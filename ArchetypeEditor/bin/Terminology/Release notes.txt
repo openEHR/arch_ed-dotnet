@@ -1,0 +1,8 @@
+Sam Heard
+2004-06-24
+
+Terminology services
+
+openEHRTerminologyTranslationOnly.exe
+
+This tool enables relatively efficient translation of terms - particularly by checking the ToDo check box. This is the tool that should be distributed to some users ASAP - and probably go out with the editor initially for each country.
