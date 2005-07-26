@@ -1,0 +1,1067 @@
+<VisualStudioProject>
+    <VisualBasic
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{179B4A54-F044-430D-9DB6-E950F80EC87F}"
+        SccProjectName = "SAK"
+        SccLocalPath = "SAK"
+        SccAuxPath = "SAK"
+        SccProvider = "SAK"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = "arch_ed.ico"
+                AssemblyKeyContainerName = ""
+                AssemblyName = "ArchetypeEditor"
+                AssemblyOriginatorKeyFile = ""
+                AssemblyOriginatorKeyMode = "None"
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "WinExe"
+                OptionCompare = "Binary"
+                OptionExplicit = "On"
+                OptionStrict = "Off"
+                RootNamespace = "openEHR.ArchetypeEditor"
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    BaseAddress = "285212672"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = "PaintBoundary=false"
+                    DefineDebug = "true"
+                    DefineTrace = "true"
+                    DebugSymbols = "true"
+                    IncrementalBuild = "true"
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "1"
+                />
+                <Config
+                    Name = "Release"
+                    BaseAddress = "285212672"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = ""
+                    DefineDebug = "false"
+                    DefineTrace = "true"
+                    DebugSymbols = "false"
+                    IncrementalBuild = "false"
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "1"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                />
+                <Reference
+                    Name = "System.Windows.Forms"
+                    AssemblyName = "System.Windows.Forms"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                />
+                <Reference
+                    Name = "System.Design"
+                    AssemblyName = "System.Design"
+                    HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Design.dll"
+                />
+                <Reference
+                    Name = "MagicLibrary"
+                    AssemblyName = "MagicLibrary"
+                    HintPath = "bin\MagicLibrary.dll"
+                />
+                <Reference
+                    Name = "EiffelSoftware.Runtime"
+                    AssemblyName = "EiffelSoftware.Runtime"
+                    HintPath = "bin\EiffelSoftware.Runtime.dll"
+                />
+                <Reference
+                    Name = "adl_dotnet_lib"
+                    AssemblyName = "adl_dotnet_lib"
+                    HintPath = "bin\adl_dotnet_lib.dll"
+                />
+            </References>
+            <Imports>
+                <Import Namespace = "Microsoft.VisualBasic" />
+                <Import Namespace = "System" />
+                <Import Namespace = "System.Collections" />
+                <Import Namespace = "System.Data" />
+                <Import Namespace = "System.Drawing" />
+                <Import Namespace = "System.Diagnostics" />
+                <Import Namespace = "System.Windows.Forms" />
+            </Imports>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "arch_ed.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "ArchetypeEditor.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AssemblyInfo.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\ADL_Archetype.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\ADL_Composition.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\ADL_Description.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\ADL_Entry.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\ADL_Interface.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\ADL_Ontology.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\ADL_Section.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\ADL_Term.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\ADL_Tools.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "ADL_Classes\Duration.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\Archetype.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDefinition.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeID.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\FileManager.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\Ontology.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\OntologyManager.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\Parser.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ReferenceModel.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\RmCardinality.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\ArchetypeDescription.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\ArchetypeDescriptionItem.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\AuditDetails.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\OtherDefinitionDetails.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\TranslationDetails.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\CodePhrase.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\RelatedParty.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\RmCluster.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\RmComposition.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\RmElement.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\RmEntry.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\RmPathwayStep.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\RmSection.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\RmSlot.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\EHR_Classes\RmTerm.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\Generic_Structures\RmChildren.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\Generic_Structures\RmStructure.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\Generic_Structures\RmStructureCompound.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\openEHR\RmReference.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\openEHR\RmTable.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\openEHR\History\EventCollection.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\openEHR\History\RmEvent.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\openEHR\History\RmHistory.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\BooleanConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\ChoiceConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\CollectionOfSlots.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\Constraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\ConstraintCollection.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\ConstraintWithValue.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\CountConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\DateTimeConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\DurationConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\IntervalConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\IntervalOfCountConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\IntervalOfDateTimeConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\IntervalOfQuantity.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\MultimediaConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\Ordinal_Constraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\OrdinalTable.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\OrdinalTable.resx"
+                    DependentUpon = "OrdinalTable.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\QuantityConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\QuantityRatioConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\QuantityUnitConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\RatioConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\RealConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\SlotConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\TextConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\UriConstraint.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\ArchetypeNodeConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\ArchetypeNodeConstraintControl.resx"
+                    DependentUpon = "ArchetypeNodeConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\BooleanConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\BooleanConstraintControl.resx"
+                    DependentUpon = "BooleanConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\ClusterControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\ClusterControl.resx"
+                    DependentUpon = "ClusterControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\ConstraintContextMenu.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\ConstraintContextMenu.resx"
+                    DependentUpon = "ConstraintContextMenu.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\ConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\ConstraintControl.resx"
+                    DependentUpon = "ConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\CountConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\CountConstraintControl.resx"
+                    DependentUpon = "CountConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\DateTimeConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\DateTimeConstraintControl.resx"
+                    DependentUpon = "DateTimeConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\DurationConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\DurationConstraintControl.resx"
+                    DependentUpon = "DurationConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\IntervalConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\IntervalConstraintControl.resx"
+                    DependentUpon = "IntervalConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\MultimediaConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\MultimediaConstraintControl.resx"
+                    DependentUpon = "MultimediaConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\MultipleConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\MultipleConstraintControl.resx"
+                    DependentUpon = "MultipleConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\OrdinalConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\OrdinalConstraintControl.resx"
+                    DependentUpon = "OrdinalConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\QuantityConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\QuantityConstraintControl.resx"
+                    DependentUpon = "QuantityConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\QuantityUnitConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\QuantityUnitConstraintControl.resx"
+                    DependentUpon = "QuantityUnitConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\RatioConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\RatioConstraintControl.resx"
+                    DependentUpon = "RatioConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\SlotConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\SlotConstraintControl.resx"
+                    DependentUpon = "SlotConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\TextConstraintControl.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\TextConstraintControl.resx"
+                    DependentUpon = "TextConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraintsView\ArchetypeView.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\BooleanViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\BooleanViewControl.resx"
+                    DependentUpon = "BooleanViewControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraintsView\ColumnLayout.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\CountViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\CountViewControl.resx"
+                    DependentUpon = "CountViewControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraintsView\DatatypeViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\DateTimeViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\ElementViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\ElementViewControl.resx"
+                    DependentUpon = "ElementViewControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraintsView\IntervalViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\LayoutManager.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\MultiMediaViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\MultipleViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\OrdinalViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\QuantityViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\RatioViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\RatioViewControl.resx"
+                    DependentUpon = "RatioViewControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraintsView\TextViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\TextViewControl.resx"
+                    DependentUpon = "TextViewControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraintsView\URIViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\URIViewControl.resx"
+                    DependentUpon = "URIViewControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraintsView\ViewPanel.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraintsView\ViewPanel.resx"
+                    DependentUpon = "ViewPanel.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\ApplicationOptionsForm.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\ApplicationOptionsForm.resx"
+                    DependentUpon = "ApplicationOptionsForm.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\ArchetypeLibrary.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\ArchetypeLibrary.resx"
+                    DependentUpon = "ArchetypeLibrary.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\Choose.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\Choose.resx"
+                    DependentUpon = "Choose.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\ChoosePath.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\ChoosePath.resx"
+                    DependentUpon = "ChoosePath.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\ConstraintForm.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\ConstraintForm.resx"
+                    DependentUpon = "ConstraintForm.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\Designer.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\Designer.resx"
+                    DependentUpon = "Designer.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\InputForm.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\InputForm.resx"
+                    DependentUpon = "InputForm.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\Splash.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\Splash.resx"
+                    DependentUpon = "Splash.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\StartUp.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\StartUp.resx"
+                    DependentUpon = "StartUp.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GUI_Archetype\ArchetypeComposite.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Archetype\ArchetypeElement.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Archetype\ArchetypeNode.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Archetype\ArchetypeNodeAbstract.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Archetype\ArchetypeNodeAnonymous.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Instruction_Controls\PathwayEvent.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Instruction_Controls\PathwayEvent.resx"
+                    DependentUpon = "PathwayEvent.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GUI_Classes\Instruction_Controls\PathwaySpecification.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Instruction_Controls\PathwaySpecification.resx"
+                    DependentUpon = "PathwaySpecification.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GUI_Classes\Specialised_VB_classes\ArchetypeListViewItem.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Specialised_VB_classes\ArchetypeTreeNode.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Specialised_VB_classes\RichTextBoxPrintable.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Specialised_VB_classes\RichTextBoxPrintable.resx"
+                    DependentUpon = "RichTextBoxPrintable.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\EntryStructure.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\EntryStructure.resx"
+                    DependentUpon = "EntryStructure.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\ListStructure.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\ListStructure.resx"
+                    DependentUpon = "ListStructure.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\SimpleStructure.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\SimpleStructure.resx"
+                    DependentUpon = "SimpleStructure.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\TableStructure.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\TableStructure.resx"
+                    DependentUpon = "TableStructure.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\TreeStructure.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "GUI_Classes\Structure_Controls\TreeStructure.resx"
+                    DependentUpon = "TreeStructure.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Support\AE_Constants.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Support\ChangeLog.htm"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Support\DataSetArchetypes.xsd"
+                    BuildAction = "Content"
+                    Generator = "MSDataSetGenerator"
+                    LastGenOutput = "DataSetArchetypes.vb"
+                />
+                <File
+                    RelPath = "Support\DataSetArchetypes.vb"
+                    DependentUpon = "DataSetArchetypes.xsd"
+                    SubType = "code"
+                    BuildAction = "Compile"
+                    DesignTime = "True"
+                    AutoGen = "True"
+                />
+                <File
+                    RelPath = "Support\DataSetArchetypes.xsx"
+                    DependentUpon = "DataSetArchetypes.xsd"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Support\ocean.ico"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Support\Options.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Support\TerminologyServer.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageComposition.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageComposition.resx"
+                    DependentUpon = "TabPageComposition.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageHistory.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageHistory.resx"
+                    DependentUpon = "TabPageHistory.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageInstruction.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageInstruction.resx"
+                    DependentUpon = "TabPageInstruction.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageSection.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageSection.resx"
+                    DependentUpon = "TabPageSection.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageStructure.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageStructure.resx"
+                    DependentUpon = "TabPageStructure.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TermBindingPanel.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TermBindingPanel.resx"
+                    DependentUpon = "TermBindingPanel.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+            </Include>
+        </Files>
+    </VisualBasic>
+</VisualStudioProject>
+
