@@ -34,6 +34,7 @@ Public Class ListStructure
         'Not able to set imagelists that are inherited
         Me.lvList.SmallImageList = Me.ilSmall
 
+
         Dim lvitem As ArchetypeListViewItem
 
         For Each element As RmElement In rm.Children
@@ -203,7 +204,7 @@ Public Class ListStructure
             Dim RM_S As New RmStructureCompound(mNodeId, StructureType.List)
 
             RM_S.Children.Cardinality = mCardinalityControl.Item.Cardinality
-            RM_S.Children.Ordered = mCardinalityControl.Item.IsOrdered
+            RM_S.Children.Cardinality.Ordered = mCardinalityControl.Item.IsOrdered
 
             For Each lvItem In Me.lvList.Items
                 RM_S.Children.Add(lvItem.Item.RM_Class)
