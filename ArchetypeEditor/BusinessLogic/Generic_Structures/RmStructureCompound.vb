@@ -58,7 +58,7 @@ Public Class RmStructureCompound
         MyBase.New(archetype_composite.RM_Class)
         colChildren = New Children(mType)
         colChildren.Cardinality = archetype_composite.Cardinality
-        colChildren.Ordered = archetype_composite.IsOrdered
+        colChildren.Cardinality.Ordered = archetype_composite.IsOrdered
     End Sub
 
 
@@ -114,6 +114,8 @@ Public Class RmStructureCompound
                     mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.am.C_COMPLEX_OBJECT))
                 Case "items"
                     Dim ii As Integer
+                    'Set whether the list is ordered or not
+                    colChildren.Cardinality.SetFromOpenEHRCardinality(an_attribute.cardinality)
                     For ii = 1 To an_attribute.children.count
                         Dim a_ComplexObject As openehr.am.C_COMPLEX_OBJECT
                         Select Case CType(an_attribute.children.i_th(ii), openehr.am.C_OBJECT).Generating_Type.to_cil
@@ -184,9 +186,9 @@ Public Class RmStructureCompound
                 colChildren.Cardinality.SetFromString(an_attribute.cardinality.as_string.to_cil.Substring(0, i))
                 Select Case s.Substring(i + 1).ToLower(System.Globalization.CultureInfo.InvariantCulture).Trim()
                     Case "ordered"
-                        colChildren.Ordered = True
+                        colChildren.Cardinality.Ordered = True
                     Case "unordered"
-                        colChildren.Ordered = False
+                        colChildren.Cardinality.Ordered = False
                     Case Else
                         Debug.Assert(False, "Not handled")
                 End Select

@@ -167,7 +167,7 @@ Public Class ADL_Archetype
         Return mCADL_Factory.create_assertion(match_operator, Nothing)
 
     End Function
-    Private Function MakeCardinality(ByVal c As RmCardinality, Optional ByVal IsOrdered As Boolean = True) As openehr.am.CARDINALITY
+    Private Function MakeCardinality(ByVal c As RmCardinality) As openehr.am.CARDINALITY
         Dim cardObj As openehr.am.CARDINALITY
 
         If c.IsUnbounded Then
@@ -175,7 +175,7 @@ Public Class ADL_Archetype
         Else
             cardObj = mCADL_Factory.create_cardinality_make_bounded(c.MinCount, c.MaxCount)
         End If
-        If Not IsOrdered Then
+        If Not c.Ordered Then
             cardObj.set_unordered()
         End If
         Return cardObj
@@ -460,7 +460,7 @@ Public Class ADL_Archetype
         End If
 
         If Cluster.Children.Count > 0 Then
-            an_attribute = mCADL_Factory.create_c_attribute_multiple(cluster_cadlObj, openehr.base_net.Create.STRING.make_from_cil("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Ordered))
+            an_attribute = mCADL_Factory.create_c_attribute_multiple(cluster_cadlObj, openehr.base_net.Create.STRING.make_from_cil("items"), MakeCardinality(Cluster.Children.Cardinality))
             For Each rm In Cluster.Children.items
                 If rm.Type = StructureType.Cluster Then
                     BuildCluster(rm, an_attribute)
@@ -867,13 +867,13 @@ Public Class ADL_Archetype
                     BuildElementOrReference(rmStruct.Children.items(0), an_attribute)
 
                 Case StructureType.List ' "LIST"
-                    an_attribute = mCADL_Factory.create_c_attribute_multiple(objNode, openehr.base_net.Create.STRING.make_from_cil("items"), MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Ordered))
+                    an_attribute = mCADL_Factory.create_c_attribute_multiple(objNode, openehr.base_net.Create.STRING.make_from_cil("items"), MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality))
                     For Each rm In rmStruct.Children.items
                         BuildElementOrReference(rm, an_attribute)
                     Next
                 Case StructureType.Tree ' "TREE"
                     an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base_net.Create.STRING.make_from_cil("items"))
-                    an_attribute.set_cardinality(MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Ordered))
+                    an_attribute.set_cardinality(MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality))
                     For Each rm In rmStruct.Children.items
                         'If rm.TypeName = "Cluster" Then
                         If rm.Type = StructureType.Cluster Then
@@ -906,7 +906,7 @@ Public Class ADL_Archetype
                     End If
 
 
-                    an_attribute = mCADL_Factory.create_c_attribute_multiple(objNode, openehr.base_net.Create.STRING.make_from_cil("rows"), MakeCardinality(New RmCardinality(rmStruct.Occurrences), True))
+                    an_attribute = mCADL_Factory.create_c_attribute_multiple(objNode, openehr.base_net.Create.STRING.make_from_cil("rows"), MakeCardinality(New RmCardinality(rmStruct.Occurrences)))
 
                     BuildCluster(rmStruct.Children.items(0), an_attribute)
 
@@ -972,7 +972,7 @@ Public Class ADL_Archetype
         ' Build a section, runtimename is already done
         Dim an_attribute As openehr.am.C_ATTRIBUTE
 
-        an_attribute = mCADL_Factory.create_c_attribute_multiple(cadlObj, openehr.base_net.Create.STRING.make_from_cil("items"), MakeCardinality(rmChildren.Cardinality, rmChildren.Ordered))
+        an_attribute = mCADL_Factory.create_c_attribute_multiple(cadlObj, openehr.base_net.Create.STRING.make_from_cil("items"), MakeCardinality(rmChildren.Cardinality))
 
         For Each a_structure As RmStructure In rmChildren
 
@@ -1060,7 +1060,7 @@ Public Class ADL_Archetype
         ' CadlObj.SetObjectId(Openehr.Base_Net.Create.String.Make_From_Cil(Rm.NodeId))
 
         If Rm.Children.Count > 0 Then
-            an_attribute = mCADL_Factory.create_c_attribute_multiple(CadlObj, openehr.base_net.Create.STRING.make_from_cil("items"), MakeCardinality(Rm.Children.Cardinality, Rm.Children.Ordered))
+            an_attribute = mCADL_Factory.create_c_attribute_multiple(CadlObj, openehr.base_net.Create.STRING.make_from_cil("items"), MakeCardinality(Rm.Children.Cardinality))
 
             For Each a_structure As RmStructure In Rm.Children
                 If a_structure.Type = StructureType.SECTION Then
