@@ -16,7 +16,7 @@
 
 
 Public MustInherit Class Archetype
-    'Protected adlEngine As Openehr.am.AdlEngine
+    'Protected adlEngine As openehr.openehr.am.archetype.constraint_model.AdlEngine
 
     Protected cDefinition As ArchetypeDefinition
     Protected mDescription As New ArchetypeDescription
@@ -169,4 +169,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

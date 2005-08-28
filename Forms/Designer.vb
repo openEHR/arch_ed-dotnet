@@ -307,7 +307,7 @@ Public Class Designer
         Me.tpTerms = New Crownwood.Magic.Controls.TabPage
         Me.PanelTermDefinitions = New System.Windows.Forms.Panel
         Me.tpBindings = New Crownwood.Magic.Controls.TabPage
-        Me.TermBindingPanel2 = New openehr.ArchetypeEditor.TermBindingPanel
+        Me.TermBindingPanel2 = New TermBindingPanel
         Me.tpConstraints = New Crownwood.Magic.Controls.TabPage
         Me.DataGridConstraintStatements = New System.Windows.Forms.DataGrid
         Me.ConstraintBindingStyle = New System.Windows.Forms.DataGridTableStyle
@@ -340,7 +340,7 @@ Public Class Designer
         Me.lblAvailableLanguages = New System.Windows.Forms.Label
         Me.tpText = New Crownwood.Magic.Controls.TabPage
         Me.Panel3 = New System.Windows.Forms.Panel
-        Me.richtextArchetype = New openehr.ArchetypeEditor.RichTextBoxPrintable
+        Me.richtextArchetype = New RichTextBoxPrintable
         Me.ContextMenuDisplay = New System.Windows.Forms.ContextMenu
         Me.menuDisplayPrint = New System.Windows.Forms.MenuItem
         Me.MenuDisplayFind = New System.Windows.Forms.MenuItem

@@ -23,9 +23,9 @@ Class ADL_ENTRY
     ' to discover reference pointers
     Private highest_level_children As Children
 
-    Private Sub ProcessSubjectOfData(ByVal SubjectOfData As Openehr.am.C_Attribute)
-        Dim ComplexObj As Openehr.am.C_COMPLEX_OBJECT
-        Dim an_attribute As Openehr.am.C_Attribute
+    Private Sub ProcessSubjectOfData(ByVal SubjectOfData As openehr.openehr.am.archetype.constraint_model.C_Attribute)
+        Dim ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_Attribute
         Dim i As Integer
 
         For i = 1 To SubjectOfData.Children.Count
@@ -41,9 +41,9 @@ Class ADL_ENTRY
     End Sub
 
 
-    Sub New(ByRef Definition As Openehr.am.C_COMPLEX_OBJECT)
+    Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         MyBase.New(Definition.rm_type_name.to_cil) ' sets the type to OBSERVATION, EVALUATION etc
-        Dim an_attribute As Openehr.am.C_Attribute
+        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_Attribute
         Dim i As Integer
 
         ' set the root node id - usually the same as the concept
@@ -55,7 +55,7 @@ Class ADL_ENTRY
                 Case "subject"
                     ProcessSubjectOfData(an_attribute)
                 Case "name", "runtime_label" 'run_time_label is obsolete
-                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.am.C_COMPLEX_OBJECT))
+                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "data"
                     mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Data))
                     ' remembers the Processed data off events
@@ -110,4 +110,4 @@ End Class 'ADL_ENTRY
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
