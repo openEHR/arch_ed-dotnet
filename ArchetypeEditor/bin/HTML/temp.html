@@ -2,25 +2,25 @@
 <HEAD>
 <meta http-equiv="Content-Language" content="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Body weight</title>
+<title>afds</title>
 </HEAD>
 <BODY>
 <table border="0" cellpadding="2" width="100%">
 <tr>
 <td width="100%" bgcolor="#000080">
-<h1 align="center"><font color="#FFFFFF">Body weight</font></h1>
+<h1 align="center"><font color="#FFFFFF">afds</font></h1>
 </td>
 </tr>
 </table>
-<p><i>Entity</i>: OBSERVATION</p>
+<p><i>Entity</i>: EVALUATION</p>
 <table border="1" cellpadding="3" width="100%">
 <tr>
 <td width="50%"><h4>Concept description:</h4></td>
 <td width="50%"><h4>Identification:</h4></td>
 </tr>
 <tr>
-<td width="50%">Total body weight - a surrogate for naked body weight</td>
-<td width="50%"><i>Id</i>: openEHR-EHR-OBSERVATION.body_weight.v1<br><i>Reference model</i>: openEHR_EHR</td>
+<td width="50%">asdf</td>
+<td width="50%"><i>Id</i>: openEHR-EHR-EVALUATION.test.v1draft<br><i>Reference model</i>: openEHR_EHR</td>
 </tr>
 </table>
 <hr>
@@ -31,7 +31,7 @@
 </td>
 </tr>
 </table>
-<p>Structure = SINGLE</p>
+<p>Structure = TREE</p>
 <table border="1" cellpadding="2" width="100%">
 <tr  bgcolor="#FFFF53">
 <td width="20%"><h4>Concept</h4></td>
@@ -39,104 +39,32 @@
 <td width = "20%"><h4>Constraints</h4></td>
 <td width="20%"><h4>Values</h4></td>
 </tr>
+
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Weight</b></td></table></td>
-<td>The weight of the whole body</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>New element</b></td></table></td>
+<td>*</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Internal;
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>New cluster</i></b></td></table></td>
+<td>*</td>
+<td><b><i>Cluster</b></i><br>
+0..1</td><td>&nbsp;</td>
+</tr>
+
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>New element</b></td></table></td>
+<td>*</td>
 <td><b><i>Quantity</i></b><br>
-1..1</td>
-<td>
-Property = mass<br>
-  Units = kg; >=0; <=1000;<br>
-</td>
-</tr>
-</table>
-<hr>
-<table border="0" cellpadding="2" width="100%">
-<tr>
-<td width="100%" bgcolor="#9DAAFF">
-<h2>State</h2>
-</td>
-</tr>
-</table>
-<p>Structure = LIST, ordered</p>
-<table border="1" cellpadding="2" width="100%">
-<tr  bgcolor="#9DAAFF">
-<td width="20%"><h4>Concept</h4></td>
-<td width = "40%"><h4>Description</h4></td>
-<td width = "20%"><h4>Constraints</h4></td>
-<td width="20%"><h4>Values</h4></td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Clothing</b></td></table></td>
-<td>The amount of clothes worn at the time of weighing</td>
-<td><b><i>Text</i></b><br>
 0..1</td>
 <td>
-Internal; 'Lightly clothed/underwear', 'Naked', 'Fully dressed', 'Nappy'
+Property = <br>
 </td>
 </tr>
-</table>
-<hr>
-<table border="0" cellpadding="2" width="100%">
-<tr>
-<td width="100%" bgcolor="#AAFE92">
-<h2>History</h2>
-</td>
-</tr>
-</table>
-
-<table border="1" cellpadding="2" width="100%">
-
-<tr  bgcolor="#AAFE92">
-<td width="20%"><h4>Events</h4></td>
-<td width = "40%"><h4>Description</h4></td>
-<td width = "20%"><h4>Constraints</h4></td>
-</tr>
-<tr>
-<td><b>Any event</b></td>
-<td><b>Any event - based on offset from the baseline</b></td>
-<td>
-Reference = PointInTime<br>
-</tr>
-<tr>
-<td><b>Weight loss</b></td>
-<td><b>Amount of weight lost over the period</b></td>
-<td>
-Reference = Change (negative)<br>
-</tr>
-<tr>
-<td><b>Weight gain</b></td>
-<td><b>Amount of weight gained over the period</b></td>
-<td>
-Reference = Change<br>
-</tr>
-
-</table>
-
-<hr>
-<table border="0" cellpadding="2" width="100%">
-<tr>
-<td width="100%" bgcolor="#FF717B">
-<h2>Protocol</h2>
-</td>
-</tr>
-</table>
-<p>Structure = LIST, ordered</p>
-<table border="1" cellpadding="2" width="100%">
-<tr  bgcolor="#FF717B">
-<td width="20%"><h4>Concept</h4></td>
-<td width = "40%"><h4>Description</h4></td>
-<td width = "20%"><h4>Constraints</h4></td>
-<td width="20%"><h4>Values</h4></td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Device</b></td></table></td>
-<td>The name of the weighing device</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
 </tr>
 </table>
 <hr>

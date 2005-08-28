@@ -37,7 +37,7 @@ Public Class RmTable : Inherits RmStructureCompound
         End Set
     End Property
 
-    Sub New(ByVal EIF_Table As openehr.am.C_COMPLEX_OBJECT)
+    Sub New(ByVal EIF_Table As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         'FIXMENOW probably can call
         MyBase.New(EIF_Table.node_id.to_cil, StructureType.Table)
         ProcessTable(EIF_Table)
@@ -55,14 +55,14 @@ Public Class RmTable : Inherits RmStructureCompound
         MyBase.New(NodeId, StructureType.Table)
     End Sub
 
-    Private Sub ProcessRows(ByVal RelNode As openehr.am.C_ATTRIBUTE)
+    Private Sub ProcessRows(ByVal RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
         Dim rows As RmCluster
         'Dim rm_column As RmElement
-        'Dim cadlColumn As openehr.am.C_COMPLEX_OBJECT
+        'Dim cadlColumn As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
         'Dim i As Integer
 
 
-        rows = New RmCluster(CType(RelNode.children.first, openehr.am.C_COMPLEX_OBJECT))
+        rows = New RmCluster(CType(RelNode.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
         'columns = New RmStructureCompound(StructureType.Columns, StructureType.Columns)
 
@@ -74,30 +74,30 @@ Public Class RmTable : Inherits RmStructureCompound
         Me.Children.Add(rows)
     End Sub
 
-    Private Sub ProcessTable(ByVal ObjNode As openehr.am.C_COMPLEX_OBJECT)
-        Dim an_attribute As openehr.am.C_ATTRIBUTE
+    Private Sub ProcessTable(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
         For i = 1 To ObjNode.attributes.count
             an_attribute = ObjNode.attributes.i_th(i)
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label"
-                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.am.C_COMPLEX_OBJECT))
+                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "rotated"
-                    Dim b As openehr.am.C_BOOLEAN
+                    Dim b As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN
 
                     b = CType(CType(an_attribute.children.first, _
-                            openehr.am.C_PRIMITIVE_OBJECT).item, openehr.am.C_BOOLEAN)
+                            openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT).item, openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN)
                     If b.true_valid Then
                         mRotated = True
                     Else
                         mRotated = False
                     End If
                 Case "number_key_columns"
-                    Dim int As openehr.am.C_INTEGER
+                    Dim int As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
 
                     int = CType(CType(an_attribute.children.first, _
-                            openehr.am.C_PRIMITIVE_OBJECT).item, openehr.am.C_INTEGER)
+                            openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT).item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
                     mNumberKeyColumns = int.interval.lower ' lower or higher will get the number
 
                 Case "rows"
@@ -147,4 +147,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

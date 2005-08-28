@@ -24,7 +24,7 @@
                 OptionCompare = "Binary"
                 OptionExplicit = "On"
                 OptionStrict = "Off"
-                RootNamespace = "openEHR.ArchetypeEditor"
+                RootNamespace = "ocean.ArchetypeEditor"
                 StartupObject = ""
             >
                 <Config
