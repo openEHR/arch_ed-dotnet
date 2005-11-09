@@ -169,13 +169,22 @@ Public Class TextViewControl : Inherits ElementViewControl ' ViewControl
     Private Sub ComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
             Handles mComboBox.SelectedIndexChanged
 
-        If mComboBox.SelectedValue Is Nothing Then
-            Me.Tag = New CodePhrase(CType(mComboBox.Items(0), RmTerm)).Phrase
-            Value = mComboBox.Text
-        Else
-            Me.Tag = New CodePhrase(CType(mComboBox.SelectedValue, RmTerm)).Phrase
-            Value = CType(mComboBox.SelectedValue, RmTerm).Text
-        End If
+        Try
+            If TypeOf mComboBox.Items(0) Is RmTerm Then
+                If mComboBox.SelectedValue Is Nothing Then
+                    Me.Tag = New CodePhrase(CType(mComboBox.Items(0), RmTerm)).Phrase
+                    Value = mComboBox.Text
+                Else
+                    Me.Tag = New CodePhrase(CType(mComboBox.SelectedValue, RmTerm)).Phrase
+                    Value = CType(mComboBox.SelectedValue, RmTerm).Text
+                End If
+            Else  ' text string
+                Me.Tag = mComboBox.Text
+                Value = mComboBox.Text
+            End If
+        Catch ex As Exception
+            Debug.Assert(False, ex.Message)
+        End Try
     End Sub
 
     Private Sub TextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
