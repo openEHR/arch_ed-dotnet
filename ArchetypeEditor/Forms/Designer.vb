@@ -307,7 +307,7 @@ Public Class Designer
         Me.tpTerms = New Crownwood.Magic.Controls.TabPage
         Me.PanelTermDefinitions = New System.Windows.Forms.Panel
         Me.tpBindings = New Crownwood.Magic.Controls.TabPage
-        Me.TermBindingPanel2 = New TermBindingPanel
+        Me.TermBindingPanel2 = New ocean.ArchetypeEditor.TermBindingPanel
         Me.tpConstraints = New Crownwood.Magic.Controls.TabPage
         Me.DataGridConstraintStatements = New System.Windows.Forms.DataGrid
         Me.ConstraintBindingStyle = New System.Windows.Forms.DataGridTableStyle
@@ -340,7 +340,7 @@ Public Class Designer
         Me.lblAvailableLanguages = New System.Windows.Forms.Label
         Me.tpText = New Crownwood.Magic.Controls.TabPage
         Me.Panel3 = New System.Windows.Forms.Panel
-        Me.richtextArchetype = New RichTextBoxPrintable
+        Me.richtextArchetype = New ocean.ArchetypeEditor.RichTextBoxPrintable
         Me.ContextMenuDisplay = New System.Windows.Forms.ContextMenu
         Me.menuDisplayPrint = New System.Windows.Forms.MenuItem
         Me.MenuDisplayFind = New System.Windows.Forms.MenuItem
@@ -3199,6 +3199,10 @@ Public Class Designer
         Me.SaveFileArchetype.FileName = Filemanager.Instance.Archetype.Archetype_ID.ToString
         Me.SaveFileArchetype.OverwritePrompt = True
         Me.SaveFileArchetype.DefaultExt = Filemanager.Instance.ParserType
+        Dim i As Integer = Filemanager.Instance.IndexOfFormat(Filemanager.Instance.ParserType)
+        If i > 0 Then
+            Me.SaveFileArchetype.FilterIndex = i  ' adl is the third type
+        End If
         Me.SaveFileArchetype.AddExtension = True
         Me.SaveFileArchetype.Title = AE_Constants.Instance.MessageBoxCaption
         Me.SaveFileArchetype.ValidateNames = True
@@ -4446,6 +4450,7 @@ Public Class Designer
             Me.MenuDisplayFindAgain.Visible = False
         End If
     End Sub
+
 End Class
 
 
