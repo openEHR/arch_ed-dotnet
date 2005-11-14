@@ -18,7 +18,7 @@ Option Explicit On
 
 Friend Class ADL_Ontology
     Inherits Ontology
-    Private EIF_adlInterface As openehr.adl_parser.interface.ADL_INTERFACE
+    Private EIF_adlInterface As openehr.am.ADL_INTERFACE
     Private sLanguageCode As String
 
     Public Overrides ReadOnly Property PrimaryLanguageCode() As String
@@ -38,7 +38,7 @@ Friend Class ADL_Ontology
     End Property
 
     Public Overrides Function LanguageAvailable(ByVal code As String) As Boolean
-        If EIF_adlInterface.ontology.has_language(openehr.base.kernel.Create.STRING.make_from_cil(code)) Then
+        If EIF_adlInterface.ontology.has_language(openehr.base_net.Create.STRING.make_from_cil(code)) Then
             Return True
         Else
             Return False
@@ -46,7 +46,7 @@ Friend Class ADL_Ontology
     End Function
 
     Public Overrides Function TerminologyAvailable(ByVal code As String) As Boolean
-        If EIF_adlInterface.ontology.has_terminology(openehr.base.kernel.Create.STRING.make_from_cil(code)) Then
+        If EIF_adlInterface.ontology.has_terminology(openehr.base_net.Create.STRING.make_from_cil(code)) Then
             Return True
         Else
             Return False
@@ -57,12 +57,12 @@ Friend Class ADL_Ontology
         Dim a_term As ADL_Term
 
         If Code.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("at") Then
-            If EIF_adlInterface.ontology.has_term_code(openehr.base.kernel.Create.STRING.make_from_cil(Code)) Then
-                Return New ADL_Term(EIF_adlInterface.ontology.term_definition(openehr.base.kernel.Create.STRING.make_from_cil(Language), openehr.base.kernel.Create.STRING.make_from_cil(Code)))
+            If EIF_adlInterface.ontology.has_term_code(openehr.base_net.Create.STRING.make_from_cil(Code)) Then
+                Return New ADL_Term(EIF_adlInterface.ontology.term_definition(openehr.base_net.Create.STRING.make_from_cil(Language), openehr.base_net.Create.STRING.make_from_cil(Code)))
             End If
         ElseIf Code.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("ac") Then
-            If EIF_adlInterface.ontology.has_constraint_code(openehr.base.kernel.Create.STRING.make_from_cil(Code)) Then
-                Return New ADL_Term(EIF_adlInterface.ontology.constraint_definition(openehr.base.kernel.Create.STRING.make_from_cil(Language), openehr.base.kernel.Create.STRING.make_from_cil(Code)))
+            If EIF_adlInterface.ontology.has_constraint_code(openehr.base_net.Create.STRING.make_from_cil(Code)) Then
+                Return New ADL_Term(EIF_adlInterface.ontology.constraint_definition(openehr.base_net.Create.STRING.make_from_cil(Language), openehr.base_net.Create.STRING.make_from_cil(Code)))
             End If
         Else
             Debug.Assert(False, "Code type is not available")
@@ -81,13 +81,13 @@ Friend Class ADL_Ontology
     End Sub
 
     Public Overrides Sub AddLanguage(ByVal code As String)
-        EIF_adlInterface.ontology.add_language_available(openehr.base.kernel.Create.STRING.make_from_cil(code))
+        EIF_adlInterface.ontology.add_language_available(openehr.base_net.Create.STRING.make_from_cil(code))
     End Sub
 
     Public Overrides Sub AddTerminology(ByVal code As String)
-        Dim s As openehr.base.kernel.STRING
+        Dim s As openehr.base_net.STRING
 
-        s = openehr.base.kernel.Create.STRING.make_from_cil(code)
+        s = openehr.base_net.Create.STRING.make_from_cil(code)
 
         Try
             If Not EIF_adlInterface.ontology.has_terminology(s) Then
@@ -108,11 +108,11 @@ Friend Class ADL_Ontology
         Debug.Assert(sTerminology <> "", "TerminologyID is not set")
         ' release is not utilised at this point
         Try
-            Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE
-            Dim str As openehr.base.kernel.STRING
+            Dim cp As openehr.rm.CODE_PHRASE
+            Dim str As openehr.Base_Net.STRING
 
-            str = openehr.base.kernel.Create.STRING.make_from_cil(sPath)
-            cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(sTerminology & "::" & sCode))
+            str = openehr.base_net.Create.STRING.make_from_cil(sPath)
+            cp = openehr.rm.Create.CODE_PHRASE.make_from_string(openehr.base_net.Create.STRING.make_from_cil(sTerminology & "::" & sCode))
             If EIF_adlInterface.ontology.has_term_binding(cp.terminology_id.as_string, str) Then
                 EIF_adlInterface.ontology.replace_term_binding(cp, str)
             Else
@@ -126,7 +126,7 @@ Friend Class ADL_Ontology
 
     Public Overrides Sub SetLanguage(ByVal code As String)
         sLanguageCode = code
-        EIF_adlInterface.set_language(openehr.base.kernel.Create.STRING.make_from_cil(code))
+        EIF_adlInterface.set_language(openehr.base_net.Create.STRING.make_from_cil(code))
     End Sub
 
     Public Overrides Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
@@ -147,7 +147,7 @@ Friend Class ADL_Ontology
         If LanguageCode = "" Then
             Return
         Else
-            EIF_adlInterface.ontology.set_primary_language(openehr.base.kernel.Create.STRING.make_from_cil(LanguageCode))
+            EIF_adlInterface.ontology.set_primary_language(openehr.base_net.Create.STRING.make_from_cil(LanguageCode))
         End If
     End Sub
 
@@ -163,8 +163,8 @@ Friend Class ADL_Ontology
         Return EIF_adlInterface.ontology.new_constraint_code.to_cil
     End Function
 
-    Private Function NextSpecialisedId(ByVal ParentCode As String) As openehr.base.kernel.STRING
-        Return EIF_adlInterface.ontology.new_specialised_term_code(openehr.base.kernel.Create.STRING.make_from_cil(ParentCode))
+    Private Function NextSpecialisedId(ByVal ParentCode As String) As openehr.Base_Net.STRING
+        Return EIF_adlInterface.ontology.new_specialised_term_code(openehr.base_net.Create.STRING.make_from_cil(ParentCode))
     End Function
 
     Public Overrides Sub AddTerm(ByVal a_Term As RmTerm)
@@ -204,12 +204,12 @@ Friend Class ADL_Ontology
 
     Public Overrides Sub ReplaceTerm(ByVal a_Term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
         Dim an_adl_Term As ADL_Term
-        Dim language_code As openehr.base.kernel.STRING
+        Dim language_code As openehr.Base_Net.STRING
 
         If Not a_Term.isConstraint Then
             an_adl_Term = New ADL_Term(a_Term)
             If a_Term.Language <> "" Then
-                language_code = openehr.base.kernel.Create.STRING.make_from_cil(a_Term.Language)
+                language_code = openehr.base_net.Create.STRING.make_from_cil(a_Term.Language)
             Else
                 language_code = EIF_adlInterface.language
             End If
@@ -278,7 +278,7 @@ Friend Class ADL_Ontology
             TheOntologyManager.LanguagesTable.Clear()
 
             For i = EIF_adlInterface.ontology.languages_available.lower() To EIF_adlInterface.ontology.languages_available.upper()
-                s = CType(EIF_adlInterface.ontology.languages_available.i_th(i), openehr.base.kernel.STRING).to_cil()
+                s = CType(EIF_adlInterface.ontology.languages_available.i_th(i), openehr.Base_Net.STRING).to_cil()
                 TheOntologyManager.AddLanguage(s)
             Next
 
@@ -295,7 +295,7 @@ Friend Class ADL_Ontology
 
             For i = EIF_adlInterface.ontology.terminologies_available.lower() To EIF_adlInterface.ontology.terminologies_available.upper()
 
-                s = CType(EIF_adlInterface.ontology.terminologies_available.i_th(i), openehr.base.kernel.STRING).to_cil()
+                s = CType(EIF_adlInterface.ontology.terminologies_available.i_th(i), openehr.Base_Net.STRING).to_cil()
                 t = TheOntologyManager.GetTerminologyDescription(s)
                 TheOntologyManager.AddTerminology(s, t)
             Next
@@ -308,20 +308,20 @@ Friend Class ADL_Ontology
         If EIF_adlInterface.ontology.term_definitions.empty() = False Then
             Dim i As Integer
             Dim d_row, selected_row As DataRow
-            Dim s As openehr.base.kernel.STRING
+            Dim s As openehr.Base_Net.STRING
             Dim a_term As ADL_Term
-            Dim linklist As openehr.base.structures.list.LINKED_LIST_ANY
+            Dim linklist As openehr.Base.LINKED_LIST_ANY
 
             linklist = EIF_adlInterface.ontology.term_codes
 
             linklist.start()
             Do While Not linklist.off
-                s = CType(linklist.active.item, openehr.base.kernel.STRING)
+                s = CType(linklist.active.item, openehr.Base_Net.STRING)
                 If LanguageCode = "" Then
                     ' set the term for all languages
                     For Each selected_row In TheOntologyManager.LanguagesTable.Rows
                         ' take each term from the ADL ontology
-                        a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0)), s))
+                        a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(openehr.base_net.Create.STRING.make_from_cil(selected_row(0)), s))
                         ' and if it is not an internal ID for machine processing
                         If InStr(a_term.Description, "@ internal @") = 0 Then
                             d_row = TheOntologyManager.TermDefinitionTable.NewRow
@@ -335,7 +335,7 @@ Friend Class ADL_Ontology
                     Next
                 Else
                     ' just do it for the new language
-                    a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(openehr.base.kernel.Create.STRING.make_from_cil(LanguageCode), s))
+                    a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(openehr.base_net.Create.STRING.make_from_cil(LanguageCode), s))
                     ' and if it is not an internal ID for machine processing
                     If InStr(a_term.Description, "@ internal @") = 0 Then
                         d_row = TheOntologyManager.TermDefinitionTable.NewRow
@@ -358,13 +358,13 @@ Friend Class ADL_Ontology
         If EIF_adlInterface.ontology.term_bindings.empty() = False Then
             Dim i As Integer
             Dim d_row, selected_row As DataRow
-            Dim terminology, code As openehr.base.kernel.STRING
-            Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE
-            Dim Bindings As openehr.Base.structures.table.HASH_TABLE_ANY_ANY
+            Dim terminology, code As openehr.Base_Net.STRING
+            Dim cp As openehr.rm.CODE_PHRASE
+            Dim Bindings As openehr.Base.HASH_TABLE_ANY_ANY
 
 
             For Each selected_row In TheOntologyManager.TerminologiesTable.Rows
-                terminology = openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0))
+                terminology = openehr.base_net.Create.STRING.make_from_cil(selected_row(0))
                 If EIF_adlInterface.ontology.has_term_bindings(terminology) Then
                     Bindings = EIF_adlInterface.ontology.term_bindings_for_terminology(terminology)
                     Bindings.start()
@@ -389,18 +389,18 @@ Friend Class ADL_Ontology
         If EIF_adlInterface.ontology.constraint_definitions.empty() = False Then
             Dim i As Integer
             Dim d_row, selected_row As DataRow
-            Dim s As openehr.base.kernel.STRING
+            Dim s As openehr.Base_Net.STRING
             Dim a_term As ADL_Term
-            Dim linklist As openehr.base.structures.list.LINKED_LIST_ANY
+            Dim linklist As openehr.Base.LINKED_LIST_ANY
 
             linklist = EIF_adlInterface.ontology.constraint_codes
 
             linklist.start()
             Do While Not linklist.off
-                s = CType(linklist.active.item, openehr.base.kernel.STRING)
+                s = CType(linklist.active.item, openehr.Base_Net.STRING)
                 If LanguageCode = "" Then
                     For Each selected_row In TheOntologyManager.LanguagesTable.Rows
-                        a_term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0)), s))
+                        a_term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(openehr.base_net.Create.STRING.make_from_cil(selected_row(0)), s))
                         d_row = TheOntologyManager.ConstraintDefinitionTable.NewRow
                         d_row(0) = selected_row(0)
                         d_row(1) = a_term.Code
@@ -409,7 +409,7 @@ Friend Class ADL_Ontology
                         TheOntologyManager.ConstraintDefinitionTable.Rows.Add(d_row)
                     Next
                 Else
-                    a_term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(openehr.base.kernel.Create.STRING.make_from_cil(LanguageCode), s))
+                    a_term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(openehr.base_net.Create.STRING.make_from_cil(LanguageCode), s))
                     d_row = TheOntologyManager.ConstraintDefinitionTable.NewRow
                     d_row(0) = LanguageCode
                     d_row(1) = a_term.Code
@@ -428,20 +428,20 @@ Friend Class ADL_Ontology
         If EIF_adlInterface.ontology.constraint_bindings.empty() = False Then
             Dim i As Integer
             Dim d_row, selected_row As DataRow
-            Dim s As openehr.base.kernel.STRING
-            Dim a_term As openehr.base.kernel.STRING
-            Dim linklist As openehr.base.structures.list.LINKED_LIST_ANY
+            Dim s As openehr.Base_Net.STRING
+            Dim a_term As openehr.Base_Net.STRING
+            Dim linklist As openehr.Base.LINKED_LIST_ANY
 
             linklist = EIF_adlInterface.ontology.constraint_codes
 
             linklist.start()
             Do While Not linklist.off
-                s = CType(linklist.active.item, openehr.base.kernel.STRING)
+                s = CType(linklist.active.item, openehr.Base_Net.STRING)
                 For Each selected_row In TheOntologyManager.TerminologiesTable.Rows
                     Try
-                        If EIF_adlInterface.ontology.has_constraint_bindings(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0))) Then
-                            If EIF_adlInterface.ontology.has_constraint_binding(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0)), s) Then
-                                a_term = EIF_adlInterface.ontology.constraint_binding(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0)), s)
+                        If EIF_adlInterface.ontology.has_constraint_bindings(openehr.base_net.Create.STRING.make_from_cil(selected_row(0))) Then
+                            If EIF_adlInterface.ontology.has_constraint_binding(openehr.base_net.Create.STRING.make_from_cil(selected_row(0)), s) Then
+                                a_term = EIF_adlInterface.ontology.constraint_binding(openehr.base_net.Create.STRING.make_from_cil(selected_row(0)), s)
                                 d_row = TheOntologyManager.ConstraintBindingsTable.NewRow
                                 d_row(0) = selected_row(0)
                                 d_row(1) = s.to_cil
@@ -466,7 +466,7 @@ Friend Class ADL_Ontology
     End Sub
 
     Public Overrides Sub PopulateAllTerms(ByRef TheOntologyManager As OntologyManager)
-        If EIF_adlInterface.archetype_available Then
+        If EIF_adlInterface.ontology_available Then
             populate_languages(TheOntologyManager)
             populate_terminologies(TheOntologyManager)
             populate_term_definitions(TheOntologyManager)
@@ -477,7 +477,7 @@ Friend Class ADL_Ontology
 
     End Sub
 
-    Sub New(ByRef an_adl_interface As openehr.adl_parser.interface.ADL_INTERFACE, Optional ByVal Replace As Boolean = False)
+    Sub New(ByRef an_adl_interface As openehr.am.ADL_INTERFACE, Optional ByVal Replace As Boolean = False)
         EIF_adlInterface = an_adl_interface
     End Sub
 
@@ -520,4 +520,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

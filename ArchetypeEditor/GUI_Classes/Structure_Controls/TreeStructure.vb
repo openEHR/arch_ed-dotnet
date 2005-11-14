@@ -17,7 +17,7 @@
 Option Strict On
 
 Public Class TreeStructure
-    Inherits EntryStructure
+    Inherits Openehr.ArchetypeEditor.EntryStructure
 
 
     Friend MenuItemExpandAll As MenuItem

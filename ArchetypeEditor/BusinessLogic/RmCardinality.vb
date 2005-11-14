@@ -124,7 +124,7 @@ Public Class RmCardinality
 
     End Function
 
-    Public Sub SetFromOpenEHRCardinality(ByVal a_cardinality As openehr.openehr.am.archetype.constraint_model.CARDINALITY)
+    Public Sub SetFromOpenEHRCardinality(ByVal a_cardinality As openehr.am.CARDINALITY)
         If a_cardinality.interval.upper_unbounded Then
             mUnbounded = True
         Else
@@ -224,4 +224,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

@@ -57,7 +57,7 @@ Public Class RmSlot
 
 #Region "Processing ADL - incoming"
 
-    Sub New(ByVal an_archetype_slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)
+    Sub New(ByVal an_archetype_slot As openehr.am.ARCHETYPE_SLOT)
         MyBase.New(an_archetype_slot)
 
         mSlotConstraint = New Constraint_Slot
@@ -88,8 +88,8 @@ Public Class RmSlot
         If an_archetype_slot.has_includes Then
             Dim s As String
             For i As Integer = 1 To an_archetype_slot.includes.count
-                Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
-                assert = CType(an_archetype_slot.includes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
+                Dim assert As openehr.am.ASSERTION
+                assert = CType(an_archetype_slot.includes.i_th(i), openehr.am.ASSERTION)
                 s = ADL_Tools.Instance.GetDomainConceptFromAssertion(assert)
                 If s = "/.*/" Then
                     mSlotConstraint.IncludeAll = True
@@ -103,8 +103,8 @@ Public Class RmSlot
         If an_archetype_slot.has_excludes Then
             Dim s As String
             For i As Integer = 1 To an_archetype_slot.excludes.count
-                Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
-                assert = CType(an_archetype_slot.excludes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
+                Dim assert As openehr.am.ASSERTION
+                assert = CType(an_archetype_slot.excludes.i_th(i), openehr.am.ASSERTION)
                 s = ADL_Tools.Instance.GetDomainConceptFromAssertion(assert)
                 If s = "/.*/" Then
                     mSlotConstraint.ExcludeAll = True
@@ -163,4 +163,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

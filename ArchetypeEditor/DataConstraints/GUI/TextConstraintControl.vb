@@ -81,7 +81,6 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.butAddItem = New System.Windows.Forms.Button
         Me.listAllowableValues = New System.Windows.Forms.ListBox
         Me.ContextMenuListAllowableValues = New System.Windows.Forms.ContextMenu
-        Me.MenuItemEdit = New System.Windows.Forms.MenuItem
         Me.MenuItemCopyAll = New System.Windows.Forms.MenuItem
         Me.MenuItemPasteAll = New System.Windows.Forms.MenuItem
         Me.MenuItemCancelCopy = New System.Windows.Forms.MenuItem
@@ -93,6 +92,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.radioTerminology = New System.Windows.Forms.RadioButton
         Me.txtTermConstraintDescription = New System.Windows.Forms.TextBox
         Me.txtTermConstraintText = New System.Windows.Forms.TextBox
+        Me.MenuItemEdit = New System.Windows.Forms.MenuItem
         Me.gbAllowableValues.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -107,7 +107,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.gbAllowableValues.Controls.Add(Me.listAllowableValues)
         Me.gbAllowableValues.Location = New System.Drawing.Point(8, 40)
         Me.gbAllowableValues.Name = "gbAllowableValues"
-        Me.gbAllowableValues.Size = New System.Drawing.Size(360, 192)
+        Me.gbAllowableValues.Size = New System.Drawing.Size(352, 192)
         Me.gbAllowableValues.TabIndex = 36
         Me.gbAllowableValues.TabStop = False
         '
@@ -146,7 +146,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.txtAssumedValue.Location = New System.Drawing.Point(159, 165)
         Me.txtAssumedValue.Name = "txtAssumedValue"
         Me.txtAssumedValue.ReadOnly = True
-        Me.txtAssumedValue.Size = New System.Drawing.Size(177, 22)
+        Me.txtAssumedValue.Size = New System.Drawing.Size(177, 20)
         Me.txtAssumedValue.TabIndex = 5
         Me.txtAssumedValue.Text = "(none)"
         Me.txtAssumedValue.Visible = False
@@ -174,22 +174,15 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.listAllowableValues.ContextMenu = Me.ContextMenuListAllowableValues
         Me.listAllowableValues.DisplayMember = "Text"
-        Me.listAllowableValues.ItemHeight = 16
         Me.listAllowableValues.Location = New System.Drawing.Point(46, 20)
         Me.listAllowableValues.Name = "listAllowableValues"
-        Me.listAllowableValues.Size = New System.Drawing.Size(306, 132)
+        Me.listAllowableValues.Size = New System.Drawing.Size(290, 134)
         Me.listAllowableValues.TabIndex = 3
         Me.listAllowableValues.ValueMember = "Code"
         '
         'ContextMenuListAllowableValues
         '
         Me.ContextMenuListAllowableValues.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItemEdit, Me.MenuItemCopyAll, Me.MenuItemPasteAll, Me.MenuItemCancelCopy, Me.MenuItemAddExisting})
-        '
-        'MenuItemEdit
-        '
-        Me.MenuItemEdit.Index = 0
-        Me.MenuItemEdit.Text = "Edit"
-        Me.MenuItemEdit.Visible = False
         '
         'MenuItemCopyAll
         '
@@ -233,9 +226,9 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         'radioInternal
         '
-        Me.radioInternal.Location = New System.Drawing.Point(120, 6)
+        Me.radioInternal.Location = New System.Drawing.Point(104, 6)
         Me.radioInternal.Name = "radioInternal"
-        Me.radioInternal.Size = New System.Drawing.Size(120, 32)
+        Me.radioInternal.Size = New System.Drawing.Size(128, 32)
         Me.radioInternal.TabIndex = 32
         Me.radioInternal.Text = "Internal codes"
         '
@@ -243,13 +236,13 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.radioText.Location = New System.Drawing.Point(9, 6)
         Me.radioText.Name = "radioText"
-        Me.radioText.Size = New System.Drawing.Size(103, 32)
+        Me.radioText.Size = New System.Drawing.Size(79, 32)
         Me.radioText.TabIndex = 31
         Me.radioText.Text = "Free text or coded"
         '
         'radioTerminology
         '
-        Me.radioTerminology.Location = New System.Drawing.Point(248, 6)
+        Me.radioTerminology.Location = New System.Drawing.Point(240, 6)
         Me.radioTerminology.Name = "radioTerminology"
         Me.radioTerminology.Size = New System.Drawing.Size(128, 32)
         Me.radioTerminology.TabIndex = 33
@@ -269,10 +262,16 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.txtTermConstraintText.Location = New System.Drawing.Point(56, 72)
         Me.txtTermConstraintText.Name = "txtTermConstraintText"
-        Me.txtTermConstraintText.Size = New System.Drawing.Size(288, 22)
+        Me.txtTermConstraintText.Size = New System.Drawing.Size(288, 20)
         Me.txtTermConstraintText.TabIndex = 34
         Me.txtTermConstraintText.Text = ""
         Me.txtTermConstraintText.Visible = False
+        '
+        'MenuItemEdit
+        '
+        Me.MenuItemEdit.Index = 0
+        Me.MenuItemEdit.Text = "Edit"
+        Me.MenuItemEdit.Visible = False
         '
         'TextConstraintControl
         '
@@ -285,7 +284,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.txtTermConstraintDescription)
         Me.Controls.Add(Me.txtTermConstraintText)
         Me.Name = "TextConstraintControl"
-        Me.Size = New System.Drawing.Size(376, 240)
+        Me.Size = New System.Drawing.Size(368, 240)
         Me.gbAllowableValues.ResumeLayout(False)
         Me.ResumeLayout(False)
 

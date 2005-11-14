@@ -211,10 +211,9 @@ Public Class TermBindingPanel
         '
         Me.BindingCriteriaListBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BindingCriteriaListBox.ItemHeight = 16
         Me.BindingCriteriaListBox.Location = New System.Drawing.Point(48, 16)
         Me.BindingCriteriaListBox.Name = "BindingCriteriaListBox"
-        Me.BindingCriteriaListBox.Size = New System.Drawing.Size(520, 68)
+        Me.BindingCriteriaListBox.Size = New System.Drawing.Size(520, 69)
         Me.BindingCriteriaListBox.TabIndex = 11
         Me.BindingCriteriaListBox.TabStop = False
         '
@@ -230,9 +229,9 @@ Public Class TermBindingPanel
         'AddBindingGroupBox
         '
         Me.AddBindingGroupBox.Controls.Add(Me.CancelAddBindingButton)
-        Me.AddBindingGroupBox.Controls.Add(Me.BindingOkButton)
         Me.AddBindingGroupBox.Controls.Add(Me.Label4)
         Me.AddBindingGroupBox.Controls.Add(Me.Label1)
+        Me.AddBindingGroupBox.Controls.Add(Me.BindingOkButton)
         Me.AddBindingGroupBox.Controls.Add(Me.ReleaseTextBox)
         Me.AddBindingGroupBox.Controls.Add(Me.CodeTextBox)
         Me.AddBindingGroupBox.Controls.Add(Me.NodePathLabel)
@@ -258,6 +257,8 @@ Public Class TermBindingPanel
         '
         'Label4
         '
+        Me.Label4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label4.Location = New System.Drawing.Point(216, 63)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(72, 16)
@@ -267,6 +268,8 @@ Public Class TermBindingPanel
         '
         'Label1
         '
+        Me.Label1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label1.Location = New System.Drawing.Point(16, 63)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(88, 16)
@@ -285,6 +288,8 @@ Public Class TermBindingPanel
         '
         'ReleaseTextBox
         '
+        Me.ReleaseTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ReleaseTextBox.Location = New System.Drawing.Point(296, 63)
         Me.ReleaseTextBox.Name = "ReleaseTextBox"
         Me.ReleaseTextBox.TabIndex = 25
@@ -292,6 +297,8 @@ Public Class TermBindingPanel
         '
         'CodeTextBox
         '
+        Me.CodeTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CodeTextBox.Location = New System.Drawing.Point(104, 63)
         Me.CodeTextBox.Name = "CodeTextBox"
         Me.CodeTextBox.TabIndex = 24
@@ -299,7 +306,9 @@ Public Class TermBindingPanel
         '
         'NodePathLabel
         '
-        Me.NodePathLabel.Location = New System.Drawing.Point(72, 19)
+        Me.NodePathLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.NodePathLabel.Location = New System.Drawing.Point(72, 24)
         Me.NodePathLabel.Name = "NodePathLabel"
         Me.NodePathLabel.Size = New System.Drawing.Size(712, 32)
         Me.NodePathLabel.TabIndex = 26
@@ -384,7 +393,7 @@ Public Class TermBindingPanel
         Me.OperatorComboBox.Items.AddRange(New Object() {"=", "<", "<=", ">", ">=", "!="})
         Me.OperatorComboBox.Location = New System.Drawing.Point(456, 20)
         Me.OperatorComboBox.Name = "OperatorComboBox"
-        Me.OperatorComboBox.Size = New System.Drawing.Size(40, 24)
+        Me.OperatorComboBox.Size = New System.Drawing.Size(40, 21)
         Me.OperatorComboBox.TabIndex = 34
         Me.OperatorComboBox.Text = "="
         '
@@ -412,7 +421,7 @@ Public Class TermBindingPanel
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CriteriaValueTextBox.Location = New System.Drawing.Point(504, 20)
         Me.CriteriaValueTextBox.Name = "CriteriaValueTextBox"
-        Me.CriteriaValueTextBox.Size = New System.Drawing.Size(176, 22)
+        Me.CriteriaValueTextBox.Size = New System.Drawing.Size(176, 20)
         Me.CriteriaValueTextBox.TabIndex = 35
         Me.CriteriaValueTextBox.Text = ""
         Me.CriteriaValueTextBox.Visible = False
@@ -449,7 +458,7 @@ Public Class TermBindingPanel
         Me.TerminologyComboBox.DisplayMember = "Description"
         Me.TerminologyComboBox.Location = New System.Drawing.Point(256, 8)
         Me.TerminologyComboBox.Name = "TerminologyComboBox"
-        Me.TerminologyComboBox.Size = New System.Drawing.Size(328, 24)
+        Me.TerminologyComboBox.Size = New System.Drawing.Size(328, 21)
         Me.TerminologyComboBox.TabIndex = 12
         Me.TerminologyComboBox.ValueMember = "Terminology"
         '
@@ -816,28 +825,6 @@ Public Class TermBindingPanel
         End If
     End Sub
 
-    Private Sub RemovePathFromBindings(ByVal aPath As String, ByVal aCode As String, Optional ByVal aCriteria As String = "")
-
-        Dim SelectedRows As DataRow()
-
-        SelectedRows = Filemanager.Instance.OntologyManager.TermBindingsTable.Select _
-            ("[Terminology]='" & CStr(Me.TerminologyComboBox.SelectedValue) & "'" _
-            & " AND [Path]='" & aPath & "'" _
-            & " AND [Code]='" & aCode & "'")
-
-        For Each d_row As DataRow In SelectedRows
-            d_row.Delete()
-        Next
-
-        Filemanager.Instance.OntologyManager.TermBindingsTable.AcceptChanges()
-
-        Filemanager.Instance.FileEdited = True
-
-        If BindingList.Items.Count > 0 Then
-            BindingList.Items(BindingList.Items.Count - 1).Selected = True
-        End If
-    End Sub
-
     Private Sub AddTerminologyButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
             Handles AddTerminologyButton.Click
 
@@ -905,7 +892,7 @@ Public Class TermBindingPanel
             Me.NodePathLabel.Text = "//" & Me.NodePathLabel.Text
         End If
 
-        If Filemanager.Instance.OntologyManager.hasTermBinding(CStr(TerminologyComboBox.SelectedValue), CodeTextBox.Text, NodePathLabel.Text) Then
+        If Filemanager.Instance.OntologyManager.hasTermBinding(CType(TerminologyComboBox.SelectedValue, String), CodeTextBox.Text, NodePathLabel.Text) Then
             If MessageBox.Show(AE_Constants.Instance.Must_add_criteria, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = DialogResult.OK Then
                 AddBindingGroupBox.Visible = False
                 AddCriteriaButton_Click(sender, e)
@@ -994,16 +981,7 @@ Public Class TermBindingPanel
 
             Dim index As Integer = BindingList.SelectedIndices.Item(0)
             If index >= 0 Then
-                Dim a_code As String = CStr(mTermBindingView.Item(index).Item("Code"))
-                Dim a_path As String = CStr(mTermBindingView.Item(index).Item("Path"))
-                If Filemanager.Instance.OntologyManager.hasTermBinding(CStr(TerminologyComboBox.SelectedValue), a_code, a_path) Then
-                    Try
-                        RemovePathFromBindings(a_path, a_code)
-                    Catch ex As Exception
-                        Debug.Assert(False, ex.ToString)
-                        MessageBox.Show(AE_Constants.Instance.Error_saving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    End Try
-                End If
+                mTermBindingView.Item(index).Delete()
             End If
 
             ShowNodesImage(PathsTreeView.Nodes)

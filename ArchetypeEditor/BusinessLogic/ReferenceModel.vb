@@ -169,12 +169,6 @@ Public Class ReferenceModelLocal
                             Case StructureType.Data, StructureType.State, StructureType.Protocol
                                 Return True
                         End Select
-                    Case StructureType.ADMIN_ENTRY
-                        ' only data for admin entry
-                        Select Case Child
-                            Case StructureType.Data
-                                Return True
-                        End Select
                     Case StructureType.INSTRUCTION
                         Select Case Child
                             Case StructureType.InstructionActExection, StructureType.Action
@@ -183,7 +177,7 @@ Public Class ReferenceModelLocal
                     Case StructureType.Data 'openEHR
                         Debug.Assert(mArchetypedClass <> 0)
                         Select Case mArchetypedClass
-                            Case StructureType.EVALUATION, StructureType.ADMIN_ENTRY
+                            Case StructureType.EVALUATION
                                 Select Case Child
                                     Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
                                         mStructureClass = Child
@@ -300,7 +294,6 @@ Public Class ReferenceModelLocal
                 s(0) = StructureType.OBSERVATION
                 s(1) = StructureType.EVALUATION
                 s(2) = StructureType.INSTRUCTION
-                s(3) = StructureType.ADMIN_ENTRY
                 Return s
             Case ReferenceModelType.CEN_EHR, ReferenceModelType.HL7_CDA
                 Dim s(0) As StructureType
@@ -382,12 +375,11 @@ Public Class ReferenceModelLocal
             Case StructureType.SECTION
                 Select Case mRefModelType
                     Case ReferenceModelType.openEHR_EHR
-                        Dim s(4) As StructureType
+                        Dim s(3) As StructureType
                         s(0) = StructureType.EVALUATION
                         s(1) = StructureType.INSTRUCTION
                         s(2) = StructureType.OBSERVATION
                         s(3) = StructureType.SECTION
-                        s(4) = StructureType.ADMIN_ENTRY
                         Return s
                     Case ReferenceModelType.CEN_EHR, ReferenceModelType.HL7_CDA
                         Dim s(1) As StructureType
@@ -416,7 +408,7 @@ Public Class ReferenceModelLocal
     Public Function ValidArchetypeDefinitions() As StructureType()
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
-                Dim s(9) As StructureType
+                Dim s(8) As StructureType
                 s(0) = StructureType.OBSERVATION
                 s(1) = StructureType.EVALUATION
                 s(2) = StructureType.INSTRUCTION
@@ -426,7 +418,6 @@ Public Class ReferenceModelLocal
                 s(6) = StructureType.List
                 s(7) = StructureType.Tree
                 s(8) = StructureType.Table
-                s(9) = StructureType.ADMIN_ENTRY
                 Return s
             Case ReferenceModelType.CEN_EHR, ReferenceModelType.HL7_CDA
                 Dim s(2) As StructureType

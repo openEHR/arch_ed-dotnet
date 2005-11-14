@@ -39,6 +39,9 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
 
+        ' Add time units for the appropriate language
+
+
 
     End Sub
 
@@ -47,174 +50,128 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
+    Friend WithEvents LabelDateTime As System.Windows.Forms.Label
+    Friend WithEvents ImageListDateTime As System.Windows.Forms.ImageList
     Private components As System.ComponentModel.IContainer
     Friend WithEvents chkAll As System.Windows.Forms.CheckBox
     Friend WithEvents chkYears As System.Windows.Forms.CheckBox
     Friend WithEvents chkMonths As System.Windows.Forms.CheckBox
     Friend WithEvents chkWeeks As System.Windows.Forms.CheckBox
+    Friend WithEvents CheckBox6 As System.Windows.Forms.CheckBox
     Friend WithEvents chkHours As System.Windows.Forms.CheckBox
     Friend WithEvents chkMinutes As System.Windows.Forms.CheckBox
     Friend WithEvents chkDays As System.Windows.Forms.CheckBox
     Friend WithEvents chkMilliseconds As System.Windows.Forms.CheckBox
-    Friend WithEvents chkSeconds As System.Windows.Forms.CheckBox
-    Friend WithEvents panelTop As System.Windows.Forms.Panel
-    Friend WithEvents panelDetail As System.Windows.Forms.Panel
-    Friend WithEvents LabelDuration As System.Windows.Forms.Label
-    Friend WithEvents comboTimeUnits As System.Windows.Forms.ComboBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.LabelDuration = New System.Windows.Forms.Label
+        Me.components = New System.ComponentModel.Container
+        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(DurationConstraintControl))
+        Me.ImageListDateTime = New System.Windows.Forms.ImageList(Me.components)
+        Me.LabelDateTime = New System.Windows.Forms.Label
         Me.chkAll = New System.Windows.Forms.CheckBox
         Me.chkYears = New System.Windows.Forms.CheckBox
         Me.chkMonths = New System.Windows.Forms.CheckBox
         Me.chkWeeks = New System.Windows.Forms.CheckBox
         Me.chkHours = New System.Windows.Forms.CheckBox
         Me.chkMinutes = New System.Windows.Forms.CheckBox
-        Me.chkSeconds = New System.Windows.Forms.CheckBox
+        Me.CheckBox6 = New System.Windows.Forms.CheckBox
         Me.chkDays = New System.Windows.Forms.CheckBox
         Me.chkMilliseconds = New System.Windows.Forms.CheckBox
-        Me.panelTop = New System.Windows.Forms.Panel
-        Me.panelDetail = New System.Windows.Forms.Panel
-        Me.comboTimeUnits = New System.Windows.Forms.ComboBox
-        Me.panelTop.SuspendLayout()
-        Me.panelDetail.SuspendLayout()
         Me.SuspendLayout()
         '
-        'LabelDuration
+        'ImageListDateTime
         '
-        Me.LabelDuration.BackColor = System.Drawing.Color.Transparent
-        Me.LabelDuration.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelDuration.Location = New System.Drawing.Point(8, 8)
-        Me.LabelDuration.Name = "LabelDuration"
-        Me.LabelDuration.Size = New System.Drawing.Size(96, 24)
-        Me.LabelDuration.TabIndex = 36
-        Me.LabelDuration.Text = "Duration"
+        Me.ImageListDateTime.ImageSize = New System.Drawing.Size(16, 16)
+        Me.ImageListDateTime.ImageStream = CType(resources.GetObject("ImageListDateTime.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageListDateTime.TransparentColor = System.Drawing.Color.Transparent
+        '
+        'LabelDateTime
+        '
+        Me.LabelDateTime.BackColor = System.Drawing.Color.Transparent
+        Me.LabelDateTime.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelDateTime.Location = New System.Drawing.Point(8, 8)
+        Me.LabelDateTime.Name = "LabelDateTime"
+        Me.LabelDateTime.Size = New System.Drawing.Size(96, 24)
+        Me.LabelDateTime.TabIndex = 36
+        Me.LabelDateTime.Text = "Duration"
         '
         'chkAll
         '
         Me.chkAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.chkAll.Location = New System.Drawing.Point(224, 8)
+        Me.chkAll.Location = New System.Drawing.Point(120, 16)
         Me.chkAll.Name = "chkAll"
-        Me.chkAll.Size = New System.Drawing.Size(144, 32)
         Me.chkAll.TabIndex = 37
-        Me.chkAll.Text = "Allow all time units"
+        Me.chkAll.Text = "Allow all"
         '
         'chkYears
         '
-        Me.chkYears.Location = New System.Drawing.Point(16, 8)
+        Me.chkYears.Location = New System.Drawing.Point(24, 56)
         Me.chkYears.Name = "chkYears"
-        Me.chkYears.Size = New System.Drawing.Size(176, 24)
         Me.chkYears.TabIndex = 38
-        Me.chkYears.Tag = "a"
         Me.chkYears.Text = "Years"
         '
         'chkMonths
         '
-        Me.chkMonths.Location = New System.Drawing.Point(16, 32)
+        Me.chkMonths.Location = New System.Drawing.Point(24, 80)
         Me.chkMonths.Name = "chkMonths"
-        Me.chkMonths.Size = New System.Drawing.Size(176, 24)
         Me.chkMonths.TabIndex = 39
-        Me.chkMonths.Tag = "mo"
         Me.chkMonths.Text = "Months"
         '
         'chkWeeks
         '
-        Me.chkWeeks.Location = New System.Drawing.Point(16, 56)
+        Me.chkWeeks.Location = New System.Drawing.Point(24, 104)
         Me.chkWeeks.Name = "chkWeeks"
-        Me.chkWeeks.Size = New System.Drawing.Size(176, 24)
         Me.chkWeeks.TabIndex = 40
-        Me.chkWeeks.Tag = "wk"
         Me.chkWeeks.Text = "Weeks"
         '
         'chkHours
         '
-        Me.chkHours.Location = New System.Drawing.Point(224, 8)
+        Me.chkHours.Location = New System.Drawing.Point(152, 56)
         Me.chkHours.Name = "chkHours"
-        Me.chkHours.Size = New System.Drawing.Size(152, 24)
         Me.chkHours.TabIndex = 41
-        Me.chkHours.Tag = "h"
         Me.chkHours.Text = "Hours"
         '
         'chkMinutes
         '
-        Me.chkMinutes.Location = New System.Drawing.Point(224, 32)
+        Me.chkMinutes.Location = New System.Drawing.Point(152, 80)
         Me.chkMinutes.Name = "chkMinutes"
-        Me.chkMinutes.Size = New System.Drawing.Size(152, 24)
         Me.chkMinutes.TabIndex = 42
-        Me.chkMinutes.Tag = "min"
         Me.chkMinutes.Text = "Minutes"
         '
-        'chkSeconds
+        'CheckBox6
         '
-        Me.chkSeconds.Location = New System.Drawing.Point(224, 56)
-        Me.chkSeconds.Name = "chkSeconds"
-        Me.chkSeconds.Size = New System.Drawing.Size(152, 24)
-        Me.chkSeconds.TabIndex = 43
-        Me.chkSeconds.Tag = "s"
-        Me.chkSeconds.Text = "Seconds"
+        Me.CheckBox6.Location = New System.Drawing.Point(152, 104)
+        Me.CheckBox6.Name = "CheckBox6"
+        Me.CheckBox6.TabIndex = 43
+        Me.CheckBox6.Text = "Seconds"
         '
         'chkDays
         '
-        Me.chkDays.Location = New System.Drawing.Point(16, 80)
+        Me.chkDays.Location = New System.Drawing.Point(24, 128)
         Me.chkDays.Name = "chkDays"
-        Me.chkDays.Size = New System.Drawing.Size(176, 24)
         Me.chkDays.TabIndex = 44
-        Me.chkDays.Tag = "d"
         Me.chkDays.Text = "Days"
         '
         'chkMilliseconds
         '
-        Me.chkMilliseconds.Location = New System.Drawing.Point(224, 80)
+        Me.chkMilliseconds.Location = New System.Drawing.Point(152, 128)
         Me.chkMilliseconds.Name = "chkMilliseconds"
-        Me.chkMilliseconds.Size = New System.Drawing.Size(152, 24)
         Me.chkMilliseconds.TabIndex = 45
-        Me.chkMilliseconds.Tag = "millisec"
         Me.chkMilliseconds.Text = "Milliseconds"
-        Me.chkMilliseconds.Visible = False
-        '
-        'panelTop
-        '
-        Me.panelTop.Controls.Add(Me.chkAll)
-        Me.panelTop.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelTop.Location = New System.Drawing.Point(0, 0)
-        Me.panelTop.Name = "panelTop"
-        Me.panelTop.Size = New System.Drawing.Size(384, 48)
-        Me.panelTop.TabIndex = 46
-        '
-        'panelDetail
-        '
-        Me.panelDetail.Controls.Add(Me.chkMilliseconds)
-        Me.panelDetail.Controls.Add(Me.chkDays)
-        Me.panelDetail.Controls.Add(Me.chkSeconds)
-        Me.panelDetail.Controls.Add(Me.chkMinutes)
-        Me.panelDetail.Controls.Add(Me.chkHours)
-        Me.panelDetail.Controls.Add(Me.chkWeeks)
-        Me.panelDetail.Controls.Add(Me.chkMonths)
-        Me.panelDetail.Controls.Add(Me.chkYears)
-        Me.panelDetail.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelDetail.Location = New System.Drawing.Point(0, 48)
-        Me.panelDetail.Name = "panelDetail"
-        Me.panelDetail.Size = New System.Drawing.Size(384, 104)
-        Me.panelDetail.TabIndex = 47
-        '
-        'comboTimeUnits
-        '
-        Me.comboTimeUnits.Items.AddRange(New Object() {"M; months", "Y; Years"})
-        Me.comboTimeUnits.Location = New System.Drawing.Point(256, 160)
-        Me.comboTimeUnits.Name = "comboTimeUnits"
-        Me.comboTimeUnits.Size = New System.Drawing.Size(88, 24)
-        Me.comboTimeUnits.TabIndex = 56
-        Me.comboTimeUnits.Visible = False
         '
         'DurationConstraintControl
         '
-        Me.Controls.Add(Me.comboTimeUnits)
-        Me.Controls.Add(Me.panelDetail)
-        Me.Controls.Add(Me.LabelDuration)
-        Me.Controls.Add(Me.panelTop)
+        Me.Controls.Add(Me.chkMilliseconds)
+        Me.Controls.Add(Me.chkDays)
+        Me.Controls.Add(Me.CheckBox6)
+        Me.Controls.Add(Me.chkMinutes)
+        Me.Controls.Add(Me.chkHours)
+        Me.Controls.Add(Me.chkWeeks)
+        Me.Controls.Add(Me.chkMonths)
+        Me.Controls.Add(Me.chkYears)
+        Me.Controls.Add(Me.chkAll)
+        Me.Controls.Add(Me.LabelDateTime)
         Me.Name = "DurationConstraintControl"
-        Me.Size = New System.Drawing.Size(384, 264)
-        Me.panelTop.ResumeLayout(False)
-        Me.panelDetail.ResumeLayout(False)
+        Me.Size = New System.Drawing.Size(304, 168)
         Me.ResumeLayout(False)
 
     End Sub
@@ -229,235 +186,43 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         End Get
     End Property
 
-    Dim WithEvents mCountControl As CountConstraintControl
-
-    Private Sub SetUnitDisplay(ByVal Sender As Object, ByVal DisplayUnits As Boolean) Handles mCountControl.ChangeDisplay
-        Me.comboTimeUnits.Visible = DisplayUnits
-    End Sub
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
 
-        Dim s As String = Me.Constraint.AllowableUnits
+        'MyBase.SetControlValues(IsState) 
 
-        mCountControl = New CountConstraintControl(mFileManager)
-        Me.Controls.Add(mCountControl)
-        mCountControl.Top = Me.panelDetail.Top + Me.panelDetail.Height + 10
-        mCountControl.ShowConstraint(IsState, Me.Constraint)
-        mCountControl.LabelQuantity.Text = AE_Constants.Instance.Unit
+        ' set constraint values on control
 
-        If s = "*" Then
-            Me.chkAll.Checked = True
-        Else
-            Me.chkAll.Checked = False
+        
+        'Me.TvDateTime.SelectedNode = FindNode(Me.TvDateTime.Nodes, _
+        '            CStr(Me.Constraint.TypeofDateTimeConstraint), True)
 
-            Dim y As String() = s.Split("T".ToCharArray)
-            If y.Length = 2 AndAlso y(1) <> "" Then
-                ' there are day and time units
-                If y(1).IndexOf("H") > -1 Then
-                    Me.chkHours.Checked = True
-                End If
-                If y(1).IndexOf("M") > -1 Then
-                    Me.chkMinutes.Checked = True
-                End If
-                If y(1).IndexOf("S") > -1 Then
-                    Me.chkSeconds.Checked = True
-                End If
-            End If
-            If y(0).IndexOf("Y") > -1 Then
-                Me.chkYears.Checked = True
-            End If
-            If y(0).IndexOf("M") > -1 Then
-                Me.chkMonths.Checked = True
-            End If
-            If y(0).IndexOf("W") > -1 Then
-                Me.chkWeeks.Checked = True
-            End If
-            If y(0).IndexOf("D") > -1 Then
-                Me.chkDays.Checked = True
-            End If
-        End If
-
-        If Me.Constraint.ValueUnits <> "" Then
-            Dim time_unit As String = ""
-            Select Case Me.Constraint.ValueUnits
-                Case "Y"
-                    time_unit = chkYears.Text
-                Case "M"
-                    time_unit = chkMonths.Text
-                Case "W"
-                    time_unit = chkWeeks.Text
-                Case "D"
-                    time_unit = chkDays.Text
-                Case "TH"
-                    time_unit = chkHours.Text
-                Case "TM"
-                    time_unit = chkMinutes.Text
-                Case "TS"
-                    time_unit = chkSeconds.Text
-                Case Else
-                    Debug.Assert(False, "Not handled")
-            End Select
-            Me.comboTimeUnits.SelectedIndex = Me.comboTimeUnits.FindStringExact(time_unit)
-        End If
-
-        ResetTimeUnits()
-        Me.LabelDuration.Text = AE_Constants.Instance.Duration
+        'Me.TvDateTime.SelectedNode.EnsureVisible()
 
     End Sub
 
-    Private Function GetAllowableUnits() As String
-        Dim result As String = ""
-        Dim time_separated As Boolean
+    Private Sub TvDateTime_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs)
+        'Dim ae As iArchetypeElementNode
 
+        ' HKF: 1620
+        If MyBase.IsLoading Then Return
+        'If MyBase.ArchetypeNode Is Nothing Then Return
 
-        If Me.chkYears.Checked Then
-            result &= "Y"
-        End If
-        If Me.chkMonths.Checked Then
-            result &= "M"
-        End If
-        If Me.chkWeeks.Checked Then
-            result &= "W"
-        End If
-        If Me.chkDays.Checked Then
-            result &= "D"
-        End If
-        If Me.chkHours.Checked Then
-            result &= "TH"
-            time_separated = True
-        End If
-        If Me.chkMinutes.Checked Then
-            If Not time_separated Then
-                result &= "T"
-                time_separated = True
-            End If
-            result &= "M"
-        End If
-        If Me.chkSeconds.Checked Then
-            If Not time_separated Then
-                result &= "T"
-                time_separated = True
-            End If
-            result &= "S"
-        End If
-        Return result
+        'Try
+        '    ae = CType(currentitem, iArchetypeElementNode)
+        'Catch
+        '    Return
+        'End Try
 
-    End Function
+        ' CType(MyBase.Constraint, Constraint_DateTime).TypeofDateTimeConstraint _
+        '        = CInt(Me.TvDateTime.SelectedNode.Tag)
 
-    Private Sub ResetTimeUnits()
-
-        Dim s As String = Me.comboTimeUnits.Text
-
-        Me.comboTimeUnits.Items.Clear()
-        If chkAll.Checked Then
-            Me.comboTimeUnits.Items.Add(chkYears.Text)
-            Me.comboTimeUnits.Items.Add(chkMonths.Text)
-            Me.comboTimeUnits.Items.Add(chkWeeks.Text)
-            Me.comboTimeUnits.Items.Add(chkDays.Text)
-            Me.comboTimeUnits.Items.Add(chkHours.Text)
-            Me.comboTimeUnits.Items.Add(chkMinutes.Text)
-            Me.comboTimeUnits.Items.Add(chkSeconds.Text)
-        Else
-            If chkYears.Checked Then
-                Me.comboTimeUnits.Items.Add(chkYears.Text)
-            End If
-            If chkMonths.Checked Then
-                Me.comboTimeUnits.Items.Add(chkMonths.Text)
-            End If
-            If chkWeeks.Checked Then
-                Me.comboTimeUnits.Items.Add(chkWeeks.Text)
-            End If
-            If chkDays.Checked Then
-                Me.comboTimeUnits.Items.Add(chkDays.Text)
-            End If
-            If chkHours.Checked Then
-                Me.comboTimeUnits.Items.Add(chkHours.Text)
-            End If
-            If chkMinutes.Checked Then
-                Me.comboTimeUnits.Items.Add(chkMinutes.Text)
-            End If
-            If chkSeconds.Checked Then
-                Me.comboTimeUnits.Items.Add(chkSeconds.Text)
-            End If
-        End If
-
-        ' reset the units to the previous value
-        Dim i As Integer = Me.comboTimeUnits.FindStringExact(s)
-        If i > -1 Then
-            Me.comboTimeUnits.SelectedIndex = i
-        Else
-            Me.comboTimeUnits.SelectedIndex = Me.comboTimeUnits.Items.Count - 1
-        End If
+        mFileManager.FileEdited = True
 
     End Sub
-    Private Sub chkAll_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkAll.CheckedChanged
-        If chkAll.Checked Then
-            Me.panelDetail.Visible = False
-            mCountControl.Top = Me.panelTop.Top + Me.panelTop.Height + 10
-            Me.comboTimeUnits.Top = Me.panelTop.Top + Me.panelTop.Height + 10
-        Else
-            Me.panelDetail.Visible = True
-            mCountControl.Top = Me.panelDetail.Top + Me.panelDetail.Height + 10
-            Me.comboTimeUnits.Top = Me.panelDetail.Top + Me.panelDetail.Height + 10
-        End If
 
-        ResetTimeUnits()
+    Private Sub DurationConstraintControl_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-        If Not MyBase.IsLoading() Then
-            If chkAll.Checked Then
-                Me.Constraint.AllowableUnits = "*"
-            Else
-                Me.Constraint.AllowableUnits = GetAllowableUnits()
-            End If
-            mFileManager.FileEdited = True
-        End If
-    End Sub
-
-    Private Sub chkBox_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-        Handles chkYears.CheckedChanged, chkDays.CheckedChanged, _
-        chkHours.CheckedChanged, chkMinutes.CheckedChanged, chkMonths.CheckedChanged, _
-        chkSeconds.CheckedChanged, chkWeeks.CheckedChanged
-
-        Dim s As String = Me.comboTimeUnits.Text
-
-        ResetTimeUnits()
-
-
-        If Not MyBase.IsLoading() Then
-            Me.Constraint.AllowableUnits = GetAllowableUnits()
-            mFileManager.FileEdited = True
-        End If
-    End Sub
-
-
-    Private Sub comboTimeUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboTimeUnits.SelectedIndexChanged
-        If Not MyBase.IsLoading Then
-            If comboTimeUnits.SelectedIndex > -1 Then
-                Dim s As String
-
-                Select Case comboTimeUnits.Text
-                    Case Me.chkYears.Text
-                        s = "Y"
-                    Case Me.chkMonths.Text
-                        s = "M"
-                    Case Me.chkWeeks.Text
-                        s = "W"
-                    Case Me.chkDays.Text
-                        s = "D"
-                    Case Me.chkHours.Text
-                        s = "TH"
-                    Case Me.chkMinutes.Text
-                        s = "TM"
-                    Case Me.chkSeconds.Text
-                        s = "TS"
-                    Case Else
-                        Debug.Assert(False, "Not handled")
-                        Return
-                End Select
-                Me.Constraint.ValueUnits = s
-                mFileManager.FileEdited = True
-            End If
-        End If
     End Sub
 End Class
 

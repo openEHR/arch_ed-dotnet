@@ -25,7 +25,7 @@ Public Class RmSection
         MyBase.new(NodeId, StructureType.SECTION)
     End Sub
 
-    Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Sub New(ByVal EIF_Structure As openehr.am.C_COMPLEX_OBJECT)
         MyBase.New(EIF_Structure)
     End Sub
 End Class
@@ -67,4 +67,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

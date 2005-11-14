@@ -19,10 +19,10 @@ Option Explicit On
 Class ADL_SECTION
     Inherits RmSection
 
-    Private Function GetRunTimeConstraintID(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As String
+    Private Function GetRunTimeConstraintID(ByVal an_attribute As Openehr.am.C_Attribute) As String
 
-        Dim CodedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-        Dim constraint_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT
+        Dim CodedText As Openehr.am.C_COMPLEX_OBJECT
+        Dim constraint_object As openehr.am.C_OBJECT
         Dim s As String
 
         CodedText = an_attribute.children.first
@@ -30,9 +30,9 @@ Class ADL_SECTION
         constraint_object = an_attribute.children.first
 
         If constraint_object.generating_type.to_cil = "CONSTRAINT_REF" Then
-            s = CType(constraint_object, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).as_string.to_cil
+            s = CType(constraint_object, openehr.am.CONSTRAINT_REF).as_string.to_cil
         ElseIf constraint_object.generating_type.to_cil = "C_CODED_TERM" Then
-            s = CType(constraint_object, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM).as_string.to_cil()
+            s = CType(constraint_object, openehr.am.C_CODED_TERM).as_string.to_cil()
         End If
         ' strip off the square brackets
         s = s.Substring(1, s.Length - 2)
@@ -44,15 +44,15 @@ Class ADL_SECTION
 
     End Function
 
-    Private Function ProcessSection(ByVal a_rm_section As Object, ByVal an_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+    Private Function ProcessSection(ByVal a_rm_section As Object, ByVal an_object As openehr.am.C_OBJECT)
         'ccomplex object means it is a section, otherwise a slot
         'a_rm_section is passed as object so that definition can be passed at the first level
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        Dim an_attribute As openehr.am.C_ATTRIBUTE
         Dim i, j As Integer
 
         Select Case an_object.generating_type.to_cil
             Case "C_COMPLEX_OBJECT"
-                Dim a_complex_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                Dim a_complex_object As openehr.am.C_COMPLEX_OBJECT
                 Dim a_section As RmSection
 
                 a_section = New RmSection(an_object.node_id.to_cil)
@@ -62,7 +62,7 @@ Class ADL_SECTION
                     an_attribute = a_complex_object.attributes.i_th(i)
                     Select Case an_attribute.Rm_Attribute_Name.to_cil
                         Case "name", "Name", "NAME", "runtime_label"
-                            a_section.NameConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                            a_section.NameConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.am.C_COMPLEX_OBJECT))
                         Case "items", "Items", "ITEMS"
                             For j = 1 To an_attribute.children.count
                                 ProcessSection(a_section, an_attribute.children.i_th(j))
@@ -82,14 +82,14 @@ Class ADL_SECTION
     End Function
 
 
-    Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Sub New(ByRef Definition As openehr.am.C_COMPLEX_OBJECT)
         MyBase.New(Definition)
 
-        If Definition.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("items")) Then
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        If Definition.has_attribute(openehr.base_net.Create.STRING.make_from_cil("items")) Then
+            Dim an_attribute As openehr.am.C_ATTRIBUTE
             Dim i As Integer
 
-            an_attribute = Definition.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("items"))
+            an_attribute = Definition.c_attribute_at_path(openehr.base_net.Create.STRING.make_from_cil("items"))
             For i = 1 To an_attribute.children.count
                 ProcessSection(Me, an_attribute.children.i_th(i))
             Next
@@ -136,4 +136,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

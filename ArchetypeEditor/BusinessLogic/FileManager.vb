@@ -112,18 +112,6 @@ Public Class FileManagerLocal
         End Get
     End Property
 
-    Public Function IndexOfFormat(ByVal a_format As String) As Integer
-        ' returns a filedialog filter
-        Dim format_filter As String
-
-        For i As Integer = 0 To mArchetypeEngine.AvailableFormats.Length - 1
-            If a_format = mArchetypeEngine.AvailableFormats(i) Then
-                Return i + 1
-            End If
-        Next
-        Return 0
-    End Function
-
     Protected Sub OnIsFileDirtyChanged(ByVal IsFileDirty As Boolean)
         RaiseEvent IsFileDirtyChanged(Me, New FileManagerEventArgs(IsFileDirty))
     End Sub

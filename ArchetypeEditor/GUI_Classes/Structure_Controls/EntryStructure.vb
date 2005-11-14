@@ -379,7 +379,7 @@ Public Class EntryStructure
 
     Public ReadOnly Property SelectedImageOffset() As Integer
         Get
-            Return 26
+            Return 24
         End Get
     End Property
     'implement as overrided property
@@ -616,7 +616,7 @@ Public Class EntryStructure
 
         Dim offset As Integer
 
-        If isReference Then offset = 13
+        If isReference Then offset = 12
         If isSelected Then offset += Me.SelectedImageOffset
 
         Select Case ct
@@ -644,8 +644,6 @@ Public Class EntryStructure
                 Return 10 + offset
             Case ConstraintType.Ratio
                 Return 11 + offset
-            Case ConstraintType.Duration
-                Return 12 + offset
             Case Else
                 Debug.Assert(False, "Constraint not handled")
         End Select

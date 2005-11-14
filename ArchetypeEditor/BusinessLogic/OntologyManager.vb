@@ -828,7 +828,6 @@ Public Class OntologyManager
                 mTermBindingCriteriaTable.Columns(1), mTermBindingCriteriaTable.Columns(2)}
         new_relation = New DataRelation("TermBindingTermBindingCriteria", _
                 termBindingColumns, termBindingCriteriaColumns)
-
         mLanguageDS.Relations.Add(new_relation)
 
         mConstraintBindingsTable = MakeConstraintBindingTable()

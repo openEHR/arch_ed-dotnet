@@ -139,25 +139,25 @@ Class RmEvent
 
 #Region "ADL Oriented Features"
 
-    Sub New(ByVal An_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Sub New(ByVal An_Event As Openehr.am.C_COMPLEX_OBJECT)
         MyBase.New(An_Event.node_id.to_cil, StructureType.Event)
         ProcessEvent(An_Event)
     End Sub
 
-    Private mEIF_Data As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-    Property ADL_Data() As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+    Private mEIF_Data As Openehr.am.C_Attribute
+    Property ADL_Data() As Openehr.am.C_Attribute
         Get
             Return mEIF_Data
         End Get
-        Set(ByVal Value As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+        Set(ByVal Value As Openehr.am.C_Attribute)
             Debug.Assert(False)
         End Set
     End Property
 
 #Region "ADL PRocessing - incoming"
 
-    Private Sub ProcessEvent(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+    Private Sub ProcessEvent(ByVal ObjNode As Openehr.am.C_COMPLEX_OBJECT)
+        Dim an_attribute As Openehr.am.C_Attribute
         Dim i As Integer
 
         cOccurrences = ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
@@ -168,10 +168,10 @@ Class RmEvent
 
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label" ' runtime_label is redundant
-                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.am.C_COMPLEX_OBJECT))
                 Case "offset"
                     Dim d As New Duration
-                    Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                    Dim offset As openehr.am.C_PRIMITIVE_OBJECT
 
                     offset = an_attribute.children.first
                     d.ISO_duration = offset.item.as_string.to_cil
@@ -180,7 +180,7 @@ Class RmEvent
 
                 Case "width"
                     Dim d As New Duration
-                    Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                    Dim width As openehr.am.C_PRIMITIVE_OBJECT
 
                     boolPointInTime = False
                     width = an_attribute.children.first
@@ -189,14 +189,14 @@ Class RmEvent
                     Me.WidthUnits = d.GUI_Units
 
                 Case "aggregate_math_function"
-                    Dim MathFunc As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                    Dim MathFunc As openehr.am.C_PRIMITIVE_OBJECT
 
                     boolPointInTime = False
                     MathFunc = an_attribute.children.first
                     Me.sMath = MathFunc.item.as_string.to_cil.Trim("""")
 
                 Case "display_as_positive"
-                    Dim DisplayPos As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                    Dim DisplayPos As openehr.am.C_PRIMITIVE_OBJECT
 
                     DisplayPos = an_attribute.children.first
                     boolSignNeg = (DisplayPos.item.as_string.to_cil = "True")
@@ -211,14 +211,14 @@ Class RmEvent
 
 
         If Not Me.ADL_Data Is Nothing Then
-            Dim cadlStruct As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim cadlStruct As Openehr.am.C_COMPLEX_OBJECT
 
             Select Case Me.ADL_Data.Children.First.Generating_Type.to_cil
                 Case "ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
                 Case "C_COMPLEX_OBJECT"
-                    cadlStruct = CType(Me.ADL_Data.Children.First, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+                    cadlStruct = CType(Me.ADL_Data.Children.First, Openehr.am.C_COMPLEX_OBJECT)
                     Dim structure_type As StructureType
 
                     structure_type = ReferenceModel.Instance.StructureTypeFromString(cadlStruct.Rm_Type_Name.to_cil)
@@ -280,4 +280,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

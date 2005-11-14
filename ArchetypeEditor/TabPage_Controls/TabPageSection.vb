@@ -347,7 +347,7 @@ Public Class TabPageSection
             End If
         End If
 
-        SectNode.Children.Cardinality.Ordered = Me.cbOrdered.Checked
+        SectNode.Children.Ordered = Me.cbOrdered.Checked
         If Me.cbFixed.Checked Then
             Dim i As Integer
             For Each rm As RmStructure In SectNode.Children
@@ -797,4 +797,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

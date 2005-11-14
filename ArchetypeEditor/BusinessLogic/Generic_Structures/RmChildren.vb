@@ -65,6 +65,14 @@ Public Class Children
     Private boolOrdered As Boolean = True
     Private mParentStructureType As StructureType
 
+    Public Property Ordered() As Boolean
+        Get
+            Return boolOrdered
+        End Get
+        Set(ByVal Value As Boolean)
+            boolOrdered = Value
+        End Set
+    End Property
     Public ReadOnly Property items() As RmStructure()
         Get
             Dim rm(MyBase.List.Count - 1) As RmStructure

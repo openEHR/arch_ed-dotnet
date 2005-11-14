@@ -591,14 +591,8 @@ Public Class ArchetypeEditor
         Units.Rows.Add(rw)
     End Sub
 
-    Shared Sub main(ByVal CmdArgs() As String)
+    Shared Sub main()
         Dim frm As New Designer
-
-        If CmdArgs.Length > 0 Then
-            frm.ArchetypeToOpen = CmdArgs(0)
-        End If
-
-        'frm.ArchetypeToOpen = "C:\all_work\Knowledge\Archetypes\Current\Packed\observation\openEHR-EHR-OBSERVATION.blood_pressure.v1.adl"
 
         frm.ShowDialog()
     End Sub

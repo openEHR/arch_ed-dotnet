@@ -64,7 +64,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.butAddUnit = New System.Windows.Forms.Button
         Me.butRemoveUnit = New System.Windows.Forms.Button
         Me.LabelQuantity = New System.Windows.Forms.Label
-        Me.QuantityUnitConstraint = New QuantityUnitConstraintControl
+        Me.QuantityUnitConstraint = New openehr.ArchetypeEditor.QuantityUnitConstraintControl
         Me.SuspendLayout()
         '
         'listUnits
