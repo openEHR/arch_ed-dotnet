@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL$"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	file:        "$Source$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -828,6 +828,7 @@ Public Class OntologyManager
                 mTermBindingCriteriaTable.Columns(1), mTermBindingCriteriaTable.Columns(2)}
         new_relation = New DataRelation("TermBindingTermBindingCriteria", _
                 termBindingColumns, termBindingCriteriaColumns)
+
         mLanguageDS.Relations.Add(new_relation)
 
         mConstraintBindingsTable = MakeConstraintBindingTable()

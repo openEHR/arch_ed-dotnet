@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL$"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	file:        "$Source$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -72,6 +72,11 @@ Public Class TabPageInstruction
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageInstruction))
         Me.TabControlInstruction = New Crownwood.Magic.Controls.TabControl
+        Me.tpDelta = New Crownwood.Magic.Controls.TabPage
+        Me.butRemoveElement = New System.Windows.Forms.Button
+        Me.ButAddElement = New System.Windows.Forms.Button
+        Me.Label1 = New System.Windows.Forms.Label
+        Me.listAllowedDeltas = New System.Windows.Forms.ListBox
         Me.tpAction = New Crownwood.Magic.Controls.TabPage
         Me.tpPathway = New Crownwood.Magic.Controls.TabPage
         Me.tpConditions = New Crownwood.Magic.Controls.TabPage
@@ -80,20 +85,15 @@ Public Class TabPageInstruction
         Me.checkListConditions = New System.Windows.Forms.CheckedListBox
         Me.gbTiming = New System.Windows.Forms.GroupBox
         Me.checkListTiming = New System.Windows.Forms.CheckedListBox
-        Me.tpDelta = New Crownwood.Magic.Controls.TabPage
-        Me.butRemoveElement = New System.Windows.Forms.Button
-        Me.ButAddElement = New System.Windows.Forms.Button
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.listAllowedDeltas = New System.Windows.Forms.ListBox
         Me.ContextMenuPathway = New System.Windows.Forms.ContextMenu
         Me.MenuAdd = New System.Windows.Forms.MenuItem
         Me.PanelBaseTop = New System.Windows.Forms.Panel
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
+        Me.tpDelta.SuspendLayout()
         Me.tpConditions.SuspendLayout()
         Me.PanelTiming.SuspendLayout()
         Me.gbConditions.SuspendLayout()
         Me.gbTiming.SuspendLayout()
-        Me.tpDelta.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControlInstruction
@@ -107,91 +107,13 @@ Public Class TabPageInstruction
         Me.TabControlInstruction.Location = New System.Drawing.Point(0, 24)
         Me.TabControlInstruction.Name = "TabControlInstruction"
         Me.TabControlInstruction.PositionTop = True
-        Me.TabControlInstruction.SelectedIndex = 3
-        Me.TabControlInstruction.SelectedTab = Me.tpDelta
+        Me.TabControlInstruction.SelectedIndex = 0
+        Me.TabControlInstruction.SelectedTab = Me.tpAction
         Me.HelpProviderInstruction.SetShowHelp(Me.TabControlInstruction, True)
         Me.TabControlInstruction.Size = New System.Drawing.Size(848, 400)
         Me.TabControlInstruction.TabIndex = 0
         Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpAction, Me.tpPathway, Me.tpConditions, Me.tpDelta})
         Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpAction
-        '
-        Me.HelpProviderInstruction.SetHelpKeyword(Me.tpAction, "Screens/action_screen.html")
-        Me.HelpProviderInstruction.SetHelpNavigator(Me.tpAction, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpAction.Location = New System.Drawing.Point(0, 0)
-        Me.tpAction.Name = "tpAction"
-        Me.tpAction.Selected = False
-        Me.HelpProviderInstruction.SetShowHelp(Me.tpAction, True)
-        Me.tpAction.Size = New System.Drawing.Size(848, 375)
-        Me.tpAction.TabIndex = 2
-        Me.tpAction.Title = "Activity"
-        '
-        'tpPathway
-        '
-        Me.tpPathway.Location = New System.Drawing.Point(0, 0)
-        Me.tpPathway.Name = "tpPathway"
-        Me.tpPathway.Selected = False
-        Me.tpPathway.Size = New System.Drawing.Size(848, 375)
-        Me.tpPathway.TabIndex = 0
-        Me.tpPathway.Title = "Pathway"
-        '
-        'tpConditions
-        '
-        Me.tpConditions.Controls.Add(Me.PanelTiming)
-        Me.tpConditions.Location = New System.Drawing.Point(0, 0)
-        Me.tpConditions.Name = "tpConditions"
-        Me.tpConditions.Selected = False
-        Me.tpConditions.Size = New System.Drawing.Size(848, 375)
-        Me.tpConditions.TabIndex = 1
-        Me.tpConditions.Title = "Conditions"
-        '
-        'PanelTiming
-        '
-        Me.PanelTiming.BackColor = System.Drawing.Color.LightGoldenrodYellow
-        Me.PanelTiming.Controls.Add(Me.gbConditions)
-        Me.PanelTiming.Controls.Add(Me.gbTiming)
-        Me.PanelTiming.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelTiming.Location = New System.Drawing.Point(0, 0)
-        Me.PanelTiming.Name = "PanelTiming"
-        Me.PanelTiming.Size = New System.Drawing.Size(848, 375)
-        Me.PanelTiming.TabIndex = 0
-        '
-        'gbConditions
-        '
-        Me.gbConditions.Controls.Add(Me.checkListConditions)
-        Me.gbConditions.Location = New System.Drawing.Point(312, 24)
-        Me.gbConditions.Name = "gbConditions"
-        Me.gbConditions.Size = New System.Drawing.Size(264, 272)
-        Me.gbConditions.TabIndex = 1
-        Me.gbConditions.TabStop = False
-        Me.gbConditions.Text = "Conditions"
-        '
-        'checkListConditions
-        '
-        Me.checkListConditions.Items.AddRange(New Object() {"Active conditions", "Complete conditions", "Suspend conditions", "Abort conditions", "Active triggers", "Compete triggers", "Suspend triggers", "Abort triggers", "Notify user triggers", "Notify system triggers"})
-        Me.checkListConditions.Location = New System.Drawing.Point(16, 24)
-        Me.checkListConditions.Name = "checkListConditions"
-        Me.checkListConditions.Size = New System.Drawing.Size(240, 220)
-        Me.checkListConditions.TabIndex = 0
-        '
-        'gbTiming
-        '
-        Me.gbTiming.Controls.Add(Me.checkListTiming)
-        Me.gbTiming.Location = New System.Drawing.Point(24, 24)
-        Me.gbTiming.Name = "gbTiming"
-        Me.gbTiming.Size = New System.Drawing.Size(264, 272)
-        Me.gbTiming.TabIndex = 0
-        Me.gbTiming.TabStop = False
-        Me.gbTiming.Text = "Timing"
-        '
-        'checkListTiming
-        '
-        Me.checkListTiming.Items.AddRange(New Object() {"Start date/time", "Finish date/time", "Action duration", "Earliest start date/time", "Earliest completed date/time", "Latest start date/time", "Latest completed date/time", "Allow instruction repeats", "Number of repeats"})
-        Me.checkListTiming.Location = New System.Drawing.Point(16, 24)
-        Me.checkListTiming.Name = "checkListTiming"
-        Me.checkListTiming.Size = New System.Drawing.Size(240, 220)
-        Me.checkListTiming.TabIndex = 0
         '
         'tpDelta
         '
@@ -201,7 +123,8 @@ Public Class TabPageInstruction
         Me.tpDelta.Controls.Add(Me.listAllowedDeltas)
         Me.tpDelta.Location = New System.Drawing.Point(0, 0)
         Me.tpDelta.Name = "tpDelta"
-        Me.tpDelta.Size = New System.Drawing.Size(848, 375)
+        Me.tpDelta.Selected = False
+        Me.tpDelta.Size = New System.Drawing.Size(848, 374)
         Me.tpDelta.TabIndex = 3
         Me.tpDelta.Title = "Allowable changes"
         '
@@ -239,11 +162,88 @@ Public Class TabPageInstruction
         '
         'listAllowedDeltas
         '
-        Me.listAllowedDeltas.ItemHeight = 16
+        Me.listAllowedDeltas.ItemHeight = 17
         Me.listAllowedDeltas.Location = New System.Drawing.Point(232, 40)
         Me.listAllowedDeltas.Name = "listAllowedDeltas"
-        Me.listAllowedDeltas.Size = New System.Drawing.Size(264, 164)
+        Me.listAllowedDeltas.Size = New System.Drawing.Size(264, 157)
         Me.listAllowedDeltas.TabIndex = 0
+        '
+        'tpAction
+        '
+        Me.HelpProviderInstruction.SetHelpKeyword(Me.tpAction, "Screens/action_screen.html")
+        Me.HelpProviderInstruction.SetHelpNavigator(Me.tpAction, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpAction.Location = New System.Drawing.Point(0, 0)
+        Me.tpAction.Name = "tpAction"
+        Me.HelpProviderInstruction.SetShowHelp(Me.tpAction, True)
+        Me.tpAction.Size = New System.Drawing.Size(848, 374)
+        Me.tpAction.TabIndex = 2
+        Me.tpAction.Title = "Action"
+        '
+        'tpPathway
+        '
+        Me.tpPathway.Location = New System.Drawing.Point(0, 0)
+        Me.tpPathway.Name = "tpPathway"
+        Me.tpPathway.Selected = False
+        Me.tpPathway.Size = New System.Drawing.Size(848, 374)
+        Me.tpPathway.TabIndex = 0
+        Me.tpPathway.Title = "Pathway"
+        '
+        'tpConditions
+        '
+        Me.tpConditions.Controls.Add(Me.PanelTiming)
+        Me.tpConditions.Location = New System.Drawing.Point(0, 0)
+        Me.tpConditions.Name = "tpConditions"
+        Me.tpConditions.Selected = False
+        Me.tpConditions.Size = New System.Drawing.Size(848, 374)
+        Me.tpConditions.TabIndex = 1
+        Me.tpConditions.Title = "Conditions"
+        '
+        'PanelTiming
+        '
+        Me.PanelTiming.BackColor = System.Drawing.Color.LightGoldenrodYellow
+        Me.PanelTiming.Controls.Add(Me.gbConditions)
+        Me.PanelTiming.Controls.Add(Me.gbTiming)
+        Me.PanelTiming.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelTiming.Location = New System.Drawing.Point(0, 0)
+        Me.PanelTiming.Name = "PanelTiming"
+        Me.PanelTiming.Size = New System.Drawing.Size(848, 374)
+        Me.PanelTiming.TabIndex = 0
+        '
+        'gbConditions
+        '
+        Me.gbConditions.Controls.Add(Me.checkListConditions)
+        Me.gbConditions.Location = New System.Drawing.Point(312, 24)
+        Me.gbConditions.Name = "gbConditions"
+        Me.gbConditions.Size = New System.Drawing.Size(264, 272)
+        Me.gbConditions.TabIndex = 1
+        Me.gbConditions.TabStop = False
+        Me.gbConditions.Text = "Conditions"
+        '
+        'checkListConditions
+        '
+        Me.checkListConditions.Items.AddRange(New Object() {"Active conditions", "Complete conditions", "Suspend conditions", "Abort conditions", "Active triggers", "Compete triggers", "Suspend triggers", "Abort triggers", "Notify user triggers", "Notify system triggers"})
+        Me.checkListConditions.Location = New System.Drawing.Point(16, 24)
+        Me.checkListConditions.Name = "checkListConditions"
+        Me.checkListConditions.Size = New System.Drawing.Size(240, 213)
+        Me.checkListConditions.TabIndex = 0
+        '
+        'gbTiming
+        '
+        Me.gbTiming.Controls.Add(Me.checkListTiming)
+        Me.gbTiming.Location = New System.Drawing.Point(24, 24)
+        Me.gbTiming.Name = "gbTiming"
+        Me.gbTiming.Size = New System.Drawing.Size(264, 272)
+        Me.gbTiming.TabIndex = 0
+        Me.gbTiming.TabStop = False
+        Me.gbTiming.Text = "Timing"
+        '
+        'checkListTiming
+        '
+        Me.checkListTiming.Items.AddRange(New Object() {"Start date/time", "Finish date/time", "Action duration", "Earliest start date/time", "Earliest completed date/time", "Latest start date/time", "Latest completed date/time", "Allow instruction repeats", "Number of repeats"})
+        Me.checkListTiming.Location = New System.Drawing.Point(16, 24)
+        Me.checkListTiming.Name = "checkListTiming"
+        Me.checkListTiming.Size = New System.Drawing.Size(240, 213)
+        Me.checkListTiming.TabIndex = 0
         '
         'ContextMenuPathway
         '
@@ -269,11 +269,11 @@ Public Class TabPageInstruction
         Me.Controls.Add(Me.PanelBaseTop)
         Me.Name = "TabPageInstruction"
         Me.Size = New System.Drawing.Size(848, 424)
+        Me.tpDelta.ResumeLayout(False)
         Me.tpConditions.ResumeLayout(False)
         Me.PanelTiming.ResumeLayout(False)
         Me.gbConditions.ResumeLayout(False)
         Me.gbTiming.ResumeLayout(False)
-        Me.tpDelta.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

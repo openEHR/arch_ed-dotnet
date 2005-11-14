@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/SCCS/s.ArchetypeEditor.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -591,8 +591,14 @@ Public Class ArchetypeEditor
         Units.Rows.Add(rw)
     End Sub
 
-    Shared Sub main()
+    Shared Sub main(ByVal CmdArgs() As String)
         Dim frm As New Designer
+
+        If CmdArgs.Length > 0 Then
+            frm.ArchetypeToOpen = CmdArgs(0)
+        End If
+
+        'frm.ArchetypeToOpen = "C:\all_work\Knowledge\Archetypes\Current\Packed\observation\openEHR-EHR-OBSERVATION.blood_pressure.v1.adl"
 
         frm.ShowDialog()
     End Sub

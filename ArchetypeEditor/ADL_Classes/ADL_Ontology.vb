@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/ADL_Classes/SCCS/s.ADL_Ontology.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -466,7 +466,7 @@ Friend Class ADL_Ontology
     End Sub
 
     Public Overrides Sub PopulateAllTerms(ByRef TheOntologyManager As OntologyManager)
-        If EIF_adlInterface.archetype_available Then  'Ontology is available is archetype is available
+        If EIF_adlInterface.archetype_available Then
             populate_languages(TheOntologyManager)
             populate_terminologies(TheOntologyManager)
             populate_term_definitions(TheOntologyManager)

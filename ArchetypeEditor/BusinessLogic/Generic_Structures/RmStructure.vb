@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL$"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	file:        "$Source$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -35,6 +35,7 @@ Public Enum StructureType
     EVALUATION = 101
     OBSERVATION = 102
     INSTRUCTION = 103
+    ADMIN_ENTRY = 104
 
     SECTION = 200
 

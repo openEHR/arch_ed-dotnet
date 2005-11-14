@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL$"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	file:        "$Source$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -169,22 +169,13 @@ Public Class TextViewControl : Inherits ElementViewControl ' ViewControl
     Private Sub ComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
             Handles mComboBox.SelectedIndexChanged
 
-        Try
-            If TypeOf mComboBox.Items(0) Is RmTerm Then
-                If mComboBox.SelectedValue Is Nothing Then
-                    Me.Tag = New CodePhrase(CType(mComboBox.Items(0), RmTerm)).Phrase
-                    Value = mComboBox.Text
-                Else
-                    Me.Tag = New CodePhrase(CType(mComboBox.SelectedValue, RmTerm)).Phrase
-                    Value = CType(mComboBox.SelectedValue, RmTerm).Text
-                End If
-            Else  ' text string
-                Me.Tag = mComboBox.Text
-                Value = mComboBox.Text
-            End If
-        Catch ex As Exception
-            Debug.Assert(False, ex.Message)
-        End Try
+        If mComboBox.SelectedValue Is Nothing Then
+            Me.Tag = New CodePhrase(CType(mComboBox.Items(0), RmTerm)).Phrase
+            Value = mComboBox.Text
+        Else
+            Me.Tag = New CodePhrase(CType(mComboBox.SelectedValue, RmTerm)).Phrase
+            Value = CType(mComboBox.SelectedValue, RmTerm).Text
+        End If
     End Sub
 
     Private Sub TextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _

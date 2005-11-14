@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/Forms/SCCS/s.Designer.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -156,7 +156,6 @@ Public Class Designer
     Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     Friend WithEvents DataGridTableStyle4 As System.Windows.Forms.DataGridTableStyle
     Friend WithEvents DataGridTextBoxColumn9 As System.Windows.Forms.DataGridTextBoxColumn
-    Friend WithEvents DataGridTextBoxColumn10 As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents DataGridTextBoxColumn11 As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents DataGridTextBoxColumn12 As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
@@ -199,8 +198,6 @@ Public Class Designer
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents butRemoveFromRestrictedSet As System.Windows.Forms.Button
     Friend WithEvents tpBindings As Crownwood.Magic.Controls.TabPage
-    Friend WithEvents TermBindingPanel2 As TermBindingPanel
-    Friend WithEvents DevelopmentLabel As System.Windows.Forms.Label
     Friend WithEvents PanelTermDefinitions As System.Windows.Forms.Panel
     Friend WithEvents MenuFileSaveAs As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpReport As System.Windows.Forms.MenuItem
@@ -217,6 +214,10 @@ Public Class Designer
     Friend WithEvents menuEditArchID As System.Windows.Forms.MenuItem
     Friend WithEvents MenuDisplayFind As System.Windows.Forms.MenuItem
     Friend WithEvents MenuDisplayFindAgain As System.Windows.Forms.MenuItem
+    Friend WithEvents tpDescription As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents DataGridTableStyle5 As System.Windows.Forms.DataGridTableStyle
+    Friend WithEvents DataGridTextBoxColumn13 As System.Windows.Forms.DataGridTextBoxColumn
+    Friend WithEvents TermBindingPanel1 As TermBindingPanel
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(Designer))
@@ -290,24 +291,12 @@ Public Class Designer
         Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
-        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
-        Me.tpDesign = New Crownwood.Magic.Controls.TabPage
-        Me.TabDesign = New Crownwood.Magic.Controls.TabControl
-        Me.tpData = New Crownwood.Magic.Controls.TabPage
-        Me.TabStructure = New Crownwood.Magic.Controls.TabControl
-        Me.tpDataStructure = New Crownwood.Magic.Controls.TabPage
-        Me.tpRootState = New Crownwood.Magic.Controls.TabPage
-        Me.TabState = New Crownwood.Magic.Controls.TabControl
-        Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
-        Me.tpRootStateHistory = New Crownwood.Magic.Controls.TabPage
-        Me.PanelState = New System.Windows.Forms.Panel
-        Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpTerminology = New Crownwood.Magic.Controls.TabPage
         Me.TabTerminology = New Crownwood.Magic.Controls.TabControl
+        Me.tpBindings = New Crownwood.Magic.Controls.TabPage
+        Me.TermBindingPanel1 = New TermBindingPanel
         Me.tpTerms = New Crownwood.Magic.Controls.TabPage
         Me.PanelTermDefinitions = New System.Windows.Forms.Panel
-        Me.tpBindings = New Crownwood.Magic.Controls.TabPage
-        Me.TermBindingPanel2 = New ocean.ArchetypeEditor.TermBindingPanel
         Me.tpConstraints = New Crownwood.Magic.Controls.TabPage
         Me.DataGridConstraintStatements = New System.Windows.Forms.DataGrid
         Me.ConstraintBindingStyle = New System.Windows.Forms.DataGridTableStyle
@@ -327,9 +316,10 @@ Public Class Designer
         Me.DataGridTextBoxColumn5 = New System.Windows.Forms.DataGridTextBoxColumn
         Me.DataGridTableStyle4 = New System.Windows.Forms.DataGridTableStyle
         Me.DataGridTextBoxColumn9 = New System.Windows.Forms.DataGridTextBoxColumn
-        Me.DataGridTextBoxColumn10 = New System.Windows.Forms.DataGridTextBoxColumn
         Me.DataGridTextBoxColumn11 = New System.Windows.Forms.DataGridTextBoxColumn
         Me.DataGridTextBoxColumn12 = New System.Windows.Forms.DataGridTextBoxColumn
+        Me.DataGridTableStyle5 = New System.Windows.Forms.DataGridTableStyle
+        Me.DataGridTextBoxColumn13 = New System.Windows.Forms.DataGridTextBoxColumn
         Me.Panel2 = New System.Windows.Forms.Panel
         Me.butAddTerminology = New System.Windows.Forms.Button
         Me.Label1 = New System.Windows.Forms.Label
@@ -338,14 +328,20 @@ Public Class Designer
         Me.ListLanguages = New System.Windows.Forms.ListBox
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.lblAvailableLanguages = New System.Windows.Forms.Label
+        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
+        Me.tpDesign = New Crownwood.Magic.Controls.TabPage
+        Me.TabDesign = New Crownwood.Magic.Controls.TabControl
+        Me.tpData = New Crownwood.Magic.Controls.TabPage
+        Me.TabStructure = New Crownwood.Magic.Controls.TabControl
+        Me.tpDataStructure = New Crownwood.Magic.Controls.TabPage
+        Me.tpRootState = New Crownwood.Magic.Controls.TabPage
+        Me.TabState = New Crownwood.Magic.Controls.TabControl
+        Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
+        Me.tpRootStateHistory = New Crownwood.Magic.Controls.TabPage
+        Me.PanelState = New System.Windows.Forms.Panel
+        Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpText = New Crownwood.Magic.Controls.TabPage
         Me.Panel3 = New System.Windows.Forms.Panel
-        Me.richtextArchetype = New ocean.ArchetypeEditor.RichTextBoxPrintable
-        Me.ContextMenuDisplay = New System.Windows.Forms.ContextMenu
-        Me.menuDisplayPrint = New System.Windows.Forms.MenuItem
-        Me.MenuDisplayFind = New System.Windows.Forms.MenuItem
-        Me.MenuDisplayFindAgain = New System.Windows.Forms.MenuItem
-        Me.menuDisplaySaveAs = New System.Windows.Forms.MenuItem
         Me.panelDiplayTop = New System.Windows.Forms.Panel
         Me.butHTML = New System.Windows.Forms.Button
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
@@ -353,8 +349,13 @@ Public Class Designer
         Me.RadioRichText = New System.Windows.Forms.RadioButton
         Me.butSaveDisplay = New System.Windows.Forms.Button
         Me.tpInterface = New Crownwood.Magic.Controls.TabPage
+        Me.tpDescription = New Crownwood.Magic.Controls.TabPage
+        Me.ContextMenuDisplay = New System.Windows.Forms.ContextMenu
+        Me.menuDisplayPrint = New System.Windows.Forms.MenuItem
+        Me.MenuDisplayFind = New System.Windows.Forms.MenuItem
+        Me.MenuDisplayFindAgain = New System.Windows.Forms.MenuItem
+        Me.menuDisplaySaveAs = New System.Windows.Forms.MenuItem
         Me.PanelHeader = New System.Windows.Forms.Panel
-        Me.DevelopmentLabel = New System.Windows.Forms.Label
         Me.lblLifecycle = New System.Windows.Forms.Label
         Me.ToolBarMain = New System.Windows.Forms.ToolBar
         Me.ToolBarNew = New System.Windows.Forms.ToolBarButton
@@ -377,13 +378,9 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
-        Me.tpHeader.SuspendLayout()
-        Me.tpDesign.SuspendLayout()
-        Me.tpData.SuspendLayout()
-        Me.tpRootState.SuspendLayout()
         Me.tpTerminology.SuspendLayout()
-        Me.tpTerms.SuspendLayout()
         Me.tpBindings.SuspendLayout()
+        Me.tpTerms.SuspendLayout()
         Me.tpConstraints.SuspendLayout()
         CType(Me.DataGridConstraintStatements, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelConstraintBinding.SuspendLayout()
@@ -392,8 +389,11 @@ Public Class Designer
         Me.Panel2.SuspendLayout()
         Me.panelLanguages.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.tpHeader.SuspendLayout()
+        Me.tpDesign.SuspendLayout()
+        Me.tpData.SuspendLayout()
+        Me.tpRootState.SuspendLayout()
         Me.tpText.SuspendLayout()
-        Me.Panel3.SuspendLayout()
         Me.panelDiplayTop.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
@@ -918,7 +918,7 @@ Public Class Designer
         'MenuHelpOcean
         '
         Me.MenuHelpOcean.Index = 3
-        Me.MenuHelpOcean.Text = "About Oean informatics"
+        Me.MenuHelpOcean.Text = "About Ocean Informatics"
         '
         'MenuHelpOceanEditor
         '
@@ -948,8 +948,386 @@ Public Class Designer
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
         Me.TabMain.Size = New System.Drawing.Size(969, 621)
         Me.TabMain.TabIndex = 1
-        Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface})
+        Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
+        '
+        'tpTerminology
+        '
+        Me.tpTerminology.Controls.Add(Me.TabTerminology)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpTerminology, "Screens/terminology_screens.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpTerminology, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpTerminology.Location = New System.Drawing.Point(0, 0)
+        Me.tpTerminology.Name = "tpTerminology"
+        Me.tpTerminology.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpTerminology, True)
+        Me.tpTerminology.Size = New System.Drawing.Size(969, 595)
+        Me.tpTerminology.TabIndex = 2
+        Me.tpTerminology.Title = "Terminology"
+        '
+        'TabTerminology
+        '
+        Me.TabTerminology.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.TabTerminology.BoldSelectedPage = True
+        Me.TabTerminology.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabTerminology.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabTerminology.Location = New System.Drawing.Point(0, 0)
+        Me.TabTerminology.Name = "TabTerminology"
+        Me.TabTerminology.PositionTop = True
+        Me.TabTerminology.SelectedIndex = 0
+        Me.TabTerminology.SelectedTab = Me.tpTerms
+        Me.TabTerminology.Size = New System.Drawing.Size(969, 595)
+        Me.TabTerminology.TabIndex = 0
+        Me.TabTerminology.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpTerms, Me.tpBindings, Me.tpConstraints, Me.tpLanguages})
+        '
+        'tpBindings
+        '
+        Me.tpBindings.Controls.Add(Me.TermBindingPanel1)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpBindings, "Screens/term_binding_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpBindings, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpBindings.Location = New System.Drawing.Point(0, 0)
+        Me.tpBindings.Name = "tpBindings"
+        Me.tpBindings.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpBindings, True)
+        Me.tpBindings.Size = New System.Drawing.Size(969, 569)
+        Me.tpBindings.TabIndex = 3
+        Me.tpBindings.Title = "Term Bindings"
+        '
+        'TermBindingPanel1
+        '
+        Me.TermBindingPanel1.BackColor = System.Drawing.Color.LightYellow
+        Me.TermBindingPanel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TermBindingPanel1.DockPadding.Bottom = 4
+        Me.TermBindingPanel1.DockPadding.Left = 4
+        Me.TermBindingPanel1.DockPadding.Right = 4
+        Me.TermBindingPanel1.Location = New System.Drawing.Point(0, 0)
+        Me.TermBindingPanel1.Name = "TermBindingPanel1"
+        Me.TermBindingPanel1.Size = New System.Drawing.Size(969, 569)
+        Me.TermBindingPanel1.TabIndex = 0
+        '
+        'tpTerms
+        '
+        Me.tpTerms.BackColor = System.Drawing.Color.LightYellow
+        Me.tpTerms.Controls.Add(Me.DataGridDefinitions)
+        Me.tpTerms.Controls.Add(Me.PanelTermDefinitions)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpTerms, "Screens/term_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpTerms, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpTerms.Location = New System.Drawing.Point(0, 0)
+        Me.tpTerms.Name = "tpTerms"
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpTerms, True)
+        Me.tpTerms.Size = New System.Drawing.Size(969, 569)
+        Me.tpTerms.TabIndex = 2
+        Me.tpTerms.Title = "Terms "
+        Me.ToolTip1.SetToolTip(Me.tpTerms, "Internal term definitions")
+        '
+        'PanelTermDefinitions
+        '
+        Me.PanelTermDefinitions.BackColor = System.Drawing.Color.LightYellow
+        Me.PanelTermDefinitions.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelTermDefinitions.Location = New System.Drawing.Point(0, 0)
+        Me.PanelTermDefinitions.Name = "PanelTermDefinitions"
+        Me.PanelTermDefinitions.Size = New System.Drawing.Size(969, 18)
+        Me.PanelTermDefinitions.TabIndex = 3
+        '
+        'tpConstraints
+        '
+        Me.tpConstraints.BackColor = System.Drawing.Color.FromArgb(CType(245, Byte), CType(240, Byte), CType(192, Byte))
+        Me.tpConstraints.Controls.Add(Me.DataGridConstraintStatements)
+        Me.tpConstraints.Controls.Add(Me.Splitter1)
+        Me.tpConstraints.Controls.Add(Me.DataGridConstraintDefinitions)
+        Me.tpConstraints.Controls.Add(Me.PanelConstraintDefTop)
+        Me.tpConstraints.Controls.Add(Me.PanelConstraintBinding)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpConstraints, "Screens/constraints_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpConstraints, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpConstraints.Location = New System.Drawing.Point(0, 0)
+        Me.tpConstraints.Name = "tpConstraints"
+        Me.tpConstraints.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpConstraints, True)
+        Me.tpConstraints.Size = New System.Drawing.Size(969, 569)
+        Me.tpConstraints.TabIndex = 1
+        Me.tpConstraints.Title = "Constraints"
+        Me.ToolTip1.SetToolTip(Me.tpConstraints, "Constraint definitions")
+        '
+        'DataGridConstraintStatements
+        '
+        Me.DataGridConstraintStatements.CaptionBackColor = System.Drawing.Color.RoyalBlue
+        Me.DataGridConstraintStatements.CaptionText = "Constraint statements"
+        Me.DataGridConstraintStatements.DataMember = ""
+        Me.DataGridConstraintStatements.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DataGridConstraintStatements.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.DataGridConstraintStatements.Location = New System.Drawing.Point(0, 323)
+        Me.DataGridConstraintStatements.Name = "DataGridConstraintStatements"
+        Me.DataGridConstraintStatements.ReadOnly = True
+        Me.DataGridConstraintStatements.Size = New System.Drawing.Size(969, 182)
+        Me.DataGridConstraintStatements.TabIndex = 9
+        Me.DataGridConstraintStatements.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.ConstraintBindingStyle})
+        '
+        'ConstraintBindingStyle
+        '
+        Me.ConstraintBindingStyle.DataGrid = Me.DataGridConstraintStatements
+        Me.ConstraintBindingStyle.GridColumnStyles.AddRange(New System.Windows.Forms.DataGridColumnStyle() {Me.TerminologyStyle, Me.CodePhraseStyle, Me.Release_Style})
+        Me.ConstraintBindingStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.ConstraintBindingStyle.MappingName = "ConstraintBindings"
+        Me.ConstraintBindingStyle.PreferredRowHeight = 32
+        '
+        'TerminologyStyle
+        '
+        Me.TerminologyStyle.Format = ""
+        Me.TerminologyStyle.FormatInfo = Nothing
+        Me.TerminologyStyle.HeaderText = "Terminology"
+        Me.TerminologyStyle.MappingName = "Terminology"
+        Me.TerminologyStyle.NullText = ""
+        Me.TerminologyStyle.ReadOnly = True
+        Me.TerminologyStyle.Width = 75
+        '
+        'CodePhraseStyle
+        '
+        Me.CodePhraseStyle.Format = ""
+        Me.CodePhraseStyle.FormatInfo = Nothing
+        Me.CodePhraseStyle.HeaderText = "Query or Group"
+        Me.CodePhraseStyle.MappingName = "CodePhrase"
+        Me.CodePhraseStyle.Width = 600
+        '
+        'Release_Style
+        '
+        Me.Release_Style.Format = ""
+        Me.Release_Style.FormatInfo = Nothing
+        Me.Release_Style.HeaderText = "Release"
+        Me.Release_Style.MappingName = "Release"
+        Me.Release_Style.ReadOnly = True
+        Me.Release_Style.Width = 75
+        '
+        'Splitter1
+        '
+        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Splitter1.Location = New System.Drawing.Point(0, 314)
+        Me.Splitter1.Name = "Splitter1"
+        Me.Splitter1.Size = New System.Drawing.Size(969, 9)
+        Me.Splitter1.TabIndex = 11
+        Me.Splitter1.TabStop = False
+        '
+        'PanelConstraintDefTop
+        '
+        Me.PanelConstraintDefTop.BackColor = System.Drawing.Color.LightYellow
+        Me.PanelConstraintDefTop.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelConstraintDefTop.Location = New System.Drawing.Point(0, 0)
+        Me.PanelConstraintDefTop.Name = "PanelConstraintDefTop"
+        Me.PanelConstraintDefTop.Size = New System.Drawing.Size(969, 18)
+        Me.PanelConstraintDefTop.TabIndex = 10
+        '
+        'PanelConstraintBinding
+        '
+        Me.PanelConstraintBinding.BackColor = System.Drawing.Color.LemonChiffon
+        Me.PanelConstraintBinding.Controls.Add(Me.butLookUpConstraint)
+        Me.PanelConstraintBinding.Controls.Add(Me.lblConstraintStatement)
+        Me.PanelConstraintBinding.Controls.Add(Me.txtConstraintStatement)
+        Me.PanelConstraintBinding.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PanelConstraintBinding.Location = New System.Drawing.Point(0, 505)
+        Me.PanelConstraintBinding.Name = "PanelConstraintBinding"
+        Me.PanelConstraintBinding.Size = New System.Drawing.Size(969, 64)
+        Me.PanelConstraintBinding.TabIndex = 7
+        '
+        'butLookUpConstraint
+        '
+        Me.butLookUpConstraint.Location = New System.Drawing.Point(870, 16)
+        Me.butLookUpConstraint.Name = "butLookUpConstraint"
+        Me.butLookUpConstraint.Size = New System.Drawing.Size(38, 28)
+        Me.butLookUpConstraint.TabIndex = 2
+        Me.butLookUpConstraint.Text = "..."
+        '
+        'lblConstraintStatement
+        '
+        Me.lblConstraintStatement.Location = New System.Drawing.Point(18, 22)
+        Me.lblConstraintStatement.Name = "lblConstraintStatement"
+        Me.lblConstraintStatement.Size = New System.Drawing.Size(240, 18)
+        Me.lblConstraintStatement.TabIndex = 1
+        Me.lblConstraintStatement.Text = "Constraint statement:"
+        Me.lblConstraintStatement.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtConstraintStatement
+        '
+        Me.txtConstraintStatement.Location = New System.Drawing.Point(265, 16)
+        Me.txtConstraintStatement.Name = "txtConstraintStatement"
+        Me.txtConstraintStatement.Size = New System.Drawing.Size(595, 24)
+        Me.txtConstraintStatement.TabIndex = 0
+        Me.txtConstraintStatement.Text = ""
+        '
+        'tpLanguages
+        '
+        Me.tpLanguages.BackColor = System.Drawing.Color.LightGoldenrodYellow
+        Me.tpLanguages.Controls.Add(Me.DataGridTerminologies)
+        Me.tpLanguages.Controls.Add(Me.Panel2)
+        Me.tpLanguages.Controls.Add(Me.Splitter2)
+        Me.tpLanguages.Controls.Add(Me.panelLanguages)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpLanguages, "Screens/languages_terminologies_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpLanguages, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpLanguages.Location = New System.Drawing.Point(0, 0)
+        Me.tpLanguages.Name = "tpLanguages"
+        Me.tpLanguages.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpLanguages, True)
+        Me.tpLanguages.Size = New System.Drawing.Size(969, 569)
+        Me.tpLanguages.TabIndex = 0
+        Me.tpLanguages.Title = "Languages && Terminologies"
+        Me.ToolTip1.SetToolTip(Me.tpLanguages, "Available Languages and terminologies")
+        '
+        'DataGridTerminologies
+        '
+        Me.DataGridTerminologies.CaptionBackColor = System.Drawing.Color.CornflowerBlue
+        Me.DataGridTerminologies.CaptionText = "Available terminologies"
+        Me.DataGridTerminologies.DataMember = ""
+        Me.DataGridTerminologies.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.DataGridTerminologies.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.DataGridTerminologies.Location = New System.Drawing.Point(384, 46)
+        Me.DataGridTerminologies.Name = "DataGridTerminologies"
+        Me.DataGridTerminologies.ReadOnly = True
+        Me.DataGridTerminologies.Size = New System.Drawing.Size(585, 523)
+        Me.DataGridTerminologies.TabIndex = 10
+        Me.DataGridTerminologies.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.DataGridTableStyle3, Me.DataGridTableStyle4, Me.DataGridTableStyle5})
+        '
+        'DataGridTableStyle3
+        '
+        Me.DataGridTableStyle3.DataGrid = Me.DataGridTerminologies
+        Me.DataGridTableStyle3.GridColumnStyles.AddRange(New System.Windows.Forms.DataGridColumnStyle() {Me.DataGridTextBoxColumn1, Me.DataGridTextBoxColumn5})
+        Me.DataGridTableStyle3.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.DataGridTableStyle3.MappingName = "Terminologies"
+        '
+        'DataGridTextBoxColumn1
+        '
+        Me.DataGridTextBoxColumn1.Format = ""
+        Me.DataGridTextBoxColumn1.FormatInfo = Nothing
+        Me.DataGridTextBoxColumn1.HeaderText = "Code"
+        Me.DataGridTextBoxColumn1.MappingName = "Terminology"
+        Me.DataGridTextBoxColumn1.Width = 125
+        '
+        'DataGridTextBoxColumn5
+        '
+        Me.DataGridTextBoxColumn5.Format = ""
+        Me.DataGridTextBoxColumn5.FormatInfo = Nothing
+        Me.DataGridTextBoxColumn5.HeaderText = "Description"
+        Me.DataGridTextBoxColumn5.MappingName = "Description"
+        Me.DataGridTextBoxColumn5.Width = 325
+        '
+        'DataGridTableStyle4
+        '
+        Me.DataGridTableStyle4.DataGrid = Me.DataGridTerminologies
+        Me.DataGridTableStyle4.GridColumnStyles.AddRange(New System.Windows.Forms.DataGridColumnStyle() {Me.DataGridTextBoxColumn9, Me.DataGridTextBoxColumn11, Me.DataGridTextBoxColumn12})
+        Me.DataGridTableStyle4.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.DataGridTableStyle4.MappingName = "TermBindings"
+        '
+        'DataGridTextBoxColumn9
+        '
+        Me.DataGridTextBoxColumn9.Format = ""
+        Me.DataGridTextBoxColumn9.FormatInfo = Nothing
+        Me.DataGridTextBoxColumn9.HeaderText = "Path"
+        Me.DataGridTextBoxColumn9.MappingName = "Path"
+        Me.DataGridTextBoxColumn9.Width = 75
+        '
+        'DataGridTextBoxColumn11
+        '
+        Me.DataGridTextBoxColumn11.Format = ""
+        Me.DataGridTextBoxColumn11.FormatInfo = Nothing
+        Me.DataGridTextBoxColumn11.HeaderText = "Code"
+        Me.DataGridTextBoxColumn11.MappingName = "Code"
+        Me.DataGridTextBoxColumn11.Width = 75
+        '
+        'DataGridTextBoxColumn12
+        '
+        Me.DataGridTextBoxColumn12.Format = ""
+        Me.DataGridTextBoxColumn12.FormatInfo = Nothing
+        Me.DataGridTextBoxColumn12.HeaderText = "Release"
+        Me.DataGridTextBoxColumn12.MappingName = "Release"
+        Me.DataGridTextBoxColumn12.Width = 75
+        '
+        'DataGridTableStyle5
+        '
+        Me.DataGridTableStyle5.DataGrid = Me.DataGridTerminologies
+        Me.DataGridTableStyle5.GridColumnStyles.AddRange(New System.Windows.Forms.DataGridColumnStyle() {Me.DataGridTextBoxColumn13})
+        Me.DataGridTableStyle5.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.DataGridTableStyle5.MappingName = "TermBindingCriteria"
+        '
+        'DataGridTextBoxColumn13
+        '
+        Me.DataGridTextBoxColumn13.Format = ""
+        Me.DataGridTextBoxColumn13.FormatInfo = Nothing
+        Me.DataGridTextBoxColumn13.HeaderText = "Criteria"
+        Me.DataGridTextBoxColumn13.MappingName = "Criteria"
+        Me.DataGridTextBoxColumn13.Width = 250
+        '
+        'Panel2
+        '
+        Me.Panel2.BackColor = System.Drawing.Color.LightYellow
+        Me.Panel2.Controls.Add(Me.butAddTerminology)
+        Me.Panel2.Controls.Add(Me.Label1)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel2.Location = New System.Drawing.Point(384, 0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(585, 46)
+        Me.Panel2.TabIndex = 13
+        '
+        'butAddTerminology
+        '
+        Me.butAddTerminology.Image = CType(resources.GetObject("butAddTerminology.Image"), System.Drawing.Image)
+        Me.butAddTerminology.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butAddTerminology.Location = New System.Drawing.Point(10, 9)
+        Me.butAddTerminology.Name = "butAddTerminology"
+        Me.butAddTerminology.Size = New System.Drawing.Size(27, 31)
+        Me.butAddTerminology.TabIndex = 11
+        Me.ToolTip1.SetToolTip(Me.butAddTerminology, "Add a language")
+        '
+        'Label1
+        '
+        Me.Label1.Location = New System.Drawing.Point(48, 15)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(250, 28)
+        Me.Label1.TabIndex = 11
+        Me.Label1.Text = "Available terminologies:"
+        '
+        'Splitter2
+        '
+        Me.Splitter2.Location = New System.Drawing.Point(374, 0)
+        Me.Splitter2.Name = "Splitter2"
+        Me.Splitter2.Size = New System.Drawing.Size(10, 569)
+        Me.Splitter2.TabIndex = 12
+        Me.Splitter2.TabStop = False
+        '
+        'panelLanguages
+        '
+        Me.panelLanguages.BackColor = System.Drawing.Color.LightYellow
+        Me.panelLanguages.Controls.Add(Me.ListLanguages)
+        Me.panelLanguages.Controls.Add(Me.Panel1)
+        Me.panelLanguages.Dock = System.Windows.Forms.DockStyle.Left
+        Me.panelLanguages.Location = New System.Drawing.Point(0, 0)
+        Me.panelLanguages.Name = "panelLanguages"
+        Me.panelLanguages.Size = New System.Drawing.Size(374, 569)
+        Me.panelLanguages.TabIndex = 2
+        '
+        'ListLanguages
+        '
+        Me.ListLanguages.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListLanguages.ItemHeight = 17
+        Me.ListLanguages.Location = New System.Drawing.Point(0, 111)
+        Me.ListLanguages.Name = "ListLanguages"
+        Me.ListLanguages.Size = New System.Drawing.Size(374, 458)
+        Me.ListLanguages.TabIndex = 9
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.lblAvailableLanguages)
+        Me.Panel1.Controls.Add(Me.butAdd)
+        Me.Panel1.Controls.Add(Me.lblPrimaryLanguageText)
+        Me.Panel1.Controls.Add(Me.lblPrimaryLanguage)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(374, 111)
+        Me.Panel1.TabIndex = 11
+        '
+        'lblAvailableLanguages
+        '
+        Me.lblAvailableLanguages.Location = New System.Drawing.Point(49, 80)
+        Me.lblAvailableLanguages.Name = "lblAvailableLanguages"
+        Me.lblAvailableLanguages.Size = New System.Drawing.Size(250, 27)
+        Me.lblAvailableLanguages.TabIndex = 10
+        Me.lblAvailableLanguages.Text = "Available languages:"
         '
         'tpHeader
         '
@@ -1109,377 +1487,6 @@ Public Class Designer
         Me.tpSectionPage.TabIndex = 4
         Me.tpSectionPage.Title = "Section model"
         '
-        'tpTerminology
-        '
-        Me.tpTerminology.Controls.Add(Me.TabTerminology)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpTerminology, "Screens/terminology_screens.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpTerminology, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpTerminology.Location = New System.Drawing.Point(0, 0)
-        Me.tpTerminology.Name = "tpTerminology"
-        Me.tpTerminology.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpTerminology, True)
-        Me.tpTerminology.Size = New System.Drawing.Size(969, 595)
-        Me.tpTerminology.TabIndex = 2
-        Me.tpTerminology.Title = "Terminology"
-        '
-        'TabTerminology
-        '
-        Me.TabTerminology.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.TabTerminology.BoldSelectedPage = True
-        Me.TabTerminology.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabTerminology.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabTerminology.Location = New System.Drawing.Point(0, 0)
-        Me.TabTerminology.Name = "TabTerminology"
-        Me.TabTerminology.PositionTop = True
-        Me.TabTerminology.SelectedIndex = 0
-        Me.TabTerminology.SelectedTab = Me.tpTerms
-        Me.TabTerminology.Size = New System.Drawing.Size(969, 595)
-        Me.TabTerminology.TabIndex = 0
-        Me.TabTerminology.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpTerms, Me.tpBindings, Me.tpConstraints, Me.tpLanguages})
-        '
-        'tpTerms
-        '
-        Me.tpTerms.BackColor = System.Drawing.Color.LightYellow
-        Me.tpTerms.Controls.Add(Me.DataGridDefinitions)
-        Me.tpTerms.Controls.Add(Me.PanelTermDefinitions)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpTerms, "Screens/term_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpTerms, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpTerms.Location = New System.Drawing.Point(0, 0)
-        Me.tpTerms.Name = "tpTerms"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpTerms, True)
-        Me.tpTerms.Size = New System.Drawing.Size(969, 569)
-        Me.tpTerms.TabIndex = 2
-        Me.tpTerms.Title = "Terms "
-        Me.ToolTip1.SetToolTip(Me.tpTerms, "Internal term definitions")
-        '
-        'PanelTermDefinitions
-        '
-        Me.PanelTermDefinitions.BackColor = System.Drawing.Color.LightYellow
-        Me.PanelTermDefinitions.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelTermDefinitions.Location = New System.Drawing.Point(0, 0)
-        Me.PanelTermDefinitions.Name = "PanelTermDefinitions"
-        Me.PanelTermDefinitions.Size = New System.Drawing.Size(969, 18)
-        Me.PanelTermDefinitions.TabIndex = 3
-        '
-        'tpBindings
-        '
-        Me.tpBindings.Controls.Add(Me.TermBindingPanel2)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpBindings, "Screens/term_binding_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpBindings, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpBindings.Location = New System.Drawing.Point(0, 0)
-        Me.tpBindings.Name = "tpBindings"
-        Me.tpBindings.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpBindings, True)
-        Me.tpBindings.Size = New System.Drawing.Size(969, 569)
-        Me.tpBindings.TabIndex = 3
-        Me.tpBindings.Title = "Term Bindings"
-        '
-        'TermBindingPanel2
-        '
-        Me.TermBindingPanel2.BackColor = System.Drawing.Color.LightYellow
-        Me.TermBindingPanel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TermBindingPanel2.DockPadding.Bottom = 4
-        Me.TermBindingPanel2.DockPadding.Left = 4
-        Me.TermBindingPanel2.DockPadding.Right = 4
-        Me.TermBindingPanel2.Location = New System.Drawing.Point(0, 0)
-        Me.TermBindingPanel2.Name = "TermBindingPanel2"
-        Me.TermBindingPanel2.Size = New System.Drawing.Size(969, 569)
-        Me.TermBindingPanel2.TabIndex = 0
-        '
-        'tpConstraints
-        '
-        Me.tpConstraints.BackColor = System.Drawing.Color.FromArgb(CType(245, Byte), CType(240, Byte), CType(192, Byte))
-        Me.tpConstraints.Controls.Add(Me.DataGridConstraintStatements)
-        Me.tpConstraints.Controls.Add(Me.Splitter1)
-        Me.tpConstraints.Controls.Add(Me.DataGridConstraintDefinitions)
-        Me.tpConstraints.Controls.Add(Me.PanelConstraintDefTop)
-        Me.tpConstraints.Controls.Add(Me.PanelConstraintBinding)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpConstraints, "Screens/constraints_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpConstraints, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpConstraints.Location = New System.Drawing.Point(0, 0)
-        Me.tpConstraints.Name = "tpConstraints"
-        Me.tpConstraints.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpConstraints, True)
-        Me.tpConstraints.Size = New System.Drawing.Size(969, 569)
-        Me.tpConstraints.TabIndex = 1
-        Me.tpConstraints.Title = "Constraints"
-        Me.ToolTip1.SetToolTip(Me.tpConstraints, "Constraint definitions")
-        '
-        'DataGridConstraintStatements
-        '
-        Me.DataGridConstraintStatements.CaptionBackColor = System.Drawing.Color.RoyalBlue
-        Me.DataGridConstraintStatements.CaptionText = "Constraint statements"
-        Me.DataGridConstraintStatements.DataMember = ""
-        Me.DataGridConstraintStatements.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridConstraintStatements.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.DataGridConstraintStatements.Location = New System.Drawing.Point(0, 323)
-        Me.DataGridConstraintStatements.Name = "DataGridConstraintStatements"
-        Me.DataGridConstraintStatements.ReadOnly = True
-        Me.DataGridConstraintStatements.Size = New System.Drawing.Size(969, 182)
-        Me.DataGridConstraintStatements.TabIndex = 9
-        Me.DataGridConstraintStatements.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.ConstraintBindingStyle})
-        '
-        'ConstraintBindingStyle
-        '
-        Me.ConstraintBindingStyle.DataGrid = Me.DataGridConstraintStatements
-        Me.ConstraintBindingStyle.GridColumnStyles.AddRange(New System.Windows.Forms.DataGridColumnStyle() {Me.TerminologyStyle, Me.CodePhraseStyle, Me.Release_Style})
-        Me.ConstraintBindingStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.ConstraintBindingStyle.MappingName = "ConstraintBindings"
-        Me.ConstraintBindingStyle.PreferredRowHeight = 32
-        '
-        'TerminologyStyle
-        '
-        Me.TerminologyStyle.Format = ""
-        Me.TerminologyStyle.FormatInfo = Nothing
-        Me.TerminologyStyle.HeaderText = "Terminology"
-        Me.TerminologyStyle.MappingName = "Terminology"
-        Me.TerminologyStyle.NullText = ""
-        Me.TerminologyStyle.ReadOnly = True
-        Me.TerminologyStyle.Width = 75
-        '
-        'CodePhraseStyle
-        '
-        Me.CodePhraseStyle.Format = ""
-        Me.CodePhraseStyle.FormatInfo = Nothing
-        Me.CodePhraseStyle.HeaderText = "Query or Group"
-        Me.CodePhraseStyle.MappingName = "CodePhrase"
-        Me.CodePhraseStyle.Width = 600
-        '
-        'Release_Style
-        '
-        Me.Release_Style.Format = ""
-        Me.Release_Style.FormatInfo = Nothing
-        Me.Release_Style.HeaderText = "Release"
-        Me.Release_Style.MappingName = "Release"
-        Me.Release_Style.ReadOnly = True
-        Me.Release_Style.Width = 75
-        '
-        'Splitter1
-        '
-        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Splitter1.Location = New System.Drawing.Point(0, 314)
-        Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(969, 9)
-        Me.Splitter1.TabIndex = 11
-        Me.Splitter1.TabStop = False
-        '
-        'PanelConstraintDefTop
-        '
-        Me.PanelConstraintDefTop.BackColor = System.Drawing.Color.LightYellow
-        Me.PanelConstraintDefTop.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelConstraintDefTop.Location = New System.Drawing.Point(0, 0)
-        Me.PanelConstraintDefTop.Name = "PanelConstraintDefTop"
-        Me.PanelConstraintDefTop.Size = New System.Drawing.Size(969, 18)
-        Me.PanelConstraintDefTop.TabIndex = 10
-        '
-        'PanelConstraintBinding
-        '
-        Me.PanelConstraintBinding.BackColor = System.Drawing.Color.LemonChiffon
-        Me.PanelConstraintBinding.Controls.Add(Me.butLookUpConstraint)
-        Me.PanelConstraintBinding.Controls.Add(Me.lblConstraintStatement)
-        Me.PanelConstraintBinding.Controls.Add(Me.txtConstraintStatement)
-        Me.PanelConstraintBinding.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelConstraintBinding.Location = New System.Drawing.Point(0, 505)
-        Me.PanelConstraintBinding.Name = "PanelConstraintBinding"
-        Me.PanelConstraintBinding.Size = New System.Drawing.Size(969, 64)
-        Me.PanelConstraintBinding.TabIndex = 7
-        '
-        'butLookUpConstraint
-        '
-        Me.butLookUpConstraint.Location = New System.Drawing.Point(870, 16)
-        Me.butLookUpConstraint.Name = "butLookUpConstraint"
-        Me.butLookUpConstraint.Size = New System.Drawing.Size(38, 28)
-        Me.butLookUpConstraint.TabIndex = 2
-        Me.butLookUpConstraint.Text = "..."
-        '
-        'lblConstraintStatement
-        '
-        Me.lblConstraintStatement.Location = New System.Drawing.Point(18, 22)
-        Me.lblConstraintStatement.Name = "lblConstraintStatement"
-        Me.lblConstraintStatement.Size = New System.Drawing.Size(240, 18)
-        Me.lblConstraintStatement.TabIndex = 1
-        Me.lblConstraintStatement.Text = "Constraint statement:"
-        Me.lblConstraintStatement.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txtConstraintStatement
-        '
-        Me.txtConstraintStatement.Location = New System.Drawing.Point(265, 16)
-        Me.txtConstraintStatement.Name = "txtConstraintStatement"
-        Me.txtConstraintStatement.Size = New System.Drawing.Size(595, 24)
-        Me.txtConstraintStatement.TabIndex = 0
-        Me.txtConstraintStatement.Text = ""
-        '
-        'tpLanguages
-        '
-        Me.tpLanguages.BackColor = System.Drawing.Color.LightGoldenrodYellow
-        Me.tpLanguages.Controls.Add(Me.DataGridTerminologies)
-        Me.tpLanguages.Controls.Add(Me.Panel2)
-        Me.tpLanguages.Controls.Add(Me.Splitter2)
-        Me.tpLanguages.Controls.Add(Me.panelLanguages)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpLanguages, "Screens/languages_terminologies_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpLanguages, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpLanguages.Location = New System.Drawing.Point(0, 0)
-        Me.tpLanguages.Name = "tpLanguages"
-        Me.tpLanguages.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpLanguages, True)
-        Me.tpLanguages.Size = New System.Drawing.Size(969, 569)
-        Me.tpLanguages.TabIndex = 0
-        Me.tpLanguages.Title = "Languages && Terminologies"
-        Me.ToolTip1.SetToolTip(Me.tpLanguages, "Available Languages and terminologies")
-        '
-        'DataGridTerminologies
-        '
-        Me.DataGridTerminologies.CaptionBackColor = System.Drawing.Color.CornflowerBlue
-        Me.DataGridTerminologies.CaptionText = "Available terminologies"
-        Me.DataGridTerminologies.DataMember = ""
-        Me.DataGridTerminologies.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridTerminologies.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.DataGridTerminologies.Location = New System.Drawing.Point(384, 46)
-        Me.DataGridTerminologies.Name = "DataGridTerminologies"
-        Me.DataGridTerminologies.ReadOnly = True
-        Me.DataGridTerminologies.Size = New System.Drawing.Size(585, 523)
-        Me.DataGridTerminologies.TabIndex = 10
-        Me.DataGridTerminologies.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.DataGridTableStyle3, Me.DataGridTableStyle4})
-        '
-        'DataGridTableStyle3
-        '
-        Me.DataGridTableStyle3.DataGrid = Me.DataGridTerminologies
-        Me.DataGridTableStyle3.GridColumnStyles.AddRange(New System.Windows.Forms.DataGridColumnStyle() {Me.DataGridTextBoxColumn1, Me.DataGridTextBoxColumn5})
-        Me.DataGridTableStyle3.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.DataGridTableStyle3.MappingName = "Terminologies"
-        '
-        'DataGridTextBoxColumn1
-        '
-        Me.DataGridTextBoxColumn1.Format = ""
-        Me.DataGridTextBoxColumn1.FormatInfo = Nothing
-        Me.DataGridTextBoxColumn1.HeaderText = "Code"
-        Me.DataGridTextBoxColumn1.MappingName = "Terminology"
-        Me.DataGridTextBoxColumn1.Width = 125
-        '
-        'DataGridTextBoxColumn5
-        '
-        Me.DataGridTextBoxColumn5.Format = ""
-        Me.DataGridTextBoxColumn5.FormatInfo = Nothing
-        Me.DataGridTextBoxColumn5.HeaderText = "Description"
-        Me.DataGridTextBoxColumn5.MappingName = "Description"
-        Me.DataGridTextBoxColumn5.Width = 325
-        '
-        'DataGridTableStyle4
-        '
-        Me.DataGridTableStyle4.DataGrid = Me.DataGridTerminologies
-        Me.DataGridTableStyle4.GridColumnStyles.AddRange(New System.Windows.Forms.DataGridColumnStyle() {Me.DataGridTextBoxColumn9, Me.DataGridTextBoxColumn10, Me.DataGridTextBoxColumn11, Me.DataGridTextBoxColumn12})
-        Me.DataGridTableStyle4.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.DataGridTableStyle4.MappingName = "TermBindings"
-        '
-        'DataGridTextBoxColumn9
-        '
-        Me.DataGridTextBoxColumn9.Format = ""
-        Me.DataGridTextBoxColumn9.FormatInfo = Nothing
-        Me.DataGridTextBoxColumn9.HeaderText = "Path"
-        Me.DataGridTextBoxColumn9.MappingName = "Path"
-        Me.DataGridTextBoxColumn9.Width = 75
-        '
-        'DataGridTextBoxColumn10
-        '
-        Me.DataGridTextBoxColumn10.Format = ""
-        Me.DataGridTextBoxColumn10.FormatInfo = Nothing
-        Me.DataGridTextBoxColumn10.HeaderText = "Text"
-        Me.DataGridTextBoxColumn10.MappingName = "Text"
-        Me.DataGridTextBoxColumn10.Width = 215
-        '
-        'DataGridTextBoxColumn11
-        '
-        Me.DataGridTextBoxColumn11.Format = ""
-        Me.DataGridTextBoxColumn11.FormatInfo = Nothing
-        Me.DataGridTextBoxColumn11.HeaderText = "Code"
-        Me.DataGridTextBoxColumn11.MappingName = "Code"
-        Me.DataGridTextBoxColumn11.Width = 75
-        '
-        'DataGridTextBoxColumn12
-        '
-        Me.DataGridTextBoxColumn12.Format = ""
-        Me.DataGridTextBoxColumn12.FormatInfo = Nothing
-        Me.DataGridTextBoxColumn12.HeaderText = "Release"
-        Me.DataGridTextBoxColumn12.MappingName = "Release"
-        Me.DataGridTextBoxColumn12.Width = 75
-        '
-        'Panel2
-        '
-        Me.Panel2.BackColor = System.Drawing.Color.LightYellow
-        Me.Panel2.Controls.Add(Me.butAddTerminology)
-        Me.Panel2.Controls.Add(Me.Label1)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(384, 0)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(585, 46)
-        Me.Panel2.TabIndex = 13
-        '
-        'butAddTerminology
-        '
-        Me.butAddTerminology.Image = CType(resources.GetObject("butAddTerminology.Image"), System.Drawing.Image)
-        Me.butAddTerminology.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddTerminology.Location = New System.Drawing.Point(10, 9)
-        Me.butAddTerminology.Name = "butAddTerminology"
-        Me.butAddTerminology.Size = New System.Drawing.Size(27, 31)
-        Me.butAddTerminology.TabIndex = 11
-        Me.ToolTip1.SetToolTip(Me.butAddTerminology, "Add a language")
-        '
-        'Label1
-        '
-        Me.Label1.Location = New System.Drawing.Point(48, 15)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(250, 28)
-        Me.Label1.TabIndex = 11
-        Me.Label1.Text = "Available terminologies:"
-        '
-        'Splitter2
-        '
-        Me.Splitter2.Location = New System.Drawing.Point(374, 0)
-        Me.Splitter2.Name = "Splitter2"
-        Me.Splitter2.Size = New System.Drawing.Size(10, 569)
-        Me.Splitter2.TabIndex = 12
-        Me.Splitter2.TabStop = False
-        '
-        'panelLanguages
-        '
-        Me.panelLanguages.BackColor = System.Drawing.Color.LightYellow
-        Me.panelLanguages.Controls.Add(Me.ListLanguages)
-        Me.panelLanguages.Controls.Add(Me.Panel1)
-        Me.panelLanguages.Dock = System.Windows.Forms.DockStyle.Left
-        Me.panelLanguages.Location = New System.Drawing.Point(0, 0)
-        Me.panelLanguages.Name = "panelLanguages"
-        Me.panelLanguages.Size = New System.Drawing.Size(374, 569)
-        Me.panelLanguages.TabIndex = 2
-        '
-        'ListLanguages
-        '
-        Me.ListLanguages.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListLanguages.ItemHeight = 16
-        Me.ListLanguages.Location = New System.Drawing.Point(0, 111)
-        Me.ListLanguages.Name = "ListLanguages"
-        Me.ListLanguages.Size = New System.Drawing.Size(374, 458)
-        Me.ListLanguages.TabIndex = 9
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.lblAvailableLanguages)
-        Me.Panel1.Controls.Add(Me.butAdd)
-        Me.Panel1.Controls.Add(Me.lblPrimaryLanguageText)
-        Me.Panel1.Controls.Add(Me.lblPrimaryLanguage)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(374, 111)
-        Me.Panel1.TabIndex = 11
-        '
-        'lblAvailableLanguages
-        '
-        Me.lblAvailableLanguages.Location = New System.Drawing.Point(49, 80)
-        Me.lblAvailableLanguages.Name = "lblAvailableLanguages"
-        Me.lblAvailableLanguages.Size = New System.Drawing.Size(250, 27)
-        Me.lblAvailableLanguages.TabIndex = 10
-        Me.lblAvailableLanguages.Text = "Available languages:"
-        '
         'tpText
         '
         Me.tpText.BackColor = System.Drawing.Color.LightSteelBlue
@@ -1497,48 +1504,12 @@ Public Class Designer
         '
         'Panel3
         '
-        Me.Panel3.Controls.Add(Me.richtextArchetype)
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel3.DockPadding.All = 5
         Me.Panel3.Location = New System.Drawing.Point(0, 55)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Size = New System.Drawing.Size(969, 540)
         Me.Panel3.TabIndex = 4
-        '
-        'richtextArchetype
-        '
-        Me.richtextArchetype.ContextMenu = Me.ContextMenuDisplay
-        Me.richtextArchetype.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.richtextArchetype.Location = New System.Drawing.Point(5, 5)
-        Me.richtextArchetype.Name = "richtextArchetype"
-        Me.richtextArchetype.ReadOnly = True
-        Me.richtextArchetype.Size = New System.Drawing.Size(959, 530)
-        Me.richtextArchetype.TabIndex = 0
-        Me.richtextArchetype.Text = ""
-        '
-        'ContextMenuDisplay
-        '
-        Me.ContextMenuDisplay.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuDisplayPrint, Me.MenuDisplayFind, Me.MenuDisplayFindAgain, Me.menuDisplaySaveAs})
-        '
-        'menuDisplayPrint
-        '
-        Me.menuDisplayPrint.Index = 0
-        Me.menuDisplayPrint.Text = "Print"
-        '
-        'MenuDisplayFind
-        '
-        Me.MenuDisplayFind.Index = 1
-        Me.MenuDisplayFind.Text = "Find"
-        '
-        'MenuDisplayFindAgain
-        '
-        Me.MenuDisplayFindAgain.Index = 2
-        Me.MenuDisplayFindAgain.Text = "Find again"
-        '
-        'menuDisplaySaveAs
-        '
-        Me.menuDisplaySaveAs.Index = 3
-        Me.menuDisplaySaveAs.Text = "Save as"
         '
         'panelDiplayTop
         '
@@ -1610,10 +1581,42 @@ Public Class Designer
         Me.tpInterface.TabIndex = 5
         Me.tpInterface.Title = "Interface"
         '
+        'tpDescription
+        '
+        Me.tpDescription.Location = New System.Drawing.Point(0, 0)
+        Me.tpDescription.Name = "tpDescription"
+        Me.tpDescription.Selected = False
+        Me.tpDescription.Size = New System.Drawing.Size(969, 595)
+        Me.tpDescription.TabIndex = 6
+        Me.tpDescription.Title = "Description"
+        '
+        'ContextMenuDisplay
+        '
+        Me.ContextMenuDisplay.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuDisplayPrint, Me.MenuDisplayFind, Me.MenuDisplayFindAgain, Me.menuDisplaySaveAs})
+        '
+        'menuDisplayPrint
+        '
+        Me.menuDisplayPrint.Index = 0
+        Me.menuDisplayPrint.Text = "Print"
+        '
+        'MenuDisplayFind
+        '
+        Me.MenuDisplayFind.Index = 1
+        Me.MenuDisplayFind.Text = "Find"
+        '
+        'MenuDisplayFindAgain
+        '
+        Me.MenuDisplayFindAgain.Index = 2
+        Me.MenuDisplayFindAgain.Text = "Find again"
+        '
+        'menuDisplaySaveAs
+        '
+        Me.menuDisplaySaveAs.Index = 3
+        Me.menuDisplaySaveAs.Text = "Save as"
+        '
         'PanelHeader
         '
         Me.PanelHeader.BackColor = System.Drawing.Color.Ivory
-        Me.PanelHeader.Controls.Add(Me.DevelopmentLabel)
         Me.PanelHeader.Controls.Add(Me.lblLifecycle)
         Me.PanelHeader.Controls.Add(Me.ToolBarMain)
         Me.PanelHeader.Controls.Add(Me.PictureBox1)
@@ -1624,16 +1627,6 @@ Public Class Designer
         Me.PanelHeader.Name = "PanelHeader"
         Me.PanelHeader.Size = New System.Drawing.Size(969, 92)
         Me.PanelHeader.TabIndex = 10
-        '
-        'DevelopmentLabel
-        '
-        Me.DevelopmentLabel.BackColor = System.Drawing.SystemColors.Control
-        Me.DevelopmentLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DevelopmentLabel.Location = New System.Drawing.Point(736, 4)
-        Me.DevelopmentLabel.Name = "DevelopmentLabel"
-        Me.DevelopmentLabel.Size = New System.Drawing.Size(115, 19)
-        Me.DevelopmentLabel.TabIndex = 13
-        Me.DevelopmentLabel.Text = "Development"
         '
         'lblLifecycle
         '
@@ -1738,13 +1731,9 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
-        Me.tpHeader.ResumeLayout(False)
-        Me.tpDesign.ResumeLayout(False)
-        Me.tpData.ResumeLayout(False)
-        Me.tpRootState.ResumeLayout(False)
         Me.tpTerminology.ResumeLayout(False)
-        Me.tpTerms.ResumeLayout(False)
         Me.tpBindings.ResumeLayout(False)
+        Me.tpTerms.ResumeLayout(False)
         Me.tpConstraints.ResumeLayout(False)
         CType(Me.DataGridConstraintStatements, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelConstraintBinding.ResumeLayout(False)
@@ -1753,8 +1742,11 @@ Public Class Designer
         Me.Panel2.ResumeLayout(False)
         Me.panelLanguages.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
+        Me.tpHeader.ResumeLayout(False)
+        Me.tpDesign.ResumeLayout(False)
+        Me.tpData.ResumeLayout(False)
+        Me.tpRootState.ResumeLayout(False)
         Me.tpText.ResumeLayout(False)
-        Me.Panel3.ResumeLayout(False)
         Me.panelDiplayTop.ResumeLayout(False)
         Me.GroupBox1.ResumeLayout(False)
         Me.PanelHeader.ResumeLayout(False)
@@ -1767,13 +1759,6 @@ Public Class Designer
 #Region "Principle functions"
 
     Private Sub OpenArchetype(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileOpen.Click
-
-        Dim i As Integer
-        Dim new_row As DataRow
-        Dim selected_rows As DataRow()
-        Dim has_default_language As Boolean
-        Dim default_language_id As Integer
-        Dim s As String
 
         If Not CheckOKtoClose() Then
             Return
@@ -1792,22 +1777,32 @@ Public Class Designer
             Return
         End If
 
+        OpenArchetype(Me.OpenFileDialogArchetype.FileName)
+
+    End Sub
+
+    Private Sub OpenArchetype(ByVal a_file_name As String)
+        Dim i As Integer
+        Dim new_row As DataRow
+        Dim selected_rows As DataRow()
+        Dim has_default_language As Boolean
+        Dim default_language_id As Integer
+        Dim s As String
+
         Me.Cursor = System.Windows.Forms.Cursors.WaitCursor
 
         ' stop auto updating of controls
         Filemanager.Instance.FileLoading = True
 
-        If Not Filemanager.Instance.OpenArchetype( _
-                Me.OpenFileDialogArchetype.FileName) Then
-            MessageBox.Show(Filemanager.Instance.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        If Not Filemanager.Instance.OpenArchetype(a_file_name) Then
+            MessageBox.Show(Filemanager.Instance.Status, _
+                AE_Constants.Instance.MessageBoxCaption, _
+                MessageBoxButtons.OK, MessageBoxIcon.Error)
             Me.Cursor = System.Windows.Forms.Cursors.Default
             Filemanager.Instance.ParserReset()
             Filemanager.Instance.FileLoading = False
             Exit Sub
         End If
-
-        ' set the file state to clean
-        'FileManager.Instance.FileEdited = False
 
         ' stop the handler while we get all the languages
         RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
@@ -1988,7 +1983,6 @@ Public Class Designer
 
         Me.MenuFileSpecialise.Visible = True
         Me.Cursor = System.Windows.Forms.Cursors.Default
-
     End Sub
 
     Private Sub NewArchetype(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuFileNew.Click, MenuFileClose.Click
@@ -2080,19 +2074,6 @@ Public Class Designer
     Private Sub DesignerInitialiser()
         Dim i As Integer
         Dim tp As Crownwood.Magic.Controls.TabPage
-
-        ''default language as two letter code e.g. "en"
-        'default_language_code = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-        ''FOR TESTING
-        ''MessageBox.Show("LANG: " & default_language_code, "TEST")
-        ''default_language_code = "tr"
-
-        '' specific as four letter e.g. "en-AU"
-        'specific_language_code = System.Globalization.CultureInfo.CurrentCulture.Name
-        ''MessageBox.Show("Specific LANG: " & specific_language_code, "TEST")
-        ''specific_language_code = "tr"
-
-        'DesignerDS = New DataSet("DesignerDataSet")
 
         Me.TabMain.SelectedIndex = 0
         Me.TabMain.SelectedTab = Me.tpHeader
@@ -2350,7 +2331,10 @@ Public Class Designer
         text.WriteLine("   Concept: " & Me.txtConceptInFull.Text & "\par")
         text.WriteLine("\par")
         text.WriteLine("\cf1 Definition\cf0\par")
-        text.WriteLine("\cf2    " & Filemanager.Instance.Archetype.Definition.Type.ToString & "\cf0\par")
+
+        If Not Filemanager.Instance.Archetype.Definition Is Nothing Then
+            text.WriteLine("\cf2    " & Filemanager.Instance.Archetype.Definition.Type.ToString & "\cf0\par")
+        End If
 
         Select Case Filemanager.Instance.Archetype.RmEntity
             Case StructureType.SECTION
@@ -2536,7 +2520,7 @@ Public Class Designer
                     s = s.TrimEnd(commaspace)
                     text.WriteLine("<hr>Subject relationship restricted to " & s & "<br>")
                 End If
-                
+
                 If Not mTabPageProtocolStructure Is Nothing Then
                     text.WriteLine("<table border=""0"" cellpadding=""2"" width=""100%"">")
                     text.WriteLine("<tr>")
@@ -2747,6 +2731,18 @@ Public Class Designer
             Me.ToolBarSave.Visible = Value
         End Set
     End Property
+
+    Dim m_ArchetypeToOpen As String
+    'Allows setting archetype to open on load if required
+    Public Property ArchetypeToOpen() As String
+        Get
+            Return m_ArchetypeToOpen
+        End Get
+        Set(ByVal Value As String)
+            m_ArchetypeToOpen = Value
+        End Set
+    End Property
+
     Public Property ShowToolbarNewButton() As Boolean
         Get
             Return Me.ToolBarNew.Visible
@@ -2852,9 +2848,12 @@ Public Class Designer
 
     Public Sub ShowTabPages(ByVal archetyped_class As StructureType)
 
+        'layout of the pages to match the archetyped class
+        'Compositions, Sections and Instructions use the tpSectionPage which is generic - probably a bad name!
+
         Select Case archetyped_class
 
-            Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION
+            Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                 ' enable restriction of subject of care
                 Me.gbRestrictedData.Visible = True
                 Me.gbRestrictedData.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(32, "Subject of data")
@@ -2864,6 +2863,22 @@ Public Class Designer
                     Me.TabMain.TabPages.Remove(Me.tpSectionPage)
                     Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpDesign"))
                 End If
+
+                Select Case archetyped_class
+                    Case StructureType.ADMIN_ENTRY, StructureType.ENTRY
+                        'no protocol, state or history
+                        Me.cbPersonState.Enabled = False
+                        Me.cbStructurePersonState.Enabled = False
+                        Me.cbProtocol.Enabled = False
+                    Case StructureType.EVALUATION
+                        Me.cbPersonState.Enabled = False
+                        Me.cbStructurePersonState.Enabled = False
+                        Me.cbProtocol.Enabled = True
+                    Case StructureType.OBSERVATION
+                        Me.cbPersonState.Enabled = True
+                        Me.cbStructurePersonState.Enabled = True
+                        Me.cbProtocol.Enabled = True
+                End Select
 
             Case StructureType.INSTRUCTION
                 ' enable restriction of subject of care
@@ -3049,7 +3064,7 @@ Public Class Designer
                 End If
                 ShowTabPages(archetyped_class)
 
-            Case StructureType.EVALUATION
+            Case StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                 If isNew Then
                     SetUpDataStructure()
                 End If
@@ -3842,17 +3857,23 @@ Public Class Designer
 
         Me.Show()
 
-        If SetNewArchetypeName() = 2 Then
+        If ArchetypeToOpen <> "" Then
+            'command line variable has been set
+            OpenArchetype(ArchetypeToOpen)
+        Else
+            'load the start screen
+            If SetNewArchetypeName() = 2 Then
 
-            ' new archetype
-            SetUpGUI(ReferenceModel.Instance.ArchetypedClass, True)
-            Filemanager.Instance.FileLoading = False
-            Filemanager.Instance.FileEdited = True
+                ' new archetype
+                SetUpGUI(ReferenceModel.Instance.ArchetypedClass, True)
+                Filemanager.Instance.FileLoading = False
+                Filemanager.Instance.FileEdited = True
 
-            'Case 1  -  archetype openned - no action
-            ' Case 0  - exit application called from in set new archetype name
+                'Case 1  -  archetype openned - no action
+                ' Case 0  - exit application called from in set new archetype name
+            End If
         End If
-
+        
     End Sub
 
     Private Sub Designer_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
@@ -3994,11 +4015,12 @@ Public Class Designer
                 mTabPageDataStateStructure.IsState = True ' makes assumed value button/text box visible
                 'Adding it to this collection allows it to be removed
                 ' and then readded without losing the data
-                mTabPagesCollection.Add(tp.Name, tp)
                 mComponentsCollection.Add(mTabPageDataStateStructure)
                 tp.Controls.Add(mTabPageDataStateStructure)
                 tp.BackColor = System.Drawing.Color.RoyalBlue
                 tp.Name = "tpStateStructure"
+                ' add it to the collection incase it is needed again
+                mTabPagesCollection.Add(tp.Name, tp)
                 tp.Title = AE_Constants.Instance.Person_state
                 Me.TabStructure.TabPages.Add(tp)
 
@@ -4339,6 +4361,13 @@ Public Class Designer
             Case StructureType.SECTION
 
             Case StructureType.COMPOSITION
+                Dim pos As New Point
+                pos.X = 10
+                pos.Y = 10
+
+                If Not Me.mTabPageComposition Is Nothing Then
+                    Me.mTabPageComposition.BuildInterface(tpInterface, pos)
+                End If
 
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 Dim pos As New Point
@@ -4354,6 +4383,11 @@ Public Class Designer
 
     Private Sub RadioADL_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioADL.CheckedChanged
         If RadioADL.Checked Then
+            If Filemanager.Instance.FileEdited Then
+                If MessageBox.Show("Save to display current ADL?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Yes Then
+                    Me.SaveArchetype(Me, New EventArgs)
+                End If
+            End If
             Me.richtextArchetype.Text = Filemanager.Instance.Archetype.SourceCode
         Else
             WriteRichText()

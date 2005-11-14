@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/BusinessLogic/Generic_Structures/SCCS/s.RmStructureCompound.vb $"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -114,8 +114,6 @@ Public Class RmStructureCompound
                     mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "items"
                     Dim ii As Integer
-                    'Set whether the list is ordered or not
-                    colChildren.Cardinality.SetFromOpenEHRCardinality(an_attribute.cardinality)
                     For ii = 1 To an_attribute.children.count
                         Dim a_ComplexObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                         Select Case CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_OBJECT).Generating_Type.to_cil

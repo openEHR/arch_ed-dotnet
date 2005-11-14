@@ -24,7 +24,7 @@
                 OptionCompare = "Binary"
                 OptionExplicit = "On"
                 OptionStrict = "Off"
-                RootNamespace = "ocean.ArchetypeEditor"
+                RootNamespace = "ArchetypeEditor"
                 StartupObject = ""
             >
                 <Config
@@ -242,6 +242,16 @@
                     RelPath = "BusinessLogic\ArchetypeDescription\OtherDefinitionDetails.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\TabPageDescription.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\TabPageDescription.resx"
+                    DependentUpon = "TabPageDescription.vb"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "BusinessLogic\ArchetypeDescription\TranslationDetails.vb"

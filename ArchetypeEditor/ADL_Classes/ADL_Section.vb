@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL$"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	file:        "$Source$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -19,7 +19,7 @@ Option Explicit On
 Class ADL_SECTION
     Inherits RmSection
 
-    Private Function GetRunTimeConstraintID(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_Attribute) As String
+    Private Function GetRunTimeConstraintID(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As String
 
         Dim CodedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
         Dim constraint_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT

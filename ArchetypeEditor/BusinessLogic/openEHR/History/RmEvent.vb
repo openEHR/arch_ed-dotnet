@@ -5,12 +5,12 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL$"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	file:        "$Source$"
+'	revision:    "$Revision$"
+'	last_change: "$Date$"
 '
 '
 
@@ -144,12 +144,12 @@ Class RmEvent
         ProcessEvent(An_Event)
     End Sub
 
-    Private mEIF_Data As openehr.openehr.am.archetype.constraint_model.C_Attribute
-    Property ADL_Data() As openehr.openehr.am.archetype.constraint_model.C_Attribute
+    Private mEIF_Data As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+    Property ADL_Data() As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Get
             Return mEIF_Data
         End Get
-        Set(ByVal Value As openehr.openehr.am.archetype.constraint_model.C_Attribute)
+        Set(ByVal Value As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
             Debug.Assert(False)
         End Set
     End Property
@@ -157,7 +157,7 @@ Class RmEvent
 #Region "ADL PRocessing - incoming"
 
     Private Sub ProcessEvent(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_Attribute
+        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
         cOccurrences = ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
@@ -280,4 +280,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
