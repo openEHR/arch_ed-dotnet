@@ -67,17 +67,17 @@ Public Class RmPathwayStep
         mStateType = a_machine_state_type
     End Sub
 
-    Sub New(ByVal EIF_PathwayStep As openehr.am.C_COMPLEX_OBJECT)
+    Sub New(ByVal EIF_PathwayStep As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         MyBase.New(EIF_PathwayStep.node_id.to_cil, StructureType.WorkFlowStep)
         ProcessPathwayStep(EIF_PathwayStep)
     End Sub
 
 #Region "ADL Orientated Classes"
 
-    Sub ProcessPathwayStep(ByVal EIF_Step As openehr.am.C_COMPLEX_OBJECT)
-        Dim an_attribute As openehr.am.C_ATTRIBUTE
-        Dim constraint As openehr.am.C_PRIMITIVE_OBJECT
-        Dim cString As openehr.am.OE_C_STRING
+    Sub ProcessPathwayStep(ByVal EIF_Step As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+        Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING
 
         an_attribute = EIF_Step.attributes.first
 
@@ -86,7 +86,7 @@ Public Class RmPathwayStep
 
             constraint = an_attribute.children.first
             cString = constraint.item
-            y = CType(cString.strings.i_th(1), openehr.Base_Net.STRING).to_cil.Split(",")
+            y = CType(cString.strings.i_th(1), openehr.base.kernel.STRING).to_cil.Split(",")
 
             Debug.Assert(y.Length < 3, "Have not dealt with multiple state possibilities > 2")
 

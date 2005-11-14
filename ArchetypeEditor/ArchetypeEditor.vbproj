@@ -24,7 +24,7 @@
                 OptionCompare = "Binary"
                 OptionExplicit = "On"
                 OptionStrict = "Off"
-                RootNamespace = "openEHR.ArchetypeEditor"
+                RootNamespace = "ArchetypeEditor"
                 StartupObject = ""
             >
                 <Config
@@ -242,6 +242,16 @@
                     RelPath = "BusinessLogic\ArchetypeDescription\OtherDefinitionDetails.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\TabPageDescription.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\TabPageDescription.resx"
+                    DependentUpon = "TabPageDescription.vb"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "BusinessLogic\ArchetypeDescription\TranslationDetails.vb"
@@ -1002,7 +1012,7 @@
                 />
                 <File
                     RelPath = "TabPage_Controls\TabPageComposition.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -1012,7 +1022,7 @@
                 />
                 <File
                     RelPath = "TabPage_Controls\TabPageHistory.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -1022,7 +1032,7 @@
                 />
                 <File
                     RelPath = "TabPage_Controls\TabPageInstruction.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -1032,7 +1042,7 @@
                 />
                 <File
                     RelPath = "TabPage_Controls\TabPageSection.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -1042,7 +1052,7 @@
                 />
                 <File
                     RelPath = "TabPage_Controls\TabPageStructure.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -1052,7 +1062,7 @@
                 />
                 <File
                     RelPath = "TabPage_Controls\TermBindingPanel.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File

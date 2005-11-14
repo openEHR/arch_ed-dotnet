@@ -38,7 +38,7 @@ Public Class RmCluster
 
 #Region "ADL Processing"
 
-    Sub New(ByVal EIF_Cluster As openehr.am.C_COMPLEX_OBJECT)
+    Sub New(ByVal EIF_Cluster As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         MyBase.New(EIF_Cluster)
         ProcessTree(EIF_Cluster)
     End Sub
@@ -84,4 +84,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

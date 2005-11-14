@@ -71,7 +71,7 @@ Class RmHistory
         Return rme
     End Function
 
-    Sub New(ByVal EIF_history As Openehr.am.C_COMPLEX_OBJECT)
+    Sub New(ByVal EIF_history As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         MyBase.new(EIF_history)
         ProcessHistory(EIF_history)
     End Sub
@@ -94,9 +94,9 @@ Class RmHistory
         Return child
     End Function
 
-    Private Sub ProcessHistory(ByVal ObjNode As Openehr.am.C_COMPLEX_OBJECT)
-        Dim an_attribute As Openehr.am.C_Attribute
-        Dim period As Openehr.am.C_Primitive_Object
+    Private Sub ProcessHistory(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
         Dim i As Integer
 
         cOccurrences = ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
@@ -105,7 +105,7 @@ Class RmHistory
             an_attribute = ObjNode.Attributes.i_th(i)
             Select Case an_attribute.Rm_Attribute_Name.to_cil
                 Case "name", "Name", "NAME", "runtime_label", "Runtime_label", "RUNTIME_LABEL"
-                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.am.C_COMPLEX_OBJECT))
+                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
                 Case "period", "Period", "PERIOD"
                     Dim d As Duration
@@ -116,7 +116,7 @@ Class RmHistory
                     sPeriodUnits = d.GUI_Units
 
                 Case "events", "Events", "EVENTS"
-                    Dim an_Event As openehr.am.C_COMPLEX_OBJECT
+                    Dim an_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                     Dim ii As Integer
 
                     ' empty the remembered structure
@@ -125,7 +125,7 @@ Class RmHistory
                     colEvt.Cardinality.SetFromOpenEHRCardinality(an_attribute.cardinality)
 
                     For ii = 1 To an_attribute.children.count
-                        Dim Struct_rel_node As openehr.am.C_ATTRIBUTE
+                        Dim Struct_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                         an_Event = an_attribute.children.i_th(ii)
                         ' process the event and expose the data structure if it is present
                         ' as ADL_Data property
@@ -185,4 +185,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

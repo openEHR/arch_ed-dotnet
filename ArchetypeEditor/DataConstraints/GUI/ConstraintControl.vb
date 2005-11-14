@@ -193,6 +193,9 @@ Public Class ConstraintControl
             Case ConstraintType.DateTime
                 Return New DateTimeConstraintControl(a_file_manager)
 
+            Case ConstraintType.Duration
+                Return New DurationConstraintControl(a_file_manager)
+
             Case ConstraintType.Ordinal
                 Return New OrdinalConstraintControl(a_file_manager)
 

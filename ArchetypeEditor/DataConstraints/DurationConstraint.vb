@@ -15,80 +15,51 @@
 Option Strict On
 
 Public Class Constraint_Duration
-    Inherits Constraint_with_value
+    Inherits Constraint_Count
 
-    Private mValue As TimeSpan
-    Public Overrides Property AssumedValue() As Object
+    Public Overrides Function copy() As Constraint
+        Dim d As New Constraint_Duration
+
+        d.mHasMaxVal = Me.mHasMaxVal
+        d.mHasMinVal = Me.mHasMinVal
+        d.mMaxVal = Me.mMaxVal
+        d.mMinVal = Me.mMinVal
+        d.mAllowableUnits = Me.mAllowableUnits
+        d.mValueUnits = Me.mValueUnits
+        d.mAssumedValue = Me.mAssumedValue
+        d.HasAssumedValue = Me.HasAssumedValue
+
+        Return d
+    End Function
+    Public Overrides ReadOnly Property Type() As ConstraintType
         Get
-            Return mValue
+            'Return "DateTime"
+            Return ConstraintType.Duration
         End Get
-        Set(ByVal Value As Object)
-            mValue = CType(Value, TimeSpan)
+    End Property
+
+    Private mValueUnits As String
+    Public Property ValueUnits() As String
+        Get
+            Return mValueUnits
+        End Get
+        Set(ByVal Value As String)
+            mValueUnits = Value
         End Set
     End Property
 
-    Private mAllowableUnits As ArrayList
-    '99 = all, 0 = year, 1 = month, 2 = week, 3 = day, 4 = minute, 5 = second, 6 = millisecond
-    Public Property AllowableUnits() As ArrayList
+    Private mAllowableUnits As String = "*"
+    '* = all, Y = year, M = month, W = week, D = day, T as separator then M = minute
+    ' S = second
+    Public Property AllowableUnits() As String
         Get
             Return mAllowableUnits
         End Get
-        Set(ByVal Value As ArrayList)
+        Set(ByVal Value As String)
             mAllowableUnits = Value
         End Set
     End Property
 
-
-    Private mHasMaxValue As Boolean
-
-    Public Property HasMaximumValue() As Boolean
-        Get
-            Return mHasMaxValue
-        End Get
-        Set(ByVal Value As Boolean)
-            mHasMaxValue = Value
-        End Set
-    End Property
-
-    Private mMaxVal As TimeSpan
-
-    Public Property MaximumValue() As TimeSpan
-        Get
-            Return mMaxVal
-        End Get
-        Set(ByVal Value As TimeSpan)
-            If (Value.Ticks <= mValue.MaxValue.Ticks) Then
-                mMaxVal = Value
-                mHasMaxValue = True
-            End If
-        End Set
-    End Property
-
-
-    Private mHasMinValue As Boolean
-
-    Public Property HasMinimumValue() As Boolean
-        Get
-            Return mHasMinValue
-        End Get
-        Set(ByVal Value As Boolean)
-            mHasMinValue = Value
-        End Set
-    End Property
-
-    Private mMinVal As TimeSpan
-
-    Public Property MinimumValue() As TimeSpan
-        Get
-            Return mMinVal
-        End Get
-        Set(ByVal Value As TimeSpan)
-            If (Value.Ticks >= mValue.MinValue.Ticks) Then
-                mMinVal = Value
-                mHasMinValue = True
-            End If
-        End Set
-    End Property
 End Class
 '
 '***** BEGIN LICENSE BLOCK *****

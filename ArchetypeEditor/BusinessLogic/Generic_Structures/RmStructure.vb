@@ -35,6 +35,7 @@ Public Enum StructureType
     EVALUATION = 101
     OBSERVATION = 102
     INSTRUCTION = 103
+    ADMIN_ENTRY = 104
 
     SECTION = 200
 
@@ -134,7 +135,7 @@ Public Class RmStructure
 
 #Region "ADL oriented features"
 
-    Sub New(ByVal EIF_Structure As openehr.am.C_OBJECT)
+    Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
         sNodeId = EIF_Structure.node_id.to_cil
         cOccurrences = ADL_Tools.Instance.SetOccurrences(EIF_Structure.occurrences)
         mType = ReferenceModel.Instance.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
@@ -142,17 +143,17 @@ Public Class RmStructure
         If EIF_Structure.generating_type.to_cil = "C_COMPLEX_OBJECT" Then
             Dim s As String
             ' need to cope with runtime_label
-            If CType(EIF_Structure, openehr.am.C_COMPLEX_OBJECT).has_attribute(openehr.base_net.Create.STRING.make_from_cil("name")) Then
+            If CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("name")) Then
                 s = "name"
-            ElseIf CType(EIF_Structure, openehr.am.C_COMPLEX_OBJECT).has_attribute(openehr.base_net.Create.STRING.make_from_cil("runtime_label")) Then
+            ElseIf CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("runtime_label")) Then
                 'can be removed in the future
                 s = "runtime_label"
             Else
                 Return
             End If
-            Dim attribute As openehr.am.C_ATTRIBUTE
-            attribute = CType(EIF_Structure, openehr.am.C_COMPLEX_OBJECT).c_attribute_at_path(openehr.base_net.Create.STRING.make_from_cil(s))
-            mRunTimeConstraint = RmElement.ProcessText(CType(attribute.children.first, openehr.am.C_COMPLEX_OBJECT))
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            attribute = CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil(s))
+            mRunTimeConstraint = RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
         End If
     End Sub
 

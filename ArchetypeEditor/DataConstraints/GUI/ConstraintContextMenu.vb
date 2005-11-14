@@ -216,7 +216,7 @@ Public Class ConstraintContextMenu
         mMI_Header.Visible = False
         ' and invisible spacer
         mMI_Spacer = New MenuItem
-        mMI_Spacer.Text = "___________"
+        mMI_Spacer.Text = "----------"
         mMI_Spacer.Enabled = False
         Me.MenuItems.Add(mMI_Spacer)
         mMI_Spacer.Visible = False

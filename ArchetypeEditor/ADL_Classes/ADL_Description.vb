@@ -1,13 +1,13 @@
 Public Class ADL_Description
     Inherits ArchetypeDescription
 
-    Private mADL_Description As openehr.am.ARCHETYPE_DESCRIPTION
+    Private mADL_Description As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION
 
     Sub SaveToADL()
         ' TODO
     End Sub
 
-    Sub New(ByVal an_adl_archetype As openehr.am.ARCHETYPE)
+    Sub New(ByVal an_adl_archetype As openehr.openehr.am.archetype.ARCHETYPE)
         mADL_Description = an_adl_archetype.description
 
         ' mADL_Version = mADL_Description.adl_version.to_cil ' set to 1.2 by default

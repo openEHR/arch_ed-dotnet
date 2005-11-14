@@ -75,7 +75,7 @@ Public Class ADL_Tools
 
     End Function
 
-    Public Function ProcessReference(ByVal objRef As openehr.am.ARCHETYPE_INTERNAL_REF) As RmReference
+    Public Function ProcessReference(ByVal objRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF) As RmReference
         Dim rm As RmReference
         Dim nodeid As String
 
@@ -118,7 +118,7 @@ Public Class ADL_Tools
 
     End Sub
 
-    Public Function SetOccurrences(ByVal cadlOccurrences As openehr.Openehr_Library.OE_INTERVAL_INT32) As RmCardinality
+    Public Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.OE_INTERVAL_INT32) As RmCardinality
         Dim c As New RmCardinality
 
         If cadlOccurrences.upper_unbounded Then
@@ -132,24 +132,24 @@ Public Class ADL_Tools
         Return c
     End Function
 
-    Public Function ProcessCodes(ByVal Constraint As openehr.am.C_CODED_TERM) As CodePhrase
+    Public Function ProcessCodes(ByVal Constraint As openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM) As CodePhrase
         Dim s As String
         Dim cp As New CodePhrase
 
         For i As Integer = 1 To Constraint.code_count
-            cp.Codes.Add(CType(Constraint.code_list.i_th(i), openehr.base_net.STRING).to_cil)
+            cp.Codes.Add(CType(Constraint.code_list.i_th(i), openehr.base.kernel.STRING).to_cil)
         Next
 
         cp.TerminologyID = Constraint.terminology_id.as_string.to_cil
         Return cp
     End Function
 
-    Function GetDomainConceptFromAssertion(ByVal assert As openehr.am.ASSERTION) As String
+    Function GetDomainConceptFromAssertion(ByVal assert As openehr.openehr.am.archetype.assertion.ASSERTION) As String
         Select Case assert.expression.generating_type.to_cil
             Case "EXPR_BINARY_OPERATOR"
-                Dim expr As openehr.am.EXPR_BINARY_OPERATOR = assert.expression
+                Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression
                 Debug.Assert(expr.left_operand.as_string.to_cil = "domain_concept")
-                Return CType(expr.right_operand, openehr.am.EXPR_LEAF).out.to_cil
+                Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil
             Case Else
                 Debug.Assert(False)
                 Return "????"
@@ -193,4 +193,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

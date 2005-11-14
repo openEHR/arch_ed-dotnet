@@ -18,7 +18,7 @@ Option Strict On
 
 Class ADL_Interface
     Implements Parser
-    Private EIF_adlInterface As openehr.am.ADL_INTERFACE
+    Private EIF_adlInterface As openehr.adl_parser.interface.ADL_INTERFACE
     Private mFileName As String
     Private an_Archetype As ADL_Archetype
     Private mOpenFileError As Boolean
@@ -29,7 +29,7 @@ Class ADL_Interface
             Return mFileName
         End Get
     End Property
-    Public ReadOnly Property ADL_Parser() As openehr.am.ADL_INTERFACE
+    Public ReadOnly Property ADL_Parser() As openehr.adl_parser.interface.ADL_INTERFACE
         Get
             Return EIF_adlInterface
         End Get
@@ -39,7 +39,7 @@ Class ADL_Interface
             Dim formats(EIF_adlInterface.archetype_serialiser_formats.count - 1) As String
 
             For i As Integer = 1 To EIF_adlInterface.archetype_serialiser_formats.count
-                formats(i - 1) = CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), openehr.base_net.STRING).to_cil
+                formats(i - 1) = CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), openehr.base.kernel.STRING).to_cil
             Next
             Return formats
         End Get
@@ -97,7 +97,7 @@ Class ADL_Interface
             System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture()
         End If
 
-        EIF_adlInterface.open_adl_file(openehr.base_net.Create.STRING.make_from_cil(FileName))
+        EIF_adlInterface.open_adl_file(openehr.base.kernel.Create.STRING.make_from_cil(FileName))
 
         ' check that file openned successfully by checking status
         If EIF_adlInterface.archetype_source_loaded Then
@@ -130,8 +130,8 @@ Class ADL_Interface
         Try
             an_Archetype.MakeParseTree()
             If EIF_adlInterface.archetype_available Then
-                If EIF_adlInterface.has_archetype_serialiser_format(openehr.base_net.Create.STRING.make_from_cil(output_format)) Then
-                    EIF_adlInterface.save_archetype(openehr.base_net.Create.STRING.make_from_cil(FileName), openehr.base_net.Create.STRING.make_from_cil(output_format))
+                If EIF_adlInterface.has_archetype_serialiser_format(openehr.base.kernel.Create.STRING.make_from_cil(output_format)) Then
+                    EIF_adlInterface.save_archetype(openehr.base.kernel.Create.STRING.make_from_cil(FileName), openehr.base.kernel.Create.STRING.make_from_cil(output_format))
                     If EIF_adlInterface.exception_encountered Then
                         MessageBox.Show(EIF_adlInterface.status.to_cil)
                         EIF_adlInterface.reset()
@@ -152,7 +152,7 @@ Class ADL_Interface
     End Sub
 
     Sub New()
-        EIF_adlInterface = openehr.am.Create.ADL_INTERFACE.make
+        EIF_adlInterface = openehr.adl_parser.interface.Create.ADL_INTERFACE.make
     End Sub
 
 End Class
@@ -195,4 +195,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

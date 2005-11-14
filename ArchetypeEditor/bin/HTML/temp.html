@@ -2,13 +2,13 @@
 <HEAD>
 <meta http-equiv="Content-Language" content="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Problem as defined by a clinician</title>
+<title>Adverse reaction</title>
 </HEAD>
 <BODY>
 <table border="0" cellpadding="2" width="100%">
 <tr>
 <td width="100%" bgcolor="#000080">
-<h1 align="center"><font color="#FFFFFF">Problem as defined by a clinician</font></h1>
+<h1 align="center"><font color="#FFFFFF">Adverse reaction</font></h1>
 </td>
 </tr>
 </table>
@@ -19,8 +19,8 @@
 <td width="50%"><h4>Identification:</h4></td>
 </tr>
 <tr>
-<td width="50%">A problem, condition or issue defined by the clinician which is deemed summative of a range of symptoms or concerns of the person and a useful label of these.</td>
-<td width="50%"><i>Id</i>: openEHR-EHR-EVALUATION.problem.v1<br><i>Reference model</i>: openEHR_EHR</td>
+<td width="50%">Recording the presence or absence of a harmful or undesirable response to an agent or substance including food, as determined by the clinician - excluding poisoning and abnormal use</td>
+<td width="50%"><i>Id</i>: openEHR-EHR-EVALUATION.adverse.v1<br><i>Reference model</i>: openEHR_EHR</td>
 </tr>
 </table>
 <hr>
@@ -31,7 +31,7 @@
 </td>
 </tr>
 </table>
-<p>Structure = TREE, ordered</p>
+<p>Structure = TREE</p>
 <table border="1" cellpadding="2" width="100%">
 <tr  bgcolor="#FFFF53">
 <td width="20%"><h4>Concept</h4></td>
@@ -41,8 +41,8 @@
 </tr>
 
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>Problem</b></td></table></td>
-<td>The index problem, condition or issue described</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Agent</b></td></table></td>
+<td>The agent or substance or class that caused the adverse reaction</td>
 <td><b><i>Text</i></b><br>
 1..1</td>
 <td>
@@ -50,73 +50,24 @@ Text;
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/datetime.png" width="32" height="32" align="middle"><b>Date of onset</b></td></table></td>
-<td>The date that the problem began from the perspective of the clinician</td>
-<td><b><i>DateTime</i></b><br>
-0..1</td>
-<td>
-Partial date
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/Q.png" width="32" height="32" align="middle"><b>Age at onset</b></td></table></td>
-<td>The age of the at the onset of the problem</td>
-<td><b><i>Quantity</i></b><br>
-0..1</td>
-<td>
-Property = time<br>
-  Units = yr; >=0; <=200;<br>
-  Units = mth; >=0; <=36;<br>
-  Units = wk; >=0; <=52;<br>
-  Units = day; >=0; <=56;<br>
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/Ordinal.png" width="32" height="32" align="middle"><b>Severity</b></td></table></td>
-<td>The severity of the index problem</td>
-<td><b><i>Ordinal</i></b><br>
-0..1</td>
-<td>
-0: <i> Mild<i><br> 5: <i> Moderate<i><br> 10: <i> Severe<i><br>
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>Clinical description</b></td></table></td>
-<td>Description of the clinical aspects of the problem</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Agent category</b></td></table></td>
+<td>The category of the agent</td>
 <td><b><i>Text</i></b><br>
 0..1</td>
 <td>
-Text;
+Internal; 'Food', 'Animal', 'Medication', 'Other chemical or substance', 'Non-active ingredient of medication', 'Imaging dye or media'
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/datetime.png" width="32" height="32" align="middle"><b>Date clinically recognised</b></td></table></td>
-<td>Date the problem was recognised by clinicians</td>
-<td><b><i>DateTime</i></b><br>
-0..1</td>
-<td>
-Date only
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/Compound.png" width="32" height="32" align="middle"><b><i>Location</i></b></td></table></td>
-<td>Location of the problem in terms of body site</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Exposure and reaction detail</i></b></td></table></td>
+<td>Details of the reaction experienced by the person</td>
 <td><b><i>Cluster</b></i><br>
-0..*, fixed, ordered</td><td>&nbsp;</td>
+0..*</td><td>&nbsp;</td>
 </tr>
 
 <tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>Body site</b></td></table></td>
-<td>The body site affected</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Terminology; Any term that describes a body site
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>Location description</b></td></table></td>
-<td>A free text description of the location - may be in addition to a coded body site</td>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Specific substance</b></td></table></td>
+<td>The specific substance that caused the reaction if different from the agent (e.g. brands or members of a class)</td>
 <td><b><i>Text</i></b><br>
 0..1</td>
 <td>
@@ -124,102 +75,26 @@ Text;
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/Compound.png" width="32" height="32" align="middle"><b><i>Aetiology</i></b></td></table></td>
-<td>Agents or Factors known to have been of aetiological significance</td>
-<td><b><i>Cluster</b></i><br>
-0..1</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>Agent</b></td></table></td>
-<td>Microbial or other agent known to have caused this problem</td>
-<td><b><i>Text</i></b><br>
-0..*</td>
-<td>
-Internal;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/Multiple.png" width="32" height="32" align="middle"><b>Complication of</b></td></table></td>
-<td>A problem or link to a problem or injury described elsewhere in the EHR</td>
-<td><b><i>Text<hr>URI</i></b><br>
-0..*</td>
-<td>
-Text;<hr>
-&nbsp;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>Description</b></td></table></td>
-<td>Description of aetiological process</td>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Reaction category</b></td></table></td>
+<td>The type of reaction experience by the person as determined by the clinician</td>
 <td><b><i>Text</i></b><br>
 0..1</td>
 <td>
-Text;
+Internal; 'Intolerance', 'Sensitivity', 'Allergy', 'No reaction'
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/Compound.png" width="32" height="32" align="middle"><b><i>Occurrences or exacerbations</i></b></td></table></td>
-<td>Grouping of information about individual occurrences or exacerbations</td>
-<td><b><i>Cluster</b></i><br>
-0..1, ordered</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/Q.png" width="32" height="32" align="middle"><b>Frequency of occurrences</b></td></table></td>
-<td>The frequency of occurrences of the problem</td>
-<td><b><i>Quantity</i></b><br>
-0..1</td>
-<td>
-Property = Time<br>
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/datetime.png" width="32" height="32" align="middle"><b>Date of last occurrence</b></td></table></td>
-<td>The date of the last occurrence of the problem</td>
-<td><b><i>DateTime</i></b><br>
-0..1</td>
-<td>
-Date only
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/Compound.png" width="32" height="32" align="middle"><b><i>Occurence/exacerbation</i></b></td></table></td>
-<td>Information about one occurrence or exacerbation</td>
-<td><b><i>Cluster</b></i><br>
-0..*, ordered</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="40"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>Clinical description</b></td></table></td>
-<td>A description of the exacerbation or occurrence</td>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Probability of causation</b></td></table></td>
+<td>Degree of certainty that the agent was the cause of the reaction</td>
 <td><b><i>Text</i></b><br>
 0..1</td>
 <td>
-Text;
+Internal; 'Certain/Highly likely', 'Probable', 'Possible'
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="40"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>Outcome</b></td></table></td>
-<td>Outcome of the occurrence or exacerbation</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="40"></td><td><img border="0" src="Images/datetime.png" width="32" height="32" align="middle"><b>Date of onset of occurrence</b></td></table></td>
-<td>Date of onset of occurrence or exacerbation</td>
-<td><b><i>DateTime</i></b><br>
-0..1</td>
-<td>
-Date only
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="40"></td><td><img border="0" src="Images/datetime.png" width="32" height="32" align="middle"><b>Date of resolution of occurrence</b></td></table></td>
-<td>Date of the resolution of the occurrence</td>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/datetime.gif" width="32" height="32" align="middle"><b>Date of exposure</b></td></table></td>
+<td>The date (+/- time) when the person became exposed to the agent</td>
 <td><b><i>DateTime</i></b><br>
 0..1</td>
 <td>
@@ -227,111 +102,48 @@ Allow all
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/Count.png" width="32" height="32" align="middle"><b>Number of occurrences</b></td></table></td>
-<td>Number of times this problem has occurred or been apparent</td>
-<td><b><i>Count</i></b><br>
-0..1</td>
-<td>
-1..*
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/Compound.png" width="32" height="32" align="middle"><b><i>Complications</i></b></td></table></td>
-<td>Complications that are attributed to this problem</td>
-<td><b><i>Cluster</b></i><br>
-0..1</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/Compound.png" width="32" height="32" align="middle"><b><i>Complication</i></b></td></table></td>
-<td>A group of characteristics of the problem complicating the index condition in this archetype</td>
-<td><b><i>Cluster</b></i><br>
-0..*, fixed, ordered</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="40"></td><td><img border="0" src="Images/Multiple.png" width="32" height="32" align="middle"><b>Complicating problem</b></td></table></td>
-<td>Details of the problem as text or coded text or URI</td>
-<td><b><i>Text<hr>URI</i></b><br>
-0..1</td>
-<td>
-Text;<hr>
-&nbsp;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="40"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>Clinical description</b></td></table></td>
-<td>Decription of the complicating problem</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/datetime.png" width="32" height="32" align="middle"><b>Date of resolution</b></td></table></td>
-<td>The date that the problem resolved or went into remission</td>
-<td><b><i>DateTime</i></b><br>
-0..1</td>
-<td>
-Date only
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/Q.png" width="32" height="32" align="middle"><b>Age at resolution</b></td></table></td>
-<td>The age of the at the resolution of the problem</td>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Duration of the exposure</b></td></table></td>
+<td>The duration of the exposure to the agent</td>
 <td><b><i>Quantity</i></b><br>
 0..1</td>
 <td>
-Property = time<br>
-  Units = yr; >=0; <=200;<br>
-  Units = mth; >=0; <=36;<br>
-  Units = wk; >=0; <=52;<br>
-  Units = day; >=0; <=56;<br>
+Property = Time<br>
 </td>
 </tr>
-</tr>
-</table>
-<hr>
-<table border="0" cellpadding="2" width="100%">
 <tr>
-<td width="100%" bgcolor="#FF717B">
-<h2>Protocol</h2>
-</td>
-</tr>
-</table>
-<p>Structure = TREE</p>
-<table border="1" cellpadding="2" width="100%">
-<tr  bgcolor="#FF717B">
-<td width="20%"><h4>Concept</h4></td>
-<td width = "40%"><h4>Description</h4></td>
-<td width = "20%"><h4>Constraints</h4></td>
-<td width="20%"><h4>Values</h4></td>
-</tr>
-
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/Compound.png" width="32" height="32" align="middle"><b><i>References</i></b></td></table></td>
-<td>Useful information about this condition</td>
-<td><b><i>Cluster</b></i><br>
-0..1</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/T.png" width="32" height="32" align="middle"><b>References</b></td></table></td>
-<td>References to material about this condition</td>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Reaction severity</b></td></table></td>
+<td>The category of the reaction for future reference</td>
 <td><b><i>Text</i></b><br>
-0..*</td>
+0..1</td>
+<td>
+Internal; 'Mild', 'Disabling', 'Life threatening'
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Reaction description</b></td></table></td>
+<td>A description of the reaction to this agent as experienced by the person</td>
+<td><b><i>Text</i></b><br>
+1..1</td>
 <td>
 Text;
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/uri.png" width="32" height="32" align="middle"><b>Web links</b></td></table></td>
-<td>Useful information on the internet about this condition</td>
-<td><b><i>URI</i></b><br>
-0..*</td>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/datetime.gif" width="32" height="32" align="middle"><b>Date of onset of reaction</b></td></table></td>
+<td>The date the reaction began</td>
+<td><b><i>DateTime</i></b><br>
+0..1</td>
 <td>
-&nbsp;
+Allow all
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Duration of the reaction</b></td></table></td>
+<td>The duration of the reaction</td>
+<td><b><i>Quantity</i></b><br>
+0..1</td>
+<td>
+Property = Time<br>
 </td>
 </tr>
 </tr>

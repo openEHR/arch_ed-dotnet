@@ -116,20 +116,20 @@ Public Class ArchetypeComposite
     Sub New(ByVal aCluster As RmCluster, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(New RmStructure(aCluster), a_file_manager)
         mCardinality = aCluster.Children.Cardinality
-        mIsOrdered = aCluster.Children.Ordered
+        mIsOrdered = aCluster.Children.Cardinality.Ordered
         mIsFixed = aCluster.Children.Fixed
     End Sub
 
     Sub New(ByVal a_structure As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(New RmStructure(a_structure), a_file_manager)
         mCardinality = a_structure.Children.Cardinality
-        mIsOrdered = a_structure.Children.Ordered
+        mIsOrdered = a_structure.Children.Cardinality.Ordered
         mIsFixed = a_structure.Children.Fixed
     End Sub
 
     Sub New(ByVal aSection As RmSection, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(New RmStructure(aSection), a_file_manager)
-        mIsOrdered = aSection.Children.Ordered
+        mIsOrdered = aSection.Children.Cardinality.Ordered
         mIsFixed = aSection.Children.Fixed
     End Sub
 
@@ -175,4 +175,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

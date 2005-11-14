@@ -109,7 +109,7 @@ Public Class TabPageStructure
         Me.PanelStructure = New System.Windows.Forms.Panel
         Me.panelDisplay = New System.Windows.Forms.Panel
         Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.PanelDetails = New openehr.ArchetypeEditor.ArchetypeNodeConstraintControl
+        Me.PanelDetails = New ArchetypeNodeConstraintControl
         Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
         Me.MenuItemGridAdd = New System.Windows.Forms.MenuItem
@@ -535,7 +535,9 @@ Public Class TabPageStructure
 
     Public Sub Translate()
 
-        mArchetypeControl.Translate()
+        If Not mArchetypeControl Is Nothing Then
+            mArchetypeControl.Translate()
+        End If
 
     End Sub
 

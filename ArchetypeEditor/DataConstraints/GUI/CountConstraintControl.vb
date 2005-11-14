@@ -18,6 +18,8 @@ Option Strict On
 
 Public Class CountConstraintControl : Inherits ConstraintControl
 
+    Public Event ChangeDisplay(ByVal sender As Object, ByVal HasMinOrMax As Boolean)
+
 #Region " Windows Form Designer generated code "
     Public Sub New()
         MyBase.New()
@@ -332,6 +334,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Else
             Constraint.HasMinimum = False
         End If
+
     End Sub
 
     Protected Sub cbMinValue_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMinValue.CheckedChanged
@@ -339,9 +342,13 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numMinValue.Visible = Me.cbMinValue.Checked
         Me.comboIncludeMin.Visible = Me.cbMinValue.Checked
 
+        'Allows duration control to display the units combobox
+        RaiseEvent ChangeDisplay(sender, (cbMinValue.Checked Or cbMinValue.Checked))
+
         If MyBase.IsLoading Then Return
 
         MinValueCheckedChanged()
+
 
         mFileManager.FileEdited = True
 
@@ -367,6 +374,9 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         Me.numMaxValue.Visible = Me.cbMaxValue.Checked
         Me.comboIncludeMax.Visible = Me.cbMaxValue.Checked
+
+        'Allows duration control to display the units combobox
+        RaiseEvent ChangeDisplay(sender, (cbMinValue.Checked Or cbMinValue.Checked))
 
         If MyBase.IsLoading Then Return
 
@@ -499,6 +509,18 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         Me.Constraint.AssumedValue = Me.NumericAssumed.Value
         mFileManager.FileEdited = True
+    End Sub
+
+    Private Sub lblAssumedValue_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblAssumedValue.Click
+
+    End Sub
+
+    Private Sub numMinValue_ValueChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.ValueChanged
+
+    End Sub
+
+    Private Sub numMaxValue_ValueChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMaxValue.ValueChanged
+
     End Sub
 End Class
 
