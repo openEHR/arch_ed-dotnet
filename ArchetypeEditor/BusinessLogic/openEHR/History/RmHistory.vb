@@ -103,11 +103,11 @@ Class RmHistory
 
         For i = 1 To ObjNode.Attributes.Count
             an_attribute = ObjNode.Attributes.i_th(i)
-            Select Case an_attribute.Rm_Attribute_Name.to_cil
-                Case "name", "Name", "NAME", "runtime_label", "Runtime_label", "RUNTIME_LABEL"
+            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "name", "runtime_label"  'run_time_label is obsolete
                     mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
-                Case "period", "Period", "PERIOD"
+                Case "period"
                     Dim d As Duration
 
                     period = an_attribute.children.first
@@ -115,7 +115,7 @@ Class RmHistory
                     iPeriod = d.GUI_duration
                     sPeriodUnits = d.GUI_Units
 
-                Case "events", "Events", "EVENTS"
+                Case "items", "events"  'events is obsolete
                     Dim an_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                     Dim ii As Integer
 
@@ -142,7 +142,8 @@ Class RmHistory
                     If Not ADL_Tools.Instance.LastProcessedStructure Is Nothing Then
                         rmData = ADL_Tools.Instance.LastProcessedStructure
                     End If
-
+                Case Else
+                    MessageBox.Show(AE_Constants.Instance.Incorrect_format & ": illegal attribute - " & an_attribute.rm_attribute_name.to_cil & " in HISTORY", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Select
         Next
     End Sub
