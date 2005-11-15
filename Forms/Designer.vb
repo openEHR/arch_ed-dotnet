@@ -3222,7 +3222,7 @@ Public Class Designer
         Me.SaveFileArchetype.FileName = Filemanager.Instance.Archetype.Archetype_ID.ToString
         Me.SaveFileArchetype.OverwritePrompt = True
         Me.SaveFileArchetype.DefaultExt = Filemanager.Instance.ParserType
-        Dim i As Integer = Filemanager.Instance.IndexOfFormat(Filemanager.Instance.ParserType)
+        Dim i As Integer = Filemanager.Instance.IndexOfFormat(Filemanager.Instance.ParserType) + 1
         If i > 0 Then
             Me.SaveFileArchetype.FilterIndex = i  ' adl is the third type
         End If
