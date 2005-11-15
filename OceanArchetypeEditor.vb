@@ -16,15 +16,15 @@
 
 Option Strict On
 
-Public Class ArchetypeEditor
+Public Class OceanArchetypeEditor
 
     ' ArchetypeEditor Singleton
-    Private Shared mInstance As ArchetypeEditor
+    Private Shared mInstance As OceanArchetypeEditor
 
-    Public Shared ReadOnly Property Instance() As ArchetypeEditor
+    Public Shared ReadOnly Property Instance() As OceanArchetypeEditor
         Get
             If mInstance Is Nothing Then
-                mInstance = New ArchetypeEditor
+                mInstance = New OceanArchetypeEditor
             End If
 
             Return mInstance
