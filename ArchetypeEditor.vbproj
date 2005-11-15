@@ -4,10 +4,6 @@
         ProductVersion = "7.10.3077"
         SchemaVersion = "2.0"
         ProjectGuid = "{179B4A54-F044-430D-9DB6-E950F80EC87F}"
-        SccProjectName = "SAK"
-        SccLocalPath = "SAK"
-        SccAuxPath = "SAK"
-        SccProvider = "SAK"
     >
         <Build>
             <Settings
@@ -24,7 +20,7 @@
                 OptionCompare = "Binary"
                 OptionExplicit = "On"
                 OptionStrict = "Off"
-                RootNamespace = "ocean.ArchetypeEditor"
+                RootNamespace = "ArchetypeEditor"
                 StartupObject = ""
             >
                 <Config
@@ -242,6 +238,16 @@
                     RelPath = "BusinessLogic\ArchetypeDescription\OtherDefinitionDetails.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\TabPageDescription.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\TabPageDescription.resx"
+                    DependentUpon = "TabPageDescription.vb"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "BusinessLogic\ArchetypeDescription\TranslationDetails.vb"

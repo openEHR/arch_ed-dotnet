@@ -35,6 +35,7 @@ Public Enum StructureType
     EVALUATION = 101
     OBSERVATION = 102
     INSTRUCTION = 103
+    ADMIN_ENTRY = 104
 
     SECTION = 200
 

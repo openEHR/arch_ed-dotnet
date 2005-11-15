@@ -2,13 +2,13 @@
 <HEAD>
 <meta http-equiv="Content-Language" content="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>afds</title>
+<title>Adverse reaction</title>
 </HEAD>
 <BODY>
 <table border="0" cellpadding="2" width="100%">
 <tr>
 <td width="100%" bgcolor="#000080">
-<h1 align="center"><font color="#FFFFFF">afds</font></h1>
+<h1 align="center"><font color="#FFFFFF">Adverse reaction</font></h1>
 </td>
 </tr>
 </table>
@@ -19,8 +19,8 @@
 <td width="50%"><h4>Identification:</h4></td>
 </tr>
 <tr>
-<td width="50%">asdf</td>
-<td width="50%"><i>Id</i>: openEHR-EHR-EVALUATION.test.v1draft<br><i>Reference model</i>: openEHR_EHR</td>
+<td width="50%">Recording the presence or absence of a harmful or undesirable response to an agent or substance including food, as determined by the clinician - excluding poisoning and abnormal use</td>
+<td width="50%"><i>Id</i>: openEHR-EHR-EVALUATION.adverse.v1<br><i>Reference model</i>: openEHR_EHR</td>
 </tr>
 </table>
 <hr>
@@ -41,28 +41,109 @@
 </tr>
 
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>New element</b></td></table></td>
-<td>*</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Agent</b></td></table></td>
+<td>The agent or substance or class that caused the adverse reaction</td>
 <td><b><i>Text</i></b><br>
-0..1</td>
+1..1</td>
 <td>
-Internal;
+Text;
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>New cluster</i></b></td></table></td>
-<td>*</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Agent category</b></td></table></td>
+<td>The category of the agent</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Internal; 'Food', 'Animal', 'Medication', 'Other chemical or substance', 'Non-active ingredient of medication', 'Imaging dye or media'
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Exposure and reaction detail</i></b></td></table></td>
+<td>Details of the reaction experienced by the person</td>
 <td><b><i>Cluster</b></i><br>
-0..1</td><td>&nbsp;</td>
+0..*</td><td>&nbsp;</td>
 </tr>
 
 <tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>New element</b></td></table></td>
-<td>*</td>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Specific substance</b></td></table></td>
+<td>The specific substance that caused the reaction if different from the agent (e.g. brands or members of a class)</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Text;
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Reaction category</b></td></table></td>
+<td>The type of reaction experience by the person as determined by the clinician</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Internal; 'Intolerance', 'Sensitivity', 'Allergy', 'No reaction'
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Probability of causation</b></td></table></td>
+<td>Degree of certainty that the agent was the cause of the reaction</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Internal; 'Certain/Highly likely', 'Probable', 'Possible'
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/datetime.gif" width="32" height="32" align="middle"><b>Date of exposure</b></td></table></td>
+<td>The date (+/- time) when the person became exposed to the agent</td>
+<td><b><i>DateTime</i></b><br>
+0..1</td>
+<td>
+Allow all
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Duration of the exposure</b></td></table></td>
+<td>The duration of the exposure to the agent</td>
 <td><b><i>Quantity</i></b><br>
 0..1</td>
 <td>
-Property = <br>
+Property = Time<br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Reaction severity</b></td></table></td>
+<td>The category of the reaction for future reference</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Internal; 'Mild', 'Disabling', 'Life threatening'
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Reaction description</b></td></table></td>
+<td>A description of the reaction to this agent as experienced by the person</td>
+<td><b><i>Text</i></b><br>
+1..1</td>
+<td>
+Text;
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/datetime.gif" width="32" height="32" align="middle"><b>Date of onset of reaction</b></td></table></td>
+<td>The date the reaction began</td>
+<td><b><i>DateTime</i></b><br>
+0..1</td>
+<td>
+Allow all
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Duration of the reaction</b></td></table></td>
+<td>The duration of the reaction</td>
+<td><b><i>Quantity</i></b><br>
+0..1</td>
+<td>
+Property = Time<br>
 </td>
 </tr>
 </tr>

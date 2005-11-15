@@ -47,7 +47,6 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents ImageListDateTime As System.Windows.Forms.ImageList
     Private components As System.ComponentModel.IContainer
     Friend WithEvents chkAll As System.Windows.Forms.CheckBox
     Friend WithEvents chkYears As System.Windows.Forms.CheckBox
@@ -63,9 +62,6 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
     Friend WithEvents LabelDuration As System.Windows.Forms.Label
     Friend WithEvents comboTimeUnits As System.Windows.Forms.ComboBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(DurationConstraintControl))
-        Me.ImageListDateTime = New System.Windows.Forms.ImageList(Me.components)
         Me.LabelDuration = New System.Windows.Forms.Label
         Me.chkAll = New System.Windows.Forms.CheckBox
         Me.chkYears = New System.Windows.Forms.CheckBox
@@ -83,12 +79,6 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.panelDetail.SuspendLayout()
         Me.SuspendLayout()
         '
-        'ImageListDateTime
-        '
-        Me.ImageListDateTime.ImageSize = New System.Drawing.Size(16, 16)
-        Me.ImageListDateTime.ImageStream = CType(resources.GetObject("ImageListDateTime.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageListDateTime.TransparentColor = System.Drawing.Color.Transparent
-        '
         'LabelDuration
         '
         Me.LabelDuration.BackColor = System.Drawing.Color.Transparent
@@ -104,9 +94,9 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkAll.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkAll.Location = New System.Drawing.Point(224, 8)
         Me.chkAll.Name = "chkAll"
-        Me.chkAll.Size = New System.Drawing.Size(144, 24)
+        Me.chkAll.Size = New System.Drawing.Size(144, 32)
         Me.chkAll.TabIndex = 37
-        Me.chkAll.Text = "Allow all"
+        Me.chkAll.Text = "Allow all time units"
         '
         'chkYears
         '
@@ -114,6 +104,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkYears.Name = "chkYears"
         Me.chkYears.Size = New System.Drawing.Size(176, 24)
         Me.chkYears.TabIndex = 38
+        Me.chkYears.Tag = "a"
         Me.chkYears.Text = "Years"
         '
         'chkMonths
@@ -122,6 +113,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkMonths.Name = "chkMonths"
         Me.chkMonths.Size = New System.Drawing.Size(176, 24)
         Me.chkMonths.TabIndex = 39
+        Me.chkMonths.Tag = "mo"
         Me.chkMonths.Text = "Months"
         '
         'chkWeeks
@@ -130,6 +122,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkWeeks.Name = "chkWeeks"
         Me.chkWeeks.Size = New System.Drawing.Size(176, 24)
         Me.chkWeeks.TabIndex = 40
+        Me.chkWeeks.Tag = "wk"
         Me.chkWeeks.Text = "Weeks"
         '
         'chkHours
@@ -138,6 +131,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkHours.Name = "chkHours"
         Me.chkHours.Size = New System.Drawing.Size(152, 24)
         Me.chkHours.TabIndex = 41
+        Me.chkHours.Tag = "h"
         Me.chkHours.Text = "Hours"
         '
         'chkMinutes
@@ -146,6 +140,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkMinutes.Name = "chkMinutes"
         Me.chkMinutes.Size = New System.Drawing.Size(152, 24)
         Me.chkMinutes.TabIndex = 42
+        Me.chkMinutes.Tag = "min"
         Me.chkMinutes.Text = "Minutes"
         '
         'chkSeconds
@@ -154,6 +149,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkSeconds.Name = "chkSeconds"
         Me.chkSeconds.Size = New System.Drawing.Size(152, 24)
         Me.chkSeconds.TabIndex = 43
+        Me.chkSeconds.Tag = "s"
         Me.chkSeconds.Text = "Seconds"
         '
         'chkDays
@@ -162,6 +158,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkDays.Name = "chkDays"
         Me.chkDays.Size = New System.Drawing.Size(176, 24)
         Me.chkDays.TabIndex = 44
+        Me.chkDays.Tag = "d"
         Me.chkDays.Text = "Days"
         '
         'chkMilliseconds
@@ -170,6 +167,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkMilliseconds.Name = "chkMilliseconds"
         Me.chkMilliseconds.Size = New System.Drawing.Size(152, 24)
         Me.chkMilliseconds.TabIndex = 45
+        Me.chkMilliseconds.Tag = "millisec"
         Me.chkMilliseconds.Text = "Milliseconds"
         Me.chkMilliseconds.Visible = False
         '
@@ -205,6 +203,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.comboTimeUnits.Name = "comboTimeUnits"
         Me.comboTimeUnits.Size = New System.Drawing.Size(88, 24)
         Me.comboTimeUnits.TabIndex = 56
+        Me.comboTimeUnits.Visible = False
         '
         'DurationConstraintControl
         '
@@ -230,12 +229,15 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         End Get
     End Property
 
-    Dim mCountControl As CountConstraintControl
+    Dim WithEvents mCountControl As CountConstraintControl
+
+    Private Sub SetUnitDisplay(ByVal Sender As Object, ByVal DisplayUnits As Boolean) Handles mCountControl.ChangeDisplay
+        Me.comboTimeUnits.Visible = DisplayUnits
+    End Sub
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
 
         Dim s As String = Me.Constraint.AllowableUnits
-
 
         mCountControl = New CountConstraintControl(mFileManager)
         Me.Controls.Add(mCountControl)

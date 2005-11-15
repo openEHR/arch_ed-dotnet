@@ -23,9 +23,9 @@ Class ADL_ENTRY
     ' to discover reference pointers
     Private highest_level_children As Children
 
-    Private Sub ProcessSubjectOfData(ByVal SubjectOfData As openehr.openehr.am.archetype.constraint_model.C_Attribute)
+    Private Sub ProcessSubjectOfData(ByVal SubjectOfData As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
         Dim ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_Attribute
+        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
         For i = 1 To SubjectOfData.Children.Count
@@ -43,7 +43,7 @@ Class ADL_ENTRY
 
     Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         MyBase.New(Definition.rm_type_name.to_cil) ' sets the type to OBSERVATION, EVALUATION etc
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_Attribute
+        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
         ' set the root node id - usually the same as the concept

@@ -95,8 +95,8 @@ Class RmHistory
     End Function
 
     Private Sub ProcessHistory(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_Attribute
-        Dim period As openehr.openehr.am.archetype.constraint_model.C_Primitive_Object
+        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
         Dim i As Integer
 
         cOccurrences = ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)

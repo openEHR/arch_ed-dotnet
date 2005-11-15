@@ -76,6 +76,14 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
                     n.ImageIndex = 3
                     TvMultiMedia.Nodes.Item(3).Nodes.Add(n) ' video
 
+                Case "application"
+                    n = New TreeNode(s(1))
+                    n.Tag = r.Item(1).ToString
+                    n.ImageIndex = 4
+                    TvMultiMedia.Nodes.Item(4).Nodes.Add(n) ' application
+
+
+
             End Select
 
         Next
@@ -111,8 +119,8 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
         Me.TvMultiMedia.ImageList = Me.ImageListMIME
         Me.TvMultiMedia.Location = New System.Drawing.Point(0, 32)
         Me.TvMultiMedia.Name = "TvMultiMedia"
-        Me.TvMultiMedia.Nodes.AddRange(New System.Windows.Forms.TreeNode() {New System.Windows.Forms.TreeNode("Audio"), New System.Windows.Forms.TreeNode("Image"), New System.Windows.Forms.TreeNode("Text"), New System.Windows.Forms.TreeNode("Video")})
-        Me.TvMultiMedia.SelectedImageIndex = 4
+        Me.TvMultiMedia.Nodes.AddRange(New System.Windows.Forms.TreeNode() {New System.Windows.Forms.TreeNode("Audio"), New System.Windows.Forms.TreeNode("Image"), New System.Windows.Forms.TreeNode("Text"), New System.Windows.Forms.TreeNode("Video"), New System.Windows.Forms.TreeNode("Application")})
+        Me.TvMultiMedia.SelectedImageIndex = 5
         Me.TvMultiMedia.Size = New System.Drawing.Size(304, 136)
         Me.TvMultiMedia.TabIndex = 37
         '
