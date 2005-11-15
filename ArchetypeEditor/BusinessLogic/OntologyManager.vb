@@ -162,7 +162,7 @@ Public Class OntologyManager
         End Get
         Set(ByVal Value As Ontology)
             mOntology = Value
-            Me.InitialiseOntologyManager(ArchetypeEditor.Instance.DefaultLanguageCode)
+            Me.InitialiseOntologyManager(OceanArchetypeEditor.Instance.DefaultLanguageCode)
         End Set
     End Property
 
@@ -202,7 +202,7 @@ Public Class OntologyManager
 
         mOntology.Reset()
         If LanguageCode = "" Then
-            LanguageCode = ArchetypeEditor.Instance.DefaultLanguageCode
+            LanguageCode = OceanArchetypeEditor.Instance.DefaultLanguageCode
         End If
         mOntology.SetPrimaryLanguage(LanguageCode)
         InitialiseOntologyManager(LanguageCode)
@@ -544,7 +544,7 @@ Public Class OntologyManager
         ' returns the string in the language
 
         If Language = "?" Then
-            Language = ArchetypeEditor.Instance.SpecificLanguageCode
+            Language = OceanArchetypeEditor.Instance.SpecificLanguageCode
         End If
 
         Try
@@ -963,7 +963,7 @@ Public Class OntologyManager
     Sub New()
         mLanguageDS = New DataSet("LanguageDataSet")
         InitialiseTables()
-        AE_Constants.Create(ArchetypeEditor.Instance.DefaultLanguageCode)
+        AE_Constants.Create(OceanArchetypeEditor.Instance.DefaultLanguageCode)
     End Sub
 
 

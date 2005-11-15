@@ -93,11 +93,11 @@ Public Class QuantityViewControl : Inherits ElementViewControl
                 combo.Width = 150
 
                 Dim d_row As DataRow
-                d_row = ArchetypeEditor.Instance.PhysicalPropertiesTable.Select("Text = '" & quantityConstraint.Physical_property & "'")(0)
+                d_row = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select("Text = '" & quantityConstraint.Physical_property & "'")(0)
 
                 Dim id As String = d_row(0)
 
-                For Each d_row In ArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id)
+                For Each d_row In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id)
 
                     combo.Items.Add(CStr(d_row(1)))
                 Next
@@ -187,4 +187,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

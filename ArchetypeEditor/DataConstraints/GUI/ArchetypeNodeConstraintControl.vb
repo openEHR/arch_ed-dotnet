@@ -588,7 +588,7 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub ArchetypeNodeConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.HelpProviderCommonConstraint.HelpNamespace = ArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderCommonConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 
     Private Sub txtTermDescription_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtTermDescription.KeyPress

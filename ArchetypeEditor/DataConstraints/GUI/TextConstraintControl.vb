@@ -377,7 +377,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         If MyBase.IsLoading Then Return
 
-        Dim s() As String = ArchetypeEditor.Instance.ChooseInternal(mFileManager)
+        Dim s() As String = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager)
 
         If s Is Nothing Then Return
 
@@ -437,7 +437,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         If Me.radioInternal.Checked Then
             Dim s(1) As String
-            s = ArchetypeEditor.Instance.GetInput("Enter the new item:", "Description")
+            s = OceanArchetypeEditor.Instance.GetInput("Enter the new item:", "Description")
 
             If s(0) <> "" Then
                 Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(s(0), s(1))
@@ -468,7 +468,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         ElseIf Me.radioText.Checked Then
             Dim s As String
-            s = ArchetypeEditor.Instance.GetInput("Enter the new item:")
+            s = OceanArchetypeEditor.Instance.GetInput("Enter the new item:")
 
             If s <> "" Then
                 Me.listAllowableValues.Items.Add(s)
@@ -905,7 +905,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Dim t As RmTerm = mFilemanager.OntologyManager.GetTerm(Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex))
 
             If Not t Is Nothing Then
-                s = ArchetypeEditor.Instance.GetInput(t)
+                s = OceanArchetypeEditor.Instance.GetInput(t)
 
                 If s(0) <> "" Then
                     mFilemanager.OntologyManager.SetText(t)
@@ -965,4 +965,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

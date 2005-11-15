@@ -483,7 +483,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
         s = ReferenceModel.Instance.ReferenceModelName & "-" & Me.Constraint.RM_ClassType.ToString
         fd.Filter = s & "|" & s & ".*.adl"
-        fd.InitialDirectory = ArchetypeEditor.Instance.Options.RepositoryPath
+        fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath
 
         If fd.ShowDialog = DialogResult.OK Then
             Dim ss As String
@@ -513,13 +513,13 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Dim d As System.IO.DirectoryInfo
         Me.Cursor = Cursors.WaitCursor
 
-        d = New System.IO.DirectoryInfo(ArchetypeEditor.Instance.Options.RepositoryPath)
+        d = New System.IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath)
         If d.Exists Then
             RetrieveFiles(d)
             Me.Cursor = Cursors.Default
         Else
             Me.Cursor = Cursors.Default
-            MessageBox.Show(AE_Constants.Instance.Error_loading & " " & ArchetypeEditor.Instance.Options.RepositoryPath, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(AE_Constants.Instance.Error_loading & " " & OceanArchetypeEditor.Instance.Options.RepositoryPath, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 

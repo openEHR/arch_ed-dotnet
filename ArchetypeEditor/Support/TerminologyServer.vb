@@ -169,7 +169,7 @@ Public Class TerminologyServer
 
         If language = "" Then
             'language = Default_language
-            language = ArchetypeEditor.Instance.DefaultLanguageCode
+            language = OceanArchetypeEditor.Instance.DefaultLanguageCode
         End If
 
         selected_rows = Terminology.Tables("GrouperTerm").Select("GrouperID = " & selected_rows1(0).Item(1))
@@ -190,7 +190,7 @@ Public Class TerminologyServer
 
         If language = "" Then
             'language = Default_language
-            language = ArchetypeEditor.Instance.DefaultLanguageCode
+            language = OceanArchetypeEditor.Instance.DefaultLanguageCode
         End If
 
         Return GetConcepts(selected_concepts, language)
@@ -394,4 +394,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

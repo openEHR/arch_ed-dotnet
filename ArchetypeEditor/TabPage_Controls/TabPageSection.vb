@@ -498,7 +498,7 @@ Public Class TabPageSection
         If Me.tvSection.GetNodeCount(False) > 0 Then
             Me.tvSection.SelectedNode = Me.tvSection.Nodes(0)
         End If
-        Me.HelpProviderSection.HelpNamespace = ArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderSection.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 
 #Region "Buttons and menus - adding and removing slots and sections"

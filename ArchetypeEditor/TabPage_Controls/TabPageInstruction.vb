@@ -295,7 +295,7 @@ Public Class TabPageInstruction
             mActionSpecification.Dock = DockStyle.Fill
         End If
 
-        Me.HelpProviderInstruction.HelpNamespace = ArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
         mIsLoading = False
 
     End Sub
@@ -379,7 +379,7 @@ Public Class TabPageInstruction
     Private Sub ButAddElement_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddElement.Click
         'Dim ae() As ArchetypeElement
 
-        'ae = ArchetypeEditor.Instance.ChooseInternal(Me.mActionSpecification.Elements, Me.listAllowedDeltas.Items)
+        'ae = OceanArchetypeEditor.Instance.ChooseInternal(Me.mActionSpecification.Elements, Me.listAllowedDeltas.Items)
         'If Not ae Is Nothing Then
         '    listAllowedDeltas.Items.AddRange(ae)
         'End If
@@ -390,7 +390,7 @@ Public Class TabPageInstruction
 
         If mIsloading Then Return
 
-        Dim ae() As ArchetypeElement = ArchetypeEditor.Instance.ChooseInternal(Me.mActionSpecification.Elements, mAllowDeltas)
+        Dim ae() As ArchetypeElement = OceanArchetypeEditor.Instance.ChooseInternal(Me.mActionSpecification.Elements, mAllowDeltas)
 
         If ae Is Nothing Then Return
 
@@ -517,4 +517,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

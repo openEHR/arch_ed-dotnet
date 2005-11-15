@@ -222,7 +222,7 @@ Public Class ConstraintControl
     End Function
 
     Private Sub ConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.HelpProviderConstraint.HelpNamespace = ArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 End Class
 

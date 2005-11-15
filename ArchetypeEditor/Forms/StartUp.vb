@@ -287,9 +287,9 @@ Public Class frmStartUp
         For i As Integer = 0 To ReferenceModel.Instance.ValidReferenceModelNames.Length - 1
             Me.comboModel.Items.Add(ReferenceModel.Instance.ValidReferenceModelNames(i))
         Next
-        Me.comboModel.SelectedIndex = ArchetypeEditor.Instance.Options.DefaultReferenceModel
+        Me.comboModel.SelectedIndex = OceanArchetypeEditor.Instance.Options.DefaultReferenceModel
         Me.AcceptButton = Me.butOpen
-        Me.HelpProviderStartUp.HelpNamespace = ArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderStartUp.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 End Class
 
@@ -330,4 +330,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

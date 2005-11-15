@@ -179,7 +179,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         RemoveHandler Me.comboPhysicalProperty.SelectedIndexChanged, AddressOf Me.comboPhysicalProperty_SelectedIndexChanged
 
         If Me.comboPhysicalProperty.DataSource Is Nothing Then
-            Me.comboPhysicalProperty.DataSource = ArchetypeEditor.Instance.PhysicalPropertiesTable
+            Me.comboPhysicalProperty.DataSource = OceanArchetypeEditor.Instance.PhysicalPropertiesTable
         End If
 
         listUnits.Items.Clear()
@@ -239,7 +239,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             where_clause &= ")"
         End If
 
-        For Each d_row As DataRow In ArchetypeEditor.Instance.UnitsTable.Select("property_id = " & _
+        For Each d_row As DataRow In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & _
                 CStr(Me.comboPhysicalProperty.SelectedValue) & where_clause)
 
             Dim s As String
@@ -366,7 +366,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         U_1 = y(0).Split("^"c)
         Phys_Prop = U_1(0)
 
-        selected_rows = ArchetypeEditor.Instance.PhysicalPropertiesTable.Select("Text = '" & Phys_Prop & "'")
+        selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select("Text = '" & Phys_Prop & "'")
 
         If selected_rows.Length <> 1 Then
             'FIXME - report error
@@ -375,7 +375,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
         id = CInt(selected_rows(0).Item(0))
 
-        selected_rows = ArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id.ToString)
+        selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id.ToString)
         If selected_rows.Length = 0 Then
             'FIXME Error
             Return ""
@@ -421,7 +421,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 U_2 = y(1).Split("^"c)
                 Phys_Prop = U_2(0)
 
-                selected_rows = ArchetypeEditor.Instance.PhysicalPropertiesTable.Select("Text = '" & Phys_Prop & "'")
+                selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select("Text = '" & Phys_Prop & "'")
 
                 If selected_rows.Length <> 1 Then
                     'FIXME - report error
@@ -430,7 +430,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
                 id = CInt(selected_rows(0).Item(0))
 
-                selected_rows = ArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id.ToString)
+                selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id.ToString)
                 If selected_rows.Length = 0 Then
                     'FIXME Error
                     Return ""
@@ -516,4 +516,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

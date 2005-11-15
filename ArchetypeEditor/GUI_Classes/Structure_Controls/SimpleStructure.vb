@@ -300,7 +300,7 @@ Public Class SimpleStructure
         Debug.Assert(ContextMenuSimple.MenuItems.Count = 1)
         ' show specialisation if appropriate
 
-        Dim i As Integer = ArchetypeEditor.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
+        Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
 
         If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
             Me.MenuSpecialise.Text = AE_Constants.Instance.Specialise
@@ -321,7 +321,7 @@ Public Class SimpleStructure
         If Not mLoading Then
             Dim i As Integer
             Debug.Assert(Not mCurrentItem.IsAnonymous)
-            i = ArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+            i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 If Not mOKtoEditSpecialisation Then
                     If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = DialogResult.No Then
@@ -428,4 +428,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

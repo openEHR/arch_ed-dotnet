@@ -787,7 +787,7 @@ Public Class TreeStructure
 
         ' show specialisation if appropriate
         If Not tvNode.Item.IsAnonymous Then
-            i = ArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
+            i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 Me.MenuSpecialise.Visible = True
             End If
@@ -852,7 +852,7 @@ Public Class TreeStructure
         End If
 
         If Not tvNode Is Nothing Then
-            i = ArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
+            i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = DialogResult.No Then
                     e.CancelEdit = True
@@ -1034,4 +1034,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

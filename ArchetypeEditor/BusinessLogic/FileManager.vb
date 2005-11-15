@@ -100,28 +100,25 @@ Public Class FileManagerLocal
             ' returns a filedialog filter
             Dim format_filter As String
 
-            For i As Integer = 0 To mArchetypeEngine.AvailableFormats.Length - 1
-                Dim s As String = mArchetypeEngine.AvailableFormats(i)
-
+            For i As Integer = 0 To mArchetypeEngine.AvailableFormats.Count - 1
+                Dim s As String = CStr(mArchetypeEngine.AvailableFormats(i))
                 format_filter &= s & "|*." & s
-                If i < mArchetypeEngine.AvailableFormats.Length - 1 Then
+                If i < mArchetypeEngine.AvailableFormats.Count - 1 Then
                     format_filter &= "|"
                 End If
             Next
             Return format_filter
         End Get
     End Property
+    Public ReadOnly Property AvailableFormats() As ArrayList
+        Get
+            Return mArchetypeEngine.AvailableFormats
+        End Get
+    End Property
 
     Public Function IndexOfFormat(ByVal a_format As String) As Integer
         ' returns a filedialog filter
-        Dim format_filter As String
-
-        For i As Integer = 0 To mArchetypeEngine.AvailableFormats.Length - 1
-            If a_format = mArchetypeEngine.AvailableFormats(i) Then
-                Return i + 1
-            End If
-        Next
-        Return 0
+        Return mArchetypeEngine.AvailableFormats.IndexOf(a_format)
     End Function
 
     Protected Sub OnIsFileDirtyChanged(ByVal IsFileDirty As Boolean)
@@ -200,14 +197,17 @@ Public Class FileManagerLocal
 
     Public Function FormatIsAvailable(ByVal a_format As String) As Boolean
 
-        For i As Integer = 0 To mArchetypeEngine.AvailableFormats.Length - 1
-            If a_format = mArchetypeEngine.AvailableFormats(i) Then
-                Return True
-            End If
-        Next
-        Return False
+        If mArchetypeEngine.AvailableFormats.Contains(a_format) Then
+            Return True
+        Else
+            Return False
+        End If
 
     End Function
+
+    Public Sub SerialiseArchetype(ByVal a_format As String)
+        mArchetypeEngine.Serialise(a_format)
+    End Sub
 
     Public Sub ParserReset(Optional ByVal an_archetype_ID As ArchetypeID = Nothing)
         If mArchetypeEngine Is Nothing Then
@@ -272,7 +272,7 @@ Public Class FileManagerLocal
             Case "adl", "ADL", "Adl"
                 Dim a_ontology As ADL_Ontology
                 Dim a_term As RmTerm
-                mArchetypeEngine.NewArchetype(an_ArchetypeID, ArchetypeEditor.Instance.DefaultLanguageCode)
+                mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.Instance.DefaultLanguageCode)
 
                 If mArchetypeEngine.ArchetypeAvailable Then
 
@@ -288,7 +288,7 @@ Public Class FileManagerLocal
             Case Else
                 Debug.Assert(False)
                 'Case "archetype", "ARCHETYPE", "Archetype"
-                '    mArchetypeEngine = New Text_Parsing.TextParser(OntologyManager.Instance, ArchetypeEditor.Instance.DefaultLanguageCode)
+                '    mArchetypeEngine = New Text_Parsing.TextParser(OntologyManager.Instance, OceanArchetypeEditor.Instance.DefaultLanguageCode)
         End Select
 
     End Sub

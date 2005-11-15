@@ -84,6 +84,13 @@ Public Class ADL_Archetype
             End If
         End Get
     End Property
+    Public Overrides ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
+        Get
+            Me.MakeParseTree()
+            adlEngine.serialise(openehr.base.kernel.Create.STRING.make_from_cil(a_format))
+            Return adlEngine.serialised_archetype.to_cil
+        End Get
+    End Property
     Public Overrides ReadOnly Property Paths(ByVal LanguageCode As String, Optional ByVal Logical As Boolean = False) As String()
         Get
             Dim list As openehr.base.structures.list.ARRAYED_LIST_ANY

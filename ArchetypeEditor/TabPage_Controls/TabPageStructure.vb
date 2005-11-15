@@ -518,7 +518,7 @@ Public Class TabPageStructure
         For Each ValidStructure As StructureType In mValidStructureClasses
             Me.comboStructure.Items.Add(ValidStructure.ToString)
         Next
-        Me.HelpProviderTabPageStructure.HelpNamespace = ArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderTabPageStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 
     Sub ShowDetailPanel(ByVal CurrentItem As ArchetypeNode, ByVal e As EventArgs) Handles mArchetypeControl.CurrentItemChanged
@@ -691,7 +691,7 @@ Public Class TabPageStructure
         Dim archetype_name As String
 
         archetype_name = ReferenceModel.Instance.ReferenceModelName & "-" & a_slot.SlotConstraint.RM_ClassType.ToString & "." & a_slot.SlotConstraint.Include.Item(0) & ".adl"
-        OpenArchetype(ArchetypeEditor.Instance.Options.RepositoryPath & "\Structure\" & archetype_name)
+        OpenArchetype(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\Structure\" & archetype_name)
 
     End Sub
 
@@ -764,4 +764,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

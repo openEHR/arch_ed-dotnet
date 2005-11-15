@@ -17,6 +17,6 @@ Public Class ADL_Description
     End Sub
 
     Sub New()
-        mADL_Description = openehr.openehr.am.archetype.description.Create.ARCHETYPE_DESCRIPTION.make_author(openehr.base.kernel.Create.STRING.make_from_cil(ArchetypeEditor.Instance.Options.UserName))
+        mADL_Description = openehr.openehr.am.archetype.description.Create.ARCHETYPE_DESCRIPTION.make_author(openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName))
     End Sub
 End Class

@@ -842,7 +842,7 @@ Public Class TermBindingPanel
             Handles AddTerminologyButton.Click
 
         Try
-            If ArchetypeEditor.Instance.AddTerminology() Then
+            If OceanArchetypeEditor.Instance.AddTerminology() Then
                 Filemanager.Instance.FileEdited = True
 
                 TerminologyComboBox.SelectedIndex = TerminologyComboBox.Items.Count - 1
@@ -1441,4 +1441,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

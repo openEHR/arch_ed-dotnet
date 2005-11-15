@@ -487,7 +487,7 @@ Public Class TableStructure
         ' adds columns if rotated
         If mIsRotated Then
             'If mArchetypeTable.Rows.Count > 0 Then
-            s = ArchetypeEditor.Instance.GetInput("Enter the name of the new column", "Description")
+            s = OceanArchetypeEditor.Instance.GetInput("Enter the name of the new column", "Description")
             If s(0) <> "" Then
                 Dim a_term As RmTerm
                 Dim element As ArchetypeElement
@@ -496,7 +496,7 @@ Public Class TableStructure
                 If mKeyColumns.Count > 0 Then
                     element = mKeyColumns.Item(mKeyColumns.Count)
                 Else
-                    s = ArchetypeEditor.Instance.GetInput("Enter the concept represented by the columns", "Description")
+                    s = OceanArchetypeEditor.Instance.GetInput("Enter the concept represented by the columns", "Description")
                     If s(0) <> "" Then
                         element = New ArchetypeElement(s(0), mFileManager)
                         If s(1) <> "" Then
@@ -750,7 +750,7 @@ Public Class TableStructure
             Return
         End If
 
-        s = ArchetypeEditor.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'")
+        s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'")
         If s <> "" Then
             ' HKF: 1613
             'Dim ArchCol As ArchetypeColumn
@@ -804,7 +804,7 @@ Public Class TableStructure
             Dim archetype_element As ArchetypeElement
 
             archetype_element = e.Row.Item(2)
-            i = ArchetypeEditor.Instance.CountInString(archetype_element.NodeId, ".")
+            i = OceanArchetypeEditor.Instance.CountInString(archetype_element.NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = DialogResult.No Then
                     e.ProposedValue = archetype_element.Text
@@ -957,4 +957,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
