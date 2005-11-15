@@ -19,7 +19,7 @@ Option Explicit On
 Class ADL_SECTION
     Inherits RmSection
 
-    Private Function GetRunTimeConstraintID(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_Attribute) As String
+    Private Function GetRunTimeConstraintID(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As String
 
         Dim CodedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
         Dim constraint_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT

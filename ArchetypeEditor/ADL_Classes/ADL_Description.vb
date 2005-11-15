@@ -8,7 +8,6 @@ Public Class ADL_Description
     End Function
 
     Sub New(ByVal an_adl_archetype As openehr.openehr.am.archetype.ARCHETYPE)
-
         mADL_Description = an_adl_archetype.description
         'mADL_Version = mADL_Description.adl_version.to_cil ' set to 1.2 by default
         If Not mADL_Description.archetype_package_uri Is Nothing Then

@@ -466,7 +466,7 @@ Friend Class ADL_Ontology
     End Sub
 
     Public Overrides Sub PopulateAllTerms(ByRef TheOntologyManager As OntologyManager)
-        If EIF_adlInterface.archetype_available Then  'Ontology is available is archetype is available
+        If EIF_adlInterface.archetype_available Then
             populate_languages(TheOntologyManager)
             populate_terminologies(TheOntologyManager)
             populate_term_definitions(TheOntologyManager)

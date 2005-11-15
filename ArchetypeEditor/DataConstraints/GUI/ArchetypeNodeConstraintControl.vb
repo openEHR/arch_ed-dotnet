@@ -94,7 +94,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'lblNumMax
         '
-        Me.lblNumMax.Location = New System.Drawing.Point(184, 8)
+        Me.lblNumMax.Location = New System.Drawing.Point(179, 12)
         Me.lblNumMax.Name = "lblNumMax"
         Me.lblNumMax.Size = New System.Drawing.Size(32, 16)
         Me.lblNumMax.TabIndex = 2
@@ -104,7 +104,7 @@ Public Class ArchetypeNodeConstraintControl
         'lblNumMin
         '
         Me.lblNumMin.BackColor = System.Drawing.Color.Transparent
-        Me.lblNumMin.Location = New System.Drawing.Point(8, 8)
+        Me.lblNumMin.Location = New System.Drawing.Point(8, 12)
         Me.lblNumMin.Name = "lblNumMin"
         Me.lblNumMin.Size = New System.Drawing.Size(120, 16)
         Me.lblNumMin.TabIndex = 0
@@ -113,7 +113,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'numMin
         '
-        Me.numMin.Location = New System.Drawing.Point(136, 8)
+        Me.numMin.Location = New System.Drawing.Point(134, 9)
         Me.numMin.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numMin.Name = "numMin"
         Me.numMin.Size = New System.Drawing.Size(40, 22)
@@ -122,7 +122,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'numMax
         '
-        Me.numMax.Location = New System.Drawing.Point(224, 8)
+        Me.numMax.Location = New System.Drawing.Point(216, 9)
         Me.numMax.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numMax.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.numMax.Name = "numMax"
@@ -132,9 +132,9 @@ Public Class ArchetypeNodeConstraintControl
         '
         'cbUnbounded
         '
-        Me.cbUnbounded.Location = New System.Drawing.Point(280, 8)
+        Me.cbUnbounded.Location = New System.Drawing.Point(272, 12)
         Me.cbUnbounded.Name = "cbUnbounded"
-        Me.cbUnbounded.Size = New System.Drawing.Size(96, 16)
+        Me.cbUnbounded.Size = New System.Drawing.Size(99, 16)
         Me.cbUnbounded.TabIndex = 4
         Me.cbUnbounded.Text = "Unbounded"
         '
@@ -155,9 +155,9 @@ Public Class ArchetypeNodeConstraintControl
         '
         Me.PanelDataConstraint.Controls.Add(Me.labelAnyCluster)
         Me.PanelDataConstraint.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 80)
+        Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
         Me.PanelDataConstraint.Name = "PanelDataConstraint"
-        Me.PanelDataConstraint.Size = New System.Drawing.Size(376, 128)
+        Me.PanelDataConstraint.Size = New System.Drawing.Size(376, 112)
         Me.PanelDataConstraint.TabIndex = 31
         '
         'labelAnyCluster
@@ -165,7 +165,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.labelAnyCluster.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.labelAnyCluster.Location = New System.Drawing.Point(16, 8)
         Me.labelAnyCluster.Name = "labelAnyCluster"
-        Me.labelAnyCluster.Size = New System.Drawing.Size(136, 24)
+        Me.labelAnyCluster.Size = New System.Drawing.Size(136, 40)
         Me.labelAnyCluster.TabIndex = 0
         Me.labelAnyCluster.Text = "Cluster"
         '
@@ -179,14 +179,14 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelNonAnonymous.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelNonAnonymous.Location = New System.Drawing.Point(0, 0)
         Me.PanelNonAnonymous.Name = "PanelNonAnonymous"
-        Me.PanelNonAnonymous.Size = New System.Drawing.Size(376, 80)
+        Me.PanelNonAnonymous.Size = New System.Drawing.Size(376, 96)
         Me.PanelNonAnonymous.TabIndex = 32
         '
         'butSetRuntimeName
         '
         Me.HelpProviderCommonConstraint.SetHelpKeyword(Me.butSetRuntimeName, "HowTo/Edit data/Set_runtime_name.html")
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me.butSetRuntimeName, System.Windows.Forms.HelpNavigator.Topic)
-        Me.butSetRuntimeName.Location = New System.Drawing.Point(330, 53)
+        Me.butSetRuntimeName.Location = New System.Drawing.Point(330, 70)
         Me.butSetRuntimeName.Name = "butSetRuntimeName"
         Me.HelpProviderCommonConstraint.SetShowHelp(Me.butSetRuntimeName, True)
         Me.butSetRuntimeName.Size = New System.Drawing.Size(26, 20)
@@ -195,7 +195,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'txtRuntimeName
         '
-        Me.txtRuntimeName.Location = New System.Drawing.Point(136, 52)
+        Me.txtRuntimeName.Location = New System.Drawing.Point(136, 62)
         Me.txtRuntimeName.Name = "txtRuntimeName"
         Me.txtRuntimeName.ReadOnly = True
         Me.txtRuntimeName.Size = New System.Drawing.Size(192, 22)
@@ -204,7 +204,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'Label11
         '
-        Me.Label11.Location = New System.Drawing.Point(8, 46)
+        Me.Label11.Location = New System.Drawing.Point(8, 62)
         Me.Label11.Name = "Label11"
         Me.Label11.Size = New System.Drawing.Size(120, 32)
         Me.Label11.TabIndex = 6
@@ -217,7 +217,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.txtTermDescription.Multiline = True
         Me.txtTermDescription.Name = "txtTermDescription"
         Me.txtTermDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtTermDescription.Size = New System.Drawing.Size(224, 38)
+        Me.txtTermDescription.Size = New System.Drawing.Size(224, 53)
         Me.txtTermDescription.TabIndex = 5
         Me.txtTermDescription.Text = ""
         '
