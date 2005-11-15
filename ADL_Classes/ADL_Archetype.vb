@@ -297,7 +297,7 @@ Public Class ADL_Archetype
 
                 ' now build the events
                 If History.Children.Count > 0 Then
-                    an_attribute = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("events"), MakeCardinality(History.Children.Cardinality))
+                    an_attribute = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(History.Children.Cardinality))
                     an_event = History.Children.Item(0)
                     cadlEvent = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.Event)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
                     cadlEvent.set_occurrences(MakeOccurrences(an_event.Occurrences))
@@ -386,7 +386,7 @@ Public Class ADL_Archetype
         End If
 
         ' now build the events
-        events_rel_node = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("events"), MakeCardinality(History.Children.Cardinality))
+        events_rel_node = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(History.Children.Cardinality))
         For Each an_event In History.Children
 
             cadlEvent = mCADL_Factory.create_c_complex_object_identified(events_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.Event)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
