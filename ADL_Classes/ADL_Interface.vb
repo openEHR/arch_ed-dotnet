@@ -34,12 +34,12 @@ Class ADL_Interface
             Return EIF_adlInterface
         End Get
     End Property
-    Public ReadOnly Property AvailableFormats() As String() Implements Parser.AvailableFormats
+    Public ReadOnly Property AvailableFormats() As ArrayList Implements Parser.AvailableFormats
         Get
-            Dim formats(EIF_adlInterface.archetype_serialiser_formats.count - 1) As String
+            Dim formats As New ArrayList
 
             For i As Integer = 1 To EIF_adlInterface.archetype_serialiser_formats.count
-                formats(i - 1) = CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), openehr.base.kernel.STRING).to_cil
+                formats.Add(CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), openehr.base.kernel.STRING).to_cil)
             Next
             Return formats
         End Get
@@ -78,6 +78,19 @@ Class ADL_Interface
     Public Sub ResetAll() Implements Parser.ResetAll
         EIF_adlInterface.reset()
     End Sub
+
+    Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
+        If Me.AvailableFormats.Contains(a_format) Then
+            Try
+                an_Archetype.MakeParseTree()
+                EIF_adlInterface.serialise_archetype(openehr.base.kernel.Create.STRING.make_from_cil(a_format))
+            Catch e As Exception
+                Debug.Assert(False, e.Message)
+                MessageBox.Show(AE_Constants.Instance.Error_saving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+    End Sub
+
 
     Public Sub OpenFile(ByVal FileName As String, ByRef TheOntologyManager As OntologyManager) Implements Parser.OpenFile
 

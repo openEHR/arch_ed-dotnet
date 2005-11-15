@@ -561,7 +561,7 @@ Public Class EntryStructure
                 If CType(a_node, ArchetypeElement).Constraint.Type = ConstraintType.Any Then
                     Me.butChangeDataType.Visible = True
                 Else
-                    If mFileManager.OntologyManager.NumberOfSpecialisations = ArchetypeEditor.Instance.CountInString(a_node.RM_Class.NodeId, ".") Then
+                    If mFileManager.OntologyManager.NumberOfSpecialisations = OceanArchetypeEditor.Instance.CountInString(a_node.RM_Class.NodeId, ".") Then
                         Me.butChangeDataType.Visible = True
                     Else
                         Me.butChangeDataType.Visible = False
@@ -592,7 +592,7 @@ Public Class EntryStructure
             nl = Chr(10) & Chr(13)
 
             If Not Item.IsAnonymous Then
-                ct = ArchetypeEditor.Instance.GetSpecialisationChain(CType(Item, ArchetypeNodeAbstract).NodeId)
+                ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(CType(Item, ArchetypeNodeAbstract).NodeId)
 
                 If ct.Length = 1 Then
                     Me.ToolTipSpecialisation.RemoveAll()
@@ -759,7 +759,7 @@ Public Class EntryStructure
             Me.ttElement.SetToolTip(Me.pbDateTime, AE_Constants.Instance.DateTime)
             Me.ttElement.SetToolTip(Me.pbCluster, AE_Constants.Instance.Cluster)
 
-            Me.helpEntryStructure.HelpNamespace = ArchetypeEditor.Instance.Options.HelpLocationPath
+            Me.helpEntryStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
         End If
     End Sub

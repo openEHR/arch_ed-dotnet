@@ -139,7 +139,7 @@ Public Class TabPageComposition
         End If
 
         mSectionConstraint.IsRootOfComposition = True
-        Me.HelpProviderInstruction.HelpNamespace = ArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
         mIsloading = False
 

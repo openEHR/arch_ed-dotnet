@@ -237,7 +237,7 @@ Public Class ConstraintForm
     End Sub
 
     Private Sub ConstraintForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.HelpProviderConstraintForm.HelpNamespace = ArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderConstraintForm.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 End Class
 
@@ -277,4 +277,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

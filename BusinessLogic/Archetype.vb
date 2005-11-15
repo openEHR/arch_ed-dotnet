@@ -35,6 +35,7 @@ Public MustInherit Class Archetype
     MustOverride ReadOnly Property Paths(ByVal languageCode As String, Optional ByVal Logical As Boolean = False) As String()
 
     MustOverride ReadOnly Property SourceCode() As String
+    MustOverride ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
     MustOverride Sub Specialise(ByVal NewConceptShortName As String, ByRef The_Ontology As OntologyManager)
     Public ReadOnly Property RmEntity() As StructureType
         Get

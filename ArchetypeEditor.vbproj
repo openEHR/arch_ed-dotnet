@@ -115,12 +115,12 @@
                     BuildAction = "Content"
                 />
                 <File
-                    RelPath = "ArchetypeEditor.vb"
+                    RelPath = "AssemblyInfo.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AssemblyInfo.vb"
+                    RelPath = "OceanArchetypeEditor.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

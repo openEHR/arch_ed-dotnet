@@ -501,7 +501,7 @@ Public Class ListStructure
                 Me.MenuAddReference.Visible = True
             End If
             ' show specialisation if appropriate
-            i = ArchetypeEditor.Instance.CountInString(lvItem.Item.NodeId, ".")
+            i = OceanArchetypeEditor.Instance.CountInString(lvItem.Item.NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 Me.SpecialiseMenuItem.Visible = True
             End If
@@ -582,7 +582,7 @@ Public Class ListStructure
         Dim i As Integer
         If Not mCurrentItem Is Nothing Then
             If (Not mCurrentItem.IsAnonymous) And lvList.SelectedItems.Count = 1 Then
-                i = ArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+                i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
                 If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                     If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, _
                         AE_Constants.Instance.MessageBoxCaption, _
@@ -695,4 +695,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

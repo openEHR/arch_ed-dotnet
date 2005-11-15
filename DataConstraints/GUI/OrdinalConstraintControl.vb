@@ -225,7 +225,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
         InitialiseOrdinals()
 
-        If (Not ArchetypeEditor.Instance.TempConstraint Is Nothing) AndAlso (ArchetypeEditor.Instance.TempConstraint.Type = ConstraintType.Ordinal) Then
+        If (Not OceanArchetypeEditor.Instance.TempConstraint Is Nothing) AndAlso (OceanArchetypeEditor.Instance.TempConstraint.Type = ConstraintType.Ordinal) Then
             Me.MenuItemPasteAll.Enabled = True
             Me.MenuItemCancelCopy.Visible = True
             Me.MenuItemCopyAll.Enabled = False
@@ -275,7 +275,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
     Private Sub MenuItemCopyAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemCopyAll.Click
 
-        ArchetypeEditor.Instance.TempConstraint = Me.Constraint
+        OceanArchetypeEditor.Instance.TempConstraint = Me.Constraint
 
     End Sub
 
@@ -286,7 +286,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
     Private Sub AddCodeToOrdinal()
         If MyBase.IsLoading Then Return
 
-        Dim s As String() = ArchetypeEditor.Instance.ChooseInternal(mFileManager)
+        Dim s As String() = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager)
         If s Is Nothing Then Return
 
         For i As Integer = 0 To s.Length - 1
@@ -309,10 +309,10 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
         Me.Constraint.ClearOrdinalValues()
 
-        Debug.Assert(ArchetypeEditor.Instance.TempConstraint.Type = ConstraintType.Ordinal)
+        Debug.Assert(OceanArchetypeEditor.Instance.TempConstraint.Type = ConstraintType.Ordinal)
 
         '' default key(0) is set to ae.NodeId
-        For Each ov As OrdinalValue In CType(ArchetypeEditor.Instance.TempConstraint, Constraint_Ordinal).OrdinalValues
+        For Each ov As OrdinalValue In CType(OceanArchetypeEditor.Instance.TempConstraint, Constraint_Ordinal).OrdinalValues
             Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
             Dim newOrdinal As OrdinalValue = Me.Constraint.OrdinalValues.NewOrdinal
 
@@ -329,7 +329,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
         Me.MenuItemPasteAll.Enabled = False
         Me.MenuItemCancelCopy.Visible = False
         Me.MenuItemCopyAll.Enabled = True
-        ArchetypeEditor.Instance.TempConstraint = Nothing
+        OceanArchetypeEditor.Instance.TempConstraint = Nothing
 
         mFileManager.FileEdited = True
 
