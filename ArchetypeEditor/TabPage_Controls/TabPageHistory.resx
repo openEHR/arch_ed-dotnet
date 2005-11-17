@@ -544,17 +544,17 @@
         AwHPAfkEAAHwAQcBzwH5BAAB/AEfAe8B+wQABP8EAAT/GgAL
 </value>
   </data>
-  <data name="HelpProviderHistory.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="HelpProviderEventSeries.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Assembly</value>
   </data>
-  <data name="HelpProviderHistory.Location" type="System.Drawing.Point, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <data name="HelpProviderEventSeries.Location" type="System.Drawing.Point, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>244, 17</value>
   </data>
-  <data name="HelpProviderHistory.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <data name="HelpProviderEventSeries.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>Assembly</value>
   </data>
   <data name="$this.Name">
-    <value>TabPageHistory</value>
+    <value>TabPageEventSeries</value>
   </data>
   <data name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>

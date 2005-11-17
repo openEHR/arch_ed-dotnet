@@ -15,6 +15,7 @@
 '
 
 Option Explicit On 
+Namespace ArchetypeEditor.ADL_Classes
 
 Class ADL_ENTRY
     Inherits RmEntry
@@ -28,8 +29,8 @@ Class ADL_ENTRY
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
-        For i = 1 To SubjectOfData.Children.Count
-            ComplexObj = SubjectOfData.Children.i_th(i)
+        For i = 1 To SubjectOfData.children.count
+            ComplexObj = SubjectOfData.children.i_th(i)
             Select Case ComplexObj.rm_type_name.to_cil
                 Case "RELATED_PARTY"
                     an_attribute = ComplexObj.attributes.first  ' get the 'relationship' an_attribute
@@ -49,8 +50,8 @@ Class ADL_ENTRY
         ' set the root node id - usually the same as the concept
         mNodeID = Definition.node_id.to_cil
 
-        For i = 1 To Definition.Attributes.Count
-            an_attribute = Definition.Attributes.i_th(i)
+        For i = 1 To Definition.attributes.count
+            an_attribute = Definition.attributes.i_th(i)
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "subject"
                     ProcessSubjectOfData(an_attribute)
@@ -72,7 +73,7 @@ Class ADL_ENTRY
     End Sub
 
 End Class 'ADL_ENTRY
-
+End Namespace
 '
 '***** BEGIN LICENSE BLOCK *****
 'Version: MPL 1.1/GPL 2.0/LGPL 2.1

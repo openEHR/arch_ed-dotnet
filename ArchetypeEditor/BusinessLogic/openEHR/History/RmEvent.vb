@@ -160,7 +160,7 @@ Class RmEvent
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
-        cOccurrences = ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
+        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
 
         For i = 1 To ObjNode.Attributes.Count
 
@@ -170,7 +170,7 @@ Class RmEvent
                 Case "name", "runtime_label" ' runtime_label is redundant
                     mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "offset"
-                    Dim d As New Duration
+                    Dim d As New ArchetypeEditor.ADL_Classes.Duration
                     Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
                     offset = an_attribute.children.first
@@ -179,7 +179,7 @@ Class RmEvent
                     Me.OffsetUnits = d.GUI_Units
 
                 Case "width"
-                    Dim d As New Duration
+                    Dim d As New ArchetypeEditor.ADL_Classes.Duration
                     Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
                     boolPointInTime = False
@@ -201,7 +201,7 @@ Class RmEvent
                     DisplayPos = an_attribute.children.first
                     boolSignNeg = (DisplayPos.item.as_string.to_cil = "True")
 
-                Case "data"
+                Case "item", "data" 'data is OBSOLETE
                     ' return the data for processing
                     mEIF_Data = an_attribute
 
@@ -226,9 +226,9 @@ Class RmEvent
                     Debug.Assert(structure_type <> StructureType.Not_Set)
 
                     If structure_type = StructureType.Table Then
-                        ADL_Tools.Instance.LastProcessedStructure = New RmTable(cadlStruct)
+                        ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = New RmTable(cadlStruct)
                     Else
-                        ADL_Tools.Instance.LastProcessedStructure = New RmStructureCompound(cadlStruct)
+                        ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = New RmStructureCompound(cadlStruct)
                     End If
             End Select
         End If

@@ -15,70 +15,71 @@
 '
 
 Option Strict On
+Namespace ArchetypeEditor.ADL_Classes
 
-Class ADL_Term
-    Inherits RmTerm
-    Private EIF_a_Term As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM
+    Class ADL_Term
+        Inherits RmTerm
+        Private EIF_a_Term As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM
 
-    Public ReadOnly Property EIF_Term() As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM
-        Get
-            Me.setItem("text", sText)
-            Me.setItem("description", sDescription)
-            Return EIF_a_Term
-        End Get
-    End Property
-    Private Function getItem(ByVal key As String) As String
-        Dim s As openehr.base.kernel.STRING
+        Public ReadOnly Property EIF_Term() As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM
+            Get
+                Me.setItem("text", sText)
+                Me.setItem("description", sDescription)
+                Return EIF_a_Term
+            End Get
+        End Property
+        Private Function getItem(ByVal key As String) As String
+            Dim s As openehr.base.kernel.STRING
 
-        s = openehr.base.kernel.Create.STRING.make_from_cil(key)
-        If EIF_a_Term.has_key(s) Then
-            Return EIF_a_Term.item(s).to_cil
-        Else
-            Return ""
-        End If
-    End Function
+            s = openehr.base.kernel.Create.STRING.make_from_cil(key)
+            If EIF_a_Term.has_key(s) Then
+                Return EIF_a_Term.item(s).to_cil
+            Else
+                Return ""
+            End If
+        End Function
 
-    Private Sub setItem(ByVal Item As String, ByVal Value As String)
-        If EIF_a_Term.has_key(openehr.base.kernel.Create.STRING.make_from_cil(Item)) Then
-            EIF_a_Term.replace_item(openehr.base.kernel.Create.STRING.make_from_cil(Item), openehr.base.kernel.Create.STRING.make_from_cil(Value))
-        Else
-            EIF_a_Term.add_item(openehr.base.kernel.Create.STRING.make_from_cil(Item), openehr.base.kernel.Create.STRING.make_from_cil(Value))
-        End If
-    End Sub
+        Private Sub setItem(ByVal Item As String, ByVal Value As String)
+            If EIF_a_Term.has_key(openehr.base.kernel.Create.STRING.make_from_cil(Item)) Then
+                EIF_a_Term.replace_item(openehr.base.kernel.Create.STRING.make_from_cil(Item), openehr.base.kernel.Create.STRING.make_from_cil(Value))
+            Else
+                EIF_a_Term.add_item(openehr.base.kernel.Create.STRING.make_from_cil(Item), openehr.base.kernel.Create.STRING.make_from_cil(Value))
+            End If
+        End Sub
 
-    Sub New(ByVal ID As String)
-        MyBase.new(ID)
-        EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(openehr.base.kernel.Create.STRING.make_from_cil(ID))
-    End Sub
+        Sub New(ByVal ID As String)
+            MyBase.new(ID)
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(openehr.base.kernel.Create.STRING.make_from_cil(ID))
+        End Sub
 
-    Sub New(ByVal EIF_ID As openehr.base.kernel.STRING)
-        MyBase.New(EIF_ID.to_cil)
-        EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EIF_ID)
-    End Sub
+        Sub New(ByVal EIF_ID As openehr.base.kernel.STRING)
+            MyBase.New(EIF_ID.to_cil)
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EIF_ID)
+        End Sub
 
-    Sub New(ByVal a_Term As RmTerm)
-        MyBase.New(a_Term.Code)
-        sText = a_Term.Text
-        sDescription = a_Term.Description
-        EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(openehr.base.kernel.Create.STRING.make_from_cil(a_Term.Code))
-    End Sub
+        Sub New(ByVal a_Term As RmTerm)
+            MyBase.New(a_Term.Code)
+            sText = a_Term.Text
+            sDescription = a_Term.Description
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(openehr.base.kernel.Create.STRING.make_from_cil(a_Term.Code))
+        End Sub
 
-    Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal language As String = "?")
-        MyBase.New(code)
-        sText = text
-        sDescription = description
-        EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(openehr.base.kernel.Create.STRING.make_from_cil(code))
-    End Sub
+        Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal language As String = "?")
+            MyBase.New(code)
+            sText = text
+            sDescription = description
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(openehr.base.kernel.Create.STRING.make_from_cil(code))
+        End Sub
 
-    Sub New(ByVal an_adlTerm As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM)
-        MyBase.New(an_adlTerm.code.to_cil)
-        EIF_a_Term = an_adlTerm
-        sText = Me.getItem("text")
-        sDescription = Me.getItem("description")
-    End Sub
+        Sub New(ByVal an_adlTerm As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM)
+            MyBase.New(an_adlTerm.code.to_cil)
+            EIF_a_Term = an_adlTerm
+            sText = Me.getItem("text")
+            sDescription = Me.getItem("description")
+        End Sub
 
-End Class
-
+    End Class
+End Namespace
 '
 '***** BEGIN LICENSE BLOCK *****
 'Version: MPL 1.1/GPL 2.0/LGPL 2.1

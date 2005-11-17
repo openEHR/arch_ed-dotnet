@@ -81,12 +81,12 @@ Public Class RmStructureCompound
                 ProcessSimple(EIF_Structure)
             Case StructureType.List
                 ProcessList(EIF_Structure)
-                ADL_Tools.Instance.HighestLevelChildren = Me.Children
-                ADL_Tools.Instance.PopulateReferences(Me)
+                ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.HighestLevelChildren = Me.Children
+                ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.PopulateReferences(Me)
             Case StructureType.Tree
                 ProcessTree(EIF_Structure)
-                ADL_Tools.Instance.HighestLevelChildren = Me.Children
-                ADL_Tools.Instance.PopulateReferences(Me)
+                ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.HighestLevelChildren = Me.Children
+                ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.PopulateReferences(Me)
             Case StructureType.Cluster, StructureType.History, StructureType.SECTION, StructureType.Table
                 Return  'code is dealt with in the specialised classes
             Case Else
@@ -123,7 +123,7 @@ Public Class RmStructureCompound
                                 a_ComplexObject = CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                                 colChildren.Add(New RmElement(a_ComplexObject))
                             Case "ARCHETYPE_INTERNAL_REF"
-                                colChildren.Add(ADL_Tools.Instance.ProcessReference(CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
+                                colChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.ProcessReference(CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
                         End Select
                     Next
                     'Case "ordered", "Ordered", "ORDERED"
@@ -212,7 +212,7 @@ Public Class RmStructureCompound
                                 colChildren.Add(New RmElement(a_ComplexObject))
                         End Select
                     Case "ARCHETYPE_INTERNAL_REF"
-                        colChildren.Add(ADL_Tools.Instance.ProcessReference(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
+                        colChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.ProcessReference(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
                 End Select
             Next
         End If
@@ -236,7 +236,7 @@ Public Class RmStructureCompound
             Case "C_COMPLEX_OBJECT"
                     Select Case structure_type
                         Case StructureType.History
-                            colChildren.Add(New RmHistory(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                            colChildren.Add(New RmEventSeries(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case StructureType.Single, StructureType.List, StructureType.Tree
                             ' a structure
                             colChildren.Add(New RmStructureCompound(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))

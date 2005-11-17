@@ -15,90 +15,90 @@
 '
 
 Option Explicit On 
+Namespace ArchetypeEditor.ADL_Classes
+    Class ADL_SECTION
+        Inherits RmSection
 
-Class ADL_SECTION
-    Inherits RmSection
+        Private Function GetRunTimeConstraintID(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As String
 
-    Private Function GetRunTimeConstraintID(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As String
+            Dim CodedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim constraint_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT
+            Dim s As String
 
-        Dim CodedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-        Dim constraint_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT
-        Dim s As String
+            CodedText = an_attribute.children.first
+            an_attribute = CodedText.attributes.first
+            constraint_object = an_attribute.children.first
 
-        CodedText = an_attribute.children.first
-        an_attribute = CodedText.attributes.first
-        constraint_object = an_attribute.children.first
+            If constraint_object.generating_type.to_cil = "CONSTRAINT_REF" Then
+                s = CType(constraint_object, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).as_string.to_cil
+            ElseIf constraint_object.generating_type.to_cil = "C_CODED_TERM" Then
+                s = CType(constraint_object, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM).as_string.to_cil()
+            End If
+            ' strip off the square brackets
+            s = s.Substring(1, s.Length - 2)
+            If s.StartsWith("local::") Then
+                ' when the runtime name is constrained by an 'at' code to be the same as the design name ie NodeId
+                s = s.Substring(7)
+            End If
+            Return s
 
-        If constraint_object.generating_type.to_cil = "CONSTRAINT_REF" Then
-            s = CType(constraint_object, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).as_string.to_cil
-        ElseIf constraint_object.generating_type.to_cil = "C_CODED_TERM" Then
-            s = CType(constraint_object, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM).as_string.to_cil()
-        End If
-        ' strip off the square brackets
-        s = s.Substring(1, s.Length - 2)
-        If s.StartsWith("local::") Then
-            ' when the runtime name is constrained by an 'at' code to be the same as the design name ie NodeId
-            s = s.Substring(7)
-        End If
-        Return s
+        End Function
 
-    End Function
-
-    Private Function ProcessSection(ByVal a_rm_section As Object, ByVal an_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
-        'ccomplex object means it is a section, otherwise a slot
-        'a_rm_section is passed as object so that definition can be passed at the first level
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-        Dim i, j As Integer
-
-        Select Case an_object.generating_type.to_cil
-            Case "C_COMPLEX_OBJECT"
-                Dim a_complex_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                Dim a_section As RmSection
-
-                a_section = New RmSection(an_object.node_id.to_cil)
-                a_complex_object = an_object
-
-                For i = 1 To a_complex_object.attributes.count
-                    an_attribute = a_complex_object.attributes.i_th(i)
-                    Select Case an_attribute.Rm_Attribute_Name.to_cil
-                        Case "name", "Name", "NAME", "runtime_label"
-                            a_section.NameConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                        Case "items", "Items", "ITEMS"
-                            For j = 1 To an_attribute.children.count
-                                ProcessSection(a_section, an_attribute.children.i_th(j))
-                            Next
-                    End Select
-                Next
-                a_rm_section.Children.Add(a_section)
-
-            Case "ARCHETYPE_SLOT"
-                a_rm_section.children.add(New RmSlot(an_object))
-
-            Case Else
-                Debug.Assert(False, "Type is not catered for")
-                Return Nothing
-        End Select
-
-    End Function
-
-
-    Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.New(Definition)
-
-        If Definition.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("items")) Then
+        Private Function ProcessSection(ByVal a_rm_section As Object, ByVal an_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+            'ccomplex object means it is a section, otherwise a slot
+            'a_rm_section is passed as object so that definition can be passed at the first level
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim i As Integer
+            Dim i, j As Integer
 
-            an_attribute = Definition.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("items"))
-            For i = 1 To an_attribute.children.count
-                ProcessSection(Me, an_attribute.children.i_th(i))
-            Next
-        End If
+            Select Case an_object.generating_type.to_cil
+                Case "C_COMPLEX_OBJECT"
+                    Dim a_complex_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                    Dim a_section As RmSection
 
-    End Sub
+                    a_section = New RmSection(an_object.node_id.to_cil)
+                    a_complex_object = an_object
 
-End Class
+                    For i = 1 To a_complex_object.attributes.count
+                        an_attribute = a_complex_object.attributes.i_th(i)
+                        Select Case an_attribute.rm_attribute_name.to_cil
+                            Case "name", "Name", "NAME", "runtime_label"
+                                a_section.NameConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                            Case "items", "Items", "ITEMS"
+                                For j = 1 To an_attribute.children.count
+                                    ProcessSection(a_section, an_attribute.children.i_th(j))
+                                Next
+                        End Select
+                    Next
+                    a_rm_section.Children.Add(a_section)
 
+                Case "ARCHETYPE_SLOT"
+                    a_rm_section.children.add(New RmSlot(an_object))
+
+                Case Else
+                    Debug.Assert(False, "Type is not catered for")
+                    Return Nothing
+            End Select
+
+        End Function
+
+
+        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+            MyBase.New(Definition)
+
+            If Definition.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("items")) Then
+                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                Dim i As Integer
+
+                an_attribute = Definition.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("items"))
+                For i = 1 To an_attribute.children.count
+                    ProcessSection(Me, an_attribute.children.i_th(i))
+                Next
+            End If
+
+        End Sub
+
+    End Class
+End Namespace
 '
 '***** BEGIN LICENSE BLOCK *****
 'Version: MPL 1.1/GPL 2.0/LGPL 2.1
