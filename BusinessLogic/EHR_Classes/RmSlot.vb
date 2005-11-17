@@ -90,7 +90,7 @@ Public Class RmSlot
             For i As Integer = 1 To an_archetype_slot.includes.count
                 Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
                 assert = CType(an_archetype_slot.includes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
-                s = ADL_Tools.Instance.GetDomainConceptFromAssertion(assert)
+                s = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.GetDomainConceptFromAssertion(assert)
                 If s = "/.*/" Then
                     mSlotConstraint.IncludeAll = True
                 Else
@@ -105,7 +105,7 @@ Public Class RmSlot
             For i As Integer = 1 To an_archetype_slot.excludes.count
                 Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
                 assert = CType(an_archetype_slot.excludes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
-                s = ADL_Tools.Instance.GetDomainConceptFromAssertion(assert)
+                s = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.GetDomainConceptFromAssertion(assert)
                 If s = "/.*/" Then
                     mSlotConstraint.ExcludeAll = True
                 Else

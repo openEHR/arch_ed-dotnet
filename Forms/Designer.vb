@@ -27,8 +27,8 @@ Public Class Designer
     Private mComponentsCollection As New Collection
     Private mTabPagesCollection As New Collections.Hashtable
     Private mBaseTabPagesCollection As New Collection
-    Private mTabPageDataHistory As TabPageHistory
-    Private mTabPageStateHistory As TabPageHistory
+    Private mTabPageDataEventSeries As TabPageEventSeries
+    Private mTabPageStateEventSeries As TabPageEventSeries
     Private WithEvents mTabPageDataStructure As TabPageStructure
     Private mTabPageDataStateStructure As TabPageStructure
     Private mTabPageProtocolStructure As TabPageStructure
@@ -69,7 +69,7 @@ Public Class Designer
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents chkHistory As System.Windows.Forms.CheckBox
+    Friend WithEvents chkEventSeries As System.Windows.Forms.CheckBox
     Friend WithEvents DataGridDefinitions As System.Windows.Forms.DataGrid
     Friend WithEvents butAdd As System.Windows.Forms.Button
     Friend WithEvents DefinitionTableStyle As System.Windows.Forms.DataGridTableStyle
@@ -118,7 +118,7 @@ Public Class Designer
     Friend WithEvents PanelState As System.Windows.Forms.Panel
     Friend WithEvents TabState As Crownwood.Magic.Controls.TabControl
     Friend WithEvents tpRootStateStructure As Crownwood.Magic.Controls.TabPage
-    Friend WithEvents tpRootStateHistory As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents tpRootStateEventSeries As Crownwood.Magic.Controls.TabPage
     Friend WithEvents tpDataStructure As Crownwood.Magic.Controls.TabPage
     Friend WithEvents tpText As Crownwood.Magic.Controls.TabPage
     Friend WithEvents ToolBarOpen As System.Windows.Forms.ToolBarButton
@@ -212,7 +212,7 @@ Public Class Designer
     Friend WithEvents DataGridTableStyle5 As System.Windows.Forms.DataGridTableStyle
     Friend WithEvents DataGridTextBoxColumn13 As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents TermBindingPanel1 As TermBindingPanel
-    Friend WithEvents richtextArchetype As ArchetypeEditor.RichTextBoxPrintable
+    Friend WithEvents richtextArchetype As ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
     Friend WithEvents ToolBarRTF As System.Windows.Forms.ToolBar
     Friend WithEvents butRTF As System.Windows.Forms.ToolBarButton
     Friend WithEvents tbSep1 As System.Windows.Forms.ToolBarButton
@@ -241,7 +241,7 @@ Public Class Designer
         Me.PanelConcept = New System.Windows.Forms.Panel
         Me.PanelConfigStructure = New System.Windows.Forms.Panel
         Me.cbStructurePersonState = New System.Windows.Forms.CheckBox
-        Me.chkHistory = New System.Windows.Forms.CheckBox
+        Me.chkEventSeries = New System.Windows.Forms.CheckBox
         Me.PanelRoot = New System.Windows.Forms.Panel
         Me.cbPersonState = New System.Windows.Forms.CheckBox
         Me.cbProtocol = New System.Windows.Forms.CheckBox
@@ -297,7 +297,7 @@ Public Class Designer
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
         Me.tpText = New Crownwood.Magic.Controls.TabPage
         Me.Panel3 = New System.Windows.Forms.Panel
-        Me.richtextArchetype = New ArchetypeEditor.RichTextBoxPrintable
+        Me.richtextArchetype = New ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
         Me.panelDiplayTop = New System.Windows.Forms.Panel
         Me.ToolBarRTF = New System.Windows.Forms.ToolBar
         Me.tbSep1 = New System.Windows.Forms.ToolBarButton
@@ -315,7 +315,7 @@ Public Class Designer
         Me.tpRootState = New Crownwood.Magic.Controls.TabPage
         Me.TabState = New Crownwood.Magic.Controls.TabControl
         Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
-        Me.tpRootStateHistory = New Crownwood.Magic.Controls.TabPage
+        Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
         Me.PanelState = New System.Windows.Forms.Panel
         Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpTerminology = New Crownwood.Magic.Controls.TabPage
@@ -559,7 +559,7 @@ Public Class Designer
         '
         Me.PanelConfigStructure.BackColor = System.Drawing.Color.LightGoldenrodYellow
         Me.PanelConfigStructure.Controls.Add(Me.cbStructurePersonState)
-        Me.PanelConfigStructure.Controls.Add(Me.chkHistory)
+        Me.PanelConfigStructure.Controls.Add(Me.chkEventSeries)
         Me.PanelConfigStructure.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelConfigStructure.DockPadding.All = 1
         Me.PanelConfigStructure.Location = New System.Drawing.Point(0, 0)
@@ -576,15 +576,15 @@ Public Class Designer
         Me.cbStructurePersonState.Text = "Person State"
         Me.ToolTip1.SetToolTip(Me.cbStructurePersonState, "Information about the person that influences the interpretation")
         '
-        'chkHistory
+        'chkEventSeries
         '
-        Me.chkHistory.Enabled = False
-        Me.chkHistory.Location = New System.Drawing.Point(67, 0)
-        Me.chkHistory.Name = "chkHistory"
-        Me.chkHistory.Size = New System.Drawing.Size(163, 28)
-        Me.chkHistory.TabIndex = 8
-        Me.chkHistory.Text = "Event History"
-        Me.ToolTip1.SetToolTip(Me.chkHistory, "Repeated measurements in same series")
+        Me.chkEventSeries.Enabled = False
+        Me.chkEventSeries.Location = New System.Drawing.Point(67, 0)
+        Me.chkEventSeries.Name = "chkEventSeries"
+        Me.chkEventSeries.Size = New System.Drawing.Size(163, 28)
+        Me.chkEventSeries.TabIndex = 8
+        Me.chkEventSeries.Text = "Event EventSeries"
+        Me.ToolTip1.SetToolTip(Me.chkEventSeries, "Repeated measurements in same series")
         '
         'PanelRoot
         '
@@ -604,8 +604,8 @@ Public Class Designer
         Me.cbPersonState.Name = "cbPersonState"
         Me.cbPersonState.Size = New System.Drawing.Size(228, 19)
         Me.cbPersonState.TabIndex = 30
-        Me.cbPersonState.Text = "Person State with history"
-        Me.ToolTip1.SetToolTip(Me.cbPersonState, "Only for situations where 'state' information requires a history event")
+        Me.cbPersonState.Text = "Person State with EventSeries"
+        Me.ToolTip1.SetToolTip(Me.cbPersonState, "Only for situations where 'state' information requires a EventSeries event")
         '
         'cbProtocol
         '
@@ -1158,7 +1158,7 @@ Public Class Designer
         Me.HelpProviderDesigner.SetShowHelp(Me.TabState, True)
         Me.TabState.Size = New System.Drawing.Size(969, 504)
         Me.TabState.TabIndex = 1
-        Me.TabState.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpRootStateStructure, Me.tpRootStateHistory})
+        Me.TabState.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpRootStateStructure, Me.tpRootStateEventSeries})
         '
         'tpRootStateStructure
         '
@@ -1169,15 +1169,15 @@ Public Class Designer
         Me.tpRootStateStructure.TabIndex = 0
         Me.tpRootStateStructure.Title = "Structure"
         '
-        'tpRootStateHistory
+        'tpRootStateEventSeries
         '
-        Me.tpRootStateHistory.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.tpRootStateHistory.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootStateHistory.Name = "tpRootStateHistory"
-        Me.tpRootStateHistory.Selected = False
-        Me.tpRootStateHistory.Size = New System.Drawing.Size(969, 478)
-        Me.tpRootStateHistory.TabIndex = 1
-        Me.tpRootStateHistory.Title = "History"
+        Me.tpRootStateEventSeries.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.tpRootStateEventSeries.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootStateEventSeries.Name = "tpRootStateEventSeries"
+        Me.tpRootStateEventSeries.Selected = False
+        Me.tpRootStateEventSeries.Size = New System.Drawing.Size(969, 478)
+        Me.tpRootStateEventSeries.TabIndex = 1
+        Me.tpRootStateEventSeries.Title = "Event Series"
         '
         'PanelState
         '
@@ -1868,7 +1868,7 @@ Public Class Designer
                             For Each rm In Filemanager.Instance.Archetype.Definition.Data
                                 Select Case rm.Type
                                     Case StructureType.Data
-                                        ProcessHistory(rm)
+                                        ProcessEventSeries(rm)
                                     Case StructureType.Protocol
                                         ProcessProtocol(rm)
                                 End Select
@@ -1883,7 +1883,7 @@ Public Class Designer
                                             'Select Case rm_s.TypeName
                                             Select Case rm_s.Type
                                                 Case StructureType.History
-                                                    ProcessHistory(rm_s)
+                                                    ProcessEventSeries(rm_s)
                                                 Case Else
                                                     Me.ProcessDataStructure(rm_s)
                                             End Select
@@ -1894,9 +1894,9 @@ Public Class Designer
 
                                         Dim rm_1 As RmStructure
                                         rm_1 = rm.Children.items(0)
-                                        'If rm_1.TypeName = "History" Then
+
                                         If rm_1.Type = StructureType.History Then
-                                            ProcessStateHistory(rm_1)
+                                            ProcessStateEventSeries(rm_1)
                                         Else
                                             ProcessState(rm.Children.items(0))
                                         End If
@@ -2171,7 +2171,7 @@ Public Class Designer
         'Entry tab on designer
         Me.cbProtocol.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(78, Me.cbProtocol.Text, language)
         Me.cbPersonState.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(79, Me.cbPersonState.Text, language)
-        Me.chkHistory.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(81, Me.chkHistory.Text, language)
+        Me.chkEventSeries.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(81, Me.chkEventSeries.Text, language)
         Me.cbStructurePersonState.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(82, Me.cbStructurePersonState.Text, language)
         Me.cbProtocol.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(78, Me.cbProtocol.Text, language)
 
@@ -2196,7 +2196,7 @@ Public Class Designer
         Me.tpLanguages.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(88, Me.tpLanguages.Title, language)
         Me.tpData.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(80, Me.tpData.Title, language)
         Me.tpRootState.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(177, Me.tpRootState.Title, language)
-        Me.tpRootStateHistory.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(133, Me.tpRootStateHistory.Title, language)
+        Me.tpRootStateEventSeries.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(133, Me.tpRootStateEventSeries.Title, language)
         Me.tpRootStateStructure.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(177, Me.tpRootStateStructure.Title, language)
 
 
@@ -2388,8 +2388,8 @@ Public Class Designer
                     text.WriteLine("\par")
                 End If
 
-                If Not mTabPageDataHistory Is Nothing Then
-                    mTabPageDataHistory.ToRichText(text, 3)
+                If Not mTabPageDataEventSeries Is Nothing Then
+                    mTabPageDataEventSeries.ToRichText(text, 3)
                 End If
 
                 text.WriteLine("\par")
@@ -2407,8 +2407,8 @@ Public Class Designer
                 If Not mTabPageStateStructure Is Nothing Then
                     text.WriteLine("cf1   STATE\cf0  = \{\par")
                     mTabPageStateStructure.toRichText(text, 2)
-                    If Not mTabPageStateHistory Is Nothing Then
-                        mTabPageStateHistory.ToRichText(text, 2)
+                    If Not mTabPageStateEventSeries Is Nothing Then
+                        mTabPageStateEventSeries.ToRichText(text, 2)
                     End If
                     text.WriteLine("     \} -- end State\par")
                     text.WriteLine("\par")
@@ -2508,15 +2508,15 @@ Public Class Designer
                     mTabPageDataStateStructure.toHTML(text, "#9DAAFF")
                 End If
 
-                If Not mTabPageDataHistory Is Nothing Then
+                If Not mTabPageDataEventSeries Is Nothing Then
                     text.WriteLine("<table border=""0"" cellpadding=""2"" width=""100%"">")
                     text.WriteLine("<tr>")
                     text.WriteLine("<td width=""100%"" bgcolor=""#AAFE92"">")
-                    text.WriteLine("<h2>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(275, "History") & "</h2>")
+                    text.WriteLine("<h2>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(81, "Event Series") & "</h2>")
                     text.WriteLine("</td>")
                     text.WriteLine("</tr>")
                     text.WriteLine("</table>")
-                    mTabPageDataHistory.ToHTML(text, "#AAFE92")
+                    mTabPageDataEventSeries.ToHTML(text, "#AAFE92")
                 End If
 
                 If Me.radioRestrictedSet.Checked And Me.listRestrictionSet.Items.Count > 0 Then
@@ -2544,8 +2544,8 @@ Public Class Designer
                 'If Not mTabPageStateStructure Is Nothing Then
                 '    text.WriteLine("cf1   STATE\cf0  = \{\par")
                 '    mTabPageStateStructure.toRichText(text, 2)
-                '    If Not mTabPageStateHistory Is Nothing Then
-                '        mTabPageStateHistory.ToRichText(text, 2)
+                '    If Not mTabPageStateEventSeries Is Nothing Then
+                '        mTabPageStateEventSeries.ToRichText(text, 2)
                 '    End If
                 '    text.WriteLine("     \} -- end State\par")
                 '    text.WriteLine("\par")
@@ -2810,10 +2810,10 @@ Public Class Designer
         Me.radioUnrestrictedSubject.Checked = True
 
         'set the other pages
-        Me.chkHistory.Enabled = False
+        Me.chkEventSeries.Enabled = False
         Me.cbStructurePersonState.Checked = False
         Me.cbPersonState.Checked = False
-        Me.chkHistory.Checked = False
+        Me.chkEventSeries.Checked = False
         Me.cbProtocol.Checked = False
         Me.cbStructurePersonState.Checked = False
         Me.cbProtocol.Checked = False
@@ -2837,11 +2837,11 @@ Public Class Designer
 
         Me.tpDataStructure.Controls.Clear()
         Me.tpRootStateStructure.Controls.Clear()
-        Me.tpRootStateHistory.Controls.Clear()
+        Me.tpRootStateEventSeries.Controls.Clear()
 
         ' kill all the components
-        mTabPageDataHistory = Nothing
-        mTabPageStateHistory = Nothing
+        mTabPageDataEventSeries = Nothing
+        mTabPageStateEventSeries = Nothing
         mTabPageDataStructure = Nothing
         mTabPageDataStateStructure = Nothing
         mTabPageProtocolStructure = Nothing
@@ -2874,7 +2874,7 @@ Public Class Designer
 
                 Select Case archetyped_class
                     Case StructureType.ADMIN_ENTRY, StructureType.ENTRY
-                        'no protocol, state or history
+                        'no protocol, state or EventSeries
                         Me.cbPersonState.Enabled = False
                         Me.cbStructurePersonState.Enabled = False
                         Me.cbProtocol.Enabled = False
@@ -2989,37 +2989,37 @@ Public Class Designer
     End Sub
 
 
-    Private Sub SetUpHistory(Optional ByVal NodeId As String = "")
+    Private Sub SetUpEventSeries(Optional ByVal NodeId As String = "")
         Dim tp As New Crownwood.Magic.Controls.TabPage
         Dim file_loading As Boolean
 
-        mTabPageDataHistory = New TabPageHistory
-        tp.Name = "tpDataHistory"
+        mTabPageDataEventSeries = New TabPageEventSeries
+        tp.Name = "tpDataEventSeries"
         tp.Title = "Events"
         mTabPagesCollection.Add(tp.Name, tp)
-        mComponentsCollection.Add(mTabPageDataHistory)
-        tp.Controls.Add(mTabPageDataHistory)
-        mTabPageDataHistory.Dock = DockStyle.Fill
+        mComponentsCollection.Add(mTabPageDataEventSeries)
+        tp.Controls.Add(mTabPageDataEventSeries)
+        mTabPageDataEventSeries.Dock = DockStyle.Fill
         Me.TabStructure.TabPages.Add(tp)
 
         file_loading = Filemanager.Instance.FileLoading
         Filemanager.Instance.FileLoading = True
-        ' this creates a new history unless fileloading set to true
+        ' this creates a new EventSeries unless fileloading set to true
         ' which happens when creating a new archetype
-        Me.chkHistory.Checked = True
+        Me.chkEventSeries.Checked = True
         ' now put it back to how it was
         Filemanager.Instance.FileLoading = file_loading
 
         If NodeId = "" Then
-            ' a new history so set Id and add a baseline event as default
-            mTabPageDataHistory.NodeId = Filemanager.Instance.OntologyManager.AddTerm("history", "@ internal @").Code
-            mTabPageDataHistory.AddBaseLineEvent()
+            ' a new EventSeries so set Id and add a baseline event as default
+            mTabPageDataEventSeries.NodeId = Filemanager.Instance.OntologyManager.AddTerm("Event Series", "@ internal @").Code
+            mTabPageDataEventSeries.AddBaseLineEvent()
         Else
-            mTabPageDataHistory.NodeId = NodeId
+            mTabPageDataEventSeries.NodeId = NodeId
         End If
 
         Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
-        Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_history.htm")
+        Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_EventSeries.htm")
     End Sub
 
     Private Sub SetUpInstruction()
@@ -3054,7 +3054,7 @@ Public Class Designer
     Private Sub SetUpGUI(ByVal archetyped_class As StructureType, ByVal isNew As Boolean)
 
         'NOTE: Showing tabpages in the editor requires generating
-        'IDs for the structural components (e.g. History and List)
+        'IDs for the structural components (e.g. EventSeries and List)
         'This feature cannot be run unless the Ontology is initialised
         If Filemanager.Instance.OntologyManager.Ontology Is Nothing Then
             Beep()
@@ -3064,11 +3064,11 @@ Public Class Designer
 
         Select Case archetyped_class
             Case StructureType.OBSERVATION
-                'must have a history
+                'must have a EventSeries
                 Me.cbPersonState.Enabled = True
                 If isNew Then
                     SetUpDataStructure()
-                    SetUpHistory()
+                    SetUpEventSeries()
                 End If
                 ShowTabPages(archetyped_class)
 
@@ -3424,32 +3424,32 @@ Public Class Designer
 
 #Region "Methods to build the GUI when an archetype is loaded"
 
-    Private Function ProcessStateHistory(ByVal rm As RmStructureCompound) As Boolean
+    Private Function ProcessStateEventSeries(ByVal rm As RmStructureCompound) As Boolean
         Dim a_rm As RmStructureCompound
 
         For Each a_rm In rm.Children
             Select Case a_rm.Type '.TypeName
-                Case StructureType.History ' "history", "History", "HISTORY"
+                Case StructureType.History
                     Me.cbPersonState.Checked = True
                     'cannot have state associated with structure
                     Me.cbStructurePersonState.Enabled = False
                     Me.TabDesign.TabPages.Add(Me.mBaseTabPagesCollection.Item("tpRootState"))
                     Me.tpRootState.Visible = True
 
-                    mTabPageStateHistory = New TabPageHistory
-                    mTabPageStateHistory.BackColor = System.Drawing.Color.LightSteelBlue
-                    Me.tpRootStateHistory.Controls.Add(mTabPageStateHistory)
-                    mTabPageStateHistory.Dock = DockStyle.Fill
-                    mTabPageStateHistory.ProcessHistory(a_rm)
-                    mComponentsCollection.Add(mTabPageStateHistory)
+                    mTabPageStateEventSeries = New TabPageEventSeries
+                    mTabPageStateEventSeries.BackColor = System.Drawing.Color.LightSteelBlue
+                    Me.tpRootStateEventSeries.Controls.Add(mTabPageStateEventSeries)
+                    mTabPageStateEventSeries.Dock = DockStyle.Fill
+                    mTabPageStateEventSeries.ProcessEventSeries(a_rm)
+                    mComponentsCollection.Add(mTabPageStateEventSeries)
 
                     mTabPageStateStructure = New TabPageStructure  'Me
                     mTabPageStateStructure.IsState = True  ' sets some display characteristics of buttons
                     mTabPageStateStructure.BackColor = System.Drawing.Color.LightSteelBlue
                     Me.tpRootStateStructure.Controls.Add(mTabPageStateStructure)
                     mTabPageStateStructure.Dock = DockStyle.Fill
-                    If Not CType(a_rm, RmHistory).Data Is Nothing Then
-                        Me.mTabPageStateStructure.ProcessStructure(CType(a_rm, RmHistory).Data)
+                    If Not CType(a_rm, RmEventSeries).Data Is Nothing Then
+                        Me.mTabPageStateStructure.ProcessStructure(CType(a_rm, RmEventSeries).Data)
                     End If
                     Me.tpRootStateStructure.Title = mTabPageStateStructure.StructureType
                     mComponentsCollection.Add(mTabPageStateStructure)
@@ -3473,7 +3473,7 @@ Public Class Designer
                         mTabPageStateStructure.Dock = DockStyle.Fill
                         tp.BackColor = System.Drawing.Color.LightSteelBlue
                         tp.Name = "tpRootState"
-                        tp.Title = "State history"
+                        tp.Title = "State EventSeries"
                         Me.TabDesign.TabPages.Add(tp)
                         Me.TabDesign.SelectedIndex = 0
                         tp.Selected = True
@@ -3488,14 +3488,14 @@ Public Class Designer
 
     End Function
 
-    Private Sub ProcessHistory(ByVal a_History As RmHistory)
+    Private Sub ProcessEventSeries(ByVal a_EventSeries As RmEventSeries)
         Dim tp As New Crownwood.Magic.Controls.TabPage
 
-        SetUpHistory(a_History.NodeId)
-        mTabPageDataHistory.ProcessHistory(a_History)
+        SetUpEventSeries(a_EventSeries.NodeId)
+        mTabPageDataEventSeries.ProcessEventSeries(a_EventSeries)
 
-        If Not a_History.Data Is Nothing Then
-            ProcessDataStructure(a_History.Data)
+        If Not a_EventSeries.Data Is Nothing Then
+            ProcessDataStructure(a_EventSeries.Data)
         End If
 
     End Sub
@@ -3616,17 +3616,17 @@ Public Class Designer
                             ' Observation always has at least one event
                             Select Case tp.Name
 
-                                Case "tpDataHistory"
-                                    If Not mTabPageDataHistory Is Nothing Then
+                                Case "tpDataEventSeries"
+                                    If Not mTabPageDataEventSeries Is Nothing Then
                                         Dim rm As RmStructureCompound
-                                        Dim rmHistory As RmHistory
+                                        Dim rmEventSeries As RmEventSeries
 
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
-                                        rmHistory = mTabPageDataHistory.SaveAsHistory()
+                                        rmEventSeries = mTabPageDataEventSeries.SaveAsEventSeries()
                                         If Not mTabPageDataStructure Is Nothing Then
-                                            rmHistory.Data = mTabPageDataStructure.SaveAsStructure
+                                            rmEventSeries.Data = mTabPageDataStructure.SaveAsStructure
                                         End If
-                                        rm.Children.Add(rmHistory)
+                                        rm.Children.Add(rmEventSeries)
                                         Filemanager.Instance.Archetype.Definition.Data.Add(rm)
                                     End If
 
@@ -3672,10 +3672,10 @@ Public Class Designer
                                             For Each tp1 In Tab.TabPages
 
                                                 Select Case tp1.Name
-                                                    Case "tpRootStateHistory"
-                                                        If Not mTabPageStateHistory Is Nothing Then
+                                                    Case "tpRootStateEventSeries"
+                                                        If Not mTabPageStateEventSeries Is Nothing Then
 
-                                                            rm.Children.add(mTabPageStateHistory.SaveAsHistory)
+                                                            rm.Children.add(mTabPageStateEventSeries.SaveAsEventSeries)
                                                         End If
 
                                                     Case "tpRootStateStructure"
@@ -3741,20 +3741,20 @@ Public Class Designer
                         For Each tp In Me.TabStructure.TabPages
 
                             Select Case tp.Name
-                                Case "tpDataHistory"
-                                    If Me.chkHistory.Checked Then
-                                        If Not mTabPageDataHistory Is Nothing Then
-                                            Dim rmHistory As RmHistory
-                                            rmHistory = mTabPageDataHistory.SaveAsHistory()
+                                Case "tpDataEventSeries"
+                                    If Me.chkEventSeries.Checked Then
+                                        If Not mTabPageDataEventSeries Is Nothing Then
+                                            Dim rmEventSeries As RmEventSeries
+                                            rmEventSeries = mTabPageDataEventSeries.SaveAsEventSeries()
                                             If Not mTabPageDataStructure Is Nothing Then
-                                                rmHistory.Data = mTabPageDataStructure.SaveAsStructure
+                                                rmEventSeries.Data = mTabPageDataStructure.SaveAsStructure
                                             End If
-                                            Filemanager.Instance.Archetype.Definition.Data.Add(rmHistory)
+                                            Filemanager.Instance.Archetype.Definition.Data.Add(rmEventSeries)
                                         End If
                                     End If
 
                                 Case "tpDataStructure"
-                                    If Not Me.chkHistory.Checked Then
+                                    If Not Me.chkEventSeries.Checked Then
                                         If Not mTabPageDataStructure Is Nothing Then
                                             Dim rm As RmStructureCompound
                                             rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
@@ -3910,30 +3910,30 @@ Public Class Designer
 
 #Region "Functions associated with GUI widgets"
 
-    Private Sub chkHistory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkHistory.CheckedChanged
+    Private Sub chkEventSeries_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEventSeries.CheckedChanged
 
         ' only proceed if in interactive state
         If Filemanager.Instance.FileLoading Then Return
 
-        If chkHistory.Checked Then
-            If mTabPagesCollection.Contains("tpDataHistory") Then
+        If chkEventSeries.Checked Then
+            If mTabPagesCollection.Contains("tpDataEventSeries") Then
                 ' if one is already built
-                Me.TabStructure.TabPages.Add(mTabPagesCollection.Item("tpDataHistory"))
+                Me.TabStructure.TabPages.Add(mTabPagesCollection.Item("tpDataEventSeries"))
             Else
-                SetUpHistory()
+                SetUpEventSeries()
             End If
             ' now set the selected tab page to this one
             Dim i As Integer
             For i = 0 To Me.TabStructure.TabPages.Count - 1
-                If Me.TabStructure.TabPages(i).Name = "tpDataHistory" Then
+                If Me.TabStructure.TabPages(i).Name = "tpDataEventSeries" Then
                     Me.TabStructure.SelectedIndex = i
                 End If
             Next
         Else
             Dim tp As Crownwood.Magic.Controls.TabPage
             For Each tp In Me.TabStructure.TabPages
-                If tp.Name = "tpDataHistory" Then
-                    If Not mTabPagesCollection.Contains("tpDataHistory") Then
+                If tp.Name = "tpDataEventSeries" Then
+                    If Not mTabPagesCollection.Contains("tpDataEventSeries") Then
                         mTabPagesCollection.Add(tp.Name, tp)
                     End If
                     Me.TabStructure.TabPages.Remove(tp)
@@ -4019,7 +4019,7 @@ Public Class Designer
     Private Sub cbStructurePersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbStructurePersonState.CheckedChanged
 
         If cbStructurePersonState.Checked Then
-            'cannot have rootstate - 'Person State With History'
+            'cannot have rootstate - 'Person State With EventSeries'
             Me.cbPersonState.Visible = False
 
             If Filemanager.Instance.FileLoading Then Exit Sub
@@ -4104,10 +4104,10 @@ Public Class Designer
                 Me.tpRootStateStructure.Controls.Add(mTabPageStateStructure)
                 mTabPageStateStructure.Dock = DockStyle.Fill
 
-                mTabPageStateHistory = New TabPageHistory
-                mTabPageStateHistory.BackColor = System.Drawing.Color.LightSteelBlue
-                Me.tpRootStateHistory.Controls.Add(mTabPageStateHistory)
-                mTabPageStateHistory.Dock = DockStyle.Fill
+                mTabPageStateEventSeries = New TabPageEventSeries
+                mTabPageStateEventSeries.BackColor = System.Drawing.Color.LightSteelBlue
+                Me.tpRootStateEventSeries.Controls.Add(mTabPageStateEventSeries)
+                mTabPageStateEventSeries.Dock = DockStyle.Fill
             End If
         Else
             Dim tp As Crownwood.Magic.Controls.TabPage
@@ -4251,18 +4251,18 @@ Public Class Designer
                 pos.X = 10
                 pos.Y = 10
 
-                If Me.chkHistory.Checked Then
+                If Me.chkEventSeries.Checked Then
                     Dim gb As New GroupBox
                     Dim rel_pos As New Point
 
-                    gb.Text = "History"
+                    gb.Text = "Event Series"
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
                     gb.Location = pos
                     rel_pos.X = 20
                     rel_pos.Y = 20
-                    If Not Me.mTabPageDataHistory Is Nothing Then
-                        Me.mTabPageDataHistory.BuildInterface(gb, rel_pos)
+                    If Not Me.mTabPageDataEventSeries Is Nothing Then
+                        Me.mTabPageDataEventSeries.BuildInterface(gb, rel_pos)
                     End If
                     gb.Height = gb.Height + 10
                     Me.tpInterface.Controls.Add(gb)
@@ -4293,24 +4293,24 @@ Public Class Designer
                     Dim gb, hist As GroupBox
                     Dim rel_pos As New Point
                     gb = New GroupBox
-                    gb.Text = "State & History"
+                    gb.Text = "State & EventSeries"
                     gb.FlatStyle = FlatStyle.Popup
-                    ' add history
+                    ' add EventSeries
                     pos.X = 10
                     gb.Location = pos
 
-                    ' now add the history element
+                    ' now add the EventSeries element
                     hist = New GroupBox
                     Dim hist_pos As New Point
-                    hist.Text = "History"
+                    hist.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(81, "Event Series")
                     hist.FlatStyle = FlatStyle.Popup
                     hist_pos.X = 20
                     hist_pos.Y = 20
                     hist.Location = hist_pos
                     rel_pos.X = 20
                     rel_pos.Y = 20
-                    If Not Me.mTabPageStateHistory Is Nothing Then
-                        Me.mTabPageStateHistory.BuildInterface(hist, rel_pos)
+                    If Not Me.mTabPageStateEventSeries Is Nothing Then
+                        Me.mTabPageStateEventSeries.BuildInterface(hist, rel_pos)
                     End If
                     gb.Controls.Add(hist)
                     gb.Height = hist.Height + 10
@@ -4562,4 +4562,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

@@ -161,7 +161,7 @@ Public Class RmElement
 
             Obj = CType(media_type.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
 
-            mm.AllowableValues = ADL_Tools.Instance.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM))
+            mm.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM))
 
         Catch ex As Exception
             Debug.Assert(False)
@@ -442,7 +442,7 @@ Public Class RmElement
                             t.TypeOfTextConstraint = TextConstrainType.Terminology
                             t.ConstraintCode = CType(Obj, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).target.to_cil
                         Case "C_CODED_TERM"
-                            t.AllowableValues = ADL_Tools.Instance.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM))
+                            t.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM))
 
                             If CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM).has_assumed_value Then
                                 t.AssumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM).assumed_value, openehr.base.kernel.STRING).to_cil

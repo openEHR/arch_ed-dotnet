@@ -13,152 +13,152 @@
 '	last_change: "$LastChangedDate$"
 '
 '
+Namespace ArchetypeEditor.ADL_Classes
+    Public Class ADL_Tools
 
-Public Class ADL_Tools
-    
-    ' Singleton
-    Private mRmStructureCompound As RmStructureCompound
+        ' Singleton
+        Private mRmStructureCompound As RmStructureCompound
 
-    Private Shared mInstance As ADL_Tools
-    Public Shared ReadOnly Property Instance() As ADL_Tools
-        Get
-            If mInstance Is Nothing Then
-                mInstance = New ADL_Tools
-            End If
-
-            Return mInstance
-        End Get
-    End Property
-
-    ' The limit of the processing for references
-    Private mHighestLevelChildren As Children
-
-    Public Property HighestLevelChildren() As Children
-        Get
-            Return mHighestLevelChildren
-        End Get
-        Set(ByVal Value As Children)
-            mHighestLevelChildren = Value
-        End Set
-    End Property
-    Public Property LastProcessedStructure() As RmStructureCompound
-        ' may process a structure within a history - and need to save it
-        ' as data...so remember it here
-        Get
-            Return mRmStructureCompound
-        End Get
-        Set(ByVal value As RmStructureCompound)
-            mRmStructureCompound = value
-        End Set
-    End Property
-
-    Private Function getElementForReference(ByVal nodeid As String, ByVal the_Children As Children) As RmElement
-        Dim rm As RmStructure
-
-        For Each rm In the_Children
-            If rm.NodeId = nodeid Then
-                'can be multiple references and may have same node id
-                If rm.Type = StructureType.Element Then
-                    Return rm
+        Private Shared mInstance As ADL_Tools
+        Public Shared ReadOnly Property Instance() As ADL_Tools
+            Get
+                If mInstance Is Nothing Then
+                    mInstance = New ADL_Tools
                 End If
-            End If
 
-            If TypeOf rm Is RmCluster Then
-                Dim element As RmElement
-                element = getElementForReference(nodeid, CType(rm, RmStructureCompound).Children)
-                If Not element Is Nothing Then
-                    Return element
+                Return mInstance
+            End Get
+        End Property
+
+        ' The limit of the processing for references
+        Private mHighestLevelChildren As Children
+
+        Public Property HighestLevelChildren() As Children
+            Get
+                Return mHighestLevelChildren
+            End Get
+            Set(ByVal Value As Children)
+                mHighestLevelChildren = Value
+            End Set
+        End Property
+        Public Property LastProcessedStructure() As RmStructureCompound
+            ' may process a structure within a EventSeries - and need to save it
+            ' as data...so remember it here
+            Get
+                Return mRmStructureCompound
+            End Get
+            Set(ByVal value As RmStructureCompound)
+                mRmStructureCompound = value
+            End Set
+        End Property
+
+        Private Function getElementForReference(ByVal nodeid As String, ByVal the_Children As Children) As RmElement
+            Dim rm As RmStructure
+
+            For Each rm In the_Children
+                If rm.NodeId = nodeid Then
+                    'can be multiple references and may have same node id
+                    If rm.Type = StructureType.Element Then
+                        Return rm
+                    End If
                 End If
-            End If
-        Next
-        Return Nothing
 
-    End Function
-
-    Public Function ProcessReference(ByVal objRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF) As RmReference
-        Dim rm As RmReference
-        Dim nodeid As String
-
-        rm = New RmReference
-
-        ' get the path - this also sets the nodeid of the leaf in ref
-        ' populating the references is done at the end in case references appear before their targets
-        rm.Path = objRef.target_path.to_cil
-        rm.Occurrences = ADL_Tools.Instance.SetOccurrences(objRef.occurrences)
-
-        Return rm
-
-    End Function
-
-    Public Sub PopulateReferences(ByVal rm As RmStructureCompound)
-        Dim element As RmElement
-        Dim a_structure As RmStructure
-
-        For Each a_structure In rm.Children
-            Select Case a_structure.Type
-                Case StructureType.Reference
-                    'If a_structure.TypeName = "Reference" Then
-
-                    element = getElementForReference(a_structure.NodeId, mHighestLevelChildren)
+                If TypeOf rm Is RmCluster Then
+                    Dim element As RmElement
+                    element = getElementForReference(nodeid, CType(rm, RmStructureCompound).Children)
                     If Not element Is Nothing Then
-                        element.hasReferences = True
-                        CType(a_structure, RmReference).SetElement(element)
-                    Else
-                        a_structure = Nothing
+                        Return element
                     End If
+                End If
+            Next
+            Return Nothing
 
-                Case StructureType.Cluster
+        End Function
 
-                    If CType(a_structure, RmCluster).Children.Count > 0 Then
-                        PopulateReferences(a_structure)
-                    End If
+        Public Function ProcessReference(ByVal objRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF) As RmReference
+            Dim rm As RmReference
+            Dim nodeid As String
 
+            rm = New RmReference
+
+            ' get the path - this also sets the nodeid of the leaf in ref
+            ' populating the references is done at the end in case references appear before their targets
+            rm.Path = objRef.target_path.to_cil
+            rm.Occurrences = ADL_Tools.Instance.SetOccurrences(objRef.occurrences)
+
+            Return rm
+
+        End Function
+
+        Public Sub PopulateReferences(ByVal rm As RmStructureCompound)
+            Dim element As RmElement
+            Dim a_structure As RmStructure
+
+            For Each a_structure In rm.Children
+                Select Case a_structure.Type
+                    Case StructureType.Reference
+                        'If a_structure.TypeName = "Reference" Then
+
+                        element = getElementForReference(a_structure.NodeId, mHighestLevelChildren)
+                        If Not element Is Nothing Then
+                            element.hasReferences = True
+                            CType(a_structure, RmReference).SetElement(element)
+                        Else
+                            a_structure = Nothing
+                        End If
+
+                    Case StructureType.Cluster
+
+                        If CType(a_structure, RmCluster).Children.Count > 0 Then
+                            PopulateReferences(a_structure)
+                        End If
+
+                End Select
+            Next
+
+        End Sub
+
+        Public Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.OE_INTERVAL_INT32) As RmCardinality
+            Dim c As New RmCardinality
+
+            If cadlOccurrences.upper_unbounded Then
+                c.IsUnbounded = True
+            Else
+                c.MaxCount = cadlOccurrences.upper
+            End If
+            If Not cadlOccurrences.lower_unbounded Then
+                c.MinCount = cadlOccurrences.lower
+            End If
+            Return c
+        End Function
+
+        Public Function ProcessCodes(ByVal Constraint As openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM) As CodePhrase
+            Dim s As String
+            Dim cp As New CodePhrase
+
+            For i As Integer = 1 To Constraint.code_count
+                cp.Codes.Add(CType(Constraint.code_list.i_th(i), openehr.base.kernel.STRING).to_cil)
+            Next
+
+            cp.TerminologyID = Constraint.terminology_id.as_string.to_cil
+            Return cp
+        End Function
+
+        Function GetDomainConceptFromAssertion(ByVal assert As openehr.openehr.am.archetype.assertion.ASSERTION) As String
+            Select Case assert.expression.generating_type.to_cil
+                Case "EXPR_BINARY_OPERATOR"
+                    Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression
+                    Debug.Assert(expr.left_operand.as_string.to_cil = "domain_concept")
+                    Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil
+                Case Else
+                    Debug.Assert(False)
+                    Return "????"
             End Select
-        Next
-
-    End Sub
-
-    Public Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.OE_INTERVAL_INT32) As RmCardinality
-        Dim c As New RmCardinality
-
-        If cadlOccurrences.upper_unbounded Then
-            c.IsUnbounded = True
-        Else
-            c.MaxCount = cadlOccurrences.upper
-        End If
-        If Not cadlOccurrences.lower_unbounded Then
-            c.MinCount = cadlOccurrences.lower
-        End If
-        Return c
-    End Function
-
-    Public Function ProcessCodes(ByVal Constraint As openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM) As CodePhrase
-        Dim s As String
-        Dim cp As New CodePhrase
-
-        For i As Integer = 1 To Constraint.code_count
-            cp.Codes.Add(CType(Constraint.code_list.i_th(i), openehr.base.kernel.STRING).to_cil)
-        Next
-
-        cp.TerminologyID = Constraint.terminology_id.as_string.to_cil
-        Return cp
-    End Function
-
-    Function GetDomainConceptFromAssertion(ByVal assert As openehr.openehr.am.archetype.assertion.ASSERTION) As String
-        Select Case assert.expression.generating_type.to_cil
-            Case "EXPR_BINARY_OPERATOR"
-                Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression
-                Debug.Assert(expr.left_operand.as_string.to_cil = "domain_concept")
-                Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil
-            Case Else
-                Debug.Assert(False)
-                Return "????"
-        End Select
-    End Function
+        End Function
 
 
-End Class
-
+    End Class
+End Namespace
 '
 '***** BEGIN LICENSE BLOCK *****
 'Version: MPL 1.1/GPL 2.0/LGPL 2.1

@@ -14,7 +14,7 @@
 '
 '
 
-Public Class TabPageHistory
+Public Class TabPageEventSeries
     Inherits System.Windows.Forms.UserControl
 
     Private current_item As EventListViewItem
@@ -85,10 +85,10 @@ Public Class TabPageHistory
     Friend WithEvents ImageListEvents As System.Windows.Forms.ImageList
     Friend WithEvents TheEvents As System.Windows.Forms.ColumnHeader
     Friend WithEvents buSetRuntimeConstraint As System.Windows.Forms.Button
-    Friend WithEvents HelpProviderHistory As System.Windows.Forms.HelpProvider
+    Friend WithEvents HelpProviderEventSeries As System.Windows.Forms.HelpProvider
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageHistory))
+        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageEventSeries))
         Me.gbEventDetails = New System.Windows.Forms.GroupBox
         Me.buSetRuntimeConstraint = New System.Windows.Forms.Button
         Me.Label11 = New System.Windows.Forms.Label
@@ -126,7 +126,7 @@ Public Class TabPageHistory
         Me.ListEvents = New System.Windows.Forms.ListView
         Me.TheEvents = New System.Windows.Forms.ColumnHeader
         Me.ImageListEvents = New System.Windows.Forms.ImageList(Me.components)
-        Me.HelpProviderHistory = New System.Windows.Forms.HelpProvider
+        Me.HelpProviderEventSeries = New System.Windows.Forms.HelpProvider
         Me.gbEventDetails.SuspendLayout()
         Me.gbDuration.SuspendLayout()
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -499,7 +499,7 @@ Public Class TabPageHistory
         Me.ImageListEvents.ImageStream = CType(resources.GetObject("ImageListEvents.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageListEvents.TransparentColor = System.Drawing.Color.Transparent
         '
-        'TabPageHistory
+        'TabPageEventSeries
         '
         Me.BackColor = System.Drawing.Color.LemonChiffon
         Me.Controls.Add(Me.ListEvents)
@@ -512,10 +512,10 @@ Public Class TabPageHistory
         Me.Controls.Add(Me.comboTimeUnits)
         Me.Controls.Add(Me.butAddEvent)
         Me.Controls.Add(Me.butRemoveElement)
-        Me.HelpProviderHistory.SetHelpKeyword(Me, "HowTo/edit_history.htm")
-        Me.HelpProviderHistory.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
-        Me.Name = "TabPageHistory"
-        Me.HelpProviderHistory.SetShowHelp(Me, True)
+        Me.HelpProviderEventSeries.SetHelpKeyword(Me, "HowTo/edit_EventSeries.htm")
+        Me.HelpProviderEventSeries.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
+        Me.Name = "TabPageEventSeries"
+        Me.HelpProviderEventSeries.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(760, 352)
         Me.gbEventDetails.ResumeLayout(False)
         Me.gbDuration.ResumeLayout(False)
@@ -569,7 +569,7 @@ Public Class TabPageHistory
     Friend Function ToRichText(ByRef Text As IO.StringWriter, ByVal level As Integer)
         Dim elvi As EventListViewItem
 
-        Text.WriteLine(Space(3 * level) & "\cf1 HISTORY\cf0  = \{\par")
+        Text.WriteLine(Space(3 * level) & "\cf1 EventSeries\cf0  = \{\par")
         level = level + 1
         If Me.chkIsPeriodic.Checked Then
             Text.WriteLine(Space(3 * level) & "Periodic offset = " & Me.numPeriod.Value.ToString & " " & Me.comboTimeUnits.Text & "\par")
@@ -597,7 +597,7 @@ Public Class TabPageHistory
         Next
 
         level = level - 1
-        Text.WriteLine(Space(3 * level) & "\} -- end History\par")
+        Text.WriteLine(Space(3 * level) & "\} -- end EventSeries\par")
     End Function
 
     Friend Function ToHTML(ByRef Text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "")
@@ -652,7 +652,7 @@ Public Class TabPageHistory
 
     End Function
 
-    Friend Function ProcessHistory(ByVal rm As RmHistory)
+    Friend Function ProcessEventSeries(ByVal rm As RmEventSeries)
         Dim ev As RmEvent
         Dim HistEvent As EventListViewItem
 
@@ -671,7 +671,7 @@ Public Class TabPageHistory
         End If
 
         If rm.Children.Fixed Then
-            ' fixed history
+            ' fixed EventSeries
             Me.radioFixed.Checked = True
         Else
             Me.radioOpen.Checked = True
@@ -700,7 +700,7 @@ Public Class TabPageHistory
 
     Public ReadOnly Property ComponentType() As String
         Get
-            Return "History"
+            Return "EventSeries"
         End Get
     End Property
 
@@ -726,11 +726,11 @@ Public Class TabPageHistory
 
     End Sub
 
-    Friend Function SaveAsHistory() As RmHistory
+    Friend Function SaveAsEventSeries() As RmEventSeries
         Dim ev As EventListViewItem
-        Dim Hist As RmHistory
+        Dim Hist As RmEventSeries
 
-        Hist = New RmHistory(Me.NodeId)
+        Hist = New RmEventSeries(Me.NodeId)
 
         If Me.chkIsPeriodic.Checked Then
             Hist.Period = Me.numPeriod.Value
@@ -747,26 +747,26 @@ Public Class TabPageHistory
             Hist.Children.Add(ev.RM_Class)
         Next
 
-        SetHistoryCardinality(Hist)
+        SetEventSeriesCardinality(Hist)
 
         Return Hist
     End Function
 
-    Private Sub SetHistoryCardinality(ByVal a_history As RmHistory)
+    Private Sub SetEventSeriesCardinality(ByVal a_EventSeries As RmEventSeries)
 
         If Me.radioFixed.Checked Then
             Dim i As Integer
-            For Each evnt As RmEvent In a_history.Children
+            For Each evnt As RmEvent In a_EventSeries.Children
                 If evnt.Occurrences.IsUnbounded Then
-                    a_history.Children.Cardinality.IsUnbounded = True
+                    a_EventSeries.Children.Cardinality.IsUnbounded = True
                     Return
                 End If
                 i += evnt.Occurrences.MaxCount
             Next
-            a_history.Children.Cardinality.MaxCount = i
+            a_EventSeries.Children.Cardinality.MaxCount = i
             Return
         End If
-        a_history.Children.Cardinality.IsUnbounded = True
+        a_EventSeries.Children.Cardinality.IsUnbounded = True
     End Sub
 
     Friend Function Reset()
@@ -1434,8 +1434,8 @@ Public Class TabPageHistory
         End If
     End Sub
 
-    Private Sub TabPageHistory_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.HelpProviderHistory.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+    Private Sub TabPageEventSeries_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Me.HelpProviderEventSeries.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 End Class
 
@@ -1453,7 +1453,7 @@ End Class
 'for the specific language governing rights and limitations under the
 'License.
 '
-'The Original Code is TabPageHistory.vb.
+'The Original Code is TabPageEventSeries.vb.
 '
 'The Initial Developer of the Original Code is
 'Sam Heard, Ocean Informatics (www.oceaninformatics.biz).

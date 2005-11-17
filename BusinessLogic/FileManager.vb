@@ -167,7 +167,7 @@ Public Class FileManagerLocal
 
         If aFileName.EndsWith(".adl") Then
             If mArchetypeEngine Is Nothing Then
-                mArchetypeEngine = New ADL_Interface
+                mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
             End If
         Else
             Debug.Assert(False)
@@ -211,7 +211,7 @@ Public Class FileManagerLocal
 
     Public Sub ParserReset(Optional ByVal an_archetype_ID As ArchetypeID = Nothing)
         If mArchetypeEngine Is Nothing Then
-            mArchetypeEngine = New ADL_Interface
+            mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
         Else
             If Not an_archetype_ID Is Nothing Then
                 NewArchetype(an_archetype_ID)
@@ -270,13 +270,13 @@ Public Class FileManagerLocal
     Public Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, Optional ByVal FileType As String = "adl")
         Select Case FileType
             Case "adl", "ADL", "Adl"
-                Dim a_ontology As ADL_Ontology
+                Dim a_ontology As ArchetypeEditor.ADL_Classes.ADL_Ontology
                 Dim a_term As RmTerm
                 mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.Instance.DefaultLanguageCode)
 
                 If mArchetypeEngine.ArchetypeAvailable Then
 
-                    a_ontology = New ADL_Ontology(CType(mArchetypeEngine, ADL_Interface).ADL_Parser)
+                    a_ontology = New ArchetypeEditor.ADL_Classes.ADL_Ontology(CType(mArchetypeEngine, ArchetypeEditor.ADL_Classes.ADL_Interface).ADL_Parser)
 
                     'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
                     Filemanager.Instance.OntologyManager.Ontology = a_ontology
@@ -297,7 +297,7 @@ Public Class FileManagerLocal
         'default is to work with ADL
         'sDefaultLanguageCode = ParentFrm.DefaultLanguageCode
         'mEditor = ParentFrm
-        mArchetypeEngine = New ADL_Interface
+        mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
     End Sub
 End Class
 

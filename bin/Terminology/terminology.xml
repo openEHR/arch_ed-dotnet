@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <Terminology xmlns="http://openehr.org/Terminology.xsd">
   <Language code="af" Description="Afrikaans" />
   <Language code="sq" Description="Albanian" />
@@ -710,9 +710,9 @@
   <Concept Language="en" ConceptID="76" Rubric="Header" />
   <Concept Language="en" ConceptID="77" Rubric="Entry model" />
   <Concept Language="en" ConceptID="78" Rubric="Protocol" />
-  <Concept Language="en" ConceptID="79" Rubric="Person State with history" />
+  <Concept Language="en" ConceptID="79" Rubric="Person State with event series" />
   <Concept Language="en" ConceptID="80" Rubric="Data" />
-  <Concept Language="en" ConceptID="81" Rubric="Event History" />
+  <Concept Language="en" ConceptID="81" Rubric="Event Series" />
   <Concept Language="en" ConceptID="82" Rubric="Person State" />
   <Concept Language="en" ConceptID="83" Rubric="Display" />
   <Concept Language="en" ConceptID="84" Rubric="Interface" />

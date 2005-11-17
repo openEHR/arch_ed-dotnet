@@ -72,11 +72,6 @@ Public Class TabPageInstruction
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageInstruction))
         Me.TabControlInstruction = New Crownwood.Magic.Controls.TabControl
-        Me.tpDelta = New Crownwood.Magic.Controls.TabPage
-        Me.butRemoveElement = New System.Windows.Forms.Button
-        Me.ButAddElement = New System.Windows.Forms.Button
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.listAllowedDeltas = New System.Windows.Forms.ListBox
         Me.tpAction = New Crownwood.Magic.Controls.TabPage
         Me.tpPathway = New Crownwood.Magic.Controls.TabPage
         Me.tpConditions = New Crownwood.Magic.Controls.TabPage
@@ -85,15 +80,20 @@ Public Class TabPageInstruction
         Me.checkListConditions = New System.Windows.Forms.CheckedListBox
         Me.gbTiming = New System.Windows.Forms.GroupBox
         Me.checkListTiming = New System.Windows.Forms.CheckedListBox
+        Me.tpDelta = New Crownwood.Magic.Controls.TabPage
+        Me.butRemoveElement = New System.Windows.Forms.Button
+        Me.ButAddElement = New System.Windows.Forms.Button
+        Me.Label1 = New System.Windows.Forms.Label
+        Me.listAllowedDeltas = New System.Windows.Forms.ListBox
         Me.ContextMenuPathway = New System.Windows.Forms.ContextMenu
         Me.MenuAdd = New System.Windows.Forms.MenuItem
         Me.PanelBaseTop = New System.Windows.Forms.Panel
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
-        Me.tpDelta.SuspendLayout()
         Me.tpConditions.SuspendLayout()
         Me.PanelTiming.SuspendLayout()
         Me.gbConditions.SuspendLayout()
         Me.gbTiming.SuspendLayout()
+        Me.tpDelta.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControlInstruction
@@ -107,66 +107,13 @@ Public Class TabPageInstruction
         Me.TabControlInstruction.Location = New System.Drawing.Point(0, 24)
         Me.TabControlInstruction.Name = "TabControlInstruction"
         Me.TabControlInstruction.PositionTop = True
-        Me.TabControlInstruction.SelectedIndex = 0
-        Me.TabControlInstruction.SelectedTab = Me.tpAction
+        Me.TabControlInstruction.SelectedIndex = 3
+        Me.TabControlInstruction.SelectedTab = Me.tpDelta
         Me.HelpProviderInstruction.SetShowHelp(Me.TabControlInstruction, True)
         Me.TabControlInstruction.Size = New System.Drawing.Size(848, 400)
         Me.TabControlInstruction.TabIndex = 0
         Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpAction, Me.tpPathway, Me.tpConditions, Me.tpDelta})
         Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpDelta
-        '
-        Me.tpDelta.Controls.Add(Me.butRemoveElement)
-        Me.tpDelta.Controls.Add(Me.ButAddElement)
-        Me.tpDelta.Controls.Add(Me.Label1)
-        Me.tpDelta.Controls.Add(Me.listAllowedDeltas)
-        Me.tpDelta.Location = New System.Drawing.Point(0, 0)
-        Me.tpDelta.Name = "tpDelta"
-        Me.tpDelta.Selected = False
-        Me.tpDelta.Size = New System.Drawing.Size(848, 374)
-        Me.tpDelta.TabIndex = 3
-        Me.tpDelta.Title = "Allowable changes"
-        '
-        'butRemoveElement
-        '
-        Me.butRemoveElement.BackColor = System.Drawing.SystemColors.Control
-        Me.butRemoveElement.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.butRemoveElement.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.butRemoveElement.Image = CType(resources.GetObject("butRemoveElement.Image"), System.Drawing.Image)
-        Me.butRemoveElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveElement.Location = New System.Drawing.Point(200, 72)
-        Me.butRemoveElement.Name = "butRemoveElement"
-        Me.butRemoveElement.Size = New System.Drawing.Size(24, 25)
-        Me.butRemoveElement.TabIndex = 34
-        '
-        'ButAddElement
-        '
-        Me.ButAddElement.BackColor = System.Drawing.SystemColors.Control
-        Me.ButAddElement.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButAddElement.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ButAddElement.Image = CType(resources.GetObject("ButAddElement.Image"), System.Drawing.Image)
-        Me.ButAddElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.ButAddElement.Location = New System.Drawing.Point(200, 40)
-        Me.ButAddElement.Name = "ButAddElement"
-        Me.ButAddElement.Size = New System.Drawing.Size(24, 25)
-        Me.ButAddElement.TabIndex = 33
-        '
-        'Label1
-        '
-        Me.Label1.Location = New System.Drawing.Point(112, 16)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(144, 24)
-        Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Allowable changes"
-        '
-        'listAllowedDeltas
-        '
-        Me.listAllowedDeltas.ItemHeight = 17
-        Me.listAllowedDeltas.Location = New System.Drawing.Point(232, 40)
-        Me.listAllowedDeltas.Name = "listAllowedDeltas"
-        Me.listAllowedDeltas.Size = New System.Drawing.Size(264, 157)
-        Me.listAllowedDeltas.TabIndex = 0
         '
         'tpAction
         '
@@ -174,6 +121,7 @@ Public Class TabPageInstruction
         Me.HelpProviderInstruction.SetHelpNavigator(Me.tpAction, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpAction.Location = New System.Drawing.Point(0, 0)
         Me.tpAction.Name = "tpAction"
+        Me.tpAction.Selected = False
         Me.HelpProviderInstruction.SetShowHelp(Me.tpAction, True)
         Me.tpAction.Size = New System.Drawing.Size(848, 374)
         Me.tpAction.TabIndex = 2
@@ -239,11 +187,63 @@ Public Class TabPageInstruction
         '
         'checkListTiming
         '
-        Me.checkListTiming.Items.AddRange(New Object() {"Start date/time", "Finish date/time", "Action duration", "Earliest start date/time", "Earliest completed date/time", "Latest start date/time", "Latest completed date/time", "Allow instruction repeats", "Number of repeats"})
+        Me.checkListTiming.Items.AddRange(New Object() {"Start date/time", "Finish date/time", "Action duration", "Earliest start date/time", "Earliest completed date/time", "Latest start date/time", "Latest completed date/time", "Allow instruction repeats", "Number of repeats", "Minimum repeat interval", "Maximum repeat interval"})
         Me.checkListTiming.Location = New System.Drawing.Point(16, 24)
         Me.checkListTiming.Name = "checkListTiming"
         Me.checkListTiming.Size = New System.Drawing.Size(240, 213)
         Me.checkListTiming.TabIndex = 0
+        '
+        'tpDelta
+        '
+        Me.tpDelta.Controls.Add(Me.butRemoveElement)
+        Me.tpDelta.Controls.Add(Me.ButAddElement)
+        Me.tpDelta.Controls.Add(Me.Label1)
+        Me.tpDelta.Controls.Add(Me.listAllowedDeltas)
+        Me.tpDelta.Location = New System.Drawing.Point(0, 0)
+        Me.tpDelta.Name = "tpDelta"
+        Me.tpDelta.Size = New System.Drawing.Size(848, 374)
+        Me.tpDelta.TabIndex = 3
+        Me.tpDelta.Title = "Allowable changes"
+        '
+        'butRemoveElement
+        '
+        Me.butRemoveElement.BackColor = System.Drawing.SystemColors.Control
+        Me.butRemoveElement.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.butRemoveElement.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butRemoveElement.Image = CType(resources.GetObject("butRemoveElement.Image"), System.Drawing.Image)
+        Me.butRemoveElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butRemoveElement.Location = New System.Drawing.Point(200, 72)
+        Me.butRemoveElement.Name = "butRemoveElement"
+        Me.butRemoveElement.Size = New System.Drawing.Size(24, 25)
+        Me.butRemoveElement.TabIndex = 34
+        '
+        'ButAddElement
+        '
+        Me.ButAddElement.BackColor = System.Drawing.SystemColors.Control
+        Me.ButAddElement.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButAddElement.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ButAddElement.Image = CType(resources.GetObject("ButAddElement.Image"), System.Drawing.Image)
+        Me.ButAddElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.ButAddElement.Location = New System.Drawing.Point(200, 40)
+        Me.ButAddElement.Name = "ButAddElement"
+        Me.ButAddElement.Size = New System.Drawing.Size(24, 25)
+        Me.ButAddElement.TabIndex = 33
+        '
+        'Label1
+        '
+        Me.Label1.Location = New System.Drawing.Point(112, 16)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(144, 24)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Allowable changes"
+        '
+        'listAllowedDeltas
+        '
+        Me.listAllowedDeltas.ItemHeight = 17
+        Me.listAllowedDeltas.Location = New System.Drawing.Point(232, 40)
+        Me.listAllowedDeltas.Name = "listAllowedDeltas"
+        Me.listAllowedDeltas.Size = New System.Drawing.Size(264, 157)
+        Me.listAllowedDeltas.TabIndex = 0
         '
         'ContextMenuPathway
         '
@@ -269,11 +269,11 @@ Public Class TabPageInstruction
         Me.Controls.Add(Me.PanelBaseTop)
         Me.Name = "TabPageInstruction"
         Me.Size = New System.Drawing.Size(848, 424)
-        Me.tpDelta.ResumeLayout(False)
         Me.tpConditions.ResumeLayout(False)
         Me.PanelTiming.ResumeLayout(False)
         Me.gbConditions.ResumeLayout(False)
         Me.gbTiming.ResumeLayout(False)
+        Me.tpDelta.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -375,16 +375,6 @@ Public Class TabPageInstruction
 
         Return rm
     End Function
-
-    Private Sub ButAddElement_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddElement.Click
-        'Dim ae() As ArchetypeElement
-
-        'ae = OceanArchetypeEditor.Instance.ChooseInternal(Me.mActionSpecification.Elements, Me.listAllowedDeltas.Items)
-        'If Not ae Is Nothing Then
-        '    listAllowedDeltas.Items.AddRange(ae)
-        'End If
-
-    End Sub
 
     Private Sub butAddItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddElement.Click
 

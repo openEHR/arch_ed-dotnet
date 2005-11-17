@@ -15,161 +15,161 @@
 '
 
 Option Strict On
+Namespace ArchetypeEditor.ADL_Classes
+    Class ADL_Interface
+        Implements Parser
+        Private EIF_adlInterface As openehr.adl_parser.interface.ADL_INTERFACE
+        Private mFileName As String
+        Private an_Archetype As ADL_Archetype
+        Private mOpenFileError As Boolean
+        Private mWriteFileError As Boolean
 
-Class ADL_Interface
-    Implements Parser
-    Private EIF_adlInterface As openehr.adl_parser.interface.ADL_INTERFACE
-    Private mFileName As String
-    Private an_Archetype As ADL_Archetype
-    Private mOpenFileError As Boolean
-    Private mWriteFileError As Boolean
+        Public ReadOnly Property FileName() As String Implements Parser.FileName
+            Get
+                Return mFileName
+            End Get
+        End Property
+        Public ReadOnly Property ADL_Parser() As openehr.adl_parser.interface.ADL_INTERFACE
+            Get
+                Return EIF_adlInterface
+            End Get
+        End Property
+        Public ReadOnly Property AvailableFormats() As ArrayList Implements Parser.AvailableFormats
+            Get
+                Dim formats As New ArrayList
 
-    Public ReadOnly Property FileName() As String Implements Parser.FileName
-        Get
-            Return mFileName
-        End Get
-    End Property
-    Public ReadOnly Property ADL_Parser() As openehr.adl_parser.interface.ADL_INTERFACE
-        Get
-            Return EIF_adlInterface
-        End Get
-    End Property
-    Public ReadOnly Property AvailableFormats() As ArrayList Implements Parser.AvailableFormats
-        Get
-            Dim formats As New ArrayList
+                For i As Integer = 1 To EIF_adlInterface.archetype_serialiser_formats.count
+                    formats.Add(CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), openehr.base.kernel.STRING).to_cil)
+                Next
+                Return formats
+            End Get
+        End Property
+        Public ReadOnly Property TypeName() As String Implements Parser.TypeName
+            Get
+                Return "adl"
+            End Get
+        End Property
+        Public ReadOnly Property Status() As String Implements Parser.Status
+            Get
+                Return EIF_adlInterface.status.to_cil
+            End Get
+        End Property
+        Public ReadOnly Property ArchetypeAvailable() As Boolean Implements Parser.ArchetypeAvailable
+            Get
+                Return Not an_Archetype Is Nothing
+            End Get
+        End Property
+        Public ReadOnly Property Archetype() As Archetype Implements Parser.Archetype
+            Get
+                Return an_Archetype
+            End Get
+        End Property
+        Public ReadOnly Property OpenFileError() As Boolean Implements Parser.OpenFileError
+            Get
+                Return mOpenFileError
+            End Get
+        End Property
+        Public ReadOnly Property WriteFileError() As Boolean Implements Parser.WriteFileError
+            Get
+                Return mWriteFileError
+            End Get
+        End Property
 
-            For i As Integer = 1 To EIF_adlInterface.archetype_serialiser_formats.count
-                formats.Add(CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), openehr.base.kernel.STRING).to_cil)
-            Next
-            Return formats
-        End Get
-    End Property
-    Public ReadOnly Property TypeName() As String Implements Parser.TypeName
-        Get
-            Return "adl"
-        End Get
-    End Property
-    Public ReadOnly Property Status() As String Implements Parser.Status
-        Get
-            Return EIF_adlInterface.status.to_cil
-        End Get
-    End Property
-    Public ReadOnly Property ArchetypeAvailable() As Boolean Implements Parser.ArchetypeAvailable
-        Get
-            Return Not an_Archetype Is Nothing
-        End Get
-    End Property
-    Public ReadOnly Property Archetype() As Archetype Implements Parser.Archetype
-        Get
-            Return an_Archetype
-        End Get
-    End Property
-    Public ReadOnly Property OpenFileError() As Boolean Implements Parser.OpenFileError
-        Get
-            Return mOpenFileError
-        End Get
-    End Property
-    Public ReadOnly Property WriteFileError() As Boolean Implements Parser.WriteFileError
-        Get
-            Return mWriteFileError
-        End Get
-    End Property
+        Public Sub ResetAll() Implements Parser.ResetAll
+            EIF_adlInterface.reset()
+        End Sub
 
-    Public Sub ResetAll() Implements Parser.ResetAll
-        EIF_adlInterface.reset()
-    End Sub
+        Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
+            If Me.AvailableFormats.Contains(a_format) Then
+                Try
+                    an_Archetype.MakeParseTree()
+                    EIF_adlInterface.serialise_archetype(openehr.base.kernel.Create.STRING.make_from_cil(a_format))
+                Catch e As Exception
+                    Debug.Assert(False, e.Message)
+                    MessageBox.Show(AE_Constants.Instance.Error_saving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+        End Sub
 
-    Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
-        If Me.AvailableFormats.Contains(a_format) Then
+
+        Public Sub OpenFile(ByVal FileName As String, ByRef TheOntologyManager As OntologyManager) Implements Parser.OpenFile
+
+            Dim current_culture As System.Globalization.CultureInfo
+            Dim replace_culture As Boolean
+
+            mOpenFileError = True  ' default unless all goes wel
+            mFileName = FileName
+
+            ' ADDED 2004-11-18
+            ' Sam Heard
+            ' This code is essential to ensure that the parser reads regardless of the local culture
+
+            If System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator <> "." Then
+                current_culture = System.Globalization.CultureInfo.CurrentCulture
+                replace_culture = True
+                System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture()
+            End If
+
+            EIF_adlInterface.open_adl_file(openehr.base.kernel.Create.STRING.make_from_cil(FileName))
+
+            ' check that file openned successfully by checking status
+            If EIF_adlInterface.archetype_source_loaded Then
+                EIF_adlInterface.parse_archetype()
+                If EIF_adlInterface.parse_succeeded Then
+                    Dim the_ontology As ADL_Ontology
+                    the_ontology = New ADL_Ontology(EIF_adlInterface)
+                    TheOntologyManager.Ontology = the_ontology
+                    an_Archetype = New ADL_Archetype(EIF_adlInterface.adl_engine.archetype, EIF_adlInterface.adl_engine)
+                    If EIF_adlInterface.archetype_available Then
+                        mOpenFileError = False
+                    End If
+                End If
+            End If
+
+            If replace_culture Then
+                System.Threading.Thread.CurrentThread.CurrentCulture = current_culture
+            End If
+        End Sub
+
+        Public Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal LanguageCode As String) Implements Parser.NewArchetype
+            an_Archetype = New ADL_Archetype(EIF_adlInterface.adl_engine, an_ArchetypeID, LanguageCode)
+        End Sub
+
+        Public Sub WriteFile(ByVal FileName As String, Optional ByVal output_format As String = "adl") Implements Parser.WriteFile
+            'Change from intermediate format to ADL
+            ' then make it again
+
+            mWriteFileError = True ' default is that an error occurred
             Try
                 an_Archetype.MakeParseTree()
-                EIF_adlInterface.serialise_archetype(openehr.base.kernel.Create.STRING.make_from_cil(a_format))
-            Catch e As Exception
-                Debug.Assert(False, e.Message)
-                MessageBox.Show(AE_Constants.Instance.Error_saving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        End If
-    End Sub
-
-
-    Public Sub OpenFile(ByVal FileName As String, ByRef TheOntologyManager As OntologyManager) Implements Parser.OpenFile
-
-        Dim current_culture As System.Globalization.CultureInfo
-        Dim replace_culture As Boolean
-
-        mOpenFileError = True  ' default unless all goes wel
-        mFileName = FileName
-
-        ' ADDED 2004-11-18
-        ' Sam Heard
-        ' This code is essential to ensure that the parser reads regardless of the local culture
-
-        If System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator <> "." Then
-            current_culture = System.Globalization.CultureInfo.CurrentCulture
-            replace_culture = True
-            System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture()
-        End If
-
-        EIF_adlInterface.open_adl_file(openehr.base.kernel.Create.STRING.make_from_cil(FileName))
-
-        ' check that file openned successfully by checking status
-        If EIF_adlInterface.archetype_source_loaded Then
-            EIF_adlInterface.parse_archetype()
-            If EIF_adlInterface.parse_succeeded Then
-                Dim the_ontology As ADL_Ontology
-                the_ontology = New ADL_Ontology(EIF_adlInterface)
-                TheOntologyManager.Ontology = the_ontology
-                an_Archetype = New ADL_Archetype(EIF_adlInterface.adl_engine.archetype, EIF_adlInterface.adl_engine)
                 If EIF_adlInterface.archetype_available Then
-                    mOpenFileError = False
-                End If
-            End If
-        End If
-
-        If replace_culture Then
-            System.Threading.Thread.CurrentThread.CurrentCulture = current_culture
-        End If
-    End Sub
-
-    Public Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal LanguageCode As String) Implements Parser.NewArchetype
-        an_Archetype = New ADL_Archetype(EIF_adlInterface.adl_engine, an_ArchetypeID, LanguageCode)
-    End Sub
-
-    Public Sub WriteFile(ByVal FileName As String, Optional ByVal output_format As String = "adl") Implements Parser.WriteFile
-        'Change from intermediate format to ADL
-        ' then make it again
-
-        mWriteFileError = True ' default is that an error occurred
-        Try
-            an_Archetype.MakeParseTree()
-            If EIF_adlInterface.archetype_available Then
-                If EIF_adlInterface.has_archetype_serialiser_format(openehr.base.kernel.Create.STRING.make_from_cil(output_format)) Then
-                    EIF_adlInterface.save_archetype(openehr.base.kernel.Create.STRING.make_from_cil(FileName), openehr.base.kernel.Create.STRING.make_from_cil(output_format))
-                    If EIF_adlInterface.exception_encountered Then
-                        MessageBox.Show(EIF_adlInterface.status.to_cil)
-                        EIF_adlInterface.reset()
-                    ElseIf Not EIF_adlInterface.save_succeeded Then
-                        MessageBox.Show(EIF_adlInterface.status.to_cil)
+                    If EIF_adlInterface.has_archetype_serialiser_format(openehr.base.kernel.Create.STRING.make_from_cil(output_format)) Then
+                        EIF_adlInterface.save_archetype(openehr.base.kernel.Create.STRING.make_from_cil(FileName), openehr.base.kernel.Create.STRING.make_from_cil(output_format))
+                        If EIF_adlInterface.exception_encountered Then
+                            MessageBox.Show(EIF_adlInterface.status.to_cil)
+                            EIF_adlInterface.reset()
+                        ElseIf Not EIF_adlInterface.save_succeeded Then
+                            MessageBox.Show(EIF_adlInterface.status.to_cil)
+                        Else
+                            mWriteFileError = False
+                        End If
                     Else
-                        mWriteFileError = False
+                        MessageBox.Show("Archetype format - " & output_format & " -  no longer available")
                     End If
                 Else
-                    MessageBox.Show("Archetype format - " & output_format & " -  no longer available")
+                    MessageBox.Show("Archetype not available - error on making parse tree")
                 End If
-            Else
-                MessageBox.Show("Archetype not available - error on making parse tree")
-            End If
-        Catch ex As Exception
-            MessageBox.Show(AE_Constants.Instance.Error_saving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
+            Catch ex As Exception
+                MessageBox.Show(AE_Constants.Instance.Error_saving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Sub
 
-    Sub New()
-        EIF_adlInterface = openehr.adl_parser.interface.Create.ADL_INTERFACE.make
-    End Sub
+        Sub New()
+            EIF_adlInterface = openehr.adl_parser.interface.Create.ADL_INTERFACE.make
+        End Sub
 
-End Class
-
+    End Class
+End Namespace
 
 '
 '***** BEGIN LICENSE BLOCK *****

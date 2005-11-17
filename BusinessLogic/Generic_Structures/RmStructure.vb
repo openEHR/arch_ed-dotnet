@@ -137,7 +137,7 @@ Public Class RmStructure
 
     Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
         sNodeId = EIF_Structure.node_id.to_cil
-        cOccurrences = ADL_Tools.Instance.SetOccurrences(EIF_Structure.occurrences)
+        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.SetOccurrences(EIF_Structure.occurrences)
         mType = ReferenceModel.Instance.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
 
         If EIF_Structure.generating_type.to_cil = "C_COMPLEX_OBJECT" Then

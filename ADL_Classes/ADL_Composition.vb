@@ -16,6 +16,8 @@
 
 Option Explicit On 
 
+Namespace ArchetypeEditor.ADL_Classes
+
 Class ADL_COMPOSITION
     Inherits RmComposition
 
@@ -47,7 +49,9 @@ Class ADL_COMPOSITION
         Next
     End Sub
 
-End Class
+    End Class
+
+End Namespace
 
 '
 '***** BEGIN LICENSE BLOCK *****

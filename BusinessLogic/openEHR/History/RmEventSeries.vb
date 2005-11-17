@@ -16,7 +16,7 @@
 
 Option Explicit On 
 
-Class RmHistory
+Class RmEventSeries
     Inherits RmStructureCompound
 
     Private colEvt As New EventCollection
@@ -64,16 +64,16 @@ Class RmHistory
     End Property
 
     Public Overrides Function copy() As RmStructure
-        Dim rme As RmHistory
+        Dim rme As RmEventSeries
         rme.colEvt = colEvt.Copy
         rme.cOccurrences = Me.cOccurrences
         rme.sNodeId = Me.sNodeId
         Return rme
     End Function
 
-    Sub New(ByVal EIF_history As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.new(EIF_history)
-        ProcessHistory(EIF_history)
+    Sub New(ByVal EIF_EventSeries As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        MyBase.new(EIF_EventSeries)
+        ProcessEventSeries(EIF_EventSeries)
     End Sub
 
     Sub New(ByVal NodeId As String)
@@ -94,12 +94,12 @@ Class RmHistory
         Return child
     End Function
 
-    Private Sub ProcessHistory(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Private Sub ProcessEventSeries(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
         Dim i As Integer
 
-        cOccurrences = ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
+        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
 
         For i = 1 To ObjNode.Attributes.Count
             an_attribute = ObjNode.Attributes.i_th(i)
@@ -108,19 +108,19 @@ Class RmHistory
                     mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
                 Case "period"
-                    Dim d As Duration
+                    Dim d As ArchetypeEditor.ADL_Classes.Duration
 
                     period = an_attribute.children.first
                     d.ISO_duration = period.item.as_string.to_cil
                     iPeriod = d.GUI_duration
                     sPeriodUnits = d.GUI_Units
 
-                Case "items", "events"  'events is obsolete
+                Case "items", "events"  'events is OBSOLETE
                     Dim an_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                     Dim ii As Integer
 
                     ' empty the remembered structure
-                    ADL_Tools.Instance.LastProcessedStructure = Nothing
+                    ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = Nothing
 
                     colEvt.Cardinality.SetFromOpenEHRCardinality(an_attribute.cardinality)
 
@@ -129,7 +129,7 @@ Class RmHistory
                         an_Event = an_attribute.children.i_th(ii)
                         ' process the event and expose the data structure if it is present
                         ' as ADL_Data property
-                        ' this means there is only one structure per history as in the GUI -
+                        ' this means there is only one structure per EventSeries as in the GUI -
                         ' can be extended in future
 
                         colEvt.Add(New RmEvent(an_Event))
@@ -137,13 +137,13 @@ Class RmHistory
 
                     ' the data definition is on one event at present
                     ' this is passed to the ADL_tools during event processing
-                    ' and placed on the history at this point
+                    ' and placed on the EventSeries at this point
 
-                    If Not ADL_Tools.Instance.LastProcessedStructure Is Nothing Then
-                        rmData = ADL_Tools.Instance.LastProcessedStructure
+                    If Not ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure Is Nothing Then
+                        rmData = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure
                     End If
                 Case Else
-                    MessageBox.Show(AE_Constants.Instance.Incorrect_format & ": illegal attribute - " & an_attribute.rm_attribute_name.to_cil & " in HISTORY", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show(AE_Constants.Instance.Incorrect_format & ": illegal attribute - " & an_attribute.rm_attribute_name.to_cil & " in EventSeries", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Select
         Next
     End Sub
@@ -163,7 +163,7 @@ End Class
 'for the specific language governing rights and limitations under the
 'License.
 '
-'The Original Code is RmHistory.vb.
+'The Original Code is RmEventSeries.vb.
 '
 'The Initial Developer of the Original Code is
 'Sam Heard, Ocean Informatics (www.oceaninformatics.biz).
