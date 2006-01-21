@@ -340,7 +340,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "BusinessLogic\openEHR\History\RmEventSeries.vb"
+                    RelPath = "BusinessLogic\openEHR\History\RmHistory.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

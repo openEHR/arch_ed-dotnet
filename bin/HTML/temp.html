@@ -2,13 +2,13 @@
 <HEAD>
 <meta http-equiv="Content-Language" content="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Microbiology laboratory observations</title>
+<title>Body weight</title>
 </HEAD>
 <BODY>
 <table border="0" cellpadding="2" width="100%">
 <tr>
 <td width="100%" bgcolor="#000080">
-<h1 align="center"><font color="#FFFFFF">Microbiology laboratory observations</font></h1>
+<h1 align="center"><font color="#FFFFFF">Body weight</font></h1>
 </td>
 </tr>
 </table>
@@ -19,8 +19,8 @@
 <td width="50%"><h4>Identification:</h4></td>
 </tr>
 <tr>
-<td width="50%">The observations made in the microbiology laboratory based on a single specimen. This archetype can be repeated in one full microbiology report</td>
-<td width="50%"><i>Id</i>: openEHR-EHR-OBSERVATION.microbiology.v1<br><i>Reference model</i>: openEHR_EHR</td>
+<td width="50%">Total body weight - a surrogate for naked body weight</td>
+<td width="50%"><i>Id</i>: openEHR-EHR-OBSERVATION.body_weight.v1<br><i>Reference model</i>: openEHR_EHR</td>
 </tr>
 </table>
 <hr>
@@ -31,7 +31,7 @@
 </td>
 </tr>
 </table>
-<p>Structure = TREE, ordered</p>
+<p>Structure = SINGLE</p>
 <table border="1" cellpadding="2" width="100%">
 <tr  bgcolor="#FFFF53">
 <td width="20%"><h4>Concept</h4></td>
@@ -39,199 +39,48 @@
 <td width = "20%"><h4>Constraints</h4></td>
 <td width="20%"><h4>Values</h4></td>
 </tr>
-
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Result label</b></td></table></td>
-<td>The label applied to this result by the laboratory</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Specimen</i></b></td></table></td>
-<td>Details about the specimen received</td>
-<td><b><i>Cluster</b></i><br>
-0..1, fixed, ordered</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Sample description</b></td></table></td>
-<td>Description of the sample</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Site</b></td></table></td>
-<td>The site of sampling</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Sampling method</b></td></table></td>
-<td>The method used for sampling</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/truefalse.gif" width="32" height="32" align="middle"><b>Sterile field</b></td></table></td>
-<td>Was the sample taken from a sterile field</td>
-<td><b><i>Boolean</i></b><br>
-0..1</td>
-<td>
-False
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Macroscopic findings</i></b></td></table></td>
-<td>Observations without microscopy</td>
-<td><b><i>Cluster</b></i><br>
-0..1, fixed, ordered</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/count.gif" width="32" height="32" align="middle"><b>Colony count</b></td></table></td>
-<td>The count of colonies</td>
-<td><b><i>Count</i></b><br>
-0..1</td>
-<td>
-0..*
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Description</b></td></table></td>
-<td>Description of macroscopic findings</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Microscopic findings</i></b></td></table></td>
-<td>Findings under microscopy</td>
-<td><b><i>Cluster</b></i><br>
-0..1, fixed, ordered</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/count.gif" width="32" height="32" align="middle"><b>Microscopy field</b></td></table></td>
-<td>Microscopy field counts</td>
-<td><b><i>Count</i></b><br>
-0..1</td>
-<td>
-0..*
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Description</b></td></table></td>
-<td>Description of the microscopic findings</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Culture</i></b></td></table></td>
-<td>Group of findings related to microbiological culture</td>
-<td><b><i>Cluster</b></i><br>
-0..*, fixed, ordered</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Micro-organisam identified</i></b></td></table></td>
-<td>The name of the micro-organism identified</td>
-<td><b><i>Cluster</b></i><br>
-0..*</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="40"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Therapeutic susceptibilities</i></b></td></table></td>
-<td>A cluster containing the therapeutic susceptibilities for the named organisem</td>
-<td><b><i>Cluster</b></i><br>
-0..1</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="60"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Antimicrobial agent</i></b></td></table></td>
-<td>The antibiotic or other anti-microbiological agent tested</td>
-<td><b><i>Cluster</b></i><br>
-0..*</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="80"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Sensitivity</b></td></table></td>
-<td>Sensitivity of the identified microorganism to the therapeutic agennt</td>
-<td><b><i>Ordinal</i></b><br>
-0..1</td>
-<td>
-0: <i> Not sensitive<i><br> 5: <i> Borderline sensitivity<i><br> 10: <i> Sensitive<i><br>
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="80"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Quantified sensitivity</b></td></table></td>
-<td>A measure of the sensitivity based on a quantifiable method</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Weight</b></td></table></td>
+<td>The weight of the whole body</td>
 <td><b><i>Quantity</i></b><br>
-0..1</td>
+1..1</td>
 <td>
-Property = concentration<br>
-  Units = %; >=0; <=100;<br>
+Property = mass<br>
+  Units = kg; >=0; <=1000;<br>
 </td>
 </tr>
+</table>
+<hr>
+<table border="0" cellpadding="2" width="100%">
 <tr>
-<td><table><tr><td width="80"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Method of sensitivity</b></td></table></td>
-<td>The method used to determine sensitivity</td>
+<td width="100%" bgcolor="#9DAAFF">
+<h2>State</h2>
+</td>
+</tr>
+</table>
+<p>Structure = LIST, ordered</p>
+<table border="1" cellpadding="2" width="100%">
+<tr  bgcolor="#9DAAFF">
+<td width="20%"><h4>Concept</h4></td>
+<td width = "40%"><h4>Description</h4></td>
+<td width = "20%"><h4>Constraints</h4></td>
+<td width="20%"><h4>Values</h4></td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Clothing</b></td></table></td>
+<td>The amount of clothes worn at the time of weighing</td>
 <td><b><i>Text</i></b><br>
 0..1</td>
 <td>
-Internal;
+Internal; 'Lightly clothed/underwear', 'Naked', 'Fully dressed', 'Nappy'
 </td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Culture method</b></td></table></td>
-<td>The method of culturing</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Internal;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Findings</b></td></table></td>
-<td>Any information specific to the culture</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Overall comment</b></td></table></td>
-<td>Any overall comment</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
 </tr>
 </table>
 <hr>
 <table border="0" cellpadding="2" width="100%">
 <tr>
 <td width="100%" bgcolor="#AAFE92">
-<h2>History</h2>
+<h2>Event Series</h2>
 </td>
 </tr>
 </table>
@@ -245,9 +94,23 @@ Text;
 </tr>
 <tr>
 <td><b>Any event</b></td>
-<td><b>Event of reporting - only used for serial measurements</b></td>
+<td><b>Any event - based on offset from the baseline</b></td>
 <td>
-Reference = PointInTime<br>
+Event
+</tr>
+<tr>
+<td><b>Weight loss</b></td>
+<td><b>Amount of weight lost over the period</b></td>
+<td>
+IntervalEvent
+<br>Event math function = delta (display as absolute)
+</tr>
+<tr>
+<td><b>Weight gain</b></td>
+<td><b>Amount of weight gained over the period</b></td>
+<td>
+IntervalEvent
+<br>Event math function = delta
 </tr>
 
 </table>
@@ -260,7 +123,7 @@ Reference = PointInTime<br>
 </td>
 </tr>
 </table>
-<p>Structure = LIST</p>
+<p>Structure = LIST, ordered</p>
 <table border="1" cellpadding="2" width="100%">
 <tr  bgcolor="#FF717B">
 <td width="20%"><h4>Concept</h4></td>
@@ -269,46 +132,10 @@ Reference = PointInTime<br>
 <td width="20%"><h4>Values</h4></td>
 </tr>
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Microscope type</b></td></table></td>
-<td>The type of microscope used for microscopy</td>
-<td><b><i>Text</i></b><br>
-0..*</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Stain</b></td></table></td>
-<td>Type of stain used in the microscopy</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Device</b></td></table></td>
+<td>The name of the weighing device</td>
 <td><b><i>Text</i></b><br>
 0..1</td>
-<td>
-Internal;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Laboratory identifier</b></td></table></td>
-<td>The identifier used in the laboratory for this test</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Adjustments</b></td></table></td>
-<td>Any adjustments made</td>
-<td><b><i>Text</i></b><br>
-0..*</td>
-<td>
-Text;
-</td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Methods</b></td></table></td>
-<td>Any methods used</td>
-<td><b><i>Text</i></b><br>
-0..*</td>
 <td>
 Text;
 </td>

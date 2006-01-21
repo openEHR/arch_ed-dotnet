@@ -27,8 +27,8 @@ Public Class Designer
     Private mComponentsCollection As New Collection
     Private mTabPagesCollection As New Collections.Hashtable
     Private mBaseTabPagesCollection As New Collection
-    Private mTabPageDataEventSeries As TabPageEventSeries
-    Private mTabPageStateEventSeries As TabPageEventSeries
+    Private mTabPageDataEventSeries As TabpageHistory
+    Private mTabPageStateEventSeries As TabpageHistory
     Private WithEvents mTabPageDataStructure As TabPageStructure
     Private mTabPageDataStateStructure As TabPageStructure
     Private mTabPageProtocolStructure As TabPageStructure
@@ -2817,6 +2817,8 @@ Public Class Designer
         Me.cbProtocol.Checked = False
         Me.cbStructurePersonState.Checked = False
         Me.cbProtocol.Checked = False
+        'set the display panel to nothing
+        Me.richtextArchetype.Clear()
 
         'Get rid of the languages from menu
         Me.MenuLanguageChange.MenuItems.Clear()
@@ -2993,7 +2995,7 @@ Public Class Designer
         Dim tp As New Crownwood.Magic.Controls.TabPage
         Dim file_loading As Boolean
 
-        mTabPageDataEventSeries = New TabPageEventSeries
+        mTabPageDataEventSeries = New TabpageHistory
         tp.Name = "tpDataEventSeries"
         tp.Title = "Events"
         mTabPagesCollection.Add(tp.Name, tp)
@@ -3436,7 +3438,7 @@ Public Class Designer
                     Me.TabDesign.TabPages.Add(Me.mBaseTabPagesCollection.Item("tpRootState"))
                     Me.tpRootState.Visible = True
 
-                    mTabPageStateEventSeries = New TabPageEventSeries
+                    mTabPageStateEventSeries = New TabpageHistory
                     mTabPageStateEventSeries.BackColor = System.Drawing.Color.LightSteelBlue
                     Me.tpRootStateEventSeries.Controls.Add(mTabPageStateEventSeries)
                     mTabPageStateEventSeries.Dock = DockStyle.Fill
@@ -3448,8 +3450,8 @@ Public Class Designer
                     mTabPageStateStructure.BackColor = System.Drawing.Color.LightSteelBlue
                     Me.tpRootStateStructure.Controls.Add(mTabPageStateStructure)
                     mTabPageStateStructure.Dock = DockStyle.Fill
-                    If Not CType(a_rm, RmEventSeries).Data Is Nothing Then
-                        Me.mTabPageStateStructure.ProcessStructure(CType(a_rm, RmEventSeries).Data)
+                    If Not CType(a_rm, RmHistory).Data Is Nothing Then
+                        Me.mTabPageStateStructure.ProcessStructure(CType(a_rm, RmHistory).Data)
                     End If
                     Me.tpRootStateStructure.Title = mTabPageStateStructure.StructureType
                     mComponentsCollection.Add(mTabPageStateStructure)
@@ -3488,7 +3490,7 @@ Public Class Designer
 
     End Function
 
-    Private Sub ProcessEventSeries(ByVal a_EventSeries As RmEventSeries)
+    Private Sub ProcessEventSeries(ByVal a_EventSeries As RmHistory)
         Dim tp As New Crownwood.Magic.Controls.TabPage
 
         SetUpEventSeries(a_EventSeries.NodeId)
@@ -3619,14 +3621,14 @@ Public Class Designer
                                 Case "tpDataEventSeries"
                                     If Not mTabPageDataEventSeries Is Nothing Then
                                         Dim rm As RmStructureCompound
-                                        Dim rmEventSeries As RmEventSeries
+                                        Dim RmHistory As RmHistory
 
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
-                                        rmEventSeries = mTabPageDataEventSeries.SaveAsEventSeries()
+                                        RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
                                         If Not mTabPageDataStructure Is Nothing Then
-                                            rmEventSeries.Data = mTabPageDataStructure.SaveAsStructure
+                                            RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                         End If
-                                        rm.Children.Add(rmEventSeries)
+                                        rm.Children.Add(RmHistory)
                                         Filemanager.Instance.Archetype.Definition.Data.Add(rm)
                                     End If
 
@@ -3744,12 +3746,12 @@ Public Class Designer
                                 Case "tpDataEventSeries"
                                     If Me.chkEventSeries.Checked Then
                                         If Not mTabPageDataEventSeries Is Nothing Then
-                                            Dim rmEventSeries As RmEventSeries
-                                            rmEventSeries = mTabPageDataEventSeries.SaveAsEventSeries()
+                                            Dim RmHistory As RmHistory
+                                            RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
                                             If Not mTabPageDataStructure Is Nothing Then
-                                                rmEventSeries.Data = mTabPageDataStructure.SaveAsStructure
+                                                RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                             End If
-                                            Filemanager.Instance.Archetype.Definition.Data.Add(rmEventSeries)
+                                            Filemanager.Instance.Archetype.Definition.Data.Add(RmHistory)
                                         End If
                                     End If
 
@@ -4104,7 +4106,7 @@ Public Class Designer
                 Me.tpRootStateStructure.Controls.Add(mTabPageStateStructure)
                 mTabPageStateStructure.Dock = DockStyle.Fill
 
-                mTabPageStateEventSeries = New TabPageEventSeries
+                mTabPageStateEventSeries = New TabpageHistory
                 mTabPageStateEventSeries.BackColor = System.Drawing.Color.LightSteelBlue
                 Me.tpRootStateEventSeries.Controls.Add(mTabPageStateEventSeries)
                 mTabPageStateEventSeries.Dock = DockStyle.Fill
@@ -4138,23 +4140,6 @@ Public Class Designer
         ' and when loading a new archetype
 
         If Me.radioRestrictedSet.Checked Then
-            'If Not Filemanager.Instance.FileLoading Then
-            '    Select Case Filemanager.Instance.Archetype.RmEntity
-            '        Case StructureType.EVALUATION, StructureType.OBSERVATION, StructureType.INSTRUCTION, StructureType.ENTRY
-            '            Dim subject As RelatedParty
-            '            subject = CType(Filemanager.Instance.Archetype.Definition, RmEntry).SubjectOfData
-            '            If subject.NodeId Is Nothing Then
-            '                Dim a_term As RmTerm
-            '                Dim s As String
-            '                s = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(32, "Subject of data")
-            '                a_term = Filemanager.Instance.OntologyManager.AddTerm(s, s)
-            '                subject.NodeId = a_term.Code
-            '                subject.Relationship.TerminologyID = "openehr"
-            '            End If
-            '        Case StructureType.COMPOSITION
-            '            'ToDo: add restricted setting to archetype
-            '    End Select
-            'End If
             Me.listRestrictionSet.Visible = True
             Me.butAddToRestrictedSet.Visible = True
             Me.butRemoveFromRestrictedSet.Visible = True
@@ -4204,7 +4189,13 @@ Public Class Designer
     Private Sub TabMain_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanged
 
         If TabMain.SelectedTab Is tpText Then
-            WriteRichText()
+            If Me.richtextArchetype.Text = "" Then
+                For Each tbb As System.Windows.Forms.ToolBarButton In Me.ToolBarRTF.Buttons
+                    tbb.Pushed = False
+                Next
+                Me.butRTF.Pushed = True
+                WriteRichText()
+            End If
 
         ElseIf Me.TabMain.SelectedTab Is tpInterface Then
             BuildInterface()
@@ -4381,6 +4372,9 @@ Public Class Designer
         Static Dim format As String = "rtf" ' remember the format that has been set
 
         Dim s As String = CStr(e.Button.Tag).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+
+        ' buttons are tagged with the file extension and the fixed buttons are tagged with
+        ' standard english text.
 
         Select Case s
             Case "save"

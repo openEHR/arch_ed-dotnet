@@ -16,7 +16,7 @@
 
 Option Explicit On 
 
-Class RmEventSeries
+Class RmHistory
     Inherits RmStructureCompound
 
     Private colEvt As New EventCollection
@@ -64,7 +64,7 @@ Class RmEventSeries
     End Property
 
     Public Overrides Function copy() As RmStructure
-        Dim rme As RmEventSeries
+        Dim rme As RmHistory
         rme.colEvt = colEvt.Copy
         rme.cOccurrences = Me.cOccurrences
         rme.sNodeId = Me.sNodeId
@@ -163,7 +163,7 @@ End Class
 'for the specific language governing rights and limitations under the
 'License.
 '
-'The Original Code is RmEventSeries.vb.
+'The Original Code is RmHistory.vb.
 '
 'The Initial Developer of the Original Code is
 'Sam Heard, Ocean Informatics (www.oceaninformatics.biz).

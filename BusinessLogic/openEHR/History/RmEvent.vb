@@ -27,10 +27,11 @@ Class RmEvent
     Dim boolSignNeg, boolFixedDuration, boolFixedOffset As Boolean
     Dim boolPointInTime As Boolean = True
     Dim sData As String
+    Dim mMathFunction As Constraint_Text
 
     Public Shadows ReadOnly Property TypeName() As String
         Get
-            Return "Event"
+            Return mType.ToString
         End Get
     End Property
 
@@ -57,6 +58,11 @@ Class RmEvent
         End Get
         Set(ByVal Value As Boolean)
             boolPointInTime = Value
+            If (Value) Then
+                mType = StructureType.PointEvent
+            Else
+                mType = StructureType.IntervalEvent
+            End If
         End Set
     End Property
     Public Property Offset() As Integer
@@ -84,14 +90,6 @@ Class RmEvent
             sMath = Value
         End Set
     End Property
-    Property isSignNegative() As Boolean
-        Get
-            Return boolSignNeg
-        End Get
-        Set(ByVal Value As Boolean)
-            boolSignNeg = Value
-        End Set
-    End Property
     Property hasFixedDuration() As Boolean
         Get
             Return boolFixedDuration
@@ -116,10 +114,14 @@ Class RmEvent
             sData = Value
         End Set
     End Property
+    Public Sub SetType(ByVal a_type As StructureType)
+        mType = a_type
+    End Sub
 
     Public Overrides Function Copy() As RmStructure
         Dim ae As New RmEvent(Me.NodeId)
         ae.cOccurrences = Me.cOccurrences
+        ae.mType = mType
         ae.sNodeId = Me.sNodeId
         ae.mRunTimeConstraint = Me.mRunTimeConstraint
         ae.iOffset = Me.iOffset
@@ -160,14 +162,24 @@ Class RmEvent
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
+        Select Case ObjNode.rm_type_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Case "event"
+                mType = StructureType.Event
+            Case "point_event"
+                mType = StructureType.PointEvent
+            Case "interval_event"
+                mType = StructureType.IntervalEvent
+                boolPointInTime = False
+        End Select
+
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
 
-        For i = 1 To ObjNode.Attributes.Count
+        For i = 1 To ObjNode.attributes.count
 
-            an_attribute = ObjNode.Attributes.i_th(i)
+            an_attribute = ObjNode.attributes.i_th(i)
 
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
-                Case "name", "runtime_label" ' runtime_label is redundant
+                Case "name", "runtime_label" ' runtime_label is OBSOLETE
                     mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "offset"
                     Dim d As New ArchetypeEditor.ADL_Classes.Duration
@@ -177,31 +189,50 @@ Class RmEvent
                     d.ISO_duration = offset.item.as_string.to_cil
                     Me.Offset = d.GUI_duration
                     Me.OffsetUnits = d.GUI_Units
+                    mType = StructureType.PointEvent  ' may be an interval - this will be set
+                    ' when maths function is set
 
                 Case "width"
                     Dim d As New ArchetypeEditor.ADL_Classes.Duration
                     Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
                     boolPointInTime = False
+                    mType = StructureType.IntervalEvent
+
                     width = an_attribute.children.first
                     d.ISO_duration = width.item.as_string.to_cil
                     Me.Width = d.GUI_duration
                     Me.WidthUnits = d.GUI_Units
 
-                Case "aggregate_math_function"
+                Case "aggregate_math_function" ' OBSOLETE
                     Dim MathFunc As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
                     boolPointInTime = False
+                    mType = StructureType.IntervalEvent
+
                     MathFunc = an_attribute.children.first
                     Me.sMath = MathFunc.item.as_string.to_cil.Trim("""")
 
-                Case "display_as_positive"
+                Case "math_function"
+                    boolPointInTime = False
+                    mType = StructureType.IntervalEvent
+
+                    Dim textConstraint As Constraint_Text = _
+                    RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Me.sMath = textConstraint.AllowableValues.FirstCode ' only one allowed
+
+                Case "display_as_positive"  ' OBSOLETE
                     Dim DisplayPos As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+
+                    Debug.Assert(False, "archetype contains obsolete data - will be written correctly")
 
                     DisplayPos = an_attribute.children.first
                     boolSignNeg = (DisplayPos.item.as_string.to_cil = "True")
+                    If boolSignNeg Then
+                        sMath = "521" ' a change that is displayed in absolute terms
+                    End If
 
-                Case "item", "data" 'data is OBSOLETE
+                Case "data", "item" 'item is OBSOLETE
                     ' return the data for processing
                     mEIF_Data = an_attribute
 
@@ -213,15 +244,15 @@ Class RmEvent
         If Not Me.ADL_Data Is Nothing Then
             Dim cadlStruct As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-            Select Case Me.ADL_Data.Children.First.Generating_Type.to_cil
+            Select Case Me.ADL_Data.children.first.Generating_Type.to_cil
                 Case "ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
                 Case "C_COMPLEX_OBJECT"
-                    cadlStruct = CType(Me.ADL_Data.Children.First, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+                    cadlStruct = CType(Me.ADL_Data.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                     Dim structure_type As StructureType
 
-                    structure_type = ReferenceModel.Instance.StructureTypeFromString(cadlStruct.Rm_Type_Name.to_cil)
+                    structure_type = ReferenceModel.Instance.StructureTypeFromString(cadlStruct.rm_type_name.to_cil)
 
                     Debug.Assert(structure_type <> StructureType.Not_Set)
 
@@ -240,7 +271,7 @@ Class RmEvent
 
 #End Region
 #End Region
-    
+
 
 End Class
 '

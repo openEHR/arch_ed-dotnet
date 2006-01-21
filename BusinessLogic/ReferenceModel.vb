@@ -112,8 +112,10 @@ Public Class ReferenceModelLocal
                 mReferenceModelNames.Add(50, "CLUSTER")
                 mReferenceModelNames.Add(60, "ELEMENT")
                 mReferenceModelNames.Add(70, "EVENT")
+                mReferenceModelNames.Add(71, "POINT_EVENT")
+                mReferenceModelNames.Add(72, "INTERVAL_EVENT")
                 mReferenceModelNames.Add(85, "WORKFLOW_STEP")
-                mReferenceModelNames.Add(1003, "EVENT_SERIES")
+                mReferenceModelNames.Add(1003, "EVENT_SERIES") 'Obsolete
                 mReferenceModelNames.Add(1005, "pathway_specification")
         End Select
 

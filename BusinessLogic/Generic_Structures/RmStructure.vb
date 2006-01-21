@@ -27,6 +27,9 @@ Public Enum StructureType
     Element = 60
 
     [Event] = 70
+    PointEvent = 71
+    IntervalEvent = 72
+
     Reference = 75
     Slot = 80
     WorkFlowStep = 85
