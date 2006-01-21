@@ -63,52 +63,52 @@ Public Class InputForm
         '
         'txtInput
         '
-        Me.txtInput.Location = New System.Drawing.Point(16, 64)
+        Me.txtInput.Location = New System.Drawing.Point(19, 74)
         Me.txtInput.Name = "txtInput"
-        Me.txtInput.Size = New System.Drawing.Size(320, 20)
+        Me.txtInput.Size = New System.Drawing.Size(384, 22)
         Me.txtInput.TabIndex = 0
         Me.txtInput.Text = ""
         '
         'lblInput
         '
-        Me.lblInput.Location = New System.Drawing.Point(16, 8)
+        Me.lblInput.Location = New System.Drawing.Point(19, 9)
         Me.lblInput.Name = "lblInput"
-        Me.lblInput.Size = New System.Drawing.Size(256, 48)
+        Me.lblInput.Size = New System.Drawing.Size(307, 56)
         Me.lblInput.TabIndex = 1
         Me.lblInput.Text = "Enter:"
         Me.lblInput.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'butOK
         '
-        Me.butOK.Location = New System.Drawing.Point(288, 6)
+        Me.butOK.Location = New System.Drawing.Point(346, 7)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(56, 24)
+        Me.butOK.Size = New System.Drawing.Size(67, 28)
         Me.butOK.TabIndex = 2
         Me.butOK.Text = "OK"
         '
         'butCancel
         '
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(288, 37)
+        Me.butCancel.Location = New System.Drawing.Point(346, 43)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(56, 24)
+        Me.butCancel.Size = New System.Drawing.Size(67, 27)
         Me.butCancel.TabIndex = 3
         Me.butCancel.Text = "Cancel"
         '
         'txtInput2
         '
-        Me.txtInput2.Location = New System.Drawing.Point(16, 111)
+        Me.txtInput2.Location = New System.Drawing.Point(19, 128)
         Me.txtInput2.Name = "txtInput2"
-        Me.txtInput2.Size = New System.Drawing.Size(320, 20)
+        Me.txtInput2.Size = New System.Drawing.Size(384, 22)
         Me.txtInput2.TabIndex = 4
         Me.txtInput2.Text = ""
         Me.txtInput2.Visible = False
         '
         'LblInput2
         '
-        Me.LblInput2.Location = New System.Drawing.Point(17, 92)
+        Me.LblInput2.Location = New System.Drawing.Point(20, 106)
         Me.LblInput2.Name = "LblInput2"
-        Me.LblInput2.Size = New System.Drawing.Size(271, 16)
+        Me.LblInput2.Size = New System.Drawing.Size(326, 19)
         Me.LblInput2.TabIndex = 5
         Me.LblInput2.Text = "Label2"
         Me.LblInput2.Visible = False
@@ -116,9 +116,9 @@ Public Class InputForm
         'InputForm
         '
         Me.AcceptButton = Me.butOK
-        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(350, 92)
+        Me.ClientSize = New System.Drawing.Size(420, 106)
         Me.ControlBox = False
         Me.Controls.Add(Me.LblInput2)
         Me.Controls.Add(Me.txtInput2)
@@ -129,6 +129,7 @@ Public Class InputForm
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "InputForm"
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Input"
         Me.ResumeLayout(False)

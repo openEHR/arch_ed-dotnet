@@ -236,7 +236,7 @@ Public Class RmStructureCompound
             Case "C_COMPLEX_OBJECT"
                     Select Case structure_type
                         Case StructureType.History
-                            colChildren.Add(New RmEventSeries(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                            colChildren.Add(New RmHistory(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case StructureType.Single, StructureType.List, StructureType.Tree
                             ' a structure
                             colChildren.Add(New RmStructureCompound(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))

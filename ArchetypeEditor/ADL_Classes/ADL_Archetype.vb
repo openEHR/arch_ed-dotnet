@@ -270,26 +270,26 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Private Sub DuplicateEventSeries(ByVal rm As RmStructureCompound, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-            Dim cadlEventSeries, cadlEvent As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim cadlHistory, cadlEvent As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim an_event As RmEvent
             Dim rm_1 As RmStructureCompound
-            Dim EventSeries As RmEventSeries
+            Dim EventSeries As RmHistory
 
             For Each rm_1 In cDefinition.Data
                 If rm_1.Type = StructureType.History Then
-                    EventSeries = CType(rm_1, RmEventSeries)
-                    cadlEventSeries = mCADL_Factory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.History)), openehr.base.kernel.Create.STRING.make_from_cil(EventSeries.NodeId))
-                    cadlEventSeries.set_occurrences(MakeOccurrences(EventSeries.Occurrences))
+                    EventSeries = CType(rm_1, RmHistory)
+                    cadlHistory = mCADL_Factory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.History)), openehr.base.kernel.Create.STRING.make_from_cil(EventSeries.NodeId))
+                    cadlHistory.set_occurrences(MakeOccurrences(EventSeries.Occurrences))
                     If Not EventSeries.HasNameConstraint Then
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEventSeries, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("name"))
                         BuildText(an_attribute, EventSeries.NameConstraint)
                     End If
                     If EventSeries.isPeriodic Then
                         Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
                         Dim d As Duration
 
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEventSeries, openehr.base.kernel.Create.STRING.make_from_cil("period"))
+                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
                         d.GUI_Units = EventSeries.PeriodUnits
                         d.GUI_duration = EventSeries.Period
 
@@ -298,7 +298,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     ' now build the events
                     If EventSeries.Children.Count > 0 Then
-                        an_attribute = mCADL_Factory.create_c_attribute_multiple(cadlEventSeries, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(EventSeries.Children.Cardinality))
+                        an_attribute = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(EventSeries.Children.Cardinality))
                         an_event = EventSeries.Children.Item(0)
                         cadlEvent = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.Event)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
                         cadlEvent.set_occurrences(MakeOccurrences(an_event.Occurrences))
@@ -316,27 +316,21 @@ Namespace ArchetypeEditor.ADL_Classes
                             Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
                             If an_event.AggregateMathFunction <> "" Then
-                                Dim AggrMath As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                                an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("aggregate_math_function"))
-                                AggrMath = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_string_make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(an_event.AggregateMathFunction)))
+                                an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("math_function"))
+                                Dim a_code_phrase As CodePhrase = New CodePhrase
+                                a_code_phrase.FirstCode = an_event.AggregateMathFunction
+                                a_code_phrase.TerminologyID = "openehr"
+                                BuildCodedText(an_attribute, a_code_phrase)
                             End If
 
                             If an_event.hasFixedDuration Then
                                 Dim d As Duration
 
-                                an_attribute = mCADL_Factory.create_c_attribute_single(cadlEventSeries, openehr.base.kernel.Create.STRING.make_from_cil("width"))
+                                an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("width"))
                                 d.GUI_Units = an_event.WidthUnits
                                 d.GUI_duration = an_event.Width
                                 width = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                             End If
-
-                            ' signed negative
-                            If an_event.isSignNegative Then
-                                Dim SignNeg As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                                an_attribute = mCADL_Factory.create_c_attribute_single(cadlEventSeries, openehr.base.kernel.Create.STRING.make_from_cil("display_as_positive"))
-                                SignNeg = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_boolean_make_true())
-                            End If
-
                         End If
 
                         ' runtime name
@@ -360,74 +354,74 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Private Sub BuildEventSeries(ByVal EventSeries As RmEventSeries, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-            Dim cadlEventSeries, cadlEvent As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+        Private Sub BuildHistory(ByVal a_history As RmHistory, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+            Dim cadlHistory, cadlEvent As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim events_rel_node, an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim an_event As RmEvent
             Dim data_processed As Boolean
             Dim data_path As openehr.common_libs.structures.object_graph.path.OG_PATH
 
-            cadlEventSeries = mCADL_Factory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.History)), openehr.base.kernel.Create.STRING.make_from_cil(EventSeries.NodeId))
-            cadlEventSeries.set_occurrences(MakeOccurrences(EventSeries.Occurrences))
+            cadlHistory = mCADL_Factory.create_c_complex_object_identified(RelNode, _
+                openehr.base.kernel.Create.STRING.make_from_cil(StructureType.History.ToString.ToUpper(System.Globalization.CultureInfo.InvariantCulture)), _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_history.NodeId))
+            cadlHistory.set_occurrences(MakeOccurrences(a_history.Occurrences))
 
-            If EventSeries.HasNameConstraint Then
-                an_attribute = mCADL_Factory.create_c_attribute_single(cadlEventSeries, openehr.base.kernel.Create.STRING.make_from_cil("name"))
-                BuildText(an_attribute, EventSeries.NameConstraint)
+            If a_history.HasNameConstraint Then
+                an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                BuildText(an_attribute, a_history.NameConstraint)
             End If
 
-            If EventSeries.isPeriodic Then
+            If a_history.isPeriodic Then
                 Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
                 Dim d As Duration
 
-                an_attribute = mCADL_Factory.create_c_attribute_single(cadlEventSeries, openehr.base.kernel.Create.STRING.make_from_cil("period"))
-                d.GUI_Units = EventSeries.PeriodUnits
-                d.GUI_duration = EventSeries.Period
+                an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
+                d.GUI_Units = a_history.PeriodUnits
+                d.GUI_duration = a_history.Period
 
                 period = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
             End If
 
             ' now build the events
-            events_rel_node = mCADL_Factory.create_c_attribute_multiple(cadlEventSeries, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(EventSeries.Children.Cardinality))
-            For Each an_event In EventSeries.Children
+            events_rel_node = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(a_history.Children.Cardinality))
+            For Each an_event In a_history.Children
 
-                cadlEvent = mCADL_Factory.create_c_complex_object_identified(events_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.Event)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
+                cadlEvent = mCADL_Factory.create_c_complex_object_identified(events_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(an_event.Type)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
                 cadlEvent.set_occurrences(MakeOccurrences(an_event.Occurrences))
-                If an_event.isPointInTime Then
-                    If an_event.hasFixedOffset Then
-                        Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                        Dim d As New Duration
 
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
-                        d.GUI_Units = an_event.OffsetUnits
-                        d.GUI_duration = an_event.Offset
-                        offset = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
-                    End If
-                Else
-                    Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                Select Case an_event.Type
+                    Case StructureType.Event
+                        ' do nothing...
+                    Case StructureType.PointEvent
+                        If an_event.hasFixedOffset Then
+                            Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                            Dim d As New Duration
 
-                    If an_event.AggregateMathFunction <> "" Then
-                        Dim AggrMath As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("aggregate_math_function"))
-                        AggrMath = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_string_make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(an_event.AggregateMathFunction)))
-                    End If
+                            an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
+                            d.GUI_Units = an_event.OffsetUnits
+                            d.GUI_duration = an_event.Offset
+                            offset = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                        End If
+                    Case StructureType.IntervalEvent
+                        Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
-                    If an_event.hasFixedDuration Then
-                        Dim d As New Duration
+                        If an_event.AggregateMathFunction <> "" Then
+                            an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("math_function"))
+                            Dim a_code_phrase As CodePhrase = New CodePhrase
+                            a_code_phrase.FirstCode = an_event.AggregateMathFunction
+                            a_code_phrase.TerminologyID = "openehr"
+                            BuildCodedText(an_attribute, a_code_phrase)
+                        End If
 
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("width"))
-                        d.GUI_Units = an_event.WidthUnits
-                        d.GUI_duration = an_event.Width
-                        width = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
-                    End If
+                        If an_event.hasFixedDuration Then
+                            Dim d As New Duration
 
-                    ' signed negative
-                    If an_event.isSignNegative Then
-                        Dim SignNeg As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("display_as_positive"))
-                        SignNeg = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_boolean_make_true())
-                    End If
-
-                End If
+                            an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("width"))
+                            d.GUI_Units = an_event.WidthUnits
+                            d.GUI_duration = an_event.Width
+                            width = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                        End If
+                End Select
 
                 ' runtime name
                 If an_event.HasNameConstraint Then
@@ -438,19 +432,19 @@ Namespace ArchetypeEditor.ADL_Classes
                 ' item
                 an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("item"))
                 If Not data_processed Then
-                    If Not EventSeries.Data Is Nothing Then
+                    If Not a_history.Data Is Nothing Then
                         Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(EventSeries.Data.Type)), openehr.base.kernel.Create.STRING.make_from_cil(EventSeries.Data.NodeId))
-                        BuildStructure(EventSeries.Data, objNode)
+                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_history.Data.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_history.Data.NodeId))
+                        BuildStructure(a_history.Data, objNode)
 
                         ''data_path = cadlEvent.path
-                        data_path = GetPathOfNode(EventSeries.Data.NodeId)
+                        data_path = GetPathOfNode(a_history.Data.NodeId)
                     End If
                     data_processed = True
                 Else
                     Dim NodeRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
-                    NodeRef = mCADL_Factory.create_archetype_internal_ref(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(EventSeries.Data.Type.ToString), data_path.as_string)
+                    NodeRef = mCADL_Factory.create_archetype_internal_ref(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_history.Data.Type)), data_path.as_string)
                 End If
 
             Next
@@ -1238,7 +1232,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                 a_rm = rm.Children.items(0)
 
                                 If a_rm.Type = StructureType.History Then
-                                    BuildEventSeries(a_rm, an_attribute)
+                                    BuildHistory(a_rm, an_attribute)
                                 Else
                                     ' can have EventSeries for each state
                                     Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
@@ -1256,7 +1250,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                 For Each a_rm As RmStructureCompound In rm.Children.items
                                     Select Case a_rm.Type '.TypeName
                                         Case StructureType.History
-                                            BuildEventSeries(a_rm, an_attribute)
+                                            BuildHistory(a_rm, an_attribute)
                                         Case Else
                                             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                                             objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))

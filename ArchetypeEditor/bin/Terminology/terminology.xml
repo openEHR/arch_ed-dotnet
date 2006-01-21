@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" standalone="yes"?>
+<?xml version="1.0" standalone="yes"?>
 <Terminology xmlns="http://openehr.org/Terminology.xsd">
   <Language code="af" Description="Afrikaans" />
   <Language code="sq" Description="Albanian" />
@@ -639,6 +639,7 @@
   <PrimaryRubric Id="518" Language="en" />
   <PrimaryRubric Id="519" Language="en" />
   <PrimaryRubric Id="520" Language="en" />
+  <PrimaryRubric Id="521" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -777,7 +778,7 @@
   <Concept Language="en" ConceptID="146" Rubric="mean" />
   <Concept Language="en" ConceptID="147" Rubric="delta" />
   <Concept Language="en" ConceptID="148" Rubric="total" />
-  <Concept Language="en" ConceptID="149" Rubric="Variation" />
+  <Concept Language="en" ConceptID="149" Rubric="variation" />
   <Concept Language="en" ConceptID="150" Rubric="Internal codes" />
   <Concept Language="en" ConceptID="151" Rubric="New" />
   <Concept Language="en" ConceptID="152" Rubric="Remove" />
@@ -1787,6 +1788,7 @@
   <Concept Language="en" ConceptID="518" Rubric="application/pdf" />
   <Concept Language="en" ConceptID="519" Rubric="application/rtf" />
   <Concept Language="en" ConceptID="520" Rubric="Print" />
+  <Concept Language="en" ConceptID="521" Rubric="delta (display as absolute)" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
@@ -2279,6 +2281,8 @@
   <GroupedConcept GrouperID="19" ChildID="517" />
   <GroupedConcept GrouperID="19" ChildID="518" />
   <GroupedConcept GrouperID="19" ChildID="519" />
+  <GroupedConcept GrouperID="14" ChildID="149" />
+  <GroupedConcept GrouperID="14" ChildID="521" />
   <TerminologyIdentifiers VSAB="AIR93" SourceName="AI/RHEUM,1993" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ALT2000" SourceName="Alternative Billing Concepts, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="AOD2000" SourceName="Alcohol and Other Drug Thesaurus, 2000" Authority="UMLS2003AA" />

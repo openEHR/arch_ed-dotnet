@@ -55,62 +55,69 @@ Public Class Choose
     Friend WithEvents ListBox2 As System.Windows.Forms.ListBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(Choose))
-        Me.ListChoose = New System.Windows.Forms.ListBox()
-        Me.LblForm = New System.Windows.Forms.Label()
-        Me.butCancel = New System.Windows.Forms.Button()
-        Me.butOK = New System.Windows.Forms.Button()
-        Me.ListBox2 = New System.Windows.Forms.ListBox()
+        Me.ListChoose = New System.Windows.Forms.ListBox
+        Me.LblForm = New System.Windows.Forms.Label
+        Me.butCancel = New System.Windows.Forms.Button
+        Me.butOK = New System.Windows.Forms.Button
+        Me.ListBox2 = New System.Windows.Forms.ListBox
         Me.SuspendLayout()
         '
         'ListChoose
         '
-        Me.ListChoose.Location = New System.Drawing.Point(8, 40)
+        Me.ListChoose.ItemHeight = 16
+        Me.ListChoose.Location = New System.Drawing.Point(10, 46)
         Me.ListChoose.Name = "ListChoose"
-        Me.ListChoose.Size = New System.Drawing.Size(272, 173)
+        Me.ListChoose.Size = New System.Drawing.Size(326, 180)
         Me.ListChoose.TabIndex = 0
         '
         'LblForm
         '
         Me.LblForm.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LblForm.Location = New System.Drawing.Point(16, 8)
+        Me.LblForm.Location = New System.Drawing.Point(19, 9)
         Me.LblForm.Name = "LblForm"
-        Me.LblForm.Size = New System.Drawing.Size(248, 24)
+        Me.LblForm.Size = New System.Drawing.Size(298, 28)
         Me.LblForm.TabIndex = 1
         Me.LblForm.Text = "Choose"
         '
         'butCancel
         '
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(416, 224)
+        Me.butCancel.Location = New System.Drawing.Point(499, 258)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(56, 32)
+        Me.butCancel.Size = New System.Drawing.Size(67, 37)
         Me.butCancel.TabIndex = 2
         Me.butCancel.Text = "Cancel"
         '
         'butOK
         '
-        Me.butOK.Location = New System.Drawing.Point(480, 224)
+        Me.butOK.Location = New System.Drawing.Point(576, 258)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(56, 32)
+        Me.butOK.Size = New System.Drawing.Size(67, 37)
         Me.butOK.TabIndex = 3
         Me.butOK.Text = "OK"
         '
         'ListBox2
         '
-        Me.ListBox2.Location = New System.Drawing.Point(296, 40)
+        Me.ListBox2.ItemHeight = 16
+        Me.ListBox2.Location = New System.Drawing.Point(355, 46)
         Me.ListBox2.Name = "ListBox2"
-        Me.ListBox2.Size = New System.Drawing.Size(240, 173)
+        Me.ListBox2.Size = New System.Drawing.Size(288, 180)
         Me.ListBox2.TabIndex = 4
         '
         'Choose
         '
         Me.AcceptButton = Me.butOK
-        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(544, 266)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.ListBox2, Me.butOK, Me.butCancel, Me.LblForm, Me.ListChoose})
+        Me.ClientSize = New System.Drawing.Size(652, 306)
+        Me.Controls.Add(Me.ListBox2)
+        Me.Controls.Add(Me.butOK)
+        Me.Controls.Add(Me.butCancel)
+        Me.Controls.Add(Me.LblForm)
+        Me.Controls.Add(Me.ListChoose)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Choose"
+        Me.ShowInTaskbar = False
         Me.Text = "Choose"
         Me.ResumeLayout(False)
 
