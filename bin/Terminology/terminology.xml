@@ -1789,6 +1789,190 @@
   <Concept Language="en" ConceptID="519" Rubric="application/rtf" />
   <Concept Language="en" ConceptID="520" Rubric="Print" />
   <Concept Language="en" ConceptID="521" Rubric="delta (display as absolute)" />
+    <Concept Language="tr" ConceptID="329" Rubric="Miktar aralığı" />
+    <Concept Language="tr" ConceptID="330" Rubric="Tamsayı (sayım) aralığı" />
+    <Concept Language="tr" ConceptID="332" Rubric="Mutlak maksimumu belirle" />
+    <Concept Language="tr" ConceptID="333" Rubric="Mutlak minimumu belirle" />
+    <Concept Language="tr" ConceptID="334" Rubric="Elektrik akımı" />
+    <Concept Language="tr" ConceptID="335" Rubric="Alan" />
+    <Concept Language="tr" ConceptID="336" Rubric="Özgül hacim" />
+    <Concept Language="tr" ConceptID="337" Rubric="Özgül yüzey" />
+    <Concept Language="tr" ConceptID="338" Rubric="Hız" />
+    <Concept Language="tr" ConceptID="339" Rubric="İvme" />
+    <Concept Language="tr" ConceptID="340" Rubric="Momentum" />
+    <Concept Language="tr" ConceptID="341" Rubric="Hız, Açısal" />
+    <Concept Language="tr" ConceptID="342" Rubric="İvme, açısal" />
+    <Concept Language="tr" ConceptID="343" Rubric="Momentum, Açısal" />
+    <Concept Language="tr" ConceptID="344" Rubric="Moment Ataleti, Alan" />
+    <Concept Language="tr" ConceptID="345" Rubric="Moment Ataleti, Kütle" />
+    <Concept Language="tr" ConceptID="346" Rubric="Momentum Akım Hızı" />
+    <Concept Language="tr" ConceptID="347" Rubric="Akım hızı, Kütle" />
+    <Concept Language="tr" ConceptID="348" Rubric="Akış (flux), Kütle" />
+    <Concept Language="tr" ConceptID="349" Rubric="Alan başına Kütle" />
+    <Concept Language="tr" ConceptID="350" Rubric="Yoğunluk" />
+    <Concept Language="tr" ConceptID="351" Rubric="Akım hızı, Kütle/Hacim" />
+    <Concept Language="tr" ConceptID="352" Rubric="Akım hızı, Kütle/Kuvvet" />
+    <Concept Language="tr" ConceptID="354" Rubric="Özgül ağırlık" />
+    <Concept Language="tr" ConceptID="355" Rubric="Kuvvet" />
+    <Concept Language="tr" ConceptID="356" Rubric="Yüzey tansiyonu" />
+    <Concept Language="tr" ConceptID="357" Rubric="Kuvvet, Vücut" />
+    <Concept Language="tr" ConceptID="358" Rubric="Kütle başına Kuvvet" />
+    <Concept Language="tr" ConceptID="359" Rubric="Tork" />
+    <Concept Language="tr" ConceptID="360" Rubric="Viskozite, Dinamik" />
+    <Concept Language="tr" ConceptID="361" Rubric="Viskozite, Kinematik" />
+    <Concept Language="tr" ConceptID="362" Rubric="Yayılım (difüzyon) katsayısı" />
+    <Concept Language="tr" ConceptID="363" Rubric="Güç" />
+    <Concept Language="tr" ConceptID="364" Rubric="Enerji, lineer" />
+    <Concept Language="tr" ConceptID="365" Rubric="Alan başına düşen Enerji" />
+    <Concept Language="tr" ConceptID="366" Rubric="Enerji Yoğunluğu" />
+    <Concept Language="tr" ConceptID="367" Rubric="Güç, Lineer" />
+    <Concept Language="tr" ConceptID="368" Rubric="Güç Akımı (flux)" />
+    <Concept Language="tr" ConceptID="369" Rubric="Güç Yoğunluğu" />
+    <Concept Language="tr" ConceptID="370" Rubric="Özgül Enerji" />
+    <Concept Language="tr" ConceptID="371" Rubric="Özgül Isı, Gaz sabiti" />
+    <Concept Language="tr" ConceptID="372" Rubric="Termal iletkenlik" />
+    <Concept Language="tr" ConceptID="373" Rubric="Isı transfer karsayısı" />
+    <Concept Language="tr" ConceptID="374" Rubric="Voltaj, Elektriksel potansiyel" />
+    <Concept Language="tr" ConceptID="375" Rubric="Direnç" />
+    <Concept Language="tr" ConceptID="377" Rubric="Elektrik Alan Şiddetim" />
+    <Concept Language="tr" ConceptID="378" Rubric="Manyetik akım (flux)" />
+    <Concept Language="tr" ConceptID="379" Rubric="Endüktans" />
+    <Concept Language="tr" ConceptID="380" Rubric="Kalifiye reel" />
+    <Concept Language="tr" ConceptID="381" Rubric="Miktar (Eq)" />
+    <Concept Language="tr" ConceptID="382" Rubric="Sıklık (frekans)" />
+    <Concept Language="tr" ConceptID="384" Rubric="Miktar (mole)" />
+    <Concept Language="tr" ConceptID="385" Rubric="Kütle (IU)" />
+    <Concept Language="tr" ConceptID="386" Rubric="Çoklu Ortam" />
+    <Concept Language="tr" ConceptID="387" Rubric="audio/DVI4" />
+    <Concept Language="tr" ConceptID="388" Rubric="audio/G722" />
+    <Concept Language="tr" ConceptID="389" Rubric="audio/G723" />
+    <Concept Language="tr" ConceptID="390" Rubric="audio/G726-16" />
+    <Concept Language="tr" ConceptID="391" Rubric="audio/G726-24" />
+    <Concept Language="tr" ConceptID="392" Rubric="audio/G726-32" />
+    <Concept Language="tr" ConceptID="393" Rubric="audio/G726-40" />
+    <Concept Language="tr" ConceptID="394" Rubric="audio/G728" />
+    <Concept Language="tr" ConceptID="395" Rubric="audio/L8" />
+    <Concept Language="tr" ConceptID="396" Rubric="audio/L16" />
+    <Concept Language="tr" ConceptID="397" Rubric="audio/LPC" />
+    <Concept Language="tr" ConceptID="398" Rubric="audio/G729 " />
+    <Concept Language="tr" ConceptID="399" Rubric="audio/G729D" />
+    <Concept Language="tr" ConceptID="400" Rubric="audio/G729E" />
+    <Concept Language="tr" ConceptID="401" Rubric="video/BT656" />
+    <Concept Language="tr" ConceptID="402" Rubric="video/CelB" />
+    <Concept Language="tr" ConceptID="403" Rubric="video/JPEG" />
+    <Concept Language="tr" ConceptID="404" Rubric="video/H261" />
+    <Concept Language="tr" ConceptID="405" Rubric="video/H263" />
+    <Concept Language="tr" ConceptID="406" Rubric="video/H263-1998" />
+    <Concept Language="tr" ConceptID="407" Rubric="video/H263-2000" />
+    <Concept Language="tr" ConceptID="408" Rubric="video/MPV" />
+    <Concept Language="tr" ConceptID="409" Rubric="audio/mpeg" />
+    <Concept Language="tr" ConceptID="410" Rubric="audio/mpeg4-generic" />
+    <Concept Language="tr" ConceptID="411" Rubric="audio/L20" />
+    <Concept Language="tr" ConceptID="412" Rubric="audio/L24" />
+    <Concept Language="tr" ConceptID="413" Rubric="audio/telefon-olayı" />
+    <Concept Language="tr" ConceptID="414" Rubric="video/quicktime" />
+    <Concept Language="tr" ConceptID="415" Rubric="metin/takvim" />
+    <Concept Language="tr" ConceptID="416" Rubric="metin/dizin" />
+    <Concept Language="tr" ConceptID="417" Rubric="metin/html" />
+    <Concept Language="tr" ConceptID="418" Rubric="metin/düz" />
+    <Concept Language="tr" ConceptID="419" Rubric="metin/rtf" />
+    <Concept Language="tr" ConceptID="420" Rubric="metin/sgml" />
+    <Concept Language="tr" ConceptID="421" Rubric="metin/TSV" />
+    <Concept Language="tr" ConceptID="422" Rubric="metin/uri-list" />
+    <Concept Language="tr" ConceptID="423" Rubric="metin/xml" />
+    <Concept Language="tr" ConceptID="424" Rubric="metin/xml-external-parsed-entity" />
+    <Concept Language="tr" ConceptID="425" Rubric="imaj/cgm" />
+    <Concept Language="tr" ConceptID="426" Rubric="imaj/gif" />
+    <Concept Language="tr" ConceptID="427" Rubric="imaj/png" />
+    <Concept Language="tr" ConceptID="428" Rubric="imaj/tiff" />
+    <Concept Language="tr" ConceptID="429" Rubric="imaj/jpeg" />
+    <Concept Language="tr" ConceptID="430" Rubric="URI - kaynak niteleyicisi" />
+    <Concept Language="tr" ConceptID="431" Rubric="kalıcı" />
+    <Concept Language="tr" ConceptID="432" Rubric="Composition kategorisi" />
+    <Concept Language="tr" ConceptID="433" Rubric="olay" />
+    <Concept Language="tr" ConceptID="434" Rubric="süreç/işlem" />
+    <Concept Language="tr" ConceptID="435" Rubric="laboratuvar" />
+    <Concept Language="tr" ConceptID="436" Rubric="görüntüleme" />
+    <Concept Language="tr" ConceptID="437" Rubric="kardinalite" />
+    <Concept Language="tr" ConceptID="438" Rubric="Değerler" />
+    <Concept Language="tr" ConceptID="439" Rubric="Salt okunabilir" />
+    <Concept Language="tr" ConceptID="440" Rubric="Data tipini belirlemek için buraya sürükleyip bırakın" />
+    <Concept Language="tr" ConceptID="441" Rubric="Serbest metin" />
+    <Concept Language="tr" ConceptID="442" Rubric="Bu terimin tercümelerini yer değiştir" />
+    <Concept Language="tr" ConceptID="443" Rubric="Tip" />
+    <Concept Language="tr" ConceptID="444" Rubric="Serbest veya Kodlanmış Metin" />
+    <Concept Language="tr" ConceptID="445" Rubric="Kütle (Birimleri)" />
+    <Concept Language="tr" ConceptID="446" Rubric="zorunlu" />
+    <Concept Language="tr" ConceptID="447" Rubric="tekrarlayıcı" />
+    <Concept Language="tr" ConceptID="448" Rubric="opsiyonel" />
+    <Concept Language="tr" ConceptID="449" Rubric="Payda" />
+    <Concept Language="tr" ConceptID="450" Rubric="Pay" />
+    <Concept Language="tr" ConceptID="451" Rubric="Vücut sıvıları" />
+    <Concept Language="tr" ConceptID="452" Rubric="Kan arteryel" />
+    <Concept Language="tr" ConceptID="453" Rubric="Kan kapiller" />
+    <Concept Language="tr" ConceptID="454" Rubric="Kan göbek bağı" />
+    <Concept Language="tr" ConceptID="455" Rubric="Kan karışık venöz" />
+    <Concept Language="tr" ConceptID="456" Rubric="Kan periferal" />
+    <Concept Language="tr" ConceptID="457" Rubric="Kan venöz" />
+    <Concept Language="tr" ConceptID="458" Rubric="Balgam bronşiyal" />
+    <Concept Language="tr" ConceptID="459" Rubric="Balgam" />
+    <Concept Language="tr" ConceptID="460" Rubric="Beyin Omurilik sıvısı" />
+    <Concept Language="tr" ConceptID="461" Rubric="Servikal mukus" />
+    <Concept Language="tr" ConceptID="462" Rubric="Kolostrum" />
+    <Concept Language="tr" ConceptID="463" Rubric="Genital sıvı" />
+    <Concept Language="tr" ConceptID="464" Rubric="Loşia" />
+    <Concept Language="tr" ConceptID="465" Rubric="Genital mukus" />
+    <Concept Language="tr" ConceptID="467" Rubric="Diğer vücut sıvısı" />
+    <Concept Language="tr" ConceptID="468" Rubric="Mekonyum" />
+    <Concept Language="tr" ConceptID="469" Rubric="Adet kanı" />
+    <Concept Language="tr" ConceptID="470" Rubric="Anne sütü" />
+    <Concept Language="tr" ConceptID="471" Rubric="Nazal mukus/akıntı" />
+    <Concept Language="tr" ConceptID="472" Rubric="Pankreatik sıvı" />
+    <Concept Language="tr" ConceptID="473" Rubric="Periton sıvısı/asit" />
+    <Concept Language="tr" ConceptID="476" Rubric="Perikardiyal sıvı" />
+    <Concept Language="tr" ConceptID="477" Rubric="Plazma" />
+    <Concept Language="tr" ConceptID="478" Rubric="Plöral sıvı (torasentez sıvısı)" />
+    <Concept Language="tr" ConceptID="479" Rubric="Püs (cerahat)" />
+    <Concept Language="tr" ConceptID="480" Rubric="Tükürük" />
+    <Concept Language="tr" ConceptID="481" Rubric="Seminal sıvı" />
+    <Concept Language="tr" ConceptID="482" Rubric="Seminal plazma" />
+    <Concept Language="tr" ConceptID="483" Rubric="Serum" />
+    <Concept Language="tr" ConceptID="484" Rubric="Dışkı (kaka)" />
+    <Concept Language="tr" ConceptID="485" Rubric="Ter" />
+    <Concept Language="tr" ConceptID="486" Rubric="Sinoviyal sıvı" />
+    <Concept Language="tr" ConceptID="487" Rubric="Göz yaşı" />
+    <Concept Language="tr" ConceptID="488" Rubric="İdrar" />
+    <Concept Language="tr" ConceptID="489" Rubric="Orta-akım idrarı (clean catch) (en)" />
+    <Concept Language="tr" ConceptID="490" Rubric="İdrar sondası" />
+    <Concept Language="tr" ConceptID="491" Rubric="İdrar çökeltisi" />
+    <Concept Language="tr" ConceptID="492" Rubric="Kusmuk" />
+    <Concept Language="tr" ConceptID="493" Rubric="Kan tam" />
+    <Concept Language="tr" ConceptID="494" Rubric="Yara exudası" />
+    <Concept Language="tr" ConceptID="495" Rubric="Vitöz sıvı" />
+    <Concept Language="tr" ConceptID="496" Rubric="Diyaliz sıvısı" />
+    <Concept Language="tr" ConceptID="497" Rubric="Açı, düzlemsel" />
+    <Concept Language="tr" ConceptID="498" Rubric="Elektrik yükü" />
+    <Concept Language="tr" ConceptID="499" Rubric="Işık yoğunluğu" />
+    <Concept Language="tr" ConceptID="500" Rubric="Açı, solid" />
+    <Concept Language="tr" ConceptID="501" Rubric="Elektrik kapasitansı" />
+    <Concept Language="tr" ConceptID="502" Rubric="Elektrik ilerimi (kondüktans)" />
+    <Concept Language="tr" ConceptID="503" Rubric="Manyetik akım yoğunluğu" />
+    <Concept Language="tr" ConceptID="504" Rubric="Parlaklık (luminans) akımı" />
+    <Concept Language="tr" ConceptID="505" Rubric="İlluminans" />
+    <Concept Language="tr" ConceptID="506" Rubric="Radyoaktivite" />
+    <Concept Language="tr" ConceptID="507" Rubric="Orantı" />
+    <Concept Language="tr" ConceptID="508" Rubric="Enerji dozu" />
+    <Concept Language="tr" ConceptID="509" Rubric="Aktivite tanımı" />
+    <Concept Language="tr" ConceptID="510" Rubric="Yol" />
+    <Concept Language="tr" ConceptID="511" Rubric="çoklu (çoklu)" />
+    <Concept Language="tr" ConceptID="512" Rubric="Serum/Plazma" />
+    <Concept Language="tr" ConceptID="513" Rubric="Bileşen" />
+    <Concept Language="tr" ConceptID="514" Rubric="Bağlam (kontext)" />
+    <Concept Language="tr" ConceptID="515" Rubric="İçerik" />
+    <Concept Language="tr" ConceptID="516" Rubric="Tarih veya zaman aralığı" />
+    <Concept Language="tr" ConceptID="517" Rubric="aplikasyon/msword" />
+    <Concept Language="tr" ConceptID="518" Rubric="aplikasyon/pdf" />
+    <Concept Language="tr" ConceptID="519" Rubric="aplikasyon/rtf" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
