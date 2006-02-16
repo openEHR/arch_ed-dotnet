@@ -115,7 +115,7 @@ Class RmHistory
                     iPeriod = d.GUI_duration
                     sPeriodUnits = d.GUI_Units
 
-                Case "items", "events"  'events is OBSOLETE
+                Case "items", "events"  'items is OBSOLETE
                     Dim an_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                     Dim ii As Integer
 
