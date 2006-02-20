@@ -44,6 +44,11 @@ Public Class ArchetypeNodeAnonymous
             mRMStructure.Occurrences = Value
         End Set
     End Property
+    Public ReadOnly Property IsMandatory() As Boolean Implements ArchetypeNode.IsMandatory
+        Get
+            Return (mRMStructure.Occurrences.MinCount > 0)
+        End Get
+    End Property
     Public ReadOnly Property RM_Class() As RmStructure Implements ArchetypeNode.RM_Class
         Get
             Return mRMStructure
@@ -61,11 +66,11 @@ Public Class ArchetypeNodeAnonymous
                     Case StructureType.EVALUATION
                         mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(2000, "EVALUATION")
                     Case StructureType.INSTRUCTION
-                        mText = FileManager.Instance.OntologyManager.GetOpenEHRTerm(2000, "INSTRUCTION")
+                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(2000, "INSTRUCTION")
                     Case StructureType.SECTION
-                        mText = FileManager.Instance.OntologyManager.GetOpenEHRTerm(314, "SECTION")
+                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(314, "SECTION")
                     Case StructureType.Cluster
-                        mText = FileManager.Instance.OntologyManager.GetOpenEHRTerm(313, "Cluster")
+                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(313, "Cluster")
                 End Select
             Case Else
                 Debug.Assert(False)

@@ -96,7 +96,7 @@ Public Class RmStructureCompound
 
     Sub New(ByVal EIF_Attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_structure_type As StructureType)
         MyBase.New(a_structure_type.ToString, a_structure_type) 'State, Data, Protocol, InstructionActExection
-        Debug.Assert(a_structure_type = StructureType.Data Or a_structure_type = StructureType.State Or a_structure_type = StructureType.Protocol Or a_structure_type = StructureType.InstructionActExection Or a_structure_type = StructureType.Action)
+        Debug.Assert(a_structure_type = StructureType.Data Or a_structure_type = StructureType.State Or a_structure_type = StructureType.Protocol Or a_structure_type = StructureType.InstructionActExection Or a_structure_type = StructureType.Activity)
         colChildren = New Children(mType)
         ProcessData(EIF_Attribute)
     End Sub
@@ -144,7 +144,7 @@ Public Class RmStructureCompound
                     '    If cadlObjSimple.Rm_Type_Name.to_cil = "INTEGER" Then
                     '        colChildren.Cardinality = ADL_Tools.Instance.SetOccurrences(CType(cadlobjsimple.Item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER).Interval)
                     '    End If
-                Case ReferenceModel.Instance.RM_StructureName(StructureType.WorkFlowStep)
+                Case ReferenceModel.Instance.RM_StructureName(StructureType.CarePathwayStep)
                     Dim ii As Integer
                     For ii = 1 To an_attribute.children.count
                         ObjNode = CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -242,7 +242,7 @@ Public Class RmStructureCompound
                             colChildren.Add(New RmStructureCompound(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case StructureType.Table
                             colChildren.Add(New RmTable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
-                        Case StructureType.WorkFlowStep
+                        Case StructureType.CarePathwayStep
                             colChildren.Add(New RmPathwayStep(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case Else
                             Debug.Assert(False)

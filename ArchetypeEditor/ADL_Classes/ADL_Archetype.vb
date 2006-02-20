@@ -1120,7 +1120,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             For Each pathway_step As RmPathwayStep In rm.Children
                 Dim a_state As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.WorkFlowStep)), openehr.base.kernel.Create.STRING.make_from_cil(pathway_step.NodeId))
+                objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.CarePathwayStep)), openehr.base.kernel.Create.STRING.make_from_cil(pathway_step.NodeId))
                 a_state = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("ssm_state"))
                 Dim s As String
                 s = Int(pathway_step.StateType).ToString
@@ -1267,7 +1267,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         Select Case rm.Type
                             Case StructureType.InstructionActExection
                                 BuildPathway(rm, adlArchetype.definition)
-                            Case StructureType.Action
+                            Case StructureType.Activity
                                 BuildAction(rm, adlArchetype.definition)
                             Case StructureType.Slot
                                 ' this allows a structure to be archetyped at this point

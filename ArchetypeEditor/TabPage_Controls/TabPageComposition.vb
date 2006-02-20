@@ -186,7 +186,7 @@ Public Class TabPageComposition
         Next
     End Sub
 
-    Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point)
+    Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point, ByVal mandatory_only As Boolean)
         Dim spacer As Integer = 1
 
         'leftmargin = pos.X
@@ -194,7 +194,7 @@ Public Class TabPageComposition
             aContainer.Size = New Size
         End If
 
-        mContextConstraint.BuildInterface(aContainer, pos)
+        mContextConstraint.BuildInterface(aContainer, pos, mandatory_only)
 
     End Sub
 

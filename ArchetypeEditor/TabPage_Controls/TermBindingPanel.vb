@@ -98,9 +98,9 @@ Public Class TermBindingPanel
         Me.AddCriteriaButton = New System.Windows.Forms.Button
         Me.AddBindingGroupBox = New System.Windows.Forms.GroupBox
         Me.CancelAddBindingButton = New System.Windows.Forms.Button
+        Me.BindingOkButton = New System.Windows.Forms.Button
         Me.Label4 = New System.Windows.Forms.Label
         Me.Label1 = New System.Windows.Forms.Label
-        Me.BindingOkButton = New System.Windows.Forms.Button
         Me.ReleaseTextBox = New System.Windows.Forms.TextBox
         Me.CodeTextBox = New System.Windows.Forms.TextBox
         Me.NodePathLabel = New System.Windows.Forms.Label
@@ -138,7 +138,7 @@ Public Class TermBindingPanel
         Me.PathsTreeView.Name = "PathsTreeView"
         Me.PathsTreeView.PathSeparator = "/"
         Me.PathsTreeView.ShowRootLines = False
-        Me.PathsTreeView.Size = New System.Drawing.Size(800, 194)
+        Me.PathsTreeView.Size = New System.Drawing.Size(880, 194)
         Me.PathsTreeView.TabIndex = 1
         '
         'BindingImageList
@@ -214,7 +214,7 @@ Public Class TermBindingPanel
         Me.BindingCriteriaListBox.ItemHeight = 16
         Me.BindingCriteriaListBox.Location = New System.Drawing.Point(48, 16)
         Me.BindingCriteriaListBox.Name = "BindingCriteriaListBox"
-        Me.BindingCriteriaListBox.Size = New System.Drawing.Size(520, 68)
+        Me.BindingCriteriaListBox.Size = New System.Drawing.Size(600, 68)
         Me.BindingCriteriaListBox.TabIndex = 11
         Me.BindingCriteriaListBox.TabStop = False
         '
@@ -241,7 +241,7 @@ Public Class TermBindingPanel
         Me.AddBindingGroupBox.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.AddBindingGroupBox.Location = New System.Drawing.Point(4, 226)
         Me.AddBindingGroupBox.Name = "AddBindingGroupBox"
-        Me.AddBindingGroupBox.Size = New System.Drawing.Size(800, 90)
+        Me.AddBindingGroupBox.Size = New System.Drawing.Size(880, 90)
         Me.AddBindingGroupBox.TabIndex = 12
         Me.AddBindingGroupBox.TabStop = False
         Me.AddBindingGroupBox.Text = "Add Binding"
@@ -250,11 +250,20 @@ Public Class TermBindingPanel
         'CancelAddBindingButton
         '
         Me.CancelAddBindingButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CancelAddBindingButton.Location = New System.Drawing.Point(648, 61)
+        Me.CancelAddBindingButton.Location = New System.Drawing.Point(728, 61)
         Me.CancelAddBindingButton.Name = "CancelAddBindingButton"
         Me.CancelAddBindingButton.Size = New System.Drawing.Size(64, 20)
         Me.CancelAddBindingButton.TabIndex = 27
         Me.CancelAddBindingButton.Text = "Cancel"
+        '
+        'BindingOkButton
+        '
+        Me.BindingOkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.BindingOkButton.Location = New System.Drawing.Point(808, 61)
+        Me.BindingOkButton.Name = "BindingOkButton"
+        Me.BindingOkButton.Size = New System.Drawing.Size(64, 20)
+        Me.BindingOkButton.TabIndex = 26
+        Me.BindingOkButton.Text = "OK"
         '
         'Label4
         '
@@ -273,15 +282,6 @@ Public Class TermBindingPanel
         Me.Label1.TabIndex = 31
         Me.Label1.Text = "Code"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'BindingOkButton
-        '
-        Me.BindingOkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BindingOkButton.Location = New System.Drawing.Point(728, 61)
-        Me.BindingOkButton.Name = "BindingOkButton"
-        Me.BindingOkButton.Size = New System.Drawing.Size(64, 20)
-        Me.BindingOkButton.TabIndex = 26
-        Me.BindingOkButton.Text = "OK"
         '
         'ReleaseTextBox
         '
@@ -338,7 +338,7 @@ Public Class TermBindingPanel
         Me.AddBindingCriteriaGroupBox.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.AddBindingCriteriaGroupBox.Location = New System.Drawing.Point(4, 316)
         Me.AddBindingCriteriaGroupBox.Name = "AddBindingCriteriaGroupBox"
-        Me.AddBindingCriteriaGroupBox.Size = New System.Drawing.Size(800, 72)
+        Me.AddBindingCriteriaGroupBox.Size = New System.Drawing.Size(880, 72)
         Me.AddBindingCriteriaGroupBox.TabIndex = 13
         Me.AddBindingCriteriaGroupBox.TabStop = False
         Me.AddBindingCriteriaGroupBox.Text = "Add Binding Criteria"
@@ -368,30 +368,26 @@ Public Class TermBindingPanel
         '
         'CriteriaTermLabel
         '
-        Me.CriteriaTermLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CriteriaTermLabel.BackColor = System.Drawing.Color.White
         Me.CriteriaTermLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.CriteriaTermLabel.Location = New System.Drawing.Point(72, 20)
         Me.CriteriaTermLabel.Name = "CriteriaTermLabel"
-        Me.CriteriaTermLabel.Size = New System.Drawing.Size(376, 40)
+        Me.CriteriaTermLabel.Size = New System.Drawing.Size(400, 40)
         Me.CriteriaTermLabel.TabIndex = 40
         '
         'OperatorComboBox
         '
-        Me.OperatorComboBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.OperatorComboBox.Items.AddRange(New Object() {"=", "<", "<=", ">", ">=", "!="})
-        Me.OperatorComboBox.Location = New System.Drawing.Point(456, 20)
+        Me.OperatorComboBox.Location = New System.Drawing.Point(488, 20)
         Me.OperatorComboBox.Name = "OperatorComboBox"
-        Me.OperatorComboBox.Size = New System.Drawing.Size(40, 24)
+        Me.OperatorComboBox.Size = New System.Drawing.Size(64, 24)
         Me.OperatorComboBox.TabIndex = 34
         Me.OperatorComboBox.Text = "="
         '
         'BindingCriteriaCancelButton
         '
         Me.BindingCriteriaCancelButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BindingCriteriaCancelButton.Location = New System.Drawing.Point(648, 44)
+        Me.BindingCriteriaCancelButton.Location = New System.Drawing.Point(728, 44)
         Me.BindingCriteriaCancelButton.Name = "BindingCriteriaCancelButton"
         Me.BindingCriteriaCancelButton.Size = New System.Drawing.Size(64, 20)
         Me.BindingCriteriaCancelButton.TabIndex = 37
@@ -400,7 +396,7 @@ Public Class TermBindingPanel
         'CriteriaOkButton
         '
         Me.CriteriaOkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CriteriaOkButton.Location = New System.Drawing.Point(728, 44)
+        Me.CriteriaOkButton.Location = New System.Drawing.Point(808, 44)
         Me.CriteriaOkButton.Name = "CriteriaOkButton"
         Me.CriteriaOkButton.Size = New System.Drawing.Size(64, 20)
         Me.CriteriaOkButton.TabIndex = 36
@@ -408,11 +404,9 @@ Public Class TermBindingPanel
         '
         'CriteriaValueTextBox
         '
-        Me.CriteriaValueTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CriteriaValueTextBox.Location = New System.Drawing.Point(504, 20)
+        Me.CriteriaValueTextBox.Location = New System.Drawing.Point(568, 20)
         Me.CriteriaValueTextBox.Name = "CriteriaValueTextBox"
-        Me.CriteriaValueTextBox.Size = New System.Drawing.Size(176, 22)
+        Me.CriteriaValueTextBox.Size = New System.Drawing.Size(200, 22)
         Me.CriteriaValueTextBox.TabIndex = 35
         Me.CriteriaValueTextBox.Text = ""
         Me.CriteriaValueTextBox.Visible = False
@@ -432,7 +426,7 @@ Public Class TermBindingPanel
         Me.TopPanel.Dock = System.Windows.Forms.DockStyle.Top
         Me.TopPanel.Location = New System.Drawing.Point(4, 0)
         Me.TopPanel.Name = "TopPanel"
-        Me.TopPanel.Size = New System.Drawing.Size(800, 32)
+        Me.TopPanel.Size = New System.Drawing.Size(880, 32)
         Me.TopPanel.TabIndex = 14
         '
         'AddTerminologyButton
@@ -469,7 +463,7 @@ Public Class TermBindingPanel
         Me.PanelBindings.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.PanelBindings.Location = New System.Drawing.Point(4, 388)
         Me.PanelBindings.Name = "PanelBindings"
-        Me.PanelBindings.Size = New System.Drawing.Size(800, 96)
+        Me.PanelBindings.Size = New System.Drawing.Size(880, 96)
         Me.PanelBindings.TabIndex = 15
         '
         'gbCriteria
@@ -480,7 +474,7 @@ Public Class TermBindingPanel
         Me.gbCriteria.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbCriteria.Location = New System.Drawing.Point(224, 0)
         Me.gbCriteria.Name = "gbCriteria"
-        Me.gbCriteria.Size = New System.Drawing.Size(576, 96)
+        Me.gbCriteria.Size = New System.Drawing.Size(656, 96)
         Me.gbCriteria.TabIndex = 0
         Me.gbCriteria.TabStop = False
         Me.gbCriteria.Text = "Criteria"
@@ -498,7 +492,7 @@ Public Class TermBindingPanel
         Me.DockPadding.Left = 4
         Me.DockPadding.Right = 4
         Me.Name = "TermBindingPanel"
-        Me.Size = New System.Drawing.Size(808, 488)
+        Me.Size = New System.Drawing.Size(888, 488)
         Me.BindingGroupBox.ResumeLayout(False)
         Me.AddBindingGroupBox.ResumeLayout(False)
         Me.AddBindingCriteriaGroupBox.ResumeLayout(False)
@@ -1277,7 +1271,7 @@ Public Class TermBindingPanel
 
         Public ReadOnly Property NodeText() As String
             Get
-                If NodeOperand.IndexOf("/") > 0 Then
+                If NodeOperand.IndexOf("/") > -1 Then
                     Dim path As String = NodeOperand.TrimEnd("/"c)
                     Dim pathParts() As String = path.Split("/"c)
 

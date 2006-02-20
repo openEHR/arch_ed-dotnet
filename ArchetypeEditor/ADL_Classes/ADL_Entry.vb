@@ -65,7 +65,7 @@ Class ADL_ENTRY
                 Case "protocol"
                     mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Protocol))
                 Case "activity_definition"
-                    mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Action))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activity))
                 Case ReferenceModel.Instance.RM_StructureName(StructureType.InstructionActExection).ToLower(System.Globalization.CultureInfo.InvariantCulture)
                     mChildren.Add(New RmStructureCompound(an_attribute, StructureType.InstructionActExection))
             End Select

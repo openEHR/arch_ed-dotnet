@@ -18,37 +18,38 @@ Option Explicit On
 
 Public Enum StructureType
     Not_Set = 0
-    [Single] = 1
-    List = 2
-    Tree = 3
-    Table = 4
-    Columns = 31
-    Cluster = 50
-    Element = 60
+    [Single] = 105
+    List = 106
+    Tree = 107
+    Table = 108
+    Columns = 164
+    Cluster = 313
+    Element = 567
 
-    [Event] = 70
-    PointEvent = 71
-    IntervalEvent = 72
+    [Event] = 433
+    PointEvent = 566
+    IntervalEvent = 565
 
-    Reference = 75
-    Slot = 80
-    WorkFlowStep = 85
+    Reference = 564
+    Slot = 312
+    CarePathwayStep = 563
 
-    ENTRY = 100
-    EVALUATION = 101
-    OBSERVATION = 102
-    INSTRUCTION = 103
-    ADMIN_ENTRY = 104
+    ENTRY = 559
+    EVALUATION = 555
+    OBSERVATION = 554
+    INSTRUCTION = 557
+    ACTION = 556
+    ADMIN_ENTRY = 560
 
-    SECTION = 200
+    SECTION = 314
 
-    COMPOSITION = 300
+    COMPOSITION = 561
 
-    Data = 1000
-    State = 1001
-    Protocol = 1002
-    History = 1003
-    Action = 1004
+    Data = 80
+    State = 177
+    Protocol = 78
+    History = 275
+    Activity = 556
     InstructionActExection = 1005
 End Enum
 

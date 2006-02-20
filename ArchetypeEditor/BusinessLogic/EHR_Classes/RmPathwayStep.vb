@@ -63,12 +63,12 @@ Public Class RmPathwayStep
 
 
     Sub New(ByVal nodeID As String, ByVal a_machine_state_type As StateMachineType)
-        MyBase.New(nodeID, StructureType.WorkFlowStep)
+        MyBase.New(nodeID, StructureType.CarePathwayStep)
         mStateType = a_machine_state_type
     End Sub
 
     Sub New(ByVal EIF_PathwayStep As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.New(EIF_PathwayStep.node_id.to_cil, StructureType.WorkFlowStep)
+        MyBase.New(EIF_PathwayStep.node_id.to_cil, StructureType.CarePathwayStep)
         ProcessPathwayStep(EIF_PathwayStep)
     End Sub
 
