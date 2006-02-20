@@ -534,22 +534,20 @@ Public Class TabpageHistory
         End Set
     End Property
 
-    ' HKF: 1620
-    'Friend Function BuildInterface(ByRef p As Control, ByVal pos As Point)
-    Friend Function BuildInterface(ByVal aContainer As Control, ByVal pos As Point)
+    Friend Function BuildInterface(ByVal aContainer As Control, ByVal pos As Point, ByVal mandatory_only As Boolean)
         Dim spacer As Integer = 15
         Dim leftmargin As Integer = pos.X
 
         Dim combo As New ComboBox
         For Each elvi As EventListViewItem In Me.ListEvents.Items
-            combo.Items.Add(elvi.Text)
+            If ((elvi.IsMandatory) Or (Not mandatory_only)) Then
+                combo.Items.Add(elvi.Text)
+            End If
         Next
         combo.Height = 25
         combo.Width = 150
         combo.Location = pos
-        If Me.ListEvents.Items.Count > 0 Then
-            ' HKF: 1620
-            'combo.Text = Me.ListEvents.Items(0).ToString
+        If combo.Items.Count > 0 Then
             combo.SelectedIndex = 0
         End If
         aContainer.Height = pos.Y + combo.Height + 10
@@ -950,6 +948,11 @@ Public Class TabpageHistory
             Get
                 ' has to be an element as it is in a list
                 Return element.TypeName
+            End Get
+        End Property
+        Public ReadOnly Property IsMandatory() As Boolean
+            Get
+                Return (element.Occurrences.MinCount > 0)
             End Get
         End Property
 

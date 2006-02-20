@@ -2,13 +2,13 @@
 <HEAD>
 <meta http-equiv="Content-Language" content="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Body weight</title>
+<title>Measurement of parts of body or other entities</title>
 </HEAD>
 <BODY>
 <table border="0" cellpadding="2" width="100%">
 <tr>
 <td width="100%" bgcolor="#000080">
-<h1 align="center"><font color="#FFFFFF">Body weight</font></h1>
+<h1 align="center"><font color="#FFFFFF">Measurement of parts of body or other entities</font></h1>
 </td>
 </tr>
 </table>
@@ -19,8 +19,8 @@
 <td width="50%"><h4>Identification:</h4></td>
 </tr>
 <tr>
-<td width="50%">Total body weight - a surrogate for naked body weight</td>
-<td width="50%"><i>Id</i>: openEHR-EHR-OBSERVATION.body_weight.v1<br><i>Reference model</i>: openEHR_EHR</td>
+<td width="50%">Measurement of the length, circumference, diameter, height, depth or width of a part of the body or object</td>
+<td width="50%"><i>Id</i>: openEHR-EHR-OBSERVATION.dimensions.v1<br><i>Reference model</i>: openEHR_EHR</td>
 </tr>
 </table>
 <hr>
@@ -31,7 +31,7 @@
 </td>
 </tr>
 </table>
-<p>Structure = SINGLE</p>
+<p>Structure = TREE</p>
 <table border="1" cellpadding="2" width="100%">
 <tr  bgcolor="#FFFF53">
 <td width="20%"><h4>Concept</h4></td>
@@ -39,41 +39,61 @@
 <td width = "20%"><h4>Constraints</h4></td>
 <td width="20%"><h4>Values</h4></td>
 </tr>
+
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Weight</b></td></table></td>
-<td>The weight of the whole body</td>
-<td><b><i>Quantity</i></b><br>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Object</b></td></table></td>
+<td>The object, axis or body part that is being measured</td>
+<td><b><i>Text</i></b><br>
 1..1</td>
 <td>
-Property = mass<br>
-  Units = kg; >=0; <=1000;<br>
+Internal; 'Biparietal', 'Waist', 'Crown-rump', 'Chest', 'Head', 'Abdomen'
 </td>
 </tr>
-</table>
-<hr>
-<table border="0" cellpadding="2" width="100%">
 <tr>
-<td width="100%" bgcolor="#9DAAFF">
-<h2>State</h2>
-</td>
-</tr>
-</table>
-<p>Structure = LIST, ordered</p>
-<table border="1" cellpadding="2" width="100%">
-<tr  bgcolor="#9DAAFF">
-<td width="20%"><h4>Concept</h4></td>
-<td width = "40%"><h4>Description</h4></td>
-<td width = "20%"><h4>Constraints</h4></td>
-<td width="20%"><h4>Values</h4></td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Clothing</b></td></table></td>
-<td>The amount of clothes worn at the time of weighing</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Location/description of measurement</b></td></table></td>
+<td>Information about the location of the measurement or other information regarding the location of the object measured</td>
 <td><b><i>Text</i></b><br>
 0..1</td>
 <td>
-Internal; 'Lightly clothed/underwear', 'Naked', 'Fully dressed', 'Nappy'
+Text;
 </td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Length</b></td></table></td>
+<td>A length measurement including circumference, diameter</td>
+<td><b><i>Quantity</i></b><br>
+0..*</td>
+<td>
+Property = Length<br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Circumference</b></td></table></td>
+<td>The circumference of the body part or object</td>
+<td><b><i>Quantity</i></b><br>
+0..1</td>
+<td>
+Property = Length<br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Volume</b></td></table></td>
+<td>The volume of the body part or object</td>
+<td><b><i>Quantity</i></b><br>
+0..1</td>
+<td>
+Property = Volume<br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Area</b></td></table></td>
+<td>The area of the body part or object</td>
+<td><b><i>Quantity</i></b><br>
+0..1</td>
+<td>
+Property = Area<br>
+</td>
+</tr>
 </tr>
 </table>
 <hr>
@@ -94,53 +114,13 @@ Internal; 'Lightly clothed/underwear', 'Naked', 'Fully dressed', 'Nappy'
 </tr>
 <tr>
 <td><b>Any event</b></td>
-<td><b>Any event - based on offset from the baseline</b></td>
+<td><b>*</b></td>
 <td>
 Event
 </tr>
-<tr>
-<td><b>Weight loss</b></td>
-<td><b>Amount of weight lost over the period</b></td>
-<td>
-IntervalEvent
-<br>Event math function = delta (display as absolute)
-</tr>
-<tr>
-<td><b>Weight gain</b></td>
-<td><b>Amount of weight gained over the period</b></td>
-<td>
-IntervalEvent
-<br>Event math function = delta
-</tr>
 
 </table>
 
-<hr>
-<table border="0" cellpadding="2" width="100%">
-<tr>
-<td width="100%" bgcolor="#FF717B">
-<h2>Protocol</h2>
-</td>
-</tr>
-</table>
-<p>Structure = LIST, ordered</p>
-<table border="1" cellpadding="2" width="100%">
-<tr  bgcolor="#FF717B">
-<td width="20%"><h4>Concept</h4></td>
-<td width = "40%"><h4>Description</h4></td>
-<td width = "20%"><h4>Constraints</h4></td>
-<td width="20%"><h4>Values</h4></td>
-</tr>
-<tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Device</b></td></table></td>
-<td>The name of the weighing device</td>
-<td><b><i>Text</i></b><br>
-0..1</td>
-<td>
-Text;
-</td>
-</tr>
-</table>
 <hr>
 </BODY>
 </HTML>

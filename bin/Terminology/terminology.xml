@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" standalone="yes"?>
+<?xml version="1.0" standalone="yes"?>
 <Terminology xmlns="http://openehr.org/Terminology.xsd">
   <Language code="af" Description="Afrikaans" />
   <Language code="sq" Description="Albanian" />
@@ -625,6 +625,20 @@
   <PrimaryRubric Id="551" Language="en" />
   <PrimaryRubric Id="552" Language="en" />
   <PrimaryRubric Id="553" Language="en" />
+  <PrimaryRubric Id="554" Language="en" />
+  <PrimaryRubric Id="555" Language="en" />
+  <PrimaryRubric Id="556" Language="en" />
+  <PrimaryRubric Id="557" Language="en" />
+  <PrimaryRubric Id="558" Language="en" />
+  <PrimaryRubric Id="559" Language="en" />
+  <PrimaryRubric Id="560" Language="en" />
+  <PrimaryRubric Id="561" Language="en" />
+  <PrimaryRubric Id="562" Language="en" />
+  <PrimaryRubric Id="563" Language="en" />
+  <PrimaryRubric Id="564" Language="en" />
+  <PrimaryRubric Id="565" Language="en" />
+  <PrimaryRubric Id="566" Language="en" />
+  <PrimaryRubric Id="567" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -696,7 +710,7 @@
   <Concept Language="en" ConceptID="76" Rubric="Header" />
   <Concept Language="en" ConceptID="77" Rubric="Entry model" />
   <Concept Language="en" ConceptID="78" Rubric="Protocol" />
-  <Concept Language="en" ConceptID="79" Rubric="Person State with event series" />
+  <Concept Language="en" ConceptID="79" Rubric="Person State with History" />
   <Concept Language="en" ConceptID="80" Rubric="Data" />
   <Concept Language="en" ConceptID="81" Rubric="Event Series" />
   <Concept Language="en" ConceptID="82" Rubric="Person State" />
@@ -1029,7 +1043,7 @@
   <Concept Language="en" ConceptID="242" Rubric="required" />
   <Concept Language="en" ConceptID="243" Rubric="Version life cycle" />
   <Concept Language="en" ConceptID="244" Rubric="draft" />
-  <Concept Language="en" ConceptID="245" Rubric="active" />
+  <Concept Language="en" ConceptID="245" Rubric="Active" />
   <Concept Language="en" ConceptID="246" Rubric="inactive" />
   <Concept Language="en" ConceptID="247" Rubric="awaiting approval" />
   <Concept Language="en" ConceptID="248" Rubric="Audit change type" />
@@ -1667,7 +1681,7 @@
   <Concept Language="en" ConceptID="430" Rubric="URI - resource identifier" />
   <Concept Language="en" ConceptID="431" Rubric="persistent" />
   <Concept Language="en" ConceptID="432" Rubric="Composition category" />
-  <Concept Language="en" ConceptID="433" Rubric="event" />
+  <Concept Language="en" ConceptID="433" Rubric="Event" />
   <Concept Language="en" ConceptID="434" Rubric="process" />
   <Concept Language="en" ConceptID="435" Rubric="laboratory" />
   <Concept Language="en" ConceptID="436" Rubric="imaging" />
@@ -1851,15 +1865,15 @@
   <Concept Language="tr" ConceptID="519" Rubric="aplikasyon/rtf" />
   <Concept Language="en" ConceptID="522" Rubric="increase" />
   <Concept Language="en" ConceptID="523" Rubric="deleted" />
-  <Concept Language="en" ConceptID="524" Rubric="initial" />
+  <Concept Language="en" ConceptID="524" Rubric="Initial" />
   <Concept Language="en" ConceptID="525" Rubric="Instruction states" />
   <Concept Language="en" ConceptID="526" Rubric="planned" />
-  <Concept Language="en" ConceptID="527" Rubric="postponed" />
-  <Concept Language="en" ConceptID="528" Rubric="cancelled" />
+  <Concept Language="en" ConceptID="527" Rubric="Postponed" />
+  <Concept Language="en" ConceptID="528" Rubric="Cancelled" />
   <Concept Language="en" ConceptID="529" Rubric="scheduled" />
-  <Concept Language="en" ConceptID="530" Rubric="suspended" />
+  <Concept Language="en" ConceptID="530" Rubric="Suspended" />
   <Concept Language="en" ConceptID="531" Rubric="aborted" />
-  <Concept Language="en" ConceptID="532" Rubric="completed" />
+  <Concept Language="en" ConceptID="532" Rubric="Completed" />
   <Concept Language="en" ConceptID="533" Rubric="expired" />
   <Concept Language="en" ConceptID="534" Rubric="Instruction transitions" />
   <Concept Language="en" ConceptID="535" Rubric="Initiate" />
@@ -1881,6 +1895,19 @@
   <Concept Language="en" ConceptID="551" Rubric="Notify completed" />
   <Concept Language="en" ConceptID="552" Rubric="Notify cancelled" />
   <Concept Language="en" ConceptID="553" Rubric="incomplete" />
+  <Concept Language="en" ConceptID="554" Rubric="Observation" />
+  <Concept Language="en" ConceptID="555" Rubric="Evaluation" />
+  <Concept Language="en" ConceptID="556" Rubric="Action" />
+  <Concept Language="en" ConceptID="557" Rubric="Instruction" />
+  <Concept Language="en" ConceptID="558" Rubric="Sub-Section" />
+  <Concept Language="en" ConceptID="559" Rubric="Entry" />
+  <Concept Language="en" ConceptID="560" Rubric="Administration entry" />
+  <Concept Language="en" ConceptID="561" Rubric="Composition" />
+  <Concept Language="en" ConceptID="563" Rubric="Care pathway step" />
+  <Concept Language="en" ConceptID="564" Rubric="Reference" />
+  <Concept Language="en" ConceptID="565" Rubric="Interval event" />
+  <Concept Language="en" ConceptID="566" Rubric="Point-in-time event" />
+  <Concept Language="en" ConceptID="567" Rubric="Element" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

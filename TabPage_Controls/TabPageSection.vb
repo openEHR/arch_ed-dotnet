@@ -401,16 +401,23 @@ Public Class TabPageSection
         
     End Function
 
-    Private Function TranslateSectionNodes(ByRef tvnodes As TreeNodeCollection)
+    Private Sub TranslateSectionNodes(ByRef tvnodes As TreeNodeCollection)
         For Each n As TreeNode In tvnodes
             CType(n, ArchetypeTreeNode).Translate()
             If n.GetNodeCount(False) > 0 Then
                 TranslateSectionNodes(n.Nodes)
             End If
         Next
-    End Function
+    End Sub
+
+    Private Sub TranslateGUI()
+        Me.cbFixed.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(136, "Fixed")
+        Me.cbOrdered.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(162, "Ordered")
+    End Sub
+
 
     Public Sub Translate()
+        TranslateGUI()
         TranslateSectionNodes(Me.tvSection.Nodes)
 
     End Sub
@@ -576,11 +583,11 @@ Public Class TabPageSection
 
 
         If mRootOfComposition Then
-            mi = New MenuItem("Slot")
+            mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(312, "Slot"))
             cm.MenuItems.Add(mi)
 
             For Each strtype As StructureType In ReferenceModel.Instance.validArchetypeSlots(StructureType.COMPOSITION)
-                mi = New MenuItem(strtype.ToString)
+                mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(strtype, strtype.ToString))
 
                 AddHandler mi.Click, AddressOf AddSlot
                 cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)
@@ -589,26 +596,26 @@ Public Class TabPageSection
         Else
 
             If tvSection.SelectedNode Is Nothing Then
-                mi = New MenuItem("SECTION")
+                mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(314, "Section"))
                 AddHandler mi.Click, AddressOf AddSection
                 cm.MenuItems.Add(mi)
             Else
                 If CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = StructureType.SECTION Then
-                    mi = New MenuItem("SECTION")
+                    mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(314, "Section"))
                     AddHandler mi.Click, AddressOf AddSection
                     cm.MenuItems.Add(mi)
-                    mi = New MenuItem("Sub-SECTION")
+                    mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(558, "Sub-Section"))
                     AddHandler mi.Click, AddressOf AddSection
                     cm.MenuItems.Add(mi)
                 End If
             End If
 
             If Me.tvSection.GetNodeCount(False) > 0 Then
-                mi = New MenuItem("Slot")
+                mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(312, "Slot"))
                 cm.MenuItems.Add(mi)
 
                 For Each strtype As StructureType In ReferenceModel.Instance.validArchetypeSlots(StructureType.SECTION)
-                    mi = New MenuItem(strtype.ToString)
+                    mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(strtype, strtype.ToString))
 
                     AddHandler mi.Click, AddressOf AddSlot
                     cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)

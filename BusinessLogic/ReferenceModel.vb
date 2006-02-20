@@ -105,17 +105,17 @@ Public Class ReferenceModelLocal
 
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
-                mReferenceModelNames.Add(1, "ITEM_SINGLE")
-                mReferenceModelNames.Add(2, "ITEM_LIST")
-                mReferenceModelNames.Add(3, "ITEM_TREE")
-                mReferenceModelNames.Add(4, "ITEM_TABLE")
-                mReferenceModelNames.Add(50, "CLUSTER")
-                mReferenceModelNames.Add(60, "ELEMENT")
-                mReferenceModelNames.Add(70, "EVENT")
-                mReferenceModelNames.Add(71, "POINT_EVENT")
-                mReferenceModelNames.Add(72, "INTERVAL_EVENT")
-                mReferenceModelNames.Add(85, "WORKFLOW_STEP")
-                mReferenceModelNames.Add(1003, "EVENT_SERIES") 'Obsolete
+                mReferenceModelNames.Add(105, "ITEM_SINGLE")
+                mReferenceModelNames.Add(106, "ITEM_LIST")
+                mReferenceModelNames.Add(107, "ITEM_TREE")
+                mReferenceModelNames.Add(108, "ITEM_TABLE")
+                mReferenceModelNames.Add(313, "CLUSTER")
+                mReferenceModelNames.Add(567, "ELEMENT")
+                mReferenceModelNames.Add(433, "EVENT")
+                mReferenceModelNames.Add(566, "POINT_EVENT")
+                mReferenceModelNames.Add(565, "INTERVAL_EVENT")
+                mReferenceModelNames.Add(563, "WORKFLOW_STEP")
+                mReferenceModelNames.Add(275, "EVENT_SERIES") 'Obsolete
                 mReferenceModelNames.Add(1005, "pathway_specification")
         End Select
 
@@ -179,7 +179,7 @@ Public Class ReferenceModelLocal
                         End Select
                     Case StructureType.INSTRUCTION
                         Select Case Child
-                            Case StructureType.InstructionActExection, StructureType.Action
+                            Case StructureType.InstructionActExection, StructureType.Activity
                                 Return True
                         End Select
                     Case StructureType.Data 'openEHR
@@ -237,10 +237,10 @@ Public Class ReferenceModelLocal
                         End Select
                     Case StructureType.InstructionActExection
                         Select Case Child
-                            Case StructureType.WorkFlowStep
+                            Case StructureType.CarePathwayStep
                                 Return True
                         End Select
-                    Case StructureType.Action
+                    Case StructureType.Activity
                         Select Case Child
                             Case StructureType.Slot, StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                                 Return True

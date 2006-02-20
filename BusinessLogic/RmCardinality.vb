@@ -106,7 +106,6 @@ Public Class RmCardinality
             mOrdered = Value
         End Set
     End Property
-
     Public Function Copy() As RmCardinality
         Return New RmCardinality(Me)
     End Function

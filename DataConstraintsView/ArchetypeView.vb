@@ -33,58 +33,52 @@ Public Class ArchetypeView
 
     Public Sub BuildInterface(ByVal an_element As ArchetypeElement, _
             ByVal aContainer As Control, ByRef aLocation As Point, _
-            ByVal spacer As Integer)
+            ByVal spacer As Integer, ByVal mandatory_only As Boolean)
 
-        'ElementToControl(anElement, pos, aContainer, spacer)
+        If (mandatory_only And (Not an_element.IsMandatory)) Then
+            Return
+        End If
 
         Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT))
         view.Location = New Point(aLocation.X, aLocation.Y)
-
         view.Controls.Add(ElementView(an_element))
-
         aLocation.Y = view.Top + view.Height + spacer
-
         aContainer.Controls.Add(view)
     End Sub
 
     Public Sub BuildInterface(ByVal Items As Windows.forms.ListView.ListViewItemCollection, _
             ByVal aContainer As Control, ByRef aLocation As Point, _
-            ByVal spacer As Integer)
+            ByVal spacer As Integer, ByVal mandatory_only As Boolean)
 
         Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
         view.Location = New Point(aLocation.X, aLocation.Y)
         view.SuspendLayout()
 
         For Each lvitem As ArchetypeListViewItem In Items
-            'ElementToControl(lvitem.Item, pos, aContainer, spacer)
-            view.Controls.Add(ElementView(lvitem.Item))
+            If ((lvitem.Item.IsMandatory) Or (Not mandatory_only)) Then
+                view.Controls.Add(ElementView(lvitem.Item))
+            End If
         Next
 
         view.ResumeLayout() '(False)
-        aContainer.Controls.Add(view)
 
-        'Dim max_width As Integer = aLocation.X + view.Width
-        'If max_width > aContainer.Width Then
-        '    aContainer.Width = max_width + 5
-        'End If
-        aContainer.Width = Math.Max(aLocation.X + view.Width + 5, aContainer.Width)
+        If view.Controls.Count > 0 Then
+            aContainer.Controls.Add(view)
 
-        If aContainer.Name <> "tpInterface" Then
-            'Dim h As Integer
-            'h = view.Top + view.Height + 1
-            'If aContainer.Height < h Then
-            '    aContainer.Height = h
-            'End If
-            aContainer.Height = Math.Max(view.Top + view.Height + 1, aContainer.Height)
+            aContainer.Width = Math.Max(aLocation.X + view.Width + 5, aContainer.Width)
+
+            If aContainer.Name <> "tpInterface" Then
+                aContainer.Height = Math.Max(view.Top + view.Height + 1, aContainer.Height)
+            End If
+
+            aLocation.Y = view.Top + view.Height + spacer
         End If
-
-        aLocation.Y = view.Top + view.Height + spacer
     End Sub
 
     Public Sub BuildInterface(ByVal Nodes As TreeNodeCollection, _
-            ByVal aContainer As Control, ByRef Pos As Point, ByVal spacer As Integer)
+            ByVal aContainer As Control, ByRef Pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean)
 
-        NodesToControls(Nodes, Pos, aContainer, spacer)
+        NodesToControls(Nodes, Pos, aContainer, spacer, mandatory_only)
     End Sub
 
     Public Sub BuildInterface(ByVal TableDetails As ArrayList, _
@@ -134,10 +128,10 @@ Public Class ArchetypeView
         End If
     End Sub
 
-   
+
     Private Function NodesToControls(ByVal NodeCol As TreeNodeCollection, _
         ByRef aLocation As Point, ByVal aContainer As Control, _
-        ByVal spacer As Integer) As Integer
+        ByVal spacer As Integer, ByVal mandatory_only As Boolean) As Integer
 
         'Displays the archetype nodes as GUI controls on the Interface TAB
 
@@ -148,79 +142,86 @@ Public Class ArchetypeView
 
         For Each tvNode As ArchetypeTreeNode In NodeCol
 
-            Select Case tvNode.Item.RM_Class.Type
-                Case StructureType.Cluster
-                    Dim ctrl As New Panel
-                    ctrl.Location = aLocation
+            If ((tvNode.Item.IsMandatory) Or (Not mandatory_only)) Then
 
-                    Dim lbl As New Label
-                    lbl.Width = 150
-                    lbl.Height = 20
-                    lbl.Text = tvNode.Text
-                    If lbl.Text.Length > 20 Then
-                        lbl.AutoSize = True
-                    End If
+                Select Case tvNode.Item.RM_Class.Type
+                    Case StructureType.Cluster
+                        Dim ctrl As New Panel
+                        ctrl.Location = aLocation
 
-                    Dim rel_pos As New Point(0, 20)
+                        Dim lbl As New Label
+                        lbl.Width = 150
+                        lbl.Height = 20
+                        lbl.Text = tvNode.Text
+                        If lbl.Text.Length > 20 Then
+                            lbl.AutoSize = True
+                        End If
 
-                    lbl.Location = rel_pos
-                    lbl.BorderStyle = BorderStyle.FixedSingle
+                        Dim rel_pos As New Point(0, 20)
 
-                    ' cardinality as a tooltip
-                    ToolTip1.SetToolTip(lbl, tvNode.Item.Occurrences.ToString)
+                        lbl.Location = rel_pos
+                        lbl.BorderStyle = BorderStyle.FixedSingle
 
-                    'bold if must exist
-                    If tvNode.Item.Occurrences.MinCount > 0 Then
-                        lbl.Font = New System.Drawing.Font(lbl.Font, FontStyle.Bold)
-                    End If
+                        ' cardinality as a tooltip
+                        ToolTip1.SetToolTip(lbl, tvNode.Item.Occurrences.ToString)
 
-                    ctrl.Controls.Add(lbl)
+                        'bold if must exist
+                        If tvNode.Item.Occurrences.MinCount > 0 Then
+                            lbl.Font = New System.Drawing.Font(lbl.Font, FontStyle.Bold)
+                        End If
 
-                    lbl.BackColor = System.Drawing.Color.CornflowerBlue
+                        ctrl.Controls.Add(lbl)
 
-                    If Not tvNode.Item.IsAnonymous AndAlso CType(tvNode.Item, ArchetypeNodeAbstract).RuntimeNameText <> "" Then
-                        Dim but As New Button
-                        but.Text = "..."
-                        rel_pos.X = lbl.Location.X + lbl.Size.Width + 10
-                        but.BackColor = System.Drawing.Color.LightGray
+                        lbl.BackColor = System.Drawing.Color.CornflowerBlue
 
-                        ToolTip1.SetToolTip(but, CType(tvNode.Item, ArchetypeNodeAbstract).RuntimeNameText)
+                        If Not tvNode.Item.IsAnonymous AndAlso CType(tvNode.Item, ArchetypeNodeAbstract).RuntimeNameText <> "" Then
+                            Dim but As New Button
+                            but.Text = "..."
+                            rel_pos.X = lbl.Location.X + lbl.Size.Width + 10
+                            but.BackColor = System.Drawing.Color.LightGray
 
-                        but.Width = 30
-                        but.Height = 20
-                        but.Location = rel_pos
-                        ctrl.Controls.Add(but)
-                        ctrl.Width = 300
-                    End If
+                            ToolTip1.SetToolTip(but, CType(tvNode.Item, ArchetypeNodeAbstract).RuntimeNameText)
+
+                            but.Width = 30
+                            but.Height = 20
+                            but.Location = rel_pos
+                            ctrl.Controls.Add(but)
+                            ctrl.Width = 300
+                        End If
 
 
-                    rel_pos.X = 20
-                    rel_pos.Y = 40
+                        rel_pos.X = 20
+                        rel_pos.Y = 40
 
-                    NodesToControls(tvNode.Nodes, rel_pos, ctrl, spacer)
-                    view.Controls.Add(ctrl)
+                        NodesToControls(tvNode.Nodes, rel_pos, ctrl, spacer, mandatory_only)
+                        view.Controls.Add(ctrl)
 
-                Case StructureType.Element, StructureType.Reference
+                    Case StructureType.Element, StructureType.Reference
 
-                    view.Controls.Add(ElementView(CType(tvNode.Item, ArchetypeElement)))
+                        view.Controls.Add(ElementView(CType(tvNode.Item, ArchetypeElement)))
 
-                Case Else
-                    Beep()
-                    Debug.Assert(False)
+                    Case Else
+                        Beep()
+                        Debug.Assert(False)
 
-            End Select
 
+                End Select
+            End If
         Next
 
         view.ResumeLayout() '(False)
-        aContainer.Controls.Add(view)
 
-        aContainer.Width = Math.Max(aLocation.X + view.Width + 5, aContainer.Width)
-        If aContainer.Name <> "tpInterface" Then
-            aContainer.Height = Math.Max(view.Top + view.Height + 1, aContainer.Height)
+        If view.Controls.Count > 0 Then
+            aContainer.Controls.Add(view)
+
+            aContainer.Width = Math.Max(aLocation.X + view.Width + 5, aContainer.Width)
+            If aContainer.Name <> "tpInterface" Then
+                aContainer.Height = Math.Max(view.Top + view.Height + 1, aContainer.Height)
+            End If
+
+            aLocation.Y = view.Top + view.Height + spacer
         End If
 
-        aLocation.Y = view.Top + view.Height + spacer
     End Function
 
     Public Shared Function ElementView(ByVal anElement As ArchetypeElement) As ElementViewControl

@@ -101,8 +101,8 @@ Public Class TabPageStructure
     Friend WithEvents MenuGridAddDate As System.Windows.Forms.MenuItem
     Friend WithEvents MenuAddElementCountable As System.Windows.Forms.MenuItem
     Friend WithEvents ttElement As System.Windows.Forms.ToolTip
-    Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents HelpProviderTabPageStructure As System.Windows.Forms.HelpProvider
+    Friend WithEvents lblStructure As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageStructure))
@@ -145,7 +145,7 @@ Public Class TabPageStructure
         Me.MenuRemoveElement = New System.Windows.Forms.MenuItem
         Me.ilSmall = New System.Windows.Forms.ImageList(Me.components)
         Me.panelEntry = New System.Windows.Forms.Panel
-        Me.Label2 = New System.Windows.Forms.Label
+        Me.lblStructure = New System.Windows.Forms.Label
         Me.comboStructure = New System.Windows.Forms.ComboBox
         Me.ttElement = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolTipSpecialisation = New System.Windows.Forms.ToolTip(Me.components)
@@ -380,7 +380,7 @@ Public Class TabPageStructure
         'panelEntry
         '
         Me.panelEntry.BackColor = System.Drawing.Color.Transparent
-        Me.panelEntry.Controls.Add(Me.Label2)
+        Me.panelEntry.Controls.Add(Me.lblStructure)
         Me.panelEntry.Controls.Add(Me.comboStructure)
         Me.panelEntry.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelEntry.Location = New System.Drawing.Point(0, 0)
@@ -388,15 +388,15 @@ Public Class TabPageStructure
         Me.panelEntry.Size = New System.Drawing.Size(848, 40)
         Me.panelEntry.TabIndex = 9
         '
-        'Label2
+        'lblStructure
         '
-        Me.Label2.BackColor = System.Drawing.Color.Transparent
-        Me.Label2.Location = New System.Drawing.Point(0, 12)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(72, 16)
-        Me.Label2.TabIndex = 9
-        Me.Label2.Text = "Structure:"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.lblStructure.BackColor = System.Drawing.Color.Transparent
+        Me.lblStructure.Location = New System.Drawing.Point(0, 12)
+        Me.lblStructure.Name = "lblStructure"
+        Me.lblStructure.Size = New System.Drawing.Size(72, 16)
+        Me.lblStructure.TabIndex = 9
+        Me.lblStructure.Text = "Structure:"
+        Me.lblStructure.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'comboStructure
         '
@@ -405,7 +405,7 @@ Public Class TabPageStructure
         Me.comboStructure.Location = New System.Drawing.Point(80, 8)
         Me.comboStructure.Name = "comboStructure"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.comboStructure, True)
-        Me.comboStructure.Size = New System.Drawing.Size(136, 21)
+        Me.comboStructure.Size = New System.Drawing.Size(136, 24)
         Me.comboStructure.TabIndex = 7
         Me.comboStructure.Text = "Choose..."
         '
@@ -516,7 +516,7 @@ Public Class TabPageStructure
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mValidStructureClasses = ReferenceModel.Instance.ValidStructureTypes
         For Each ValidStructure As StructureType In mValidStructureClasses
-            Me.comboStructure.Items.Add(ValidStructure.ToString)
+            Me.comboStructure.Items.Add(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(ValidStructure, ValidStructure.ToString))
         Next
         Me.HelpProviderTabPageStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
@@ -535,8 +535,22 @@ Public Class TabPageStructure
 
     Public Sub Translate()
 
+        TranslateGUI()
+
         If Not mArchetypeControl Is Nothing Then
             mArchetypeControl.Translate()
+        End If
+
+    End Sub
+
+    Public Sub TranslateGUI()
+
+        Me.comboStructure.Items.Clear()
+
+        If Not mValidStructureClasses Is Nothing Then
+            For Each ValidStructure As StructureType In mValidStructureClasses
+                Me.comboStructure.Items.Add(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(ValidStructure, ValidStructure.ToString))
+            Next
         End If
 
     End Sub
@@ -615,7 +629,7 @@ Public Class TabPageStructure
         End If
     End Sub
 
-    Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point)
+    Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point, ByVal mandatory_only As Boolean)
         Dim spacer As Integer = 1
 
         'leftmargin = pos.X
@@ -623,7 +637,7 @@ Public Class TabPageStructure
             aContainer.Size = New Size
         End If
         If Not mArchetypeControl Is Nothing Then
-            ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer)
+            ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only)
         End If
     End Sub
 

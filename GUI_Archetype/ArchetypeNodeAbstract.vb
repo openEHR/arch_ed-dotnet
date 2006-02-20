@@ -72,6 +72,11 @@ Public MustInherit Class ArchetypeNodeAbstract
             mItem.Occurrences = Value
         End Set
     End Property
+    Public ReadOnly Property IsMandatory() As Boolean Implements ArchetypeNode.IsMandatory
+        Get
+            Return (mItem.Occurrences.MinCount > 0)
+        End Get
+    End Property
     Public ReadOnly Property NodeId() As String
         Get
             Return mItem.NodeId

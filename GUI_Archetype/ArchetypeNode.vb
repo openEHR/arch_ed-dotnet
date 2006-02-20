@@ -19,6 +19,7 @@ Option Strict On
 Public Interface ArchetypeNode
     Property Text() As String
     ReadOnly Property RM_Class() As RmStructure
+    ReadOnly Property IsMandatory() As Boolean
     Property Occurrences() As RmCardinality
     ReadOnly Property IsAnonymous() As Boolean
     Sub Translate()

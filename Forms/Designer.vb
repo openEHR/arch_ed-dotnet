@@ -40,6 +40,9 @@ Public Class Designer
     Private mDataViewConstraintBindings As DataView
     Private mFindString As String = ""
     Private mFindStringFrom As Integer = -1
+    Friend WithEvents mRichTextArchetype As ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
+    Friend WithEvents mTermBindingPanel As TermBindingPanel
+
 
 #Region " Windows Form Designer generated code "
 
@@ -211,8 +214,6 @@ Public Class Designer
     Friend WithEvents tpDescription As Crownwood.Magic.Controls.TabPage
     Friend WithEvents DataGridTableStyle5 As System.Windows.Forms.DataGridTableStyle
     Friend WithEvents DataGridTextBoxColumn13 As System.Windows.Forms.DataGridTextBoxColumn
-    Friend WithEvents TermBindingPanel1 As TermBindingPanel
-    Friend WithEvents richtextArchetype As ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
     Friend WithEvents ToolBarRTF As System.Windows.Forms.ToolBar
     Friend WithEvents butRTF As System.Windows.Forms.ToolBarButton
     Friend WithEvents tbSep1 As System.Windows.Forms.ToolBarButton
@@ -222,6 +223,7 @@ Public Class Designer
     Friend WithEvents ToolBarButton1 As System.Windows.Forms.ToolBarButton
     Friend WithEvents butPrint As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarButton2 As System.Windows.Forms.ToolBarButton
+    Friend WithEvents cbMandatory As System.Windows.Forms.CheckBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(Designer))
@@ -295,17 +297,8 @@ Public Class Designer
         Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
-        Me.tpText = New Crownwood.Magic.Controls.TabPage
-        Me.Panel3 = New System.Windows.Forms.Panel
-        Me.richtextArchetype = New ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
-        Me.panelDiplayTop = New System.Windows.Forms.Panel
-        Me.ToolBarRTF = New System.Windows.Forms.ToolBar
-        Me.tbSep1 = New System.Windows.Forms.ToolBarButton
-        Me.butRTF = New System.Windows.Forms.ToolBarButton
-        Me.tbSep2 = New System.Windows.Forms.ToolBarButton
-        Me.butSaveFile = New System.Windows.Forms.ToolBarButton
-        Me.ToolBarButton1 = New System.Windows.Forms.ToolBarButton
-        Me.butHTML1 = New System.Windows.Forms.ToolBarButton
+        Me.tpInterface = New Crownwood.Magic.Controls.TabPage
+        Me.cbMandatory = New System.Windows.Forms.CheckBox
         Me.tpHeader = New Crownwood.Magic.Controls.TabPage
         Me.tpDesign = New Crownwood.Magic.Controls.TabPage
         Me.TabDesign = New Crownwood.Magic.Controls.TabControl
@@ -354,7 +347,19 @@ Public Class Designer
         Me.ListLanguages = New System.Windows.Forms.ListBox
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.lblAvailableLanguages = New System.Windows.Forms.Label
-        Me.tpInterface = New Crownwood.Magic.Controls.TabPage
+        Me.tpText = New Crownwood.Magic.Controls.TabPage
+        Me.Panel3 = New System.Windows.Forms.Panel
+        Me.panelDiplayTop = New System.Windows.Forms.Panel
+        Me.ToolBarRTF = New System.Windows.Forms.ToolBar
+        Me.tbSep1 = New System.Windows.Forms.ToolBarButton
+        Me.butRTF = New System.Windows.Forms.ToolBarButton
+        Me.tbSep2 = New System.Windows.Forms.ToolBarButton
+        Me.butHTML1 = New System.Windows.Forms.ToolBarButton
+        Me.ToolBarButton1 = New System.Windows.Forms.ToolBarButton
+        Me.butSaveFile = New System.Windows.Forms.ToolBarButton
+        Me.ToolBarButton2 = New System.Windows.Forms.ToolBarButton
+        Me.butPrint = New System.Windows.Forms.ToolBarButton
+        Me.ImageListToolbar = New System.Windows.Forms.ImageList(Me.components)
         Me.tpDescription = New Crownwood.Magic.Controls.TabPage
         Me.ContextMenuDisplay = New System.Windows.Forms.ContextMenu
         Me.menuDisplayPrint = New System.Windows.Forms.MenuItem
@@ -369,14 +374,11 @@ Public Class Designer
         Me.ToolBarSave = New System.Windows.Forms.ToolBarButton
         Me.ToolBarSeparator1 = New System.Windows.Forms.ToolBarButton
         Me.ToolBarPrint = New System.Windows.Forms.ToolBarButton
-        Me.ImageListToolbar = New System.Windows.Forms.ImageList(Me.components)
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.lblArchetypeName = New System.Windows.Forms.Label
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.SaveFileArchetype = New System.Windows.Forms.SaveFileDialog
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
-        Me.butPrint = New System.Windows.Forms.ToolBarButton
-        Me.ToolBarButton2 = New System.Windows.Forms.ToolBarButton
         Me.PanelConcept_1.SuspendLayout()
         Me.gbSpecialisation.SuspendLayout()
         Me.gbRestrictedData.SuspendLayout()
@@ -386,9 +388,7 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
-        Me.tpText.SuspendLayout()
-        Me.Panel3.SuspendLayout()
-        Me.panelDiplayTop.SuspendLayout()
+        Me.tpInterface.SuspendLayout()
         Me.tpHeader.SuspendLayout()
         Me.tpDesign.SuspendLayout()
         Me.tpData.SuspendLayout()
@@ -403,6 +403,8 @@ Public Class Designer
         Me.Panel2.SuspendLayout()
         Me.panelLanguages.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.tpText.SuspendLayout()
+        Me.panelDiplayTop.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -950,97 +952,35 @@ Public Class Designer
         Me.TabMain.Location = New System.Drawing.Point(0, 0)
         Me.TabMain.Name = "TabMain"
         Me.TabMain.PositionTop = True
-        Me.TabMain.SelectedIndex = 4
-        Me.TabMain.SelectedTab = Me.tpText
+        Me.TabMain.SelectedIndex = 5
+        Me.TabMain.SelectedTab = Me.tpInterface
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
         Me.TabMain.Size = New System.Drawing.Size(969, 621)
         Me.TabMain.TabIndex = 1
         Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
         '
-        'tpText
+        'tpInterface
         '
-        Me.tpText.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.tpText.Controls.Add(Me.Panel3)
-        Me.tpText.Controls.Add(Me.panelDiplayTop)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpText, "Screens/display_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpText, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpText.Location = New System.Drawing.Point(0, 0)
-        Me.tpText.Name = "tpText"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpText, True)
-        Me.tpText.Size = New System.Drawing.Size(969, 595)
-        Me.tpText.TabIndex = 3
-        Me.tpText.Title = "Display"
+        Me.tpInterface.AutoScroll = True
+        Me.tpInterface.Controls.Add(Me.cbMandatory)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpInterface, "Screens/interface_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpInterface, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpInterface.Location = New System.Drawing.Point(0, 0)
+        Me.tpInterface.Name = "tpInterface"
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpInterface, True)
+        Me.tpInterface.Size = New System.Drawing.Size(969, 595)
+        Me.tpInterface.TabIndex = 5
+        Me.tpInterface.Title = "Interface"
         '
-        'Panel3
+        'cbMandatory
         '
-        Me.Panel3.Controls.Add(Me.richtextArchetype)
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel3.DockPadding.All = 5
-        Me.Panel3.Location = New System.Drawing.Point(0, 40)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(969, 555)
-        Me.Panel3.TabIndex = 4
-        '
-        'richtextArchetype
-        '
-        Me.richtextArchetype.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.richtextArchetype.Location = New System.Drawing.Point(5, 5)
-        Me.richtextArchetype.Name = "richtextArchetype"
-        Me.richtextArchetype.Size = New System.Drawing.Size(959, 545)
-        Me.richtextArchetype.TabIndex = 0
-        Me.richtextArchetype.Text = ""
-        '
-        'panelDiplayTop
-        '
-        Me.panelDiplayTop.Controls.Add(Me.ToolBarRTF)
-        Me.panelDiplayTop.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelDiplayTop.Location = New System.Drawing.Point(0, 0)
-        Me.panelDiplayTop.Name = "panelDiplayTop"
-        Me.panelDiplayTop.Size = New System.Drawing.Size(969, 40)
-        Me.panelDiplayTop.TabIndex = 3
-        '
-        'ToolBarRTF
-        '
-        Me.ToolBarRTF.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
-        Me.ToolBarRTF.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butSaveFile, Me.ToolBarButton2, Me.butPrint})
-        Me.ToolBarRTF.ButtonSize = New System.Drawing.Size(20, 20)
-        Me.ToolBarRTF.ImageList = Me.ImageListToolbar
-        Me.ToolBarRTF.Location = New System.Drawing.Point(0, 0)
-        Me.ToolBarRTF.Name = "ToolBarRTF"
-        Me.ToolBarRTF.ShowToolTips = True
-        Me.ToolBarRTF.Size = New System.Drawing.Size(969, 46)
-        Me.ToolBarRTF.TabIndex = 4
-        '
-        'tbSep1
-        '
-        Me.tbSep1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butRTF
-        '
-        Me.butRTF.Pushed = True
-        Me.butRTF.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
-        Me.butRTF.Tag = "rtf"
-        Me.butRTF.Text = "RTF"
-        '
-        'tbSep2
-        '
-        Me.tbSep2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butSaveFile
-        '
-        Me.butSaveFile.ImageIndex = 1
-        Me.butSaveFile.Tag = "save"
-        Me.butSaveFile.Text = "Save"
-        '
-        'ToolBarButton1
-        '
-        Me.ToolBarButton1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butHTML1
-        '
-        Me.butHTML1.Tag = "html"
-        Me.butHTML1.Text = "HTML"
+        Me.cbMandatory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbMandatory.Location = New System.Drawing.Point(792, 8)
+        Me.cbMandatory.Name = "cbMandatory"
+        Me.cbMandatory.Size = New System.Drawing.Size(152, 24)
+        Me.cbMandatory.TabIndex = 0
+        Me.cbMandatory.Text = "Mandatory"
         '
         'tpHeader
         '
@@ -1566,18 +1506,97 @@ Public Class Designer
         Me.lblAvailableLanguages.TabIndex = 10
         Me.lblAvailableLanguages.Text = "Available languages:"
         '
-        'tpInterface
+        'tpText
         '
-        Me.tpInterface.AutoScroll = True
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpInterface, "Screens/interface_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpInterface, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpInterface.Location = New System.Drawing.Point(0, 0)
-        Me.tpInterface.Name = "tpInterface"
-        Me.tpInterface.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpInterface, True)
-        Me.tpInterface.Size = New System.Drawing.Size(969, 595)
-        Me.tpInterface.TabIndex = 5
-        Me.tpInterface.Title = "Interface"
+        Me.tpText.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.tpText.Controls.Add(Me.Panel3)
+        Me.tpText.Controls.Add(Me.panelDiplayTop)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpText, "Screens/display_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpText, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpText.Location = New System.Drawing.Point(0, 0)
+        Me.tpText.Name = "tpText"
+        Me.tpText.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpText, True)
+        Me.tpText.Size = New System.Drawing.Size(969, 595)
+        Me.tpText.TabIndex = 3
+        Me.tpText.Title = "Display"
+        '
+        'Panel3
+        '
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel3.DockPadding.All = 5
+        Me.Panel3.Location = New System.Drawing.Point(0, 40)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(969, 555)
+        Me.Panel3.TabIndex = 4
+        '
+        'panelDiplayTop
+        '
+        Me.panelDiplayTop.Controls.Add(Me.ToolBarRTF)
+        Me.panelDiplayTop.Dock = System.Windows.Forms.DockStyle.Top
+        Me.panelDiplayTop.Location = New System.Drawing.Point(0, 0)
+        Me.panelDiplayTop.Name = "panelDiplayTop"
+        Me.panelDiplayTop.Size = New System.Drawing.Size(969, 40)
+        Me.panelDiplayTop.TabIndex = 3
+        '
+        'ToolBarRTF
+        '
+        Me.ToolBarRTF.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
+        Me.ToolBarRTF.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butSaveFile, Me.ToolBarButton2, Me.butPrint})
+        Me.ToolBarRTF.ButtonSize = New System.Drawing.Size(20, 20)
+        Me.ToolBarRTF.DropDownArrows = True
+        Me.ToolBarRTF.ImageList = Me.ImageListToolbar
+        Me.ToolBarRTF.Location = New System.Drawing.Point(0, 0)
+        Me.ToolBarRTF.Name = "ToolBarRTF"
+        Me.ToolBarRTF.ShowToolTips = True
+        Me.ToolBarRTF.Size = New System.Drawing.Size(969, 28)
+        Me.ToolBarRTF.TabIndex = 4
+        '
+        'tbSep1
+        '
+        Me.tbSep1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butRTF
+        '
+        Me.butRTF.Pushed = True
+        Me.butRTF.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
+        Me.butRTF.Tag = "rtf"
+        Me.butRTF.Text = "RTF"
+        '
+        'tbSep2
+        '
+        Me.tbSep2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butHTML1
+        '
+        Me.butHTML1.Tag = "html"
+        Me.butHTML1.Text = "HTML"
+        '
+        'ToolBarButton1
+        '
+        Me.ToolBarButton1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butSaveFile
+        '
+        Me.butSaveFile.ImageIndex = 1
+        Me.butSaveFile.Tag = "save"
+        Me.butSaveFile.Text = "Save"
+        '
+        'ToolBarButton2
+        '
+        Me.ToolBarButton2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butPrint
+        '
+        Me.butPrint.ImageIndex = 2
+        Me.butPrint.Tag = "print"
+        Me.butPrint.Text = "Print"
+        '
+        'ImageListToolbar
+        '
+        Me.ImageListToolbar.ImageSize = New System.Drawing.Size(16, 16)
+        Me.ImageListToolbar.ImageStream = CType(resources.GetObject("ImageListToolbar.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageListToolbar.TransparentColor = System.Drawing.Color.Transparent
         '
         'tpDescription
         '
@@ -1674,12 +1693,6 @@ Public Class Designer
         Me.ToolBarPrint.ToolTipText = "Print archetype"
         Me.ToolBarPrint.Visible = False
         '
-        'ImageListToolbar
-        '
-        Me.ImageListToolbar.ImageSize = New System.Drawing.Size(16, 16)
-        Me.ImageListToolbar.ImageStream = CType(resources.GetObject("ImageListToolbar.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageListToolbar.TransparentColor = System.Drawing.Color.Transparent
-        '
         'PictureBox1
         '
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
@@ -1706,16 +1719,6 @@ Public Class Designer
         '
         Me.SaveFileArchetype.FileName = "doc1"
         '
-        'butPrint
-        '
-        Me.butPrint.ImageIndex = 2
-        Me.butPrint.Tag = "print"
-        Me.butPrint.Text = "Print"
-        '
-        'ToolBarButton2
-        '
-        Me.ToolBarButton2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
         'Designer
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
@@ -1739,9 +1742,7 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
-        Me.tpText.ResumeLayout(False)
-        Me.Panel3.ResumeLayout(False)
-        Me.panelDiplayTop.ResumeLayout(False)
+        Me.tpInterface.ResumeLayout(False)
         Me.tpHeader.ResumeLayout(False)
         Me.tpDesign.ResumeLayout(False)
         Me.tpData.ResumeLayout(False)
@@ -1756,6 +1757,8 @@ Public Class Designer
         Me.Panel2.ResumeLayout(False)
         Me.panelLanguages.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
+        Me.tpText.ResumeLayout(False)
+        Me.panelDiplayTop.ResumeLayout(False)
         Me.PanelHeader.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -2097,6 +2100,16 @@ Public Class Designer
         mBaseTabPagesCollection.Add(Me.tpDesign, Me.tpDesign.Name)
         ' leave in place as default
 
+        ' add the display printable rich text box
+        mRichTextArchetype = New ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
+        Me.Panel3.Controls.Add(mRichTextArchetype)
+        mRichTextArchetype.Dock = DockStyle.Fill
+
+        ' add the term binding panel
+        mTermBindingPanel = New TermBindingPanel
+        Me.tpBindings.Controls.Add(mTermBindingPanel)
+        mTermBindingPanel.Dock = DockStyle.Fill
+
     End Sub
 
     Private Sub AddLanguageToMenu(ByVal LanguageText As String)
@@ -2198,7 +2211,7 @@ Public Class Designer
         Me.tpRootState.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(177, Me.tpRootState.Title, language)
         Me.tpRootStateEventSeries.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(133, Me.tpRootStateEventSeries.Title, language)
         Me.tpRootStateStructure.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(177, Me.tpRootStateStructure.Title, language)
-
+        Me.tpRootStateStructure.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(446, Me.cbMandatory.Text, language)
 
     End Sub
 
@@ -2268,7 +2281,6 @@ Public Class Designer
 
         Select Case Me.TabMain.SelectedTab.Name
             Case "tpInterface"
-                Me.tpInterface.Controls.Clear()
                 BuildInterface()
             Case "tpText"
                 WriteRichText()
@@ -2422,7 +2434,7 @@ Public Class Designer
                 End If
         End Select
 
-        Me.richtextArchetype.Rtf = text.ToString
+        Me.mRichTextArchetype.Rtf = text.ToString
     End Sub
 
     Public Sub WriteToHTML(ByVal filename As String)
@@ -2565,9 +2577,6 @@ Public Class Designer
 
         text.Flush()
         text.Close()
-
-        'Me.richtextArchetype.Rtf = text.ToString
-
 
     End Sub
 
@@ -2818,7 +2827,7 @@ Public Class Designer
         Me.cbStructurePersonState.Checked = False
         Me.cbProtocol.Checked = False
         'set the display panel to nothing
-        Me.richtextArchetype.Clear()
+        Me.mRichTextArchetype.Clear()
 
         'Get rid of the languages from menu
         Me.MenuLanguageChange.MenuItems.Clear()
@@ -4189,7 +4198,7 @@ Public Class Designer
     Private Sub TabMain_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanged
 
         If TabMain.SelectedTab Is tpText Then
-            If Me.richtextArchetype.Text = "" Then
+            If Me.mRichTextArchetype.Text = "" Then
                 For Each tbb As System.Windows.Forms.ToolBarButton In Me.ToolBarRTF.Buttons
                     tbb.Pushed = False
                 Next
@@ -4235,6 +4244,11 @@ Public Class Designer
 
     Private Sub BuildInterface()
         ' build the data
+
+        Me.tpInterface.Controls.Clear()
+        'Put back the mandatory text box
+        Me.tpInterface.Controls.Add(Me.cbMandatory)
+
         ' ? use tabcontrol in the future for protocol and state
         Select Case Filemanager.Instance.Archetype.RmEntity
             Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION
@@ -4246,14 +4260,15 @@ Public Class Designer
                     Dim gb As New GroupBox
                     Dim rel_pos As New Point
 
-                    gb.Text = "Event Series"
+                    gb.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(275, "History")
+
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
                     gb.Location = pos
                     rel_pos.X = 20
                     rel_pos.Y = 20
                     If Not Me.mTabPageDataEventSeries Is Nothing Then
-                        Me.mTabPageDataEventSeries.BuildInterface(gb, rel_pos)
+                        Me.mTabPageDataEventSeries.BuildInterface(gb, rel_pos, Me.cbMandatory.Checked)
                     End If
                     gb.Height = gb.Height + 10
                     Me.tpInterface.Controls.Add(gb)
@@ -4261,22 +4276,24 @@ Public Class Designer
                 End If
 
                 If Not Me.mTabPageDataStructure Is Nothing Then
-                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos)
+                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
                 End If
 
                 If Me.cbStructurePersonState.Checked Then
                     Dim gb As New GroupBox
                     Dim rel_pos As New Point
 
-                    gb.Text = "State"
+                    gb.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(177, "State")
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
                     gb.Location = pos
                     rel_pos.X = 20
                     rel_pos.Y = 20
-                    Me.mTabPageDataStateStructure.BuildInterface(gb, rel_pos)
+                    Me.mTabPageDataStateStructure.BuildInterface(gb, rel_pos, Me.cbMandatory.Checked)
                     gb.Height = gb.Height + 10
-                    Me.tpInterface.Controls.Add(gb)
+                    If gb.Controls.Count > 0 Then
+                        Me.tpInterface.Controls.Add(gb)
+                    End If
                     pos.Y = pos.Y + gb.Height + 10
                 End If
 
@@ -4284,7 +4301,7 @@ Public Class Designer
                     Dim gb, hist As GroupBox
                     Dim rel_pos As New Point
                     gb = New GroupBox
-                    gb.Text = "State & EventSeries"
+                    gb.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(79, "Person State with History")
                     gb.FlatStyle = FlatStyle.Popup
                     ' add EventSeries
                     pos.X = 10
@@ -4293,7 +4310,7 @@ Public Class Designer
                     ' now add the EventSeries element
                     hist = New GroupBox
                     Dim hist_pos As New Point
-                    hist.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(81, "Event Series")
+                    hist.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(275, "History")
                     hist.FlatStyle = FlatStyle.Popup
                     hist_pos.X = 20
                     hist_pos.Y = 20
@@ -4301,16 +4318,18 @@ Public Class Designer
                     rel_pos.X = 20
                     rel_pos.Y = 20
                     If Not Me.mTabPageStateEventSeries Is Nothing Then
-                        Me.mTabPageStateEventSeries.BuildInterface(hist, rel_pos)
+                        Me.mTabPageStateEventSeries.BuildInterface(hist, rel_pos, Me.cbMandatory.Checked)
                     End If
                     gb.Controls.Add(hist)
                     gb.Height = hist.Height + 10
                     pos.Y = pos.Y + hist.Height + 10
                     rel_pos.X = 20
                     rel_pos.Y = rel_pos.Y + hist.Height + 10
-                    Me.mTabPageStateStructure.BuildInterface(gb, rel_pos)
+                    Me.mTabPageStateStructure.BuildInterface(gb, rel_pos, cbMandatory.Checked)
                     gb.Height = gb.Height + 10
-                    Me.tpInterface.Controls.Add(gb)
+                    If gb.Controls.Count > 0 Then
+                        Me.tpInterface.Controls.Add(gb)
+                    End If
                     pos.Y = pos.Y + gb.Height + 10
                 End If
 
@@ -4318,17 +4337,19 @@ Public Class Designer
                     Dim gb As New GroupBox
                     Dim rel_pos As New Point
 
-                    gb.Text = "Protocol"
+                    gb.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(78, "Protocol")
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
                     gb.Location = pos
                     rel_pos.X = 20
                     rel_pos.Y = 20
                     If Not Me.mTabPageProtocolStructure Is Nothing Then
-                        Me.mTabPageProtocolStructure.BuildInterface(gb, rel_pos)
+                        Me.mTabPageProtocolStructure.BuildInterface(gb, rel_pos, Me.cbMandatory.Checked)
                     End If
                     gb.Height = gb.Height + 10
-                    Me.tpInterface.Controls.Add(gb)
+                    If gb.Controls.Count > 0 Then
+                        Me.tpInterface.Controls.Add(gb)
+                    End If
                     pos.Y = pos.Y + gb.Height + 10
                 End If
 
@@ -4339,7 +4360,7 @@ Public Class Designer
                 pos.Y = 10
 
                 If Not Me.mTabPageInstruction Is Nothing Then
-                    Me.mTabPageInstruction.BuildInterface(tpInterface, pos)
+                    Me.mTabPageInstruction.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
                 End If
 
 
@@ -4351,7 +4372,7 @@ Public Class Designer
                 pos.Y = 10
 
                 If Not Me.mTabPageComposition Is Nothing Then
-                    Me.mTabPageComposition.BuildInterface(tpInterface, pos)
+                    Me.mTabPageComposition.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
                 End If
 
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
@@ -4360,7 +4381,7 @@ Public Class Designer
                 pos.Y = 10
 
                 If Not Me.mTabPageDataStructure Is Nothing Then
-                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos)
+                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
                 End If
         End Select
 
@@ -4396,13 +4417,13 @@ Public Class Designer
                     End Select
 
                     Try
-                        Me.richtextArchetype.SaveFile(Me.SaveFileArchetype.FileName, ds)
+                        Me.mRichTextArchetype.SaveFile(Me.SaveFileArchetype.FileName, ds)
                     Catch
                         MessageBox.Show(AE_Constants.Instance.Error_saving & Filemanager.Instance.Archetype.Archetype_ID.ToString & ".rtf", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
                 End If
             Case "print"
-                Me.richtextArchetype.Print()
+                Me.mRichTextArchetype.Print()
 
             Case "html"
                 WriteToHTML("\HTML\temp.html")
@@ -4423,7 +4444,7 @@ Public Class Designer
                     WriteRichText()
                 Else
                     Me.PrepareToSave()
-                    Me.richtextArchetype.Text = Filemanager.Instance.Archetype.SerialisedArchetype(s)
+                    Me.mRichTextArchetype.Text = Filemanager.Instance.Archetype.SerialisedArchetype(s)
                 End If
         End Select
     End Sub
@@ -4458,7 +4479,7 @@ Public Class Designer
 #End Region
 
     Private Sub menuDisplayPrint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuDisplayPrint.Click
-        Me.richtextArchetype.Print()
+        Me.mRichTextArchetype.Print()
     End Sub
 
     Private Sub menuEditArchID_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuEditArchID.Click
@@ -4490,18 +4511,18 @@ Public Class Designer
         If sender Is MenuDisplayFind Then
             mFindString = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.Text)
             If mFindString <> "" Then
-                mFindStringFrom = Me.richtextArchetype.Find(mFindString)
+                mFindStringFrom = Me.mRichTextArchetype.Find(mFindString)
                 If mFindStringFrom > -1 Then
-                    Me.richtextArchetype.Select(mFindStringFrom, mFindString.Length)
+                    Me.mRichTextArchetype.Select(mFindStringFrom, mFindString.Length)
                 End If
             End If
         Else
-            mFindStringFrom = Me.richtextArchetype.Find(mFindString, mFindStringFrom + mFindString.Length, RichTextBoxFinds.None)
+            mFindStringFrom = Me.mRichTextArchetype.Find(mFindString, mFindStringFrom + mFindString.Length, RichTextBoxFinds.None)
             If mFindStringFrom > -1 Then
-                Me.richtextArchetype.Select(mFindStringFrom, mFindString.Length)
+                Me.mRichTextArchetype.Select(mFindStringFrom, mFindString.Length)
             Else
                 Beep()
-                Me.richtextArchetype.Select(0, 0)
+                Me.mRichTextArchetype.Select(0, 0)
             End If
         End If
     End Sub
@@ -4514,6 +4535,9 @@ Public Class Designer
         End If
     End Sub
 
+    Private Sub cbMandatory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMandatory.CheckedChanged
+        BuildInterface()
+    End Sub
 End Class
 
 
