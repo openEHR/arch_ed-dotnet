@@ -6,8 +6,9 @@ Public Class ArchetypeDescriptionItem
     Protected mCopyright As String
     Protected mOriginalResourceURI As String
     Protected mOtherDetails As New OtherDefinitionDetails
+    Protected mKeyWords As New ArrayList
 
-    Property Language() As String
+    Public Overridable Property Language() As String
         Get
             Return mLanguage
         End Get
@@ -15,7 +16,7 @@ Public Class ArchetypeDescriptionItem
             mLanguage = Value
         End Set
     End Property
-    Property Purpose() As String
+    Public Overridable Property Purpose() As String
         Get
             Return mPurpose
         End Get
@@ -23,7 +24,7 @@ Public Class ArchetypeDescriptionItem
             mPurpose = Value
         End Set
     End Property
-    Property Use() As String
+    Public Overridable Property Use() As String
         Get
             Return mUse
         End Get
@@ -31,7 +32,7 @@ Public Class ArchetypeDescriptionItem
             mUse = Value
         End Set
     End Property
-    Property MisUse() As String
+    Public Overridable Property MisUse() As String
         Get
             Return mMisUse
         End Get
@@ -39,7 +40,7 @@ Public Class ArchetypeDescriptionItem
             mMisUse = Value
         End Set
     End Property
-    Property Copyright() As String
+    Public Overridable Property Copyright() As String
         Get
             Return mCopyright
         End Get
@@ -47,7 +48,12 @@ Public Class ArchetypeDescriptionItem
             mCopyright = Value
         End Set
     End Property
-    Property OriginalResourceURI() As String
+    Public ReadOnly Property KeyWords() As ArrayList
+        Get
+            Return mKeyWords
+        End Get
+    End Property
+    Public Overridable Property OriginalResourceURI() As String
         Get
             Return mOriginalResourceURI
         End Get
@@ -55,10 +61,14 @@ Public Class ArchetypeDescriptionItem
             mOriginalResourceURI = Value
         End Set
     End Property
-    ReadOnly Property OtherDetails() As OtherDefinitionDetails
+    Public Overridable ReadOnly Property OtherDetails() As OtherDefinitionDetails
         Get
             Return mOtherDetails
         End Get
     End Property
+
+    Sub New(ByVal a_language_code As String)
+        mLanguage = a_language_code
+    End Sub
 
 End Class

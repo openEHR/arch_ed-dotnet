@@ -372,8 +372,13 @@ Public Class ReferenceModelLocal
             Case StructureType.COMPOSITION
                 Select Case mRefModelType
                     Case ReferenceModelType.openEHR_EHR, ReferenceModelType.HL7_CDA
-                        Dim s(0) As StructureType
+                        Dim s(5) As StructureType
                         s(0) = StructureType.SECTION
+                        s(1) = StructureType.ADMIN_ENTRY
+                        s(2) = StructureType.OBSERVATION
+                        s(3) = StructureType.EVALUATION
+                        s(4) = StructureType.INSTRUCTION
+                        s(5) = StructureType.ACTION
                         Return s
                     Case ReferenceModelType.CEN_EHR
                         Dim s(1) As StructureType

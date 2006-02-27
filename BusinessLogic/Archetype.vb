@@ -42,10 +42,13 @@ Public MustInherit Class Archetype
             Return mArchetypeID.ReferenceModelEntity
         End Get
     End Property
-    Public ReadOnly Property Description() As ArchetypeDescription
+    Public Property Description() As ArchetypeDescription
         Get
             Return mDescription
         End Get
+        Set(ByVal Value As ArchetypeDescription)
+            mDescription = Value
+        End Set
     End Property
     Public ReadOnly Property RmType() As ReferenceModelType
         Get
@@ -102,7 +105,9 @@ Public MustInherit Class Archetype
                 cDefinition = New RmComposition
             Case StructureType.SECTION
                 cDefinition = New RmSection("?")
-            Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.INSTRUCTION, StructureType.EVALUATION
+            Case StructureType.ENTRY, StructureType.OBSERVATION, _
+                StructureType.INSTRUCTION, StructureType.EVALUATION, _
+                StructureType.ADMIN_ENTRY
                 cDefinition = New RmEntry(mArchetypeID.ReferenceModelEntity)
             Case StructureType.Single, StructureType.List, StructureType.Tree
                 cDefinition = New RmStructureCompound("?", mArchetypeID.ReferenceModelEntity)
