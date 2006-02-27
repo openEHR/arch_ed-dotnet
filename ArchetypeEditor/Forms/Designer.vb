@@ -42,6 +42,7 @@ Public Class Designer
     Private mFindStringFrom As Integer = -1
     Friend WithEvents mRichTextArchetype As ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
     Friend WithEvents mTermBindingPanel As TermBindingPanel
+    Friend WithEvents mTabPageDescription As TabPageDescription
 
 
 #Region " Windows Form Designer generated code "
@@ -1851,6 +1852,9 @@ Public Class Designer
             Me.gbSpecialisation.Visible = True
         End If
 
+        'Set the description
+        mTabPageDescription.Description = Filemanager.Instance.Archetype.Description
+
         If Filemanager.Instance.Archetype.hasData Then
             'Dim sType As String
 
@@ -1858,7 +1862,7 @@ Public Class Designer
 
             Select Case Filemanager.Instance.Archetype.RmEntity
 
-                Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, StructureType.INSTRUCTION
+                Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY
                     'If FileManager.Instance.Archetype.Definition.TypeName.StartsWith("ENTRY") Then
                     Dim rm As RmStructureCompound
                     ' allow restriction of subject of data
@@ -1929,6 +1933,12 @@ Public Class Designer
                         Case StructureType.INSTRUCTION ' "ENTRY.INSTRUCTION"
                             SetUpInstruction()
                             mTabPageInstruction.ProcessInstruction(Filemanager.Instance.Archetype.Definition.Data)
+
+                        Case StructureType.ADMIN_ENTRY
+                            rm = Filemanager.Instance.Archetype.Definition.Data.items(0)
+                            If rm.Children.Count > 0 Then
+                                ProcessDataStructure(rm.Children.items(0))
+                            End If
 
                     End Select
 
@@ -2109,6 +2119,12 @@ Public Class Designer
         mTermBindingPanel = New TermBindingPanel
         Me.tpBindings.Controls.Add(mTermBindingPanel)
         mTermBindingPanel.Dock = DockStyle.Fill
+
+        'Add description
+        mTabPageDescription = New TabPageDescription
+        Me.tpDescription.Controls.Add(mTabPageDescription)
+        mTabPageDescription.Dock = DockStyle.Fill
+        Me.mComponentsCollection.Add(mTabPageDescription)
 
     End Sub
 
@@ -2858,6 +2874,7 @@ Public Class Designer
         mTabPageProtocolStructure = Nothing
         mTabPageStateStructure = Nothing
         mTabPageSection = Nothing
+        mTabPageDescription.Reset()
 
         'clear any added pages and controls
         mTabPagesCollection = New Collections.Hashtable  'clear all tab pages
@@ -3592,6 +3609,7 @@ Public Class Designer
 
         ' Clear the definitions prior to rebuilding them
         Filemanager.Instance.Archetype.ResetDefinitions()
+        Filemanager.Instance.Archetype.Description = mTabPageDescription.Description
 
         If Me.ShowAsDraft Then
             Filemanager.Instance.Archetype.LifeCycle = "draft"
@@ -3601,7 +3619,10 @@ Public Class Designer
 
         ' get the subject of data information
         Select Case Filemanager.Instance.Archetype.Definition.Type
-            Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, StructureType.INSTRUCTION
+            Case StructureType.ENTRY, StructureType.EVALUATION, _
+                StructureType.OBSERVATION, StructureType.INSTRUCTION, _
+                StructureType.ADMIN_ENTRY
+
                 If Me.radioRestrictedSet.Checked Then
                     Dim cp As CodePhrase
 
@@ -3617,6 +3638,7 @@ Public Class Designer
                         cp.Codes.Add(a_term.Code)
                     Next
                 End If
+
                 Select Case Filemanager.Instance.Archetype.Definition.Type
                     Case StructureType.INSTRUCTION
                         Filemanager.Instance.Archetype.Definition.Data = mTabPageInstruction.SaveAsInstruction.Children
@@ -3801,8 +3823,21 @@ Public Class Designer
                         Next
 
 
-                End Select
+                    Case StructureType.ADMIN_ENTRY
 
+                        For Each tp In Me.TabStructure.TabPages
+                            Select Case tp.Name
+                                Case "tpDataStructure"
+                                    If Not mTabPageDataStructure Is Nothing Then
+                                        Dim rm As RmStructureCompound
+                                        rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
+                                        rm.Children.add(mTabPageDataStructure.SaveAsStructure)
+                                        Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                    End If
+                            End Select
+                        Next
+
+                End Select
 
             Case StructureType.SECTION ' "SECTION"
 

@@ -60,13 +60,17 @@ Public Class ArchetypeNodeAnonymous
             Case StructureType.Slot
                 Select Case CType(mRMStructure, RmSlot).SlotConstraint.RM_ClassType
                     Case StructureType.ENTRY
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(171, "ENTRY")
+                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(559, "ENTRY")
                     Case StructureType.OBSERVATION
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(2000, "OBSERVATION")
+                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(554, "OBSERVATION")
                     Case StructureType.EVALUATION
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(2000, "EVALUATION")
+                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(555, "EVALUATION")
                     Case StructureType.INSTRUCTION
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(2000, "INSTRUCTION")
+                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(557, "INSTRUCTION")
+                    Case StructureType.ACTION
+                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(556, "ACTION")
+                    Case StructureType.ADMIN_ENTRY
+                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(560, "Administration ENTRY")
                     Case StructureType.SECTION
                         mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(314, "SECTION")
                     Case StructureType.Cluster

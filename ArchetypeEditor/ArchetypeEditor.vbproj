@@ -130,6 +130,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ADL_Classes\ADL_ArchetypeDetails.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ADL_Classes\ADL_Composition.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -226,6 +231,11 @@
                 />
                 <File
                     RelPath = "BusinessLogic\ArchetypeDescription\ArchetypeDescriptionItem.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "BusinessLogic\ArchetypeDescription\ArchetypeDetails.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

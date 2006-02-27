@@ -36,15 +36,17 @@ Public Class RmEntry
     End Sub
 
     Sub New(ByVal SubType As String)
-        Select Case SubType
-            Case "OBSERVATION", "Observation", "observation"
+        Select Case SubType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Case "observation"
                 mType = StructureType.OBSERVATION
-            Case "EVALUATION", "Evaluation", "evaluation"
+            Case "evaluation"
                 mType = StructureType.EVALUATION
-               Case "INSTRUCTION", "Instruction", "instruction"
+            Case "instruction"
                 mType = StructureType.INSTRUCTION
-            Case "ENTRY", "Entry", "entry"
+            Case "entry"
                 mType = StructureType.ENTRY
+            Case "admin_entry"
+                mType = StructureType.ADMIN_ENTRY
             Case Else
                 'raise error
                 Beep()

@@ -13,23 +13,75 @@
 '	last_change: "$LastChangedDate$"
 '
 '
+
+Option Explicit On 
+
 Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Description
         Inherits ArchetypeDescription
 
         Private mADL_Description As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION
 
+        Public Overrides ReadOnly Property Details() As ArchetypeDetails
+            Get
+                Return New ADL_ArchetypeDetails(mADL_Description)
+            End Get
+        End Property
+
+
         Function ADL_Description() As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION
+            ' set the variables
+
+            ' Add the original author details
+            mADL_Description.original_author.clear_all()
+            mADL_Description.add_original_author_item( _
+                 openehr.base.kernel.Create.STRING.make_from_cil("name"), _
+                openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthor))
+            mADL_Description.add_original_author_item( _
+                 openehr.base.kernel.Create.STRING.make_from_cil("email"), _
+                openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorEmail))
+
+            mADL_Description.set_lifecycle_state( _
+                openehr.base.kernel.Create.STRING.make_from_cil(Me.LifeCycleStateAsString))
+
+            If Not mArchetypePackageURI Is Nothing Then
+                mADL_Description.set_archetype_package_uri( _
+                    openehr.base.kernel.Create.STRING.make_from_cil(mArchetypePackageURI))
+            End If
+
             Return mADL_Description
         End Function
 
-        Sub New(ByVal an_adl_archetype As openehr.openehr.am.archetype.ARCHETYPE)
-            mADL_Description = an_adl_archetype.description
+        Sub New(ByVal an_adl_archetype_description As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION)
+            mADL_Description = an_adl_archetype_description
+
             'mADL_Version = mADL_Description.adl_version.to_cil ' set to 1.2 by default
             If Not mADL_Description.archetype_package_uri Is Nothing Then
                 mArchetypePackageURI = mADL_Description.archetype_package_uri.as_string.to_cil
             End If
+
+            If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("name")) Then
+                mOriginalAuthor = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("name")).to_cil()
+            End If
+
+            If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("email")) Then
+                mOriginalAuthorEmail = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("email")).to_cil
+            End If
+
             MyBase.LifeCycleStateAsString = mADL_Description.lifecycle_state.to_cil
+            If mADL_Description.details.count > 0 Then
+                Dim mADL_Detail As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION_ITEM
+                For i As Integer = 1 To mADL_Description.details.count
+
+                    mADL_Detail = mADL_Description.details.item(mADL_Description.details.key_at(i))
+
+
+                Next
+            Else
+                Me.mArchetypeDetails.AddOrReplace( _
+                Filemanager.Instance.OntologyManager.LanguageCode, _
+                New ArchetypeDescriptionItem(Filemanager.Instance.OntologyManager.LanguageCode))
+            End If
         End Sub
 
         Sub New()
