@@ -139,6 +139,7 @@ Public Class EntryStructure
     Friend WithEvents ToolTipSpecialisation As System.Windows.Forms.ToolTip
     Friend WithEvents helpEntryStructure As System.Windows.Forms.HelpProvider
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
+    Friend WithEvents lblAtcode As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(EntryStructure))
@@ -162,7 +163,9 @@ Public Class EntryStructure
         Me.ToolTipSpecialisation = New System.Windows.Forms.ToolTip(Me.components)
         Me.helpEntryStructure = New System.Windows.Forms.HelpProvider
         Me.Splitter1 = New System.Windows.Forms.Splitter
+        Me.lblAtcode = New System.Windows.Forms.Label
         Me.PanelIcons.SuspendLayout()
+        Me.PanelStructureHeader.SuspendLayout()
         Me.SuspendLayout()
         '
         'PanelIcons
@@ -334,6 +337,7 @@ Public Class EntryStructure
         '
         'PanelStructureHeader
         '
+        Me.PanelStructureHeader.Controls.Add(Me.lblAtcode)
         Me.PanelStructureHeader.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelStructureHeader.Location = New System.Drawing.Point(40, 0)
         Me.PanelStructureHeader.Name = "PanelStructureHeader"
@@ -360,6 +364,16 @@ Public Class EntryStructure
         Me.Splitter1.TabIndex = 38
         Me.Splitter1.TabStop = False
         '
+        'lblAtcode
+        '
+        Me.lblAtcode.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lblAtcode.ForeColor = System.Drawing.SystemColors.GrayText
+        Me.lblAtcode.Location = New System.Drawing.Point(272, 0)
+        Me.lblAtcode.Name = "lblAtcode"
+        Me.lblAtcode.Size = New System.Drawing.Size(72, 24)
+        Me.lblAtcode.TabIndex = 0
+        Me.lblAtcode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'EntryStructure
         '
         Me.Controls.Add(Me.Splitter1)
@@ -371,6 +385,7 @@ Public Class EntryStructure
         Me.helpEntryStructure.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(384, 360)
         Me.PanelIcons.ResumeLayout(False)
+        Me.PanelStructureHeader.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -517,6 +532,7 @@ Public Class EntryStructure
     Protected Overloads Sub SetCurrentItem(ByVal a_node As ArchetypeNode)
         ' if nothing this hides panelDetails
         mCurrentItem = a_node
+        Me.lblAtcode.Text = a_node.RM_Class.NodeId
         If Not a_node Is Nothing Then
             SetButtonVisibility(a_node)
         End If

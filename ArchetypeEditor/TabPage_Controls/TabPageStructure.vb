@@ -535,8 +535,6 @@ Public Class TabPageStructure
 
     Public Sub Translate()
 
-        TranslateGUI()
-
         If Not mArchetypeControl Is Nothing Then
             mArchetypeControl.Translate()
         End If

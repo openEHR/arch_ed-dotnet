@@ -89,10 +89,17 @@ Public Class AE_Constants
     Private mURI As String
     Private mDragDropHere As String
     Private mReplaceTranslations As String
+    Private mRename As String
 
     Friend ReadOnly Property ReplaceTranslations() As String
         Get
             Return mReplaceTranslations
+        End Get
+    End Property
+
+    Friend ReadOnly Property Rename() As String
+        Get
+            Return mRename
         End Get
     End Property
 
@@ -595,6 +602,7 @@ Public Class AE_Constants
         mURI = TerminologyServer.Instance.RubricForCode(430, Language)
         mDragDropHere = TerminologyServer.Instance.RubricForCode(440, Language)
         mReplaceTranslations = TerminologyServer.Instance.RubricForCode(442, Language)
+        mRename = TerminologyServer.Instance.RubricForCode(325, Language)
     End Sub
 End Class
 

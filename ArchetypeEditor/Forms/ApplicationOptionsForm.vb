@@ -69,6 +69,8 @@ Public Class ApplicationOptionsForm
     Friend WithEvents butHelpBrowse As System.Windows.Forms.Button
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
     Friend WithEvents txtHelpFile As System.Windows.Forms.TextBox
+    Friend WithEvents lblOccurrences As System.Windows.Forms.Label
+    Friend WithEvents comboOccurrences As System.Windows.Forms.ComboBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(ApplicationOptionsForm))
@@ -112,6 +114,8 @@ Public Class ApplicationOptionsForm
         Me.tpAppearance = New System.Windows.Forms.TabPage
         Me.tpDefaults = New System.Windows.Forms.TabPage
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
+        Me.comboOccurrences = New System.Windows.Forms.ComboBox
+        Me.lblOccurrences = New System.Windows.Forms.Label
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -218,7 +222,7 @@ Public Class ApplicationOptionsForm
         '
         Me.comboReferenceModel.Location = New System.Drawing.Point(19, 65)
         Me.comboReferenceModel.Name = "comboReferenceModel"
-        Me.comboReferenceModel.Size = New System.Drawing.Size(250, 22)
+        Me.comboReferenceModel.Size = New System.Drawing.Size(250, 24)
         Me.comboReferenceModel.TabIndex = 21
         '
         'Label1
@@ -261,7 +265,7 @@ Public Class ApplicationOptionsForm
         Me.GroupBox1.Controls.Add(Me.Label_5)
         Me.GroupBox1.Location = New System.Drawing.Point(19, 9)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(557, 166)
+        Me.GroupBox1.Size = New System.Drawing.Size(557, 135)
         Me.GroupBox1.TabIndex = 24
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "State machine colours"
@@ -270,16 +274,16 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_6.BackColor = System.Drawing.Color.LightGray
         Me.Panel_6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_6.Location = New System.Drawing.Point(509, 92)
+        Me.Panel_6.Location = New System.Drawing.Point(509, 80)
         Me.Panel_6.Name = "Panel_6"
-        Me.Panel_6.Size = New System.Drawing.Size(38, 28)
+        Me.Panel_6.Size = New System.Drawing.Size(38, 18)
         Me.Panel_6.TabIndex = 13
         '
         'Label_6
         '
-        Me.Label_6.Location = New System.Drawing.Point(288, 92)
+        Me.Label_6.Location = New System.Drawing.Point(288, 80)
         Me.Label_6.Name = "Label_6"
-        Me.Label_6.Size = New System.Drawing.Size(211, 28)
+        Me.Label_6.Size = New System.Drawing.Size(211, 18)
         Me.Label_6.TabIndex = 12
         Me.Label_6.Text = "Label6"
         Me.Label_6.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -289,9 +293,9 @@ Public Class ApplicationOptionsForm
         Me.Panel_4.BackColor = System.Drawing.Color.Red
         Me.Panel_4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel_4.Controls.Add(Me.Panel2)
-        Me.Panel_4.Location = New System.Drawing.Point(509, 18)
+        Me.Panel_4.Location = New System.Drawing.Point(509, 20)
         Me.Panel_4.Name = "Panel_4"
-        Me.Panel_4.Size = New System.Drawing.Size(38, 28)
+        Me.Panel_4.Size = New System.Drawing.Size(38, 18)
         Me.Panel_4.TabIndex = 9
         '
         'Panel2
@@ -307,7 +311,7 @@ Public Class ApplicationOptionsForm
         '
         Me.Label_4.Location = New System.Drawing.Point(288, 18)
         Me.Label_4.Name = "Label_4"
-        Me.Label_4.Size = New System.Drawing.Size(211, 28)
+        Me.Label_4.Size = New System.Drawing.Size(211, 18)
         Me.Label_4.TabIndex = 8
         Me.Label_4.Text = "Label4"
         Me.Label_4.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -316,16 +320,16 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_1.BackColor = System.Drawing.Color.Lime
         Me.Panel_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_1.Location = New System.Drawing.Point(240, 55)
+        Me.Panel_1.Location = New System.Drawing.Point(240, 48)
         Me.Panel_1.Name = "Panel_1"
-        Me.Panel_1.Size = New System.Drawing.Size(38, 28)
+        Me.Panel_1.Size = New System.Drawing.Size(38, 18)
         Me.Panel_1.TabIndex = 7
         '
         'Label_1
         '
-        Me.Label_1.Location = New System.Drawing.Point(10, 55)
+        Me.Label_1.Location = New System.Drawing.Point(10, 48)
         Me.Label_1.Name = "Label_1"
-        Me.Label_1.Size = New System.Drawing.Size(211, 28)
+        Me.Label_1.Size = New System.Drawing.Size(211, 18)
         Me.Label_1.TabIndex = 6
         Me.Label_1.Text = "Label1"
         Me.Label_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -334,16 +338,16 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_3.BackColor = System.Drawing.Color.Tomato
         Me.Panel_3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_3.Location = New System.Drawing.Point(240, 129)
+        Me.Panel_3.Location = New System.Drawing.Point(240, 113)
         Me.Panel_3.Name = "Panel_3"
-        Me.Panel_3.Size = New System.Drawing.Size(38, 28)
+        Me.Panel_3.Size = New System.Drawing.Size(38, 18)
         Me.Panel_3.TabIndex = 5
         '
         'Label_3
         '
-        Me.Label_3.Location = New System.Drawing.Point(10, 129)
+        Me.Label_3.Location = New System.Drawing.Point(10, 112)
         Me.Label_3.Name = "Label_3"
-        Me.Label_3.Size = New System.Drawing.Size(211, 28)
+        Me.Label_3.Size = New System.Drawing.Size(211, 18)
         Me.Label_3.TabIndex = 4
         Me.Label_3.Text = "Label3"
         Me.Label_3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -352,16 +356,16 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_2.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(192, Byte), CType(192, Byte))
         Me.Panel_2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_2.Location = New System.Drawing.Point(240, 92)
+        Me.Panel_2.Location = New System.Drawing.Point(240, 81)
         Me.Panel_2.Name = "Panel_2"
-        Me.Panel_2.Size = New System.Drawing.Size(38, 28)
+        Me.Panel_2.Size = New System.Drawing.Size(38, 18)
         Me.Panel_2.TabIndex = 3
         '
         'Label_2
         '
-        Me.Label_2.Location = New System.Drawing.Point(10, 92)
+        Me.Label_2.Location = New System.Drawing.Point(10, 80)
         Me.Label_2.Name = "Label_2"
-        Me.Label_2.Size = New System.Drawing.Size(211, 28)
+        Me.Label_2.Size = New System.Drawing.Size(211, 18)
         Me.Label_2.TabIndex = 2
         Me.Label_2.Text = "Label2"
         Me.Label_2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -370,16 +374,16 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_0.BackColor = System.Drawing.Color.Yellow
         Me.Panel_0.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_0.Location = New System.Drawing.Point(240, 18)
+        Me.Panel_0.Location = New System.Drawing.Point(240, 19)
         Me.Panel_0.Name = "Panel_0"
-        Me.Panel_0.Size = New System.Drawing.Size(38, 28)
+        Me.Panel_0.Size = New System.Drawing.Size(38, 18)
         Me.Panel_0.TabIndex = 1
         '
         'Label_0
         '
         Me.Label_0.Location = New System.Drawing.Point(10, 18)
         Me.Label_0.Name = "Label_0"
-        Me.Label_0.Size = New System.Drawing.Size(211, 28)
+        Me.Label_0.Size = New System.Drawing.Size(211, 18)
         Me.Label_0.TabIndex = 0
         Me.Label_0.Text = "Label0"
         Me.Label_0.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -388,16 +392,16 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_5.BackColor = System.Drawing.Color.Silver
         Me.Panel_5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_5.Location = New System.Drawing.Point(509, 55)
+        Me.Panel_5.Location = New System.Drawing.Point(509, 49)
         Me.Panel_5.Name = "Panel_5"
-        Me.Panel_5.Size = New System.Drawing.Size(38, 28)
+        Me.Panel_5.Size = New System.Drawing.Size(38, 18)
         Me.Panel_5.TabIndex = 11
         '
         'Label_5
         '
-        Me.Label_5.Location = New System.Drawing.Point(288, 55)
+        Me.Label_5.Location = New System.Drawing.Point(288, 48)
         Me.Label_5.Name = "Label_5"
-        Me.Label_5.Size = New System.Drawing.Size(211, 28)
+        Me.Label_5.Size = New System.Drawing.Size(211, 18)
         Me.Label_5.TabIndex = 10
         Me.Label_5.Text = "Label5"
         Me.Label_5.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -460,6 +464,8 @@ Public Class ApplicationOptionsForm
         '
         'tpAppearance
         '
+        Me.tpAppearance.Controls.Add(Me.lblOccurrences)
+        Me.tpAppearance.Controls.Add(Me.comboOccurrences)
         Me.tpAppearance.Controls.Add(Me.GroupBox1)
         Me.tpAppearance.Location = New System.Drawing.Point(4, 25)
         Me.tpAppearance.Name = "tpAppearance"
@@ -476,6 +482,23 @@ Public Class ApplicationOptionsForm
         Me.tpDefaults.Size = New System.Drawing.Size(635, 193)
         Me.tpDefaults.TabIndex = 3
         Me.tpDefaults.Text = "Defaults"
+        '
+        'comboOccurrences
+        '
+        Me.comboOccurrences.Items.AddRange(New Object() {"numeric", "lexical"})
+        Me.comboOccurrences.Location = New System.Drawing.Point(144, 160)
+        Me.comboOccurrences.Name = "comboOccurrences"
+        Me.comboOccurrences.Size = New System.Drawing.Size(136, 24)
+        Me.comboOccurrences.TabIndex = 25
+        Me.comboOccurrences.Text = "numeric"
+        '
+        'lblOccurrences
+        '
+        Me.lblOccurrences.Location = New System.Drawing.Point(24, 164)
+        Me.lblOccurrences.Name = "lblOccurrences"
+        Me.lblOccurrences.Size = New System.Drawing.Size(112, 16)
+        Me.lblOccurrences.TabIndex = 26
+        Me.lblOccurrences.Text = "Occurrences"
         '
         'ApplicationOptionsForm
         '

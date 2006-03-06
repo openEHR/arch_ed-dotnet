@@ -732,6 +732,10 @@ Public Class TabpageHistory
 
     End Sub
 
+    Public Sub TranslateGUI()
+        Debug.Assert(False, "Not done yet")
+    End Sub
+
     Friend Function SaveAsEventSeries() As RmHistory
         Dim ev As EventListViewItem
         Dim Hist As RmHistory

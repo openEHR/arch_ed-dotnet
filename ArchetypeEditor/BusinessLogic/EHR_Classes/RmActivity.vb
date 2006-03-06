@@ -8,66 +8,56 @@
 '	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL$"
+'	file:        "$URL: http://svn.openehr.org/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/BusinessLogic/EHR_Classes/RmCluster.vb $"
 '	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	last_change: "$LastChangedDate: 2005-11-15 11:02:20 +0930 (Tue, 15 Nov 2005) $"
 '
 '
 
+Public Class RmActivity
+    Inherits RmStructureCompound
 
-Public Class RmEntry
-    Inherits ArchetypeDefinitionAbstract
-    Protected rSubjectOfData As New RelatedParty
+    Private mArchetypeIdConstraint As String
 
-    Public Overridable Property SubjectOfData() As RelatedParty
+    Public Property ArchetypeId() As String
         Get
-            Return rSubjectOfData
+            Return mArchetypeIdConstraint
         End Get
-        Set(ByVal Value As RelatedParty)
-            rSubjectOfData = Value
+        Set(ByVal Value As String)
+            mArchetypeIdConstraint = Value
         End Set
     End Property
 
-    Sub New()
-        mType = StructureType.ENTRY
-        mChildren = New Children(mType)
-        rSubjectOfData = New RelatedParty
-        rSubjectOfData.Relationship.TerminologyID = "openehr"
+    Sub New(ByVal NodeId As String)
+        MyBase.New(NodeId, StructureType.Activity)
     End Sub
 
-    Sub New(ByVal SubType As String)
-        Select Case SubType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            Case "observation"
-                mType = StructureType.OBSERVATION
-            Case "evaluation"
-                mType = StructureType.EVALUATION
-            Case "instruction"
-                mType = StructureType.INSTRUCTION
-            Case "action"
-                mType = StructureType.ACTION
-            Case "entry"
-                mType = StructureType.ENTRY
-            Case "admin_entry"
-                mType = StructureType.ADMIN_ENTRY
-            Case Else
-                'raise error
-                Beep()
-                Debug.Assert(False)
-        End Select
-        mChildren = New Children(mType)
-        rSubjectOfData = New RelatedParty
-        rSubjectOfData.Relationship.TerminologyID = "openehr"
-    End Sub
+#Region "ADL Handling"
+    Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        MyBase.New(EIF_Structure)
 
-    Sub New(ByVal aType As StructureType)
-        mType = aType
-        mChildren = New Children(aType)
-        rSubjectOfData = New RelatedParty
-        rSubjectOfData.Relationship.TerminologyID = "openehr"
+        Me.Occurrences.SetFromString(EIF_Structure.occurrences.as_occurrences_string.to_cil)
+
+        ' process the archetype id constraint
+        If EIF_Structure.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("action_archetype_id")) Then
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            an_attribute = EIF_Structure.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("action_archetype_id"))
+            Dim obj As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+            obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+            If obj.any_allowed Then
+                Me.ArchetypeId = "."
+            Else
+                Me.ArchetypeId = CType(obj.item, openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING).strings.first.to_cil
+            End If
+        End If
+
+        'process any activity descriptions
+
+
     End Sub
+#End Region
 
 End Class
-
 '
 '***** BEGIN LICENSE BLOCK *****
 'Version: MPL 1.1/GPL 2.0/LGPL 2.1
@@ -82,15 +72,14 @@ End Class
 'for the specific language governing rights and limitations under the
 'License.
 '
-'The Original Code is RmEntry.vb.
+'The Original Code is RmActivity.vb.
 '
 'The Initial Developer of the Original Code is
 'Sam Heard, Ocean Informatics (www.oceaninformatics.biz).
-'Portions created by the Initial Developer are Copyright (C) 2004
+'Portions created by the Initial Developer are Copyright (C) 2006
 'the Initial Developer. All Rights Reserved.
 '
 'Contributor(s):
-'	Heath Frankel
 '
 'Alternatively, the contents of this file may be used under the terms of
 'either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -105,4 +94,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

@@ -275,6 +275,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "BusinessLogic\EHR_Classes\RmActivity.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "BusinessLogic\EHR_Classes\RmCluster.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -587,6 +592,16 @@
                 <File
                     RelPath = "DataConstraints\GUI\MultipleConstraintControl.resx"
                     DependentUpon = "MultipleConstraintControl.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\OccurrencesPanel.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "DataConstraints\GUI\OccurrencesPanel.resx"
+                    DependentUpon = "OccurrencesPanel.vb"
                     BuildAction = "EmbeddedResource"
                 />
                 <File
@@ -1015,6 +1030,16 @@
                     RelPath = "Support\TerminologyServer.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageAction.vb"
+                    SubType = "UserControl"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "TabPage_Controls\TabPageAction.resx"
+                    DependentUpon = "TabPageAction.vb"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "TabPage_Controls\TabPageComposition.vb"

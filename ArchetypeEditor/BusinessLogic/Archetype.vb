@@ -107,7 +107,7 @@ Public MustInherit Class Archetype
                 cDefinition = New RmSection("?")
             Case StructureType.ENTRY, StructureType.OBSERVATION, _
                 StructureType.INSTRUCTION, StructureType.EVALUATION, _
-                StructureType.ADMIN_ENTRY
+                StructureType.ACTION, StructureType.ADMIN_ENTRY
                 cDefinition = New RmEntry(mArchetypeID.ReferenceModelEntity)
             Case StructureType.Single, StructureType.List, StructureType.Tree
                 cDefinition = New RmStructureCompound("?", mArchetypeID.ReferenceModelEntity)

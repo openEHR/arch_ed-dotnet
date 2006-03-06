@@ -34,6 +34,7 @@ Public Class Designer
     Private mTabPageProtocolStructure As TabPageStructure
     Private WithEvents mTabPageStateStructure As TabPageStructure
     Private mTabPageInstruction As TabPageInstruction
+    Private mTabPageAction As TabPageAction
     Private mTabPageSection As TabPageSection
     Private mTabPageComposition As TabPageComposition
     Private mDataViewTermBindings As DataView
@@ -1862,7 +1863,9 @@ Public Class Designer
 
             Select Case Filemanager.Instance.Archetype.RmEntity
 
-                Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY
+                Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, _
+                    StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
+
                     'If FileManager.Instance.Archetype.Definition.TypeName.StartsWith("ENTRY") Then
                     Dim rm As RmStructureCompound
                     ' allow restriction of subject of data
@@ -1933,6 +1936,10 @@ Public Class Designer
                         Case StructureType.INSTRUCTION ' "ENTRY.INSTRUCTION"
                             SetUpInstruction()
                             mTabPageInstruction.ProcessInstruction(Filemanager.Instance.Archetype.Definition.Data)
+
+                        Case StructureType.ACTION
+                            SetUpAction()
+                            mTabPageAction.ProcessAction(Filemanager.Instance.Archetype.Definition.Data)
 
                         Case StructureType.ADMIN_ENTRY
                             rm = Filemanager.Instance.Archetype.Definition.Data.items(0)
@@ -2020,7 +2027,6 @@ Public Class Designer
                 Me.ResetDefaults()
 
                 'reset the filename to null to force SaveAs
-                Filemanager.Instance.IsNew = True
                 Filemanager.Instance.FileName = ""
 
                 SetUpGUI(ReferenceModel.Instance.ArchetypedClass, True)
@@ -2384,7 +2390,7 @@ Public Class Designer
 
             Case StructureType.COMPOSITION
 
-            Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION
+            Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION, StructureType.ACTION, StructureType.ADMIN_ENTRY
                 If Me.radioRestrictedSet.Checked And Me.listRestrictionSet.Items.Count > 0 Then
                     Dim a_term As RmTerm
                     s = ""
@@ -2402,6 +2408,10 @@ Public Class Designer
                 If Filemanager.Instance.Archetype.RmEntity = StructureType.INSTRUCTION Then
                     If Not mTabPageInstruction Is Nothing Then
                         mTabPageInstruction.toRichText(text, 2)
+                    End If
+                ElseIf Filemanager.Instance.Archetype.RmEntity = StructureType.ACTION Then
+                    If Not mTabPageAction Is Nothing Then
+                        mTabPageAction.toRichText(text, 2)
                     End If
                 Else
                     If Not mTabPageDataStructure Is Nothing Then
@@ -2926,6 +2936,15 @@ Public Class Designer
                     Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
                 End If
 
+            Case StructureType.ACTION
+                ' enable restriction of subject of care
+                Me.gbRestrictedData.Visible = True
+
+                'need to check not changing from section
+                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
+                    Me.TabMain.TabPages.Remove(Me.tpDesign)
+                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
+                End If
 
             Case StructureType.SECTION
                 ' disable restriction of subject of care
@@ -3067,6 +3086,23 @@ Public Class Designer
 
     End Sub
 
+    Private Sub SetUpAction()
+        ' reset the data structure tab page
+        mTabPageAction = New TabPageAction
+        ' add it to the collection of components that require translation
+        'FIXME need openEHR term
+        ' Me.tpSectionPage.Title = FileManager.Instance.OntologyManager.GetOpenEHRTerm(85, "Instruction")
+        Me.tpSectionPage.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(556, "Action")
+        Me.tpSectionPage.Controls.Clear()
+        Me.tpSectionPage.Controls.Add(mTabPageAction)
+        mTabPageAction.Dock = DockStyle.Fill
+        Me.mComponentsCollection.Add(mTabPageAction)
+
+        Me.HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
+        Me.HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_instruction.htm")
+
+    End Sub
+
     Private Sub SetUpDataStructure()
         ' reset the data structure tab page
         mTabPageDataStructure = New TabPageStructure
@@ -3111,6 +3147,13 @@ Public Class Designer
                     SetUpInstruction()
                 End If
                 ShowTabPages(archetyped_class)
+
+            Case StructureType.ACTION
+                If isNew Then
+                    SetUpAction()
+                End If
+                ShowTabPages(archetyped_class)
+
             Case StructureType.SECTION
                 If isNew Then
                     SetUpSection()
@@ -3203,14 +3246,9 @@ Public Class Designer
                     Filemanager.Instance.Archetype.LifeCycle = "draft"
 
                     ' Now set up the GUI - requires an ontology.
-                    If Not Filemanager.Instance.OntologyManager.Ontology Is Nothing Then
-                        frm.Dispose()
-                        Return 2
-                    Else
-                        frm.Close()
-                        Filemanager.Instance.IsNew = True  ' this is a new archetype
-                        Return 0
-                    End If
+                    frm.Close()
+                    Filemanager.Instance.IsNew = True  ' this is a new archetype
+                    Return 2
                 End If
             Case 2 'cancel or exit
                 frm.Close()
@@ -3621,7 +3659,7 @@ Public Class Designer
         Select Case Filemanager.Instance.Archetype.Definition.Type
             Case StructureType.ENTRY, StructureType.EVALUATION, _
                 StructureType.OBSERVATION, StructureType.INSTRUCTION, _
-                StructureType.ADMIN_ENTRY
+                StructureType.ACTION, StructureType.ADMIN_ENTRY
 
                 If Me.radioRestrictedSet.Checked Then
                     Dim cp As CodePhrase
@@ -3642,6 +3680,9 @@ Public Class Designer
                 Select Case Filemanager.Instance.Archetype.Definition.Type
                     Case StructureType.INSTRUCTION
                         Filemanager.Instance.Archetype.Definition.Data = mTabPageInstruction.SaveAsInstruction.Children
+
+                    Case StructureType.ACTION
+                        Filemanager.Instance.Archetype.Definition.Data = mTabPageAction.SaveAsAction.Children
 
                     Case StructureType.OBSERVATION
                         For Each tp In Me.TabStructure.TabPages
@@ -4239,6 +4280,8 @@ Public Class Designer
                 Next
                 Me.butRTF.Pushed = True
                 WriteRichText()
+            Else
+                RefreshRichText()
             End If
 
         ElseIf Me.TabMain.SelectedTab Is tpInterface Then
@@ -4286,7 +4329,7 @@ Public Class Designer
 
         ' ? use tabcontrol in the future for protocol and state
         Select Case Filemanager.Instance.Archetype.RmEntity
-            Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION
+            Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                 Dim pos As New Point
                 pos.X = 10
                 pos.Y = 10
@@ -4398,6 +4441,16 @@ Public Class Designer
                     Me.mTabPageInstruction.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
                 End If
 
+            Case StructureType.ACTION
+
+                Dim pos As New Point
+                pos.X = 10
+                pos.Y = 10
+
+                If Not Me.mTabPageAction Is Nothing Then
+                    Me.mTabPageAction.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                End If
+
 
             Case StructureType.SECTION
 
@@ -4422,6 +4475,30 @@ Public Class Designer
 
     End Sub
 
+    Sub RefreshRichText()
+        ' refreshes the output of the rich text box
+        Dim s As String = ""
+
+        For Each tbb As System.Windows.Forms.ToolBarButton In Me.ToolBarRTF.Buttons
+            If tbb.Pushed Then
+                s = CType(tbb.Tag, String).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Exit For
+            End If
+        Next
+
+        Select Case s
+            Case "save", "print", "html", ""
+                ' do nothing
+            Case Else
+                If s = "rtf" Then
+                    WriteRichText()
+                Else
+                    Me.PrepareToSave()
+                    Me.mRichTextArchetype.Text = Filemanager.Instance.Archetype.SerialisedArchetype(s)
+                End If
+        End Select
+
+    End Sub
 
     Private Sub ToolBarRTF_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBarRTF.ButtonClick
 

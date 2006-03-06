@@ -41,36 +41,36 @@ Class ADL_ENTRY
         Next
     End Sub
 
+        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+            MyBase.New(Definition.rm_type_name.to_cil) ' sets the type to OBSERVATION, EVALUATION etc
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim i As Integer
 
-    Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.New(Definition.rm_type_name.to_cil) ' sets the type to OBSERVATION, EVALUATION etc
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-        Dim i As Integer
-
-        ' set the root node id - usually the same as the concept
-        mNodeID = Definition.node_id.to_cil
-
-        For i = 1 To Definition.attributes.count
-            an_attribute = Definition.attributes.i_th(i)
-            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                Case "subject"
-                    ProcessSubjectOfData(an_attribute)
-                Case "name", "runtime_label" 'run_time_label is obsolete
-                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "data"
-                    mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Data))
-                    ' remembers the Processed data off events
-                Case "state"
-                    mChildren.Add(New RmStructureCompound(an_attribute, StructureType.State))
-                Case "protocol"
-                    mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Protocol))
-                Case "activity_definition"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activity))
-                Case ReferenceModel.Instance.RM_StructureName(StructureType.InstructionActExection).ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                    mChildren.Add(New RmStructureCompound(an_attribute, StructureType.InstructionActExection))
-            End Select
-        Next
-    End Sub
+            ' set the root node id - usually the same as the concept
+            mNodeID = Definition.node_id.to_cil
+            For i = 1 To Definition.attributes.count
+                an_attribute = Definition.attributes.i_th(i)
+                Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    Case "subject"
+                        ProcessSubjectOfData(an_attribute)
+                    Case "name", "runtime_label" 'run_time_label is obsolete
+                        mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case "data"
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Data))
+                        ' remembers the Processed data off events
+                    Case "state"
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.State))
+                    Case "protocol"
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Protocol))
+                    Case "description"
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ActivityDescription))
+                    Case "ism_transition", "pathway_specification" 'pathway_spec is obsolete 
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ism_transition))
+                    Case "activities"
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activities))
+                End Select
+            Next
+        End Sub
 
 End Class 'ADL_ENTRY
 End Namespace
