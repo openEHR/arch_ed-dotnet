@@ -199,8 +199,8 @@
   <data name="butBrowse.Image" type="System.Drawing.Bitmap, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAASdAAA
-        EnQB3mYfeAAAAbpJREFUWEdj/Pd513+GgQQgB5CLZyx4QLZemJ0M5FoO0gdyQH3HVYocQbYDNu54NXgc
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScwAA
+        EnMBjCK5BwAAAbpJREFUWEdj/Pd513+GgQQgB5CLZyx4QLZemJ0M5FoO0gdyQH3HVYocQbYDNu54NXgc
         kF54muxQICsETp3/+h85BAaFA/wiD5AVCiSHwOPn/8EWoYfAyHDAqQufUIIZlg1BaQAUAqaO20iOBpKi
         YEg4QEZrNUmhQHQIbNzxFKvBoJIQOQoGhQOYhRYSHQpEhcCMhdfxGogeAsPLAfVdp4gKTlg2BKUBUAgw
         C84iSh/BKAA5ABQFoEQIyoagkhBbXUBTB6C3GfZnrvi/LrTr/xyHnP9d2n5gn2JzALPAZIKhgDcEUov2
@@ -564,8 +564,8 @@
   <data name="butHelpBrowse.Image" type="System.Drawing.Bitmap, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAASdAAA
-        EnQB3mYfeAAAAbpJREFUWEdj/Pd513+GgQQgB5CLZyx4QLZemJ0M5FoO0gdyQH3HVYocQbYDNu54NXgc
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScwAA
+        EnMBjCK5BwAAAbpJREFUWEdj/Pd513+GgQQgB5CLZyx4QLZemJ0M5FoO0gdyQH3HVYocQbYDNu54NXgc
         kF54muxQICsETp3/+h85BAaFA/wiD5AVCiSHwOPn/8EWoYfAyHDAqQufUIIZlg1BaQAUAqaO20iOBpKi
         YEg4QEZrNUmhQHQIbNzxFKvBoJIQOQoGhQOYhRYSHQpEhcCMhdfxGogeAsPLAfVdp4gKTlg2BKUBUAgw
         C84iSh/BKAA5ABQFoEQIyoagkhBbXUBTB6C3GfZnrvi/LrTr/xyHnP9d2n5gn2JzALPAZIKhgDcEUov2
@@ -620,6 +620,24 @@
   <data name="OpenFileDialog1.Location" type="System.Drawing.Point, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>385, 17</value>
   </data>
+  <data name="comboOccurrences.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Assembly</value>
+  </data>
+  <data name="comboOccurrences.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="comboOccurrences.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Assembly</value>
+  </data>
+  <data name="lblOccurrences.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </data>
+  <data name="lblOccurrences.DefaultModifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Assembly</value>
+  </data>
+  <data name="lblOccurrences.Modifiers" type="System.CodeDom.MemberAttributes, System, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>Assembly</value>
+  </data>
   <data name="$this.Locked" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </data>
@@ -632,14 +650,14 @@
   <data name="$this.Localizable" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </data>
+  <data name="$this.Name">
+    <value>ApplicationOptionsForm</value>
+  </data>
   <data name="$this.GridSize" type="System.Drawing.Size, System.Drawing, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>8, 8</value>
   </data>
   <data name="$this.DrawGrid" type="System.Boolean, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="$this.Name">
-    <value>ApplicationOptionsForm</value>
   </data>
   <data name="$this.TrayHeight" type="System.Int32, mscorlib, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>80</value>

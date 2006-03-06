@@ -87,7 +87,7 @@ Public Class RmStructureCompound
                 ProcessTree(EIF_Structure)
                 ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.HighestLevelChildren = Me.Children
                 ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.PopulateReferences(Me)
-            Case StructureType.Cluster, StructureType.History, StructureType.SECTION, StructureType.Table
+            Case StructureType.Cluster, StructureType.History, StructureType.SECTION, StructureType.Table, StructureType.Activity
                 Return  'code is dealt with in the specialised classes
             Case Else
                 Debug.Assert(False)
@@ -95,8 +95,13 @@ Public Class RmStructureCompound
     End Sub
 
     Sub New(ByVal EIF_Attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_structure_type As StructureType)
-        MyBase.New(a_structure_type.ToString, a_structure_type) 'State, Data, Protocol, InstructionActExection
-        Debug.Assert(a_structure_type = StructureType.Data Or a_structure_type = StructureType.State Or a_structure_type = StructureType.Protocol Or a_structure_type = StructureType.InstructionActExection Or a_structure_type = StructureType.Activity)
+        MyBase.New(a_structure_type.ToString, a_structure_type) 'State, Data, Protocol, ism_transition
+        Debug.Assert(a_structure_type = StructureType.Data Or _
+            a_structure_type = StructureType.State Or _
+            a_structure_type = StructureType.Protocol Or _
+            a_structure_type = StructureType.ism_transition Or _
+            a_structure_type = StructureType.ActivityDescription Or _
+            a_structure_type = StructureType.Activities)
         colChildren = New Children(mType)
         ProcessData(EIF_Attribute)
     End Sub
@@ -244,6 +249,8 @@ Public Class RmStructureCompound
                             colChildren.Add(New RmTable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case StructureType.CarePathwayStep
                             colChildren.Add(New RmPathwayStep(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                        Case StructureType.Activity
+                            colChildren.Add(New RmActivity(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case Else
                             Debug.Assert(False)
                     End Select

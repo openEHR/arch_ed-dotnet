@@ -410,18 +410,14 @@ Public Class TabPageSection
         Next
     End Sub
 
+    Public Sub Translate()
+        TranslateSectionNodes(Me.tvSection.Nodes)
+    End Sub
+
     Private Sub TranslateGUI()
         Me.cbFixed.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(136, "Fixed")
         Me.cbOrdered.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(162, "Ordered")
     End Sub
-
-
-    Public Sub Translate()
-        TranslateGUI()
-        TranslateSectionNodes(Me.tvSection.Nodes)
-
-    End Sub
-
 
 #End Region
 

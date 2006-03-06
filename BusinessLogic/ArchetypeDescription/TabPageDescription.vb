@@ -72,6 +72,8 @@ Public Class TabPageDescription
         Me.gbPurpose = New System.Windows.Forms.GroupBox
         Me.txtPurpose = New System.Windows.Forms.TextBox
         Me.panelDescription = New System.Windows.Forms.Panel
+        Me.ButAddKeyWord = New System.Windows.Forms.Button
+        Me.butRemoveKeyWord = New System.Windows.Forms.Button
         Me.comboLifeCycle = New System.Windows.Forms.ComboBox
         Me.lblKeyword = New System.Windows.Forms.Label
         Me.listKeyword = New System.Windows.Forms.ListBox
@@ -86,8 +88,6 @@ Public Class TabPageDescription
         Me.txtOriginalAuthor = New System.Windows.Forms.TextBox
         Me.lblEmail = New System.Windows.Forms.Label
         Me.txtOriginalEmail = New System.Windows.Forms.TextBox
-        Me.ButAddKeyWord = New System.Windows.Forms.Button
-        Me.butRemoveKeyWord = New System.Windows.Forms.Button
         Me.gbUse.SuspendLayout()
         Me.gbMisuse.SuspendLayout()
         Me.gbPurpose.SuspendLayout()
@@ -159,7 +159,7 @@ Public Class TabPageDescription
         Me.gbPurpose.Size = New System.Drawing.Size(465, 228)
         Me.gbPurpose.TabIndex = 13
         Me.gbPurpose.TabStop = False
-        Me.gbPurpose.Text = "Description"
+        Me.gbPurpose.Text = "Purpose"
         '
         'txtPurpose
         '
@@ -185,6 +185,29 @@ Public Class TabPageDescription
         Me.panelDescription.Name = "panelDescription"
         Me.panelDescription.Size = New System.Drawing.Size(232, 228)
         Me.panelDescription.TabIndex = 14
+        '
+        'ButAddKeyWord
+        '
+        Me.ButAddKeyWord.BackColor = System.Drawing.Color.Transparent
+        Me.ButAddKeyWord.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButAddKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.ButAddKeyWord.Image = CType(resources.GetObject("ButAddKeyWord.Image"), System.Drawing.Image)
+        Me.ButAddKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.ButAddKeyWord.Location = New System.Drawing.Point(16, 72)
+        Me.ButAddKeyWord.Name = "ButAddKeyWord"
+        Me.ButAddKeyWord.Size = New System.Drawing.Size(24, 25)
+        Me.ButAddKeyWord.TabIndex = 34
+        '
+        'butRemoveKeyWord
+        '
+        Me.butRemoveKeyWord.BackColor = System.Drawing.Color.Transparent
+        Me.butRemoveKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butRemoveKeyWord.Image = CType(resources.GetObject("butRemoveKeyWord.Image"), System.Drawing.Image)
+        Me.butRemoveKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butRemoveKeyWord.Location = New System.Drawing.Point(16, 104)
+        Me.butRemoveKeyWord.Name = "butRemoveKeyWord"
+        Me.butRemoveKeyWord.Size = New System.Drawing.Size(24, 25)
+        Me.butRemoveKeyWord.TabIndex = 35
         '
         'comboLifeCycle
         '
@@ -327,29 +350,6 @@ Public Class TabPageDescription
         Me.txtOriginalEmail.TabIndex = 1
         Me.txtOriginalEmail.Text = ""
         '
-        'ButAddKeyWord
-        '
-        Me.ButAddKeyWord.BackColor = System.Drawing.Color.Transparent
-        Me.ButAddKeyWord.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButAddKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.ButAddKeyWord.Image = CType(resources.GetObject("ButAddKeyWord.Image"), System.Drawing.Image)
-        Me.ButAddKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.ButAddKeyWord.Location = New System.Drawing.Point(16, 72)
-        Me.ButAddKeyWord.Name = "ButAddKeyWord"
-        Me.ButAddKeyWord.Size = New System.Drawing.Size(24, 25)
-        Me.ButAddKeyWord.TabIndex = 34
-        '
-        'butRemoveKeyWord
-        '
-        Me.butRemoveKeyWord.BackColor = System.Drawing.Color.Transparent
-        Me.butRemoveKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.butRemoveKeyWord.Image = CType(resources.GetObject("butRemoveKeyWord.Image"), System.Drawing.Image)
-        Me.butRemoveKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveKeyWord.Location = New System.Drawing.Point(16, 104)
-        Me.butRemoveKeyWord.Name = "butRemoveKeyWord"
-        Me.butRemoveKeyWord.Size = New System.Drawing.Size(24, 25)
-        Me.butRemoveKeyWord.TabIndex = 35
-        '
         'TabPageDescription
         '
         Me.BackColor = System.Drawing.SystemColors.Control
@@ -406,6 +406,11 @@ Public Class TabPageDescription
 
         mArchetypeDescription.OriginalAuthor = Me.txtOriginalAuthor.Text
         mArchetypeDescription.OriginalAuthorEmail = Me.txtOriginalEmail.Text
+
+        If mCurrentLanguage Is Nothing Then
+            mCurrentLanguage = Filemanager.Instance.OntologyManager.LanguageCode
+        End If
+
         Dim archDescriptionItem As New ArchetypeDescriptionItem( _
             mCurrentLanguage)
         For Each s As String In Me.listKeyword.Items
@@ -457,7 +462,7 @@ Public Class TabPageDescription
         Me.lblName.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(579, "Name") & ":"
         Me.tpAuthor.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(580, "Authorship")
         Me.tpDescDetails.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(581, "Details")
-        Me.gbPurpose.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(113, "Description")
+        Me.gbPurpose.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(585, "Purpose")
         Me.gbUse.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(582, "Use")
         Me.gbMisuse.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(583, "Misuse")
         Me.gbAuthor.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(584, "Original Author")

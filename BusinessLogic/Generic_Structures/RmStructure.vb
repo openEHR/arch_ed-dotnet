@@ -49,8 +49,10 @@ Public Enum StructureType
     State = 177
     Protocol = 78
     History = 275
-    Activity = 556
-    InstructionActExection = 1005
+    Activity = 586
+    Activities = 587
+    ActivityDescription = 509
+    ism_transition = 1005
 End Enum
 
 Public Class RmStructure

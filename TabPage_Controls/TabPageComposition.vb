@@ -209,6 +209,15 @@ Public Class TabPageComposition
         Return rm
     End Function
 
+    Public Sub Translate()
+        Debug.Assert(False, "Not done yet")
+    End Sub
+
+    Public Sub TranslateGUI()
+        Debug.Assert(False, "Not done yet")
+    End Sub
+
+
 End Class
 
 '

@@ -598,8 +598,6 @@ Public Class OceanArchetypeEditor
             frm.ArchetypeToOpen = CmdArgs(0)
         End If
 
-        'frm.ArchetypeToOpen = "C:\all_work\Knowledge\Archetypes\Current\Packed\observation\openEHR-EHR-OBSERVATION.blood_pressure.v1.adl"
-
         frm.ShowDialog()
     End Sub
 End Class

@@ -707,7 +707,7 @@ Public Class PathwaySpecification
         Set(ByVal Value As RmStructureCompound)
             Dim Ctrl As Panel
 
-            Debug.Assert(Value.Type = StructureType.InstructionActExection)
+            Debug.Assert(Value.Type = StructureType.ism_transition)
             For Each ms As RmPathwayStep In Value.Children
                 Dim pv As New PathwayEvent(ms)
                 Select Case pv.DefaultStateMachineType
@@ -795,7 +795,7 @@ Public Class PathwaySpecification
     End Sub
 
     Private Function BuildPathwaySteps() As RmStructureCompound
-        Dim rm As New RmStructureCompound("InstructionActExection", StructureType.InstructionActExection)
+        Dim rm As New RmStructureCompound("ism_transition", StructureType.ism_transition)
 
         GetPathwaySteps(rm.Children, Me.PanelInitial)
         GetPathwaySteps(rm.Children, Me.PanelSuspendInitial)
@@ -1078,4 +1078,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

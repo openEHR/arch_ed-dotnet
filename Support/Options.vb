@@ -5,6 +5,7 @@ Public Class Options
     Private mUserName As String
     Private mUserEmail As String
     Private mDefaultRM As Integer
+    Private mOccurrencesView As String
     Private mHelpPath As String
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray}
 
@@ -32,6 +33,14 @@ Public Class Options
             mUserName = Value
         End Set
     End Property
+    Property OccurrencesView() As String
+        Get
+            Return mOccurrencesView
+        End Get
+        Set(ByVal Value As String)
+            mOccurrencesView = Value
+        End Set
+    End Property
     Property UserEmail() As String
         Get
             Return mUserEmail
@@ -55,6 +64,7 @@ Public Class Options
         frm.txtEmail.Text = mUserEmail
         frm.txtRepositoryPath.Text = mRepositoryPath
         frm.txtHelpFile.Text = mHelpPath
+        frm.comboOccurrences.Text = mOccurrencesView
         For i As Integer = 0 To ReferenceModel.Instance.ValidReferenceModelNames.Length - 1
             frm.comboReferenceModel.Items.Add(ReferenceModel.Instance.ValidReferenceModelNames(i))
         Next
@@ -73,6 +83,7 @@ Public Class Options
             mRepositoryPath = frm.txtRepositoryPath.Text
             mHelpPath = frm.txtHelpFile.Text
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
+            mOccurrencesView = frm.comboOccurrences.Text
             mColors(0) = frm.Panel_0.BackColor
             mColors(1) = frm.Panel_1.BackColor
             mColors(2) = frm.Panel_2.BackColor
@@ -121,6 +132,8 @@ Public Class Options
                                     For i = 0 To 4
                                         mColors(i) = System.Drawing.Color.FromArgb(CInt(Val(y(i))))
                                     Next
+                                Case "OccurrencesView"
+                                    mOccurrencesView = y(1).Trim
                             End Select
                         Else
                             MessageBox.Show("Error reading '" & y(0) & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -168,6 +181,7 @@ Public Class Options
                     End If
                 Next
                 StrmWrite.WriteLine("StateMachineColours=" & s)
+                StrmWrite.WriteLine("OccurrencesView=" & mOccurrencesView)
             Catch e As Exception
                 MessageBox.Show("Error reading Configuration File 'ArchetypeEditor.cfg' - please view options and save to restore: " & e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
@@ -188,6 +202,7 @@ Public Class Options
         mUserName = ""
         mUserEmail = ""
         mHelpPath = Application.StartupPath & "\Help\ArchetypeEditor.chm"
+        mOccurrencesView = "numeric"
         LoadConfiguration()
     End Sub
 End Class

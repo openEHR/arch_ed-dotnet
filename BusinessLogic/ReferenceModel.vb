@@ -116,7 +116,7 @@ Public Class ReferenceModelLocal
                 mReferenceModelNames.Add(565, "INTERVAL_EVENT")
                 mReferenceModelNames.Add(563, "WORKFLOW_STEP")
                 mReferenceModelNames.Add(275, "EVENT_SERIES") 'Obsolete
-                mReferenceModelNames.Add(1005, "pathway_specification")
+                mReferenceModelNames.Add(1005, "pathway_specification") 'Obsolete
         End Select
 
     End Sub
@@ -179,7 +179,12 @@ Public Class ReferenceModelLocal
                         End Select
                     Case StructureType.INSTRUCTION
                         Select Case Child
-                            Case StructureType.InstructionActExection, StructureType.Activity
+                            Case StructureType.Activities
+                                Return True
+                        End Select
+                    Case StructureType.ACTION
+                        Select Case Child
+                            Case StructureType.ism_transition, StructureType.ActivityDescription
                                 Return True
                         End Select
                     Case StructureType.Data 'openEHR
@@ -196,6 +201,16 @@ Public Class ReferenceModelLocal
                                     Case StructureType.History
                                         Return True
                                 End Select
+                        End Select
+                    Case StructureType.Activities
+                        Select Case Child
+                            Case StructureType.Activity
+                                Return True
+                        End Select
+                    Case StructureType.Activity
+                        Select Case Child
+                            Case StructureType.ActivityDescription
+                                Return True
                         End Select
                     Case StructureType.State, StructureType.Protocol
                         Select Case Child
@@ -235,12 +250,12 @@ Public Class ReferenceModelLocal
                             Case StructureType.Element
                                 Return True
                         End Select
-                    Case StructureType.InstructionActExection
+                    Case StructureType.ism_transition
                         Select Case Child
                             Case StructureType.CarePathwayStep
                                 Return True
                         End Select
-                    Case StructureType.Activity
+                    Case StructureType.ActivityDescription
                         Select Case Child
                             Case StructureType.Slot, StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                                 Return True
@@ -389,12 +404,13 @@ Public Class ReferenceModelLocal
             Case StructureType.SECTION
                 Select Case mRefModelType
                     Case ReferenceModelType.openEHR_EHR
-                        Dim s(4) As StructureType
+                        Dim s(5) As StructureType
                         s(0) = StructureType.EVALUATION
                         s(1) = StructureType.INSTRUCTION
                         s(2) = StructureType.OBSERVATION
-                        s(3) = StructureType.SECTION
-                        s(4) = StructureType.ADMIN_ENTRY
+                        s(3) = StructureType.ACTION
+                        s(4) = StructureType.SECTION
+                        s(5) = StructureType.ADMIN_ENTRY
                         Return s
                     Case ReferenceModelType.CEN_EHR, ReferenceModelType.HL7_CDA
                         Dim s(1) As StructureType
@@ -423,17 +439,18 @@ Public Class ReferenceModelLocal
     Public Function ValidArchetypeDefinitions() As StructureType()
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
-                Dim s(9) As StructureType
+                Dim s(10) As StructureType
                 s(0) = StructureType.OBSERVATION
                 s(1) = StructureType.EVALUATION
                 s(2) = StructureType.INSTRUCTION
-                s(3) = StructureType.SECTION
-                s(4) = StructureType.COMPOSITION
-                s(5) = StructureType.Single
-                s(6) = StructureType.List
-                s(7) = StructureType.Tree
-                s(8) = StructureType.Table
-                s(9) = StructureType.ADMIN_ENTRY
+                s(3) = StructureType.ACTION
+                s(4) = StructureType.SECTION
+                s(5) = StructureType.COMPOSITION
+                s(6) = StructureType.Single
+                s(7) = StructureType.List
+                s(8) = StructureType.Tree
+                s(9) = StructureType.Table
+                s(10) = StructureType.ADMIN_ENTRY
                 Return s
             Case ReferenceModelType.CEN_EHR, ReferenceModelType.HL7_CDA
                 Dim s(2) As StructureType
@@ -557,4 +574,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

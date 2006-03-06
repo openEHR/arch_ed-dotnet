@@ -1129,7 +1129,11 @@ Public Class TermBindingPanel
     End Sub
 
     Public Sub Translate()
-        'FIXME
+        Debug.Assert(False, "Not done yet")
+    End Sub
+
+    Private Sub TranslateGUI()
+        Debug.Assert(False, "Not done yet")
     End Sub
 
     Private Sub DeleteCriteriaButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DeleteCriteriaButton.Click
