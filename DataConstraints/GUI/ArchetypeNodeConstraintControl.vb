@@ -22,6 +22,7 @@ Public Class ArchetypeNodeConstraintControl
     '    Private AnyConstraints As AnyConstraintControl
     Private mConstraintControl As ConstraintControl
     Private mFileManager As FileManagerLocal
+    Friend WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
 
@@ -51,11 +52,6 @@ Public Class ArchetypeNodeConstraintControl
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents lblNumMax As System.Windows.Forms.Label
-    Friend WithEvents lblNumMin As System.Windows.Forms.Label
-    Friend WithEvents numMin As System.Windows.Forms.NumericUpDown
-    Friend WithEvents numMax As System.Windows.Forms.NumericUpDown
-    Friend WithEvents cbUnbounded As System.Windows.Forms.CheckBox
     Friend WithEvents PanelGenericConstraint As System.Windows.Forms.Panel
     Friend WithEvents PanelDataConstraint As System.Windows.Forms.Panel
     Friend WithEvents PanelNonAnonymous As System.Windows.Forms.Panel
@@ -68,11 +64,6 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents HelpProviderCommonConstraint As System.Windows.Forms.HelpProvider
     Friend WithEvents labelAnyCluster As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.lblNumMax = New System.Windows.Forms.Label
-        Me.lblNumMin = New System.Windows.Forms.Label
-        Me.numMin = New System.Windows.Forms.NumericUpDown
-        Me.numMax = New System.Windows.Forms.NumericUpDown
-        Me.cbUnbounded = New System.Windows.Forms.CheckBox
         Me.PanelGenericConstraint = New System.Windows.Forms.Panel
         Me.PanelDataConstraint = New System.Windows.Forms.Panel
         Me.labelAnyCluster = New System.Windows.Forms.Label
@@ -84,71 +75,17 @@ Public Class ArchetypeNodeConstraintControl
         Me.Label12 = New System.Windows.Forms.Label
         Me.PanelLower = New System.Windows.Forms.Panel
         Me.HelpProviderCommonConstraint = New System.Windows.Forms.HelpProvider
-        CType(Me.numMin, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.numMax, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.PanelGenericConstraint.SuspendLayout()
         Me.PanelDataConstraint.SuspendLayout()
         Me.PanelNonAnonymous.SuspendLayout()
         Me.PanelLower.SuspendLayout()
         Me.SuspendLayout()
         '
-        'lblNumMax
-        '
-        Me.lblNumMax.Location = New System.Drawing.Point(179, 12)
-        Me.lblNumMax.Name = "lblNumMax"
-        Me.lblNumMax.Size = New System.Drawing.Size(32, 16)
-        Me.lblNumMax.TabIndex = 2
-        Me.lblNumMax.Text = "Max:"
-        Me.lblNumMax.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'lblNumMin
-        '
-        Me.lblNumMin.BackColor = System.Drawing.Color.Transparent
-        Me.lblNumMin.Location = New System.Drawing.Point(8, 12)
-        Me.lblNumMin.Name = "lblNumMin"
-        Me.lblNumMin.Size = New System.Drawing.Size(120, 16)
-        Me.lblNumMin.TabIndex = 0
-        Me.lblNumMin.Text = "Occurrences -Min:"
-        Me.lblNumMin.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'numMin
-        '
-        Me.numMin.Location = New System.Drawing.Point(134, 9)
-        Me.numMin.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numMin.Name = "numMin"
-        Me.numMin.Size = New System.Drawing.Size(40, 22)
-        Me.numMin.TabIndex = 1
-        Me.numMin.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'numMax
-        '
-        Me.numMax.Location = New System.Drawing.Point(216, 9)
-        Me.numMax.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numMax.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numMax.Name = "numMax"
-        Me.numMax.Size = New System.Drawing.Size(48, 22)
-        Me.numMax.TabIndex = 3
-        Me.numMax.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'cbUnbounded
-        '
-        Me.cbUnbounded.Location = New System.Drawing.Point(272, 12)
-        Me.cbUnbounded.Name = "cbUnbounded"
-        Me.cbUnbounded.Size = New System.Drawing.Size(99, 16)
-        Me.cbUnbounded.TabIndex = 4
-        Me.cbUnbounded.Text = "Unbounded"
-        '
         'PanelGenericConstraint
         '
-        Me.PanelGenericConstraint.Controls.Add(Me.numMax)
-        Me.PanelGenericConstraint.Controls.Add(Me.cbUnbounded)
-        Me.PanelGenericConstraint.Controls.Add(Me.lblNumMax)
-        Me.PanelGenericConstraint.Controls.Add(Me.lblNumMin)
-        Me.PanelGenericConstraint.Controls.Add(Me.numMin)
         Me.PanelGenericConstraint.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelGenericConstraint.Location = New System.Drawing.Point(0, 0)
         Me.PanelGenericConstraint.Name = "PanelGenericConstraint"
-        Me.PanelGenericConstraint.Size = New System.Drawing.Size(376, 40)
+        Me.PanelGenericConstraint.Size = New System.Drawing.Size(376, 48)
         Me.PanelGenericConstraint.TabIndex = 0
         '
         'PanelDataConstraint
@@ -157,7 +94,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelDataConstraint.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
         Me.PanelDataConstraint.Name = "PanelDataConstraint"
-        Me.PanelDataConstraint.Size = New System.Drawing.Size(376, 112)
+        Me.PanelDataConstraint.Size = New System.Drawing.Size(376, 104)
         Me.PanelDataConstraint.TabIndex = 31
         '
         'labelAnyCluster
@@ -235,9 +172,9 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelLower.Controls.Add(Me.PanelDataConstraint)
         Me.PanelLower.Controls.Add(Me.PanelNonAnonymous)
         Me.PanelLower.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelLower.Location = New System.Drawing.Point(0, 40)
+        Me.PanelLower.Location = New System.Drawing.Point(0, 48)
         Me.PanelLower.Name = "PanelLower"
-        Me.PanelLower.Size = New System.Drawing.Size(376, 208)
+        Me.PanelLower.Size = New System.Drawing.Size(376, 200)
         Me.PanelLower.TabIndex = 33
         '
         'ArchetypeNodeConstraintControl
@@ -249,9 +186,6 @@ Public Class ArchetypeNodeConstraintControl
         Me.Name = "ArchetypeNodeConstraintControl"
         Me.HelpProviderCommonConstraint.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(376, 248)
-        CType(Me.numMin, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.numMax, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.PanelGenericConstraint.ResumeLayout(False)
         Me.PanelDataConstraint.ResumeLayout(False)
         Me.PanelNonAnonymous.ResumeLayout(False)
         Me.PanelLower.ResumeLayout(False)
@@ -270,6 +204,8 @@ Public Class ArchetypeNodeConstraintControl
         End Get
     End Property
 
+
+
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _
             ByVal IsState As Boolean, ByVal aArchetypeNode As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
 
@@ -277,13 +213,19 @@ Public Class ArchetypeNodeConstraintControl
         mIsLoading = True
         Me.SuspendLayout()
 
-        ' ensure that it is not hidden by slot control
-        '        Me.txtRuntimeName.Visible = True
-        '       Me.txtTermDescription.Visible = True
+        If mOccurrences Is Nothing Then
+            mOccurrences = New OccurrencesPanel
+            Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
+                Case "lexical"
+                    mOccurrences.Mode = OccurrencesMode.Lexical
+                Case "numeric"
+                    mOccurrences.Mode = OccurrencesMode.Numeric
+            End Select
+        End If
 
         Try
             ' hide the label if there is no constraint (for ANY or Cluster) - see below
-            Me.LabelAnyCluster.Visible = False
+            Me.labelAnyCluster.Visible = False
 
             If Not mConstraintControl Is Nothing Then
                 Me.PanelDataConstraint.Controls.Remove(mConstraintControl)
@@ -344,17 +286,9 @@ Public Class ArchetypeNodeConstraintControl
             mArchetypeNode = aArchetypeNode
 
             If aStructureType = StructureType.Single Then
-                Me.cbUnbounded.Checked = False
-                Me.cbUnbounded.Enabled = False
-                Me.numMin.Maximum = 1
-                Me.numMax.Value = 1
-                Me.numMax.Enabled = False
-
+                mOccurrences.SetSingle = True
             Else
-                Me.numMin.Maximum = 100
-                Me.numMax.Enabled = True
-                Me.cbUnbounded.Enabled = True
-
+                mOccurrences.SetSingle = False
             End If
 
             SetControlValues(IsState)
@@ -372,17 +306,8 @@ Public Class ArchetypeNodeConstraintControl
         ' ToDo: set constraint values on control
 
         ' set the cardinality
-        If mArchetypeNode.Occurrences.IsUnbounded _
-                OrElse mArchetypeNode.Occurrences.MaxCount < 1 Then
 
-            Me.cbUnbounded.Checked = True
-
-        Else
-            Me.cbUnbounded.Checked = False
-            Me.numMax.Value = mArchetypeNode.Occurrences.MaxCount
-        End If
-
-        Me.numMin.Value = mArchetypeNode.Occurrences.MinCount
+        mOccurrences.Cardinality = mArchetypeNode.Occurrences
 
         If mArchetypeNode.IsAnonymous Then
             Me.PanelNonAnonymous.Visible = False
@@ -398,161 +323,26 @@ Public Class ArchetypeNodeConstraintControl
 
             If mArchetypeNode.RM_Class.Type = StructureType.Reference Then
                 Me.Enabled = False
-
-                'Me.PanelNonAnonymous.Enabled = False
-                'Me.PanelGenericConstraint.Enabled = False
-
-                '                Me.txtRuntimeName.Enabled = False
-                '               Me.txtTermDescription.Enabled = False
             Else
                 Me.Enabled = True
-                'Me.PanelNonAnonymous.Enabled = True
-                'Me.PanelGenericConstraint.Enabled = True
-
-                '              Me.txtRuntimeName.Enabled = True
-                '             Me.txtTermDescription.Enabled = True
             End If
         End If
 
     End Sub
 
-    Private Sub numMin_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMin.ValueChanged, numMin.TextChanged
-        If Not IsLoading Then
-            Try
-                If numMin.Value > numMax.Value Then
-                    numMax.Value = numMin.Value
-                End If
-                mArchetypeNode.Occurrences.MinCount = CInt(Me.numMin.Value)
-
-                mFileManager.FileEdited = True
-
-            Catch ex As Exception
-                Debug.Assert(False, ex.ToString)
-            End Try
-        End If
-    End Sub
-
-    Private Sub numMax_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMax.ValueChanged, numMax.TextChanged
-
-        'If Not mArchetypeNode Is Nothing Then
-        If Not IsLoading Then
-            Try
-                mArchetypeNode.Occurrences.MaxCount = CInt(Me.numMax.Value)
-
-                mFileManager.FileEdited = True
-
-                If numMax.Value < numMin.Value Then
-                    numMin.Value = numMax.Value
-                End If
-
-            Catch ex As Exception
-                Debug.Assert(False, ex.ToString)
-            End Try
-        End If
-
-    End Sub
-
-    Private Sub cbUnbounded_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbUnbounded.CheckedChanged
-        Try
-            If Me.cbUnbounded.Checked Then
-                Me.numMax.Visible = False
-                Me.lblNumMax.Visible = False
-
-                If mArchetypeNode Is Nothing Then Return
-
-                mArchetypeNode.Occurrences.IsUnbounded = True
-
-            Else
-                Me.numMax.Visible = True
-                Me.lblNumMax.Visible = True
-
-                If mArchetypeNode Is Nothing Then Return
-
-                If Me.numMax.Value < Me.numMin.Value Then
-                    Me.numMax.Value = Me.numMin.Value
-                End If
-
-                mArchetypeNode.Occurrences.MaxCount = CInt(Me.numMax.Value)
-                mArchetypeNode.Occurrences.IsUnbounded = False
-            End If
-
-            If Not mIsLoading Then mFileManager.FileEdited = True
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
-    End Sub
 
     Private Sub txtTermDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTermDescription.TextChanged
 
-        'If Not mArchetypeNode Is Nothing Then
         If Not mIsLoading Then
             CType(mArchetypeNode, ArchetypeNodeAbstract).Description = Me.txtTermDescription.Text
 
-            'If NotmMIsLoading Then
             mFileManager.FileEdited = True
-            'End If
 
-            'Catch ex As Exception
-            '    Debug.Assert(False, ex.ToString)
-            'End Try
         End If
 
     End Sub
 
-    Protected Function ChooseInternal() As String()
-        Try
-            Dim Frm As New Choose
-            Dim selected_rows As DataRow()
-            Dim i As Integer
-
-            Frm.Set_Single()
-
-            Frm.PrepareDataTable_for_List(1)
-
-
-            Debug.Assert(False, "TEST")
-            'HKF: 1609
-            'selected_rows = mFileManager.OntologyManager.TermDefinitionTable.Select("Id = '" & Me.ListLanguages.SelectedValue & "'")
-            selected_rows = mFileManager.OntologyManager.TermDefinitionTable.Select(String.Format("Id = '{0}'", _
-                        mFileManager.OntologyManager.LanguageCode))
-
-            For i = 0 To selected_rows.Length - 1
-                Dim New_row As DataRow
-                New_row = Frm.DTab_1.NewRow
-                New_row(1) = selected_rows(i).Item(1)
-                New_row(2) = selected_rows(i).Item(2)
-                Frm.DTab_1.Rows.Add(New_row)
-            Next
-            Frm.ListChoose.SelectionMode = SelectionMode.MultiExtended
-            Frm.ListChoose.DataSource = Frm.DTab_1
-            Frm.ListChoose.DisplayMember = "Text"
-            Frm.ListChoose.ValueMember = "Code"
-
-            If Frm.ShowDialog(Me) = DialogResult.OK Then
-
-                If Frm.ListChoose.SelectedIndices.Count > 0 Then
-                    Dim s(Frm.ListChoose.SelectedItems.Count - 1) As String
-                    For i = 0 To Frm.ListChoose.SelectedItems.Count - 1
-                        'HKF: 1609
-                        's(i) = Frm.ListChoose.SelectedItems(i).item("Code")
-                        Debug.Assert(TypeOf Frm.ListChoose.SelectedItems(i) Is DataRow)
-                        Dim selectedRow As DataRow = CType(Frm.ListChoose.SelectedItems(i), DataRow)
-                        s(i) = CStr(selectedRow.Item("Code"))
-                    Next
-
-                    Return s
-                End If
-
-            End If
-
-            Return Nothing
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
-    End Function
-
+   
     Private Sub butSetRuntimeName_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butSetRuntimeName.Click
         Dim frm As New ConstraintForm
         Dim has_constraint As Boolean
@@ -588,6 +378,18 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub ArchetypeNodeConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        mIsLoading = True
+        If mOccurrences Is Nothing Then
+            mOccurrences = New OccurrencesPanel
+            Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
+                Case "lexical"
+                    mOccurrences.Mode = OccurrencesMode.Lexical
+                Case "numeric"
+                    mOccurrences.Mode = OccurrencesMode.Numeric
+            End Select
+        End If
+        Me.PanelGenericConstraint.Controls.Add(mOccurrences)
+        mOccurrences.Dock = DockStyle.Fill
         Me.HelpProviderCommonConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 
@@ -598,13 +400,6 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Sub
 
-    Private Sub lblNumMax_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblNumMax.Click
-
-    End Sub
-
-    Private Sub lblNumMin_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblNumMin.Click
-
-    End Sub
 End Class
 
 '
