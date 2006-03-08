@@ -2638,6 +2638,7 @@ Public Class Designer
         Next
 
         frm.ListChoose.DataSource = frm.DTab_1
+        frm.DTab_1.DefaultView.Sort = "Text"
         frm.ListChoose.DisplayMember = "Text"
         frm.ListChoose.ValueMember = "Code"
 

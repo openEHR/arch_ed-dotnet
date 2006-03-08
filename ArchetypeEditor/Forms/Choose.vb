@@ -65,9 +65,9 @@ Public Class Choose
         'ListChoose
         '
         Me.ListChoose.ItemHeight = 16
-        Me.ListChoose.Location = New System.Drawing.Point(10, 46)
+        Me.ListChoose.Location = New System.Drawing.Point(16, 46)
         Me.ListChoose.Name = "ListChoose"
-        Me.ListChoose.Size = New System.Drawing.Size(326, 180)
+        Me.ListChoose.Size = New System.Drawing.Size(328, 180)
         Me.ListChoose.TabIndex = 0
         '
         'LblForm
@@ -127,7 +127,7 @@ Public Class Choose
 
     Public Sub Set_Single()
         Dim p As New Drawing.Point()
-        Me.Width = 296
+        Me.Width = 380
         p.X = 224
         p.Y = Me.butOK.Location.Y
         Me.butOK.Location = p
