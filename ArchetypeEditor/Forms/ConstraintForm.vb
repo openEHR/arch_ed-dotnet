@@ -170,57 +170,6 @@ Public Class ConstraintForm
         mIsLoading = False
     End Sub
 
-    Protected Function ChooseInternal() As String()
-        Try
-            Dim Frm As New Choose
-            Dim selected_rows As DataRow()
-            Dim i As Integer
-
-            Frm.Set_Single()
-
-            Frm.PrepareDataTable_for_List(1)
-
-
-            Debug.Assert(False, "TEST")
-            selected_rows = mFileManager.OntologyManager.TermDefinitionTable.Select(String.Format("Id = '{0}'", _
-                        mFileManager.OntologyManager.LanguageCode))
-
-            For i = 0 To selected_rows.Length - 1
-                Dim New_row As DataRow
-                New_row = Frm.DTab_1.NewRow
-                New_row(1) = selected_rows(i).Item(1)
-                New_row(2) = selected_rows(i).Item(2)
-                Frm.DTab_1.Rows.Add(New_row)
-            Next
-            Frm.ListChoose.SelectionMode = SelectionMode.MultiExtended
-            Frm.ListChoose.DataSource = Frm.DTab_1
-            Frm.ListChoose.DisplayMember = "Text"
-            Frm.ListChoose.ValueMember = "Code"
-
-            If Frm.ShowDialog(Me) = DialogResult.OK Then
-
-                If Frm.ListChoose.SelectedIndices.Count > 0 Then
-                    Dim s(Frm.ListChoose.SelectedItems.Count - 1) As String
-                    For i = 0 To Frm.ListChoose.SelectedItems.Count - 1
-                        'HKF: 1609
-                        's(i) = Frm.ListChoose.SelectedItems(i).item("Code")
-                        Debug.Assert(TypeOf Frm.ListChoose.SelectedItems(i) Is DataRow)
-                        Dim selectedRow As DataRow = CType(Frm.ListChoose.SelectedItems(i), DataRow)
-                        s(i) = CStr(selectedRow.Item("Code"))
-                    Next
-
-                    Return s
-                End If
-
-            End If
-
-            Return Nothing
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
-    End Function
-
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
         Me.Close()
     End Sub

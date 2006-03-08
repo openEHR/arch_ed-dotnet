@@ -226,6 +226,7 @@ Public Class Designer
     Friend WithEvents butPrint As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarButton2 As System.Windows.Forms.ToolBarButton
     Friend WithEvents cbMandatory As System.Windows.Forms.CheckBox
+    Friend WithEvents menuFileNewWindow As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(Designer))
@@ -271,6 +272,7 @@ Public Class Designer
         Me.MenuFile = New System.Windows.Forms.MenuItem
         Me.MenuFileOpen = New System.Windows.Forms.MenuItem
         Me.MenuFileNew = New System.Windows.Forms.MenuItem
+        Me.menuFileNewWindow = New System.Windows.Forms.MenuItem
         Me.MenuFileSave = New System.Windows.Forms.MenuItem
         Me.MenuFileSaveAs = New System.Windows.Forms.MenuItem
         Me.MenuFileClose = New System.Windows.Forms.MenuItem
@@ -299,8 +301,6 @@ Public Class Designer
         Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
-        Me.tpInterface = New Crownwood.Magic.Controls.TabPage
-        Me.cbMandatory = New System.Windows.Forms.CheckBox
         Me.tpHeader = New Crownwood.Magic.Controls.TabPage
         Me.tpDesign = New Crownwood.Magic.Controls.TabPage
         Me.TabDesign = New Crownwood.Magic.Controls.TabControl
@@ -362,6 +362,8 @@ Public Class Designer
         Me.ToolBarButton2 = New System.Windows.Forms.ToolBarButton
         Me.butPrint = New System.Windows.Forms.ToolBarButton
         Me.ImageListToolbar = New System.Windows.Forms.ImageList(Me.components)
+        Me.tpInterface = New Crownwood.Magic.Controls.TabPage
+        Me.cbMandatory = New System.Windows.Forms.CheckBox
         Me.tpDescription = New Crownwood.Magic.Controls.TabPage
         Me.ContextMenuDisplay = New System.Windows.Forms.ContextMenu
         Me.menuDisplayPrint = New System.Windows.Forms.MenuItem
@@ -390,7 +392,6 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
-        Me.tpInterface.SuspendLayout()
         Me.tpHeader.SuspendLayout()
         Me.tpDesign.SuspendLayout()
         Me.tpData.SuspendLayout()
@@ -407,6 +408,7 @@ Public Class Designer
         Me.Panel1.SuspendLayout()
         Me.tpText.SuspendLayout()
         Me.panelDiplayTop.SuspendLayout()
+        Me.tpInterface.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -776,7 +778,7 @@ Public Class Designer
         'MenuFile
         '
         Me.MenuFile.Index = 0
-        Me.MenuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileOpen, Me.MenuFileNew, Me.MenuFileSave, Me.MenuFileSaveAs, Me.MenuFileClose, Me.MenuFileSpecialise, Me.MenuFileExit})
+        Me.MenuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileOpen, Me.MenuFileNew, Me.menuFileNewWindow, Me.MenuFileSave, Me.MenuFileSaveAs, Me.MenuFileClose, Me.MenuFileSpecialise, Me.MenuFileExit})
         Me.MenuFile.Shortcut = System.Windows.Forms.Shortcut.CtrlF
         Me.MenuFile.ShowShortcut = False
         Me.MenuFile.Text = "File"
@@ -793,32 +795,37 @@ Public Class Designer
         Me.MenuFileNew.Shortcut = System.Windows.Forms.Shortcut.CtrlN
         Me.MenuFileNew.Text = "New"
         '
+        'menuFileNewWindow
+        '
+        Me.menuFileNewWindow.Index = 2
+        Me.menuFileNewWindow.Text = "New window"
+        '
         'MenuFileSave
         '
-        Me.MenuFileSave.Index = 2
+        Me.MenuFileSave.Index = 3
         Me.MenuFileSave.Shortcut = System.Windows.Forms.Shortcut.CtrlS
         Me.MenuFileSave.Text = "Save"
         Me.MenuFileSave.Visible = False
         '
         'MenuFileSaveAs
         '
-        Me.MenuFileSaveAs.Index = 3
+        Me.MenuFileSaveAs.Index = 4
         Me.MenuFileSaveAs.Text = "Save As"
         '
         'MenuFileClose
         '
-        Me.MenuFileClose.Index = 4
+        Me.MenuFileClose.Index = 5
         Me.MenuFileClose.Text = "Close"
         '
         'MenuFileSpecialise
         '
-        Me.MenuFileSpecialise.Index = 5
+        Me.MenuFileSpecialise.Index = 6
         Me.MenuFileSpecialise.Text = "Specialise"
         Me.MenuFileSpecialise.Visible = False
         '
         'MenuFileExit
         '
-        Me.MenuFileExit.Index = 6
+        Me.MenuFileExit.Index = 7
         Me.MenuFileExit.Text = "E&xit"
         '
         'menuEdit
@@ -954,35 +961,13 @@ Public Class Designer
         Me.TabMain.Location = New System.Drawing.Point(0, 0)
         Me.TabMain.Name = "TabMain"
         Me.TabMain.PositionTop = True
-        Me.TabMain.SelectedIndex = 5
-        Me.TabMain.SelectedTab = Me.tpInterface
+        Me.TabMain.SelectedIndex = 0
+        Me.TabMain.SelectedTab = Me.tpHeader
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
         Me.TabMain.Size = New System.Drawing.Size(969, 621)
         Me.TabMain.TabIndex = 1
         Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpInterface
-        '
-        Me.tpInterface.AutoScroll = True
-        Me.tpInterface.Controls.Add(Me.cbMandatory)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpInterface, "Screens/interface_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpInterface, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpInterface.Location = New System.Drawing.Point(0, 0)
-        Me.tpInterface.Name = "tpInterface"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpInterface, True)
-        Me.tpInterface.Size = New System.Drawing.Size(969, 595)
-        Me.tpInterface.TabIndex = 5
-        Me.tpInterface.Title = "Interface"
-        '
-        'cbMandatory
-        '
-        Me.cbMandatory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cbMandatory.Location = New System.Drawing.Point(792, 8)
-        Me.cbMandatory.Name = "cbMandatory"
-        Me.cbMandatory.Size = New System.Drawing.Size(152, 24)
-        Me.cbMandatory.TabIndex = 0
-        Me.cbMandatory.Text = "Mandatory"
         '
         'tpHeader
         '
@@ -993,7 +978,6 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpHeader.Location = New System.Drawing.Point(0, 0)
         Me.tpHeader.Name = "tpHeader"
-        Me.tpHeader.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
         Me.tpHeader.Size = New System.Drawing.Size(969, 595)
         Me.tpHeader.TabIndex = 0
@@ -1551,7 +1535,7 @@ Public Class Designer
         Me.ToolBarRTF.Location = New System.Drawing.Point(0, 0)
         Me.ToolBarRTF.Name = "ToolBarRTF"
         Me.ToolBarRTF.ShowToolTips = True
-        Me.ToolBarRTF.Size = New System.Drawing.Size(969, 28)
+        Me.ToolBarRTF.Size = New System.Drawing.Size(969, 46)
         Me.ToolBarRTF.TabIndex = 4
         '
         'tbSep1
@@ -1599,6 +1583,29 @@ Public Class Designer
         Me.ImageListToolbar.ImageSize = New System.Drawing.Size(16, 16)
         Me.ImageListToolbar.ImageStream = CType(resources.GetObject("ImageListToolbar.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageListToolbar.TransparentColor = System.Drawing.Color.Transparent
+        '
+        'tpInterface
+        '
+        Me.tpInterface.AutoScroll = True
+        Me.tpInterface.Controls.Add(Me.cbMandatory)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpInterface, "Screens/interface_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpInterface, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpInterface.Location = New System.Drawing.Point(0, 0)
+        Me.tpInterface.Name = "tpInterface"
+        Me.tpInterface.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpInterface, True)
+        Me.tpInterface.Size = New System.Drawing.Size(969, 595)
+        Me.tpInterface.TabIndex = 5
+        Me.tpInterface.Title = "Interface"
+        '
+        'cbMandatory
+        '
+        Me.cbMandatory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbMandatory.Location = New System.Drawing.Point(792, 8)
+        Me.cbMandatory.Name = "cbMandatory"
+        Me.cbMandatory.Size = New System.Drawing.Size(152, 24)
+        Me.cbMandatory.TabIndex = 0
+        Me.cbMandatory.Text = "Mandatory"
         '
         'tpDescription
         '
@@ -1744,7 +1751,6 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
-        Me.tpInterface.ResumeLayout(False)
         Me.tpHeader.ResumeLayout(False)
         Me.tpDesign.ResumeLayout(False)
         Me.tpData.ResumeLayout(False)
@@ -1761,6 +1767,7 @@ Public Class Designer
         Me.Panel1.ResumeLayout(False)
         Me.tpText.ResumeLayout(False)
         Me.panelDiplayTop.ResumeLayout(False)
+        Me.tpInterface.ResumeLayout(False)
         Me.PanelHeader.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -3435,6 +3442,17 @@ Public Class Designer
         OceanArchetypeEditor.Instance.Options.ShowOptionsForm()
     End Sub
 
+    Private Sub menuFileNewWindow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuFileNewWindow.Click
+        Try
+            Dim start_info As New ProcessStartInfo
+            start_info.FileName = Application.ExecutablePath
+            start_info.WorkingDirectory = Application.StartupPath
+            Process.Start(start_info)
+        Catch
+            MessageBox.Show(AE_Constants.Instance.Error_loading & " Archetype Editor", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
 #End Region
 
 #Region "Language related functions - Add, Change, List_selectedIndex, Menu Change"
@@ -3955,6 +3973,9 @@ Public Class Designer
         If ArchetypeToOpen <> "" Then
             'command line variable has been set
             OpenArchetype(ArchetypeToOpen)
+            If Not Filemanager.Instance.ArchetypeAvailable Then
+                Me.Close()
+            End If
         Else
             'load the start screen
             If SetNewArchetypeName() = 2 Then
@@ -4650,6 +4671,8 @@ Public Class Designer
     Private Sub cbMandatory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMandatory.CheckedChanged
         BuildInterface()
     End Sub
+
+ 
 End Class
 
 

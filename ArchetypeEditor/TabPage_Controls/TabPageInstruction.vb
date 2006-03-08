@@ -62,8 +62,12 @@ Public Class TabPageInstruction
     Friend WithEvents ContextMenu1 As System.Windows.Forms.ContextMenu
     Friend WithEvents tpActivity As Crownwood.Magic.Controls.TabPage
     Friend WithEvents menuItemRename As System.Windows.Forms.MenuItem
+    Friend WithEvents butOpenArchetype As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageInstruction))
         Me.TabControlInstruction = New Crownwood.Magic.Controls.TabControl
+        Me.ContextMenu1 = New System.Windows.Forms.ContextMenu
+        Me.menuItemRename = New System.Windows.Forms.MenuItem
         Me.tpActivity = New Crownwood.Magic.Controls.TabPage
         Me.PanelAction = New System.Windows.Forms.Panel
         Me.lblNodeId = New System.Windows.Forms.Label
@@ -73,8 +77,7 @@ Public Class TabPageInstruction
         Me.chkActivity = New System.Windows.Forms.CheckBox
         Me.PanelBaseTop = New System.Windows.Forms.Panel
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
-        Me.ContextMenu1 = New System.Windows.Forms.ContextMenu
-        Me.menuItemRename = New System.Windows.Forms.MenuItem
+        Me.butOpenArchetype = New System.Windows.Forms.Button
         Me.tpActivity.SuspendLayout()
         Me.PanelAction.SuspendLayout()
         Me.SuspendLayout()
@@ -99,6 +102,15 @@ Public Class TabPageInstruction
         Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpActivity})
         Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
         '
+        'ContextMenu1
+        '
+        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuItemRename})
+        '
+        'menuItemRename
+        '
+        Me.menuItemRename.Index = 0
+        Me.menuItemRename.Text = "Rename"
+        '
         'tpActivity
         '
         Me.tpActivity.Controls.Add(Me.PanelAction)
@@ -113,6 +125,7 @@ Public Class TabPageInstruction
         '
         'PanelAction
         '
+        Me.PanelAction.Controls.Add(Me.butOpenArchetype)
         Me.PanelAction.Controls.Add(Me.lblNodeId)
         Me.PanelAction.Controls.Add(Me.lblAction)
         Me.PanelAction.Controls.Add(Me.butGetAction)
@@ -159,9 +172,9 @@ Public Class TabPageInstruction
         '
         'chkActivity
         '
-        Me.chkActivity.Location = New System.Drawing.Point(344, 8)
+        Me.chkActivity.Location = New System.Drawing.Point(368, 8)
         Me.chkActivity.Name = "chkActivity"
-        Me.chkActivity.Size = New System.Drawing.Size(168, 24)
+        Me.chkActivity.Size = New System.Drawing.Size(120, 24)
         Me.chkActivity.TabIndex = 0
         Me.chkActivity.Text = "Activity"
         '
@@ -173,14 +186,13 @@ Public Class TabPageInstruction
         Me.PanelBaseTop.Size = New System.Drawing.Size(848, 24)
         Me.PanelBaseTop.TabIndex = 1
         '
-        'ContextMenu1
+        'butOpenArchetype
         '
-        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuItemRename})
-        '
-        'menuItemRename
-        '
-        Me.menuItemRename.Index = 0
-        Me.menuItemRename.Text = "Rename"
+        Me.butOpenArchetype.Image = CType(resources.GetObject("butOpenArchetype.Image"), System.Drawing.Image)
+        Me.butOpenArchetype.Location = New System.Drawing.Point(336, 8)
+        Me.butOpenArchetype.Name = "butOpenArchetype"
+        Me.butOpenArchetype.Size = New System.Drawing.Size(24, 24)
+        Me.butOpenArchetype.TabIndex = 5
         '
         'TabPageInstruction
         '
@@ -418,6 +430,18 @@ Public Class TabPageInstruction
         If Not mIsloading Then
             Filemanager.Instance.FileEdited = True
         End If
+    End Sub
+
+    Private Sub butOpenArchetype_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOpenArchetype.Click
+        Try
+            Dim start_info As New ProcessStartInfo
+            start_info.FileName = Application.ExecutablePath
+            start_info.WorkingDirectory = Application.StartupPath
+            start_info.Arguments = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\action\" & "openEHR-EHR-ACTION." & Me.txtAction.Text & ".adl"
+            Process.Start(start_info)
+        Catch
+            MessageBox.Show(AE_Constants.Instance.Error_loading & " Archetype Editor", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 End Class
 
