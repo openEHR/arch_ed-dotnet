@@ -53,6 +53,16 @@ Public Class RmActivity
 
         'process any activity descriptions
 
+        If EIF_Structure.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("description")) Then
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            an_attribute = EIF_Structure.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("description"))
+            Dim obj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+            If Not obj.any_allowed Then
+                Me.Children.Add(New RmStructureCompound(obj))
+            End If
+        End If
+
 
     End Sub
 #End Region

@@ -16,6 +16,8 @@ End Enum
 Public Class ArchetypeDescription
     Protected mOriginalAuthor As String
     Protected mOriginalAuthorEmail As String
+    Protected mOriginalAuthorOrganisation As String
+    Protected mOriginalAuthorDate As String
     Protected mLifeCycleState As LifeCycleStates
     Protected mADL_Version As String = "1.2"
     Protected mArchetypePackageURI As String
@@ -37,6 +39,22 @@ Public Class ArchetypeDescription
         End Get
         Set(ByVal Value As String)
             mOriginalAuthorEmail = Value
+        End Set
+    End Property
+    Property OriginalAuthorOrganisation() As String
+        Get
+            Return mOriginalAuthorOrganisation
+        End Get
+        Set(ByVal Value As String)
+            mOriginalAuthorOrganisation = Value
+        End Set
+    End Property
+    Property OriginalAuthorDate() As String
+        Get
+            Return mOriginalAuthorDate
+        End Get
+        Set(ByVal Value As String)
+            mOriginalAuthorDate = Value
         End Set
     End Property
     Property CopyRight() As String

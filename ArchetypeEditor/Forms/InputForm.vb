@@ -118,7 +118,7 @@ Public Class InputForm
         Me.AcceptButton = Me.butOK
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(420, 106)
+        Me.ClientSize = New System.Drawing.Size(420, 102)
         Me.ControlBox = False
         Me.Controls.Add(Me.LblInput2)
         Me.Controls.Add(Me.txtInput2)
@@ -151,7 +151,7 @@ Public Class InputForm
 
     Private Sub LblInput2_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles LblInput2.TextChanged
         If LblInput2.Text <> "" Then
-            Me.Size = New System.Drawing.Size(Me.Size.Width, 176)
+            Me.Size = New System.Drawing.Size(Me.Size.Width, 208)
         End If
         Me.LblInput2.Visible = True
         Me.txtInput2.Visible = True

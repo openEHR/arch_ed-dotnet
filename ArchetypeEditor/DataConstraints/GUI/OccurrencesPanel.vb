@@ -215,6 +215,7 @@ Public Class OccurrencesPanel
     End Property
     Public WriteOnly Property SetSingle() As Boolean
         Set(ByVal Value As Boolean)
+            mIsLoading = True
             mIsSingle = Value
             If Value Then
                 Me.numMin.Value = 1
@@ -224,6 +225,7 @@ Public Class OccurrencesPanel
             Else
                 Me.Enabled = True
             End If
+            mIsLoading = False
         End Set
     End Property
     Public Property Cardinality() As RmCardinality

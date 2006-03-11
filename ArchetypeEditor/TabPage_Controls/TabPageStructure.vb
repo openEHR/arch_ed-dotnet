@@ -28,6 +28,7 @@ Public Class TabPageStructure
     Private WithEvents mArchetypeControl As EntryStructure
     Private WithEvents mFileManager As FileManagerLocal
     Public Event StructureChanged(ByVal sender As Object, ByVal a_structure As StructureType)
+    
 
 #Region " Windows Form Designer generated code "
 

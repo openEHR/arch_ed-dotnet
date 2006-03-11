@@ -1132,9 +1132,16 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             For Each rm_struct As RmStructure In rm.Children
+                an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("description"))
                 Select Case rm_struct.Type
-                    Case StructureType.ActivityDescription
-                        BuildAction(rm_struct, objNode)
+                    Case StructureType.List, StructureType.Single, StructureType.Tree, StructureType.Table
+                        Dim EIF_struct As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                        EIF_struct = mCADL_Factory.create_c_complex_object_identified(an_attribute, _
+                            openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm_struct.Type)), _
+                            openehr.base.kernel.Create.STRING.make_from_cil(rm_struct.NodeId))
+
+                        BuildStructure(CType(rm_struct, RmStructureCompound), EIF_struct)
+
                     Case StructureType.Slot
                         ' this allows a structure to be archetyped at this point
                         Debug.Assert(CType(rm_struct, RmStructure).Type = StructureType.Slot)
@@ -1178,7 +1185,10 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Select Case action_spec.Type
                 Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(action_spec.Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
+                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, _
+                        openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(action_spec.Type)), _
+                        openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
+
                     BuildStructure(action_spec, objNode)
 
                 Case StructureType.Slot

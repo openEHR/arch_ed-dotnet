@@ -70,6 +70,7 @@ Public Class TabPageInstruction
         Me.menuItemRename = New System.Windows.Forms.MenuItem
         Me.tpActivity = New Crownwood.Magic.Controls.TabPage
         Me.PanelAction = New System.Windows.Forms.Panel
+        Me.butOpenArchetype = New System.Windows.Forms.Button
         Me.lblNodeId = New System.Windows.Forms.Label
         Me.lblAction = New System.Windows.Forms.Label
         Me.butGetAction = New System.Windows.Forms.Button
@@ -77,7 +78,6 @@ Public Class TabPageInstruction
         Me.chkActivity = New System.Windows.Forms.CheckBox
         Me.PanelBaseTop = New System.Windows.Forms.Panel
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
-        Me.butOpenArchetype = New System.Windows.Forms.Button
         Me.tpActivity.SuspendLayout()
         Me.PanelAction.SuspendLayout()
         Me.SuspendLayout()
@@ -137,6 +137,14 @@ Public Class TabPageInstruction
         Me.PanelAction.Size = New System.Drawing.Size(848, 48)
         Me.PanelAction.TabIndex = 2
         '
+        'butOpenArchetype
+        '
+        Me.butOpenArchetype.Image = CType(resources.GetObject("butOpenArchetype.Image"), System.Drawing.Image)
+        Me.butOpenArchetype.Location = New System.Drawing.Point(336, 8)
+        Me.butOpenArchetype.Name = "butOpenArchetype"
+        Me.butOpenArchetype.Size = New System.Drawing.Size(24, 24)
+        Me.butOpenArchetype.TabIndex = 5
+        '
         'lblNodeId
         '
         Me.lblNodeId.Dock = System.Windows.Forms.DockStyle.Right
@@ -185,14 +193,6 @@ Public Class TabPageInstruction
         Me.PanelBaseTop.Name = "PanelBaseTop"
         Me.PanelBaseTop.Size = New System.Drawing.Size(848, 24)
         Me.PanelBaseTop.TabIndex = 1
-        '
-        'butOpenArchetype
-        '
-        Me.butOpenArchetype.Image = CType(resources.GetObject("butOpenArchetype.Image"), System.Drawing.Image)
-        Me.butOpenArchetype.Location = New System.Drawing.Point(336, 8)
-        Me.butOpenArchetype.Name = "butOpenArchetype"
-        Me.butOpenArchetype.Size = New System.Drawing.Size(24, 24)
-        Me.butOpenArchetype.TabIndex = 5
         '
         'TabPageInstruction
         '
@@ -290,23 +290,20 @@ Public Class TabPageInstruction
                         Me.mOccurrences.Cardinality = activity.Occurrences
                         Me.txtAction.Text = activity.ArchetypeId
 
-                        For Each rm As RmStructureCompound In activity.Children
+                        For Each rm As RmStructure In activity.Children
 
                             Select Case rm.Type
-                                Case StructureType.ActivityDescription
-                                    Dim an_action As RmStructure = rm.Children.items(0)
+                                Case StructureType.List, StructureType.Table, StructureType.Tree, StructureType.Single
                                     If Me.tpActivity.Controls.Contains(mActionSpecification) Then
                                         Me.txtAction.Controls.Remove(mActionSpecification)
                                     End If
                                     mActionSpecification = New TabPageStructure
-                                    If an_action.Type = StructureType.Slot Then
-                                        mActionSpecification.ProcessStructure(CType(an_action, RmSlot))
-                                    Else
-                                        Debug.Assert(an_action.Type = StructureType.Single Or an_action.Type = StructureType.List Or an_action.Type = StructureType.Tree Or an_action.Type = StructureType.Table)
-                                        mActionSpecification.ProcessStructure(CType(an_action, RmStructureCompound))
-                                    End If
+                                    mActionSpecification.ProcessStructure(CType(rm, RmStructureCompound))
                                     Me.tpActivity.Controls.Add(mActionSpecification)
+                                    mActionSpecification.BringToFront()
                                     mActionSpecification.Dock = DockStyle.Fill
+                                Case StructureType.Slot
+                                    mActionSpecification.ProcessStructure(CType(rm, RmSlot))
                                 Case Else
                                     Debug.Assert(False, "Not handled yet")
                             End Select
@@ -343,15 +340,17 @@ Public Class TabPageInstruction
 
         'for each each activity - there is only one at present!
 
+        mActivity.Children.Clear()
 
         mActivity.Occurrences = mOccurrences.Cardinality
 
         mActivity.ArchetypeId = Me.txtAction.Text
 
         If Not mActionSpecification Is Nothing Then
-            Dim action_spec As New RmStructureCompound("activity_description", StructureType.ActivityDescription)
-            action_spec.Children.Add(mActionSpecification.SaveAsStructure)
-            mActivity.Children.Add(action_spec)
+            mActivity.Children.Add(mActionSpecification.SaveAsStructure)
+        Else
+            'add reference to action archetype
+            'ToDo:
         End If
 
         activities.Children.Add(mActivity)
@@ -395,6 +394,7 @@ Public Class TabPageInstruction
                 mActionSpecification = New TabPageStructure
             End If
             Me.tpActivity.Controls.Add(mActionSpecification)
+            mActionSpecification.BringToFront()
             mActionSpecification.Dock = DockStyle.Fill
         Else
             If tpActivity.Controls.Contains(mActionSpecification) Then

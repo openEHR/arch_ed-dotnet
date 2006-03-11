@@ -4,6 +4,7 @@ Public Class Options
     Private mRepositoryPath As String
     Private mUserName As String
     Private mUserEmail As String
+    Private mUserOrganisation As String
     Private mDefaultRM As Integer
     Private mOccurrencesView As String
     Private mHelpPath As String
@@ -31,6 +32,14 @@ Public Class Options
         End Get
         Set(ByVal Value As String)
             mUserName = Value
+        End Set
+    End Property
+    Property UserOrganisation() As String
+        Get
+            Return mUserOrganisation
+        End Get
+        Set(ByVal Value As String)
+            mUserOrganisation = Value
         End Set
     End Property
     Property OccurrencesView() As String
@@ -62,6 +71,7 @@ Public Class Options
 
         frm.txtUsername.Text = mUserName
         frm.txtEmail.Text = mUserEmail
+        frm.txtOrganisation.Text = mUserOrganisation
         frm.txtRepositoryPath.Text = mRepositoryPath
         frm.txtHelpFile.Text = mHelpPath
         frm.comboOccurrences.Text = mOccurrencesView
@@ -80,6 +90,7 @@ Public Class Options
         If frm.ShowDialog() = DialogResult.OK Then
             mUserName = frm.txtUsername.Text
             mUserEmail = frm.txtEmail.Text
+            mUserOrganisation = frm.txtOrganisation.Text
             mRepositoryPath = frm.txtRepositoryPath.Text
             mHelpPath = frm.txtHelpFile.Text
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
@@ -121,6 +132,8 @@ Public Class Options
                                     mUserName = y(1)
                                 Case "UserEmail"
                                     mUserEmail = y(1)
+                                Case "Organisation"
+                                    mUserOrganisation = y(1)
                                 Case "RepositoryPath"
                                     mRepositoryPath = y(1).Trim
                                 Case "HelpPath"
@@ -169,6 +182,7 @@ Public Class Options
             Try
                 StrmWrite.WriteLine("UserName=" & mUserName)
                 StrmWrite.WriteLine("UserEmail=" & mUserEmail)
+                StrmWrite.WriteLine("Organisation=" & mUserOrganisation)
                 StrmWrite.WriteLine("RepositoryPath=" & mRepositoryPath)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
                 StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)

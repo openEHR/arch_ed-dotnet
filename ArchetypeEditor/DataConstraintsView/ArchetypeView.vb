@@ -82,7 +82,7 @@ Public Class ArchetypeView
     End Sub
 
     Public Sub BuildInterface(ByVal TableDetails As ArrayList, _
-            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer)
+            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean)
 
         Dim archetypeTable As DataTable
         Dim rowHeadings As Collection
@@ -113,7 +113,14 @@ Public Class ArchetypeView
 
                 For Each d_row As DataRow In archetypeTable.Rows
                     Debug.Assert(TypeOf d_row(2) Is ArchetypeElement)
-                    view.Controls.Add(ElementView(CType(d_row(2), ArchetypeElement)))
+                    Dim ae As ArchetypeElement = CType(d_row(2), ArchetypeElement)
+                    If mandatory_only Then
+                        If ae.Occurrences.MinCount > 0 Then
+                            view.Controls.Add(ElementView(ae))
+                        End If
+                    Else
+                        view.Controls.Add(ElementView(ae))
+                    End If
                 Next
 
                 view.ResumeLayout()
