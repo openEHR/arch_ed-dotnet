@@ -187,6 +187,11 @@ Public Class ReferenceModelLocal
                             Case StructureType.ism_transition, StructureType.ActivityDescription
                                 Return True
                         End Select
+                    Case StructureType.Activity
+                        Select Case Child
+                            Case StructureType.List, StructureType.Table, StructureType.Tree, StructureType.Single
+                                Return True
+                        End Select
                     Case StructureType.Data 'openEHR
                         Debug.Assert(mArchetypedClass <> 0)
                         Select Case mArchetypedClass

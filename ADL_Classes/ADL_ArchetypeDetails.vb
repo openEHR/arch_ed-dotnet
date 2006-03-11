@@ -36,16 +36,29 @@ Public Class ADL_ArchetypeDetails
             'EIF_detail = mADL_Details.item(openehr.base.kernel.Create.STRING.make_from_cil(a_language))
             EIF_detail = mADL_Description.details_for_lang(openehr.base.kernel.Create.STRING.make_from_cil(a_language))
             If Not EIF_detail Is Nothing Then
-                archDescriptDetail.MisUse = EIF_detail.misuse.to_cil
-                archDescriptDetail.Use = EIF_detail.use.to_cil
-                archDescriptDetail.Purpose = EIF_detail.purpose.to_cil
+                If Not EIF_detail.misuse Is Nothing Then
+                    archDescriptDetail.MisUse = EIF_detail.misuse.to_cil
+                Else
+                    archDescriptDetail.MisUse = ""
+                End If
+                If Not EIF_detail.use Is Nothing Then
+                    archDescriptDetail.Use = EIF_detail.use.to_cil
+                Else
+                    archDescriptDetail.Use = ""
+                End If
+                If Not EIF_detail.purpose Is Nothing Then
+                    archDescriptDetail.Purpose = EIF_detail.purpose.to_cil
+                Else
+                    archDescriptDetail.Purpose = ""
+                End If
+
                 If Not EIF_detail.keywords Is Nothing Then
                     For i As Integer = 1 To EIF_detail.keywords.count
                         archDescriptDetail.KeyWords.Add(EIF_detail.keywords.i_th(i).to_cil)
                     Next
                 End If
             End If
-        End If
+            End If
         Return archDescriptDetail
     End Function
 

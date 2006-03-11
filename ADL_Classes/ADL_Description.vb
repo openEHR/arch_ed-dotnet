@@ -34,12 +34,26 @@ Namespace ArchetypeEditor.ADL_Classes
 
             ' Add the original author details
             mADL_Description.original_author.clear_all()
-            mADL_Description.add_original_author_item( _
-                 openehr.base.kernel.Create.STRING.make_from_cil("name"), _
-                openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthor))
-            mADL_Description.add_original_author_item( _
-                 openehr.base.kernel.Create.STRING.make_from_cil("email"), _
-                openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorEmail))
+            If Me.OriginalAuthor <> "" Then
+                mADL_Description.add_original_author_item( _
+                     openehr.base.kernel.Create.STRING.make_from_cil("name"), _
+                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthor))
+            End If
+            If Me.OriginalAuthorEmail <> "" Then
+                mADL_Description.add_original_author_item( _
+                     openehr.base.kernel.Create.STRING.make_from_cil("email"), _
+                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorEmail))
+            End If
+            If Me.OriginalAuthorOrganisation <> "" Then
+                mADL_Description.add_original_author_item( _
+                     openehr.base.kernel.Create.STRING.make_from_cil("organisation"), _
+                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorOrganisation))
+            End If
+            If Me.OriginalAuthorDate <> "" Then
+                mADL_Description.add_original_author_item( _
+                     openehr.base.kernel.Create.STRING.make_from_cil("date"), _
+                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorDate))
+            End If
 
             mADL_Description.set_lifecycle_state( _
                 openehr.base.kernel.Create.STRING.make_from_cil(Me.LifeCycleStateAsString))
@@ -66,6 +80,14 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("email")) Then
                 mOriginalAuthorEmail = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("email")).to_cil
+            End If
+
+            If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("organisation")) Then
+                mOriginalAuthorOrganisation = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("organisation")).to_cil
+            End If
+
+            If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("date")) Then
+                mOriginalAuthorDate = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("date")).to_cil
             End If
 
             MyBase.LifeCycleStateAsString = mADL_Description.lifecycle_state.to_cil

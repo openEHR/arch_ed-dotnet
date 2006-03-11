@@ -71,6 +71,8 @@ Public Class ApplicationOptionsForm
     Friend WithEvents txtHelpFile As System.Windows.Forms.TextBox
     Friend WithEvents lblOccurrences As System.Windows.Forms.Label
     Friend WithEvents comboOccurrences As System.Windows.Forms.ComboBox
+    Friend WithEvents txtOrganisation As System.Windows.Forms.TextBox
+    Friend WithEvents lblOrganisation As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(ApplicationOptionsForm))
@@ -112,10 +114,12 @@ Public Class ApplicationOptionsForm
         Me.Label4 = New System.Windows.Forms.Label
         Me.butHelpBrowse = New System.Windows.Forms.Button
         Me.tpAppearance = New System.Windows.Forms.TabPage
+        Me.lblOccurrences = New System.Windows.Forms.Label
+        Me.comboOccurrences = New System.Windows.Forms.ComboBox
         Me.tpDefaults = New System.Windows.Forms.TabPage
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.comboOccurrences = New System.Windows.Forms.ComboBox
-        Me.lblOccurrences = New System.Windows.Forms.Label
+        Me.txtOrganisation = New System.Windows.Forms.TextBox
+        Me.lblOrganisation = New System.Windows.Forms.Label
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -132,7 +136,7 @@ Public Class ApplicationOptionsForm
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(124, 28)
         Me.Label3.TabIndex = 13
-        Me.Label3.Text = "Email address"
+        Me.Label3.Text = "Email"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtEmail
@@ -236,13 +240,15 @@ Public Class ApplicationOptionsForm
         '
         'gbUserDetails
         '
+        Me.gbUserDetails.Controls.Add(Me.txtOrganisation)
+        Me.gbUserDetails.Controls.Add(Me.lblOrganisation)
         Me.gbUserDetails.Controls.Add(Me.Label2)
         Me.gbUserDetails.Controls.Add(Me.txtUsername)
         Me.gbUserDetails.Controls.Add(Me.txtEmail)
         Me.gbUserDetails.Controls.Add(Me.Label3)
-        Me.gbUserDetails.Location = New System.Drawing.Point(19, 37)
+        Me.gbUserDetails.Location = New System.Drawing.Point(19, 8)
         Me.gbUserDetails.Name = "gbUserDetails"
-        Me.gbUserDetails.Size = New System.Drawing.Size(519, 101)
+        Me.gbUserDetails.Size = New System.Drawing.Size(519, 144)
         Me.gbUserDetails.TabIndex = 23
         Me.gbUserDetails.TabStop = False
         Me.gbUserDetails.Text = "User details"
@@ -473,15 +479,13 @@ Public Class ApplicationOptionsForm
         Me.tpAppearance.TabIndex = 2
         Me.tpAppearance.Text = "Appearance"
         '
-        'tpDefaults
+        'lblOccurrences
         '
-        Me.tpDefaults.Controls.Add(Me.comboReferenceModel)
-        Me.tpDefaults.Controls.Add(Me.Label1)
-        Me.tpDefaults.Location = New System.Drawing.Point(4, 25)
-        Me.tpDefaults.Name = "tpDefaults"
-        Me.tpDefaults.Size = New System.Drawing.Size(635, 193)
-        Me.tpDefaults.TabIndex = 3
-        Me.tpDefaults.Text = "Defaults"
+        Me.lblOccurrences.Location = New System.Drawing.Point(24, 164)
+        Me.lblOccurrences.Name = "lblOccurrences"
+        Me.lblOccurrences.Size = New System.Drawing.Size(112, 16)
+        Me.lblOccurrences.TabIndex = 26
+        Me.lblOccurrences.Text = "Occurrences"
         '
         'comboOccurrences
         '
@@ -492,13 +496,32 @@ Public Class ApplicationOptionsForm
         Me.comboOccurrences.TabIndex = 25
         Me.comboOccurrences.Text = "numeric"
         '
-        'lblOccurrences
+        'tpDefaults
         '
-        Me.lblOccurrences.Location = New System.Drawing.Point(24, 164)
-        Me.lblOccurrences.Name = "lblOccurrences"
-        Me.lblOccurrences.Size = New System.Drawing.Size(112, 16)
-        Me.lblOccurrences.TabIndex = 26
-        Me.lblOccurrences.Text = "Occurrences"
+        Me.tpDefaults.Controls.Add(Me.comboReferenceModel)
+        Me.tpDefaults.Controls.Add(Me.Label1)
+        Me.tpDefaults.Location = New System.Drawing.Point(4, 25)
+        Me.tpDefaults.Name = "tpDefaults"
+        Me.tpDefaults.Size = New System.Drawing.Size(635, 193)
+        Me.tpDefaults.TabIndex = 3
+        Me.tpDefaults.Text = "Defaults"
+        '
+        'txtOrganisation
+        '
+        Me.txtOrganisation.Location = New System.Drawing.Point(144, 104)
+        Me.txtOrganisation.Name = "txtOrganisation"
+        Me.txtOrganisation.Size = New System.Drawing.Size(274, 22)
+        Me.txtOrganisation.TabIndex = 14
+        Me.txtOrganisation.Text = ""
+        '
+        'lblOrganisation
+        '
+        Me.lblOrganisation.Location = New System.Drawing.Point(8, 99)
+        Me.lblOrganisation.Name = "lblOrganisation"
+        Me.lblOrganisation.Size = New System.Drawing.Size(124, 28)
+        Me.lblOrganisation.TabIndex = 15
+        Me.lblOrganisation.Text = "Organisation"
+        Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ApplicationOptionsForm
         '
