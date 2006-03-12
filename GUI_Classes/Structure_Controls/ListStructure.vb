@@ -203,9 +203,8 @@ Public Class ListStructure
 
             Dim RM_S As New RmStructureCompound(mNodeId, StructureType.List)
 
-            RM_S.Children.Cardinality = mCardinalityControl.Item.Cardinality
-            RM_S.Children.Cardinality.Ordered = mCardinalityControl.Item.IsOrdered
-
+            RM_S.Children.Cardinality = mCardinalityControl.Cardinality
+            
             For Each lvItem In Me.lvList.Items
                 RM_S.Children.Add(lvItem.Item.RM_Class)
             Next
@@ -377,7 +376,7 @@ Public Class ListStructure
 
         text = text & new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 LIST\cf0\par")
         s = ""
-        If mCardinalityControl.Item.IsOrdered Then
+        If mCardinalityControl.Cardinality.Ordered Then
             s = "ordered"
         End If
 
@@ -396,7 +395,7 @@ Public Class ListStructure
         Dim text, s As String
 
         s = ""
-        If mCardinalityControl.Item.IsOrdered Then
+        If mCardinalityControl.Cardinality.Ordered Then
             s &= ", ordered"
         End If
 

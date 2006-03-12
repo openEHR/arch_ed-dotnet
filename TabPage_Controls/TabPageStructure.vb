@@ -559,11 +559,6 @@ Public Class TabPageStructure
 
         If mIsEmbedded Then
             'Fixme - save embedded archetype
-
-            If mFileManager.FileEdited AndAlso MessageBox.Show(AE_Constants.Instance.Save_changes & ": " & mFileManager.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Yes Then
-                mFileManager.Archetype.Definition = mArchetypeControl.Archetype
-                mFileManager.WriteArchetype()
-            End If
             Return mEmbeddedSlot
         Else
             If mArchetypeControl Is Nothing Then
@@ -606,16 +601,16 @@ Public Class TabPageStructure
 
                     Me.ArchetypeDisplay = New SimpleStructure(a_compound_structure, mFileManager)
 
-                Case StructureType.List ' "list", "List", "LIST"
+                Case StructureType.List
 
                     ' this also shows the panels and sets lvList to visible
                     Me.ArchetypeDisplay = New ListStructure(a_compound_structure, mFileManager)
 
-                Case StructureType.Tree ' "tree", "Tree", "TREE"
+                Case StructureType.Tree
 
                     Me.ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
 
-                Case StructureType.Table ' "table", "Table", "TABLE"
+                Case StructureType.Table
 
                     Me.ArchetypeDisplay = New TableStructure(CType(a_compound_structure, RmTable), mFileManager)
 
@@ -691,6 +686,8 @@ Public Class TabPageStructure
 
     Public Sub ProcessStructure(ByVal a_slot As RmSlot)
         mFileManager = New FileManagerLocal
+        mFileManager.ObjectToSave = Me
+        Filemanager.AddEmbedded(mFileManager)
         mIsEmbedded = True
         mEmbeddedSlot = a_slot
         OpenArchetype(a_slot)
@@ -704,7 +701,7 @@ Public Class TabPageStructure
         Dim archetype_name As String
 
         archetype_name = ReferenceModel.Instance.ReferenceModelName & "-" & a_slot.SlotConstraint.RM_ClassType.ToString & "." & a_slot.SlotConstraint.Include.Item(0) & ".adl"
-        OpenArchetype(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\Structure\" & archetype_name)
+        OpenArchetype(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure\" & archetype_name)
 
     End Sub
 
@@ -713,26 +710,26 @@ Public Class TabPageStructure
       
         If mFileManager.ArchetypeAvailable Then
             Dim lbl As New Label
-            lbl.Location = New System.Drawing.Point(3, 20)
-            lbl.Width = 400
+            lbl.Location = New System.Drawing.Point(120, 2)
+            lbl.Width = 320
             lbl.Height = 24
             Me.ProcessStructure(CType(mFileManager.Archetype.Definition, RmStructureCompound))
             lbl.Text = mFileManager.Archetype.Archetype_ID.ToString
             mArchetypeControl.PanelStructureHeader.Controls.Add(lbl)
-            mArchetypeControl.PanelStructureHeader.Height = 40
+            lbl.BringToFront()
         Else
             MessageBox.Show(AE_Constants.Instance.Error_loading & ": " & an_archetype_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             'FixMe - offer to find file
         End If
     End Sub
 
-    Private Sub SaveArchetype()
-        mFileManager.WriteArchetype()
+    Public Sub PrepareToSave()
+        mFileManager.Archetype.Definition = mArchetypeControl.Archetype
     End Sub
 
     Private Sub FileEditedChanged(ByVal sender As Object, ByVal e As FileManagerEventArgs) Handles mFileManager.IsFileDirtyChanged
         If mIsEmbedded Then
-            Filemanager.Instance.FileEdited = True
+            Filemanager.Instance.SetFileChangedToolBar(e.IsFileDirty)
         End If
     End Sub
 

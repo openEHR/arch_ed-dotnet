@@ -619,10 +619,13 @@ Public Class TabPageDescription
     End Sub
     Private Sub TabPageDescription_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mCurrentLanguage = Filemanager.Instance.OntologyManager.LanguageCode
+        Dim temp_isloading As Boolean = Filemanager.Instance.FileLoading
+        Filemanager.Instance.FileLoading = True
         LoadAuthorStatesTableCombo()
         If mCurrentLanguage <> "en" Then
             SetFormText()
         End If
+        Filemanager.Instance.FileLoading = temp_isloading
     End Sub
 
     Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtMisuse.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged

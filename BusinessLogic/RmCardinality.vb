@@ -24,6 +24,8 @@ Public Class RmCardinality
     Private mIncludeUpper As Boolean = True
     Private mIncludeLower As Boolean = True
     Private mOrdered As Boolean = False
+    Private mIsDefault As Boolean = False
+
 
     'Private sCount As String
 
@@ -42,9 +44,14 @@ Public Class RmCardinality
                     'setCount()
                 End If
             End If
+            mIsDefault = False
         End Set
     End Property
-
+    Public ReadOnly Property IsDefault() As Boolean
+        Get
+            Return mIsDefault
+        End Get
+    End Property
     Public Property MinCount() As Integer
         Get
             Return mMinCount
@@ -59,6 +66,7 @@ Public Class RmCardinality
                     'setCount()
                 End If
             End If
+            mIsDefault = False
         End Set
     End Property
 
@@ -73,11 +81,12 @@ Public Class RmCardinality
                     mMaxCount = mMinCount
                 End If
             End If
+            mIsDefault = False
             'setCount()
         End Set
     End Property
 
-   Public Property IncludeUpper() As Boolean
+    Public Property IncludeUpper() As Boolean
         Get
             If Not mUnbounded Then
                 Return mIncludeUpper
@@ -87,6 +96,7 @@ Public Class RmCardinality
         End Get
         Set(ByVal Value As Boolean)
             mIncludeUpper = Value
+            mIsDefault = False
         End Set
     End Property
 
@@ -96,6 +106,7 @@ Public Class RmCardinality
         End Get
         Set(ByVal Value As Boolean)
             mIncludeLower = Value
+            mIsDefault = False
         End Set
     End Property
     Public Property Ordered() As Boolean
@@ -104,6 +115,7 @@ Public Class RmCardinality
         End Get
         Set(ByVal Value As Boolean)
             mOrdered = Value
+            mIsDefault = False
         End Set
     End Property
     Public Function Copy() As RmCardinality
@@ -134,6 +146,8 @@ Public Class RmCardinality
 
         mOrdered = a_cardinality.is_ordered
 
+        mIsDefault = False
+
     End Sub
     Public Sub SetFromString(ByVal a_string As String)
         'Format is n..* or n..n
@@ -153,7 +167,7 @@ Public Class RmCardinality
             mMinCount = Integer.Parse(a_string)
             mMaxCount = Integer.Parse(a_string)
         End If
-
+        mIsDefault = False
     End Sub
 
     Sub New(ByVal lower As Integer, ByVal upper As Integer)
@@ -174,6 +188,7 @@ Public Class RmCardinality
         mMaxCount = 1
         mMinCount = 0
         mUnbounded = False
+        mIsDefault = True
     End Sub
 
     Sub New(ByVal aCount As RmCardinality)

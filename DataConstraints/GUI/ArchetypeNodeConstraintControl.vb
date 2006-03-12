@@ -215,6 +215,7 @@ Public Class ArchetypeNodeConstraintControl
 
         If mOccurrences Is Nothing Then
             mOccurrences = New OccurrencesPanel
+            mOccurrences.LocalFileManager = a_file_manager
             Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
                 Case "lexical"
                     mOccurrences.Mode = OccurrencesMode.Lexical

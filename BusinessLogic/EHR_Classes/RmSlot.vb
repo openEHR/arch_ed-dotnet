@@ -62,7 +62,7 @@ Public Class RmSlot
 
         mSlotConstraint = New Constraint_Slot
 
-        Select Case an_archetype_slot.rm_type_name.to_cil
+        Select Case an_archetype_slot.rm_type_name.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
             Case "SECTION"
                 mSlotConstraint.RM_ClassType = StructureType.SECTION
             Case "ENTRY"
@@ -73,15 +73,15 @@ Public Class RmSlot
                 mSlotConstraint.RM_ClassType = StructureType.EVALUATION
             Case "INSTRUCTION"
                 mSlotConstraint.RM_ClassType = StructureType.INSTRUCTION
-            Case "Simple", "Single"
+            Case "ITEM_SINGLE"
                 mSlotConstraint.RM_ClassType = StructureType.Single
-            Case "List"
+            Case "ITEM_LIST"
                 mSlotConstraint.RM_ClassType = StructureType.List
-            Case "Tree"
+            Case "ITEM_TREE"
                 mSlotConstraint.RM_ClassType = StructureType.Tree
-            Case "Table"
+            Case "ITEM_TABLE"
                 mSlotConstraint.RM_ClassType = StructureType.Table
-            Case "Cluster"
+            Case "CLUSTER"
                 mSlotConstraint.RM_ClassType = StructureType.Cluster
         End Select
 

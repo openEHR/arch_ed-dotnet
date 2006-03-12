@@ -29,7 +29,7 @@ Public Class EntryStructure
     Protected mOrdinalTable As DataTable
     Protected mCurrentItem As ArchetypeNode
     Protected mFileManager As FileManagerLocal
-    Protected mCardinalityControl As ClusterControl
+    Protected mCardinalityControl As OccurrencesPanel
 
     'implement as overrided property
     Protected mControl As Control  ' the GUI control in the inherited class e.g. tree, text etc
@@ -158,12 +158,12 @@ Public Class EntryStructure
         Me.pbCluster = New System.Windows.Forms.PictureBox
         Me.butChangeDataType = New System.Windows.Forms.Button
         Me.PanelStructureHeader = New System.Windows.Forms.Panel
+        Me.lblAtcode = New System.Windows.Forms.Label
         Me.ilSmall = New System.Windows.Forms.ImageList(Me.components)
         Me.ttElement = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolTipSpecialisation = New System.Windows.Forms.ToolTip(Me.components)
         Me.helpEntryStructure = New System.Windows.Forms.HelpProvider
         Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.lblAtcode = New System.Windows.Forms.Label
         Me.PanelIcons.SuspendLayout()
         Me.PanelStructureHeader.SuspendLayout()
         Me.SuspendLayout()
@@ -184,9 +184,9 @@ Public Class EntryStructure
         Me.PanelIcons.Controls.Add(Me.pbCluster)
         Me.PanelIcons.Controls.Add(Me.butChangeDataType)
         Me.PanelIcons.Dock = System.Windows.Forms.DockStyle.Left
-        Me.PanelIcons.Location = New System.Drawing.Point(0, 0)
+        Me.PanelIcons.Location = New System.Drawing.Point(0, 27)
         Me.PanelIcons.Name = "PanelIcons"
-        Me.PanelIcons.Size = New System.Drawing.Size(40, 360)
+        Me.PanelIcons.Size = New System.Drawing.Size(40, 333)
         Me.PanelIcons.TabIndex = 36
         '
         'ButAddElement
@@ -339,10 +339,20 @@ Public Class EntryStructure
         '
         Me.PanelStructureHeader.Controls.Add(Me.lblAtcode)
         Me.PanelStructureHeader.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelStructureHeader.Location = New System.Drawing.Point(40, 0)
+        Me.PanelStructureHeader.Location = New System.Drawing.Point(0, 0)
         Me.PanelStructureHeader.Name = "PanelStructureHeader"
-        Me.PanelStructureHeader.Size = New System.Drawing.Size(344, 24)
+        Me.PanelStructureHeader.Size = New System.Drawing.Size(384, 24)
         Me.PanelStructureHeader.TabIndex = 37
+        '
+        'lblAtcode
+        '
+        Me.lblAtcode.Dock = System.Windows.Forms.DockStyle.Right
+        Me.lblAtcode.ForeColor = System.Drawing.SystemColors.GrayText
+        Me.lblAtcode.Location = New System.Drawing.Point(312, 0)
+        Me.lblAtcode.Name = "lblAtcode"
+        Me.lblAtcode.Size = New System.Drawing.Size(72, 24)
+        Me.lblAtcode.TabIndex = 0
+        Me.lblAtcode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ilSmall
         '
@@ -358,27 +368,17 @@ Public Class EntryStructure
         'Splitter1
         '
         Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Splitter1.Location = New System.Drawing.Point(40, 24)
+        Me.Splitter1.Location = New System.Drawing.Point(0, 24)
         Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(344, 3)
+        Me.Splitter1.Size = New System.Drawing.Size(384, 3)
         Me.Splitter1.TabIndex = 38
         Me.Splitter1.TabStop = False
         '
-        'lblAtcode
-        '
-        Me.lblAtcode.Dock = System.Windows.Forms.DockStyle.Right
-        Me.lblAtcode.ForeColor = System.Drawing.SystemColors.GrayText
-        Me.lblAtcode.Location = New System.Drawing.Point(272, 0)
-        Me.lblAtcode.Name = "lblAtcode"
-        Me.lblAtcode.Size = New System.Drawing.Size(72, 24)
-        Me.lblAtcode.TabIndex = 0
-        Me.lblAtcode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'EntryStructure
         '
+        Me.Controls.Add(Me.PanelIcons)
         Me.Controls.Add(Me.Splitter1)
         Me.Controls.Add(Me.PanelStructureHeader)
-        Me.Controls.Add(Me.PanelIcons)
         Me.helpEntryStructure.SetHelpKeyword(Me, "Edit an archetype")
         Me.helpEntryStructure.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.TableOfContents)
         Me.Name = "EntryStructure"
@@ -447,20 +447,19 @@ Public Class EntryStructure
     End Property
 
     Protected Sub SetCardinality(ByVal rm As RmStructureCompound)
-        mCardinalityControl = New ClusterControl(mFileManager)
-        If rm.Type <> StructureType.Single Then
-            mCardinalityControl.Item = New ArchetypeComposite(rm, mFileManager)
-            Me.PanelStructureHeader.Controls.Add(mCardinalityControl)
-            mCardinalityControl.Dock = DockStyle.Fill
-        End If
+        SetCardinality(rm.Type)
+        mCardinalityControl.Cardinality = rm.Children.Cardinality
     End Sub
 
     Protected Sub SetCardinality(ByVal a_structure_type As StructureType)
-        mCardinalityControl = New ClusterControl(mFileManager)
-        If a_structure_type <> StructureType.Single Then
-            mCardinalityControl.Item = New ArchetypeComposite(a_structure_type, mFileManager)
+        mCardinalityControl = New OccurrencesPanel
+        mCardinalityControl.LocalFileManager = mFileManager
+        If a_structure_type = StructureType.Single Then
+            mCardinalityControl.SetSingle = True
+        Else
+            mCardinalityControl.IsContainer = True
+            mCardinalityControl.Location = New Drawing.Point(0, 0)
             Me.PanelStructureHeader.Controls.Add(mCardinalityControl)
-            mCardinalityControl.Dock = DockStyle.Fill
         End If
     End Sub
 

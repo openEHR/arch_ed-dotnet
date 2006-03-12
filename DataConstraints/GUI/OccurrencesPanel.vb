@@ -10,6 +10,8 @@ Public Class OccurrencesPanel
     Private mCardinality As New RmCardinality
     Private mIsLoading As Boolean = False
     Private mIsSingle As Boolean = False
+    Private mIncludeOrdered As Boolean = False
+    Private mFileManager As FileManagerLocal
 
 
 #Region " Windows Form Designer generated code "
@@ -51,6 +53,7 @@ Public Class OccurrencesPanel
     Friend WithEvents comboRepeat As System.Windows.Forms.ComboBox
     Friend WithEvents numMin As System.Windows.Forms.NumericUpDown
     Friend WithEvents numMax As System.Windows.Forms.NumericUpDown
+    Friend WithEvents cbOrdered As System.Windows.Forms.CheckBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.panelNumeric = New System.Windows.Forms.Panel
         Me.lblNumMax = New System.Windows.Forms.Label
@@ -63,6 +66,7 @@ Public Class OccurrencesPanel
         Me.lblDash = New System.Windows.Forms.Label
         Me.numMin = New System.Windows.Forms.NumericUpDown
         Me.numMax = New System.Windows.Forms.NumericUpDown
+        Me.cbOrdered = New System.Windows.Forms.CheckBox
         Me.panelNumeric.SuspendLayout()
         Me.panelLexical.SuspendLayout()
         CType(Me.numMin, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -74,7 +78,7 @@ Public Class OccurrencesPanel
         Me.panelNumeric.Controls.Add(Me.lblNumMax)
         Me.panelNumeric.Controls.Add(Me.lblNumMin)
         Me.panelNumeric.Controls.Add(Me.cbUnbounded)
-        Me.panelNumeric.Location = New System.Drawing.Point(8, 0)
+        Me.panelNumeric.Location = New System.Drawing.Point(0, 128)
         Me.panelNumeric.Name = "panelNumeric"
         Me.panelNumeric.Size = New System.Drawing.Size(376, 32)
         Me.panelNumeric.TabIndex = 0
@@ -108,7 +112,7 @@ Public Class OccurrencesPanel
         '
         'gbOccurrences
         '
-        Me.gbOccurrences.Location = New System.Drawing.Point(8, 40)
+        Me.gbOccurrences.Location = New System.Drawing.Point(0, 40)
         Me.gbOccurrences.Name = "gbOccurrences"
         Me.gbOccurrences.Size = New System.Drawing.Size(376, 48)
         Me.gbOccurrences.TabIndex = 1
@@ -120,7 +124,7 @@ Public Class OccurrencesPanel
         Me.panelLexical.Controls.Add(Me.comboRepeat)
         Me.panelLexical.Controls.Add(Me.comboOptional)
         Me.panelLexical.Controls.Add(Me.lblDash)
-        Me.panelLexical.Location = New System.Drawing.Point(8, 104)
+        Me.panelLexical.Location = New System.Drawing.Point(0, 88)
         Me.panelLexical.Name = "panelLexical"
         Me.panelLexical.Size = New System.Drawing.Size(376, 32)
         Me.panelLexical.TabIndex = 2
@@ -167,15 +171,25 @@ Public Class OccurrencesPanel
         Me.numMax.TabIndex = 14
         Me.numMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
+        'cbOrdered
+        '
+        Me.cbOrdered.Location = New System.Drawing.Point(16, 0)
+        Me.cbOrdered.Name = "cbOrdered"
+        Me.cbOrdered.Size = New System.Drawing.Size(112, 24)
+        Me.cbOrdered.TabIndex = 15
+        Me.cbOrdered.Text = "Ordered"
+        Me.cbOrdered.Visible = False
+        '
         'OccurrencesPanel
         '
+        Me.Controls.Add(Me.cbOrdered)
         Me.Controls.Add(Me.numMax)
         Me.Controls.Add(Me.numMin)
         Me.Controls.Add(Me.panelLexical)
         Me.Controls.Add(Me.gbOccurrences)
         Me.Controls.Add(Me.panelNumeric)
         Me.Name = "OccurrencesPanel"
-        Me.Size = New System.Drawing.Size(448, 208)
+        Me.Size = New System.Drawing.Size(376, 208)
         Me.panelNumeric.ResumeLayout(False)
         Me.panelLexical.ResumeLayout(False)
         CType(Me.numMin, System.ComponentModel.ISupportInitialize).EndInit()
@@ -213,10 +227,31 @@ Public Class OccurrencesPanel
             End If
         End Set
     End Property
+    Public WriteOnly Property LocalFileManager() As FileManagerLocal
+        Set(ByVal Value As FileManagerLocal)
+            mFileManager = Value
+        End Set
+    End Property
+    Public Property IsContainer() As Boolean
+        Get
+            Return mIncludeOrdered
+        End Get
+        Set(ByVal Value As Boolean)
+            mIncludeOrdered = Value
+            Me.cbOrdered.Visible = Value
+            If Value Then
+                ' it is a container then default max is unbounded
+                If mCardinality.IsDefault Then
+                    mCardinality.IsUnbounded = True
+                End If
+            End If
+        End Set
+    End Property
     Public WriteOnly Property SetSingle() As Boolean
         Set(ByVal Value As Boolean)
             mIsLoading = True
             mIsSingle = Value
+            mIncludeOrdered = False
             If Value Then
                 Me.numMin.Value = 1
                 Me.numMax.Value = 1
@@ -254,14 +289,27 @@ Public Class OccurrencesPanel
 
     Private Sub OccurrencesPanel_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsLoading = True
-        Me.Size = gbOccurrences.Size
-        gbOccurrences.Dock = DockStyle.Fill
+        ' Set for cardinality if appropriate
+        If mIncludeOrdered Then
+            Me.Height = gbOccurrences.Height + 40
+            gbOccurrences.Text = mFileManager.OntologyManager.GetOpenEHRTerm(437, "Items")
+            Me.cbOrdered.Visible = True
+        Else
+            Me.Size = gbOccurrences.Size
+            Me.cbOrdered.Visible = False
+            gbOccurrences.Dock = DockStyle.Fill
+        End If
+
         If OceanArchetypeEditor.Instance.Options.OccurrencesView = "numeric" Then
             Me.Mode = OccurrencesMode.Numeric
         Else
             Me.Mode = OccurrencesMode.Lexical
             If Me.comboRepeat.SelectedIndex = -1 Then
-                Me.comboRepeat.SelectedIndex = 0
+                If mCardinality.IsUnbounded Then
+                    Me.comboRepeat.SelectedIndex = 1
+                Else
+                    Me.comboRepeat.SelectedIndex = 0
+                End If
             End If
             If Me.comboOptional.SelectedIndex = -1 Then
                 Me.comboOptional.SelectedIndex = 0
@@ -298,6 +346,9 @@ Public Class OccurrencesPanel
                 End If
             End If
         End If
+        If mIncludeOrdered Then
+            cbOrdered.Checked = mCardinality.Ordered
+        End If
         mIsLoading = False
 
     End Sub
@@ -318,7 +369,7 @@ Public Class OccurrencesPanel
                 'no action
         End Select
         If Not mIsLoading Then
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
         SetGUI()
     End Sub
@@ -375,7 +426,7 @@ Public Class OccurrencesPanel
             End If
         End If
         If Not mIsLoading Then
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
         SetGUI()
     End Sub
@@ -383,7 +434,7 @@ Public Class OccurrencesPanel
     Private Sub numMin_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMin.TextChanged ', numMax.ValueChanged
 
         If Not mIsLoading Then
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
             If mMode = OccurrencesMode.Lexical Then
                 mIsLoading = True
                 If numMin.Value = 0 Then
@@ -403,7 +454,7 @@ Public Class OccurrencesPanel
     Private Sub numMax_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMax.TextChanged ', numMax.ValueChanged
 
         If Not mIsLoading Then
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
             If mMode = OccurrencesMode.Lexical Then
                 mIsLoading = True
                 If numMax.Value = 1 Then
@@ -433,30 +484,36 @@ Public Class OccurrencesPanel
             Me.numMax.Visible = False
         End If
         If Not mIsLoading Then
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 
     Sub Translate()
         Dim i As Integer
         mIsLoading = True
-        Me.gbOccurrences.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(110, "Occurrences")
-        Me.lblNumMin.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(588, "Min:")
-        Me.lblNumMax.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(111, "Max:")
+        Me.gbOccurrences.Text = mFileManager.OntologyManager.GetOpenEHRTerm(110, "Occurrences")
+        Me.lblNumMin.Text = mFileManager.OntologyManager.GetOpenEHRTerm(588, "Min:")
+        Me.lblNumMax.Text = mFileManager.OntologyManager.GetOpenEHRTerm(111, "Max:")
         i = Me.comboOptional.SelectedIndex
         Me.comboOptional.Items.Clear()
-        Me.comboOptional.Items.Add(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(448, "optional"))
-        Me.comboOptional.Items.Add(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(446, "mandatory"))
+        Me.comboOptional.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(448, "optional"))
+        Me.comboOptional.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(446, "mandatory"))
         Me.comboOptional.SelectedIndex = i
         i = Me.comboRepeat.SelectedIndex
         Me.comboRepeat.Items.Clear()
-        Me.comboRepeat.Items.Add(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(589, "not repeating"))
-        Me.comboRepeat.Items.Add(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(590, "repeating, no limit"))
-        Me.comboRepeat.Items.Add(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(591, "repeating, limited"))
+        Me.comboRepeat.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(589, "not repeating"))
+        Me.comboRepeat.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(590, "repeating, no limit"))
+        Me.comboRepeat.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(591, "repeating, limited"))
         Me.comboRepeat.SelectedIndex = i
-        Me.cbUnbounded.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(112, "Unbounded")
+        Me.cbUnbounded.Text = mFileManager.OntologyManager.GetOpenEHRTerm(112, "Unbounded")
         mIsLoading = False
 
     End Sub
 
+    Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbOrdered.CheckedChanged
+        If Not mIsLoading Then
+            mCardinality.Ordered = cbOrdered.Checked
+            mFileManager.FileEdited = True
+        End If
+    End Sub
 End Class
