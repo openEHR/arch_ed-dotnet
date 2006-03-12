@@ -2995,14 +2995,9 @@ Public Class Designer
     End Sub
 
     Private Function CheckOKtoClose() As Boolean
-        If Filemanager.Instance.FileEdited Then
-            'Add message box here and save
-            Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & Filemanager.Instance.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
-                Case DialogResult.Cancel
-                    Return False
-                Case DialogResult.Yes
-                    Me.SaveArchetype(Me, New EventArgs)
-            End Select
+        If Filemanager.HasFileToSave Then
+            Filemanager.SaveFiles()
+            'Me.SaveArchetype(Me, New EventArgs)
         End If
         Return True
     End Function
@@ -3403,7 +3398,7 @@ Public Class Designer
             Case 1 ' open
                 OpenArchetype(sender, e)
             Case 2 ' Save
-                SaveArchetype(sender, e)
+                Filemanager.SaveFiles()
             Case 3 ' separator
 
             Case 4 ' Print
@@ -3655,7 +3650,7 @@ Public Class Designer
 
 #Region "Methods to save archetype as represented in the GUI"
 
-    Private Sub PrepareToSave()
+    Public Sub PrepareToSave() 'Called internally and by FileManager
         Dim Selected_row As DataRow
         Dim selected_rows As DataRow()
         Dim i, ii As Integer
@@ -3669,7 +3664,7 @@ Public Class Designer
         Filemanager.Instance.Archetype.Description = mTabPageDescription.Description
 
         If Me.ShowAsDraft Then
-            Filemanager.Instance.Archetype.LifeCycle = "draft"
+            Filemanager.Instance.Archetype.LifeCycle = "Initial"
         End If
 
         ' For all ENTRY subtypes
@@ -3940,6 +3935,7 @@ Public Class Designer
         frmSplash.Show()
 
         AddHandler Filemanager.Instance.IsFileDirtyChanged, AddressOf FileManager_IsFileDirtyChanged
+        Filemanager.Instance.ObjectToSave = Me
 
         DesignerInitialiser() ' see Internal functions region
 

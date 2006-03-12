@@ -227,14 +227,11 @@ Public Class TableStructure
             Dim element As RmElement
 
             'sets the cardinality of the children
-            RM_T = New RmTable(mCardinalityControl.Item)
-
-            ' need to set the node Id
-            RM_T.NodeId = mNodeId
+            RM_T = New RmTable(mNodeId)
+            RM_T.Children.Cardinality = Me.mCardinalityControl.Cardinality
 
             RM_T.isRotated = True
             RM_T.NumberKeyColumns = mKeyColumns.Count
-
 
             If mRow Is Nothing Then
                 mRow = New RmCluster(mFileManager.OntologyManager.AddTerm("row", "@ internal @").Code)
@@ -605,7 +602,7 @@ Public Class TableStructure
         Next
         tab_end_str = "\cellx8414\pard"
         s = "Rows "
-        If mCardinalityControl.Item.IsOrdered Then
+        If mCardinalityControl.Cardinality.Ordered Then
             s = "ordered "
         End If
 

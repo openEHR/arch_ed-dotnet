@@ -290,10 +290,9 @@ Public Class TreeStructure
             Dim tvNode As ArchetypeTreeNode
 
             ' sets the cardinality of the children
-            Dim RM_S As New RmStructureCompound(mCardinalityControl.Item)
+            Dim RM_S As New RmStructureCompound(mNodeId, StructureType.Tree)
 
-            ' need to set the node Id
-            RM_S.NodeId = mNodeId
+            RM_S.Children.Cardinality = Me.mCardinalityControl.Cardinality
 
             For Each tvNode In Me.tvTree.Nodes
 
@@ -687,7 +686,7 @@ Public Class TreeStructure
 
         text = text & new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 TREE\cf0\par")
         s = ""
-        If mCardinalityControl.Item.IsOrdered Then
+        If mCardinalityControl.Cardinality.Ordered Then
             s = "ordered"
         End If
         s = s.Trim
@@ -702,7 +701,7 @@ Public Class TreeStructure
         Dim text, s As String
 
         s = ""
-        If mCardinalityControl.Item.IsOrdered Then
+        If mCardinalityControl.Cardinality.Ordered Then
             s &= ", ordered"
         End If
 

@@ -55,7 +55,6 @@ Public Class SimpleStructure
 
         mLoading = True
         element = rm.Children.FirstElementNode
-        '  mFileManager = Filemanager.Instance
 
         If Not element Is Nothing Then
             mElement = New ArchetypeElement(element, mFileManager)
