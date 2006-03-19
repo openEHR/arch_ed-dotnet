@@ -27,7 +27,6 @@ Public Class FileManagerLocal
     Private mObjectToSave As Object
     Private mOntologyManager As New OntologyManager
 
-    Public Event IsFileDirtyChanged As FileManagerEventHandler
     Public Event ArchetypeLoaded As EventHandler
 
     Public Property OntologyManager() As OntologyManager
@@ -98,7 +97,7 @@ Public Class FileManagerLocal
         Set(ByVal Value As Boolean)
             If Value <> mIsFileDirty Then
                 mIsFileDirty = Value
-                OnIsFileDirtyChanged(Value)
+                Filemanager.SetFileChangedToolBar(Value)
             End If
         End Set
     End Property
@@ -128,14 +127,6 @@ Public Class FileManagerLocal
         Return mArchetypeEngine.AvailableFormats.IndexOf(a_format)
     End Function
 
-    Public Sub SetFileChangedToolBar(ByVal isChanged As Boolean)
-        ' used by embedded archetypes to set the GUI to filechanged
-        RaiseEvent IsFileDirtyChanged(Me, New FileManagerEventArgs(isChanged))
-    End Sub
-    Protected Sub OnIsFileDirtyChanged(ByVal IsFileDirty As Boolean)
-        RaiseEvent IsFileDirtyChanged(Me, New FileManagerEventArgs(IsFileDirty))
-    End Sub
-
     Public Property FileLoading() As Boolean
         'Public ReadOnly Property FileLoading() As Boolean
         Get
@@ -150,10 +141,10 @@ Public Class FileManagerLocal
 
             If Value Then
                 ' stop recursive updates through the interface to the ontology
-                Filemanager.Instance.OntologyManager.DoUpdateOntology = False
+                OntologyManager.DoUpdateOntology = False
             Else
                 ' allow them
-                Filemanager.Instance.OntologyManager.DoUpdateOntology = True
+                OntologyManager.DoUpdateOntology = True
             End If
         End Set
     End Property
@@ -187,7 +178,7 @@ Public Class FileManagerLocal
         End If
 
         mHasOpenFileError = False
-        mArchetypeEngine.OpenFile(aFileName, mOntologyManager)
+        mArchetypeEngine.OpenFile(aFileName, Me)
 
         If mArchetypeEngine.OpenFileError Then
             mHasOpenFileError = True
@@ -230,22 +221,87 @@ Public Class FileManagerLocal
                 mArchetypeEngine.ResetAll()
                 ' need to reload the current archetype if there is one
                 If Not mPriorFileName = Nothing Then
-                    mArchetypeEngine.OpenFile(mPriorFileName, mOntologyManager)
+                    mArchetypeEngine.OpenFile(mPriorFileName, Me)
                     mPriorFileName = Nothing
                 End If
             End If
         End If
     End Sub
 
-    Public Sub SaveArchetype()
-        'Called by main filemanager to save ADL before writing archetype
-        Try
-            mObjectToSave.PrepareToSave()
-            WriteArchetype()
-        Catch ex As Exception
-            MessageBox.Show(AE_Constants.Instance.Error_saving & Me.FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
+    Public Function SaveArchetype() As Boolean
+        Dim s As String
+
+        If Me.IsNew Then   ' never saved before
+            s = ChooseFileName()
+        Else
+            If IO.File.Exists(Me.FileName) Then  ' check the file exists so it is saving over the top
+                s = FileName
+            Else
+                s = ChooseFileName()
+            End If
+        End If
+
+        If s <> "" Then
+
+            ' The file might be in a repository and readonly
+            If IO.File.Exists(s) Then
+                ' if it isn't a new file
+                Dim fa As IO.FileAttributes = IO.File.GetAttributes(s)
+                'check it isn't readonly
+                If (fa And IO.FileAttributes.ReadOnly) > 0 Then
+                    MessageBox.Show(s & ": " & Filemanager.GetOpenEhrTerm(439, "Read only"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Return False
+                End If
+            End If
+
+            'Now write the arcehtype using the parser
+            Me.FileName = s
+
+            Try
+                mObjectToSave.PrepareToSave()
+                WriteArchetype()
+                Return True
+            Catch ex As Exception
+                MessageBox.Show(AE_Constants.Instance.Error_saving & Me.FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return False
+            End Try
+        Else
+            Return False  ' did not set a filename
+        End If
+
+    End Function
+
+    Private Function ChooseFileName() As String
+        Dim saveFile As New SaveFileDialog
+
+        saveFile.Filter = Me.AvailableFormatFilter
+        saveFile.FileName = Me.Archetype.Archetype_ID.ToString
+        saveFile.OverwritePrompt = True
+        saveFile.DefaultExt = Me.ParserType
+        Dim i As Integer = Me.IndexOfFormat(Me.ParserType) + 1
+        If i > 0 Then
+            saveFile.FilterIndex = i  ' adl is the third type
+        End If
+        saveFile.AddExtension = True
+        saveFile.Title = AE_Constants.Instance.MessageBoxCaption
+        saveFile.ValidateNames = True
+        If saveFile.ShowDialog() = DialogResult.Cancel Then
+            Return ""
+        Else
+            'Check the file extension is added
+            Dim s, ext As String
+
+            ext = saveFile.Filter.Split("|".ToCharArray())((saveFile.FilterIndex - 1) * 2)
+            s = saveFile.FileName.Substring(saveFile.FileName.LastIndexOf(".") + 1)
+            If s = ext Then
+                Return saveFile.FileName
+            Else
+                Return saveFile.FileName & "." & ext
+            End If
+        End If
+
+    End Function
+
 
     Public Sub WriteArchetype()
 
@@ -300,11 +356,11 @@ Public Class FileManagerLocal
                     a_ontology = New ArchetypeEditor.ADL_Classes.ADL_Ontology(CType(mArchetypeEngine, ArchetypeEditor.ADL_Classes.ADL_Interface).ADL_Parser)
 
                     'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
-                    Filemanager.Instance.OntologyManager.Ontology = a_ontology
+                    OntologyManager.Ontology = a_ontology
                     ' a new archetype always has a concept code set to "at0000"
                     a_term = New RmTerm(mArchetypeEngine.Archetype.ConceptCode)
                     a_term.Text = "?"
-                    Filemanager.Instance.OntologyManager.UpdateTerm(a_term)
+                    OntologyManager.UpdateTerm(a_term)
                 End If
             Case Else
                 Debug.Assert(False)
@@ -319,8 +375,7 @@ Public Class FileManagerLocal
     End Sub
 End Class
 
-Public Delegate Sub FileManagerEventHandler(ByVal sender As Object, _
-        ByVal e As FileManagerEventArgs)
+Public Delegate Sub FileManagerEventHandler(ByVal e As FileManagerEventArgs)
 
 Public Class FileManagerEventArgs
     Private mIsFileDirty As Boolean
@@ -340,64 +395,101 @@ Class Filemanager
     ' Allows Designer wide access to FileManager, while enabling local access if required
 
     ' FileManager Singleton
-    Private Shared mInstance As FileManagerLocal
-    Private Shared mEmbedded As New ArrayList
+    'Private Shared mInstance As FileManagerLocal
+    Private Shared mFileManagerCollection As New ArrayList
+    Shared Event IsFileDirtyChanged As FileManagerEventHandler
 
-
-    Public Shared ReadOnly Property Instance() As FileManagerLocal
-        Get
-            If mInstance Is Nothing Then
-                mInstance = New FileManagerLocal
-                'Throw New InvalidOperationException("FileManager instance not created")
-            End If
-
-            Return mInstance
-        End Get
-    End Property
-
-    Public Shared Sub AddEmbedded(ByVal f As FileManagerLocal)
-        mEmbedded.Add(f)
+    Shared Sub SetFileChangedToolBar(ByVal isChanged As Boolean)
+        ' used by embedded archetypes to set the GUI to filechanged
+        RaiseEvent IsFileDirtyChanged(New FileManagerEventArgs(isChanged))
+    End Sub
+    Private Sub OnIsFileDirtyChanged(ByVal IsFileDirty As Boolean)
+        RaiseEvent IsFileDirtyChanged(New FileManagerEventArgs(IsFileDirty))
     End Sub
 
+    'Public Shared ReadOnly Property Instance() As FileManagerLocal
+    '    Get
+    '        If mInstance Is Nothing Then
+    '            mInstance = New FileManagerLocal
+    '            'Throw New InvalidOperationException("FileManager instance not created")
+    '        End If
+
+    '        Return mInstance
+    '    End Get
+    'End Property
+
+    Public Shared Sub AddEmbedded(ByVal f As FileManagerLocal)
+        mFileManagerCollection.Add(f)
+    End Sub
+    Public Shared Property Master() As FileManagerLocal
+        Get
+            If mFileManagerCollection.Count > 0 Then
+                Return mFileManagerCollection(0)
+            End If
+        End Get
+        Set(ByVal Value As FileManagerLocal)
+            mFileManagerCollection.Insert(0, Value)
+        End Set
+    End Property
     Public Shared ReadOnly Property HasFileToSave() As Boolean
         Get
-            If mInstance.FileEdited Then
-                Return True
-            Else
-                For Each f As FileManagerLocal In mEmbedded
-                    If f.FileEdited Then
-                        Return True
-                    End If
-                Next
-            End If
+            'If mInstance.FileEdited Then
+            '    Return True
+            'Else
+            For Each f As FileManagerLocal In mFileManagerCollection
+                If f.FileEdited Then
+                    Return True
+                End If
+            Next
+            'End If
             Return False
         End Get
     End Property
 
-    Public Shared Function SaveFiles() As Boolean
-        If mInstance.FileEdited Then
-            Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & Filemanager.Instance.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
-                Case DialogResult.Cancel
-                    Return False
-                Case DialogResult.Yes
-                    mInstance.SaveArchetype()
-                    mInstance.FileEdited = False
-            End Select
+    Public Shared Function GetOpenEhrTerm(ByVal code As Integer, ByVal default_text As String, Optional ByVal language As String = "") As String
+        If language = "" Then
+            Return Master.OntologyManager.GetOpenEHRTerm(code, default_text)
+        Else
+            Return Master.OntologyManager.GetOpenEHRTerm(code, default_text, language)
         End If
-        For Each f As FileManagerLocal In mEmbedded
+    End Function
+
+    Public Shared Function SaveFiles(ByVal askToSave As Boolean) As Boolean
+        'If mInstance.FileEdited Then
+        '    Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & mFileManager.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
+        '        Case DialogResult.Cancel
+        '            Return False
+        '        Case DialogResult.Yes
+        '            mInstance.SaveArchetype()
+        '            mInstance.FileEdited = False
+        '    End Select
+        'End If
+        For Each f As FileManagerLocal In mFileManagerCollection
             If f.FileEdited Then
-                Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & f.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
-                    Case DialogResult.Cancel
-                        Return False
-                    Case DialogResult.Yes
-                        f.SaveArchetype()
+                If mFileManagerCollection.Count > 1 Or askToSave Then
+                    Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & f.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
+                        Case DialogResult.Cancel
+                            Return False
+                        Case DialogResult.No
+                            Return True
+                        Case DialogResult.Yes
+                            If f.SaveArchetype() Then
+                                f.IsNew = False
+                                f.FileEdited = False
+                            Else
+                                Return False
+                            End If
+                    End Select
+                Else
+                    If f.SaveArchetype() Then
+                        f.IsNew = False
                         f.FileEdited = False
-                End Select
+                    Else
+                        Return False
+                    End If
+                End If
             End If
         Next
-        ' set the tool bar buttons appropriately
-        mInstance.SetFileChangedToolBar(HasFileToSave)
-
         Return True
     End Function
 

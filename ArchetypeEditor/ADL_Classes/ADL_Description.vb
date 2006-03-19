@@ -101,8 +101,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 Next
             Else
                 Me.mArchetypeDetails.AddOrReplace( _
-                Filemanager.Instance.OntologyManager.LanguageCode, _
-                New ArchetypeDescriptionItem(Filemanager.Instance.OntologyManager.LanguageCode))
+                Filemanager.Master.OntologyManager.LanguageCode, _
+                New ArchetypeDescriptionItem(Filemanager.Master.OntologyManager.LanguageCode))
             End If
         End Sub
 

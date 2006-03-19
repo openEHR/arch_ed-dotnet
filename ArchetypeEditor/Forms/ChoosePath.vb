@@ -115,9 +115,9 @@ Public Class frmChoosePath
 
         LanguageCode = a_LanguageCode
         ' get the paths with the language labels
-        LogPath = Filemanager.Instance.Archetype.Paths(LanguageCode, True)
+        LogPath = Filemanager.Master.Archetype.Paths(LanguageCode, True)
         ' get the paths with the NodeId labels
-        PhysPath = Filemanager.Instance.Archetype.Paths(LanguageCode, False)
+        PhysPath = Filemanager.Master.Archetype.Paths(LanguageCode, False)
         For i = 0 To LogPath.Length - 1
             clean_s = ""
             ' check there are no enclosed "/" if so replace with "|"
@@ -223,4 +223,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

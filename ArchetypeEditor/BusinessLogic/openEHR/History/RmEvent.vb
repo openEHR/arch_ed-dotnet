@@ -141,9 +141,9 @@ Class RmEvent
 
 #Region "ADL Oriented Features"
 
-    Sub New(ByVal An_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Sub New(ByVal An_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(An_Event.node_id.to_cil, StructureType.Event)
-        ProcessEvent(An_Event)
+        ProcessEvent(An_Event, a_filemanager)
     End Sub
 
     Private mEIF_Data As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
@@ -158,7 +158,7 @@ Class RmEvent
 
 #Region "ADL PRocessing - incoming"
 
-    Private Sub ProcessEvent(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Private Sub ProcessEvent(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
@@ -257,9 +257,9 @@ Class RmEvent
                     Debug.Assert(structure_type <> StructureType.Not_Set)
 
                     If structure_type = StructureType.Table Then
-                        ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = New RmTable(cadlStruct)
+                        ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = New RmTable(cadlStruct, a_filemanager)
                     Else
-                        ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = New RmStructureCompound(cadlStruct)
+                        ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = New RmStructureCompound(cadlStruct, a_filemanager)
                     End If
             End Select
         End If

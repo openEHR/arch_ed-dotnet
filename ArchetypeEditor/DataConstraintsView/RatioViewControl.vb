@@ -22,12 +22,12 @@ Public Class RatioViewControl : Inherits ElementViewControl
     Private WithEvents mDenominator As NumericUpDown
     Private mIsPercent As Boolean
 
-    Public Sub New(ByVal anElement As ArchetypeElement)
-        MyBase.New(anElement)
+    Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(anElement, a_filemanager)
     End Sub
 
-    Public Sub New(ByVal aConstraint As Constraint)
-        MyBase.New(aConstraint)
+    Public Sub New(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(aConstraint, a_filemanager)
 
     End Sub
 

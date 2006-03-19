@@ -21,6 +21,7 @@ Public Class PathwaySpecification
     Private WithEvents mPathwayEvent As PathwayEvent
     Private mIsloading As Boolean
     Private mTabPages As New Collection
+    Private mFileManager As FileManagerLocal
     Public Event StructureChanged(ByVal sender As Object, ByVal a_structure As StructureType)
 
 
@@ -33,6 +34,9 @@ Public Class PathwaySpecification
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
+        If Not Me.DesignMode Then
+            mFileManager = Filemanager.Master
+        End If
 
     End Sub
 
@@ -709,7 +713,7 @@ Public Class PathwaySpecification
 
             Debug.Assert(Value.Type = StructureType.ism_transition)
             For Each ms As RmPathwayStep In Value.Children
-                Dim pv As New PathwayEvent(ms)
+                Dim pv As New PathwayEvent(ms, mFileManager)
                 Select Case pv.DefaultStateMachineType
                     Case StateMachineType.ActiveAborted
                         Ctrl = Me.PanelAbortActive
@@ -940,19 +944,19 @@ Public Class PathwaySpecification
         End If
 
         If ctrl Is Me.PanelAbortActive Then
-            pv = New PathwayEvent(StateMachineType.ActiveAborted)
+            pv = New PathwayEvent(StateMachineType.ActiveAborted, mFileManager)
         ElseIf ctrl Is Me.PanelAbortInitial Then
-            pv = New PathwayEvent(StateMachineType.InitialAborted)
+            pv = New PathwayEvent(StateMachineType.InitialAborted, mFileManager)
         ElseIf ctrl Is Me.PanelActive Then
-            pv = New PathwayEvent(StateMachineType.Active)
+            pv = New PathwayEvent(StateMachineType.Active, mFileManager)
         ElseIf ctrl Is Me.PanelInitial Then
-            pv = New PathwayEvent(StateMachineType.Initial)
+            pv = New PathwayEvent(StateMachineType.Initial, mFileManager)
         ElseIf ctrl Is Me.PanelCompleted Then
-            pv = New PathwayEvent(StateMachineType.Completed)
+            pv = New PathwayEvent(StateMachineType.Completed, mFileManager)
         ElseIf ctrl Is Me.PanelSuspendInitial Then
-            pv = New PathwayEvent(StateMachineType.InitialSuspended)
+            pv = New PathwayEvent(StateMachineType.InitialSuspended, mFileManager)
         ElseIf ctrl Is Me.PanelSuspendActive Then
-            pv = New PathwayEvent(StateMachineType.ActiveSuspended)
+            pv = New PathwayEvent(StateMachineType.ActiveSuspended, mFileManager)
         Else
             Debug.Assert(False)
             Beep()
@@ -975,7 +979,7 @@ Public Class PathwaySpecification
             Else
                 Me.mPathwayEvent.AlternativeState = StateMachineType.Not_Set
             End If
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -984,7 +988,7 @@ Public Class PathwaySpecification
             If mPathwayEvent Is Nothing Then Return
 
             Me.mPathwayEvent.Item.SuspendAllowed = Me.cbSuspended.Checked
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -993,7 +997,7 @@ Public Class PathwaySpecification
             If mPathwayEvent Is Nothing Then Return
 
             Me.mPathwayEvent.Item.AbortAllowed = Me.cbAborted.Checked
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -1021,17 +1025,16 @@ Public Class PathwaySpecification
     End Sub
 
     Private Sub TranslateGUI()
-        Me.PanelInitial.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(524, "Initial")
-        Me.PanelSuspendInitial.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(527, "Postponed")
-        Me.PanelAbortInitial.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(528, "Cancelled")
-        Me.PanelActive.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(245, "Active")
-        Me.PanelSuspendActive.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(530, "Suspended")
-        Me.PanelAbortActive.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(547, "Abort")
-        Me.PanelCompleted.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(532, "Completed")
+        Me.PanelInitial.Text = Filemanager.GetOpenEhrTerm(524, "Initial")
+        Me.PanelSuspendInitial.Text = Filemanager.GetOpenEhrTerm(527, "Postponed")
+        Me.PanelAbortInitial.Text = Filemanager.GetOpenEhrTerm(528, "Cancelled")
+        Me.PanelActive.Text = Filemanager.GetOpenEhrTerm(245, "Active")
+        Me.PanelSuspendActive.Text = Filemanager.GetOpenEhrTerm(530, "Suspended")
+        Me.PanelAbortActive.Text = Filemanager.GetOpenEhrTerm(547, "Abort")
+        Me.PanelCompleted.Text = Filemanager.GetOpenEhrTerm(532, "Completed")
     End Sub
 
     Public Sub Translate()
-        TranslateGUI()
         TranslatePathwayEvents(Me.PanelInitial)
         TranslatePathwayEvents(Me.PanelSuspendInitial)
         TranslatePathwayEvents(Me.PanelAbortInitial)

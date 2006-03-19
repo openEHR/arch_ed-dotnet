@@ -25,9 +25,10 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
     Private mAssumedValue As Integer
     Private mIsLoadingComplete As Boolean
     Private mLanguage As String
+    Private mFileManager As FileManagerLocal
 
     Public Overrides Function Copy() As Constraint
-        Dim ord As New Constraint_Ordinal
+        Dim ord As New Constraint_Ordinal(mFileManager)
 
         ord.mFixed = mFixed
         ord.OrdinalValues.Copy(mOrdinalTable)
@@ -121,13 +122,13 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         End Set
     End Property
 
-    Sub New()
+    Sub New(ByVal a_local_filemanager As FileManagerLocal)
+        mFileManager = a_local_filemanager
         mOrdinalTable = New OrdinalTable
     End Sub
 
-    Sub New(ByVal IsLoadingComplete As Boolean)
-        Me.New()
-
+    Sub New(ByVal IsLoadingComplete As Boolean, ByVal a_local_filemanager As FileManagerLocal)
+        Me.New(a_local_filemanager)
         mIsLoadingComplete = IsLoadingComplete
     End Sub
 
@@ -139,7 +140,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         If e.Action = DataRowAction.Delete Then
             If Me.HasAssumedValue Then
 
-                Dim ordinalValue As New ordinalValue(e.Row)
+                Dim ordinalValue As New OrdinalValue(e.Row)
                 'Debug.Assert(TypeOf e.Row(1) Is Long)
                 Debug.Assert(TypeOf Me.AssumedValue Is Integer)
 
@@ -156,7 +157,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
             End If
 
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
 
     End Sub
@@ -180,14 +181,14 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
                 If TypeOf e.Row.Item(2) Is System.DBNull Then
                     'add ordinal to ontology when new ordinal is added
                     mIsLoadingComplete = False
-                    Dim a_Term As RmTerm = Filemanager.Instance.OntologyManager.AddTerm( _
+                    Dim a_Term As RmTerm = mFileManager.OntologyManager.AddTerm( _
                             CStr(e.ProposedValue))
                     ordinal.InternalCode = a_Term.Code
                     e.Row.Item(1) = a_term.Text
                     mIsLoadingComplete = True
                 Else
                     'update ontology with ordinal text value when ordinal is edited
-                    Filemanager.Instance.OntologyManager.SetText(CStr(e.ProposedValue), _
+                    mFileManager.OntologyManager.SetText(CStr(e.ProposedValue), _
                             ordinal.InternalCode)
                 End If
 
@@ -196,7 +197,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
                 If TypeOf e.Row.Item(2) Is System.DBNull Then
                     mIsLoadingComplete = False
                     Dim ordinal As New OrdinalValue(e.Row)
-                    Dim a_Term As RmTerm = Filemanager.Instance.OntologyManager.AddTerm( _
+                    Dim a_Term As RmTerm = mFileManager.OntologyManager.AddTerm( _
                                               "new ordinal")
                     ordinal.InternalCode = a_term.Code
                     e.Row.Item(1) = a_term.Text
@@ -208,14 +209,14 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
                     e.ProposedValue = System.DBNull.Value
                 Else
                     'update ontology with ordinal text value when ordinal is edited
-                    Filemanager.Instance.OntologyManager.SetDescription(CStr(e.ProposedValue), _
+                    mFileManager.OntologyManager.SetDescription(CStr(e.ProposedValue), _
                             CStr(e.Row.Item(2)))
                 End If
 
 
         End Select
 
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Public Sub EndLoading()
@@ -266,4 +267,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

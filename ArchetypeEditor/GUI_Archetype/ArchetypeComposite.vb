@@ -72,11 +72,11 @@ Public Class ArchetypeComposite
         Select Case Me.mItem.Type
             Case StructureType.Cluster
                 a_text &= Environment.NewLine & "<td><table><tr><td width=""" & (level * 20).ToString & """></td><td><img border=""0"" src=""Images/compound.gif"" width=""32"" height=""32"" align=""middle""><b><i>" & mText & "</i></b></td></table></td>"
-                s = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(313, "Cluster")
+                s = Filemanager.GetOpenEhrTerm(313, "Cluster")
 
             Case StructureType.SECTION
                 a_text &= Environment.NewLine & "<td><table><tr><td width=""" & (level * 20).ToString & """></td><td><img border=""0"" src=""Images/section.gif"" width=""32"" height=""32"" align=""middle""><b><i>" & mText & "</i></b></td></table></td>"
-                s = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(314, "Section")
+                s = Filemanager.GetOpenEhrTerm(314, "Section")
         End Select
         a_text &= Environment.NewLine & "<td>" & mDescription & "</td>"
         a_text &= Environment.NewLine & "<td><b><i>" & s & "</b></i><br>"

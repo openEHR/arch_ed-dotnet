@@ -21,13 +21,13 @@ Public Class DatatypeViewControl : Inherits ElementViewControl 'Viewcontrol
     Private WithEvents mNumeric As NumericUpDown
     Private WithEvents mListBox As ListBox
 
-    Public Sub New(ByVal anElement As ArchetypeElement)
-        MyBase.New(anElement)
+    Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(anElement, a_filemanager)
 
     End Sub
 
-    Public Sub New(ByVal aConstraint As Constraint)
-        MyBase.New(aConstraint)
+    Public Sub New(ByVal aConstraint As Constraint, a_filemanager as FileManagerLocal)
+        MyBase.New(aConstraint, a_filemanager)
 
     End Sub
 

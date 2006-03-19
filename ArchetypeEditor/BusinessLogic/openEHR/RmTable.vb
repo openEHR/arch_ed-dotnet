@@ -37,10 +37,10 @@ Public Class RmTable : Inherits RmStructureCompound
         End Set
     End Property
 
-    Sub New(ByVal EIF_Table As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Sub New(ByVal EIF_Table As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         'FIXMENOW probably can call
         MyBase.New(EIF_Table.node_id.to_cil, StructureType.Table)
-        ProcessTable(EIF_Table)
+        ProcessTable(EIF_Table, a_filemanager)
     End Sub
 
     Sub New(ByVal rm As RmStructure)
@@ -55,14 +55,14 @@ Public Class RmTable : Inherits RmStructureCompound
         MyBase.New(NodeId, StructureType.Table)
     End Sub
 
-    Private Sub ProcessRows(ByVal RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+    Private Sub ProcessRows(ByVal RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
         Dim rows As RmCluster
         'Dim rm_column As RmElement
         'Dim cadlColumn As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
         'Dim i As Integer
 
 
-        rows = New RmCluster(CType(RelNode.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+        rows = New RmCluster(CType(RelNode.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
 
         'columns = New RmStructureCompound(StructureType.Columns, StructureType.Columns)
 
@@ -74,7 +74,7 @@ Public Class RmTable : Inherits RmStructureCompound
         Me.Children.Add(rows)
     End Sub
 
-    Private Sub ProcessTable(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Private Sub ProcessTable(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
@@ -101,7 +101,7 @@ Public Class RmTable : Inherits RmStructureCompound
                     mNumberKeyColumns = int.interval.lower ' lower or higher will get the number
 
                 Case "rows"
-                    ProcessRows(an_attribute)
+                    ProcessRows(an_attribute, a_filemanager)
             End Select
         Next
 

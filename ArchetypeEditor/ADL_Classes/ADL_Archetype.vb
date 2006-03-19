@@ -582,7 +582,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal sl As Constraint_Slot, ByVal an_occurrence As RmCardinality)
             Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
 
-            slot = mCADL_Factory.create_archetype_slot_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(sl.RM_ClassType.ToString))
+            slot = mCADL_Factory.create_archetype_slot_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(sl.RM_ClassType)))
 
             slot.set_occurrences(MakeOccurrences(an_occurrence))
 
@@ -1366,7 +1366,7 @@ Namespace ArchetypeEditor.ADL_Classes
             mDescription = New ADL_Description ' nothing to pass
         End Sub
 
-        Sub New(ByRef an_Archetype As openehr.openehr.am.archetype.ARCHETYPE, ByRef an_ADL_Engine As openehr.adl_parser.syntax.adl.ADL_ENGINE)
+        Sub New(ByRef an_Archetype As openehr.openehr.am.archetype.ARCHETYPE, ByRef an_ADL_Engine As openehr.adl_parser.syntax.adl.ADL_ENGINE, ByVal a_filemanager As FileManagerLocal)
             ' call to create an in memory archetype from the ADL parser
             MyBase.New(an_Archetype.ontology.primary_language.to_cil)
 
@@ -1384,15 +1384,15 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Select Case mArchetypeID.ReferenceModelEntity
                 Case StructureType.COMPOSITION
-                    cDefinition = New ADL_COMPOSITION(an_Archetype.definition)
+                    cDefinition = New ADL_COMPOSITION(an_Archetype.definition, a_filemanager)
                 Case StructureType.SECTION
-                    cDefinition = New ADL_SECTION(an_Archetype.definition)
+                    cDefinition = New ADL_SECTION(an_Archetype.definition, a_filemanager)
                 Case StructureType.List, StructureType.Tree, StructureType.Single
-                    cDefinition = New RmStructureCompound(an_Archetype.definition)
+                    cDefinition = New RmStructureCompound(an_Archetype.definition, a_filemanager)
                 Case StructureType.Table
-                    cDefinition = New RmTable(an_Archetype.definition)
+                    cDefinition = New RmTable(an_Archetype.definition, a_filemanager)
                 Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
-                    cDefinition = New ADL_ENTRY(an_Archetype.definition)
+                    cDefinition = New ADL_ENTRY(an_Archetype.definition, a_filemanager)
                 Case Else
                     Debug.Assert(False)
             End Select

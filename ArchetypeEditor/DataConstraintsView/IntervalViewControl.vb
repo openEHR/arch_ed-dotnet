@@ -21,12 +21,12 @@ Public Class IntervalViewControl : Inherits ElementViewControl
     Private WithEvents mLower As NumericUpDown
     Private WithEvents mUpper As NumericUpDown
 
-    Public Sub New(ByVal anElement As ArchetypeElement)
-        MyBase.New(anElement)
+    Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(anElement, a_filemanager)
     End Sub
 
-    Public Sub New(ByVal aConstraint As Constraint)
-        MyBase.New(aConstraint)
+    Public Sub New(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(aConstraint, a_filemanager)
 
     End Sub
 
@@ -39,7 +39,7 @@ Public Class IntervalViewControl : Inherits ElementViewControl
         If aConstraint.Type = ConstraintType.Interval_Quantity Then
             Dim c As Constraint_Interval_Quantity = CType(aConstraint, Constraint_Interval_Quantity)
 
-            Debug.Assert(False) 'ToDo:
+            'ToDo: ensure this works OK
 
             If CType(c.AbsoluteLimits, Constraint_Quantity).has_units Then
                 SetMaxMin(mLower, CType(CType(c.AbsoluteLimits, Constraint_Quantity).Units(0), Constraint_QuantityUnit))

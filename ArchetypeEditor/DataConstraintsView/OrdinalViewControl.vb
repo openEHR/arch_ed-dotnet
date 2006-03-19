@@ -20,12 +20,12 @@ Public Class OrdinalViewControl : Inherits ElementViewControl
 
     Private WithEvents mComboBox As ComboBox
 
-    Public Sub New(ByVal an_Element As ArchetypeElement)
-        MyBase.New(an_Element)
+    Public Sub New(ByVal an_Element As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(an_Element, a_filemanager)
         If Not CType(an_Element.Constraint, Constraint_Ordinal).IsInitialised Then
             CType(an_Element.Constraint, Constraint_Ordinal).BeginLoading()
             For Each ov As OrdinalValue In CType(an_Element.Constraint, Constraint_Ordinal).OrdinalValues
-                Dim aTerm As RmTerm = Filemanager.Instance.OntologyManager.GetTerm(ov.InternalCode)
+                Dim aTerm As RmTerm = Filemanager.Master.OntologyManager.GetTerm(ov.InternalCode)
 
                 ov.Text = aTerm.Text
             Next
@@ -33,12 +33,12 @@ Public Class OrdinalViewControl : Inherits ElementViewControl
         End If
     End Sub
 
-    Public Sub New(ByVal a_Constraint As Constraint)
-        MyBase.New(a_Constraint)
+    Public Sub New(ByVal a_Constraint As Constraint, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(a_Constraint, a_filemanager)
         If Not CType(a_Constraint, Constraint_Ordinal).IsInitialised Then
             CType(a_Constraint, Constraint_Ordinal).BeginLoading()
             For Each ov As OrdinalValue In CType(a_Constraint, Constraint_Ordinal).OrdinalValues
-                Dim aTerm As RmTerm = Filemanager.Instance.OntologyManager.GetTerm(ov.InternalCode)
+                Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
                 ov.Text = aTerm.Text
             Next
             CType(a_Constraint, Constraint_Ordinal).EndLoading()
@@ -158,4 +158,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

@@ -39,7 +39,7 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
 
-        Dim d_row As DataRow() = Filemanager.Instance.OntologyManager.CodeForGroupID(19, "en") ' must be in English
+        Dim d_row As DataRow() = mFileManager.OntologyManager.CodeForGroupID(19, "en") ' must be in English
         Dim s() As String
         Dim n As TreeNode
 
@@ -287,4 +287,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

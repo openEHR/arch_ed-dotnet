@@ -21,12 +21,12 @@ Public Class MultiMediaViewControl : Inherits ElementViewControl ' ViewControl
     Private mToolTip As ToolTip
     Private WithEvents mComboBox As ComboBox
 
-    Public Sub New(ByVal anElement As ArchetypeElement) 'ByVal aConstraint As Constraint_Text)
-        MyBase.New(anElement)
+    Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) 'ByVal aConstraint As Constraint_Text)
+        MyBase.New(anElement, a_filemanager)
     End Sub
 
-    Public Sub New(ByVal aConstraint As Constraint)
-        MyBase.New(aConstraint)
+    Public Sub New(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(aConstraint, a_filemanager)
 
     End Sub
 
@@ -51,7 +51,7 @@ Public Class MultiMediaViewControl : Inherits ElementViewControl ' ViewControl
                     lth = s.Length
                 End If
                 Dim term As New RmTerm(s)
-                term.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(Integer.Parse(s), "?")
+                term.Text = Filemanager.GetOpenEhrTerm(Integer.Parse(s), "?")
                 mComboBox.Items.Add(term)
             Next
             If lth > 250 Then
@@ -126,4 +126,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

@@ -16,12 +16,12 @@ Option Strict On
 
 Public Class MultipleViewControl : Inherits ElementViewControl
 
-    Public Sub New(ByVal anElement As ArchetypeElement)
-        MyBase.New(anElement)
+    Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(anElement, a_filemanager)
     End Sub
 
-    Public Sub New(ByVal aConstraint As Constraint)
-        MyBase.New(aConstraint)
+    Public Sub New(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(aConstraint, a_filemanager)
 
     End Sub
 
@@ -57,7 +57,7 @@ Public Class MultipleViewControl : Inherits ElementViewControl
             '    Case Else
             '        tp.Controls.Add(DataTypeToControl(c, rel_pos))
             'End Select
-            Dim viewControl As ElementViewControl = ArchetypeView.ElementView(c)
+            Dim viewControl As ElementViewControl = ArchetypeView.ElementView(c, mFileManager)
             'If viewControl.Width > max_width Then
             '    max_width = viewControl.Width
             'End If

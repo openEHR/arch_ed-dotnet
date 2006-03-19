@@ -19,13 +19,16 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
     Public Event ValueChanged As EventHandler
 
     Protected mToolTips As New ToolTip
+    Protected mFileManager As FileManagerLocal
 
-    Public Sub New(ByVal anElement As ArchetypeElement)
+    Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
         MyBase.New()
 
-        Dim location As New Point(0, 0)
+        mFileManager = a_filemanager
 
+        Dim location As New Point(0, 0)
         Dim lbl As New Label
+
         lbl.Width = 100
         lbl.Height = 35
         location.Y += 5
@@ -68,8 +71,10 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
 
     End Sub
 
-    Public Sub New(ByVal aConstraint As Constraint)
+    Public Sub New(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal)
         MyBase.New()
+
+        mFileManager = a_filemanager
 
         Dim location As New Point(0, 0)
 

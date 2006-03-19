@@ -395,18 +395,18 @@ Public Class TableStructure
         Dim cm As New ContextMenu
         Dim mi, a_mi As MenuItem
         If mIsRotated Then
-            a_mi = New MenuItem(mFileManager.OntologyManager.GetOpenEHRTerm(324, "New Row"))
+            a_mi = New MenuItem(Filemanager.GetOpenEhrTerm(324, "New Row"))
         Else
-            a_mi = New MenuItem(mFileManager.OntologyManager.GetOpenEHRTerm(323, "New Column"))
+            a_mi = New MenuItem(Filemanager.GetOpenEhrTerm(323, "New Column"))
         End If
-        mConstraintMenu = New ConstraintContextMenu(AddressOf AddNewElement)
+        mConstraintMenu = New ConstraintContextMenu(AddressOf AddNewElement, mFileManager)
         cm.MenuItems.Add(a_mi)
         a_mi.MergeMenu(mConstraintMenu)
 
         If mIsRotated Then
-            mMenuItemAddRow = New MenuItem(mFileManager.OntologyManager.GetOpenEHRTerm(323, "New Column"))
+            mMenuItemAddRow = New MenuItem(Filemanager.GetOpenEhrTerm(323, "New Column"))
         Else
-            mMenuItemAddRow = New MenuItem(mFileManager.OntologyManager.GetOpenEHRTerm(323, "New Row"))
+            mMenuItemAddRow = New MenuItem(Filemanager.GetOpenEhrTerm(323, "New Row"))
         End If
         AddHandler mMenuItemAddRow.Click, AddressOf AddRow
         cm.MenuItems.Add(mMenuItemAddRow)
@@ -420,7 +420,7 @@ Public Class TableStructure
 
         mIsLoading = True
         new_row = mArchetypeTable.NewRow
-        new_row(1) = mFileManager.OntologyManager.GetOpenEHRTerm(109, "New Element")
+        new_row(1) = Filemanager.GetOpenEhrTerm(109, "New Element")
         '      Try
         mArchetypeTable.Rows.Add(new_row)
         '     Catch
@@ -764,9 +764,9 @@ Public Class TableStructure
         ' check to ensure that no menu items have been added and not translated
         Debug.Assert(ContextMenuGrid.MenuItems.Count = 1)
         Debug.Assert(ContextMenuGrid.MenuItems(0).MenuItems.Count = 2)
-        Me.MenuRename.Text = mFileManager.OntologyManager.GetOpenEHRTerm(325, "Rename")
-        Me.MenuRenameColumn.Text = mFileManager.OntologyManager.GetOpenEHRTerm(164, "Column")
-        Me.MenuRenameRow.Text = mFileManager.OntologyManager.GetOpenEHRTerm(163, "Row")
+        Me.MenuRename.Text = Filemanager.GetOpenEhrTerm(325, "Rename")
+        Me.MenuRenameColumn.Text = Filemanager.GetOpenEhrTerm(164, "Column")
+        Me.MenuRenameRow.Text = Filemanager.GetOpenEhrTerm(163, "Row")
     End Sub
 
     Private Sub dgGrid_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles dgGrid.MouseMove

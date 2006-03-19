@@ -112,7 +112,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Private Function QuantityConstraintToHTML(ByVal q As Constraint_Quantity) As String
         Dim a_text As String
 
-        a_text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(116, "Property") & " = " & q.Physical_property & "<br>"
+        a_text = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & q.Physical_property & "<br>"
         For Each u As Constraint_QuantityUnit In q.Units
             a_text &= Environment.NewLine & QuantityUnitConstraintToRichText(u) & "<br>"
         Next
@@ -262,7 +262,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Case ConstraintType.DateTime
                 Dim dt As Constraint_DateTime
                 dt = CType(Me.Element.Constraint, Constraint_DateTime)
-                s = mFileManager.OntologyManager.GetOpenEHRTerm(dt.TypeofDateTimeConstraint, "not known")
+                s = Filemanager.GetOpenEhrTerm(dt.TypeofDateTimeConstraint, "not known")
                 aText &= new_line & (Space(3 * level) & "  Constraint: " & s & "\par")
 
             Case ConstraintType.Ordinal
@@ -335,7 +335,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 End If
 
                 If b.hasAssumedValue Then
-                    html_dt.HTML &= Filemanager.Instance.OntologyManager.GetOpenEHRTerm(158, "Assumed value:") & " " & b.AssumedValue.ToString
+                    html_dt.HTML &= Filemanager.GetOpenEhrTerm(158, "Assumed value:") & " " & b.AssumedValue.ToString
                 End If
 
                 html_dt.ImageSource = "Images/truefalse.gif"
@@ -343,7 +343,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Case ConstraintType.DateTime
                 Dim dt As Constraint_DateTime
                 dt = CType(c, Constraint_DateTime)
-                html_dt.HTML = Environment.NewLine & mFileManager.OntologyManager.GetOpenEHRTerm(dt.TypeofDateTimeConstraint, "not known")
+                html_dt.HTML = Environment.NewLine & Filemanager.GetOpenEhrTerm(dt.TypeofDateTimeConstraint, "not known")
 
                 html_dt.ImageSource = "Images/datetime.gif"
 

@@ -82,8 +82,8 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
 
-        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-            MyBase.New(Definition)
+        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+            MyBase.New(Definition, a_filemanager)
 
             If Definition.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("items")) Then
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE

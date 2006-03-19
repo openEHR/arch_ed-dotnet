@@ -135,8 +135,8 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
         mIsState = IsState
         ' set constraint values on control
 
-        SetFactor(Me.Constraint.Numerator, Filemanager.Instance.OntologyManager.GetOpenEHRTerm(450, "Numerator"))
-        SetFactor(Me.Constraint.Denominator, Filemanager.Instance.OntologyManager.GetOpenEHRTerm(449, "Denominator"))
+        SetFactor(Me.Constraint.Numerator, Filemanager.GetOpenEhrTerm(450, "Numerator"))
+        SetFactor(Me.Constraint.Denominator, Filemanager.GetOpenEhrTerm(449, "Denominator"))
 
         If Me.Constraint.Denominator.Type = ConstraintType.Count Then
             cbAsPercent.Visible = True
@@ -215,4 +215,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

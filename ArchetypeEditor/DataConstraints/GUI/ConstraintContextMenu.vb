@@ -19,6 +19,7 @@ Public Class ConstraintContextMenu
 
     Public Delegate Sub ProcessMenuClick(ByVal a_constraint As Constraint)
     Private _ProcessMenuClick As ProcessMenuClick
+    Private mFileManager As FileManagerLocal
     Private mMI_Header, mMI_Spacer, mMI_Text, _
         mMI_Quantity, mMI_Count, mMI_DateTime, _
         mMI_Ordinal, mMI_Boolean, mMI_any, mMI_Multiple, _
@@ -176,7 +177,7 @@ Public Class ConstraintContextMenu
         ElseIf Sender Is mMI_DateTime Then
             _ProcessMenuClick(New Constraint_DateTime)
         ElseIf Sender Is mMI_Ordinal Then
-            _ProcessMenuClick(New Constraint_Ordinal(True))
+            _ProcessMenuClick(New Constraint_Ordinal(True, mFileManager))
         ElseIf Sender Is mMI_Boolean Then
             _ProcessMenuClick(New Constraint_Boolean)
         ElseIf Sender Is mMI_any Then
@@ -207,7 +208,9 @@ Public Class ConstraintContextMenu
     End Sub
 
 
-    Sub New(ByVal a_sub As ProcessMenuClick)
+    Sub New(ByVal a_sub As ProcessMenuClick, ByVal a_filemanager As FileManagerLocal)
+        mFileManager = a_filemanager
+
         _ProcessMenuClick = a_sub
 
         ' add invisible head item

@@ -16,13 +16,14 @@ Public Class OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
 
-    Public Sub New()
+    Public Sub New(ByVal a_filemanager As FileManagerLocal)
         MyBase.New()
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
+        mFileManager = a_filemanager
 
     End Sub
 
@@ -292,7 +293,7 @@ Public Class OccurrencesPanel
         ' Set for cardinality if appropriate
         If mIncludeOrdered Then
             Me.Height = gbOccurrences.Height + 40
-            gbOccurrences.Text = mFileManager.OntologyManager.GetOpenEHRTerm(437, "Items")
+            gbOccurrences.Text = Filemanager.GetOpenEhrTerm(437, "Items")
             Me.cbOrdered.Visible = True
         Else
             Me.Size = gbOccurrences.Size
@@ -491,21 +492,21 @@ Public Class OccurrencesPanel
     Sub Translate()
         Dim i As Integer
         mIsLoading = True
-        Me.gbOccurrences.Text = mFileManager.OntologyManager.GetOpenEHRTerm(110, "Occurrences")
-        Me.lblNumMin.Text = mFileManager.OntologyManager.GetOpenEHRTerm(588, "Min:")
-        Me.lblNumMax.Text = mFileManager.OntologyManager.GetOpenEHRTerm(111, "Max:")
+        Me.gbOccurrences.Text = Filemanager.GetOpenEhrTerm(110, "Occurrences")
+        Me.lblNumMin.Text = Filemanager.GetOpenEhrTerm(588, "Min:")
+        Me.lblNumMax.Text = Filemanager.GetOpenEhrTerm(111, "Max:")
         i = Me.comboOptional.SelectedIndex
         Me.comboOptional.Items.Clear()
-        Me.comboOptional.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(448, "optional"))
-        Me.comboOptional.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(446, "mandatory"))
+        Me.comboOptional.Items.Add(Filemanager.GetOpenEhrTerm(448, "optional"))
+        Me.comboOptional.Items.Add(Filemanager.GetOpenEhrTerm(446, "mandatory"))
         Me.comboOptional.SelectedIndex = i
         i = Me.comboRepeat.SelectedIndex
         Me.comboRepeat.Items.Clear()
-        Me.comboRepeat.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(589, "not repeating"))
-        Me.comboRepeat.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(590, "repeating, no limit"))
-        Me.comboRepeat.Items.Add(mFileManager.OntologyManager.GetOpenEHRTerm(591, "repeating, limited"))
+        Me.comboRepeat.Items.Add(Filemanager.GetOpenEhrTerm(589, "not repeating"))
+        Me.comboRepeat.Items.Add(Filemanager.GetOpenEhrTerm(590, "repeating, no limit"))
+        Me.comboRepeat.Items.Add(Filemanager.GetOpenEhrTerm(591, "repeating, limited"))
         Me.comboRepeat.SelectedIndex = i
-        Me.cbUnbounded.Text = mFileManager.OntologyManager.GetOpenEHRTerm(112, "Unbounded")
+        Me.cbUnbounded.Text = Filemanager.GetOpenEhrTerm(112, "Unbounded")
         mIsLoading = False
 
     End Sub

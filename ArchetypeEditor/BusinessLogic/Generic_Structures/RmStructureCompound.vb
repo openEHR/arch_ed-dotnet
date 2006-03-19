@@ -70,7 +70,7 @@ Public Class RmStructureCompound
 
 #Region "ADL oriented features"
 
-    Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(EIF_Structure)
         colChildren = New Children(mType)
 
@@ -78,13 +78,13 @@ Public Class RmStructureCompound
 
         Select Case mType
             Case StructureType.Single
-                ProcessSimple(EIF_Structure)
+                ProcessSimple(EIF_Structure, a_filemanager)
             Case StructureType.List
-                ProcessList(EIF_Structure)
+                ProcessList(EIF_Structure, a_filemanager)
                 ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.HighestLevelChildren = Me.Children
                 ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.PopulateReferences(Me)
             Case StructureType.Tree
-                ProcessTree(EIF_Structure)
+                ProcessTree(EIF_Structure, a_filemanager)
                 ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.HighestLevelChildren = Me.Children
                 ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.PopulateReferences(Me)
             Case StructureType.Cluster, StructureType.History, StructureType.SECTION, StructureType.Table, StructureType.Activity
@@ -94,7 +94,7 @@ Public Class RmStructureCompound
         End Select
     End Sub
 
-    Sub New(ByVal EIF_Attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_structure_type As StructureType)
+    Sub New(ByVal EIF_Attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_structure_type As StructureType, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(a_structure_type.ToString, a_structure_type) 'State, Data, Protocol, ism_transition
         Debug.Assert(a_structure_type = StructureType.Data Or _
             a_structure_type = StructureType.State Or _
@@ -103,12 +103,12 @@ Public Class RmStructureCompound
             a_structure_type = StructureType.ActivityDescription Or _
             a_structure_type = StructureType.Activities)
         colChildren = New Children(mType)
-        ProcessData(EIF_Attribute)
+        ProcessData(EIF_Attribute, a_filemanager)
     End Sub
 
 #Region "Processing ADL - incoming"
 
-    Private Sub ProcessList(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Private Sub ProcessList(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
@@ -126,7 +126,7 @@ Public Class RmStructureCompound
                         Select Case CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_OBJECT).Generating_Type.to_cil
                             Case "C_COMPLEX_OBJECT"
                                 a_ComplexObject = CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-                                colChildren.Add(New RmElement(a_ComplexObject))
+                                colChildren.Add(New RmElement(a_ComplexObject, a_filemanager))
                             Case "ARCHETYPE_INTERNAL_REF"
                                 colChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.ProcessReference(CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
                         End Select
@@ -160,7 +160,7 @@ Public Class RmStructureCompound
         Next
     End Sub
 
-    Private Sub ProcessSimple(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Private Sub ProcessSimple(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
@@ -170,14 +170,14 @@ Public Class RmStructureCompound
                 Case "name", "runtime_label" ' runtime_label is obsolete
                     mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "item"
-                    colChildren.Add(New RmElement(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                    colChildren.Add(New RmElement(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
             End Select
 
         Next
 
     End Sub
 
-    Protected Sub ProcessTree(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Protected Sub ProcessTree(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
 
         If ObjNode.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("items")) Then
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
@@ -212,9 +212,9 @@ Public Class RmStructureCompound
 
                         Select Case structure_type
                             Case StructureType.Cluster
-                                colChildren.Add(New RmCluster(a_ComplexObject))
+                                colChildren.Add(New RmCluster(a_ComplexObject, a_filemanager))
                             Case StructureType.Element
-                                colChildren.Add(New RmElement(a_ComplexObject))
+                                colChildren.Add(New RmElement(a_ComplexObject, a_filemanager))
                         End Select
                     Case "ARCHETYPE_INTERNAL_REF"
                         colChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.ProcessReference(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
@@ -224,7 +224,7 @@ Public Class RmStructureCompound
 
     End Sub
 
-    Private Sub ProcessData(ByVal data_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+    Private Sub ProcessData(ByVal data_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT
         Dim i As Integer
@@ -241,16 +241,16 @@ Public Class RmStructureCompound
             Case "C_COMPLEX_OBJECT"
                     Select Case structure_type
                         Case StructureType.History
-                            colChildren.Add(New RmHistory(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                            colChildren.Add(New RmHistory(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                         Case StructureType.Single, StructureType.List, StructureType.Tree
                             ' a structure
-                            colChildren.Add(New RmStructureCompound(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                            colChildren.Add(New RmStructureCompound(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                         Case StructureType.Table
-                            colChildren.Add(New RmTable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                            colChildren.Add(New RmTable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                         Case StructureType.CarePathwayStep
                             colChildren.Add(New RmPathwayStep(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case StructureType.Activity
-                            colChildren.Add(New RmActivity(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                            colChildren.Add(New RmActivity(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                         Case Else
                             Debug.Assert(False)
                     End Select

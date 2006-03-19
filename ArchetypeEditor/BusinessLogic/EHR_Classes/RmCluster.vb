@@ -38,9 +38,9 @@ Public Class RmCluster
 
 #Region "ADL Processing"
 
-    Sub New(ByVal EIF_Cluster As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.New(EIF_Cluster)
-        ProcessTree(EIF_Cluster)
+    Sub New(ByVal EIF_Cluster As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(EIF_Cluster, a_filemanager)
+        ProcessTree(EIF_Cluster, a_filemanager)
     End Sub
 
 #End Region

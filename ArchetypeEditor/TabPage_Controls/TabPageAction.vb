@@ -22,6 +22,7 @@ Public Class TabPageAction
     Private mIsloading As Boolean
     Private mPathwaySpecification As PathwaySpecification
     Private mActionDescription As TabPageStructure
+    Private mFileManager As FileManagerLocal
 
 #Region " Windows Form Designer generated code "
 
@@ -31,6 +32,10 @@ Public Class TabPageAction
         'This call is required by the Windows Form Designer.
         'Try
         InitializeComponent()
+
+        If Not Me.DesignMode Then
+            mFileManager = Filemanager.Master
+        End If
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -237,8 +242,8 @@ Public Class TabPageAction
     End Sub
 
     Public Sub TranslateGUI()
-        Me.tpAction.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(509, "Activity description")
-        Me.tpPathway.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(510, "Pathway")
+        Me.tpAction.Title = Filemanager.GetOpenEhrTerm(509, "Activity description")
+        Me.tpPathway.Title = Filemanager.GetOpenEhrTerm(510, "Pathway")
     End Sub
 
 
