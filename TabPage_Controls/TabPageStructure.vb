@@ -39,7 +39,7 @@ Public Class TabPageStructure
         InitializeComponent()
 
         If Not Me.DesignMode Then
-            mFileManager = Filemanager.Instance
+            mFileManager = Filemanager.Master
         End If
 
     End Sub
@@ -110,7 +110,7 @@ Public Class TabPageStructure
         Me.PanelStructure = New System.Windows.Forms.Panel
         Me.panelDisplay = New System.Windows.Forms.Panel
         Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.PanelDetails = New ArchetypeNodeConstraintControl
+        Me.PanelDetails = New ArchetypeEditor.ArchetypeNodeConstraintControl
         Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
         Me.MenuItemGridAdd = New System.Windows.Forms.MenuItem
@@ -490,13 +490,13 @@ Public Class TabPageStructure
             Else
                 Select Case mArchetypeControl.StructureType
                     Case StructureType.Single
-                        Return Filemanager.Instance.OntologyManager.GetOpenEHRTerm(105, "Single")
+                        Return Filemanager.GetOpenEhrTerm(105, "Single")
                     Case StructureType.List
-                        Return Filemanager.Instance.OntologyManager.GetOpenEHRTerm(106, "List")
+                        Return Filemanager.GetOpenEhrTerm(106, "List")
                     Case StructureType.Tree
-                        Return Filemanager.Instance.OntologyManager.GetOpenEHRTerm(107, "Tree")
+                        Return Filemanager.GetOpenEhrTerm(107, "Tree")
                     Case StructureType.Table
-                        Return Filemanager.Instance.OntologyManager.GetOpenEHRTerm(108, "Structure")
+                        Return Filemanager.GetOpenEhrTerm(108, "Structure")
                 End Select
             End If
         End Get
@@ -517,7 +517,7 @@ Public Class TabPageStructure
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mValidStructureClasses = ReferenceModel.Instance.ValidStructureTypes
         For Each ValidStructure As StructureType In mValidStructureClasses
-            Me.comboStructure.Items.Add(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(ValidStructure, ValidStructure.ToString))
+            Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(ValidStructure, ValidStructure.ToString))
         Next
         Me.HelpProviderTabPageStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
@@ -548,7 +548,7 @@ Public Class TabPageStructure
 
         If Not mValidStructureClasses Is Nothing Then
             For Each ValidStructure As StructureType In mValidStructureClasses
-                Me.comboStructure.Items.Add(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(ValidStructure, ValidStructure.ToString))
+                Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(ValidStructure, ValidStructure.ToString))
             Next
         End If
 
@@ -631,7 +631,7 @@ Public Class TabPageStructure
             aContainer.Size = New Size
         End If
         If Not mArchetypeControl Is Nothing Then
-            ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only)
+            ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only, mFileManager)
         End If
     End Sub
 
@@ -725,12 +725,6 @@ Public Class TabPageStructure
 
     Public Sub PrepareToSave()
         mFileManager.Archetype.Definition = mArchetypeControl.Archetype
-    End Sub
-
-    Private Sub FileEditedChanged(ByVal sender As Object, ByVal e As FileManagerEventArgs) Handles mFileManager.IsFileDirtyChanged
-        If mIsEmbedded Then
-            Filemanager.Instance.SetFileChangedToolBar(e.IsFileDirty)
-        End If
     End Sub
 
 #End Region

@@ -33,8 +33,8 @@ Public Class RmActivity
     End Sub
 
 #Region "ADL Handling"
-    Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.New(EIF_Structure)
+    Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(EIF_Structure, a_filemanager)
 
         Me.Occurrences.SetFromString(EIF_Structure.occurrences.as_occurrences_string.to_cil)
 
@@ -59,7 +59,7 @@ Public Class RmActivity
             Dim obj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             If Not obj.any_allowed Then
-                Me.Children.Add(New RmStructureCompound(obj))
+                Me.Children.Add(New RmStructureCompound(obj, a_filemanager))
             End If
         End If
 

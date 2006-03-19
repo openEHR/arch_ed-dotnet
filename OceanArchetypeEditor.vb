@@ -172,7 +172,7 @@ Public Class OceanArchetypeEditor
         frm.PrepareDataTable_for_List(1)
 
         Dim Terminologies As DataRow() _
-                = Filemanager.Instance.OntologyManager.GetTerminologyIdentifiers
+                = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
         frm.DTab_1.DefaultView.Sort = "Text"
 
         For i As Integer = 0 To Terminologies.Length - 1
@@ -191,7 +191,7 @@ Public Class OceanArchetypeEditor
             Dim term As String = CStr(frm.ListChoose.SelectedValue)
             Dim description As String = frm.ListChoose.Text
 
-            If Not Filemanager.Instance.OntologyManager.TerminologiesTable.Select("Terminology = '" & term & "'").Length = 0 Then
+            If Not Filemanager.Master.OntologyManager.TerminologiesTable.Select("Terminology = '" & term & "'").Length = 0 Then
                 Beep()
                 Debug.Assert(False)
 
@@ -201,7 +201,7 @@ Public Class OceanArchetypeEditor
             ' there is already a language in the archetype
             If (MessageBox.Show(AE_Constants.Instance.NewTerminology & description, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK) Then
                 ' add to the terminologies
-                Filemanager.Instance.OntologyManager.AddTerminology(term, description)
+                Filemanager.Master.OntologyManager.AddTerminology(term, description)
             End If
 
         Else
@@ -396,7 +396,7 @@ Public Class OceanArchetypeEditor
             Else
                 Dim a_Term As RmTerm
 
-                a_Term = Filemanager.Instance.OntologyManager.GetTerm(a_ct.Code)
+                a_Term = Filemanager.Master.OntologyManager.GetTerm(a_ct.Code)
                 a_ct.Text = a_Term.Text
                 ct(counter) = a_ct
                 counter += 1
@@ -662,4 +662,5 @@ End Structure
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

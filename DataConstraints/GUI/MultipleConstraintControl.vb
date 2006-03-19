@@ -158,7 +158,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
     End Sub
     Private Sub butAddConstraint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddConstraint.Click
         If AddConstraintMenu Is Nothing Then
-            AddConstraintMenu = New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf AddConstraint))
+            AddConstraintMenu = New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf AddConstraint), mFileManager)
         Else
             AddConstraintMenu.Reset()
         End If

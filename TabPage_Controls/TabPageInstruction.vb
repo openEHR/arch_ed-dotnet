@@ -23,6 +23,7 @@ Public Class TabPageInstruction
     Private mActionSpecification As TabPageStructure
     Friend WithEvents mOccurrences As OccurrencesPanel
     Private mActivity As RmActivity
+    Private mFileManager As FileManagerLocal
 
 #Region " Windows Form Designer generated code "
 
@@ -32,6 +33,10 @@ Public Class TabPageInstruction
         'This call is required by the Windows Form Designer.
         'Try
         InitializeComponent()
+
+        If Not Me.DesignMode Then
+            mFileManager = Filemanager.Master
+        End If
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -212,14 +217,14 @@ Public Class TabPageInstruction
     Private Sub TabPageInstruction_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsloading = True
         If mOccurrences Is Nothing Then
-            mOccurrences = New OccurrencesPanel
+            mOccurrences = New OccurrencesPanel(mFileManager)
         End If
         Me.PanelAction.Controls.Add(mOccurrences)
         mOccurrences.Dock = DockStyle.Right
         Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
-        If Filemanager.Instance.IsNew Then
+        If mFileManager.IsNew Then
             'need to add an RmActivity to the mActivities set
-            Dim a_term As RmTerm = Filemanager.Instance.OntologyManager.AddTerm("new activity")
+            Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm("new activity")
             Dim activity As New RmActivity(a_term.Code)
             mActivity = activity
         End If
@@ -278,7 +283,7 @@ Public Class TabPageInstruction
 
                         Me.lblNodeId.Text = activity.NodeId
                         If mOccurrences Is Nothing Then
-                            mOccurrences = New OccurrencesPanel
+                            mOccurrences = New OccurrencesPanel(mFileManager)
                             Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
                                 Case "lexical"
                                     mOccurrences.Mode = OccurrencesMode.Lexical
@@ -362,14 +367,14 @@ Public Class TabPageInstruction
 
     Public Sub Translate()
         mActionSpecification.Translate()
-        If Filemanager.Instance.OntologyManager.Ontology.LanguageAvailable(Filemanager.Instance.OntologyManager.LanguageCode) Then
-            Me.tpActivity.Title = Filemanager.Instance.OntologyManager.GetTerm(mActivity.NodeId).Text
+        If mFileManager.OntologyManager.Ontology.LanguageAvailable(mFileManager.OntologyManager.LanguageCode) Then
+            Me.tpActivity.Title = mFileManager.OntologyManager.GetTerm(mActivity.NodeId).Text
         End If
     End Sub
 
     Public Sub TranslateGUI()
-        Me.tpActivity.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(586, "Activity")
-        Me.lblAction.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(556, "Action")
+        Me.tpActivity.Title = Filemanager.GetOpenEhrTerm(586, "Activity")
+        Me.lblAction.Text = Filemanager.GetOpenEhrTerm(556, "Action")
     End Sub
 
     Private Sub butGetAction_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butGetAction.Click
@@ -420,15 +425,15 @@ Public Class TabPageInstruction
         If f.ShowDialog = DialogResult.OK Then
             If f.txtInput.Text <> "" Then
                 Me.tpActivity.Title = f.txtInput.Text
-                Filemanager.Instance.OntologyManager.SetText(Me.tpActivity.Title, mActivity.NodeId)
-                Filemanager.Instance.FileEdited = True
+                mFileManager.OntologyManager.SetText(Me.tpActivity.Title, mActivity.NodeId)
+                mFileManager.FileEdited = True
             End If
         End If
     End Sub
 
     Private Sub txtAction_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtAction.TextChanged
         If Not mIsloading Then
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 

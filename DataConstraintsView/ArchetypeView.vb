@@ -21,6 +21,7 @@ Public Class ArchetypeView
     Private ToolTip1 As New ToolTip
 
     Private Shared mInstance As ArchetypeView
+
     Public Shared ReadOnly Property Instance() As ArchetypeView
         Get
             If mInstance Is Nothing Then
@@ -33,7 +34,7 @@ Public Class ArchetypeView
 
     Public Sub BuildInterface(ByVal an_element As ArchetypeElement, _
             ByVal aContainer As Control, ByRef aLocation As Point, _
-            ByVal spacer As Integer, ByVal mandatory_only As Boolean)
+            ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
 
         If (mandatory_only And (Not an_element.IsMandatory)) Then
             Return
@@ -41,14 +42,14 @@ Public Class ArchetypeView
 
         Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT))
         view.Location = New Point(aLocation.X, aLocation.Y)
-        view.Controls.Add(ElementView(an_element))
+        view.Controls.Add(ElementView(an_element, a_filemanager))
         aLocation.Y = view.Top + view.Height + spacer
         aContainer.Controls.Add(view)
     End Sub
 
     Public Sub BuildInterface(ByVal Items As Windows.forms.ListView.ListViewItemCollection, _
             ByVal aContainer As Control, ByRef aLocation As Point, _
-            ByVal spacer As Integer, ByVal mandatory_only As Boolean)
+            ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
 
         Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
         view.Location = New Point(aLocation.X, aLocation.Y)
@@ -56,7 +57,7 @@ Public Class ArchetypeView
 
         For Each lvitem As ArchetypeListViewItem In Items
             If ((lvitem.Item.IsMandatory) Or (Not mandatory_only)) Then
-                view.Controls.Add(ElementView(lvitem.Item))
+                view.Controls.Add(ElementView(lvitem.Item, a_filemanager))
             End If
         Next
 
@@ -76,13 +77,13 @@ Public Class ArchetypeView
     End Sub
 
     Public Sub BuildInterface(ByVal Nodes As TreeNodeCollection, _
-            ByVal aContainer As Control, ByRef Pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean)
+            ByVal aContainer As Control, ByRef Pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
 
-        NodesToControls(Nodes, Pos, aContainer, spacer, mandatory_only)
+        NodesToControls(Nodes, Pos, aContainer, spacer, mandatory_only, a_filemanager)
     End Sub
 
     Public Sub BuildInterface(ByVal TableDetails As ArrayList, _
-            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean)
+            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
 
         Dim archetypeTable As DataTable
         Dim rowHeadings As Collection
@@ -103,7 +104,7 @@ Public Class ArchetypeView
                 Dim Rel_Pos As New Point(20, 20)
 
                 Dim gb As New GroupBox
-                gb.Text = Filemanager.Instance.OntologyManager.GetTerm(t).Text
+                gb.Text = a_filemanager.OntologyManager.GetTerm(t).Text
                 gb.Location = pos
 
                 Dim view As New ViewPanel( _
@@ -116,10 +117,10 @@ Public Class ArchetypeView
                     Dim ae As ArchetypeElement = CType(d_row(2), ArchetypeElement)
                     If mandatory_only Then
                         If ae.Occurrences.MinCount > 0 Then
-                            view.Controls.Add(ElementView(ae))
+                            view.Controls.Add(ElementView(ae, a_filemanager))
                         End If
                     Else
-                        view.Controls.Add(ElementView(ae))
+                        view.Controls.Add(ElementView(ae, a_filemanager))
                     End If
                 Next
 
@@ -138,7 +139,7 @@ Public Class ArchetypeView
 
     Private Function NodesToControls(ByVal NodeCol As TreeNodeCollection, _
         ByRef aLocation As Point, ByVal aContainer As Control, _
-        ByVal spacer As Integer, ByVal mandatory_only As Boolean) As Integer
+        ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal) As Integer
 
         'Displays the archetype nodes as GUI controls on the Interface TAB
 
@@ -200,12 +201,12 @@ Public Class ArchetypeView
                         rel_pos.X = 20
                         rel_pos.Y = 40
 
-                        NodesToControls(tvNode.Nodes, rel_pos, ctrl, spacer, mandatory_only)
+                        NodesToControls(tvNode.Nodes, rel_pos, ctrl, spacer, mandatory_only, a_filemanager)
                         view.Controls.Add(ctrl)
 
                     Case StructureType.Element, StructureType.Reference
 
-                        view.Controls.Add(ElementView(CType(tvNode.Item, ArchetypeElement)))
+                        view.Controls.Add(ElementView(CType(tvNode.Item, ArchetypeElement), a_filemanager))
 
                     Case Else
                         Beep()
@@ -231,90 +232,91 @@ Public Class ArchetypeView
 
     End Function
 
-    Public Shared Function ElementView(ByVal anElement As ArchetypeElement) As ElementViewControl
+    Public Shared Function ElementView(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
 
         'any additions need to be processed in the overloaded function below
         Select Case anElement.Constraint.Type
             Case ConstraintType.Text
-                Return New TextViewControl(anElement)
+                Return New TextViewControl(anElement, a_filemanager)
 
             Case ConstraintType.Quantity
-                Return New QuantityViewControl(anElement)
+                Return New QuantityViewControl(anElement, a_filemanager)
 
             Case ConstraintType.Boolean
-                Return New BooleanViewControl(anElement)
+                Return New BooleanViewControl(anElement, a_filemanager)
 
             Case ConstraintType.Ordinal
-                Return New OrdinalViewControl(anElement)
+                Return New OrdinalViewControl(anElement, a_filemanager)
 
             Case ConstraintType.DateTime
-                Return New DateTimeViewControl(anElement)
+                Return New DateTimeViewControl(anElement, a_filemanager)
 
             Case ConstraintType.Count
-                Return New CountViewControl(anElement)
+                Return New CountViewControl(anElement, a_filemanager)
 
             Case ConstraintType.Multiple
-                Return New MultipleViewControl(anElement)
+                Return New MultipleViewControl(anElement, a_filemanager)
 
             Case ConstraintType.URI
-                Return New URIViewControl(anElement)
+                Return New URIViewControl(anElement, a_filemanager)
 
             Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
-                Return New IntervalViewControl(anElement)
+                Return New IntervalViewControl(anElement, a_filemanager)
 
             Case ConstraintType.Ratio
-                Return New RatioViewControl(anElement)
+                Return New RatioViewControl(anElement, a_filemanager)
 
             Case ConstraintType.MultiMedia
-                Return New MultiMediaViewControl(anElement)
+                Return New MultiMediaViewControl(anElement, a_filemanager)
 
             Case Else
-                Return New DatatypeViewControl(anElement)
+                Return New DatatypeViewControl(anElement, a_filemanager)
         End Select
     End Function
 
-    Public Shared Function ElementView(ByVal aConstraint As Constraint) As ElementViewControl
+    Public Shared Function ElementView(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
 
         'any additions need to be processed in the overloaded function above
 
         Select Case aConstraint.Type
             Case ConstraintType.Text
-                Return New TextViewControl(aConstraint)
+                Return New TextViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Quantity
-                Return New QuantityViewControl(aConstraint)
+                Return New QuantityViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Boolean
-                Return New BooleanViewControl(aConstraint)
+                Return New BooleanViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Ordinal
-                Return New OrdinalViewControl(aConstraint)
+                Return New OrdinalViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.DateTime
-                Return New DateTimeViewControl(aConstraint)
+                Return New DateTimeViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Count
-                Return New CountViewControl(aConstraint)
+                Return New CountViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Multiple
-                Return New MultipleViewControl(aConstraint)
+                Return New MultipleViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.URI
-                Return New URIViewControl(aConstraint)
+                Return New URIViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
-                Return New IntervalViewControl(aConstraint)
+                Return New IntervalViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Ratio
-                Return New RatioViewControl(aConstraint)
+                Return New RatioViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.MultiMedia
-                Return New MultiMediaViewControl(aConstraint)
+                Return New MultiMediaViewControl(aConstraint, a_filemanager)
 
             Case Else
-                Return New DatatypeViewControl(aConstraint)
+                Return New DatatypeViewControl(aConstraint, a_filemanager)
         End Select
     End Function
+
 End Class
 
 '
@@ -354,4 +356,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

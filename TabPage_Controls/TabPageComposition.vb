@@ -55,12 +55,17 @@ Public Class TabPageComposition
     Friend WithEvents HelpProviderInstruction As System.Windows.Forms.HelpProvider
     Friend WithEvents tpContext As Crownwood.Magic.Controls.TabPage
     Friend WithEvents tpSectionConstraint As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents radioEvent As System.Windows.Forms.RadioButton
+    Friend WithEvents radioPersist As System.Windows.Forms.RadioButton
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.TabControlInstruction = New Crownwood.Magic.Controls.TabControl
-        Me.tpContext = New Crownwood.Magic.Controls.TabPage
         Me.tpSectionConstraint = New Crownwood.Magic.Controls.TabPage
+        Me.tpContext = New Crownwood.Magic.Controls.TabPage
         Me.PanelBaseTop = New System.Windows.Forms.Panel
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
+        Me.radioEvent = New System.Windows.Forms.RadioButton
+        Me.radioPersist = New System.Windows.Forms.RadioButton
+        Me.PanelBaseTop.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControlInstruction
@@ -74,13 +79,22 @@ Public Class TabPageComposition
         Me.TabControlInstruction.Location = New System.Drawing.Point(0, 24)
         Me.TabControlInstruction.Name = "TabControlInstruction"
         Me.TabControlInstruction.PositionTop = True
-        Me.TabControlInstruction.SelectedIndex = 1
-        Me.TabControlInstruction.SelectedTab = Me.tpSectionConstraint
+        Me.TabControlInstruction.SelectedIndex = 0
+        Me.TabControlInstruction.SelectedTab = Me.tpContext
         Me.HelpProviderInstruction.SetShowHelp(Me.TabControlInstruction, True)
         Me.TabControlInstruction.Size = New System.Drawing.Size(848, 400)
         Me.TabControlInstruction.TabIndex = 0
         Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpContext, Me.tpSectionConstraint})
         Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
+        '
+        'tpSectionConstraint
+        '
+        Me.tpSectionConstraint.Location = New System.Drawing.Point(0, 0)
+        Me.tpSectionConstraint.Name = "tpSectionConstraint"
+        Me.tpSectionConstraint.Selected = False
+        Me.tpSectionConstraint.Size = New System.Drawing.Size(848, 374)
+        Me.tpSectionConstraint.TabIndex = 0
+        Me.tpSectionConstraint.Title = "Sections"
         '
         'tpContext
         '
@@ -88,27 +102,35 @@ Public Class TabPageComposition
         Me.HelpProviderInstruction.SetHelpNavigator(Me.tpContext, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpContext.Location = New System.Drawing.Point(0, 0)
         Me.tpContext.Name = "tpContext"
-        Me.tpContext.Selected = False
         Me.HelpProviderInstruction.SetShowHelp(Me.tpContext, True)
-        Me.tpContext.Size = New System.Drawing.Size(848, 375)
+        Me.tpContext.Size = New System.Drawing.Size(848, 374)
         Me.tpContext.TabIndex = 2
         Me.tpContext.Title = "Context"
         '
-        'tpSectionConstraint
-        '
-        Me.tpSectionConstraint.Location = New System.Drawing.Point(0, 0)
-        Me.tpSectionConstraint.Name = "tpSectionConstraint"
-        Me.tpSectionConstraint.Size = New System.Drawing.Size(848, 375)
-        Me.tpSectionConstraint.TabIndex = 0
-        Me.tpSectionConstraint.Title = "Sections"
-        '
         'PanelBaseTop
         '
+        Me.PanelBaseTop.Controls.Add(Me.radioPersist)
+        Me.PanelBaseTop.Controls.Add(Me.radioEvent)
         Me.PanelBaseTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelBaseTop.Location = New System.Drawing.Point(0, 0)
         Me.PanelBaseTop.Name = "PanelBaseTop"
         Me.PanelBaseTop.Size = New System.Drawing.Size(848, 24)
         Me.PanelBaseTop.TabIndex = 1
+        '
+        'radioEvent
+        '
+        Me.radioEvent.Checked = True
+        Me.radioEvent.Location = New System.Drawing.Point(536, 0)
+        Me.radioEvent.Name = "radioEvent"
+        Me.radioEvent.TabIndex = 0
+        Me.radioEvent.Text = "Event"
+        '
+        'radioPersist
+        '
+        Me.radioPersist.Location = New System.Drawing.Point(648, 0)
+        Me.radioPersist.Name = "radioPersist"
+        Me.radioPersist.TabIndex = 1
+        Me.radioPersist.Text = "Persistant"
         '
         'TabPageComposition
         '
@@ -117,6 +139,7 @@ Public Class TabPageComposition
         Me.Controls.Add(Me.PanelBaseTop)
         Me.Name = "TabPageComposition"
         Me.Size = New System.Drawing.Size(848, 424)
+        Me.PanelBaseTop.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -129,6 +152,7 @@ Public Class TabPageComposition
             ' nothing loaded from archetype
             mSectionConstraint = New TabPageSection
             tpSectionConstraint.Controls.Add(mSectionConstraint)
+            tpSectionConstraint.Title = Filemanager.GetOpenEhrTerm(515, "Content")
             mSectionConstraint.Dock = DockStyle.Fill
         End If
         If Me.tpContext.Controls.Count = 0 Then
@@ -201,20 +225,33 @@ Public Class TabPageComposition
     Public Function SaveAsComposition() As RmComposition
         Dim rm As New RmComposition
         If Not mContextConstraint Is Nothing Then
-            rm.Data.Add(mContextConstraint.SaveAsStructure)
+            Dim context As RmStructure = mContextConstraint.SaveAsStructure
+            If Not context Is Nothing Then
+                rm.Data.Add(context)
+            End If
         End If
         If Not mSectionConstraint Is Nothing Then
-            rm.Data.Add(mSectionConstraint.SaveAsSection)
+            Dim section As RmSection = mSectionConstraint.SaveAsSection
+            If Not section Is Nothing Then
+                rm.Data.Add(section)
+            End If
         End If
         Return rm
     End Function
 
     Public Sub Translate()
-        Debug.Assert(False, "Not done yet")
+        Me.mContextConstraint.Translate()
+        Me.mSectionConstraint.Translate()
     End Sub
 
     Public Sub TranslateGUI()
-        Debug.Assert(False, "Not done yet")
+        'ToDo: more to do here
+        Me.radioPersist.Text = Filemanager.GetOpenEhrTerm(431, "Persistent")
+        Me.radioEvent.Text = Filemanager.GetOpenEhrTerm(433, "Event")
+        tpSectionConstraint.Title = Filemanager.GetOpenEhrTerm(515, "Content")
+        Me.tpContext.Title = Filemanager.GetOpenEhrTerm(515, "Context")
+        Me.mContextConstraint.TranslateGUI()
+        Me.mSectionConstraint.TranslateGUI()
     End Sub
 
 

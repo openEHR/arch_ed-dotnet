@@ -21,33 +21,33 @@ Namespace ArchetypeEditor.ADL_Classes
 Class ADL_COMPOSITION
     Inherits RmComposition
 
-    Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.New()
+        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+            MyBase.New()
 
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-        Dim i As Integer
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim i As Integer
 
-        ' set the root node id - usually the same as the concept
-        mNodeID = Definition.node_id.to_cil
+            ' set the root node id - usually the same as the concept
+            mNodeID = Definition.node_id.to_cil
 
-        For i = 1 To Definition.attributes.count
-            an_attribute = Definition.attributes.i_th(i)
-            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                Case "context"
-                    mChildren.Add(New RmStructureCompound(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
-                    ' remembers the Processed data off events
-                Case "content"
-                    ' a set of slots constraining what sections can be added
+            For i = 1 To Definition.attributes.count
+                an_attribute = Definition.attributes.i_th(i)
+                Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    Case "context"
+                        mChildren.Add(New RmStructureCompound(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
+                        ' remembers the Processed data off events
+                    Case "content"
+                        ' a set of slots constraining what sections can be added
 
-                    Dim section As RmSection = New RmSection("root")
+                        Dim section As RmSection = New RmSection("root")
 
-                    For j As Integer = 1 To an_attribute.children.count
-                        section.Children.Add(New RmSlot(CType(an_attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
-                    Next
-                    mChildren.Add(section)
-            End Select
-        Next
-    End Sub
+                        For j As Integer = 1 To an_attribute.children.count
+                            section.Children.Add(New RmSlot(CType(an_attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                        Next
+                        mChildren.Add(section)
+                End Select
+            Next
+        End Sub
 
     End Class
 

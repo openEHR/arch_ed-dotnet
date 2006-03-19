@@ -34,6 +34,25 @@ Public Class ArchetypeNodeConstraintControl
 
         'Add any initialization after the InitializeComponent() call
 
+        If Not Me.DesignMode Then
+
+            mIsLoading = True
+
+            mOccurrences = New OccurrencesPanel(mFileManager)
+            Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
+                Case "lexical"
+                    mOccurrences.Mode = OccurrencesMode.Lexical
+                Case "numeric"
+                    mOccurrences.Mode = OccurrencesMode.Numeric
+            End Select
+
+            mIsLoading = False
+            Me.PanelGenericConstraint.Controls.Add(mOccurrences)
+            mOccurrences.Dock = DockStyle.Fill
+        End If
+
+        Me.HelpProviderCommonConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -213,17 +232,6 @@ Public Class ArchetypeNodeConstraintControl
         mIsLoading = True
         Me.SuspendLayout()
 
-        If mOccurrences Is Nothing Then
-            mOccurrences = New OccurrencesPanel
-            mOccurrences.LocalFileManager = a_file_manager
-            Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
-                Case "lexical"
-                    mOccurrences.Mode = OccurrencesMode.Lexical
-                Case "numeric"
-                    mOccurrences.Mode = OccurrencesMode.Numeric
-            End Select
-        End If
-
         Try
             ' hide the label if there is no constraint (for ANY or Cluster) - see below
             Me.labelAnyCluster.Visible = False
@@ -379,20 +387,7 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub ArchetypeNodeConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        mIsLoading = True
-        If mOccurrences Is Nothing Then
-            mOccurrences = New OccurrencesPanel
-            Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
-                Case "lexical"
-                    mOccurrences.Mode = OccurrencesMode.Lexical
-                Case "numeric"
-                    mOccurrences.Mode = OccurrencesMode.Numeric
-            End Select
-        End If
-        Me.PanelGenericConstraint.Controls.Add(mOccurrences)
-        mOccurrences.Dock = DockStyle.Fill
-        Me.HelpProviderCommonConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
-    End Sub
+     End Sub
 
     Private Sub txtTermDescription_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtTermDescription.KeyPress
         ' work around as acceptsreturn = false does not deal with stop Enter unless there is a AcceptButton

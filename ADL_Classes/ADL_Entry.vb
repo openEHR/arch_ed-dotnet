@@ -41,7 +41,7 @@ Class ADL_ENTRY
         Next
     End Sub
 
-        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
             MyBase.New(Definition.rm_type_name.to_cil) ' sets the type to OBSERVATION, EVALUATION etc
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim i As Integer
@@ -56,18 +56,18 @@ Class ADL_ENTRY
                     Case "name", "runtime_label" 'run_time_label is obsolete
                         mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     Case "data"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Data))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Data, a_filemanager))
                         ' remembers the Processed data off events
                     Case "state"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.State))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.State, a_filemanager))
                     Case "protocol"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Protocol))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Protocol, a_filemanager))
                     Case "description"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ActivityDescription))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ActivityDescription, a_filemanager))
                     Case "ism_transition", "pathway_specification" 'pathway_spec is obsolete 
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ism_transition))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ism_transition, a_filemanager))
                     Case "activities"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activities))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activities, a_filemanager))
                 End Select
             Next
         End Sub

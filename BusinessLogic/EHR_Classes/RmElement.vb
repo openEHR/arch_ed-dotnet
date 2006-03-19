@@ -79,14 +79,14 @@ Public Class RmElement
 
 #Region "ADL oriented features"
 
-    Sub New(ByVal EIF_Element As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Sub New(ByVal EIF_Element As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(EIF_Element)
-        ProcessElement(EIF_Element)
+        ProcessElement(EIF_Element, a_filemanager)
     End Sub
 
 #Region "Processing ADL - incoming"
 
-    Private Sub ProcessElement(ByVal ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Private Sub ProcessElement(ByVal ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
 
         Try
 
@@ -108,11 +108,11 @@ Public Class RmElement
                     ' multiple constraints - not dealt with yet in the GUI
                     Dim m_c As New Constraint_Choice
                     For i = 1 To an_attribute.children.count
-                        m_c.Constraints.Add(ProcessValue(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT)))
+                        m_c.Constraints.Add(ProcessValue(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager))
                     Next
                     cConstraint = m_c
                 Else
-                    cConstraint = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT))
+                    cConstraint = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager)
                 End If
             End If
 
@@ -123,7 +123,7 @@ Public Class RmElement
         End Try
     End Sub
 
-    Private Function ProcessInterval(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Interval
+    Private Function ProcessInterval(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint_Interval
 
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
@@ -136,11 +136,11 @@ Public Class RmElement
         Select Case ObjNode.rm_type_name.to_cil
             Case "interval_count", "Interval_Count", "INTERVAL_COUNT"
                 Dim cic As New Constraint_Interval_Count
-                cic.AbsoluteLimits = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT))
+                cic.AbsoluteLimits = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager)
                 Return cic
             Case "interval_quantity", "Interval_Quantity", "INTERVAL_QUANTITY"
                 Dim ciq As New Constraint_Interval_Quantity
-                ciq.AbsoluteLimits = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT))
+                ciq.AbsoluteLimits = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager)
                 Return ciq
         End Select
 
@@ -173,7 +173,7 @@ Public Class RmElement
 
     End Function
 
-    Private Function ProcessValue(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT) As Constraint
+    Private Function ProcessValue(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint
 
         Select Case ObjNode.rm_type_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "quantity", "real_quantity"
@@ -183,7 +183,7 @@ Public Class RmElement
             Case "boolean"
                 Return ProcessBoolean(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
             Case "ordinal"
-                Return ProcessOrdinal(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                Return ProcessOrdinal(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
             Case "datetime", "date_time", "date", "time", "_c_date"
                 Debug.WriteLine(ObjNode.rm_type_name.to_cil)
                 Return ProcessDateTime(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
@@ -192,7 +192,7 @@ Public Class RmElement
             Case "countable", "count"
                 Return ProcessCount(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
             Case "interval_count", "interval_quantity"
-                Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
             Case "multimedia", "multi_media"
                 Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
             Case "uri"
@@ -333,7 +333,7 @@ Public Class RmElement
 
     End Function
 
-    Private Function ProcessOrdinal(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Ordinal
+    Private Function ProcessOrdinal(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
         Dim i As Integer
         Dim c_phrase As New CodePhrase
         Dim openehr_ordinal As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
@@ -342,10 +342,10 @@ Public Class RmElement
         Dim Ordinals As openehr.base.structures.list.LINKED_LIST_ANY
 
         If ObjNode.any_allowed Then
-            Return New Constraint_Ordinal(True)
+            Return New Constraint_Ordinal(True, a_filemanager)
         End If
 
-        Dim ord As New Constraint_Ordinal
+        Dim ord As New Constraint_Ordinal(a_filemanager)
 
         For i = 1 To ObjNode.attributes.count
 

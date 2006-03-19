@@ -41,6 +41,7 @@ Public Class Designer
     Private mDataViewConstraintBindings As DataView
     Private mFindString As String = ""
     Private mFindStringFrom As Integer = -1
+    Private mFileManager As FileManagerLocal
     Friend WithEvents mRichTextArchetype As ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
     Friend WithEvents mTermBindingPanel As TermBindingPanel
     Friend WithEvents mTabPageDescription As TabPageDescription
@@ -128,7 +129,6 @@ Public Class Designer
     Friend WithEvents tpText As Crownwood.Magic.Controls.TabPage
     Friend WithEvents ToolBarOpen As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarMain As System.Windows.Forms.ToolBar
-    Friend WithEvents SaveFileArchetype As System.Windows.Forms.SaveFileDialog
     Friend WithEvents ImageListToolbar As System.Windows.Forms.ImageList
     Friend WithEvents ToolBarSave As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarSeparator1 As System.Windows.Forms.ToolBarButton
@@ -381,7 +381,6 @@ Public Class Designer
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.lblArchetypeName = New System.Windows.Forms.Label
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.SaveFileArchetype = New System.Windows.Forms.SaveFileDialog
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
         Me.PanelConcept_1.SuspendLayout()
         Me.gbSpecialisation.SuspendLayout()
@@ -1724,10 +1723,6 @@ Public Class Designer
         Me.lblArchetypeName.TabIndex = 10
         Me.lblArchetypeName.Text = "Archetype Editor by Ocean Informatics"
         '
-        'SaveFileArchetype
-        '
-        Me.SaveFileArchetype.FileName = "doc1"
-        '
         'Designer
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
@@ -1783,13 +1778,13 @@ Public Class Designer
             Return
         End If
 
-        If Filemanager.Instance.ParserType = "adl" Then
+        If mFileManager.ParserType = "adl" Then
             Me.OpenFileDialogArchetype.Filter = "ADL|*.adl|Archetypes|*.archetype|All files|*.*"
         Else
             Me.OpenFileDialogArchetype.Filter = "Archetypes|*.archetype|ADL|*.adl|All files|*.*"
         End If
-        If Filemanager.Instance.WorkingDirectory <> "" Then
-            Me.OpenFileDialogArchetype.InitialDirectory = Filemanager.Instance.WorkingDirectory
+        If mFileManager.WorkingDirectory <> "" Then
+            Me.OpenFileDialogArchetype.InitialDirectory = mFileManager.WorkingDirectory
         End If
 
         If OpenFileDialogArchetype.ShowDialog(Me) = DialogResult.Cancel Then
@@ -1811,15 +1806,15 @@ Public Class Designer
         Me.Cursor = System.Windows.Forms.Cursors.WaitCursor
 
         ' stop auto updating of controls
-        Filemanager.Instance.FileLoading = True
+        mFileManager.FileLoading = True
 
-        If Not Filemanager.Instance.OpenArchetype(a_file_name) Then
-            MessageBox.Show(Filemanager.Instance.Status, _
+        If Not mFileManager.OpenArchetype(a_file_name) Then
+            MessageBox.Show(mFileManager.Status, _
                 AE_Constants.Instance.MessageBoxCaption, _
                 MessageBoxButtons.OK, MessageBoxIcon.Error)
             Me.Cursor = System.Windows.Forms.Cursors.Default
-            Filemanager.Instance.ParserReset()
-            Filemanager.Instance.FileLoading = False
+            mFileManager.ParserReset()
+            mFileManager.FileLoading = False
             Exit Sub
         End If
 
@@ -1832,23 +1827,23 @@ Public Class Designer
         ' Deal with the languages, terms and terminology bindings
 
         ' set the language that is chosen
-        Filemanager.Instance.OntologyManager.LanguageCode = Me.ListLanguages.SelectedValue
+        mFileManager.OntologyManager.LanguageCode = Me.ListLanguages.SelectedValue
 
         ' set the concept and description
-        Dim a_term As RmTerm = Filemanager.Instance.OntologyManager.GetTerm( _
-                Filemanager.Instance.Archetype.ConceptCode)
+        Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm( _
+                mFileManager.Archetype.ConceptCode)
         If Not a_term Is Nothing Then
             Me.txtConceptInFull.Text = a_term.Text
             Me.TxtConceptDescription.Text = a_term.Description
         End If
 
-        If Filemanager.Instance.OntologyManager.NumberOfSpecialisations > 0 Then
+        If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
             Dim tn As TreeNode
             Dim tnc As TreeNodeCollection
             Dim ct As CodeAndTerm()
 
             tnc = Me.tvSpecialisation.Nodes
-            ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(Filemanager.Instance.Archetype.ConceptCode)
+            ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(mFileManager.Archetype.ConceptCode)
             For i = 0 To ct.Length - 1
                 tn = New TreeNode
                 tn.Text = ct(i).Text
@@ -1861,28 +1856,28 @@ Public Class Designer
         End If
 
         'Set the description
-        mTabPageDescription.Description = Filemanager.Instance.Archetype.Description
+        mTabPageDescription.Description = mFileManager.Archetype.Description
 
-        If Filemanager.Instance.Archetype.hasData Then
+        If mFileManager.Archetype.hasData Then
             'Dim sType As String
 
-            'sType = FileManager.Instance.Archetype.Definition.TypeName
+            'sType = mFileManager.Archetype.Definition.TypeName
 
-            Select Case Filemanager.Instance.Archetype.RmEntity
+            Select Case mFileManager.Archetype.RmEntity
 
                 Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, _
                     StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
 
-                    'If FileManager.Instance.Archetype.Definition.TypeName.StartsWith("ENTRY") Then
+                    'If mFileManager.Archetype.Definition.TypeName.StartsWith("ENTRY") Then
                     Dim rm As RmStructureCompound
                     ' allow restriction of subject of data
                     Me.gbRestrictedData.Visible = True
-                    Me.gbRestrictedData.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(32, "Subject of data")
+                    Me.gbRestrictedData.Text = Filemanager.GetOpenEhrTerm(32, "Subject of data")
 
                     ' deal with the various groups of information appropriate to the type
-                    Select Case Filemanager.Instance.Archetype.RmEntity
+                    Select Case mFileManager.Archetype.RmEntity
                         Case StructureType.ENTRY ' "ENTRY"
-                            For Each rm In Filemanager.Instance.Archetype.Definition.Data
+                            For Each rm In mFileManager.Archetype.Definition.Data
                                 Select Case rm.Type
                                     Case StructureType.Data
                                         ProcessEventSeries(rm)
@@ -1892,7 +1887,7 @@ Public Class Designer
                             Next
 
                         Case StructureType.OBSERVATION ' "ENTRY.OBSERVATION"
-                            For Each rm In Filemanager.Instance.Archetype.Definition.Data
+                            For Each rm In mFileManager.Archetype.Definition.Data
                                 Select Case rm.Type
                                     Case StructureType.Data
                                         Dim rm_s As RmStructureCompound
@@ -1925,7 +1920,7 @@ Public Class Designer
                             Next
 
                         Case StructureType.EVALUATION ' "ENTRY.EVALUATION"
-                            For Each rm In Filemanager.Instance.Archetype.Definition.Data
+                            For Each rm In mFileManager.Archetype.Definition.Data
                                 Select Case rm.Type
                                     Case StructureType.Data
                                         If rm.Children.Count > 0 Then
@@ -1942,14 +1937,14 @@ Public Class Designer
 
                         Case StructureType.INSTRUCTION ' "ENTRY.INSTRUCTION"
                             SetUpInstruction()
-                            mTabPageInstruction.ProcessInstruction(Filemanager.Instance.Archetype.Definition.Data)
+                            mTabPageInstruction.ProcessInstruction(mFileManager.Archetype.Definition.Data)
 
                         Case StructureType.ACTION
                             SetUpAction()
-                            mTabPageAction.ProcessAction(Filemanager.Instance.Archetype.Definition.Data)
+                            mTabPageAction.ProcessAction(mFileManager.Archetype.Definition.Data)
 
                         Case StructureType.ADMIN_ENTRY
-                            rm = Filemanager.Instance.Archetype.Definition.Data.items(0)
+                            rm = mFileManager.Archetype.Definition.Data.items(0)
                             If rm.Children.Count > 0 Then
                                 ProcessDataStructure(rm.Children.items(0))
                             End If
@@ -1958,7 +1953,7 @@ Public Class Designer
 
                     ' fill the subject of data if required
                     Dim cp As CodePhrase
-                    cp = CType(Filemanager.Instance.Archetype.Definition, RmEntry).SubjectOfData.Relationship
+                    cp = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
                     If Not cp Is Nothing Then
 
                         If cp.Codes.Count > 0 Then
@@ -1970,7 +1965,7 @@ Public Class Designer
 
                             For Each a_code In cp.Codes
                                 a_term = New RmTerm(a_code)
-                                a_term.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(Val(a_code), "?")
+                                a_term.Text = Filemanager.GetOpenEhrTerm(Val(a_code), "?")
                                 Me.listRestrictionSet.Items.Add(a_term)
                             Next
                         End If
@@ -1978,41 +1973,41 @@ Public Class Designer
 
                 Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
 
-                    ProcessStructure(Filemanager.Instance.Archetype.Definition)
+                    ProcessStructure(mFileManager.Archetype.Definition)
 
                 Case StructureType.SECTION
                     SetUpSection()
                     mTabPageSection.ProcessSection( _
-                            Filemanager.Instance.Archetype.Definition)
+                            mFileManager.Archetype.Definition)
 
                 Case StructureType.COMPOSITION
                     Me.gbRestrictedData.Visible = True
-                    Me.gbRestrictedData.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(226, "Setting")
+                    Me.gbRestrictedData.Text = Filemanager.GetOpenEhrTerm(226, "Setting")
 
                     SetUpComposition()
                     mTabPageComposition.ProcessComposition( _
-                        Filemanager.Instance.Archetype.Definition.Data)
+                        mFileManager.Archetype.Definition.Data)
             End Select
 
         End If
 
-        SetUpGUI(Filemanager.Instance.Archetype.RmEntity, False)
+        SetUpGUI(mFileManager.Archetype.RmEntity, False)
 
-        Filemanager.Instance.FileLoading = False
+        mFileManager.FileLoading = False
 
         AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
         ' set the specific language if it is present e.g. en-US, en-AU
-        If Filemanager.Instance.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.Instance.SpecificLanguageCode) AndAlso _
+        If mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.Instance.SpecificLanguageCode) AndAlso _
             Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.Instance.SpecificLanguageCode Then
             Me.ListLanguages.SelectedValue = OceanArchetypeEditor.Instance.SpecificLanguageCode
             Translate(OceanArchetypeEditor.Instance.SpecificLanguageCode)
-        ElseIf Filemanager.Instance.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.Instance.DefaultLanguageCode) AndAlso _
+        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.Instance.DefaultLanguageCode) AndAlso _
             Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.Instance.DefaultLanguageCode Then
             Me.ListLanguages.SelectedValue = OceanArchetypeEditor.Instance.DefaultLanguageCode
             Translate(OceanArchetypeEditor.Instance.DefaultLanguageCode)
         Else
-            Me.ListLanguages.SelectedValue = Filemanager.Instance.OntologyManager.PrimaryLanguageCode
+            Me.ListLanguages.SelectedValue = mFileManager.OntologyManager.PrimaryLanguageCode
         End If
 
         Me.MenuFileSpecialise.Visible = True
@@ -2030,16 +2025,16 @@ Public Class Designer
 
                 RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
                 ' stop auto updating of controls
-                Filemanager.Instance.FileLoading = True
+                mFileManager.FileLoading = True
                 Me.ResetDefaults()
 
                 'reset the filename to null to force SaveAs
-                Filemanager.Instance.FileName = ""
+                mFileManager.FileName = ""
 
                 SetUpGUI(ReferenceModel.Instance.ArchetypedClass, True)
 
-                Filemanager.Instance.FileLoading = False
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileLoading = False
+                mFileManager.FileEdited = True
 
                 AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
@@ -2061,42 +2056,17 @@ Public Class Designer
         Dim s As String
 
         If sender Is MenuFileSaveAs Then  ' save as a different name
-            s = ChooseFileName()
-        ElseIf Filemanager.Instance.IsNew Then   ' never saved before
-            s = ChooseFileName()
+            s = Filemanager.Master.FileName
+            Filemanager.Master.FileName = ""
+            If Not Filemanager.Master.SaveArchetype() Then
+                Filemanager.Master.FileName = s
+                Me.MenuFileSpecialise.Visible = True
+            End If
         Else
-            If IO.File.Exists(Filemanager.Instance.FileName) Then  ' check the file exists so it is saving over the top
-                s = Filemanager.Instance.FileName
-            Else
-                s = ChooseFileName()
+            If Filemanager.SaveFiles(False) Then
+                Me.MenuFileSpecialise.Visible = True
             End If
         End If
-
-        If s <> "" Then
-
-            ' The file might be in a repository and readonly
-            If IO.File.Exists(s) Then
-                ' if it isn't a new file
-                Dim fa As IO.FileAttributes = IO.File.GetAttributes(s)
-                'check it isn't readonly
-                If (fa And IO.FileAttributes.ReadOnly) > 0 Then
-                    MessageBox.Show(s & ": " & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(439, "Read only"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    Return
-                End If
-            End If
-
-            ' Save all the archetype details to RmStructures
-            PrepareToSave()
-
-            'Now write the arcehtype using the parser
-            Filemanager.Instance.FileName = s
-            Filemanager.Instance.WriteArchetype()
-            ' ToDo: check for file write error
-            Filemanager.Instance.IsNew = False
-            Filemanager.Instance.FileEdited = False
-            Me.MenuFileSpecialise.Visible = True
-        End If
-
     End Sub
 
 #End Region
@@ -2148,7 +2118,7 @@ Public Class Designer
         Else
             Dim MI As New MenuItem
             MI.Text = LanguageText
-            If LanguageText = Filemanager.Instance.OntologyManager.LanguageText Then
+            If LanguageText = mFileManager.OntologyManager.LanguageText Then
                 MI.Checked = True
             End If
             Me.MenuLanguageChange.MenuItems.Add(MI)
@@ -2156,8 +2126,8 @@ Public Class Designer
 
     End Sub
 
-    Private Sub FileManager_IsFileDirtyChanged(ByVal sender As Object, _
-        ByVal e As FileManagerEventArgs) 'Handles mFileManager.IsFileDirtyChanged
+    Private Sub FileManager_IsFileDirtyChanged(ByVal e As FileManagerEventArgs)
+        'Handles FileManager.IsFileDirtyChanged
 
         If e.IsFileDirty = True And Me.ShowMenuFileSave = False Then
             Me.ShowMenuFileSave = True
@@ -2177,70 +2147,70 @@ Public Class Designer
     Private Sub LocaliseGUI(ByVal language As String)
 
         'MenuItem labels
-        Me.MenuFile.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(43, Me.MenuFile.Text, language)
-        Me.MenuFileClose.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(184, Me.MenuFileClose.Text, language)
-        Me.MenuFileNew.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(62, Me.MenuFileNew.Text, language)
-        Me.MenuFileExit.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(63, Me.MenuFileExit.Text, language)
-        Me.MenuFileOpen.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(61, Me.MenuFileOpen.Text, language)
-        Me.MenuFileSave.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(183, Me.MenuFileSave.Text, language)
-        Me.MenuFileSpecialise.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(185, Me.MenuFileSpecialise.Text, language)
-        Me.MenuHelp.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(48, Me.MenuHelp.Text, language)
-        Me.MenuHelpStart.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(72, Me.MenuHelpStart.Text, language)
-        Me.MenuHelpLicence.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(73, Me.MenuHelpLicence.Text, language)
-        Me.MenuTerminology.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(47, Me.MenuTerminology.Text, language)
-        Me.MenuHelpOcean.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(74, Me.MenuHelpOcean.Text, language)
-        Me.MenuHelpOceanEditor.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(75, Me.MenuHelpOceanEditor.Text, language)
-        Me.MenuLanguage.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(46, Me.MenuLanguage.Text, language)
-        Me.MenuLanguageAdd.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(68, Me.MenuLanguageAdd.Text, language)
-        Me.MenuLanguageChange.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(69, Me.MenuLanguageChange.Text, language)
-        Me.MenuLanguageAvailable.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(67, Me.MenuLanguageAvailable.Text, language)
-        Me.MenuPublish.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(45, Me.MenuPublish.Text, language)
-        Me.MenuPublishFinalise.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(66, Me.MenuPublishFinalise.Text, language)
-        Me.MenuPublishPack.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(65, Me.MenuPublishPack.Text, language)
-        Me.MenuView.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(44, Me.MenuView.Text, language)
-        Me.MenuViewArchetypes.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(64, Me.MenuViewArchetypes.Text, language)
-        Me.MenuTerminologyAdd.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(71, Me.MenuTerminologyAdd.Text, language)
-        Me.MenuTerminologyAvailable.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(70, Me.MenuTerminologyAvailable.Text, language)
+        Me.MenuFile.Text = Filemanager.GetOpenEhrTerm(43, Me.MenuFile.Text, language)
+        Me.MenuFileClose.Text = Filemanager.GetOpenEhrTerm(184, Me.MenuFileClose.Text, language)
+        Me.MenuFileNew.Text = Filemanager.GetOpenEhrTerm(62, Me.MenuFileNew.Text, language)
+        Me.MenuFileExit.Text = Filemanager.GetOpenEhrTerm(63, Me.MenuFileExit.Text, language)
+        Me.MenuFileOpen.Text = Filemanager.GetOpenEhrTerm(61, Me.MenuFileOpen.Text, language)
+        Me.MenuFileSave.Text = Filemanager.GetOpenEhrTerm(183, Me.MenuFileSave.Text, language)
+        Me.MenuFileSpecialise.Text = Filemanager.GetOpenEhrTerm(185, Me.MenuFileSpecialise.Text, language)
+        Me.MenuHelp.Text = Filemanager.GetOpenEhrTerm(48, Me.MenuHelp.Text, language)
+        Me.MenuHelpStart.Text = Filemanager.GetOpenEhrTerm(72, Me.MenuHelpStart.Text, language)
+        Me.MenuHelpLicence.Text = Filemanager.GetOpenEhrTerm(73, Me.MenuHelpLicence.Text, language)
+        Me.MenuTerminology.Text = Filemanager.GetOpenEhrTerm(47, Me.MenuTerminology.Text, language)
+        Me.MenuHelpOcean.Text = Filemanager.GetOpenEhrTerm(74, Me.MenuHelpOcean.Text, language)
+        Me.MenuHelpOceanEditor.Text = Filemanager.GetOpenEhrTerm(75, Me.MenuHelpOceanEditor.Text, language)
+        Me.MenuLanguage.Text = Filemanager.GetOpenEhrTerm(46, Me.MenuLanguage.Text, language)
+        Me.MenuLanguageAdd.Text = Filemanager.GetOpenEhrTerm(68, Me.MenuLanguageAdd.Text, language)
+        Me.MenuLanguageChange.Text = Filemanager.GetOpenEhrTerm(69, Me.MenuLanguageChange.Text, language)
+        Me.MenuLanguageAvailable.Text = Filemanager.GetOpenEhrTerm(67, Me.MenuLanguageAvailable.Text, language)
+        Me.MenuPublish.Text = Filemanager.GetOpenEhrTerm(45, Me.MenuPublish.Text, language)
+        Me.MenuPublishFinalise.Text = Filemanager.GetOpenEhrTerm(66, Me.MenuPublishFinalise.Text, language)
+        Me.MenuPublishPack.Text = Filemanager.GetOpenEhrTerm(65, Me.MenuPublishPack.Text, language)
+        Me.MenuView.Text = Filemanager.GetOpenEhrTerm(44, Me.MenuView.Text, language)
+        Me.MenuViewArchetypes.Text = Filemanager.GetOpenEhrTerm(64, Me.MenuViewArchetypes.Text, language)
+        Me.MenuTerminologyAdd.Text = Filemanager.GetOpenEhrTerm(71, Me.MenuTerminologyAdd.Text, language)
+        Me.MenuTerminologyAvailable.Text = Filemanager.GetOpenEhrTerm(70, Me.MenuTerminologyAvailable.Text, language)
 
         'Front panel of designer
-        Me.lblArchetypeFileName.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(57, Me.lblArchetypeFileName.Text, language)
-        Me.lblArchetypeName.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(58, Me.lblArchetypeName.Text, language)
-        Me.lblConcept.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(54, Me.lblConcept.Text, language)
-        Me.lblDescription.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(113, Me.lblDescription.Text, language)
-        Me.radioUnrestrictedSubject.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(56, Me.radioUnrestrictedSubject.Text, language)
-        Me.gbSpecialisation.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(186, Me.gbSpecialisation.Text, language)
+        Me.lblArchetypeFileName.Text = Filemanager.GetOpenEhrTerm(57, Me.lblArchetypeFileName.Text, language)
+        Me.lblArchetypeName.Text = Filemanager.GetOpenEhrTerm(58, Me.lblArchetypeName.Text, language)
+        Me.lblConcept.Text = Filemanager.GetOpenEhrTerm(54, Me.lblConcept.Text, language)
+        Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text, language)
+        Me.radioUnrestrictedSubject.Text = Filemanager.GetOpenEhrTerm(56, Me.radioUnrestrictedSubject.Text, language)
+        Me.gbSpecialisation.Text = Filemanager.GetOpenEhrTerm(186, Me.gbSpecialisation.Text, language)
 
         'Entry tab on designer
-        Me.cbProtocol.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(78, Me.cbProtocol.Text, language)
-        Me.cbPersonState.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(79, Me.cbPersonState.Text, language)
-        Me.chkEventSeries.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(81, Me.chkEventSeries.Text, language)
-        Me.cbStructurePersonState.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(82, Me.cbStructurePersonState.Text, language)
-        Me.cbProtocol.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(78, Me.cbProtocol.Text, language)
+        Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
+        Me.cbPersonState.Text = Filemanager.GetOpenEhrTerm(79, Me.cbPersonState.Text, language)
+        Me.chkEventSeries.Text = Filemanager.GetOpenEhrTerm(81, Me.chkEventSeries.Text, language)
+        Me.cbStructurePersonState.Text = Filemanager.GetOpenEhrTerm(82, Me.cbStructurePersonState.Text, language)
+        Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
 
         'Display tab on Designer
-        Me.butSaveFile.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(103, Me.butSaveFile.Text, language)
-        Me.butPrint.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(520, Me.butPrint.Text, language)
+        Me.butSaveFile.Text = Filemanager.GetOpenEhrTerm(103, Me.butSaveFile.Text, language)
+        Me.butPrint.Text = Filemanager.GetOpenEhrTerm(520, Me.butPrint.Text, language)
 
         'Terminology tab on Designer
-        Me.lblPrimaryLanguageText.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(187, Me.lblPrimaryLanguageText.Text, language)
-        Me.lblAvailableLanguages.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(67, Me.lblAvailableLanguages.Text, language)
-        Me.DataGridTerminologies.CaptionText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(70, Me.DataGridTerminologies.CaptionText, language)
+        Me.lblPrimaryLanguageText.Text = Filemanager.GetOpenEhrTerm(187, Me.lblPrimaryLanguageText.Text, language)
+        Me.lblAvailableLanguages.Text = Filemanager.GetOpenEhrTerm(67, Me.lblAvailableLanguages.Text, language)
+        Me.DataGridTerminologies.CaptionText = Filemanager.GetOpenEhrTerm(70, Me.DataGridTerminologies.CaptionText, language)
 
         'TabControl headings
-        Me.tpHeader.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(76, Me.tpHeader.Title, language)
-        Me.tpDesign.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(77, Me.tpDesign.Title, language)
-        Me.tpSectionPage.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(168, Me.tpSectionPage.Title, language)
-        Me.tpTerminology.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(47, Me.tpTerminology.Title, language)
-        Me.tpText.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(83, Me.tpText.Title, language)
-        Me.tpInterface.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(84, Me.tpInterface.Title, language)
-        Me.tpTerms.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(86, Me.tpTerms.Title, language)
-        Me.tpConstraints.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(87, Me.tpTerms.Title, language)
-        Me.tpLanguages.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(88, Me.tpLanguages.Title, language)
-        Me.tpData.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(80, Me.tpData.Title, language)
-        Me.tpRootState.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(177, Me.tpRootState.Title, language)
-        Me.tpRootStateEventSeries.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(133, Me.tpRootStateEventSeries.Title, language)
-        Me.tpRootStateStructure.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(177, Me.tpRootStateStructure.Title, language)
-        Me.tpRootStateStructure.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(446, Me.cbMandatory.Text, language)
+        Me.tpHeader.Title = Filemanager.GetOpenEhrTerm(76, Me.tpHeader.Title, language)
+        Me.tpDesign.Title = Filemanager.GetOpenEhrTerm(77, Me.tpDesign.Title, language)
+        Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(168, Me.tpSectionPage.Title, language)
+        Me.tpTerminology.Title = Filemanager.GetOpenEhrTerm(47, Me.tpTerminology.Title, language)
+        Me.tpText.Title = Filemanager.GetOpenEhrTerm(83, Me.tpText.Title, language)
+        Me.tpInterface.Title = Filemanager.GetOpenEhrTerm(84, Me.tpInterface.Title, language)
+        Me.tpTerms.Title = Filemanager.GetOpenEhrTerm(86, Me.tpTerms.Title, language)
+        Me.tpConstraints.Title = Filemanager.GetOpenEhrTerm(87, Me.tpTerms.Title, language)
+        Me.tpLanguages.Title = Filemanager.GetOpenEhrTerm(88, Me.tpLanguages.Title, language)
+        Me.tpData.Title = Filemanager.GetOpenEhrTerm(80, Me.tpData.Title, language)
+        Me.tpRootState.Title = Filemanager.GetOpenEhrTerm(177, Me.tpRootState.Title, language)
+        Me.tpRootStateEventSeries.Title = Filemanager.GetOpenEhrTerm(133, Me.tpRootStateEventSeries.Title, language)
+        Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(177, Me.tpRootStateStructure.Title, language)
+        Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(446, Me.cbMandatory.Text, language)
 
     End Sub
 
@@ -2250,7 +2220,7 @@ Public Class Designer
 
         For Each tNode In tnc
             TranslateSpecialisationNodes(tNode.Nodes)
-            a_Term = Filemanager.Instance.OntologyManager.GetTerm(tNode.Tag)
+            a_Term = mFileManager.OntologyManager.GetTerm(tNode.Tag)
             tNode.Text = a_Term.Text
         Next
     End Sub
@@ -2262,14 +2232,14 @@ Public Class Designer
         Dim a_Term As RmTerm
 
         ' file loading so no updates
-        Filemanager.Instance.FileLoading = True
+        mFileManager.FileLoading = True
         ' set the language
         If LanguageCode <> "" Then
             Dim MI As MenuItem
 
-            Filemanager.Instance.OntologyManager.LanguageCode = LanguageCode
+            mFileManager.OntologyManager.LanguageCode = LanguageCode
             For Each MI In Me.MenuLanguageChange.MenuItems
-                If MI.Text = Filemanager.Instance.OntologyManager.LanguageText Then
+                If MI.Text = mFileManager.OntologyManager.LanguageText Then
                     MI.Checked = True
                 Else
                     MI.Checked = False
@@ -2279,7 +2249,7 @@ Public Class Designer
         End If
         ' Concept and description fields on header and the form text
 
-        a_Term = Filemanager.Instance.OntologyManager.GetTerm(Filemanager.Instance.Archetype.ConceptCode)
+        a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
         Me.txtConceptInFull.Text = a_Term.Text
         Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & a_Term.Text & "]"
         Me.TxtConceptDescription.Text = a_Term.Description
@@ -2296,12 +2266,12 @@ Public Class Designer
             ' as just reassigning the text does not make it available
             For i = 0 To Me.listRestrictionSet.Items.Count - 1
                 a_Term = Me.listRestrictionSet.Items(i)
-                a_Term.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(Val(a_Term.Code), "*" & a_Term.Text, LanguageCode)
+                a_Term.Text = Filemanager.GetOpenEhrTerm(Val(a_Term.Code), "*" & a_Term.Text, LanguageCode)
                 Me.listRestrictionSet.Items(i) = a_Term
             Next
         End If
 
-        Filemanager.Instance.FileLoading = False
+        mFileManager.FileLoading = False
 
         For Each obj In mComponentsCollection
             ' each component must have a populate terms method to enable translation
@@ -2320,22 +2290,22 @@ Public Class Designer
     Private Sub BindTables()
         Dim CM As CurrencyManager
 
-        Me.mDataViewTermBindings = New DataView(Filemanager.Instance.OntologyManager.TermBindingsTable)
+        Me.mDataViewTermBindings = New DataView(mFileManager.OntologyManager.TermBindingsTable)
         Me.mDataViewTermBindings.AllowNew = False
 
-        Me.mDataViewConstraintBindings = New DataView(Filemanager.Instance.OntologyManager.ConstraintBindingsTable)
+        Me.mDataViewConstraintBindings = New DataView(mFileManager.OntologyManager.ConstraintBindingsTable)
         Me.mDataViewConstraintBindings.RowFilter = "ID ='ZZZZ'" ' do not show any for the moment
         Me.mDataViewConstraintBindings.AllowNew = False
 
 
         ' ensure that the table is bound to the languages list
-        Me.ListLanguages.DataSource = Filemanager.Instance.OntologyManager.LanguagesTable
+        Me.ListLanguages.DataSource = mFileManager.OntologyManager.LanguagesTable
         Me.ListLanguages.DisplayMember = "Language"
         Me.ListLanguages.ValueMember = "id"
 
         ' bind the Term definitions table
 
-        Me.DataGridDefinitions.DataSource = Filemanager.Instance.OntologyManager.LanguagesTable
+        Me.DataGridDefinitions.DataSource = mFileManager.OntologyManager.LanguagesTable
         Me.DataGridDefinitions.DataMember = "LanguageTerms"
         Me.DataGridDefinitions.TableStyles(0).MappingName = "TermDefinitions"
         Me.DataGridDefinitions.TableStyles(0).GridColumnStyles(0).MappingName = "Code"
@@ -2348,7 +2318,7 @@ Public Class Designer
         CType(CM.List, DataView).AllowDelete = False
 
         ' bind the Constraint definitions table
-        Me.DataGridConstraintDefinitions.DataSource = Filemanager.Instance.OntologyManager.LanguagesTable
+        Me.DataGridConstraintDefinitions.DataSource = mFileManager.OntologyManager.LanguagesTable
         Me.DataGridConstraintDefinitions.DataMember = "LanguageConstraints"
         Me.DataGridConstraintDefinitions.TableStyles(0).MappingName = "ConstraintDefinitions"
         Me.DataGridConstraintDefinitions.TableStyles(0).GridColumnStyles(0).MappingName = "Code"
@@ -2361,7 +2331,7 @@ Public Class Designer
         CType(CM.List, DataView).AllowDelete = False
 
         'bind the terminology combobox
-        Me.DataGridTerminologies.DataSource = Filemanager.Instance.OntologyManager.TerminologiesTable
+        Me.DataGridTerminologies.DataSource = mFileManager.OntologyManager.TerminologiesTable
 
         Me.DataGridConstraintStatements.DataSource = Me.mDataViewConstraintBindings
 
@@ -2381,11 +2351,11 @@ Public Class Designer
         text.WriteLine("\par")
         text.WriteLine("\cf1 Definition\cf0\par")
 
-        If Not Filemanager.Instance.Archetype.Definition Is Nothing Then
-            text.WriteLine("\cf2    " & Filemanager.Instance.Archetype.Definition.Type.ToString & "\cf0\par")
+        If Not mFileManager.Archetype.Definition Is Nothing Then
+            text.WriteLine("\cf2    " & mFileManager.Archetype.Definition.Type.ToString & "\cf0\par")
         End If
 
-        Select Case Filemanager.Instance.Archetype.RmEntity
+        Select Case mFileManager.Archetype.RmEntity
             Case StructureType.SECTION
                 text.WriteLine("\par")
                 ' add subject relationship constraint here
@@ -2412,11 +2382,11 @@ Public Class Designer
                 text.WriteLine("\cf1   DATA\cf0  = \{\par")
 
 
-                If Filemanager.Instance.Archetype.RmEntity = StructureType.INSTRUCTION Then
+                If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
                     If Not mTabPageInstruction Is Nothing Then
                         mTabPageInstruction.toRichText(text, 2)
                     End If
-                ElseIf Filemanager.Instance.Archetype.RmEntity = StructureType.ACTION Then
+                ElseIf mFileManager.Archetype.RmEntity = StructureType.ACTION Then
                     If Not mTabPageAction Is Nothing Then
                         mTabPageAction.toRichText(text, 2)
                     End If
@@ -2480,7 +2450,7 @@ Public Class Designer
 
         text.WriteLine("<HTML>")
         text.WriteLine("<HEAD>")
-        text.WriteLine("<meta http-equiv=""Content-Language"" content=""" & Filemanager.Instance.OntologyManager.LanguageCode & """>")
+        text.WriteLine("<meta http-equiv=""Content-Language"" content=""" & mFileManager.OntologyManager.LanguageCode & """>")
         text.WriteLine("<meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"">")
         text.WriteLine("<title>" & Me.txtConceptInFull.Text & "</title>")
         text.WriteLine("</HEAD>")
@@ -2493,7 +2463,7 @@ Public Class Designer
         text.WriteLine("</td>")
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
-        text.WriteLine("<p><i>Entity</i>: " & Filemanager.Instance.Archetype.Archetype_ID.ReferenceModelEntity.ToString & "</p>")
+        text.WriteLine("<p><i>Entity</i>: " & mFileManager.Archetype.Archetype_ID.ReferenceModelEntity.ToString & "</p>")
         text.WriteLine("<table border=""1"" cellpadding=""3"" width=""100%"">")
         text.WriteLine("<tr>")
         text.WriteLine("<td width=""50%""><h4>Concept description:</h4></td>")
@@ -2501,12 +2471,12 @@ Public Class Designer
         text.WriteLine("</tr>")
         text.WriteLine("<tr>")
         text.WriteLine("<td width=""50%"">" & Me.TxtConceptDescription.Text & "</td>")
-        text.WriteLine("<td width=""50%""><i>Id</i>: " & Filemanager.Instance.Archetype.Archetype_ID.ToString() & _
-            "<br><i>Reference model</i>: " & Filemanager.Instance.Archetype.Archetype_ID.Reference_Model.ToString & "</td>")
+        text.WriteLine("<td width=""50%""><i>Id</i>: " & mFileManager.Archetype.Archetype_ID.ToString() & _
+            "<br><i>Reference model</i>: " & mFileManager.Archetype.Archetype_ID.Reference_Model.ToString & "</td>")
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
 
-        Select Case Filemanager.Instance.Archetype.RmEntity
+        Select Case mFileManager.Archetype.RmEntity
             '    Case StructureType.SECTION
             '        text.WriteLine("\par")
             '        ' add subject relationship constraint here
@@ -2525,12 +2495,12 @@ Public Class Designer
                 text.WriteLine("<table border=""0"" cellpadding=""2"" width=""100%"">")
                 text.WriteLine("<tr>")
                 text.WriteLine("<td width=""100%"" bgcolor=""#FFFF53"">")
-                text.WriteLine("<h2>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(80, "Data") & "</h2>")
+                text.WriteLine("<h2>" & Filemanager.GetOpenEhrTerm(80, "Data") & "</h2>")
                 text.WriteLine("</td>")
                 text.WriteLine("</tr>")
                 text.WriteLine("</table>")
 
-                'If Filemanager.Instance.Archetype.RmEntity = StructureType.INSTRUCTION Then
+                'If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
                 '    If Not mTabPageInstruction Is Nothing Then
                 '        mTabPageInstruction.toRichText(text, 2)
                 '    End If
@@ -2546,7 +2516,7 @@ Public Class Designer
                     text.WriteLine("<table border=""0"" cellpadding=""2"" width=""100%"">")
                     text.WriteLine("<tr>")
                     text.WriteLine("<td width=""100%"" bgcolor=""#9DAAFF"">")
-                    text.WriteLine("<h2>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(177, "State") & "</h2>")
+                    text.WriteLine("<h2>" & Filemanager.GetOpenEhrTerm(177, "State") & "</h2>")
                     text.WriteLine("</td>")
                     text.WriteLine("</tr>")
                     text.WriteLine("</table>")
@@ -2557,7 +2527,7 @@ Public Class Designer
                     text.WriteLine("<table border=""0"" cellpadding=""2"" width=""100%"">")
                     text.WriteLine("<tr>")
                     text.WriteLine("<td width=""100%"" bgcolor=""#AAFE92"">")
-                    text.WriteLine("<h2>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(81, "Event Series") & "</h2>")
+                    text.WriteLine("<h2>" & Filemanager.GetOpenEhrTerm(81, "Event Series") & "</h2>")
                     text.WriteLine("</td>")
                     text.WriteLine("</tr>")
                     text.WriteLine("</table>")
@@ -2578,7 +2548,7 @@ Public Class Designer
                     text.WriteLine("<table border=""0"" cellpadding=""2"" width=""100%"">")
                     text.WriteLine("<tr>")
                     text.WriteLine("<td width=""100%"" bgcolor=""#FF717B"">")
-                    text.WriteLine("<h2>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(78, "Protocol") & "</h2>")
+                    text.WriteLine("<h2>" & Filemanager.GetOpenEhrTerm(78, "Protocol") & "</h2>")
                     text.WriteLine("</td>")
                     text.WriteLine("</tr>")
                     text.WriteLine("</table>")
@@ -2627,7 +2597,7 @@ Public Class Designer
         ' add the language codes - FIXME - from a file in future
         frm.Set_Single()
         frm.PrepareDataTable_for_List(1)
-        Languages = Filemanager.Instance.OntologyManager.GetLanguageList
+        Languages = mFileManager.OntologyManager.GetLanguageList
 
         ' the first language is "aaaa" and is set to show all in the openEHR maintenance
         For i = 0 To Languages.Length - 1
@@ -2649,7 +2619,7 @@ Public Class Designer
 
             lang = frm.ListChoose.SelectedValue
 
-            If Not Filemanager.Instance.OntologyManager.LanguagesTable.Rows.Find(lang) Is Nothing Then
+            If Not mFileManager.OntologyManager.LanguagesTable.Rows.Find(lang) Is Nothing Then
                 Return False ' no need to add anything
             End If
 
@@ -2659,7 +2629,7 @@ Public Class Designer
 
             ' check with user they want to add a languge
             If (MessageBox.Show(AE_Constants.Instance.NewLanguage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK) Then
-                Filemanager.Instance.OntologyManager.AddLanguage(lang, frm.ListChoose.Text)
+                mFileManager.OntologyManager.AddLanguage(lang, frm.ListChoose.Text)
                 Me.AddLanguageToMenu(frm.ListChoose.Text)
             Else
                 MessageBox.Show(AE_Constants.Instance.Language_addition_cancelled, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -2685,7 +2655,7 @@ Public Class Designer
     '    ' add the language codes - FIXME - from a file in future
     '    frm.Set_Single()
     '    frm.PrepareDataTable_for_List(1)
-    '    Terminologies = FileManager.Instance.OntologyManager.GetTerminologyIdentifiers
+    '    Terminologies = mFileManager.OntologyManager.GetTerminologyIdentifiers
     '    frm.DTab_1.DefaultView.Sort = "Text"
     '    For i = 0 To Terminologies.Length - 1
     '        new_row = frm.DTab_1.NewRow()
@@ -2702,7 +2672,7 @@ Public Class Designer
     '        ' check it is not a language added previously
     '        term = frm.ListChoose.SelectedValue
     '        Description = frm.ListChoose.Text
-    '        If Not FileManager.Instance.OntologyManager.TerminologiesTable.Select("Terminology = '" & term & "'").Length = 0 Then
+    '        If Not mFileManager.OntologyManager.TerminologiesTable.Select("Terminology = '" & term & "'").Length = 0 Then
     '            Beep()
     '            Return False
     '        End If
@@ -2710,7 +2680,7 @@ Public Class Designer
     '        ' there is already a language in the archetype
     '        If (MessageBox.Show(AE_Constants.Instance.NewTerminology & Description, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK) Then
     '            ' add to the terminologies
-    '            FileManager.Instance.OntologyManager.AddTerminology(term, Description)
+    '            mFileManager.OntologyManager.AddTerminology(term, Description)
     '        End If
     '    Else
     '        Return False
@@ -2720,7 +2690,7 @@ Public Class Designer
 
     Friend Function ChooseRestrictionSet() As Boolean
 
-        Select Case Filemanager.Instance.Archetype.RmEntity
+        Select Case mFileManager.Archetype.RmEntity
             Case StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ENTRY, StructureType.INSTRUCTION
                 Return ChooseSubjectOfData(1) 'Subject of care
 
@@ -2741,7 +2711,7 @@ Public Class Designer
         ' add the language codes - FIXME - from a file in future
         frm.Set_Single()
         frm.PrepareDataTable_for_List(1)
-        Subjects = Filemanager.Instance.OntologyManager.CodeForGroupID(group_id, Filemanager.Instance.OntologyManager.LanguageCode) 'subject of data
+        Subjects = mFileManager.OntologyManager.CodeForGroupID(group_id, mFileManager.OntologyManager.LanguageCode) 'subject of data
         frm.DTab_1.DefaultView.Sort = "Text"
 
         For i = 0 To Subjects.Length - 1
@@ -2824,8 +2794,8 @@ Public Class Designer
         End Get
         Set(ByVal Value As Boolean)
             If Value Then
-                If Filemanager.Instance.Archetype.LifeCycle Is Nothing Then
-                    Filemanager.Instance.Archetype.LifeCycle = "draft"
+                If mFileManager.Archetype.LifeCycle Is Nothing Then
+                    mFileManager.Archetype.LifeCycle = "draft"
                     Me.lblLifecycle.Text = "draft"
                     Me.lblLifecycle.Visible = True
                 Else
@@ -2910,7 +2880,7 @@ Public Class Designer
             Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                 ' enable restriction of subject of care
                 Me.gbRestrictedData.Visible = True
-                Me.gbRestrictedData.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(32, "Subject of data")
+                Me.gbRestrictedData.Text = Filemanager.GetOpenEhrTerm(32, "Subject of data")
 
                 'need to check not changing from section
                 If Me.TabMain.TabPages.Contains(Me.tpSectionPage) Then
@@ -2967,7 +2937,7 @@ Public Class Designer
             Case StructureType.COMPOSITION
                 ' disable restriction of subject of care
                 Me.gbRestrictedData.Visible = True
-                Me.gbRestrictedData.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(226, "Setting")
+                Me.gbRestrictedData.Text = Filemanager.GetOpenEhrTerm(226, "Setting")
 
 
                 'need to check not changing from Evaluation, Observation
@@ -2996,7 +2966,7 @@ Public Class Designer
 
     Private Function CheckOKtoClose() As Boolean
         If Filemanager.HasFileToSave Then
-            Filemanager.SaveFiles()
+            Filemanager.SaveFiles(True)
             'Me.SaveArchetype(Me, New EventArgs)
         End If
         Return True
@@ -3031,7 +3001,7 @@ Public Class Designer
         Me.tpSectionPage.Controls.Add(mTabPageComposition)
         mTabPageComposition.Dock = DockStyle.Fill
         Me.mComponentsCollection.Add(mTabPageComposition)
-        Me.tpSectionPage.Title = Filemanager.Instance.Archetype.RmType.ToString
+        Me.tpSectionPage.Title = mFileManager.Archetype.RmType.ToString
 
         Me.HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
         'FIXME - need to add help about how to edit a composition
@@ -3052,17 +3022,17 @@ Public Class Designer
         mTabPageDataEventSeries.Dock = DockStyle.Fill
         Me.TabStructure.TabPages.Add(tp)
 
-        file_loading = Filemanager.Instance.FileLoading
-        Filemanager.Instance.FileLoading = True
+        file_loading = mFileManager.FileLoading
+        mFileManager.FileLoading = True
         ' this creates a new EventSeries unless fileloading set to true
         ' which happens when creating a new archetype
         Me.chkEventSeries.Checked = True
         ' now put it back to how it was
-        Filemanager.Instance.FileLoading = file_loading
+        mFileManager.FileLoading = file_loading
 
         If NodeId = "" Then
             ' a new EventSeries so set Id and add a baseline event as default
-            mTabPageDataEventSeries.NodeId = Filemanager.Instance.OntologyManager.AddTerm("Event Series", "@ internal @").Code
+            mTabPageDataEventSeries.NodeId = mFileManager.OntologyManager.AddTerm("Event Series", "@ internal @").Code
             mTabPageDataEventSeries.AddBaseLineEvent()
         Else
             mTabPageDataEventSeries.NodeId = NodeId
@@ -3077,7 +3047,7 @@ Public Class Designer
         mTabPageInstruction = New TabPageInstruction
         ' add it to the collection of components that require translation
         'FIXME need openEHR term
-        ' Me.tpSectionPage.Title = FileManager.Instance.OntologyManager.GetOpenEHRTerm(85, "Instruction")
+        ' Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(85, "Instruction")
         Me.tpSectionPage.Title = StructureType.INSTRUCTION.ToString
         Me.tpSectionPage.Controls.Clear()
         Me.tpSectionPage.Controls.Add(mTabPageInstruction)
@@ -3094,8 +3064,8 @@ Public Class Designer
         mTabPageAction = New TabPageAction
         ' add it to the collection of components that require translation
         'FIXME need openEHR term
-        ' Me.tpSectionPage.Title = FileManager.Instance.OntologyManager.GetOpenEHRTerm(85, "Instruction")
-        Me.tpSectionPage.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(556, "Action")
+        ' Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(85, "Instruction")
+        Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(556, "Action")
         Me.tpSectionPage.Controls.Clear()
         Me.tpSectionPage.Controls.Add(mTabPageAction)
         mTabPageAction.Dock = DockStyle.Fill
@@ -3110,7 +3080,7 @@ Public Class Designer
         ' reset the data structure tab page
         mTabPageDataStructure = New TabPageStructure
         ' add it to the collection of components that require translation
-        Me.tpDataStructure.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(85, "Structure")
+        Me.tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
         mComponentsCollection.Add(mTabPageDataStructure)
         Me.tpDataStructure.Controls.Add(mTabPageDataStructure)
         mTabPageDataStructure.Dock = DockStyle.Fill
@@ -3123,7 +3093,7 @@ Public Class Designer
         'NOTE: Showing tabpages in the editor requires generating
         'IDs for the structural components (e.g. EventSeries and List)
         'This feature cannot be run unless the Ontology is initialised
-        If Filemanager.Instance.OntologyManager.Ontology Is Nothing Then
+        If mFileManager.OntologyManager.Ontology Is Nothing Then
             Beep()
             Debug.Assert(False)
             Return
@@ -3187,16 +3157,16 @@ Public Class Designer
 
         End Select
 
-        Me.lblLifecycle.Text = Filemanager.Instance.Archetype.LifeCycle
-        Me.lblArchetypeName.Text = Filemanager.Instance.Archetype.Archetype_ID.ToString
+        Me.lblLifecycle.Text = mFileManager.Archetype.LifeCycle
+        Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
         ' Set the form text
         Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & Me.txtConceptInFull.Text & "]"
 
         ' Set the GUI language elements
-        Me.lblPrimaryLanguage.Text = Filemanager.Instance.OntologyManager.PrimaryLanguageText
+        Me.lblPrimaryLanguage.Text = mFileManager.OntologyManager.PrimaryLanguageText
         ' set the language menu
         Dim d_row
-        For Each d_row In Filemanager.Instance.OntologyManager.LanguagesTable.Rows
+        For Each d_row In mFileManager.OntologyManager.LanguagesTable.Rows
             AddLanguageToMenu(d_row(1))
         Next
 
@@ -3212,28 +3182,28 @@ Public Class Designer
         Dim i As Integer
 
         If AllowOpen Then
-            Filemanager.Instance.FileLoading = True
+            mFileManager.FileLoading = True
             ' clear the archetype editor
             Me.ResetDefaults()
             ' prevent being asked again to save if open new archetype
-            Filemanager.Instance.FileEdited = False
-            Filemanager.Instance.FileLoading = False
+            mFileManager.FileEdited = False
+            mFileManager.FileLoading = False
         End If
 
         If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
-            frm.comboModel.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(104, "Choose...", OceanArchetypeEditor.Instance.DefaultLanguageCode)
-            frm.comboComponent.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(104, "Choose...", OceanArchetypeEditor.Instance.DefaultLanguageCode)
-            frm.gbNew.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(50, frm.gbNew.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
-            frm.lblShortConcept.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(52, frm.lblShortConcept.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
-            frm.lblModel.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(51, frm.lblModel.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
+            frm.comboModel.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", OceanArchetypeEditor.Instance.DefaultLanguageCode)
+            frm.comboComponent.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", OceanArchetypeEditor.Instance.DefaultLanguageCode)
+            frm.gbNew.Text = Filemanager.GetOpenEhrTerm(50, frm.gbNew.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
+            frm.lblShortConcept.Text = Filemanager.GetOpenEhrTerm(52, frm.lblShortConcept.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
+            frm.lblModel.Text = Filemanager.GetOpenEhrTerm(51, frm.lblModel.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
         End If
 
         If Not AllowOpen Then
             frm.gbExistingArchetype.Visible = False
             frm.Height = frm.Height - frm.gbExistingArchetype.Height
-            frm.butCancel.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(166, "Cancel")
+            frm.butCancel.Text = Filemanager.GetOpenEhrTerm(166, "Cancel")
         Else
-            frm.butCancel.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(63, "Exit")
+            frm.butCancel.Text = Filemanager.GetOpenEhrTerm(63, "Exit")
         End If
 
         i = frm.ShowDialog(Me)
@@ -3242,15 +3212,15 @@ Public Class Designer
 
             Case 1
                 'this creates an archetype and sets the ontology
-                Filemanager.Instance.NewArchetype(frm.Archetype_ID)
+                mFileManager.NewArchetype(frm.Archetype_ID)
 
-                If Filemanager.Instance.Archetype.ArchetypeAvailable Then
-                    Filemanager.Instance.Archetype.Version = 1
-                    Filemanager.Instance.Archetype.LifeCycle = "draft"
+                If mFileManager.Archetype.ArchetypeAvailable Then
+                    mFileManager.Archetype.Version = 1
+                    mFileManager.Archetype.LifeCycle = "draft"
 
                     ' Now set up the GUI - requires an ontology.
                     frm.Close()
-                    Filemanager.Instance.IsNew = True  ' this is a new archetype
+                    mFileManager.IsNew = True  ' this is a new archetype
                     Return 2
                 End If
             Case 2 'cancel or exit
@@ -3264,7 +3234,7 @@ Public Class Designer
             Case 6  'pressed the open button
                 frm.Close()
                 Me.OpenArchetype(Me, New System.EventArgs)
-                If Filemanager.Instance.Archetype Is Nothing Then
+                If mFileManager.Archetype Is Nothing Then
                     'open archetype was cancelled so go back to new
                     Return SetNewArchetypeName()
                 End If
@@ -3286,35 +3256,7 @@ Public Class Designer
         Me.ListLanguages.Focus()
     End Sub
 
-    Private Function ChooseFileName() As String
-        Me.SaveFileArchetype.Filter = Filemanager.Instance.AvailableFormatFilter
-        Me.SaveFileArchetype.FileName = Filemanager.Instance.Archetype.Archetype_ID.ToString
-        Me.SaveFileArchetype.OverwritePrompt = True
-        Me.SaveFileArchetype.DefaultExt = Filemanager.Instance.ParserType
-        Dim i As Integer = Filemanager.Instance.IndexOfFormat(Filemanager.Instance.ParserType) + 1
-        If i > 0 Then
-            Me.SaveFileArchetype.FilterIndex = i  ' adl is the third type
-        End If
-        Me.SaveFileArchetype.AddExtension = True
-        Me.SaveFileArchetype.Title = AE_Constants.Instance.MessageBoxCaption
-        Me.SaveFileArchetype.ValidateNames = True
-        If Me.SaveFileArchetype.ShowDialog(Me) = DialogResult.Cancel Then
-            Return ""
-        Else
-            'Check the file extension is added
-            Dim s, ext As String
-
-            ext = Me.SaveFileArchetype.Filter.Split("|".ToCharArray())((Me.SaveFileArchetype.FilterIndex - 1) * 2)
-            s = Me.SaveFileArchetype.FileName.Substring(Me.SaveFileArchetype.FileName.LastIndexOf(".") + 1)
-            If s = ext Then
-                Return Me.SaveFileArchetype.FileName
-            Else
-                Return Me.SaveFileArchetype.FileName & "." & ext
-            End If
-        End If
-
-    End Function
-
+    
     Private Sub MenuViewArchetypes_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuViewArchetypes.Click
         Dim frm As Form
         frm = New formCreateClinicalModel
@@ -3359,7 +3301,7 @@ Public Class Designer
 
     Private Sub MenuFileSpecialise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSpecialise.Click
         'Enable specialisation of the archetype
-        If MessageBox.Show(AE_Constants.Instance.Specialise & " " & Filemanager.Instance.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+        If MessageBox.Show(AE_Constants.Instance.Specialise & " " & mFileManager.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
             Dim s As String
             s = "-"
             While InStr(s, "-") > 0
@@ -3370,22 +3312,21 @@ Public Class Designer
                 Dim a_Term As RmTerm
 
                 'specialise concept
-                Filemanager.Instance.FileLoading = True
-                Filemanager.Instance.Archetype.Specialise(s, Filemanager.Instance.OntologyManager)
+                mFileManager.FileLoading = True
+                mFileManager.Archetype.Specialise(s, mFileManager.OntologyManager)
 
                 ' show the new archetype ID in the GUI
-                Me.lblArchetypeName.Text = Filemanager.Instance.Archetype.Archetype_ID.ToString
-                a_Term = Filemanager.Instance.OntologyManager.GetTerm(Filemanager.Instance.Archetype.ConceptCode)
+                Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
+                a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
                 Me.txtConceptInFull.Text = a_Term.Text
                 Me.TxtConceptDescription.Text = a_Term.Description
                 Me.gbSpecialisation.Visible = True
-
-                UpdateSpecialisationTree(a_Term.Text, Filemanager.Instance.Archetype.ConceptCode)
-
-                Filemanager.Instance.FileLoading = False
-                Filemanager.Instance.FileEdited = True
-                Filemanager.Instance.IsNew = True
-                Filemanager.Instance.FileName = ""    'new filename and needs to save as
+                UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
+                Me.MenuFileSpecialise.Visible = False
+                mFileManager.FileLoading = False
+                mFileManager.FileEdited = True
+                mFileManager.IsNew = True
+                mFileManager.FileName = ""    'new filename and needs to save as
             End If
         End If
     End Sub
@@ -3398,7 +3339,9 @@ Public Class Designer
             Case 1 ' open
                 OpenArchetype(sender, e)
             Case 2 ' Save
-                Filemanager.SaveFiles()
+                If Filemanager.SaveFiles(False) Then
+                    Me.MenuFileSpecialise.Visible = True
+                End If
             Case 3 ' separator
 
             Case 4 ' Print
@@ -3455,19 +3398,19 @@ Public Class Designer
 
     Private Sub AddLanguage(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAdd.Click, MenuLanguageAdd.Click
         If ChooseLanguage() Then
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub ChangeLanguage(ByVal LangCode As String)
-        If Filemanager.Instance.OntologyManager.LanguageCode <> LangCode Then
+        If mFileManager.OntologyManager.LanguageCode <> LangCode Then
             ' a new language is selected so populate the terms
-            Filemanager.Instance.OntologyManager.LanguageCode = LangCode
+            mFileManager.OntologyManager.LanguageCode = LangCode
 
             ' turn off updates from changed fields
-            Filemanager.Instance.FileLoading = True
+            mFileManager.FileLoading = True
             Translate(LangCode)
-            Filemanager.Instance.FileLoading = False
+            mFileManager.FileLoading = False
 
         End If
     End Sub
@@ -3660,17 +3603,17 @@ Public Class Designer
         Dim s As String
 
         ' Clear the definitions prior to rebuilding them
-        Filemanager.Instance.Archetype.ResetDefinitions()
-        Filemanager.Instance.Archetype.Description = mTabPageDescription.Description
+        mFileManager.Archetype.ResetDefinitions()
+        mFileManager.Archetype.Description = mTabPageDescription.Description
 
         If Me.ShowAsDraft Then
-            Filemanager.Instance.Archetype.LifeCycle = "Initial"
+            mFileManager.Archetype.LifeCycle = "Initial"
         End If
 
         ' For all ENTRY subtypes
 
         ' get the subject of data information
-        Select Case Filemanager.Instance.Archetype.Definition.Type
+        Select Case mFileManager.Archetype.Definition.Type
             Case StructureType.ENTRY, StructureType.EVALUATION, _
                 StructureType.OBSERVATION, StructureType.INSTRUCTION, _
                 StructureType.ACTION, StructureType.ADMIN_ENTRY
@@ -3678,11 +3621,11 @@ Public Class Designer
                 If Me.radioRestrictedSet.Checked Then
                     Dim cp As CodePhrase
 
-                    cp = CType(Filemanager.Instance.Archetype.Definition, RmEntry).SubjectOfData.Relationship
+                    cp = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
                     If cp Is Nothing Then
                         cp = New CodePhrase
                         cp.TerminologyID = "openehr"
-                        CType(Filemanager.Instance.Archetype.Definition, RmEntry).SubjectOfData.Relationship = cp
+                        CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship = cp
                     Else
                         cp.Codes.Clear()
                     End If
@@ -3691,12 +3634,12 @@ Public Class Designer
                     Next
                 End If
 
-                Select Case Filemanager.Instance.Archetype.Definition.Type
+                Select Case mFileManager.Archetype.Definition.Type
                     Case StructureType.INSTRUCTION
-                        Filemanager.Instance.Archetype.Definition.Data = mTabPageInstruction.SaveAsInstruction.Children
+                        mFileManager.Archetype.Definition.Data = mTabPageInstruction.SaveAsInstruction.Children
 
                     Case StructureType.ACTION
-                        Filemanager.Instance.Archetype.Definition.Data = mTabPageAction.SaveAsAction.Children
+                        mFileManager.Archetype.Definition.Data = mTabPageAction.SaveAsAction.Children
 
                     Case StructureType.OBSERVATION
                         For Each tp In Me.TabStructure.TabPages
@@ -3715,7 +3658,7 @@ Public Class Designer
                                             RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                         End If
                                         rm.Children.Add(RmHistory)
-                                        Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                        mFileManager.Archetype.Definition.Data.Add(rm)
                                     End If
 
                                 Case "tpStateStructure"
@@ -3723,7 +3666,7 @@ Public Class Designer
                                     If Not mTabPageDataStateStructure Is Nothing Then
                                         Dim rmState As New RmStructureCompound(StructureType.State.ToString, StructureType.State)
                                         rmState.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
-                                        Filemanager.Instance.Archetype.Definition.Data.Add(rmState)
+                                        mFileManager.Archetype.Definition.Data.Add(rmState)
                                         STATE_processed = True
                                     End If
                             End Select
@@ -3740,7 +3683,7 @@ Public Class Designer
                                     If Not mTabPageProtocolStructure Is Nothing Then
                                         Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                         rm.Children.add(mTabPageProtocolStructure.SaveAsStructure)
-                                        Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                        mFileManager.Archetype.Definition.Data.Add(rm)
                                     End If
 
                                 Case "tpRootState"
@@ -3778,7 +3721,7 @@ Public Class Designer
                                             Debug.Assert(False)
 
                                         End Try
-                                        Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                        mFileManager.Archetype.Definition.Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3794,7 +3737,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         rm.Children.add(mTabPageDataStructure.SaveAsStructure)
-                                        Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                        mFileManager.Archetype.Definition.Data.Add(rm)
                                     End If
 
                                 Case "tpStateStructure"
@@ -3803,7 +3746,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
                                         rm.Children.add(mTabPageDataStateStructure.SaveAsStructure)
-                                        Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                        mFileManager.Archetype.Definition.Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3818,7 +3761,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                         rm.Children.add(mTabPageProtocolStructure.SaveAsStructure)
-                                        Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                        mFileManager.Archetype.Definition.Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3837,7 +3780,7 @@ Public Class Designer
                                             If Not mTabPageDataStructure Is Nothing Then
                                                 RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                             End If
-                                            Filemanager.Instance.Archetype.Definition.Data.Add(RmHistory)
+                                            mFileManager.Archetype.Definition.Data.Add(RmHistory)
                                         End If
                                     End If
 
@@ -3847,7 +3790,7 @@ Public Class Designer
                                             Dim rm As RmStructureCompound
                                             rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                             rm.Children.add(mTabPageDataStructure.SaveAsStructure)
-                                            Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                            mFileManager.Archetype.Definition.Data.Add(rm)
                                         End If
                                     End If
 
@@ -3857,7 +3800,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
                                         rm.Children.add(mTabPageDataStateStructure.SaveAsStructure)
-                                        Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                        mFileManager.Archetype.Definition.Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3873,7 +3816,7 @@ Public Class Designer
                                     Dim rm As RmStructureCompound
                                     rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                     rm.Children.add(mTabPageProtocolStructure.SaveAsStructure)
-                                    Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                    mFileManager.Archetype.Definition.Data.Add(rm)
                             End Select
                         Next
 
@@ -3887,7 +3830,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         rm.Children.add(mTabPageDataStructure.SaveAsStructure)
-                                        Filemanager.Instance.Archetype.Definition.Data.Add(rm)
+                                        mFileManager.Archetype.Definition.Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3899,7 +3842,7 @@ Public Class Designer
                 ' Added try to this call as it now throws an exception if
                 ' it encounters any components that are not sections
                 Try
-                    Filemanager.Instance.Archetype.Definition = mTabPageSection.SaveAsSection()
+                    mFileManager.Archetype.Definition = mTabPageSection.SaveAsSection()
                 Catch e As Exception
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
@@ -3909,14 +3852,14 @@ Public Class Designer
                 ' Throws exception if encounters any 
                 ' components that are not sections
                 Try
-                    Filemanager.Instance.Archetype.Definition = mTabPageComposition.SaveAsComposition()
+                    mFileManager.Archetype.Definition = mTabPageComposition.SaveAsComposition()
                 Catch e As Exception
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
 
 
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                Filemanager.Instance.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
+                mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
         End Select
 
     End Sub
@@ -3934,8 +3877,10 @@ Public Class Designer
         Dim frmSplash As New Splash
         frmSplash.Show()
 
-        AddHandler Filemanager.Instance.IsFileDirtyChanged, AddressOf FileManager_IsFileDirtyChanged
-        Filemanager.Instance.ObjectToSave = Me
+        AddHandler Filemanager.IsFileDirtyChanged, AddressOf FileManager_IsFileDirtyChanged
+        mFileManager = New FileManagerLocal
+        Filemanager.Master = mFileManager
+        mFileManager.ObjectToSave = Me
 
         DesignerInitialiser() ' see Internal functions region
 
@@ -3953,7 +3898,7 @@ Public Class Designer
         Me.HelpProviderDesigner.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
         ' stop processing of most calls
-        Filemanager.Instance.FileLoading = True
+        mFileManager.FileLoading = True
 
         'Initialise the bindings of tables for all the lookups
         BindTables()
@@ -3970,7 +3915,7 @@ Public Class Designer
         If ArchetypeToOpen <> "" Then
             'command line variable has been set
             OpenArchetype(ArchetypeToOpen)
-            If Not Filemanager.Instance.ArchetypeAvailable Then
+            If Not mFileManager.ArchetypeAvailable Then
                 Me.Close()
             End If
         Else
@@ -3979,8 +3924,8 @@ Public Class Designer
 
                 ' new archetype
                 SetUpGUI(ReferenceModel.Instance.ArchetypedClass, True)
-                Filemanager.Instance.FileLoading = False
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileLoading = False
+                mFileManager.FileEdited = True
 
                 'Case 1  -  archetype openned - no action
                 ' Case 0  - exit application called from in set new archetype name
@@ -3988,7 +3933,7 @@ Public Class Designer
         End If
 
         'Add the display format buttons based on the parser types
-        For Each format_type As String In Filemanager.Instance.AvailableFormats
+        For Each format_type As String In mFileManager.AvailableFormats
             format_type = format_type.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
             If format_type <> "HTML" Then
                 Dim tbb As New ToolBarButton(format_type)
@@ -4018,7 +3963,7 @@ Public Class Designer
     Private Sub chkEventSeries_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEventSeries.CheckedChanged
 
         ' only proceed if in interactive state
-        If Filemanager.Instance.FileLoading Then Return
+        If mFileManager.FileLoading Then Return
 
         If chkEventSeries.Checked Then
             If mTabPagesCollection.Contains("tpDataEventSeries") Then
@@ -4047,33 +3992,33 @@ Public Class Designer
             Next
         End If
 
-        If Filemanager.Instance.FileLoading Then Exit Sub
+        If mFileManager.FileLoading Then Exit Sub
 
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
     End Sub
 
     Private Sub txtConceptInFull_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtConceptInFull.TextChanged
-        If Not Filemanager.Instance.FileLoading Then
-            Filemanager.Instance.OntologyManager.SetText(txtConceptInFull.Text, Filemanager.Instance.Archetype.ConceptCode)
-            Filemanager.Instance.FileEdited = True
+        If Not mFileManager.FileLoading Then
+            mFileManager.OntologyManager.SetText(txtConceptInFull.Text, mFileManager.Archetype.ConceptCode)
+            mFileManager.FileEdited = True
             Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & Me.txtConceptInFull.Text & "]"
 
             If Me.gbSpecialisation.Visible Then
-                UpdateSpecialisationTree(Me.txtConceptInFull.Text, Filemanager.Instance.Archetype.ConceptCode)
+                UpdateSpecialisationTree(Me.txtConceptInFull.Text, mFileManager.Archetype.ConceptCode)
             End If
         End If
     End Sub
 
     Private Sub TxtConceptDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TxtConceptDescription.TextChanged
-        If Not Filemanager.Instance.FileLoading Then
+        If Not mFileManager.FileLoading Then
             If Me.txtConceptInFull.Text = "" Then
                 MessageBox.Show(AE_Constants.Instance.Set_concept, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Me.TxtConceptDescription.Clear()
                 Me.txtConceptInFull.Focus()
             Else
-                Filemanager.Instance.OntologyManager.SetDescription(TxtConceptDescription.Text, Filemanager.Instance.Archetype.ConceptCode)
-                Filemanager.Instance.FileEdited = True
+                mFileManager.OntologyManager.SetDescription(TxtConceptDescription.Text, mFileManager.Archetype.ConceptCode)
+                mFileManager.FileEdited = True
             End If
         End If
     End Sub
@@ -4082,7 +4027,7 @@ Public Class Designer
         Dim tp As Crownwood.Magic.Controls.TabPage
         'Fixme check this runs still
 
-        If Filemanager.Instance.FileLoading Then Exit Sub
+        If mFileManager.FileLoading Then Exit Sub
 
         If Me.cbProtocol.Checked Then
             If Me.mTabPagesCollection.Contains("tpProtocol") Then
@@ -4127,7 +4072,7 @@ Public Class Designer
             'cannot have rootstate - 'Person State With EventSeries'
             Me.cbPersonState.Visible = False
 
-            If Filemanager.Instance.FileLoading Then Exit Sub
+            If mFileManager.FileLoading Then Exit Sub
 
             If mTabPagesCollection.Contains("tpStateStructure") Then
                 Me.TabStructure.TabPages.Add(Me.mTabPagesCollection.Item("tpStateStructure"))
@@ -4161,7 +4106,7 @@ Public Class Designer
 
         Else
 
-            If Filemanager.Instance.FileLoading Then
+            If mFileManager.FileLoading Then
                 Me.cbPersonState.Visible = True
             Else
                 Dim tp As Crownwood.Magic.Controls.TabPage
@@ -4174,12 +4119,12 @@ Public Class Designer
                             Exit For
                         End If
                     Next
-                    Filemanager.Instance.FileEdited = True
+                    mFileManager.FileEdited = True
                 Else
                     'cancel the checkChanged
-                    Filemanager.Instance.FileLoading = True
+                    mFileManager.FileLoading = True
                     Me.cbStructurePersonState.Checked = True
-                    Filemanager.Instance.FileLoading = False
+                    mFileManager.FileLoading = False
                 End If
             End If
         End If
@@ -4189,7 +4134,7 @@ Public Class Designer
     Private Sub cbPersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbPersonState.CheckedChanged
 
         ' ensure in interactive state
-        If Filemanager.Instance.FileLoading Then Return
+        If mFileManager.FileLoading Then Return
 
         If cbPersonState.Checked Then
             'cannot have state associated with structure
@@ -4229,13 +4174,13 @@ Public Class Designer
                 Next
             Else
                 'cancel the checkChanged
-                Filemanager.Instance.FileLoading = True
+                mFileManager.FileLoading = True
                 Me.cbPersonState.Checked = True
-                Filemanager.Instance.FileLoading = False
+                mFileManager.FileLoading = False
             End If
         End If
 
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
     End Sub
 
@@ -4252,11 +4197,11 @@ Public Class Designer
             Me.butRemoveFromRestrictedSet.Visible = False
         End If
 
-        If Not Filemanager.Instance Is Nothing Then
-            If Filemanager.Instance.FileLoading Then
+        If Not mFileManager Is Nothing Then
+            If mFileManager.FileLoading Then
                 Return
             Else
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
             End If
         End If
     End Sub
@@ -4267,13 +4212,13 @@ Public Class Designer
             ' edits of terms in the table may have taken place and will need to be 
             ' reflected in the GUI (via Translate)
 
-            If Not Filemanager.Instance.FileLoading Then
+            If Not mFileManager.FileLoading Then
                 ' if this is not due to a file load (e.g. opening a file)
 
-                If Not Filemanager.Instance.OntologyManager.TermDefinitionTable.GetChanges Is Nothing Then
+                If Not mFileManager.OntologyManager.TermDefinitionTable.GetChanges Is Nothing Then
                     ' and there have been some changes to the table
-                    Filemanager.Instance.OntologyManager.TermDefinitionTable.AcceptChanges()
-                    Filemanager.Instance.FileEdited = True
+                    mFileManager.OntologyManager.TermDefinitionTable.AcceptChanges()
+                    mFileManager.FileEdited = True
 
                     Me.Translate()
 
@@ -4308,13 +4253,13 @@ Public Class Designer
         ElseIf Me.TabMain.SelectedTab Is tpTerminology Then
             ' rebuild the ParseTree to ensure the
             ' paths are all available
-            If Filemanager.Instance.FileEdited Then
+            If mFileManager.FileEdited Then
                 PrepareToSave()
             End If
             'CHANGE - Sam Heard - 2004-05-21
             ' accept all changes in the termdefinitions table
             'so can test if any changes made
-            Filemanager.Instance.OntologyManager.TermDefinitionTable.AcceptChanges()
+            mFileManager.OntologyManager.TermDefinitionTable.AcceptChanges()
 
         End If
     End Sub
@@ -4322,7 +4267,7 @@ Public Class Designer
     Private Sub butAddTerminology_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddTerminology.Click, MenuTerminologyAdd.Click
         'If ChooseTerminology() Then
         If OceanArchetypeEditor.Instance.AddTerminology() Then
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -4346,7 +4291,7 @@ Public Class Designer
         Me.tpInterface.Controls.Add(Me.cbMandatory)
 
         ' ? use tabcontrol in the future for protocol and state
-        Select Case Filemanager.Instance.Archetype.RmEntity
+        Select Case mFileManager.Archetype.RmEntity
             Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                 Dim pos As New Point
                 pos.X = 10
@@ -4356,7 +4301,7 @@ Public Class Designer
                     Dim gb As New GroupBox
                     Dim rel_pos As New Point
 
-                    gb.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(275, "History")
+                    gb.Text = Filemanager.GetOpenEhrTerm(275, "History")
 
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
@@ -4379,7 +4324,7 @@ Public Class Designer
                     Dim gb As New GroupBox
                     Dim rel_pos As New Point
 
-                    gb.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(177, "State")
+                    gb.Text = Filemanager.GetOpenEhrTerm(177, "State")
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
                     gb.Location = pos
@@ -4397,7 +4342,7 @@ Public Class Designer
                     Dim gb, hist As GroupBox
                     Dim rel_pos As New Point
                     gb = New GroupBox
-                    gb.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(79, "Person State with History")
+                    gb.Text = Filemanager.GetOpenEhrTerm(79, "Person State with History")
                     gb.FlatStyle = FlatStyle.Popup
                     ' add EventSeries
                     pos.X = 10
@@ -4406,7 +4351,7 @@ Public Class Designer
                     ' now add the EventSeries element
                     hist = New GroupBox
                     Dim hist_pos As New Point
-                    hist.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(275, "History")
+                    hist.Text = Filemanager.GetOpenEhrTerm(275, "History")
                     hist.FlatStyle = FlatStyle.Popup
                     hist_pos.X = 20
                     hist_pos.Y = 20
@@ -4433,7 +4378,7 @@ Public Class Designer
                     Dim gb As New GroupBox
                     Dim rel_pos As New Point
 
-                    gb.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(78, "Protocol")
+                    gb.Text = Filemanager.GetOpenEhrTerm(78, "Protocol")
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
                     gb.Location = pos
@@ -4512,7 +4457,7 @@ Public Class Designer
                     WriteRichText()
                 Else
                     Me.PrepareToSave()
-                    Me.mRichTextArchetype.Text = Filemanager.Instance.Archetype.SerialisedArchetype(s)
+                    Me.mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
                 End If
         End Select
 
@@ -4521,6 +4466,7 @@ Public Class Designer
     Private Sub ToolBarRTF_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBarRTF.ButtonClick
 
         Static Dim format As String = "rtf" ' remember the format that has been set
+        Dim saveFile As New SaveFileDialog
 
         Dim s As String = CStr(e.Button.Tag).ToLower(System.Globalization.CultureInfo.InvariantCulture)
 
@@ -4532,13 +4478,13 @@ Public Class Designer
 
                 Dim ds As New Windows.Forms.RichTextBoxStreamType
 
-                Me.SaveFileArchetype.Filter = format.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|*." & format
-                Me.SaveFileArchetype.FileName = Filemanager.Instance.Archetype.Archetype_ID.ToString & "." & format
-                Me.SaveFileArchetype.OverwritePrompt = True
-                Me.SaveFileArchetype.AddExtension = True
-                Me.SaveFileArchetype.Title = AE_Constants.Instance.MessageBoxCaption
-                Me.SaveFileArchetype.ValidateNames = True
-                If Me.SaveFileArchetype.ShowDialog(Me) = DialogResult.OK Then
+                saveFile.Filter = format.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|*." & format
+                saveFile.FileName = mFileManager.Archetype.Archetype_ID.ToString & "." & format
+                saveFile.OverwritePrompt = True
+                saveFile.AddExtension = True
+                saveFile.Title = AE_Constants.Instance.MessageBoxCaption
+                saveFile.ValidateNames = True
+                If saveFile.ShowDialog(Me) = DialogResult.OK Then
                     Select Case format
                         Case "rtf"
                             ds = RichTextBoxStreamType.RichNoOleObjs
@@ -4547,9 +4493,9 @@ Public Class Designer
                     End Select
 
                     Try
-                        Me.mRichTextArchetype.SaveFile(Me.SaveFileArchetype.FileName, ds)
+                        Me.mRichTextArchetype.SaveFile(saveFile.FileName, ds)
                     Catch
-                        MessageBox.Show(AE_Constants.Instance.Error_saving & Filemanager.Instance.Archetype.Archetype_ID.ToString & ".rtf", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        MessageBox.Show(AE_Constants.Instance.Error_saving & mFileManager.Archetype.Archetype_ID.ToString & ".rtf", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
                 End If
             Case "print"
@@ -4574,14 +4520,14 @@ Public Class Designer
                     WriteRichText()
                 Else
                     Me.PrepareToSave()
-                    Me.mRichTextArchetype.Text = Filemanager.Instance.Archetype.SerialisedArchetype(s)
+                    Me.mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
                 End If
         End Select
     End Sub
 
     Private Sub butAddSujectOfData_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddToRestrictedSet.Click
         If ChooseRestrictionSet() Then
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -4592,7 +4538,7 @@ Public Class Designer
         If i > -1 Then
             If MessageBox.Show(AE_Constants.Instance.Remove & Me.listRestrictionSet.SelectedItem.text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
                 Me.listRestrictionSet.Items.RemoveAt(i)
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
             End If
         End If
     End Sub
@@ -4613,11 +4559,11 @@ Public Class Designer
     End Sub
 
     Private Sub menuEditArchID_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuEditArchID.Click
-        Dim arch_id As String = Filemanager.Instance.Archetype.Archetype_ID.Concept
+        Dim arch_id As String = mFileManager.Archetype.Archetype_ID.Concept
         Dim i As Integer = arch_id.LastIndexOf("-")
         Dim new_concept As String
 
-        new_concept = OceanArchetypeEditor.Instance.GetInput(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(54, "Concept"))
+        new_concept = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"))
 
         If new_concept = "" Then
             Return
@@ -4629,11 +4575,11 @@ Public Class Designer
             new_concept = new_concept.Replace("-", "_")
         End If
 
-        Filemanager.Instance.Archetype.Archetype_ID.Concept = new_concept
+        mFileManager.Archetype.Archetype_ID.Concept = new_concept
         ' force save as to new file
-        Filemanager.Instance.IsNew = True
-        Filemanager.Instance.FileEdited = True
-        Me.lblArchetypeName.Text = Filemanager.Instance.Archetype.Archetype_ID.ToString
+        mFileManager.IsNew = True
+        mFileManager.FileEdited = True
+        Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
 
     End Sub
 
@@ -4669,7 +4615,6 @@ Public Class Designer
         BuildInterface()
     End Sub
 
- 
 End Class
 
 

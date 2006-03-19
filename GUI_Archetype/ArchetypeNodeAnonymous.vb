@@ -60,21 +60,21 @@ Public Class ArchetypeNodeAnonymous
             Case StructureType.Slot
                 Select Case CType(mRMStructure, RmSlot).SlotConstraint.RM_ClassType
                     Case StructureType.ENTRY
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(559, "ENTRY")
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(559, "ENTRY")
                     Case StructureType.OBSERVATION
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(554, "OBSERVATION")
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(554, "OBSERVATION")
                     Case StructureType.EVALUATION
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(555, "EVALUATION")
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(555, "EVALUATION")
                     Case StructureType.INSTRUCTION
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(557, "INSTRUCTION")
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(557, "INSTRUCTION")
                     Case StructureType.ACTION
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(556, "ACTION")
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(556, "ACTION")
                     Case StructureType.ADMIN_ENTRY
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(560, "Administration ENTRY")
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(560, "Administration ENTRY")
                     Case StructureType.SECTION
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(314, "SECTION")
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(314, "SECTION")
                     Case StructureType.Cluster
-                        mText = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(313, "Cluster")
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(313, "Cluster")
                 End Select
             Case Else
                 Debug.Assert(False)
@@ -135,20 +135,20 @@ Public Class ArchetypeNodeAnonymous
             s = "<table><tr><td width=""" & (level * 20).ToString & """></td><td><table>"
 
             s &= Environment.NewLine & "<tr>"
-            s &= Environment.NewLine & "<td>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(312, "Slot") & "</td>"
+            s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(312, "Slot") & "</td>"
             If slot_constraint.RM_ClassType = StructureType.SECTION Then
-                s &= Environment.NewLine & "<td>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(172, "Include sections") & "</td>"
-                s &= Environment.NewLine & "<td>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(173, "Exclude sections") & "</td>"
+                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(172, "Include sections") & "</td>"
+                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(173, "Exclude sections") & "</td>"
             ElseIf slot_constraint.RM_ClassType = StructureType.ENTRY Then
-                s &= Environment.NewLine & "<td>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(175, "Include entries") & "</td>"
-                s &= Environment.NewLine & "<td>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(176, "Exclude entries") & "</td>"
+                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(175, "Include entries") & "</td>"
+                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(176, "Exclude entries") & "</td>"
             End If
             s &= Environment.NewLine & "</tr>"
             s &= Environment.NewLine & "<tr>"
             s &= Environment.NewLine & "<td>" & slot_constraint.RM_ClassType.ToString & "</td>"
             If slot_constraint.Include.Count > 0 Then
                 If slot_constraint.IncludeAll Then
-                    s &= Environment.NewLine & "<td>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(11, "Allow all") & "</td>"
+                    s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(11, "Allow all") & "</td>"
                 Else
                     s &= Environment.NewLine & "<td>"
                     For Each statement As String In slot_constraint.Include
@@ -159,7 +159,7 @@ Public Class ArchetypeNodeAnonymous
             End If
             If slot_constraint.Exclude.Count > 0 Then
                 If slot_constraint.ExcludeAll Then
-                    s &= Environment.NewLine & "<td>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(101, "All") & "</td>"
+                    s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(101, "All") & "</td>"
                 Else
                     s &= Environment.NewLine & "<td>"
                     For Each statement As String In slot_constraint.Exclude
@@ -237,4 +237,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

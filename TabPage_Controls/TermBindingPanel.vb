@@ -525,13 +525,13 @@ Public Class TermBindingPanel
         Try
 
             PathsTreeView.SuspendLayout()
-            Dim languageCode As String = Filemanager.Instance.OntologyManager.LanguageCode
+            Dim languageCode As String = mFileManager.OntologyManager.LanguageCode
 
             ' get the paths with the language labels
-            Dim logicalPaths As String() = Filemanager.Instance.Archetype.Paths(languageCode, True)
+            Dim logicalPaths As String() = mFileManager.Archetype.Paths(languageCode, True)
 
             ' get the paths with the NodeId labels
-            Dim physicalPaths As String() = Filemanager.Instance.Archetype.Paths(languageCode, False)
+            Dim physicalPaths As String() = mFileManager.Archetype.Paths(languageCode, False)
 
             For i As Integer = 0 To logicalPaths.Length - 1
                 Dim clean_s As String = ""
@@ -596,7 +596,7 @@ Public Class TermBindingPanel
                         'Dim nodeId As String = z(j)
 
                         If Not nodeFound Then
-                            node = New TermNode(nodeId, nodeText)
+                            node = New TermNode(nodeId, nodeText, mFileManager)
                             'node = New TermNode(nodeId)
                             nodes.Add(node)
 
@@ -634,7 +634,7 @@ Public Class TermBindingPanel
         Static imageTermBindingDataView As DataView
         If imageTermBindingDataView Is Nothing Then
 
-            imageTermBindingDataView = New DataView(Filemanager.Instance.OntologyManager.TermBindingsTable)
+            imageTermBindingDataView = New DataView(mFileManager.OntologyManager.TermBindingsTable)
         End If
 
         For Each node As TermNode In aNodes
@@ -669,16 +669,16 @@ Public Class TermBindingPanel
             Try
 
                 ' Term Binding data view
-                mTermBindingView = New DataView(Filemanager.Instance.OntologyManager.TermBindingsTable)
+                mTermBindingView = New DataView(mFileManager.OntologyManager.TermBindingsTable)
 
                 mTermBindingView.AllowNew = False
 
-                mTermBindingCriteriaView = New DataView(Filemanager.Instance.OntologyManager.TermBindingCriteriaTable)
+                mTermBindingCriteriaView = New DataView(mFileManager.OntologyManager.TermBindingCriteriaTable)
                 mTermBindingCriteriaView.AllowNew = False
 
-                Me.TerminologyComboBox.DataSource = Filemanager.Instance.OntologyManager.TerminologiesTable
+                Me.TerminologyComboBox.DataSource = mFileManager.OntologyManager.TerminologiesTable
 
-                mFileManager = Filemanager.Instance
+                mFileManager = mFileManager
 
                 If PathsTreeView.Nodes.Count = 0 Then
                     PopulateNodeTree()
@@ -697,7 +697,7 @@ Public Class TermBindingPanel
     Private Sub mFileManager_ArchetypeLoaded(ByVal sender As Object, ByVal e As System.EventArgs) Handles mFileManager.ArchetypeLoaded
         PathsTreeView.Nodes.Clear()
         PopulateNodeTree()
-        'PopulateNodeTree(FileManager.Instance.Archetype.Definition.Data)
+        'PopulateNodeTree(mFileManager.Archetype.Definition.Data)
 
     End Sub
 
@@ -795,14 +795,14 @@ Public Class TermBindingPanel
 
     Private Sub AddPathToBindings(ByVal aPath As String, ByVal aCode As String, Optional ByVal aCriteria As String = "")
 
-        Dim newRow As DataRow = Filemanager.Instance.OntologyManager.TermBindingsTable.NewRow
+        Dim newRow As DataRow = mFileManager.OntologyManager.TermBindingsTable.NewRow
         newRow(0) = Me.TerminologyComboBox.SelectedValue
         newRow(1) = aPath
         newRow("code") = aCode
 
-        Filemanager.Instance.OntologyManager.TermBindingsTable.Rows.Add(newRow)
+        mFileManager.OntologyManager.TermBindingsTable.Rows.Add(newRow)
 
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
         Debug.Assert(BindingList.Items.Count > 0, "BindingList not updated")
         If BindingList.Items.Count > 0 Then
@@ -814,7 +814,7 @@ Public Class TermBindingPanel
 
         Dim SelectedRows As DataRow()
 
-        SelectedRows = Filemanager.Instance.OntologyManager.TermBindingsTable.Select _
+        SelectedRows = mFileManager.OntologyManager.TermBindingsTable.Select _
             ("[Terminology]='" & CStr(Me.TerminologyComboBox.SelectedValue) & "'" _
             & " AND [Path]='" & aPath & "'" _
             & " AND [Code]='" & aCode & "'")
@@ -823,9 +823,9 @@ Public Class TermBindingPanel
             d_row.Delete()
         Next
 
-        Filemanager.Instance.OntologyManager.TermBindingsTable.AcceptChanges()
+        mFileManager.OntologyManager.TermBindingsTable.AcceptChanges()
 
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
         If BindingList.Items.Count > 0 Then
             BindingList.Items(BindingList.Items.Count - 1).Selected = True
@@ -837,7 +837,7 @@ Public Class TermBindingPanel
 
         Try
             If OceanArchetypeEditor.Instance.AddTerminology() Then
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
 
                 TerminologyComboBox.SelectedIndex = TerminologyComboBox.Items.Count - 1
                 SetTermBindingFilter()
@@ -899,7 +899,7 @@ Public Class TermBindingPanel
             Me.NodePathLabel.Text = "//" & Me.NodePathLabel.Text
         End If
 
-        If Filemanager.Instance.OntologyManager.hasTermBinding(CStr(TerminologyComboBox.SelectedValue), CodeTextBox.Text, NodePathLabel.Text) Then
+        If mFileManager.OntologyManager.hasTermBinding(CStr(TerminologyComboBox.SelectedValue), CodeTextBox.Text, NodePathLabel.Text) Then
             If MessageBox.Show(AE_Constants.Instance.Must_add_criteria, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = DialogResult.OK Then
                 AddBindingGroupBox.Visible = False
                 AddCriteriaButton_Click(sender, e)
@@ -990,7 +990,7 @@ Public Class TermBindingPanel
             If index >= 0 Then
                 Dim a_code As String = CStr(mTermBindingView.Item(index).Item("Code"))
                 Dim a_path As String = CStr(mTermBindingView.Item(index).Item("Path"))
-                If Filemanager.Instance.OntologyManager.hasTermBinding(CStr(TerminologyComboBox.SelectedValue), a_code, a_path) Then
+                If mFileManager.OntologyManager.hasTermBinding(CStr(TerminologyComboBox.SelectedValue), a_code, a_path) Then
                     Try
                         RemovePathFromBindings(a_path, a_code)
                     Catch ex As Exception
@@ -1022,7 +1022,7 @@ Public Class TermBindingPanel
 
             mCurrentTermNode = CType(PathsTreeView.SelectedNode, TermNode)
 
-            mCurrentBindingCriteria = New BindingCriteria
+            mCurrentBindingCriteria = New BindingCriteria(mFileManager)
 
             PopulateCriteriaPath()
 
@@ -1089,7 +1089,7 @@ Public Class TermBindingPanel
         End If
 
         If Not termConstraint Is Nothing Then
-            mCriteriaElementView = ArchetypeView.ElementView(termConstraint)
+            mCriteriaElementView = ArchetypeView.ElementView(termConstraint, mFileManager)
             mCriteriaElementView.Location = Me.CriteriaValueTextBox.Location 'New Point(520, 64)
             AddBindingCriteriaGroupBox.Controls.Add(mCriteriaElementView)
         End If
@@ -1113,15 +1113,15 @@ Public Class TermBindingPanel
             Dim terminology As String = CStr(bindingRowView.Item("Terminology"))
             Dim code As String = CStr(bindingRowView.Item("Code"))
 
-            Dim newRow As DataRow = Filemanager.Instance.OntologyManager.TermBindingCriteriaTable.NewRow
+            Dim newRow As DataRow = mFileManager.OntologyManager.TermBindingCriteriaTable.NewRow
             newRow(0) = terminology
             newRow(1) = path
             newRow("code") = code
             newRow("Criteria") = mCurrentBindingCriteria.ToPhysicalCriteria
 
-            Filemanager.Instance.OntologyManager.TermBindingCriteriaTable.Rows.Add(newRow)
+            mFileManager.OntologyManager.TermBindingCriteriaTable.Rows.Add(newRow)
 
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
 
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
@@ -1161,7 +1161,7 @@ Public Class TermBindingPanel
             For Each criteriaRow As DataRowView In mTermBindingCriteriaView
 
                 Dim criteriaExpression As String = CStr(criteriaRow.Item("criteria"))
-                Dim criteria As New BindingCriteria(criteriaExpression)
+                Dim criteria As New BindingCriteria(criteriaExpression, mFileManager)
 
                 BindingCriteriaListBox.Items.Add(criteria)
 
@@ -1182,14 +1182,16 @@ Public Class TermBindingPanel
     End Sub
 
     Class TermNode : Inherits TreeNode
+        Private mFileManager As FileManagerLocal
 
-        Public Sub New(ByVal aNodeId As String, ByVal aText As String)
+        Public Sub New(ByVal aNodeId As String, ByVal aText As String, ByVal a_filemanager As FileManagerLocal)
 
             MyBase.New(aText)
+            mFileManager = a_filemanager
             Me.NodeId = aNodeId
 
             If NodeTerm <> "structure" Then
-                Dim term As RmTerm = Filemanager.Instance.OntologyManager.GetTerm(NodeTerm)
+                Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(NodeTerm)
                 If term.Text <> "" Then
                     MyBase.Text = term.Text
                 End If
@@ -1245,10 +1247,10 @@ Public Class TermBindingPanel
         End Property
 
         'Public Sub Translate()
-        '    Dim term As Term = FileManager.Instance.OntologyManager.GetTerm(mNodeId)
+        '    Dim term As Term = mFileManager.OntologyManager.GetTerm(mNodeId)
         '    MyBase.Text = term.Text
         '    'sDescription = term.Description
-        '    'term = FileManager.Instance.OntologyManager.GetTerm(Item.RuntimeName)
+        '    'term = mFileManager.OntologyManager.GetTerm(Item.RuntimeName)
         '    'sConstraintText = term.Text
         '    For Each node As TermNode In Me.Nodes
         '        node.Translate()
@@ -1258,7 +1260,7 @@ Public Class TermBindingPanel
         ReadOnly Property Constraint() As Constraint
             Get
                 Dim rmClass As RmStructure
-                rmClass = Filemanager.Instance.Archetype.Definition.GetChildByNodeId(NodeTerm)
+                rmClass = mFileManager.Archetype.Definition.GetChildByNodeId(NodeTerm)
 
                 If TypeOf rmClass Is RmElement Then
                     Return CType(rmClass, RmElement).Constraint
@@ -1272,6 +1274,7 @@ Public Class TermBindingPanel
         Public NodeOperand As String
         Public Operator As String = "="
         Public ValueOperand As String
+        Private mFileManager As FileManagerLocal
 
         Public ReadOnly Property NodeText() As String
             Get
@@ -1287,7 +1290,7 @@ Public Class TermBindingPanel
                             Debug.Assert(j > 0)
                             Dim partTerm As String = part.Substring(i, j - i)
 
-                            Dim term As RmTerm = Filemanager.Instance.OntologyManager.GetTerm(partTerm)
+                            Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(partTerm)
                             If term.Text <> "" Then
                                 part = term.Text
                             Else
@@ -1306,7 +1309,7 @@ Public Class TermBindingPanel
                     Return path
 
                 Else
-                    Dim nodeTerm As RmTerm = Filemanager.Instance.OntologyManager.GetTerm(NodeOperand)
+                    Dim nodeTerm As RmTerm = mFileManager.OntologyManager.GetTerm(NodeOperand)
 
                     Return nodeTerm.Text
 
@@ -1358,7 +1361,7 @@ Public Class TermBindingPanel
                 End If
 
                 Dim rmClass As RmStructure
-                rmClass = Filemanager.Instance.Archetype.Definition.Data.GetChildByNodeId(nodeId)
+                rmClass = mFileManager.Archetype.Definition.Data.GetChildByNodeId(nodeId)
 
                 Debug.Assert(TypeOf rmClass Is RmElement)
                 Dim valueConstraint As Constraint = CType(rmClass, RmElement).Constraint
@@ -1379,11 +1382,12 @@ Public Class TermBindingPanel
             End Get
         End Property
 
-        Public Sub New()
-            ' noop
+        Public Sub New(ByVal a_filemanager As FileManagerLocal)
+            mFileManager = a_filemanager
         End Sub
 
-        Public Sub New(ByVal CriteriaExpression As String)
+        Public Sub New(ByVal CriteriaExpression As String, ByVal a_filemanager As FileManagerLocal)
+            mFileManager = a_filemanager
             Dim criteriaParts() As String = CriteriaExpression.Split(" "c)
             Debug.Assert(criteriaParts.Length >= 3)
 

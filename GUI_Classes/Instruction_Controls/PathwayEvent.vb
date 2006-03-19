@@ -8,6 +8,7 @@ Public Class PathwayEvent
     Private mText As String
     Private mDescription As String
     Private mItem As RmPathwayStep
+    Private mFileManager As FileManagerLocal
 
     Public Event SelectionChanged(ByVal sender As Object, ByVal e As EventArgs)
     Public Event Deleted(ByVal sender As Object, ByVal e As EventArgs)
@@ -28,23 +29,25 @@ Public Class PathwayEvent
         End If
     End Sub
 
-    Sub New(ByVal DefaultMachineStateType As StateMachineType)
+    Sub New(ByVal DefaultMachineStateType As StateMachineType, ByVal a_filemanager As FileManagerLocal)
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
-        Dim a_term As RmTerm = FileManager.Instance.OntologyManager.AddTerm("New Pathway step")
+        mFileManager = a_filemanager
+        Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm("New Pathway step")
         mText = a_term.Text
         mItem = New RmPathwayStep(a_term.Code, DefaultMachineStateType)
         Me.BackColor = OceanArchetypeEditor.Instance.Options.StateMachineColour(DefaultMachineStateType)
         MenuEdit_Click(Me, New EventArgs)
     End Sub
 
-    Sub New(ByVal rm As RmPathwayStep)
+    Sub New(ByVal rm As RmPathwayStep, ByVal a_filemanager As FileManagerLocal)
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
+        mFileManager = a_filemanager
         mItem = rm
         Me.Translate()
         If mItem.HasAlternativeState Then
@@ -173,7 +176,7 @@ Public Class PathwayEvent
     Public Sub Translate()
         Dim a_term As RmTerm
 
-        a_term = Filemanager.Instance.OntologyManager.GetTerm(mItem.NodeId)
+        a_term = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
         mText = a_term.Text
         mDescription = a_term.Description
     End Sub
@@ -246,9 +249,9 @@ Public Class PathwayEvent
         mText = a_term.Text
         mDescription = a_term.Description
 
-        Filemanager.Instance.OntologyManager.SetText(a_term)
+        mFileManager.OntologyManager.SetText(a_term)
         TextRectangle(mText, Me.CreateGraphics)
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
     End Sub
 
@@ -270,6 +273,7 @@ Public Class PathwayEvent
         p = Me.Parent
         p.Controls.Remove(Me)
         Me.mItem = Nothing
+        mFileManager.FileEdited = True
         RaiseEvent Deleted(p, New EventArgs)
     End Sub
 

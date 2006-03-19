@@ -452,11 +452,11 @@ Public Class TreeStructure
     Protected Overrides Sub SetUpAddElementMenu()
         Dim cm As New ContextMenu
         Dim mi, a_mi As MenuItem
-        a_mi = New MenuItem(mFileManager.OntologyManager.GetOpenEHRTerm(109, "New element"))
+        a_mi = New MenuItem(Filemanager.GetOpenEhrTerm(109, "New element"))
         cm.MenuItems.Add(a_mi)
         a_mi.MergeMenu(mConstraintMenu)
 
-        mAddClusterMenuItem = New MenuItem(mFileManager.OntologyManager.GetOpenEHRTerm(322, "New cluster"))
+        mAddClusterMenuItem = New MenuItem(Filemanager.GetOpenEhrTerm(322, "New cluster"))
         AddHandler mAddClusterMenuItem.Click, AddressOf AddNewCluster
         cm.MenuItems.Add(mAddClusterMenuItem)
 
@@ -468,7 +468,7 @@ Public Class TreeStructure
         Dim rw, rw1 As DataRow
         Dim a_node As ArchetypeTreeNode
 
-        tvNode = New ArchetypeTreeNode(mFileManager.OntologyManager.GetOpenEHRTerm(109, "New Element"), StructureType.Element, mFileManager)
+        tvNode = New ArchetypeTreeNode(Filemanager.GetOpenEhrTerm(109, "New Element"), StructureType.Element, mFileManager)
         ' set the image indexes
         tvNode.ImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type)
         tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type, False, True)
@@ -506,7 +506,7 @@ Public Class TreeStructure
         '        Dim a_node As ArchetypeTreeNode
         Dim s As String
 
-        s = mFileManager.OntologyManager.GetOpenEHRTerm(322, "New cluster")
+        s = Filemanager.GetOpenEhrTerm(322, "New cluster")
         tvNode = New ArchetypeTreeNode(s, StructureType.Cluster, mFileManager)
         selNode = CType(Me.tvTree.SelectedNode, ArchetypeTreeNode)
 
@@ -716,10 +716,10 @@ Public Class TreeStructure
         Else
             text &= Environment.NewLine & "<tr  bgcolor=""" & BackGroundColour & """>"
         End If
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(54, "Concept") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""40%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(113, "Description") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(87, "Constraints") & "</h4></td>"
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(438, "Values") & "</h4></td>"
+        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(54, "Concept") & "</h4></td>"
+        text &= Environment.NewLine & "<td width = ""40%""><h4>" & Filemanager.GetOpenEhrTerm(113, "Description") & "</h4></td>"
+        text &= Environment.NewLine & "<td width = ""20%""><h4>" & Filemanager.GetOpenEhrTerm(87, "Constraints") & "</h4></td>"
+        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(438, "Values") & "</h4></td>"
         text &= Environment.NewLine & "</tr>"
 
         text &= Environment.NewLine & TreeToHTML(tvTree.Nodes, 0)
@@ -777,7 +777,7 @@ Public Class TreeStructure
             Me.MenuRemoveItemAndReferences.Text = tvNode.Text
 
             If tvNode.Item.RM_Class.Type = StructureType.Element Then
-                'If Filemanager.Instance.OntologyManager.NumberOfSpecialisations = 0 Then
+                'If mFileManager.OntologyManager.NumberOfSpecialisations = 0 Then
                 If Not CType(tvNode.Item.RM_Class, RmElement).isReference Then
                     Me.MenuAddReference.Visible = True
                 End If

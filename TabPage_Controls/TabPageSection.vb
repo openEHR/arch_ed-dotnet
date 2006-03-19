@@ -22,6 +22,7 @@ Public Class TabPageSection
     Private MenuItemSpecialise As MenuItem
     Private mConstraintDisplay As ArchetypeNodeConstraintControl
     Private mRootOfComposition As Boolean = False
+    Private mFileManager As FileManagerLocal
 
 
 #Region " Windows Form Designer generated code "
@@ -33,6 +34,10 @@ Public Class TabPageSection
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
+
+        If Not Me.DesignMode Then
+            mFileManager = Filemanager.Master
+        End If
 
     End Sub
 
@@ -378,7 +383,7 @@ Public Class TabPageSection
                 tvSection.Nodes.Add(n)
             Next
         Else
-            Dim a_section_tree_node As New ArchetypeTreeNode(a_section, Filemanager.Instance)
+            Dim a_section_tree_node As New ArchetypeTreeNode(a_section, mFileManager)
 
             
             Me.tvSection.Nodes.Add(a_section_tree_node)
@@ -386,7 +391,7 @@ Public Class TabPageSection
             For Each rm_node In a_section.Children
 
                 If TypeOf rm_node Is RmSection Then
-                    Dim n As New ArchetypeTreeNode(CType(rm_node, RmStructureCompound), Filemanager.Instance)
+                    Dim n As New ArchetypeTreeNode(CType(rm_node, RmStructureCompound), mFileManager)
                     a_section_tree_node.Nodes.Add(n)
                     ProcessSection(rm_node, n.Nodes)
                 ElseIf TypeOf rm_node Is RmSlot Then
@@ -414,9 +419,9 @@ Public Class TabPageSection
         TranslateSectionNodes(Me.tvSection.Nodes)
     End Sub
 
-    Private Sub TranslateGUI()
-        Me.cbFixed.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(136, "Fixed")
-        Me.cbOrdered.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(162, "Ordered")
+    Public Sub TranslateGUI()
+        Me.cbFixed.Text = Filemanager.GetOpenEhrTerm(136, "Fixed")
+        Me.cbOrdered.Text = Filemanager.GetOpenEhrTerm(162, "Ordered")
     End Sub
 
 #End Region
@@ -470,7 +475,7 @@ Public Class TabPageSection
             Try
                 Me.SuspendLayout()
                 mConstraintDisplay.ShowConstraint(a_node.RM_Class.Type, _
-                     False, a_node.Item, Filemanager.Instance)
+                     False, a_node.Item, mFileManager)
                 Me.ResumeLayout()
             Catch
                 Debug.Assert(False, "Type is not catered for")
@@ -485,11 +490,11 @@ Public Class TabPageSection
 
 
     Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbOrdered.Click
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub cbFixed_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFixed.Click
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub TabPageSection_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -534,7 +539,7 @@ Public Class TabPageSection
                 Me.tvSection.SelectedNode.Parent.Nodes.Add(tvNode)
             End If
         End If
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
         tvNode.EnsureVisible()
         Me.tvSection.SelectedNode = tvNode
 
@@ -547,8 +552,8 @@ Public Class TabPageSection
         Debug.Assert(mRootOfComposition = False)
 
         'Fixme
-        s = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(2000, "New Section")
-        Dim tvNode As New ArchetypeTreeNode(s, StructureType.SECTION, Filemanager.Instance)
+        s = Filemanager.GetOpenEhrTerm(2000, "New Section")
+        Dim tvNode As New ArchetypeTreeNode(s, StructureType.SECTION, mFileManager)
 
         If Me.tvSection.SelectedNode Is Nothing Then
             Me.tvSection.Nodes.Add(tvNode)
@@ -563,7 +568,7 @@ Public Class TabPageSection
                 End If
             End If
         End If
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
         tvNode.EnsureVisible()
         Me.tvSection.SelectedNode = tvNode
         tvNode.BeginEdit()
@@ -579,11 +584,11 @@ Public Class TabPageSection
 
 
         If mRootOfComposition Then
-            mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(312, "Slot"))
+            mi = New MenuItem(Filemanager.GetOpenEhrTerm(312, "Slot"))
             cm.MenuItems.Add(mi)
 
             For Each strtype As StructureType In ReferenceModel.Instance.validArchetypeSlots(StructureType.COMPOSITION)
-                mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(strtype, strtype.ToString))
+                mi = New MenuItem(Filemanager.GetOpenEhrTerm(strtype, strtype.ToString))
 
                 AddHandler mi.Click, AddressOf AddSlot
                 cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)
@@ -592,26 +597,26 @@ Public Class TabPageSection
         Else
 
             If tvSection.SelectedNode Is Nothing Then
-                mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(314, "Section"))
+                mi = New MenuItem(Filemanager.GetOpenEhrTerm(314, "Section"))
                 AddHandler mi.Click, AddressOf AddSection
                 cm.MenuItems.Add(mi)
             Else
                 If CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = StructureType.SECTION Then
-                    mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(314, "Section"))
+                    mi = New MenuItem(Filemanager.GetOpenEhrTerm(314, "Section"))
                     AddHandler mi.Click, AddressOf AddSection
                     cm.MenuItems.Add(mi)
-                    mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(558, "Sub-Section"))
+                    mi = New MenuItem(Filemanager.GetOpenEhrTerm(558, "Sub-Section"))
                     AddHandler mi.Click, AddressOf AddSection
                     cm.MenuItems.Add(mi)
                 End If
             End If
 
             If Me.tvSection.GetNodeCount(False) > 0 Then
-                mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(312, "Slot"))
+                mi = New MenuItem(Filemanager.GetOpenEhrTerm(312, "Slot"))
                 cm.MenuItems.Add(mi)
 
                 For Each strtype As StructureType In ReferenceModel.Instance.validArchetypeSlots(StructureType.SECTION)
-                    mi = New MenuItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(strtype, strtype.ToString))
+                    mi = New MenuItem(Filemanager.GetOpenEhrTerm(strtype, strtype.ToString))
 
                     AddHandler mi.Click, AddressOf AddSlot
                     cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)
@@ -649,7 +654,7 @@ Public Class TabPageSection
             If i > 0 Then
                 tvN.Remove()
                 tvN_C.Insert((i - 1), tvN)
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
                 Me.tvSection.SelectedNode = tvN
             End If
         End If
@@ -674,7 +679,7 @@ Public Class TabPageSection
             If Not tvN.NextNode Is Nothing Then
                 tvN.Remove()
                 tvN_C.Insert((i + 1), tvN)
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
                 Me.tvSection.SelectedNode = tvN
             End If
         End If
@@ -749,7 +754,7 @@ Public Class TabPageSection
                     End If
 
                 End If
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
                 mNodeDragged.EnsureVisible()
                 Me.tvSection.SelectedNode = mNodeDragged
             End If

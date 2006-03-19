@@ -219,7 +219,7 @@ Public Class SimpleStructure
 
 
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
-        mElement = New ArchetypeElement(mFileManager.OntologyManager.GetOpenEHRTerm(109, "New Element"), mFileManager)
+        mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
         mElement.Constraint = a_constraint
         mElement.Occurrences.MaxCount = 1
         Me.txtSimple.Text = mElement.Text
@@ -269,10 +269,10 @@ Public Class SimpleStructure
             text &= Environment.NewLine & "<tr  bgcolor=""" & BackGroundColour & """>"
         End If
 
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(54, "Concept") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""40%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(113, "Description") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(87, "Constraints") & "</h4></td>"
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(438, "Values") & "</h4></td>"
+        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(54, "Concept") & "</h4></td>"
+        text &= Environment.NewLine & "<td width = ""40%""><h4>" & Filemanager.GetOpenEhrTerm(113, "Description") & "</h4></td>"
+        text &= Environment.NewLine & "<td width = ""20%""><h4>" & Filemanager.GetOpenEhrTerm(87, "Constraints") & "</h4></td>"
+        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(438, "Values") & "</h4></td>"
         text &= Environment.NewLine & "</tr>"
 
         text &= Environment.NewLine & mElement.ToHTML(0)

@@ -481,7 +481,7 @@ Public Class TabPageDescription
             Me.txtOrganisation.Text = Value.OriginalAuthorOrganisation
             Me.txtDate.Text = Value.OriginalAuthorDate
             mArchetypeDescription = Value
-            mCurrentLanguage = Filemanager.Instance.OntologyManager.LanguageCode
+            mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
             SetDescriptionDetailValues()
         End Set
     End Property
@@ -489,7 +489,7 @@ Public Class TabPageDescription
     Public Sub SaveDescription()
 
         If mArchetypeDescription Is Nothing Then
-            Select Case Filemanager.Instance.ParserType
+            Select Case Filemanager.Master.ParserType
                 Case "adl"
                     mArchetypeDescription = New ArchetypeEditor.ADL_Classes.ADL_Description
                 Case Else
@@ -509,7 +509,7 @@ Public Class TabPageDescription
         mArchetypeDescription.OriginalAuthorDate = Me.txtDate.Text
 
         If mCurrentLanguage Is Nothing Then
-            mCurrentLanguage = Filemanager.Instance.OntologyManager.LanguageCode
+            mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         End If
 
         Dim archDescriptionItem As New ArchetypeDescriptionItem( _
@@ -553,20 +553,20 @@ Public Class TabPageDescription
 
     Public Sub Translate()
         SaveDescription() ' in the previous language = mCurrentLanguage
-        mCurrentLanguage = Filemanager.Instance.OntologyManager.LanguageCode
+        mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         SetDescriptionDetailValues()
     End Sub
 
     Private Sub SetFormText()
-        Me.lblKeyword.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(578, "Keyword") & ":"
-        Me.lblStatus.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(568, "Authorship lifecycle") & ":"
-        Me.lblName.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(579, "Name") & ":"
-        Me.tpAuthor.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(580, "Authorship")
-        Me.tpDescDetails.Title = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(581, "Details")
-        Me.gbPurpose.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(585, "Purpose")
-        Me.gbUse.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(582, "Use")
-        Me.gbMisuse.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(583, "Misuse")
-        Me.gbAuthor.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(584, "Original Author")
+        Me.lblKeyword.Text = Filemanager.GetOpenEhrTerm(578, "Keyword") & ":"
+        Me.lblStatus.Text = Filemanager.GetOpenEhrTerm(568, "Authorship lifecycle") & ":"
+        Me.lblName.Text = Filemanager.GetOpenEhrTerm(579, "Name") & ":"
+        Me.tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, "Authorship")
+        Me.tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, "Details")
+        Me.gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, "Purpose")
+        Me.gbUse.Text = Filemanager.GetOpenEhrTerm(582, "Use")
+        Me.gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, "Misuse")
+        Me.gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, "Original Author")
         LoadAuthorStatesTableCombo()
     End Sub
 
@@ -603,7 +603,7 @@ Public Class TabPageDescription
         End If
 
         Dim d_r As DataRow()
-        d_r = Filemanager.Instance.OntologyManager.CodeForGroupID(23) ' LifeCycle states
+        d_r = Filemanager.Master.OntologyManager.CodeForGroupID(23) ' LifeCycle states
         For Each data_row As DataRow In d_r
             Dim new_row As DataRow = mLifeCycleStatesTable.NewRow
             new_row(0) = data_row(1)
@@ -618,30 +618,30 @@ Public Class TabPageDescription
 
     End Sub
     Private Sub TabPageDescription_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        mCurrentLanguage = Filemanager.Instance.OntologyManager.LanguageCode
-        Dim temp_isloading As Boolean = Filemanager.Instance.FileLoading
-        Filemanager.Instance.FileLoading = True
+        mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
+        Dim temp_isloading As Boolean = Filemanager.Master.FileLoading
+        Filemanager.Master.FileLoading = True
         LoadAuthorStatesTableCombo()
         If mCurrentLanguage <> "en" Then
             SetFormText()
         End If
-        Filemanager.Instance.FileLoading = temp_isloading
+        Filemanager.Master.FileLoading = temp_isloading
     End Sub
 
     Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtMisuse.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged
 
-        If Not Filemanager.Instance.FileLoading Then
-            Filemanager.Instance.FileEdited = True
+        If Not Filemanager.Master.FileLoading Then
+            Filemanager.Master.FileEdited = True
         End If
 
     End Sub
 
     Private Sub ButAddKeyWord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddKeyWord.Click
         Dim ipb As New InputForm
-        ipb.lblInput.Text = Filemanager.Instance.OntologyManager.GetOpenEHRTerm(578, "Keyword")
+        ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(578, "Keyword")
         If ipb.ShowDialog = DialogResult.OK Then
             Me.listKeyword.Items.Add(ipb.txtInput.Text)
-            Filemanager.Instance.FileEdited = True
+            Filemanager.Master.FileEdited = True
         End If
     End Sub
 
@@ -649,7 +649,7 @@ Public Class TabPageDescription
         If Me.listKeyword.SelectedIndex > -1 Then
             If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(Me.listKeyword.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 Me.listKeyword.Items.RemoveAt(Me.listKeyword.SelectedIndex)
-                Filemanager.Instance.FileEdited = True
+                Filemanager.Master.FileEdited = True
             End If
         End If
     End Sub

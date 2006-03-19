@@ -21,6 +21,7 @@ Public Class TabpageHistory
     Private sNodeID As String
     Private MathFunctionTable As DataTable
     Private mIsLoading = False
+    Private mFileManager As FileManagerLocal
 
 #Region " Windows Form Designer generated code "
 
@@ -31,6 +32,10 @@ Public Class TabpageHistory
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
+
+        If Not Me.DesignMode Then
+            mFileManager = Filemanager.Master
+        End If
 
     End Sub
 
@@ -576,18 +581,18 @@ Public Class TabpageHistory
 
                 Case StructureType.PointEvent
                     If elvi.hasFixedOffset Then
-                        Text.WriteLine(Space(3 * level) & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(179, "Offset") + _
+                        Text.WriteLine(Space(3 * level) & Filemanager.GetOpenEhrTerm(179, "Offset") + _
                         " = " & elvi.Offset.ToString & " " & elvi.OffsetUnits & "\par")
                     End If
 
                 Case StructureType.IntervalEvent
                     If elvi.hasFixedWidth Then
-                        Text.WriteLine(Space(3 * level) & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(143, "Fixed interval") + _
+                        Text.WriteLine(Space(3 * level) & Filemanager.GetOpenEhrTerm(143, "Fixed interval") + _
                         " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "\par")
                     End If
                     Try
-                        Text.WriteLine(Space(3 * level) & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(266, "Event math function") + _
-                        " = " & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(Integer.Parse(elvi.AggregateMathFunction), "Fixed interval") & "\par")
+                        Text.WriteLine(Space(3 * level) & Filemanager.GetOpenEhrTerm(266, "Event math function") + _
+                        " = " & Filemanager.GetOpenEhrTerm(Integer.Parse(elvi.AggregateMathFunction), "Fixed interval") & "\par")
                     Catch
                     End Try
             End Select
@@ -614,9 +619,9 @@ Public Class TabpageHistory
             Text.WriteLine(Environment.NewLine & "<tr  bgcolor=""" & BackGroundColour & """>")
         End If
 
-        Text.WriteLine("<td width=""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(133, "Events") & "</h4></td>")
-        Text.WriteLine("<td width = ""40%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(113, "Description") & "</h4></td>")
-        Text.WriteLine("<td width = ""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(87, "Constraints") & "</h4></td>")
+        Text.WriteLine("<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(133, "Events") & "</h4></td>")
+        Text.WriteLine("<td width = ""40%""><h4>" & Filemanager.GetOpenEhrTerm(113, "Description") & "</h4></td>")
+        Text.WriteLine("<td width = ""20%""><h4>" & Filemanager.GetOpenEhrTerm(87, "Constraints") & "</h4></td>")
         Text.WriteLine("</tr>")
 
 
@@ -634,18 +639,18 @@ Public Class TabpageHistory
 
                 Case StructureType.PointEvent
                     If elvi.hasFixedOffset Then
-                        Text.WriteLine("<br>" + Filemanager.Instance.OntologyManager.GetOpenEHRTerm(179, "Offset") + _
+                        Text.WriteLine("<br>" + Filemanager.GetOpenEhrTerm(179, "Offset") + _
                         " = " & elvi.Offset.ToString & " " & elvi.OffsetUnits & "<br>")
                     End If
 
                 Case StructureType.IntervalEvent
                     If elvi.hasFixedWidth Then
-                        Text.WriteLine("<br>" + Filemanager.Instance.OntologyManager.GetOpenEHRTerm(143, "Fixed interval") + _
+                        Text.WriteLine("<br>" + Filemanager.GetOpenEhrTerm(143, "Fixed interval") + _
                         " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "<br>")
                     End If
                     Try
-                        Text.WriteLine("<br>" + Filemanager.Instance.OntologyManager.GetOpenEHRTerm(266, "Event math function") + _
-                        " = " + Filemanager.Instance.OntologyManager.GetOpenEHRTerm(Integer.Parse(elvi.AggregateMathFunction), "Fixed interval"))
+                        Text.WriteLine("<br>" + Filemanager.GetOpenEhrTerm(266, "Event math function") + _
+                        " = " + Filemanager.GetOpenEhrTerm(Integer.Parse(elvi.AggregateMathFunction), "Fixed interval"))
                     Catch
                     End Try
             End Select
@@ -684,7 +689,7 @@ Public Class TabpageHistory
         End If
 
         For Each ev In rm.Children
-            HistEvent = New EventListViewItem(ev)
+            HistEvent = New EventListViewItem(ev, mFileManager)
             Me.ListEvents.Items.Add(HistEvent)
         Next
 
@@ -791,7 +796,7 @@ Public Class TabpageHistory
     Friend Function AddBaseLineEvent()
         Dim elvi As EventListViewItem
 
-        elvi = New EventListViewItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(276, "Baseline event"))
+        elvi = New EventListViewItem(Filemanager.GetOpenEhrTerm(276, "Baseline event"), mFileManager)
         Me.txtEventDescription.Text = "*"
         elvi.Width = 1
         elvi.WidthUnits = "min"
@@ -819,13 +824,14 @@ Public Class TabpageHistory
         Private element As RmEvent
         Private sDescription As String
         Private boolNew As Boolean = False
+        Private mFileManager As FileManagerLocal
 
         Public Shadows Property Text() As String
             Get
                 Return MyBase.Text
             End Get
             Set(ByVal Value As String)
-                Filemanager.Instance.OntologyManager.SetText(Value, element.NodeId)
+                mFileManager.OntologyManager.SetText(Value, element.NodeId)
                 MyBase.Text = Value
             End Set
         End Property
@@ -862,7 +868,7 @@ Public Class TabpageHistory
             End Get
             Set(ByVal Value As String)
                 sDescription = Value
-                Filemanager.Instance.OntologyManager.SetDescription(Value, element.NodeId)
+                mFileManager.OntologyManager.SetDescription(Value, element.NodeId)
             End Set
         End Property
         Public Property isPointInTime() As Boolean
@@ -962,14 +968,14 @@ Public Class TabpageHistory
 
         Public Sub Translate()
             Dim a_Term As RmTerm
-            a_Term = Filemanager.Instance.OntologyManager.GetTerm(element.NodeId)
+            a_Term = mFileManager.OntologyManager.GetTerm(element.NodeId)
             MyBase.Text = a_Term.Text
             sDescription = a_Term.Description
         End Sub
 
         Public Function Copy() As EventListViewItem
             Dim newLvItem As EventListViewItem
-            newLvItem = New EventListViewItem(Me)
+            newLvItem = New EventListViewItem(Me, mFileManager)
             Return newLvItem
         End Function
 
@@ -982,10 +988,10 @@ Public Class TabpageHistory
             Dim a_Term As RmTerm
 
             MyBase.Text = "! - " & MyBase.Text
-            a_Term = Filemanager.Instance.OntologyManager.SpecialiseTerm(MyBase.Text, sDescription, element.NodeId)
+            a_Term = mFileManager.OntologyManager.SpecialiseTerm(MyBase.Text, sDescription, element.NodeId)
             element.NodeId = a_Term.Code
             If element.HasNameConstraint Then
-                element.NameConstraint.ConstraintCode = Filemanager.Instance.OntologyManager.SpecialiseTerm(element.NameConstraint.ConstraintCode).Code
+                element.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseTerm(element.NameConstraint.ConstraintCode).Code
             End If
         End Sub
 
@@ -1007,32 +1013,36 @@ Public Class TabpageHistory
 
         End Sub
 
-        Sub New(ByVal Text As String)
+        Sub New(ByVal Text As String, ByVal a_filemanager As FileManagerLocal)
             MyBase.New()
+            mFileManager = a_filemanager
             MyBase.Text = Text
 
             Dim a_Term As RmTerm
-            a_Term = Filemanager.Instance.OntologyManager.AddTerm(Text)
+            a_Term = mFileManager.OntologyManager.AddTerm(Text)
             element = New RmEvent(a_Term.Code)
             sDescription = "*"
         End Sub
 
-        Sub New(ByVal an_event As RmEvent)
+        Sub New(ByVal an_event As RmEvent, ByVal a_filemanager As FileManagerLocal)
             MyBase.New()
+            mFileManager = a_filemanager
 
             Dim s As String
             Dim a_Term As RmTerm
 
             element = an_event
-            a_Term = Filemanager.Instance.OntologyManager.GetTerm(an_event.NodeId)
+            a_Term = mFileManager.OntologyManager.GetTerm(an_event.NodeId)
             MyBase.Text = a_Term.Text
             sDescription = a_Term.Description
             SetImageIndex()
 
         End Sub
 
-        Sub New(ByVal elvi As EventListViewItem)
+        Sub New(ByVal elvi As EventListViewItem, ByVal a_filemanager As FileManagerLocal)
             MyBase.New()
+
+            mFileManager = a_filemanager
 
             Dim s As String
 
@@ -1060,7 +1070,7 @@ Public Class TabpageHistory
 
         If current_item Is Nothing Then Exit Sub
 
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
     End Sub
 
@@ -1072,7 +1082,7 @@ Public Class TabpageHistory
         If current_item Is Nothing Then Exit Sub
 
         current_item.isPointInTime = True
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
     End Sub
 
@@ -1086,7 +1096,7 @@ Public Class TabpageHistory
         current_item = Nothing
 
         ' create a new generic event and set the screen accordingly
-        elvi = New EventListViewItem(Filemanager.Instance.OntologyManager.GetOpenEHRTerm(276, "Any event"))
+        elvi = New EventListViewItem(Filemanager.GetOpenEhrTerm(276, "Any event"), mFileManager)
         Me.txtEventDescription.Text = "*"
         elvi.Width = 1
         elvi.WidthUnits = "min"
@@ -1106,7 +1116,7 @@ Public Class TabpageHistory
         current_item = elvi
         elvi.Selected = True
         butRemoveElement.Visible = True
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
         elvi.BeginEdit()
 
     End Sub
@@ -1207,7 +1217,7 @@ Public Class TabpageHistory
     Private Sub txtEventDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtEventDescription.TextChanged
         If current_item Is Nothing Then Return
         current_item.Description = Me.txtEventDescription.Text
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub RadioInterval_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioInterval.CheckedChanged
@@ -1221,31 +1231,31 @@ Public Class TabpageHistory
             current_item.AggregateMathFunction = Convert.ToString(Me.comboIntervalViewPoint.SelectedValue)
             cbFixedInterval_CheckedChanged(sender, e)
         End If
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub NumericOffset_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericOffset.ValueChanged, NumericOffset.TextChanged
         If current_item Is Nothing Then Return
         current_item.Offset = Me.NumericOffset.Value
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub comboOffsetUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboOffsetUnits.SelectedIndexChanged
         If current_item Is Nothing Then Return
         current_item.OffsetUnits = Me.comboOffsetUnits.Text
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub numericDuration_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numericDuration.ValueChanged, numericDuration.TextChanged
         If current_item Is Nothing Then Return
         current_item.Width = Me.numericDuration.Value
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub comboDurationUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboDurationUnits.SelectedIndexChanged
         If current_item Is Nothing Then Return
         current_item.WidthUnits = Me.comboDurationUnits.Text
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub comboIntervalViewPoint_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboIntervalViewPoint.SelectedIndexChanged
@@ -1253,19 +1263,19 @@ Public Class TabpageHistory
         If (current_item Is Nothing) Or mIsLoading Then Return
 
         current_item.AggregateMathFunction = Convert.ToString(Me.comboIntervalViewPoint.SelectedValue)
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
     End Sub
 
     Private Sub radioOpen_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioOpen.CheckedChanged
         If current_item Is Nothing Then Return
 
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub radioFixed_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioFixed.CheckedChanged
         If current_item Is Nothing Then Return
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub cbFixedOffset_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFixedOffset.CheckedChanged
@@ -1283,7 +1293,7 @@ Public Class TabpageHistory
         Else
             current_item.hasFixedOffset = False
         End If
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
 
     End Sub
@@ -1302,7 +1312,7 @@ Public Class TabpageHistory
         Else
             current_item.hasFixedWidth = False
         End If
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub butRemoveElement_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveElement.Click
@@ -1325,7 +1335,7 @@ Public Class TabpageHistory
                     Me.ListEvents.Items(elvi.Index + 1).Selected = True
                 End If
                 elvi.Remove()
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
             End If
 
         End If
@@ -1339,7 +1349,7 @@ Public Class TabpageHistory
                 numMax.Value = numMin.Value
             End If
             current_item.Occurrences.MinCount = Me.numMin.Value
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -1347,7 +1357,7 @@ Public Class TabpageHistory
 
         If Not current_item Is Nothing Then
             current_item.Occurrences.MaxCount = Me.numMax.Value
-            Filemanager.Instance.FileEdited = True
+            mFileManager.FileEdited = True
             If numMax.Value < numMin.Value Then
                 numMin.Value = numMax.Value
             End If
@@ -1373,7 +1383,7 @@ Public Class TabpageHistory
             current_item.Occurrences.MaxCount = Me.numMax.Value
             current_item.Occurrences.IsUnbounded = False
         End If
-        Filemanager.Instance.FileEdited = True
+        mFileManager.FileEdited = True
 
     End Sub
 
@@ -1388,7 +1398,7 @@ Public Class TabpageHistory
             If i > 0 Then
                 Me.ListEvents.Items.Remove(lvI)
                 Me.ListEvents.Items.Insert((i - 1), lvI)
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
                 Me.ListEvents.Items.Item(i - 1).Selected = True
             End If
         End If
@@ -1409,7 +1419,7 @@ Public Class TabpageHistory
                 Me.ListEvents.Items.Remove(lvI)
                 Me.ListEvents.Items.Insert((i + 1), lvI)
                 lvI.Selected = True
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
             End If
         End If
     End Sub
@@ -1440,11 +1450,11 @@ Public Class TabpageHistory
             t = current_item.NameConstraint.copy
         End If
 
-        frm.ShowConstraint(False, current_item.NameConstraint, Filemanager.Instance)
+        frm.ShowConstraint(False, current_item.NameConstraint, mFileManager)
         Select Case frm.ShowDialog
             Case DialogResult.OK
                 'no action
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
             Case DialogResult.Cancel
                 ' put it back to null if it was before
                 If Not has_constraint Then
@@ -1454,7 +1464,7 @@ Public Class TabpageHistory
                 End If
             Case DialogResult.Ignore
                 current_item.hasNameConstraint = False
-                Filemanager.Instance.FileEdited = True
+                mFileManager.FileEdited = True
         End Select
 
         If current_item.hasNameConstraint Then
@@ -1478,7 +1488,7 @@ Public Class TabpageHistory
         Dim math_functions As DataRow()
         Dim new_row As DataRow
 
-        math_functions = Filemanager.Instance.OntologyManager.CodeForGroupID(14, Filemanager.Instance.OntologyManager.LanguageCode) 'event math function
+        math_functions = mFileManager.OntologyManager.CodeForGroupID(14, mFileManager.OntologyManager.LanguageCode) 'event math function
 
         For Each rw As DataRow In math_functions
             new_row = MathFunctionTable.NewRow

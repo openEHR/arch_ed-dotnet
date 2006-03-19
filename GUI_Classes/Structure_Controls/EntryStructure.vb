@@ -408,13 +408,13 @@ Public Class EntryStructure
 
             Select Case Value
                 Case StructureType.Single
-                    s = mFileManager.OntologyManager.GetOpenEHRTerm(105, "Single")
+                    s = Filemanager.GetOpenEhrTerm(105, "Single")
                 Case StructureType.List
-                    s = mFileManager.OntologyManager.GetOpenEHRTerm(106, "List")
+                    s = Filemanager.GetOpenEhrTerm(106, "List")
                 Case StructureType.Tree
-                    s = mFileManager.OntologyManager.GetOpenEHRTerm(107, "Tree")
+                    s = Filemanager.GetOpenEhrTerm(107, "Tree")
                 Case StructureType.Table
-                    s = mFileManager.OntologyManager.GetOpenEHRTerm(108, "Table")
+                    s = Filemanager.GetOpenEhrTerm(108, "Table")
             End Select
             If mNodeId = "" Then
                 mNodeId = mFileManager.OntologyManager.AddTerm(s, "@ internal @").Code
@@ -452,7 +452,7 @@ Public Class EntryStructure
     End Sub
 
     Protected Sub SetCardinality(ByVal a_structure_type As StructureType)
-        mCardinalityControl = New OccurrencesPanel
+        mCardinalityControl = New OccurrencesPanel(mFileManager)
         mCardinalityControl.LocalFileManager = mFileManager
         If a_structure_type = StructureType.Single Then
             mCardinalityControl.SetSingle = True
@@ -703,8 +703,8 @@ Public Class EntryStructure
     End Sub
 
     Private Sub ButAddElement_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddElement.Click
-        mConstraintMenu = New ConstraintContextMenu(AddressOf AddNewElement)
-        mConstraintMenu.ShowHeader(mFileManager.OntologyManager.GetOpenEHRTerm(155, "Add"))
+        mConstraintMenu = New ConstraintContextMenu(AddressOf AddNewElement, mFileManager)
+        mConstraintMenu.ShowHeader(Filemanager.GetOpenEhrTerm(155, "Add"))
         SetUpAddElementMenu()
     End Sub
 
@@ -738,10 +738,10 @@ Public Class EntryStructure
     Private Sub butChangeDataType_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butChangeDataType.Click
         Debug.Assert(Not mCurrentItem Is Nothing, "Button should not be available")
         Debug.Assert(mCurrentItem.RM_Class.Type = StructureType.Element, "Button should not be available")
-        mConstraintMenu = New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf ChangeConstraint))
+        mConstraintMenu = New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf ChangeConstraint), mFileManager)
         ' hide the current constraint type
         mConstraintMenu.HideMenuItem(CType(mCurrentItem, ArchetypeElement).Constraint.Type)
-        mConstraintMenu.ShowHeader(mFileManager.OntologyManager.GetOpenEHRTerm(60, "Change data type"))
+        mConstraintMenu.ShowHeader(Filemanager.GetOpenEhrTerm(60, "Change data type"))
         mConstraintMenu.Show(butChangeDataType, New System.Drawing.Point(5, 5))
     End Sub
 
@@ -779,6 +779,9 @@ Public Class EntryStructure
         End If
     End Sub
 
+    Private Sub ChangeStructure(ByVal sender As Object, ByVal e As EventArgs)
+
+    End Sub
 
 #Region "Drag and Drop operations for toolbar on left"
 
@@ -800,11 +803,11 @@ Public Class EntryStructure
         ' create mDragArchetype node with the correct constraint
 
         If sender.name = "pbCluster" Then
-            mDragArchetypeNode = New ArchetypeComposite(mFileManager.OntologyManager.GetOpenEHRTerm(322, "New cluster"), StructureType.Cluster, mFileManager)
+            mDragArchetypeNode = New ArchetypeComposite(Filemanager.GetOpenEhrTerm(322, "New cluster"), StructureType.Cluster, mFileManager)
         Else
             Dim c As New Constraint
 
-            mDragArchetypeNode = New ArchetypeElement(mFileManager.OntologyManager.GetOpenEHRTerm(109, "New element"), mFileManager)
+            mDragArchetypeNode = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
 
             Select Case sender.Name
                 Case "pbAny"
@@ -816,7 +819,7 @@ Public Class EntryStructure
                 Case "pbDateTime"
                     c = New Constraint_DateTime
                 Case "pbOrdinal"
-                    c = New Constraint_Ordinal(True)
+                    c = New Constraint_Ordinal(True, mFileManager)
                 Case "pbQuantity"
                     c = New Constraint_Quantity
                 Case "pbText"
@@ -837,7 +840,6 @@ Public Class EntryStructure
 
 
 #End Region
-
 
 End Class
 

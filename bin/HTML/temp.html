@@ -2,26 +2,89 @@
 <HEAD>
 <meta http-equiv="Content-Language" content="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Medication action</title>
+<title>Evaluation of risk of condition!</title>
 </HEAD>
 <BODY>
 <table border="0" cellpadding="2" width="100%">
 <tr>
 <td width="100%" bgcolor="#000080">
-<h1 align="center"><font color="#FFFFFF">Medication action</font></h1>
+<h1 align="center"><font color="#FFFFFF">Evaluation of risk of condition!</font></h1>
 </td>
 </tr>
 </table>
-<p><i>Entity</i>: ACTION</p>
+<p><i>Entity</i>: EVALUATION</p>
 <table border="1" cellpadding="3" width="100%">
 <tr>
 <td width="50%"><h4>Concept description:</h4></td>
 <td width="50%"><h4>Identification:</h4></td>
 </tr>
 <tr>
-<td width="50%">An action arising from a medication order created by a clinician which specifies which medication to take, when, for how long etc.</td>
-<td width="50%"><i>Id</i>: openEHR-EHR-ACTION.medication.v1<br><i>Reference model</i>: openEHR_EHR</td>
+<td width="50%">Evaluation to indicate that there is, or is not, a significant risk of this subject of care having, now or in the future, a condition.!</td>
+<td width="50%"><i>Id</i>: openEHR-EHR-EVALUATION.risk-anaesthetic.v1<br><i>Reference model</i>: openEHR_EHR</td>
 </tr>
 </table>
+<hr>
+<table border="0" cellpadding="2" width="100%">
+<tr>
+<td width="100%" bgcolor="#FFFF53">
+<h2>Data</h2>
+</td>
+</tr>
+</table>
+<p>Structure = TREE, ordered</p>
+<table border="1" cellpadding="2" width="100%">
+<tr  bgcolor="#FFFF53">
+<td width="20%"><h4>Concept</h4></td>
+<td width = "40%"><h4>Description</h4></td>
+<td width = "20%"><h4>Constraints</h4></td>
+<td width="20%"><h4>Values</h4></td>
+</tr>
+
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Type of anaesthetic</b></td></table></td>
+<td>The condition on which the risk assessment is focussed</td>
+<td><b><i>Text</i></b><br>
+1..1</td>
+<td>
+Internal; 'anaesthetic', 'general anaesthetic'
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Significance of risk</b></td></table></td>
+<td>The likelihood that this person will develop this condition or suffer in this way in the future</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Internal; 'Not significant', 'Minimal significance', 'Significant', 'Highly significant'
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Rationale</b></td></table></td>
+<td>Justification for this risk assessment</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Text;
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Indicators</i></b></td></table></td>
+<td>Specific indications of risk</td>
+<td><b><i>Cluster</b></i><br>
+0..1</td><td>&nbsp;</td>
+</tr>
+
+<tr>
+<td><table><tr><td width="20"></td><td><img border="0" src="Images/truefalse.gif" width="32" height="32" align="middle"><b>Difficult intubation</b></td></table></td>
+<td>The patient has a history of difficult intubation</td>
+<td><b><i>Boolean</i></b><br>
+0..1</td>
+<td>
+False
+</td>
+</tr>
+</tr>
+</table>
+<hr>
 </BODY>
 </HTML>

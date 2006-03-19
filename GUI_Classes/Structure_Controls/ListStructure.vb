@@ -313,7 +313,7 @@ Public Class ListStructure
     End Sub
 
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
-        Dim lvItem As New ArchetypeListViewItem(mFileManager.OntologyManager.GetOpenEHRTerm(109, "New Element"), mFileManager)
+        Dim lvItem As New ArchetypeListViewItem(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
         lvItem.Item.Constraint = a_constraint
         Me.lvList.Items.Add(lvItem)
         lvItem.ImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type, False, True)
@@ -410,10 +410,10 @@ Public Class ListStructure
         Else
             text &= Environment.NewLine & "<tr  bgcolor=""" & BackGroundColour & """>"
         End If
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(54, "Concept") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""40%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(113, "Description") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(87, "Constraints") & "</h4></td>"
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.Instance.OntologyManager.GetOpenEHRTerm(438, "Values") & "</h4></td>"
+        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(54, "Concept") & "</h4></td>"
+        text &= Environment.NewLine & "<td width = ""40%""><h4>" & Filemanager.GetOpenEhrTerm(113, "Description") & "</h4></td>"
+        text &= Environment.NewLine & "<td width = ""20%""><h4>" & Filemanager.GetOpenEhrTerm(87, "Constraints") & "</h4></td>"
+        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(438, "Values") & "</h4></td>"
         text &= Environment.NewLine & "</tr>"
 
         For Each lvItem In Me.lvList.Items
@@ -495,7 +495,7 @@ Public Class ListStructure
             Me.MenuRemove.Visible = True
             Me.MenuRemoveItemAndReference.Text = lvItem.Text
             'may be a reference and can't add a reference
-            'If (Filemanager.Instance.OntologyManager.NumberOfSpecialisations = 0) AndAlso (Not lvItem.Item.IsReference) Then
+            'If (mFileManager.OntologyManager.NumberOfSpecialisations = 0) AndAlso (Not lvItem.Item.IsReference) Then
             If Not lvItem.Item.IsReference Then
                 Me.MenuAddReference.Visible = True
             End If

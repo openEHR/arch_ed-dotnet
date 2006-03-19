@@ -26,7 +26,7 @@ Public Interface Parser
     Sub Serialise(ByVal a_format As String)
     ReadOnly Property AvailableFormats() As ArrayList
     Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal LanguageCode As String)
-    Sub OpenFile(ByVal FileName As String, ByRef TheOntologyManager As OntologyManager)
+    Sub OpenFile(ByVal FileName As String, ByVal a_filemanager As FileManagerLocal)
     Sub WriteFile(ByVal FileName As String, Optional ByVal output_format As String = "adl")
 End Interface
 

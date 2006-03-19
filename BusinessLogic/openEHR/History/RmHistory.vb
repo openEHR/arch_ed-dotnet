@@ -71,9 +71,9 @@ Class RmHistory
         Return rme
     End Function
 
-    Sub New(ByVal EIF_EventSeries As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.new(EIF_EventSeries)
-        ProcessEventSeries(EIF_EventSeries)
+    Sub New(ByVal EIF_EventSeries As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        MyBase.new(EIF_EventSeries, a_filemanager)
+        ProcessEventSeries(EIF_EventSeries, a_filemanager)
     End Sub
 
     Sub New(ByVal NodeId As String)
@@ -94,15 +94,15 @@ Class RmHistory
         Return child
     End Function
 
-    Private Sub ProcessEventSeries(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Private Sub ProcessEventSeries(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
         Dim i As Integer
 
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
 
-        For i = 1 To ObjNode.Attributes.Count
-            an_attribute = ObjNode.Attributes.i_th(i)
+        For i = 1 To ObjNode.attributes.count
+            an_attribute = ObjNode.attributes.i_th(i)
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label"  'run_time_label is obsolete
                     mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -132,7 +132,7 @@ Class RmHistory
                         ' this means there is only one structure per EventSeries as in the GUI -
                         ' can be extended in future
 
-                        colEvt.Add(New RmEvent(an_Event))
+                        colEvt.Add(New RmEvent(an_Event, a_filemanager))
                     Next
 
                     ' the data definition is on one event at present

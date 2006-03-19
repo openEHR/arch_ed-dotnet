@@ -92,7 +92,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
 
-        Public Sub OpenFile(ByVal FileName As String, ByRef TheOntologyManager As OntologyManager) Implements Parser.OpenFile
+        Public Sub OpenFile(ByVal FileName As String, ByVal a_filemanager As FileManagerLocal) Implements Parser.OpenFile
 
             Dim current_culture As System.Globalization.CultureInfo
             Dim replace_culture As Boolean
@@ -118,8 +118,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 If EIF_adlInterface.parse_succeeded Then
                     Dim the_ontology As ADL_Ontology
                     the_ontology = New ADL_Ontology(EIF_adlInterface)
-                    TheOntologyManager.Ontology = the_ontology
-                    an_Archetype = New ADL_Archetype(EIF_adlInterface.adl_engine.archetype, EIF_adlInterface.adl_engine)
+                    a_filemanager.OntologyManager.Ontology = the_ontology
+                    an_Archetype = New ADL_Archetype(EIF_adlInterface.adl_engine.archetype, EIF_adlInterface.adl_engine, a_filemanager)
                     If EIF_adlInterface.archetype_available Then
                         mOpenFileError = False
                     End If
