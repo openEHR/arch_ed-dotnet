@@ -24,6 +24,9 @@ Public Class OccurrencesPanel
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_filemanager
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.TranslateGUI()
+        End If
 
     End Sub
 
@@ -489,7 +492,7 @@ Public Class OccurrencesPanel
         End If
     End Sub
 
-    Sub Translate()
+    Sub TranslateGUI()
         Dim i As Integer
         mIsLoading = True
         Me.gbOccurrences.Text = Filemanager.GetOpenEhrTerm(110, "Occurrences")

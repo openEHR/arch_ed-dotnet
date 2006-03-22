@@ -91,6 +91,8 @@ Public Class ApplicationOptionsForm
         Me.Label1 = New System.Windows.Forms.Label
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog
         Me.gbUserDetails = New System.Windows.Forms.GroupBox
+        Me.txtOrganisation = New System.Windows.Forms.TextBox
+        Me.lblOrganisation = New System.Windows.Forms.Label
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
         Me.Panel_6 = New System.Windows.Forms.Panel
         Me.Label_6 = New System.Windows.Forms.Label
@@ -118,8 +120,6 @@ Public Class ApplicationOptionsForm
         Me.comboOccurrences = New System.Windows.Forms.ComboBox
         Me.tpDefaults = New System.Windows.Forms.TabPage
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.txtOrganisation = New System.Windows.Forms.TextBox
-        Me.lblOrganisation = New System.Windows.Forms.Label
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -252,6 +252,23 @@ Public Class ApplicationOptionsForm
         Me.gbUserDetails.TabIndex = 23
         Me.gbUserDetails.TabStop = False
         Me.gbUserDetails.Text = "User details"
+        '
+        'txtOrganisation
+        '
+        Me.txtOrganisation.Location = New System.Drawing.Point(144, 104)
+        Me.txtOrganisation.Name = "txtOrganisation"
+        Me.txtOrganisation.Size = New System.Drawing.Size(274, 22)
+        Me.txtOrganisation.TabIndex = 14
+        Me.txtOrganisation.Text = ""
+        '
+        'lblOrganisation
+        '
+        Me.lblOrganisation.Location = New System.Drawing.Point(8, 99)
+        Me.lblOrganisation.Name = "lblOrganisation"
+        Me.lblOrganisation.Size = New System.Drawing.Size(124, 28)
+        Me.lblOrganisation.TabIndex = 15
+        Me.lblOrganisation.Text = "Organisation"
+        Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'GroupBox1
         '
@@ -505,23 +522,6 @@ Public Class ApplicationOptionsForm
         Me.tpDefaults.Size = New System.Drawing.Size(635, 193)
         Me.tpDefaults.TabIndex = 3
         Me.tpDefaults.Text = "Defaults"
-        '
-        'txtOrganisation
-        '
-        Me.txtOrganisation.Location = New System.Drawing.Point(144, 104)
-        Me.txtOrganisation.Name = "txtOrganisation"
-        Me.txtOrganisation.Size = New System.Drawing.Size(274, 22)
-        Me.txtOrganisation.TabIndex = 14
-        Me.txtOrganisation.Text = ""
-        '
-        'lblOrganisation
-        '
-        Me.lblOrganisation.Location = New System.Drawing.Point(8, 99)
-        Me.lblOrganisation.Name = "lblOrganisation"
-        Me.lblOrganisation.Size = New System.Drawing.Size(124, 28)
-        Me.lblOrganisation.TabIndex = 15
-        Me.lblOrganisation.Text = "Organisation"
-        Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ApplicationOptionsForm
         '

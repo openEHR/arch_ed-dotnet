@@ -27,13 +27,13 @@ End Enum
 
 Public Enum StateMachineType
     Not_Set = 0
-    Initial = 1
-    Active = 2
-    Completed = 3
-    ActiveSuspended = 4
-    InitialSuspended = 5
-    ActiveAborted = 6
-    InitialAborted = 7
+    Initial = 524
+    Active = 245
+    Completed = 532
+    ActiveSuspended = 530
+    InitialSuspended = 527
+    ActiveAborted = 531
+    InitialAborted = 528
 End Enum
 
 Public Class ReferenceModelLocal

@@ -38,6 +38,8 @@ Public Class ArchetypeNodeConstraintControl
 
             mIsLoading = True
 
+            mFileManager = Filemanager.Master
+
             mOccurrences = New OccurrencesPanel(mFileManager)
             Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
                 Case "lexical"

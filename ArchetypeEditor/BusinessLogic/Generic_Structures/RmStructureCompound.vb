@@ -247,7 +247,7 @@ Public Class RmStructureCompound
                             colChildren.Add(New RmStructureCompound(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                         Case StructureType.Table
                             colChildren.Add(New RmTable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
-                        Case StructureType.CarePathwayStep
+                        Case StructureType.ISM_TRANSITION
                             colChildren.Add(New RmPathwayStep(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case StructureType.Activity
                             colChildren.Add(New RmActivity(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))

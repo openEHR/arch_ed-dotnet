@@ -79,24 +79,49 @@ Public Class RmPathwayStep
         Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
         Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING
 
+        For i As Integer = 1 To EIF_Step.attributes.count
+
+            Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim t As Constraint_Text
+
+            an_attribute = EIF_Step.attributes.i_th(i)
+
+            coded_text = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+
+            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "current_state"
+                    t = RmElement.ProcessText(coded_text)
+                    If t.AllowableValues.Codes.Count > 0 Then
+                        mStateType = Integer.Parse(t.AllowableValues.Codes(0))
+                    End If
+                    If t.AllowableValues.Codes.Count > 1 Then
+                        mAlternativeState = Integer.Parse(t.AllowableValues.Codes(1))
+                    End If
+                Case "careflow_step"
+                        'No action now as atcode is set for RmPathwayStep and reproduced here
+                Case Else
+                        Debug.Assert(False, EIF_Step.rm_type_name.to_cil & " not handled")
+            End Select
+        Next
+
         an_attribute = EIF_Step.attributes.first
 
-        If an_attribute.children.count > 0 Then
-            Dim y() As String
+        'If an_attribute.children.count > 0 Then
+        '    Dim y() As String
 
-            constraint = an_attribute.children.first
-            cString = constraint.item
-            y = CType(cString.strings.i_th(1), openehr.base.kernel.STRING).to_cil.Split(",")
+        '    constraint = an_attribute.children.first
+        '    cString = constraint.item
+        '    y = CType(cString.strings.i_th(1), openehr.base.kernel.STRING).to_cil.Split(",")
 
-            Debug.Assert(y.Length < 3, "Have not dealt with multiple state possibilities > 2")
+        '    Debug.Assert(y.Length < 3, "Have not dealt with multiple state possibilities > 2")
 
-            Me.mStateType = Int(y(0))
+        '    Me.mStateType = Int(y(0))
 
-            If y.Length > 1 Then
-                Me.AlternativeState = Int(y(1))
-                ' sets the HasAlternative State to True
-            End If
-        End If
+        '    If y.Length > 1 Then
+        '        Me.AlternativeState = Int(y(1))
+        '        ' sets the HasAlternative State to True
+        '    End If
+        'End If
     End Sub
 
 #End Region

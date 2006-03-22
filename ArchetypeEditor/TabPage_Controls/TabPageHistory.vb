@@ -22,6 +22,7 @@ Public Class TabpageHistory
     Private MathFunctionTable As DataTable
     Private mIsLoading = False
     Private mFileManager As FileManagerLocal
+    WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
 
@@ -35,6 +36,9 @@ Public Class TabpageHistory
 
         If Not Me.DesignMode Then
             mFileManager = Filemanager.Master
+            mOccurrences = New OccurrencesPanel(mFileManager)
+            Me.gbEventDetails.Controls.Add(mOccurrences)
+            mOccurrences.Dock = DockStyle.Top
         End If
 
     End Sub
@@ -67,38 +71,35 @@ Public Class TabpageHistory
     Friend WithEvents gbOffset As System.Windows.Forms.GroupBox
     Friend WithEvents NumericOffset As System.Windows.Forms.NumericUpDown
     Friend WithEvents comboOffsetUnits As System.Windows.Forms.ComboBox
-    Friend WithEvents Label14 As System.Windows.Forms.Label
+
     Friend WithEvents chkIsPeriodic As System.Windows.Forms.CheckBox
     Friend WithEvents numPeriod As System.Windows.Forms.NumericUpDown
     Friend WithEvents comboTimeUnits As System.Windows.Forms.ComboBox
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
-    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+
     Friend WithEvents radioFixed As System.Windows.Forms.RadioButton
     Friend WithEvents radioOpen As System.Windows.Forms.RadioButton
     Friend WithEvents cbFixedOffset As System.Windows.Forms.CheckBox
     Friend WithEvents cbFixedInterval As System.Windows.Forms.CheckBox
     Friend WithEvents butRemoveElement As System.Windows.Forms.Button
-
-    Friend WithEvents lblNumMax As System.Windows.Forms.Label
-    Friend WithEvents lblNumMin As System.Windows.Forms.Label
-    Friend WithEvents numMin As System.Windows.Forms.NumericUpDown
-    Friend WithEvents numMax As System.Windows.Forms.NumericUpDown
-    Friend WithEvents cbUnbounded As System.Windows.Forms.CheckBox
     Friend WithEvents butListUp As System.Windows.Forms.Button
     Friend WithEvents butListDown As System.Windows.Forms.Button
     Friend WithEvents txtRuntimeConstraint As System.Windows.Forms.TextBox
-    Friend WithEvents Label11 As System.Windows.Forms.Label
+
     Friend WithEvents ListEvents As System.Windows.Forms.ListView
     Friend WithEvents ImageListEvents As System.Windows.Forms.ImageList
     Friend WithEvents TheEvents As System.Windows.Forms.ColumnHeader
     Friend WithEvents buSetRuntimeConstraint As System.Windows.Forms.Button
     Friend WithEvents HelpProviderEventSeries As System.Windows.Forms.HelpProvider
+    Friend WithEvents lblDescription As System.Windows.Forms.Label
+    Friend WithEvents lblRuntimeName As System.Windows.Forms.Label
+    Friend WithEvents gbEventList As System.Windows.Forms.GroupBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabpageHistory))
         Me.gbEventDetails = New System.Windows.Forms.GroupBox
         Me.buSetRuntimeConstraint = New System.Windows.Forms.Button
-        Me.Label11 = New System.Windows.Forms.Label
+        Me.lblRuntimeName = New System.Windows.Forms.Label
         Me.txtRuntimeConstraint = New System.Windows.Forms.TextBox
         Me.txtEventDescription = New System.Windows.Forms.TextBox
         Me.gbDuration = New System.Windows.Forms.GroupBox
@@ -112,12 +113,7 @@ Public Class TabpageHistory
         Me.cbFixedOffset = New System.Windows.Forms.CheckBox
         Me.NumericOffset = New System.Windows.Forms.NumericUpDown
         Me.comboOffsetUnits = New System.Windows.Forms.ComboBox
-        Me.Label14 = New System.Windows.Forms.Label
-        Me.lblNumMax = New System.Windows.Forms.Label
-        Me.lblNumMin = New System.Windows.Forms.Label
-        Me.numMax = New System.Windows.Forms.NumericUpDown
-        Me.cbUnbounded = New System.Windows.Forms.CheckBox
-        Me.numMin = New System.Windows.Forms.NumericUpDown
+        Me.lblDescription = New System.Windows.Forms.Label
         Me.butRemoveElement = New System.Windows.Forms.Button
         Me.butAddEvent = New System.Windows.Forms.Button
         Me.chkIsPeriodic = New System.Windows.Forms.CheckBox
@@ -126,7 +122,7 @@ Public Class TabpageHistory
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.butListUp = New System.Windows.Forms.Button
         Me.butListDown = New System.Windows.Forms.Button
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.gbEventList = New System.Windows.Forms.GroupBox
         Me.radioOpen = New System.Windows.Forms.RadioButton
         Me.radioFixed = New System.Windows.Forms.RadioButton
         Me.ListEvents = New System.Windows.Forms.ListView
@@ -138,55 +134,48 @@ Public Class TabpageHistory
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbOffset.SuspendLayout()
         CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.numMax, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.numMin, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.GroupBox1.SuspendLayout()
+        Me.gbEventList.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbEventDetails
         '
         Me.gbEventDetails.Controls.Add(Me.buSetRuntimeConstraint)
-        Me.gbEventDetails.Controls.Add(Me.Label11)
+        Me.gbEventDetails.Controls.Add(Me.lblRuntimeName)
         Me.gbEventDetails.Controls.Add(Me.txtRuntimeConstraint)
         Me.gbEventDetails.Controls.Add(Me.txtEventDescription)
         Me.gbEventDetails.Controls.Add(Me.gbDuration)
         Me.gbEventDetails.Controls.Add(Me.RadioInterval)
         Me.gbEventDetails.Controls.Add(Me.radioPointInTime)
         Me.gbEventDetails.Controls.Add(Me.gbOffset)
-        Me.gbEventDetails.Controls.Add(Me.Label14)
-        Me.gbEventDetails.Controls.Add(Me.lblNumMax)
-        Me.gbEventDetails.Controls.Add(Me.lblNumMin)
-        Me.gbEventDetails.Controls.Add(Me.numMax)
-        Me.gbEventDetails.Controls.Add(Me.cbUnbounded)
-        Me.gbEventDetails.Controls.Add(Me.numMin)
+        Me.gbEventDetails.Controls.Add(Me.lblDescription)
         Me.gbEventDetails.Location = New System.Drawing.Point(361, 8)
         Me.gbEventDetails.Name = "gbEventDetails"
-        Me.gbEventDetails.Size = New System.Drawing.Size(376, 316)
+        Me.gbEventDetails.Size = New System.Drawing.Size(376, 376)
         Me.gbEventDetails.TabIndex = 34
         Me.gbEventDetails.TabStop = False
         Me.gbEventDetails.Text = "Event details"
         '
         'buSetRuntimeConstraint
         '
-        Me.buSetRuntimeConstraint.Location = New System.Drawing.Point(328, 128)
+        Me.buSetRuntimeConstraint.Location = New System.Drawing.Point(328, 160)
         Me.buSetRuntimeConstraint.Name = "buSetRuntimeConstraint"
         Me.buSetRuntimeConstraint.Size = New System.Drawing.Size(32, 20)
         Me.buSetRuntimeConstraint.TabIndex = 43
         Me.buSetRuntimeConstraint.Text = "..."
         '
-        'Label11
+        'lblRuntimeName
         '
-        Me.Label11.Location = New System.Drawing.Point(4, 120)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(116, 32)
-        Me.Label11.TabIndex = 42
-        Me.Label11.Text = "Runtime name constraint:"
-        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblRuntimeName.Location = New System.Drawing.Point(4, 152)
+        Me.lblRuntimeName.Name = "lblRuntimeName"
+        Me.lblRuntimeName.Size = New System.Drawing.Size(116, 32)
+        Me.lblRuntimeName.TabIndex = 42
+        Me.lblRuntimeName.Text = "Runtime name constraint:"
+        Me.lblRuntimeName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtRuntimeConstraint
         '
-        Me.txtRuntimeConstraint.Location = New System.Drawing.Point(128, 128)
+        Me.txtRuntimeConstraint.Location = New System.Drawing.Point(128, 160)
         Me.txtRuntimeConstraint.Name = "txtRuntimeConstraint"
         Me.txtRuntimeConstraint.ReadOnly = True
         Me.txtRuntimeConstraint.Size = New System.Drawing.Size(190, 22)
@@ -195,7 +184,7 @@ Public Class TabpageHistory
         '
         'txtEventDescription
         '
-        Me.txtEventDescription.Location = New System.Drawing.Point(16, 66)
+        Me.txtEventDescription.Location = New System.Drawing.Point(16, 96)
         Me.txtEventDescription.Multiline = True
         Me.txtEventDescription.Name = "txtEventDescription"
         Me.txtEventDescription.Size = New System.Drawing.Size(349, 46)
@@ -208,7 +197,7 @@ Public Class TabpageHistory
         Me.gbDuration.Controls.Add(Me.comboIntervalViewPoint)
         Me.gbDuration.Controls.Add(Me.numericDuration)
         Me.gbDuration.Controls.Add(Me.comboDurationUnits)
-        Me.gbDuration.Location = New System.Drawing.Point(178, 200)
+        Me.gbDuration.Location = New System.Drawing.Point(178, 232)
         Me.gbDuration.Name = "gbDuration"
         Me.gbDuration.Size = New System.Drawing.Size(190, 104)
         Me.gbDuration.TabIndex = 25
@@ -257,7 +246,7 @@ Public Class TabpageHistory
         '
         Me.RadioInterval.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioInterval.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.RadioInterval.Location = New System.Drawing.Point(180, 168)
+        Me.RadioInterval.Location = New System.Drawing.Point(180, 200)
         Me.RadioInterval.Name = "RadioInterval"
         Me.RadioInterval.Size = New System.Drawing.Size(128, 24)
         Me.RadioInterval.TabIndex = 7
@@ -268,7 +257,7 @@ Public Class TabpageHistory
         '
         Me.radioPointInTime.Appearance = System.Windows.Forms.Appearance.Button
         Me.radioPointInTime.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.radioPointInTime.Location = New System.Drawing.Point(26, 168)
+        Me.radioPointInTime.Location = New System.Drawing.Point(26, 200)
         Me.radioPointInTime.Name = "radioPointInTime"
         Me.radioPointInTime.Size = New System.Drawing.Size(136, 24)
         Me.radioPointInTime.TabIndex = 6
@@ -280,7 +269,7 @@ Public Class TabpageHistory
         Me.gbOffset.Controls.Add(Me.cbFixedOffset)
         Me.gbOffset.Controls.Add(Me.NumericOffset)
         Me.gbOffset.Controls.Add(Me.comboOffsetUnits)
-        Me.gbOffset.Location = New System.Drawing.Point(26, 200)
+        Me.gbOffset.Location = New System.Drawing.Point(26, 232)
         Me.gbOffset.Name = "gbOffset"
         Me.gbOffset.Size = New System.Drawing.Size(136, 72)
         Me.gbOffset.TabIndex = 22
@@ -317,57 +306,13 @@ Public Class TabpageHistory
         Me.comboOffsetUnits.Text = "min"
         Me.comboOffsetUnits.Visible = False
         '
-        'Label14
+        'lblDescription
         '
-        Me.Label14.Location = New System.Drawing.Point(18, 47)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(112, 24)
-        Me.Label14.TabIndex = 17
-        Me.Label14.Text = "Description:"
-        '
-        'lblNumMax
-        '
-        Me.lblNumMax.Location = New System.Drawing.Point(176, 24)
-        Me.lblNumMax.Name = "lblNumMax"
-        Me.lblNumMax.Size = New System.Drawing.Size(40, 16)
-        Me.lblNumMax.TabIndex = 38
-        Me.lblNumMax.Text = "Max:"
-        Me.lblNumMax.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'lblNumMin
-        '
-        Me.lblNumMin.Location = New System.Drawing.Point(8, 24)
-        Me.lblNumMin.Name = "lblNumMin"
-        Me.lblNumMin.Size = New System.Drawing.Size(120, 16)
-        Me.lblNumMin.TabIndex = 36
-        Me.lblNumMin.Text = "Occurrences - Min:"
-        Me.lblNumMin.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'numMax
-        '
-        Me.numMax.Location = New System.Drawing.Point(224, 22)
-        Me.numMax.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numMax.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numMax.Name = "numMax"
-        Me.numMax.Size = New System.Drawing.Size(48, 22)
-        Me.numMax.TabIndex = 2
-        Me.numMax.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'cbUnbounded
-        '
-        Me.cbUnbounded.Location = New System.Drawing.Point(272, 24)
-        Me.cbUnbounded.Name = "cbUnbounded"
-        Me.cbUnbounded.Size = New System.Drawing.Size(112, 16)
-        Me.cbUnbounded.TabIndex = 3
-        Me.cbUnbounded.Text = "Unbounded"
-        '
-        'numMin
-        '
-        Me.numMin.Location = New System.Drawing.Point(136, 22)
-        Me.numMin.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numMin.Name = "numMin"
-        Me.numMin.Size = New System.Drawing.Size(40, 22)
-        Me.numMin.TabIndex = 1
+        Me.lblDescription.Location = New System.Drawing.Point(18, 79)
+        Me.lblDescription.Name = "lblDescription"
+        Me.lblDescription.Size = New System.Drawing.Size(112, 24)
+        Me.lblDescription.TabIndex = 17
+        Me.lblDescription.Text = "Description:"
         '
         'butRemoveElement
         '
@@ -438,17 +383,17 @@ Public Class TabpageHistory
         Me.butListDown.TabIndex = 24
         Me.ToolTip1.SetToolTip(Me.butListDown, "Move selected item down")
         '
-        'GroupBox1
+        'gbEventList
         '
-        Me.GroupBox1.Controls.Add(Me.radioOpen)
-        Me.GroupBox1.Controls.Add(Me.radioFixed)
-        Me.GroupBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(16, 8)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(96, 80)
-        Me.GroupBox1.TabIndex = 35
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "Event list:"
+        Me.gbEventList.Controls.Add(Me.radioOpen)
+        Me.gbEventList.Controls.Add(Me.radioFixed)
+        Me.gbEventList.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.gbEventList.Location = New System.Drawing.Point(16, 8)
+        Me.gbEventList.Name = "gbEventList"
+        Me.gbEventList.Size = New System.Drawing.Size(96, 80)
+        Me.gbEventList.TabIndex = 35
+        Me.gbEventList.TabStop = False
+        Me.gbEventList.Text = "Event list:"
         '
         'radioOpen
         '
@@ -479,7 +424,7 @@ Public Class TabpageHistory
         Me.ListEvents.Location = New System.Drawing.Point(152, 8)
         Me.ListEvents.MultiSelect = False
         Me.ListEvents.Name = "ListEvents"
-        Me.ListEvents.Size = New System.Drawing.Size(200, 320)
+        Me.ListEvents.Size = New System.Drawing.Size(200, 376)
         Me.ListEvents.SmallImageList = Me.ImageListEvents
         Me.ListEvents.TabIndex = 0
         Me.ListEvents.View = System.Windows.Forms.View.Details
@@ -501,7 +446,7 @@ Public Class TabpageHistory
         Me.Controls.Add(Me.ListEvents)
         Me.Controls.Add(Me.butListUp)
         Me.Controls.Add(Me.butListDown)
-        Me.Controls.Add(Me.GroupBox1)
+        Me.Controls.Add(Me.gbEventList)
         Me.Controls.Add(Me.gbEventDetails)
         Me.Controls.Add(Me.chkIsPeriodic)
         Me.Controls.Add(Me.numPeriod)
@@ -512,16 +457,14 @@ Public Class TabpageHistory
         Me.HelpProviderEventSeries.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "TabpageHistory"
         Me.HelpProviderEventSeries.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(760, 336)
+        Me.Size = New System.Drawing.Size(760, 392)
         Me.gbEventDetails.ResumeLayout(False)
         Me.gbDuration.ResumeLayout(False)
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbOffset.ResumeLayout(False)
         CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.numMax, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.numMin, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.GroupBox1.ResumeLayout(False)
+        Me.gbEventList.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -738,7 +681,23 @@ Public Class TabpageHistory
     End Sub
 
     Public Sub TranslateGUI()
-        Debug.Assert(False, "Not done yet")
+        Me.cbFixedInterval.Text = Filemanager.GetOpenEhrTerm(143, Me.cbFixedInterval.Text)
+        Me.cbFixedOffset.Text = Filemanager.GetOpenEhrTerm(180, Me.cbFixedOffset.Text)
+        Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
+        Me.lblRuntimeName.Text = Filemanager.GetOpenEhrTerm(114, Me.lblRuntimeName.Text)
+        Me.gbEventDetails.Text = Filemanager.GetOpenEhrTerm(138, Me.gbEventDetails.Text)
+        Me.gbOffset.Text = Filemanager.GetOpenEhrTerm(179, Me.gbOffset.Text)
+        Me.gbDuration.Text = Filemanager.GetOpenEhrTerm(142, Me.gbDuration.Text)
+        Me.radioPointInTime.Text = Filemanager.GetOpenEhrTerm(140, Me.radioPointInTime.Text)
+        Me.RadioInterval.Text = Filemanager.GetOpenEhrTerm(141, Me.RadioInterval.Text)
+        Me.chkIsPeriodic.Text = Filemanager.GetOpenEhrTerm(137, Me.chkIsPeriodic.Text)
+        Me.gbEventList.Text = Filemanager.GetOpenEhrTerm(134, Me.gbEventList.Text)
+        Me.radioOpen.Text = Filemanager.GetOpenEhrTerm(135, Me.radioOpen.Text)
+        Me.radioFixed.Text = Filemanager.GetOpenEhrTerm(136, Me.radioFixed.Text)
+
+
+
+
     End Sub
 
     Friend Function SaveAsEventSeries() As RmHistory
@@ -803,11 +762,9 @@ Public Class TabpageHistory
         Me.radioPointInTime.Checked = False
         Me.cbFixedInterval.Checked = False
         Me.cbFixedOffset.Checked = False
-        Me.numMax.Visible = False
-        Me.numMin.Value = 0
         Me.numericDuration.Value = 1
-        Me.cbUnbounded.Checked = True
-        elvi.Occurrences.IsUnbounded = True
+        mOccurrences.Cardinality = elvi.Occurrences
+        'elvi.Occurrences.IsUnbounded = True
         Me.ListEvents.Items.Add(elvi)
         elvi.Selected = True
         current_item = elvi
@@ -1105,11 +1062,8 @@ Public Class TabpageHistory
         Me.radioPointInTime.Checked = False
         Me.cbFixedInterval.Checked = False
         Me.cbFixedOffset.Checked = False
-        Me.numMax.Visible = False
-        Me.numMin.Value = 0
+        mOccurrences.Cardinality = elvi.Occurrences
         Me.numericDuration.Value = 1
-        Me.cbUnbounded.Checked = True
-        elvi.Occurrences.IsUnbounded = True
         Me.comboIntervalViewPoint.SelectedIndex = 1  ' delta
         Me.ListEvents.Items.Add(elvi)
         elvi.Selected = True
@@ -1129,14 +1083,7 @@ Public Class TabpageHistory
             Me.comboOffsetUnits.Text = elvi.OffsetUnits
         End If
 
-        If elvi.Occurrences.IsUnbounded Then
-            Me.cbUnbounded.Checked = True
-        Else
-            Me.cbUnbounded.Checked = False
-            Me.numMax.Value = elvi.Occurrences.MaxCount
-        End If
-        Me.numMin.Value = elvi.Occurrences.MinCount
-
+        mOccurrences.Cardinality = elvi.Occurrences
 
         If elvi.Width <> 0 Then
             Me.numericDuration.Value = elvi.Width
@@ -1341,52 +1288,6 @@ Public Class TabpageHistory
         End If
     End Sub
 
-    Private Sub numMin_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMin.ValueChanged
-
-        If Not current_item Is Nothing Then
-
-            If numMin.Value > numMax.Value Then
-                numMax.Value = numMin.Value
-            End If
-            current_item.Occurrences.MinCount = Me.numMin.Value
-            mFileManager.FileEdited = True
-        End If
-    End Sub
-
-    Private Sub numMax_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMax.ValueChanged
-
-        If Not current_item Is Nothing Then
-            current_item.Occurrences.MaxCount = Me.numMax.Value
-            mFileManager.FileEdited = True
-            If numMax.Value < numMin.Value Then
-                numMin.Value = numMax.Value
-            End If
-        End If
-
-    End Sub
-
-    Private Sub cbUnbounded_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbUnbounded.CheckedChanged
-
-        If Me.cbUnbounded.Checked Then
-            Me.numMax.Visible = False
-            Me.lblNumMax.Visible = False
-
-            If current_item Is Nothing Then Return
-
-            current_item.Occurrences.IsUnbounded = True
-        Else
-            Me.numMax.Visible = True
-            Me.lblNumMax.Visible = True
-
-            If current_item Is Nothing Then Return
-
-            current_item.Occurrences.MaxCount = Me.numMax.Value
-            current_item.Occurrences.IsUnbounded = False
-        End If
-        mFileManager.FileEdited = True
-
-    End Sub
-
     Private Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click
 
         If Not Me.ListEvents.SelectedIndices.Count = 0 Then
@@ -1478,6 +1379,10 @@ Public Class TabpageHistory
         Me.HelpProviderEventSeries.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
         mIsLoading = True
+
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            TranslateGUI()
+        End If
 
         MathFunctionTable = New DataTable("MathFunction")
         Dim newcol As New DataColumn("Code", System.Type.GetType("System.UInt64"))
