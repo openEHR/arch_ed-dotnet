@@ -89,12 +89,15 @@ Public Class TabPageDescription
         Me.lblKeyword = New System.Windows.Forms.Label
         Me.listKeyword = New System.Windows.Forms.ListBox
         Me.TabDescription = New Crownwood.Magic.Controls.TabControl
-        Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage
-        Me.Splitter3 = New System.Windows.Forms.Splitter
-        Me.Splitter2 = New System.Windows.Forms.Splitter
-        Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.tpAuthor = New Crownwood.Magic.Controls.TabPage
         Me.gbAuthor = New System.Windows.Forms.GroupBox
+        Me.ContextMenu1 = New System.Windows.Forms.ContextMenu
+        Me.c_menuPaste = New System.Windows.Forms.MenuItem
+        Me.c_menuPasteAll = New System.Windows.Forms.MenuItem
+        Me.c_menuPasteName = New System.Windows.Forms.MenuItem
+        Me.c_menuPasteEmail = New System.Windows.Forms.MenuItem
+        Me.c_menuPasteOrg = New System.Windows.Forms.MenuItem
+        Me.c_menPasteDate = New System.Windows.Forms.MenuItem
         Me.lblDate = New System.Windows.Forms.Label
         Me.txtDate = New System.Windows.Forms.TextBox
         Me.lblOrganisation = New System.Windows.Forms.Label
@@ -103,20 +106,17 @@ Public Class TabPageDescription
         Me.txtOriginalAuthor = New System.Windows.Forms.TextBox
         Me.lblEmail = New System.Windows.Forms.Label
         Me.txtOriginalEmail = New System.Windows.Forms.TextBox
-        Me.ContextMenu1 = New System.Windows.Forms.ContextMenu
-        Me.c_menuPaste = New System.Windows.Forms.MenuItem
-        Me.c_menuPasteAll = New System.Windows.Forms.MenuItem
-        Me.c_menuPasteName = New System.Windows.Forms.MenuItem
-        Me.c_menuPasteEmail = New System.Windows.Forms.MenuItem
-        Me.c_menuPasteOrg = New System.Windows.Forms.MenuItem
-        Me.c_menPasteDate = New System.Windows.Forms.MenuItem
+        Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage
+        Me.Splitter3 = New System.Windows.Forms.Splitter
+        Me.Splitter2 = New System.Windows.Forms.Splitter
+        Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.gbUse.SuspendLayout()
         Me.gbMisuse.SuspendLayout()
         Me.gbPurpose.SuspendLayout()
         Me.panelDescription.SuspendLayout()
-        Me.tpDescDetails.SuspendLayout()
         Me.tpAuthor.SuspendLayout()
         Me.gbAuthor.SuspendLayout()
+        Me.tpDescDetails.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblStatus
@@ -272,6 +272,137 @@ Public Class TabPageDescription
         Me.TabDescription.TabIndex = 15
         Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor})
         '
+        'tpAuthor
+        '
+        Me.tpAuthor.Controls.Add(Me.gbAuthor)
+        Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
+        Me.tpAuthor.Name = "tpAuthor"
+        Me.tpAuthor.Size = New System.Drawing.Size(700, 474)
+        Me.tpAuthor.TabIndex = 1
+        Me.tpAuthor.Title = "Authorship"
+        '
+        'gbAuthor
+        '
+        Me.gbAuthor.ContextMenu = Me.ContextMenu1
+        Me.gbAuthor.Controls.Add(Me.lblDate)
+        Me.gbAuthor.Controls.Add(Me.txtDate)
+        Me.gbAuthor.Controls.Add(Me.lblOrganisation)
+        Me.gbAuthor.Controls.Add(Me.txtOrganisation)
+        Me.gbAuthor.Controls.Add(Me.lblName)
+        Me.gbAuthor.Controls.Add(Me.txtOriginalAuthor)
+        Me.gbAuthor.Controls.Add(Me.lblEmail)
+        Me.gbAuthor.Controls.Add(Me.txtOriginalEmail)
+        Me.gbAuthor.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbAuthor.Location = New System.Drawing.Point(0, 0)
+        Me.gbAuthor.Name = "gbAuthor"
+        Me.gbAuthor.Size = New System.Drawing.Size(700, 152)
+        Me.gbAuthor.TabIndex = 4
+        Me.gbAuthor.TabStop = False
+        Me.gbAuthor.Text = "Original author"
+        '
+        'ContextMenu1
+        '
+        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.c_menuPaste})
+        '
+        'c_menuPaste
+        '
+        Me.c_menuPaste.Index = 0
+        Me.c_menuPaste.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.c_menuPasteAll, Me.c_menuPasteName, Me.c_menuPasteEmail, Me.c_menuPasteOrg, Me.c_menPasteDate})
+        Me.c_menuPaste.Text = "Paste"
+        '
+        'c_menuPasteAll
+        '
+        Me.c_menuPasteAll.Index = 0
+        Me.c_menuPasteAll.Text = "All"
+        '
+        'c_menuPasteName
+        '
+        Me.c_menuPasteName.Index = 1
+        Me.c_menuPasteName.Text = "Name"
+        '
+        'c_menuPasteEmail
+        '
+        Me.c_menuPasteEmail.Index = 2
+        Me.c_menuPasteEmail.Text = "Email"
+        '
+        'c_menuPasteOrg
+        '
+        Me.c_menuPasteOrg.Index = 3
+        Me.c_menuPasteOrg.Text = "Organisation"
+        '
+        'c_menPasteDate
+        '
+        Me.c_menPasteDate.Index = 4
+        Me.c_menPasteDate.Text = "Date"
+        '
+        'lblDate
+        '
+        Me.lblDate.Location = New System.Drawing.Point(16, 120)
+        Me.lblDate.Name = "lblDate"
+        Me.lblDate.Size = New System.Drawing.Size(128, 24)
+        Me.lblDate.TabIndex = 7
+        Me.lblDate.Text = "Date:"
+        Me.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtDate
+        '
+        Me.txtDate.Location = New System.Drawing.Point(152, 120)
+        Me.txtDate.Name = "txtDate"
+        Me.txtDate.Size = New System.Drawing.Size(160, 24)
+        Me.txtDate.TabIndex = 6
+        Me.txtDate.Text = ""
+        '
+        'lblOrganisation
+        '
+        Me.lblOrganisation.Location = New System.Drawing.Point(16, 88)
+        Me.lblOrganisation.Name = "lblOrganisation"
+        Me.lblOrganisation.Size = New System.Drawing.Size(128, 24)
+        Me.lblOrganisation.TabIndex = 5
+        Me.lblOrganisation.Text = "Organisation:"
+        Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOrganisation
+        '
+        Me.txtOrganisation.Location = New System.Drawing.Point(152, 88)
+        Me.txtOrganisation.Name = "txtOrganisation"
+        Me.txtOrganisation.Size = New System.Drawing.Size(424, 24)
+        Me.txtOrganisation.TabIndex = 4
+        Me.txtOrganisation.Text = ""
+        '
+        'lblName
+        '
+        Me.lblName.Location = New System.Drawing.Point(16, 24)
+        Me.lblName.Name = "lblName"
+        Me.lblName.Size = New System.Drawing.Size(128, 24)
+        Me.lblName.TabIndex = 2
+        Me.lblName.Text = "Name:"
+        Me.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOriginalAuthor
+        '
+        Me.txtOriginalAuthor.Location = New System.Drawing.Point(152, 24)
+        Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
+        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 24)
+        Me.txtOriginalAuthor.TabIndex = 0
+        Me.txtOriginalAuthor.Text = ""
+        '
+        'lblEmail
+        '
+        Me.lblEmail.Location = New System.Drawing.Point(16, 56)
+        Me.lblEmail.Name = "lblEmail"
+        Me.lblEmail.Size = New System.Drawing.Size(128, 24)
+        Me.lblEmail.TabIndex = 3
+        Me.lblEmail.Text = "Email:"
+        Me.lblEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOriginalEmail
+        '
+        Me.txtOriginalEmail.Location = New System.Drawing.Point(152, 56)
+        Me.txtOriginalEmail.Name = "txtOriginalEmail"
+        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 24)
+        Me.txtOriginalEmail.TabIndex = 1
+        Me.txtOriginalEmail.Text = ""
+        '
         'tpDescDetails
         '
         Me.tpDescDetails.Controls.Add(Me.gbPurpose)
@@ -315,137 +446,6 @@ Public Class TabPageDescription
         Me.Splitter1.TabIndex = 15
         Me.Splitter1.TabStop = False
         '
-        'tpAuthor
-        '
-        Me.tpAuthor.Controls.Add(Me.gbAuthor)
-        Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
-        Me.tpAuthor.Name = "tpAuthor"
-        Me.tpAuthor.Size = New System.Drawing.Size(700, 474)
-        Me.tpAuthor.TabIndex = 1
-        Me.tpAuthor.Title = "Authorship"
-        '
-        'gbAuthor
-        '
-        Me.gbAuthor.ContextMenu = Me.ContextMenu1
-        Me.gbAuthor.Controls.Add(Me.lblDate)
-        Me.gbAuthor.Controls.Add(Me.txtDate)
-        Me.gbAuthor.Controls.Add(Me.lblOrganisation)
-        Me.gbAuthor.Controls.Add(Me.txtOrganisation)
-        Me.gbAuthor.Controls.Add(Me.lblName)
-        Me.gbAuthor.Controls.Add(Me.txtOriginalAuthor)
-        Me.gbAuthor.Controls.Add(Me.lblEmail)
-        Me.gbAuthor.Controls.Add(Me.txtOriginalEmail)
-        Me.gbAuthor.Dock = System.Windows.Forms.DockStyle.Top
-        Me.gbAuthor.Location = New System.Drawing.Point(0, 0)
-        Me.gbAuthor.Name = "gbAuthor"
-        Me.gbAuthor.Size = New System.Drawing.Size(700, 152)
-        Me.gbAuthor.TabIndex = 4
-        Me.gbAuthor.TabStop = False
-        Me.gbAuthor.Text = "Original author"
-        '
-        'lblDate
-        '
-        Me.lblDate.Location = New System.Drawing.Point(16, 120)
-        Me.lblDate.Name = "lblDate"
-        Me.lblDate.Size = New System.Drawing.Size(80, 24)
-        Me.lblDate.TabIndex = 7
-        Me.lblDate.Text = "Date:"
-        Me.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txtDate
-        '
-        Me.txtDate.Location = New System.Drawing.Point(104, 120)
-        Me.txtDate.Name = "txtDate"
-        Me.txtDate.Size = New System.Drawing.Size(160, 24)
-        Me.txtDate.TabIndex = 6
-        Me.txtDate.Text = ""
-        '
-        'lblOrganisation
-        '
-        Me.lblOrganisation.Location = New System.Drawing.Point(0, 88)
-        Me.lblOrganisation.Name = "lblOrganisation"
-        Me.lblOrganisation.Size = New System.Drawing.Size(96, 24)
-        Me.lblOrganisation.TabIndex = 5
-        Me.lblOrganisation.Text = "Organisation:"
-        Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txtOrganisation
-        '
-        Me.txtOrganisation.Location = New System.Drawing.Point(104, 88)
-        Me.txtOrganisation.Name = "txtOrganisation"
-        Me.txtOrganisation.Size = New System.Drawing.Size(424, 24)
-        Me.txtOrganisation.TabIndex = 4
-        Me.txtOrganisation.Text = ""
-        '
-        'lblName
-        '
-        Me.lblName.Location = New System.Drawing.Point(16, 24)
-        Me.lblName.Name = "lblName"
-        Me.lblName.Size = New System.Drawing.Size(80, 24)
-        Me.lblName.TabIndex = 2
-        Me.lblName.Text = "Name:"
-        Me.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txtOriginalAuthor
-        '
-        Me.txtOriginalAuthor.Location = New System.Drawing.Point(104, 24)
-        Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
-        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 24)
-        Me.txtOriginalAuthor.TabIndex = 0
-        Me.txtOriginalAuthor.Text = ""
-        '
-        'lblEmail
-        '
-        Me.lblEmail.Location = New System.Drawing.Point(16, 56)
-        Me.lblEmail.Name = "lblEmail"
-        Me.lblEmail.Size = New System.Drawing.Size(80, 24)
-        Me.lblEmail.TabIndex = 3
-        Me.lblEmail.Text = "Email:"
-        Me.lblEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txtOriginalEmail
-        '
-        Me.txtOriginalEmail.Location = New System.Drawing.Point(104, 56)
-        Me.txtOriginalEmail.Name = "txtOriginalEmail"
-        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 24)
-        Me.txtOriginalEmail.TabIndex = 1
-        Me.txtOriginalEmail.Text = ""
-        '
-        'ContextMenu1
-        '
-        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.c_menuPaste})
-        '
-        'c_menuPaste
-        '
-        Me.c_menuPaste.Index = 0
-        Me.c_menuPaste.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.c_menuPasteAll, Me.c_menuPasteName, Me.c_menuPasteEmail, Me.c_menuPasteOrg, Me.c_menPasteDate})
-        Me.c_menuPaste.Text = "Paste"
-        '
-        'c_menuPasteAll
-        '
-        Me.c_menuPasteAll.Index = 0
-        Me.c_menuPasteAll.Text = "All"
-        '
-        'c_menuPasteName
-        '
-        Me.c_menuPasteName.Index = 1
-        Me.c_menuPasteName.Text = "Name"
-        '
-        'c_menuPasteEmail
-        '
-        Me.c_menuPasteEmail.Index = 2
-        Me.c_menuPasteEmail.Text = "Email"
-        '
-        'c_menuPasteOrg
-        '
-        Me.c_menuPasteOrg.Index = 3
-        Me.c_menuPasteOrg.Text = "Organisation"
-        '
-        'c_menPasteDate
-        '
-        Me.c_menPasteDate.Index = 4
-        Me.c_menPasteDate.Text = "Date"
-        '
         'TabPageDescription
         '
         Me.BackColor = System.Drawing.SystemColors.Control
@@ -457,9 +457,9 @@ Public Class TabPageDescription
         Me.gbMisuse.ResumeLayout(False)
         Me.gbPurpose.ResumeLayout(False)
         Me.panelDescription.ResumeLayout(False)
-        Me.tpDescDetails.ResumeLayout(False)
         Me.tpAuthor.ResumeLayout(False)
         Me.gbAuthor.ResumeLayout(False)
+        Me.tpDescDetails.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -557,17 +557,19 @@ Public Class TabPageDescription
         SetDescriptionDetailValues()
     End Sub
 
-    Private Sub SetFormText()
-        Me.lblKeyword.Text = Filemanager.GetOpenEhrTerm(578, "Keyword") & ":"
-        Me.lblStatus.Text = Filemanager.GetOpenEhrTerm(568, "Authorship lifecycle") & ":"
-        Me.lblName.Text = Filemanager.GetOpenEhrTerm(579, "Name") & ":"
-        Me.tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, "Authorship")
-        Me.tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, "Details")
-        Me.gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, "Purpose")
-        Me.gbUse.Text = Filemanager.GetOpenEhrTerm(582, "Use")
-        Me.gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, "Misuse")
-        Me.gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, "Original Author")
-        LoadAuthorStatesTableCombo()
+    Private Sub TranslateGUI()
+        Me.lblKeyword.Text = Filemanager.GetOpenEhrTerm(578, Me.lblKeyword.Text) & ":"
+        Me.lblStatus.Text = Filemanager.GetOpenEhrTerm(568, Me.lblStatus.Text) & ":"
+        Me.lblName.Text = Filemanager.GetOpenEhrTerm(579, Me.lblName.Text) & ":"
+        Me.lblEmail.Text = Filemanager.GetOpenEhrTerm(207, Me.lblEmail.Text) & ":"
+        Me.lblDate.Text = Filemanager.GetOpenEhrTerm(593, Me.lblDate.Text) & ":"
+        Me.lblOrganisation.Text = Filemanager.GetOpenEhrTerm(594, Me.lblOrganisation.Text) & ":"
+        Me.tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, Me.tpAuthor.Title)
+        Me.tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, Me.tpDescDetails.Title)
+        Me.gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, Me.gbPurpose.Text)
+        Me.gbUse.Text = Filemanager.GetOpenEhrTerm(582, Me.gbUse.Text)
+        Me.gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, Me.gbMisuse.Text)
+        Me.gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, Me.gbAuthor.Text)
     End Sub
 
     Private Function MakeLifeCycleTable() As DataTable
@@ -622,8 +624,8 @@ Public Class TabPageDescription
         Dim temp_isloading As Boolean = Filemanager.Master.FileLoading
         Filemanager.Master.FileLoading = True
         LoadAuthorStatesTableCombo()
-        If mCurrentLanguage <> "en" Then
-            SetFormText()
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            TranslateGUI()
         End If
         Filemanager.Master.FileLoading = temp_isloading
     End Sub

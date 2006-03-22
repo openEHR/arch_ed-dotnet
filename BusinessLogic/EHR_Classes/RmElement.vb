@@ -450,9 +450,6 @@ Public Class RmElement
 
                             If t.AllowableValues.TerminologyID = "local" Then
                                 t.TypeOfTextConstraint = TextConstrainType.Internal
-                            Else
-                                ''FIXME - a place holder for other internal coding schemes
-                                'openEHR
                             End If
                     End Select
 

@@ -2,65 +2,206 @@
 <HEAD>
 <meta http-equiv="Content-Language" content="en">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Evaluation of risk of condition!</title>
+<title>Blood pressure measurement</title>
 </HEAD>
 <BODY>
 <table border="0" cellpadding="2" width="100%">
 <tr>
 <td width="100%" bgcolor="#000080">
-<h1 align="center"><font color="#FFFFFF">Evaluation of risk of condition!</font></h1>
+<h1 align="center"><font color="#FFFFFF">Blood pressure measurement</font></h1>
 </td>
 </tr>
 </table>
-<p><i>Entity</i>: EVALUATION</p>
+<p><i>Entity</i>: OBSERVATION</p>
 <table border="1" cellpadding="3" width="100%">
 <tr>
 <td width="50%"><h4>Concept description:</h4></td>
 <td width="50%"><h4>Identification:</h4></td>
 </tr>
 <tr>
-<td width="50%">Evaluation to indicate that there is, or is not, a significant risk of this subject of care having, now or in the future, a condition.!</td>
-<td width="50%"><i>Id</i>: openEHR-EHR-EVALUATION.risk-anaesthetic.v1<br><i>Reference model</i>: openEHR_EHR</td>
+<td width="50%">the measurement of systemic arterial blood pressure which is deemed to represent the actual systemic blood pressure</td>
+<td width="50%"><i>Id</i>: openEHR-EHR-OBSERVATION.blood_pressure.v1<br><i>Reference model</i>: openEHR_EHR</td>
 </tr>
 </table>
 <hr>
 <table border="0" cellpadding="2" width="100%">
 <tr>
 <td width="100%" bgcolor="#FFFF53">
-<h2>Data</h2>
+<h2>داده ها</h2>
 </td>
 </tr>
 </table>
-<p>Structure = TREE, ordered</p>
+<p>Structure = LIST, ordered</p>
 <table border="1" cellpadding="2" width="100%">
 <tr  bgcolor="#FFFF53">
-<td width="20%"><h4>Concept</h4></td>
-<td width = "40%"><h4>Description</h4></td>
-<td width = "20%"><h4>Constraints</h4></td>
-<td width="20%"><h4>Values</h4></td>
+<td width="20%"><h4>مفهوم</h4></td>
+<td width = "40%"><h4>شرح</h4></td>
+<td width = "20%"><h4>محدود کننده ها</h4></td>
+<td width="20%"><h4>ارزشها</h4></td>
 </tr>
-
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Type of anaesthetic</b></td></table></td>
-<td>The condition on which the risk assessment is focussed</td>
-<td><b><i>Text</i></b><br>
-1..1</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>systolic</b></td></table></td>
+<td>the systemic arterial blood pressure in systolic phase</td>
+<td><b><i>Quantity</i></b><br>
+0..1</td>
 <td>
-Internal; 'anaesthetic', 'general anaesthetic'
+خاصیت = pressure<br>
+  Units = mm[Hg]; >=0; <=1000;<br>
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Significance of risk</b></td></table></td>
-<td>The likelihood that this person will develop this condition or suffer in this way in the future</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>diastolic</b></td></table></td>
+<td>the systemic arterial blood pressure in diastolic phase</td>
+<td><b><i>Quantity</i></b><br>
+0..1</td>
+<td>
+خاصیت = pressure<br>
+  Units = mm[Hg]; >=0; <=1000;<br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Comment</b></td></table></td>
+<td>Comment on blood pressure reading</td>
 <td><b><i>Text</i></b><br>
 0..1</td>
 <td>
-Internal; 'Not significant', 'Minimal significance', 'Significant', 'Highly significant'
+Text;
+</td>
+</tr>
+</table>
+<hr>
+<table border="0" cellpadding="2" width="100%">
+<tr>
+<td width="100%" bgcolor="#9DAAFF">
+<h2>حالت</h2>
+</td>
+</tr>
+</table>
+<p>Structure = LIST, ordered</p>
+<table border="1" cellpadding="2" width="100%">
+<tr  bgcolor="#9DAAFF">
+<td width="20%"><h4>مفهوم</h4></td>
+<td width = "40%"><h4>شرح</h4></td>
+<td width = "20%"><h4>محدود کننده ها</h4></td>
+<td width="20%"><h4>ارزشها</h4></td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Position</b></td></table></td>
+<td>The position of the patient at the time of measuring blood pressure</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Internal; 'Standing', 'Sitting', 'Reclining', 'Lying'
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Rationale</b></td></table></td>
-<td>Justification for this risk assessment</td>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Exertion level</b></td></table></td>
+<td>The level of exertion at the time of taking the measurement</td>
+<td><b><i>Quantity</i></b><br>
+0..1</td>
+<td>
+خاصیت = work<br>
+  Units = J/min; >=0; <=1000;<br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Exercise</b></td></table></td>
+<td>The classification of the exercise level</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Internal; 'At rest', 'Post-exercise', 'During exercise'
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/quantity.gif" width="32" height="32" align="middle"><b>Tilt</b></td></table></td>
+<td>The tilt of the surface on which the person is lying</td>
+<td><b><i>Quantity</i></b><br>
+0..1</td>
+<td>
+خاصیت = Angle, plane<br>
+  Units = °; >=-90; <=90;<br>
+</td>
+</tr>
+</table>
+<hr>
+<table border="0" cellpadding="2" width="100%">
+<tr>
+<td width="100%" bgcolor="#AAFE92">
+<h2>مجموعه واقعه</h2>
+</td>
+</tr>
+</table>
+
+<table border="1" cellpadding="2" width="100%">
+
+<tr  bgcolor="#AAFE92">
+<td width="20%"><h4>رویدادها</h4></td>
+<td width = "40%"><h4>شرح</h4></td>
+<td width = "20%"><h4>محدود کننده ها</h4></td>
+</tr>
+<tr>
+<td><b>any event</b></td>
+<td><b>other event in event history</b></td>
+<td>
+Event
+</tr>
+<tr>
+<td><b>baseline reading</b></td>
+<td><b>baseline event in event history</b></td>
+<td>
+PointEvent
+<br>چاپ افست  = 0 sec<br>
+</tr>
+<tr>
+<td><b>5 minute reading</b></td>
+<td><b>Blood pressure reading after 5 minutes rest</b></td>
+<td>
+PointEvent
+<br>چاپ افست  = 5 min<br>
+</tr>
+<tr>
+<td><b>10 minute reading</b></td>
+<td><b>Blood pressure reading after 10 minutes rest</b></td>
+<td>
+PointEvent
+<br>چاپ افست  = 10 min<br>
+</tr>
+<tr>
+<td><b>Postural drop</b></td>
+<td><b>The difference between standing and sitting/lying blood pressure</b></td>
+<td>
+IntervalEvent
+<br>وظیفه ریاضی واقعه = کاهش
+</tr>
+<tr>
+<td><b>Paradox</b></td>
+<td><b>Variation in blood pressure with respiration</b></td>
+<td>
+IntervalEvent
+</tr>
+
+</table>
+
+<hr>
+<table border="0" cellpadding="2" width="100%">
+<tr>
+<td width="100%" bgcolor="#FF717B">
+<h2>پروتکل</h2>
+</td>
+</tr>
+</table>
+<p>Structure = LIST, ordered</p>
+<table border="1" cellpadding="2" width="100%">
+<tr  bgcolor="#FF717B">
+<td width="20%"><h4>مفهوم</h4></td>
+<td width = "40%"><h4>شرح</h4></td>
+<td width = "20%"><h4>محدود کننده ها</h4></td>
+<td width="20%"><h4>ارزشها</h4></td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Instrument</b></td></table></td>
+<td>the instrument used to measure the blood pressure</td>
 <td><b><i>Text</i></b><br>
 0..1</td>
 <td>
@@ -68,21 +209,22 @@ Text;
 </td>
 </tr>
 <tr>
-<td><table><tr><td width="0"></td><td><img border="0" src="Images/compound.gif" width="32" height="32" align="middle"><b><i>Indicators</i></b></td></table></td>
-<td>Specific indications of risk</td>
-<td><b><i>Cluster</b></i><br>
-0..1</td><td>&nbsp;</td>
-</tr>
-
-<tr>
-<td><table><tr><td width="20"></td><td><img border="0" src="Images/truefalse.gif" width="32" height="32" align="middle"><b>Difficult intubation</b></td></table></td>
-<td>The patient has a history of difficult intubation</td>
-<td><b><i>Boolean</i></b><br>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Cuff size</b></td></table></td>
+<td>the size of the cuff if a sphygmomanometer is used</td>
+<td><b><i>Text</i></b><br>
 0..1</td>
 <td>
-False
+Internal; 'Appropriate for age', 'Wide for age', 'Small for age'
 </td>
 </tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/text.gif" width="32" height="32" align="middle"><b>Location of measurement</b></td></table></td>
+<td>The site of the measurement of the blood pressure</td>
+<td><b><i>Text</i></b><br>
+0..1</td>
+<td>
+Internal; 'Right arm', 'Left arm', 'Right leg', 'Left leg', 'Intra-arterial'
+</td>
 </tr>
 </table>
 <hr>

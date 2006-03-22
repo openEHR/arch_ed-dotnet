@@ -98,7 +98,6 @@ Public Class Designer
     Friend WithEvents DataGridTextBoxColumn6 As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents DataGridTextBoxColumn7 As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents DataGridTextBoxColumn8 As System.Windows.Forms.DataGridTextBoxColumn
-    Friend WithEvents MenuViewArchetypes As System.Windows.Forms.MenuItem
     Friend WithEvents PanelMain As System.Windows.Forms.Panel
     Friend WithEvents PanelHeader As System.Windows.Forms.Panel
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
@@ -164,7 +163,6 @@ Public Class Designer
     Friend WithEvents DataGridTextBoxColumn12 As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents DataGridConstraintStatements As System.Windows.Forms.DataGrid
-    Friend WithEvents MenuView As System.Windows.Forms.MenuItem
     Friend WithEvents MenuLanguageAvailable As System.Windows.Forms.MenuItem
     Friend WithEvents MenuLanguageAdd As System.Windows.Forms.MenuItem
     Friend WithEvents MenuLanguage As System.Windows.Forms.MenuItem
@@ -280,8 +278,6 @@ Public Class Designer
         Me.MenuFileExit = New System.Windows.Forms.MenuItem
         Me.menuEdit = New System.Windows.Forms.MenuItem
         Me.menuEditArchID = New System.Windows.Forms.MenuItem
-        Me.MenuView = New System.Windows.Forms.MenuItem
-        Me.MenuViewArchetypes = New System.Windows.Forms.MenuItem
         Me.MenuViewConfig = New System.Windows.Forms.MenuItem
         Me.MenuPublish = New System.Windows.Forms.MenuItem
         Me.MenuPublishPack = New System.Windows.Forms.MenuItem
@@ -772,7 +768,7 @@ Public Class Designer
         '
         'MainMenu
         '
-        Me.MainMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFile, Me.menuEdit, Me.MenuView, Me.MenuPublish, Me.MenuLanguage, Me.MenuTerminology, Me.MenuHelp})
+        Me.MainMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFile, Me.menuEdit, Me.MenuPublish, Me.MenuLanguage, Me.MenuTerminology, Me.MenuHelp})
         '
         'MenuFile
         '
@@ -830,7 +826,7 @@ Public Class Designer
         'menuEdit
         '
         Me.menuEdit.Index = 1
-        Me.menuEdit.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuEditArchID})
+        Me.menuEdit.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuEditArchID, Me.MenuViewConfig})
         Me.menuEdit.Text = "Edit"
         '
         'menuEditArchID
@@ -838,27 +834,14 @@ Public Class Designer
         Me.menuEditArchID.Index = 0
         Me.menuEditArchID.Text = "Archetype ID"
         '
-        'MenuView
-        '
-        Me.MenuView.Index = 2
-        Me.MenuView.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuViewArchetypes, Me.MenuViewConfig})
-        Me.MenuView.Shortcut = System.Windows.Forms.Shortcut.CtrlV
-        Me.MenuView.ShowShortcut = False
-        Me.MenuView.Text = "View"
-        '
-        'MenuViewArchetypes
-        '
-        Me.MenuViewArchetypes.Index = 0
-        Me.MenuViewArchetypes.Text = "Archetypes DB"
-        '
         'MenuViewConfig
         '
         Me.MenuViewConfig.Index = 1
-        Me.MenuViewConfig.Text = "Configuration"
+        Me.MenuViewConfig.Text = "Preferences"
         '
         'MenuPublish
         '
-        Me.MenuPublish.Index = 3
+        Me.MenuPublish.Index = 2
         Me.MenuPublish.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuPublishPack, Me.MenuPublishFinalise})
         Me.MenuPublish.Text = "Publish"
         '
@@ -876,7 +859,7 @@ Public Class Designer
         '
         'MenuLanguage
         '
-        Me.MenuLanguage.Index = 4
+        Me.MenuLanguage.Index = 3
         Me.MenuLanguage.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuLanguageAvailable, Me.MenuLanguageAdd, Me.MenuLanguageChange})
         Me.MenuLanguage.Text = "Language"
         '
@@ -897,7 +880,7 @@ Public Class Designer
         '
         'MenuTerminology
         '
-        Me.MenuTerminology.Index = 5
+        Me.MenuTerminology.Index = 4
         Me.MenuTerminology.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuTerminologyAvailable, Me.MenuTerminologyAdd})
         Me.MenuTerminology.Text = "&Terminology"
         '
@@ -913,7 +896,7 @@ Public Class Designer
         '
         'MenuHelp
         '
-        Me.MenuHelp.Index = 6
+        Me.MenuHelp.Index = 5
         Me.MenuHelp.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuHelpStart, Me.MenuHelpReport, Me.MenuHelpLicence, Me.MenuHelpOcean, Me.MenuHelpOceanEditor})
         Me.MenuHelp.Text = "&Help"
         '
@@ -2146,6 +2129,12 @@ Public Class Designer
 
     Private Sub LocaliseGUI(ByVal language As String)
 
+        If OceanArchetypeEditor.IsLanguageRightToLeft(language) Then
+            Me.RightToLeft = RightToLeft.Yes
+        Else
+            Me.RightToLeft = RightToLeft.Inherit
+        End If
+
         'MenuItem labels
         Me.MenuFile.Text = Filemanager.GetOpenEhrTerm(43, Me.MenuFile.Text, language)
         Me.MenuFileClose.Text = Filemanager.GetOpenEhrTerm(184, Me.MenuFileClose.Text, language)
@@ -2153,7 +2142,12 @@ Public Class Designer
         Me.MenuFileExit.Text = Filemanager.GetOpenEhrTerm(63, Me.MenuFileExit.Text, language)
         Me.MenuFileOpen.Text = Filemanager.GetOpenEhrTerm(61, Me.MenuFileOpen.Text, language)
         Me.MenuFileSave.Text = Filemanager.GetOpenEhrTerm(183, Me.MenuFileSave.Text, language)
+        Me.menuFileNewWindow.Text = Filemanager.GetOpenEhrTerm(595, Me.menuFileNewWindow.Text, language)
+        Me.MenuFileSaveAs.Text = Filemanager.GetOpenEhrTerm(596, Me.MenuFileSaveAs.Text, language)
         Me.MenuFileSpecialise.Text = Filemanager.GetOpenEhrTerm(185, Me.MenuFileSpecialise.Text, language)
+        Me.menuEdit.Text = Filemanager.GetOpenEhrTerm(592, Me.menuEdit.Text, language)
+        Me.MenuViewConfig.Text = Filemanager.GetOpenEhrTerm(598, Me.MenuViewConfig.Text, language)
+        Me.MenuHelpReport.Text = Filemanager.GetOpenEhrTerm(597, Me.MenuHelpReport.Text, language)
         Me.MenuHelp.Text = Filemanager.GetOpenEhrTerm(48, Me.MenuHelp.Text, language)
         Me.MenuHelpStart.Text = Filemanager.GetOpenEhrTerm(72, Me.MenuHelpStart.Text, language)
         Me.MenuHelpLicence.Text = Filemanager.GetOpenEhrTerm(73, Me.MenuHelpLicence.Text, language)
@@ -2167,8 +2161,6 @@ Public Class Designer
         Me.MenuPublish.Text = Filemanager.GetOpenEhrTerm(45, Me.MenuPublish.Text, language)
         Me.MenuPublishFinalise.Text = Filemanager.GetOpenEhrTerm(66, Me.MenuPublishFinalise.Text, language)
         Me.MenuPublishPack.Text = Filemanager.GetOpenEhrTerm(65, Me.MenuPublishPack.Text, language)
-        Me.MenuView.Text = Filemanager.GetOpenEhrTerm(44, Me.MenuView.Text, language)
-        Me.MenuViewArchetypes.Text = Filemanager.GetOpenEhrTerm(64, Me.MenuViewArchetypes.Text, language)
         Me.MenuTerminologyAdd.Text = Filemanager.GetOpenEhrTerm(71, Me.MenuTerminologyAdd.Text, language)
         Me.MenuTerminologyAvailable.Text = Filemanager.GetOpenEhrTerm(70, Me.MenuTerminologyAvailable.Text, language)
 
@@ -2178,6 +2170,7 @@ Public Class Designer
         Me.lblConcept.Text = Filemanager.GetOpenEhrTerm(54, Me.lblConcept.Text, language)
         Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text, language)
         Me.radioUnrestrictedSubject.Text = Filemanager.GetOpenEhrTerm(56, Me.radioUnrestrictedSubject.Text, language)
+        Me.radioRestrictedSet.Text = Filemanager.GetOpenEhrTerm(599, Me.radioRestrictedSet.Text)
         Me.gbSpecialisation.Text = Filemanager.GetOpenEhrTerm(186, Me.gbSpecialisation.Text, language)
 
         'Entry tab on designer
@@ -2203,6 +2196,7 @@ Public Class Designer
         Me.tpTerminology.Title = Filemanager.GetOpenEhrTerm(47, Me.tpTerminology.Title, language)
         Me.tpText.Title = Filemanager.GetOpenEhrTerm(83, Me.tpText.Title, language)
         Me.tpInterface.Title = Filemanager.GetOpenEhrTerm(84, Me.tpInterface.Title, language)
+        Me.tpDescription.Title = Filemanager.GetOpenEhrTerm(113, Me.tpDescription.Title, language)
         Me.tpTerms.Title = Filemanager.GetOpenEhrTerm(86, Me.tpTerms.Title, language)
         Me.tpConstraints.Title = Filemanager.GetOpenEhrTerm(87, Me.tpTerms.Title, language)
         Me.tpLanguages.Title = Filemanager.GetOpenEhrTerm(88, Me.tpLanguages.Title, language)
@@ -2211,6 +2205,7 @@ Public Class Designer
         Me.tpRootStateEventSeries.Title = Filemanager.GetOpenEhrTerm(133, Me.tpRootStateEventSeries.Title, language)
         Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(177, Me.tpRootStateStructure.Title, language)
         Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(446, Me.cbMandatory.Text, language)
+
 
     End Sub
 
@@ -3015,7 +3010,7 @@ Public Class Designer
 
         mTabPageDataEventSeries = New TabpageHistory
         tp.Name = "tpDataEventSeries"
-        tp.Title = "Events"
+        tp.Title = Filemanager.GetOpenEhrTerm(133, "Events")
         mTabPagesCollection.Add(tp.Name, tp)
         mComponentsCollection.Add(mTabPageDataEventSeries)
         tp.Controls.Add(mTabPageDataEventSeries)
@@ -3045,13 +3040,13 @@ Public Class Designer
     Private Sub SetUpInstruction()
         ' reset the data structure tab page
         mTabPageInstruction = New TabPageInstruction
-        ' add it to the collection of components that require translation
-        'FIXME need openEHR term
-        ' Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(85, "Instruction")
-        Me.tpSectionPage.Title = StructureType.INSTRUCTION.ToString
+
+        Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(557, StructureType.INSTRUCTION.ToString)
         Me.tpSectionPage.Controls.Clear()
         Me.tpSectionPage.Controls.Add(mTabPageInstruction)
         mTabPageInstruction.Dock = DockStyle.Fill
+
+        ' add it to the collection of components that require translation
         Me.mComponentsCollection.Add(mTabPageInstruction)
 
         Me.HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
@@ -3062,13 +3057,13 @@ Public Class Designer
     Private Sub SetUpAction()
         ' reset the data structure tab page
         mTabPageAction = New TabPageAction
-        ' add it to the collection of components that require translation
-        'FIXME need openEHR term
-        ' Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(85, "Instruction")
+
         Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(556, "Action")
         Me.tpSectionPage.Controls.Clear()
         Me.tpSectionPage.Controls.Add(mTabPageAction)
         mTabPageAction.Dock = DockStyle.Fill
+
+        ' add it to the collection of components that require translation
         Me.mComponentsCollection.Add(mTabPageAction)
 
         Me.HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
@@ -3079,11 +3074,14 @@ Public Class Designer
     Private Sub SetUpDataStructure()
         ' reset the data structure tab page
         mTabPageDataStructure = New TabPageStructure
-        ' add it to the collection of components that require translation
+
         Me.tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
-        mComponentsCollection.Add(mTabPageDataStructure)
         Me.tpDataStructure.Controls.Add(mTabPageDataStructure)
         mTabPageDataStructure.Dock = DockStyle.Fill
+
+        ' add it to the collection of components that require translation
+        mComponentsCollection.Add(mTabPageDataStructure)
+
         Me.TabStructure.SelectedIndex = 0
         Me.tpDataStructure.Selected = True
     End Sub
@@ -3257,7 +3255,7 @@ Public Class Designer
     End Sub
 
     
-    Private Sub MenuViewArchetypes_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuViewArchetypes.Click
+    Private Sub MenuViewArchetypes_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim frm As Form
         frm = New formCreateClinicalModel
         frm.ShowDialog(Me)
@@ -3576,13 +3574,12 @@ Public Class Designer
         mTabPageProtocolStructure.ProcessStructure(rm)
 
         ' add it to the collection of components that require translation
-        tp.Title = mTabPageProtocolStructure.StructureType
         mComponentsCollection.Add(mTabPageProtocolStructure)
         tp.Controls.Add(mTabPageProtocolStructure)
         mTabPageProtocolStructure.Dock = DockStyle.Fill
         tp.BackColor = System.Drawing.Color.LightSteelBlue
         tp.Name = "tpProtocol"
-        tp.Title = "Protocol"
+        tp.Title = Filemanager.GetOpenEhrTerm(78, "Protocol")
         Me.TabDesign.TabPages.Add(tp)
         Me.cbProtocol.Checked = True
 

@@ -175,7 +175,15 @@ Public Class OntologyManager
         Dim aterm As RmTerm
         Dim LanguageText As String
 
-        mLanguageDS.Clear()
+        Try
+            mLanguageDS.Clear()
+        Catch
+            If mLanguageDS.HasChanges Then
+                ' must accept these before calling clear
+                mLanguageDS.AcceptChanges()
+            End If
+            mLanguageDS.Clear()
+        End Try
 
         Debug.Assert(TermDefinitionTable.Rows.Count = 0)
         'If Me.TermDefinitionTable.Rows.Count > 0 Then

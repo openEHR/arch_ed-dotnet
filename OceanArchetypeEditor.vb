@@ -82,9 +82,9 @@ Public Class OceanArchetypeEditor
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
         'MessageBox.Show("LANG: " & default_language_code, "TEST")
-        mDefaultLanguageCode =  "tr"
+        mDefaultLanguageCode = "fa"
         'MessageBox.Show("Specific LANG: " & specific_language_code, "TEST")
-        mSpecificLanguageCode = "tr"
+        mSpecificLanguageCode = "fa"
 
         'mDefaultLanguageCode =  "nl"
         'mSpecificLanguageCode = "nl"
@@ -591,6 +591,12 @@ Public Class OceanArchetypeEditor
         Units.Rows.Add(rw)
     End Sub
 
+    Shared Function IsLanguageRightToLeft(ByVal a_language_code As String) As Boolean
+        Select Case a_language_code
+            Case "fa"
+                Return False
+        End Select
+    End Function
     Shared Sub main(ByVal CmdArgs() As String)
         Dim frm As New Designer
 

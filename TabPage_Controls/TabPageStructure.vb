@@ -110,7 +110,7 @@ Public Class TabPageStructure
         Me.PanelStructure = New System.Windows.Forms.Panel
         Me.panelDisplay = New System.Windows.Forms.Panel
         Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.PanelDetails = New ArchetypeEditor.ArchetypeNodeConstraintControl
+        Me.PanelDetails = New ArchetypeNodeConstraintControl
         Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
         Me.MenuItemGridAdd = New System.Windows.Forms.MenuItem

@@ -208,7 +208,23 @@ Public Class Options
 
     Function StateMachineColour(ByVal a_StateMachineType As StateMachineType) As Color
         Debug.Assert(a_StateMachineType <> StateMachineType.Not_Set)
-        Return mColors(a_StateMachineType - 1)
+        Select Case a_StateMachineType
+            Case StateMachineType.Initial
+                Return mColors(0)
+            Case StateMachineType.Active
+                Return mColors(1)
+            Case StateMachineType.Completed
+                Return mColors(2)
+            Case StateMachineType.ActiveSuspended
+                Return mColors(3)
+            Case StateMachineType.InitialSuspended
+                Return mColors(4)
+            Case StateMachineType.ActiveAborted
+                Return mColors(5)
+            Case StateMachineType.InitialAborted
+                Return mColors(6)
+        End Select
+
     End Function
 
     Sub New()

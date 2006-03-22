@@ -1096,26 +1096,37 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
+        Sub BuildWorkFlowStep(ByVal rm As RmPathwayStep, ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+            Dim a_state, a_step As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim code_phrase As New CodePhrase
+
+            objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("ISM_TRANSITION"), openehr.base.kernel.Create.STRING.make_from_cil(rm.NodeId))
+            a_state = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("current_state"))
+            code_phrase.TerminologyID = "openehr"
+            code_phrase.Codes.Add((CInt(rm.StateType)).ToString)
+            If rm.HasAlternativeState Then
+                code_phrase.Codes.Add(CInt(rm.AlternativeState).ToString)
+            End If
+            BuildCodedText(a_state, code_phrase)
+
+            a_step = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("careflow_step"))
+            code_phrase = New CodePhrase
+            code_phrase.Codes.Add(rm.NodeId)  ' local is default terminology, node_id of rm is same as term code of name
+            BuildCodedText(a_step, code_phrase)
+
+        End Sub
+
         Sub BuildPathway(ByVal rm As RmStructureCompound, ByVal arch_def As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim states As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING
 
-            an_attribute = mCADL_Factory.create_c_attribute_multiple(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil(StructureType.ism_transition.ToString), MakeCardinality(rm.Children.Cardinality))
+            If rm.Children.Count > 0 Then
+                an_attribute = mCADL_Factory.create_c_attribute_multiple(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("ism_transition"), MakeCardinality(rm.Children.Cardinality))
 
-            For Each pathway_step As RmPathwayStep In rm.Children
-                Dim a_state As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.CarePathwayStep)), openehr.base.kernel.Create.STRING.make_from_cil(pathway_step.NodeId))
-                a_state = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("ssm_state"))
-                Dim s As String
-                s = Int(pathway_step.StateType).ToString
-                If pathway_step.HasAlternativeState Then
-                    s &= "," & Int(pathway_step.AlternativeState).ToString
-                End If
-                states = mCADL_Factory.create_c_string_make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(s))
-                mCADL_Factory.create_c_primitive_object(a_state, states)
-            Next
-
+                For Each pathway_step As RmPathwayStep In rm.Children
+                    BuildWorkFlowStep(pathway_step, an_attribute)
+                Next
+            End If
         End Sub
 
         Sub BuildActivity(ByVal rm As RmActivity, ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)

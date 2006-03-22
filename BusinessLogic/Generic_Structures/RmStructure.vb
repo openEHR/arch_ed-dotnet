@@ -52,7 +52,7 @@ Public Enum StructureType
     Activity = 586
     Activities = 587
     ActivityDescription = 509
-    ism_transition = 1005
+    ISM_TRANSITION = 1005
 End Enum
 
 Public Class RmStructure
