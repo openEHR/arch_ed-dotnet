@@ -467,7 +467,7 @@ Class Filemanager
         For Each f As FileManagerLocal In mFileManagerCollection
             If f.FileEdited Then
                 If mFileManagerCollection.Count > 1 Or askToSave Then
-                    Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & f.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
+                    Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & " '" & f.Archetype.Archetype_ID.ToString & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
                         Case DialogResult.Cancel
                             Return False
                         Case DialogResult.No

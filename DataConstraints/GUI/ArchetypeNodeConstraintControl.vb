@@ -48,9 +48,15 @@ Public Class ArchetypeNodeConstraintControl
                     mOccurrences.Mode = OccurrencesMode.Numeric
             End Select
 
-            mIsLoading = False
             Me.PanelGenericConstraint.Controls.Add(mOccurrences)
+
             mOccurrences.Dock = DockStyle.Fill
+
+            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+                TranslateGUI()
+            End If
+
+            mIsLoading = False
         End If
 
         Me.HelpProviderCommonConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
@@ -77,13 +83,13 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents PanelDataConstraint As System.Windows.Forms.Panel
     Friend WithEvents PanelNonAnonymous As System.Windows.Forms.Panel
     Friend WithEvents txtRuntimeName As System.Windows.Forms.TextBox
-    Friend WithEvents Label11 As System.Windows.Forms.Label
     Friend WithEvents txtTermDescription As System.Windows.Forms.TextBox
-    Friend WithEvents Label12 As System.Windows.Forms.Label
     Friend WithEvents PanelLower As System.Windows.Forms.Panel
     Friend WithEvents butSetRuntimeName As System.Windows.Forms.Button
     Friend WithEvents HelpProviderCommonConstraint As System.Windows.Forms.HelpProvider
     Friend WithEvents labelAnyCluster As System.Windows.Forms.Label
+    Friend WithEvents lblRunTimeName As System.Windows.Forms.Label
+    Friend WithEvents lblDescription As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.PanelGenericConstraint = New System.Windows.Forms.Panel
         Me.PanelDataConstraint = New System.Windows.Forms.Panel
@@ -91,9 +97,9 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelNonAnonymous = New System.Windows.Forms.Panel
         Me.butSetRuntimeName = New System.Windows.Forms.Button
         Me.txtRuntimeName = New System.Windows.Forms.TextBox
-        Me.Label11 = New System.Windows.Forms.Label
+        Me.lblRunTimeName = New System.Windows.Forms.Label
         Me.txtTermDescription = New System.Windows.Forms.TextBox
-        Me.Label12 = New System.Windows.Forms.Label
+        Me.lblDescription = New System.Windows.Forms.Label
         Me.PanelLower = New System.Windows.Forms.Panel
         Me.HelpProviderCommonConstraint = New System.Windows.Forms.HelpProvider
         Me.PanelDataConstraint.SuspendLayout()
@@ -131,9 +137,9 @@ Public Class ArchetypeNodeConstraintControl
         '
         Me.PanelNonAnonymous.Controls.Add(Me.butSetRuntimeName)
         Me.PanelNonAnonymous.Controls.Add(Me.txtRuntimeName)
-        Me.PanelNonAnonymous.Controls.Add(Me.Label11)
+        Me.PanelNonAnonymous.Controls.Add(Me.lblRunTimeName)
         Me.PanelNonAnonymous.Controls.Add(Me.txtTermDescription)
-        Me.PanelNonAnonymous.Controls.Add(Me.Label12)
+        Me.PanelNonAnonymous.Controls.Add(Me.lblDescription)
         Me.PanelNonAnonymous.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelNonAnonymous.Location = New System.Drawing.Point(0, 0)
         Me.PanelNonAnonymous.Name = "PanelNonAnonymous"
@@ -160,14 +166,14 @@ Public Class ArchetypeNodeConstraintControl
         Me.txtRuntimeName.TabIndex = 7
         Me.txtRuntimeName.Text = ""
         '
-        'Label11
+        'lblRunTimeName
         '
-        Me.Label11.Location = New System.Drawing.Point(8, 62)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(120, 32)
-        Me.Label11.TabIndex = 6
-        Me.Label11.Text = "Runtime name constraint:"
-        Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblRunTimeName.Location = New System.Drawing.Point(8, 62)
+        Me.lblRunTimeName.Name = "lblRunTimeName"
+        Me.lblRunTimeName.Size = New System.Drawing.Size(120, 32)
+        Me.lblRunTimeName.TabIndex = 6
+        Me.lblRunTimeName.Text = "Runtime name constraint:"
+        Me.lblRunTimeName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtTermDescription
         '
@@ -179,14 +185,14 @@ Public Class ArchetypeNodeConstraintControl
         Me.txtTermDescription.TabIndex = 5
         Me.txtTermDescription.Text = ""
         '
-        'Label12
+        'lblDescription
         '
-        Me.Label12.Location = New System.Drawing.Point(19, 8)
-        Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(112, 16)
-        Me.Label12.TabIndex = 26
-        Me.Label12.Text = "Description:"
-        Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblDescription.Location = New System.Drawing.Point(19, 8)
+        Me.lblDescription.Name = "lblDescription"
+        Me.lblDescription.Size = New System.Drawing.Size(112, 16)
+        Me.lblDescription.TabIndex = 26
+        Me.lblDescription.Text = "Description:"
+        Me.lblDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'PanelLower
         '
@@ -225,7 +231,11 @@ Public Class ArchetypeNodeConstraintControl
         End Get
     End Property
 
-
+    Public Sub TranslateGUI()
+        Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
+        Me.lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, Me.lblRunTimeName.Text)
+        Me.labelAnyCluster.Text = Filemanager.GetOpenEhrTerm(313, Me.labelAnyCluster.Text)
+    End Sub
 
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _
             ByVal IsState As Boolean, ByVal aArchetypeNode As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
@@ -260,6 +270,7 @@ Public Class ArchetypeNodeConstraintControl
                         Case Else
                             mConstraintControl = ConstraintControl.CreateConstraintControl( _
                                                            archetypeElem.Constraint.Type, mFileManager)
+
 
                             Me.PanelDataConstraint.Controls.Add(mConstraintControl)
 
@@ -353,7 +364,7 @@ Public Class ArchetypeNodeConstraintControl
 
     End Sub
 
-   
+
     Private Sub butSetRuntimeName_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butSetRuntimeName.Click
         Dim frm As New ConstraintForm
         Dim has_constraint As Boolean
@@ -389,7 +400,7 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub ArchetypeNodeConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-     End Sub
+    End Sub
 
     Private Sub txtTermDescription_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtTermDescription.KeyPress
         ' work around as acceptsreturn = false does not deal with stop Enter unless there is a AcceptButton

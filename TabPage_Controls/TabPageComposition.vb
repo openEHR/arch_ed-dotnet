@@ -181,6 +181,8 @@ Public Class TabPageComposition
     End Function
 
     Public Sub Reset()
+        Me.radioEvent.Checked = True
+
         Me.tpContext.Controls.Clear()
         mContextConstraint = New TabPageStructure
         tpContext.Controls.Add(mContextConstraint)
@@ -193,11 +195,13 @@ Public Class TabPageComposition
         mSectionConstraint.Dock = DockStyle.Fill
     End Sub
 
-    Public Sub ProcessComposition(ByVal Struct As Children)
+    Public Sub ProcessComposition(ByVal a_composition As RmComposition)
 
         Me.Reset()
 
-        For Each rm As RmStructureCompound In Struct
+        Me.radioPersist.Checked = a_composition.IsPersistent
+
+        For Each rm As RmStructureCompound In a_composition.Data
             Select Case rm.Type
                 Case StructureType.SECTION
                     mSectionConstraint.IsRootOfComposition = True
@@ -236,6 +240,7 @@ Public Class TabPageComposition
                 rm.Data.Add(section)
             End If
         End If
+        rm.IsPersistent = Me.radioPersist.Checked
         Return rm
     End Function
 

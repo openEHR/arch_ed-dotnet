@@ -40,6 +40,18 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
         mAllowedValuesDataView = New DataView(mFileManager.OntologyManager.TermDefinitionTable)
+
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.radioText.Text = Filemanager.GetOpenEhrTerm(444, Me.radioText.Text)
+            Me.radioInternal.Text = Filemanager.GetOpenEhrTerm(150, Me.radioInternal.Text)
+            Me.radioTerminology.Text = Filemanager.GetOpenEhrTerm(47, Me.radioTerminology.Text)
+            Me.butDefaultItem.Text = Filemanager.GetOpenEhrTerm(153, Me.butDefaultItem.Text)
+            Me.ToolTip1.SetToolTip(Me.butAddItem, Filemanager.GetOpenEhrTerm(602, "Add existing term"))
+            Me.ToolTip1.SetToolTip(Me.ButNewItem, Filemanager.GetOpenEhrTerm(603, "Add new term"))
+            Me.ToolTip1.SetToolTip(Me.butRemoveItem, Filemanager.GetOpenEhrTerm(152, "Remove term"))
+
+
+        End If
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer
@@ -125,7 +137,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.butDefaultItem.Location = New System.Drawing.Point(11, 165)
         Me.butDefaultItem.Name = "butDefaultItem"
-        Me.butDefaultItem.Size = New System.Drawing.Size(135, 24)
+        Me.butDefaultItem.Size = New System.Drawing.Size(157, 24)
         Me.butDefaultItem.TabIndex = 8
         Me.butDefaultItem.Text = "Set assumed value"
         Me.butDefaultItem.Visible = False
@@ -143,10 +155,10 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         'txtAssumedValue
         '
         Me.txtAssumedValue.ContextMenu = Me.ContextMenuClearText
-        Me.txtAssumedValue.Location = New System.Drawing.Point(159, 165)
+        Me.txtAssumedValue.Location = New System.Drawing.Point(176, 165)
         Me.txtAssumedValue.Name = "txtAssumedValue"
         Me.txtAssumedValue.ReadOnly = True
-        Me.txtAssumedValue.Size = New System.Drawing.Size(177, 22)
+        Me.txtAssumedValue.Size = New System.Drawing.Size(176, 22)
         Me.txtAssumedValue.TabIndex = 5
         Me.txtAssumedValue.Text = "(none)"
         Me.txtAssumedValue.Visible = False

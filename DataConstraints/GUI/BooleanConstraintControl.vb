@@ -29,6 +29,9 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
+        If Not Me.DesignMode Then
+            Debug.Assert(False, "Should not get to here")
+        End If
 
     End Sub
 
@@ -41,6 +44,15 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         'Add any initialization after the InitializeComponent() call
 
         mFileManager = a_file_manager
+
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.LabelTrueFalse.Text = Filemanager.GetOpenEhrTerm(157, Me.LabelTrueFalse.Text)
+            Me.LabelTrueFalseDefault.Text = Filemanager.GetOpenEhrTerm(600, Me.LabelTrueFalseDefault.Text)
+            Me.gbAssummedValue.Text = Filemanager.GetOpenEhrTerm(158, Me.gbAssummedValue.Text)
+
+
+
+        End If
 
     End Sub
 

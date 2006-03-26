@@ -995,8 +995,21 @@ Namespace ArchetypeEditor.ADL_Classes
             ' Build a section, runtimename is already done
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-            ' CadlObj.SetObjectId(openehr.base.kernel.Create.STRING.make_from_cil(Rm.NodeId))
+            ' set the category
+            an_attribute = mCADL_Factory.create_c_attribute_single(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("category"))
+            Dim t As New Constraint_Text
+            t.TypeOfTextConstraint = TextConstrainType.Terminology ' coded_text
+            t.AllowableValues.TerminologyID = "openehr"
 
+            If Rm.IsPersistent Then
+                t.AllowableValues.Codes.Add("431") ' persistent
+            Else
+                t.AllowableValues.Codes.Add("433") ' event
+            End If
+
+            BuildCodedText(an_attribute, t.AllowableValues)
+
+            ' Deal with the data
             If Rm.Data.Count > 0 Then
 
                 For Each a_structure As RmStructure In Rm.Data
