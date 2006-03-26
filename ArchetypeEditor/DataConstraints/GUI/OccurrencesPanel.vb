@@ -510,6 +510,7 @@ Public Class OccurrencesPanel
         Me.comboRepeat.Items.Add(Filemanager.GetOpenEhrTerm(591, "repeating, limited"))
         Me.comboRepeat.SelectedIndex = i
         Me.cbUnbounded.Text = Filemanager.GetOpenEhrTerm(112, "Unbounded")
+        Me.cbOrdered.Text = Filemanager.GetOpenEhrTerm(162, "Ordered")
         mIsLoading = False
 
     End Sub

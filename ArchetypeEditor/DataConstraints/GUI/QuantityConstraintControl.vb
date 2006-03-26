@@ -26,6 +26,9 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
+        If Not Me.DesignMode Then
+            Debug.Assert(False)
+        End If
 
     End Sub
 
@@ -39,6 +42,18 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
         Me.QuantityUnitConstraint.LocalFileManager = mFileManager
+
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.LabelQuantity.Text = Filemanager.GetOpenEhrTerm(115, Me.LabelQuantity.Text)
+            Me.lblListProperty.Text = Filemanager.GetOpenEhrTerm(116, Me.lblListProperty.Text)
+            Me.lblListUnits.Text = Filemanager.GetOpenEhrTerm(117, Me.lblListUnits.Text)
+            Me.QuantityUnitConstraint.LabelQuantity.Text = Filemanager.GetOpenEhrTerm(601, "Unit values")
+            Me.QuantityUnitConstraint.cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, Me.QuantityUnitConstraint.cbMinValue.Text)
+            Me.QuantityUnitConstraint.cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, Me.QuantityUnitConstraint.cbMaxValue.Text)
+            Me.QuantityUnitConstraint.lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, Me.QuantityUnitConstraint.lblAssumedValue.Text)
+        Else
+            Me.QuantityUnitConstraint.LabelQuantity.Text = "Unit values"
+        End If
 
 
     End Sub

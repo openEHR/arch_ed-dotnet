@@ -106,7 +106,6 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
         MyBase.numMaxValue.DecimalPlaces = 2
         MyBase.NumericAssumed.DecimalPlaces = 2
 
-        LabelQuantity.Text = "Unit Values"
     End Sub
 
     Protected Sub SetIncrement()

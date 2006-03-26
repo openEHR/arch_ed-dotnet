@@ -671,6 +671,10 @@
   <PrimaryRubric Id="597" Language="en" />
   <PrimaryRubric Id="598" Language="en" />
   <PrimaryRubric Id="599" Language="en" />
+  <PrimaryRubric Id="600" Language="en" />
+  <PrimaryRubric Id="601" Language="en" />
+  <PrimaryRubric Id="602" Language="en" />
+  <PrimaryRubric Id="603" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -2707,6 +2711,10 @@
   <Concept Language="en" ConceptID="597" Rubric="Report issue" />
   <Concept Language="en" ConceptID="598" Rubric="Preferences" />
   <Concept Language="en" ConceptID="599" Rubric="Restricted" />
+  <Concept Language="en" ConceptID="600" Rubric="Allowed values" />
+  <Concept Language="en" ConceptID="601" Rubric="Unit values" />
+  <Concept Language="en" ConceptID="602" Rubric="Add existing term" />
+  <Concept Language="en" ConceptID="603" Rubric="Add new term" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

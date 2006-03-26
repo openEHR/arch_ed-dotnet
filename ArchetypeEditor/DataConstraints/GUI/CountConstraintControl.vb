@@ -42,6 +42,12 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
 
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, Me.cbMinValue.Text)
+            Me.cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, Me.cbMaxValue.Text)
+            Me.lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, Me.lblAssumedValue.Text)
+        End If
+
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer
@@ -106,23 +112,23 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'cbMinValue
         '
-        Me.cbMinValue.Location = New System.Drawing.Point(48, 29)
+        Me.cbMinValue.Location = New System.Drawing.Point(48, 30)
         Me.cbMinValue.Name = "cbMinValue"
-        Me.cbMinValue.Size = New System.Drawing.Size(144, 24)
+        Me.cbMinValue.Size = New System.Drawing.Size(184, 24)
         Me.cbMinValue.TabIndex = 0
         Me.cbMinValue.Text = "Set min. value"
         '
         'cbMaxValue
         '
-        Me.cbMaxValue.Location = New System.Drawing.Point(48, 55)
+        Me.cbMaxValue.Location = New System.Drawing.Point(48, 56)
         Me.cbMaxValue.Name = "cbMaxValue"
-        Me.cbMaxValue.Size = New System.Drawing.Size(144, 24)
+        Me.cbMaxValue.Size = New System.Drawing.Size(184, 24)
         Me.cbMaxValue.TabIndex = 3
         Me.cbMaxValue.Text = "Set max. value"
         '
         'NumericAssumed
         '
-        Me.NumericAssumed.Location = New System.Drawing.Point(256, 82)
+        Me.NumericAssumed.Location = New System.Drawing.Point(296, 82)
         Me.NumericAssumed.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.NumericAssumed.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.NumericAssumed.Name = "NumericAssumed"
@@ -134,7 +140,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'numMaxValue
         '
-        Me.numMaxValue.Location = New System.Drawing.Point(256, 55)
+        Me.numMaxValue.Location = New System.Drawing.Point(296, 55)
         Me.numMaxValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMaxValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMaxValue.Name = "numMaxValue"
@@ -146,7 +152,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'numMinValue
         '
-        Me.numMinValue.Location = New System.Drawing.Point(256, 31)
+        Me.numMinValue.Location = New System.Drawing.Point(296, 31)
         Me.numMinValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMinValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMinValue.Name = "numMinValue"
@@ -217,7 +223,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         'comboIncludeMin
         '
         Me.comboIncludeMin.Items.AddRange(New Object() {">=", ">"})
-        Me.comboIncludeMin.Location = New System.Drawing.Point(200, 31)
+        Me.comboIncludeMin.Location = New System.Drawing.Point(240, 31)
         Me.comboIncludeMin.Name = "comboIncludeMin"
         Me.comboIncludeMin.Size = New System.Drawing.Size(48, 24)
         Me.comboIncludeMin.TabIndex = 1
@@ -227,7 +233,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         'comboIncludeMax
         '
         Me.comboIncludeMax.Items.AddRange(New Object() {"<=", "<"})
-        Me.comboIncludeMax.Location = New System.Drawing.Point(200, 55)
+        Me.comboIncludeMax.Location = New System.Drawing.Point(240, 55)
         Me.comboIncludeMax.Name = "comboIncludeMax"
         Me.comboIncludeMax.Size = New System.Drawing.Size(48, 24)
         Me.comboIncludeMax.TabIndex = 4
@@ -236,7 +242,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'lblAssumedValue
         '
-        Me.lblAssumedValue.Location = New System.Drawing.Point(56, 82)
+        Me.lblAssumedValue.Location = New System.Drawing.Point(96, 82)
         Me.lblAssumedValue.Name = "lblAssumedValue"
         Me.lblAssumedValue.Size = New System.Drawing.Size(184, 24)
         Me.lblAssumedValue.TabIndex = 13
@@ -256,7 +262,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.numMaxValue)
         Me.Controls.Add(Me.numMinValue)
         Me.Name = "CountConstraintControl"
-        Me.Size = New System.Drawing.Size(336, 104)
+        Me.Size = New System.Drawing.Size(392, 112)
         CType(Me.NumericAssumed, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numMaxValue, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numMinValue, System.ComponentModel.ISupportInitialize).EndInit()

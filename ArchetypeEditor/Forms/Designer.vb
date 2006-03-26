@@ -1969,7 +1969,7 @@ Public Class Designer
 
                     SetUpComposition()
                     mTabPageComposition.ProcessComposition( _
-                        mFileManager.Archetype.Definition.Data)
+                        mFileManager.Archetype.Definition)
             End Select
 
         End If

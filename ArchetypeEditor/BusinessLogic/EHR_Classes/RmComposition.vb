@@ -17,6 +17,16 @@
 
 Public Class RmComposition : Inherits ArchetypeDefinitionAbstract
 
+    Protected mIsPersistent As Boolean = False
+    Public Property IsPersistent() As Boolean
+        Get
+            Return mIsPersistent
+        End Get
+        Set(ByVal Value As Boolean)
+            mIsPersistent = Value
+        End Set
+    End Property
+
     Sub New()
         mType = StructureType.COMPOSITION
         mChildren = New Children(mType)

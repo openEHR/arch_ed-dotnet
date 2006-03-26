@@ -158,20 +158,18 @@ Public Class ConstraintControl
 
     Protected Overridable Sub SetControlValues(ByVal IsState As Boolean, _
             ByVal aArchetypeElement As ArchetypeElement)
-
         SetControlValues(IsState)
     End Sub
 
     Protected Overridable Sub SetControlValues(ByVal IsState As Boolean, _
                 ByVal c As Constraint)
-        'Added Sam Heard 2004-06-07
-        ' required for multiple constraints
         SetControlValues(IsState)
     End Sub
 
     Protected Overridable Sub SetControlValues(ByVal IsState As Boolean)
         'Noop
     End Sub
+
 
     Public Shared Function CreateConstraintControl(ByVal aConstraintType As ConstraintType, ByVal a_file_manager As FileManagerLocal) As ConstraintControl
 
