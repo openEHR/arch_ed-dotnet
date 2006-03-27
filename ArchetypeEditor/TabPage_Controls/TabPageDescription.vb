@@ -73,6 +73,10 @@ Public Class TabPageDescription
     Friend WithEvents c_menuPasteEmail As System.Windows.Forms.MenuItem
     Friend WithEvents c_menuPasteOrg As System.Windows.Forms.MenuItem
     Friend WithEvents c_menPasteDate As System.Windows.Forms.MenuItem
+    Friend WithEvents lblContributors As System.Windows.Forms.Label
+    Friend WithEvents listContributors As System.Windows.Forms.ListBox
+    Friend WithEvents butRemoveContributor As System.Windows.Forms.Button
+    Friend WithEvents butAddContributor As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageDescription))
         Me.lblStatus = New System.Windows.Forms.Label
@@ -90,6 +94,10 @@ Public Class TabPageDescription
         Me.listKeyword = New System.Windows.Forms.ListBox
         Me.TabDescription = New Crownwood.Magic.Controls.TabControl
         Me.tpAuthor = New Crownwood.Magic.Controls.TabPage
+        Me.butAddContributor = New System.Windows.Forms.Button
+        Me.butRemoveContributor = New System.Windows.Forms.Button
+        Me.lblContributors = New System.Windows.Forms.Label
+        Me.listContributors = New System.Windows.Forms.ListBox
         Me.gbAuthor = New System.Windows.Forms.GroupBox
         Me.ContextMenu1 = New System.Windows.Forms.ContextMenu
         Me.c_menuPaste = New System.Windows.Forms.MenuItem
@@ -274,12 +282,59 @@ Public Class TabPageDescription
         '
         'tpAuthor
         '
+        Me.tpAuthor.Controls.Add(Me.butAddContributor)
+        Me.tpAuthor.Controls.Add(Me.butRemoveContributor)
+        Me.tpAuthor.Controls.Add(Me.lblContributors)
+        Me.tpAuthor.Controls.Add(Me.listContributors)
         Me.tpAuthor.Controls.Add(Me.gbAuthor)
         Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
         Me.tpAuthor.Name = "tpAuthor"
         Me.tpAuthor.Size = New System.Drawing.Size(700, 474)
         Me.tpAuthor.TabIndex = 1
         Me.tpAuthor.Title = "Authorship"
+        '
+        'butAddContributor
+        '
+        Me.butAddContributor.BackColor = System.Drawing.Color.Transparent
+        Me.butAddContributor.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.butAddContributor.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butAddContributor.Image = CType(resources.GetObject("butAddContributor.Image"), System.Drawing.Image)
+        Me.butAddContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butAddContributor.Location = New System.Drawing.Point(24, 189)
+        Me.butAddContributor.Name = "butAddContributor"
+        Me.butAddContributor.Size = New System.Drawing.Size(24, 25)
+        Me.butAddContributor.TabIndex = 38
+        '
+        'butRemoveContributor
+        '
+        Me.butRemoveContributor.BackColor = System.Drawing.Color.Transparent
+        Me.butRemoveContributor.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butRemoveContributor.Image = CType(resources.GetObject("butRemoveContributor.Image"), System.Drawing.Image)
+        Me.butRemoveContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butRemoveContributor.Location = New System.Drawing.Point(24, 221)
+        Me.butRemoveContributor.Name = "butRemoveContributor"
+        Me.butRemoveContributor.Size = New System.Drawing.Size(24, 25)
+        Me.butRemoveContributor.TabIndex = 39
+        '
+        'lblContributors
+        '
+        Me.lblContributors.Location = New System.Drawing.Point(56, 163)
+        Me.lblContributors.Name = "lblContributors"
+        Me.lblContributors.Size = New System.Drawing.Size(112, 24)
+        Me.lblContributors.TabIndex = 37
+        Me.lblContributors.Text = "Contributors"
+        Me.lblContributors.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        '
+        'listContributors
+        '
+        Me.listContributors.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.listContributors.ItemHeight = 17
+        Me.listContributors.Location = New System.Drawing.Point(56, 189)
+        Me.listContributors.Name = "listContributors"
+        Me.listContributors.Size = New System.Drawing.Size(528, 123)
+        Me.listContributors.TabIndex = 36
         '
         'gbAuthor
         '
@@ -480,6 +535,10 @@ Public Class TabPageDescription
             Me.txtOriginalEmail.Text = Value.OriginalAuthorEmail
             Me.txtOrganisation.Text = Value.OriginalAuthorOrganisation
             Me.txtDate.Text = Value.OriginalAuthorDate
+            For Each s As String In Value.OtherContributors
+                Me.listContributors.Items.Add(s)
+            Next
+
             mArchetypeDescription = Value
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
             SetDescriptionDetailValues()
@@ -508,15 +567,23 @@ Public Class TabPageDescription
         mArchetypeDescription.OriginalAuthorOrganisation = Me.txtOrganisation.Text
         mArchetypeDescription.OriginalAuthorDate = Me.txtDate.Text
 
+        ' get the contributors
+        For Each s As String In Me.listContributors.Items
+            mArchetypeDescription.OtherContributors.Add(s)
+        Next
+
         If mCurrentLanguage Is Nothing Then
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         End If
 
         Dim archDescriptionItem As New ArchetypeDescriptionItem( _
             mCurrentLanguage)
+
+        ' get the key words
         For Each s As String In Me.listKeyword.Items
             archDescriptionItem.KeyWords.Add(s)
         Next
+
         archDescriptionItem.Purpose = Me.txtPurpose.Text
         archDescriptionItem.Use = Me.txtUse.Text
         archDescriptionItem.MisUse = Me.txtMisuse.Text
@@ -549,6 +616,7 @@ Public Class TabPageDescription
         Me.txtUse.Text = ""
         Me.txtMisuse.Text = ""
         Me.listKeyword.Items.Clear()
+        Me.listContributors.Items.Clear()
     End Sub
 
     Public Sub Translate()
@@ -670,5 +738,23 @@ Public Class TabPageDescription
             Me.txtDate.Text = System.DateTime.Now().ToShortDateString
         End If
 
+    End Sub
+
+    Private Sub butAddContributor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddContributor.Click
+        Dim ipb As New InputForm
+        ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(604, "Contributors")
+        If ipb.ShowDialog = DialogResult.OK Then
+            Me.listContributors.Items.Add(ipb.txtInput.Text)
+            Filemanager.Master.FileEdited = True
+        End If
+    End Sub
+
+    Private Sub butRemoveContributor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveContributor.Click
+        If Me.listContributors.SelectedIndex > -1 Then
+            If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(Me.listContributors.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                Me.listContributors.Items.RemoveAt(Me.listContributors.SelectedIndex)
+                Filemanager.Master.FileEdited = True
+            End If
+        End If
     End Sub
 End Class

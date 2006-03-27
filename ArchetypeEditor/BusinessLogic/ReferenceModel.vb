@@ -197,7 +197,7 @@ Public Class ReferenceModelLocal
                         Select Case mArchetypedClass
                             Case StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                                 Select Case Child
-                                    Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
+                                    Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree, StructureType.Slot
                                         mStructureClass = Child
                                         Return True
                                 End Select

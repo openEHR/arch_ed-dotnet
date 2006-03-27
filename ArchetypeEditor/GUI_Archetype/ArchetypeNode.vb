@@ -28,14 +28,6 @@ Public Interface ArchetypeNode
     Function Copy() As ArchetypeNode
 End Interface
 
-'Public Enum ArchetypeNodeType
-'    Nil = 0
-'    Element
-'    Cluster
-'    Slot
-'    'Reference
-'End Enum
-
 '
 '***** BEGIN LICENSE BLOCK *****
 'Version: MPL 1.1/GPL 2.0/LGPL 2.1

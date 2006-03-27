@@ -63,6 +63,12 @@ Namespace ArchetypeEditor.ADL_Classes
                     openehr.base.kernel.Create.STRING.make_from_cil(mArchetypePackageURI))
             End If
 
+            ' clear the other contributors and add them again
+            'mADL_Description.other_contributors.clear_all() ' CAUSES crash on serialise
+            For Each s As String In mOtherContributors
+                mADL_Description.add_other_contributor(openehr.base.kernel.Create.STRING.make_from_cil(s))
+            Next
+
             Return mADL_Description
         End Function
 
@@ -88,6 +94,12 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("date")) Then
                 mOriginalAuthorDate = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("date")).to_cil
+            End If
+
+            If Not mADL_Description.other_contributors Is Nothing Then
+                For i As Integer = 1 To mADL_Description.other_contributors.count
+                    mOtherContributors.Add(mADL_Description.other_contributors.i_th(i).to_cil)
+                Next
             End If
 
             MyBase.LifeCycleStateAsString = mADL_Description.lifecycle_state.to_cil

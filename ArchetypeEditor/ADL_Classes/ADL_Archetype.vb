@@ -170,7 +170,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Debug.Assert((Not id Is Nothing) And (id <> ""))
 
-            id_expression_leaf = mCADL_Factory.create_expr_leaf_feature_call(openehr.base.kernel.Create.STRING.make_from_cil(id))
+            id_expression_leaf = mCADL_Factory.create_expr_leaf_object_ref(openehr.base.kernel.Create.STRING.make_from_cil(id))
             If expression = "*" Then
                 id_pattern_expression_leaf = mCADL_Factory.create_expr_leaf_constraint(mCADL_Factory.create_c_string_make_from_regexp(openehr.base.kernel.Create.STRING.make_from_cil(expression)))
             Else
@@ -579,6 +579,10 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
+        Private Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
+            BuildSlot(value_attribute, a_slot.SlotConstraint, a_slot.Occurrences)
+        End Sub
+
         Private Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal sl As Constraint_Slot, ByVal an_occurrence As RmCardinality)
             Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
 
@@ -722,7 +726,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             For i = 1 To arraylist.count
                 s = arraylist.i_th(i).out.to_cil
-                If s.EndsWith(NodeId & "]/") Then
+                If s.EndsWith(NodeId & "]") Then
                     path = openehr.common_libs.structures.object_graph.path.Create.OG_PATH.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(s))
                     Return path
                 End If
@@ -984,7 +988,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     End If
                     an_attribute.put_child(new_section)
                 ElseIf a_structure.Type = StructureType.Slot Then
-                    BuildSlot(an_attribute, CType(a_structure, RmSlot).SlotConstraint, a_structure.Occurrences)
+                    BuildSlot(an_attribute, a_structure)
                 Else
                     Debug.Assert(False)
                 End If
@@ -1029,7 +1033,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                                 For Each slot As RmSlot In CType(a_structure, RmSection).Children
 
-                                    BuildSlot(an_attribute, CType(slot, RmSlot).SlotConstraint, slot.Occurrences)
+                                    BuildSlot(an_attribute, slot)
                                 Next
 
                             End If
@@ -1085,7 +1089,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
                         an_attribute.put_child(new_section)
                     ElseIf a_structure.Type = StructureType.Slot Then
-                        BuildSlot(an_attribute, CType(a_structure, RmSlot).SlotConstraint, a_structure.Occurrences)
+                        BuildSlot(an_attribute, a_structure)
                     Else
                         Debug.Assert(False)
                     End If
@@ -1095,16 +1099,23 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Private Sub BuildProtocol(ByVal rm As RmStructureCompound, ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-            If rm.Children.Count > 0 Then
-                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        Private Sub BuildProtocol(ByVal rm As RmStructure, ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim rmStructComp As RmStructureCompound
 
+            If rm.Type = StructureType.Slot Then
                 an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("protocol"))
-                ' only 1 protocol allowed
-                Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                BuildSlot(an_attribute, rm)
+            Else
+                rmStructComp = CType(rm, RmStructureCompound)
+                If rmStructComp.Children.Count > 0 Then
+                    an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("protocol"))
+                    ' only 1 protocol allowed
+                    Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
-                BuildStructure(rm.Children.items(0), objNode)
+                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rmStructComp.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rmStructComp.Children.items(0).NodeId))
+                    BuildStructure(rmStructComp.Children.items(0), objNode)
+                End If
             End If
 
         End Sub
@@ -1219,7 +1230,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     ' allows action to be specified in another archetype
                     Dim slot As RmSlot = CType(action_spec, RmSlot)
 
-                    BuildSlot(an_attribute, slot.SlotConstraint, slot.Occurrences)
+                    BuildSlot(an_attribute, slot)
             End Select
 
         End Sub
@@ -1270,10 +1281,14 @@ Namespace ArchetypeEditor.ADL_Classes
                             Case StructureType.State
                                 an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("state"))
 
-                                Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                                If CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot Then
+                                    BuildSlot(an_attribute, rm.Children.items(0))
+                                Else
+                                    Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                                objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
-                                BuildStructure(rm.Children.items(0), objNode)
+                                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
+                                    BuildStructure(rm.Children.items(0), objNode)
+                                End If
 
                             Case StructureType.Protocol
                                 BuildProtocol(rm, adlArchetype.definition)
@@ -1281,10 +1296,14 @@ Namespace ArchetypeEditor.ADL_Classes
                             Case StructureType.Data
                                 an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
 
-                                For Each a_rm As RmStructureCompound In rm.Children.items
-                                    Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
-                                    BuildStructure(a_rm, objNode)
+                                For Each a_rm As RmStructure In rm.Children.items
+                                    If a_rm.Type = StructureType.Slot Then
+                                        BuildSlot(an_attribute, a_rm)
+                                    Else
+                                        Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
+                                        BuildStructure(a_rm, objNode)
+                                    End If
                                 Next
                         End Select
                     Next
@@ -1355,7 +1374,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     For Each rm In cDefinition.Data
                         Select Case rm.Type
-                            Case StructureType.ism_transition
+                            Case StructureType.ISM_TRANSITION
                                 BuildPathway(rm, adlArchetype.definition)
                             Case StructureType.ActivityDescription
                                 BuildAction(rm, adlArchetype.definition)

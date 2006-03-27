@@ -18,7 +18,8 @@ Option Strict On
 
 Public Class ClusterControl : Inherits ConstraintControl
 
-    Dim mHeader As Integer
+    Private mHeader As Integer
+    Private mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
 
@@ -30,6 +31,11 @@ Public Class ClusterControl : Inherits ConstraintControl
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = aFileManager
+        mOccurrences = New OccurrencesPanel(mFileManager)
+        mOccurrences.IsContainer = True
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.LabelTop.Text = Filemanager.GetOpenEhrTerm(313, Me.LabelTop.Text)
+        End If
 
     End Sub
 
@@ -49,89 +55,39 @@ Public Class ClusterControl : Inherits ConstraintControl
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents numMax As System.Windows.Forms.NumericUpDown
-    Friend WithEvents cbUnbounded As System.Windows.Forms.CheckBox
-    Friend WithEvents lblNumMax As System.Windows.Forms.Label
-    Friend WithEvents lblNumMin As System.Windows.Forms.Label
-    Friend WithEvents numMin As System.Windows.Forms.NumericUpDown
-    Friend WithEvents cbOrdered As System.Windows.Forms.CheckBox
+    Friend WithEvents ClusterPanelTop As System.Windows.Forms.Panel
+    Friend WithEvents LabelTop As System.Windows.Forms.Label
+
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.numMax = New System.Windows.Forms.NumericUpDown
-        Me.cbUnbounded = New System.Windows.Forms.CheckBox
-        Me.lblNumMax = New System.Windows.Forms.Label
-        Me.lblNumMin = New System.Windows.Forms.Label
-        Me.numMin = New System.Windows.Forms.NumericUpDown
-        Me.cbOrdered = New System.Windows.Forms.CheckBox
-        CType(Me.numMax, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.numMin, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ClusterPanelTop = New System.Windows.Forms.Panel
+        Me.LabelTop = New System.Windows.Forms.Label
+        Me.ClusterPanelTop.SuspendLayout()
         Me.SuspendLayout()
         '
-        'numMax
+        'ClusterPanelTop
         '
-        Me.numMax.Location = New System.Drawing.Point(208, 48)
-        Me.numMax.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numMax.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numMax.Name = "numMax"
-        Me.numMax.Size = New System.Drawing.Size(48, 20)
-        Me.numMax.TabIndex = 8
-        Me.numMax.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.ClusterPanelTop.Controls.Add(Me.LabelTop)
+        Me.ClusterPanelTop.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ClusterPanelTop.Location = New System.Drawing.Point(0, 0)
+        Me.ClusterPanelTop.Name = "ClusterPanelTop"
+        Me.ClusterPanelTop.Size = New System.Drawing.Size(376, 32)
+        Me.ClusterPanelTop.TabIndex = 0
         '
-        'cbUnbounded
+        'LabelTop
         '
-        Me.cbUnbounded.Location = New System.Drawing.Point(264, 48)
-        Me.cbUnbounded.Name = "cbUnbounded"
-        Me.cbUnbounded.Size = New System.Drawing.Size(96, 16)
-        Me.cbUnbounded.TabIndex = 9
-        Me.cbUnbounded.Text = "Unbounded"
-        '
-        'lblNumMax
-        '
-        Me.lblNumMax.Location = New System.Drawing.Point(168, 48)
-        Me.lblNumMax.Name = "lblNumMax"
-        Me.lblNumMax.Size = New System.Drawing.Size(32, 16)
-        Me.lblNumMax.TabIndex = 7
-        Me.lblNumMax.Text = "Max:"
-        Me.lblNumMax.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'lblNumMin
-        '
-        Me.lblNumMin.BackColor = System.Drawing.Color.Transparent
-        Me.lblNumMin.Location = New System.Drawing.Point(8, 48)
-        Me.lblNumMin.Name = "lblNumMin"
-        Me.lblNumMin.Size = New System.Drawing.Size(104, 16)
-        Me.lblNumMin.TabIndex = 5
-        Me.lblNumMin.Text = "Cardinality -Min:"
-        Me.lblNumMin.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'numMin
-        '
-        Me.numMin.Location = New System.Drawing.Point(120, 48)
-        Me.numMin.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numMin.Name = "numMin"
-        Me.numMin.Size = New System.Drawing.Size(40, 20)
-        Me.numMin.TabIndex = 6
-        Me.numMin.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        '
-        'cbOrdered
-        '
-        Me.cbOrdered.Location = New System.Drawing.Point(120, 0)
-        Me.cbOrdered.Name = "cbOrdered"
-        Me.cbOrdered.Size = New System.Drawing.Size(112, 24)
-        Me.cbOrdered.TabIndex = 33
-        Me.cbOrdered.Text = "Ordered"
+        Me.LabelTop.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelTop.Location = New System.Drawing.Point(16, 8)
+        Me.LabelTop.Name = "LabelTop"
+        Me.LabelTop.Size = New System.Drawing.Size(144, 16)
+        Me.LabelTop.TabIndex = 0
+        Me.LabelTop.Text = "Cluster"
         '
         'ClusterControl
         '
-        Me.Controls.Add(Me.cbOrdered)
-        Me.Controls.Add(Me.numMax)
-        Me.Controls.Add(Me.cbUnbounded)
-        Me.Controls.Add(Me.lblNumMax)
-        Me.Controls.Add(Me.lblNumMin)
-        Me.Controls.Add(Me.numMin)
+        Me.Controls.Add(Me.ClusterPanelTop)
         Me.Name = "ClusterControl"
-        Me.Size = New System.Drawing.Size(376, 80)
-        CType(Me.numMax, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.numMin, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Size = New System.Drawing.Size(376, 96)
+        Me.ClusterPanelTop.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -176,85 +132,15 @@ Public Class ClusterControl : Inherits ConstraintControl
 
     Private Sub SetValues()
         ' set the cardinality
-        If mItem.Cardinality.IsUnbounded _
-            OrElse mItem.Cardinality.MaxCount < 1 Then
 
-            Me.cbUnbounded.Checked = True
-        Else
-            Me.cbUnbounded.Checked = False
-            Me.numMax.Value = mItem.Cardinality.MaxCount
-        End If
-
-        Me.numMin.Value = mItem.Cardinality.MinCount
-
-        Me.cbOrdered.Checked = mItem.IsOrdered
+        mOccurrences.Cardinality = mItem.Cardinality
     End Sub
 
-    Private Sub numMin_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMin.ValueChanged, numMin.TextChanged
-        If Not IsLoading Then
-            Try
-                If numMin.Value > numMax.Value Then
-                    numMax.Value = numMin.Value
-                End If
-                mItem.Cardinality.MinCount = CInt(Me.numMin.Value)
 
-                mFileManager.FileEdited = True
-
-            Catch ex As Exception
-                Debug.Assert(False, ex.ToString)
-            End Try
-        End If
-    End Sub
-
-    Private Sub numMax_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMax.ValueChanged, numMax.TextChanged
-
-        'If Not mArchetypeNode Is Nothing Then
-        If Not MyBase.IsLoading Then
-            Try
-                mItem.Cardinality.MaxCount = CInt(Me.numMax.Value)
-
-                mFileManager.FileEdited = True
-
-                If numMax.Value < numMin.Value Then
-                    numMin.Value = numMax.Value
-                End If
-
-            Catch ex As Exception
-                Debug.Assert(False, ex.ToString)
-            End Try
-        End If
-
-    End Sub
-
-    Private Sub cbUnbounded_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbUnbounded.CheckedChanged
-        Try
-            If Me.cbUnbounded.Checked Then
-                Me.numMax.Visible = False
-                Me.lblNumMax.Visible = False
-                mItem.Cardinality.IsUnbounded = True
-            Else
-                Me.numMax.Visible = True
-                Me.lblNumMax.Visible = True
-
-                If Me.numMax.Value < Me.numMin.Value Then
-                    Me.numMax.Value = Me.numMin.Value
-                End If
-                mItem.Cardinality.MaxCount = CInt(Me.numMax.Value)
-                mItem.Cardinality.IsUnbounded = False
-            End If
-
-            If Not MyBase.IsLoading Then mFileManager.FileEdited = True
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
-    End Sub
-
-    Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbOrdered.CheckedChanged
-        If Not MyBase.IsLoading Then
-            mItem.IsOrdered = cbOrdered.Checked
-            mFileManager.FileEdited = True
-        End If
+    Private Sub ClusterControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Me.Controls.Add(mOccurrences)
+        mOccurrences.BringToFront()
+        mOccurrences.Dock = DockStyle.Top
     End Sub
 End Class
 
