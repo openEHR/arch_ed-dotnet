@@ -24,6 +24,7 @@ Public Class ArchetypeDescription
     Protected mOtherDetails As New OtherDefinitionDetails
     Protected mArchetypeDetails As New ArchetypeDetails
     Protected mCopyRight As String
+    Protected mOtherContributors As New Collections.Specialized.StringCollection
 
     Property OriginalAuthor() As String
         Get
@@ -57,6 +58,12 @@ Public Class ArchetypeDescription
             mOriginalAuthorDate = Value
         End Set
     End Property
+    ReadOnly Property OtherContributors() As Collections.Specialized.StringCollection
+        Get
+            Return mOtherContributors
+        End Get
+    End Property
+
     Property CopyRight() As String
         Get
             Return mCopyRight

@@ -83,6 +83,11 @@
                     HintPath = "..\..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.0.3705\System.Design.dll"
                 />
                 <Reference
+                    Name = "adl_dotnet_lib"
+                    AssemblyName = "adl_dotnet_lib"
+                    HintPath = "bin\adl_dotnet_lib.dll"
+                />
+                <Reference
                     Name = "MagicLibrary"
                     AssemblyName = "MagicLibrary"
                     HintPath = "bin\MagicLibrary.dll"
@@ -91,11 +96,6 @@
                     Name = "EiffelSoftware.Runtime"
                     AssemblyName = "EiffelSoftware.Runtime"
                     HintPath = "bin\EiffelSoftware.Runtime.dll"
-                />
-                <Reference
-                    Name = "adl_dotnet_lib"
-                    AssemblyName = "adl_dotnet_lib"
-                    HintPath = "bin\adl_dotnet_lib.dll"
                 />
             </References>
             <Imports>

@@ -29,6 +29,18 @@ Public Class TermBindingPanel
 
         'Add any initialization after the InitializeComponent() call
 
+        If Not Me.DesignMode Then
+            mFileManager = Filemanager.Master
+
+
+            ' Term Binding data view
+            mTermBindingView = New DataView(mFileManager.OntologyManager.TermBindingsTable)
+            mTermBindingView.AllowNew = False
+
+            mTermBindingCriteriaView = New DataView(mFileManager.OntologyManager.TermBindingCriteriaTable)
+            mTermBindingCriteriaView.AllowNew = False
+        End If
+
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -539,7 +551,7 @@ Public Class TermBindingPanel
                 'ignore value paths
                 If logicalPaths(i).IndexOf("/value/") = -1 Then
 
-                ' check there are no enclosed "/" if so replace with "|"
+                    ' check there are no enclosed "/" if so replace with "|"
                     For Each c As Char In logicalPaths(i)
                         Dim enclosed As Boolean
                         Select Case c
@@ -563,7 +575,8 @@ Public Class TermBindingPanel
                     Dim nodes As TreeNodeCollection = PathsTreeView.Nodes
 
                     ' ignore the first and last segment as it is always ""
-                    Debug.Assert(y(y.Length - 1) = "" AndAlso y(0) = "")
+                    'ToDo: fix paths
+                    'Debug.Assert(y(y.Length - 1) = "" AndAlso y(0) = "")
 
 
                     For j As Integer = 1 To y.Length - 2
@@ -668,17 +681,7 @@ Public Class TermBindingPanel
         If Not Me.DesignMode Then
             Try
 
-                ' Term Binding data view
-                mTermBindingView = New DataView(mFileManager.OntologyManager.TermBindingsTable)
-
-                mTermBindingView.AllowNew = False
-
-                mTermBindingCriteriaView = New DataView(mFileManager.OntologyManager.TermBindingCriteriaTable)
-                mTermBindingCriteriaView.AllowNew = False
-
                 Me.TerminologyComboBox.DataSource = mFileManager.OntologyManager.TerminologiesTable
-
-                mFileManager = mFileManager
 
                 If PathsTreeView.Nodes.Count = 0 Then
                     PopulateNodeTree()
@@ -1274,7 +1277,7 @@ Public Class TermBindingPanel
         Public NodeOperand As String
         Public Operator As String = "="
         Public ValueOperand As String
-        Private mFileManager As FileManagerLocal
+        Private mFilemanager As FileManagerLocal
 
         Public ReadOnly Property NodeText() As String
             Get
@@ -1383,11 +1386,11 @@ Public Class TermBindingPanel
         End Property
 
         Public Sub New(ByVal a_filemanager As FileManagerLocal)
-            mFileManager = a_filemanager
+            mFilemanager = a_filemanager
         End Sub
 
         Public Sub New(ByVal CriteriaExpression As String, ByVal a_filemanager As FileManagerLocal)
-            mFileManager = a_filemanager
+            mFilemanager = a_filemanager
             Dim criteriaParts() As String = CriteriaExpression.Split(" "c)
             Debug.Assert(criteriaParts.Length >= 3)
 

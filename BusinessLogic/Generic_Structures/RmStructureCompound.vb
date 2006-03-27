@@ -185,21 +185,7 @@ Public Class RmStructureCompound
 
             an_attribute = ObjNode.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("items"))
 
-            Dim s As String = an_attribute.cardinality.as_string.to_cil
-            i = s.IndexOf(";")
-            If i > -1 Then
-                colChildren.Cardinality.SetFromString(an_attribute.cardinality.as_string.to_cil.Substring(0, i))
-                Select Case s.Substring(i + 1).ToLower(System.Globalization.CultureInfo.InvariantCulture).Trim()
-                    Case "ordered"
-                        colChildren.Cardinality.Ordered = True
-                    Case "unordered"
-                        colChildren.Cardinality.Ordered = False
-                    Case Else
-                        Debug.Assert(False, "Not handled")
-                End Select
-            Else
-                colChildren.Cardinality.SetFromString(an_attribute.cardinality.as_string.to_cil)
-            End If
+            ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.cardinality, colChildren)
 
             For i = 1 To an_attribute.children.count
                 Dim a_ComplexObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT

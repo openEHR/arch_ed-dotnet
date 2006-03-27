@@ -52,6 +52,7 @@ Public Class CollectionOfSlots
             For i As Integer = 0 To Me.List.Count - 1
                 s(i) = CStr(Me.List.Item(i))
             Next
+            Return s
         End Get
     End Property
     Public Property Item(ByVal key As Integer) As String

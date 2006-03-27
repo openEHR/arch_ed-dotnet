@@ -75,7 +75,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Function
 
-        Public Function ProcessReference(ByVal objRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF) As RmReference
+        Public Shared Function ProcessReference(ByVal objRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF) As RmReference
             Dim rm As RmReference
             Dim nodeid As String
 
@@ -118,7 +118,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Public Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.OE_INTERVAL_INT32) As RmCardinality
+        Public Shared Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.OE_INTERVAL_INT32) As RmCardinality
             Dim c As New RmCardinality
 
             If cadlOccurrences.upper_unbounded Then
@@ -132,7 +132,12 @@ Namespace ArchetypeEditor.ADL_Classes
             Return c
         End Function
 
-        Public Function ProcessCodes(ByVal Constraint As openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM) As CodePhrase
+        Public Shared Sub SetCardinality(ByVal cadlCardinality As openehr.openehr.am.archetype.constraint_model.CARDINALITY, ByVal colChildren As Children)
+            colChildren.Cardinality = SetOccurrences(cadlCardinality.interval)
+            colChildren.Cardinality.Ordered = cadlCardinality.is_ordered
+        End Sub
+
+        Public Shared Function ProcessCodes(ByVal Constraint As openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM) As CodePhrase
             Dim s As String
             Dim cp As New CodePhrase
 
@@ -140,11 +145,11 @@ Namespace ArchetypeEditor.ADL_Classes
                 cp.Codes.Add(CType(Constraint.code_list.i_th(i), openehr.base.kernel.STRING).to_cil)
             Next
 
-            cp.TerminologyID = Constraint.terminology_id.as_string.to_cil
+            cp.TerminologyID = Constraint.terminology_id.value.to_cil
             Return cp
         End Function
 
-        Function GetDomainConceptFromAssertion(ByVal assert As openehr.openehr.am.archetype.assertion.ASSERTION) As String
+        Public Shared Function GetDomainConceptFromAssertion(ByVal assert As openehr.openehr.am.archetype.assertion.ASSERTION) As String
             Select Case assert.expression.generating_type.to_cil
                 Case "EXPR_BINARY_OPERATOR"
                     Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression

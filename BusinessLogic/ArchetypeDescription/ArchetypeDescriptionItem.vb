@@ -6,7 +6,7 @@ Public Class ArchetypeDescriptionItem
     Protected mCopyright As String
     Protected mOriginalResourceURI As String
     Protected mOtherDetails As New OtherDefinitionDetails
-    Protected mKeyWords As New ArrayList
+    Protected mKeyWords As New Collections.Specialized.StringCollection
 
     Public Overridable Property Language() As String
         Get
@@ -48,7 +48,7 @@ Public Class ArchetypeDescriptionItem
             mCopyright = Value
         End Set
     End Property
-    Public ReadOnly Property KeyWords() As ArrayList
+    Public ReadOnly Property KeyWords() As Collections.Specialized.StringCollection
         Get
             Return mKeyWords
         End Get

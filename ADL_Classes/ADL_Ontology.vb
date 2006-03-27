@@ -77,7 +77,8 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Public Overrides Sub Reset()
-            EIF_adlInterface.ontology.clear_terminology()
+            ' no action required
+            ' EIF_adlInterface.ontology.clear_terminology()
         End Sub
 
         Public Overrides Sub AddLanguage(ByVal code As String)
@@ -113,7 +114,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 str = openehr.base.kernel.Create.STRING.make_from_cil(sPath)
                 cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(sTerminology & "::" & sCode))
-                If EIF_adlInterface.ontology.has_term_binding(cp.terminology_id.as_string, str) Then
+                If EIF_adlInterface.ontology.has_term_binding(cp.terminology_id.value, str) Then
                     EIF_adlInterface.ontology.replace_term_binding(cp, str)
                 Else
                     EIF_adlInterface.ontology.add_term_binding(cp, str)

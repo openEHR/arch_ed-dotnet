@@ -87,13 +87,13 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents PanelLower As System.Windows.Forms.Panel
     Friend WithEvents butSetRuntimeName As System.Windows.Forms.Button
     Friend WithEvents HelpProviderCommonConstraint As System.Windows.Forms.HelpProvider
-    Friend WithEvents labelAnyCluster As System.Windows.Forms.Label
     Friend WithEvents lblRunTimeName As System.Windows.Forms.Label
     Friend WithEvents lblDescription As System.Windows.Forms.Label
+    Friend WithEvents labelAny As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.PanelGenericConstraint = New System.Windows.Forms.Panel
         Me.PanelDataConstraint = New System.Windows.Forms.Panel
-        Me.labelAnyCluster = New System.Windows.Forms.Label
+        Me.labelAny = New System.Windows.Forms.Label
         Me.PanelNonAnonymous = New System.Windows.Forms.Panel
         Me.butSetRuntimeName = New System.Windows.Forms.Button
         Me.txtRuntimeName = New System.Windows.Forms.TextBox
@@ -117,21 +117,21 @@ Public Class ArchetypeNodeConstraintControl
         '
         'PanelDataConstraint
         '
-        Me.PanelDataConstraint.Controls.Add(Me.labelAnyCluster)
+        Me.PanelDataConstraint.Controls.Add(Me.labelAny)
         Me.PanelDataConstraint.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
         Me.PanelDataConstraint.Name = "PanelDataConstraint"
         Me.PanelDataConstraint.Size = New System.Drawing.Size(376, 104)
         Me.PanelDataConstraint.TabIndex = 31
         '
-        'labelAnyCluster
+        'labelAny
         '
-        Me.labelAnyCluster.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.labelAnyCluster.Location = New System.Drawing.Point(16, 8)
-        Me.labelAnyCluster.Name = "labelAnyCluster"
-        Me.labelAnyCluster.Size = New System.Drawing.Size(136, 40)
-        Me.labelAnyCluster.TabIndex = 0
-        Me.labelAnyCluster.Text = "Cluster"
+        Me.labelAny.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.labelAny.Location = New System.Drawing.Point(16, 8)
+        Me.labelAny.Name = "labelAny"
+        Me.labelAny.Size = New System.Drawing.Size(136, 24)
+        Me.labelAny.TabIndex = 0
+        Me.labelAny.Text = "Any"
         '
         'PanelNonAnonymous
         '
@@ -234,7 +234,6 @@ Public Class ArchetypeNodeConstraintControl
     Public Sub TranslateGUI()
         Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
         Me.lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, Me.lblRunTimeName.Text)
-        Me.labelAnyCluster.Text = Filemanager.GetOpenEhrTerm(313, Me.labelAnyCluster.Text)
     End Sub
 
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _
@@ -246,7 +245,7 @@ Public Class ArchetypeNodeConstraintControl
 
         Try
             ' hide the label if there is no constraint (for ANY or Cluster) - see below
-            Me.labelAnyCluster.Visible = False
+            Me.labelAny.Visible = False
 
             If Not mConstraintControl Is Nothing Then
                 Me.PanelDataConstraint.Controls.Remove(mConstraintControl)
@@ -260,12 +259,12 @@ Public Class ArchetypeNodeConstraintControl
 
                     Select Case archetypeElem.Constraint.Type
                         Case ConstraintType.Any
-                            Me.labelAnyCluster.Text = AE_Constants.Instance.Any
-                            Me.labelAnyCluster.Visible = True
+                            Me.labelAny.Text = AE_Constants.Instance.Any
+                            Me.labelAny.Visible = True
 
                         Case ConstraintType.URI
-                            Me.labelAnyCluster.Text = AE_Constants.Instance.URI
-                            Me.labelAnyCluster.Visible = True
+                            Me.labelAny.Text = AE_Constants.Instance.URI
+                            Me.labelAny.Visible = True
 
                         Case Else
                             mConstraintControl = ConstraintControl.CreateConstraintControl( _
@@ -295,7 +294,7 @@ Public Class ArchetypeNodeConstraintControl
 
                 Case StructureType.Cluster
                     ' Me.labelAnyCluster.Text = AE_Constants.Instance.Cluster
-                    Me.labelAnyCluster.Visible = True
+                    Me.labelAny.Visible = False
                     mConstraintControl = New ClusterControl(a_file_manager)
                     CType(mConstraintControl, ClusterControl).Item = CType(aArchetypeNode, ArchetypeComposite)
                     Me.PanelDataConstraint.Controls.Add(mConstraintControl)
