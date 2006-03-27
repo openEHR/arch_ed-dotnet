@@ -25,10 +25,10 @@ Public Class TabPageStructure
     Private mIsLoading As Boolean = False
     Private mIsState As Boolean
     Private mEmbeddedAllowed As Boolean = True
+    Private mEmbeddedLoaded As Boolean = False
     Private mValidStructureClasses As StructureType()
     Private WithEvents mArchetypeControl As EntryStructure
     Private WithEvents mFileManager As FileManagerLocal
-    Public Event StructureChanged(ByVal sender As Object, ByVal a_structure As StructureType)
     
 
 #Region " Windows Form Designer generated code "
@@ -549,6 +549,10 @@ Public Class TabPageStructure
         Me.HelpProviderTabPageStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 
+    Sub ShowStructurePanel(ByVal Sender As Object, ByVal e As EventArgs) Handles mArchetypeControl.ChangeStructure
+        Me.panelEntry.Visible = True
+    End Sub
+
     Sub ShowDetailPanel(ByVal CurrentItem As ArchetypeNode, ByVal e As EventArgs) Handles mArchetypeControl.CurrentItemChanged
         If CurrentItem Is Nothing Then
             Me.PanelDetails.Visible = False
@@ -678,7 +682,6 @@ Public Class TabPageStructure
     End Sub
 
     Private Sub comboStructure_selectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboStructure.SelectedIndexChanged
-        ' make the context menu for the design panel relevant
 
         Dim entry_structure As EntryStructure ' User control to provide the list or whatever
         Dim chosen_structure As StructureType
@@ -703,6 +706,11 @@ Public Class TabPageStructure
             Me.panelDisplay.Visible = False
             Me.ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
+            ' ensure the structure component is visible
+            If Me.panelDisplay.Visible = False Then
+                Me.panelDisplay.Visible = True
+            End If
+
             Select Case chosen_structure
                 Case StructureType.Single
                     entry_structure = New SimpleStructure(mFileManager) ' inherits from EntryStructure
@@ -716,20 +724,26 @@ Public Class TabPageStructure
 
             If mArchetypeControl Is Nothing Then
                 Me.ArchetypeDisplay = entry_structure
+
+                ' new structure so hide details if visible
+                If Me.PanelDetails.Visible Then
+                    Me.PanelDetails.Visible = False
+                End If
+
             Else
                 'Changing structures
-                entry_structure.Archetype = mArchetypeControl.Archetype
-                Me.ArchetypeDisplay = entry_structure
+                If entry_structure.StructureType <> mArchetypeControl.StructureType Then
+                    entry_structure.Archetype = mArchetypeControl.Archetype
+                    Me.ArchetypeDisplay = entry_structure
+                End If
+
             End If
             Me.PanelStructure.Visible = True
             Me.panelEntry.Visible = False
-
         End If
-
 
         If Not mIsLoading Then
             mFileManager.FileEdited = True
-            RaiseEvent StructureChanged(Me, chosen_structure)
         End If
 
     End Sub
@@ -852,6 +866,18 @@ Public Class TabPageStructure
 
     Private Sub chkEmbedded_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEmbedded.CheckedChanged
         mIsEmbedded = chkEmbedded.Checked
+        If Not mIsLoading Then
+            'changed the embedded status
+            ' if it is not loading and is changed to false then
+            ' need to remove the filemanager
+            'ToDo: needs to be more comprehensive if more than one embedded
+            If Filemanager.HasEmbedded AndAlso (Not Filemanager.Master Is mFileManager) Then
+                Filemanager.RemoveEmbedded(mFileManager)
+                mFileManager = Filemanager.Master
+            End If
+
+            Me.comboStructure_selectedIndexChanged(sender, e)
+        End If
     End Sub
 
 #End Region

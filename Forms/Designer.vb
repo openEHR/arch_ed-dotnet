@@ -4540,14 +4540,14 @@ Public Class Designer
         End If
     End Sub
 
-    Sub SetTabPageTitle(ByVal sender As Object, ByVal str As StructureType) Handles mTabPageDataStructure.StructureChanged, mTabPageStateStructure.StructureChanged
-        'Updates the tab label when the type of structure is chosen
-        If sender Is mTabPageDataStructure Then
-            Me.tpDataStructure.Title = str.ToString
-        ElseIf sender Is mTabPageStateStructure Then
-            Me.tpRootStateStructure.Title = str.ToString
-        End If
-    End Sub
+    'Sub SetTabPageTitle(ByVal sender As Object, ByVal str As StructureType) Handles mTabPageDataStructure.StructureChanged, mTabPageStateStructure.StructureChanged
+    '    'Updates the tab label when the type of structure is chosen
+    '    If sender Is mTabPageDataStructure Then
+    '        Me.tpDataStructure.Title = str.ToString
+    '    ElseIf sender Is mTabPageStateStructure Then
+    '        Me.tpRootStateStructure.Title = str.ToString
+    '    End If
+    'End Sub
 
 #End Region
 

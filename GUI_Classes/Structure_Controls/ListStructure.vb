@@ -113,10 +113,10 @@ Public Class ListStructure
         Me.lvList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.lvList.HideSelection = False
         Me.lvList.LabelEdit = True
-        Me.lvList.Location = New System.Drawing.Point(40, 32)
+        Me.lvList.Location = New System.Drawing.Point(40, 27)
         Me.lvList.MultiSelect = False
         Me.lvList.Name = "lvList"
-        Me.lvList.Size = New System.Drawing.Size(464, 328)
+        Me.lvList.Size = New System.Drawing.Size(344, 333)
         Me.lvList.TabIndex = 38
         Me.lvList.View = System.Windows.Forms.View.Details
         '
@@ -149,6 +149,7 @@ Public Class ListStructure
         '
         Me.MenuAddReference.Index = 2
         Me.MenuAddReference.Text = "Add Reference"
+
         '
         'ListStructure
         '
@@ -168,9 +169,13 @@ Public Class ListStructure
 
         If Not Me.DesignMode Then
             'Set the menu texts
-            Me.MenuRemove.Text = AE_Constants.Instance.Remove
-            Me.SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
-            Me.MenuAddReference.Text = AE_Constants.Instance.Add_Reference
+            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+                Me.MenuRemove.Text = AE_Constants.Instance.Remove
+                Me.SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
+                Me.MenuAddReference.Text = AE_Constants.Instance.Add_Reference
+            End If
+            ' add the change structure menu from EntryStructure
+            Me.ContextMenuList.MenuItems.Add(menuChangeStructure)
         End If
     End Sub
 
@@ -212,7 +217,6 @@ Public Class ListStructure
         End Get
         Set(ByVal Value As RmStructureCompound)
             ' handles conversion from other structures
-            Debug.Assert(False, "ToDo")
             Me.lvList.Items.Clear()
             mNodeId = Value.NodeId
             Select Case Value.Type '.TypeName
@@ -222,12 +226,23 @@ Public Class ListStructure
                     Dim item As New ArchetypeListViewItem(Value.Children.FirstElementNode, mFileManager)
                     lvList.Items.Add(item)
                 Case StructureType.Table ' "TABLE"
-                    Dim element As RmElement
-                    For Each element In Value.Children
-                        Dim item As New ArchetypeListViewItem(element, mFileManager)
-                        lvList.Items.Add(item)
-                    Next
+                    If Value.Children.items(0).Type = StructureType.Cluster Then
+                        Dim clust As RmCluster
+                        Dim element As RmElement
+
+                        clust = CType(Value.Children.items(0), RmCluster)
+
+                        For Each element In clust.Children
+                            Dim item As New ArchetypeListViewItem(element, mFileManager)
+                            lvList.Items.Add(item)
+                        Next
+                    Else
+                        Debug.Assert(False, "Not expected type")
+                    End If
             End Select
+            If lvList.Items.Count > 0 Then
+                lvList.Items(0).Selected = True
+            End If
         End Set
     End Property
 
@@ -547,7 +562,6 @@ Public Class ListStructure
         End If
     End Sub
 
-
     Private Sub lvList_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles lvList.KeyDown
         If e.KeyCode = Keys.Delete Then
             Me.RemoveItemAndReferences(sender, e)
@@ -598,7 +612,7 @@ Public Class ListStructure
 #Region "Drag and Drop"
 
     Private Sub lvList_DragDrop(ByVal sender As System.Object, _
-        ByVal e As System.Windows.Forms.DragEventArgs) Handles lvList.DragDrop
+    ByVal e As System.Windows.Forms.DragEventArgs) Handles lvList.DragDrop
         Dim position As Point
         Dim DropListItem As ArchetypeListViewItem
         Dim list_item_dragged As ArchetypeListViewItem

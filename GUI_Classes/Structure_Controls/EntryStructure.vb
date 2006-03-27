@@ -30,12 +30,14 @@ Public Class EntryStructure
     Protected mCurrentItem As ArchetypeNode
     Protected mFileManager As FileManagerLocal
     Protected mCardinalityControl As OccurrencesPanel
+    Protected WithEvents menuChangeStructure As System.Windows.Forms.MenuItem
 
     'implement as overrided property
     Protected mControl As Control  ' the GUI control in the inherited class e.g. tree, text etc
 
     Protected mDragArchetypeNode As ArchetypeNode
     Public Event CurrentItemChanged(ByVal sender As ArchetypeNode, ByVal e As EventArgs)
+    Public Event ChangeStructure(ByVal sender As Object, ByVal e As EventArgs)
 
 
 #Region " Windows Form Designer generated code "
@@ -62,6 +64,9 @@ Public Class EntryStructure
                 Debug.Assert(False)
         End Select
 
+        Me.menuChangeStructure = New System.Windows.Forms.MenuItem
+        menuChangeStructure.Text = AE_Constants.Instance.ChangeStructure
+
         ShowIcons()
 
         SetCardinality(rm)
@@ -86,6 +91,9 @@ Public Class EntryStructure
             Case Else
                 Debug.Assert(False)
         End Select
+
+        Me.menuChangeStructure = New System.Windows.Forms.MenuItem
+        menuChangeStructure.Text = AE_Constants.Instance.ChangeStructure
 
         ShowIcons()
 
@@ -437,6 +445,10 @@ Public Class EntryStructure
         End Get
     End Property
 
+    Private Sub menuChangeStructure_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuChangeStructure.Click
+        NotifyChangeStructure(Me, e)
+    End Sub
+
     Public Overridable Property Archetype() As RmStructureCompound
         Get
             Throw New NotImplementedException("Subclass must override this property")
@@ -779,8 +791,8 @@ Public Class EntryStructure
         End If
     End Sub
 
-    Private Sub ChangeStructure(ByVal sender As Object, ByVal e As EventArgs)
-
+    Protected Sub NotifyChangeStructure(ByVal sender As Object, ByVal e As EventArgs)
+        RaiseEvent ChangeStructure(sender, e)
     End Sub
 
 #Region "Drag and Drop operations for toolbar on left"
