@@ -398,6 +398,7 @@ Class Filemanager
     'Private Shared mInstance As FileManagerLocal
     Private Shared mFileManagerCollection As New ArrayList
     Shared Event IsFileDirtyChanged As FileManagerEventHandler
+    Private Shared mHasEmbedded As Boolean = False
 
     Shared Sub SetFileChangedToolBar(ByVal isChanged As Boolean)
         ' used by embedded archetypes to set the GUI to filechanged
@@ -407,20 +408,6 @@ Class Filemanager
         RaiseEvent IsFileDirtyChanged(New FileManagerEventArgs(IsFileDirty))
     End Sub
 
-    'Public Shared ReadOnly Property Instance() As FileManagerLocal
-    '    Get
-    '        If mInstance Is Nothing Then
-    '            mInstance = New FileManagerLocal
-    '            'Throw New InvalidOperationException("FileManager instance not created")
-    '        End If
-
-    '        Return mInstance
-    '    End Get
-    'End Property
-
-    Public Shared Sub AddEmbedded(ByVal f As FileManagerLocal)
-        mFileManagerCollection.Add(f)
-    End Sub
     Public Shared Property Master() As FileManagerLocal
         Get
             If mFileManagerCollection.Count > 0 Then
@@ -445,6 +432,25 @@ Class Filemanager
             Return False
         End Get
     End Property
+    Public Shared ReadOnly Property HasEmbedded() As Boolean
+        Get
+            Return mHasEmbedded
+        End Get
+    End Property
+
+    Public Shared Sub AddEmbedded(ByVal f As FileManagerLocal)
+        mFileManagerCollection.Add(f)
+        mHasEmbedded = True
+    End Sub
+
+    Public Shared Sub RemoveEmbedded(ByVal f As FileManagerLocal)
+        If mHasEmbedded Then
+            mFileManagerCollection.Remove(f)
+            If mFileManagerCollection.Count = 1 Then
+                mHasEmbedded = False
+            End If
+        End If
+    End Sub
 
     Public Shared Function GetOpenEhrTerm(ByVal code As Integer, ByVal default_text As String, Optional ByVal language As String = "") As String
         If language = "" Then
@@ -455,15 +461,6 @@ Class Filemanager
     End Function
 
     Public Shared Function SaveFiles(ByVal askToSave As Boolean) As Boolean
-        'If mInstance.FileEdited Then
-        '    Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & mFileManager.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
-        '        Case DialogResult.Cancel
-        '            Return False
-        '        Case DialogResult.Yes
-        '            mInstance.SaveArchetype()
-        '            mInstance.FileEdited = False
-        '    End Select
-        'End If
         For Each f As FileManagerLocal In mFileManagerCollection
             If f.FileEdited Then
                 If mFileManagerCollection.Count > 1 Or askToSave Then

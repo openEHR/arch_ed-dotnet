@@ -111,8 +111,9 @@ Public Class SimpleStructure
         Me.txtSimple.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSimple.Location = New System.Drawing.Point(96, 40)
         Me.txtSimple.Name = "txtSimple"
-        Me.txtSimple.Size = New System.Drawing.Size(280, 20)
+        Me.txtSimple.Size = New System.Drawing.Size(280, 23)
         Me.txtSimple.TabIndex = 38
+        Me.txtSimple.Text = ""
         '
         'ContextMenuSimple
         '
@@ -155,19 +156,19 @@ Public Class SimpleStructure
 
             mNodeID = Value.NodeId
             element = Value.Children.FirstElementNode
+            mLoading = True
             If Not element Is Nothing Then
                 mElement = New ArchetypeElement(element, mFileManager)
                 Me.txtSimple.Text = mElement.Text
                 Me.txtSimple.Enabled = True
                 Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
             Else
-                mLoading = True
                 mElement = Nothing
                 Me.txtSimple.Text = AE_Constants.Instance.DragDropHere
                 Me.txtSimple.Enabled = False
                 Me.PictureBoxSimple.Image = Nothing
-                mLoading = False
             End If
+            mLoading = False
             mFileManager.FileEdited = True
             SetCurrentItem(mElement)
         End Set
@@ -296,7 +297,7 @@ Public Class SimpleStructure
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
-        Debug.Assert(ContextMenuSimple.MenuItems.Count = 1)
+        Debug.Assert(ContextMenuSimple.MenuItems.Count = 2)
         ' show specialisation if appropriate
 
         Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
@@ -352,6 +353,8 @@ Public Class SimpleStructure
             Me.txtSimple.Enabled = False
             mLoading = False
         End If
+        ' add the change structure menu from EntryStructure
+        Me.ContextMenuSimple.MenuItems.Add(menuChangeStructure)
     End Sub
 
 
@@ -387,6 +390,7 @@ Public Class SimpleStructure
         e.Effect = e.AllowedEffect
     End Sub
 #End Region
+
 
 End Class
 

@@ -90,6 +90,7 @@ Public Class AE_Constants
     Private mDragDropHere As String
     Private mReplaceTranslations As String
     Private mRename As String
+    Private mChangeStructure As String
 
     Friend ReadOnly Property ReplaceTranslations() As String
         Get
@@ -97,6 +98,11 @@ Public Class AE_Constants
         End Get
     End Property
 
+    Friend ReadOnly Property ChangeStructure() As String
+        Get
+            Return mChangeStructure
+        End Get
+    End Property
     Friend ReadOnly Property Rename() As String
         Get
             Return mRename
@@ -585,7 +591,7 @@ Public Class AE_Constants
         mRatio = TerminologyServer.Instance.RubricForCode(321, Language)
         mUnit = TerminologyServer.Instance.RubricForCode(117, Language)
         mMultiple = TerminologyServer.Instance.RubricForCode(320, Language)
-        mCannotSpecialiseReference = TerminologyServer.Instance.RubricForCode(326, Language)
+        mCannotSpecialiseReference = TerminologyServer.Instance.RubricForCode(607, Language)
         mMustAddCriteria = TerminologyServer.Instance.RubricForCode(327, Language)
         mDescription = TerminologyServer.Instance.RubricForCode(113, Language)
         mInterval = TerminologyServer.Instance.RubricForCode(141, Language)
@@ -603,6 +609,7 @@ Public Class AE_Constants
         mDragDropHere = TerminologyServer.Instance.RubricForCode(440, Language)
         mReplaceTranslations = TerminologyServer.Instance.RubricForCode(442, Language)
         mRename = TerminologyServer.Instance.RubricForCode(325, Language)
+        mChangeStructure = TerminologyServer.Instance.RubricForCode(326, Language)
     End Sub
 End Class
 

@@ -20,6 +20,7 @@ Public Class OceanArchetypeEditor
 
     ' ArchetypeEditor Singleton
     Private Shared mInstance As OceanArchetypeEditor
+    Private Shared mMenu As Menu
 
     Public Shared ReadOnly Property Instance() As OceanArchetypeEditor
         Get
@@ -38,6 +39,12 @@ Public Class OceanArchetypeEditor
                 mOptions = New Options
             End If
             Return mOptions
+        End Get
+    End Property
+
+    ReadOnly Property MainMenu() As Menu
+        Get
+            Return mMenu
         End Get
     End Property
 
@@ -603,6 +610,8 @@ Public Class OceanArchetypeEditor
         If CmdArgs.Length > 0 Then
             frm.ArchetypeToOpen = CmdArgs(0)
         End If
+
+        mMenu = frm.MainMenu
 
         frm.ShowDialog()
     End Sub

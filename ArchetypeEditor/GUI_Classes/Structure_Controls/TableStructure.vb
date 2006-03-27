@@ -207,6 +207,8 @@ Public Class TableStructure
                 dgGrid_CurrentCellChanged(sender, e)
             End If
         End If
+        ' add the change structure menu from EntryStructure
+        Me.ContextMenuGrid.MenuItems.Add(menuChangeStructure)
     End Sub
 
     Public Overrides ReadOnly Property InterfaceBuilder() As Object
@@ -267,13 +269,18 @@ Public Class TableStructure
 
             MyBase.SetCardinality(Value)
 
-            Debug.Assert(False, "ToDo")
-
+            mControl = dgGrid
+            If mArchetypeTable Is Nothing Then
+                ' no archetype driving constructor
+                SetArchetypeTable()
+            End If
 
             ' handles conversion from other structures
-            Debug.Assert(False, "ToDo")
             Me.mArchetypeTable.Rows.Clear()
             mNodeId = Value.NodeId
+
+            mIsLoading = True
+
             Select Case Value.Type '.TypeName
                 Case StructureType.Tree ' "TREE"
                     ProcessNodesToTable(Value.Children)
@@ -287,7 +294,8 @@ Public Class TableStructure
                     mArchetypeTable.Rows.Add(new_row)
 
                 Case StructureType.List ' "list"
-                    For Each element In Value.Children
+                    For Each rm_element As RmElement In Value.Children
+                        element = New ArchetypeElement(rm_element, mFileManager)
                         new_row = mArchetypeTable.NewRow
                         new_row(1) = element.Text
                         new_row(2) = element
@@ -295,6 +303,9 @@ Public Class TableStructure
                         mArchetypeTable.Rows.Add(new_row)
                     Next
             End Select
+
+            mIsLoading = False
+
         End Set
     End Property
 
@@ -762,7 +773,7 @@ Public Class TableStructure
 
     Private Sub ContextMenuGrid_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuGrid.Popup
         ' check to ensure that no menu items have been added and not translated
-        Debug.Assert(ContextMenuGrid.MenuItems.Count = 1)
+        Debug.Assert(ContextMenuGrid.MenuItems.Count = 2)
         Debug.Assert(ContextMenuGrid.MenuItems(0).MenuItems.Count = 2)
         Me.MenuRename.Text = Filemanager.GetOpenEhrTerm(325, "Rename")
         Me.MenuRenameColumn.Text = Filemanager.GetOpenEhrTerm(164, "Column")

@@ -250,6 +250,8 @@ Public Class TreeStructure
             If Me.tvTree.GetNodeCount(False) > 0 Then
                 Me.tvTree.SelectedNode = Me.tvTree.Nodes(0)
             End If
+            ' add the change structure menu from EntryStructure
+            Me.TreeContextMenu.MenuItems.Add(menuChangeStructure)
         End If
 
     End Sub
@@ -315,7 +317,7 @@ Public Class TreeStructure
         End Get
         Set(ByVal Value As RmStructureCompound)
             ' handles conversion from other structures
-            Debug.Assert(False, "ToDo")
+
             Me.tvTree.Nodes.Clear()
             mNodeId = Value.NodeId
             MyBase.SetCardinality(Value)
@@ -338,13 +340,21 @@ Public Class TreeStructure
 
                     tvTree.Nodes.Add(node)
                 Case StructureType.Table ' "TABLE"
-                    Dim element As RmElement
-                    For Each element In Value.Children
-                        Dim node As New ArchetypeTreeNode(element, mFileManager)
-                        node.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
-                        node.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
-                        tvTree.Nodes.Add(node)
-                    Next
+                    If Value.Children.items(0).Type = StructureType.Cluster Then
+                        Dim clust As RmCluster
+                        Dim element As RmElement
+
+                        clust = CType(Value.Children.items(0), RmCluster)
+
+                        For Each element In clust.Children
+                            Dim node As New ArchetypeTreeNode(element, mFileManager)
+                            node.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
+                            node.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
+                            tvTree.Nodes.Add(node)
+                        Next
+                    Else
+                        Debug.Assert(False, "Not expected type")
+                    End If
             End Select
         End Set
     End Property
