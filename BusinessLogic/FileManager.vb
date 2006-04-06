@@ -19,6 +19,7 @@ Option Explicit On
 Public Class FileManagerLocal
     Private mIsFileDirty As Boolean
     Private mIsFileLoading As Boolean
+    Private mParserSynchronised As Boolean = True
     Private mHasOpenFileError, mHasWriteFileError As Boolean
     Private mArchetypeEngine As Parser
     Private mFileName, mPriorFileName As String
@@ -48,6 +49,9 @@ Public Class FileManagerLocal
         End Get
         Set(ByVal Value As Boolean)
             mIsNew = Value
+            If Value Then
+                mParserSynchronised = False
+            End If
         End Set
     End Property
     Public WriteOnly Property ObjectToSave() As Object
@@ -93,12 +97,24 @@ Public Class FileManagerLocal
         Get
             Return mIsFileDirty
         End Get
-
         Set(ByVal Value As Boolean)
             If Value <> mIsFileDirty Then
                 mIsFileDirty = Value
                 Filemanager.SetFileChangedToolBar(Value)
             End If
+            If Value Then
+                mParserSynchronised = True
+            Else
+                mParserSynchronised = False
+            End If
+        End Set
+    End Property
+    Public Property ParserSynchronised() As Boolean
+        Get
+            Return mParserSynchronised
+        End Get
+        Set(ByVal Value As Boolean)
+            mParserSynchronised = Value
         End Set
     End Property
     Public ReadOnly Property AvailableFormatFilter() As String

@@ -36,6 +36,12 @@ Public Class TabPageInstruction
 
         If Not Me.DesignMode Then
             mFileManager = Filemanager.Master
+            If mActionSpecification Is Nothing Then
+                mActionSpecification = New TabPageStructure
+            End If
+            Me.tpActivity.Controls.Add(mActionSpecification)
+            mActionSpecification.BringToFront()
+            mActionSpecification.Dock = DockStyle.Fill
         End If
     End Sub
 
@@ -61,7 +67,6 @@ Public Class TabPageInstruction
     Friend WithEvents butGetAction As System.Windows.Forms.Button
     Friend WithEvents txtAction As System.Windows.Forms.TextBox
     Friend WithEvents lblAction As System.Windows.Forms.Label
-    Friend WithEvents chkActivity As System.Windows.Forms.CheckBox
     Friend WithEvents PanelAction As System.Windows.Forms.Panel
     Friend WithEvents lblNodeId As System.Windows.Forms.Label
     Friend WithEvents ContextMenu1 As System.Windows.Forms.ContextMenu
@@ -80,7 +85,6 @@ Public Class TabPageInstruction
         Me.lblAction = New System.Windows.Forms.Label
         Me.butGetAction = New System.Windows.Forms.Button
         Me.txtAction = New System.Windows.Forms.TextBox
-        Me.chkActivity = New System.Windows.Forms.CheckBox
         Me.PanelBaseTop = New System.Windows.Forms.Panel
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
         Me.tpActivity.SuspendLayout()
@@ -135,7 +139,6 @@ Public Class TabPageInstruction
         Me.PanelAction.Controls.Add(Me.lblAction)
         Me.PanelAction.Controls.Add(Me.butGetAction)
         Me.PanelAction.Controls.Add(Me.txtAction)
-        Me.PanelAction.Controls.Add(Me.chkActivity)
         Me.PanelAction.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelAction.Location = New System.Drawing.Point(0, 0)
         Me.PanelAction.Name = "PanelAction"
@@ -182,14 +185,6 @@ Public Class TabPageInstruction
         Me.txtAction.Size = New System.Drawing.Size(216, 24)
         Me.txtAction.TabIndex = 1
         Me.txtAction.Text = ""
-        '
-        'chkActivity
-        '
-        Me.chkActivity.Location = New System.Drawing.Point(368, 8)
-        Me.chkActivity.Name = "chkActivity"
-        Me.chkActivity.Size = New System.Drawing.Size(120, 24)
-        Me.chkActivity.TabIndex = 0
-        Me.chkActivity.Text = "Activity"
         '
         'PanelBaseTop
         '
@@ -251,8 +246,7 @@ Public Class TabPageInstruction
 
     Public Sub Reset()
         Me.txtAction.Text = ""
-        Me.chkActivity.Checked = False
-        mActionSpecification = Nothing
+        mActionSpecification = New TabPageStructure
         Me.lblNodeId.Text = ""
     End Sub
 
@@ -297,21 +291,24 @@ Public Class TabPageInstruction
 
                         For Each rm As RmStructure In activity.Children
 
+                            If Me.tpActivity.Controls.Contains(mActionSpecification) Then
+                                Me.txtAction.Controls.Remove(mActionSpecification)
+                            End If
+                            mActionSpecification = New TabPageStructure
+
                             Select Case rm.Type
                                 Case StructureType.List, StructureType.Table, StructureType.Tree, StructureType.Single
-                                    If Me.tpActivity.Controls.Contains(mActionSpecification) Then
-                                        Me.txtAction.Controls.Remove(mActionSpecification)
-                                    End If
-                                    mActionSpecification = New TabPageStructure
                                     mActionSpecification.ProcessStructure(CType(rm, RmStructureCompound))
-                                    Me.tpActivity.Controls.Add(mActionSpecification)
-                                    mActionSpecification.BringToFront()
-                                    mActionSpecification.Dock = DockStyle.Fill
                                 Case StructureType.Slot
                                     mActionSpecification.ProcessStructure(CType(rm, RmSlot))
                                 Case Else
                                     Debug.Assert(False, "Not handled yet")
                             End Select
+
+                            Me.tpActivity.Controls.Add(mActionSpecification)
+                            mActionSpecification.BringToFront()
+                            mActionSpecification.Dock = DockStyle.Fill
+
                         Next
                     Next
                 Case Else
@@ -393,21 +390,6 @@ Public Class TabPageInstruction
         End If
     End Sub
 
-    Private Sub chkActivity_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkActivity.CheckedChanged
-        If chkActivity.Checked Then
-            If mActionSpecification Is Nothing Then
-                mActionSpecification = New TabPageStructure
-            End If
-            Me.tpActivity.Controls.Add(mActionSpecification)
-            mActionSpecification.BringToFront()
-            mActionSpecification.Dock = DockStyle.Fill
-        Else
-            If tpActivity.Controls.Contains(mActionSpecification) Then
-                tpActivity.Controls.Remove(mActionSpecification)
-            End If
-        End If
-    End Sub
-
     Private Sub ContextMenu1_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenu1.Popup
         If Me.TabControlInstruction.SelectedTab Is Me.tpActivity Then
             menuItemRename.Text = AE_Constants.Instance.Rename & " - " & tpActivity.Title
@@ -442,7 +424,7 @@ Public Class TabPageInstruction
             Dim start_info As New ProcessStartInfo
             start_info.FileName = Application.ExecutablePath
             start_info.WorkingDirectory = Application.StartupPath
-            start_info.Arguments = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\action\" & "openEHR-EHR-ACTION." & Me.txtAction.Text & ".adl"
+            start_info.Arguments = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\entry\action\" & "openEHR-EHR-ACTION." & Me.txtAction.Text & ".adl"
             Process.Start(start_info)
         Catch
             MessageBox.Show(AE_Constants.Instance.Error_loading & " Archetype Editor", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)

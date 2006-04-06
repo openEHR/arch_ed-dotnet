@@ -98,12 +98,14 @@ Namespace ArchetypeEditor.ADL_Classes
                 End Try
             End Get
         End Property
-        Public Overrides ReadOnly Property Paths(ByVal LanguageCode As String, Optional ByVal Logical As Boolean = False) As String()
+        Public Overrides ReadOnly Property Paths(ByVal LanguageCode As String, ByVal parserIsSynchronised As Boolean, Optional ByVal Logical As Boolean = False) As String()
             Get
                 Dim list As openehr.base.structures.list.ARRAYED_LIST_ANY
                 Dim i As Integer
                 ' must call the prepareToSave to ensure it is accurate
-                MakeParseTree()
+                If (Not Filemanager.Master.FileLoading) AndAlso (Not parserIsSynchronised) Then
+                    MakeParseTree()
+                End If
                 ' showing the task with logical paths takes a lot of space
                 If Logical Then
                     list = adlArchetype.logical_paths(openehr.base.kernel.Create.STRING.make_from_cil(LanguageCode))
@@ -996,7 +998,6 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Private Sub BuildComposition(ByVal Rm As RmComposition, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-            ' Build a section, runtimename is already done
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             ' set the category
@@ -1013,17 +1014,21 @@ Namespace ArchetypeEditor.ADL_Classes
 
             BuildCodedText(an_attribute, t.AllowableValues)
 
-            ' Deal with the data
+            ' Deal with the content and context
             If Rm.Data.Count > 0 Then
 
                 For Each a_structure As RmStructure In Rm.Data
                     Select Case a_structure.Type
                         Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
+
                             Dim new_structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
                             an_attribute = mCADL_Factory.create_c_attribute_single(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("context"))
+                            new_structure = mCADL_Factory.create_c_complex_object_anonymous(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("EVENT_CONTEXT"))
+                            an_attribute = mCADL_Factory.create_c_attribute_single(new_structure, openehr.base.kernel.Create.STRING.make_from_cil("other_context"))
                             new_structure = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_structure.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_structure.NodeId))
                             BuildStructure(a_structure, new_structure)
+
                         Case StructureType.SECTION
                             Dim new_section As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
@@ -1099,6 +1104,23 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
+        Private Sub BuildStructure(ByVal rm As RmStructureCompound, _
+                ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, _
+                ByVal attribute_name As String)
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+            an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil(attribute_name))
+
+            If CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot Then
+                BuildSlot(an_attribute, rm.Children.items(0))
+            Else
+                Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+
+                objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
+                BuildStructure(rm.Children.items(0), objNode)
+            End If
+        End Sub
+
         Private Sub BuildProtocol(ByVal rm As RmStructure, ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim rmStructComp As RmStructureCompound
@@ -1167,7 +1189,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             For Each rm_struct As RmStructure In rm.Children
-                an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("description"))
+                an_attribute = mCADL_Factory.create_c_attribute_multiple(objNode, openehr.base.kernel.Create.STRING.make_from_cil("description"), MakeCardinality(rm.Children.Cardinality, rm.Children.Cardinality.Ordered))
                 Select Case rm_struct.Type
                     Case StructureType.List, StructureType.Single, StructureType.Tree, StructureType.Table
                         Dim EIF_struct As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
@@ -1180,7 +1202,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     Case StructureType.Slot
                         ' this allows a structure to be archetyped at this point
                         Debug.Assert(CType(rm_struct, RmStructure).Type = StructureType.Slot)
-                        BuildStructure(rm_struct, objNode)
+                        BuildSlot(an_attribute, rm_struct)
                 End Select
             Next
 
@@ -1279,32 +1301,14 @@ Namespace ArchetypeEditor.ADL_Classes
                     For Each rm In cDefinition.Data
                         Select Case rm.Type
                             Case StructureType.State
-                                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("state"))
-
-                                If CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot Then
-                                    BuildSlot(an_attribute, rm.Children.items(0))
-                                Else
-                                    Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
-                                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
-                                    BuildStructure(rm.Children.items(0), objNode)
-                                End If
+                                BuildStructure(rm, adlArchetype.definition, "state")
 
                             Case StructureType.Protocol
                                 BuildProtocol(rm, adlArchetype.definition)
 
                             Case StructureType.Data
-                                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
+                                BuildStructure(rm, adlArchetype.definition, "data")
 
-                                For Each a_rm As RmStructure In rm.Children.items
-                                    If a_rm.Type = StructureType.Slot Then
-                                        BuildSlot(an_attribute, a_rm)
-                                    Else
-                                        Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
-                                        BuildStructure(a_rm, objNode)
-                                    End If
-                                Next
                         End Select
                     Next
 

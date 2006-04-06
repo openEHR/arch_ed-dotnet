@@ -56,10 +56,16 @@ Public Class RmActivity
         If EIF_Structure.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("description")) Then
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             an_attribute = EIF_Structure.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("description"))
-            Dim obj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+            ' could be a C_COMPLEX_OBJECT
+            Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT
+            obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
             If Not obj.any_allowed Then
-                Me.Children.Add(New RmStructureCompound(obj, a_filemanager))
+                Select Case obj.generating_type.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+                    Case "archetype_slot"
+                        Me.Children.Add(New RmSlot(obj))
+                    Case "c_complex_object"
+                        Me.Children.Add(New RmStructureCompound(obj, a_filemanager))
+                End Select
             End If
         End If
 

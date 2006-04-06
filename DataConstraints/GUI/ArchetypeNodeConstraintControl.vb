@@ -375,7 +375,7 @@ Public Class ArchetypeNodeConstraintControl
         End If
 
         frm.ShowConstraint(False, mArchetypeNode.RM_Class.NameConstraint, mFileManager)
-        Select Case frm.ShowDialog
+        Select Case frm.ShowDialog(Me)
             Case DialogResult.OK
                 'no action
                 mFileManager.FileEdited = True

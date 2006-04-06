@@ -41,17 +41,22 @@ Class ADL_COMPOSITION
                             mIsPersistent = True
                         End If
                     Case "context"
-                        mChildren.Add(New RmStructureCompound(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
-                        ' remembers the Processed data off events
+                        Dim complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                        complexObj = an_attribute.children.first
+                        If complexObj.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("other_context")) Then
+                            an_attribute = complexObj.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("other_context"))
+                            mChildren.Add(New RmStructureCompound(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
+                            ' remembers the Processed data off events
+                        End If
                     Case "content"
-                        ' a set of slots constraining what sections can be added
+                            ' a set of slots constraining what sections can be added
 
-                        Dim section As RmSection = New RmSection("root")
+                            Dim section As RmSection = New RmSection("root")
 
-                        For j As Integer = 1 To an_attribute.children.count
-                            section.Children.Add(New RmSlot(CType(an_attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
-                        Next
-                        mChildren.Add(section)
+                            For j As Integer = 1 To an_attribute.children.count
+                                section.Children.Add(New RmSlot(CType(an_attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                            Next
+                            mChildren.Add(section)
                 End Select
             Next
         End Sub

@@ -16,6 +16,7 @@
 
 Option Strict On
 
+
 Public Class TermBindingPanel
     Inherits System.Windows.Forms.UserControl
 
@@ -524,32 +525,53 @@ Public Class TermBindingPanel
     Private mCurrentBindingCriteria As BindingCriteria
     Private mCriteriaMode As Boolean
     Private WithEvents mCriteriaElementView As ElementViewControl
+    Private mIsLoading As Boolean
+    Private mCriteriaNewRow As DataRow
 
     Private Sub BindingTerminologyComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TerminologyComboBox.SelectedIndexChanged
 
         If Not Me.TerminologyComboBox.SelectedValue Is Nothing Then
-            PopulateNodeTree()
+            'PopulateNodeTree()
+            ShowNodesImage(PathsTreeView.Nodes)
             SetTermBindingFilter()
         End If
     End Sub
+
+    Private Function GetTextFromPath(ByVal path As String, ByVal insideSqBrackets As Boolean) As String
+
+        Dim splitNode As String() = path.Split("[]".ToCharArray)
+
+        If splitNode.Length = 3 Then
+            If insideSqBrackets Then
+                Return splitNode(1)
+            Else
+                Return splitNode(0)
+            End If
+        Else
+            Return path
+        End If
+
+    End Function
 
     Private Sub PopulateNodeTree()
         Try
 
             PathsTreeView.SuspendLayout()
+
             Dim languageCode As String = mFileManager.OntologyManager.LanguageCode
 
             ' get the paths with the language labels
-            Dim logicalPaths As String() = mFileManager.Archetype.Paths(languageCode, True)
+            Dim logicalPaths As String() = mFileManager.Archetype.Paths(languageCode, mFileManager.ParserSynchronised, True)
 
             ' get the paths with the NodeId labels
-            Dim physicalPaths As String() = mFileManager.Archetype.Paths(languageCode, False)
+            Dim physicalPaths As String() = mFileManager.Archetype.Paths(languageCode, mFileManager.ParserSynchronised, False)
 
             For i As Integer = 0 To logicalPaths.Length - 1
-                Dim clean_s As String = ""
 
-                'ignore value paths
-                If logicalPaths(i).IndexOf("/value/") = -1 Then
+                'ignore value paths and empty attributes
+                If logicalPaths(i).EndsWith("]") Then
+                    Dim clean_s As String = ""
+
 
                     ' check there are no enclosed "/" if so replace with "|"
                     For Each c As Char In logicalPaths(i)
@@ -574,50 +596,55 @@ Public Class TermBindingPanel
                     Dim z As String() = physicalPaths(i).Split("/"c)
                     Dim nodes As TreeNodeCollection = PathsTreeView.Nodes
 
-                    ' ignore the first and last segment as it is always ""
-                    'ToDo: fix paths
-                    'Debug.Assert(y(y.Length - 1) = "" AndAlso y(0) = "")
+                    'Ignore the first string as always ""
+                    Debug.Assert(y(0) = "", "String is not empty as expected")
 
-
-                    For j As Integer = 1 To y.Length - 2
+                    For j As Integer = 1 To y.Length - 1
                         Dim nodeFound As Boolean = False
                         Dim nodeText As String
 
-                        ' FIXME need to pass the structure type across in logical path
+                        nodeText = GetTextFromPath(y(j), False)
 
-                        If InStr(y(j), "[") > 0 Then
-                            Dim x As Integer = y(j).IndexOf("[")
-                            nodeText = y(j).Substring(x, y(j).LastIndexOf("]") - x + 1)
-                        Else
-                            nodeText = "[not named]"
-                        End If
+                        Select Case nodeText.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+                            Case "items", "item"
+                                nodeText = GetTextFromPath(y(j), True)
+                            Case "state", "protocol"
+                                ' do nothing - use outer text
+                            Case "data"
+                                If y(j).IndexOf("history") > -1 Then
+                                    nodeText = y(j)
+                                End If
+                            Case "events"
+                                nodeText = y(j)
+                        End Select
 
-                        Dim nodeId As String = z(j)
+                        Dim nodeId As String = GetTextFromPath(z(j), True)
 
                         Dim node As TermNode
+                        ' does this node exist elsewhere?
                         For Each node In nodes
-
-                            'If nodeText = node.Text Then
                             If nodeId = node.NodeId Then
                                 nodeFound = True
                                 Exit For
-
                             End If
-
                         Next
-
-                        'Dim nodeId As String = z(j)
 
                         If Not nodeFound Then
                             node = New TermNode(nodeId, nodeText, mFileManager)
-                            'node = New TermNode(nodeId)
-                            nodes.Add(node)
-
-                            If node.Parent Is Nothing Then
-                                node.PhysicalPath = "/" & z(j) & "/"
+                            If nodeText.StartsWith("data") Then
+                                nodes.Insert(0, node)
+                            ElseIf nodeText.StartsWith("events") Then
+                                If y.Length > 3 Then
+                                    ' the data node
+                                    nodes.Insert(0, node)
+                                Else
+                                    nodes.Add(node)
+                                End If
                             Else
-                                node.PhysicalPath = node.Parent.PhysicalPath & z(j) & "/"
+                                nodes.Add(node)
                             End If
+
+                            node.PhysicalPathPart = z(j)
 
                         End If
 
@@ -629,12 +656,15 @@ Public Class TermBindingPanel
 
             Next    ' LogPath index
 
-            ShowNodesImage(PathsTreeView.Nodes)
+            If mIsLoading Then
+                PathsTreeView.ExpandAll()
+            Else
+                ShowNodesImage(PathsTreeView.Nodes)
+            End If
 
-            PathsTreeView.ExpandAll()
-
-            PathsTreeView.SelectedNode = PathsTreeView.Nodes(0)
-
+            If PathsTreeView.GetNodeCount(False) > 0 Then
+                PathsTreeView.SelectedNode = PathsTreeView.Nodes(0)
+            End If
             PathsTreeView.ResumeLayout()
 
         Catch ex As Exception
@@ -646,7 +676,6 @@ Public Class TermBindingPanel
 
         Static imageTermBindingDataView As DataView
         If imageTermBindingDataView Is Nothing Then
-
             imageTermBindingDataView = New DataView(mFileManager.OntologyManager.TermBindingsTable)
         End If
 
@@ -699,7 +728,9 @@ Public Class TermBindingPanel
 
     Private Sub mFileManager_ArchetypeLoaded(ByVal sender As Object, ByVal e As System.EventArgs) Handles mFileManager.ArchetypeLoaded
         PathsTreeView.Nodes.Clear()
+        mIsLoading = True
         PopulateNodeTree()
+        mIsLoading = False
         'PopulateNodeTree(mFileManager.Archetype.Definition.Data)
 
     End Sub
@@ -798,19 +829,28 @@ Public Class TermBindingPanel
 
     Private Sub AddPathToBindings(ByVal aPath As String, ByVal aCode As String, Optional ByVal aCriteria As String = "")
 
-        Dim newRow As DataRow = mFileManager.OntologyManager.TermBindingsTable.NewRow
-        newRow(0) = Me.TerminologyComboBox.SelectedValue
-        newRow(1) = aPath
-        newRow("code") = aCode
+        mCriteriaNewRow = mFileManager.OntologyManager.TermBindingsTable.NewRow
+        mCriteriaNewRow(0) = Me.TerminologyComboBox.SelectedValue
+        mCriteriaNewRow(1) = aPath
+        mCriteriaNewRow("code") = aCode
 
-        mFileManager.OntologyManager.TermBindingsTable.Rows.Add(newRow)
+        If mFileManager.OntologyManager.Ontology.HasTermBinding(CStr(mCriteriaNewRow(0)), aPath) Then
+            ' already has this path so add criteria
+            If MessageBox.Show("Term has binding, add anyway?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.No Then
+                Return
+            End If
+        End If
+
+        mFileManager.OntologyManager.TermBindingsTable.Rows.Add(mCriteriaNewRow)
 
         mFileManager.FileEdited = True
 
         Debug.Assert(BindingList.Items.Count > 0, "BindingList not updated")
+
         If BindingList.Items.Count > 0 Then
             BindingList.Items(BindingList.Items.Count - 1).Selected = True
         End If
+
     End Sub
 
     Private Sub RemovePathFromBindings(ByVal aPath As String, ByVal aCode As String, Optional ByVal aCriteria As String = "")
@@ -1057,7 +1097,7 @@ Public Class TermBindingPanel
         If mCriteriaMode Then
             ' have to add the binding and the criteria
             AddBindingCriteria()
-            'AddPathToBindings(BindingList.SelectedItems(0).Text & "{" & mCurrentBindingCriteria.ToPhysicalCriteria & "}", CodeTextBox.Text)
+            AddPathToBindings(Me.CodeTextBox.Text & "{" & mCurrentBindingCriteria.ToPhysicalCriteria & "}", BindingList.SelectedItems(0).Text)
             ShowNodesImage(PathsTreeView.Nodes)
         End If
         BindingCriteriaCancelButton_Click(sender, e)
@@ -1193,12 +1233,12 @@ Public Class TermBindingPanel
             mFileManager = a_filemanager
             Me.NodeId = aNodeId
 
-            If NodeTerm <> "structure" Then
-                Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(NodeTerm)
-                If term.Text <> "" Then
-                    MyBase.Text = term.Text
-                End If
-            End If
+            'If NodeTerm <> "structure" Then
+            '    Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(NodeTerm)
+            '    If term.Text <> "" Then
+            '        MyBase.Text = term.Text
+            '    End If
+            'End If
 
         End Sub
 
@@ -1212,7 +1252,7 @@ Public Class TermBindingPanel
             End Set
         End Property
 
-        Property PhysicalPath() As String
+        Property PhysicalPathPart() As String
             Get
                 Return CStr(MyBase.Tag)
             End Get
@@ -1223,15 +1263,9 @@ Public Class TermBindingPanel
 
         ReadOnly Property NodeTerm() As String
             Get
-                If InStr(mNodeId, "[") > 0 Then
-                    Dim x As Integer = mNodeId.IndexOf("[") + 1
-                    Return mNodeId.Substring(x, mNodeId.LastIndexOf("]") - x)
-                Else
-                    Return "structure" 'mNodeId
-                End If
+                Return mNodeId
             End Get
         End Property
-
 
         Shadows ReadOnly Property Parent() As TermNode
             Get
@@ -1248,6 +1282,14 @@ Public Class TermBindingPanel
                 Return MyBase.FullPath
             End Get
         End Property
+
+        Public Function PhysicalPath() As String
+            If Me.Parent Is Nothing Then
+                Return "/" & Me.PhysicalPathPart
+            Else
+                Return Me.Parent.PhysicalPath & "/" & Me.PhysicalPathPart
+            End If
+        End Function
 
         'Public Sub Translate()
         '    Dim term As Term = mFileManager.OntologyManager.GetTerm(mNodeId)
@@ -1271,6 +1313,12 @@ Public Class TermBindingPanel
             End Get
         End Property
 
+        Public Function Copy() As TermNode
+            Dim tn As New TermNode(Me.mNodeId, Me.Text, Me.mFileManager)
+            tn.Tag = Me.Tag
+            Return tn
+        End Function
+
     End Class
 
     Public Class BindingCriteria
@@ -1293,7 +1341,7 @@ Public Class TermBindingPanel
                             Debug.Assert(j > 0)
                             Dim partTerm As String = part.Substring(i, j - i)
 
-                            Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(partTerm)
+                            Dim term As RmTerm = mFilemanager.OntologyManager.GetTerm(partTerm)
                             If term.Text <> "" Then
                                 part = term.Text
                             Else
@@ -1312,10 +1360,13 @@ Public Class TermBindingPanel
                     Return path
 
                 Else
-                    Dim nodeTerm As RmTerm = mFileManager.OntologyManager.GetTerm(NodeOperand)
+                    If mFilemanager.OntologyManager.Ontology.HasTermCode(NodeOperand) Then
+                        Dim nodeTerm As RmTerm = mFilemanager.OntologyManager.GetTerm(NodeOperand)
 
-                    Return nodeTerm.Text
-
+                        Return nodeTerm.Text
+                    Else
+                        Return NodeOperand
+                    End If
                 End If
             End Get
         End Property
@@ -1364,7 +1415,7 @@ Public Class TermBindingPanel
                 End If
 
                 Dim rmClass As RmStructure
-                rmClass = mFileManager.Archetype.Definition.Data.GetChildByNodeId(nodeId)
+                rmClass = mFilemanager.Archetype.Definition.Data.GetChildByNodeId(nodeId)
 
                 Debug.Assert(TypeOf rmClass Is RmElement)
                 Dim valueConstraint As Constraint = CType(rmClass, RmElement).Constraint

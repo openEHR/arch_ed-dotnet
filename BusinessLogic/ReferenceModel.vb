@@ -189,7 +189,7 @@ Public Class ReferenceModelLocal
                         End Select
                     Case StructureType.Activity
                         Select Case Child
-                            Case StructureType.List, StructureType.Table, StructureType.Tree, StructureType.Single
+                            Case StructureType.List, StructureType.Table, StructureType.Tree, StructureType.Single, StructureType.Slot
                                 Return True
                         End Select
                     Case StructureType.Data 'openEHR

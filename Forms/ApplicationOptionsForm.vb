@@ -555,7 +555,7 @@ Public Class ApplicationOptionsForm
         
         Me.FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
         Me.FolderBrowserDialog1.ShowNewFolderButton = True
-        If FolderBrowserDialog1.ShowDialog = DialogResult.OK Then
+        If FolderBrowserDialog1.ShowDialog(Me) = DialogResult.OK Then
             Me.txtRepositoryPath.Text = FolderBrowserDialog1.SelectedPath
         End If
 
@@ -583,7 +583,7 @@ Public Class ApplicationOptionsForm
         Me.ColorDialog1.FullOpen = True
         Me.ColorDialog1.AnyColor = True
         Me.ColorDialog1.Color = p.BackColor
-        If Me.ColorDialog1.ShowDialog = DialogResult.OK Then
+        If Me.ColorDialog1.ShowDialog(Me) = DialogResult.OK Then
             p.BackColor = ColorDialog1.Color
         End If
         p.BorderStyle = BorderStyle.Fixed3D
@@ -593,7 +593,7 @@ Public Class ApplicationOptionsForm
     Private Sub butHelpBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butHelpBrowse.Click
         Me.OpenFileDialog1.InitialDirectory = Application.StartupPath & "\Help"
         Me.OpenFileDialog1.Filter = "Windows help (chm)|*.chm|HTML|*.htm, *.html"
-        If OpenFileDialog1.ShowDialog = DialogResult.OK Then
+        If OpenFileDialog1.ShowDialog(Me) = DialogResult.OK Then
             Me.txtHelpFile.Text = OpenFileDialog1.FileName
         End If
 
