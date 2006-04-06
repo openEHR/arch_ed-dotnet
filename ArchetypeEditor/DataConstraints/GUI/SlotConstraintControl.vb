@@ -481,11 +481,11 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Dim fd As New OpenFileDialog
         Dim s As String
 
-        s = ReferenceModel.Instance.ReferenceModelName & "-" & Me.Constraint.RM_ClassType.ToString
+        s = ReferenceModel.Instance.ReferenceModelName & "-" & ReferenceModel.Instance.RM_StructureName(Me.Constraint.RM_ClassType)
         fd.Filter = s & "|" & s & ".*.adl"
         fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath
 
-        If fd.ShowDialog = DialogResult.OK Then
+        If fd.ShowDialog(Me) = DialogResult.OK Then
             Dim ss As String
 
             ss = fd.FileName.Substring(fd.FileName.LastIndexOf("\") + s.Length + 2)

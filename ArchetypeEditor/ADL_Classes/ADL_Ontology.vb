@@ -100,6 +100,41 @@ Namespace ArchetypeEditor.ADL_Classes
             End Try
         End Sub
 
+        Public Overrides Function HasTermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
+            If EIF_adlInterface.ontology.has_term_binding( _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_terminology_id), _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_path)) Then
+
+                Return True
+            Else
+                Return False
+            End If
+
+        End Function
+
+        Public Overrides Sub ReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
+            ' CHANGE - Sam Heard 2005.05.15
+            ' Added ascerts required for this piece of code to run successfully
+            ' and try statement
+            Debug.Assert(sCode <> "", "Code is not set")
+            Debug.Assert(sPath <> "", "Path or nodeID are not set")
+            Debug.Assert(sTerminology <> "", "TerminologyID is not set")
+            ' release is not utilised at this point
+            Try
+                Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE
+                Dim str As openehr.base.kernel.STRING
+
+                str = openehr.base.kernel.Create.STRING.make_from_cil(sPath)
+                cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(sTerminology & "::" & sCode))
+                If EIF_adlInterface.ontology.has_term_binding(cp.terminology_id.value, str) Then
+                    EIF_adlInterface.ontology.replace_term_binding(cp, str)
+                End If
+
+            Catch e As System.Exception
+                MessageBox.Show(e.Message, "ADL DLL", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Sub
+
         Public Overrides Sub AddorReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
             ' CHANGE - Sam Heard 2005.05.15
             ' Added ascerts required for this piece of code to run successfully
@@ -228,6 +263,19 @@ Namespace ArchetypeEditor.ADL_Classes
                 Debug.Assert(False, "Term is a constraint and should not be passed")
             End If
         End Sub
+
+        Public Overrides Function HasTermCode(ByVal a_term_code As String) As Boolean
+            If RmTerm.isValidTermCode(a_term_code) Then
+                If EIF_adlInterface.ontology.has_term_code(openehr.base.kernel.Create.STRING.make_from_cil(a_term_code)) Then
+                    Return True
+                ElseIf EIF_adlInterface.ontology.has_constraint_code(openehr.base.kernel.Create.STRING.make_from_cil(a_term_code)) Then
+                    Return True
+                End If
+            End If
+
+            Return False
+
+        End Function
 
         Public Overrides Sub AddConstraint(ByVal a_term As RmTerm)
             Dim an_adl_Term As ADL_Term

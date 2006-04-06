@@ -32,7 +32,7 @@ Public MustInherit Class Archetype
     MustOverride Property ConceptCode() As String
     MustOverride Property Archetype_ID() As ArchetypeID
     MustOverride ReadOnly Property ArchetypeAvailable() As Boolean
-    MustOverride ReadOnly Property Paths(ByVal languageCode As String, Optional ByVal Logical As Boolean = False) As String()
+    MustOverride ReadOnly Property Paths(ByVal languageCode As String, ByVal parserIsSynchronised As Boolean, Optional ByVal Logical As Boolean = False) As String()
 
     MustOverride ReadOnly Property SourceCode() As String
     MustOverride ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String

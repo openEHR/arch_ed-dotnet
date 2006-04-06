@@ -58,19 +58,24 @@ Public Class RmTerm
             Dim s As String
             ' cannot use toupper or lower safely with internationalisation
 
-            s = Me.Code.Substring(0, 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            If s = "at" Then
-                Return False
-            ElseIf s = "ac" Then
-                Return True
+            If isValidTermCode(Me.Code) Then
+                s = Me.Code.Substring(0, 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                If s = "at" Then
+                    Return False
+                ElseIf s = "ac" Then
+                    Return True
+                End If
             Else
-                'Raise ERROR - FIXME
-                Beep()
-                Debug.Assert(False)
+                    Debug.Assert(False)
             End If
 
         End Get
     End Property
+
+    Friend Shared Function isValidTermCode(ByVal a_term_code) As Boolean
+        Dim rx As New System.Text.RegularExpressions.Regex("a[ct](0\.[0-9]{1,4}|[0-9]{4})(\.[0-9]{1,3})*")
+        Return rx.Match(a_term_code).Success()
+    End Function
 
     Overrides Function ToString() As String
         Return sText

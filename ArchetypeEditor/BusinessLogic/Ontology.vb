@@ -25,6 +25,7 @@ Public MustInherit Class Ontology
     Public MustOverride ReadOnly Property LanguageCode() As String
     Public MustOverride ReadOnly Property NumberOfSpecialisations() As Integer
     Public MustOverride Sub Reset()
+    Public MustOverride Function HasTermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
     Public MustOverride Function LanguageAvailable(ByVal code As String) As Boolean
     Public MustOverride Function IsMultiLanguage() As Boolean
     Public MustOverride Function TerminologyAvailable(ByVal code As String) As Boolean
@@ -34,11 +35,13 @@ Public MustInherit Class Ontology
     Public MustOverride Function NextTermId() As String
     Public MustOverride Function NextConstraintID() As String
     Public MustOverride Sub AddTerm(ByVal a_Term As RmTerm)
+    Public MustOverride Function HasTermCode(ByVal a_term_code As String) As Boolean
     Public MustOverride Sub ReplaceTerm(ByVal a_Term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
     Public MustOverride Sub AddConstraint(ByVal a_Term As RmTerm)
     Public MustOverride Sub ReplaceConstraint(ByVal a_Term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
     Public MustOverride Sub AddLanguage(ByVal LanguageCode As String)
     Public MustOverride Sub AddTerminology(ByVal TerminologyCode As String)
+    Public MustOverride Sub ReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
     Public MustOverride Sub AddorReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
     Public MustOverride Function TermForCode(ByVal Code As String, ByVal LanguageCode As String) As RmTerm
     Public MustOverride Sub PopulateAllTerms(ByRef TheOntologyManager As OntologyManager)

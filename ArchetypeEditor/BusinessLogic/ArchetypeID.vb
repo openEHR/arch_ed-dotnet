@@ -45,7 +45,7 @@ Public Class ArchetypeID
         End Get
         Set(ByVal Value As String)
             mConcept = Value
-            mArchetypeID = ReferenceModel.Instance.ReferenceModelName & "-" & mRmEntity.ToString & "." & mConcept & "." & mVersion
+            mArchetypeID = ReferenceModel.Instance.ReferenceModelName & "-" & ReferenceModel.Instance.RM_StructureName(mRmEntity) & "." & mConcept & "." & mVersion
             RaiseEvent ArchetypeID_Changed(Me, New EventArgs)
         End Set
     End Property

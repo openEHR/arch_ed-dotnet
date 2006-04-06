@@ -800,10 +800,11 @@ Public Class TabPageStructure
             Dim lbl As New Label
             lbl.Location = New System.Drawing.Point(120, 2)
             lbl.Width = 320
-            lbl.Height = 24
+            lbl.Height = 36
             Me.ProcessStructure(CType(mFileManager.Archetype.Definition, RmStructureCompound))
             lbl.Text = mFileManager.Archetype.Archetype_ID.ToString
             mArchetypeControl.PanelStructureHeader.Controls.Add(lbl)
+            mArchetypeControl.PanelStructureHeader.Height = 36
             lbl.BringToFront()
         Else
             MessageBox.Show(AE_Constants.Instance.Error_loading & ": " & an_archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -820,12 +821,16 @@ Public Class TabPageStructure
             frm.Set_Single()
             frm.ListChoose.Items.AddRange(a_slot.SlotConstraint.Include.Items)
             If frm.ShowDialog = DialogResult.OK Then
-                archetype_name = ReferenceModel.Instance.ReferenceModelName & "-" & a_slot.SlotConstraint.RM_ClassType.ToString & "." & CStr(frm.ListChoose.SelectedItem) & ".adl"
+                archetype_name = ReferenceModel.Instance.ReferenceModelName & "-" & _
+                    ReferenceModel.Instance.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
+                    "." & CStr(frm.ListChoose.SelectedItem) & ".adl"
             Else
                 Return False
             End If
         ElseIf a_slot.SlotConstraint.Include.Count = 1 Then
-            archetype_name = ReferenceModel.Instance.ReferenceModelName & "-" & a_slot.SlotConstraint.RM_ClassType.ToString & "." & a_slot.SlotConstraint.Include.Item(0) & ".adl"
+            archetype_name = ReferenceModel.Instance.ReferenceModelName & "-" & _
+                ReferenceModel.Instance.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
+                "." & a_slot.SlotConstraint.Include.Item(0) & ".adl"
         Else
             Return False
         End If

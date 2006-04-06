@@ -225,8 +225,7 @@ Public Class OceanArchetypeEditor
 
         frm.lblInput.Text = label
         frm.Text = AE_Constants.Instance.MessageBoxCaption
-        'HKF: 1609
-        'If frm.ShowDialog(Me) = DialogResult.OK Then
+
         If frm.ShowDialog() = DialogResult.OK Then
             s = frm.txtInput.Text
         End If
@@ -243,8 +242,6 @@ Public Class OceanArchetypeEditor
         frm.LblInput2.Text = label_2
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
-        'HKF: 1609
-        ''If frm.ShowDialog(Me) = DialogResult.OK Then
         If frm.ShowDialog() = DialogResult.OK Then
             s(0) = frm.txtInput.Text
             s(1) = frm.txtInput2.Text
@@ -268,8 +265,6 @@ Public Class OceanArchetypeEditor
         frm.txtInput.Text = a_term.Text
         frm.txtInput2.Text = a_term.Description
 
-        'HKF: 1609
-        ''If frm.ShowDialog(Me) = DialogResult.OK Then
         If frm.ShowDialog() = DialogResult.OK Then
             s(0) = frm.txtInput.Text
             If s(0) <> "" Then
