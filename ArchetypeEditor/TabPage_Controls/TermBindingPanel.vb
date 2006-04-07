@@ -520,7 +520,7 @@ Public Class TermBindingPanel
 
     Private WithEvents mTermBindingView As DataView
     Private WithEvents mTermBindingCriteriaView As DataView
-    Private WithEvents mFileManager As FileManagerLocal
+    Private mFileManager As FileManagerLocal
     Private mCurrentTermNode As TermNode
     Private mCurrentBindingCriteria As BindingCriteria
     Private mCriteriaMode As Boolean
@@ -726,14 +726,21 @@ Public Class TermBindingPanel
         End If
     End Sub
 
-    Private Sub mFileManager_ArchetypeLoaded(ByVal sender As Object, ByVal e As System.EventArgs) Handles mFileManager.ArchetypeLoaded
+    Public Sub PopulatePathTree()
         PathsTreeView.Nodes.Clear()
         mIsLoading = True
         PopulateNodeTree()
         mIsLoading = False
-        'PopulateNodeTree(mFileManager.Archetype.Definition.Data)
-
     End Sub
+
+    'Private Sub mFileManager_ArchetypeLoaded(ByVal sender As Object, ByVal e As System.EventArgs) Handles mFileManager.ArchetypeLoaded
+    '    PathsTreeView.Nodes.Clear()
+    '    mIsLoading = True
+    '    PopulateNodeTree()
+    '    mIsLoading = False
+    '    'PopulateNodeTree(mFileManager.Archetype.Definition.Data)
+
+    'End Sub
 
     Private Sub NodeScopeCheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
             Handles PathRadioButton.CheckedChanged, NodeRadioButton.CheckedChanged

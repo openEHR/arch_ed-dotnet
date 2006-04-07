@@ -28,7 +28,7 @@ Public Class TabPageStructure
     Private mEmbeddedLoaded As Boolean = False
     Private mValidStructureClasses As StructureType()
     Private WithEvents mArchetypeControl As EntryStructure
-    Private WithEvents mFileManager As FileManagerLocal
+    Private mFileManager As FileManagerLocal
     
 
 #Region " Windows Form Designer generated code "

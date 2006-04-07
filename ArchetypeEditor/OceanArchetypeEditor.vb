@@ -89,12 +89,12 @@ Public Class OceanArchetypeEditor
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
         'MessageBox.Show("LANG: " & default_language_code, "TEST")
-        mDefaultLanguageCode = "fa"
+        ' mDefaultLanguageCode = "fa"
         'MessageBox.Show("Specific LANG: " & specific_language_code, "TEST")
-        mSpecificLanguageCode = "fa"
+        'mSpecificLanguageCode = "fa"
 
-        'mDefaultLanguageCode =  "nl"
-        'mSpecificLanguageCode = "nl"
+        mDefaultLanguageCode = "de"
+        mSpecificLanguageCode = "de"
 #End If
 
         mDataSet = New DataSet("DesignerDataSet")
