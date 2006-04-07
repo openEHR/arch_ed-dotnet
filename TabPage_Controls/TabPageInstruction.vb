@@ -424,8 +424,15 @@ Public Class TabPageInstruction
             Dim start_info As New ProcessStartInfo
             start_info.FileName = Application.ExecutablePath
             start_info.WorkingDirectory = Application.StartupPath
-            start_info.Arguments = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\entry\action\" & "openEHR-EHR-ACTION." & Me.txtAction.Text & ".adl"
-            Process.Start(start_info)
+            Dim s As String = OceanArchetypeEditor.Instance.Options.RepositoryPath & _
+                "\entry\action\" & "openEHR-EHR-ACTION." & Me.txtAction.Text & ".adl"
+            If IO.File.Exists(s) Then
+                start_info.Arguments = s
+                Process.Start(start_info)
+            Else
+                MessageBox.Show(AE_Constants.Instance.Could_not_find & " '" & s & "'", _
+                    AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
         Catch
             MessageBox.Show(AE_Constants.Instance.Error_loading & " Archetype Editor", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

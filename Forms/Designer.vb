@@ -1761,6 +1761,7 @@ Public Class Designer
             Return
         End If
 
+
         If mFileManager.ParserType = "adl" Then
             Me.OpenFileDialogArchetype.Filter = "ADL|*.adl|Archetypes|*.archetype|All files|*.*"
         Else
@@ -1800,6 +1801,9 @@ Public Class Designer
             mFileManager.FileLoading = False
             Exit Sub
         End If
+
+        'remove embedded filemanagers
+        Filemanager.ClearEmbedded()
 
         ' stop the handler while we get all the languages
         RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
@@ -1993,6 +1997,10 @@ Public Class Designer
             Me.ListLanguages.SelectedValue = mFileManager.OntologyManager.PrimaryLanguageCode
         End If
 
+        If Not mTermBindingPanel Is Nothing Then
+            Me.mTermBindingPanel.PopulatePathTree()
+        End If
+
         Me.MenuFileSpecialise.Visible = True
         Me.Cursor = System.Windows.Forms.Cursors.Default
     End Sub
@@ -2003,7 +2011,11 @@ Public Class Designer
             Dim obj As Object
             'reset the header
 
+
             If SetNewArchetypeName(sender Is MenuFileClose) = 2 Then  ' a new archetype
+                'remove embedded filemanagers
+                Filemanager.ClearEmbedded()
+
                 Me.SuspendLayout()
 
                 RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
@@ -2961,8 +2973,7 @@ Public Class Designer
 
     Private Function CheckOKtoClose() As Boolean
         If Filemanager.HasFileToSave Then
-            Filemanager.SaveFiles(True)
-            'Me.SaveArchetype(Me, New EventArgs)
+            Return Filemanager.SaveFiles(True)
         End If
         Return True
     End Function
@@ -3241,9 +3252,11 @@ Public Class Designer
     End Function
 
     Private Sub MenuFileExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileExit.Click
-        If CheckOKtoClose() Then
-            Me.Dispose()
-        End If
+        'If CheckOKtoClose() Then
+        'Close checks if it is OK to close
+        Me.Close()
+        'Me.Dispose()
+        'End If
     End Sub
 
     Private Sub MenuViewLanguageTerminology_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuLanguageAvailable.Click, MenuTerminologyAvailable.Click

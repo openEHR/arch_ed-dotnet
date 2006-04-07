@@ -28,8 +28,6 @@ Public Class FileManagerLocal
     Private mObjectToSave As Object
     Private mOntologyManager As New OntologyManager
 
-    Public Event ArchetypeLoaded As EventHandler
-
     Public Property OntologyManager() As OntologyManager
         Get
             Return mOntologyManager
@@ -98,10 +96,10 @@ Public Class FileManagerLocal
             Return mIsFileDirty
         End Get
         Set(ByVal Value As Boolean)
-            If Value <> mIsFileDirty Then
-                mIsFileDirty = Value
-                Filemanager.SetFileChangedToolBar(Value)
-            End If
+            'As the File Save might have been set by an embedded
+            'archetype so have to raise the event
+            mIsFileDirty = Value
+            Filemanager.SetFileChangedToolBar(Value)
             If Value Then
                 mParserSynchronised = True
             Else
@@ -206,8 +204,6 @@ Public Class FileManagerLocal
             mOntologyManager.PopulateAllTerms()
 
             FileEdited = False
-
-            RaiseEvent ArchetypeLoaded(Me, New EventArgs)
 
             Return True
         End If
@@ -431,20 +427,17 @@ Class Filemanager
             End If
         End Get
         Set(ByVal Value As FileManagerLocal)
+            ' setting the master must require clearing embedded if there are any
             mFileManagerCollection.Insert(0, Value)
         End Set
     End Property
     Public Shared ReadOnly Property HasFileToSave() As Boolean
         Get
-            'If mInstance.FileEdited Then
-            '    Return True
-            'Else
             For Each f As FileManagerLocal In mFileManagerCollection
                 If f.FileEdited Then
                     Return True
                 End If
             Next
-            'End If
             Return False
         End Get
     End Property
@@ -457,6 +450,12 @@ Class Filemanager
     Public Shared Sub AddEmbedded(ByVal f As FileManagerLocal)
         mFileManagerCollection.Add(f)
         mHasEmbedded = True
+    End Sub
+
+    Public Shared Sub ClearEmbedded()
+        While mFileManagerCollection.Count > 1
+            mFileManagerCollection.RemoveAt(1)
+        End While
     End Sub
 
     Public Shared Sub RemoveEmbedded(ByVal f As FileManagerLocal)
