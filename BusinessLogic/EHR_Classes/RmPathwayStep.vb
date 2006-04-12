@@ -67,8 +67,8 @@ Public Class RmPathwayStep
         mStateType = a_machine_state_type
     End Sub
 
-    Sub New(ByVal EIF_PathwayStep As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.New(EIF_PathwayStep.node_id.to_cil, StructureType.CarePathwayStep)
+    Sub New(ByVal a_node_id As String, ByVal EIF_PathwayStep As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        MyBase.New(a_node_id, StructureType.CarePathwayStep)
         ProcessPathwayStep(EIF_PathwayStep)
     End Sub
 
@@ -98,9 +98,9 @@ Public Class RmPathwayStep
                         mAlternativeState = Integer.Parse(t.AllowableValues.Codes(1))
                     End If
                 Case "careflow_step"
-                        'No action now as atcode is set for RmPathwayStep and reproduced here
+                    'No action now as atcode is set for RmPathwayStep and reproduced here
                 Case Else
-                        Debug.Assert(False, EIF_Step.rm_type_name.to_cil & " not handled")
+                    Debug.Assert(False, EIF_Step.rm_type_name.to_cil & " not handled")
             End Select
         Next
 

@@ -1147,7 +1147,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_phrase As New CodePhrase
 
-            objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("ISM_TRANSITION"), openehr.base.kernel.Create.STRING.make_from_cil(rm.NodeId))
+            objNode = mCADL_Factory.create_c_complex_object_anonymous(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("ISM_TRANSITION"))
             a_state = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("current_state"))
             code_phrase.TerminologyID = "openehr"
             code_phrase.Codes.Add((CInt(rm.StateType)).ToString)
