@@ -2642,14 +2642,14 @@
   <Concept Language="en" ConceptID="523" Rubric="deleted" />
   <Concept Language="en" ConceptID="524" Rubric="Initial" />
   <Concept Language="en" ConceptID="525" Rubric="Instruction states" />
-  <Concept Language="en" ConceptID="526" Rubric="planned" />
+  <Concept Language="en" ConceptID="526" Rubric="Planned" />
   <Concept Language="en" ConceptID="527" Rubric="Postponed" />
   <Concept Language="en" ConceptID="528" Rubric="Cancelled" />
-  <Concept Language="en" ConceptID="529" Rubric="scheduled" />
+  <Concept Language="en" ConceptID="529" Rubric="Scheduled" />
   <Concept Language="en" ConceptID="530" Rubric="Suspended" />
-  <Concept Language="en" ConceptID="531" Rubric="aborted" />
+  <Concept Language="en" ConceptID="531" Rubric="Aborted" />
   <Concept Language="en" ConceptID="532" Rubric="Completed" />
-  <Concept Language="en" ConceptID="533" Rubric="expired" />
+  <Concept Language="en" ConceptID="533" Rubric="Expired" />
   <Concept Language="en" ConceptID="534" Rubric="Instruction transitions" />
   <Concept Language="en" ConceptID="535" Rubric="Initiate" />
   <Concept Language="en" ConceptID="536" Rubric="Plan step" />
