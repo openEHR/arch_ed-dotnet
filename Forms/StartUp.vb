@@ -215,7 +215,12 @@ Public Class frmStartUp
     End Property
     Public Property Archetype_ID() As ArchetypeID
         Get
-            Return New ArchetypeID(Me.comboModel.Text & "-" & Me.comboComponent.Text & "." & Me.txtConcept.Text & ".v1draft")
+            Try
+                Return New ArchetypeID(Me.comboModel.Text & "-" & ReferenceModel.Instance.RM_StructureName(ReferenceModel.Instance.ValidStructureTypes(0)) & "." & Me.txtConcept.Text & ".v1draft")
+            Catch
+                Return Nothing
+                Debug.Assert(False)
+            End Try
         End Get
         Set(ByVal Value As ArchetypeID)
             Debug.Assert(False) ' untested
@@ -223,11 +228,11 @@ Public Class frmStartUp
             txtConcept.Text = Value.Concept
 
             Me.comboModel.SelectedItem = Value.Reference_Model.ToString
-                Try
+            Try
                 Me.comboComponent.SelectedItem = Value.ReferenceModelEntity.ToString
-                Catch ex As Exception
-                    Debug.Assert(False)
-                End Try
+            Catch ex As Exception
+                Debug.Assert(False)
+            End Try
         End Set
     End Property
 

@@ -70,7 +70,9 @@ Public Class TableStructure
                         mArchetypeTable.Rows.Add(d_row)
                     End If
                 Next
-                SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeElement))
+                If mArchetypeTable.Rows.Count > 0 Then
+                    SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeElement))
+                End If
             Else
                 Debug.Assert(False, "Unrotated tables are not handled at present")
             End If
@@ -419,7 +421,7 @@ Public Class TableStructure
         Else
             mMenuItemAddRow = New MenuItem(Filemanager.GetOpenEhrTerm(323, "New Row"))
         End If
-        AddHandler mMenuItemAddRow.Click, AddressOf AddRow
+        AddHandler mMenuItemAddRow.Click, AddressOf AddKeyColumn
         cm.MenuItems.Add(mMenuItemAddRow)
         cm.Show(Me.ButAddElement, New System.Drawing.Point(5, 5))
     End Sub
@@ -490,30 +492,25 @@ Public Class TableStructure
         End If
     End Sub
 
-    Sub AddRow(ByVal sender As Object, ByVal e As EventArgs)
+    Sub AddKeyColumn(ByVal sender As Object, ByVal e As EventArgs)
         Dim s As String()
+        Dim a_term As RmTerm
+        Dim element As ArchetypeElement
+
         ' adds columns if rotated
         If mIsRotated Then
-            'If mArchetypeTable.Rows.Count > 0 Then
-            s = OceanArchetypeEditor.Instance.GetInput("Enter the name of the new column", "Description")
+            s = OceanArchetypeEditor.Instance.GetInput("Enter the concept of the new column", "Description")
             If s(0) <> "" Then
-                Dim a_term As RmTerm
-                Dim element As ArchetypeElement
-
                 a_term = mFileManager.OntologyManager.AddTerm(s(0), s(1))
+                'If mArchetypeTable.Rows.Count > 0 Then
                 If mKeyColumns.Count > 0 Then
                     element = mKeyColumns.Item(mKeyColumns.Count)
                 Else
-                    s = OceanArchetypeEditor.Instance.GetInput("Enter the concept represented by the columns", "Description")
-                    If s(0) <> "" Then
-                        element = New ArchetypeElement(s(0), mFileManager)
-                        If s(1) <> "" Then
-                            element.Description = s(1)
-                        End If
-                    Else
-                        element = New ArchetypeElement("row_head", mFileManager)
-                    End If
-
+                    element = New ArchetypeElement("row_head", mFileManager)
+                    'element = New ArchetypeElement(New RmElement(a_term.Code), mFileManager)
+                    'If s(1) <> "" Then
+                    'element.Description = s(1)
+                    'End If
                     element.Constraint = New Constraint_Text
                     mKeyColumns.Add(element)
                 End If
@@ -521,7 +518,6 @@ Public Class TableStructure
                 AddColumn(a_term)
                 mFileManager.FileEdited = True
             End If
-            'End If
         Else
             Debug.Assert(False, "TODO")
         End If
@@ -857,11 +853,13 @@ Public Class TableStructure
     Private Sub dgGrid_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles dgGrid.DragDrop
         Dim table_archetype As ArchetypeElement
 
-        table_archetype = mDragArchetypeNode
-
-        If Not mDragArchetypeNode Is Nothing Then
+        If Not mNewConstraint Is Nothing Then
             Dim new_row As DataRow
             Dim a_cell As DataGridCell
+
+            table_archetype = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
+            table_archetype.Constraint = mNewConstraint
+
             mCurrentItem = Nothing
             mIsLoading = True
             new_row = mArchetypeTable.NewRow
@@ -879,8 +877,8 @@ Public Class TableStructure
             Me.dgGrid.CurrentCell = a_cell
             mFileManager.FileEdited = True
             mIsLoading = False
+            mNewConstraint = Nothing
         End If
-        mDragArchetypeNode = Nothing
 
     End Sub
 

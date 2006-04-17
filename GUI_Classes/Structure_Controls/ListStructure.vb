@@ -620,11 +620,16 @@ Public Class ListStructure
 
         If Not mDragItem Is Nothing Then
             list_item_dragged = mDragItem
-        ElseIf Not mDragArchetypeNode Is Nothing Then
-            list_item_dragged = New ArchetypeListViewItem(CType(mDragArchetypeNode, ArchetypeElement))
+            'ElseIf Not mDragArchetypeNode Is Nothing Then
+        ElseIf Not mNewConstraint Is Nothing Then
+            Dim archetype_element As ArchetypeElement
+            archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
+            archetype_element.Constraint = mNewConstraint
+            list_item_dragged = New ArchetypeListViewItem(archetype_element)
         Else
             Debug.Assert(False, "No item dragged")
-            mDragArchetypeNode = Nothing
+            mNewConstraint = Nothing
+            mNewCluster = False
             mDragItem = Nothing
             Return
         End If
@@ -653,7 +658,8 @@ Public Class ListStructure
         End If
         mFileManager.FileEdited = True
 
-        mDragArchetypeNode = Nothing
+        mNewConstraint = Nothing
+        mNewCluster = False
         mDragItem = Nothing
     End Sub
 

@@ -1236,7 +1236,7 @@
   <Concept Language="de" ConceptID="107" Rubric="Baum" />
   <Concept Language="de" ConceptID="108" Rubric="Tabelle" />
   <Concept Language="de" ConceptID="109" Rubric="Neues Element" />
-  <Concept Language="de" ConceptID="110" Rubric="Vorkommen - Minimum" />
+  <Concept Language="de" ConceptID="110" Rubric="Vorkommen" />
   <Concept Language="de" ConceptID="111" Rubric="Maximum" />
   <Concept Language="de" ConceptID="112" Rubric="Unbegrenzt" />
   <Concept Language="de" ConceptID="113" Rubric="Beschreibung" />
@@ -2279,7 +2279,7 @@
   <Concept Language="tr" ConceptID="8" Rubric="dede" />
   <Concept Language="tr" ConceptID="7" Rubric="anneanne" />
   <Concept Language="tr" ConceptID="38" Rubric="Dayı" />
-  <Concept Language="tr" ConceptID="111" Rubric="Maksimum:" />
+  <Concept Language="tr" ConceptID="111" Rubric="Maksimum" />
   <Concept Language="tr" ConceptID="144" Rubric="maksimum" />
   <Concept Language="tr" ConceptID="146" Rubric="ortalama" />
   <Concept Language="tr" ConceptID="145" Rubric="minimum" />
@@ -2290,7 +2290,7 @@
   <Concept Language="tr" ConceptID="139" Rubric="Yeni kısıt" />
   <Concept Language="tr" ConceptID="109" Rubric="Yeni eleman" />
   <Concept Language="tr" ConceptID="118" Rubric="Belirlenmemiş" />
-  <Concept Language="tr" ConceptID="110" Rubric="Var olabilirlik - Minimum:" />
+  <Concept Language="tr" ConceptID="110" Rubric="Var olabilirlik" />
   <Concept Language="tr" ConceptID="179" Rubric="Ofset" />
   <Concept Language="tr" ConceptID="165" Rubric="Tamam" />
   <Concept Language="tr" ConceptID="135" Rubric="Aç" />
@@ -2723,6 +2723,9 @@
   <Concept Language="en" ConceptID="605" Rubric="Embedded archetype" />
   <Concept Language="en" ConceptID="606" Rubric="Load embedded archetype" />
   <Concept Language="en" ConceptID="607" Rubric="Cannot specialise reference" />
+  <Concept Language="tr" ConceptID="525" Rubric="*Instruction states (en)" />
+  <Concept Language="tr" ConceptID="534" Rubric="*Instruction transitions (en)" />
+  <Concept Language="tr" ConceptID="568" Rubric="*Authorship lifecycle (en)" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

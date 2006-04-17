@@ -142,23 +142,15 @@ Public Class FileManagerLocal
     End Function
 
     Public Property FileLoading() As Boolean
-        'Public ReadOnly Property FileLoading() As Boolean
         Get
             Return mIsFileLoading
         End Get
-
-        'End Property
-
-        'Private WriteOnly Property IsFileLoading() As Boolean
         Set(ByVal Value As Boolean)
-            mIsFileLoading = Value
-
-            If Value Then
-                ' stop recursive updates through the interface to the ontology
-                OntologyManager.DoUpdateOntology = False
-            Else
-                ' allow them
-                OntologyManager.DoUpdateOntology = True
+            If mIsFileLoading <> Value Then
+                mIsFileLoading = Value
+                ' now stop recursive updates through the interface to the ontology
+                ' when the file is loading, otherwise allow them
+                OntologyManager.DoUpdateOntology = Not Value
             End If
         End Set
     End Property
@@ -272,7 +264,12 @@ Public Class FileManagerLocal
             Try
                 mObjectToSave.PrepareToSave()
                 WriteArchetype()
-                Return True
+                If Not mHasWriteFileError Then
+                    FileEdited = False
+                    Return True
+                Else
+                    Return False
+                End If
             Catch ex As Exception
                 MessageBox.Show(AE_Constants.Instance.Error_saving & Me.FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return False
@@ -487,7 +484,6 @@ Class Filemanager
                         Case DialogResult.Yes
                             If f.SaveArchetype() Then
                                 f.IsNew = False
-                                f.FileEdited = False
                             Else
                                 Return False
                             End If
@@ -495,7 +491,6 @@ Class Filemanager
                 Else
                     If f.SaveArchetype() Then
                         f.IsNew = False
-                        f.FileEdited = False
                     Else
                         Return False
                     End If

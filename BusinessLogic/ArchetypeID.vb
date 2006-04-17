@@ -55,6 +55,12 @@ Public Class ArchetypeID
         End Get
     End Property
 
+    ReadOnly Property ReferenceModelEntityAsString() As String
+        Get
+            Return ReferenceModel.Instance.RM_StructureName(mRmEntity)
+        End Get
+    End Property
+
     Sub SetFromString(ByVal value As String)
         ProcessStringValue(value)
     End Sub

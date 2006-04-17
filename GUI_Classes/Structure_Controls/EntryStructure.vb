@@ -35,7 +35,9 @@ Public Class EntryStructure
     'implement as overrided property
     Protected mControl As Control  ' the GUI control in the inherited class e.g. tree, text etc
 
-    Protected mDragArchetypeNode As ArchetypeNode
+    'Protected mDragArchetypeNode As ArchetypeNode
+    Protected mNewConstraint As Constraint
+    Protected mNewCluster As Boolean = False
     Public Event CurrentItemChanged(ByVal sender As ArchetypeNode, ByVal e As EventArgs)
     Public Event ChangeStructure(ByVal sender As Object, ByVal e As EventArgs)
 
@@ -802,7 +804,9 @@ Public Class EntryStructure
                     pbOrdinal.MouseUp, pbText.MouseUp, pbQuantity.MouseUp
 
         'cancel drag and drop operation
-        mDragArchetypeNode = Nothing
+        mNewConstraint = Nothing
+        mNewCluster = False
+        'mDragArchetypeNode = Nothing
     End Sub
 
     Private Sub pbGroup_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) _
@@ -812,32 +816,29 @@ Public Class EntryStructure
         Dim rm As RmElement
         Dim pb As PictureBox
 
-        ' create mDragArchetype node with the correct constraint
-
         If sender.name = "pbCluster" Then
-            mDragArchetypeNode = New ArchetypeComposite(Filemanager.GetOpenEhrTerm(322, "New cluster"), StructureType.Cluster, mFileManager)
+            mNewCluster = True
+            sender.DoDragDrop(mNewCluster, DragDropEffects.Copy)
         Else
-            Dim c As New Constraint
-
-            mDragArchetypeNode = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
+            ' create mNewConstraint with the correct constraint
 
             Select Case sender.Name
                 Case "pbAny"
-                    c = New Constraint
+                    mNewConstraint = New Constraint
                 Case "pbBoolean"
-                    c = New Constraint_Boolean
+                    mNewConstraint = New Constraint_Boolean
                 Case "pbCount"
-                    c = New Constraint_Count
+                    mNewConstraint = New Constraint_Count
                 Case "pbDateTime"
-                    c = New Constraint_DateTime
+                    mNewConstraint = New Constraint_DateTime
                 Case "pbOrdinal"
-                    c = New Constraint_Ordinal(True, mFileManager)
+                    mNewConstraint = New Constraint_Ordinal(True, mFileManager)
                 Case "pbQuantity"
-                    c = New Constraint_Quantity
+                    mNewConstraint = New Constraint_Quantity
                 Case "pbText"
-                    c = New Constraint_Text
+                    mNewConstraint = New Constraint_Text
             End Select
-            CType(mDragArchetypeNode, ArchetypeElement).Constraint = c
+            sender.DoDragDrop(mNewConstraint, DragDropEffects.Copy)
         End If
 
         If mControl.Enabled = False Then
@@ -846,7 +847,7 @@ Public Class EntryStructure
 
         mControl.AllowDrop = True
 
-        sender.DoDragDrop(mDragArchetypeNode, DragDropEffects.Copy)
+        'sender.DoDragDrop(mDragArchetypeNode, DragDropEffects.Copy)
 
     End Sub
 
