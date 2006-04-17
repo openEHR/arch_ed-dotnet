@@ -163,14 +163,6 @@ Public Class RmStructure
         End If
     End Sub
 
-#Region "Processing ADL - incoming"
-
-#End Region
-
-#Region "Building ADL - outgoing"
-
-#End Region
-
 #End Region
 
 End Class

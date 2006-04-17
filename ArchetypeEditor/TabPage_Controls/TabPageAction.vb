@@ -154,7 +154,9 @@ Public Class TabPageAction
             Me.tpAction.Controls.Add(mActionDescription)
             mActionDescription.Dock = DockStyle.Fill
         End If
-
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            TranslateGUI()
+        End If
         Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
         mIsloading = False
 
@@ -229,7 +231,10 @@ Public Class TabPageAction
         End If
         If Not mActionDescription Is Nothing Then
             Dim action_spec As New RmStructureCompound("activity_description", StructureType.ActivityDescription)
-            action_spec.Children.Add(mActionDescription.SaveAsStructure)
+            Dim rm_struct As RmStructure = mActionDescription.SaveAsStructure
+            If Not rm_struct Is Nothing Then
+                action_spec.Children.Add(rm_struct)
+            End If
             rm.Children.Add(action_spec)
         End If
 
@@ -244,6 +249,8 @@ Public Class TabPageAction
     Public Sub TranslateGUI()
         Me.tpAction.Title = Filemanager.GetOpenEhrTerm(509, "Activity description")
         Me.tpPathway.Title = Filemanager.GetOpenEhrTerm(510, "Pathway")
+        mPathwaySpecification.TranslateGUI()
+        mActionDescription.TranslateGUI()
     End Sub
 
 

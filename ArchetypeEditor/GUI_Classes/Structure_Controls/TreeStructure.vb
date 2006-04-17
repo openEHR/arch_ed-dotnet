@@ -913,20 +913,19 @@ Public Class TreeStructure
 
         If Not mDragTreeNode Is Nothing Then
             mNodeDragged = mDragTreeNode
-        ElseIf Not mDragArchetypeNode Is Nothing Then
-            If mDragArchetypeNode.RM_Class.Type = StructureType.Cluster Then
-                mNodeDragged = New ArchetypeTreeNode(mDragArchetypeNode)
-            ElseIf mDragArchetypeNode.RM_Class.Type = StructureType.Element Then
-                mNodeDragged = New ArchetypeTreeNode(mDragArchetypeNode)
-                Dim archetype_element As ArchetypeElement = CType(mNodeDragged.Item, ArchetypeElement)
-                mNodeDragged.ImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference)
-                mNodeDragged.SelectedImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
-            Else
-                Debug.Assert(False, "No node type")
-            End If
+        ElseIf Not mNewConstraint Is Nothing Then
+            Dim archetype_element As ArchetypeElement
+            archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
+            archetype_element.Constraint = mNewConstraint
+            mNodeDragged = New ArchetypeTreeNode(archetype_element)
+            mNodeDragged.ImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference)
+            mNodeDragged.SelectedImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
+        ElseIf mNewCluster Then
+            Dim new_cluster As ArchetypeComposite
+            new_cluster = New ArchetypeComposite(Filemanager.GetOpenEhrTerm(322, "New cluster"), StructureType.Cluster, mFileManager)
+            mNodeDragged = New ArchetypeTreeNode(new_cluster)
         Else
             Debug.Assert(False, "No drag item set")
-            mDragArchetypeNode = Nothing
             mDragTreeNode = Nothing
             Me.tvTree.Cursor = System.Windows.Forms.Cursors.Default
             Return
@@ -974,7 +973,8 @@ Public Class TreeStructure
                 DragParent.Remove(mNodeDragged)
             Else
                 Beep()
-                mDragArchetypeNode = Nothing
+                mNewConstraint = Nothing
+                mNewCluster = False
                 mDragTreeNode = Nothing
                 Me.tvTree.Cursor = System.Windows.Forms.Cursors.Default
                 Return
@@ -993,7 +993,8 @@ Public Class TreeStructure
         mFileManager.FileEdited = True
 
         ' set the drag items to nothing
-        mDragArchetypeNode = Nothing
+        mNewConstraint = Nothing
+        mNewCluster = False
         mDragTreeNode = Nothing
         Me.tvTree.Cursor = System.Windows.Forms.Cursors.Default
     End Sub

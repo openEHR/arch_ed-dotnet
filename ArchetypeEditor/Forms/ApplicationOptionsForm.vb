@@ -73,6 +73,8 @@ Public Class ApplicationOptionsForm
     Friend WithEvents comboOccurrences As System.Windows.Forms.ComboBox
     Friend WithEvents txtOrganisation As System.Windows.Forms.TextBox
     Friend WithEvents lblOrganisation As System.Windows.Forms.Label
+    Friend WithEvents Panel_7 As System.Windows.Forms.Panel
+    Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(ApplicationOptionsForm))
@@ -120,6 +122,8 @@ Public Class ApplicationOptionsForm
         Me.comboOccurrences = New System.Windows.Forms.ComboBox
         Me.tpDefaults = New System.Windows.Forms.TabPage
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
+        Me.Panel_7 = New System.Windows.Forms.Panel
+        Me.Label_7 = New System.Windows.Forms.Label
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -272,6 +276,8 @@ Public Class ApplicationOptionsForm
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Panel_7)
+        Me.GroupBox1.Controls.Add(Me.Label_7)
         Me.GroupBox1.Controls.Add(Me.Panel_6)
         Me.GroupBox1.Controls.Add(Me.Label_6)
         Me.GroupBox1.Controls.Add(Me.Panel_4)
@@ -523,6 +529,24 @@ Public Class ApplicationOptionsForm
         Me.tpDefaults.TabIndex = 3
         Me.tpDefaults.Text = "Defaults"
         '
+        'Panel_7
+        '
+        Me.Panel_7.BackColor = System.Drawing.Color.Orange
+        Me.Panel_7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Panel_7.Location = New System.Drawing.Point(509, 112)
+        Me.Panel_7.Name = "Panel_7"
+        Me.Panel_7.Size = New System.Drawing.Size(38, 18)
+        Me.Panel_7.TabIndex = 15
+        '
+        'Label_7
+        '
+        Me.Label_7.Location = New System.Drawing.Point(288, 112)
+        Me.Label_7.Name = "Label_7"
+        Me.Label_7.Size = New System.Drawing.Size(211, 18)
+        Me.Label_7.TabIndex = 14
+        Me.Label_7.Text = "Label7"
+        Me.Label_7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'ApplicationOptionsForm
         '
         Me.AcceptButton = Me.butOK
@@ -565,14 +589,15 @@ Public Class ApplicationOptionsForm
         Dim ms As StateMachineType()
 
         ms = ReferenceModel.Instance.ValidStateMachineTypes
-        Debug.Assert(ms.Length = 7)
+        Debug.Assert(ms.Length = 8)
         Me.Label_0.Text = ms(0).ToString
         Me.Label_1.Text = ms(1).ToString
         Me.Label_2.Text = ms(2).ToString
         Me.Label_3.Text = ms(3).ToString
         Me.Label_4.Text = ms(4).ToString
-        Me.Label_4.Text = ms(5).ToString
-        Me.Label_4.Text = ms(6).ToString
+        Me.Label_5.Text = ms(5).ToString
+        Me.Label_6.Text = ms(6).ToString
+        Me.Label_7.Text = ms(7).ToString
     End Sub
 
     Private Sub ColourPanel_doubleClisk(ByVal sender As System.Object, ByVal e As EventArgs) Handles Panel_4.DoubleClick, Panel_0.DoubleClick, Panel_2.DoubleClick, Panel_1.DoubleClick, Panel_3.DoubleClick

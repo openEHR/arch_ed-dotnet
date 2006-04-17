@@ -8,7 +8,7 @@ Public Class Options
     Private mDefaultRM As Integer
     Private mOccurrencesView As String
     Private mHelpPath As String
-    Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray}
+    Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
     Property HelpLocationPath() As String
         Get
@@ -86,6 +86,7 @@ Public Class Options
         frm.Panel_4.BackColor = mColors(4)
         frm.Panel_5.BackColor = mColors(5)
         frm.Panel_6.BackColor = mColors(6)
+        frm.Panel_7.BackColor = mColors(7)
 
         If frm.ShowDialog() = DialogResult.OK Then
             mUserName = frm.txtUsername.Text
@@ -102,6 +103,7 @@ Public Class Options
             mColors(4) = frm.Panel_4.BackColor
             mColors(5) = frm.Panel_5.BackColor
             mColors(6) = frm.Panel_6.BackColor
+            mColors(7) = frm.Panel_7.BackColor
 
             WriteConfiguration()
         End If
@@ -116,10 +118,11 @@ Public Class Options
         Dim y() As String
         Dim i As Integer
         Dim rw As DataRow
+        Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
 
-        If System.IO.File.Exists(Application.StartupPath & "\ArchetypeEditor.cfg") Then
+        If System.IO.File.Exists(path & "\ArchetypeEditor.cfg") Then
             Try
-                StrmRead = New IO.StreamReader("ArchetypeEditor.cfg")
+                StrmRead = New IO.StreamReader(path & "\ArchetypeEditor.cfg")
 
                 While StrmRead.Peek > 0
 
@@ -176,9 +179,10 @@ Public Class Options
         Dim y() As String
         Dim i As Integer
         Dim rw As DataRow
+        Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
 
         Try
-            StrmWrite = New IO.StreamWriter(Application.StartupPath & "\ArchetypeEditor.cfg", False)
+            StrmWrite = New IO.StreamWriter(path & "\ArchetypeEditor.cfg", False)
             Try
                 StrmWrite.WriteLine("UserName=" & mUserName)
                 StrmWrite.WriteLine("UserEmail=" & mUserEmail)
@@ -223,15 +227,18 @@ Public Class Options
                 Return mColors(5)
             Case StateMachineType.InitialAborted
                 Return mColors(6)
+            Case StateMachineType.Scheduled
+                Return mColors(7)
         End Select
 
     End Function
 
     Sub New()
-        mRepositoryPath = "\SampleArchetypes"
+        Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
+        mRepositoryPath = path + "SampleArchetypes"
         mUserName = ""
         mUserEmail = ""
-        mHelpPath = Application.StartupPath & "\Help\ArchetypeEditor.chm"
+        mHelpPath = path & "Help\ArchetypeEditor.chm"
         mOccurrencesView = "numeric"
         LoadConfiguration()
     End Sub

@@ -105,6 +105,9 @@ Public Class PathwaySpecification
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents tpTransition As System.Windows.Forms.TabPage
     Friend WithEvents tpState As System.Windows.Forms.TabPage
+    Friend WithEvents gbScheduled As System.Windows.Forms.GroupBox
+    Friend WithEvents PanelScheduled As System.Windows.Forms.Panel
+    Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(PathwaySpecification))
         Me.PanelRight = New System.Windows.Forms.Panel
@@ -138,6 +141,9 @@ Public Class PathwaySpecification
         Me.PanelMiddle = New System.Windows.Forms.Panel
         Me.gbActive = New System.Windows.Forms.GroupBox
         Me.PanelActive = New System.Windows.Forms.Panel
+        Me.Splitter2 = New System.Windows.Forms.Splitter
+        Me.gbScheduled = New System.Windows.Forms.GroupBox
+        Me.PanelScheduled = New System.Windows.Forms.Panel
         Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.PanelLeft = New System.Windows.Forms.Panel
         Me.gbInitial = New System.Windows.Forms.GroupBox
@@ -170,6 +176,7 @@ Public Class PathwaySpecification
         Me.gbAbortedInitial.SuspendLayout()
         Me.PanelMiddle.SuspendLayout()
         Me.gbActive.SuspendLayout()
+        Me.gbScheduled.SuspendLayout()
         Me.PanelLeft.SuspendLayout()
         Me.gbInitial.SuspendLayout()
         Me.PanelSpacer.SuspendLayout()
@@ -184,9 +191,9 @@ Public Class PathwaySpecification
         Me.PanelRight.Controls.Add(Me.PanelRightBottom)
         Me.PanelRight.Controls.Add(Me.PanelRightTop)
         Me.PanelRight.Dock = System.Windows.Forms.DockStyle.Right
-        Me.PanelRight.Location = New System.Drawing.Point(768, 0)
+        Me.PanelRight.Location = New System.Drawing.Point(808, 0)
         Me.PanelRight.Name = "PanelRight"
-        Me.PanelRight.Size = New System.Drawing.Size(200, 616)
+        Me.PanelRight.Size = New System.Drawing.Size(160, 616)
         Me.PanelRight.TabIndex = 3
         '
         'gbCompleted
@@ -196,7 +203,7 @@ Public Class PathwaySpecification
         Me.gbCompleted.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbCompleted.Location = New System.Drawing.Point(0, 152)
         Me.gbCompleted.Name = "gbCompleted"
-        Me.gbCompleted.Size = New System.Drawing.Size(200, 316)
+        Me.gbCompleted.Size = New System.Drawing.Size(160, 316)
         Me.gbCompleted.TabIndex = 0
         Me.gbCompleted.TabStop = False
         Me.gbCompleted.Text = "Completed"
@@ -206,9 +213,9 @@ Public Class PathwaySpecification
         Me.PanelCompleted.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelCompleted.ContextMenu = Me.ContextMenuState
         Me.PanelCompleted.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelCompleted.Location = New System.Drawing.Point(3, 16)
+        Me.PanelCompleted.Location = New System.Drawing.Point(3, 18)
         Me.PanelCompleted.Name = "PanelCompleted"
-        Me.PanelCompleted.Size = New System.Drawing.Size(194, 297)
+        Me.PanelCompleted.Size = New System.Drawing.Size(154, 295)
         Me.PanelCompleted.TabIndex = 0
         '
         'ContextMenuState
@@ -226,7 +233,7 @@ Public Class PathwaySpecification
         Me.PanelRightBottom.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.PanelRightBottom.Location = New System.Drawing.Point(0, 468)
         Me.PanelRightBottom.Name = "PanelRightBottom"
-        Me.PanelRightBottom.Size = New System.Drawing.Size(200, 148)
+        Me.PanelRightBottom.Size = New System.Drawing.Size(160, 148)
         Me.PanelRightBottom.TabIndex = 2
         '
         'tabProperties
@@ -238,7 +245,7 @@ Public Class PathwaySpecification
         Me.tabProperties.Multiline = True
         Me.tabProperties.Name = "tabProperties"
         Me.tabProperties.SelectedIndex = 0
-        Me.tabProperties.Size = New System.Drawing.Size(200, 148)
+        Me.tabProperties.Size = New System.Drawing.Size(160, 148)
         Me.tabProperties.TabIndex = 0
         Me.tabProperties.Visible = False
         '
@@ -249,7 +256,7 @@ Public Class PathwaySpecification
         Me.tpTransition.Controls.Add(Me.Label2)
         Me.tpTransition.Location = New System.Drawing.Point(4, 25)
         Me.tpTransition.Name = "tpTransition"
-        Me.tpTransition.Size = New System.Drawing.Size(192, 119)
+        Me.tpTransition.Size = New System.Drawing.Size(152, 119)
         Me.tpTransition.TabIndex = 0
         Me.tpTransition.Text = "Transition"
         '
@@ -285,18 +292,19 @@ Public Class PathwaySpecification
         Me.tpState.Controls.Add(Me.cbAlternativeState)
         Me.tpState.Location = New System.Drawing.Point(4, 25)
         Me.tpState.Name = "tpState"
-        Me.tpState.Size = New System.Drawing.Size(192, 119)
+        Me.tpState.Size = New System.Drawing.Size(152, 119)
         Me.tpState.TabIndex = 1
         Me.tpState.Text = "State"
         Me.tpState.Visible = False
         '
         'Label1
         '
-        Me.Label1.Location = New System.Drawing.Point(8, 8)
+        Me.Label1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Label1.Location = New System.Drawing.Point(0, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(168, 32)
+        Me.Label1.Size = New System.Drawing.Size(152, 32)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Allow alternative state for this event."
+        Me.Label1.Text = "Allow alternative state for this action."
         '
         'cbAlternativeState
         '
@@ -311,13 +319,13 @@ Public Class PathwaySpecification
         Me.PanelRightTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelRightTop.Location = New System.Drawing.Point(0, 0)
         Me.PanelRightTop.Name = "PanelRightTop"
-        Me.PanelRightTop.Size = New System.Drawing.Size(200, 152)
+        Me.PanelRightTop.Size = New System.Drawing.Size(160, 152)
         Me.PanelRightTop.TabIndex = 1
         '
         'SplitterRight
         '
         Me.SplitterRight.Dock = System.Windows.Forms.DockStyle.Right
-        Me.SplitterRight.Location = New System.Drawing.Point(765, 0)
+        Me.SplitterRight.Location = New System.Drawing.Point(805, 0)
         Me.SplitterRight.Name = "SplitterRight"
         Me.SplitterRight.Size = New System.Drawing.Size(3, 616)
         Me.SplitterRight.TabIndex = 4
@@ -331,7 +339,7 @@ Public Class PathwaySpecification
         Me.gbSuspended.Dock = System.Windows.Forms.DockStyle.Top
         Me.gbSuspended.Location = New System.Drawing.Point(0, 0)
         Me.gbSuspended.Name = "gbSuspended"
-        Me.gbSuspended.Size = New System.Drawing.Size(765, 128)
+        Me.gbSuspended.Size = New System.Drawing.Size(805, 128)
         Me.gbSuspended.TabIndex = 5
         Me.gbSuspended.TabStop = False
         '
@@ -339,9 +347,9 @@ Public Class PathwaySpecification
         '
         Me.gbSuspendedActive.Controls.Add(Me.PanelSuspendActive)
         Me.gbSuspendedActive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbSuspendedActive.Location = New System.Drawing.Point(152, 16)
+        Me.gbSuspendedActive.Location = New System.Drawing.Point(152, 18)
         Me.gbSuspendedActive.Name = "gbSuspendedActive"
-        Me.gbSuspendedActive.Size = New System.Drawing.Size(610, 109)
+        Me.gbSuspendedActive.Size = New System.Drawing.Size(650, 107)
         Me.gbSuspendedActive.TabIndex = 4
         Me.gbSuspendedActive.TabStop = False
         Me.gbSuspendedActive.Text = "Suspended"
@@ -351,17 +359,17 @@ Public Class PathwaySpecification
         Me.PanelSuspendActive.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelSuspendActive.ContextMenu = Me.ContextMenuState
         Me.PanelSuspendActive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelSuspendActive.Location = New System.Drawing.Point(3, 16)
+        Me.PanelSuspendActive.Location = New System.Drawing.Point(3, 18)
         Me.PanelSuspendActive.Name = "PanelSuspendActive"
-        Me.PanelSuspendActive.Size = New System.Drawing.Size(604, 90)
+        Me.PanelSuspendActive.Size = New System.Drawing.Size(644, 86)
         Me.PanelSuspendActive.TabIndex = 1
         '
         'gbTop
         '
         Me.gbTop.Dock = System.Windows.Forms.DockStyle.Left
-        Me.gbTop.Location = New System.Drawing.Point(128, 16)
+        Me.gbTop.Location = New System.Drawing.Point(128, 18)
         Me.gbTop.Name = "gbTop"
-        Me.gbTop.Size = New System.Drawing.Size(24, 109)
+        Me.gbTop.Size = New System.Drawing.Size(24, 107)
         Me.gbTop.TabIndex = 3
         Me.gbTop.TabStop = False
         '
@@ -369,9 +377,9 @@ Public Class PathwaySpecification
         '
         Me.gbSuspendedInitial.Controls.Add(Me.PanelSuspendInitial)
         Me.gbSuspendedInitial.Dock = System.Windows.Forms.DockStyle.Left
-        Me.gbSuspendedInitial.Location = New System.Drawing.Point(3, 16)
+        Me.gbSuspendedInitial.Location = New System.Drawing.Point(3, 18)
         Me.gbSuspendedInitial.Name = "gbSuspendedInitial"
-        Me.gbSuspendedInitial.Size = New System.Drawing.Size(125, 109)
+        Me.gbSuspendedInitial.Size = New System.Drawing.Size(125, 107)
         Me.gbSuspendedInitial.TabIndex = 2
         Me.gbSuspendedInitial.TabStop = False
         Me.gbSuspendedInitial.Text = "Postponed"
@@ -381,9 +389,9 @@ Public Class PathwaySpecification
         Me.PanelSuspendInitial.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelSuspendInitial.ContextMenu = Me.ContextMenuState
         Me.PanelSuspendInitial.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelSuspendInitial.Location = New System.Drawing.Point(3, 16)
+        Me.PanelSuspendInitial.Location = New System.Drawing.Point(3, 18)
         Me.PanelSuspendInitial.Name = "PanelSuspendInitial"
-        Me.PanelSuspendInitial.Size = New System.Drawing.Size(119, 90)
+        Me.PanelSuspendInitial.Size = New System.Drawing.Size(119, 86)
         Me.PanelSuspendInitial.TabIndex = 0
         '
         'gbAborted
@@ -394,7 +402,7 @@ Public Class PathwaySpecification
         Me.gbAborted.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.gbAborted.Location = New System.Drawing.Point(0, 488)
         Me.gbAborted.Name = "gbAborted"
-        Me.gbAborted.Size = New System.Drawing.Size(765, 128)
+        Me.gbAborted.Size = New System.Drawing.Size(805, 128)
         Me.gbAborted.TabIndex = 7
         Me.gbAborted.TabStop = False
         '
@@ -404,7 +412,7 @@ Public Class PathwaySpecification
         Me.gbAbortedActive.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbAbortedActive.Location = New System.Drawing.Point(157, 18)
         Me.gbAbortedActive.Name = "gbAbortedActive"
-        Me.gbAbortedActive.Size = New System.Drawing.Size(605, 107)
+        Me.gbAbortedActive.Size = New System.Drawing.Size(645, 107)
         Me.gbAbortedActive.TabIndex = 4
         Me.gbAbortedActive.TabStop = False
         Me.gbAbortedActive.Text = "Aborted"
@@ -416,7 +424,7 @@ Public Class PathwaySpecification
         Me.PanelAbortActive.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelAbortActive.Location = New System.Drawing.Point(3, 18)
         Me.PanelAbortActive.Name = "PanelAbortActive"
-        Me.PanelAbortActive.Size = New System.Drawing.Size(599, 86)
+        Me.PanelAbortActive.Size = New System.Drawing.Size(639, 86)
         Me.PanelAbortActive.TabIndex = 1
         '
         'gbBottom
@@ -452,13 +460,15 @@ Public Class PathwaySpecification
         'PanelMiddle
         '
         Me.PanelMiddle.Controls.Add(Me.gbActive)
+        Me.PanelMiddle.Controls.Add(Me.Splitter2)
+        Me.PanelMiddle.Controls.Add(Me.gbScheduled)
         Me.PanelMiddle.Controls.Add(Me.Splitter1)
         Me.PanelMiddle.Controls.Add(Me.PanelLeft)
         Me.PanelMiddle.Controls.Add(Me.PanelCompletedSpacer)
         Me.PanelMiddle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelMiddle.Location = New System.Drawing.Point(0, 151)
         Me.PanelMiddle.Name = "PanelMiddle"
-        Me.PanelMiddle.Size = New System.Drawing.Size(765, 314)
+        Me.PanelMiddle.Size = New System.Drawing.Size(805, 314)
         Me.PanelMiddle.TabIndex = 8
         '
         'gbActive
@@ -466,9 +476,9 @@ Public Class PathwaySpecification
         Me.gbActive.BackColor = System.Drawing.Color.LightYellow
         Me.gbActive.Controls.Add(Me.PanelActive)
         Me.gbActive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbActive.Location = New System.Drawing.Point(163, 0)
+        Me.gbActive.Location = New System.Drawing.Point(283, 0)
         Me.gbActive.Name = "gbActive"
-        Me.gbActive.Size = New System.Drawing.Size(578, 314)
+        Me.gbActive.Size = New System.Drawing.Size(498, 314)
         Me.gbActive.TabIndex = 2
         Me.gbActive.TabStop = False
         Me.gbActive.Text = "Active"
@@ -478,10 +488,40 @@ Public Class PathwaySpecification
         Me.PanelActive.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelActive.ContextMenu = Me.ContextMenuState
         Me.PanelActive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelActive.Location = New System.Drawing.Point(3, 16)
+        Me.PanelActive.Location = New System.Drawing.Point(3, 18)
         Me.PanelActive.Name = "PanelActive"
-        Me.PanelActive.Size = New System.Drawing.Size(572, 295)
+        Me.PanelActive.Size = New System.Drawing.Size(492, 293)
         Me.PanelActive.TabIndex = 0
+        '
+        'Splitter2
+        '
+        Me.Splitter2.Location = New System.Drawing.Point(275, 0)
+        Me.Splitter2.Name = "Splitter2"
+        Me.Splitter2.Size = New System.Drawing.Size(8, 314)
+        Me.Splitter2.TabIndex = 9
+        Me.Splitter2.TabStop = False
+        '
+        'gbScheduled
+        '
+        Me.gbScheduled.Controls.Add(Me.PanelScheduled)
+        Me.gbScheduled.Dock = System.Windows.Forms.DockStyle.Left
+        Me.gbScheduled.Location = New System.Drawing.Point(163, 0)
+        Me.gbScheduled.Name = "gbScheduled"
+        Me.gbScheduled.Size = New System.Drawing.Size(112, 314)
+        Me.gbScheduled.TabIndex = 8
+        Me.gbScheduled.TabStop = False
+        Me.gbScheduled.Text = "Scheduled"
+        '
+        'PanelScheduled
+        '
+        Me.PanelScheduled.BackColor = System.Drawing.Color.LightYellow
+        Me.PanelScheduled.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelScheduled.ContextMenu = Me.ContextMenuState
+        Me.PanelScheduled.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelScheduled.Location = New System.Drawing.Point(3, 18)
+        Me.PanelScheduled.Name = "PanelScheduled"
+        Me.PanelScheduled.Size = New System.Drawing.Size(106, 293)
+        Me.PanelScheduled.TabIndex = 0
         '
         'Splitter1
         '
@@ -547,7 +587,7 @@ Public Class PathwaySpecification
         Me.PanelCompletedSpacer.BackColor = System.Drawing.Color.LightYellow
         Me.PanelCompletedSpacer.Controls.Add(Me.pbActiveToCompleted)
         Me.PanelCompletedSpacer.Dock = System.Windows.Forms.DockStyle.Right
-        Me.PanelCompletedSpacer.Location = New System.Drawing.Point(741, 0)
+        Me.PanelCompletedSpacer.Location = New System.Drawing.Point(781, 0)
         Me.PanelCompletedSpacer.Name = "PanelCompletedSpacer"
         Me.PanelCompletedSpacer.Size = New System.Drawing.Size(24, 314)
         Me.PanelCompletedSpacer.TabIndex = 5
@@ -568,7 +608,7 @@ Public Class PathwaySpecification
         Me.panelBottomSpacer.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.panelBottomSpacer.Location = New System.Drawing.Point(0, 468)
         Me.panelBottomSpacer.Name = "panelBottomSpacer"
-        Me.panelBottomSpacer.Size = New System.Drawing.Size(765, 20)
+        Me.panelBottomSpacer.Size = New System.Drawing.Size(805, 20)
         Me.panelBottomSpacer.TabIndex = 9
         '
         'pbInitialBottomDown
@@ -598,7 +638,7 @@ Public Class PathwaySpecification
         Me.panelTopSpacer.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelTopSpacer.Location = New System.Drawing.Point(0, 128)
         Me.panelTopSpacer.Name = "panelTopSpacer"
-        Me.panelTopSpacer.Size = New System.Drawing.Size(765, 20)
+        Me.panelTopSpacer.Size = New System.Drawing.Size(805, 20)
         Me.panelTopSpacer.TabIndex = 10
         '
         'pbInitialTopDown
@@ -642,7 +682,7 @@ Public Class PathwaySpecification
         Me.SplitterTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.SplitterTop.Location = New System.Drawing.Point(0, 148)
         Me.SplitterTop.Name = "SplitterTop"
-        Me.SplitterTop.Size = New System.Drawing.Size(765, 3)
+        Me.SplitterTop.Size = New System.Drawing.Size(805, 3)
         Me.SplitterTop.TabIndex = 11
         Me.SplitterTop.TabStop = False
         '
@@ -651,7 +691,7 @@ Public Class PathwaySpecification
         Me.SplitterBottom.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.SplitterBottom.Location = New System.Drawing.Point(0, 465)
         Me.SplitterBottom.Name = "SplitterBottom"
-        Me.SplitterBottom.Size = New System.Drawing.Size(765, 3)
+        Me.SplitterBottom.Size = New System.Drawing.Size(805, 3)
         Me.SplitterBottom.TabIndex = 12
         Me.SplitterBottom.TabStop = False
         '
@@ -683,6 +723,7 @@ Public Class PathwaySpecification
         Me.gbAbortedInitial.ResumeLayout(False)
         Me.PanelMiddle.ResumeLayout(False)
         Me.gbActive.ResumeLayout(False)
+        Me.gbScheduled.ResumeLayout(False)
         Me.PanelLeft.ResumeLayout(False)
         Me.gbInitial.ResumeLayout(False)
         Me.PanelSpacer.ResumeLayout(False)
@@ -729,6 +770,8 @@ Public Class PathwaySpecification
                         Ctrl = Me.PanelSuspendInitial
                     Case StateMachineType.Completed
                         Ctrl = Me.PanelCompleted
+                    Case StateMachineType.Scheduled
+                        Ctrl = Me.PanelScheduled
                 End Select
                 Ctrl.Controls.Add(pv)
                 pv.ContextMenuPathwayEvent.MergeMenu(Me.ContextMenuState)
@@ -770,20 +813,6 @@ Public Class PathwaySpecification
 
     End Sub
 
-    'Private Sub gbInitial_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles gbInitial.Resize
-    '    Me.PanelAbortInitial.Width = gbInitial.Width
-    '    Me.PanelSuspendInitial.Width = gbInitial.Width
-    'End Sub
-
-    'Private Sub gbSuspended_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles gbSuspended.Resize
-    '    Me.PanelRightTop.Height = gbSuspended.Height
-    'End Sub
-
-
-    'Private Sub gbAborted_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles gbAborted.Resize
-    '    Me.PanelRightBottom.Height = gbAborted.Height
-    'End Sub
-
     Private Sub Panel_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles PanelActive.Resize, PanelAbortActive.Resize, PanelAbortInitial.Resize, PanelInitial.Resize, PanelSuspendInitial.Resize, PanelCompleted.Resize, PanelSuspendActive.Resize
         LayOutControls(CType(sender, Control))
     End Sub
@@ -804,6 +833,7 @@ Public Class PathwaySpecification
         GetPathwaySteps(rm.Children, Me.PanelInitial)
         GetPathwaySteps(rm.Children, Me.PanelSuspendInitial)
         GetPathwaySteps(rm.Children, Me.PanelAbortInitial)
+        GetPathwaySteps(rm.Children, Me.PanelScheduled)
         GetPathwaySteps(rm.Children, Me.PanelActive)
         GetPathwaySteps(rm.Children, Me.PanelSuspendActive)
         GetPathwaySteps(rm.Children, Me.PanelAbortActive)
@@ -833,7 +863,7 @@ Public Class PathwaySpecification
         mPathwayEvent = selected_pv
 
         Select Case mPathwayEvent.DefaultStateMachineType
-            Case StateMachineType.ActiveAborted, StateMachineType.InitialAborted, StateMachineType.Completed
+            Case StateMachineType.ActiveAborted, StateMachineType.InitialAborted, StateMachineType.Completed, StateMachineType.Scheduled
                 If Me.tabProperties.Contains(tpTransition) Then
                     Me.tabProperties.TabPages.Remove(tpTransition)
                 End If
@@ -957,6 +987,8 @@ Public Class PathwaySpecification
             pv = New PathwayEvent(StateMachineType.InitialSuspended, mFileManager)
         ElseIf ctrl Is Me.PanelSuspendActive Then
             pv = New PathwayEvent(StateMachineType.ActiveSuspended, mFileManager)
+        ElseIf ctrl Is Me.PanelScheduled Then
+            pv = New PathwayEvent(StateMachineType.Scheduled, mFileManager)
         Else
             Debug.Assert(False)
             Beep()
@@ -1001,7 +1033,7 @@ Public Class PathwaySpecification
         End If
     End Sub
 
-    Private Sub Splitter_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitterBottom.SplitterMoved, Splitter1.SplitterMoved
+    Private Sub Splitter_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitterBottom.SplitterMoved, Splitter1.SplitterMoved, Splitter2.SplitterMoved
         Me.PathwaySpecification_Resize(sender, e)
     End Sub
 
@@ -1024,20 +1056,22 @@ Public Class PathwaySpecification
         Next
     End Sub
 
-    Private Sub TranslateGUI()
-        Me.PanelInitial.Text = Filemanager.GetOpenEhrTerm(524, "Initial")
-        Me.PanelSuspendInitial.Text = Filemanager.GetOpenEhrTerm(527, "Postponed")
-        Me.PanelAbortInitial.Text = Filemanager.GetOpenEhrTerm(528, "Cancelled")
-        Me.PanelActive.Text = Filemanager.GetOpenEhrTerm(245, "Active")
-        Me.PanelSuspendActive.Text = Filemanager.GetOpenEhrTerm(530, "Suspended")
-        Me.PanelAbortActive.Text = Filemanager.GetOpenEhrTerm(547, "Abort")
-        Me.PanelCompleted.Text = Filemanager.GetOpenEhrTerm(532, "Completed")
+    Public Sub TranslateGUI()
+        Me.gbInitial.Text = Filemanager.GetOpenEhrTerm(524, "Initial")
+        Me.gbSuspendedInitial.Text = Filemanager.GetOpenEhrTerm(527, "Postponed")
+        Me.gbAbortedInitial.Text = Filemanager.GetOpenEhrTerm(528, "Cancelled")
+        Me.gbScheduled.Text = Filemanager.GetOpenEhrTerm(529, "Scheduled")
+        Me.gbActive.Text = Filemanager.GetOpenEhrTerm(245, "Active")
+        Me.gbSuspendedActive.Text = Filemanager.GetOpenEhrTerm(530, "Suspended")
+        Me.gbAbortedActive.Text = Filemanager.GetOpenEhrTerm(547, "Abort")
+        Me.gbCompleted.Text = Filemanager.GetOpenEhrTerm(532, "Completed")
     End Sub
 
     Public Sub Translate()
         TranslatePathwayEvents(Me.PanelInitial)
         TranslatePathwayEvents(Me.PanelSuspendInitial)
         TranslatePathwayEvents(Me.PanelAbortInitial)
+        TranslatePathwayEvents(Me.PanelScheduled)
         TranslatePathwayEvents(Me.PanelActive)
         TranslatePathwayEvents(Me.PanelSuspendActive)
         TranslatePathwayEvents(Me.PanelAbortActive)

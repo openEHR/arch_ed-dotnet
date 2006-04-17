@@ -459,7 +459,7 @@ Public Class Designer
         Me.listRestrictionSet.ItemHeight = 17
         Me.listRestrictionSet.Location = New System.Drawing.Point(40, 46)
         Me.listRestrictionSet.Name = "listRestrictionSet"
-        Me.listRestrictionSet.Size = New System.Drawing.Size(240, 72)
+        Me.listRestrictionSet.Size = New System.Drawing.Size(240, 123)
         Me.listRestrictionSet.TabIndex = 13
         Me.listRestrictionSet.Visible = False
         '
@@ -476,18 +476,18 @@ Public Class Designer
         '
         'radioRestrictedSet
         '
-        Me.radioRestrictedSet.Location = New System.Drawing.Point(149, 18)
+        Me.radioRestrictedSet.Location = New System.Drawing.Point(160, 18)
         Me.radioRestrictedSet.Name = "radioRestrictedSet"
-        Me.radioRestrictedSet.Size = New System.Drawing.Size(182, 28)
+        Me.radioRestrictedSet.Size = New System.Drawing.Size(136, 28)
         Me.radioRestrictedSet.TabIndex = 1
         Me.radioRestrictedSet.Text = "Restricted"
         '
         'radioUnrestrictedSubject
         '
         Me.radioUnrestrictedSubject.Checked = True
-        Me.radioUnrestrictedSubject.Location = New System.Drawing.Point(29, 20)
+        Me.radioUnrestrictedSubject.Location = New System.Drawing.Point(14, 19)
         Me.radioUnrestrictedSubject.Name = "radioUnrestrictedSubject"
-        Me.radioUnrestrictedSubject.Size = New System.Drawing.Size(182, 27)
+        Me.radioUnrestrictedSubject.Size = New System.Drawing.Size(138, 27)
         Me.radioUnrestrictedSubject.TabIndex = 0
         Me.radioUnrestrictedSubject.TabStop = True
         Me.radioUnrestrictedSubject.Text = "Unrestricted"
@@ -1980,8 +1980,6 @@ Public Class Designer
 
         SetUpGUI(mFileManager.Archetype.RmEntity, False)
 
-        mFileManager.FileLoading = False
-
         AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
         ' set the specific language if it is present e.g. en-US, en-AU
@@ -1997,9 +1995,12 @@ Public Class Designer
             Me.ListLanguages.SelectedValue = mFileManager.OntologyManager.PrimaryLanguageCode
         End If
 
+
         If Not mTermBindingPanel Is Nothing Then
             Me.mTermBindingPanel.PopulatePathTree()
         End If
+
+        mFileManager.FileLoading = False
 
         Me.MenuFileSpecialise.Visible = True
         Me.Cursor = System.Windows.Forms.Cursors.Default
@@ -2056,6 +2057,11 @@ Public Class Designer
             If Not Filemanager.Master.SaveArchetype() Then
                 Filemanager.Master.FileName = s
                 Me.MenuFileSpecialise.Visible = True
+            Else
+                If Not Filemanager.HasFileToSave Then
+                    'Hide save button on Toolbar
+                    Filemanager.SetFileChangedToolBar(False)
+                End If
             End If
         Else
             If Filemanager.SaveFiles(False) Then
@@ -3417,12 +3423,7 @@ Public Class Designer
         If mFileManager.OntologyManager.LanguageCode <> LangCode Then
             ' a new language is selected so populate the terms
             mFileManager.OntologyManager.LanguageCode = LangCode
-
-            ' turn off updates from changed fields
-            mFileManager.FileLoading = True
             Translate(LangCode)
-            mFileManager.FileLoading = False
-
         End If
     End Sub
 
@@ -3906,9 +3907,6 @@ Public Class Designer
 
         ' Set the help context
         Me.HelpProviderDesigner.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
-
-        ' stop processing of most calls
-        mFileManager.FileLoading = True
 
         'Initialise the bindings of tables for all the lookups
         BindTables()

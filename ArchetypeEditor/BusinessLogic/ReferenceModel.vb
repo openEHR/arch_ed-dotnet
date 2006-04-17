@@ -34,6 +34,7 @@ Public Enum StateMachineType
     InitialSuspended = 527
     ActiveAborted = 531
     InitialAborted = 528
+    Scheduled = 529
 End Enum
 
 Public Class ReferenceModelLocal
@@ -477,7 +478,7 @@ Public Class ReferenceModelLocal
     Function ValidStateMachineTypes() As StateMachineType()
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
-                Dim s(6) As StateMachineType
+                Dim s(7) As StateMachineType
                 s(0) = StateMachineType.Initial
                 s(1) = StateMachineType.Active
                 s(2) = StateMachineType.Completed
@@ -485,6 +486,7 @@ Public Class ReferenceModelLocal
                 s(4) = StateMachineType.InitialSuspended
                 s(5) = StateMachineType.ActiveAborted
                 s(6) = StateMachineType.InitialAborted
+                s(7) = StateMachineType.Scheduled
                 Return s
         End Select
 

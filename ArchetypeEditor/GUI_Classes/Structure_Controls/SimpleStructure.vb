@@ -367,12 +367,14 @@ Public Class SimpleStructure
         Dim list_item_dragged As ArchetypeListViewItem
         Dim i As Integer
 
-        If Not mDragArchetypeNode Is Nothing Then
-            mElement = mDragArchetypeNode
+        If Not mNewConstraint Is Nothing Then
+            mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
+            mElement.Constraint = mNewConstraint
             mLoading = True
             txtSimple.Text = mElement.Text
             txtSimple.Enabled = True
             mLoading = False
+
         Else
             Me.txtSimple.Enabled = False
             Debug.Assert(False, "No item dragged")
@@ -383,7 +385,7 @@ Public Class SimpleStructure
 
         mFileManager.FileEdited = True
 
-        mDragArchetypeNode = Nothing
+        mNewConstraint = Nothing
     End Sub
 
     Private Sub txtSimple_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles txtSimple.DragEnter
