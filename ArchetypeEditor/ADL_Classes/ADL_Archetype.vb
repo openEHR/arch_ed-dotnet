@@ -1167,7 +1167,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             If rm.Children.Count > 0 Then
-                an_attribute = mCADL_Factory.create_c_attribute_multiple(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("ism_transition"), MakeCardinality(rm.Children.Cardinality))
+                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("ism_transition"), MakeCardinality(rm.Children.Cardinality))
 
                 For Each pathway_step As RmPathwayStep In rm.Children
                     BuildWorkFlowStep(pathway_step, an_attribute)

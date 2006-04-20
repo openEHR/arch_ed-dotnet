@@ -104,24 +104,6 @@ Public Class RmPathwayStep
             End Select
         Next
 
-        an_attribute = EIF_Step.attributes.first
-
-        'If an_attribute.children.count > 0 Then
-        '    Dim y() As String
-
-        '    constraint = an_attribute.children.first
-        '    cString = constraint.item
-        '    y = CType(cString.strings.i_th(1), openehr.base.kernel.STRING).to_cil.Split(",")
-
-        '    Debug.Assert(y.Length < 3, "Have not dealt with multiple state possibilities > 2")
-
-        '    Me.mStateType = Int(y(0))
-
-        '    If y.Length > 1 Then
-        '        Me.AlternativeState = Int(y(1))
-        '        ' sets the HasAlternative State to True
-        '    End If
-        'End If
     End Sub
 
 #End Region
