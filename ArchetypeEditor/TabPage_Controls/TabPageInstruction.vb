@@ -380,13 +380,13 @@ Public Class TabPageInstruction
 
         s = ReferenceModel.Instance.ReferenceModelName & "-ACTION"
         fd.Filter = s & "|" & s & ".*.adl"
-        fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\Action"
+        fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\entry\action"
 
         If fd.ShowDialog = DialogResult.OK Then
             Dim ss As String
 
             ss = fd.FileName.Substring(fd.FileName.LastIndexOf("\") + s.Length + 2)
-            Me.txtAction.Text = ss.Substring(0, ss.LastIndexOf("."))
+            Me.txtAction.Text = ss.Substring(0, ss.LastIndexOf(".")).Replace(".", "\.")
         End If
     End Sub
 

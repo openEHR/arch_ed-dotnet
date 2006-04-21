@@ -1185,7 +1185,7 @@ Namespace ArchetypeEditor.ADL_Classes
             If rm.ArchetypeId <> "" Then
                 an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("action_archetype_id"))
                 objNodeSimple = mCADL_Factory.create_c_primitive_object(an_attribute, _
-                    mCADL_Factory.create_c_string_make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(rm.ArchetypeId)))
+                    mCADL_Factory.create_c_string_make_from_string(openehr.base.kernel.Create.STRING.make_from_cil("/" + rm.ArchetypeId + "/")))
             End If
 
             For Each rm_struct As RmStructure In rm.Children
