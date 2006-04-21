@@ -24,6 +24,10 @@ Public Class RmActivity
             Return mArchetypeIdConstraint
         End Get
         Set(ByVal Value As String)
+            If Value.StartsWith("/") Then
+                'Trim leading and trailing expressions
+                Value = Value.Substring(1, Value.Length() - 2)
+            End If
             mArchetypeIdConstraint = Value
         End Set
     End Property
