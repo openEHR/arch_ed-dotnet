@@ -816,6 +816,8 @@ Public Class EntryStructure
         Dim rm As RmElement
         Dim pb As PictureBox
 
+        mControl.AllowDrop = True
+
         If sender.name = "pbCluster" Then
             mNewCluster = True
             sender.DoDragDrop(mNewCluster, DragDropEffects.Copy)
@@ -844,8 +846,6 @@ Public Class EntryStructure
         If mControl.Enabled = False Then
             mControl.Enabled = True
         End If
-
-        mControl.AllowDrop = True
 
         'sender.DoDragDrop(mDragArchetypeNode, DragDropEffects.Copy)
 

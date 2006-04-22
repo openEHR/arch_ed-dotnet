@@ -25,7 +25,7 @@ Public Class OrdinalViewControl : Inherits ElementViewControl
         If Not CType(an_Element.Constraint, Constraint_Ordinal).IsInitialised Then
             CType(an_Element.Constraint, Constraint_Ordinal).BeginLoading()
             For Each ov As OrdinalValue In CType(an_Element.Constraint, Constraint_Ordinal).OrdinalValues
-                Dim aTerm As RmTerm = Filemanager.Master.OntologyManager.GetTerm(ov.InternalCode)
+                Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
 
                 ov.Text = aTerm.Text
             Next

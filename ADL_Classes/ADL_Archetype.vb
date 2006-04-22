@@ -1225,7 +1225,8 @@ Namespace ArchetypeEditor.ADL_Classes
                         For Each activity As RmActivity In rm.Children
                             BuildActivity(activity, an_attribute)
                         Next
-
+                    Case StructureType.Protocol
+                        BuildProtocol(rm, adlArchetype.definition)
                     Case Else
                         Debug.Assert(False, rm.Type.ToString() & " - Type under INSTRUCTION not handled")
                 End Select
@@ -1237,24 +1238,25 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-            an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("description"))
-            action_spec = rm.Children.items(0)
+            If rm.Children.items.Length > 0 Then
+                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("description"))
+                action_spec = rm.Children.items(0)
 
-            Select Case action_spec.Type
-                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, _
-                        openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(action_spec.Type)), _
-                        openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
+                Select Case action_spec.Type
+                    Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, _
+                            openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(action_spec.Type)), _
+                            openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
 
-                    BuildStructure(action_spec, objNode)
+                        BuildStructure(action_spec, objNode)
 
-                Case StructureType.Slot
-                    ' allows action to be specified in another archetype
-                    Dim slot As RmSlot = CType(action_spec, RmSlot)
+                    Case StructureType.Slot
+                        ' allows action to be specified in another archetype
+                        Dim slot As RmSlot = CType(action_spec, RmSlot)
 
-                    BuildSlot(an_attribute, slot)
-            End Select
-
+                        BuildSlot(an_attribute, slot)
+                End Select
+            End If
         End Sub
 
         Public Sub MakeParseTree()
@@ -1294,105 +1296,107 @@ Namespace ArchetypeEditor.ADL_Classes
                     BuildStructure(cDefinition, adlArchetype.definition)
 
                 Case StructureType.SECTION
-                        BuildRootSection(cDefinition, adlArchetype.definition)
+                    BuildRootSection(cDefinition, adlArchetype.definition)
 
                 Case StructureType.COMPOSITION
-                        BuildComposition(cDefinition, adlArchetype.definition)
+                    BuildComposition(cDefinition, adlArchetype.definition)
 
                 Case StructureType.EVALUATION, StructureType.ENTRY
 
-                        BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+                    BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
 
-                        For Each rm In cDefinition.Data
-                            Select Case rm.Type
-                                Case StructureType.State
-                                    BuildStructure(rm, adlArchetype.definition, "state")
+                    For Each rm In cDefinition.Data
+                        Select Case rm.Type
+                            Case StructureType.State
+                                BuildStructure(rm, adlArchetype.definition, "state")
 
-                                Case StructureType.Protocol
-                                    BuildProtocol(rm, adlArchetype.definition)
+                            Case StructureType.Protocol
+                                BuildProtocol(rm, adlArchetype.definition)
 
-                                Case StructureType.Data
-                                    BuildStructure(rm, adlArchetype.definition, "data")
+                            Case StructureType.Data
+                                BuildStructure(rm, adlArchetype.definition, "data")
 
-                            End Select
-                        Next
+                        End Select
+                    Next
 
                 Case StructureType.ADMIN_ENTRY
 
-                        an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
-                        Try
-                            Dim rm_struct As RmStructureCompound = CType(cDefinition.Data.items(0), RmStructureCompound).Children.items(0)
+                    an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
+                    Try
+                        Dim rm_struct As RmStructureCompound = CType(cDefinition.Data.items(0), RmStructureCompound).Children.items(0)
 
-                            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                            objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm_struct.Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm_struct.NodeId))
-                            BuildStructure(rm_struct, objNode)
-                        Catch
-                            'ToDo - process error
-                            Debug.Assert(False, "Error building structure")
-                        End Try
+                        Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm_struct.Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm_struct.NodeId))
+                        BuildStructure(rm_struct, objNode)
+                    Catch
+                        'ToDo - process error
+                        Debug.Assert(False, "Error building structure")
+                    End Try
 
                 Case StructureType.OBSERVATION
-                        BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+                    BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
 
-                        For Each rm In cDefinition.Data
-                            Select Case rm.Type
-                                Case StructureType.State
-                                    an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("state"))
+                    For Each rm In cDefinition.Data
+                        Select Case rm.Type
+                            Case StructureType.State
+                                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("state"))
 
-                                    'for the moment saving the state data on the first event EventSeries if there is one
-                                    Dim a_rm As RmStructureCompound
+                                'for the moment saving the state data on the first event EventSeries if there is one
+                                Dim a_rm As RmStructureCompound
 
-                                    a_rm = rm.Children.items(0)
+                                a_rm = rm.Children.items(0)
 
-                                    If a_rm.Type = StructureType.History Then
-                                        BuildHistory(a_rm, an_attribute)
-                                    Else
-                                        ' can have EventSeries for each state
-                                        Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                                If a_rm.Type = StructureType.History Then
+                                    BuildHistory(a_rm, an_attribute)
+                                Else
+                                    ' can have EventSeries for each state
+                                    Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
-                                        BuildStructure(a_rm, objNode)
-                                    End If
+                                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
+                                    BuildStructure(a_rm, objNode)
+                                End If
 
-                                Case StructureType.Protocol
-                                    BuildProtocol(rm, adlArchetype.definition)
+                            Case StructureType.Protocol
+                                BuildProtocol(rm, adlArchetype.definition)
 
-                                Case StructureType.Data
-                                    an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
+                            Case StructureType.Data
+                                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
 
-                                    For Each a_rm As RmStructureCompound In rm.Children.items
-                                        Select Case a_rm.Type '.TypeName
-                                            Case StructureType.History
-                                                BuildHistory(a_rm, an_attribute)
-                                            Case Else
-                                                Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                                                objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
-                                                BuildStructure(a_rm, objNode)
-                                        End Select
-                                    Next
-                            End Select
-                        Next
+                                For Each a_rm As RmStructureCompound In rm.Children.items
+                                    Select Case a_rm.Type '.TypeName
+                                        Case StructureType.History
+                                            BuildHistory(a_rm, an_attribute)
+                                        Case Else
+                                            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                                            objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
+                                            BuildStructure(a_rm, objNode)
+                                    End Select
+                                Next
+                        End Select
+                    Next
 
                 Case StructureType.INSTRUCTION
-                        BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+                    BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
 
-                        BuildInstruction(cDefinition.Data)
+                    BuildInstruction(cDefinition.Data)
 
                 Case StructureType.ACTION
-                        BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+                    BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
 
-                        For Each rm In cDefinition.Data
-                            Select Case rm.Type
-                                Case StructureType.ISM_TRANSITION
-                                    BuildPathway(rm, adlArchetype.definition)
-                                Case StructureType.ActivityDescription
-                                    BuildAction(rm, adlArchetype.definition)
-                                Case StructureType.Slot
-                                    ' this allows a structure to be archetyped at this point
-                                    Debug.Assert(CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot)
-                                    BuildStructure(rm, adlArchetype.definition)
-                            End Select
-                        Next
+                    For Each rm In cDefinition.Data
+                        Select Case rm.Type
+                            Case StructureType.ISM_TRANSITION
+                                BuildPathway(rm, adlArchetype.definition)
+                            Case StructureType.ActivityDescription
+                                BuildAction(rm, adlArchetype.definition)
+                            Case StructureType.Slot
+                                ' this allows a structure to be archetyped at this point
+                                Debug.Assert(CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot)
+                                BuildStructure(rm, adlArchetype.definition)
+                            Case StructureType.Protocol
+                                BuildProtocol(rm, adlArchetype.definition)
+                        End Select
+                    Next
 
             End Select
 

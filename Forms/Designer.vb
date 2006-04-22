@@ -33,8 +33,8 @@ Public Class Designer
     Private mTabPageDataStateStructure As TabPageStructure
     Private mTabPageProtocolStructure As TabPageStructure
     Private WithEvents mTabPageStateStructure As TabPageStructure
-    Private mTabPageInstruction As TabPageInstruction
-    Private mTabPageAction As TabPageAction
+    Private WithEvents mTabPageInstruction As TabPageInstruction
+    Private WithEvents mTabPageAction As TabPageAction
     Private mTabPageSection As TabPageSection
     Private mTabPageComposition As TabPageComposition
     Private mDataViewTermBindings As DataView
@@ -1869,7 +1869,7 @@ Public Class Designer
                                     Case StructureType.Data
                                         ProcessEventSeries(rm)
                                     Case StructureType.Protocol
-                                        ProcessProtocol(rm)
+                                        ProcessProtocol(rm, Me.TabDesign)
                                 End Select
                             Next
 
@@ -1902,7 +1902,7 @@ Public Class Designer
 
                                     Case StructureType.Protocol
                                         Debug.Assert(rm.Children.Count > 0)
-                                        ProcessProtocol(rm.Children.items(0))
+                                        ProcessProtocol(rm.Children.items(0), Me.TabDesign)
                                 End Select
                             Next
 
@@ -1914,27 +1914,39 @@ Public Class Designer
                                             ProcessDataStructure(rm.Children.items(0))
                                         End If
 
-                                    Case StructureType.State
-                                        ProcessState(rm.Children.items(0))
+                                        '  Case StructureType.State
+                                        '     ProcessState(rm.Children.items(0))
 
                                     Case StructureType.Protocol
-                                        ProcessProtocol(rm.Children.items(0))
+                                        ProcessProtocol(rm.Children.items(0), Me.TabDesign)
                                 End Select
                             Next
 
                         Case StructureType.INSTRUCTION ' "ENTRY.INSTRUCTION"
                             SetUpInstruction()
                             mTabPageInstruction.ProcessInstruction(mFileManager.Archetype.Definition.Data)
+                            For Each rmStruct As RmStructureCompound In mFileManager.Archetype.Definition.Data
+                                If rmStruct.Type = StructureType.Protocol Then
+                                    mTabPageInstruction.cbProtocol.Checked = True
+                                    ProcessProtocol(rmStruct.Children.items(0), mTabPageInstruction.TabControlInstruction)
+                                End If
+                            Next
 
                         Case StructureType.ACTION
                             SetUpAction()
                             mTabPageAction.ProcessAction(mFileManager.Archetype.Definition.Data)
+                            For Each rmStruct As RmStructureCompound In mFileManager.Archetype.Definition.Data
+                                If rmStruct.Type = StructureType.Protocol Then
+                                    mTabPageAction.cbProtocol.Checked = True
+                                    ProcessProtocol(rmStruct.Children.items(0), mTabPageAction.TabControlAction)
+                                End If
+                            Next
 
                         Case StructureType.ADMIN_ENTRY
-                            rm = mFileManager.Archetype.Definition.Data.items(0)
-                            If rm.Children.Count > 0 Then
-                                ProcessDataStructure(rm.Children.items(0))
-                            End If
+                                rm = mFileManager.Archetype.Definition.Data.items(0)
+                                If rm.Children.Count > 0 Then
+                                    ProcessDataStructure(rm.Children.items(0))
+                                End If
 
                     End Select
 
@@ -3581,7 +3593,7 @@ Public Class Designer
         Me.tpDataStructure.Title = mTabPageDataStructure.StructureTypeAsString
     End Sub
 
-    Private Sub ProcessProtocol(ByVal rm As RmStructureCompound)
+    Private Sub ProcessProtocol(ByVal rm As RmStructureCompound, ByVal tbCtrl As Crownwood.Magic.Controls.TabControl)
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageProtocolStructure = New TabPageStructure '(Me)
         mTabPageProtocolStructure.BackColor = System.Drawing.Color.PaleGoldenrod
@@ -3594,7 +3606,7 @@ Public Class Designer
         tp.BackColor = System.Drawing.Color.LightSteelBlue
         tp.Name = "tpProtocol"
         tp.Title = Filemanager.GetOpenEhrTerm(78, "Protocol")
-        Me.TabDesign.TabPages.Add(tp)
+        tbCtrl.TabPages.Add(tp)
         Me.cbProtocol.Checked = True
 
         Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
@@ -3648,9 +3660,19 @@ Public Class Designer
                 Select Case mFileManager.Archetype.Definition.Type
                     Case StructureType.INSTRUCTION
                         mFileManager.Archetype.Definition.Data = mTabPageInstruction.SaveAsInstruction.Children
+                        If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
+                            Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
+                            rm.Children.add(mTabPageProtocolStructure.SaveAsStructure)
+                            mFileManager.Archetype.Definition.Data.Add(rm)
+                        End If
 
                     Case StructureType.ACTION
                         mFileManager.Archetype.Definition.Data = mTabPageAction.SaveAsAction.Children
+                        If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
+                            Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
+                            rm.Children.add(mTabPageProtocolStructure.SaveAsStructure)
+                            mFileManager.Archetype.Definition.Data.Add(rm)
+                        End If
 
                     Case StructureType.OBSERVATION
                         For Each tp In Me.TabStructure.TabPages
@@ -4031,15 +4053,12 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
+    Private Sub ProtocolCheckChanged(ByVal tbCtrl As Crownwood.Magic.Controls.TabControl, ByVal state As Boolean) Handles mTabPageAction.ProtocolCheckChanged, mTabPageInstruction.ProtocolCheckChanged
         Dim tp As Crownwood.Magic.Controls.TabPage
-        'Fixme check this runs still
 
-        If mFileManager.FileLoading Then Exit Sub
-
-        If Me.cbProtocol.Checked Then
+        If state Then
             If Me.mTabPagesCollection.Contains("tpProtocol") Then
-                Me.TabDesign.TabPages.Add(Me.mTabPagesCollection.Item("tpProtocol"))
+                tbCtrl.TabPages.Add(Me.mTabPagesCollection.Item("tpProtocol"))
             Else
                 mTabPageProtocolStructure = New TabPageStructure '(Me)
                 mTabPageProtocolStructure.BackColor = System.Drawing.Color.LightGoldenrodYellow
@@ -4052,26 +4071,39 @@ Public Class Designer
                 If Not mTabPagesCollection.Contains(tp.Name) Then
                     Me.mTabPagesCollection.Add(tp.Name, tp)
                 End If
-                Me.TabDesign.TabPages.Add(tp)
+                tbCtrl.TabPages.Add(tp)
 
                 Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
                 Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_protocol.htm")
             End If
             ' now set the selected tab page to this one
             Dim i As Integer
-            For i = 0 To Me.TabDesign.TabPages.Count - 1
-                If Me.TabDesign.TabPages(i).Name = "tpProtocol" Then
+            For i = 0 To tbCtrl.TabPages.Count - 1
+                If tbCtrl.TabPages(i).Name = "tpProtocol" Then
                     Me.TabDesign.SelectedIndex = i
                 End If
             Next
         Else
-            For Each tp In Me.TabDesign.TabPages
+            For Each tp In tbCtrl.TabPages
                 If tp.Name = "tpProtocol" Then
-                    Me.TabDesign.TabPages.Remove(tp)
+                    If Not Me.mTabPagesCollection.ContainsKey("tpProtocol") Then
+                        Me.mTabPagesCollection.Add("tpProtocol", tp) ' save it incase reinstate
+                    End If
+                    tbCtrl.TabPages.Remove(tp)
                     Exit For
                 End If
             Next
         End If
+    End Sub
+
+    Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
+
+        If mFileManager.FileLoading Then Exit Sub
+
+        ProtocolCheckChanged(Me.TabDesign, Me.cbProtocol.Checked)
+
+        mFileManager.FileEdited = True
+
     End Sub
 
     Private Sub cbStructurePersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbStructurePersonState.CheckedChanged

@@ -491,7 +491,9 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         If Me.comboIncludeMin.SelectedIndex = 1 Then
             Me.Constraint.IncludeMinimum = False
-            Me.NumericAssumed.Minimum = Me.Constraint.MinimumValue + Me.NumericAssumed.Increment
+            If Me.NumericAssumed.Visible Then ' is state control
+                Me.NumericAssumed.Minimum = Me.Constraint.MinimumValue + Me.NumericAssumed.Increment
+            End If
         Else
             Me.Constraint.IncludeMinimum = True
         End If
@@ -503,7 +505,9 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         If Me.comboIncludeMax.SelectedIndex = 1 Then
             Me.Constraint.IncludeMaximum = False
-            Me.NumericAssumed.Maximum = Me.Constraint.MaximumValue - Me.NumericAssumed.Increment
+            If NumericAssumed.Visible Then
+                Me.NumericAssumed.Maximum = Me.Constraint.MaximumValue - Me.NumericAssumed.Increment
+            End If
         Else
             Me.Constraint.IncludeMaximum = True
         End If

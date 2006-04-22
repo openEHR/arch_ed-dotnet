@@ -180,12 +180,12 @@ Public Class ReferenceModelLocal
                         End Select
                     Case StructureType.INSTRUCTION
                         Select Case Child
-                            Case StructureType.Activities
+                            Case StructureType.Activities, StructureType.Protocol
                                 Return True
                         End Select
                     Case StructureType.ACTION
                         Select Case Child
-                            Case StructureType.ism_transition, StructureType.ActivityDescription
+                            Case StructureType.ISM_TRANSITION, StructureType.ActivityDescription, StructureType.Protocol
                                 Return True
                         End Select
                     Case StructureType.Activity
@@ -299,8 +299,10 @@ Public Class ReferenceModelLocal
                 End Select
                 'Case ReferenceModelType.HL7_CDA
             Case ReferenceModelType.openEHR_Demographic
-                Debug.Assert(False, "Not available yet")
+                Debug.Assert(False, "Demographic model is not available as yet")
         End Select
+
+        MessageBox.Show(AE_Constants.Instance.Incorrect_format & " Does not conform to reference model", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
 
         Debug.Assert(False)
         Return False
