@@ -24,6 +24,7 @@ Public Class TabPageInstruction
     Friend WithEvents mOccurrences As OccurrencesPanel
     Private mActivity As RmActivity
     Private mFileManager As FileManagerLocal
+    Public Event ProtocolCheckChanged(ByVal sender As Crownwood.Magic.Controls.TabControl, ByVal state As Boolean)
 
 #Region " Windows Form Designer generated code "
 
@@ -73,6 +74,7 @@ Public Class TabPageInstruction
     Friend WithEvents tpActivity As Crownwood.Magic.Controls.TabPage
     Friend WithEvents menuItemRename As System.Windows.Forms.MenuItem
     Friend WithEvents butOpenArchetype As System.Windows.Forms.Button
+    Friend WithEvents cbProtocol As System.Windows.Forms.CheckBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageInstruction))
         Me.TabControlInstruction = New Crownwood.Magic.Controls.TabControl
@@ -87,8 +89,10 @@ Public Class TabPageInstruction
         Me.txtAction = New System.Windows.Forms.TextBox
         Me.PanelBaseTop = New System.Windows.Forms.Panel
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
+        Me.cbProtocol = New System.Windows.Forms.CheckBox
         Me.tpActivity.SuspendLayout()
         Me.PanelAction.SuspendLayout()
+        Me.PanelBaseTop.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControlInstruction
@@ -188,11 +192,20 @@ Public Class TabPageInstruction
         '
         'PanelBaseTop
         '
+        Me.PanelBaseTop.Controls.Add(Me.cbProtocol)
         Me.PanelBaseTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelBaseTop.Location = New System.Drawing.Point(0, 0)
         Me.PanelBaseTop.Name = "PanelBaseTop"
         Me.PanelBaseTop.Size = New System.Drawing.Size(848, 24)
         Me.PanelBaseTop.TabIndex = 1
+        '
+        'cbProtocol
+        '
+        Me.cbProtocol.Location = New System.Drawing.Point(72, 0)
+        Me.cbProtocol.Name = "cbProtocol"
+        Me.cbProtocol.Size = New System.Drawing.Size(136, 24)
+        Me.cbProtocol.TabIndex = 1
+        Me.cbProtocol.Text = "Protocol"
         '
         'TabPageInstruction
         '
@@ -203,11 +216,21 @@ Public Class TabPageInstruction
         Me.Size = New System.Drawing.Size(848, 424)
         Me.tpActivity.ResumeLayout(False)
         Me.PanelAction.ResumeLayout(False)
+        Me.PanelBaseTop.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
 
 #End Region
+
+    Public Function HasProtocol() As Boolean
+        For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlInstruction.TabPages
+            If tp.Name = "tpProtocol" Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
 
     Private Sub TabPageInstruction_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsloading = True
@@ -311,6 +334,8 @@ Public Class TabPageInstruction
 
                         Next
                     Next
+                Case StructureType.Protocol
+                    'do nothing
                 Case Else
                     Debug.Assert(False, rm_structure.Type.ToString & " - type not handled for attribute 'activities'")
             End Select
@@ -349,10 +374,11 @@ Public Class TabPageInstruction
         mActivity.ArchetypeId = Me.txtAction.Text
 
         If Not mActionSpecification Is Nothing Then
-            mActivity.Children.Add(mActionSpecification.SaveAsStructure)
-        Else
-            'add reference to action archetype
-            'ToDo:
+            Dim action_specification As RmStructure
+            action_specification = mActionSpecification.SaveAsStructure()
+            If Not action_specification Is Nothing Then
+                mActivity.Children.Add(mActionSpecification.SaveAsStructure)
+            End If
         End If
 
         activities.Children.Add(mActivity)
@@ -436,6 +462,13 @@ Public Class TabPageInstruction
         Catch
             MessageBox.Show(AE_Constants.Instance.Error_loading & " Archetype Editor", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+    End Sub
+
+    Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
+        If Not mFileManager.FileLoading Then
+            RaiseEvent ProtocolCheckChanged(Me.TabControlInstruction, cbProtocol.Checked)
+            mFileManager.FileEdited = True
+        End If
     End Sub
 End Class
 

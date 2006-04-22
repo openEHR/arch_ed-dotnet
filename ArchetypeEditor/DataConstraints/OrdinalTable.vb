@@ -84,7 +84,6 @@ Public Class OrdinalTable : Inherits DataTable
 
     Public ReadOnly Property Count() As Integer
         Get
-            'Return MyBase.Rows.Count
             Return MyBase.DefaultView.Count
         End Get
     End Property
@@ -92,7 +91,6 @@ Public Class OrdinalTable : Inherits DataTable
     Private Function GetEnumerator() As System.Collections.IEnumerator _
             Implements System.Collections.IEnumerable.GetEnumerator
 
-        'mRowEnumerator = Me.Rows.GetEnumerator
         mRowEnumerator = Me.DefaultView.GetEnumerator
 
         Return Me

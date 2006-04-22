@@ -23,6 +23,7 @@ Public Class TabPageAction
     Private mPathwaySpecification As PathwaySpecification
     Private mActionDescription As TabPageStructure
     Private mFileManager As FileManagerLocal
+    Public Event ProtocolCheckChanged(ByVal sender As Crownwood.Magic.Controls.TabControl, ByVal state As Boolean)
 
 #Region " Windows Form Designer generated code "
 
@@ -54,49 +55,44 @@ Public Class TabPageAction
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents TabControlInstruction As Crownwood.Magic.Controls.TabControl
     Friend WithEvents tpPathway As Crownwood.Magic.Controls.TabPage
     Friend WithEvents PanelBaseTop As System.Windows.Forms.Panel
     Friend WithEvents ContextMenuPathway As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuAdd As System.Windows.Forms.MenuItem
     Friend WithEvents tpAction As Crownwood.Magic.Controls.TabPage
     Friend WithEvents HelpProviderInstruction As System.Windows.Forms.HelpProvider
+    Friend WithEvents cbProtocol As System.Windows.Forms.CheckBox
+    Friend WithEvents TabControlAction As Crownwood.Magic.Controls.TabControl
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.TabControlInstruction = New Crownwood.Magic.Controls.TabControl
-        Me.tpPathway = New Crownwood.Magic.Controls.TabPage
+        Me.TabControlAction = New Crownwood.Magic.Controls.TabControl
         Me.tpAction = New Crownwood.Magic.Controls.TabPage
+        Me.tpPathway = New Crownwood.Magic.Controls.TabPage
         Me.ContextMenuPathway = New System.Windows.Forms.ContextMenu
         Me.MenuAdd = New System.Windows.Forms.MenuItem
         Me.PanelBaseTop = New System.Windows.Forms.Panel
+        Me.cbProtocol = New System.Windows.Forms.CheckBox
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
+        Me.PanelBaseTop.SuspendLayout()
         Me.SuspendLayout()
         '
-        'TabControlInstruction
+        'TabControlAction
         '
-        Me.TabControlInstruction.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.TabControlInstruction.BoldSelectedPage = True
-        Me.TabControlInstruction.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderInstruction.SetHelpKeyword(Me.TabControlInstruction, "Screens/pathway_screen.html")
-        Me.HelpProviderInstruction.SetHelpNavigator(Me.TabControlInstruction, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabControlInstruction.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabControlInstruction.Location = New System.Drawing.Point(0, 24)
-        Me.TabControlInstruction.Name = "TabControlInstruction"
-        Me.TabControlInstruction.PositionTop = True
-        Me.TabControlInstruction.SelectedIndex = 1
-        Me.TabControlInstruction.SelectedTab = Me.tpPathway
-        Me.HelpProviderInstruction.SetShowHelp(Me.TabControlInstruction, True)
-        Me.TabControlInstruction.Size = New System.Drawing.Size(848, 400)
-        Me.TabControlInstruction.TabIndex = 0
-        Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpAction, Me.tpPathway})
-        Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpPathway
-        '
-        Me.tpPathway.Location = New System.Drawing.Point(0, 0)
-        Me.tpPathway.Name = "tpPathway"
-        Me.tpPathway.Size = New System.Drawing.Size(848, 374)
-        Me.tpPathway.TabIndex = 0
-        Me.tpPathway.Title = "Pathway"
+        Me.TabControlAction.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.TabControlAction.BoldSelectedPage = True
+        Me.TabControlAction.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderInstruction.SetHelpKeyword(Me.TabControlAction, "Screens/pathway_screen.html")
+        Me.HelpProviderInstruction.SetHelpNavigator(Me.TabControlAction, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabControlAction.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabControlAction.Location = New System.Drawing.Point(0, 24)
+        Me.TabControlAction.Name = "TabControlAction"
+        Me.TabControlAction.PositionTop = True
+        Me.TabControlAction.SelectedIndex = 0
+        Me.TabControlAction.SelectedTab = Me.tpAction
+        Me.HelpProviderInstruction.SetShowHelp(Me.TabControlAction, True)
+        Me.TabControlAction.Size = New System.Drawing.Size(848, 400)
+        Me.TabControlAction.TabIndex = 0
+        Me.TabControlAction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpAction, Me.tpPathway})
+        Me.TabControlAction.TextInactiveColor = System.Drawing.Color.Black
         '
         'tpAction
         '
@@ -104,11 +100,19 @@ Public Class TabPageAction
         Me.HelpProviderInstruction.SetHelpNavigator(Me.tpAction, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpAction.Location = New System.Drawing.Point(0, 0)
         Me.tpAction.Name = "tpAction"
-        Me.tpAction.Selected = False
         Me.HelpProviderInstruction.SetShowHelp(Me.tpAction, True)
         Me.tpAction.Size = New System.Drawing.Size(848, 374)
         Me.tpAction.TabIndex = 2
         Me.tpAction.Title = "Action description"
+        '
+        'tpPathway
+        '
+        Me.tpPathway.Location = New System.Drawing.Point(0, 0)
+        Me.tpPathway.Name = "tpPathway"
+        Me.tpPathway.Selected = False
+        Me.tpPathway.Size = New System.Drawing.Size(848, 374)
+        Me.tpPathway.TabIndex = 0
+        Me.tpPathway.Title = "Pathway"
         '
         'ContextMenuPathway
         '
@@ -121,24 +125,44 @@ Public Class TabPageAction
         '
         'PanelBaseTop
         '
+        Me.PanelBaseTop.Controls.Add(Me.cbProtocol)
         Me.PanelBaseTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelBaseTop.Location = New System.Drawing.Point(0, 0)
         Me.PanelBaseTop.Name = "PanelBaseTop"
         Me.PanelBaseTop.Size = New System.Drawing.Size(848, 24)
         Me.PanelBaseTop.TabIndex = 1
         '
+        'cbProtocol
+        '
+        Me.cbProtocol.Location = New System.Drawing.Point(72, 0)
+        Me.cbProtocol.Name = "cbProtocol"
+        Me.cbProtocol.Size = New System.Drawing.Size(136, 24)
+        Me.cbProtocol.TabIndex = 0
+        Me.cbProtocol.Text = "Protocol"
+        '
         'TabPageAction
         '
         Me.BackColor = System.Drawing.Color.LemonChiffon
-        Me.Controls.Add(Me.TabControlInstruction)
+        Me.Controls.Add(Me.TabControlAction)
         Me.Controls.Add(Me.PanelBaseTop)
         Me.Name = "TabPageAction"
         Me.Size = New System.Drawing.Size(848, 424)
+        Me.PanelBaseTop.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
 
 #End Region
+
+    Public Function HasProtocol() As Boolean
+        For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlAction.TabPages
+            If tp.Name = "tpProtocol" Then
+                Return True
+            End If
+        Next
+        Return False
+
+    End Function
 
     Private Sub TabPageAction_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsloading = True
@@ -186,7 +210,7 @@ Public Class TabPageAction
 
         For Each rm As RmStructureCompound In Struct
             Select Case rm.Type
-                Case StructureType.ism_transition
+                Case StructureType.ISM_TRANSITION
                     Me.tpPathway.Controls.Clear()
                     mPathwaySpecification = New PathwaySpecification
                     Me.tpPathway.Controls.Add(mPathwaySpecification)
@@ -204,6 +228,8 @@ Public Class TabPageAction
                     End If
                     Me.tpAction.Controls.Add(mActionDescription)
                     mActionDescription.Dock = DockStyle.Fill
+                Case StructureType.Protocol
+                    ' do nothing
                 Case Else
                     Debug.Assert(False, "Not handled yet")
             End Select
@@ -253,7 +279,12 @@ Public Class TabPageAction
         mActionDescription.TranslateGUI()
     End Sub
 
-
+    Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
+        If Not mFileManager.FileLoading Then
+            RaiseEvent ProtocolCheckChanged(Me.TabControlAction, cbProtocol.Checked)
+            mFileManager.FileEdited = True
+        End If
+    End Sub
 End Class
 
 '
