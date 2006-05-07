@@ -23,16 +23,16 @@ Namespace ArchetypeEditor.ADL_Classes
 
         'Builds all archetypes at present
 
-        Private adlArchetype As openehr.openehr.am.archetype.ARCHETYPE
-        Private adlEngine As openehr.adl_parser.syntax.adl.ADL_ENGINE
-        Private mCADL_Factory As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_MODEL_FACTORY
+        Protected adlArchetype As openehr.openehr.am.archetype.ARCHETYPE
+        Protected adlEngine As openehr.adl_parser.syntax.adl.ADL_ENGINE
+        Protected mCADL_Factory As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_MODEL_FACTORY
 
-        Private Structure ReferenceToResolve
+        Protected Structure ReferenceToResolve
             Dim Element As RmElement
             Dim Attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         End Structure
 
-        Private ReferencesToResolve As ArrayList = New ArrayList
+        Protected ReferencesToResolve As ArrayList = New ArrayList
 
 
         Public Overrides Property ConceptCode() As String
@@ -134,7 +134,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Private Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)
+        Protected Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)
             Dim id As openehr.openehr.rm.support.identification.ARCHETYPE_ID
 
             id = openehr.openehr.rm.support.identification.Create.ARCHETYPE_ID.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(an_archetype_id.ToString))
@@ -161,12 +161,11 @@ Namespace ArchetypeEditor.ADL_Classes
             End Try
         End Sub
 
-
-        Private Sub ArchetypeID_Changed(ByVal sender As Object, ByVal e As EventArgs) Handles mArchetypeID.ArchetypeID_Changed
+        Protected Sub ArchetypeID_Changed(ByVal sender As Object, ByVal e As EventArgs) Handles mArchetypeID.ArchetypeID_Changed
             SetArchetypeId(CType(sender, ArchetypeID))
         End Sub
 
-        Private Function MakeAssertion(ByVal id As String, ByVal expression As String) As openehr.openehr.am.archetype.assertion.ASSERTION
+        Protected Function MakeAssertion(ByVal id As String, ByVal expression As String) As openehr.openehr.am.archetype.assertion.ASSERTION
             Dim id_expression_leaf, id_pattern_expression_leaf As openehr.openehr.am.archetype.assertion.EXPR_LEAF
             Dim match_operator As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR
 
@@ -186,7 +185,8 @@ Namespace ArchetypeEditor.ADL_Classes
             Return mCADL_Factory.create_assertion(match_operator, Nothing)
 
         End Function
-        Private Function MakeCardinality(ByVal c As RmCardinality, Optional ByVal IsOrdered As Boolean = True) As openehr.openehr.am.archetype.constraint_model.CARDINALITY
+
+        Protected Function MakeCardinality(ByVal c As RmCardinality, Optional ByVal IsOrdered As Boolean = True) As openehr.openehr.am.archetype.constraint_model.CARDINALITY
             Dim cardObj As openehr.openehr.am.archetype.constraint_model.CARDINALITY
 
             If c.IsUnbounded Then
@@ -201,7 +201,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Function
 
-        Private Function MakeOccurrences(ByVal c As RmCardinality) As openehr.common_libs.basic.OE_INTERVAL_INT32
+        Protected Function MakeOccurrences(ByVal c As RmCardinality) As openehr.common_libs.basic.OE_INTERVAL_INT32
 
             If c.IsUnbounded Then
                 Return mCADL_Factory.create_c_integer_make_upper_unbounded(c.MinCount, c.IncludeLower).interval
@@ -210,7 +210,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Function
 
-        Private Overloads Sub BuildCodedText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ConstraintID As String)
+        Protected Overloads Sub BuildCodedText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ConstraintID As String)
             Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim ca_Term As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF
@@ -222,7 +222,7 @@ Namespace ArchetypeEditor.ADL_Classes
             code_rel_node.put_child(ca_Term)
         End Sub
 
-        Private Overloads Sub BuildCodedText(ByRef ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal RunTimeName As String)
+        Protected Overloads Sub BuildCodedText(ByRef ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal RunTimeName As String)
             Dim coded_text, codePhrase As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_rel_node, name_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim ca_Term As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF
@@ -234,7 +234,7 @@ Namespace ArchetypeEditor.ADL_Classes
             code_rel_node.put_child(ca_Term)
         End Sub
 
-        Private Overloads Sub BuildCodedText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_CodePhrase As CodePhrase, Optional ByVal an_assumed_value As String = "")
+        Protected Overloads Sub BuildCodedText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_CodePhrase As CodePhrase, Optional ByVal an_assumed_value As String = "")
             Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM
@@ -253,7 +253,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Private Sub BuildPlainText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
+        Protected Sub BuildPlainText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
             Dim plain_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim value_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING
@@ -391,8 +391,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
             ' now build the events
             events_rel_node = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("events"), MakeCardinality(a_history.Children.Cardinality))
-            For Each an_event In a_history.Children
 
+            For Each an_event In a_history.Children
                 cadlEvent = mCADL_Factory.create_c_complex_object_identified(events_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(an_event.Type)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
                 cadlEvent.set_occurrences(MakeOccurrences(an_event.Occurrences))
 
@@ -458,7 +458,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Private Sub BuildCluster(ByVal Cluster As RmCluster, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+        Protected Sub BuildCluster(ByVal Cluster As RmCluster, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
             Dim cluster_cadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim rm As RmStructure
@@ -497,7 +497,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Private Sub BuildCount(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ct As Constraint_Count)
+        Protected Sub BuildCount(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ct As Constraint_Count)
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim cadlCount As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim magnitude As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
@@ -581,11 +581,11 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Private Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
+        Protected Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
             BuildSlot(value_attribute, a_slot.SlotConstraint, a_slot.Occurrences)
         End Sub
 
-        Private Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal sl As Constraint_Slot, ByVal an_occurrence As RmCardinality)
+        Protected Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal sl As Constraint_Slot, ByVal an_occurrence As RmCardinality)
             Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
 
             slot = mCADL_Factory.create_archetype_slot_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(sl.RM_ClassType)))
@@ -614,15 +614,15 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Private Sub BuildQuantity(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
+        Protected Sub BuildQuantity(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
             Dim cadlQuantity As openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY
 
             cadlQuantity = mCADL_Factory.create_c_quantity(value_attribute)
             ' set the property constraint - it should be present
 
-            If Not q.Physical_property Is Nothing Then
+            If Not q.IsNull Then
 
-                cadlQuantity.set_property(openehr.base.kernel.Create.STRING.make_from_cil(q.Physical_property))
+                cadlQuantity.set_property(openehr.base.kernel.Create.STRING.make_from_cil(q.PhysicalPropertyAsString))
 
                 If q.has_units Then
                     Dim unit_constraint As Constraint_QuantityUnit
@@ -639,7 +639,8 @@ Namespace ArchetypeEditor.ADL_Classes
                                 a_real = mCADL_Factory.create_real_interval_make_upper_unbounded(unit_constraint.MinimumValue, unit_constraint.IncludeMinimum)
                             End If
                         Else
-                            a_real = mCADL_Factory.create_real_interval_make_unbounded()
+                            'a_real = mCADL_Factory.create_real_interval_make_unbounded()
+                            a_real = Nothing
                         End If
 
                         If unit_constraint.HasAssumedValue Then
@@ -666,6 +667,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 c_value = mCADL_Factory.create_c_primitive_object(value_attribute, mCADL_Factory.create_c_boolean_make_false())
             End If
 
+            'ToDo: See if this works again!
+
             'If b.hasAssumedValue Then
             '    If b.AssumedValue = True Then
             '        c_value = mCADL_Factory.create_c_primitive_object(value_attribute, mCADL_Factory.create_c_boolean_make_true())
@@ -677,7 +680,7 @@ Namespace ArchetypeEditor.ADL_Classes
             'End If
         End Sub
 
-        Private Sub BuildOrdinal(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal o As Constraint_Ordinal)
+        Protected Sub BuildOrdinal(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal o As Constraint_Ordinal)
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim c_value As openehr.openehr.am.openehr_profile.data_types.quantity.C_ORDINAL
@@ -704,7 +707,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Private Sub BuildText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal t As Constraint_Text)
+        Protected Sub BuildText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal t As Constraint_Text)
 
             Select Case t.TypeOfTextConstraint
                 Case TextConstrainType.Terminology
@@ -718,7 +721,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End Select
         End Sub
 
-        Private Function GetPathOfNode(ByVal NodeId As String) As openehr.common_libs.structures.object_graph.path.OG_PATH
+        Protected Function GetPathOfNode(ByVal NodeId As String) As openehr.common_libs.structures.object_graph.path.OG_PATH
             Dim arraylist As openehr.Base.structures.list.LIST_ANY
             Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
             Dim s As String
@@ -775,8 +778,7 @@ Namespace ArchetypeEditor.ADL_Classes
             objNode.set_any_allowed()
         End Sub
 
-
-        Private Sub BuildElementConstraint(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint)
+        Protected Sub BuildElementConstraint(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint)
 
             ' cannot have a value with no constraint on datatype
             Debug.Assert(c.Type <> ConstraintType.Any)
@@ -829,7 +831,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End Select
 
         End Sub
-        Private Sub BuildElementOrReference(ByVal Element As RmElement, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+        Protected Sub BuildElementOrReference(ByVal Element As RmElement, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
             Dim value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             If Element.Type = StructureType.Reference Then
@@ -948,7 +950,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Private Sub BuildSubjectOfData(ByVal subject As RelatedParty, ByVal root_node As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Protected Sub BuildSubjectOfData(ByVal subject As RelatedParty, ByVal root_node As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             If subject.Relationship.Codes.Count = 0 Then
                 Return
             Else
@@ -964,7 +966,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Private Sub BuildSection(ByVal rmChildren As Children, ByVal cadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Protected Sub BuildSection(ByVal rmChildren As Children, ByVal cadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
@@ -1043,20 +1045,6 @@ Namespace ArchetypeEditor.ADL_Classes
 
                             End If
 
-                            'new_section = openehr.am.Create.C_COMPLEX_OBJECT.make_identified(openehr.base.kernel.Create.STRING.make_from_cil("SECTION"), openehr.base.kernel.Create.STRING.make_from_cil(a_structure.NodeId))
-                            'new_section.set_occurrences(MakeOccurrences(a_structure.Occurrences))
-
-                            'If a_structure.HasNameConstraint Then
-                            '    an_attribute = mCADL_Factory.create_c_attribute_single(new_section, openehr.base.kernel.Create.STRING.make_from_cil("name"))
-                            '    BuildText(an_attribute, a_structure.NameConstraint)
-                            'End If
-
-                            'If CType(a_structure, RmSection).Children.Count > 0 Then
-                            '    BuildSection(CType(a_structure, RmSection).Children, new_section)
-                            'Else
-                            '    new_section.set_any_allowed()
-                            'End If
-                            'an_attribute.put_child(new_section)
                         Case Else
                             Debug.Assert(False)
                     End Select
@@ -1066,7 +1054,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Private Sub BuildRootSection(ByVal Rm As RmSection, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Protected Sub BuildRootSection(ByVal Rm As RmSection, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
@@ -1142,7 +1130,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Sub BuildWorkFlowStep(ByVal rm As RmPathwayStep, ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+        Private Sub BuildWorkFlowStep(ByVal rm As RmPathwayStep, ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
             Dim a_state, a_step As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_phrase As New CodePhrase
@@ -1163,7 +1151,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Sub BuildPathway(ByVal rm As RmStructureCompound, ByVal arch_def As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Private Sub BuildPathway(ByVal rm As RmStructureCompound, ByVal arch_def As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             If rm.Children.Count > 0 Then
@@ -1175,7 +1163,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Sub BuildActivity(ByVal rm As RmActivity, ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+        Private Sub BuildActivity(ByVal rm As RmActivity, ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim objNodeSimple As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
@@ -1208,7 +1196,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Sub BuildInstruction(ByVal data As RmChildren)
+        Private Sub BuildInstruction(ByVal data As RmChildren)
             For Each rm As RmStructureCompound In data
                 Select Case rm.Type
                     Case StructureType.Activities
@@ -1233,7 +1221,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Next
         End Sub
 
-        Sub BuildAction(ByVal rm As RmStructureCompound, ByVal a_definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Private Sub BuildAction(ByVal rm As RmStructureCompound, ByVal a_definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             Dim action_spec As RmStructure
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
@@ -1259,7 +1247,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Public Sub MakeParseTree()
+        Public Overridable Sub MakeParseTree()
             Dim rm As RmStructureCompound
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
@@ -1463,6 +1451,10 @@ Namespace ArchetypeEditor.ADL_Classes
                 Next
             End If
 
+        End Sub
+
+        Protected Sub New(ByVal primary_language As String)
+            MyBase.New(primary_language)
         End Sub
 
     End Class

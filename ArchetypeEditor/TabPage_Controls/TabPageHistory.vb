@@ -149,7 +149,7 @@ Public Class TabpageHistory
         Me.gbEventDetails.Controls.Add(Me.radioPointInTime)
         Me.gbEventDetails.Controls.Add(Me.gbOffset)
         Me.gbEventDetails.Controls.Add(Me.lblDescription)
-        Me.gbEventDetails.Location = New System.Drawing.Point(361, 8)
+        Me.gbEventDetails.Location = New System.Drawing.Point(432, 8)
         Me.gbEventDetails.Name = "gbEventDetails"
         Me.gbEventDetails.Size = New System.Drawing.Size(376, 376)
         Me.gbEventDetails.TabIndex = 34
@@ -226,7 +226,7 @@ Public Class TabpageHistory
         Me.numericDuration.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numericDuration.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.numericDuration.Name = "numericDuration"
-        Me.numericDuration.Size = New System.Drawing.Size(48, 22)
+        Me.numericDuration.Size = New System.Drawing.Size(46, 22)
         Me.numericDuration.TabIndex = 13
         Me.numericDuration.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numericDuration.Value = New Decimal(New Integer() {1, 0, 0, 0})
@@ -234,12 +234,10 @@ Public Class TabpageHistory
         '
         'comboDurationUnits
         '
-        Me.comboDurationUnits.Items.AddRange(New Object() {"Millisec", "sec", "min", "hr", "day", "month", "year"})
-        Me.comboDurationUnits.Location = New System.Drawing.Point(66, 69)
+        Me.comboDurationUnits.Location = New System.Drawing.Point(61, 69)
         Me.comboDurationUnits.Name = "comboDurationUnits"
-        Me.comboDurationUnits.Size = New System.Drawing.Size(56, 24)
+        Me.comboDurationUnits.Size = New System.Drawing.Size(86, 24)
         Me.comboDurationUnits.TabIndex = 14
-        Me.comboDurationUnits.Text = "min"
         Me.comboDurationUnits.Visible = False
         '
         'RadioInterval
@@ -269,9 +267,9 @@ Public Class TabpageHistory
         Me.gbOffset.Controls.Add(Me.cbFixedOffset)
         Me.gbOffset.Controls.Add(Me.NumericOffset)
         Me.gbOffset.Controls.Add(Me.comboOffsetUnits)
-        Me.gbOffset.Location = New System.Drawing.Point(26, 232)
+        Me.gbOffset.Location = New System.Drawing.Point(15, 232)
         Me.gbOffset.Name = "gbOffset"
-        Me.gbOffset.Size = New System.Drawing.Size(136, 72)
+        Me.gbOffset.Size = New System.Drawing.Size(153, 104)
         Me.gbOffset.TabIndex = 22
         Me.gbOffset.TabStop = False
         Me.gbOffset.Text = "Offset"
@@ -279,7 +277,7 @@ Public Class TabpageHistory
         '
         'cbFixedOffset
         '
-        Me.cbFixedOffset.Location = New System.Drawing.Point(16, 16)
+        Me.cbFixedOffset.Location = New System.Drawing.Point(11, 16)
         Me.cbFixedOffset.Name = "cbFixedOffset"
         Me.cbFixedOffset.Size = New System.Drawing.Size(112, 24)
         Me.cbFixedOffset.TabIndex = 8
@@ -287,23 +285,21 @@ Public Class TabpageHistory
         '
         'NumericOffset
         '
-        Me.NumericOffset.Location = New System.Drawing.Point(16, 47)
+        Me.NumericOffset.Location = New System.Drawing.Point(10, 47)
         Me.NumericOffset.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.NumericOffset.Minimum = New Decimal(New Integer() {1000, 0, 0, -2147483648})
         Me.NumericOffset.Name = "NumericOffset"
-        Me.NumericOffset.Size = New System.Drawing.Size(48, 22)
+        Me.NumericOffset.Size = New System.Drawing.Size(46, 22)
         Me.NumericOffset.TabIndex = 9
         Me.NumericOffset.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericOffset.Visible = False
         '
         'comboOffsetUnits
         '
-        Me.comboOffsetUnits.Items.AddRange(New Object() {"millisec", "sec", "min", "hr", "day"})
-        Me.comboOffsetUnits.Location = New System.Drawing.Point(72, 47)
+        Me.comboOffsetUnits.Location = New System.Drawing.Point(61, 47)
         Me.comboOffsetUnits.Name = "comboOffsetUnits"
-        Me.comboOffsetUnits.Size = New System.Drawing.Size(56, 24)
+        Me.comboOffsetUnits.Size = New System.Drawing.Size(88, 24)
         Me.comboOffsetUnits.TabIndex = 10
-        Me.comboOffsetUnits.Text = "min"
         Me.comboOffsetUnits.Visible = False
         '
         'lblDescription
@@ -319,7 +315,7 @@ Public Class TabpageHistory
         Me.butRemoveElement.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butRemoveElement.Image = CType(resources.GetObject("butRemoveElement.Image"), System.Drawing.Image)
         Me.butRemoveElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveElement.Location = New System.Drawing.Point(114, 35)
+        Me.butRemoveElement.Location = New System.Drawing.Point(176, 35)
         Me.butRemoveElement.Name = "butRemoveElement"
         Me.butRemoveElement.Size = New System.Drawing.Size(24, 24)
         Me.butRemoveElement.TabIndex = 22
@@ -329,7 +325,7 @@ Public Class TabpageHistory
         '
         Me.butAddEvent.Image = CType(resources.GetObject("butAddEvent.Image"), System.Drawing.Image)
         Me.butAddEvent.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddEvent.Location = New System.Drawing.Point(114, 9)
+        Me.butAddEvent.Location = New System.Drawing.Point(176, 9)
         Me.butAddEvent.Name = "butAddEvent"
         Me.butAddEvent.Size = New System.Drawing.Size(24, 24)
         Me.butAddEvent.TabIndex = 21
@@ -337,15 +333,15 @@ Public Class TabpageHistory
         '
         'chkIsPeriodic
         '
-        Me.chkIsPeriodic.Location = New System.Drawing.Point(12, 87)
+        Me.chkIsPeriodic.Location = New System.Drawing.Point(16, 128)
         Me.chkIsPeriodic.Name = "chkIsPeriodic"
-        Me.chkIsPeriodic.Size = New System.Drawing.Size(100, 64)
+        Me.chkIsPeriodic.Size = New System.Drawing.Size(144, 64)
         Me.chkIsPeriodic.TabIndex = 18
         Me.chkIsPeriodic.Text = "Events at regular time period"
         '
         'numPeriod
         '
-        Me.numPeriod.Location = New System.Drawing.Point(7, 153)
+        Me.numPeriod.Location = New System.Drawing.Point(16, 192)
         Me.numPeriod.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numPeriod.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.numPeriod.Name = "numPeriod"
@@ -357,18 +353,16 @@ Public Class TabpageHistory
         '
         'comboTimeUnits
         '
-        Me.comboTimeUnits.Items.AddRange(New Object() {"millisec", "sec", "min", "hr"})
-        Me.comboTimeUnits.Location = New System.Drawing.Point(55, 153)
+        Me.comboTimeUnits.Location = New System.Drawing.Point(72, 192)
         Me.comboTimeUnits.Name = "comboTimeUnits"
-        Me.comboTimeUnits.Size = New System.Drawing.Size(56, 24)
+        Me.comboTimeUnits.Size = New System.Drawing.Size(88, 24)
         Me.comboTimeUnits.TabIndex = 20
-        Me.comboTimeUnits.Text = "min"
         Me.comboTimeUnits.Visible = False
         '
         'butListUp
         '
         Me.butListUp.Image = CType(resources.GetObject("butListUp.Image"), System.Drawing.Image)
-        Me.butListUp.Location = New System.Drawing.Point(114, 61)
+        Me.butListUp.Location = New System.Drawing.Point(176, 61)
         Me.butListUp.Name = "butListUp"
         Me.butListUp.Size = New System.Drawing.Size(24, 24)
         Me.butListUp.TabIndex = 23
@@ -377,7 +371,7 @@ Public Class TabpageHistory
         'butListDown
         '
         Me.butListDown.Image = CType(resources.GetObject("butListDown.Image"), System.Drawing.Image)
-        Me.butListDown.Location = New System.Drawing.Point(114, 87)
+        Me.butListDown.Location = New System.Drawing.Point(176, 87)
         Me.butListDown.Name = "butListDown"
         Me.butListDown.Size = New System.Drawing.Size(24, 24)
         Me.butListDown.TabIndex = 24
@@ -390,7 +384,7 @@ Public Class TabpageHistory
         Me.gbEventList.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.gbEventList.Location = New System.Drawing.Point(16, 8)
         Me.gbEventList.Name = "gbEventList"
-        Me.gbEventList.Size = New System.Drawing.Size(96, 80)
+        Me.gbEventList.Size = New System.Drawing.Size(144, 104)
         Me.gbEventList.TabIndex = 35
         Me.gbEventList.TabStop = False
         Me.gbEventList.Text = "Event list:"
@@ -400,16 +394,16 @@ Public Class TabpageHistory
         Me.radioOpen.Checked = True
         Me.radioOpen.Location = New System.Drawing.Point(8, 16)
         Me.radioOpen.Name = "radioOpen"
-        Me.radioOpen.Size = New System.Drawing.Size(80, 24)
+        Me.radioOpen.Size = New System.Drawing.Size(128, 32)
         Me.radioOpen.TabIndex = 16
         Me.radioOpen.TabStop = True
         Me.radioOpen.Text = "open"
         '
         'radioFixed
         '
-        Me.radioFixed.Location = New System.Drawing.Point(8, 43)
+        Me.radioFixed.Location = New System.Drawing.Point(8, 56)
         Me.radioFixed.Name = "radioFixed"
-        Me.radioFixed.Size = New System.Drawing.Size(80, 24)
+        Me.radioFixed.Size = New System.Drawing.Size(128, 40)
         Me.radioFixed.TabIndex = 17
         Me.radioFixed.Text = "Fixed"
         '
@@ -421,10 +415,10 @@ Public Class TabpageHistory
         Me.ListEvents.HideSelection = False
         Me.ListEvents.LabelEdit = True
         Me.ListEvents.LabelWrap = False
-        Me.ListEvents.Location = New System.Drawing.Point(152, 8)
+        Me.ListEvents.Location = New System.Drawing.Point(208, 8)
         Me.ListEvents.MultiSelect = False
         Me.ListEvents.Name = "ListEvents"
-        Me.ListEvents.Size = New System.Drawing.Size(200, 376)
+        Me.ListEvents.Size = New System.Drawing.Size(216, 376)
         Me.ListEvents.SmallImageList = Me.ImageListEvents
         Me.ListEvents.TabIndex = 0
         Me.ListEvents.View = System.Windows.Forms.View.Details
@@ -457,7 +451,7 @@ Public Class TabpageHistory
         Me.HelpProviderEventSeries.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "TabpageHistory"
         Me.HelpProviderEventSeries.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(760, 392)
+        Me.Size = New System.Drawing.Size(824, 392)
         Me.gbEventDetails.ResumeLayout(False)
         Me.gbDuration.ResumeLayout(False)
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).EndInit()
@@ -706,9 +700,9 @@ Public Class TabpageHistory
 
         Hist = New RmHistory(Me.NodeId)
 
-        If Me.chkIsPeriodic.Checked Then
+        If Me.chkIsPeriodic.Checked AndAlso (Not Me.comboTimeUnits.SelectedItem Is Nothing) Then
             Hist.Period = Me.numPeriod.Value
-            Hist.PeriodUnits = Me.comboTimeUnits.Text
+            Hist.PeriodUnits = CType(Me.comboTimeUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
         End If
 
         If Me.ListEvents.Items.Count = 0 Then
@@ -1189,7 +1183,7 @@ Public Class TabpageHistory
 
     Private Sub comboOffsetUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboOffsetUnits.SelectedIndexChanged
         If current_item Is Nothing Then Return
-        current_item.OffsetUnits = Me.comboOffsetUnits.Text
+        current_item.OffsetUnits = CType(Me.comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
         mFileManager.FileEdited = True
     End Sub
 
@@ -1201,7 +1195,7 @@ Public Class TabpageHistory
 
     Private Sub comboDurationUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboDurationUnits.SelectedIndexChanged
         If current_item Is Nothing Then Return
-        current_item.WidthUnits = Me.comboDurationUnits.Text
+        current_item.WidthUnits = CType(Me.comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
         mFileManager.FileEdited = True
     End Sub
 
@@ -1255,7 +1249,7 @@ Public Class TabpageHistory
             current_item.hasFixedWidth = True
             ' may accept default so load these
             current_item.Width = Me.numericDuration.Value
-            current_item.WidthUnits = Me.comboDurationUnits.Text
+            current_item.WidthUnits = CType(Me.comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
         Else
             current_item.hasFixedWidth = False
         End If
@@ -1393,7 +1387,9 @@ Public Class TabpageHistory
         Dim math_functions As DataRow()
         Dim new_row As DataRow
 
-        math_functions = mFileManager.OntologyManager.CodeForGroupID(14, mFileManager.OntologyManager.LanguageCode) 'event math function
+        'Load according to the language of the interface, not the archetype
+        'math_functions = mFileManager.OntologyManager.CodeForGroupID(14, mFileManager.OntologyManager.LanguageCode) 'event math function
+        math_functions = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.Instance.DefaultLanguageCode) 'event math function
 
         For Each rw As DataRow In math_functions
             new_row = MathFunctionTable.NewRow
@@ -1408,9 +1404,31 @@ Public Class TabpageHistory
         Me.comboIntervalViewPoint.DisplayMember = "Text"
         Me.comboIntervalViewPoint.ValueMember = "Code"
 
+        Me.comboTimeUnits.Items.Clear()
+        Me.comboTimeUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        'Set default to minutes
+        Me.comboTimeUnits.SelectedIndex = 3
+        Me.comboOffsetUnits.Items.Clear()
+        Me.comboOffsetUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        'Set default to minutes
+        Me.comboOffsetUnits.SelectedIndex = 3
+        Me.comboDurationUnits.Items.Clear()
+        Me.comboDurationUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        'Set default to minutes
+        Me.comboDurationUnits.SelectedIndex = 3
+
         mIsLoading = False
 
 
+    End Sub
+
+    Private Sub comboTimeUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboTimeUnits.SelectedIndexChanged
+        'Initialising
+        If mFileManager Is Nothing Then Return
+
+        If mIsLoading Then
+            mFileManager.FileEdited = True
+        End If
     End Sub
 End Class
 

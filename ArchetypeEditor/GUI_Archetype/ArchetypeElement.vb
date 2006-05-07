@@ -102,7 +102,14 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Dim Text, s As String
         Dim u As Constraint_QuantityUnit
 
-        Text = (Space(3 * level) & "  Constraint: Physical property = " & q.Physical_property & ";" & "\par")
+        If q.IsCoded Then
+            Text = (Space(3 * level) & "  Constraint: Physical property = " & _
+            Filemanager.GetOpenEhrTerm(q.OpenEhrCode, q.PhysicalPropertyAsString) & ";" & "\par")
+        Else
+            Text = (Space(3 * level) & "  Constraint: Physical property = " & _
+                q.PhysicalPropertyAsString & ";" & "\par")
+        End If
+
         For Each u In q.Units
             Text &= new_line & (Space(4 * level) & QuantityUnitConstraintToRichText(u) & "\par")
         Next
@@ -112,7 +119,14 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Private Function QuantityConstraintToHTML(ByVal q As Constraint_Quantity) As String
         Dim a_text As String
 
-        a_text = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & q.Physical_property & "<br>"
+        If q.IsCoded Then
+            a_text = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
+                Filemanager.GetOpenEhrTerm(q.OpenEhrCode, q.PhysicalPropertyAsString) & "<br>"
+        Else
+            a_text = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
+                q.PhysicalPropertyAsString & "<br>"
+        End If
+
         For Each u As Constraint_QuantityUnit In q.Units
             a_text &= Environment.NewLine & QuantityUnitConstraintToRichText(u) & "<br>"
         Next
@@ -123,7 +137,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Dim s As String
 
         If u.Unit <> "" Then
-            s = "  Units = " & u.Unit & ";"
+            s = "  Units = " & u.ToString & ";"
         End If
         If u.HasMinimum Then
             If u.IncludeMinimum Then

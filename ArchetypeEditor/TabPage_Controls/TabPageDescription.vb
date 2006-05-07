@@ -129,9 +129,9 @@ Public Class TabPageDescription
         '
         'lblStatus
         '
-        Me.lblStatus.Location = New System.Drawing.Point(48, 0)
+        Me.lblStatus.Location = New System.Drawing.Point(16, 0)
         Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(168, 24)
+        Me.lblStatus.Size = New System.Drawing.Size(200, 32)
         Me.lblStatus.TabIndex = 1
         Me.lblStatus.Text = "Authorship lifecycle:"
         Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -223,7 +223,7 @@ Public Class TabPageDescription
         Me.ButAddKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
         Me.ButAddKeyWord.Image = CType(resources.GetObject("ButAddKeyWord.Image"), System.Drawing.Image)
         Me.ButAddKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.ButAddKeyWord.Location = New System.Drawing.Point(16, 72)
+        Me.ButAddKeyWord.Location = New System.Drawing.Point(16, 92)
         Me.ButAddKeyWord.Name = "ButAddKeyWord"
         Me.ButAddKeyWord.Size = New System.Drawing.Size(24, 25)
         Me.ButAddKeyWord.TabIndex = 34
@@ -234,21 +234,21 @@ Public Class TabPageDescription
         Me.butRemoveKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butRemoveKeyWord.Image = CType(resources.GetObject("butRemoveKeyWord.Image"), System.Drawing.Image)
         Me.butRemoveKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveKeyWord.Location = New System.Drawing.Point(16, 104)
+        Me.butRemoveKeyWord.Location = New System.Drawing.Point(16, 124)
         Me.butRemoveKeyWord.Name = "butRemoveKeyWord"
         Me.butRemoveKeyWord.Size = New System.Drawing.Size(24, 25)
         Me.butRemoveKeyWord.TabIndex = 35
         '
         'comboLifeCycle
         '
-        Me.comboLifeCycle.Location = New System.Drawing.Point(48, 24)
+        Me.comboLifeCycle.Location = New System.Drawing.Point(16, 35)
         Me.comboLifeCycle.Name = "comboLifeCycle"
-        Me.comboLifeCycle.Size = New System.Drawing.Size(168, 25)
+        Me.comboLifeCycle.Size = New System.Drawing.Size(200, 25)
         Me.comboLifeCycle.TabIndex = 4
         '
         'lblKeyword
         '
-        Me.lblKeyword.Location = New System.Drawing.Point(49, 46)
+        Me.lblKeyword.Location = New System.Drawing.Point(49, 68)
         Me.lblKeyword.Name = "lblKeyword"
         Me.lblKeyword.Size = New System.Drawing.Size(112, 24)
         Me.lblKeyword.TabIndex = 3
@@ -261,7 +261,7 @@ Public Class TabPageDescription
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.listKeyword.ItemHeight = 17
-        Me.listKeyword.Location = New System.Drawing.Point(48, 72)
+        Me.listKeyword.Location = New System.Drawing.Point(48, 92)
         Me.listKeyword.Name = "listKeyword"
         Me.listKeyword.Size = New System.Drawing.Size(168, 123)
         Me.listKeyword.TabIndex = 2
@@ -568,6 +568,7 @@ Public Class TabPageDescription
         mArchetypeDescription.OriginalAuthorDate = Me.txtDate.Text
 
         ' get the contributors
+        mArchetypeDescription.OtherContributors.Clear()
         For Each s As String In Me.listContributors.Items
             mArchetypeDescription.OtherContributors.Add(s)
         Next
@@ -601,10 +602,6 @@ Public Class TabPageDescription
             Me.txtPurpose.Text = archDescriptionItem.Purpose
             Me.txtUse.Text = archDescriptionItem.Use
             Me.txtMisuse.Text = archDescriptionItem.MisUse
-        Else
-            Me.txtPurpose.Text = ""
-            Me.txtUse.Text = ""
-            Me.txtMisuse.Text = ""
         End If
     End Sub
 
@@ -620,24 +617,32 @@ Public Class TabPageDescription
     End Sub
 
     Public Sub Translate()
+        Dim fileState As Boolean = Filemanager.Master.FileLoading
+        Filemanager.Master.FileLoading = True
         SaveDescription() ' in the previous language = mCurrentLanguage
+        ' Now mark the texts as needing translation in case this is a new language
+        Me.txtPurpose.Text = "*" & Me.txtPurpose.Text & "(" & mCurrentLanguage & ")"
+        Me.txtUse.Text = "*" & Me.txtUse.Text & "(" & mCurrentLanguage & ")"
+        Me.txtMisuse.Text = "*" & Me.txtMisuse.Text & "(" & mCurrentLanguage & ")"
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         SetDescriptionDetailValues()
+        Filemanager.Master.FileLoading = fileState
     End Sub
 
     Private Sub TranslateGUI()
-        Me.lblKeyword.Text = Filemanager.GetOpenEhrTerm(578, Me.lblKeyword.Text) & ":"
-        Me.lblStatus.Text = Filemanager.GetOpenEhrTerm(568, Me.lblStatus.Text) & ":"
-        Me.lblName.Text = Filemanager.GetOpenEhrTerm(579, Me.lblName.Text) & ":"
-        Me.lblEmail.Text = Filemanager.GetOpenEhrTerm(207, Me.lblEmail.Text) & ":"
-        Me.lblDate.Text = Filemanager.GetOpenEhrTerm(593, Me.lblDate.Text) & ":"
-        Me.lblOrganisation.Text = Filemanager.GetOpenEhrTerm(594, Me.lblOrganisation.Text) & ":"
+        Me.lblKeyword.Text = Filemanager.GetOpenEhrTerm(578, Me.lblKeyword.Text)
+        Me.lblStatus.Text = Filemanager.GetOpenEhrTerm(568, Me.lblStatus.Text)
+        Me.lblName.Text = Filemanager.GetOpenEhrTerm(579, Me.lblName.Text)
+        Me.lblEmail.Text = Filemanager.GetOpenEhrTerm(207, Me.lblEmail.Text)
+        Me.lblDate.Text = Filemanager.GetOpenEhrTerm(593, Me.lblDate.Text)
+        Me.lblOrganisation.Text = Filemanager.GetOpenEhrTerm(594, Me.lblOrganisation.Text)
         Me.tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, Me.tpAuthor.Title)
         Me.tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, Me.tpDescDetails.Title)
         Me.gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, Me.gbPurpose.Text)
         Me.gbUse.Text = Filemanager.GetOpenEhrTerm(582, Me.gbUse.Text)
         Me.gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, Me.gbMisuse.Text)
         Me.gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, Me.gbAuthor.Text)
+        Me.lblContributors.Text = Filemanager.GetOpenEhrTerm(604, Me.lblContributors.Text)
     End Sub
 
     Private Function MakeLifeCycleTable() As DataTable
@@ -699,11 +704,9 @@ Public Class TabPageDescription
     End Sub
 
     Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtMisuse.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged
-
         If Not Filemanager.Master.FileLoading Then
             Filemanager.Master.FileEdited = True
         End If
-
     End Sub
 
     Private Sub ButAddKeyWord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddKeyWord.Click
@@ -755,6 +758,18 @@ Public Class TabPageDescription
                 Me.listContributors.Items.RemoveAt(Me.listContributors.SelectedIndex)
                 Filemanager.Master.FileEdited = True
             End If
+        End If
+    End Sub
+
+    Private Sub txtDate_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtDate.TextChanged
+        If Not Filemanager.Master.FileLoading Then
+            Filemanager.Master.FileEdited = True
+        End If
+    End Sub
+
+    Private Sub txtOrganisation_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtOrganisation.TextChanged
+        If Not Filemanager.Master.FileLoading Then
+            Filemanager.Master.FileEdited = True
         End If
     End Sub
 End Class

@@ -190,8 +190,9 @@ Public Class ConstraintContextMenu
             _ProcessMenuClick(New Constraint_Slot)
         ElseIf Sender Is mMI_Ratio Then
             _ProcessMenuClick(New Constraint_Ratio)
-        ElseIf Sender Is mMI_QuantityUnit Then
-            _ProcessMenuClick(New Constraint_QuantityUnit)
+            'Cannot be Quantity Unit alone
+            'ElseIf Sender Is mMI_QuantityUnit Then
+            '    _ProcessMenuClick(New Constraint_QuantityUnit)
         ElseIf Sender Is mMI_Interval_Count Then
             _ProcessMenuClick(New Constraint_Interval_Count)
         ElseIf Sender Is mMI_Interval_Quantity Then

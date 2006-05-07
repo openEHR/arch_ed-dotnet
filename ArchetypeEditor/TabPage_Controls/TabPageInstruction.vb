@@ -14,7 +14,7 @@
 '
 '
 
-Option Explicit On 
+Option Strict On
 
 Public Class TabPageInstruction
     Inherits System.Windows.Forms.UserControl
@@ -448,15 +448,54 @@ Public Class TabPageInstruction
     Private Sub butOpenArchetype_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOpenArchetype.Click
         Try
             Dim start_info As New ProcessStartInfo
+            Dim action_name As String
+            Dim regx As System.Text.RegularExpressions.Regex
+            Dim matchingFileNames As New ArrayList
+
             start_info.FileName = Application.ExecutablePath
             start_info.WorkingDirectory = Application.StartupPath
-            Dim s As String = OceanArchetypeEditor.Instance.Options.RepositoryPath & _
-                "\entry\action\" & "openEHR-EHR-ACTION." & Me.txtAction.Text & ".adl"
-            If IO.File.Exists(s) Then
-                start_info.Arguments = s
+
+
+            ' get the name of the action 
+            action_name = Me.txtAction.Text
+            regx = New System.Text.RegularExpressions.Regex(action_name)
+
+            Dim dirinfo As System.IO.DirectoryInfo
+            dirinfo = New System.IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath & _
+                "\entry\action\")
+
+            For Each f As System.IO.FileInfo In dirinfo.GetFiles("*.adl")
+                If regx.Match(f.Name).Success Then
+                    matchingFileNames.Add(f.Name)
+                End If
+            Next
+
+            Select Case matchingFileNames.Count
+                Case 0
+                    MessageBox.Show(AE_Constants.Instance.Could_not_find & " " & action_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    Return
+                Case 1
+                    action_name = CStr(matchingFileNames(0))
+                Case Else
+                    'more than one
+                    Dim frm As New Choose
+                    frm.Set_Single()
+                    frm.ListChoose.Items.AddRange(matchingFileNames.ToArray)
+                    If frm.ShowDialog = DialogResult.OK Then
+                        action_name = CStr(frm.ListChoose.SelectedItem)
+                    Else
+                        Return
+                    End If
+            End Select
+
+            action_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & _
+                "\entry\action\" & action_name
+            
+            If IO.File.Exists(action_name) Then
+                start_info.Arguments = action_name
                 Process.Start(start_info)
             Else
-                MessageBox.Show(AE_Constants.Instance.Could_not_find & " '" & s & "'", _
+                MessageBox.Show(AE_Constants.Instance.Could_not_find & " '" & action_name & "'", _
                     AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
         Catch

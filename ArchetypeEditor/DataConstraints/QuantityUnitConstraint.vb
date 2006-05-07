@@ -19,6 +19,7 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
 
     ' allows a unit to have individual magnitude constraints
     Private mUnit As String
+    Private mIsTime As Boolean
 
     Public Overrides ReadOnly Property Type() As ConstraintType
         Get
@@ -31,7 +32,20 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
             Return mUnit
         End Get
         Set(ByVal Value As String)
-            mUnit = Value
+            If mIsTime Then
+                mUnit = OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(Value)
+            Else
+                mUnit = Value
+            End If
+        End Set
+    End Property
+
+    Property IsTime() As Boolean
+        Get
+            Return mIsTime
+        End Get
+        Set(ByVal Value As Boolean)
+            mIsTime = Value
         End Set
     End Property
 
@@ -43,7 +57,7 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
     End Property
 
     Public Overrides Function Copy() As Constraint
-        Dim q As New Constraint_QuantityUnit
+        Dim q As New Constraint_QuantityUnit(mIsTime)
 
         q.mHasMaxVal = Me.mHasMaxVal
         q.mHasMinVal = Me.mHasMinVal
@@ -57,8 +71,22 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
     End Function
 
     Overrides Function ToString() As String
-        Return mUnit
+        If mIsTime Then
+            If OceanArchetypeEditor.ISO_TimeUnits.IsValidIsoUnit(mUnit) Then
+                Return OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(mUnit)
+            Else
+                Return mUnit
+            End If
+        Else
+            Return mUnit
+        End If
     End Function
+
+    Sub New(ByVal is_time_unit As Boolean)
+        'Special handling for time units as need to be language dependent
+        'display
+        mIsTime = is_time_unit
+    End Sub
 
 End Class
 

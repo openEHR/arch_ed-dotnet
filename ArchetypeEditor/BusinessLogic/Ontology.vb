@@ -43,6 +43,7 @@ Public MustInherit Class Ontology
     Public MustOverride Sub AddTerminology(ByVal TerminologyCode As String)
     Public MustOverride Sub ReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
     Public MustOverride Sub AddorReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
+    Public MustOverride Sub AddorReplaceConstraintBinding(ByVal sTerminology As String, ByVal sCode As String, ByVal sQuery As String, ByVal sRelease As String)
     Public MustOverride Function TermForCode(ByVal Code As String, ByVal LanguageCode As String) As RmTerm
     Public MustOverride Sub PopulateAllTerms(ByRef TheOntologyManager As OntologyManager)
     Public MustOverride Sub PopulateTermsInLanguage(ByRef TheOntologyManager As OntologyManager, ByVal LanguageCode As String)

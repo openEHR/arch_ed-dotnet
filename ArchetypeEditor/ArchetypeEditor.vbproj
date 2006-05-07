@@ -125,6 +125,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "TimeUnits.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "ADL_Classes\ADL_Archetype.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -426,7 +431,7 @@
                 />
                 <File
                     RelPath = "DataConstraints\OrdinalTable.vb"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -496,7 +501,7 @@
                 />
                 <File
                     RelPath = "DataConstraints\GUI\ClusterControl.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -506,7 +511,7 @@
                 />
                 <File
                     RelPath = "DataConstraints\GUI\ConstraintContextMenu.vb"
-                    SubType = "Code"
+                    SubType = "Component"
                     BuildAction = "Compile"
                 />
                 <File
@@ -516,7 +521,7 @@
                 />
                 <File
                     RelPath = "DataConstraints\GUI\ConstraintControl.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -526,7 +531,7 @@
                 />
                 <File
                     RelPath = "DataConstraints\GUI\CountConstraintControl.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -536,7 +541,7 @@
                 />
                 <File
                     RelPath = "DataConstraints\GUI\DateTimeConstraintControl.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -546,7 +551,7 @@
                 />
                 <File
                     RelPath = "DataConstraints\GUI\DurationConstraintControl.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -556,7 +561,7 @@
                 />
                 <File
                     RelPath = "DataConstraints\GUI\IntervalConstraintControl.vb"
-                    SubType = "Code"
+                    SubType = "UserControl"
                     BuildAction = "Compile"
                 />
                 <File
@@ -812,6 +817,16 @@
                 <File
                     RelPath = "Forms\ChoosePath.resx"
                     DependentUpon = "ChoosePath.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "Forms\ConstraintBindingForm.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Forms\ConstraintBindingForm.resx"
+                    DependentUpon = "ConstraintBindingForm.vb"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

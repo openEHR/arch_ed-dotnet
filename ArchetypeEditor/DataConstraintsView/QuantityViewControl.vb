@@ -49,8 +49,8 @@ Public Class QuantityViewControl : Inherits ElementViewControl
 
         mNumeric.Height = 25
         mNumeric.Width = 75
-        If quantityConstraint.Physical_property = "" _
-                OrElse quantityConstraint.Physical_property = "?" Then
+        If quantityConstraint.IsNull _
+                OrElse quantityConstraint.PhysicalPropertyAsString = "?" Then
 
             mNumeric.Location = New Point(aLocation.X, aLocation.Y)
 
@@ -92,16 +92,35 @@ Public Class QuantityViewControl : Inherits ElementViewControl
                 combo.Height = 25
                 combo.Width = 150
 
-                Dim d_row As DataRow
-                d_row = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select("Text = '" & quantityConstraint.Physical_property & "'")(0)
+                Try
+                    Dim d_row As DataRow
 
-                Dim id As String = d_row(0)
+                    If quantityConstraint.IsCoded Then
+                        d_row = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
+                            ("openEHR = " & quantityConstraint.OpenEhrCode.ToString())(0)
+                    Else
+                        'OBSOLETE
+                        If OceanArchetypeEditor.Instance.DefaultLanguageCode = "en" Then
+                            d_row = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
+                                ("Text = '" & quantityConstraint.PhysicalPropertyAsString & "'")(0)
+                        Else
+                            d_row = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
+                               ("Translated = '" & quantityConstraint.PhysicalPropertyAsString & "'")(0)
+                        End If
+                    End If
 
-                For Each d_row In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id)
+                    Dim id As String = d_row(0)
 
-                    combo.Items.Add(CStr(d_row(1)))
-                Next
-                Me.Controls.Add(combo)
+                    For Each d_row In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id)
+                        combo.Items.Add(CStr(d_row(1)))
+                    Next
+
+                    Me.Controls.Add(combo)
+                Catch
+                    Debug.Assert(False, "Error selecting quantity property")
+                    combo.Items.Add("#Error#")
+                    Me.Controls.Add(combo)
+                End Try
             End If
         End If
     End Sub

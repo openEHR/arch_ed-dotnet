@@ -53,7 +53,7 @@ Public Class RmTerm
         End Set
     End Property
 
-    Friend ReadOnly Property isConstraint() As Boolean
+    ReadOnly Property isConstraint() As Boolean
         Get
             Dim s As String
             ' cannot use toupper or lower safely with internationalisation
@@ -66,7 +66,7 @@ Public Class RmTerm
                     Return True
                 End If
             Else
-                    Debug.Assert(False)
+                Debug.Assert(False)
             End If
 
         End Get
