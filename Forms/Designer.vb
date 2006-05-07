@@ -297,23 +297,8 @@ Public Class Designer
         Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
-        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
-        Me.tpDesign = New Crownwood.Magic.Controls.TabPage
-        Me.TabDesign = New Crownwood.Magic.Controls.TabControl
-        Me.tpData = New Crownwood.Magic.Controls.TabPage
-        Me.TabStructure = New Crownwood.Magic.Controls.TabControl
-        Me.tpDataStructure = New Crownwood.Magic.Controls.TabPage
-        Me.tpRootState = New Crownwood.Magic.Controls.TabPage
-        Me.TabState = New Crownwood.Magic.Controls.TabControl
-        Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
-        Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
-        Me.PanelState = New System.Windows.Forms.Panel
-        Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpTerminology = New Crownwood.Magic.Controls.TabPage
         Me.TabTerminology = New Crownwood.Magic.Controls.TabControl
-        Me.tpTerms = New Crownwood.Magic.Controls.TabPage
-        Me.PanelTermDefinitions = New System.Windows.Forms.Panel
-        Me.tpBindings = New Crownwood.Magic.Controls.TabPage
         Me.tpConstraints = New Crownwood.Magic.Controls.TabPage
         Me.DataGridConstraintStatements = New System.Windows.Forms.DataGrid
         Me.ConstraintBindingStyle = New System.Windows.Forms.DataGridTableStyle
@@ -326,6 +311,9 @@ Public Class Designer
         Me.butLookUpConstraint = New System.Windows.Forms.Button
         Me.lblConstraintStatement = New System.Windows.Forms.Label
         Me.txtConstraintStatement = New System.Windows.Forms.TextBox
+        Me.tpTerms = New Crownwood.Magic.Controls.TabPage
+        Me.PanelTermDefinitions = New System.Windows.Forms.Panel
+        Me.tpBindings = New Crownwood.Magic.Controls.TabPage
         Me.tpLanguages = New Crownwood.Magic.Controls.TabPage
         Me.DataGridTerminologies = New System.Windows.Forms.DataGrid
         Me.DataGridTableStyle3 = New System.Windows.Forms.DataGridTableStyle
@@ -345,6 +333,18 @@ Public Class Designer
         Me.ListLanguages = New System.Windows.Forms.ListBox
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.lblAvailableLanguages = New System.Windows.Forms.Label
+        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
+        Me.tpDesign = New Crownwood.Magic.Controls.TabPage
+        Me.TabDesign = New Crownwood.Magic.Controls.TabControl
+        Me.tpData = New Crownwood.Magic.Controls.TabPage
+        Me.TabStructure = New Crownwood.Magic.Controls.TabControl
+        Me.tpDataStructure = New Crownwood.Magic.Controls.TabPage
+        Me.tpRootState = New Crownwood.Magic.Controls.TabPage
+        Me.TabState = New Crownwood.Magic.Controls.TabControl
+        Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
+        Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
+        Me.PanelState = New System.Windows.Forms.Panel
+        Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpText = New Crownwood.Magic.Controls.TabPage
         Me.Panel3 = New System.Windows.Forms.Panel
         Me.panelDiplayTop = New System.Windows.Forms.Panel
@@ -387,20 +387,20 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
-        Me.tpHeader.SuspendLayout()
-        Me.tpDesign.SuspendLayout()
-        Me.tpData.SuspendLayout()
-        Me.tpRootState.SuspendLayout()
         Me.tpTerminology.SuspendLayout()
-        Me.tpTerms.SuspendLayout()
         Me.tpConstraints.SuspendLayout()
         CType(Me.DataGridConstraintStatements, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelConstraintBinding.SuspendLayout()
+        Me.tpTerms.SuspendLayout()
         Me.tpLanguages.SuspendLayout()
         CType(Me.DataGridTerminologies, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         Me.panelLanguages.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.tpHeader.SuspendLayout()
+        Me.tpDesign.SuspendLayout()
+        Me.tpData.SuspendLayout()
+        Me.tpRootState.SuspendLayout()
         Me.tpText.SuspendLayout()
         Me.panelDiplayTop.SuspendLayout()
         Me.tpInterface.SuspendLayout()
@@ -619,6 +619,7 @@ Public Class Designer
         '
         'DataGridConstraintDefinitions
         '
+        Me.DataGridConstraintDefinitions.AllowNavigation = False
         Me.DataGridConstraintDefinitions.CaptionBackColor = System.Drawing.Color.CornflowerBlue
         Me.DataGridConstraintDefinitions.CaptionText = "Constraint definitions"
         Me.DataGridConstraintDefinitions.DataMember = ""
@@ -653,7 +654,7 @@ Public Class Designer
         Me.DataGridTextBoxColumn7.FormatInfo = Nothing
         Me.DataGridTextBoxColumn7.HeaderText = "Text"
         Me.DataGridTextBoxColumn7.MappingName = ""
-        Me.DataGridTextBoxColumn7.Width = 185
+        Me.DataGridTextBoxColumn7.Width = 385
         '
         'DataGridTextBoxColumn8
         '
@@ -943,171 +944,13 @@ Public Class Designer
         Me.TabMain.Location = New System.Drawing.Point(0, 0)
         Me.TabMain.Name = "TabMain"
         Me.TabMain.PositionTop = True
-        Me.TabMain.SelectedIndex = 0
-        Me.TabMain.SelectedTab = Me.tpHeader
+        Me.TabMain.SelectedIndex = 4
+        Me.TabMain.SelectedTab = Me.tpText
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
         Me.TabMain.Size = New System.Drawing.Size(969, 621)
         Me.TabMain.TabIndex = 1
         Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpHeader
-        '
-        Me.tpHeader.BackColor = System.Drawing.Color.LemonChiffon
-        Me.tpHeader.Controls.Add(Me.PanelConcept_1)
-        Me.tpHeader.Controls.Add(Me.PanelConcept)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpHeader, "Screens/header.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpHeader.Location = New System.Drawing.Point(0, 0)
-        Me.tpHeader.Name = "tpHeader"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
-        Me.tpHeader.Size = New System.Drawing.Size(969, 595)
-        Me.tpHeader.TabIndex = 0
-        Me.tpHeader.Title = "Header"
-        '
-        'tpDesign
-        '
-        Me.tpDesign.Controls.Add(Me.TabDesign)
-        Me.tpDesign.Controls.Add(Me.PanelRoot)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDesign, "Screens/Entry Model screen.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDesign, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpDesign.Location = New System.Drawing.Point(0, 0)
-        Me.tpDesign.Name = "tpDesign"
-        Me.tpDesign.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpDesign, True)
-        Me.tpDesign.Size = New System.Drawing.Size(969, 595)
-        Me.tpDesign.TabIndex = 1
-        Me.tpDesign.Title = "Entry model"
-        '
-        'TabDesign
-        '
-        Me.TabDesign.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.TabDesign.BoldSelectedPage = True
-        Me.TabDesign.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabDesign, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabDesign, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabDesign.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabDesign.Location = New System.Drawing.Point(0, 37)
-        Me.TabDesign.Name = "TabDesign"
-        Me.TabDesign.PositionTop = True
-        Me.TabDesign.SelectedIndex = 0
-        Me.TabDesign.SelectedTab = Me.tpData
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
-        Me.TabDesign.Size = New System.Drawing.Size(969, 558)
-        Me.TabDesign.TabIndex = 12
-        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState})
-        Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpData
-        '
-        Me.tpData.Controls.Add(Me.TabStructure)
-        Me.tpData.Controls.Add(Me.PanelConfigStructure)
-        Me.tpData.Location = New System.Drawing.Point(0, 0)
-        Me.tpData.Name = "tpData"
-        Me.tpData.Size = New System.Drawing.Size(969, 532)
-        Me.tpData.TabIndex = 0
-        Me.tpData.Title = "Data"
-        '
-        'TabStructure
-        '
-        Me.TabStructure.BackColor = System.Drawing.Color.RoyalBlue
-        Me.TabStructure.BoldSelectedPage = True
-        Me.TabStructure.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabStructure, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabStructure.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabStructure.Location = New System.Drawing.Point(0, 28)
-        Me.TabStructure.Name = "TabStructure"
-        Me.TabStructure.PositionTop = True
-        Me.TabStructure.SelectedIndex = 0
-        Me.TabStructure.SelectedTab = Me.tpDataStructure
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabStructure, True)
-        Me.TabStructure.Size = New System.Drawing.Size(969, 504)
-        Me.TabStructure.TabIndex = 10
-        Me.TabStructure.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDataStructure})
-        Me.TabStructure.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpDataStructure
-        '
-        Me.tpDataStructure.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDataStructure, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDataStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpDataStructure.Location = New System.Drawing.Point(0, 0)
-        Me.tpDataStructure.Name = "tpDataStructure"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpDataStructure, True)
-        Me.tpDataStructure.Size = New System.Drawing.Size(969, 478)
-        Me.tpDataStructure.TabIndex = 0
-        Me.tpDataStructure.Title = "Structure"
-        '
-        'tpRootState
-        '
-        Me.tpRootState.Controls.Add(Me.TabState)
-        Me.tpRootState.Controls.Add(Me.PanelState)
-        Me.tpRootState.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootState.Name = "tpRootState"
-        Me.tpRootState.Selected = False
-        Me.tpRootState.Size = New System.Drawing.Size(969, 532)
-        Me.tpRootState.TabIndex = 1
-        Me.tpRootState.Title = "State"
-        '
-        'TabState
-        '
-        Me.TabState.BackColor = System.Drawing.Color.RoyalBlue
-        Me.TabState.BoldSelectedPage = True
-        Me.TabState.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabState, "HowTo/edit_state.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabState, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabState.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabState.Location = New System.Drawing.Point(0, 28)
-        Me.TabState.Name = "TabState"
-        Me.TabState.PositionTop = True
-        Me.TabState.SelectedIndex = 0
-        Me.TabState.SelectedTab = Me.tpRootStateStructure
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabState, True)
-        Me.TabState.Size = New System.Drawing.Size(969, 504)
-        Me.TabState.TabIndex = 1
-        Me.TabState.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpRootStateStructure, Me.tpRootStateEventSeries})
-        '
-        'tpRootStateStructure
-        '
-        Me.tpRootStateStructure.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.tpRootStateStructure.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootStateStructure.Name = "tpRootStateStructure"
-        Me.tpRootStateStructure.Size = New System.Drawing.Size(969, 478)
-        Me.tpRootStateStructure.TabIndex = 0
-        Me.tpRootStateStructure.Title = "Structure"
-        '
-        'tpRootStateEventSeries
-        '
-        Me.tpRootStateEventSeries.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.tpRootStateEventSeries.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootStateEventSeries.Name = "tpRootStateEventSeries"
-        Me.tpRootStateEventSeries.Selected = False
-        Me.tpRootStateEventSeries.Size = New System.Drawing.Size(969, 478)
-        Me.tpRootStateEventSeries.TabIndex = 1
-        Me.tpRootStateEventSeries.Title = "Event Series"
-        '
-        'PanelState
-        '
-        Me.PanelState.BackColor = System.Drawing.Color.FromArgb(CType(245, Byte), CType(240, Byte), CType(192, Byte))
-        Me.PanelState.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelState.Location = New System.Drawing.Point(0, 0)
-        Me.PanelState.Name = "PanelState"
-        Me.PanelState.Size = New System.Drawing.Size(969, 28)
-        Me.PanelState.TabIndex = 0
-        '
-        'tpSectionPage
-        '
-        Me.tpSectionPage.BackColor = System.Drawing.Color.LightYellow
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpSectionPage, "Screens/section_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpSectionPage, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpSectionPage.Location = New System.Drawing.Point(0, 0)
-        Me.tpSectionPage.Name = "tpSectionPage"
-        Me.tpSectionPage.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpSectionPage, True)
-        Me.tpSectionPage.Size = New System.Drawing.Size(969, 595)
-        Me.tpSectionPage.TabIndex = 4
-        Me.tpSectionPage.Title = "Section model"
         '
         'tpTerminology
         '
@@ -1131,47 +974,11 @@ Public Class Designer
         Me.TabTerminology.Location = New System.Drawing.Point(0, 0)
         Me.TabTerminology.Name = "TabTerminology"
         Me.TabTerminology.PositionTop = True
-        Me.TabTerminology.SelectedIndex = 0
-        Me.TabTerminology.SelectedTab = Me.tpTerms
+        Me.TabTerminology.SelectedIndex = 2
+        Me.TabTerminology.SelectedTab = Me.tpConstraints
         Me.TabTerminology.Size = New System.Drawing.Size(969, 595)
         Me.TabTerminology.TabIndex = 0
         Me.TabTerminology.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpTerms, Me.tpBindings, Me.tpConstraints, Me.tpLanguages})
-        '
-        'tpTerms
-        '
-        Me.tpTerms.BackColor = System.Drawing.Color.LightYellow
-        Me.tpTerms.Controls.Add(Me.DataGridDefinitions)
-        Me.tpTerms.Controls.Add(Me.PanelTermDefinitions)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpTerms, "Screens/term_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpTerms, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpTerms.Location = New System.Drawing.Point(0, 0)
-        Me.tpTerms.Name = "tpTerms"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpTerms, True)
-        Me.tpTerms.Size = New System.Drawing.Size(969, 569)
-        Me.tpTerms.TabIndex = 2
-        Me.tpTerms.Title = "Terms "
-        Me.ToolTip1.SetToolTip(Me.tpTerms, "Internal term definitions")
-        '
-        'PanelTermDefinitions
-        '
-        Me.PanelTermDefinitions.BackColor = System.Drawing.Color.LightYellow
-        Me.PanelTermDefinitions.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelTermDefinitions.Location = New System.Drawing.Point(0, 0)
-        Me.PanelTermDefinitions.Name = "PanelTermDefinitions"
-        Me.PanelTermDefinitions.Size = New System.Drawing.Size(969, 18)
-        Me.PanelTermDefinitions.TabIndex = 3
-        '
-        'tpBindings
-        '
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpBindings, "Screens/term_binding_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpBindings, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpBindings.Location = New System.Drawing.Point(0, 0)
-        Me.tpBindings.Name = "tpBindings"
-        Me.tpBindings.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpBindings, True)
-        Me.tpBindings.Size = New System.Drawing.Size(969, 569)
-        Me.tpBindings.TabIndex = 3
-        Me.tpBindings.Title = "Term Bindings"
         '
         'tpConstraints
         '
@@ -1185,7 +992,6 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpConstraints, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpConstraints.Location = New System.Drawing.Point(0, 0)
         Me.tpConstraints.Name = "tpConstraints"
-        Me.tpConstraints.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpConstraints, True)
         Me.tpConstraints.Size = New System.Drawing.Size(969, 569)
         Me.tpConstraints.TabIndex = 1
@@ -1295,6 +1101,43 @@ Public Class Designer
         Me.txtConstraintStatement.Size = New System.Drawing.Size(595, 24)
         Me.txtConstraintStatement.TabIndex = 0
         Me.txtConstraintStatement.Text = ""
+        '
+        'tpTerms
+        '
+        Me.tpTerms.BackColor = System.Drawing.Color.LightYellow
+        Me.tpTerms.Controls.Add(Me.DataGridDefinitions)
+        Me.tpTerms.Controls.Add(Me.PanelTermDefinitions)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpTerms, "Screens/term_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpTerms, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpTerms.Location = New System.Drawing.Point(0, 0)
+        Me.tpTerms.Name = "tpTerms"
+        Me.tpTerms.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpTerms, True)
+        Me.tpTerms.Size = New System.Drawing.Size(969, 569)
+        Me.tpTerms.TabIndex = 2
+        Me.tpTerms.Title = "Terms "
+        Me.ToolTip1.SetToolTip(Me.tpTerms, "Internal term definitions")
+        '
+        'PanelTermDefinitions
+        '
+        Me.PanelTermDefinitions.BackColor = System.Drawing.Color.LightYellow
+        Me.PanelTermDefinitions.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelTermDefinitions.Location = New System.Drawing.Point(0, 0)
+        Me.PanelTermDefinitions.Name = "PanelTermDefinitions"
+        Me.PanelTermDefinitions.Size = New System.Drawing.Size(969, 18)
+        Me.PanelTermDefinitions.TabIndex = 3
+        '
+        'tpBindings
+        '
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpBindings, "Screens/term_binding_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpBindings, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpBindings.Location = New System.Drawing.Point(0, 0)
+        Me.tpBindings.Name = "tpBindings"
+        Me.tpBindings.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpBindings, True)
+        Me.tpBindings.Size = New System.Drawing.Size(969, 569)
+        Me.tpBindings.TabIndex = 3
+        Me.tpBindings.Title = "Term Bindings"
         '
         'tpLanguages
         '
@@ -1474,6 +1317,165 @@ Public Class Designer
         Me.lblAvailableLanguages.TabIndex = 10
         Me.lblAvailableLanguages.Text = "Available languages:"
         '
+        'tpHeader
+        '
+        Me.tpHeader.BackColor = System.Drawing.Color.LemonChiffon
+        Me.tpHeader.Controls.Add(Me.PanelConcept_1)
+        Me.tpHeader.Controls.Add(Me.PanelConcept)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpHeader, "Screens/header.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpHeader.Location = New System.Drawing.Point(0, 0)
+        Me.tpHeader.Name = "tpHeader"
+        Me.tpHeader.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
+        Me.tpHeader.Size = New System.Drawing.Size(969, 595)
+        Me.tpHeader.TabIndex = 0
+        Me.tpHeader.Title = "Header"
+        '
+        'tpDesign
+        '
+        Me.tpDesign.Controls.Add(Me.TabDesign)
+        Me.tpDesign.Controls.Add(Me.PanelRoot)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDesign, "Screens/Entry Model screen.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDesign, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpDesign.Location = New System.Drawing.Point(0, 0)
+        Me.tpDesign.Name = "tpDesign"
+        Me.tpDesign.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpDesign, True)
+        Me.tpDesign.Size = New System.Drawing.Size(969, 595)
+        Me.tpDesign.TabIndex = 1
+        Me.tpDesign.Title = "Entry model"
+        '
+        'TabDesign
+        '
+        Me.TabDesign.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.TabDesign.BoldSelectedPage = True
+        Me.TabDesign.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabDesign, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabDesign, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabDesign.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabDesign.Location = New System.Drawing.Point(0, 37)
+        Me.TabDesign.Name = "TabDesign"
+        Me.TabDesign.PositionTop = True
+        Me.TabDesign.SelectedIndex = 0
+        Me.TabDesign.SelectedTab = Me.tpData
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
+        Me.TabDesign.Size = New System.Drawing.Size(969, 558)
+        Me.TabDesign.TabIndex = 12
+        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState})
+        Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
+        '
+        'tpData
+        '
+        Me.tpData.Controls.Add(Me.TabStructure)
+        Me.tpData.Controls.Add(Me.PanelConfigStructure)
+        Me.tpData.Location = New System.Drawing.Point(0, 0)
+        Me.tpData.Name = "tpData"
+        Me.tpData.Size = New System.Drawing.Size(969, 532)
+        Me.tpData.TabIndex = 0
+        Me.tpData.Title = "Data"
+        '
+        'TabStructure
+        '
+        Me.TabStructure.BackColor = System.Drawing.Color.RoyalBlue
+        Me.TabStructure.BoldSelectedPage = True
+        Me.TabStructure.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabStructure, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabStructure, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabStructure.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabStructure.Location = New System.Drawing.Point(0, 28)
+        Me.TabStructure.Name = "TabStructure"
+        Me.TabStructure.PositionTop = True
+        Me.TabStructure.SelectedIndex = 0
+        Me.TabStructure.SelectedTab = Me.tpDataStructure
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabStructure, True)
+        Me.TabStructure.Size = New System.Drawing.Size(969, 504)
+        Me.TabStructure.TabIndex = 10
+        Me.TabStructure.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDataStructure})
+        Me.TabStructure.TextInactiveColor = System.Drawing.Color.Black
+        '
+        'tpDataStructure
+        '
+        Me.tpDataStructure.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDataStructure, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDataStructure, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpDataStructure.Location = New System.Drawing.Point(0, 0)
+        Me.tpDataStructure.Name = "tpDataStructure"
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpDataStructure, True)
+        Me.tpDataStructure.Size = New System.Drawing.Size(969, 478)
+        Me.tpDataStructure.TabIndex = 0
+        Me.tpDataStructure.Title = "Structure"
+        '
+        'tpRootState
+        '
+        Me.tpRootState.Controls.Add(Me.TabState)
+        Me.tpRootState.Controls.Add(Me.PanelState)
+        Me.tpRootState.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootState.Name = "tpRootState"
+        Me.tpRootState.Selected = False
+        Me.tpRootState.Size = New System.Drawing.Size(969, 532)
+        Me.tpRootState.TabIndex = 1
+        Me.tpRootState.Title = "State"
+        '
+        'TabState
+        '
+        Me.TabState.BackColor = System.Drawing.Color.RoyalBlue
+        Me.TabState.BoldSelectedPage = True
+        Me.TabState.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabState, "HowTo/edit_state.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabState, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabState.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabState.Location = New System.Drawing.Point(0, 28)
+        Me.TabState.Name = "TabState"
+        Me.TabState.PositionTop = True
+        Me.TabState.SelectedIndex = 0
+        Me.TabState.SelectedTab = Me.tpRootStateStructure
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabState, True)
+        Me.TabState.Size = New System.Drawing.Size(969, 504)
+        Me.TabState.TabIndex = 1
+        Me.TabState.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpRootStateStructure, Me.tpRootStateEventSeries})
+        '
+        'tpRootStateStructure
+        '
+        Me.tpRootStateStructure.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.tpRootStateStructure.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootStateStructure.Name = "tpRootStateStructure"
+        Me.tpRootStateStructure.Size = New System.Drawing.Size(969, 478)
+        Me.tpRootStateStructure.TabIndex = 0
+        Me.tpRootStateStructure.Title = "Structure"
+        '
+        'tpRootStateEventSeries
+        '
+        Me.tpRootStateEventSeries.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.tpRootStateEventSeries.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootStateEventSeries.Name = "tpRootStateEventSeries"
+        Me.tpRootStateEventSeries.Selected = False
+        Me.tpRootStateEventSeries.Size = New System.Drawing.Size(969, 478)
+        Me.tpRootStateEventSeries.TabIndex = 1
+        Me.tpRootStateEventSeries.Title = "Event Series"
+        '
+        'PanelState
+        '
+        Me.PanelState.BackColor = System.Drawing.Color.FromArgb(CType(245, Byte), CType(240, Byte), CType(192, Byte))
+        Me.PanelState.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelState.Location = New System.Drawing.Point(0, 0)
+        Me.PanelState.Name = "PanelState"
+        Me.PanelState.Size = New System.Drawing.Size(969, 28)
+        Me.PanelState.TabIndex = 0
+        '
+        'tpSectionPage
+        '
+        Me.tpSectionPage.BackColor = System.Drawing.Color.LightYellow
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpSectionPage, "Screens/section_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpSectionPage, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpSectionPage.Location = New System.Drawing.Point(0, 0)
+        Me.tpSectionPage.Name = "tpSectionPage"
+        Me.tpSectionPage.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpSectionPage, True)
+        Me.tpSectionPage.Size = New System.Drawing.Size(969, 595)
+        Me.tpSectionPage.TabIndex = 4
+        Me.tpSectionPage.Title = "Section model"
+        '
         'tpText
         '
         Me.tpText.BackColor = System.Drawing.Color.LightSteelBlue
@@ -1483,7 +1485,6 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpText, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpText.Location = New System.Drawing.Point(0, 0)
         Me.tpText.Name = "tpText"
-        Me.tpText.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpText, True)
         Me.tpText.Size = New System.Drawing.Size(969, 595)
         Me.tpText.TabIndex = 3
@@ -1509,16 +1510,21 @@ Public Class Designer
         '
         'ToolBarRTF
         '
+        Me.ToolBarRTF.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ToolBarRTF.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
+        Me.ToolBarRTF.AutoSize = False
         Me.ToolBarRTF.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butSaveFile, Me.ToolBarButton2, Me.butPrint})
-        Me.ToolBarRTF.ButtonSize = New System.Drawing.Size(20, 20)
+        Me.ToolBarRTF.ButtonSize = New System.Drawing.Size(20, 30)
+        Me.ToolBarRTF.Dock = System.Windows.Forms.DockStyle.None
         Me.ToolBarRTF.DropDownArrows = True
         Me.ToolBarRTF.ImageList = Me.ImageListToolbar
         Me.ToolBarRTF.Location = New System.Drawing.Point(0, 0)
         Me.ToolBarRTF.Name = "ToolBarRTF"
         Me.ToolBarRTF.ShowToolTips = True
-        Me.ToolBarRTF.Size = New System.Drawing.Size(969, 46)
+        Me.ToolBarRTF.Size = New System.Drawing.Size(969, 40)
         Me.ToolBarRTF.TabIndex = 4
+        Me.ToolBarRTF.Wrappable = False
         '
         'tbSep1
         '
@@ -1526,6 +1532,7 @@ Public Class Designer
         '
         'butRTF
         '
+        Me.butRTF.ImageIndex = 4
         Me.butRTF.Pushed = True
         Me.butRTF.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
         Me.butRTF.Tag = "rtf"
@@ -1537,6 +1544,7 @@ Public Class Designer
         '
         'butHTML1
         '
+        Me.butHTML1.ImageIndex = 5
         Me.butHTML1.Tag = "html"
         Me.butHTML1.Text = "HTML"
         '
@@ -1729,20 +1737,20 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
-        Me.tpHeader.ResumeLayout(False)
-        Me.tpDesign.ResumeLayout(False)
-        Me.tpData.ResumeLayout(False)
-        Me.tpRootState.ResumeLayout(False)
         Me.tpTerminology.ResumeLayout(False)
-        Me.tpTerms.ResumeLayout(False)
         Me.tpConstraints.ResumeLayout(False)
         CType(Me.DataGridConstraintStatements, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelConstraintBinding.ResumeLayout(False)
+        Me.tpTerms.ResumeLayout(False)
         Me.tpLanguages.ResumeLayout(False)
         CType(Me.DataGridTerminologies, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.panelLanguages.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
+        Me.tpHeader.ResumeLayout(False)
+        Me.tpDesign.ResumeLayout(False)
+        Me.tpData.ResumeLayout(False)
+        Me.tpRootState.ResumeLayout(False)
         Me.tpText.ResumeLayout(False)
         Me.panelDiplayTop.ResumeLayout(False)
         Me.tpInterface.ResumeLayout(False)
@@ -2214,10 +2222,31 @@ Public Class Designer
         Me.butSaveFile.Text = Filemanager.GetOpenEhrTerm(103, Me.butSaveFile.Text, language)
         Me.butPrint.Text = Filemanager.GetOpenEhrTerm(520, Me.butPrint.Text, language)
 
+        'Interface tab
+        Me.cbMandatory.Text = Filemanager.GetOpenEhrTerm(446, Me.cbMandatory.Text, language)
+
         'Terminology tab on Designer
         Me.lblPrimaryLanguageText.Text = Filemanager.GetOpenEhrTerm(187, Me.lblPrimaryLanguageText.Text, language)
         Me.lblAvailableLanguages.Text = Filemanager.GetOpenEhrTerm(67, Me.lblAvailableLanguages.Text, language)
         Me.DataGridTerminologies.CaptionText = Filemanager.GetOpenEhrTerm(70, Me.DataGridTerminologies.CaptionText, language)
+
+        Me.DataGridDefinitions.CaptionText = Filemanager.GetOpenEhrTerm(89, Me.DataGridDefinitions.CaptionText, language)
+        Me.DataGridConstraintDefinitions.CaptionText = Filemanager.GetOpenEhrTerm(623, Me.DataGridConstraintDefinitions.CaptionText, language)
+        Me.DataGridConstraintStatements.CaptionText = Filemanager.GetOpenEhrTerm(93, DataGridConstraintStatements.CaptionText, language)
+
+        'ColumnStyleHeadings
+        DataGridTextBoxColumn1.HeaderText = AE_Constants.Instance.Terminology
+        DataGridTextBoxColumn2.HeaderText = Filemanager.GetOpenEhrTerm(90, DataGridTextBoxColumn2.HeaderText, language) ' Code
+        DataGridTextBoxColumn3.HeaderText = Filemanager.GetOpenEhrTerm(91, DataGridTextBoxColumn3.HeaderText, language) ' Text
+        DataGridTextBoxColumn4.HeaderText = Filemanager.GetOpenEhrTerm(113, DataGridTextBoxColumn4.HeaderText, language) 'Description
+        DataGridTextBoxColumn5.HeaderText = DataGridTextBoxColumn4.HeaderText
+        DataGridTextBoxColumn6.HeaderText = DataGridTextBoxColumn2.HeaderText
+        DataGridTextBoxColumn7.HeaderText = DataGridTextBoxColumn3.HeaderText
+        DataGridTextBoxColumn8.HeaderText = DataGridTextBoxColumn4.HeaderText
+        DataGridTextBoxColumn9.HeaderText = Filemanager.GetOpenEhrTerm(96, DataGridTextBoxColumn9.HeaderText, language) 'Path
+        DataGridTextBoxColumn11.HeaderText = DataGridTextBoxColumn2.HeaderText
+        DataGridTextBoxColumn12.HeaderText = Filemanager.GetOpenEhrTerm(97, DataGridTextBoxColumn12.HeaderText, language) 'Release
+        DataGridTextBoxColumn13.HeaderText = Filemanager.GetOpenEhrTerm(622, DataGridTextBoxColumn13.HeaderText, language) 'Criteria
 
         'TabControl headings
         Me.tpHeader.Title = Filemanager.GetOpenEhrTerm(76, Me.tpHeader.Title, language)
@@ -2228,7 +2257,8 @@ Public Class Designer
         Me.tpInterface.Title = Filemanager.GetOpenEhrTerm(84, Me.tpInterface.Title, language)
         Me.tpDescription.Title = Filemanager.GetOpenEhrTerm(113, Me.tpDescription.Title, language)
         Me.tpTerms.Title = Filemanager.GetOpenEhrTerm(86, Me.tpTerms.Title, language)
-        Me.tpConstraints.Title = Filemanager.GetOpenEhrTerm(87, Me.tpTerms.Title, language)
+        Me.tpBindings.Title = Filemanager.GetOpenEhrTerm(93, Me.tpTerms.Title, language)
+        Me.tpConstraints.Title = Filemanager.GetOpenEhrTerm(87, Me.tpConstraints.Title, language)
         Me.tpLanguages.Title = Filemanager.GetOpenEhrTerm(88, Me.tpLanguages.Title, language)
         Me.tpData.Title = Filemanager.GetOpenEhrTerm(80, Me.tpData.Title, language)
         Me.tpRootState.Title = Filemanager.GetOpenEhrTerm(177, Me.tpRootState.Title, language)
@@ -2236,7 +2266,7 @@ Public Class Designer
         Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(177, Me.tpRootStateStructure.Title, language)
         Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(446, Me.cbMandatory.Text, language)
 
-
+        
     End Sub
 
     Private Sub TranslateSpecialisationNodes(ByVal tnc As TreeNodeCollection)
@@ -2303,6 +2333,9 @@ Public Class Designer
             obj.Translate()
         Next
 
+        'Translate descriptions
+        mTabPageDescription.Translate()
+
         Select Case Me.TabMain.SelectedTab.Name
             Case "tpInterface"
                 BuildInterface()
@@ -2343,7 +2376,7 @@ Public Class Designer
         CType(CM.List, DataView).AllowDelete = False
 
         ' bind the Constraint definitions table
-        Me.DataGridConstraintDefinitions.DataSource = mFileManager.OntologyManager.LanguagesTable
+        Me.DataGridConstraintDefinitions.DataSource = mFileManager.OntologyManager.LanguagesTable.DefaultView
         Me.DataGridConstraintDefinitions.DataMember = "LanguageConstraints"
         Me.DataGridConstraintDefinitions.TableStyles(0).MappingName = "ConstraintDefinitions"
         Me.DataGridConstraintDefinitions.TableStyles(0).GridColumnStyles(0).MappingName = "Code"
@@ -3221,8 +3254,9 @@ Public Class Designer
             frm.comboModel.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", OceanArchetypeEditor.Instance.DefaultLanguageCode)
             frm.comboComponent.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", OceanArchetypeEditor.Instance.DefaultLanguageCode)
             frm.gbNew.Text = Filemanager.GetOpenEhrTerm(50, frm.gbNew.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
-            frm.lblShortConcept.Text = Filemanager.GetOpenEhrTerm(52, frm.lblShortConcept.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
+            frm.lblComponent.Text = Filemanager.GetOpenEhrTerm(531, frm.lblComponent.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
             frm.lblModel.Text = Filemanager.GetOpenEhrTerm(51, frm.lblModel.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
+            frm.lblShortConcept.Text = Filemanager.GetOpenEhrTerm(52, frm.lblShortConcept.Text, OceanArchetypeEditor.Instance.DefaultLanguageCode)
         End If
 
         If Not AllowOpen Then
@@ -3230,6 +3264,7 @@ Public Class Designer
             frm.Height = frm.Height - frm.gbExistingArchetype.Height
             frm.butCancel.Text = Filemanager.GetOpenEhrTerm(166, "Cancel")
         Else
+            frm.gbExistingArchetype.Text = Filemanager.GetOpenEhrTerm(609, "Open existing archetypes")
             frm.butCancel.Text = Filemanager.GetOpenEhrTerm(63, "Exit")
         End If
 
@@ -4314,14 +4349,65 @@ Public Class Designer
     Private Sub DataGridConstraintDefinitions_CurrentCellChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridConstraintDefinitions.CurrentCellChanged
         ' set the mDataViewConstraintBindings to the appropriate term
         Dim ID As String
-        Try
-            ID = Me.DataGridConstraintDefinitions.Item(Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)
-            mDataViewConstraintBindings.RowFilter = "ID = '" & ID & "'"
-        Catch
-            ' if it falls off the grid to an empty row
-            Debug.Assert(False)
-        End Try
+
+        If Me.DataGridConstraintDefinitions.VisibleRowCount > 0 Then
+            Try
+                ID = Me.DataGridConstraintDefinitions.Item(Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)
+                mDataViewConstraintBindings.RowFilter = "ID = '" & ID & "'"
+            Catch
+                ' if it falls off the grid to an empty row
+                Debug.Assert(False)
+            End Try
+        End If
     End Sub
+
+    Private Sub butLookUpConstraint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butLookUpConstraint.Click
+        Dim s As String = Filemanager.GetOpenEhrTerm(99, "Add binding")
+
+        Dim frm As New ConstraintBindingForm
+
+        If Me.DataGridConstraintDefinitions.VisibleRowCount > 0 AndAlso Me.DataGridConstraintDefinitions.CurrentRowIndex > -1 Then
+            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+                frm.Text = s
+                frm.lblQueryName.Text = Filemanager.GetOpenEhrTerm(624, frm.lblQueryName.Text)
+                frm.lblRelease.Text = Filemanager.GetOpenEhrTerm(97, frm.lblRelease.Text)
+                frm.lblTerminology.Text = AE_Constants.Instance.Terminology
+                frm.butCancel.Text = AE_Constants.Instance.Cancel
+                frm.butOK.Text = AE_Constants.Instance.OK
+            End If
+
+            While frm.ShowDialog() = DialogResult.OK
+                If (frm.comboTerminology.SelectedIndex > -1 And frm.txtQuery.Text <> "") Then
+
+                    'Add the terminology
+                    If Not mFileManager.OntologyManager.HasTerminology(frm.comboTerminology.SelectedValue) Then
+                        mFileManager.OntologyManager.AddTerminology(frm.comboTerminology.SelectedValue, frm.comboTerminology.SelectedText)
+                    End If
+
+                    'Then the binding
+                    Dim new_row As DataRow
+                    Dim acCode As String = Me.DataGridConstraintDefinitions.Item _
+                        (Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)
+
+                    If RmTerm.isValidTermCode(acCode) Then
+                        new_row = Filemanager.Master.OntologyManager.ConstraintBindingsTable.NewRow
+                        new_row(0) = frm.comboTerminology.SelectedValue
+                        new_row(1) = acCode
+                        new_row(2) = frm.txtQuery.Text
+                        new_row(3) = frm.txtRelease.Text
+                        Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Add(new_row)
+                        Filemanager.Master.FileEdited = True
+                    End If
+                    Return
+                Else
+                        MessageBox.Show(AE_Constants.Instance.Add_Reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End If
+            End While
+        Else
+            MessageBox.Show(AE_Constants.Instance.Add_Reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+    End Sub
+
 
     Private Sub BuildInterface()
         ' build the data
@@ -4653,6 +4739,10 @@ Public Class Designer
 
     Private Sub cbMandatory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMandatory.CheckedChanged
         BuildInterface()
+    End Sub
+
+    Private Sub MenuFileExportCEN_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        MessageBox.Show(AE_Constants.Instance.Feature_not_available, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
     End Sub
 
 End Class

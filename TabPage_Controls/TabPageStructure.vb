@@ -767,9 +767,16 @@ Public Class TabPageStructure
 
         If MessageBox.Show(Filemanager.GetOpenEhrTerm(606, "Load embedded archetype"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             mFileManager = New FileManagerLocal
+
+            ' set the filemanager on the Details Panel as well
+            PanelDetails.LocalFileManager = mFileManager
+
             mFileManager.ObjectToSave = Me
             If OpenArchetype(a_slot) Then
                 Filemanager.AddEmbedded(mFileManager)
+                'Hide context menu to change structure
+                mArchetypeControl.ShowChangeStructureMenu = False
+
                 mIsLoading = False
                 Return
             Else

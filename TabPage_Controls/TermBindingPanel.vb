@@ -75,17 +75,13 @@ Public Class TermBindingPanel
     Friend WithEvents NodePathLabel As System.Windows.Forms.Label
     Friend WithEvents PathRadioButton As System.Windows.Forms.RadioButton
     Friend WithEvents NodeRadioButton As System.Windows.Forms.RadioButton
-    Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents BindingToolTip As System.Windows.Forms.ToolTip
-    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
     Friend WithEvents AddBindingGroupBox As System.Windows.Forms.GroupBox
     Friend WithEvents AddBindingCriteriaGroupBox As System.Windows.Forms.GroupBox
     Friend WithEvents BindingGroupBox As System.Windows.Forms.GroupBox
     Friend WithEvents CancelAddBindingButton As System.Windows.Forms.Button
     Friend WithEvents TopPanel As System.Windows.Forms.Panel
     Friend WithEvents AddTerminologyButton As System.Windows.Forms.Button
-    Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents OperatorComboBox As System.Windows.Forms.ComboBox
     Friend WithEvents CriteriaValueTextBox As System.Windows.Forms.TextBox
     Friend WithEvents CriteriaTermLabel As System.Windows.Forms.Label
@@ -96,6 +92,10 @@ Public Class TermBindingPanel
     Friend WithEvents TerminologyComboBox As System.Windows.Forms.ComboBox
     Friend WithEvents PanelBindings As System.Windows.Forms.Panel
     Friend WithEvents gbCriteria As System.Windows.Forms.GroupBox
+    Friend WithEvents lblBindingterminology As System.Windows.Forms.Label
+    Friend WithEvents lblCode As System.Windows.Forms.Label
+    Friend WithEvents BindingCodeListColumnHeader As System.Windows.Forms.ColumnHeader
+    Friend WithEvents lblRelease As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TermBindingPanel))
@@ -103,7 +103,7 @@ Public Class TermBindingPanel
         Me.BindingImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.BindingGroupBox = New System.Windows.Forms.GroupBox
         Me.BindingList = New System.Windows.Forms.ListView
-        Me.ColumnHeader1 = New System.Windows.Forms.ColumnHeader
+        Me.BindingCodeListColumnHeader = New System.Windows.Forms.ColumnHeader
         Me.DeleteBindingButton = New System.Windows.Forms.Button
         Me.AddBindingButton = New System.Windows.Forms.Button
         Me.DeleteCriteriaButton = New System.Windows.Forms.Button
@@ -112,8 +112,8 @@ Public Class TermBindingPanel
         Me.AddBindingGroupBox = New System.Windows.Forms.GroupBox
         Me.CancelAddBindingButton = New System.Windows.Forms.Button
         Me.BindingOkButton = New System.Windows.Forms.Button
-        Me.Label4 = New System.Windows.Forms.Label
-        Me.Label1 = New System.Windows.Forms.Label
+        Me.lblRelease = New System.Windows.Forms.Label
+        Me.lblCode = New System.Windows.Forms.Label
         Me.ReleaseTextBox = New System.Windows.Forms.TextBox
         Me.CodeTextBox = New System.Windows.Forms.TextBox
         Me.NodePathLabel = New System.Windows.Forms.Label
@@ -131,7 +131,7 @@ Public Class TermBindingPanel
         Me.TopPanel = New System.Windows.Forms.Panel
         Me.AddTerminologyButton = New System.Windows.Forms.Button
         Me.TerminologyComboBox = New System.Windows.Forms.ComboBox
-        Me.Label2 = New System.Windows.Forms.Label
+        Me.lblBindingterminology = New System.Windows.Forms.Label
         Me.PanelBindings = New System.Windows.Forms.Panel
         Me.gbCriteria = New System.Windows.Forms.GroupBox
         Me.BindingGroupBox.SuspendLayout()
@@ -175,7 +175,7 @@ Public Class TermBindingPanel
         '
         'BindingList
         '
-        Me.BindingList.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1})
+        Me.BindingList.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.BindingCodeListColumnHeader})
         Me.BindingList.FullRowSelect = True
         Me.BindingList.HideSelection = False
         Me.BindingList.Location = New System.Drawing.Point(56, 16)
@@ -186,10 +186,10 @@ Public Class TermBindingPanel
         Me.BindingList.TabIndex = 8
         Me.BindingList.View = System.Windows.Forms.View.Details
         '
-        'ColumnHeader1
+        'BindingCodeListColumnHeader
         '
-        Me.ColumnHeader1.Text = "Code"
-        Me.ColumnHeader1.Width = 156
+        Me.BindingCodeListColumnHeader.Text = "Code"
+        Me.BindingCodeListColumnHeader.Width = 156
         '
         'DeleteBindingButton
         '
@@ -244,8 +244,8 @@ Public Class TermBindingPanel
         '
         Me.AddBindingGroupBox.Controls.Add(Me.CancelAddBindingButton)
         Me.AddBindingGroupBox.Controls.Add(Me.BindingOkButton)
-        Me.AddBindingGroupBox.Controls.Add(Me.Label4)
-        Me.AddBindingGroupBox.Controls.Add(Me.Label1)
+        Me.AddBindingGroupBox.Controls.Add(Me.lblRelease)
+        Me.AddBindingGroupBox.Controls.Add(Me.lblCode)
         Me.AddBindingGroupBox.Controls.Add(Me.ReleaseTextBox)
         Me.AddBindingGroupBox.Controls.Add(Me.CodeTextBox)
         Me.AddBindingGroupBox.Controls.Add(Me.NodePathLabel)
@@ -278,23 +278,23 @@ Public Class TermBindingPanel
         Me.BindingOkButton.TabIndex = 26
         Me.BindingOkButton.Text = "OK"
         '
-        'Label4
+        'lblRelease
         '
-        Me.Label4.Location = New System.Drawing.Point(216, 63)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(72, 16)
-        Me.Label4.TabIndex = 32
-        Me.Label4.Text = "Release"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblRelease.Location = New System.Drawing.Point(216, 63)
+        Me.lblRelease.Name = "lblRelease"
+        Me.lblRelease.Size = New System.Drawing.Size(72, 16)
+        Me.lblRelease.TabIndex = 32
+        Me.lblRelease.Text = "Release"
+        Me.lblRelease.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'Label1
+        'lblCode
         '
-        Me.Label1.Location = New System.Drawing.Point(16, 63)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(88, 16)
-        Me.Label1.TabIndex = 31
-        Me.Label1.Text = "Code"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblCode.Location = New System.Drawing.Point(16, 63)
+        Me.lblCode.Name = "lblCode"
+        Me.lblCode.Size = New System.Drawing.Size(88, 16)
+        Me.lblCode.TabIndex = 31
+        Me.lblCode.Text = "Code"
+        Me.lblCode.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'ReleaseTextBox
         '
@@ -435,7 +435,7 @@ Public Class TermBindingPanel
         '
         Me.TopPanel.Controls.Add(Me.AddTerminologyButton)
         Me.TopPanel.Controls.Add(Me.TerminologyComboBox)
-        Me.TopPanel.Controls.Add(Me.Label2)
+        Me.TopPanel.Controls.Add(Me.lblBindingterminology)
         Me.TopPanel.Dock = System.Windows.Forms.DockStyle.Top
         Me.TopPanel.Location = New System.Drawing.Point(4, 0)
         Me.TopPanel.Name = "TopPanel"
@@ -446,28 +446,28 @@ Public Class TermBindingPanel
         '
         Me.AddTerminologyButton.Image = CType(resources.GetObject("AddTerminologyButton.Image"), System.Drawing.Image)
         Me.AddTerminologyButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.AddTerminologyButton.Location = New System.Drawing.Point(584, 8)
+        Me.AddTerminologyButton.Location = New System.Drawing.Point(585, 3)
         Me.AddTerminologyButton.Name = "AddTerminologyButton"
-        Me.AddTerminologyButton.Size = New System.Drawing.Size(22, 22)
+        Me.AddTerminologyButton.Size = New System.Drawing.Size(22, 27)
         Me.AddTerminologyButton.TabIndex = 13
         '
         'TerminologyComboBox
         '
         Me.TerminologyComboBox.DisplayMember = "Description"
-        Me.TerminologyComboBox.Location = New System.Drawing.Point(256, 8)
+        Me.TerminologyComboBox.Location = New System.Drawing.Point(256, 5)
         Me.TerminologyComboBox.Name = "TerminologyComboBox"
         Me.TerminologyComboBox.Size = New System.Drawing.Size(328, 24)
         Me.TerminologyComboBox.TabIndex = 12
         Me.TerminologyComboBox.ValueMember = "Terminology"
         '
-        'Label2
+        'lblBindingterminology
         '
-        Me.Label2.Location = New System.Drawing.Point(8, 8)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(248, 16)
-        Me.Label2.TabIndex = 12
-        Me.Label2.Text = "Binding terminology:"
-        Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblBindingterminology.Location = New System.Drawing.Point(8, 8)
+        Me.lblBindingterminology.Name = "lblBindingterminology"
+        Me.lblBindingterminology.Size = New System.Drawing.Size(240, 16)
+        Me.lblBindingterminology.TabIndex = 12
+        Me.lblBindingterminology.Text = "Binding terminology:"
+        Me.lblBindingterminology.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'PanelBindings
         '
@@ -708,6 +708,11 @@ Public Class TermBindingPanel
 
     Private Sub TermBindingPanel_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Not Me.DesignMode Then
+
+            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+                TranslateGUI()
+            End If
+
             Try
 
                 Me.TerminologyComboBox.DataSource = mFileManager.OntologyManager.TerminologiesTable
@@ -1183,7 +1188,21 @@ Public Class TermBindingPanel
     End Sub
 
     Private Sub TranslateGUI()
-        Debug.Assert(False, "Not done yet")
+        lblBindingterminology.Text = Filemanager.GetOpenEhrTerm(47, lblBindingterminology.Text)
+        lblCode.Text = Filemanager.GetOpenEhrTerm(90, lblCode.Text)
+        lblRelease.Text = Filemanager.GetOpenEhrTerm(97, lblRelease.Text)
+        BindingGroupBox.Text = Filemanager.GetOpenEhrTerm(93, BindingGroupBox.Text)
+        AddBindingGroupBox.Text = Filemanager.GetOpenEhrTerm(99, AddBindingGroupBox.Text)
+        gbCriteria.Text = Filemanager.GetOpenEhrTerm(622, gbCriteria.Text)
+        NodeRadioButton.Text = Filemanager.GetOpenEhrTerm(621, NodeRadioButton.Text)
+        PathRadioButton.Text = Filemanager.GetOpenEhrTerm(96, PathRadioButton.Text)
+        CriteriaNodeRadioButton.Text = NodeRadioButton.Text
+        CriteriaPathRadioButton.Text = PathRadioButton.Text
+        CancelAddBindingButton.Text = Filemanager.GetOpenEhrTerm(166, CancelAddBindingButton.Text)
+        BindingCriteriaCancelButton.Text = CancelAddBindingButton.Text
+        BindingOkButton.Text = Filemanager.GetOpenEhrTerm(165, BindingOkButton.Text)
+        CriteriaOkButton.Text = BindingOkButton.Text
+        BindingCodeListColumnHeader.Text = Filemanager.GetOpenEhrTerm(90, BindingCodeListColumnHeader.Text)
     End Sub
 
     Private Sub DeleteCriteriaButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DeleteCriteriaButton.Click

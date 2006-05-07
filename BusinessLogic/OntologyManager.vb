@@ -166,6 +166,10 @@ Public Class OntologyManager
         End Set
     End Property
 
+    Function HasTerminology(ByVal a_terminology_id As String) As Boolean
+        Return Not mTerminologiesTable.Rows.Find(a_terminology_id) Is Nothing
+    End Function
+
     Sub ReplaceOntology(ByVal anOntology As Ontology)
         mOntology = anOntology
     End Sub
@@ -881,7 +885,6 @@ Public Class OntologyManager
         End If
     End Sub
 
-
     Public Sub TermBindingsTable_RowChanged(ByVal sender As Object, ByVal e As DataRowChangeEventArgs) Handles mTermBindingsTable.RowChanged
         If mDoUpdateOntology Then
             Try
@@ -912,6 +915,49 @@ Public Class OntologyManager
 
                 If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
                     mOntology.AddorReplaceTermBinding(sTerminology, sPath, sCode, sRelease)
+
+                ElseIf e.Action = DataRowAction.Delete Then
+                    ''fixme mOntology.RemoveTermBinding(sTerminology, sPath, sCode, sRelease)
+                    Debug.Assert(False)
+                End If
+
+            Catch ex As Exception
+                Debug.Assert(False, ex.ToString)
+            End Try
+        End If
+    End Sub
+
+    Public Sub ConstraintBindingsTable_RowChanged(ByVal sender As Object, ByVal e As DataRowChangeEventArgs) Handles mConstraintBindingsTable.RowChanged
+        If mDoUpdateOntology Then
+            Try
+                Dim sTerminology As String
+                If Not e.Row(0) Is Nothing Then     'Terminology
+                    sTerminology = CStr(e.Row(0))
+                Else
+                    Return
+                End If
+
+                Dim sCode As String
+                If Not e.Row(1) Is Nothing Then     'Code
+                    sCode = CStr(e.Row(1))
+                End If
+
+                Dim sQuery As String
+
+                If Not e.Row(2) Is Nothing Then     'Query
+                    sQuery = CStr(e.Row(2))
+                Else
+                    Return
+                End If
+
+
+                Dim sRelease As String
+                If Not e.Row(3) Is Nothing Then     'Release
+                    sRelease = CStr(e.Row(3))
+                End If
+
+                If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
+                    mOntology.AddorReplaceConstraintBinding(sTerminology, sCode, sQuery, sRelease)
 
                 ElseIf e.Action = DataRowAction.Delete Then
                     ''fixme mOntology.RemoveTermBinding(sTerminology, sPath, sCode, sRelease)

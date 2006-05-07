@@ -17,8 +17,11 @@ Option Strict On
 Public Class Constraint_Quantity
     Inherits Constraint
 
-    Private phys_prop As String
     Private mUnits As New Collection
+    Private mTerminologyId As String = "openehr"
+    Private mOpenEhrCode As String  'carries uncoded value
+    Private mSeparator As String = "::"
+    Private mIsCoded As Boolean
 
     Public Overrides ReadOnly Property Type() As ConstraintType
         Get
@@ -30,13 +33,57 @@ Public Class Constraint_Quantity
             Return mUnits.Count > 0
         End Get
     End Property
-    Public Property Physical_property() As String
+    Public Property PhysicalPropertyAsString() As String
         Get
-            Physical_property = phys_prop
+            If mIsCoded Then
+                Return mTerminologyId & mSeparator & mOpenEhrCode
+            Else
+                Return mOpenEhrCode
+            End If
         End Get
         Set(ByVal Value As String)
-            phys_prop = Value
+            Dim i As Integer = Value.IndexOf(mSeparator)
+            If i > -1 Then
+                mIsCoded = True
+                mTerminologyId = Value.Substring(0, i)
+                mOpenEhrCode = Value.Substring(i + mSeparator.Length)
+            Else
+                mIsCoded = False
+                mOpenEhrCode = Value
+            End If
         End Set
+    End Property
+    Public ReadOnly Property IsNull() As Boolean
+        Get
+            Return mOpenEhrCode = ""
+        End Get
+    End Property
+    Public Property OpenEhrCode() As Integer
+        Get
+            If mIsCoded Then
+                Try
+                    Return Integer.Parse(mOpenEhrCode)
+                Catch
+                    Return 0
+                End Try
+            End If
+        End Get
+        Set(ByVal Value As Integer)
+            mOpenEhrCode = Value.ToString()
+            If mOpenEhrCode <> "" Then
+                mIsCoded = True
+            End If
+        End Set
+    End Property
+    Public ReadOnly Property IsTime() As Boolean
+        Get
+            Return mOpenEhrCode = "128"
+        End Get
+    End Property
+    Public ReadOnly Property IsCoded() As Boolean
+        Get
+            Return mIsCoded
+        End Get
     End Property
     Public Property Units() As Collection
         Get
@@ -51,7 +98,7 @@ Public Class Constraint_Quantity
         Dim q As New Constraint_Quantity
 
         q.mUnits = Me.mUnits
-        q.phys_prop = Me.phys_prop
+        q.mOpenEhrCode = mOpenEhrCode
         Return q
     End Function
 

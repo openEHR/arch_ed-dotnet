@@ -231,9 +231,16 @@ Public Class ArchetypeNodeConstraintControl
         End Get
     End Property
 
+    Public WriteOnly Property LocalFileManager() As FileManagerLocal
+        Set(ByVal Value As FileManagerLocal)
+            mFileManager = Value
+            mOccurrences.LocalFileManager = Value
+        End Set
+    End Property
+
     Public Sub TranslateGUI()
-        Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
-        Me.lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, Me.lblRunTimeName.Text)
+        Me.lblDescription.Text = FileManager.GetOpenEhrTerm(113, Me.lblDescription.Text)
+        Me.lblRunTimeName.Text = FileManager.GetOpenEhrTerm(114, Me.lblRunTimeName.Text)
     End Sub
 
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _
@@ -332,7 +339,6 @@ Public Class ArchetypeNodeConstraintControl
 
         If mArchetypeNode.IsAnonymous Then
             Me.PanelNonAnonymous.Visible = False
-
         Else
             Me.PanelNonAnonymous.Visible = True
 

@@ -43,7 +43,7 @@ Public Class ReferenceModelLocal
     Private mStructureClass As StructureType
     Private mReferenceModelNames As Collections.Hashtable
     Private mReferenceModelDataTypes As Collections.Hashtable
-    Private mValidReferenceModelNames As String() = {"openEHR-EHR", "CEN-EHR"} ', "HL7-CDA"} ',"openEHR-Demographic"}
+    Private mValidReferenceModelNames As String() = {"openEHR-EHR"} ', "CEN-EHR"} ', "HL7-CDA"} ',"openEHR-Demographic"}
 
 
     Property ModelType() As ReferenceModelType

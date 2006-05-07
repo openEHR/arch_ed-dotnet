@@ -507,36 +507,42 @@ Public Class RmElement
         End If
 
         If Not ObjNode.property Is Nothing Then
-            q.Physical_property = ObjNode.property.to_cil
-        End If
 
-        If ObjNode.list.count > 0 Then
-            Dim cqi As openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM
+            q.PhysicalPropertyAsString = ObjNode.property.to_cil
 
-            For i = 1 To ObjNode.list.count
-                u = New Constraint_QuantityUnit
-                cqi = CType(ObjNode.list.i_th(i), openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM)
-                u.Unit = cqi.units.to_cil
-                If Not cqi.any_magnitude_allowed Then
-                    u.HasMaximum = Not cqi.magnitude.upper_unbounded
-                    If u.HasMaximum Then
-                        u.MaximumValue = CSng(cqi.magnitude.upper)
-                        u.IncludeMaximum = cqi.magnitude.upper_included
+            If ObjNode.list.count > 0 Then
+                Dim cqi As openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM
+
+                For i = 1 To ObjNode.list.count
+                    'Do not set attribute to true here as there
+                    'is no special handling of time units until Unit is set
+                    u = New Constraint_QuantityUnit(q.IsTime)
+                    cqi = CType(ObjNode.list.i_th(i), openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM)
+
+                    u.Unit = cqi.units.to_cil
+
+                    If Not cqi.any_magnitude_allowed Then
+                        u.HasMaximum = Not cqi.magnitude.upper_unbounded
+                        If u.HasMaximum Then
+                            u.MaximumValue = CSng(cqi.magnitude.upper)
+                            u.IncludeMaximum = cqi.magnitude.upper_included
+                        End If
+                        u.HasMinimum = Not cqi.magnitude.lower_unbounded
+                        If u.HasMinimum Then
+                            u.MinimumValue = CSng(cqi.magnitude.lower)
+                            u.IncludeMinimum = cqi.magnitude.lower_included
+                        End If
                     End If
-                    u.HasMinimum = Not cqi.magnitude.lower_unbounded
-                    If u.HasMinimum Then
-                        u.MinimumValue = CSng(cqi.magnitude.lower)
-                        u.IncludeMinimum = cqi.magnitude.lower_included
-                    End If
-                End If
-                ' need to add with key for retrieval
-                q.Units.Add(u, u.Unit)
-            Next
+                    ' need to add with key for retrieval
+                    q.Units.Add(u, u.Unit)
+                Next
 
-        End If
+            End If
 
-        If ObjNode.has_assumed_value Then
-            CType(q.Units.Item(CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil), Constraint_QuantityUnit).AssumedValue = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
+            If ObjNode.has_assumed_value Then
+                CType(q.Units.Item(CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil), Constraint_QuantityUnit).AssumedValue = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
+            End If
+
         End If
 
         Return q

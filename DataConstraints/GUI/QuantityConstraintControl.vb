@@ -177,6 +177,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
 #End Region
     Private mIsState As Boolean
+    Private mIsTime As Boolean
 
     Private Shadows ReadOnly Property Constraint() As Constraint_Quantity
         Get
@@ -197,6 +198,46 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             Me.comboPhysicalProperty.DataSource = OceanArchetypeEditor.Instance.PhysicalPropertiesTable
         End If
 
+        ' Locate the property - it can be expressed as:
+        ' an english string (old format), or
+        ' a code_phrase 'terminology::code'
+
+        If Not Me.Constraint.IsNull Then
+            If Me.Constraint.IsCoded Then
+                Debug.Assert(Me.Constraint.PhysicalPropertyAsString.StartsWith("openehr"))
+                Try
+                    Me.comboPhysicalProperty.SelectedValue = OceanArchetypeEditor.Instance.GetIdForPropertyOpenEhrCode(Me.Constraint.OpenEhrCode)
+                Catch
+                    'ToDo: Raise error
+                    Debug.Assert(False)
+                End Try
+            Else   ' Obsolete text string as needs to be language independent
+                'And need to update the constraint to the coded version
+                Dim d_row() As DataRow
+                If OceanArchetypeEditor.Instance.DefaultLanguageCode = "en" Then
+                    d_row = CType(Me.comboPhysicalProperty.DataSource, DataTable).Select("Text = '" & Me.Constraint.PhysicalPropertyAsString & "'")
+                Else
+                    d_row = CType(Me.comboPhysicalProperty.DataSource, DataTable).Select("Translated = '" & Me.Constraint.PhysicalPropertyAsString & "'")
+                End If
+                If d_row.Length > 0 Then
+                    Me.Constraint.OpenEhrCode = CInt(d_row(0).Item(2))
+                    mFileManager.FileEdited = True
+                    If d_row.Length > 0 Then
+                        Me.comboPhysicalProperty.SelectedValue = d_row(0).Item(0)
+                    End If
+                Else
+                    Me.comboPhysicalProperty.SelectedValue = 64 ' Not set
+                End If
+            End If
+        End If
+
+        'Check if the Property is Time - requires special language handling
+        If CInt(comboPhysicalProperty.SelectedValue) = 2 Then
+            mIsTime = True
+        Else
+            mIsTime = False
+        End If
+
         listUnits.Items.Clear()
 
         For Each unit As Constraint_QuantityUnit In Me.Constraint.Units
@@ -206,10 +247,6 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         If listUnits.Items.Count > 0 Then
             listUnits.SelectedIndex = 0
         End If
-
-        Dim i As Integer = Me.comboPhysicalProperty.FindStringExact( _
-                Me.Constraint.Physical_property)
-        Me.comboPhysicalProperty.SelectedIndex = i
 
         AddHandler Me.comboPhysicalProperty.SelectedIndexChanged, AddressOf Me.comboPhysicalProperty_SelectedIndexChanged
 
@@ -261,10 +298,19 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
             s = CStr(d_row(1))
 
-            Dim MI As MenuItem = New MenuItem(s)
-            AddHandler MI.Click, AddressOf AddUnit
+            'Omit the "yr" unit as is a duplicate of "a"
+            If Not (mIsTime And s = "yr") Then
+                'Show language abbreviations for time
+                If mIsTime Then
+                    s = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(s)
+                End If
 
-            c_menu.MenuItems.Add(MI)
+                Dim MI As MenuItem = New MenuItem(s)
+                AddHandler MI.Click, AddressOf AddUnit
+
+                c_menu.MenuItems.Add(MI)
+            End If
+
         Next
         c_menu.Show(butAddUnit, New System.Drawing.Point(5, 5))
 
@@ -281,7 +327,12 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                         MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) _
                         = DialogResult.OK Then
 
-                    Constraint.Units.Remove(s)
+                    If Constraint.IsTime Then
+                        Constraint.Units.Remove(OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(s))
+                    Else
+                        Constraint.Units.Remove(s)
+                    End If
+
 
                     Dim i As Integer = listUnits.SelectedIndex
                     listUnits.Items.Remove(listUnits.SelectedItem)
@@ -301,14 +352,27 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub comboPhysicalProperty_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            'Handles comboPhysicalProperty.SelectedIndexChanged
+        'Handles comboPhysicalProperty.SelectedIndexChanged
+        'Handling added specifically in code to allow loading
 
         If Me.comboPhysicalProperty.Focused Then
             If (Me.comboPhysicalProperty.SelectedIndex > -1) _
                     AndAlso (MyBase.Constraint.Type = ConstraintType.Quantity) Then
 
+                'Check to see if it is TIME as Time units are handled with
+                'language specific abbreviations
+
+                If CInt(Me.comboPhysicalProperty.SelectedValue) = 2 Then
+                    mIsTime = True
+                Else
+                    mIsTime = False
+                End If
+
                 MyBase.IsLoading = True
-                Me.Constraint.Physical_property = CStr(Me.comboPhysicalProperty.Text)
+                'OBSOLETE
+                'Me.Constraint.Physical_property = CStr(Me.comboPhysicalProperty.Text)
+                ' get the openEHR term, which allows translation
+                Me.Constraint.OpenEhrCode = CInt(CType(Me.comboPhysicalProperty.SelectedItem, DataRowView).Item("openEHR"))
 
                 'clear the units
                 For Each u As Constraint_QuantityUnit In Me.Constraint.Units
@@ -332,7 +396,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         'If Not MyBase.ArchetypeElement Is Nothing Then
         If Not MyBase.IsLoading Then
             Try
-                Dim quantityUnit As New Constraint_QuantityUnit
+                Dim quantityUnit As New Constraint_QuantityUnit(mIsTime)
 
                 Debug.Assert(TypeOf sender Is MenuItem)
                 quantityUnit.Unit = CType(sender, MenuItem).Text
@@ -484,14 +548,11 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 Return ""
         End Select
 
-
-
-
-
         Return CompoundUnit
 
 
     End Function
+
 End Class
 
 '

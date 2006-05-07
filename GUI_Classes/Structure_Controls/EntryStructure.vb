@@ -441,6 +441,14 @@ Public Class EntryStructure
         End Get
     End Property
 
+    Public Property ShowChangeStructureMenu() As Boolean
+        Get
+            Return menuChangeStructure.Visible
+        End Get
+        Set(ByVal Value As Boolean)
+            menuChangeStructure.Visible = Value
+        End Set
+    End Property
     Public Overridable ReadOnly Property Elements() As ArchetypeElement()
         Get
             Throw New NotImplementedException("Subclass must override this property")
@@ -806,7 +814,7 @@ Public Class EntryStructure
         'cancel drag and drop operation
         mNewConstraint = Nothing
         mNewCluster = False
-        'mDragArchetypeNode = Nothing
+
     End Sub
 
     Private Sub pbGroup_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) _
@@ -846,8 +854,6 @@ Public Class EntryStructure
         If mControl.Enabled = False Then
             mControl.Enabled = True
         End If
-
-        'sender.DoDragDrop(mDragArchetypeNode, DragDropEffects.Copy)
 
     End Sub
 

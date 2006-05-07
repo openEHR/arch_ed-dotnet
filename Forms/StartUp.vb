@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/Forms/SCCS/s.StartUp.vb $"
@@ -56,9 +56,10 @@ Public Class frmStartUp
     Friend WithEvents lblShortConcept As System.Windows.Forms.Label
     Friend WithEvents butCancel As System.Windows.Forms.Button
     Friend WithEvents butOK As System.Windows.Forms.Button
-    Friend WithEvents Label2 As System.Windows.Forms.Label
+
     Friend WithEvents lblModel As System.Windows.Forms.Label
     Friend WithEvents HelpProviderStartUp As System.Windows.Forms.HelpProvider
+    Friend WithEvents lblComponent As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmStartUp))
         Me.gbNew = New System.Windows.Forms.GroupBox
@@ -69,7 +70,7 @@ Public Class frmStartUp
         Me.comboModel = New System.Windows.Forms.ComboBox
         Me.lblShortConcept = New System.Windows.Forms.Label
         Me.lblModel = New System.Windows.Forms.Label
-        Me.Label2 = New System.Windows.Forms.Label
+        Me.lblComponent = New System.Windows.Forms.Label
         Me.gbExistingArchetype = New System.Windows.Forms.GroupBox
         Me.butOpen = New System.Windows.Forms.Button
         Me.HelpProviderStartUp = New System.Windows.Forms.HelpProvider
@@ -86,7 +87,7 @@ Public Class frmStartUp
         Me.gbNew.Controls.Add(Me.comboModel)
         Me.gbNew.Controls.Add(Me.lblShortConcept)
         Me.gbNew.Controls.Add(Me.lblModel)
-        Me.gbNew.Controls.Add(Me.Label2)
+        Me.gbNew.Controls.Add(Me.lblComponent)
         Me.gbNew.Location = New System.Drawing.Point(19, 18)
         Me.gbNew.Name = "gbNew"
         Me.gbNew.Size = New System.Drawing.Size(547, 185)
@@ -152,13 +153,13 @@ Public Class frmStartUp
         Me.lblModel.TabIndex = 10
         Me.lblModel.Text = "Model"
         '
-        'Label2
+        'lblComponent
         '
-        Me.Label2.Location = New System.Drawing.Point(259, 28)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(211, 27)
-        Me.Label2.TabIndex = 11
-        Me.Label2.Text = "Component"
+        Me.lblComponent.Location = New System.Drawing.Point(259, 28)
+        Me.lblComponent.Name = "lblComponent"
+        Me.lblComponent.Size = New System.Drawing.Size(211, 27)
+        Me.lblComponent.TabIndex = 11
+        Me.lblComponent.Text = "Component"
         '
         'gbExistingArchetype
         '
@@ -206,13 +207,6 @@ Public Class frmStartUp
 
 #End Region
 
-    Public WriteOnly Property ChooseAsText()
-        Set(ByVal Value)
-            sChooseText = Value
-            Me.comboModel.Text = sChooseText & "..."
-            Me.comboComponent.Text = sChooseText & "..."
-        End Set
-    End Property
     Public Property Archetype_ID() As ArchetypeID
         Get
             Try

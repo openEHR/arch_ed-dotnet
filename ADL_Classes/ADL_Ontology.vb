@@ -160,6 +160,30 @@ Namespace ArchetypeEditor.ADL_Classes
             End Try
         End Sub
 
+        Public Overrides Sub AddorReplaceConstraintBinding(ByVal sTerminology As String, ByVal sCode As String, ByVal sQuery As String, ByVal sRelease As String)
+            ' CHANGE - Sam Heard 2006.05.07
+            ' Added ascerts required for this piece of code to run successfully
+            ' and try statement
+            Debug.Assert(sCode <> "", "Code is not set")
+            Debug.Assert(sQuery <> "", "Query is not set")
+            Debug.Assert(sTerminology <> "", "TerminologyID is not set")
+            ' release is not utilised at this point
+            Try
+                Dim cd, qry As openehr.base.kernel.STRING
+
+                qry = openehr.base.kernel.Create.STRING.make_from_cil(sQuery)
+                cd = openehr.base.kernel.Create.STRING.make_from_cil(sCode)
+                If EIF_adlInterface.ontology.has_constraint_binding(cd, qry) Then
+                    'EIF_adlInterface.ontology.replace_constraint_binding(cd, qry)
+                Else
+                    'EIF_adlInterface.ontology.add_constraint_binding(cd, qry)
+                End If
+
+            Catch e As System.Exception
+                MessageBox.Show(e.Message, "ADL DLL", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Sub
+
         Public Overrides Sub SetLanguage(ByVal code As String)
             sLanguageCode = code
             EIF_adlInterface.set_language(openehr.base.kernel.Create.STRING.make_from_cil(code))
@@ -448,22 +472,27 @@ Namespace ArchetypeEditor.ADL_Classes
                 Do While Not linklist.off
                     s = CType(linklist.active.item, openehr.base.kernel.STRING)
                     If LanguageCode = "" Then
+                        ' set the constraints for all languages
                         For Each selected_row In TheOntologyManager.LanguagesTable.Rows
+                            ' take each constraint from the ADL ontology
                             a_term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0)), s))
                             d_row = TheOntologyManager.ConstraintDefinitionTable.NewRow
                             d_row(0) = selected_row(0)
                             d_row(1) = a_term.Code
                             d_row(2) = a_term.Text
                             d_row(3) = a_term.Description
+                            'Add it to the GUI
                             TheOntologyManager.ConstraintDefinitionTable.Rows.Add(d_row)
                         Next
                     Else
+                        'Do it for the new language
                         a_term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(openehr.base.kernel.Create.STRING.make_from_cil(LanguageCode), s))
                         d_row = TheOntologyManager.ConstraintDefinitionTable.NewRow
                         d_row(0) = LanguageCode
                         d_row(1) = a_term.Code
                         d_row(2) = a_term.Text
                         d_row(3) = a_term.Description
+                        'Add it for the ontology
                         TheOntologyManager.ConstraintDefinitionTable.Rows.Add(d_row)
                     End If
                     linklist.forth()

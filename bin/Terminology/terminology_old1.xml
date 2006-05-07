@@ -680,22 +680,6 @@
   <PrimaryRubric Id="606" Language="en" />
   <PrimaryRubric Id="607" Language="en" />
   <PrimaryRubric Id="608" Language="en" />
-  <PrimaryRubric Id="609" Language="en" />
-  <PrimaryRubric Id="610" Language="en" />
-  <PrimaryRubric Id="611" Language="en" />
-  <PrimaryRubric Id="612" Language="en" />
-  <PrimaryRubric Id="613" Language="en" />
-  <PrimaryRubric Id="614" Language="en" />
-  <PrimaryRubric Id="615" Language="en" />
-  <PrimaryRubric Id="616" Language="en" />
-  <PrimaryRubric Id="617" Language="en" />
-  <PrimaryRubric Id="618" Language="en" />
-  <PrimaryRubric Id="619" Language="en" />
-  <PrimaryRubric Id="620" Language="en" />
-  <PrimaryRubric Id="621" Language="en" />
-  <PrimaryRubric Id="622" Language="en" />
-  <PrimaryRubric Id="623" Language="en" />
-  <PrimaryRubric Id="624" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -784,7 +768,7 @@
   <Concept Language="en" ConceptID="96" Rubric="Path" />
   <Concept Language="en" ConceptID="97" Rubric="Release" />
   <Concept Language="en" ConceptID="98" Rubric="Map" />
-  <Concept Language="en" ConceptID="99" Rubric="Add Binding: " />
+  <Concept Language="en" ConceptID="99" Rubric="Add Binding from" />
   <Concept Language="en" ConceptID="100" Rubric="Specific" />
   <Concept Language="en" ConceptID="101" Rubric="All" />
   <Concept Language="en" ConceptID="102" Rubric="Complex" />
@@ -1152,92 +1136,6 @@
   <Concept Language="en" ConceptID="519" Rubric="application/rtf" />
   <Concept Language="en" ConceptID="520" Rubric="Print" />
   <Concept Language="en" ConceptID="521" Rubric="decrease" />
-  <Concept Language="en" ConceptID="522" Rubric="increase" />
-  <Concept Language="en" ConceptID="523" Rubric="deleted" />
-  <Concept Language="en" ConceptID="524" Rubric="Initial" />
-  <Concept Language="en" ConceptID="525" Rubric="Instruction states" />
-  <Concept Language="en" ConceptID="526" Rubric="Planned" />
-  <Concept Language="en" ConceptID="527" Rubric="Postponed" />
-  <Concept Language="en" ConceptID="528" Rubric="Cancelled" />
-  <Concept Language="en" ConceptID="529" Rubric="Scheduled" />
-  <Concept Language="en" ConceptID="530" Rubric="Suspended" />
-  <Concept Language="en" ConceptID="531" Rubric="Aborted" />
-  <Concept Language="en" ConceptID="532" Rubric="Completed" />
-  <Concept Language="en" ConceptID="533" Rubric="Expired" />
-  <Concept Language="en" ConceptID="534" Rubric="Instruction transitions" />
-  <Concept Language="en" ConceptID="535" Rubric="Initiate" />
-  <Concept Language="en" ConceptID="536" Rubric="Plan step" />
-  <Concept Language="en" ConceptID="537" Rubric="Postpone" />
-  <Concept Language="en" ConceptID="538" Rubric="Restore" />
-  <Concept Language="en" ConceptID="539" Rubric="Schedule" />
-  <Concept Language="en" ConceptID="540" Rubric="Start" />
-  <Concept Language="en" ConceptID="541" Rubric="Do" />
-  <Concept Language="en" ConceptID="542" Rubric="Postponed step" />
-  <Concept Language="en" ConceptID="543" Rubric="Active step" />
-  <Concept Language="en" ConceptID="544" Rubric="Suspend" />
-  <Concept Language="en" ConceptID="545" Rubric="Suspended step" />
-  <Concept Language="en" ConceptID="546" Rubric="Resume" />
-  <Concept Language="en" ConceptID="547" Rubric="Abort" />
-  <Concept Language="en" ConceptID="548" Rubric="Finish" />
-  <Concept Language="en" ConceptID="549" Rubric="Time out" />
-  <Concept Language="en" ConceptID="550" Rubric="Notify aborted" />
-  <Concept Language="en" ConceptID="551" Rubric="Notify completed" />
-  <Concept Language="en" ConceptID="552" Rubric="Notify cancelled" />
-  <Concept Language="en" ConceptID="553" Rubric="incomplete" />
-  <Concept Language="en" ConceptID="554" Rubric="Observation" />
-  <Concept Language="en" ConceptID="555" Rubric="Evaluation" />
-  <Concept Language="en" ConceptID="556" Rubric="Action" />
-  <Concept Language="en" ConceptID="557" Rubric="Instruction" />
-  <Concept Language="en" ConceptID="558" Rubric="Sub-Section" />
-  <Concept Language="en" ConceptID="559" Rubric="Entry" />
-  <Concept Language="en" ConceptID="560" Rubric="Administration entry" />
-  <Concept Language="en" ConceptID="561" Rubric="Composition" />
-  <Concept Language="en" ConceptID="563" Rubric="Care pathway step" />
-  <Concept Language="en" ConceptID="564" Rubric="Reference" />
-  <Concept Language="en" ConceptID="565" Rubric="Interval event" />
-  <Concept Language="en" ConceptID="566" Rubric="Point-in-time event" />
-  <Concept Language="en" ConceptID="567" Rubric="Element" />
-  <Concept Language="en" ConceptID="568" Rubric="Authorship lifecycle" />
-  <Concept Language="en" ConceptID="569" Rubric="Author draft" />
-  <Concept Language="en" ConceptID="570" Rubric="Committee draft" />
-  <Concept Language="en" ConceptID="571" Rubric="Organisation draft" />
-  <Concept Language="en" ConceptID="572" Rubric="Submitted" />
-  <Concept Language="en" ConceptID="573" Rubric="Candidate" />
-  <Concept Language="en" ConceptID="574" Rubric="Approved candidate" />
-  <Concept Language="en" ConceptID="575" Rubric="Published" />
-  <Concept Language="en" ConceptID="576" Rubric="Rejected" />
-  <Concept Language="en" ConceptID="577" Rubric="Obsolete" />
-  <Concept Language="en" ConceptID="578" Rubric="Keyword" />
-  <Concept Language="en" ConceptID="579" Rubric="Name" />
-  <Concept Language="en" ConceptID="580" Rubric="Authorship" />
-  <Concept Language="en" ConceptID="581" Rubric="Details" />
-  <Concept Language="en" ConceptID="582" Rubric="Use" />
-  <Concept Language="en" ConceptID="583" Rubric="Misuse" />
-  <Concept Language="en" ConceptID="584" Rubric="Original author" />
-  <Concept Language="en" ConceptID="585" Rubric="Purpose" />
-  <Concept Language="en" ConceptID="586" Rubric="Activity" />
-  <Concept Language="en" ConceptID="587" Rubric="Activities" />
-  <Concept Language="en" ConceptID="588" Rubric="Min:" />
-  <Concept Language="en" ConceptID="589" Rubric="not repeating" />
-  <Concept Language="en" ConceptID="590" Rubric="repeating, unlimited" />
-  <Concept Language="en" ConceptID="591" Rubric="repeating, limited" />
-  <Concept Language="en" ConceptID="592" Rubric="Edit" />
-  <Concept Language="en" ConceptID="593" Rubric="Date" />
-  <Concept Language="en" ConceptID="594" Rubric="Organisation" />
-  <Concept Language="en" ConceptID="595" Rubric="New window" />
-  <Concept Language="en" ConceptID="596" Rubric="Save as" />
-  <Concept Language="en" ConceptID="597" Rubric="Report issue" />
-  <Concept Language="en" ConceptID="598" Rubric="Preferences" />
-  <Concept Language="en" ConceptID="599" Rubric="Restricted" />
-  <Concept Language="en" ConceptID="600" Rubric="Allowed values" />
-  <Concept Language="en" ConceptID="601" Rubric="Unit values" />
-  <Concept Language="en" ConceptID="602" Rubric="Add existing term" />
-  <Concept Language="en" ConceptID="603" Rubric="Add new term" />
-  <Concept Language="en" ConceptID="604" Rubric="Contributors" />
-  <Concept Language="en" ConceptID="605" Rubric="Embedded archetype" />
-  <Concept Language="en" ConceptID="606" Rubric="Load embedded archetype" />
-  <Concept Language="en" ConceptID="607" Rubric="Cannot specialise reference" />
-  <Concept Language="en" ConceptID="608" Rubric="Other context" />
   <Concept Language="de" ConceptID="0" Rubric="Selbst" />
   <Concept Language="de" ConceptID="3" Rubric="Fötus" />
   <Concept Language="de" ConceptID="6" Rubric="Spender" />
@@ -1284,17 +1182,17 @@
   <Concept Language="de" ConceptID="48" Rubric="Hilfe" />
   <Concept Language="de" ConceptID="49" Rubric="Form Beschriftungen" />
   <Concept Language="de" ConceptID="50" Rubric="Archetyp" />
-  <Concept Language="de" ConceptID="51" Rubric="Modell" />
-  <Concept Language="de" ConceptID="52" Rubric="Kurze Konzeptbezeichung" />
+  <Concept Language="de" ConceptID="51" Rubric="Model &amp; Komponente" />
+  <Concept Language="de" ConceptID="52" Rubric="Konzept (kurzer Name)" />
   <Concept Language="de" ConceptID="53" Rubric="Version" />
   <Concept Language="de" ConceptID="54" Rubric="Konzept" />
   <Concept Language="de" ConceptID="56" Rubric="Uneingeschränkt" />
-  <Concept Language="de" ConceptID="57" Rubric="Archetyp-Dateiname" />
+  <Concept Language="de" ConceptID="57" Rubric="Archetyp Dateiname" />
   <Concept Language="de" ConceptID="58" Rubric="Archetyp Editor von Ocean Informatics" />
   <Concept Language="de" ConceptID="59" Rubric="Tooltips" />
   <Concept Language="de" ConceptID="60" Rubric="Ändern des Datentyps" />
-  <Concept Language="de" ConceptID="61" Rubric="Öffnen Strg+O" />
-  <Concept Language="de" ConceptID="62" Rubric="Neu Strg+N" />
+  <Concept Language="de" ConceptID="61" Rubric="Öffnen Ctrl+O" />
+  <Concept Language="de" ConceptID="62" Rubric="Neu Ctr+N" />
   <Concept Language="de" ConceptID="63" Rubric="Beenden" />
   <Concept Language="de" ConceptID="64" Rubric="Archetypen Datenbank" />
   <Concept Language="de" ConceptID="65" Rubric="Packen" />
@@ -1308,14 +1206,14 @@
   <Concept Language="de" ConceptID="73" Rubric="Lizenz" />
   <Concept Language="de" ConceptID="74" Rubric="Über Ocean Informatics" />
   <Concept Language="de" ConceptID="75" Rubric="Über the Ocean Editor" />
-  <Concept Language="de" ConceptID="76" Rubric="Kopfdaten" />
-  <Concept Language="de" ConceptID="77" Rubric="ENTRY-Modell" />
+  <Concept Language="de" ConceptID="76" Rubric="Kopf" />
+  <Concept Language="de" ConceptID="77" Rubric="ENTRY Modell" />
   <Concept Language="de" ConceptID="78" Rubric="Protokoll" />
-  <Concept Language="de" ConceptID="79" Rubric="Personenstatus mit Verlauf" />
+  <Concept Language="de" ConceptID="79" Rubric="Personenstatus mit Geschichte" />
   <Concept Language="de" ConceptID="80" Rubric="Daten" />
-  <Concept Language="de" ConceptID="81" Rubric="Ereignis Verlauf" />
+  <Concept Language="de" ConceptID="81" Rubric="Ereignis Geschichte" />
   <Concept Language="de" ConceptID="82" Rubric="Personenstatus" />
-  <Concept Language="de" ConceptID="83" Rubric="Ausgabe" />
+  <Concept Language="de" ConceptID="83" Rubric="Anzeigen" />
   <Concept Language="de" ConceptID="84" Rubric="Eingabeoberfläche" />
   <Concept Language="de" ConceptID="85" Rubric="Struktur" />
   <Concept Language="de" ConceptID="86" Rubric="Begriffe" />
@@ -1343,7 +1241,7 @@
   <Concept Language="de" ConceptID="111" Rubric="Maximum" />
   <Concept Language="de" ConceptID="112" Rubric="Unbegrenzt" />
   <Concept Language="de" ConceptID="113" Rubric="Beschreibung" />
-  <Concept Language="de" ConceptID="114" Rubric="Namesbeschränkung zur Laufzeit" />
+  <Concept Language="de" ConceptID="114" Rubric="Runtime Namesbeschränkung" />
   <Concept Language="de" ConceptID="115" Rubric="Quantität" />
   <Concept Language="de" ConceptID="116" Rubric="Eingenschaft" />
   <Concept Language="de" ConceptID="117" Rubric="Einheit" />
@@ -1364,8 +1262,8 @@
   <Concept Language="de" ConceptID="132" Rubric="Übenehme max. Wert" />
   <Concept Language="de" ConceptID="133" Rubric="Ereignisse" />
   <Concept Language="de" ConceptID="134" Rubric="Ereignisliste" />
-  <Concept Language="de" ConceptID="135" Rubric="Offen" />
-  <Concept Language="de" ConceptID="136" Rubric="Fixiert" />
+  <Concept Language="de" ConceptID="135" Rubric="Öffne" />
+  <Concept Language="de" ConceptID="136" Rubric="Unveränderlich" />
   <Concept Language="de" ConceptID="137" Rubric="Regelmäßig vorkommende Ereignisse" />
   <Concept Language="de" ConceptID="138" Rubric="Ereignisdetails" />
   <Concept Language="de" ConceptID="139" Rubric="Neue Einschränkung" />
@@ -1379,10 +1277,10 @@
   <Concept Language="de" ConceptID="147" Rubric="Differenz" />
   <Concept Language="de" ConceptID="148" Rubric="Gesamt" />
   <Concept Language="de" ConceptID="149" Rubric="Abweichung" />
-  <Concept Language="de" ConceptID="150" Rubric="Interne Kodierung" />
+  <Concept Language="de" ConceptID="150" Rubric="Interne Codes" />
   <Concept Language="de" ConceptID="151" Rubric="Neu" />
   <Concept Language="de" ConceptID="152" Rubric="Verwerfen" />
-  <Concept Language="de" ConceptID="153" Rubric="Setze angenomm. Wert" />
+  <Concept Language="de" ConceptID="153" Rubric="Übernehme angenommenen Wert" />
   <Concept Language="de" ConceptID="155" Rubric="Hinzufügen" />
   <Concept Language="de" ConceptID="156" Rubric="Ordinal" />
   <Concept Language="de" ConceptID="157" Rubric="Wahr/Falsch" />
@@ -1498,7 +1396,7 @@
   <Concept Language="de" ConceptID="272" Rubric="maskiert" />
   <Concept Language="de" ConceptID="273" Rubric="nicht anwendbar" />
   <Concept Language="de" ConceptID="274" Rubric="openEHR Strukturkomponenten" />
-  <Concept Language="de" ConceptID="275" Rubric="Verlauf" />
+  <Concept Language="de" ConceptID="275" Rubric="Geschichte" />
   <Concept Language="de" ConceptID="276" Rubric="Jedes Ereignis" />
   <Concept Language="de" ConceptID="277" Rubric="Reduziere Tabelle zu einem einfachen Wert" />
   <Concept Language="de" ConceptID="278" Rubric="Konstanten" />
@@ -1517,7 +1415,7 @@
   <Concept Language="de" ConceptID="291" Rubric="Loeschen der Statusinformationen?" />
   <Concept Language="de" ConceptID="292" Rubric="Fehler beim Laden" />
   <Concept Language="de" ConceptID="293" Rubric="Fehler beim Speichern" />
-  <Concept Language="de" ConceptID="294" Rubric="Archetyp Knoten Code oder ID nicht akzeptiert" />
+  <Concept Language="de" ConceptID="294" Rubric="Archetyp Node (Knoten) Code oder ID nicht akzeptiert" />
   <Concept Language="de" ConceptID="295" Rubric="Speichere Änderungen unter" />
   <Concept Language="de" ConceptID="296" Rubric="Falsches Format" />
   <Concept Language="de" ConceptID="297" Rubric="Keine Definition für:" />
@@ -1539,9 +1437,9 @@
   <Concept Language="de" ConceptID="313" Rubric="Cluster" />
   <Concept Language="de" ConceptID="314" Rubric="SECTION (Ordnungselement)" />
   <Concept Language="de" ConceptID="315" Rubric="Boolsche" />
-  <Concept Language="de" ConceptID="316" Rubric="Jeder" />
+  <Concept Language="de" ConceptID="316" Rubric="Jede" />
   <Concept Language="de" ConceptID="317" Rubric="Konvertiere Textwerte in Ordinalwerte" />
-  <Concept Language="de" ConceptID="318" Rubric="Konvertiere interne Kodierung zu Freitext" />
+  <Concept Language="de" ConceptID="318" Rubric="Konvertiere interne Codes zu Freitext" />
   <Concept Language="de" ConceptID="319" Rubric="Um zu editieren muss das Element zuvor spezialisiert werden. Wollen Sie fortfahren?" />
   <Concept Language="de" ConceptID="320" Rubric="Multiple" />
   <Concept Language="de" ConceptID="321" Rubric="Quotient" />
@@ -1550,7 +1448,6 @@
   <Concept Language="de" ConceptID="324" Rubric="Neue Reihe" />
   <Concept Language="de" ConceptID="325" Rubric="Umbenennen" />
   <Concept Language="de" ConceptID="326" Rubric="Ändere Struktur" />
-  <Concept Language="de" ConceptID="327" Rubric="Diese Bindung existiert bereits - Sie müssen ein Kriterium hinzufügen" />
   <Concept Language="de" ConceptID="329" Rubric="Mengenintervall" />
   <Concept Language="de" ConceptID="330" Rubric="Integerintervall (count)" />
   <Concept Language="de" ConceptID="332" Rubric="Setze absolutes Max." />
@@ -1568,7 +1465,7 @@
   <Concept Language="de" ConceptID="344" Rubric="Trägheitsmoment, Fläche" />
   <Concept Language="de" ConceptID="345" Rubric="Trägheitsmoment, Masse" />
   <Concept Language="de" ConceptID="346" Rubric="Impulsflussrate" />
-  <Concept Language="de" ConceptID="347" Rubric="Flußrate, Masse (en)" />
+  <Concept Language="de" ConceptID="347" Rubric="Flußrate, Masse " />
   <Concept Language="de" ConceptID="348" Rubric="Fluß, Masse" />
   <Concept Language="de" ConceptID="349" Rubric="Masse pro Fläche" />
   <Concept Language="de" ConceptID="350" Rubric="Dichte" />
@@ -1604,7 +1501,7 @@
   <Concept Language="de" ConceptID="382" Rubric="Frequenz" />
   <Concept Language="de" ConceptID="384" Rubric="Menge (Mol)" />
   <Concept Language="de" ConceptID="385" Rubric="Masse (IU)" />
-  <Concept Language="de" ConceptID="386" Rubric="Multimedia" />
+  <Concept Language="de" ConceptID="386" Rubric="MultiMedia" />
   <Concept Language="de" ConceptID="387" Rubric="audio/DVI4" />
   <Concept Language="de" ConceptID="388" Rubric="audio/G722" />
   <Concept Language="de" ConceptID="389" Rubric="audio/G723" />
@@ -1727,7 +1624,7 @@
   <Concept Language="de" ConceptID="553" Rubric="unvollständig" />
   <Concept Language="de" ConceptID="554" Rubric="Observation" />
   <Concept Language="de" ConceptID="555" Rubric="Evaluation" />
-  <Concept Language="de" ConceptID="556" Rubric="Aktion" />
+  <Concept Language="de" ConceptID="556" Rubric="Action" />
   <Concept Language="de" ConceptID="557" Rubric="Instruktion" />
   <Concept Language="de" ConceptID="558" Rubric="Untersektion" />
   <Concept Language="de" ConceptID="559" Rubric="Eintrag (Entry)" />
@@ -1738,7 +1635,7 @@
   <Concept Language="de" ConceptID="565" Rubric="Intervallereignis" />
   <Concept Language="de" ConceptID="566" Rubric="Zeitpunkt-Ereignis" />
   <Concept Language="de" ConceptID="567" Rubric="Element" />
-  <Concept Language="de" ConceptID="568" Rubric="Status" />
+  <Concept Language="de" ConceptID="568" Rubric="Autorenschaft Lebenszyklus" />
   <Concept Language="de" ConceptID="569" Rubric="Autorenentwurf" />
   <Concept Language="de" ConceptID="570" Rubric="Kommittee-Entwurf" />
   <Concept Language="de" ConceptID="571" Rubric="Organisationsentwurf" />
@@ -1762,23 +1659,7 @@
   <Concept Language="de" ConceptID="589" Rubric="sich nicht wiederholend" />
   <Concept Language="de" ConceptID="590" Rubric="sich unbegrenzt wiederholend" />
   <Concept Language="de" ConceptID="591" Rubric="sich begrenzt wiederholend" />
-  <Concept Language="de" ConceptID="592" Rubric="Bearbeiten" />
-  <Concept Language="de" ConceptID="593" Rubric="Datum" />
-  <Concept Language="de" ConceptID="594" Rubric="Organisation" />
-  <Concept Language="de" ConceptID="595" Rubric="Neues Fenster" />
-  <Concept Language="de" ConceptID="596" Rubric="Speichern als" />
-  <Concept Language="de" ConceptID="597" Rubric="Problem melden/Vorschlag machen" />
-  <Concept Language="de" ConceptID="598" Rubric="Einstellungen" />
-  <Concept Language="de" ConceptID="599" Rubric="Eingeschränkt" />
-  <Concept Language="de" ConceptID="600" Rubric="Erlaubte Werte" />
-  <Concept Language="de" ConceptID="601" Rubric="Einheits-Werte" />
-  <Concept Language="de" ConceptID="602" Rubric="Bestehenden Begriff hinzufügen" />
-  <Concept Language="de" ConceptID="603" Rubric="Neuen Begriff hinzufügen" />
-  <Concept Language="de" ConceptID="604" Rubric="weitere Beteiligte" />
-  <Concept Language="de" ConceptID="605" Rubric="Eingebetteter Archetyp" />
-  <Concept Language="de" ConceptID="606" Rubric="Eingebetteten Archetyp laden" />
-  <Concept Language="de" ConceptID="607" Rubric="Referenz nicht spezialisierbar" />
-  <Concept Language="de" ConceptID="608" Rubric="Anderer Kontext" />
+  <Concept Language="de" ConceptID="327" Rubric="Diese Bindung existiert bereits - Sie müssen ein Kriterium hinzufügen" />
   <Concept Language="fa" ConceptID="0" Rubric="خود" />
   <Concept Language="fa" ConceptID="3" Rubric="جنین" />
   <Concept Language="fa" ConceptID="6" Rubric="اهدا کننده" />
@@ -1832,7 +1713,7 @@
   <Concept Language="fa" ConceptID="56" Rubric="نامحدود" />
   <Concept Language="fa" ConceptID="57" Rubric="نام فایل الگو" />
   <Concept Language="fa" ConceptID="58" Rubric="ocean informatics ویرایشگر الگو" />
-  <Concept Language="fa" ConceptID="59" Rubric="عناوین ابزاری" />
+  <Concept Language="fa" ConceptID="59" Rubric="*Tooltips (en)" />
   <Concept Language="fa" ConceptID="60" Rubric="تغییر نوع داد ه ها" />
   <Concept Language="fa" ConceptID="61" Rubric="باز کردن    Ctrl+O (en)" />
   <Concept Language="fa" ConceptID="62" Rubric="جدید   Ctrl+N (en)" />
@@ -1934,7 +1815,7 @@
   <Concept Language="fa" ConceptID="162" Rubric="دستورداده شده" />
   <Concept Language="fa" ConceptID="163" Rubric="سطر" />
   <Concept Language="fa" ConceptID="164" Rubric="ستون" />
-  <Concept Language="fa" ConceptID="165" Rubric="بله" />
+  <Concept Language="fa" ConceptID="165" Rubric="موافقت کردن" />
   <Concept Language="fa" ConceptID="166" Rubric="لغو " />
   <Concept Language="fa" ConceptID="167" Rubric="برچسب سر عنوان" />
   <Concept Language="fa" ConceptID="168" Rubric="مدل بخش" />
@@ -2303,23 +2184,6 @@
   <Concept Language="fa" ConceptID="589" Rubric="غیر تکراری" />
   <Concept Language="fa" ConceptID="590" Rubric="تکرار،نامحدود" />
   <Concept Language="fa" ConceptID="591" Rubric="تکرار،محدود" />
-  <Concept Language="fa" ConceptID="592" Rubric="ویرایش" />
-  <Concept Language="fa" ConceptID="593" Rubric="تاریخ" />
-  <Concept Language="fa" ConceptID="594" Rubric="سازمان" />
-  <Concept Language="fa" ConceptID="595" Rubric="پنجره جدید" />
-  <Concept Language="fa" ConceptID="596" Rubric="ذخیره به عنوان" />
-  <Concept Language="fa" ConceptID="597" Rubric="موضوع گزارش" />
-  <Concept Language="fa" ConceptID="598" Rubric="ارجاعات" />
-  <Concept Language="fa" ConceptID="599" Rubric="محدود شده" />
-  <Concept Language="fa" ConceptID="600" Rubric="ارزشهای امکان پذیر" />
-  <Concept Language="fa" ConceptID="601" Rubric="ارزشهای واحد" />
-  <Concept Language="fa" ConceptID="602" Rubric="اضافه کردن واژه های موجود" />
-  <Concept Language="fa" ConceptID="603" Rubric="اضافه کردن واژه جدید" />
-  <Concept Language="fa" ConceptID="604" Rubric="همکاری" />
-  <Concept Language="fa" ConceptID="605" Rubric="الگوهای در بر گرفته" />
-  <Concept Language="fa" ConceptID="606" Rubric="بارگذاری الگوهای در بر گرفته" />
-  <Concept Language="fa" ConceptID="607" Rubric="امکان مشخص کردن ارجاع وجود ندارد" />
-  <Concept Language="fa" ConceptID="608" Rubric="سایر زمینه ها" />
   <Concept Language="tr" ConceptID="34" Rubric="Hiçbirisi" />
   <Concept Language="tr" ConceptID="32" Rubric="Verinin konusu olan kişi" />
   <Concept Language="tr" ConceptID="33" Rubric="Tarih Zaman kısıtları" />
@@ -2775,22 +2639,95 @@
   <Concept Language="tr" ConceptID="517" Rubric="aplikasyon/msword" />
   <Concept Language="tr" ConceptID="518" Rubric="aplikasyon/pdf" />
   <Concept Language="tr" ConceptID="519" Rubric="aplikasyon/rtf" />
-  <Concept Language="en" ConceptID="609" Rubric="Open existing archetypes" />
-  <Concept Language="en" ConceptID="610" Rubric="Time abbreviations" />
-  <Concept Language="en" ConceptID="611" Rubric="nanosec" />
-  <Concept Language="en" ConceptID="612" Rubric="microsec" />
-  <Concept Language="en" ConceptID="613" Rubric="millisec" />
-  <Concept Language="en" ConceptID="614" Rubric="sec" />
-  <Concept Language="en" ConceptID="615" Rubric="min" />
-  <Concept Language="en" ConceptID="616" Rubric="hr" />
-  <Concept Language="en" ConceptID="617" Rubric="day(s)" />
-  <Concept Language="en" ConceptID="618" Rubric="mth" />
-  <Concept Language="en" ConceptID="619" Rubric="yr" />
-  <Concept Language="en" ConceptID="620" Rubric="wk" />
-  <Concept Language="en" ConceptID="621" Rubric="Node" />
-  <Concept Language="en" ConceptID="622" Rubric="Criteria" />
-  <Concept Language="en" ConceptID="623" Rubric="Constraint definitions" />
-  <Concept Language="en" ConceptID="624" Rubric="Query name" />
+  <Concept Language="en" ConceptID="522" Rubric="increase" />
+  <Concept Language="en" ConceptID="523" Rubric="deleted" />
+  <Concept Language="en" ConceptID="524" Rubric="Initial" />
+  <Concept Language="en" ConceptID="525" Rubric="Instruction states" />
+  <Concept Language="en" ConceptID="526" Rubric="Planned" />
+  <Concept Language="en" ConceptID="527" Rubric="Postponed" />
+  <Concept Language="en" ConceptID="528" Rubric="Cancelled" />
+  <Concept Language="en" ConceptID="529" Rubric="Scheduled" />
+  <Concept Language="en" ConceptID="530" Rubric="Suspended" />
+  <Concept Language="en" ConceptID="531" Rubric="Aborted" />
+  <Concept Language="en" ConceptID="532" Rubric="Completed" />
+  <Concept Language="en" ConceptID="533" Rubric="Expired" />
+  <Concept Language="en" ConceptID="534" Rubric="Instruction transitions" />
+  <Concept Language="en" ConceptID="535" Rubric="Initiate" />
+  <Concept Language="en" ConceptID="536" Rubric="Plan step" />
+  <Concept Language="en" ConceptID="537" Rubric="Postpone" />
+  <Concept Language="en" ConceptID="538" Rubric="Restore" />
+  <Concept Language="en" ConceptID="539" Rubric="Schedule" />
+  <Concept Language="en" ConceptID="540" Rubric="Start" />
+  <Concept Language="en" ConceptID="541" Rubric="Do" />
+  <Concept Language="en" ConceptID="542" Rubric="Postponed step" />
+  <Concept Language="en" ConceptID="543" Rubric="Active step" />
+  <Concept Language="en" ConceptID="544" Rubric="Suspend" />
+  <Concept Language="en" ConceptID="545" Rubric="Suspended step" />
+  <Concept Language="en" ConceptID="546" Rubric="Resume" />
+  <Concept Language="en" ConceptID="547" Rubric="Abort" />
+  <Concept Language="en" ConceptID="548" Rubric="Finish" />
+  <Concept Language="en" ConceptID="549" Rubric="Time out" />
+  <Concept Language="en" ConceptID="550" Rubric="Notify aborted" />
+  <Concept Language="en" ConceptID="551" Rubric="Notify completed" />
+  <Concept Language="en" ConceptID="552" Rubric="Notify cancelled" />
+  <Concept Language="en" ConceptID="553" Rubric="incomplete" />
+  <Concept Language="en" ConceptID="554" Rubric="Observation" />
+  <Concept Language="en" ConceptID="555" Rubric="Evaluation" />
+  <Concept Language="en" ConceptID="556" Rubric="Action" />
+  <Concept Language="en" ConceptID="557" Rubric="Instruction" />
+  <Concept Language="en" ConceptID="558" Rubric="Sub-Section" />
+  <Concept Language="en" ConceptID="559" Rubric="Entry" />
+  <Concept Language="en" ConceptID="560" Rubric="Administration entry" />
+  <Concept Language="en" ConceptID="561" Rubric="Composition" />
+  <Concept Language="en" ConceptID="563" Rubric="Care pathway step" />
+  <Concept Language="en" ConceptID="564" Rubric="Reference" />
+  <Concept Language="en" ConceptID="565" Rubric="Interval event" />
+  <Concept Language="en" ConceptID="566" Rubric="Point-in-time event" />
+  <Concept Language="en" ConceptID="567" Rubric="Element" />
+  <Concept Language="en" ConceptID="568" Rubric="Authorship lifecycle" />
+  <Concept Language="en" ConceptID="569" Rubric="Author draft" />
+  <Concept Language="en" ConceptID="570" Rubric="Committee draft" />
+  <Concept Language="en" ConceptID="571" Rubric="Organisation draft" />
+  <Concept Language="en" ConceptID="572" Rubric="Submitted" />
+  <Concept Language="en" ConceptID="573" Rubric="Candidate" />
+  <Concept Language="en" ConceptID="574" Rubric="Approved candidate" />
+  <Concept Language="en" ConceptID="575" Rubric="Published" />
+  <Concept Language="en" ConceptID="576" Rubric="Rejected" />
+  <Concept Language="en" ConceptID="577" Rubric="Obsolete" />
+  <Concept Language="en" ConceptID="578" Rubric="Keyword" />
+  <Concept Language="en" ConceptID="579" Rubric="Name" />
+  <Concept Language="en" ConceptID="580" Rubric="Authorship" />
+  <Concept Language="en" ConceptID="581" Rubric="Details" />
+  <Concept Language="en" ConceptID="582" Rubric="Use" />
+  <Concept Language="en" ConceptID="583" Rubric="Misuse" />
+  <Concept Language="en" ConceptID="584" Rubric="Original author" />
+  <Concept Language="en" ConceptID="585" Rubric="Purpose" />
+  <Concept Language="en" ConceptID="586" Rubric="Activity" />
+  <Concept Language="en" ConceptID="587" Rubric="Activities" />
+  <Concept Language="en" ConceptID="588" Rubric="Min:" />
+  <Concept Language="en" ConceptID="589" Rubric="not repeating" />
+  <Concept Language="en" ConceptID="590" Rubric="repeating, unlimited" />
+  <Concept Language="en" ConceptID="591" Rubric="repeating, limited" />
+  <Concept Language="en" ConceptID="592" Rubric="Edit" />
+  <Concept Language="en" ConceptID="593" Rubric="Date" />
+  <Concept Language="en" ConceptID="594" Rubric="Organisation" />
+  <Concept Language="en" ConceptID="595" Rubric="New window" />
+  <Concept Language="en" ConceptID="596" Rubric="Save as" />
+  <Concept Language="en" ConceptID="597" Rubric="Report issue" />
+  <Concept Language="en" ConceptID="598" Rubric="Preferences" />
+  <Concept Language="en" ConceptID="599" Rubric="Restricted" />
+  <Concept Language="en" ConceptID="600" Rubric="Allowed values" />
+  <Concept Language="en" ConceptID="601" Rubric="Unit values" />
+  <Concept Language="en" ConceptID="602" Rubric="Add existing term" />
+  <Concept Language="en" ConceptID="603" Rubric="Add new term" />
+  <Concept Language="en" ConceptID="604" Rubric="Contributors" />
+  <Concept Language="en" ConceptID="605" Rubric="Embedded archetype" />
+  <Concept Language="en" ConceptID="606" Rubric="Load embedded archetype" />
+  <Concept Language="en" ConceptID="607" Rubric="Cannot specialise reference" />
+  <Concept Language="tr" ConceptID="525" Rubric="*Instruction states (en)" />
+  <Concept Language="tr" ConceptID="534" Rubric="*Instruction transitions (en)" />
+  <Concept Language="tr" ConceptID="568" Rubric="*Authorship lifecycle (en)" />
+  <Concept Language="en" ConceptID="608" Rubric="Other context" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
@@ -2814,7 +2751,6 @@
   <Grouper id="21" ConceptID="525" />
   <Grouper id="22" ConceptID="534" />
   <Grouper id="23" ConceptID="568" />
-  <Grouper id="24" ConceptID="610" />
   <GroupedConcept GrouperID="1" ChildID="0" />
   <GroupedConcept GrouperID="1" ChildID="3" />
   <GroupedConcept GrouperID="1" ChildID="6" />
@@ -3267,16 +3203,6 @@
   <GroupedConcept GrouperID="23" ChildID="576" />
   <GroupedConcept GrouperID="23" ChildID="577" />
   <GroupedConcept GrouperID="3" ChildID="592" />
-  <GroupedConcept GrouperID="24" ChildID="611" />
-  <GroupedConcept GrouperID="24" ChildID="612" />
-  <GroupedConcept GrouperID="24" ChildID="613" />
-  <GroupedConcept GrouperID="24" ChildID="614" />
-  <GroupedConcept GrouperID="24" ChildID="615" />
-  <GroupedConcept GrouperID="24" ChildID="616" />
-  <GroupedConcept GrouperID="24" ChildID="617" />
-  <GroupedConcept GrouperID="24" ChildID="618" />
-  <GroupedConcept GrouperID="24" ChildID="619" />
-  <GroupedConcept GrouperID="24" ChildID="620" />
   <TerminologyIdentifiers VSAB="AIR93" SourceName="AI/RHEUM,1993" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ALT2000" SourceName="Alternative Billing Concepts, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="AOD2000" SourceName="Alcohol and Other Drug Thesaurus, 2000" Authority="UMLS2003AA" />

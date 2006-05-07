@@ -65,8 +65,9 @@ Namespace ArchetypeEditor.ADL_Classes
 
             ' clear the other contributors and add them again
             'mADL_Description.other_contributors.clear_all() ' CAUSES crash on serialise
+
             For Each s As String In mOtherContributors
-                mADL_Description.add_other_contributor(openehr.base.kernel.Create.STRING.make_from_cil(s))
+                    mADL_Description.add_other_contributor(openehr.base.kernel.Create.STRING.make_from_cil(s))
             Next
 
             Return mADL_Description

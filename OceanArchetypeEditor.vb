@@ -22,6 +22,8 @@ Public Class OceanArchetypeEditor
     Private Shared mInstance As OceanArchetypeEditor
     Private Shared mMenu As Menu
 
+    Public Shared ISO_TimeUnits As New TimeUnits
+
     Public Shared ReadOnly Property Instance() As OceanArchetypeEditor
         Get
             If mInstance Is Nothing Then
@@ -78,6 +80,7 @@ Public Class OceanArchetypeEditor
     Protected Sub New()
 
 #Const TEST_LANGUAGE_TRANSLATION = False
+
 #If Not TEST_LANGUAGE_TRANSLATION Then
 
         'default language as two letter code e.g. "en"
@@ -88,13 +91,11 @@ Public Class OceanArchetypeEditor
 
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
-        'MessageBox.Show("LANG: " & default_language_code, "TEST")
-        ' mDefaultLanguageCode = "fa"
-        'MessageBox.Show("Specific LANG: " & specific_language_code, "TEST")
-        'mSpecificLanguageCode = "fa"
+        mDefaultLanguageCode = "fa"
+        mSpecificLanguageCode = "fa"
 
-        mDefaultLanguageCode = "de"
-        mSpecificLanguageCode = "de"
+        'mDefaultLanguageCode = "de"
+        'mSpecificLanguageCode = "de"
 #End If
 
         mDataSet = New DataSet("DesignerDataSet")
@@ -173,7 +174,7 @@ Public Class OceanArchetypeEditor
     End Function
 
     Public Function AddTerminology() As Boolean
-        ' add the language codes - FIXME - from a file in future
+        ' add the language codes 
         Dim frm As New Choose
         frm.Set_Single()
         frm.PrepareDataTable_for_List(1)
@@ -443,6 +444,22 @@ Public Class OceanArchetypeEditor
             mDataSet.Tables("Property").PrimaryKey = keys
             mDataSet.Tables("Property").DefaultView.Sort = "Text"
 
+            If Me.mDefaultLanguageCode <> "en" Then
+                'translate the properties
+                ' 0 = Id
+                ' 1 = text
+                ' 2 = openEHR code
+                ' 3 = translation
+                ' 4 = language code
+                For Each dr As DataRow In mDataSet.Tables("Property").Rows
+                    dr.BeginEdit()
+                    dr(3) = dr(1)
+                    dr(1) = Filemanager.GetOpenEhrTerm(CInt(dr(2)), CStr(dr(1)), mDefaultLanguageCode)
+                    dr(4) = mDefaultLanguageCode
+                    dr.EndEdit()
+                Next
+            End If
+
             ' Set up the primary key
             ReDim keys(1)
             keys(0) = mDataSet.Tables("Unit").Columns(0) ' property id
@@ -453,6 +470,7 @@ Public Class OceanArchetypeEditor
             Dim new_relation As New DataRelation("PhysPropUnits", mDataSet.Tables("Property").Columns(0), _
                     mDataSet.Tables("Unit").Columns(0))
             mDataSet.Relations.Add(new_relation)
+
         Catch e As Exception
             ' emergency if data is not available as file
             Dim physicalProperties As DataTable = MakePhysicalPropertiesTable()
@@ -468,6 +486,19 @@ Public Class OceanArchetypeEditor
         '
     End Sub
 
+    Public Function GetIdForPropertyOpenEhrCode(ByVal openEhrCode As Integer) As Integer
+        Try
+            Dim dr As DataRow() = mDataSet.Tables("Property").Select("openEHR = " & Convert.ToString(openEhrCode))
+            If Not dr Is Nothing Then
+                Debug.Assert(dr.Length = 1)
+                Return CInt(dr(0).Item(0))
+            Else
+                Return 0
+            End If
+        Catch e As Exception
+            Return 0
+        End Try
+    End Function
     Private Sub PopulatePhysPropUnitTables(ByVal Units As DataTable, _
             ByVal PhysicalProperties As DataTable)
 
