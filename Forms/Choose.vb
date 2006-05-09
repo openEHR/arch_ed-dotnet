@@ -30,6 +30,15 @@ Public Class Choose
 
         'Add any initialization after the InitializeComponent() call
 
+        If Not Me.DesignMode Then
+            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+                Me.Text = Filemanager.GetOpenEhrTerm(104, "Choose")
+                Me.LblForm.Text = Filemanager.GetOpenEhrTerm(104, "Choose")
+                Me.butCancel.Text = AE_Constants.Instance.Cancel
+                Me.butOK.Text = AE_Constants.Instance.OK
+            End If
+        End If
+
     End Sub
 
     'Form overrides dispose to clean up the component list.

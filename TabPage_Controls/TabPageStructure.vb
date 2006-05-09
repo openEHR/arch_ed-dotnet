@@ -43,8 +43,12 @@ Public Class TabPageStructure
             mFileManager = Filemanager.Master
             mValidStructureClasses = ReferenceModel.Instance.ValidStructureTypes
             For Each ValidStructure As StructureType In mValidStructureClasses
-                Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(ValidStructure, ValidStructure.ToString))
+                Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(CInt(ValidStructure), ValidStructure.ToString))
             Next
+            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+                Me.comboStructure.Text = Filemanager.GetOpenEhrTerm(104, "Choose...")
+                Me.chkEmbedded.Text = Filemanager.GetOpenEhrTerm(605, chkEmbedded.Text)
+            End If
         End If
 
     End Sub
@@ -777,6 +781,8 @@ Public Class TabPageStructure
                 'Hide context menu to change structure
                 mArchetypeControl.ShowChangeStructureMenu = False
 
+                ShowLanguage()
+
                 mIsLoading = False
                 Return
             Else
@@ -797,10 +803,29 @@ Public Class TabPageStructure
                 Me.comboStructure.SelectedIndex = 3
         End Select
 
+        ShowLanguage()
+
         mIsLoading = False
     End Sub
 
+    Private Sub ShowLanguage()
+        ' set the specific language if it is present e.g. en-US, en-AU
+        If mFileManager.OntologyManager.LanguageIsAvailable(Filemanager.Master.OntologyManager.LanguageCode) Then
+            mFileManager.OntologyManager.LanguageCode = Filemanager.Master.OntologyManager.LanguageCode
+        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.Instance.SpecificLanguageCode) AndAlso _
+            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.Instance.SpecificLanguageCode Then
+            Filemanager.Master.OntologyManager.LanguageCode = OceanArchetypeEditor.Instance.SpecificLanguageCode
+        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.Instance.DefaultLanguageCode) AndAlso _
+            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.Instance.DefaultLanguageCode Then
+            mFileManager.OntologyManager.LanguageCode = OceanArchetypeEditor.Instance.DefaultLanguageCode
+        Else
+            mFileManager.OntologyManager.LanguageCode = mFileManager.OntologyManager.PrimaryLanguageCode
+        End If
+        Translate()
+    End Sub
+
     Private Overloads Function OpenArchetype(ByVal an_archetype_ID As ArchetypeID) As Boolean
+
         mFileManager.OpenArchetype(an_archetype_ID.ToString)
 
         If mFileManager.ArchetypeAvailable Then

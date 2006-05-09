@@ -25,7 +25,7 @@ Public Class IntervalConstraintControl : Inherits ConstraintControl
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
-        'Add any initialization after the InitializeComponent() call
+
 
     End Sub
 
@@ -37,6 +37,10 @@ Public Class IntervalConstraintControl : Inherits ConstraintControl
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
+
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.LabelInterval.Text = Filemanager.GetOpenEhrTerm(141, Me.LabelInterval.Text)
+        End If
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer

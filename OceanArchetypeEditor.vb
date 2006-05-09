@@ -79,7 +79,7 @@ Public Class OceanArchetypeEditor
 
     Protected Sub New()
 
-#Const TEST_LANGUAGE_TRANSLATION = False
+#Const TEST_LANGUAGE_TRANSLATION = True
 
 #If Not TEST_LANGUAGE_TRANSLATION Then
 
@@ -91,11 +91,11 @@ Public Class OceanArchetypeEditor
 
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
-        mDefaultLanguageCode = "fa"
-        mSpecificLanguageCode = "fa"
+        'mDefaultLanguageCode = "fa"
+        'mSpecificLanguageCode = "fa"
 
-        'mDefaultLanguageCode = "de"
-        'mSpecificLanguageCode = "de"
+        mDefaultLanguageCode = "de"
+        mSpecificLanguageCode = "de"
 #End If
 
         mDataSet = New DataSet("DesignerDataSet")

@@ -27,6 +27,13 @@ Public Class InputForm
 
         'Add any initialization after the InitializeComponent() call
 
+        If Not Me.DesignMode Then
+            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+                Me.butCancel.Text = AE_Constants.Instance.Cancel
+                Me.butOK.Text = AE_Constants.Instance.OK
+            End If
+        End If
+
     End Sub
 
     'Form overrides dispose to clean up the component list.
@@ -65,7 +72,7 @@ Public Class InputForm
         '
         Me.txtInput.Location = New System.Drawing.Point(19, 74)
         Me.txtInput.Name = "txtInput"
-        Me.txtInput.Size = New System.Drawing.Size(384, 22)
+        Me.txtInput.Size = New System.Drawing.Size(421, 22)
         Me.txtInput.TabIndex = 0
         Me.txtInput.Text = ""
         '
@@ -82,7 +89,7 @@ Public Class InputForm
         '
         Me.butOK.Location = New System.Drawing.Point(346, 7)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(67, 28)
+        Me.butOK.Size = New System.Drawing.Size(94, 28)
         Me.butOK.TabIndex = 2
         Me.butOK.Text = "OK"
         '
@@ -91,7 +98,7 @@ Public Class InputForm
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.butCancel.Location = New System.Drawing.Point(346, 43)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(67, 27)
+        Me.butCancel.Size = New System.Drawing.Size(94, 27)
         Me.butCancel.TabIndex = 3
         Me.butCancel.Text = "Cancel"
         '
@@ -118,7 +125,7 @@ Public Class InputForm
         Me.AcceptButton = Me.butOK
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(420, 102)
+        Me.ClientSize = New System.Drawing.Size(446, 102)
         Me.ControlBox = False
         Me.Controls.Add(Me.LblInput2)
         Me.Controls.Add(Me.txtInput2)

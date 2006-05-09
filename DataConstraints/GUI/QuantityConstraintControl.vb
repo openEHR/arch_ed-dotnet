@@ -85,7 +85,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         'listUnits
         '
         Me.listUnits.ItemHeight = 16
-        Me.listUnits.Location = New System.Drawing.Point(88, 66)
+        Me.listUnits.Location = New System.Drawing.Point(73, 115)
         Me.listUnits.Name = "listUnits"
         Me.listUnits.Size = New System.Drawing.Size(192, 68)
         Me.listUnits.TabIndex = 15
@@ -93,29 +93,27 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         'lblListProperty
         '
         Me.lblListProperty.BackColor = System.Drawing.Color.Transparent
-        Me.lblListProperty.Location = New System.Drawing.Point(16, 34)
+        Me.lblListProperty.Location = New System.Drawing.Point(24, 42)
         Me.lblListProperty.Name = "lblListProperty"
-        Me.lblListProperty.Size = New System.Drawing.Size(72, 16)
+        Me.lblListProperty.Size = New System.Drawing.Size(224, 16)
         Me.lblListProperty.TabIndex = 9
         Me.lblListProperty.Text = "Property:"
-        Me.lblListProperty.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblListUnits
         '
         Me.lblListUnits.BackColor = System.Drawing.Color.Transparent
-        Me.lblListUnits.Location = New System.Drawing.Point(16, 66)
+        Me.lblListUnits.Location = New System.Drawing.Point(24, 93)
         Me.lblListUnits.Name = "lblListUnits"
-        Me.lblListUnits.Size = New System.Drawing.Size(64, 16)
+        Me.lblListUnits.Size = New System.Drawing.Size(136, 16)
         Me.lblListUnits.TabIndex = 2
         Me.lblListUnits.Text = "Units:"
-        Me.lblListUnits.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'comboPhysicalProperty
         '
         Me.comboPhysicalProperty.DisplayMember = "Text"
-        Me.comboPhysicalProperty.Location = New System.Drawing.Point(88, 34)
+        Me.comboPhysicalProperty.Location = New System.Drawing.Point(41, 64)
         Me.comboPhysicalProperty.Name = "comboPhysicalProperty"
-        Me.comboPhysicalProperty.Size = New System.Drawing.Size(272, 24)
+        Me.comboPhysicalProperty.Size = New System.Drawing.Size(320, 24)
         Me.comboPhysicalProperty.TabIndex = 0
         Me.comboPhysicalProperty.ValueMember = "id"
         '
@@ -125,7 +123,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.butAddUnit.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butAddUnit.Image = CType(resources.GetObject("butAddUnit.Image"), System.Drawing.Image)
         Me.butAddUnit.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddUnit.Location = New System.Drawing.Point(56, 82)
+        Me.butAddUnit.Location = New System.Drawing.Point(41, 115)
         Me.butAddUnit.Name = "butAddUnit"
         Me.butAddUnit.Size = New System.Drawing.Size(24, 25)
         Me.butAddUnit.TabIndex = 40
@@ -136,7 +134,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.butRemoveUnit.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butRemoveUnit.Image = CType(resources.GetObject("butRemoveUnit.Image"), System.Drawing.Image)
         Me.butRemoveUnit.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveUnit.Location = New System.Drawing.Point(56, 114)
+        Me.butRemoveUnit.Location = New System.Drawing.Point(41, 143)
         Me.butRemoveUnit.Name = "butRemoveUnit"
         Me.butRemoveUnit.Size = New System.Drawing.Size(24, 25)
         Me.butRemoveUnit.TabIndex = 42
@@ -153,7 +151,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         '
         'QuantityUnitConstraint
         '
-        Me.QuantityUnitConstraint.Location = New System.Drawing.Point(0, 152)
+        Me.QuantityUnitConstraint.Location = New System.Drawing.Point(0, 192)
         Me.QuantityUnitConstraint.Name = "QuantityUnitConstraint"
         Me.QuantityUnitConstraint.Size = New System.Drawing.Size(384, 120)
         Me.QuantityUnitConstraint.TabIndex = 0
@@ -170,7 +168,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.lblListProperty)
         Me.Controls.Add(Me.lblListUnits)
         Me.Name = "QuantityConstraintControl"
-        Me.Size = New System.Drawing.Size(368, 272)
+        Me.Size = New System.Drawing.Size(368, 320)
         Me.ResumeLayout(False)
 
     End Sub

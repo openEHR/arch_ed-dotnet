@@ -322,8 +322,12 @@ Public Class TerminologyServer
             xmlDoc = "..\terminology.xml"
         End If
 
-        Terminology.ReadXmlSchema(xmlSchema)
-        Terminology.ReadXml(xmlDoc)
+        Try
+            Terminology.ReadXmlSchema(xmlSchema)
+            Terminology.ReadXml(xmlDoc)
+        Catch e As Exception
+            MessageBox.Show("Loading terminology:" + e.Message)
+        End Try
 
         KeyFields(0) = Terminology.Tables("Concept").Columns(0)
         KeyFields(1) = Terminology.Tables("Concept").Columns(1)
