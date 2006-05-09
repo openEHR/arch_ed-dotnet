@@ -38,6 +38,15 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
 
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.lblSlot.Text = Filemanager.GetOpenEhrTerm(312, Me.lblSlot.Text)
+            Me.gbInclude.Text = Filemanager.GetOpenEhrTerm(625, Me.gbInclude.Text)
+            Me.gbExclude.Text = Filemanager.GetOpenEhrTerm(626, Me.gbExclude.Text)
+            Me.butBrowse.Text = Filemanager.GetOpenEhrTerm(627, Me.butBrowse.Text)
+            Me.chkIncludeAll.Text = Filemanager.GetOpenEhrTerm(628, Me.chkIncludeAll.Text)
+            Me.chkExcludeAll.Text = Filemanager.GetOpenEhrTerm(628, Me.chkExcludeAll.Text)
+        End If
+
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer
@@ -205,16 +214,16 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         'butBrowse
         '
-        Me.butBrowse.Location = New System.Drawing.Point(76, 56)
+        Me.butBrowse.Location = New System.Drawing.Point(357, 8)
         Me.butBrowse.Name = "butBrowse"
-        Me.butBrowse.Size = New System.Drawing.Size(72, 24)
+        Me.butBrowse.Size = New System.Drawing.Size(64, 40)
         Me.butBrowse.TabIndex = 3
         Me.butBrowse.Text = "Browse"
         '
         'listAvailbleArchetypes
         '
         Me.listAvailbleArchetypes.ItemHeight = 16
-        Me.listAvailbleArchetypes.Location = New System.Drawing.Point(152, 0)
+        Me.listAvailbleArchetypes.Location = New System.Drawing.Point(96, 0)
         Me.listAvailbleArchetypes.Name = "listAvailbleArchetypes"
         Me.listAvailbleArchetypes.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
         Me.listAvailbleArchetypes.Size = New System.Drawing.Size(256, 84)
@@ -224,12 +233,12 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         'lblClass
         '
         Me.lblClass.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblClass.Location = New System.Drawing.Point(8, 16)
+        Me.lblClass.Location = New System.Drawing.Point(8, 24)
         Me.lblClass.Name = "lblClass"
-        Me.lblClass.Size = New System.Drawing.Size(136, 32)
+        Me.lblClass.Size = New System.Drawing.Size(80, 56)
         Me.lblClass.TabIndex = 1
         Me.lblClass.Text = "Class name"
-        Me.lblClass.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblClass.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lblSlot
         '
@@ -348,7 +357,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
         Dim s As String
 
-        Me.lblClass.Text = Me.Constraint.RM_ClassType.ToString
+        Me.lblClass.Text = Filemanager.GetOpenEhrTerm(CInt(Me.Constraint.RM_ClassType), Me.Constraint.RM_ClassType.ToString())
 
         Me.butShowAll()
 

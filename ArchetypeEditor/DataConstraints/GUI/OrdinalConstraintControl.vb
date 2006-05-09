@@ -37,6 +37,11 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
+
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.LabelOrdinal.Text = Filemanager.GetOpenEhrTerm(156, Me.LabelOrdinal.Text)
+            Me.butSetAssumedOrdinal.Text = Filemanager.GetOpenEhrTerm(153, Me.butSetAssumedOrdinal.Text)
+        End If
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer

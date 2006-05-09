@@ -27,6 +27,7 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
 
         'Add any initialization after the InitializeComponent() call
 
+
     End Sub
 
     Public Sub New(ByVal a_file_manager As FileManagerLocal)
@@ -38,6 +39,10 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
         'Add any initialization after the InitializeComponent() call
 
         mFileManager = a_file_manager
+
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.lblMultiMedia.Text = Filemanager.GetOpenEhrTerm(386, Me.lblMultiMedia.Text)
+        End If
 
         Dim d_row As DataRow() = mFileManager.OntologyManager.CodeForGroupID(19, "en") ' must be in English
         Dim s() As String
@@ -81,8 +86,6 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
                     n.Tag = r.Item(1).ToString
                     n.ImageIndex = 4
                     TvMultiMedia.Nodes.Item(4).Nodes.Add(n) ' application
-
-
 
             End Select
 

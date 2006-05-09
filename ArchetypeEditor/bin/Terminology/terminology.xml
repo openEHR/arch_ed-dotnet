@@ -696,6 +696,13 @@
   <PrimaryRubric Id="622" Language="en" />
   <PrimaryRubric Id="623" Language="en" />
   <PrimaryRubric Id="624" Language="en" />
+  <PrimaryRubric Id="625" Language="en" />
+  <PrimaryRubric Id="626" Language="en" />
+  <PrimaryRubric Id="627" Language="en" />
+  <PrimaryRubric Id="628" Language="en" />
+  <PrimaryRubric Id="629" Language="en" />
+  <PrimaryRubric Id="630" Language="en" />
+  <PrimaryRubric Id="631" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -856,10 +863,10 @@
   <Concept Language="en" ConceptID="169" Rubric="Naming" />
   <Concept Language="en" ConceptID="170" Rubric="Slots" />
   <Concept Language="en" ConceptID="171" Rubric="Entry slots" />
-  <Concept Language="en" ConceptID="172" Rubric="Include entries:" />
+  <Concept Language="en" ConceptID="172" Rubric="Include entries" />
   <Concept Language="en" ConceptID="173" Rubric="Exclude entries:" />
   <Concept Language="en" ConceptID="174" Rubric="Section slots" />
-  <Concept Language="en" ConceptID="175" Rubric="Include sections:" />
+  <Concept Language="en" ConceptID="175" Rubric="Include sections" />
   <Concept Language="en" ConceptID="176" Rubric="Exclude sections:" />
   <Concept Language="en" ConceptID="177" Rubric="State" />
   <Concept Language="en" ConceptID="179" Rubric="Offset" />
@@ -1345,7 +1352,7 @@
   <Concept Language="de" ConceptID="113" Rubric="Beschreibung" />
   <Concept Language="de" ConceptID="114" Rubric="Namesbeschränkung zur Laufzeit" />
   <Concept Language="de" ConceptID="115" Rubric="Quantität" />
-  <Concept Language="de" ConceptID="116" Rubric="Eingenschaft" />
+  <Concept Language="de" ConceptID="116" Rubric="Eigenschaft" />
   <Concept Language="de" ConceptID="117" Rubric="Einheit" />
   <Concept Language="de" ConceptID="118" Rubric="Nicht gesetzt" />
   <Concept Language="de" ConceptID="119" Rubric="Konzentration" />
@@ -1599,7 +1606,7 @@
   <Concept Language="de" ConceptID="377" Rubric="Elekt. Feldstärke" />
   <Concept Language="de" ConceptID="378" Rubric="Magnetischer Fluß" />
   <Concept Language="de" ConceptID="379" Rubric="Induktion" />
-  <Concept Language="de" ConceptID="380" Rubric="Qualified Real" />
+  <Concept Language="de" ConceptID="380" Rubric="reelle Zahl (mit oder ohne Exponent)" />
   <Concept Language="de" ConceptID="381" Rubric="Menge (Eq)" />
   <Concept Language="de" ConceptID="382" Rubric="Frequenz" />
   <Concept Language="de" ConceptID="384" Rubric="Menge (Mol)" />
@@ -1696,29 +1703,29 @@
   <Concept Language="de" ConceptID="522" Rubric="erhöhen" />
   <Concept Language="de" ConceptID="523" Rubric="gelöscht" />
   <Concept Language="de" ConceptID="524" Rubric="Initial" />
-  <Concept Language="de" ConceptID="525" Rubric="(Instruktions-) Zustand" />
-  <Concept Language="de" ConceptID="526" Rubric="geplant" />
-  <Concept Language="de" ConceptID="527" Rubric="verschoben" />
-  <Concept Language="de" ConceptID="528" Rubric="Abgebrochen" />
-  <Concept Language="de" ConceptID="529" Rubric="terminiert" />
+  <Concept Language="de" ConceptID="525" Rubric="(Instruktions-) Zustände" />
+  <Concept Language="de" ConceptID="526" Rubric="Geplant" />
+  <Concept Language="de" ConceptID="527" Rubric="Verschoben" />
+  <Concept Language="de" ConceptID="528" Rubric="Annuliert" />
+  <Concept Language="de" ConceptID="529" Rubric="Eingeplant" />
   <Concept Language="de" ConceptID="530" Rubric="Ausgesetzt" />
-  <Concept Language="de" ConceptID="531" Rubric="abbrechen" />
+  <Concept Language="de" ConceptID="531" Rubric="Abgebrochen" />
   <Concept Language="de" ConceptID="532" Rubric="Vollendet" />
-  <Concept Language="de" ConceptID="533" Rubric="abgelaufen" />
+  <Concept Language="de" ConceptID="533" Rubric="Abgelaufen" />
   <Concept Language="de" ConceptID="534" Rubric="(Instruktions-)Übergänge" />
   <Concept Language="de" ConceptID="535" Rubric="Initiieren" />
   <Concept Language="de" ConceptID="536" Rubric="Planungsschritt" />
   <Concept Language="de" ConceptID="537" Rubric="Verschieben" />
   <Concept Language="de" ConceptID="538" Rubric="Wiederaufnehmen" />
-  <Concept Language="de" ConceptID="539" Rubric="Terminieren" />
+  <Concept Language="de" ConceptID="539" Rubric="Einplanen" />
   <Concept Language="de" ConceptID="540" Rubric="Starten" />
   <Concept Language="de" ConceptID="541" Rubric="Ausführen" />
   <Concept Language="de" ConceptID="542" Rubric="Verschobener Schritt" />
   <Concept Language="de" ConceptID="543" Rubric="Aktiver Schritt" />
-  <Concept Language="de" ConceptID="544" Rubric="Unterbrochen" />
+  <Concept Language="de" ConceptID="544" Rubric="Unterbrechen" />
   <Concept Language="de" ConceptID="545" Rubric="Unterbrochener Schritt" />
-  <Concept Language="de" ConceptID="546" Rubric="Wiederaufenommener Schritt" />
-  <Concept Language="de" ConceptID="547" Rubric="Abbrechen" />
+  <Concept Language="de" ConceptID="546" Rubric="Wiederaufgenommener Schritt" />
+  <Concept Language="de" ConceptID="547" Rubric="Abgebrochen" />
   <Concept Language="de" ConceptID="548" Rubric="Beenden" />
   <Concept Language="de" ConceptID="549" Rubric="Time-Out" />
   <Concept Language="de" ConceptID="550" Rubric="Benachrichtigung abgebrochen" />
@@ -2791,6 +2798,45 @@
   <Concept Language="en" ConceptID="622" Rubric="Criteria" />
   <Concept Language="en" ConceptID="623" Rubric="Constraint definitions" />
   <Concept Language="en" ConceptID="624" Rubric="Query name" />
+  <Concept Language="fa" ConceptID="609" Rubric="الگوهای موجود را باز کنید" />
+  <Concept Language="fa" ConceptID="610" Rubric="اختصارات زمانی" />
+  <Concept Language="fa" ConceptID="611" Rubric="میلیاردم ثانیه" />
+  <Concept Language="fa" ConceptID="612" Rubric="میلیونم ثانیه" />
+  <Concept Language="fa" ConceptID="613" Rubric="هزارم ثانیه" />
+  <Concept Language="fa" ConceptID="614" Rubric="ثانیه" />
+  <Concept Language="fa" ConceptID="615" Rubric="حداقل" />
+  <Concept Language="fa" ConceptID="616" Rubric="ساعت" />
+  <Concept Language="fa" ConceptID="617" Rubric="روز و یا روزها" />
+  <Concept Language="fa" ConceptID="618" Rubric="ماه" />
+  <Concept Language="fa" ConceptID="619" Rubric="سال" />
+  <Concept Language="fa" ConceptID="620" Rubric="هفته" />
+  <Concept Language="fa" ConceptID="621" Rubric="گره" />
+  <Concept Language="fa" ConceptID="622" Rubric="معیار" />
+  <Concept Language="fa" ConceptID="623" Rubric="تعاریف محدودیت" />
+  <Concept Language="fa" ConceptID="624" Rubric="نام درخواست" />
+  <Concept Language="de" ConceptID="609" Rubric="Öffne bestehenden Archetypen" />
+  <Concept Language="de" ConceptID="610" Rubric="Abkürzungen für Zeiteinheiten" />
+  <Concept Language="de" ConceptID="611" Rubric="Nano-Sekunden" />
+  <Concept Language="de" ConceptID="612" Rubric="Mikro-Sekunden" />
+  <Concept Language="de" ConceptID="613" Rubric="Milli-Sekunden" />
+  <Concept Language="de" ConceptID="614" Rubric="Sekunden" />
+  <Concept Language="de" ConceptID="615" Rubric="Minuten" />
+  <Concept Language="de" ConceptID="616" Rubric="Stunden" />
+  <Concept Language="de" ConceptID="617" Rubric="Tage" />
+  <Concept Language="de" ConceptID="618" Rubric="Monate" />
+  <Concept Language="de" ConceptID="619" Rubric="Jahre" />
+  <Concept Language="de" ConceptID="620" Rubric="Wochen" />
+  <Concept Language="de" ConceptID="621" Rubric="Knoten" />
+  <Concept Language="de" ConceptID="622" Rubric="Kriterien" />
+  <Concept Language="de" ConceptID="623" Rubric="Definitionen der Einschränkungen" />
+  <Concept Language="de" ConceptID="624" Rubric="Name der Suchanfrage" />
+  <Concept Language="en" ConceptID="625" Rubric="Include" />
+  <Concept Language="en" ConceptID="626" Rubric="Exclude" />
+  <Concept Language="en" ConceptID="627" Rubric="Browse" />
+  <Concept Language="en" ConceptID="628" Rubric="Include all" />
+  <Concept Language="en" ConceptID="629" Rubric="Exclude all" />
+  <Concept Language="en" ConceptID="630" Rubric="As percent" />
+  <Concept Language="en" ConceptID="631" Rubric="Delete all" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

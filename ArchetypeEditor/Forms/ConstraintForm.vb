@@ -33,6 +33,14 @@ Public Class ConstraintForm
 
         'Add any initialization after the InitializeComponent() call
 
+        If Not Me.DesignMode Then
+            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+                Me.butDelete.Text = Filemanager.GetOpenEhrTerm(631, "Delete all")
+                Me.butCancel.Text = AE_Constants.Instance.Cancel
+                Me.butOK.Text = AE_Constants.Instance.OK
+            End If
+        End If
+
     End Sub
 
     'Form overrides dispose to clean up the component list.
@@ -71,42 +79,42 @@ Public Class ConstraintForm
         Me.PanelBottom.Controls.Add(Me.butCancel)
         Me.PanelBottom.Controls.Add(Me.butOK)
         Me.PanelBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelBottom.Location = New System.Drawing.Point(0, 198)
+        Me.PanelBottom.Location = New System.Drawing.Point(0, 228)
         Me.PanelBottom.Name = "PanelBottom"
-        Me.PanelBottom.Size = New System.Drawing.Size(408, 32)
+        Me.PanelBottom.Size = New System.Drawing.Size(489, 37)
         Me.PanelBottom.TabIndex = 0
         '
         'butDelete
         '
-        Me.butDelete.Location = New System.Drawing.Point(80, 4)
+        Me.butDelete.Location = New System.Drawing.Point(96, 5)
         Me.butDelete.Name = "butDelete"
-        Me.butDelete.Size = New System.Drawing.Size(64, 24)
+        Me.butDelete.Size = New System.Drawing.Size(104, 27)
         Me.butDelete.TabIndex = 2
         Me.butDelete.Text = "Delete All"
         '
         'butCancel
         '
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(256, 4)
+        Me.butCancel.Location = New System.Drawing.Point(288, 5)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(64, 24)
+        Me.butCancel.Size = New System.Drawing.Size(96, 27)
         Me.butCancel.TabIndex = 1
         Me.butCancel.Text = "Cancel"
         '
         'butOK
         '
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(336, 4)
+        Me.butOK.Location = New System.Drawing.Point(392, 5)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(64, 24)
+        Me.butOK.Size = New System.Drawing.Size(88, 27)
         Me.butOK.TabIndex = 0
         Me.butOK.Text = "OK"
         '
         'ConstraintForm
         '
-        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(408, 230)
+        Me.ClientSize = New System.Drawing.Size(489, 265)
         Me.ControlBox = False
         Me.Controls.Add(Me.PanelBottom)
         Me.HelpProviderConstraintForm.SetHelpKeyword(Me, "HowTo/Edit data/Set_runtime_name.html")

@@ -449,7 +449,9 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         If Me.radioInternal.Checked Then
             Dim s(1) As String
-            s = OceanArchetypeEditor.Instance.GetInput("Enter the new item:", "Description")
+            s = OceanArchetypeEditor.Instance.GetInput( _
+                Filemanager.GetOpenEhrTerm(603, "Add new term"), _
+                AE_Constants.Instance.Description)
 
             If s(0) <> "" Then
                 Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(s(0), s(1))

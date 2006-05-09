@@ -41,6 +41,10 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
+        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            Me.lblRatio.Text = Filemanager.GetOpenEhrTerm(321, Me.lblRatio.Text)
+            Me.cbAsPercent.Text = Filemanager.GetOpenEhrTerm(630, Me.cbAsPercent.Text)
+        End If
 
     End Sub
 

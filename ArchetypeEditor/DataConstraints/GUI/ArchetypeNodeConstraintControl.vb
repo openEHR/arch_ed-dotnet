@@ -150,7 +150,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         Me.HelpProviderCommonConstraint.SetHelpKeyword(Me.butSetRuntimeName, "HowTo/Edit data/Set_runtime_name.html")
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me.butSetRuntimeName, System.Windows.Forms.HelpNavigator.Topic)
-        Me.butSetRuntimeName.Location = New System.Drawing.Point(330, 70)
+        Me.butSetRuntimeName.Location = New System.Drawing.Point(334, 63)
         Me.butSetRuntimeName.Name = "butSetRuntimeName"
         Me.HelpProviderCommonConstraint.SetShowHelp(Me.butSetRuntimeName, True)
         Me.butSetRuntimeName.Size = New System.Drawing.Size(26, 20)
