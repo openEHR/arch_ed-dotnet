@@ -169,13 +169,15 @@ Public Class ListStructure
 
         If Not Me.DesignMode Then
             'Set the menu texts
-            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 Me.MenuRemove.Text = AE_Constants.Instance.Remove
                 Me.SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
                 Me.MenuAddReference.Text = AE_Constants.Instance.Add_Reference
             End If
             ' add the change structure menu from EntryStructure
-            Me.ContextMenuList.MenuItems.Add(menuChangeStructure)
+            If Not Me.ContextMenuList.MenuItems.Contains(menuChangeStructure) Then
+                Me.ContextMenuList.MenuItems.Add(menuChangeStructure)
+            End If
         End If
     End Sub
 

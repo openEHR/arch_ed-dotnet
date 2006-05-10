@@ -358,7 +358,7 @@ Public Class FileManagerLocal
             Case "adl", "ADL", "Adl"
                 Dim a_ontology As ArchetypeEditor.ADL_Classes.ADL_Ontology
                 Dim a_term As RmTerm
-                mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.Instance.DefaultLanguageCode)
+                mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.DefaultLanguageCode)
 
                 If mArchetypeEngine.ArchetypeAvailable Then
 
@@ -374,7 +374,7 @@ Public Class FileManagerLocal
             Case Else
                 Debug.Assert(False)
                 'Case "archetype", "ARCHETYPE", "Archetype"
-                '    mArchetypeEngine = New Text_Parsing.TextParser(OntologyManager.Instance, OceanArchetypeEditor.Instance.DefaultLanguageCode)
+                '    mArchetypeEngine = New Text_Parsing.TextParser(OntologyManager.Instance, OceanArchetypeEditor.DefaultLanguageCode)
         End Select
 
     End Sub

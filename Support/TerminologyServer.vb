@@ -169,7 +169,7 @@ Public Class TerminologyServer
 
         If language = "" Then
             'language = Default_language
-            language = OceanArchetypeEditor.Instance.DefaultLanguageCode
+            language = OceanArchetypeEditor.DefaultLanguageCode
         End If
 
         selected_rows = Terminology.Tables("GrouperTerm").Select("GrouperID = " & selected_rows1(0).Item(1))
@@ -190,7 +190,7 @@ Public Class TerminologyServer
 
         If language = "" Then
             'language = Default_language
-            language = OceanArchetypeEditor.Instance.DefaultLanguageCode
+            language = OceanArchetypeEditor.DefaultLanguageCode
         End If
 
         Return GetConcepts(selected_concepts, language)

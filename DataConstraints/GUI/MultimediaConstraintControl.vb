@@ -40,7 +40,7 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             Me.lblMultiMedia.Text = Filemanager.GetOpenEhrTerm(386, Me.lblMultiMedia.Text)
         End If
 

@@ -28,7 +28,7 @@ Public Class InputForm
         'Add any initialization after the InitializeComponent() call
 
         If Not Me.DesignMode Then
-            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 Me.butCancel.Text = AE_Constants.Instance.Cancel
                 Me.butOK.Text = AE_Constants.Instance.OK
             End If

@@ -73,10 +73,10 @@ Public Class TabPageDescription
     Friend WithEvents c_menuPasteEmail As System.Windows.Forms.MenuItem
     Friend WithEvents c_menuPasteOrg As System.Windows.Forms.MenuItem
     Friend WithEvents c_menPasteDate As System.Windows.Forms.MenuItem
-    Friend WithEvents lblContributors As System.Windows.Forms.Label
     Friend WithEvents listContributors As System.Windows.Forms.ListBox
     Friend WithEvents butRemoveContributor As System.Windows.Forms.Button
     Friend WithEvents butAddContributor As System.Windows.Forms.Button
+    Friend WithEvents gbContributors As System.Windows.Forms.GroupBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageDescription))
         Me.lblStatus = New System.Windows.Forms.Label
@@ -96,7 +96,6 @@ Public Class TabPageDescription
         Me.tpAuthor = New Crownwood.Magic.Controls.TabPage
         Me.butAddContributor = New System.Windows.Forms.Button
         Me.butRemoveContributor = New System.Windows.Forms.Button
-        Me.lblContributors = New System.Windows.Forms.Label
         Me.listContributors = New System.Windows.Forms.ListBox
         Me.gbAuthor = New System.Windows.Forms.GroupBox
         Me.ContextMenu1 = New System.Windows.Forms.ContextMenu
@@ -118,6 +117,7 @@ Public Class TabPageDescription
         Me.Splitter3 = New System.Windows.Forms.Splitter
         Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.Splitter1 = New System.Windows.Forms.Splitter
+        Me.gbContributors = New System.Windows.Forms.GroupBox
         Me.gbUse.SuspendLayout()
         Me.gbMisuse.SuspendLayout()
         Me.gbPurpose.SuspendLayout()
@@ -125,6 +125,7 @@ Public Class TabPageDescription
         Me.tpAuthor.SuspendLayout()
         Me.gbAuthor.SuspendLayout()
         Me.tpDescDetails.SuspendLayout()
+        Me.gbContributors.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblStatus
@@ -282,10 +283,7 @@ Public Class TabPageDescription
         '
         'tpAuthor
         '
-        Me.tpAuthor.Controls.Add(Me.butAddContributor)
-        Me.tpAuthor.Controls.Add(Me.butRemoveContributor)
-        Me.tpAuthor.Controls.Add(Me.lblContributors)
-        Me.tpAuthor.Controls.Add(Me.listContributors)
+        Me.tpAuthor.Controls.Add(Me.gbContributors)
         Me.tpAuthor.Controls.Add(Me.gbAuthor)
         Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
         Me.tpAuthor.Name = "tpAuthor"
@@ -300,7 +298,7 @@ Public Class TabPageDescription
         Me.butAddContributor.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butAddContributor.Image = CType(resources.GetObject("butAddContributor.Image"), System.Drawing.Image)
         Me.butAddContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddContributor.Location = New System.Drawing.Point(24, 189)
+        Me.butAddContributor.Location = New System.Drawing.Point(32, 24)
         Me.butAddContributor.Name = "butAddContributor"
         Me.butAddContributor.Size = New System.Drawing.Size(24, 25)
         Me.butAddContributor.TabIndex = 38
@@ -311,19 +309,10 @@ Public Class TabPageDescription
         Me.butRemoveContributor.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butRemoveContributor.Image = CType(resources.GetObject("butRemoveContributor.Image"), System.Drawing.Image)
         Me.butRemoveContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveContributor.Location = New System.Drawing.Point(24, 221)
+        Me.butRemoveContributor.Location = New System.Drawing.Point(32, 56)
         Me.butRemoveContributor.Name = "butRemoveContributor"
         Me.butRemoveContributor.Size = New System.Drawing.Size(24, 25)
         Me.butRemoveContributor.TabIndex = 39
-        '
-        'lblContributors
-        '
-        Me.lblContributors.Location = New System.Drawing.Point(56, 163)
-        Me.lblContributors.Name = "lblContributors"
-        Me.lblContributors.Size = New System.Drawing.Size(112, 24)
-        Me.lblContributors.TabIndex = 37
-        Me.lblContributors.Text = "Contributors"
-        Me.lblContributors.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'listContributors
         '
@@ -331,9 +320,9 @@ Public Class TabPageDescription
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.listContributors.ItemHeight = 17
-        Me.listContributors.Location = New System.Drawing.Point(56, 189)
+        Me.listContributors.Location = New System.Drawing.Point(64, 24)
         Me.listContributors.Name = "listContributors"
-        Me.listContributors.Size = New System.Drawing.Size(528, 123)
+        Me.listContributors.Size = New System.Drawing.Size(616, 123)
         Me.listContributors.TabIndex = 36
         '
         'gbAuthor
@@ -501,6 +490,19 @@ Public Class TabPageDescription
         Me.Splitter1.TabIndex = 15
         Me.Splitter1.TabStop = False
         '
+        'gbContributors
+        '
+        Me.gbContributors.Controls.Add(Me.listContributors)
+        Me.gbContributors.Controls.Add(Me.butAddContributor)
+        Me.gbContributors.Controls.Add(Me.butRemoveContributor)
+        Me.gbContributors.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbContributors.Location = New System.Drawing.Point(0, 152)
+        Me.gbContributors.Name = "gbContributors"
+        Me.gbContributors.Size = New System.Drawing.Size(700, 176)
+        Me.gbContributors.TabIndex = 40
+        Me.gbContributors.TabStop = False
+        Me.gbContributors.Text = "Contributors"
+        '
         'TabPageDescription
         '
         Me.BackColor = System.Drawing.SystemColors.Control
@@ -515,6 +517,7 @@ Public Class TabPageDescription
         Me.tpAuthor.ResumeLayout(False)
         Me.gbAuthor.ResumeLayout(False)
         Me.tpDescDetails.ResumeLayout(False)
+        Me.gbContributors.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -642,7 +645,7 @@ Public Class TabPageDescription
         Me.gbUse.Text = Filemanager.GetOpenEhrTerm(582, Me.gbUse.Text)
         Me.gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, Me.gbMisuse.Text)
         Me.gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, Me.gbAuthor.Text)
-        Me.lblContributors.Text = Filemanager.GetOpenEhrTerm(604, Me.lblContributors.Text)
+        Me.gbContributors.Text = Filemanager.GetOpenEhrTerm(604, Me.gbContributors.Text)
     End Sub
 
     Private Function MakeLifeCycleTable() As DataTable
@@ -696,8 +699,8 @@ Public Class TabPageDescription
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         Dim temp_isloading As Boolean = Filemanager.Master.FileLoading
         Filemanager.Master.FileLoading = True
-        LoadAuthorStatesTableCombo()
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
         Filemanager.Master.FileLoading = temp_isloading
@@ -771,5 +774,9 @@ Public Class TabPageDescription
         If Not Filemanager.Master.FileLoading Then
             Filemanager.Master.FileEdited = True
         End If
+    End Sub
+
+    Private Sub TabPageDescription_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
+        OceanArchetypeEditor.Reflect(Me)
     End Sub
 End Class

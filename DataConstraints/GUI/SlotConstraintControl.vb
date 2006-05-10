@@ -38,7 +38,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             Me.lblSlot.Text = Filemanager.GetOpenEhrTerm(312, Me.lblSlot.Text)
             Me.gbInclude.Text = Filemanager.GetOpenEhrTerm(625, Me.gbInclude.Text)
             Me.gbExclude.Text = Filemanager.GetOpenEhrTerm(626, Me.gbExclude.Text)

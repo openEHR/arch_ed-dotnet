@@ -34,7 +34,7 @@ Public Class ConstraintForm
         'Add any initialization after the InitializeComponent() call
 
         If Not Me.DesignMode Then
-            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 Me.butDelete.Text = Filemanager.GetOpenEhrTerm(631, "Delete all")
                 Me.butCancel.Text = AE_Constants.Instance.Cancel
                 Me.butOK.Text = AE_Constants.Instance.OK

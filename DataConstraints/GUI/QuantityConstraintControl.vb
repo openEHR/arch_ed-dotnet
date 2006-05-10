@@ -43,7 +43,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         mFileManager = a_file_manager
         Me.QuantityUnitConstraint.LocalFileManager = mFileManager
 
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             Me.LabelQuantity.Text = Filemanager.GetOpenEhrTerm(115, Me.LabelQuantity.Text)
             Me.lblListProperty.Text = Filemanager.GetOpenEhrTerm(116, Me.lblListProperty.Text)
             Me.lblListUnits.Text = Filemanager.GetOpenEhrTerm(117, Me.lblListUnits.Text)
@@ -212,7 +212,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             Else   ' Obsolete text string as needs to be language independent
                 'And need to update the constraint to the coded version
                 Dim d_row() As DataRow
-                If OceanArchetypeEditor.Instance.DefaultLanguageCode = "en" Then
+                If OceanArchetypeEditor.DefaultLanguageCode = "en" Then
                     d_row = CType(Me.comboPhysicalProperty.DataSource, DataTable).Select("Text = '" & Me.Constraint.PhysicalPropertyAsString & "'")
                 Else
                     d_row = CType(Me.comboPhysicalProperty.DataSource, DataTable).Select("Translated = '" & Me.Constraint.PhysicalPropertyAsString & "'")

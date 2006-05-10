@@ -38,7 +38,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             Me.LabelDuration.Text = Filemanager.GetOpenEhrTerm(142, Me.LabelDuration.Text)
             Me.chkYears.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("a")
             Me.chkMonths.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("mo")

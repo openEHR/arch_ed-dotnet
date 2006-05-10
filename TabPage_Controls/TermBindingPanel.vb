@@ -709,7 +709,7 @@ Public Class TermBindingPanel
     Private Sub TermBindingPanel_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Not Me.DesignMode Then
 
-            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 TranslateGUI()
             End If
 

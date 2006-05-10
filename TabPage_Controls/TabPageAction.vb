@@ -178,7 +178,7 @@ Public Class TabPageAction
             Me.tpAction.Controls.Add(mActionDescription)
             mActionDescription.Dock = DockStyle.Fill
         End If
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
         Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath

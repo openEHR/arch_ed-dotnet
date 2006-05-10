@@ -100,7 +100,7 @@ Public Class QuantityViewControl : Inherits ElementViewControl
                             ("openEHR = " & quantityConstraint.OpenEhrCode.ToString())(0)
                     Else
                         'OBSOLETE
-                        If OceanArchetypeEditor.Instance.DefaultLanguageCode = "en" Then
+                        If OceanArchetypeEditor.DefaultLanguageCode = "en" Then
                             d_row = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
                                 ("Text = '" & quantityConstraint.PhysicalPropertyAsString & "'")(0)
                         Else

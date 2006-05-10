@@ -50,17 +50,17 @@ Public Class OceanArchetypeEditor
         End Get
     End Property
 
-    Private mDefaultLanguageCode As String
+    Private Shared mDefaultLanguageCode As String
 
-    Public ReadOnly Property DefaultLanguageCode() As String
+    Public Shared ReadOnly Property DefaultLanguageCode() As String
         Get
             Debug.Assert(mDefaultLanguageCode <> "", "DefaultLanguageCode not set")
             Return mDefaultLanguageCode
         End Get
     End Property
 
-    Private mSpecificLanguageCode As String
-    Public ReadOnly Property SpecificLanguageCode() As String
+    Private Shared mSpecificLanguageCode As String
+    Public Shared ReadOnly Property SpecificLanguageCode() As String
         Get
             Debug.Assert(mSpecificLanguageCode <> "", "SpecificLanguageCode not set")
             Return mSpecificLanguageCode
@@ -78,25 +78,6 @@ Public Class OceanArchetypeEditor
     End Property
 
     Protected Sub New()
-
-#Const TEST_LANGUAGE_TRANSLATION = True
-
-#If Not TEST_LANGUAGE_TRANSLATION Then
-
-        'default language as two letter code e.g. "en"
-        mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-
-        ' specific as four letter e.g. "en-AU"
-        mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.Name
-
-#Else
-        'FOR TESTING LANGUAGE TRANSLATION
-        'mDefaultLanguageCode = "fa"
-        'mSpecificLanguageCode = "fa"
-
-        mDefaultLanguageCode = "de"
-        mSpecificLanguageCode = "de"
-#End If
 
         mDataSet = New DataSet("DesignerDataSet")
 
@@ -627,10 +608,31 @@ Public Class OceanArchetypeEditor
     Shared Function IsLanguageRightToLeft(ByVal a_language_code As String) As Boolean
         Select Case a_language_code
             Case "fa"
-                Return False
+                Return True
         End Select
     End Function
+
     Shared Sub main(ByVal CmdArgs() As String)
+
+#Const TEST_LANGUAGE_TRANSLATION = False
+
+#If Not TEST_LANGUAGE_TRANSLATION Then
+
+        'default language as two letter code e.g. "en"
+        mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+
+        ' specific as four letter e.g. "en-AU"
+        mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.Name
+
+#Else
+        'FOR TESTING LANGUAGE TRANSLATION
+        mDefaultLanguageCode = "fa"
+        mSpecificLanguageCode = "fa"
+
+        'mDefaultLanguageCode = "de"
+        'mSpecificLanguageCode = "de"
+#End If
+
         Dim frm As New Designer
 
         If CmdArgs.Length > 0 Then
@@ -639,8 +641,42 @@ Public Class OceanArchetypeEditor
 
         mMenu = frm.MainMenu
 
+        If IsLanguageRightToLeft(mDefaultLanguageCode) Then
+            frm.RightToLeft = RightToLeft.Yes
+        End If
         frm.ShowDialog()
     End Sub
+
+    Shared Sub Reflect(ByVal a_control As Control)
+        For Each Ctrl As Control In a_control.Controls
+
+            Debug.WriteLine(Ctrl.Name & ":")
+            Debug.WriteLine("     * " & Ctrl.Location.X.ToString() & ", " & Ctrl.Location.Y.ToString())
+
+            'If TypeOf Ctrl Is Windows.Forms.GroupBox Or TypeOf Ctrl Is Windows.Forms.Panel Then
+            If Ctrl.Dock = DockStyle.Left Then
+                Ctrl.Dock = DockStyle.Right
+            ElseIf Ctrl.Dock = DockStyle.Right Then
+                Ctrl.Dock = DockStyle.Left
+            ElseIf Ctrl.Dock = DockStyle.None Then
+                Ctrl.Location = New Drawing.Point(Ctrl.Parent.Width - (Ctrl.Location.X + Ctrl.Width), Ctrl.Location.Y)
+
+                If TypeOf Ctrl Is Windows.Forms.Button Then
+                    'Change Top Left anchor to Top Right
+                    If Ctrl.Anchor = 5 Then
+                        Ctrl.Anchor = CType(9, Windows.Forms.AnchorStyles)
+                    End If
+                End If
+            End If
+
+            Debug.WriteLine("     * " & Ctrl.Location.X.ToString() & ", " & Ctrl.Location.Y.ToString())
+
+            If Ctrl.Controls.Count > 0 Then
+                Reflect(Ctrl)
+            End If
+        Next
+    End Sub
+
 End Class
 
 Public Structure CodeAndTerm
