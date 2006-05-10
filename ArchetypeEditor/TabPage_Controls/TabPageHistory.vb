@@ -1156,7 +1156,9 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub txtEventDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtEventDescription.TextChanged
-        If current_item Is Nothing Then Return
+
+        If (current_item Is Nothing) Or mIsLoading Then Return
+
         current_item.Description = Me.txtEventDescription.Text
         mFileManager.FileEdited = True
     End Sub
@@ -1164,7 +1166,7 @@ Public Class TabpageHistory
     Private Sub RadioInterval_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioInterval.CheckedChanged
         Me.gbDuration.Visible = RadioInterval.Checked
 
-        If current_item Is Nothing Then Return
+        If (current_item Is Nothing) Or mIsLoading Then Return
 
         current_item.isPointInTime = Not RadioInterval.Checked
 
@@ -1176,25 +1178,34 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub NumericOffset_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericOffset.ValueChanged, NumericOffset.TextChanged
-        If current_item Is Nothing Then Return
+
+        If (current_item Is Nothing) Or mIsLoading Then Return
+
         current_item.Offset = Me.NumericOffset.Value
         mFileManager.FileEdited = True
     End Sub
 
     Private Sub comboOffsetUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboOffsetUnits.SelectedIndexChanged
-        If current_item Is Nothing Then Return
+
+        If (current_item Is Nothing) Or mIsLoading Then Return
+
         current_item.OffsetUnits = CType(Me.comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
         mFileManager.FileEdited = True
+
     End Sub
 
     Private Sub numericDuration_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numericDuration.ValueChanged, numericDuration.TextChanged
-        If current_item Is Nothing Then Return
+
+        If (current_item Is Nothing) Or mIsLoading Then Return
+
         current_item.Width = Me.numericDuration.Value
         mFileManager.FileEdited = True
     End Sub
 
     Private Sub comboDurationUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboDurationUnits.SelectedIndexChanged
-        If current_item Is Nothing Then Return
+
+        If (current_item Is Nothing) Or mIsLoading Then Return
+
         current_item.WidthUnits = CType(Me.comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
         mFileManager.FileEdited = True
     End Sub
@@ -1374,7 +1385,7 @@ Public Class TabpageHistory
 
         mIsLoading = True
 
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
 
@@ -1389,7 +1400,7 @@ Public Class TabpageHistory
 
         'Load according to the language of the interface, not the archetype
         'math_functions = mFileManager.OntologyManager.CodeForGroupID(14, mFileManager.OntologyManager.LanguageCode) 'event math function
-        math_functions = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.Instance.DefaultLanguageCode) 'event math function
+        math_functions = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.DefaultLanguageCode) 'event math function
 
         For Each rw As DataRow In math_functions
             new_row = MathFunctionTable.NewRow
@@ -1426,7 +1437,7 @@ Public Class TabpageHistory
         'Initialising
         If mFileManager Is Nothing Then Return
 
-        If mIsLoading Then
+        If Not mIsLoading Then
             mFileManager.FileEdited = True
         End If
     End Sub

@@ -38,7 +38,7 @@ Public Class IntervalConstraintControl : Inherits ConstraintControl
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             Me.LabelInterval.Text = Filemanager.GetOpenEhrTerm(141, Me.LabelInterval.Text)
         End If
     End Sub
@@ -178,4 +178,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

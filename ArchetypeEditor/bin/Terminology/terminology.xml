@@ -1292,7 +1292,7 @@
   <Concept Language="de" ConceptID="49" Rubric="Form Beschriftungen" />
   <Concept Language="de" ConceptID="50" Rubric="Archetyp" />
   <Concept Language="de" ConceptID="51" Rubric="Modell" />
-  <Concept Language="de" ConceptID="52" Rubric="Kurze Konzeptbezeichung" />
+  <Concept Language="de" ConceptID="52" Rubric="Kurzbezeichung" />
   <Concept Language="de" ConceptID="53" Rubric="Version" />
   <Concept Language="de" ConceptID="54" Rubric="Konzept" />
   <Concept Language="de" ConceptID="56" Rubric="Uneingeschränkt" />
@@ -2837,6 +2837,20 @@
   <Concept Language="en" ConceptID="629" Rubric="Exclude all" />
   <Concept Language="en" ConceptID="630" Rubric="As percent" />
   <Concept Language="en" ConceptID="631" Rubric="Delete all" />
+  <Concept Language="fa" ConceptID="625" Rubric="شامل" />
+  <Concept Language="fa" ConceptID="626" Rubric="استثنا" />
+  <Concept Language="fa" ConceptID="627" Rubric="جستار" />
+  <Concept Language="fa" ConceptID="628" Rubric="شامل کلیه موارد" />
+  <Concept Language="fa" ConceptID="629" Rubric="کلیه موارد استثنا است" />
+  <Concept Language="fa" ConceptID="630" Rubric="به صورت درصد" />
+  <Concept Language="fa" ConceptID="631" Rubric="حذف کلیه موارد" />
+  <Concept Language="de" ConceptID="625" Rubric="Einbeziehen" />
+  <Concept Language="de" ConceptID="626" Rubric="Ausschließen" />
+  <Concept Language="de" ConceptID="627" Rubric="Anschauen" />
+  <Concept Language="de" ConceptID="628" Rubric="Alle einbeziehen" />
+  <Concept Language="de" ConceptID="629" Rubric="Alle ausschließen" />
+  <Concept Language="de" ConceptID="630" Rubric="Als Prozent" />
+  <Concept Language="de" ConceptID="631" Rubric="Alle löschen" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

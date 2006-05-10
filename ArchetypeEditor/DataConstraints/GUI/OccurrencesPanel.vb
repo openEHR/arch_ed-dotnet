@@ -24,7 +24,7 @@ Public Class OccurrencesPanel
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_filemanager
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             Me.TranslateGUI()
         End If
 

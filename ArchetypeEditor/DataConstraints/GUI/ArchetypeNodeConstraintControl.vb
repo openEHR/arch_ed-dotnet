@@ -52,7 +52,7 @@ Public Class ArchetypeNodeConstraintControl
 
             mOccurrences.Dock = DockStyle.Fill
 
-            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 TranslateGUI()
             End If
 

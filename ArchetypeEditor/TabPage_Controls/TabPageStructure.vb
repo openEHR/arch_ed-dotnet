@@ -45,7 +45,7 @@ Public Class TabPageStructure
             For Each ValidStructure As StructureType In mValidStructureClasses
                 Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(CInt(ValidStructure), ValidStructure.ToString))
             Next
-            If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 Me.comboStructure.Text = Filemanager.GetOpenEhrTerm(104, "Choose...")
                 Me.chkEmbedded.Text = Filemanager.GetOpenEhrTerm(605, chkEmbedded.Text)
             End If
@@ -543,7 +543,7 @@ Public Class TabPageStructure
 #Region "Functions"
 
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        
+
         If mEmbeddedAllowed Then
             Me.chkEmbedded.Visible = True
         Else
@@ -812,12 +812,12 @@ Public Class TabPageStructure
         ' set the specific language if it is present e.g. en-US, en-AU
         If mFileManager.OntologyManager.LanguageIsAvailable(Filemanager.Master.OntologyManager.LanguageCode) Then
             mFileManager.OntologyManager.LanguageCode = Filemanager.Master.OntologyManager.LanguageCode
-        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.Instance.SpecificLanguageCode) AndAlso _
-            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.Instance.SpecificLanguageCode Then
-            Filemanager.Master.OntologyManager.LanguageCode = OceanArchetypeEditor.Instance.SpecificLanguageCode
-        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.Instance.DefaultLanguageCode) AndAlso _
-            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.Instance.DefaultLanguageCode Then
-            mFileManager.OntologyManager.LanguageCode = OceanArchetypeEditor.Instance.DefaultLanguageCode
+        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) AndAlso _
+            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.SpecificLanguageCode Then
+            Filemanager.Master.OntologyManager.LanguageCode = OceanArchetypeEditor.SpecificLanguageCode
+        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) AndAlso _
+            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.DefaultLanguageCode Then
+            mFileManager.OntologyManager.LanguageCode = OceanArchetypeEditor.DefaultLanguageCode
         Else
             mFileManager.OntologyManager.LanguageCode = mFileManager.OntologyManager.PrimaryLanguageCode
         End If

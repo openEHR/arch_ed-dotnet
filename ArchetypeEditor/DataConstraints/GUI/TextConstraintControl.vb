@@ -41,7 +41,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         mFileManager = a_file_manager
         mAllowedValuesDataView = New DataView(mFileManager.OntologyManager.TermDefinitionTable)
 
-        If OceanArchetypeEditor.Instance.DefaultLanguageCode <> "en" Then
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             Me.radioText.Text = Filemanager.GetOpenEhrTerm(444, Me.radioText.Text)
             Me.radioInternal.Text = Filemanager.GetOpenEhrTerm(150, Me.radioInternal.Text)
             Me.radioTerminology.Text = Filemanager.GetOpenEhrTerm(47, Me.radioTerminology.Text)

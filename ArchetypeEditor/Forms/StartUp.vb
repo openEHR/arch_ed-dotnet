@@ -291,6 +291,10 @@ Public Class frmStartUp
         Me.AcceptButton = Me.butOpen
         Me.HelpProviderStartUp.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
+
+    Private Sub frmStartUp_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
+        OceanArchetypeEditor.Reflect(Me)
+    End Sub
 End Class
 
 '
