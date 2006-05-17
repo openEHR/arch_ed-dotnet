@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$URL$"
@@ -113,7 +113,7 @@ Class RmHistory
                     period = an_attribute.children.first
                     d.ISO_duration = period.item.as_string.to_cil
                     iPeriod = d.GUI_duration
-                    sPeriodUnits = d.GUI_Units
+                    sPeriodUnits = d.ISO_Units
 
                 Case "items", "events"  'items is OBSOLETE
                     Dim an_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT

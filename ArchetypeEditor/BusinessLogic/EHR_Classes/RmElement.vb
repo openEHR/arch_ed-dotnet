@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$URL$"
@@ -508,7 +508,14 @@ Public Class RmElement
 
         If Not ObjNode.property Is Nothing Then
 
-            q.PhysicalPropertyAsString = ObjNode.property.to_cil
+            Dim s As String = ObjNode.property.code_string.to_cil
+
+            If IsNumeric(s) Then
+                q.OpenEhrCode = Integer.Parse(s)
+            Else
+                'OBSOLETE - to cope with physical properties
+                q.PhysicalPropertyAsString = s
+            End If
 
             If ObjNode.list.count > 0 Then
                 Dim cqi As openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM
@@ -545,7 +552,7 @@ Public Class RmElement
 
         End If
 
-        Return q
+            Return q
 
     End Function
 

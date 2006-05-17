@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/GUI_Classes/Structure_Controls/SCCS/s.EntryStructure.vb $"
@@ -860,6 +860,9 @@ Public Class EntryStructure
 
 #End Region
 
+    Private Sub EntryStructure_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
+        OceanArchetypeEditor.Reflect(Me)
+    End Sub
 End Class
 
 '

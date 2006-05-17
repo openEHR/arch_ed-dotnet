@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/SCCS/s.ArchetypeEditor.vb $"
@@ -605,6 +605,10 @@ Public Class OceanArchetypeEditor
         Units.Rows.Add(rw)
     End Sub
 
+    Shared Function IsDefaultLanguageRightToLeft() As Boolean
+        Return IsLanguageRightToLeft(mDefaultLanguageCode)
+    End Function
+
     Shared Function IsLanguageRightToLeft(ByVal a_language_code As String) As Boolean
         Select Case a_language_code
             Case "fa"
@@ -626,8 +630,8 @@ Public Class OceanArchetypeEditor
 
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
-        mDefaultLanguageCode = "fa"
-        mSpecificLanguageCode = "fa"
+        'mDefaultLanguageCode = "fa"
+        'mSpecificLanguageCode = "fa"
 
         'mDefaultLanguageCode = "de"
         'mSpecificLanguageCode = "de"
@@ -650,10 +654,6 @@ Public Class OceanArchetypeEditor
     Shared Sub Reflect(ByVal a_control As Control)
         For Each Ctrl As Control In a_control.Controls
 
-            Debug.WriteLine(Ctrl.Name & ":")
-            Debug.WriteLine("     * " & Ctrl.Location.X.ToString() & ", " & Ctrl.Location.Y.ToString())
-
-            'If TypeOf Ctrl Is Windows.Forms.GroupBox Or TypeOf Ctrl Is Windows.Forms.Panel Then
             If Ctrl.Dock = DockStyle.Left Then
                 Ctrl.Dock = DockStyle.Right
             ElseIf Ctrl.Dock = DockStyle.Right Then
@@ -661,15 +661,15 @@ Public Class OceanArchetypeEditor
             ElseIf Ctrl.Dock = DockStyle.None Then
                 Ctrl.Location = New Drawing.Point(Ctrl.Parent.Width - (Ctrl.Location.X + Ctrl.Width), Ctrl.Location.Y)
 
-                If TypeOf Ctrl Is Windows.Forms.Button Then
-                    'Change Top Left anchor to Top Right
+                If Not (TypeOf Ctrl Is Windows.Forms.TabPage) And _
+                Not (TypeOf Ctrl Is Crownwood.Magic.Controls.TabPage) And _
+                Not (TypeOf Ctrl Is Windows.Forms.TabControl) Then
                     If Ctrl.Anchor = 5 Then
+                        Debug.WriteLine(Ctrl.Name)
                         Ctrl.Anchor = CType(9, Windows.Forms.AnchorStyles)
                     End If
                 End If
             End If
-
-            Debug.WriteLine("     * " & Ctrl.Location.X.ToString() & ", " & Ctrl.Location.Y.ToString())
 
             If Ctrl.Controls.Count > 0 Then
                 Reflect(Ctrl)

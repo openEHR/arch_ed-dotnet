@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/DataConstraints/SCCS/s.SlotConstraintControl.vb $"
@@ -214,28 +214,32 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         'butBrowse
         '
-        Me.butBrowse.Location = New System.Drawing.Point(357, 8)
+        Me.butBrowse.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.butBrowse.Location = New System.Drawing.Point(344, 8)
         Me.butBrowse.Name = "butBrowse"
-        Me.butBrowse.Size = New System.Drawing.Size(64, 40)
+        Me.butBrowse.Size = New System.Drawing.Size(72, 40)
         Me.butBrowse.TabIndex = 3
         Me.butBrowse.Text = "Browse"
         '
         'listAvailbleArchetypes
         '
+        Me.listAvailbleArchetypes.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.listAvailbleArchetypes.ItemHeight = 16
-        Me.listAvailbleArchetypes.Location = New System.Drawing.Point(96, 0)
+        Me.listAvailbleArchetypes.Location = New System.Drawing.Point(128, 0)
         Me.listAvailbleArchetypes.Name = "listAvailbleArchetypes"
         Me.listAvailbleArchetypes.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
-        Me.listAvailbleArchetypes.Size = New System.Drawing.Size(256, 84)
+        Me.listAvailbleArchetypes.Size = New System.Drawing.Size(208, 84)
         Me.listAvailbleArchetypes.Sorted = True
         Me.listAvailbleArchetypes.TabIndex = 2
         '
         'lblClass
         '
-        Me.lblClass.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblClass.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblClass.Location = New System.Drawing.Point(8, 24)
         Me.lblClass.Name = "lblClass"
-        Me.lblClass.Size = New System.Drawing.Size(80, 56)
+        Me.lblClass.Size = New System.Drawing.Size(112, 56)
         Me.lblClass.TabIndex = 1
         Me.lblClass.Text = "Class name"
         Me.lblClass.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -245,7 +249,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.lblSlot.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblSlot.Location = New System.Drawing.Point(8, 1)
         Me.lblSlot.Name = "lblSlot"
-        Me.lblSlot.Size = New System.Drawing.Size(32, 16)
+        Me.lblSlot.Size = New System.Drawing.Size(112, 16)
         Me.lblSlot.TabIndex = 0
         Me.lblSlot.Text = "Slot"
         '

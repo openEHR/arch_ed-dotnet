@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$URL$"
@@ -40,39 +40,61 @@ Namespace ArchetypeEditor.ADL_Classes
             End Get
             Set(ByVal Value As Integer)
                 If sUnits = "millisec" Then
-                    sISODuration = "P" & (Value / 1000).ToString & "s"
+                    sISODuration = "PT" & (Value / 1000).ToString & "s"
                 Else
-                    sISODuration = "P" & Value.ToString & sUnits
+                    If (sUnits = "d") Then
+                        sISODuration = "P" & Value.ToString & toDuration(sUnits)
+                    Else
+                        sISODuration = "PT" & Value.ToString & toDuration(sUnits)
+                    End If
                 End If
                 iValue = Value
             End Set
         End Property
-        Property GUI_Units() As String
+        Property ISO_Units() As String
             Get
                 Return sUnits
             End Get
             Set(ByVal Value As String)
-                If sUnits <> Value Then
-                    sUnits = Value
-                    If sUnits = "millisec" Then
-                        sISODuration = "P" & (iValue / 1000).ToString & "s"
-                    Else
-                        sISODuration = "P" & iValue.ToString & sUnits
+                If OceanArchetypeEditor.ISO_TimeUnits.IsValidIsoUnit(Value) Then
+                    If sUnits <> Value Then
+                        sUnits = Value
+                        If (sUnits = "d") Then
+                            sISODuration = "P" & iValue.ToString & toDuration(sUnits)
+                        Else
+                            sISODuration = "PT" & iValue.ToString & toDuration(sUnits)
+                        End If
                     End If
+                Else
+                    Debug.Assert(False, Value & " is not a valid ISO Unit")
+                    Throw New Exception(Value & " is not a valid ISO Unit")
                 End If
             End Set
         End Property
+
+        Private Function toDuration(ByVal units As String)
+            Select Case units
+                Case "min"
+                    Return "M"
+                Case Else 'D, H, S
+                    Return units.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+            End Select
+        End Function
 
         Private Sub ProcessIso()
             Dim str As String
             Dim y() As String
 
-            str = sISODuration.Substring(1) ' drop the leading P
+            ' drop the leading P and convert to lower
+            str = sISODuration.Substring(1).ToLower(System.Globalization.CultureInfo.InvariantCulture)
             y = str.Split("d".ToCharArray())
             If y.Length > 1 Then
                 d = Val(y(0))
                 str = y(1)
             End If
+
+            str = str.Trim("t"c)
+
             y = str.Split("h")
             If y.Length > 1 Then
                 h = Val(y(0))
@@ -89,13 +111,13 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
 
-            If sISODuration.EndsWith("d") Then
-                sUnits = "day"
-            ElseIf sISODuration.EndsWith("h") Then
-                sUnits = "hr"
-            ElseIf sISODuration.EndsWith("m") Then
+            If sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("d") Then
+                sUnits = "d"
+            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("h") Then
+                sUnits = "h"
+            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("m") Then
                 sUnits = "min"
-            ElseIf sISODuration.EndsWith("s") Then
+            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("s") Then
                 If InStr(s.ToString, ".") > 0 Then
                     ' this means there is a decimal point and the period must have been in millisecs
                     If InStr(iValue.ToString, ".") Then
@@ -103,20 +125,20 @@ Namespace ArchetypeEditor.ADL_Classes
                         sUnits = "millisec"
                     End If
                 Else
-                    sUnits = "sec"
+                    sUnits = "s"
                 End If
             End If
 
 
-            If sUnits = "day" Then
+            If sUnits = "d" Then
                 iValue = d
-            ElseIf sUnits = "hr" Then
+            ElseIf sUnits = "h" Then
                 iValue = (d * 24) + h
 
             ElseIf sUnits = "min" Then
                 iValue = (((d * 24) + h) * 60) + m
 
-            ElseIf sUnits = "sec" Then
+            ElseIf sUnits = "s" Then
                 iValue = (((((d * 24) + h) * 60) + m) * 60) + s
             End If
         End Sub
@@ -160,4 +182,4 @@ End Namespace
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

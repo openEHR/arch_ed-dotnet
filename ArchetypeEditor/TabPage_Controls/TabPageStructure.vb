@@ -28,7 +28,9 @@ Public Class TabPageStructure
     Private mEmbeddedLoaded As Boolean = False
     Private mValidStructureClasses As StructureType()
     Private WithEvents mArchetypeControl As EntryStructure
+    Private WithEvents mSplitter As Splitter
     Private mFileManager As FileManagerLocal
+    Friend WithEvents PanelDetails As ArchetypeNodeConstraintControl
     
 
 #Region " Windows Form Designer generated code "
@@ -40,15 +42,34 @@ Public Class TabPageStructure
         InitializeComponent()
 
         If Not Me.DesignMode Then
+            Dim ds As DockStyle = DockStyle.Right
+
             mFileManager = Filemanager.Master
             mValidStructureClasses = ReferenceModel.Instance.ValidStructureTypes
             For Each ValidStructure As StructureType In mValidStructureClasses
                 Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(CInt(ValidStructure), ValidStructure.ToString))
             Next
+
+            PanelDetails = New ArchetypeNodeConstraintControl(mFileManager)
+            Me.PanelStructure.Controls.Add(PanelDetails)
+
             If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 Me.comboStructure.Text = Filemanager.GetOpenEhrTerm(104, "Choose...")
-                Me.chkEmbedded.Text = Filemanager.GetOpenEhrTerm(605, chkEmbedded.Text)
+                TranslateGUI()
+                If OceanArchetypeEditor.IsDefaultLanguageRightToLeft Then
+                    ds = DockStyle.Left
+                    OceanArchetypeEditor.Reflect(PanelDetails)
+                End If
             End If
+
+            PanelDetails.Dock = ds
+
+            mSplitter = New Splitter
+            mSplitter.Dock = ds
+            Me.PanelStructure.Controls.Add(mSplitter)
+
+            Me.panelDisplay.Dock = DockStyle.Fill
+
         End If
 
     End Sub
@@ -70,7 +91,6 @@ Public Class TabPageStructure
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     Friend WithEvents PanelStructure As System.Windows.Forms.Panel
-    Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     Friend WithEvents panelDisplay As System.Windows.Forms.Panel
     Friend WithEvents panelEntry As System.Windows.Forms.Panel
     Friend WithEvents comboStructure As System.Windows.Forms.ComboBox
@@ -82,8 +102,6 @@ Public Class TabPageStructure
     Friend WithEvents MenuAddItem As System.Windows.Forms.MenuItem
     Friend WithEvents menuRemove As System.Windows.Forms.MenuItem
     Friend WithEvents MenuRemoveElement As System.Windows.Forms.MenuItem
-    Friend WithEvents PanelDetails As ArchetypeNodeConstraintControl
-    Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
     Friend WithEvents ContextMenuGrid As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuItemGridAdd As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItemGridAddColumn As System.Windows.Forms.MenuItem
@@ -119,9 +137,6 @@ Public Class TabPageStructure
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageStructure))
         Me.PanelStructure = New System.Windows.Forms.Panel
         Me.panelDisplay = New System.Windows.Forms.Panel
-        Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.PanelDetails = New ArchetypeNodeConstraintControl
-        Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
         Me.MenuItemGridAdd = New System.Windows.Forms.MenuItem
         Me.MenuItemGridAddColumn = New System.Windows.Forms.MenuItem
@@ -169,9 +184,6 @@ Public Class TabPageStructure
         'PanelStructure
         '
         Me.PanelStructure.Controls.Add(Me.panelDisplay)
-        Me.PanelStructure.Controls.Add(Me.Splitter1)
-        Me.PanelStructure.Controls.Add(Me.PanelDetails)
-        Me.PanelStructure.Controls.Add(Me.Splitter2)
         Me.PanelStructure.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelStructure.Location = New System.Drawing.Point(0, 40)
         Me.PanelStructure.Name = "PanelStructure"
@@ -181,41 +193,13 @@ Public Class TabPageStructure
         '
         'panelDisplay
         '
-        Me.panelDisplay.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelDisplay.DockPadding.All = 2
         Me.HelpProviderTabPageStructure.SetHelpNavigator(Me.panelDisplay, System.Windows.Forms.HelpNavigator.Index)
-        Me.panelDisplay.Location = New System.Drawing.Point(0, 0)
+        Me.panelDisplay.Location = New System.Drawing.Point(80, 0)
         Me.panelDisplay.Name = "panelDisplay"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.panelDisplay, True)
-        Me.panelDisplay.Size = New System.Drawing.Size(429, 368)
+        Me.panelDisplay.Size = New System.Drawing.Size(376, 368)
         Me.panelDisplay.TabIndex = 0
-        '
-        'Splitter1
-        '
-        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Splitter1.Location = New System.Drawing.Point(429, 0)
-        Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(8, 368)
-        Me.Splitter1.TabIndex = 34
-        Me.Splitter1.TabStop = False
-        '
-        'PanelDetails
-        '
-        Me.PanelDetails.Dock = System.Windows.Forms.DockStyle.Right
-        Me.PanelDetails.Location = New System.Drawing.Point(437, 0)
-        Me.PanelDetails.Name = "PanelDetails"
-        Me.PanelDetails.Size = New System.Drawing.Size(408, 368)
-        Me.PanelDetails.TabIndex = 33
-        Me.PanelDetails.Visible = False
-        '
-        'Splitter2
-        '
-        Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Splitter2.Location = New System.Drawing.Point(845, 0)
-        Me.Splitter2.Name = "Splitter2"
-        Me.Splitter2.Size = New System.Drawing.Size(3, 368)
-        Me.Splitter2.TabIndex = 23
-        Me.Splitter2.TabStop = False
         '
         'ContextMenuGrid
         '
@@ -412,18 +396,18 @@ Public Class TabPageStructure
         'lblStructure
         '
         Me.lblStructure.BackColor = System.Drawing.Color.Transparent
-        Me.lblStructure.Location = New System.Drawing.Point(0, 12)
+        Me.lblStructure.Location = New System.Drawing.Point(9, 12)
         Me.lblStructure.Name = "lblStructure"
-        Me.lblStructure.Size = New System.Drawing.Size(72, 16)
+        Me.lblStructure.Size = New System.Drawing.Size(79, 16)
         Me.lblStructure.TabIndex = 9
-        Me.lblStructure.Text = "Structure:"
+        Me.lblStructure.Text = "Structure"
         Me.lblStructure.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'comboStructure
         '
         Me.HelpProviderTabPageStructure.SetHelpKeyword(Me.comboStructure, "HowTo/Edit data/set_structure.htm")
         Me.HelpProviderTabPageStructure.SetHelpNavigator(Me.comboStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.comboStructure.Location = New System.Drawing.Point(80, 8)
+        Me.comboStructure.Location = New System.Drawing.Point(97, 8)
         Me.comboStructure.Name = "comboStructure"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.comboStructure, True)
         Me.comboStructure.Size = New System.Drawing.Size(136, 24)
@@ -461,7 +445,9 @@ Public Class TabPageStructure
         End Get
         Set(ByVal Value As EntryStructure)
             mArchetypeControl = Value
-            Me.panelDisplay.Controls.Clear()
+            If Me.panelDisplay.Controls.Count > 0 Then
+                Me.panelDisplay.Controls.Clear()
+            End If
             Me.panelDisplay.Controls.Add(Value)
             Value.Dock = DockStyle.Fill
         End Set
@@ -593,6 +579,8 @@ Public Class TabPageStructure
                 Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(ValidStructure, ValidStructure.ToString))
             Next
         End If
+
+        Me.lblStructure.Text = Filemanager.GetOpenEhrTerm(85, Me.lblStructure.Text)
 
         If Me.chkEmbedded.Visible Then
             Me.chkEmbedded.Text = Filemanager.GetOpenEhrTerm(605, Me.chkEmbedded.Text)
@@ -918,7 +906,6 @@ Public Class TabPageStructure
     End Sub
 
 #End Region
-
 
 End Class
 

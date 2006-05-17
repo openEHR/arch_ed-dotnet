@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$URL$"
@@ -25,7 +25,6 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
-
     Public Sub New()
         MyBase.New()
 
@@ -33,31 +32,38 @@ Public Class ArchetypeNodeConstraintControl
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
+    End Sub
 
-        If Not Me.DesignMode Then
+    Public Sub New(ByVal a_file_manager As FileManagerLocal)
+        MyBase.New()
 
-            mIsLoading = True
+        'This call is required by the Windows Form Designer.
+        InitializeComponent()
 
-            mFileManager = Filemanager.Master
+        'Add any initialization after the InitializeComponent() call
 
-            mOccurrences = New OccurrencesPanel(mFileManager)
-            Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
-                Case "lexical"
-                    mOccurrences.Mode = OccurrencesMode.Lexical
-                Case "numeric"
-                    mOccurrences.Mode = OccurrencesMode.Numeric
-            End Select
+        mIsLoading = True
 
-            Me.PanelGenericConstraint.Controls.Add(mOccurrences)
+        mFileManager = a_file_manager
 
-            mOccurrences.Dock = DockStyle.Fill
+        mOccurrences = New OccurrencesPanel(mFileManager)
 
-            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-                TranslateGUI()
-            End If
+        Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
+            Case "lexical"
+                mOccurrences.Mode = OccurrencesMode.Lexical
+            Case "numeric"
+                mOccurrences.Mode = OccurrencesMode.Numeric
+        End Select
 
-            mIsLoading = False
+        Me.PanelGenericConstraint.Controls.Add(mOccurrences)
+
+        mOccurrences.Dock = DockStyle.Fill
+
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            TranslateGUI()
         End If
+
+        mIsLoading = False
 
         Me.HelpProviderCommonConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
@@ -320,6 +326,10 @@ Public Class ArchetypeNodeConstraintControl
             End If
 
             SetControlValues(IsState)
+
+            If OceanArchetypeEditor.IsDefaultLanguageRightToLeft Then
+                OceanArchetypeEditor.Reflect(mConstraintControl)
+            End If
 
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)

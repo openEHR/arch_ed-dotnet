@@ -703,6 +703,11 @@
   <PrimaryRubric Id="629" Language="en" />
   <PrimaryRubric Id="630" Language="en" />
   <PrimaryRubric Id="631" Language="en" />
+  <PrimaryRubric Id="632" Language="en" />
+  <PrimaryRubric Id="633" Language="en" />
+  <PrimaryRubric Id="634" Language="en" />
+  <PrimaryRubric Id="635" Language="en" />
+  <PrimaryRubric Id="636" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -756,7 +761,7 @@
   <Concept Language="en" ConceptID="57" Rubric="Archetype file name" />
   <Concept Language="en" ConceptID="59" Rubric="Tooltips" />
   <Concept Language="en" ConceptID="60" Rubric="Change data type" />
-  <Concept Language="en" ConceptID="61" Rubric="Open     Ctrl+O" />
+  <Concept Language="en" ConceptID="61" Rubric="Open" />
   <Concept Language="en" ConceptID="62" Rubric="New    Ctrl+N" />
   <Concept Language="en" ConceptID="63" Rubric="Exit" />
   <Concept Language="en" ConceptID="64" Rubric="Archetypes DB" />
@@ -827,7 +832,7 @@
   <Concept Language="en" ConceptID="132" Rubric="Set max. value" />
   <Concept Language="en" ConceptID="133" Rubric="Events" />
   <Concept Language="en" ConceptID="134" Rubric="Event list" />
-  <Concept Language="en" ConceptID="135" Rubric="Open" />
+  <Concept Language="en" ConceptID="135" Rubric="Open (Ctrl + O)" />
   <Concept Language="en" ConceptID="136" Rubric="Fixed" />
   <Concept Language="en" ConceptID="137" Rubric="Events at regular time period" />
   <Concept Language="en" ConceptID="138" Rubric="Event details" />
@@ -1841,7 +1846,7 @@
   <Concept Language="fa" ConceptID="58" Rubric="ocean informatics ویرایشگر الگو" />
   <Concept Language="fa" ConceptID="59" Rubric="عناوین ابزاری" />
   <Concept Language="fa" ConceptID="60" Rubric="تغییر نوع داد ه ها" />
-  <Concept Language="fa" ConceptID="61" Rubric="باز کردن    Ctrl+O (en)" />
+  <Concept Language="fa" ConceptID="61" Rubric="باز کردن" />
   <Concept Language="fa" ConceptID="62" Rubric="جدید   Ctrl+N (en)" />
   <Concept Language="fa" ConceptID="63" Rubric="خروج" />
   <Concept Language="fa" ConceptID="64" Rubric="پایگاه داده های الگو" />
@@ -2055,7 +2060,7 @@
   <Concept Language="fa" ConceptID="281" Rubric="بسط دادن کیله موارد" />
   <Concept Language="fa" ConceptID="282" Rubric="بستن کلیه موارد" />
   <Concept Language="fa" ConceptID="283" Rubric="کلیه ارجاعات" />
-  <Concept Language="fa" ConceptID="284" Rubric="*Ocean Archetypeویرایشگر" />
+  <Concept Language="fa" ConceptID="284" Rubric="Ocean Archetypeویرایشگر" />
   <Concept Language="fa" ConceptID="285" Rubric="شما زبانی را انتخاب نموده اید که کامل نشده است" />
   <Concept Language="fa" ConceptID="286" Rubric="اضافه کردن زبان لغو شد" />
   <Concept Language="fa" ConceptID="287" Rubric="الگوی کنونی" />
@@ -2851,6 +2856,11 @@
   <Concept Language="de" ConceptID="629" Rubric="Alle ausschließen" />
   <Concept Language="de" ConceptID="630" Rubric="Als Prozent" />
   <Concept Language="de" ConceptID="631" Rubric="Alle löschen" />
+  <Concept Language="en" ConceptID="632" Rubric="Archetype Id" />
+  <Concept Language="en" ConceptID="633" Rubric="Identifier" />
+  <Concept Language="en" ConceptID="634" Rubric="Paragraph" />
+  <Concept Language="en" ConceptID="635" Rubric="Parsable" />
+  <Concept Language="en" ConceptID="636" Rubric="Coded text" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

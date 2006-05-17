@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$URL$"
@@ -49,7 +49,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Me.ToolTip1.SetToolTip(Me.butAddItem, Filemanager.GetOpenEhrTerm(602, "Add existing term"))
             Me.ToolTip1.SetToolTip(Me.ButNewItem, Filemanager.GetOpenEhrTerm(603, "Add new term"))
             Me.ToolTip1.SetToolTip(Me.butRemoveItem, Filemanager.GetOpenEhrTerm(152, "Remove term"))
-
+            Me.lblConstraint.Text = Filemanager.GetOpenEhrTerm(87, Me.lblConstraint.Text)
+            Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
 
         End If
     End Sub
@@ -64,8 +65,6 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Friend WithEvents txtAssumedValue As System.Windows.Forms.TextBox
     Friend WithEvents butAddItem As System.Windows.Forms.Button
     Friend WithEvents listAllowableValues As System.Windows.Forms.ListBox
-    Friend WithEvents Label5 As System.Windows.Forms.Label
-    Friend WithEvents Label4 As System.Windows.Forms.Label
     Friend WithEvents radioInternal As System.Windows.Forms.RadioButton
     Friend WithEvents radioText As System.Windows.Forms.RadioButton
     Friend WithEvents radioTerminology As System.Windows.Forms.RadioButton
@@ -81,6 +80,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     'Private components As System.ComponentModel.IContainer
     'Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents MenuItemEdit As System.Windows.Forms.MenuItem
+    Friend WithEvents lblDescription As System.Windows.Forms.Label
+    Friend WithEvents lblConstraint As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TextConstraintControl))
         Me.gbAllowableValues = New System.Windows.Forms.GroupBox
@@ -98,8 +99,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.MenuItemPasteAll = New System.Windows.Forms.MenuItem
         Me.MenuItemCancelCopy = New System.Windows.Forms.MenuItem
         Me.MenuItemAddExisting = New System.Windows.Forms.MenuItem
-        Me.Label5 = New System.Windows.Forms.Label
-        Me.Label4 = New System.Windows.Forms.Label
+        Me.lblDescription = New System.Windows.Forms.Label
+        Me.lblConstraint = New System.Windows.Forms.Label
         Me.radioInternal = New System.Windows.Forms.RadioButton
         Me.radioText = New System.Windows.Forms.RadioButton
         Me.radioTerminology = New System.Windows.Forms.RadioButton
@@ -117,7 +118,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.gbAllowableValues.Controls.Add(Me.txtAssumedValue)
         Me.gbAllowableValues.Controls.Add(Me.butAddItem)
         Me.gbAllowableValues.Controls.Add(Me.listAllowableValues)
-        Me.gbAllowableValues.Location = New System.Drawing.Point(8, 40)
+        Me.gbAllowableValues.Location = New System.Drawing.Point(16, 40)
         Me.gbAllowableValues.Name = "gbAllowableValues"
         Me.gbAllowableValues.Size = New System.Drawing.Size(360, 192)
         Me.gbAllowableValues.TabIndex = 36
@@ -225,23 +226,23 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.MenuItemAddExisting.Index = 4
         Me.MenuItemAddExisting.Text = "Add existing code(s)"
         '
-        'Label5
+        'lblDescription
         '
-        Me.Label5.Location = New System.Drawing.Point(16, 104)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(88, 24)
-        Me.Label5.TabIndex = 38
-        Me.Label5.Text = "Description:"
-        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblDescription.Location = New System.Drawing.Point(16, 104)
+        Me.lblDescription.Name = "lblDescription"
+        Me.lblDescription.Size = New System.Drawing.Size(88, 24)
+        Me.lblDescription.TabIndex = 38
+        Me.lblDescription.Text = "Description"
+        Me.lblDescription.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'Label4
+        'lblConstraint
         '
-        Me.Label4.Location = New System.Drawing.Point(16, 48)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(88, 24)
-        Me.Label4.TabIndex = 37
-        Me.Label4.Text = "Constraint:"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblConstraint.Location = New System.Drawing.Point(16, 48)
+        Me.lblConstraint.Name = "lblConstraint"
+        Me.lblConstraint.Size = New System.Drawing.Size(88, 24)
+        Me.lblConstraint.TabIndex = 37
+        Me.lblConstraint.Text = "Constraint"
+        Me.lblConstraint.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'radioInternal
         '
@@ -289,15 +290,15 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         'TextConstraintControl
         '
         Me.Controls.Add(Me.gbAllowableValues)
-        Me.Controls.Add(Me.Label5)
-        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.lblDescription)
+        Me.Controls.Add(Me.lblConstraint)
         Me.Controls.Add(Me.radioInternal)
         Me.Controls.Add(Me.radioText)
         Me.Controls.Add(Me.radioTerminology)
         Me.Controls.Add(Me.txtTermConstraintDescription)
         Me.Controls.Add(Me.txtTermConstraintText)
         Me.Name = "TextConstraintControl"
-        Me.Size = New System.Drawing.Size(376, 240)
+        Me.Size = New System.Drawing.Size(392, 240)
         Me.gbAllowableValues.ResumeLayout(False)
         Me.ResumeLayout(False)
 

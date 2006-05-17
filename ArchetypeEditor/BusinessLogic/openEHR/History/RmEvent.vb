@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$URL$"
@@ -188,7 +188,7 @@ Class RmEvent
                     offset = an_attribute.children.first
                     d.ISO_duration = offset.item.as_string.to_cil
                     Me.Offset = d.GUI_duration
-                    Me.OffsetUnits = d.GUI_Units
+                    Me.OffsetUnits = d.ISO_Units
                     mType = StructureType.PointEvent  ' may be an interval - this will be set
                     ' when maths function is set
 
@@ -202,7 +202,7 @@ Class RmEvent
                     width = an_attribute.children.first
                     d.ISO_duration = width.item.as_string.to_cil
                     Me.Width = d.GUI_duration
-                    Me.WidthUnits = d.GUI_Units
+                    Me.WidthUnits = d.ISO_Units
 
                 Case "aggregate_math_function" ' OBSOLETE
                     Dim MathFunc As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
