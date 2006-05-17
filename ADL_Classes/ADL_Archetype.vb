@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/ADL_Classes/SCCS/s.ADL_Archetype.vb $"
@@ -132,6 +132,10 @@ Namespace ArchetypeEditor.ADL_Classes
             Me.mArchetypeID.Concept &= "-" & ConceptShortName
 
 
+        End Sub
+
+        Public Sub RemoveUnusedCodes()
+            adlArchetype.ontology_remove_unused_codes()
         End Sub
 
         Protected Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)
@@ -297,7 +301,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         Dim d As Duration
 
                         an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
-                        d.GUI_Units = a_history.PeriodUnits
+                        d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(a_history.PeriodUnits)
                         d.GUI_duration = a_history.Period
 
                         period = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
@@ -315,7 +319,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                 Dim d As Duration
 
                                 an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
-                                d.GUI_Units = an_event.OffsetUnits
+                                d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(an_event.OffsetUnits)
                                 d.GUI_duration = an_event.Offset
                                 offset = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                             End If
@@ -334,7 +338,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                 Dim d As Duration
 
                                 an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("width"))
-                                d.GUI_Units = an_event.WidthUnits
+                                d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(an_event.WidthUnits)
                                 d.GUI_duration = an_event.Width
                                 width = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                             End If
@@ -383,7 +387,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim d As Duration
 
                 an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
-                d.GUI_Units = a_history.PeriodUnits
+                d.ISO_Units = a_history.PeriodUnits
                 d.GUI_duration = a_history.Period
 
                 period = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
@@ -405,7 +409,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             Dim d As New Duration
 
                             an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
-                            d.GUI_Units = an_event.OffsetUnits
+                            d.ISO_Units = an_event.OffsetUnits
                             d.GUI_duration = an_event.Offset
                             offset = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                         End If
@@ -424,7 +428,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             Dim d As New Duration
 
                             an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("width"))
-                            d.GUI_Units = an_event.WidthUnits
+                            d.ISO_Units = an_event.WidthUnits
                             d.GUI_duration = an_event.Width
                             width = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                         End If
@@ -622,7 +626,12 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If Not q.IsNull Then
 
-                cadlQuantity.set_property(openehr.base.kernel.Create.STRING.make_from_cil(q.PhysicalPropertyAsString))
+                Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE
+
+                Debug.Assert(q.IsCoded)
+
+                cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
+                 openehr.base.kernel.Create.STRING.make_from_cil(q.PhysicalPropertyAsString))
 
                 If q.has_units Then
                     Dim unit_constraint As Constraint_QuantityUnit

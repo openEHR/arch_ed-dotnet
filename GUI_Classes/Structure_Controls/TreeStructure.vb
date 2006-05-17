@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$URL$"
@@ -251,7 +251,9 @@ Public Class TreeStructure
                 Me.tvTree.SelectedNode = Me.tvTree.Nodes(0)
             End If
             ' add the change structure menu from EntryStructure
-            Me.TreeContextMenu.MenuItems.Add(menuChangeStructure)
+            If Not Me.TreeContextMenu.MenuItems.Contains(menuChangeStructure) Then
+                Me.TreeContextMenu.MenuItems.Add(menuChangeStructure)
+            End If
         End If
 
     End Sub

@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$URL$"
@@ -611,8 +611,7 @@ Public Class TabpageHistory
             ' periodic
             Me.chkIsPeriodic.Checked = True
             Me.numPeriod.Value = rm.Period
-            Me.comboTimeUnits.Text = rm.PeriodUnits
-
+            Me.comboTimeUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(rm.PeriodUnits)
         Else
             ' not periodic
             Me.chkIsPeriodic.Checked = False
@@ -1074,7 +1073,7 @@ Public Class TabpageHistory
         Me.NumericOffset.Value = elvi.Offset
 
         If elvi.OffsetUnits <> "" Then
-            Me.comboOffsetUnits.Text = elvi.OffsetUnits
+            Me.comboOffsetUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.OffsetUnits)
         End If
 
         mOccurrences.Cardinality = elvi.Occurrences
@@ -1084,7 +1083,7 @@ Public Class TabpageHistory
         End If
 
         If elvi.WidthUnits <> "" Then
-            Me.comboDurationUnits.Text = elvi.WidthUnits
+            Me.comboDurationUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.WidthUnits)
         End If
 
         If elvi.AggregateMathFunction <> "" Then
@@ -1241,7 +1240,7 @@ Public Class TabpageHistory
             current_item.hasFixedOffset = True
             ' may accept default so set them
             current_item.Offset = Me.NumericOffset.Value
-            current_item.OffsetUnits = Me.comboOffsetUnits.Text
+            current_item.OffsetUnits = CType(Me.comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
         Else
             current_item.hasFixedOffset = False
         End If
@@ -1440,6 +1439,10 @@ Public Class TabpageHistory
         If Not mIsLoading Then
             mFileManager.FileEdited = True
         End If
+    End Sub
+
+    Private Sub TabpageHistory_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
+        OceanArchetypeEditor.Reflect(Me)
     End Sub
 End Class
 

@@ -521,4 +521,5 @@ Public Class OccurrencesPanel
             mFileManager.FileEdited = True
         End If
     End Sub
+
 End Class

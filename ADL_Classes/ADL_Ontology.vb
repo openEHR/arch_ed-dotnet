@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$Source: source/vb.net/archetype_editor/ADL_Classes/SCCS/s.ADL_Ontology.vb $"
@@ -173,10 +173,21 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 qry = openehr.base.kernel.Create.STRING.make_from_cil(sQuery)
                 cd = openehr.base.kernel.Create.STRING.make_from_cil(sCode)
-                If EIF_adlInterface.ontology.has_constraint_binding(cd, qry) Then
-                    'EIF_adlInterface.ontology.replace_constraint_binding(cd, qry)
+
+                If EIF_adlInterface.ontology.has_constraint_binding( _
+                    openehr.base.kernel.Create.STRING.make_from_cil(sTerminology), _
+                    cd) Then
+
+                    EIF_adlInterface.ontology.replace_constraint_binding( _
+                    openehr.common_libs.basic.Create.URI.make_from_string(qry), _
+                    openehr.base.kernel.Create.STRING.make_from_cil(sTerminology), _
+                    cd)
+
                 Else
-                    'EIF_adlInterface.ontology.add_constraint_binding(cd, qry)
+                    EIF_adlInterface.ontology.add_constraint_binding( _
+                    openehr.common_libs.basic.Create.URI.make_from_string(qry), _
+                    openehr.base.kernel.Create.STRING.make_from_cil(sTerminology), _
+                    cd)
                 End If
 
             Catch e As System.Exception
@@ -507,7 +518,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim i As Integer
                 Dim d_row, selected_row As DataRow
                 Dim s As openehr.base.kernel.STRING
-                Dim a_term As openehr.base.kernel.STRING
+                Dim a_query As openehr.base.kernel.STRING
                 Dim linklist As openehr.base.structures.list.LINKED_LIST_ANY
 
                 linklist = EIF_adlInterface.ontology.constraint_codes
@@ -519,11 +530,11 @@ Namespace ArchetypeEditor.ADL_Classes
                         Try
                             If EIF_adlInterface.ontology.has_constraint_bindings(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0))) Then
                                 If EIF_adlInterface.ontology.has_constraint_binding(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0)), s) Then
-                                    a_term = EIF_adlInterface.ontology.constraint_binding(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0)), s)
+                                    a_query = EIF_adlInterface.ontology.constraint_binding(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0)), s).as_string
                                     d_row = TheOntologyManager.ConstraintBindingsTable.NewRow
                                     d_row(0) = selected_row(0)
                                     d_row(1) = s.to_cil
-                                    d_row(2) = a_term.to_cil
+                                    d_row(2) = a_query.to_cil
                                     TheOntologyManager.ConstraintBindingsTable.Rows.Add(d_row)
                                 End If
                             End If

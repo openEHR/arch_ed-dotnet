@@ -5,7 +5,7 @@
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
 '	support:     "Ocean Informatics <support@OceanInformatics.biz>"
-'	copyright:   "Copyright (c) 2004,2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
 '	file:        "$URL$"
@@ -238,7 +238,17 @@ Public Class TabPageInstruction
             mOccurrences = New OccurrencesPanel(mFileManager)
         End If
         Me.PanelAction.Controls.Add(mOccurrences)
-        mOccurrences.Dock = DockStyle.Right
+        If Me.RightToLeft = RightToLeft.Yes Then
+            OceanArchetypeEditor.Reflect(mOccurrences)
+            mOccurrences.Dock = DockStyle.Left
+        Else
+            mOccurrences.Dock = DockStyle.Right
+        End If
+
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            TranslateGUI()
+        End If
+
         Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
         If mFileManager.IsNew Then
             'need to add an RmActivity to the mActivities set
@@ -398,6 +408,7 @@ Public Class TabPageInstruction
     Public Sub TranslateGUI()
         Me.tpActivity.Title = Filemanager.GetOpenEhrTerm(586, "Activity")
         Me.lblAction.Text = Filemanager.GetOpenEhrTerm(556, "Action")
+        Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, "Protocol")
     End Sub
 
     Private Sub butGetAction_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butGetAction.Click
@@ -508,6 +519,10 @@ Public Class TabPageInstruction
             RaiseEvent ProtocolCheckChanged(Me.TabControlInstruction, cbProtocol.Checked)
             mFileManager.FileEdited = True
         End If
+    End Sub
+
+    Private Sub TabPageInstruction_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
+        OceanArchetypeEditor.Reflect(Me)
     End Sub
 End Class
 
