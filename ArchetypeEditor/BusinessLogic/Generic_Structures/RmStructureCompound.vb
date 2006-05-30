@@ -43,6 +43,8 @@ Public Class RmStructureCompound
 
         rm.cOccurrences = Me.cOccurrences.Copy
         rm.colChildren = Me.colChildren.copy
+
+        Return rm
     End Function
 
     Public Overridable Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure Implements ArchetypeDefinition.GetChildByNodeId

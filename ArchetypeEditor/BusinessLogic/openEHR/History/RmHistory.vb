@@ -64,10 +64,9 @@ Class RmHistory
     End Property
 
     Public Overrides Function copy() As RmStructure
-        Dim rme As RmHistory
+        Dim rme As RmHistory = New RmHistory(Me.sNodeId)
         rme.colEvt = colEvt.Copy
         rme.cOccurrences = Me.cOccurrences
-        rme.sNodeId = Me.sNodeId
         Return rme
     End Function
 
@@ -108,7 +107,7 @@ Class RmHistory
                     mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
                 Case "period"
-                    Dim d As ArchetypeEditor.ADL_Classes.Duration
+                    Dim d As ArchetypeEditor.ADL_Classes.Duration = New ArchetypeEditor.ADL_Classes.Duration
 
                     period = an_attribute.children.first
                     d.ISO_duration = period.item.as_string.to_cil
