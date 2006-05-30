@@ -630,6 +630,10 @@ Public Class OceanArchetypeEditor
 
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
+
+        mDefaultLanguageCode = "sv"
+        mSpecificLanguageCode = "sv"
+
         'mDefaultLanguageCode = "fa"
         'mSpecificLanguageCode = "fa"
 

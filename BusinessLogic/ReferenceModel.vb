@@ -330,6 +330,7 @@ Public Class ReferenceModelLocal
             Case ReferenceModelType.CEN_EHR, ReferenceModelType.HL7_CDA
                 Dim s(0) As StructureType
                 s(0) = StructureType.ENTRY
+                Return s
             Case ReferenceModelType.openEHR_Demographic
                 Debug.Assert(False, "Not available")
         End Select

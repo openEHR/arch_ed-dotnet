@@ -906,9 +906,11 @@ Public Class OntologyManager
                 Dim sCode As String
                 If Not e.Row(2) Is Nothing Then     'Code
                     sCode = CStr(e.Row(2))
+                Else
+                    Return
                 End If
 
-                Dim sRelease As String
+                Dim sRelease As String = ""
                 If Not e.Row(3) Is Nothing Then     'Release
                     sRelease = CStr(e.Row(3))
                 End If
@@ -917,7 +919,7 @@ Public Class OntologyManager
                     mOntology.AddorReplaceTermBinding(sTerminology, sPath, sCode, sRelease)
 
                 ElseIf e.Action = DataRowAction.Delete Then
-                    ''fixme mOntology.RemoveTermBinding(sTerminology, sPath, sCode, sRelease)
+                    mOntology.RemoveTermBinding(sTerminology, sCode)
                     Debug.Assert(False)
                 End If
 
@@ -940,6 +942,8 @@ Public Class OntologyManager
                 Dim sCode As String
                 If Not e.Row(1) Is Nothing Then     'Code
                     sCode = CStr(e.Row(1))
+                Else
+                    Return
                 End If
 
                 Dim sQuery As String
@@ -951,17 +955,15 @@ Public Class OntologyManager
                 End If
 
 
-                Dim sRelease As String
+                Dim sRelease As String = ""
                 If Not e.Row(3) Is Nothing Then     'Release
                     sRelease = CStr(e.Row(3))
                 End If
 
                 If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
                     mOntology.AddorReplaceConstraintBinding(sTerminology, sCode, sQuery, sRelease)
-
                 ElseIf e.Action = DataRowAction.Delete Then
-                    ''fixme mOntology.RemoveTermBinding(sTerminology, sPath, sCode, sRelease)
-                    Debug.Assert(False)
+                    mOntology.RemoveConstraintBinding(sTerminology, sCode)
                 End If
 
             Catch ex As Exception

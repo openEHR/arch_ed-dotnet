@@ -72,7 +72,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End Set
         End Property
 
-        Private Function toDuration(ByVal units As String)
+        Private Function toDuration(ByVal units As String) As String
             Select Case units
                 Case "min"
                     Return "M"

@@ -32,6 +32,7 @@ Class Constraint_Choice : Inherits Constraint
     Public Overrides Function Copy() As Constraint
         Dim cm As New Constraint_Choice
         cm.col_Constraints = Me.col_Constraints.Copy
+        Return cm
     End Function
 
 End Class

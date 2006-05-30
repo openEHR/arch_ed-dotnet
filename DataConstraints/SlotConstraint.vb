@@ -74,7 +74,7 @@ Public Class Constraint_Slot
     End Property
 
     Public Overrides Function Copy() As Constraint
-        Dim slot As Constraint_Slot
+        Dim slot As Constraint_Slot = New Constraint_Slot
         slot.colInclude = Me.colInclude.Copy
         slot.colExclude = Me.colExclude.Copy
         Return slot

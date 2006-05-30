@@ -298,7 +298,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     End If
                     If a_history.isPeriodic Then
                         Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                        Dim d As Duration
+                        Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
 
                         an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
                         d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(a_history.PeriodUnits)
@@ -316,7 +316,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         If an_event.isPointInTime Then
                             If an_event.hasFixedOffset Then
                                 Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                                Dim d As Duration
+                                Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
 
                                 an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
                                 d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(an_event.OffsetUnits)
@@ -335,7 +335,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             End If
 
                             If an_event.hasFixedDuration Then
-                                Dim d As Duration
+                                Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
 
                                 an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("width"))
                                 d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(an_event.WidthUnits)
@@ -384,7 +384,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If a_history.isPeriodic Then
                 Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                Dim d As Duration
+                Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
 
                 an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
                 d.ISO_Units = a_history.PeriodUnits
@@ -406,7 +406,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     Case StructureType.PointEvent
                         If an_event.hasFixedOffset Then
                             Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                            Dim d As New Duration
+                            Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
 
                             an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
                             d.ISO_Units = an_event.OffsetUnits
@@ -425,7 +425,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
 
                         If an_event.hasFixedDuration Then
-                            Dim d As New Duration
+                            Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
 
                             an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("width"))
                             d.ISO_Units = an_event.WidthUnits
@@ -990,8 +990,9 @@ Namespace ArchetypeEditor.ADL_Classes
                     new_section.set_occurrences(MakeOccurrences(a_structure.Occurrences))
 
                     If a_structure.HasNameConstraint Then
-                        an_attribute = mCADL_Factory.create_c_attribute_single(new_section, openehr.base.kernel.Create.STRING.make_from_cil("name"))
-                        BuildText(an_attribute, a_structure.NameConstraint)
+                        Dim another_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                        another_attribute = mCADL_Factory.create_c_attribute_single(new_section, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                        BuildText(another_attribute, a_structure.NameConstraint)
                     End If
 
                     If CType(a_structure, RmSection).Children.Count > 0 Then
@@ -1080,8 +1081,9 @@ Namespace ArchetypeEditor.ADL_Classes
                         new_section.set_occurrences(MakeOccurrences(a_structure.Occurrences))
 
                         If a_structure.HasNameConstraint Then
-                            an_attribute = mCADL_Factory.create_c_attribute_single(new_section, openehr.base.kernel.Create.STRING.make_from_cil("name"))
-                            BuildText(an_attribute, a_structure.NameConstraint)
+                            Dim another_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                            another_attribute = mCADL_Factory.create_c_attribute_single(new_section, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                            BuildText(another_attribute, a_structure.NameConstraint)
                         End If
 
                         If CType(a_structure, RmSection).Children.Count > 0 Then
