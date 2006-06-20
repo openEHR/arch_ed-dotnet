@@ -317,7 +317,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Function GetAllowableUnits() As String
-        Dim result As String = ""
+        Dim result As String = "P"
         Dim time_separated As Boolean
 
 

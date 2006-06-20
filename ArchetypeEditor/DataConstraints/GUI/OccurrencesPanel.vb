@@ -348,6 +348,8 @@ Public Class OccurrencesPanel
                 Else
                     Me.comboRepeat.SelectedIndex = 2 ' limited
                 End If
+            Else
+                Me.cbUnbounded.Checked = False
             End If
         End If
         If mIncludeOrdered Then

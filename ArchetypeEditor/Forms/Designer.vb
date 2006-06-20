@@ -531,9 +531,8 @@ Public Class Designer
         'txtConceptInFull
         '
         Me.txtConceptInFull.Location = New System.Drawing.Point(90, 12)
-        Me.txtConceptInFull.Multiline = True
         Me.txtConceptInFull.Name = "txtConceptInFull"
-        Me.txtConceptInFull.Size = New System.Drawing.Size(259, 46)
+        Me.txtConceptInFull.Size = New System.Drawing.Size(259, 24)
         Me.txtConceptInFull.TabIndex = 0
         Me.txtConceptInFull.Tag = ""
         Me.txtConceptInFull.Text = ""
