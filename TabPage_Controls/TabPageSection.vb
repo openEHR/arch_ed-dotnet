@@ -499,7 +499,7 @@ Public Class TabPageSection
 
     Private Sub TabPageSection_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Me.tvSection.ExpandAll()
-        mConstraintDisplay = New ArchetypeNodeConstraintControl
+        mConstraintDisplay = New ArchetypeNodeConstraintControl(mFileManager)
         mConstraintDisplay.Visible = False
         Me.PanelSectionConstraint.Controls.Add(mConstraintDisplay)
         mConstraintDisplay.Dock = DockStyle.Fill

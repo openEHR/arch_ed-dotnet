@@ -197,6 +197,8 @@ Public Class RmElement
                 Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
             Case "uri"
                 Return New Constraint_URI
+            Case "duration"
+                Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
             Case Else
                 Debug.Assert(False)
                 Return New Constraint
@@ -240,6 +242,19 @@ Public Class RmElement
             End Select
         Next
         Return ct
+    End Function
+
+    Private Function ProcessDuration(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_Duration
+        Dim duration As New Constraint_Duration
+       
+        If ObjNode.any_allowed Then
+            Return duration
+        End If
+
+        Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
+        cadlC = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
+        duration.AllowableUnits = cadlC.pattern.to_cil
+        Return duration
     End Function
 
     Private Function ProcessRatio(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Ratio
@@ -552,7 +567,7 @@ Public Class RmElement
 
         End If
 
-            Return q
+        Return q
 
     End Function
 

@@ -633,6 +633,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
                  openehr.base.kernel.Create.STRING.make_from_cil(q.PhysicalPropertyAsString))
 
+                cadlQuantity.set_property(cp)
+
                 If q.has_units Then
                     Dim unit_constraint As Constraint_QuantityUnit
 
@@ -780,6 +782,20 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
+        Private Sub BuildDuration(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Duration)
+            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
+
+            d = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_DURATION.make_from_pattern(openehr.base.kernel.Create.STRING.make_from_cil(c.AllowableUnits))
+
+            Dim po As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+            po = openehr.openehr.am.archetype.constraint_model.Create.C_PRIMITIVE_OBJECT.make(d)
+            value_attribute.put_child(po)
+
+            'objNode = mCADL_Factory.create_c_primitive_object(value_attribute, d)
+
+        End Sub
+
         Private Sub BuildURI(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_URI)
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
@@ -837,6 +853,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case ConstraintType.URI
                     BuildURI(value_attribute, c)
 
+                Case ConstraintType.Duration
+                    BuildDuration(value_attribute, c)
             End Select
 
         End Sub

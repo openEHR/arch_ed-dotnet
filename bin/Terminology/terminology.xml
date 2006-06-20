@@ -708,6 +708,7 @@
   <PrimaryRubric Id="634" Language="en" />
   <PrimaryRubric Id="635" Language="en" />
   <PrimaryRubric Id="636" Language="en" />
+  <PrimaryRubric Id="637" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1819,30 +1820,30 @@
   <Concept Language="de" ConceptID="606" Rubric="Eingebetteten Archetyp laden" />
   <Concept Language="de" ConceptID="607" Rubric="Referenz nicht spezialisierbar" />
   <Concept Language="de" ConceptID="608" Rubric="Anderer Kontext" />
-    <Concept Language="de" ConceptID="609" Rubric="Öffne bestehenden Archetypen" />
-    <Concept Language="de" ConceptID="610" Rubric="Abkürzungen für Zeiteinheiten" />
-    <Concept Language="de" ConceptID="611" Rubric="Nano-Sekunden" />
-    <Concept Language="de" ConceptID="612" Rubric="Mikro-Sekunden" />
-    <Concept Language="de" ConceptID="613" Rubric="Milli-Sekunden" />
-    <Concept Language="de" ConceptID="614" Rubric="Sekunden" />
-    <Concept Language="de" ConceptID="615" Rubric="Minuten" />
-    <Concept Language="de" ConceptID="616" Rubric="Stunden" />
-    <Concept Language="de" ConceptID="617" Rubric="Tage" />
-    <Concept Language="de" ConceptID="618" Rubric="Monate" />
-    <Concept Language="de" ConceptID="619" Rubric="Jahre" />
-    <Concept Language="de" ConceptID="620" Rubric="Wochen" />
-    <Concept Language="de" ConceptID="621" Rubric="Knoten" />
-    <Concept Language="de" ConceptID="622" Rubric="Kriterien" />
-    <Concept Language="de" ConceptID="623" Rubric="Definitionen der Einschränkungen" />
-    <Concept Language="de" ConceptID="624" Rubric="Name der Suchanfrage" />
-    <Concept Language="de" ConceptID="625" Rubric="Einbeziehen" />
-    <Concept Language="de" ConceptID="626" Rubric="Ausschließen" />
-    <Concept Language="de" ConceptID="627" Rubric="Anschauen" />
-    <Concept Language="de" ConceptID="628" Rubric="Alle einbeziehen" />
-    <Concept Language="de" ConceptID="629" Rubric="Alle ausschließen" />
-    <Concept Language="de" ConceptID="630" Rubric="Als Prozent" />
-    <Concept Language="de" ConceptID="631" Rubric="Alle löschen" />
-    <Concept Language="fa" ConceptID="0" Rubric="خود" />
+  <Concept Language="de" ConceptID="609" Rubric="Öffne bestehenden Archetypen" />
+  <Concept Language="de" ConceptID="610" Rubric="Abkürzungen für Zeiteinheiten" />
+  <Concept Language="de" ConceptID="611" Rubric="Nano-Sekunden" />
+  <Concept Language="de" ConceptID="612" Rubric="Mikro-Sekunden" />
+  <Concept Language="de" ConceptID="613" Rubric="Milli-Sekunden" />
+  <Concept Language="de" ConceptID="614" Rubric="Sekunden" />
+  <Concept Language="de" ConceptID="615" Rubric="Minuten" />
+  <Concept Language="de" ConceptID="616" Rubric="Stunden" />
+  <Concept Language="de" ConceptID="617" Rubric="Tage" />
+  <Concept Language="de" ConceptID="618" Rubric="Monate" />
+  <Concept Language="de" ConceptID="619" Rubric="Jahre" />
+  <Concept Language="de" ConceptID="620" Rubric="Wochen" />
+  <Concept Language="de" ConceptID="621" Rubric="Knoten" />
+  <Concept Language="de" ConceptID="622" Rubric="Kriterien" />
+  <Concept Language="de" ConceptID="623" Rubric="Definitionen der Einschränkungen" />
+  <Concept Language="de" ConceptID="624" Rubric="Name der Suchanfrage" />
+  <Concept Language="de" ConceptID="625" Rubric="Einbeziehen" />
+  <Concept Language="de" ConceptID="626" Rubric="Ausschließen" />
+  <Concept Language="de" ConceptID="627" Rubric="Anschauen" />
+  <Concept Language="de" ConceptID="628" Rubric="Alle einbeziehen" />
+  <Concept Language="de" ConceptID="629" Rubric="Alle ausschließen" />
+  <Concept Language="de" ConceptID="630" Rubric="Als Prozent" />
+  <Concept Language="de" ConceptID="631" Rubric="Alle löschen" />
+  <Concept Language="fa" ConceptID="0" Rubric="خود" />
   <Concept Language="fa" ConceptID="3" Rubric="جنین" />
   <Concept Language="fa" ConceptID="6" Rubric="اهدا کننده" />
   <Concept Language="fa" ConceptID="7" Rubric="مادربزرگ مادری " />
@@ -2383,30 +2384,30 @@
   <Concept Language="fa" ConceptID="606" Rubric="بارگذاری الگوهای در بر گرفته" />
   <Concept Language="fa" ConceptID="607" Rubric="امکان مشخص کردن ارجاع وجود ندارد" />
   <Concept Language="fa" ConceptID="608" Rubric="سایر زمینه ها" />
-    <Concept Language="fa" ConceptID="609" Rubric="الگوهای موجود را باز کنید" />
-    <Concept Language="fa" ConceptID="610" Rubric="اختصارات زمانی" />
-    <Concept Language="fa" ConceptID="611" Rubric="میلیاردم ثانیه" />
-    <Concept Language="fa" ConceptID="612" Rubric="میلیونم ثانیه" />
-    <Concept Language="fa" ConceptID="613" Rubric="هزارم ثانیه" />
-    <Concept Language="fa" ConceptID="614" Rubric="ثانیه" />
-    <Concept Language="fa" ConceptID="615" Rubric="حداقل" />
-    <Concept Language="fa" ConceptID="616" Rubric="ساعت" />
-    <Concept Language="fa" ConceptID="617" Rubric="روز و یا روزها" />
-    <Concept Language="fa" ConceptID="618" Rubric="ماه" />
-    <Concept Language="fa" ConceptID="619" Rubric="سال" />
-    <Concept Language="fa" ConceptID="620" Rubric="هفته" />
-    <Concept Language="fa" ConceptID="621" Rubric="گره" />
-    <Concept Language="fa" ConceptID="622" Rubric="معیار" />
-    <Concept Language="fa" ConceptID="623" Rubric="تعاریف محدودیت" />
-    <Concept Language="fa" ConceptID="624" Rubric="نام درخواست" />
-    <Concept Language="fa" ConceptID="625" Rubric="شامل" />
-    <Concept Language="fa" ConceptID="626" Rubric="استثنا" />
-    <Concept Language="fa" ConceptID="627" Rubric="جستار" />
-    <Concept Language="fa" ConceptID="628" Rubric="شامل کلیه موارد" />
-    <Concept Language="fa" ConceptID="629" Rubric="کلیه موارد استثنا است" />
-    <Concept Language="fa" ConceptID="630" Rubric="به صورت درصد" />
-    <Concept Language="fa" ConceptID="631" Rubric="حذف کلیه موارد" />
-    <Concept Language="tr" ConceptID="34" Rubric="Hiçbirisi" />
+  <Concept Language="fa" ConceptID="609" Rubric="الگوهای موجود را باز کنید" />
+  <Concept Language="fa" ConceptID="610" Rubric="اختصارات زمانی" />
+  <Concept Language="fa" ConceptID="611" Rubric="میلیاردم ثانیه" />
+  <Concept Language="fa" ConceptID="612" Rubric="میلیونم ثانیه" />
+  <Concept Language="fa" ConceptID="613" Rubric="هزارم ثانیه" />
+  <Concept Language="fa" ConceptID="614" Rubric="ثانیه" />
+  <Concept Language="fa" ConceptID="615" Rubric="حداقل" />
+  <Concept Language="fa" ConceptID="616" Rubric="ساعت" />
+  <Concept Language="fa" ConceptID="617" Rubric="روز و یا روزها" />
+  <Concept Language="fa" ConceptID="618" Rubric="ماه" />
+  <Concept Language="fa" ConceptID="619" Rubric="سال" />
+  <Concept Language="fa" ConceptID="620" Rubric="هفته" />
+  <Concept Language="fa" ConceptID="621" Rubric="گره" />
+  <Concept Language="fa" ConceptID="622" Rubric="معیار" />
+  <Concept Language="fa" ConceptID="623" Rubric="تعاریف محدودیت" />
+  <Concept Language="fa" ConceptID="624" Rubric="نام درخواست" />
+  <Concept Language="fa" ConceptID="625" Rubric="شامل" />
+  <Concept Language="fa" ConceptID="626" Rubric="استثنا" />
+  <Concept Language="fa" ConceptID="627" Rubric="جستار" />
+  <Concept Language="fa" ConceptID="628" Rubric="شامل کلیه موارد" />
+  <Concept Language="fa" ConceptID="629" Rubric="کلیه موارد استثنا است" />
+  <Concept Language="fa" ConceptID="630" Rubric="به صورت درصد" />
+  <Concept Language="fa" ConceptID="631" Rubric="حذف کلیه موارد" />
+  <Concept Language="tr" ConceptID="34" Rubric="Hiçbirisi" />
   <Concept Language="tr" ConceptID="32" Rubric="Verinin konusu olan kişi" />
   <Concept Language="tr" ConceptID="33" Rubric="Tarih Zaman kısıtları" />
   <Concept Language="tr" ConceptID="42" Rubric="MenuItem labels" />
@@ -3346,6 +3347,7 @@
   <Concept Language="sv" ConceptID="558" Rubric="Under-sektion" />
   <Concept Language="sv" ConceptID="559" Rubric="Post" />
   <Concept Language="sv" ConceptID="560" Rubric="Administrativ post" />
+  <Concept Language="en" ConceptID="637" Rubric="application/dicom" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
@@ -3832,6 +3834,7 @@
   <GroupedConcept GrouperID="24" ChildID="618" />
   <GroupedConcept GrouperID="24" ChildID="619" />
   <GroupedConcept GrouperID="24" ChildID="620" />
+  <GroupedConcept GrouperID="19" ChildID="637" />
   <TerminologyIdentifiers VSAB="AIR93" SourceName="AI/RHEUM,1993" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ALT2000" SourceName="Alternative Billing Concepts, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="AOD2000" SourceName="Alcohol and Other Drug Thesaurus, 2000" Authority="UMLS2003AA" />
