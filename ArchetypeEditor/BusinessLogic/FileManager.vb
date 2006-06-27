@@ -192,6 +192,20 @@ Public Class FileManagerLocal
             Return False
 
         Else
+            Dim i As Integer = aFileName.LastIndexOf("\")
+            Dim shortFileName As String = aFileName.Substring(i + 1)
+            If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".") Then
+                If MessageBox.Show(mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & _
+                   ": " & shortFileName & "; " & Environment.NewLine & _
+                   mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & _
+                   ": " & mArchetypeEngine.Archetype.Archetype_ID.ToString & ". " & Environment.NewLine & _
+                   mOntologyManager.GetOpenEHRTerm(147, "Change") & _
+                   " " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name"), _
+                   AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    Me.FileName = aFileName.Substring(i + 1) + mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
+                End If
+
+            End If
             mPriorFileName = Nothing
             mOntologyManager.PopulateAllTerms()
 

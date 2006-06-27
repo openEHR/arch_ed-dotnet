@@ -156,8 +156,11 @@ Public Class OrdinalValue ': Inherits DataRow
 
     Public Property Text() As String
         Get
-            Debug.Assert(Not mDataRow.IsNull(1))
-            Return CStr(mDataRow(1))
+            If mDataRow.IsNull(1) Then
+                Return ""
+            Else
+                Return CStr(mDataRow(1))
+            End If
         End Get
         Set(ByVal Value As String)
             mDataRow(1) = Value
