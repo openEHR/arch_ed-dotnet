@@ -397,9 +397,9 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Sub numMaxValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMaxValue.TextChanged
+        If MyBase.IsLoading Then Exit Sub
 
         If Me.NumericAssumed.Visible Then
-            Me.NumericAssumed.Maximum = numMaxValue.Value
             Me.NumericAssumed.Maximum = numMaxValue.Value
             If Me.comboIncludeMax.SelectedIndex = 1 Then
                 ' don't include maximum
@@ -423,9 +423,9 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Sub numMinValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.TextChanged
+        If MyBase.IsLoading Then Exit Sub
 
         If Me.NumericAssumed.Visible Then
-            Me.NumericAssumed.Minimum = numMinValue.Value
             Me.NumericAssumed.Minimum = numMinValue.Value
             If Me.comboIncludeMin.SelectedIndex = 1 Then
                 ' don't include minimum

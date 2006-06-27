@@ -308,13 +308,13 @@ Public Class RmElement
         End Select
 
 
-        Select Case s
-            Case "yyyy-??-?? ??:??:??"
+        Select Case s.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Case "yyyy-??-?? ??:??:??", "yyyy-??-??t??:??:??"
                 ' Allow all
                 dt.TypeofDateTimeConstraint = 11
-            Case "yyyy-mm-dd HH:MM:SS"
+            Case "yyyy-mm-dd hh:mm:ss", "yyyy-mm-ddthh:mm:ss"
                 dt.TypeofDateTimeConstraint = 12
-            Case "yyy-mm-dd HH:??:??"
+            Case "yyy-mm-dd hh:??:??", "yyy-mm-ddthh:??:??"
                 'Partial Date time
 
                 dt.TypeofDateTimeConstraint = 13
@@ -324,22 +324,22 @@ Public Class RmElement
             Case "yyyy-mm-dd"
                 'Full date
                 dt.TypeofDateTimeConstraint = 15
-            Case "yyyy-??-XX"
+            Case "yyyy-??-xx"
                 'Partial date
                 dt.TypeofDateTimeConstraint = 16
-            Case "yyyy-mm-XX"
+            Case "yyyy-mm-xx"
                 'Partial date with month
                 dt.TypeofDateTimeConstraint = 17
-            Case "HH:??:??"
+            Case "hh:??:??", "thh:??:??"
                 'TimeOnly
                 dt.TypeofDateTimeConstraint = 18
-            Case "HH:MM:SS"
+            Case "hh:mm:ss", "thh:mm:ss"
                 'Full time
                 dt.TypeofDateTimeConstraint = 19
-            Case "HH:??:XX"
+            Case "hh:??:xx", "thh:??:xx"
                 'Partial time
                 dt.TypeofDateTimeConstraint = 20
-            Case "HH:MM:XX"
+            Case "hh:mm:xx", "thh:mm:xx"
                 'Partial time with minutes
                 dt.TypeofDateTimeConstraint = 21
         End Select
@@ -366,8 +366,8 @@ Public Class RmElement
 
             an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-            Select Case an_attribute.rm_attribute_name.to_cil
-                Case "value", "Value", "VALUE"
+            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "value"
                     c_value = CType(an_attribute.children.first, openehr.openehr.am.openehr_profile.data_types.quantity.C_ORDINAL)
 
                     '' first value may have a "?" instead of a code as holder for empty ordinal
@@ -393,7 +393,7 @@ Public Class RmElement
                         Ordinals.forth()
                     Loop
 
-                Case "assumed_value", "Assumed_value", "ASSUMED_VALUE"
+                Case "assumed_value"
                     Dim c_assumed_value As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
                     Dim c_integer As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
 
@@ -562,7 +562,9 @@ Public Class RmElement
             End If
 
             If ObjNode.has_assumed_value Then
-                CType(q.Units.Item(CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil), Constraint_QuantityUnit).AssumedValue = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
+                Dim assumed_units As String = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil
+                Dim assumed_value As Single = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
+                CType(q.Units.Item(assumed_units), Constraint_QuantityUnit).AssumedValue = assumed_value
             End If
 
         End If

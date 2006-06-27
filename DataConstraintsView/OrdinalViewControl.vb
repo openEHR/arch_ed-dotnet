@@ -61,15 +61,19 @@ Public Class OrdinalViewControl : Inherits ElementViewControl
 
         Debug.Assert(Not ord.OrdinalValues Is Nothing)
 
+        Dim i As Integer
+
         For Each value As OrdinalValue In ord.OrdinalValues
-            'mComboBox.Items.Add(value.Ordinal.ToString & " - " & value.Text)
-            mComboBox.Items.Add(value)
+            If value.Text = "" Then
+                value.Text = mFilemanager.OntologyManager.GetTerm(value.InternalCode).Text
+            End If
+            i = mComboBox.Items.Add(value)
 
             If ord.HasAssumedValue Then
                 Debug.Assert(TypeOf ord.AssumedValue Is Integer)
 
                 If value.Ordinal = CInt(ord.AssumedValue) Then
-                    mComboBox.Text = value.Text
+                    mComboBox.Text = value.OrdinalAndText
                 End If
 
             End If

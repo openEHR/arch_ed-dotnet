@@ -23,6 +23,7 @@ Public Class TabPageSection
     Private mConstraintDisplay As ArchetypeNodeConstraintControl
     Private mRootOfComposition As Boolean = False
     Private mFileManager As FileManagerLocal
+    Private mNoHitNode As Boolean = False
 
 
 #Region " Windows Form Designer generated code "
@@ -333,7 +334,6 @@ Public Class TabPageSection
     End Function
 
     Public Function SaveAsSection() As RmSection
-        Dim tvNode As ArchetypeTreeNode
         Dim SectNode As RmSection
 
         'Try
@@ -342,11 +342,9 @@ Public Class TabPageSection
             ProcessChildrenRM_Structures(Me.tvSection.Nodes, SectNode)
 
         Else
+            SectNode = New RmSection(mFileManager.Archetype.ConceptCode)
             If Me.tvSection.GetNodeCount(False) > 0 Then
-                tvNode = Me.tvSection.Nodes(0)
-
-                SectNode = New RmSection(tvNode.RM_Class)
-                ProcessChildrenRM_Structures(tvNode.Nodes, SectNode)
+                ProcessChildrenRM_Structures(Me.tvSection.Nodes, SectNode)
             Else
                 Return Nothing
             End If
@@ -383,25 +381,19 @@ Public Class TabPageSection
                 tvSection.Nodes.Add(n)
             Next
         Else
-            Dim a_section_tree_node As New ArchetypeTreeNode(a_section, mFileManager)
-
-            
-            Me.tvSection.Nodes.Add(a_section_tree_node)
-
             For Each rm_node In a_section.Children
 
                 If TypeOf rm_node Is RmSection Then
                     Dim n As New ArchetypeTreeNode(CType(rm_node, RmStructureCompound), mFileManager)
-                    a_section_tree_node.Nodes.Add(n)
+                    Me.tvSection.Nodes.Add(n)
                     ProcessSection(rm_node, n.Nodes)
                 ElseIf TypeOf rm_node Is RmSlot Then
                     Dim n As New ArchetypeTreeNode(CType(rm_node, RmSlot))
-                    a_section_tree_node.Nodes.Add(n)
+                    Me.tvSection.Nodes.Add(n)
                 Else
                     Debug.Assert(False, "Type not catered for")
                 End If
             Next
-
         End If
         
     End Function
@@ -532,11 +524,16 @@ Public Class TabPageSection
             tvNode = New ArchetypeTreeNode(archNode)
             tvNode.SelectedImageIndex = 2
 
-            If CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = StructureType.SECTION Then
+            If tvSection.SelectedNode Is Nothing Or mNoHitNode Then
+                Me.tvSection.Nodes.Add(tvNode)
+            ElseIf CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = StructureType.SECTION Then
                 Me.tvSection.SelectedNode.Nodes.Add(tvNode)
             Else
-                Debug.Assert(Not tvSection.SelectedNode Is Nothing)
-                Me.tvSection.SelectedNode.Parent.Nodes.Add(tvNode)
+                If Me.tvSection.SelectedNode.Parent Is Nothing Then
+                    Me.tvSection.Nodes.Add(tvNode)
+                Else
+                    Me.tvSection.SelectedNode.Parent.Nodes.Add(tvNode)
+                End If
             End If
         End If
         mFileManager.FileEdited = True
@@ -555,7 +552,7 @@ Public Class TabPageSection
         s = Filemanager.GetOpenEhrTerm(2000, "New Section")
         Dim tvNode As New ArchetypeTreeNode(s, StructureType.SECTION, mFileManager)
 
-        If Me.tvSection.SelectedNode Is Nothing Then
+        If Me.tvSection.SelectedNode Is Nothing Or mNoHitNode Then
             Me.tvSection.Nodes.Add(tvNode)
         Else
             If CType(sender, MenuItem).Index = 1 Then  ' add as subsection
@@ -595,33 +592,26 @@ Public Class TabPageSection
             Next
             Return cm
         Else
+            mi = New MenuItem(Filemanager.GetOpenEhrTerm(314, "Section"))
+            AddHandler mi.Click, AddressOf AddSection
+            cm.MenuItems.Add(mi)
+            If (Not tvSection.SelectedNode Is Nothing) AndAlso _
+                CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = _
+                StructureType.SECTION Then
 
-            If tvSection.SelectedNode Is Nothing Then
-                mi = New MenuItem(Filemanager.GetOpenEhrTerm(314, "Section"))
+                mi = New MenuItem(Filemanager.GetOpenEhrTerm(558, "Sub-Section"))
                 AddHandler mi.Click, AddressOf AddSection
                 cm.MenuItems.Add(mi)
-            Else
-                If CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = StructureType.SECTION Then
-                    mi = New MenuItem(Filemanager.GetOpenEhrTerm(314, "Section"))
-                    AddHandler mi.Click, AddressOf AddSection
-                    cm.MenuItems.Add(mi)
-                    mi = New MenuItem(Filemanager.GetOpenEhrTerm(558, "Sub-Section"))
-                    AddHandler mi.Click, AddressOf AddSection
-                    cm.MenuItems.Add(mi)
-                End If
             End If
+            mi = New MenuItem(Filemanager.GetOpenEhrTerm(312, "Slot"))
+            cm.MenuItems.Add(mi)
 
-            If Me.tvSection.GetNodeCount(False) > 0 Then
-                mi = New MenuItem(Filemanager.GetOpenEhrTerm(312, "Slot"))
-                cm.MenuItems.Add(mi)
+            For Each strtype As StructureType In ReferenceModel.Instance.validArchetypeSlots(StructureType.SECTION)
+                mi = New MenuItem(Filemanager.GetOpenEhrTerm(strtype, strtype.ToString))
 
-                For Each strtype As StructureType In ReferenceModel.Instance.validArchetypeSlots(StructureType.SECTION)
-                    mi = New MenuItem(Filemanager.GetOpenEhrTerm(strtype, strtype.ToString))
-
-                    AddHandler mi.Click, AddressOf AddSlot
-                    cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)
-                Next
-            End If
+                AddHandler mi.Click, AddressOf AddSlot
+                cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)
+            Next
             Return cm
         End If
         
@@ -693,8 +683,12 @@ Public Class TabPageSection
             tn = Me.tvSection.GetNodeAt(e.X, e.Y)
             If Not tn Is Nothing Then
                 Me.tvSection.SelectedNode = tn
+            Else
+                mNoHitNode = True
+                Return
             End If
         End If
+        mNoHitNode = False
     End Sub
 
     Private Sub tvSection_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvSection.MouseUp
@@ -733,9 +727,7 @@ Public Class TabPageSection
                 End If
 
                 If mNodeDragged.Parent Is Nothing Then
-                    ' can't drag root
-                    Beep()
-                    Return
+                    DragParent = tvSection.Nodes
                 Else
                     DragParent = mNodeDragged.Parent.Nodes
                 End If

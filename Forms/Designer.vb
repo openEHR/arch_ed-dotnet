@@ -4153,6 +4153,7 @@ Public Class Designer
                 tp.Name = "tpStateStructure"
                 ' add it to the collection incase it is needed again
                 mTabPagesCollection.Add(tp.Name, tp)
+                mTabPageDataStateStructure.Dock = DockStyle.Fill
                 tp.Title = AE_Constants.Instance.Person_state
                 Me.TabStructure.TabPages.Add(tp)
 

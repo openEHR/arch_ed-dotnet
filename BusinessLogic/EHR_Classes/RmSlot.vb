@@ -55,8 +55,6 @@ Public Class RmSlot
 
 #Region "ADL oriented features"
 
-#Region "Processing ADL - incoming"
-
     Sub New(ByVal an_archetype_slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)
         MyBase.New(an_archetype_slot)
 
@@ -71,6 +69,8 @@ Public Class RmSlot
                 mSlotConstraint.RM_ClassType = StructureType.OBSERVATION
             Case "EVALUATION"
                 mSlotConstraint.RM_ClassType = StructureType.EVALUATION
+            Case "ACTION"
+                mSlotConstraint.RM_ClassType = StructureType.ACTION
             Case "INSTRUCTION"
                 mSlotConstraint.RM_ClassType = StructureType.INSTRUCTION
             Case "ITEM_SINGLE"
@@ -114,12 +114,6 @@ Public Class RmSlot
             Next
         End If
     End Sub
-
-#End Region
-
-#Region "Building ADL - outgoing"
-
-#End Region
 
 #End Region
 
