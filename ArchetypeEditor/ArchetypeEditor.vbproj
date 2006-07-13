@@ -700,6 +700,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "DataConstraintsView\DurationViewControl.vb"
+                    SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "DataConstraintsView\ElementViewControl.vb"
                     SubType = "Component"
                     BuildAction = "Compile"

@@ -256,7 +256,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         mCountControl.ShowConstraint(IsState, Me.Constraint)
         mCountControl.LabelQuantity.Text = AE_Constants.Instance.Unit
 
-        If s = "*" Then
+        If s = "PYMWDTHMS" Then
             Me.chkAll.Checked = True
         Else
             Me.chkAll.Checked = False
@@ -319,7 +319,6 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
     Private Function GetAllowableUnits() As String
         Dim result As String = "P"
         Dim time_separated As Boolean
-
 
         If Me.chkYears.Checked Then
             result &= "Y"
@@ -416,7 +415,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
 
         If Not MyBase.IsLoading() Then
             If chkAll.Checked Then
-                Me.Constraint.AllowableUnits = "*"
+                Me.Constraint.AllowableUnits = "PYMWDTHMS"
             Else
                 Me.Constraint.AllowableUnits = GetAllowableUnits()
             End If
@@ -442,7 +441,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
 
 
     Private Sub comboTimeUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboTimeUnits.SelectedIndexChanged
-        If Not MyBase.IsLoading Then
+        If Not MyBase.IsLoading Or Me.Constraint.ValueUnits = "" Then
             If comboTimeUnits.SelectedIndex > -1 Then
                 Dim s As String
 
@@ -466,7 +465,9 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
                         Return
                 End Select
                 Me.Constraint.ValueUnits = s
-                mFileManager.FileEdited = True
+                If Not MyBase.IsLoading Then
+                    mFileManager.FileEdited = True
+                End If
             End If
         End If
     End Sub

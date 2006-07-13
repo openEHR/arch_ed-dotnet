@@ -629,7 +629,7 @@ Public Class EntryStructure
             nl = Chr(10) & Chr(13)
 
             If Not Item.IsAnonymous Then
-                ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(CType(Item, ArchetypeNodeAbstract).NodeId)
+                ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(CType(Item, ArchetypeNodeAbstract).NodeId, mFileManager)
 
                 If ct.Length = 1 Then
                     Me.ToolTipSpecialisation.RemoveAll()

@@ -37,7 +37,7 @@ Public Class TimeUnits
 
     Public Function GetValidIsoUnit(ByVal a_unit As String) As String
         Select Case a_unit
-            Case "yr", "year"
+            Case "yr", "year", "y"
                 Return "a"
             Case "mth", "month"
                 Return "mo"

@@ -48,8 +48,8 @@ Public Class Constraint_Duration
         End Set
     End Property
 
-    Private mAllowableUnits As String = "*"
-    '* = all, Y = year, M = month, W = week, D = day, T as separator then M = minute
+    Private mAllowableUnits As String = "PYMWDTHMS"
+    'Y = year, M = month, W = week, D = day, T as separator then H = hour, M = minute
     ' S = second
     Public Property AllowableUnits() As String
         Get

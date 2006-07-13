@@ -357,7 +357,7 @@ Public Class OceanArchetypeEditor
 
     End Function
 
-    Public Function GetSpecialisationChain(ByVal Id As String) As CodeAndTerm()
+    Public Function GetSpecialisationChain(ByVal Id As String, ByVal a_filemanager As FileManagerLocal) As CodeAndTerm()
         Dim i, start, iii, n As Integer
         n = CountInString(Id, ".")
         Dim ct(n) As CodeAndTerm
@@ -380,7 +380,7 @@ Public Class OceanArchetypeEditor
             Else
                 Dim a_Term As RmTerm
 
-                a_Term = Filemanager.Master.OntologyManager.GetTerm(a_ct.Code)
+                a_Term = a_filemanager.OntologyManager.GetTerm(a_ct.Code)
                 a_ct.Text = a_Term.Text
                 ct(counter) = a_ct
                 counter += 1
@@ -631,11 +631,11 @@ Public Class OceanArchetypeEditor
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
 
-        mDefaultLanguageCode = "sv"
-        mSpecificLanguageCode = "sv"
+        'mDefaultLanguageCode = "sv"
+        'mSpecificLanguageCode = "sv"
 
-        'mDefaultLanguageCode = "fa"
-        'mSpecificLanguageCode = "fa"
+        mDefaultLanguageCode = "fa"
+        mSpecificLanguageCode = "fa"
 
         'mDefaultLanguageCode = "de"
         'mSpecificLanguageCode = "de"

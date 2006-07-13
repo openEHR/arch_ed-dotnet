@@ -242,6 +242,9 @@ Public Class ArchetypeView
             Case ConstraintType.Quantity
                 Return New QuantityViewControl(anElement, a_filemanager)
 
+            Case ConstraintType.Duration
+                Return New DurationViewControl(anElement, a_filemanager)
+
             Case ConstraintType.Boolean
                 Return New BooleanViewControl(anElement, a_filemanager)
 
@@ -284,6 +287,9 @@ Public Class ArchetypeView
 
             Case ConstraintType.Quantity
                 Return New QuantityViewControl(aConstraint, a_filemanager)
+
+            Case ConstraintType.Duration
+                Return New DurationViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Boolean
                 Return New BooleanViewControl(aConstraint, a_filemanager)
