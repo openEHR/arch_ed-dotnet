@@ -1816,7 +1816,7 @@ Public Class Designer
             Dim ct As CodeAndTerm()
 
             tnc = Me.tvSpecialisation.Nodes
-            ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(mFileManager.Archetype.ConceptCode)
+            ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(mFileManager.Archetype.ConceptCode, mFileManager)
             For i = 0 To ct.Length - 1
                 tn = New TreeNode
                 tn.Text = ct(i).Text

@@ -96,10 +96,16 @@ Public Class TermBindingPanel
     Friend WithEvents lblCode As System.Windows.Forms.Label
     Friend WithEvents BindingCodeListColumnHeader As System.Windows.Forms.ColumnHeader
     Friend WithEvents lblRelease As System.Windows.Forms.Label
+    Friend WithEvents ContextMenuTermBinding As System.Windows.Forms.ContextMenu
+    Friend WithEvents cmBindingPastePath As System.Windows.Forms.MenuItem
+    Friend WithEvents cmBindingPastePathLogical As System.Windows.Forms.MenuItem
+    Friend WithEvents cmBindingPastePathPhysical As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TermBindingPanel))
         Me.PathsTreeView = New System.Windows.Forms.TreeView
+        Me.ContextMenuTermBinding = New System.Windows.Forms.ContextMenu
+        Me.cmBindingPastePath = New System.Windows.Forms.MenuItem
         Me.BindingImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.BindingGroupBox = New System.Windows.Forms.GroupBox
         Me.BindingList = New System.Windows.Forms.ListView
@@ -134,6 +140,8 @@ Public Class TermBindingPanel
         Me.lblBindingterminology = New System.Windows.Forms.Label
         Me.PanelBindings = New System.Windows.Forms.Panel
         Me.gbCriteria = New System.Windows.Forms.GroupBox
+        Me.cmBindingPastePathLogical = New System.Windows.Forms.MenuItem
+        Me.cmBindingPastePathPhysical = New System.Windows.Forms.MenuItem
         Me.BindingGroupBox.SuspendLayout()
         Me.AddBindingGroupBox.SuspendLayout()
         Me.AddBindingCriteriaGroupBox.SuspendLayout()
@@ -144,6 +152,7 @@ Public Class TermBindingPanel
         '
         'PathsTreeView
         '
+        Me.PathsTreeView.ContextMenu = Me.ContextMenuTermBinding
         Me.PathsTreeView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PathsTreeView.HideSelection = False
         Me.PathsTreeView.ImageList = Me.BindingImageList
@@ -153,6 +162,16 @@ Public Class TermBindingPanel
         Me.PathsTreeView.ShowRootLines = False
         Me.PathsTreeView.Size = New System.Drawing.Size(880, 194)
         Me.PathsTreeView.TabIndex = 1
+        '
+        'ContextMenuTermBinding
+        '
+        Me.ContextMenuTermBinding.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.cmBindingPastePath})
+        '
+        'cmBindingPastePath
+        '
+        Me.cmBindingPastePath.Index = 0
+        Me.cmBindingPastePath.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.cmBindingPastePathLogical, Me.cmBindingPastePathPhysical})
+        Me.cmBindingPastePath.Text = "Copy path to clipboard"
         '
         'BindingImageList
         '
@@ -492,6 +511,16 @@ Public Class TermBindingPanel
         Me.gbCriteria.TabStop = False
         Me.gbCriteria.Text = "Criteria"
         Me.gbCriteria.Visible = False
+        '
+        'cmBindingPastePathLogical
+        '
+        Me.cmBindingPastePathLogical.Index = 0
+        Me.cmBindingPastePathLogical.Text = "Logical path"
+        '
+        'cmBindingPastePathPhysical
+        '
+        Me.cmBindingPastePathPhysical.Index = 1
+        Me.cmBindingPastePathPhysical.Text = "Physical path"
         '
         'TermBindingPanel
         '
@@ -1203,6 +1232,7 @@ Public Class TermBindingPanel
         BindingOkButton.Text = Filemanager.GetOpenEhrTerm(165, BindingOkButton.Text)
         CriteriaOkButton.Text = BindingOkButton.Text
         BindingCodeListColumnHeader.Text = Filemanager.GetOpenEhrTerm(90, BindingCodeListColumnHeader.Text)
+        cmBindingPastePath.Text = Filemanager.GetOpenEhrTerm(639, cmBindingPastePath.Text)
     End Sub
 
     Private Sub DeleteCriteriaButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DeleteCriteriaButton.Click
@@ -1486,6 +1516,37 @@ Public Class TermBindingPanel
 
     Private Sub TermBindingPanel_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
         OceanArchetypeEditor.Reflect(Me)
+    End Sub
+
+    Dim mCurrentLogicalPath As String
+    Dim mCurrentPhysicalPath As String
+
+    Private Sub PathsTreeView_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles PathsTreeView.MouseDown
+        If e.Button = MouseButtons.Right Then
+            Dim pathNode As TermNode
+            pathNode = CType(PathsTreeView.GetNodeAt(New Drawing.Point(e.X, e.Y)), TermNode)
+            If pathNode Is Nothing Then
+                mCurrentLogicalPath = ""
+                mCurrentPhysicalPath = ""
+            Else
+                mCurrentLogicalPath = pathNode.LogicalPath
+                mCurrentPhysicalPath = pathNode.PhysicalPath
+            End If
+        End If
+    End Sub
+
+    Private Sub ContextMenuTermBinding_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuTermBinding.Popup
+        If mCurrentLogicalPath <> "" Then
+            Me.cmBindingPastePath.Enabled = True
+            Me.cmBindingPastePathLogical.Text = mCurrentLogicalPath
+            Me.cmBindingPastePathPhysical.Text = mCurrentPhysicalPath
+        Else
+            Me.cmBindingPastePath.Enabled = False
+        End If
+    End Sub
+
+    Private Sub cmBindingPastePathLogical_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmBindingPastePathLogical.Click, cmBindingPastePathPhysical.Click
+        Clipboard.SetDataObject(CType(sender, MenuItem).Text)
     End Sub
 End Class
 

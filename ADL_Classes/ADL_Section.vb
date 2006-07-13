@@ -90,6 +90,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim i As Integer
 
                 an_attribute = Definition.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("items"))
+                ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.cardinality, Me.Children)
                 For i = 1 To an_attribute.children.count
                     ProcessSection(Me, an_attribute.children.i_th(i))
                 Next

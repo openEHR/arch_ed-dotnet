@@ -297,6 +297,7 @@ Public Class TabPageSection
         Dim rm As Object
 
         ' can be RmSlot or RmStructureCompound
+
         For Each rm In A_sect.Children
 
             If TypeOf rm Is RmSection Then
@@ -345,22 +346,23 @@ Public Class TabPageSection
             SectNode = New RmSection(mFileManager.Archetype.ConceptCode)
             If Me.tvSection.GetNodeCount(False) > 0 Then
                 ProcessChildrenRM_Structures(Me.tvSection.Nodes, SectNode)
-            Else
-                Return Nothing
             End If
         End If
 
-        SectNode.Children.Cardinality.Ordered = Me.cbOrdered.Checked
-        If Me.cbFixed.Checked Then
-            Dim i As Integer
-            For Each rm As RmStructure In SectNode.Children
-                If rm.Occurrences.IsUnbounded Then
-                    Return SectNode
-                End If
-                i += rm.Occurrences.MaxCount
-            Next
-            SectNode.Children.Cardinality.MaxCount = i
+        If SectNode.Children.Count > 0 Then
+            SectNode.Children.Cardinality.Ordered = Me.cbOrdered.Checked
+            If Me.cbFixed.Checked Then
+                Dim i As Integer
+                For Each rm As RmStructure In SectNode.Children
+                    If rm.Occurrences.IsUnbounded Then
+                        Return SectNode
+                    End If
+                    i += rm.Occurrences.MaxCount
+                Next
+                SectNode.Children.Cardinality.MaxCount = i
+            End If
         End If
+
         Return SectNode
 
         'Catch e As Exception
@@ -372,6 +374,12 @@ Public Class TabPageSection
         Dim rm_node As Object
 
         Me.tvSection.Nodes.Clear()
+
+        If Not a_section.Children.Cardinality.IsUnbounded Then
+            Me.cbFixed.Checked = True
+        End If
+
+        Me.cbOrdered.Checked = a_section.Children.Cardinality.Ordered
 
         If mRootOfComposition Then
 
@@ -482,11 +490,15 @@ Public Class TabPageSection
 
 
     Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbOrdered.Click
-        mFileManager.FileEdited = True
+        If Not mFileManager.FileLoading Then
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub cbFixed_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFixed.Click
-        mFileManager.FileEdited = True
+        If Not mFileManager.FileLoading Then
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub TabPageSection_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -540,7 +552,7 @@ Public Class TabPageSection
         tvNode.EnsureVisible()
         Me.tvSection.SelectedNode = tvNode
 
-        
+
     End Sub
 
     Sub AddSection(ByVal sender As Object, ByVal e As EventArgs)
@@ -614,7 +626,7 @@ Public Class TabPageSection
             Next
             Return cm
         End If
-        
+
     End Function
 
     Private Sub ContextMenuTree_Popup(ByVal sender As System.Object, ByVal e As EventArgs) Handles ContextMenuTree.Popup
