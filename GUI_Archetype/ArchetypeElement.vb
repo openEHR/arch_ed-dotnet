@@ -339,11 +339,10 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
                 html_dt.HTML = Environment.NewLine
 
-                If b.TrueAllowed Then
+                If b.TrueFalseAllowed Then
+                    html_dt.HTML &= Boolean.TrueString & ", " & Boolean.FalseString
+                ElseIf b.TrueAllowed Then
                     html_dt.HTML &= Boolean.TrueString
-                    If b.FalseAllowed Then
-                        html_dt.HTML &= ", " & Boolean.FalseString
-                    End If
                 Else
                     html_dt.HTML &= Boolean.FalseString
                 End If

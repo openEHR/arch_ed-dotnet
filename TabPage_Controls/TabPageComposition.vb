@@ -59,12 +59,12 @@ Public Class TabPageComposition
     Friend WithEvents radioPersist As System.Windows.Forms.RadioButton
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.TabControlInstruction = New Crownwood.Magic.Controls.TabControl
-        Me.tpSectionConstraint = New Crownwood.Magic.Controls.TabPage
         Me.tpContext = New Crownwood.Magic.Controls.TabPage
+        Me.tpSectionConstraint = New Crownwood.Magic.Controls.TabPage
         Me.PanelBaseTop = New System.Windows.Forms.Panel
-        Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
-        Me.radioEvent = New System.Windows.Forms.RadioButton
         Me.radioPersist = New System.Windows.Forms.RadioButton
+        Me.radioEvent = New System.Windows.Forms.RadioButton
+        Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
         Me.PanelBaseTop.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -87,15 +87,6 @@ Public Class TabPageComposition
         Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpContext, Me.tpSectionConstraint})
         Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
         '
-        'tpSectionConstraint
-        '
-        Me.tpSectionConstraint.Location = New System.Drawing.Point(0, 0)
-        Me.tpSectionConstraint.Name = "tpSectionConstraint"
-        Me.tpSectionConstraint.Selected = False
-        Me.tpSectionConstraint.Size = New System.Drawing.Size(848, 374)
-        Me.tpSectionConstraint.TabIndex = 0
-        Me.tpSectionConstraint.Title = "Sections"
-        '
         'tpContext
         '
         Me.HelpProviderInstruction.SetHelpKeyword(Me.tpContext, "Screens/action_screen.html")
@@ -107,6 +98,15 @@ Public Class TabPageComposition
         Me.tpContext.TabIndex = 2
         Me.tpContext.Title = "Context"
         '
+        'tpSectionConstraint
+        '
+        Me.tpSectionConstraint.Location = New System.Drawing.Point(0, 0)
+        Me.tpSectionConstraint.Name = "tpSectionConstraint"
+        Me.tpSectionConstraint.Selected = False
+        Me.tpSectionConstraint.Size = New System.Drawing.Size(848, 374)
+        Me.tpSectionConstraint.TabIndex = 0
+        Me.tpSectionConstraint.Title = "Sections"
+        '
         'PanelBaseTop
         '
         Me.PanelBaseTop.Controls.Add(Me.radioPersist)
@@ -117,20 +117,21 @@ Public Class TabPageComposition
         Me.PanelBaseTop.Size = New System.Drawing.Size(848, 24)
         Me.PanelBaseTop.TabIndex = 1
         '
+        'radioPersist
+        '
+        Me.radioPersist.Location = New System.Drawing.Point(648, 0)
+        Me.radioPersist.Name = "radioPersist"
+        Me.radioPersist.TabIndex = 1
+        Me.radioPersist.Text = "Persistent"
+        '
         'radioEvent
         '
         Me.radioEvent.Checked = True
         Me.radioEvent.Location = New System.Drawing.Point(536, 0)
         Me.radioEvent.Name = "radioEvent"
         Me.radioEvent.TabIndex = 0
+        Me.radioEvent.TabStop = True
         Me.radioEvent.Text = "Event"
-        '
-        'radioPersist
-        '
-        Me.radioPersist.Location = New System.Drawing.Point(648, 0)
-        Me.radioPersist.Name = "radioPersist"
-        Me.radioPersist.TabIndex = 1
-        Me.radioPersist.Text = "Persistant"
         '
         'TabPageComposition
         '
