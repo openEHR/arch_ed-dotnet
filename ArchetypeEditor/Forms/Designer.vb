@@ -1828,9 +1828,6 @@ Public Class Designer
             Me.gbSpecialisation.Visible = True
         End If
 
-        'Set the description
-        mTabPageDescription.Description = mFileManager.Archetype.Description
-
         If mFileManager.Archetype.hasData Then
             'Dim sType As String
 
@@ -3213,6 +3210,10 @@ Public Class Designer
         For Each d_row In mFileManager.OntologyManager.LanguagesTable.Rows
             AddLanguageToMenu(d_row(1))
         Next
+
+
+        'Set the description
+        mTabPageDescription.Description = mFileManager.Archetype.Description
 
     End Sub
 

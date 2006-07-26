@@ -394,6 +394,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             ' now build the events
+
             events_rel_node = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("events"), MakeCardinality(a_history.Children.Cardinality))
 
             For Each an_event In a_history.Children
@@ -441,20 +442,29 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
 
                 ' data
-                an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("data"))
+                
                 If Not data_processed Then
                     If Not a_history.Data Is Nothing Then
+
+                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("data"))
+
                         Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+
 
                         objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_history.Data.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_history.Data.NodeId))
                         BuildStructure(a_history.Data, objNode)
 
                         ''data_path = cadlEvent.path
                         data_path = GetPathOfNode(a_history.Data.NodeId)
+                    Else
+                        cadlEvent.set_any_allowed()
                     End If
                     data_processed = True
                 Else
                     Dim NodeRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
+                    If Not cadlEvent.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("data")) Then
+                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("data"))
+                    End If
                     NodeRef = mCADL_Factory.create_archetype_internal_ref(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_history.Data.Type)), data_path.as_string)
                 End If
 
