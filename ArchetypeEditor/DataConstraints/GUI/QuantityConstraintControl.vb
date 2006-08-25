@@ -113,7 +113,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.comboPhysicalProperty.DisplayMember = "Text"
         Me.comboPhysicalProperty.Location = New System.Drawing.Point(41, 64)
         Me.comboPhysicalProperty.Name = "comboPhysicalProperty"
-        Me.comboPhysicalProperty.Size = New System.Drawing.Size(320, 24)
+        Me.comboPhysicalProperty.Size = New System.Drawing.Size(295, 24)
         Me.comboPhysicalProperty.TabIndex = 0
         Me.comboPhysicalProperty.ValueMember = "id"
         '

@@ -327,7 +327,7 @@ Public Class RmElement
             Case "yyyy-??-xx"
                 'Partial date
                 dt.TypeofDateTimeConstraint = 16
-            Case "yyyy-mm-xx"
+            Case "yyyy-mm-??"
                 'Partial date with month
                 dt.TypeofDateTimeConstraint = 17
             Case "hh:??:??", "thh:??:??"

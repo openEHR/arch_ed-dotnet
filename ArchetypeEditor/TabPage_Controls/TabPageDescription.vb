@@ -699,9 +699,6 @@ Public Class TabPageDescription
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         Dim temp_isloading As Boolean = Filemanager.Master.FileLoading
         Filemanager.Master.FileLoading = True
-
-        'Initialise the description
-        Me.Description = New ArchetypeEditor.ADL_Classes.ADL_Description
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If

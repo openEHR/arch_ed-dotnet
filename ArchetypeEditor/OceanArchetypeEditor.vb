@@ -618,7 +618,7 @@ Public Class OceanArchetypeEditor
 
     Shared Sub main(ByVal CmdArgs() As String)
 
-#Const TEST_LANGUAGE_TRANSLATION = False
+#Const TEST_LANGUAGE_TRANSLATION = True
 
 #If Not TEST_LANGUAGE_TRANSLATION Then
 
@@ -634,8 +634,11 @@ Public Class OceanArchetypeEditor
         'mDefaultLanguageCode = "sv"
         'mSpecificLanguageCode = "sv"
 
-        mDefaultLanguageCode = "fa"
-        mSpecificLanguageCode = "fa"
+        'mDefaultLanguageCode = "fa"
+        'mSpecificLanguageCode = "fa"
+
+        mDefaultLanguageCode = "nl"
+        mSpecificLanguageCode = "nl"
 
         'mDefaultLanguageCode = "de"
         'mSpecificLanguageCode = "de"

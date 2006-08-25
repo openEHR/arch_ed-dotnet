@@ -20,6 +20,7 @@ Option Strict On
 Public Class TermBindingPanel
     Inherits System.Windows.Forms.UserControl
 
+
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -67,7 +68,6 @@ Public Class TermBindingPanel
     Friend WithEvents AddCriteriaButton As System.Windows.Forms.Button
     Friend WithEvents DeleteCriteriaButton As System.Windows.Forms.Button
     Friend WithEvents BindingCriteriaListBox As System.Windows.Forms.ListBox
-    'Friend WithEvents BindingListBox As System.Windows.Forms.ListBox
     Friend WithEvents BindingList As System.Windows.Forms.ListView
     Friend WithEvents BindingOkButton As System.Windows.Forms.Button
     Friend WithEvents ReleaseTextBox As System.Windows.Forms.TextBox
@@ -100,12 +100,18 @@ Public Class TermBindingPanel
     Friend WithEvents cmBindingPastePath As System.Windows.Forms.MenuItem
     Friend WithEvents cmBindingPastePathLogical As System.Windows.Forms.MenuItem
     Friend WithEvents cmBindingPastePathPhysical As System.Windows.Forms.MenuItem
+    Friend WithEvents tabBindings As Crownwood.Magic.Controls.TabControl
+    Friend WithEvents tpSimple As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents tpComplex As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents dgTermBinding As System.Windows.Forms.DataGrid
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TermBindingPanel))
         Me.PathsTreeView = New System.Windows.Forms.TreeView
         Me.ContextMenuTermBinding = New System.Windows.Forms.ContextMenu
         Me.cmBindingPastePath = New System.Windows.Forms.MenuItem
+        Me.cmBindingPastePathLogical = New System.Windows.Forms.MenuItem
+        Me.cmBindingPastePathPhysical = New System.Windows.Forms.MenuItem
         Me.BindingImageList = New System.Windows.Forms.ImageList(Me.components)
         Me.BindingGroupBox = New System.Windows.Forms.GroupBox
         Me.BindingList = New System.Windows.Forms.ListView
@@ -140,14 +146,19 @@ Public Class TermBindingPanel
         Me.lblBindingterminology = New System.Windows.Forms.Label
         Me.PanelBindings = New System.Windows.Forms.Panel
         Me.gbCriteria = New System.Windows.Forms.GroupBox
-        Me.cmBindingPastePathLogical = New System.Windows.Forms.MenuItem
-        Me.cmBindingPastePathPhysical = New System.Windows.Forms.MenuItem
+        Me.tabBindings = New Crownwood.Magic.Controls.TabControl
+        Me.tpSimple = New Crownwood.Magic.Controls.TabPage
+        Me.tpComplex = New Crownwood.Magic.Controls.TabPage
+        Me.dgTermBinding = New System.Windows.Forms.DataGrid
         Me.BindingGroupBox.SuspendLayout()
         Me.AddBindingGroupBox.SuspendLayout()
         Me.AddBindingCriteriaGroupBox.SuspendLayout()
         Me.TopPanel.SuspendLayout()
         Me.PanelBindings.SuspendLayout()
         Me.gbCriteria.SuspendLayout()
+        Me.tpSimple.SuspendLayout()
+        Me.tpComplex.SuspendLayout()
+        CType(Me.dgTermBinding, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PathsTreeView
@@ -156,11 +167,11 @@ Public Class TermBindingPanel
         Me.PathsTreeView.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PathsTreeView.HideSelection = False
         Me.PathsTreeView.ImageList = Me.BindingImageList
-        Me.PathsTreeView.Location = New System.Drawing.Point(4, 32)
+        Me.PathsTreeView.Location = New System.Drawing.Point(0, 0)
         Me.PathsTreeView.Name = "PathsTreeView"
         Me.PathsTreeView.PathSeparator = "/"
         Me.PathsTreeView.ShowRootLines = False
-        Me.PathsTreeView.Size = New System.Drawing.Size(880, 194)
+        Me.PathsTreeView.Size = New System.Drawing.Size(880, 170)
         Me.PathsTreeView.TabIndex = 1
         '
         'ContextMenuTermBinding
@@ -172,6 +183,16 @@ Public Class TermBindingPanel
         Me.cmBindingPastePath.Index = 0
         Me.cmBindingPastePath.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.cmBindingPastePathLogical, Me.cmBindingPastePathPhysical})
         Me.cmBindingPastePath.Text = "Copy path to clipboard"
+        '
+        'cmBindingPastePathLogical
+        '
+        Me.cmBindingPastePathLogical.Index = 0
+        Me.cmBindingPastePathLogical.Text = "Logical path"
+        '
+        'cmBindingPastePathPhysical
+        '
+        Me.cmBindingPastePathPhysical.Index = 1
+        Me.cmBindingPastePathPhysical.Text = "Physical path"
         '
         'BindingImageList
         '
@@ -187,7 +208,7 @@ Public Class TermBindingPanel
         Me.BindingGroupBox.Dock = System.Windows.Forms.DockStyle.Left
         Me.BindingGroupBox.Location = New System.Drawing.Point(0, 0)
         Me.BindingGroupBox.Name = "BindingGroupBox"
-        Me.BindingGroupBox.Size = New System.Drawing.Size(224, 96)
+        Me.BindingGroupBox.Size = New System.Drawing.Size(224, 80)
         Me.BindingGroupBox.TabIndex = 9
         Me.BindingGroupBox.TabStop = False
         Me.BindingGroupBox.Text = "Bindings"
@@ -243,10 +264,10 @@ Public Class TermBindingPanel
         '
         Me.BindingCriteriaListBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BindingCriteriaListBox.ItemHeight = 16
+        Me.BindingCriteriaListBox.ItemHeight = 17
         Me.BindingCriteriaListBox.Location = New System.Drawing.Point(48, 16)
         Me.BindingCriteriaListBox.Name = "BindingCriteriaListBox"
-        Me.BindingCriteriaListBox.Size = New System.Drawing.Size(600, 68)
+        Me.BindingCriteriaListBox.Size = New System.Drawing.Size(824, 55)
         Me.BindingCriteriaListBox.TabIndex = 11
         Me.BindingCriteriaListBox.TabStop = False
         '
@@ -271,9 +292,9 @@ Public Class TermBindingPanel
         Me.AddBindingGroupBox.Controls.Add(Me.PathRadioButton)
         Me.AddBindingGroupBox.Controls.Add(Me.NodeRadioButton)
         Me.AddBindingGroupBox.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.AddBindingGroupBox.Location = New System.Drawing.Point(4, 226)
+        Me.AddBindingGroupBox.Location = New System.Drawing.Point(0, 330)
         Me.AddBindingGroupBox.Name = "AddBindingGroupBox"
-        Me.AddBindingGroupBox.Size = New System.Drawing.Size(880, 90)
+        Me.AddBindingGroupBox.Size = New System.Drawing.Size(880, 96)
         Me.AddBindingGroupBox.TabIndex = 12
         Me.AddBindingGroupBox.TabStop = False
         Me.AddBindingGroupBox.Text = "Add Binding"
@@ -282,7 +303,7 @@ Public Class TermBindingPanel
         'CancelAddBindingButton
         '
         Me.CancelAddBindingButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CancelAddBindingButton.Location = New System.Drawing.Point(728, 61)
+        Me.CancelAddBindingButton.Location = New System.Drawing.Point(728, 67)
         Me.CancelAddBindingButton.Name = "CancelAddBindingButton"
         Me.CancelAddBindingButton.Size = New System.Drawing.Size(64, 20)
         Me.CancelAddBindingButton.TabIndex = 27
@@ -291,7 +312,7 @@ Public Class TermBindingPanel
         'BindingOkButton
         '
         Me.BindingOkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BindingOkButton.Location = New System.Drawing.Point(808, 61)
+        Me.BindingOkButton.Location = New System.Drawing.Point(808, 67)
         Me.BindingOkButton.Name = "BindingOkButton"
         Me.BindingOkButton.Size = New System.Drawing.Size(64, 20)
         Me.BindingOkButton.TabIndex = 26
@@ -368,9 +389,9 @@ Public Class TermBindingPanel
         Me.AddBindingCriteriaGroupBox.Controls.Add(Me.CriteriaOkButton)
         Me.AddBindingCriteriaGroupBox.Controls.Add(Me.CriteriaValueTextBox)
         Me.AddBindingCriteriaGroupBox.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.AddBindingCriteriaGroupBox.Location = New System.Drawing.Point(4, 316)
+        Me.AddBindingCriteriaGroupBox.Location = New System.Drawing.Point(0, 250)
         Me.AddBindingCriteriaGroupBox.Name = "AddBindingCriteriaGroupBox"
-        Me.AddBindingCriteriaGroupBox.Size = New System.Drawing.Size(880, 72)
+        Me.AddBindingCriteriaGroupBox.Size = New System.Drawing.Size(880, 80)
         Me.AddBindingCriteriaGroupBox.TabIndex = 13
         Me.AddBindingCriteriaGroupBox.TabStop = False
         Me.AddBindingCriteriaGroupBox.Text = "Add Binding Criteria"
@@ -412,14 +433,14 @@ Public Class TermBindingPanel
         Me.OperatorComboBox.Items.AddRange(New Object() {"=", "<", "<=", ">", ">=", "!="})
         Me.OperatorComboBox.Location = New System.Drawing.Point(488, 20)
         Me.OperatorComboBox.Name = "OperatorComboBox"
-        Me.OperatorComboBox.Size = New System.Drawing.Size(64, 24)
+        Me.OperatorComboBox.Size = New System.Drawing.Size(64, 25)
         Me.OperatorComboBox.TabIndex = 34
         Me.OperatorComboBox.Text = "="
         '
         'BindingCriteriaCancelButton
         '
         Me.BindingCriteriaCancelButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BindingCriteriaCancelButton.Location = New System.Drawing.Point(728, 44)
+        Me.BindingCriteriaCancelButton.Location = New System.Drawing.Point(728, 52)
         Me.BindingCriteriaCancelButton.Name = "BindingCriteriaCancelButton"
         Me.BindingCriteriaCancelButton.Size = New System.Drawing.Size(64, 20)
         Me.BindingCriteriaCancelButton.TabIndex = 37
@@ -428,7 +449,7 @@ Public Class TermBindingPanel
         'CriteriaOkButton
         '
         Me.CriteriaOkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CriteriaOkButton.Location = New System.Drawing.Point(808, 44)
+        Me.CriteriaOkButton.Location = New System.Drawing.Point(808, 52)
         Me.CriteriaOkButton.Name = "CriteriaOkButton"
         Me.CriteriaOkButton.Size = New System.Drawing.Size(64, 20)
         Me.CriteriaOkButton.TabIndex = 36
@@ -438,7 +459,7 @@ Public Class TermBindingPanel
         '
         Me.CriteriaValueTextBox.Location = New System.Drawing.Point(568, 20)
         Me.CriteriaValueTextBox.Name = "CriteriaValueTextBox"
-        Me.CriteriaValueTextBox.Size = New System.Drawing.Size(200, 22)
+        Me.CriteriaValueTextBox.Size = New System.Drawing.Size(200, 24)
         Me.CriteriaValueTextBox.TabIndex = 35
         Me.CriteriaValueTextBox.Text = ""
         Me.CriteriaValueTextBox.Visible = False
@@ -493,9 +514,9 @@ Public Class TermBindingPanel
         Me.PanelBindings.Controls.Add(Me.gbCriteria)
         Me.PanelBindings.Controls.Add(Me.BindingGroupBox)
         Me.PanelBindings.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelBindings.Location = New System.Drawing.Point(4, 388)
+        Me.PanelBindings.Location = New System.Drawing.Point(0, 170)
         Me.PanelBindings.Name = "PanelBindings"
-        Me.PanelBindings.Size = New System.Drawing.Size(880, 96)
+        Me.PanelBindings.Size = New System.Drawing.Size(880, 80)
         Me.PanelBindings.TabIndex = 15
         '
         'gbCriteria
@@ -506,29 +527,63 @@ Public Class TermBindingPanel
         Me.gbCriteria.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbCriteria.Location = New System.Drawing.Point(224, 0)
         Me.gbCriteria.Name = "gbCriteria"
-        Me.gbCriteria.Size = New System.Drawing.Size(656, 96)
+        Me.gbCriteria.Size = New System.Drawing.Size(656, 80)
         Me.gbCriteria.TabIndex = 0
         Me.gbCriteria.TabStop = False
         Me.gbCriteria.Text = "Criteria"
         Me.gbCriteria.Visible = False
         '
-        'cmBindingPastePathLogical
+        'tabBindings
         '
-        Me.cmBindingPastePathLogical.Index = 0
-        Me.cmBindingPastePathLogical.Text = "Logical path"
+        Me.tabBindings.BackColor = System.Drawing.Color.LightGoldenrodYellow
+        Me.tabBindings.BoldSelectedPage = True
+        Me.tabBindings.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tabBindings.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.tabBindings.Location = New System.Drawing.Point(4, 32)
+        Me.tabBindings.Name = "tabBindings"
+        Me.tabBindings.PositionTop = True
+        Me.tabBindings.SelectedIndex = 0
+        Me.tabBindings.SelectedTab = Me.tpSimple
+        Me.tabBindings.Size = New System.Drawing.Size(880, 452)
+        Me.tabBindings.TabIndex = 16
+        Me.tabBindings.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpSimple, Me.tpComplex})
         '
-        'cmBindingPastePathPhysical
+        'tpSimple
         '
-        Me.cmBindingPastePathPhysical.Index = 1
-        Me.cmBindingPastePathPhysical.Text = "Physical path"
+        Me.tpSimple.Controls.Add(Me.dgTermBinding)
+        Me.tpSimple.Location = New System.Drawing.Point(0, 0)
+        Me.tpSimple.Name = "tpSimple"
+        Me.tpSimple.Size = New System.Drawing.Size(880, 426)
+        Me.tpSimple.TabIndex = 0
+        Me.tpSimple.Title = "Node"
+        '
+        'tpComplex
+        '
+        Me.tpComplex.Controls.Add(Me.PathsTreeView)
+        Me.tpComplex.Controls.Add(Me.PanelBindings)
+        Me.tpComplex.Controls.Add(Me.AddBindingCriteriaGroupBox)
+        Me.tpComplex.Controls.Add(Me.AddBindingGroupBox)
+        Me.tpComplex.Location = New System.Drawing.Point(0, 0)
+        Me.tpComplex.Name = "tpComplex"
+        Me.tpComplex.Selected = False
+        Me.tpComplex.Size = New System.Drawing.Size(880, 426)
+        Me.tpComplex.TabIndex = 1
+        Me.tpComplex.Title = "Complex"
+        '
+        'dgTermBinding
+        '
+        Me.dgTermBinding.DataMember = ""
+        Me.dgTermBinding.Dock = System.Windows.Forms.DockStyle.Left
+        Me.dgTermBinding.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.dgTermBinding.Location = New System.Drawing.Point(0, 0)
+        Me.dgTermBinding.Name = "dgTermBinding"
+        Me.dgTermBinding.Size = New System.Drawing.Size(520, 426)
+        Me.dgTermBinding.TabIndex = 0
         '
         'TermBindingPanel
         '
         Me.BackColor = System.Drawing.Color.LightYellow
-        Me.Controls.Add(Me.PathsTreeView)
-        Me.Controls.Add(Me.AddBindingGroupBox)
-        Me.Controls.Add(Me.AddBindingCriteriaGroupBox)
-        Me.Controls.Add(Me.PanelBindings)
+        Me.Controls.Add(Me.tabBindings)
         Me.Controls.Add(Me.TopPanel)
         Me.DockPadding.Bottom = 4
         Me.DockPadding.Left = 4
@@ -541,6 +596,9 @@ Public Class TermBindingPanel
         Me.TopPanel.ResumeLayout(False)
         Me.PanelBindings.ResumeLayout(False)
         Me.gbCriteria.ResumeLayout(False)
+        Me.tpSimple.ResumeLayout(False)
+        Me.tpComplex.ResumeLayout(False)
+        CType(Me.dgTermBinding, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -725,7 +783,7 @@ Public Class TermBindingPanel
             End If
 
             If Not node.Parent Is Nothing _
-        AndAlso node.Parent.ImageIndex <= 0 Then
+                AndAlso node.Parent.ImageIndex <= 0 Then
 
                 node.Parent.ImageIndex = 4
                 node.Parent.SelectedImageIndex = 4
@@ -745,6 +803,7 @@ Public Class TermBindingPanel
             Try
 
                 Me.TerminologyComboBox.DataSource = mFileManager.OntologyManager.TerminologiesTable
+                Me.dgTermBinding.DataSource = mFileManager.OntologyManager.TermBindingsTable
 
                 If PathsTreeView.Nodes.Count = 0 Then
                     PopulateNodeTree()

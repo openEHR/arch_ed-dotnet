@@ -711,6 +711,7 @@
   <PrimaryRubric Id="637" Language="en" />
   <PrimaryRubric Id="638" Language="en" />
   <PrimaryRubric Id="639" Language="en" />
+  <PrimaryRubric Id="640" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -3352,6 +3353,7 @@
   <Concept Language="en" ConceptID="637" Rubric="application/dicom" />
   <Concept Language="en" ConceptID="638" Rubric="Format" />
   <Concept Language="en" ConceptID="639" Rubric="Copy path to clipboard" />
+  <Concept Language="en" ConceptID="640" Rubric="actual" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
@@ -3839,6 +3841,7 @@
   <GroupedConcept GrouperID="24" ChildID="619" />
   <GroupedConcept GrouperID="24" ChildID="620" />
   <GroupedConcept GrouperID="19" ChildID="637" />
+  <GroupedConcept GrouperID="14" ChildID="640" />
   <TerminologyIdentifiers VSAB="AIR93" SourceName="AI/RHEUM,1993" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ALT2000" SourceName="Alternative Billing Concepts, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="AOD2000" SourceName="Alcohol and Other Drug Thesaurus, 2000" Authority="UMLS2003AA" />

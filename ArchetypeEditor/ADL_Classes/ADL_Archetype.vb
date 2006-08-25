@@ -568,7 +568,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     s = "yyyy-??-XX"
                     dtType = "d"
                 Case 17                'Partial date with month
-                    s = "yyyy-mm-XX"
+                    s = "yyyy-mm-??"
                     dtType = "d"
                 Case 18                'TimeOnly
                     s = "HH:??:??"
