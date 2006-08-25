@@ -66,8 +66,8 @@ Public Class TerminologyServer
     Public Function CodeSetAsStringArray(ByVal CodeSetName As String) As String()
         'languages, countries, Media types, terminologies, compression algorithms, integrity check algorithms
 
-        Select Case CodeSetName
-            Case "Concepts", "Concepts", "Terminologies", "terminologies", "CONCEPTS", "TERMINOLOGIES"
+        Select Case CodeSetName.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Case "concepts", "terminologies"
                 Dim i, n_rows As Integer
 
                 n_rows = Terminology.Tables.Item("TerminologyIdentifiers").Rows.Count - 1
@@ -78,7 +78,7 @@ Public Class TerminologyServer
                 Next
                 Return CodeSetArray
 
-            Case "language", "Language", "LANGUAGE", "languages", "Languages", "LANGUAGES"
+            Case "language", "languages"
                 Dim CodeSetArray(Terminology.Tables.Item("Languages").Rows.Count - 1) As String
 
                 Terminology.Tables("Languages").Rows.CopyTo(CodeSetArray, 0)
@@ -90,14 +90,14 @@ Public Class TerminologyServer
     Public Function CodeSetAsDataRow(ByVal CodeSetName As String) As DataRow()
         'languages, countries, Media types, terminologies, compression algorithms, integrity check algorithms
 
-        Select Case CodeSetName
-            Case "Concepts", "Concepts", "Terminologies", "terminologies", "CONCEPTS", "TERMINOLOGIES"
+        Select Case CodeSetName.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Case "concepts", "terminologies"
                 Dim selected_rows As DataRow()
 
                 selected_rows = Terminology.Tables("TerminologyIdentifiers").Select()
                 Return selected_rows
 
-            Case "languages", "Languages", "LANGUAGES", "language", "Language", "LANGUAGE"
+            Case "languages", "language"
                 Dim selected_rows As DataRow()
 
                 selected_rows = Terminology.Tables("Language").Select()
@@ -106,8 +106,8 @@ Public Class TerminologyServer
     End Function
 
     Public Function CodeSetItemDescription(ByVal CodeSetName As String, ByVal Code As String) As String
-        Select Case CodeSetName
-            Case "concept", "Concept", "Terminologies", "terminologies", "CONCEPT", "TERMINOLOGIES"
+        Select Case CodeSetName.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Case "concept", "terminologies"
                 Dim key(0) As Object
                 key(0) = Code
                 Try
@@ -116,7 +116,7 @@ Public Class TerminologyServer
                     Return ""
                 End Try
 
-            Case "language", "Language", "LANGUAGE", "languages", "Languages", "LANGUAGES"
+            Case "language", "languages"
                 Dim selected_rows As DataRow()
                 selected_rows = Terminology.Tables("Language").Select("Code = '" & Code & "'")
                 If selected_rows.Length > 0 Then
@@ -145,16 +145,16 @@ Public Class TerminologyServer
             If i > -1 Then
                 keys(0) = language.Substring(0, i)
                 selected_row = Terminology.Tables("Concept").Rows.Find(keys)
-                If selected_row Is Nothing Then
-                    Return Nothing
-                Else
+                If Not selected_row Is Nothing Then
                     Return selected_row(2)
                 End If
             End If
-            Return Nothing
         Else
             Return selected_row(2)
         End If
+
+        'otherwise return the English version
+        Return RubricForCode(Code, "en")
 
     End Function
 

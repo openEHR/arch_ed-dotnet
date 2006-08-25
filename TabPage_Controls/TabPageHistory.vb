@@ -1444,6 +1444,14 @@ Public Class TabpageHistory
     Private Sub TabpageHistory_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
         OceanArchetypeEditor.Reflect(Me)
     End Sub
+
+    Private Sub ListEvents_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles ListEvents.KeyDown
+        If (Not current_item Is Nothing) AndAlso e.KeyCode = Keys.Delete Then
+            If MessageBox.Show(AE_Constants.Instance.Remove + " " + current_item.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+                current_item.Remove()
+            End If
+        End If
+    End Sub
 End Class
 
 '

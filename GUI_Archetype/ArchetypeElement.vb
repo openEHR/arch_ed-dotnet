@@ -232,6 +232,22 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     End Function
 
+    Private Function IntervalCountToHTML(ByVal intervalCountConstraint As Constraint_Interval_Count) As String
+        Dim s As String
+
+        s = CountConstraintToRichText(CType(intervalCountConstraint.AbsoluteLimits, Constraint_Count))
+        Return s
+
+    End Function
+
+    Private Function IntervalQuantityToHTML(ByVal intervalQuantityConstraint As Constraint_Interval_Quantity) As String
+        Dim s As String
+
+        s = QuantityConstraintToHTML(CType(intervalQuantityConstraint.AbsoluteLimits, Constraint_Quantity))
+        Return s
+
+    End Function
+
     Public Overrides Function ToRichText(ByVal level As Integer) As String
         Dim new_line As String = Chr(10) & Chr(13)
 
@@ -372,6 +388,15 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Case ConstraintType.Ratio
                 html_dt.HTML = Environment.NewLine & RatioConstraintToHTML(CType(c, Constraint_Ratio))
                 html_dt.ImageSource = "Images/ratio.gif"
+
+            Case ConstraintType.Interval_Count
+                html_dt.HTML = Environment.NewLine & IntervalCountToHTML(CType(c, Constraint_Interval_Count))
+                html_dt.ImageSource = "Images/interval.gif"
+
+            Case ConstraintType.Interval_Quantity
+                html_dt.HTML = Environment.NewLine & IntervalQuantityToHTML(CType(c, Constraint_Interval_Quantity))
+                html_dt.ImageSource = "Images/interval.gif"
+
             Case Else
                 Debug.WriteLine(c.Type.ToString)
                 Debug.Assert(False, "Not handled")
