@@ -26,7 +26,7 @@ Public Class FileManagerLocal
     Private mWorkingDirectory As String
     Private mIsNew As Boolean = False
     Private mObjectToSave As Object
-    Private mOntologyManager As New OntologyManager
+    Private mOntologyManager As New OntologyManager(Me)
 
     Public Property OntologyManager() As OntologyManager
         Get
@@ -101,9 +101,9 @@ Public Class FileManagerLocal
             mIsFileDirty = Value
             Filemanager.SetFileChangedToolBar(Value)
             If Value Then
-                mParserSynchronised = True
-            Else
                 mParserSynchronised = False
+            Else
+                mParserSynchronised = True
             End If
         End Set
     End Property

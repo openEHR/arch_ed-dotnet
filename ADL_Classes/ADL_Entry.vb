@@ -58,18 +58,22 @@ Class ADL_ENTRY
                     Case "data"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Data, a_filemanager))
                         ' remembers the Processed data off events
-                    Case "state"
+                    Case "state"  'Obsolete unless it is a History
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.State, a_filemanager))
                     Case "protocol"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Protocol, a_filemanager))
                     Case "description"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ActivityDescription, a_filemanager))
                     Case "ism_transition", "pathway_specification" 'pathway_spec is obsolete 
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ism_transition, a_filemanager))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ISM_TRANSITION, a_filemanager))
                     Case "activities"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activities, a_filemanager))
                 End Select
             Next
+            If Not ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure Is Nothing Then
+                mChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure)
+                ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure = Nothing
+            End If
         End Sub
 
 End Class 'ADL_ENTRY

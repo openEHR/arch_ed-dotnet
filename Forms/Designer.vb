@@ -3239,7 +3239,7 @@ Public Class Designer
             frm.comboModel.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", OceanArchetypeEditor.DefaultLanguageCode)
             frm.comboComponent.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", OceanArchetypeEditor.DefaultLanguageCode)
             frm.gbNew.Text = Filemanager.GetOpenEhrTerm(50, frm.gbNew.Text, OceanArchetypeEditor.DefaultLanguageCode)
-            frm.lblComponent.Text = Filemanager.GetOpenEhrTerm(531, frm.lblComponent.Text, OceanArchetypeEditor.DefaultLanguageCode)
+            frm.lblComponent.Text = Filemanager.GetOpenEhrTerm(513, frm.lblComponent.Text, OceanArchetypeEditor.DefaultLanguageCode)
             frm.lblModel.Text = Filemanager.GetOpenEhrTerm(51, frm.lblModel.Text, OceanArchetypeEditor.DefaultLanguageCode)
             frm.lblShortConcept.Text = Filemanager.GetOpenEhrTerm(52, frm.lblShortConcept.Text, OceanArchetypeEditor.DefaultLanguageCode)
             frm.butOK.Text = Filemanager.GetOpenEhrTerm(165, frm.butOK.Text, OceanArchetypeEditor.DefaultLanguageCode)
@@ -3363,6 +3363,8 @@ Public Class Designer
 
             If s <> "" Then
                 Dim a_Term As RmTerm
+
+                s = s.Replace(" "c, "_"c)
 
                 'specialise concept
                 mFileManager.FileLoading = True

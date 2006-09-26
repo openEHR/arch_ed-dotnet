@@ -553,23 +553,14 @@ Public Class EntryStructure
     Protected Overloads Sub SetCurrentItem(ByVal a_node As ArchetypeNode)
         ' if nothing this hides panelDetails
         mCurrentItem = a_node
-        Me.lblAtcode.Text = a_node.RM_Class.NodeId
         If Not a_node Is Nothing Then
+            Me.lblAtcode.Text = a_node.RM_Class.NodeId
             SetButtonVisibility(a_node)
+        Else
+            Me.lblAtcode.Text = ""
         End If
         RaiseEvent CurrentItemChanged(a_node, New EventArgs)
     End Sub
-
-    Protected Overloads Sub SetCurrentItem(ByVal a_node As ArchetypeNode, ByVal cardinality As RmCardinality)
-        ' if nothing this hides panelDetails
-        mCurrentItem = a_node
-        If Not a_node Is Nothing Then
-            SetButtonVisibility(a_node)
-        End If
-        RaiseEvent CurrentItemChanged(a_node, New EventArgs)
-
-    End Sub
-
 
     Protected Sub SetButtonVisibility(ByVal a_node As ArchetypeNode)
 

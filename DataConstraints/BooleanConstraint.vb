@@ -17,7 +17,7 @@ Class Constraint_Boolean
     Inherits Constraint
     Private boolAssumed As Boolean
     Private boolHasAssumed As Boolean
-    Private iBoolVal As Integer ' 0 = TrueOrFalse (default), 1 = True, 2 = False
+    Private iBoolVal As Integer = 0 ' 0 = TrueOrFalse (default), 1 = True, 2 = False
 
     Public Overrides Function copy() As Constraint
         Dim b As New Constraint_Boolean

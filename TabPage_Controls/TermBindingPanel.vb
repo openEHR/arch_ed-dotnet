@@ -104,6 +104,11 @@ Public Class TermBindingPanel
     Friend WithEvents tpSimple As Crownwood.Magic.Controls.TabPage
     Friend WithEvents tpComplex As Crownwood.Magic.Controls.TabPage
     Friend WithEvents dgTermBinding As System.Windows.Forms.DataGrid
+    Friend WithEvents butAddNode As System.Windows.Forms.Button
+    Friend WithEvents panelNodeLeft As System.Windows.Forms.Panel
+    Friend WithEvents defaultTableStyle As System.Windows.Forms.DataGridTableStyle
+    Friend WithEvents pathColumn As System.Windows.Forms.DataGridTextBoxColumn
+    Friend WithEvents Code As System.Windows.Forms.DataGridTextBoxColumn
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TermBindingPanel))
@@ -148,8 +153,13 @@ Public Class TermBindingPanel
         Me.gbCriteria = New System.Windows.Forms.GroupBox
         Me.tabBindings = New Crownwood.Magic.Controls.TabControl
         Me.tpSimple = New Crownwood.Magic.Controls.TabPage
-        Me.tpComplex = New Crownwood.Magic.Controls.TabPage
         Me.dgTermBinding = New System.Windows.Forms.DataGrid
+        Me.defaultTableStyle = New System.Windows.Forms.DataGridTableStyle
+        Me.pathColumn = New System.Windows.Forms.DataGridTextBoxColumn
+        Me.Code = New System.Windows.Forms.DataGridTextBoxColumn
+        Me.panelNodeLeft = New System.Windows.Forms.Panel
+        Me.butAddNode = New System.Windows.Forms.Button
+        Me.tpComplex = New Crownwood.Magic.Controls.TabPage
         Me.BindingGroupBox.SuspendLayout()
         Me.AddBindingGroupBox.SuspendLayout()
         Me.AddBindingCriteriaGroupBox.SuspendLayout()
@@ -157,8 +167,9 @@ Public Class TermBindingPanel
         Me.PanelBindings.SuspendLayout()
         Me.gbCriteria.SuspendLayout()
         Me.tpSimple.SuspendLayout()
-        Me.tpComplex.SuspendLayout()
         CType(Me.dgTermBinding, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.panelNodeLeft.SuspendLayout()
+        Me.tpComplex.SuspendLayout()
         Me.SuspendLayout()
         '
         'PathsTreeView
@@ -170,7 +181,6 @@ Public Class TermBindingPanel
         Me.PathsTreeView.Location = New System.Drawing.Point(0, 0)
         Me.PathsTreeView.Name = "PathsTreeView"
         Me.PathsTreeView.PathSeparator = "/"
-        Me.PathsTreeView.ShowRootLines = False
         Me.PathsTreeView.Size = New System.Drawing.Size(880, 170)
         Me.PathsTreeView.TabIndex = 1
         '
@@ -542,8 +552,8 @@ Public Class TermBindingPanel
         Me.tabBindings.Location = New System.Drawing.Point(4, 32)
         Me.tabBindings.Name = "tabBindings"
         Me.tabBindings.PositionTop = True
-        Me.tabBindings.SelectedIndex = 0
-        Me.tabBindings.SelectedTab = Me.tpSimple
+        Me.tabBindings.SelectedIndex = 1
+        Me.tabBindings.SelectedTab = Me.tpComplex
         Me.tabBindings.Size = New System.Drawing.Size(880, 452)
         Me.tabBindings.TabIndex = 16
         Me.tabBindings.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpSimple, Me.tpComplex})
@@ -551,11 +561,66 @@ Public Class TermBindingPanel
         'tpSimple
         '
         Me.tpSimple.Controls.Add(Me.dgTermBinding)
+        Me.tpSimple.Controls.Add(Me.panelNodeLeft)
         Me.tpSimple.Location = New System.Drawing.Point(0, 0)
         Me.tpSimple.Name = "tpSimple"
+        Me.tpSimple.Selected = False
         Me.tpSimple.Size = New System.Drawing.Size(880, 426)
         Me.tpSimple.TabIndex = 0
         Me.tpSimple.Title = "Node"
+        '
+        'dgTermBinding
+        '
+        Me.dgTermBinding.AllowNavigation = False
+        Me.dgTermBinding.DataMember = ""
+        Me.dgTermBinding.Dock = System.Windows.Forms.DockStyle.Left
+        Me.dgTermBinding.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.dgTermBinding.Location = New System.Drawing.Point(32, 0)
+        Me.dgTermBinding.Name = "dgTermBinding"
+        Me.dgTermBinding.Size = New System.Drawing.Size(424, 426)
+        Me.dgTermBinding.TabIndex = 0
+        Me.dgTermBinding.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.defaultTableStyle})
+        '
+        'defaultTableStyle
+        '
+        Me.defaultTableStyle.DataGrid = Me.dgTermBinding
+        Me.defaultTableStyle.GridColumnStyles.AddRange(New System.Windows.Forms.DataGridColumnStyle() {Me.pathColumn, Me.Code})
+        Me.defaultTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.defaultTableStyle.MappingName = "TermBindings"
+        '
+        'pathColumn
+        '
+        Me.pathColumn.Format = ""
+        Me.pathColumn.FormatInfo = Nothing
+        Me.pathColumn.HeaderText = "Node"
+        Me.pathColumn.MappingName = "Path"
+        Me.pathColumn.Width = 75
+        '
+        'Code
+        '
+        Me.Code.Format = ""
+        Me.Code.FormatInfo = Nothing
+        Me.Code.HeaderText = "Code"
+        Me.Code.MappingName = "Code"
+        Me.Code.Width = 150
+        '
+        'panelNodeLeft
+        '
+        Me.panelNodeLeft.Controls.Add(Me.butAddNode)
+        Me.panelNodeLeft.Dock = System.Windows.Forms.DockStyle.Left
+        Me.panelNodeLeft.Location = New System.Drawing.Point(0, 0)
+        Me.panelNodeLeft.Name = "panelNodeLeft"
+        Me.panelNodeLeft.Size = New System.Drawing.Size(32, 426)
+        Me.panelNodeLeft.TabIndex = 15
+        '
+        'butAddNode
+        '
+        Me.butAddNode.Image = CType(resources.GetObject("butAddNode.Image"), System.Drawing.Image)
+        Me.butAddNode.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butAddNode.Location = New System.Drawing.Point(8, 8)
+        Me.butAddNode.Name = "butAddNode"
+        Me.butAddNode.Size = New System.Drawing.Size(22, 27)
+        Me.butAddNode.TabIndex = 14
         '
         'tpComplex
         '
@@ -565,20 +630,9 @@ Public Class TermBindingPanel
         Me.tpComplex.Controls.Add(Me.AddBindingGroupBox)
         Me.tpComplex.Location = New System.Drawing.Point(0, 0)
         Me.tpComplex.Name = "tpComplex"
-        Me.tpComplex.Selected = False
         Me.tpComplex.Size = New System.Drawing.Size(880, 426)
         Me.tpComplex.TabIndex = 1
         Me.tpComplex.Title = "Complex"
-        '
-        'dgTermBinding
-        '
-        Me.dgTermBinding.DataMember = ""
-        Me.dgTermBinding.Dock = System.Windows.Forms.DockStyle.Left
-        Me.dgTermBinding.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.dgTermBinding.Location = New System.Drawing.Point(0, 0)
-        Me.dgTermBinding.Name = "dgTermBinding"
-        Me.dgTermBinding.Size = New System.Drawing.Size(520, 426)
-        Me.dgTermBinding.TabIndex = 0
         '
         'TermBindingPanel
         '
@@ -597,8 +651,9 @@ Public Class TermBindingPanel
         Me.PanelBindings.ResumeLayout(False)
         Me.gbCriteria.ResumeLayout(False)
         Me.tpSimple.ResumeLayout(False)
-        Me.tpComplex.ResumeLayout(False)
         CType(Me.dgTermBinding, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.panelNodeLeft.ResumeLayout(False)
+        Me.tpComplex.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -624,22 +679,6 @@ Public Class TermBindingPanel
         End If
     End Sub
 
-    Private Function GetTextFromPath(ByVal path As String, ByVal insideSqBrackets As Boolean) As String
-
-        Dim splitNode As String() = path.Split("[]".ToCharArray)
-
-        If splitNode.Length = 3 Then
-            If insideSqBrackets Then
-                Return splitNode(1)
-            Else
-                Return splitNode(0)
-            End If
-        Else
-            Return path
-        End If
-
-    End Function
-
     Private Sub PopulateNodeTree()
         Try
 
@@ -647,81 +686,39 @@ Public Class TermBindingPanel
 
             Dim languageCode As String = mFileManager.OntologyManager.LanguageCode
 
-            ' get the paths with the language labels
-            Dim logicalPaths As String() = mFileManager.Archetype.Paths(languageCode, mFileManager.ParserSynchronised, True)
-
             ' get the paths with the NodeId labels
             Dim physicalPaths As String() = mFileManager.Archetype.Paths(languageCode, mFileManager.ParserSynchronised, False)
 
-            For i As Integer = 0 To logicalPaths.Length - 1
+            For i As Integer = 0 To physicalPaths.Length - 1
 
                 'ignore value paths and empty attributes
-                If logicalPaths(i).EndsWith("]") Then
-                    Dim clean_s As String = ""
-
-
-                    ' check there are no enclosed "/" if so replace with "|"
-                    For Each c As Char In logicalPaths(i)
-                        Dim enclosed As Boolean
-                        Select Case c
-                            Case "["c
-                                enclosed = True
-
-                            Case "]"c
-                                enclosed = False
-
-                            Case "/"c
-                                If enclosed Then
-                                    c = "|"c
-                                End If
-                        End Select
-
-                        clean_s = clean_s & c
-                    Next    ' c
-
-                    Dim y As String() = clean_s.Split("/"c)
+                If physicalPaths(i).EndsWith("]") Then
                     Dim z As String() = physicalPaths(i).Split("/"c)
                     Dim nodes As TreeNodeCollection = PathsTreeView.Nodes
 
                     'Ignore the first string as always ""
-                    Debug.Assert(y(0) = "", "String is not empty as expected")
+                    Debug.Assert(z(0) = "", "String is not empty as expected")
 
-                    For j As Integer = 1 To y.Length - 1
+                    For j As Integer = 1 To z.Length - 1
                         Dim nodeFound As Boolean = False
-                        Dim nodeText As String
-
-                        nodeText = GetTextFromPath(y(j), False)
-
-                        Select Case nodeText.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
-                            Case "items", "item"
-                                nodeText = GetTextFromPath(y(j), True)
-                            Case "state", "protocol"
-                                ' do nothing - use outer text
-                            Case "data"
-                                If y(j).IndexOf("history") > -1 Then
-                                    nodeText = y(j)
-                                End If
-                            Case "events"
-                                nodeText = y(j)
-                        End Select
-
-                        Dim nodeId As String = GetTextFromPath(z(j), True)
-
                         Dim node As TermNode
+
+                        Dim nId As String = z(j).Split("[]".ToCharArray())(1)
                         ' does this node exist elsewhere?
-                        For Each node In nodes
-                            If nodeId = node.NodeId Then
+                        For Each n As TermNode In nodes
+                            If n.NodeId = nId Then
+                                node = n
                                 nodeFound = True
                                 Exit For
                             End If
                         Next
 
                         If Not nodeFound Then
-                            node = New TermNode(nodeId, nodeText, mFileManager)
-                            If nodeText.StartsWith("data") Then
+                            node = New TermNode(z(j), mFileManager)
+                            If z(j).StartsWith("data") Then
                                 nodes.Insert(0, node)
-                            ElseIf nodeText.StartsWith("events") Then
-                                If y.Length > 3 Then
+                            ElseIf z(j).StartsWith("events") Then
+                                If z.Length > 3 Then
                                     ' the data node
                                     nodes.Insert(0, node)
                                 Else
@@ -730,14 +727,11 @@ Public Class TermBindingPanel
                             Else
                                 nodes.Add(node)
                             End If
-
-                            node.PhysicalPathPart = z(j)
-
                         End If
 
                         nodes = node.Nodes
 
-                    Next    ' y index
+                    Next    ' z index
 
                 End If
 
@@ -773,7 +767,7 @@ Public Class TermBindingPanel
             If Not TerminologyComboBox.SelectedValue Is Nothing Then
                 SetTermBindingFilter(imageTermBindingDataView, _
                         CStr(TerminologyComboBox.SelectedValue), _
-                        node.NodeTerm, node.PhysicalPath)
+                        node.NodeId, node.PhysicalPath)
 
                 If imageTermBindingDataView.Count > 0 Then
                     node.ImageIndex = 1
@@ -803,7 +797,8 @@ Public Class TermBindingPanel
             Try
 
                 Me.TerminologyComboBox.DataSource = mFileManager.OntologyManager.TerminologiesTable
-                Me.dgTermBinding.DataSource = mFileManager.OntologyManager.TermBindingsTable
+                Me.dgTermBinding.DataSource = mFileManager.OntologyManager.TerminologiesTable
+                Me.dgTermBinding.DataMember = "TerminologiesBindings"
 
                 If PathsTreeView.Nodes.Count = 0 Then
                     PopulateNodeTree()
@@ -816,6 +811,11 @@ Public Class TermBindingPanel
                 Debug.Assert(False, ex.ToString)
 
             End Try
+
+            'ensure that the change in terminology shows child records
+            Me.tabBindings.BindingContext = Me.BindingContext
+
+
         End If
     End Sub
 
@@ -825,15 +825,6 @@ Public Class TermBindingPanel
         PopulateNodeTree()
         mIsLoading = False
     End Sub
-
-    'Private Sub mFileManager_ArchetypeLoaded(ByVal sender As Object, ByVal e As System.EventArgs) Handles mFileManager.ArchetypeLoaded
-    '    PathsTreeView.Nodes.Clear()
-    '    mIsLoading = True
-    '    PopulateNodeTree()
-    '    mIsLoading = False
-    '    'PopulateNodeTree(mFileManager.Archetype.Definition.Data)
-
-    'End Sub
 
     Private Sub NodeScopeCheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
             Handles PathRadioButton.CheckedChanged, NodeRadioButton.CheckedChanged
@@ -879,7 +870,7 @@ Public Class TermBindingPanel
         Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
 
         SetTermBindingFilter(mTermBindingView, CStr(TerminologyComboBox.SelectedValue), _
-                selectedNode.NodeTerm, selectedNode.PhysicalPath)
+                selectedNode.NodeId, selectedNode.PhysicalPath)
     End Sub
 
     Private Sub SetTermBindingFilter(ByVal TermBindingView As DataView, _
@@ -918,7 +909,7 @@ Public Class TermBindingPanel
             Else
                 Debug.Assert(NodeRadioButton.Checked, "No node scope option selected")
 
-                NodePathLabel.Text = selectedNode.NodeTerm
+                NodePathLabel.Text = selectedNode.NodeId
             End If
 
         Catch ex As Exception
@@ -1213,7 +1204,7 @@ Public Class TermBindingPanel
             Else
                 Debug.Assert(CriteriaNodeRadioButton.Checked, "No criteria scope option selected")
 
-                mCurrentBindingCriteria.NodeOperand = selectedNode.NodeTerm
+                mCurrentBindingCriteria.NodeOperand = selectedNode.NodeId
             End If
 
             CriteriaTermLabel.Text = mCurrentBindingCriteria.NodeText
@@ -1272,7 +1263,16 @@ Public Class TermBindingPanel
     End Sub
 
     Public Sub Translate()
-        Debug.Assert(False, "Not done yet")
+        TranslateNodes(Me.PathsTreeView.Nodes)
+    End Sub
+
+    Private Sub TranslateNodes(ByVal nodes As TreeNodeCollection)
+        For Each t As TermNode In nodes
+            t.Translate()
+            If t.GetNodeCount(False) > 0 Then
+                TranslateNodes(t.Nodes)
+            End If
+        Next
     End Sub
 
     Private Sub TranslateGUI()
@@ -1341,44 +1341,29 @@ Public Class TermBindingPanel
 
     Class TermNode : Inherits TreeNode
         Private mFileManager As FileManagerLocal
+        Private mPhysicalPathPart As String
 
-        Public Sub New(ByVal aNodeId As String, ByVal aText As String, ByVal a_filemanager As FileManagerLocal)
-
-            MyBase.New(aText)
+        Public Sub New(ByVal physicalPathPart As String, ByVal a_filemanager As FileManagerLocal)
+            MyBase.New("?")
+            mPhysicalPathPart = physicalPathPart
             mFileManager = a_filemanager
-            Me.NodeId = aNodeId
-
-            'If NodeTerm <> "structure" Then
-            '    Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(NodeTerm)
-            '    If term.Text <> "" Then
-            '        MyBase.Text = term.Text
-            '    End If
-            'End If
-
+            Debug.Assert(physicalPathPart.IndexOf("/") = -1, "Path is wrong:" & physicalPathPart)
+            Dim i As Integer = physicalPathPart.IndexOf("[")
+            Debug.Assert(i > -1, "Path is wrong:" & physicalPathPart)
+            mNodeId = physicalPathPart.Substring(i + 1, physicalPathPart.Length - i - 2)
+            Translate()
         End Sub
 
         Private mNodeId As String
-        Property NodeId() As String
+        ReadOnly Property NodeId() As String
             Get
                 Return mNodeId
             End Get
-            Set(ByVal Value As String)
-                mNodeId = Value
-            End Set
         End Property
 
-        Property PhysicalPathPart() As String
+        ReadOnly Property PhysicalPathPart() As String
             Get
-                Return CStr(MyBase.Tag)
-            End Get
-            Set(ByVal Value As String)
-                MyBase.Tag = Value
-            End Set
-        End Property
-
-        ReadOnly Property NodeTerm() As String
-            Get
-                Return mNodeId
+                Return mPhysicalPathPart
             End Get
         End Property
 
@@ -1406,21 +1391,30 @@ Public Class TermBindingPanel
             End If
         End Function
 
-        'Public Sub Translate()
-        '    Dim term As Term = mFileManager.OntologyManager.GetTerm(mNodeId)
-        '    MyBase.Text = term.Text
-        '    'sDescription = term.Description
-        '    'term = mFileManager.OntologyManager.GetTerm(Item.RuntimeName)
-        '    'sConstraintText = term.Text
-        '    For Each node As TermNode In Me.Nodes
-        '        node.Translate()
-        '    Next
-        'End Sub
+        Public Sub Translate()
+            Dim i As Integer = PhysicalPathPart.IndexOf("[")
+            Dim txt As String = PhysicalPathPart.Substring(0, i)
+            Select Case txt.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "history"
+                    txt = mFileManager.OntologyManager.GetOpenEHRTerm(275, txt).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    'Case "events"
+                    'txt = mFileManager.OntologyManager.GetOpenEHRTerm(133, txt).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "data"
+                    txt = mFileManager.OntologyManager.GetOpenEHRTerm(80, txt).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "protocol"
+                    txt = mFileManager.OntologyManager.GetOpenEHRTerm(78, txt).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "state"
+                    txt = mFileManager.OntologyManager.GetOpenEHRTerm(177, txt).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case Else
+                    txt = mFileManager.OntologyManager.GetTerm(NodeId).Text
+            End Select
+            Me.Text = txt
+        End Sub
 
         ReadOnly Property Constraint() As Constraint
             Get
                 Dim rmClass As RmStructure
-                rmClass = mFileManager.Archetype.Definition.GetChildByNodeId(NodeTerm)
+                rmClass = mFileManager.Archetype.Definition.GetChildByNodeId(mNodeId)
 
                 If TypeOf rmClass Is RmElement Then
                     Return CType(rmClass, RmElement).Constraint
@@ -1429,11 +1423,9 @@ Public Class TermBindingPanel
         End Property
 
         Public Function Copy() As TermNode
-            Dim tn As New TermNode(Me.mNodeId, Me.Text, Me.mFileManager)
-            tn.Tag = Me.Tag
+            Dim tn As New TermNode(Me.mPhysicalPathPart, Me.mFileManager)
             Return tn
         End Function
-
     End Class
 
     Public Class BindingCriteria
@@ -1606,6 +1598,38 @@ Public Class TermBindingPanel
 
     Private Sub cmBindingPastePathLogical_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmBindingPastePathLogical.Click, cmBindingPastePathPhysical.Click
         Clipboard.SetDataObject(CType(sender, MenuItem).Text)
+    End Sub
+
+    Private Sub CopyNodes(ByVal toNodes As TreeNodeCollection, ByVal fromNodes As TreeNodeCollection)
+        For Each tn As TermNode In fromNodes
+            Dim new_node As New TreeNode
+            new_node.Text = tn.Text
+            new_node.Tag = tn.NodeId
+            toNodes.Add(new_node)
+            If tn.GetNodeCount(False) > 0 Then
+                CopyNodes(new_node.Nodes, tn.Nodes)
+            End If
+        Next
+    End Sub
+
+
+    Private Sub butAddNode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddNode.Click
+        If Not Me.TerminologyComboBox.SelectedValue Is Nothing Then
+            Dim frm As New frmChoosePath
+            frm.Initialise(mFileManager)
+            'Populate nodes with tag for id
+            CopyNodes(frm.tvPaths.Nodes, Me.PathsTreeView.Nodes)
+            If frm.ShowDialog = DialogResult.OK Then
+                Dim dr As DataRow
+                dr = mFileManager.OntologyManager.TermBindingsTable.NewRow
+                dr("Path") = frm.CodeOfNode
+                dr("Terminology") = Me.TerminologyComboBox.SelectedValue
+                mFileManager.OntologyManager.TermBindingsTable.Rows.Add(dr)
+            End If
+        Else
+            MessageBox.Show(AE_Constants.Instance.Terminology, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Me.AddTerminologyButton.Focus()
+        End If
     End Sub
 End Class
 

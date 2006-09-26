@@ -532,7 +532,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             Me.Cursor = Cursors.Default
         Else
             Me.Cursor = Cursors.Default
-            MessageBox.Show(AE_Constants.Instance.Error_loading & " " & OceanArchetypeEditor.Instance.Options.RepositoryPath, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(AE_Constants.Instance.Error_loading & " " & OceanArchetypeEditor.Instance.Options.RepositoryPath & ". No repository found - please use Menu>Edit>Preferences and set the location of the archetypes", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 

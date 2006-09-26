@@ -176,32 +176,41 @@ Public Class RmElement
     Private Function ProcessValue(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint
 
         Select Case ObjNode.rm_type_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            Case "quantity", "real_quantity"
+            Case "quantity", "real_quantity" 'real_quantity is obsolete
                 Return ProcessQuantity(CType(ObjNode, openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY))
             Case "coded_text", "text"
                 Return ProcessText(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
             Case "boolean"
-                Return ProcessBoolean(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                If TypeOf (ObjNode) Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
+                    Return ProcessBoolean(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                Else
+                    'obsolete
+                    Return ProcessBoolean(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                End If
             Case "ordinal"
                 Return ProcessOrdinal(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
             Case "datetime", "date_time", "date", "time", "_c_date"
-                Debug.WriteLine(ObjNode.rm_type_name.to_cil)
-                Return ProcessDateTime(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                If TypeOf (ObjNode) Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
+                    Return ProcessDateTime(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                Else
+                    'obsolete
+                    Return ProcessDateTime(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                End If
             Case "quantity_ratio"
-                Return ProcessRatio(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Return ProcessRatio(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
             Case "countable", "count"
-                Return ProcessCount(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Return ProcessCount(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
             Case "interval_count", "interval_quantity"
-                Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
+                    Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
             Case "multimedia", "multi_media"
-                Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
             Case "uri"
-                Return New Constraint_URI
+                    Return New Constraint_URI
             Case "duration"
-                Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                    Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
             Case Else
-                Debug.Assert(False)
-                Return New Constraint
+                    Debug.Assert(False)
+                    Return New Constraint
         End Select
     End Function
 
@@ -216,8 +225,8 @@ Public Class RmElement
 
         For i = 1 To ObjNode.attributes.count
             an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-            Select Case an_attribute.rm_attribute_name.to_cil
-                Case "value", "Value", "VALUE", "magnitude", "Magnitude", "MAGNITUDE"
+            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "value", "magnitude"
                     Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
                     Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
 
@@ -281,6 +290,33 @@ Public Class RmElement
 
     End Function
 
+    Private Function ProcessDateTime(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_DateTime
+
+        If ObjNode.any_allowed Then
+            Return New Constraint_DateTime
+        Else
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+            For i As Integer = 1 To ObjNode.attributes.count
+
+                an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+                Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    Case "value"
+                        Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                        If an_attribute.children.count > 0 Then
+                            constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                            Return ProcessDateTime(constraint)
+                        End If
+                End Select
+            Next
+        End If
+
+        'Shouldn't get to here
+        Debug.Assert(False, "Error processing boolean")
+        Return New Constraint_DateTime
+
+    End Function
+
     Private Function ProcessDateTime(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_DateTime
         Dim dt As New Constraint_DateTime
         Dim s As String
@@ -339,7 +375,7 @@ Public Class RmElement
             Case "hh:??:xx", "thh:??:xx"
                 'Partial time
                 dt.TypeofDateTimeConstraint = 20
-            Case "hh:mm:xx", "thh:mm:xx"
+            Case "hh:mm:??", "thh:mm:??"
                 'Partial time with minutes
                 dt.TypeofDateTimeConstraint = 21
         End Select
@@ -412,10 +448,13 @@ Public Class RmElement
         Dim b As New Constraint_Boolean
         Dim i As Integer
 
-        If CType(ObjSimple.item, openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN).true_valid Then
+        Dim bool As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN = _
+            CType(ObjSimple.item, openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN)
+
+        If bool.true_valid Then
             i = 1
         End If
-        If CType(ObjSimple.item, openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN).false_valid Then
+        If bool.false_valid Then
             i += 2
         End If
         Select Case i
@@ -427,7 +466,39 @@ Public Class RmElement
                 b.TrueFalseAllowed = False
         End Select
 
+        If bool.has_assumed_value() Then
+            b.AssumedValue = CType(bool.assumed_value, openehr.base.kernel.BOOLEAN_REF).item
+        End If
+
+
         Return b
+
+    End Function
+
+    Private Function ProcessBoolean(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Boolean
+
+        If ObjNode.any_allowed Then
+            Return New Constraint_Boolean
+        Else
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+            For i As Integer = 1 To ObjNode.attributes.count
+
+                an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+                Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    Case "value"
+                        Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                        If an_attribute.children.count > 0 Then
+                            constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                            Return ProcessBoolean(constraint)
+                        End If
+                End Select
+            Next
+        End If
+
+        'Shouldn't get to here
+        Debug.Assert(False, "Error processing boolean")
+        Return New Constraint_Boolean
 
     End Function
 

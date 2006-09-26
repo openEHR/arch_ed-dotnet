@@ -118,8 +118,9 @@ Class RmHistory
                     Dim an_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                     Dim ii As Integer
 
-                    ' empty the remembered structure
+                    ' empty the remembered structures
                     ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = Nothing
+                    ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure = Nothing
 
                     colEvt.Cardinality.SetFromOpenEHRCardinality(an_attribute.cardinality)
 

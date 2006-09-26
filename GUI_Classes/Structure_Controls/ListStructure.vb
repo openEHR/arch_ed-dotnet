@@ -574,15 +574,13 @@ Public Class ListStructure
         ' add the update of the Term and description
 
         If Not e.Label Is Nothing Then
-            Dim lvItem As ArchetypeListViewItem
-
-            lvItem = CType(Me.lvList.Items(e.Item), ArchetypeListViewItem)
-
             If e.Label = "" Then
                 e.CancelEdit = True
                 Return
             End If
+            Dim lvItem As ArchetypeListViewItem
 
+            lvItem = CType(Me.lvList.Items(e.Item), ArchetypeListViewItem)
             lvItem.Text = e.Label
             Me.MenuRemoveItemAndReference.Text = e.Label
             If lvItem.Item.HasReferences Then

@@ -718,7 +718,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                     Case TextConstrainType.Internal
                         Me.radioInternal.Checked = True
                 End Select
-                MyBase.IsLoading = True
+                MyBase.IsLoading = False
 
                 Exit Sub
 
