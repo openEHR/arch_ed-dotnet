@@ -154,7 +154,11 @@ Public Class TerminologyServer
         End If
 
         'otherwise return the English version
-        Return RubricForCode(Code, "en")
+        If language <> "en" Then
+            Return RubricForCode(Code, "en")
+        Else
+            Return "?"
+        End If
 
     End Function
 

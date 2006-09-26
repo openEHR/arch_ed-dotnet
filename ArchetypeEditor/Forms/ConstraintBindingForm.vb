@@ -184,4 +184,11 @@ Public Class ConstraintBindingForm
         Me.comboTerminology.ValueMember = "Code"
     End Sub
 
+    Private Sub txtQuery_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtQuery.TextChanged
+        If Me.txtQuery.Text <> "" Then
+            Me.AcceptButton = Me.butOK
+        Else
+            Me.AcceptButton = Nothing
+        End If
+    End Sub
 End Class

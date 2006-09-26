@@ -193,7 +193,9 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         RemoveHandler Me.comboPhysicalProperty.SelectedIndexChanged, AddressOf Me.comboPhysicalProperty_SelectedIndexChanged
 
         If Me.comboPhysicalProperty.DataSource Is Nothing Then
-            Me.comboPhysicalProperty.DataSource = OceanArchetypeEditor.Instance.PhysicalPropertiesTable
+            '            OceanArchetypeEditor.Instance.PhysicalPropertiesTable.DefaultView.ApplyDefaultSort = True
+            Me.comboPhysicalProperty.DataSource = New DataView(OceanArchetypeEditor.Instance.PhysicalPropertiesTable)
+            CType(Me.comboPhysicalProperty.DataSource, DataView).Sort = Me.comboPhysicalProperty.DisplayMember
         End If
 
         ' Locate the property - it can be expressed as:
@@ -273,45 +275,80 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
     Private Sub butAddUnit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddUnit.Click
 
-        Dim c_menu As New ContextMenu
-        Dim where_clause As String
 
-        'Exclude units already added
-        For Each c_unit As Constraint_QuantityUnit In Me.listUnits.Items
-            If where_clause = "" Then
-                where_clause = " AND NOT (Text = '" & c_unit.Unit & "'"
-            Else
-                where_clause &= " OR Text = '" & c_unit.Unit & "'"
+        If Convert.ToInt16(Me.comboPhysicalProperty.SelectedValue) = 64 Then
+            'Property is not set so show all the units
+            Dim Frm As New Choose
+            Dim data_view As New DataView(OceanArchetypeEditor.Instance.UnitsTable)
+            data_view.Sort = "Text"
+            Frm.ListChoose.DataSource = data_view
+            Frm.ListChoose.DisplayMember = "Text"
+            Frm.ListChoose.ValueMember = "property_id"
+
+            Frm.Set_Single()
+            Frm.ListChoose.SelectionMode = SelectionMode.One
+            Frm.ShowDialog(Me)
+            If Frm.ListChoose.SelectedIndex < 0 Then
+                Return
             End If
-        Next
 
-        If where_clause <> "" Then
-            where_clause &= ")"
-        End If
+            'Set the property to the property Id and then set the constraint property
+            Me.comboPhysicalProperty.SelectedValue = Frm.ListChoose.SelectedValue
+            Me.Constraint.OpenEhrCode = CInt(CType(Me.comboPhysicalProperty.SelectedItem, DataRowView).Item("openEHR"))
 
-        For Each d_row As DataRow In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & _
-                CStr(Me.comboPhysicalProperty.SelectedValue) & where_clause)
+            'Add the unit
+            Dim quantityUnit As New Constraint_QuantityUnit(mIsTime)
+            quantityUnit.Unit = CStr(CType(Frm.ListChoose.SelectedItem, DataRowView).Item(1))
+            Constraint.Units.Add(quantityUnit, quantityUnit.Unit)
+            listUnits.Items.Add(quantityUnit)
+            listUnits.SelectedItem = quantityUnit
 
-            Dim s As String
+            mFileManager.FileEdited = True
 
-            s = CStr(d_row(1))
 
-            'Omit the "yr" unit as is a duplicate of "a"
-            If Not (mIsTime And s = "yr") Then
-                'Show language abbreviations for time
-                If mIsTime Then
-                    s = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(s)
+        Else
+            'Show units of that are not already selected
+            ' of that property
+
+            Dim c_menu As New ContextMenu
+            Dim where_clause As String
+
+            'Exclude units already added
+            For Each c_unit As Constraint_QuantityUnit In Me.listUnits.Items
+                If where_clause = "" Then
+                    where_clause = " AND NOT (Text = '" & c_unit.Unit & "'"
+                Else
+                    where_clause &= " OR Text = '" & c_unit.Unit & "'"
+                End If
+            Next
+
+            If where_clause <> "" Then
+                where_clause &= ")"
+            End If
+
+            For Each d_row As DataRow In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & _
+                    CStr(Me.comboPhysicalProperty.SelectedValue) & where_clause)
+
+                Dim s As String
+
+                s = CStr(d_row(1))
+
+                'Omit the "yr" unit as is a duplicate of "a"
+                If Not (mIsTime And s = "yr") Then
+                    'Show language abbreviations for time
+                    If mIsTime Then
+                        s = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(s)
+                    End If
+
+                    Dim MI As MenuItem = New MenuItem(s)
+                    AddHandler MI.Click, AddressOf AddUnit
+
+                    c_menu.MenuItems.Add(MI)
                 End If
 
-                Dim MI As MenuItem = New MenuItem(s)
-                AddHandler MI.Click, AddressOf AddUnit
-
-                c_menu.MenuItems.Add(MI)
-            End If
-
-        Next
-        c_menu.Show(butAddUnit, New System.Drawing.Point(5, 5))
-
+            Next
+            c_menu.Show(butAddUnit, New System.Drawing.Point(5, 5))
+        End If
     End Sub
 
     Private Sub butRemoveUnit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveUnit.Click

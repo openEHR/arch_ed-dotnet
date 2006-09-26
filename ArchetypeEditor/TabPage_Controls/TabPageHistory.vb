@@ -108,6 +108,7 @@ Public Class TabpageHistory
         Me.numericDuration = New System.Windows.Forms.NumericUpDown
         Me.comboDurationUnits = New System.Windows.Forms.ComboBox
         Me.RadioInterval = New System.Windows.Forms.RadioButton
+        Me.ImageListEvents = New System.Windows.Forms.ImageList(Me.components)
         Me.radioPointInTime = New System.Windows.Forms.RadioButton
         Me.gbOffset = New System.Windows.Forms.GroupBox
         Me.cbFixedOffset = New System.Windows.Forms.CheckBox
@@ -127,7 +128,6 @@ Public Class TabpageHistory
         Me.radioFixed = New System.Windows.Forms.RadioButton
         Me.ListEvents = New System.Windows.Forms.ListView
         Me.TheEvents = New System.Windows.Forms.ColumnHeader
-        Me.ImageListEvents = New System.Windows.Forms.ImageList(Me.components)
         Me.HelpProviderEventSeries = New System.Windows.Forms.HelpProvider
         Me.gbEventDetails.SuspendLayout()
         Me.gbDuration.SuspendLayout()
@@ -243,18 +243,32 @@ Public Class TabpageHistory
         'RadioInterval
         '
         Me.RadioInterval.Appearance = System.Windows.Forms.Appearance.Button
+        Me.RadioInterval.AutoCheck = False
         Me.RadioInterval.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.RadioInterval.ImageAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.RadioInterval.ImageIndex = 1
+        Me.RadioInterval.ImageList = Me.ImageListEvents
         Me.RadioInterval.Location = New System.Drawing.Point(180, 200)
         Me.RadioInterval.Name = "RadioInterval"
         Me.RadioInterval.Size = New System.Drawing.Size(128, 24)
         Me.RadioInterval.TabIndex = 7
         Me.RadioInterval.Text = "Interval"
-        Me.RadioInterval.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.RadioInterval.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'ImageListEvents
+        '
+        Me.ImageListEvents.ImageSize = New System.Drawing.Size(16, 16)
+        Me.ImageListEvents.ImageStream = CType(resources.GetObject("ImageListEvents.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageListEvents.TransparentColor = System.Drawing.Color.Transparent
         '
         'radioPointInTime
         '
         Me.radioPointInTime.Appearance = System.Windows.Forms.Appearance.Button
+        Me.radioPointInTime.AutoCheck = False
         Me.radioPointInTime.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.radioPointInTime.ImageAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.radioPointInTime.ImageIndex = 0
+        Me.radioPointInTime.ImageList = Me.ImageListEvents
         Me.radioPointInTime.Location = New System.Drawing.Point(26, 200)
         Me.radioPointInTime.Name = "radioPointInTime"
         Me.radioPointInTime.Size = New System.Drawing.Size(136, 24)
@@ -427,12 +441,6 @@ Public Class TabpageHistory
         '
         Me.TheEvents.Text = "Events"
         Me.TheEvents.Width = 350
-        '
-        'ImageListEvents
-        '
-        Me.ImageListEvents.ImageSize = New System.Drawing.Size(16, 16)
-        Me.ImageListEvents.ImageStream = CType(resources.GetObject("ImageListEvents.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageListEvents.TransparentColor = System.Drawing.Color.Transparent
         '
         'TabpageHistory
         '
@@ -821,12 +829,12 @@ Public Class TabpageHistory
                 mFileManager.OntologyManager.SetDescription(Value, element.NodeId)
             End Set
         End Property
-        Public Property isPointInTime() As Boolean
+        Public Property EventType() As RmEvent.ObservationEventType
             Get
-                Return element.isPointInTime
+                Return element.EventType
             End Get
-            Set(ByVal Value As Boolean)
-                element.isPointInTime = Value
+            Set(ByVal Value As RmEvent.ObservationEventType)
+                element.EventType = Value
                 SetImageIndex()
             End Set
         End Property
@@ -929,11 +937,6 @@ Public Class TabpageHistory
             Return newLvItem
         End Function
 
-        Public Sub SetEventType(ByVal new_event_type As StructureType)
-            element.SetType(new_event_type)
-            SetImageIndex()
-        End Sub
-
         Public Sub Specialise()
             Dim a_Term As RmTerm
 
@@ -1031,9 +1034,47 @@ Public Class TabpageHistory
 
         If current_item Is Nothing Then Exit Sub
 
-        current_item.isPointInTime = True
+        If radioPointInTime.Checked Then
+            current_item.EventType = RmEvent.ObservationEventType.PointInTime
+        Else
+            If current_item.EventType = RmEvent.ObservationEventType.PointInTime Then
+                current_item.EventType = RmEvent.ObservationEventType.Event
+            End If
+        End If
         mFileManager.FileEdited = True
 
+    End Sub
+
+    Private Sub RadioInterval_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioInterval.CheckedChanged
+        Me.gbDuration.Visible = RadioInterval.Checked
+
+        If (current_item Is Nothing) Or mIsLoading Then Return
+
+        If RadioInterval.Checked Then
+            current_item.EventType = RmEvent.ObservationEventType.Interval
+            current_item.AggregateMathFunction = Convert.ToString(Me.comboIntervalViewPoint.SelectedValue)
+            cbFixedInterval_CheckedChanged(sender, e)
+        Else
+            If current_item.EventType = RmEvent.ObservationEventType.Interval Then
+                current_item.EventType = RmEvent.ObservationEventType.Event
+            End If
+        End If
+
+        mFileManager.FileEdited = True
+    End Sub
+
+    Private Sub radioInteval_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioInterval.Click
+        RadioInterval.Checked = Not RadioInterval.Checked
+        If RadioInterval.Checked Then
+            radioPointInTime.Checked = False
+        End If
+    End Sub
+
+    Private Sub radioPointInTime_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioPointInTime.Click
+        radioPointInTime.Checked = Not radioPointInTime.Checked
+        If radioPointInTime.Checked Then
+            RadioInterval.Checked = False
+        End If
     End Sub
 
     Private Sub butAddEvent_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddEvent.Click
@@ -1050,8 +1091,6 @@ Public Class TabpageHistory
         Me.txtEventDescription.Text = "*"
         elvi.Width = 1
         elvi.WidthUnits = "min"
-        elvi.isPointInTime = True
-        elvi.SetEventType(StructureType.Event)
         Me.radioPointInTime.Checked = False
         Me.cbFixedInterval.Checked = False
         Me.cbFixedOffset.Checked = False
@@ -1107,19 +1146,21 @@ Public Class TabpageHistory
             End Try
         End If
 
-        Select Case elvi.RM_Class.Type
-            Case StructureType.Event
+        Select Case elvi.EventType
+            Case RmEvent.ObservationEventType.Event
                 Me.radioPointInTime.Checked = False
                 Me.RadioInterval.Checked = False
-            Case StructureType.PointEvent
+            Case RmEvent.ObservationEventType.PointInTime
                 Me.radioPointInTime.Checked = True
+                Me.RadioInterval.Checked = False
                 If elvi.hasFixedOffset Then
                     Me.cbFixedOffset.Checked = True
                 Else
                     Me.cbFixedOffset.Checked = False
                 End If
-            Case StructureType.IntervalEvent
+            Case RmEvent.ObservationEventType.Interval
                 Me.RadioInterval.Checked = True
+                Me.radioPointInTime.Checked = False
                 If elvi.hasFixedWidth Then
                     Me.cbFixedInterval.Checked = True
                 Else
@@ -1159,20 +1200,6 @@ Public Class TabpageHistory
         If (current_item Is Nothing) Or mIsLoading Then Return
 
         current_item.Description = Me.txtEventDescription.Text
-        mFileManager.FileEdited = True
-    End Sub
-
-    Private Sub RadioInterval_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioInterval.CheckedChanged
-        Me.gbDuration.Visible = RadioInterval.Checked
-
-        If (current_item Is Nothing) Or mIsLoading Then Return
-
-        current_item.isPointInTime = Not RadioInterval.Checked
-
-        If RadioInterval.Checked Then
-            current_item.AggregateMathFunction = Convert.ToString(Me.comboIntervalViewPoint.SelectedValue)
-            cbFixedInterval_CheckedChanged(sender, e)
-        End If
         mFileManager.FileEdited = True
     End Sub
 

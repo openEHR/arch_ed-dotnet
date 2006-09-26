@@ -618,7 +618,7 @@ Public Class OceanArchetypeEditor
 
     Shared Sub main(ByVal CmdArgs() As String)
 
-#Const TEST_LANGUAGE_TRANSLATION = True
+#Const TEST_LANGUAGE_TRANSLATION = False
 
 #If Not TEST_LANGUAGE_TRANSLATION Then
 

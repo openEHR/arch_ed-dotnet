@@ -831,14 +831,14 @@ Public Class TreeStructure
         ' add the update of the Term and description
 
         If Not e.Label Is Nothing Then
-            Dim tvNode As ArchetypeTreeNode
-
-            tvNode = CType(e.Node, ArchetypeTreeNode)
-            If tvNode.Text = "" Then
+            If e.Label = "" Then
                 e.CancelEdit = True
                 Return
             End If
 
+            Dim tvNode As ArchetypeTreeNode
+
+            tvNode = CType(e.Node, ArchetypeTreeNode)
             tvNode.Text = e.Label
             Me.MenuRemoveItemAndReferences.Text = e.Label
             If tvNode.Item.RM_Class.Type = StructureType.Element Then

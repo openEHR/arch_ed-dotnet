@@ -19,14 +19,21 @@ Option Explicit On
 Class RmEvent
     Inherits RmStructure
 
+    Enum ObservationEventType
+        [Event]
+        PointInTime
+        Interval
+    End Enum
+
+
     Dim iOffset As Integer
     Dim sOffset As String
     Dim sMath As String
     Dim iWidth As Long = 1
     Dim sWidth As String
     Dim boolSignNeg, boolFixedDuration, boolFixedOffset As Boolean
-    Dim boolPointInTime As Boolean = True
     Dim sData As String
+    Dim mEventType As ObservationEventType
     Dim mMathFunction As Constraint_Text
 
     Public Shadows ReadOnly Property TypeName() As String
@@ -52,17 +59,20 @@ Class RmEvent
             sWidth = Value
         End Set
     End Property
-    Public Property isPointInTime() As Boolean
+    Public Property EventType() As ObservationEventType
         Get
-            Return boolPointInTime
+            Return mEventType
         End Get
-        Set(ByVal Value As Boolean)
-            boolPointInTime = Value
-            If (Value) Then
-                mType = StructureType.PointEvent
-            Else
-                mType = StructureType.IntervalEvent
-            End If
+        Set(ByVal Value As ObservationEventType)
+            mEventType = Value
+            Select Case Value
+                Case ObservationEventType.Event
+                    mType = StructureType.Event
+                Case ObservationEventType.Interval
+                    mType = StructureType.IntervalEvent
+                Case ObservationEventType.PointInTime
+                    mType = StructureType.PointEvent
+            End Select
         End Set
     End Property
     Public Property Offset() As Integer
@@ -114,9 +124,6 @@ Class RmEvent
             sData = Value
         End Set
     End Property
-    Public Sub SetType(ByVal a_type As StructureType)
-        mType = a_type
-    End Sub
 
     Public Overrides Function Copy() As RmStructure
         Dim ae As New RmEvent(Me.NodeId)
@@ -128,7 +135,7 @@ Class RmEvent
         ae.sOffset = Me.sOffset
         ae.iWidth = Me.iWidth
         ae.sWidth = Me.sWidth
-        ae.boolPointInTime = Me.boolPointInTime
+        ae.mEventType = Me.EventType
         ae.boolSignNeg = Me.boolSignNeg
         ae.boolFixedDuration = Me.boolFixedDuration
         ae.boolFixedOffset = ae.boolFixedOffset
@@ -147,9 +154,20 @@ Class RmEvent
     End Sub
 
     Private mEIF_Data As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+    Private mEIF_State As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
     Property ADL_Data() As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Get
             Return mEIF_Data
+        End Get
+        Set(ByVal Value As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+            Debug.Assert(False)
+        End Set
+    End Property
+
+    Property ADL_State() As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        Get
+            Return mEIF_State
         End Get
         Set(ByVal Value As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
             Debug.Assert(False)
@@ -164,12 +182,13 @@ Class RmEvent
 
         Select Case ObjNode.rm_type_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "event"
-                mType = StructureType.Event
+                EventType = ObservationEventType.Event
             Case "point_event"
-                mType = StructureType.PointEvent
+                EventType = ObservationEventType.PointInTime
             Case "interval_event"
-                mType = StructureType.IntervalEvent
-                boolPointInTime = False
+                EventType = ObservationEventType.Interval
+            Case Else
+                Debug.Assert(False)
         End Select
 
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
@@ -196,8 +215,7 @@ Class RmEvent
                     Dim d As New ArchetypeEditor.ADL_Classes.Duration
                     Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
-                    boolPointInTime = False
-                    mType = StructureType.IntervalEvent
+                    Debug.Assert(mType = StructureType.IntervalEvent)
 
                     width = an_attribute.children.first
                     d.ISO_duration = width.item.as_string.to_cil
@@ -207,15 +225,14 @@ Class RmEvent
                 Case "aggregate_math_function" ' OBSOLETE
                     Dim MathFunc As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
-                    boolPointInTime = False
-                    mType = StructureType.IntervalEvent
+                    Debug.Assert(mType = StructureType.IntervalEvent)
 
                     MathFunc = an_attribute.children.first
                     Me.sMath = MathFunc.item.as_string.to_cil.Trim("""")
 
                 Case "math_function"
-                    boolPointInTime = False
-                    mType = StructureType.IntervalEvent
+
+                    Debug.Assert(mType = StructureType.IntervalEvent)
 
                     Dim textConstraint As Constraint_Text = _
                     RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -235,6 +252,9 @@ Class RmEvent
                 Case "data", "item" 'item is OBSOLETE
                     ' return the data for processing
                     mEIF_Data = an_attribute
+
+                Case "state"
+                    mEIF_State = an_attribute
 
             End Select
 
@@ -264,6 +284,17 @@ Class RmEvent
             End Select
         End If
 
+
+        If Not Me.ADL_State Is Nothing Then
+            
+            Select Case Me.ADL_State.children.first.Generating_Type.to_cil
+                Case "ARCHETYPE_INTERNAL_REF"
+                    ' Place holder for different structures at different events 
+                    ' not available as yet
+                Case "C_COMPLEX_OBJECT"
+                    ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure = New RmStructureCompound(Me.ADL_State, StructureType.State, a_filemanager)
+            End Select
+        End If
     End Sub
 
 #End Region

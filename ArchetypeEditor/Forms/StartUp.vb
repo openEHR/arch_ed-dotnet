@@ -151,7 +151,7 @@ Public Class frmStartUp
         Me.lblModel.Name = "lblModel"
         Me.lblModel.Size = New System.Drawing.Size(144, 27)
         Me.lblModel.TabIndex = 10
-        Me.lblModel.Text = "Model"
+        Me.lblModel.Text = "Model "
         '
         'lblComponent
         '

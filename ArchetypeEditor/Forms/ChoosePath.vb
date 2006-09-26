@@ -17,7 +17,7 @@
 Public Class frmChoosePath
     Inherits System.Windows.Forms.Form
 
-    Private LanguageCode As String
+    Private languageCode As String
 
 #Region " Windows Form Designer generated code "
 
@@ -58,139 +58,188 @@ Public Class frmChoosePath
     Friend WithEvents tvPaths As System.Windows.Forms.TreeView
     Friend WithEvents butOK As System.Windows.Forms.Button
     Friend WithEvents butCancel As System.Windows.Forms.Button
+    Friend WithEvents tabCtrlPaths As System.Windows.Forms.TabControl
+    Friend WithEvents tabNodes As System.Windows.Forms.TabPage
+    Friend WithEvents tabPaths As System.Windows.Forms.TabPage
+    Friend WithEvents listNodes As System.Windows.Forms.ListBox
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.tvPaths = New System.Windows.Forms.TreeView
         Me.butOK = New System.Windows.Forms.Button
         Me.butCancel = New System.Windows.Forms.Button
+        Me.tabCtrlPaths = New System.Windows.Forms.TabControl
+        Me.tabNodes = New System.Windows.Forms.TabPage
+        Me.listNodes = New System.Windows.Forms.ListBox
+        Me.tabPaths = New System.Windows.Forms.TabPage
+        Me.Panel1 = New System.Windows.Forms.Panel
+        Me.tabCtrlPaths.SuspendLayout()
+        Me.tabNodes.SuspendLayout()
+        Me.tabPaths.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'tvPaths
         '
+        Me.tvPaths.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tvPaths.HideSelection = False
         Me.tvPaths.ImageIndex = -1
-        Me.tvPaths.Location = New System.Drawing.Point(24, 24)
+        Me.tvPaths.Location = New System.Drawing.Point(0, 0)
         Me.tvPaths.Name = "tvPaths"
         Me.tvPaths.SelectedImageIndex = -1
-        Me.tvPaths.ShowRootLines = False
-        Me.tvPaths.Size = New System.Drawing.Size(536, 360)
+        Me.tvPaths.Size = New System.Drawing.Size(692, 411)
         Me.tvPaths.TabIndex = 0
         '
         'butOK
         '
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(472, 400)
+        Me.butOK.Location = New System.Drawing.Point(568, 16)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(88, 24)
+        Me.butOK.Size = New System.Drawing.Size(106, 27)
         Me.butOK.TabIndex = 1
         Me.butOK.Text = "OK"
         '
         'butCancel
         '
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(368, 400)
+        Me.butCancel.Location = New System.Drawing.Point(448, 16)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(88, 24)
+        Me.butCancel.Size = New System.Drawing.Size(105, 27)
         Me.butCancel.TabIndex = 2
         Me.butCancel.Text = "Cancel"
         '
+        'tabCtrlPaths
+        '
+        Me.tabCtrlPaths.Controls.Add(Me.tabNodes)
+        Me.tabCtrlPaths.Controls.Add(Me.tabPaths)
+        Me.tabCtrlPaths.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tabCtrlPaths.Location = New System.Drawing.Point(0, 0)
+        Me.tabCtrlPaths.Name = "tabCtrlPaths"
+        Me.tabCtrlPaths.SelectedIndex = 0
+        Me.tabCtrlPaths.Size = New System.Drawing.Size(700, 440)
+        Me.tabCtrlPaths.TabIndex = 3
+        '
+        'tabNodes
+        '
+        Me.tabNodes.Controls.Add(Me.listNodes)
+        Me.tabNodes.Location = New System.Drawing.Point(4, 25)
+        Me.tabNodes.Name = "tabNodes"
+        Me.tabNodes.Size = New System.Drawing.Size(692, 411)
+        Me.tabNodes.TabIndex = 0
+        Me.tabNodes.Text = "Nodes"
+        '
+        'listNodes
+        '
+        Me.listNodes.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.listNodes.ItemHeight = 16
+        Me.listNodes.Location = New System.Drawing.Point(0, 0)
+        Me.listNodes.Name = "listNodes"
+        Me.listNodes.Size = New System.Drawing.Size(692, 404)
+        Me.listNodes.TabIndex = 0
+        '
+        'tabPaths
+        '
+        Me.tabPaths.Controls.Add(Me.tvPaths)
+        Me.tabPaths.Location = New System.Drawing.Point(4, 25)
+        Me.tabPaths.Name = "tabPaths"
+        Me.tabPaths.Size = New System.Drawing.Size(692, 411)
+        Me.tabPaths.TabIndex = 1
+        Me.tabPaths.Text = "Paths"
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.butCancel)
+        Me.Panel1.Controls.Add(Me.butOK)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panel1.Location = New System.Drawing.Point(0, 440)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(700, 56)
+        Me.Panel1.TabIndex = 4
+        '
         'frmChoosePath
         '
-        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(584, 430)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.butCancel, Me.butOK, Me.tvPaths})
+        Me.ClientSize = New System.Drawing.Size(700, 496)
+        Me.Controls.Add(Me.tabCtrlPaths)
+        Me.Controls.Add(Me.Panel1)
         Me.Name = "frmChoosePath"
         Me.Text = "ChoosePath"
+        Me.tabCtrlPaths.ResumeLayout(False)
+        Me.tabNodes.ResumeLayout(False)
+        Me.tabPaths.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
 
 #End Region
 
-    ReadOnly Property Path() As String
+    ReadOnly Property CodeOfNode() As String
         Get
-            Return tvPaths.SelectedNode.Tag
+            If Me.tabCtrlPaths.SelectedIndex = 0 Then
+                If listNodes.SelectedIndex > -1 Then
+                    Return listNodes.SelectedValue
+                Else
+                    Return ""
+                End If
+            Else
+                If tvPaths.SelectedNode Is Nothing Then
+                    Return ""
+                Else
+                    Return tvPaths.SelectedNode.Tag
+                End If
+
+            End If
+
         End Get
     End Property
 
-    Public Sub Initialise(ByVal a_LanguageCode As String)
-        Dim i, ii As Integer
-        Dim LogPath, PhysPath, y, z As String()
-        Dim s, clean_s As String
-        Dim node As TreeNode
-        Dim Nodes As TreeNodeCollection
-        Dim NodeFound, Enclosed As Boolean
-        Dim c As Char
+    Public Sub Initialise(ByVal fm As FileManagerLocal)
 
-        LanguageCode = a_LanguageCode
-        ' get the paths with the language labels
-        LogPath = Filemanager.Master.Archetype.Paths(LanguageCode, True)
-        ' get the paths with the NodeId labels
-        PhysPath = Filemanager.Master.Archetype.Paths(LanguageCode, False)
-        For i = 0 To LogPath.Length - 1
-            clean_s = ""
-            ' check there are no enclosed "/" if so replace with "|"
-            For Each c In LogPath(i)
-                If c = "[" Then
-                    Enclosed = True
-                ElseIf c = "]" Then
-                    Enclosed = False
-                ElseIf c = "/" Then
-                    If Enclosed Then
-                        c = "|"
-                    End If
-                End If
-                clean_s = clean_s & c
-            Next
-            y = clean_s.Split("/")
-            z = PhysPath(i).Split("/")
-            Nodes = tvPaths.Nodes
-            ' ignore the last segment as it is always ""
-            For ii = 0 To y.Length - 2
-                NodeFound = False
-                If InStr(y(ii), "[") Then
-                    'CHANGE - Sam Heard 2004-05-19
-                    ' added else clause
-                    ' FIXME need to pass the structure type across
-                    ' in logical path
-                    s = Mid(y(ii), y(ii).IndexOf("[") + 1, y(ii).LastIndexOf("]"))
-                Else
-                    s = "[structure]"
-                End If
-                For Each node In Nodes
-                    If PhysPath(i).StartsWith(node.Tag) Then
-                        NodeFound = True
-                        Exit For
-                    End If
-                Next
-                If Not NodeFound Then
-                    node = New TreeNode(s)
-                    Nodes.Add(node)
-                    ' Changed Sam Heard
-                    ' Tag added only if new
-                    If node.Parent Is Nothing Then
-                        node.Tag = z(ii) & "/"
-                    Else
-                        node.Tag = node.Parent.Tag & z(ii) & "/"
-                    End If
-                End If
-                Nodes = node.Nodes
-            Next
-        Next
 
-        tvPaths.ExpandAll()
+        languageCode = fm.OntologyManager.LanguageCode
 
+        'Nodes
+        Dim dv As New DataView(fm.OntologyManager.TermDefinitionTable)
+        dv.RowFilter = "id = '" & languageCode & "'"
+        Me.listNodes.DataSource = dv
+        Me.listNodes.DisplayMember = "Text"
+        Me.listNodes.ValueMember = "Code"
+
+        'Paths is populated before call
     End Sub
+
+    Private Function GetTextFromPath(ByVal path As String, ByVal insideSqBrackets As Boolean) As String
+
+        Dim splitNode As String() = path.Split("[]".ToCharArray)
+
+        If splitNode.Length = 3 Then
+            If insideSqBrackets Then
+                Return splitNode(1)
+            Else
+                Return splitNode(0)
+            End If
+        Else
+            Return path
+        End If
+
+    End Function
 
     Private Sub tvPaths_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles tvPaths.AfterSelect
         Me.AcceptButton = butOK
     End Sub
 
-    Private Sub tvPaths_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvPaths.DoubleClick
+    Private Sub tvPaths_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles tvPaths.DoubleClick, listNodes.DoubleClick
         butOK_Click(sender, e)
     End Sub
 
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
+        Me.DialogResult = DialogResult.OK
         Me.Close()
+    End Sub
+
+    Private Sub listNodes_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listNodes.SelectedIndexChanged
+        Me.AcceptButton = butOK
     End Sub
 End Class
 

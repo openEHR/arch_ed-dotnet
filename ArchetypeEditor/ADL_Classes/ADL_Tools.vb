@@ -52,6 +52,20 @@ Namespace ArchetypeEditor.ADL_Classes
             End Set
         End Property
 
+        'State data
+        Private mRmStateStructureCompound As RmStructureCompound
+
+        Public Property StateStructure() As RmStructureCompound
+            ' may process the State within a EventSeries - and need to save it
+            ' as state...so remember it here
+            Get
+                Return mRmStateStructureCompound
+            End Get
+            Set(ByVal value As RmStructureCompound)
+                mRmStateStructureCompound = value
+            End Set
+        End Property
+
         Private Function getElementForReference(ByVal nodeid As String, ByVal the_Children As Children) As RmElement
             Dim rm As RmStructure
 
