@@ -778,31 +778,30 @@ Public Class TreeStructure
 
     Private Sub ContextMenuTree_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TreeContextMenu.Popup
 
-        Me.MenuRemove.Visible = False
         Me.MenuSpecialise.Visible = False
         Me.MenuAddReference.Visible = False
 
         If Not tvTree.SelectedNode Is Nothing Then
             Dim i As Integer
             Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
-            Me.MenuRemove.Visible = True
             Me.MenuRemoveItemAndReferences.Text = tvNode.Text
 
             If tvNode.Item.RM_Class.Type = StructureType.Element Then
-                'If mFileManager.OntologyManager.NumberOfSpecialisations = 0 Then
                 If Not CType(tvNode.Item.RM_Class, RmElement).isReference Then
                     Me.MenuAddReference.Visible = True
                 End If
-                'End If
-        End If
-
-        ' show specialisation if appropriate
-        If Not tvNode.Item.IsAnonymous Then
-            i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
-            If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                Me.MenuSpecialise.Visible = True
             End If
-        End If
+
+            ' show specialisation if appropriate
+            If Not tvNode.Item.IsAnonymous Then
+                i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
+                If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                    Me.MenuSpecialise.Visible = True
+                    If ((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))) Then
+                        Me.MenuRemove.Visible = False
+                    End If
+                End If
+            End If
         End If
 
     End Sub
@@ -874,8 +873,19 @@ Public Class TreeStructure
     End Sub
 
     Private Sub tvTree_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tvTree.KeyDown
-        If e.KeyCode = Keys.Delete Then
-            Me.RemoveItemAndReferences(sender, e)
+        If e.KeyCode = Keys.Delete AndAlso (Not tvTree.SelectedNode Is Nothing) Then
+            Dim i As Integer
+            Dim tvNode As ArchetypeTreeNode
+
+            tvNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+
+            If Not tvNode.Item.IsAnonymous Then
+                i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
+                If (i = mFileManager.OntologyManager.NumberOfSpecialisations And _
+                    (((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))))) Then
+                    Me.RemoveItemAndReferences(sender, e)
+                End If
+            End If
         End If
     End Sub
 

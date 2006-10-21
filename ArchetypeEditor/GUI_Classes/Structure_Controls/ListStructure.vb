@@ -346,6 +346,7 @@ Public Class ListStructure
         If Me.lvList.SelectedIndices.Count > 0 Then
             Dim lvItem As ArchetypeListViewItem
             Dim message As String
+            Dim i As Integer
 
             lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
 
@@ -509,7 +510,6 @@ Public Class ListStructure
             Dim i As Integer
 
             lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
-            Me.MenuRemove.Visible = True
             Me.MenuRemoveItemAndReference.Text = lvItem.Text
             'may be a reference and can't add a reference
             'If (mFileManager.OntologyManager.NumberOfSpecialisations = 0) AndAlso (Not lvItem.Item.IsReference) Then
@@ -520,6 +520,11 @@ Public Class ListStructure
             i = OceanArchetypeEditor.Instance.CountInString(lvItem.Item.NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 Me.SpecialiseMenuItem.Visible = True
+                If ((lvItem.Item.NodeId.StartsWith("at0.") Or (lvItem.Item.NodeId.IndexOf(".0.") > -1))) Then
+                    Me.MenuRemove.Visible = False
+                End If
+            Else
+                Me.MenuRemove.Visible = True
             End If
         End If
 
@@ -566,7 +571,15 @@ Public Class ListStructure
 
     Private Sub lvList_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles lvList.KeyDown
         If e.KeyCode = Keys.Delete Then
-            Me.RemoveItemAndReferences(sender, e)
+            Dim i As Integer
+            Dim lvItem As ArchetypeListViewItem
+            If Me.lvList.SelectedItems.Count > 0 Then
+                lvItem = CType(Me.lvList.SelectedItems(0), ArchetypeListViewItem)
+                i = OceanArchetypeEditor.Instance.CountInString(lvItem.Item.NodeId, ".")
+                If (i = mFileManager.OntologyManager.NumberOfSpecialisations And ((lvItem.Item.NodeId.StartsWith("at0.") Or (lvItem.Item.NodeId.IndexOf(".0.") > -1)))) Then
+                    Me.RemoveItemAndReferences(sender, e)
+                End If
+            End If
         End If
     End Sub
 
