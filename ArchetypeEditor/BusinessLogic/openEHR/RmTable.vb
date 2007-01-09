@@ -43,6 +43,12 @@ Public Class RmTable : Inherits RmStructureCompound
         ProcessTable(EIF_Table, a_filemanager)
     End Sub
 
+    Sub New(ByVal XML_Table As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        'FIXMENOW probably can call
+        MyBase.New(XML_Table.node_id, StructureType.Table)
+        ProcessTable(XML_Table, a_filemanager)
+    End Sub
+
     Sub New(ByVal rm As RmStructure)
         MyBase.New(rm)
     End Sub
@@ -57,20 +63,9 @@ Public Class RmTable : Inherits RmStructureCompound
 
     Private Sub ProcessRows(ByVal RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
         Dim rows As RmCluster
-        'Dim rm_column As RmElement
-        'Dim cadlColumn As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-        'Dim i As Integer
-
 
         rows = New RmCluster(CType(RelNode.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
 
-        'columns = New RmStructureCompound(StructureType.Columns, StructureType.Columns)
-
-        'For i = 1 To RelNode.children.count
-        '    cadlColumn = RelNode.children.i_th(i)
-        '    rm_column = New RmElement(cadlColumn)
-        '    columns.Children.Add(rm_column)
-        'Next
         Me.Children.Add(rows)
     End Sub
 
@@ -82,7 +77,7 @@ Public Class RmTable : Inherits RmStructureCompound
             an_attribute = ObjNode.attributes.i_th(i)
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label"
-                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "rotated"
                     Dim b As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN
 
@@ -99,6 +94,45 @@ Public Class RmTable : Inherits RmStructureCompound
                     int = CType(CType(an_attribute.children.first, _
                             openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT).item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
                     mNumberKeyColumns = int.interval.lower ' lower or higher will get the number
+
+                Case "rows"
+                    ProcessRows(an_attribute, a_filemanager)
+            End Select
+        Next
+
+    End Sub
+
+    Private Sub ProcessRows(ByVal RelNode As XMLParser.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
+        Dim rows As RmCluster
+
+        rows = New RmCluster(CType(RelNode.children(0), XMLParser.C_COMPLEX_OBJECT), a_filemanager)
+
+        Me.Children.Add(rows)
+    End Sub
+
+    Private Sub ProcessTable(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Dim an_attribute As XMLParser.C_ATTRIBUTE
+
+        For Each an_attribute In ObjNode.attributes
+            Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+                Case "name", "runtime_label"
+                    mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                Case "rotated"
+                    Dim b As XMLParser.C_BOOLEAN
+
+                    b = CType(CType(an_attribute.children(0), _
+                            XMLParser.C_PRIMITIVE_OBJECT).item, XMLParser.C_BOOLEAN)
+                    If b.true_valid Then
+                        mRotated = True
+                    Else
+                        mRotated = False
+                    End If
+                Case "number_key_columns"
+                    Dim int As XMLParser.C_INTEGER
+
+                    int = CType(CType(an_attribute.children(0), _
+                            XMLParser.C_PRIMITIVE_OBJECT).item, XMLParser.C_INTEGER)
+                    mNumberKeyColumns = int.range.minimum ' lower or higher will get the number
 
                 Case "rows"
                     ProcessRows(an_attribute, a_filemanager)

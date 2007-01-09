@@ -17,12 +17,14 @@
 Option Strict On
 Namespace ArchetypeEditor.ADL_Classes
     Class ADL_Interface
-        Implements Parser
+        Implements Parser, IDisposable
         Private EIF_adlInterface As openehr.adl_parser.interface.ADL_INTERFACE
         Private mFileName As String
-        Private an_Archetype As ADL_Archetype
+        Private adlArchetype As ADL_Archetype
         Private mOpenFileError As Boolean
         Private mWriteFileError As Boolean
+        Protected disposed As Boolean = False
+
 
         Public ReadOnly Property FileName() As String Implements Parser.FileName
             Get
@@ -37,10 +39,14 @@ Namespace ArchetypeEditor.ADL_Classes
         Public ReadOnly Property AvailableFormats() As ArrayList Implements Parser.AvailableFormats
             Get
                 Dim formats As New ArrayList
+                Dim s As String
 
                 For i As Integer = 1 To EIF_adlInterface.archetype_serialiser_formats.count
-                    formats.Add(CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), openehr.base.kernel.STRING).to_cil)
+                    s = CType(EIF_adlInterface.archetype_serialiser_formats.i_th(i), openehr.base.kernel.STRING).to_cil
+                    ' sml is not valid
+                    formats.Add(s)
                 Next
+
                 Return formats
             End Get
         End Property
@@ -56,12 +62,12 @@ Namespace ArchetypeEditor.ADL_Classes
         End Property
         Public ReadOnly Property ArchetypeAvailable() As Boolean Implements Parser.ArchetypeAvailable
             Get
-                Return Not an_Archetype Is Nothing
+                Return Not adlArchetype Is Nothing
             End Get
         End Property
         Public ReadOnly Property Archetype() As Archetype Implements Parser.Archetype
             Get
-                Return an_Archetype
+                Return adlArchetype
             End Get
         End Property
         Public ReadOnly Property OpenFileError() As Boolean Implements Parser.OpenFileError
@@ -82,7 +88,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
             If Me.AvailableFormats.Contains(a_format) Then
                 Try
-                    an_Archetype.MakeParseTree()
+                    adlArchetype.MakeParseTree()
                     EIF_adlInterface.serialise_archetype(openehr.base.kernel.Create.STRING.make_from_cil(a_format))
                 Catch e As Exception
                     Debug.Assert(False, e.Message)
@@ -94,7 +100,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Sub OpenFile(ByVal FileName As String, ByVal a_filemanager As FileManagerLocal) Implements Parser.OpenFile
 
-            Dim current_culture As System.Globalization.CultureInfo
+            Dim current_culture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CurrentCulture
             Dim replace_culture As Boolean
 
             mOpenFileError = True  ' default unless all goes wel
@@ -105,7 +111,6 @@ Namespace ArchetypeEditor.ADL_Classes
             ' This code is essential to ensure that the parser reads regardless of the local culture
 
             If System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator <> "." Then
-                current_culture = System.Globalization.CultureInfo.CurrentCulture
                 replace_culture = True
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture()
             End If
@@ -119,7 +124,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim the_ontology As ADL_Ontology
                     the_ontology = New ADL_Ontology(EIF_adlInterface)
                     a_filemanager.OntologyManager.Ontology = the_ontology
-                    an_Archetype = New ADL_Archetype(EIF_adlInterface.adl_engine.archetype, EIF_adlInterface.adl_engine, a_filemanager)
+                    adlArchetype = New ADL_Archetype(EIF_adlInterface.adl_engine.archetype, EIF_adlInterface.adl_engine, a_filemanager)
                     If EIF_adlInterface.archetype_available Then
                         mOpenFileError = False
                     End If
@@ -131,19 +136,93 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Public Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal LanguageCode As String) Implements Parser.NewArchetype
-            an_Archetype = New ADL_Archetype(EIF_adlInterface.adl_engine, an_ArchetypeID, LanguageCode)
+        Public Sub NewArchetype(ByVal adlArchetypeID As ArchetypeID, ByVal LanguageCode As String) Implements Parser.NewArchetype
+            adlArchetype = New ADL_Archetype(EIF_adlInterface.adl_engine, adlArchetypeID, LanguageCode)
         End Sub
 
-        Public Sub WriteFile(ByVal FileName As String, Optional ByVal output_format As String = "adl") Implements Parser.WriteFile
+        Public Sub AddTermDefinitionsFromTable(ByVal a_table As DataTable, ByVal primary_language As String)
+            Dim term As ADL_Term
+            Dim language As openehr.base.kernel.STRING
+
+            'First pass do primary language only
+            For Each dRow As DataRow In a_table.Rows
+                If primary_language = CType(dRow(0), String) Then
+                    language = openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(0), String))
+                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(0), String))
+                    EIF_adlInterface.ontology.add_term_definition(language, term.EIF_Term)
+                End If
+            Next
+
+            'Then subsequent languages
+            For Each dRow As DataRow In a_table.Rows
+                If primary_language <> CType(dRow(0), String) Then
+                    language = openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(0), String))
+                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(0), String))
+                    EIF_adlInterface.ontology.replace_term_definition(language, term.EIF_Term, False)
+                End If
+            Next
+        End Sub
+
+        Public Sub AddConstraintDefinitionsFromTable(ByVal a_table As DataTable, ByVal primary_language As String)
+            Dim term As ADL_Term
+            Dim language As openehr.base.kernel.STRING
+
+            'First pass do primary language only
+            For Each dRow As DataRow In a_table.Rows
+                If primary_language = CType(dRow(0), String) Then
+                    language = openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(0), String))
+                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(0), String))
+                    EIF_adlInterface.ontology.add_constraint_definition(language, term.EIF_Term)
+                End If
+            Next
+
+            'Then subsequent languages
+            For Each dRow As DataRow In a_table.Rows
+                If primary_language <> CType(dRow(0), String) Then
+                    language = openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(0), String))
+                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(0), String))
+                    EIF_adlInterface.ontology.replace_constraint_definition(language, term.EIF_Term, False)
+                End If
+            Next
+        End Sub
+
+        Public Sub AddTermBindingsFromTable(ByVal a_table As DataTable)
+            Dim path As openehr.base.kernel.STRING
+            Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
+
+            For Each dRow As DataRow In a_table.Rows
+                path = openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(1), String))
+                codePhrase = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
+                    openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(0), String) & "::" & CType(dRow(2), String)))
+                EIF_adlInterface.ontology.add_term_binding(codePhrase, path)
+            Next
+        End Sub
+
+        Public Sub AddConstraintBindingsFromTable(ByVal a_table As DataTable)
+            Dim terminology As openehr.base.kernel.STRING
+            Dim constraintCode As openehr.base.kernel.STRING
+            Dim path As openehr.common_libs.basic.URI
+
+            For Each dRow As DataRow In a_table.Rows
+                terminology = openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(0), String))
+                constraintCode = openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(1), String))
+                path = openehr.common_libs.basic.Create.URI.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(2), String)))
+                EIF_adlInterface.ontology.add_constraint_binding(path, terminology, constraintCode)
+            Next
+        End Sub
+
+
+        Public Sub WriteFile(ByVal FileName As String, ByVal output_format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
             'Change from intermediate format to ADL
             ' then make it again
 
             mWriteFileError = True ' default is that an error occurred
             Try
-                an_Archetype.MakeParseTree()
+                If Not parserSynchronised Then
+                    adlArchetype.MakeParseTree()
+                End If
                 If EIF_adlInterface.archetype_available Then
-                    'an_Archetype.RemoveUnusedCodes()
+                    adlArchetype.RemoveUnusedCodes()
                     If EIF_adlInterface.has_archetype_serialiser_format(openehr.base.kernel.Create.STRING.make_from_cil(output_format)) Then
                         EIF_adlInterface.save_archetype(openehr.base.kernel.Create.STRING.make_from_cil(FileName), openehr.base.kernel.Create.STRING.make_from_cil(output_format))
                         If EIF_adlInterface.exception_encountered Then
@@ -164,6 +243,58 @@ Namespace ArchetypeEditor.ADL_Classes
                 MessageBox.Show(AE_Constants.Instance.Error_saving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
+
+
+        Public Sub WriteAdlDirect(ByVal FileName As String)
+            Try
+                If EIF_adlInterface.archetype_available Then
+                    adlArchetype.RemoveUnusedCodes()
+                    If EIF_adlInterface.has_archetype_serialiser_format(openehr.base.kernel.Create.STRING.make_from_cil("adl")) Then
+                        EIF_adlInterface.save_archetype(openehr.base.kernel.Create.STRING.make_from_cil(FileName), openehr.base.kernel.Create.STRING.make_from_cil("adl"))
+                        If EIF_adlInterface.exception_encountered Then
+                            MessageBox.Show(EIF_adlInterface.status.to_cil)
+                            EIF_adlInterface.reset()
+                        ElseIf Not EIF_adlInterface.save_succeeded Then
+                            MessageBox.Show(EIF_adlInterface.status.to_cil)
+                        Else
+                            mWriteFileError = False
+                        End If
+                    Else
+                        MessageBox.Show("Archetype format - ADL -  no longer available")
+                    End If
+                Else
+                    MessageBox.Show("Archetype not available - error on making parse tree")
+                End If
+            Catch ex As Exception
+                MessageBox.Show(AE_Constants.Instance.Error_saving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Sub
+
+        ' This method disposes the base object's resources.
+        Protected Overridable Sub Dispose(ByVal disposing As Boolean)
+            If Not Me.disposed Then
+                If disposing Then
+                    ' Insert code to free unmanaged resources.
+                End If
+                adlArchetype = Nothing
+                EIF_adlInterface = Nothing
+            End If
+            Me.disposed = True
+        End Sub
+
+#Region " IDisposable Support "
+        ' Do not change or add Overridable to these methods.
+        ' Put cleanup code in Dispose(ByVal disposing As Boolean).
+        Public Sub Dispose() Implements IDisposable.Dispose
+            Dispose(True)
+            GC.SuppressFinalize(Me)
+        End Sub
+        Protected Overrides Sub Finalize()
+            Dispose(False)
+            MyBase.Finalize()
+        End Sub
+#End Region
+
 
         Sub New()
             EIF_adlInterface = openehr.adl_parser.interface.Create.ADL_INTERFACE.make

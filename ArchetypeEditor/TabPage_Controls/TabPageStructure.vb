@@ -45,7 +45,7 @@ Public Class TabPageStructure
             Dim ds As DockStyle = DockStyle.Right
 
             mFileManager = Filemanager.Master
-            mValidStructureClasses = ReferenceModel.Instance.ValidStructureTypes
+            mValidStructureClasses = ReferenceModel.ValidStructureTypes
             For Each ValidStructure As StructureType In mValidStructureClasses
                 Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(CInt(ValidStructure), ValidStructure.ToString))
             Next
@@ -134,7 +134,7 @@ Public Class TabPageStructure
     Friend WithEvents chkEmbedded As System.Windows.Forms.CheckBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageStructure))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageStructure))
         Me.PanelStructure = New System.Windows.Forms.Panel
         Me.panelDisplay = New System.Windows.Forms.Panel
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
@@ -187,18 +187,20 @@ Public Class TabPageStructure
         Me.PanelStructure.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelStructure.Location = New System.Drawing.Point(0, 40)
         Me.PanelStructure.Name = "PanelStructure"
-        Me.PanelStructure.Size = New System.Drawing.Size(848, 368)
+        Me.PanelStructure.Size = New System.Drawing.Size(658, 368)
         Me.PanelStructure.TabIndex = 8
         Me.PanelStructure.Visible = False
         '
         'panelDisplay
         '
-        Me.panelDisplay.DockPadding.All = 2
+        Me.panelDisplay.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.HelpProviderTabPageStructure.SetHelpNavigator(Me.panelDisplay, System.Windows.Forms.HelpNavigator.Index)
         Me.panelDisplay.Location = New System.Drawing.Point(80, 0)
         Me.panelDisplay.Name = "panelDisplay"
+        Me.panelDisplay.Padding = New System.Windows.Forms.Padding(2)
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.panelDisplay, True)
-        Me.panelDisplay.Size = New System.Drawing.Size(376, 368)
+        Me.panelDisplay.Size = New System.Drawing.Size(328, 368)
         Me.panelDisplay.TabIndex = 0
         '
         'ContextMenuGrid
@@ -368,10 +370,42 @@ Public Class TabPageStructure
         '
         'ilSmall
         '
-        Me.ilSmall.ColorDepth = System.Windows.Forms.ColorDepth.Depth16Bit
-        Me.ilSmall.ImageSize = New System.Drawing.Size(20, 20)
         Me.ilSmall.ImageStream = CType(resources.GetObject("ilSmall.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ilSmall.TransparentColor = System.Drawing.Color.Transparent
+        Me.ilSmall.Images.SetKeyName(0, "")
+        Me.ilSmall.Images.SetKeyName(1, "")
+        Me.ilSmall.Images.SetKeyName(2, "")
+        Me.ilSmall.Images.SetKeyName(3, "")
+        Me.ilSmall.Images.SetKeyName(4, "")
+        Me.ilSmall.Images.SetKeyName(5, "")
+        Me.ilSmall.Images.SetKeyName(6, "")
+        Me.ilSmall.Images.SetKeyName(7, "")
+        Me.ilSmall.Images.SetKeyName(8, "")
+        Me.ilSmall.Images.SetKeyName(9, "")
+        Me.ilSmall.Images.SetKeyName(10, "")
+        Me.ilSmall.Images.SetKeyName(11, "")
+        Me.ilSmall.Images.SetKeyName(12, "")
+        Me.ilSmall.Images.SetKeyName(13, "")
+        Me.ilSmall.Images.SetKeyName(14, "")
+        Me.ilSmall.Images.SetKeyName(15, "")
+        Me.ilSmall.Images.SetKeyName(16, "")
+        Me.ilSmall.Images.SetKeyName(17, "")
+        Me.ilSmall.Images.SetKeyName(18, "")
+        Me.ilSmall.Images.SetKeyName(19, "")
+        Me.ilSmall.Images.SetKeyName(20, "")
+        Me.ilSmall.Images.SetKeyName(21, "")
+        Me.ilSmall.Images.SetKeyName(22, "")
+        Me.ilSmall.Images.SetKeyName(23, "")
+        Me.ilSmall.Images.SetKeyName(24, "")
+        Me.ilSmall.Images.SetKeyName(25, "")
+        Me.ilSmall.Images.SetKeyName(26, "")
+        Me.ilSmall.Images.SetKeyName(27, "")
+        Me.ilSmall.Images.SetKeyName(28, "")
+        Me.ilSmall.Images.SetKeyName(29, "")
+        Me.ilSmall.Images.SetKeyName(30, "")
+        Me.ilSmall.Images.SetKeyName(31, "")
+        Me.ilSmall.Images.SetKeyName(32, "")
+        Me.ilSmall.Images.SetKeyName(33, "")
         '
         'panelEntry
         '
@@ -382,7 +416,7 @@ Public Class TabPageStructure
         Me.panelEntry.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelEntry.Location = New System.Drawing.Point(0, 0)
         Me.panelEntry.Name = "panelEntry"
-        Me.panelEntry.Size = New System.Drawing.Size(848, 40)
+        Me.panelEntry.Size = New System.Drawing.Size(658, 40)
         Me.panelEntry.TabIndex = 9
         '
         'chkEmbedded
@@ -428,7 +462,7 @@ Public Class TabPageStructure
         Me.HelpProviderTabPageStructure.SetHelpString(Me, "")
         Me.Name = "TabPageStructure"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(848, 408)
+        Me.Size = New System.Drawing.Size(658, 408)
         Me.PanelStructure.ResumeLayout(False)
         Me.panelEntry.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -511,6 +545,9 @@ Public Class TabPageStructure
                         Return Filemanager.GetOpenEhrTerm(107, "Tree")
                     Case StructureType.Table
                         Return Filemanager.GetOpenEhrTerm(108, "Structure")
+                    Case Else
+                        Debug.Assert(False)
+                        Return ""
                 End Select
             End If
         End Get
@@ -603,21 +640,21 @@ Public Class TabPageStructure
         End If
     End Function
 
-    Public Function toRichText(ByRef text As IO.StringWriter, ByVal level As Integer) As String
+    Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
 
         If Not mArchetypeControl Is Nothing Then
             text.WriteLine(mArchetypeControl.ToRichText(level, Chr(13) & Chr(10)))
             text.WriteLine("\pard\f0\fs20\par")
         End If
 
-    End Function
+    End Sub
 
-    Public Function toHTML(ByRef text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "") As String
+    Public Sub toHTML(ByRef text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "")
         If Not mArchetypeControl Is Nothing Then
             text.WriteLine(mArchetypeControl.ToHTML(BackGroundColour))
             text.WriteLine("<hr>")
         End If
-    End Function
+    End Sub
 
     Public Sub Reset()
         mArchetypeControl.Reset()
@@ -683,7 +720,7 @@ Public Class TabPageStructure
         If Me.comboStructure.SelectedIndex = -1 Then Return ' nothing selected
 
         chosen_structure = mValidStructureClasses(Me.comboStructure.SelectedIndex)
-        ReferenceModel.Instance.StructureClass = chosen_structure
+        ReferenceModel.SetStructureClass(chosen_structure)
 
         If mIsEmbedded Then
             If mIsLoading Then
@@ -712,6 +749,9 @@ Public Class TabPageStructure
                     entry_structure = New TreeStructure(mFileManager) ' inherits from EntryStructure
                 Case StructureType.Table
                     entry_structure = New TableStructure(mFileManager) ' inherits from EntryStructure
+                Case Else
+                    Debug.Assert(False)
+                    Return
             End Select
 
             If mArchetypeControl Is Nothing Then
@@ -757,7 +797,7 @@ Public Class TabPageStructure
         mIsEmbedded = True
         mEmbeddedSlot = New ArchetypeNodeAnonymous(a_slot)
 
-        If MessageBox.Show(Filemanager.GetOpenEhrTerm(606, "Load embedded archetype"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+        If MessageBox.Show(Filemanager.GetOpenEhrTerm(606, "Load embedded archetype"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
             mFileManager = New FileManagerLocal
 
             ' set the filemanager on the Details Panel as well
@@ -840,16 +880,16 @@ Public Class TabPageStructure
             Dim frm As New Choose
             frm.Set_Single()
             frm.ListChoose.Items.AddRange(a_slot.SlotConstraint.Include.Items)
-            If frm.ShowDialog = DialogResult.OK Then
-                archetype_name = ReferenceModel.Instance.ReferenceModelName & "-" & _
-                    ReferenceModel.Instance.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
+            If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                archetype_name = ReferenceModel.ReferenceModelName & "-" & _
+                    ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
                     "." & CStr(frm.ListChoose.SelectedItem) & ".adl"
             Else
                 Return False
             End If
         ElseIf a_slot.SlotConstraint.Include.Count = 1 Then
-            archetype_name = ReferenceModel.Instance.ReferenceModelName & "-" & _
-                ReferenceModel.Instance.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
+            archetype_name = ReferenceModel.ReferenceModelName & "-" & _
+                ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
                 "." & a_slot.SlotConstraint.Include.Item(0) & ".adl"
         Else
             Return False

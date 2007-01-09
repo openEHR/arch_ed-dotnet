@@ -4,7 +4,7 @@ Public Class ADL_ArchetypeDetails
     'Private mADL_Details As openehr.base.structures.table.HASH_TABLE_ANY_ANY
     Private mADL_Description As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION
 
-    Public Overrides Function AddOrReplace(ByVal a_language As String, ByVal a_detail As ArchetypeDescriptionItem)
+    Public Overrides Sub AddOrReplace(ByVal a_language As String, ByVal a_detail As ArchetypeDescriptionItem)
         Dim EIF_s As openehr.base.kernel.STRING
         EIF_s = openehr.base.kernel.Create.STRING.make_from_cil(a_language)
         If Me.HasDetailInLanguage(a_language) Then
@@ -26,7 +26,7 @@ Public Class ADL_ArchetypeDetails
         EIF_detail.set_purpose(openehr.base.kernel.Create.STRING.make_from_cil(a_detail.Purpose))
         'mADL_Details.put(EIF_detail, openehr.base.kernel.Create.STRING.make_from_cil(a_language))
         mADL_Description.add_detail(EIF_s, EIF_detail)
-    End Function
+    End Sub
 
     Public Overrides Function DetailInLanguage(ByVal a_language As String) As ArchetypeDescriptionItem
         Dim archDescriptDetail As New ArchetypeDescriptionItem(a_language)

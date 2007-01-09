@@ -17,8 +17,8 @@ Option Strict On
 Public Class Constraint_Count
     Inherits Constraint_with_value
 
-    Protected mMinVal As Single
-    Protected mMaxVal As Single
+    Protected mMinVal As Single = 0
+    Protected mMaxVal As Single = 0
     Protected mAssumedValue As Single
     Protected mHasMaxVal As Boolean
     Protected mHasMinVal As Boolean
@@ -42,7 +42,6 @@ Public Class Constraint_Count
         Set(ByVal Value As Object)
             Try
                 mAssumedValue = CLng(Value)
-                HasAssumedValue = True
             Catch ex As Exception
                 Debug.Assert(False, Value.ToString & "is not valid value for this type")
             End Try
@@ -71,7 +70,6 @@ Public Class Constraint_Count
         End Get
         Set(ByVal Value As Long)
             mMinVal = CSng(Value)
-            mHasMinVal = True
         End Set
     End Property
     Public Property MaximumValue() As Long
@@ -79,7 +77,6 @@ Public Class Constraint_Count
             Return CLng(mMaxVal)
         End Get
         Set(ByVal Value As Long)
-            mHasMaxVal = True
             mMaxVal = CSng(Value)
         End Set
     End Property

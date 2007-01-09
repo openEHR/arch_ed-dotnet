@@ -31,13 +31,13 @@ Class ADL_ENTRY
 
         For i = 1 To SubjectOfData.children.count
             ComplexObj = SubjectOfData.children.i_th(i)
-            Select Case ComplexObj.rm_type_name.to_cil
-                Case "RELATED_PARTY"
-                    an_attribute = ComplexObj.attributes.first  ' get the 'relationship' an_attribute
-                    ComplexObj = an_attribute.children.first  ' CODED_TEXT
-                    an_attribute = ComplexObj.attributes.first  ' code
-                    rSubjectOfData.Relationship = ADL_Tools.Instance.ProcessCodes(an_attribute.children.first)
-            End Select
+                Select Case ComplexObj.rm_type_name.to_cil.ToLowerInvariant()
+                    Case "party_related", "related_party" ' related party is obsolete
+                        an_attribute = ComplexObj.attributes.first  ' get the 'relationship' an_attribute
+                        ComplexObj = an_attribute.children.first  ' CODED_TEXT
+                        an_attribute = ComplexObj.attributes.first  ' defining_code
+                        rSubjectOfData.Relationship = ADL_Tools.ProcessCodes(an_attribute.children.first)
+                End Select
         Next
     End Sub
 
@@ -54,25 +54,25 @@ Class ADL_ENTRY
                     Case "subject"
                         ProcessSubjectOfData(an_attribute)
                     Case "name", "runtime_label" 'run_time_label is obsolete
-                        mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        mRuntimeConstraint = ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     Case "data"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Data, a_filemanager))
                         ' remembers the Processed data off events
-                    Case "state"  'Obsolete unless it is a History
+                    Case "state"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.State, a_filemanager))
                     Case "protocol"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Protocol, a_filemanager))
                     Case "description"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ActivityDescription, a_filemanager))
                     Case "ism_transition", "pathway_specification" 'pathway_spec is obsolete 
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ISM_TRANSITION, a_filemanager))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ism_transition, a_filemanager))
                     Case "activities"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activities, a_filemanager))
                 End Select
             Next
-            If Not ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure Is Nothing Then
-                mChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure)
-                ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure = Nothing
+            If Not ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure Is Nothing Then
+                mChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure)
+                ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure = Nothing
             End If
         End Sub
 

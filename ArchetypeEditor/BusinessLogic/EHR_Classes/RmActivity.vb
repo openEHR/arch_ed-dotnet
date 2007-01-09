@@ -36,7 +36,7 @@ Public Class RmActivity
         MyBase.New(NodeId, StructureType.Activity)
     End Sub
 
-#Region "ADL Handling"
+#Region "ADL and XML Handling"
     Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(EIF_Structure, a_filemanager)
 
@@ -51,7 +51,16 @@ Public Class RmActivity
             If obj.any_allowed Then
                 Me.ArchetypeId = "."
             Else
-                Me.ArchetypeId = CType(obj.item, openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING).strings.first.to_cil
+                Dim item As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING = _
+                                CType(obj.item, openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING)
+                If Not item.regexp Is Nothing Then
+                    Me.ArchetypeId = item.regexp.to_cil.Replace("\.", ".")
+                ElseIf Not item.strings Is Nothing Then
+                    Me.ArchetypeId = CType(item.strings.i_th(1), openehr.base.kernel.STRING).to_cil.Replace("\.", ".")
+                Else
+                    Me.ArchetypeId = "."
+                End If
+
             End If
         End If
 
@@ -60,21 +69,66 @@ Public Class RmActivity
         If EIF_Structure.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("description")) Then
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             an_attribute = EIF_Structure.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("description"))
-            ' could be a C_COMPLEX_OBJECT
+            ' could be a C_COMPLEX_OBJECT or an ARCHETYPE_SLOT
             Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT
             obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
-            If Not obj.any_allowed Then
-                Select Case obj.generating_type.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
-                    Case "archetype_slot"
-                        Me.Children.Add(New RmSlot(obj))
-                    Case "c_complex_object"
-                        Me.Children.Add(New RmStructureCompound(obj, a_filemanager))
-                End Select
-            End If
+            Select Case obj.generating_type.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+                Case "archetype_slot"
+                    Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
+                    slot = CType(obj, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)
+                    Me.Children.Add(New RmSlot(CType(obj, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                Case "c_complex_object"
+                    Dim complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                    complexObj = CType(obj, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+                    Me.Children.Add(New RmStructureCompound(CType(obj, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
+            End Select
         End If
 
 
     End Sub
+
+    Sub New(ByVal xml_Structure As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(xml_Structure, a_filemanager)
+
+        Me.Occurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(xml_Structure.occurrences)
+
+        ' process the archetype id constraint
+        For Each an_attribute As XMLParser.C_ATTRIBUTE In xml_Structure.attributes
+            Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "action_archetype_id"
+                    Dim obj As XMLParser.C_PRIMITIVE_OBJECT
+                    obj = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
+                    If obj.any_allowed Then
+                        Me.ArchetypeId = "."
+                    Else
+                        Dim id As XMLParser.C_STRING = CType(obj.item, XMLParser.C_STRING)
+                        If id.list Is Nothing Then
+                            If id.pattern Is Nothing Then
+                                Me.ArchetypeId = "."
+                            Else
+                                Me.ArchetypeId = id.pattern.Trim("/".ToCharArray()).Replace("\.", ".")
+                            End If
+                        Else
+                            Debug.Assert(False, "Should use pattern here")
+                            Me.ArchetypeId = id.list(0).Trim("/".ToCharArray()).Replace("\.", ".")
+                        End If
+                    End If
+                Case "description"
+                    Dim obj As XMLParser.C_OBJECT
+                    obj = CType(an_attribute.children(0), XMLParser.C_OBJECT)
+                    If Not obj.any_allowed Then
+                        Select Case obj.GetType.ToString.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+                            Case "xmlparser.archetype_slot"
+                                Me.Children.Add(New RmSlot(CType(obj, XMLParser.ARCHETYPE_SLOT)))
+                            Case "xmlparser.c_complex_object"
+                                Me.Children.Add(New RmStructureCompound(CType(obj, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                        End Select
+                    End If
+            End Select
+        Next
+
+    End Sub
+
 #End Region
 
 End Class

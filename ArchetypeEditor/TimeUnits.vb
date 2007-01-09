@@ -36,7 +36,7 @@ Public Class TimeUnits
     End Function
 
     Public Function GetValidIsoUnit(ByVal a_unit As String) As String
-        Select Case a_unit
+        Select Case a_unit.ToLowerInvariant
             Case "yr", "year", "y"
                 Return "a"
             Case "mth", "month"

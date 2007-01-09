@@ -149,6 +149,21 @@ Public Class RmCardinality
         mIsDefault = False
 
     End Sub
+
+    Public Sub SetFromXmlCardinality(ByVal a_cardinality As XMLParser.CARDINALITY)
+        If a_cardinality.interval.maximum <> "" Then
+            mUnbounded = False
+            mMaxCount = CInt(a_cardinality.interval.maximum)
+        Else
+            mUnbounded = True
+        End If
+        mMinCount = CInt(a_cardinality.interval.minimum)
+
+        mOrdered = a_cardinality.is_ordered
+
+        mIsDefault = False
+    End Sub
+
     Public Sub SetFromString(ByVal a_string As String)
         'Format is n..* or n..n
         ' or n (= n..n)

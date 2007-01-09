@@ -59,9 +59,12 @@ Public Class frmStartUp
 
     Friend WithEvents lblModel As System.Windows.Forms.Label
     Friend WithEvents HelpProviderStartUp As System.Windows.Forms.HelpProvider
+    Friend WithEvents gbFormat As System.Windows.Forms.GroupBox
+    Friend WithEvents rbXML As System.Windows.Forms.RadioButton
+    Friend WithEvents rbADL As System.Windows.Forms.RadioButton
     Friend WithEvents lblComponent As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmStartUp))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmStartUp))
         Me.gbNew = New System.Windows.Forms.GroupBox
         Me.butOK = New System.Windows.Forms.Button
         Me.butCancel = New System.Windows.Forms.Button
@@ -72,10 +75,14 @@ Public Class frmStartUp
         Me.lblModel = New System.Windows.Forms.Label
         Me.lblComponent = New System.Windows.Forms.Label
         Me.gbExistingArchetype = New System.Windows.Forms.GroupBox
+        Me.gbFormat = New System.Windows.Forms.GroupBox
+        Me.rbXML = New System.Windows.Forms.RadioButton
+        Me.rbADL = New System.Windows.Forms.RadioButton
         Me.butOpen = New System.Windows.Forms.Button
         Me.HelpProviderStartUp = New System.Windows.Forms.HelpProvider
         Me.gbNew.SuspendLayout()
         Me.gbExistingArchetype.SuspendLayout()
+        Me.gbFormat.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbNew
@@ -114,11 +121,10 @@ Public Class frmStartUp
         '
         'txtConcept
         '
-        Me.txtConcept.Location = New System.Drawing.Point(8, 103)
+        Me.txtConcept.Location = New System.Drawing.Point(13, 103)
         Me.txtConcept.Name = "txtConcept"
-        Me.txtConcept.Size = New System.Drawing.Size(530, 22)
+        Me.txtConcept.Size = New System.Drawing.Size(515, 22)
         Me.txtConcept.TabIndex = 4
-        Me.txtConcept.Text = ""
         '
         'comboComponent
         '
@@ -151,7 +157,7 @@ Public Class frmStartUp
         Me.lblModel.Name = "lblModel"
         Me.lblModel.Size = New System.Drawing.Size(144, 27)
         Me.lblModel.TabIndex = 10
-        Me.lblModel.Text = "Model "
+        Me.lblModel.Text = "Model"
         '
         'lblComponent
         '
@@ -163,6 +169,7 @@ Public Class frmStartUp
         '
         'gbExistingArchetype
         '
+        Me.gbExistingArchetype.Controls.Add(Me.gbFormat)
         Me.gbExistingArchetype.Controls.Add(Me.butOpen)
         Me.gbExistingArchetype.Location = New System.Drawing.Point(19, 217)
         Me.gbExistingArchetype.Name = "gbExistingArchetype"
@@ -171,14 +178,49 @@ Public Class frmStartUp
         Me.gbExistingArchetype.TabStop = False
         Me.gbExistingArchetype.Text = "Open existing archetype"
         '
+        'gbFormat
+        '
+        Me.gbFormat.Controls.Add(Me.rbXML)
+        Me.gbFormat.Controls.Add(Me.rbADL)
+        Me.gbFormat.Enabled = False
+        Me.gbFormat.Location = New System.Drawing.Point(373, 14)
+        Me.gbFormat.Name = "gbFormat"
+        Me.gbFormat.Size = New System.Drawing.Size(155, 60)
+        Me.gbFormat.TabIndex = 9
+        Me.gbFormat.TabStop = False
+        Me.gbFormat.Text = "Format"
+        '
+        'rbXML
+        '
+        Me.rbXML.AutoSize = True
+        Me.rbXML.Location = New System.Drawing.Point(86, 20)
+        Me.rbXML.Name = "rbXML"
+        Me.rbXML.Size = New System.Drawing.Size(57, 21)
+        Me.rbXML.TabIndex = 1
+        Me.rbXML.TabStop = True
+        Me.rbXML.Text = "XML"
+        Me.rbXML.UseVisualStyleBackColor = True
+        '
+        'rbADL
+        '
+        Me.rbADL.AutoSize = True
+        Me.rbADL.Location = New System.Drawing.Point(15, 20)
+        Me.rbADL.Name = "rbADL"
+        Me.rbADL.Size = New System.Drawing.Size(56, 21)
+        Me.rbADL.TabIndex = 0
+        Me.rbADL.TabStop = True
+        Me.rbADL.Text = "ADL"
+        Me.rbADL.UseVisualStyleBackColor = True
+        '
         'butOpen
         '
         Me.butOpen.BackColor = System.Drawing.SystemColors.Control
         Me.butOpen.Image = CType(resources.GetObject("butOpen.Image"), System.Drawing.Image)
-        Me.butOpen.Location = New System.Drawing.Point(235, 20)
+        Me.butOpen.Location = New System.Drawing.Point(229, 21)
         Me.butOpen.Name = "butOpen"
-        Me.butOpen.Size = New System.Drawing.Size(77, 46)
+        Me.butOpen.Size = New System.Drawing.Size(92, 46)
         Me.butOpen.TabIndex = 7
+        Me.butOpen.UseVisualStyleBackColor = False
         '
         'frmStartUp
         '
@@ -200,7 +242,10 @@ Public Class frmStartUp
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Archetype Editor"
         Me.gbNew.ResumeLayout(False)
+        Me.gbNew.PerformLayout()
         Me.gbExistingArchetype.ResumeLayout(False)
+        Me.gbFormat.ResumeLayout(False)
+        Me.gbFormat.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -210,7 +255,7 @@ Public Class frmStartUp
     Public Property Archetype_ID() As ArchetypeID
         Get
             Try
-                Return New ArchetypeID(Me.comboModel.Text & "-" & ReferenceModel.Instance.RM_StructureName(ReferenceModel.Instance.ArchetypedClass) & "." & Me.txtConcept.Text & ".v1draft")
+                Return New ArchetypeID(Me.comboModel.Text & "-" & ReferenceModel.RM_StructureName(ReferenceModel.ArchetypedClass) & "." & Me.txtConcept.Text & ".v1draft")
             Catch
                 Return Nothing
                 Debug.Assert(False)
@@ -234,11 +279,11 @@ Public Class frmStartUp
     Private Sub comboModel_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboModel.SelectedIndexChanged
 
         ' set the reference model, which sets valid classes to archetype
-        ReferenceModel.Instance.ModelType = comboModel.SelectedIndex
+        ReferenceModel.SetModelType(comboModel.SelectedIndex)
         Me.comboComponent.Items.Clear()
 
         Me.comboComponent.SelectedIndex = -1
-        For Each valid_archetype As StructureType In ReferenceModel.Instance.ValidArchetypeDefinitions
+        For Each valid_archetype As StructureType In ReferenceModel.ValidArchetypeDefinitions
             Me.comboComponent.Items.Add(valid_archetype.ToString)
         Next
         Me.comboComponent.Enabled = True
@@ -247,11 +292,11 @@ Public Class frmStartUp
     End Sub
 
     Private Sub butOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOpen.Click
-        Me.DialogResult = DialogResult.Yes
+        Me.DialogResult = Windows.Forms.DialogResult.Yes
     End Sub
 
     Private Sub butCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butCancel.Click
-        Me.DialogResult = DialogResult.Cancel
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
 
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
@@ -274,18 +319,18 @@ Public Class frmStartUp
         Me.txtConcept.Text = Me.txtConcept.Text.Replace(" ", "_")
         Me.txtConcept.Text = Me.txtConcept.Text.Replace("-", "_")
 
-        Me.DialogResult = DialogResult.OK
+        Me.DialogResult = Windows.Forms.DialogResult.OK
     End Sub
 
     Private Sub comboComponent_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboComponent.SelectedIndexChanged
         If Me.comboComponent.SelectedIndex = -1 Then Return
-        ReferenceModel.Instance.ArchetypedClass = ReferenceModel.Instance.ValidArchetypeDefinitions(comboComponent.SelectedIndex)
+        ReferenceModel.SetArchetypedClass(ReferenceModel.ValidArchetypeDefinitions(comboComponent.SelectedIndex))
         Me.AcceptButton = butOK
     End Sub
 
     Private Sub frmStartUp_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        For i As Integer = 0 To ReferenceModel.Instance.ValidReferenceModelNames.Length - 1
-            Me.comboModel.Items.Add(ReferenceModel.Instance.ValidReferenceModelNames(i))
+        For i As Integer = 0 To ReferenceModel.ValidReferenceModelNames.Length - 1
+            Me.comboModel.Items.Add(ReferenceModel.ValidReferenceModelNames(i))
         Next
         Me.comboModel.SelectedIndex = OceanArchetypeEditor.Instance.Options.DefaultReferenceModel
         Me.AcceptButton = Me.butOpen
@@ -294,6 +339,18 @@ Public Class frmStartUp
 
     Private Sub frmStartUp_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
         OceanArchetypeEditor.Reflect(Me)
+    End Sub
+
+    Private Sub rbADL_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbADL.CheckedChanged
+        If rbADL.Focused Then
+            OceanArchetypeEditor.Instance.Options.DefaultParser = "adl"
+        End If
+    End Sub
+
+    Private Sub rbXML_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbXML.CheckedChanged
+        If rbXML.Focused Then
+            OceanArchetypeEditor.Instance.Options.DefaultParser = "xml"
+        End If
     End Sub
 End Class
 

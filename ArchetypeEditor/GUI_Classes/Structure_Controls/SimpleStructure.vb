@@ -176,8 +176,6 @@ Public Class SimpleStructure
 
     Public Overrides ReadOnly Property Elements() As ArchetypeElement()
         Get
-            Dim i As Integer
-
             If mElement Is Nothing Then
                 Return Nothing
             Else
@@ -203,7 +201,7 @@ Public Class SimpleStructure
 
     Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
         If MessageBox.Show(AE_Constants.Instance.Specialise & " " & txtSimple.Text, AE_Constants.Instance.MessageBoxCaption, _
-            MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+            MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
             mElement.Specialise()
             Me.txtSimple.Text = mElement.Text
             mFileManager.FileEdited = True
@@ -235,7 +233,7 @@ Public Class SimpleStructure
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs)
         If MessageBox.Show(AE_Constants.Instance.Remove & mElement.Text, _
             AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
-            MessageBoxIcon.Question) = DialogResult.OK Then
+            MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
             mLoading = True
             mElement = Nothing
             Me.txtSimple.Text = AE_Constants.Instance.DragDropHere
@@ -257,8 +255,7 @@ Public Class SimpleStructure
     End Function
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
-        Dim lvItem As ArchetypeListViewItem
-        Dim text, s As String
+        Dim text As String
 
         text = "<p>Structure = SINGLE</p>"
 
@@ -324,7 +321,7 @@ Public Class SimpleStructure
             i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 If Not mOKtoEditSpecialisation Then
-                    If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = DialogResult.No Then
+                    If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
                         Me.txtSimple.Text = mElement.Text
                     Else
                         mOKtoEditSpecialisation = True
@@ -362,11 +359,7 @@ Public Class SimpleStructure
 
     Private Sub txtSimple_DragDrop(ByVal sender As System.Object, _
     ByVal e As System.Windows.Forms.DragEventArgs) Handles txtSimple.DragDrop
-        Dim position As Point
-        Dim DropListItem As ArchetypeListViewItem
-        Dim list_item_dragged As ArchetypeListViewItem
-        Dim i As Integer
-
+        
         If Not mNewConstraint Is Nothing Then
             mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
             mElement.Constraint = mNewConstraint

@@ -167,7 +167,7 @@ Namespace ArchetypeEditor.Specialised_VB_Classes
             AddHandler PrintDoc.EndPrint, AddressOf printDoc_EndPrint
 
             a_PrintDialog.Document = PrintDoc
-            If a_PrintDialog.ShowDialog(Me) = DialogResult.OK Then
+            If a_PrintDialog.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                 PrintDoc.Print()
             End If
         End Sub

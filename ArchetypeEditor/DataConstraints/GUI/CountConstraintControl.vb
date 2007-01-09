@@ -73,6 +73,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     Friend WithEvents Increment_1000 As System.Windows.Forms.MenuItem
     Friend WithEvents comboIncludeMin As System.Windows.Forms.ComboBox
     Friend WithEvents comboIncludeMax As System.Windows.Forms.ComboBox
+    Friend WithEvents numPrecision As System.Windows.Forms.NumericUpDown
+    Friend WithEvents lblPrecision As System.Windows.Forms.Label
     Friend WithEvents lblAssumedValue As System.Windows.Forms.Label
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -96,9 +98,12 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.comboIncludeMin = New System.Windows.Forms.ComboBox
         Me.comboIncludeMax = New System.Windows.Forms.ComboBox
         Me.lblAssumedValue = New System.Windows.Forms.Label
+        Me.numPrecision = New System.Windows.Forms.NumericUpDown
+        Me.lblPrecision = New System.Windows.Forms.Label
         CType(Me.NumericAssumed, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numMaxValue, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numMinValue, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.numPrecision, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'LabelQuantity
@@ -112,27 +117,27 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'cbMinValue
         '
-        Me.cbMinValue.Location = New System.Drawing.Point(40, 30)
+        Me.cbMinValue.Location = New System.Drawing.Point(20, 29)
         Me.cbMinValue.Name = "cbMinValue"
-        Me.cbMinValue.Size = New System.Drawing.Size(160, 24)
+        Me.cbMinValue.Size = New System.Drawing.Size(184, 24)
         Me.cbMinValue.TabIndex = 0
         Me.cbMinValue.Text = "Set min. value"
         '
         'cbMaxValue
         '
-        Me.cbMaxValue.Location = New System.Drawing.Point(40, 56)
+        Me.cbMaxValue.Location = New System.Drawing.Point(20, 57)
         Me.cbMaxValue.Name = "cbMaxValue"
-        Me.cbMaxValue.Size = New System.Drawing.Size(168, 24)
+        Me.cbMaxValue.Size = New System.Drawing.Size(184, 24)
         Me.cbMaxValue.TabIndex = 3
         Me.cbMaxValue.Text = "Set max. value"
         '
         'NumericAssumed
         '
-        Me.NumericAssumed.Location = New System.Drawing.Point(272, 82)
+        Me.NumericAssumed.Location = New System.Drawing.Point(268, 82)
         Me.NumericAssumed.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.NumericAssumed.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.NumericAssumed.Name = "NumericAssumed"
-        Me.NumericAssumed.Size = New System.Drawing.Size(72, 22)
+        Me.NumericAssumed.Size = New System.Drawing.Size(88, 22)
         Me.NumericAssumed.TabIndex = 7
         Me.NumericAssumed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericAssumed.ThousandsSeparator = True
@@ -140,11 +145,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'numMaxValue
         '
-        Me.numMaxValue.Location = New System.Drawing.Point(272, 55)
+        Me.numMaxValue.Location = New System.Drawing.Point(268, 56)
         Me.numMaxValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMaxValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMaxValue.Name = "numMaxValue"
-        Me.numMaxValue.Size = New System.Drawing.Size(72, 22)
+        Me.numMaxValue.Size = New System.Drawing.Size(88, 22)
         Me.numMaxValue.TabIndex = 5
         Me.numMaxValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numMaxValue.ThousandsSeparator = True
@@ -152,11 +157,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'numMinValue
         '
-        Me.numMinValue.Location = New System.Drawing.Point(272, 31)
+        Me.numMinValue.Location = New System.Drawing.Point(268, 30)
         Me.numMinValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMinValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMinValue.Name = "numMinValue"
-        Me.numMinValue.Size = New System.Drawing.Size(72, 22)
+        Me.numMinValue.Size = New System.Drawing.Size(90, 22)
         Me.numMinValue.TabIndex = 2
         Me.numMinValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numMinValue.ThousandsSeparator = True
@@ -223,7 +228,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         'comboIncludeMin
         '
         Me.comboIncludeMin.Items.AddRange(New Object() {">=", ">"})
-        Me.comboIncludeMin.Location = New System.Drawing.Point(216, 31)
+        Me.comboIncludeMin.Location = New System.Drawing.Point(212, 29)
         Me.comboIncludeMin.Name = "comboIncludeMin"
         Me.comboIncludeMin.Size = New System.Drawing.Size(48, 24)
         Me.comboIncludeMin.TabIndex = 1
@@ -233,7 +238,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         'comboIncludeMax
         '
         Me.comboIncludeMax.Items.AddRange(New Object() {"<=", "<"})
-        Me.comboIncludeMax.Location = New System.Drawing.Point(216, 55)
+        Me.comboIncludeMax.Location = New System.Drawing.Point(212, 56)
         Me.comboIncludeMax.Name = "comboIncludeMax"
         Me.comboIncludeMax.Size = New System.Drawing.Size(48, 24)
         Me.comboIncludeMax.TabIndex = 4
@@ -242,7 +247,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'lblAssumedValue
         '
-        Me.lblAssumedValue.Location = New System.Drawing.Point(72, 82)
+        Me.lblAssumedValue.Location = New System.Drawing.Point(68, 83)
         Me.lblAssumedValue.Name = "lblAssumedValue"
         Me.lblAssumedValue.Size = New System.Drawing.Size(184, 24)
         Me.lblAssumedValue.TabIndex = 13
@@ -250,8 +255,29 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.lblAssumedValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lblAssumedValue.Visible = False
         '
+        'numPrecision
+        '
+        Me.numPrecision.Location = New System.Drawing.Point(317, 4)
+        Me.numPrecision.Minimum = New Decimal(New Integer() {1, 0, 0, -2147483648})
+        Me.numPrecision.Name = "numPrecision"
+        Me.numPrecision.Size = New System.Drawing.Size(39, 22)
+        Me.numPrecision.TabIndex = 14
+        Me.numPrecision.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.numPrecision.Value = New Decimal(New Integer() {1, 0, 0, -2147483648})
+        '
+        'lblPrecision
+        '
+        Me.lblPrecision.Location = New System.Drawing.Point(137, 4)
+        Me.lblPrecision.Name = "lblPrecision"
+        Me.lblPrecision.Size = New System.Drawing.Size(173, 22)
+        Me.lblPrecision.TabIndex = 15
+        Me.lblPrecision.Text = "Precision"
+        Me.lblPrecision.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'CountConstraintControl
         '
+        Me.Controls.Add(Me.lblPrecision)
+        Me.Controls.Add(Me.numPrecision)
         Me.Controls.Add(Me.lblAssumedValue)
         Me.Controls.Add(Me.comboIncludeMax)
         Me.Controls.Add(Me.comboIncludeMin)
@@ -262,10 +288,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.numMaxValue)
         Me.Controls.Add(Me.numMinValue)
         Me.Name = "CountConstraintControl"
-        Me.Size = New System.Drawing.Size(360, 112)
+        Me.Size = New System.Drawing.Size(363, 112)
         CType(Me.NumericAssumed, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numMaxValue, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numMinValue, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.numPrecision, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -274,7 +301,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
     Protected Shadows ReadOnly Property Constraint() As Constraint_Count
         Get
-            Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Count)
             Return CType(MyBase.Constraint, Constraint_Count)
         End Get
     End Property
@@ -285,6 +311,12 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         If IsState Then
             SetStateValues()
+        End If
+
+        If TypeOf Me.Constraint Is Constraint_Real Then
+            Me.IsIntegral = False
+        Else
+            Me.IsIntegral = True
         End If
 
         SetMaxAndMin()
@@ -326,6 +358,22 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             Me.cbMinValue.Checked = False
         End If
     End Sub
+
+    Public WriteOnly Property IsIntegral() As Boolean
+        Set(ByVal value As Boolean)
+            If value Then
+                Me.numPrecision.Visible = False
+                Me.lblPrecision.Visible = False
+                Me.numMaxValue.DecimalPlaces = 0
+                Me.numMinValue.DecimalPlaces = 0
+                Me.NumericAssumed.DecimalPlaces = 0
+            Else
+                Me.numPrecision.Visible = True
+                Me.lblPrecision.Visible = True
+                Me.numPrecision.Value = CType(Me.Constraint, Constraint_Real).Precision
+            End If
+        End Set
+    End Property
 
     Protected Overridable Sub MinValueCheckedChanged()
         If Me.cbMinValue.Checked Then
@@ -397,7 +445,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Sub numMaxValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMaxValue.TextChanged
-        If MyBase.IsLoading Then Exit Sub
+
+        If MyBase.IsLoading Then Return
 
         If Me.NumericAssumed.Visible Then
             Me.NumericAssumed.Maximum = numMaxValue.Value
@@ -423,7 +472,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Sub numMinValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.TextChanged
-        If MyBase.IsLoading Then Exit Sub
+
+        If MyBase.IsLoading Then Return
 
         If Me.NumericAssumed.Visible Then
             Me.NumericAssumed.Minimum = numMinValue.Value
@@ -460,9 +510,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     Private Sub Decimal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
             Handles Decimal_0.Click, Decimal_1.Click, Decimal_2.Click, _
             Decimal_3.Click
-
-        'HKF: 1609
-        'If ActiveControl.GetType.ToString = "System.Windows.Forms.NumericUpDown" Then
         If TypeOf ActiveControl Is System.Windows.Forms.NumericUpDown Then
             Dim i As Integer
             Dim ctrl As System.Windows.Forms.MenuItem
@@ -518,20 +565,38 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         If MyBase.IsLoading Then Return
 
         Me.Constraint.AssumedValue = Me.NumericAssumed.Value
+        Me.Constraint.HasAssumedValue = True
         mFileManager.FileEdited = True
     End Sub
 
-    Private Sub lblAssumedValue_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lblAssumedValue.Click
+    Private Sub numPrecision_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numPrecision.ValueChanged
+        Dim i As Integer = CInt(numPrecision.Value)
+        If i = -1 Or i > 2 Then
+            Me.numMaxValue.DecimalPlaces = 3
+            Me.numMinValue.DecimalPlaces = 3
+            Me.numMinValue.Increment = CDec(0.001)
+        Else
+            Me.numMaxValue.DecimalPlaces = i
+            Me.numMinValue.DecimalPlaces = i
+            Dim d As Decimal
+            d = CDec(Math.Pow(10, -i)) ' set the increment to the power of the precision
+            Me.numMinValue.Increment = d
+            Me.numMaxValue.Increment = d
+        End If
 
+        If Not Me.IsLoading Then
+            Dim decimalPlaces As Integer = CInt(Me.numPrecision.Value)
+            If decimalPlaces > -1 AndAlso CType(Me.Constraint, Constraint_Real).Precision > decimalPlaces Then
+                Me.numMaxValue.Value = CDec(Math.Round(CDbl(Me.numMaxValue.Value), CInt(Me.numPrecision.Value)))
+                MaxValueChanged()
+                Me.numMinValue.Value = CDec(Math.Round(CDbl(Me.numMinValue.Value), CInt(Me.numPrecision.Value)))
+                MinValueChanged()
+            End If
+            CType(Me.Constraint, Constraint_Real).Precision = decimalPlaces
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
-    Private Sub numMinValue_ValueChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.ValueChanged
-
-    End Sub
-
-    Private Sub numMaxValue_ValueChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMaxValue.ValueChanged
-
-    End Sub
 End Class
 
 '

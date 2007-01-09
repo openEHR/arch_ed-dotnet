@@ -45,7 +45,7 @@ Public Class ArchetypeID
         End Get
         Set(ByVal Value As String)
             mConcept = Value
-            mArchetypeID = ReferenceModel.Instance.ReferenceModelName & "-" & ReferenceModel.Instance.RM_StructureName(mRmEntity) & "." & mConcept & "." & mVersion
+            mArchetypeID = ReferenceModel.ReferenceModelName & "-" & ReferenceModel.RM_StructureName(mRmEntity) & "." & mConcept & "." & mVersion
             RaiseEvent ArchetypeID_Changed(Me, New EventArgs)
         End Set
     End Property
@@ -57,7 +57,7 @@ Public Class ArchetypeID
 
     ReadOnly Property ReferenceModelEntityAsString() As String
         Get
-            Return ReferenceModel.Instance.RM_StructureName(mRmEntity)
+            Return ReferenceModel.RM_StructureName(mRmEntity)
         End Get
     End Property
 
@@ -80,11 +80,11 @@ Public Class ArchetypeID
         mVersion = y(2)
         y = y(0).Split("-")
         Debug.Assert(y.Length = 3)
-        ReferenceModel.Instance.ReferenceModelName = y(0) & "-" & y(1)
-        Debug.Assert(ReferenceModel.Instance.ModelType <> ReferenceModelType.Not_Set)
-        mRmEntity = ReferenceModel.Instance.StructureTypeFromString(y(2))
-        Debug.Assert(ReferenceModel.Instance.IsValidArchetypeDefinition(mRmEntity))
-        mRmModel = ReferenceModel.Instance.ModelType
+        ReferenceModel.SetReferenceModelName(y(0) & "-" & y(1))
+        Debug.Assert(ReferenceModel.ModelType <> ReferenceModelType.Not_Set)
+        mRmEntity = ReferenceModel.StructureTypeFromString(y(2))
+        Debug.Assert(ReferenceModel.IsValidArchetypeDefinition(mRmEntity))
+        mRmModel = ReferenceModel.ModelType
     End Sub
     Sub New(ByVal Value As String)
         ProcessStringValue(Value)

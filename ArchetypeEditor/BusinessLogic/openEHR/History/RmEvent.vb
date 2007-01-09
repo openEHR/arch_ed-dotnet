@@ -146,7 +146,7 @@ Class RmEvent
         MyBase.New(NodeId, StructureType.Event)
     End Sub
 
-#Region "ADL Oriented Features"
+#Region "ADL Processing"
 
     Sub New(ByVal An_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(An_Event.node_id.to_cil, StructureType.Event)
@@ -154,7 +154,6 @@ Class RmEvent
     End Sub
 
     Private mEIF_Data As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-    Private mEIF_State As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
     Property ADL_Data() As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Get
@@ -165,6 +164,8 @@ Class RmEvent
         End Set
     End Property
 
+    Private mEIF_State As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
     Property ADL_State() As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Get
             Return mEIF_State
@@ -173,8 +174,6 @@ Class RmEvent
             Debug.Assert(False)
         End Set
     End Property
-
-#Region "ADL PRocessing - incoming"
 
     Private Sub ProcessEvent(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
@@ -191,7 +190,7 @@ Class RmEvent
                 Debug.Assert(False)
         End Select
 
-        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
+        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(ObjNode.occurrences)
 
         For i = 1 To ObjNode.attributes.count
 
@@ -199,7 +198,7 @@ Class RmEvent
 
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label" ' runtime_label is OBSOLETE
-                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "offset"
                     Dim d As New ArchetypeEditor.ADL_Classes.Duration
                     Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
@@ -218,6 +217,19 @@ Class RmEvent
                     Debug.Assert(mType = StructureType.IntervalEvent)
 
                     width = an_attribute.children.first
+                    If Not width Is Nothing Then
+                        Dim durationConstraint As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION = _
+                            CType(width.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
+                        If Not durationConstraint.interval Is Nothing Then
+                            'ToDo: deal with genuine range as now max = min only
+                            d.ISO_duration = CType(durationConstraint.interval.upper, _
+                                openehr.common_libs.date_time.Impl.ISO8601_DURATION).as_string.to_cil
+                        ElseIf Not durationConstraint.pattern Is Nothing Then 'obsolete (error in previous archetypes)
+                            d.ISO_duration = durationConstraint.pattern.to_cil
+                        End If
+                        Me.Width = d.GUI_duration
+                        Me.WidthUnits = d.ISO_Units
+                    End If
                     d.ISO_duration = width.item.as_string.to_cil
                     Me.Width = d.GUI_duration
                     Me.WidthUnits = d.ISO_Units
@@ -235,7 +247,7 @@ Class RmEvent
                     Debug.Assert(mType = StructureType.IntervalEvent)
 
                     Dim textConstraint As Constraint_Text = _
-                    RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     Me.sMath = textConstraint.AllowableValues.FirstCode ' only one allowed
 
                 Case "display_as_positive"  ' OBSOLETE
@@ -264,7 +276,8 @@ Class RmEvent
         If Not Me.ADL_Data Is Nothing Then
             Dim cadlStruct As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-            Select Case Me.ADL_Data.children.first.Generating_Type.to_cil
+            Dim generating_type As String = Me.ADL_Data.children.first.Generating_Type.to_cil
+            Select Case generating_type
                 Case "ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
@@ -272,37 +285,177 @@ Class RmEvent
                     cadlStruct = CType(Me.ADL_Data.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                     Dim structure_type As StructureType
 
-                    structure_type = ReferenceModel.Instance.StructureTypeFromString(cadlStruct.rm_type_name.to_cil)
+                    structure_type = ReferenceModel.StructureTypeFromString(cadlStruct.rm_type_name.to_cil)
 
                     Debug.Assert(structure_type <> StructureType.Not_Set)
 
                     If structure_type = StructureType.Table Then
-                        ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = New RmTable(cadlStruct, a_filemanager)
+                        ArchetypeEditor.ADL_Classes.ADL_Tools.LastProcessedStructure = New RmTable(cadlStruct, a_filemanager)
                     Else
-                        ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = New RmStructureCompound(cadlStruct, a_filemanager)
+                        ArchetypeEditor.ADL_Classes.ADL_Tools.LastProcessedStructure = New RmStructureCompound(cadlStruct, a_filemanager)
                     End If
             End Select
         End If
 
 
         If Not Me.ADL_State Is Nothing Then
-            
-            Select Case Me.ADL_State.children.first.Generating_Type.to_cil
+            Dim generating_type As String = Me.ADL_State.children.first.Generating_Type.to_cil
+
+            Select Case generating_type
                 Case "ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
                 Case "C_COMPLEX_OBJECT"
-                    ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure = New RmStructureCompound(Me.ADL_State, StructureType.State, a_filemanager)
+                    ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure = New RmStructureCompound(Me.ADL_State, StructureType.State, a_filemanager)
             End Select
         End If
+
     End Sub
 
 #End Region
-#Region "ADL Build - outgoing"
+
+#Region "XML Processing"
+
+    Sub New(ByVal An_Event As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(An_Event.node_id, StructureType.Event)
+        ProcessEvent(An_Event, a_filemanager)
+    End Sub
+
+    Private mXML_Data As XMLParser.C_ATTRIBUTE
+    Property XML_Data() As XMLParser.C_ATTRIBUTE
+        Get
+            Return mXML_Data
+        End Get
+        Set(ByVal Value As XMLParser.C_ATTRIBUTE)
+            Debug.Assert(False)
+        End Set
+    End Property
+
+    Private mXML_State As XMLParser.C_ATTRIBUTE
+    Property XML_State() As XMLParser.C_ATTRIBUTE
+        Get
+            Return mXML_State
+        End Get
+        Set(ByVal Value As XMLParser.C_ATTRIBUTE)
+            Debug.Assert(False)
+        End Set
+    End Property
+
+    Private Sub ProcessEvent(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Dim an_attribute As XMLParser.C_ATTRIBUTE
+
+        Select Case ObjNode.rm_type_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Case "event"
+                EventType = ObservationEventType.Event
+            Case "point_event"
+                EventType = ObservationEventType.PointInTime
+            Case "interval_event"
+                EventType = ObservationEventType.Interval
+        End Select
+
+        cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(ObjNode.occurrences)
+
+        For Each an_attribute In ObjNode.attributes
+
+            Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+                Case "name"
+                    mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                Case "offset"
+                    Dim d As New ArchetypeEditor.ADL_Classes.Duration
+                    Dim offset As XMLParser.C_PRIMITIVE_OBJECT
+                    Dim duration As XMLParser.C_DURATION
+
+                    offset = an_attribute.children(0)
+                    duration = CType(offset.item, XMLParser.C_DURATION)
+
+                    If duration.pattern Is Nothing Then
+                        'cannot cope with ranges of duration at present in the editor
+                        d.ISO_duration = duration.range.maximum
+                    Else
+                        d.ISO_duration = duration.pattern
+                    End If
+
+                    Me.Offset = d.GUI_duration
+                    Me.OffsetUnits = d.ISO_Units
+
+                Case "width"
+                    Dim d As New ArchetypeEditor.ADL_Classes.Duration
+                    Dim width As XMLParser.C_PRIMITIVE_OBJECT
+
+                    Debug.Assert(mType = StructureType.IntervalEvent)
+
+                    width = an_attribute.children(0)
+                    If Not width Is Nothing Then
+                        Dim durationConstraint As XMLParser.C_DURATION = _
+                            CType(width.item, XMLParser.C_DURATION)
+                        If Not durationConstraint.range Is Nothing Then
+                            'ToDo: deal with genuine range as now max = min only
+                            d.ISO_duration = durationConstraint.range.maximum
+                        ElseIf Not durationConstraint.pattern Is Nothing Then 'obsolete (error in previous archetypes)
+                            d.ISO_duration = durationConstraint.pattern
+                        End If
+                        Me.Width = d.GUI_duration
+                        Me.WidthUnits = d.ISO_Units
+                    End If
+
+                Case "math_function"
+                    Debug.Assert(mType = StructureType.IntervalEvent)
+
+                    Dim textConstraint As Constraint_Text = _
+                    ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                    Me.sMath = textConstraint.AllowableValues.FirstCode ' only one allowed
+
+                Case "data", "item" 'item is OBSOLETE
+                    ' return the data for processing
+                    mXML_Data = an_attribute
+
+                Case "state"
+                    ' return the state for processing
+                    mXML_State = an_attribute
+            End Select
+
+        Next
+
+
+        If Not Me.XML_Data Is Nothing AndAlso Not Me.XML_Data.children Is Nothing AndAlso Me.XML_Data.children.Length > 0 Then
+            Dim cadlStruct As XMLParser.C_COMPLEX_OBJECT
+
+            Dim generating_type As String = Me.XML_Data.children(0).GetType.ToString
+            Select Case generating_type
+                Case "XMLParser.ARCHETYPE_INTERNAL_REF"
+                    ' Place holder for different structures at different events 
+                    ' not available as yet
+                Case "XMLParser.C_COMPLEX_OBJECT"
+                    cadlStruct = CType(Me.XML_Data.children(0), XMLParser.C_COMPLEX_OBJECT)
+                    Dim structure_type As StructureType
+
+                    structure_type = ReferenceModel.StructureTypeFromString(cadlStruct.rm_type_name)
+
+                    Debug.Assert(structure_type <> StructureType.Not_Set)
+
+                    If structure_type = StructureType.Table Then
+                        ArchetypeEditor.XML_Classes.XML_Tools.LastProcessedStructure = New RmTable(cadlStruct, a_filemanager)
+                    Else
+                        ArchetypeEditor.XML_Classes.XML_Tools.LastProcessedStructure = New RmStructureCompound(cadlStruct, a_filemanager)
+                    End If
+            End Select
+        End If
+
+        If Not Me.XML_State Is Nothing AndAlso Not Me.XML_State.children Is Nothing AndAlso Me.XML_State.children.Length > 0 Then
+            Dim generating_type As String = Me.XML_State.children(0).GetType.ToString
+
+            Select Case generating_type
+                Case "XMLParser.ARCHETYPE_INTERNAL_REF"
+                    ' Place holder for different structures at different events 
+                    ' not available as yet
+                Case "XMLParser.C_COMPLEX_OBJECT"
+                    ArchetypeEditor.XML_Classes.XML_Tools.StateStructure = New RmStructureCompound(Me.XML_State, StructureType.State, a_filemanager)
+            End Select
+        End If
+
+    End Sub
 
 #End Region
-#End Region
-
 
 End Class
 '

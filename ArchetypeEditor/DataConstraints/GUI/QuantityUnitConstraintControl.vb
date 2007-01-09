@@ -95,63 +95,42 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
         Reset()
 
-        SetMaxAndMin()
+        MyBase.SetControlValues(IsState)
 
-        If IsState Then
-            SetStateValues()
-            SetIncrement()
-        End If
+        'SetMaxAndMin()
 
-        MyBase.numMinValue.DecimalPlaces = 2
-        MyBase.numMaxValue.DecimalPlaces = 2
-        MyBase.NumericAssumed.DecimalPlaces = 2
+        'If IsState Then
+        '    SetStateValues()
+        'End If
 
     End Sub
 
-    Protected Sub SetIncrement()
-        Dim span As Single = numMaxValue.Value - numMinValue.Value
-        Dim increment As Decimal
 
-        Select Case span
-            Case 0
-                increment = CDec(1)
-            Case Is <= 1
-                increment = CDec(0.01)
-            Case Is <= 10
-                increment = CDec(0.1)
-            Case Else
-                increment = CDec(1)
-        End Select
+    'Private Sub SetMaxAndMin()
+    '    If Constraint.HasMaximum Then
+    '        Me.cbMaxValue.Checked = True
+    '        Me.numMaxValue.Value = CDec(Constraint.MaximumValue)
+    '        If Constraint.IncludeMaximum Then
+    '            Me.comboIncludeMax.SelectedIndex = 0
+    '        Else
+    '            Me.comboIncludeMax.SelectedIndex = 1
+    '        End If
+    '    Else
+    '        Me.cbMaxValue.Checked = False
+    '    End If
 
-        Me.NumericAssumed.Increment = increment
-
-    End Sub
-
-    Private Sub SetMaxAndMin()
-        If Constraint.HasMaximum Then
-            Me.cbMaxValue.Checked = True
-            Me.numMaxValue.Value = CDec(Constraint.MaximumValue)
-            If Constraint.IncludeMaximum Then
-                Me.comboIncludeMax.SelectedIndex = 0
-            Else
-                Me.comboIncludeMax.SelectedIndex = 1
-            End If
-        Else
-            Me.cbMaxValue.Checked = False
-        End If
-
-        If Constraint.HasMinimum Then
-            Me.cbMinValue.Checked = True
-            Me.numMinValue.Value = CDec(Constraint.MinimumValue)
-            If Constraint.IncludeMinimum Then
-                Me.comboIncludeMin.SelectedIndex = 0
-            Else
-                Me.comboIncludeMin.SelectedIndex = 1
-            End If
-        Else
-            Me.cbMinValue.Checked = False
-        End If
-    End Sub
+    '    If Constraint.HasMinimum Then
+    '        Me.cbMinValue.Checked = True
+    '        Me.numMinValue.Value = CDec(Constraint.MinimumValue)
+    '        If Constraint.IncludeMinimum Then
+    '            Me.comboIncludeMin.SelectedIndex = 0
+    '        Else
+    '            Me.comboIncludeMin.SelectedIndex = 1
+    '        End If
+    '    Else
+    '        Me.cbMinValue.Checked = False
+    '    End If
+    'End Sub
 
 End Class
 

@@ -75,11 +75,17 @@ Class RmHistory
         ProcessEventSeries(EIF_EventSeries, a_filemanager)
     End Sub
 
+    Sub New(ByVal XML_EventSeries As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        MyBase.new(XML_EventSeries, a_filemanager)
+        ProcessEventSeries(XML_EventSeries, a_filemanager)
+    End Sub
+
     Sub New(ByVal NodeId As String)
         MyBase.new(NodeId, StructureType.History)
         MyBase.cOccurrences.MinCount = 1
     End Sub
 
+#Region "ADL and XML Handling"
     Public Overrides Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure
 
         Dim child As RmStructure '= MyBase.GetChildByNodeId(aNodeId)
@@ -98,16 +104,16 @@ Class RmHistory
         Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
         Dim i As Integer
 
-        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.SetOccurrences(ObjNode.occurrences)
+        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(ObjNode.occurrences)
 
         For i = 1 To ObjNode.attributes.count
             an_attribute = ObjNode.attributes.i_th(i)
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label"  'run_time_label is obsolete
-                    mRuntimeConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
                 Case "period"
-                    Dim d As ArchetypeEditor.ADL_Classes.Duration = New ArchetypeEditor.ADL_Classes.Duration
+                    Dim d As ArchetypeEditor.ADL_Classes.Duration = New ArchetypeEditor.ADL_Classes.Duration()
 
                     period = an_attribute.children.first
                     d.ISO_duration = period.item.as_string.to_cil
@@ -118,14 +124,13 @@ Class RmHistory
                     Dim an_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                     Dim ii As Integer
 
-                    ' empty the remembered structures
-                    ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure = Nothing
-                    ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.StateStructure = Nothing
+                    ' empty the remembered structure
+                    ArchetypeEditor.ADL_Classes.ADL_Tools.LastProcessedStructure = Nothing
 
                     colEvt.Cardinality.SetFromOpenEHRCardinality(an_attribute.cardinality)
 
                     For ii = 1 To an_attribute.children.count
-                        Dim Struct_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                        'Dim Struct_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                         an_Event = an_attribute.children.i_th(ii)
                         ' process the event and expose the data structure if it is present
                         ' as ADL_Data property
@@ -139,8 +144,8 @@ Class RmHistory
                     ' this is passed to the ADL_tools during event processing
                     ' and placed on the EventSeries at this point
 
-                    If Not ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure Is Nothing Then
-                        rmData = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.LastProcessedStructure
+                    If Not ArchetypeEditor.ADL_Classes.ADL_Tools.LastProcessedStructure Is Nothing Then
+                        rmData = ArchetypeEditor.ADL_Classes.ADL_Tools.LastProcessedStructure
                     End If
                 Case Else
                     MessageBox.Show(AE_Constants.Instance.Incorrect_format & ": illegal attribute - " & an_attribute.rm_attribute_name.to_cil & " in EventSeries", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -148,6 +153,54 @@ Class RmHistory
         Next
     End Sub
 
+    Private Sub ProcessEventSeries(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Dim an_attribute As XMLParser.C_ATTRIBUTE
+        Dim period As XMLParser.C_PRIMITIVE_OBJECT
+        
+        cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(ObjNode.occurrences)
+
+        For Each an_attribute In ObjNode.attributes
+            Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "name", "runtime_label"  'run_time_label is obsolete
+                    mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+
+                Case "period"
+                    Dim d As ArchetypeEditor.ADL_Classes.Duration = New ArchetypeEditor.ADL_Classes.Duration()
+
+                    period = an_attribute.children(0)
+                    d.ISO_duration = CType(period.item, XMLParser.C_DURATION).pattern
+                    iPeriod = d.GUI_duration
+                    sPeriodUnits = d.ISO_Units
+
+                Case "items", "events"  'items is OBSOLETE
+                    Dim an_Event As XMLParser.C_COMPLEX_OBJECT
+
+                    ' empty the remembered structure
+                    ArchetypeEditor.XML_Classes.XML_Tools.LastProcessedStructure = Nothing
+
+                    colEvt.Cardinality.SetFromXmlCardinality(CType(an_attribute, XMLParser.C_MULTIPLE_ATTRIBUTE).cardinality)
+
+                    For Each an_Event In an_attribute.children
+                        ' process the event and expose the data structure if it is present
+                        ' this means there is only one structure per EventSeries as in the GUI -
+                        ' can be extended in future
+
+                        colEvt.Add(New RmEvent(an_Event, a_filemanager))
+                    Next
+
+                    ' the data definition is on one event at present
+                    ' this is passed to the ADL_tools during event processing
+                    ' and placed on the EventSeries at this point
+
+                    If Not ArchetypeEditor.XML_Classes.XML_Tools.LastProcessedStructure Is Nothing Then
+                        rmData = ArchetypeEditor.XML_Classes.XML_Tools.LastProcessedStructure
+                    End If
+                Case Else
+                    MessageBox.Show(AE_Constants.Instance.Incorrect_format & ": illegal attribute - " & an_attribute.rm_attribute_name & " in EventSeries", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Select
+        Next
+    End Sub
+#End Region
 End Class
 '
 '***** BEGIN LICENSE BLOCK *****

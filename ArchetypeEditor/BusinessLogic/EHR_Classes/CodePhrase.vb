@@ -78,8 +78,9 @@ Public Class CodePhrase
             If cCodes.Count = 0 Then
                 Return Nothing
             End If
-            Dim s, ss As String
-            For Each ss In cCodes
+            Dim s As String = ""
+
+            For Each ss As String In cCodes
                 s = s & ss & ","
             Next
             'remove the trailing ","

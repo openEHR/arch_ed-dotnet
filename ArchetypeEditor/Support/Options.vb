@@ -8,6 +8,7 @@ Public Class Options
     Private mDefaultRM As Integer
     Private mOccurrencesView As String
     Private mHelpPath As String
+    Private mDefaultParser As String
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
     Property HelpLocationPath() As String
@@ -66,8 +67,22 @@ Public Class Options
             mDefaultRM = Value
         End Set
     End Property
-    Sub ShowOptionsForm()
+
+    Property DefaultParser() As String
+        Get
+            Return mDefaultParser
+        End Get
+        Set(ByVal Value As String)
+            mDefaultParser = Value
+        End Set
+    End Property
+
+    Sub ShowOptionsForm(Optional ByVal tabIndex As Integer = 0)
         Dim frm As New ApplicationOptionsForm
+
+        If frm.TabConfiguration.TabPages.Count > tabIndex Then
+            frm.TabConfiguration.SelectedIndex = tabIndex
+        End If
 
         frm.txtUsername.Text = mUserName
         frm.txtEmail.Text = mUserEmail
@@ -75,9 +90,14 @@ Public Class Options
         frm.txtRepositoryPath.Text = mRepositoryPath
         frm.txtHelpFile.Text = mHelpPath
         frm.comboOccurrences.Text = mOccurrencesView
-        For i As Integer = 0 To ReferenceModel.Instance.ValidReferenceModelNames.Length - 1
-            frm.comboReferenceModel.Items.Add(ReferenceModel.Instance.ValidReferenceModelNames(i))
+        For i As Integer = 0 To ReferenceModel.ValidReferenceModelNames.Length - 1
+            frm.comboReferenceModel.Items.Add(ReferenceModel.ValidReferenceModelNames(i))
         Next
+        If mDefaultParser = "xml" Then
+            frm.chkParserXML.Checked = True
+        Else
+            frm.chkParserADL.Checked = True
+        End If
         frm.comboReferenceModel.SelectedIndex = mDefaultRM
         frm.Panel_0.BackColor = mColors(0)
         frm.Panel_1.BackColor = mColors(1)
@@ -88,7 +108,7 @@ Public Class Options
         frm.Panel_6.BackColor = mColors(6)
         frm.Panel_7.BackColor = mColors(7)
 
-        If frm.ShowDialog() = DialogResult.OK Then
+        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
             mUserName = frm.txtUsername.Text
             mUserEmail = frm.txtEmail.Text
             mUserOrganisation = frm.txtOrganisation.Text
@@ -96,6 +116,11 @@ Public Class Options
             mHelpPath = frm.txtHelpFile.Text
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
             mOccurrencesView = frm.comboOccurrences.Text
+            If frm.chkParserADL.Checked Then
+                mDefaultParser = "adl"
+            Else
+                mDefaultParser = "xml"
+            End If
             mColors(0) = frm.Panel_0.BackColor
             mColors(1) = frm.Panel_1.BackColor
             mColors(2) = frm.Panel_2.BackColor
@@ -114,10 +139,9 @@ Public Class Options
 
     Public Function LoadConfiguration() As Boolean
         Dim StrmRead As IO.StreamReader
-        Dim x, z, code, description As String
+        Dim x As String
         Dim y() As String
         Dim i As Integer
-        Dim rw As DataRow
         Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
 
         If System.IO.File.Exists(path & "\ArchetypeEditor.cfg") Then
@@ -150,6 +174,8 @@ Public Class Options
                                     Next
                                 Case "OccurrencesView"
                                     mOccurrencesView = y(1).Trim
+                                Case "DefaultParser"
+                                    mDefaultParser = y(1).Trim.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                             End Select
                         Else
                             MessageBox.Show("Error reading '" & y(0) & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -175,10 +201,7 @@ Public Class Options
 
     Sub WriteConfiguration()
         Dim StrmWrite As IO.StreamWriter
-        Dim x, z, code, description As String
-        Dim y() As String
         Dim i As Integer
-        Dim rw As DataRow
         Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
 
         Try
@@ -190,7 +213,7 @@ Public Class Options
                 StrmWrite.WriteLine("RepositoryPath=" & mRepositoryPath)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
                 StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
-                Dim s As String
+                Dim s As String = ""
 
                 For i = 0 To mColors.Length - 1
                     s &= mColors(i).ToArgb.ToString
@@ -200,6 +223,7 @@ Public Class Options
                 Next
                 StrmWrite.WriteLine("StateMachineColours=" & s)
                 StrmWrite.WriteLine("OccurrencesView=" & mOccurrencesView)
+                StrmWrite.WriteLine("DefaultParser=" & mDefaultParser)
             Catch e As Exception
                 MessageBox.Show("Error reading Configuration File 'ArchetypeEditor.cfg' - please view options and save to restore: " & e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
@@ -233,6 +257,25 @@ Public Class Options
 
     End Function
 
+    Function ValidateConfiguration() As Boolean
+        Dim result As Boolean = True
+        Dim message As String = "Errors:"
+        If Not System.IO.File.Exists(mHelpPath) Then
+            result = False
+            message &= (": Help file does not exist @ " & mHelpPath)
+        End If
+
+        If Not System.IO.Directory.Exists(mRepositoryPath) Then
+            result = False
+            message &= (": Repository does not exist @ " & mRepositoryPath)
+        End If
+
+        If Not result Then
+            MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+        Return result
+    End Function
+
     Sub New()
         Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
         mRepositoryPath = path + "SampleArchetypes"
@@ -240,6 +283,10 @@ Public Class Options
         mUserEmail = ""
         mHelpPath = path & "Help\ArchetypeEditor.chm"
         mOccurrencesView = "numeric"
+        mDefaultParser = "adl"
         LoadConfiguration()
+        If Not ValidateConfiguration() Then
+            Me.ShowOptionsForm(1)
+        End If
     End Sub
 End Class

@@ -83,7 +83,7 @@ Public Class EntryStructure
         mFileManager = a_file_manager
 
         ' also sets the node Id if it is not already set
-        Me.StructureType = StructureType.Parse(StructureType.GetType, a_structure_as_string)
+        Me.StructureType = System.Enum.Parse(StructureType.GetType, a_structure_as_string)
 
         ' layout the buttons on the icons panel
         Select Case mStructureType
@@ -152,7 +152,7 @@ Public Class EntryStructure
     Friend WithEvents lblAtcode As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(EntryStructure))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EntryStructure))
         Me.PanelIcons = New System.Windows.Forms.Panel
         Me.ButAddElement = New System.Windows.Forms.Button
         Me.butRemoveElement = New System.Windows.Forms.Button
@@ -175,6 +175,14 @@ Public Class EntryStructure
         Me.helpEntryStructure = New System.Windows.Forms.HelpProvider
         Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.PanelIcons.SuspendLayout()
+        CType(Me.pbText, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbQuantity, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbCount, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbDateTime, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbOrdinal, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbBoolean, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbAny, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbCluster, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelStructureHeader.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -212,6 +220,7 @@ Public Class EntryStructure
         Me.helpEntryStructure.SetShowHelp(Me.ButAddElement, True)
         Me.ButAddElement.Size = New System.Drawing.Size(24, 25)
         Me.ButAddElement.TabIndex = 32
+        Me.ButAddElement.UseVisualStyleBackColor = False
         '
         'butRemoveElement
         '
@@ -223,6 +232,7 @@ Public Class EntryStructure
         Me.butRemoveElement.Name = "butRemoveElement"
         Me.butRemoveElement.Size = New System.Drawing.Size(24, 25)
         Me.butRemoveElement.TabIndex = 33
+        Me.butRemoveElement.UseVisualStyleBackColor = False
         '
         'butListUp
         '
@@ -233,6 +243,7 @@ Public Class EntryStructure
         Me.butListUp.Name = "butListUp"
         Me.butListUp.Size = New System.Drawing.Size(24, 25)
         Me.butListUp.TabIndex = 30
+        Me.butListUp.UseVisualStyleBackColor = False
         '
         'butListDown
         '
@@ -243,6 +254,7 @@ Public Class EntryStructure
         Me.butListDown.Name = "butListDown"
         Me.butListDown.Size = New System.Drawing.Size(24, 25)
         Me.butListDown.TabIndex = 31
+        Me.butListDown.UseVisualStyleBackColor = False
         '
         'pbText
         '
@@ -342,7 +354,6 @@ Public Class EntryStructure
         Me.helpEntryStructure.SetShowHelp(Me.butChangeDataType, True)
         Me.butChangeDataType.Size = New System.Drawing.Size(24, 25)
         Me.butChangeDataType.TabIndex = 34
-        Me.ttElement.SetToolTip(Me.butChangeDataType, "Change data type")
         Me.butChangeDataType.Visible = False
         '
         'PanelStructureHeader
@@ -366,10 +377,76 @@ Public Class EntryStructure
         '
         'ilSmall
         '
-        Me.ilSmall.ColorDepth = System.Windows.Forms.ColorDepth.Depth16Bit
-        Me.ilSmall.ImageSize = New System.Drawing.Size(20, 20)
         Me.ilSmall.ImageStream = CType(resources.GetObject("ilSmall.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ilSmall.TransparentColor = System.Drawing.Color.Transparent
+        Me.ilSmall.Images.SetKeyName(0, "")
+        Me.ilSmall.Images.SetKeyName(1, "")
+        Me.ilSmall.Images.SetKeyName(2, "")
+        Me.ilSmall.Images.SetKeyName(3, "")
+        Me.ilSmall.Images.SetKeyName(4, "")
+        Me.ilSmall.Images.SetKeyName(5, "")
+        Me.ilSmall.Images.SetKeyName(6, "")
+        Me.ilSmall.Images.SetKeyName(7, "")
+        Me.ilSmall.Images.SetKeyName(8, "")
+        Me.ilSmall.Images.SetKeyName(9, "")
+        Me.ilSmall.Images.SetKeyName(10, "")
+        Me.ilSmall.Images.SetKeyName(11, "duration.gif")
+        Me.ilSmall.Images.SetKeyName(12, "interval_quantity.gif")
+        Me.ilSmall.Images.SetKeyName(13, "interval_count.gif")
+        Me.ilSmall.Images.SetKeyName(14, "interval_datetime.gif")
+        Me.ilSmall.Images.SetKeyName(15, "")
+        Me.ilSmall.Images.SetKeyName(16, "")
+        Me.ilSmall.Images.SetKeyName(17, "")
+        Me.ilSmall.Images.SetKeyName(18, "")
+        Me.ilSmall.Images.SetKeyName(19, "")
+        Me.ilSmall.Images.SetKeyName(20, "")
+        Me.ilSmall.Images.SetKeyName(21, "")
+        Me.ilSmall.Images.SetKeyName(22, "")
+        Me.ilSmall.Images.SetKeyName(23, "")
+        Me.ilSmall.Images.SetKeyName(24, "")
+        Me.ilSmall.Images.SetKeyName(25, "")
+        Me.ilSmall.Images.SetKeyName(26, "")
+        Me.ilSmall.Images.SetKeyName(27, "interval_quantity_ref.gif")
+        Me.ilSmall.Images.SetKeyName(28, "interval_count_ref.gif")
+        Me.ilSmall.Images.SetKeyName(29, "interval_datetime_ref.gif")
+        Me.ilSmall.Images.SetKeyName(30, "")
+        Me.ilSmall.Images.SetKeyName(31, "")
+        Me.ilSmall.Images.SetKeyName(32, "")
+        Me.ilSmall.Images.SetKeyName(33, "")
+        Me.ilSmall.Images.SetKeyName(34, "")
+        Me.ilSmall.Images.SetKeyName(35, "")
+        Me.ilSmall.Images.SetKeyName(36, "")
+        Me.ilSmall.Images.SetKeyName(37, "")
+        Me.ilSmall.Images.SetKeyName(38, "")
+        Me.ilSmall.Images.SetKeyName(39, "")
+        Me.ilSmall.Images.SetKeyName(40, "")
+        Me.ilSmall.Images.SetKeyName(41, "")
+        Me.ilSmall.Images.SetKeyName(42, "interval_quantity_selected.gif")
+        Me.ilSmall.Images.SetKeyName(43, "interval_count_selected.gif")
+        Me.ilSmall.Images.SetKeyName(44, "interval_datetime_selected.gif")
+        Me.ilSmall.Images.SetKeyName(45, "")
+        Me.ilSmall.Images.SetKeyName(46, "")
+        Me.ilSmall.Images.SetKeyName(47, "")
+        Me.ilSmall.Images.SetKeyName(48, "")
+        Me.ilSmall.Images.SetKeyName(49, "")
+        Me.ilSmall.Images.SetKeyName(50, "")
+        Me.ilSmall.Images.SetKeyName(51, "")
+        Me.ilSmall.Images.SetKeyName(52, "")
+        Me.ilSmall.Images.SetKeyName(53, "")
+        Me.ilSmall.Images.SetKeyName(54, "")
+        Me.ilSmall.Images.SetKeyName(55, "")
+        Me.ilSmall.Images.SetKeyName(56, "")
+        Me.ilSmall.Images.SetKeyName(57, "interval_quantity_ref_selected.gif")
+        Me.ilSmall.Images.SetKeyName(58, "interval_count_ref_selected.gif")
+        Me.ilSmall.Images.SetKeyName(59, "interval_datetime_ref_selected.gif")
+        Me.ilSmall.Images.SetKeyName(60, "")
+        Me.ilSmall.Images.SetKeyName(61, "")
+        '
+        'ToolTipSpecialisation
+        '
+        Me.ToolTipSpecialisation.AutoPopDelay = 5000
+        Me.ToolTipSpecialisation.InitialDelay = 500
+        Me.ToolTipSpecialisation.ReshowDelay = 100
         '
         'helpEntryStructure
         '
@@ -395,6 +472,14 @@ Public Class EntryStructure
         Me.helpEntryStructure.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(384, 360)
         Me.PanelIcons.ResumeLayout(False)
+        CType(Me.pbText, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbQuantity, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbCount, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbDateTime, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbOrdinal, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbBoolean, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbAny, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbCluster, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelStructureHeader.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -404,7 +489,7 @@ Public Class EntryStructure
 
     Public ReadOnly Property SelectedImageOffset() As Integer
         Get
-            Return 26
+            Return 30
         End Get
     End Property
     'implement as overrided property
@@ -414,7 +499,7 @@ Public Class EntryStructure
         End Get
         Set(ByVal Value As StructureType)
             mStructureType = Value
-            Dim s As String
+            Dim s As String = ""
 
             Select Case Value
                 Case StructureType.Single
@@ -583,20 +668,25 @@ Public Class EntryStructure
                 Me.butChangeDataType.Enabled = True
             End If
 
+            Me.butChangeDataType.Visible = True
+            Me.butRemoveElement.Enabled = True
+
             If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
-                ' ensure that datatypes cannot be changed in specialisations
+                ' ensure that datatypes cannot be changed in specialisations not at this level
                 'except for any
+
+                Dim equalSpecialisation As Boolean = (mFileManager.OntologyManager.NumberOfSpecialisations = OceanArchetypeEditor.Instance.CountInString(a_node.RM_Class.NodeId, "."))
+
+                If Not equalSpecialisation Then
+                    Me.butRemoveElement.Enabled = False
+                    Me.butChangeDataType.Visible = False
+                End If
+
                 If CType(a_node, ArchetypeElement).Constraint.Type = ConstraintType.Any Then
                     Me.butChangeDataType.Visible = True
-                Else
-                    If mFileManager.OntologyManager.NumberOfSpecialisations = OceanArchetypeEditor.Instance.CountInString(a_node.RM_Class.NodeId, ".") Then
-                        Me.butChangeDataType.Visible = True
-                    Else
-                        Me.butChangeDataType.Visible = False
-                    End If
                 End If
             Else
-                Me.butChangeDataType.Visible = True
+                
             End If
         Else
             ' a cluster
@@ -644,7 +734,7 @@ Public Class EntryStructure
 
         Dim offset As Integer
 
-        If isReference Then offset = 13
+        If isReference Then offset = 15
         If isSelected Then offset += Me.SelectedImageOffset
 
         Select Case ct
@@ -664,16 +754,20 @@ Public Class EntryStructure
                 Return 6 + offset
             Case ConstraintType.Multiple
                 Return 7 + offset
-            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
-                Return 8 + offset
             Case ConstraintType.MultiMedia
-                Return 9 + offset
+                Return 8 + offset
             Case ConstraintType.URI
+                Return 9 + offset
+            Case ConstraintType.Proportion
                 Return 10 + offset
-            Case ConstraintType.Ratio
-                Return 11 + offset
             Case ConstraintType.Duration
+                Return 11 + offset
+            Case ConstraintType.Interval_Quantity
                 Return 12 + offset
+            Case ConstraintType.Interval_Count
+                Return 13 + offset
+            Case ConstraintType.Interval_DateTime
+                Return 14 + offset
             Case Else
                 Debug.Assert(False, "Constraint not handled")
         End Select
@@ -786,6 +880,7 @@ Public Class EntryStructure
             Me.ttElement.SetToolTip(Me.pbCount, AE_Constants.Instance.Count)
             Me.ttElement.SetToolTip(Me.pbDateTime, AE_Constants.Instance.DateTime)
             Me.ttElement.SetToolTip(Me.pbCluster, AE_Constants.Instance.Cluster)
+            Me.ttElement.SetToolTip(Me.butChangeDataType, AE_Constants.Instance.ChangeDataType)
 
             Me.helpEntryStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
@@ -812,9 +907,6 @@ Public Class EntryStructure
                 Handles pbAny.MouseDown, pbBoolean.MouseDown, pbCluster.MouseDown, pbCount.MouseDown, _
                         pbDateTime.MouseDown, pbOrdinal.MouseDown, pbQuantity.MouseDown, pbText.MouseDown
 
-        Dim rm As RmElement
-        Dim pb As PictureBox
-
         mControl.AllowDrop = True
 
         If sender.name = "pbCluster" Then
@@ -822,8 +914,9 @@ Public Class EntryStructure
             sender.DoDragDrop(mNewCluster, DragDropEffects.Copy)
         Else
             ' create mNewConstraint with the correct constraint
+            Dim ctrlName As String = sender.name
 
-            Select Case sender.Name
+            Select Case ctrlName
                 Case "pbAny"
                     mNewConstraint = New Constraint
                 Case "pbBoolean"

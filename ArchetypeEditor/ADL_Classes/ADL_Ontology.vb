@@ -54,7 +54,6 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Public Overrides Function TermForCode(ByVal Code As String, ByVal Language As String) As RmTerm
-            Dim a_term As ADL_Term
 
             If Code.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("at") Then
                 If EIF_adlInterface.ontology.has_term_code(openehr.base.kernel.Create.STRING.make_from_cil(Code)) Then
@@ -242,6 +241,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Return EIF_adlInterface.ontology.new_non_specialised_term_code.to_cil
             Catch e As Exception
                 Debug.Assert(False, e.Message)
+                Return ""
             End Try
         End Function
 
@@ -313,6 +313,27 @@ Namespace ArchetypeEditor.ADL_Classes
                 Debug.Assert(False, "Term is a constraint and should not be passed")
             End If
         End Sub
+
+        'Not used as not safe - better to remove unused terms when saving the archetype
+
+        'Public Overrides Sub DeleteTerm(ByVal a_Term As RmTerm)
+        '    Dim an_adl_Term As ADL_Term
+
+        '    an_adl_Term = New ADL_Term(a_Term)
+        '    Try
+        '        If EIF_adlInterface.ontology.has_term_code(an_adl_Term.EIF_Term.code) Then
+        '            If an_adl_Term.isConstraint Then
+        '                EIF_adlInterface.ontology.remove_constraint_definition(an_adl_Term.EIF_Term)
+        '            Else
+        '                EIF_adlInterface.ontology.remove_term_definition(an_adl_Term.EIF_Term)
+        '            End If
+        '        Else
+        '            Debug.Assert(False, "Term code is not available: " & an_adl_Term.Code)
+        '        End If
+        '    Catch e As Exception
+        '        Debug.Assert(False, e.Message)
+        '    End Try
+        'End Sub
 
         Public Overrides Function HasTermCode(ByVal a_term_code As String) As Boolean
             If RmTerm.isValidTermCode(a_term_code) Then
@@ -389,7 +410,6 @@ Namespace ArchetypeEditor.ADL_Classes
             ' populate the terminology table in TermLookUp
             If EIF_adlInterface.ontology.terminologies_available.empty() = False Then
                 Dim i As Integer
-                Dim d_row As DataRow
                 Dim s, t As String
 
                 For i = EIF_adlInterface.ontology.terminologies_available.lower() To EIF_adlInterface.ontology.terminologies_available.upper()
@@ -405,7 +425,6 @@ Namespace ArchetypeEditor.ADL_Classes
             ' populate the TermDefinitions table in TermLookUp
 
             If EIF_adlInterface.ontology.term_definitions.empty() = False Then
-                Dim i As Integer
                 Dim d_row, selected_row As DataRow
                 Dim s As openehr.base.kernel.STRING
                 Dim a_term As ADL_Term
@@ -422,29 +441,25 @@ Namespace ArchetypeEditor.ADL_Classes
                             ' take each term from the ADL ontology
                             a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(openehr.base.kernel.Create.STRING.make_from_cil(selected_row(0)), s))
                             ' and if it is not an internal ID for machine processing
-                            If InStr(a_term.Description, "@ internal @") = 0 Then
-                                d_row = TheOntologyManager.TermDefinitionTable.NewRow
-                                d_row(0) = selected_row(0)
-                                d_row(1) = a_term.Code
-                                d_row(2) = a_term.Text
-                                d_row(3) = a_term.Description
-                                ' add it to the GUI ontology
-                                TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
-                            End If
-                        Next
-                    Else
-                        ' just do it for the new language
-                        a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(openehr.base.kernel.Create.STRING.make_from_cil(LanguageCode), s))
-                        ' and if it is not an internal ID for machine processing
-                        If InStr(a_term.Description, "@ internal @") = 0 Then
                             d_row = TheOntologyManager.TermDefinitionTable.NewRow
-                            d_row(0) = LanguageCode
+                            d_row(0) = selected_row(0)
                             d_row(1) = a_term.Code
                             d_row(2) = a_term.Text
                             d_row(3) = a_term.Description
                             ' add it to the GUI ontology
                             TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
-                        End If
+                        Next
+                    Else
+                        ' just do it for the new language
+                        a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(openehr.base.kernel.Create.STRING.make_from_cil(LanguageCode), s))
+                        ' and if it is not an internal ID for machine processing
+                        d_row = TheOntologyManager.TermDefinitionTable.NewRow
+                        d_row(0) = LanguageCode
+                        d_row(1) = a_term.Code
+                        d_row(2) = a_term.Text
+                        d_row(3) = a_term.Description
+                        ' add it to the GUI ontology
+                        TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
                     End If
                     linklist.forth()
                 Loop
@@ -455,7 +470,6 @@ Namespace ArchetypeEditor.ADL_Classes
             ' populate the TermBindings table in TermLookUp
 
             If EIF_adlInterface.ontology.term_bindings.empty() = False Then
-                Dim i As Integer
                 Dim d_row, selected_row As DataRow
                 Dim terminology, code As openehr.base.kernel.STRING
                 Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE
@@ -486,7 +500,6 @@ Namespace ArchetypeEditor.ADL_Classes
             ' populate the ConstraintDefinitions table in TermLookUp
 
             If EIF_adlInterface.ontology.constraint_definitions.empty() = False Then
-                Dim i As Integer
                 Dim d_row, selected_row As DataRow
                 Dim s As openehr.base.kernel.STRING
                 Dim a_term As ADL_Term
@@ -530,7 +543,6 @@ Namespace ArchetypeEditor.ADL_Classes
             ' populate the ConstraintBindings table in TermLookUp
 
             If EIF_adlInterface.ontology.constraint_bindings.empty() = False Then
-                Dim i As Integer
                 Dim d_row, selected_row As DataRow
                 Dim s As openehr.base.kernel.STRING
                 Dim a_query As openehr.base.kernel.STRING

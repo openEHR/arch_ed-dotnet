@@ -263,10 +263,10 @@ Public Class ArchetypeView
             Case ConstraintType.URI
                 Return New URIViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
+            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
                 Return New IntervalViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Ratio
+            Case ConstraintType.Proportion
                 Return New RatioViewControl(anElement, a_filemanager)
 
             Case ConstraintType.MultiMedia
@@ -312,7 +312,7 @@ Public Class ArchetypeView
             Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
                 Return New IntervalViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Ratio
+            Case ConstraintType.Proportion
                 Return New RatioViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.MultiMedia

@@ -25,7 +25,7 @@ Public Class Constraint_Duration
         d.mMaxVal = Me.mMaxVal
         d.mMinVal = Me.mMinVal
         d.mAllowableUnits = Me.mAllowableUnits
-        d.mValueUnits = Me.mValueUnits
+        d.mMinMaxValueUnits = Me.MinMaxValueUnits
         d.mAssumedValue = Me.mAssumedValue
         d.HasAssumedValue = Me.HasAssumedValue
 
@@ -33,24 +33,23 @@ Public Class Constraint_Duration
     End Function
     Public Overrides ReadOnly Property Type() As ConstraintType
         Get
-            'Return "DateTime"
             Return ConstraintType.Duration
         End Get
     End Property
 
-    Private mValueUnits As String
-    Public Property ValueUnits() As String
+    Private mMinMaxValueUnits As String
+    Public Property MinMaxValueUnits() As String
         Get
-            Return mValueUnits
+            Return mMinMaxValueUnits
         End Get
         Set(ByVal Value As String)
-            mValueUnits = Value
+            mMinMaxValueUnits = Value
         End Set
     End Property
 
     Private mAllowableUnits As String = "PYMWDTHMS"
-    'Y = year, M = month, W = week, D = day, T as separator then H = hour, M = minute
-    ' S = second
+    ' Y = year, M = month, W = week, D = day, T as separator then H = hour
+    ' M = minute S = second
     Public Property AllowableUnits() As String
         Get
             Return mAllowableUnits
@@ -59,6 +58,27 @@ Public Class Constraint_Duration
             mAllowableUnits = Value
         End Set
     End Property
+
+    Public Function LimitsAsPattern() As String
+        Dim result As String = ""
+
+        If Me.HasMinimum Then
+            If Not Me.IncludeMinimum Then
+                result &= ">"
+            End If
+            result &= "P" & Me.mMinMaxValueUnits & mMinVal.ToString()
+        End If
+        If Me.HasMaximum Then
+            If Me.HasMinimum Then
+                result &= ".."
+            End If
+            If Not Me.IncludeMaximum Then
+                result &= "<"
+            End If
+            result &= "P" & Me.mMinMaxValueUnits
+        End If
+        Return result
+    End Function
 
 End Class
 '

@@ -67,17 +67,22 @@ Public Class RmPathwayStep
         mStateType = a_machine_state_type
     End Sub
 
+
+
+#Region "ADL and XML Orientated Methods"
+
     Sub New(ByVal a_node_id As String, ByVal EIF_PathwayStep As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         MyBase.New(a_node_id, StructureType.CarePathwayStep)
         ProcessPathwayStep(EIF_PathwayStep)
     End Sub
 
-#Region "ADL Orientated Classes"
+    Sub New(ByVal a_node_id As String, ByVal XML_PathwayStep As XMLParser.C_COMPLEX_OBJECT)
+        MyBase.New(a_node_id, StructureType.CarePathwayStep)
+        ProcessPathwayStep(XML_PathwayStep)
+    End Sub
 
     Sub ProcessPathwayStep(ByVal EIF_Step As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-        Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-        Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING
 
         For i As Integer = 1 To EIF_Step.attributes.count
 
@@ -90,7 +95,7 @@ Public Class RmPathwayStep
 
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "current_state"
-                    t = RmElement.ProcessText(coded_text)
+                    t = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(coded_text)
                     If t.AllowableValues.Codes.Count > 0 Then
                         mStateType = Integer.Parse(t.AllowableValues.Codes(0))
                     End If
@@ -101,6 +106,35 @@ Public Class RmPathwayStep
                     'No action now as atcode is set for RmPathwayStep and reproduced here
                 Case Else
                     Debug.Assert(False, EIF_Step.rm_type_name.to_cil & " not handled")
+            End Select
+        Next
+
+    End Sub
+
+
+    Private Sub ProcessPathwayStep(ByVal XML_Step As XMLParser.C_COMPLEX_OBJECT)
+        Dim an_attribute As XMLParser.C_ATTRIBUTE
+
+        For Each an_attribute In XML_Step.attributes
+
+            Dim coded_text As XMLParser.C_COMPLEX_OBJECT
+            Dim t As Constraint_Text
+
+            coded_text = CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT)
+
+            Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "current_state"
+                    t = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(coded_text)
+                    If t.AllowableValues.Codes.Count > 0 Then
+                        mStateType = Integer.Parse(t.AllowableValues.Codes(0))
+                    End If
+                    If t.AllowableValues.Codes.Count > 1 Then
+                        mAlternativeState = Integer.Parse(t.AllowableValues.Codes(1))
+                    End If
+                Case "careflow_step"
+                    'No action now as atcode is set for RmPathwayStep and reproduced here
+                Case Else
+                    Debug.Assert(False, XML_Step.rm_type_name & " not handled")
             End Select
         Next
 

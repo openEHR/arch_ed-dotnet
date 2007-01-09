@@ -280,7 +280,7 @@
   <Unit property_id="37" Text="in-lb" conversion="0.113" primary="false" />
   <Unit property_id="37" Text="hp-min" conversion="4.48" coefficient="4" primary="false" />
   <Unit property_id="37" Text="hp-s" conversion="745.8" primary="false" />
-  <Unit property_id="37" Text="eV" name="electron volts" conversion="1.60207" coefficient="-19" primary="false" />
+  <Unit property_id="37" Text="eV" conversion="1.60207" coefficient="-19" primary="false" />
   <Unit property_id="38" Text="W" name="Watt" conversion="1" primary="true" case_ins="W" />
   <Unit property_id="38" Text="cal/s" conversion="4.187" primary="false" />
   <Unit property_id="38" Text="kcal/s" conversion="4187" primary="false" />
@@ -516,6 +516,4 @@
   <Unit property_id="77" Text="[ppb]" name="parts per billion" conversion="1" coefficient="-9" primary="false" case_ins="[PPB]" />
   <Unit property_id="77" Text="[ppt]" name="parts per thousand" conversion="1" coefficient="-3" primary="false" case_ins="[PPT]" />
   <Unit property_id="78" Text="ml/min/1.73m2" conversion="1" primary="true" />
-  <Unit property_id="37" Text="MeV" name="Mega eletron volts" conversion="1.60207" coefficient="-16" primary="false" />
-  <Unit property_id="49" Text="KV" conversion="10" coefficient="3" primary="false" />
 </PropertyUnits>

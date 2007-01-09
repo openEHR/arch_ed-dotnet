@@ -24,7 +24,7 @@ Public Class TabPageInstruction
     Friend WithEvents mOccurrences As OccurrencesPanel
     Private mActivity As RmActivity
     Private mFileManager As FileManagerLocal
-    Public Event ProtocolCheckChanged(ByVal sender As Crownwood.Magic.Controls.TabControl, ByVal state As Boolean)
+    Public Event ProtocolCheckChanged(ByVal sender As Object, ByVal state As Boolean)
 
 #Region " Windows Form Designer generated code "
 
@@ -238,7 +238,7 @@ Public Class TabPageInstruction
             mOccurrences = New OccurrencesPanel(mFileManager)
         End If
         Me.PanelAction.Controls.Add(mOccurrences)
-        If Me.RightToLeft = RightToLeft.Yes Then
+        If Me.RightToLeft = Windows.Forms.RightToLeft.Yes Then
             OceanArchetypeEditor.Reflect(mOccurrences)
             mOccurrences.Dock = DockStyle.Left
         Else
@@ -266,7 +266,7 @@ Public Class TabPageInstruction
         End Get
     End Property
 
-    Public Function toRichText(ByRef text As IO.StringWriter, ByVal level As Integer) As String
+    Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
         text.WriteLine("\par Action archetype: \par")
         text.WriteLine("      " & Me.txtAction.Text & "\par")
 
@@ -275,7 +275,7 @@ Public Class TabPageInstruction
             text.WriteLine("\par")
             mActionSpecification.toRichText(text, level + 1)
         End If
-    End Function
+    End Sub
 
     Public Sub Reset()
         Me.txtAction.Text = ""
@@ -415,11 +415,11 @@ Public Class TabPageInstruction
         Dim fd As New OpenFileDialog
         Dim s As String
 
-        s = ReferenceModel.Instance.ReferenceModelName & "-ACTION"
+        s = ReferenceModel.ReferenceModelName & "-ACTION"
         fd.Filter = s & "|" & s & ".*.adl"
         fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\entry\action"
 
-        If fd.ShowDialog = DialogResult.OK Then
+        If fd.ShowDialog = Windows.Forms.DialogResult.OK Then
             Dim ss As String
 
             ss = fd.FileName.Substring(fd.FileName.LastIndexOf("\") + s.Length + 2)
@@ -441,7 +441,7 @@ Public Class TabPageInstruction
         Dim f As New InputForm
 
         'ToDo: needs to change to allow more than one activity
-        If f.ShowDialog = DialogResult.OK Then
+        If f.ShowDialog = Windows.Forms.DialogResult.OK Then
             If f.txtInput.Text <> "" Then
                 Me.tpActivity.Title = f.txtInput.Text
                 mFileManager.OntologyManager.SetText(Me.tpActivity.Title, mActivity.NodeId)
@@ -492,7 +492,7 @@ Public Class TabPageInstruction
                     Dim frm As New Choose
                     frm.Set_Single()
                     frm.ListChoose.Items.AddRange(matchingFileNames.ToArray)
-                    If frm.ShowDialog = DialogResult.OK Then
+                    If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
                         action_name = CStr(frm.ListChoose.SelectedItem)
                     Else
                         Return
@@ -501,7 +501,7 @@ Public Class TabPageInstruction
 
             action_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & _
                 "\entry\action\" & action_name
-            
+
             If IO.File.Exists(action_name) Then
                 start_info.Arguments = action_name
                 Process.Start(start_info)

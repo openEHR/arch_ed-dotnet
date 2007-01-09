@@ -74,9 +74,6 @@ Public Class ColumnLayout : Inherits LayoutManager
             top = top + targetSize.Height - tps.Height + insets.Top
         End If
 
-        Dim i As Integer
-        'For i = 0 To target.Controls.Count - 1
-        'comp = target.ContainerControl.Controls(i)
         For Each comp As Control In target.Controls
             Dim left As Integer = insets.Left
 
@@ -93,9 +90,7 @@ Public Class ColumnLayout : Inherits LayoutManager
                     left = targetSize.Width - comp.Width - insets.Right
                 End If
 
-                'comp.Bounds = New Rectangle(left, top, ps.Width, ps.Height)
                 comp.Location = New System.Drawing.Point(left, top)
-                'comp.Size = New System.Drawing.Size(comp.Width, comp.Height)
 
                 top = top + comp.Height + mGap
 

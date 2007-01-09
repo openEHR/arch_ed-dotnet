@@ -118,7 +118,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelGenericConstraint.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelGenericConstraint.Location = New System.Drawing.Point(0, 0)
         Me.PanelGenericConstraint.Name = "PanelGenericConstraint"
-        Me.PanelGenericConstraint.Size = New System.Drawing.Size(376, 48)
+        Me.PanelGenericConstraint.Size = New System.Drawing.Size(406, 48)
         Me.PanelGenericConstraint.TabIndex = 0
         '
         'PanelDataConstraint
@@ -127,7 +127,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelDataConstraint.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
         Me.PanelDataConstraint.Name = "PanelDataConstraint"
-        Me.PanelDataConstraint.Size = New System.Drawing.Size(376, 104)
+        Me.PanelDataConstraint.Size = New System.Drawing.Size(406, 104)
         Me.PanelDataConstraint.TabIndex = 31
         '
         'labelAny
@@ -149,7 +149,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelNonAnonymous.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelNonAnonymous.Location = New System.Drawing.Point(0, 0)
         Me.PanelNonAnonymous.Name = "PanelNonAnonymous"
-        Me.PanelNonAnonymous.Size = New System.Drawing.Size(376, 96)
+        Me.PanelNonAnonymous.Size = New System.Drawing.Size(406, 96)
         Me.PanelNonAnonymous.TabIndex = 32
         '
         'butSetRuntimeName
@@ -170,7 +170,6 @@ Public Class ArchetypeNodeConstraintControl
         Me.txtRuntimeName.ReadOnly = True
         Me.txtRuntimeName.Size = New System.Drawing.Size(192, 22)
         Me.txtRuntimeName.TabIndex = 7
-        Me.txtRuntimeName.Text = ""
         '
         'lblRunTimeName
         '
@@ -189,7 +188,6 @@ Public Class ArchetypeNodeConstraintControl
         Me.txtTermDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtTermDescription.Size = New System.Drawing.Size(224, 53)
         Me.txtTermDescription.TabIndex = 5
-        Me.txtTermDescription.Text = ""
         '
         'lblDescription
         '
@@ -207,7 +205,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelLower.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelLower.Location = New System.Drawing.Point(0, 48)
         Me.PanelLower.Name = "PanelLower"
-        Me.PanelLower.Size = New System.Drawing.Size(376, 200)
+        Me.PanelLower.Size = New System.Drawing.Size(406, 200)
         Me.PanelLower.TabIndex = 33
         '
         'ArchetypeNodeConstraintControl
@@ -218,9 +216,10 @@ Public Class ArchetypeNodeConstraintControl
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "ArchetypeNodeConstraintControl"
         Me.HelpProviderCommonConstraint.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(376, 248)
+        Me.Size = New System.Drawing.Size(406, 248)
         Me.PanelDataConstraint.ResumeLayout(False)
         Me.PanelNonAnonymous.ResumeLayout(False)
+        Me.PanelNonAnonymous.PerformLayout()
         Me.PanelLower.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -383,7 +382,7 @@ Public Class ArchetypeNodeConstraintControl
     Private Sub butSetRuntimeName_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butSetRuntimeName.Click
         Dim frm As New ConstraintForm
         Dim has_constraint As Boolean
-        Dim t As Constraint_Text
+        Dim t As Constraint_Text = Nothing
 
         has_constraint = mArchetypeNode.RM_Class.HasNameConstraint
         If has_constraint Then
@@ -392,17 +391,17 @@ Public Class ArchetypeNodeConstraintControl
 
         frm.ShowConstraint(False, mArchetypeNode.RM_Class.NameConstraint, mFileManager)
         Select Case frm.ShowDialog(Me)
-            Case DialogResult.OK
+            Case Windows.Forms.DialogResult.OK
                 'no action
                 mFileManager.FileEdited = True
-            Case DialogResult.Cancel
+            Case Windows.Forms.DialogResult.Cancel
                 ' put it back to null if it was before
                 If Not has_constraint Then
                     mArchetypeNode.RM_Class.HasNameConstraint = False
                 Else
                     mArchetypeNode.RM_Class.NameConstraint = t
                 End If
-            Case DialogResult.Ignore
+            Case Windows.Forms.DialogResult.Ignore
                 mArchetypeNode.RM_Class.HasNameConstraint = False
                 mFileManager.FileEdited = True
         End Select
@@ -463,4 +462,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

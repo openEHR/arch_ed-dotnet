@@ -66,6 +66,7 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
         q.mAssumedValue = Me.mAssumedValue
         q.HasAssumedValue = Me.HasAssumedValue
         q.mUnit = Me.mUnit
+        q.mPrecision = Me.mPrecision
 
         Return q
     End Function

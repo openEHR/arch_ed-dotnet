@@ -28,7 +28,9 @@ Public Class ConstraintControl
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-
+        If Not DesignMode Then
+            SetHelpDetails() ' Has to be here so it is not called in design mode
+        End If
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -108,7 +110,7 @@ Public Class ConstraintControl
                 Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_multiple.html")
             Case ConstraintType.Quantity
                 Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_quantity.htm")
-            Case ConstraintType.Ratio
+            Case ConstraintType.Proportion
                 Me.HelpProviderConstraint.SetHelpKeyword(Me, "")
             Case ConstraintType.Slot
                 Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_slot.html")
@@ -182,7 +184,7 @@ Public Class ConstraintControl
             Case ConstraintType.Quantity
                 Return New QuantityConstraintControl(a_file_manager)
 
-            Case ConstraintType.Count
+            Case ConstraintType.Count, ConstraintType.Real
                 Return New CountConstraintControl(a_file_manager)
 
             Case ConstraintType.Text
@@ -200,7 +202,7 @@ Public Class ConstraintControl
             Case ConstraintType.Multiple
                 Return New MultipleConstraintControl(a_file_manager)
 
-            Case ConstraintType.Ratio
+            Case ConstraintType.Proportion
                 Return New RatioConstraintControl(a_file_manager)
 
             Case ConstraintType.Slot
@@ -219,7 +221,7 @@ Public Class ConstraintControl
         End Select
     End Function
 
-    Private Sub ConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Private Sub SetHelpDetails()
         Me.HelpProviderConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 End Class

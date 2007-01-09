@@ -25,7 +25,7 @@ Public Enum ConstraintType
     DateTime = 7
     Ordinal = 8
     Multiple = 9
-    Ratio = 10
+    Proportion = 10
     Slot = 11
     Interval_Count = 12
     Interval_Quantity = 13
@@ -33,8 +33,7 @@ Public Enum ConstraintType
     MultiMedia = 15
     URI = 16
     Duration = 17
-    QuantityRatio = 18
-    Real = 19
+    Real = 18
 End Enum
 
 

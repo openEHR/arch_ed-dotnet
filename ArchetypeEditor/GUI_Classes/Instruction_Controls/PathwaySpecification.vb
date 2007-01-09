@@ -737,7 +737,7 @@ Public Class PathwaySpecification
 #End Region
 
     Private Sub PathwaySpecification_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        mValidStateMachineClasses = ReferenceModel.Instance.ValidStateMachineTypes
+        mValidStateMachineClasses = ReferenceModel.ValidStateMachineTypes
         Me.PathwaySpecification_Resize(sender, e)
         'hold the tabpages in a collection so can remove them from the Tab as required
         mTabPages.Add(Me.tpTransition, tpTransition.Name)
@@ -772,6 +772,9 @@ Public Class PathwaySpecification
                         Ctrl = Me.PanelCompleted
                     Case StateMachineType.Scheduled
                         Ctrl = Me.PanelScheduled
+                    Case Else
+                        Debug.Assert(False)
+                        Return
                 End Select
                 Ctrl.Controls.Add(pv)
                 pv.ContextMenuPathwayEvent.MergeMenu(Me.ContextMenuState)
@@ -804,7 +807,7 @@ Public Class PathwaySpecification
         End If
         For i = 0 To Ctrl.Controls.Count - 1
             path_event = CType(Ctrl.Controls(i), PathwayEvent)
-            path_event.Width = (path_event.DefaultWidth * scalefactor)
+            path_event.Width = (PathwayEvent.DefaultWidth * scalefactor)
             path_event.Height = Ctrl.Height - 6
             path_event.Top = 3
             path_event.Left = left_margin

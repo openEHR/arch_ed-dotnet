@@ -288,9 +288,9 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
             End If
         End If
 
-        If Me.Constraint.ValueUnits <> "" Then
+        If Me.Constraint.MinMaxValueUnits <> "" Then
             Dim time_unit As String = ""
-            Select Case Me.Constraint.ValueUnits
+            Select Case Me.Constraint.MinMaxValueUnits
                 Case "Y"
                     time_unit = chkYears.Text
                 Case "M"
@@ -319,6 +319,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
     Private Function GetAllowableUnits() As String
         Dim result As String = "P"
         Dim time_separated As Boolean
+
 
         If Me.chkYears.Checked Then
             result &= "Y"
@@ -441,7 +442,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
 
 
     Private Sub comboTimeUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboTimeUnits.SelectedIndexChanged
-        If Not MyBase.IsLoading Or Me.Constraint.ValueUnits = "" Then
+        If (Not MyBase.IsLoading) Or Me.Constraint.MinMaxValueUnits = "" Then
             If comboTimeUnits.SelectedIndex > -1 Then
                 Dim s As String
 
@@ -464,7 +465,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
                         Debug.Assert(False, "Not handled")
                         Return
                 End Select
-                Me.Constraint.ValueUnits = s
+                Me.Constraint.MinMaxValueUnits = s
                 If Not MyBase.IsLoading Then
                     mFileManager.FileEdited = True
                 End If
@@ -510,4 +511,5 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'
+

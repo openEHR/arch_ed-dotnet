@@ -445,9 +445,9 @@ Public Class formCreateClinicalModel
 
 
     Private Sub formCreateClinicalModel_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Dim nd, nd1, nd2 As TreeNode
+        Dim nd, nd1 As TreeNode
         Dim str, str1, str2, str3 As String
-        Dim i, ii As Integer
+        Dim i As Integer
         Dim dr As OleDb.OleDbDataReader
         Dim tr_v As TreeView
 
@@ -570,7 +570,7 @@ Public Class formCreateClinicalModel
         Dim nd As New TreeNode()
         Dim nc As New Collection()
         Dim n_nodes As Integer
-        Dim searchstring, s As String
+        Dim searchstring As String
 
         searchstring = Me.TxtSearch.Text
 
@@ -593,6 +593,9 @@ Public Class formCreateClinicalModel
                 tr = Me.TreeEvaluation
             Case "TabPgAction"
                 tr = Me.TreeAction
+            Case Else
+                Debug.Assert(False, "Control not handled")
+                Return
         End Select
 
         tr.CollapseAll()
@@ -636,7 +639,7 @@ Public Class formCreateClinicalModel
     Private Function Get_matching_nodes(ByVal TrView As TreeView, ByVal node_property As String, ByVal str_to_look_for As String) As Collection
         Dim nc As Collection
         Dim node_collection As New Collection()
-        Dim nd, nd1 As TreeNode
+        Dim nd As TreeNode
         Dim i As Integer
 
         For Each nd In TrView.Nodes
@@ -656,8 +659,8 @@ Public Class formCreateClinicalModel
     Private Function CallRecursive(ByVal nd As TreeNode, ByVal node_property As String, ByVal str_to_look_for As String) As Collection
 
         Dim n, n1 As TreeNode
-        Dim nc = New Collection()
-        Dim nc1 = New Collection()
+        Dim nc As Collection = New Collection()
+        Dim nc1 As Collection = New Collection()
 
         Dim str As String
 
@@ -666,6 +669,9 @@ Public Class formCreateClinicalModel
                 str = nd.Tag
             Case "TEXT"
                 str = nd.Text
+            Case Else
+                Debug.Assert(False)
+                Return Nothing
         End Select
 
         If InStr(str, str_to_look_for, CompareMethod.Text) Then

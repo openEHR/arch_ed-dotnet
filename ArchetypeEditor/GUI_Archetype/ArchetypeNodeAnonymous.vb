@@ -83,7 +83,6 @@ Public Class ArchetypeNodeAnonymous
 
     Function ToRichText(ByVal level As Integer) As String Implements ArchetypeNode.ToRichText
         Dim s, statement As String
-        Dim nl As String = Chr(10) & Chr(13)
 
         If mRMStructure.Type = StructureType.Slot Then
             Dim slot_constraint As Constraint_Slot
@@ -94,29 +93,30 @@ Public Class ArchetypeNodeAnonymous
                 Return ""
             End Try
 
-            s &= Space(3 * level) & slot_constraint.RM_ClassType.ToString & ":\par"
+            s = Space(3 * level) & slot_constraint.RM_ClassType.ToString & ":\par"
             If slot_constraint.Include.Count > 0 Then
                 If slot_constraint.IncludeAll Then
-                    s &= nl & Space(3 * (level + 1)) & "  Include ALL\par"
+                    s &= Environment.NewLine & Space(3 * (level + 1)) & "  Include ALL\par"
                 Else
-                    s &= nl & Space(3 * (level + 1)) & "  Include:\par"
+                    s &= Environment.NewLine & Space(3 * (level + 1)) & "  Include:\par"
                     For Each statement In slot_constraint.Include
-                        s &= nl & Space(3 * (level + 2)) & statement & "\par"
+                        s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
                     Next
                 End If
             End If
             If slot_constraint.Exclude.Count > 0 Then
                 If slot_constraint.ExcludeAll Then
-                    s &= nl & Space(3 * (level + 1)) & "  Exclude ALL\par"
+                    s &= Environment.NewLine & Space(3 * (level + 1)) & "  Exclude ALL\par"
                 Else
-                    s &= nl & Space(3 * (level + 1)) & "  Exclude:\par"
+                    s &= Environment.NewLine & Space(3 * (level + 1)) & "  Exclude:\par"
                     For Each statement In slot_constraint.Exclude
-                        s &= nl & Space(3 * (level + 2)) & statement & "\par"
+                        s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
                     Next
                 End If
             End If
             Return s
         End If
+        Return ""
     End Function
 
     Function ToHTML(ByVal level As Integer) As String Implements ArchetypeNode.ToHTML
@@ -171,6 +171,7 @@ Public Class ArchetypeNodeAnonymous
             s &= "</table></td></table>"
             Return s
         End If
+        Return ""
     End Function
 
 

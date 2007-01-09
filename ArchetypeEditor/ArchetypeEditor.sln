@@ -1,21 +1,19 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ArchetypeEditor", "ArchetypeEditor.vbproj", "{179B4A54-F044-430D-9DB6-E950F80EC87F}"
-	ProjectSection(ProjectDependencies) = postProject
-	EndProjectSection
 EndProject
 Global
-	GlobalSection(SolutionConfiguration) = preSolution
-		Debug = Debug
-		Release = Release
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ProjectConfiguration) = postSolution
-		{179B4A54-F044-430D-9DB6-E950F80EC87F}.Debug.ActiveCfg = Debug|.NET
-		{179B4A54-F044-430D-9DB6-E950F80EC87F}.Debug.Build.0 = Debug|.NET
-		{179B4A54-F044-430D-9DB6-E950F80EC87F}.Release.ActiveCfg = Release|.NET
-		{179B4A54-F044-430D-9DB6-E950F80EC87F}.Release.Build.0 = Release|.NET
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{179B4A54-F044-430D-9DB6-E950F80EC87F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{179B4A54-F044-430D-9DB6-E950F80EC87F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{179B4A54-F044-430D-9DB6-E950F80EC87F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{179B4A54-F044-430D-9DB6-E950F80EC87F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityAddIns) = postSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

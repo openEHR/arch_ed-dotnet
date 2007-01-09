@@ -88,33 +88,35 @@ Public Class QuantityViewControl : Inherits ElementViewControl
                 ' shows all allowable units for that property
                 Dim combo As New ComboBox
                 combo.Location = New Point(aLocation.X + 90, aLocation.Y + 5)
-                Dim u As Constraint_QuantityUnit
                 combo.Height = 25
                 combo.Width = 150
 
                 Try
                     Dim d_row As DataRow
+                    Dim d_rows As DataRow()
 
                     If quantityConstraint.IsCoded Then
-                        d_row = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
-                            ("openEHR = " & quantityConstraint.OpenEhrCode.ToString())(0)
+                        d_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
+                            ("openEHR = " & quantityConstraint.OpenEhrCode.ToString())
                     Else
                         'OBSOLETE
                         If OceanArchetypeEditor.DefaultLanguageCode = "en" Then
-                            d_row = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
-                                ("Text = '" & quantityConstraint.PhysicalPropertyAsString & "'")(0)
+                            d_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
+                                ("Text = '" & quantityConstraint.PhysicalPropertyAsString & "'")
                         Else
-                            d_row = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
-                               ("Translated = '" & quantityConstraint.PhysicalPropertyAsString & "'")(0)
+                            d_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
+                               ("Translated = '" & quantityConstraint.PhysicalPropertyAsString & "'")
                         End If
                     End If
 
-                    Dim id As String = d_row(0)
+                    If Not d_rows Is Nothing AndAlso d_rows.Length > 0 Then
 
-                    For Each d_row In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id)
-                        combo.Items.Add(CStr(d_row(1)))
-                    Next
+                        Dim id As String = d_rows(0)(0)
 
+                        For Each d_row In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id)
+                            combo.Items.Add(CStr(d_row(1)))
+                        Next
+                    End If
                     Me.Controls.Add(combo)
                 Catch
                     Debug.Assert(False, "Error selecting quantity property")

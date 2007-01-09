@@ -22,7 +22,7 @@ Public Class Constraint_Quantity
     Private mOpenEhrCode As String  'carries uncoded value
     Private mSeparator As String = "::"
     Private mIsCoded As Boolean
-
+    
     Public Overrides ReadOnly Property Type() As ConstraintType
         Get
             Return ConstraintType.Quantity

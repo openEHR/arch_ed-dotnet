@@ -121,6 +121,7 @@ Public Class TabPageComposition
         '
         Me.radioPersist.Location = New System.Drawing.Point(648, 0)
         Me.radioPersist.Name = "radioPersist"
+        Me.radioPersist.Size = New System.Drawing.Size(104, 24)
         Me.radioPersist.TabIndex = 1
         Me.radioPersist.Text = "Persistent"
         '
@@ -129,6 +130,7 @@ Public Class TabPageComposition
         Me.radioEvent.Checked = True
         Me.radioEvent.Location = New System.Drawing.Point(536, 0)
         Me.radioEvent.Name = "radioEvent"
+        Me.radioEvent.Size = New System.Drawing.Size(104, 24)
         Me.radioEvent.TabIndex = 0
         Me.radioEvent.TabStop = True
         Me.radioEvent.Text = "Event"
@@ -177,9 +179,9 @@ Public Class TabPageComposition
         End Get
     End Property
 
-    Public Function toRichText(ByRef text As IO.StringWriter, ByVal level As Integer) As String
-
-    End Function
+    Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
+        text.WriteLine("Not available")
+    End Sub
 
     Public Sub Reset()
         Me.radioEvent.Checked = True

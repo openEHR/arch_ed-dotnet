@@ -37,71 +37,69 @@ Public Enum StateMachineType
     Scheduled = 529
 End Enum
 
-Public Class ReferenceModelLocal
-    Private mRefModelType As ReferenceModelType
-    Private mArchetypedClass As StructureType
-    Private mStructureClass As StructureType
-    Private mReferenceModelNames As Collections.Hashtable
-    Private mReferenceModelDataTypes As Collections.Hashtable
-    Private mValidReferenceModelNames As String() = {"openEHR-EHR"} ', "CEN-EHR"} ', "HL7-CDA"} ',"openEHR-Demographic"}
+Public Class ReferenceModel
+    Private Shared mRefModelType As ReferenceModelType
+    Private Shared mArchetypedClass As StructureType
+    Private Shared mStructureClass As StructureType
+    Private Shared mReferenceModelNames As Collections.Hashtable
+    Private Shared mReferenceModelDataTypes As Collections.Hashtable
+    Private Shared mValidReferenceModelNames As String() = {"openEHR-EHR"} ', "CEN-EHR"} ', "HL7-CDA"} ',"openEHR-Demographic"}
 
 
-    Property ModelType() As ReferenceModelType
-        Get
-            Return mRefModelType
-        End Get
-        Set(ByVal Value As ReferenceModelType)
-            mRefModelType = Value
-            LoadReferenceModelNames()
-            LoadReferenceModelDataTypes()
-        End Set
-    End Property
-    Property ReferenceModelName() As String
-        Get
-            Return mValidReferenceModelNames(mRefModelType)
-        End Get
-        Set(ByVal Value As String)
-            Debug.Assert(IsValidReferenceModelName(Value))
-            mRefModelType = CType(mValidReferenceModelNames.IndexOf(mValidReferenceModelNames, Value), ReferenceModelType)
-            LoadReferenceModelNames()
-        End Set
-    End Property
-    ReadOnly Property ValidReferenceModelNames() As String()
-        Get
-            Return mValidReferenceModelNames
-        End Get
-    End Property
-    Property ArchetypedClass() As StructureType
-        Get
-            Return mArchetypedClass
-        End Get
-        Set(ByVal Value As StructureType)
-            ' not a null value
-            Debug.Assert(Not Value = StructureType.Not_Set)
-            ' is a valid type for this reference model
-            Debug.Assert(IsValidArchetypeDefinition(Value))
-            mArchetypedClass = Value
-            Select Case Value
-                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                    mStructureClass = Value
-            End Select
-        End Set
-    End Property
-    Property StructureClass() As StructureType
-        Get
-            Return mStructureClass
-        End Get
-        Set(ByVal Value As StructureType)
-            Select Case Value
-                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                    mStructureClass = Value
-                Case Else
-                    Debug.Assert(False)
-            End Select
-        End Set
-    End Property
+    Public Shared Function ModelType() As ReferenceModelType
+        Return mRefModelType
+    End Function
+    Public Shared Sub SetModelType(ByVal Value As ReferenceModelType)
+        mRefModelType = Value
+        LoadReferenceModelNames()
+        LoadReferenceModelDataTypes()
+    End Sub
 
-    Private Sub LoadReferenceModelNames()
+    Public Shared Function ReferenceModelName() As String
+        Return mValidReferenceModelNames(mRefModelType)
+    End Function
+
+    Public Shared Sub SetReferenceModelName(ByVal Value As String)
+        Debug.Assert(IsValidReferenceModelName(Value))
+        Dim i As Integer = Array.IndexOf(mValidReferenceModelNames, Value)
+        mRefModelType = CType(i, ReferenceModelType)
+        LoadReferenceModelNames()
+    End Sub
+
+    Public Shared Function ValidReferenceModelNames() As String()
+        Return mValidReferenceModelNames
+    End Function
+
+    Public Shared Function ArchetypedClass() As StructureType
+        Return mArchetypedClass
+    End Function
+
+    Public Shared Sub SetArchetypedClass(ByVal Value As StructureType)
+        ' not a null value
+        Debug.Assert(Not Value = StructureType.Not_Set)
+        ' is a valid type for this reference model
+        Debug.Assert(IsValidArchetypeDefinition(Value))
+        mArchetypedClass = Value
+        Select Case Value
+            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                mStructureClass = Value
+        End Select
+    End Sub
+
+    Public Shared Function StructureClass() As StructureType
+        Return mStructureClass
+    End Function
+
+    Public Shared Sub SetStructureClass(ByVal Value As StructureType)
+        Select Case Value
+            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                mStructureClass = Value
+            Case Else
+                Debug.Assert(False)
+        End Select
+    End Sub
+
+    Private Shared Sub LoadReferenceModelNames()
         mReferenceModelNames = New Hashtable
 
         Select Case mRefModelType
@@ -122,7 +120,7 @@ Public Class ReferenceModelLocal
 
     End Sub
 
-    Public Function RM_StructureName(ByVal s_type As StructureType) As String
+    Public Shared Function RM_StructureName(ByVal s_type As StructureType) As String
         If mReferenceModelNames.ContainsKey(CType(s_type, Integer)) Then
             Return CStr(mReferenceModelNames.Item(CType(s_type, Integer)))
         Else
@@ -130,29 +128,35 @@ Public Class ReferenceModelLocal
         End If
     End Function
 
-    Private Sub LoadReferenceModelDataTypes()
+    Private Shared Sub LoadReferenceModelDataTypes()
         mReferenceModelDataTypes = New Hashtable
 
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
-                mReferenceModelDataTypes.Add(14, "MULTI_MEDIA")
+                mReferenceModelDataTypes.Add(12, "INTERVAL<COUNT>")
+                mReferenceModelDataTypes.Add(13, "INTERVAL<QUANTITY>")
+                mReferenceModelDataTypes.Add(14, "INTERVAL<DATE_TIME>")
         End Select
 
     End Sub
 
-    Public Function RM_DataTypeName(ByVal d_type As ConstraintType) As String
+    Public Shared Function RM_DataTypeName(ByVal d_type As ConstraintType) As String
+        Dim result As String
         If mReferenceModelDataTypes.ContainsKey(CType(d_type, Integer)) Then
-            Return CStr(mReferenceModelDataTypes.Item(CType(d_type, Integer)))
+            result = CStr(mReferenceModelDataTypes.Item(CType(d_type, Integer)))
         Else
-            Return d_type.ToString.ToUpper(System.Globalization.CultureInfo.InstalledUICulture)
+            result = d_type.ToString.ToUpperInvariant()
         End If
+
+        Return String.Format("DV_{0}", result)
+
     End Function
 
-    Function IsValidReferenceModelName(ByVal RefModelName As String) As Boolean
-        Return mValidReferenceModelNames.IndexOf(mValidReferenceModelNames, RefModelName) > -1
+    Public Shared Function IsValidReferenceModelName(ByVal RefModelName As String) As Boolean
+        Return Array.IndexOf(mValidReferenceModelNames, RefModelName) > -1
     End Function
 
-    Function IsValidChild(ByVal Parent As StructureType, ByVal Child As StructureType) As Boolean
+    Public Shared Function IsValidChild(ByVal Parent As StructureType, ByVal Child As StructureType) As Boolean
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
                 Select Case Parent
@@ -223,6 +227,8 @@ Public Class ReferenceModelLocal
                             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                                 mStructureClass = Child
                                 Return True
+                            Case StructureType.History ' Allows for history based state information
+                                Return True
                         End Select
                     Case StructureType.Single 'openEHR
                         mStructureClass = Parent
@@ -256,7 +262,7 @@ Public Class ReferenceModelLocal
                             Case StructureType.Element
                                 Return True
                         End Select
-                    Case StructureType.ism_transition
+                    Case StructureType.ISM_TRANSITION
                         Select Case Child
                             Case StructureType.CarePathwayStep
                                 Return True
@@ -309,8 +315,8 @@ Public Class ReferenceModelLocal
 
     End Function
 
-    Public Function IsValidEntryType(ByVal a_structure_type As StructureType) As Boolean
-        For Each st As StructureType In Me.ValidEntryTypes
+    Public Shared Function IsValidEntryType(ByVal a_structure_type As StructureType) As Boolean
+        For Each st As StructureType In ValidEntryTypes()
             If st = a_structure_type Then
                 Return True
             End If
@@ -318,7 +324,7 @@ Public Class ReferenceModelLocal
         Return False
     End Function
 
-    Public Function ValidEntryTypes() As StructureType()
+    Public Shared Function ValidEntryTypes() As StructureType()
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
                 Dim s(2) As StructureType
@@ -333,12 +339,16 @@ Public Class ReferenceModelLocal
                 Return s
             Case ReferenceModelType.openEHR_Demographic
                 Debug.Assert(False, "Not available")
+                Return Nothing
+            Case Else
+                Debug.Assert(False, "Not available")
+                Return Nothing
         End Select
     End Function
 
 
-    Public Function IsValidStrucutureType(ByVal a_structure_type As StructureType) As Boolean
-        For Each st As StructureType In Me.ValidStructureTypes
+    Public Shared Function IsValidStrucutureType(ByVal a_structure_type As StructureType) As Boolean
+        For Each st As StructureType In ValidStructureTypes()
             If st = a_structure_type Then
                 Return True
             End If
@@ -346,7 +356,7 @@ Public Class ReferenceModelLocal
         Return False
     End Function
 
-    Public Function ValidStructureTypes() As StructureType()
+    Public Shared Function ValidStructureTypes() As StructureType()
         Select Case mArchetypedClass
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 Dim s(0) As StructureType
@@ -382,8 +392,8 @@ Public Class ReferenceModelLocal
         End Select
     End Function
 
-    Public Function IsValidArchetypeDefinition(ByVal a_structure_type As StructureType) As Boolean
-        For Each st As StructureType In Me.ValidArchetypeDefinitions
+    Public Shared Function IsValidArchetypeDefinition(ByVal a_structure_type As StructureType) As Boolean
+        For Each st As StructureType In ValidArchetypeDefinitions()
             If st = a_structure_type Then
                 Return True
             End If
@@ -391,7 +401,7 @@ Public Class ReferenceModelLocal
         Return False
     End Function
 
-    Public Function validArchetypeSlots(ByVal a_structure_type As StructureType) As StructureType()
+    Public Shared Function validArchetypeSlots(ByVal a_structure_type As StructureType) As StructureType()
         Select Case a_structure_type
             Case StructureType.COMPOSITION
                 Select Case mRefModelType
@@ -430,7 +440,7 @@ Public Class ReferenceModelLocal
                         Debug.Assert(False)
                 End Select
             Case Else
-                Select Case Me.mStructureClass
+                Select Case mStructureClass
                     Case StructureType.Single, StructureType.List
                         Dim s(0) As StructureType
                         s(0) = StructureType.Element
@@ -441,11 +451,12 @@ Public Class ReferenceModelLocal
                         s(1) = StructureType.Cluster
                         Return s
                     Case StructureType.Table
-                        Debug.Assert(False)
+                        Debug.Assert(False)                      
                 End Select
         End Select
+        Return Nothing
     End Function
-    Public Function ValidArchetypeDefinitions() As StructureType()
+    Public Shared Function ValidArchetypeDefinitions() As StructureType()
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
                 Dim s(10) As StructureType
@@ -478,7 +489,7 @@ Public Class ReferenceModelLocal
         Return Nothing
     End Function
 
-    Function ValidStateMachineTypes() As StateMachineType()
+    Public Shared Function ValidStateMachineTypes() As StateMachineType()
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
                 Dim s(7) As StateMachineType
@@ -491,16 +502,18 @@ Public Class ReferenceModelLocal
                 s(6) = StateMachineType.InitialAborted
                 s(7) = StateMachineType.Scheduled
                 Return s
+
+            Case Else
+                Debug.Assert(False, "No other reference model handled")
+                Return Nothing
         End Select
 
     End Function
 
-    Function StructureTypeFromString(ByVal a_structure_name As String) As StructureType
+    Public Shared Function StructureTypeFromString(ByVal a_structure_name As String) As StructureType
         'Returns the structure type that matches the string
         'Ignoring case - could be a problem in some languages
         Try
-            Dim i As Integer
-
             If mReferenceModelNames.ContainsValue(a_structure_name) Then
                 For Each rfn As DictionaryEntry In mReferenceModelNames
                     If CStr(rfn.Value) = a_structure_name Then
@@ -523,29 +536,29 @@ Public Class ReferenceModelLocal
         End Try
     End Function
 
-    Sub Reset()
+    Public Shared Sub Reset()
         mRefModelType = ReferenceModelType.Not_Set
         mArchetypedClass = StructureType.Not_Set
         mStructureClass = StructureType.Not_Set
     End Sub
 End Class
 
-Class ReferenceModel
-    Inherits ReferenceModelLocal
+'Class ReferenceModel
+'    Inherits ReferenceModelLocal
 
-    ' ReferenceModel Singleton
-    Private Shared mInstance As ReferenceModel
+'    ' ReferenceModel Singleton
+'    Private Shared mInstance As ReferenceModel
 
-    Public Shared ReadOnly Property Instance() As ReferenceModel
-        Get
-            If mInstance Is Nothing Then
-                mInstance = New ReferenceModel
-            End If
-            Return mInstance
-        End Get
-    End Property
+'    Public Shared ReadOnly Property Instance() As ReferenceModel
+'        Get
+'            If mInstance Is Nothing Then
+'                mInstance = New ReferenceModel
+'            End If
+'            Return mInstance
+'        End Get
+'    End Property
 
-End Class
+'End Class
 
 '
 '***** BEGIN LICENSE BLOCK *****

@@ -48,8 +48,9 @@ Public Class Splash
     Friend WithEvents TimerSplash As System.Windows.Forms.Timer
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(Splash))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Splash))
         Me.TimerSplash = New System.Windows.Forms.Timer(Me.components)
+        Me.SuspendLayout()
         '
         'TimerSplash
         '
@@ -70,8 +71,9 @@ Public Class Splash
         Me.Name = "Splash"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Archetype Editor    Version 0.99.8 Beta"
+        Me.Text = "Archetype Editor    Release 1 candidate (1229)"
         Me.TopMost = True
+        Me.ResumeLayout(False)
 
     End Sub
 

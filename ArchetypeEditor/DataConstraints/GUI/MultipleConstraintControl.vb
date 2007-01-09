@@ -141,7 +141,6 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
     End Sub
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
         Dim i As Integer
-        Dim cc As ConstraintControl
 
         mIsState = IsState
         ' set constraint values on control
@@ -167,7 +166,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
     End Sub
 
     Private Sub butRemoveUnit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveUnit.Click
-        If MessageBox.Show(AE_Constants.Instance.Remove & Me.TabConstraints.SelectedTab.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+        If MessageBox.Show(AE_Constants.Instance.Remove & Me.TabConstraints.SelectedTab.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
             Dim i As Integer
             i = Me.TabConstraints.SelectedIndex
             Me.Constraint.Constraints.RemoveAt(i)

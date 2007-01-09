@@ -23,7 +23,7 @@ Public Class TabPageAction
     Private mPathwaySpecification As PathwaySpecification
     Private mActionDescription As TabPageStructure
     Private mFileManager As FileManagerLocal
-    Public Event ProtocolCheckChanged(ByVal sender As Crownwood.Magic.Controls.TabControl, ByVal state As Boolean)
+    Public Event ProtocolCheckChanged(ByVal sender As Object, ByVal state As Boolean)
 
 #Region " Windows Form Designer generated code "
 
@@ -193,11 +193,11 @@ Public Class TabPageAction
         End Get
     End Property
 
-    Public Function toRichText(ByRef text As IO.StringWriter, ByVal level As Integer) As String
+    Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
         text.WriteLine("\par Action description: \par")
         text.WriteLine("\par")
         mActionDescription.toRichText(text, level + 1)
-    End Function
+    End Sub
 
     Public Sub Reset()
         Me.tpPathway.Controls.Clear()

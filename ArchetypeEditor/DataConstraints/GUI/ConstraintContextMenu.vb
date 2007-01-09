@@ -53,7 +53,7 @@ Public Class ConstraintContextMenu
                 mMI_QuantityUnit.Visible = True
             Case ConstraintType.Duration
                 mMI_Duration.Visible = True
-            Case ConstraintType.Ratio
+            Case ConstraintType.Proportion
                 mMI_Ratio.Visible = True
             Case ConstraintType.Slot
                 mMI_Slot.Visible = True
@@ -95,7 +95,7 @@ Public Class ConstraintContextMenu
                 mMI_QuantityUnit.Visible = False
             Case ConstraintType.Duration
                 mMI_Duration.Visible = False
-            Case ConstraintType.Ratio
+            Case ConstraintType.Proportion
                 mMI_Ratio.Visible = False
             Case ConstraintType.Slot
                 mMI_Slot.Visible = False
@@ -189,7 +189,7 @@ Public Class ConstraintContextMenu
         ElseIf Sender Is mMI_Slot Then
             _ProcessMenuClick(New Constraint_Slot)
         ElseIf Sender Is mMI_Ratio Then
-            _ProcessMenuClick(New Constraint_Ratio)
+            _ProcessMenuClick(New Constraint_Proportion)
             'Cannot be Quantity Unit alone
             'ElseIf Sender Is mMI_QuantityUnit Then
             '    _ProcessMenuClick(New Constraint_QuantityUnit)
@@ -269,7 +269,7 @@ Public Class ConstraintContextMenu
         mMI_URI = New MenuItem(AE_Constants.Instance.URI)
         Me.MenuItems.Add(mMI_URI)
         AddHandler mMI_URI.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Ratio = New MenuItem(AE_Constants.Instance.Ratio)
+        mMI_Ratio = New MenuItem(AE_Constants.Instance.Proportion)
         Me.MenuItems.Add(mMI_Ratio)
         AddHandler mMI_Ratio.Click, AddressOf InternalProcessMenuItemClick
 

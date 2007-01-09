@@ -26,7 +26,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End Set
     End Property
     Public ReadOnly Property IsReference() As Boolean
-
         Get
             Return Me.Element.isReference
         End Get
@@ -40,12 +39,10 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Public Shadows ReadOnly Property RM_Class() As RmElement
         Get
             Debug.Assert(TypeOf MyBase.RM_Class Is RmElement)
-
             Return CType(MyBase.RM_Class, RmElement)
         End Get
     End Property
     Public Property Constraint() As Constraint
-
         Get
             Return Me.Element.Constraint
         End Get
@@ -65,7 +62,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     End Function
 
     Private Function TextConstraintToRichText(ByVal TextConstraint As Constraint_Text) As String
-        Dim d_row As DataRowView
         Dim s As String
         Dim punctuation As Char() = {CType(".", Char), CType(",", Char)}
         Dim a_Term As RmTerm
@@ -98,8 +94,8 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     End Function
 
-    Private Function QuantityConstraintToRichText(ByVal q As Constraint_Quantity, ByVal level As Integer, ByVal new_line As String) As String
-        Dim Text, s As String
+    Private Function QuantityConstraintToRichText(ByVal q As Constraint_Quantity, ByVal level As Integer) As String
+        Dim Text As String
         Dim u As Constraint_QuantityUnit
 
         If q.IsCoded Then
@@ -111,7 +107,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End If
 
         For Each u In q.Units
-            Text &= new_line & (Space(4 * level) & QuantityUnitConstraintToRichText(u) & "\par")
+            Text &= Environment.NewLine & (Space(4 * level) & QuantityUnitConstraintToRichText(u) & "\par")
         Next
         Return Text
     End Function
@@ -133,8 +129,45 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Return a_text
     End Function
 
+    Private Function DateTimeIntervalConstraintToHTML(ByVal dtInterval As Constraint_Interval_DateTime) As String
+        Dim a_text, s As String
+        Dim constraintDt As Constraint_DateTime
+        a_text = ""
+        constraintDt = CType(dtInterval.LowerLimit, Constraint_DateTime)
+        s = Filemanager.GetOpenEhrTerm(constraintDt.TypeofDateTimeConstraint, "not known")
+
+
+        a_text &= Environment.NewLine & AE_Constants.Instance.Lower & ": " & s & "<br>"
+
+        constraintDt = CType(dtInterval.UpperLimit, Constraint_DateTime)
+        s = Filemanager.GetOpenEhrTerm(constraintDt.TypeofDateTimeConstraint, "not known")
+
+        a_text &= Environment.NewLine & AE_Constants.Instance.Upper & ": " & s & "<br>"
+        Return a_text
+    End Function
+
+
+    Private Function QuantityIntervalConstraintToHTML(ByVal q As Constraint_Interval_Quantity) As String
+        Dim a_text As String
+
+        a_text = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
+                Filemanager.GetOpenEhrTerm(q.QuantityPropertyCode, CType(q.LowerLimit, Constraint_Quantity).PhysicalPropertyAsString) & "<br>"
+
+        Dim u As Constraint_QuantityUnit
+        a_text &= Environment.NewLine & AE_Constants.Instance.Lower & ": <br>"
+        For Each u In CType(q.LowerLimit, Constraint_Quantity).Units
+            a_text &= QuantityUnitConstraintToRichText(u) & "<br>"
+        Next
+        a_text &= Environment.NewLine & AE_Constants.Instance.Upper & ": <br>"
+        For Each u In CType(q.UpperLimit, Constraint_Quantity).Units
+            a_text &= QuantityUnitConstraintToRichText(u) & "<br>"
+        Next
+
+        Return a_text
+    End Function
+
     Private Function QuantityUnitConstraintToRichText(ByVal u As Constraint_QuantityUnit) As String
-        Dim s As String
+        Dim s As String = ""
 
         If u.Unit <> "" Then
             s = "  Units = " & u.ToString & ";"
@@ -186,6 +219,25 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     End Function
 
+    Private Function DurationConstraintToRichText(ByVal durationConstraint As Constraint_Duration) As String
+        Dim s As String
+        s = mFileManager.OntologyManager.GetOpenEHRTerm(117, "Units") & ": "
+        If durationConstraint.AllowableUnits = "" Then
+            Return s & "*"
+        Else
+            For Each c As Char In durationConstraint.AllowableUnits
+                If c <> "P"c Then
+                    Dim isoUnit As String = OceanArchetypeEditor.ISO_TimeUnits.GetValidIsoUnit(c.ToString)
+                    If isoUnit <> "" Then
+                        s &= OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(isoUnit) & ", "
+                    End If
+                End If
+            Next
+            Return s.Trim(", ".ToCharArray)
+        End If
+    End Function
+
+
     Private Function OrdinalConstraintToRichText(ByVal OrdinalConstraint As Constraint_Ordinal) As String
         Dim s As String
         Dim ov As OrdinalValue
@@ -193,7 +245,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
         s = "{"
         For Each ov In OrdinalConstraint.OrdinalValues
-            Dim str As String
             a_Term = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
             s = s & ov.Ordinal.ToString & ": \i " & a_Term.Text & "\i0 ; "
         Next
@@ -209,7 +260,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
         s = ""
         For Each ov In OrdinalConstraint.OrdinalValues
-            Dim str As String
             a_Term = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
             s &= ov.Ordinal.ToString & ": <i> " & a_Term.Text & "<i><br> "
         Next
@@ -218,7 +268,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     End Function
 
-    Private Function RatioConstraintToHTML(ByVal RatioConstraint As Constraint_Ratio) As String
+    Private Function ProportionConstraintToHTML(ByVal RatioConstraint As Constraint_Proportion) As String
         Dim s As String
 
         s = CountConstraintToRichText(CType(RatioConstraint.Numerator, Constraint_Count))
@@ -234,8 +284,10 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     Private Function IntervalCountToHTML(ByVal intervalCountConstraint As Constraint_Interval_Count) As String
         Dim s As String
-
-        s = CountConstraintToRichText(CType(intervalCountConstraint.AbsoluteLimits, Constraint_Count))
+        s = AE_Constants.Instance.Upper & ": "
+        s += CountConstraintToRichText(CType(intervalCountConstraint.UpperLimit, Constraint_Count))
+        s += ", " & AE_Constants.Instance.Lower & ": "
+        s += CountConstraintToRichText(CType(intervalCountConstraint.LowerLimit, Constraint_Count))
         Return s
 
     End Function
@@ -243,66 +295,155 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Private Function IntervalQuantityToHTML(ByVal intervalQuantityConstraint As Constraint_Interval_Quantity) As String
         Dim s As String
 
-        s = QuantityConstraintToHTML(CType(intervalQuantityConstraint.AbsoluteLimits, Constraint_Quantity))
+        s = QuantityIntervalConstraintToHTML(intervalQuantityConstraint)
+        Return s
+
+    End Function
+
+    Private Function IntervalDateTimeToHTML(ByVal intervalDateTimeConstraint As Constraint_Interval_DateTime) As String
+        Dim s As String
+
+        s = DateTimeIntervalConstraintToHTML(intervalDateTimeConstraint)
         Return s
 
     End Function
 
     Public Overrides Function ToRichText(ByVal level As Integer) As String
-        Dim new_line As String = Chr(10) & Chr(13)
-
-        'Dim Text, x, s, s1 As String
 
         ' write the cardinality of the element
         Dim s1 As String = mText & " (" & mItem.Occurrences.ToString & ")"
 
         ' add bars if table and wrapping text
-        Dim aText As String = (Space(3 * level) & "\b " & s1 & "\b0\par")
+        Dim result As String = (Space(3 * level) & "\b " & s1 & "\b0\par")
 
         'write the description of the element
         Dim s As String = " " & mDescription
-        aText = aText & new_line & (Space(3 * level) & s & "\par")
+        result = result & Environment.NewLine & (Space(3 * level) & s & "\par")
 
-        aText &= new_line & (Space(3 * level) & "  DataType = " _
+        result &= Environment.NewLine & (Space(3 * level) & "  DataType = " _
                 & Me.Element.Constraint.ConstraintTypeString & "\par")
 
-        Select Case Me.Element.Constraint.Type
+        result &= ConstraintToRichText(Me.Element.Constraint, level)
+
+        result &= Environment.NewLine & ("\par")
+        Return result
+
+    End Function
+
+    Private Function DateTimeConstraintToRichText(ByVal a_date_time_constraint As Constraint_DateTime) As String
+        Dim result As String = ""
+        result &= Filemanager.GetOpenEhrTerm(a_date_time_constraint.TypeofDateTimeConstraint, "not known")
+        Return result
+    End Function
+
+    Private Function ConstraintToRichText(ByVal a_constraint As Constraint, ByVal level As Integer) As String
+        Dim result As String = ""
+        Select Case a_constraint.Type
+
             Case ConstraintType.Quantity
 
-                aText &= new_line _
-                        & QuantityConstraintToRichText(CType(Me.Element.Constraint, Constraint_Quantity), level, new_line)
+                result &= Environment.NewLine _
+                        & QuantityConstraintToRichText(CType(a_constraint, Constraint_Quantity), level)
 
             Case ConstraintType.Count
 
-                aText &= new_line & (Space(3 * level) & "  Constraint: " & CountConstraintToRichText(CType(Me.Element.Constraint, Constraint_Count)) & "\par")
+                result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & CountConstraintToRichText(CType(a_constraint, Constraint_Count)) & "\par")
 
             Case ConstraintType.Text
 
-                aText &= new_line & (Space(3 * level) & "  Constraint: " & TextConstraintToRichText(CType(Me.Element.Constraint, Constraint_Text)) & "\par")
+                result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & TextConstraintToRichText(CType(a_constraint, Constraint_Text)) & "\par")
 
             Case ConstraintType.Boolean
                 Dim b As Constraint_Boolean
+                Dim s As String = ""
 
-                b = CType(Me.Element.Constraint, Constraint_Boolean)
-                If b.hasAssumedValue Then
-                    s = "Default = " & b.AssumedValue.ToString
-                    aText &= new_line & (Space(3 * level) & "  Constraint: " & s & "\par")
+                b = CType(a_constraint, Constraint_Boolean)
+                If b.TrueFalseAllowed Then
+                    s = "*"
+                ElseIf b.TrueAllowed Then
+                    s = Boolean.TrueString
+                Else
+                    s = Boolean.FalseString
                 End If
+
+                If b.hasAssumedValue Then
+                    s &= "; " & mFileManager.OntologyManager.GetOpenEHRTerm(158, "Assumed value") & " = " & b.AssumedValue.ToString
+                End If
+                result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & s & "\par")
 
             Case ConstraintType.DateTime
                 Dim dt As Constraint_DateTime
-                dt = CType(Me.Element.Constraint, Constraint_DateTime)
-                s = Filemanager.GetOpenEhrTerm(dt.TypeofDateTimeConstraint, "not known")
-                aText &= new_line & (Space(3 * level) & "  Constraint: " & s & "\par")
+                dt = CType(a_constraint, Constraint_DateTime)
+                result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & DateTimeConstraintToRichText(dt) & "\par")
 
             Case ConstraintType.Ordinal
-                aText &= new_line & (Space(3 * level) & "  Constraint: " & OrdinalConstraintToRichText(CType(Me.Element.Constraint, Constraint_Ordinal)) & "\par")
+                result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & OrdinalConstraintToRichText(CType(a_constraint, Constraint_Ordinal)) & "\par")
+
+            Case ConstraintType.Duration
+                result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & DurationConstraintToRichText(CType(a_constraint, Constraint_Duration)) & "\par")
+
+            Case ConstraintType.Any
+                ' add nothing
+
+            Case ConstraintType.Multiple
+                For Each c As Constraint In CType(a_constraint, Constraint_Choice).Constraints
+                    result &= ConstraintToRichText(c, level + 1)
+                Next
+
+            Case ConstraintType.MultiMedia
+                'add nothing
+
+            Case ConstraintType.URI
+                'add nothing
+
+            Case ConstraintType.Interval_Count
+                Dim cic As Constraint_Interval_Count = CType(a_constraint, Constraint_Interval_Count)
+                result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": "
+                result &= CountConstraintToRichText(CType(cic.UpperLimit, Constraint_Count))
+                result &= ", " & AE_Constants.Instance.Lower & ": "
+                result &= CountConstraintToRichText(CType(cic.LowerLimit, Constraint_Count))
+                result &= "\par"
+
+            Case ConstraintType.Interval_DateTime
+                Dim cidt As Constraint_Interval_DateTime = CType(a_constraint, Constraint_Interval_DateTime)
+                result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": "
+                result &= DateTimeConstraintToRichText(CType(cidt.UpperLimit, Constraint_DateTime))
+                result &= ", " & AE_Constants.Instance.Lower & ": "
+                result &= DateTimeConstraintToRichText(CType(cidt.LowerLimit, Constraint_DateTime))
+                result &= "\par"
+                
+            Case ConstraintType.Interval_Quantity
+                Dim ciq As Constraint_Interval_Count = CType(a_constraint, Constraint_Interval_Quantity)
+                result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": \par"
+                result &= Environment.NewLine & QuantityConstraintToRichText(CType(ciq.UpperLimit, Constraint_Quantity), level + 1) & "\par"
+                result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Lower & ": \par"
+                result &= Environment.NewLine & QuantityConstraintToRichText(CType(ciq.LowerLimit, Constraint_Quantity), level + 1) & "\par"
+
+
+            Case ConstraintType.Proportion
+                Dim cp As Constraint_Proportion = CType(a_constraint, Constraint_Proportion)
+                result &= Environment.NewLine & Space(3 * level)
+                result &= CountConstraintToRichText(CType(cp.Numerator, Constraint_Count))
+                If cp.IsPercent Then
+                    result &= "%"
+                ElseIf cp.IsUnitary Then
+                    result &= " (" & mFileManager.OntologyManager.GetOpenEHRTerm(644, "Unitary") & ")"
+                Else
+                    result &= ": "
+                    result &= CountConstraintToRichText(CType(cp.Denominator, Constraint_Count))
+                End If
+
+                If cp.IsIntegral Then
+                    result &= " (" & mFileManager.OntologyManager.GetOpenEHRTerm(643, "Integral") & ")"
+                End If
+
+                result &= "\par"
+
+            Case Else
+                Debug.Assert(False, a_constraint.Type.ToString & " not handled")
 
         End Select
-
-        aText &= new_line & ("\par")
-        Return aText
-
+        Return result
     End Function
 
     Private Structure HTML_Details
@@ -311,7 +452,11 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     End Structure
 
     Private Function GetHtmlDetails(ByVal c As Constraint) As HTML_Details
-        Dim html_dt As HTML_Details
+
+        Dim html_dt As HTML_Details = New HTML_Details()
+
+        html_dt.HTML = ""
+        html_dt.ImageSource = ""
 
         Select Case c.Type
 
@@ -385,9 +530,13 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 html_dt.HTML = Environment.NewLine & "&nbsp;"
                 html_dt.ImageSource = "Images/uri.gif"
 
-            Case ConstraintType.Ratio
-                html_dt.HTML = Environment.NewLine & RatioConstraintToHTML(CType(c, Constraint_Ratio))
+            Case ConstraintType.Proportion
+                html_dt.HTML = Environment.NewLine & ProportionConstraintToHTML(CType(c, Constraint_Proportion))
                 html_dt.ImageSource = "Images/ratio.gif"
+
+            Case ConstraintType.Duration
+                html_dt.HTML = Environment.NewLine & DurationConstraintToRichText(CType(c, Constraint_Duration))
+                html_dt.ImageSource = "Images/duration.gif"
 
             Case ConstraintType.Interval_Count
                 html_dt.HTML = Environment.NewLine & IntervalCountToHTML(CType(c, Constraint_Interval_Count))
@@ -396,6 +545,14 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Case ConstraintType.Interval_Quantity
                 html_dt.HTML = Environment.NewLine & IntervalQuantityToHTML(CType(c, Constraint_Interval_Quantity))
                 html_dt.ImageSource = "Images/interval.gif"
+
+            Case ConstraintType.Interval_DateTime
+                html_dt.HTML = Environment.NewLine & IntervalDateTimeToHTML(CType(c, Constraint_Interval_DateTime))
+                html_dt.ImageSource = "Images/interval.gif"
+
+            Case ConstraintType.MultiMedia
+                html_dt.HTML = ""
+                html_dt.ImageSource = "Images/multimedia.gif"
 
             Case Else
                 Debug.WriteLine(c.Type.ToString)
@@ -413,7 +570,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
         ' write the cardinality of the element
         Dim a_text As String = "<tr>"
-        Dim class_names As String
+        Dim class_names As String = ""
         Dim html_dt As HTML_Details = GetHtmlDetails(Me.Element.Constraint)
 
         If Me.Element.Constraint.Type = ConstraintType.Multiple Then
