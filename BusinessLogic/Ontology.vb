@@ -37,6 +37,7 @@ Public MustInherit Class Ontology
     Public MustOverride Sub AddTerm(ByVal a_Term As RmTerm)
     Public MustOverride Function HasTermCode(ByVal a_term_code As String) As Boolean
     Public MustOverride Sub ReplaceTerm(ByVal a_Term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
+    'Public MustOverride Sub DeleteTerm(ByVal a_Term As RmTerm)
     Public MustOverride Sub AddConstraint(ByVal a_Term As RmTerm)
     Public MustOverride Sub ReplaceConstraint(ByVal a_Term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
     Public MustOverride Sub AddLanguage(ByVal LanguageCode As String)

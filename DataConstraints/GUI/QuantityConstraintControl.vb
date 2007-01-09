@@ -113,7 +113,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.comboPhysicalProperty.DisplayMember = "Text"
         Me.comboPhysicalProperty.Location = New System.Drawing.Point(41, 64)
         Me.comboPhysicalProperty.Name = "comboPhysicalProperty"
-        Me.comboPhysicalProperty.Size = New System.Drawing.Size(295, 24)
+        Me.comboPhysicalProperty.Size = New System.Drawing.Size(320, 24)
         Me.comboPhysicalProperty.TabIndex = 0
         Me.comboPhysicalProperty.ValueMember = "id"
         '
@@ -193,7 +193,6 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         RemoveHandler Me.comboPhysicalProperty.SelectedIndexChanged, AddressOf Me.comboPhysicalProperty_SelectedIndexChanged
 
         If Me.comboPhysicalProperty.DataSource Is Nothing Then
-            '            OceanArchetypeEditor.Instance.PhysicalPropertiesTable.DefaultView.ApplyDefaultSort = True
             Me.comboPhysicalProperty.DataSource = New DataView(OceanArchetypeEditor.Instance.PhysicalPropertiesTable)
             CType(Me.comboPhysicalProperty.DataSource, DataView).Sort = Me.comboPhysicalProperty.DisplayMember
         End If
@@ -206,7 +205,12 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             If Me.Constraint.IsCoded Then
                 Debug.Assert(Me.Constraint.PhysicalPropertyAsString.StartsWith("openehr"))
                 Try
-                    Me.comboPhysicalProperty.SelectedValue = OceanArchetypeEditor.Instance.GetIdForPropertyOpenEhrCode(Me.Constraint.OpenEhrCode)
+                    Dim i As Integer = OceanArchetypeEditor.Instance.GetIdForPropertyOpenEhrCode(Me.Constraint.OpenEhrCode)
+                    If i > -1 Then
+                        Me.comboPhysicalProperty.SelectedValue = OceanArchetypeEditor.Instance.GetIdForPropertyOpenEhrCode(Me.Constraint.OpenEhrCode)
+                    Else
+                        Me.comboPhysicalProperty.SelectedValue = 64
+                    End If
                 Catch
                     'ToDo: Raise error
                     Debug.Assert(False)
@@ -229,6 +233,9 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                     Me.comboPhysicalProperty.SelectedValue = 64 ' Not set
                 End If
             End If
+        Else
+            'Set the property value to Not Set
+            Me.comboPhysicalProperty.SelectedValue = 64 ' Not set
         End If
 
         'Check if the Property is Time - requires special language handling
@@ -274,8 +281,6 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub butAddUnit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddUnit.Click
-
-
         If Convert.ToInt16(Me.comboPhysicalProperty.SelectedValue) = 64 Then
             'Property is not set so show all the units
             Dim Frm As New Choose
@@ -305,13 +310,9 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
             mFileManager.FileEdited = True
 
-
         Else
-            'Show units of that are not already selected
-            ' of that property
-
             Dim c_menu As New ContextMenu
-            Dim where_clause As String
+            Dim where_clause As String = ""
 
             'Exclude units already added
             For Each c_unit As Constraint_QuantityUnit In Me.listUnits.Items
@@ -360,7 +361,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 If MessageBox.Show(AE_Constants.Instance.Remove & "'" & s & "'", _
                         AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, _
                         MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) _
-                        = DialogResult.OK Then
+                        = Windows.Forms.DialogResult.OK Then
 
                     If Constraint.IsTime Then
                         Constraint.Units.Remove(OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(s))
@@ -470,7 +471,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Dim Phys_Prop, CompoundUnit As String
         Dim id As Integer
         Dim selected_rows As DataRow()
-        Dim d_row, new_row As DataRow
+        Dim d_row As DataRow
         Dim curlybrackets As Char() = {"{"c, "}"c}
 
         y = Units.Split("/"c)

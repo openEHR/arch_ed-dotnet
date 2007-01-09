@@ -1,12 +1,12 @@
 Public Class ArchetypeDetails
     Inherits Collections.DictionaryBase
 
-    Public Overridable Function AddOrReplace(ByVal a_language As String, ByVal a_detail As ArchetypeDescriptionItem)
+    Public Overridable Sub AddOrReplace(ByVal a_language As String, ByVal a_detail As ArchetypeDescriptionItem)
         If Me.HasDetailInLanguage(a_language) Then
             Me.InnerHashtable.Remove(a_language)
         End If
         Me.InnerHashtable.Add(a_language, a_detail)
-    End Function
+    End Sub
 
     Public Overridable Function DetailInLanguage(ByVal a_language As String) As ArchetypeDescriptionItem
         If Me.InnerHashtable.ContainsKey(a_language) Then

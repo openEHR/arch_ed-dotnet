@@ -35,7 +35,7 @@ Class ADL_COMPOSITION
                 Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                     Case "category"
                         Dim t As Constraint_Text
-                        t = RmElement.ProcessText(an_attribute.children.first)
+                        t = ADL_RmElement.ProcessText(an_attribute.children.first)
                         If t.AllowableValues.hasCode("431") Then
                             'isPersistent defaults to false (openehr::433) for event
                             mIsPersistent = True

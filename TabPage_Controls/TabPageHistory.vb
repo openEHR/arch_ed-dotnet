@@ -20,7 +20,7 @@ Public Class TabpageHistory
     Private current_item As EventListViewItem
     Private sNodeID As String
     Private MathFunctionTable As DataTable
-    Private mIsLoading = False
+    Private mIsLoading As Boolean = False
     Private mFileManager As FileManagerLocal
     WithEvents mOccurrences As OccurrencesPanel
 
@@ -96,7 +96,7 @@ Public Class TabpageHistory
     Friend WithEvents gbEventList As System.Windows.Forms.GroupBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabpageHistory))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabpageHistory))
         Me.gbEventDetails = New System.Windows.Forms.GroupBox
         Me.buSetRuntimeConstraint = New System.Windows.Forms.Button
         Me.lblRuntimeName = New System.Windows.Forms.Label
@@ -108,7 +108,6 @@ Public Class TabpageHistory
         Me.numericDuration = New System.Windows.Forms.NumericUpDown
         Me.comboDurationUnits = New System.Windows.Forms.ComboBox
         Me.RadioInterval = New System.Windows.Forms.RadioButton
-        Me.ImageListEvents = New System.Windows.Forms.ImageList(Me.components)
         Me.radioPointInTime = New System.Windows.Forms.RadioButton
         Me.gbOffset = New System.Windows.Forms.GroupBox
         Me.cbFixedOffset = New System.Windows.Forms.CheckBox
@@ -128,6 +127,7 @@ Public Class TabpageHistory
         Me.radioFixed = New System.Windows.Forms.RadioButton
         Me.ListEvents = New System.Windows.Forms.ListView
         Me.TheEvents = New System.Windows.Forms.ColumnHeader
+        Me.ImageListEvents = New System.Windows.Forms.ImageList(Me.components)
         Me.HelpProviderEventSeries = New System.Windows.Forms.HelpProvider
         Me.gbEventDetails.SuspendLayout()
         Me.gbDuration.SuspendLayout()
@@ -180,7 +180,6 @@ Public Class TabpageHistory
         Me.txtRuntimeConstraint.ReadOnly = True
         Me.txtRuntimeConstraint.Size = New System.Drawing.Size(190, 22)
         Me.txtRuntimeConstraint.TabIndex = 5
-        Me.txtRuntimeConstraint.Text = ""
         '
         'txtEventDescription
         '
@@ -189,7 +188,6 @@ Public Class TabpageHistory
         Me.txtEventDescription.Name = "txtEventDescription"
         Me.txtEventDescription.Size = New System.Drawing.Size(349, 46)
         Me.txtEventDescription.TabIndex = 4
-        Me.txtEventDescription.Text = ""
         '
         'gbDuration
         '
@@ -245,30 +243,18 @@ Public Class TabpageHistory
         Me.RadioInterval.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioInterval.AutoCheck = False
         Me.RadioInterval.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.RadioInterval.ImageAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.RadioInterval.ImageIndex = 1
-        Me.RadioInterval.ImageList = Me.ImageListEvents
         Me.RadioInterval.Location = New System.Drawing.Point(180, 200)
         Me.RadioInterval.Name = "RadioInterval"
         Me.RadioInterval.Size = New System.Drawing.Size(128, 24)
         Me.RadioInterval.TabIndex = 7
         Me.RadioInterval.Text = "Interval"
-        Me.RadioInterval.TextAlign = System.Drawing.ContentAlignment.TopCenter
-        '
-        'ImageListEvents
-        '
-        Me.ImageListEvents.ImageSize = New System.Drawing.Size(16, 16)
-        Me.ImageListEvents.ImageStream = CType(resources.GetObject("ImageListEvents.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageListEvents.TransparentColor = System.Drawing.Color.Transparent
+        Me.RadioInterval.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'radioPointInTime
         '
         Me.radioPointInTime.Appearance = System.Windows.Forms.Appearance.Button
         Me.radioPointInTime.AutoCheck = False
         Me.radioPointInTime.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.radioPointInTime.ImageAlign = System.Drawing.ContentAlignment.TopLeft
-        Me.radioPointInTime.ImageIndex = 0
-        Me.radioPointInTime.ImageList = Me.ImageListEvents
         Me.radioPointInTime.Location = New System.Drawing.Point(26, 200)
         Me.radioPointInTime.Name = "radioPointInTime"
         Me.radioPointInTime.Size = New System.Drawing.Size(136, 24)
@@ -435,12 +421,24 @@ Public Class TabpageHistory
         Me.ListEvents.Size = New System.Drawing.Size(216, 376)
         Me.ListEvents.SmallImageList = Me.ImageListEvents
         Me.ListEvents.TabIndex = 0
+        Me.ListEvents.UseCompatibleStateImageBehavior = False
         Me.ListEvents.View = System.Windows.Forms.View.Details
         '
         'TheEvents
         '
         Me.TheEvents.Text = "Events"
         Me.TheEvents.Width = 350
+        '
+        'ImageListEvents
+        '
+        Me.ImageListEvents.ImageStream = CType(resources.GetObject("ImageListEvents.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageListEvents.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageListEvents.Images.SetKeyName(0, "")
+        Me.ImageListEvents.Images.SetKeyName(1, "")
+        Me.ImageListEvents.Images.SetKeyName(2, "")
+        Me.ImageListEvents.Images.SetKeyName(3, "")
+        Me.ImageListEvents.Images.SetKeyName(4, "")
+        Me.ImageListEvents.Images.SetKeyName(5, "")
         '
         'TabpageHistory
         '
@@ -461,6 +459,7 @@ Public Class TabpageHistory
         Me.HelpProviderEventSeries.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(824, 392)
         Me.gbEventDetails.ResumeLayout(False)
+        Me.gbEventDetails.PerformLayout()
         Me.gbDuration.ResumeLayout(False)
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbOffset.ResumeLayout(False)
@@ -484,7 +483,7 @@ Public Class TabpageHistory
         End Set
     End Property
 
-    Friend Function BuildInterface(ByVal aContainer As Control, ByVal pos As Point, ByVal mandatory_only As Boolean)
+    Friend Sub BuildInterface(ByVal aContainer As Control, ByVal pos As Point, ByVal mandatory_only As Boolean)
         Dim spacer As Integer = 15
         Dim leftmargin As Integer = pos.X
 
@@ -503,9 +502,9 @@ Public Class TabpageHistory
         aContainer.Height = pos.Y + combo.Height + 10
         aContainer.Controls.Add(combo)
 
-    End Function
+    End Sub
 
-    Friend Function ToRichText(ByRef Text As IO.StringWriter, ByVal level As Integer)
+    Friend Sub ToRichText(ByRef Text As IO.StringWriter, ByVal level As Integer)
         Dim elvi As EventListViewItem
 
         Text.WriteLine(Space(3 * level) & "\cf1 EventSeries\cf0  = \{\par")
@@ -515,7 +514,6 @@ Public Class TabpageHistory
         End If
 
         For Each elvi In Me.ListEvents.Items
-            Dim s As String
             Text.WriteLine(Space(3 * level) & "\b " & elvi.Text & " (" & elvi.Occurrences.ToString & ") \b0\par")
             Text.WriteLine(Space(3 * level) & "\i   - " & elvi.Description & "\i0\par")
 
@@ -547,9 +545,9 @@ Public Class TabpageHistory
 
         level = level - 1
         Text.WriteLine(Space(3 * level) & "\} -- end EventSeries\par")
-    End Function
+    End Sub
 
-    Friend Function ToHTML(ByRef Text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "")
+    Friend Sub ToHTML(ByRef Text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "")
         Dim elvi As EventListViewItem
 
         If Me.chkIsPeriodic.Checked Then
@@ -606,9 +604,9 @@ Public Class TabpageHistory
         Text.WriteLine(Environment.NewLine & "<hr>")
 
 
-    End Function
+    End Sub
 
-    Friend Function ProcessEventSeries(ByVal rm As RmHistory)
+    Friend Sub ProcessEventSeries(ByVal rm As RmHistory)
         Dim ev As RmEvent
         Dim HistEvent As EventListViewItem
 
@@ -651,7 +649,7 @@ Public Class TabpageHistory
             current_item.Selected = True
         End If
 
-    End Function
+    End Sub
 
     Public ReadOnly Property ComponentType() As String
         Get
@@ -744,16 +742,16 @@ Public Class TabpageHistory
         a_EventSeries.Children.Cardinality.IsUnbounded = True
     End Sub
 
-    Friend Function Reset()
+    Friend Sub Reset()
         ' empty and reset all controls
         Me.ListEvents.Items.Clear()
         Me.txtEventDescription.Text = ""
         Me.NumericOffset.Value = 0
         Me.chkIsPeriodic.Checked = False
         Me.numericDuration.Value = 0
-    End Function
+    End Sub
 
-    Friend Function AddBaseLineEvent()
+    Friend Sub AddBaseLineEvent()
         Dim elvi As EventListViewItem
 
         elvi = New EventListViewItem(Filemanager.GetOpenEhrTerm(276, "Baseline event"), mFileManager)
@@ -770,7 +768,7 @@ Public Class TabpageHistory
         elvi.Selected = True
         current_item = elvi
 
-    End Function
+    End Sub
 
 #End Region
 
@@ -981,7 +979,6 @@ Public Class TabpageHistory
             MyBase.New()
             mFileManager = a_filemanager
 
-            Dim s As String
             Dim a_Term As RmTerm
 
             element = an_event
@@ -996,8 +993,6 @@ Public Class TabpageHistory
             MyBase.New()
 
             mFileManager = a_filemanager
-
-            Dim s As String
 
             MyBase.Text = elvi.Text
             sDescription = elvi.Description
@@ -1076,6 +1071,7 @@ Public Class TabpageHistory
             RadioInterval.Checked = False
         End If
     End Sub
+
 
     Private Sub butAddEvent_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddEvent.Click
         Dim elvi As EventListViewItem
@@ -1303,9 +1299,8 @@ Public Class TabpageHistory
 
             elvi = ListEvents.SelectedItems(0)
 
-            If MessageBox.Show(AE_Constants.Instance.Remove & elvi.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
-                Dim nodeid As String
-
+            If MessageBox.Show(AE_Constants.Instance.Remove & elvi.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                
                 ' leave an item selected if there is one
                 If elvi.Index > 0 Then
                     Me.ListEvents.Items(elvi.Index - 1).Selected = True
@@ -1375,7 +1370,7 @@ Public Class TabpageHistory
     Private Sub buSetRuntimeConstraint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles buSetRuntimeConstraint.Click
         Dim frm As New ConstraintForm
         Dim has_constraint As Boolean
-        Dim t As Constraint_Text
+        Dim t As Constraint_Text = Nothing
 
         has_constraint = current_item.hasNameConstraint
         If has_constraint Then
@@ -1384,17 +1379,17 @@ Public Class TabpageHistory
 
         frm.ShowConstraint(False, current_item.NameConstraint, mFileManager)
         Select Case frm.ShowDialog
-            Case DialogResult.OK
+            Case Windows.Forms.DialogResult.OK
                 'no action
                 mFileManager.FileEdited = True
-            Case DialogResult.Cancel
+            Case Windows.Forms.DialogResult.Cancel
                 ' put it back to null if it was before
                 If Not has_constraint Then
                     current_item.hasNameConstraint = False
                 Else
                     current_item.NameConstraint = t
                 End If
-            Case DialogResult.Ignore
+            Case Windows.Forms.DialogResult.Ignore
                 current_item.hasNameConstraint = False
                 mFileManager.FileEdited = True
         End Select

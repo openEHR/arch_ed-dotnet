@@ -39,7 +39,7 @@ Public Class DurationViewControl : Inherits ElementViewControl
         'Change Sam Heard 2004-06-20
         'Crash if no units so added check
 
-        If durationConstraint.ValueUnits <> "" Then
+        If durationConstraint.MinMaxValueUnits <> "" Then
             SetMaxMin(mNumeric, CType(durationConstraint, Constraint_Count))
         End If
 

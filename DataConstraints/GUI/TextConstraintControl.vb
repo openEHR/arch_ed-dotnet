@@ -425,7 +425,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Private Sub butDefaultItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butDefaultItem.Click
 
         If Me.listAllowableValues.SelectedIndex > -1 Then
-            Dim s As String
+            Dim s As String = ""
+
             If Me.radioInternal.Checked Then
                 ' the code is the default value, show the text
                 Me.txtAssumedValue.Text = CType(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item("Text"), String)
@@ -520,7 +521,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                     If MessageBox.Show(AE_Constants.Instance.Remove & _
                             CStr(Me.listAllowableValues.Items(Index)), _
                             AE_Constants.Instance.MessageBoxCaption, _
-                            MessageBoxButtons.OKCancel) = DialogResult.OK Then
+                            MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
 
                         If CStr(Me.listAllowableValues.Items(Index)) = defaultText Then
                             Me.txtAssumedValue.Text = "(none)"
@@ -542,7 +543,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                     If MessageBox.Show(AE_Constants.Instance.Remove & _
                             CStr(Me.listAllowableValues.Text), _
                             AE_Constants.Instance.MessageBoxCaption, _
-                            MessageBoxButtons.OKCancel) = DialogResult.OK Then
+                            MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
 
                         ' have to delete this from all languages
                         If CStr(Me.listAllowableValues.Text) = defaultText Then
@@ -617,7 +618,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                                AE_Constants.Instance.MessageBoxCaption, _
                                MessageBoxButtons.OKCancel, _
                                MessageBoxIcon.Warning, _
-                               MessageBoxDefaultButton.Button2) = DialogResult.OK Then
+                               MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
 
 
                         ' could offer transform but risky as many variables!
@@ -684,11 +685,11 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                     AE_Constants.Instance.MessageBoxCaption, _
                     MessageBoxButtons.OKCancel, _
                     MessageBoxIcon.Warning, _
-                    MessageBoxDefaultButton.Button2) = DialogResult.OK Then
+                    MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
 
                 If Me.Constraint.ConstraintCode = "" Then
                     Dim term As RmTerm = mFileManager.OntologyManager.AddConstraint("New constraint")
-                    Me.Constraint.ConstraintCode = Term.Code
+                    Me.Constraint.ConstraintCode = term.Code
                     MyBase.IsLoading = True  ' avoids replacing the text
                     Me.txtTermConstraintText.Text = "New constraint"
                     MyBase.IsLoading = False
@@ -749,10 +750,10 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 If MessageBox.Show(AE_Constants.Instance.Convert_internal_text, _
                         AE_Constants.Instance.MessageBoxCaption, _
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, _
-                        MessageBoxDefaultButton.Button2) = DialogResult.OK Then
+                        MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
 
                     Dim cp As New CodePhrase
-                    Dim aTerm As RmTerm
+                    Dim aTerm As RmTerm = Nothing
 
                     For Each ss As String In Me.Constraint.AllowableValues.Codes
                         aTerm = mFileManager.OntologyManager.GetTerm(ss)
@@ -847,7 +848,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 If MessageBox.Show(AE_Constants.Instance.Convert_string_text, _
                         AE_Constants.Instance.MessageBoxCaption, _
                         MessageBoxButtons.OKCancel, _
-                        MessageBoxIcon.Question) = DialogResult.OK Then
+                        MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
 
                     For i As Integer = 0 To mTempConstraint.AllowableValues.Codes.Count - 1
                         Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm( _
@@ -875,7 +876,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 If MessageBox.Show(AE_Constants.Instance.Convert_text_string, _
                         AE_Constants.Instance.MessageBoxCaption, _
                         MessageBoxButtons.OKCancel, _
-                        MessageBoxIcon.Question) = DialogResult.OK Then
+                        MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
 
                     For i As Integer = 0 To mTempConstraint.AllowableValues.Codes.Count - 1
                         Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm( _

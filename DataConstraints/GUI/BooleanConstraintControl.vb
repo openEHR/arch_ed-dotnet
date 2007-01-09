@@ -162,8 +162,8 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
 
         ' set constraint values on control
 
-        Me.cbFalse.Text = System.Boolean.FalseString
-        Me.cbTrue.Text = System.Boolean.TrueString
+        Me.cbFalse.Text = AE_Constants.Instance.False_
+        Me.cbTrue.Text = AE_Constants.Instance.True_
 
         If Me.Constraint.TrueFalseAllowed Then
             Me.cbTrue.Checked = True
@@ -180,9 +180,9 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
             Me.gbAssummedValue.Visible = True
             If Me.Constraint.hasAssumedValue Then
                 If Me.Constraint.AssumedValue Then
-                    Me.listBoolean.SelectedIndex = Me.listBoolean.Items.IndexOf(System.Boolean.TrueString)
+                    Me.listBoolean.SelectedIndex = Me.listBoolean.Items.IndexOf(AE_Constants.Instance.True_)
                 Else
-                    Me.listBoolean.SelectedIndex = Me.listBoolean.Items.IndexOf(System.Boolean.FalseString)
+                    Me.listBoolean.SelectedIndex = Me.listBoolean.Items.IndexOf(AE_Constants.Instance.False_)
                 End If
             End If
         Else
@@ -197,11 +197,11 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
             Me.Constraint.hasAssumedValue = True
 
             Select Case Me.listBoolean.SelectedItem.ToString
-                Case System.Boolean.TrueString
+                Case AE_Constants.Instance.True_
                     ' true
                     Me.Constraint.AssumedValue = True
 
-                Case System.Boolean.FalseString ' false
+                Case AE_Constants.Instance.False_ ' false
                     Me.Constraint.AssumedValue = False
 
                 Case Else
@@ -233,13 +233,13 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
             mFileManager.FileEdited = True
         End If
 
-        If Me.listBoolean.Items.Contains(System.Boolean.TrueString) Then
+        If Me.listBoolean.Items.Contains(AE_Constants.Instance.True_) Then
             If Not Me.cbTrue.Checked Then
-                Me.listBoolean.Items.Remove(System.Boolean.TrueString)
+                Me.listBoolean.Items.Remove(AE_Constants.Instance.True_)
             End If
         Else
             If Me.cbTrue.Checked Then
-                Me.listBoolean.Items.Add(System.Boolean.TrueString)
+                Me.listBoolean.Items.Add(AE_Constants.Instance.True_)
             End If
         End If
 
@@ -265,13 +265,13 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
             mFileManager.FileEdited = True
         End If
 
-        If Me.listBoolean.Items.Contains(System.Boolean.FalseString) Then
+        If Me.listBoolean.Items.Contains(AE_Constants.Instance.False_) Then
             If Not Me.cbFalse.Checked Then
-                Me.listBoolean.Items.Remove(System.Boolean.FalseString)
+                Me.listBoolean.Items.Remove(AE_Constants.Instance.False_)
             End If
         Else
             If Me.cbFalse.Checked Then
-                Me.listBoolean.Items.Add(System.Boolean.FalseString)
+                Me.listBoolean.Items.Add(AE_Constants.Instance.False_)
             End If
         End If
     End Sub

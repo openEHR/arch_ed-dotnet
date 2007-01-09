@@ -13,13 +13,13 @@ Public Enum LifeCycleStates
     Obsolete = 577
 End Enum
 
-Public Class ArchetypeDescription
+Public MustInherit Class ArchetypeDescription
     Protected mOriginalAuthor As String
     Protected mOriginalAuthorEmail As String
     Protected mOriginalAuthorOrganisation As String
     Protected mOriginalAuthorDate As String
     Protected mLifeCycleState As LifeCycleStates
-    Protected mADL_Version As String = "1.2"
+    Protected mADL_Version As String = "1.4"
     Protected mArchetypePackageURI As String
     Protected mOtherDetails As New OtherDefinitionDetails
     Protected mArchetypeDetails As New ArchetypeDetails
@@ -58,10 +58,13 @@ Public Class ArchetypeDescription
             mOriginalAuthorDate = Value
         End Set
     End Property
-    ReadOnly Property OtherContributors() As Collections.Specialized.StringCollection
+    Property OtherContributors() As Collections.Specialized.StringCollection
         Get
             Return mOtherContributors
         End Get
+        Set(ByVal value As Collections.Specialized.StringCollection)
+            mOtherContributors = value
+        End Set
     End Property
 
     Property CopyRight() As String
@@ -72,10 +75,13 @@ Public Class ArchetypeDescription
             mCopyRight = Value
         End Set
     End Property
-    Public Overridable ReadOnly Property Details() As ArchetypeDetails
+    Public Overridable Property Details() As ArchetypeDetails
         Get
             Return mArchetypeDetails
         End Get
+        Set(ByVal value As ArchetypeDetails)
+            mArchetypeDetails = value
+        End Set
     End Property
     Property LifeCycleState() As LifeCycleStates
         Get
@@ -100,7 +106,7 @@ Public Class ArchetypeDescription
             Try
                 mLifeCycleState = CType([Enum].Parse(GetType(LifeCycleStates), Value, True), LifeCycleStates)
             Catch
-                'FIXME - raise error
+                mLifeCycleState = LifeCycleStates.NotSet
             End Try
         End Set
     End Property
@@ -112,10 +118,13 @@ Public Class ArchetypeDescription
             mArchetypePackageURI = Value
         End Set
     End Property
-    ReadOnly Property OtherDetails() As OtherDefinitionDetails
+    Public Property OtherDetails() As OtherDefinitionDetails
         Get
             Return mOtherDetails
         End Get
+        Set(ByVal value As OtherDefinitionDetails)
+            mOtherDetails = value
+        End Set
     End Property
 
 End Class

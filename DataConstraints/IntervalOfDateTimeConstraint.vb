@@ -17,7 +17,8 @@ Option Strict On
 Class Constraint_Interval_DateTime
     Inherits Constraint_Interval
 
-    Private mDateTime As New Constraint_DateTime
+    Private mDateTimeUpper As New Constraint_DateTime
+    Private mDateTimeLower As New Constraint_DateTime
 
     Public Overrides ReadOnly Property Type() As ConstraintType
         Get
@@ -25,17 +26,23 @@ Class Constraint_Interval_DateTime
         End Get
     End Property
 
-    'Absolute limits is the feature of intervals
-    'Here it only allows you to set the constraint
-    'on the type of date time expressed in the interval
-
-    Overrides Property AbsoluteLimits() As Constraint
+    Overrides Property UpperLimit() As Constraint
         Get
-            Return mDateTime
+            Return mDateTimeUpper
         End Get
         Set(ByVal Value As Constraint)
             Debug.Assert(TypeOf Value Is Constraint_DateTime)
-            mDateTime = CType(Value, Constraint_DateTime)
+            mDateTimeUpper = CType(Value, Constraint_DateTime)
+        End Set
+    End Property
+
+    Overrides Property LowerLimit() As Constraint
+        Get
+            Return mDateTimeLower
+        End Get
+        Set(ByVal Value As Constraint)
+            Debug.Assert(TypeOf Value Is Constraint_DateTime)
+            mDateTimeLower = CType(Value, Constraint_DateTime)
         End Set
     End Property
 

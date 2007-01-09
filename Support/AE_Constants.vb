@@ -16,82 +16,101 @@
 
 Public Class AE_Constants
 
-    Private mSpecialise As String
-    Private mMustAddCriteria As String
-    Private mReduceTableToSimpleValue As String
-    Private mChooseMenuFileNew As String
-    Private mAndAllReferences As String
-    Private mExpandAll As String
-    Private mCollapseAll As String
-    Private mAddReference As String
-    Private mOceanArchetypeEditor As String
-    Private mYouHaveChosenALanguage As String
-    Private mAddTerminology As String
-    Private mLanguageAdditionCancelled As String
-    Private mCurrentArchetype As String
-    Private mDiscardChanges As String
-    Private mCouldNotFind As String
-    Private mPleaseSetConceptText As String
-    Private mRemoveState As String
-    Private mErrorLoading As String
-    Private mErrorSaving As String
-    Private mArchetypeNodeCodeNotPassed As String
-    Private mSaveChanges As String
-    Private mIncorrectFormat As String
-    Private mNoDefinitionFor As String
-    Private mRemove As String
-    Private mObjectColumnNameAlreadyInUse As String
-    Private mReduceListToSingleValue As String
-    Private mSelectedNodeIsNotElement As String
-    Private mSelectItem As String
-    Private mReduceTreeToList As String
-    Private mNameAlreadyInUse As String
-    Private mProtocol As String
-    Private mPersonState As String
-    Private mCannotDelete As String
-    Private mEnterNewName As String
-    Private mCannotRename As String
-    Private mFeatureNotAvailable As String
-    Private mConvertConstraint As String
-    Private mConvertStringToText As String
-    Private mConvertTextToStrings As String
-    Private mConvertTextToOrdinals As String
-    Private mConvertOrdinalToAllowableValues As String
-    Private mConvertInternalCodedToFreeText As String
-    Private mSlot As String
-    Private mCluster As String
-    Private mSection As String
-    Private mText As String
-    Private mDescription As String
-    Private mCannotSpecialiseReference
-    Private mCount As String
-    Private mDuration As String
-    Private mBoolean As String
-    Private mAny As String
-    Private mQuantity As String
-    Private mDateTime As String
-    Private mOrdinal As String
-    Private mRatio As String
-    Private mUnit As String
-    Private mMultiple As String
-    Private mRequiresSpecialisationToEdit As String
-    Private mInterval As String
-    Private mIntervalCount As String
-    Private mIntervalQuantity As String
-    Private mIntervalDateTime As String
-    Private mSetAbsoluteMax As String
-    Private mSetAbsoluteMin As String
-    Private mOK As String
-    Private mCancel As String
-    Private mTerminology As String
-    Private mInternalCodes As String
-    Private mMultiMedia As String
-    Private mURI As String
-    Private mDragDropHere As String
-    Private mReplaceTranslations As String
-    Private mRename As String
-    Private mChangeStructure As String
+    Private mSpecialise As String = "Specialise"
+    Private mMustAddCriteria As String = "Must add criteria"
+    Private mReduceTableToSimpleValue As String = "Reduce table to single value"
+    Private mChooseMenuFileNew As String = "Choose Menu > File > New"
+    Private mAndAllReferences As String = "and all references"
+    Private mExpandAll As String = "Expand all"
+    Private mCollapseAll As String = "Collapse all"
+    Private mAddReference As String = "Add reference"
+    Private mOceanArchetypeEditor As String = "Ocean archetype editor"
+    Private mYouHaveChosenALanguage As String = "You have chosen a language "
+    Private mAddTerminology As String = "Add terminology"
+    Private mLanguageAdditionCancelled As String = "Adding language cancelled"
+    Private mCurrentArchetype As String = "Current archetype"
+    Private mDiscardChanges As String = "Discard changes"
+    Private mCouldNotFind As String = "Could not find "
+    Private mPleaseSetConceptText As String = "Please set concept text"
+    Private mRemoveState As String = "Remove state information"
+    Private mErrorLoading As String = "Error on load"
+    Private mErrorSaving As String = "Error on save"
+    Private mArchetypeNodeCodeNotPassed As String = "Archetype node code did not pass"
+    Private mSaveChanges As String = "Save changes"
+    Private mIncorrectFormat As String = "Incorrect format"
+    Private mNoDefinitionFor As String = "No definition for "
+    Private mRemove As String = "Remove"
+    Private mObjectColumnNameAlreadyInUse As String = "Column name already in use"
+    Private mReduceListToSingleValue As String = "Reduce list to single value (first only)"
+    Private mSelectedNodeIsNotElement As String = "Selected node is not an element"
+    Private mSelectItem As String = "Select item"
+    Private mReduceTreeToList As String = "Reduce tree to list"
+    Private mNameAlreadyInUse As String = "Name already in use"
+    Private mProtocol As String = "Protocol"
+    Private mPersonState As String = "State"
+    Private mCannotDelete As String = "Cannot delete"
+    Private mEnterNewName As String = "Enter new name"
+    Private mCannotRename As String = "Cannot rename"
+    Private mFeatureNotAvailable As String = "Feature not available"
+    Private mConvertConstraint As String = "Convert constraint"
+    Private mConvertStringToText As String = "Convert string to text"
+    Private mConvertTextToStrings As String = "Convert text to strings"
+    Private mConvertTextToOrdinals As String = "Convert text to ordinals"
+    Private mConvertOrdinalToAllowableValues As String = "Convert ordinal to allowed values"
+    Private mConvertInternalCodedToFreeText As String = "Convert internal codes to free text"
+    Private mSlot As String = "Slot"
+    Private mCluster As String = "Cluster"
+    Private mSection As String = "Section"
+    Private mText As String = "Text"
+    Private mDescription As String = "Description"
+    Private mCannotSpecialiseReference As String = "Cannot specialise a reference"
+    Private mCount As String = "Count"
+    Private mDuration As String = "Duration"
+    Private mBoolean As String = "Boolean"
+    Private mAny As String = "Any"
+    Private mQuantity As String = "Quantity"
+    Private mDateTime As String = "DateTime"
+    Private mOrdinal As String = "Ordinal"
+    Private mProportion As String = "Proportion"
+    Private mUnit As String = "Unit"
+    Private mMultiple As String = "Multiple"
+    Private mRequiresSpecialisationToEdit As String = "Requires specialisation to edit"
+    Private mInterval As String = "Interval"
+    Private mIntervalCount As String = "Interval of Count"
+    Private mIntervalQuantity As String = "Interval of Quantity"
+    Private mIntervalDateTime As String = "Interval of DateTime"
+    Private mSetAbsoluteMax As String = "Set absolute maximum"
+    Private mSetAbsoluteMin As String = "Set absolute minimum"
+    Private mOK As String = "OK"
+    Private mCancel As String = "Cancel"
+    Private mTerminology As String = "Terminology"
+    Private mInternalCodes As String = "Internal codes"
+    Private mMultiMedia As String = "Multimedia"
+    Private mURI As String = "URI"
+    Private mDragDropHere As String = "Drag and drop here"
+    Private mReplaceTranslations As String = "Replace translations"
+    Private mRename As String = "Rename"
+    Private mChangeStructure As String = "Change structure"
+    Private mLower As String = "Lower"
+    Private mUpper As String = "Upper"
+    Private mIntegral As String = "Integral"
+    Private mUnitary As String = "Unitary"
+    Private mIntegerFraction As String = "Integer and fraction"
+    Private mFraction As String = "Fraction"
+    Private mTrue As String = "True"
+    Private mFalse As String = "False"
+    Private mChangeDataType As String = "Change data type"
 
+    Friend ReadOnly Property Lower() As String
+        Get
+            Return mLower
+        End Get
+    End Property
+    Friend ReadOnly Property Upper() As String
+        Get
+            Return mUpper
+        End Get
+    End Property
     Friend ReadOnly Property ReplaceTranslations() As String
         Get
             Return mReplaceTranslations
@@ -167,9 +186,9 @@ Public Class AE_Constants
         End Get
     End Property
 
-    Friend ReadOnly Property Ratio() As String
+    Friend ReadOnly Property Proportion() As String
         Get
-            Return mRatio
+            Return mProportion
         End Get
     End Property
     Friend ReadOnly Property Cannot_specialise_reference() As String
@@ -345,7 +364,7 @@ Public Class AE_Constants
         End Get
     End Property
 
-    Friend ReadOnly Property Duplicate_Object_column_name()
+    Friend ReadOnly Property Duplicate_Object_column_name() As String
         Get
             Return mObjectColumnNameAlreadyInUse
         End Get
@@ -365,6 +384,18 @@ Public Class AE_Constants
     Friend ReadOnly Property SelectItem() As String
         Get
             Return mSelectItem
+        End Get
+    End Property
+
+    Friend ReadOnly Property False_() As String
+        Get
+            Return mFalse
+        End Get
+    End Property
+
+    Friend ReadOnly Property True_() As String
+        Get
+            Return mTrue
         End Get
     End Property
 
@@ -458,6 +489,11 @@ Public Class AE_Constants
         End Get
     End Property
 
+    Friend ReadOnly Property ChangeDataType() As String
+        Get
+            Return mChangeDataType
+        End Get
+    End Property
     Friend ReadOnly Property Slot() As String
         Get
             Return mSlot
@@ -515,6 +551,29 @@ Public Class AE_Constants
             Return mRequiresSpecialisationToEdit
         End Get
     End Property
+    Friend ReadOnly Property Integral() As String
+        Get
+            Return mIntegral
+        End Get
+    End Property
+    Friend ReadOnly Property Unitary() As String
+        Get
+            Return mUnitary
+        End Get
+    End Property
+    Friend ReadOnly Property Fraction() As String
+        Get
+            Return mFraction
+        End Get
+    End Property
+    Friend ReadOnly Property IntegerFraction() As String
+        Get
+            Return mIntegerFraction
+        End Get
+    End Property
+
+
+
 
     ' AE_Constants Singleton
     Private Shared mInstance As AE_Constants
@@ -588,7 +647,7 @@ Public Class AE_Constants
         mDuration = TerminologyServer.Instance.RubricForCode(142, Language)
         mOrdinal = TerminologyServer.Instance.RubricForCode(156, Language)
         mRequiresSpecialisationToEdit = TerminologyServer.Instance.RubricForCode(319, Language)
-        mRatio = TerminologyServer.Instance.RubricForCode(321, Language)
+        mProportion = TerminologyServer.Instance.RubricForCode(507, Language)
         mUnit = TerminologyServer.Instance.RubricForCode(117, Language)
         mMultiple = TerminologyServer.Instance.RubricForCode(320, Language)
         mCannotSpecialiseReference = TerminologyServer.Instance.RubricForCode(607, Language)
@@ -610,6 +669,15 @@ Public Class AE_Constants
         mReplaceTranslations = TerminologyServer.Instance.RubricForCode(442, Language)
         mRename = TerminologyServer.Instance.RubricForCode(325, Language)
         mChangeStructure = TerminologyServer.Instance.RubricForCode(326, Language)
+        mLower = TerminologyServer.Instance.RubricForCode(641, Language)
+        mUpper = TerminologyServer.Instance.RubricForCode(642, Language)
+        mIntegral = TerminologyServer.Instance.RubricForCode(643, Language)
+        mUnitary = TerminologyServer.Instance.RubricForCode(644, Language)
+        mIntegerFraction = TerminologyServer.Instance.RubricForCode(645, Language)
+        mFraction = TerminologyServer.Instance.RubricForCode(646, Language)
+        mTrue = TerminologyServer.Instance.RubricForCode(159, Language)
+        mFalse = TerminologyServer.Instance.RubricForCode(160, Language)
+        mChangeDataType = TerminologyServer.Instance.RubricForCode(60, Language)
     End Sub
 End Class
 
@@ -650,4 +718,4 @@ End Class
 'the terms of any one of the MPL, the GPL or the LGPL.
 '
 '***** END LICENSE BLOCK *****
-'
+'

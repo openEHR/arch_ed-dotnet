@@ -17,7 +17,8 @@ Option Strict On
 MustInherit Class Constraint_Interval
     Inherits Constraint
 
-    MustOverride Property AbsoluteLimits() As Constraint
+    MustOverride Property UpperLimit() As Constraint
+    MustOverride Property LowerLimit() As Constraint
 End Class
 
 '

@@ -139,12 +139,12 @@ Public Class RmStructure
         mType = a_structure_type
     End Sub
 
-#Region "ADL oriented features"
+#Region "ADL and XML oriented features"
 
     Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
         sNodeId = EIF_Structure.node_id.to_cil
-        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.SetOccurrences(EIF_Structure.occurrences)
-        mType = ReferenceModel.Instance.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
+        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(EIF_Structure.occurrences)
+        mType = ReferenceModel.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
 
         If EIF_Structure.generating_type.to_cil = "C_COMPLEX_OBJECT" Then
             Dim s As String
@@ -159,7 +159,23 @@ Public Class RmStructure
             End If
             Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             attribute = CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil(s))
-            mRunTimeConstraint = RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+            mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+        End If
+    End Sub
+
+    Sub New(ByVal XML_Structure As XMLParser.C_OBJECT)
+        sNodeId = XML_Structure.node_id
+        cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(XML_Structure.occurrences)
+        mType = ReferenceModel.StructureTypeFromString(XML_Structure.rm_type_name)
+
+        If XML_Structure.GetType.ToString = "XMLParser.C_COMPLEX_OBJECT" Then
+            If Not CType(XML_Structure, XMLParser.C_COMPLEX_OBJECT).attributes Is Nothing Then
+                For Each an_attribute As XMLParser.C_ATTRIBUTE In CType(XML_Structure, XMLParser.C_COMPLEX_OBJECT).attributes
+                    If an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "name" Then
+                        mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                    End If
+                Next
+            End If
         End If
     End Sub
 

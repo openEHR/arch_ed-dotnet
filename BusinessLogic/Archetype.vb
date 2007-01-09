@@ -19,7 +19,7 @@ Public MustInherit Class Archetype
     'Protected adlEngine As openehr.openehr.am.archetype.constraint_model.AdlEngine
 
     Protected cDefinition As ArchetypeDefinition
-    Protected mDescription As New ArchetypeDescription
+    Protected mDescription As ArchetypeDescription
     Protected sParentArchetypeID As String
     Protected sConceptCode As New String("at0000")
     Protected sPrimaryLanguageCode As String
@@ -27,6 +27,7 @@ Public MustInherit Class Archetype
     Protected sLifeCycle As New String("draft")
     Protected iVersion As Integer = 1
     Protected WithEvents mArchetypeID As ArchetypeID
+    Protected mSynchronised As Boolean = False 'synchronised with defintion
 
     MustOverride Property LifeCycle() As String
     MustOverride Property ConceptCode() As String
@@ -86,6 +87,7 @@ Public MustInherit Class Archetype
         End Get
         Set(ByVal value As ArchetypeDefinition)
             cDefinition = value
+            mSynchronised = False
         End Set
     End Property
     Public Property Extendable() As Boolean
@@ -114,7 +116,10 @@ Public MustInherit Class Archetype
             Case StructureType.Table
                 cDefinition = New RmTable("?")
         End Select
-        ReferenceModel.Instance.ArchetypedClass = mArchetypeID.ReferenceModelEntity
+        ReferenceModel.SetArchetypedClass(mArchetypeID.ReferenceModelEntity)
+
+        'Not archetype is not synchronised with definition
+        mSynchronised = False
     End Sub
 
     Public Sub ResetDefinitions()
@@ -122,6 +127,8 @@ Public MustInherit Class Archetype
         If Not cDefinition Is Nothing Then
             cDefinition.Data.Clear()
         End If
+        'Not archetype is not synchronised with definition
+        mSynchronised = False
     End Sub
 
     Sub New(ByVal Primary_Language As String)

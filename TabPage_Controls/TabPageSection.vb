@@ -259,20 +259,19 @@ Public Class TabPageSection
 #Region "Functions"
 
 
-    Private Function TreeToRichText(ByVal TreeNodes As TreeNodeCollection, ByRef text As IO.StringWriter, ByVal level As Integer)
+    Private Sub TreeToRichText(ByVal TreeNodes As TreeNodeCollection, ByRef text As IO.StringWriter, ByVal level As Integer)
         Dim n As ArchetypeTreeNode
-        Dim x, s, s1 As String
-
+        
         For Each n In TreeNodes
             text.WriteLine(n.Item.ToRichText(level))
             If n.GetNodeCount(False) > 0 Then
                 TreeToRichText(n.Nodes, text, level + 3)
             End If
         Next
-    End Function
+    End Sub
 
-    Public Function ToRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
-        Dim s, x As String
+    Public Sub ToRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
+        Dim s As String
 
         s = ""
         If Me.cbOrdered.Checked Then
@@ -290,14 +289,13 @@ Public Class TabPageSection
         TreeToRichText(Me.tvSection.Nodes, text, level + 1)
         text.WriteLine("\pard\f0\fs20\par")
 
-    End Function
+    End Sub
 
 
     Private Sub ProcessSection(ByVal A_sect As RmSection, ByVal tvNodes As TreeNodeCollection)
         Dim rm As Object
 
         ' can be RmSlot or RmStructureCompound
-
         For Each rm In A_sect.Children
 
             If TypeOf rm Is RmSection Then
@@ -313,7 +311,7 @@ Public Class TabPageSection
 
     End Sub
 
-    Private Function ProcessChildrenRM_Structures(ByVal colNodes As TreeNodeCollection, ByRef a_section As RmSection)
+    Private Sub ProcessChildrenRM_Structures(ByVal colNodes As TreeNodeCollection, ByRef a_section As RmSection)
 
         Dim tvNode As TreeNode
         Dim SectionNode As RmSection
@@ -332,7 +330,7 @@ Public Class TabPageSection
             End If
         Next
 
-    End Function
+    End Sub
 
     Public Function SaveAsSection() As RmSection
         Dim SectNode As RmSection
@@ -362,7 +360,6 @@ Public Class TabPageSection
                 SectNode.Children.Cardinality.MaxCount = i
             End If
         End If
-
         Return SectNode
 
         'Catch e As Exception
@@ -370,7 +367,7 @@ Public Class TabPageSection
         'End Try
     End Function
 
-    Public Function ProcessSection(ByVal a_section As RmSection)
+    Public Sub ProcessSection(ByVal a_section As RmSection)
         Dim rm_node As Object
 
         Me.tvSection.Nodes.Clear()
@@ -403,8 +400,8 @@ Public Class TabPageSection
                 End If
             Next
         End If
-        
-    End Function
+
+    End Sub
 
     Private Sub TranslateSectionNodes(ByRef tvnodes As TreeNodeCollection)
         For Each n As TreeNode In tvnodes
@@ -490,15 +487,11 @@ Public Class TabPageSection
 
 
     Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbOrdered.Click
-        If Not mFileManager.FileLoading Then
-            mFileManager.FileEdited = True
-        End If
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub cbFixed_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFixed.Click
-        If Not mFileManager.FileLoading Then
-            mFileManager.FileEdited = True
-        End If
+        mFileManager.FileEdited = True
     End Sub
 
     Private Sub TabPageSection_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -520,7 +513,7 @@ Public Class TabPageSection
         Dim tvNode As ArchetypeTreeNode
 
         If mRootOfComposition Then
-            struct_type = ReferenceModel.Instance.validArchetypeSlots(StructureType.COMPOSITION).GetValue(CType(sender, MenuItem).Index)
+            struct_type = ReferenceModel.validArchetypeSlots(StructureType.COMPOSITION).GetValue(CType(sender, MenuItem).Index)
 
             Dim archNode As New ArchetypeNodeAnonymous(struct_type)
 
@@ -529,7 +522,7 @@ Public Class TabPageSection
             Me.tvSection.Nodes.Add(tvNode)
 
         Else
-            struct_type = ReferenceModel.Instance.validArchetypeSlots(StructureType.SECTION).GetValue(CType(sender, MenuItem).Index)
+            struct_type = ReferenceModel.validArchetypeSlots(StructureType.SECTION).GetValue(CType(sender, MenuItem).Index)
 
             Dim archNode As New ArchetypeNodeAnonymous(struct_type)
 
@@ -552,7 +545,7 @@ Public Class TabPageSection
         tvNode.EnsureVisible()
         Me.tvSection.SelectedNode = tvNode
 
-
+        
     End Sub
 
     Sub AddSection(ByVal sender As Object, ByVal e As EventArgs)
@@ -596,7 +589,7 @@ Public Class TabPageSection
             mi = New MenuItem(Filemanager.GetOpenEhrTerm(312, "Slot"))
             cm.MenuItems.Add(mi)
 
-            For Each strtype As StructureType In ReferenceModel.Instance.validArchetypeSlots(StructureType.COMPOSITION)
+            For Each strtype As StructureType In ReferenceModel.validArchetypeSlots(StructureType.COMPOSITION)
                 mi = New MenuItem(Filemanager.GetOpenEhrTerm(strtype, strtype.ToString))
 
                 AddHandler mi.Click, AddressOf AddSlot
@@ -618,7 +611,7 @@ Public Class TabPageSection
             mi = New MenuItem(Filemanager.GetOpenEhrTerm(312, "Slot"))
             cm.MenuItems.Add(mi)
 
-            For Each strtype As StructureType In ReferenceModel.Instance.validArchetypeSlots(StructureType.SECTION)
+            For Each strtype As StructureType In ReferenceModel.validArchetypeSlots(StructureType.SECTION)
                 mi = New MenuItem(Filemanager.GetOpenEhrTerm(strtype, strtype.ToString))
 
                 AddHandler mi.Click, AddressOf AddSlot
@@ -626,7 +619,7 @@ Public Class TabPageSection
             Next
             Return cm
         End If
-
+        
     End Function
 
     Private Sub ContextMenuTree_Popup(ByVal sender As System.Object, ByVal e As EventArgs) Handles ContextMenuTree.Popup
@@ -688,9 +681,9 @@ Public Class TabPageSection
     End Sub
 
     Private Sub tvSection_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvSection.MouseDown
-        If e.Button = MouseButtons.Left Then
+        If e.Button = System.Windows.Forms.MouseButtons.Left Then
             Me.tvSection.Cursor = System.Windows.Forms.Cursors.Hand
-        ElseIf e.Button = MouseButtons.Right Then
+        ElseIf e.Button = System.Windows.Forms.MouseButtons.Right Then
             Dim tn As TreeNode
             tn = Me.tvSection.GetNodeAt(e.X, e.Y)
             If Not tn Is Nothing Then

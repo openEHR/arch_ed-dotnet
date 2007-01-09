@@ -182,7 +182,6 @@ Public Class PathwayEvent
     End Sub
     Private Function TextRectangle(ByVal TextToRender As String, ByVal g As Graphics) As Drawing.Rectangle
         Dim fontFamily As New fontFamily("Arial")
-        Dim b As Brush
         Dim a_colour As Drawing.Color
         Dim font As New font( _
            fontFamily, _

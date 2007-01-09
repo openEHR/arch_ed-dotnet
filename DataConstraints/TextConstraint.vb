@@ -31,7 +31,6 @@ Public Class Constraint_Text
 
     Public Overrides Function Copy() As Constraint
         Dim t As New Constraint_Text
-        Dim i As Integer
 
         t.boolFixed = Me.boolFixed
         t.cpTerms.Phrase = Me.cpTerms.Phrase
@@ -51,13 +50,14 @@ Public Class Constraint_Text
     Public Overrides Property AssumedValue() As Object
         Get
             If HasAssumedValue Then
-                Dim s As String
 
                 If Not cpTerms.Codes.Contains(mAssumed_value) Then
                     mAssumed_value = Nothing
                     HasAssumedValue = False
                 End If
                 Return mAssumed_value
+            Else
+                Return Nothing
             End If
         End Get
         Set(ByVal Value As Object)
@@ -65,7 +65,6 @@ Public Class Constraint_Text
 
             If cpTerms.Codes.Contains(CStr(Value)) Then
                 mAssumed_value = CStr(Value)
-                HasAssumedValue = True
             End If
         End Set
     End Property
@@ -104,6 +103,8 @@ Public Class Constraint_Text
         Get
             If mTextConstraintType = TextConstrainType.Terminology Then
                 Return mConstraintCode
+            Else
+                Return ""
             End If
         End Get
         Set(ByVal Value As String)
@@ -119,6 +120,8 @@ Public Class Constraint_Text
                 Return AE_Constants.Instance.Text
             Case TextConstrainType.Terminology
                 Return AE_Constants.Instance.Terminology
+            Case Else
+                Return MyBase.ToString()
         End Select
     End Function
 

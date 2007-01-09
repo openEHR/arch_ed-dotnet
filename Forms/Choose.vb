@@ -201,12 +201,12 @@ Public Class Choose
 
 
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click, ListChoose.DoubleClick
-        Me.DialogResult = DialogResult.OK
+        Me.DialogResult = Windows.Forms.DialogResult.OK
 
     End Sub
 
     Private Sub butCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butCancel.Click
-        Me.DialogResult = DialogResult.Cancel
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
 
 

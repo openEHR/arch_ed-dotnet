@@ -31,6 +31,7 @@ Public Class RmComposition : Inherits ArchetypeDefinitionAbstract
         mType = StructureType.COMPOSITION
         mChildren = New Children(mType)
     End Sub
+
 End Class
 '
 '***** BEGIN LICENSE BLOCK *****

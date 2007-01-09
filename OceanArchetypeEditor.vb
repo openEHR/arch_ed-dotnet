@@ -122,6 +122,39 @@ Public Class OceanArchetypeEditor
 
     End Function
 
+    Public Function MakeTerminologyDataTable() As DataTable
+        Dim mDataTable As DataTable
+
+        mDataTable = New DataTable("DataTable")
+        Dim idColumn As DataColumn = New DataColumn
+        idColumn.DataType = System.Type.GetType("System.Int32")
+        idColumn.ColumnName = "Id"
+        mDataTable.Columns.Add(idColumn)
+        Dim CodeColumn As DataColumn = New DataColumn
+        CodeColumn.DataType = System.Type.GetType("System.String")
+        CodeColumn.ColumnName = "Code"
+        mDataTable.Columns.Add(CodeColumn)
+        Dim TextColumn As DataColumn = New DataColumn
+        TextColumn.DataType = System.Type.GetType("System.String")
+        TextColumn.ColumnName = "Text"
+        mDataTable.Columns.Add(TextColumn)
+
+        Dim Terminologies As DataRow() _
+                = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
+
+        mDataTable.DefaultView.Sort = "Text"
+
+        For i As Integer = 0 To Terminologies.Length - 1
+            Dim newRow As DataRow = mDataTable.NewRow()
+            newRow("Code") = Terminologies(i).Item(0)
+            newRow("Text") = Terminologies(i).Item(1)
+            mDataTable.Rows.Add(newRow)
+        Next
+
+        Return mDataTable
+    End Function
+
+
     Private Function MakePhysicalPropertiesTable() As DataTable
         Dim tTable As DataTable
 
@@ -175,7 +208,7 @@ Public Class OceanArchetypeEditor
         frm.ListChoose.DisplayMember = "Text"
         frm.ListChoose.ValueMember = "Code"
 
-        If frm.ShowDialog() = DialogResult.OK Then
+        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
             ' check it is not a terminology added previously
             Dim term As String = CStr(frm.ListChoose.SelectedValue)
             Dim description As String = frm.ListChoose.Text
@@ -188,7 +221,7 @@ Public Class OceanArchetypeEditor
             End If
 
             ' there is already a language in the archetype
-            If (MessageBox.Show(AE_Constants.Instance.NewTerminology & description, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK) Then
+            If (MessageBox.Show(AE_Constants.Instance.NewTerminology & description, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK) Then
                 ' add to the terminologies
                 Filemanager.Master.OntologyManager.AddTerminology(term, description)
             End If
@@ -203,12 +236,12 @@ Public Class OceanArchetypeEditor
 
     Public Function GetInput(ByVal label As String) As String
         Dim frm As New InputForm
-        Dim s As String
+        Dim s As String = ""
 
         frm.lblInput.Text = label
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
-        If frm.ShowDialog() = DialogResult.OK Then
+        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
             s = frm.txtInput.Text
         End If
         frm.Close()
@@ -224,7 +257,7 @@ Public Class OceanArchetypeEditor
         frm.LblInput2.Text = label_2
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
-        If frm.ShowDialog() = DialogResult.OK Then
+        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
             s(0) = frm.txtInput.Text
             s(1) = frm.txtInput2.Text
             If s(1) = "" Then
@@ -247,7 +280,7 @@ Public Class OceanArchetypeEditor
         frm.txtInput.Text = a_term.Text
         frm.txtInput2.Text = a_term.Description
 
-        If frm.ShowDialog() = DialogResult.OK Then
+        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
             s(0) = frm.txtInput.Text
             If s(0) <> "" Then
                 a_term.Text = s(0)
@@ -288,7 +321,7 @@ Public Class OceanArchetypeEditor
             Frm.ListChoose.DisplayMember = "Text"
             Frm.ListChoose.ValueMember = "Code"
 
-            If Frm.ShowDialog() = DialogResult.OK Then
+            If Frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
 
                 If Frm.ListChoose.SelectedIndices.Count > 0 Then
                     Dim s(Frm.ListChoose.SelectedItems.Count - 1) As String
@@ -305,17 +338,17 @@ Public Class OceanArchetypeEditor
 
             End If
 
-            Return Nothing
-
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
         End Try
+
+        Return Nothing
+
     End Function
 
     Public Function ChooseInternal(ByVal an_array_of_elements As ArchetypeElement(), Optional ByVal AlreadyAdded As CodePhrase = Nothing) As ArchetypeElement()
         Try
             Dim Frm As New Choose
-            Dim selected_rows As DataRow()
             Dim i As Integer
 
             Frm.Set_Single()
@@ -327,7 +360,7 @@ Public Class OceanArchetypeEditor
                 End If
             Next
 
-            If Frm.ShowDialog() = DialogResult.OK Then
+            If Frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
 
                 If Frm.ListChoose.SelectedIndices.Count > 0 Then
                     Dim a_e(Frm.ListChoose.SelectedIndices.Count - 1) As ArchetypeElement
@@ -336,11 +369,12 @@ Public Class OceanArchetypeEditor
                 End If
             End If
 
-            Return Nothing
-
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
         End Try
+
+        Return Nothing
+
     End Function
 
 
@@ -358,7 +392,7 @@ Public Class OceanArchetypeEditor
     End Function
 
     Public Function GetSpecialisationChain(ByVal Id As String, ByVal a_filemanager As FileManagerLocal) As CodeAndTerm()
-        Dim i, start, iii, n As Integer
+        Dim i, start, n As Integer
         n = CountInString(Id, ".")
         Dim ct(n) As CodeAndTerm
         Dim counter As Integer
@@ -425,7 +459,7 @@ Public Class OceanArchetypeEditor
             mDataSet.Tables("Property").PrimaryKey = keys
             mDataSet.Tables("Property").DefaultView.Sort = "Text"
 
-            If Me.mDefaultLanguageCode <> "en" Then
+            If mDefaultLanguageCode <> "en" Then
                 'translate the properties
                 ' 0 = Id
                 ' 1 = text
@@ -470,14 +504,13 @@ Public Class OceanArchetypeEditor
     Public Function GetIdForPropertyOpenEhrCode(ByVal openEhrCode As Integer) As Integer
         Try
             Dim dr As DataRow() = mDataSet.Tables("Property").Select("openEHR = " & Convert.ToString(openEhrCode))
-            If Not dr Is Nothing Then
-                Debug.Assert(dr.Length = 1)
+            If Not dr Is Nothing AndAlso dr.Length = 1 Then
                 Return CInt(dr(0).Item(0))
             Else
-                Return 0
+                Return -1
             End If
         Catch e As Exception
-            Return 0
+            Return -1
         End Try
     End Function
     Private Sub PopulatePhysPropUnitTables(ByVal Units As DataTable, _
@@ -630,15 +663,17 @@ Public Class OceanArchetypeEditor
 
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
+        mDefaultLanguageCode = "fa"
+        mSpecificLanguageCode = "fa"
 
-        'mDefaultLanguageCode = "sv"
-        'mSpecificLanguageCode = "sv"
+       'mDefaultLanguageCode = "pt-br"
+       'mSpecificLanguageCode = "pt-br"
 
-        'mDefaultLanguageCode = "fa"
-        'mSpecificLanguageCode = "fa"
+        'mDefaultLanguageCode = "da"
+        'mSpecificLanguageCode = "da"
 
-        mDefaultLanguageCode = "nl"
-        mSpecificLanguageCode = "nl"
+        'mDefaultLanguageCode = "nl"
+        'mSpecificLanguageCode = "nl"
 
         'mDefaultLanguageCode = "de"
         'mSpecificLanguageCode = "de"

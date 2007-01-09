@@ -17,7 +17,8 @@ Option Strict On
 Class Constraint_Interval_Count
     Inherits Constraint_Interval
 
-    Private mCount As New Constraint_Count
+    Private mLower As New Constraint_Count
+    Private mUpper As New Constraint_Count
 
     Public Overrides ReadOnly Property Type() As ConstraintType
         Get
@@ -25,13 +26,24 @@ Class Constraint_Interval_Count
         End Get
     End Property
 
-    Overrides Property AbsoluteLimits() As Constraint
+    Overrides Property UpperLimit() As Constraint
         Get
-            Return mCount
+            Return mUpper
         End Get
         Set(ByVal Value As Constraint)
             Debug.Assert(TypeOf Value Is Constraint_Count)
-            mCount = CType(Value, Constraint_Count)
+            mUpper = CType(Value, Constraint_Count)
+        End Set
+    End Property
+
+
+    Overrides Property LowerLimit() As Constraint
+        Get
+            Return mLower
+        End Get
+        Set(ByVal Value As Constraint)
+            Debug.Assert(TypeOf Value Is Constraint_Count)
+            mLower = CType(Value, Constraint_Count)
         End Set
     End Property
 End Class

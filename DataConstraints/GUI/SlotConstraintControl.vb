@@ -397,11 +397,14 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         ElseIf sender Is Me.listExclude Then
             list = Me.listExclude
             col = Me.Constraint.Exclude
+        Else
+            Debug.Assert(False, "Control not included")
+            Return
         End If
 
         If Not list.SelectedItem Is Nothing Then
             If e.KeyCode = Keys.Delete Then
-                If MessageBox.Show(AE_Constants.Instance.Remove & CStr(list.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+                If MessageBox.Show(AE_Constants.Instance.Remove & CStr(list.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                     col.Remove(CStr(list.SelectedItem))
                     list.Items.RemoveAt(list.SelectedIndex)
                     mFileManager.FileEdited = True
@@ -420,6 +423,9 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         ElseIf sender Is Me.butExcludeRemove Then
             list = Me.listExclude
             col = Me.Constraint.Exclude
+        Else
+            Debug.Assert(False, "Control not included")
+            Return
         End If
 
         Dim do_remove As Boolean = False
@@ -428,9 +434,9 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             Case 0
                 ' do nothing
             Case 1
-                do_remove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & CStr(list.SelectedItems(0)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK)
+                do_remove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & CStr(list.SelectedItems(0)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK)
             Case 2
-                do_remove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & list.SelectedItems.Count.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK)
+                do_remove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & list.SelectedItems.Count.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK)
 
         End Select
 
@@ -456,6 +462,9 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         ElseIf sender Is Me.butExclude Then
             list = Me.listExclude
             col = Me.Constraint.Exclude
+        Else
+            Debug.Assert(False, "Control not included")
+            Return
         End If
 
         If Me.listAvailbleArchetypes.SelectedItems.Count > 0 Then
@@ -494,11 +503,11 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Dim fd As New OpenFileDialog
         Dim s As String
 
-        s = ReferenceModel.Instance.ReferenceModelName & "-" & ReferenceModel.Instance.RM_StructureName(Me.Constraint.RM_ClassType)
+        s = ReferenceModel.ReferenceModelName & "-" & ReferenceModel.RM_StructureName(Me.Constraint.RM_ClassType)
         fd.Filter = s & "|" & s & ".*.adl"
         fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath
 
-        If fd.ShowDialog(Me) = DialogResult.OK Then
+        If fd.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             Dim ss As String
 
             ss = fd.FileName.Substring(fd.FileName.LastIndexOf("\") + s.Length + 2)
@@ -513,7 +522,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Dim s As String
         Dim d As System.IO.DirectoryInfo
 
-        s = ReferenceModel.Instance.ReferenceModelName & "-" & Me.lblClass.Text
+        s = ReferenceModel.ReferenceModelName & "-" & Me.lblClass.Text
         For Each f In a_directory.GetFiles(s & ".*.adl")
             Me.listAvailbleArchetypes.Items.Insert(0, f.Name.Substring(s.Length + 1, f.Name.LastIndexOf(".") - (s.Length + 1)))
         Next
@@ -532,7 +541,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             Me.Cursor = Cursors.Default
         Else
             Me.Cursor = Cursors.Default
-            MessageBox.Show(AE_Constants.Instance.Error_loading & " " & OceanArchetypeEditor.Instance.Options.RepositoryPath & ". No repository found - please use Menu>Edit>Preferences and set the location of the archetypes", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(AE_Constants.Instance.Error_loading & " - " & OceanArchetypeEditor.Instance.Options.RepositoryPath, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 

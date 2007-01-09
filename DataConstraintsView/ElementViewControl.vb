@@ -115,6 +115,7 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
     Public Overridable Property Value() As Object
         Get
             Debug.Assert(False)
+            Return Nothing
         End Get
         Set(ByVal Value As Object)
             Debug.Assert(False)

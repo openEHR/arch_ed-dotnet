@@ -25,7 +25,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Protected adlArchetype As openehr.openehr.am.archetype.ARCHETYPE
         Protected adlEngine As openehr.adl_parser.syntax.adl.ADL_ENGINE
-        Protected mCADL_Factory As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_MODEL_FACTORY
+        Protected mAomFactory As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_MODEL_FACTORY
 
         Protected Structure ReferenceToResolve
             Dim Element As RmElement
@@ -74,7 +74,9 @@ Namespace ArchetypeEditor.ADL_Classes
                 Return adlArchetype.parent_archetype_id.as_string.to_cil
             End Get
             Set(ByVal Value As String)
-                adlArchetype.set_parent_archetype_id(openehr.base.kernel.Create.STRING.make_from_cil(Value))
+                Dim archId As openehr.openehr.rm.support.identification.ARCHETYPE_ID
+                archId = openehr.openehr.rm.support.identification.Create.ARCHETYPE_ID.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(Value))
+                adlArchetype.set_parent_archetype_id(archId)
             End Set
         End Property
         Public Overrides ReadOnly Property SourceCode() As String
@@ -175,18 +177,18 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Debug.Assert((Not id Is Nothing) And (id <> ""))
 
-            id_expression_leaf = mCADL_Factory.create_expr_leaf_object_ref(openehr.base.kernel.Create.STRING.make_from_cil(id))
+            id_expression_leaf = mAomFactory.create_expr_leaf_object_ref(openehr.base.kernel.Create.STRING.make_from_cil(id))
             If expression = "*" Then
-                id_pattern_expression_leaf = mCADL_Factory.create_expr_leaf_constraint(mCADL_Factory.create_c_string_make_from_regexp(openehr.base.kernel.Create.STRING.make_from_cil(expression)))
+                id_pattern_expression_leaf = mAomFactory.create_expr_leaf_constraint(mAomFactory.create_c_string_make_from_regexp(openehr.base.kernel.Create.STRING.make_from_cil(expression)))
             Else
-                id_pattern_expression_leaf = mCADL_Factory.create_expr_leaf_constraint(mCADL_Factory.create_c_string_make_from_regexp(openehr.base.kernel.Create.STRING.make_from_cil(expression)))
+                id_pattern_expression_leaf = mAomFactory.create_expr_leaf_constraint(mAomFactory.create_c_string_make_from_regexp(openehr.base.kernel.Create.STRING.make_from_cil(expression)))
             End If
-            match_operator = mCADL_Factory.create_expr_binary_operator_node( _
+            match_operator = mAomFactory.create_expr_binary_operator_node( _
                 openehr.openehr.am.archetype.assertion.Create.OPERATOR_KIND.make_from_string( _
                     openehr.base.kernel.Create.STRING.make_from_cil("matches")), _
                 id_expression_leaf, id_pattern_expression_leaf)
 
-            Return mCADL_Factory.create_assertion(match_operator, Nothing)
+            Return mAomFactory.create_assertion(match_operator, Nothing)
 
         End Function
 
@@ -194,9 +196,9 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim cardObj As openehr.openehr.am.archetype.constraint_model.CARDINALITY
 
             If c.IsUnbounded Then
-                cardObj = mCADL_Factory.create_cardinality_make_upper_unbounded(c.MinCount)
+                cardObj = mAomFactory.create_cardinality_make_upper_unbounded(c.MinCount)
             Else
-                cardObj = mCADL_Factory.create_cardinality_make_bounded(c.MinCount, c.MaxCount)
+                cardObj = mAomFactory.create_cardinality_make_bounded(c.MinCount, c.MaxCount)
             End If
             If Not c.Ordered Then
                 cardObj.set_unordered()
@@ -208,9 +210,9 @@ Namespace ArchetypeEditor.ADL_Classes
         Protected Function MakeOccurrences(ByVal c As RmCardinality) As openehr.common_libs.basic.OE_INTERVAL_INT32
 
             If c.IsUnbounded Then
-                Return mCADL_Factory.create_c_integer_make_upper_unbounded(c.MinCount, c.IncludeLower).interval
+                Return mAomFactory.create_c_integer_make_upper_unbounded(c.MinCount, c.IncludeLower).interval
             Else
-                Return mCADL_Factory.create_c_integer_make_bounded(c.MinCount, c.MaxCount, c.IncludeLower, c.IncludeUpper).interval
+                Return mAomFactory.create_c_integer_make_bounded(c.MinCount, c.MaxCount, c.IncludeLower, c.IncludeUpper).interval
             End If
         End Function
 
@@ -219,21 +221,20 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim code_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim ca_Term As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF
 
-
-            coded_text = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("CODED_TEXT"))
-            code_rel_node = mCADL_Factory.create_c_attribute_single(coded_text, openehr.base.kernel.Create.STRING.make_from_cil("code"))
+            coded_text = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("DV_CODED_TEXT"))
+            code_rel_node = mAomFactory.create_c_attribute_single(coded_text, openehr.base.kernel.Create.STRING.make_from_cil("defining_code"))
             ca_Term = openehr.openehr.am.archetype.constraint_model.Create.CONSTRAINT_REF.make(openehr.base.kernel.Create.STRING.make_from_cil(ConstraintID))
             code_rel_node.put_child(ca_Term)
         End Sub
 
         Protected Overloads Sub BuildCodedText(ByRef ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal RunTimeName As String)
-            Dim coded_text, codePhrase As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_rel_node, name_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim ca_Term As openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF
 
-            name_rel_node = mCADL_Factory.create_c_attribute_single(ObjNode, openehr.base.kernel.Create.STRING.make_from_cil("name"))
-            coded_text = mCADL_Factory.create_c_complex_object_anonymous(name_rel_node, openehr.base.kernel.Create.STRING.make_from_cil("CODED_TEXT"))
-            code_rel_node = mCADL_Factory.create_c_attribute_single(coded_text, openehr.base.kernel.Create.STRING.make_from_cil("code"))
+            name_rel_node = mAomFactory.create_c_attribute_single(ObjNode, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+            coded_text = mAomFactory.create_c_complex_object_anonymous(name_rel_node, openehr.base.kernel.Create.STRING.make_from_cil("DV_CODED_TEXT"))
+            code_rel_node = mAomFactory.create_c_attribute_single(coded_text, openehr.base.kernel.Create.STRING.make_from_cil("defining_code"))
             ca_Term = openehr.openehr.am.archetype.constraint_model.Create.CONSTRAINT_REF.make(openehr.base.kernel.Create.STRING.make_from_cil(RunTimeName))
             code_rel_node.put_child(ca_Term)
         End Sub
@@ -241,18 +242,18 @@ Namespace ArchetypeEditor.ADL_Classes
         Protected Overloads Sub BuildCodedText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_CodePhrase As CodePhrase, Optional ByVal an_assumed_value As String = "")
             Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM
+            Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE
 
-            coded_text = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("CODED_TEXT"))
+            coded_text = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("DV_CODED_TEXT"))
 
-            code_rel_node = mCADL_Factory.create_c_attribute_single(coded_text, openehr.base.kernel.Create.STRING.make_from_cil("code"))
+            code_rel_node = mAomFactory.create_c_attribute_single(coded_text, openehr.base.kernel.Create.STRING.make_from_cil("defining_code"))
             If a_CodePhrase.Codes.Count > 0 Then
-                ca_Term = mCADL_Factory.create_c_coded_term_from_pattern(code_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(a_CodePhrase.Phrase))
+                ca_Term = mAomFactory.create_c_code_phrase_from_pattern(code_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(a_CodePhrase.Phrase))
                 If an_assumed_value <> "" Then
-                    ca_Term.set_assumed_value(openehr.base.kernel.Create.STRING.make_from_cil(an_assumed_value))
+                    ca_Term.set_assumed_value(openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil("local::" & an_assumed_value)))
                 End If
             Else
-                ca_Term = openehr.openehr.am.openehr_profile.data_types.text.Create.C_CODED_TERM.make_from_terminology_id(openehr.base.kernel.Create.STRING.make_from_cil(a_CodePhrase.TerminologyID))
+                ca_Term = openehr.openehr.am.openehr_profile.data_types.text.Create.C_CODE_PHRASE.make_from_terminology_id(openehr.base.kernel.Create.STRING.make_from_cil(a_CodePhrase.TerminologyID))
                 code_rel_node.put_child(ca_Term)
             End If
         End Sub
@@ -263,18 +264,16 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING
             Dim cadlSimple As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
-            plain_text = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("TEXT"))
+            plain_text = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("DV_TEXT"))
 
             If TermList.Count > 0 Then
                 Dim i As Integer
-                value_rel_node = mCADL_Factory.create_c_attribute_single(plain_text, openehr.base.kernel.Create.STRING.make_from_cil("value"))
-                cString = mCADL_Factory.create_c_string_make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(TermList.Item(0)))
+                value_rel_node = mAomFactory.create_c_attribute_single(plain_text, openehr.base.kernel.Create.STRING.make_from_cil("value"))
+                cString = mAomFactory.create_c_string_make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(TermList.Item(0)))
                 For i = 1 To TermList.Count - 1
                     cString.add_string(openehr.base.kernel.Create.STRING.make_from_cil(TermList.Item(i)))
                 Next
-                cadlSimple = mCADL_Factory.create_c_primitive_object(value_rel_node, cString)
-            Else
-                plain_text.set_any_allowed()
+                cadlSimple = mAomFactory.create_c_primitive_object(value_rel_node, cString)
             End If
 
         End Sub
@@ -290,45 +289,45 @@ Namespace ArchetypeEditor.ADL_Classes
             For Each rm_1 In cDefinition.Data
                 If rm_1.Type = StructureType.History Then
                     a_history = CType(rm_1, RmHistory)
-                    cadlHistory = mCADL_Factory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.History)), openehr.base.kernel.Create.STRING.make_from_cil(a_history.NodeId))
+                    cadlHistory = mAomFactory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(StructureType.History)), openehr.base.kernel.Create.STRING.make_from_cil(a_history.NodeId))
                     cadlHistory.set_occurrences(MakeOccurrences(a_history.Occurrences))
                     If Not a_history.HasNameConstraint Then
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                        an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("name"))
                         BuildText(an_attribute, a_history.NameConstraint)
                     End If
                     If a_history.isPeriodic Then
                         Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                        Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
+                        Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration()
 
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
+                        an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
                         d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(a_history.PeriodUnits)
                         d.GUI_duration = a_history.Period
 
-                        period = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                        period = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                     End If
 
                     ' now build the events
                     If a_history.Children.Count > 0 Then
-                        an_attribute = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("events"), MakeCardinality(a_history.Children.Cardinality))
+                        an_attribute = mAomFactory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("events"), MakeCardinality(a_history.Children.Cardinality))
                         an_event = a_history.Children.Item(0)
-                        cadlEvent = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.Event)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
+                        cadlEvent = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(StructureType.Event)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
                         cadlEvent.set_occurrences(MakeOccurrences(an_event.Occurrences))
                         Select Case an_event.EventType
                             Case RmEvent.ObservationEventType.PointInTime
                                 If an_event.hasFixedOffset Then
                                     Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                                    Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
+                                    Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration()
 
-                                    an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
+                                    an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
                                     d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(an_event.OffsetUnits)
                                     d.GUI_duration = an_event.Offset
-                                    offset = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                                    offset = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                                 End If
                             Case RmEvent.ObservationEventType.Interval
                                 Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
                                 If an_event.AggregateMathFunction <> "" Then
-                                    an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("math_function"))
+                                    an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("math_function"))
                                     Dim a_code_phrase As CodePhrase = New CodePhrase
                                     a_code_phrase.FirstCode = an_event.AggregateMathFunction
                                     a_code_phrase.TerminologyID = "openehr"
@@ -336,26 +335,26 @@ Namespace ArchetypeEditor.ADL_Classes
                                 End If
 
                                 If an_event.hasFixedDuration Then
-                                    Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
+                                    Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration()
 
-                                    an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("width"))
+                                    an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("width"))
                                     d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(an_event.WidthUnits)
                                     d.GUI_duration = an_event.Width
-                                    width = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                                    width = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                                 End If
                         End Select
-                        
+
                         ' runtime name
                         If an_event.HasNameConstraint Then
-                            an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                            an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("name"))
                             BuildText(an_attribute, an_event.NameConstraint)
                         End If
 
                         ' data
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("data"))
+                        an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("data"))
                         Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.NodeId))
+                        objNode = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.NodeId))
                         BuildStructure(rm, objNode)
 
                         Exit Sub
@@ -383,64 +382,66 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 For i As Integer = 0 To events.Length - 1
                     history_event = CType(events(i), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-                    an_attribute = mCADL_Factory.create_c_attribute_single(history_event, openehr.base.kernel.Create.STRING.make_from_cil("state"))
+                    an_attribute = mAomFactory.create_c_attribute_single(history_event, openehr.base.kernel.Create.STRING.make_from_cil("state"))
 
                     'First event has the structure
                     If i = 0 Then
                         Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
+                        objNode = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
                         BuildStructure(a_rm, objNode)
                         path = Me.GetPathOfNode(a_rm.NodeId)
                     Else
                         'create a reference
                         Dim ref_cadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
                         If Not path Is Nothing Then
-                            ref_cadlRefNode = mCADL_Factory.create_archetype_internal_ref(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), path.as_string)
+                            ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(a_rm.Type)), path.as_string)
                         End If
                     End If
                 Next
             End If
         End Sub
 
-
         Private Function BuildHistory(ByVal a_history As RmHistory, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As Object()
             Dim cadlHistory, cadlEvent As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim events_rel_node, an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim events_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            'Set to nothing as not guaranteed to be set from a programming point of view
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = Nothing
+
             Dim an_event As RmEvent
             Dim data_processed As Boolean
-            Dim data_path As openehr.common_libs.structures.object_graph.path.OG_PATH
+            Dim data_path As openehr.common_libs.structures.object_graph.path.OG_PATH = Nothing
             Dim array_list_events As New ArrayList
 
-            cadlHistory = mCADL_Factory.create_c_complex_object_identified(RelNode, _
+            cadlHistory = mAomFactory.create_c_complex_object_identified(RelNode, _
                 openehr.base.kernel.Create.STRING.make_from_cil(StructureType.History.ToString.ToUpper(System.Globalization.CultureInfo.InvariantCulture)), _
                 openehr.base.kernel.Create.STRING.make_from_cil(a_history.NodeId))
             cadlHistory.set_occurrences(MakeOccurrences(a_history.Occurrences))
 
             If a_history.HasNameConstraint Then
-                an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("name"))
                 BuildText(an_attribute, a_history.NameConstraint)
             End If
 
             If a_history.isPeriodic Then
                 Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
+                Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration()
 
-                an_attribute = mCADL_Factory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
+                an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
                 d.ISO_Units = a_history.PeriodUnits
                 d.GUI_duration = a_history.Period
 
-                period = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                period = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
             End If
 
             ' now build the events
-
-            events_rel_node = mCADL_Factory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("events"), MakeCardinality(a_history.Children.Cardinality))
+            events_rel_node = mAomFactory.create_c_attribute_multiple(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("events"), MakeCardinality(a_history.Children.Cardinality))
 
             For Each an_event In a_history.Children
-                cadlEvent = mCADL_Factory.create_c_complex_object_identified(events_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(an_event.Type)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
+                cadlEvent = mAomFactory.create_c_complex_object_identified(events_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(an_event.Type)), openehr.base.kernel.Create.STRING.make_from_cil(an_event.NodeId))
                 'remember the events to return these
                 array_list_events.Add(cadlEvent)
+
                 cadlEvent.set_occurrences(MakeOccurrences(an_event.Occurrences))
 
                 Select Case an_event.Type
@@ -449,18 +450,18 @@ Namespace ArchetypeEditor.ADL_Classes
                     Case StructureType.PointEvent
                         If an_event.hasFixedOffset Then
                             Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                            Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
+                            Dim d As New Duration
 
-                            an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
+                            an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
                             d.ISO_Units = an_event.OffsetUnits
                             d.GUI_duration = an_event.Offset
-                            offset = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                            offset = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                         End If
                     Case StructureType.IntervalEvent
                         Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
                         If an_event.AggregateMathFunction <> "" Then
-                            an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("math_function"))
+                            an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("math_function"))
                             Dim a_code_phrase As CodePhrase = New CodePhrase
                             a_code_phrase.FirstCode = an_event.AggregateMathFunction
                             a_code_phrase.TerminologyID = "openehr"
@@ -468,18 +469,18 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
 
                         If an_event.hasFixedDuration Then
-                            Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration
+                            Dim d As New Duration
 
-                            an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("width"))
+                            an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("width"))
                             d.ISO_Units = an_event.WidthUnits
                             d.GUI_duration = an_event.Width
-                            width = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                            width = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
                         End If
                 End Select
 
                 ' runtime name
                 If an_event.HasNameConstraint Then
-                    an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                    an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("name"))
                     BuildText(an_attribute, an_event.NameConstraint)
                 End If
 
@@ -487,32 +488,27 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 If Not data_processed Then
                     If Not a_history.Data Is Nothing Then
-
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("data"))
-
+                        an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("data"))
                         Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-
-                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_history.Data.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_history.Data.NodeId))
+                        objNode = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(a_history.Data.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_history.Data.NodeId))
                         BuildStructure(a_history.Data, objNode)
 
                         ''data_path = cadlEvent.path
                         data_path = GetPathOfNode(a_history.Data.NodeId)
-                    Else
-                        cadlEvent.set_any_allowed()
                     End If
                     data_processed = True
                 Else
                     Dim NodeRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
                     If Not cadlEvent.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("data")) Then
-                        an_attribute = mCADL_Factory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("data"))
+                        an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("data"))
                     End If
-                    NodeRef = mCADL_Factory.create_archetype_internal_ref(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_history.Data.Type)), data_path.as_string)
+                    NodeRef = mAomFactory.create_archetype_internal_ref(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(a_history.Data.Type)), data_path.as_string)
                 End If
 
             Next
-            Return array_list_events.ToArray()
 
+            Return array_list_events.ToArray()
         End Function
 
         Protected Sub BuildCluster(ByVal Cluster As RmCluster, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
@@ -520,16 +516,16 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim rm As RmStructure
 
-            cluster_cadlObj = mCADL_Factory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.Cluster)), openehr.base.kernel.Create.STRING.make_from_cil(Cluster.NodeId))
+            cluster_cadlObj = mAomFactory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(StructureType.Cluster)), openehr.base.kernel.Create.STRING.make_from_cil(Cluster.NodeId))
             cluster_cadlObj.set_occurrences(MakeOccurrences(Cluster.Occurrences))
 
             If Cluster.HasNameConstraint Then
-                an_attribute = mCADL_Factory.create_c_attribute_single(cluster_cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                an_attribute = mAomFactory.create_c_attribute_single(cluster_cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("name"))
                 BuildText(an_attribute, Cluster.NameConstraint)
             End If
 
             If Cluster.Children.Count > 0 Then
-                an_attribute = mCADL_Factory.create_c_attribute_multiple(cluster_cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
+                an_attribute = mAomFactory.create_c_attribute_multiple(cluster_cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
                 For Each rm In Cluster.Children.items
                     If rm.Type = StructureType.Cluster Then
                         BuildCluster(rm, an_attribute)
@@ -537,21 +533,76 @@ Namespace ArchetypeEditor.ADL_Classes
                         BuildElementOrReference(rm, an_attribute)
                     End If
                 Next
-            Else
-                cluster_cadlObj.set_any_allowed()
             End If
         End Sub
 
-        Private Sub BuildRatio(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal cr As Constraint_Ratio)
+        Private Sub BuildProportion(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal cp As Constraint_Proportion)
             Dim RatioObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim fraction_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-            RatioObject = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("QUANTITY_RATIO"))
-            fraction_attribute = mCADL_Factory.create_c_attribute_single(RatioObject, openehr.base.kernel.Create.STRING.make_from_cil("numerator"))
-            BuildCount(fraction_attribute, cr.Numerator)
-            fraction_attribute = mCADL_Factory.create_c_attribute_single(RatioObject, openehr.base.kernel.Create.STRING.make_from_cil("denominator"))
-            BuildCount(fraction_attribute, cr.Denominator)
+            RatioObject = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(cp.Type)))
 
+            If cp.Numerator.HasMaximum Or cp.Numerator.HasMinimum Then
+                fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, openehr.base.kernel.Create.STRING.make_from_cil("numerator"))
+                BuildReal(fraction_attribute, cp.Numerator)
+            End If
+
+            If cp.Denominator.HasMaximum Or cp.Denominator.HasMinimum Then
+                fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, openehr.base.kernel.Create.STRING.make_from_cil("denominator"))
+                BuildReal(fraction_attribute, cp.Denominator)
+            End If
+
+            If cp.IsIntegralSet Then
+                'There is a restriction on whether the instance will be integral or not
+                fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, openehr.base.kernel.Create.STRING.make_from_cil("is_integral"))
+                If cp.IsIntegral Then
+                    mAomFactory.create_c_primitive_object(fraction_attribute, mAomFactory.create_c_boolean_make_true())
+                Else
+                    mAomFactory.create_c_primitive_object(fraction_attribute, mAomFactory.create_c_boolean_make_false())
+                End If
+            End If
+
+            If Not cp.AllowAllTypes Then
+                Dim integerConstraint As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
+                Dim integerList As openehr.base.structures.list.LIST_INT32
+
+                fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, openehr.base.kernel.Create.STRING.make_from_cil("type"))
+
+                integerList = mAomFactory.create_integer_list()
+
+                For i As Integer = 0 To 4
+                    If cp.IsTypeAllowed(i) Then
+                        integerList.extend(i)
+                    End If
+                Next
+
+                integerConstraint = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_INTEGER.make_list(integerList)
+                mAomFactory.create_c_primitive_object(fraction_attribute, integerConstraint)
+            End If
+        End Sub
+
+        Protected Sub BuildReal(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ct As Constraint_Real)
+            Dim magnitude As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+
+            If ct.HasMaximum And ct.HasMinimum Then
+                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_bounded(ct.MinimumValue, ct.MaximumValue, ct.IncludeMinimum, ct.IncludeMaximum))
+            ElseIf ct.HasMaximum Then
+                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum))
+            ElseIf ct.HasMinimum Then
+                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_upper_unbounded(ct.MinimumValue, ct.IncludeMinimum))
+            Else
+                Debug.Assert(False)
+                Return
+            End If
+
+            If ct.Precision > -1 Then
+                'Need set precision on C_REAL
+                'magnitude.set_precision(ct.Precision)
+            End If
+
+            If ct.HasAssumedValue Then
+                magnitude.set_assumed_value(CType(ct.AssumedValue, Single))
+            End If
         End Sub
 
         Protected Sub BuildCount(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ct As Constraint_Count)
@@ -559,18 +610,21 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim cadlCount As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim magnitude As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
-            cadlCount = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_DataTypeName(ct.Type)))
+            cadlCount = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(ct.Type)))
 
             If ct.HasMaximum Or ct.HasMinimum Then
                 ' set the magnitude constraint
-                an_attribute = mCADL_Factory.create_c_attribute_single(cadlCount, openehr.base.kernel.Create.STRING.make_from_cil("magnitude"))
+                an_attribute = mAomFactory.create_c_attribute_single(cadlCount, openehr.base.kernel.Create.STRING.make_from_cil("magnitude"))
 
                 If ct.HasMaximum And ct.HasMinimum Then
-                    magnitude = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_integer_make_bounded(ct.MinimumValue, ct.MaximumValue, ct.IncludeMinimum, ct.IncludeMaximum))
+                    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_bounded(ct.MinimumValue, ct.MaximumValue, ct.IncludeMinimum, ct.IncludeMaximum))
                 ElseIf ct.HasMaximum Then
-                    magnitude = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_integer_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum))
+                    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum))
                 ElseIf ct.HasMinimum Then
-                    magnitude = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_integer_make_upper_unbounded(ct.MinimumValue, ct.IncludeMinimum))
+                    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_upper_unbounded(ct.MinimumValue, ct.IncludeMinimum))
+                Else
+                    Debug.Assert(False)
+                    Return
                 End If
 
                 If ct.HasAssumedValue Then
@@ -581,80 +635,26 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     CType(magnitude.item, openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER).set_assumed_value(int_ref)
                 End If
-            Else
-                cadlCount.set_any_allowed()
             End If
         End Sub
-
-        'Private Sub BuildDateTime(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal dt As Constraint_DateTime)
-        '    Dim s As String
-        '    Dim dtType As String
-        '    Dim cadlDateTime As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-
-        '    Select Case dt.TypeofDateTimeConstraint
-        '        Case 11                 ' Allow all
-        '            s = "yyyy-??-?? ??:??:??"
-        '            dtType = "dt"
-        '        Case 12                 ' Full date time
-        '            s = "yyyy-mm-dd HH:MM:SS"
-        '            dtType = "dt"
-        '        Case 13                 'Partial Date time
-        '            s = "yyyy-mm-dd HH:??:XX"
-        '            dtType = "dt"
-        '        Case 14                 'Date only
-        '            s = "yyyy-??-??"
-        '            dtType = "d"
-        '        Case 15                'Full date
-        '            s = "yyyy-mm-dd"
-        '            dtType = "d"
-        '        Case 16                'Partial date
-        '            s = "yyyy-??-XX"
-        '            dtType = "d"
-        '        Case 17                'Partial date with month
-        '            s = "yyyy-mm-??"
-        '            dtType = "d"
-        '        Case 18                'TimeOnly
-        '            s = "HH:??:??"
-        '            dtType = "t"
-        '        Case 19                 'Full time
-        '            s = "HH:MM:SS"
-        '            dtType = "t"
-        '        Case 20                'Partial time
-        '            s = "HH:??:XX"
-        '            dtType = "t"
-        '        Case 21                'Partial time with minutes
-        '            s = "HH:MM:??"
-        '            dtType = "t"
-        '    End Select
-
-        '    Select Case dtType
-        '        Case "dt"
-        '            cadlDateTime = mCADL_Factory.create_c_primitive_object(value_attribute, mCADL_Factory.create_c_date_time_make_pattern(openehr.base.kernel.Create.STRING.make_from_cil(s)))
-        '        Case "d"
-        '            cadlDateTime = mCADL_Factory.create_c_primitive_object(value_attribute, mCADL_Factory.create_c_date_make_pattern(openehr.base.kernel.Create.STRING.make_from_cil(s)))
-        '        Case "t"
-        '            cadlDateTime = mCADL_Factory.create_c_primitive_object(value_attribute, mCADL_Factory.create_c_time_make_pattern(openehr.base.kernel.Create.STRING.make_from_cil(s)))
-        '    End Select
-
-        'End Sub
 
         Private Sub BuildDateTime(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal dt As Constraint_DateTime)
 
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim s As String
-            Dim dtType As String
+            Dim dtType As String = ""
             Dim cadlDateTime As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
             Select Case dt.TypeofDateTimeConstraint
                 Case 11                 ' Allow all
-                    s = "yyyy-??-??T??:??:??"
+                    s = "yyyy-??-?? ??:??:??"
                     dtType = "dt"
                 Case 12                 ' Full date time
-                    s = "yyyy-mm-ddTHH:MM:SS"
+                    s = "yyyy-mm-dd HH:MM:SS"
                     dtType = "dt"
                 Case 13                 'Partial Date time
-                    s = "yyyy-mm-ddTHH:??:??"
+                    s = "yyyy-mm-dd HH:??:??"
                     dtType = "dt"
                 Case 14                 'Date only
                     s = "yyyy-??-??"
@@ -680,21 +680,23 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case 21                'Partial time with minutes
                     s = "HH:MM:XX"
                     dtType = "t"
+                Case Else
+                    Throw New ApplicationException("Invalid date time type")
             End Select
 
             Select Case dtType
                 Case "dt"
-                    an_object = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("DATE_TIME"))
-                    an_attribute = mCADL_Factory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
-                    cadlDateTime = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_date_time_make_pattern(openehr.base.kernel.Create.STRING.make_from_cil(s)))
+                    an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("DV_DATE_TIME"))
+                    an_attribute = mAomFactory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
+                    cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_date_time_make_pattern(openehr.base.kernel.Create.STRING.make_from_cil(s)))
                 Case "d"
-                    an_object = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("DATE"))
-                    an_attribute = mCADL_Factory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
-                    cadlDateTime = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_date_make_pattern(openehr.base.kernel.Create.STRING.make_from_cil(s)))
+                    an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("DV_DATE"))
+                    an_attribute = mAomFactory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
+                    cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_date_make_pattern(openehr.base.kernel.Create.STRING.make_from_cil(s)))
                 Case "t"
-                    an_object = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("TIME"))
-                    an_attribute = mCADL_Factory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
-                    cadlDateTime = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_time_make_pattern(openehr.base.kernel.Create.STRING.make_from_cil(s)))
+                    an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil("DV_TIME"))
+                    an_attribute = mAomFactory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
+                    cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_time_make_pattern(openehr.base.kernel.Create.STRING.make_from_cil(s)))
             End Select
 
         End Sub
@@ -706,7 +708,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Protected Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal sl As Constraint_Slot, ByVal an_occurrence As RmCardinality)
             Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
 
-            slot = mCADL_Factory.create_archetype_slot_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(sl.RM_ClassType)))
+            slot = mAomFactory.create_archetype_slot_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(sl.RM_ClassType)))
 
             slot.set_occurrences(MakeOccurrences(an_occurrence))
 
@@ -715,14 +717,32 @@ Namespace ArchetypeEditor.ADL_Classes
                     slot.add_include(MakeAssertion("domain_concept", ".*"))
                 Else
                     For Each s As String In sl.Include
-                        slot.add_include(MakeAssertion("domain_concept", s))
+                        Dim escapedString As String
+                        Dim i As Integer
+                        'Must have at least one escaped . or it is not valid unless it is the end
+                        i = s.IndexOf("\")
+                        If i > -1 AndAlso i <> (s.Length - 1) Then
+                            escapedString = s
+                        Else
+                            escapedString = s.Replace(".", "\.")
+                        End If
+                        slot.add_include(MakeAssertion("domain_concept", escapedString))
                     Next
                 End If
                 If sl.ExcludeAll Then
                     slot.add_exclude(MakeAssertion("domain_concept", ".*"))
                 Else
                     For Each s As String In sl.Exclude
-                        slot.add_exclude(MakeAssertion("domain_concept", s))
+                        Dim escapedString As String
+                        Dim i As Integer
+                        'Must have at least one escaped . or it is not valid unless it is the end
+                        i = s.IndexOf("\")
+                        If i > -1 AndAlso i <> (s.Length - 1) Then
+                            escapedString = s
+                        Else
+                            escapedString = s.Replace(".", "\.")
+                        End If
+                        slot.add_exclude(MakeAssertion("domain_concept", escapedString))
                     Next
                 End If
                 Debug.Assert(slot.has_excludes Or slot.has_includes)
@@ -732,10 +752,28 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
+
+        Private Sub BuildDuration(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Duration)
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+
+            an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
+            an_attribute = mAomFactory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
+
+            Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
+
+            d = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_DURATION.make_from_pattern(openehr.base.kernel.Create.STRING.make_from_cil(c.AllowableUnits))
+
+            Dim po As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+            po = openehr.openehr.am.archetype.constraint_model.Create.C_PRIMITIVE_OBJECT.make(d)
+            an_attribute.put_child(po)
+
+        End Sub
+
         Protected Sub BuildQuantity(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
             Dim cadlQuantity As openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY
 
-            cadlQuantity = mCADL_Factory.create_c_quantity(value_attribute)
+            cadlQuantity = mAomFactory.create_c_quantity(value_attribute)
             ' set the property constraint - it should be present
 
             If Not q.IsNull Then
@@ -753,30 +791,31 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim unit_constraint As Constraint_QuantityUnit
 
                     For Each unit_constraint In q.Units
-                        Dim a_real As openehr.common_libs.basic.OE_INTERVAL_SINGLE
+                        Dim a_real As openehr.common_libs.basic.OE_INTERVAL_SINGLE = Nothing
+                        Dim a_precision As openehr.common_libs.basic.OE_INTERVAL_INT32 = Nothing
 
                         If unit_constraint.HasMaximum Or unit_constraint.HasMinimum Then
                             If unit_constraint.HasMaximum And unit_constraint.HasMinimum Then
-                                a_real = mCADL_Factory.create_real_interval_make_bounded(unit_constraint.MinimumValue, unit_constraint.MaximumValue, unit_constraint.IncludeMinimum, unit_constraint.IncludeMaximum)
+                                a_real = mAomFactory.create_real_interval_make_bounded(unit_constraint.MinimumValue, unit_constraint.MaximumValue, unit_constraint.IncludeMinimum, unit_constraint.IncludeMaximum)
                             ElseIf unit_constraint.HasMaximum Then
-                                a_real = mCADL_Factory.create_real_interval_make_lower_unbounded(unit_constraint.MaximumValue, unit_constraint.IncludeMaximum)
+                                a_real = mAomFactory.create_real_interval_make_lower_unbounded(unit_constraint.MaximumValue, unit_constraint.IncludeMaximum)
                             ElseIf unit_constraint.HasMinimum Then
-                                a_real = mCADL_Factory.create_real_interval_make_upper_unbounded(unit_constraint.MinimumValue, unit_constraint.IncludeMinimum)
+                                a_real = mAomFactory.create_real_interval_make_upper_unbounded(unit_constraint.MinimumValue, unit_constraint.IncludeMinimum)
                             End If
-                        Else
-                            'a_real = mCADL_Factory.create_real_interval_make_unbounded()
-                            a_real = Nothing
                         End If
 
                         If unit_constraint.HasAssumedValue Then
-                            cadlQuantity.set_assumed_value_from_units_magnitude(openehr.base.kernel.Create.STRING.make_from_cil(unit_constraint.Unit), unit_constraint.AssumedValue)
+                            cadlQuantity.set_assumed_value_from_units_magnitude(openehr.base.kernel.Create.STRING.make_from_cil(unit_constraint.Unit), unit_constraint.AssumedValue, unit_constraint.Precision)
                         End If
-                        cadlQuantity.add_unit_constraint(openehr.base.kernel.Create.STRING.make_from_cil(unit_constraint.Unit), a_real)
+
+                        ' Now set the precision (has to be an interval)
+                        If unit_constraint.Precision > -1 Then
+                            a_precision = mAomFactory.create_integer_interval_make_bounded(unit_constraint.Precision, unit_constraint.Precision, True, True)
+                        End If
+
+                        cadlQuantity.add_unit_constraint(openehr.base.kernel.Create.STRING.make_from_cil(unit_constraint.Unit), a_real, a_precision)
                     Next
                 End If
-
-            Else
-                cadlQuantity.set_any_allowed()
             End If
 
         End Sub
@@ -785,17 +824,18 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-            an_object = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_DataTypeName(b.Type)))
-            an_attribute = mCADL_Factory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
+            an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(b.Type)))
+            an_attribute = mAomFactory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
 
             Dim c_value As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
             If b.TrueFalseAllowed Then
-                c_value = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_boolean_make_true_false())
+                c_value = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_boolean_make_true_false())
             ElseIf b.TrueAllowed Then
-                c_value = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_boolean_make_true())
-            ElseIf b.FalseAllowed Then
-                c_value = mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_boolean_make_false())
+                c_value = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_boolean_make_true())
+            Else
+                Debug.Assert(b.FalseAllowed, "Must have FalseAllowed as true if gets to here")
+                c_value = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_boolean_make_false())
             End If
 
             If b.hasAssumedValue Then
@@ -808,34 +848,29 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
                 c_value.item.set_assumed_value(EIF_bool)
             End If
-
         End Sub
 
         Protected Sub BuildOrdinal(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal o As Constraint_Ordinal)
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            'Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            ' Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim c_value As openehr.openehr.am.openehr_profile.data_types.quantity.C_ORDINAL
             Dim o_v As OrdinalValue
 
-            an_object = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_DataTypeName(o.Type)))
+            '  an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(o.Type)))
 
+                '    an_attribute = mAomFactory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
+            c_value = mAomFactory.create_c_ordinal(value_attribute)
             If o.OrdinalValues.Count > 0 Then
-                an_attribute = mCADL_Factory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
-                c_value = mCADL_Factory.create_c_ordinal(an_attribute)
 
                 For Each o_v In o.OrdinalValues
                     Dim cadlO As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
-                    cadlO = mCADL_Factory.create_ordinal(o_v.Ordinal, openehr.base.kernel.Create.STRING.make_from_cil("local::" & o_v.InternalCode))
+                    cadlO = mAomFactory.create_ordinal(o_v.Ordinal, openehr.base.kernel.Create.STRING.make_from_cil("local::" & o_v.InternalCode))
                     c_value.add_item(cadlO)
+                    If o.HasAssumedValue And o_v.Ordinal = CInt(o.AssumedValue) Then
+                        c_value.set_assumed_value_from_integer(CInt(o.AssumedValue))
+                    End If
                 Next
-                If o.HasAssumedValue Then
-                    an_attribute = mCADL_Factory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("assumed_value"))
-                    mCADL_Factory.create_c_primitive_object(an_attribute, mCADL_Factory.create_c_integer_make_bounded(o.AssumedValue, o.AssumedValue, True, True))
-                End If
-            Else
-                an_object.set_any_allowed()
             End If
-
         End Sub
 
         Protected Sub BuildText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal t As Constraint_Text)
@@ -853,15 +888,15 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Function GetPathOfNode(ByVal NodeId As String) As openehr.common_libs.structures.object_graph.path.OG_PATH
-            Dim arraylist As openehr.Base.structures.list.LIST_ANY
+            Dim tablePaths As openehr.base.structures.list.LIST_ANY
             Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
             Dim s As String
             Dim i As Integer
 
-            arraylist = Me.adlArchetype.definition.all_paths
+            tablePaths = Me.adlArchetype.physical_paths
 
-            For i = 1 To arraylist.count
-                s = arraylist.i_th(i).out.to_cil
+            For i = 1 To tablePaths.count
+                s = tablePaths.i_th(i).out.to_cil
                 If s.EndsWith(NodeId & "]") Then
                     path = openehr.common_libs.structures.object_graph.path.Create.OG_PATH.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(s))
                     Return path
@@ -875,52 +910,42 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Sub BuildInterval(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Interval)
 
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            ' Interval<T>
 
-            objNode = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_DataTypeName(c.Type)))
+            objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
 
+            'Upper of type T
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("absolute_limits"))
+            an_attribute = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("upper"))
+            BuildElementConstraint(an_attribute, c.UpperLimit)
 
-            BuildElementConstraint(an_attribute, c.AbsoluteLimits)
+            'Lower of type T
+            an_attribute = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("lower"))
+            BuildElementConstraint(an_attribute, c.LowerLimit)
 
         End Sub
 
         Private Sub BuildMultiMedia(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_MultiMedia)
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM
+            Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE
 
-            objNode = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_DataTypeName(c.Type)))
+            objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
 
-            code_rel_node = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("media_type"))
+            code_rel_node = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("media_type"))
             If c.AllowableValues.Codes.Count > 0 Then
-                ca_Term = mCADL_Factory.create_c_coded_term_from_pattern(code_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(c.AllowableValues.Phrase))
+                ca_Term = mAomFactory.create_c_code_phrase_from_pattern(code_rel_node, openehr.base.kernel.Create.STRING.make_from_cil(c.AllowableValues.Phrase))
             Else
-                ca_Term = openehr.openehr.am.openehr_profile.data_types.text.Create.C_CODED_TERM.make_from_terminology_id(openehr.base.kernel.Create.STRING.make_from_cil(c.AllowableValues.TerminologyID))
+                ca_Term = openehr.openehr.am.openehr_profile.data_types.text.Create.C_CODE_PHRASE.make_from_terminology_id(openehr.base.kernel.Create.STRING.make_from_cil(c.AllowableValues.TerminologyID))
                 code_rel_node.put_child(ca_Term)
             End If
-
-        End Sub
-
-        Private Sub BuildDuration(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Duration)
-            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
-
-            d = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_DURATION.make_from_pattern(openehr.base.kernel.Create.STRING.make_from_cil(c.AllowableUnits))
-
-            Dim po As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-            po = openehr.openehr.am.archetype.constraint_model.Create.C_PRIMITIVE_OBJECT.make(d)
-            value_attribute.put_child(po)
-
-            'objNode = mCADL_Factory.create_c_primitive_object(value_attribute, d)
 
         End Sub
 
         Private Sub BuildURI(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_URI)
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-            objNode = mCADL_Factory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_DataTypeName(c.Type)))
-            objNode.set_any_allowed()
+            objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
         End Sub
 
         Protected Sub BuildElementConstraint(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint)
@@ -942,16 +967,14 @@ Namespace ArchetypeEditor.ADL_Classes
                     BuildOrdinal(value_attribute, c)
 
                 Case ConstraintType.Any
-                    value_attribute.parent.set_any_allowed()
+                    Debug.Assert(False, "Need to check this is set to the true")
+                    'value_attribute.parent.set_any_allowed()
 
-                Case ConstraintType.Ratio
-                    BuildRatio(value_attribute, c)
+                Case ConstraintType.Proportion
+                    BuildProportion(value_attribute, c)
 
                 Case ConstraintType.Count
                     BuildCount(value_attribute, c)
-
-                Case ConstraintType.Ratio
-                    BuildRatio(value_attribute, c)
 
                 Case ConstraintType.DateTime
                     BuildDateTime(value_attribute, c)
@@ -964,7 +987,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         BuildElementConstraint(value_attribute, a_constraint)
                     Next
 
-                Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
+                Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
                     BuildInterval(value_attribute, c)
 
                 Case ConstraintType.MultiMedia
@@ -975,6 +998,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Case ConstraintType.Duration
                     BuildDuration(value_attribute, c)
+
             End Select
 
         End Sub
@@ -982,10 +1006,8 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             If Element.Type = StructureType.Reference Then
-                Dim ref_cadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
-                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
-
                 Dim ref As ReferenceToResolve
+
                 ref.Element = Element
                 ref.Attribute = RelNode
 
@@ -993,22 +1015,17 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Else
                 Dim element_cadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                Dim name_rel_Node, Definition_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-                element_cadlObj = mCADL_Factory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(StructureType.Element)), openehr.base.kernel.Create.STRING.make_from_cil(Element.NodeId))
+                element_cadlObj = mAomFactory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(StructureType.Element)), openehr.base.kernel.Create.STRING.make_from_cil(Element.NodeId))
                 element_cadlObj.set_occurrences(MakeOccurrences(Element.Occurrences))
                 If Element.HasNameConstraint Then
                     Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-                    an_attribute = mCADL_Factory.create_c_attribute_single(element_cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                    an_attribute = mAomFactory.create_c_attribute_single(element_cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("name"))
                     BuildText(an_attribute, Element.NameConstraint)
                 End If
-                If Element.Constraint.Type = ConstraintType.Any Then
-                    If element_cadlObj.attributes.count = 0 Then
-                        element_cadlObj.set_any_allowed()
-                    End If
-                Else
-                    value_attribute = mCADL_Factory.create_c_attribute_single(element_cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("value"))
+                If Element.Constraint.Type <> ConstraintType.Any Then
+                    value_attribute = mAomFactory.create_c_attribute_single(element_cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("value"))
                     BuildElementConstraint(value_attribute, Element.Constraint)
                 End If
 
@@ -1028,17 +1045,24 @@ Namespace ArchetypeEditor.ADL_Classes
                 Select Case rmStruct.Type '.TypeName
                     Case StructureType.Single ' "SINGLE"
 
-                        an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("item"))
+                        an_attribute = mAomFactory.create_c_attribute_single(objNode, _
+                            openehr.base.kernel.Create.STRING.make_from_cil("item"))
+
                         BuildElementOrReference(rmStruct.Children.items(0), an_attribute)
 
                     Case StructureType.List ' "LIST"
-                        an_attribute = mCADL_Factory.create_c_attribute_multiple(objNode, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
+                        an_attribute = mAomFactory.create_c_attribute_multiple(objNode, _
+                            openehr.base.kernel.Create.STRING.make_from_cil("items"), _
+                            MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
+
                         For Each rm In rmStruct.Children.items
                             BuildElementOrReference(rm, an_attribute)
                         Next
                     Case StructureType.Tree ' "TREE"
-                        an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("items"))
-                        an_attribute.set_cardinality(MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
+                        an_attribute = mAomFactory.create_c_attribute_multiple(objNode, _
+                            openehr.base.kernel.Create.STRING.make_from_cil("items"), _
+                            MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
+
                         For Each rm In rmStruct.Children.items
                             'If rm.TypeName = "Cluster" Then
                             If rm.Type = StructureType.Cluster Then
@@ -1048,36 +1072,33 @@ Namespace ArchetypeEditor.ADL_Classes
                             End If
                         Next
                     Case StructureType.Table ' "TABLE"
-                        Dim rm_c As RmStructureCompound
                         Dim table As RmTable
                         Dim b As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN
                         Dim rh As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
 
                         table = CType(rmStruct, RmTable)
                         ' set is rotated
-                        an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("rotated"))
+                        an_attribute = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("rotated"))
                         If table.isRotated Then
-                            b = mCADL_Factory.create_c_boolean_make_true()
+                            b = mAomFactory.create_c_boolean_make_true()
                         Else
-                            b = mCADL_Factory.create_c_boolean_make_false()
+                            b = mAomFactory.create_c_boolean_make_false()
                         End If
-                        mCADL_Factory.create_c_primitive_object(an_attribute, b)
+                        mAomFactory.create_c_primitive_object(an_attribute, b)
 
                         ' set number of row if not one
                         If table.NumberKeyColumns > 0 Then
-                            an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("number_key_columns"))
-                            rh = mCADL_Factory.create_c_integer_make_bounded(table.NumberKeyColumns, table.NumberKeyColumns, True, True)
-                            mCADL_Factory.create_c_primitive_object(an_attribute, rh)
+                            an_attribute = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("number_key_columns"))
+                            rh = mAomFactory.create_c_integer_make_bounded(table.NumberKeyColumns, table.NumberKeyColumns, True, True)
+                            mAomFactory.create_c_primitive_object(an_attribute, rh)
                         End If
 
 
-                        an_attribute = mCADL_Factory.create_c_attribute_multiple(objNode, openehr.base.kernel.Create.STRING.make_from_cil("rows"), MakeCardinality(New RmCardinality(rmStruct.Occurrences), True))
+                        an_attribute = mAomFactory.create_c_attribute_multiple(objNode, openehr.base.kernel.Create.STRING.make_from_cil("rows"), MakeCardinality(New RmCardinality(rmStruct.Occurrences), True))
 
                         BuildCluster(rmStruct.Children.items(0), an_attribute)
 
                 End Select
-            Else
-                objNode.set_any_allowed()
             End If
 
             If ReferencesToResolve.Count > 0 Then
@@ -1088,7 +1109,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     path = GetPathOfNode(ref.Element.NodeId)
                     If Not path Is Nothing Then
-                        ref_cadlRefNode = mCADL_Factory.create_archetype_internal_ref(ref.Attribute, openehr.base.kernel.Create.STRING.make_from_cil("ELEMENT"), path.as_string)
+                        ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, openehr.base.kernel.Create.STRING.make_from_cil("ELEMENT"), path.as_string)
                     End If
 
                 Next
@@ -1105,10 +1126,10 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 Dim a_relationship As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-                an_attribute = mCADL_Factory.create_c_attribute_single(root_node, openehr.base.kernel.Create.STRING.make_from_cil("subject"))
-                objnode = openehr.openehr.am.archetype.constraint_model.Create.C_COMPLEX_OBJECT.make_anonymous(openehr.base.kernel.Create.STRING.make_from_cil("RELATED_PARTY"))
+                an_attribute = mAomFactory.create_c_attribute_single(root_node, openehr.base.kernel.Create.STRING.make_from_cil("subject"))
+                objnode = openehr.openehr.am.archetype.constraint_model.Create.C_COMPLEX_OBJECT.make_anonymous(openehr.base.kernel.Create.STRING.make_from_cil("PARTY_RELATED"))
                 an_attribute.put_child(objnode)
-                a_relationship = mCADL_Factory.create_c_attribute_single(objnode, openehr.base.kernel.Create.STRING.make_from_cil("relationship"))
+                a_relationship = mAomFactory.create_c_attribute_single(objnode, openehr.base.kernel.Create.STRING.make_from_cil("relationship"))
                 BuildCodedText(a_relationship, subject.Relationship)
             End If
         End Sub
@@ -1117,7 +1138,7 @@ Namespace ArchetypeEditor.ADL_Classes
             ' Build a section, runtimename is already done
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-            an_attribute = mCADL_Factory.create_c_attribute_multiple(cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(rmChildren.Cardinality, rmChildren.Cardinality.Ordered))
+            an_attribute = mAomFactory.create_c_attribute_multiple(cadlObj, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(rmChildren.Cardinality, rmChildren.Cardinality.Ordered))
 
             For Each a_structure As RmStructure In rmChildren
 
@@ -1129,14 +1150,12 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     If a_structure.HasNameConstraint Then
                         Dim another_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                        another_attribute = mCADL_Factory.create_c_attribute_single(new_section, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                        another_attribute = mAomFactory.create_c_attribute_single(new_section, openehr.base.kernel.Create.STRING.make_from_cil("name"))
                         BuildText(another_attribute, a_structure.NameConstraint)
                     End If
 
                     If CType(a_structure, RmSection).Children.Count > 0 Then
                         BuildSection(CType(a_structure, RmSection).Children, new_section)
-                    Else
-                        new_section.set_any_allowed()
                     End If
                     an_attribute.put_child(new_section)
                 ElseIf a_structure.Type = StructureType.Slot Then
@@ -1151,7 +1170,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             ' set the category
-            an_attribute = mCADL_Factory.create_c_attribute_single(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("category"))
+            an_attribute = mAomFactory.create_c_attribute_single(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("category"))
             Dim t As New Constraint_Text
             t.TypeOfTextConstraint = TextConstrainType.Terminology ' coded_text
             t.AllowableValues.TerminologyID = "openehr"
@@ -1173,18 +1192,19 @@ Namespace ArchetypeEditor.ADL_Classes
 
                             Dim new_structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                            an_attribute = mCADL_Factory.create_c_attribute_single(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("context"))
-                            new_structure = mCADL_Factory.create_c_complex_object_anonymous(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("EVENT_CONTEXT"))
-                            an_attribute = mCADL_Factory.create_c_attribute_single(new_structure, openehr.base.kernel.Create.STRING.make_from_cil("other_context"))
-                            new_structure = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_structure.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_structure.NodeId))
+                            an_attribute = mAomFactory.create_c_attribute_single(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("context"))
+                            new_structure = mAomFactory.create_c_complex_object_anonymous(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("EVENT_CONTEXT"))
+                            an_attribute = mAomFactory.create_c_attribute_single(new_structure, openehr.base.kernel.Create.STRING.make_from_cil("other_context"))
+                            new_structure = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(a_structure.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_structure.NodeId))
                             BuildStructure(a_structure, new_structure)
 
                         Case StructureType.SECTION
-                            Dim new_section As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
                             If CType(a_structure, RmSection).Children.Count > 0 Then
 
-                                an_attribute = mCADL_Factory.create_c_attribute_single(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("content"))
+                                an_attribute = mAomFactory.create_c_attribute_multiple(CadlObj, _
+                                    openehr.base.kernel.Create.STRING.make_from_cil("content"), _
+                                    MakeCardinality(CType(a_structure, RmSection).Children.Cardinality, CType(a_structure, RmSection).Children.Cardinality.Ordered))
 
                                 For Each slot As RmSlot In CType(a_structure, RmSection).Children
 
@@ -1197,8 +1217,6 @@ Namespace ArchetypeEditor.ADL_Classes
                             Debug.Assert(False)
                     End Select
                 Next
-            Else
-                CadlObj.set_any_allowed()
             End If
         End Sub
 
@@ -1209,7 +1227,7 @@ Namespace ArchetypeEditor.ADL_Classes
             ' CadlObj.SetObjectId(openehr.base.kernel.Create.STRING.make_from_cil(Rm.NodeId))
 
             If Rm.Children.Count > 0 Then
-                an_attribute = mCADL_Factory.create_c_attribute_multiple(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(Rm.Children.Cardinality, Rm.Children.Cardinality.Ordered))
+                an_attribute = mAomFactory.create_c_attribute_multiple(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(Rm.Children.Cardinality, Rm.Children.Cardinality.Ordered))
 
                 For Each a_structure As RmStructure In Rm.Children
                     If a_structure.Type = StructureType.SECTION Then
@@ -1220,14 +1238,12 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         If a_structure.HasNameConstraint Then
                             Dim another_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                            another_attribute = mCADL_Factory.create_c_attribute_single(new_section, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                            another_attribute = mAomFactory.create_c_attribute_single(new_section, openehr.base.kernel.Create.STRING.make_from_cil("name"))
                             BuildText(another_attribute, a_structure.NameConstraint)
                         End If
 
                         If CType(a_structure, RmSection).Children.Count > 0 Then
                             BuildSection(CType(a_structure, RmSection).Children, new_section)
-                        Else
-                            new_section.set_any_allowed()
                         End If
                         an_attribute.put_child(new_section)
                     ElseIf a_structure.Type = StructureType.Slot Then
@@ -1236,8 +1252,6 @@ Namespace ArchetypeEditor.ADL_Classes
                         Debug.Assert(False)
                     End If
                 Next
-            Else
-                CadlObj.set_any_allowed()
             End If
         End Sub
 
@@ -1246,14 +1260,14 @@ Namespace ArchetypeEditor.ADL_Classes
                 ByVal attribute_name As String)
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-            an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil(attribute_name))
+            an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil(attribute_name))
 
             If CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot Then
                 BuildSlot(an_attribute, rm.Children.items(0))
             Else
                 Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
+                objNode = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(rm.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
                 BuildStructure(rm.Children.items(0), objNode)
             End If
         End Sub
@@ -1263,16 +1277,16 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim rmStructComp As RmStructureCompound
 
             If rm.Type = StructureType.Slot Then
-                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("protocol"))
+                an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("protocol"))
                 BuildSlot(an_attribute, rm)
             Else
                 rmStructComp = CType(rm, RmStructureCompound)
                 If rmStructComp.Children.Count > 0 Then
-                    an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("protocol"))
+                    an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("protocol"))
                     ' only 1 protocol allowed
                     Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rmStructComp.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rmStructComp.Children.items(0).NodeId))
+                    objNode = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(rmStructComp.Children.items(0).Type)), openehr.base.kernel.Create.STRING.make_from_cil(rmStructComp.Children.items(0).NodeId))
                     BuildStructure(rmStructComp.Children.items(0), objNode)
                 End If
             End If
@@ -1284,8 +1298,8 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_phrase As New CodePhrase
 
-            objNode = mCADL_Factory.create_c_complex_object_anonymous(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("ISM_TRANSITION"))
-            a_state = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("current_state"))
+            objNode = mAomFactory.create_c_complex_object_anonymous(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("ISM_TRANSITION"))
+            a_state = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("current_state"))
             code_phrase.TerminologyID = "openehr"
             code_phrase.Codes.Add((CInt(rm.StateType)).ToString)
             If rm.HasAlternativeState Then
@@ -1293,7 +1307,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
             BuildCodedText(a_state, code_phrase)
 
-            a_step = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("careflow_step"))
+            a_step = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("careflow_step"))
             code_phrase = New CodePhrase
             code_phrase.Codes.Add(rm.NodeId)  ' local is default terminology, node_id of rm is same as term code of name
             BuildCodedText(a_step, code_phrase)
@@ -1304,7 +1318,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             If rm.Children.Count > 0 Then
-                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("ism_transition"))
+                an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("ism_transition"))
 
                 For Each pathway_step As RmPathwayStep In rm.Children
                     BuildWorkFlowStep(pathway_step, an_attribute)
@@ -1316,23 +1330,33 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim objNodeSimple As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
-            objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("ACTIVITY"), openehr.base.kernel.Create.STRING.make_from_cil(rm.NodeId))
+            objNode = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil("ACTIVITY"), openehr.base.kernel.Create.STRING.make_from_cil(rm.NodeId))
             objNode.set_occurrences(MakeOccurrences(rm.Occurrences))
 
             If rm.ArchetypeId <> "" Then
-                an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("action_archetype_id"))
-                objNodeSimple = mCADL_Factory.create_c_primitive_object(an_attribute, _
-                    mCADL_Factory.create_c_string_make_from_regexp( _
-                    openehr.base.kernel.Create.STRING.make_from_cil(rm.ArchetypeId)))
+                Dim escapedString As String
+                Dim i As Integer
+                'Must have at least one escaped . or it is not valid unless it is the end
+                i = rm.ArchetypeId.IndexOf("\")
+                If i > -1 AndAlso i <> (rm.ArchetypeId.Length - 1) Then
+                    escapedString = rm.ArchetypeId
+                Else
+                    escapedString = rm.ArchetypeId.Replace(".", "\.")
+                End If
+            
+                an_attribute = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("action_archetype_id"))
+                objNodeSimple = mAomFactory.create_c_primitive_object(an_attribute, _
+                    mAomFactory.create_c_string_make_from_regexp( _
+                    openehr.base.kernel.Create.STRING.make_from_cil(escapedString)))
             End If
 
             For Each rm_struct As RmStructure In rm.Children
-                an_attribute = mCADL_Factory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("description"))
+                an_attribute = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("description"))
                 Select Case rm_struct.Type
                     Case StructureType.List, StructureType.Single, StructureType.Tree, StructureType.Table
                         Dim EIF_struct As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                        EIF_struct = mCADL_Factory.create_c_complex_object_identified(an_attribute, _
-                            openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm_struct.Type)), _
+                        EIF_struct = mAomFactory.create_c_complex_object_identified(an_attribute, _
+                            openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(rm_struct.Type)), _
                             openehr.base.kernel.Create.STRING.make_from_cil(rm_struct.NodeId))
 
                         BuildStructure(CType(rm_struct, RmStructureCompound), EIF_struct)
@@ -1353,7 +1377,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         'ToDo: Set cardinality on this attribute
                         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                        an_attribute = mCADL_Factory.create_c_attribute_multiple(adlArchetype.definition, _
+                        an_attribute = mAomFactory.create_c_attribute_multiple(adlArchetype.definition, _
                             openehr.base.kernel.Create.STRING.make_from_cil("activities"), _
                             MakeCardinality(New RmCardinality(0)))
 
@@ -1377,13 +1401,13 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
             If rm.Children.items.Length > 0 Then
-                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("description"))
+                an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("description"))
                 action_spec = rm.Children.items(0)
 
                 Select Case action_spec.Type
                     Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, _
-                            openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(action_spec.Type)), _
+                        objNode = mAomFactory.create_c_complex_object_identified(an_attribute, _
+                            openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(action_spec.Type)), _
                             openehr.base.kernel.Create.STRING.make_from_cil(rm.Children.items(0).NodeId))
 
                         BuildStructure(action_spec, objNode)
@@ -1398,174 +1422,174 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overridable Sub MakeParseTree()
-            Dim rm As RmStructureCompound
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            If Not mSynchronised Then
+                Dim rm As RmStructureCompound
+                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-            'reset the ADL definition to make it again
-            adlArchetype.reset_definition()
+                'reset the ADL definition to make it again
+                adlArchetype.reset_definition()
 
-            'pick up the description data
-            adlArchetype.set_description(CType(mDescription, ADL_Description).ADL_Description)
+                'pick up the description data
+                adlArchetype.set_description(CType(mDescription, ADL_Description).ADL_Description)
 
-            If cDefinition Is Nothing Then
-                Err.Raise(vbObjectError + 512, "No archetype definition", _
-                "An archetype definition is required prior to saving")
-            End If
+                If cDefinition Is Nothing Then
+                    Err.Raise(vbObjectError + 512, "No archetype definition", _
+                    "An archetype definition is required prior to saving")
+                End If
 
-            mCADL_Factory = adlEngine.constraint_model_factory
+                mAomFactory = adlEngine.constraint_model_factory
 
-            If cDefinition.hasNameConstraint Then
-                an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("name"))
-                BuildText(an_attribute, cDefinition.NameConstraint)
-            End If
-
-
-            Debug.Assert(ReferenceModel.Instance.IsValidArchetypeDefinition(cDefinition.Type))
-
-            Select Case cDefinition.Type
-
-                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                    If adlArchetype.definition.any_allowed AndAlso cDefinition.Data.Count > 0 Then
-                        'This can arise if the archetype has been saved with no children then
-                        'items have been added later - this is percular to Tree, List and Table.
-                        adlArchetype.definition.set_occurrences(MakeOccurrences(New RmCardinality(0)))
-                    End If
-                    BuildStructure(cDefinition, adlArchetype.definition)
-
-                Case StructureType.SECTION
-                    BuildRootSection(cDefinition, adlArchetype.definition)
-
-                Case StructureType.COMPOSITION
-                    BuildComposition(cDefinition, adlArchetype.definition)
-
-                Case StructureType.EVALUATION, StructureType.ENTRY
-
-                    BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
-
-                    For Each rm In cDefinition.Data
-                        Select Case rm.Type
-                            Case StructureType.State
-                                BuildStructure(rm, adlArchetype.definition, "state")
-
-                            Case StructureType.Protocol
-                                BuildProtocol(rm, adlArchetype.definition)
-
-                            Case StructureType.Data
-                                BuildStructure(rm, adlArchetype.definition, "data")
-
-                        End Select
-                    Next
-
-                Case StructureType.ADMIN_ENTRY
-
-                    an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
-                    Try
-                        Dim rm_struct As RmStructureCompound = CType(cDefinition.Data.items(0), RmStructureCompound).Children.items(0)
-
-                        Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                        objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(rm_struct.Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm_struct.NodeId))
-                        BuildStructure(rm_struct, objNode)
-                    Catch
-                        'ToDo - process error
-                        Debug.Assert(False, "Error building structure")
-                    End Try
-
-                Case StructureType.OBSERVATION
-                    BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+                If cDefinition.hasNameConstraint Then
+                    an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                    BuildText(an_attribute, cDefinition.NameConstraint)
+                End If
 
 
-                    'Add state to each event so need to be sure of requirements
-                    Dim state_to_be_added As Boolean = True
-                    Dim rm_state As RmStructureCompound
-                    Dim rm_data As RmStructureCompound
-                    Dim rm_protocol As RmStructureCompound
+                Debug.Assert(ReferenceModel.IsValidArchetypeDefinition(cDefinition.Type))
 
-                    For Each rm In cDefinition.Data
-                        Select Case rm.Type
-                            'PROTOCOL
-                        Case StructureType.Protocol
-                                rm_protocol = rm
+                Select Case cDefinition.Type
 
-                                'DATA
-                            Case StructureType.Data
-                                'remember the data structure
-                                rm_data = rm
+                    Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                        If adlArchetype.definition.any_allowed AndAlso cDefinition.Data.Count > 0 Then
+                            'This can arise if the archetype has been saved with no children then
+                            'items have been added later - this is percular to Tree, List and Table.
+                            adlArchetype.definition.set_occurrences(MakeOccurrences(New RmCardinality(0)))
+                        End If
+                        BuildStructure(cDefinition, adlArchetype.definition)
 
+                    Case StructureType.SECTION
+                        BuildRootSection(cDefinition, adlArchetype.definition)
 
-                                'STATE
-                            Case StructureType.State
+                    Case StructureType.COMPOSITION
+                        BuildComposition(cDefinition, adlArchetype.definition)
 
-                                'for the moment saving the state data on the first event EventSeries if there is one
-                                Dim a_rm As RmStructureCompound
+                    Case StructureType.EVALUATION, StructureType.ENTRY
 
-                                a_rm = rm.Children.items(0)
+                        BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
 
-                                If a_rm.Type = StructureType.History Then
-                                    an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("state"))
+                        For Each rm In cDefinition.Data
+                            Select Case rm.Type
+                                Case StructureType.State
+                                    BuildStructure(rm, adlArchetype.definition, "state")
 
-                                    ' can have EventSeries for each state
-                                    BuildHistory(a_rm, an_attribute)
-                                Else
-                                    rm_state = rm
+                                Case StructureType.Protocol
+                                    BuildProtocol(rm, adlArchetype.definition)
 
-                                End If
+                                Case StructureType.Data
+                                    BuildStructure(rm, adlArchetype.definition, "data")
 
-
-                        End Select
-                    Next
-
-                    'Add the data
-                    If Not rm_data Is Nothing Then
-                        an_attribute = mCADL_Factory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
-
-                        For Each a_rm As RmStructureCompound In rm_data.Children.items
-                            Select Case a_rm.Type '.TypeName
-                                Case StructureType.History
-                                    If Not rm_state Is Nothing Then
-                                        BuildHistory(a_rm, an_attribute, rm_state)
-                                    Else
-                                        BuildHistory(a_rm, an_attribute)
-                                    End If
-                                Case Else
-                                    Debug.Assert(False) '?OBSOLETE
-                                    Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                                    objNode = mCADL_Factory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.Instance.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
-                                    BuildStructure(a_rm, objNode)
                             End Select
                         Next
-                    End If
 
-                    If Not rm_protocol Is Nothing Then
-                        BuildProtocol(rm_protocol, adlArchetype.definition)
-                    End If
+                    Case StructureType.ADMIN_ENTRY
+
+                        an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
+                        Try
+                            Dim rm_struct As RmStructureCompound = CType(cDefinition.Data.items(0), RmStructureCompound).Children.items(0)
+
+                            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                            objNode = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(rm_struct.Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm_struct.NodeId))
+                            BuildStructure(rm_struct, objNode)
+                        Catch
+                            'ToDo - process error
+                            Debug.Assert(False, "Error building structure")
+                        End Try
+
+                    Case StructureType.OBSERVATION
+                        BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+                        'Add state to each event so need to be sure of requirements
+                        Dim state_to_be_added As Boolean = True
+                        Dim rm_state As RmStructureCompound = Nothing
+                        Dim rm_state_history As RmStructureCompound = Nothing
+                        Dim rm_data As RmStructureCompound = Nothing
+                        Dim rm_protocol As RmStructureCompound = Nothing
+
+                        For Each rm In cDefinition.Data
+                            Select Case rm.Type
+                                'PROTOCOL
+                                Case StructureType.Protocol
+                                    rm_protocol = rm
+
+                                    'DATA
+                                Case StructureType.Data
+                                    'remember the data structure
+                                    rm_data = rm
 
 
-                Case StructureType.INSTRUCTION
-                    BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+                                    'STATE
+                                Case StructureType.State
 
-                    BuildInstruction(cDefinition.Data)
+                                    'for the moment saving the state data on the first event EventSeries if there is one
+                                    Dim a_rm As RmStructureCompound
 
-                Case StructureType.ACTION
-                    BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+                                    a_rm = rm.Children.items(0)
 
-                    For Each rm In cDefinition.Data
-                        Select Case rm.Type
-                            Case StructureType.ISM_TRANSITION
-                                BuildPathway(rm, adlArchetype.definition)
-                            Case StructureType.ActivityDescription
-                                BuildAction(rm, adlArchetype.definition)
-                            Case StructureType.Slot
-                                ' this allows a structure to be archetyped at this point
-                                Debug.Assert(CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot)
-                                BuildStructure(rm, adlArchetype.definition)
-                            Case StructureType.Protocol
-                                BuildProtocol(rm, adlArchetype.definition)
-                        End Select
-                    Next
+                                    If a_rm.Type = StructureType.History Then
+                                        ' can have EventSeries for each state
+                                        rm_state_history = a_rm
+                                    Else
+                                        rm_state = rm
+                                    End If
+                            End Select
+                        Next
 
-            End Select
+                        'Add the data
+                        If Not rm_data Is Nothing Then
+                            an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
 
+                            For Each a_rm As RmStructureCompound In rm_data.Children.items
+                                Select Case a_rm.Type '.TypeName
+                                    Case StructureType.History
+                                        If Not rm_state Is Nothing Then
+                                            BuildHistory(a_rm, an_attribute, rm_state)
+                                        Else
+                                            BuildHistory(a_rm, an_attribute)
+                                        End If
+                                    Case Else
+                                        Debug.Assert(False) '?OBSOLETE
+                                        Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                                        objNode = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(a_rm.Type)), openehr.base.kernel.Create.STRING.make_from_cil(a_rm.NodeId))
+                                        BuildStructure(a_rm, objNode)
+                                End Select
+                            Next
+                        End If
+
+                        If Not rm_state_history Is Nothing Then
+                            an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("state"))
+                            BuildHistory(rm_state_history, an_attribute)
+                        End If
+
+                        If Not rm_protocol Is Nothing Then
+                            BuildProtocol(rm_protocol, adlArchetype.definition)
+                        End If
+
+                    Case StructureType.INSTRUCTION
+                        BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+
+                        BuildInstruction(cDefinition.Data)
+
+                    Case StructureType.ACTION
+                        BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
+
+                        For Each rm In cDefinition.Data
+                            Select Case rm.Type
+                                Case StructureType.ISM_TRANSITION
+                                    BuildPathway(rm, adlArchetype.definition)
+                                Case StructureType.ActivityDescription
+                                    BuildAction(rm, adlArchetype.definition)
+                                Case StructureType.Slot
+                                    ' this allows a structure to be archetyped at this point
+                                    Debug.Assert(CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot)
+                                    BuildStructure(rm, adlArchetype.definition)
+                                Case StructureType.Protocol
+                                    BuildProtocol(rm, adlArchetype.definition)
+                            End Select
+                        Next
+
+                End Select
+                'Now synchronised with cDefintion
+                mSynchronised = True
+            End If
         End Sub
 
         Sub New(ByRef an_ADL_ENGINE As openehr.adl_parser.syntax.adl.ADL_ENGINE, ByVal an_ArchetypeID As ArchetypeID, ByVal primary_language As String)
@@ -1595,7 +1619,7 @@ Namespace ArchetypeEditor.ADL_Classes
             adlArchetype = an_Archetype
             adlEngine = an_ADL_Engine
             mArchetypeID = New ArchetypeID(an_Archetype.archetype_id.as_string.to_cil)
-            ReferenceModel.Instance.ArchetypedClass = mArchetypeID.ReferenceModelEntity
+            ReferenceModel.SetArchetypedClass(mArchetypeID.ReferenceModelEntity)
 
             ' get the parent ID
             If Not an_Archetype.parent_archetype_id Is Nothing Then
@@ -1633,6 +1657,44 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Protected Sub New(ByVal primary_language As String)
             MyBase.New(primary_language)
+        End Sub
+
+        Sub New(ByRef an_ADL_ENGINE As openehr.adl_parser.syntax.adl.ADL_ENGINE)
+            ' call use in create for export only
+            MyBase.New(an_ADL_ENGINE.ontology.primary_language.to_cil)
+            adlEngine = an_ADL_ENGINE
+            ' make the new archetype
+
+            adlArchetype = adlEngine.archetype
+            mArchetypeID = New ArchetypeID(adlArchetype.archetype_id.as_string.to_cil)
+
+            ' get the parent ID
+            If Not adlArchetype.parent_archetype_id Is Nothing Then
+                sParentArchetypeID = adlArchetype.parent_archetype_id.as_string.to_cil
+            End If
+
+            ' root of definition set to at0000 by default, may be another code
+            adlArchetype.definition.set_object_id(adlArchetype.concept_code)
+
+            mDescription = New ADL_Description ' nothing to pass
+
+            Select Case mArchetypeID.ReferenceModelEntity
+                Case StructureType.COMPOSITION
+                    cDefinition = New RmComposition()
+                    cDefinition.RootNodeId = adlArchetype.concept_code.to_cil
+                Case StructureType.SECTION
+                    cDefinition = New RmSection(adlArchetype.concept_code.to_cil)
+                Case StructureType.List, StructureType.Tree, StructureType.Single
+                    cDefinition = New RmStructureCompound(adlArchetype.concept_code.to_cil, mArchetypeID.ReferenceModelEntity)
+                Case StructureType.Table
+                    cDefinition = New RmTable(adlArchetype.concept_code.to_cil)
+                Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
+                    cDefinition = New RmEntry(mArchetypeID.ReferenceModelEntity)
+                    cDefinition.RootNodeId = adlArchetype.concept_code.to_cil
+                Case Else
+                    Debug.Assert(False)
+            End Select
+
         End Sub
 
     End Class

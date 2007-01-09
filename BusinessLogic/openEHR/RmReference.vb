@@ -79,7 +79,7 @@ Public Class RmReference
         Me.sNodeId = rm.NodeId
         mElement = rm
         If rm.HasNameConstraint Then
-            mRuntimeConstraint = rm.NameConstraint
+            mRunTimeConstraint = rm.NameConstraint
         End If
         mType = StructureType.Element
         sNodeId = rm.NodeId

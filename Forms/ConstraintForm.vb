@@ -187,8 +187,9 @@ Public Class ConstraintForm
     End Sub
 
     Private Sub butDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butDelete.Click
-        If MessageBox.Show("Delete all", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-            Me.DialogResult = DialogResult.Ignore
+        If MessageBox.Show("Delete all", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = _
+            System.Windows.Forms.DialogResult.Yes Then
+            Me.DialogResult = System.Windows.Forms.DialogResult.Ignore
             Me.Close()
         End If
     End Sub

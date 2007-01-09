@@ -17,7 +17,8 @@ Option Strict On
 Class Constraint_Interval_Quantity
     Inherits Constraint_Interval_Count
 
-    Private mQuantity As New Constraint_Quantity
+    Private mQuantityLower As New Constraint_Quantity
+    Private mQuantityUpper As New Constraint_Quantity
 
     Public Overrides ReadOnly Property Type() As ConstraintType
         Get
@@ -25,16 +26,40 @@ Class Constraint_Interval_Quantity
         End Get
     End Property
 
-    Overrides Property AbsoluteLimits() As Constraint
+    Public Property QuantityPropertyCode() As Integer
         Get
-            Return mQuantity
+            Return mQuantityLower.OpenEhrCode
         End Get
-        Set(ByVal Value As Constraint)
-            Debug.Assert(TypeOf Value Is Constraint_Quantity)
-            mQuantity = CType(Value, Constraint_Quantity)
+        Set(ByVal value As Integer)
+            mQuantityLower.OpenEhrCode = value
+            mQuantityUpper.OpenEhrCode = value
         End Set
     End Property
 
+    Overrides Property LowerLimit() As Constraint
+        Get
+            Return mQuantityLower
+        End Get
+        Set(ByVal Value As Constraint)
+            Debug.Assert(TypeOf Value Is Constraint_Quantity)
+            mQuantityLower = CType(Value, Constraint_Quantity)
+        End Set
+    End Property
+
+    Overrides Property UpperLimit() As Constraint
+        Get
+            Return mQuantityUpper
+        End Get
+        Set(ByVal Value As Constraint)
+            Debug.Assert(TypeOf Value Is Constraint_Quantity)
+            mQuantityUpper = CType(Value, Constraint_Quantity)
+        End Set
+    End Property
+
+    Sub AddUnit(ByVal unitConstraint As Constraint_QuantityUnit)
+        mQuantityUpper.Units.Add(unitConstraint)
+        mQuantityLower.Units.Add(unitConstraint)
+    End Sub
 End Class
 
 

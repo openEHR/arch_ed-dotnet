@@ -64,7 +64,6 @@ Public Class ConstraintBindingForm
         Me.txtQuery.Name = "txtQuery"
         Me.txtQuery.Size = New System.Drawing.Size(264, 22)
         Me.txtQuery.TabIndex = 1
-        Me.txtQuery.Text = ""
         '
         'txtRelease
         '
@@ -72,7 +71,6 @@ Public Class ConstraintBindingForm
         Me.txtRelease.Name = "txtRelease"
         Me.txtRelease.Size = New System.Drawing.Size(344, 22)
         Me.txtRelease.TabIndex = 2
-        Me.txtRelease.Text = ""
         Me.txtRelease.Visible = False
         '
         'lblTerminology
@@ -145,6 +143,7 @@ Public Class ConstraintBindingForm
         Me.Name = "ConstraintBindingForm"
         Me.Text = "Add binding"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -185,7 +184,7 @@ Public Class ConstraintBindingForm
     End Sub
 
     Private Sub txtQuery_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtQuery.TextChanged
-        If Me.txtQuery.Text <> "" Then
+        If txtQuery.Text <> "" Then
             Me.AcceptButton = Me.butOK
         Else
             Me.AcceptButton = Nothing

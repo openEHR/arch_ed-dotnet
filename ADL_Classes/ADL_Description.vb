@@ -8,7 +8,7 @@
 '	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$Source: source/vb.net/archetype_editor/ADL_Classes/SCCS/s.ADL_Composition.vb $"
+'	file:        "$Source: source/vb.net/archetype_editor/ADL_Classes/SCCS/s.ADL_Description.vb $"
 '	revision:    "$LastChangedRevision$"
 '	last_change: "$LastChangedDate$"
 '
@@ -22,10 +22,13 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Private mADL_Description As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION
 
-        Public Overrides ReadOnly Property Details() As ArchetypeDetails
+        Public Overrides Property Details() As ArchetypeDetails
             Get
                 Return New ADL_ArchetypeDetails(mADL_Description)
             End Get
+            Set(ByVal value As ArchetypeDetails)
+                mArchetypeDetails = value
+            End Set
         End Property
 
 
@@ -103,19 +106,29 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             MyBase.LifeCycleStateAsString = mADL_Description.lifecycle_state.to_cil
-            If mADL_Description.details.count > 0 Then
-                Dim mADL_Detail As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION_ITEM
-                For i As Integer = 1 To mADL_Description.details.count
-
-                    mADL_Detail = mADL_Description.details.item(mADL_Description.details.key_at(i))
-
-
-                Next
-            Else
+            If mADL_Description.details.count = 0 Then
                 Me.mArchetypeDetails.AddOrReplace( _
                 Filemanager.Master.OntologyManager.LanguageCode, _
                 New ArchetypeDescriptionItem(Filemanager.Master.OntologyManager.LanguageCode))
             End If
+        End Sub
+
+        Sub New(ByVal an_archetype_description As ArchetypeDescription)
+            mADL_Description = openehr.openehr.am.archetype.description.Create.ARCHETYPE_DESCRIPTION.make_author(openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName))
+
+            'mADL_Version = mADL_Description.adl_version.to_cil ' set to 1.2 by default
+            If Not an_archetype_description.ArchetypePackageURI Is Nothing Then
+                mArchetypePackageURI = an_archetype_description.ArchetypePackageURI
+            End If
+
+            mOriginalAuthor = an_archetype_description.OriginalAuthor
+            mOriginalAuthorEmail = an_archetype_description.OriginalAuthorEmail
+            mOriginalAuthorOrganisation = an_archetype_description.OriginalAuthorOrganisation
+            mOriginalAuthorDate = an_archetype_description.OriginalAuthorDate
+
+            mOtherContributors = an_archetype_description.OtherContributors
+
+            MyBase.LifeCycleState = an_archetype_description.LifeCycleState
         End Sub
 
         Sub New()
@@ -137,7 +150,7 @@ End Namespace
 'for the specific language governing rights and limitations under the
 'License.
 '
-'The Original Code is ADL_Composition.vb.
+'The Original Code is ADL_Description.vb.
 '
 'The Initial Developer of the Original Code is
 'Sam Heard, Ocean Informatics (www.oceaninformatics.biz).

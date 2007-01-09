@@ -99,6 +99,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
 
             Case Else
                 Debug.Assert(False, "Type not handled")
+                Return Nothing
         End Select
     End Function
 
@@ -119,8 +120,8 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Private Sub SetImageIndex()
         Select Case mArchetypeNode.RM_Class.Type
             Case StructureType.Cluster
-                MyBase.ImageIndex = 52
-                MyBase.SelectedImageIndex = 53
+                MyBase.ImageIndex = 60
+                MyBase.SelectedImageIndex = 61
             Case StructureType.SECTION
                 MyBase.ImageIndex = 1
                 MyBase.SelectedImageIndex = 3

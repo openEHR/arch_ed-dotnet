@@ -211,7 +211,7 @@ Public Class ListStructure
             Dim RM_S As New RmStructureCompound(mNodeId, StructureType.List)
 
             RM_S.Children.Cardinality = mCardinalityControl.Cardinality
-            
+
             For Each lvItem In Me.lvList.Items
                 RM_S.Children.Add(lvItem.Item.RM_Class)
             Next
@@ -284,7 +284,7 @@ Public Class ListStructure
 
             If MessageBox.Show(AE_Constants.Instance.Specialise & lvitem.Text, _
                 AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
-                MessageBoxIcon.Question) = DialogResult.OK Then
+                MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
 
                 If lvitem.Item.Occurrences.IsUnbounded Or lvitem.Item.Occurrences.MaxCount > 1 Then
                     Dim i As Integer
@@ -304,8 +304,6 @@ Public Class ListStructure
     End Sub
 
     Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles MenuAddReference.Click
-        Dim an_element As ArchetypeElement
-        Dim element As RmElement
         Dim ref As RmReference
 
         ' create a new reference element pointing to this element
@@ -346,7 +344,6 @@ Public Class ListStructure
         If Me.lvList.SelectedIndices.Count > 0 Then
             Dim lvItem As ArchetypeListViewItem
             Dim message As String
-            Dim i As Integer
 
             lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
 
@@ -356,7 +353,7 @@ Public Class ListStructure
                 message = AE_Constants.Instance.Remove & Me.lvList.SelectedItems(0).Text
             End If
 
-            If MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+            If MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                 Dim nodeid As String
 
                 ' leave an item selected if there is one
@@ -392,7 +389,7 @@ Public Class ListStructure
         Dim lvItem As ArchetypeListViewItem
         Dim text, s As String
 
-        text = text & new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 LIST\cf0\par")
+        text = new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 LIST\cf0\par")
         s = ""
         If mCardinalityControl.Cardinality.Ordered Then
             s = "ordered"
@@ -518,13 +515,15 @@ Public Class ListStructure
             End If
             ' show specialisation if appropriate
             i = OceanArchetypeEditor.Instance.CountInString(lvItem.Item.NodeId, ".")
-            If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+
+            Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+
+            If i < numberSpecialisations Then
                 Me.SpecialiseMenuItem.Visible = True
-                If ((lvItem.Item.NodeId.StartsWith("at0.") Or (lvItem.Item.NodeId.IndexOf(".0.") > -1))) Then
-                    Me.MenuRemove.Visible = False
-                End If
             Else
-                Me.MenuRemove.Visible = True
+                If numberSpecialisations = 0 Or ((lvItem.Item.NodeId.StartsWith("at0.") Or (lvItem.Item.NodeId.IndexOf(".0.") > -1))) Then
+                    Me.MenuRemove.Visible = True
+                End If
             End If
         End If
 
@@ -533,9 +532,7 @@ Public Class ListStructure
     Private Sub lvList_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvList.SelectedIndexChanged
         Dim element As ArchetypeElement
         Dim lvItem As ArchetypeListViewItem
-        Dim i As Integer
-        Dim s As String
-
+       
         If Me.lvList.Items.Count = 0 Then
             Me.butChangeDataType.Visible = False
             Return
@@ -587,10 +584,12 @@ Public Class ListStructure
         ' add the update of the Term and description
 
         If Not e.Label Is Nothing Then
+
             If e.Label = "" Then
                 e.CancelEdit = True
                 Return
             End If
+
             Dim lvItem As ArchetypeListViewItem
 
             lvItem = CType(Me.lvList.Items(e.Item), ArchetypeListViewItem)
@@ -614,7 +613,7 @@ Public Class ListStructure
                         AE_Constants.Instance.MessageBoxCaption, _
                         MessageBoxButtons.YesNo, _
                         MessageBoxIcon.Warning, _
-                        MessageBoxDefaultButton.Button2) = DialogResult.No Then
+                        MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
                         e.CancelEdit = True
                     End If
                 End If

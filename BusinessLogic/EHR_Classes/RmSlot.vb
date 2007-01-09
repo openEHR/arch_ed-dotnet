@@ -53,7 +53,7 @@ Public Class RmSlot
         mSlotConstraint.RM_ClassType = a_type
     End Sub
 
-#Region "ADL oriented features"
+#Region "ADL and XML oriented features"
 
     Sub New(ByVal an_archetype_slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)
         MyBase.New(an_archetype_slot)
@@ -90,11 +90,11 @@ Public Class RmSlot
             For i As Integer = 1 To an_archetype_slot.includes.count
                 Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
                 assert = CType(an_archetype_slot.includes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
-                s = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.GetDomainConceptFromAssertion(assert)
-                If s = "/.*/" Then
+                s = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDomainConceptFromAssertion(assert)
+                If s = ".*" Then
                     mSlotConstraint.IncludeAll = True
                 Else
-                    mSlotConstraint.Include.Add(s.Trim("/".ToCharArray))
+                    mSlotConstraint.Include.Add(s.Replace("\", ""))
                 End If
 
             Next
@@ -105,7 +105,66 @@ Public Class RmSlot
             For i As Integer = 1 To an_archetype_slot.excludes.count
                 Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
                 assert = CType(an_archetype_slot.excludes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
-                s = ArchetypeEditor.ADL_Classes.ADL_Tools.Instance.GetDomainConceptFromAssertion(assert)
+                s = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDomainConceptFromAssertion(assert)
+                If s = ".*" Then
+                    mSlotConstraint.ExcludeAll = True
+                Else
+                    mSlotConstraint.Exclude.Add(s.Replace("\", ""))
+                End If
+            Next
+        End If
+    End Sub
+    Sub New(ByVal an_archetype_slot As XMLParser.ARCHETYPE_SLOT)
+        MyBase.New(an_archetype_slot)
+
+        mSlotConstraint = New Constraint_Slot
+
+        Select Case an_archetype_slot.rm_type_name.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+            Case "SECTION"
+                mSlotConstraint.RM_ClassType = StructureType.SECTION
+            Case "ENTRY"
+                mSlotConstraint.RM_ClassType = StructureType.ENTRY
+            Case "OBSERVATION"
+                mSlotConstraint.RM_ClassType = StructureType.OBSERVATION
+            Case "EVALUATION"
+                mSlotConstraint.RM_ClassType = StructureType.EVALUATION
+            Case "ACTION"
+                mSlotConstraint.RM_ClassType = StructureType.ACTION
+            Case "INSTRUCTION"
+                mSlotConstraint.RM_ClassType = StructureType.INSTRUCTION
+            Case "ITEM_SINGLE"
+                mSlotConstraint.RM_ClassType = StructureType.Single
+            Case "ITEM_LIST"
+                mSlotConstraint.RM_ClassType = StructureType.List
+            Case "ITEM_TREE"
+                mSlotConstraint.RM_ClassType = StructureType.Tree
+            Case "ITEM_TABLE"
+                mSlotConstraint.RM_ClassType = StructureType.Table
+            Case "CLUSTER"
+                mSlotConstraint.RM_ClassType = StructureType.Cluster
+        End Select
+
+        If (Not an_archetype_slot.includes Is Nothing) AndAlso (an_archetype_slot.includes.Length > 0) Then
+            Dim s As String
+            For i As Integer = 0 To an_archetype_slot.includes.Length - 1
+                Dim assert As XMLParser.ASSERTION
+                assert = CType(an_archetype_slot.includes(i), XMLParser.ASSERTION)
+                s = ArchetypeEditor.XML_Classes.XML_Tools.GetDomainConceptFromAssertion(assert)
+                If s = ".*" Then
+                    mSlotConstraint.IncludeAll = True
+                Else
+                    mSlotConstraint.Include.Add(s.Replace("\", ""))
+                End If
+
+            Next
+        End If
+
+        If (Not an_archetype_slot.excludes Is Nothing) AndAlso (an_archetype_slot.excludes.Length > 0) Then
+            Dim s As String
+            For i As Integer = 0 To an_archetype_slot.excludes.Length - 1
+                Dim assert As XMLParser.ASSERTION
+                assert = CType(an_archetype_slot.excludes(i), XMLParser.ASSERTION)
+                s = ArchetypeEditor.XML_Classes.XML_Tools.GetDomainConceptFromAssertion(assert)
                 If s = "/.*/" Then
                     mSlotConstraint.ExcludeAll = True
                 Else
@@ -116,6 +175,7 @@ Public Class RmSlot
     End Sub
 
 #End Region
+
 
 End Class
 

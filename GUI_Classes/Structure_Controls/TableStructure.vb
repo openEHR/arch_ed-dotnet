@@ -227,7 +227,6 @@ Public Class TableStructure
         Get
             Dim i, n_rows As Integer
             Dim RM_T As RmTable
-            Dim row As RmCluster
             Dim element As RmElement
 
             'sets the cardinality of the children
@@ -406,7 +405,7 @@ Public Class TableStructure
 
     Protected Overrides Sub SetUpAddElementMenu()
         Dim cm As New ContextMenu
-        Dim mi, a_mi As MenuItem
+        Dim a_mi As MenuItem
         If mIsRotated Then
             a_mi = New MenuItem(Filemanager.GetOpenEhrTerm(324, "New Row"))
         Else
@@ -525,13 +524,9 @@ Public Class TableStructure
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs)
         Dim i, ii As Integer
-        Dim label As String
+        Dim label As String = ""
         Dim row_selected As Boolean
-        'FIXME
-        ' If sender Is Me.MenuItemGridRemoveColumn Then
-        'remove a column
-        'Else
-        ' if row is selected offer row only
+
         For i = 0 To Me.dgGrid.VisibleRowCount - 1
             If Me.dgGrid.IsSelected(i) Then
                 label = Me.dgGrid.Item(i, 1)
@@ -539,17 +534,6 @@ Public Class TableStructure
                 Exit For
             End If
         Next
-
-        If Not row_selected Then
-            ' get the row label
-            ' If Me.comboRowColumn.SelectedIndex = 0 Then  ' a row
-            'i = Me.dgGrid.CurrentRowIndex
-            'label = Me.dgGrid.Item(i, 1)
-            'row_selected = True
-            '  End If
-        End If
-
-        'End If
 
         If Not row_selected Then
             ' and the column label
@@ -564,7 +548,7 @@ Public Class TableStructure
         End If
 
         ' a row is selected
-        If MessageBox.Show(AE_Constants.Instance.Remove & "'" & label & "'", AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.OK Then
+        If MessageBox.Show(AE_Constants.Instance.Remove & "'" & label & "'", AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
             Dim selected_rows As DataRow()
             If row_selected Then
                 selected_rows = mArchetypeTable.Select("Text = '" & label & "'")
@@ -599,7 +583,8 @@ Public Class TableStructure
         Dim Text, tab_str, col_str, tab_end_str, s As String
         Col_count = ((mArchetypeTable.Columns.Count - 1) / 2)
 
-        Text = Text & new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 TABLE\cf0\par")
+        col_str = ""
+        Text = new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 TABLE\cf0\par")
         Text = Text & new_line & ("\par")
 
         col_width = (8414 - (Col_count * tab_pad)) / Col_count
@@ -810,7 +795,7 @@ Public Class TableStructure
             archetype_element = e.Row.Item(2)
             i = OceanArchetypeEditor.Instance.CountInString(archetype_element.NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = DialogResult.No Then
+                If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
                     e.ProposedValue = archetype_element.Text
                 End If
             End If
@@ -823,7 +808,7 @@ Public Class TableStructure
         Dim hti As System.Windows.Forms.DataGrid.HitTestInfo
         hti = Me.dgGrid.HitTest(e.X, e.Y)
 
-        If e.Button = MouseButtons.Right Then
+        If e.Button = Windows.Forms.MouseButtons.Right Then
             Select Case hti.Type
                 Case System.Windows.Forms.DataGrid.HitTestType.None
 

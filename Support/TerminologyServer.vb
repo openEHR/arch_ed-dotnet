@@ -66,8 +66,8 @@ Public Class TerminologyServer
     Public Function CodeSetAsStringArray(ByVal CodeSetName As String) As String()
         'languages, countries, Media types, terminologies, compression algorithms, integrity check algorithms
 
-        Select Case CodeSetName.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            Case "concepts", "terminologies"
+        Select Case CodeSetName
+            Case "Concepts", "Concepts", "Terminologies", "terminologies", "CONCEPTS", "TERMINOLOGIES"
                 Dim i, n_rows As Integer
 
                 n_rows = Terminology.Tables.Item("TerminologyIdentifiers").Rows.Count - 1
@@ -78,42 +78,49 @@ Public Class TerminologyServer
                 Next
                 Return CodeSetArray
 
-            Case "language", "languages"
+            Case "language", "Language", "LANGUAGE", "languages", "Languages", "LANGUAGES"
                 Dim CodeSetArray(Terminology.Tables.Item("Languages").Rows.Count - 1) As String
 
                 Terminology.Tables("Languages").Rows.CopyTo(CodeSetArray, 0)
                 Return CodeSetArray
 
+            Case Else
+                Debug.Assert(False)
+                Return Nothing
         End Select
+
     End Function
 
     Public Function CodeSetAsDataRow(ByVal CodeSetName As String) As DataRow()
         'languages, countries, Media types, terminologies, compression algorithms, integrity check algorithms
 
-        Select Case CodeSetName.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            Case "concepts", "terminologies"
+        Select Case CodeSetName
+            Case "Concepts", "Concepts", "Terminologies", "terminologies", "CONCEPTS", "TERMINOLOGIES"
                 Dim selected_rows As DataRow()
 
                 selected_rows = Terminology.Tables("TerminologyIdentifiers").Select()
                 Return selected_rows
 
-            Case "languages", "language"
+            Case "languages", "Languages", "LANGUAGES", "language", "Language", "LANGUAGE"
                 Dim selected_rows As DataRow()
 
                 selected_rows = Terminology.Tables("Language").Select()
                 Return selected_rows
+            Case Else
+                Debug.Assert(False)
+                Return Nothing
         End Select
     End Function
 
     Public Function CodeSetItemDescription(ByVal CodeSetName As String, ByVal Code As String) As String
-        Select Case CodeSetName.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        Select Case CodeSetName.ToLowerInvariant()
             Case "concept", "terminologies"
                 Dim key(0) As Object
                 key(0) = Code
                 Try
                     Return Terminology.Tables("TerminologyIdentifiers").Rows.Find(key).Item(1)
                 Catch
-                    Return ""
+                    Debug.Assert(False)
                 End Try
 
             Case "language", "languages"
@@ -121,10 +128,10 @@ Public Class TerminologyServer
                 selected_rows = Terminology.Tables("Language").Select("Code = '" & Code & "'")
                 If selected_rows.Length > 0 Then
                     Return selected_rows(0).Item("Description")
-                Else
-                    Return ""
                 End If
         End Select
+
+        Return Nothing
 
     End Function
 
@@ -152,21 +159,17 @@ Public Class TerminologyServer
         Else
             Return selected_row(2)
         End If
-
-        'otherwise return the English version
+        'If nothing is found then return the english text
         If language <> "en" Then
             Return RubricForCode(Code, "en")
         Else
             Return "?"
         End If
-
     End Function
 
     Public Function CodesForGroupName(ByVal GrouperName As String, Optional ByVal language As String = "") As DataRow()
         Dim selected_rows, selected_rows1 As DataRow()
-        Dim f As String
-        Dim i As Integer
-
+        
         selected_rows1 = Terminology.Tables("Grouper").Select("Label = '" & GrouperName & "'")
 
         If selected_rows1.Length = 0 Then Return Nothing
@@ -206,6 +209,7 @@ Public Class TerminologyServer
         Dim filterString, f, g As String
         Dim i As Integer
 
+        g = ""
         f = "Language = '" & language & "' AND (ConceptID = "
 
 
@@ -229,11 +233,9 @@ Public Class TerminologyServer
             ii = language.IndexOf("-")
 
             If ii > -1 Then
-                Dim highestconcept As Integer
                 Dim code, last_code As String
                 Dim subsequent_standard, subsequent_language As Boolean
-                Dim d_row, last_row As DataRow
-
+                
                 ' use standard language as master
                 standard_language = language.Substring(0, ii)
 
@@ -245,6 +247,7 @@ Public Class TerminologyServer
 
                 f = "Language = '" & language & "' AND (ConceptID = "
                 g = "Language = '" & standard_language & "' AND (ConceptID = "
+                last_code = ""
 
                 For i = 0 To selected_terms.Length - 1
                     code = selected_terms(i).Item(1).ToString
@@ -287,7 +290,7 @@ Public Class TerminologyServer
         Return selected_terms
 
     End Function
-    Private Function TranslateGroup(ByVal FilterString As String, ByVal languageID As String)
+    Private Sub TranslateGroup(ByVal FilterString As String, ByVal languageID As String)
         Dim selected_rows As DataRow()
         Dim dr, nr As DataRow
 
@@ -304,7 +307,7 @@ Public Class TerminologyServer
             Terminology.Tables("Concept").Rows.Add(nr)
         Next
 
-    End Function
+    End Sub
 
     Public Function InitialiseTerminology(Optional ByVal Document As String = "", Optional ByVal Schema As String = "") As Boolean
 

@@ -36,11 +36,16 @@ Public Class RmCluster
         MyBase.New(NodeId, StructureType.Cluster)
     End Sub
 
-#Region "ADL Processing"
+#Region "ADL and XML Processing"
 
     Sub New(ByVal EIF_Cluster As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(EIF_Cluster, a_filemanager)
         ProcessTree(EIF_Cluster, a_filemanager)
+    End Sub
+
+    Sub New(ByVal XML_Cluster As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(XML_Cluster, a_filemanager)
+        ProcessTree(XML_Cluster, a_filemanager)
     End Sub
 
 #End Region

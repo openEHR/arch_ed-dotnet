@@ -23,7 +23,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Dim CodedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim constraint_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT
-            Dim s As String
+            Dim s As String = ""
 
             CodedText = an_attribute.children.first
             an_attribute = CodedText.attributes.first
@@ -31,9 +31,10 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If constraint_object.generating_type.to_cil = "CONSTRAINT_REF" Then
                 s = CType(constraint_object, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).as_string.to_cil
-            ElseIf constraint_object.generating_type.to_cil = "C_CODED_TERM" Then
-                s = CType(constraint_object, openehr.openehr.am.openehr_profile.data_types.text.C_CODED_TERM).as_string.to_cil()
+            ElseIf constraint_object.generating_type.to_cil = "C_CODE_PHRASE" Then
+                s = CType(constraint_object, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).as_string.to_cil()
             End If
+
             ' strip off the square brackets
             s = s.Substring(1, s.Length - 2)
             If s.StartsWith("local::") Then
@@ -44,7 +45,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Function
 
-        Private Function ProcessSection(ByVal a_rm_section As Object, ByVal an_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+        Private Sub ProcessSection(ByVal a_rm_section As Object, ByVal an_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
             'ccomplex object means it is a section, otherwise a slot
             'a_rm_section is passed as object so that definition can be passed at the first level
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
@@ -62,7 +63,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         an_attribute = a_complex_object.attributes.i_th(i)
                         Select Case an_attribute.rm_attribute_name.to_cil
                             Case "name", "Name", "NAME", "runtime_label"
-                                a_section.NameConstraint = RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                                a_section.NameConstraint = ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                             Case "items", "Items", "ITEMS"
                                 For j = 1 To an_attribute.children.count
                                     ProcessSection(a_section, an_attribute.children.i_th(j))
@@ -72,14 +73,13 @@ Namespace ArchetypeEditor.ADL_Classes
                     a_rm_section.Children.Add(a_section)
 
                 Case "ARCHETYPE_SLOT"
-                    a_rm_section.children.add(New RmSlot(an_object))
+                    a_rm_section.children.add(New RmSlot(CType(an_object, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
 
                 Case Else
                     Debug.Assert(False, "Type is not catered for")
-                    Return Nothing
             End Select
 
-        End Function
+        End Sub
 
 
         Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
@@ -91,6 +91,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 an_attribute = Definition.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("items"))
                 ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.cardinality, Me.Children)
+
                 For i = 1 To an_attribute.children.count
                     ProcessSection(Me, an_attribute.children.i_th(i))
                 Next

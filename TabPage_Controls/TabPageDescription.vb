@@ -533,7 +533,6 @@ Public Class TabPageDescription
             ' add the lifecycle states to the combo box
             LoadAuthorStatesTableCombo()
             Me.comboLifeCycle.SelectedValue = CInt(Value.LifeCycleState)
-            'Me.comboLifeCycle.SelectedIndex = Me.comboLifeCycle.FindStringExact(Value.LifeCycleStateAsString)
             Me.txtOriginalAuthor.Text = Value.OriginalAuthor
             Me.txtOriginalEmail.Text = Value.OriginalAuthorEmail
             Me.txtOrganisation.Text = Value.OriginalAuthorOrganisation
@@ -554,8 +553,8 @@ Public Class TabPageDescription
             Select Case Filemanager.Master.ParserType
                 Case "adl"
                     mArchetypeDescription = New ArchetypeEditor.ADL_Classes.ADL_Description
-                Case Else
-                    mArchetypeDescription = New ArchetypeDescription
+                Case "xml"
+                    mArchetypeDescription = New ArchetypeEditor.XML_Classes.XML_Description
             End Select
         End If
         If comboLifeCycle.SelectedIndex > -1 Then
@@ -593,6 +592,43 @@ Public Class TabPageDescription
         archDescriptionItem.MisUse = Me.txtMisuse.Text
         mArchetypeDescription.Details.AddOrReplace(archDescriptionItem.Language, archDescriptionItem)
     End Sub
+
+    Public Function AsRtfString() As String
+        Dim result As System.Text.StringBuilder = New System.Text.StringBuilder()
+
+        result.AppendLine("{\rtf1\ansi\ansicpg1252\deff0{\fonttbl{\f0\fnil\fcharset0 Tahoma;}{\f1\fnil\fcharset2 Symbol;}}")
+        result.AppendLine("{\colortbl ;\red0\green0\blue255;\red0\green255\blue0;}")
+        result.AppendLine("\viewkind4\uc1\pard\tx2840\tx5112\lang3081\f0\fs20")
+
+        'Purpose
+        result.AppendLine("\b")
+        result.AppendLine(Filemanager.GetOpenEhrTerm(585, "Purpose"))
+        result.Append(":\b0")
+        result.AppendLine("\par")
+        result.AppendLine(Me.txtPurpose.Text)
+        result.AppendLine("\par")
+        result.AppendLine("\par")
+        'Use
+        result.AppendLine("\b")
+        result.AppendLine(Filemanager.GetOpenEhrTerm(582, "Use"))
+        result.Append(":\b0")
+        result.AppendLine("\par")
+        result.AppendLine(Me.txtUse.Text)
+        result.AppendLine("\par")
+        result.AppendLine("\par")
+
+        'Use
+        result.AppendLine("\b")
+        result.AppendLine(Filemanager.GetOpenEhrTerm(583, "Misuse"))
+        result.Append(":\b0")
+        result.AppendLine("\par")
+        result.AppendLine(Me.txtMisuse.Text)
+        result.AppendLine("\par")
+        result.AppendLine("\par")
+
+        Return result.ToString()
+
+    End Function
 
     Public Sub SetDescriptionDetailValues()
         Me.listKeyword.Items.Clear()
@@ -674,11 +710,20 @@ Public Class TabPageDescription
         ' add the lifecycle states to the combo box
         Dim i As Integer = Me.comboLifeCycle.SelectedIndex
 
-        If mLifeCycleStatesTable Is Nothing Then
-            mLifeCycleStatesTable = MakeLifeCycleTable()
-        Else
-            mLifeCycleStatesTable.Rows.Clear()
-        End If
+        'If the table is only cleared then the second time the
+        ' table is cleared and reloaded an index error occurs
+        ' which does not appear to be in the data.
+        'For this reason the table is rebuilt
+        '
+        'Uncomment the following lines to debug
+
+        'If mLifeCycleStatesTable Is Nothing Then
+        mLifeCycleStatesTable = MakeLifeCycleTable()
+        'Else
+        '    mLifeCycleStatesTable.Rows.Clear()
+        'End If
+
+        'Debug.Assert(mLifeCycleStatesTable.Rows.Count = 0, "Did not clear lifecycletable")
 
         Dim d_r As DataRow()
         d_r = Filemanager.Master.OntologyManager.CodeForGroupID(23) ' LifeCycle states
@@ -688,6 +733,7 @@ Public Class TabPageDescription
             new_row(1) = data_row(2)
             mLifeCycleStatesTable.Rows.Add(new_row)
         Next
+        mLifeCycleStatesTable.AcceptChanges()
         Me.comboLifeCycle.DataSource = mLifeCycleStatesTable
         Me.comboLifeCycle.DisplayMember = "LifeCycle"
         Me.comboLifeCycle.ValueMember = "code"
@@ -714,7 +760,7 @@ Public Class TabPageDescription
     Private Sub ButAddKeyWord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddKeyWord.Click
         Dim ipb As New InputForm
         ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(578, "Keyword")
-        If ipb.ShowDialog = DialogResult.OK Then
+        If ipb.ShowDialog = Windows.Forms.DialogResult.OK Then
             Me.listKeyword.Items.Add(ipb.txtInput.Text)
             Filemanager.Master.FileEdited = True
         End If
@@ -722,7 +768,7 @@ Public Class TabPageDescription
 
     Private Sub butRemoveKeyWord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveKeyWord.Click
         If Me.listKeyword.SelectedIndex > -1 Then
-            If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(Me.listKeyword.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(Me.listKeyword.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 Me.listKeyword.Items.RemoveAt(Me.listKeyword.SelectedIndex)
                 Filemanager.Master.FileEdited = True
             End If
@@ -748,7 +794,7 @@ Public Class TabPageDescription
     Private Sub butAddContributor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddContributor.Click
         Dim ipb As New InputForm
         ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(604, "Contributors")
-        If ipb.ShowDialog = DialogResult.OK Then
+        If ipb.ShowDialog = Windows.Forms.DialogResult.OK Then
             Me.listContributors.Items.Add(ipb.txtInput.Text)
             Filemanager.Master.FileEdited = True
         End If
@@ -756,7 +802,7 @@ Public Class TabPageDescription
 
     Private Sub butRemoveContributor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveContributor.Click
         If Me.listContributors.SelectedIndex > -1 Then
-            If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(Me.listContributors.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(Me.listContributors.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 Me.listContributors.Items.RemoveAt(Me.listContributors.SelectedIndex)
                 Filemanager.Master.FileEdited = True
             End If

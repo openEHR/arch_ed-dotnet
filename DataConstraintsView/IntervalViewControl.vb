@@ -18,8 +18,8 @@ Option Strict On
 
 Public Class IntervalViewControl : Inherits ElementViewControl
 
-    Private WithEvents mLower As NumericUpDown
-    Private WithEvents mUpper As NumericUpDown
+    Private WithEvents mLower As ElementViewControl
+    Private WithEvents mUpper As ElementViewControl
 
     Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(anElement, a_filemanager)
@@ -33,43 +33,47 @@ Public Class IntervalViewControl : Inherits ElementViewControl
     Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, _
             ByVal aLocation As System.Drawing.Point)
 
-        mLower = New NumericUpDown
-        mUpper = New NumericUpDown
-
         If aConstraint.Type = ConstraintType.Interval_Quantity Then
             Dim c As Constraint_Interval_Quantity = CType(aConstraint, Constraint_Interval_Quantity)
 
-            'ToDo: ensure this works OK
+            mLower = New QuantityViewControl(c.LowerLimit, mFileManager)
+            mUpper = New QuantityViewControl(c.UpperLimit, mFileManager)
 
-            If CType(c.AbsoluteLimits, Constraint_Quantity).has_units Then
-                SetMaxMin(mLower, CType(CType(c.AbsoluteLimits, Constraint_Quantity).Units(0), Constraint_QuantityUnit))
-            End If
         ElseIf aConstraint.Type = ConstraintType.Interval_Count Then
+            Dim c As Constraint_Interval_Count = CType(aConstraint, Constraint_Interval_Count)
 
-            Dim c As Constraint_Interval = CType(aConstraint, Constraint_Interval)
+            mLower = New CountViewControl(c.LowerLimit, mFileManager)
+            mUpper = New CountViewControl(c.UpperLimit, mFileManager)
+            
+        ElseIf aConstraint.Type = ConstraintType.Interval_DateTime Then
+            Dim c As Constraint_Interval_DateTime = CType(aConstraint, Constraint_Interval_DateTime)
 
-            SetMaxMin(mLower, CType(c.AbsoluteLimits, Constraint_Count))
-            mLower.Height = 25
-            mLower.Width = 75
-            mLower.Location = aLocation
+            mLower = New DateTimeViewControl(c.LowerLimit, mFileManager)
+            mUpper = New DateTimeViewControl(c.UpperLimit, mFileManager)
 
-            Me.Controls.Add(mLower)
-
-            Dim lbl As New Label
-            lbl.Text = "-"
-            lbl.Width = 15
-            lbl.Location = New Drawing.Point(aLocation.X + 85, aLocation.Y)
-            Me.Controls.Add(lbl)
-
-            SetMaxMin(mUpper, CType(c.AbsoluteLimits, Constraint_Count))
-            mUpper.Height = 25
-            mUpper.Width = 75
-            mUpper.Location = New Drawing.Point(aLocation.X + 105, aLocation.Y)
-            Me.Controls.Add(mUpper)
         End If
+
+        Dim width As Integer
+
+        mLower.Location = aLocation
+        width = mLower.Width
+
+        Me.Controls.Add(mLower)
+
+        Dim lbl As New Label
+        lbl.Text = "-"
+        lbl.Width = 15
+        lbl.Location = New Drawing.Point(aLocation.X + width + 10, aLocation.Y)
+        Me.Controls.Add(lbl)
+
+        mUpper.Location = New Drawing.Point(aLocation.X + width + 40, aLocation.Y)
+        Me.Width = width + 50 + mUpper.Width
+
+        Me.Controls.Add(mUpper)
+
     End Sub
 
-    Private Sub SetMaxMin(ByVal aControl As NumericUpDown, ByVal c As Constraint_Count)
+    Private Sub SetMax(ByVal aControl As NumericUpDown, ByVal c As Constraint_Count)
         If c.HasMaximum Then
             aControl.Maximum = c.MaximumValue
             'CHANGE Sam Heard 2004-05-24
@@ -87,6 +91,9 @@ Public Class IntervalViewControl : Inherits ElementViewControl
         Else
             aControl.Maximum = 1000000
         End If
+    End Sub
+
+    Private Sub SetMin(ByVal aControl As NumericUpDown, ByVal c As Constraint_Count)
         If c.HasMinimum Then
             aControl.Minimum = c.MinimumValue
         End If
@@ -107,7 +114,7 @@ Public Class IntervalViewControl : Inherits ElementViewControl
     Private Sub Numeric_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) _
             Handles mLower.ValueChanged, mUpper.ValueChanged
 
-        Value = CStr(mLower.Value & " - " & mUpper.Value)
+        Value = CStr(mLower.Value) & " - " & CStr(mUpper.Value)
     End Sub
 
 End Class

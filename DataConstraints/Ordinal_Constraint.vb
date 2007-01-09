@@ -55,6 +55,8 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         Get
             If HasAssumedValue Then
                 Return mAssumedValue
+            Else
+                Return Nothing
             End If
         End Get
         Set(ByVal Value As Object)

@@ -37,7 +37,7 @@ Public Class RatioViewControl : Inherits ElementViewControl
         mNumerator = New NumericUpDown
         mDenominator = New NumericUpDown
 
-        Dim c As Constraint_Ratio = CType(aConstraint, Constraint_Ratio)
+        Dim c As Constraint_Proportion = CType(aConstraint, Constraint_Proportion)
 
         SetMaxMin(mNumerator, c.Numerator)
         mNumerator.Height = 25

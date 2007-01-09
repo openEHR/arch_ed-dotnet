@@ -17,6 +17,8 @@ Option Strict On
 Public Class Constraint_Real
     Inherits Constraint_Count
 
+    Protected mPrecision As Integer = -1
+
     Public Overrides ReadOnly Property Type() As ConstraintType
         Get
             Return ConstraintType.Real
@@ -29,7 +31,6 @@ Public Class Constraint_Real
         End Get
         Set(ByVal Value As Single)
             mMinval = Value
-            mHasMinVal = True
         End Set
     End Property
     Public Shadows Property MaximumValue() As Single
@@ -37,8 +38,18 @@ Public Class Constraint_Real
             Return mMaxval
         End Get
         Set(ByVal Value As Single)
-            mHasMaxVal = True
-            mMaxval = Value
+            mMaxVal = Value
+        End Set
+    End Property
+
+    Public Property Precision() As Integer
+        Get
+            Return mPrecision
+        End Get
+        Set(ByVal value As Integer)
+            If value > -2 Then ' must be -1 or >= 0
+                mPrecision = value
+            End If
         End Set
     End Property
 
@@ -53,12 +64,24 @@ Public Class Constraint_Real
         Set(ByVal Value As Object)
             Try
                 mAssumedValue = CSng(Value)
-                HasAssumedValue = True
             Catch ex As Exception
                 Debug.Assert(False, Value.ToString & "is not valid value for this type")
             End Try
         End Set
     End Property
+
+    Public Overrides Function Copy() As Constraint
+        Dim c As New Constraint_Real
+
+        c.mHasMaxVal = Me.mHasMaxVal
+        c.mHasMinVal = Me.mHasMinVal
+        c.mMaxVal = Me.mMaxVal
+        c.mMinVal = Me.mMinVal
+        c.mAssumedValue = Me.mAssumedValue
+        c.HasAssumedValue = Me.HasAssumedValue
+        c.mPrecision = Me.Precision
+        Return c
+    End Function
 
     Public Sub SetFromCount(ByVal c As Constraint_Count)
 
@@ -76,6 +99,13 @@ Public Class Constraint_Real
         End If
         Me.IncludeMaximum = c.IncludeMaximum
         Me.IncludeMinimum = c.IncludeMinimum
+    End Sub
+
+    Sub New()
+    End Sub
+
+    Sub New(ByVal a_count_constraint As Constraint_Count)
+        SetFromCount(a_count_constraint)
     End Sub
 
 End Class

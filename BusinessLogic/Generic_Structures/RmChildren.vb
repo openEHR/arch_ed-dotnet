@@ -54,6 +54,7 @@ Public MustInherit Class RmChildren
                 End If
             End If
         Next
+        Return Nothing
     End Function
 
 End Class
@@ -75,9 +76,7 @@ Public Class Children
             Return rm
         End Get
     End Property
-    'CHANGE Sam Heard 2004-06-11
-    'Returns the first element - makes it easy to convert to
-    'simple from complex structure
+
     ReadOnly Property FirstElementNode() As RmElement
         Get
             Dim i As Integer
@@ -120,7 +119,7 @@ Public Class Children
 
     Public Shadows Sub Add(ByVal an_RM_Structure As RmStructure)
         Debug.Assert(Not an_RM_Structure Is Nothing)
-        If (Not an_RM_Structure Is Nothing) AndAlso ReferenceModel.Instance.IsValidChild(mParentStructureType, an_RM_Structure.Type) Then
+        If (Not an_RM_Structure Is Nothing) AndAlso ReferenceModel.IsValidChild(mParentStructureType, an_RM_Structure.Type) Then
             'Is valid child traps post condition of false as should not arise
             MyBase.List.Add(an_RM_Structure)
         End If

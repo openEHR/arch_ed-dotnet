@@ -201,7 +201,7 @@ Public Class TreeStructure
 
     Public Overrides ReadOnly Property Elements() As ArchetypeElement()
         Get
-            Dim i, j As Integer
+            Dim i As Integer
             i = tvTree.GetNodeCount(False)
             If i > 0 Then
                 Dim an_arraylist As New ArrayList
@@ -409,7 +409,7 @@ Public Class TreeStructure
         If Not tvTree.SelectedNode Is Nothing Then
             If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & Me.tvTree.SelectedNode.Text & "'", _
                 AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
-                MessageBoxIcon.Question) = DialogResult.OK Then
+                MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
 
                 Dim tvNode As ArchetypeTreeNode = CType(Me.tvTree.SelectedNode, ArchetypeTreeNode)
 
@@ -463,7 +463,7 @@ Public Class TreeStructure
 
     Protected Overrides Sub SetUpAddElementMenu()
         Dim cm As New ContextMenu
-        Dim mi, a_mi As MenuItem
+        Dim a_mi As MenuItem
         a_mi = New MenuItem(Filemanager.GetOpenEhrTerm(109, "New element"))
         cm.MenuItems.Add(a_mi)
         a_mi.MergeMenu(mConstraintMenu)
@@ -477,7 +477,6 @@ Public Class TreeStructure
 
     Protected Overrides Sub addNewElement(ByVal a_constraint As Constraint)
         Dim tvNode As ArchetypeTreeNode
-        Dim rw, rw1 As DataRow
         Dim a_node As ArchetypeTreeNode
 
         tvNode = New ArchetypeTreeNode(Filemanager.GetOpenEhrTerm(109, "New Element"), StructureType.Element, mFileManager)
@@ -559,7 +558,7 @@ Public Class TreeStructure
                 End If
             End If
 
-            If MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+            If MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                 ' leave an item selected if there is one
                 If Not tvNode.PrevNode Is Nothing Then
                     Me.tvTree.SelectedNode = tvNode.PrevNode
@@ -694,9 +693,8 @@ Public Class TreeStructure
 
     Public Overrides Function ToRichText(ByVal indentlevel As Integer, ByVal new_line As String) As String
         Dim text, s As String
-        Dim an As ArchetypeTreeNode
 
-        text = text & new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 TREE\cf0\par")
+        text = new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 TREE\cf0\par")
         s = ""
         If mCardinalityControl.Cardinality.Ordered Then
             s = "ordered"
@@ -709,7 +707,6 @@ Public Class TreeStructure
     End Function
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
-        Dim lvItem As ArchetypeListViewItem
         Dim text, s As String
 
         s = ""
@@ -744,7 +741,7 @@ Public Class TreeStructure
 
     Private Function TreeToRichText(ByVal TreeNodes As TreeNodeCollection, ByVal level As Integer, ByVal new_line As String) As String
         Dim an As ArchetypeTreeNode
-        Dim text As String
+        Dim text As String = ""
 
         For Each an In TreeNodes
             text = text & new_line & an.Item.ToRichText(level)
@@ -778,6 +775,7 @@ Public Class TreeStructure
 
     Private Sub ContextMenuTree_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TreeContextMenu.Popup
 
+        Me.MenuRemove.Visible = False
         Me.MenuSpecialise.Visible = False
         Me.MenuAddReference.Visible = False
 
@@ -787,18 +785,22 @@ Public Class TreeStructure
             Me.MenuRemoveItemAndReferences.Text = tvNode.Text
 
             If tvNode.Item.RM_Class.Type = StructureType.Element Then
+                'If mFileManager.OntologyManager.NumberOfSpecialisations = 0 Then
                 If Not CType(tvNode.Item.RM_Class, RmElement).isReference Then
                     Me.MenuAddReference.Visible = True
                 End If
+                'End If
             End If
 
             ' show specialisation if appropriate
             If Not tvNode.Item.IsAnonymous Then
                 i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
-                If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+                If i < numberSpecialisations Then
                     Me.MenuSpecialise.Visible = True
-                    If ((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))) Then
-                        Me.MenuRemove.Visible = False
+                Else
+                    If numberSpecialisations = 0 Or ((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))) Then
+                        Me.MenuRemove.Visible = True
                     End If
                 End If
             End If
@@ -818,11 +820,17 @@ Public Class TreeStructure
         End If
     End Sub
 
+    Dim mHoverNode As ArchetypeTreeNode
+
     Private Sub tvTree_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvTree.MouseMove
         Dim a_node As ArchetypeTreeNode
         a_node = CType(Me.tvTree.GetNodeAt(e.X, e.Y), ArchetypeTreeNode)
         If Not a_node Is Nothing Then
-            SetToolTipSpecialisation(Me.tvTree, a_node.Item)
+            If Not mHoverNode Is a_node Then
+                mHoverNode = a_node
+                SetToolTipSpecialisation(Me.tvTree, a_node.Item)
+            End If
+
         End If
     End Sub
 
@@ -864,7 +872,7 @@ Public Class TreeStructure
         If Not tvNode Is Nothing Then
             i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = DialogResult.No Then
+                If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
                     e.CancelEdit = True
                 End If
             End If
@@ -873,15 +881,17 @@ Public Class TreeStructure
     End Sub
 
     Private Sub tvTree_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tvTree.KeyDown
-        If e.KeyCode = Keys.Delete AndAlso (Not tvTree.SelectedNode Is Nothing) Then
+        If e.KeyCode = Keys.Delete Then
             Dim i As Integer
             Dim tvNode As ArchetypeTreeNode
 
             tvNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
 
             If Not tvNode.Item.IsAnonymous Then
+                Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+
                 i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
-                If (i = mFileManager.OntologyManager.NumberOfSpecialisations And _
+                If (numberSpecialisations = 0) Or (i = numberSpecialisations And _
                     (((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))))) Then
                     Me.RemoveItemAndReferences(sender, e)
                 End If
@@ -895,9 +905,9 @@ Public Class TreeStructure
         Dim tn As TreeNode
         tn = Me.tvTree.GetNodeAt(e.X, e.Y)
         If Not tn Is Nothing Then
-            If e.Button = MouseButtons.Left Then
+            If e.Button = Windows.Forms.MouseButtons.Left Then
                 Me.tvTree.Cursor = System.Windows.Forms.Cursors.Hand
-            ElseIf e.Button = MouseButtons.Right Then
+            ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
                 Me.tvTree.SelectedNode = tn
             End If
         End If

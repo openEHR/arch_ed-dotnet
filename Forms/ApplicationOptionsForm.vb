@@ -74,10 +74,13 @@ Public Class ApplicationOptionsForm
     Friend WithEvents txtOrganisation As System.Windows.Forms.TextBox
     Friend WithEvents lblOrganisation As System.Windows.Forms.Label
     Friend WithEvents Panel_7 As System.Windows.Forms.Panel
+    Friend WithEvents grpParser As System.Windows.Forms.GroupBox
+    Friend WithEvents chkParserXML As System.Windows.Forms.CheckBox
+    Friend WithEvents chkParserADL As System.Windows.Forms.CheckBox
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(ApplicationOptionsForm))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ApplicationOptionsForm))
         Me.Label3 = New System.Windows.Forms.Label
         Me.txtEmail = New System.Windows.Forms.TextBox
         Me.Label2 = New System.Windows.Forms.Label
@@ -96,6 +99,8 @@ Public Class ApplicationOptionsForm
         Me.txtOrganisation = New System.Windows.Forms.TextBox
         Me.lblOrganisation = New System.Windows.Forms.Label
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.Panel_7 = New System.Windows.Forms.Panel
+        Me.Label_7 = New System.Windows.Forms.Label
         Me.Panel_6 = New System.Windows.Forms.Panel
         Me.Label_6 = New System.Windows.Forms.Label
         Me.Panel_4 = New System.Windows.Forms.Panel
@@ -121,9 +126,10 @@ Public Class ApplicationOptionsForm
         Me.lblOccurrences = New System.Windows.Forms.Label
         Me.comboOccurrences = New System.Windows.Forms.ComboBox
         Me.tpDefaults = New System.Windows.Forms.TabPage
+        Me.grpParser = New System.Windows.Forms.GroupBox
+        Me.chkParserXML = New System.Windows.Forms.CheckBox
+        Me.chkParserADL = New System.Windows.Forms.CheckBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.Panel_7 = New System.Windows.Forms.Panel
-        Me.Label_7 = New System.Windows.Forms.Label
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -132,6 +138,7 @@ Public Class ApplicationOptionsForm
         Me.tpLocations.SuspendLayout()
         Me.tpAppearance.SuspendLayout()
         Me.tpDefaults.SuspendLayout()
+        Me.grpParser.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label3
@@ -149,7 +156,6 @@ Public Class ApplicationOptionsForm
         Me.txtEmail.Name = "txtEmail"
         Me.txtEmail.Size = New System.Drawing.Size(274, 22)
         Me.txtEmail.TabIndex = 12
-        Me.txtEmail.Text = ""
         '
         'Label2
         '
@@ -166,7 +172,6 @@ Public Class ApplicationOptionsForm
         Me.txtUsername.Name = "txtUsername"
         Me.txtUsername.Size = New System.Drawing.Size(202, 22)
         Me.txtUsername.TabIndex = 10
-        Me.txtUsername.Text = ""
         '
         'lblArchetypePath
         '
@@ -183,7 +188,6 @@ Public Class ApplicationOptionsForm
         Me.txtRepositoryPath.Name = "txtRepositoryPath"
         Me.txtRepositoryPath.Size = New System.Drawing.Size(442, 22)
         Me.txtRepositoryPath.TabIndex = 16
-        Me.txtRepositoryPath.Text = ""
         Me.ToolTip1.SetToolTip(Me.txtRepositoryPath, "Leave blank for last directory used")
         '
         'butCancel
@@ -212,7 +216,6 @@ Public Class ApplicationOptionsForm
         Me.txtHelpFile.Name = "txtHelpFile"
         Me.txtHelpFile.Size = New System.Drawing.Size(442, 22)
         Me.txtHelpFile.TabIndex = 21
-        Me.txtHelpFile.Text = ""
         Me.ToolTip1.SetToolTip(Me.txtHelpFile, "Leave blank for last directory used")
         '
         'butBrowse
@@ -263,7 +266,6 @@ Public Class ApplicationOptionsForm
         Me.txtOrganisation.Name = "txtOrganisation"
         Me.txtOrganisation.Size = New System.Drawing.Size(274, 22)
         Me.txtOrganisation.TabIndex = 14
-        Me.txtOrganisation.Text = ""
         '
         'lblOrganisation
         '
@@ -298,6 +300,24 @@ Public Class ApplicationOptionsForm
         Me.GroupBox1.TabIndex = 24
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "State machine colours"
+        '
+        'Panel_7
+        '
+        Me.Panel_7.BackColor = System.Drawing.Color.Orange
+        Me.Panel_7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.Panel_7.Location = New System.Drawing.Point(509, 112)
+        Me.Panel_7.Name = "Panel_7"
+        Me.Panel_7.Size = New System.Drawing.Size(38, 18)
+        Me.Panel_7.TabIndex = 15
+        '
+        'Label_7
+        '
+        Me.Label_7.Location = New System.Drawing.Point(288, 112)
+        Me.Label_7.Name = "Label_7"
+        Me.Label_7.Size = New System.Drawing.Size(211, 18)
+        Me.Label_7.TabIndex = 14
+        Me.Label_7.Text = "Label7"
+        Me.Label_7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Panel_6
         '
@@ -383,7 +403,7 @@ Public Class ApplicationOptionsForm
         '
         'Panel_2
         '
-        Me.Panel_2.BackColor = System.Drawing.Color.FromArgb(CType(0, Byte), CType(192, Byte), CType(192, Byte))
+        Me.Panel_2.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.Panel_2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel_2.Location = New System.Drawing.Point(240, 81)
         Me.Panel_2.Name = "Panel_2"
@@ -521,6 +541,7 @@ Public Class ApplicationOptionsForm
         '
         'tpDefaults
         '
+        Me.tpDefaults.Controls.Add(Me.grpParser)
         Me.tpDefaults.Controls.Add(Me.comboReferenceModel)
         Me.tpDefaults.Controls.Add(Me.Label1)
         Me.tpDefaults.Location = New System.Drawing.Point(4, 25)
@@ -529,23 +550,36 @@ Public Class ApplicationOptionsForm
         Me.tpDefaults.TabIndex = 3
         Me.tpDefaults.Text = "Defaults"
         '
-        'Panel_7
+        'grpParser
         '
-        Me.Panel_7.BackColor = System.Drawing.Color.Orange
-        Me.Panel_7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_7.Location = New System.Drawing.Point(509, 112)
-        Me.Panel_7.Name = "Panel_7"
-        Me.Panel_7.Size = New System.Drawing.Size(38, 18)
-        Me.Panel_7.TabIndex = 15
+        Me.grpParser.Controls.Add(Me.chkParserXML)
+        Me.grpParser.Controls.Add(Me.chkParserADL)
+        Me.grpParser.Location = New System.Drawing.Point(352, 42)
+        Me.grpParser.Name = "grpParser"
+        Me.grpParser.Size = New System.Drawing.Size(186, 77)
+        Me.grpParser.TabIndex = 23
+        Me.grpParser.TabStop = False
+        Me.grpParser.Text = "Parser"
         '
-        'Label_7
+        'chkParserXML
         '
-        Me.Label_7.Location = New System.Drawing.Point(288, 112)
-        Me.Label_7.Name = "Label_7"
-        Me.Label_7.Size = New System.Drawing.Size(211, 18)
-        Me.Label_7.TabIndex = 14
-        Me.Label_7.Text = "Label7"
-        Me.Label_7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.chkParserXML.AutoSize = True
+        Me.chkParserXML.Location = New System.Drawing.Point(33, 44)
+        Me.chkParserXML.Name = "chkParserXML"
+        Me.chkParserXML.Size = New System.Drawing.Size(58, 21)
+        Me.chkParserXML.TabIndex = 1
+        Me.chkParserXML.Text = "XML"
+        Me.chkParserXML.UseVisualStyleBackColor = True
+        '
+        'chkParserADL
+        '
+        Me.chkParserADL.AutoSize = True
+        Me.chkParserADL.Location = New System.Drawing.Point(33, 21)
+        Me.chkParserADL.Name = "chkParserADL"
+        Me.chkParserADL.Size = New System.Drawing.Size(57, 21)
+        Me.chkParserADL.TabIndex = 0
+        Me.chkParserADL.Text = "ADL"
+        Me.chkParserADL.UseVisualStyleBackColor = True
         '
         'ApplicationOptionsForm
         '
@@ -561,13 +595,17 @@ Public Class ApplicationOptionsForm
         Me.ShowInTaskbar = False
         Me.Text = "ApplicationOptionsForm"
         Me.gbUserDetails.ResumeLayout(False)
+        Me.gbUserDetails.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
         Me.Panel_4.ResumeLayout(False)
         Me.TabConfiguration.ResumeLayout(False)
         Me.tpUser.ResumeLayout(False)
         Me.tpLocations.ResumeLayout(False)
+        Me.tpLocations.PerformLayout()
         Me.tpAppearance.ResumeLayout(False)
         Me.tpDefaults.ResumeLayout(False)
+        Me.grpParser.ResumeLayout(False)
+        Me.grpParser.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -579,7 +617,7 @@ Public Class ApplicationOptionsForm
         
         Me.FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
         Me.FolderBrowserDialog1.ShowNewFolderButton = True
-        If FolderBrowserDialog1.ShowDialog(Me) = DialogResult.OK Then
+        If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             Me.txtRepositoryPath.Text = FolderBrowserDialog1.SelectedPath
         End If
 
@@ -588,7 +626,7 @@ Public Class ApplicationOptionsForm
     Private Sub ApplicationOptionsForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Dim ms As StateMachineType()
 
-        ms = ReferenceModel.Instance.ValidStateMachineTypes
+        ms = ReferenceModel.ValidStateMachineTypes
         Debug.Assert(ms.Length = 8)
         Me.Label_0.Text = ms(0).ToString
         Me.Label_1.Text = ms(1).ToString
@@ -608,7 +646,7 @@ Public Class ApplicationOptionsForm
         Me.ColorDialog1.FullOpen = True
         Me.ColorDialog1.AnyColor = True
         Me.ColorDialog1.Color = p.BackColor
-        If Me.ColorDialog1.ShowDialog(Me) = DialogResult.OK Then
+        If Me.ColorDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             p.BackColor = ColorDialog1.Color
         End If
         p.BorderStyle = BorderStyle.Fixed3D
@@ -618,10 +656,18 @@ Public Class ApplicationOptionsForm
     Private Sub butHelpBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butHelpBrowse.Click
         Me.OpenFileDialog1.InitialDirectory = Application.StartupPath & "\Help"
         Me.OpenFileDialog1.Filter = "Windows help (chm)|*.chm|HTML|*.htm, *.html"
-        If OpenFileDialog1.ShowDialog(Me) = DialogResult.OK Then
+        If OpenFileDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             Me.txtHelpFile.Text = OpenFileDialog1.FileName
         End If
 
+    End Sub
+
+    Private Sub chkParserADL_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkParserADL.CheckedChanged
+        chkParserXML.Checked = Not chkParserADL.Checked
+    End Sub
+
+    Private Sub chkParserXML_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkParserXML.CheckedChanged
+        chkParserADL.Checked = Not chkParserXML.Checked
     End Sub
 End Class
 
