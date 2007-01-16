@@ -96,7 +96,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="XMLParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -141,7 +140,7 @@
     <Compile Include="ADL_Classes\ADL_Tools.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ADL_Classes\Duration.vb">
+    <Compile Include="BusinessLogic\Duration.vb">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ADL_Classes\ADL_RmElement.vb" />

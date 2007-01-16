@@ -708,6 +708,7 @@ Public Class TabpageHistory
         If Me.chkIsPeriodic.Checked AndAlso (Not Me.comboTimeUnits.SelectedItem Is Nothing) Then
             Hist.Period = Me.numPeriod.Value
             Hist.PeriodUnits = CType(Me.comboTimeUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+            Hist.isPeriodic = True
         End If
 
         If Me.ListEvents.Items.Count = 0 Then

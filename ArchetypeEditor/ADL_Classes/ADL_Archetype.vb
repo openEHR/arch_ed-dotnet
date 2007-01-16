@@ -296,14 +296,16 @@ Namespace ArchetypeEditor.ADL_Classes
                         BuildText(an_attribute, a_history.NameConstraint)
                     End If
                     If a_history.isPeriodic Then
-                        Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                        Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration()
+                        Dim period As New Constraint_Duration
 
                         an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
-                        d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(a_history.PeriodUnits)
-                        d.GUI_duration = a_history.Period
-
-                        period = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                        period.MinMaxValueUnits = a_history.PeriodUnits
+                        'Set max and min to offset value
+                        period.MinimumValue = a_history.Period
+                        period.HasMinimum = True
+                        period.MaximumValue = a_history.Period
+                        period.HasMaximum = True
+                        BuildDuration(an_attribute, period)
                     End If
 
                     ' now build the events
@@ -315,16 +317,18 @@ Namespace ArchetypeEditor.ADL_Classes
                         Select Case an_event.EventType
                             Case RmEvent.ObservationEventType.PointInTime
                                 If an_event.hasFixedOffset Then
-                                    Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                                    Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration()
+                                    Dim offset As New Constraint_Duration
 
                                     an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
-                                    d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(an_event.OffsetUnits)
-                                    d.GUI_duration = an_event.Offset
-                                    offset = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                                    offset.MinMaxValueUnits = an_event.OffsetUnits
+                                    'Set max and min to offset value
+                                    offset.MinimumValue = an_event.Offset
+                                    offset.HasMinimum = True
+                                    offset.MaximumValue = an_event.Offset
+                                    offset.HasMaximum = True
+                                    BuildDuration(an_attribute, offset)
                                 End If
                             Case RmEvent.ObservationEventType.Interval
-                                Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
                                 If an_event.AggregateMathFunction <> "" Then
                                     an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("math_function"))
@@ -335,12 +339,17 @@ Namespace ArchetypeEditor.ADL_Classes
                                 End If
 
                                 If an_event.hasFixedDuration Then
-                                    Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration()
+                                    Dim fixedDuration As New Constraint_Duration
 
-                                    an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("width"))
-                                    d.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(an_event.WidthUnits)
-                                    d.GUI_duration = an_event.Width
-                                    width = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                                    an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("width"))
+                                    fixedDuration.MinMaxValueUnits = an_event.WidthUnits
+                                    'Set max and min to offset value
+                                    fixedDuration.MinimumValue = an_event.Width
+                                    fixedDuration.HasMinimum = True
+                                    fixedDuration.MaximumValue = an_event.Width
+                                    fixedDuration.HasMaximum = True
+                                    BuildDuration(an_attribute, fixedDuration)
+
                                 End If
                         End Select
 
@@ -424,14 +433,16 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             If a_history.isPeriodic Then
-                Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                Dim d As Duration = New ArchetypeEditor.ADL_Classes.Duration()
+                Dim period As New Constraint_Duration
 
                 an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, openehr.base.kernel.Create.STRING.make_from_cil("period"))
-                d.ISO_Units = a_history.PeriodUnits
-                d.GUI_duration = a_history.Period
-
-                period = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                period.MinMaxValueUnits = a_history.PeriodUnits
+                'Set max and min to offset value
+                period.MinimumValue = a_history.Period
+                period.HasMinimum = True
+                period.MaximumValue = a_history.Period
+                period.HasMaximum = True
+                BuildDuration(an_attribute, period)
             End If
 
             ' now build the events
@@ -449,16 +460,18 @@ Namespace ArchetypeEditor.ADL_Classes
                         ' do nothing...
                     Case StructureType.PointEvent
                         If an_event.hasFixedOffset Then
-                            Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                            Dim d As New Duration
+                            Dim offset As New Constraint_Duration
 
                             an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("offset"))
-                            d.ISO_Units = an_event.OffsetUnits
-                            d.GUI_duration = an_event.Offset
-                            offset = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                            offset.MinMaxValueUnits = an_event.OffsetUnits
+                            'Set max and min to offset value
+                            offset.MinimumValue = an_event.Offset
+                            offset.HasMinimum = True
+                            offset.MaximumValue = an_event.Offset
+                            offset.HasMaximum = True
+                            BuildDuration(an_attribute, offset)
                         End If
                     Case StructureType.IntervalEvent
-                        Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
                         If an_event.AggregateMathFunction <> "" Then
                             an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("math_function"))
@@ -469,12 +482,16 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
 
                         If an_event.hasFixedDuration Then
-                            Dim d As New Duration
+                            Dim fixedDuration As New Constraint_Duration
 
                             an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, openehr.base.kernel.Create.STRING.make_from_cil("width"))
-                            d.ISO_Units = an_event.WidthUnits
-                            d.GUI_duration = an_event.Width
-                            width = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_duration_make_bounded(openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), openehr.base.kernel.Create.STRING.make_from_cil(d.ISO_duration), True, True))
+                            fixedDuration.MinMaxValueUnits = an_event.WidthUnits
+                            'Set max and min to offset value
+                            fixedDuration.MinimumValue = an_event.Width
+                            fixedDuration.HasMinimum = True
+                            fixedDuration.MaximumValue = an_event.Width
+                            fixedDuration.HasMaximum = True
+                            BuildDuration(an_attribute, fixedDuration)
                         End If
                 End Select
 
@@ -760,9 +777,38 @@ Namespace ArchetypeEditor.ADL_Classes
             an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
             an_attribute = mAomFactory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
 
+            Dim durationISO As New Duration()
+
             Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
 
-            d = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_DURATION.make_from_pattern(openehr.base.kernel.Create.STRING.make_from_cil(c.AllowableUnits))
+
+            If c.HasMaximum Or c.HasMinimum Then
+                durationISO.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(c.MinMaxValueUnits)
+
+                If c.HasMaximum And c.HasMinimum Then
+                    'Need duration converter for max and min
+                    Dim durationMin As New Duration
+                    durationMin.ISO_Units = durationISO.ISO_Units
+                    durationISO.GUI_duration = CInt(c.MaximumValue)
+                    durationMin.GUI_duration = CInt(c.MinimumValue)
+                    d = mAomFactory.create_c_duration_make_bounded( _
+                        openehr.base.kernel.Create.STRING.make_from_cil(durationMin.ISO_duration), _
+                        openehr.base.kernel.Create.STRING.make_from_cil(durationISO.ISO_duration), _
+                        c.IncludeMinimum, c.IncludeMaximum)
+                ElseIf c.HasMinimum Then
+                    durationISO.GUI_duration = CInt(c.MinimumValue)
+                    d = mAomFactory.create_c_duration_make_upper_unbounded( _
+                        openehr.base.kernel.Create.STRING.make_from_cil(durationISO.ISO_duration), _
+                        c.IncludeMinimum)
+                Else 'Has maximum
+                    durationISO.GUI_duration = CInt(c.MaximumValue)
+                    d = mAomFactory.create_c_duration_make_lower_unbounded( _
+                        openehr.base.kernel.Create.STRING.make_from_cil(durationISO.ISO_duration), _
+                        c.IncludeMaximum)
+                End If
+            Else
+                d = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_DURATION.make_from_pattern(openehr.base.kernel.Create.STRING.make_from_cil(c.AllowableUnits))
+            End If
 
             Dim po As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
             po = openehr.openehr.am.archetype.constraint_model.Create.C_PRIMITIVE_OBJECT.make(d)
@@ -771,7 +817,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildQuantity(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
-            Dim cadlQuantity As openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY
+            Dim cadlQuantity As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY
 
             cadlQuantity = mAomFactory.create_c_quantity(value_attribute)
             ' set the property constraint - it should be present
@@ -853,12 +899,9 @@ Namespace ArchetypeEditor.ADL_Classes
         Protected Sub BuildOrdinal(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal o As Constraint_Ordinal)
             'Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             ' Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim c_value As openehr.openehr.am.openehr_profile.data_types.quantity.C_ORDINAL
+            Dim c_value As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL
             Dim o_v As OrdinalValue
 
-            '  an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_DataTypeName(o.Type)))
-
-                '    an_attribute = mAomFactory.create_c_attribute_single(an_object, openehr.base.kernel.Create.STRING.make_from_cil("value"))
             c_value = mAomFactory.create_c_ordinal(value_attribute)
             If o.OrdinalValues.Count > 0 Then
 

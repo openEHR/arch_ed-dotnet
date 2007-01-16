@@ -75,6 +75,36 @@ Namespace ArchetypeEditor.ADL_Classes
             End Select
         End Function
 
+        Friend Shared Function GetDuration(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As Duration
+            Dim result As New Duration
+            Dim durationObject As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+            Try
+                If TypeOf (an_attribute.children.first) Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
+                    Dim durationAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                    durationAttribute = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).attributes.i_th(1)
+                    durationObject = durationAttribute.children.first
+                Else
+                    'obsolete: C_PRIMITIVE_OBJECT
+                    durationObject = an_attribute.children.first
+                End If
+            Catch
+                Debug.Assert(False, "Error casting to width")
+                Throw New Exception("Parsing error: Duration")
+            End Try
+
+            If Not durationObject Is Nothing Then
+                Dim durationConstraint As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION = _
+                    CType(durationObject.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
+                If Not durationConstraint.interval Is Nothing Then
+                    'ToDo: deal with genuine range as now max = min only
+                    result.ISO_duration = CType(durationConstraint.interval.upper, _
+                        openehr.common_libs.date_time.Impl.ISO8601_DURATION).as_string.to_cil
+                ElseIf Not durationConstraint.pattern Is Nothing Then 'obsolete (error in previous archetypes)
+                    result.ISO_duration = durationConstraint.pattern.to_cil
+                End If
+            End If
+            Return result
+        End Function
     End Class
 End Namespace
 '

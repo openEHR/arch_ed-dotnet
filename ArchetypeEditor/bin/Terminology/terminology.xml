@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" standalone="yes"?>
+<?xml version="1.0" standalone="yes"?>
 <Terminology xmlns="http://openehr.org/Terminology.xsd">
   <Language code="af" Description="Afrikaans" />
   <Language code="sq" Description="Albanian" />
@@ -719,6 +719,7 @@
   <PrimaryRubric Id="645" Language="en" />
   <PrimaryRubric Id="646" Language="en" />
   <PrimaryRubric Id="647" Language="en" />
+  <PrimaryRubric Id="648" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -944,7 +945,7 @@
   <Concept Language="en" ConceptID="236" Rubric="dental care" />
   <Concept Language="en" ConceptID="237" Rubric="nursing home care" />
   <Concept Language="en" ConceptID="238" Rubric="other care" />
-  <Concept Language="en" ConceptID="239" Rubric="Attestation status" />
+  <Concept Language="en" ConceptID="239" Rubric="Attestation reason" />
   <Concept Language="en" ConceptID="240" Rubric="signed" />
   <Concept Language="en" ConceptID="241" Rubric="intended" />
   <Concept Language="en" ConceptID="242" Rubric="required" />
@@ -4438,6 +4439,7 @@
   <Concept Language="sv" ConceptID="558" Rubric="Under-sektion" />
   <Concept Language="sv" ConceptID="559" Rubric="Post" />
   <Concept Language="sv" ConceptID="560" Rubric="Administrativ post" />
+  <Concept Language="en" ConceptID="648" Rubric="witnessed" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
@@ -4678,8 +4680,6 @@
   <GroupedConcept GrouperID="10" ChildID="237" />
   <GroupedConcept GrouperID="10" ChildID="238" />
   <GroupedConcept GrouperID="11" ChildID="240" />
-  <GroupedConcept GrouperID="11" ChildID="241" />
-  <GroupedConcept GrouperID="11" ChildID="242" />
   <GroupedConcept GrouperID="13" ChildID="249" />
   <GroupedConcept GrouperID="13" ChildID="250" />
   <GroupedConcept GrouperID="13" ChildID="251" />
@@ -4926,6 +4926,7 @@
   <GroupedConcept GrouperID="24" ChildID="620" />
   <GroupedConcept GrouperID="19" ChildID="637" />
   <GroupedConcept GrouperID="14" ChildID="640" />
+  <GroupedConcept GrouperID="11" ChildID="648" />
   <TerminologyIdentifiers VSAB="AIR93" SourceName="AI/RHEUM,1993" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ALT2000" SourceName="Alternative Billing Concepts, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="AOD2000" SourceName="Alcohol and Other Drug Thesaurus, 2000" Authority="UMLS2003AA" />
@@ -5042,8 +5043,7 @@
   <TerminologyIdentifiers VSAB="WHOGER_1997" SourceName="WHOART, German Translation, 1997" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="WHOPOR_1997" SourceName="WHOART, Portuguese Translation, 1997" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="WHOSPA_1997" SourceName="WHOART, Spanish Translation, 1997" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="MST2"	SourceName="World Organisation of Digestive Endoscopy" Authority="Manually added" />
-
+  <TerminologyIdentifiers VSAB="MST2" SourceName="World Organisation of Digestive Endoscopy" Authority="Manually added" />
   <Territory NumericCode="004" TwoLetter="AF" ThreeLetter="AFG" Text="Afghanistan" />
   <Territory NumericCode="008" TwoLetter="AL" ThreeLetter="ALB" Text="Albania, People's Socialist Republic of" />
   <Territory NumericCode="012" TwoLetter="DZ" ThreeLetter="DZA" Text="Algeria, People's Democratic Republic of" />

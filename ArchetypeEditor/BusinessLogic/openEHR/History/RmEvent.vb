@@ -200,39 +200,24 @@ Class RmEvent
                 Case "name", "runtime_label" ' runtime_label is OBSOLETE
                     mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "offset"
-                    Dim d As New ArchetypeEditor.ADL_Classes.Duration
-                    Dim offset As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-
-                    offset = an_attribute.children.first
-                    d.ISO_duration = offset.item.as_string.to_cil
-                    Me.Offset = d.GUI_duration
-                    Me.OffsetUnits = d.ISO_Units
-                    mType = StructureType.PointEvent  ' may be an interval - this will be set
-                    ' when maths function is set
+                    Try
+                        Dim d As Duration = _
+                            ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(an_attribute)
+                        Me.Offset = d.GUI_duration
+                        Me.OffsetUnits = d.ISO_Units
+                    Catch e As Exception
+                        MessageBox.Show(String.Format("Event[{1}]/offset attribute - {0}", Me.NodeId, e.Message))
+                    End Try
 
                 Case "width"
-                    Dim d As New ArchetypeEditor.ADL_Classes.Duration
-                    Dim width As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-
-                    Debug.Assert(mType = StructureType.IntervalEvent)
-
-                    width = an_attribute.children.first
-                    If Not width Is Nothing Then
-                        Dim durationConstraint As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION = _
-                            CType(width.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
-                        If Not durationConstraint.interval Is Nothing Then
-                            'ToDo: deal with genuine range as now max = min only
-                            d.ISO_duration = CType(durationConstraint.interval.upper, _
-                                openehr.common_libs.date_time.Impl.ISO8601_DURATION).as_string.to_cil
-                        ElseIf Not durationConstraint.pattern Is Nothing Then 'obsolete (error in previous archetypes)
-                            d.ISO_duration = durationConstraint.pattern.to_cil
-                        End If
+                    Try
+                        Dim d As Duration = _
+                            ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(an_attribute)
                         Me.Width = d.GUI_duration
                         Me.WidthUnits = d.ISO_Units
-                    End If
-                    d.ISO_duration = width.item.as_string.to_cil
-                    Me.Width = d.GUI_duration
-                    Me.WidthUnits = d.ISO_Units
+                    Catch e As Exception
+                        MessageBox.Show(String.Format("Event[{1}]/width attribute - {0}", Me.NodeId, e.Message))
+                    End Try
 
                 Case "aggregate_math_function" ' OBSOLETE
                     Dim MathFunc As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
@@ -361,7 +346,7 @@ Class RmEvent
                 Case "name"
                     mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                 Case "offset"
-                    Dim d As New ArchetypeEditor.ADL_Classes.Duration
+                    Dim d As New Duration
                     Dim offset As XMLParser.C_PRIMITIVE_OBJECT
                     Dim duration As XMLParser.C_DURATION
 
@@ -379,7 +364,7 @@ Class RmEvent
                     Me.OffsetUnits = d.ISO_Units
 
                 Case "width"
-                    Dim d As New ArchetypeEditor.ADL_Classes.Duration
+                    Dim d As New Duration
                     Dim width As XMLParser.C_PRIMITIVE_OBJECT
 
                     Debug.Assert(mType = StructureType.IntervalEvent)

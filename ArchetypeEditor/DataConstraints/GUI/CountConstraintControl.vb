@@ -336,7 +336,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     Private Sub SetMaxAndMin()
         If Constraint.HasMaximum Then
             Me.cbMaxValue.Checked = True
-            Me.numMaxValue.Value = Constraint.MaximumValue
+            Me.numMaxValue.Value = CDec(CType(Constraint, Constraint_Real).MaximumValue)
             If Constraint.IncludeMaximum Then
                 Me.comboIncludeMax.SelectedIndex = 0
             Else
@@ -348,7 +348,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         If Constraint.HasMinimum Then
             Me.cbMinValue.Checked = True
-            Me.numMinValue.Value = Constraint.MinimumValue
+            If TypeOf Me.Constraint Is Constraint_Real Then
+                Me.numMinValue.Value = CDec(CType(Constraint, Constraint_Real).MinimumValue)
+            Else
+                Me.numMinValue.Value = Constraint.MinimumValue
+            End If
             If Constraint.IncludeMinimum Then
                 Me.comboIncludeMin.SelectedIndex = 0
             Else
