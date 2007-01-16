@@ -204,15 +204,13 @@ Public Class OntologyManager
         new_row(0) = mLanguageCode
         new_row(1) = mLanguageText
         mLanguagesTable.Rows.Add(new_row)
-
-        'CHANGE Sam Heard 2004-05-25
-        'Added following line as bug if last edited concept text
         mLastTerm = Nothing
+        Me.mReplaceTranslations = 0
 
     End Sub
 
     Public Sub Reset(Optional ByVal LanguageCode As String = "") ' resets for beginning a new archetype
-
+        Me.mReplaceTranslations = 0
         mOntology.Reset()
         If LanguageCode = "" Then
             LanguageCode = OceanArchetypeEditor.DefaultLanguageCode

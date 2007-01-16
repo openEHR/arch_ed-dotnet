@@ -101,7 +101,6 @@ Class RmHistory
 
     Private Sub ProcessEventSeries(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-        Dim period As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
         Dim i As Integer
 
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(ObjNode.occurrences)
@@ -113,12 +112,15 @@ Class RmHistory
                     mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
                 Case "period"
-                    Dim d As ArchetypeEditor.ADL_Classes.Duration = New ArchetypeEditor.ADL_Classes.Duration()
-
-                    period = an_attribute.children.first
-                    d.ISO_duration = period.item.as_string.to_cil
-                    iPeriod = d.GUI_duration
-                    sPeriodUnits = d.ISO_Units
+                    Try
+                        Dim d As Duration = _
+                            ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(an_attribute)
+                        Me.Period = d.GUI_duration
+                        Me.PeriodUnits = d.ISO_Units
+                        Me.isPeriodic = True
+                    Catch e As Exception
+                        MessageBox.Show(String.Format("History[{1}]/period attribute - {0}", Me.NodeId, e.Message))
+                    End Try
 
                 Case "items", "events"  'items is OBSOLETE
                     Dim an_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
@@ -155,7 +157,6 @@ Class RmHistory
 
     Private Sub ProcessEventSeries(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As XMLParser.C_ATTRIBUTE
-        Dim period As XMLParser.C_PRIMITIVE_OBJECT
         
         cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(ObjNode.occurrences)
 
@@ -165,14 +166,17 @@ Class RmHistory
                     mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
                 Case "period"
-                    Dim d As ArchetypeEditor.ADL_Classes.Duration = New ArchetypeEditor.ADL_Classes.Duration()
+                    Try
+                        Dim d As Duration = _
+                            ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
+                        Me.Period = d.GUI_duration
+                        Me.PeriodUnits = d.ISO_Units
+                        Me.isPeriodic = True
+                    Catch e As Exception
+                        MessageBox.Show(String.Format("History[{1}]/period attribute - {0}", Me.NodeId, e.Message))
+                    End Try
 
-                    period = an_attribute.children(0)
-                    d.ISO_duration = CType(period.item, XMLParser.C_DURATION).pattern
-                    iPeriod = d.GUI_duration
-                    sPeriodUnits = d.ISO_Units
-
-                Case "items", "events"  'items is OBSOLETE
+                Case "events", "items"  'items is OBSOLETE
                     Dim an_Event As XMLParser.C_COMPLEX_OBJECT
 
                     ' empty the remembered structure

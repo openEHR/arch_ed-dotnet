@@ -133,20 +133,33 @@ Public Class ReferenceModel
 
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
-                mReferenceModelDataTypes.Add(12, "INTERVAL<COUNT>")
-                mReferenceModelDataTypes.Add(13, "INTERVAL<QUANTITY>")
-                mReferenceModelDataTypes.Add(14, "INTERVAL<DATE_TIME>")
+                mReferenceModelDataTypes.Add(7, "DATE_TIME")
+                mReferenceModelDataTypes.Add(12, "INTERVAL<DV_COUNT>")
+                mReferenceModelDataTypes.Add(13, "INTERVAL<DV_QUANTITY>")
+                mReferenceModelDataTypes.Add(14, "INTERVAL<DV_DATE_TIME>")
         End Select
 
     End Sub
 
     Public Shared Function RM_DataTypeName(ByVal d_type As ConstraintType) As String
-        Dim result As String
+        Dim result, s As String
         If mReferenceModelDataTypes.ContainsKey(CType(d_type, Integer)) Then
             result = CStr(mReferenceModelDataTypes.Item(CType(d_type, Integer)))
         Else
             result = d_type.ToString.ToUpperInvariant()
         End If
+
+        Select Case d_type
+            Case ConstraintType.Interval_Count
+                s = RM_DataTypeName(ConstraintType.Count)
+                result = String.Format("INTERVAL<{0}>", s)
+            Case ConstraintType.Interval_Quantity
+                s = RM_DataTypeName(ConstraintType.Quantity)
+                result = String.Format("INTERVAL<{0}>", s)
+            Case ConstraintType.Interval_DateTime
+                s = RM_DataTypeName(ConstraintType.DateTime)
+                result = String.Format("INTERVAL<{0}>", s)
+        End Select
 
         Return String.Format("DV_{0}", result)
 
