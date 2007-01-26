@@ -36,6 +36,16 @@ Public Class ArchetypeNodeAnonymous
             Return True
         End Get
     End Property
+    Public ReadOnly Property IsReference() As Boolean Implements ArchetypeNode.IsReference
+        Get
+            Return False
+        End Get
+    End Property
+    Public ReadOnly Property HasReferences() As Boolean Implements ArchetypeNode.HasReferences
+        Get
+            Return False
+        End Get
+    End Property
     Public Property Occurrences() As RmCardinality Implements ArchetypeNode.Occurrences
         Get
             Return mRMStructure.Occurrences
@@ -75,6 +85,8 @@ Public Class ArchetypeNodeAnonymous
                         mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(314, "SECTION")
                     Case StructureType.Cluster
                         mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(313, "Cluster")
+                    Case StructureType.Element
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(567, "Element")
                 End Select
             Case Else
                 Debug.Assert(False)
@@ -94,25 +106,23 @@ Public Class ArchetypeNodeAnonymous
             End Try
 
             s = Space(3 * level) & slot_constraint.RM_ClassType.ToString & ":\par"
-            If slot_constraint.Include.Count > 0 Then
-                If slot_constraint.IncludeAll Then
-                    s &= Environment.NewLine & Space(3 * (level + 1)) & "  Include ALL\par"
-                Else
-                    s &= Environment.NewLine & Space(3 * (level + 1)) & "  Include:\par"
-                    For Each statement In slot_constraint.Include
-                        s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
-                    Next
-                End If
+            If slot_constraint.IncludeAll Then
+                s &= Environment.NewLine & Space(3 * (level + 1)) & "  Include ALL\par"
+            ElseIf slot_constraint.Include.Count > 0 Then
+                s &= Environment.NewLine & Space(3 * (level + 1)) & "  Include:\par"
+                For Each statement In slot_constraint.Include
+                    s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
+                Next
             End If
-            If slot_constraint.Exclude.Count > 0 Then
-                If slot_constraint.ExcludeAll Then
-                    s &= Environment.NewLine & Space(3 * (level + 1)) & "  Exclude ALL\par"
-                Else
-                    s &= Environment.NewLine & Space(3 * (level + 1)) & "  Exclude:\par"
-                    For Each statement In slot_constraint.Exclude
-                        s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
-                    Next
-                End If
+
+
+            If slot_constraint.ExcludeAll Then
+                s &= Environment.NewLine & Space(3 * (level + 1)) & "  Exclude ALL\par"
+            ElseIf slot_constraint.Exclude.Count > 0 Then
+                s &= Environment.NewLine & Space(3 * (level + 1)) & "  Exclude:\par"
+                For Each statement In slot_constraint.Exclude
+                    s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
+                Next
             End If
             Return s
         End If

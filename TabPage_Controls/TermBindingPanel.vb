@@ -1487,14 +1487,16 @@ Public Class TermBindingPanel
 
         ReadOnly Property Constraint() As Constraint
             Get
-                Dim rmClass As RmStructure
-                rmClass = mFileManager.Archetype.Definition.GetChildByNodeId(mNodeId)
-
-                If TypeOf rmClass Is RmElement Then
-                    Return CType(rmClass, RmElement).Constraint
+                If mFileManager.Archetype.Definition.Type <> StructureType.Element Then
+                    Dim rmClass As RmStructure
+                    rmClass = CType(mFileManager.Archetype.Definition, ArchetypeDefinition).GetChildByNodeId(mNodeId)
+                    If TypeOf rmClass Is RmElement Then
+                        Return CType(rmClass, RmElement).Constraint
+                    End If
                 Else
-                    Return Nothing
+                    Debug.Assert(False) 'Not sure if you can get to here
                 End If
+                Return Nothing
             End Get
         End Property
 
@@ -1598,7 +1600,7 @@ Public Class TermBindingPanel
                 End If
 
                 Dim rmClass As RmStructure
-                rmClass = mFilemanager.Archetype.Definition.Data.GetChildByNodeId(nodeId)
+                rmClass = CType(mFilemanager.Archetype.Definition, ArchetypeDefinition).Data.GetChildByNodeId(nodeId)
 
                 Debug.Assert(TypeOf rmClass Is RmElement)
                 Dim valueConstraint As Constraint = CType(rmClass, RmElement).Constraint

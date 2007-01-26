@@ -307,6 +307,9 @@ Public Class Designer
         Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
+        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
+        Me.PanelDescription = New System.Windows.Forms.Panel
+        Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
         Me.tpDesign = New Crownwood.Magic.Controls.TabPage
         Me.TabDesign = New Crownwood.Magic.Controls.TabControl
         Me.tpData = New Crownwood.Magic.Controls.TabPage
@@ -317,9 +320,6 @@ Public Class Designer
         Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
         Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
         Me.PanelState = New System.Windows.Forms.Panel
-        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
-        Me.PanelDescription = New System.Windows.Forms.Panel
-        Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
         Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpTerminology = New Crownwood.Magic.Controls.TabPage
         Me.TabTerminology = New Crownwood.Magic.Controls.TabControl
@@ -402,11 +402,11 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
+        Me.tpHeader.SuspendLayout()
+        Me.PanelDescription.SuspendLayout()
         Me.tpDesign.SuspendLayout()
         Me.tpData.SuspendLayout()
         Me.tpRootState.SuspendLayout()
-        Me.tpHeader.SuspendLayout()
-        Me.PanelDescription.SuspendLayout()
         Me.tpTerminology.SuspendLayout()
         Me.tpTerms.SuspendLayout()
         Me.tpConstraints.SuspendLayout()
@@ -970,6 +970,41 @@ Public Class Designer
         Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
         '
+        'tpHeader
+        '
+        Me.tpHeader.BackColor = System.Drawing.Color.LemonChiffon
+        Me.tpHeader.Controls.Add(Me.PanelDescription)
+        Me.tpHeader.Controls.Add(Me.PanelConcept_1)
+        Me.tpHeader.Controls.Add(Me.PanelConcept)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpHeader, "Screens/header.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpHeader.Location = New System.Drawing.Point(0, 0)
+        Me.tpHeader.Name = "tpHeader"
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
+        Me.tpHeader.Size = New System.Drawing.Size(969, 595)
+        Me.tpHeader.TabIndex = 0
+        Me.tpHeader.Title = "Header"
+        '
+        'PanelDescription
+        '
+        Me.PanelDescription.Controls.Add(Me.RichTextBoxDescription)
+        Me.PanelDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelDescription.Location = New System.Drawing.Point(0, 111)
+        Me.PanelDescription.Name = "PanelDescription"
+        Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
+        Me.PanelDescription.Size = New System.Drawing.Size(969, 284)
+        Me.PanelDescription.TabIndex = 6
+        '
+        'RichTextBoxDescription
+        '
+        Me.RichTextBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBoxDescription.Location = New System.Drawing.Point(10, 10)
+        Me.RichTextBoxDescription.Name = "RichTextBoxDescription"
+        Me.RichTextBoxDescription.ReadOnly = True
+        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 264)
+        Me.RichTextBoxDescription.TabIndex = 5
+        Me.RichTextBoxDescription.Text = ""
+        '
         'tpDesign
         '
         Me.tpDesign.Controls.Add(Me.TabDesign)
@@ -1100,41 +1135,6 @@ Public Class Designer
         Me.PanelState.Name = "PanelState"
         Me.PanelState.Size = New System.Drawing.Size(969, 28)
         Me.PanelState.TabIndex = 0
-        '
-        'tpHeader
-        '
-        Me.tpHeader.BackColor = System.Drawing.Color.LemonChiffon
-        Me.tpHeader.Controls.Add(Me.PanelDescription)
-        Me.tpHeader.Controls.Add(Me.PanelConcept_1)
-        Me.tpHeader.Controls.Add(Me.PanelConcept)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpHeader, "Screens/header.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpHeader.Location = New System.Drawing.Point(0, 0)
-        Me.tpHeader.Name = "tpHeader"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
-        Me.tpHeader.Size = New System.Drawing.Size(969, 595)
-        Me.tpHeader.TabIndex = 0
-        Me.tpHeader.Title = "Header"
-        '
-        'PanelDescription
-        '
-        Me.PanelDescription.Controls.Add(Me.RichTextBoxDescription)
-        Me.PanelDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelDescription.Location = New System.Drawing.Point(0, 111)
-        Me.PanelDescription.Name = "PanelDescription"
-        Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
-        Me.PanelDescription.Size = New System.Drawing.Size(969, 284)
-        Me.PanelDescription.TabIndex = 6
-        '
-        'RichTextBoxDescription
-        '
-        Me.RichTextBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RichTextBoxDescription.Location = New System.Drawing.Point(10, 10)
-        Me.RichTextBoxDescription.Name = "RichTextBoxDescription"
-        Me.RichTextBoxDescription.ReadOnly = True
-        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 264)
-        Me.RichTextBoxDescription.TabIndex = 5
-        Me.RichTextBoxDescription.Text = ""
         '
         'tpSectionPage
         '
@@ -1817,11 +1817,11 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
+        Me.tpHeader.ResumeLayout(False)
+        Me.PanelDescription.ResumeLayout(False)
         Me.tpDesign.ResumeLayout(False)
         Me.tpData.ResumeLayout(False)
         Me.tpRootState.ResumeLayout(False)
-        Me.tpHeader.ResumeLayout(False)
-        Me.PanelDescription.ResumeLayout(False)
         Me.tpTerminology.ResumeLayout(False)
         Me.tpTerms.ResumeLayout(False)
         Me.tpConstraints.ResumeLayout(False)
@@ -1964,7 +1964,7 @@ Public Class Designer
                     ' deal with the various groups of information appropriate to the type
                     Select Case mFileManager.Archetype.RmEntity
                         Case StructureType.ENTRY ' "ENTRY"
-                            For Each rm In mFileManager.Archetype.Definition.Data
+                            For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
                                     Case StructureType.Data
                                         ProcessEventSeries(rm)
@@ -1974,7 +1974,7 @@ Public Class Designer
                             Next
 
                         Case StructureType.OBSERVATION ' "ENTRY.OBSERVATION"
-                            For Each rm In mFileManager.Archetype.Definition.Data
+                            For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
                                     Case StructureType.Data
                                         Dim rm_s As RmStructureCompound
@@ -2007,7 +2007,7 @@ Public Class Designer
                             Next
 
                         Case StructureType.EVALUATION ' "ENTRY.EVALUATION"
-                            For Each rm In mFileManager.Archetype.Definition.Data
+                            For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
                                     Case StructureType.Data
                                         If rm.Children.Count > 0 Then
@@ -2024,8 +2024,8 @@ Public Class Designer
 
                         Case StructureType.INSTRUCTION ' "ENTRY.INSTRUCTION"
                             SetUpInstruction()
-                            mTabPageInstruction.ProcessInstruction(mFileManager.Archetype.Definition.Data)
-                            For Each rmStruct As RmStructureCompound In mFileManager.Archetype.Definition.Data
+                            mTabPageInstruction.ProcessInstruction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+                            For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 If rmStruct.Type = StructureType.Protocol Then
                                     mTabPageInstruction.cbProtocol.Checked = True
                                     ProcessProtocol(rmStruct.Children.items(0), mTabPageInstruction.TabControlInstruction)
@@ -2034,8 +2034,8 @@ Public Class Designer
 
                         Case StructureType.ACTION
                             SetUpAction()
-                            mTabPageAction.ProcessAction(mFileManager.Archetype.Definition.Data)
-                            For Each rmStruct As RmStructureCompound In mFileManager.Archetype.Definition.Data
+                            mTabPageAction.ProcessAction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+                            For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 If rmStruct.Type = StructureType.Protocol Then
                                     mTabPageAction.cbProtocol.Checked = True
                                     ProcessProtocol(rmStruct.Children.items(0), mTabPageAction.TabControlAction)
@@ -2043,7 +2043,7 @@ Public Class Designer
                             Next
 
                         Case StructureType.ADMIN_ENTRY
-                            rm = mFileManager.Archetype.Definition.Data.items(0)
+                            rm = CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.items(0)
                             If rm.Children.Count > 0 Then
                                 ProcessDataStructure(rm.Children.items(0))
                             End If
@@ -2073,6 +2073,12 @@ Public Class Designer
                 Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
 
                     ProcessStructure(mFileManager.Archetype.Definition)
+
+                Case StructureType.Cluster
+                    ProcessCluster(mFileManager.Archetype.Definition)
+
+                Case StructureType.Element
+                    ProcessElement(mFileManager.Archetype.Definition)
 
                 Case StructureType.SECTION
                     SetUpSection()
@@ -2605,6 +2611,12 @@ Public Class Designer
                 If Not mTabPageDataStructure Is Nothing Then
                     mTabPageDataStructure.toRichText(text, 2)
                 End If
+
+            Case StructureType.Cluster, StructureType.Element
+                If Not mTabPageDataStructure Is Nothing Then
+                    mTabPageDataStructure.toRichText(text, 2)
+                End If
+
         End Select
 
         Me.mRichTextArchetype.Rtf = text.ToString
@@ -2646,19 +2658,13 @@ Public Class Designer
         text.WriteLine("</table>")
 
         Select Case mFileManager.Archetype.RmEntity
-            '    Case StructureType.SECTION
-            '        text.WriteLine("\par")
-            '        ' add subject relationship constraint here
-            '        text.WriteLine("\cf1   DATA\cf0  = \{\par")
-            '        mTabPageSection.ToRichText(text, 2)
-            '        text.WriteLine("\par")
-            '        text.WriteLine("  \} -- end Data\par")
-            '        text.WriteLine("\par")
+            'Case StructureType.SECTION
+            '    mTabPageSection.toHTML()
 
-            '    Case StructureType.COMPOSITION
+            'Case StructureType.COMPOSITION
+            '    mTabPageComposition.toHTML()
 
             Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION
-
 
                 text.WriteLine("<hr>")
                 text.WriteLine("<table border=""0"" cellpadding=""2"" width=""100%"">")
@@ -2737,10 +2743,16 @@ Public Class Designer
 
                 'text.WriteLine("\par")
 
-                '    Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                '        If Not mTabPageDataStructure Is Nothing Then
-                '            mTabPageDataStructure.toRichText(text, 2)
-                '        End If
+            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                If Not mTabPageDataStructure Is Nothing Then
+                    mTabPageDataStructure.toHTML(text)
+                End If
+
+            Case StructureType.Cluster, StructureType.Element
+                If Not mTabPageDataStructure Is Nothing Then
+                    mTabPageDataStructure.toHTML(text)
+                End If
+
         End Select
 
         text.WriteLine("</BODY>")
@@ -3132,6 +3144,17 @@ Public Class Designer
 
                 'Me.tpSectionPage.Title = ReferenceModel.StructureClass.ToString
 
+            Case StructureType.Cluster
+                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
+                    Me.TabMain.TabPages.Remove(Me.tpDesign)
+                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
+                End If
+
+            Case StructureType.Element
+                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
+                    Me.TabMain.TabPages.Remove(Me.tpDesign)
+                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
+                End If
         End Select
 
     End Sub
@@ -3281,55 +3304,62 @@ Public Class Designer
                     SetUpDataStructure()
                     SetUpEventSeries()
                 End If
-                ShowTabPages(archetyped_class)
 
             Case StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                 If isNew Then
                     SetUpDataStructure()
                 End If
-                ShowTabPages(archetyped_class)
-
+                
             Case StructureType.INSTRUCTION
                 If isNew Then
                     SetUpInstruction()
                 End If
-                ShowTabPages(archetyped_class)
-
+                
             Case StructureType.ACTION
                 If isNew Then
                     SetUpAction()
                 End If
-                ShowTabPages(archetyped_class)
-
+                
             Case StructureType.SECTION
                 If isNew Then
                     SetUpSection()
                 End If
-                ShowTabPages(archetyped_class)
-
+                
             Case StructureType.COMPOSITION
                 If isNew Then
                     SetUpComposition()
                 End If
-                ShowTabPages(archetyped_class)
-
+                
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 If isNew Then
                     SetUpStructure()
                 End If
-                ShowTabPages(archetyped_class)
+                
+            Case StructureType.Cluster
+                If isNew Then
+                    SetUpStructure()
+                    Me.mTabPageDataStructure.SetAsCluster(mFileManager.Archetype.ConceptCode)
+                End If
+                
+            Case StructureType.Element
+                If isNew Then
+                    SetUpStructure()
+                    Me.mTabPageDataStructure.SetAsElement(mFileManager.Archetype.ConceptCode)
+                End If
 
             Case StructureType.ENTRY
                 If isNew Then
                     SetUpDataStructure()
                 End If
-                ShowTabPages(archetyped_class)
 
             Case Else
                 Beep()
                 Debug.Assert(False)
+                Throw New Exception(String.Format("{0}: {1}", AE_Constants.Instance.Error_loading, mFileManager.Archetype.Archetype_ID.ToString))
 
         End Select
+
+        ShowTabPages(archetyped_class)
 
         Me.lblLifecycle.Text = mFileManager.Archetype.LifeCycle
         Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
@@ -3708,6 +3738,17 @@ Public Class Designer
         mTabPageDataStructure.ProcessStructure(a_Structure)
     End Sub
 
+    Private Sub ProcessCluster(ByVal a_Structure As RmCluster)
+        SetUpStructure()
+        mTabPageDataStructure.ProcessStructure(a_Structure)
+    End Sub
+
+    Private Sub ProcessElement(ByVal an_element As RmElement)
+        SetUpStructure()
+        mTabPageDataStructure.ProcessStructure(an_element)
+    End Sub
+
+
     Private Sub ProcessPathwaySpecification(ByVal a_structure As RmStructureCompound)
 
 
@@ -3784,19 +3825,19 @@ Public Class Designer
 
                 Select Case mFileManager.Archetype.Definition.Type
                     Case StructureType.INSTRUCTION
-                        mFileManager.Archetype.Definition.Data = mTabPageInstruction.SaveAsInstruction.Children
+                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children
                         If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
                             Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                             rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                            mFileManager.Archetype.Definition.Data.Add(rm)
+                            CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                         End If
 
                     Case StructureType.ACTION
-                        mFileManager.Archetype.Definition.Data = mTabPageAction.SaveAsAction.Children
+                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageAction.SaveAsAction.Children
                         If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
                             Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                             rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                            mFileManager.Archetype.Definition.Data.Add(rm)
+                            CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                         End If
 
                     Case StructureType.OBSERVATION
@@ -3816,7 +3857,7 @@ Public Class Designer
                                             RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                         End If
                                         rm.Children.Add(RmHistory)
-                                        mFileManager.Archetype.Definition.Data.Add(rm)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                                     End If
 
                                 Case "tpStateStructure"
@@ -3824,7 +3865,7 @@ Public Class Designer
                                     If Not mTabPageDataStateStructure Is Nothing Then
                                         Dim rmState As New RmStructureCompound(StructureType.State.ToString, StructureType.State)
                                         rmState.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
-                                        mFileManager.Archetype.Definition.Data.Add(rmState)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rmState)
                                         STATE_processed = True
                                     End If
                             End Select
@@ -3841,7 +3882,7 @@ Public Class Designer
                                     If Not mTabPageProtocolStructure Is Nothing Then
                                         Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                         rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                                        mFileManager.Archetype.Definition.Data.Add(rm)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                                     End If
 
                                 Case "tpRootState"
@@ -3873,7 +3914,7 @@ Public Class Designer
                                             Debug.Assert(False)
 
                                         End Try
-                                        mFileManager.Archetype.Definition.Data.Add(rm)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3889,7 +3930,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
-                                        mFileManager.Archetype.Definition.Data.Add(rm)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                                     End If
 
                                 Case "tpStateStructure"
@@ -3898,7 +3939,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
                                         rm.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
-                                        mFileManager.Archetype.Definition.Data.Add(rm)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3913,7 +3954,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                         rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                                        mFileManager.Archetype.Definition.Data.Add(rm)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3932,7 +3973,7 @@ Public Class Designer
                                             If Not mTabPageDataStructure Is Nothing Then
                                                 RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                             End If
-                                            mFileManager.Archetype.Definition.Data.Add(RmHistory)
+                                            CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(RmHistory)
                                         End If
                                     End If
 
@@ -3942,7 +3983,7 @@ Public Class Designer
                                             Dim rm As RmStructureCompound
                                             rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                             rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
-                                            mFileManager.Archetype.Definition.Data.Add(rm)
+                                            CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                                         End If
                                     End If
 
@@ -3952,7 +3993,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
                                         rm.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
-                                        mFileManager.Archetype.Definition.Data.Add(rm)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3968,7 +4009,7 @@ Public Class Designer
                                     Dim rm As RmStructureCompound
                                     rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                     rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                                    mFileManager.Archetype.Definition.Data.Add(rm)
+                                    CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                             End Select
                         Next
 
@@ -3982,7 +4023,7 @@ Public Class Designer
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
-                                        mFileManager.Archetype.Definition.Data.Add(rm)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                                     End If
                             End Select
                         Next
@@ -3999,6 +4040,25 @@ Public Class Designer
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
 
+            Case StructureType.Cluster ' "CLUSTER"
+
+                ' Added try to this call as it now throws an exception if
+                ' it encounters any components that are not clusters or elements
+                Try
+                    mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
+                Catch e As Exception
+                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+
+            Case StructureType.Element
+
+                ' Added try to this call as it now throws an exception if
+                ' it encounters any components that are not clusters or elements
+                Try
+                    mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
+                Catch e As Exception
+                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
             Case StructureType.COMPOSITION
 
                 ' Throws exception if encounters any 
@@ -4658,6 +4718,23 @@ Public Class Designer
                     Me.mTabPageAction.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
                 End If
 
+            Case StructureType.Cluster
+                Dim pos As New Point
+                pos.X = 10
+                pos.Y = 10
+
+                If Not Me.mTabPageDataStructure Is Nothing Then
+                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                End If
+
+            Case StructureType.Element
+                Dim pos As New Point
+                pos.X = 10
+                pos.Y = 10
+
+                If Not Me.mTabPageDataStructure Is Nothing Then
+                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                End If
 
             Case StructureType.SECTION
 

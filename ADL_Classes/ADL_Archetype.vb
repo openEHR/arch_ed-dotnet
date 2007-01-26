@@ -286,7 +286,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim rm_1 As RmStructureCompound
             Dim a_history As RmHistory
 
-            For Each rm_1 In cDefinition.Data
+            For Each rm_1 In CType(cDefinition, ArchetypeDefinition).Data
                 If rm_1.Type = StructureType.History Then
                     a_history = CType(rm_1, RmHistory)
                     cadlHistory = mAomFactory.create_c_complex_object_identified(RelNode, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(StructureType.History)), openehr.base.kernel.Create.STRING.make_from_cil(a_history.NodeId))
@@ -546,8 +546,12 @@ Namespace ArchetypeEditor.ADL_Classes
                 For Each rm In Cluster.Children.items
                     If rm.Type = StructureType.Cluster Then
                         BuildCluster(rm, an_attribute)
-                    Else
+                    ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
                         BuildElementOrReference(rm, an_attribute)
+                    ElseIf rm.Type = StructureType.Slot Then
+                        BuildSlot(an_attribute, rm)
+                    Else
+                        Debug.Assert(False, "Type not handled")
                     End If
                 Next
             End If
@@ -731,7 +735,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If sl.hasSlots Then
                 If sl.IncludeAll Then
-                    slot.add_include(MakeAssertion("domain_concept", ".*"))
+                    slot.add_include(MakeAssertion("concept", ".*"))
                 Else
                     For Each s As String In sl.Include
                         Dim escapedString As String
@@ -743,11 +747,11 @@ Namespace ArchetypeEditor.ADL_Classes
                         Else
                             escapedString = s.Replace(".", "\.")
                         End If
-                        slot.add_include(MakeAssertion("domain_concept", escapedString))
+                        slot.add_include(MakeAssertion("concept", escapedString))
                     Next
                 End If
                 If sl.ExcludeAll Then
-                    slot.add_exclude(MakeAssertion("domain_concept", ".*"))
+                    slot.add_exclude(MakeAssertion("concept", ".*"))
                 Else
                     For Each s As String In sl.Exclude
                         Dim escapedString As String
@@ -759,12 +763,12 @@ Namespace ArchetypeEditor.ADL_Classes
                         Else
                             escapedString = s.Replace(".", "\.")
                         End If
-                        slot.add_exclude(MakeAssertion("domain_concept", escapedString))
+                        slot.add_exclude(MakeAssertion("concept", escapedString))
                     Next
                 End If
                 Debug.Assert(slot.has_excludes Or slot.has_includes)
             Else
-                slot.add_include(MakeAssertion("domain_concept", ".*"))
+                slot.add_include(MakeAssertion("concept", ".*"))
             End If
 
         End Sub
@@ -1022,8 +1026,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case ConstraintType.DateTime
                     BuildDateTime(value_attribute, c)
 
-                Case ConstraintType.Slot
-                    BuildSlot(value_attribute, c, New RmCardinality)
+                    'Case ConstraintType.Slot
+                    '    BuildSlot(value_attribute, c, New RmCardinality)
 
                 Case ConstraintType.Multiple
                     For Each a_constraint As Constraint In CType(c, Constraint_Choice).Constraints
@@ -1091,7 +1095,14 @@ Namespace ArchetypeEditor.ADL_Classes
                         an_attribute = mAomFactory.create_c_attribute_single(objNode, _
                             openehr.base.kernel.Create.STRING.make_from_cil("item"))
 
-                        BuildElementOrReference(rmStruct.Children.items(0), an_attribute)
+                        Dim rmStr As RmStructure = rmStruct.Children.items(0)
+                        If rmStr.Type = StructureType.Element Or rmStr.Type = StructureType.Reference Then
+                            BuildElementOrReference(rmStr, an_attribute)
+                        ElseIf rmStr.Type = StructureType.Slot Then
+                            BuildSlot(an_attribute, rmStr)
+                        Else
+                            Debug.Assert(False, "Type not handled")
+                        End If
 
                     Case StructureType.List ' "LIST"
                         an_attribute = mAomFactory.create_c_attribute_multiple(objNode, _
@@ -1099,7 +1110,13 @@ Namespace ArchetypeEditor.ADL_Classes
                             MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
 
                         For Each rm In rmStruct.Children.items
-                            BuildElementOrReference(rm, an_attribute)
+                            If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
+                                BuildElementOrReference(rm, an_attribute)
+                            ElseIf rm.Type = StructureType.Slot Then
+                                BuildSlot(an_attribute, rm)
+                            Else
+                                Debug.Assert(False, "Type not handled")
+                            End If
                         Next
                     Case StructureType.Tree ' "TREE"
                         an_attribute = mAomFactory.create_c_attribute_multiple(objNode, _
@@ -1107,11 +1124,14 @@ Namespace ArchetypeEditor.ADL_Classes
                             MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
 
                         For Each rm In rmStruct.Children.items
-                            'If rm.TypeName = "Cluster" Then
                             If rm.Type = StructureType.Cluster Then
                                 BuildCluster(rm, an_attribute)
-                            Else
+                            ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
                                 BuildElementOrReference(rm, an_attribute)
+                            ElseIf rm.Type = StructureType.Slot Then
+                                BuildSlot(an_attribute, rm)
+                            Else
+                                Debug.Assert(False, "Type not handled")
                             End If
                         Next
                     Case StructureType.Table ' "TABLE"
@@ -1259,6 +1279,45 @@ Namespace ArchetypeEditor.ADL_Classes
                         Case Else
                             Debug.Assert(False)
                     End Select
+                Next
+            End If
+        End Sub
+
+        Protected Sub BuildRootElement(ByVal an_element As RmElement, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+
+            If an_element.HasNameConstraint Then
+                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+                an_attribute = mAomFactory.create_c_attribute_single(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("name"))
+                BuildText(an_attribute, an_element.NameConstraint)
+            End If
+            If an_element.Constraint.Type <> ConstraintType.Any Then
+                Dim value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+                value_attribute = mAomFactory.create_c_attribute_single(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("value"))
+                BuildElementConstraint(value_attribute, an_element.Constraint)
+            End If
+
+        End Sub
+
+        Protected Sub BuildRootCluster(ByVal Cluster As RmCluster, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+            ' Build a section, runtimename is already done
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+            ' CadlObj.SetObjectId(openehr.base.kernel.Create.STRING.make_from_cil(Rm.NodeId))
+
+            If Cluster.Children.Count > 0 Then
+                an_attribute = mAomFactory.create_c_attribute_multiple(CadlObj, openehr.base.kernel.Create.STRING.make_from_cil("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
+                For Each Rm As RmStructure In Cluster.Children.items
+                    If Rm.Type = StructureType.Cluster Then
+                        BuildCluster(Rm, an_attribute)
+                    ElseIf Rm.Type = StructureType.Element Or Rm.Type = StructureType.Reference Then
+                        BuildElementOrReference(Rm, an_attribute)
+                    ElseIf Rm.Type = StructureType.Slot Then
+                        BuildSlot(an_attribute, Rm)
+                    Else
+                        Debug.Assert(False, "Type not handled")
+                    End If
                 Next
             End If
         End Sub
@@ -1493,12 +1552,18 @@ Namespace ArchetypeEditor.ADL_Classes
                 Select Case cDefinition.Type
 
                     Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                        If adlArchetype.definition.any_allowed AndAlso cDefinition.Data.Count > 0 Then
+                        If adlArchetype.definition.any_allowed AndAlso CType(cDefinition, ArchetypeDefinition).Data.Count > 0 Then
                             'This can arise if the archetype has been saved with no children then
                             'items have been added later - this is percular to Tree, List and Table.
                             adlArchetype.definition.set_occurrences(MakeOccurrences(New RmCardinality(0)))
                         End If
                         BuildStructure(cDefinition, adlArchetype.definition)
+
+                    Case StructureType.Cluster
+                        BuildRootCluster(cDefinition, adlArchetype.definition)
+
+                    Case StructureType.Element
+                        BuildRootElement(cDefinition, adlArchetype.definition)
 
                     Case StructureType.SECTION
                         BuildRootSection(cDefinition, adlArchetype.definition)
@@ -1510,7 +1575,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
 
-                        For Each rm In cDefinition.Data
+                        For Each rm In CType(cDefinition, ArchetypeDefinition).Data
                             Select Case rm.Type
                                 Case StructureType.State
                                     BuildStructure(rm, adlArchetype.definition, "state")
@@ -1528,7 +1593,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, openehr.base.kernel.Create.STRING.make_from_cil("data"))
                         Try
-                            Dim rm_struct As RmStructureCompound = CType(cDefinition.Data.items(0), RmStructureCompound).Children.items(0)
+                            Dim rm_struct As RmStructureCompound = CType(CType(cDefinition, ArchetypeDefinition).Data.items(0), RmStructureCompound).Children.items(0)
 
                             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                             objNode = mAomFactory.create_c_complex_object_identified(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(rm_struct.Type)), openehr.base.kernel.Create.STRING.make_from_cil(rm_struct.NodeId))
@@ -1547,7 +1612,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         Dim rm_data As RmStructureCompound = Nothing
                         Dim rm_protocol As RmStructureCompound = Nothing
 
-                        For Each rm In cDefinition.Data
+                        For Each rm In CType(cDefinition, ArchetypeDefinition).Data
                             Select Case rm.Type
                                 'PROTOCOL
                                 Case StructureType.Protocol
@@ -1609,12 +1674,12 @@ Namespace ArchetypeEditor.ADL_Classes
                     Case StructureType.INSTRUCTION
                         BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
 
-                        BuildInstruction(cDefinition.Data)
+                        BuildInstruction(CType(cDefinition, ArchetypeDefinition).Data)
 
                     Case StructureType.ACTION
                         BuildSubjectOfData(CType(cDefinition, RmEntry).SubjectOfData, adlArchetype.definition)
 
-                        For Each rm In cDefinition.Data
+                        For Each rm In CType(cDefinition, ArchetypeDefinition).Data
                             Select Case rm.Type
                                 Case StructureType.ISM_TRANSITION
                                     BuildPathway(rm, adlArchetype.definition)
@@ -1682,6 +1747,10 @@ Namespace ArchetypeEditor.ADL_Classes
                     cDefinition = New RmTable(an_Archetype.definition, a_filemanager)
                 Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
                     cDefinition = New ADL_ENTRY(an_Archetype.definition, a_filemanager)
+                Case StructureType.Cluster
+                    cDefinition = New RmCluster(an_Archetype.definition, a_filemanager)
+                Case StructureType.Element
+                    cDefinition = New ADL_RmElement(an_Archetype.definition, a_filemanager)
                 Case Else
                     Debug.Assert(False)
             End Select
@@ -1734,6 +1803,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
                     cDefinition = New RmEntry(mArchetypeID.ReferenceModelEntity)
                     cDefinition.RootNodeId = adlArchetype.concept_code.to_cil
+                Case StructureType.Cluster
+                    cDefinition = New RmCluster(adlArchetype.concept_code.to_cil)
                 Case Else
                     Debug.Assert(False)
             End Select

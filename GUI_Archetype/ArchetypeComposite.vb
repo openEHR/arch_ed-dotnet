@@ -65,6 +65,18 @@ Public Class ArchetypeComposite
         Return s
     End Function
 
+    Public Overrides ReadOnly Property IsReference() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property HasReferences() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
     Public Overrides Function ToHTML(ByVal level As Integer) As String
         Dim s As String
         Dim a_text As String = "<tr>"

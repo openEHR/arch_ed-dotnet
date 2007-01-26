@@ -37,19 +37,24 @@ Public Class ListStructure
 
         Dim lvitem As ArchetypeListViewItem
 
-        For Each element As RmElement In rm.Children
+        For Each item As RmStructure In rm.Children
             ' have to create links to the new archetype here to maintain updates
-            lvitem = New ArchetypeListViewItem(element, mFileManager)
-            lvitem.ImageIndex = ImageIndexForConstraintType(lvitem.Item.Constraint.Type, element.isReference)
-            ''If lvItem.Item.Constraint.ConstraintType = "Ordinal" Then
-            'If lvItem.Item.Constraint.Type = ConstraintType.Ordinal Then
-            '    SetOrdinals(lvItem)
-            'End If
-            Me.lvList.Items.Add(lvitem)
-            If lvitem.Index = 0 Then
-                lvitem.Selected = True
-                lvitem.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
-            End If
+            Select Case item.Type
+                Case StructureType.Element
+                    Dim element As RmElement = CType(item, RmElement)
+                    lvitem = New ArchetypeListViewItem(element, mFileManager)
+                    'Sets selected if first in list
+                    lvitem.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.isReference, lvList.Items.Count = 0)
+                    Me.lvList.Items.Add(lvitem)
+                Case StructureType.Slot
+                    Dim slot As RmSlot = CType(item, RmSlot)
+                    lvitem = New ArchetypeListViewItem(slot, mFileManager)
+                    'Sets selected if first in list
+                    lvitem.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, lvList.Items.Count = 0)
+                    Me.lvList.Items.Add(lvitem)
+                Case Else
+                    Debug.Assert(False, "Type not handled")
+            End Select
         Next
     End Sub
 
@@ -187,21 +192,22 @@ Public Class ListStructure
         End Get
     End Property
 
-    Public Overrides ReadOnly Property Elements() As ArchetypeElement()
-        Get
-            Dim i As Integer
-            i = lvList.Items.Count
-            If i > 0 Then
-                Dim a_e(i) As ArchetypeElement
-                For i = 0 To lvList.Items.Count - 1
-                    a_e(i) = CType(lvList.Items(i), ArchetypeListViewItem).Item
-                Next
-                Return a_e
-            Else
-                Return Nothing
-            End If
-        End Get
-    End Property
+    'Public Overrides ReadOnly Property Elements() As ArchetypeElement()
+    '    Get
+    '        Dim i As Integer
+    '        i = lvList.Items.Count
+    '        If i > 0 Then
+    '            Dim a_e(i) As ArchetypeElement
+    '            For i = 0 To lvList.Items.Count - 1
+
+    '                a_e(i) = CType(lvList.Items(i), ArchetypeListViewItem).Item
+    '            Next
+    '            Return a_e
+    '        Else
+    '            Return Nothing
+    '        End If
+    '    End Get
+    'End Property
 
 
     Public Overrides Property Archetype() As RmStructureCompound
@@ -311,14 +317,18 @@ Public Class ListStructure
             Dim lvItem As ArchetypeListViewItem
 
             lvItem = CType(Me.lvList.SelectedItems(0), ArchetypeListViewItem)
-            ref = New RmReference(lvItem.Item.RM_Class)
-            ' record the presence of the reference so a delete can be safe
-            CType(lvItem.Item.RM_Class, RmElement).hasReferences = True
-            lvItem = New ArchetypeListViewItem(ref, mFileManager)
-            ' insert in the list
-            lvItem.ImageIndex = Me.ImageIndexForConstraintType(lvItem.Item.Constraint.Type, True)
-            Me.lvList.Items.Insert(lvList.SelectedIndices(0) + 1, lvItem)
-            mFileManager.FileEdited = True
+            If Not lvItem.Item.IsAnonymous Then
+                ref = New RmReference(CType(lvItem.Item, ArchetypeElement).RM_Class)
+                ' record the presence of the reference so a delete can be safe
+                CType(lvItem.Item.RM_Class, RmElement).hasReferences = True
+                lvItem = New ArchetypeListViewItem(ref, mFileManager)
+                ' insert in the list
+                lvItem.ImageIndex = Me.ImageIndexForConstraintType(CType(lvItem.Item, ArchetypeElement).Constraint.Type, True)
+                Me.lvList.Items.Insert(lvList.SelectedIndices(0) + 1, lvItem)
+                mFileManager.FileEdited = True
+            Else
+                Debug.Assert(False)
+            End If
         End If
 
     End Sub
@@ -328,12 +338,19 @@ Public Class ListStructure
     End Sub
 
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
-        Dim lvItem As New ArchetypeListViewItem(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
-        lvItem.Item.Constraint = a_constraint
-        Me.lvList.Items.Add(lvItem)
+        Dim lvItem As ArchetypeListViewItem
+
+        If a_constraint.Type = ConstraintType.Slot Then
+            Dim newSlot As New RmSlot(CType(a_constraint, Constraint_Slot).RM_ClassType)
+            lvItem = New ArchetypeListViewItem(newSlot, mFileManager)
+        Else
+            lvItem = New ArchetypeListViewItem(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
+            CType(lvItem.Item, ArchetypeElement).Constraint = a_constraint
+            lvItem.BeginEdit()
+        End If
         lvItem.ImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type, False, True)
+        Me.lvList.Items.Add(lvItem)
         mFileManager.FileEdited = True
-        lvItem.BeginEdit()
         If Not lvItem.Selected Then
             ' needed for first element in the list
             lvItem.Selected = True
@@ -365,9 +382,9 @@ Public Class ListStructure
 
                 ' if this is a reference then remove all items with nodeid
                 If lvItem.Item.HasReferences Then
-                    nodeid = lvItem.Item.NodeId
+                    nodeid = CType(lvItem.Item, ArchetypeElement).NodeId
                     For Each lvItem In lvList.Items
-                        If lvItem.Item.NodeId = nodeid Then
+                        If Not lvItem.Item.IsAnonymous AndAlso CType(lvItem.Item, ArchetypeElement).NodeId = nodeid Then
                             lvItem.Remove()
                         End If
                     Next
@@ -399,7 +416,7 @@ Public Class ListStructure
 
         text = text & new_line & (Space(3 * indentlevel) & "\cf2 Items\cf0  " & s & "\par")
         For Each lvItem In Me.lvList.Items
-            text = text & new_line & lvItem.Item.ToRichText(indentlevel + 1)
+            text &= new_line & lvItem.Item.ToRichText(indentlevel + 1)
         Next
 
         Return text
@@ -476,12 +493,12 @@ Public Class ListStructure
     End Sub
 
     Protected Overrides Sub RefreshIcons()
-        Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
 
-        If element.HasReferences Then
+        If mCurrentItem.HasReferences Then
+            Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
             For Each lvItem As ArchetypeListViewItem In lvList.Items
-                If lvItem.Item.NodeId = element.NodeId Then
-                    lvItem.ImageIndex = Me.ImageIndexForConstraintType(lvItem.Item.Constraint.Type, lvItem.Item.IsReference, lvItem.Selected)
+                If Not lvItem.Item.IsAnonymous AndAlso CType(lvItem.Item, ArchetypeElement).NodeId = element.NodeId Then
+                    lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item)
                 End If
             Next
         Else
@@ -491,9 +508,8 @@ Public Class ListStructure
                 End If
                 lvList.Items(0).Selected = True
             End If
-            CType(lvList.SelectedItems(0), ArchetypeListViewItem).ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, True)
+            CType(lvList.SelectedItems(0), ArchetypeListViewItem).ImageIndex = Me.ImageIndexForItem(mCurrentItem, True)
         End If
-
     End Sub
 
     Private Sub ContextMenuList_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuList.Popup
@@ -508,21 +524,25 @@ Public Class ListStructure
 
             lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
             Me.MenuRemoveItemAndReference.Text = lvItem.Text
-            'may be a reference and can't add a reference
-            'If (mFileManager.OntologyManager.NumberOfSpecialisations = 0) AndAlso (Not lvItem.Item.IsReference) Then
-            If Not lvItem.Item.IsReference Then
-                Me.MenuAddReference.Visible = True
-            End If
-            ' show specialisation if appropriate
-            i = OceanArchetypeEditor.Instance.CountInString(lvItem.Item.NodeId, ".")
 
-            Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+            'If it is an element and not a slot
+            If Not lvItem.Item.IsAnonymous Then
+                'may be a reference and can't add a reference
+                Dim element As ArchetypeElement = CType(lvItem.Item, ArchetypeElement)
+                If Not element.IsReference Then
+                    Me.MenuAddReference.Visible = True
+                End If
+                ' show specialisation if appropriate
+                i = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
 
-            If i < numberSpecialisations Then
-                Me.SpecialiseMenuItem.Visible = True
-            Else
-                If numberSpecialisations = 0 Or ((lvItem.Item.NodeId.StartsWith("at0.") Or (lvItem.Item.NodeId.IndexOf(".0.") > -1))) Then
-                    Me.MenuRemove.Visible = True
+                Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+
+                If i < numberSpecialisations Then
+                    Me.SpecialiseMenuItem.Visible = True
+                Else
+                    If numberSpecialisations = 0 Or ((element.NodeId.StartsWith("at0.") Or (element.NodeId.IndexOf(".0.") > -1))) Then
+                        Me.MenuRemove.Visible = True
+                    End If
                 End If
             End If
         End If
@@ -530,7 +550,6 @@ Public Class ListStructure
     End Sub
 
     Private Sub lvList_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvList.SelectedIndexChanged
-        Dim element As ArchetypeElement
         Dim lvItem As ArchetypeListViewItem
        
         If Me.lvList.Items.Count = 0 Then
@@ -542,13 +561,12 @@ Public Class ListStructure
             Me.MenuRemoveItemAndReference.Text = Me.lvList.SelectedItems(0).Text
             'Unselect the previous item
             For Each lvItem In Me.lvList.Items
-                lvItem.ImageIndex = Me.ImageIndexForConstraintType(lvItem.Item.Constraint.Type, lvItem.Item.IsReference)
+                lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item, False)
             Next
             lvItem = CType(Me.lvList.SelectedItems(0), ArchetypeListViewItem)
             'Force the change to selected image
-            element = lvItem.Item
-            lvItem.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, True)
-            SetCurrentItem(element)
+            lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item, True)
+            SetCurrentItem(lvItem.Item)
             If lvItem.Item.HasReferences Then
                 MenuRemoveItemAndReference.Text = MenuRemoveItemAndReference.Text & " [+]"
             End If
@@ -572,9 +590,12 @@ Public Class ListStructure
             Dim lvItem As ArchetypeListViewItem
             If Me.lvList.SelectedItems.Count > 0 Then
                 lvItem = CType(Me.lvList.SelectedItems(0), ArchetypeListViewItem)
-                i = OceanArchetypeEditor.Instance.CountInString(lvItem.Item.NodeId, ".")
-                If (i = mFileManager.OntologyManager.NumberOfSpecialisations And ((lvItem.Item.NodeId.StartsWith("at0.") Or (lvItem.Item.NodeId.IndexOf(".0.") > -1)))) Then
-                    Me.RemoveItemAndReferences(sender, e)
+                If lvItem.Item.RM_Class.Type = StructureType.Element Then
+                    Dim id As String = CType(lvItem.Item, ArchetypeElement).NodeId
+                    i = OceanArchetypeEditor.Instance.CountInString(id, ".")
+                    If (i = mFileManager.OntologyManager.NumberOfSpecialisations And ((id.StartsWith("at0.") Or (id.IndexOf(".0.") > -1)))) Then
+                        Me.RemoveItemAndReferences(sender, e)
+                    End If
                 End If
             End If
         End If
@@ -634,10 +655,17 @@ Public Class ListStructure
             list_item_dragged = mDragItem
             'ElseIf Not mDragArchetypeNode Is Nothing Then
         ElseIf Not mNewConstraint Is Nothing Then
-            Dim archetype_element As ArchetypeElement
-            archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
-            archetype_element.Constraint = mNewConstraint
-            list_item_dragged = New ArchetypeListViewItem(archetype_element)
+
+            If TypeOf mNewConstraint Is Constraint_Slot Then
+                Dim newSlot As New RmSlot(StructureType.Element)
+                list_item_dragged = New ArchetypeListViewItem(newSlot, mFileManager)
+            Else
+                Dim archetype_element As ArchetypeElement
+                archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
+                archetype_element.Constraint = mNewConstraint
+                list_item_dragged = New ArchetypeListViewItem(archetype_element)
+            End If
+            
         Else
             Debug.Assert(False, "No item dragged")
             mNewConstraint = Nothing

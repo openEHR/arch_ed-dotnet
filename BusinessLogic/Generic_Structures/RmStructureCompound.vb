@@ -126,6 +126,8 @@ Public Class RmStructureCompound
                             Case "C_COMPLEX_OBJECT"
                                 a_ComplexObject = CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                                 colChildren.Add(New ArchetypeEditor.ADL_Classes.ADL_RmElement(a_ComplexObject, a_filemanager))
+                            Case "ARCHETYPE_SLOT"
+                                colChildren.Add(New RmSlot(CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
                             Case "ARCHETYPE_INTERNAL_REF"
                                 colChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessReference(CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
                         End Select
@@ -146,7 +148,12 @@ Public Class RmStructureCompound
                 Case "name", "runtime_label" ' runtime_label is obsolete
                     mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "item"
-                    colChildren.Add(New ArchetypeEditor.ADL_Classes.ADL_RmElement(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
+                    Select Case CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil.ToUpperInvariant()
+                        Case "C_COMPLEX_OBJECT"
+                            colChildren.Add(New ArchetypeEditor.ADL_Classes.ADL_RmElement(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
+                        Case "ARCHETYPE_SLOT"
+                            colChildren.Add(New RmSlot(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                    End Select
             End Select
 
         Next
@@ -165,7 +172,7 @@ Public Class RmStructureCompound
 
             For i = 1 To an_attribute.children.count
                 Dim a_ComplexObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                Select Case CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil
+                Select Case CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil.ToUpperInvariant()
                     Case "C_COMPLEX_OBJECT"
                         a_ComplexObject = CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                         Dim structure_type As StructureType
@@ -178,6 +185,8 @@ Public Class RmStructureCompound
                             Case StructureType.Element
                                 colChildren.Add(New ArchetypeEditor.ADL_Classes.ADL_RmElement(a_ComplexObject, a_filemanager))
                         End Select
+                    Case "ARCHETYPE_SLOT"
+                        colChildren.Add(New RmSlot(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
                     Case "ARCHETYPE_INTERNAL_REF"
                         colChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessReference(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
                 End Select
@@ -299,6 +308,8 @@ Public Class RmStructureCompound
                             Select Case co.GetType.ToString.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                                 Case "xmlparser.c_complex_object"
                                     colChildren.Add(New ArchetypeEditor.XML_Classes.XML_RmElement(CType(co, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                                Case "xmlparser.archetype_slot"
+                                    colChildren.Add(New RmSlot(CType(co, XMLParser.ARCHETYPE_SLOT)))
                                 Case "xmlparser.archetype_internal_ref"
                                     colChildren.Add(ArchetypeEditor.XML_Classes.XML_Tools.ProcessReference(CType(co, XMLParser.ARCHETYPE_INTERNAL_REF)))
                             End Select
@@ -318,7 +329,13 @@ Public Class RmStructureCompound
                 Case "name", "runtime_label" ' runtime_label is obsolete
                     mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                 Case "item"
-                    colChildren.Add(New ArchetypeEditor.XML_Classes.XML_RmElement(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                    Dim co As XMLParser.C_OBJECT = an_attribute.children(0)
+                    Select Case co.GetType.ToString.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                        Case "xmlparser.c_complex_object"
+                            colChildren.Add(New ArchetypeEditor.XML_Classes.XML_RmElement(CType(co, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                        Case "xmlparser.archetype_slot"
+                            colChildren.Add(New RmSlot(CType(co, XMLParser.ARCHETYPE_SLOT)))
+                    End Select
             End Select
         Next
 
@@ -348,6 +365,8 @@ Public Class RmStructureCompound
                                 Case StructureType.Element
                                     colChildren.Add(New ArchetypeEditor.XML_Classes.XML_RmElement(a_ComplexObject, a_filemanager))
                             End Select
+                        Case "xmlparser.archetype_slot"
+                            colChildren.Add(New RmSlot(CType(cObject, XMLParser.ARCHETYPE_SLOT)))
                         Case "xmlparser.archetype_internal_ref"
                             colChildren.Add(ArchetypeEditor.XML_Classes.XML_Tools.ProcessReference(CType(cObject, XMLParser.ARCHETYPE_INTERNAL_REF)))
                     End Select

@@ -25,12 +25,12 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Me.Item = Value
         End Set
     End Property
-    Public ReadOnly Property IsReference() As Boolean
+    Public Overrides ReadOnly Property IsReference() As Boolean
         Get
             Return Me.Element.isReference
         End Get
     End Property
-    Public ReadOnly Property HasReferences() As Boolean
+    Public Overrides ReadOnly Property HasReferences() As Boolean
 
         Get
             Return Me.Element.hasReferences
@@ -292,6 +292,35 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     End Function
 
+    Private Function SlotToHTML(ByVal a_slot_constraint As Constraint_Slot) As String
+        Dim result As String = ""
+
+        If a_slot_constraint.hasSlots Then
+            If a_slot_constraint.IncludeAll Then
+                result &= Environment.NewLine & mFileManager.OntologyManager.GetOpenEHRTerm(628, "Include all") & "<br>"
+            ElseIf a_slot_constraint.Include.Count > 0 Then
+                result &= Environment.NewLine & mFileManager.OntologyManager.GetOpenEHRTerm(625, "Include") & ": <br><ul>"
+                For Each slot As String In a_slot_constraint.Include
+                    result &= Environment.NewLine & "<li>" & slot & "</li>"
+                Next
+                result &= Environment.NewLine & "</ul><br>"
+            End If
+            If a_slot_constraint.ExcludeAll Then
+                result &= Environment.NewLine & mFileManager.OntologyManager.GetOpenEHRTerm(629, "Exclude all") & "<br>"
+            ElseIf a_slot_constraint.Exclude.Count > 0 Then
+                result &= Environment.NewLine & mFileManager.OntologyManager.GetOpenEHRTerm(626, "Exclude") & ": <br><ul>"
+                For Each slot As String In a_slot_constraint.Exclude
+                    result &= Environment.NewLine & "<li>" & slot & "</li>"
+                Next
+                result &= Environment.NewLine & "</ul><br>"
+            End If
+        Else
+            result &= Environment.NewLine & mFileManager.OntologyManager.GetOpenEHRTerm(628, "Include all") & "<br>"
+        End If
+        result &= "<br>"
+        Return result
+    End Function
+
     Private Function IntervalQuantityToHTML(ByVal intervalQuantityConstraint As Constraint_Interval_Quantity) As String
         Dim s As String
 
@@ -411,7 +440,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 result &= ", " & AE_Constants.Instance.Lower & ": "
                 result &= DateTimeConstraintToRichText(CType(cidt.LowerLimit, Constraint_DateTime))
                 result &= "\par"
-                
+
             Case ConstraintType.Interval_Quantity
                 Dim ciq As Constraint_Interval_Count = CType(a_constraint, Constraint_Interval_Quantity)
                 result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": \par"
@@ -437,6 +466,30 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                     result &= " (" & mFileManager.OntologyManager.GetOpenEHRTerm(643, "Integral") & ")"
                 End If
 
+                result &= "\par"
+
+            Case ConstraintType.Slot
+                Dim cSlot As Constraint_Slot = CType(a_constraint, Constraint_Slot)
+                If cSlot.hasSlots Then
+                    If cSlot.IncludeAll Then
+                        result &= Environment.NewLine & Space(3 * level) & mFileManager.OntologyManager.GetOpenEHRTerm(628, "Include all") & "\par"
+                    ElseIf cSlot.Include.Count > 0 Then
+                        result &= Environment.NewLine & Space(3 * level) & mFileManager.OntologyManager.GetOpenEHRTerm(625, "Include") & ": \par"
+                        For Each slot As String In cSlot.Include
+                            result &= Environment.NewLine & Space(3 * (level + 1)) & slot & "\par"
+                        Next
+                    End If
+                    If cSlot.ExcludeAll Then
+                        result &= Environment.NewLine & Space(3 * level) & mFileManager.OntologyManager.GetOpenEHRTerm(629, "Exclude all") & "\par"
+                    ElseIf cSlot.Exclude.Count > 0 Then
+                        result &= Environment.NewLine & Space(3 * level) & mFileManager.OntologyManager.GetOpenEHRTerm(626, "Exclude") & ": \par"
+                        For Each slot As String In cSlot.Exclude
+                            result &= Environment.NewLine & Space(3 * (level + 1)) & slot & "\par"
+                        Next
+                    End If
+                Else
+                    result &= Environment.NewLine & Space(3 * level) & mFileManager.OntologyManager.GetOpenEHRTerm(628, "Include all") & "\par"
+                End If
                 result &= "\par"
 
             Case Else
@@ -554,6 +607,11 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 html_dt.HTML = ""
                 html_dt.ImageSource = "Images/multimedia.gif"
 
+            Case ConstraintType.Slot
+
+                html_dt.HTML = Environment.NewLine & SlotToHTML(CType(c, Constraint_Slot))
+                html_dt.ImageSource = "Images/slot.gif"
+
             Case Else
                 Debug.WriteLine(c.Type.ToString)
                 Debug.Assert(False, "Not handled")
@@ -608,7 +666,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Public Sub New(ByVal aText As String, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(aText)
         mFileManager = a_file_manager
-        Dim aTerm As RmTerm = mFilemanager.OntologyManager.AddTerm(aText)
+        Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(aText)
         Me.Element = New RmElement(aTerm.Code)
     End Sub
 

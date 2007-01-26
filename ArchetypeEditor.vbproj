@@ -96,6 +96,7 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
+    <Reference Include="XMLParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -438,6 +439,12 @@
     <Compile Include="Forms\ChoosePath.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\ChooseType.Designer.vb">
+      <DependentUpon>ChooseType.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ChooseType.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\ConstraintBindingForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -485,6 +492,9 @@
     </Compile>
     <Compile Include="GUI_Classes\Specialised_VB_classes\RichTextBoxPrintable.vb">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Structure_Controls\ElementOnly.vb">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GUI_Classes\Structure_Controls\EntryStructure.vb">
       <SubType>UserControl</SubType>
@@ -647,6 +657,10 @@
     <EmbeddedResource Include="Forms\ChoosePath.resx">
       <DependentUpon>ChoosePath.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChooseType.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ChooseType.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConstraintBindingForm.resx">
       <DependentUpon>ConstraintBindingForm.vb</DependentUpon>
     </EmbeddedResource>
@@ -673,6 +687,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Specialised_VB_classes\RichTextBoxPrintable.resx">
       <DependentUpon>RichTextBoxPrintable.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Structure_Controls\ElementOnly.resx">
+      <DependentUpon>ElementOnly.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Structure_Controls\EntryStructure.resx">
       <DependentUpon>EntryStructure.vb</DependentUpon>

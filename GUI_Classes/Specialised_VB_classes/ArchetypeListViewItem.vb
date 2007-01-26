@@ -18,98 +18,29 @@ Option Strict On
 
 Public Class ArchetypeListViewItem : Inherits ListViewItem
 
-    Private mArchetypeElement As ArchetypeElement
+    Private mArchetypeNode As ArchetypeNode
 
-    Public ReadOnly Property Item() As ArchetypeElement
+    Public ReadOnly Property Item() As ArchetypeNode
         Get
-            Debug.Assert(Not mArchetypeElement Is Nothing)
-            Return mArchetypeElement
+            Debug.Assert(Not mArchetypeNode Is Nothing)
+            Return mArchetypeNode
         End Get
     End Property
     Public Shadows Property Text() As String
         Get
-            Return mArchetypeElement.Text
+            Return mArchetypeNode.Text
         End Get
         Set(ByVal Value As String)
             MyBase.Text = Value
-            mArchetypeElement.Text = Value
+            mArchetypeNode.Text = Value
         End Set
     End Property
 
-    'Private ReadOnly Property RuntimeNameText() As String
-    '    Get
-    '        Return mArchetypeElement.RuntimeNameText
-    '    End Get
-    'End Property
-
-    'Private ReadOnly Property IsReference() As Boolean
-    '    Get
-    '        Return mArchetypeElement.IsReference
-    '    End Get
-    'End Property
-
-    'Private ReadOnly Property HasReferences() As Boolean
-    '    Get
-    '        Return mArchetypeElement.HasReferences
-    '    End Get
-    'End Property
-
-    'Private Property Description() As String
-    '    Get
-    '        Return mArchetypeElement.Description
-    '    End Get
-    '    Set(ByVal Value As String)
-    '        mArchetypeElement.Description = Value
-    '    End Set
-    'End Property
-
-    'Private ReadOnly Property RM_Class() As RmStructure
-    '    Get
-    '        Return mArchetypeElement.RM_Class
-    '    End Get
-    'End Property
-
-    'Private Property Constraint() As Constraint
-    '    Get
-    '        Return mArchetypeElement.Constraint
-    '    End Get
-    '    Set(ByVal Value As Constraint)
-    '        mArchetypeElement.Constraint = Value
-    '    End Set
-    'End Property
-
-    'Private Property Occurrences() As RmCardinality
-    '    Get
-    '        Return mArchetypeElement.Occurrences
-    '    End Get
-    '    Set(ByVal Value As RmCardinality)
-    '        mArchetypeElement.Occurrences = Value
-    '    End Set
-    'End Property
-
-    'Private ReadOnly Property NodeId() As String
-    '    Get
-    '        Return mArchetypeElement.NodeId
-    '    End Get
-    'End Property
-
-    'Private ReadOnly Property TypeName() As String
-    '    Get
-    '        '' has to be an element as it is in a list
-    '        'Return "mElement"
-    '        Return mArchetypeElement.RM_Class.Type.ToString
-    '    End Get
-    'End Property
-
-    'Private ReadOnly Property DataType() As String
-    '    Get
-    '        Return mArchetypeElement.DataType
-    '    End Get
-    'End Property
+    
 
     Public Sub Translate()
-        mArchetypeElement.Translate()
-        MyBase.Text = mArchetypeElement.Text
+        mArchetypeNode.Translate()
+        MyBase.Text = mArchetypeNode.Text
     End Sub
 
     Public Function Copy() As ArchetypeListViewItem
@@ -117,14 +48,16 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
     End Function
 
     Public Sub Specialise()
-        mArchetypeElement.Specialise()
-        MyBase.Text = mArchetypeElement.Text
+        If TypeOf mArchetypeNode Is ArchetypeElement Then
+            CType(mArchetypeNode, ArchetypeElement).Specialise()
+            MyBase.Text = mArchetypeNode.Text
+        End If
     End Sub
 
 
     Sub New(ByVal aText As String, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(aText)
-        mArchetypeElement = New ArchetypeElement(aText, a_file_manager)
+        mArchetypeNode = New ArchetypeElement(aText, a_file_manager)
     End Sub
 
     Sub New(ByVal el As RmElement, ByVal a_file_manager As FileManagerLocal)
@@ -133,15 +66,19 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
         Dim aTerm As RmTerm = a_file_manager.OntologyManager.GetTerm(el.NodeId)
         MyBase.Text = aTerm.Text
 
-        mArchetypeElement = New ArchetypeElement(el, a_file_manager)
+        mArchetypeNode = New ArchetypeElement(el, a_file_manager)
 
     End Sub
 
-    Sub New(ByVal el As ArchetypeElement)
-        MyBase.New(el.Text)
+    Sub New(ByVal slot As RmSlot, ByVal a_file_manager As FileManagerLocal)
+        MyBase.New()
+        MyBase.Text = a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
+        mArchetypeNode = New ArchetypeNodeAnonymous(slot)
+    End Sub
 
-        mArchetypeElement = el
-
+    Sub New(ByVal an_archetype_node As ArchetypeNode)
+        MyBase.New(an_archetype_node.Text)
+        mArchetypeNode = an_archetype_node
     End Sub
 
 

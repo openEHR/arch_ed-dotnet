@@ -83,6 +83,8 @@ Public Class RmSlot
                 mSlotConstraint.RM_ClassType = StructureType.Table
             Case "CLUSTER"
                 mSlotConstraint.RM_ClassType = StructureType.Cluster
+            Case "ELEMENT"
+                mSlotConstraint.RM_ClassType = StructureType.Element
         End Select
 
         If an_archetype_slot.has_includes Then
@@ -142,6 +144,8 @@ Public Class RmSlot
                 mSlotConstraint.RM_ClassType = StructureType.Table
             Case "CLUSTER"
                 mSlotConstraint.RM_ClassType = StructureType.Cluster
+            Case "ELEMENT"
+                mSlotConstraint.RM_ClassType = StructureType.Element
         End Select
 
         If (Not an_archetype_slot.includes Is Nothing) AndAlso (an_archetype_slot.includes.Length > 0) Then

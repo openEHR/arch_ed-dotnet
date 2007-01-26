@@ -836,21 +836,26 @@ Public Class TableStructure
     End Sub
 
     Private Sub dgGrid_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles dgGrid.DragDrop
-        Dim table_archetype As ArchetypeElement
+        Dim table_archetype As ArchetypeNode
 
         If Not mNewConstraint Is Nothing Then
             Dim new_row As DataRow
             Dim a_cell As DataGridCell
 
-            table_archetype = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
-            table_archetype.Constraint = mNewConstraint
+            If TypeOf mNewConstraint Is Constraint_Slot Then
+                Dim newSlot As New RmSlot(StructureType.Element)
+                table_archetype = New ArchetypeListViewItem(newSlot, mFileManager)
+            Else
 
+                table_archetype = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
+                CType(table_archetype, ArchetypeElement).Constraint = mNewConstraint
+            End If
             mCurrentItem = Nothing
             mIsLoading = True
             new_row = mArchetypeTable.NewRow
             'Change Sam Heard 2004-06-11
             'Change to use constraint.type
-            new_row(0) = Me.ImageIndexForConstraintType(table_archetype.Constraint.Type, table_archetype.IsReference)
+            new_row(0) = Me.ImageIndexForItem(table_archetype)
             new_row(1) = table_archetype.Text
             new_row(2) = table_archetype
             mArchetypeTable.Rows.Add(new_row)

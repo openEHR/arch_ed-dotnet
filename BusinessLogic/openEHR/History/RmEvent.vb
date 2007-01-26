@@ -342,46 +342,30 @@ Class RmEvent
 
         For Each an_attribute In ObjNode.attributes
 
-            Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+            Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
                 Case "name"
                     mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                 Case "offset"
-                    Dim d As New Duration
-                    Dim offset As XMLParser.C_PRIMITIVE_OBJECT
-                    Dim duration As XMLParser.C_DURATION
-
-                    offset = an_attribute.children(0)
-                    duration = CType(offset.item, XMLParser.C_DURATION)
-
-                    If duration.pattern Is Nothing Then
-                        'cannot cope with ranges of duration at present in the editor
-                        d.ISO_duration = duration.range.maximum
-                    Else
-                        d.ISO_duration = duration.pattern
-                    End If
-
-                    Me.Offset = d.GUI_duration
-                    Me.OffsetUnits = d.ISO_Units
+                    Try
+                        Dim d As Duration = _
+                            ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
+                        Me.Offset = d.GUI_duration
+                        Me.OffsetUnits = d.ISO_Units
+                    Catch e As Exception
+                        MessageBox.Show(String.Format("Error: Event[{0}]/offset attribute - {1}", Me.NodeId, e.Message))
+                    End Try
 
                 Case "width"
-                    Dim d As New Duration
-                    Dim width As XMLParser.C_PRIMITIVE_OBJECT
-
                     Debug.Assert(mType = StructureType.IntervalEvent)
 
-                    width = an_attribute.children(0)
-                    If Not width Is Nothing Then
-                        Dim durationConstraint As XMLParser.C_DURATION = _
-                            CType(width.item, XMLParser.C_DURATION)
-                        If Not durationConstraint.range Is Nothing Then
-                            'ToDo: deal with genuine range as now max = min only
-                            d.ISO_duration = durationConstraint.range.maximum
-                        ElseIf Not durationConstraint.pattern Is Nothing Then 'obsolete (error in previous archetypes)
-                            d.ISO_duration = durationConstraint.pattern
-                        End If
+                    Try
+                        Dim d As Duration = _
+                            ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
                         Me.Width = d.GUI_duration
                         Me.WidthUnits = d.ISO_Units
-                    End If
+                    Catch e As Exception
+                        MessageBox.Show(String.Format("Error: Event[{1}]/width attribute - {0}", Me.NodeId, e.Message))
+                    End Try
 
                 Case "math_function"
                     Debug.Assert(mType = StructureType.IntervalEvent)

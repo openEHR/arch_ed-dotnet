@@ -116,7 +116,7 @@ Public Class OccurrencesPanel
         '
         'gbOccurrences
         '
-        Me.gbOccurrences.Location = New System.Drawing.Point(0, 40)
+        Me.gbOccurrences.Location = New System.Drawing.Point(0, 20)
         Me.gbOccurrences.Name = "gbOccurrences"
         Me.gbOccurrences.Size = New System.Drawing.Size(376, 48)
         Me.gbOccurrences.TabIndex = 1
@@ -296,7 +296,7 @@ Public Class OccurrencesPanel
         ' Set for cardinality if appropriate
         If mIncludeOrdered Then
             Me.Height = gbOccurrences.Height + 40
-            gbOccurrences.Text = Filemanager.GetOpenEhrTerm(437, "Items")
+            gbOccurrences.Text = AE_Constants.Instance.Cardinality
             Me.cbOrdered.Visible = True
         Else
             Me.Size = gbOccurrences.Size
@@ -451,8 +451,11 @@ Public Class OccurrencesPanel
                 mIsLoading = False
             End If
             mCardinality.MinCount = Me.numMin.Value
-            If Me.numMax.Value <= Me.numMin.Value Then
+            If Me.numMax.Value < Me.numMin.Value Then
+                'Protect max val being changed if unbounded
+                mIsLoading = Me.cbUnbounded.Checked
                 Me.numMax.Value = Me.numMin.Value
+                mIsLoading = False
             End If
         End If
     End Sub
