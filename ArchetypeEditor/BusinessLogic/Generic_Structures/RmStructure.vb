@@ -56,7 +56,7 @@ Public Enum StructureType
 End Enum
 
 Public Class RmStructure
-    Implements ArcheTypeDefintionBasic
+    Implements ArcheTypeDefinitionBasic
 
     '  maps to C_OBJECT in ADL
     Protected sNodeId As String
@@ -64,12 +64,12 @@ Public Class RmStructure
     Protected mRunTimeConstraint As Constraint_Text
     Protected mType As StructureType
 
-    Public Overridable ReadOnly Property Type() As StructureType Implements ArcheTypeDefintionBasic.Type
+    Public Overridable ReadOnly Property Type() As StructureType Implements ArcheTypeDefinitionBasic.Type
         Get
             Return mType
         End Get
     End Property
-    Public Property NameConstraint() As Constraint_Text Implements ArcheTypeDefintionBasic.NameConstraint
+    Public Property NameConstraint() As Constraint_Text Implements ArcheTypeDefinitionBasic.NameConstraint
         Get
             If mRunTimeConstraint Is Nothing Then
                 mRunTimeConstraint = New Constraint_Text
@@ -80,7 +80,7 @@ Public Class RmStructure
             mRunTimeConstraint = Value
         End Set
     End Property
-    Public Property HasNameConstraint() As Boolean Implements ArcheTypeDefintionBasic.hasNameConstraint
+    Public Property HasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.hasNameConstraint
         Get
             Return Not mRunTimeConstraint Is Nothing
         End Get
@@ -94,7 +94,7 @@ Public Class RmStructure
             End If
         End Set
     End Property
-    Public Property NodeId() As String Implements ArcheTypeDefintionBasic.RootNodeId
+    Public Property NodeId() As String Implements ArcheTypeDefinitionBasic.RootNodeId
         Get
             Return sNodeId
         End Get
@@ -122,7 +122,11 @@ Public Class RmStructure
 
     Sub New(ByRef Archetype As Archetype)
         ' For building new parse tree - and a root structure
-        Archetype.Definition.Data.Add(Me)
+        If Archetype.Definition.Type <> StructureType.Element Then
+            CType(Archetype.Definition, ArchetypeDefinition).Data.Add(Me)
+        Else
+            Debug.Assert(False, "??")
+        End If
     End Sub
 
     Sub New(ByVal a_RmStructure As RmStructure)

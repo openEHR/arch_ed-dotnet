@@ -57,7 +57,19 @@ Public Class ArchetypeView
 
         For Each lvitem As ArchetypeListViewItem In Items
             If ((lvitem.Item.IsMandatory) Or (Not mandatory_only)) Then
-                view.Controls.Add(ElementView(lvitem.Item, a_filemanager))
+                Select Case lvitem.Item.RM_Class.Type
+                    Case StructureType.Element, StructureType.Reference
+                        view.Controls.Add(ElementView(CType(lvitem.Item, ArchetypeElement), a_filemanager))
+                    Case StructureType.Slot
+                        Dim panel As New Windows.Forms.Panel
+                        Dim lbl As New Windows.Forms.Label
+                        lbl.Text = lvitem.Text
+                        panel.Controls.Add(lbl)
+                        view.Controls.Add(panel)
+                    Case Else
+                        Debug.Assert(False, "Type not handled")
+                End Select
+
             End If
         Next
 

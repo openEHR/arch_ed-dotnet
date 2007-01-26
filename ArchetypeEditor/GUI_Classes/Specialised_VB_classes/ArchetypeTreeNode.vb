@@ -120,8 +120,8 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Private Sub SetImageIndex()
         Select Case mArchetypeNode.RM_Class.Type
             Case StructureType.Cluster
-                MyBase.ImageIndex = 60
-                MyBase.SelectedImageIndex = 61
+                MyBase.ImageIndex = 64
+                MyBase.SelectedImageIndex = 65
             Case StructureType.SECTION
                 MyBase.ImageIndex = 1
                 MyBase.SelectedImageIndex = 3
@@ -191,8 +191,8 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         'Me.Item.Occurrences = el.Occurrences
     End Sub
 
-    Sub New(ByVal a_slot As RmSlot)
-        MyBase.New(a_slot.SlotConstraint.RM_ClassType.ToString)
+    Sub New(ByVal a_slot As RmSlot, ByVal a_file_manager As FileManagerLocal)
+        MyBase.New(a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(a_slot.SlotConstraint.RM_ClassType), a_slot.SlotConstraint.RM_ClassType.ToString))
         mArchetypeNode = New ArchetypeNodeAnonymous(a_slot)
     End Sub
 

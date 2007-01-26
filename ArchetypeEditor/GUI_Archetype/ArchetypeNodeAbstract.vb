@@ -64,6 +64,10 @@ Public MustInherit Class ArchetypeNodeAbstract
             Return mItem.NameConstraint
         End Get
     End Property
+
+    Public MustOverride ReadOnly Property IsReference() As Boolean Implements ArchetypeNode.IsReference
+    Public MustOverride ReadOnly Property HasReferences() As Boolean Implements ArchetypeNode.HasReferences
+
     Public Property Occurrences() As RmCardinality Implements ArchetypeNode.Occurrences
         Get
             Return mItem.Occurrences

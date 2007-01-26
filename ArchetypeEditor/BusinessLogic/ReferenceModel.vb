@@ -253,7 +253,7 @@ Public Class ReferenceModel
                     Case StructureType.List 'openEHR
                         mStructureClass = Parent
                         Select Case Child
-                            Case StructureType.Element, StructureType.Reference
+                            Case StructureType.Element, StructureType.Reference, StructureType.Slot
                                 Return True
                         End Select
                     Case StructureType.Tree, StructureType.Cluster 'openEHR
@@ -261,7 +261,7 @@ Public Class ReferenceModel
                             mStructureClass = Parent
                         End If
                         Select Case Child
-                            Case StructureType.Element, StructureType.Reference, StructureType.Cluster
+                            Case StructureType.Element, StructureType.Reference, StructureType.Cluster, StructureType.Slot
                                 Return True
                         End Select
                     Case StructureType.Table 'openEHR
@@ -306,13 +306,13 @@ Public Class ReferenceModel
                             mStructureClass = Parent
                         End If
                         Select Case Child
-                            Case StructureType.Element, StructureType.Reference, StructureType.Cluster
+                            Case StructureType.Element, StructureType.Reference, StructureType.Cluster, StructureType.Slot
                                 Return True
                         End Select
                     Case StructureType.List, StructureType.Single
                         mStructureClass = Parent
                         Select Case Child
-                            Case StructureType.Element, StructureType.Reference
+                            Case StructureType.Element, StructureType.Reference, StructureType.Slot
                                 Return True
                         End Select
                 End Select
@@ -472,7 +472,7 @@ Public Class ReferenceModel
     Public Shared Function ValidArchetypeDefinitions() As StructureType()
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
-                Dim s(10) As StructureType
+                Dim s(12) As StructureType
                 s(0) = StructureType.OBSERVATION
                 s(1) = StructureType.EVALUATION
                 s(2) = StructureType.INSTRUCTION
@@ -484,6 +484,8 @@ Public Class ReferenceModel
                 s(8) = StructureType.Tree
                 s(9) = StructureType.Table
                 s(10) = StructureType.ADMIN_ENTRY
+                s(11) = StructureType.Cluster
+                s(12) = StructureType.Element
                 Return s
             Case ReferenceModelType.CEN_EHR, ReferenceModelType.HL7_CDA
                 Dim s(2) As StructureType

@@ -19,7 +19,7 @@ Option Explicit On
 Public Class SimpleStructure
     Inherits EntryStructure
     Private mElement As ArchetypeElement
-    Private mLoading As Boolean
+    Private mIsLoading As Boolean
     Private mOKtoEditSpecialisation As Boolean
 
 
@@ -44,6 +44,7 @@ Public Class SimpleStructure
         InitializeComponent()
         'Add any initialization after the InitializeComponent() call
         mFileManager.FileEdited = True
+
     End Sub
 
     Sub New(ByVal rm As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)
@@ -53,7 +54,7 @@ Public Class SimpleStructure
 
         Dim element As RmElement
 
-        mLoading = True
+        mIsLoading = True
         element = rm.Children.FirstElementNode
 
         If Not element Is Nothing Then
@@ -63,8 +64,10 @@ Public Class SimpleStructure
             Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
             ' can't add any more elements to simple
             SetCurrentItem(mElement) ' does not raise an event during construction
+        Else
+            ButAddElement.Visible = True
         End If
-        mLoading = False
+        mIsLoading = False
     End Sub
 
 
@@ -146,7 +149,7 @@ Public Class SimpleStructure
 
     Public Overrides Property Archetype() As RmStructureCompound
         Get
-            Dim rm As New RmStructureCompound(mNodeID, StructureType.Single)
+            Dim rm As New RmStructureCompound(mNodeId, StructureType.Single)
             rm.Occurrences = New RmCardinality(1, 1)
             rm.Children.Add(mElement.RM_Class)
             Return rm
@@ -154,9 +157,9 @@ Public Class SimpleStructure
         Set(ByVal Value As RmStructureCompound)
             Dim element As RmElement
 
-            mNodeID = Value.NodeId
+            mNodeId = Value.NodeId
             element = Value.Children.FirstElementNode
-            mLoading = True
+            mIsLoading = True
             If Not element Is Nothing Then
                 mElement = New ArchetypeElement(element, mFileManager)
                 Me.txtSimple.Text = mElement.Text
@@ -164,11 +167,12 @@ Public Class SimpleStructure
                 Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
             Else
                 mElement = Nothing
+                Me.ButAddElement.Visible = True
                 Me.txtSimple.Text = AE_Constants.Instance.DragDropHere
                 Me.txtSimple.Enabled = False
                 Me.PictureBoxSimple.Image = Nothing
             End If
-            mLoading = False
+            mIsLoading = False
             mFileManager.FileEdited = True
             SetCurrentItem(mElement)
         End Set
@@ -187,7 +191,8 @@ Public Class SimpleStructure
     End Property
 
     Public Overrides Sub Reset()
-        Me.txtSimple.Text = AE_Constants.Instance.DragDropHere
+        Me.txtSimple.Text = ""
+        Me.ButAddElement.Visible = True
         Me.txtSimple.Enabled = False
         Me.PictureBoxSimple.Image = Nothing
     End Sub
@@ -213,11 +218,12 @@ Public Class SimpleStructure
     End Sub
 
     Protected Overrides Sub SetUpAddElementMenu()
-        Debug.Assert(False, "should not be called")
+        mConstraintMenu.Show(ButAddElement, New System.Drawing.Point(5, 5))
     End Sub
 
 
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
+        mIsLoading = True
         mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
         mElement.Constraint = a_constraint
         mElement.Occurrences.MaxCount = 1
@@ -228,18 +234,21 @@ Public Class SimpleStructure
         Me.txtSimple.SelectAll()
         mFileManager.FileEdited = True
         SetCurrentItem(Element)
+        Me.ButAddElement.Visible = False
+        mIsLoading = False
     End Sub
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs)
         If MessageBox.Show(AE_Constants.Instance.Remove & mElement.Text, _
             AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
             MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-            mLoading = True
+            mIsLoading = True
             mElement = Nothing
-            Me.txtSimple.Text = AE_Constants.Instance.DragDropHere
+            Me.txtSimple.Text = ""
+            Me.ButAddElement.Visible = True
             Me.txtSimple.Enabled = False
             Me.PictureBoxSimple.Image = Nothing
-            mLoading = False
+            mIsLoading = False
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -315,7 +324,7 @@ Public Class SimpleStructure
 
 
     Private Sub txtSimple_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSimple.TextChanged
-        If Not mLoading Then
+        If Not mIsLoading Then
             Dim i As Integer
             Debug.Assert(Not mCurrentItem.IsAnonymous)
             i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
@@ -345,10 +354,11 @@ Public Class SimpleStructure
         If Not mElement Is Nothing Then
             SetCurrentItem(mElement)
         Else
-            mLoading = True
-            Me.txtSimple.Text = AE_Constants.Instance.DragDropHere
+            mIsLoading = True
+            Me.txtSimple.Text = ""
+            ButAddElement.Visible = True
             Me.txtSimple.Enabled = False
-            mLoading = False
+            mIsLoading = False
         End If
         ' add the change structure menu from EntryStructure
         Me.ContextMenuSimple.MenuItems.Add(menuChangeStructure)
@@ -363,10 +373,10 @@ Public Class SimpleStructure
         If Not mNewConstraint Is Nothing Then
             mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
             mElement.Constraint = mNewConstraint
-            mLoading = True
+            mIsLoading = True
             txtSimple.Text = mElement.Text
             txtSimple.Enabled = True
-            mLoading = False
+            mIsLoading = False
 
         Else
             Me.txtSimple.Enabled = False

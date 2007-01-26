@@ -19,7 +19,7 @@ Option Strict On
 'Need to use inheritance here to allow use of the interface on RmStructure
 ' and RmStructureCompound
 
-Public Interface ArcheTypeDefintionBasic
+Public Interface ArcheTypeDefinitionBasic
     ReadOnly Property Type() As StructureType
     Property RootNodeId() As String
     Property NameConstraint() As Constraint_Text
@@ -27,7 +27,7 @@ Public Interface ArcheTypeDefintionBasic
 End Interface
 
 Public Interface ArchetypeDefinition
-    Inherits ArcheTypeDefintionBasic
+    Inherits ArcheTypeDefinitionBasic
 
     Property Data() As Children
     Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure
@@ -55,7 +55,7 @@ Public MustInherit Class ArchetypeDefinitionAbstract
             mChildren = Value
         End Set
     End Property
-    Public Property hasNameConstraint() As Boolean Implements ArcheTypeDefintionBasic.hasNameConstraint
+    Public Property hasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.hasNameConstraint
         Get
             Return Not mRuntimeConstraint Is Nothing
         End Get

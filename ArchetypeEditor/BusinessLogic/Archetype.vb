@@ -18,7 +18,7 @@
 Public MustInherit Class Archetype
     'Protected adlEngine As openehr.openehr.am.archetype.constraint_model.AdlEngine
 
-    Protected cDefinition As ArchetypeDefinition
+    Protected cDefinition As ArcheTypeDefinitionBasic
     Protected mDescription As ArchetypeDescription
     Protected sParentArchetypeID As String
     Protected sConceptCode As New String("at0000")
@@ -81,11 +81,11 @@ Public MustInherit Class Archetype
             iVersion = Value
         End Set
     End Property
-    Public Property Definition() As ArchetypeDefinition
+    Public Property Definition() As ArcheTypeDefinitionBasic
         Get
             Return cDefinition
         End Get
-        Set(ByVal value As ArchetypeDefinition)
+        Set(ByVal value As ArcheTypeDefinitionBasic)
             cDefinition = value
             mSynchronised = False
         End Set
@@ -115,6 +115,12 @@ Public MustInherit Class Archetype
                 cDefinition = New RmStructureCompound("?", mArchetypeID.ReferenceModelEntity)
             Case StructureType.Table
                 cDefinition = New RmTable("?")
+            Case StructureType.Cluster
+                cDefinition = New RmCluster("?")
+            Case StructureType.Element
+                cDefinition = New RmElement("?")
+            Case Else
+                Debug.Assert(False, String.Format("Type not handled: {0}", mArchetypeID.ReferenceModelEntity))
         End Select
         ReferenceModel.SetArchetypedClass(mArchetypeID.ReferenceModelEntity)
 
@@ -124,8 +130,8 @@ Public MustInherit Class Archetype
 
     Public Sub ResetDefinitions()
         Debug.Assert(Not cDefinition Is Nothing)
-        If Not cDefinition Is Nothing Then
-            cDefinition.Data.Clear()
+        If Not cDefinition Is Nothing AndAlso TypeOf (cDefinition) Is ArchetypeDefinition Then
+            CType(cDefinition, ArchetypeDefinition).Data.Clear()
         End If
         'Not archetype is not synchronised with definition
         mSynchronised = False

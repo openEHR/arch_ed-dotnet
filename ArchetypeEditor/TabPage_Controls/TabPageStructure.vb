@@ -26,6 +26,8 @@ Public Class TabPageStructure
     Private mIsState As Boolean
     Private mEmbeddedAllowed As Boolean = True
     Private mEmbeddedLoaded As Boolean = False
+    Private mIsCluster As Boolean = False
+    Private mIsElement As Boolean = False
     Private mValidStructureClasses As StructureType()
     Private WithEvents mArchetypeControl As EntryStructure
     Private WithEvents mSplitter As Splitter
@@ -635,7 +637,12 @@ Public Class TabPageStructure
             If mArchetypeControl Is Nothing Then
                 Return Nothing
             Else
-                Return mArchetypeControl.Archetype
+                If mIsElement Then
+                    Return CType(mArchetypeControl, ElementOnly).Archetype
+                Else
+                    Return mArchetypeControl.Archetype
+                End If
+
             End If
         End If
     End Function
@@ -658,6 +665,17 @@ Public Class TabPageStructure
 
     Public Sub Reset()
         mArchetypeControl.Reset()
+    End Sub
+
+    Public Sub ProcessStructure(ByVal an_element As RmElement)
+
+        mIsLoading = True
+        mIsElement = True
+        Me.panelEntry.Visible = False
+        Me.PanelStructure.Visible = True
+
+        Me.ArchetypeDisplay = New ElementOnly(an_element, mFileManager)
+        mIsLoading = False
     End Sub
 
     Public Sub ProcessStructure(ByVal a_compound_structure As RmStructureCompound)
@@ -687,6 +705,10 @@ Public Class TabPageStructure
 
                     Me.ArchetypeDisplay = New TableStructure(CType(a_compound_structure, RmTable), mFileManager)
 
+                Case StructureType.Cluster
+
+                    Me.ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
+
                 Case Else
                     Debug.Assert(False)
             End Select
@@ -710,10 +732,76 @@ Public Class TabPageStructure
         End If
     End Sub
 
+    Public Sub SetAsElement(ByVal a_node_id As String)
+
+        mIsElement = True
+        Me.panelEntry.Visible = False
+
+        If mIsEmbedded Then
+            If mIsLoading Then
+                If mEmbeddedSlot Is Nothing Then
+                    mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Element)
+                End If
+            Else
+                ' have to have a new slot if change the structure
+                mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Element)
+            End If
+            Me.PanelStructure.Visible = True
+            Me.panelDisplay.Visible = False
+            Me.ShowDetailPanel(mEmbeddedSlot, New EventArgs)
+        Else
+            ' ensure the structure component is visible
+            If Me.panelDisplay.Visible = False Then
+                Me.panelDisplay.Visible = True
+            End If
+
+            Dim newElementOnly As New ElementOnly(New RmElement(mFileManager.Archetype.ConceptCode), mFileManager)
+            Me.ArchetypeDisplay = newElementOnly
+            Me.PanelDetails.Visible = False
+        End If
+
+        Me.PanelStructure.Visible = True
+
+    End Sub
+
+    Public Sub SetAsCluster(ByVal a_node_id As String)
+
+        mIsCluster = True
+        Me.panelEntry.Visible = False
+
+        If mIsEmbedded Then
+            If mIsLoading Then
+                If mEmbeddedSlot Is Nothing Then
+                    mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Cluster)
+                End If
+            Else
+                ' have to have a new slot if change the structure
+                mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Cluster)
+            End If
+            Me.PanelStructure.Visible = True
+            Me.panelDisplay.Visible = False
+            Me.ShowDetailPanel(mEmbeddedSlot, New EventArgs)
+        Else
+            ' ensure the structure component is visible
+            If Me.panelDisplay.Visible = False Then
+                Me.panelDisplay.Visible = True
+            End If
+
+            Dim newTreeStructure As New TreeStructure(New RmCluster(mFileManager.Archetype.ConceptCode), mFileManager)
+            Me.ArchetypeDisplay = newTreeStructure
+            Me.PanelDetails.Visible = False
+        End If
+
+        Me.PanelStructure.Visible = True
+
+    End Sub
+
     Private Sub comboStructure_selectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboStructure.SelectedIndexChanged
 
         Dim entry_structure As EntryStructure ' User control to provide the list or whatever
         Dim chosen_structure As StructureType
+
+        Debug.Assert(mIsCluster = False)
 
         Debug.Assert(Not mValidStructureClasses Is Nothing)  ' This should be set to populate the list
 

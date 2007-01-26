@@ -67,12 +67,13 @@ Namespace ArchetypeEditor.ADL_Classes
             Select Case assert.expression.generating_type.to_cil
                 Case "EXPR_BINARY_OPERATOR"
                     Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression
-                    Debug.Assert(expr.left_operand.as_string.to_cil = "domain_concept")
-                    Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil.Trim("/".ToCharArray())
+                    If expr.left_operand.as_string.to_cil = "concept" Then
+                        Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil.Trim("/".ToCharArray())
+                    End If
                 Case Else
                     Debug.Assert(False)
-                    Return "????"
             End Select
+            Return "????"
         End Function
 
         Friend Shared Function GetDuration(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As Duration

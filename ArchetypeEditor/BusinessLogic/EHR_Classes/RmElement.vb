@@ -18,6 +18,7 @@ Option Strict On
 
 Public Class RmElement
     Inherits RmStructure
+
     Private colReferences As New System.Collections.Specialized.StringCollection
     Protected cConstraint As Constraint
     Protected boolIsReference As Boolean

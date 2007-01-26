@@ -100,6 +100,7 @@ Public Class AE_Constants
     Private mTrue As String = "True"
     Private mFalse As String = "False"
     Private mChangeDataType As String = "Change data type"
+    Private mCardinality As String = "Cardinality"
 
     Friend ReadOnly Property Lower() As String
         Get
@@ -131,6 +132,12 @@ Public Class AE_Constants
     Friend ReadOnly Property DragDropHere() As String
         Get
             Return mDragDropHere
+        End Get
+    End Property
+
+    Friend ReadOnly Property Cardinality() As String
+        Get
+            Return mCardinality
         End Get
     End Property
 
@@ -678,6 +685,7 @@ Public Class AE_Constants
         mTrue = TerminologyServer.Instance.RubricForCode(159, Language)
         mFalse = TerminologyServer.Instance.RubricForCode(160, Language)
         mChangeDataType = TerminologyServer.Instance.RubricForCode(60, Language)
+        mCardinality = TerminologyServer.Instance.RubricForCode(437, Language)
     End Sub
 End Class
 

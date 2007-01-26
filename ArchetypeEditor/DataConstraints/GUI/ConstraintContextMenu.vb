@@ -138,10 +138,10 @@ Public Class ConstraintContextMenu
         mMI_MultiMedia.Visible = True
         mMI_URI.Visible = True
         mMI_Ratio.Visible = True
+        mMI_Slot.Visible = True
 
         '==========================
         'Rest are not usual datatypes
-        mMI_Slot.Visible = False
         mMI_QuantityUnit.Visible = False
     End Sub
 
@@ -273,8 +273,6 @@ Public Class ConstraintContextMenu
         Me.MenuItems.Add(mMI_Ratio)
         AddHandler mMI_Ratio.Click, AddressOf InternalProcessMenuItemClick
 
-
-
         mMI_Slot = New MenuItem(AE_Constants.Instance.Slot)
         Me.MenuItems.Add(mMI_Slot)
         AddHandler mMI_Slot.Click, AddressOf InternalProcessMenuItemClick
@@ -287,6 +285,9 @@ Public Class ConstraintContextMenu
     End Sub
 
 
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
 End Class
 
 '

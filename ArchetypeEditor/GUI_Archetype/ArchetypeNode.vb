@@ -22,6 +22,8 @@ Public Interface ArchetypeNode
     ReadOnly Property IsMandatory() As Boolean
     Property Occurrences() As RmCardinality
     ReadOnly Property IsAnonymous() As Boolean
+    ReadOnly Property IsReference() As Boolean
+    ReadOnly Property HasReferences() As Boolean
     Sub Translate()
     Function ToRichText(ByVal level As Integer) As String
     Function ToHTML(ByVal level As Integer) As String

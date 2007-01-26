@@ -24,6 +24,7 @@ Public Class TabPageSection
     Private mRootOfComposition As Boolean = False
     Private mFileManager As FileManagerLocal
     Private mNoHitNode As Boolean = False
+    Private mCardinalityControl As OccurrencesPanel
 
 
 #Region " Windows Form Designer generated code "
@@ -38,6 +39,7 @@ Public Class TabPageSection
 
         If Not Me.DesignMode Then
             mFileManager = Filemanager.Master
+            SetCardinality(StructureType.SECTION)
         End If
 
     End Sub
@@ -68,8 +70,6 @@ Public Class TabPageSection
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents butListUp As System.Windows.Forms.Button
     Friend WithEvents butListDown As System.Windows.Forms.Button
-    Friend WithEvents cbFixed As System.Windows.Forms.CheckBox
-    Friend WithEvents cbOrdered As System.Windows.Forms.CheckBox
     Friend WithEvents ButAddSubsection As System.Windows.Forms.Button
     Friend WithEvents butRemoveSection As System.Windows.Forms.Button
     Friend WithEvents PanelSectionConstraint As System.Windows.Forms.Panel
@@ -77,10 +77,8 @@ Public Class TabPageSection
     Friend WithEvents HelpProviderSection As System.Windows.Forms.HelpProvider
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageSection))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageSection))
         Me.PanelTop = New System.Windows.Forms.Panel
-        Me.cbFixed = New System.Windows.Forms.CheckBox
-        Me.cbOrdered = New System.Windows.Forms.CheckBox
         Me.ButAddSubsection = New System.Windows.Forms.Button
         Me.butRemoveSection = New System.Windows.Forms.Button
         Me.butListUp = New System.Windows.Forms.Button
@@ -95,35 +93,16 @@ Public Class TabPageSection
         Me.PanelLeft = New System.Windows.Forms.Panel
         Me.PanelSectionConstraint = New System.Windows.Forms.Panel
         Me.HelpProviderSection = New System.Windows.Forms.HelpProvider
-        Me.PanelTop.SuspendLayout()
         Me.PanelLeft.SuspendLayout()
         Me.SuspendLayout()
         '
         'PanelTop
         '
-        Me.PanelTop.Controls.Add(Me.cbFixed)
-        Me.PanelTop.Controls.Add(Me.cbOrdered)
         Me.PanelTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelTop.Location = New System.Drawing.Point(0, 0)
         Me.PanelTop.Name = "PanelTop"
-        Me.PanelTop.Size = New System.Drawing.Size(800, 40)
+        Me.PanelTop.Size = New System.Drawing.Size(800, 69)
         Me.PanelTop.TabIndex = 0
-        '
-        'cbFixed
-        '
-        Me.cbFixed.Location = New System.Drawing.Point(248, 8)
-        Me.cbFixed.Name = "cbFixed"
-        Me.cbFixed.Size = New System.Drawing.Size(88, 24)
-        Me.cbFixed.TabIndex = 37
-        Me.cbFixed.Text = "Fixed"
-        '
-        'cbOrdered
-        '
-        Me.cbOrdered.Location = New System.Drawing.Point(138, 8)
-        Me.cbOrdered.Name = "cbOrdered"
-        Me.cbOrdered.Size = New System.Drawing.Size(102, 24)
-        Me.cbOrdered.TabIndex = 36
-        Me.cbOrdered.Text = "Ordered"
         '
         'ButAddSubsection
         '
@@ -167,9 +146,9 @@ Public Class TabPageSection
         'Splitter1
         '
         Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Splitter1.Location = New System.Drawing.Point(360, 40)
+        Me.Splitter1.Location = New System.Drawing.Point(360, 69)
         Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(8, 376)
+        Me.Splitter1.Size = New System.Drawing.Size(8, 347)
         Me.Splitter1.TabIndex = 2
         Me.Splitter1.TabStop = False
         '
@@ -178,11 +157,13 @@ Public Class TabPageSection
         Me.tvSection.AllowDrop = True
         Me.tvSection.ContextMenu = Me.ContextMenuTree
         Me.tvSection.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tvSection.ImageIndex = 0
         Me.tvSection.ImageList = Me.ilSection
         Me.tvSection.LabelEdit = True
-        Me.tvSection.Location = New System.Drawing.Point(32, 40)
+        Me.tvSection.Location = New System.Drawing.Point(32, 69)
         Me.tvSection.Name = "tvSection"
-        Me.tvSection.Size = New System.Drawing.Size(328, 376)
+        Me.tvSection.SelectedImageIndex = 0
+        Me.tvSection.Size = New System.Drawing.Size(328, 347)
         Me.tvSection.TabIndex = 3
         '
         'ContextMenuTree
@@ -202,9 +183,12 @@ Public Class TabPageSection
         '
         'ilSection
         '
-        Me.ilSection.ImageSize = New System.Drawing.Size(20, 20)
         Me.ilSection.ImageStream = CType(resources.GetObject("ilSection.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ilSection.TransparentColor = System.Drawing.Color.Transparent
+        Me.ilSection.Images.SetKeyName(0, "")
+        Me.ilSection.Images.SetKeyName(1, "")
+        Me.ilSection.Images.SetKeyName(2, "")
+        Me.ilSection.Images.SetKeyName(3, "")
         '
         'PanelLeft
         '
@@ -213,17 +197,17 @@ Public Class TabPageSection
         Me.PanelLeft.Controls.Add(Me.ButAddSubsection)
         Me.PanelLeft.Controls.Add(Me.butRemoveSection)
         Me.PanelLeft.Dock = System.Windows.Forms.DockStyle.Left
-        Me.PanelLeft.Location = New System.Drawing.Point(0, 40)
+        Me.PanelLeft.Location = New System.Drawing.Point(0, 69)
         Me.PanelLeft.Name = "PanelLeft"
-        Me.PanelLeft.Size = New System.Drawing.Size(32, 376)
+        Me.PanelLeft.Size = New System.Drawing.Size(32, 347)
         Me.PanelLeft.TabIndex = 4
         '
         'PanelSectionConstraint
         '
         Me.PanelSectionConstraint.Dock = System.Windows.Forms.DockStyle.Right
-        Me.PanelSectionConstraint.Location = New System.Drawing.Point(368, 40)
+        Me.PanelSectionConstraint.Location = New System.Drawing.Point(368, 69)
         Me.PanelSectionConstraint.Name = "PanelSectionConstraint"
-        Me.PanelSectionConstraint.Size = New System.Drawing.Size(432, 376)
+        Me.PanelSectionConstraint.Size = New System.Drawing.Size(432, 347)
         Me.PanelSectionConstraint.TabIndex = 5
         '
         'TabPageSection
@@ -239,7 +223,6 @@ Public Class TabPageSection
         Me.Name = "TabPageSection"
         Me.HelpProviderSection.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(800, 416)
-        Me.PanelTop.ResumeLayout(False)
         Me.PanelLeft.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -256,12 +239,13 @@ Public Class TabPageSection
         End Set
     End Property
 
+
 #Region "Functions"
 
 
     Private Sub TreeToRichText(ByVal TreeNodes As TreeNodeCollection, ByRef text As IO.StringWriter, ByVal level As Integer)
         Dim n As ArchetypeTreeNode
-        
+
         For Each n In TreeNodes
             text.WriteLine(n.Item.ToRichText(level))
             If n.GetNodeCount(False) > 0 Then
@@ -274,11 +258,8 @@ Public Class TabPageSection
         Dim s As String
 
         s = ""
-        If Me.cbOrdered.Checked Then
+        If mCardinalityControl.cbOrdered.Checked Then
             s = "ordered"
-        End If
-        If Me.cbFixed.Checked Then
-            s = s & " fixed"
         End If
 
         s = s.Trim
@@ -348,17 +329,18 @@ Public Class TabPageSection
         End If
 
         If SectNode.Children.Count > 0 Then
-            SectNode.Children.Cardinality.Ordered = Me.cbOrdered.Checked
-            If Me.cbFixed.Checked Then
-                Dim i As Integer
-                For Each rm As RmStructure In SectNode.Children
-                    If rm.Occurrences.IsUnbounded Then
-                        Return SectNode
-                    End If
-                    i += rm.Occurrences.MaxCount
-                Next
-                SectNode.Children.Cardinality.MaxCount = i
-            End If
+            SectNode.Children.Cardinality = mCardinalityControl.Cardinality
+            'Changed SRH Jan 2007 - added cardinality control
+            'If Me.cbFixed.Checked Then
+            '    Dim i As Integer
+            '    For Each rm As RmStructure In SectNode.Children
+            '        If rm.Occurrences.IsUnbounded Then
+            '            Return SectNode
+            '        End If
+            '        i += rm.Occurrences.MaxCount
+            '    Next
+            '    SectNode.Children.Cardinality.MaxCount = i
+            'End If
         End If
         Return SectNode
 
@@ -370,13 +352,9 @@ Public Class TabPageSection
     Public Sub ProcessSection(ByVal a_section As RmSection)
         Dim rm_node As Object
 
+        SetCardinality(a_section)
+
         Me.tvSection.Nodes.Clear()
-
-        If Not a_section.Children.Cardinality.IsUnbounded Then
-            Me.cbFixed.Checked = True
-        End If
-
-        Me.cbOrdered.Checked = a_section.Children.Cardinality.Ordered
 
         If mRootOfComposition Then
 
@@ -417,11 +395,29 @@ Public Class TabPageSection
     End Sub
 
     Public Sub TranslateGUI()
-        Me.cbFixed.Text = Filemanager.GetOpenEhrTerm(136, "Fixed")
-        Me.cbOrdered.Text = Filemanager.GetOpenEhrTerm(162, "Ordered")
+        mCardinalityControl.TranslateGUI()
     End Sub
 
 #End Region
+
+    Protected Sub SetCardinality(ByVal rm As RmStructureCompound)
+        If mCardinalityControl Is Nothing Then
+            SetCardinality(rm.Type)
+        End If
+        mCardinalityControl.Cardinality = rm.Children.Cardinality
+    End Sub
+
+    Protected Sub SetCardinality(ByVal a_structure_type As StructureType)
+        mCardinalityControl = New OccurrencesPanel(mFileManager)
+        mCardinalityControl.LocalFileManager = mFileManager
+        If a_structure_type = StructureType.Single Then
+            mCardinalityControl.SetSingle = True
+        Else
+            mCardinalityControl.IsContainer = True
+            mCardinalityControl.Location = New Drawing.Point(0, 0)
+            Me.PanelTop.Controls.Add(mCardinalityControl)
+        End If
+    End Sub
 
     Private Sub tvSection_AfterLabelEdit(ByVal sender As System.Object, ByVal e As System.Windows.Forms.NodeLabelEditEventArgs) Handles tvSection.AfterLabelEdit
         ' add the update of the Term and description
@@ -486,11 +482,11 @@ Public Class TabPageSection
     End Sub
 
 
-    Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbOrdered.Click
+    Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         mFileManager.FileEdited = True
     End Sub
 
-    Private Sub cbFixed_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFixed.Click
+    Private Sub cbFixed_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         mFileManager.FileEdited = True
     End Sub
 
@@ -545,7 +541,7 @@ Public Class TabPageSection
         tvNode.EnsureVisible()
         Me.tvSection.SelectedNode = tvNode
 
-        
+
     End Sub
 
     Sub AddSection(ByVal sender As Object, ByVal e As EventArgs)
@@ -619,7 +615,7 @@ Public Class TabPageSection
             Next
             Return cm
         End If
-        
+
     End Function
 
     Private Sub ContextMenuTree_Popup(ByVal sender As System.Object, ByVal e As EventArgs) Handles ContextMenuTree.Popup

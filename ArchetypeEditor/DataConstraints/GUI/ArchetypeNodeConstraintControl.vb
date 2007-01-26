@@ -264,6 +264,13 @@ Public Class ArchetypeNodeConstraintControl
                 mConstraintControl = Nothing
             End If
 
+            'Hide Occurrences if an Element archetype
+            If mFileManager.Archetype.RmEntity = StructureType.Element Then
+                Me.PanelGenericConstraint.Visible = False
+            Else
+                Me.PanelGenericConstraint.Visible = True
+            End If
+
             Select Case aArchetypeNode.RM_Class.Type
                 Case StructureType.Element, StructureType.Reference
 
