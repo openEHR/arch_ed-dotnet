@@ -18,7 +18,7 @@ Option Explicit On
 
 Public Class SimpleStructure
     Inherits EntryStructure
-    Private mElement As ArchetypeElement
+    Private mElement As ArchetypeNode
     Private mIsLoading As Boolean
     Private mOKtoEditSpecialisation As Boolean
 
@@ -52,16 +52,20 @@ Public Class SimpleStructure
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
-        Dim element As RmElement
+        Dim element As RmStructure
 
         mIsLoading = True
-        element = rm.Children.FirstElementNode
+        element = rm.Children.FirstElementOrElementSlot
 
         If Not element Is Nothing Then
-            mElement = New ArchetypeElement(element, mFileManager)
+            If element.Type = StructureType.Element Then
+                mElement = New ArchetypeElement(element, mFileManager)
+            Else
+                mElement = New ArchetypeNodeAnonymous(element)
+            End If
             Me.txtSimple.Text = mElement.Text
             Me.txtSimple.Enabled = True
-            Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
+            Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForItem(mElement))
             ' can't add any more elements to simple
             SetCurrentItem(mElement) ' does not raise an event during construction
         Else
@@ -155,16 +159,20 @@ Public Class SimpleStructure
             Return rm
         End Get
         Set(ByVal Value As RmStructureCompound)
-            Dim element As RmElement
+            Dim element As RmStructure
 
             mNodeId = Value.NodeId
-            element = Value.Children.FirstElementNode
+            element = Value.Children.FirstElementOrElementSlot
             mIsLoading = True
             If Not element Is Nothing Then
-                mElement = New ArchetypeElement(element, mFileManager)
+                If element.Type = StructureType.Element Then
+                    mElement = New ArchetypeElement(element, mFileManager)
+                Else
+                    mElement = New ArchetypeNodeAnonymous(element)
+                End If
                 Me.txtSimple.Text = mElement.Text
                 Me.txtSimple.Enabled = True
-                Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
+                Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForItem(mElement))
             Else
                 mElement = Nothing
                 Me.ButAddElement.Visible = True
@@ -205,11 +213,13 @@ Public Class SimpleStructure
     End Sub
 
     Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
-        If MessageBox.Show(AE_Constants.Instance.Specialise & " " & txtSimple.Text, AE_Constants.Instance.MessageBoxCaption, _
-            MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-            mElement.Specialise()
-            Me.txtSimple.Text = mElement.Text
-            mFileManager.FileEdited = True
+        If TypeOf mElement Is ArchetypeElement Then
+            If MessageBox.Show(AE_Constants.Instance.Specialise & " " & txtSimple.Text, AE_Constants.Instance.MessageBoxCaption, _
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                CType(mElement, ArchetypeElement).Specialise()
+                Me.txtSimple.Text = mElement.Text
+                mFileManager.FileEdited = True
+            End If
         End If
     End Sub
 
@@ -224,16 +234,22 @@ Public Class SimpleStructure
 
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
         mIsLoading = True
-        mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
-        mElement.Constraint = a_constraint
+
+        If a_constraint.Type = ConstraintType.Slot Then
+            Dim newSlot As New RmSlot(CType(a_constraint, Constraint_Slot).RM_ClassType)
+            mElement = New ArchetypeNodeAnonymous(newSlot)
+        Else
+            mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
+            CType(mElement, ArchetypeElement).Constraint = a_constraint
+        End If
         mElement.Occurrences.MaxCount = 1
         Me.txtSimple.Text = mElement.Text
         Me.txtSimple.Enabled = True
-        Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
+        Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForItem(mElement))
         Me.txtSimple.Focus()
         Me.txtSimple.SelectAll()
         mFileManager.FileEdited = True
-        SetCurrentItem(Element)
+        SetCurrentItem(mElement)
         Me.ButAddElement.Visible = False
         mIsLoading = False
     End Sub
@@ -371,24 +387,13 @@ Public Class SimpleStructure
     ByVal e As System.Windows.Forms.DragEventArgs) Handles txtSimple.DragDrop
         
         If Not mNewConstraint Is Nothing Then
-            mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
-            mElement.Constraint = mNewConstraint
-            mIsLoading = True
-            txtSimple.Text = mElement.Text
-            txtSimple.Enabled = True
-            mIsLoading = False
-
+            AddNewElement(mNewConstraint)
+            mNewConstraint = Nothing
         Else
             Me.txtSimple.Enabled = False
             Debug.Assert(False, "No item dragged")
             Return
         End If
-        Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
-        SetCurrentItem(mElement)
-
-        mFileManager.FileEdited = True
-
-        mNewConstraint = Nothing
     End Sub
 
     Private Sub txtSimple_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles txtSimple.DragEnter

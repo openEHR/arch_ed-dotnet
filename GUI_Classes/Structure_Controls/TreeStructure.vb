@@ -296,11 +296,11 @@ Public Class TreeStructure
 
                 Case StructureType.Element, StructureType.Reference
                     Dim ElementNode As RmElement = CType(tvNode.Item.RM_Class, RmElement)
-                    'If ElementNode.DataType = "Ordinal" Then
-                    '    Debug.Assert(False, "TODO")
-                    '    'GetOrdinals(tvNode)
-                    'End If
                     rm.Children.Add(ElementNode)
+
+                Case StructureType.Slot
+                    Dim slotNode As RmSlot = CType(tvNode.Item.RM_Class, RmSlot)
+                    rm.Children.Add(SlotNode)
 
                 Case Else
                     Debug.Assert(False)
@@ -363,13 +363,21 @@ Public Class TreeStructure
                         tvTree.Nodes.Add(node)
                     Next
                 Case StructureType.Single ' "SINGLE"
-                    Dim element As RmElement
-                    element = Value.Children.FirstElementNode
-                    Dim node As New ArchetypeTreeNode(element, mFileManager)
-                    node.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
-                    node.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
+                    Dim element As RmStructure
+                    element = Value.Children.FirstElementOrElementSlot
+                    Dim node As ArchetypeTreeNode
+
+                    If element.Type = StructureType.Element Then
+                        node = New ArchetypeTreeNode(CType(element, RmElement), mFileManager)
+                    Else
+                        node = New ArchetypeTreeNode(CType(element, RmSlot), mFileManager)
+                    End If
+
+                    node.ImageIndex = Me.ImageIndexForItem(node.Item)
+                    node.SelectedImageIndex = Me.ImageIndexForItem(node.Item, True)
 
                     tvTree.Nodes.Add(node)
+
                 Case StructureType.Table ' "TABLE"
                     If Value.Children.items(0).Type = StructureType.Cluster Then
                         Dim clust As RmCluster
@@ -426,8 +434,15 @@ Public Class TreeStructure
                     tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
                     ParentTreeNode.Nodes.Add(tvNode)
 
+                Case StructureType.Slot
+                    Dim tvNode As New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
+                    Dim slot As ArchetypeNodeAnonymous = CType(tvNode.Item, ArchetypeNodeAnonymous)
+                    tvNode.ImageIndex = Me.ImageIndexForItem(slot)
+                    tvNode.SelectedImageIndex = Me.ImageIndexForItem(slot, True)
+                    ParentTreeNode.Nodes.Add(tvNode)
+
                 Case Else
-                    Debug.Assert(False)
+                    Debug.Assert(False, "Type not handled")
             End Select
 
         Next

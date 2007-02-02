@@ -64,8 +64,10 @@ Public Class CollectionOfSlots
         End Set
     End Property
 
-    Public Sub Remove(ByVal SlotConstraint As String)
-        Me.List.Remove(SlotConstraint)
+    Public Sub Remove(ByVal a_slot_constraint As String)
+        If Me.List.Contains(a_slot_constraint) Then
+            Me.List.Remove(a_slot_constraint)
+        End If
     End Sub
 
 End Class

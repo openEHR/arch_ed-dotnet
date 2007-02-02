@@ -281,11 +281,11 @@ Public Class TabPageSection
 
             If TypeOf rm Is RmSection Then
                 Dim n As ArchetypeTreeNode
-                n = New ArchetypeTreeNode(CType(rm, RmSection))
+                n = New ArchetypeTreeNode(CType(rm, RmSection), mFileManager)
                 tvNodes.Add(n)
                 ProcessSection(rm, n.Nodes)
             ElseIf TypeOf rm Is RmSlot Then
-                Dim n As New ArchetypeTreeNode(CType(rm, RmSlot))
+                Dim n As New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
                 tvNodes.Add(n)
             End If
         Next
@@ -371,7 +371,7 @@ Public Class TabPageSection
                     Me.tvSection.Nodes.Add(n)
                     ProcessSection(rm_node, n.Nodes)
                 ElseIf TypeOf rm_node Is RmSlot Then
-                    Dim n As New ArchetypeTreeNode(CType(rm_node, RmSlot))
+                    Dim n As New ArchetypeTreeNode(CType(rm_node, RmSlot), mFileManager)
                     Me.tvSection.Nodes.Add(n)
                 Else
                     Debug.Assert(False, "Type not catered for")

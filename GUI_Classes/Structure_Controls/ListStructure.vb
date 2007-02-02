@@ -224,6 +224,7 @@ Public Class ListStructure
             Return RM_S
         End Get
         Set(ByVal Value As RmStructureCompound)
+            Dim aStructure As RmStructure
             ' handles conversion from other structures
             Me.lvList.Items.Clear()
             mNodeId = Value.NodeId
@@ -231,18 +232,16 @@ Public Class ListStructure
                 Case StructureType.Tree ' "TREE"
                     ProcessTreeToList(Value)
                 Case StructureType.Single ' "SINGLE"
-                    Dim item As New ArchetypeListViewItem(Value.Children.FirstElementNode, mFileManager)
-                    lvList.Items.Add(item)
+                    aStructure = Value.Children.FirstElementOrElementSlot
+                    AddRmStructureToList(aStructure)
                 Case StructureType.Table ' "TABLE"
                     If Value.Children.items(0).Type = StructureType.Cluster Then
                         Dim clust As RmCluster
-                        Dim element As RmElement
-
+                        
                         clust = CType(Value.Children.items(0), RmCluster)
 
-                        For Each element In clust.Children
-                            Dim item As New ArchetypeListViewItem(element, mFileManager)
-                            lvList.Items.Add(item)
+                        For Each aStructure In clust.Children
+                            AddRmStructureToList(aStructure)
                         Next
                     Else
                         Debug.Assert(False, "Not expected type")
@@ -254,17 +253,24 @@ Public Class ListStructure
         End Set
     End Property
 
+    Private Sub AddRmStructureToList(ByVal a_structure As RmStructure)
+        If a_structure.Type = StructureType.Element Then
+            lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmElement), mFileManager))
+        ElseIf a_structure.Type = StructureType.Slot Then
+            lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmSlot), mFileManager))
+        Else
+            Debug.Assert(False, "Type not handled")
+        End If
+    End Sub
+
 
     Private Sub ProcessTreeToList(ByVal rm As RmStructureCompound)
-        Dim a_rm_structure As RmStructure
-
-        For Each a_rm_structure In rm.Children
+         For Each aStructure As RmStructure In rm.Children
             'If a_rm_structure.TypeName = "Cluster" Then
-            If a_rm_structure.Type = StructureType.Cluster Then
-                ProcessTreeToList(CType(a_rm_structure, RmStructureCompound))
+            If aStructure.Type = StructureType.Cluster Then
+                ProcessTreeToList(CType(aStructure, RmStructureCompound))
             Else
-                Dim item As New ArchetypeListViewItem(CType(a_rm_structure, RmElement), mFileManager)
-                lvList.Items.Add(item)
+                AddRmStructureToList(aStructure)
             End If
         Next
 

@@ -584,6 +584,11 @@ Public Class AE_Constants
 
     ' AE_Constants Singleton
     Private Shared mInstance As AE_Constants
+    Public Shared ReadOnly Property HasInstance() As Boolean
+        Get
+            Return Not mInstance Is Nothing
+        End Get
+    End Property
     Public Shared ReadOnly Property Instance() As AE_Constants
         Get
             If mInstance Is Nothing Then
