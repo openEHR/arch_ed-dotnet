@@ -13,6 +13,7 @@
 '	last_change: "$LastChangedDate$"
 '
 '
+Option Strict On
 
 Public Class TableStructure
     Inherits EntryStructure
@@ -48,30 +49,36 @@ Public Class TableStructure
         Dim d_row As DataRow
 
         If mRow.Children.Count > 0 Then
-            Dim element As ArchetypeElement
+            Dim rmStr As RmStructure
+            Dim archNode As ArchetypeNode = Nothing
 
             Me.butChangeDataType.Visible = True
 
             If rm.isRotated Then
                 For i As Integer = 0 To mRow.Children.Count - 1
                     'set column heading as always rotated - at the moment
-                    element = New ArchetypeElement(mRow.Children.items(i), mFileManager)
-                    If i < rm.NumberKeyColumns Then
-                        mKeyColumns.Add(element)
-                        For Each t As String In CType(element.Constraint, Constraint_Text).AllowableValues.Codes
-                            AddColumn(mFileManager.OntologyManager.GetTerm(t))
-                        Next
+                    rmStr = mRow.Children.items(i)
+                    If rmStr.Type = StructureType.Element Then
+                        archNode = New ArchetypeElement(CType(rmStr, RmElement), mFileManager)
+                    ElseIf rmStr.Type = StructureType.Slot Then
+                        archNode = New ArchetypeNodeAnonymous(CType(rmStr, RmSlot))
+                    Else
+                        Debug.Assert(False, "Type not handled")
+                        Throw New Exception("Table row of invalid type")
+                    End If
+
+                    If i < rm.NumberKeyColumns AndAlso TypeOf archNode Is ArchetypeElement Then
+                        AddColumnElement(CType(archNode, ArchetypeElement))
                     Else
                         d_row = mArchetypeTable.NewRow
-                        d_row.Item(0) = Me.ImageIndexForConstraintType(element.Constraint.Type, _
-                            CType(element.RM_Class, RmElement).isReference)
-                        d_row.Item(1) = element.Text
-                        d_row.Item(2) = element
+                        d_row.Item(0) = Me.ImageIndexForItem(archNode)
+                        d_row.Item(1) = archNode.Text
+                        d_row.Item(2) = archNode
                         mArchetypeTable.Rows.Add(d_row)
                     End If
                 Next
                 If mArchetypeTable.Rows.Count > 0 Then
-                    SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeElement))
+                    SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeNode))
                 End If
             Else
                 Debug.Assert(False, "Unrotated tables are not handled at present")
@@ -84,7 +91,7 @@ Public Class TableStructure
         End If
 
         If Me.dgGrid.VisibleRowCount > 0 Then
-            SetCurrentItem(mArchetypeTable.Rows(0).Item(2))
+            SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeNode))
         End If
         mIsLoading = False
 
@@ -182,21 +189,28 @@ Public Class TableStructure
 
 #End Region
 
-    Public Overrides ReadOnly Property Elements() As ArchetypeElement()
-        Get
-            Dim i As Integer
-            i = mKeyColumns.Count
-            If i > 0 Then
-                Dim a_e(i) As ArchetypeElement
-                For i = 1 To mKeyColumns.Count
-                    a_e(i) = CType(mKeyColumns.Item(i), ArchetypeElement)
-                Next
-                Return a_e
-            Else
-                Return Nothing
-            End If
-        End Get
-    End Property
+    Private Sub AddColumnElement(ByVal an_element As ArchetypeElement)
+        mKeyColumns.Add(an_element)
+        For Each t As String In CType(an_element.Constraint, Constraint_Text).AllowableValues.Codes
+            AddColumn(mFileManager.OntologyManager.GetTerm(t))
+        Next
+    End Sub
+
+    'Public Overrides ReadOnly Property Elements() As ArchetypeElement()
+    '    Get
+    '        Dim i As Integer
+    '        i = mKeyColumns.Count
+    '        If i > 0 Then
+    '            Dim a_e(i) As ArchetypeElement
+    '            For i = 1 To mKeyColumns.Count
+    '                a_e(i) = CType(mKeyColumns.Item(i), ArchetypeElement)
+    '            Next
+    '            Return a_e
+    '        Else
+    '            Return Nothing
+    '        End If
+    '    End Get
+    'End Property
 
     Private Sub TableStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' set the variable in the base class
@@ -251,21 +265,22 @@ Public Class TableStructure
                 element = row_heading.RM_Class
                 mRow.Children.Add(element)
             Next
-            ' then the columns
+            ' then the rows
             For i = 0 To n_rows - 1
-                Dim element_node As RmElement
-                Dim archetype_element_node As ArchetypeElement
+                Dim rowStructure As RmStructure
+                Dim archetype_node As ArchetypeNode
 
-                archetype_element_node = mArchetypeTable.Rows(i).Item(2)
-                element_node = archetype_element_node.RM_Class
-                mRow.Children.Add(element_node)
+                archetype_node = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode)
+                rowStructure = archetype_node.RM_Class
+                mRow.Children.Add(rowStructure)
             Next
 
             RM_T.Children.Add(mRow)
             Return RM_T
         End Get
         Set(ByVal Value As RmStructureCompound)
-            Dim element As ArchetypeElement
+            Dim element As ArchetypeNode
+            Dim aStructure As RmStructure
             Dim new_row As DataRow
 
             MyBase.SetCardinality(Value)
@@ -287,20 +302,31 @@ Public Class TableStructure
                     ProcessNodesToTable(Value.Children)
 
                 Case StructureType.Single ' "SINGLE"
-                    element = New ArchetypeElement(Value.Children.FirstElementNode, mFileManager)
-                    new_row = mArchetypeTable.NewRow
-                    new_row(1) = element.Text
-                    new_row(2) = element
-                    new_row(0) = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference)
-                    mArchetypeTable.Rows.Add(new_row)
-
-                Case StructureType.List ' "list"
-                    For Each rm_element As RmElement In Value.Children
-                        element = New ArchetypeElement(rm_element, mFileManager)
+                    aStructure = Value.Children.FirstElementOrElementSlot
+                    If Not aStructure Is Nothing Then
+                        If aStructure.Type = StructureType.Element Then
+                            element = New ArchetypeElement(CType(aStructure, RmElement), mFileManager)
+                        Else ' a slot
+                            element = New ArchetypeNodeAnonymous(CType(aStructure, RmSlot))
+                        End If
                         new_row = mArchetypeTable.NewRow
                         new_row(1) = element.Text
                         new_row(2) = element
-                        new_row(0) = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference)
+                        new_row(0) = Me.ImageIndexForItem(element)
+                        mArchetypeTable.Rows.Add(new_row)
+                    End If
+
+                Case StructureType.List ' "list"
+                    For Each aStructure In Value.Children
+                        If aStructure.Type = StructureType.Element Then
+                            element = New ArchetypeElement(CType(aStructure, RmElement), mFileManager)
+                        Else ' a slot
+                            element = New ArchetypeNodeAnonymous(CType(aStructure, RmSlot))
+                        End If
+                        new_row = mArchetypeTable.NewRow
+                        new_row(1) = element.Text
+                        new_row(2) = element
+                        new_row(0) = Me.ImageIndexForItem(element)
                         mArchetypeTable.Rows.Add(new_row)
                     Next
             End Select
@@ -342,8 +368,8 @@ Public Class TableStructure
         mIsLoading = True
         If mIsRotated Then
             For i = 0 To mArchetypeTable.Rows.Count - 1
-                Dim an_element As ArchetypeElement
-                an_element = mArchetypeTable.Rows(i).Item(2)
+                Dim an_element As ArchetypeNode
+                an_element = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode)
                 an_element.Translate()
                 mArchetypeTable.Rows(i).Item(1) = an_element.Text
             Next
@@ -365,19 +391,18 @@ Public Class TableStructure
     End Sub
 
     Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
-        If Me.dgGrid.CurrentRowIndex > -1 Then
-            Dim mElement As ArchetypeElement = mArchetypeTable.Rows(Me.dgGrid.CurrentCell.RowNumber).Item(2)
-
+        If Me.dgGrid.CurrentRowIndex > -1 AndAlso TypeOf mArchetypeTable.Rows(Me.dgGrid.CurrentCell.RowNumber).Item(2) Is ArchetypeElement Then
+            Dim mElement As ArchetypeElement = CType(mArchetypeTable.Rows(Me.dgGrid.CurrentCell.RowNumber).Item(2), ArchetypeElement)
             If mElement.IsReference Then
                 MessageBox.Show(AE_Constants.Instance.Cannot_specialise_reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Return
             End If
             If mElement.Occurrences.IsUnbounded Or mElement.Occurrences.MaxCount > 1 Then
-                Dim new_element As ArchetypeElement 'ArchetypeSimple
+                Dim new_element As ArchetypeElement
                 Dim new_row As DataRow
                 Dim a_cell As DataGridCell
 
-                new_element = mElement.Copy
+                new_element = CType(CType(mElement, ArchetypeElement).Copy, ArchetypeElement)
                 new_element.Specialise()
 
                 new_row = mArchetypeTable.NewRow
@@ -503,13 +528,9 @@ Public Class TableStructure
                 a_term = mFileManager.OntologyManager.AddTerm(s(0), s(1))
                 'If mArchetypeTable.Rows.Count > 0 Then
                 If mKeyColumns.Count > 0 Then
-                    element = mKeyColumns.Item(mKeyColumns.Count)
+                    element = CType(mKeyColumns.Item(mKeyColumns.Count), ArchetypeElement)
                 Else
                     element = New ArchetypeElement("row_head", mFileManager)
-                    'element = New ArchetypeElement(New RmElement(a_term.Code), mFileManager)
-                    'If s(1) <> "" Then
-                    'element.Description = s(1)
-                    'End If
                     element.Constraint = New Constraint_Text
                     mKeyColumns.Add(element)
                 End If
@@ -529,7 +550,7 @@ Public Class TableStructure
 
         For i = 0 To Me.dgGrid.VisibleRowCount - 1
             If Me.dgGrid.IsSelected(i) Then
-                label = Me.dgGrid.Item(i, 1)
+                label = CStr(Me.dgGrid.Item(i, 1))
                 row_selected = True
                 Exit For
             End If
@@ -581,13 +602,13 @@ Public Class TableStructure
         Dim tab_pad As Integer = 109
         Dim Col_count As Integer
         Dim Text, tab_str, col_str, tab_end_str, s As String
-        Col_count = ((mArchetypeTable.Columns.Count - 1) / 2)
+        Col_count = CInt(((mArchetypeTable.Columns.Count - 1) / 2))
 
         col_str = ""
         Text = new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 TABLE\cf0\par")
         Text = Text & new_line & ("\par")
 
-        col_width = (8414 - (Col_count * tab_pad)) / Col_count
+        col_width = CInt((8414 - (Col_count * tab_pad)) / Col_count)
         tab_str = "\trowd\trgaph108\trleft-108\trbrdrt\brdrs\brdrw10 \trbrdrl\brdrs\brdrw10 \trbrdrb\brdrs\brdrw10 \trbrdrr\brdrs\brdrw10 \clbrdrt\brdrw15\brdrs\clbrdrl\brdrw15\brdrs\clbrdrb\brdrw15\brdrs\clbrdrr\brdrw15\brdrs "
         For i = 1 To Col_count
             col_str = col_str & "\cellx" & ((col_width * i) + tab_pad).ToString & "\clbrdrt\brdrw15\brdrs\clbrdrl\brdrw15\brdrs\clbrdrb\brdrw15\brdrs\clbrdrr\brdrw15\brdrs "
@@ -613,25 +634,39 @@ Public Class TableStructure
         Text = Text & new_line & s
 
         For i = 0 To mArchetypeTable.Rows.Count - 1
-            Dim ArchS As ArchetypeElement 'ArchetypeSimple
+            Dim ArchS As ArchetypeNode 'ArchetypeSimple
+            Dim constraintString As String
+
             s = "\intbl "
-            ArchS = mArchetypeTable.Rows(i).Item(2)
+            ArchS = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode)
 
-            s = s & ArchS.Text & " (" & ArchS.Constraint.ConstraintTypeString & ")\cell "
+            If ArchS.RM_Class.Type = StructureType.Element Then
+                constraintString = CType(ArchS, ArchetypeElement).Constraint.ConstraintTypeString
+            Else
+                constraintString = mFileManager.OntologyManager.GetOpenEHRTerm(312, "Slot")
+            End If
 
-            Text = Text & new_line & ArchS.ToRichText(0).Substring(1, 62) & "\cell\cell\row"
+            s = s & ArchS.Text & " (" & constraintString & ")\cell "
+            constraintString = ArchS.ToRichText(0)
+            If constraintString.Length > 62 Then
+                constraintString = constraintString.Substring(1, 62)
+            End If
+
+            Text = Text & new_line & constraintString & "\cell\cell\row"
         Next
 
         Return Text
     End Function
 
     Protected Overrides Sub RefreshIcons()
-        Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
         Dim d_row As DataRow
 
-        If element.HasReferences Then
+        If mCurrentItem.HasReferences Then
+            Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
+
             For Each d_row In mArchetypeTable.Rows
-                If CType(d_row.Item(2), ArchetypeElement).NodeId = element.NodeId Then
+                Dim node As ArchetypeNode = CType(d_row.Item(2), ArchetypeNode)
+                If Not node.IsAnonymous AndAlso CType(node, ArchetypeElement).NodeId = element.NodeId Then
                     d_row.BeginEdit()
                     d_row(0) = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, False)
                     d_row.EndEdit()
@@ -640,7 +675,7 @@ Public Class TableStructure
         Else
             d_row = mArchetypeTable.Rows(dgGrid.CurrentRowIndex)
             d_row.BeginEdit()
-            d_row(0) = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, False)
+            d_row(0) = Me.ImageIndexForItem(CType(d_row.Item(2), ArchetypeNode))
             d_row.EndEdit()
         End If
         dgGrid.Refresh()
@@ -648,7 +683,7 @@ Public Class TableStructure
 
     Private Function GetImageIndexForRow(ByVal row As Integer) As Integer
         Dim i As Integer
-        i = mArchetypeTable.Rows(row).Item(0)
+        i = CInt(mArchetypeTable.Rows(row).Item(0))
         If dgGrid.CurrentRowIndex = row Then
             i += Me.SelectedImageOffset
         End If
@@ -744,7 +779,7 @@ Public Class TableStructure
             ' HKF: 1613
             'Dim ArchCol As ArchetypeColumn
             Dim ArchCol As ArchetypeComposite
-            ArchCol = mArchetypeTable.Rows(0).Item(i * 2)
+            ArchCol = CType(mArchetypeTable.Rows(0).Item(i * 2), ArchetypeComposite)
             ArchCol.Text = s
             Me.TableArchetypeStyle.GridColumnStyles(i).HeaderText = s
             Me.TableArchetypeStyle.GridColumnStyles(i).NullText = "(" & s & ")"
@@ -767,7 +802,7 @@ Public Class TableStructure
 
         i = myHitInfo.Row - 1
         If i > -1 Then
-            SetToolTipSpecialisation(Me.dgGrid, mArchetypeTable.Rows(i).Item(2))
+            SetToolTipSpecialisation(Me.dgGrid, CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode))
         End If
     End Sub
 
@@ -775,10 +810,10 @@ Public Class TableStructure
         ' arises when moves to new cell
         Dim i As Integer
         If mIsRotated Then
-            Dim element As ArchetypeElement
+            Dim element As ArchetypeNode
 
             i = Me.dgGrid.CurrentCell.RowNumber
-            element = mArchetypeTable.Rows(i).Item(2)
+            element = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode)
             SetCurrentItem(element)
         Else
             Debug.Assert(False, "TODO")
@@ -790,17 +825,20 @@ Public Class TableStructure
 
         If Not mIsLoading Then
             Dim i As Integer
-            Dim archetype_element As ArchetypeElement
+            Dim archetype_node As ArchetypeNode
 
-            archetype_element = e.Row.Item(2)
-            i = OceanArchetypeEditor.Instance.CountInString(archetype_element.NodeId, ".")
-            If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
-                    e.ProposedValue = archetype_element.Text
+            archetype_node = CType(e.Row.Item(2), ArchetypeNode)
+            If archetype_node.RM_Class.Type = StructureType.Element Then
+                Dim element As ArchetypeElement = CType(archetype_node, ArchetypeElement)
+                i = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
+                If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                    If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
+                        e.ProposedValue = element.Text
+                    End If
                 End If
             End If
-            archetype_element = e.Row.Item(2)
-            archetype_element.Text = e.ProposedValue
+            archetype_node = CType(e.Row.Item(2), ArchetypeNode)
+            archetype_node.Text = CStr(e.ProposedValue)
         End If
     End Sub
 
@@ -844,7 +882,7 @@ Public Class TableStructure
 
             If TypeOf mNewConstraint Is Constraint_Slot Then
                 Dim newSlot As New RmSlot(StructureType.Element)
-                table_archetype = New ArchetypeListViewItem(newSlot, mFileManager)
+                table_archetype = New ArchetypeNodeAnonymous(newSlot)
             Else
 
                 table_archetype = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)

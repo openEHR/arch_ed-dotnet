@@ -42,7 +42,6 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             Me.lblSlot.Text = Filemanager.GetOpenEhrTerm(312, Me.lblSlot.Text)
             Me.gbInclude.Text = Filemanager.GetOpenEhrTerm(625, Me.gbInclude.Text)
             Me.gbExclude.Text = Filemanager.GetOpenEhrTerm(626, Me.gbExclude.Text)
-            Me.butBrowse.Text = Filemanager.GetOpenEhrTerm(627, Me.butBrowse.Text)
             Me.chkIncludeAll.Text = Filemanager.GetOpenEhrTerm(628, Me.chkIncludeAll.Text)
             Me.chkExcludeAll.Text = Filemanager.GetOpenEhrTerm(628, Me.chkExcludeAll.Text)
         End If
@@ -76,7 +75,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     Friend WithEvents butBrowse As System.Windows.Forms.Button
     Friend WithEvents listAvailbleArchetypes As System.Windows.Forms.ListBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(SlotConstraintControl))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SlotConstraintControl))
         Me.PanelInlcude = New System.Windows.Forms.Panel
         Me.butInclude = New System.Windows.Forms.Button
         Me.chkIncludeAll = New System.Windows.Forms.CheckBox
@@ -115,7 +114,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelInlcude.Controls.Add(Me.butInclude)
         Me.PanelInlcude.Controls.Add(Me.chkIncludeAll)
         Me.PanelInlcude.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelInlcude.Location = New System.Drawing.Point(3, 16)
+        Me.PanelInlcude.Location = New System.Drawing.Point(3, 18)
         Me.PanelInlcude.Name = "PanelInlcude"
         Me.PanelInlcude.Size = New System.Drawing.Size(418, 40)
         Me.PanelInlcude.TabIndex = 33
@@ -132,6 +131,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         Me.chkIncludeAll.Location = New System.Drawing.Point(48, 1)
         Me.chkIncludeAll.Name = "chkIncludeAll"
+        Me.chkIncludeAll.Size = New System.Drawing.Size(104, 24)
         Me.chkIncludeAll.TabIndex = 32
         Me.chkIncludeAll.Text = "Include All"
         '
@@ -145,6 +145,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         'listInclude
         '
+        Me.listInclude.AllowDrop = True
         Me.listInclude.Dock = System.Windows.Forms.DockStyle.Fill
         Me.listInclude.ForeColor = System.Drawing.Color.DarkGreen
         Me.listInclude.ItemHeight = 16
@@ -177,6 +178,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         Me.chkExcludeAll.Location = New System.Drawing.Point(48, 0)
         Me.chkExcludeAll.Name = "chkExcludeAll"
+        Me.chkExcludeAll.Size = New System.Drawing.Size(104, 24)
         Me.chkExcludeAll.TabIndex = 38
         Me.chkExcludeAll.Text = "Exclude All"
         '
@@ -190,6 +192,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         'listExclude
         '
+        Me.listExclude.AllowDrop = True
         Me.listExclude.Dock = System.Windows.Forms.DockStyle.Fill
         Me.listExclude.ForeColor = System.Drawing.Color.DarkGreen
         Me.listExclude.ItemHeight = 16
@@ -216,11 +219,11 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         Me.butBrowse.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butBrowse.Location = New System.Drawing.Point(344, 8)
+        Me.butBrowse.Location = New System.Drawing.Point(389, 8)
         Me.butBrowse.Name = "butBrowse"
-        Me.butBrowse.Size = New System.Drawing.Size(72, 40)
+        Me.butBrowse.Size = New System.Drawing.Size(32, 29)
         Me.butBrowse.TabIndex = 3
-        Me.butBrowse.Text = "Browse"
+        Me.butBrowse.Text = "..."
         '
         'listAvailbleArchetypes
         '
@@ -230,7 +233,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.listAvailbleArchetypes.Location = New System.Drawing.Point(128, 0)
         Me.listAvailbleArchetypes.Name = "listAvailbleArchetypes"
         Me.listAvailbleArchetypes.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
-        Me.listAvailbleArchetypes.Size = New System.Drawing.Size(208, 84)
+        Me.listAvailbleArchetypes.Size = New System.Drawing.Size(255, 84)
         Me.listAvailbleArchetypes.Sorted = True
         Me.listAvailbleArchetypes.TabIndex = 2
         '
@@ -258,10 +261,9 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelExcludeStatements.Controls.Add(Me.listExclude)
         Me.PanelExcludeStatements.Controls.Add(Me.PanelExcludeMinusTick)
         Me.PanelExcludeStatements.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelExcludeStatements.DockPadding.Bottom = 2
-        Me.PanelExcludeStatements.DockPadding.Right = 10
         Me.PanelExcludeStatements.Location = New System.Drawing.Point(3, 50)
         Me.PanelExcludeStatements.Name = "PanelExcludeStatements"
+        Me.PanelExcludeStatements.Padding = New System.Windows.Forms.Padding(0, 0, 10, 2)
         Me.PanelExcludeStatements.Size = New System.Drawing.Size(418, 99)
         Me.PanelExcludeStatements.TabIndex = 38
         '
@@ -279,10 +281,10 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelIncludeStatements.Controls.Add(Me.listInclude)
         Me.PanelIncludeStatements.Controls.Add(Me.PanelIncludeMinusTick)
         Me.PanelIncludeStatements.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelIncludeStatements.DockPadding.Right = 10
-        Me.PanelIncludeStatements.Location = New System.Drawing.Point(3, 56)
+        Me.PanelIncludeStatements.Location = New System.Drawing.Point(3, 58)
         Me.PanelIncludeStatements.Name = "PanelIncludeStatements"
-        Me.PanelIncludeStatements.Size = New System.Drawing.Size(418, 101)
+        Me.PanelIncludeStatements.Padding = New System.Windows.Forms.Padding(0, 0, 10, 0)
+        Me.PanelIncludeStatements.Size = New System.Drawing.Size(418, 99)
         Me.PanelIncludeStatements.TabIndex = 40
         '
         'PanelIncludeMinusTick
@@ -291,7 +293,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelIncludeMinusTick.Dock = System.Windows.Forms.DockStyle.Left
         Me.PanelIncludeMinusTick.Location = New System.Drawing.Point(0, 0)
         Me.PanelIncludeMinusTick.Name = "PanelIncludeMinusTick"
-        Me.PanelIncludeMinusTick.Size = New System.Drawing.Size(40, 101)
+        Me.PanelIncludeMinusTick.Size = New System.Drawing.Size(40, 99)
         Me.PanelIncludeMinusTick.TabIndex = 28
         '
         'gbExclude
@@ -435,7 +437,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
                 ' do nothing
             Case 1
                 do_remove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & CStr(list.SelectedItems(0)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK)
-            Case 2
+            Case Is > 1
                 do_remove = (MessageBox.Show(AE_Constants.Instance.Remove & " " & list.SelectedItems.Count.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK)
 
         End Select
@@ -453,15 +455,19 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub butSlotAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butExclude.Click, butInclude.Click
-        Dim list As Windows.Forms.ListBox
-        Dim col As CollectionOfSlots
+        Dim list, removelist As Windows.Forms.ListBox
+        Dim col, removecol As CollectionOfSlots
 
         If sender Is Me.butInclude Then
             list = Me.listInclude
+            removelist = Me.listExclude
             col = Me.Constraint.Include
+            removecol = Me.Constraint.Exclude
         ElseIf sender Is Me.butExclude Then
             list = Me.listExclude
+            removelist = Me.listInclude
             col = Me.Constraint.Exclude
+            removecol = Me.Constraint.Include
         Else
             Debug.Assert(False, "Control not included")
             Return
@@ -472,6 +478,10 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
                 If Not col.Contains(s) Then
                     col.Add(s)
                     list.Items.Add(s)
+                    If removelist.Items.Contains(s) Then
+                        removelist.Items.Remove(s)
+                        removecol.Remove(s)
+                    End If
                 End If
             Next
             Me.listAvailbleArchetypes.ClearSelected()
@@ -568,6 +578,69 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             End If
         End If
     End Sub
+
+    Private Sub listAvailbleArchetypes_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles listAvailbleArchetypes.MouseDown
+        Dim indexOfItem As Integer = Me.listAvailbleArchetypes.IndexFromPoint(e.X, e.Y)
+        If (indexOfItem >= 0 AndAlso indexOfItem < Me.listAvailbleArchetypes.Items.Count) Then
+            Me.listAvailbleArchetypes.DoDragDrop(Me.listAvailbleArchetypes.Items(indexOfItem), DragDropEffects.Copy)
+        End If
+    End Sub
+    Private Sub listInclude_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles listInclude.DragEnter
+        If e.Data.GetDataPresent(DataFormats.StringFormat) AndAlso e.AllowedEffect = DragDropEffects.Copy Then
+            e.Effect = DragDropEffects.Copy
+        End If
+    End Sub
+
+    Private Sub listExclude_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles listExclude.DragEnter
+        If e.Data.GetDataPresent(DataFormats.StringFormat) AndAlso e.AllowedEffect = DragDropEffects.Copy Then
+            e.Effect = DragDropEffects.Copy
+        End If
+    End Sub
+
+    Private Sub listInclude_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles listInclude.DragDrop
+        If e.Data.GetDataPresent(DataFormats.StringFormat) Then
+            Dim s As String = CStr(e.Data.GetData(DataFormats.StringFormat))
+            'make sure it is not already there
+            For Each assert As String In listInclude.Items
+                If assert = s Then
+                    Return
+                End If
+            Next
+            listInclude.Items.Add(s)
+            Me.Constraint.Include.Add(s)
+            If listExclude.Items.Contains(s) Then
+                listExclude.Items.Remove(s)
+                Me.Constraint.Exclude.Remove(s)
+            End If
+            Me.listAvailbleArchetypes.ClearSelected()
+            mFileManager.FileEdited = True
+        End If
+    End Sub
+
+    Private Sub listExclude_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles listExclude.DragDrop
+        If e.Data.GetDataPresent(DataFormats.StringFormat) Then
+            Dim s As String = CStr(e.Data.GetData(DataFormats.StringFormat))
+            'make sure it is not already there
+            For Each assert As String In listExclude.Items
+                If assert = s Then
+                    Return
+                End If
+            Next
+            listExclude.Items.Add(s)
+            Me.Constraint.Exclude.Add(s)
+            If listInclude.Items.Contains(s) Then
+                listInclude.Items.Remove(s)
+                Me.Constraint.Include.Remove(s)
+            End If
+            Me.listAvailbleArchetypes.ClearSelected()
+            mFileManager.FileEdited = True
+        End If
+    End Sub
+
+    Private Sub listAvailbleArchetypes_DragLeave(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAvailbleArchetypes.DragLeave
+        Me.listAvailbleArchetypes.SelectedIndices.Remove(Me.listAvailbleArchetypes.SelectedIndex)
+    End Sub
+
 End Class
 
 '

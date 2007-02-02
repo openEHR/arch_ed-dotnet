@@ -220,6 +220,15 @@ Public Class ArchetypeView
 
                         view.Controls.Add(ElementView(CType(tvNode.Item, ArchetypeElement), a_filemanager))
 
+                    Case StructureType.Slot
+                        Dim newPanel As New Panel
+                        newPanel.BorderStyle = BorderStyle.Fixed3D
+                        newPanel.Size = New Size(150, 25)
+                        Dim lbl As New Label
+                        lbl.Text = Filemanager.GetOpenEhrTerm(312, "Slot") & ": " & tvNode.Text
+                        newPanel.Controls.Add(lbl)
+                        view.Controls.Add(newPanel)
+
                     Case Else
                         Beep()
                         Debug.Assert(False)

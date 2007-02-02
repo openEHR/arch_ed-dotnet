@@ -65,6 +65,8 @@ Public Class RmSlot
                 mSlotConstraint.RM_ClassType = StructureType.SECTION
             Case "ENTRY"
                 mSlotConstraint.RM_ClassType = StructureType.ENTRY
+            Case "ADMIN_ENTRY"
+                mSlotConstraint.RM_ClassType = StructureType.ADMIN_ENTRY
             Case "OBSERVATION"
                 mSlotConstraint.RM_ClassType = StructureType.OBSERVATION
             Case "EVALUATION"
@@ -126,6 +128,8 @@ Public Class RmSlot
                 mSlotConstraint.RM_ClassType = StructureType.SECTION
             Case "ENTRY"
                 mSlotConstraint.RM_ClassType = StructureType.ENTRY
+            Case "ADMIN_ENTRY"
+                mSlotConstraint.RM_ClassType = StructureType.ADMIN_ENTRY
             Case "OBSERVATION"
                 mSlotConstraint.RM_ClassType = StructureType.OBSERVATION
             Case "EVALUATION"
@@ -169,7 +173,7 @@ Public Class RmSlot
                 Dim assert As XMLParser.ASSERTION
                 assert = CType(an_archetype_slot.excludes(i), XMLParser.ASSERTION)
                 s = ArchetypeEditor.XML_Classes.XML_Tools.GetDomainConceptFromAssertion(assert)
-                If s = "/.*/" Then
+                If s = ".*" Then
                     mSlotConstraint.ExcludeAll = True
                 Else
                     mSlotConstraint.Exclude.Add(s.Trim(("/").ToCharArray))

@@ -28,7 +28,7 @@ Public Class ConstraintControl
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-        If Not DesignMode Then
+        If Not DesignMode AndAlso AE_Constants.HasInstance Then
             SetHelpDetails() ' Has to be here so it is not called in design mode
         End If
     End Sub

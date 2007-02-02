@@ -178,11 +178,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Debug.Assert((Not id Is Nothing) And (id <> ""))
 
             id_expression_leaf = mAomFactory.create_expr_leaf_object_ref(openehr.base.kernel.Create.STRING.make_from_cil(id))
-            If expression = "*" Then
-                id_pattern_expression_leaf = mAomFactory.create_expr_leaf_constraint(mAomFactory.create_c_string_make_from_regexp(openehr.base.kernel.Create.STRING.make_from_cil(expression)))
-            Else
-                id_pattern_expression_leaf = mAomFactory.create_expr_leaf_constraint(mAomFactory.create_c_string_make_from_regexp(openehr.base.kernel.Create.STRING.make_from_cil(expression)))
-            End If
+            id_pattern_expression_leaf = mAomFactory.create_expr_leaf_constraint(mAomFactory.create_c_string_make_from_regexp(openehr.base.kernel.Create.STRING.make_from_cil(expression)))
             match_operator = mAomFactory.create_expr_binary_operator_node( _
                 openehr.openehr.am.archetype.assertion.Create.OPERATOR_KIND.make_from_string( _
                     openehr.base.kernel.Create.STRING.make_from_cil("matches")), _

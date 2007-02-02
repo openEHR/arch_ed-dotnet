@@ -77,7 +77,7 @@ Public Class Children
         End Get
     End Property
 
-    ReadOnly Property FirstElementNode() As RmElement
+    ReadOnly Property FirstElementOrElementSlot() As RmStructure
         Get
             Dim i As Integer
 
@@ -89,12 +89,17 @@ Public Class Children
 
                     Case StructureType.Cluster
 
-                        Dim rm As RmElement
-                        rm = CType(Me.items(i), RmCluster).Children.FirstElementNode
+                        Dim rm As RmStructure
+                        rm = CType(Me.items(i), RmCluster).Children.FirstElementOrElementSlot
                         If Not rm Is Nothing Then
                             Return rm
                         End If
 
+                    Case StructureType.Slot
+                        Dim aSlot As RmSlot = CType(Me.items(i), RmSlot)
+                        If aSlot.Type = StructureType.Element Then
+                            Return aSlot
+                        End If
                 End Select
 
             Next
