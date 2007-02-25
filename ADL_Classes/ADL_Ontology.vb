@@ -81,7 +81,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overrides Sub AddLanguage(ByVal code As String)
-            EIF_adlInterface.ontology.add_language_available(openehr.base.kernel.Create.STRING.make_from_cil(code))
+            EIF_adlInterface.ontology.add_language(openehr.base.kernel.Create.STRING.make_from_cil(code))
         End Sub
 
         Public Overrides Sub AddTerminology(ByVal code As String)

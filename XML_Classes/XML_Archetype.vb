@@ -131,7 +131,7 @@ Namespace ArchetypeEditor.XML_Classes
         Protected Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)
             Try
                 If Not mArchetypeParser.ArchetypeAvailable Then
-                    mArchetypeParser.NewArchetype(an_archetype_id.ToString(), sPrimaryLanguageCode)
+                    mArchetypeParser.NewArchetype(an_archetype_id.ToString(), sPrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
                     mXmlArchetype = mArchetypeParser.Archetype
                     mArchetypeParser.SetDefinitionId(mXmlArchetype.concept_code)
                     setDefinition()
@@ -164,11 +164,13 @@ Namespace ArchetypeEditor.XML_Classes
             Debug.Assert((Not id Is Nothing) And (id <> ""))
 
             id_expression_leaf = New XMLParser.EXPR_LEAF()
-            id_expression_leaf.type = "OBJECT_REF"
+            id_expression_leaf.type = "String"
             id_expression_leaf.item = id
+            id_expression_leaf.reference_type = "attribute"
 
             id_pattern_expression_leaf = New XMLParser.EXPR_LEAF()
-            id_pattern_expression_leaf.type = "CONSTRAINT"
+            id_pattern_expression_leaf.type = "C_STRING"
+            id_pattern_expression_leaf.reference_type = "constraint"
 
             Dim c_s As New XMLParser.C_STRING()
 
@@ -180,6 +182,7 @@ Namespace ArchetypeEditor.XML_Classes
             id_pattern_expression_leaf.item = c_s
 
             match_operator = New XMLParser.EXPR_BINARY_OPERATOR()
+            match_operator.type = "Boolean"
             match_operator.operator = Global.XMLParser.OPERATOR_KIND.Item2007
             match_operator.left_operand = id_expression_leaf
             match_operator.right_operand = id_pattern_expression_leaf
@@ -873,7 +876,7 @@ Namespace ArchetypeEditor.XML_Classes
 
             If sl.hasSlots Then
                 If sl.IncludeAll Then
-                    mAomFactory.AddIncludeToSlot(slot, MakeAssertion("concept", ".*"))
+                    mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
                 Else
                     For Each s As String In sl.Include
                         Dim escapedString As String
@@ -885,14 +888,14 @@ Namespace ArchetypeEditor.XML_Classes
                         Else
                             escapedString = s.Replace(".", "\.")
                         End If
-                        mAomFactory.AddIncludeToSlot(slot, MakeAssertion("concept", escapedString))
+                        mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", escapedString))
                     Next
                     For Each s As String In sl.Include
 
                     Next
                 End If
                 If sl.ExcludeAll Then
-                    mAomFactory.AddExcludeToSlot(slot, MakeAssertion("concept", ".*"))
+                    mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
                 Else
                     For Each s As String In sl.Exclude
                         Dim escapedString As String
@@ -904,11 +907,11 @@ Namespace ArchetypeEditor.XML_Classes
                         Else
                             escapedString = s.Replace(".", "\.")
                         End If
-                        mAomFactory.AddExcludeToSlot(slot, MakeAssertion("concept", escapedString))
+                        mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", escapedString))
                     Next
                 End If
             Else
-                mAomFactory.AddIncludeToSlot(slot, MakeAssertion("concept", ".*"))
+                mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
             End If
 
             mAomFactory.add_object(value_attribute, slot)
@@ -1065,23 +1068,26 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildOrdinal(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal o As Constraint_Ordinal)
-            Dim c_value As XMLParser.C_ORDINAL
+            Dim c_value As XMLParser.C_DV_ORDINAL
             Dim o_v As OrdinalValue
 
-            c_value = New XMLParser.C_ORDINAL()
+            c_value = New XMLParser.C_DV_ORDINAL()
             c_value.rm_type_name = "ORDINAL"
             c_value.list = Array.CreateInstance(GetType(XMLParser.ORDINAL), o.OrdinalValues.Count)
 
             If o.OrdinalValues.Count > 0 Then
                 Dim i As Integer = 0
                 For Each o_v In o.OrdinalValues
-                    Dim xmlO As New XMLParser.ORDINAL
-                    xmlO.value = o_v.Ordinal.ToString()
-                    xmlO.symbol = New XMLParser.CODE_PHRASE
-                    xmlO.symbol.code_string = o_v.InternalCode
-                    xmlO.symbol.terminology_id = "local"
-                    c_value.list(i) = xmlO
-                    i += 1
+                    'SRH: Added as empty rows still give a count of 1
+                    If o_v.InternalCode <> Nothing Then
+                        Dim xmlO As New XMLParser.ORDINAL
+                        xmlO.value = o_v.Ordinal.ToString()
+                        xmlO.symbol = New XMLParser.CODE_PHRASE
+                        xmlO.symbol.code_string = o_v.InternalCode
+                        xmlO.symbol.terminology_id = "local"
+                        c_value.list(i) = xmlO
+                        i += 1
+                    End If
                 Next
             End If
 
@@ -1715,6 +1721,22 @@ Namespace ArchetypeEditor.XML_Classes
                     mXmlArchetype.description = (CType(mDescription, XML_Description).XML_Description)
                 End If
 
+                If Not mTranslationDetails Is Nothing AndAlso mTranslationDetails.Count > 0 Then
+                    Dim xmlTranslationDetails As XMLParser.TRANSLATION_DETAILS() = Array.CreateInstance(GetType(XMLParser.TRANSLATION_DETAILS), mTranslationDetails.Count)
+                    If TypeOf mTranslationDetails.Values(0) Is ADL_TranslationDetails Then
+                        'Need to convert to XML
+                        For i As Integer = 0 To mTranslationDetails.Count - 1
+                            xmlTranslationDetails(i) = New XML_TranslationDetails(mTranslationDetails.Values(i)).XmlTranslation
+                        Next
+                    Else
+                        For i As Integer = 0 To mTranslationDetails.Count - 1
+                            xmlTranslationDetails(i) = CType(mTranslationDetails.Values(i), XML_TranslationDetails).XmlTranslation
+                        Next
+
+                    End If
+
+                    mXmlArchetype.translations = xmlTranslationDetails
+                End If
 
                 If cDefinition Is Nothing Then
                     Err.Raise(vbObjectError + 512, "No archetype definition", _
@@ -1888,7 +1910,7 @@ Namespace ArchetypeEditor.XML_Classes
             ' make the new archetype
 
             Try
-                mArchetypeParser.NewArchetype(an_ArchetypeID.ToString, sPrimaryLanguageCode)
+                mArchetypeParser.NewArchetype(an_ArchetypeID.ToString, sPrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
                 mXmlArchetype = mArchetypeParser.Archetype
                 mDescription = New XML_Description(mXmlArchetype.description, primary_language)
             Catch
@@ -1950,9 +1972,13 @@ Namespace ArchetypeEditor.XML_Classes
             If Not mXmlArchetype.parent_archetype_id Is Nothing Then
                 sParentArchetypeID = mXmlArchetype.parent_archetype_id
             End If
-            'antoher
-            mDescription = New XML_Description(mXmlArchetype.description, a_parser.Archetype.original_language.code_string)
 
+            'description and translation details
+            mDescription = New XML_Description(mXmlArchetype.description, a_parser.Archetype.original_language.code_string)
+            For Each t As XMLParser.TRANSLATION_DETAILS In mXmlArchetype.translations
+                mTranslationDetails.Add(t.language.code_string, New XML_TranslationDetails(t))
+            Next
+            
             Select Case mArchetypeID.ReferenceModelEntity
                 Case StructureType.COMPOSITION
                     cDefinition = New XML_COMPOSITION(mXmlArchetype.definition, a_filemanager)

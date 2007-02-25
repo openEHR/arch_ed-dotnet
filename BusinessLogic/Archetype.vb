@@ -51,6 +51,18 @@ Public MustInherit Class Archetype
             mDescription = Value
         End Set
     End Property
+
+    Protected mTranslationDetails As Generic.SortedList(Of String, TranslationDetails) = New Generic.SortedList(Of String, TranslationDetails)
+
+    Public Property TranslationDetails() As Generic.SortedList(Of String, TranslationDetails)
+        Get
+            Return mTranslationDetails
+        End Get
+        Set(ByVal value As Generic.SortedList(Of String, TranslationDetails))
+            mTranslationDetails = value
+        End Set
+    End Property
+
     Public ReadOnly Property RmType() As ReferenceModelType
         Get
             Return mArchetypeID.Reference_Model

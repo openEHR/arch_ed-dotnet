@@ -66,8 +66,6 @@ Public Class SimpleStructure
             Me.txtSimple.Text = mElement.Text
             Me.txtSimple.Enabled = True
             Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForItem(mElement))
-            ' can't add any more elements to simple
-            SetCurrentItem(mElement) ' does not raise an event during construction
         Else
             ButAddElement.Visible = True
         End If
@@ -229,6 +227,12 @@ Public Class SimpleStructure
 
     Protected Overrides Sub SetUpAddElementMenu()
         mConstraintMenu.Show(ButAddElement, New System.Drawing.Point(5, 5))
+    End Sub
+
+    Public Overrides Sub SetInitial()
+        If Not mElement Is Nothing Then
+            SetCurrentItem(mElement)
+        End If
     End Sub
 
 

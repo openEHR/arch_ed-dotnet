@@ -90,9 +90,6 @@ Public Class TableStructure
             Return
         End If
 
-        If Me.dgGrid.VisibleRowCount > 0 Then
-            SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeNode))
-        End If
         mIsLoading = False
 
     End Sub
@@ -449,6 +446,13 @@ Public Class TableStructure
         cm.MenuItems.Add(mMenuItemAddRow)
         cm.Show(Me.ButAddElement, New System.Drawing.Point(5, 5))
     End Sub
+
+    Public Overrides Sub SetInitial()
+        If Me.dgGrid.VisibleRowCount > 0 Then
+            SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeNode))
+        End If
+    End Sub
+
 
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
         Dim el As ArchetypeElement

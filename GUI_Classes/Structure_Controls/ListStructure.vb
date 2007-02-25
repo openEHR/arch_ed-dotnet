@@ -343,6 +343,12 @@ Public Class ListStructure
         mConstraintMenu.Show(ButAddElement, New System.Drawing.Point(5, 5))
     End Sub
 
+    Public Overrides Sub SetInitial()
+        If lvList.Items.Count > 0 Then
+            lvList.Items(0).Selected = True
+        End If
+    End Sub
+
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
         Dim lvItem As ArchetypeListViewItem
 
@@ -592,14 +598,15 @@ Public Class ListStructure
 
     Private Sub lvList_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles lvList.KeyDown
         If e.KeyCode = Keys.Delete Then
-            Dim i As Integer
             Dim lvItem As ArchetypeListViewItem
             If Me.lvList.SelectedItems.Count > 0 Then
                 lvItem = CType(Me.lvList.SelectedItems(0), ArchetypeListViewItem)
                 If lvItem.Item.RM_Class.Type = StructureType.Element Then
                     Dim id As String = CType(lvItem.Item, ArchetypeElement).NodeId
-                    i = OceanArchetypeEditor.Instance.CountInString(id, ".")
-                    If (i = mFileManager.OntologyManager.NumberOfSpecialisations And ((id.StartsWith("at0.") Or (id.IndexOf(".0.") > -1)))) Then
+                    Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(id, ".")
+                    Dim numSpecs As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+
+                    If numSpecs = 0 Or (i = numSpecs And ((id.StartsWith("at0.") Or (id.IndexOf(".0.") > -1)))) Then
                         Me.RemoveItemAndReferences(sender, e)
                     End If
                 End If

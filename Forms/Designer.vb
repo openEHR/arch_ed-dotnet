@@ -2184,6 +2184,7 @@ Public Class Designer
                     'Saved in a different format so set the description to right format
                     Filemanager.Master.FileLoading = True
                     mTabPageDescription.Description = mFileManager.Archetype.Description
+                    mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
                     Filemanager.Master.FileLoading = False
                 End If
                 If Not Filemanager.HasFileToSave Then
@@ -3374,8 +3375,9 @@ Public Class Designer
             AddLanguageToMenu(d_row(1))
         Next
 
-        'Set the description
+        'Set the description and translation
         mTabPageDescription.Description = mFileManager.Archetype.Description
+        mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
         Me.RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
 
     End Sub
@@ -3794,6 +3796,7 @@ Public Class Designer
         ' Clear the definitions prior to rebuilding them
         mFileManager.Archetype.ResetDefinitions()
         mFileManager.Archetype.Description = mTabPageDescription.Description
+        mFileManager.Archetype.TranslationDetails = mTabPageDescription.TranslationDetails
 
         If Me.ShowAsDraft Then
             mFileManager.Archetype.LifeCycle = "Initial"
@@ -4853,8 +4856,8 @@ Public Class Designer
                 If s = "rtf" Then
                     WriteRichText()
                 Else
-                    Me.PrepareToSave()
                     If s = mFileManager.ParserType.ToLowerInvariant() Then
+                        Me.PrepareToSave()
                         Me.mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
                     Else
                         Me.mRichTextArchetype.Text = mFileManager.ExportSerialised(s)

@@ -20,7 +20,7 @@ Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Description
         Inherits ArchetypeDescription
 
-        Private mADL_Description As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION
+        Private mADL_Description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
 
         Public Overrides Property Details() As ArchetypeDetails
             Get
@@ -32,7 +32,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Property
 
 
-        Function ADL_Description() As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION
+        Function ADL_Description() As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
             ' set the variables
 
             ' Add the original author details
@@ -62,7 +62,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 openehr.base.kernel.Create.STRING.make_from_cil(Me.LifeCycleStateAsString))
 
             If Not mArchetypePackageURI Is Nothing Then
-                mADL_Description.set_archetype_package_uri( _
+                mADL_Description.set_resource_package_uri( _
                     openehr.base.kernel.Create.STRING.make_from_cil(mArchetypePackageURI))
             End If
 
@@ -75,12 +75,12 @@ Namespace ArchetypeEditor.ADL_Classes
             Return mADL_Description
         End Function
 
-        Sub New(ByVal an_adl_archetype_description As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION)
+        Sub New(ByVal an_adl_archetype_description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION)
             mADL_Description = an_adl_archetype_description
 
             'mADL_Version = mADL_Description.adl_version.to_cil ' set to 1.2 by default
-            If Not mADL_Description.archetype_package_uri Is Nothing Then
-                mArchetypePackageURI = mADL_Description.archetype_package_uri.as_string.to_cil
+            If Not mADL_Description.resource_package_uri Is Nothing Then
+                mArchetypePackageURI = mADL_Description.resource_package_uri.as_string.to_cil
             End If
 
             If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("name")) Then
@@ -113,8 +113,9 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Sub New(ByVal an_archetype_description As ArchetypeDescription)
-            mADL_Description = openehr.openehr.am.archetype.description.Create.ARCHETYPE_DESCRIPTION.make_author(openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName))
+        Sub New(ByVal an_archetype_description As ArchetypeDescription, ByVal a_language As String)
+            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName), _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_language))
 
             'mADL_Version = mADL_Description.adl_version.to_cil ' set to 1.2 by default
             If Not an_archetype_description.ArchetypePackageURI Is Nothing Then
@@ -131,8 +132,10 @@ Namespace ArchetypeEditor.ADL_Classes
             MyBase.LifeCycleState = an_archetype_description.LifeCycleState
         End Sub
 
-        Sub New()
-            mADL_Description = openehr.openehr.am.archetype.description.Create.ARCHETYPE_DESCRIPTION.make_author(openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName))
+        Sub New(ByVal original_language As String)
+            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make( _
+                openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName), _
+                openehr.base.kernel.Create.STRING.make_from_cil(original_language))
         End Sub
     End Class
 End Namespace

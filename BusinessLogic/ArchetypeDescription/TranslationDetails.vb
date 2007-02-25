@@ -1,8 +1,10 @@
 Public Class TranslationDetails
     Protected mLanguage As String
-    Protected mAuthor As String
-    Protected mAccreditation As String
+    Protected mAuthorName As String = "?"
+    Protected mAuthorEmail As String = ""
+    Protected mAccreditation As String = ""
     Protected mTimeCommitted As String
+    Protected mAuthorOrganisation As String = ""
     Protected mOtherDetails As New OtherDefinitionDetails
 
     Property Language() As String
@@ -13,20 +15,28 @@ Public Class TranslationDetails
             mLanguage = Value
         End Set
     End Property
-    Property Author() As String
+    Property AuthorName() As String
         Get
-            Return mAuthor
+            Return mAuthorName
         End Get
         Set(ByVal Value As String)
-            mAuthor = Value
+            mAuthorName = Value
         End Set
     End Property
-    Property TimeCommitted() As DateTime
+    Property AuthorEmail() As String
         Get
-            Return mTimeCommitted
+            Return mAuthorEmail
         End Get
-        Set(ByVal Value As DateTime)
-            mTimeCommitted = Value
+        Set(ByVal Value As String)
+            mAuthorEmail = Value
+        End Set
+    End Property
+    Property AuthorOrganisation() As String
+        Get
+            Return mAuthorOrganisation
+        End Get
+        Set(ByVal Value As String)
+            mAuthorOrganisation = Value
         End Set
     End Property
     Property Accreditation() As String

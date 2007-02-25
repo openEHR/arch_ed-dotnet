@@ -98,12 +98,14 @@ Public Class FileManagerLocal
         Set(ByVal Value As Boolean)
             'As the File Save might have been set by an embedded
             'archetype so have to raise the event
-            mIsFileDirty = Value
-            Filemanager.SetFileChangedToolBar(Value)
-            If Value Then
-                mParserSynchronised = False
-            Else
-                mParserSynchronised = True
+            If Not mIsFileLoading Then
+                mIsFileDirty = Value
+                Filemanager.SetFileChangedToolBar(Value)
+                If Value Then
+                    mParserSynchronised = False
+                Else
+                    mParserSynchronised = True
+                End If
             End If
         End Set
     End Property
@@ -260,7 +262,7 @@ Public Class FileManagerLocal
 
         xml_parser.NewArchetype( _
                    mArchetypeEngine.Archetype.Archetype_ID.ToString, _
-                   mOntologyManager.PrimaryLanguageCode)
+                   mOntologyManager.PrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
         xml_parser.Archetype.concept_code = mArchetypeEngine.Archetype.ConceptCode
 
         'Set the root id which can be different than the concept ID
@@ -289,7 +291,7 @@ Public Class FileManagerLocal
 
         'languages - need translations and details for each language
         Dim ii As Integer = mOntologyManager.LanguagesTable.Rows.Count
-        'xml_parser.Archetype.translations = Array.CreateInstance(GetType(XMLParser.TRANSLATION_DETAILS), ii - 1)
+        Dim translationsArray As XMLParser.TRANSLATION_DETAILS() = Array.CreateInstance(GetType(XMLParser.TRANSLATION_DETAILS), ii - 1)
         Dim details_array As XMLParser.RESOURCE_DESCRIPTION_ITEM() = Array.CreateInstance(GetType(XMLParser.RESOURCE_DESCRIPTION_ITEM), ii)
 
         Dim i As Integer = 0
@@ -298,12 +300,18 @@ Public Class FileManagerLocal
         For Each row As DataRow In mOntologyManager.LanguagesTable.Rows
             Dim language As String = row(0)
             Dim cp As New XMLParser.CODE_PHRASE
-            cp.terminology_id = "openehr"
+            cp.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
             cp.code_string = language
+
+            'Add the translations
             If language <> mOntologyManager.PrimaryLanguageCode Then
-                xml_parser.AddTranslation(cp)
+                Dim translationDetail As TranslationDetails = Me.Archetype.TranslationDetails.Item(language)
+                Dim xmlTranslationDetail As New XML_TranslationDetails(translationDetail)
+                translationsArray(i) = xmlTranslationDetail.XmlTranslation
                 i += 1
             End If
+
+            'Add the archetype details in each language
             Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
             Dim xml_detail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
             xml_detail.language = cp
@@ -324,7 +332,7 @@ Public Class FileManagerLocal
             ii += 1
         Next
 
-        ''Definition
+        'Definition
         Dim xmlArchetype As New ArchetypeEditor.XML_Classes.XML_Archetype(xml_parser)
         xmlArchetype.Definition = Me.Archetype.Definition
         xmlArchetype.MakeParseTree()
@@ -335,47 +343,64 @@ Public Class FileManagerLocal
         xml_parser.Archetype.description = xml_description.XML_Description
         xml_parser.Archetype.description.details = details_array
 
+        'translations
+        xml_parser.Archetype.translations = translationsArray
         Return xml_parser
     End Function
 
     Private Function CreateAdlParser() As ArchetypeEditor.ADL_Classes.ADL_Interface
         'Create a new parser
-        Dim adl_parser As New ArchetypeEditor.ADL_Classes.ADL_Interface()
+        Dim adlParser As New ArchetypeEditor.ADL_Classes.ADL_Interface()
 
-        adl_parser.NewArchetype( _
+        adlParser.NewArchetype( _
             mArchetypeEngine.Archetype.Archetype_ID, _
             mOntologyManager.PrimaryLanguageCode)
-        adl_parser.Archetype.ConceptCode = mArchetypeEngine.Archetype.ConceptCode
-        adl_parser.Archetype.Definition.RootNodeId = mArchetypeEngine.Archetype.Definition.RootNodeId
+        adlParser.Archetype.ConceptCode = mArchetypeEngine.Archetype.ConceptCode
+        adlParser.Archetype.Definition.RootNodeId = mArchetypeEngine.Archetype.Definition.RootNodeId
         If mOntologyManager.NumberOfSpecialisations > 0 Then
-            adl_parser.Archetype.ParentArchetype = mArchetypeEngine.Archetype.ParentArchetype
+            adlParser.Archetype.ParentArchetype = mArchetypeEngine.Archetype.ParentArchetype
         End If
 
         'set the adl version
-        adl_parser.ADL_Parser.archetype.set_adl_version(openehr.base.kernel.Create.STRING.make_from_cil("1.4"))
+        adlParser.ADL_Parser.archetype.set_adl_version(openehr.base.kernel.Create.STRING.make_from_cil("1.4"))
 
         'populate the ontology
-        'languages
+   
+        'languages - need translations and details for each language
 
-        Dim archetypeDetails() As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION_ITEM
-        archetypeDetails = Array.CreateInstance(GetType(openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION_ITEM), mOntologyManager.LanguagesTable.Rows.Count)
-        Dim ii As Integer = 0
+        'Dim ii As Integer = mOntologyManager.LanguagesTable.Rows.Count
+
+        Dim translationsArray As New ArrayList
+        Dim detailsArray As New ArrayList
+
+        'Dim translationsArray() As openehr.openehr.rm.common.resource.TRANSLATION_DETAILS
+        'translationsArray = Array.CreateInstance(GetType(openehr.openehr.rm.common.resource.TRANSLATION_DETAILS), ii - 1)
+        'Dim detailsArray() As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
+        'detailsArray = Array.CreateInstance(GetType(openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM), ii)
+
+        'Dim i As Integer = 0
+        'ii = 0
+
+        'First deal with the original language
+
 
         For Each dRow As DataRow In mOntologyManager.LanguagesTable.Rows
             Dim language As String = dRow(0)
-            If dRow(0) <> mOntologyManager.PrimaryLanguageCode Then
-                adl_parser.ADL_Parser.ontology.add_language_available(openehr.base.kernel.Create.STRING.make_from_cil(language))
+            If language <> mOntologyManager.PrimaryLanguageCode Then
+                Dim adlTranslationDetails As ADL_TranslationDetails = New ADL_TranslationDetails(Me.Archetype.TranslationDetails.Item(language))
+                translationsArray.Add(adlTranslationDetails.ADL_Translation)
+                adlParser.ADL_Parser.ontology.add_language(openehr.base.kernel.Create.STRING.make_from_cil(language))
             End If
 
             Dim cp As openehr.openehr.rm.data_types.text.Impl.CODE_PHRASE
             cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                openehr.base.kernel.Create.STRING.make_from_cil("openehr::" & language))
+                openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.DefaultLanguageCodeSet & "::" & language))
             Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
 
-            Dim adl_detail As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION_ITEM
-            adl_detail = openehr.openehr.am.archetype.description.Create.ARCHETYPE_DESCRIPTION_ITEM.make_lang( _
+            Dim adl_detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
+            adl_detail = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION_ITEM.make_from_language( _
                 openehr.base.kernel.Create.STRING.make_from_cil(language), _
-                openehr.base.kernel.Create.STRING.make_from_cil(""))
+                openehr.base.kernel.Create.STRING.make_from_cil((archDetail.Purpose)))
             If archDetail.Copyright <> "" Then
                 adl_detail.set_copyright(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.Copyright))
             End If
@@ -388,36 +413,39 @@ Public Class FileManagerLocal
                     adl_detail.add_keyword(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.KeyWords.Item(j)))
                 Next
             End If
-            archetypeDetails(ii) = adl_detail
-            ii += 1
+            detailsArray.Add(adl_detail)
 
         Next
         'term defintions
-        adl_parser.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable, mOntologyManager.PrimaryLanguageCode)
+        adlParser.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable, mOntologyManager.PrimaryLanguageCode)
 
         'constraint definitions
-        adl_parser.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable, mOntologyManager.PrimaryLanguageCode)
+        adlParser.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable, mOntologyManager.PrimaryLanguageCode)
 
         'bindings
-        adl_parser.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
-        adl_parser.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
+        adlParser.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
+        adlParser.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
 
 
         'Build the Definition
-        Dim adl_archetype As ArchetypeEditor.ADL_Classes.ADL_Archetype = adl_parser.Archetype
+        Dim adl_archetype As ArchetypeEditor.ADL_Classes.ADL_Archetype = adlParser.Archetype
         adl_archetype.Definition = Me.Archetype.Definition
         adl_archetype.MakeParseTree()
         Me.ParserSynchronised = True
-        
+
         'description
-        Dim adl_description As New ArchetypeEditor.ADL_Classes.ADL_Description(Me.Archetype.Description)
-        adl_parser.ADL_Parser.archetype.set_description(adl_description.ADL_Description)
-        For Each an_adl_detail As openehr.openehr.am.archetype.description.ARCHETYPE_DESCRIPTION_ITEM In archetypeDetails
-            adl_parser.ADL_Parser.archetype.description.add_detail( _
-                    an_adl_detail.language, an_adl_detail)
+        Dim adl_description As New ArchetypeEditor.ADL_Classes.ADL_Description(Me.Archetype.Description, mOntologyManager.PrimaryLanguageCode)
+        adlParser.ADL_Parser.archetype.set_description(adl_description.ADL_Description)
+        For Each an_adl_detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM In detailsArray
+            adlParser.ADL_Parser.archetype.description.add_detail(an_adl_detail)
         Next
 
-        Return adl_parser
+        'translations
+        For Each an_adl_translation As openehr.openehr.rm.common.resource.TRANSLATION_DETAILS In translationsArray
+            adlParser.ADL_Parser.archetype.add_translation(an_adl_translation, an_adl_translation.language.code_string)
+        Next
+
+        Return adlParser
 
     End Function
 

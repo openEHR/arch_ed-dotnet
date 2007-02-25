@@ -142,23 +142,25 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Sub AddTermDefinitionsFromTable(ByVal a_table As DataTable, ByVal primary_language As String)
             Dim term As ADL_Term
-            Dim language As openehr.base.kernel.STRING
+            Dim EifLanguage As openehr.base.kernel.STRING
 
             'First pass do primary language only
             For Each dRow As DataRow In a_table.Rows
-                If primary_language = CType(dRow(0), String) Then
-                    language = openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(0), String))
-                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(0), String))
-                    EIF_adlInterface.ontology.add_term_definition(language, term.EIF_Term)
+                Dim language As String = CType(dRow(0), String)
+                If primary_language = language Then
+                    EifLanguage = openehr.base.kernel.Create.STRING.make_from_cil(language)
+                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), language)
+                    EIF_adlInterface.ontology.add_term_definition(EifLanguage, term.EIF_Term)
                 End If
             Next
 
             'Then subsequent languages
             For Each dRow As DataRow In a_table.Rows
-                If primary_language <> CType(dRow(0), String) Then
-                    language = openehr.base.kernel.Create.STRING.make_from_cil(CType(dRow(0), String))
-                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(0), String))
-                    EIF_adlInterface.ontology.replace_term_definition(language, term.EIF_Term, False)
+                Dim language As String = CType(dRow(0), String)
+                If primary_language <> language Then
+                    EifLanguage = openehr.base.kernel.Create.STRING.make_from_cil(language)
+                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), language)
+                    EIF_adlInterface.ontology.replace_term_definition(EifLanguage, term.EIF_Term, False)
                 End If
             Next
         End Sub

@@ -50,6 +50,14 @@ Public Class OceanArchetypeEditor
         End Get
     End Property
 
+    Private Shared mDefaultLanguageCodeSet As String = "ISO_639-1"
+
+    Public Shared ReadOnly Property DefaultLanguageCodeSet() As String
+        Get
+            Return mDefaultLanguageCodeSet
+        End Get
+    End Property
+
     Private Shared mDefaultLanguageCode As String
 
     Public Shared ReadOnly Property DefaultLanguageCode() As String

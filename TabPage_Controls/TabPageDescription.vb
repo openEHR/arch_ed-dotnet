@@ -6,7 +6,19 @@ Public Class TabPageDescription
 
     Private mArchetypeDescription As ArchetypeDescription
     Private mLifeCycleStatesTable As DataTable
+    Friend WithEvents tpTranslation As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents gbTranslator As System.Windows.Forms.GroupBox
+    Friend WithEvents lblAccreditation As System.Windows.Forms.Label
+    Friend WithEvents txtTranslationAccreditation As System.Windows.Forms.TextBox
+    Friend WithEvents lblTranslatorOrganisation As System.Windows.Forms.Label
+    Friend WithEvents txtTranslatorOrganisation As System.Windows.Forms.TextBox
+    Friend WithEvents lblTranslatorName As System.Windows.Forms.Label
+    Friend WithEvents txtTranslatorName As System.Windows.Forms.TextBox
+    Friend WithEvents lblTranslatorEmail As System.Windows.Forms.Label
+    Friend WithEvents txtTranslatorEmail As System.Windows.Forms.TextBox
     Private mCurrentLanguage As String
+    Private mTranslationAltered As Boolean
+    Private mIsLoading As Boolean = False
 
 
 #Region " Windows Form Designer generated code "
@@ -78,7 +90,7 @@ Public Class TabPageDescription
     Friend WithEvents butAddContributor As System.Windows.Forms.Button
     Friend WithEvents gbContributors As System.Windows.Forms.GroupBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TabPageDescription))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageDescription))
         Me.lblStatus = New System.Windows.Forms.Label
         Me.txtUse = New System.Windows.Forms.TextBox
         Me.txtMisuse = New System.Windows.Forms.TextBox
@@ -93,11 +105,8 @@ Public Class TabPageDescription
         Me.lblKeyword = New System.Windows.Forms.Label
         Me.listKeyword = New System.Windows.Forms.ListBox
         Me.TabDescription = New Crownwood.Magic.Controls.TabControl
-        Me.tpAuthor = New Crownwood.Magic.Controls.TabPage
-        Me.butAddContributor = New System.Windows.Forms.Button
-        Me.butRemoveContributor = New System.Windows.Forms.Button
-        Me.listContributors = New System.Windows.Forms.ListBox
-        Me.gbAuthor = New System.Windows.Forms.GroupBox
+        Me.tpTranslation = New Crownwood.Magic.Controls.TabPage
+        Me.gbTranslator = New System.Windows.Forms.GroupBox
         Me.ContextMenu1 = New System.Windows.Forms.ContextMenu
         Me.c_menuPaste = New System.Windows.Forms.MenuItem
         Me.c_menuPasteAll = New System.Windows.Forms.MenuItem
@@ -105,6 +114,24 @@ Public Class TabPageDescription
         Me.c_menuPasteEmail = New System.Windows.Forms.MenuItem
         Me.c_menuPasteOrg = New System.Windows.Forms.MenuItem
         Me.c_menPasteDate = New System.Windows.Forms.MenuItem
+        Me.lblAccreditation = New System.Windows.Forms.Label
+        Me.txtTranslationAccreditation = New System.Windows.Forms.TextBox
+        Me.lblTranslatorOrganisation = New System.Windows.Forms.Label
+        Me.txtTranslatorOrganisation = New System.Windows.Forms.TextBox
+        Me.lblTranslatorName = New System.Windows.Forms.Label
+        Me.txtTranslatorName = New System.Windows.Forms.TextBox
+        Me.lblTranslatorEmail = New System.Windows.Forms.Label
+        Me.txtTranslatorEmail = New System.Windows.Forms.TextBox
+        Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage
+        Me.Splitter3 = New System.Windows.Forms.Splitter
+        Me.Splitter2 = New System.Windows.Forms.Splitter
+        Me.Splitter1 = New System.Windows.Forms.Splitter
+        Me.tpAuthor = New Crownwood.Magic.Controls.TabPage
+        Me.gbContributors = New System.Windows.Forms.GroupBox
+        Me.listContributors = New System.Windows.Forms.ListBox
+        Me.butAddContributor = New System.Windows.Forms.Button
+        Me.butRemoveContributor = New System.Windows.Forms.Button
+        Me.gbAuthor = New System.Windows.Forms.GroupBox
         Me.lblDate = New System.Windows.Forms.Label
         Me.txtDate = New System.Windows.Forms.TextBox
         Me.lblOrganisation = New System.Windows.Forms.Label
@@ -113,19 +140,16 @@ Public Class TabPageDescription
         Me.txtOriginalAuthor = New System.Windows.Forms.TextBox
         Me.lblEmail = New System.Windows.Forms.Label
         Me.txtOriginalEmail = New System.Windows.Forms.TextBox
-        Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage
-        Me.Splitter3 = New System.Windows.Forms.Splitter
-        Me.Splitter2 = New System.Windows.Forms.Splitter
-        Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.gbContributors = New System.Windows.Forms.GroupBox
         Me.gbUse.SuspendLayout()
         Me.gbMisuse.SuspendLayout()
         Me.gbPurpose.SuspendLayout()
         Me.panelDescription.SuspendLayout()
-        Me.tpAuthor.SuspendLayout()
-        Me.gbAuthor.SuspendLayout()
+        Me.tpTranslation.SuspendLayout()
+        Me.gbTranslator.SuspendLayout()
         Me.tpDescDetails.SuspendLayout()
+        Me.tpAuthor.SuspendLayout()
         Me.gbContributors.SuspendLayout()
+        Me.gbAuthor.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblStatus
@@ -146,7 +170,6 @@ Public Class TabPageDescription
         Me.txtUse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtUse.Size = New System.Drawing.Size(694, 105)
         Me.txtUse.TabIndex = 4
-        Me.txtUse.Text = ""
         '
         'txtMisuse
         '
@@ -157,7 +180,6 @@ Public Class TabPageDescription
         Me.txtMisuse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtMisuse.Size = New System.Drawing.Size(694, 89)
         Me.txtMisuse.TabIndex = 6
-        Me.txtMisuse.Text = ""
         '
         'gbUse
         '
@@ -201,7 +223,6 @@ Public Class TabPageDescription
         Me.txtPurpose.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtPurpose.Size = New System.Drawing.Size(459, 205)
         Me.txtPurpose.TabIndex = 0
-        Me.txtPurpose.Text = ""
         '
         'panelDescription
         '
@@ -228,6 +249,7 @@ Public Class TabPageDescription
         Me.ButAddKeyWord.Name = "ButAddKeyWord"
         Me.ButAddKeyWord.Size = New System.Drawing.Size(24, 25)
         Me.ButAddKeyWord.TabIndex = 34
+        Me.ButAddKeyWord.UseVisualStyleBackColor = False
         '
         'butRemoveKeyWord
         '
@@ -239,6 +261,7 @@ Public Class TabPageDescription
         Me.butRemoveKeyWord.Name = "butRemoveKeyWord"
         Me.butRemoveKeyWord.Size = New System.Drawing.Size(24, 25)
         Me.butRemoveKeyWord.TabIndex = 35
+        Me.butRemoveKeyWord.UseVisualStyleBackColor = False
         '
         'comboLifeCycle
         '
@@ -275,74 +298,40 @@ Public Class TabPageDescription
         Me.TabDescription.Location = New System.Drawing.Point(2, 2)
         Me.TabDescription.Name = "TabDescription"
         Me.TabDescription.PositionTop = True
-        Me.TabDescription.SelectedIndex = 1
-        Me.TabDescription.SelectedTab = Me.tpAuthor
+        Me.TabDescription.SelectedIndex = 2
+        Me.TabDescription.SelectedTab = Me.tpTranslation
         Me.TabDescription.Size = New System.Drawing.Size(700, 500)
         Me.TabDescription.TabIndex = 15
-        Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor})
+        Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation})
         '
-        'tpAuthor
+        'tpTranslation
         '
-        Me.tpAuthor.Controls.Add(Me.gbContributors)
-        Me.tpAuthor.Controls.Add(Me.gbAuthor)
-        Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
-        Me.tpAuthor.Name = "tpAuthor"
-        Me.tpAuthor.Size = New System.Drawing.Size(700, 474)
-        Me.tpAuthor.TabIndex = 1
-        Me.tpAuthor.Title = "Authorship"
+        Me.tpTranslation.BackColor = System.Drawing.Color.LightBlue
+        Me.tpTranslation.Controls.Add(Me.gbTranslator)
+        Me.tpTranslation.Location = New System.Drawing.Point(0, 0)
+        Me.tpTranslation.Name = "tpTranslation"
+        Me.tpTranslation.Size = New System.Drawing.Size(700, 474)
+        Me.tpTranslation.TabIndex = 2
+        Me.tpTranslation.Title = "Translation"
         '
-        'butAddContributor
+        'gbTranslator
         '
-        Me.butAddContributor.BackColor = System.Drawing.Color.Transparent
-        Me.butAddContributor.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.butAddContributor.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.butAddContributor.Image = CType(resources.GetObject("butAddContributor.Image"), System.Drawing.Image)
-        Me.butAddContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddContributor.Location = New System.Drawing.Point(32, 24)
-        Me.butAddContributor.Name = "butAddContributor"
-        Me.butAddContributor.Size = New System.Drawing.Size(24, 25)
-        Me.butAddContributor.TabIndex = 38
-        '
-        'butRemoveContributor
-        '
-        Me.butRemoveContributor.BackColor = System.Drawing.Color.Transparent
-        Me.butRemoveContributor.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.butRemoveContributor.Image = CType(resources.GetObject("butRemoveContributor.Image"), System.Drawing.Image)
-        Me.butRemoveContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveContributor.Location = New System.Drawing.Point(32, 56)
-        Me.butRemoveContributor.Name = "butRemoveContributor"
-        Me.butRemoveContributor.Size = New System.Drawing.Size(24, 25)
-        Me.butRemoveContributor.TabIndex = 39
-        '
-        'listContributors
-        '
-        Me.listContributors.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.listContributors.ItemHeight = 17
-        Me.listContributors.Location = New System.Drawing.Point(64, 24)
-        Me.listContributors.Name = "listContributors"
-        Me.listContributors.Size = New System.Drawing.Size(616, 123)
-        Me.listContributors.TabIndex = 36
-        '
-        'gbAuthor
-        '
-        Me.gbAuthor.ContextMenu = Me.ContextMenu1
-        Me.gbAuthor.Controls.Add(Me.lblDate)
-        Me.gbAuthor.Controls.Add(Me.txtDate)
-        Me.gbAuthor.Controls.Add(Me.lblOrganisation)
-        Me.gbAuthor.Controls.Add(Me.txtOrganisation)
-        Me.gbAuthor.Controls.Add(Me.lblName)
-        Me.gbAuthor.Controls.Add(Me.txtOriginalAuthor)
-        Me.gbAuthor.Controls.Add(Me.lblEmail)
-        Me.gbAuthor.Controls.Add(Me.txtOriginalEmail)
-        Me.gbAuthor.Dock = System.Windows.Forms.DockStyle.Top
-        Me.gbAuthor.Location = New System.Drawing.Point(0, 0)
-        Me.gbAuthor.Name = "gbAuthor"
-        Me.gbAuthor.Size = New System.Drawing.Size(700, 152)
-        Me.gbAuthor.TabIndex = 4
-        Me.gbAuthor.TabStop = False
-        Me.gbAuthor.Text = "Original author"
+        Me.gbTranslator.ContextMenu = Me.ContextMenu1
+        Me.gbTranslator.Controls.Add(Me.lblAccreditation)
+        Me.gbTranslator.Controls.Add(Me.txtTranslationAccreditation)
+        Me.gbTranslator.Controls.Add(Me.lblTranslatorOrganisation)
+        Me.gbTranslator.Controls.Add(Me.txtTranslatorOrganisation)
+        Me.gbTranslator.Controls.Add(Me.lblTranslatorName)
+        Me.gbTranslator.Controls.Add(Me.txtTranslatorName)
+        Me.gbTranslator.Controls.Add(Me.lblTranslatorEmail)
+        Me.gbTranslator.Controls.Add(Me.txtTranslatorEmail)
+        Me.gbTranslator.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbTranslator.Location = New System.Drawing.Point(0, 0)
+        Me.gbTranslator.Name = "gbTranslator"
+        Me.gbTranslator.Size = New System.Drawing.Size(700, 157)
+        Me.gbTranslator.TabIndex = 5
+        Me.gbTranslator.TabStop = False
+        Me.gbTranslator.Text = "Translator"
         '
         'ContextMenu1
         '
@@ -379,73 +368,69 @@ Public Class TabPageDescription
         Me.c_menPasteDate.Index = 4
         Me.c_menPasteDate.Text = "Date"
         '
-        'lblDate
+        'lblAccreditation
         '
-        Me.lblDate.Location = New System.Drawing.Point(16, 120)
-        Me.lblDate.Name = "lblDate"
-        Me.lblDate.Size = New System.Drawing.Size(128, 24)
-        Me.lblDate.TabIndex = 7
-        Me.lblDate.Text = "Date:"
-        Me.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblAccreditation.Location = New System.Drawing.Point(16, 120)
+        Me.lblAccreditation.Name = "lblAccreditation"
+        Me.lblAccreditation.Size = New System.Drawing.Size(128, 24)
+        Me.lblAccreditation.TabIndex = 7
+        Me.lblAccreditation.Text = "Accreditation"
+        Me.lblAccreditation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'txtDate
+        'txtTranslationAccreditation
         '
-        Me.txtDate.Location = New System.Drawing.Point(152, 120)
-        Me.txtDate.Name = "txtDate"
-        Me.txtDate.Size = New System.Drawing.Size(160, 24)
-        Me.txtDate.TabIndex = 6
-        Me.txtDate.Text = ""
+        Me.txtTranslationAccreditation.Location = New System.Drawing.Point(152, 120)
+        Me.txtTranslationAccreditation.Name = "txtTranslationAccreditation"
+        Me.txtTranslationAccreditation.Size = New System.Drawing.Size(160, 24)
+        Me.txtTranslationAccreditation.TabIndex = 6
         '
-        'lblOrganisation
+        'lblTranslatorOrganisation
         '
-        Me.lblOrganisation.Location = New System.Drawing.Point(16, 88)
-        Me.lblOrganisation.Name = "lblOrganisation"
-        Me.lblOrganisation.Size = New System.Drawing.Size(128, 24)
-        Me.lblOrganisation.TabIndex = 5
-        Me.lblOrganisation.Text = "Organisation:"
-        Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblTranslatorOrganisation.Location = New System.Drawing.Point(16, 88)
+        Me.lblTranslatorOrganisation.Name = "lblTranslatorOrganisation"
+        Me.lblTranslatorOrganisation.Size = New System.Drawing.Size(128, 24)
+        Me.lblTranslatorOrganisation.TabIndex = 5
+        Me.lblTranslatorOrganisation.Text = "Organisation"
+        Me.lblTranslatorOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'txtOrganisation
+        'txtTranslatorOrganisation
         '
-        Me.txtOrganisation.Location = New System.Drawing.Point(152, 88)
-        Me.txtOrganisation.Name = "txtOrganisation"
-        Me.txtOrganisation.Size = New System.Drawing.Size(424, 24)
-        Me.txtOrganisation.TabIndex = 4
-        Me.txtOrganisation.Text = ""
+        Me.txtTranslatorOrganisation.Location = New System.Drawing.Point(152, 88)
+        Me.txtTranslatorOrganisation.Name = "txtTranslatorOrganisation"
+        Me.txtTranslatorOrganisation.Size = New System.Drawing.Size(424, 24)
+        Me.txtTranslatorOrganisation.TabIndex = 4
         '
-        'lblName
+        'lblTranslatorName
         '
-        Me.lblName.Location = New System.Drawing.Point(16, 24)
-        Me.lblName.Name = "lblName"
-        Me.lblName.Size = New System.Drawing.Size(128, 24)
-        Me.lblName.TabIndex = 2
-        Me.lblName.Text = "Name:"
-        Me.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblTranslatorName.Location = New System.Drawing.Point(16, 24)
+        Me.lblTranslatorName.Name = "lblTranslatorName"
+        Me.lblTranslatorName.Size = New System.Drawing.Size(128, 24)
+        Me.lblTranslatorName.TabIndex = 2
+        Me.lblTranslatorName.Text = "Name"
+        Me.lblTranslatorName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'txtOriginalAuthor
+        'txtTranslatorName
         '
-        Me.txtOriginalAuthor.Location = New System.Drawing.Point(152, 24)
-        Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
-        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 24)
-        Me.txtOriginalAuthor.TabIndex = 0
-        Me.txtOriginalAuthor.Text = ""
+        Me.txtTranslatorName.Location = New System.Drawing.Point(152, 24)
+        Me.txtTranslatorName.Name = "txtTranslatorName"
+        Me.txtTranslatorName.Size = New System.Drawing.Size(424, 24)
+        Me.txtTranslatorName.TabIndex = 0
         '
-        'lblEmail
+        'lblTranslatorEmail
         '
-        Me.lblEmail.Location = New System.Drawing.Point(16, 56)
-        Me.lblEmail.Name = "lblEmail"
-        Me.lblEmail.Size = New System.Drawing.Size(128, 24)
-        Me.lblEmail.TabIndex = 3
-        Me.lblEmail.Text = "Email:"
-        Me.lblEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lblTranslatorEmail.Location = New System.Drawing.Point(16, 56)
+        Me.lblTranslatorEmail.Name = "lblTranslatorEmail"
+        Me.lblTranslatorEmail.Size = New System.Drawing.Size(128, 24)
+        Me.lblTranslatorEmail.TabIndex = 3
+        Me.lblTranslatorEmail.Text = "Email"
+        Me.lblTranslatorEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'txtOriginalEmail
+        'txtTranslatorEmail
         '
-        Me.txtOriginalEmail.Location = New System.Drawing.Point(152, 56)
-        Me.txtOriginalEmail.Name = "txtOriginalEmail"
-        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 24)
-        Me.txtOriginalEmail.TabIndex = 1
-        Me.txtOriginalEmail.Text = ""
+        Me.txtTranslatorEmail.Location = New System.Drawing.Point(152, 56)
+        Me.txtTranslatorEmail.Name = "txtTranslatorEmail"
+        Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 24)
+        Me.txtTranslatorEmail.TabIndex = 1
         '
         'tpDescDetails
         '
@@ -490,6 +475,17 @@ Public Class TabPageDescription
         Me.Splitter1.TabIndex = 15
         Me.Splitter1.TabStop = False
         '
+        'tpAuthor
+        '
+        Me.tpAuthor.Controls.Add(Me.gbContributors)
+        Me.tpAuthor.Controls.Add(Me.gbAuthor)
+        Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
+        Me.tpAuthor.Name = "tpAuthor"
+        Me.tpAuthor.Selected = False
+        Me.tpAuthor.Size = New System.Drawing.Size(700, 474)
+        Me.tpAuthor.TabIndex = 1
+        Me.tpAuthor.Title = "Authorship"
+        '
         'gbContributors
         '
         Me.gbContributors.Controls.Add(Me.listContributors)
@@ -503,21 +499,147 @@ Public Class TabPageDescription
         Me.gbContributors.TabStop = False
         Me.gbContributors.Text = "Contributors"
         '
+        'listContributors
+        '
+        Me.listContributors.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.listContributors.ItemHeight = 17
+        Me.listContributors.Location = New System.Drawing.Point(64, 24)
+        Me.listContributors.Name = "listContributors"
+        Me.listContributors.Size = New System.Drawing.Size(616, 123)
+        Me.listContributors.TabIndex = 36
+        '
+        'butAddContributor
+        '
+        Me.butAddContributor.BackColor = System.Drawing.Color.Transparent
+        Me.butAddContributor.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.butAddContributor.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butAddContributor.Image = CType(resources.GetObject("butAddContributor.Image"), System.Drawing.Image)
+        Me.butAddContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butAddContributor.Location = New System.Drawing.Point(32, 24)
+        Me.butAddContributor.Name = "butAddContributor"
+        Me.butAddContributor.Size = New System.Drawing.Size(24, 25)
+        Me.butAddContributor.TabIndex = 38
+        Me.butAddContributor.UseVisualStyleBackColor = False
+        '
+        'butRemoveContributor
+        '
+        Me.butRemoveContributor.BackColor = System.Drawing.Color.Transparent
+        Me.butRemoveContributor.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butRemoveContributor.Image = CType(resources.GetObject("butRemoveContributor.Image"), System.Drawing.Image)
+        Me.butRemoveContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butRemoveContributor.Location = New System.Drawing.Point(32, 56)
+        Me.butRemoveContributor.Name = "butRemoveContributor"
+        Me.butRemoveContributor.Size = New System.Drawing.Size(24, 25)
+        Me.butRemoveContributor.TabIndex = 39
+        Me.butRemoveContributor.UseVisualStyleBackColor = False
+        '
+        'gbAuthor
+        '
+        Me.gbAuthor.ContextMenu = Me.ContextMenu1
+        Me.gbAuthor.Controls.Add(Me.lblDate)
+        Me.gbAuthor.Controls.Add(Me.txtDate)
+        Me.gbAuthor.Controls.Add(Me.lblOrganisation)
+        Me.gbAuthor.Controls.Add(Me.txtOrganisation)
+        Me.gbAuthor.Controls.Add(Me.lblName)
+        Me.gbAuthor.Controls.Add(Me.txtOriginalAuthor)
+        Me.gbAuthor.Controls.Add(Me.lblEmail)
+        Me.gbAuthor.Controls.Add(Me.txtOriginalEmail)
+        Me.gbAuthor.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbAuthor.Location = New System.Drawing.Point(0, 0)
+        Me.gbAuthor.Name = "gbAuthor"
+        Me.gbAuthor.Size = New System.Drawing.Size(700, 152)
+        Me.gbAuthor.TabIndex = 4
+        Me.gbAuthor.TabStop = False
+        Me.gbAuthor.Text = "Original author"
+        '
+        'lblDate
+        '
+        Me.lblDate.Location = New System.Drawing.Point(16, 120)
+        Me.lblDate.Name = "lblDate"
+        Me.lblDate.Size = New System.Drawing.Size(128, 24)
+        Me.lblDate.TabIndex = 7
+        Me.lblDate.Text = "Date:"
+        Me.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtDate
+        '
+        Me.txtDate.Location = New System.Drawing.Point(152, 120)
+        Me.txtDate.Name = "txtDate"
+        Me.txtDate.Size = New System.Drawing.Size(160, 24)
+        Me.txtDate.TabIndex = 6
+        '
+        'lblOrganisation
+        '
+        Me.lblOrganisation.Location = New System.Drawing.Point(16, 88)
+        Me.lblOrganisation.Name = "lblOrganisation"
+        Me.lblOrganisation.Size = New System.Drawing.Size(128, 24)
+        Me.lblOrganisation.TabIndex = 5
+        Me.lblOrganisation.Text = "Organisation:"
+        Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOrganisation
+        '
+        Me.txtOrganisation.Location = New System.Drawing.Point(152, 88)
+        Me.txtOrganisation.Name = "txtOrganisation"
+        Me.txtOrganisation.Size = New System.Drawing.Size(424, 24)
+        Me.txtOrganisation.TabIndex = 4
+        '
+        'lblName
+        '
+        Me.lblName.Location = New System.Drawing.Point(16, 24)
+        Me.lblName.Name = "lblName"
+        Me.lblName.Size = New System.Drawing.Size(128, 24)
+        Me.lblName.TabIndex = 2
+        Me.lblName.Text = "Name:"
+        Me.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOriginalAuthor
+        '
+        Me.txtOriginalAuthor.Location = New System.Drawing.Point(152, 24)
+        Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
+        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 24)
+        Me.txtOriginalAuthor.TabIndex = 0
+        '
+        'lblEmail
+        '
+        Me.lblEmail.Location = New System.Drawing.Point(16, 56)
+        Me.lblEmail.Name = "lblEmail"
+        Me.lblEmail.Size = New System.Drawing.Size(128, 24)
+        Me.lblEmail.TabIndex = 3
+        Me.lblEmail.Text = "Email:"
+        Me.lblEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txtOriginalEmail
+        '
+        Me.txtOriginalEmail.Location = New System.Drawing.Point(152, 56)
+        Me.txtOriginalEmail.Name = "txtOriginalEmail"
+        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 24)
+        Me.txtOriginalEmail.TabIndex = 1
+        '
         'TabPageDescription
         '
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.Controls.Add(Me.TabDescription)
-        Me.DockPadding.All = 2
         Me.Name = "TabPageDescription"
+        Me.Padding = New System.Windows.Forms.Padding(2)
         Me.Size = New System.Drawing.Size(704, 504)
         Me.gbUse.ResumeLayout(False)
+        Me.gbUse.PerformLayout()
         Me.gbMisuse.ResumeLayout(False)
+        Me.gbMisuse.PerformLayout()
         Me.gbPurpose.ResumeLayout(False)
+        Me.gbPurpose.PerformLayout()
         Me.panelDescription.ResumeLayout(False)
-        Me.tpAuthor.ResumeLayout(False)
-        Me.gbAuthor.ResumeLayout(False)
+        Me.tpTranslation.ResumeLayout(False)
+        Me.gbTranslator.ResumeLayout(False)
+        Me.gbTranslator.PerformLayout()
         Me.tpDescDetails.ResumeLayout(False)
+        Me.tpAuthor.ResumeLayout(False)
         Me.gbContributors.ResumeLayout(False)
+        Me.gbAuthor.ResumeLayout(False)
+        Me.gbAuthor.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -543,16 +665,55 @@ Public Class TabPageDescription
 
             mArchetypeDescription = Value
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
-            SetDescriptionDetailValues()
+            SetDescriptionDetailValues(False)
         End Set
     End Property
 
-    Public Sub SaveDescription()
+
+    Dim mTranslationDetails As Generic.SortedList(Of String, TranslationDetails) = New Generic.SortedList(Of String, TranslationDetails)
+
+    Public Property TranslationDetails() As Generic.SortedList(Of String, TranslationDetails)
+        Get
+            SaveTranslation()
+            Return mTranslationDetails
+        End Get
+        Set(ByVal value As Generic.SortedList(Of String, TranslationDetails))
+            mTranslationDetails = value
+            SetTranslationValues()
+        End Set
+    End Property
+
+    Private Sub SaveTranslation()
+        If mTranslationAltered Then
+            Dim t As TranslationDetails = Nothing
+            If mTranslationDetails.Keys.Contains(mCurrentLanguage) Then
+                t = mTranslationDetails.Item(mCurrentLanguage)
+            Else
+                Select Case Filemanager.Master.ParserType
+                    Case "adl"
+                        t = New ADL_TranslationDetails(mCurrentLanguage)
+                    Case "xml"
+                        t = New XML_TranslationDetails(mCurrentLanguage)
+                End Select
+            End If
+            t.Accreditation = Me.txtTranslationAccreditation.Text
+            t.AuthorName = Me.txtTranslatorName.Text
+            t.AuthorOrganisation = Me.txtTranslatorOrganisation.Text
+            t.AuthorEmail = Me.txtTranslatorEmail.Text
+            If mTranslationDetails.Keys.Contains(t.Language) Then
+                mTranslationDetails.Item(t.Language) = t
+            Else
+                mTranslationDetails.Add(t.Language, t)
+            End If
+        End If
+        mTranslationAltered = False
+    End Sub
+    Private Sub SaveDescription()
 
         If mArchetypeDescription Is Nothing Then
             Select Case Filemanager.Master.ParserType
                 Case "adl"
-                    mArchetypeDescription = New ArchetypeEditor.ADL_Classes.ADL_Description
+                    mArchetypeDescription = New ArchetypeEditor.ADL_Classes.ADL_Description(Filemanager.Master.OntologyManager.PrimaryLanguageCode)
                 Case "xml"
                     mArchetypeDescription = New ArchetypeEditor.XML_Classes.XML_Description
             End Select
@@ -630,10 +791,10 @@ Public Class TabPageDescription
 
     End Function
 
-    Public Sub SetDescriptionDetailValues()
+    Private Sub SetDescriptionDetailValues(ByVal translate As Boolean)
+        Dim archDescriptionItem As ArchetypeDescriptionItem
         Me.listKeyword.Items.Clear()
         If mArchetypeDescription.Details.HasDetailInLanguage(mCurrentLanguage) Then
-            Dim archDescriptionItem As ArchetypeDescriptionItem
             archDescriptionItem = mArchetypeDescription.Details.DetailInLanguage(mCurrentLanguage)
             For Each s As String In archDescriptionItem.KeyWords
                 Me.listKeyword.Items.Add(s)
@@ -641,7 +802,60 @@ Public Class TabPageDescription
             Me.txtPurpose.Text = archDescriptionItem.Purpose
             Me.txtUse.Text = archDescriptionItem.Use
             Me.txtMisuse.Text = archDescriptionItem.MisUse
+        ElseIf translate Then
+            If mArchetypeDescription.Details.HasDetailInLanguage(Filemanager.Master.OntologyManager.PrimaryLanguageCode) Then
+                archDescriptionItem = mArchetypeDescription.Details.DetailInLanguage(Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                For Each s As String In archDescriptionItem.KeyWords
+                    Me.listKeyword.Items.Add(String.Format("*{0}({1})", s, Filemanager.Master.OntologyManager.PrimaryLanguageCode))
+                Next
+                Me.txtPurpose.Text = String.Format("*{0}({1})", archDescriptionItem.Purpose, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                Me.txtUse.Text = String.Format("*{0}({1})", archDescriptionItem.Use, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                Me.txtMisuse.Text = String.Format("*{0}({1})", archDescriptionItem.MisUse, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+            Else
+                If Me.txtPurpose.Text <> "" Then
+                    Me.txtPurpose.Text = "*" & Me.txtPurpose.Text & "(" & mCurrentLanguage & ")"
+                End If
+                If Me.txtUse.Text <> "" Then
+                    Me.txtUse.Text = "*" & Me.txtUse.Text & "(" & mCurrentLanguage & ")"
+                End If
+                If Me.txtMisuse.Text <> "" Then
+                    Me.txtMisuse.Text = "*" & Me.txtMisuse.Text & "(" & mCurrentLanguage & ")"
+                End If
+            End If
         End If
+    End Sub
+
+    Private Sub SetTranslationValues()
+        mIsLoading = True
+
+        If mCurrentLanguage = Filemanager.Master.OntologyManager.PrimaryLanguageCode Then
+            Me.txtTranslationAccreditation.Text = ""
+            Me.txtTranslatorEmail.Text = ""
+            Me.txtTranslatorName.Text = ""
+            Me.txtTranslatorOrganisation.Text = ""
+            Me.gbTranslator.Visible = False
+        Else
+            Me.gbTranslator.Visible = True
+            Dim t As TranslationDetails = Nothing
+            If mTranslationDetails.Keys.Contains(mCurrentLanguage) Then
+                t = mTranslationDetails.Item(mCurrentLanguage)
+            Else
+                Select Case Filemanager.Master.ParserType
+                    Case "adl"
+                        t = New ADL_TranslationDetails(mCurrentLanguage)
+                    Case "xml"
+                        t = New XML_TranslationDetails(mCurrentLanguage)
+                End Select
+                t.AuthorName = "?"
+                mTranslationAltered = True
+                Filemanager.Master.FileEdited = True
+            End If
+            Me.txtTranslatorName.Text = t.AuthorName
+            Me.txtTranslationAccreditation.Text = t.Accreditation
+            Me.txtTranslatorEmail.Text = t.AuthorEmail
+            Me.txtTranslatorOrganisation.Text = t.AuthorOrganisation
+        End If
+        mIsLoading = False
     End Sub
 
     Public Sub Reset()
@@ -653,18 +867,23 @@ Public Class TabPageDescription
         Me.txtMisuse.Text = ""
         Me.listKeyword.Items.Clear()
         Me.listContributors.Items.Clear()
+        Me.txtTranslationAccreditation.Text = ""
+        Me.txtTranslatorEmail.Text = ""
+        Me.txtTranslatorName.Text = ""
+        Me.txtTranslatorOrganisation.Text = ""
+        mTranslationAltered = False
+        Me.gbTranslator.Visible = False
     End Sub
 
     Public Sub Translate()
         Dim fileState As Boolean = Filemanager.Master.FileLoading
         Filemanager.Master.FileLoading = True
         SaveDescription() ' in the previous language = mCurrentLanguage
+        SaveTranslation()
         ' Now mark the texts as needing translation in case this is a new language
-        Me.txtPurpose.Text = "*" & Me.txtPurpose.Text & "(" & mCurrentLanguage & ")"
-        Me.txtUse.Text = "*" & Me.txtUse.Text & "(" & mCurrentLanguage & ")"
-        Me.txtMisuse.Text = "*" & Me.txtMisuse.Text & "(" & mCurrentLanguage & ")"
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
-        SetDescriptionDetailValues()
+        SetDescriptionDetailValues(True)
+        SetTranslationValues()
         Filemanager.Master.FileLoading = fileState
     End Sub
 
@@ -672,11 +891,16 @@ Public Class TabPageDescription
         Me.lblKeyword.Text = Filemanager.GetOpenEhrTerm(578, Me.lblKeyword.Text)
         Me.lblStatus.Text = Filemanager.GetOpenEhrTerm(568, Me.lblStatus.Text)
         Me.lblName.Text = Filemanager.GetOpenEhrTerm(579, Me.lblName.Text)
+        Me.lblTranslatorName.Text = lblName.Text
         Me.lblEmail.Text = Filemanager.GetOpenEhrTerm(207, Me.lblEmail.Text)
+        Me.lblTranslatorEmail.Text = Me.lblEmail.Text
         Me.lblDate.Text = Filemanager.GetOpenEhrTerm(593, Me.lblDate.Text)
+        Me.lblAccreditation.Text = Filemanager.GetOpenEhrTerm(651, Me.lblAccreditation.Text)
         Me.lblOrganisation.Text = Filemanager.GetOpenEhrTerm(594, Me.lblOrganisation.Text)
+        Me.lblTranslatorOrganisation.Text = Me.lblOrganisation.Text
         Me.tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, Me.tpAuthor.Title)
         Me.tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, Me.tpDescDetails.Title)
+        Me.tpTranslation.Title = Filemanager.GetOpenEhrTerm(650, Me.tpTranslation.Title)
         Me.gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, Me.gbPurpose.Text)
         Me.gbUse.Text = Filemanager.GetOpenEhrTerm(582, Me.gbUse.Text)
         Me.gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, Me.gbMisuse.Text)
@@ -823,5 +1047,12 @@ Public Class TabPageDescription
 
     Private Sub TabPageDescription_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
         OceanArchetypeEditor.Reflect(Me)
+    End Sub
+
+    Private Sub txtTranslatorName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTranslatorName.TextChanged, txtTranslationAccreditation.TextChanged, txtTranslatorEmail.TextChanged, txtTranslatorOrganisation.TextChanged
+        If Not mIsLoading Then
+            mTranslationAltered = True
+            Filemanager.Master.FileEdited = True
+        End If
     End Sub
 End Class
