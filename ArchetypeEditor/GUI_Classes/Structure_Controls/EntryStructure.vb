@@ -170,7 +170,6 @@ Public Class EntryStructure
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(EntryStructure))
         Me.PanelIcons = New System.Windows.Forms.Panel
-        Me.pbSlot = New System.Windows.Forms.PictureBox
         Me.ButAddElement = New System.Windows.Forms.Button
         Me.butRemoveElement = New System.Windows.Forms.Button
         Me.butListUp = New System.Windows.Forms.Button
@@ -184,6 +183,7 @@ Public Class EntryStructure
         Me.pbAny = New System.Windows.Forms.PictureBox
         Me.pbCluster = New System.Windows.Forms.PictureBox
         Me.butChangeDataType = New System.Windows.Forms.Button
+        Me.pbSlot = New System.Windows.Forms.PictureBox
         Me.PanelStructureHeader = New System.Windows.Forms.Panel
         Me.lblAtcode = New System.Windows.Forms.Label
         Me.ilSmall = New System.Windows.Forms.ImageList(Me.components)
@@ -192,7 +192,6 @@ Public Class EntryStructure
         Me.helpEntryStructure = New System.Windows.Forms.HelpProvider
         Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.PanelIcons.SuspendLayout()
-        CType(Me.pbSlot, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbText, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbQuantity, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbCount, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -201,6 +200,7 @@ Public Class EntryStructure
         CType(Me.pbBoolean, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbAny, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.pbCluster, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbSlot, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelStructureHeader.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -225,16 +225,6 @@ Public Class EntryStructure
         Me.PanelIcons.Name = "PanelIcons"
         Me.PanelIcons.Size = New System.Drawing.Size(40, 382)
         Me.PanelIcons.TabIndex = 36
-        '
-        'pbSlot
-        '
-        Me.pbSlot.Image = CType(resources.GetObject("pbSlot.Image"), System.Drawing.Image)
-        Me.pbSlot.Location = New System.Drawing.Point(8, 328)
-        Me.pbSlot.Name = "pbSlot"
-        Me.pbSlot.Size = New System.Drawing.Size(24, 25)
-        Me.pbSlot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.pbSlot.TabIndex = 40
-        Me.pbSlot.TabStop = False
         '
         'ButAddElement
         '
@@ -385,6 +375,16 @@ Public Class EntryStructure
         Me.butChangeDataType.TabIndex = 34
         Me.butChangeDataType.Visible = False
         '
+        'pbSlot
+        '
+        Me.pbSlot.Image = CType(resources.GetObject("pbSlot.Image"), System.Drawing.Image)
+        Me.pbSlot.Location = New System.Drawing.Point(8, 328)
+        Me.pbSlot.Name = "pbSlot"
+        Me.pbSlot.Size = New System.Drawing.Size(24, 25)
+        Me.pbSlot.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.pbSlot.TabIndex = 40
+        Me.pbSlot.TabStop = False
+        '
         'PanelStructureHeader
         '
         Me.PanelStructureHeader.Controls.Add(Me.lblAtcode)
@@ -419,11 +419,11 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(8, "")
         Me.ilSmall.Images.SetKeyName(9, "")
         Me.ilSmall.Images.SetKeyName(10, "")
-        Me.ilSmall.Images.SetKeyName(11, "duration.gif")
-        Me.ilSmall.Images.SetKeyName(12, "interval_quantity.gif")
-        Me.ilSmall.Images.SetKeyName(13, "interval_count.gif")
-        Me.ilSmall.Images.SetKeyName(14, "interval_datetime.gif")
-        Me.ilSmall.Images.SetKeyName(15, "slot.png")
+        Me.ilSmall.Images.SetKeyName(11, "")
+        Me.ilSmall.Images.SetKeyName(12, "")
+        Me.ilSmall.Images.SetKeyName(13, "")
+        Me.ilSmall.Images.SetKeyName(14, "")
+        Me.ilSmall.Images.SetKeyName(15, "")
         Me.ilSmall.Images.SetKeyName(16, "")
         Me.ilSmall.Images.SetKeyName(17, "")
         Me.ilSmall.Images.SetKeyName(18, "")
@@ -436,10 +436,10 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(25, "")
         Me.ilSmall.Images.SetKeyName(26, "")
         Me.ilSmall.Images.SetKeyName(27, "")
-        Me.ilSmall.Images.SetKeyName(28, "interval_quantity_ref.gif")
-        Me.ilSmall.Images.SetKeyName(29, "interval_count_ref.gif")
-        Me.ilSmall.Images.SetKeyName(30, "interval_datetime_ref.gif")
-        Me.ilSmall.Images.SetKeyName(31, "slot_ref.png")
+        Me.ilSmall.Images.SetKeyName(28, "")
+        Me.ilSmall.Images.SetKeyName(29, "")
+        Me.ilSmall.Images.SetKeyName(30, "")
+        Me.ilSmall.Images.SetKeyName(31, "")
         Me.ilSmall.Images.SetKeyName(32, "")
         Me.ilSmall.Images.SetKeyName(33, "")
         Me.ilSmall.Images.SetKeyName(34, "")
@@ -452,10 +452,10 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(41, "")
         Me.ilSmall.Images.SetKeyName(42, "")
         Me.ilSmall.Images.SetKeyName(43, "")
-        Me.ilSmall.Images.SetKeyName(44, "interval_quantity_selected.gif")
-        Me.ilSmall.Images.SetKeyName(45, "interval_count_selected.gif")
-        Me.ilSmall.Images.SetKeyName(46, "interval_datetime_selected.gif")
-        Me.ilSmall.Images.SetKeyName(47, "slot_selected.png")
+        Me.ilSmall.Images.SetKeyName(44, "")
+        Me.ilSmall.Images.SetKeyName(45, "")
+        Me.ilSmall.Images.SetKeyName(46, "")
+        Me.ilSmall.Images.SetKeyName(47, "")
         Me.ilSmall.Images.SetKeyName(48, "")
         Me.ilSmall.Images.SetKeyName(49, "")
         Me.ilSmall.Images.SetKeyName(50, "")
@@ -468,10 +468,10 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(57, "")
         Me.ilSmall.Images.SetKeyName(58, "")
         Me.ilSmall.Images.SetKeyName(59, "")
-        Me.ilSmall.Images.SetKeyName(60, "interval_quantity_ref_selected.gif")
-        Me.ilSmall.Images.SetKeyName(61, "interval_count_ref_selected.gif")
-        Me.ilSmall.Images.SetKeyName(62, "interval_datetime_ref_selected.gif")
-        Me.ilSmall.Images.SetKeyName(63, "slot_ref_selected.png")
+        Me.ilSmall.Images.SetKeyName(60, "")
+        Me.ilSmall.Images.SetKeyName(61, "")
+        Me.ilSmall.Images.SetKeyName(62, "")
+        Me.ilSmall.Images.SetKeyName(63, "")
         Me.ilSmall.Images.SetKeyName(64, "")
         Me.ilSmall.Images.SetKeyName(65, "")
         '
@@ -505,7 +505,6 @@ Public Class EntryStructure
         Me.helpEntryStructure.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(384, 406)
         Me.PanelIcons.ResumeLayout(False)
-        CType(Me.pbSlot, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbText, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbQuantity, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbCount, System.ComponentModel.ISupportInitialize).EndInit()
@@ -514,6 +513,7 @@ Public Class EntryStructure
         CType(Me.pbBoolean, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbAny, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.pbCluster, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbSlot, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelStructureHeader.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -573,7 +573,6 @@ Public Class EntryStructure
             Throw New NotImplementedException("Subclass must override this property")
         End Get
     End Property
-
     Private Sub menuChangeStructure_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuChangeStructure.Click
         NotifyChangeStructure(Me, e)
     End Sub
@@ -632,6 +631,11 @@ Public Class EntryStructure
     Public Overridable Sub Reset()
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
+
+    Public Overridable Sub SetInitial()
+        Throw New NotImplementedException("Subclass must override this method")
+    End Sub
+
 
     Protected Overridable Sub SetUpAddElementMenu()
         Throw New NotImplementedException("Subclass must override this method")
@@ -785,7 +789,7 @@ Public Class EntryStructure
 
         Dim offset As Integer
 
-        If isReference Then offset = 15
+        If isReference Then offset = 16
         If isSelected Then offset += Me.SelectedImageOffset
 
         Select Case ct

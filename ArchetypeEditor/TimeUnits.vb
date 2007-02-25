@@ -35,6 +35,23 @@ Public Class TimeUnits
         Return Array.IndexOf(System.Enum.GetNames(GetType(mTimeUnits)), a_unit) > -1
     End Function
 
+    Public Function GetIsoUnitForDuration(ByVal a_duration As String) As String
+        Select Case a_duration.ToLowerInvariant
+            Case "y"
+                Return "a"
+            Case "m"
+                Return "mo"
+            Case "th"
+                Return "h"
+            Case "tm"
+                Return "m"
+            Case "ts"
+                Return "s"
+            Case Else
+                Return a_duration.ToLowerInvariant
+        End Select
+    End Function
+
     Public Function GetValidIsoUnit(ByVal a_unit As String) As String
         Select Case a_unit.ToLowerInvariant
             Case "yr", "year", "y"
@@ -100,6 +117,7 @@ Public Class TimeUnits
         End If
         Return a_unit  'unable to standardise this
     End Function
+
     Public Function GetISOForLanguage(ByVal a_language_unit As String) As String
         If Not mIsInitialised Then
             Initialise()

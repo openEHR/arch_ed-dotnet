@@ -94,7 +94,7 @@ Public Class RmSlot
             For i As Integer = 1 To an_archetype_slot.includes.count
                 Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
                 assert = CType(an_archetype_slot.includes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
-                s = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDomainConceptFromAssertion(assert)
+                s = ArchetypeEditor.ADL_Classes.ADL_Tools.GetConstraintFromAssertion(assert)
                 If s = ".*" Then
                     mSlotConstraint.IncludeAll = True
                 Else
@@ -109,7 +109,7 @@ Public Class RmSlot
             For i As Integer = 1 To an_archetype_slot.excludes.count
                 Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
                 assert = CType(an_archetype_slot.excludes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
-                s = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDomainConceptFromAssertion(assert)
+                s = ArchetypeEditor.ADL_Classes.ADL_Tools.GetConstraintFromAssertion(assert)
                 If s = ".*" Then
                     mSlotConstraint.ExcludeAll = True
                 Else
@@ -157,7 +157,7 @@ Public Class RmSlot
             For i As Integer = 0 To an_archetype_slot.includes.Length - 1
                 Dim assert As XMLParser.ASSERTION
                 assert = CType(an_archetype_slot.includes(i), XMLParser.ASSERTION)
-                s = ArchetypeEditor.XML_Classes.XML_Tools.GetDomainConceptFromAssertion(assert)
+                s = ArchetypeEditor.XML_Classes.XML_Tools.GetConstraintFromAssertion(assert)
                 If s = ".*" Then
                     mSlotConstraint.IncludeAll = True
                 Else
@@ -172,7 +172,7 @@ Public Class RmSlot
             For i As Integer = 0 To an_archetype_slot.excludes.Length - 1
                 Dim assert As XMLParser.ASSERTION
                 assert = CType(an_archetype_slot.excludes(i), XMLParser.ASSERTION)
-                s = ArchetypeEditor.XML_Classes.XML_Tools.GetDomainConceptFromAssertion(assert)
+                s = ArchetypeEditor.XML_Classes.XML_Tools.GetConstraintFromAssertion(assert)
                 If s = ".*" Then
                     mSlotConstraint.ExcludeAll = True
                 Else

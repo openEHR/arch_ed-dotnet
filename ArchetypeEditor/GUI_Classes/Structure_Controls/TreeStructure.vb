@@ -519,6 +519,12 @@ Public Class TreeStructure
         cm.Show(Me.ButAddElement, New System.Drawing.Point(5, 5))
     End Sub
 
+    Public Overrides Sub SetInitial()
+        If tvTree.Nodes.Count > 0 Then
+            tvTree.SelectedNode = tvTree.Nodes(0)
+        End If
+    End Sub
+
     Protected Overrides Sub addNewElement(ByVal a_constraint As Constraint)
         Dim tvNode As ArchetypeTreeNode
         Dim a_node As ArchetypeTreeNode

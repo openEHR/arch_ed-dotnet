@@ -37,7 +37,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Overrides Property ConceptCode() As String
             Get
-                Return adlArchetype.concept_code.to_cil
+                Return adlArchetype.concept.to_cil
             End Get
             Set(ByVal Value As String)
                 adlArchetype.set_concept(openehr.base.kernel.Create.STRING.make_from_cil(Value))
@@ -129,7 +129,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             adlEngine.specialise_archetype(openehr.base.kernel.Create.STRING.make_from_cil(ConceptShortName))
             ' Update the GUI tables with the new term
-            a_term = New ADL_Term(adlEngine.ontology.term_definition(openehr.base.kernel.Create.STRING.make_from_cil(The_Ontology.LanguageCode), adlArchetype.concept_code))
+            a_term = New ADL_Term(adlEngine.ontology.term_definition(openehr.base.kernel.Create.STRING.make_from_cil(The_Ontology.LanguageCode), adlArchetype.concept))
             The_Ontology.UpdateTerm(a_term)
             Me.mArchetypeID.Concept &= "-" & ConceptShortName
 
@@ -148,7 +148,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 If Not adlEngine.archetype_available Then
                     adlEngine.create_new_archetype(id.rm_originator, id.rm_name, id.rm_entity, openehr.base.kernel.Create.STRING.make_from_cil(sPrimaryLanguageCode))
                     adlArchetype = adlEngine.archetype
-                    adlArchetype.definition.set_object_id(adlArchetype.concept_code)
+                    adlArchetype.definition.set_object_id(adlArchetype.concept)
                     setDefinition()
                 Else
                     ' does this involve a change in the entity (affects the GUI a great deal!)
@@ -383,7 +383,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
 
             If events.Length > 0 AndAlso Not a_rm Is Nothing Then
-                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
+                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH = Nothing
 
                 For i As Integer = 0 To events.Length - 1
                     history_event = CType(events(i), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -731,7 +731,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If sl.hasSlots Then
                 If sl.IncludeAll Then
-                    slot.add_include(MakeAssertion("concept", ".*"))
+                    slot.add_include(MakeAssertion("archetype_id/value", ".*"))
                 Else
                     For Each s As String In sl.Include
                         Dim escapedString As String
@@ -743,11 +743,11 @@ Namespace ArchetypeEditor.ADL_Classes
                         Else
                             escapedString = s.Replace(".", "\.")
                         End If
-                        slot.add_include(MakeAssertion("concept", escapedString))
+                        slot.add_include(MakeAssertion("archetype_id/value", escapedString))
                     Next
                 End If
                 If sl.ExcludeAll Then
-                    slot.add_exclude(MakeAssertion("concept", ".*"))
+                    slot.add_exclude(MakeAssertion("archetype_id/value", ".*"))
                 Else
                     For Each s As String In sl.Exclude
                         Dim escapedString As String
@@ -759,12 +759,12 @@ Namespace ArchetypeEditor.ADL_Classes
                         Else
                             escapedString = s.Replace(".", "\.")
                         End If
-                        slot.add_exclude(MakeAssertion("concept", escapedString))
+                        slot.add_exclude(MakeAssertion("archetype_id/value", escapedString))
                     Next
                 End If
                 Debug.Assert(slot.has_excludes Or slot.has_includes)
             Else
-                slot.add_include(MakeAssertion("concept", ".*"))
+                slot.add_include(MakeAssertion("archetype_id/value", ".*"))
             End If
 
         End Sub
@@ -783,7 +783,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
 
             If c.HasMaximum Or c.HasMinimum Then
-                durationISO.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(c.MinMaxValueUnits)
+                durationISO.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
 
                 If c.HasMaximum And c.HasMinimum Then
                     'Need duration converter for max and min
@@ -819,7 +819,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Protected Sub BuildQuantity(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
             Dim cadlQuantity As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY
 
-            cadlQuantity = mAomFactory.create_c_quantity(value_attribute)
+            cadlQuantity = mAomFactory.create_c_dv_quantity(value_attribute)
             ' set the property constraint - it should be present
 
             If Not q.IsNull Then
@@ -902,15 +902,17 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim c_value As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL
             Dim o_v As OrdinalValue
 
-            c_value = mAomFactory.create_c_ordinal(value_attribute)
+            c_value = mAomFactory.create_c_dv_ordinal(value_attribute)
             If o.OrdinalValues.Count > 0 Then
-
                 For Each o_v In o.OrdinalValues
-                    Dim cadlO As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
-                    cadlO = mAomFactory.create_ordinal(o_v.Ordinal, openehr.base.kernel.Create.STRING.make_from_cil("local::" & o_v.InternalCode))
-                    c_value.add_item(cadlO)
-                    If o.HasAssumedValue And o_v.Ordinal = CInt(o.AssumedValue) Then
-                        c_value.set_assumed_value_from_integer(CInt(o.AssumedValue))
+                    'SRH: Added 20070210 - the table can offer ordinals that are empty
+                    If o_v.InternalCode <> Nothing Then
+                        Dim cadlO As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
+                        cadlO = mAomFactory.create_ordinal(o_v.Ordinal, openehr.base.kernel.Create.STRING.make_from_cil("local::" & o_v.InternalCode))
+                        c_value.add_item(cadlO)
+                        If o.HasAssumedValue And o_v.Ordinal = CInt(o.AssumedValue) Then
+                            c_value.set_assumed_value_from_integer(CInt(o.AssumedValue))
+                        End If
                     End If
                 Next
             End If
@@ -1316,6 +1318,21 @@ Namespace ArchetypeEditor.ADL_Classes
                     End If
                 Next
             End If
+
+            If ReferencesToResolve.Count > 0 Then
+                Dim ref_cadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
+                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
+
+                For Each ref As ReferenceToResolve In ReferencesToResolve
+
+                    path = GetPathOfNode(ref.Element.NodeId)
+                    If Not path Is Nothing Then
+                        ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, openehr.base.kernel.Create.STRING.make_from_cil("ELEMENT"), path.as_string)
+                    End If
+
+                Next
+                ReferencesToResolve.Clear()
+            End If
         End Sub
 
         Protected Sub BuildRootSection(ByVal Rm As RmSection, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -1530,6 +1547,14 @@ Namespace ArchetypeEditor.ADL_Classes
                 'pick up the description data
                 adlArchetype.set_description(CType(mDescription, ADL_Description).ADL_Description)
 
+                If Not adlArchetype.translations Is Nothing Then
+                    adlArchetype.translations.clear_all()
+                End If
+                For Each transDetail As TranslationDetails In mTranslationDetails.Values
+                    Dim t As openehr.openehr.rm.common.resource.TRANSLATION_DETAILS = CType(transDetail, ADL_TranslationDetails).ADL_Translation
+                    adlArchetype.add_translation(t, t.language.code_string)
+                Next
+
                 If cDefinition Is Nothing Then
                     Err.Raise(vbObjectError + 512, "No archetype definition", _
                     "An archetype definition is required prior to saving")
@@ -1708,12 +1733,12 @@ Namespace ArchetypeEditor.ADL_Classes
                 adlEngine.create_new_archetype(id.rm_originator, id.rm_name, id.rm_entity, openehr.base.kernel.Create.STRING.make_from_cil(sPrimaryLanguageCode))
                 adlArchetype = adlEngine.archetype
                 adlArchetype.set_archetype_id(id)
-                adlArchetype.definition.set_object_id(adlArchetype.concept_code)
+                adlArchetype.definition.set_object_id(adlArchetype.concept)
             Catch
                 Debug.Assert(False)
                 ''FIXME raise error
             End Try
-            mDescription = New ADL_Description ' nothing to pass
+            mDescription = New ADL_Description(adlEngine.archetype.original_language.code_string.to_cil) ' nothing to pass
         End Sub
 
         Sub New(ByRef an_Archetype As openehr.openehr.am.archetype.ARCHETYPE, ByRef an_ADL_Engine As openehr.adl_parser.syntax.adl.ADL_ENGINE, ByVal a_filemanager As FileManagerLocal)
@@ -1731,6 +1756,16 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             mDescription = New ADL_Description(adlArchetype.description)
+
+            If Not adlArchetype.translations Is Nothing AndAlso adlArchetype.translations.count > 0 Then
+                ' add translation details
+                adlArchetype.translations.start()
+                Do While Not adlArchetype.translations.off
+                    Dim transDetails As ADL_TranslationDetails = New ADL_TranslationDetails(CType(adlArchetype.translations.item_for_iteration, openehr.openehr.rm.common.resource.TRANSLATION_DETAILS))
+                    mTranslationDetails.Add(transDetails.Language, transDetails)
+                    adlArchetype.translations.forth()
+                Loop
+            End If
 
             Select Case mArchetypeID.ReferenceModelEntity
                 Case StructureType.COMPOSITION
@@ -1782,25 +1817,25 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             ' root of definition set to at0000 by default, may be another code
-            adlArchetype.definition.set_object_id(adlArchetype.concept_code)
+            adlArchetype.definition.set_object_id(adlArchetype.concept)
 
-            mDescription = New ADL_Description ' nothing to pass
+            mDescription = New ADL_Description(adlArchetype.original_language.code_string.to_cil) ' nothing to pass
 
             Select Case mArchetypeID.ReferenceModelEntity
                 Case StructureType.COMPOSITION
                     cDefinition = New RmComposition()
-                    cDefinition.RootNodeId = adlArchetype.concept_code.to_cil
+                    cDefinition.RootNodeId = adlArchetype.concept.to_cil
                 Case StructureType.SECTION
-                    cDefinition = New RmSection(adlArchetype.concept_code.to_cil)
+                    cDefinition = New RmSection(adlArchetype.concept.to_cil)
                 Case StructureType.List, StructureType.Tree, StructureType.Single
-                    cDefinition = New RmStructureCompound(adlArchetype.concept_code.to_cil, mArchetypeID.ReferenceModelEntity)
+                    cDefinition = New RmStructureCompound(adlArchetype.concept.to_cil, mArchetypeID.ReferenceModelEntity)
                 Case StructureType.Table
-                    cDefinition = New RmTable(adlArchetype.concept_code.to_cil)
+                    cDefinition = New RmTable(adlArchetype.concept.to_cil)
                 Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
                     cDefinition = New RmEntry(mArchetypeID.ReferenceModelEntity)
-                    cDefinition.RootNodeId = adlArchetype.concept_code.to_cil
+                    cDefinition.RootNodeId = adlArchetype.concept.to_cil
                 Case StructureType.Cluster
-                    cDefinition = New RmCluster(adlArchetype.concept_code.to_cil)
+                    cDefinition = New RmCluster(adlArchetype.concept.to_cil)
                 Case Else
                     Debug.Assert(False)
             End Select

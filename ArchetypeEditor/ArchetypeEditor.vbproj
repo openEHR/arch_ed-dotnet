@@ -141,6 +141,7 @@
     <Compile Include="ADL_Classes\ADL_Tools.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ADL_Classes\ADL_TranslationDetails.vb" />
     <Compile Include="BusinessLogic\Duration.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -567,6 +568,7 @@
     <Compile Include="XML_Classes\XML_Section.vb" />
     <Compile Include="Support\ParsingTools.vb" />
     <Compile Include="XML_Classes\XML_Tools.vb" />
+    <Compile Include="XML_Classes\XML_TranslationDetails.vb" />
     <EmbeddedResource Include="DataConstraintsView\BooleanViewControl.resx">
       <DependentUpon>BooleanViewControl.vb</DependentUpon>
     </EmbeddedResource>

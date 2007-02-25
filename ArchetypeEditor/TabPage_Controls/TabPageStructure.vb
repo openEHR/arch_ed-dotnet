@@ -675,6 +675,10 @@ Public Class TabPageStructure
         Me.PanelStructure.Visible = True
 
         Me.ArchetypeDisplay = New ElementOnly(an_element, mFileManager)
+
+        'Set the initial value
+        Me.ArchetypeDisplay.SetInitial()
+
         mIsLoading = False
     End Sub
 
@@ -712,6 +716,10 @@ Public Class TabPageStructure
                 Case Else
                     Debug.Assert(False)
             End Select
+
+            'Set the initial value
+            Me.ArchetypeDisplay.SetInitial()
+
         Else
             Me.panelEntry.Visible = True
             Me.PanelStructure.Visible = False

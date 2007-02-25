@@ -88,6 +88,19 @@ Public Class OrdinalTable : Inherits DataTable
         End Get
     End Property
 
+    Public Sub Commit()
+        If Not mRowEnumerator Is Nothing Then
+            Dim rowView As DataRowView = CType(mRowEnumerator.Current, DataRowView)
+            If Not rowView Is Nothing Then
+                If rowView.IsEdit Then
+                    rowView.EndEdit()
+                ElseIf rowView.IsNew Then
+                    rowView.CancelEdit()
+                End If
+            End If
+        End If
+    End Sub
+
     Private Function GetEnumerator() As System.Collections.IEnumerator _
             Implements System.Collections.IEnumerable.GetEnumerator
 

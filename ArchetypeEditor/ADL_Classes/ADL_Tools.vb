@@ -63,7 +63,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Return cp
         End Function
 
-        Public Shared Function GetDomainConceptFromAssertion(ByVal assert As openehr.openehr.am.archetype.assertion.ASSERTION) As String
+        Public Shared Function GetConstraintFromAssertion(ByVal assert As openehr.openehr.am.archetype.assertion.ASSERTION) As String
             Select Case assert.expression.generating_type.to_cil
                 Case "EXPR_BINARY_OPERATOR"
                     Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression

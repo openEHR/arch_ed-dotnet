@@ -83,7 +83,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Friend WithEvents lblDescription As System.Windows.Forms.Label
     Friend WithEvents lblConstraint As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(TextConstraintControl))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TextConstraintControl))
         Me.gbAllowableValues = New System.Windows.Forms.GroupBox
         Me.ButNewItem = New System.Windows.Forms.Button
         Me.butDefaultItem = New System.Windows.Forms.Button
@@ -275,7 +275,6 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.txtTermConstraintDescription.Name = "txtTermConstraintDescription"
         Me.txtTermConstraintDescription.Size = New System.Drawing.Size(288, 56)
         Me.txtTermConstraintDescription.TabIndex = 35
-        Me.txtTermConstraintDescription.Text = ""
         Me.txtTermConstraintDescription.Visible = False
         '
         'txtTermConstraintText
@@ -284,7 +283,6 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.txtTermConstraintText.Name = "txtTermConstraintText"
         Me.txtTermConstraintText.Size = New System.Drawing.Size(288, 22)
         Me.txtTermConstraintText.TabIndex = 34
-        Me.txtTermConstraintText.Text = ""
         Me.txtTermConstraintText.Visible = False
         '
         'TextConstraintControl
@@ -300,7 +298,9 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.Name = "TextConstraintControl"
         Me.Size = New System.Drawing.Size(392, 240)
         Me.gbAllowableValues.ResumeLayout(False)
+        Me.gbAllowableValues.PerformLayout()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -925,7 +925,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
                 If s(0) <> "" Then
                     mFilemanager.OntologyManager.SetText(t)
-                    mFilemanager.OntologyManager.SetDescription(t.Description, t.Code)
+                    mFileManager.OntologyManager.SetDescription(t.Description, t.Code)
                 Else
                     Return
                 End If
@@ -942,6 +942,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             MenuItemEdit.Visible = False
         End If
     End Sub
+
 End Class
 
 '

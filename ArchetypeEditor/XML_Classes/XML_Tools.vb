@@ -49,7 +49,7 @@ Namespace ArchetypeEditor.XML_Classes
             Return cp
         End Function
 
-        Public Shared Function GetDomainConceptFromAssertion(ByVal assert As XMLParser.ASSERTION) As String
+        Public Shared Function GetConstraintFromAssertion(ByVal assert As XMLParser.ASSERTION) As String
             Select Case assert.expression.GetType.ToString.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "xmlparser.expr_binary_operator"
                     Dim expr As XMLParser.EXPR_BINARY_OPERATOR = assert.expression

@@ -59,9 +59,6 @@ Public Class ElementOnly
             mElement = New ArchetypeElement(an_element, mFileManager)
             If Not mElement.Constraint Is Nothing Then
                 Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
-                ' can't add any more elements to simple
-
-                SetCurrentItem(mElement) ' does not raise an event during construction
             Else
                 Me.ButAddElement.Visible = True
             End If
@@ -209,6 +206,12 @@ Public Class ElementOnly
 
     Protected Overrides Sub SetUpAddElementMenu()
         mConstraintMenu.Show(ButAddElement, New System.Drawing.Point(5, 5))
+    End Sub
+
+    Public Overrides Sub SetInitial()
+        If Not mElement Is Nothing Then
+            SetCurrentItem(mElement) ' does not raise an event during construction
+        End If
     End Sub
 
 

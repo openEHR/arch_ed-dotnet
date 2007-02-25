@@ -200,8 +200,11 @@ Namespace ArchetypeEditor.XML_Classes
                         'obsolete
                         Return ProcessBoolean(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
                     End If
-                Case "c_dv_ordinal", "ordinal"
-                    If TypeOf (ObjNode) Is XMLParser.C_ORDINAL Then
+                Case "c_dv_ordinal", "ordinal", "c_ordinal"
+                    If TypeOf (ObjNode) Is XMLParser.C_DV_ORDINAL Then
+                        Return ProcessOrdinal(CType(ObjNode, XMLParser.C_DV_ORDINAL), a_filemanager)
+                    ElseIf TypeOf (ObjNode) Is XMLParser.C_ORDINAL Then
+                        'Obsolete
                         Return ProcessOrdinal(CType(ObjNode, XMLParser.C_ORDINAL), a_filemanager)
                     Else
                         'Obsolete
@@ -514,6 +517,8 @@ Namespace ArchetypeEditor.XML_Classes
             Return dt
 
         End Function
+
+        'OBSOLETE
         Private Function ProcessOrdinal(ByVal an_ordinal_value As XMLParser.C_ORDINAL, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
             Dim ehr_ordinal As XMLParser.ORDINAL
 
@@ -542,6 +547,36 @@ Namespace ArchetypeEditor.XML_Classes
             Return ord
 
         End Function
+
+        Private Function ProcessOrdinal(ByVal an_ordinal_value As XMLParser.C_DV_ORDINAL, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
+            Dim ehr_ordinal As XMLParser.ORDINAL
+
+            Dim ord As New Constraint_Ordinal(a_filemanager)
+
+            '' first value may have a "?" instead of a code as holder for empty ordinal
+            For Each ehr_ordinal In an_ordinal_value.list
+
+                Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
+
+                newOrdinal.Ordinal = CInt(ehr_ordinal.value)
+
+                If ehr_ordinal.symbol.terminology_id = "local" Then
+                    newOrdinal.InternalCode = ehr_ordinal.symbol.code_string
+                    ord.OrdinalValues.Add(newOrdinal)
+                Else
+                    Debug.Assert(False)
+                End If
+            Next
+
+            If an_ordinal_value.assumed_value <> Nothing Then
+                ord.HasAssumedValue = True
+                ord.AssumedValue = CInt(an_ordinal_value.assumed_value)
+            End If
+
+            Return ord
+
+        End Function
+
 
         'OBSOLETE
         Private Function ProcessOrdinal(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal

@@ -95,8 +95,6 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
                 Return New ArchetypeTreeNode(mArchetypeNode)
             Case StructureType.Reference
                 Return New ArchetypeTreeNode(mArchetypeNode)
-
-
             Case Else
                 Debug.Assert(False, "Type not handled")
                 Return Nothing
@@ -127,7 +125,6 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
                 MyBase.SelectedImageIndex = 3
         End Select
     End Sub
-
 
     Public Sub New(ByVal aArchetypeNode As ArchetypeNode)
         MyBase.New(aArchetypeNode.Text)

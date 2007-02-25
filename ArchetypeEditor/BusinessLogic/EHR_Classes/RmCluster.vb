@@ -41,11 +41,15 @@ Public Class RmCluster
     Sub New(ByVal EIF_Cluster As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(EIF_Cluster, a_filemanager)
         ProcessTree(EIF_Cluster, a_filemanager)
+        ArchetypeEditor.ADL_Classes.ADL_Tools.HighestLevelChildren = Me.Children
+        ArchetypeEditor.ADL_Classes.ADL_Tools.PopulateReferences(Me)
     End Sub
 
     Sub New(ByVal XML_Cluster As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(XML_Cluster, a_filemanager)
         ProcessTree(XML_Cluster, a_filemanager)
+        ArchetypeEditor.ADL_Classes.ADL_Tools.HighestLevelChildren = Me.Children
+        ArchetypeEditor.ADL_Classes.ADL_Tools.PopulateReferences(Me)
     End Sub
 
 #End Region

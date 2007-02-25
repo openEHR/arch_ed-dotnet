@@ -721,6 +721,8 @@
   <PrimaryRubric Id="647" Language="en" />
   <PrimaryRubric Id="648" Language="en" />
   <PrimaryRubric Id="649" Language="en" />
+  <PrimaryRubric Id="650" Language="en" />
+  <PrimaryRubric Id="651" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="foetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -4444,6 +4446,8 @@
   <Concept Language="en" ConceptID="649" Rubric="Limit decimal places" />
   <Concept Language="da" ConceptID="648" Rubric="bevidnet" />
   <Concept Language="da" ConceptID="649" Rubric="Begræns antallet decimaler" />
+  <Concept Language="en" ConceptID="650" Rubric="Translation" />
+  <Concept Language="en" ConceptID="651" Rubric="Accreditation" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

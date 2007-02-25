@@ -43,7 +43,7 @@ Namespace ArchetypeEditor.XML_Classes
 
             XML_detail.language = New XMLParser.CODE_PHRASE
             XML_detail.language.code_string = a_language
-            XML_detail.language.terminology_id = "openehr"
+            XML_detail.language.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
 
             XML_detail.copyright = a_detail.Copyright
             If a_detail.KeyWords.Count > 0 Then
