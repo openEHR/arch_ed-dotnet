@@ -294,7 +294,7 @@ Public Class ListStructure
             Dim lvitem As ArchetypeListViewItem = CType(lvList.SelectedItems.Item(0), ArchetypeListViewItem)
             'Fixme - need to add code to check if can be specialised
 
-            If MessageBox.Show(AE_Constants.Instance.Specialise & lvitem.Text, _
+            If MessageBox.Show(String.Format("{0} '{1}'", AE_Constants.Instance.Specialise, lvitem.Text), _
                 AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
                 MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
 

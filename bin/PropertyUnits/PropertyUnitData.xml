@@ -516,4 +516,5 @@
   <Unit property_id="77" Text="[ppb]" name="parts per billion" conversion="1" coefficient="-9" primary="false" case_ins="[PPB]" />
   <Unit property_id="77" Text="[ppt]" name="parts per thousand" conversion="1" coefficient="-3" primary="false" case_ins="[PPT]" />
   <Unit property_id="78" Text="ml/min/1.73m2" conversion="1" primary="true" />
+  <Unit property_id="59" Text="gm/100ml" conversion="0" primary="false" />
 </PropertyUnits>

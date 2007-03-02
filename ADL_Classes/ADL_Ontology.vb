@@ -28,7 +28,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Property
         Public Overrides ReadOnly Property LanguageCode() As String
             Get
-                Return EIF_adlInterface.language.to_cil
+                Return EIF_adlInterface.current_language.to_cil
             End Get
         End Property
         Public Overrides ReadOnly Property NumberOfSpecialisations() As Integer
@@ -211,7 +211,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Overrides Sub SetLanguage(ByVal code As String)
             sLanguageCode = code
-            EIF_adlInterface.set_language(openehr.base.kernel.Create.STRING.make_from_cil(code))
+            EIF_adlInterface.set_current_language(openehr.base.kernel.Create.STRING.make_from_cil(code))
         End Sub
 
         Public Overrides Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
@@ -262,7 +262,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Try
                     If Not EIF_adlInterface.ontology.has_term_code(an_adl_Term.EIF_Term.code) Then
-                        EIF_adlInterface.ontology.add_term_definition(EIF_adlInterface.language, an_adl_Term.EIF_Term)
+                        EIF_adlInterface.ontology.add_term_definition(EIF_adlInterface.current_language, an_adl_Term.EIF_Term)
                     Else
                         Debug.Assert(False)
                     End If
@@ -275,7 +275,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Try
                     If Not EIF_adlInterface.ontology.has_constraint_code(an_adl_Term.EIF_Term.code) Then
-                        EIF_adlInterface.ontology.add_constraint_definition(EIF_adlInterface.language, an_adl_Term.EIF_Term)
+                        EIF_adlInterface.ontology.add_constraint_definition(EIF_adlInterface.current_language, an_adl_Term.EIF_Term)
                     Else
                         Debug.Assert(False)
                     End If
@@ -297,7 +297,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 If a_Term.Language <> "" Then
                     language_code = openehr.base.kernel.Create.STRING.make_from_cil(a_Term.Language)
                 Else
-                    language_code = EIF_adlInterface.language
+                    language_code = EIF_adlInterface.current_language
                 End If
 
                 Try
@@ -355,7 +355,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 an_adl_Term = New ADL_Term(a_term)
                 Try
                     If Not EIF_adlInterface.ontology.has_constraint_code(an_adl_Term.EIF_Term.code) Then
-                        EIF_adlInterface.ontology.add_constraint_definition(EIF_adlInterface.language, an_adl_Term.EIF_Term)
+                        EIF_adlInterface.ontology.add_constraint_definition(EIF_adlInterface.current_language, an_adl_Term.EIF_Term)
                     Else
                         Debug.Assert(False, "Constraint code not available: " & an_adl_Term.Code)
                     End If
@@ -375,7 +375,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Try
                     If EIF_adlInterface.ontology.has_constraint_code(an_adl_Term.EIF_Term.code) Then
-                        EIF_adlInterface.ontology.replace_constraint_definition(EIF_adlInterface.language, an_adl_Term.EIF_Term, ReplaceTranslations)
+                        EIF_adlInterface.ontology.replace_constraint_definition(EIF_adlInterface.current_language, an_adl_Term.EIF_Term, ReplaceTranslations)
                     Else
                         Debug.Assert(False, "Constraint code not available: " & an_adl_Term.Code)
                     End If

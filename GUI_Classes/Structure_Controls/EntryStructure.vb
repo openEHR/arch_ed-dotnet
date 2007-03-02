@@ -741,11 +741,8 @@ Public Class EntryStructure
 
         If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
             Dim s As String
-            Dim nl As String
             Dim ct() As CodeAndTerm
             Dim i As Integer
-
-            nl = Chr(10) & Chr(13)
 
             If Not Item.IsAnonymous Then
                 ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(CType(Item, ArchetypeNodeAbstract).NodeId, mFileManager)
@@ -754,11 +751,11 @@ Public Class EntryStructure
                     Me.ToolTipSpecialisation.RemoveAll()
                     Return
                 End If
-                s = "Specialised:" & nl
+                s = "Specialised:" & Environment.NewLine
                 For i = 0 To ct.Length - 1
                     s = s & Space((i * 2) + 2) & "- " & ct(i).Text
                     If i < ct.Length - 1 Then
-                        s = s & nl
+                        s = s & Environment.NewLine
                     End If
                 Next
                 Me.ToolTipSpecialisation.SetToolTip(Ctrl, s)

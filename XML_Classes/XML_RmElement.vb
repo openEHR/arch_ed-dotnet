@@ -554,25 +554,27 @@ Namespace ArchetypeEditor.XML_Classes
             Dim ord As New Constraint_Ordinal(a_filemanager)
 
             '' first value may have a "?" instead of a code as holder for empty ordinal
-            For Each ehr_ordinal In an_ordinal_value.list
 
-                Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
+            If Not an_ordinal_value.list Is Nothing Then
+                For Each ehr_ordinal In an_ordinal_value.list
 
-                newOrdinal.Ordinal = CInt(ehr_ordinal.value)
+                    Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
 
-                If ehr_ordinal.symbol.terminology_id = "local" Then
-                    newOrdinal.InternalCode = ehr_ordinal.symbol.code_string
-                    ord.OrdinalValues.Add(newOrdinal)
-                Else
-                    Debug.Assert(False)
+                    newOrdinal.Ordinal = CInt(ehr_ordinal.value)
+
+                    If ehr_ordinal.symbol.terminology_id = "local" Then
+                        newOrdinal.InternalCode = ehr_ordinal.symbol.code_string
+                        ord.OrdinalValues.Add(newOrdinal)
+                    Else
+                        Debug.Assert(False)
+                    End If
+                Next
+
+                If an_ordinal_value.assumed_value <> Nothing Then
+                    ord.HasAssumedValue = True
+                    ord.AssumedValue = CInt(an_ordinal_value.assumed_value)
                 End If
-            Next
-
-            If an_ordinal_value.assumed_value <> Nothing Then
-                ord.HasAssumedValue = True
-                ord.AssumedValue = CInt(an_ordinal_value.assumed_value)
             End If
-
             Return ord
 
         End Function
