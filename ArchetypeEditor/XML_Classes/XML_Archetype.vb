@@ -1975,10 +1975,13 @@ Namespace ArchetypeEditor.XML_Classes
 
             'description and translation details
             mDescription = New XML_Description(mXmlArchetype.description, a_parser.Archetype.original_language.code_string)
-            For Each t As XMLParser.TRANSLATION_DETAILS In mXmlArchetype.translations
-                mTranslationDetails.Add(t.language.code_string, New XML_TranslationDetails(t))
-            Next
-            
+
+            If Not mXmlArchetype.translations Is Nothing Then
+                For Each t As XMLParser.TRANSLATION_DETAILS In mXmlArchetype.translations
+                    mTranslationDetails.Add(t.language.code_string, New XML_TranslationDetails(t))
+                Next
+            End If
+
             Select Case mArchetypeID.ReferenceModelEntity
                 Case StructureType.COMPOSITION
                     cDefinition = New XML_COMPOSITION(mXmlArchetype.definition, a_filemanager)

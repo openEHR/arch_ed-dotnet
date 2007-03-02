@@ -53,6 +53,7 @@ Namespace ArchetypeEditor.XML_Classes
             Select Case assert.expression.GetType.ToString.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "xmlparser.expr_binary_operator"
                     Dim expr As XMLParser.EXPR_BINARY_OPERATOR = assert.expression
+                    'CType(expr.left_operand, XMLParser.EXPR_LEAF).item.ToString()
                     Dim cstring As XMLParser.C_STRING = CType(expr.right_operand, XMLParser.EXPR_LEAF).item
                     Return cstring.pattern.Trim("/".ToCharArray())
                 Case Else

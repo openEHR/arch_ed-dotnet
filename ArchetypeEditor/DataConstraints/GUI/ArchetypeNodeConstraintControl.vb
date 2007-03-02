@@ -249,8 +249,11 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _
-            ByVal IsState As Boolean, ByVal aArchetypeNode As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
+            ByVal IsState As Boolean, ByVal an_archetype_node As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
 
+        'If a_file_manager.OntologyManager.NumberOfSpecialisations() <> OceanArchetypeEditor.Instance.CountInString(an_archetype_node.RM_Class.NodeId, ".") Then
+        '    Me.Enabled = False
+        'End If
         mFileManager = a_file_manager
         mIsLoading = True
         Me.SuspendLayout()
@@ -271,10 +274,10 @@ Public Class ArchetypeNodeConstraintControl
                 Me.PanelGenericConstraint.Visible = True
             End If
 
-            Select Case aArchetypeNode.RM_Class.Type
+            Select Case an_archetype_node.RM_Class.Type
                 Case StructureType.Element, StructureType.Reference
 
-                    Dim archetypeElem As ArchetypeElement = CType(aArchetypeNode, ArchetypeElement)
+                    Dim archetypeElem As ArchetypeElement = CType(an_archetype_node, ArchetypeElement)
 
                     Select Case archetypeElem.Constraint.Type
                         Case ConstraintType.Any
@@ -309,13 +312,13 @@ Public Class ArchetypeNodeConstraintControl
                     mConstraintControl.Dock = DockStyle.Fill
 
                     ' HKF: 1620
-                    mConstraintControl.ShowConstraint(IsState, CType(CType(aArchetypeNode, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint)
+                    mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint)
 
                 Case StructureType.Cluster
                     ' Me.labelAnyCluster.Text = AE_Constants.Instance.Cluster
                     Me.labelAny.Visible = False
                     mConstraintControl = New ClusterControl(a_file_manager)
-                    CType(mConstraintControl, ClusterControl).Item = CType(aArchetypeNode, ArchetypeComposite)
+                    CType(mConstraintControl, ClusterControl).Item = CType(an_archetype_node, ArchetypeComposite)
                     Me.PanelDataConstraint.Controls.Add(mConstraintControl)
 
                     CType(mConstraintControl, ClusterControl).Header = 50
@@ -323,7 +326,7 @@ Public Class ArchetypeNodeConstraintControl
 
             End Select
 
-            mArchetypeNode = aArchetypeNode
+            mArchetypeNode = an_archetype_node
 
             If aStructureType = StructureType.Single Then
                 mOccurrences.SetSingle = True

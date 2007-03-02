@@ -67,7 +67,9 @@ Namespace ArchetypeEditor.ADL_Classes
             Select Case assert.expression.generating_type.to_cil
                 Case "EXPR_BINARY_OPERATOR"
                     Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression
-                    If expr.left_operand.as_string.to_cil = "concept" Then
+                    If expr.left_operand.as_string.to_cil = "archetype_id/value" Then
+                        Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil.Trim("/".ToCharArray())
+                    ElseIf expr.left_operand.as_string.to_cil = "concept" Then
                         Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil.Trim("/".ToCharArray())
                     End If
                 Case Else

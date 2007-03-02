@@ -879,7 +879,6 @@ Public Class TreeStructure
                 mHoverNode = a_node
                 SetToolTipSpecialisation(Me.tvTree, a_node.Item)
             End If
-
         End If
     End Sub
 

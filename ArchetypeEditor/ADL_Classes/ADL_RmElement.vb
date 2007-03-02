@@ -535,32 +535,34 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim openehr_ordinal As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
 
             '' first value may have a "?" instead of a code as holder for empty ordinal
-            Ordinals = an_ordinal_constraint.items()
+            If Not an_ordinal_constraint.any_allowed Then
+                Ordinals = an_ordinal_constraint.items()
 
-            Ordinals.start()
+                Ordinals.start()
 
-            Do While Not Ordinals.off
-                openehr_ordinal = CType(Ordinals.active.item, openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL)
+                Do While Not Ordinals.off
+                    openehr_ordinal = CType(Ordinals.active.item, openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL)
 
-                Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
+                    Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
 
-                newOrdinal.Ordinal = openehr_ordinal.value
-                c_phrase.Phrase = openehr_ordinal.symbol.as_string.to_cil
+                    newOrdinal.Ordinal = openehr_ordinal.value
+                    c_phrase.Phrase = openehr_ordinal.symbol.as_string.to_cil
 
-                If c_phrase.TerminologyID = "local" Then
-                    newOrdinal.InternalCode = c_phrase.FirstCode
-                    ord.OrdinalValues.Add(newOrdinal)
-                Else
-                    Beep()
-                    Debug.Assert(False)
+                    If c_phrase.TerminologyID = "local" Then
+                        newOrdinal.InternalCode = c_phrase.FirstCode
+                        ord.OrdinalValues.Add(newOrdinal)
+                    Else
+                        Beep()
+                        Debug.Assert(False)
+                    End If
+
+                    Ordinals.forth()
+                Loop
+
+                If an_ordinal_constraint.has_assumed_value Then
+                    ord.HasAssumedValue = True
+                    ord.AssumedValue = CType(an_ordinal_constraint.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL).value
                 End If
-
-                Ordinals.forth()
-            Loop
-
-            If an_ordinal_constraint.has_assumed_value Then
-                ord.HasAssumedValue = True
-                ord.AssumedValue = CType(an_ordinal_constraint.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL).value
             End If
 
             Return ord
