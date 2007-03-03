@@ -502,6 +502,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Private Structure HTML_Details
         Dim ImageSource As String
         Dim HTML As String
+        Dim TerminologyCode As String
     End Structure
 
     Private Function GetHtmlDetails(ByVal c As Constraint) As HTML_Details
@@ -510,6 +511,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
         html_dt.HTML = ""
         html_dt.ImageSource = ""
+        html_dt.TerminologyCode = ""
 
         Select Case c.Type
 
@@ -630,7 +632,15 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Dim a_text As String = "<tr>"
         Dim class_names As String = ""
         Dim html_dt As HTML_Details = GetHtmlDetails(Me.Element.Constraint)
+        Dim terminologyCode As String
 
+        For Each terminologyRow As DataRow In mFileManager.OntologyManager.TerminologiesTable.Rows
+            terminologyCode = CStr(terminologyRow.Item(0))
+            If mFileManager.OntologyManager.Ontology.HasTermBinding(terminologyCode, Me.NodeId) Then
+                html_dt.TerminologyCode = "<br>" & terminologyCode & ": " & mFileManager.OntologyManager.Ontology.TermBinding(terminologyCode, Me.NodeId)
+            End If
+        Next
+        
         If Me.Element.Constraint.Type = ConstraintType.Multiple Then
             Dim first As Boolean = True
 
@@ -648,7 +658,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End If
 
         a_text &= Environment.NewLine & "<td><table><tr><td width=""" & (level * 20).ToString & """></td><td><img border=""0"" src=""" & html_dt.ImageSource & """ width=""32"" height=""32"" align=""middle""><b>" & mText & "</b></td></table></td>"
-        a_text &= Environment.NewLine & "<td>" & mDescription & "</td>"
+        a_text &= Environment.NewLine & "<td>" & mDescription & html_dt.TerminologyCode & "</td>"
         a_text &= Environment.NewLine & "<td><b><i>" & class_names & "</i></b><br>"
         a_text &= Environment.NewLine & mItem.Occurrences.ToString & "</td>"
         a_text &= Environment.NewLine & "<td>" & html_dt.HTML

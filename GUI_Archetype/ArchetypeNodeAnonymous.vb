@@ -131,7 +131,7 @@ Public Class ArchetypeNodeAnonymous
 
     Function ToHTML(ByVal level As Integer) As String Implements ArchetypeNode.ToHTML
         Dim s As String
-        Dim nl As String = Chr(10) & Chr(13)
+
 
         If mRMStructure.Type = StructureType.Slot Then
             Dim slot_constraint As Constraint_Slot
@@ -152,6 +152,9 @@ Public Class ArchetypeNodeAnonymous
             ElseIf slot_constraint.RM_ClassType = StructureType.ENTRY Then
                 s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(175, "Include entries") & "</td>"
                 s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(176, "Exclude entries") & "</td>"
+            Else
+                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(625, "Include") & "</td>"
+                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(626, "Exclude") & "</td>"
             End If
             s &= Environment.NewLine & "</tr>"
             s &= Environment.NewLine & "<tr>"

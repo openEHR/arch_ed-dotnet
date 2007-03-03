@@ -210,7 +210,64 @@ Public Class FileManagerLocal
 
 
         mHasOpenFileError = False
+
+        ' next section: written by Jana Graenz, necessary for opening a "web archetype" (where path is a URL)
+        ' if this archtype comes from the web, aFileName will be the URL.
+        ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
+        ' it will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
+        ' This avoids data and file overflow.  
+
+        If aFileName.StartsWith("http") Then
+
+            Dim fileUrl As New Uri(aFileName)
+            Dim request As System.Net.WebRequest
+            Dim response As Net.HttpWebResponse
+            Dim tempPath, strFileName, downloadPath As String
+            tempPath = System.IO.Path.GetTempPath
+
+            strFileName = System.IO.Path.GetFileName(fileUrl.AbsoluteUri)
+            downloadPath = System.IO.Path.Combine(tempPath, strFileName)
+            Try
+                request = System.Net.WebRequest.Create(fileUrl)                ' 
+                request.Proxy = System.Net.WebProxy.GetDefaultProxy
+                request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials ' to avoid eventually Proxy-Troubles
+                response = CType(request.GetResponse(), Net.HttpWebResponse)
+            Catch ex As Exception
+                Return False
+            End Try
+
+            Dim sw As New System.IO.StreamWriter(downloadPath)
+
+            Dim dataStream As IO.Stream = response.GetResponseStream()
+            ' Open the stream using a StreamReader for easy access.
+            Dim reader As New IO.StreamReader(dataStream)
+            ' Read the content.
+            Dim responseFromServer As String = reader.ReadToEnd()
+            ' Display the content.
+            sw.WriteLine(responseFromServer)
+            ' Cleanup the streams and the response.
+            reader.Close()
+            dataStream.Close()
+            response.Close()
+            sw.Close()
+
+            ' the web archetype has been written into a local temporary file!
+            aFileName = downloadPath
+        End If
+
+        'end of addition
+
         mArchetypeEngine.OpenFile(aFileName, Me)
+
+        ' next section: written by Jana Graenz 2007-02-28
+
+        If aFileName.StartsWith(System.IO.Path.GetTempPath) Then
+            'delete the temporarily downloaded adl-file after opening it.
+            'user has to safe the file locally if he/she wants to keep it
+            Kill(aFileName)
+        End If
+
+        'end of addition
 
         If mArchetypeEngine.OpenFileError Then
             mHasOpenFileError = True
@@ -886,6 +943,7 @@ End Class
 '
 'Contributor(s):
 '	Heath Frankel
+'   Jana Graenz
 '
 'Alternatively, the contents of this file may be used under the terms of
 'either the GNU General Public License Version 2 or later (the "GPL"), or

@@ -111,6 +111,47 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Function
 
+        Public Overrides Function HasConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
+            If EIF_adlInterface.ontology.has_constraint_binding( _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_terminology_id), _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_path)) Then
+
+                Return True
+            Else
+                Return False
+            End If
+
+        End Function
+
+        Public Overrides Function TermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
+            Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
+
+            codePhrase = EIF_adlInterface.ontology.term_binding( _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_terminology_id), _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_path))
+
+            If codePhrase Is Nothing Then
+                Return ""
+            Else
+                Return codePhrase.code_string.to_cil
+            End If
+        End Function
+
+        Public Overrides Function ConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
+            Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
+
+            codePhrase = EIF_adlInterface.ontology.constraint_binding( _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_terminology_id), _
+                openehr.base.kernel.Create.STRING.make_from_cil(a_path))
+
+            If codePhrase Is Nothing Then
+                Return ""
+            Else
+                Return codePhrase.code_string.to_cil
+            End If
+        End Function
+
+
         Public Overrides Sub AddorReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
             ' CHANGE - Sam Heard 2005.05.15
             ' Added ascerts required for this piece of code to run successfully

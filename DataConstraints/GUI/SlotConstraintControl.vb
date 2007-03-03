@@ -454,17 +454,19 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
     End Sub
 
+    Dim activeList As Windows.Forms.ListBox
+
     Private Sub butSlotAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butExclude.Click, butInclude.Click
-        Dim list, removelist As Windows.Forms.ListBox
+        Dim removelist As Windows.Forms.ListBox
         Dim col, removecol As CollectionOfSlots
 
         If sender Is Me.butInclude Then
-            list = Me.listInclude
+            activeList = Me.listInclude
             removelist = Me.listExclude
             col = Me.Constraint.Include
             removecol = Me.Constraint.Exclude
         ElseIf sender Is Me.butExclude Then
-            list = Me.listExclude
+            activeList = Me.listExclude
             removelist = Me.listInclude
             col = Me.Constraint.Exclude
             removecol = Me.Constraint.Include
@@ -477,7 +479,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             For Each s As String In Me.listAvailbleArchetypes.SelectedItems
                 If Not col.Contains(s) Then
                     col.Add(s)
-                    list.Items.Add(s)
+                    activeList.Items.Add(s)
                     If removelist.Items.Contains(s) Then
                         removelist.Items.Remove(s)
                         removecol.Remove(s)
@@ -579,6 +581,16 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
+    Private Sub listAvailbleArchetypes_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAvailbleArchetypes.DoubleClick
+        If Not activeList Is Nothing And activeList Is Me.listInclude Then
+            Me.butSlotAdd_Click(Me.listInclude, e)
+        ElseIf activeList Is Me.listExclude Then
+            Me.butSlotAdd_Click(Me.listExclude, e)
+        End If
+
+    End Sub
+
+#Region "Drag and drop"
     Private Sub listAvailbleArchetypes_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles listAvailbleArchetypes.MouseDown
         Dim indexOfItem As Integer = Me.listAvailbleArchetypes.IndexFromPoint(e.X, e.Y)
         If (indexOfItem >= 0 AndAlso indexOfItem < Me.listAvailbleArchetypes.Items.Count) Then
@@ -641,6 +653,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.listAvailbleArchetypes.SelectedIndices.Remove(Me.listAvailbleArchetypes.SelectedIndex)
     End Sub
 
+#End Region
 End Class
 
 '

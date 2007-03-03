@@ -26,6 +26,9 @@ Public MustInherit Class Ontology
     Public MustOverride ReadOnly Property NumberOfSpecialisations() As Integer
     Public MustOverride Sub Reset()
     Public MustOverride Function HasTermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
+    Public MustOverride Function TermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
+    Public MustOverride Function HasConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
+    Public MustOverride Function ConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
     Public MustOverride Function LanguageAvailable(ByVal code As String) As Boolean
     Public MustOverride Function IsMultiLanguage() As Boolean
     Public MustOverride Function TerminologyAvailable(ByVal code As String) As Boolean

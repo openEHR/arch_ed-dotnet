@@ -59,7 +59,6 @@ Public Class RmStructureCompound
         MyBase.New(archetype_composite.RM_Class)
         colChildren = New Children(mType)
         colChildren.Cardinality = archetype_composite.Cardinality
-        colChildren.Cardinality.Ordered = archetype_composite.IsOrdered
     End Sub
 
 
