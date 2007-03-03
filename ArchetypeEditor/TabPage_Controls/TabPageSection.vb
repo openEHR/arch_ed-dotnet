@@ -452,6 +452,7 @@ Public Class TabPageSection
         If Not n Is Nothing Then
             If MessageBox.Show(AE_Constants.Instance.Remove & " " & n.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
                 Me.tvSection.Nodes.Remove(n)
+                mFileManager.FileEdited = True
             End If
         End If
     End Sub
@@ -593,17 +594,18 @@ Public Class TabPageSection
             Next
             Return cm
         Else
-            mi = New MenuItem(Filemanager.GetOpenEhrTerm(314, "Section"))
+            'Change SRH: Only subsections allowed
+            'mi = New MenuItem(Filemanager.GetOpenEhrTerm(314, "Section"))
+            'AddHandler mi.Click, AddressOf AddSection
+            'cm.MenuItems.Add(mi)
+            'If (Not tvSection.SelectedNode Is Nothing) AndAlso _
+            '    CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = _
+            '    StructureType.SECTION Then
+
+            mi = New MenuItem(Filemanager.GetOpenEhrTerm(558, "Sub-Section"))
             AddHandler mi.Click, AddressOf AddSection
             cm.MenuItems.Add(mi)
-            If (Not tvSection.SelectedNode Is Nothing) AndAlso _
-                CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = _
-                StructureType.SECTION Then
-
-                mi = New MenuItem(Filemanager.GetOpenEhrTerm(558, "Sub-Section"))
-                AddHandler mi.Click, AddressOf AddSection
-                cm.MenuItems.Add(mi)
-            End If
+            'End If
             mi = New MenuItem(Filemanager.GetOpenEhrTerm(312, "Slot"))
             cm.MenuItems.Add(mi)
 
@@ -630,21 +632,33 @@ Public Class TabPageSection
     Private Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click
         If Not Me.tvSection.SelectedNode Is Nothing Then
             Dim tvN As TreeNode
-            Dim tvN_C As TreeNodeCollection
+            Dim tvNodeCollection As TreeNodeCollection
+            Dim tvParentNodeCollection As TreeNodeCollection = Nothing
             Dim i As Integer
 
             tvN = Me.tvSection.SelectedNode
             If tvN.Parent Is Nothing Then
-                tvN_C = Me.tvSection.Nodes
+                tvNodeCollection = Me.tvSection.Nodes
             Else
-                tvN_C = tvN.Parent.Nodes
+                tvNodeCollection = tvN.Parent.Nodes
+                If tvN.Parent.Parent Is Nothing Then
+                    tvParentNodeCollection = Me.tvSection.Nodes
+                Else
+                    tvParentNodeCollection = tvN.Parent.Parent.Nodes
+                End If
             End If
 
             i = tvN.Index
 
             If i > 0 Then
                 tvN.Remove()
-                tvN_C.Insert((i - 1), tvN)
+                tvNodeCollection.Insert((i - 1), tvN)
+                mFileManager.FileEdited = True
+                Me.tvSection.SelectedNode = tvN
+            ElseIf i = 0 AndAlso Not tvParentNodeCollection Is Nothing Then
+                Dim ii As Integer = tvN.Parent.Index
+                tvN.Remove()
+                tvParentNodeCollection.Insert(ii, tvN)
                 mFileManager.FileEdited = True
                 Me.tvSection.SelectedNode = tvN
             End If
@@ -655,21 +669,33 @@ Public Class TabPageSection
     Private Sub butListDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListDown.Click
         If Not Me.tvSection.SelectedNode Is Nothing Then
             Dim tvN As TreeNode
-            Dim tvN_C As TreeNodeCollection
+            Dim tvNodeCollection As TreeNodeCollection
+            Dim tvParentNodeCollection As TreeNodeCollection = Nothing
             Dim i As Integer
 
             tvN = Me.tvSection.SelectedNode
             If tvN.Parent Is Nothing Then
-                tvN_C = Me.tvSection.Nodes
+                tvNodeCollection = Me.tvSection.Nodes
             Else
-                tvN_C = tvN.Parent.Nodes
+                tvNodeCollection = tvN.Parent.Nodes
+                If tvN.Parent.Parent Is Nothing Then
+                    tvParentNodeCollection = Me.tvSection.Nodes
+                Else
+                    tvParentNodeCollection = tvN.Parent.Parent.Nodes
+                End If
             End If
 
             i = tvN.Index
 
             If Not tvN.NextNode Is Nothing Then
                 tvN.Remove()
-                tvN_C.Insert((i + 1), tvN)
+                tvNodeCollection.Insert((i + 1), tvN)
+                mFileManager.FileEdited = True
+                Me.tvSection.SelectedNode = tvN
+            ElseIf i = tvNodeCollection.Count - 1 AndAlso Not tvParentNodeCollection Is Nothing Then
+                Dim ii As Integer = tvN.Parent.Index
+                tvN.Remove()
+                tvParentNodeCollection.Insert(ii + 1, tvN)
                 mFileManager.FileEdited = True
                 Me.tvSection.SelectedNode = tvN
             End If
@@ -759,6 +785,12 @@ Public Class TabPageSection
     End Sub
 #End Region
 
+    Private Sub tvSection_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tvSection.KeyDown
+        If e.KeyCode = Keys.Delete Then
+            butRemoveSection_Click(sender, New EventArgs)
+        End If
+
+    End Sub
 End Class
 
 '

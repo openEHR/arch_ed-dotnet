@@ -290,7 +290,8 @@ Public Class TreeStructure
 
             Select Case tvNode.Item.RM_Class.Type
                 Case StructureType.Cluster
-                    Dim clusterNode As New RmCluster(CType(tvNode.Item.RM_Class, RmStructure))
+                    Dim clusterNode As New RmCluster(CType(tvNode.Item, ArchetypeComposite))
+                    'HERE IT IS
                     ProcessChildrenRM_Structures(tvNode.Nodes, clusterNode)
                     rm.Children.Add(clusterNode)
 

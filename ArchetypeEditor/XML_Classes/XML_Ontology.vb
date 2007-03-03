@@ -91,6 +91,18 @@ Namespace ArchetypeEditor.XML_Classes
             Return archetypeParser.Ontology.HasTermBinding(a_terminology_id, a_path)
         End Function
 
+        Public Overrides Function HasConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
+            Return archetypeParser.Ontology.HasConstraintBinding(a_terminology_id, a_path)
+        End Function
+
+        Public Overrides Function TermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
+            Return archetypeParser.Ontology.TermBinding(a_terminology_id, a_path)
+        End Function
+
+        Public Overrides Function ConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
+            Return archetypeParser.Ontology.ConstraintBinding(a_terminology_id, a_path)
+        End Function
+
         Public Overrides Sub AddorReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
             ' Added ascerts required for this piece of code to run successfully
             ' and try statement

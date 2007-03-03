@@ -18,8 +18,6 @@ Option Strict On
 
 Public Class ArchetypeComposite
     Inherits ArchetypeNodeAbstract
-
-    Private mIsOrdered As Boolean
     Private mIsFixed As Boolean
     Private mCardinality As New RmCardinality(0)
 
@@ -34,10 +32,10 @@ Public Class ArchetypeComposite
 
     Public Property IsOrdered() As Boolean
         Get
-            Return mIsOrdered
+            Return mCardinality.Ordered
         End Get
         Set(ByVal Value As Boolean)
-            mIsOrdered = Value
+            mCardinality.Ordered = Value
         End Set
     End Property
 
@@ -53,7 +51,7 @@ Public Class ArchetypeComposite
 
         s &= (Space(3 * level) & "\i    - " & mDescription & "\i0\par") & nl
         s1 = "\cf2 Items \cf0"
-        If mIsOrdered Then
+        If IsOrdered Then
             s1 &= " ordered"
         End If
         If mIsFixed Then
@@ -101,7 +99,7 @@ Public Class ArchetypeComposite
         If mIsFixed Then
             a_text &= ", fixed"
         End If
-        If mIsOrdered Then
+        If IsOrdered Then
             a_text &= ", ordered"
         End If
         a_text &= "</td><td>&nbsp;</td>"
@@ -132,20 +130,18 @@ Public Class ArchetypeComposite
     Sub New(ByVal aCluster As RmCluster, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(New RmStructure(aCluster), a_file_manager)
         mCardinality = aCluster.Children.Cardinality
-        mIsOrdered = aCluster.Children.Cardinality.Ordered
         mIsFixed = aCluster.Children.Fixed
     End Sub
 
     Sub New(ByVal a_structure As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(New RmStructure(a_structure), a_file_manager)
         mCardinality = a_structure.Children.Cardinality
-        mIsOrdered = a_structure.Children.Cardinality.Ordered
         mIsFixed = a_structure.Children.Fixed
     End Sub
 
     Sub New(ByVal aSection As RmSection, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(New RmStructure(aSection), a_file_manager)
-        mIsOrdered = aSection.Children.Cardinality.Ordered
+        mCardinality = aSection.Children.Cardinality
         mIsFixed = aSection.Children.Fixed
     End Sub
 
