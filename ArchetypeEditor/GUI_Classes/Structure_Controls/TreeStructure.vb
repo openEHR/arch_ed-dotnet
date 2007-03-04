@@ -974,6 +974,36 @@ Public Class TreeStructure
         Me.tvTree.DoDragDrop(e.Item, DragDropEffects.Move)
     End Sub
 
+    'Not needed as collapse containers before dragging which prevents dragging them onto their children
+
+    'Private Sub tvTree_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragOver
+    '    Dim dropNode As TreeNode
+    '    Dim position As Drawing.Point
+    '    Dim parentNode As TreeNode
+
+    '    'Prevent dropping a parent on a child
+    '    If Not mDragTreeNode Is Nothing Then
+    '        position.X = e.X
+    '        position.Y = e.Y
+    '        position = Me.tvTree.PointToClient(position)
+    '        DropNode = CType(Me.tvTree.GetNodeAt(position), ArchetypeTreeNode)
+    '        If Not dropNode Is Nothing Then
+    '            parentNode = dropNode.Parent
+    '            While Not parentNode Is Nothing
+    '                If parentNode Is mDragTreeNode Then
+    '                    e.Effect = DragDropEffects.None
+    '                    Return
+    '                End If
+    '                parentNode = parentNode.Parent
+    '            End While
+    '        End If
+    '    End If
+    '    'Allow the allowed effect
+    '    e.Effect = e.AllowedEffect
+
+    'End Sub
+
+
     Private Sub tvTree_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragDrop
         Dim position As Point
         Dim DropNode As ArchetypeTreeNode

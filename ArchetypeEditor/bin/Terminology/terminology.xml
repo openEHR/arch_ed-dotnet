@@ -1,4 +1,4 @@
-<?xml version="1.0" standalone="yes"?>
+﻿<?xml version="1.0" standalone="yes"?>
 <Terminology xmlns="http://openehr.org/Terminology.xsd">
   <Language code="af" Description="Afrikaans" />
   <Language code="sq" Description="Albanian" />
@@ -724,7 +724,7 @@
   <PrimaryRubric Id="650" Language="en" />
   <PrimaryRubric Id="651" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
-  <Concept Language="en" ConceptID="3" Rubric="foetus" />
+  <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
   <Concept Language="en" ConceptID="7" Rubric="maternal grandmother" />
   <Concept Language="en" ConceptID="8" Rubric="maternal grandfather" />
@@ -1303,7 +1303,7 @@
   <Concept Language="en" ConceptID="645" Rubric="Integer and fraction" />
   <Concept Language="en" ConceptID="646" Rubric="Fraction" />
   <Concept Language="en" ConceptID="647" Rubric="Definition" />
-  <Concept Language="en-us" ConceptID="3" Rubric="fetus" />
+  <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
   <Concept Language="da" ConceptID="6" Rubric="donor" />
