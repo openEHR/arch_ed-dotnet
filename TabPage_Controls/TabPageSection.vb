@@ -724,11 +724,39 @@ Public Class TabPageSection
 
     Private Sub tvSection_ItemDrag(ByVal sender As Object, ByVal e As System.Windows.Forms.ItemDragEventArgs) Handles tvSection.ItemDrag
         mNodeDragged = e.Item
+        'mNodeDragged.Collapse()
         Me.tvSection.DoDragDrop(e, DragDropEffects.Move)
     End Sub
 
     Private Sub tvSection_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvSection.DragEnter
         e.Effect = DragDropEffects.Move
+    End Sub
+
+    Private Sub tvSection_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvSection.DragOver
+        Dim dropNode As TreeNode
+        Dim position As Drawing.Point
+        Dim parentNode As TreeNode
+
+        'Prevent dropping a parent on a child
+        If Not mNodeDragged Is Nothing Then
+            position.X = e.X
+            position.Y = e.Y
+            position = Me.tvSection.PointToClient(position)
+            dropNode = CType(Me.tvSection.GetNodeAt(position), ArchetypeTreeNode)
+            If Not dropNode Is Nothing Then
+                parentNode = dropNode.Parent
+                While Not parentNode Is Nothing
+                    If parentNode Is mNodeDragged Then
+                        e.Effect = DragDropEffects.None
+                        Return
+                    End If
+                    parentNode = parentNode.Parent
+                End While
+            End If
+        End If
+        'Allow the allowed effect
+        e.Effect = e.AllowedEffect
+
     End Sub
 
     Private Sub tvSection_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvSection.DragDrop
@@ -744,6 +772,10 @@ Public Class TabPageSection
             position.Y = e.Y
             position = Me.tvSection.PointToClient(position)
             DropNode = Me.tvSection.GetNodeAt(position)
+
+            If DropNode Is mNodeDragged Then
+                Return
+            End If
 
             If Not DropNode Is Nothing Then
                 If DropNode.Parent Is Nothing Then

@@ -634,13 +634,15 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Dim html_dt As HTML_Details = GetHtmlDetails(Me.Element.Constraint)
         Dim terminologyCode As String
 
-        For Each terminologyRow As DataRow In mFileManager.OntologyManager.TerminologiesTable.Rows
-            terminologyCode = CStr(terminologyRow.Item(0))
-            If mFileManager.OntologyManager.Ontology.HasTermBinding(terminologyCode, Me.NodeId) Then
-                html_dt.TerminologyCode = "<br>" & terminologyCode & ": " & mFileManager.OntologyManager.Ontology.TermBinding(terminologyCode, Me.NodeId)
-            End If
-        Next
-        
+        If OceanArchetypeEditor.Instance.Options.ShowTermsInHtml Then
+            For Each terminologyRow As DataRow In mFileManager.OntologyManager.TerminologiesTable.Rows
+                terminologyCode = CStr(terminologyRow.Item(0))
+                If mFileManager.OntologyManager.Ontology.HasTermBinding(terminologyCode, Me.NodeId) Then
+                    html_dt.TerminologyCode = "<br>" & terminologyCode & ": " & mFileManager.OntologyManager.Ontology.TermBinding(terminologyCode, Me.NodeId)
+                End If
+            Next
+        End If
+
         If Me.Element.Constraint.Type = ConstraintType.Multiple Then
             Dim first As Boolean = True
 

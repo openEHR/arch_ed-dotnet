@@ -9,6 +9,7 @@ Public Class Options
     Private mOccurrencesView As String
     Private mHelpPath As String
     Private mDefaultParser As String
+    Private mShowTermsInHtml As Boolean
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
     Property HelpLocationPath() As String
@@ -77,6 +78,15 @@ Public Class Options
         End Set
     End Property
 
+    Property ShowTermsInHtml() As Boolean
+        Get
+            Return mShowTermsInHtml
+        End Get
+        Set(ByVal value As Boolean)
+            mShowTermsInHtml = value
+        End Set
+    End Property
+
     Sub ShowOptionsForm(Optional ByVal tabIndex As Integer = 0)
         Dim frm As New ApplicationOptionsForm
 
@@ -99,6 +109,7 @@ Public Class Options
             frm.chkParserADL.Checked = True
         End If
         frm.comboReferenceModel.SelectedIndex = mDefaultRM
+        frm.chkShowTerminologyInHTML.Checked = mShowTermsInHtml
         frm.Panel_0.BackColor = mColors(0)
         frm.Panel_1.BackColor = mColors(1)
         frm.Panel_2.BackColor = mColors(2)
@@ -116,6 +127,7 @@ Public Class Options
             mHelpPath = frm.txtHelpFile.Text
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
             mOccurrencesView = frm.comboOccurrences.Text
+            mShowTermsInHtml = frm.chkShowTerminologyInHTML.Checked
             If frm.chkParserADL.Checked Then
                 mDefaultParser = "adl"
             Else
@@ -176,6 +188,8 @@ Public Class Options
                                     mOccurrencesView = y(1).Trim
                                 Case "DefaultParser"
                                     mDefaultParser = y(1).Trim.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                                Case "ShowTermsInHtml"
+                                    mShowTermsInHtml = Boolean.Parse(y(1).Trim)
                             End Select
                         Else
                             MessageBox.Show("Error reading '" & y(0) & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -213,6 +227,7 @@ Public Class Options
                 StrmWrite.WriteLine("RepositoryPath=" & mRepositoryPath)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
                 StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
+                StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
                 Dim s As String = ""
 
                 For i = 0 To mColors.Length - 1
@@ -284,6 +299,7 @@ Public Class Options
         mHelpPath = path & "Help\ArchetypeEditor.chm"
         mOccurrencesView = "numeric"
         mDefaultParser = "adl"
+        mShowTermsInHtml = False
         LoadConfiguration()
         If Not ValidateConfiguration() Then
             Me.ShowOptionsForm(1)

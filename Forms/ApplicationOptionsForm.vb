@@ -77,6 +77,7 @@ Public Class ApplicationOptionsForm
     Friend WithEvents grpParser As System.Windows.Forms.GroupBox
     Friend WithEvents chkParserXML As System.Windows.Forms.CheckBox
     Friend WithEvents chkParserADL As System.Windows.Forms.CheckBox
+    Friend WithEvents chkShowTerminologyInHTML As System.Windows.Forms.CheckBox
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -130,6 +131,7 @@ Public Class ApplicationOptionsForm
         Me.chkParserXML = New System.Windows.Forms.CheckBox
         Me.chkParserADL = New System.Windows.Forms.CheckBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
+        Me.chkShowTerminologyInHTML = New System.Windows.Forms.CheckBox
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -513,6 +515,7 @@ Public Class ApplicationOptionsForm
         '
         'tpAppearance
         '
+        Me.tpAppearance.Controls.Add(Me.chkShowTerminologyInHTML)
         Me.tpAppearance.Controls.Add(Me.lblOccurrences)
         Me.tpAppearance.Controls.Add(Me.comboOccurrences)
         Me.tpAppearance.Controls.Add(Me.GroupBox1)
@@ -581,6 +584,16 @@ Public Class ApplicationOptionsForm
         Me.chkParserADL.Text = "ADL"
         Me.chkParserADL.UseVisualStyleBackColor = True
         '
+        'chkShowTerminologyInHTML
+        '
+        Me.chkShowTerminologyInHTML.AutoSize = True
+        Me.chkShowTerminologyInHTML.Location = New System.Drawing.Point(329, 160)
+        Me.chkShowTerminologyInHTML.Name = "chkShowTerminologyInHTML"
+        Me.chkShowTerminologyInHTML.Size = New System.Drawing.Size(198, 21)
+        Me.chkShowTerminologyInHTML.TabIndex = 27
+        Me.chkShowTerminologyInHTML.Text = "Show terminology in HTML"
+        Me.chkShowTerminologyInHTML.UseVisualStyleBackColor = True
+        '
         'ApplicationOptionsForm
         '
         Me.AcceptButton = Me.butOK
@@ -603,6 +616,7 @@ Public Class ApplicationOptionsForm
         Me.tpLocations.ResumeLayout(False)
         Me.tpLocations.PerformLayout()
         Me.tpAppearance.ResumeLayout(False)
+        Me.tpAppearance.PerformLayout()
         Me.tpDefaults.ResumeLayout(False)
         Me.grpParser.ResumeLayout(False)
         Me.grpParser.PerformLayout()

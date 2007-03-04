@@ -4973,6 +4973,10 @@ Public Class Designer
         End If
         Me.Cursor = Cursors.Default
     End Sub
+
+    Private Sub RichTextBoxDescription_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RichTextBoxDescription.DoubleClick
+        Me.TabMain.SelectedTab = Me.tpDescription
+    End Sub
 End Class
 
 
