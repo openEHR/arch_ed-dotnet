@@ -14,11 +14,6 @@
 '
 '
 
-'Written by Sam Heard
-'Ocean Informatics
-'1st June 2005
-' Version 0.99.2
-
 'Option Strict On
 
 Public Class Designer
