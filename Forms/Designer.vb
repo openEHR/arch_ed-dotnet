@@ -4128,6 +4128,9 @@ Public Class Designer
 
         If ArchetypeToOpen <> "" Then
             'command line variable has been set
+            Dim archID As ArchetypeID = New ArchetypeID(ArchetypeToOpen.Substring(ArchetypeToOpen.LastIndexOf("\") + 1))
+
+            ReferenceModel.SetModelType(archID.Reference_Model)
             OpenArchetype(ArchetypeToOpen)
             If Not mFileManager.ArchetypeAvailable Then
                 Me.Close()
