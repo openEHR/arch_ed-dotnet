@@ -163,6 +163,7 @@ Public Class TabPageDescription
         '
         'txtUse
         '
+        Me.txtUse.AcceptsReturn = True
         Me.txtUse.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txtUse.Location = New System.Drawing.Point(3, 20)
         Me.txtUse.Multiline = True
@@ -173,6 +174,7 @@ Public Class TabPageDescription
         '
         'txtMisuse
         '
+        Me.txtMisuse.AcceptsReturn = True
         Me.txtMisuse.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txtMisuse.Location = New System.Drawing.Point(3, 20)
         Me.txtMisuse.Multiline = True
@@ -216,6 +218,7 @@ Public Class TabPageDescription
         '
         'txtPurpose
         '
+        Me.txtPurpose.AcceptsReturn = True
         Me.txtPurpose.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txtPurpose.Location = New System.Drawing.Point(3, 20)
         Me.txtPurpose.Multiline = True
@@ -298,8 +301,8 @@ Public Class TabPageDescription
         Me.TabDescription.Location = New System.Drawing.Point(2, 2)
         Me.TabDescription.Name = "TabDescription"
         Me.TabDescription.PositionTop = True
-        Me.TabDescription.SelectedIndex = 2
-        Me.TabDescription.SelectedTab = Me.tpTranslation
+        Me.TabDescription.SelectedIndex = 0
+        Me.TabDescription.SelectedTab = Me.tpDescDetails
         Me.TabDescription.Size = New System.Drawing.Size(700, 500)
         Me.TabDescription.TabIndex = 15
         Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation})
@@ -310,6 +313,7 @@ Public Class TabPageDescription
         Me.tpTranslation.Controls.Add(Me.gbTranslator)
         Me.tpTranslation.Location = New System.Drawing.Point(0, 0)
         Me.tpTranslation.Name = "tpTranslation"
+        Me.tpTranslation.Selected = False
         Me.tpTranslation.Size = New System.Drawing.Size(700, 474)
         Me.tpTranslation.TabIndex = 2
         Me.tpTranslation.Title = "Translation"
@@ -443,7 +447,6 @@ Public Class TabPageDescription
         Me.tpDescDetails.Controls.Add(Me.gbMisuse)
         Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
         Me.tpDescDetails.Name = "tpDescDetails"
-        Me.tpDescDetails.Selected = False
         Me.tpDescDetails.Size = New System.Drawing.Size(700, 474)
         Me.tpDescDetails.TabIndex = 0
         Me.tpDescDetails.Title = "Details"

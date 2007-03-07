@@ -341,37 +341,38 @@ Public Class RmStructureCompound
     End Sub
 
     Protected Sub ProcessTree(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        If Not ObjNode.any_allowed AndAlso Not ObjNode.attributes Is Nothing Then
+            For Each an_attribute As XMLParser.C_ATTRIBUTE In ObjNode.attributes
 
-        For Each an_attribute As XMLParser.C_ATTRIBUTE In ObjNode.attributes
+                If an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "items" Then
+                    'for items - that is content only
+                    ArchetypeEditor.XML_Classes.XML_Tools.SetCardinality(CType(an_attribute, XMLParser.C_MULTIPLE_ATTRIBUTE).cardinality, colChildren)
 
-            If an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "items" Then
-                'for items - that is content only
-                ArchetypeEditor.XML_Classes.XML_Tools.SetCardinality(CType(an_attribute, XMLParser.C_MULTIPLE_ATTRIBUTE).cardinality, colChildren)
+                    For Each cObject As XMLParser.C_OBJECT In CType(an_attribute, XMLParser.C_MULTIPLE_ATTRIBUTE).children
+                        Select Case cObject.GetType.ToString.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                            Case "xmlparser.c_complex_object"
+                                Dim a_ComplexObject As XMLParser.C_COMPLEX_OBJECT
 
-                For Each cObject As XMLParser.C_OBJECT In CType(an_attribute, XMLParser.C_MULTIPLE_ATTRIBUTE).children
-                    Select Case cObject.GetType.ToString.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                        Case "xmlparser.c_complex_object"
-                            Dim a_ComplexObject As XMLParser.C_COMPLEX_OBJECT
+                                a_ComplexObject = CType(cObject, XMLParser.C_COMPLEX_OBJECT)
+                                Dim structure_type As StructureType
 
-                            a_ComplexObject = CType(cObject, XMLParser.C_COMPLEX_OBJECT)
-                            Dim structure_type As StructureType
+                                structure_type = ReferenceModel.StructureTypeFromString(a_ComplexObject.rm_type_name)
 
-                            structure_type = ReferenceModel.StructureTypeFromString(a_ComplexObject.rm_type_name)
-
-                            Select Case structure_type
-                                Case StructureType.Cluster
-                                    colChildren.Add(New RmCluster(a_ComplexObject, a_filemanager))
-                                Case StructureType.Element
-                                    colChildren.Add(New ArchetypeEditor.XML_Classes.XML_RmElement(a_ComplexObject, a_filemanager))
-                            End Select
-                        Case "xmlparser.archetype_slot"
-                            colChildren.Add(New RmSlot(CType(cObject, XMLParser.ARCHETYPE_SLOT)))
-                        Case "xmlparser.archetype_internal_ref"
-                            colChildren.Add(ArchetypeEditor.XML_Classes.XML_Tools.ProcessReference(CType(cObject, XMLParser.ARCHETYPE_INTERNAL_REF)))
-                    End Select
-                Next
-            End If
-        Next
+                                Select Case structure_type
+                                    Case StructureType.Cluster
+                                        colChildren.Add(New RmCluster(a_ComplexObject, a_filemanager))
+                                    Case StructureType.Element
+                                        colChildren.Add(New ArchetypeEditor.XML_Classes.XML_RmElement(a_ComplexObject, a_filemanager))
+                                End Select
+                            Case "xmlparser.archetype_slot"
+                                colChildren.Add(New RmSlot(CType(cObject, XMLParser.ARCHETYPE_SLOT)))
+                            Case "xmlparser.archetype_internal_ref"
+                                colChildren.Add(ArchetypeEditor.XML_Classes.XML_Tools.ProcessReference(CType(cObject, XMLParser.ARCHETYPE_INTERNAL_REF)))
+                        End Select
+                    Next
+                End If
+            Next
+        End If
     End Sub
 
     Private Sub ProcessData(ByVal data_rel_node As XMLParser.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
