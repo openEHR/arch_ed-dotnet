@@ -359,7 +359,7 @@ Public Class TabPageSection
         If mRootOfComposition Then
 
             For Each slot As RmSlot In a_section.Children
-                Dim n As New ArchetypeTreeNode(CType(slot, RmSlot))
+                Dim n As New ArchetypeTreeNode(CType(slot, RmSlot), mFileManager)
 
                 tvSection.Nodes.Add(n)
             Next

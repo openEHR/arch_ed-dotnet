@@ -25,6 +25,9 @@ Namespace ArchetypeEditor.ADL_Classes
             Get
                 Me.setItem("text", sText)
                 Me.setItem("description", sDescription)
+                If Not (sComment Is Nothing OrElse sComment = "") Then
+                    Me.setItem("comment", sComment)
+                End If
                 Return EIF_a_Term
             End Get
         End Property
@@ -61,13 +64,15 @@ Namespace ArchetypeEditor.ADL_Classes
             MyBase.New(a_Term.Code)
             sText = a_Term.Text
             sDescription = a_Term.Description
+            sComment = a_Term.Comment
             EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(openehr.base.kernel.Create.STRING.make_from_cil(a_Term.Code))
         End Sub
 
-        Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal language As String = "?")
+        Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal comment As String = "")
             MyBase.New(code)
             sText = text
             sDescription = description
+            sComment = comment
             EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(openehr.base.kernel.Create.STRING.make_from_cil(code))
         End Sub
 
@@ -76,6 +81,7 @@ Namespace ArchetypeEditor.ADL_Classes
             EIF_a_Term = an_adlTerm
             sText = Me.getItem("text")
             sDescription = Me.getItem("description")
+            sComment = Me.getItem("comment")
         End Sub
 
     End Class

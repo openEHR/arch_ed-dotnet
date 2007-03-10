@@ -96,7 +96,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="XMLParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -739,6 +738,12 @@
     <EmbeddedResource Include="TabPage_Controls\TermBindingPanel.resx">
       <DependentUpon>TermBindingPanel.vb</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\dev\XmlParser\XMLParser.csproj">
+      <Project>{927EB444-A45E-4703-946F-78EB37FAD96E}</Project>
+      <Name>XMLParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
