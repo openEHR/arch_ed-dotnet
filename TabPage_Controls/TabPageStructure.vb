@@ -631,8 +631,12 @@ Public Class TabPageStructure
         ' save as RmStructureCompound or RmSlot
 
         If mIsEmbedded Then
-            'Fixme - save embedded archetype
-            Return mEmbeddedSlot.RM_Class
+            If mEmbeddedSlot Is Nothing Then
+                Return Nothing
+            Else
+                Return mEmbeddedSlot.RM_Class
+            End If
+
         Else
             If mArchetypeControl Is Nothing Then
                 Return Nothing

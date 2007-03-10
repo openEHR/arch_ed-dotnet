@@ -487,6 +487,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             d_row(1) = a_term.Code
                             d_row(2) = a_term.Text
                             d_row(3) = a_term.Description
+                            d_row(4) = a_term.Comment
                             ' add it to the GUI ontology
                             TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
                         Next
@@ -499,6 +500,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         d_row(1) = a_term.Code
                         d_row(2) = a_term.Text
                         d_row(3) = a_term.Description
+                        d_row(4) = a_term.Comment
                         ' add it to the GUI ontology
                         TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
                     End If

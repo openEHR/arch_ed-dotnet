@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" standalone="yes"?>
+<?xml version="1.0" standalone="yes"?>
 <Terminology xmlns="http://openehr.org/Terminology.xsd">
   <Language code="af" Description="Afrikaans" />
   <Language code="sq" Description="Albanian" />
@@ -723,6 +723,7 @@
   <PrimaryRubric Id="649" Language="en" />
   <PrimaryRubric Id="650" Language="en" />
   <PrimaryRubric Id="651" Language="en" />
+  <PrimaryRubric Id="652" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -4448,6 +4449,7 @@
   <Concept Language="da" ConceptID="649" Rubric="Begræns antallet decimaler" />
   <Concept Language="en" ConceptID="650" Rubric="Translation" />
   <Concept Language="en" ConceptID="651" Rubric="Accreditation" />
+  <Concept Language="en" ConceptID="652" Rubric="Comments" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

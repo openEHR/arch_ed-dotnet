@@ -260,10 +260,13 @@ Public Class OntologyManager
                 aterm.Language = mLanguageCode
                 aterm.Text = CStr(d_row(2))
                 aterm.Description = CStr(d_row(3))
+                If Not aterm.isConstraint Then
+                    aterm.Comment = CStr(d_row(4))
+                End If
             End If
             mLastTerm = aterm  ' remember last one for efficiency
             Return aterm
-        End If
+            End If
     End Function
 
     Public Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
@@ -447,6 +450,17 @@ Public Class OntologyManager
 
     End Sub
 
+    Public Overloads Sub SetComment(ByVal Value As String, ByVal code As String)
+
+        ' ensure there are no " in the string
+        Value = Value.Replace("""", "'")
+
+        mLastTerm = Me.GetTerm(code)
+        mLastTerm.Comment = Value
+        SetText(mLastTerm)
+
+    End Sub
+
     Private Sub Update(ByVal aTerm As RmTerm, ByVal aTable As DataTable, Optional ByVal ReplaceTranslations As Boolean = False)
         Dim d_row As DataRow
 
@@ -462,11 +476,21 @@ Public Class OntologyManager
                     If CStr(d_row(3)) <> aTerm.Description Then
                         d_row(3) = aTerm.Description
                     End If
+                    If Not aTerm.isConstraint Then
+                        If CStr(d_row(4)) <> aTerm.Comment Then
+                            d_row(4) = aTerm.Comment
+                        End If
+                    End If
                     d_row.EndEdit()
                 Else
                     d_row.BeginEdit()
                     d_row(2) = "*" & aTerm.Text & "(" & mLanguageCode & ")"
                     d_row(3) = "*" & aTerm.Description & "(" & mLanguageCode & ")"
+                    If Not aTerm.isConstraint Then
+                        If Not (CStr(d_row(4)) = "" And aTerm.Comment = "") Then
+                            d_row(4) = "*" & aTerm.Comment & "(" & mLanguageCode & ")"
+                        End If
+                    End If
                     d_row.EndEdit()
                 End If
             Next
@@ -483,6 +507,9 @@ Public Class OntologyManager
                 End If
                 If CStr(d_row(3)) <> aTerm.Description Then
                     d_row(3) = aTerm.Description
+                End If
+                If CStr(d_row(4)) <> aTerm.Comment Then
+                    d_row(4) = aTerm.Comment
                 End If
                 d_row.EndEdit()
             End If
@@ -705,10 +732,13 @@ Public Class OntologyManager
         Dim BindingsTable As DataTable
         BindingsTable = New DataTable("TermBindings")
         ' Add six column objects to the table.
+        'CODE
         Dim TermColumn As DataColumn = New DataColumn  ' the code in the terminology
         TermColumn.DataType = System.Type.GetType("System.String")
         TermColumn.ColumnName = "Terminology"
         BindingsTable.Columns.Add(TermColumn)
+
+        'PATH
         Dim PathColumn As DataColumn = New DataColumn
         PathColumn.DataType = System.Type.GetType("System.String")
         PathColumn.ColumnName = "Path"  ' the path - could be a node or the full path of a node +/- criteria
@@ -718,6 +748,7 @@ Public Class OntologyManager
         CodeColumn.ColumnName = "Code"
         CodeColumn.DefaultValue = ""
         BindingsTable.Columns.Add(CodeColumn)
+        'RELEASE
         Dim ReleaseColumn As DataColumn = New DataColumn
         ReleaseColumn.DataType = System.Type.GetType("System.String")
         ReleaseColumn.ColumnName = "Release"
@@ -799,6 +830,11 @@ Public Class OntologyManager
         DescriptionColumn.ColumnName = "Description"
         DescriptionColumn.DefaultValue = "*"
         DefinitionsTable.Columns.Add(DescriptionColumn)
+        Dim CommentColumn As DataColumn = New DataColumn
+        CommentColumn.DataType = System.Type.GetType("System.String")
+        CommentColumn.ColumnName = "Comment"
+        CommentColumn.DefaultValue = ""
+        DefinitionsTable.Columns.Add(CommentColumn)
         ' Return the new DataTable.
         Dim keys(1) As DataColumn
         keys(0) = idColumn
@@ -888,6 +924,7 @@ Public Class OntologyManager
                 If aterm.isConstraint Then
                     mOntology.ReplaceConstraint(aterm)
                 Else
+                    aterm.Comment = CStr(e.Row(4))
                     mOntology.ReplaceTerm(aterm, ReplaceTranslations())
                 End If
 

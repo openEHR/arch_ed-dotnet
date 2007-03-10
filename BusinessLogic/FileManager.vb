@@ -188,6 +188,21 @@ Public Class FileManagerLocal
         'Try
         mPriorFileName = Me.FileName
 
+        'Need to check file name for eMail extensions
+
+        'Dim i As Integer = aFileName.LastIndexOf("."c)
+
+        'If i = 0 Then
+        '    Return False
+        'Else
+        '    Dim ext As String = aFileName.Substring(0, i).ToLowerInvariant
+        '    If ext <> "adl" Or ext <> "xml" Then
+        '        'could be an email temporary name
+
+        '    End If
+        'End If
+
+
         Me.FileName = aFileName
 
         If aFileName.ToLowerInvariant().EndsWith(".adl") Then
@@ -228,8 +243,9 @@ Public Class FileManagerLocal
             strFileName = System.IO.Path.GetFileName(fileUrl.AbsoluteUri)
             downloadPath = System.IO.Path.Combine(tempPath, strFileName)
             Try
-                request = System.Net.WebRequest.Create(fileUrl)                ' 
-                request.Proxy = System.Net.WebProxy.GetDefaultProxy
+                request = System.Net.WebRequest.Create(fileUrl)
+                'CHANGED SRH - says use the default
+                'request.Proxy = System.Net.WebProxy.GetDefaultProxy
                 request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials ' to avoid eventually Proxy-Troubles
                 response = CType(request.GetResponse(), Net.HttpWebResponse)
             Catch ex As Exception
@@ -316,11 +332,13 @@ Public Class FileManagerLocal
     Public Function CreateXMLParser() As XMLParser.XmlArchetypeParser
         'Create a new parser
         Dim xml_parser As New XMLParser.XmlArchetypeParser()
-
+        
         xml_parser.NewArchetype( _
                    mArchetypeEngine.Archetype.Archetype_ID.ToString, _
                    mOntologyManager.PrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
         xml_parser.Archetype.concept_code = mArchetypeEngine.Archetype.ConceptCode
+
+        Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(xml_parser)
 
         'Set the root id which can be different than the concept ID
         If Not mArchetypeEngine.Archetype.Definition.RootNodeId Is Nothing AndAlso xml_parser.Archetype.definition.node_id <> mArchetypeEngine.Archetype.Definition.RootNodeId Then
@@ -337,14 +355,14 @@ Public Class FileManagerLocal
         xml_parser.Archetype.ontology.specialisation_depth = mOntologyManager.NumberOfSpecialisations.ToString
 
         'term defintions
-        xml_parser.Ontology.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable)
+        xmlOntology.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable)
 
         'constraint definitions
-        xml_parser.Ontology.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable)
+        xmlOntology.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable)
 
         'bindings
-        xml_parser.Ontology.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
-        xml_parser.Ontology.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
+        xmlOntology.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
+        xmlOntology.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
 
         'languages - need translations and details for each language
         Dim ii As Integer = mOntologyManager.LanguagesTable.Rows.Count
@@ -424,19 +442,8 @@ Public Class FileManagerLocal
         'populate the ontology
    
         'languages - need translations and details for each language
-
-        'Dim ii As Integer = mOntologyManager.LanguagesTable.Rows.Count
-
         Dim translationsArray As New ArrayList
         Dim detailsArray As New ArrayList
-
-        'Dim translationsArray() As openehr.openehr.rm.common.resource.TRANSLATION_DETAILS
-        'translationsArray = Array.CreateInstance(GetType(openehr.openehr.rm.common.resource.TRANSLATION_DETAILS), ii - 1)
-        'Dim detailsArray() As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
-        'detailsArray = Array.CreateInstance(GetType(openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM), ii)
-
-        'Dim i As Integer = 0
-        'ii = 0
 
         'First deal with the original language
 

@@ -23,6 +23,7 @@ Public MustInherit Class ArchetypeNodeAbstract
 
     Protected mText As String
     Protected mDescription As String
+    Protected mComment As String
     Protected mItem As RmStructure
 
     Public Property Text() As String Implements ArchetypeNode.Text
@@ -47,6 +48,16 @@ Public MustInherit Class ArchetypeNodeAbstract
         Set(ByVal Value As String)
             mDescription = Value
             mFileManager.OntologyManager.SetDescription(Value, mItem.NodeId)
+            mFileManager.FileEdited = True
+        End Set
+    End Property
+    Public Property Comment() As String
+        Get
+            Return mComment
+        End Get
+        Set(ByVal Value As String)
+            mComment = Value
+            mFileManager.OntologyManager.SetComment(Value, mItem.NodeId)
             mFileManager.FileEdited = True
         End Set
     End Property
@@ -108,6 +119,7 @@ Public MustInherit Class ArchetypeNodeAbstract
         aTerm = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
         mText = aTerm.Text
         mDescription = aTerm.Description
+        mComment = aTerm.Comment
     End Sub
 
     Public Sub Specialise()
@@ -151,6 +163,7 @@ Public MustInherit Class ArchetypeNodeAbstract
         Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(aItem.NodeId)
         mText = aTerm.Text
         mDescription = aTerm.Description
+        mComment = aTerm.Comment
     End Sub
 
     Sub New(ByVal a_node As ArchetypeNodeAbstract)
@@ -158,6 +171,7 @@ Public MustInherit Class ArchetypeNodeAbstract
         mItem = CType(a_node.mItem.Copy, RmStructure)
         mText = a_node.Text
         mDescription = a_node.Description
+        mComment = a_node.Comment
     End Sub
 
 End Class

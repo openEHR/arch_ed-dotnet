@@ -22,6 +22,15 @@ Public Class ArchetypeNodeConstraintControl
     '    Private AnyConstraints As AnyConstraintControl
     Private mConstraintControl As ConstraintControl
     Private mFileManager As FileManagerLocal
+    Friend WithEvents tabConstraint As System.Windows.Forms.TabControl
+    Friend WithEvents tpConstraint As System.Windows.Forms.TabPage
+    Friend WithEvents tpConstraintDetails As System.Windows.Forms.TabPage
+    Friend WithEvents txtComments As System.Windows.Forms.TextBox
+    Friend WithEvents gbComments As System.Windows.Forms.GroupBox
+    Friend WithEvents gbTerminology As System.Windows.Forms.GroupBox
+    Friend WithEvents dgNodeBindings As System.Windows.Forms.DataGridView
+    Friend WithEvents dgValueSets As System.Windows.Forms.DataGridView
+    Friend WithEvents gbValueSets As System.Windows.Forms.GroupBox
     Friend WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
@@ -108,17 +117,34 @@ Public Class ArchetypeNodeConstraintControl
         Me.lblDescription = New System.Windows.Forms.Label
         Me.PanelLower = New System.Windows.Forms.Panel
         Me.HelpProviderCommonConstraint = New System.Windows.Forms.HelpProvider
+        Me.tabConstraint = New System.Windows.Forms.TabControl
+        Me.tpConstraint = New System.Windows.Forms.TabPage
+        Me.tpConstraintDetails = New System.Windows.Forms.TabPage
+        Me.gbValueSets = New System.Windows.Forms.GroupBox
+        Me.dgValueSets = New System.Windows.Forms.DataGridView
+        Me.gbTerminology = New System.Windows.Forms.GroupBox
+        Me.dgNodeBindings = New System.Windows.Forms.DataGridView
+        Me.gbComments = New System.Windows.Forms.GroupBox
+        Me.txtComments = New System.Windows.Forms.TextBox
         Me.PanelDataConstraint.SuspendLayout()
         Me.PanelNonAnonymous.SuspendLayout()
         Me.PanelLower.SuspendLayout()
+        Me.tabConstraint.SuspendLayout()
+        Me.tpConstraint.SuspendLayout()
+        Me.tpConstraintDetails.SuspendLayout()
+        Me.gbValueSets.SuspendLayout()
+        CType(Me.dgValueSets, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.gbTerminology.SuspendLayout()
+        CType(Me.dgNodeBindings, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.gbComments.SuspendLayout()
         Me.SuspendLayout()
         '
         'PanelGenericConstraint
         '
         Me.PanelGenericConstraint.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelGenericConstraint.Location = New System.Drawing.Point(0, 0)
+        Me.PanelGenericConstraint.Location = New System.Drawing.Point(3, 3)
         Me.PanelGenericConstraint.Name = "PanelGenericConstraint"
-        Me.PanelGenericConstraint.Size = New System.Drawing.Size(406, 48)
+        Me.PanelGenericConstraint.Size = New System.Drawing.Size(365, 51)
         Me.PanelGenericConstraint.TabIndex = 0
         '
         'PanelDataConstraint
@@ -127,7 +153,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelDataConstraint.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
         Me.PanelDataConstraint.Name = "PanelDataConstraint"
-        Me.PanelDataConstraint.Size = New System.Drawing.Size(406, 104)
+        Me.PanelDataConstraint.Size = New System.Drawing.Size(365, 199)
         Me.PanelDataConstraint.TabIndex = 31
         '
         'labelAny
@@ -149,7 +175,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelNonAnonymous.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelNonAnonymous.Location = New System.Drawing.Point(0, 0)
         Me.PanelNonAnonymous.Name = "PanelNonAnonymous"
-        Me.PanelNonAnonymous.Size = New System.Drawing.Size(406, 96)
+        Me.PanelNonAnonymous.Size = New System.Drawing.Size(365, 96)
         Me.PanelNonAnonymous.TabIndex = 32
         '
         'butSetRuntimeName
@@ -203,24 +229,135 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelLower.Controls.Add(Me.PanelDataConstraint)
         Me.PanelLower.Controls.Add(Me.PanelNonAnonymous)
         Me.PanelLower.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelLower.Location = New System.Drawing.Point(0, 48)
+        Me.PanelLower.Location = New System.Drawing.Point(3, 54)
         Me.PanelLower.Name = "PanelLower"
-        Me.PanelLower.Size = New System.Drawing.Size(406, 200)
+        Me.PanelLower.Size = New System.Drawing.Size(365, 295)
         Me.PanelLower.TabIndex = 33
+        '
+        'tabConstraint
+        '
+        Me.tabConstraint.Controls.Add(Me.tpConstraint)
+        Me.tabConstraint.Controls.Add(Me.tpConstraintDetails)
+        Me.tabConstraint.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tabConstraint.Location = New System.Drawing.Point(0, 0)
+        Me.tabConstraint.Name = "tabConstraint"
+        Me.tabConstraint.SelectedIndex = 0
+        Me.tabConstraint.Size = New System.Drawing.Size(379, 381)
+        Me.tabConstraint.TabIndex = 34
+        '
+        'tpConstraint
+        '
+        Me.tpConstraint.BackColor = System.Drawing.Color.LemonChiffon
+        Me.tpConstraint.Controls.Add(Me.PanelLower)
+        Me.tpConstraint.Controls.Add(Me.PanelGenericConstraint)
+        Me.tpConstraint.Location = New System.Drawing.Point(4, 25)
+        Me.tpConstraint.Margin = New System.Windows.Forms.Padding(0)
+        Me.tpConstraint.Name = "tpConstraint"
+        Me.tpConstraint.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpConstraint.Size = New System.Drawing.Size(371, 352)
+        Me.tpConstraint.TabIndex = 0
+        Me.tpConstraint.Text = "Constraint"
+        Me.tpConstraint.UseVisualStyleBackColor = True
+        '
+        'tpConstraintDetails
+        '
+        Me.tpConstraintDetails.BackColor = System.Drawing.Color.LemonChiffon
+        Me.tpConstraintDetails.Controls.Add(Me.gbValueSets)
+        Me.tpConstraintDetails.Controls.Add(Me.gbTerminology)
+        Me.tpConstraintDetails.Controls.Add(Me.gbComments)
+        Me.tpConstraintDetails.Location = New System.Drawing.Point(4, 25)
+        Me.tpConstraintDetails.Name = "tpConstraintDetails"
+        Me.tpConstraintDetails.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpConstraintDetails.Size = New System.Drawing.Size(371, 352)
+        Me.tpConstraintDetails.TabIndex = 1
+        Me.tpConstraintDetails.Text = "Details"
+        Me.tpConstraintDetails.UseVisualStyleBackColor = True
+        '
+        'gbValueSets
+        '
+        Me.gbValueSets.Controls.Add(Me.dgValueSets)
+        Me.gbValueSets.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gbValueSets.Location = New System.Drawing.Point(3, 312)
+        Me.gbValueSets.Name = "gbValueSets"
+        Me.gbValueSets.Size = New System.Drawing.Size(365, 37)
+        Me.gbValueSets.TabIndex = 6
+        Me.gbValueSets.TabStop = False
+        Me.gbValueSets.Text = "Value sets in external terminologies"
+        '
+        'dgValueSets
+        '
+        Me.dgValueSets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgValueSets.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgValueSets.Location = New System.Drawing.Point(3, 18)
+        Me.dgValueSets.Name = "dgValueSets"
+        Me.dgValueSets.RowTemplate.Height = 24
+        Me.dgValueSets.Size = New System.Drawing.Size(359, 16)
+        Me.dgValueSets.TabIndex = 3
+        '
+        'gbTerminology
+        '
+        Me.gbTerminology.Controls.Add(Me.dgNodeBindings)
+        Me.gbTerminology.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbTerminology.Location = New System.Drawing.Point(3, 219)
+        Me.gbTerminology.Name = "gbTerminology"
+        Me.gbTerminology.Size = New System.Drawing.Size(365, 93)
+        Me.gbTerminology.TabIndex = 4
+        Me.gbTerminology.TabStop = False
+        Me.gbTerminology.Text = "Node meaning in terminologies"
+        '
+        'dgNodeBindings
+        '
+        Me.dgNodeBindings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgNodeBindings.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgNodeBindings.Location = New System.Drawing.Point(3, 18)
+        Me.dgNodeBindings.Name = "dgNodeBindings"
+        Me.dgNodeBindings.RowTemplate.Height = 24
+        Me.dgNodeBindings.Size = New System.Drawing.Size(359, 72)
+        Me.dgNodeBindings.TabIndex = 2
+        '
+        'gbComments
+        '
+        Me.gbComments.Controls.Add(Me.txtComments)
+        Me.gbComments.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbComments.Location = New System.Drawing.Point(3, 3)
+        Me.gbComments.Name = "gbComments"
+        Me.gbComments.Size = New System.Drawing.Size(365, 216)
+        Me.gbComments.TabIndex = 5
+        Me.gbComments.TabStop = False
+        Me.gbComments.Text = "Comments"
+        '
+        'txtComments
+        '
+        Me.txtComments.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtComments.Location = New System.Drawing.Point(3, 18)
+        Me.txtComments.Multiline = True
+        Me.txtComments.Name = "txtComments"
+        Me.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtComments.Size = New System.Drawing.Size(359, 195)
+        Me.txtComments.TabIndex = 0
         '
         'ArchetypeNodeConstraintControl
         '
-        Me.Controls.Add(Me.PanelLower)
-        Me.Controls.Add(Me.PanelGenericConstraint)
+        Me.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange
+        Me.Controls.Add(Me.tabConstraint)
         Me.HelpProviderCommonConstraint.SetHelpKeyword(Me, "HowTo/Edit data/set_common_constraints.htm")
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "ArchetypeNodeConstraintControl"
         Me.HelpProviderCommonConstraint.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(406, 248)
+        Me.Size = New System.Drawing.Size(379, 381)
         Me.PanelDataConstraint.ResumeLayout(False)
         Me.PanelNonAnonymous.ResumeLayout(False)
         Me.PanelNonAnonymous.PerformLayout()
         Me.PanelLower.ResumeLayout(False)
+        Me.tabConstraint.ResumeLayout(False)
+        Me.tpConstraint.ResumeLayout(False)
+        Me.tpConstraintDetails.ResumeLayout(False)
+        Me.gbValueSets.ResumeLayout(False)
+        CType(Me.dgValueSets, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.gbTerminology.ResumeLayout(False)
+        CType(Me.dgNodeBindings, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.gbComments.ResumeLayout(False)
+        Me.gbComments.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -244,8 +381,8 @@ Public Class ArchetypeNodeConstraintControl
     End Property
 
     Public Sub TranslateGUI()
-        Me.lblDescription.Text = FileManager.GetOpenEhrTerm(113, Me.lblDescription.Text)
-        Me.lblRunTimeName.Text = FileManager.GetOpenEhrTerm(114, Me.lblRunTimeName.Text)
+        Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
+        Me.lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, Me.lblRunTimeName.Text)
     End Sub
 
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _
@@ -289,6 +426,12 @@ Public Class ArchetypeNodeConstraintControl
                             Me.labelAny.Visible = True
 
                         Case Else
+                            If archetypeElem.Constraint.Type = ConstraintType.Text AndAlso CType(archetypeElem.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstrainType.Terminology Then
+                                Me.gbValueSets.Visible = True
+                            Else
+                                Me.gbValueSets.Visible = False
+                            End If
+
                             mConstraintControl = ConstraintControl.CreateConstraintControl( _
                                                            archetypeElem.Constraint.Type, mFileManager)
 
@@ -334,6 +477,14 @@ Public Class ArchetypeNodeConstraintControl
                 mOccurrences.SetSingle = False
             End If
 
+            If IsState Then
+                Me.tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue
+                Me.tpConstraintDetails.BackColor = System.Drawing.Color.LightSteelBlue
+            Else
+                Me.tpConstraint.BackColor = System.Drawing.Color.LemonChiffon
+                Me.tpConstraintDetails.BackColor = System.Drawing.Color.LemonChiffon
+            End If
+
             SetControlValues(IsState)
 
             If OceanArchetypeEditor.IsDefaultLanguageRightToLeft Then
@@ -358,11 +509,15 @@ Public Class ArchetypeNodeConstraintControl
 
         If mArchetypeNode.IsAnonymous Then
             Me.PanelNonAnonymous.Visible = False
+            Me.gbTerminology.Visible = False
+
         Else
             Me.PanelNonAnonymous.Visible = True
+            Me.gbTerminology.Visible = True
 
             ' set the description of the term
             Me.txtTermDescription.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Description
+            Me.txtComments.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Comment
 
             ' set the runtime name text
             Me.txtRuntimeName.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).RuntimeNameText
@@ -396,7 +551,7 @@ Public Class ArchetypeNodeConstraintControl
 
         has_constraint = mArchetypeNode.RM_Class.HasNameConstraint
         If has_constraint Then
-            t = CType(mArchetypeNode.RM_Class.NameConstraint.copy, Constraint_Text)
+            t = CType(mArchetypeNode.RM_Class.NameConstraint.Copy, Constraint_Text)
         End If
 
         frm.ShowConstraint(False, mArchetypeNode.RM_Class.NameConstraint, mFileManager)
@@ -423,9 +578,6 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Sub
 
-    Private Sub ArchetypeNodeConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-    End Sub
-
     Private Sub txtTermDescription_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtTermDescription.KeyPress
         ' work around as acceptsreturn = false does not deal with stop Enter unless there is a AcceptButton
         If e.KeyChar = Chr(13) Then
@@ -433,6 +585,12 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Sub
 
+    Private Sub txtComments_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtComments.TextChanged
+        If Not mIsLoading Then
+            CType(mArchetypeNode, ArchetypeNodeAbstract).Comment = Me.txtComments.Text
+            mFileManager.FileEdited = True
+        End If
+    End Sub
 End Class
 
 '

@@ -25,6 +25,9 @@ Namespace ArchetypeEditor.XML_Classes
             Get
                 Me.setItem("text", sText)
                 Me.setItem("description", sDescription)
+                If Not (sComment Is Nothing OrElse sComment = "") Then
+                    Me.setItem("comment", sComment)
+                End If
                 Return a_Xml_Term
             End Get
         End Property
@@ -38,17 +41,20 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         Private Sub setItem(ByVal Item As String, ByVal Value As String)
-            For Each di As XMLParser.dictionaryItem In a_Xml_Term.items
-                If di.key = Item Then
-                    di.value = Value
-                    Return
-                End If
-            Next
-
-            Dim new_items() As XMLParser.dictionaryItem
             Dim i As Integer
 
+            Dim new_items() As XMLParser.dictionaryItem
+
             If Not a_Xml_Term.items Is Nothing Then
+
+                ' set the value of the item
+                For Each di As XMLParser.dictionaryItem In a_Xml_Term.items
+                    If di.key = Item Then
+                        di.value = Value
+                        Return  'and return if it is found
+                    End If
+                Next
+
                 new_items = a_Xml_Term.items
                 i = new_items.Length
                 Array.Resize(new_items, i + 1)
@@ -77,25 +83,34 @@ Namespace ArchetypeEditor.XML_Classes
             MyBase.New(a_Term.Code)
             sText = a_Term.Text
             sDescription = a_Term.Description
+            sComment = a_Term.Comment
             a_Xml_Term = New XMLParser.ARCHETYPE_TERM()
-            a_Xml_Term.items = CType(Array.CreateInstance(GetType(XMLParser.dictionaryItem), 2), XMLParser.dictionaryItem())
+            a_Xml_Term.items = CType(Array.CreateInstance(GetType(XMLParser.dictionaryItem), 1), XMLParser.dictionaryItem())
             a_Xml_Term.items(0) = New XMLParser.dictionaryItem
             a_Xml_Term.items(0).key = "text"
-            a_Xml_Term.items(1) = New XMLParser.dictionaryItem
-            a_Xml_Term.items(1).key = "description"
+            'a_Xml_Term.items(1) = New XMLParser.dictionaryItem
+            'a_Xml_Term.items(1).key = "description"
+            'a_Xml_Term.items(2) = New XMLParser.dictionaryItem
+            'a_Xml_Term.items(2).key = "comment"
             a_Xml_Term.code = a_Term.Code
             setItem("text", sText)
             setItem("description", sDescription)
+            setItem("comment", sComment)
         End Sub
 
-        Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal language As String = "?")
+        Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal comment As String = "")
             MyBase.New(code)
             sText = text
             sDescription = description
             a_Xml_Term = New XMLParser.ARCHETYPE_TERM()
+
             a_Xml_Term.code = code
             setItem("text", sText)
             setItem("description", sDescription)
+            If (comment <> "") Then
+                sComment = comment
+                setItem("comment", comment)
+            End If
         End Sub
 
         Sub New(ByVal an_adlTerm As XMLParser.ARCHETYPE_TERM)
@@ -103,6 +118,7 @@ Namespace ArchetypeEditor.XML_Classes
             a_Xml_Term = an_adlTerm
             sText = Me.getItem("text")
             sDescription = Me.getItem("description")
+            sComment = Me.getItem("comment")
         End Sub
 
     End Class

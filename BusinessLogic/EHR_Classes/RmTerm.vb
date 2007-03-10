@@ -18,6 +18,7 @@ Public Class RmTerm
     Protected sCode As String
     Protected sText As String 'New String("")
     Protected sDescription As String 'New String("")
+    Protected sComment As String
     Protected sLanguageCode As String 'New String("")
 
     ReadOnly Property Code() As String
@@ -50,6 +51,15 @@ Public Class RmTerm
         End Get
         Set(ByVal Value As String)
             sDescription = Value
+        End Set
+    End Property
+
+    Property Comment() As String
+        Get
+            Return sComment
+        End Get
+        Set(ByVal value As String)
+            sComment = value
         End Set
     End Property
 
