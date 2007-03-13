@@ -917,19 +917,31 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         If Me.listAllowableValues.SelectedIndex > -1 Then
             Dim s(1) As String
 
-            ' get the term that is selected
-            Dim t As RmTerm = mFilemanager.OntologyManager.GetTerm(Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex))
+            If Me.radioText.Checked Then
+                Dim ss As String
+                ss = Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex)
+                ss = OceanArchetypeEditor.Instance.GetInput(ss)
+                If ss <> "" Then
+                    Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex) = ss
+                    Me.listAllowableValues.Items(Me.listAllowableValues.SelectedIndex) = ss
+                End If
+            ElseIf Me.radioInternal.Checked Then
+                ' get the term that is selected
+                Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex))
 
-            If Not t Is Nothing Then
-                s = OceanArchetypeEditor.Instance.GetInput(t)
+                If Not t Is Nothing Then
+                    s = OceanArchetypeEditor.Instance.GetInput(t)
 
-                If s(0) <> "" Then
-                    mFilemanager.OntologyManager.SetText(t)
-                    mFileManager.OntologyManager.SetDescription(t.Description, t.Code)
-                Else
-                    Return
+                    If s(0) <> "" Then
+                        mFileManager.OntologyManager.SetText(t)
+                        mFileManager.OntologyManager.SetDescription(t.Description, t.Code)
+                    Else
+                        Return
+                    End If
                 End If
             End If
+
+
         End If
 
     End Sub

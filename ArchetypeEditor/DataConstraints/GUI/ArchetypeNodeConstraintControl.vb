@@ -144,7 +144,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelGenericConstraint.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelGenericConstraint.Location = New System.Drawing.Point(3, 3)
         Me.PanelGenericConstraint.Name = "PanelGenericConstraint"
-        Me.PanelGenericConstraint.Size = New System.Drawing.Size(365, 51)
+        Me.PanelGenericConstraint.Size = New System.Drawing.Size(420, 51)
         Me.PanelGenericConstraint.TabIndex = 0
         '
         'PanelDataConstraint
@@ -153,7 +153,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelDataConstraint.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
         Me.PanelDataConstraint.Name = "PanelDataConstraint"
-        Me.PanelDataConstraint.Size = New System.Drawing.Size(365, 199)
+        Me.PanelDataConstraint.Size = New System.Drawing.Size(420, 199)
         Me.PanelDataConstraint.TabIndex = 31
         '
         'labelAny
@@ -175,7 +175,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelNonAnonymous.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelNonAnonymous.Location = New System.Drawing.Point(0, 0)
         Me.PanelNonAnonymous.Name = "PanelNonAnonymous"
-        Me.PanelNonAnonymous.Size = New System.Drawing.Size(365, 96)
+        Me.PanelNonAnonymous.Size = New System.Drawing.Size(420, 96)
         Me.PanelNonAnonymous.TabIndex = 32
         '
         'butSetRuntimeName
@@ -231,7 +231,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelLower.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelLower.Location = New System.Drawing.Point(3, 54)
         Me.PanelLower.Name = "PanelLower"
-        Me.PanelLower.Size = New System.Drawing.Size(365, 295)
+        Me.PanelLower.Size = New System.Drawing.Size(420, 295)
         Me.PanelLower.TabIndex = 33
         '
         'tabConstraint
@@ -242,7 +242,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.tabConstraint.Location = New System.Drawing.Point(0, 0)
         Me.tabConstraint.Name = "tabConstraint"
         Me.tabConstraint.SelectedIndex = 0
-        Me.tabConstraint.Size = New System.Drawing.Size(379, 381)
+        Me.tabConstraint.Size = New System.Drawing.Size(434, 381)
         Me.tabConstraint.TabIndex = 34
         '
         'tpConstraint
@@ -254,7 +254,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.tpConstraint.Margin = New System.Windows.Forms.Padding(0)
         Me.tpConstraint.Name = "tpConstraint"
         Me.tpConstraint.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConstraint.Size = New System.Drawing.Size(371, 352)
+        Me.tpConstraint.Size = New System.Drawing.Size(426, 352)
         Me.tpConstraint.TabIndex = 0
         Me.tpConstraint.Text = "Constraint"
         Me.tpConstraint.UseVisualStyleBackColor = True
@@ -344,7 +344,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "ArchetypeNodeConstraintControl"
         Me.HelpProviderCommonConstraint.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(379, 381)
+        Me.Size = New System.Drawing.Size(434, 381)
         Me.PanelDataConstraint.ResumeLayout(False)
         Me.PanelNonAnonymous.ResumeLayout(False)
         Me.PanelNonAnonymous.PerformLayout()

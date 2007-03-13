@@ -1027,7 +1027,7 @@ Public Class TreeStructure
                 frmChooseType.Text = Filemanager.GetOpenEhrTerm(104, "Choose..")
                 frmChooseType.StartPosition = FormStartPosition.Manual
                 frmChooseType.Location = New Point(e.X, e.Y)
-                Dim r As Integer = frmChooseType.ShowDialog()
+                Dim r As Integer = frmChooseType.ShowDialog(Me.ParentForm)
 
                 Select Case r
                     Case 1 'Cluster
