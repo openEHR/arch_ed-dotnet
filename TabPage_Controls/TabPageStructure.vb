@@ -202,7 +202,7 @@ Public Class TabPageStructure
         Me.panelDisplay.Name = "panelDisplay"
         Me.panelDisplay.Padding = New System.Windows.Forms.Padding(2)
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.panelDisplay, True)
-        Me.panelDisplay.Size = New System.Drawing.Size(328, 368)
+        Me.panelDisplay.Size = New System.Drawing.Size(350, 368)
         Me.panelDisplay.TabIndex = 0
         '
         'ContextMenuGrid

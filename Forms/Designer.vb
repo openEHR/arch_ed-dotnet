@@ -4514,17 +4514,19 @@ Public Class Designer
         ' set the mDataViewConstraintBindings to the appropriate term
         Dim ID As String
 
-        If Me.DataGridConstraintDefinitions.VisibleRowCount > 0 AndAlso _
-        (Not TypeOf (Me.DataGridConstraintDefinitions.Item(Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)) Is System.DBNull) Then
-            Try
-                ID = Me.DataGridConstraintDefinitions.Item(Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)
-                If Not ID Is Nothing Then
-                    mDataViewConstraintBindings.RowFilter = "ID = '" & ID & "'"
-                End If
-            Catch
-                ' if it falls off the grid to an empty row
-                Debug.Assert(False)
-            End Try
+        If Me.DataGridConstraintDefinitions.CurrentRowIndex > -1 Then
+            If Me.DataGridConstraintDefinitions.VisibleRowCount > 0 AndAlso _
+            (Not TypeOf (Me.DataGridConstraintDefinitions.Item(Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)) Is System.DBNull) Then
+                Try
+                    ID = Me.DataGridConstraintDefinitions.Item(Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)
+                    If Not ID Is Nothing Then
+                        mDataViewConstraintBindings.RowFilter = "ID = '" & ID & "'"
+                    End If
+                Catch
+                    ' if it falls off the grid to an empty row
+                    Debug.Assert(False)
+                End Try
+            End If
         End If
 
     End Sub
@@ -4544,7 +4546,7 @@ Public Class Designer
                 frm.butOK.Text = AE_Constants.Instance.OK
             End If
 
-            While frm.ShowDialog() = Windows.Forms.DialogResult.OK
+            While frm.ShowDialog(Me.ParentForm) = Windows.Forms.DialogResult.OK
                 If (frm.comboTerminology.SelectedIndex > -1 And frm.txtQuery.Text <> "") Then
 
                     'Add the terminology
