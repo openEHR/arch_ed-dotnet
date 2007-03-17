@@ -42,36 +42,36 @@ Namespace ArchetypeEditor.XML_Classes
             Dim di As New XMLParser.dictionaryItem
 
             di.key = "name"
-            di.value = Me.mOriginalAuthor
+            di.value = Me.mOriginalAuthor.Replace("""", "'")
             authorDetails.Add(di)
 
             If Me.mOriginalAuthorEmail <> "" Then
                 di = New XMLParser.dictionaryItem
                 di.key = "email"
-                di.value = Me.mOriginalAuthorEmail
+                di.value = Me.mOriginalAuthorEmail.Replace("""", "'")
                 authorDetails.Add(di)
             End If
 
             If Me.mOriginalAuthorDate <> "" Then
                 di = New XMLParser.dictionaryItem
                 di.key = "date"
-                di.value = Me.mOriginalAuthorDate
+                di.value = Me.mOriginalAuthorDate.Replace("""", "'")
                 authorDetails.Add(di)
             End If
 
             If Me.mOriginalAuthorOrganisation <> "" Then
                 di = New XMLParser.dictionaryItem
                 di.key = "organisation"
-                di.value = Me.mOriginalAuthorOrganisation
+                di.value = Me.mOriginalAuthorOrganisation.Replace("""", "'")
                 authorDetails.Add(di)
             End If
 
             mXML_Description.original_author = authorDetails.ToArray(GetType(XMLParser.dictionaryItem))
 
-            mXML_Description.lifecycle_state = Me.LifeCycleStateAsString
+            mXML_Description.lifecycle_state = Me.LifeCycleStateAsString.Replace("""", "'")
 
             If Not mArchetypePackageURI Is Nothing Then
-                mXML_Description.resource_package_uri = mArchetypePackageURI
+                mXML_Description.resource_package_uri = mArchetypePackageURI.Replace("""", "'")
             End If
 
             ' clear the other contributors and add them again

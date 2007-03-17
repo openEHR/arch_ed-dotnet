@@ -26,7 +26,7 @@ Public Interface ArchetypeNode
     ReadOnly Property HasReferences() As Boolean
     Sub Translate()
     Function ToRichText(ByVal level As Integer) As String
-    Function ToHTML(ByVal level As Integer) As String
+    Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
     Function Copy() As ArchetypeNode
 End Interface
 

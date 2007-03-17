@@ -4904,10 +4904,10 @@ Public Class Designer
         If i > -1 Then
             new_concept = arch_id.Substring(0, i + 1) + new_concept.Replace("-", "_")
         Else
-            new_concept = new_concept.Replace("-", "_")
+            new_concept = new_concept.Replace(" ", "_")
         End If
 
-        mFileManager.Archetype.Archetype_ID.Concept = new_concept
+        mFileManager.Archetype.Archetype_ID.Concept = new_concept.ToLowerInvariant
         ' force save as to new file
         mFileManager.IsNew = True
         mFileManager.FileEdited = True

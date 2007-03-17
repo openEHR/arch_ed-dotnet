@@ -436,7 +436,10 @@ Public Class ListStructure
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
         Dim lvItem As ArchetypeListViewItem
-        Dim text, s As String
+        Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
+        Dim s As String
+        Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
+
 
         s = ""
         If mCardinalityControl.Cardinality.Ordered Then
@@ -445,29 +448,18 @@ Public Class ListStructure
 
         s = s.Trim
 
-        text = "<p>Structure = LIST" & s & "</p>"
-
-        text &= Environment.NewLine & "<table border=""1"" cellpadding=""2"" width=""100%"">"
-
-        If BackGroundColour = "" Then
-            text &= Environment.NewLine & "<tr>"
-        Else
-            text &= Environment.NewLine & "<tr  bgcolor=""" & BackGroundColour & """>"
-        End If
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(54, "Concept") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""40%""><h4>" & Filemanager.GetOpenEhrTerm(113, "Description") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""20%""><h4>" & Filemanager.GetOpenEhrTerm(87, "Constraints") & "</h4></td>"
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(438, "Values") & "</h4></td>"
-        text &= Environment.NewLine & "</tr>"
-
+        result.AppendFormat("<p>Structure = LIST{0}</p>", s)
+        result.Append(Environment.NewLine)
+        result.Append("<table border=""1"" cellpadding=""2"" width=""100%"">")
+        result.AppendFormat(Me.HtmlHeader(BackGroundColour, showComments))
+       
         For Each lvItem In Me.lvList.Items
-            text &= Environment.NewLine & lvItem.Item.ToHTML(0)
-            text &= Environment.NewLine & "</tr>"
+            result.AppendFormat("{0}{1}", Environment.NewLine, lvItem.Item.ToHTML(0, showComments))
+            result.AppendFormat("{0}</tr>", Environment.NewLine)
         Next
-        text &= Environment.NewLine & "</table>"
+        result.Append("</table>")
 
-
-        Return text
+        Return result.ToString()
     End Function
 
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click

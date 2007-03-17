@@ -40,36 +40,36 @@ Namespace ArchetypeEditor.ADL_Classes
             If Me.OriginalAuthor <> "" Then
                 mADL_Description.add_original_author_item( _
                      openehr.base.kernel.Create.STRING.make_from_cil("name"), _
-                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthor))
+                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthor.Replace("""", "'")))
             End If
             If Me.OriginalAuthorEmail <> "" Then
                 mADL_Description.add_original_author_item( _
                      openehr.base.kernel.Create.STRING.make_from_cil("email"), _
-                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorEmail))
+                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorEmail.Replace("""", "'")))
             End If
             If Me.OriginalAuthorOrganisation <> "" Then
                 mADL_Description.add_original_author_item( _
                      openehr.base.kernel.Create.STRING.make_from_cil("organisation"), _
-                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorOrganisation))
+                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorOrganisation.Replace("""", "'")))
             End If
             If Me.OriginalAuthorDate <> "" Then
                 mADL_Description.add_original_author_item( _
                      openehr.base.kernel.Create.STRING.make_from_cil("date"), _
-                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorDate))
+                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorDate.Replace("""", "'")))
             End If
 
             mADL_Description.set_lifecycle_state( _
-                openehr.base.kernel.Create.STRING.make_from_cil(Me.LifeCycleStateAsString))
+                openehr.base.kernel.Create.STRING.make_from_cil(Me.LifeCycleStateAsString.Replace("""", "'")))
 
             If Not mArchetypePackageURI Is Nothing Then
                 mADL_Description.set_resource_package_uri( _
-                    openehr.base.kernel.Create.STRING.make_from_cil(mArchetypePackageURI))
+                    openehr.base.kernel.Create.STRING.make_from_cil(mArchetypePackageURI.Replace("""", "'")))
             End If
 
             ' clear the other contributors and add them again
             mADL_Description.clear_other_contributors()
             For Each s As String In mOtherContributors
-                mADL_Description.add_other_contributor(openehr.base.kernel.Create.STRING.make_from_cil(s))
+                mADL_Description.add_other_contributor(openehr.base.kernel.Create.STRING.make_from_cil(s.Replace("""", "'")))
             Next
 
             Return mADL_Description

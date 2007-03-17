@@ -603,6 +603,33 @@ Public Class EntryStructure
         End If
     End Sub
 
+    Protected Function HtmlHeader(ByVal aBackGroundColour As String, ByVal showComments As Boolean) As String
+
+        Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
+        Dim displayWidth As String = "20"
+
+        If aBackGroundColour = "" Then
+            result.Append("<tr>")
+        Else
+            result.AppendFormat("<tr  bgcolor=""{0}"">", aBackGroundColour)
+        End If
+
+        If showComments Then
+            displayWidth = "16"
+        End If
+
+        result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(54, "Concept"))
+        result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(113, "Description"))
+        result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(87, "Constraints"))
+        result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(438, "Values"))
+        If showComments Then
+            result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(652, "Comments"))
+        End If
+
+        result.AppendFormat("{0}</tr>", Environment.NewLine)
+
+        Return result.ToString
+    End Function
 
     Protected Sub SetHelpTopic(ByVal a_structure_type As StructureType)
 

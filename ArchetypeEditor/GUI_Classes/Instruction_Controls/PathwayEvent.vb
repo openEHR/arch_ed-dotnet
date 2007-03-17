@@ -8,6 +8,7 @@ Public Class PathwayEvent
     Private mText As String
     Private mDescription As String
     Private mItem As RmPathwayStep
+    Friend WithEvents toolTipPathway As System.Windows.Forms.ToolTip
     Private mFileManager As FileManagerLocal
 
     Public Event SelectionChanged(ByVal sender As Object, ByVal e As EventArgs)
@@ -79,10 +80,13 @@ Public Class PathwayEvent
     Friend WithEvents MenuDelete As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItem1 As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Me.ContextMenuPathwayEvent = New System.Windows.Forms.ContextMenu
         Me.MenuEdit = New System.Windows.Forms.MenuItem
         Me.MenuDelete = New System.Windows.Forms.MenuItem
         Me.MenuItem1 = New System.Windows.Forms.MenuItem
+        Me.toolTipPathway = New System.Windows.Forms.ToolTip(Me.components)
+        Me.SuspendLayout()
         '
         'ContextMenuPathwayEvent
         '
@@ -103,12 +107,17 @@ Public Class PathwayEvent
         Me.MenuItem1.Index = 2
         Me.MenuItem1.Text = "Properties"
         '
+        'toolTipPathway
+        '
+        Me.toolTipPathway.AutomaticDelay = 100
+        '
         'PathwayEvent
         '
         Me.BackColor = System.Drawing.Color.LightGreen
         Me.ContextMenu = Me.ContextMenuPathwayEvent
         Me.Name = "PathwayEvent"
         Me.Size = New System.Drawing.Size(80, 204)
+        Me.ResumeLayout(False)
 
     End Sub
 
@@ -170,6 +179,7 @@ Public Class PathwayEvent
         End Get
         Set(ByVal Value As String)
             mText = Value
+            Me.toolTipPathway.SetToolTip(Me, mText)
             TextRectangle(mText, Me.CreateGraphics)
         End Set
     End Property
@@ -179,6 +189,7 @@ Public Class PathwayEvent
         a_term = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
         mText = a_term.Text
         mDescription = a_term.Description
+        Me.toolTipPathway.SetToolTip(Me, mText)
     End Sub
     Private Function TextRectangle(ByVal TextToRender As String, ByVal g As Graphics) As Drawing.Rectangle
         Dim fontFamily As New fontFamily("Arial")
@@ -230,7 +241,7 @@ Public Class PathwayEvent
         TextRectangle(mText, e.Graphics)
     End Sub
 
-    Private Sub MenuEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuEdit.Click
+    Private Sub MenuEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuEdit.Click, Me.DoubleClick
         Dim s() As String
         Dim a_term As RmTerm
 
@@ -247,8 +258,8 @@ Public Class PathwayEvent
 
         mText = a_term.Text
         mDescription = a_term.Description
-
         mFileManager.OntologyManager.SetText(a_term)
+        Me.toolTipPathway.SetToolTip(Me, mText)
         TextRectangle(mText, Me.CreateGraphics)
         mFileManager.FileEdited = True
 
@@ -265,7 +276,7 @@ Public Class PathwayEvent
         End If
     End Sub
 
-    Private Sub MenuDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDelete.Click
+    Public Sub Remove()
         Dim p As Panel
         ' get the parent - needed to layout controls as basis for the event
 
@@ -274,6 +285,10 @@ Public Class PathwayEvent
         Me.mItem = Nothing
         mFileManager.FileEdited = True
         RaiseEvent Deleted(p, New EventArgs)
+    End Sub
+
+    Private Sub MenuDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDelete.Click
+        Me.Remove()
     End Sub
 
 End Class

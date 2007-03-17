@@ -111,7 +111,7 @@ Public MustInherit Class ArchetypeNodeAbstract
 
     Public MustOverride Function ToRichText(ByVal level As Integer) As String Implements ArchetypeNode.ToRichText
 
-    Public MustOverride Function ToHTML(ByVal level As Integer) As String Implements ArchetypeNode.ToHTML
+    Public MustOverride Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String Implements ArchetypeNode.ToHTML
 
     Public Sub Translate() Implements ArchetypeNode.Translate
         Dim aTerm As RmTerm
