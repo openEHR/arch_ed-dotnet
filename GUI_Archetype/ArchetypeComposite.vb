@@ -75,36 +75,39 @@ Public Class ArchetypeComposite
         End Get
     End Property
 
-    Public Overrides Function ToHTML(ByVal level As Integer) As String
+    Public Overrides Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
         Dim s As String
-        Dim a_text As String = "<tr>"
+        Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("<tr>")
 
         Select Case Me.mItem.Type
             Case StructureType.Cluster
-                a_text &= Environment.NewLine & "<td><table><tr><td width=""" & (level * 20).ToString & """></td><td><img border=""0"" src=""Images/compound.gif"" width=""32"" height=""32"" align=""middle""><b><i>" & mText & "</i></b></td></table></td>"
+                result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""Images/compound.gif"" width=""32"" height=""32"" align=""middle""><b><i>{2}</i></b></td></table></td>", Environment.NewLine, (level * 20).ToString, mText)
                 s = Filemanager.GetOpenEhrTerm(313, "Cluster")
 
             Case StructureType.SECTION
-                a_text &= Environment.NewLine & "<td><table><tr><td width=""" & (level * 20).ToString & """></td><td><img border=""0"" src=""Images/section.gif"" width=""32"" height=""32"" align=""middle""><b><i>" & mText & "</i></b></td></table></td>"
+                result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""Images/section.gif"" width=""32"" height=""32"" align=""middle""><b><i>{2}</i></b></td></table></td>", Environment.NewLine, (level * 20).ToString, mText)
                 s = Filemanager.GetOpenEhrTerm(314, "Section")
             Case Else
                 Debug.Assert(False)
                 Return ""
         End Select
 
-        a_text &= Environment.NewLine & "<td>" & mDescription & "</td>"
-        a_text &= Environment.NewLine & "<td><b><i>" & s & "</b></i><br>"
-        a_text &= Environment.NewLine & mItem.Occurrences.ToString
+        result.AppendFormat("{0}<td>{1}</td>", Environment.NewLine, mDescription)
+        result.AppendFormat("{0}<td><b><i>{1}</b></i><br>", Environment.NewLine, s)
+        result.AppendFormat("{0}{1}", Environment.NewLine, mItem.Occurrences.ToString)
 
         If mIsFixed Then
-            a_text &= ", fixed"
+            result.Append(", fixed")
         End If
         If IsOrdered Then
-            a_text &= ", ordered"
+            result.Append(", ordered")
         End If
-        a_text &= "</td><td>&nbsp;</td>"
+        result.Append("</td><td>&nbsp;</td>")
+        If showComments Then
+            result.AppendFormat("<td>{0}</td>", Me.Comment)
+        End If
 
-        Return a_text
+        Return result.ToString
 
     End Function
 

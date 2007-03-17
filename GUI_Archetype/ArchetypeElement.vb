@@ -113,57 +113,57 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     End Function
 
     Private Function QuantityConstraintToHTML(ByVal q As Constraint_Quantity) As String
-        Dim a_text As String
+        Dim result As String
 
         If q.IsCoded Then
-            a_text = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
+            result = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
                 Filemanager.GetOpenEhrTerm(q.OpenEhrCode, q.PhysicalPropertyAsString) & "<br>"
         Else
-            a_text = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
+            result = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
                 q.PhysicalPropertyAsString & "<br>"
         End If
 
         For Each u As Constraint_QuantityUnit In q.Units
-            a_text &= Environment.NewLine & QuantityUnitConstraintToRichText(u) & "<br>"
+            result &= Environment.NewLine & QuantityUnitConstraintToRichText(u) & "<br>"
         Next
-        Return a_text
+        Return result
     End Function
 
     Private Function DateTimeIntervalConstraintToHTML(ByVal dtInterval As Constraint_Interval_DateTime) As String
-        Dim a_text, s As String
+        Dim result, s As String
         Dim constraintDt As Constraint_DateTime
-        a_text = ""
+        result = ""
         constraintDt = CType(dtInterval.LowerLimit, Constraint_DateTime)
         s = Filemanager.GetOpenEhrTerm(constraintDt.TypeofDateTimeConstraint, "not known")
 
 
-        a_text &= Environment.NewLine & AE_Constants.Instance.Lower & ": " & s & "<br>"
+        result &= Environment.NewLine & AE_Constants.Instance.Lower & ": " & s & "<br>"
 
         constraintDt = CType(dtInterval.UpperLimit, Constraint_DateTime)
         s = Filemanager.GetOpenEhrTerm(constraintDt.TypeofDateTimeConstraint, "not known")
 
-        a_text &= Environment.NewLine & AE_Constants.Instance.Upper & ": " & s & "<br>"
-        Return a_text
+        result &= Environment.NewLine & AE_Constants.Instance.Upper & ": " & s & "<br>"
+        Return result
     End Function
 
 
     Private Function QuantityIntervalConstraintToHTML(ByVal q As Constraint_Interval_Quantity) As String
-        Dim a_text As String
+        Dim result As String
 
-        a_text = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
+        result = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
                 Filemanager.GetOpenEhrTerm(q.QuantityPropertyCode, CType(q.LowerLimit, Constraint_Quantity).PhysicalPropertyAsString) & "<br>"
 
         Dim u As Constraint_QuantityUnit
-        a_text &= Environment.NewLine & AE_Constants.Instance.Lower & ": <br>"
+        result &= Environment.NewLine & AE_Constants.Instance.Lower & ": <br>"
         For Each u In CType(q.LowerLimit, Constraint_Quantity).Units
-            a_text &= QuantityUnitConstraintToRichText(u) & "<br>"
+            result &= QuantityUnitConstraintToRichText(u) & "<br>"
         Next
-        a_text &= Environment.NewLine & AE_Constants.Instance.Upper & ": <br>"
+        result &= Environment.NewLine & AE_Constants.Instance.Upper & ": <br>"
         For Each u In CType(q.UpperLimit, Constraint_Quantity).Units
-            a_text &= QuantityUnitConstraintToRichText(u) & "<br>"
+            result &= QuantityUnitConstraintToRichText(u) & "<br>"
         Next
 
-        Return a_text
+        Return result
     End Function
 
     Private Function QuantityUnitConstraintToRichText(ByVal u As Constraint_QuantityUnit) As String
@@ -625,11 +625,10 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     End Function
 
 
-
-    Public Overrides Function ToHTML(ByVal level As Integer) As String
+    Public Overrides Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
 
         ' write the cardinality of the element
-        Dim a_text As String = "<tr>"
+        Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("<tr>")
         Dim class_names As String = ""
         Dim html_dt As HTML_Details = GetHtmlDetails(Me.Element.Constraint)
         Dim terminologyCode As String
@@ -659,14 +658,17 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             class_names = Me.Element.Constraint.ConstraintTypeString
         End If
 
-        a_text &= Environment.NewLine & "<td><table><tr><td width=""" & (level * 20).ToString & """></td><td><img border=""0"" src=""" & html_dt.ImageSource & """ width=""32"" height=""32"" align=""middle""><b>" & mText & "</b></td></table></td>"
-        a_text &= Environment.NewLine & "<td>" & mDescription & html_dt.TerminologyCode & "</td>"
-        a_text &= Environment.NewLine & "<td><b><i>" & class_names & "</i></b><br>"
-        a_text &= Environment.NewLine & mItem.Occurrences.ToString & "</td>"
-        a_text &= Environment.NewLine & "<td>" & html_dt.HTML
-        a_text &= Environment.NewLine & "</td>"
+        result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""{2}"" width=""32"" height=""32"" align=""middle""><b>{3}</b></td></table></td>", Environment.NewLine, (level * 20).ToString, html_dt.ImageSource, mText)
+        result.AppendFormat("{0}<td>{1}{2}</td>", Environment.NewLine, mDescription, html_dt.TerminologyCode)
+        result.AppendFormat("{0}<td><b><i>{1}</i></b><br>", Environment.NewLine, class_names)
+        result.AppendFormat("{0}{1}</td>", Environment.NewLine, mItem.Occurrences.ToString)
+        result.AppendFormat("{0}<td>{1}", Environment.NewLine, html_dt.HTML)
+        result.AppendFormat("{0}</td>", Environment.NewLine)
+        If showComments Then
+            result.AppendFormat("{0}<td>{1}</td>", Environment.NewLine, Me.Comment)
+        End If
 
-        Return a_text
+        Return result.ToString
 
     End Function
 

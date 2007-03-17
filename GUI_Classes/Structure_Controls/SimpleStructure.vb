@@ -284,29 +284,19 @@ Public Class SimpleStructure
     End Function
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
-        Dim text As String
+        Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
+        Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
 
-        text = "<p>Structure = SINGLE</p>"
+        result.Append("<p>Structure = SINGLE</p>")
+        result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
+        result.AppendFormat(Me.HtmlHeader(BackGroundColour, showComments))
 
-        text &= Environment.NewLine & "<table border=""1"" cellpadding=""2"" width=""100%"">"
+        result.AppendFormat("{0}{1}", Environment.NewLine, mElement.ToHTML(0, showComments))
+        result.AppendFormat("{0}</tr>", Environment.NewLine)
+        result.AppendFormat("{0}</table>", Environment.NewLine)
 
-        If BackGroundColour = "" Then
-            text &= Environment.NewLine & "<tr>"
-        Else
-            text &= Environment.NewLine & "<tr  bgcolor=""" & BackGroundColour & """>"
-        End If
+        Return result.ToString
 
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(54, "Concept") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""40%""><h4>" & Filemanager.GetOpenEhrTerm(113, "Description") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""20%""><h4>" & Filemanager.GetOpenEhrTerm(87, "Constraints") & "</h4></td>"
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(438, "Values") & "</h4></td>"
-        text &= Environment.NewLine & "</tr>"
-
-        text &= Environment.NewLine & mElement.ToHTML(0)
-        text &= Environment.NewLine & "</tr>"
-
-        text &= Environment.NewLine & "</table>"
-        Return text
     End Function
 
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)

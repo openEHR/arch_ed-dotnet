@@ -758,35 +758,31 @@ Public Class TreeStructure
     End Function
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
-        Dim text As String = ""
+        Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
+        Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
 
         If IsCluster Then
-            text = "<p>" & _
-            CStr(IIf(mCardinalityControl.Cardinality.Ordered, mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")) & "</p>"
+            result.Append("<p>")
+            result.Append(CStr(IIf(mCardinalityControl.Cardinality.Ordered, mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")))
+            result.Append("</p>")
         Else
-            text = "<p>Structure = TREE" & _
-            CStr(IIf(mCardinalityControl.Cardinality.Ordered, ", " & mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")) & "</p>"
+            result.Append("<p>Structure = TREE")
+            result.Append(CStr(IIf(mCardinalityControl.Cardinality.Ordered, ", " & mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")))
+            result.Append("</p>")
         End If
 
-        text &= Environment.NewLine & "<table border=""1"" cellpadding=""2"" width=""100%"">"
+        result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
 
-        If BackGroundColour = "" Then
-            text &= Environment.NewLine & "<tr>"
-        Else
-            text &= Environment.NewLine & "<tr  bgcolor=""" & BackGroundColour & """>"
-        End If
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(54, "Concept") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""40%""><h4>" & Filemanager.GetOpenEhrTerm(113, "Description") & "</h4></td>"
-        text &= Environment.NewLine & "<td width = ""20%""><h4>" & Filemanager.GetOpenEhrTerm(87, "Constraints") & "</h4></td>"
-        text &= Environment.NewLine & "<td width=""20%""><h4>" & Filemanager.GetOpenEhrTerm(438, "Values") & "</h4></td>"
-        text &= Environment.NewLine & "</tr>"
+        result.Append(Environment.NewLine)
 
-        text &= Environment.NewLine & TreeToHTML(tvTree.Nodes, 0)
-        text &= Environment.NewLine & "</tr>"
-        text &= Environment.NewLine & "</table>"
+        result.AppendFormat(Me.HtmlHeader(BackGroundColour, showComments))
 
+        result.AppendFormat("{0}{1}", Environment.NewLine, TreeToHTML(tvTree.Nodes, 0, showComments))
+        result.AppendFormat("{0}</tr>", Environment.NewLine)
+        result.AppendFormat("{0}</table>", Environment.NewLine)
 
-        Return text
+        Return result.ToString
+
     End Function
 
     Private Function TreeToRichText(ByVal TreeNodes As TreeNodeCollection, ByVal level As Integer, ByVal new_line As String) As String
@@ -802,14 +798,14 @@ Public Class TreeStructure
         Return text
     End Function
 
-    Private Function TreeToHTML(ByVal TreeNodes As TreeNodeCollection, ByVal level As Integer) As String
+    Private Function TreeToHTML(ByVal TreeNodes As TreeNodeCollection, ByVal level As Integer, ByVal showComments As Boolean) As String
         Dim text As String = ""
 
         For Each an As ArchetypeTreeNode In TreeNodes
-            text &= Environment.NewLine & an.Item.ToHTML(level)
+            text &= Environment.NewLine & an.Item.ToHTML(level, showComments)
             text &= Environment.NewLine & "</tr>"
             If an.GetNodeCount(False) > 0 Then
-                text &= Environment.NewLine & TreeToHTML(an.Nodes, level + 1)
+                text &= Environment.NewLine & TreeToHTML(an.Nodes, level + 1, showComments)
             End If
         Next
         Return text

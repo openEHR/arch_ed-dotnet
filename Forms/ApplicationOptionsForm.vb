@@ -78,6 +78,7 @@ Public Class ApplicationOptionsForm
     Friend WithEvents chkParserXML As System.Windows.Forms.CheckBox
     Friend WithEvents chkParserADL As System.Windows.Forms.CheckBox
     Friend WithEvents chkShowTerminologyInHTML As System.Windows.Forms.CheckBox
+    Friend WithEvents chkShowCommentsInHTML As System.Windows.Forms.CheckBox
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -124,6 +125,7 @@ Public Class ApplicationOptionsForm
         Me.Label4 = New System.Windows.Forms.Label
         Me.butHelpBrowse = New System.Windows.Forms.Button
         Me.tpAppearance = New System.Windows.Forms.TabPage
+        Me.chkShowTerminologyInHTML = New System.Windows.Forms.CheckBox
         Me.lblOccurrences = New System.Windows.Forms.Label
         Me.comboOccurrences = New System.Windows.Forms.ComboBox
         Me.tpDefaults = New System.Windows.Forms.TabPage
@@ -131,7 +133,7 @@ Public Class ApplicationOptionsForm
         Me.chkParserXML = New System.Windows.Forms.CheckBox
         Me.chkParserADL = New System.Windows.Forms.CheckBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.chkShowTerminologyInHTML = New System.Windows.Forms.CheckBox
+        Me.chkShowCommentsInHTML = New System.Windows.Forms.CheckBox
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -467,7 +469,7 @@ Public Class ApplicationOptionsForm
         Me.TabConfiguration.Location = New System.Drawing.Point(0, 0)
         Me.TabConfiguration.Name = "TabConfiguration"
         Me.TabConfiguration.SelectedIndex = 0
-        Me.TabConfiguration.Size = New System.Drawing.Size(643, 222)
+        Me.TabConfiguration.Size = New System.Drawing.Size(643, 234)
         Me.TabConfiguration.TabIndex = 25
         '
         'tpUser
@@ -475,7 +477,7 @@ Public Class ApplicationOptionsForm
         Me.tpUser.Controls.Add(Me.gbUserDetails)
         Me.tpUser.Location = New System.Drawing.Point(4, 25)
         Me.tpUser.Name = "tpUser"
-        Me.tpUser.Size = New System.Drawing.Size(635, 193)
+        Me.tpUser.Size = New System.Drawing.Size(635, 205)
         Me.tpUser.TabIndex = 0
         Me.tpUser.Text = "User details"
         '
@@ -489,7 +491,7 @@ Public Class ApplicationOptionsForm
         Me.tpLocations.Controls.Add(Me.butBrowse)
         Me.tpLocations.Location = New System.Drawing.Point(4, 25)
         Me.tpLocations.Name = "tpLocations"
-        Me.tpLocations.Size = New System.Drawing.Size(635, 193)
+        Me.tpLocations.Size = New System.Drawing.Size(635, 205)
         Me.tpLocations.TabIndex = 1
         Me.tpLocations.Text = "File locations"
         '
@@ -515,15 +517,26 @@ Public Class ApplicationOptionsForm
         '
         'tpAppearance
         '
+        Me.tpAppearance.Controls.Add(Me.chkShowCommentsInHTML)
         Me.tpAppearance.Controls.Add(Me.chkShowTerminologyInHTML)
         Me.tpAppearance.Controls.Add(Me.lblOccurrences)
         Me.tpAppearance.Controls.Add(Me.comboOccurrences)
         Me.tpAppearance.Controls.Add(Me.GroupBox1)
         Me.tpAppearance.Location = New System.Drawing.Point(4, 25)
         Me.tpAppearance.Name = "tpAppearance"
-        Me.tpAppearance.Size = New System.Drawing.Size(635, 193)
+        Me.tpAppearance.Size = New System.Drawing.Size(635, 205)
         Me.tpAppearance.TabIndex = 2
         Me.tpAppearance.Text = "Appearance"
+        '
+        'chkShowTerminologyInHTML
+        '
+        Me.chkShowTerminologyInHTML.AutoSize = True
+        Me.chkShowTerminologyInHTML.Location = New System.Drawing.Point(329, 153)
+        Me.chkShowTerminologyInHTML.Name = "chkShowTerminologyInHTML"
+        Me.chkShowTerminologyInHTML.Size = New System.Drawing.Size(198, 21)
+        Me.chkShowTerminologyInHTML.TabIndex = 27
+        Me.chkShowTerminologyInHTML.Text = "Show terminology in HTML"
+        Me.chkShowTerminologyInHTML.UseVisualStyleBackColor = True
         '
         'lblOccurrences
         '
@@ -549,7 +562,7 @@ Public Class ApplicationOptionsForm
         Me.tpDefaults.Controls.Add(Me.Label1)
         Me.tpDefaults.Location = New System.Drawing.Point(4, 25)
         Me.tpDefaults.Name = "tpDefaults"
-        Me.tpDefaults.Size = New System.Drawing.Size(635, 193)
+        Me.tpDefaults.Size = New System.Drawing.Size(635, 205)
         Me.tpDefaults.TabIndex = 3
         Me.tpDefaults.Text = "Defaults"
         '
@@ -584,15 +597,15 @@ Public Class ApplicationOptionsForm
         Me.chkParserADL.Text = "ADL"
         Me.chkParserADL.UseVisualStyleBackColor = True
         '
-        'chkShowTerminologyInHTML
+        'chkShowCommentsInHTML
         '
-        Me.chkShowTerminologyInHTML.AutoSize = True
-        Me.chkShowTerminologyInHTML.Location = New System.Drawing.Point(329, 160)
-        Me.chkShowTerminologyInHTML.Name = "chkShowTerminologyInHTML"
-        Me.chkShowTerminologyInHTML.Size = New System.Drawing.Size(198, 21)
-        Me.chkShowTerminologyInHTML.TabIndex = 27
-        Me.chkShowTerminologyInHTML.Text = "Show terminology in HTML"
-        Me.chkShowTerminologyInHTML.UseVisualStyleBackColor = True
+        Me.chkShowCommentsInHTML.AutoSize = True
+        Me.chkShowCommentsInHTML.Location = New System.Drawing.Point(329, 177)
+        Me.chkShowCommentsInHTML.Name = "chkShowCommentsInHTML"
+        Me.chkShowCommentsInHTML.Size = New System.Drawing.Size(189, 21)
+        Me.chkShowCommentsInHTML.TabIndex = 28
+        Me.chkShowCommentsInHTML.Text = "Show comments in HTML"
+        Me.chkShowCommentsInHTML.UseVisualStyleBackColor = True
         '
         'ApplicationOptionsForm
         '

@@ -465,6 +465,7 @@ Public Class OntologyManager
         Dim d_row As DataRow
 
         If ReplaceTranslations Then
+            Dim priorSetting As Boolean = mDoUpdateOntology
             Dim selected_rows As DataRow()
             selected_rows = aTable.Select("Code ='" & aTerm.Code & "'")
             For Each d_row In selected_rows
@@ -483,6 +484,7 @@ Public Class OntologyManager
                     End If
                     d_row.EndEdit()
                 Else
+                    mDoUpdateOntology = False 'as ontology changes are handled there
                     d_row.BeginEdit()
                     d_row(2) = "*" & aTerm.Text & "(" & mLanguageCode & ")"
                     d_row(3) = "*" & aTerm.Description & "(" & mLanguageCode & ")"
@@ -492,10 +494,12 @@ Public Class OntologyManager
                         End If
                     End If
                     d_row.EndEdit()
+                    mDoUpdateOntology = priorSetting
                 End If
             Next
-
+            
         Else
+            'Need to update ontology here
             Dim keys(1) As Object
             keys(0) = mLanguageCode
             keys(1) = aTerm.Code

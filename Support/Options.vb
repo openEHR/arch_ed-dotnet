@@ -10,6 +10,7 @@ Public Class Options
     Private mHelpPath As String
     Private mDefaultParser As String
     Private mShowTermsInHtml As Boolean
+    Private mShowCommentsInHtml As Boolean
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
     Property HelpLocationPath() As String
@@ -87,6 +88,15 @@ Public Class Options
         End Set
     End Property
 
+    Property ShowCommentsInHtml() As Boolean
+        Get
+            Return mShowCommentsInHtml
+        End Get
+        Set(ByVal value As Boolean)
+            mShowCommentsInHtml = value
+        End Set
+    End Property
+
     Sub ShowOptionsForm(Optional ByVal tabIndex As Integer = 0)
         Dim frm As New ApplicationOptionsForm
 
@@ -110,6 +120,7 @@ Public Class Options
         End If
         frm.comboReferenceModel.SelectedIndex = mDefaultRM
         frm.chkShowTerminologyInHTML.Checked = mShowTermsInHtml
+        frm.chkShowCommentsInHTML.Checked = mShowCommentsInHtml
         frm.Panel_0.BackColor = mColors(0)
         frm.Panel_1.BackColor = mColors(1)
         frm.Panel_2.BackColor = mColors(2)
@@ -128,6 +139,7 @@ Public Class Options
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
             mOccurrencesView = frm.comboOccurrences.Text
             mShowTermsInHtml = frm.chkShowTerminologyInHTML.Checked
+            mShowCommentsInHtml = frm.chkShowCommentsInHTML.Checked
             If frm.chkParserADL.Checked Then
                 mDefaultParser = "adl"
             Else
@@ -190,6 +202,8 @@ Public Class Options
                                     mDefaultParser = y(1).Trim.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                                 Case "ShowTermsInHtml"
                                     mShowTermsInHtml = Boolean.Parse(y(1).Trim)
+                                Case "ShowCommentsInHtml"
+                                    mShowCommentsInHtml = Boolean.Parse(y(1).Trim)
                             End Select
                         Else
                             MessageBox.Show("Error reading '" & y(0) & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -228,6 +242,7 @@ Public Class Options
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
                 StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
                 StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
+                StrmWrite.WriteLine("ShowCommentsInHtml=" & mShowCommentsInHtml.ToString)
                 Dim s As String = ""
 
                 For i = 0 To mColors.Length - 1
@@ -300,6 +315,7 @@ Public Class Options
         mOccurrencesView = "numeric"
         mDefaultParser = "adl"
         mShowTermsInHtml = False
+        mShowCommentsInHtml = False
         LoadConfiguration()
         If Not ValidateConfiguration() Then
             Me.ShowOptionsForm(1)

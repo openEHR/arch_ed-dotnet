@@ -109,7 +109,7 @@ Public Class PathwaySpecification
     Friend WithEvents PanelScheduled As System.Windows.Forms.Panel
     Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(PathwaySpecification))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PathwaySpecification))
         Me.PanelRight = New System.Windows.Forms.Panel
         Me.gbCompleted = New System.Windows.Forms.GroupBox
         Me.PanelCompleted = New System.Windows.Forms.Panel
@@ -180,9 +180,17 @@ Public Class PathwaySpecification
         Me.PanelLeft.SuspendLayout()
         Me.gbInitial.SuspendLayout()
         Me.PanelSpacer.SuspendLayout()
+        CType(Me.pbInitialToActive, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelCompletedSpacer.SuspendLayout()
+        CType(Me.pbActiveToCompleted, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.panelBottomSpacer.SuspendLayout()
+        CType(Me.pbInitialBottomDown, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbActiveBottomDown, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.panelTopSpacer.SuspendLayout()
+        CType(Me.pbInitialTopDown, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbInitialTopUp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbActiveTopDown, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pbActiveTopUp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PanelRight
@@ -558,9 +566,9 @@ Public Class PathwaySpecification
         Me.PanelInitial.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelInitial.ContextMenu = Me.ContextMenuState
         Me.PanelInitial.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelInitial.Location = New System.Drawing.Point(3, 16)
+        Me.PanelInitial.Location = New System.Drawing.Point(3, 18)
         Me.PanelInitial.Name = "PanelInitial"
-        Me.PanelInitial.Size = New System.Drawing.Size(130, 295)
+        Me.PanelInitial.Size = New System.Drawing.Size(130, 293)
         Me.PanelInitial.TabIndex = 0
         '
         'PanelSpacer
@@ -727,9 +735,17 @@ Public Class PathwaySpecification
         Me.PanelLeft.ResumeLayout(False)
         Me.gbInitial.ResumeLayout(False)
         Me.PanelSpacer.ResumeLayout(False)
+        CType(Me.pbInitialToActive, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelCompletedSpacer.ResumeLayout(False)
+        CType(Me.pbActiveToCompleted, System.ComponentModel.ISupportInitialize).EndInit()
         Me.panelBottomSpacer.ResumeLayout(False)
+        CType(Me.pbInitialBottomDown, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbActiveBottomDown, System.ComponentModel.ISupportInitialize).EndInit()
         Me.panelTopSpacer.ResumeLayout(False)
+        CType(Me.pbInitialTopDown, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbInitialTopUp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbActiveTopDown, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pbActiveTopUp, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1081,6 +1097,15 @@ Public Class PathwaySpecification
         TranslatePathwayEvents(Me.PanelCompleted)
     End Sub
 
+    Private Sub PathwaySpecification_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles mPathwayEvent.KeyDown
+        If e.KeyCode = Keys.Delete Then
+            If mPathwayEvent.Selected Then
+                If MessageBox.Show(AE_Constants.Instance.Remove & mPathwayEvent.PathwayEventText, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    mPathwayEvent.Remove()
+                End If
+            End If
+        End If
+    End Sub
 End Class
 
 '

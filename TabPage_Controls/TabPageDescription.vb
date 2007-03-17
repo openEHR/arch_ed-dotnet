@@ -699,10 +699,10 @@ Public Class TabPageDescription
                         t = New XML_TranslationDetails(mCurrentLanguage)
                 End Select
             End If
-            t.Accreditation = Me.txtTranslationAccreditation.Text
-            t.AuthorName = Me.txtTranslatorName.Text
-            t.AuthorOrganisation = Me.txtTranslatorOrganisation.Text
-            t.AuthorEmail = Me.txtTranslatorEmail.Text
+            t.Accreditation = Me.txtTranslationAccreditation.Text.Replace("""", "'")
+            t.AuthorName = Me.txtTranslatorName.Text.Replace("""", "'")
+            t.AuthorOrganisation = Me.txtTranslatorOrganisation.Text.Replace("""", "'")
+            t.AuthorEmail = Me.txtTranslatorEmail.Text.Replace("""", "'")
             If mTranslationDetails.Keys.Contains(t.Language) Then
                 mTranslationDetails.Item(t.Language) = t
             Else
@@ -728,15 +728,15 @@ Public Class TabPageDescription
             mArchetypeDescription.LifeCycleState = CType([Enum].ToObject(GetType(LifeCycleStates), 0), LifeCycleStates)
         End If
 
-        mArchetypeDescription.OriginalAuthor = Me.txtOriginalAuthor.Text
-        mArchetypeDescription.OriginalAuthorEmail = Me.txtOriginalEmail.Text
-        mArchetypeDescription.OriginalAuthorOrganisation = Me.txtOrganisation.Text
-        mArchetypeDescription.OriginalAuthorDate = Me.txtDate.Text
+        mArchetypeDescription.OriginalAuthor = Me.txtOriginalAuthor.Text.Replace("""", "'")
+        mArchetypeDescription.OriginalAuthorEmail = Me.txtOriginalEmail.Text.Replace("""", "'")
+        mArchetypeDescription.OriginalAuthorOrganisation = Me.txtOrganisation.Text.Replace("""", "'")
+        mArchetypeDescription.OriginalAuthorDate = Me.txtDate.Text.Replace("""", "'")
 
         ' get the contributors
         mArchetypeDescription.OtherContributors.Clear()
         For Each s As String In Me.listContributors.Items
-            mArchetypeDescription.OtherContributors.Add(s)
+            mArchetypeDescription.OtherContributors.Add(s.Replace("""", "'"))
         Next
 
         If mCurrentLanguage Is Nothing Then
@@ -751,9 +751,9 @@ Public Class TabPageDescription
             archDescriptionItem.KeyWords.Add(s)
         Next
 
-        archDescriptionItem.Purpose = Me.txtPurpose.Text
-        archDescriptionItem.Use = Me.txtUse.Text
-        archDescriptionItem.MisUse = Me.txtMisuse.Text
+        archDescriptionItem.Purpose = Me.txtPurpose.Text.Replace("""", "'")
+        archDescriptionItem.Use = Me.txtUse.Text.Replace("""", "'")
+        archDescriptionItem.MisUse = Me.txtMisuse.Text.Replace("""", "'")
         mArchetypeDescription.Details.AddOrReplace(archDescriptionItem.Language, archDescriptionItem)
     End Sub
 
@@ -816,13 +816,13 @@ Public Class TabPageDescription
                 Me.txtMisuse.Text = String.Format("*{0}({1})", archDescriptionItem.MisUse, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
             Else
                 If Me.txtPurpose.Text <> "" Then
-                    Me.txtPurpose.Text = "*" & Me.txtPurpose.Text & "(" & mCurrentLanguage & ")"
+                    Me.txtPurpose.Text = String.Format("*{0}({1})", Me.txtPurpose.Text, mCurrentLanguage)
                 End If
                 If Me.txtUse.Text <> "" Then
-                    Me.txtUse.Text = "*" & Me.txtUse.Text & "(" & mCurrentLanguage & ")"
+                    Me.txtUse.Text = String.Format("*{0}({1})", Me.txtUse.Text, mCurrentLanguage)
                 End If
                 If Me.txtMisuse.Text <> "" Then
-                    Me.txtMisuse.Text = "*" & Me.txtMisuse.Text & "(" & mCurrentLanguage & ")"
+                    Me.txtMisuse.Text = String.Format("*{0}({1})", Me.txtMisuse.Text, mCurrentLanguage)
                 End If
             End If
         End If

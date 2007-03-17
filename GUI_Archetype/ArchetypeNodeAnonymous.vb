@@ -129,7 +129,7 @@ Public Class ArchetypeNodeAnonymous
         Return ""
     End Function
 
-    Function ToHTML(ByVal level As Integer) As String Implements ArchetypeNode.ToHTML
+    Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String Implements ArchetypeNode.ToHTML
         Dim s As String
 
 
