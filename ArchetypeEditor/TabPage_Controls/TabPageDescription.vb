@@ -898,12 +898,12 @@ Public Class TabPageDescription
         Me.lblEmail.Text = Filemanager.GetOpenEhrTerm(207, Me.lblEmail.Text)
         Me.lblTranslatorEmail.Text = Me.lblEmail.Text
         Me.lblDate.Text = Filemanager.GetOpenEhrTerm(593, Me.lblDate.Text)
-        Me.lblAccreditation.Text = Filemanager.GetOpenEhrTerm(651, Me.lblAccreditation.Text)
+        Me.lblAccreditation.Text = Filemanager.GetOpenEhrTerm(662, Me.lblAccreditation.Text)
         Me.lblOrganisation.Text = Filemanager.GetOpenEhrTerm(594, Me.lblOrganisation.Text)
         Me.lblTranslatorOrganisation.Text = Me.lblOrganisation.Text
         Me.tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, Me.tpAuthor.Title)
         Me.tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, Me.tpDescDetails.Title)
-        Me.tpTranslation.Title = Filemanager.GetOpenEhrTerm(650, Me.tpTranslation.Title)
+        Me.tpTranslation.Title = Filemanager.GetOpenEhrTerm(661, Me.tpTranslation.Title)
         Me.gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, Me.gbPurpose.Text)
         Me.gbUse.Text = Filemanager.GetOpenEhrTerm(582, Me.gbUse.Text)
         Me.gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, Me.gbMisuse.Text)

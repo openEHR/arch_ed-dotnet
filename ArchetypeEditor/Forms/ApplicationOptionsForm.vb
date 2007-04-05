@@ -79,6 +79,9 @@ Public Class ApplicationOptionsForm
     Friend WithEvents chkParserADL As System.Windows.Forms.CheckBox
     Friend WithEvents chkShowTerminologyInHTML As System.Windows.Forms.CheckBox
     Friend WithEvents chkShowCommentsInHTML As System.Windows.Forms.CheckBox
+    Friend WithEvents chkWebSearch As System.Windows.Forms.CheckBox
+    Friend WithEvents lblURL As System.Windows.Forms.Label
+    Friend WithEvents txtURL As System.Windows.Forms.TextBox
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -93,6 +96,7 @@ Public Class ApplicationOptionsForm
         Me.butOK = New System.Windows.Forms.Button
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.txtHelpFile = New System.Windows.Forms.TextBox
+        Me.txtURL = New System.Windows.Forms.TextBox
         Me.butBrowse = New System.Windows.Forms.Button
         Me.comboReferenceModel = New System.Windows.Forms.ComboBox
         Me.Label1 = New System.Windows.Forms.Label
@@ -122,9 +126,12 @@ Public Class ApplicationOptionsForm
         Me.TabConfiguration = New System.Windows.Forms.TabControl
         Me.tpUser = New System.Windows.Forms.TabPage
         Me.tpLocations = New System.Windows.Forms.TabPage
+        Me.lblURL = New System.Windows.Forms.Label
+        Me.chkWebSearch = New System.Windows.Forms.CheckBox
         Me.Label4 = New System.Windows.Forms.Label
         Me.butHelpBrowse = New System.Windows.Forms.Button
         Me.tpAppearance = New System.Windows.Forms.TabPage
+        Me.chkShowCommentsInHTML = New System.Windows.Forms.CheckBox
         Me.chkShowTerminologyInHTML = New System.Windows.Forms.CheckBox
         Me.lblOccurrences = New System.Windows.Forms.Label
         Me.comboOccurrences = New System.Windows.Forms.ComboBox
@@ -133,7 +140,6 @@ Public Class ApplicationOptionsForm
         Me.chkParserXML = New System.Windows.Forms.CheckBox
         Me.chkParserADL = New System.Windows.Forms.CheckBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.chkShowCommentsInHTML = New System.Windows.Forms.CheckBox
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -179,16 +185,16 @@ Public Class ApplicationOptionsForm
         '
         'lblArchetypePath
         '
-        Me.lblArchetypePath.Location = New System.Drawing.Point(38, 18)
+        Me.lblArchetypePath.Location = New System.Drawing.Point(20, 0)
         Me.lblArchetypePath.Name = "lblArchetypePath"
-        Me.lblArchetypePath.Size = New System.Drawing.Size(173, 28)
+        Me.lblArchetypePath.Size = New System.Drawing.Size(173, 29)
         Me.lblArchetypePath.TabIndex = 17
         Me.lblArchetypePath.Text = "Archetype repository path"
         Me.lblArchetypePath.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'txtRepositoryPath
         '
-        Me.txtRepositoryPath.Location = New System.Drawing.Point(38, 55)
+        Me.txtRepositoryPath.Location = New System.Drawing.Point(20, 32)
         Me.txtRepositoryPath.Name = "txtRepositoryPath"
         Me.txtRepositoryPath.Size = New System.Drawing.Size(442, 22)
         Me.txtRepositoryPath.TabIndex = 16
@@ -216,17 +222,25 @@ Public Class ApplicationOptionsForm
         '
         'txtHelpFile
         '
-        Me.txtHelpFile.Location = New System.Drawing.Point(38, 120)
+        Me.txtHelpFile.Location = New System.Drawing.Point(20, 97)
         Me.txtHelpFile.Name = "txtHelpFile"
         Me.txtHelpFile.Size = New System.Drawing.Size(442, 22)
         Me.txtHelpFile.TabIndex = 21
         Me.ToolTip1.SetToolTip(Me.txtHelpFile, "Leave blank for last directory used")
         '
+        'txtURL
+        '
+        Me.txtURL.Location = New System.Drawing.Point(20, 169)
+        Me.txtURL.Name = "txtURL"
+        Me.txtURL.Size = New System.Drawing.Size(442, 22)
+        Me.txtURL.TabIndex = 25
+        Me.ToolTip1.SetToolTip(Me.txtURL, "Http address of repository")
+        '
         'butBrowse
         '
         Me.butBrowse.Image = CType(resources.GetObject("butBrowse.Image"), System.Drawing.Image)
         Me.butBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butBrowse.Location = New System.Drawing.Point(499, 46)
+        Me.butBrowse.Location = New System.Drawing.Point(481, 19)
         Me.butBrowse.Name = "butBrowse"
         Me.butBrowse.Size = New System.Drawing.Size(115, 37)
         Me.butBrowse.TabIndex = 20
@@ -483,6 +497,9 @@ Public Class ApplicationOptionsForm
         '
         'tpLocations
         '
+        Me.tpLocations.Controls.Add(Me.lblURL)
+        Me.tpLocations.Controls.Add(Me.txtURL)
+        Me.tpLocations.Controls.Add(Me.chkWebSearch)
         Me.tpLocations.Controls.Add(Me.Label4)
         Me.tpLocations.Controls.Add(Me.txtHelpFile)
         Me.tpLocations.Controls.Add(Me.butHelpBrowse)
@@ -495,9 +512,28 @@ Public Class ApplicationOptionsForm
         Me.tpLocations.TabIndex = 1
         Me.tpLocations.Text = "File locations"
         '
+        'lblURL
+        '
+        Me.lblURL.Location = New System.Drawing.Point(20, 132)
+        Me.lblURL.Name = "lblURL"
+        Me.lblURL.Size = New System.Drawing.Size(173, 28)
+        Me.lblURL.TabIndex = 26
+        Me.lblURL.Text = "URL for shared repository"
+        Me.lblURL.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        '
+        'chkWebSearch
+        '
+        Me.chkWebSearch.AutoSize = True
+        Me.chkWebSearch.Location = New System.Drawing.Point(287, 141)
+        Me.chkWebSearch.Name = "chkWebSearch"
+        Me.chkWebSearch.Size = New System.Drawing.Size(175, 21)
+        Me.chkWebSearch.TabIndex = 24
+        Me.chkWebSearch.Text = "Enable Internet Search"
+        Me.chkWebSearch.UseVisualStyleBackColor = True
+        '
         'Label4
         '
-        Me.Label4.Location = New System.Drawing.Point(38, 83)
+        Me.Label4.Location = New System.Drawing.Point(20, 60)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(173, 28)
         Me.Label4.TabIndex = 22
@@ -508,7 +544,7 @@ Public Class ApplicationOptionsForm
         '
         Me.butHelpBrowse.Image = CType(resources.GetObject("butHelpBrowse.Image"), System.Drawing.Image)
         Me.butHelpBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butHelpBrowse.Location = New System.Drawing.Point(499, 111)
+        Me.butHelpBrowse.Location = New System.Drawing.Point(481, 88)
         Me.butHelpBrowse.Name = "butHelpBrowse"
         Me.butHelpBrowse.Size = New System.Drawing.Size(115, 37)
         Me.butHelpBrowse.TabIndex = 23
@@ -527,6 +563,16 @@ Public Class ApplicationOptionsForm
         Me.tpAppearance.Size = New System.Drawing.Size(635, 205)
         Me.tpAppearance.TabIndex = 2
         Me.tpAppearance.Text = "Appearance"
+        '
+        'chkShowCommentsInHTML
+        '
+        Me.chkShowCommentsInHTML.AutoSize = True
+        Me.chkShowCommentsInHTML.Location = New System.Drawing.Point(329, 177)
+        Me.chkShowCommentsInHTML.Name = "chkShowCommentsInHTML"
+        Me.chkShowCommentsInHTML.Size = New System.Drawing.Size(189, 21)
+        Me.chkShowCommentsInHTML.TabIndex = 28
+        Me.chkShowCommentsInHTML.Text = "Show comments in HTML"
+        Me.chkShowCommentsInHTML.UseVisualStyleBackColor = True
         '
         'chkShowTerminologyInHTML
         '
@@ -596,16 +642,6 @@ Public Class ApplicationOptionsForm
         Me.chkParserADL.TabIndex = 0
         Me.chkParserADL.Text = "ADL"
         Me.chkParserADL.UseVisualStyleBackColor = True
-        '
-        'chkShowCommentsInHTML
-        '
-        Me.chkShowCommentsInHTML.AutoSize = True
-        Me.chkShowCommentsInHTML.Location = New System.Drawing.Point(329, 177)
-        Me.chkShowCommentsInHTML.Name = "chkShowCommentsInHTML"
-        Me.chkShowCommentsInHTML.Size = New System.Drawing.Size(189, 21)
-        Me.chkShowCommentsInHTML.TabIndex = 28
-        Me.chkShowCommentsInHTML.Text = "Show comments in HTML"
-        Me.chkShowCommentsInHTML.UseVisualStyleBackColor = True
         '
         'ApplicationOptionsForm
         '

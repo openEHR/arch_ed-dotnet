@@ -27,6 +27,10 @@ Public Class TableStructure
     Private mIsRotated As Boolean = True
     Private mRow As RmCluster
     Private mIsLoading As Boolean
+    Friend WithEvents MenuRemoveColumnOrRow As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuRemoveColumn As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuRemoveRow As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuItem1 As System.Windows.Forms.MenuItem
     Public Shadows Event CurrentItemChanged(ByVal an_archetype_node As ArchetypeNode)
     Private mKeyColumns As New Collection
 
@@ -130,14 +134,16 @@ Public Class TableStructure
     Friend WithEvents dgGrid As System.Windows.Forms.DataGrid
     Friend WithEvents ContextMenuGrid As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuRenameColumn As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuRenameRow As System.Windows.Forms.MenuItem
     Friend WithEvents MenuRename As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.dgGrid = New System.Windows.Forms.DataGrid
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
         Me.MenuRename = New System.Windows.Forms.MenuItem
         Me.MenuRenameColumn = New System.Windows.Forms.MenuItem
-        Me.MenuRenameRow = New System.Windows.Forms.MenuItem
+        Me.MenuRemoveColumnOrRow = New System.Windows.Forms.MenuItem
+        Me.MenuRemoveColumn = New System.Windows.Forms.MenuItem
+        Me.MenuRemoveRow = New System.Windows.Forms.MenuItem
+        Me.MenuItem1 = New System.Windows.Forms.MenuItem
         CType(Me.dgGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -149,19 +155,19 @@ Public Class TableStructure
         Me.dgGrid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgGrid.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.dgGrid.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.dgGrid.Location = New System.Drawing.Point(40, 32)
+        Me.dgGrid.Location = New System.Drawing.Point(40, 24)
         Me.dgGrid.Name = "dgGrid"
-        Me.dgGrid.Size = New System.Drawing.Size(464, 328)
+        Me.dgGrid.Size = New System.Drawing.Size(344, 382)
         Me.dgGrid.TabIndex = 38
         '
         'ContextMenuGrid
         '
-        Me.ContextMenuGrid.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRename})
+        Me.ContextMenuGrid.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRename, Me.MenuRemoveColumnOrRow})
         '
         'MenuRename
         '
         Me.MenuRename.Index = 0
-        Me.MenuRename.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRenameColumn, Me.MenuRenameRow})
+        Me.MenuRename.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRenameColumn})
         Me.MenuRename.Text = "Rename"
         '
         'MenuRenameColumn
@@ -169,10 +175,26 @@ Public Class TableStructure
         Me.MenuRenameColumn.Index = 0
         Me.MenuRenameColumn.Text = "Column"
         '
-        'MenuRenameRow
+        'MenuRemoveColumnOrRow
         '
-        Me.MenuRenameRow.Index = 1
-        Me.MenuRenameRow.Text = "Row"
+        Me.MenuRemoveColumnOrRow.Index = 1
+        Me.MenuRemoveColumnOrRow.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRemoveColumn, Me.MenuRemoveRow})
+        Me.MenuRemoveColumnOrRow.Text = "Remove"
+        '
+        'MenuRemoveColumn
+        '
+        Me.MenuRemoveColumn.Index = 0
+        Me.MenuRemoveColumn.Text = "Column"
+        '
+        'MenuRemoveRow
+        '
+        Me.MenuRemoveRow.Index = 1
+        Me.MenuRemoveRow.Text = "Row"
+        '
+        'MenuItem1
+        '
+        Me.MenuItem1.Index = -1
+        Me.MenuItem1.Text = "Remove"
         '
         'TableStructure
         '
@@ -498,7 +520,8 @@ Public Class TableStructure
         Dim c As New DataGridCell
 
         ' add the column to display
-        col = New DataColumn(a_term.Text)
+        col = New DataColumn(a_term.Code)
+        col.Caption = a_term.Text
         col.DataType = System.Type.GetType("System.String")
         Try
             mArchetypeTable.Columns.Add(col)
@@ -511,7 +534,7 @@ Public Class TableStructure
         cs.NullText = "(" & a_term.Text & ")"
         cs.Width = 75
         cs.ReadOnly = True
-        cs.MappingName = a_term.Text
+        cs.MappingName = a_term.Code
         TableArchetypeStyle.GridColumnStyles.Add(cs)
         If Not mIsLoading Then
             c.RowNumber = 0
@@ -527,7 +550,7 @@ Public Class TableStructure
 
         ' adds columns if rotated
         If mIsRotated Then
-            s = OceanArchetypeEditor.Instance.GetInput("Enter the concept of the new column", "Description")
+            s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.Text, AE_Constants.Instance.Description)
             If s(0) <> "" Then
                 a_term = mFileManager.OntologyManager.AddTerm(s(0), s(1))
                 'If mArchetypeTable.Rows.Count > 0 Then
@@ -547,57 +570,81 @@ Public Class TableStructure
         End If
     End Sub
 
-    Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs)
-        Dim i, ii As Integer
-        Dim label As String = ""
-        Dim row_selected As Boolean
+    Private Sub RemoveColumn(ByVal sender As Object, ByVal e As EventArgs) Handles MenuRemoveColumn.Click
+        Dim columnIndex As Integer
+        Dim columnLabel As String
 
-        For i = 0 To Me.dgGrid.VisibleRowCount - 1
-            If Me.dgGrid.IsSelected(i) Then
-                label = CStr(Me.dgGrid.Item(i, 1))
-                row_selected = True
-                Exit For
+        columnIndex = Me.dgGrid.CurrentCell.ColumnNumber
+        columnLabel = Me.TableArchetypeStyle.GridColumnStyles(columnIndex).HeaderText
+
+        If columnIndex < 2 Then
+            'Nothing to delete
+            MessageBox.Show(AE_Constants.Instance.Cannot_delete & ": " & AE_Constants.Instance.SelectItem, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
+        Else
+            If MessageBox.Show(AE_Constants.Instance.Remove & "'" & columnLabel & "'", AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
+                Me.TableArchetypeStyle.GridColumnStyles.RemoveAt(columnIndex)
+                mArchetypeTable.Columns.RemoveAt(columnIndex * 2)
             End If
-        Next
+        End If
+    End Sub
 
-        If Not row_selected Then
-            ' and the column label
-            ii = Me.dgGrid.CurrentCell.ColumnNumber
-            label = Me.TableArchetypeStyle.GridColumnStyles(ii).HeaderText
-            If ii < 1 Then
-                'not a valid column to remove
-                MessageBox.Show(AE_Constants.Instance.Cannot_delete & "'" & label & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-                Return
-            End If
 
+    Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles MenuRemoveRow.Click
+        Dim rowIndex As Integer
+        Dim rowLabel As String
+
+        rowIndex = Me.dgGrid.CurrentRowIndex
+        
+        If rowIndex = -1 Then
+            'Nothing to delete
+            MessageBox.Show(AE_Constants.Instance.Cannot_delete & ": " & AE_Constants.Instance.SelectItem, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return
         End If
 
-        ' a row is selected
-        If MessageBox.Show(AE_Constants.Instance.Remove & "'" & label & "'", AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
-            Dim selected_rows As DataRow()
-            If row_selected Then
-                selected_rows = mArchetypeTable.Select("Text = '" & label & "'")
-                If selected_rows.Length = 1 Then
-                    If i > 0 Then
-                        Me.dgGrid.CurrentRowIndex = i - 1
-                    Else
-                        Me.dgGrid.CurrentRowIndex = i + 1
-                    End If
-                    'RemoveTerms(selected_rows(0).Item(2))
-                    mArchetypeTable.Rows.Remove(selected_rows(0))
-                Else
-                    'FIXME - may need to say no row selected
-                    Debug.Assert(False)
-                    Beep()
-                End If
-            Else
-                ' column selected
-                Me.TableArchetypeStyle.GridColumnStyles.RemoveAt(ii)
-                mArchetypeTable.Columns.RemoveAt(ii * 2)
-                ' moves the archetype object column to index ii * 2
-                'RemoveTerms(Me.ArchetypeTable.Rows(0).Item(ii * 2))
-                mArchetypeTable.Columns.RemoveAt(ii * 2)
+        'If Not row_selected Then
+        '    ' and the column label
+        '    ii = Me.dgGrid.CurrentCell.ColumnNumber
+        '    label = Me.TableArchetypeStyle.GridColumnStyles(ii).HeaderText
+        '    If ii < 2 Then
+        '        'not a valid column to remove
+        '        MessageBox.Show(AE_Constants.Instance.Cannot_delete & "'" & label & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+        '        Return
+        '    End If
+
+        'End If
+
+        If rowIndex > -1 Then
+            ' a row is selected
+            rowLabel = CStr(Me.dgGrid.Item(rowIndex, 1))
+            If MessageBox.Show(AE_Constants.Instance.Remove & "'" & rowLabel & "'", AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
+                mArchetypeTable.Rows.RemoveAt(dgGrid.CurrentRowIndex)
             End If
+            'Dim selected_rows As DataRow()
+            'If row_selected Then
+            '    selected_rows = mArchetypeTable.Select("Text = '" & Label & "'")
+            '    If selected_rows.Length = 1 Then
+            '        If i > 0 Then
+            '            Me.dgGrid.CurrentRowIndex = i - 1
+            '        Else
+            '            Me.dgGrid.CurrentRowIndex = i + 1
+            '        End If
+            '        'RemoveTerms(selected_rows(0).Item(2))
+            '        mArchetypeTable.Rows.Remove(selected_rows(0))
+            '    Else
+            '        'FIXME - may need to say no row selected
+            '        Debug.Assert(False)
+            '        Beep()
+            '    End If
+            'Else
+            '    ' column selected
+            '    Me.TableArchetypeStyle.GridColumnStyles.RemoveAt(ii)
+            '    mArchetypeTable.Columns.RemoveAt(ii * 2)
+            '    ' moves the archetype object column to index ii * 2
+            '    'RemoveTerms(Me.ArchetypeTable.Rows(0).Item(ii * 2))
+            '    mArchetypeTable.Columns.RemoveAt(ii * 2)
+            'End If
+
         End If
     End Sub
 
@@ -758,16 +805,8 @@ Public Class TableStructure
 
     End Sub
 
-    Private Sub MenuRenameRow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuRenameRow.Click
-        Dim c As DataGridCell
-        c.ColumnNumber = 0
-        c.RowNumber = Me.dgGrid.CurrentRowIndex
-        Me.dgGrid.CurrentCell = c
-        Me.dgGrid.Focus()
-    End Sub
-
     Private Sub MenuRenameColumn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuRenameColumn.Click
-        Dim s, label As String
+        Dim label As String
         Dim i As Integer
 
         i = Me.dgGrid.CurrentCell.ColumnNumber
@@ -778,26 +817,55 @@ Public Class TableStructure
             Return
         End If
 
-        s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'")
-        If s <> "" Then
+        Dim s() As String
+
+        s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'", AE_Constants.Instance.Description)
+
+        If s(0) <> "" Then
             ' HKF: 1613
             'Dim ArchCol As ArchetypeColumn
-            Dim ArchCol As ArchetypeComposite
-            ArchCol = CType(mArchetypeTable.Rows(0).Item(i * 2), ArchetypeComposite)
-            ArchCol.Text = s
-            Me.TableArchetypeStyle.GridColumnStyles(i).HeaderText = s
-            Me.TableArchetypeStyle.GridColumnStyles(i).NullText = "(" & s & ")"
+            Dim newTerm As RmTerm = New RmTerm(mArchetypeTable.Columns(i + 1).ColumnName)
+            newTerm.Text = s(0)
+            newTerm.Description = s(1)
+            mFileManager.OntologyManager.SetText(newTerm)
+            'Dim ArchCol As ArchetypeComposite
+            'ArchCol = CType(mArchetypeTable.Rows(0).Item(i * 2), ArchetypeComposite)
+            'ArchCol.Text = s(0)
+            'ArchCol.Description = s(1)
+            Me.TableArchetypeStyle.GridColumnStyles(i).HeaderText = s(0)
+            Me.TableArchetypeStyle.GridColumnStyles(i).NullText = "(" & s(0) & ")"
             Me.dgGrid.Refresh()
         End If
+
     End Sub
 
     Private Sub ContextMenuGrid_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuGrid.Popup
-        ' check to ensure that no menu items have been added and not translated
-        Debug.Assert(ContextMenuGrid.MenuItems.Count = 2)
-        Debug.Assert(ContextMenuGrid.MenuItems(0).MenuItems.Count = 2)
-        Me.MenuRename.Text = Filemanager.GetOpenEhrTerm(325, "Rename")
-        Me.MenuRenameColumn.Text = Filemanager.GetOpenEhrTerm(164, "Column")
-        Me.MenuRenameRow.Text = Filemanager.GetOpenEhrTerm(163, "Row")
+        ContextMenuGrid.MenuItems.Clear()
+
+        Dim hasRemoveMenu As Boolean = False
+
+        Me.MenuRemoveColumn.Visible = False
+        Me.MenuRemoveRow.Visible = False
+
+        If (Me.dgGrid.CurrentCell.ColumnNumber > 1) Then
+            Me.MenuRename.Text = Filemanager.GetOpenEhrTerm(325, "Rename")
+            Me.MenuRenameColumn.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(164, "Column"), Me.TableArchetypeStyle.GridColumnStyles(Me.dgGrid.CurrentCell.ColumnNumber).HeaderText)
+            ContextMenuGrid.MenuItems.Add(Me.MenuRename)
+            ContextMenuGrid.MenuItems.Add(Me.MenuRemoveColumnOrRow)
+            hasRemoveMenu = True
+            MenuRemoveColumn.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(164, "Column"), MenuRenameColumn.Text)
+            Me.MenuRemoveColumn.Visible = True
+            ContextMenuGrid.MenuItems.Add(Me.MenuRemoveColumnOrRow)
+        End If
+        If Me.dgGrid.CurrentRowIndex > -1 Then
+            If Not hasRemoveMenu Then
+                ContextMenuGrid.MenuItems.Add(Me.MenuRemoveColumnOrRow)
+            End If
+            Me.MenuRemoveRow.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(163, "Row"), CStr(Me.dgGrid.Item(Me.dgGrid.CurrentRowIndex, 1)))
+            Me.MenuRemoveRow.Visible = True
+        End If
+
+
     End Sub
 
     Private Sub dgGrid_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles dgGrid.MouseMove

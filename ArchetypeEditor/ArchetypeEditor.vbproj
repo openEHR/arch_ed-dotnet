@@ -90,6 +90,8 @@
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -458,10 +460,22 @@
     <Compile Include="Forms\InputForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\myArchetypeFromWeb.designer.vb">
+      <DependentUpon>myArchetypeFromWeb.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\myArchetypeFromWeb.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Forms\Splash.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\StartUp.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WebSearchForm.designer.vb">
+      <DependentUpon>WebSearchForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WebSearchForm.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI_Archetype\ArchetypeComposite.vb">
@@ -517,6 +531,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="OceanArchetypeEditor.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -555,6 +574,9 @@
     </Compile>
     <Compile Include="TimeUnits.vb">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Web References\ArchetypeFinderWebServiceURL\Reference.vb">
+      <SubType>code</SubType>
     </Compile>
     <Compile Include="XML_Classes\XML_RmElement.vb" />
     <Compile Include="XML_Classes\XML_Term.vb" />
@@ -675,11 +697,19 @@
     <EmbeddedResource Include="Forms\InputForm.resx">
       <DependentUpon>InputForm.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\myArchetypeFromWeb.resx">
+      <DependentUpon>myArchetypeFromWeb.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Splash.resx">
       <DependentUpon>Splash.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartUp.resx">
       <DependentUpon>StartUp.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WebSearchForm.resx">
+      <DependentUpon>WebSearchForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Instruction_Controls\PathwayEvent.resx">
       <DependentUpon>PathwayEvent.vb</DependentUpon>
@@ -739,6 +769,19 @@
     <EmbeddedResource Include="TabPage_Controls\TermBindingPanel.resx">
       <DependentUpon>TermBindingPanel.vb</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="My Project\Settings.settings">
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="Web References\ArchetypeFinderWebServiceURL\ArchetypeFinderBean.wsdl" />
+    <None Include="Web References\ArchetypeFinderWebServiceURL\Reference.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

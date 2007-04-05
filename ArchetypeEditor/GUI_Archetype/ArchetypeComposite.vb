@@ -104,7 +104,11 @@ Public Class ArchetypeComposite
         End If
         result.Append("</td><td>&nbsp;</td>")
         If showComments Then
-            result.AppendFormat("<td>{0}</td>", Me.Comment)
+            Dim commentString As String = Me.Comment
+            If commentString = "" Then
+                commentString = "&nbsp;"
+            End If
+            result.AppendFormat("{0}<td>{1}</td>", Environment.NewLine, commentString)
         End If
 
         Return result.ToString

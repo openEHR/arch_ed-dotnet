@@ -42,7 +42,9 @@ Namespace ArchetypeEditor.XML_Classes
             Dim di As New XMLParser.dictionaryItem
 
             di.key = "name"
-            di.value = Me.mOriginalAuthor.Replace("""", "'")
+            If (Not Me.OriginalAuthor Is Nothing) Then
+                di.value = Me.mOriginalAuthor.Replace("""", "'")
+            End If
             authorDetails.Add(di)
 
             If Me.mOriginalAuthorEmail <> "" Then

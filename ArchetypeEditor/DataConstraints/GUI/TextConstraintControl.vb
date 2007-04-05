@@ -927,7 +927,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 End If
             ElseIf Me.radioInternal.Checked Then
                 ' get the term that is selected
-                Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex))
+                Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item(1)))
 
                 If Not t Is Nothing Then
                     s = OceanArchetypeEditor.Instance.GetInput(t)
