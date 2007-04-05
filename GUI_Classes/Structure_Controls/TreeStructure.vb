@@ -849,6 +849,8 @@ Public Class TreeStructure
                         Me.MenuRemove.Visible = True
                     End If
                 End If
+            Else
+                Me.MenuRemove.Visible = True
             End If
         End If
 
@@ -940,6 +942,8 @@ Public Class TreeStructure
                     (((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))))) Then
                     Me.RemoveItemAndReferences(sender, e)
                 End If
+            Else
+                Me.RemoveItemAndReferences(sender, e)
             End If
         End If
     End Sub

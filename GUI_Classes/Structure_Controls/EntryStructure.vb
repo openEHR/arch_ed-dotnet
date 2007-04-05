@@ -124,9 +124,6 @@ Public Class EntryStructure
         'This call is required by the Windows Form Designer.
         InitializeComponent()
         'Add any initialization after the InitializeComponent() call
-        If Not Me.DesignMode Then
-            Debug.Assert(False)
-        End If
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -623,7 +620,7 @@ Public Class EntryStructure
         result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(87, "Constraints"))
         result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(438, "Values"))
         If showComments Then
-            result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(652, "Comments"))
+            result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(663, "Comments"))
         End If
 
         result.AppendFormat("{0}</tr>", Environment.NewLine)

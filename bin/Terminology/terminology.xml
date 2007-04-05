@@ -724,6 +724,19 @@
   <PrimaryRubric Id="650" Language="en" />
   <PrimaryRubric Id="651" Language="en" />
   <PrimaryRubric Id="652" Language="en" />
+  <PrimaryRubric Id="653" Language="en" />
+  <PrimaryRubric Id="654" Language="en" />
+  <PrimaryRubric Id="655" Language="en" />
+  <PrimaryRubric Id="656" Language="en" />
+  <PrimaryRubric Id="657" Language="en" />
+  <PrimaryRubric Id="658" Language="en" />
+  <PrimaryRubric Id="659" Language="en" />
+  <PrimaryRubric Id="660" Language="en" />
+  <PrimaryRubric Id="661" Language="en" />
+  <PrimaryRubric Id="662" Language="en" />
+  <PrimaryRubric Id="663" Language="en" />
+  <PrimaryRubric Id="664" Language="en" />
+  <PrimaryRubric Id="665" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1304,7 +1317,23 @@
   <Concept Language="en" ConceptID="645" Rubric="Integer and fraction" />
   <Concept Language="en" ConceptID="646" Rubric="Fraction" />
   <Concept Language="en" ConceptID="647" Rubric="Definition" />
-  <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
+  <Concept Language="en" ConceptID="648" Rubric="witnessed" />
+  <Concept Language="en" ConceptID="649" Rubric="Limit decimal places" />
+  <Concept Language="en" ConceptID="650" Rubric="Open Archetype from Web" />
+  <Concept Language="en" ConceptID="651" Rubric="Search for" />
+  <Concept Language="en" ConceptID="652" Rubric="Please enter a search parameter" />
+  <Concept Language="en" ConceptID="653" Rubric="archetype(s) found" />
+  <Concept Language="en" ConceptID="654" Rubric="No archetypes found" />
+  <Concept Language="en" ConceptID="655" Rubric="Search" />
+  <Concept Language="en" ConceptID="656" Rubric="Reset" />
+  <Concept Language="en" ConceptID="657" Rubric="any Term" />
+  <Concept Language="en" ConceptID="658" Rubric="Open from Web" />
+  <Concept Language="en" ConceptID="659" Rubric="No network connection available" />
+  <Concept Language="en" ConceptID="660" Rubric="Service not available" />
+  <Concept Language="en" ConceptID="661" Rubric="Translation" />
+  <Concept Language="en" ConceptID="662" Rubric="Accreditation" />
+  <Concept Language="en" ConceptID="663" Rubric="Comments" />
+  <Concept Language="en-au" ConceptID="3" Rubric="foetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
   <Concept Language="da" ConceptID="6" Rubric="donor" />
@@ -1885,6 +1914,8 @@
   <Concept Language="da" ConceptID="645" Rubric="Helt tal og brøk" />
   <Concept Language="da" ConceptID="646" Rubric="Brøk" />
   <Concept Language="da" ConceptID="647" Rubric="Definition" />
+  <Concept Language="da" ConceptID="648" Rubric="bevidnet" />
+  <Concept Language="da" ConceptID="649" Rubric="Begræns antallet decimaler" />
   <Concept Language="de" ConceptID="0" Rubric="Selbst" />
   <Concept Language="de" ConceptID="3" Rubric="Fötus" />
   <Concept Language="de" ConceptID="6" Rubric="Spender" />
@@ -2449,6 +2480,35 @@
   <Concept Language="de" ConceptID="629" Rubric="Alle ausschließen" />
   <Concept Language="de" ConceptID="630" Rubric="Als Prozent" />
   <Concept Language="de" ConceptID="631" Rubric="Alle löschen" />
+  <Concept Language="de" ConceptID="632" Rubric="Archetyp Id" />
+  <Concept Language="de" ConceptID="633" Rubric="*Identifier (en)" />
+  <Concept Language="de" ConceptID="634" Rubric="*Paragraph (en)" />
+  <Concept Language="de" ConceptID="635" Rubric="*Parsable (en)" />
+  <Concept Language="de" ConceptID="636" Rubric="*Coded text (en)" />
+  <Concept Language="de" ConceptID="637" Rubric="*application/dicom (en)" />
+  <Concept Language="de" ConceptID="638" Rubric="Format" />
+  <Concept Language="de" ConceptID="639" Rubric="*Copy path to clipboard (en)" />
+  <Concept Language="de" ConceptID="640" Rubric="*actual (en)" />
+  <Concept Language="de" ConceptID="641" Rubric="*Lower (en)" />
+  <Concept Language="de" ConceptID="642" Rubric="*Upper (en)" />
+  <Concept Language="de" ConceptID="643" Rubric="*Integral (en)" />
+  <Concept Language="de" ConceptID="644" Rubric="*Unitary (en)" />
+  <Concept Language="de" ConceptID="645" Rubric="*Integer and fraction (en)" />
+  <Concept Language="de" ConceptID="646" Rubric="*Fraction (en)" />
+  <Concept Language="de" ConceptID="647" Rubric="Definition" />
+  <Concept Language="de" ConceptID="648" Rubric="*witnessed (en)" />
+  <Concept Language="de" ConceptID="649" Rubric="*Limit decimal places (en)" />
+  <Concept Language="de" ConceptID="650" Rubric="Öffne Archetypen aus dem Web" />
+  <Concept Language="de" ConceptID="651" Rubric="Suche nach" />
+  <Concept Language="de" ConceptID="652" Rubric="Bitte Suchparameter eingeben" />
+  <Concept Language="de" ConceptID="653" Rubric="Archetypen gefunden" />
+  <Concept Language="de" ConceptID="654" Rubric="Keine Archetypen gefunden" />
+  <Concept Language="de" ConceptID="655" Rubric="Suchen" />
+  <Concept Language="de" ConceptID="656" Rubric="Zurücksetzen" />
+  <Concept Language="de" ConceptID="657" Rubric="allgemein" />
+  <Concept Language="de" ConceptID="658" Rubric="Öffne vom Web" />
+  <Concept Language="de" ConceptID="659" Rubric="Keine Netzwerkverbindung vorhanden" />
+  <Concept Language="de" ConceptID="660" Rubric="Service nicht aufrufbar" />
   <Concept Language="es" ConceptID="0" Rubric="mismo" />
   <Concept Language="es" ConceptID="7" Rubric="abuela materna" />
   <Concept Language="es" ConceptID="8" Rubric="abuelo materno" />
@@ -4443,13 +4503,8 @@
   <Concept Language="sv" ConceptID="558" Rubric="Under-sektion" />
   <Concept Language="sv" ConceptID="559" Rubric="Post" />
   <Concept Language="sv" ConceptID="560" Rubric="Administrativ post" />
-  <Concept Language="en" ConceptID="648" Rubric="witnessed" />
-  <Concept Language="en" ConceptID="649" Rubric="Limit decimal places" />
-  <Concept Language="da" ConceptID="648" Rubric="bevidnet" />
-  <Concept Language="da" ConceptID="649" Rubric="Begræns antallet decimaler" />
-  <Concept Language="en" ConceptID="650" Rubric="Translation" />
-  <Concept Language="en" ConceptID="651" Rubric="Accreditation" />
-  <Concept Language="en" ConceptID="652" Rubric="Comments" />
+  <Concept Language="en" ConceptID="664" Rubric="Add subject" />
+  <Concept Language="en" ConceptID="665" Rubric="Remove subject" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

@@ -54,6 +54,12 @@ Public Class Designer
     Friend WithEvents release As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents PanelDescription As System.Windows.Forms.Panel
     Friend WithEvents RichTextBoxDescription As System.Windows.Forms.RichTextBox
+    Friend WithEvents tabComment As System.Windows.Forms.TabControl
+    Friend WithEvents tpConceptDescription As System.Windows.Forms.TabPage
+    Friend WithEvents tpConceptComment As System.Windows.Forms.TabPage
+    Friend WithEvents txtConceptComment As System.Windows.Forms.TextBox
+    Friend WithEvents MenuFileOpenFromWeb As System.Windows.Forms.MenuItem
+    Friend WithEvents ToolBarOpenFromWeb As System.Windows.Forms.ToolBarButton
     Friend WithEvents mTabPageDescription As TabPageDescription
 
 
@@ -177,7 +183,6 @@ Public Class Designer
     Friend WithEvents lblLifecycle As System.Windows.Forms.Label
     Friend WithEvents MenuTerminologyAdd As System.Windows.Forms.MenuItem
     Friend WithEvents MenuTerminologyAvailable As System.Windows.Forms.MenuItem
-    Friend WithEvents lblDescription As System.Windows.Forms.Label
     Friend WithEvents lblConcept As System.Windows.Forms.Label
     Friend WithEvents lblArchetypeFileName As System.Windows.Forms.Label
     Friend WithEvents lblPrimaryLanguageText As System.Windows.Forms.Label
@@ -240,11 +245,14 @@ Public Class Designer
         Me.radioRestrictedSet = New System.Windows.Forms.RadioButton
         Me.radioUnrestrictedSubject = New System.Windows.Forms.RadioButton
         Me.butAddToRestrictedSet = New System.Windows.Forms.Button
-        Me.lblDescription = New System.Windows.Forms.Label
         Me.TxtConceptDescription = New System.Windows.Forms.TextBox
         Me.lblConcept = New System.Windows.Forms.Label
         Me.txtConceptInFull = New System.Windows.Forms.TextBox
         Me.PanelConcept = New System.Windows.Forms.Panel
+        Me.tabComment = New System.Windows.Forms.TabControl
+        Me.tpConceptDescription = New System.Windows.Forms.TabPage
+        Me.tpConceptComment = New System.Windows.Forms.TabPage
+        Me.txtConceptComment = New System.Windows.Forms.TextBox
         Me.PanelConfigStructure = New System.Windows.Forms.Panel
         Me.cbStructurePersonState = New System.Windows.Forms.CheckBox
         Me.chkEventSeries = New System.Windows.Forms.CheckBox
@@ -272,6 +280,7 @@ Public Class Designer
         Me.MainMenu = New System.Windows.Forms.MainMenu(Me.components)
         Me.MenuFile = New System.Windows.Forms.MenuItem
         Me.MenuFileOpen = New System.Windows.Forms.MenuItem
+        Me.MenuFileOpenFromWeb = New System.Windows.Forms.MenuItem
         Me.MenuFileNew = New System.Windows.Forms.MenuItem
         Me.menuFileNewWindow = New System.Windows.Forms.MenuItem
         Me.MenuFileSave = New System.Windows.Forms.MenuItem
@@ -382,6 +391,7 @@ Public Class Designer
         Me.ToolBarMain = New System.Windows.Forms.ToolBar
         Me.ToolBarNew = New System.Windows.Forms.ToolBarButton
         Me.ToolBarOpen = New System.Windows.Forms.ToolBarButton
+        Me.ToolBarOpenFromWeb = New System.Windows.Forms.ToolBarButton
         Me.ToolBarSave = New System.Windows.Forms.ToolBarButton
         Me.ToolBarSeparator1 = New System.Windows.Forms.ToolBarButton
         Me.ToolBarPrint = New System.Windows.Forms.ToolBarButton
@@ -392,6 +402,9 @@ Public Class Designer
         Me.gbSpecialisation.SuspendLayout()
         Me.gbRestrictedData.SuspendLayout()
         Me.PanelConcept.SuspendLayout()
+        Me.tabComment.SuspendLayout()
+        Me.tpConceptDescription.SuspendLayout()
+        Me.tpConceptComment.SuspendLayout()
         Me.PanelConfigStructure.SuspendLayout()
         Me.PanelRoot.SuspendLayout()
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -482,7 +495,7 @@ Public Class Designer
         Me.butRemoveFromRestrictedSet.Name = "butRemoveFromRestrictedSet"
         Me.butRemoveFromRestrictedSet.Size = New System.Drawing.Size(27, 25)
         Me.butRemoveFromRestrictedSet.TabIndex = 15
-        Me.ToolTip1.SetToolTip(Me.butRemoveFromRestrictedSet, "Add subject")
+        Me.ToolTip1.SetToolTip(Me.butRemoveFromRestrictedSet, "Remove subject")
         Me.butRemoveFromRestrictedSet.Visible = False
         '
         'radioRestrictedSet
@@ -514,22 +527,14 @@ Public Class Designer
         Me.ToolTip1.SetToolTip(Me.butAddToRestrictedSet, "Add subject")
         Me.butAddToRestrictedSet.Visible = False
         '
-        'lblDescription
-        '
-        Me.lblDescription.Location = New System.Drawing.Point(359, 12)
-        Me.lblDescription.Name = "lblDescription"
-        Me.lblDescription.Size = New System.Drawing.Size(115, 21)
-        Me.lblDescription.TabIndex = 9
-        Me.lblDescription.Text = "Description:"
-        Me.lblDescription.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
         'TxtConceptDescription
         '
-        Me.TxtConceptDescription.Location = New System.Drawing.Point(493, 12)
+        Me.TxtConceptDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TxtConceptDescription.Location = New System.Drawing.Point(3, 3)
         Me.TxtConceptDescription.Multiline = True
         Me.TxtConceptDescription.Name = "TxtConceptDescription"
         Me.TxtConceptDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TxtConceptDescription.Size = New System.Drawing.Size(461, 83)
+        Me.TxtConceptDescription.Size = New System.Drawing.Size(513, 71)
         Me.TxtConceptDescription.TabIndex = 1
         Me.TxtConceptDescription.Tag = ""
         '
@@ -546,7 +551,7 @@ Public Class Designer
         '
         Me.txtConceptInFull.Location = New System.Drawing.Point(90, 12)
         Me.txtConceptInFull.Name = "txtConceptInFull"
-        Me.txtConceptInFull.Size = New System.Drawing.Size(259, 24)
+        Me.txtConceptInFull.Size = New System.Drawing.Size(325, 24)
         Me.txtConceptInFull.TabIndex = 0
         Me.txtConceptInFull.Tag = ""
         '
@@ -554,15 +559,58 @@ Public Class Designer
         '
         Me.PanelConcept.BackColor = System.Drawing.Color.LightYellow
         Me.PanelConcept.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelConcept.Controls.Add(Me.tabComment)
         Me.PanelConcept.Controls.Add(Me.lblConcept)
         Me.PanelConcept.Controls.Add(Me.txtConceptInFull)
-        Me.PanelConcept.Controls.Add(Me.TxtConceptDescription)
-        Me.PanelConcept.Controls.Add(Me.lblDescription)
         Me.PanelConcept.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelConcept.Location = New System.Drawing.Point(0, 0)
         Me.PanelConcept.Name = "PanelConcept"
         Me.PanelConcept.Size = New System.Drawing.Size(969, 111)
         Me.PanelConcept.TabIndex = 3
+        '
+        'tabComment
+        '
+        Me.tabComment.Controls.Add(Me.tpConceptDescription)
+        Me.tabComment.Controls.Add(Me.tpConceptComment)
+        Me.tabComment.Dock = System.Windows.Forms.DockStyle.Right
+        Me.tabComment.Location = New System.Drawing.Point(438, 0)
+        Me.tabComment.Name = "tabComment"
+        Me.tabComment.SelectedIndex = 0
+        Me.tabComment.Size = New System.Drawing.Size(527, 107)
+        Me.tabComment.TabIndex = 10
+        '
+        'tpConceptDescription
+        '
+        Me.tpConceptDescription.BackColor = System.Drawing.Color.LightYellow
+        Me.tpConceptDescription.Controls.Add(Me.TxtConceptDescription)
+        Me.tpConceptDescription.Location = New System.Drawing.Point(4, 26)
+        Me.tpConceptDescription.Name = "tpConceptDescription"
+        Me.tpConceptDescription.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpConceptDescription.Size = New System.Drawing.Size(519, 77)
+        Me.tpConceptDescription.TabIndex = 0
+        Me.tpConceptDescription.Text = "Description"
+        Me.tpConceptDescription.UseVisualStyleBackColor = True
+        '
+        'tpConceptComment
+        '
+        Me.tpConceptComment.BackColor = System.Drawing.Color.LightYellow
+        Me.tpConceptComment.Controls.Add(Me.txtConceptComment)
+        Me.tpConceptComment.Location = New System.Drawing.Point(4, 26)
+        Me.tpConceptComment.Name = "tpConceptComment"
+        Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpConceptComment.Size = New System.Drawing.Size(519, 77)
+        Me.tpConceptComment.TabIndex = 1
+        Me.tpConceptComment.Text = "Comment"
+        Me.tpConceptComment.UseVisualStyleBackColor = True
+        '
+        'txtConceptComment
+        '
+        Me.txtConceptComment.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtConceptComment.Location = New System.Drawing.Point(3, 3)
+        Me.txtConceptComment.Multiline = True
+        Me.txtConceptComment.Name = "txtConceptComment"
+        Me.txtConceptComment.Size = New System.Drawing.Size(513, 71)
+        Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
         '
@@ -777,7 +825,7 @@ Public Class Designer
         'MenuFile
         '
         Me.MenuFile.Index = 0
-        Me.MenuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileOpen, Me.MenuFileNew, Me.menuFileNewWindow, Me.MenuFileSave, Me.MenuFileSaveAs, Me.menuFileExport, Me.MenuFileClose, Me.MenuFileSpecialise, Me.MenuFileExit})
+        Me.MenuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileOpen, Me.MenuFileOpenFromWeb, Me.MenuFileNew, Me.menuFileNewWindow, Me.MenuFileSave, Me.MenuFileSaveAs, Me.menuFileExport, Me.MenuFileClose, Me.MenuFileSpecialise, Me.MenuFileExit})
         Me.MenuFile.Shortcut = System.Windows.Forms.Shortcut.CtrlF
         Me.MenuFile.ShowShortcut = False
         Me.MenuFile.Text = "File"
@@ -788,32 +836,38 @@ Public Class Designer
         Me.MenuFileOpen.Shortcut = System.Windows.Forms.Shortcut.CtrlO
         Me.MenuFileOpen.Text = "Open "
         '
+        'MenuFileOpenFromWeb
+        '
+        Me.MenuFileOpenFromWeb.Index = 1
+        Me.MenuFileOpenFromWeb.Shortcut = System.Windows.Forms.Shortcut.CtrlW
+        Me.MenuFileOpenFromWeb.Text = "Open from Web"
+        '
         'MenuFileNew
         '
-        Me.MenuFileNew.Index = 1
+        Me.MenuFileNew.Index = 2
         Me.MenuFileNew.Shortcut = System.Windows.Forms.Shortcut.CtrlN
         Me.MenuFileNew.Text = "New"
         '
         'menuFileNewWindow
         '
-        Me.menuFileNewWindow.Index = 2
+        Me.menuFileNewWindow.Index = 3
         Me.menuFileNewWindow.Text = "New window"
         '
         'MenuFileSave
         '
-        Me.MenuFileSave.Index = 3
+        Me.MenuFileSave.Index = 4
         Me.MenuFileSave.Shortcut = System.Windows.Forms.Shortcut.CtrlS
         Me.MenuFileSave.Text = "Save"
         Me.MenuFileSave.Visible = False
         '
         'MenuFileSaveAs
         '
-        Me.MenuFileSaveAs.Index = 4
+        Me.MenuFileSaveAs.Index = 5
         Me.MenuFileSaveAs.Text = "Save As"
         '
         'menuFileExport
         '
-        Me.menuFileExport.Index = 5
+        Me.menuFileExport.Index = 6
         Me.menuFileExport.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileExportType})
         Me.menuFileExport.Text = "Export"
         '
@@ -824,18 +878,18 @@ Public Class Designer
         '
         'MenuFileClose
         '
-        Me.MenuFileClose.Index = 6
+        Me.MenuFileClose.Index = 7
         Me.MenuFileClose.Text = "Close"
         '
         'MenuFileSpecialise
         '
-        Me.MenuFileSpecialise.Index = 7
+        Me.MenuFileSpecialise.Index = 8
         Me.MenuFileSpecialise.Text = "Specialise"
         Me.MenuFileSpecialise.Visible = False
         '
         'MenuFileExit
         '
-        Me.MenuFileExit.Index = 8
+        Me.MenuFileExit.Index = 9
         Me.MenuFileExit.Text = "E&xit"
         '
         'menuEdit
@@ -1641,6 +1695,7 @@ Public Class Designer
         Me.ImageListToolbar.Images.SetKeyName(3, "")
         Me.ImageListToolbar.Images.SetKeyName(4, "")
         Me.ImageListToolbar.Images.SetKeyName(5, "")
+        Me.ImageListToolbar.Images.SetKeyName(6, "searchweb.ico")
         '
         'tpInterface
         '
@@ -1719,7 +1774,7 @@ Public Class Designer
         Me.lblArchetypeName.ForeColor = System.Drawing.SystemColors.ControlText
         Me.lblArchetypeName.Location = New System.Drawing.Point(0, 56)
         Me.lblArchetypeName.Name = "lblArchetypeName"
-        Me.lblArchetypeName.Size = New System.Drawing.Size(863, 36)
+        Me.lblArchetypeName.Size = New System.Drawing.Size(881, 36)
         Me.lblArchetypeName.TabIndex = 10
         Me.lblArchetypeName.Text = "Archetype Editor by Ocean Informatics"
         '
@@ -1735,13 +1790,13 @@ Public Class Designer
         '
         'ToolBarMain
         '
-        Me.ToolBarMain.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.ToolBarNew, Me.ToolBarOpen, Me.ToolBarSave, Me.ToolBarSeparator1, Me.ToolBarPrint})
+        Me.ToolBarMain.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.ToolBarNew, Me.ToolBarOpen, Me.ToolBarOpenFromWeb, Me.ToolBarSave, Me.ToolBarSeparator1, Me.ToolBarPrint})
         Me.ToolBarMain.DropDownArrows = True
         Me.ToolBarMain.ImageList = Me.ImageListToolbar
         Me.ToolBarMain.Location = New System.Drawing.Point(0, 0)
         Me.ToolBarMain.Name = "ToolBarMain"
         Me.ToolBarMain.ShowToolTips = True
-        Me.ToolBarMain.Size = New System.Drawing.Size(863, 28)
+        Me.ToolBarMain.Size = New System.Drawing.Size(881, 28)
         Me.ToolBarMain.TabIndex = 11
         '
         'ToolBarNew
@@ -1756,6 +1811,12 @@ Public Class Designer
         Me.ToolBarOpen.ImageIndex = 0
         Me.ToolBarOpen.Name = "ToolBarOpen"
         Me.ToolBarOpen.ToolTipText = "Open archetype"
+        '
+        'ToolBarOpenFromWeb
+        '
+        Me.ToolBarOpenFromWeb.ImageIndex = 6
+        Me.ToolBarOpenFromWeb.Name = "ToolBarOpenFromWeb"
+        Me.ToolBarOpenFromWeb.Visible = False
         '
         'ToolBarSave
         '
@@ -1781,9 +1842,9 @@ Public Class Designer
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Right
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(863, 0)
+        Me.PictureBox1.Location = New System.Drawing.Point(881, 0)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(106, 92)
+        Me.PictureBox1.Size = New System.Drawing.Size(88, 92)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
@@ -1807,6 +1868,11 @@ Public Class Designer
         Me.gbRestrictedData.ResumeLayout(False)
         Me.PanelConcept.ResumeLayout(False)
         Me.PanelConcept.PerformLayout()
+        Me.tabComment.ResumeLayout(False)
+        Me.tpConceptDescription.ResumeLayout(False)
+        Me.tpConceptDescription.PerformLayout()
+        Me.tpConceptComment.ResumeLayout(False)
+        Me.tpConceptComment.PerformLayout()
         Me.PanelConfigStructure.ResumeLayout(False)
         Me.PanelRoot.ResumeLayout(False)
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1872,6 +1938,47 @@ Public Class Designer
 
     End Sub
 
+    ' added funtion (by Jana Graenz)
+    ' loads the Windows form "WebSearchForm" for enabling a search for archetypes from the web 
+    ' (accessing the web-based Archetype Finder via its provided Web Services)
+    Private Sub OpenArchetypeFromWeb(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileOpenFromWeb.Click
+        If Not CheckOKtoClose() Then
+            Return
+        End If
+
+
+        Dim frm As New WebSearchForm
+
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+
+            frm.Text = Filemanager.GetOpenEhrTerm(658, frm.Text)
+            frm.lblSearch.Text = Filemanager.GetOpenEhrTerm(651, frm.lblSearch.Text)
+            frm.rdbtn_any.Text = Filemanager.GetOpenEhrTerm(657, frm.rdbtn_any.Text)
+            frm.rdbtn_id.Text = Filemanager.GetOpenEhrTerm(632, frm.rdbtn_id.Text)
+            frm.rdbtn_des.Text = Filemanager.GetOpenEhrTerm(113, frm.rdbtn_des.Text)
+            frm.rdbtn_con.Text = Filemanager.GetOpenEhrTerm(54, frm.rdbtn_con.Text)
+            frm.btnSearch.Text = Filemanager.GetOpenEhrTerm(655, frm.btnSearch.Text)
+            frm.btnReset.Text = Filemanager.GetOpenEhrTerm(656, frm.btnReset.Text)
+            frm.lblNum.Text = Filemanager.GetOpenEhrTerm(653, frm.lblNum.Text)
+
+        End If
+
+        frm.ShowDialog(Me)
+        Dim myArchetypeURL As String
+        ' The boolean variable "chosen" determines if the user decided to open one found archetype 
+        ' (a result set is shown as a list with button a Open-Button for each archetype on the WebSearchForm)
+        ' is chosen true, we find out which archetypes has to be opened and takes its URL for further processing
+        If frm.chosen = True Then
+
+            myArchetypeURL = frm.getArchetypeIdTobeOpened().Trim
+            OpenArchetype(myArchetypeURL)
+
+        End If
+
+
+    End Sub
+
+
     Private Sub OpenArchetype(ByVal a_file_name As String)
         Dim i As Integer
 
@@ -1920,6 +2027,7 @@ Public Class Designer
         If Not a_term Is Nothing Then
             Me.txtConceptInFull.Text = a_term.Text
             Me.TxtConceptDescription.Text = a_term.Description
+            Me.txtConceptComment.Text = a_term.Comment
         End If
 
         If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
@@ -2281,6 +2389,7 @@ Public Class Designer
         Me.MenuFileNew.Text = Filemanager.GetOpenEhrTerm(151, Me.MenuFileNew.Text, language)
         Me.MenuFileExit.Text = Filemanager.GetOpenEhrTerm(63, Me.MenuFileExit.Text, language)
         Me.MenuFileOpen.Text = Filemanager.GetOpenEhrTerm(61, Me.MenuFileOpen.Text, language)
+        Me.MenuFileOpenFromWeb.Text = Filemanager.GetOpenEhrTerm(651, Me.MenuFileOpenFromWeb.Text, language)
         Me.MenuFileSave.Text = Filemanager.GetOpenEhrTerm(183, Me.MenuFileSave.Text, language)
         Me.menuFileNewWindow.Text = Filemanager.GetOpenEhrTerm(595, Me.menuFileNewWindow.Text, language)
         Me.MenuFileSaveAs.Text = Filemanager.GetOpenEhrTerm(596, Me.MenuFileSaveAs.Text, language)
@@ -2309,10 +2418,13 @@ Public Class Designer
         Me.lblArchetypeFileName.Text = Filemanager.GetOpenEhrTerm(57, Me.lblArchetypeFileName.Text, language)
         Me.lblArchetypeName.Text = Filemanager.GetOpenEhrTerm(58, Me.lblArchetypeName.Text, language)
         Me.lblConcept.Text = Filemanager.GetOpenEhrTerm(54, Me.lblConcept.Text, language)
-        Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text, language)
+        Me.tpConceptDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.tpConceptDescription.Text, language)
+        Me.tpConceptComment.Text = Filemanager.GetOpenEhrTerm(663, Me.tpConceptComment.Text, language)
         Me.radioUnrestrictedSubject.Text = Filemanager.GetOpenEhrTerm(56, Me.radioUnrestrictedSubject.Text, language)
         Me.radioRestrictedSet.Text = Filemanager.GetOpenEhrTerm(599, Me.radioRestrictedSet.Text)
         Me.gbSpecialisation.Text = Filemanager.GetOpenEhrTerm(186, Me.gbSpecialisation.Text, language)
+        Me.butRemoveFromRestrictedSet.Text = Filemanager.GetOpenEhrTerm(665, Me.butRemoveFromRestrictedSet.Text, language)
+        Me.butAddToRestrictedSet.Text = Filemanager.GetOpenEhrTerm(664, Me.butAddToRestrictedSet.Text, language)
 
         'Entry tab on designer
         Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
@@ -2417,6 +2529,7 @@ Public Class Designer
         Me.txtConceptInFull.Text = a_Term.Text
         Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & a_Term.Text & "]"
         Me.TxtConceptDescription.Text = a_Term.Description
+        Me.txtConceptComment.Text = a_Term.Comment
 
         'and in the specialisation chain
         If Me.tvSpecialisation.GetNodeCount(False) > 0 Then
@@ -2642,14 +2755,39 @@ Public Class Designer
         text.WriteLine("</table>")
         text.WriteLine("<p><i>Entity</i>: " & mFileManager.Archetype.Archetype_ID.ReferenceModelEntity.ToString & "</p>")
         text.WriteLine("<table border=""1"" cellpadding=""3"" width=""100%"">")
+
+        Dim width As String = "50"
+        If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
+            width = "33"
+        End If
         text.WriteLine("<tr>")
-        text.WriteLine("<td width=""50%""><h4>Concept description:</h4></td>")
-        text.WriteLine("<td width=""50%""><h4>Identification:</h4></td>")
+        text.WriteLine(String.Format("<td width=""{0}%""><h4>Concept description:</h4></td>", width))
+        text.WriteLine(String.Format("<td width=""{0}%""><h4>Identification:</h4></td>", width))
+        If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
+            text.WriteLine(String.Format("<td width=""{0}%""><h4>Comments:</h4></td>", width))
+        End If
         text.WriteLine("</tr>")
         text.WriteLine("<tr>")
-        text.WriteLine("<td width=""50%"">" & Me.TxtConceptDescription.Text & "</td>")
-        text.WriteLine("<td width=""50%""><i>Id</i>: " & mFileManager.Archetype.Archetype_ID.ToString() & _
-            "<br><i>Reference model</i>: " & mFileManager.Archetype.Archetype_ID.Reference_Model.ToString & "</td>")
+        text.WriteLine(String.Format("<td width=""{0}%"">{1}</td>", width, TxtConceptDescription.Text))
+        text.WriteLine(String.Format("<td width=""{0}%""><i>Id</i>: {1}<br><i>Reference model</i>: {2}</td>", _
+            width, mFileManager.Archetype.Archetype_ID.ToString(), mFileManager.Archetype.Archetype_ID.Reference_Model.ToString))
+        If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
+            text.WriteLine(String.Format("<td width=""{0}%"">{1}</td>", width, Me.txtConceptComment.Text))
+        End If
+        text.WriteLine("</tr>")
+        text.WriteLine("</table>")
+
+
+        text.WriteLine("<table border=""1"" cellpadding=""3"" style=""background-color: rgb(229, 229, 229); width:100%;"" >")
+        text.WriteLine("<tr>")
+        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(585, "Purpose")))
+        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(582, "Use")))
+        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(583, "Misuse")))
+        text.WriteLine("</tr>")
+        text.WriteLine("<tr>")
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", Me.mTabPageDescription.txtPurpose.Text))
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", Me.mTabPageDescription.txtUse.Text))
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", Me.mTabPageDescription.txtMisuse.Text))
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
 
@@ -2998,6 +3136,8 @@ Public Class Designer
         Me.txtConceptInFull.Text = ""
         Me.RichTextBoxDescription.Text = ""
         Me.TxtConceptDescription.Text = ""
+        Me.txtConceptComment.Text = ""
+        Me.tabComment.SelectedIndex = 0
         Me.radioUnrestrictedSubject.Checked = True
 
         'set the other pages
@@ -3305,38 +3445,38 @@ Public Class Designer
                 If isNew Then
                     SetUpDataStructure()
                 End If
-                
+
             Case StructureType.INSTRUCTION
                 If isNew Then
                     SetUpInstruction()
                 End If
-                
+
             Case StructureType.ACTION
                 If isNew Then
                     SetUpAction()
                 End If
-                
+
             Case StructureType.SECTION
                 If isNew Then
                     SetUpSection()
                 End If
-                
+
             Case StructureType.COMPOSITION
                 If isNew Then
                     SetUpComposition()
                 End If
-                
+
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 If isNew Then
                     SetUpStructure()
                 End If
-                
+
             Case StructureType.Cluster
                 If isNew Then
                     SetUpStructure()
                     Me.mTabPageDataStructure.SetAsCluster(mFileManager.Archetype.ConceptCode)
                 End If
-                
+
             Case StructureType.Element
                 If isNew Then
                     SetUpStructure()
@@ -3406,6 +3546,7 @@ Public Class Designer
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(166, "Cancel")
             Else
                 frm.gbExistingArchetype.Text = Filemanager.GetOpenEhrTerm(609, "Open existing archetypes")
+                frm.gbArchetypeFromWeb.Text = Filemanager.GetOpenEhrTerm(650, "Open Archetype from Web")
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(63, "Exit")
                 frm.gbFormat.Text = Filemanager.GetOpenEhrTerm(638, "Format")
             End If
@@ -3420,7 +3561,9 @@ Public Class Designer
 
         If Not AllowOpen Then
             frm.gbExistingArchetype.Visible = False
-            frm.Height = frm.Height - frm.gbExistingArchetype.Height
+
+            frm.gbArchetypeFromWeb.Visible = False
+            frm.Height = frm.Height - (frm.gbExistingArchetype.Height + frm.gbArchetypeFromWeb.Height)
         End If
 
         i = frm.ShowDialog(Me)
@@ -3447,7 +3590,14 @@ Public Class Designer
                 Else
                     Return 0
                 End If
-
+            Case 4 'pressed the open-From-Web Button
+                frm.Close()
+                Me.OpenArchetypeFromWeb(Me, New System.EventArgs)
+                If mFileManager.Archetype Is Nothing Then
+                    'open archetype was cancelled so go back to new
+                    Return SetNewArchetypeName()
+                End If
+                Return 1
             Case 6  'pressed the open button
                 frm.Close()
                 Me.OpenArchetype(Me, New System.EventArgs)
@@ -3543,6 +3693,7 @@ Public Class Designer
                 a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
                 Me.txtConceptInFull.Text = a_Term.Text
                 Me.TxtConceptDescription.Text = a_Term.Description
+                Me.txtConceptComment.Text = ""
                 Me.gbSpecialisation.Visible = True
                 UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
                 Me.MenuFileSpecialise.Visible = False
@@ -3561,13 +3712,15 @@ Public Class Designer
                 NewArchetype(sender, e)
             Case 1 ' open
                 OpenArchetype(sender, e)
-            Case 2 ' Save
+            Case 2 ' Open from Web
+                OpenArchetypeFromWeb(sender, e)
+            Case 3 ' Save
                 If Filemanager.SaveFiles(False) Then
                     Me.MenuFileSpecialise.Visible = True
                 End If
-            Case 3 ' separator
+            Case 4 ' separator
 
-            Case 4 ' Print
+            Case 5 ' Print
                 ' only available when displaying archetype
 
         End Select
@@ -4107,6 +4260,10 @@ Public Class Designer
         ' Set the help context
         Me.HelpProviderDesigner.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
+        If (OceanArchetypeEditor.Instance.Options.AllowWebSearch = False) Then
+            Me.ToolBarOpenFromWeb.Visible = False
+            Me.MenuFileOpenFromWeb.Visible = False
+        End If
         'Initialise the bindings of tables for all the lookups
         BindTables()
 
@@ -4116,6 +4273,7 @@ Public Class Designer
         'Set Tooltips
 
         Me.ToolBarOpen.ToolTipText = Filemanager.GetOpenEhrTerm(609, "Open archetype")
+        Me.ToolBarOpenFromWeb.ToolTipText = Filemanager.GetOpenEhrTerm(650, "Open Archetype from Web")
         Me.ToolBarNew.ToolTipText = Filemanager.GetOpenEhrTerm(151, "New")
         Me.ToolBarPrint.ToolTipText = Filemanager.GetOpenEhrTerm(520, "Print")
         Me.ToolBarSave.ToolTipText = Filemanager.GetOpenEhrTerm(183, "Save")
@@ -4128,7 +4286,7 @@ Public Class Designer
 
         If ArchetypeToOpen <> "" Then
             'command line variable has been set
-           Dim archID As ArchetypeID = New ArchetypeID(ArchetypeToOpen.Substring(ArchetypeToOpen.LastIndexOf("\") + 1))
+            Dim archID As ArchetypeID = New ArchetypeID(ArchetypeToOpen.Substring(ArchetypeToOpen.LastIndexOf("\") + 1))
 
             ReferenceModel.SetModelType(archID.Reference_Model)
             OpenArchetype(ArchetypeToOpen)
@@ -4235,6 +4393,19 @@ Public Class Designer
                 Me.txtConceptInFull.Focus()
             Else
                 mFileManager.OntologyManager.SetDescription(TxtConceptDescription.Text, mFileManager.Archetype.ConceptCode)
+                mFileManager.FileEdited = True
+            End If
+        End If
+    End Sub
+
+    Private Sub txtConceptComment_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtConceptComment.TextChanged
+        If Not mFileManager.FileLoading Then
+            If Me.txtConceptInFull.Text = "" Then
+                MessageBox.Show(AE_Constants.Instance.Set_concept, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Me.txtConceptComment.Clear()
+                Me.txtConceptInFull.Focus()
+            Else
+                mFileManager.OntologyManager.SetComment(txtConceptComment.Text, mFileManager.Archetype.ConceptCode)
                 mFileManager.FileEdited = True
             End If
         End If
@@ -4977,6 +5148,7 @@ Public Class Designer
     Private Sub RichTextBoxDescription_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RichTextBoxDescription.DoubleClick
         Me.TabMain.SelectedTab = Me.tpDescription
     End Sub
+
 End Class
 
 

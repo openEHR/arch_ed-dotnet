@@ -548,6 +548,8 @@ Public Class ListStructure
                         Me.MenuRemove.Visible = True
                     End If
                 End If
+            Else
+                Me.MenuRemove.Visible = True
             End If
         End If
 
@@ -601,6 +603,8 @@ Public Class ListStructure
                     If numSpecs = 0 Or (i = numSpecs And ((id.StartsWith("at0.") Or (id.IndexOf(".0.") > -1)))) Then
                         Me.RemoveItemAndReferences(sender, e)
                     End If
+                Else
+                    Me.RemoveItemAndReferences(sender, e)
                 End If
             End If
         End If

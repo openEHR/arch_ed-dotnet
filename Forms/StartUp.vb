@@ -62,6 +62,8 @@ Public Class frmStartUp
     Friend WithEvents gbFormat As System.Windows.Forms.GroupBox
     Friend WithEvents rbXML As System.Windows.Forms.RadioButton
     Friend WithEvents rbADL As System.Windows.Forms.RadioButton
+    Friend WithEvents gbArchetypeFromWeb As System.Windows.Forms.GroupBox
+    Friend WithEvents butOpenFromWeb As System.Windows.Forms.Button
     Friend WithEvents lblComponent As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmStartUp))
@@ -80,9 +82,12 @@ Public Class frmStartUp
         Me.rbADL = New System.Windows.Forms.RadioButton
         Me.butOpen = New System.Windows.Forms.Button
         Me.HelpProviderStartUp = New System.Windows.Forms.HelpProvider
+        Me.gbArchetypeFromWeb = New System.Windows.Forms.GroupBox
+        Me.butOpenFromWeb = New System.Windows.Forms.Button
         Me.gbNew.SuspendLayout()
         Me.gbExistingArchetype.SuspendLayout()
         Me.gbFormat.SuspendLayout()
+        Me.gbArchetypeFromWeb.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbNew
@@ -204,7 +209,7 @@ Public Class frmStartUp
         'rbADL
         '
         Me.rbADL.AutoSize = True
-        Me.rbADL.Location = New System.Drawing.Point(15, 20)
+        Me.rbADL.Location = New System.Drawing.Point(14, 20)
         Me.rbADL.Name = "rbADL"
         Me.rbADL.Size = New System.Drawing.Size(56, 21)
         Me.rbADL.TabIndex = 0
@@ -218,16 +223,37 @@ Public Class frmStartUp
         Me.butOpen.Image = CType(resources.GetObject("butOpen.Image"), System.Drawing.Image)
         Me.butOpen.Location = New System.Drawing.Point(229, 21)
         Me.butOpen.Name = "butOpen"
-        Me.butOpen.Size = New System.Drawing.Size(92, 46)
+        Me.butOpen.Size = New System.Drawing.Size(91, 46)
         Me.butOpen.TabIndex = 7
         Me.butOpen.UseVisualStyleBackColor = False
+        '
+        'gbArchetypeFromWeb
+        '
+        Me.gbArchetypeFromWeb.Controls.Add(Me.butOpenFromWeb)
+        Me.gbArchetypeFromWeb.Location = New System.Drawing.Point(19, 317)
+        Me.gbArchetypeFromWeb.Name = "gbArchetypeFromWeb"
+        Me.gbArchetypeFromWeb.Size = New System.Drawing.Size(547, 80)
+        Me.gbArchetypeFromWeb.TabIndex = 3
+        Me.gbArchetypeFromWeb.TabStop = False
+        Me.gbArchetypeFromWeb.Text = "Open archetype from Web"
+        '
+        'butOpenFromWeb
+        '
+        Me.butOpenFromWeb.BackColor = System.Drawing.SystemColors.Control
+        Me.butOpenFromWeb.Image = CType(resources.GetObject("butOpenFromWeb.Image"), System.Drawing.Image)
+        Me.butOpenFromWeb.Location = New System.Drawing.Point(235, 20)
+        Me.butOpenFromWeb.Name = "butOpenFromWeb"
+        Me.butOpenFromWeb.Size = New System.Drawing.Size(77, 46)
+        Me.butOpenFromWeb.TabIndex = 7
+        Me.butOpenFromWeb.UseVisualStyleBackColor = False
         '
         'frmStartUp
         '
         Me.AcceptButton = Me.butOpen
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(585, 311)
+        Me.ClientSize = New System.Drawing.Size(572, 404)
+        Me.Controls.Add(Me.gbArchetypeFromWeb)
         Me.Controls.Add(Me.gbExistingArchetype)
         Me.Controls.Add(Me.gbNew)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
@@ -246,6 +272,7 @@ Public Class frmStartUp
         Me.gbExistingArchetype.ResumeLayout(False)
         Me.gbFormat.ResumeLayout(False)
         Me.gbFormat.PerformLayout()
+        Me.gbArchetypeFromWeb.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -332,6 +359,10 @@ Public Class frmStartUp
         For i As Integer = 0 To ReferenceModel.ValidReferenceModelNames.Length - 1
             Me.comboModel.Items.Add(ReferenceModel.ValidReferenceModelNames(i))
         Next
+        If (OceanArchetypeEditor.Instance.Options.AllowWebSearch <> True) Then
+            Me.gbArchetypeFromWeb.Visible = False
+            Me.Height = Me.Height - ((Me.gbArchetypeFromWeb.Height) + 10)
+        End If
         Me.comboModel.SelectedIndex = OceanArchetypeEditor.Instance.Options.DefaultReferenceModel
         Me.AcceptButton = Me.butOpen
         Me.HelpProviderStartUp.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
@@ -351,6 +382,10 @@ Public Class frmStartUp
         If rbXML.Focused Then
             OceanArchetypeEditor.Instance.Options.DefaultParser = "xml"
         End If
+    End Sub
+
+    Private Sub butOpenFromWeb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOpenFromWeb.Click
+        Me.DialogResult = DialogResult.Retry
     End Sub
 End Class
 

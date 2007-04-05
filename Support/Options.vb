@@ -11,6 +11,8 @@ Public Class Options
     Private mDefaultParser As String
     Private mShowTermsInHtml As Boolean
     Private mShowCommentsInHtml As Boolean
+    Private mAllowWebSearch As Boolean
+    Private mURL As New Uri("http://www.archetypes.com.au/archetypefinder")
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
     Property HelpLocationPath() As String
@@ -27,6 +29,14 @@ Public Class Options
         End Get
         Set(ByVal Value As String)
             mRepositoryPath = Value
+        End Set
+    End Property
+    Property URL() As Uri
+        Get
+            Return mURL
+        End Get
+        Set(ByVal value As Uri)
+            mURL = value
         End Set
     End Property
     Property UserName() As String
@@ -79,6 +89,15 @@ Public Class Options
         End Set
     End Property
 
+    Property AllowWebSearch() As Boolean
+        Get
+            Return mAllowWebSearch
+        End Get
+        Set(ByVal Value As Boolean)
+            mAllowWebSearch = Value
+        End Set
+    End Property
+
     Property ShowTermsInHtml() As Boolean
         Get
             Return mShowTermsInHtml
@@ -110,9 +129,13 @@ Public Class Options
         frm.txtRepositoryPath.Text = mRepositoryPath
         frm.txtHelpFile.Text = mHelpPath
         frm.comboOccurrences.Text = mOccurrencesView
+        frm.chkWebSearch.Checked = mAllowWebSearch
         For i As Integer = 0 To ReferenceModel.ValidReferenceModelNames.Length - 1
             frm.comboReferenceModel.Items.Add(ReferenceModel.ValidReferenceModelNames(i))
         Next
+
+        frm.txtURL.Text = mURL.ToString
+
         If mDefaultParser = "xml" Then
             frm.chkParserXML.Checked = True
         Else
@@ -140,6 +163,8 @@ Public Class Options
             mOccurrencesView = frm.comboOccurrences.Text
             mShowTermsInHtml = frm.chkShowTerminologyInHTML.Checked
             mShowCommentsInHtml = frm.chkShowCommentsInHTML.Checked
+            mURL = New Uri(frm.txtURL.Text)
+            mAllowWebSearch = frm.chkWebSearch.Checked
             If frm.chkParserADL.Checked Then
                 mDefaultParser = "adl"
             Else
@@ -204,6 +229,10 @@ Public Class Options
                                     mShowTermsInHtml = Boolean.Parse(y(1).Trim)
                                 Case "ShowCommentsInHtml"
                                     mShowCommentsInHtml = Boolean.Parse(y(1).Trim)
+                                Case "AllowSearchForArchetypesFromWeb"
+                                    mAllowWebSearch = Boolean.Parse(y(1).Trim)
+                                Case "SharedRepositoryUrl"
+                                    mURL = New Uri(y(1).Trim)
                             End Select
                         Else
                             MessageBox.Show("Error reading '" & y(0) & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -239,10 +268,13 @@ Public Class Options
                 StrmWrite.WriteLine("UserEmail=" & mUserEmail)
                 StrmWrite.WriteLine("Organisation=" & mUserOrganisation)
                 StrmWrite.WriteLine("RepositoryPath=" & mRepositoryPath)
+                StrmWrite.WriteLine("SharedRepositoryUrl=" & mURL.ToString)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
                 StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
                 StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
                 StrmWrite.WriteLine("ShowCommentsInHtml=" & mShowCommentsInHtml.ToString)
+                StrmWrite.WriteLine("AllowSearchForArchetypesFromWeb=" & mAllowWebSearch.ToString)
+               
                 Dim s As String = ""
 
                 For i = 0 To mColors.Length - 1
@@ -316,6 +348,7 @@ Public Class Options
         mDefaultParser = "adl"
         mShowTermsInHtml = False
         mShowCommentsInHtml = False
+        mAllowWebSearch = False
         LoadConfiguration()
         If Not ValidateConfiguration() Then
             Me.ShowOptionsForm(1)

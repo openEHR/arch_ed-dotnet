@@ -665,7 +665,11 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         result.AppendFormat("{0}<td>{1}", Environment.NewLine, html_dt.HTML)
         result.AppendFormat("{0}</td>", Environment.NewLine)
         If showComments Then
-            result.AppendFormat("{0}<td>{1}</td>", Environment.NewLine, Me.Comment)
+            Dim s As String = Me.Comment
+            If s = "" Then
+                s = "&nbsp;"
+            End If
+            result.AppendFormat("{0}<td>{1}</td>", Environment.NewLine, s)
         End If
 
         Return result.ToString
