@@ -132,7 +132,7 @@ Public Class RmStructure
     Sub New(ByVal a_RmStructure As RmStructure)
         mType = a_RmStructure.mType
         sNodeId = a_RmStructure.sNodeId
-        cOccurrences = a_RmStructure.cOccurrences
+        cOccurrences = a_RmStructure.cOccurrences.Copy()
         If a_RmStructure.HasNameConstraint Then
             mRunTimeConstraint = a_RmStructure.NameConstraint
         End If
