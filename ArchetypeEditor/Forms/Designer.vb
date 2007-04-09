@@ -5152,6 +5152,11 @@ Public Class Designer
         Me.TabMain.SelectedTab = Me.tpDescription
     End Sub
 
+    Private Sub RichTextBoxDescription_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles RichTextBoxDescription.KeyPress
+        If (e.KeyChar > "0"c And e.KeyChar < "z"c) Then
+            Me.TabMain.SelectedTab = Me.tpDescription
+        End If
+    End Sub
 End Class
 
 
