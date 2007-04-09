@@ -1171,6 +1171,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     path = GetPathOfNode(ref.Element.NodeId)
                     If Not path Is Nothing Then
                         ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, openehr.base.kernel.Create.STRING.make_from_cil("ELEMENT"), path.as_string)
+                        ref_cadlRefNode.set_occurrences(MakeOccurrences(ref.Element.Occurrences))
                     End If
 
                 Next
@@ -1328,6 +1329,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     path = GetPathOfNode(ref.Element.NodeId)
                     If Not path Is Nothing Then
                         ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, openehr.base.kernel.Create.STRING.make_from_cil("ELEMENT"), path.as_string)
+                        ref_cadlRefNode.set_occurrences(MakeOccurrences(ref.Element.Occurrences))
                     End If
 
                 Next

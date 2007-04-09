@@ -522,10 +522,13 @@ Public Class ArchetypeNodeConstraintControl
             ' set the runtime name text
             Me.txtRuntimeName.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).RuntimeNameText
 
+            'Disable all but occurrences for References
             If mArchetypeNode.RM_Class.Type = StructureType.Reference Then
-                Me.Enabled = False
+                Me.PanelDataConstraint.Enabled = False
+                Me.PanelNonAnonymous.Enabled = False
             Else
-                Me.Enabled = True
+                Me.PanelDataConstraint.Enabled = True
+                Me.PanelNonAnonymous.Enabled = True
             End If
         End If
 

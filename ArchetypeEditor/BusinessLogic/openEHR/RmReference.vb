@@ -76,14 +76,15 @@ Public Class RmReference
     Sub SetElement(ByVal rm As RmElement)
         Debug.Assert(Not rm Is Nothing, "rm Argument is nothing")
 
-        Me.sNodeId = rm.NodeId
-        mElement = rm
-        If rm.HasNameConstraint Then
-            mRunTimeConstraint = rm.NameConstraint
+        If (sNodeId <> rm.NodeId) Then
+            If rm.HasNameConstraint Then
+                mRunTimeConstraint = rm.NameConstraint
+            End If
+            mType = StructureType.Element
+            sNodeId = rm.NodeId
+            cOccurrences = rm.Occurrences.Copy()
         End If
-        mType = StructureType.Element
-        sNodeId = rm.NodeId
-        cOccurrences = rm.Occurrences
+        mElement = rm
     End Sub
 
     Sub New()

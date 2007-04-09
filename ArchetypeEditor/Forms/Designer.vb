@@ -3561,9 +3561,12 @@ Public Class Designer
 
         If Not AllowOpen Then
             frm.gbExistingArchetype.Visible = False
+            frm.Height -= (frm.gbExistingArchetype.Height + 10)
+            If (OceanArchetypeEditor.Instance.Options.AllowWebSearch = False) Then
+                frm.gbArchetypeFromWeb.Visible = False
+                Me.Height -= ((frm.gbArchetypeFromWeb.Height) + 10)
+            End If
 
-            frm.gbArchetypeFromWeb.Visible = False
-            frm.Height = frm.Height - (frm.gbExistingArchetype.Height + frm.gbArchetypeFromWeb.Height)
         End If
 
         i = frm.ShowDialog(Me)

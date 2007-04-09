@@ -640,6 +640,23 @@ Namespace ArchetypeEditor.XML_Classes
                     End If
                 Next
             End If
+
+            If ReferencesToResolve.Count > 0 Then
+                Dim ref_xmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF
+                Dim path As String
+
+                For Each ref As ReferenceToResolve In ReferencesToResolve
+
+                    path = GetPathOfNode(ref.Element.NodeId)
+                    If Not path Is Nothing Then
+                        ref_xmlRefNode = mAomFactory.MakeArchetypeRef(ref.Attribute, "ELEMENT", path)
+                        ref_xmlRefNode.occurrences = MakeOccurrences(ref.Element.Occurrences)
+                    End If
+
+                Next
+                ReferencesToResolve.Clear()
+            End If
+
         End Sub
 
         Protected Sub BuildRootElement(ByVal an_element As RmElement, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
@@ -1376,6 +1393,7 @@ Namespace ArchetypeEditor.XML_Classes
                     path = GetPathOfNode(ref.Element.NodeId)
                     If Not path Is Nothing Then
                         ref_xmlRefNode = mAomFactory.MakeArchetypeRef(ref.Attribute, "ELEMENT", path)
+                        ref_xmlRefNode.occurrences = MakeOccurrences(ref.Element.Occurrences)
                     End If
 
                 Next
