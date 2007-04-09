@@ -906,14 +906,18 @@ Namespace ArchetypeEditor.ADL_Classes
             If o.OrdinalValues.Count > 0 Then
                 For Each o_v In o.OrdinalValues
                     'SRH: Added 20070210 - the table can offer ordinals that are empty
-                    If o_v.InternalCode <> Nothing Then
-                        Dim cadlO As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
-                        cadlO = mAomFactory.create_ordinal(o_v.Ordinal, openehr.base.kernel.Create.STRING.make_from_cil("local::" & o_v.InternalCode))
-                        c_value.add_item(cadlO)
-                        If o.HasAssumedValue And o_v.Ordinal = CInt(o.AssumedValue) Then
-                            c_value.set_assumed_value_from_integer(CInt(o.AssumedValue))
+                    Try
+                        If o_v.InternalCode <> Nothing Then
+                            Dim cadlO As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
+                            cadlO = mAomFactory.create_ordinal(o_v.Ordinal, openehr.base.kernel.Create.STRING.make_from_cil("local::" & o_v.InternalCode))
+                            c_value.add_item(cadlO)
+                            If o.HasAssumedValue And o_v.Ordinal = CInt(o.AssumedValue) Then
+                                c_value.set_assumed_value_from_integer(CInt(o.AssumedValue))
+                            End If
                         End If
-                    End If
+                    Catch
+                        'No action as dbnull
+                    End Try
                 Next
             End If
         End Sub

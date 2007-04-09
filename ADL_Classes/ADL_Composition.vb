@@ -53,9 +53,20 @@ Class ADL_COMPOSITION
 
                             Dim section As RmSection = New RmSection("root")
 
-                            For j As Integer = 1 To an_attribute.children.count
-                                section.Children.Add(New RmSlot(CType(an_attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
-                            Next
+                        For j As Integer = 1 To an_attribute.children.count
+                            Try
+                                Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = an_attribute.children.i_th(j)
+                                If obj.generating_type.to_cil = "ARCHETYPE_SLOT" Then
+                                    section.Children.Add(New RmSlot(CType(an_attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                                Else
+                                    MessageBox.Show("Editor does not support compositions with fixed sections. Create slots and separate suitable section archetype", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                End If
+                            Catch ex As Exception
+                                MessageBox.Show(String.Format("{0}- ({1}): {2}", AE_Constants.Instance.Error_loading, a_filemanager.Archetype.Archetype_ID.ToString(), ex.Message), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+                            End Try
+
+                        Next
                             mChildren.Add(section)
                 End Select
             Next
