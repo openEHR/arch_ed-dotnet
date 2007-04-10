@@ -651,6 +651,10 @@ Namespace ArchetypeEditor.XML_Classes
                     If Not path Is Nothing Then
                         ref_xmlRefNode = mAomFactory.MakeArchetypeRef(ref.Attribute, "ELEMENT", path)
                         ref_xmlRefNode.occurrences = MakeOccurrences(ref.Element.Occurrences)
+                    Else
+                        'reference element no longer exists so build it as an element
+                        Dim new_element As RmElement = ref.Element.Copy()
+                        BuildElementOrReference(new_element, ref.Attribute)
                     End If
 
                 Next
@@ -1394,8 +1398,12 @@ Namespace ArchetypeEditor.XML_Classes
                     If Not path Is Nothing Then
                         ref_xmlRefNode = mAomFactory.MakeArchetypeRef(ref.Attribute, "ELEMENT", path)
                         ref_xmlRefNode.occurrences = MakeOccurrences(ref.Element.Occurrences)
-                    End If
+                    Else
+                        'reference element no longer exists so build it as an element
+                        Dim new_element As RmElement = ref.Element.Copy()
 
+                        BuildElementOrReference(new_element, ref.Attribute)
+                    End If
                 Next
                 ReferencesToResolve.Clear()
             End If

@@ -1985,6 +1985,9 @@ Public Class Designer
         Me.Cursor = System.Windows.Forms.Cursors.WaitCursor
 
         ' stop auto updating of controls
+        Dim previousEditedState As Boolean = mFileManager.FileEdited
+
+        mFileManager.FileEdited = False
         mFileManager.FileLoading = True
 
         If Not mFileManager.OpenArchetype(a_file_name) Then
@@ -1994,6 +1997,7 @@ Public Class Designer
             Me.Cursor = System.Windows.Forms.Cursors.Default
             mFileManager.ParserReset()
             mFileManager.FileLoading = False
+            mFileManager.FileEdited = previousEditedState
             Exit Sub
         End If
 
