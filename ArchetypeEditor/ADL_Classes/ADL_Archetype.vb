@@ -1176,6 +1176,11 @@ Namespace ArchetypeEditor.ADL_Classes
                     If Not path Is Nothing Then
                         ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, openehr.base.kernel.Create.STRING.make_from_cil("ELEMENT"), path.as_string)
                         ref_cadlRefNode.set_occurrences(MakeOccurrences(ref.Element.Occurrences))
+                    Else
+                        'reference element no longer exists so build it as an element
+                        Dim new_element As RmElement = ref.Element.Copy()
+
+                        BuildElementOrReference(new_element, ref.Attribute)
                     End If
 
                 Next
@@ -1334,6 +1339,11 @@ Namespace ArchetypeEditor.ADL_Classes
                     If Not path Is Nothing Then
                         ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, openehr.base.kernel.Create.STRING.make_from_cil("ELEMENT"), path.as_string)
                         ref_cadlRefNode.set_occurrences(MakeOccurrences(ref.Element.Occurrences))
+                    Else
+                        'reference element no longer exists so build it as an element
+                        Dim new_element As RmElement = ref.Element.Copy()
+
+                        BuildElementOrReference(new_element, ref.Attribute)
                     End If
 
                 Next
