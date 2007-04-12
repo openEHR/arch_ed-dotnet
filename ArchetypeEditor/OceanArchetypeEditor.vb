@@ -686,7 +686,6 @@ Public Class OceanArchetypeEditor
         'mDefaultLanguageCode = "de"
         'mSpecificLanguageCode = "de"
 #End If
-
         Dim frm As New Designer
 
         If CmdArgs.Length > 0 Then
@@ -698,7 +697,13 @@ Public Class OceanArchetypeEditor
         If IsLanguageRightToLeft(mDefaultLanguageCode) Then
             frm.RightToLeft = RightToLeft.Yes
         End If
-        frm.ShowDialog()
+
+        Try            
+            frm.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show("This program has encountered an error and will shut down" & vbCrLf & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            frm.Close()
+        End Try
     End Sub
 
     Shared Sub Reflect(ByVal a_control As Control)
