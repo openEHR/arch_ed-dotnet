@@ -31,6 +31,7 @@ Public Class AE_Constants
     Private mCurrentArchetype As String = "Current archetype"
     Private mDiscardChanges As String = "Discard changes"
     Private mCouldNotFind As String = "Could not find "
+    Private mLocateFile As String = "Do you want to locate the file"
     Private mPleaseSetConceptText As String = "Please set concept text"
     Private mRemoveState As String = "Remove state information"
     Private mErrorLoading As String = "Error on load"
@@ -317,6 +318,12 @@ Public Class AE_Constants
     Friend ReadOnly Property Could_not_find() As String
         Get
             Return mCouldNotFind
+        End Get
+    End Property
+
+    Friend ReadOnly Property Locate_file_yourself() As String
+        Get
+            Return mLocateFile
         End Get
     End Property
 
@@ -619,7 +626,7 @@ Public Class AE_Constants
         mLanguageAdditionCancelled = TerminologyServer.Instance.RubricForCode(286, Language)
         mCurrentArchetype = TerminologyServer.Instance.RubricForCode(287, Language)
         mDiscardChanges = TerminologyServer.Instance.RubricForCode(288, Language)
-        mCouldNotFind = TerminologyServer.Instance.RubricForCode(289, Language)
+        mCouldNotFind = TerminologyServer.Instance.RubricForCode(289, Language)        
         mPleaseSetConceptText = TerminologyServer.Instance.RubricForCode(290, Language)
         mRemoveState = TerminologyServer.Instance.RubricForCode(291, Language)
         mErrorLoading = TerminologyServer.Instance.RubricForCode(292, Language)
@@ -691,6 +698,7 @@ Public Class AE_Constants
         mFalse = TerminologyServer.Instance.RubricForCode(160, Language)
         mChangeDataType = TerminologyServer.Instance.RubricForCode(60, Language)
         mCardinality = TerminologyServer.Instance.RubricForCode(437, Language)
+        'mLocateFile = TerminologyServer.Instance.RubricForCode(?, Language)
     End Sub
 End Class
 
