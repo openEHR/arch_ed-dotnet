@@ -1,0 +1,385 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-EVALUATION.problem.v1
+
+concept
+	[at0000]	-- Problem
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"23/04/2006">
+		["email"] = <"sam.heard@oceaninformatics.biz">
+	>
+	details = <
+		["en"] = <
+			language = <"en">
+			purpose = <"For recording a problem, condition or issue that has ongoing significance to the person's health.">
+			use = <"Used for recording any problem, present or past - so is used for recording past history as well as current problems.  Used with changed 'Subject of care' for recording problems of relatives and so for family history.">
+			keywords = <"issue", "condition">
+			misuse = <"Use specialisations for medical diagnoses, 'openEHR-EHR-EVALUATION.problem-diagnosis' and histological diagnoses 'openEHR-EHR-EVALUATION.problem-diagnosis-histological'">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <>
+
+definition
+	EVALUATION[at0000] matches {	-- Problem
+		data matches {
+			ITEM_TREE[at0001] matches {	-- structure
+				items cardinality matches {0..*; ordered} matches {
+					ELEMENT[at0002] matches {	-- Problem
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0003] occurrences matches {0..1} matches {	-- Date of initial onset
+						value matches {
+							DV_DATE matches {
+								value matches {yyyy-??-??}
+							}
+						}
+					}
+					ELEMENT[at0004] occurrences matches {0..1} matches {	-- Age at initial onset
+						value matches {
+							DV_DURATION matches {
+								value matches {PYMWDTHMS}
+							}
+						}
+					}
+					ELEMENT[at0005] occurrences matches {0..1} matches {	-- Severity
+						value matches {
+							1|[local::at0006], 	-- Mild
+							4|[local::at0007], 	-- Moderate
+							7|[local::at0008]  	-- Severe
+						}
+					}
+					ELEMENT[at0009] occurrences matches {0..1} matches {	-- Clinical description
+						value matches {
+							DV_TEXT matches {*}
+						}
+					}
+					ELEMENT[at0010] occurrences matches {0..1} matches {	-- Date clinically recognised
+						value matches {
+							DV_DATE matches {
+								value matches {yyyy-??-XX}
+							}
+						}
+					}
+					CLUSTER[at0011] occurrences matches {0..*} matches {	-- Location
+						items cardinality matches {1..2; ordered} matches {
+							ELEMENT[at0012] occurrences matches {0..1} matches {	-- Body site
+								value matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {[local::]}
+									}
+								}
+							}
+							ELEMENT[at0013] occurrences matches {0..1} matches {	-- Location description
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+						}
+					}
+					CLUSTER[at0014] occurrences matches {0..*} matches {	-- Aetiology
+						items cardinality matches {1..2; unordered} matches {
+							ELEMENT[at0015] occurrences matches {0..*} matches {	-- Agent
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+							ELEMENT[at0016] occurrences matches {0..1} matches {	-- Complication of
+								value matches {
+									DV_TEXT matches {*}
+									DV_URI matches {*}
+								}
+							}
+							ELEMENT[at0017] occurrences matches {0..1} matches {	-- Description
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+						}
+					}
+					CLUSTER[at0018] occurrences matches {0..1} matches {	-- Occurrences or exacerbations
+						items cardinality matches {0..*; ordered} matches {
+							ELEMENT[at0019] occurrences matches {0..1} matches {	-- Frequency of reccurrence
+								value matches {
+									C_QUANTITY <
+									>
+								}
+							}
+							ELEMENT[at0020] occurrences matches {0..1} matches {	-- Date of last occurrence
+								value matches {
+									DV_DATE matches {
+										value matches {yyyy-??-??}
+									}
+								}
+							}
+							CLUSTER[at0021] occurrences matches {0..*} matches {	-- Occurence/exacerbation
+								items cardinality matches {0..*; unordered} matches {
+									ELEMENT[at0022] occurrences matches {0..1} matches {	-- Clinical description
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0023] occurrences matches {0..1} matches {	-- Outcome
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+									ELEMENT[at0024] occurrences matches {0..1} matches {	-- Date of onset of occurrence
+										value matches {
+											DV_DATE matches {
+												value matches {yyyy-??-??}
+											}
+										}
+									}
+									ELEMENT[at0036] occurrences matches {0..1} matches {	-- Date of resolution of occurrence
+										value matches {
+											DV_DATE matches {
+												value matches {yyyy-??-??}
+											}
+										}
+									}
+								}
+							}
+							ELEMENT[at0025] occurrences matches {0..1} matches {	-- Number of occurrences
+								value matches {
+									DV_COUNT matches {
+										magnitude matches {|>= 1|}
+									}
+								}
+							}
+						}
+					}
+					CLUSTER[at0026] occurrences matches {0..1} matches {	-- Related problems
+						name matches {
+							DV_CODED_TEXT matches {
+								defining_code matches {[local::]}
+							}
+						}
+						items cardinality matches {0..*; unordered} matches {
+							CLUSTER[at0027] occurrences matches {0..*} matches {	-- Related problem
+								name matches {
+									DV_CODED_TEXT matches {
+										defining_code matches {[local::]}
+									}
+								}
+								items cardinality matches {0..*; unordered} matches {
+									ELEMENT[at0028] occurrences matches {0..1} matches {	-- Related problem
+										name matches {
+											DV_CODED_TEXT matches {
+												defining_code matches {[local::]}
+											}
+										}
+										value matches {
+											DV_TEXT matches {*}
+											DV_URI matches {*}
+										}
+									}
+									ELEMENT[at0029] occurrences matches {0..1} matches {	-- Clinical description
+										value matches {
+											DV_TEXT matches {*}
+										}
+									}
+								}
+							}
+						}
+					}
+					ELEMENT[at0030] occurrences matches {0..1} matches {	-- Date of resolution
+						value matches {
+							DV_DATE matches {
+								value matches {yyyy-??-??}
+							}
+						}
+					}
+					ELEMENT[at0031] occurrences matches {0..1} matches {	-- Age at resolution
+						value matches {
+							DV_DURATION matches {
+								value matches {PYMWDTHMS}
+							}
+						}
+					}
+				}
+			}
+		}
+		protocol matches {
+			ITEM_TREE[at0032] matches {	-- Tree
+				items cardinality matches {0..*; unordered} matches {
+					CLUSTER[at0033] occurrences matches {0..1} matches {	-- References
+						items cardinality matches {0..*; unordered} matches {
+							ELEMENT[at0034] occurrences matches {0..*} matches {	-- Reference
+								value matches {
+									DV_TEXT matches {*}
+								}
+							}
+							ELEMENT[at0035] occurrences matches {0..*} matches {	-- Web link
+								value matches {
+									DV_URI matches {*}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"A problem, condition or issue defined by a clinician which is deemed summative of a range of symptoms or concerns of the person and a useful label of these.">
+					text = <"Problem">
+				>
+				["at0001"] = <
+					description = <"@ internal @">
+					text = <"structure">
+				>
+				["at0002"] = <
+					description = <"The index problem, condition or issue described">
+					text = <"Problem">
+				>
+				["at0003"] = <
+					description = <"The date that the problem began causing symptoms or signs">
+					text = <"Date of initial onset">
+				>
+				["at0004"] = <
+					description = <"The age of the at the onset of the problem">
+					text = <"Age at initial onset">
+				>
+				["at0005"] = <
+					description = <"The severity of the index problem">
+					text = <"Severity">
+				>
+				["at0006"] = <
+					description = <"The severity of the index problem is mild, not affecting life or longevity">
+					text = <"Mild">
+				>
+				["at0007"] = <
+					description = <"The severity of the index problem is such as to cause significant morbidity">
+					text = <"Moderate">
+				>
+				["at0008"] = <
+					description = <"The severity of the index problem has had a major effect on life and/or longevity">
+					text = <"Severe">
+				>
+				["at0009"] = <
+					description = <"Description of the clinical aspects of the problem">
+					text = <"Clinical description">
+				>
+				["at0010"] = <
+					description = <"Date the problem was recognised or 'diagnosed' by clinicians">
+					text = <"Date clinically recognised">
+				>
+				["at0011"] = <
+					description = <"Location of the problem in terms of body site">
+					text = <"Location">
+				>
+				["at0012"] = <
+					description = <"The body site affected">
+					text = <"Body site">
+				>
+				["at0013"] = <
+					description = <"A free text description of the location - may be in addition to a coded body site">
+					text = <"Location description">
+				>
+				["at0014"] = <
+					description = <"Agents or Factors known to have been of aetiological significance">
+					text = <"Aetiology">
+				>
+				["at0015"] = <
+					description = <"Microbial or other agent known to have caused this problem">
+					text = <"Agent">
+				>
+				["at0016"] = <
+					description = <"A problem or link to a problem or injury described elsewhere in the EHR">
+					text = <"Complication of">
+				>
+				["at0017"] = <
+					description = <"Description of aetiological process">
+					text = <"Description">
+				>
+				["at0018"] = <
+					description = <"Grouping of information about individual occurrences or exacerbations">
+					text = <"Occurrences or exacerbations">
+				>
+				["at0019"] = <
+					description = <"The frequency of individual occurrences of the problem">
+					text = <"Frequency of reccurrence">
+				>
+				["at0020"] = <
+					description = <"The date of the last occurrence of the problem">
+					text = <"Date of last occurrence">
+				>
+				["at0021"] = <
+					description = <"Information about one occurrence or exacerbation">
+					text = <"Occurence/exacerbation">
+				>
+				["at0022"] = <
+					description = <"A description of the exacerbation or occurrence">
+					text = <"Clinical description">
+				>
+				["at0023"] = <
+					description = <"Outcome of the occurrence or exacerbation">
+					text = <"Outcome">
+				>
+				["at0024"] = <
+					description = <"Date of onset of occurrence or exacerbation">
+					text = <"Date of onset of occurrence">
+				>
+				["at0025"] = <
+					description = <"Number of times this problem has occurred or been apparent">
+					text = <"Number of occurrences">
+				>
+				["at0026"] = <
+					description = <"Complications that are attributed to this problem">
+					text = <"Related problems">
+				>
+				["at0027"] = <
+					description = <"A group of characteristics of the problem complicating the index condition in this archetype">
+					text = <"Related problem">
+				>
+				["at0028"] = <
+					description = <"Details of the problem as text or coded text or URI">
+					text = <"Related problem">
+				>
+				["at0029"] = <
+					description = <"Decription of the complicating problem">
+					text = <"Clinical description">
+				>
+				["at0030"] = <
+					description = <"The date that the problem resolved or went into remission">
+					text = <"Date of resolution">
+				>
+				["at0031"] = <
+					description = <"The age of the at the resolution of the problem">
+					text = <"Age at resolution">
+				>
+				["at0032"] = <
+					description = <"@ internal @">
+					text = <"Tree">
+				>
+				["at0033"] = <
+					description = <"Useful information about this condition">
+					text = <"References">
+				>
+				["at0034"] = <
+					description = <"Reference to material about this condition">
+					text = <"Reference">
+				>
+				["at0035"] = <
+					description = <"Useful information on the internet about this condition">
+					text = <"Web link">
+				>
+				["at0036"] = <
+					description = <"Date of the resolution of the occurrence">
+					text = <"Date of resolution of occurrence">
+				>
+			>
+		>
+	>
