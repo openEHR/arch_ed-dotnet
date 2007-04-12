@@ -410,6 +410,7 @@ Public Class FileManagerLocal
         'Definition
         Dim xmlArchetype As New ArchetypeEditor.XML_Classes.XML_Archetype(xml_parser)
         xmlArchetype.Definition = Me.Archetype.Definition
+        xmlArchetype.Description = Me.Archetype.Description 'EDT33: View archetype as XML raises exception https://projects.oceanehr.com/jira/browse/EDT-33
         xmlArchetype.MakeParseTree()
         Me.ParserSynchronised = True
 
