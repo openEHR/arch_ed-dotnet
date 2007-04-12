@@ -22,6 +22,7 @@ Public Class ArchetypeNodeConstraintControl
     '    Private AnyConstraints As AnyConstraintControl
     Private mConstraintControl As ConstraintControl
     Private mFileManager As FileManagerLocal
+    Private mDataView As DataView
     Friend WithEvents tabConstraint As System.Windows.Forms.TabControl
     Friend WithEvents tpConstraint As System.Windows.Forms.TabPage
     Friend WithEvents tpConstraintDetails As System.Windows.Forms.TabPage
@@ -31,6 +32,10 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents dgNodeBindings As System.Windows.Forms.DataGridView
     Friend WithEvents dgValueSets As System.Windows.Forms.DataGridView
     Friend WithEvents gbValueSets As System.Windows.Forms.GroupBox
+    Friend WithEvents terminology As System.Windows.Forms.DataGridViewComboBoxColumn
+    Friend WithEvents code As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Path As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
     Friend WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
@@ -54,6 +59,7 @@ Public Class ArchetypeNodeConstraintControl
         mIsLoading = True
 
         mFileManager = a_file_manager
+        mDataView = New DataView(mFileManager.OntologyManager.TermBindingsTable)
 
         mOccurrences = New OccurrencesPanel(mFileManager)
 
@@ -126,6 +132,10 @@ Public Class ArchetypeNodeConstraintControl
         Me.dgNodeBindings = New System.Windows.Forms.DataGridView
         Me.gbComments = New System.Windows.Forms.GroupBox
         Me.txtComments = New System.Windows.Forms.TextBox
+        Me.terminology = New System.Windows.Forms.DataGridViewComboBoxColumn
+        Me.code = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.Path = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.PanelDataConstraint.SuspendLayout()
         Me.PanelNonAnonymous.SuspendLayout()
         Me.PanelLower.SuspendLayout()
@@ -242,7 +252,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.tabConstraint.Location = New System.Drawing.Point(0, 0)
         Me.tabConstraint.Name = "tabConstraint"
         Me.tabConstraint.SelectedIndex = 0
-        Me.tabConstraint.Size = New System.Drawing.Size(434, 381)
+        Me.tabConstraint.Size = New System.Drawing.Size(434, 439)
         Me.tabConstraint.TabIndex = 34
         '
         'tpConstraint
@@ -263,12 +273,13 @@ Public Class ArchetypeNodeConstraintControl
         '
         Me.tpConstraintDetails.BackColor = System.Drawing.Color.LemonChiffon
         Me.tpConstraintDetails.Controls.Add(Me.gbValueSets)
+        Me.tpConstraintDetails.Controls.Add(Me.Splitter1)
         Me.tpConstraintDetails.Controls.Add(Me.gbTerminology)
         Me.tpConstraintDetails.Controls.Add(Me.gbComments)
         Me.tpConstraintDetails.Location = New System.Drawing.Point(4, 25)
         Me.tpConstraintDetails.Name = "tpConstraintDetails"
         Me.tpConstraintDetails.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConstraintDetails.Size = New System.Drawing.Size(371, 352)
+        Me.tpConstraintDetails.Size = New System.Drawing.Size(426, 410)
         Me.tpConstraintDetails.TabIndex = 1
         Me.tpConstraintDetails.Text = "Details"
         Me.tpConstraintDetails.UseVisualStyleBackColor = True
@@ -277,9 +288,9 @@ Public Class ArchetypeNodeConstraintControl
         '
         Me.gbValueSets.Controls.Add(Me.dgValueSets)
         Me.gbValueSets.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbValueSets.Location = New System.Drawing.Point(3, 312)
+        Me.gbValueSets.Location = New System.Drawing.Point(3, 334)
         Me.gbValueSets.Name = "gbValueSets"
-        Me.gbValueSets.Size = New System.Drawing.Size(365, 37)
+        Me.gbValueSets.Size = New System.Drawing.Size(420, 73)
         Me.gbValueSets.TabIndex = 6
         Me.gbValueSets.TabStop = False
         Me.gbValueSets.Text = "Value sets in external terminologies"
@@ -291,7 +302,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.dgValueSets.Location = New System.Drawing.Point(3, 18)
         Me.dgValueSets.Name = "dgValueSets"
         Me.dgValueSets.RowTemplate.Height = 24
-        Me.dgValueSets.Size = New System.Drawing.Size(359, 16)
+        Me.dgValueSets.Size = New System.Drawing.Size(414, 52)
         Me.dgValueSets.TabIndex = 3
         '
         'gbTerminology
@@ -300,7 +311,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbTerminology.Dock = System.Windows.Forms.DockStyle.Top
         Me.gbTerminology.Location = New System.Drawing.Point(3, 219)
         Me.gbTerminology.Name = "gbTerminology"
-        Me.gbTerminology.Size = New System.Drawing.Size(365, 93)
+        Me.gbTerminology.Size = New System.Drawing.Size(420, 112)
         Me.gbTerminology.TabIndex = 4
         Me.gbTerminology.TabStop = False
         Me.gbTerminology.Text = "Node meaning in terminologies"
@@ -308,11 +319,12 @@ Public Class ArchetypeNodeConstraintControl
         'dgNodeBindings
         '
         Me.dgNodeBindings.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgNodeBindings.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.terminology, Me.code, Me.Path})
         Me.dgNodeBindings.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgNodeBindings.Location = New System.Drawing.Point(3, 18)
         Me.dgNodeBindings.Name = "dgNodeBindings"
         Me.dgNodeBindings.RowTemplate.Height = 24
-        Me.dgNodeBindings.Size = New System.Drawing.Size(359, 72)
+        Me.dgNodeBindings.Size = New System.Drawing.Size(414, 91)
         Me.dgNodeBindings.TabIndex = 2
         '
         'gbComments
@@ -321,7 +333,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbComments.Dock = System.Windows.Forms.DockStyle.Top
         Me.gbComments.Location = New System.Drawing.Point(3, 3)
         Me.gbComments.Name = "gbComments"
-        Me.gbComments.Size = New System.Drawing.Size(365, 216)
+        Me.gbComments.Size = New System.Drawing.Size(420, 216)
         Me.gbComments.TabIndex = 5
         Me.gbComments.TabStop = False
         Me.gbComments.Text = "Comments"
@@ -333,8 +345,40 @@ Public Class ArchetypeNodeConstraintControl
         Me.txtComments.Multiline = True
         Me.txtComments.Name = "txtComments"
         Me.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtComments.Size = New System.Drawing.Size(359, 195)
+        Me.txtComments.Size = New System.Drawing.Size(414, 195)
         Me.txtComments.TabIndex = 0
+        '
+        'terminology
+        '
+        Me.terminology.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader
+        Me.terminology.FillWeight = 70.0!
+        Me.terminology.HeaderText = "Terminology"
+        Me.terminology.MinimumWidth = 150
+        Me.terminology.Name = "terminology"
+        Me.terminology.Width = 150
+        '
+        'code
+        '
+        Me.code.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells
+        Me.code.FillWeight = 30.0!
+        Me.code.HeaderText = "Code"
+        Me.code.Name = "code"
+        Me.code.Width = 66
+        '
+        'Path
+        '
+        Me.Path.HeaderText = "Path"
+        Me.Path.Name = "Path"
+        Me.Path.Visible = False
+        '
+        'Splitter1
+        '
+        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Splitter1.Location = New System.Drawing.Point(3, 331)
+        Me.Splitter1.Name = "Splitter1"
+        Me.Splitter1.Size = New System.Drawing.Size(420, 3)
+        Me.Splitter1.TabIndex = 7
+        Me.Splitter1.TabStop = False
         '
         'ArchetypeNodeConstraintControl
         '
@@ -344,7 +388,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "ArchetypeNodeConstraintControl"
         Me.HelpProviderCommonConstraint.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(434, 381)
+        Me.Size = New System.Drawing.Size(434, 439)
         Me.PanelDataConstraint.ResumeLayout(False)
         Me.PanelNonAnonymous.ResumeLayout(False)
         Me.PanelNonAnonymous.PerformLayout()
@@ -487,9 +531,22 @@ Public Class ArchetypeNodeConstraintControl
 
             SetControlValues(IsState)
 
+            'Enable the node code if not anonymous and there is a terminology added
+            If Not an_archetype_node.IsAnonymous Then
+                Me.dgNodeBindings.Visible = True
+                Dim nodeID As String = CType(an_archetype_node, ArchetypeNodeAbstract).NodeId
+                mDataView.Table.Columns(1).DefaultValue = nodeID
+                mDataView.RowFilter = "Path = '" & CType(an_archetype_node, ArchetypeNodeAbstract).NodeId & "'"
+                If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 0 Then
+                    Me.dgNodeBindings.Enabled = False
+                End If
+            Else
+                Me.dgNodeBindings.Visible = False
+            End If
             If OceanArchetypeEditor.IsDefaultLanguageRightToLeft Then
                 OceanArchetypeEditor.Reflect(mConstraintControl)
             End If
+
 
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
@@ -593,6 +650,15 @@ Public Class ArchetypeNodeConstraintControl
             CType(mArchetypeNode, ArchetypeNodeAbstract).Comment = Me.txtComments.Text
             mFileManager.FileEdited = True
         End If
+    End Sub
+
+    Private Sub ArchetypeNodeConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        CType(Me.dgNodeBindings.Columns(0), DataGridViewComboBoxColumn).DataSource = mFileManager.OntologyManager.TerminologiesTable
+        CType(Me.dgNodeBindings.Columns(0), DataGridViewComboBoxColumn).ValueMember = "Terminology"
+        Me.dgNodeBindings.Columns(0).DataPropertyName = "Terminology"
+        Me.dgNodeBindings.Columns(1).DataPropertyName = "Code"
+        Me.dgNodeBindings.Columns(2).DataPropertyName = "Path"
+        Me.dgNodeBindings.DataSource = mDataView
     End Sub
 End Class
 
