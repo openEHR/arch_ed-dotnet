@@ -14,7 +14,7 @@
 '
 '
 
-Option Explicit On 
+Option Explicit On
 
 Public Class TabPageStructure
 
@@ -739,7 +739,9 @@ Public Class TabPageStructure
         If aContainer.Name <> "tpInterface" Then
             aContainer.Size = New Size
         End If
-        If Not mArchetypeControl Is Nothing Then
+
+        If Not mArchetypeControl Is Nothing Then            
+
             ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only, mFileManager)
         End If
     End Sub
@@ -897,7 +899,18 @@ Public Class TabPageStructure
         mIsEmbedded = True
         mEmbeddedSlot = New ArchetypeNodeAnonymous(a_slot)
 
-        If MessageBox.Show(Filemanager.GetOpenEhrTerm(606, "Load embedded archetype"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+        'setup message prompt
+        'JAR: 12APR07, EDT-9 include the name of the embedded archetype if a single embedded archetype exists
+        Dim msg As String
+        msg = Filemanager.GetOpenEhrTerm(606, "Load embedded archetype")
+
+        If a_slot.SlotConstraint.Include.Count = 1 Then
+            msg = msg & " '" & ReferenceModel.ReferenceModelName & "-" & _
+                ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
+                "." & a_slot.SlotConstraint.Include.Item(0) & ".adl'"
+        End If
+
+        If MessageBox.Show(msg, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
             mFileManager = New FileManagerLocal
 
             ' set the filemanager on the Details Panel as well
@@ -996,13 +1009,46 @@ Public Class TabPageStructure
         End If
 
         archetype_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure\" & archetype_name
+
         If System.IO.File.Exists(archetype_name) Then
             OpenArchetype(archetype_name)
-        Else
-            MessageBox.Show(AE_Constants.Instance.Could_not_find & ": '" & archetype_name & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return False
+            Return True
+
+        ElseIf MessageBox.Show(AE_Constants.Instance.Could_not_find & ": '" & archetype_name & "'" & vbCrLf & vbCrLf & AE_Constants.Instance.Locate_file_yourself & "?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            If LocateEmbeddedArchetype(archetype_name) Then 'JAR: 12APR07, EDT-8 If embedded archetype is not found, allow the user to locate
+                OpenArchetype(archetype_name)
+                Return True
+            End If
         End If
-        Return True
+        Return False
+    End Function
+
+    Private Function LocateEmbeddedArchetype(ByRef fileName As String) As Boolean 'JAR: 12APR07, EDT-8 If embedded archetype is not found, allow the user to locate
+        Dim openFileDialog As New System.Windows.Forms.OpenFileDialog
+
+        With openFileDialog
+            .ReadOnlyChecked = True
+            .Filter = "ADL|*.adl|XML|*.xml|All files|*.*"
+            .FileName = fileName
+
+            Select Case mFileManager.ParserType
+                Case "adl"
+                    .FilterIndex = 1
+                Case "xml"
+                    .FilterIndex = 2
+                Case Else
+                    .FilterIndex = 3
+            End Select
+
+            If mFileManager.WorkingDirectory <> "" Then
+                .InitialDirectory = mFileManager.WorkingDirectory
+            End If
+
+            If Not (.ShowDialog(Me) = System.Windows.Forms.DialogResult.Cancel) Then
+                LocateEmbeddedArchetype = True
+                fileName = .FileName
+            End If
+        End With
     End Function
 
     Private Overloads Function openArchetype(ByVal an_archetype_name As String) As Boolean
