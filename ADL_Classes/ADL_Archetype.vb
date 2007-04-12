@@ -203,7 +203,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Function
 
-        Protected Function MakeOccurrences(ByVal c As RmCardinality) As openehr.common_libs.basic.OE_INTERVAL_INT32
+        Protected Function MakeOccurrences(ByVal c As RmCardinality) As openehr.common_libs.basic.OE_INTERVAL_INTEGER_32 'JAR: 12APR07, EDT31 Update adl parser DLL's
 
             If c.IsUnbounded Then
                 Return mAomFactory.create_c_integer_make_upper_unbounded(c.MinCount, c.IncludeLower).interval
@@ -581,7 +581,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If Not cp.AllowAllTypes Then
                 Dim integerConstraint As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
-                Dim integerList As openehr.base.structures.list.LIST_INT32
+                Dim integerList As openehr.base.structures.list.LIST_INTEGER_32 'JAR: 12APR07, EDT31 Update adl parser DLL's
 
                 fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, openehr.base.kernel.Create.STRING.make_from_cil("type"))
 
@@ -837,8 +837,8 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim unit_constraint As Constraint_QuantityUnit
 
                     For Each unit_constraint In q.Units
-                        Dim a_real As openehr.common_libs.basic.OE_INTERVAL_SINGLE = Nothing
-                        Dim a_precision As openehr.common_libs.basic.OE_INTERVAL_INT32 = Nothing
+                        Dim a_real As openehr.common_libs.basic.OE_INTERVAL_REAL_32 = Nothing 'JAR: 12APR07, EDT31 Update adl parser DLL's
+                        Dim a_precision As openehr.common_libs.basic.OE_INTERVAL_INTEGER_32 = Nothing 'JAR: 12APR07, EDT31 Update adl parser DLL's
 
                         If unit_constraint.HasMaximum Or unit_constraint.HasMinimum Then
                             If unit_constraint.HasMaximum And unit_constraint.HasMinimum Then

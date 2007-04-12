@@ -33,7 +33,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Function
 
-        Public Shared Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.OE_INTERVAL_INT32) As RmCardinality
+        Public Shared Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.OE_INTERVAL_INTEGER_32) As RmCardinality 'JAR: 12APR07, EDT31 Update adl parser DLL's
             Dim c As New RmCardinality
 
             If cadlOccurrences.upper_unbounded Then
