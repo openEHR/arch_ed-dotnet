@@ -54,9 +54,12 @@ Public Class DurationViewControl : Inherits ElementViewControl
         combo.Location = New Point(aLocation.X + 90, aLocation.Y + 5)
         combo.Height = 25
         combo.Width = 150
+
+        Dim time As Boolean = False
+
         For Each u As Char In durationConstraint.AllowableUnits
             Dim s As String = u.ToString.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            Dim time As Boolean = False
+
 
             If s = "t" Then
                 time = True

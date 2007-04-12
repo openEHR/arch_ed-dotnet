@@ -225,11 +225,32 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         If durationConstraint.AllowableUnits = "" Then
             Return s & "*"
         Else
+            Dim time As Boolean = False
+            Dim iso As String = ""
             For Each c As Char In durationConstraint.AllowableUnits
+
                 If c <> "P"c Then
-                    Dim isoUnit As String = OceanArchetypeEditor.ISO_TimeUnits.GetValidIsoUnit(c.ToString)
-                    If isoUnit <> "" Then
-                        s &= OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(isoUnit) & ", "
+                    If c = "T"c Then
+                        time = True
+                    Else
+                        Select Case c
+                            Case "Y"c
+                                iso = "a"
+                            Case "M"c
+                                If time Then
+                                    iso = "min"
+                                Else
+                                    iso = "mo"
+                                End If
+                            Case "W"c
+                                iso = "wk"
+                            Case Else
+                                iso = c.ToString().ToLowerInvariant()
+                        End Select
+
+                        If iso <> "" Then
+                            s &= OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(iso) & ", "
+                        End If
                     End If
                 End If
             Next

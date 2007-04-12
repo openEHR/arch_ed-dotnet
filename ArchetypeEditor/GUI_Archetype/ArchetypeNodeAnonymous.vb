@@ -142,46 +142,60 @@ Public Class ArchetypeNodeAnonymous
                 Return ""
             End Try
 
-            s = "<table><tr><td width=""" & (level * 20).ToString & """></td><td><table>"
+            s = "<tr><td><table><tr><td width=""" & (level * 20).ToString & """></td><td>"
 
-            s &= Environment.NewLine & "<tr>"
+            s &= "<img border=""0"" src=""Images/slot.gif"" width=""32"" height=""32"" align=""middle"">"
+            s &= "</td></tr></table></td>"
+
+            's &= Environment.NewLine & "<tr>"
             s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(312, "Slot") & "</td>"
+
+            Dim include_label As String
+            Dim exclude_label As String
+
             If slot_constraint.RM_ClassType = StructureType.SECTION Then
-                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(172, "Include sections") & "</td>"
-                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(173, "Exclude sections") & "</td>"
+                include_label = Filemanager.GetOpenEhrTerm(172, "Include sections")
+                exclude_label = Filemanager.GetOpenEhrTerm(173, "Exclude sections")
             ElseIf slot_constraint.RM_ClassType = StructureType.ENTRY Then
-                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(175, "Include entries") & "</td>"
-                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(176, "Exclude entries") & "</td>"
+                include_label = Filemanager.GetOpenEhrTerm(175, "Include entries")
+                exclude_label = Filemanager.GetOpenEhrTerm(176, "Exclude entries")
             Else
-                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(625, "Include") & "</td>"
-                s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(626, "Exclude") & "</td>"
+                include_label = Filemanager.GetOpenEhrTerm(625, "Include") & " : " & slot_constraint.RM_ClassType.ToString
+                exclude_label = Filemanager.GetOpenEhrTerm(626, "Exclude") & " : " & slot_constraint.RM_ClassType.ToString
             End If
-            s &= Environment.NewLine & "</tr>"
-            s &= Environment.NewLine & "<tr>"
-            s &= Environment.NewLine & "<td>" & slot_constraint.RM_ClassType.ToString & "</td>"
+
+            include_label &= "<br>"
+            exclude_label &= "<br>"
+
+            s &= Environment.NewLine & "<td>" & include_label
             If slot_constraint.Include.Count > 0 Then
                 If slot_constraint.IncludeAll Then
-                    s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(11, "Allow all") & "</td>"
+                    s &= Filemanager.GetOpenEhrTerm(11, "Allow all")
                 Else
-                    s &= Environment.NewLine & "<td>"
                     For Each statement As String In slot_constraint.Include
                         s &= Environment.NewLine & statement & "<br>"
                     Next
-                    s &= Environment.NewLine & "</td>"
+
                 End If
             End If
+            s &= "</td>"
+
+            s &= Environment.NewLine & "<td>" & exclude_label
             If slot_constraint.Exclude.Count > 0 Then
                 If slot_constraint.ExcludeAll Then
-                    s &= Environment.NewLine & "<td>" & Filemanager.GetOpenEhrTerm(101, "All") & "</td>"
+                    s &= Filemanager.GetOpenEhrTerm(11, "Allow all")
                 Else
-                    s &= Environment.NewLine & "<td>"
                     For Each statement As String In slot_constraint.Exclude
                         s &= Environment.NewLine & statement & "<br>"
                     Next
-                    s &= Environment.NewLine & "</td>"
+
                 End If
             End If
-            s &= "</table></td></table>"
+            s &= "</td>"
+            If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml Then
+                s &= "<td>&nbsp;</td>"
+            End If
+            s &= "</tr>"
             Return s
         End If
         Return ""
