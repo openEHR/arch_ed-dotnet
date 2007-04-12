@@ -45,21 +45,13 @@ Public Class Splash
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents TimerSplash As System.Windows.Forms.Timer
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Splash))
-        Me.TimerSplash = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
-        '
-        'TimerSplash
-        '
-        Me.TimerSplash.Enabled = True
-        Me.TimerSplash.Interval = 3000
         '
         'Splash
         '
-        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.Color.White
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.ClientSize = New System.Drawing.Size(566, 254)
@@ -78,13 +70,6 @@ Public Class Splash
     End Sub
 
 #End Region
-
-    Private Sub TimerSplash_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TimerSplash.Tick
-        TimerSplash.Interval = 50
-        'Me.AllowTransparency = True
-        'Me.Opacity -= 0.1
-        Me.Close()
-    End Sub
 
 End Class
 
