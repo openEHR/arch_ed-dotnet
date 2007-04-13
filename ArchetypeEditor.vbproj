@@ -32,7 +32,7 @@
     <ManifestCertificateThumbprint>2C273A5FA3CAF04D7C51D36562B55C4E81BA6F99</ManifestCertificateThumbprint>
     <ManifestKeyFile>ArchetypeEditor_TemporaryKey.pfx</ManifestKeyFile>
     <GenerateManifests>true</GenerateManifests>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
     <PublishUrl>C:\Temp\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -971,10 +971,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SampleArchetypes\cluster\" />
-    <Folder Include="SampleArchetypes\element\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="My Project\Settings.settings">
       <CustomToolNamespace>My</CustomToolNamespace>
@@ -986,6 +982,10 @@
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SampleArchetypes\cluster\" />
+    <Folder Include="SampleArchetypes\element\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
