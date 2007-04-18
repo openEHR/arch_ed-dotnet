@@ -47,9 +47,12 @@ Public Class ArchetypeComposite
         Dim s, s1 As String
         Dim nl As String = Chr(10) & Chr(13)
 
-        s = (Space(3 * level) & "\ul " & mText & "\ulnone  (" & mItem.Occurrences.ToString & ")\par") & nl
+        's = (Space(3 * level) & "\ul " & mText & "\ulnone  (" & mItem.Occurrences.ToString & ")\par") & nl
+        s = (Space(3 * level) & "\ul " & RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\ulnone  (" & mItem.Occurrences.ToString & ")\par") & nl 'JAR: 13APR07, EDT-32 Support unicode
 
-        s &= (Space(3 * level) & "\i    - " & mDescription & "\i0\par") & nl
+        's &= (Space(3 * level) & "\i    - " & mDescription & "\i0\par") & nl    
+        s &= (Space(3 * level) & "\i    - " & RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC) & "\i0\par") & nl 'JAR: 13APR07, EDT-32 Support unicode
+
         s1 = "\cf2 Items \cf0"
         If IsOrdered Then
             s1 &= " ordered"

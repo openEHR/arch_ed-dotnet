@@ -13,8 +13,8 @@
 '	last_change: "$LastChangedDate$"
 '
 '
-
 Option Strict On
+
 Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     Private Property Element() As RmElement
@@ -71,8 +71,10 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Case TextConstrainType.Text
                 Dim a_string As String
                 If TextConstraint.AllowableValues.Codes.Count > 0 Then
-                    For Each a_string In TextConstraint.AllowableValues.Codes
-                        s = s & " '" & a_string & "',"
+                    For Each a_string In TextConstraint.AllowableValues.Codes 'JAR: 13APR07, EDT-32 Support unicode
+                        's = s & " '" & a_string & "',"                        
+                        s = s & " '" & RichTextBoxUnicode.CreateRichTextBoxTag(a_string, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "'," 'JAR: 13APR07, EDT-32 Support unicode
+
                     Next
                     s.TrimEnd(punctuation)
                 End If
@@ -80,8 +82,10 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 If TextConstraint.AllowableValues.Codes.Count > 1 Then
                     Dim a_string As String
                     For Each a_string In TextConstraint.AllowableValues.Codes
-                        a_Term = mFileManager.OntologyManager.GetTerm(a_string)
-                        s = s & " '" & a_Term.Text & "',"
+                        'a_Term = mFileManager.OntologyManager.GetTerm(a_string)
+                        's = s & " '" & a_Term.Text & "',"                        
+                        s = s & " '" & RichTextBoxUnicode.CreateRichTextBoxTag(a_string, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "'," 'JAR: 13APR07, EDT-32 Support unicode
+
                     Next
                     s = s.TrimEnd(punctuation)
                 End If
@@ -262,12 +266,13 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Private Function OrdinalConstraintToRichText(ByVal OrdinalConstraint As Constraint_Ordinal) As String
         Dim s As String
         Dim ov As OrdinalValue
-        Dim a_Term As RmTerm
+        'Dim a_Term As RmTerm
 
         s = "{"
         For Each ov In OrdinalConstraint.OrdinalValues
-            a_Term = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
-            s = s & ov.Ordinal.ToString & ": \i " & a_Term.Text & "\i0 ; "
+            'a_Term = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
+            's = s & ov.Ordinal.ToString & ": \i " & a_Term.Text & "\i0 ; "
+            s = s & ov.Ordinal.ToString & ": \i " & RichTextBoxUnicode.CreateRichTextBoxTag(ov.InternalCode, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\i0 ; " 'JAR: 13APR07, EDT-32 Support unicode
         Next
         s = s.Trim & "}"
         Return s
@@ -361,21 +366,24 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Public Overrides Function ToRichText(ByVal level As Integer) As String
 
         ' write the cardinality of the element
-        Dim s1 As String = mText & " (" & mItem.Occurrences.ToString & ")"
+        'Dim s1 As String = mText & " (" & mItem.Occurrences.ToString & ")"        
+        Dim s1 As String = RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & " (" & mItem.Occurrences.ToString & ")"  ''JAR: 13APR07, EDT-32 Support unicode
 
         ' add bars if table and wrapping text
         Dim result As String = (Space(3 * level) & "\b " & s1 & "\b0\par")
 
         'write the description of the element
-        Dim s As String = " " & mDescription
+        'Dim s As String = " " & mDescription        
+        Dim s As String = RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC) 'JAR: 13APR07, EDT-32 Support unicode
+
         result = result & Environment.NewLine & (Space(3 * level) & s & "\par")
 
         result &= Environment.NewLine & (Space(3 * level) & "  DataType = " _
                 & Me.Element.Constraint.ConstraintTypeString & "\par")
 
         result &= ConstraintToRichText(Me.Element.Constraint, level)
-
         result &= Environment.NewLine & ("\par")
+
         Return result
 
     End Function
