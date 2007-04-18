@@ -53,7 +53,7 @@ Public Class TabPageStructure
             Next
 
             PanelDetails = New ArchetypeNodeConstraintControl(mFileManager)
-            Me.PanelStructure.Controls.Add(PanelDetails)
+            Me.panelStructure.Controls.Add(PanelDetails)
 
             If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 Me.comboStructure.Text = Filemanager.GetOpenEhrTerm(104, "Choose...")
@@ -68,7 +68,7 @@ Public Class TabPageStructure
 
             mSplitter = New Splitter
             mSplitter.Dock = ds
-            Me.PanelStructure.Controls.Add(mSplitter)
+            Me.panelStructure.Controls.Add(mSplitter)
 
             Me.panelDisplay.Dock = DockStyle.Fill
 
@@ -92,7 +92,7 @@ Public Class TabPageStructure
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents PanelStructure As System.Windows.Forms.Panel
+    Friend WithEvents panelStructure As System.Windows.Forms.Panel
     Friend WithEvents panelDisplay As System.Windows.Forms.Panel
     Friend WithEvents panelEntry As System.Windows.Forms.Panel
     Friend WithEvents comboStructure As System.Windows.Forms.ComboBox
@@ -137,7 +137,7 @@ Public Class TabPageStructure
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageStructure))
-        Me.PanelStructure = New System.Windows.Forms.Panel
+        Me.panelStructure = New System.Windows.Forms.Panel
         Me.panelDisplay = New System.Windows.Forms.Panel
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
         Me.MenuItemGridAdd = New System.Windows.Forms.MenuItem
@@ -179,19 +179,19 @@ Public Class TabPageStructure
         Me.ttElement = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolTipSpecialisation = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderTabPageStructure = New System.Windows.Forms.HelpProvider
-        Me.PanelStructure.SuspendLayout()
+        Me.panelStructure.SuspendLayout()
         Me.panelEntry.SuspendLayout()
         Me.SuspendLayout()
         '
         'PanelStructure
         '
-        Me.PanelStructure.Controls.Add(Me.panelDisplay)
-        Me.PanelStructure.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelStructure.Location = New System.Drawing.Point(0, 40)
-        Me.PanelStructure.Name = "PanelStructure"
-        Me.PanelStructure.Size = New System.Drawing.Size(658, 368)
-        Me.PanelStructure.TabIndex = 8
-        Me.PanelStructure.Visible = False
+        Me.panelStructure.Controls.Add(Me.panelDisplay)
+        Me.panelStructure.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.panelStructure.Location = New System.Drawing.Point(0, 40)
+        Me.panelStructure.Name = "PanelStructure"
+        Me.panelStructure.Size = New System.Drawing.Size(658, 368)
+        Me.panelStructure.TabIndex = 8
+        Me.panelStructure.Visible = False
         '
         'panelDisplay
         '
@@ -457,7 +457,7 @@ Public Class TabPageStructure
         'TabPageStructure
         '
         Me.BackColor = System.Drawing.Color.LemonChiffon
-        Me.Controls.Add(Me.PanelStructure)
+        Me.Controls.Add(Me.panelStructure)
         Me.Controls.Add(Me.panelEntry)
         Me.HelpProviderTabPageStructure.SetHelpKeyword(Me, "Screens/data_screen.htm")
         Me.HelpProviderTabPageStructure.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
@@ -465,7 +465,7 @@ Public Class TabPageStructure
         Me.Name = "TabPageStructure"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(658, 408)
-        Me.PanelStructure.ResumeLayout(False)
+        Me.panelStructure.ResumeLayout(False)
         Me.panelEntry.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -676,7 +676,7 @@ Public Class TabPageStructure
         mIsLoading = True
         mIsElement = True
         Me.panelEntry.Visible = False
-        Me.PanelStructure.Visible = True
+        Me.panelStructure.Visible = True
 
         Me.ArchetypeDisplay = New ElementOnly(an_element, mFileManager)
 
@@ -693,7 +693,7 @@ Public Class TabPageStructure
         If Not a_compound_structure.Children Is Nothing Then ' Not sure that it should be there
 
             Me.panelEntry.Visible = False
-            Me.PanelStructure.Visible = True
+            Me.panelStructure.Visible = True
 
             Select Case a_compound_structure.Type '.TypeName
                 Case StructureType.Single ' "Single", "Simple"
@@ -726,7 +726,7 @@ Public Class TabPageStructure
 
         Else
             Me.panelEntry.Visible = True
-            Me.PanelStructure.Visible = False
+            Me.panelStructure.Visible = False
         End If
 
         mIsLoading = False
@@ -740,7 +740,7 @@ Public Class TabPageStructure
             aContainer.Size = New Size
         End If
 
-        If Not mArchetypeControl Is Nothing Then            
+        If Not mArchetypeControl Is Nothing Then
 
             ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only, mFileManager)
         End If
@@ -760,7 +760,7 @@ Public Class TabPageStructure
                 ' have to have a new slot if change the structure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Element)
             End If
-            Me.PanelStructure.Visible = True
+            Me.panelStructure.Visible = True
             Me.panelDisplay.Visible = False
             Me.ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
@@ -774,7 +774,7 @@ Public Class TabPageStructure
             Me.PanelDetails.Visible = False
         End If
 
-        Me.PanelStructure.Visible = True
+        Me.panelStructure.Visible = True
 
     End Sub
 
@@ -792,7 +792,7 @@ Public Class TabPageStructure
                 ' have to have a new slot if change the structure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Cluster)
             End If
-            Me.PanelStructure.Visible = True
+            Me.panelStructure.Visible = True
             Me.panelDisplay.Visible = False
             Me.ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
@@ -806,7 +806,7 @@ Public Class TabPageStructure
             Me.PanelDetails.Visible = False
         End If
 
-        Me.PanelStructure.Visible = True
+        Me.panelStructure.Visible = True
 
     End Sub
 
@@ -814,6 +814,7 @@ Public Class TabPageStructure
 
         Dim entry_structure As EntryStructure ' User control to provide the list or whatever
         Dim chosen_structure As StructureType
+        Dim switchOffPanelDetails As Boolean = False
 
         Debug.Assert(mIsCluster = False)
 
@@ -833,14 +834,17 @@ Public Class TabPageStructure
                 ' have to have a new slot if change the structure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(chosen_structure)
             End If
-            Me.PanelStructure.Visible = True
+            Me.panelStructure.Visible = True
             Me.panelDisplay.Visible = False
             Me.ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
+
+            panelStructure.SuspendLayout()
+            panelEntry.SuspendLayout()
+            panelDisplay.SuspendLayout()
+
             ' ensure the structure component is visible
-            If Me.panelDisplay.Visible = False Then
-                Me.panelDisplay.Visible = True
-            End If
+            Me.panelDisplay.Visible = True
 
             Select Case chosen_structure
                 Case StructureType.Single
@@ -859,10 +863,10 @@ Public Class TabPageStructure
             If mArchetypeControl Is Nothing Then
                 Me.ArchetypeDisplay = entry_structure
 
-                ' new structure so hide details if visible
-                If Me.PanelDetails.Visible Then
-                    Me.PanelDetails.Visible = False
-                End If
+                'new structure so hide details
+                'JAR: 17APR07, EDT-22 Adding constraint details when no object exists raises exception
+                'Me.PanelDetails.Visible = False 'This is switched back on when PanelStructure.Visible = True
+                switchOffPanelDetails = True
 
             Else
                 'Changing structures
@@ -870,10 +874,16 @@ Public Class TabPageStructure
                     entry_structure.Archetype = mArchetypeControl.Archetype
                     Me.ArchetypeDisplay = entry_structure
                 End If
-
             End If
-            Me.PanelStructure.Visible = True
+
+            'pane visibility
+            Me.panelStructure.Visible = True
             Me.panelEntry.Visible = False
+            PanelDetails.Enabled = Not switchOffPanelDetails 'JAR: 17APR07, EDT-22 Adding constraint details when no object exists raises exception
+
+            panelStructure.ResumeLayout(True)
+            panelEntry.ResumeLayout(True)
+            panelDisplay.ResumeLayout(True)
         End If
 
         If Not mIsLoading Then
