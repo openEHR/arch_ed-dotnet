@@ -13,6 +13,7 @@
 '	last_change: "$LastChangedDate$"
 '
 '
+Option Explicit On
 
 Public Class frmStartUp
 
@@ -385,7 +386,7 @@ Public Class frmStartUp
     End Sub
 
     Private Sub butOpenFromWeb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOpenFromWeb.Click
-        Me.DialogResult = DialogResult.Retry
+        Me.DialogResult = Windows.Forms.DialogResult.Retry 'JAR: 18APR07, EDT-35 Clean up compile time warnings
     End Sub
 End Class
 
