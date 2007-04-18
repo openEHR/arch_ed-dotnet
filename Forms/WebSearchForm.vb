@@ -1,5 +1,3 @@
-Imports System.Web.Services.Description
-
 '
 'Written by Jana Graenz
 '13.02.2007
@@ -11,7 +9,10 @@ Imports System.Web.Services.Description
 ' in this table (archetypeTable) each cell is representing one archetype. 
 ' The Form for this archetype is a userControl called "myArchetypeFromWeb", represented by its own class.
 
-'Option Strict On
+Option Explicit On
+
+Imports System.Web.Services.Description
+
 Public Class WebSearchForm
     Inherits System.Windows.Forms.Form
     Private archetypeIdToBeOpened As String
@@ -27,7 +28,7 @@ Public Class WebSearchForm
             Dim message As String = Filemanager.GetOpenEhrTerm(652, "Please enter your search parameter")
             MessageBox.Show(message)
         Else
-            Dim ArchetypeIDs As Array
+            Dim ArchetypeIDs As Array = Nothing 'JAR: 18APR07, EDT-35 Clean up compile time warnings
             Dim aTerm(0) As String
 
             ' The referenced ArchetypeFinderService provides us an object to access all available services of the ArchetypeFinder
@@ -140,13 +141,12 @@ Public Class WebSearchForm
 
     ' two helper functions to identify which archetype should be opened (after the user clicked the provided opening button)
 
-    Public Function setArchetypeIdToBeOpened(ByVal thisID As String)
+    Public Sub setArchetypeIdToBeOpened(ByVal thisID As String) 'JAR: 18APR07, EDT-35 Clean up compile time warnings
         archetypeIdToBeOpened = thisID
 
         chosen = True
         Me.Close()
-      
-    End Function
+    End Sub
 
     Public Function getArchetypeIdTobeOpened() As String
         Return archetypeIdToBeOpened

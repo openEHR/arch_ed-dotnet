@@ -9,6 +9,7 @@
 ' The type of the description can be decided here, depedning on the parameters will be requested. See below.
 ' 
 '
+Option Explicit On
 
 Public Class myArchetypeFromWeb
     Public myWebSearchForm As WebSearchForm
@@ -24,7 +25,7 @@ Public Class myArchetypeFromWeb
     Public Sub setTerms(ByVal id As String)
 
         Dim ArchetypeService As ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService = New ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService()
-        Dim ArchetypeDescTermsReturn As Array
+        Dim ArchetypeDescTermsReturn As Array = Nothing 'JAR: 18APR07, EDT-35 Clean up compile time warnings
        
         Dim ArchetypeDescAvailable As Boolean = False
         Dim ArchetypeURL As String
@@ -68,8 +69,6 @@ Public Class myArchetypeFromWeb
         End Try
 
         If ArchetypeDescAvailable Then
-
-
             Dim aTerm As String
             Dim y As Int32
             Dim row As Int32 = 0
@@ -81,11 +80,11 @@ Public Class myArchetypeFromWeb
                 Dim value As String
 
                 splittedTerms = aTerm.Split(":")
-             
+
                 'new Labels for key and value in one line
                 key = splittedTerms(0)
                 value = splittedTerms(1)
-               
+
                 Dim keylabel As New System.Windows.Forms.Label
                 keylabel.Name = key
                 keylabel.Text = key & ":"
