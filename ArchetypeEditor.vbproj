@@ -681,6 +681,8 @@
     <Compile Include="GUI_Classes\Specialised_VB_classes\RichTextBoxPrintable.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI_Classes\Specialised_VB_classes\RichTextBoxUnicode.vb">
+    </Compile>
     <Compile Include="GUI_Classes\Structure_Controls\ElementOnly.vb">
       <SubType>UserControl</SubType>
     </Compile>

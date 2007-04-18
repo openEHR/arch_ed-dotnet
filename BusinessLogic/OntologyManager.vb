@@ -439,6 +439,15 @@ Public Class OntologyManager
         mLastTerm = aTerm
     End Sub
 
+    Public Function GetText(ByVal ConceptCode As String) As String 'JAR: 13APR07, EDT-32 Support unicode
+        Dim mGetTerm As RmTerm
+        mGetTerm = GetTerm(ConceptCode)
+        If Not mGetTerm Is Nothing Then
+            Return mGetTerm.Text
+        End If
+        Return ""
+    End Function
+
     Public Overloads Sub SetDescription(ByVal Value As String, ByVal code As String)
 
         ' ensure there are no " in the string
@@ -449,6 +458,15 @@ Public Class OntologyManager
         SetText(mLastTerm)
 
     End Sub
+
+    Public Function GetDescription(ByVal ConceptCode As String) As String 'JAR: 13APR07, EDT-32 Support unicode
+        Dim mGetTerm As RmTerm
+        mGetTerm = GetTerm(ConceptCode)
+        If Not mGetTerm Is Nothing Then
+            Return mGetTerm.Description
+        End If
+        Return ""
+    End Function
 
     Public Overloads Sub SetComment(ByVal Value As String, ByVal code As String)
 

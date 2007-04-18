@@ -62,7 +62,6 @@ Public Class Designer
     Friend WithEvents ToolBarOpenFromWeb As System.Windows.Forms.ToolBarButton
     Friend WithEvents mTabPageDescription As TabPageDescription
 
-
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -2558,8 +2557,9 @@ Public Class Designer
         Next
 
         'Translate descriptions
-        mTabPageDescription.Translate()
-        Me.RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
+        mTabPageDescription.Translate()        
+        RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
+        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
 
         Select Case Me.TabMain.SelectedTab.Name
             Case "tpInterface"
@@ -2634,7 +2634,9 @@ Public Class Designer
         text.WriteLine("{\colortbl ;\red0\green0\blue255;\red0\green255\blue0;}")
         text.WriteLine("\viewkind4\uc1\pard\tx2840\tx5112\lang3081\f0\fs20")
         text.WriteLine("\cf1 Header\cf0\par")
-        text.WriteLine("   Concept: " & Me.txtConceptInFull.Text & "\par")
+        'text.WriteLine("   Concept: " & Me.txtConceptInFull.Text & "\par")        
+        text.WriteLine("   Concept: " & RichTextBoxUnicode.CreateRichTextBoxTag(mFileManager.Archetype.ConceptCode, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\par") 'JAR: 13APR07, EDT-32 Support unicode
+
         text.WriteLine("\par")
         text.WriteLine("\cf1 Definition\cf0\par")
 
@@ -2727,10 +2729,10 @@ Public Class Designer
                 If Not mTabPageDataStructure Is Nothing Then
                     mTabPageDataStructure.toRichText(text, 2)
                 End If
-
         End Select
 
-        Me.mRichTextArchetype.Rtf = text.ToString
+        mRichTextArchetype.Rtf = text.ToString        
+        RichTextBoxUnicode.ProcessRichEditControl(mRichTextArchetype, mFileManager, mTabPageDescription)
     End Sub
 
     Public Sub WriteToHTML(ByVal filename As String)
@@ -3515,8 +3517,9 @@ Public Class Designer
         'Set the description and translation
         mTabPageDescription.Description = mFileManager.Archetype.Description
         mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
-        Me.RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
 
+        RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
+        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
     End Sub
 
     Private Function SetNewArchetypeName(Optional ByVal AllowOpen As Boolean = True) As Integer
@@ -3637,7 +3640,7 @@ Public Class Designer
     End Sub
 
     Private Sub MenuHelpOceanEditor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpOceanEditor.Click
-        Dim Frm As New Splash        
+        Dim Frm As New Splash
         Frm.ControlBox = True
         Frm.ShowDialog(Me)
         Frm.Dispose()
@@ -4646,7 +4649,8 @@ Public Class Designer
 
         ElseIf TabMain.SelectedTab Is Me.tpDescription Then
             'Ensure the description is up to date
-            Me.RichTextBoxDescription.Rtf = Me.mTabPageDescription.AsRtfString()
+            RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
+            RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
         End If
 
     End Sub
