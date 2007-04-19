@@ -879,7 +879,7 @@ Public Class TabPageStructure
             'pane visibility
             Me.panelStructure.Visible = True
             Me.panelEntry.Visible = False
-            PanelDetails.Enabled = Not switchOffPanelDetails 'JAR: 17APR07, EDT-22 Adding constraint details when no object exists raises exception
+            PanelDetails.Visible = Not switchOffPanelDetails 'JAR: 17APR07, EDT-22 Adding constraint details when no object exists raises exception
 
             panelStructure.ResumeLayout(True)
             panelEntry.ResumeLayout(True)
