@@ -45,6 +45,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_73EBC78566C54C028015959527C3F473"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_87163BAEA3422EC0C4418EDAA15CCCF9"
         "OwnerKey" = "8:_66E74EB08145820A65170249672F9EFD"
         "MsmSig" = "8:_UNDEFINED"
@@ -247,7 +253,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:adl_dotnet_lib, Version=0.0.0.0, Culture=neutral"
+            "AssemblyAsmDisplayName" = "8:adl_dotnet_lib, Version=0.0.0.1, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
                     "_66E74EB08145820A65170249672F9EFD"
@@ -294,11 +300,31 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_73EBC78566C54C028015959527C3F473"
+            {
+            "SourcePath" = "8:libadl_dotnet_lib.dll"
+            "TargetName" = "8:libadl_dotnet_lib.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_22810126DF134FC0A2611D2C8BAEFE20"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_87163BAEA3422EC0C4418EDAA15CCCF9"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:EiffelSoftware.Runtime, Version=5.6.1127.0, Culture=neutral, PublicKeyToken=def26f296efef469"
+            "AssemblyAsmDisplayName" = "8:EiffelSoftware.Runtime, Version=5.7.414.0, Culture=neutral, PublicKeyToken=def26f296efef469"
                 "ScatterAssemblies"
                 {
                     "_87163BAEA3422EC0C4418EDAA15CCCF9"
@@ -949,7 +975,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_2B92C14CD9BD407CA16F4A502EE63568"
             {
-            "SourcePath" = "8:obj\\Release\\ArchetypeEditor.exe"
+            "SourcePath" = "8:obj\\Debug\\ArchetypeEditor.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_22810126DF134FC0A2611D2C8BAEFE20"
