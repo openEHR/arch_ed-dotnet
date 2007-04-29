@@ -251,7 +251,7 @@ Public Class PathwayEvent
 
         Debug.Assert(mItem.StateType <> StateMachineType.Not_Set)
 
-        s = OceanArchetypeEditor.Instance.GetInput(a_term)
+        s = OceanArchetypeEditor.Instance.GetInput(a_term, Me.ParentForm)
         If s(0) = "" Then ' cancelled
             Return
         End If

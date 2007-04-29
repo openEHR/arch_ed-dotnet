@@ -204,6 +204,10 @@
     </Content>
     <Content Include="Support\ChangeLog.htm" />
     <Content Include="Support\ocean.ico" />
+    <EmbeddedResource Include="TabPage_Controls\TabPageActivity.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TabPageActivity.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Terminology\openEHR_Translation.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -731,6 +735,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TabPage_Controls\TabPageAction.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageActivity.Designer.vb">
+      <DependentUpon>TabPageActivity.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageActivity.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TabPage_Controls\TabPageComposition.vb">

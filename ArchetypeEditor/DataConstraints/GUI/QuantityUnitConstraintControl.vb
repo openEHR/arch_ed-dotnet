@@ -85,11 +85,11 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
     End Sub
 
     Protected Overrides Sub MaxValueChanged()
-        Constraint.MaximumValue = CSng(Me.numMaxValue.Value)
+        Constraint.MaximumValue = Convert.ToSingle(Me.numMaxValue.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
     End Sub
 
     Protected Overrides Sub MinValueChanged()
-        Constraint.MinimumValue = CSng(Me.numMinValue.Value)
+        Constraint.MinimumValue = Convert.ToSingle(Me.numMinValue.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
     End Sub
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)

@@ -550,7 +550,7 @@ Public Class TableStructure
 
         ' adds columns if rotated
         If mIsRotated Then
-            s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.Text, AE_Constants.Instance.Description)
+            s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.Text, AE_Constants.Instance.Description, Me.ParentForm)
             If s(0) <> "" Then
                 a_term = mFileManager.OntologyManager.AddTerm(s(0), s(1))
                 'If mArchetypeTable.Rows.Count > 0 Then
@@ -819,7 +819,7 @@ Public Class TableStructure
 
         Dim s() As String
 
-        s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'", AE_Constants.Instance.Description)
+        s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'", AE_Constants.Instance.Description, Me.ParentForm)
 
         If s(0) <> "" Then
             ' HKF: 1613

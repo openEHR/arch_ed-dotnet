@@ -242,14 +242,14 @@ Public Class OceanArchetypeEditor
         Return True
     End Function
 
-    Public Function GetInput(ByVal label As String) As String
+    Public Function GetInput(ByVal label As String, ByVal parentForm As Form) As String
         Dim frm As New InputForm
         Dim s As String = ""
 
         frm.lblInput.Text = label
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
-        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If frm.ShowDialog(parentForm) = Windows.Forms.DialogResult.OK Then
             s = frm.txtInput.Text
         End If
         frm.Close()
@@ -257,7 +257,7 @@ Public Class OceanArchetypeEditor
         Return s
     End Function
 
-    Public Function GetInput(ByVal label_1 As String, ByVal label_2 As String) As String()
+    Public Function GetInput(ByVal label_1 As String, ByVal label_2 As String, ByVal parentForm As Form) As String()
         Dim frm As New InputForm
         Dim s(1) As String
 
@@ -265,7 +265,7 @@ Public Class OceanArchetypeEditor
         frm.LblInput2.Text = label_2
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
-        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If frm.ShowDialog(parentForm) = Windows.Forms.DialogResult.OK Then
             s(0) = frm.txtInput.Text
             s(1) = frm.txtInput2.Text
             If s(1) = "" Then
@@ -277,7 +277,7 @@ Public Class OceanArchetypeEditor
         Return s
     End Function
 
-    Public Function GetInput(ByVal a_term As RmTerm) As String()
+    Public Function GetInput(ByVal a_term As RmTerm, ByVal parentForm As Form) As String()
         Dim frm As New InputForm
         Dim s(1) As String
 
@@ -288,7 +288,7 @@ Public Class OceanArchetypeEditor
         frm.txtInput.Text = a_term.Text
         frm.txtInput2.Text = a_term.Description
 
-        If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+        If frm.ShowDialog(parentForm) = Windows.Forms.DialogResult.OK Then
             s(0) = frm.txtInput.Text
             If s(0) <> "" Then
                 a_term.Text = s(0)

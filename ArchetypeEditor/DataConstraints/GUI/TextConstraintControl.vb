@@ -453,7 +453,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Dim s(1) As String
             s = OceanArchetypeEditor.Instance.GetInput( _
                 Filemanager.GetOpenEhrTerm(603, "Add new term"), _
-                AE_Constants.Instance.Description)
+                AE_Constants.Instance.Description, Me.ParentForm)
 
             If s(0) <> "" Then
                 Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(s(0), s(1))
@@ -484,7 +484,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         ElseIf Me.radioText.Checked Then
             Dim s As String
-            s = OceanArchetypeEditor.Instance.GetInput("Enter the new item:")
+            s = OceanArchetypeEditor.Instance.GetInput("Enter the new item:", Me.ParentForm)
 
             If s <> "" Then
                 Me.listAllowableValues.Items.Add(s)
@@ -920,7 +920,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             If Me.radioText.Checked Then
                 Dim ss As String
                 ss = Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex)
-                ss = OceanArchetypeEditor.Instance.GetInput(ss)
+                ss = OceanArchetypeEditor.Instance.GetInput(ss, Me.ParentForm)
                 If ss <> "" Then
                     Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex) = ss
                     Me.listAllowableValues.Items(Me.listAllowableValues.SelectedIndex) = ss
@@ -930,7 +930,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item(1)))
 
                 If Not t Is Nothing Then
-                    s = OceanArchetypeEditor.Instance.GetInput(t)
+                    s = OceanArchetypeEditor.Instance.GetInput(t, Me.ParentForm)
 
                     If s(0) <> "" Then
                         mFileManager.OntologyManager.SetText(t)
