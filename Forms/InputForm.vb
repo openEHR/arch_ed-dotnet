@@ -59,7 +59,7 @@ Public Class InputForm
     Friend WithEvents txtInput2 As System.Windows.Forms.TextBox
     Friend WithEvents LblInput2 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(InputForm))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(InputForm))
         Me.txtInput = New System.Windows.Forms.TextBox
         Me.lblInput = New System.Windows.Forms.Label
         Me.butOK = New System.Windows.Forms.Button
@@ -74,7 +74,6 @@ Public Class InputForm
         Me.txtInput.Name = "txtInput"
         Me.txtInput.Size = New System.Drawing.Size(421, 22)
         Me.txtInput.TabIndex = 0
-        Me.txtInput.Text = ""
         '
         'lblInput
         '
@@ -106,9 +105,8 @@ Public Class InputForm
         '
         Me.txtInput2.Location = New System.Drawing.Point(19, 128)
         Me.txtInput2.Name = "txtInput2"
-        Me.txtInput2.Size = New System.Drawing.Size(384, 22)
-        Me.txtInput2.TabIndex = 4
-        Me.txtInput2.Text = ""
+        Me.txtInput2.Size = New System.Drawing.Size(421, 22)
+        Me.txtInput2.TabIndex = 1
         Me.txtInput2.Visible = False
         '
         'LblInput2
@@ -125,7 +123,7 @@ Public Class InputForm
         Me.AcceptButton = Me.butOK
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(446, 102)
+        Me.ClientSize = New System.Drawing.Size(446, 105)
         Me.ControlBox = False
         Me.Controls.Add(Me.LblInput2)
         Me.Controls.Add(Me.txtInput2)
@@ -140,6 +138,7 @@ Public Class InputForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Input"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 

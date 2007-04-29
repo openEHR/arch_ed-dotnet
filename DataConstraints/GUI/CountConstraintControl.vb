@@ -454,7 +454,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Overridable Sub MaxValueChanged()
-        Constraint.MaximumValue = CLng(Me.numMaxValue.Value)
+        Constraint.MaximumValue = Convert.ToInt32(Me.numMaxValue.Value)
     End Sub
 
     Protected Sub numMaxValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMaxValue.TextChanged
@@ -481,7 +481,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Overridable Sub MinValueChanged()
-        Constraint.MinimumValue = CLng(Me.numMinValue.Value)
+        Constraint.MinimumValue = Convert.ToInt32(Me.numMinValue.Value)
     End Sub
 
     Protected Sub numMinValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.TextChanged
@@ -576,7 +576,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     Private Sub NumericAssumed_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericAssumed.ValueChanged, NumericAssumed.TextChanged
         If MyBase.IsLoading Then Return
 
-        Me.Constraint.AssumedValue = Me.NumericAssumed.Value
+        If Me.NumericAssumed.DecimalPlaces = 0 Then
+            Me.Constraint.AssumedValue = Me.NumericAssumed.Value
+        Else
+            Me.Constraint.AssumedValue = Convert.ToSingle(Me.NumericAssumed.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
+        End If
         Me.Constraint.HasAssumedValue = True
         mFileManager.FileEdited = True
     End Sub

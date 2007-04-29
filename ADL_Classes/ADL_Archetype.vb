@@ -1512,9 +1512,6 @@ Namespace ArchetypeEditor.ADL_Classes
                             openehr.base.kernel.Create.STRING.make_from_cil("activities"), _
                             MakeCardinality(New RmCardinality(0)))
 
-                        ' only one activity allowed at present
-                        Debug.Assert(rm.Children.Count < 2)
-
                         For Each activity As RmActivity In rm.Children
                             BuildActivity(activity, an_attribute)
                         Next
