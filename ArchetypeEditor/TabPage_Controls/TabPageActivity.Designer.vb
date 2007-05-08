@@ -67,6 +67,9 @@ Partial Class TabPageActivity
         Me.butOpenArchetype.Name = "butOpenArchetype"
         Me.butOpenArchetype.Size = New System.Drawing.Size(24, 24)
         Me.butOpenArchetype.TabIndex = 5
+        'JAR: 07MAY2007, EDT-28 Display tool tip
+        Dim openToolTip As New ToolTip
+        openToolTip.SetToolTip(butOpenArchetype, "View embedded archetype")
         '
         'lblNodeId
         '
@@ -92,6 +95,9 @@ Partial Class TabPageActivity
         Me.butGetAction.Size = New System.Drawing.Size(32, 24)
         Me.butGetAction.TabIndex = 2
         Me.butGetAction.Text = "..."
+        'JAR: 07MAY2007, EDT-28 Display tool tip
+        Dim selectToolTip As New ToolTip
+        selectToolTip.SetToolTip(butGetAction, "Browse for embedded archetype")
         '
         'txtAction
         '
