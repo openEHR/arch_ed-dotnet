@@ -119,7 +119,9 @@ Public Class TabPageActivity
             Dim ss As String
 
             ss = fd.FileName.Substring(fd.FileName.LastIndexOf("\") + s.Length + 2)
-            Me.txtAction.Text = ss.Substring(0, ss.LastIndexOf(".")).Replace(".", "\.")
+            'JAR: 07MAY2007, EDT-28 Display filename should match that when loaded (i.e. ArchetypeId)
+            'Me.txtAction.Text = ss.Substring(0, ss.LastIndexOf(".")).Replace(".", "\.")
+            Me.txtAction.Text = ss.Substring(0, ss.LastIndexOf("."))
         End If
     End Sub
 
@@ -187,9 +189,9 @@ Public Class TabPageActivity
 
             action_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & _
                 "\entry\action\" & action_name
-
+            
             If IO.File.Exists(action_name) Then
-                start_info.Arguments = action_name
+                start_info.Arguments = Chr(34) & action_name & Chr(34) 'JAR: 07MAY2007, EDT-28 File name is split on space characters
                 Process.Start(start_info)
             Else
                 MessageBox.Show(AE_Constants.Instance.Could_not_find & " '" & action_name & "'", _
