@@ -455,6 +455,15 @@ Public Class ArchetypeNodeConstraintControl
                 Me.PanelGenericConstraint.Visible = True
             End If
 
+            'JAR: 07MAY2007, EDT-34 Slot does not support details fields                        
+            If an_archetype_node.RM_Class.Type = StructureType.Slot Then
+                If tabConstraint.TabPages.Contains(tpConstraintDetails) Then
+                    tabConstraint.TabPages.Remove(tpConstraintDetails)      'Hide details tab if a Slot
+                End If
+            ElseIf Not tabConstraint.TabPages.Contains(tpConstraintDetails) Then
+                tabConstraint.TabPages.Add(tpConstraintDetails)         'Show details tab if not a slot
+            End If
+
             Select Case an_archetype_node.RM_Class.Type
                 Case StructureType.Element, StructureType.Reference
 
@@ -548,6 +557,7 @@ Public Class ArchetypeNodeConstraintControl
             End If
 
 
+
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
         End Try
@@ -567,6 +577,7 @@ Public Class ArchetypeNodeConstraintControl
         If mArchetypeNode.IsAnonymous Then
             Me.PanelNonAnonymous.Visible = False
             Me.gbTerminology.Visible = False
+
 
         Else
             Me.PanelNonAnonymous.Visible = True
