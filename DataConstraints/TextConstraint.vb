@@ -28,6 +28,7 @@ Public Class Constraint_Text
     Private mTextConstraintType As TextConstrainType
     Private cpTerms As New CodePhrase
     Private mAssumed_value As String
+    Private mTerminologyId As String
 
     Public Overrides Function Copy() As Constraint
         Dim t As New Constraint_Text
@@ -39,6 +40,7 @@ Public Class Constraint_Text
         t.boolFixed = Me.boolFixed
         t.HasAssumedValue = Me.HasAssumedValue
         t.mAssumed_value = Me.mAssumed_value
+        t.mTerminologyId = mTerminologyId
         Return t
     End Function
 
@@ -47,6 +49,7 @@ Public Class Constraint_Text
             Return ConstraintType.Text
         End Get
     End Property
+
     Public Overrides Property AssumedValue() As Object
         Get
             If HasAssumedValue Then
@@ -66,6 +69,19 @@ Public Class Constraint_Text
             If cpTerms.Codes.Contains(CStr(Value)) Then
                 mAssumed_value = CStr(Value)
             End If
+        End Set
+    End Property
+
+    Public Property AssumedValue_TerminologyId() As String
+        Get
+            If HasAssumedValue Then
+                Return mTerminologyId
+            Else
+                Return ""
+            End If
+        End Get
+        Set(ByVal value As String)
+            mTerminologyId = value
         End Set
     End Property
 

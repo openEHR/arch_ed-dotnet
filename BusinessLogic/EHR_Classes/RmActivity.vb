@@ -13,6 +13,8 @@
 '	last_change: "$LastChangedDate: 2005-11-15 11:02:20 +0930 (Tue, 15 Nov 2005) $"
 '
 '
+Option Strict On
+Option Explicit On
 
 Public Class RmActivity
     Inherits RmStructureCompound
@@ -97,8 +99,12 @@ Public Class RmActivity
             Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "action_archetype_id"
                     Dim obj As XMLParser.C_PRIMITIVE_OBJECT
-                    obj = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
-                    If obj.any_allowed Then
+                    obj = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)                    
+
+                    'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                    'If obj.any_allowed Then
+                    Dim primitiveObject As New C_PRIMITIVE_OBJECT_PROXY(obj)
+                    If primitiveobject.any_allowed Then                        
                         Me.ArchetypeId = "."
                     Else
                         Dim id As XMLParser.C_STRING = CType(obj.item, XMLParser.C_STRING)
@@ -116,7 +122,10 @@ Public Class RmActivity
                 Case "description"
                     Dim obj As XMLParser.C_OBJECT
                     obj = CType(an_attribute.children(0), XMLParser.C_OBJECT)
-                    If Not obj.any_allowed Then
+                    'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                    'If Not obj.any_allowed Then
+                    Dim cObject As New C_COMPLEX_OBJECT_PROXY(CType(obj, XMLParser.C_COMPLEX_OBJECT))
+                    If Not cObject.Any_Allowed Then
                         Select Case obj.GetType.ToString.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                             Case "xmlparser.archetype_slot"
                                 Me.Children.Add(New RmSlot(CType(obj, XMLParser.ARCHETYPE_SLOT)))

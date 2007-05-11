@@ -13,7 +13,7 @@
 '	last_change: "$LastChangedDate$"
 '
 '
-
+'Option Strict On
 Option Explicit On 
 
 Public Class FileManagerLocal
@@ -336,7 +336,8 @@ Public Class FileManagerLocal
         xml_parser.NewArchetype( _
                    mArchetypeEngine.Archetype.Archetype_ID.ToString, _
                    mOntologyManager.PrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
-        xml_parser.Archetype.concept_code = mArchetypeEngine.Archetype.ConceptCode
+        xml_parser.Archetype.concept = mArchetypeEngine.Archetype.ConceptCode
+        xml_parser.Archetype.definition.node_id = xml_parser.Archetype.concept 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
         Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(xml_parser)
 
@@ -346,15 +347,21 @@ Public Class FileManagerLocal
         End If
 
         If mOntologyManager.NumberOfSpecialisations > 0 Then
-            xml_parser.Archetype.parent_archetype_id = mArchetypeEngine.Archetype.ParentArchetype
+            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            'xml_parser.Archetype.parent_archetype_id = mArchetypeEngine.Archetype.ParentArchetype 
+            If xml_parser.Archetype.parent_archetype_id Is Nothing Then
+                xml_parser.Archetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
+            End If
+            xml_parser.Archetype.parent_archetype_id.value = mArchetypeEngine.Archetype.ParentArchetype
+
         End If
         'remove the concept code from ontology as will be set again
-        xml_parser.Archetype.ontology.term_defintions = Nothing
+        xml_parser.Archetype.ontology.term_definitions = Nothing 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
         'populate the ontology
-        xml_parser.Archetype.ontology.specialisation_depth = mOntologyManager.NumberOfSpecialisations.ToString
+        'xml_parser.Archetype.ontology.specialisation_depth = mOntologyManager.NumberOfSpecialisations.ToString 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1        
 
-        'term defintions
+        'term definitions
         xmlOntology.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable)
 
         'constraint definitions
@@ -373,9 +380,11 @@ Public Class FileManagerLocal
         ii = 0
 
         For Each row As DataRow In mOntologyManager.LanguagesTable.Rows
-            Dim language As String = row(0)
+            Dim language As String = CStr(row(0))
             Dim cp As New XMLParser.CODE_PHRASE
-            cp.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+            cp.terminology_id = New XMLParser.TERMINOLOGY_ID
+            cp.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
+            'cp.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
             cp.code_string = language
 
             'Add the translations
@@ -393,8 +402,16 @@ Public Class FileManagerLocal
             If archDetail.Copyright <> "" Then
                 xml_detail.copyright = archDetail.Copyright
             End If
-            xml_detail.misuse = archDetail.MisUse
-            xml_detail.original_resource_uri = archDetail.OriginalResourceURI
+            xml_detail.misuse = archDetail.MisUse            
+
+            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            'xml_detail.original_resource_uri = archDetail.OriginalResourceURI
+            If archDetail.OriginalResourceURI <> "" Then
+                Dim new_items(0) As XMLParser.StringDictionaryItem
+                new_items(0).Value = archDetail.OriginalResourceURI
+                xml_detail.original_resource_uri = new_items
+            End If
+
             xml_detail.purpose = archDetail.Purpose
             xml_detail.use = archDetail.Use
             If (Not archDetail.KeyWords Is Nothing) AndAlso archDetail.KeyWords.Count > 0 Then
@@ -432,7 +449,8 @@ Public Class FileManagerLocal
             mArchetypeEngine.Archetype.Archetype_ID, _
             mOntologyManager.PrimaryLanguageCode)
         adlParser.Archetype.ConceptCode = mArchetypeEngine.Archetype.ConceptCode
-        adlParser.Archetype.Definition.RootNodeId = mArchetypeEngine.Archetype.Definition.RootNodeId
+        'adlParser.Archetype.Definition.RootNodeId = mArchetypeEngine.Archetype.Definition.RootNodeId 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1        
+
         If mOntologyManager.NumberOfSpecialisations > 0 Then
             adlParser.Archetype.ParentArchetype = mArchetypeEngine.Archetype.ParentArchetype
         End If
@@ -441,16 +459,14 @@ Public Class FileManagerLocal
         adlParser.ADL_Parser.archetype.set_adl_version(openehr.base.kernel.Create.STRING.make_from_cil("1.4"))
 
         'populate the ontology
-   
+
         'languages - need translations and details for each language
         Dim translationsArray As New ArrayList
         Dim detailsArray As New ArrayList
 
         'First deal with the original language
-
-
         For Each dRow As DataRow In mOntologyManager.LanguagesTable.Rows
-            Dim language As String = dRow(0)
+            Dim language As String = CStr(dRow(0))
             If language <> mOntologyManager.PrimaryLanguageCode Then
                 Dim adlTranslationDetails As ADL_TranslationDetails = New ADL_TranslationDetails(Me.Archetype.TranslationDetails.Item(language))
                 translationsArray.Add(adlTranslationDetails.ADL_Translation)
@@ -481,7 +497,7 @@ Public Class FileManagerLocal
             detailsArray.Add(adl_detail)
 
         Next
-        'term defintions
+        'term definitions
         adlParser.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable, mOntologyManager.PrimaryLanguageCode)
 
         'constraint definitions
@@ -840,7 +856,7 @@ Class Filemanager
     Public Shared Property Master() As FileManagerLocal
         Get
             If mFileManagerCollection.Count > 0 Then
-                Return mFileManagerCollection(0)
+                Return CType(mFileManagerCollection(0), FileManagerLocal)
             Else
                 Return Nothing
             End If

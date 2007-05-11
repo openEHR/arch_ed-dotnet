@@ -561,7 +561,15 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 If an_ordinal_constraint.has_assumed_value Then
                     ord.HasAssumedValue = True
-                    ord.AssumedValue = CType(an_ordinal_constraint.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL).value
+                    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    Dim ordinal As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
+                    ordinal = CType(an_ordinal_constraint.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL)
+                    'ord.AssumedValue = CType(an_ordinal_constraint.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL).value
+                    ord.AssumedValue = ordinal.value
+                    If Not ordinal.symbol Is Nothing Then
+                        If Not ordinal.symbol.terminology_id Is Nothing Then ord.AssumedValue_TerminologyId = ordinal.symbol.terminology_id.value.to_cil()
+                        If Not ordinal.symbol.code_string Is Nothing Then ord.AssumedValue_CodeString = ordinal.symbol.code_string.to_cil()
+                    End If
                 End If
             End If
 
@@ -686,6 +694,15 @@ Namespace ArchetypeEditor.ADL_Classes
                                 If CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).has_assumed_value Then
                                     t.HasAssumedValue = True
                                     t.AssumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE).code_string.to_cil
+
+                                    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                    Dim assumedValue As openehr.openehr.rm.data_types.text.CODE_PHRASE
+                                    assumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE)
+                                    t.AssumedValue = assumedValue.code_string().to_cil()
+                                    If Not assumedValue.terminology_id Is Nothing Then
+                                        t.AssumedValue_TerminologyId = assumedValue.terminology_id.value.to_cil()
+                                    End If
+
                                 End If
 
                                 If t.AllowableValues.TerminologyID = "local" Then

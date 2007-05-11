@@ -23,6 +23,8 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
     Private mFixed As Boolean
     Private WithEvents mOrdinalTable As OrdinalTable
     Private mAssumedValue As Integer
+    Private mTerminologyId As String 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+    Private mCodeString As String 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
     Private mIsLoadingComplete As Boolean
     Private mLanguage As String
     Private mFileManager As FileManagerLocal
@@ -34,6 +36,10 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         ord.OrdinalValues.Copy(mOrdinalTable)
         ord.HasAssumedValue = Me.HasAssumedValue
         ord.AssumedValue = mAssumedValue
+
+        'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+        ord.AssumedValue_TerminologyId = mTerminologyId
+        ord.AssumedValue_CodeString = mCodeString
 
         ord.EndLoading()
 
@@ -66,6 +72,34 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
             HasAssumedValue = True
 
             OnAssumedValueChanged()
+        End Set
+    End Property
+
+    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+    Public Property AssumedValue_TerminologyId() As String 'Part of AssumedValue
+        Get
+            If HasAssumedValue Then
+                Return mTerminologyId
+            Else
+                Return ""
+            End If
+        End Get
+        Set(ByVal value As String)
+            mTerminologyId = value
+        End Set
+    End Property
+
+    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+    Public Property AssumedValue_CodeString() As String 'Part of AssumedValue 
+        Get
+            If HasAssumedValue Then
+                Return mCodeString
+            Else
+                Return ""
+            End If
+        End Get
+        Set(ByVal value As String)
+            mCodeString = value
         End Set
     End Property
 
@@ -144,7 +178,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
                 Dim ordinalValue As New OrdinalValue(e.Row)
                 'Debug.Assert(TypeOf e.Row(1) Is Long)
-                Debug.Assert(TypeOf Me.AssumedValue Is Integer)
+                'Debug.Assert(TypeOf Me.AssumedValue Is Integer)
 
                 'If CLng(e.Row(1)) = CLng(Me.Constraint.AssumedValue) Then
                 If ordinalValue.Ordinal = CInt(Me.AssumedValue) Then

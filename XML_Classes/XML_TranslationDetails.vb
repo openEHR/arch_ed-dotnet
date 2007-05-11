@@ -1,3 +1,6 @@
+'Option Strict On
+Option Explicit On
+
 Public Class XML_TranslationDetails
     Inherits TranslationDetails
 
@@ -16,14 +19,16 @@ Public Class XML_TranslationDetails
             Me.Language = value.language.code_string
             Me.Accreditation = value.accreditation
 
-            For Each di As XMLParser.dictionaryItem In value.author
-                Select Case di.key.ToLowerInvariant()
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'For Each di As XMLParser.dictionaryItem In value.author
+            For Each di As XMLParser.StringDictionaryItem In value.author
+                Select Case di.id.ToLowerInvariant()
                     Case "name"
-                        Me.AuthorName = di.value
+                        Me.AuthorName = di.Value
                     Case "email"
-                        Me.AuthorEmail = di.value
+                        Me.AuthorEmail = di.Value
                     Case "organisation"
-                        Me.AuthorOrganisation = di.value
+                        Me.AuthorOrganisation = di.Value
                     Case Else
                         Debug.Assert(False, "Irregular attribute")
                 End Select
@@ -32,7 +37,9 @@ Public Class XML_TranslationDetails
     End Property
 
     Private Sub SetAuthorValue(ByVal a_key As String, ByVal a_value As String)
-        Dim di As XMLParser.dictionaryItem
+        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+        'Dim di As XMLParser.dictionaryItem
+        Dim di As XMLParser.StringDictionaryItem
         Dim i As Integer
 
         If a_key.ToLowerInvariant = "name" And a_value = "" Then
@@ -42,8 +49,8 @@ Public Class XML_TranslationDetails
         If a_value <> "" Then
             If Not mXmlTranslation.author Is Nothing Then
                 For Each di In mXmlTranslation.author
-                    If di.key.ToLowerInvariant = a_key.ToLowerInvariant Then
-                        di.value = a_value
+                    If di.id.ToLowerInvariant = a_key.ToLowerInvariant Then
+                        di.Value = a_value
                         Return
                     End If
                 Next
@@ -51,12 +58,12 @@ Public Class XML_TranslationDetails
                 Array.Resize(mXmlTranslation.author, i + 1)
             Else
                 i = 0
-                mXmlTranslation.author = Array.CreateInstance(GetType(XMLParser.dictionaryItem), i + 1)
+                mXmlTranslation.author = Array.CreateInstance(GetType(XMLParser.StringDictionaryItem), i + 1)
             End If
 
-            di = New XMLParser.dictionaryItem
-            di.key = a_key
-            di.value = a_value
+            di = New XMLParser.StringDictionaryItem
+            di.id = a_key
+            di.Value = a_value
 
             mXmlTranslation.author(i) = di
         End If
@@ -66,7 +73,13 @@ Public Class XML_TranslationDetails
         Dim xmlCodePhrase As New XMLParser.CODE_PHRASE
 
         xmlCodePhrase.code_string = a_language
-        xmlCodePhrase.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+        'xmlCodePhrase.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+        If xmlCodePhrase.terminology_id Is Nothing Then
+            xmlCodePhrase.terminology_id = New XMLParser.TERMINOLOGY_ID
+        End If
+        xmlCodePhrase.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
+
 
         mXmlTranslation = New XMLParser.TRANSLATION_DETAILS
         mXmlTranslation.language = xmlCodePhrase
@@ -83,7 +96,12 @@ Public Class XML_TranslationDetails
         Dim xmlCodePhrase As New XMLParser.CODE_PHRASE
 
         xmlCodePhrase.code_string = a_translation.Language
-        xmlCodePhrase.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+        'xmlCodePhrase.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+        If xmlCodePhrase.terminology_id Is Nothing Then
+            xmlCodePhrase.terminology_id = New XMLParser.TERMINOLOGY_ID
+        End If
+        xmlCodePhrase.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
 
         mXmlTranslation = New XMLParser.TRANSLATION_DETAILS
         mXmlTranslation.language = xmlCodePhrase

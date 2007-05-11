@@ -13,7 +13,7 @@
 '	last_change: "$LastChangedDate$"
 '
 '
-
+Option Strict On
 Option Explicit On 
 
 Public Class RmTable : Inherits RmStructureCompound
@@ -74,7 +74,7 @@ Public Class RmTable : Inherits RmStructureCompound
         Dim i As Integer
 
         For i = 1 To ObjNode.attributes.count
-            an_attribute = ObjNode.attributes.i_th(i)
+            an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
             Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label"
                     mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -132,7 +132,8 @@ Public Class RmTable : Inherits RmStructureCompound
 
                     int = CType(CType(an_attribute.children(0), _
                             XMLParser.C_PRIMITIVE_OBJECT).item, XMLParser.C_INTEGER)
-                    mNumberKeyColumns = int.range.minimum ' lower or higher will get the number
+                    'mNumberKeyColumns = int.range.minimum ' lower or higher will get the number 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                    mNumberKeyColumns = int.range.lower ' lower or higher will get the number
 
                 Case "rows"
                     ProcessRows(an_attribute, a_filemanager)
