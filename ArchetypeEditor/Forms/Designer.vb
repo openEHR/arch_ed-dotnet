@@ -1990,7 +1990,7 @@ Public Class Designer
 
         mFileManager.FileEdited = False
         mFileManager.FileLoading = True
-
+        Dim watch As Stopwatch = Stopwatch.StartNew()
         If Not mFileManager.OpenArchetype(a_file_name) Then
             MessageBox.Show(mFileManager.Status, _
                 AE_Constants.Instance.MessageBoxCaption, _
@@ -2001,6 +2001,8 @@ Public Class Designer
             mFileManager.FileEdited = previousEditedState
             Exit Sub
         End If
+
+        Debug.WriteLine(a_file_name + ": " + CStr(watch.Elapsed.TotalSeconds))
 
         'Show the correct display format toolbars
         For i = 2 To 5
@@ -3949,11 +3951,11 @@ Public Class Designer
 
     Public Sub PrepareToSave() 'Called internally and by FileManager
         Dim STATE_processed As Boolean
-        Dim tp As Crownwood.Magic.Controls.TabPage
+        Dim tp As Crownwood.Magic.Controls.TabPage        
 
         ' Clear the definitions prior to rebuilding them
         mFileManager.Archetype.ResetDefinitions()
-        mFileManager.Archetype.Description = mTabPageDescription.Description
+        mFileManager.Archetype.Description = mTabPageDescription.Description        
         mFileManager.Archetype.TranslationDetails = mTabPageDescription.TranslationDetails
 
         If Me.ShowAsDraft Then
@@ -4234,7 +4236,6 @@ Public Class Designer
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
         End Select
-
     End Sub
 
 #End Region
@@ -4293,11 +4294,13 @@ Public Class Designer
             'command line variable has been set
             Dim archID As ArchetypeID = New ArchetypeID(ArchetypeToOpen.Substring(ArchetypeToOpen.LastIndexOf("\") + 1))
             ReferenceModel.SetModelType(archID.Reference_Model)
-            OpenArchetype(ArchetypeToOpen)
 
             'JAR: 12APR07, EDT23 Continue to display splash screen for another 1 second (accounts for overhead to load archetype)
-            System.Threading.Thread.Sleep(1000)
-            frmSplash.Hide()
+            'System.Threading.Thread.Sleep(1000)
+            frmSplash.Hide() 'Hide splash screen before open as open can display messagebox that will otherwise sit behind splash screen
+
+            OpenArchetype(ArchetypeToOpen)
+
             Me.Show()
 
             If Not mFileManager.ArchetypeAvailable Then

@@ -34,20 +34,26 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Protected ReferencesToResolve As ArrayList = New ArrayList
 
-
         Public Overrides Property ConceptCode() As String
             Get
                 Return adlArchetype.concept.to_cil
             End Get
             Set(ByVal Value As String)
                 adlArchetype.set_concept(openehr.base.kernel.Create.STRING.make_from_cil(Value))
+                adlArchetype.definition.set_object_id(adlArchetype.concept) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+
+                System.Diagnostics.Debug.Assert(Me.ConceptCode = Value)
+                System.Diagnostics.Debug.Assert(adlEngine.archetype.concept.to_cil = Value)
+                System.Diagnostics.Debug.Assert(adlArchetype.definition.node_id.to_cil = Value)
             End Set
         End Property
+
         Public Overrides ReadOnly Property ArchetypeAvailable() As Boolean
             Get
                 Return adlEngine.archetype_available
             End Get
         End Property
+
         Public Overrides Property Archetype_ID() As ArchetypeID
             Get
                 Try
@@ -176,8 +182,10 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim match_operator As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR
 
             Debug.Assert((Not id Is Nothing) And (id <> ""))
+            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            'id_expression_leaf = mAomFactory.create.create_expr_leaf_object_ref(openehr.base.kernel.Create.STRING.make_from_cil(id))
+            id_expression_leaf = mAomFactory.create_expr_leaf_archetype_ref(openehr.base.kernel.Create.STRING.make_from_cil(id))
 
-            id_expression_leaf = mAomFactory.create_expr_leaf_object_ref(openehr.base.kernel.Create.STRING.make_from_cil(id))
             id_pattern_expression_leaf = mAomFactory.create_expr_leaf_constraint(mAomFactory.create_c_string_make_from_regexp(openehr.base.kernel.Create.STRING.make_from_cil(expression)))
             match_operator = mAomFactory.create_expr_binary_operator_node( _
                 openehr.openehr.am.archetype.assertion.Create.OPERATOR_KIND.make_from_string( _
@@ -1741,12 +1749,15 @@ Namespace ArchetypeEditor.ADL_Classes
             ' make the new archetype
 
             Dim id As openehr.openehr.rm.support.identification.ARCHETYPE_ID
-            id = openehr.openehr.rm.support.identification.Create.ARCHETYPE_ID.make_from_string(openehr.base.kernel.Create.STRING.make_from_cil(an_ArchetypeID.ToString))
+            id = openehr.openehr.rm.support.identification.Create.ARCHETYPE_ID.make_from_string( _
+                openehr.base.kernel.Create.STRING.make_from_cil(an_ArchetypeID.ToString))
             Try
-                adlEngine.create_new_archetype(id.rm_originator, id.rm_name, id.rm_entity, openehr.base.kernel.Create.STRING.make_from_cil(sPrimaryLanguageCode))
+                adlEngine.create_new_archetype(id.rm_originator, id.rm_name, id.rm_entity, _
+                    openehr.base.kernel.Create.STRING.make_from_cil(sPrimaryLanguageCode))
                 adlArchetype = adlEngine.archetype
-                adlArchetype.set_archetype_id(id)
+                adlArchetype.set_archetype_id(id)                
                 adlArchetype.definition.set_object_id(adlArchetype.concept)
+
             Catch
                 Debug.Assert(False)
                 ''FIXME raise error
@@ -1783,6 +1794,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Select Case mArchetypeID.ReferenceModelEntity
                 Case StructureType.COMPOSITION
                     cDefinition = New ADL_COMPOSITION(an_Archetype.definition, a_filemanager)
+                    cDefinition.RootNodeId = adlArchetype.concept.to_cil 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 Case StructureType.SECTION
                     cDefinition = New ADL_SECTION(an_Archetype.definition, a_filemanager)
                 Case StructureType.List, StructureType.Tree, StructureType.Single
@@ -1791,6 +1803,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     cDefinition = New RmTable(an_Archetype.definition, a_filemanager)
                 Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
                     cDefinition = New ADL_ENTRY(an_Archetype.definition, a_filemanager)
+                    cDefinition.RootNodeId = adlArchetype.concept.to_cil 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 Case StructureType.Cluster
                     cDefinition = New RmCluster(an_Archetype.definition, a_filemanager)
                 Case StructureType.Element

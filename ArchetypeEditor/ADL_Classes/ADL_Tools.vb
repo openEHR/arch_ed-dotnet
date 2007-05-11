@@ -52,6 +52,21 @@ Namespace ArchetypeEditor.ADL_Classes
             colChildren.Cardinality.Ordered = cadlCardinality.is_ordered
         End Sub
 
+        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+        Public Shared Sub SetExistence(ByVal cadlExistence As openehr.common_libs.basic.OE_INTERVAL_INTEGER_32, ByVal colChildren As Children)
+            Dim existence As New RmExistence
+
+            If cadlExistence.upper_unbounded Then
+                existence.IsUnbounded = True
+            Else
+                existence.MaxCount = cadlExistence.upper
+            End If
+            If Not cadlExistence.lower_unbounded Then
+                existence.MinCount = cadlExistence.lower
+            End If
+            colChildren.Existence = existence
+        End Sub
+
         Public Shared Function ProcessCodes(ByVal Constraint As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE) As CodePhrase
             Dim cp As New CodePhrase
 

@@ -13,7 +13,7 @@
 '	last_change: "$LastChangedDate: 2006-05-17 18:54:30 +0930 (Wed, 17 May 2006) $"
 '
 '
-
+'option Strict On 
 Option Explicit On 
 
 Namespace ArchetypeEditor.XML_Classes
@@ -39,36 +39,39 @@ Namespace ArchetypeEditor.XML_Classes
 
             Dim authorDetails As New ArrayList
 
-            Dim di As New XMLParser.dictionaryItem
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'Dim di As New XMLParser.dictionaryItem
+            Dim di As New XMLParser.StringDictionaryItem
 
-            di.key = "name"
+            'di.key = "name"
+            di.id = "name"
             If (Not Me.OriginalAuthor Is Nothing) Then
                 di.value = Me.mOriginalAuthor.Replace("""", "'")
             End If
             authorDetails.Add(di)
 
             If Me.mOriginalAuthorEmail <> "" Then
-                di = New XMLParser.dictionaryItem
-                di.key = "email"
+                di = New XMLParser.StringDictionaryItem
+                di.id = "email"
                 di.value = Me.mOriginalAuthorEmail.Replace("""", "'")
                 authorDetails.Add(di)
             End If
 
             If Me.mOriginalAuthorDate <> "" Then
-                di = New XMLParser.dictionaryItem
-                di.key = "date"
+                di = New XMLParser.StringDictionaryItem
+                di.id = "date"
                 di.value = Me.mOriginalAuthorDate.Replace("""", "'")
                 authorDetails.Add(di)
             End If
 
             If Me.mOriginalAuthorOrganisation <> "" Then
-                di = New XMLParser.dictionaryItem
-                di.key = "organisation"
+                di = New XMLParser.StringDictionaryItem
+                di.id = "organisation"
                 di.value = Me.mOriginalAuthorOrganisation.Replace("""", "'")
                 authorDetails.Add(di)
             End If
 
-            mXML_Description.original_author = authorDetails.ToArray(GetType(XMLParser.dictionaryItem))
+            mXML_Description.original_author = authorDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
 
             mXML_Description.lifecycle_state = Me.LifeCycleStateAsString.Replace("""", "'")
 
@@ -108,16 +111,16 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             If Not mXML_Description.original_author Is Nothing Then
-                For Each di As XMLParser.dictionaryItem In mXML_Description.original_author
-                    Select Case di.key.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                For Each di As XMLParser.StringDictionaryItem In mXML_Description.original_author 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                    Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "name"
-                            mOriginalAuthor = di.value
+                            mOriginalAuthor = di.Value
                         Case "email"
-                            mOriginalAuthorEmail = di.value
+                            mOriginalAuthorEmail = di.Value
                         Case "date"
-                            mOriginalAuthorDate = di.value
+                            mOriginalAuthorDate = di.Value
                         Case "organisation"
-                            mOriginalAuthorOrganisation = di.value
+                            mOriginalAuthorOrganisation = di.Value
                     End Select
                 Next
             End If

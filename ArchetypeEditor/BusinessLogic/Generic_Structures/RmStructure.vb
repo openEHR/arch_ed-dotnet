@@ -61,6 +61,7 @@ Public Class RmStructure
     '  maps to C_OBJECT in ADL
     Protected sNodeId As String
     Protected cOccurrences As New RmCardinality
+    Protected cExistence As New RmExistence 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
     Protected mRunTimeConstraint As Constraint_Text
     Protected mType As StructureType
 
@@ -108,6 +109,15 @@ Public Class RmStructure
         End Get
         Set(ByVal Value As RmCardinality)
             cOccurrences = Value
+        End Set
+    End Property
+
+    Public Property Existence() As RmExistence 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+        Get
+            Return cExistence
+        End Get
+        Set(ByVal Value As RmExistence)
+            cExistence = Value
         End Set
     End Property
 

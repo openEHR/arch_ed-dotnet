@@ -24,38 +24,42 @@ Namespace ArchetypeEditor.XML_Classes
         Sub New(ByVal Definition As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
             MyBase.New()
 
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+            Try
+                Dim an_attribute As XMLParser.C_ATTRIBUTE
 
-            ' set the root node id - usually the same as the concept
-            mNodeID = Definition.node_id
+                ' set the root node id - usually the same as the concept
+                mNodeID = Definition.node_id
 
-            For Each an_attribute In Definition.attributes
-                Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                    Case "category"
-                        Dim t As Constraint_Text
-                        t = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(an_attribute.children(0))
-                        If t.AllowableValues.hasCode("431") Then
-                            'isPersistent defaults to false (openehr::433) for event
-                            mIsPersistent = True
-                        End If
-                    Case "context"
-                        Dim complexObj As XMLParser.C_COMPLEX_OBJECT
-                        complexObj = an_attribute.children(0)
-                        For Each context_attribute As XMLParser.C_ATTRIBUTE In complexObj.attributes
-                            If context_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "other_context" Then
-                                mChildren.Add(New RmStructureCompound(CType(context_attribute.children(0), XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                For Each an_attribute In Definition.attributes
+                    Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                        Case "category"
+                            Dim t As Constraint_Text
+                            t = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(an_attribute.children(0))
+                            If t.AllowableValues.hasCode("431") Then
+                                'isPersistent defaults to false (openehr::433) for event
+                                mIsPersistent = True
                             End If
-                        Next
-                    Case "content"
-                        ' a set of slots constraining what sections can be added
-                        Dim section As RmSection = New RmSection("root")
+                        Case "context"
+                            Dim complexObj As XMLParser.C_COMPLEX_OBJECT
+                            complexObj = an_attribute.children(0)
+                            For Each context_attribute As XMLParser.C_ATTRIBUTE In complexObj.attributes
+                                If context_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "other_context" Then
+                                    mChildren.Add(New RmStructureCompound(CType(context_attribute.children(0), XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                                End If
+                            Next
+                        Case "content"
+                            ' a set of slots constraining what sections can be added
+                            Dim section As RmSection = New RmSection("root")
 
-                        For i As Integer = 0 To an_attribute.children.Length - 1
-                            section.Children.Add(New RmSlot(CType(an_attribute.children(i), XMLParser.ARCHETYPE_SLOT)))
-                        Next
-                        mChildren.Add(section)
-                End Select
-            Next
+                            For i As Integer = 0 To an_attribute.children.Length - 1
+                                section.Children.Add(New RmSlot(CType(an_attribute.children(i), XMLParser.ARCHETYPE_SLOT)))
+                            Next
+                            mChildren.Add(section)
+                    End Select
+                Next
+            Catch ex As Exception
+                Debug.Assert(True)
+            End Try
         End Sub
 
     End Class

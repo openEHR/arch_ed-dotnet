@@ -13,8 +13,9 @@
 '	last_change: "$LastChangedDate: 2006-05-17 18:54:30 +0930 (Wed, 17 May 2006) $"
 '
 '
-
+Option Strict On
 Option Explicit On 
+
 Namespace ArchetypeEditor.XML_Classes
     Friend Class XML_Ontology
         Inherits Ontology
@@ -31,9 +32,11 @@ Namespace ArchetypeEditor.XML_Classes
                 Return sLanguageCode
             End Get
         End Property
+
         Public Overrides ReadOnly Property NumberOfSpecialisations() As Integer
             Get
-                Return archetypeParser.Archetype.ontology.specialisation_depth
+                'Return archetypeParser.Archetype.ontology.specialisation_depth 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                Return archetypeParser.Ontology.NumberOfSpecialisations                
             End Get
         End Property
 
@@ -282,11 +285,10 @@ Namespace ArchetypeEditor.XML_Classes
             Next
         End Sub
 
-
         Public Sub AddTermBindingsFromTable(ByVal a_termBinding_table As System.Data.DataTable)
             Dim data_row As System.Data.DataRow
             For Each data_row In a_termBinding_table.Rows
-                '                         terminology id        code                path
+                '                                                terminology id        code                path
                 archetypeParser.Ontology.AddOrReplaceTermBinding(CStr(data_row(2)), CStr(data_row(1)), CStr(data_row(0)))
             Next
         End Sub
@@ -310,7 +312,7 @@ Namespace ArchetypeEditor.XML_Classes
 
         Public Overrides Sub ReplaceConstraint(ByVal a_term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
 
-            If a_Term.isConstraint Then
+            If a_term.isConstraint Then
 
                 Try
                     Dim xmlTerm As New XML_Term(a_term)
@@ -324,7 +326,7 @@ Namespace ArchetypeEditor.XML_Classes
                     Debug.Assert(False, e.Message)
                 End Try
             Else
-                Debug.Assert(False, "Code is not a constraint code: " & a_Term.Code)
+                Debug.Assert(False, "Code is not a constraint code: " & a_term.Code)
             End If
         End Sub
 
@@ -356,24 +358,27 @@ Namespace ArchetypeEditor.XML_Classes
         Private Sub populate_term_definitions(ByRef TheOntologyManager As OntologyManager, Optional ByVal LanguageCode As String = "")
             ' populate the TermDefinitions table in TermLookUp
 
-            If archetypeParser.Archetype.ontology.term_defintions.Length > 0 Then
+            If archetypeParser.Archetype.ontology.term_definitions.Length > 0 Then
                 Dim d_row As DataRow
                 Dim a_term As XML_Classes.XML_Term
 
-                For Each td As XMLParser.language_set In archetypeParser.Archetype.ontology.term_defintions
+                For Each td As XMLParser.CodeDefinitionSet In archetypeParser.Archetype.ontology.term_definitions
                     If LanguageCode = "" Or td.language = LanguageCode Then
                         ' set the term for all languages
-                        For Each termDef As XMLParser.ARCHETYPE_TERM In td.terms
-                            a_term = New XML_Classes.XML_Term(termDef)
-                            d_row = TheOntologyManager.TermDefinitionTable.NewRow
-                            d_row(0) = td.language
-                            d_row(1) = a_term.Code
-                            d_row(2) = a_term.Text
-                            d_row(3) = a_term.Description
-                            d_row(4) = a_term.Comment
-                            ' add it to the GUI ontology
-                            TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
-                        Next
+                        'If Not td Is Nothing Then
+                        If Not td Is Nothing AndAlso (Not td.items Is Nothing) AndAlso (td.items.Length > 0) Then 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                            For Each termDef As XMLParser.ARCHETYPE_TERM In td.items
+                                a_term = New XML_Classes.XML_Term(termDef)
+                                d_row = TheOntologyManager.TermDefinitionTable.NewRow
+                                d_row(0) = td.language
+                                d_row(1) = a_term.Code
+                                d_row(2) = a_term.Text
+                                d_row(3) = a_term.Description
+                                d_row(4) = a_term.Comment
+                                ' add it to the GUI ontology
+                                TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
+                            Next
+                        End If
                     End If
                 Next
             End If
@@ -382,43 +387,56 @@ Namespace ArchetypeEditor.XML_Classes
         Private Sub populate_term_bindings(ByRef TheOntologyManager As OntologyManager)
             ' populate the TermBindings table in TermLookUp
 
-            If (Not archetypeParser.Archetype.ontology.term_bindings Is Nothing) AndAlso archetypeParser.Archetype.ontology.term_bindings.Length > 0 Then
-                Dim d_row, selected_row As DataRow
-                Dim terminology As String
+            Try
 
-                For Each selected_row In TheOntologyManager.TerminologiesTable.Rows
-                    terminology = CStr(selected_row(0))
-                    If archetypeParser.Ontology.TerminologyAvailable(terminology) Then
-                        Dim ts As XMLParser.terminology_set = archetypeParser.Ontology.GetBindings(terminology, archetypeParser.Archetype.ontology.term_bindings)
-                        'Can have terminologies which do not have bindings
-                        If Not ts Is Nothing Then
-                            Dim tab As DataTable = TheOntologyManager.TermBindingsTable
-                            For Each bind As XMLParser.binding In ts.bindings
-                                d_row = tab.NewRow
-                                d_row(0) = selected_row(0)
-                                d_row(1) = bind.code
-                                d_row(2) = bind.value
-                                tab.Rows.Add(d_row)
-                            Next
+                If (Not archetypeParser.Archetype.ontology.term_bindings Is Nothing) AndAlso archetypeParser.Archetype.ontology.term_bindings.Length > 0 Then
+                    Dim d_row, selected_row As DataRow
+                    Dim terminology As String
+
+                    For Each selected_row In TheOntologyManager.TerminologiesTable.Rows
+                        terminology = CStr(selected_row(0))
+                        If archetypeParser.Ontology.TerminologyAvailable(terminology) Then
+                            Dim ts As XMLParser.TermBindingSet = archetypeParser.Ontology.GetBindings(terminology, archetypeParser.Archetype.ontology.term_bindings)
+                            'Can have terminologies which do not have bindings
+                            'If Not ts Is Nothing Then
+                            If Not ts Is Nothing AndAlso (Not ts.items Is Nothing) AndAlso (ts.items.Length > 0) Then 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                                Dim tab As DataTable = TheOntologyManager.TermBindingsTable
+                                For Each bind As XMLParser.TERM_BINDING_ITEM In ts.items
+                                    d_row = tab.NewRow
+                                    d_row(0) = selected_row(0)
+                                    d_row(1) = bind.code
+                                    'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                                    'd_row(2) = bind.value.code_string 
+                                    If Not bind.value Is Nothing Then
+                                        If Not bind.value.terminology_id Is Nothing Then
+                                            d_row(2) = bind.value.terminology_id.value
+                                        End If
+                                    End If
+                                    tab.Rows.Add(d_row)
+                                Next
+                            End If
                         End If
-                    End If
-                Next
-            End If
+                    Next
+                End If
+            Catch ex As Exception 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                Debug.Assert(False, ex.Message)
+            End Try
         End Sub
 
         Private Sub populate_constraint_definitions(ByRef TheOntologyManager As OntologyManager, Optional ByVal LanguageCode As String = "")
             ' populate the ConstraintDefinitions table in TermLookUp
 
 
-            If (Not archetypeParser.Archetype.ontology.constraint_defintions Is Nothing) AndAlso archetypeParser.Archetype.ontology.constraint_defintions.Length > 0 Then
+            If (Not archetypeParser.Archetype.ontology.constraint_definitions Is Nothing) AndAlso archetypeParser.Archetype.ontology.constraint_definitions.Length > 0 Then
                 Dim d_row As DataRow
                 Dim a_term As XML_Classes.XML_Term
 
-                For Each td As XMLParser.language_set In archetypeParser.Archetype.ontology.constraint_defintions
+                For Each td As XMLParser.CodeDefinitionSet In archetypeParser.Archetype.ontology.constraint_definitions
                     If LanguageCode = "" Or td.language = LanguageCode Then
                         ' set the term for all languages
-                        If Not td.terms Is Nothing Then
-                            For Each termDef As XMLParser.ARCHETYPE_TERM In td.terms
+                        'If Not td.items Is Nothing Then
+                        If Not td Is Nothing AndAlso (Not td.items Is Nothing) AndAlso (td.items.Length > 0) Then 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                            For Each termDef As XMLParser.ARCHETYPE_TERM In td.items
                                 a_term = New XML_Classes.XML_Term(termDef)
                                 d_row = TheOntologyManager.ConstraintDefinitionTable.NewRow
                                 d_row(0) = td.language
@@ -428,7 +446,7 @@ Namespace ArchetypeEditor.XML_Classes
                                 ' add it to the GUI ontology
                                 TheOntologyManager.ConstraintDefinitionTable.Rows.Add(d_row)
                             Next
-                        Else
+                        Else 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
                             Debug.Assert(False, "Constraint definitions exist but no terms")
                         End If
                     End If
@@ -438,9 +456,9 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Function OntologyConstraintCodes() As ArrayList
             Dim result As New ArrayList
-            If Not archetypeParser.Archetype.ontology.constraint_defintions Is Nothing Then
-                Dim ls As XMLParser.language_set = archetypeParser.Archetype.ontology.constraint_defintions(0)
-                For Each t As XMLParser.ARCHETYPE_TERM In ls.terms
+            If Not archetypeParser.Archetype.ontology.constraint_definitions Is Nothing Then
+                Dim ls As XMLParser.CodeDefinitionSet = archetypeParser.Archetype.ontology.constraint_definitions(0)
+                For Each t As XMLParser.ARCHETYPE_TERM In ls.items
                     result.Add(t.code)
                 Next
             End If
@@ -450,9 +468,9 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Function OntologyTermCodes() As ArrayList
             Dim result As New ArrayList
-            If Not archetypeParser.Archetype.ontology.term_defintions Is Nothing Then
-                Dim ls As XMLParser.language_set = archetypeParser.Archetype.ontology.term_defintions(0)
-                For Each t As XMLParser.ARCHETYPE_TERM In ls.terms
+            If Not archetypeParser.Archetype.ontology.term_definitions Is Nothing Then
+                Dim ls As XMLParser.CodeDefinitionSet = archetypeParser.Archetype.ontology.term_definitions(0)
+                For Each t As XMLParser.ARCHETYPE_TERM In ls.items
                     result.Add(t.code)
                 Next
             End If
@@ -470,10 +488,11 @@ Namespace ArchetypeEditor.XML_Classes
                 For Each selected_row In TheOntologyManager.TerminologiesTable.Rows
                     terminology = CStr(selected_row(0))
                     If archetypeParser.Ontology.TerminologyAvailable(terminology) Then
-                        Dim ts As XMLParser.terminology_set = archetypeParser.Ontology.GetBindings(terminology, archetypeParser.Archetype.ontology.constraint_bindings)
+                        'Dim ts As XMLParser.terminology_set = archetypeParser.Ontology.GetBindings(terminology, archetypeParser.Archetype.ontology.constraint_bindings) 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                        Dim ts As XMLParser.ConstraintBindingSet = archetypeParser.Ontology.GetBindings(terminology, archetypeParser.Archetype.ontology.constraint_bindings)
                         'can have no bindings so
-                        If Not ts Is Nothing AndAlso (Not ts.bindings Is Nothing) AndAlso (ts.bindings.Length > 0) Then
-                            For Each bind As XMLParser.binding In ts.bindings
+                        If Not ts Is Nothing AndAlso (Not ts.items Is Nothing) AndAlso (ts.items.Length > 0) Then
+                            For Each bind As XMLParser.CONSTRAINT_BINDING_ITEM In ts.items 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
                                 d_row = TheOntologyManager.ConstraintBindingsTable.NewRow
                                 d_row(0) = selected_row(0)
                                 d_row(1) = bind.code  'AC code
@@ -492,15 +511,20 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Public Overrides Sub PopulateAllTerms(ByRef TheOntologyManager As OntologyManager)
-            If archetypeParser.ArchetypeAvailable Then
-                populate_languages(TheOntologyManager)
-                populate_terminologies(TheOntologyManager)
-                populate_term_definitions(TheOntologyManager)
-                populate_term_bindings(TheOntologyManager)
-                populate_constraint_definitions(TheOntologyManager)
-                populate_constraint_bindings(TheOntologyManager)
-            End If
+            Try
+                If archetypeParser.ArchetypeAvailable Then
+                    populate_languages(TheOntologyManager)
+                    populate_terminologies(TheOntologyManager)
+                    populate_term_definitions(TheOntologyManager)
+                    populate_term_bindings(TheOntologyManager)
+                    populate_constraint_definitions(TheOntologyManager)
+                    populate_constraint_bindings(TheOntologyManager)
+                End If
 
+
+            Catch ex As Exception
+                Debug.Assert(False, ex.Message)
+            End Try
         End Sub
 
         Sub New(ByRef an_xml_parser As XMLParser.XmlArchetypeParser, Optional ByVal Replace As Boolean = False)

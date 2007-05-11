@@ -13,8 +13,9 @@
 '	last_change: "$LastChangedDate: 2006-05-17 18:54:30 +0930 (Wed, 17 May 2006) $"
 '
 '
-
 Option Strict On
+Option Explicit On
+
 Namespace ArchetypeEditor.XML_Classes
 
     Class XML_Term
@@ -31,10 +32,13 @@ Namespace ArchetypeEditor.XML_Classes
                 Return a_Xml_Term
             End Get
         End Property
+
         Private Function getItem(ByVal key As String) As String
-            For Each di As XMLParser.dictionaryItem In a_Xml_Term.items
-                If di.key = key Then
-                    Return di.value
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'For Each di As XMLParser.dictionaryItem In a_Xml_Term.items
+            For Each di As XMLParser.StringDictionaryItem In a_Xml_Term.items
+                If di.id = key Then
+                    Return di.Value
                 End If
             Next
             Return ""
@@ -43,14 +47,16 @@ Namespace ArchetypeEditor.XML_Classes
         Private Sub setItem(ByVal Item As String, ByVal Value As String)
             Dim i As Integer
 
-            Dim new_items() As XMLParser.dictionaryItem
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'Dim new_items() As XMLParser.dictionaryItem
+            Dim new_items() As XMLParser.StringDictionaryItem
 
             If Not a_Xml_Term.items Is Nothing Then
 
                 ' set the value of the item
-                For Each di As XMLParser.dictionaryItem In a_Xml_Term.items
-                    If di.key = Item Then
-                        di.value = Value
+                For Each di As XMLParser.StringDictionaryItem In a_Xml_Term.items
+                    If di.id = Item Then
+                        di.Value = Value
                         Return  'and return if it is found
                     End If
                 Next
@@ -60,12 +66,14 @@ Namespace ArchetypeEditor.XML_Classes
                 Array.Resize(new_items, i + 1)
 
             Else
-                new_items = CType(Array.CreateInstance(GetType(XMLParser.dictionaryItem), 1), XMLParser.dictionaryItem())
+                new_items = CType(Array.CreateInstance(GetType(XMLParser.StringDictionaryItem), 1), XMLParser.StringDictionaryItem())
                 i = 0
             End If
 
-            Dim new_di As New XMLParser.dictionaryItem()
-            new_di.key = Item
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'Dim new_di As New XMLParser.dictionaryItem()
+            Dim new_di As New XMLParser.StringDictionaryItem()
+            new_di.id = Item
             new_di.value = Value
             new_items(i) = new_di
 
@@ -85,9 +93,12 @@ Namespace ArchetypeEditor.XML_Classes
             sDescription = a_Term.Description
             sComment = a_Term.Comment
             a_Xml_Term = New XMLParser.ARCHETYPE_TERM()
-            a_Xml_Term.items = CType(Array.CreateInstance(GetType(XMLParser.dictionaryItem), 1), XMLParser.dictionaryItem())
-            a_Xml_Term.items(0) = New XMLParser.dictionaryItem
-            a_Xml_Term.items(0).key = "text"
+
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'a_Xml_Term.items = CType(Array.CreateInstance(GetType(XMLParser.dictionaryItem), 1), XMLParser.dictionaryItem())
+            a_Xml_Term.items = CType(Array.CreateInstance(GetType(XMLParser.StringDictionaryItem), 1), XMLParser.StringDictionaryItem())
+            a_Xml_Term.items(0) = New XMLParser.StringDictionaryItem
+            a_Xml_Term.items(0).id = "text"
             'a_Xml_Term.items(1) = New XMLParser.dictionaryItem
             'a_Xml_Term.items(1).key = "description"
             'a_Xml_Term.items(2) = New XMLParser.dictionaryItem

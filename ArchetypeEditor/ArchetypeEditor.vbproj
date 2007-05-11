@@ -291,7 +291,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="XMLParser.dll" />
+    <Content Include="XMLParser.dll" />
     <Compile Include="ADL_Classes\ADL_Archetype.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -324,6 +324,7 @@
     </Compile>
     <Compile Include="ADL_Classes\ADL_TranslationDetails.vb" />
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="BusinessLogic\Proxy.vb" />
     <Compile Include="BusinessLogic\Duration.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -433,6 +434,7 @@
     <Compile Include="BusinessLogic\RmCardinality.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BusinessLogic\RmExistence.vb" />
     <Compile Include="DataConstraintsView\ArchetypeView.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -971,11 +973,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="Archetype.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BaseTypes.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="My Project\Settings.settings">
       <CustomToolNamespace>My</CustomToolNamespace>
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <Content Include="OpenehrProfile.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Web References\ArchetypeFinderWebServiceURL\ArchetypeFinderBean.wsdl" />
     <None Include="Web References\ArchetypeFinderWebServiceURL\Reference.map" />
   </ItemGroup>

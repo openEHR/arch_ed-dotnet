@@ -13,8 +13,9 @@
 '	last_change: "$LastChangedDate: 2006-05-17 18:54:30 +0930 (Wed, 17 May 2006) $"
 '
 '
-
 Option Strict On
+Option Explicit On
+
 Namespace ArchetypeEditor.XML_Classes
     Public Class XML_RmElement
         Inherits RmElement
@@ -46,7 +47,10 @@ Namespace ArchetypeEditor.XML_Classes
                         End If
                     Next
                 Else
-                    If ComplexObj.any_allowed Then
+                    'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                    'If ComplexObj.any_allowed Then
+                    Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ComplexObj)
+                    If complexObject.Any_Allowed Then
                         'This is an unknown and is available for specialisation
                         cConstraint = New Constraint
                         Return
@@ -60,7 +64,7 @@ Namespace ArchetypeEditor.XML_Classes
                     Return
                 End If
 
-            Catch ex As Exception
+            Catch ex As Exception                
                 MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ComplexObj.node_id & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 ' set to any
                 cConstraint = New Constraint
@@ -159,7 +163,10 @@ Namespace ArchetypeEditor.XML_Classes
             Dim mm As New Constraint_MultiMedia
             Dim media_type As XMLParser.C_ATTRIBUTE
 
-            If ObjNode.any_allowed Then
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If ObjNode.any_allowed Then
+            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
+            If complexObject.Any_Allowed Then
                 Return mm
             End If
 
@@ -182,71 +189,82 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         Private Function ProcessValue(ByVal ObjNode As XMLParser.C_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint
+            Try
 
-            Select Case ObjNode.rm_type_name.ToLowerInvariant()
-                Case "dv_quantity", "quantity"
-                    'For backward compatibility
-                    If TypeOf (ObjNode) Is XMLParser.C_DV_QUANTITY Then
+                Select Case ObjNode.rm_type_name.ToLowerInvariant()
+                    Case "dv_quantity", "quantity"
+                        'For backward compatibility
+                        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                        'If TypeOf (ObjNode) Is XMLParser.C_DV_QUANTITY Then
                         Return ProcessQuantity(CType(ObjNode, XMLParser.C_DV_QUANTITY))
-                    Else
-                        Return ProcessQuantity(CType(ObjNode, XMLParser.C_QUANTITY))
-                    End If
-                Case "dv_coded_text", "dv_text", "coded_text", "text"
-                    Return ProcessText(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                Case "dv_boolean", "boolean"
-                    If TypeOf (ObjNode) Is XMLParser.C_COMPLEX_OBJECT Then
-                        Return ProcessBoolean(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Else
-                        'obsolete
-                        Return ProcessBoolean(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
-                    End If
-                Case "c_dv_ordinal", "ordinal", "c_ordinal"
-                    If TypeOf (ObjNode) Is XMLParser.C_DV_ORDINAL Then
+                        'Else
+                        '    Return ProcessQuantity(CType(ObjNode, XMLParser.C_QUANTITY))
+                        'End If
+                    Case "dv_coded_text", "dv_text", "coded_text", "text"
+                        Return ProcessText(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                    Case "dv_boolean", "boolean"
+                        If TypeOf (ObjNode) Is XMLParser.C_COMPLEX_OBJECT Then
+                            Return ProcessBoolean(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                        Else
+                            'obsolete
+                            Return ProcessBoolean(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
+                        End If
+                    Case "c_dv_ordinal", "ordinal", "c_ordinal", "dv_ordinal"
+                        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                        'If TypeOf (ObjNode) Is XMLParser.C_DV_ORDINAL Then
                         Return ProcessOrdinal(CType(ObjNode, XMLParser.C_DV_ORDINAL), a_filemanager)
-                    ElseIf TypeOf (ObjNode) Is XMLParser.C_ORDINAL Then
+                        'ElseIf TypeOf (ObjNode) Is XMLParser.C_ORDINAL Then
+                        '    'Obsolete
+                        '    Return ProcessOrdinal(CType(ObjNode, XMLParser.C_ORDINAL), a_filemanager)
+                        'Else
                         'Obsolete
-                        Return ProcessOrdinal(CType(ObjNode, XMLParser.C_ORDINAL), a_filemanager)
-                    Else
-                        'Obsolete
-                        Return ProcessOrdinal(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
-                    End If
+                        'Return ProcessOrdinal(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
+                        'End If
 
-                Case "dv_date_time", "dv_date", "dv_time", "date_time", "date", "time", "datetime"
-                    If TypeOf (ObjNode) Is XMLParser.C_COMPLEX_OBJECT Then
-                        Return ProcessDateTime(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Else
-                        'obsolete
-                        Return ProcessDateTime(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
-                    End If
-                Case "dv_proportion", "proportion"
-                    Return ProcessProportion(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                Case "dv_count", "count"
-                    Return ProcessCount(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                Case "interval_count", "interval_quantity" ' OBSOLETE
-                    Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
-                Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>"
-                    Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
-                Case "dv_multimedia", "multi_media", "multimedia"
-                    Return ProcessMultiMedia(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                Case "dv_uri", "uri"
-                    Return New Constraint_URI
-                Case "dv_duration", "duration"
-                    If TypeOf ObjNode Is XMLParser.C_COMPLEX_OBJECT Then
-                        Return ProcessDuration(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Else
-                        'obsolete
-                        Return ProcessDuration(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
-                    End If
+                    Case "dv_date_time", "dv_date", "dv_time", "date_time", "date", "time", "datetime"
+                        If TypeOf (ObjNode) Is XMLParser.C_COMPLEX_OBJECT Then
+                            Return ProcessDateTime(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                        Else
+                            'obsolete
+                            Return ProcessDateTime(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
+                        End If
+                    Case "dv_proportion", "proportion"
+                        Return ProcessProportion(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                    Case "dv_count", "count"
+                        Return ProcessCount(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                    Case "interval_count", "interval_quantity" ' OBSOLETE
+                        Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
+                    Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>"
+                        Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
+                    Case "dv_multimedia", "multi_media", "multimedia"
+                        Return ProcessMultiMedia(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                    Case "dv_uri", "uri"
+                        Return New Constraint_URI
+                    Case "dv_duration", "duration"
+                        If TypeOf ObjNode Is XMLParser.C_COMPLEX_OBJECT Then
+                            Return ProcessDuration(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                        Else
+                            'obsolete
+                            Return ProcessDuration(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
+                        End If
 
-                Case Else
-                    Debug.Assert(False)
-                    Return New Constraint
-            End Select
+                    Case Else
+                        Debug.Assert(False)
+                        Return New Constraint
+                End Select
+
+            Catch ex As Exception
+                MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return New Constraint
+            End Try
         End Function
 
         Private Function ProcessDuration(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Duration
 
-            If ObjNode.any_allowed Then
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If ObjNode.any_allowed Then
+            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
+            If complexObject.Any_Allowed Then
                 Return New Constraint_Duration
             Else
                 Dim an_attribute As XMLParser.C_ATTRIBUTE
@@ -274,7 +292,10 @@ Namespace ArchetypeEditor.XML_Classes
         Private Function ProcessDuration(ByVal ObjNode As XMLParser.C_PRIMITIVE_OBJECT) As Constraint_Duration
             Dim duration As New Constraint_Duration
 
-            If ObjNode.any_allowed Then
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1            
+            'If ObjNode.any_allowed Then
+            Dim primitiveObject As New C_PRIMITIVE_OBJECT_PROXY(ObjNode)
+            If primitiveObject.Any_Allowed Then
                 Return duration
             End If
 
@@ -282,19 +303,35 @@ Namespace ArchetypeEditor.XML_Classes
             cadlC = CType(ObjNode.item, XMLParser.C_DURATION)
             duration.AllowableUnits = cadlC.pattern
             If Not cadlC.range Is Nothing Then
-                If Not cadlC.range.minimum Is Nothing Then
+
+                ' Validate Interval PreConditions
+                With cadlC.range
+                    'Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
+                    Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
+                    'Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
+                    Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
+                    Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
+                    Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
+                End With
+
+                'If Not cadlC.range.minimum Is Nothing Then 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                If cadlC.range.lower_included Then
                     duration.HasMinimum = True
-                    duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.minimum)
-                    duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.minimum.Substring(1))) ' leave the P of the front
+                    duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.lower)
+                    'duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.minimum.Substring(1))) ' leave the P of the front
+                    duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower)) ' leave the P of the front
                 Else
                     duration.HasMinimum = False
                 End If
-                If Not cadlC.range.maximum Is Nothing Then
+
+                'If Not cadlC.range.maximum Is Nothing Then
+                If cadlC.range.upper_included Then
                     If duration.MinMaxValueUnits = "" Then
-                        duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.maximum)
+                        duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
                     End If
                     duration.HasMaximum = True
-                    duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.maximum.Substring(1))) ' leave the P of the front
+                    'duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.maximum.Substring(1))) ' leave the P of the front
+                    duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper)) ' leave the P of the front
                 End If
             End If
             If Not cadlC.assumed_value Is Nothing Then
@@ -307,8 +344,11 @@ Namespace ArchetypeEditor.XML_Classes
         Private Function ProcessCount(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Count
             Dim ct As New Constraint_Count
             Dim an_attribute As XMLParser.C_ATTRIBUTE
-            
-            If ObjNode.any_allowed Then
+
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If ObjNode.any_allowed Then
+            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
+            If complexObject.Any_Allowed Then
                 Return ct
             End If
 
@@ -321,21 +361,48 @@ Namespace ArchetypeEditor.XML_Classes
                         cadlOS = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
                         cadlC = CType(cadlOS.item, XMLParser.C_INTEGER)
 
-                        If cadlC.range.minimum <> "" Then
+                        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                        'If cadlC.range.minimum <> "" Then
+                        '    ct.HasMinimum = True
+                        '    ct.MinimumValue = Long.Parse(cadlC.range.minimum)
+                        '    ct.IncludeMinimum = cadlC.range.includes_minimum
+                        'Else
+                        '    ct.HasMinimum = False
+                        'End If
+                        'If cadlC.range.maximum <> "" Then
+                        '    ct.HasMaximum = True
+                        '    ct.MaximumValue = Long.Parse(cadlC.range.maximum)
+                        '    ct.IncludeMaximum = cadlC.range.includes_maximum
+                        'Else
+                        '    ct.HasMaximum = False
+                        'End If
+
+                        ' Validate Interval PreConditions
+                        With cadlC.range
+                            Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
+                            Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
+                            Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
+                            Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
+                            Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
+                            Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
+                        End With
+
+                        If cadlC.range.lowerSpecified Then
                             ct.HasMinimum = True
-                            ct.MinimumValue = Long.Parse(cadlC.range.minimum)
-                            ct.IncludeMinimum = cadlC.range.includes_minimum
+                            ct.MinimumValue = CLng(cadlC.range.lower)
+                            ct.IncludeMinimum = cadlC.range.lower_included
                         Else
                             ct.HasMinimum = False
                         End If
-                        If cadlC.range.maximum <> "" Then
+                        If cadlC.range.upperSpecified Then
                             ct.HasMaximum = True
-                            ct.MaximumValue = Long.Parse(cadlC.range.maximum)
-                            ct.IncludeMaximum = cadlC.range.includes_maximum
+                            ct.MaximumValue = CLng(cadlC.range.upper)
+                            ct.IncludeMaximum = cadlC.range.upper_included
                         Else
                             ct.HasMaximum = False
                         End If
-                        If cadlC.assumed_value <> Nothing Then
+                        'If cadlC.assumed_value <> Nothing Then
+                        If cadlC.assumed_valueSpecified Then                            
                             ct.HasAssumedValue = True
                             ct.AssumedValue = CInt(cadlC.assumed_value)
                         End If
@@ -348,26 +415,52 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Function ProcessReal(ByVal ObjNode As XMLParser.C_PRIMITIVE_OBJECT) As Constraint_Real
             Dim ct As New Constraint_Real
-
             Dim cadlC As XMLParser.C_REAL
 
             cadlC = CType(ObjNode.item, XMLParser.C_REAL)
 
-            If cadlC.range.minimumSpecified Then
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If cadlC.range.minimumSpecified Then
+            '    ct.HasMinimum = True
+            '    ct.MinimumValue = cadlC.range.minimum
+            '    ct.IncludeMinimum = cadlC.range.includes_minimum
+            'Else
+            '    ct.HasMinimum = False
+            'End If
+            'If cadlC.range.maximumSpecified Then
+            '    ct.HasMaximum = True
+            '    ct.MaximumValue = cadlC.range.maximum
+            '    ct.IncludeMaximum = cadlC.range.includes_maximum
+            'Else
+            '    ct.HasMaximum = False
+            'End If
+
+            ' Validate Interval PreConditions
+            With cadlC.range
+                Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
+                Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
+                Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
+                Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
+                Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
+                Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
+            End With
+
+            If cadlC.range.lowerSpecified Then
                 ct.HasMinimum = True
-                ct.MinimumValue = cadlC.range.minimum
-                ct.IncludeMinimum = cadlC.range.includes_minimum
+                ct.MinimumValue = cadlC.range.lower
+                ct.IncludeMinimum = cadlC.range.lower_included
             Else
                 ct.HasMinimum = False
             End If
-            If cadlC.range.maximumSpecified Then
+            If cadlC.range.upperSpecified Then
                 ct.HasMaximum = True
-                ct.MaximumValue = cadlC.range.maximum
-                ct.IncludeMaximum = cadlC.range.includes_maximum
+                ct.MaximumValue = cadlC.range.upper
+                ct.IncludeMaximum = cadlC.range.upper_included
             Else
                 ct.HasMaximum = False
             End If
-            If cadlC.assumed_value <> Nothing Then
+            If cadlC.assumed_valueSpecified Then
+                'If cadlC.assumed_value <> Nothing Then
                 ct.HasAssumedValue = True
                 ct.AssumedValue = CInt(cadlC.assumed_value)
             End If
@@ -381,7 +474,10 @@ Namespace ArchetypeEditor.XML_Classes
             Dim proportion As New Constraint_Proportion
             Dim an_attribute As XMLParser.C_ATTRIBUTE
 
-            If ObjNode.any_allowed Then
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If ObjNode.any_allowed Then
+            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
+            If complexObject.Any_Allowed Then
                 Return proportion
             Else
                 For Each an_attribute In ObjNode.attributes
@@ -420,7 +516,10 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Function ProcessDateTime(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_DateTime
 
-            If ObjNode.any_allowed Then
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If ObjNode.any_allowed Then
+            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
+            If complexObject.Any_Allowed Then
                 Return New Constraint_DateTime
             Else
                 Dim an_attribute As XMLParser.C_ATTRIBUTE
@@ -450,7 +549,10 @@ Namespace ArchetypeEditor.XML_Classes
             Dim dt As New Constraint_DateTime
             Dim s As String
 
-            If ObjNode.any_allowed Then
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If ObjNode.any_allowed Then
+            Dim primitiveObject As New C_PRIMITIVE_OBJECT_PROXY(ObjNode)
+            If primitiveObject.Any_Allowed Then
                 Return dt
             End If
 
@@ -518,38 +620,40 @@ Namespace ArchetypeEditor.XML_Classes
 
         End Function
 
-        'OBSOLETE
-        Private Function ProcessOrdinal(ByVal an_ordinal_value As XMLParser.C_ORDINAL, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
-            Dim ehr_ordinal As XMLParser.ORDINAL
+        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+        ''OBSOLETE
+        'Private Function ProcessOrdinal(ByVal an_ordinal_value As XMLParser.C_ORDINAL, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
+        '    Dim ehr_ordinal As XMLParser.ORDINAL
 
-            Dim ord As New Constraint_Ordinal(a_filemanager)
+        '    Dim ord As New Constraint_Ordinal(a_filemanager)
 
-            '' first value may have a "?" instead of a code as holder for empty ordinal
-            For Each ehr_ordinal In an_ordinal_value.list
+        '    '' first value may have a "?" instead of a code as holder for empty ordinal
+        '    For Each ehr_ordinal In an_ordinal_value.list
 
-                Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
+        '        Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
 
-                newOrdinal.Ordinal = CInt(ehr_ordinal.value)
+        '        newOrdinal.Ordinal = CInt(ehr_ordinal.value)
 
-                If ehr_ordinal.symbol.terminology_id = "local" Then
-                    newOrdinal.InternalCode = ehr_ordinal.symbol.code_string
-                    ord.OrdinalValues.Add(newOrdinal)
-                Else
-                    Debug.Assert(False)
-                End If
-            Next
+        '        If ehr_ordinal.symbol.terminology_id = "local" Then
+        '            newOrdinal.InternalCode = ehr_ordinal.symbol.code_string
+        '            ord.OrdinalValues.Add(newOrdinal)
+        '        Else
+        '            Debug.Assert(False)
+        '        End If
+        '    Next
 
-            If an_ordinal_value.assumed_value <> Nothing Then
-                ord.HasAssumedValue = True
-                ord.AssumedValue = CInt(an_ordinal_value.assumed_value)
-            End If
+        '    If an_ordinal_value.assumed_value <> Nothing Then
+        '        ord.HasAssumedValue = True
+        '        ord.AssumedValue = CInt(an_ordinal_value.assumed_value)
+        '    End If
 
-            Return ord
+        '    Return ord
 
-        End Function
+        'End Function
 
         Private Function ProcessOrdinal(ByVal an_ordinal_value As XMLParser.C_DV_ORDINAL, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
-            Dim ehr_ordinal As XMLParser.ORDINAL
+            'Dim ehr_ordinal As XMLParser.ORDINAL
+            Dim ehr_ordinal As XMLParser.DV_ORDINAL
 
             Dim ord As New Constraint_Ordinal(a_filemanager)
 
@@ -562,17 +666,30 @@ Namespace ArchetypeEditor.XML_Classes
 
                     newOrdinal.Ordinal = CInt(ehr_ordinal.value)
 
-                    If ehr_ordinal.symbol.terminology_id = "local" Then
-                        newOrdinal.InternalCode = ehr_ordinal.symbol.code_string
-                        ord.OrdinalValues.Add(newOrdinal)
-                    Else
-                        Debug.Assert(False)
+                    'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                    'If ehr_ordinal.symbol.terminology_id = "local" Then
+                    '    newOrdinal.InternalCode = ehr_ordinal.symbol.code_string
+                    '    ord.OrdinalValues.Add(newOrdinal)
+                    'Else
+                    '    Debug.Assert(False)
+                    'End If
+
+                    If Not ehr_ordinal.symbol Is Nothing Then
+                        If Not ehr_ordinal.symbol.defining_code Is Nothing Then
+                            If Not ehr_ordinal.symbol.defining_code.terminology_id Is Nothing Then
+                                If ehr_ordinal.symbol.defining_code.terminology_id.value = "local" Then
+                                    newOrdinal.InternalCode = ehr_ordinal.symbol.defining_code.code_string
+                                    ord.OrdinalValues.Add(newOrdinal)
+                                End If
+                            End If
+                        End If
                     End If
                 Next
 
-                If an_ordinal_value.assumed_value <> Nothing Then
+                'If an_ordinal_value.assumed_value <> "" Then 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                If Not an_ordinal_value.assumed_value Is Nothing Then
                     ord.HasAssumedValue = True
-                    ord.AssumedValue = CInt(an_ordinal_value.assumed_value)
+                    ord.AssumedValue = CInt(an_ordinal_value.assumed_value.value)
                 End If
             End If
             Return ord
@@ -582,16 +699,18 @@ Namespace ArchetypeEditor.XML_Classes
 
         'OBSOLETE
         Private Function ProcessOrdinal(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
-            Dim c_value As XMLParser.C_ORDINAL
+            Dim c_value As XMLParser.C_DV_ORDINAL
             Dim an_attribute As XMLParser.C_ATTRIBUTE
 
-            If Not (ObjNode.any_allowed <> Nothing AndAlso ObjNode.any_allowed) Then
-
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If Not (ObjNode.any_allowed <> Nothing AndAlso ObjNode.any_allowed) Then
+            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
+            If Not complexObject.Any_Allowed Then
                 For Each an_attribute In ObjNode.attributes
 
                     Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "value"
-                            c_value = CType(an_attribute.children(0), XMLParser.C_ORDINAL)
+                            c_value = CType(an_attribute.children(0), XMLParser.C_DV_ORDINAL)
                             Return ProcessOrdinal(c_value, a_filemanager)
                     End Select
                 Next
@@ -600,18 +719,21 @@ Namespace ArchetypeEditor.XML_Classes
 
             Return New Constraint_Ordinal(True, a_filemanager)
 
-            
+
         End Function
 
         Private Function ProcessBoolean(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Boolean
 
-            If ObjNode.any_allowed Then
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If ObjNode.any_allowed Then
+            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
+            If complexObject.Any_Allowed Then
                 Return New Constraint_Boolean
             Else
+
                 Dim an_attribute As XMLParser.C_ATTRIBUTE
 
                 For i As Integer = 0 To ObjNode.attributes.Length
-
                     an_attribute = ObjNode.attributes(i)
                     Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "value"
@@ -664,8 +786,11 @@ Namespace ArchetypeEditor.XML_Classes
         Shared Function ProcessText(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Text
             Dim an_attribute As XMLParser.C_ATTRIBUTE
             Dim t As New Constraint_Text
-
-            If Not ObjNode.any_allowed = Nothing AndAlso ObjNode.any_allowed Then
+            
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'If Not ObjNode.any_allowed = Nothing AndAlso ObjNode.any_allowed Then
+            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)            
+            If Not complexObject.Any_Allowed = Nothing AndAlso complexObject.Any_Allowed Then
                 t.TypeOfTextConstraint = TextConstrainType.Text
                 Return t
             End If
@@ -685,9 +810,11 @@ Namespace ArchetypeEditor.XML_Classes
                             Case "XMLPARSER.C_CODE_PHRASE"
                                 t.AllowableValues = ArchetypeEditor.XML_Classes.XML_Tools.ProcessCodes(CType(Obj, XMLParser.C_CODE_PHRASE))
 
-                                If CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value <> "" Then
+                                'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                                'If CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value <> "" Then
+                                If Not CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value Is Nothing Then
                                     t.HasAssumedValue = True
-                                    t.AssumedValue = CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value
+                                    t.AssumedValue = CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value.code_string()
                                 End If
 
                                 If t.AllowableValues.TerminologyID = "local" Then
@@ -718,64 +845,68 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         'Redundant
-        Private Function ProcessQuantity(ByVal ObjNode As XMLParser.C_QUANTITY) As Constraint_Quantity
-            Dim q As New Constraint_Quantity
-            Dim u As Constraint_QuantityUnit
+        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+        'Private Function ProcessQuantity(ByVal ObjNode As XMLParser.C_QUANTITY) As Constraint_Quantity
+        '    Dim q As New Constraint_Quantity
+        '    Dim u As Constraint_QuantityUnit
 
-            If ObjNode.any_allowed <> Nothing AndAlso ObjNode.any_allowed Then
-                Return q
-            End If
+        '    If ObjNode.any_allowed <> Nothing AndAlso ObjNode.any_allowed Then
+        '        Return q
+        '    End If
 
-            If Not ObjNode.property Is Nothing Then
+        '    If Not ObjNode.property Is Nothing Then
 
-                q.OpenEhrCode = CInt(ObjNode.property.code_string)
+        '        q.OpenEhrCode = CInt(ObjNode.property.code_string)
 
-                If Not ObjNode.list Is Nothing Then
+        '        If Not ObjNode.list Is Nothing Then
 
-                    For Each cqi As XMLParser.C_QUANTITY_ITEM In ObjNode.list
-                        'Do not set attribute to true here as there
-                        'is no special handling of time units until Unit is set
-                        u = New Constraint_QuantityUnit(q.IsTime)
+        '            For Each cqi As XMLParser.C_QUANTITY_ITEM In ObjNode.list
+        '                'Do not set attribute to true here as there
+        '                'is no special handling of time units until Unit is set
+        '                u = New Constraint_QuantityUnit(q.IsTime)
 
-                        u.Unit = cqi.units
+        '                u.Unit = cqi.units
 
-                        If Not cqi.magnitude Is Nothing Then
-                            u.HasMaximum = (cqi.magnitude.maximum <> Nothing)
-                            If u.HasMaximum Then
-                                u.MaximumValue = cqi.magnitude.maximum
-                                u.IncludeMaximum = cqi.magnitude.includes_maximum
-                            End If
-                            u.HasMinimum = (cqi.magnitude.minimumSpecified)
-                            If u.HasMinimum Then
-                                u.MinimumValue = cqi.magnitude.minimum
-                                u.IncludeMinimum = cqi.magnitude.includes_minimum
-                            End If
-                        End If
+        '                If Not cqi.magnitude Is Nothing Then
+        '                    u.HasMaximum = (cqi.magnitude.maximum <> Nothing)
+        '                    If u.HasMaximum Then
+        '                        u.MaximumValue = cqi.magnitude.maximum
+        '                        u.IncludeMaximum = cqi.magnitude.includes_maximum
+        '                    End If
+        '                    u.HasMinimum = (cqi.magnitude.minimumSpecified)
+        '                    If u.HasMinimum Then
+        '                        u.MinimumValue = cqi.magnitude.minimum
+        '                        u.IncludeMinimum = cqi.magnitude.includes_minimum
+        '                    End If
+        '                End If
 
-                        If cqi.precision <> "-1" Then
-                            u.Precision = CInt(cqi.precision)
-                        End If
+        '                If cqi.precision <> "-1" Then
+        '                    u.Precision = CInt(cqi.precision)
+        '                End If
 
-                        If cqi.assumed_value <> Nothing Then
-                            u.HasAssumedValue = True
-                            u.AssumedValue = cqi.assumed_value
-                        End If
+        '                If cqi.assumed_value <> Nothing Then
+        '                    u.HasAssumedValue = True
+        '                    u.AssumedValue = cqi.assumed_value
+        '                End If
 
-                        ' need to add with key for retrieval
-                        q.Units.Add(u, u.Unit)
-                    Next
-                End If
-            End If
+        '                ' need to add with key for retrieval
+        '                q.Units.Add(u, u.Unit)
+        '            Next
+        '        End If
+        '    End If
 
-            Return q
+        '    Return q
 
-        End Function
+        'End Function
 
         Private Function ProcessQuantity(ByVal ObjNode As XMLParser.C_DV_QUANTITY) As Constraint_Quantity
             Dim q As New Constraint_Quantity
             Dim u As Constraint_QuantityUnit
 
-            If ObjNode.any_allowed <> Nothing AndAlso ObjNode.any_allowed Then
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1 
+            'If ObjNode.any_allowed <> Nothing AndAlso ObjNode.any_allowed Then
+            Dim DvQuantity As New C_DV_QUANTITY_PROXY(ObjNode)            
+            If DvQuantity.Any_Allowed <> Nothing AndAlso DvQuantity.Any_Allowed Then
                 Return q
             End If
 
@@ -792,26 +923,64 @@ Namespace ArchetypeEditor.XML_Classes
 
                         u.Unit = cqi.units
 
+                        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                        'If Not cqi.magnitude Is Nothing Then
+                        '    u.HasMaximum = (cqi.magnitude.maximum <> Nothing)
+                        '    If u.HasMaximum Then
+                        '        u.MaximumValue = cqi.magnitude.maximum
+                        '        u.IncludeMaximum = cqi.magnitude.includes_maximum
+                        '    End If
+                        '    u.HasMinimum = (cqi.magnitude.minimumSpecified)
+                        '    If u.HasMinimum Then
+                        '        u.MinimumValue = cqi.magnitude.minimum
+                        '        u.IncludeMinimum = cqi.magnitude.includes_minimum
+                        '    End If
+                        'End If
+
                         If Not cqi.magnitude Is Nothing Then
-                            u.HasMaximum = (cqi.magnitude.maximum <> Nothing)
+
+                            ' Validate Interval PreConditions
+                            With cqi.magnitude
+                                Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
+                                Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
+                                Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
+                                Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
+                                Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
+                                Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
+                            End With
+
+                            u.HasMaximum = (cqi.magnitude.upperSpecified)
                             If u.HasMaximum Then
-                                u.MaximumValue = cqi.magnitude.maximum
-                                u.IncludeMaximum = cqi.magnitude.includes_maximum
+                                u.MaximumValue = cqi.magnitude.upper
+                                u.IncludeMaximum = cqi.magnitude.upper_included
                             End If
-                            u.HasMinimum = (cqi.magnitude.minimumSpecified)
+                            u.HasMinimum = (cqi.magnitude.lowerSpecified)
                             If u.HasMinimum Then
-                                u.MinimumValue = cqi.magnitude.minimum
-                                u.IncludeMinimum = cqi.magnitude.includes_minimum
+                                u.MinimumValue = cqi.magnitude.lower
+                                u.IncludeMinimum = cqi.magnitude.lower_included
                             End If
                         End If
 
-                        If cqi.precision <> "-1" Then
-                            u.Precision = CInt(cqi.precision)
+                        If Not cqi.precision Is Nothing Then
+                            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                            'If cqi.precision <> "-1" Then
+                            If cqi.precision.lower <> -1 Then
+                                Debug.Assert(cqi.precision.lower = cqi.precision.upper)
+                                'u.Precision = CInt(cqi.precision)                            
+                                u.Precision = cqi.precision.lower
+                            End If
                         End If
 
-                        If cqi.assumed_value <> Nothing Then
-                            u.HasAssumedValue = True
-                            u.AssumedValue = cqi.assumed_value
+                        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                        'If cqi.assumed_value <> Nothing Then
+                        '    u.HasAssumedValue = True
+                        '    u.AssumedValue = cqi.assumed_value
+                        'End If                        
+                        If Not ObjNode.assumed_value Is Nothing Then
+                            If StrComp(ObjNode.assumed_value.units, u.Unit, CompareMethod.Text) = 0 Then 'assumed value is for this unit
+                                u.AssumedValue = ObjNode.assumed_value.magnitude
+                                u.HasAssumedValue = True
+                            End If
                         End If
 
                         ' need to add with key for retrieval

@@ -13,8 +13,8 @@
 '	last_change: "$LastChangedDate$"
 '
 '
-
 Option Strict On
+Option Explicit On
 
 Public Class RmCardinality
     ' class for counts and cardinality
@@ -151,13 +151,23 @@ Public Class RmCardinality
     End Sub
 
     Public Sub SetFromXmlCardinality(ByVal a_cardinality As XMLParser.CARDINALITY)
-        If a_cardinality.interval.maximum <> "" Then
+
+        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+        If a_cardinality.interval.upperSpecified = True Then
             mUnbounded = False
-            mMaxCount = CInt(a_cardinality.interval.maximum)
+            mMaxCount = a_cardinality.interval.upper
         Else
             mUnbounded = True
         End If
-        mMinCount = CInt(a_cardinality.interval.minimum)
+        mMinCount = a_cardinality.interval.lower
+
+        'If a_cardinality.interval.maximum <> "" Then
+        '    mUnbounded = False
+        '    mMaxCount = CInt(a_cardinality.interval.maximum)
+        'Else
+        '    mUnbounded = True
+        'End If
+        'mMinCount = CInt(a_cardinality.interval.minimum)
 
         mOrdered = a_cardinality.is_ordered
 

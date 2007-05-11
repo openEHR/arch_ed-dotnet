@@ -26,6 +26,8 @@ Public MustInherit Class RmChildren
     End Property
 
     Protected mCardinality As New RmCardinality(0)
+    Protected mExistence As New RmExistence 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+
     Public Property Cardinality() As RmCardinality
         Get
             Return mCardinality
@@ -34,6 +36,16 @@ Public MustInherit Class RmChildren
             mCardinality = Value
         End Set
     End Property
+
+    Public Property Existence() As RmExistence 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+        Get
+            Return mExistence
+        End Get
+        Set(ByVal value As RmExistence)
+            mExistence = value
+        End Set
+    End Property
+
     Public Sub Add(ByVal an_RM_Structure As RmStructure)
         Me.List.Add(an_RM_Structure)
     End Sub

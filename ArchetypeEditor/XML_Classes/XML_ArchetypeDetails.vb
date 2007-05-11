@@ -13,6 +13,8 @@
 '	last_change: "$LastChangedDate: 2006-05-17 18:54:30 +0930 (Wed, 17 May 2006) $"
 '
 '
+'Option Strict On
+Option Explicit On
 
 Namespace ArchetypeEditor.XML_Classes
 
@@ -43,7 +45,11 @@ Namespace ArchetypeEditor.XML_Classes
 
             XML_detail.language = New XMLParser.CODE_PHRASE
             XML_detail.language.code_string = a_language
-            XML_detail.language.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+
+            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+            'XML_detail.language.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+            XML_detail.language.terminology_id = New XMLParser.TERMINOLOGY_ID
+            XML_detail.language.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
 
             XML_detail.copyright = a_detail.Copyright
             If a_detail.KeyWords.Count > 0 Then
