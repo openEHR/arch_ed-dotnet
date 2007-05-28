@@ -5086,7 +5086,7 @@ Public Class Designer
 
         new_concept = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me)
 
-        'JAR: 22MAY07, EDT-41 Validate archetype ID
+        'JAR: 22MAY07, EDT-41 Validate archetype ID  
         'If new_concept = "" Then
         '    Return
         'End If
@@ -5180,8 +5180,6 @@ Public Class Designer
         End If
     End Sub
 End Class
-
-
 
 
 '

@@ -337,15 +337,19 @@ Public Class frmStartUp
             Beep()
             Me.comboComponent.Focus()
             Return
-        ElseIf Me.txtConcept.Text = "" Then
+
+            'JAR: 22MAY07, EDT-41 Validate archetype ID
+            'ElseIf Me.txtConcept.Text = "" Then            
+        ElseIf Not Archetype_ID.ValidConcept(txtConcept.Text, "") Then 'Note: txtConcept.Text can be updated in ValidConcept!
             Beep()
             Me.txtConcept.Focus()
             Return
         End If
 
-        ' need to check for illegal characters
-        Me.txtConcept.Text = Me.txtConcept.Text.Replace(" ", "_")
-        Me.txtConcept.Text = Me.txtConcept.Text.Replace("-", "_")
+        'JAR: 22MAY07, EDT-41 Validate archetype ID
+        'need to check for illegal characters
+        'Me.txtConcept.Text = Me.txtConcept.Text.Replace(" ", "_")
+        'Me.txtConcept.Text = Me.txtConcept.Text.Replace("-", "_")
 
         Me.DialogResult = Windows.Forms.DialogResult.OK
     End Sub
