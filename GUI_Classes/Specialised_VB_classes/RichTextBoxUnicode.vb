@@ -23,6 +23,7 @@ Public Class RichTextBoxUnicode
         ARCHETYPE_PURPOSE = 3
         ARCHETYPE_USE = 4
         ARCHETYPE_MISUSE = 5
+        ARCHETYPE_REFERENCES = 6 'JAR: 24MAY2007, EDT-30 Add field for References
     End Enum
 
     'Returns a Tag to be placed in the RTF file
@@ -66,6 +67,8 @@ Public Class RichTextBoxUnicode
                         replaceText = TabPage.txtUse.Text
                     Case RichTextDataType.ARCHETYPE_MISUSE
                         replaceText = TabPage.txtMisuse.Text
+                    Case RichTextDataType.ARCHETYPE_REFERENCES 'JAR: 24MAY2007, EDT-30 Add field for References
+                        replaceText = TabPage.txtReferences.Text
                 End Select
 
                 'RichEditControl.SelectedText does not replace text when string is empty (Replace needs to occur to remove char1/AM)

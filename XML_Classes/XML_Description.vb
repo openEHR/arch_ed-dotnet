@@ -31,7 +31,6 @@ Namespace ArchetypeEditor.XML_Classes
             End Set
         End Property
 
-
         Function XML_Description() As XMLParser.RESOURCE_DESCRIPTION
             ' set the variables
 
@@ -72,6 +71,16 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             mXML_Description.original_author = authorDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
+
+            'JAR: 24MAY2007, EDT-30 Add field for References            
+            Dim otherDetails As New ArrayList
+            If Me.References <> "" Then
+                di = New XMLParser.StringDictionaryItem
+                di.id = "references"
+                di.Value = Me.mReferences.Replace("""", "'")
+                otherDetails.Add(di)
+            End If
+            mXML_Description.other_details = otherDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
 
             mXML_Description.lifecycle_state = Me.LifeCycleStateAsString.Replace("""", "'")
 
@@ -124,6 +133,15 @@ Namespace ArchetypeEditor.XML_Classes
                     End Select
                 Next
             End If
+            'JAR: 24MAY2007, EDT-30 Add field for References
+            If Not mXML_Description.other_details Is Nothing Then
+                For Each di As XMLParser.StringDictionaryItem In mXML_Description.other_details
+                    Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                        Case "references"
+                            mReferences = di.Value
+                    End Select
+                Next
+            End If
             If Not mXML_Description.other_contributors Is Nothing Then
                 For Each s As String In mXML_Description.other_contributors
                     mOtherContributors.Add(s)
@@ -154,7 +172,10 @@ Namespace ArchetypeEditor.XML_Classes
             Me.OriginalAuthorEmail = adl_description.OriginalAuthorEmail
             Me.OriginalAuthorOrganisation = adl_description.OriginalAuthorOrganisation
             Me.OtherContributors = adl_description.OtherContributors
-            Me.OtherDetails = adl_description.OtherDetails
+            'JAR: 24MAY2007, EDT-30 Add field for References
+            'Me.OtherDetails = adl_description.OtherDetails 'JAR: 24MAY2007, AE-30 Additional field References
+            Me.References = adl_description.References 'JAR: 24MAY2007, AE-30 Additional field References
+
             'Dim XmlArchetypeDetails As New XML_ArchetypeDetails(mXML_Description)
             'If adl_description.Details.Count > 0 Then
             '    For Each adl_detail In adl_description.Details
@@ -163,6 +184,7 @@ Namespace ArchetypeEditor.XML_Classes
 
             'End If
         End Sub
+
     End Class
 End Namespace
 '

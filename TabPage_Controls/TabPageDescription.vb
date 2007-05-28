@@ -18,6 +18,10 @@ Public Class TabPageDescription
     Friend WithEvents txtTranslatorEmail As System.Windows.Forms.TextBox
     Private mCurrentLanguage As String
     Private mTranslationAltered As Boolean
+    Friend WithEvents tpReferences As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents txtReferences As System.Windows.Forms.TextBox
+
     Private mIsLoading As Boolean = False
 
 
@@ -105,6 +109,9 @@ Public Class TabPageDescription
         Me.lblKeyword = New System.Windows.Forms.Label
         Me.listKeyword = New System.Windows.Forms.ListBox
         Me.TabDescription = New Crownwood.Magic.Controls.TabControl
+        Me.tpReferences = New Crownwood.Magic.Controls.TabPage
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.txtReferences = New System.Windows.Forms.TextBox
         Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage
         Me.Splitter3 = New System.Windows.Forms.Splitter
         Me.Splitter2 = New System.Windows.Forms.Splitter
@@ -144,6 +151,8 @@ Public Class TabPageDescription
         Me.gbMisuse.SuspendLayout()
         Me.gbPurpose.SuspendLayout()
         Me.panelDescription.SuspendLayout()
+        Me.tpReferences.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.tpDescDetails.SuspendLayout()
         Me.tpAuthor.SuspendLayout()
         Me.gbContributors.SuspendLayout()
@@ -304,7 +313,38 @@ Public Class TabPageDescription
         Me.TabDescription.SelectedTab = Me.tpDescDetails
         Me.TabDescription.Size = New System.Drawing.Size(700, 500)
         Me.TabDescription.TabIndex = 15
-        Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation})
+        Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
+        '
+        'tpReferences
+        '
+        Me.tpReferences.Controls.Add(Me.GroupBox1)
+        Me.tpReferences.Location = New System.Drawing.Point(0, 0)
+        Me.tpReferences.Name = "tpReferences"
+        Me.tpReferences.Selected = False
+        Me.tpReferences.Size = New System.Drawing.Size(700, 475)
+        Me.tpReferences.TabIndex = 3
+        Me.tpReferences.Title = "References"
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.txtReferences)
+        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(700, 475)
+        Me.GroupBox1.TabIndex = 14
+        Me.GroupBox1.TabStop = False
+        '
+        'txtReferences
+        '
+        Me.txtReferences.AcceptsReturn = True
+        Me.txtReferences.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtReferences.Location = New System.Drawing.Point(3, 17)
+        Me.txtReferences.Multiline = True
+        Me.txtReferences.Name = "txtReferences"
+        Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtReferences.Size = New System.Drawing.Size(694, 455)
+        Me.txtReferences.TabIndex = 0
         '
         'tpDescDetails
         '
@@ -633,6 +673,9 @@ Public Class TabPageDescription
         Me.gbPurpose.ResumeLayout(False)
         Me.gbPurpose.PerformLayout()
         Me.panelDescription.ResumeLayout(False)
+        Me.tpReferences.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.tpDescDetails.ResumeLayout(False)
         Me.tpAuthor.ResumeLayout(False)
         Me.gbContributors.ResumeLayout(False)
@@ -663,6 +706,7 @@ Public Class TabPageDescription
             For Each s As String In Value.OtherContributors
                 Me.listContributors.Items.Add(s)
             Next
+            Me.txtReferences.Text = Replace(Value.References, vbLf, vbCrLf) 'JAR: 24MAY2007, EDT-30 Eiffel parser converts vbCrLf to vbLf.  Text box does not display vbLF
 
             mArchetypeDescription = Value
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
@@ -731,6 +775,9 @@ Public Class TabPageDescription
         mArchetypeDescription.OriginalAuthorOrganisation = Me.txtOrganisation.Text.Replace("""", "'")
         mArchetypeDescription.OriginalAuthorDate = Me.txtDate.Text.Replace("""", "'")
 
+        'JAR: 24MAY2007, EDT-30 Add field for references
+        mArchetypeDescription.References = Me.txtReferences.Text.Replace("""", "'")        
+
         ' get the contributors
         mArchetypeDescription.OtherContributors.Clear()
         For Each s As String In Me.listContributors.Items
@@ -782,13 +829,24 @@ Public Class TabPageDescription
         result.AppendLine("\par")
         result.AppendLine("\par")
 
-        'Use
+        'Misuse
         result.AppendLine("\b")
         result.AppendLine(Filemanager.GetOpenEhrTerm(583, "Misuse"))
         result.Append(":\b0")
         result.AppendLine("\par")
         'result.AppendLine(Me.txtMisuse.Text) 'JAR: 13APR07, EDT-32 Support unicode
         result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ARCHETYPE_MISUSE)) 'JAR: 13APR07, EDT-32 Support unicode
+        result.AppendLine("\par")
+        result.AppendLine("\par")
+
+        'JAR: 24MAY2007, EDT-30 Add field for References
+        'References
+        result.AppendLine("\b")
+        'result.AppendLine(Filemanager.GetOpenEhrTerm(???, "References")) 'no OpenEhrTerm for References!
+        result.AppendLine("References")
+        result.Append(":\b0")
+        result.AppendLine("\par")        
+        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ARCHETYPE_REFERENCES)) 'JAR: 13APR07, EDT-32 Support unicode
         result.AppendLine("\par")
         result.AppendLine("\par")
 
@@ -804,18 +862,28 @@ Public Class TabPageDescription
             For Each s As String In archDescriptionItem.KeyWords
                 Me.listKeyword.Items.Add(s)
             Next
-            Me.txtPurpose.Text = archDescriptionItem.Purpose
-            Me.txtUse.Text = archDescriptionItem.Use
-            Me.txtMisuse.Text = archDescriptionItem.MisUse
+            'JAR: 24MAY2007, EDT-30 Eiffel parser converts vbCrLf to vbLf.  Text box does not display vbLF
+            'Me.txtPurpose.Text = archDescriptionItem.Purpose
+            'Me.txtUse.Text = archDescriptionItem.Use
+            'Me.txtMisuse.Text = archDescriptionItem.MisUse
+            Me.txtPurpose.Text = Replace(archDescriptionItem.Purpose, vbLf, vbCrLf)
+            Me.txtUse.Text = Replace(archDescriptionItem.Use, vbLf, vbCrLf)
+            Me.txtMisuse.Text = Replace(archDescriptionItem.MisUse, vbLf, vbCrLf)
+
         ElseIf translate Then
             If mArchetypeDescription.Details.HasDetailInLanguage(Filemanager.Master.OntologyManager.PrimaryLanguageCode) Then
                 archDescriptionItem = mArchetypeDescription.Details.DetailInLanguage(Filemanager.Master.OntologyManager.PrimaryLanguageCode)
                 For Each s As String In archDescriptionItem.KeyWords
                     Me.listKeyword.Items.Add(String.Format("*{0}({1})", s, Filemanager.Master.OntologyManager.PrimaryLanguageCode))
                 Next
-                Me.txtPurpose.Text = String.Format("*{0}({1})", archDescriptionItem.Purpose, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
-                Me.txtUse.Text = String.Format("*{0}({1})", archDescriptionItem.Use, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
-                Me.txtMisuse.Text = String.Format("*{0}({1})", archDescriptionItem.MisUse, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                'JAR: 24MAY2007, EDT-30 Eiffel parser converts vbCrLf to vbLf.  Text box does not display vbLF
+                'Me.txtPurpose.Text = String.Format("*{0}({1})", archDescriptionItem.Purpose, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                'Me.txtUse.Text = String.Format("*{0}({1})", archDescriptionItem.Use, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                'Me.txtMisuse.Text = String.Format("*{0}({1})", archDescriptionItem.MisUse, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                Me.txtPurpose.Text = String.Format("*{0}({1})", Replace(archDescriptionItem.Purpose, vbLf, vbCrLf), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                Me.txtUse.Text = String.Format("*{0}({1})", Replace(archDescriptionItem.Use, vbLf, vbCrLf), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                Me.txtMisuse.Text = String.Format("*{0}({1})", Replace(archDescriptionItem.MisUse, vbLf, vbCrLf), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+
             Else
                 If Me.txtPurpose.Text <> "" Then
                     Me.txtPurpose.Text = String.Format("*{0}({1})", Me.txtPurpose.Text, mCurrentLanguage)
@@ -870,6 +938,7 @@ Public Class TabPageDescription
         Me.comboLifeCycle.SelectedIndex = -1
         Me.txtUse.Text = ""
         Me.txtMisuse.Text = ""
+        Me.txtReferences.Text = "" 'JAR: 24MAY2007, EDT-30 Add field for References
         Me.listKeyword.Items.Clear()
         Me.listContributors.Items.Clear()
         Me.txtTranslationAccreditation.Text = ""
@@ -980,7 +1049,7 @@ Public Class TabPageDescription
         Filemanager.Master.FileLoading = temp_isloading
     End Sub
 
-    Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtMisuse.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged
+    Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtMisuse.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged, txtReferences.TextChanged
         If Not Filemanager.Master.FileLoading Then
             Filemanager.Master.FileEdited = True
         End If
