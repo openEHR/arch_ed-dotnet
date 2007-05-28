@@ -86,10 +86,37 @@ Public Class ArchetypeID
         Debug.Assert(ReferenceModel.IsValidArchetypeDefinition(mRmEntity))
         mRmModel = ReferenceModel.ModelType
     End Sub
+
+    'JAR: 22MAY07, EDT-41 Validate archetype ID
+    Public Function ValidConcept(ByRef Concept As String, ByVal OldConcept As String) As Boolean 'Note: Function can update the value passed in!
+        Dim i As Integer = OldConcept.LastIndexOf("-")
+
+        'check for spaces or empty 
+        If String.IsNullOrEmpty(Trim(Concept)) Then
+            Return False
+        End If
+
+        'convert illegal characters
+        Concept = Concept.Replace("-", "_")
+        Concept = Concept.Replace(" ", "_")
+        Concept = Concept.Replace(".", "_")
+        Concept = Concept.Replace("&", "_and_")
+        Concept = Concept.Replace("__", "_") 'remove repeated underscores that may occur from converting multiple illegal characters
+
+        'maintain specialisation. I.e. body_weight-birth
+        If i > -1 Then
+            Concept = OldConcept.Substring(0, i + 1) + Concept
+        End If
+
+        'convert to lower case
+        Concept = Concept.ToLowerInvariant
+
+        Return True
+    End Function
+
     Sub New(ByVal Value As String)
         ProcessStringValue(Value)
     End Sub
-
 End Class
 
 '
