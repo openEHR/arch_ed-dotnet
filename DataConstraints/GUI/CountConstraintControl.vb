@@ -162,7 +162,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numMinValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMinValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMinValue.Name = "numMinValue"
-        Me.numMinValue.Size = New System.Drawing.Size(90, 22)
+        Me.numMinValue.Size = New System.Drawing.Size(88, 22) 'JAR: 22MAY2007, EDT-20 Matched control width to numMaxValue
         Me.numMinValue.TabIndex = 2
         Me.numMinValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numMinValue.ThousandsSeparator = True
@@ -383,6 +383,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
                 Else
                     chkDecimalPlaces.Checked = False
                     Me.numPrecision.Visible = False
+                    'chkDecimalPlaces.Checked = True
+                    'Me.numPrecision.Visible = True
                 End If
             End If
         End Set
@@ -454,58 +456,98 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Overridable Sub MaxValueChanged()
-        Constraint.MaximumValue = Convert.ToInt32(Me.numMaxValue.Value)
+        'JAR: 22MAY2007, EDT-20 Do NOT refer directly to .Value property as it triggers numeric reformat 
+        'of the display which incorrectly sets the character position to 1.  Use .Text instead!
+        'Constraint.MaximumValue = Convert.ToInt32(Me.numMaxValue.Value)
+        Constraint.MaximumValue = Convert.ToInt32(CDec(Me.numMaxValue.Text))
     End Sub
 
+    'JAR: 22MAY2007, EDT-20 Validate empty string
+    Private Sub numMaxValue_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles numMaxValue.Validating
+        If MyBase.IsLoading Then Return
+
+        If numMaxValue.Text = "" Then 'empty string, revert to previous value
+            e.Cancel = True
+            numMaxValue.Text = CStr(numMaxValue.Value) 'display prevous value (previous value remains in .value but display is blank)
+            Return
+        End If
+    End Sub
+
+    'JAR: 22MAY2007, EDT-20 Restructured validation
     Protected Sub numMaxValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMaxValue.TextChanged
 
         If MyBase.IsLoading Then Return
 
+        Dim maximum As Decimal
+        If numMaxValue.Text <> "" Then maximum = CDec(numMaxValue.Text)
+
         If Me.NumericAssumed.Visible Then
-            Me.NumericAssumed.Maximum = numMaxValue.Value
+            'Me.NumericAssumed.Maximum = numMaxValue.Value
+            Me.NumericAssumed.Maximum = maximum
             If Me.comboIncludeMax.SelectedIndex = 1 Then
                 ' don't include maximum
                 Me.NumericAssumed.Maximum -= Me.NumericAssumed.Increment
             End If
         End If
 
-        If Me.numMaxValue.Value < Me.numMinValue.Value Then
-            numMinValue.Value = numMaxValue.Value
+        'If Me.numMaxValue.Value < Me.numMinValue.Value Then
+        If maximum < CDec(numMinValue.Text) Then
+            'Me.numMinValue.Value = Me.numMaxValue.Value
+            numMinValue.Text = CStr(maximum)
         End If
 
-        If MyBase.IsLoading Then Exit Sub
+        If MyBase.IsLoading Then Return
 
-        MaxValueChanged()
+        MaxValueChanged() 'Required here as change value and press Save toolbar button otherwise does not save new value!
         mFileManager.FileEdited = True
-
     End Sub
 
     Protected Overridable Sub MinValueChanged()
-        Constraint.MinimumValue = Convert.ToInt32(Me.numMinValue.Value)
+        'JAR: 22MAY2007, EDT-20 Do NOT refer directly to .Value property as it triggers numeric reformat 
+        'of the display which incorrectly sets the character position to 1.  Use .Text instead!
+        'Constraint.MinimumValue = Convert.ToInt32(Me.numMinValue.Value)
+        Constraint.MinimumValue = Convert.ToInt32(CDec(Me.numMinValue.Text))
     End Sub
 
+    'JAR: 22MAY2007, EDT-20 Validate empty string
+    Private Sub numMinValue_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles numMinValue.Validating
+        If MyBase.IsLoading Then Return
+
+        If numMinValue.Text = "" Then 'empty string
+            e.Cancel = True
+            numMinValue.Text = CStr(numMinValue.Value) 'display prevous value (previous value remains in .value but display is blank)
+            Return
+        End If
+    End Sub
+
+    'JAR: 22MAY2007, EDT-20 Do NOT refer directly to .Value property within _ValueChanged as it triggers numeric reformat 
+    'of the display which incorrectly sets the character position to 1.  Use .Text instead!
     Protected Sub numMinValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.TextChanged
 
         If MyBase.IsLoading Then Return
 
+        Dim minimum As Decimal
+        If numMinValue.Text <> "" Then minimum = CDec(numMinValue.Text)
+
         If Me.NumericAssumed.Visible Then
-            Me.NumericAssumed.Minimum = numMinValue.Value
+            'Me.NumericAssumed.Minimum = numMinValue.Value
+            Me.NumericAssumed.Minimum = minimum
             If Me.comboIncludeMin.SelectedIndex = 1 Then
                 ' don't include minimum
                 Me.NumericAssumed.Minimum += Me.NumericAssumed.Increment
             End If
         End If
 
-
-        If Me.numMinValue.Value > Me.numMaxValue.Value Then
-            numMaxValue.Value = numMinValue.Value
+        'If Me.numMinValue.Value > Me.numMaxValue.Value Then
+        If minimum > CDec(numMaxValue.Text) Then
+            'Me.numMaxValue.Value = Me.numMinValue.Value
+            numMaxValue.Text = CStr(minimum)
         End If
 
         If MyBase.IsLoading Then Return
 
-        MinValueChanged()
+        MinValueChanged() 'Required here as change value and press Save toolbar button otherwise does not save new value!
         mFileManager.FileEdited = True
-
     End Sub
 
     Private Sub MenuClearText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -517,8 +559,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         mFileManager.FileEdited = True
 
     End Sub
-
-
 
     Private Sub Decimal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
             Handles Decimal_0.Click, Decimal_1.Click, Decimal_2.Click, Decimal_3.Click
@@ -573,13 +613,27 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         mFileManager.FileEdited = True
     End Sub
 
+    'JAR: 22MAY2007, EDT-20 Validation for empty string
+    Private Sub NumericAssumed_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles NumericAssumed.Validating
+        If MyBase.IsLoading Then Return
+        If NumericAssumed.Text = "" Then 'empty string
+            e.Cancel = True
+            NumericAssumed.Text = CStr(NumericAssumed.Value) 'display prevous value (previous value remains in .value but display is blank)
+            Return
+        End If
+    End Sub
+
+    'JAR: 22MAY2007, EDT-20 Do NOT refer directly to .Value property within _ValueChanged as it triggers numeric reformat 
+    'of the display which incorrectly sets the character position to 1.  Use .Text instead!
     Private Sub NumericAssumed_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericAssumed.ValueChanged, NumericAssumed.TextChanged
         If MyBase.IsLoading Then Return
 
         If Me.NumericAssumed.DecimalPlaces = 0 Then
-            Me.Constraint.AssumedValue = Me.NumericAssumed.Value
+            'Me.Constraint.AssumedValue = Me.NumericAssumed.Value
+            Constraint.AssumedValue = CDec(NumericAssumed.Text)
         Else
-            Me.Constraint.AssumedValue = Convert.ToSingle(Me.NumericAssumed.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
+            'Me.Constraint.AssumedValue = Convert.ToSingle(Me.NumericAssumed.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
+            Constraint.AssumedValue = Convert.ToSingle(CDec(NumericAssumed.Text), System.Globalization.NumberFormatInfo.InvariantInfo)
         End If
         Me.Constraint.HasAssumedValue = True
         mFileManager.FileEdited = True
@@ -628,6 +682,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             mFileManager.FileEdited = True
         End If
     End Sub
+
 End Class
 
 '

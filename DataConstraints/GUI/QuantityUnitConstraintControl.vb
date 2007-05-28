@@ -85,11 +85,21 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
     End Sub
 
     Protected Overrides Sub MaxValueChanged()
-        Constraint.MaximumValue = Convert.ToSingle(Me.numMaxValue.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
+        'JAR: 22MAY2007, EDT-20 Do not refer directly to .Value property as it triggers numeric reformat 
+        'of the display which incorrectly sets the character position to 1.  Use .Text instead!
+        'Constraint.MaximumValue = Convert.ToSingle(Me.numMaxValue.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
+        If numMaxValue.Text <> "" Then
+            Constraint.MaximumValue = Convert.ToSingle(CDec(Me.numMaxValue.Text), System.Globalization.NumberFormatInfo.InvariantInfo)
+        End If
     End Sub
 
     Protected Overrides Sub MinValueChanged()
-        Constraint.MinimumValue = Convert.ToSingle(Me.numMinValue.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
+        'JAR: 22MAY2007, EDT-20 Do not refer directly to .Value property as it triggers numeric reformat 
+        'of the display which incorrectly sets the character position to 1.  Use .Text instead!
+        'Constraint.MinimumValue = Convert.ToSingle(Me.numMinValue.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
+        If numMinValue.Text <> "" Then
+            Constraint.MinimumValue = Convert.ToSingle(CDec(Me.numMinValue.Text), System.Globalization.NumberFormatInfo.InvariantInfo)
+        End If
     End Sub
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
