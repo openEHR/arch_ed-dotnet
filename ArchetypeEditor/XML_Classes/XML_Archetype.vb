@@ -62,6 +62,12 @@ Namespace ArchetypeEditor.XML_Classes
                 SetArchetypeId(Value)
             End Set
         End Property
+
+        'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
+        Public Overrides Sub UpdateArchetypeId() 'Forces changes made to ArchetypeID to be updated in parser
+            SetArchetypeId(Archetype_ID)
+        End Sub
+
         Public Overrides Property LifeCycle() As String
             Get
                 Return sLifeCycle
