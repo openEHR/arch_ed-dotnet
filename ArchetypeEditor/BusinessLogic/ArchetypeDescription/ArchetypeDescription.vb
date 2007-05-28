@@ -25,6 +25,7 @@ Public MustInherit Class ArchetypeDescription
     Protected mArchetypeDetails As New ArchetypeDetails
     Protected mCopyRight As String
     Protected mOtherContributors As New Collections.Specialized.StringCollection
+    Protected mReferences As String 'JAR: 24MAY2007, EDT-30 Add field for References
 
     Property OriginalAuthor() As String
         Get
@@ -66,7 +67,15 @@ Public MustInherit Class ArchetypeDescription
             mOtherContributors = value
         End Set
     End Property
-
+    'JAR: 24MAY2007, EDT-30 Add field for References
+    Property References() As String
+        Get
+            Return mReferences
+        End Get
+        Set(ByVal Value As String)
+            mReferences = Value
+        End Set
+    End Property
     Property CopyRight() As String
         Get
             Return mCopyRight
@@ -118,13 +127,12 @@ Public MustInherit Class ArchetypeDescription
             mArchetypePackageURI = Value
         End Set
     End Property
-    Public Property OtherDetails() As OtherDefinitionDetails
-        Get
-            Return mOtherDetails
-        End Get
-        Set(ByVal value As OtherDefinitionDetails)
-            mOtherDetails = value
-        End Set
-    End Property
-
+    'Public Property OtherDetails() As OtherDefinitionDetails 'JAR: 24MAY2007, EDT-30 Add field for References
+    '    Get
+    '        Return mOtherDetails
+    '    End Get
+    '    Set(ByVal value As OtherDefinitionDetails)
+    '        mOtherDetails = value
+    '    End Set        
+    'End Property
 End Class

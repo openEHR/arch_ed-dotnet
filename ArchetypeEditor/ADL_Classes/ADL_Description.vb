@@ -66,6 +66,13 @@ Namespace ArchetypeEditor.ADL_Classes
                     openehr.base.kernel.Create.STRING.make_from_cil(mArchetypePackageURI.Replace("""", "'")))
             End If
 
+            'JAR: 24MAY2007, EDT-30 Add field for References
+            If mReferences <> "" Then
+                mADL_Description.add_other_detail( _
+                                     openehr.base.kernel.Create.STRING.make_from_cil("references"), _
+                                    openehr.base.kernel.Create.STRING.make_from_cil(mReferences.Replace("""", "'")))
+            End If
+
             ' clear the other contributors and add them again
             mADL_Description.clear_other_contributors()
             For Each s As String In mOtherContributors
@@ -105,6 +112,13 @@ Namespace ArchetypeEditor.ADL_Classes
                 Next
             End If
 
+            'JAR: 24MAY2007, EDT-30 Add field for References
+            If Not mADL_Description.other_details Is Nothing Then
+                If mADL_Description.other_details.has(openehr.base.kernel.Create.STRING.make_from_cil("references")) Then
+                    mReferences = mADL_Description.other_details.item(openehr.base.kernel.Create.STRING.make_from_cil("references")).to_cil()
+                End If
+            End If
+
             MyBase.LifeCycleStateAsString = mADL_Description.lifecycle_state.to_cil
             If mADL_Description.details.count = 0 Then
                 Me.mArchetypeDetails.AddOrReplace( _
@@ -126,8 +140,8 @@ Namespace ArchetypeEditor.ADL_Classes
             mOriginalAuthorEmail = an_archetype_description.OriginalAuthorEmail
             mOriginalAuthorOrganisation = an_archetype_description.OriginalAuthorOrganisation
             mOriginalAuthorDate = an_archetype_description.OriginalAuthorDate
-
             mOtherContributors = an_archetype_description.OtherContributors
+            mReferences = an_archetype_description.References 'JAR: 24MAY2007, EDT-30 Add field for References
 
             MyBase.LifeCycleState = an_archetype_description.LifeCycleState
         End Sub

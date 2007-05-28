@@ -1975,10 +1975,7 @@ Public Class Designer
             OpenArchetype(myArchetypeURL)
 
         End If
-
-
     End Sub
-
 
     Private Sub OpenArchetype(ByVal a_file_name As String)
         Dim i As Integer
@@ -2793,11 +2790,13 @@ Public Class Designer
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(585, "Purpose")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(582, "Use")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(583, "Misuse")))
+        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", "References")) 'JAR: 24MAY2007, EDT-30 Add field for References
         text.WriteLine("</tr>")
         text.WriteLine("<tr>")
         text.WriteLine(String.Format("<td width=""33%"">{0}</td>", Me.mTabPageDescription.txtPurpose.Text))
         text.WriteLine(String.Format("<td width=""33%"">{0}</td>", Me.mTabPageDescription.txtUse.Text))
         text.WriteLine(String.Format("<td width=""33%"">{0}</td>", Me.mTabPageDescription.txtMisuse.Text))
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", Me.mTabPageDescription.txtReferences.Text)) 'JAR: 24MAY2007, EDT-30 Add field for References
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
 
@@ -3726,7 +3725,7 @@ Public Class Designer
                 OpenArchetype(sender, e)
             Case 2 ' Open from Web
                 OpenArchetypeFromWeb(sender, e)
-            Case 3 ' Save
+            Case 3 ' Save                                
                 If Filemanager.SaveFiles(False) Then
                     Me.MenuFileSpecialise.Visible = True
                 End If
@@ -3953,7 +3952,7 @@ Public Class Designer
         Dim STATE_processed As Boolean
         Dim tp As Crownwood.Magic.Controls.TabPage        
 
-        ' Clear the definitions prior to rebuilding them
+        ' Clear the definitions prior to rebuilding them        
         mFileManager.Archetype.ResetDefinitions()
         mFileManager.Archetype.Description = mTabPageDescription.Description        
         mFileManager.Archetype.TranslationDetails = mTabPageDescription.TranslationDetails
@@ -5087,22 +5086,29 @@ Public Class Designer
 
         new_concept = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me)
 
-        If new_concept = "" Then
+        'JAR: 22MAY07, EDT-41 Validate archetype ID
+        'If new_concept = "" Then
+        '    Return
+        'End If
+
+        'If i > -1 Then
+        '    new_concept = arch_id.Substring(0, i + 1) + new_concept.Replace("-", "_")
+        'Else
+        '    new_concept = new_concept.Replace(" ", "_")
+        'End If
+
+        'mFileManager.Archetype.Archetype_ID.Concept = new_concept.ToLowerInvariant
+
+        If mFileManager.Archetype.Archetype_ID.ValidConcept(new_concept, arch_id.ToString) Then 'Note: new_concept can be updated in ValidConcept!
+            mFileManager.Archetype.Archetype_ID.Concept = new_concept
+        Else
             Return
         End If
 
-        If i > -1 Then
-            new_concept = arch_id.Substring(0, i + 1) + new_concept.Replace("-", "_")
-        Else
-            new_concept = new_concept.Replace(" ", "_")
-        End If
-
-        mFileManager.Archetype.Archetype_ID.Concept = new_concept.ToLowerInvariant
         ' force save as to new file
         mFileManager.IsNew = True
         mFileManager.FileEdited = True
         Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
-
     End Sub
 
     Private Sub MenuDisplayFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDisplayFind.Click, MenuDisplayFindAgain.Click

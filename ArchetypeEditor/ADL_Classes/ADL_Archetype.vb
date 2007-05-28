@@ -67,6 +67,12 @@ Namespace ArchetypeEditor.ADL_Classes
                 SetArchetypeId(Value)
             End Set
         End Property
+
+        'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
+        Public Overrides Sub UpdateArchetypeId() 'Forces changes made to ArchetypeID to be updated in parser
+            SetArchetypeId(Archetype_ID)
+        End Sub
+
         Public Overrides Property LifeCycle() As String
             Get
                 Return sLifeCycle
@@ -1482,7 +1488,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Else
                     escapedString = rm.ArchetypeId.Replace(".", "\.")
                 End If
-            
+
                 an_attribute = mAomFactory.create_c_attribute_single(objNode, openehr.base.kernel.Create.STRING.make_from_cil("action_archetype_id"))
                 objNodeSimple = mAomFactory.create_c_primitive_object(an_attribute, _
                     mAomFactory.create_c_string_make_from_regexp( _
@@ -1755,7 +1761,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 adlEngine.create_new_archetype(id.rm_originator, id.rm_name, id.rm_entity, _
                     openehr.base.kernel.Create.STRING.make_from_cil(sPrimaryLanguageCode))
                 adlArchetype = adlEngine.archetype
-                adlArchetype.set_archetype_id(id)                
+                adlArchetype.set_archetype_id(id)
                 adlArchetype.definition.set_object_id(adlArchetype.concept)
 
             Catch
