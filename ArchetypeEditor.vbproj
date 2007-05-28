@@ -204,6 +204,10 @@
     </Content>
     <Content Include="Support\ChangeLog.htm" />
     <Content Include="Support\ocean.ico" />
+    <EmbeddedResource Include="Forms\ChooseFix.resx">
+      <DependentUpon>ChooseFix.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TabPageActivity.resx">
       <SubType>Designer</SubType>
       <DependentUpon>TabPageActivity.vb</DependentUpon>
@@ -621,6 +625,9 @@
     <Compile Include="Forms\Choose.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\ChooseFix.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\ChoosePath.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -994,6 +1001,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Terminology\Terminology.xsx">
+      <DependentUpon>Terminology.xsd</DependentUpon>
+    </None>
     <None Include="Web References\ArchetypeFinderWebServiceURL\ArchetypeFinderBean.wsdl" />
     <None Include="Web References\ArchetypeFinderWebServiceURL\Reference.map" />
   </ItemGroup>
