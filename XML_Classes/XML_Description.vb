@@ -176,6 +176,7 @@ Namespace ArchetypeEditor.XML_Classes
             'Me.OtherDetails = adl_description.OtherDetails 'JAR: 24MAY2007, AE-30 Additional field References
             Me.References = adl_description.References 'JAR: 24MAY2007, AE-30 Additional field References
 
+
             'Dim XmlArchetypeDetails As New XML_ArchetypeDetails(mXML_Description)
             'If adl_description.Details.Count > 0 Then
             '    For Each adl_detail In adl_description.Details

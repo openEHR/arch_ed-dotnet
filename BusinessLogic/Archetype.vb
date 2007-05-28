@@ -38,6 +38,8 @@ Public MustInherit Class Archetype
     MustOverride ReadOnly Property SourceCode() As String
     MustOverride ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
     MustOverride Sub Specialise(ByVal NewConceptShortName As String, ByRef The_Ontology As OntologyManager)
+    MustOverride Sub UpdateArchetypeId() 'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
+
     Public ReadOnly Property RmEntity() As StructureType
         Get
             Return mArchetypeID.ReferenceModelEntity

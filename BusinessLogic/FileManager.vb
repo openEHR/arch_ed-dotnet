@@ -218,11 +218,10 @@ Public Class FileManagerLocal
                 mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface
             End If
         Else
-            Debug.Assert(False)
             MessageBox.Show("File type: " & aFileName & " is not supported", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            Debug.Assert(False)
             Return False
         End If
-
 
         mHasOpenFileError = False
 
@@ -230,7 +229,7 @@ Public Class FileManagerLocal
         ' if this archtype comes from the web, aFileName will be the URL.
         ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
         ' it will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
-        ' This avoids data and file overflow.  
+        ' This avoids data and file overflow.
 
         If aFileName.StartsWith("http") Then
 
@@ -287,32 +286,84 @@ Public Class FileManagerLocal
 
         If mArchetypeEngine.OpenFileError Then
             mHasOpenFileError = True
-
             Return False
+        End If
 
-        Else
-            ' ensure the filename and archetype ID are in tune
-            Dim i As Integer = aFileName.LastIndexOf("\")
-            Dim shortFileName As String = aFileName.Substring(i + 1)
-            If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".") Then
-                If MessageBox.Show(mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & _
-                   ": " & shortFileName & "; " & Environment.NewLine & _
-                   mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & _
-                   ": " & mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & _
-                   mOntologyManager.GetOpenEHRTerm(147, "Change") & _
-                   " " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name"), _
-                   AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                    Me.FileName = aFileName.Substring(i + 1) + mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
-                End If
+        'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
+        'Else
+        '' ensure the filename and archetype ID are in tune
+        'Dim i As Integer = aFileName.LastIndexOf("\")
+        'Dim shortFileName As String = aFileName.Substring(i + 1)
+
+        'If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".") Then
+        '    If MessageBox.Show(mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & _
+        '       ": " & shortFileName & "; " & Environment.NewLine & _
+        '       mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & _
+        '       ": " & mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & _
+        '       mOntologyManager.GetOpenEHRTerm(147, "Change") & _
+        '       " " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name"), _
+        '       AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+        '        Me.FileName = aFileName.Substring(i + 1) + mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
+        '    End If
+        'End If
+
+        mPriorFileName = Nothing
+        mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
+        FileEdited = False
+
+        'ensure the filename and archetype ID match (ignore case!)        
+        Dim shortFileName As String = aFileName.Substring((aFileName.LastIndexOf("\")) + 1)
+        If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.CurrentCultureIgnoreCase) Then
+            If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
+                FileLoading = False
+                FileEdited = True
+                FileLoading = True
+            End If
+        End If
+
+        Return True
+    End Function
+
+    'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
+    Private Function CheckFileName(ByVal FileName As String) As Boolean 'returns false if an update occurred
+
+        Dim updateOccurred As Boolean = False
+        Dim shortFileName As String = Left(FileName, FileName.LastIndexOf("."))
+
+        'validate the concept to update it with the correct case and remove illegal characters
+        Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
+        Id1.ValidConcept(Id1.Concept, "") 'validation may update Id1.concept
+
+        Dim Id2 As New ArchetypeID(shortFileName)
+        Id2.ValidConcept(Id2.Concept, "") 'validation may update Id2.Concept 
+
+        Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
+        If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
+
+            'NOTE: The following updates can occur!
+            '    Update 1: Update if concept was changed in ValidConcept call
+            '    Update 2: Update according to the user selection
+
+            updateOccurred = True
+
+            Dim Use As String = IIf(frm.selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
+
+            'update filename if changed
+            If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
+                mPriorFileName = Me.FileName
+                Me.FileName = Replace(Me.FileName, FileName, Use & "." & ParserType)
+                updateOccurred = True
             End If
 
-            mPriorFileName = Nothing
-            mOntologyManager.PopulateAllTerms()
-
-            FileEdited = False
-
-            Return True
+            'update archetype id if changed
+            If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
+                Archetype.Archetype_ID.SetFromString(Use)
+                Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
+            End If
         End If
+
+        frm.Close()
+        Return Not updateOccurred
     End Function
 
     Public Function FormatIsAvailable(ByVal a_format As String) As Boolean
@@ -332,7 +383,7 @@ Public Class FileManagerLocal
     Public Function CreateXMLParser() As XMLParser.XmlArchetypeParser
         'Create a new parser
         Dim xml_parser As New XMLParser.XmlArchetypeParser()
-        
+
         xml_parser.NewArchetype( _
                    mArchetypeEngine.Archetype.Archetype_ID.ToString, _
                    mOntologyManager.PrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
@@ -402,7 +453,7 @@ Public Class FileManagerLocal
             If archDetail.Copyright <> "" Then
                 xml_detail.copyright = archDetail.Copyright
             End If
-            xml_detail.misuse = archDetail.MisUse            
+            xml_detail.misuse = archDetail.MisUse
 
             'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             'xml_detail.original_resource_uri = archDetail.OriginalResourceURI
@@ -444,7 +495,6 @@ Public Class FileManagerLocal
     Private Function CreateAdlParser() As ArchetypeEditor.ADL_Classes.ADL_Interface
         'Create a new parser
         Dim adlParser As New ArchetypeEditor.ADL_Classes.ADL_Interface()
-
         adlParser.NewArchetype( _
             mArchetypeEngine.Archetype.Archetype_ID, _
             mOntologyManager.PrimaryLanguageCode)
@@ -774,6 +824,7 @@ Public Class FileManagerLocal
                 Dim a_ontology As ArchetypeEditor.ADL_Classes.ADL_Ontology
                 Dim a_term As RmTerm
                 mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.DefaultLanguageCode)
+
 
                 If mArchetypeEngine.ArchetypeAvailable Then
 
