@@ -2149,8 +2149,9 @@ Namespace ArchetypeEditor.XML_Classes
                         New RmExistence(1).XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1                        
                         'rm.Children.Count)
 
-                        ' only one activity allowed at present
-                        Debug.Assert(rm.Children.Count < 2)
+                        'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+                        'only one activity allowed at present - EDT-44 not any more! 
+                        'Debug.Assert(rm.Children.Count < 2)
 
                         For Each activity As RmActivity In rm.Children
                             BuildActivity(activity, an_attribute)
