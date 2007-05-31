@@ -355,6 +355,15 @@ Public Class TableStructure
         End Set
     End Property
 
+    'JAR: 29MAY07, EDT-21 To detect whether items have been added to table
+    Public Function HasData() As Boolean
+        If Not mArchetypeTable Is Nothing Then
+            Return (mArchetypeTable.Rows.Count > 0)
+        Else
+            Return False
+        End If
+    End Function
+
     Sub ProcessNodesToTable(ByVal ch As Children)
         Dim an_rm_structure As RmStructure
 
@@ -595,7 +604,7 @@ Public Class TableStructure
         Dim rowLabel As String
 
         rowIndex = Me.dgGrid.CurrentRowIndex
-        
+
         If rowIndex = -1 Then
             'Nothing to delete
             MessageBox.Show(AE_Constants.Instance.Cannot_delete & ": " & AE_Constants.Instance.SelectItem, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -678,9 +687,14 @@ Public Class TableStructure
         s = "\intbl\f0\fs20\b " '& s & "\cell"
 
         'Then add the column headings
-        For Each t As String In CType(CType(mKeyColumns(1), ArchetypeElement).Constraint, Constraint_Text).AllowableValues.Codes
-            s = s & " " & mFileManager.OntologyManager.GetTerm(t).Text & "\cell "
-        Next
+        'JAR: 29MAY07, EDT-21 Exception thrown when mKeyColumns.count is 0 
+        If mKeyColumns.Count > 0 Then
+            For Each t As String In CType(CType(mKeyColumns(1), ArchetypeElement).Constraint, Constraint_Text).AllowableValues.Codes
+                s = s & " " & mFileManager.OntologyManager.GetTerm(t).Text & "\cell "
+            Next
+        Else
+            s = s & " " & Me.RowHeadings.HeaderText & "\cell "
+        End If
         s = s & "\b0\row"
         Text = Text & new_line & s
 
