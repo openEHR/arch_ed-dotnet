@@ -4,6 +4,7 @@ Public Class TabPageActivity
     Friend WithEvents mOccurrences As OccurrencesPanel
     Private mActivity As RmActivity
     Private mFileManager As FileManagerLocal
+    Private mTabPageInstruction As TabPageInstruction 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
 
     Public Property Activity() As RmActivity
         Get
@@ -81,11 +82,12 @@ Public Class TabPageActivity
         End If
 
         Me.HelpProviderActivity.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
-        If mFileManager.IsNew Then
-            'need to add an RmActivity to the mActivities set
-            Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm("new activity")
-            mActivity = New RmActivity(a_term.Code)
-        End If
+        'JAR: 30MAY07, EDT-44 Term already created in TabPageInstruction.  Below causes ontology to be thrown out!
+        'If mFileManager.IsNew Then
+        '    'need to add an RmActivity to the mActivities set
+        '    Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm("New activity")
+        '    mActivity = New RmActivity(a_term.Code)
+        'End If
         mIsloading = False
 
     End Sub
@@ -135,7 +137,13 @@ Public Class TabPageActivity
             mFileManager.OntologyManager.SetText(a_term)
             mFileManager.FileEdited = True
         End If
+    End Sub
 
+    'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+    Private Sub menuItemRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveToolStripMenuItem.Click        
+        If Not mTabPageInstruction Is Nothing Then
+            mTabPageInstruction.RemoveActivity()
+        End If
     End Sub
 
     Private Sub txtAction_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtAction.TextChanged
@@ -155,7 +163,7 @@ Public Class TabPageActivity
             start_info.WorkingDirectory = Application.StartupPath
 
 
-            ' get the name of the action 
+            ' get the name of the action
             action_name = Me.txtAction.Text
             regx = New System.Text.RegularExpressions.Regex(action_name)
 
@@ -219,11 +227,19 @@ Public Class TabPageActivity
         Me.lblNodeId.Text = ""
     End Sub
 
+    'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+    Public Sub ShowPopUp()
+        Me.ContextMenuStrip1.Show()
+    End Sub
+
     Public Sub ShowPopUp(ByVal location As Drawing.Point)
         Me.ContextMenuStrip1.Show(location)
     End Sub
 
-    Public Sub New()
+    'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+    'Public Sub New()
+    Public Sub New(ByVal ParentTabPageInstruction As TabPageInstruction)
+        mTabPageInstruction = ParentTabPageInstruction
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -240,5 +256,6 @@ Public Class TabPageActivity
 
     Private Sub ContextMenuStrip1_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
         RenameToolStripMenuItem.Text = AE_Constants.Instance.Rename & " - " & CType(Me.Parent, Crownwood.Magic.Controls.TabPage).Title
+        RemoveToolStripMenuItem.Text = AE_Constants.Instance.Remove & " - " & CType(Me.Parent, Crownwood.Magic.Controls.TabPage).Title 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
     End Sub
 End Class

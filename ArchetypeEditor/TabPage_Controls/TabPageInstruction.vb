@@ -21,6 +21,7 @@ Public Class TabPageInstruction
 
     Private mIsloading As Boolean
     Private mActionSpecification As TabPageStructure
+    Private tpNewActivity As New Crownwood.Magic.Controls.TabPage
     Friend WithEvents mOccurrences As OccurrencesPanel
     Friend WithEvents butRemoveActivity As System.Windows.Forms.Button
     Friend WithEvents butAddActivity As System.Windows.Forms.Button
@@ -34,12 +35,11 @@ Public Class TabPageInstruction
         MyBase.New()
 
         'This call is required by the Windows Form Designer.
-        'Try
         InitializeComponent()
 
         If Not Me.DesignMode Then
             mFileManager = Filemanager.Master
-            Dim activity As New TabPageActivity()
+            Dim activity As New TabPageActivity(Me)
             Dim tpActivity As New Crownwood.Magic.Controls.TabPage
             tpActivity.Controls.Add(activity)
             activity.Dock = DockStyle.Fill
@@ -98,6 +98,7 @@ Public Class TabPageInstruction
         Me.TabControlInstruction.Size = New System.Drawing.Size(848, 400)
         Me.TabControlInstruction.TabIndex = 0
         Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
+        Me.TabControlInstruction.CausesValidation = True        
         '
         'butRemoveActivity
         '
@@ -121,6 +122,7 @@ Public Class TabPageInstruction
         Me.butAddActivity.Size = New System.Drawing.Size(27, 25)
         Me.butAddActivity.TabIndex = 16
         Me.toolTipAction.SetToolTip(Me.butAddActivity, "Add new activity")
+        Me.butAddActivity.Visible = False 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
         '
         'PanelBaseTop
         '
@@ -155,12 +157,14 @@ Public Class TabPageInstruction
 #End Region
 
     Public Function HasProtocol() As Boolean
-        For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlInstruction.TabPages
-            If tp.Name = "tpProtocol" Then
-                Return True
-            End If
-        Next
-        Return False
+        'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+        'For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlInstruction.TabPages
+        '    If tp.Name = "tpProtocol" Then
+        '        Return True
+        '    End If
+        'Next
+        'Return False
+        Return Not TabControlInstruction.TabPages.Item(AE_Constants.Instance.Protocol) Is Nothing        
     End Function
 
     Private Sub TabPageInstruction_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
@@ -172,16 +176,27 @@ Public Class TabPageInstruction
 
         Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
         If mFileManager.IsNew Then
-            'need to add an RmActivity to the mActivities set
-            Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New activity"))
-            Dim anActivity As New RmActivity(a_term.Code)
-            Debug.Assert(Me.TabControlInstruction.TabPages.Count = 1)
-            Dim tpActivity As Crownwood.Magic.Controls.TabPage = CType(Me.TabControlInstruction.TabPages(0), Crownwood.Magic.Controls.TabPage)
-            tpActivity.Title = a_term.Text
-            CType(tpActivity.Controls(0), TabPageActivity).Activity = anActivity
-        End If
-        mIsloading = False
 
+            'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+            'need to add an RmActivity to the mActivities set
+            'Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New Activity"))
+            'Dim anActivity As New RmActivity(a_term.Code)
+            'Debug.Assert(Me.TabControlInstruction.TabPages.Count = 1)
+            'Dim tpActivity As Crownwood.Magic.Controls.TabPage = CType(Me.TabControlInstruction.TabPages(0), Crownwood.Magic.Controls.TabPage)
+            'tpActivity.Title = a_term.Text
+            'CType(tpActivity.Controls(0), TabPageActivity).Activity = anActivity
+
+            Me.TabControlInstruction.TabPages.Clear()
+            AddActivityTab()
+
+            Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm("Current Activity", "Current Activity")
+            mFileManager.OntologyManager.SetText(a_term)
+            Dim rmActivityItem As New RmActivity(a_term.Code)
+            AddActivityTab(a_term.Text, rmActivityItem)
+            Me.TabControlInstruction.SelectedTab = Me.TabControlInstruction.TabPages(0) 'set to first tab
+        End If
+
+        mIsloading = False
     End Sub
 
     Public ReadOnly Property ComponentType() As StructureType
@@ -192,13 +207,15 @@ Public Class TabPageInstruction
 
     Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
         For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlInstruction.TabPages
-            Dim uc As Control = tp.Controls(0)
-            If TypeOf (uc) Is TabPageActivity Then
-                text.WriteLine("\par Activities: \par")
-                CType(uc, TabPageActivity).toRichText(text, level + 1)
-            ElseIf TypeOf (uc) Is TabPageStructure Then 'Protocol
-                text.WriteLine("\par Protocol: \par")
-                CType(uc, TabPageStructure).toRichText(text, level + 1)
+            If Not tp Is tpNewActivity Then 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+                Dim uc As Control = tp.Controls(0)
+                If TypeOf (uc) Is TabPageActivity Then
+                    text.WriteLine("\par Activities: \par")
+                    CType(uc, TabPageActivity).toRichText(text, level + 1)
+                ElseIf TypeOf (uc) Is TabPageStructure Then 'Protocol
+                    text.WriteLine("\par Protocol: \par")
+                    CType(uc, TabPageStructure).toRichText(text, level + 1)
+                End If
             End If
         Next
     End Sub
@@ -206,7 +223,7 @@ Public Class TabPageInstruction
     Public Sub Reset()
         Me.TabControlInstruction.TabPages.Clear()
         mFileManager = Filemanager.Master
-        Dim activity As New TabPageActivity()
+        Dim activity As New TabPageActivity(Me)
         Dim tpActivity As New Crownwood.Magic.Controls.TabPage
         tpActivity.Controls.Add(activity)
         activity.Dock = DockStyle.Fill
@@ -228,6 +245,10 @@ Public Class TabPageInstruction
 
         mIsloading = True
 
+        'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+        Me.TabControlInstruction.TabPages.Clear()
+        AddActivityTab()
+
         For Each rm_structure As RmStructureCompound In instruction_attributes
 
             Select Case rm_structure.Type
@@ -235,18 +256,25 @@ Public Class TabPageInstruction
 
                     If rm_structure.Children.Count > 0 Then
 
-                        Me.TabControlInstruction.TabPages.Clear()
+                        'Me.TabControlInstruction.TabPages.Clear()
 
-                        For Each activity As RmActivity In rm_structure.Children
-                            Dim anActivity As New TabPageActivity()
-                            Dim tpActivity As New Crownwood.Magic.Controls.TabPage
+                        For Each rmActivityItem As RmActivity In rm_structure.Children
+                            'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+                            AddActivityTab(mFileManager.OntologyManager.GetText(rmActivityItem.NodeId), rmActivityItem)
 
-                            tpActivity.Title = mFileManager.OntologyManager.GetText(activity.NodeId)
+                            'Me.TabControlInstruction.TabPages.Clear()
 
-                            anActivity.Activity = activity
-                            tpActivity.Controls.Add(anActivity)
-                            anActivity.Dock = DockStyle.Fill
-                            Me.TabControlInstruction.TabPages.Add(tpActivity)
+                            'For Each activity As RmActivity In rm_structure.Children
+                            '    Dim anActivity As New TabPageActivity()
+                            '    Dim tpActivity As New Crownwood.Magic.Controls.TabPage
+
+                            '    tpActivity.Title = mFileManager.OntologyManager.GetText(activity.NodeId)
+
+                            '    anActivity.Activity = activity
+                            '    tpActivity.Controls.Add(anActivity)
+                            '    anActivity.Dock = DockStyle.Fill
+                            '    Me.TabControlInstruction.TabPages.Add(tpActivity)
+                            'Next
                         Next
                     End If
                 Case StructureType.Protocol
@@ -256,9 +284,12 @@ Public Class TabPageInstruction
             End Select
         Next
 
-        If Me.TabControlInstruction.TabPages.Count > 1 Then
-            Me.butRemoveActivity.Visible = True
-        End If
+        'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+        Me.TabControlInstruction.SelectedTab = Me.TabControlInstruction.TabPages(0) 'set to first tab
+
+        'If Me.TabControlInstruction.TabPages.Count > 1 Then
+        '    Me.butRemoveActivity.Visible = True
+        'End If
 
         mIsloading = False
 
@@ -273,14 +304,15 @@ Public Class TabPageInstruction
         End If
 
         For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlInstruction.TabPages
-            Dim uc As Control = tp.Controls(0)
-            If TypeOf (uc) Is TabPageActivity Then
-                CType(uc, TabPageActivity).BuildInterface(aContainer, pos, mandatory_only)
-            ElseIf TypeOf (uc) Is TabPageStructure Then 'Protocol
-                CType(uc, TabPageStructure).BuildInterface(aContainer, pos, mandatory_only)
+            If Not tp Is tpNewActivity Then 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+                Dim uc As Control = tp.Controls(0)
+                If TypeOf (uc) Is TabPageActivity Then
+                    CType(uc, TabPageActivity).BuildInterface(aContainer, pos, mandatory_only)
+                ElseIf TypeOf (uc) Is TabPageStructure Then 'Protocol
+                    CType(uc, TabPageStructure).BuildInterface(aContainer, pos, mandatory_only)
+                End If
             End If
         Next
-
 
     End Sub
 
@@ -290,14 +322,16 @@ Public Class TabPageInstruction
         'Add the activities
         Dim activities As New RmStructureCompound("activities", StructureType.Activities)
 
-        'for each each activity - there is only one at present!
+        'for each activity - there is only one at present! EDT-44 Not any more!
 
         For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlInstruction.TabPages
-            Dim uc As Control = tp.Controls(0)
-            If TypeOf (uc) Is TabPageActivity Then
-                activities.Children.Add(CType(uc, TabPageActivity).Activity)
-            ElseIf TypeOf (uc) Is TabPageStructure Then 'Protocol
-                rm.Children.Add(CType(uc, TabPageStructure).SaveAsStructure)
+            If Not tp Is tpNewActivity Then 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+                Dim uc As Control = tp.Controls(0)
+                If TypeOf (uc) Is TabPageActivity Then
+                    activities.Children.Add(CType(uc, TabPageActivity).Activity)
+                ElseIf TypeOf (uc) Is TabPageStructure Then 'Protocol
+                    rm.Children.Add(CType(uc, TabPageStructure).SaveAsStructure)
+                End If
             End If
         Next
         rm.Children.Add(activities)
@@ -306,11 +340,13 @@ Public Class TabPageInstruction
 
     Public Sub Translate()
         For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlInstruction.TabPages
-            Dim uc As Control = tp.Controls(0)
-            If TypeOf (uc) Is TabPageActivity Then
-                CType(uc, TabPageActivity).Translate()
-            ElseIf TypeOf (uc) Is TabPageStructure Then
-                CType(uc, TabPageStructure).Translate()
+            If Not tp Is tpNewActivity Then 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+                Dim uc As Control = tp.Controls(0)
+                If TypeOf (uc) Is TabPageActivity Then
+                    CType(uc, TabPageActivity).Translate()
+                ElseIf TypeOf (uc) Is TabPageStructure Then
+                    CType(uc, TabPageStructure).Translate()
+                End If
             End If
         Next
     End Sub
@@ -332,34 +368,101 @@ Public Class TabPageInstruction
         OceanArchetypeEditor.Reflect(Me)
     End Sub
 
+    'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+    Private Sub butRemoveActivity_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles butRemoveActivity.Click
+        RemoveActivity()
+    End Sub
+
     Private Sub butAddActivity_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddActivity.Click
-        Dim activity As New TabPageActivity()
-        Dim tpActivity As New Crownwood.Magic.Controls.TabPage
-        'need to add an RmActivity to the mActivities set
+        'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+        NewActivity()
+
+        'Dim activity As New TabPageActivity()
+        'Dim tpActivity As New Crownwood.Magic.Controls.TabPage
+        ''need to add an RmActivity to the mActivities set
 
 
+        'Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New activity"))
+
+        'Dim s As String() = OceanArchetypeEditor.Instance.GetInput(a_term, Me.ParentForm)
+
+        'If s(0) <> "" Then
+        '    mFileManager.OntologyManager.SetText(a_term)
+        '    Dim anActivity As New RmActivity(a_term.Code)
+        '    tpActivity.Title = a_term.Text
+        '    activity.Activity = anActivity
+
+        '    tpActivity.Controls.Add(activity)
+        '    activity.Dock = DockStyle.Fill
+        '    Me.TabControlInstruction.TabPages.Add(tpActivity)
+        '    Me.butRemoveActivity.Visible = True
+        'End If
+    End Sub
+
+    Private Sub NewActivity() 'Prompts for activity description then adds
         Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New activity"))
-
         Dim s As String() = OceanArchetypeEditor.Instance.GetInput(a_term, Me.ParentForm)
+        mFileManager.OntologyManager.SetText(a_term)
 
         If s(0) <> "" Then
-            mFileManager.OntologyManager.SetText(a_term)
-            Dim anActivity As New RmActivity(a_term.Code)
-            tpActivity.Title = a_term.Text
-            activity.Activity = anActivity
+            Dim rmActivityItem As New RmActivity(a_term.Code)
+            AddActivityTab(a_term.Text, rmActivityItem)
+        End If
+    End Sub
 
-            tpActivity.Controls.Add(activity)
-            activity.Dock = DockStyle.Fill
-            Me.TabControlInstruction.TabPages.Add(tpActivity)
-            Me.butRemoveActivity.Visible = True
+    Private Sub AddActivityTab(ByVal TabCaption As String, ByVal anActivity As RmActivity)
+        Dim activity As New TabPageActivity(Me)
+        Dim tpActivity As New Crownwood.Magic.Controls.TabPage
+
+        activity.Activity = anActivity
+        activity.Dock = DockStyle.Fill
+        tpActivity.Controls.Add(activity)
+        tpActivity.Title = TabCaption
+
+        'insert tab before "New Activity" tab
+        Me.TabControlInstruction.TabPages.Insert(TabControlInstruction.TabPages.IndexOf(tpNewActivity), tpActivity)
+    End Sub
+
+    Private Sub AddActivityTab() 'Add "New Activity" blank tab
+        tpNewActivity = New Crownwood.Magic.Controls.TabPage
+        tpNewActivity.Title = "New Activity"
+        Me.TabControlInstruction.TabPages.Add(tpNewActivity)
+    End Sub
+
+    Public Sub RemoveActivity()
+        If Not TabControlInstruction.SelectedTab Is Nothing Then
+            If Not TabControlInstruction.SelectedTab Is tpNewActivity Then
+                'prompt for remove
+                If MessageBox.Show(AE_Constants.Instance.Remove & " " & Chr(34) & TabControlInstruction.SelectedTab.Title & Chr(34), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
+                    Windows.Forms.DialogResult.OK Then
+                    Me.TabControlInstruction.TabPages.Remove(Me.TabControlInstruction.SelectedTab)  'remove tab
+                    Me.TabControlInstruction.SelectedTab = Me.TabControlInstruction.TabPages(0)     'set to first tab
+                    mFileManager.FileEdited = True
+                End If
+            End If
+        End If
+    End Sub
+
+    Private Sub TabControlInstruction_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabControlInstruction.Click
+
+        If Not TabControlInstruction.SelectedTab Is Nothing Then
+            If TabControlInstruction.SelectedTab Is tpNewActivity Then
+                TabControlInstruction.ResumeLayout(False)
+                NewActivity()
+                'set current tab to the tab just added
+                TabControlInstruction.SelectedIndex = TabControlInstruction.TabPages.IndexOf(tpNewActivity) - 1
+                TabControlInstruction.ResumeLayout(True)
+            End If
         End If
     End Sub
 
     Private Sub TabControlInstruction_MouseClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles TabControlInstruction.MouseClick
         If e.Button = Windows.Forms.MouseButtons.Right Then
-            If Not TabControlInstruction.SelectedTab Is Nothing Then
+            If Not TabControlInstruction.SelectedTab Is Nothing AndAlso Not TabControlInstruction.SelectedTab Is tpNewActivity Then 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
                 Dim uc As Control = TabControlInstruction.SelectedTab.Controls(0)
                 If TypeOf (uc) Is TabPageActivity Then
+                    'do not allow removal of first tab
+                    CType(uc, TabPageActivity).RemoveToolStripMenuItem.Visible = TabControlInstruction.SelectedIndex <> 0
                     CType(uc, TabPageActivity).ShowPopUp(TabControlInstruction.PointToScreen(e.Location))
                 End If
             End If
