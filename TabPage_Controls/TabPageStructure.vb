@@ -627,8 +627,34 @@ Public Class TabPageStructure
         mIsLoading = False
     End Sub
 
+    'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+    Public Function HasData() As Boolean 'Returns true if entry structure contains object(s)
+        HasData = False
+
+        If Not ArchetypeDisplay Is Nothing Then
+            Select Case StructureType
+                Case StructureType.Single, StructureType.Tree, StructureType.Cluster
+                    HasData = Not Elements Is Nothing
+                Case StructureType.List
+                    HasData = CType(CType(ArchetypeDisplay, ListStructure).InterfaceBuilder, System.Windows.Forms.ListView.ListViewItemCollection).Count > 0
+                Case StructureType.Table
+                    HasData = CType(ArchetypeDisplay, TableStructure).HasData
+                Case Else
+                    'not supported
+            End Select
+        End If
+
+        Return HasData
+    End Function
+
     Public Function SaveAsStructure() As RmStructure
         ' save as RmStructureCompound or RmSlot
+
+        'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+        If Not HasData() Then
+            Return Nothing
+            Exit Function
+        End If
 
         If mIsEmbedded Then
             If mEmbeddedSlot Is Nothing Then
@@ -652,6 +678,7 @@ Public Class TabPageStructure
     End Function
 
     Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
+        If Not HasData() Then Exit Sub 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
 
         If Not mArchetypeControl Is Nothing Then
             text.WriteLine(mArchetypeControl.ToRichText(level, Chr(13) & Chr(10)))
@@ -661,6 +688,8 @@ Public Class TabPageStructure
     End Sub
 
     Public Sub toHTML(ByRef text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "")
+        If Not HasData() Then Exit Sub 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+
         If Not mArchetypeControl Is Nothing Then
             text.WriteLine(mArchetypeControl.ToHTML(BackGroundColour))
             text.WriteLine("<hr>")
@@ -740,8 +769,8 @@ Public Class TabPageStructure
             aContainer.Size = New Size
         End If
 
-        If Not mArchetypeControl Is Nothing Then
-
+        'If Not mArchetypeControl Is Nothing Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+        If Not mArchetypeControl Is Nothing AndAlso HasData() Then
             ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only, mFileManager)
         End If
     End Sub

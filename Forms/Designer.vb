@@ -37,7 +37,7 @@ Public Class Designer
     Private mDataViewTerminologies As DataView
     Private mFindString As String = ""
     Private mFindStringFrom As Integer = -1
-    Private mFileManager As FileManagerLocal
+    Private mFileManager As FileManagerLocal    
     Friend WithEvents mRichTextArchetype As ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
     Friend WithEvents mTermBindingPanel As TermBindingPanel
     Friend WithEvents menuFileExport As System.Windows.Forms.MenuItem
@@ -2560,7 +2560,7 @@ Public Class Designer
         Next
 
         'Translate descriptions
-        mTabPageDescription.Translate()        
+        mTabPageDescription.Translate()
         RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
         RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
 
@@ -2734,7 +2734,7 @@ Public Class Designer
                 End If
         End Select
 
-        mRichTextArchetype.Rtf = text.ToString        
+        mRichTextArchetype.Rtf = text.ToString
         RichTextBoxUnicode.ProcessRichEditControl(mRichTextArchetype, mFileManager, mTabPageDescription)
     End Sub
 
@@ -3950,11 +3950,11 @@ Public Class Designer
 
     Public Sub PrepareToSave() 'Called internally and by FileManager
         Dim STATE_processed As Boolean
-        Dim tp As Crownwood.Magic.Controls.TabPage        
+        Dim tp As Crownwood.Magic.Controls.TabPage
 
         ' Clear the definitions prior to rebuilding them        
         mFileManager.Archetype.ResetDefinitions()
-        mFileManager.Archetype.Description = mTabPageDescription.Description        
+        mFileManager.Archetype.Description = mTabPageDescription.Description
         mFileManager.Archetype.TranslationDetails = mTabPageDescription.TranslationDetails
 
         If Me.ShowAsDraft Then
@@ -3987,8 +3987,8 @@ Public Class Designer
 
                 Select Case mFileManager.Archetype.Definition.Type
                     Case StructureType.INSTRUCTION
-                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children
-                        If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
+                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children                        
+                        If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing AndAlso mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                             Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                             rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
                             CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
@@ -3996,7 +3996,7 @@ Public Class Designer
 
                     Case StructureType.ACTION
                         CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageAction.SaveAsAction.Children
-                        If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
+                        If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing AndAlso mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                             Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                             rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
                             CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
@@ -4015,7 +4015,7 @@ Public Class Designer
 
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
-                                        If Not mTabPageDataStructure Is Nothing Then
+                                        If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                             RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                         End If
                                         rm.Children.Add(RmHistory)
@@ -4023,8 +4023,7 @@ Public Class Designer
                                     End If
 
                                 Case "tpStateStructure"
-
-                                    If Not mTabPageDataStateStructure Is Nothing Then
+                                    If Not mTabPageDataStateStructure Is Nothing AndAlso mTabPageDataStateStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                         Dim rmState As New RmStructureCompound(StructureType.State.ToString, StructureType.State)
                                         rmState.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
                                         CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rmState)
@@ -4041,7 +4040,7 @@ Public Class Designer
                                 Case "tpData"
                                     'No action as dealt with above
                                 Case "tpProtocol"
-                                    If Not mTabPageProtocolStructure Is Nothing Then
+                                    If Not mTabPageProtocolStructure Is Nothing AndAlso mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                         Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                         rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
                                         CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
@@ -4064,7 +4063,7 @@ Public Class Designer
                                             If Tab.TabPages.Count = 2 Then
                                                 If Not mTabPageStateEventSeries Is Nothing Then
                                                     Dim stateHistory As RmHistory = mTabPageStateEventSeries.SaveAsEventSeries
-                                                    If Not mTabPageStateStructure Is Nothing Then
+                                                    If Not mTabPageStateStructure Is Nothing AndAlso mTabPageStateStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                                         stateHistory.Data = Me.mTabPageStateStructure.SaveAsStructure
                                                         rm.Children.Add(stateHistory)
                                                     End If
@@ -4088,7 +4087,7 @@ Public Class Designer
                             Select Case tp.Name
 
                                 Case "tpDataStructure"
-                                    If Not mTabPageDataStructure Is Nothing Then
+                                    If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
@@ -4096,7 +4095,7 @@ Public Class Designer
                                     End If
 
                                 Case "tpStateStructure"
-                                    If Not mTabPageDataStateStructure Is Nothing Then
+                                    If Not mTabPageDataStateStructure Is Nothing AndAlso mTabPageDataStateStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                         STATE_processed = True
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
@@ -4112,7 +4111,7 @@ Public Class Designer
                                 Case "tpData"
                                     'No action as dealt with above
                                 Case "tpProtocol"
-                                    If Not mTabPageProtocolStructure Is Nothing Then
+                                    If Not mTabPageProtocolStructure Is Nothing AndAlso mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                         rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
@@ -4132,7 +4131,7 @@ Public Class Designer
                                         If Not mTabPageDataEventSeries Is Nothing Then
                                             Dim RmHistory As RmHistory
                                             RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
-                                            If Not mTabPageDataStructure Is Nothing Then
+                                            If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                                 RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                             End If
                                             CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(RmHistory)
@@ -4141,7 +4140,7 @@ Public Class Designer
 
                                 Case "tpDataStructure"
                                     If Not Me.chkEventSeries.Checked Then
-                                        If Not mTabPageDataStructure Is Nothing Then
+                                        If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                             Dim rm As RmStructureCompound
                                             rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                             rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
@@ -4150,7 +4149,7 @@ Public Class Designer
                                     End If
 
                                 Case "tpStateStructure"
-                                    If Not mTabPageDataStateStructure Is Nothing Then
+                                    If Not mTabPageDataStateStructure Is Nothing AndAlso mTabPageDataStateStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                         STATE_processed = True
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
@@ -4168,10 +4167,12 @@ Public Class Designer
                                 Case "tpData"
                                     'No action as dealt with above
                                 Case "tpProtocol"
-                                    Dim rm As RmStructureCompound
-                                    rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
-                                    rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                                    CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
+                                    If mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                        Dim rm As RmStructureCompound
+                                        rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
+                                        rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
+                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
+                                    End If
                             End Select
                         Next
 
@@ -4181,7 +4182,7 @@ Public Class Designer
                         For Each tp In Me.TabStructure.TabPages
                             Select Case tp.Name
                                 Case "tpDataStructure"
-                                    If Not mTabPageDataStructure Is Nothing Then
+                                    If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
@@ -4207,7 +4208,9 @@ Public Class Designer
                 ' Added try to this call as it now throws an exception if
                 ' it encounters any components that are not clusters or elements
                 Try
-                    mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
+                    If mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception 
+                        mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
+                    End If
                 Catch e As Exception
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
@@ -4217,7 +4220,9 @@ Public Class Designer
                 ' Added try to this call as it now throws an exception if
                 ' it encounters any components that are not clusters or elements
                 Try
-                    mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
+                    If mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                        mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
+                    End If
                 Catch e As Exception
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
@@ -4233,7 +4238,9 @@ Public Class Designer
 
 
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
+                If mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                    mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
+                End If
         End Select
     End Sub
 
@@ -4546,7 +4553,6 @@ Public Class Designer
                 End If
             End If
         End If
-
     End Sub
 
     Private Sub cbPersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbPersonState.CheckedChanged
@@ -4658,7 +4664,6 @@ Public Class Designer
             RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
             RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
         End If
-
     End Sub
 
     Private Sub TabMain_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanged
