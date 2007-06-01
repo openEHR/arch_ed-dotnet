@@ -65,7 +65,7 @@ Public Class Splash
         Me.Name = "Splash"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Archetype Editor    Release 1 candidate (1240)"
+        Me.Text = "Archetype Editor    Release 1 candidate (1241)"
         Me.TopMost = True
         Me.ResumeLayout(False)
 

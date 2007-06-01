@@ -84,3 +84,5 @@ Imports System.Runtime.InteropServices
 '
 '***** END LICENSE BLOCK *****
 '
+
+<Assembly: AssemblyFileVersionAttribute("1.0.1241")> 
