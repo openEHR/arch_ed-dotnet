@@ -4664,8 +4664,14 @@ Public Class Designer
             End If
 
         ElseIf TabMain.SelectedTab Is Me.tpInterface Then
-            ' clear the controls as have to rebuild each time
-            Me.tpInterface.Controls.Clear()
+            'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
+            'force garbage collection
+            tpInterface.Dispose() 'Note: Me.tpInterface.Controls.Clear() and tpInterface = Nothing have no affect on held objects!
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+
+            'next time visit tab, tab is empty!
+            'BuildTab()
 
         ElseIf TabMain.SelectedTab Is Me.tpDescription Then
             'Ensure the description is up to date
@@ -4673,6 +4679,36 @@ Public Class Designer
             RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
         End If
     End Sub
+
+    'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
+    'Private Sub BuildTab() 'tpInterface is unusable after the dispose
+    '    Me.tpInterface = New Crownwood.Magic.Controls.TabPage
+
+    '    Me.tpInterface.SuspendLayout()
+
+    '    Me.tpInterface.AutoScroll = True
+    '    Me.tpInterface.Controls.Add(Me.cbMandatory)
+    '    Me.HelpProviderDesigner.SetHelpKeyword(Me.tpInterface, "Screens/interface_screen.html")
+    '    Me.HelpProviderDesigner.SetHelpNavigator(Me.tpInterface, System.Windows.Forms.HelpNavigator.Topic)
+    '    Me.tpInterface.Location = New System.Drawing.Point(0, 0)
+    '    Me.tpInterface.Name = "tpInterface"
+    '    Me.tpInterface.Selected = False
+    '    Me.HelpProviderDesigner.SetShowHelp(Me.tpInterface, True)
+    '    Me.tpInterface.Size = New System.Drawing.Size(969, 595)
+    '    Me.tpInterface.TabIndex = 5
+    '    Me.tpInterface.Title = "Interface"
+    '    Me.tpInterface.ResumeLayout(False)
+
+    '    Me.tpInterface.Title = Filemanager.GetOpenEhrTerm(84, Me.tpInterface.Title) 'language?
+
+    '    TabMain.SuspendLayout()
+    '    TabMain.TabPages.Remove(TabMain.TabPages.Item("Interface"))
+    '    TabMain.TabPages.Add(tpInterface)        
+    '    TabMain.ResumeLayout()
+
+    '    'Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
+
+    'End Sub
 
     Private Sub TabMain_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanged
 
