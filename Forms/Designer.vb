@@ -4666,9 +4666,9 @@ Public Class Designer
         ElseIf TabMain.SelectedTab Is Me.tpInterface Then
             'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
             'force garbage collection
-            tpInterface.Dispose() 'Note: Me.tpInterface.Controls.Clear() and tpInterface = Nothing have no affect on held objects!
-            GC.Collect()
-            GC.WaitForPendingFinalizers()
+            'tpInterface.Dispose() 'Note: Me.tpInterface.Controls.Clear() and tpInterface = Nothing have no affect on held objects!
+            'GC.Collect()
+            'GC.WaitForPendingFinalizers()
 
             'next time visit tab, tab is empty!
             'BuildTab()
