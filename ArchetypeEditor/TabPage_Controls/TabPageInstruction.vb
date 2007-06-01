@@ -400,7 +400,7 @@ Public Class TabPageInstruction
     End Sub
 
     Private Sub NewActivity() 'Prompts for activity description then adds
-        Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New activity"))
+        Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New activity"))        
         Dim s As String() = OceanArchetypeEditor.Instance.GetInput(a_term, Me.ParentForm)
         mFileManager.OntologyManager.SetText(a_term)
 
@@ -425,7 +425,7 @@ Public Class TabPageInstruction
 
     Private Sub AddActivityTab() 'Add "New Activity" blank tab
         tpNewActivity = New Crownwood.Magic.Controls.TabPage
-        tpNewActivity.Title = "New Activity"
+        tpNewActivity.Title = " + " '"New Activity"
         Me.TabControlInstruction.TabPages.Add(tpNewActivity)
     End Sub
 

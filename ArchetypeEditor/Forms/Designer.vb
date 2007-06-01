@@ -4441,7 +4441,11 @@ Public Class Designer
 
         If state Then
             If Me.mTabPagesCollection.Contains("tpProtocol") Then
-                CrownCtrl.TabPages.Add(Me.mTabPagesCollection.Item("tpProtocol"))
+                If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
+                    CrownCtrl.TabPages.Insert(0, Me.mTabPagesCollection.Item("tpProtocol")) 'JAR: 30MAY07, EDT-44 Protocol to be the first tab
+                Else
+                    CrownCtrl.TabPages.Add(Me.mTabPagesCollection.Item("tpProtocol"))
+                End If
             Else
                 mTabPageProtocolStructure = New TabPageStructure '(Me)
                 mTabPageProtocolStructure.BackColor = System.Drawing.Color.LightGoldenrodYellow
@@ -4454,7 +4458,11 @@ Public Class Designer
                 If Not mTabPagesCollection.Contains(tp.Name) Then
                     Me.mTabPagesCollection.Add(tp.Name, tp)
                 End If
-                CrownCtrl.TabPages.Add(tp)
+                If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
+                    CrownCtrl.TabPages.Insert(0, tp) 'JAR: 30MAY07, EDT-44 Protocol to be the first tab
+                Else
+                    CrownCtrl.TabPages.Add(tp)
+                End If
 
                 Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
                 Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_protocol.htm")
