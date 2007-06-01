@@ -125,6 +125,17 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
     Protected Sub OnValueChanged()
         RaiseEvent ValueChanged(Me, New EventArgs)
     End Sub
+
+    'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        MyBase.Dispose(disposing)
+        For Each ctrl As Control In Me.Controls     
+            ctrl.Dispose()
+            Controls.Remove(ctrl)
+        Next
+        mFileManager = Nothing
+        mToolTips = Nothing
+    End Sub
 End Class
 
 '

@@ -89,7 +89,7 @@ Public Class ArchetypeView
     End Sub
 
     Public Sub BuildInterface(ByVal Nodes As TreeNodeCollection, _
-            ByVal aContainer As Control, ByRef Pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
+        ByVal aContainer As Control, ByRef Pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
 
         NodesToControls(Nodes, Pos, aContainer, spacer, mandatory_only, a_filemanager)
     End Sub
@@ -205,6 +205,7 @@ Public Class ArchetypeView
                             but.Width = 30
                             but.Height = 20
                             but.Location = rel_pos
+
                             ctrl.Controls.Add(but)
                             ctrl.Width = 300
                         End If
@@ -214,6 +215,7 @@ Public Class ArchetypeView
                         rel_pos.Y = 40
 
                         NodesToControls(tvNode.Nodes, rel_pos, ctrl, spacer, mandatory_only, a_filemanager)
+
                         view.Controls.Add(ctrl)
 
                     Case StructureType.Element, StructureType.Reference
@@ -226,7 +228,9 @@ Public Class ArchetypeView
                         newPanel.Size = New Size(150, 25)
                         Dim lbl As New Label
                         lbl.Text = Filemanager.GetOpenEhrTerm(312, "Slot") & ": " & tvNode.Text
+
                         newPanel.Controls.Add(lbl)
+
                         view.Controls.Add(newPanel)
 
                     Case Else
@@ -344,6 +348,11 @@ Public Class ArchetypeView
         End Select
     End Function
 
+    'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
+    Protected Sub Dispose(ByVal disposing As Boolean)
+        mInstance = Nothing
+        ToolTip1 = Nothing
+    End Sub
 End Class
 
 '
