@@ -1,29 +1,31 @@
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+
 Public Class ADL_ArchetypeDetails
     Inherits ArchetypeDetails
 
     Private mADL_Description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
 
     Public Overrides Sub AddOrReplace(ByVal a_language As String, ByVal a_detail As ArchetypeDescriptionItem)
-        Dim eiffelLanguageString As openehr.base.kernel.STRING
+        Dim eiffelLanguageString As EiffelKernel.STRING_8
 
-        eiffelLanguageString = openehr.base.kernel.Create.STRING.make_from_cil(a_language)
+        eiffelLanguageString = EiffelKernel.Create.STRING_8.make_from_cil(a_language)
 
-        
+
         If Me.HasDetailInLanguage(a_language) Then
             mADL_Description.details.remove(eiffelLanguageString)
         End If
 
         Dim EIF_detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
 
-        EIF_detail = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION_ITEM.make_from_language(eiffelLanguageString, openehr.base.kernel.Create.STRING.make_from_cil(a_detail.Purpose))
+        EIF_detail = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION_ITEM.make_from_language(eiffelLanguageString, EiffelKernel.Create.STRING_8.make_from_cil(a_detail.Purpose))
 
         For Each s As String In a_detail.KeyWords
-            EIF_detail.add_keyword(openehr.base.kernel.Create.STRING.make_from_cil(s))
+            EIF_detail.add_keyword(EiffelKernel.Create.STRING_8.make_from_cil(s))
         Next
 
-        EIF_detail.set_misuse(openehr.base.kernel.Create.STRING.make_from_cil(a_detail.MisUse))
-        EIF_detail.set_use(openehr.base.kernel.Create.STRING.make_from_cil(a_detail.Use))
-        EIF_detail.set_purpose(openehr.base.kernel.Create.STRING.make_from_cil(a_detail.Purpose))
+        EIF_detail.set_misuse(EiffelKernel.Create.STRING_8.make_from_cil(a_detail.MisUse))
+        EIF_detail.set_use(EiffelKernel.Create.STRING_8.make_from_cil(a_detail.Use))
+        EIF_detail.set_purpose(EiffelKernel.Create.STRING_8.make_from_cil(a_detail.Purpose))
         mADL_Description.add_detail(EIF_detail)
     End Sub
 
@@ -32,8 +34,8 @@ Public Class ADL_ArchetypeDetails
 
         If HasDetailInLanguage(a_language) Then
             Dim EIF_detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
-            'EIF_detail = mADL_Details.item(openehr.base.kernel.Create.STRING.make_from_cil(a_language))
-            EIF_detail = mADL_Description.detail_for_language(openehr.base.kernel.Create.STRING.make_from_cil(a_language))
+            'EIF_detail = mADL_Details.item(EiffelKernel.Create.STRING_8.make_from_cil(a_language))
+            EIF_detail = mADL_Description.detail_for_language(EiffelKernel.Create.STRING_8.make_from_cil(a_language))
             If Not EIF_detail Is Nothing Then
                 If Not EIF_detail.misuse Is Nothing Then
                     archDescriptDetail.MisUse = EIF_detail.misuse.to_cil
@@ -62,8 +64,8 @@ Public Class ADL_ArchetypeDetails
     End Function
 
     Public Overrides Function HasDetailInLanguage(ByVal a_language As String) As Boolean
-        '        If mADL_Details.has(openehr.base.kernel.Create.STRING.make_from_cil(a_language)) Then
-        If mADL_Description.details.has(openehr.base.kernel.Create.STRING.make_from_cil(a_language)) Then
+        '        If mADL_Details.has(EiffelKernel.Create.STRING_8.make_from_cil(a_language)) Then
+        If mADL_Description.details.has(EiffelKernel.Create.STRING_8.make_from_cil(a_language)) Then
             Return True
         Else
             Return False

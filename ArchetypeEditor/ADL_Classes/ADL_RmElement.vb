@@ -15,6 +15,9 @@
 '
 
 Option Strict On
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports EiffelList = EiffelSoftware.Library.Base.structures.list
+
 Namespace ArchetypeEditor.ADL_Classes
 
     Public Class ADL_RmElement
@@ -29,7 +32,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Try
 
-                If ComplexObj.any_allowed Or (Not ComplexObj.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("value"))) Then
+                If ComplexObj.any_allowed Or (Not ComplexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("value"))) Then
                     'This is an unknown and is available for specialisation
                     Dim c As New Constraint
                     Me.cConstraint = c
@@ -37,11 +40,11 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
 
                 ' Get the value
-                If ComplexObj.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("value")) Then
+                If ComplexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("value")) Then
                     Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                     Dim i As Integer
 
-                    an_attribute = ComplexObj.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("value"))
+                    an_attribute = ComplexObj.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("value"))
 
                     If an_attribute.children.count > 1 Then
                         ' multiple constraints - not dealt with yet in the GUI
@@ -89,13 +92,13 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim cic As New Constraint_Interval_Count
                     Try
                         ' Get the upper value
-                        If ObjNode.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("upper")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("upper"))
+                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("upper")) Then
+                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("upper"))
                             cic.UpperLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
                         End If
                         ' Get the lower value
-                        If ObjNode.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("lower")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("lower"))
+                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("lower")) Then
+                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("lower"))
                             cic.LowerLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
                         End If
                     Catch ex As Exception
@@ -121,13 +124,13 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim ciq As New Constraint_Interval_Quantity
                     Try
                         ' Get the upper value
-                        If ObjNode.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("upper")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("upper"))
+                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("upper")) Then
+                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("upper"))
                             ciq.UpperLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
                         End If
                         ' Get the lower value
-                        If ObjNode.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("lower")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("lower"))
+                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("lower")) Then
+                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("lower"))
                             ciq.LowerLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
                         End If
                     Catch ex As Exception
@@ -138,13 +141,13 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim cidt As New Constraint_Interval_DateTime
                     Try
                         ' Get the upper value
-                        If ObjNode.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("upper")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("upper"))
+                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("upper")) Then
+                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("upper"))
                             cidt.UpperLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)
                         End If
                         ' Get the lower value
-                        If ObjNode.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("lower")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("lower"))
+                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("lower")) Then
+                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("lower"))
                             cidt.LowerLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)
                         End If
                     Catch ex As Exception
@@ -316,7 +319,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         If cadlC.has_assumed_value Then
                             ct.HasAssumedValue = True
-                            ct.AssumedValue = CType(cadlC.assumed_value, openehr.base.kernel.INTEGER_REF).item
+                            ct.AssumedValue = CType(cadlC.assumed_value, EiffelKernel.INTEGER_32_REF).item
                         End If
                     Case Else
                         Debug.Assert(False)
@@ -327,7 +330,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Private Function ProcessReal(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_Real
             Dim ct As New Constraint_Real
-           
+
             Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_REAL
 
             cadlC = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_REAL)
@@ -474,8 +477,8 @@ Namespace ArchetypeEditor.ADL_Classes
                     s = cadlDT.pattern.to_cil
 
                 Case "DATE"
-                    Dim cadlD As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_DATE
-                    cadlD = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.OE_C_DATE)
+                    Dim cadlD As openehr.openehr.am.archetype.constraint_model.primitive.C_DATE
+                    cadlD = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE)
                     s = cadlD.pattern.to_cil
 
                 Case "TIME"
@@ -530,7 +533,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Private Function ProcessOrdinal(ByVal an_ordinal_constraint As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
             Dim ord As New Constraint_Ordinal(a_filemanager)
-            Dim Ordinals As openehr.base.structures.list.LINKED_LIST_ANY
+            Dim Ordinals As EiffelList.LINKED_LIST_REFERENCE
             Dim c_phrase As New CodePhrase
             Dim openehr_ordinal As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
 
@@ -582,7 +585,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim i As Integer
             Dim c_value As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-           
+
             If Not ObjNode.any_allowed Then
                 For i = 1 To ObjNode.attributes.count
 
@@ -655,7 +658,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If bool.has_assumed_value() Then
                 b.hasAssumedValue = True
-                b.AssumedValue = CType(bool.assumed_value, openehr.base.kernel.BOOLEAN_REF).item
+                b.AssumedValue = CType(bool.assumed_value, EiffelKernel.BOOLEAN_REF).item
             End If
 
             Return b
@@ -713,17 +716,17 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     Case "value"
                         Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                        Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING
-                        Dim EIF_String As openehr.base.kernel.STRING
+                        Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                        Dim EIF_String As EiffelKernel.STRING_8
                         Dim ii As Integer
 
                         t.TypeOfTextConstraint = TextConstrainType.Text
 
                         If an_attribute.children.count > 0 Then
                             constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                            cString = CType(constraint.item, openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING)
+                            cString = CType(constraint.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
                             For ii = 1 To cString.strings.count
-                                EIF_String = CType(cString.strings.i_th(ii), openehr.base.kernel.STRING)
+                                EIF_String = CType(cString.strings.i_th(ii), EiffelKernel.STRING_8)
                                 t.AllowableValues.Codes.Add(EIF_String.to_cil)
                             Next
                         End If
@@ -731,13 +734,13 @@ Namespace ArchetypeEditor.ADL_Classes
                         'redundant by June 2006
                     Case "assumed_value"
                         Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                        Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING
-                        Dim EIF_String As openehr.base.kernel.STRING
+                        Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                        Dim EIF_String As EiffelKernel.STRING_8
 
                         If an_attribute.children.count > 0 Then
                             constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                            cString = CType(constraint.item, openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING)
-                            EIF_String = CType(cString.strings.first, openehr.base.kernel.STRING)
+                            cString = CType(constraint.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+                            EIF_String = CType(cString.strings.first, EiffelKernel.STRING_8)
                             t.AssumedValue = EIF_String.to_cil
                         End If
 

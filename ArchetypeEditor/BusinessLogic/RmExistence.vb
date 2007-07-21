@@ -127,7 +127,7 @@ Public Class RmExistence
 
     End Function
 
-    Public Sub SetFromOpenEHRExistence(ByVal a_existence As openehr.common_libs.basic.OE_INTERVAL_INTEGER_32)
+    Public Sub SetFromOpenEHRExistence(ByVal a_existence As openehr.common_libs.basic.INTERVAL_INTEGER_32)
         If a_existence Is Nothing Then
             Debug.Assert(True)
         End If

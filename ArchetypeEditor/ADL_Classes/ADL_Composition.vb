@@ -15,6 +15,7 @@
 '
 
 Option Explicit On 
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 
 Namespace ArchetypeEditor.ADL_Classes
 
@@ -43,8 +44,8 @@ Class ADL_COMPOSITION
                     Case "context"
                         Dim complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                         complexObj = an_attribute.children.first
-                        If complexObj.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("other_context")) Then
-                            an_attribute = complexObj.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("other_context"))
+                        If complexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("other_context")) Then
+                            an_attribute = complexObj.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("other_context"))
                             mChildren.Add(New RmStructureCompound(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                             ' remembers the Processed data off events
                         End If
