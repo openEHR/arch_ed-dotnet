@@ -15,6 +15,7 @@
 '
 'Option Strict On
 Option Explicit On 
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 
 Namespace ArchetypeEditor.XML_Classes
 
@@ -779,7 +780,7 @@ Namespace ArchetypeEditor.XML_Classes
             ' Build a section, runtimename is already done
             Dim an_attribute As XMLParser.C_ATTRIBUTE
 
-            ' CadlObj.SetObjectId(openehr.base.kernel.Create.STRING.make_from_cil(Rm.NodeId))
+            ' CadlObj.SetObjectId(EiffelKernel.Create.STRING_8.make_from_cil(Rm.NodeId))
 
             If Cluster.Children.Count > 0 Then
                 'an_attribute = mAomFactory.MakeMultipleAttribute(xmlObj, "items", MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
@@ -909,7 +910,7 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            If ct.HasMinimum Then                
+            If ct.HasMinimum Then
                 cReal.range.lower = ct.MinimumValue
                 cReal.range.lowerSpecified = True
                 cReal.range.lower_included = ct.IncludeMinimum
@@ -1454,7 +1455,7 @@ Namespace ArchetypeEditor.XML_Classes
                         xmlO.symbol.defining_code = New XMLParser.CODE_PHRASE
                         xmlO.symbol.defining_code.code_string = o_v.InternalCode
                         xmlO.symbol.defining_code.terminology_id = New XMLParser.TERMINOLOGY_ID
-                        xmlO.symbol.defining_code.terminology_id.value = "local"                        
+                        xmlO.symbol.defining_code.terminology_id.value = "local"
                         xmlO.symbol.value = ""
 
                         c_value.list(i) = xmlO
@@ -2365,8 +2366,8 @@ Namespace ArchetypeEditor.XML_Classes
                                         Case Else
                                             Debug.Assert(False) '?OBSOLETE
                                             Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                                            'objNode = mAomFactory.MakeComplexObject(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(a_rm.Type)), a_rm.NodeId)
-                                            objNode = mAomFactory.MakeComplexObject(an_attribute, openehr.base.kernel.Create.STRING.make_from_cil(ReferenceModel.RM_StructureName(a_rm.Type)), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                            'objNode = mAomFactory.MakeComplexObject(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_rm.Type)), a_rm.NodeId)
+                                            objNode = mAomFactory.MakeComplexObject(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_rm.Type)), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                                             BuildStructure(a_rm, objNode)
                                     End Select
                                 Next

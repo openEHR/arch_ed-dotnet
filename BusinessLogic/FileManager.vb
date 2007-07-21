@@ -15,6 +15,7 @@
 '
 'Option Strict On
 Option Explicit On 
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 
 Public Class FileManagerLocal
     Private mIsFileDirty As Boolean
@@ -506,7 +507,7 @@ Public Class FileManagerLocal
         End If
 
         'set the adl version
-        adlParser.ADL_Parser.archetype.set_adl_version(openehr.base.kernel.Create.STRING.make_from_cil("1.4"))
+        adlParser.ADL_Parser.archetype.set_adl_version(EiffelKernel.Create.STRING_8.make_from_cil("1.4"))
 
         'populate the ontology
 
@@ -520,28 +521,28 @@ Public Class FileManagerLocal
             If language <> mOntologyManager.PrimaryLanguageCode Then
                 Dim adlTranslationDetails As ADL_TranslationDetails = New ADL_TranslationDetails(Me.Archetype.TranslationDetails.Item(language))
                 translationsArray.Add(adlTranslationDetails.ADL_Translation)
-                adlParser.ADL_Parser.ontology.add_language(openehr.base.kernel.Create.STRING.make_from_cil(language))
+                adlParser.ADL_Parser.ontology.add_language(EiffelKernel.Create.STRING_8.make_from_cil(language))
             End If
 
             Dim cp As openehr.openehr.rm.data_types.text.Impl.CODE_PHRASE
             cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.DefaultLanguageCodeSet & "::" & language))
+                EiffelKernel.Create.STRING_8.make_from_cil(OceanArchetypeEditor.DefaultLanguageCodeSet & "::" & language))
             Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
 
             Dim adl_detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
             adl_detail = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION_ITEM.make_from_language( _
-                openehr.base.kernel.Create.STRING.make_from_cil(language), _
-                openehr.base.kernel.Create.STRING.make_from_cil((archDetail.Purpose)))
+                EiffelKernel.Create.STRING_8.make_from_cil(language), _
+                EiffelKernel.Create.STRING_8.make_from_cil((archDetail.Purpose)))
             If archDetail.Copyright <> "" Then
-                adl_detail.set_copyright(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.Copyright))
+                adl_detail.set_copyright(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.Copyright))
             End If
-            adl_detail.set_misuse(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.MisUse))
+            adl_detail.set_misuse(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.MisUse))
             'ToDo: adl_detail.add_original_resource_uri()
-            adl_detail.set_purpose(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.Purpose))
-            adl_detail.set_use(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.Use))
+            adl_detail.set_purpose(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.Purpose))
+            adl_detail.set_use(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.Use))
             If (Not archDetail.KeyWords Is Nothing) AndAlso archDetail.KeyWords.Count > 0 Then
                 For j As Integer = 0 To archDetail.KeyWords.Count - 1
-                    adl_detail.add_keyword(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.KeyWords.Item(j)))
+                    adl_detail.add_keyword(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.KeyWords.Item(j)))
                 Next
             End If
             detailsArray.Add(adl_detail)

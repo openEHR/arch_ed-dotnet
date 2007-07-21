@@ -15,6 +15,7 @@
 '
 Option Strict On
 Option Explicit On
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 
 Public Class RmActivity
     Inherits RmStructureCompound
@@ -45,20 +46,19 @@ Public Class RmActivity
         Me.Occurrences.SetFromString(EIF_Structure.occurrences.as_occurrences_string.to_cil)
 
         ' process the archetype id constraint
-        If EIF_Structure.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("action_archetype_id")) Then
+        If EIF_Structure.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("action_archetype_id")) Then
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            an_attribute = EIF_Structure.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("action_archetype_id"))
+            an_attribute = EIF_Structure.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("action_archetype_id"))
             Dim obj As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
             obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
             If obj.any_allowed Then
                 Me.ArchetypeId = "."
             Else
-                Dim item As openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING = _
-                                CType(obj.item, openehr.openehr.am.archetype.constraint_model.primitive.OE_C_STRING)
+                Dim item As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = CType(obj.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
                 If Not item.regexp Is Nothing Then
                     Me.ArchetypeId = item.regexp.to_cil.Replace("\.", ".")
                 ElseIf Not item.strings Is Nothing Then
-                    Me.ArchetypeId = CType(item.strings.i_th(1), openehr.base.kernel.STRING).to_cil.Replace("\.", ".")
+                    Me.ArchetypeId = CType(item.strings.i_th(1), EiffelKernel.STRING_8).to_cil.Replace("\.", ".")
                 Else
                     Me.ArchetypeId = "."
                 End If
@@ -68,9 +68,9 @@ Public Class RmActivity
 
         'process any activity descriptions
 
-        If EIF_Structure.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("description")) Then
+        If EIF_Structure.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("description")) Then
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            an_attribute = EIF_Structure.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("description"))
+            an_attribute = EIF_Structure.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("description"))
             ' could be a C_COMPLEX_OBJECT or an ARCHETYPE_SLOT
             Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT
             obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
