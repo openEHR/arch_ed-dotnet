@@ -50,6 +50,20 @@ Public Class OceanArchetypeEditor
         End Get
     End Property
 
+    Private mAvailableTerminologyIDs As ArrayList
+
+    ReadOnly Property ServiceTerminology(ByVal terminologyID As String) As Boolean
+        Get
+            If mAvailableTerminologyIDs Is Nothing Then
+                mAvailableTerminologyIDs = New ArrayList()
+                'ToDo: Lookup from the 
+                mAvailableTerminologyIDs.Add("SNOMED-CT")
+                mAvailableTerminologyIDs.Add("LOINC")
+            End If
+            Return mAvailableTerminologyIDs.Contains(terminologyID)
+        End Get
+    End Property
+
     Private Shared mDefaultLanguageCodeSet As String = "ISO_639-1"
 
     Public Shared ReadOnly Property DefaultLanguageCodeSet() As String
@@ -88,6 +102,7 @@ Public Class OceanArchetypeEditor
     Protected Sub New()
 
         mDataSet = New DataSet("DesignerDataSet")
+        OTSControls.Term.OtsWebService.Url = "http://ots.oceaninformatics.biz/OTS/OTSService.asmx"
 
     End Sub
 
@@ -666,16 +681,19 @@ Public Class OceanArchetypeEditor
         'default language as two letter code e.g. "en"
         mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
 
-        ' specific as four letter e.g. "en-AU"
-        mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.Name
+        ' specific as four letter e.g. "en-au"
+        mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag.ToLowerInvariant()
 
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
-        mDefaultLanguageCode = "fa"
-        mSpecificLanguageCode = "fa"
+        mDefaultLanguageCode = "es"
+        mSpecificLanguageCode = "es-cl"
 
-       'mDefaultLanguageCode = "pt-br"
-       'mSpecificLanguageCode = "pt-br"
+        'mDefaultLanguageCode = "fa"
+        'mSpecificLanguageCode = "fa"
+
+        'mDefaultLanguageCode = "pt-br"
+        'mSpecificLanguageCode = "pt-br"
 
         'mDefaultLanguageCode = "da"
         'mSpecificLanguageCode = "da"
@@ -690,6 +708,19 @@ Public Class OceanArchetypeEditor
 
         If CmdArgs.Length > 0 Then
             frm.ArchetypeToOpen = CmdArgs(0)
+        End If
+
+        If CmdArgs.Length > 1 Then
+            Try
+                mDefaultLanguageCode = CmdArgs(1).Substring(0, 2)
+                mSpecificLanguageCode = CmdArgs(1)
+            Catch e As Exception
+                MessageBox.Show(String.Format("Invalid Language:{0}", CmdArgs(1)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+                ' specific as four letter e.g. "en-AU"
+                mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.Name
+            End Try
+
         End If
 
         mMenu = frm.MainMenu

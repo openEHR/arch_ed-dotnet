@@ -204,10 +204,15 @@ Public Class SimpleStructure
     End Sub
 
     Public Overrides Sub Translate()
+        mIsLoading = True
+
         mElement.Translate()
+
         Me.txtSimple.Text = mElement.Text
+
         'call base translate to raise event to refresh constraint display
         MyBase.Translate()
+        mIsLoading = False
     End Sub
 
     Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)

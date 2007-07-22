@@ -419,13 +419,14 @@ Public Class ReferenceModel
             Case StructureType.COMPOSITION
                 Select Case mRefModelType
                     Case ReferenceModelType.openEHR_EHR, ReferenceModelType.HL7_CDA
-                        Dim s(5) As StructureType
+                        Dim s(6) As StructureType
                         s(0) = StructureType.SECTION
-                        s(1) = StructureType.ADMIN_ENTRY
-                        s(2) = StructureType.OBSERVATION
-                        s(3) = StructureType.EVALUATION
-                        s(4) = StructureType.INSTRUCTION
-                        s(5) = StructureType.ACTION
+                        s(1) = StructureType.ENTRY
+                        s(2) = StructureType.ADMIN_ENTRY
+                        s(3) = StructureType.OBSERVATION
+                        s(4) = StructureType.EVALUATION
+                        s(5) = StructureType.INSTRUCTION
+                        s(6) = StructureType.ACTION
                         Return s
                     Case ReferenceModelType.CEN_EHR
                         Dim s(1) As StructureType
@@ -436,13 +437,14 @@ Public Class ReferenceModel
             Case StructureType.SECTION
                 Select Case mRefModelType
                     Case ReferenceModelType.openEHR_EHR
-                        Dim s(5) As StructureType
+                        Dim s(6) As StructureType
                         s(0) = StructureType.EVALUATION
                         s(1) = StructureType.INSTRUCTION
                         s(2) = StructureType.OBSERVATION
                         s(3) = StructureType.ACTION
                         s(4) = StructureType.SECTION
                         s(5) = StructureType.ADMIN_ENTRY
+                        s(6) = StructureType.ENTRY
                         Return s
                     Case ReferenceModelType.CEN_EHR, ReferenceModelType.HL7_CDA
                         Dim s(1) As StructureType

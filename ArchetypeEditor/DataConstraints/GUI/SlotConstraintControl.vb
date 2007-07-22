@@ -477,6 +477,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
         If Me.listAvailbleArchetypes.SelectedItems.Count > 0 Then
             For Each s As String In Me.listAvailbleArchetypes.SelectedItems
+                s = s.Replace(".", "\.")
                 If Not col.Contains(s) Then
                     col.Add(s)
                     activeList.Items.Add(s)
@@ -534,12 +535,16 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Dim s As String
         Dim d As System.IO.DirectoryInfo
 
-        s = ReferenceModel.ReferenceModelName & "-" & Me.lblClass.Text
+
+        s = String.Format("{0}-{1}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(Me.Constraint.RM_ClassType))
         For Each f In a_directory.GetFiles(s & ".*.adl")
-            Me.listAvailbleArchetypes.Items.Insert(0, f.Name.Substring(s.Length + 1, f.Name.LastIndexOf(".") - (s.Length + 1)))
+            Dim fileName As String = f.Name.Substring(s.Length + 1, f.Name.LastIndexOf(".") - (s.Length + 1))
+            Me.listAvailbleArchetypes.Items.Insert(0, fileName)
         Next
         For Each d In a_directory.GetDirectories
-            RetrieveFiles(d)
+            If d.Extension = String.Empty Then
+                RetrieveFiles(d)
+            End If
         Next
 
     End Sub
@@ -581,14 +586,14 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    Private Sub listAvailbleArchetypes_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAvailbleArchetypes.DoubleClick
-        If Not activeList Is Nothing And activeList Is Me.listInclude Then
-            Me.butSlotAdd_Click(Me.listInclude, e)
-        ElseIf activeList Is Me.listExclude Then
-            Me.butSlotAdd_Click(Me.listExclude, e)
-        End If
+    'Private Sub listAvailbleArchetypes_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAvailbleArchetypes.DoubleClick
+    '    If Not activeList Is Nothing And activeList Is Me.listInclude Then
+    '        Me.butSlotAdd_Click(Me.listInclude, e)
+    '    ElseIf activeList Is Me.listExclude Then
+    '        Me.butSlotAdd_Click(Me.listExclude, e)
+    '    End If
 
-    End Sub
+    'End Sub
 
 #Region "Drag and drop"
     Private Sub listAvailbleArchetypes_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles listAvailbleArchetypes.MouseDown
@@ -611,18 +616,22 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
     Private Sub listInclude_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles listInclude.DragDrop
         If e.Data.GetDataPresent(DataFormats.StringFormat) Then
-            Dim s As String = CStr(e.Data.GetData(DataFormats.StringFormat))
+            Dim fileName As String = CStr(e.Data.GetData(DataFormats.StringFormat))
+            fileName = fileName.Replace(".", "\.")
             'make sure it is not already there
-            For Each assert As String In listInclude.Items
-                If assert = s Then
-                    Return
-                End If
-            Next
-            listInclude.Items.Add(s)
-            Me.Constraint.Include.Add(s)
-            If listExclude.Items.Contains(s) Then
-                listExclude.Items.Remove(s)
-                Me.Constraint.Exclude.Remove(s)
+            If listInclude.Items.Contains(fileName) Then
+                Return
+            End If
+            'For Each assert As String In listInclude.Items
+            '    If assert = fileName Then
+            '        Return
+            '    End If
+            'Next
+            listInclude.Items.Add(fileName)
+            Me.Constraint.Include.Add(fileName)
+            If listExclude.Items.Contains(fileName) Then
+                listExclude.Items.Remove(fileName)
+                Me.Constraint.Exclude.Remove(fileName)
             End If
             Me.listAvailbleArchetypes.ClearSelected()
             mFileManager.FileEdited = True
@@ -631,18 +640,23 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
     Private Sub listExclude_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles listExclude.DragDrop
         If e.Data.GetDataPresent(DataFormats.StringFormat) Then
-            Dim s As String = CStr(e.Data.GetData(DataFormats.StringFormat))
+            'Dim s As String = CStr(e.Data.GetData(DataFormats.StringFormat))
+            Dim fileName As String = CStr(e.Data.GetData(DataFormats.StringFormat))
+            fileName = fileName.Replace(".", "\.")
             'make sure it is not already there
-            For Each assert As String In listExclude.Items
-                If assert = s Then
-                    Return
-                End If
-            Next
-            listExclude.Items.Add(s)
-            Me.Constraint.Exclude.Add(s)
-            If listInclude.Items.Contains(s) Then
-                listInclude.Items.Remove(s)
-                Me.Constraint.Include.Remove(s)
+            If listExclude.Items.Contains(fileName) Then
+                Return
+            End If
+            'For Each assert As String In listExclude.Items
+            '    If assert = s Then
+            '        Return
+            '    End If
+            'Next
+            listExclude.Items.Add(fileName)
+            Me.Constraint.Exclude.Add(fileName)
+            If listInclude.Items.Contains(fileName) Then
+                listInclude.Items.Remove(fileName)
+                Me.Constraint.Include.Remove(fileName)
             End If
             Me.listAvailbleArchetypes.ClearSelected()
             mFileManager.FileEdited = True

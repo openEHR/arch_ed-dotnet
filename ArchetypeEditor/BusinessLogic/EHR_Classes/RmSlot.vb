@@ -98,7 +98,7 @@ Public Class RmSlot
                 If s = ".*" Then
                     mSlotConstraint.IncludeAll = True
                 Else
-                    mSlotConstraint.Include.Add(s.Replace("\", ""))
+                    mSlotConstraint.Include.Add(s)
                 End If
 
             Next
@@ -113,7 +113,7 @@ Public Class RmSlot
                 If s = ".*" Then
                     mSlotConstraint.ExcludeAll = True
                 Else
-                    mSlotConstraint.Exclude.Add(s.Replace("\", ""))
+                    mSlotConstraint.Exclude.Add(s)
                 End If
             Next
         End If
@@ -161,7 +161,7 @@ Public Class RmSlot
                 If s = ".*" Then
                     mSlotConstraint.IncludeAll = True
                 Else
-                    mSlotConstraint.Include.Add(s.Replace("\", ""))
+                    mSlotConstraint.Include.Add(s)
                 End If
 
             Next
@@ -176,7 +176,7 @@ Public Class RmSlot
                 If s = ".*" Then
                     mSlotConstraint.ExcludeAll = True
                 Else
-                    mSlotConstraint.Exclude.Add(s.Trim(("/").ToCharArray))
+                    mSlotConstraint.Exclude.Add(s)
                 End If
             Next
         End If

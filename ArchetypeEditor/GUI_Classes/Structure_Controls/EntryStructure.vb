@@ -685,6 +685,10 @@ Public Class EntryStructure
         Throw New NotImplementedException("Subclass must override this method")
     End Function
 
+    Public Overridable Function HasData() As Boolean
+        Throw New NotImplementedException("Subclass must override this method")
+    End Function
+
     Protected Overridable Sub ButListUp_Click(ByVal sender As Object, ByVal e As EventArgs)
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
