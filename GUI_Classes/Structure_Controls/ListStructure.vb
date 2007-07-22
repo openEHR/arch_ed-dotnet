@@ -462,6 +462,10 @@ Public Class ListStructure
         Return result.ToString()
     End Function
 
+    Public Overrides Function HasData() As Boolean
+        Return Me.lvList.Items.Count > 0
+    End Function
+
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click
         If Not Me.lvList.SelectedIndices.Count = 0 Then
             Dim lvI As ListViewItem
@@ -552,6 +556,10 @@ Public Class ListStructure
                 Me.MenuRemove.Visible = True
             End If
         End If
+
+    End Sub
+
+    Private Sub lvList_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lvList.MouseDoubleClick
 
     End Sub
 

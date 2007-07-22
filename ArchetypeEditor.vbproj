@@ -89,6 +89,10 @@
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="MagicLibrary, Version=1.7.0.0, Culture=neutral, PublicKeyToken=3a6eb82f876a49bc" />
+    <Reference Include="OTSControls, Version=1.0.2760.16002, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>OTS\OTSControls.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -224,6 +228,10 @@
       <SubType>Designer</SubType>
       <DependentUpon>TabPageActivity.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageParticipation.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TabPageParticipation.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Terminology\openEHR_Translation.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -340,6 +348,7 @@
     </Compile>
     <Compile Include="ADL_Classes\ADL_TranslationDetails.vb" />
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="BusinessLogic\EHR_Classes\Participation.vb" />
     <Compile Include="BusinessLogic\Proxy.vb" />
     <Compile Include="BusinessLogic\Duration.vb">
       <SubType>Code</SubType>
@@ -774,6 +783,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TabPage_Controls\TabPageInstruction.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageParticipation.Designer.vb">
+      <DependentUpon>TabPageParticipation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageParticipation.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TabPage_Controls\TabPageSection.vb">

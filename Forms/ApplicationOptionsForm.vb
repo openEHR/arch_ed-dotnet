@@ -82,6 +82,9 @@ Public Class ApplicationOptionsForm
     Friend WithEvents chkWebSearch As System.Windows.Forms.CheckBox
     Friend WithEvents lblURL As System.Windows.Forms.Label
     Friend WithEvents txtURL As System.Windows.Forms.TextBox
+    Friend WithEvents lblTerminology As System.Windows.Forms.Label
+    Friend WithEvents txtTerminologyURL As System.Windows.Forms.TextBox
+    Friend WithEvents chkTerminology As System.Windows.Forms.CheckBox
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -140,6 +143,9 @@ Public Class ApplicationOptionsForm
         Me.chkParserXML = New System.Windows.Forms.CheckBox
         Me.chkParserADL = New System.Windows.Forms.CheckBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
+        Me.lblTerminology = New System.Windows.Forms.Label
+        Me.txtTerminologyURL = New System.Windows.Forms.TextBox
+        Me.chkTerminology = New System.Windows.Forms.CheckBox
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -222,7 +228,7 @@ Public Class ApplicationOptionsForm
         '
         'txtHelpFile
         '
-        Me.txtHelpFile.Location = New System.Drawing.Point(20, 97)
+        Me.txtHelpFile.Location = New System.Drawing.Point(20, 79)
         Me.txtHelpFile.Name = "txtHelpFile"
         Me.txtHelpFile.Size = New System.Drawing.Size(442, 22)
         Me.txtHelpFile.TabIndex = 21
@@ -230,7 +236,7 @@ Public Class ApplicationOptionsForm
         '
         'txtURL
         '
-        Me.txtURL.Location = New System.Drawing.Point(20, 169)
+        Me.txtURL.Location = New System.Drawing.Point(20, 178)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(442, 22)
         Me.txtURL.TabIndex = 25
@@ -240,7 +246,7 @@ Public Class ApplicationOptionsForm
         '
         Me.butBrowse.Image = CType(resources.GetObject("butBrowse.Image"), System.Drawing.Image)
         Me.butBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butBrowse.Location = New System.Drawing.Point(481, 19)
+        Me.butBrowse.Location = New System.Drawing.Point(479, 15)
         Me.butBrowse.Name = "butBrowse"
         Me.butBrowse.Size = New System.Drawing.Size(115, 37)
         Me.butBrowse.TabIndex = 20
@@ -497,14 +503,17 @@ Public Class ApplicationOptionsForm
         '
         'tpLocations
         '
+        Me.tpLocations.Controls.Add(Me.txtHelpFile)
+        Me.tpLocations.Controls.Add(Me.lblTerminology)
+        Me.tpLocations.Controls.Add(Me.txtTerminologyURL)
+        Me.tpLocations.Controls.Add(Me.chkTerminology)
+        Me.tpLocations.Controls.Add(Me.txtRepositoryPath)
         Me.tpLocations.Controls.Add(Me.lblURL)
         Me.tpLocations.Controls.Add(Me.txtURL)
         Me.tpLocations.Controls.Add(Me.chkWebSearch)
         Me.tpLocations.Controls.Add(Me.Label4)
-        Me.tpLocations.Controls.Add(Me.txtHelpFile)
         Me.tpLocations.Controls.Add(Me.butHelpBrowse)
         Me.tpLocations.Controls.Add(Me.lblArchetypePath)
-        Me.tpLocations.Controls.Add(Me.txtRepositoryPath)
         Me.tpLocations.Controls.Add(Me.butBrowse)
         Me.tpLocations.Location = New System.Drawing.Point(4, 25)
         Me.tpLocations.Name = "tpLocations"
@@ -514,9 +523,9 @@ Public Class ApplicationOptionsForm
         '
         'lblURL
         '
-        Me.lblURL.Location = New System.Drawing.Point(20, 132)
+        Me.lblURL.Location = New System.Drawing.Point(20, 149)
         Me.lblURL.Name = "lblURL"
-        Me.lblURL.Size = New System.Drawing.Size(173, 28)
+        Me.lblURL.Size = New System.Drawing.Size(261, 28)
         Me.lblURL.TabIndex = 26
         Me.lblURL.Text = "URL for shared repository"
         Me.lblURL.TextAlign = System.Drawing.ContentAlignment.BottomLeft
@@ -524,7 +533,7 @@ Public Class ApplicationOptionsForm
         'chkWebSearch
         '
         Me.chkWebSearch.AutoSize = True
-        Me.chkWebSearch.Location = New System.Drawing.Point(287, 141)
+        Me.chkWebSearch.Location = New System.Drawing.Point(287, 158)
         Me.chkWebSearch.Name = "chkWebSearch"
         Me.chkWebSearch.Size = New System.Drawing.Size(175, 21)
         Me.chkWebSearch.TabIndex = 24
@@ -533,7 +542,7 @@ Public Class ApplicationOptionsForm
         '
         'Label4
         '
-        Me.Label4.Location = New System.Drawing.Point(20, 60)
+        Me.Label4.Location = New System.Drawing.Point(20, 49)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(173, 28)
         Me.Label4.TabIndex = 22
@@ -544,7 +553,7 @@ Public Class ApplicationOptionsForm
         '
         Me.butHelpBrowse.Image = CType(resources.GetObject("butHelpBrowse.Image"), System.Drawing.Image)
         Me.butHelpBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butHelpBrowse.Location = New System.Drawing.Point(481, 88)
+        Me.butHelpBrowse.Location = New System.Drawing.Point(481, 62)
         Me.butHelpBrowse.Name = "butHelpBrowse"
         Me.butHelpBrowse.Size = New System.Drawing.Size(115, 37)
         Me.butHelpBrowse.TabIndex = 23
@@ -642,6 +651,33 @@ Public Class ApplicationOptionsForm
         Me.chkParserADL.TabIndex = 0
         Me.chkParserADL.Text = "ADL"
         Me.chkParserADL.UseVisualStyleBackColor = True
+        '
+        'lblTerminology
+        '
+        Me.lblTerminology.Location = New System.Drawing.Point(21, 98)
+        Me.lblTerminology.Name = "lblTerminology"
+        Me.lblTerminology.Size = New System.Drawing.Size(261, 28)
+        Me.lblTerminology.TabIndex = 29
+        Me.lblTerminology.Text = "URL for Terminology Service"
+        Me.lblTerminology.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        '
+        'txtTerminologyURL
+        '
+        Me.txtTerminologyURL.Location = New System.Drawing.Point(21, 128)
+        Me.txtTerminologyURL.Name = "txtTerminologyURL"
+        Me.txtTerminologyURL.Size = New System.Drawing.Size(442, 22)
+        Me.txtTerminologyURL.TabIndex = 28
+        Me.ToolTip1.SetToolTip(Me.txtTerminologyURL, "Http address of repository")
+        '
+        'chkTerminology
+        '
+        Me.chkTerminology.AutoSize = True
+        Me.chkTerminology.Location = New System.Drawing.Point(288, 106)
+        Me.chkTerminology.Name = "chkTerminology"
+        Me.chkTerminology.Size = New System.Drawing.Size(209, 21)
+        Me.chkTerminology.TabIndex = 27
+        Me.chkTerminology.Text = "Enable Terminology LookUp"
+        Me.chkTerminology.UseVisualStyleBackColor = True
         '
         'ApplicationOptionsForm
         '

@@ -198,7 +198,89 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
             cadlC = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
-            duration.AllowableUnits = cadlC.pattern.to_cil
+            If Not cadlC.pattern Is Nothing Then
+                duration.AllowableUnits = cadlC.pattern.to_cil
+            Else
+                'ToDo: Allow both interval and pattern - but not available in ADL at present
+                If Not cadlC.interval Is Nothing Then
+
+                    If cadlC.interval.upper_unbounded Then
+                        duration.HasMaximum = False
+                    Else
+                        Dim upperDuration As openehr.common_libs.date_time.ISO8601_DURATION
+                        upperDuration = CType(cadlC.interval.upper, openehr.common_libs.date_time.ISO8601_DURATION)
+
+                        Dim units As String = upperDuration.value.to_cil
+                        units = units.ToUpperInvariant.Substring(units.Length - 1)
+
+                        Select Case units
+                            Case "S"
+                                duration.MaximumValue = upperDuration.seconds
+                                units = "TS"
+                            Case "M"
+                                If upperDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
+                                    'Minutes
+                                    duration.MaximumValue = upperDuration.minutes
+                                    units = "TM"
+                                Else
+                                    'Months
+                                    duration.MaximumValue = upperDuration.months
+                                End If
+                            Case "H"
+                                duration.MaximumValue = upperDuration.hours
+                                units = "TH"
+                            Case "D"
+                                duration.MaximumValue = upperDuration.days
+                            Case "Y"
+                                duration.MaximumValue = upperDuration.years
+                            Case "W"
+                                duration.MaximumValue = upperDuration.weeks
+                        End Select
+                        duration.MinMaxValueUnits = units
+                        duration.HasMaximum = True
+                        duration.IncludeMaximum = cadlC.interval.upper_included
+                    End If
+
+                    If cadlC.interval.lower_unbounded Then
+                        duration.HasMinimum = False
+                    Else
+                        Dim lowerDuration As openehr.common_libs.date_time.ISO8601_DURATION
+                        lowerDuration = CType(cadlC.interval.lower, openehr.common_libs.date_time.ISO8601_DURATION)
+
+                        Dim units As String = lowerDuration.value.to_cil
+                        units = units.ToUpperInvariant.Substring(units.Length - 1)
+
+                        Select Case units.ToUpperInvariant
+                            Case "S"
+                                duration.MinimumValue = lowerDuration.seconds
+                                units = "TS"
+                            Case "M"
+                                If lowerDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
+                                    'Minutes
+                                    duration.MinimumValue = lowerDuration.minutes
+                                    units = "TM"
+                                Else
+                                    'Months
+                                    duration.MinimumValue = lowerDuration.months
+                                End If
+                            Case "H"
+                                duration.MinimumValue = lowerDuration.hours
+                                units = "TH"
+                            Case "D"
+                                duration.MinimumValue = lowerDuration.days
+                            Case "Y"
+                                duration.MinimumValue = lowerDuration.years
+                            Case "W"
+                                duration.MinimumValue = lowerDuration.weeks
+                        End Select
+                        If duration.MinMaxValueUnits = String.Empty Then
+                            duration.MinMaxValueUnits = units
+                        End If
+                        duration.HasMinimum = True
+                        duration.IncludeMinimum = cadlC.interval.lower_included
+                    End If
+                End If
+            End If
             Return duration
         End Function
 
@@ -798,10 +880,12 @@ Namespace ArchetypeEditor.ADL_Classes
                                 u.MinimumValue = CSng(cqi.magnitude.lower)
                                 u.IncludeMinimum = cqi.magnitude.lower_included
                             End If
-                            If Not cqi.any_precision_allowed Then
-                                'Only deal in maximum precision
-                                u.Precision = cqi.precision.upper
-                            End If
+                        End If
+                        'Changed SRH: 18th July 2007
+                        'Moved from inside any allowed to allow precision without magnitude
+                        If Not cqi.any_precision_allowed Then
+                            'Only deal in maximum precision
+                            u.Precision = cqi.precision.upper
                         End If
                         ' need to add with key for retrieval
                         q.Units.Add(u, u.Unit)

@@ -356,7 +356,7 @@ Public Class TableStructure
     End Property
 
     'JAR: 29MAY07, EDT-21 To detect whether items have been added to table
-    Public Function HasData() As Boolean
+    Public Overrides Function HasData() As Boolean
         If Not mArchetypeTable Is Nothing Then
             Return (mArchetypeTable.Rows.Count > 0)
         Else

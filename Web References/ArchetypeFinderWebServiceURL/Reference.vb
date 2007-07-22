@@ -60,7 +60,7 @@ Namespace ArchetypeFinderWebServiceURL
         '''<remarks/>
         Public Sub New()
             MyBase.New
-            Me.Url = OceanArchetypeEditor.Instance.Options.URL.ToString()
+            Me.Url = OceanArchetypeEditor.Instance.Options.RepositoryURL.ToString()
             If (Me.IsLocalFileSystemWebService(Me.Url) = true) Then
                 Me.UseDefaultCredentials = true
                 Me.useDefaultCredentialsSetExplicitly = false

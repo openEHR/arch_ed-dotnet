@@ -32,10 +32,11 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents dgNodeBindings As System.Windows.Forms.DataGridView
     Friend WithEvents dgValueSets As System.Windows.Forms.DataGridView
     Friend WithEvents gbValueSets As System.Windows.Forms.GroupBox
+    Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
+    Friend WithEvents termLookUp As OTSControls.Term
     Friend WithEvents terminology As System.Windows.Forms.DataGridViewComboBoxColumn
     Friend WithEvents code As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Path As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
     Friend WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
@@ -128,14 +129,15 @@ Public Class ArchetypeNodeConstraintControl
         Me.tpConstraintDetails = New System.Windows.Forms.TabPage
         Me.gbValueSets = New System.Windows.Forms.GroupBox
         Me.dgValueSets = New System.Windows.Forms.DataGridView
+        Me.termLookUp = New OTSControls.Term
+        Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.gbTerminology = New System.Windows.Forms.GroupBox
         Me.dgNodeBindings = New System.Windows.Forms.DataGridView
-        Me.gbComments = New System.Windows.Forms.GroupBox
-        Me.txtComments = New System.Windows.Forms.TextBox
         Me.terminology = New System.Windows.Forms.DataGridViewComboBoxColumn
         Me.code = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.Path = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.Splitter1 = New System.Windows.Forms.Splitter
+        Me.gbComments = New System.Windows.Forms.GroupBox
+        Me.txtComments = New System.Windows.Forms.TextBox
         Me.PanelDataConstraint.SuspendLayout()
         Me.PanelNonAnonymous.SuspendLayout()
         Me.PanelLower.SuspendLayout()
@@ -163,7 +165,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelDataConstraint.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
         Me.PanelDataConstraint.Name = "PanelDataConstraint"
-        Me.PanelDataConstraint.Size = New System.Drawing.Size(420, 199)
+        Me.PanelDataConstraint.Size = New System.Drawing.Size(420, 257)
         Me.PanelDataConstraint.TabIndex = 31
         '
         'labelAny
@@ -241,7 +243,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelLower.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelLower.Location = New System.Drawing.Point(3, 54)
         Me.PanelLower.Name = "PanelLower"
-        Me.PanelLower.Size = New System.Drawing.Size(420, 295)
+        Me.PanelLower.Size = New System.Drawing.Size(420, 353)
         Me.PanelLower.TabIndex = 33
         '
         'tabConstraint
@@ -264,7 +266,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.tpConstraint.Margin = New System.Windows.Forms.Padding(0)
         Me.tpConstraint.Name = "tpConstraint"
         Me.tpConstraint.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConstraint.Size = New System.Drawing.Size(426, 352)
+        Me.tpConstraint.Size = New System.Drawing.Size(426, 410)
         Me.tpConstraint.TabIndex = 0
         Me.tpConstraint.Text = "Constraint"
         Me.tpConstraint.UseVisualStyleBackColor = True
@@ -273,6 +275,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         Me.tpConstraintDetails.BackColor = System.Drawing.Color.LemonChiffon
         Me.tpConstraintDetails.Controls.Add(Me.gbValueSets)
+        Me.tpConstraintDetails.Controls.Add(Me.termLookUp)
         Me.tpConstraintDetails.Controls.Add(Me.Splitter1)
         Me.tpConstraintDetails.Controls.Add(Me.gbTerminology)
         Me.tpConstraintDetails.Controls.Add(Me.gbComments)
@@ -288,12 +291,13 @@ Public Class ArchetypeNodeConstraintControl
         '
         Me.gbValueSets.Controls.Add(Me.dgValueSets)
         Me.gbValueSets.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbValueSets.Location = New System.Drawing.Point(3, 334)
+        Me.gbValueSets.Location = New System.Drawing.Point(3, 348)
         Me.gbValueSets.Name = "gbValueSets"
-        Me.gbValueSets.Size = New System.Drawing.Size(420, 73)
+        Me.gbValueSets.Size = New System.Drawing.Size(420, 59)
         Me.gbValueSets.TabIndex = 6
         Me.gbValueSets.TabStop = False
         Me.gbValueSets.Text = "Value sets in external terminologies"
+        Me.gbValueSets.Visible = False
         '
         'dgValueSets
         '
@@ -302,14 +306,41 @@ Public Class ArchetypeNodeConstraintControl
         Me.dgValueSets.Location = New System.Drawing.Point(3, 18)
         Me.dgValueSets.Name = "dgValueSets"
         Me.dgValueSets.RowTemplate.Height = 24
-        Me.dgValueSets.Size = New System.Drawing.Size(414, 52)
+        Me.dgValueSets.Size = New System.Drawing.Size(414, 38)
         Me.dgValueSets.TabIndex = 3
+        '
+        'termLookUp
+        '
+        Me.termLookUp.AccessibleDescription = ""
+        Me.termLookUp.Dock = System.Windows.Forms.DockStyle.Top
+        Me.termLookUp.Location = New System.Drawing.Point(3, 293)
+        Me.termLookUp.Margin = New System.Windows.Forms.Padding(0)
+        Me.termLookUp.MinimumSize = New System.Drawing.Size(60, 55)
+        Me.termLookUp.Name = "termLookUp"
+        Me.termLookUp.Size = New System.Drawing.Size(420, 55)
+        Me.termLookUp.TabIndex = 8
+        Me.termLookUp.Tag = ""
+        Me.termLookUp.TermCaption = "SNOMED"
+        Me.termLookUp.TermId = Nothing
+        Me.termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.Snomed
+        Me.termLookUp.TermLanguage = "en-GB"
+        Me.termLookUp.TermName = Nothing
+        Me.termLookUp.TermQueryName = "AllSnomed"
+        '
+        'Splitter1
+        '
+        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Splitter1.Location = New System.Drawing.Point(3, 290)
+        Me.Splitter1.Name = "Splitter1"
+        Me.Splitter1.Size = New System.Drawing.Size(420, 3)
+        Me.Splitter1.TabIndex = 7
+        Me.Splitter1.TabStop = False
         '
         'gbTerminology
         '
         Me.gbTerminology.Controls.Add(Me.dgNodeBindings)
         Me.gbTerminology.Dock = System.Windows.Forms.DockStyle.Top
-        Me.gbTerminology.Location = New System.Drawing.Point(3, 219)
+        Me.gbTerminology.Location = New System.Drawing.Point(3, 178)
         Me.gbTerminology.Name = "gbTerminology"
         Me.gbTerminology.Size = New System.Drawing.Size(420, 112)
         Me.gbTerminology.TabIndex = 4
@@ -327,27 +358,6 @@ Public Class ArchetypeNodeConstraintControl
         Me.dgNodeBindings.Size = New System.Drawing.Size(414, 91)
         Me.dgNodeBindings.TabIndex = 2
         '
-        'gbComments
-        '
-        Me.gbComments.Controls.Add(Me.txtComments)
-        Me.gbComments.Dock = System.Windows.Forms.DockStyle.Top
-        Me.gbComments.Location = New System.Drawing.Point(3, 3)
-        Me.gbComments.Name = "gbComments"
-        Me.gbComments.Size = New System.Drawing.Size(420, 216)
-        Me.gbComments.TabIndex = 5
-        Me.gbComments.TabStop = False
-        Me.gbComments.Text = "Comments"
-        '
-        'txtComments
-        '
-        Me.txtComments.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtComments.Location = New System.Drawing.Point(3, 18)
-        Me.txtComments.Multiline = True
-        Me.txtComments.Name = "txtComments"
-        Me.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtComments.Size = New System.Drawing.Size(414, 195)
-        Me.txtComments.TabIndex = 0
-        '
         'terminology
         '
         Me.terminology.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader
@@ -362,6 +372,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.code.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells
         Me.code.FillWeight = 30.0!
         Me.code.HeaderText = "Code"
+        Me.code.MinimumWidth = 20
         Me.code.Name = "code"
         Me.code.Width = 66
         '
@@ -371,14 +382,26 @@ Public Class ArchetypeNodeConstraintControl
         Me.Path.Name = "Path"
         Me.Path.Visible = False
         '
-        'Splitter1
+        'gbComments
         '
-        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Splitter1.Location = New System.Drawing.Point(3, 331)
-        Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(420, 3)
-        Me.Splitter1.TabIndex = 7
-        Me.Splitter1.TabStop = False
+        Me.gbComments.Controls.Add(Me.txtComments)
+        Me.gbComments.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbComments.Location = New System.Drawing.Point(3, 3)
+        Me.gbComments.Name = "gbComments"
+        Me.gbComments.Size = New System.Drawing.Size(420, 175)
+        Me.gbComments.TabIndex = 5
+        Me.gbComments.TabStop = False
+        Me.gbComments.Text = "Comments"
+        '
+        'txtComments
+        '
+        Me.txtComments.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtComments.Location = New System.Drawing.Point(3, 18)
+        Me.txtComments.Multiline = True
+        Me.txtComments.Name = "txtComments"
+        Me.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtComments.Size = New System.Drawing.Size(414, 154)
+        Me.txtComments.TabIndex = 0
         '
         'ArchetypeNodeConstraintControl
         '
@@ -548,10 +571,13 @@ Public Class ArchetypeNodeConstraintControl
                 mDataView.RowFilter = "Path = '" & CType(an_archetype_node, ArchetypeNodeAbstract).NodeId & "'"
                 If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 0 Then
                     Me.dgNodeBindings.Enabled = False
+                Else
+                    Me.dgNodeBindings.Enabled = True
                 End If
             Else
                 Me.dgNodeBindings.Visible = False
             End If
+
             If OceanArchetypeEditor.IsDefaultLanguageRightToLeft Then
                 OceanArchetypeEditor.Reflect(mConstraintControl)
             End If
@@ -670,6 +696,50 @@ Public Class ArchetypeNodeConstraintControl
         Me.dgNodeBindings.Columns(1).DataPropertyName = "Code"
         Me.dgNodeBindings.Columns(2).DataPropertyName = "Path"
         Me.dgNodeBindings.DataSource = mDataView
+    End Sub
+
+    Private Sub SetTermLookUpVisibility(ByVal termID As String)
+
+        If OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp AndAlso _
+            OceanArchetypeEditor.Instance.ServiceTerminology(termID) Then
+            termLookUp.TermCaption = termID
+            'ToDo: work this from the terminology server
+            Select Case termID
+                Case "SNOMED-CT"
+                    termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.Snomed
+                    termLookUp.TermQueryName = "AllSnomed"
+                    termLookUp.Visible = True
+
+                Case "LOINC"
+                    termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.LOINC
+                    termLookUp.TermQueryName = "LOINC"
+                    termLookUp.Visible = True
+
+                Case Else
+                    Debug.Assert(False, String.Format("{0} terminology available but fails case statement", termID))
+                    termLookUp.Visible = False
+            End Select
+
+        Else
+            termLookUp.Visible = False
+        End If
+
+    End Sub
+
+
+    Private Sub termLookUp_TermChanged(ByVal sender As System.Object, ByVal e As EventArgs) Handles termLookUp.TermChanged
+        If Not dgNodeBindings.CurrentRow Is Nothing AndAlso Not termLookUp.TermId Is Nothing Then
+            dgNodeBindings.CurrentRow.Cells(1).Value = termLookUp.TermId
+        End If
+    End Sub
+
+    Private Sub dgNodeBindings_CellClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellClick
+        If e.ColumnIndex = 0 And Not dgNodeBindings.CurrentCell Is Nothing Then
+            Dim termID As String = CType(dgNodeBindings.CurrentCell, DataGridViewComboBoxCell).Value.ToString
+            If termID <> String.Empty Then
+                SetTermLookUpVisibility(termID)
+            End If
+        End If
     End Sub
 End Class
 
