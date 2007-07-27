@@ -412,7 +412,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.comboIncludeMin.Visible = Me.cbMinValue.Checked
 
         'Allows duration control to display the units combobox
-        RaiseEvent ChangeDisplay(sender, (cbMinValue.Checked Or cbMinValue.Checked))
+        RaiseEvent ChangeDisplay(sender, (cbMinValue.Checked Or cbMaxValue.Checked))
 
         If MyBase.IsLoading Then Return
 

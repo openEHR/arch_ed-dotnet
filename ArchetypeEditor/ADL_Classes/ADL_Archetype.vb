@@ -791,53 +791,60 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
             an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
-            an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
-
+            
             Dim durationISO As New Duration()
-            Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION = Nothing
+            Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
 
+            'Changed SRH: 26th July 2007
+            'Can't cope with any_allowed in the duration context
             If c.AllowableUnits <> String.Empty And c.AllowableUnits <> "PYMWDTHMS" Then
+                an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("pattern"))
                 d = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_DURATION.make_from_pattern(EiffelKernel.Create.STRING_8.make_from_cil(c.AllowableUnits))
-            Else
-                ' Cannot set the patter and range at the moment in ADL
-
-                If c.HasMaximum Or c.HasMinimum Then
-                    durationISO.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
-
-                    If c.HasMaximum And c.HasMinimum Then
-                        'Need duration converter for max and min
-                        Dim durationMin As New Duration
-                        durationMin.ISO_Units = durationISO.ISO_Units
-                        durationISO.GUI_duration = CInt(c.MaximumValue)
-                        durationMin.GUI_duration = CInt(c.MinimumValue)
-                        d = mAomFactory.create_c_duration_make_bounded( _
-                            EiffelKernel.Create.STRING_8.make_from_cil(durationMin.ISO_duration), _
-                            EiffelKernel.Create.STRING_8.make_from_cil(durationISO.ISO_duration), _
-                            c.IncludeMinimum, c.IncludeMaximum)
-                        'Else
-                        '    d.set_interval(openehr.common_libs.basic.Create.OE_INTERVAL_ANY.make_bounded( _
-                        '           openehr.common_libs.date_time.Create.ISO8601_DURATION.make_from_string( _
-                        '                openehr.base.kernel.Create.STRING.make_from_cil(durationMin.ISO_duration)), _
-                        '            openehr.common_libs.date_time.Create.ISO8601_DURATION.make_from_string( _
-                        '                openehr.base.kernel.Create.STRING.make_from_cil(durationISO.ISO_duration)), _
-                        '            c.IncludeMinimum, c.IncludeMaximum))
-                    ElseIf c.HasMinimum Then
-                        durationISO.GUI_duration = CInt(c.MinimumValue)
-                        d = mAomFactory.create_c_duration_make_upper_unbounded( _
-                            EiffelKernel.Create.STRING_8.make_from_cil(durationISO.ISO_duration), _
-                            c.IncludeMinimum)
-                    Else 'Has maximum
-                        durationISO.GUI_duration = CInt(c.MaximumValue)
-                        d = mAomFactory.create_c_duration_make_lower_unbounded( _
-                            EiffelKernel.Create.STRING_8.make_from_cil(durationISO.ISO_duration), _
-                            c.IncludeMaximum)
-                    End If
-                End If
+                Dim po As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                po = openehr.openehr.am.archetype.constraint_model.Create.C_PRIMITIVE_OBJECT.make(d)
+                an_attribute.put_child(po)
             End If
 
-            Dim po As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-            po = openehr.openehr.am.archetype.constraint_model.Create.C_PRIMITIVE_OBJECT.make(d)
-            an_attribute.put_child(po)
+                ' Cannot set the patter and range at the moment in ADL
+
+            If c.HasMaximum Or c.HasMinimum Then
+                an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("interval"))
+
+                durationISO.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
+                
+                If c.HasMaximum And c.HasMinimum Then
+                    'Need duration converter for max and min
+                    Dim durationMin As New Duration
+                    durationMin.ISO_Units = durationISO.ISO_Units
+                    durationISO.GUI_duration = CInt(c.MaximumValue)
+                    durationMin.GUI_duration = CInt(c.MinimumValue)
+                    d = mAomFactory.create_c_duration_make_bounded( _
+                        EiffelKernel.Create.STRING_8.make_from_cil(durationMin.ISO_duration), _
+                        EiffelKernel.Create.STRING_8.make_from_cil(durationISO.ISO_duration), _
+                        c.IncludeMinimum, c.IncludeMaximum)
+                    'Else
+                    '    d.set_interval(openehr.common_libs.basic.Create.OE_INTERVAL_ANY.make_bounded( _
+                    '           openehr.common_libs.date_time.Create.ISO8601_DURATION.make_from_string( _
+                    '                openehr.base.kernel.Create.STRING.make_from_cil(durationMin.ISO_duration)), _
+                    '            openehr.common_libs.date_time.Create.ISO8601_DURATION.make_from_string( _
+                    '                openehr.base.kernel.Create.STRING.make_from_cil(durationISO.ISO_duration)), _
+                    '            c.IncludeMinimum, c.IncludeMaximum))
+                ElseIf c.HasMinimum Then
+                    durationISO.GUI_duration = CInt(c.MinimumValue)
+                    d = mAomFactory.create_c_duration_make_upper_unbounded( _
+                        EiffelKernel.Create.STRING_8.make_from_cil(durationISO.ISO_duration), _
+                        c.IncludeMinimum)
+                Else 'Has maximum
+                    durationISO.GUI_duration = CInt(c.MaximumValue)
+                    d = mAomFactory.create_c_duration_make_lower_unbounded( _
+                        EiffelKernel.Create.STRING_8.make_from_cil(durationISO.ISO_duration), _
+                        c.IncludeMaximum)
+                End If
+                'Only add constraint if appropriate
+                Dim po As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                po = openehr.openehr.am.archetype.constraint_model.Create.C_PRIMITIVE_OBJECT.make(d)
+                an_attribute.put_child(po)
+            End If
 
         End Sub
 

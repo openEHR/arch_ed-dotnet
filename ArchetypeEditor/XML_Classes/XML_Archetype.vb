@@ -1215,7 +1215,7 @@ Namespace ArchetypeEditor.XML_Classes
 
             If c.HasMaximum Or c.HasMinimum Then
                 d.range = New XMLParser.IntervalOfDuration()
-                durationISO.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(c.MinMaxValueUnits)
+                durationISO.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
 
                 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 If c.HasMinimum Then
@@ -1260,7 +1260,8 @@ Namespace ArchetypeEditor.XML_Classes
                     Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
                     Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
                 End With
-            Else
+            End If
+            If Not c.AllowableUnits Is Nothing Then
                 d.pattern = c.AllowableUnits
             End If
 
