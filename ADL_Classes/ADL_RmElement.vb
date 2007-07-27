@@ -167,19 +167,19 @@ Namespace ArchetypeEditor.ADL_Classes
                 Return New Constraint_Duration
             Else
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                Dim durationConstraint As New Constraint_Duration
 
                 For i As Integer = 1 To ObjNode.attributes.count
 
                     an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                    Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                        Case "value"
-                            Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                            If an_attribute.children.count > 0 Then
-                                constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                                Return ProcessDuration(constraint)
-                            End If
-                    End Select
+
+                    Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                    If an_attribute.children.count > 0 Then
+                        constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                        durationConstraint = ProcessDuration(constraint, durationConstraint)
+                    End If
                 Next
+                Return durationConstraint
             End If
 
             'Shouldn't get to here
@@ -189,9 +189,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
 
-        Private Function ProcessDuration(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_Duration
-            Dim duration As New Constraint_Duration
-
+        Private Function ProcessDuration(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT, ByVal duration As Constraint_Duration) As Constraint_Duration
             If ObjNode.any_allowed Then
                 Return duration
             End If
@@ -357,7 +355,8 @@ Namespace ArchetypeEditor.ADL_Classes
                         Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     Else
                         'obsolete
-                        Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                        Dim constraintDuration As New Constraint_Duration
+                        constraintDuration = ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT), constraintDuration)
                     End If
                 Case Else
                     Debug.Assert(False, String.Format("Attribute not handled: {0}", ObjNode.rm_type_name.to_cil))

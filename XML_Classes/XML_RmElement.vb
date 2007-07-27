@@ -318,20 +318,27 @@ Namespace ArchetypeEditor.XML_Classes
                 If cadlC.range.lower_included Then
                     duration.HasMinimum = True
                     duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.lower)
-                    'duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.minimum.Substring(1))) ' leave the P of the front
-                    duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower)) ' leave the P of the front
+                    If cadlC.range.lower.StartsWith("P") Then
+                        duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower.Substring(1))) ' leave the P of the front
+                    Else
+                        duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower))
+                    End If
                 Else
                     duration.HasMinimum = False
                 End If
 
-                'If Not cadlC.range.maximum Is Nothing Then
-                If cadlC.range.upper_included Then
-                    If duration.MinMaxValueUnits = "" Then
-                        duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
+                    'If Not cadlC.range.maximum Is Nothing Then
+                    If cadlC.range.upper_included Then
+                        If duration.MinMaxValueUnits = "" Then
+                            duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
+                        End If
+                        duration.HasMaximum = True
+                    If cadlC.range.upper.StartsWith("P") Then
+                        duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper.Substring(1))) ' leave the P of the front
+                    Else
+                        duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper))
                     End If
-                    duration.HasMaximum = True
-                    'duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.maximum.Substring(1))) ' leave the P of the front
-                    duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper)) ' leave the P of the front
+
                 End If
             End If
             If Not cadlC.assumed_value Is Nothing Then
