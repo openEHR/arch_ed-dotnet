@@ -794,24 +794,19 @@ Namespace ArchetypeEditor.ADL_Classes
             
             Dim durationISO As New Duration()
             Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
-
+            
             'Changed SRH: 26th July 2007
             'Can't cope with any_allowed in the duration context
             If c.AllowableUnits <> String.Empty And c.AllowableUnits <> "PYMWDTHMS" Then
-                an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("pattern"))
+                an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
                 d = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_DURATION.make_from_pattern(EiffelKernel.Create.STRING_8.make_from_cil(c.AllowableUnits))
                 Dim po As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
                 po = openehr.openehr.am.archetype.constraint_model.Create.C_PRIMITIVE_OBJECT.make(d)
                 an_attribute.put_child(po)
-            End If
-
-                ' Cannot set the patter and range at the moment in ADL
-
-            If c.HasMaximum Or c.HasMinimum Then
-                an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("interval"))
-
+            ElseIf c.HasMaximum Or c.HasMinimum Then
+                an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
                 durationISO.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
-                
+
                 If c.HasMaximum And c.HasMinimum Then
                     'Need duration converter for max and min
                     Dim durationMin As New Duration
@@ -836,6 +831,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         c.IncludeMinimum)
                 Else 'Has maximum
                     durationISO.GUI_duration = CInt(c.MaximumValue)
+
                     d = mAomFactory.create_c_duration_make_lower_unbounded( _
                         EiffelKernel.Create.STRING_8.make_from_cil(durationISO.ISO_duration), _
                         c.IncludeMaximum)
@@ -845,7 +841,6 @@ Namespace ArchetypeEditor.ADL_Classes
                 po = openehr.openehr.am.archetype.constraint_model.Create.C_PRIMITIVE_OBJECT.make(d)
                 an_attribute.put_child(po)
             End If
-
         End Sub
 
         Protected Sub BuildQuantity(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
