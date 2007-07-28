@@ -45,6 +45,8 @@ Public Class TimeUnits
                 Return "h"
             Case "tm"
                 Return "min"
+            Case "w"
+                Return "wk"
             Case "ts"
                 Return "s"
             Case Else

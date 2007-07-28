@@ -67,6 +67,8 @@ Friend Class Duration
                 Return "M"
             Case "a"
                 Return "Y"
+            Case "wk"
+                Return "W"
             Case Else 'D, H, S
                 Return units.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
         End Select
@@ -76,7 +78,7 @@ Friend Class Duration
         If sUnits = "millisec" Then
             sISODuration = "PT" & (iValue / 1000).ToString & "s"
         Else
-            If (sUnits.ToLowerInvariant = "d") Or (sUnits.ToLowerInvariant = "mo") Or (sUnits.ToLowerInvariant = "a") Then
+            If (sUnits.ToLowerInvariant = "d") Or (sUnits.ToLowerInvariant = "mo") Or (sUnits.ToLowerInvariant = "wk") Or (sUnits.ToLowerInvariant = "a") Then
                 sISODuration = "P" & iValue.ToString & toDuration(sUnits)
             Else
                 sISODuration = "PT" & iValue.ToString & toDuration(sUnits)

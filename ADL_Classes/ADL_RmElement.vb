@@ -168,18 +168,15 @@ Namespace ArchetypeEditor.ADL_Classes
             Else
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 Dim durationConstraint As New Constraint_Duration
-
-                For i As Integer = 1 To ObjNode.attributes.count
-
-                    an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-
+                If ObjNode.attributes.count > 0 Then
+                    an_attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
                     Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
                     If an_attribute.children.count > 0 Then
                         constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
                         durationConstraint = ProcessDuration(constraint, durationConstraint)
                     End If
-                Next
-                Return durationConstraint
+                    Return durationConstraint
+                End If
             End If
 
             'Shouldn't get to here
@@ -198,85 +195,84 @@ Namespace ArchetypeEditor.ADL_Classes
             cadlC = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
             If Not cadlC.pattern Is Nothing Then
                 duration.AllowableUnits = cadlC.pattern.to_cil
-            Else
-                'ToDo: Allow both interval and pattern - but not available in ADL at present
-                If Not cadlC.interval Is Nothing Then
+            End If
 
-                    If cadlC.interval.upper_unbounded Then
-                        duration.HasMaximum = False
-                    Else
-                        Dim upperDuration As openehr.common_libs.date_time.ISO8601_DURATION
-                        upperDuration = CType(cadlC.interval.upper, openehr.common_libs.date_time.ISO8601_DURATION)
+            If Not cadlC.interval Is Nothing Then
 
-                        Dim units As String = upperDuration.value.to_cil
-                        units = units.ToUpperInvariant.Substring(units.Length - 1)
+                If cadlC.interval.upper_unbounded Then
+                    duration.HasMaximum = False
+                Else
+                    Dim upperDuration As openehr.common_libs.date_time.ISO8601_DURATION
+                    upperDuration = CType(cadlC.interval.upper, openehr.common_libs.date_time.ISO8601_DURATION)
 
-                        Select Case units
-                            Case "S"
-                                duration.MaximumValue = upperDuration.seconds
-                                units = "TS"
-                            Case "M"
-                                If upperDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
-                                    'Minutes
-                                    duration.MaximumValue = upperDuration.minutes
-                                    units = "TM"
-                                Else
-                                    'Months
-                                    duration.MaximumValue = upperDuration.months
-                                End If
-                            Case "H"
-                                duration.MaximumValue = upperDuration.hours
-                                units = "TH"
-                            Case "D"
-                                duration.MaximumValue = upperDuration.days
-                            Case "Y"
-                                duration.MaximumValue = upperDuration.years
-                            Case "W"
-                                duration.MaximumValue = upperDuration.weeks
-                        End Select
+                    Dim units As String = upperDuration.value.to_cil
+                    units = units.ToUpperInvariant.Substring(units.Length - 1)
+
+                    Select Case units
+                        Case "S"
+                            duration.MaximumValue = upperDuration.seconds
+                            units = "TS"
+                        Case "M"
+                            If upperDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
+                                'Minutes
+                                duration.MaximumValue = upperDuration.minutes
+                                units = "TM"
+                            Else
+                                'Months
+                                duration.MaximumValue = upperDuration.months
+                            End If
+                        Case "H"
+                            duration.MaximumValue = upperDuration.hours
+                            units = "TH"
+                        Case "D"
+                            duration.MaximumValue = upperDuration.days
+                        Case "Y"
+                            duration.MaximumValue = upperDuration.years
+                        Case "W"
+                            duration.MaximumValue = upperDuration.weeks
+                    End Select
+                    duration.MinMaxValueUnits = units
+                    duration.HasMaximum = True
+                    duration.IncludeMaximum = cadlC.interval.upper_included
+                End If
+
+                If cadlC.interval.lower_unbounded Then
+                    duration.HasMinimum = False
+                Else
+                    Dim lowerDuration As openehr.common_libs.date_time.ISO8601_DURATION
+                    lowerDuration = CType(cadlC.interval.lower, openehr.common_libs.date_time.ISO8601_DURATION)
+
+                    Dim units As String = lowerDuration.value.to_cil
+                    units = units.ToUpperInvariant.Substring(units.Length - 1)
+
+                    Select Case units.ToUpperInvariant
+                        Case "S"
+                            duration.MinimumValue = lowerDuration.seconds
+                            units = "TS"
+                        Case "M"
+                            If lowerDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
+                                'Minutes
+                                duration.MinimumValue = lowerDuration.minutes
+                                units = "TM"
+                            Else
+                                'Months
+                                duration.MinimumValue = lowerDuration.months
+                            End If
+                        Case "H"
+                            duration.MinimumValue = lowerDuration.hours
+                            units = "TH"
+                        Case "D"
+                            duration.MinimumValue = lowerDuration.days
+                        Case "Y"
+                            duration.MinimumValue = lowerDuration.years
+                        Case "W"
+                            duration.MinimumValue = lowerDuration.weeks
+                    End Select
+                    If duration.MinMaxValueUnits = String.Empty Then
                         duration.MinMaxValueUnits = units
-                        duration.HasMaximum = True
-                        duration.IncludeMaximum = cadlC.interval.upper_included
                     End If
-
-                    If cadlC.interval.lower_unbounded Then
-                        duration.HasMinimum = False
-                    Else
-                        Dim lowerDuration As openehr.common_libs.date_time.ISO8601_DURATION
-                        lowerDuration = CType(cadlC.interval.lower, openehr.common_libs.date_time.ISO8601_DURATION)
-
-                        Dim units As String = lowerDuration.value.to_cil
-                        units = units.ToUpperInvariant.Substring(units.Length - 1)
-
-                        Select Case units.ToUpperInvariant
-                            Case "S"
-                                duration.MinimumValue = lowerDuration.seconds
-                                units = "TS"
-                            Case "M"
-                                If lowerDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
-                                    'Minutes
-                                    duration.MinimumValue = lowerDuration.minutes
-                                    units = "TM"
-                                Else
-                                    'Months
-                                    duration.MinimumValue = lowerDuration.months
-                                End If
-                            Case "H"
-                                duration.MinimumValue = lowerDuration.hours
-                                units = "TH"
-                            Case "D"
-                                duration.MinimumValue = lowerDuration.days
-                            Case "Y"
-                                duration.MinimumValue = lowerDuration.years
-                            Case "W"
-                                duration.MinimumValue = lowerDuration.weeks
-                        End Select
-                        If duration.MinMaxValueUnits = String.Empty Then
-                            duration.MinMaxValueUnits = units
-                        End If
-                        duration.HasMinimum = True
-                        duration.IncludeMinimum = cadlC.interval.lower_included
-                    End If
+                    duration.HasMinimum = True
+                    duration.IncludeMinimum = cadlC.interval.lower_included
                 End If
             End If
             Return duration
