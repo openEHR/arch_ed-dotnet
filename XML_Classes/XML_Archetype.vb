@@ -1587,9 +1587,21 @@ Namespace ArchetypeEditor.XML_Classes
         Private Sub BuildURI(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_URI)
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
 
-            'objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type))
-            objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'objNode.any_allowed = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            If c.EhrUriOnly Then
+                objNode = mAomFactory.MakeComplexObject(value_attribute, "DV_EHR_URI", "", MakeOccurrences(New RmCardinality(1, 1))) 'SRH: 1AUG2007 - support DV_EHR_URI
+            Else
+                objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            End If
+
+            If c.RegularExpression <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As XMLParser.C_ATTRIBUTE
+                attribute = mAomFactory.MakeSingleAttribute(objNode, "value", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim cSt As New XMLParser.C_STRING
+                cSt.pattern = c.RegularExpression
+                mAomFactory.MakePrimitiveObject(attribute, cSt)
+            End If
+
         End Sub
 
         Private Sub BuildElementConstraint(ByVal parent As XMLParser.C_COMPLEX_OBJECT, ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint)

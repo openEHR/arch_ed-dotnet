@@ -58,7 +58,7 @@ Public Class OceanArchetypeEditor
                 mAvailableTerminologyIDs = New ArrayList()
                 'ToDo: Lookup from the 
                 mAvailableTerminologyIDs.Add("SNOMED-CT")
-                mAvailableTerminologyIDs.Add("LOINC")
+                mAvailableTerminologyIDs.Add("LNC205")
             End If
             Return mAvailableTerminologyIDs.Contains(terminologyID)
         End Get

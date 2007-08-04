@@ -214,6 +214,9 @@ Public Class ConstraintControl
             Case ConstraintType.MultiMedia
                 Return New MultiMediaConstraintControl(a_file_manager)
 
+            Case ConstraintType.URI
+                Return New UriConstraintControl(a_file_manager)
+
             Case Else
                 Throw New ArgumentException( _
                         String.Format("'{0}' does not have a corresponding constraint control implemented", _

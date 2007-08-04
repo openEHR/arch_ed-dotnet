@@ -326,6 +326,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.termLookUp.TermLanguage = "en-GB"
         Me.termLookUp.TermName = Nothing
         Me.termLookUp.TermQueryName = "AllSnomed"
+        Me.termLookUp.Visible = False
         '
         'Splitter1
         '
@@ -495,10 +496,6 @@ Public Class ArchetypeNodeConstraintControl
                     Select Case archetypeElem.Constraint.Type
                         Case ConstraintType.Any
                             Me.labelAny.Text = AE_Constants.Instance.Any
-                            Me.labelAny.Visible = True
-
-                        Case ConstraintType.URI
-                            Me.labelAny.Text = AE_Constants.Instance.URI
                             Me.labelAny.Visible = True
 
                         Case Else
@@ -710,7 +707,7 @@ Public Class ArchetypeNodeConstraintControl
                     termLookUp.TermQueryName = "AllSnomed"
                     termLookUp.Visible = True
 
-                Case "LOINC"
+                Case "LNC205"
                     termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.LOINC
                     termLookUp.TermQueryName = "LOINC"
                     termLookUp.Visible = True
@@ -729,18 +726,23 @@ Public Class ArchetypeNodeConstraintControl
 
     Private Sub termLookUp_TermChanged(ByVal sender As System.Object, ByVal e As EventArgs) Handles termLookUp.TermChanged
         If Not dgNodeBindings.CurrentRow Is Nothing AndAlso Not termLookUp.TermId Is Nothing Then
-            dgNodeBindings.CurrentRow.Cells(1).Value = termLookUp.TermId
+            dgNodeBindings.CurrentRow.Cells(2).Value = termLookUp.TermId
         End If
     End Sub
 
     Private Sub dgNodeBindings_CellClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellClick
-        If e.ColumnIndex = 0 And Not dgNodeBindings.CurrentCell Is Nothing Then
-            Dim termID As String = CType(dgNodeBindings.CurrentCell, DataGridViewComboBoxCell).Value.ToString
+        If e.ColumnIndex = 2 Then
+            Dim termID As String = CType(dgNodeBindings.CurrentRow.Cells(0), DataGridViewComboBoxCell).EditedFormattedValue.ToString
             If termID <> String.Empty Then
                 SetTermLookUpVisibility(termID)
+                Return
             End If
         End If
+        If Me.termLookUp.Visible Then
+            Me.termLookUp.Visible = False
+        End If
     End Sub
+
 End Class
 
 '
