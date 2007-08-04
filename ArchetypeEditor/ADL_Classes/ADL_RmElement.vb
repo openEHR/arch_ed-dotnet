@@ -344,8 +344,8 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
                 Case "dv_multimedia", "multimedia", "multi_media"
                     Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "dv_uri", "uri"
-                    Return New Constraint_URI
+                Case "dv_uri", "uri", "dv_ehr_uri"
+                    Return ProcessUri(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "dv_duration", "duration"
                     If TypeOf ObjNode Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
                         Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -353,11 +353,40 @@ Namespace ArchetypeEditor.ADL_Classes
                         'obsolete
                         Dim constraintDuration As New Constraint_Duration
                         constraintDuration = ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT), constraintDuration)
+                        Return constraintDuration
                     End If
                 Case Else
                     Debug.Assert(False, String.Format("Attribute not handled: {0}", ObjNode.rm_type_name.to_cil))
                     Return New Constraint
             End Select
+        End Function
+        Private Function ProcessUri(ByVal dvUri As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
+            Dim cUri As New Constraint_URI
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+            If dvUri.rm_type_name.to_cil.ToLowerInvariant = "dv_ehr_uri" Then
+                cUri.EhrUriOnly = True
+            End If
+
+            If dvUri.any_allowed Then
+                Return cUri
+            End If
+
+            Try
+                an_attribute = CType(dvUri.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+                Debug.Assert(an_attribute.rm_attribute_name.to_cil.ToLowerInvariant = "value")
+                Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = _
+                    CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = _
+                    CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+
+                cUri.RegularExpression = cadlC.regexp.to_cil
+            Catch e As Exception
+                MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+
+            Return cUri
+
         End Function
 
         Private Function ProcessCount(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Count

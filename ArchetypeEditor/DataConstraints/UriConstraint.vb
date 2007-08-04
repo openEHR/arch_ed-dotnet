@@ -25,6 +25,28 @@ Public Class Constraint_URI
         End Get
     End Property
 
+    Dim mEhrUriOnly As Boolean
+
+    Public Property EhrUriOnly() As Boolean
+        Get
+            Return mEhrUriOnly
+        End Get
+        Set(ByVal value As Boolean)
+            mEhrUriOnly = value
+        End Set
+    End Property
+
+    Dim mRegex As String
+
+    Public Property RegularExpression() As String
+        Get
+            Return mRegex
+        End Get
+        Set(ByVal value As String)
+            mRegex = value
+        End Set
+    End Property
+
 End Class
 
 '

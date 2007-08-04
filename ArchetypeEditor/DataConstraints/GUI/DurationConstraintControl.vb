@@ -39,15 +39,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         mFileManager = a_file_manager
 
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.LabelDuration.Text = Filemanager.GetOpenEhrTerm(142, Me.LabelDuration.Text)
-            Me.chkYears.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("a")
-            Me.chkMonths.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("mo")
-            Me.chkWeeks.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("wk")
-            Me.chkDays.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("d")
-            Me.chkHours.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("h")
-            Me.chkMinutes.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("m")
-            Me.chkSeconds.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("s")
-            Me.chkMilliseconds.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("millisec")
+            Translate()
         End If
 
 
@@ -244,6 +236,18 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
 
     Private Sub SetUnitDisplay(ByVal Sender As Object, ByVal DisplayUnits As Boolean) Handles mCountControl.ChangeDisplay
         Me.comboTimeUnits.Visible = DisplayUnits
+    End Sub
+
+    Public Sub Translate()
+        Me.LabelDuration.Text = Filemanager.GetOpenEhrTerm(142, Me.LabelDuration.Text)
+        Me.chkYears.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("a")
+        Me.chkMonths.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("mo")
+        Me.chkWeeks.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("wk")
+        Me.chkDays.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("d")
+        Me.chkHours.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("h")
+        Me.chkMinutes.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("m")
+        Me.chkSeconds.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("s")
+        Me.chkMilliseconds.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("millisec")
     End Sub
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)

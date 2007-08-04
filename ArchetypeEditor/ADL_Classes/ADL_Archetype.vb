@@ -998,7 +998,21 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Sub BuildURI(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_URI)
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-            objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
+            If c.EhrUriOnly Then
+                objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_EHR_URI"))
+            Else
+                objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
+            End If
+
+            If c.RegularExpression <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("value"))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.RegularExpression))
+                mAomFactory.create_c_primitive_object(attribute, cSt)
+            End If
+
         End Sub
 
         Protected Sub BuildElementConstraint(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint)
