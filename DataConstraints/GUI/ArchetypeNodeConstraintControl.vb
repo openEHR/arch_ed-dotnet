@@ -161,6 +161,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'PanelDataConstraint
         '
+        Me.PanelDataConstraint.AutoScroll = True
         Me.PanelDataConstraint.Controls.Add(Me.labelAny)
         Me.PanelDataConstraint.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)

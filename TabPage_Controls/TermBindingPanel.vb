@@ -871,11 +871,17 @@ Public Class TermBindingPanel
     End Sub
 
     Public Sub PopulatePathTree()
+        PathsTreeView.SuspendLayout()
         PathsTreeView.Nodes.Clear()
         mIsLoading = True
         PopulateNodeTree()
         SetDvTermBindingsFilter()
         mIsLoading = False
+        PathsTreeView.ResumeLayout()
+    End Sub
+
+    Public Sub Reset()
+        PathsTreeView.Nodes.Clear()
     End Sub
 
     Private Sub NodeScopeCheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
@@ -920,9 +926,10 @@ Public Class TermBindingPanel
 
     Private Sub SetTermBindingFilter()
         Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
-
-        SetTermBindingFilter(mTermBindingView, CStr(TerminologyComboBox.SelectedValue), _
-                selectedNode.NodeId, selectedNode.PhysicalPath)
+        If Not selectedNode Is Nothing Then
+            SetTermBindingFilter(mTermBindingView, CStr(TerminologyComboBox.SelectedValue), _
+                    selectedNode.NodeId, selectedNode.PhysicalPath)
+        End If
     End Sub
 
     Private Sub SetTermBindingFilter(ByVal TermBindingView As DataView, _

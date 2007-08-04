@@ -657,6 +657,54 @@ Public Class TableStructure
         End If
     End Sub
 
+    Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
+        Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
+        Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
+
+        result.AppendFormat("<p><i>Structure</i>: {0}", Filemanager.GetOpenEhrTerm(108, "TABLE"))
+        result.Append(CStr(IIf(mCardinalityControl.Cardinality.Ordered, ", " & mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")))
+        result.Append("</p>")
+        result.AppendFormat("<h2>{0}<h2>", Filemanager.GetOpenEhrTerm(164, "Columns"))
+        result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
+        'Column heads
+        If mKeyColumns.Count > 0 Then
+            For Each row_heading As ArchetypeElement In mKeyColumns
+                result.AppendLine("<tr>")
+                For Each cde As String In CType(row_heading.RM_Class.Constraint, Constraint_Text).AllowableValues.Codes
+                    result.AppendFormat("<td><h3>{0}</h3></td>", mFileManager.OntologyManager.GetTerm(cde).Text)
+                Next
+                result.AppendLine("</tr>")
+            Next
+        End If
+        result.AppendLine("</table>")
+        result.AppendFormat("<h2>{0}<h2>", Filemanager.GetOpenEhrTerm(163, "Rows"))
+        result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
+        result.Append(Me.HtmlHeader(BackGroundColour, showComments))
+
+        result.AppendFormat("{0}{1}", Environment.NewLine, TableToHTML(Me.mArchetypeTable, showComments))
+        If result.ToString.EndsWith("<tr>") Then
+            result.AppendLine("</tr>")
+        End If
+        result.AppendLine("</table>")
+
+        Return result.ToString
+
+    End Function
+
+    Private Function TableToHTML(ByVal table As DataTable, ByVal showComments As Boolean) As String
+        Dim text As System.Text.StringBuilder = New System.Text.StringBuilder
+
+
+        ' then the rows
+        For Each dRow As DataRow In table.Rows
+            For i As Integer = 1 To mKeyColumns.Count
+                text.AppendFormat("<tr>{0}</tr>", CType(dRow.Item(2), ArchetypeNode).ToHTML(0, showComments))
+            Next
+        Next
+        Return text.ToString()
+    End Function
+
+
     Public Overrides Function ToRichText(ByVal indentlevel As Integer, ByVal new_line As String) As String
         Dim i, col_width As Integer
         Dim tab_pad As Integer = 109
@@ -879,6 +927,9 @@ Public Class TableStructure
             Me.MenuRemoveRow.Visible = True
         End If
 
+        If mFileManager.OntologyManager.Ontology.NumberOfSpecialisations = 0 Then
+            ContextMenuGrid.MenuItems.Add(Me.menuChangeStructure)
+        End If
 
     End Sub
 
