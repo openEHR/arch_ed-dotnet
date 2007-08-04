@@ -764,7 +764,7 @@ Public Class TreeStructure
             result.Append(CStr(IIf(mCardinalityControl.Cardinality.Ordered, mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")))
             result.Append("</p>")
         Else
-            result.Append("<p>Structure = TREE")
+            result.AppendFormat("<p><i>Structure</i>: {0}", Filemanager.GetOpenEhrTerm(107, "TREE"))
             result.Append(CStr(IIf(mCardinalityControl.Cardinality.Ordered, ", " & mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")))
             result.Append("</p>")
         End If

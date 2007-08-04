@@ -22,6 +22,7 @@ Public Class TabPageComposition
     Private mIsloading As Boolean
     Private mSectionConstraint As TabPageSection
     Private mContextConstraint As TabPageStructure
+    Private mTabPageContext As Crownwood.Magic.Controls.TabPage
 
 
 #Region " Windows Form Designer generated code "
@@ -151,6 +152,9 @@ Public Class TabPageComposition
 
     Private Sub TabPageComposition_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsloading = True
+        'remember tabpage context
+        mTabPageContext = Me.tpContext
+
         If Me.tpSectionConstraint.Controls.Count = 0 Then
             ' nothing loaded from archetype
             mSectionConstraint = New TabPageSection
@@ -231,7 +235,7 @@ Public Class TabPageComposition
 
     Public Function SaveAsComposition() As RmComposition
         Dim rm As New RmComposition
-        If Not mContextConstraint Is Nothing Then
+        If Me.radioEvent.Checked AndAlso Not mContextConstraint Is Nothing Then
             Dim context As RmStructure = mContextConstraint.SaveAsStructure
             If Not context Is Nothing Then
                 rm.Data.Add(context)
@@ -263,6 +267,19 @@ Public Class TabPageComposition
     End Sub
 
 
+    Private Sub radioPersist_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioPersist.CheckedChanged
+        If mTabPageContext Is Nothing Then
+            mTabPageContext = Me.tpContext
+        End If
+        If radioPersist.Checked Then
+            TabControlInstruction.TabPages.Remove(mTabPageContext)
+        Else
+            TabControlInstruction.TabPages.Insert(0, mTabPageContext)
+        End If
+        If Not Filemanager.Master.FileLoading Then
+            Filemanager.Master.FileEdited = True
+        End If
+    End Sub
 End Class
 
 '

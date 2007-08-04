@@ -447,8 +447,7 @@ Public Class ListStructure
         End If
 
         s = s.Trim
-
-        result.AppendFormat("<p>Structure = LIST{0}</p>", s)
+        result.AppendFormat("<p><i>Structure</i>: {0} {1}</p>", Filemanager.GetOpenEhrTerm(108, "LIST"), s)
         result.Append(Environment.NewLine)
         result.Append("<table border=""1"" cellpadding=""2"" width=""100%"">")
         result.AppendFormat(Me.HtmlHeader(BackGroundColour, showComments))

@@ -190,6 +190,7 @@ Public Class PathwayEvent
         mText = a_term.Text
         mDescription = a_term.Description
         Me.toolTipPathway.SetToolTip(Me, mText)
+        TextRectangle(mText, Me.CreateGraphics)
     End Sub
     Private Function TextRectangle(ByVal TextToRender As String, ByVal g As Graphics) As Drawing.Rectangle
         Dim fontFamily As New fontFamily("Arial")

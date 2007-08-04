@@ -292,7 +292,7 @@ Public Class SimpleStructure
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
         Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
 
-        result.Append("<p>Structure = SINGLE</p>")
+        result.AppendFormat("<p><i>Structure</i>: {0}", Filemanager.GetOpenEhrTerm(105, "SINGLE"))
         result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
         result.AppendFormat(Me.HtmlHeader(BackGroundColour, showComments))
 
