@@ -314,14 +314,20 @@ Public Class FileManagerLocal
 
         'ensure the filename and archetype ID match (ignore case!)        
         Dim shortFileName As String = aFileName.Substring((aFileName.LastIndexOf("\")) + 1)
-        If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.CurrentCultureIgnoreCase) Then
-            If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
+        If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
+            If ArchetypeID.ValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
+                If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
+                    FileLoading = False
+                    FileEdited = True
+                    FileLoading = True
+                End If
+            Else
+                FileName = mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
                 FileLoading = False
                 FileEdited = True
                 FileLoading = True
             End If
         End If
-
         Return True
     End Function
 
@@ -335,36 +341,36 @@ Public Class FileManagerLocal
         Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
         Id1.ValidConcept(Id1.Concept, "") 'validation may update Id1.concept
 
-        Dim Id2 As New ArchetypeID(shortFileName)
-        Id2.ValidConcept(Id2.Concept, "") 'validation may update Id2.Concept 
+            Dim Id2 As New ArchetypeID(shortFileName)
+            Id2.ValidConcept(Id2.Concept, "") 'validation may update Id2.Concept 
 
-        Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
-        If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
+            Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
+            If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
 
-            'NOTE: The following updates can occur!
-            '    Update 1: Update if concept was changed in ValidConcept call
-            '    Update 2: Update according to the user selection
+                'NOTE: The following updates can occur!
+                '    Update 1: Update if concept was changed in ValidConcept call
+                '    Update 2: Update according to the user selection
 
-            updateOccurred = True
-
-            Dim Use As String = IIf(frm.selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
-
-            'update filename if changed
-            If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
-                mPriorFileName = Me.FileName
-                Me.FileName = Replace(Me.FileName, FileName, Use & "." & ParserType)
                 updateOccurred = True
+
+                Dim Use As String = IIf(frm.selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
+
+                'update filename if changed
+                If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
+                    mPriorFileName = Me.FileName
+                    Me.FileName = Replace(Me.FileName, FileName, Use & "." & ParserType)
+                    updateOccurred = True
+                End If
+
+                'update archetype id if changed
+                If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
+                    Archetype.Archetype_ID.SetFromString(Use)
+                    Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
+                End If
             End If
 
-            'update archetype id if changed
-            If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
-                Archetype.Archetype_ID.SetFromString(Use)
-                Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
-            End If
-        End If
-
-        frm.Close()
-        Return Not updateOccurred
+            frm.Close()
+            Return Not updateOccurred
     End Function
 
     Public Function FormatIsAvailable(ByVal a_format As String) As Boolean
@@ -645,6 +651,12 @@ Public Class FileManagerLocal
         End If
     End Sub
 
+    Public Sub AutoSave(ByVal n As Integer)
+
+        mObjectToSave.PrepareToSave()
+        AutoWrite("OceanRecovery-" & Me.Archetype.Archetype_ID.ToString)
+    End Sub
+
     Public Function SaveArchetype() As Boolean
         Dim s As String
 
@@ -770,6 +782,9 @@ Public Class FileManagerLocal
 
     End Function
 
+    Private Sub AutoWrite(ByVal fileName As String)
+        mArchetypeEngine.WriteFile(Application.StartupPath & "\" & fileName & "." & ParserType, ParserType, Me.ParserSynchronised)
+    End Sub
 
     Public Sub WriteArchetype()
 
@@ -990,8 +1005,15 @@ Class Filemanager
         Return True
     End Function
 
-
-
+    Public Shared Sub AutoFileSave()
+        Dim i As Integer
+        For Each f As FileManagerLocal In mFileManagerCollection
+            If f.FileEdited Then
+                i = i + 1
+                f.AutoSave(i)
+            End If
+        Next
+    End Sub
 
 End Class
 

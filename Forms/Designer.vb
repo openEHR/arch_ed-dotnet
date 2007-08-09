@@ -19,6 +19,7 @@
 Public Class Designer
     Inherits System.Windows.Forms.Form
 
+    Private WithEvents mAutoSaveTimer As New Timer()
     Private mComponentsCollection As New Collection
     Private mTabPagesCollection As New Collections.Hashtable
     Private mBaseTabPagesCollection As New Collection
@@ -32,6 +33,7 @@ Public Class Designer
     Private WithEvents mTabPageInstruction As TabPageInstruction
     Private WithEvents mTabPageAction As TabPageAction
     Private mTabPageSection As TabPageSection
+    Private mRestrictedSubject As RestrictedSet
     Private mTabPageComposition As TabPageComposition
     Private mDataViewTermBindings As DataView
     Private mDataViewConstraintBindings As DataView
@@ -63,6 +65,9 @@ Public Class Designer
     Friend WithEvents ToolBarOpenFromWeb As System.Windows.Forms.ToolBarButton
     Friend WithEvents cbParticipation As System.Windows.Forms.CheckBox
     Friend WithEvents tpParticipation As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents PanelConcept_1 As System.Windows.Forms.Panel
+    Friend WithEvents gbSpecialisation As System.Windows.Forms.GroupBox
+    Friend WithEvents tvSpecialisation As System.Windows.Forms.TreeView
     Friend WithEvents mTabPageDescription As TabPageDescription
 
 #Region " Windows Form Designer generated code "
@@ -151,8 +156,6 @@ Public Class Designer
     Friend WithEvents ToolBarSeparator1 As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarPrint As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarNew As System.Windows.Forms.ToolBarButton
-    Friend WithEvents tvSpecialisation As System.Windows.Forms.TreeView
-    Friend WithEvents gbSpecialisation As System.Windows.Forms.GroupBox
     Friend WithEvents MenuPublish As System.Windows.Forms.MenuItem
     Friend WithEvents MenuFileSpecialise As System.Windows.Forms.MenuItem
     Friend WithEvents PanelConstraintBinding As System.Windows.Forms.Panel
@@ -196,15 +199,8 @@ Public Class Designer
     Friend WithEvents MenuTerminology As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelp As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpOceanEditor As System.Windows.Forms.MenuItem
-    Friend WithEvents listRestrictionSet As System.Windows.Forms.ListBox
-    Friend WithEvents butAddToRestrictedSet As System.Windows.Forms.Button
-    Friend WithEvents radioUnrestrictedSubject As System.Windows.Forms.RadioButton
-    Friend WithEvents radioRestrictedSet As System.Windows.Forms.RadioButton
-    Friend WithEvents gbRestrictedData As System.Windows.Forms.GroupBox
-    Friend WithEvents PanelConcept_1 As System.Windows.Forms.Panel
     Friend WithEvents PanelConcept As System.Windows.Forms.Panel
     Friend WithEvents lblAvailableTerminologies As System.Windows.Forms.Label
-    Friend WithEvents butRemoveFromRestrictedSet As System.Windows.Forms.Button
     Friend WithEvents tpBindings As Crownwood.Magic.Controls.TabPage
     Friend WithEvents PanelTermDefinitions As System.Windows.Forms.Panel
     Friend WithEvents MenuFileSaveAs As System.Windows.Forms.MenuItem
@@ -238,15 +234,6 @@ Public Class Designer
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Designer))
-        Me.PanelConcept_1 = New System.Windows.Forms.Panel
-        Me.gbSpecialisation = New System.Windows.Forms.GroupBox
-        Me.tvSpecialisation = New System.Windows.Forms.TreeView
-        Me.gbRestrictedData = New System.Windows.Forms.GroupBox
-        Me.listRestrictionSet = New System.Windows.Forms.ListBox
-        Me.butRemoveFromRestrictedSet = New System.Windows.Forms.Button
-        Me.radioRestrictedSet = New System.Windows.Forms.RadioButton
-        Me.radioUnrestrictedSubject = New System.Windows.Forms.RadioButton
-        Me.butAddToRestrictedSet = New System.Windows.Forms.Button
         Me.TxtConceptDescription = New System.Windows.Forms.TextBox
         Me.lblConcept = New System.Windows.Forms.Label
         Me.txtConceptInFull = New System.Windows.Forms.TextBox
@@ -314,11 +301,29 @@ Public Class Designer
         Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
+        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
+        Me.PanelDescription = New System.Windows.Forms.Panel
+        Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
+        Me.PanelConcept_1 = New System.Windows.Forms.Panel
+        Me.gbSpecialisation = New System.Windows.Forms.GroupBox
+        Me.tvSpecialisation = New System.Windows.Forms.TreeView
+        Me.tpDesign = New Crownwood.Magic.Controls.TabPage
+        Me.TabDesign = New Crownwood.Magic.Controls.TabControl
+        Me.tpData = New Crownwood.Magic.Controls.TabPage
+        Me.TabStructure = New Crownwood.Magic.Controls.TabControl
+        Me.tpDataStructure = New Crownwood.Magic.Controls.TabPage
+        Me.tpRootState = New Crownwood.Magic.Controls.TabPage
+        Me.TabState = New Crownwood.Magic.Controls.TabControl
+        Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
+        Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
+        Me.PanelState = New System.Windows.Forms.Panel
+        Me.tpParticipation = New Crownwood.Magic.Controls.TabPage
+        Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpTerminology = New Crownwood.Magic.Controls.TabPage
         Me.TabTerminology = New Crownwood.Magic.Controls.TabControl
-        Me.tpBindings = New Crownwood.Magic.Controls.TabPage
         Me.tpTerms = New Crownwood.Magic.Controls.TabPage
         Me.PanelTermDefinitions = New System.Windows.Forms.Panel
+        Me.tpBindings = New Crownwood.Magic.Controls.TabPage
         Me.tpConstraints = New Crownwood.Magic.Controls.TabPage
         Me.DataGridConstraintStatements = New System.Windows.Forms.DataGridView
         Me.ID = New System.Windows.Forms.DataGridViewTextBoxColumn
@@ -350,21 +355,6 @@ Public Class Designer
         Me.ListLanguages = New System.Windows.Forms.ListBox
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.lblAvailableLanguages = New System.Windows.Forms.Label
-        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
-        Me.PanelDescription = New System.Windows.Forms.Panel
-        Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
-        Me.tpDesign = New Crownwood.Magic.Controls.TabPage
-        Me.TabDesign = New Crownwood.Magic.Controls.TabControl
-        Me.tpData = New Crownwood.Magic.Controls.TabPage
-        Me.TabStructure = New Crownwood.Magic.Controls.TabControl
-        Me.tpDataStructure = New Crownwood.Magic.Controls.TabPage
-        Me.tpRootState = New Crownwood.Magic.Controls.TabPage
-        Me.TabState = New Crownwood.Magic.Controls.TabControl
-        Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
-        Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
-        Me.PanelState = New System.Windows.Forms.Panel
-        Me.tpParticipation = New Crownwood.Magic.Controls.TabPage
-        Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpText = New Crownwood.Magic.Controls.TabPage
         Me.Panel3 = New System.Windows.Forms.Panel
         Me.panelDiplayTop = New System.Windows.Forms.Panel
@@ -402,9 +392,6 @@ Public Class Designer
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
-        Me.PanelConcept_1.SuspendLayout()
-        Me.gbSpecialisation.SuspendLayout()
-        Me.gbRestrictedData.SuspendLayout()
         Me.PanelConcept.SuspendLayout()
         Me.tabComment.SuspendLayout()
         Me.tpConceptDescription.SuspendLayout()
@@ -414,6 +401,13 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
+        Me.tpHeader.SuspendLayout()
+        Me.PanelDescription.SuspendLayout()
+        Me.PanelConcept_1.SuspendLayout()
+        Me.gbSpecialisation.SuspendLayout()
+        Me.tpDesign.SuspendLayout()
+        Me.tpData.SuspendLayout()
+        Me.tpRootState.SuspendLayout()
         Me.tpTerminology.SuspendLayout()
         Me.tpTerms.SuspendLayout()
         Me.tpConstraints.SuspendLayout()
@@ -425,111 +419,12 @@ Public Class Designer
         Me.Panel2.SuspendLayout()
         Me.panelLanguages.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        Me.tpHeader.SuspendLayout()
-        Me.PanelDescription.SuspendLayout()
-        Me.tpDesign.SuspendLayout()
-        Me.tpData.SuspendLayout()
-        Me.tpRootState.SuspendLayout()
         Me.tpText.SuspendLayout()
         Me.panelDiplayTop.SuspendLayout()
         Me.tpInterface.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'PanelConcept_1
-        '
-        Me.PanelConcept_1.BackColor = System.Drawing.Color.LightGoldenrodYellow
-        Me.PanelConcept_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.PanelConcept_1.Controls.Add(Me.gbSpecialisation)
-        Me.PanelConcept_1.Controls.Add(Me.gbRestrictedData)
-        Me.PanelConcept_1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelConcept_1.Location = New System.Drawing.Point(0, 394)
-        Me.PanelConcept_1.Name = "PanelConcept_1"
-        Me.PanelConcept_1.Size = New System.Drawing.Size(969, 201)
-        Me.PanelConcept_1.TabIndex = 4
-        '
-        'gbSpecialisation
-        '
-        Me.gbSpecialisation.Controls.Add(Me.tvSpecialisation)
-        Me.gbSpecialisation.Location = New System.Drawing.Point(328, 2)
-        Me.gbSpecialisation.Name = "gbSpecialisation"
-        Me.gbSpecialisation.Size = New System.Drawing.Size(624, 190)
-        Me.gbSpecialisation.TabIndex = 12
-        Me.gbSpecialisation.TabStop = False
-        Me.gbSpecialisation.Text = "Specialisation"
-        Me.gbSpecialisation.Visible = False
-        '
-        'tvSpecialisation
-        '
-        Me.tvSpecialisation.Location = New System.Drawing.Point(16, 30)
-        Me.tvSpecialisation.Name = "tvSpecialisation"
-        Me.tvSpecialisation.Size = New System.Drawing.Size(595, 138)
-        Me.tvSpecialisation.TabIndex = 0
-        '
-        'gbRestrictedData
-        '
-        Me.gbRestrictedData.Controls.Add(Me.listRestrictionSet)
-        Me.gbRestrictedData.Controls.Add(Me.butRemoveFromRestrictedSet)
-        Me.gbRestrictedData.Controls.Add(Me.radioRestrictedSet)
-        Me.gbRestrictedData.Controls.Add(Me.radioUnrestrictedSubject)
-        Me.gbRestrictedData.Controls.Add(Me.butAddToRestrictedSet)
-        Me.gbRestrictedData.Location = New System.Drawing.Point(13, 2)
-        Me.gbRestrictedData.Name = "gbRestrictedData"
-        Me.gbRestrictedData.Size = New System.Drawing.Size(307, 190)
-        Me.gbRestrictedData.TabIndex = 15
-        Me.gbRestrictedData.TabStop = False
-        Me.gbRestrictedData.Text = "Subject of data"
-        Me.gbRestrictedData.Visible = False
-        '
-        'listRestrictionSet
-        '
-        Me.listRestrictionSet.ItemHeight = 17
-        Me.listRestrictionSet.Location = New System.Drawing.Point(40, 46)
-        Me.listRestrictionSet.Name = "listRestrictionSet"
-        Me.listRestrictionSet.Size = New System.Drawing.Size(240, 89)
-        Me.listRestrictionSet.TabIndex = 13
-        Me.listRestrictionSet.Visible = False
-        '
-        'butRemoveFromRestrictedSet
-        '
-        Me.butRemoveFromRestrictedSet.Image = CType(resources.GetObject("butRemoveFromRestrictedSet.Image"), System.Drawing.Image)
-        Me.butRemoveFromRestrictedSet.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveFromRestrictedSet.Location = New System.Drawing.Point(8, 82)
-        Me.butRemoveFromRestrictedSet.Name = "butRemoveFromRestrictedSet"
-        Me.butRemoveFromRestrictedSet.Size = New System.Drawing.Size(27, 25)
-        Me.butRemoveFromRestrictedSet.TabIndex = 15
-        Me.ToolTip1.SetToolTip(Me.butRemoveFromRestrictedSet, "Remove subject")
-        Me.butRemoveFromRestrictedSet.Visible = False
-        '
-        'radioRestrictedSet
-        '
-        Me.radioRestrictedSet.Location = New System.Drawing.Point(160, 18)
-        Me.radioRestrictedSet.Name = "radioRestrictedSet"
-        Me.radioRestrictedSet.Size = New System.Drawing.Size(136, 28)
-        Me.radioRestrictedSet.TabIndex = 1
-        Me.radioRestrictedSet.Text = "Restricted"
-        '
-        'radioUnrestrictedSubject
-        '
-        Me.radioUnrestrictedSubject.Checked = True
-        Me.radioUnrestrictedSubject.Location = New System.Drawing.Point(14, 18)
-        Me.radioUnrestrictedSubject.Name = "radioUnrestrictedSubject"
-        Me.radioUnrestrictedSubject.Size = New System.Drawing.Size(138, 28)
-        Me.radioUnrestrictedSubject.TabIndex = 0
-        Me.radioUnrestrictedSubject.TabStop = True
-        Me.radioUnrestrictedSubject.Text = "Unrestricted"
-        '
-        'butAddToRestrictedSet
-        '
-        Me.butAddToRestrictedSet.Image = CType(resources.GetObject("butAddToRestrictedSet.Image"), System.Drawing.Image)
-        Me.butAddToRestrictedSet.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddToRestrictedSet.Location = New System.Drawing.Point(8, 51)
-        Me.butAddToRestrictedSet.Name = "butAddToRestrictedSet"
-        Me.butAddToRestrictedSet.Size = New System.Drawing.Size(27, 25)
-        Me.butAddToRestrictedSet.TabIndex = 14
-        Me.ToolTip1.SetToolTip(Me.butAddToRestrictedSet, "Add subject")
-        Me.butAddToRestrictedSet.Visible = False
         '
         'TxtConceptDescription
         '
@@ -1035,6 +930,223 @@ Public Class Designer
         Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
         '
+        'tpHeader
+        '
+        Me.tpHeader.BackColor = System.Drawing.Color.LemonChiffon
+        Me.tpHeader.Controls.Add(Me.PanelDescription)
+        Me.tpHeader.Controls.Add(Me.PanelConcept_1)
+        Me.tpHeader.Controls.Add(Me.PanelConcept)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpHeader, "Screens/header.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpHeader.Location = New System.Drawing.Point(0, 0)
+        Me.tpHeader.Name = "tpHeader"
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
+        Me.tpHeader.Size = New System.Drawing.Size(969, 595)
+        Me.tpHeader.TabIndex = 0
+        Me.tpHeader.Title = "Header"
+        '
+        'PanelDescription
+        '
+        Me.PanelDescription.Controls.Add(Me.RichTextBoxDescription)
+        Me.PanelDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelDescription.Location = New System.Drawing.Point(0, 111)
+        Me.PanelDescription.Name = "PanelDescription"
+        Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
+        Me.PanelDescription.Size = New System.Drawing.Size(969, 283)
+        Me.PanelDescription.TabIndex = 6
+        '
+        'RichTextBoxDescription
+        '
+        Me.RichTextBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBoxDescription.Location = New System.Drawing.Point(10, 10)
+        Me.RichTextBoxDescription.Name = "RichTextBoxDescription"
+        Me.RichTextBoxDescription.ReadOnly = True
+        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 263)
+        Me.RichTextBoxDescription.TabIndex = 5
+        Me.RichTextBoxDescription.Text = ""
+        '
+        'PanelConcept_1
+        '
+        Me.PanelConcept_1.BackColor = System.Drawing.Color.LightGoldenrodYellow
+        Me.PanelConcept_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelConcept_1.Controls.Add(Me.gbSpecialisation)
+        Me.PanelConcept_1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PanelConcept_1.Location = New System.Drawing.Point(0, 394)
+        Me.PanelConcept_1.Name = "PanelConcept_1"
+        Me.PanelConcept_1.Size = New System.Drawing.Size(969, 201)
+        Me.PanelConcept_1.TabIndex = 4
+        '
+        'gbSpecialisation
+        '
+        Me.gbSpecialisation.Controls.Add(Me.tvSpecialisation)
+        Me.gbSpecialisation.Location = New System.Drawing.Point(328, 2)
+        Me.gbSpecialisation.Name = "gbSpecialisation"
+        Me.gbSpecialisation.Size = New System.Drawing.Size(624, 190)
+        Me.gbSpecialisation.TabIndex = 12
+        Me.gbSpecialisation.TabStop = False
+        Me.gbSpecialisation.Text = "Specialisation"
+        Me.gbSpecialisation.Visible = False
+        '
+        'tvSpecialisation
+        '
+        Me.tvSpecialisation.Location = New System.Drawing.Point(16, 30)
+        Me.tvSpecialisation.Name = "tvSpecialisation"
+        Me.tvSpecialisation.Size = New System.Drawing.Size(595, 138)
+        Me.tvSpecialisation.TabIndex = 0
+        '
+        'tpDesign
+        '
+        Me.tpDesign.Controls.Add(Me.TabDesign)
+        Me.tpDesign.Controls.Add(Me.PanelRoot)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDesign, "Screens/Entry Model screen.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDesign, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpDesign.Location = New System.Drawing.Point(0, 0)
+        Me.tpDesign.Name = "tpDesign"
+        Me.tpDesign.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpDesign, True)
+        Me.tpDesign.Size = New System.Drawing.Size(969, 595)
+        Me.tpDesign.TabIndex = 1
+        Me.tpDesign.Title = "Definition"
+        '
+        'TabDesign
+        '
+        Me.TabDesign.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.TabDesign.BoldSelectedPage = True
+        Me.TabDesign.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabDesign, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabDesign, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabDesign.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabDesign.Location = New System.Drawing.Point(0, 37)
+        Me.TabDesign.Name = "TabDesign"
+        Me.TabDesign.PositionTop = True
+        Me.TabDesign.SelectedIndex = 0
+        Me.TabDesign.SelectedTab = Me.tpData
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
+        Me.TabDesign.Size = New System.Drawing.Size(969, 558)
+        Me.TabDesign.TabIndex = 12
+        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState, Me.tpParticipation})
+        Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
+        '
+        'tpData
+        '
+        Me.tpData.Controls.Add(Me.TabStructure)
+        Me.tpData.Controls.Add(Me.PanelConfigStructure)
+        Me.tpData.Location = New System.Drawing.Point(0, 0)
+        Me.tpData.Name = "tpData"
+        Me.tpData.Size = New System.Drawing.Size(969, 532)
+        Me.tpData.TabIndex = 0
+        Me.tpData.Title = "Data"
+        '
+        'TabStructure
+        '
+        Me.TabStructure.BackColor = System.Drawing.Color.RoyalBlue
+        Me.TabStructure.BoldSelectedPage = True
+        Me.TabStructure.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabStructure, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabStructure, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabStructure.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabStructure.Location = New System.Drawing.Point(0, 28)
+        Me.TabStructure.Name = "TabStructure"
+        Me.TabStructure.PositionTop = True
+        Me.TabStructure.SelectedIndex = 0
+        Me.TabStructure.SelectedTab = Me.tpDataStructure
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabStructure, True)
+        Me.TabStructure.Size = New System.Drawing.Size(969, 504)
+        Me.TabStructure.TabIndex = 10
+        Me.TabStructure.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDataStructure})
+        Me.TabStructure.TextInactiveColor = System.Drawing.Color.Black
+        '
+        'tpDataStructure
+        '
+        Me.tpDataStructure.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDataStructure, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDataStructure, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpDataStructure.Location = New System.Drawing.Point(0, 0)
+        Me.tpDataStructure.Name = "tpDataStructure"
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpDataStructure, True)
+        Me.tpDataStructure.Size = New System.Drawing.Size(969, 478)
+        Me.tpDataStructure.TabIndex = 0
+        Me.tpDataStructure.Title = "Structure"
+        '
+        'tpRootState
+        '
+        Me.tpRootState.Controls.Add(Me.TabState)
+        Me.tpRootState.Controls.Add(Me.PanelState)
+        Me.tpRootState.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootState.Name = "tpRootState"
+        Me.tpRootState.Selected = False
+        Me.tpRootState.Size = New System.Drawing.Size(969, 532)
+        Me.tpRootState.TabIndex = 1
+        Me.tpRootState.Title = "State"
+        '
+        'TabState
+        '
+        Me.TabState.BackColor = System.Drawing.Color.RoyalBlue
+        Me.TabState.BoldSelectedPage = True
+        Me.TabState.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabState, "HowTo/edit_state.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabState, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabState.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabState.Location = New System.Drawing.Point(0, 28)
+        Me.TabState.Name = "TabState"
+        Me.TabState.PositionTop = True
+        Me.TabState.SelectedIndex = 0
+        Me.TabState.SelectedTab = Me.tpRootStateStructure
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabState, True)
+        Me.TabState.Size = New System.Drawing.Size(969, 504)
+        Me.TabState.TabIndex = 1
+        Me.TabState.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpRootStateStructure, Me.tpRootStateEventSeries})
+        '
+        'tpRootStateStructure
+        '
+        Me.tpRootStateStructure.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.tpRootStateStructure.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootStateStructure.Name = "tpRootStateStructure"
+        Me.tpRootStateStructure.Size = New System.Drawing.Size(969, 478)
+        Me.tpRootStateStructure.TabIndex = 0
+        Me.tpRootStateStructure.Title = "Structure"
+        '
+        'tpRootStateEventSeries
+        '
+        Me.tpRootStateEventSeries.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.tpRootStateEventSeries.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootStateEventSeries.Name = "tpRootStateEventSeries"
+        Me.tpRootStateEventSeries.Selected = False
+        Me.tpRootStateEventSeries.Size = New System.Drawing.Size(969, 478)
+        Me.tpRootStateEventSeries.TabIndex = 1
+        Me.tpRootStateEventSeries.Title = "State Event Series"
+        '
+        'PanelState
+        '
+        Me.PanelState.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.PanelState.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelState.Location = New System.Drawing.Point(0, 0)
+        Me.PanelState.Name = "PanelState"
+        Me.PanelState.Size = New System.Drawing.Size(969, 28)
+        Me.PanelState.TabIndex = 0
+        '
+        'tpParticipation
+        '
+        Me.tpParticipation.Location = New System.Drawing.Point(0, 0)
+        Me.tpParticipation.Name = "tpParticipation"
+        Me.tpParticipation.Selected = False
+        Me.tpParticipation.Size = New System.Drawing.Size(969, 532)
+        Me.tpParticipation.TabIndex = 2
+        Me.tpParticipation.Title = "Participation"
+        '
+        'tpSectionPage
+        '
+        Me.tpSectionPage.BackColor = System.Drawing.Color.LightYellow
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpSectionPage, "Screens/section_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpSectionPage, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpSectionPage.Location = New System.Drawing.Point(0, 0)
+        Me.tpSectionPage.Name = "tpSectionPage"
+        Me.tpSectionPage.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpSectionPage, True)
+        Me.tpSectionPage.Size = New System.Drawing.Size(969, 595)
+        Me.tpSectionPage.TabIndex = 4
+        Me.tpSectionPage.Title = "Definition"
+        '
         'tpTerminology
         '
         Me.tpTerminology.Controls.Add(Me.TabTerminology)
@@ -1063,18 +1175,6 @@ Public Class Designer
         Me.TabTerminology.TabIndex = 0
         Me.TabTerminology.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpTerms, Me.tpBindings, Me.tpConstraints, Me.tpLanguages})
         '
-        'tpBindings
-        '
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpBindings, "Screens/term_binding_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpBindings, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpBindings.Location = New System.Drawing.Point(0, 0)
-        Me.tpBindings.Name = "tpBindings"
-        Me.tpBindings.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpBindings, True)
-        Me.tpBindings.Size = New System.Drawing.Size(969, 569)
-        Me.tpBindings.TabIndex = 3
-        Me.tpBindings.Title = "Term Bindings"
-        '
         'tpTerms
         '
         Me.tpTerms.BackColor = System.Drawing.Color.LightYellow
@@ -1098,6 +1198,18 @@ Public Class Designer
         Me.PanelTermDefinitions.Name = "PanelTermDefinitions"
         Me.PanelTermDefinitions.Size = New System.Drawing.Size(969, 18)
         Me.PanelTermDefinitions.TabIndex = 3
+        '
+        'tpBindings
+        '
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpBindings, "Screens/term_binding_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpBindings, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpBindings.Location = New System.Drawing.Point(0, 0)
+        Me.tpBindings.Name = "tpBindings"
+        Me.tpBindings.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpBindings, True)
+        Me.tpBindings.Size = New System.Drawing.Size(969, 569)
+        Me.tpBindings.TabIndex = 3
+        Me.tpBindings.Title = "Term Bindings"
         '
         'tpConstraints
         '
@@ -1400,194 +1512,6 @@ Public Class Designer
         Me.lblAvailableLanguages.TabIndex = 10
         Me.lblAvailableLanguages.Text = "Available languages:"
         '
-        'tpHeader
-        '
-        Me.tpHeader.BackColor = System.Drawing.Color.LemonChiffon
-        Me.tpHeader.Controls.Add(Me.PanelDescription)
-        Me.tpHeader.Controls.Add(Me.PanelConcept_1)
-        Me.tpHeader.Controls.Add(Me.PanelConcept)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpHeader, "Screens/header.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpHeader.Location = New System.Drawing.Point(0, 0)
-        Me.tpHeader.Name = "tpHeader"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
-        Me.tpHeader.Size = New System.Drawing.Size(969, 595)
-        Me.tpHeader.TabIndex = 0
-        Me.tpHeader.Title = "Header"
-        '
-        'PanelDescription
-        '
-        Me.PanelDescription.Controls.Add(Me.RichTextBoxDescription)
-        Me.PanelDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelDescription.Location = New System.Drawing.Point(0, 111)
-        Me.PanelDescription.Name = "PanelDescription"
-        Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
-        Me.PanelDescription.Size = New System.Drawing.Size(969, 283)
-        Me.PanelDescription.TabIndex = 6
-        '
-        'RichTextBoxDescription
-        '
-        Me.RichTextBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RichTextBoxDescription.Location = New System.Drawing.Point(10, 10)
-        Me.RichTextBoxDescription.Name = "RichTextBoxDescription"
-        Me.RichTextBoxDescription.ReadOnly = True
-        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 263)
-        Me.RichTextBoxDescription.TabIndex = 5
-        Me.RichTextBoxDescription.Text = ""
-        '
-        'tpDesign
-        '
-        Me.tpDesign.Controls.Add(Me.TabDesign)
-        Me.tpDesign.Controls.Add(Me.PanelRoot)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDesign, "Screens/Entry Model screen.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDesign, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpDesign.Location = New System.Drawing.Point(0, 0)
-        Me.tpDesign.Name = "tpDesign"
-        Me.tpDesign.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpDesign, True)
-        Me.tpDesign.Size = New System.Drawing.Size(969, 595)
-        Me.tpDesign.TabIndex = 1
-        Me.tpDesign.Title = "Definition"
-        '
-        'TabDesign
-        '
-        Me.TabDesign.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.TabDesign.BoldSelectedPage = True
-        Me.TabDesign.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabDesign, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabDesign, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabDesign.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabDesign.Location = New System.Drawing.Point(0, 37)
-        Me.TabDesign.Name = "TabDesign"
-        Me.TabDesign.PositionTop = True
-        Me.TabDesign.SelectedIndex = 0
-        Me.TabDesign.SelectedTab = Me.tpData
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
-        Me.TabDesign.Size = New System.Drawing.Size(969, 558)
-        Me.TabDesign.TabIndex = 12
-        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState, Me.tpParticipation})
-        Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpData
-        '
-        Me.tpData.Controls.Add(Me.TabStructure)
-        Me.tpData.Controls.Add(Me.PanelConfigStructure)
-        Me.tpData.Location = New System.Drawing.Point(0, 0)
-        Me.tpData.Name = "tpData"
-        Me.tpData.Size = New System.Drawing.Size(969, 532)
-        Me.tpData.TabIndex = 0
-        Me.tpData.Title = "Data"
-        '
-        'TabStructure
-        '
-        Me.TabStructure.BackColor = System.Drawing.Color.RoyalBlue
-        Me.TabStructure.BoldSelectedPage = True
-        Me.TabStructure.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabStructure, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabStructure.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabStructure.Location = New System.Drawing.Point(0, 28)
-        Me.TabStructure.Name = "TabStructure"
-        Me.TabStructure.PositionTop = True
-        Me.TabStructure.SelectedIndex = 0
-        Me.TabStructure.SelectedTab = Me.tpDataStructure
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabStructure, True)
-        Me.TabStructure.Size = New System.Drawing.Size(969, 504)
-        Me.TabStructure.TabIndex = 10
-        Me.TabStructure.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDataStructure})
-        Me.TabStructure.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpDataStructure
-        '
-        Me.tpDataStructure.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDataStructure, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDataStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpDataStructure.Location = New System.Drawing.Point(0, 0)
-        Me.tpDataStructure.Name = "tpDataStructure"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpDataStructure, True)
-        Me.tpDataStructure.Size = New System.Drawing.Size(969, 478)
-        Me.tpDataStructure.TabIndex = 0
-        Me.tpDataStructure.Title = "Structure"
-        '
-        'tpRootState
-        '
-        Me.tpRootState.Controls.Add(Me.TabState)
-        Me.tpRootState.Controls.Add(Me.PanelState)
-        Me.tpRootState.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootState.Name = "tpRootState"
-        Me.tpRootState.Selected = False
-        Me.tpRootState.Size = New System.Drawing.Size(969, 532)
-        Me.tpRootState.TabIndex = 1
-        Me.tpRootState.Title = "State"
-        '
-        'TabState
-        '
-        Me.TabState.BackColor = System.Drawing.Color.RoyalBlue
-        Me.TabState.BoldSelectedPage = True
-        Me.TabState.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabState, "HowTo/edit_state.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabState, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabState.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabState.Location = New System.Drawing.Point(0, 28)
-        Me.TabState.Name = "TabState"
-        Me.TabState.PositionTop = True
-        Me.TabState.SelectedIndex = 0
-        Me.TabState.SelectedTab = Me.tpRootStateStructure
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabState, True)
-        Me.TabState.Size = New System.Drawing.Size(969, 504)
-        Me.TabState.TabIndex = 1
-        Me.TabState.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpRootStateStructure, Me.tpRootStateEventSeries})
-        '
-        'tpRootStateStructure
-        '
-        Me.tpRootStateStructure.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.tpRootStateStructure.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootStateStructure.Name = "tpRootStateStructure"
-        Me.tpRootStateStructure.Size = New System.Drawing.Size(969, 478)
-        Me.tpRootStateStructure.TabIndex = 0
-        Me.tpRootStateStructure.Title = "Structure"
-        '
-        'tpRootStateEventSeries
-        '
-        Me.tpRootStateEventSeries.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.tpRootStateEventSeries.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootStateEventSeries.Name = "tpRootStateEventSeries"
-        Me.tpRootStateEventSeries.Selected = False
-        Me.tpRootStateEventSeries.Size = New System.Drawing.Size(969, 478)
-        Me.tpRootStateEventSeries.TabIndex = 1
-        Me.tpRootStateEventSeries.Title = "State Event Series"
-        '
-        'PanelState
-        '
-        Me.PanelState.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.PanelState.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelState.Location = New System.Drawing.Point(0, 0)
-        Me.PanelState.Name = "PanelState"
-        Me.PanelState.Size = New System.Drawing.Size(969, 28)
-        Me.PanelState.TabIndex = 0
-        '
-        'tpParticipation
-        '
-        Me.tpParticipation.Location = New System.Drawing.Point(0, 0)
-        Me.tpParticipation.Name = "tpParticipation"
-        Me.tpParticipation.Selected = False
-        Me.tpParticipation.Size = New System.Drawing.Size(969, 532)
-        Me.tpParticipation.TabIndex = 2
-        Me.tpParticipation.Title = "Participation"
-        '
-        'tpSectionPage
-        '
-        Me.tpSectionPage.BackColor = System.Drawing.Color.LightYellow
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpSectionPage, "Screens/section_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpSectionPage, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpSectionPage.Location = New System.Drawing.Point(0, 0)
-        Me.tpSectionPage.Name = "tpSectionPage"
-        Me.tpSectionPage.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpSectionPage, True)
-        Me.tpSectionPage.Size = New System.Drawing.Size(969, 595)
-        Me.tpSectionPage.TabIndex = 4
-        Me.tpSectionPage.Title = "Definition"
-        '
         'tpText
         '
         Me.tpText.BackColor = System.Drawing.Color.LightSteelBlue
@@ -1889,9 +1813,6 @@ Public Class Designer
         Me.HelpProviderDesigner.SetShowHelp(Me, True)
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Archetype Editor"
-        Me.PanelConcept_1.ResumeLayout(False)
-        Me.gbSpecialisation.ResumeLayout(False)
-        Me.gbRestrictedData.ResumeLayout(False)
         Me.PanelConcept.ResumeLayout(False)
         Me.PanelConcept.PerformLayout()
         Me.tabComment.ResumeLayout(False)
@@ -1904,6 +1825,13 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
+        Me.tpHeader.ResumeLayout(False)
+        Me.PanelDescription.ResumeLayout(False)
+        Me.PanelConcept_1.ResumeLayout(False)
+        Me.gbSpecialisation.ResumeLayout(False)
+        Me.tpDesign.ResumeLayout(False)
+        Me.tpData.ResumeLayout(False)
+        Me.tpRootState.ResumeLayout(False)
         Me.tpTerminology.ResumeLayout(False)
         Me.tpTerms.ResumeLayout(False)
         Me.tpConstraints.ResumeLayout(False)
@@ -1916,11 +1844,6 @@ Public Class Designer
         Me.Panel2.ResumeLayout(False)
         Me.panelLanguages.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
-        Me.tpHeader.ResumeLayout(False)
-        Me.PanelDescription.ResumeLayout(False)
-        Me.tpDesign.ResumeLayout(False)
-        Me.tpData.ResumeLayout(False)
-        Me.tpRootState.ResumeLayout(False)
         Me.tpText.ResumeLayout(False)
         Me.panelDiplayTop.ResumeLayout(False)
         Me.tpInterface.ResumeLayout(False)
@@ -2090,8 +2013,7 @@ Public Class Designer
                     'If mFileManager.Archetype.Definition.TypeName.StartsWith("ENTRY") Then
                     Dim rm As RmStructureCompound
                     ' allow restriction of subject of data
-                    Me.gbRestrictedData.Visible = True
-                    Me.gbRestrictedData.Text = Filemanager.GetOpenEhrTerm(32, "Subject of data")
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
 
                     ' deal with the various groups of information appropriate to the type
                     Select Case mFileManager.Archetype.RmEntity
@@ -2189,19 +2111,8 @@ Public Class Designer
                     Dim cp As CodePhrase
                     cp = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
                     If Not cp Is Nothing Then
-
                         If cp.Codes.Count > 0 Then
-                            Dim a_code As String
-
-                            If Me.radioUnrestrictedSubject.Checked Then
-                                Me.radioRestrictedSet.Checked = True
-                            End If
-
-                            For Each a_code In cp.Codes
-                                a_term = New RmTerm(a_code)
-                                a_term.Text = Filemanager.GetOpenEhrTerm(Val(a_code), "?")
-                                Me.listRestrictionSet.Items.Add(a_term)
-                            Next
+                            Me.mRestrictedSubject.AsCodePhrase = cp
                         End If
                     End If
 
@@ -2221,8 +2132,7 @@ Public Class Designer
                             mFileManager.Archetype.Definition)
 
                 Case StructureType.COMPOSITION
-                    Me.gbRestrictedData.Visible = True
-                    Me.gbRestrictedData.Text = Filemanager.GetOpenEhrTerm(226, "Setting")
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.Setting)
 
                     SetUpComposition()
                     mTabPageComposition.ProcessComposition( _
@@ -2259,6 +2169,18 @@ Public Class Designer
 
         Me.MenuFileSpecialise.Visible = True
         Me.Cursor = System.Windows.Forms.Cursors.Default
+    End Sub
+
+    Sub InitialiseRestrictedSet(ByVal aRestriction As RestrictedSet.TermSet)
+        If mRestrictedSubject Is Nothing Then
+            mRestrictedSubject = New RestrictedSet()
+            mRestrictedSubject.LocalFileManager = mFileManager
+            Me.PanelConcept_1.Controls.Add(mRestrictedSubject)
+            mRestrictedSubject.Dock = DockStyle.Left
+        Else
+            mRestrictedSubject.Reset()
+        End If
+        mRestrictedSubject.TermSetToRestrict = aRestriction
     End Sub
 
     Private Sub NewArchetype(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuFileNew.Click, MenuFileClose.Click
@@ -2455,16 +2377,12 @@ Public Class Designer
         Me.lblArchetypeName.Text = Filemanager.GetOpenEhrTerm(58, Me.lblArchetypeName.Text, language)
         Me.lblConcept.Text = Filemanager.GetOpenEhrTerm(54, Me.lblConcept.Text, language)
         Me.tpConceptDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.tpConceptDescription.Text, language)
-        Me.tpConceptComment.Text = Filemanager.GetOpenEhrTerm(663, Me.tpConceptComment.Text, language)
-        Me.radioUnrestrictedSubject.Text = Filemanager.GetOpenEhrTerm(56, Me.radioUnrestrictedSubject.Text, language)
-        Me.radioRestrictedSet.Text = Filemanager.GetOpenEhrTerm(599, Me.radioRestrictedSet.Text)
+        Me.tpConceptComment.Text = Filemanager.GetOpenEhrTerm(652, Me.tpConceptComment.Text, language)
         Me.gbSpecialisation.Text = Filemanager.GetOpenEhrTerm(186, Me.gbSpecialisation.Text, language)
-        Me.butRemoveFromRestrictedSet.Text = Filemanager.GetOpenEhrTerm(665, Me.butRemoveFromRestrictedSet.Text, language)
-        Me.butAddToRestrictedSet.Text = Filemanager.GetOpenEhrTerm(664, Me.butAddToRestrictedSet.Text, language)
-
+        
         'Entry tab on designer
         Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
-        Me.cbParticipation.Text = Filemanager.GetOpenEhrTerm(652, Me.cbParticipation.Text, language)
+        Me.cbParticipation.Text = Filemanager.GetOpenEhrTerm(654, Me.cbParticipation.Text, language)
         Me.cbPersonState.Text = Filemanager.GetOpenEhrTerm(79, Me.cbPersonState.Text, language)
         Me.chkEventSeries.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(80, Me.chkEventSeries.Text, language), Filemanager.GetOpenEhrTerm(81, Me.chkEventSeries.Text, language))
         Me.cbStructurePersonState.Text = Filemanager.GetOpenEhrTerm(82, Me.cbStructurePersonState.Text, language)
@@ -2575,15 +2493,8 @@ Public Class Designer
         End If
 
         ' and the subject of care
-        If Me.listRestrictionSet.Items.Count > 0 Then
-            Dim i As Integer
-            ' this approach is required to change the text in the list box
-            ' as just reassigning the text does not make it available
-            For i = 0 To Me.listRestrictionSet.Items.Count - 1
-                a_Term = Me.listRestrictionSet.Items(i)
-                a_Term.Text = Filemanager.GetOpenEhrTerm(Val(a_Term.Code), "*" & a_Term.Text, LanguageCode)
-                Me.listRestrictionSet.Items(i) = a_Term
-            Next
+        If Not mRestrictedSubject Is Nothing AndAlso mRestrictedSubject.HasRestriction Then
+            mRestrictedSubject.Translate()
         End If
 
         mFileManager.FileLoading = False
@@ -2695,14 +2606,8 @@ Public Class Designer
             Case StructureType.COMPOSITION
 
             Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.INSTRUCTION, StructureType.ACTION, StructureType.ADMIN_ENTRY
-                If Me.radioRestrictedSet.Checked And Me.listRestrictionSet.Items.Count > 0 Then
-                    Dim a_term As RmTerm
-                    Dim s As String = ""
-                    For Each a_term In Me.listRestrictionSet.Items
-                        s = s & "'" & a_term.Text & "', "
-                    Next
-                    s = s.TrimEnd(commaspace)
-                    text.WriteLine("       Subject relationship restricted to " & s & "\par")
+                If Not mRestrictedSubject Is Nothing AndAlso mRestrictedSubject.HasRestriction Then
+                    text.WriteLine("       Subject relationship restricted to " & mRestrictedSubject.CSV & "\par")
                 End If
                 text.WriteLine("\par")
                 ' add subject relationship constraint here
@@ -2891,14 +2796,8 @@ Public Class Designer
                     mTabPageDataEventSeries.ToHTML(text, "#AAFE92")
                 End If
 
-                If Me.radioRestrictedSet.Checked And Me.listRestrictionSet.Items.Count > 0 Then
-                    Dim a_term As RmTerm
-                    s = ""
-                    For Each a_term In Me.listRestrictionSet.Items
-                        s = s & "'" & a_term.Text & "', "
-                    Next
-                    s = s.TrimEnd(commaspace)
-                    text.WriteLine("<hr>Subject relationship restricted to " & s & "<br>")
+                If Not mRestrictedSubject Is Nothing AndAlso mRestrictedSubject.HasRestriction Then
+                    text.WriteLine("<br>Subject relationship restricted to " & mRestrictedSubject.CSV & "<br>")
                 End If
 
                 If Not mTabPageProtocolStructure Is Nothing Then
@@ -3052,56 +2951,8 @@ Public Class Designer
     '    Return True
     'End Function
 
-    Friend Function ChooseRestrictionSet() As Boolean
 
-        Select Case mFileManager.Archetype.RmEntity
-            Case StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ENTRY, StructureType.INSTRUCTION
-                Return ChooseSubjectOfData(1) 'Subject of care
 
-            Case StructureType.COMPOSITION
-                Return ChooseSubjectOfData(10) ' Setting
-
-        End Select
-
-    End Function
-
-    Friend Function ChooseSubjectOfData(ByVal group_id As Integer) As Boolean
-        Dim frm As New Choose
-        Dim i As Integer
-        Dim Subjects As DataRow()
-        Dim new_row As DataRow
-
-        ' add the language codes - FIXME - from a file in future
-        frm.Set_Single()
-        frm.PrepareDataTable_for_List(1)
-        Subjects = mFileManager.OntologyManager.CodeForGroupID(group_id, mFileManager.OntologyManager.LanguageCode) 'subject of data
-        frm.DTab_1.DefaultView.Sort = "Text"
-
-        For i = 0 To Subjects.Length - 1
-            new_row = frm.DTab_1.NewRow()
-            new_row("Code") = Subjects(i).Item(1).ToString
-            new_row("Text") = Subjects(i).Item(2)
-            frm.DTab_1.Rows.Add(new_row)
-        Next
-
-        frm.ListChoose.DataSource = frm.DTab_1
-        frm.ListChoose.DisplayMember = "Text"
-        frm.ListChoose.ValueMember = "Code"
-
-        If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-            ' check it is not a language added previously
-            Dim drv As DataRowView
-
-            For Each drv In frm.ListChoose.SelectedItems
-                Dim a_term As New RmTerm(drv.Item("Code"))
-                a_term.Text = drv.Item("Text")
-                Me.listRestrictionSet.Items.Add(a_term)
-            Next
-        Else
-            Return False
-        End If
-        Return True
-    End Function
 
 #End Region
 
@@ -3170,6 +3021,23 @@ Public Class Designer
         End Set
     End Property
 
+    Public Sub AutoSave()
+        EmergencySave(Me, New EventArgs)
+    End Sub
+
+    Private Sub EmergencySave(ByVal sender As Object, ByVal e As EventArgs) Handles mAutoSaveTimer.Tick
+
+        If OceanArchetypeEditor.Instance.Options.AutosaveInterval = 0 Then
+            Me.mAutoSaveTimer.Enabled = False
+        Else
+            If Not Me.mAutoSaveTimer.Enabled Or Me.mAutoSaveTimer.Interval <> OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000 Then
+                Me.mAutoSaveTimer.Enabled = True
+                Me.mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
+            End If
+            Filemanager.AutoFileSave()
+        End If
+    End Sub
+
     Public Sub ResetDefaults()
         ' show the front page
         Me.TabMain.SelectedIndex = 0
@@ -3177,8 +3045,9 @@ Public Class Designer
 
         ' set the front page to default state
         Me.lblArchetypeName.Text = ""
-        Me.listRestrictionSet.Items.Clear()
-        Me.gbRestrictedData.Visible = False
+        If Not mRestrictedSubject Is Nothing Then
+            mRestrictedSubject.Reset() 'clears list and makes invisible
+        End If
         Me.gbSpecialisation.Visible = False
         Me.tvSpecialisation.Nodes.Clear()
         Me.txtConceptInFull.Text = ""
@@ -3186,8 +3055,7 @@ Public Class Designer
         Me.TxtConceptDescription.Text = ""
         Me.txtConceptComment.Text = ""
         Me.tabComment.SelectedIndex = 0
-        Me.radioUnrestrictedSubject.Checked = True
-
+        
         'set the other pages
         Me.chkEventSeries.Enabled = False
         Me.cbStructurePersonState.Checked = False
@@ -3239,7 +3107,7 @@ Public Class Designer
 
     End Sub
 
-    Public Sub ShowTabPages(ByVal archetyped_class As StructureType)
+    Public Sub ShowTabPages(ByVal archetyped_class As StructureType, ByVal isNew As Boolean)
 
         'layout of the pages to match the archetyped class
         'Compositions, Sections and Instructions use the tpSectionPage which is generic - probably a bad name!
@@ -3248,9 +3116,9 @@ Public Class Designer
 
             Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                 ' enable restriction of subject of care
-                Me.gbRestrictedData.Visible = True
-                Me.gbRestrictedData.Text = Filemanager.GetOpenEhrTerm(32, "Subject of data")
-
+                If isNew Then
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
+                End If
                 'need to check not changing from section
                 If Me.TabMain.TabPages.Contains(Me.tpSectionPage) Then
                     Me.TabMain.TabPages.Remove(Me.tpSectionPage)
@@ -3275,7 +3143,9 @@ Public Class Designer
 
             Case StructureType.INSTRUCTION
                 ' enable restriction of subject of care
-                Me.gbRestrictedData.Visible = True
+                If isNew Then
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
+                End If
 
                 'need to check not changing from section
                 If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
@@ -3285,7 +3155,9 @@ Public Class Designer
 
             Case StructureType.ACTION
                 ' enable restriction of subject of care
-                Me.gbRestrictedData.Visible = True
+                If isNew Then
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
+                End If
 
                 'need to check not changing from section
                 If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
@@ -3295,7 +3167,9 @@ Public Class Designer
 
             Case StructureType.SECTION
                 ' disable restriction of subject of care
-                Me.gbRestrictedData.Visible = False
+                If isNew Then
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.None)
+                End If
 
                 'need to check not changing from Evaluation, Observation
                 If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
@@ -3304,9 +3178,10 @@ Public Class Designer
                 End If
 
             Case StructureType.COMPOSITION
-                ' disable restriction of subject of care
-                Me.gbRestrictedData.Visible = True
-                Me.gbRestrictedData.Text = Filemanager.GetOpenEhrTerm(226, "Setting")
+                ' Set to restriction of setting
+                If isNew Then
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.Setting)
+                End If
 
 
                 'need to check not changing from Evaluation, Observation
@@ -3319,7 +3194,9 @@ Public Class Designer
 
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 ' disable restriction of subject of care
-                Me.gbRestrictedData.Visible = False
+                If isNew Then
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.None)
+                End If
 
                 'need to check not changing from section
                 If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
@@ -3330,12 +3207,18 @@ Public Class Designer
                 'Me.tpSectionPage.Title = ReferenceModel.StructureClass.ToString
 
             Case StructureType.Cluster
+                If isNew Then
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.None)
+                End If
                 If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
                     Me.TabMain.TabPages.Remove(Me.tpDesign)
                     Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
                 End If
 
             Case StructureType.Element
+                If isNew Then
+                    InitialiseRestrictedSet(RestrictedSet.TermSet.None)
+                End If
                 If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
                     Me.TabMain.TabPages.Remove(Me.tpDesign)
                     Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
@@ -3544,7 +3427,7 @@ Public Class Designer
 
         End Select
 
-        ShowTabPages(archetyped_class)
+        ShowTabPages(archetyped_class, isNew)
 
         Me.lblLifecycle.Text = mFileManager.Archetype.LifeCycle
         Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
@@ -4008,20 +3891,8 @@ Public Class Designer
                 StructureType.OBSERVATION, StructureType.INSTRUCTION, _
                 StructureType.ACTION, StructureType.ADMIN_ENTRY
 
-                If Me.radioRestrictedSet.Checked Then
-                    Dim cp As CodePhrase
-
-                    cp = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
-                    If cp Is Nothing Then
-                        cp = New CodePhrase
-                        cp.TerminologyID = "openehr"
-                        CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship = cp
-                    Else
-                        cp.Codes.Clear()
-                    End If
-                    For Each a_term As RmTerm In Me.listRestrictionSet.Items
-                        cp.Codes.Add(a_term.Code)
-                    Next
+                If Not mRestrictedSubject Is Nothing AndAlso mRestrictedSubject.HasRestriction Then
+                    CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship = mRestrictedSubject.AsCodePhrase
                 End If
 
                 If cbParticipation.Checked Then
@@ -4036,7 +3907,7 @@ Public Class Designer
 
                 Select Case mFileManager.Archetype.Definition.Type
                     Case StructureType.INSTRUCTION
-                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children                        
+                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children
                         If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing AndAlso mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                             Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                             rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
@@ -4347,8 +4218,17 @@ Public Class Designer
 
         If ArchetypeToOpen <> "" Then
             'command line variable has been set
-            Dim archID As ArchetypeID = New ArchetypeID(ArchetypeToOpen.Substring(ArchetypeToOpen.LastIndexOf("\") + 1))
-            ReferenceModel.SetModelType(archID.Reference_Model)
+            Dim archID As String = ArchetypeToOpen.Substring(ArchetypeToOpen.LastIndexOf("\") + 1)
+            If archID.StartsWith("OceanRecovery-") Then
+                archID = archID.Substring(14)
+            End If
+
+            If ArchetypeID.ValidId(archID) Then
+                Dim archetypID As ArchetypeID = New ArchetypeID(archID)
+                ReferenceModel.SetModelType(archetypID.Reference_Model)
+            Else
+                ReferenceModel.SetModelType(ReferenceModelType.openEHR_EHR)
+            End If
 
             'JAR: 12APR07, EDT23 Continue to display splash screen for another 1 second (accounts for overhead to load archetype)
             'System.Threading.Thread.Sleep(1000)
@@ -4381,16 +4261,23 @@ Public Class Designer
             End If
         End If
 
-        ''Add the display format buttons based on the parser types
-        'For Each format_type As String In mFileManager.AvailableFormats
-        '    format_type = format_type.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
-        '    If format_type <> "HTML" Then
-        '        Dim tbb As New ToolBarButton(format_type)
-        '        tbb.Tag = format_type
-        '        tbb.Style = ToolBarButtonStyle.ToggleButton
-        '        ToolBarRTF.Buttons.Insert(2, tbb)
-        '    End If
-        'Next
+            If OceanArchetypeEditor.Instance.Options.AutosaveInterval = 0 Then
+                Me.mAutoSaveTimer.Enabled = False
+            Else
+                Me.mAutoSaveTimer.Enabled = True
+                Me.mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
+            End If
+
+            ''Add the display format buttons based on the parser types
+            'For Each format_type As String In mFileManager.AvailableFormats
+            '    format_type = format_type.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+            '    If format_type <> "HTML" Then
+            '        Dim tbb As New ToolBarButton(format_type)
+            '        tbb.Tag = format_type
+            '        tbb.Style = ToolBarButtonStyle.ToggleButton
+            '        ToolBarRTF.Buttons.Insert(2, tbb)
+            '    End If
+            'Next
     End Sub
 
     Private Sub Designer_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
@@ -4668,26 +4555,6 @@ Public Class Designer
 
         mFileManager.FileEdited = True
 
-    End Sub
-
-    Private Sub radioRestrictedSet_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioRestrictedSet.CheckedChanged
-        ' and when loading a new archetype
-
-        If Me.radioRestrictedSet.Checked Then
-            Me.listRestrictionSet.Visible = True
-            Me.butAddToRestrictedSet.Visible = True
-            Me.butRemoveFromRestrictedSet.Visible = True
-        Else
-            Me.butAddToRestrictedSet.Visible = False
-            Me.listRestrictionSet.Visible = False
-            Me.butRemoveFromRestrictedSet.Visible = False
-        End If
-
-        If Filemanager.Master.FileLoading Then
-            Return
-        Else
-            Filemanager.Master.FileEdited = True
-        End If
     End Sub
 
     Private Sub TabMain_SelectionChanging(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanging
@@ -5152,23 +5019,6 @@ Public Class Designer
         End Select
     End Sub
 
-    Private Sub butAddSujectOfData_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddToRestrictedSet.Click
-        If ChooseRestrictionSet() Then
-            mFileManager.FileEdited = True
-        End If
-    End Sub
-
-    Private Sub butRemoveSubjectOfData_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveFromRestrictedSet.Click
-        Dim i As Integer
-
-        i = Me.listRestrictionSet.SelectedIndex()
-        If i > -1 Then
-            If MessageBox.Show(AE_Constants.Instance.Remove & Me.listRestrictionSet.SelectedItem.text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-                Me.listRestrictionSet.Items.RemoveAt(i)
-                mFileManager.FileEdited = True
-            End If
-        End If
-    End Sub
 
 #End Region
 
@@ -5290,6 +5140,7 @@ Public Class Designer
         End If
 
     End Sub
+
 End Class
 
 

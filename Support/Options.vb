@@ -11,6 +11,7 @@ Public Class Options
     Private mDefaultParser As String
     Private mShowTermsInHtml As Boolean
     Private mShowCommentsInHtml As Boolean
+    Private mTimerMinutes As Integer = 10
     Private mAllowWebSearch As Boolean
     Private mArchetypeRepositoryURL As New Uri("http://www.archetypes.com.au/archetypefinder")
     Private mAllowTerminologyLookUp As Boolean
@@ -134,6 +135,15 @@ Public Class Options
         End Set
     End Property
 
+    Property AutosaveInterval() As Integer
+        Get
+            Return mTimerMinutes
+        End Get
+        Set(ByVal value As Integer)
+            mTimerMinutes = value
+        End Set
+    End Property
+
     Sub ShowOptionsForm(Optional ByVal tabIndex As Integer = 0)
         Dim frm As New ApplicationOptionsForm
 
@@ -153,7 +163,7 @@ Public Class Options
         For i As Integer = 0 To ReferenceModel.ValidReferenceModelNames.Length - 1
             frm.comboReferenceModel.Items.Add(ReferenceModel.ValidReferenceModelNames(i))
         Next
-
+        frm.numAutoSave.Value = CDec(mTimerMinutes)
         frm.txtURL.Text = mArchetypeRepositoryURL.ToString
         frm.txtTerminologyURL.Text = mTerminologyURL.ToString
 
@@ -189,6 +199,7 @@ Public Class Options
                 mTerminologyURL = New Uri(frm.txtTerminologyURL.Text)
                 OTSControls.Term.OtsWebService.Url = frm.txtTerminologyURL.Text
             End If
+            mTimerMinutes = CInt(frm.numAutoSave.Value)
             mAllowWebSearch = frm.chkWebSearch.Checked
             mAllowTerminologyLookUp = frm.chkTerminology.Checked
             If frm.chkParserADL.Checked Then
@@ -261,6 +272,8 @@ Public Class Options
                                     mArchetypeRepositoryURL = New Uri(y(1).Trim)
                                 Case "AllowTerminologyLookUp"
                                     mAllowTerminologyLookUp = Boolean.Parse(y(1).Trim)
+                                Case "AutosaveInterval"
+                                    mTimerMinutes = Integer.Parse(y(1).Trim)
                                 Case "TerminologyUrl"
                                     Dim uriString As String = y(1).Trim
                                     If Uri.IsWellFormedUriString(uriString, UriKind.Absolute) Then
@@ -310,6 +323,8 @@ Public Class Options
                 StrmWrite.WriteLine("ShowCommentsInHtml=" & mShowCommentsInHtml.ToString)
                 StrmWrite.WriteLine("AllowSearchForArchetypesFromWeb=" & mAllowWebSearch.ToString)
                 StrmWrite.WriteLine("AllowTerminologyLookUp=" & mAllowTerminologyLookUp.ToString)
+                StrmWrite.WriteLine("AutosaveInterval=" & mTimerMinutes.ToString())
+
 
                 Dim s As String = ""
 

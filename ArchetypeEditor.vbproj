@@ -227,6 +227,18 @@
       <DependentUpon>ChooseFix.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Recovery.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Recovery.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Specialised_VB_classes\RestrictedSet.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>RestrictedSet.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\Participation.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Participation.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TabPageActivity.resx">
       <SubType>Designer</SubType>
       <DependentUpon>TabPageActivity.vb</DependentUpon>
@@ -351,7 +363,9 @@
     </Compile>
     <Compile Include="ADL_Classes\ADL_TranslationDetails.vb" />
     <Compile Include="ApplicationEvents.vb" />
-    <Compile Include="BusinessLogic\EHR_Classes\Participation.vb" />
+    <Compile Include="BusinessLogic\EHR_Classes\Participation.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="BusinessLogic\Proxy.vb" />
     <Compile Include="BusinessLogic\Duration.vb">
       <SubType>Code</SubType>
@@ -463,6 +477,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessLogic\RmExistence.vb" />
+    <Compile Include="BusinessLogic\RmParticipation.vb" />
     <Compile Include="DataConstraintsView\ArchetypeView.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -682,6 +697,12 @@
     <Compile Include="Forms\myArchetypeFromWeb.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Forms\Recovery.Designer.vb">
+      <DependentUpon>Recovery.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Recovery.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Splash.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -713,6 +734,12 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GUI_Classes\Instruction_Controls\PathwaySpecification.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Specialised_VB_classes\RestrictedSet.Designer.vb">
+      <DependentUpon>RestrictedSet.vb</DependentUpon>
+    </Compile>
+    <Compile Include="GUI_Classes\Specialised_VB_classes\RestrictedSet.vb">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="GUI_Classes\Specialised_VB_classes\ArchetypeListViewItem.vb">
@@ -769,6 +796,12 @@
     </Compile>
     <Compile Include="Support\TerminologyServer.vb">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\Participation.Designer.vb">
+      <DependentUpon>Participation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TabPage_Controls\Participation.vb">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TabPage_Controls\TabPageAction.vb">
       <SubType>UserControl</SubType>

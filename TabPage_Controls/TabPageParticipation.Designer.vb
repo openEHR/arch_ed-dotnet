@@ -19,16 +19,19 @@ Partial Class TabPageParticipation
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageParticipation))
         Me.chkProvider = New System.Windows.Forms.CheckBox
         Me.panelProvider = New System.Windows.Forms.Panel
-        Me.dgOtherParticipations = New System.Windows.Forms.DataGridView
         Me.gbParticipations = New System.Windows.Forms.GroupBox
-        Me.pFunction = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.pTimeInterval = New System.Windows.Forms.DataGridViewCheckBoxColumn
-        Me.pMode = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.flowPanelParticipations = New System.Windows.Forms.FlowLayoutPanel
+        Me.panelButtons = New System.Windows.Forms.Panel
+        Me.butListUp = New System.Windows.Forms.Button
+        Me.butListDown = New System.Windows.Forms.Button
+        Me.butAddEvent = New System.Windows.Forms.Button
+        Me.butRemoveElement = New System.Windows.Forms.Button
         Me.panelProvider.SuspendLayout()
-        CType(Me.dgOtherParticipations, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbParticipations.SuspendLayout()
+        Me.panelButtons.SuspendLayout()
         Me.SuspendLayout()
         '
         'chkProvider
@@ -50,20 +53,10 @@ Partial Class TabPageParticipation
         Me.panelProvider.Size = New System.Drawing.Size(602, 28)
         Me.panelProvider.TabIndex = 1
         '
-        'dgOtherParticipations
-        '
-        Me.dgOtherParticipations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgOtherParticipations.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.pFunction, Me.pTimeInterval, Me.pMode})
-        Me.dgOtherParticipations.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.dgOtherParticipations.Location = New System.Drawing.Point(3, 18)
-        Me.dgOtherParticipations.Name = "dgOtherParticipations"
-        Me.dgOtherParticipations.RowTemplate.Height = 24
-        Me.dgOtherParticipations.Size = New System.Drawing.Size(596, 286)
-        Me.dgOtherParticipations.TabIndex = 2
-        '
         'gbParticipations
         '
-        Me.gbParticipations.Controls.Add(Me.dgOtherParticipations)
+        Me.gbParticipations.Controls.Add(Me.flowPanelParticipations)
+        Me.gbParticipations.Controls.Add(Me.panelButtons)
         Me.gbParticipations.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbParticipations.Enabled = False
         Me.gbParticipations.Location = New System.Drawing.Point(0, 28)
@@ -73,29 +66,61 @@ Partial Class TabPageParticipation
         Me.gbParticipations.TabStop = False
         Me.gbParticipations.Text = "Other Participations"
         '
-        'pFunction
+        'flowPanelParticipations
         '
-        Me.pFunction.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.pFunction.FillWeight = 40.0!
-        Me.pFunction.HeaderText = "Function"
-        Me.pFunction.Name = "pFunction"
-        Me.pFunction.Width = 87
+        Me.flowPanelParticipations.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.flowPanelParticipations.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.flowPanelParticipations.Location = New System.Drawing.Point(33, 18)
+        Me.flowPanelParticipations.Name = "flowPanelParticipations"
+        Me.flowPanelParticipations.Size = New System.Drawing.Size(566, 286)
+        Me.flowPanelParticipations.TabIndex = 0
         '
-        'pTimeInterval
+        'panelButtons
         '
-        Me.pTimeInterval.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.pTimeInterval.FillWeight = 20.0!
-        Me.pTimeInterval.HeaderText = "Mandate TimeInterval"
-        Me.pTimeInterval.Name = "pTimeInterval"
-        Me.pTimeInterval.Width = 135
+        Me.panelButtons.Controls.Add(Me.butListUp)
+        Me.panelButtons.Controls.Add(Me.butListDown)
+        Me.panelButtons.Controls.Add(Me.butAddEvent)
+        Me.panelButtons.Controls.Add(Me.butRemoveElement)
+        Me.panelButtons.Dock = System.Windows.Forms.DockStyle.Left
+        Me.panelButtons.Location = New System.Drawing.Point(3, 18)
+        Me.panelButtons.Name = "panelButtons"
+        Me.panelButtons.Size = New System.Drawing.Size(30, 286)
+        Me.panelButtons.TabIndex = 1
         '
-        'pMode
+        'butListUp
         '
-        Me.pMode.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
-        Me.pMode.FillWeight = 20.0!
-        Me.pMode.HeaderText = "Mode"
-        Me.pMode.Name = "pMode"
-        Me.pMode.Width = 68
+        Me.butListUp.Image = CType(resources.GetObject("butListUp.Image"), System.Drawing.Image)
+        Me.butListUp.Location = New System.Drawing.Point(3, 57)
+        Me.butListUp.Name = "butListUp"
+        Me.butListUp.Size = New System.Drawing.Size(24, 24)
+        Me.butListUp.TabIndex = 27
+        '
+        'butListDown
+        '
+        Me.butListDown.Image = CType(resources.GetObject("butListDown.Image"), System.Drawing.Image)
+        Me.butListDown.Location = New System.Drawing.Point(3, 83)
+        Me.butListDown.Name = "butListDown"
+        Me.butListDown.Size = New System.Drawing.Size(24, 24)
+        Me.butListDown.TabIndex = 28
+        '
+        'butAddEvent
+        '
+        Me.butAddEvent.Image = CType(resources.GetObject("butAddEvent.Image"), System.Drawing.Image)
+        Me.butAddEvent.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butAddEvent.Location = New System.Drawing.Point(3, 5)
+        Me.butAddEvent.Name = "butAddEvent"
+        Me.butAddEvent.Size = New System.Drawing.Size(24, 24)
+        Me.butAddEvent.TabIndex = 25
+        '
+        'butRemoveElement
+        '
+        Me.butRemoveElement.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butRemoveElement.Image = CType(resources.GetObject("butRemoveElement.Image"), System.Drawing.Image)
+        Me.butRemoveElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butRemoveElement.Location = New System.Drawing.Point(3, 31)
+        Me.butRemoveElement.Name = "butRemoveElement"
+        Me.butRemoveElement.Size = New System.Drawing.Size(24, 24)
+        Me.butRemoveElement.TabIndex = 26
         '
         'TabPageParticipation
         '
@@ -107,17 +132,19 @@ Partial Class TabPageParticipation
         Me.Size = New System.Drawing.Size(602, 335)
         Me.panelProvider.ResumeLayout(False)
         Me.panelProvider.PerformLayout()
-        CType(Me.dgOtherParticipations, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbParticipations.ResumeLayout(False)
+        Me.panelButtons.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
     Friend WithEvents chkProvider As System.Windows.Forms.CheckBox
     Friend WithEvents panelProvider As System.Windows.Forms.Panel
-    Friend WithEvents dgOtherParticipations As System.Windows.Forms.DataGridView
     Friend WithEvents gbParticipations As System.Windows.Forms.GroupBox
-    Friend WithEvents pFunction As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents pTimeInterval As System.Windows.Forms.DataGridViewCheckBoxColumn
-    Friend WithEvents pMode As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents flowPanelParticipations As System.Windows.Forms.FlowLayoutPanel
+    Friend WithEvents panelButtons As System.Windows.Forms.Panel
+    Friend WithEvents butListUp As System.Windows.Forms.Button
+    Friend WithEvents butListDown As System.Windows.Forms.Button
+    Friend WithEvents butAddEvent As System.Windows.Forms.Button
+    Friend WithEvents butRemoveElement As System.Windows.Forms.Button
 
 End Class

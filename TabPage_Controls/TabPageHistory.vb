@@ -22,6 +22,9 @@ Public Class TabpageHistory
     Private MathFunctionTable As DataTable
     Private mIsLoading As Boolean = False
     Private mFileManager As FileManagerLocal
+    Friend WithEvents panelLeft As System.Windows.Forms.Panel
+    Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
+    Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
@@ -129,6 +132,9 @@ Public Class TabpageHistory
         Me.TheEvents = New System.Windows.Forms.ColumnHeader
         Me.ImageListEvents = New System.Windows.Forms.ImageList(Me.components)
         Me.HelpProviderEventSeries = New System.Windows.Forms.HelpProvider
+        Me.panelLeft = New System.Windows.Forms.Panel
+        Me.Splitter1 = New System.Windows.Forms.Splitter
+        Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.gbEventDetails.SuspendLayout()
         Me.gbDuration.SuspendLayout()
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -136,6 +142,7 @@ Public Class TabpageHistory
         CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbEventList.SuspendLayout()
+        Me.panelLeft.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbEventDetails
@@ -149,9 +156,10 @@ Public Class TabpageHistory
         Me.gbEventDetails.Controls.Add(Me.radioPointInTime)
         Me.gbEventDetails.Controls.Add(Me.gbOffset)
         Me.gbEventDetails.Controls.Add(Me.lblDescription)
-        Me.gbEventDetails.Location = New System.Drawing.Point(432, 8)
+        Me.gbEventDetails.Dock = System.Windows.Forms.DockStyle.Right
+        Me.gbEventDetails.Location = New System.Drawing.Point(448, 0)
         Me.gbEventDetails.Name = "gbEventDetails"
-        Me.gbEventDetails.Size = New System.Drawing.Size(376, 376)
+        Me.gbEventDetails.Size = New System.Drawing.Size(376, 392)
         Me.gbEventDetails.TabIndex = 34
         Me.gbEventDetails.TabStop = False
         Me.gbEventDetails.Text = "Event details"
@@ -312,10 +320,11 @@ Public Class TabpageHistory
         '
         'butRemoveElement
         '
+        Me.butRemoveElement.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butRemoveElement.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butRemoveElement.Image = CType(resources.GetObject("butRemoveElement.Image"), System.Drawing.Image)
         Me.butRemoveElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveElement.Location = New System.Drawing.Point(176, 35)
+        Me.butRemoveElement.Location = New System.Drawing.Point(167, 40)
         Me.butRemoveElement.Name = "butRemoveElement"
         Me.butRemoveElement.Size = New System.Drawing.Size(24, 24)
         Me.butRemoveElement.TabIndex = 22
@@ -323,9 +332,10 @@ Public Class TabpageHistory
         '
         'butAddEvent
         '
+        Me.butAddEvent.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butAddEvent.Image = CType(resources.GetObject("butAddEvent.Image"), System.Drawing.Image)
         Me.butAddEvent.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddEvent.Location = New System.Drawing.Point(176, 9)
+        Me.butAddEvent.Location = New System.Drawing.Point(167, 14)
         Me.butAddEvent.Name = "butAddEvent"
         Me.butAddEvent.Size = New System.Drawing.Size(24, 24)
         Me.butAddEvent.TabIndex = 21
@@ -333,7 +343,7 @@ Public Class TabpageHistory
         '
         'chkIsPeriodic
         '
-        Me.chkIsPeriodic.Location = New System.Drawing.Point(16, 128)
+        Me.chkIsPeriodic.Location = New System.Drawing.Point(21, 130)
         Me.chkIsPeriodic.Name = "chkIsPeriodic"
         Me.chkIsPeriodic.Size = New System.Drawing.Size(144, 64)
         Me.chkIsPeriodic.TabIndex = 18
@@ -341,7 +351,7 @@ Public Class TabpageHistory
         '
         'numPeriod
         '
-        Me.numPeriod.Location = New System.Drawing.Point(16, 192)
+        Me.numPeriod.Location = New System.Drawing.Point(21, 194)
         Me.numPeriod.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numPeriod.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.numPeriod.Name = "numPeriod"
@@ -353,7 +363,7 @@ Public Class TabpageHistory
         '
         'comboTimeUnits
         '
-        Me.comboTimeUnits.Location = New System.Drawing.Point(72, 192)
+        Me.comboTimeUnits.Location = New System.Drawing.Point(77, 194)
         Me.comboTimeUnits.Name = "comboTimeUnits"
         Me.comboTimeUnits.Size = New System.Drawing.Size(88, 24)
         Me.comboTimeUnits.TabIndex = 20
@@ -361,8 +371,9 @@ Public Class TabpageHistory
         '
         'butListUp
         '
+        Me.butListUp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butListUp.Image = CType(resources.GetObject("butListUp.Image"), System.Drawing.Image)
-        Me.butListUp.Location = New System.Drawing.Point(176, 61)
+        Me.butListUp.Location = New System.Drawing.Point(167, 66)
         Me.butListUp.Name = "butListUp"
         Me.butListUp.Size = New System.Drawing.Size(24, 24)
         Me.butListUp.TabIndex = 23
@@ -370,8 +381,9 @@ Public Class TabpageHistory
         '
         'butListDown
         '
+        Me.butListDown.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butListDown.Image = CType(resources.GetObject("butListDown.Image"), System.Drawing.Image)
-        Me.butListDown.Location = New System.Drawing.Point(176, 87)
+        Me.butListDown.Location = New System.Drawing.Point(167, 92)
         Me.butListDown.Name = "butListDown"
         Me.butListDown.Size = New System.Drawing.Size(24, 24)
         Me.butListDown.TabIndex = 24
@@ -379,12 +391,14 @@ Public Class TabpageHistory
         '
         'gbEventList
         '
+        Me.gbEventList.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbEventList.Controls.Add(Me.radioOpen)
         Me.gbEventList.Controls.Add(Me.radioFixed)
         Me.gbEventList.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.gbEventList.Location = New System.Drawing.Point(16, 8)
+        Me.gbEventList.Location = New System.Drawing.Point(13, 5)
         Me.gbEventList.Name = "gbEventList"
-        Me.gbEventList.Size = New System.Drawing.Size(144, 104)
+        Me.gbEventList.Size = New System.Drawing.Size(144, 111)
         Me.gbEventList.TabIndex = 35
         Me.gbEventList.TabStop = False
         Me.gbEventList.Text = "Event list:"
@@ -411,14 +425,15 @@ Public Class TabpageHistory
         '
         Me.ListEvents.Alignment = System.Windows.Forms.ListViewAlignment.Left
         Me.ListEvents.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.TheEvents})
+        Me.ListEvents.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListEvents.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListEvents.HideSelection = False
         Me.ListEvents.LabelEdit = True
         Me.ListEvents.LabelWrap = False
-        Me.ListEvents.Location = New System.Drawing.Point(208, 8)
+        Me.ListEvents.Location = New System.Drawing.Point(203, 0)
         Me.ListEvents.MultiSelect = False
         Me.ListEvents.Name = "ListEvents"
-        Me.ListEvents.Size = New System.Drawing.Size(216, 376)
+        Me.ListEvents.Size = New System.Drawing.Size(242, 392)
         Me.ListEvents.SmallImageList = Me.ImageListEvents
         Me.ListEvents.TabIndex = 0
         Me.ListEvents.UseCompatibleStateImageBehavior = False
@@ -427,7 +442,7 @@ Public Class TabpageHistory
         'TheEvents
         '
         Me.TheEvents.Text = "Events"
-        Me.TheEvents.Width = 350
+        Me.TheEvents.Width = 200
         '
         'ImageListEvents
         '
@@ -440,19 +455,47 @@ Public Class TabpageHistory
         Me.ImageListEvents.Images.SetKeyName(4, "")
         Me.ImageListEvents.Images.SetKeyName(5, "")
         '
+        'panelLeft
+        '
+        Me.panelLeft.Controls.Add(Me.chkIsPeriodic)
+        Me.panelLeft.Controls.Add(Me.comboTimeUnits)
+        Me.panelLeft.Controls.Add(Me.butListUp)
+        Me.panelLeft.Controls.Add(Me.butListDown)
+        Me.panelLeft.Controls.Add(Me.numPeriod)
+        Me.panelLeft.Controls.Add(Me.gbEventList)
+        Me.panelLeft.Controls.Add(Me.butAddEvent)
+        Me.panelLeft.Controls.Add(Me.butRemoveElement)
+        Me.panelLeft.Dock = System.Windows.Forms.DockStyle.Left
+        Me.panelLeft.Location = New System.Drawing.Point(0, 0)
+        Me.panelLeft.Name = "panelLeft"
+        Me.panelLeft.Size = New System.Drawing.Size(200, 392)
+        Me.panelLeft.TabIndex = 36
+        '
+        'Splitter1
+        '
+        Me.Splitter1.Location = New System.Drawing.Point(200, 0)
+        Me.Splitter1.Name = "Splitter1"
+        Me.Splitter1.Size = New System.Drawing.Size(3, 392)
+        Me.Splitter1.TabIndex = 37
+        Me.Splitter1.TabStop = False
+        '
+        'Splitter2
+        '
+        Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Splitter2.Location = New System.Drawing.Point(445, 0)
+        Me.Splitter2.Name = "Splitter2"
+        Me.Splitter2.Size = New System.Drawing.Size(3, 392)
+        Me.Splitter2.TabIndex = 38
+        Me.Splitter2.TabStop = False
+        '
         'TabpageHistory
         '
         Me.BackColor = System.Drawing.Color.LemonChiffon
         Me.Controls.Add(Me.ListEvents)
-        Me.Controls.Add(Me.butListUp)
-        Me.Controls.Add(Me.butListDown)
-        Me.Controls.Add(Me.gbEventList)
+        Me.Controls.Add(Me.Splitter2)
+        Me.Controls.Add(Me.Splitter1)
+        Me.Controls.Add(Me.panelLeft)
         Me.Controls.Add(Me.gbEventDetails)
-        Me.Controls.Add(Me.chkIsPeriodic)
-        Me.Controls.Add(Me.numPeriod)
-        Me.Controls.Add(Me.comboTimeUnits)
-        Me.Controls.Add(Me.butAddEvent)
-        Me.Controls.Add(Me.butRemoveElement)
         Me.HelpProviderEventSeries.SetHelpKeyword(Me, "HowTo/edit_EventSeries.htm")
         Me.HelpProviderEventSeries.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "TabpageHistory"
@@ -466,6 +509,7 @@ Public Class TabpageHistory
         CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbEventList.ResumeLayout(False)
+        Me.panelLeft.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

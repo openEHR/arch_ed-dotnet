@@ -109,9 +109,6 @@ Public Class TabPageDescription
         Me.lblKeyword = New System.Windows.Forms.Label
         Me.listKeyword = New System.Windows.Forms.ListBox
         Me.TabDescription = New Crownwood.Magic.Controls.TabControl
-        Me.tpReferences = New Crownwood.Magic.Controls.TabPage
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox
-        Me.txtReferences = New System.Windows.Forms.TextBox
         Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage
         Me.Splitter3 = New System.Windows.Forms.Splitter
         Me.Splitter2 = New System.Windows.Forms.Splitter
@@ -147,18 +144,21 @@ Public Class TabPageDescription
         Me.txtTranslatorName = New System.Windows.Forms.TextBox
         Me.lblTranslatorEmail = New System.Windows.Forms.Label
         Me.txtTranslatorEmail = New System.Windows.Forms.TextBox
+        Me.tpReferences = New Crownwood.Magic.Controls.TabPage
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.txtReferences = New System.Windows.Forms.TextBox
         Me.gbUse.SuspendLayout()
         Me.gbMisuse.SuspendLayout()
         Me.gbPurpose.SuspendLayout()
         Me.panelDescription.SuspendLayout()
-        Me.tpReferences.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
         Me.tpDescDetails.SuspendLayout()
         Me.tpAuthor.SuspendLayout()
         Me.gbContributors.SuspendLayout()
         Me.gbAuthor.SuspendLayout()
         Me.tpTranslation.SuspendLayout()
         Me.gbTranslator.SuspendLayout()
+        Me.tpReferences.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblStatus
@@ -174,29 +174,29 @@ Public Class TabPageDescription
         '
         Me.txtUse.AcceptsReturn = True
         Me.txtUse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtUse.Location = New System.Drawing.Point(3, 17)
+        Me.txtUse.Location = New System.Drawing.Point(3, 20)
         Me.txtUse.Multiline = True
         Me.txtUse.Name = "txtUse"
         Me.txtUse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtUse.Size = New System.Drawing.Size(694, 108)
+        Me.txtUse.Size = New System.Drawing.Size(694, 105)
         Me.txtUse.TabIndex = 4
         '
         'txtMisuse
         '
         Me.txtMisuse.AcceptsReturn = True
         Me.txtMisuse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtMisuse.Location = New System.Drawing.Point(3, 17)
+        Me.txtMisuse.Location = New System.Drawing.Point(3, 20)
         Me.txtMisuse.Multiline = True
         Me.txtMisuse.Name = "txtMisuse"
         Me.txtMisuse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtMisuse.Size = New System.Drawing.Size(694, 92)
+        Me.txtMisuse.Size = New System.Drawing.Size(694, 89)
         Me.txtMisuse.TabIndex = 6
         '
         'gbUse
         '
         Me.gbUse.Controls.Add(Me.txtUse)
         Me.gbUse.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.gbUse.Location = New System.Drawing.Point(0, 232)
+        Me.gbUse.Location = New System.Drawing.Point(0, 231)
         Me.gbUse.Name = "gbUse"
         Me.gbUse.Size = New System.Drawing.Size(700, 128)
         Me.gbUse.TabIndex = 9
@@ -207,7 +207,7 @@ Public Class TabPageDescription
         '
         Me.gbMisuse.Controls.Add(Me.txtMisuse)
         Me.gbMisuse.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.gbMisuse.Location = New System.Drawing.Point(0, 363)
+        Me.gbMisuse.Location = New System.Drawing.Point(0, 362)
         Me.gbMisuse.Name = "gbMisuse"
         Me.gbMisuse.Size = New System.Drawing.Size(700, 112)
         Me.gbMisuse.TabIndex = 10
@@ -220,7 +220,7 @@ Public Class TabPageDescription
         Me.gbPurpose.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbPurpose.Location = New System.Drawing.Point(0, 0)
         Me.gbPurpose.Name = "gbPurpose"
-        Me.gbPurpose.Size = New System.Drawing.Size(465, 229)
+        Me.gbPurpose.Size = New System.Drawing.Size(465, 228)
         Me.gbPurpose.TabIndex = 13
         Me.gbPurpose.TabStop = False
         Me.gbPurpose.Text = "Purpose"
@@ -229,11 +229,11 @@ Public Class TabPageDescription
         '
         Me.txtPurpose.AcceptsReturn = True
         Me.txtPurpose.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtPurpose.Location = New System.Drawing.Point(3, 17)
+        Me.txtPurpose.Location = New System.Drawing.Point(3, 20)
         Me.txtPurpose.Multiline = True
         Me.txtPurpose.Name = "txtPurpose"
         Me.txtPurpose.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtPurpose.Size = New System.Drawing.Size(459, 209)
+        Me.txtPurpose.Size = New System.Drawing.Size(459, 205)
         Me.txtPurpose.TabIndex = 0
         '
         'panelDescription
@@ -247,7 +247,7 @@ Public Class TabPageDescription
         Me.panelDescription.Dock = System.Windows.Forms.DockStyle.Right
         Me.panelDescription.Location = New System.Drawing.Point(468, 0)
         Me.panelDescription.Name = "panelDescription"
-        Me.panelDescription.Size = New System.Drawing.Size(232, 229)
+        Me.panelDescription.Size = New System.Drawing.Size(232, 228)
         Me.panelDescription.TabIndex = 14
         '
         'ButAddKeyWord
@@ -279,7 +279,7 @@ Public Class TabPageDescription
         '
         Me.comboLifeCycle.Location = New System.Drawing.Point(16, 35)
         Me.comboLifeCycle.Name = "comboLifeCycle"
-        Me.comboLifeCycle.Size = New System.Drawing.Size(200, 21)
+        Me.comboLifeCycle.Size = New System.Drawing.Size(200, 25)
         Me.comboLifeCycle.TabIndex = 4
         '
         'lblKeyword
@@ -296,9 +296,10 @@ Public Class TabPageDescription
         Me.listKeyword.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.listKeyword.ItemHeight = 17
         Me.listKeyword.Location = New System.Drawing.Point(48, 92)
         Me.listKeyword.Name = "listKeyword"
-        Me.listKeyword.Size = New System.Drawing.Size(168, 121)
+        Me.listKeyword.Size = New System.Drawing.Size(168, 106)
         Me.listKeyword.TabIndex = 2
         '
         'TabDescription
@@ -315,37 +316,6 @@ Public Class TabPageDescription
         Me.TabDescription.TabIndex = 15
         Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
         '
-        'tpReferences
-        '
-        Me.tpReferences.Controls.Add(Me.GroupBox1)
-        Me.tpReferences.Location = New System.Drawing.Point(0, 0)
-        Me.tpReferences.Name = "tpReferences"
-        Me.tpReferences.Selected = False
-        Me.tpReferences.Size = New System.Drawing.Size(700, 475)
-        Me.tpReferences.TabIndex = 3
-        Me.tpReferences.Title = "References"
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.txtReferences)
-        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(700, 475)
-        Me.GroupBox1.TabIndex = 14
-        Me.GroupBox1.TabStop = False
-        '
-        'txtReferences
-        '
-        Me.txtReferences.AcceptsReturn = True
-        Me.txtReferences.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtReferences.Location = New System.Drawing.Point(3, 17)
-        Me.txtReferences.Multiline = True
-        Me.txtReferences.Name = "txtReferences"
-        Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtReferences.Size = New System.Drawing.Size(694, 455)
-        Me.txtReferences.TabIndex = 0
-        '
         'tpDescDetails
         '
         Me.tpDescDetails.Controls.Add(Me.gbPurpose)
@@ -357,7 +327,7 @@ Public Class TabPageDescription
         Me.tpDescDetails.Controls.Add(Me.gbMisuse)
         Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
         Me.tpDescDetails.Name = "tpDescDetails"
-        Me.tpDescDetails.Size = New System.Drawing.Size(700, 475)
+        Me.tpDescDetails.Size = New System.Drawing.Size(700, 474)
         Me.tpDescDetails.TabIndex = 0
         Me.tpDescDetails.Title = "Details"
         '
@@ -366,14 +336,14 @@ Public Class TabPageDescription
         Me.Splitter3.Dock = System.Windows.Forms.DockStyle.Right
         Me.Splitter3.Location = New System.Drawing.Point(465, 0)
         Me.Splitter3.Name = "Splitter3"
-        Me.Splitter3.Size = New System.Drawing.Size(3, 229)
+        Me.Splitter3.Size = New System.Drawing.Size(3, 228)
         Me.Splitter3.TabIndex = 17
         Me.Splitter3.TabStop = False
         '
         'Splitter2
         '
         Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Splitter2.Location = New System.Drawing.Point(0, 229)
+        Me.Splitter2.Location = New System.Drawing.Point(0, 228)
         Me.Splitter2.Name = "Splitter2"
         Me.Splitter2.Size = New System.Drawing.Size(700, 3)
         Me.Splitter2.TabIndex = 16
@@ -382,7 +352,7 @@ Public Class TabPageDescription
         'Splitter1
         '
         Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Splitter1.Location = New System.Drawing.Point(0, 360)
+        Me.Splitter1.Location = New System.Drawing.Point(0, 359)
         Me.Splitter1.Name = "Splitter1"
         Me.Splitter1.Size = New System.Drawing.Size(700, 3)
         Me.Splitter1.TabIndex = 15
@@ -395,7 +365,7 @@ Public Class TabPageDescription
         Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
         Me.tpAuthor.Name = "tpAuthor"
         Me.tpAuthor.Selected = False
-        Me.tpAuthor.Size = New System.Drawing.Size(700, 475)
+        Me.tpAuthor.Size = New System.Drawing.Size(700, 474)
         Me.tpAuthor.TabIndex = 1
         Me.tpAuthor.Title = "Authorship"
         '
@@ -417,9 +387,10 @@ Public Class TabPageDescription
         Me.listContributors.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.listContributors.ItemHeight = 17
         Me.listContributors.Location = New System.Drawing.Point(64, 24)
         Me.listContributors.Name = "listContributors"
-        Me.listContributors.Size = New System.Drawing.Size(616, 121)
+        Me.listContributors.Size = New System.Drawing.Size(616, 106)
         Me.listContributors.TabIndex = 36
         '
         'butAddContributor
@@ -514,7 +485,7 @@ Public Class TabPageDescription
         '
         Me.txtDate.Location = New System.Drawing.Point(152, 120)
         Me.txtDate.Name = "txtDate"
-        Me.txtDate.Size = New System.Drawing.Size(160, 21)
+        Me.txtDate.Size = New System.Drawing.Size(160, 24)
         Me.txtDate.TabIndex = 6
         '
         'lblOrganisation
@@ -530,7 +501,7 @@ Public Class TabPageDescription
         '
         Me.txtOrganisation.Location = New System.Drawing.Point(152, 88)
         Me.txtOrganisation.Name = "txtOrganisation"
-        Me.txtOrganisation.Size = New System.Drawing.Size(424, 21)
+        Me.txtOrganisation.Size = New System.Drawing.Size(424, 24)
         Me.txtOrganisation.TabIndex = 4
         '
         'lblName
@@ -546,7 +517,7 @@ Public Class TabPageDescription
         '
         Me.txtOriginalAuthor.Location = New System.Drawing.Point(152, 24)
         Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
-        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 21)
+        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 24)
         Me.txtOriginalAuthor.TabIndex = 0
         '
         'lblEmail
@@ -562,7 +533,7 @@ Public Class TabPageDescription
         '
         Me.txtOriginalEmail.Location = New System.Drawing.Point(152, 56)
         Me.txtOriginalEmail.Name = "txtOriginalEmail"
-        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 21)
+        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 24)
         Me.txtOriginalEmail.TabIndex = 1
         '
         'tpTranslation
@@ -572,7 +543,7 @@ Public Class TabPageDescription
         Me.tpTranslation.Location = New System.Drawing.Point(0, 0)
         Me.tpTranslation.Name = "tpTranslation"
         Me.tpTranslation.Selected = False
-        Me.tpTranslation.Size = New System.Drawing.Size(700, 475)
+        Me.tpTranslation.Size = New System.Drawing.Size(700, 474)
         Me.tpTranslation.TabIndex = 2
         Me.tpTranslation.Title = "Translation"
         '
@@ -608,7 +579,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslationAccreditation.Location = New System.Drawing.Point(152, 120)
         Me.txtTranslationAccreditation.Name = "txtTranslationAccreditation"
-        Me.txtTranslationAccreditation.Size = New System.Drawing.Size(160, 21)
+        Me.txtTranslationAccreditation.Size = New System.Drawing.Size(160, 24)
         Me.txtTranslationAccreditation.TabIndex = 6
         '
         'lblTranslatorOrganisation
@@ -624,7 +595,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslatorOrganisation.Location = New System.Drawing.Point(152, 88)
         Me.txtTranslatorOrganisation.Name = "txtTranslatorOrganisation"
-        Me.txtTranslatorOrganisation.Size = New System.Drawing.Size(424, 21)
+        Me.txtTranslatorOrganisation.Size = New System.Drawing.Size(424, 24)
         Me.txtTranslatorOrganisation.TabIndex = 4
         '
         'lblTranslatorName
@@ -640,7 +611,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslatorName.Location = New System.Drawing.Point(152, 24)
         Me.txtTranslatorName.Name = "txtTranslatorName"
-        Me.txtTranslatorName.Size = New System.Drawing.Size(424, 21)
+        Me.txtTranslatorName.Size = New System.Drawing.Size(424, 24)
         Me.txtTranslatorName.TabIndex = 0
         '
         'lblTranslatorEmail
@@ -656,8 +627,39 @@ Public Class TabPageDescription
         '
         Me.txtTranslatorEmail.Location = New System.Drawing.Point(152, 56)
         Me.txtTranslatorEmail.Name = "txtTranslatorEmail"
-        Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 21)
+        Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 24)
         Me.txtTranslatorEmail.TabIndex = 1
+        '
+        'tpReferences
+        '
+        Me.tpReferences.Controls.Add(Me.GroupBox1)
+        Me.tpReferences.Location = New System.Drawing.Point(0, 0)
+        Me.tpReferences.Name = "tpReferences"
+        Me.tpReferences.Selected = False
+        Me.tpReferences.Size = New System.Drawing.Size(700, 474)
+        Me.tpReferences.TabIndex = 3
+        Me.tpReferences.Title = "References"
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.txtReferences)
+        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(700, 474)
+        Me.GroupBox1.TabIndex = 14
+        Me.GroupBox1.TabStop = False
+        '
+        'txtReferences
+        '
+        Me.txtReferences.AcceptsReturn = True
+        Me.txtReferences.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtReferences.Location = New System.Drawing.Point(3, 20)
+        Me.txtReferences.Multiline = True
+        Me.txtReferences.Name = "txtReferences"
+        Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtReferences.Size = New System.Drawing.Size(694, 451)
+        Me.txtReferences.TabIndex = 0
         '
         'TabPageDescription
         '
@@ -673,9 +675,6 @@ Public Class TabPageDescription
         Me.gbPurpose.ResumeLayout(False)
         Me.gbPurpose.PerformLayout()
         Me.panelDescription.ResumeLayout(False)
-        Me.tpReferences.ResumeLayout(False)
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
         Me.tpDescDetails.ResumeLayout(False)
         Me.tpAuthor.ResumeLayout(False)
         Me.gbContributors.ResumeLayout(False)
@@ -684,6 +683,9 @@ Public Class TabPageDescription
         Me.tpTranslation.ResumeLayout(False)
         Me.gbTranslator.ResumeLayout(False)
         Me.gbTranslator.PerformLayout()
+        Me.tpReferences.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -969,12 +971,12 @@ Public Class TabPageDescription
         Me.lblEmail.Text = Filemanager.GetOpenEhrTerm(207, Me.lblEmail.Text)
         Me.lblTranslatorEmail.Text = Me.lblEmail.Text
         Me.lblDate.Text = Filemanager.GetOpenEhrTerm(593, Me.lblDate.Text)
-        Me.lblAccreditation.Text = Filemanager.GetOpenEhrTerm(662, Me.lblAccreditation.Text)
+        Me.lblAccreditation.Text = Filemanager.GetOpenEhrTerm(651, Me.lblAccreditation.Text)
         Me.lblOrganisation.Text = Filemanager.GetOpenEhrTerm(594, Me.lblOrganisation.Text)
         Me.lblTranslatorOrganisation.Text = Me.lblOrganisation.Text
         Me.tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, Me.tpAuthor.Title)
         Me.tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, Me.tpDescDetails.Title)
-        Me.tpTranslation.Title = Filemanager.GetOpenEhrTerm(661, Me.tpTranslation.Title)
+        Me.tpTranslation.Title = Filemanager.GetOpenEhrTerm(650, Me.tpTranslation.Title)
         Me.gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, Me.gbPurpose.Text)
         Me.gbUse.Text = Filemanager.GetOpenEhrTerm(582, Me.gbUse.Text)
         Me.gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, Me.gbMisuse.Text)
