@@ -270,25 +270,26 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Protected Sub BuildPlainText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
-            Dim plain_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim value_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
-            Dim cadlSimple As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+        'SRH: Stopped building plain text constraints in archetypes
+        'Protected Sub BuildPlainText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
+        '    Dim plain_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+        '    Dim value_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        '    Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+        '    Dim cadlSimple As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
-            plain_text = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_TEXT"))
+        '    plain_text = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_TEXT"))
 
-            If TermList.Count > 0 Then
-                Dim i As Integer
-                value_rel_node = mAomFactory.create_c_attribute_single(plain_text, EiffelKernel.Create.STRING_8.make_from_cil("value"))
-                cString = mAomFactory.create_c_string_make_from_string(EiffelKernel.Create.STRING_8.make_from_cil(TermList.Item(0)))
-                For i = 1 To TermList.Count - 1
-                    cString.add_string(EiffelKernel.Create.STRING_8.make_from_cil(TermList.Item(i)))
-                Next
-                cadlSimple = mAomFactory.create_c_primitive_object(value_rel_node, cString)
-            End If
+        '    If TermList.Count > 0 Then
+        '        Dim i As Integer
+        '        value_rel_node = mAomFactory.create_c_attribute_single(plain_text, EiffelKernel.Create.STRING_8.make_from_cil("value"))
+        '        cString = mAomFactory.create_c_string_make_from_string(EiffelKernel.Create.STRING_8.make_from_cil(TermList.Item(0)))
+        '        For i = 1 To TermList.Count - 1
+        '            cString.add_string(EiffelKernel.Create.STRING_8.make_from_cil(TermList.Item(i)))
+        '        Next
+        '        cadlSimple = mAomFactory.create_c_primitive_object(value_rel_node, cString)
+        '    End If
 
-        End Sub
+        'End Sub
 
         Private Sub DuplicateHistory(ByVal rm As RmStructureCompound, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
@@ -936,7 +937,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case TextConstrainType.Internal
                     BuildCodedText(value_attribute, t.AllowableValues, t.AssumedValue)
                 Case TextConstrainType.Text
-                    BuildPlainText(value_attribute, t.AllowableValues.Codes)
+                    mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_TEXT"))
+                    'BuildPlainText(value_attribute, t.AllowableValues.Codes)
             End Select
         End Sub
 

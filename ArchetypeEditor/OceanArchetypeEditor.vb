@@ -706,8 +706,44 @@ Public Class OceanArchetypeEditor
 #End If
         Dim frm As New Designer
 
-        If CmdArgs.Length > 0 Then
+        Dim di As New System.IO.DirectoryInfo(Application.StartupPath)
+        Dim files As System.IO.FileInfo()
+
+        'Loading from the command line argument
+        If CmdArgs.Length > 0 AndAlso CStr(CmdArgs(0)) <> String.Empty Then
             frm.ArchetypeToOpen = CmdArgs(0)
+        Else
+            'Pickup any Autosave files that are lying around in the same directory as the
+            'Exe file as this is where they are saved and with OceanRecover- as a suffix
+            files = di.GetFiles("OceanRecovery-*.*")
+            If Not files Is Nothing AndAlso files.Length > 0 Then
+                Dim recoverFrm As New Recovery
+                recoverFrm.chkListRecovery.Items.AddRange(files)
+                recoverFrm.ShowDialog()
+                Dim isFirst As Boolean = True
+
+                For Each f As System.IO.FileInfo In recoverFrm.chkListRecovery.Items
+
+                    If recoverFrm.chkListRecovery.CheckedItems.Contains(f) Then
+                        If isFirst Then
+                            frm.ArchetypeToOpen = f.FullName
+                            isFirst = False
+                        Else
+
+                            Dim start_info As New ProcessStartInfo
+                            start_info.FileName = f.FullName ' Application.ExecutablePath
+
+                            start_info.WorkingDirectory = Application.StartupPath
+                            Process.Start(start_info)
+                            'Dim p As New System.Diagnostics.Process
+                            'p.StartInfo.FileName = f.FullName
+                            'p.Start()
+                        End If
+                    Else
+                        f.Delete()
+                    End If
+                Next
+            End If
         End If
 
         If CmdArgs.Length > 1 Then
@@ -732,9 +768,15 @@ Public Class OceanArchetypeEditor
         Try            
             frm.ShowDialog()
         Catch ex As Exception
-            MessageBox.Show("This program has encountered an error and will shut down" & vbCrLf & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("This program has encountered an error and will shut down - a recovery file will be available on restart" & vbCrLf & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             frm.Close()
+            Return
         End Try
+        files = di.GetFiles("OceanRecovery-*.*")
+        For Each f As System.IO.FileInfo In files
+            f.Delete()
+        Next
+
     End Sub
 
     Shared Sub Reflect(ByVal a_control As Control)

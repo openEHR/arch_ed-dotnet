@@ -732,15 +732,13 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub dgNodeBindings_CellClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellClick
-        If e.ColumnIndex = 2 Then
-            Dim termID As String = CType(dgNodeBindings.CurrentRow.Cells(0), DataGridViewComboBoxCell).EditedFormattedValue.ToString
-            If termID <> String.Empty Then
-                SetTermLookUpVisibility(termID)
-                Return
+        Dim termID As String = CType(dgNodeBindings.CurrentRow.Cells(0), DataGridViewComboBoxCell).EditedFormattedValue.ToString
+        If termID <> String.Empty Then
+            SetTermLookUpVisibility(termID)
+        Else
+            If Me.termLookUp.Visible Then
+                Me.termLookUp.Visible = False
             End If
-        End If
-        If Me.termLookUp.Visible Then
-            Me.termLookUp.Visible = False
         End If
     End Sub
 

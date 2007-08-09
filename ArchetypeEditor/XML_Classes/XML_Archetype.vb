@@ -421,30 +421,31 @@ Namespace ArchetypeEditor.XML_Classes
             mAomFactory.add_object(code_rel_node, ca_Term)
         End Sub
 
-        Private Sub BuildPlainText(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
-            Dim plain_text As XMLParser.C_COMPLEX_OBJECT
-            Dim value_rel_node As XMLParser.C_ATTRIBUTE
-            Dim cString As XMLParser.C_STRING
-            Dim xmlSimple As XMLParser.C_PRIMITIVE_OBJECT
+        'SRH: 5Aug2007 - remove ability to set free text lists in archetypes - only in templates
+        'Private Sub BuildPlainText(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
+        '    Dim plain_text As XMLParser.C_COMPLEX_OBJECT
+        '    Dim value_rel_node As XMLParser.C_ATTRIBUTE
+        '    Dim cString As XMLParser.C_STRING
+        '    Dim xmlSimple As XMLParser.C_PRIMITIVE_OBJECT
 
-            'plain_text = mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT")
-            plain_text = mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT", "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+        '    'plain_text = mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT")
+        '    plain_text = mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT", "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
-            If TermList.Count > 0 Then
-                Dim i As Integer
-                'value_rel_node = mAomFactory.MakeSingleAttribute(plain_text, "value")
-                value_rel_node = mAomFactory.MakeSingleAttribute(plain_text, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                cString = New XMLParser.C_STRING()
-                cString.list = Array.CreateInstance(GetType(String), TermList.Count)
-                For i = 0 To TermList.Count - 1
-                    cString.list(i) = TermList.Item(i)
-                Next
-                xmlSimple = mAomFactory.MakePrimitiveObject(value_rel_node, cString)
-                'Else 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                '    plain_text.any_allowed = True
-            End If
+        '    If TermList.Count > 0 Then
+        '        Dim i As Integer
+        '        'value_rel_node = mAomFactory.MakeSingleAttribute(plain_text, "value")
+        '        value_rel_node = mAomFactory.MakeSingleAttribute(plain_text, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+        '        cString = New XMLParser.C_STRING()
+        '        cString.list = Array.CreateInstance(GetType(String), TermList.Count)
+        '        For i = 0 To TermList.Count - 1
+        '            cString.list(i) = TermList.Item(i)
+        '        Next
+        '        xmlSimple = mAomFactory.MakePrimitiveObject(value_rel_node, cString)
+        '        'Else 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+        '        '    plain_text.any_allowed = True
+        '    End If
 
-        End Sub
+        'End Sub
 
         Private Sub DuplicateHistory(ByVal rm As RmStructureCompound, ByRef RelNode As XMLParser.C_ATTRIBUTE)
 
@@ -1516,7 +1517,8 @@ Namespace ArchetypeEditor.XML_Classes
                 Case TextConstrainType.Internal
                     BuildCodedText(value_attribute, t.AllowableValues, CStr(t.AssumedValue), t.AssumedValue_TerminologyId)
                 Case TextConstrainType.Text
-                    BuildPlainText(value_attribute, t.AllowableValues.Codes)
+                    mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT", "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    'BuildPlainText(value_attribute, t.AllowableValues.Codes)
             End Select
         End Sub
 
