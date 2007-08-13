@@ -70,7 +70,7 @@ Public Class ArchetypeID
     End Function
 
     Public Shared Function ValidId(ByVal value As String) As Boolean
-        Dim rgx As New System.Text.RegularExpressions.Regex("^[a-z,A-Z][a-z,A-Z,0-9,_]+(-[a-z,A-Z,0-9,_]+){2}\.[a-z,A-Z][a-z,A-Z,0-9,_]+(-[a-z,A-Z,0-9,_]+)*\.v[0-9]+(\.[0-9]+)?[a-z,A-Z,0-9,_,-]*$")
+        Dim rgx As New System.Text.RegularExpressions.Regex("^[a-zA-Z][a-zA-Z0-9_]+(-[a-zA-Z0-9_]+){2}\.[a-zA-Z][a-zA-Z0-9_]+(-[a-zA-Z0-9_]+)*\.v[0-9]+(\.[0-9]+)?[a-zA-Z0-9_-]*$")
         Return rgx.Match(value).Success
     End Function
 
