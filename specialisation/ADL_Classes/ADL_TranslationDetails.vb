@@ -1,3 +1,5 @@
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+
 Public Class ADL_TranslationDetails
     Inherits TranslationDetails
 
@@ -9,7 +11,7 @@ Public Class ADL_TranslationDetails
             SetAuthorValue("email", Me.AuthorEmail)
             SetAuthorValue("organisation", Me.AuthorOrganisation)
             'If Me.Accreditation <> "" Then
-            '    mADL_Translation.set_accreditation(openehr.base.kernel.Create.STRING.make_from_cil(Me.Accreditation))
+            '    mADL_Translation.set_accreditation(EiffelKernel.Create.STRING_8.make_from_cil(Me.Accreditation))
             'End If
             Return mADL_Translation
         End Get
@@ -20,29 +22,29 @@ Public Class ADL_TranslationDetails
                 Me.Accreditation = value.accreditation.to_cil
             End If
             'get author details
-            Dim s As openehr.base.kernel.STRING
-            s = openehr.base.kernel.Create.STRING.make_from_cil("name")
+            Dim s As EiffelKernel.STRING_8
+            s = EiffelKernel.Create.STRING_8.make_from_cil("name")
             If value.author.has(s) Then
-                Me.AuthorName = CType(value.author.item(s), openehr.base.kernel.STRING).to_cil
+                Me.AuthorName = CType(value.author.item(s), EiffelKernel.STRING_8).to_cil
             End If
-            s = openehr.base.kernel.Create.STRING.make_from_cil("email")
+            s = EiffelKernel.Create.STRING_8.make_from_cil("email")
             If value.author.has(s) Then
-                Me.AuthorEmail = CType(value.author.item(s), openehr.base.kernel.STRING).to_cil
+                Me.AuthorEmail = CType(value.author.item(s), EiffelKernel.STRING_8).to_cil
             End If
-            s = openehr.base.kernel.Create.STRING.make_from_cil("organisation")
+            s = EiffelKernel.Create.STRING_8.make_from_cil("organisation")
             If value.author.has(s) Then
-                Me.AuthorOrganisation = CType(value.author.item(s), openehr.base.kernel.STRING).to_cil
+                Me.AuthorOrganisation = CType(value.author.item(s), EiffelKernel.STRING_8).to_cil
             End If
         End Set
     End Property
 
     Private Sub SetAuthorValue(ByVal a_key As String, ByVal a_value As String)
         If a_key <> "" Then
-            Dim adlKey As openehr.base.kernel.STRING
-            Dim adlValue As openehr.base.kernel.STRING
+            Dim adlKey As EiffelKernel.STRING_8
+            Dim adlValue As EiffelKernel.STRING_8
 
-            adlKey = openehr.base.kernel.Create.STRING.make_from_cil(a_key)
-            adlValue = openehr.base.kernel.Create.STRING.make_from_cil(a_value)
+            adlKey = EiffelKernel.Create.STRING_8.make_from_cil(a_key)
+            adlValue = EiffelKernel.Create.STRING_8.make_from_cil(a_value)
 
             If mADL_Translation.author.has(adlKey) Then
                 mADL_Translation.author.replace(adlValue, adlKey)
@@ -56,7 +58,7 @@ Public Class ADL_TranslationDetails
     End Sub
 
     Sub New(ByVal a_language As String)
-        mADL_Translation = openehr.openehr.rm.common.resource.Create.TRANSLATION_DETAILS.make_from_language(openehr.base.kernel.Create.STRING.make_from_cil(a_language))
+        mADL_Translation = openehr.openehr.rm.common.resource.Create.TRANSLATION_DETAILS.make_from_language(EiffelKernel.Create.STRING_8.make_from_cil(a_language))
         Me.Language = a_language
     End Sub
 
@@ -65,7 +67,7 @@ Public Class ADL_TranslationDetails
     End Sub
 
     Sub New(ByVal a_translation As TranslationDetails)
-        mADL_Translation = openehr.openehr.rm.common.resource.Create.TRANSLATION_DETAILS.make_from_language(openehr.base.kernel.Create.STRING.make_from_cil(a_translation.Language))
+        mADL_Translation = openehr.openehr.rm.common.resource.Create.TRANSLATION_DETAILS.make_from_language(EiffelKernel.Create.STRING_8.make_from_cil(a_translation.Language))
         Me.Language = a_translation.Language
         Me.Accreditation = a_translation.Accreditation
         Me.AuthorName = a_translation.AuthorName

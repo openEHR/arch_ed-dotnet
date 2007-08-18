@@ -72,8 +72,9 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 Dim a_string As String
                 If TextConstraint.AllowableValues.Codes.Count > 0 Then
                     For Each a_string In TextConstraint.AllowableValues.Codes 'JAR: 13APR07, EDT-32 Support unicode
-                        's = s & " '" & a_string & "',"                        
-                        s = s & " '" & RichTextBoxUnicode.CreateRichTextBoxTag(a_string, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "'," 'JAR: 13APR07, EDT-32 Support unicode
+                        s = s & " '" & a_string & "',"
+                        'SRH: 22nd July EDT-76 - Changed it back as done in error - there is no coded value
+                        's = s & " '" & RichTextBoxUnicode.CreateRichTextBoxTag(a_string, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "'," 'JAR: 13APR07, EDT-32 Support unicode
 
                     Next
                     s.TrimEnd(punctuation)

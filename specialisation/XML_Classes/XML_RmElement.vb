@@ -239,7 +239,7 @@ Namespace ArchetypeEditor.XML_Classes
                     Case "dv_multimedia", "multi_media", "multimedia"
                         Return ProcessMultiMedia(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
                     Case "dv_uri", "uri"
-                        Return New Constraint_URI
+                        Return ProcessUri(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
                     Case "dv_duration", "duration"
                         If TypeOf ObjNode Is XMLParser.C_COMPLEX_OBJECT Then
                             Return ProcessDuration(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
@@ -257,6 +257,34 @@ Namespace ArchetypeEditor.XML_Classes
                 MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Return New Constraint
             End Try
+        End Function
+
+        Private Function ProcessUri(ByVal dvUri As XMLParser.C_COMPLEX_OBJECT) As Constraint
+            Dim cUri As New Constraint_URI
+            Dim an_attribute As XMLParser.C_ATTRIBUTE
+
+            If dvUri.rm_type_name.ToLowerInvariant = "dv_ehr_uri" Then
+                cUri.EhrUriOnly = True
+            End If
+
+            If dvUri.attributes.Length > 0 Then
+                Try
+                    an_attribute = CType(dvUri.attributes(0), XMLParser.C_ATTRIBUTE)
+                    Debug.Assert(an_attribute.rm_attribute_name.ToLowerInvariant = "value")
+                    If an_attribute.children.Length > 0 Then
+                        Dim cadlOS As XMLParser.C_PRIMITIVE_OBJECT = _
+                            CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
+                        Dim cadlC As XMLParser.C_STRING = _
+                            CType(cadlOS.item, XMLParser.C_STRING)
+
+                        cUri.RegularExpression = cadlC.pattern
+                    End If
+                Catch e As Exception
+                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+            Return cUri
+
         End Function
 
         Private Function ProcessDuration(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Duration
@@ -318,20 +346,27 @@ Namespace ArchetypeEditor.XML_Classes
                 If cadlC.range.lower_included Then
                     duration.HasMinimum = True
                     duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.lower)
-                    'duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.minimum.Substring(1))) ' leave the P of the front
-                    duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower)) ' leave the P of the front
+                    If cadlC.range.lower.StartsWith("P") Then
+                        duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower.Substring(1))) ' leave the P of the front
+                    Else
+                        duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower))
+                    End If
                 Else
                     duration.HasMinimum = False
                 End If
 
-                'If Not cadlC.range.maximum Is Nothing Then
-                If cadlC.range.upper_included Then
-                    If duration.MinMaxValueUnits = "" Then
-                        duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
+                    'If Not cadlC.range.maximum Is Nothing Then
+                    If cadlC.range.upper_included Then
+                        If duration.MinMaxValueUnits = "" Then
+                            duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
+                        End If
+                        duration.HasMaximum = True
+                    If cadlC.range.upper.StartsWith("P") Then
+                        duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper.Substring(1))) ' leave the P of the front
+                    Else
+                        duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper))
                     End If
-                    duration.HasMaximum = True
-                    'duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.maximum.Substring(1))) ' leave the P of the front
-                    duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper)) ' leave the P of the front
+
                 End If
             End If
             If Not cadlC.assumed_value Is Nothing Then

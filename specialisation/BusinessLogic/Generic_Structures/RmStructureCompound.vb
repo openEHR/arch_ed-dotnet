@@ -15,6 +15,7 @@
 '
 Option Explicit On
 Option Strict On
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 
 Public Class RmStructureCompound
     Inherits RmStructure
@@ -165,11 +166,11 @@ Public Class RmStructureCompound
 
     Protected Sub ProcessTree(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
 
-        If ObjNode.has_attribute(openehr.base.kernel.Create.STRING.make_from_cil("items")) Then
+        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("items")) Then
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim i As Integer
 
-            an_attribute = ObjNode.c_attribute_at_path(openehr.base.kernel.Create.STRING.make_from_cil("items"))
+            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("items"))
 
             ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.cardinality, colChildren)
             ArchetypeEditor.ADL_Classes.ADL_Tools.SetExistence(an_attribute.existence, colChildren) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
@@ -225,8 +226,8 @@ Public Class RmStructureCompound
                             'need to get the node_id from the workflow step to get the text displayed
 
                             'make sure there is a valid node_id for the careflow_step
-                            Dim eif_string As openehr.base.kernel.STRING
-                            eif_string = openehr.base.kernel.Create.STRING.make_from_cil("careflow_step")
+                            Dim eif_string As EiffelKernel.STRING_8
+                            eif_string = EiffelKernel.Create.STRING_8.make_from_cil("careflow_step")
                             If CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(eif_string) Then
                                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 

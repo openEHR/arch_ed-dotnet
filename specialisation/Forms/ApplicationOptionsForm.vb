@@ -82,6 +82,11 @@ Public Class ApplicationOptionsForm
     Friend WithEvents chkWebSearch As System.Windows.Forms.CheckBox
     Friend WithEvents lblURL As System.Windows.Forms.Label
     Friend WithEvents txtURL As System.Windows.Forms.TextBox
+    Friend WithEvents lblTerminology As System.Windows.Forms.Label
+    Friend WithEvents txtTerminologyURL As System.Windows.Forms.TextBox
+    Friend WithEvents chkTerminology As System.Windows.Forms.CheckBox
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents numAutoSave As System.Windows.Forms.NumericUpDown
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -97,6 +102,7 @@ Public Class ApplicationOptionsForm
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.txtHelpFile = New System.Windows.Forms.TextBox
         Me.txtURL = New System.Windows.Forms.TextBox
+        Me.txtTerminologyURL = New System.Windows.Forms.TextBox
         Me.butBrowse = New System.Windows.Forms.Button
         Me.comboReferenceModel = New System.Windows.Forms.ComboBox
         Me.Label1 = New System.Windows.Forms.Label
@@ -126,6 +132,8 @@ Public Class ApplicationOptionsForm
         Me.TabConfiguration = New System.Windows.Forms.TabControl
         Me.tpUser = New System.Windows.Forms.TabPage
         Me.tpLocations = New System.Windows.Forms.TabPage
+        Me.lblTerminology = New System.Windows.Forms.Label
+        Me.chkTerminology = New System.Windows.Forms.CheckBox
         Me.lblURL = New System.Windows.Forms.Label
         Me.chkWebSearch = New System.Windows.Forms.CheckBox
         Me.Label4 = New System.Windows.Forms.Label
@@ -136,6 +144,8 @@ Public Class ApplicationOptionsForm
         Me.lblOccurrences = New System.Windows.Forms.Label
         Me.comboOccurrences = New System.Windows.Forms.ComboBox
         Me.tpDefaults = New System.Windows.Forms.TabPage
+        Me.Label5 = New System.Windows.Forms.Label
+        Me.numAutoSave = New System.Windows.Forms.NumericUpDown
         Me.grpParser = New System.Windows.Forms.GroupBox
         Me.chkParserXML = New System.Windows.Forms.CheckBox
         Me.chkParserADL = New System.Windows.Forms.CheckBox
@@ -148,6 +158,7 @@ Public Class ApplicationOptionsForm
         Me.tpLocations.SuspendLayout()
         Me.tpAppearance.SuspendLayout()
         Me.tpDefaults.SuspendLayout()
+        CType(Me.numAutoSave, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.grpParser.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -222,7 +233,7 @@ Public Class ApplicationOptionsForm
         '
         'txtHelpFile
         '
-        Me.txtHelpFile.Location = New System.Drawing.Point(20, 97)
+        Me.txtHelpFile.Location = New System.Drawing.Point(20, 79)
         Me.txtHelpFile.Name = "txtHelpFile"
         Me.txtHelpFile.Size = New System.Drawing.Size(442, 22)
         Me.txtHelpFile.TabIndex = 21
@@ -230,17 +241,25 @@ Public Class ApplicationOptionsForm
         '
         'txtURL
         '
-        Me.txtURL.Location = New System.Drawing.Point(20, 169)
+        Me.txtURL.Location = New System.Drawing.Point(20, 178)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(442, 22)
         Me.txtURL.TabIndex = 25
         Me.ToolTip1.SetToolTip(Me.txtURL, "Http address of repository")
         '
+        'txtTerminologyURL
+        '
+        Me.txtTerminologyURL.Location = New System.Drawing.Point(21, 128)
+        Me.txtTerminologyURL.Name = "txtTerminologyURL"
+        Me.txtTerminologyURL.Size = New System.Drawing.Size(442, 22)
+        Me.txtTerminologyURL.TabIndex = 28
+        Me.ToolTip1.SetToolTip(Me.txtTerminologyURL, "Http address of repository")
+        '
         'butBrowse
         '
         Me.butBrowse.Image = CType(resources.GetObject("butBrowse.Image"), System.Drawing.Image)
         Me.butBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butBrowse.Location = New System.Drawing.Point(481, 19)
+        Me.butBrowse.Location = New System.Drawing.Point(479, 15)
         Me.butBrowse.Name = "butBrowse"
         Me.butBrowse.Size = New System.Drawing.Size(115, 37)
         Me.butBrowse.TabIndex = 20
@@ -256,7 +275,7 @@ Public Class ApplicationOptionsForm
         '
         'Label1
         '
-        Me.Label1.Location = New System.Drawing.Point(19, 18)
+        Me.Label1.Location = New System.Drawing.Point(19, 24)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(240, 37)
         Me.Label1.TabIndex = 22
@@ -497,14 +516,17 @@ Public Class ApplicationOptionsForm
         '
         'tpLocations
         '
+        Me.tpLocations.Controls.Add(Me.txtHelpFile)
+        Me.tpLocations.Controls.Add(Me.lblTerminology)
+        Me.tpLocations.Controls.Add(Me.txtTerminologyURL)
+        Me.tpLocations.Controls.Add(Me.chkTerminology)
+        Me.tpLocations.Controls.Add(Me.txtRepositoryPath)
         Me.tpLocations.Controls.Add(Me.lblURL)
         Me.tpLocations.Controls.Add(Me.txtURL)
         Me.tpLocations.Controls.Add(Me.chkWebSearch)
         Me.tpLocations.Controls.Add(Me.Label4)
-        Me.tpLocations.Controls.Add(Me.txtHelpFile)
         Me.tpLocations.Controls.Add(Me.butHelpBrowse)
         Me.tpLocations.Controls.Add(Me.lblArchetypePath)
-        Me.tpLocations.Controls.Add(Me.txtRepositoryPath)
         Me.tpLocations.Controls.Add(Me.butBrowse)
         Me.tpLocations.Location = New System.Drawing.Point(4, 25)
         Me.tpLocations.Name = "tpLocations"
@@ -512,11 +534,30 @@ Public Class ApplicationOptionsForm
         Me.tpLocations.TabIndex = 1
         Me.tpLocations.Text = "File locations"
         '
+        'lblTerminology
+        '
+        Me.lblTerminology.Location = New System.Drawing.Point(21, 98)
+        Me.lblTerminology.Name = "lblTerminology"
+        Me.lblTerminology.Size = New System.Drawing.Size(261, 28)
+        Me.lblTerminology.TabIndex = 29
+        Me.lblTerminology.Text = "URL for Terminology Service"
+        Me.lblTerminology.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        '
+        'chkTerminology
+        '
+        Me.chkTerminology.AutoSize = True
+        Me.chkTerminology.Location = New System.Drawing.Point(288, 106)
+        Me.chkTerminology.Name = "chkTerminology"
+        Me.chkTerminology.Size = New System.Drawing.Size(209, 21)
+        Me.chkTerminology.TabIndex = 27
+        Me.chkTerminology.Text = "Enable Terminology LookUp"
+        Me.chkTerminology.UseVisualStyleBackColor = True
+        '
         'lblURL
         '
-        Me.lblURL.Location = New System.Drawing.Point(20, 132)
+        Me.lblURL.Location = New System.Drawing.Point(20, 149)
         Me.lblURL.Name = "lblURL"
-        Me.lblURL.Size = New System.Drawing.Size(173, 28)
+        Me.lblURL.Size = New System.Drawing.Size(261, 28)
         Me.lblURL.TabIndex = 26
         Me.lblURL.Text = "URL for shared repository"
         Me.lblURL.TextAlign = System.Drawing.ContentAlignment.BottomLeft
@@ -524,7 +565,7 @@ Public Class ApplicationOptionsForm
         'chkWebSearch
         '
         Me.chkWebSearch.AutoSize = True
-        Me.chkWebSearch.Location = New System.Drawing.Point(287, 141)
+        Me.chkWebSearch.Location = New System.Drawing.Point(287, 158)
         Me.chkWebSearch.Name = "chkWebSearch"
         Me.chkWebSearch.Size = New System.Drawing.Size(175, 21)
         Me.chkWebSearch.TabIndex = 24
@@ -533,7 +574,7 @@ Public Class ApplicationOptionsForm
         '
         'Label4
         '
-        Me.Label4.Location = New System.Drawing.Point(20, 60)
+        Me.Label4.Location = New System.Drawing.Point(20, 49)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(173, 28)
         Me.Label4.TabIndex = 22
@@ -544,7 +585,7 @@ Public Class ApplicationOptionsForm
         '
         Me.butHelpBrowse.Image = CType(resources.GetObject("butHelpBrowse.Image"), System.Drawing.Image)
         Me.butHelpBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butHelpBrowse.Location = New System.Drawing.Point(481, 88)
+        Me.butHelpBrowse.Location = New System.Drawing.Point(481, 62)
         Me.butHelpBrowse.Name = "butHelpBrowse"
         Me.butHelpBrowse.Size = New System.Drawing.Size(115, 37)
         Me.butHelpBrowse.TabIndex = 23
@@ -603,6 +644,8 @@ Public Class ApplicationOptionsForm
         '
         'tpDefaults
         '
+        Me.tpDefaults.Controls.Add(Me.Label5)
+        Me.tpDefaults.Controls.Add(Me.numAutoSave)
         Me.tpDefaults.Controls.Add(Me.grpParser)
         Me.tpDefaults.Controls.Add(Me.comboReferenceModel)
         Me.tpDefaults.Controls.Add(Me.Label1)
@@ -611,6 +654,23 @@ Public Class ApplicationOptionsForm
         Me.tpDefaults.Size = New System.Drawing.Size(635, 205)
         Me.tpDefaults.TabIndex = 3
         Me.tpDefaults.Text = "Defaults"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(19, 114)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(180, 17)
+        Me.Label5.TabIndex = 25
+        Me.Label5.Text = "Autosave interval (minutes)"
+        '
+        'numAutoSave
+        '
+        Me.numAutoSave.Location = New System.Drawing.Point(19, 134)
+        Me.numAutoSave.Name = "numAutoSave"
+        Me.numAutoSave.Size = New System.Drawing.Size(76, 22)
+        Me.numAutoSave.TabIndex = 24
+        Me.numAutoSave.Value = New Decimal(New Integer() {15, 0, 0, 0})
         '
         'grpParser
         '
@@ -667,6 +727,8 @@ Public Class ApplicationOptionsForm
         Me.tpAppearance.ResumeLayout(False)
         Me.tpAppearance.PerformLayout()
         Me.tpDefaults.ResumeLayout(False)
+        Me.tpDefaults.PerformLayout()
+        CType(Me.numAutoSave, System.ComponentModel.ISupportInitialize).EndInit()
         Me.grpParser.ResumeLayout(False)
         Me.grpParser.PerformLayout()
         Me.ResumeLayout(False)
@@ -677,7 +739,7 @@ Public Class ApplicationOptionsForm
 
 
     Private Sub butBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butBrowse.Click
-        
+
         Me.FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
         Me.FolderBrowserDialog1.ShowNewFolderButton = True
         If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
@@ -732,5 +794,6 @@ Public Class ApplicationOptionsForm
     Private Sub chkParserXML_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkParserXML.CheckedChanged
         chkParserADL.Checked = Not chkParserXML.Checked
     End Sub
+
 End Class
 

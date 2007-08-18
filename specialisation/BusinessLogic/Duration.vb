@@ -40,16 +40,8 @@ Friend Class Duration
         End Get
         Set(ByVal Value As Integer)
             Debug.Assert(sUnits <> "", "Value set before units") 'ToDo: Stop this dependency
-            If sUnits = "millisec" Then
-                sISODuration = "PT" & (Value / 1000).ToString & "s"
-            Else
-                If (sUnits = "d") Then
-                    sISODuration = "P" & Value.ToString & toDuration(sUnits)
-                Else
-                    sISODuration = "PT" & Value.ToString & toDuration(sUnits)
-                End If
-            End If
             iValue = Value
+            SetIsoDuration()
         End Set
     End Property
     Property ISO_Units() As String
@@ -60,11 +52,7 @@ Friend Class Duration
             If OceanArchetypeEditor.ISO_TimeUnits.IsValidIsoUnit(Value) Then
                 If sUnits <> Value Then
                     sUnits = Value
-                    If (sUnits = "d") Then
-                        sISODuration = "P" & iValue.ToString & toDuration(sUnits)
-                    Else
-                        sISODuration = "PT" & iValue.ToString & toDuration(sUnits)
-                    End If
+                    SetIsoDuration()
                 End If
             Else
                 Debug.Assert(False, Value & " is not a valid ISO Unit")
@@ -75,12 +63,28 @@ Friend Class Duration
 
     Private Function toDuration(ByVal units As String) As String
         Select Case units
-            Case "min"
+            Case "min", "mo"
                 Return "M"
+            Case "a"
+                Return "Y"
+            Case "wk"
+                Return "W"
             Case Else 'D, H, S
                 Return units.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
         End Select
     End Function
+
+    Private Sub SetIsoDuration()
+        If sUnits = "millisec" Then
+            sISODuration = "PT" & (iValue / 1000).ToString & "s"
+        Else
+            If (sUnits.ToLowerInvariant = "d") Or (sUnits.ToLowerInvariant = "mo") Or (sUnits.ToLowerInvariant = "wk") Or (sUnits.ToLowerInvariant = "a") Then
+                sISODuration = "P" & iValue.ToString & toDuration(sUnits)
+            Else
+                sISODuration = "PT" & iValue.ToString & toDuration(sUnits)
+            End If
+        End If
+    End Sub
 
     Private Sub ProcessIso()
         Dim str As String

@@ -253,6 +253,10 @@ Public Class ElementOnly
         Return result.ToString
     End Function
 
+    Public Overrides Function HasData() As Boolean
+        Return Not mElement Is Nothing
+    End Function
+
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         'nothing for this class
     End Sub

@@ -447,8 +447,7 @@ Public Class ListStructure
         End If
 
         s = s.Trim
-
-        result.AppendFormat("<p>Structure = LIST{0}</p>", s)
+        result.AppendFormat("<p><i>Structure</i>: {0} {1}</p>", Filemanager.GetOpenEhrTerm(108, "LIST"), s)
         result.Append(Environment.NewLine)
         result.Append("<table border=""1"" cellpadding=""2"" width=""100%"">")
         result.AppendFormat(Me.HtmlHeader(BackGroundColour, showComments))
@@ -460,6 +459,10 @@ Public Class ListStructure
         result.Append("</table>")
 
         Return result.ToString()
+    End Function
+
+    Public Overrides Function HasData() As Boolean
+        Return Me.lvList.Items.Count > 0
     End Function
 
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click
@@ -552,6 +555,10 @@ Public Class ListStructure
                 Me.MenuRemove.Visible = True
             End If
         End If
+
+    End Sub
+
+    Private Sub lvList_MouseDoubleClick(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lvList.MouseDoubleClick
 
     End Sub
 

@@ -253,8 +253,6 @@ Public Class TreeStructure
             Else
                 If n.Item.RM_Class.Type = StructureType.Element Then
                     arch_elements.Add(n.Item)
-                Else
-                    Debug.Assert(False)
                 End If
             End If
         Next
@@ -766,7 +764,7 @@ Public Class TreeStructure
             result.Append(CStr(IIf(mCardinalityControl.Cardinality.Ordered, mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")))
             result.Append("</p>")
         Else
-            result.Append("<p>Structure = TREE")
+            result.AppendFormat("<p><i>Structure</i>: {0}", Filemanager.GetOpenEhrTerm(107, "TREE"))
             result.Append(CStr(IIf(mCardinalityControl.Cardinality.Ordered, ", " & mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")))
             result.Append("</p>")
         End If
@@ -783,6 +781,10 @@ Public Class TreeStructure
 
         Return result.ToString
 
+    End Function
+
+    Public Overrides Function HasData() As Boolean
+        Return Me.tvTree.Nodes.Count > 0
     End Function
 
     Private Function TreeToRichText(ByVal TreeNodes As TreeNodeCollection, ByVal level As Integer, ByVal new_line As String) As String

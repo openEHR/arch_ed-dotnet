@@ -15,6 +15,7 @@
 '
 'Option Strict On
 Option Explicit On 
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 
 Public Class FileManagerLocal
     Private mIsFileDirty As Boolean
@@ -313,14 +314,20 @@ Public Class FileManagerLocal
 
         'ensure the filename and archetype ID match (ignore case!)        
         Dim shortFileName As String = aFileName.Substring((aFileName.LastIndexOf("\")) + 1)
-        If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.CurrentCultureIgnoreCase) Then
-            If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
+        If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
+            If ArchetypeID.ValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
+                If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
+                    FileLoading = False
+                    FileEdited = True
+                    FileLoading = True
+                End If
+            Else
+                FileName = mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
                 FileLoading = False
                 FileEdited = True
                 FileLoading = True
             End If
         End If
-
         Return True
     End Function
 
@@ -334,36 +341,36 @@ Public Class FileManagerLocal
         Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
         Id1.ValidConcept(Id1.Concept, "") 'validation may update Id1.concept
 
-        Dim Id2 As New ArchetypeID(shortFileName)
-        Id2.ValidConcept(Id2.Concept, "") 'validation may update Id2.Concept 
+            Dim Id2 As New ArchetypeID(shortFileName)
+            Id2.ValidConcept(Id2.Concept, "") 'validation may update Id2.Concept 
 
-        Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
-        If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
+            Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
+            If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
 
-            'NOTE: The following updates can occur!
-            '    Update 1: Update if concept was changed in ValidConcept call
-            '    Update 2: Update according to the user selection
+                'NOTE: The following updates can occur!
+                '    Update 1: Update if concept was changed in ValidConcept call
+                '    Update 2: Update according to the user selection
 
-            updateOccurred = True
-
-            Dim Use As String = IIf(frm.selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
-
-            'update filename if changed
-            If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
-                mPriorFileName = Me.FileName
-                Me.FileName = Replace(Me.FileName, FileName, Use & "." & ParserType)
                 updateOccurred = True
+
+                Dim Use As String = IIf(frm.selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
+
+                'update filename if changed
+                If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
+                    mPriorFileName = Me.FileName
+                    Me.FileName = Replace(Me.FileName, FileName, Use & "." & ParserType)
+                    updateOccurred = True
+                End If
+
+                'update archetype id if changed
+                If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
+                    Archetype.Archetype_ID.SetFromString(Use)
+                    Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
+                End If
             End If
 
-            'update archetype id if changed
-            If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
-                Archetype.Archetype_ID.SetFromString(Use)
-                Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
-            End If
-        End If
-
-        frm.Close()
-        Return Not updateOccurred
+            frm.Close()
+            Return Not updateOccurred
     End Function
 
     Public Function FormatIsAvailable(ByVal a_format As String) As Boolean
@@ -506,7 +513,7 @@ Public Class FileManagerLocal
         End If
 
         'set the adl version
-        adlParser.ADL_Parser.archetype.set_adl_version(openehr.base.kernel.Create.STRING.make_from_cil("1.4"))
+        adlParser.ADL_Parser.archetype.set_adl_version(EiffelKernel.Create.STRING_8.make_from_cil("1.4"))
 
         'populate the ontology
 
@@ -520,28 +527,28 @@ Public Class FileManagerLocal
             If language <> mOntologyManager.PrimaryLanguageCode Then
                 Dim adlTranslationDetails As ADL_TranslationDetails = New ADL_TranslationDetails(Me.Archetype.TranslationDetails.Item(language))
                 translationsArray.Add(adlTranslationDetails.ADL_Translation)
-                adlParser.ADL_Parser.ontology.add_language(openehr.base.kernel.Create.STRING.make_from_cil(language))
+                adlParser.ADL_Parser.archetype.ontology.add_language(EiffelKernel.Create.STRING_8.make_from_cil(language))
             End If
 
             Dim cp As openehr.openehr.rm.data_types.text.Impl.CODE_PHRASE
             cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.DefaultLanguageCodeSet & "::" & language))
+                EiffelKernel.Create.STRING_8.make_from_cil(OceanArchetypeEditor.DefaultLanguageCodeSet & "::" & language))
             Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
 
             Dim adl_detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
             adl_detail = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION_ITEM.make_from_language( _
-                openehr.base.kernel.Create.STRING.make_from_cil(language), _
-                openehr.base.kernel.Create.STRING.make_from_cil((archDetail.Purpose)))
+                EiffelKernel.Create.STRING_8.make_from_cil(language), _
+                EiffelKernel.Create.STRING_8.make_from_cil((archDetail.Purpose)))
             If archDetail.Copyright <> "" Then
-                adl_detail.set_copyright(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.Copyright))
+                adl_detail.set_copyright(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.Copyright))
             End If
-            adl_detail.set_misuse(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.MisUse))
+            adl_detail.set_misuse(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.MisUse))
             'ToDo: adl_detail.add_original_resource_uri()
-            adl_detail.set_purpose(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.Purpose))
-            adl_detail.set_use(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.Use))
+            adl_detail.set_purpose(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.Purpose))
+            adl_detail.set_use(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.Use))
             If (Not archDetail.KeyWords Is Nothing) AndAlso archDetail.KeyWords.Count > 0 Then
                 For j As Integer = 0 To archDetail.KeyWords.Count - 1
-                    adl_detail.add_keyword(openehr.base.kernel.Create.STRING.make_from_cil(archDetail.KeyWords.Item(j)))
+                    adl_detail.add_keyword(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.KeyWords.Item(j)))
                 Next
             End If
             detailsArray.Add(adl_detail)
@@ -642,6 +649,12 @@ Public Class FileManagerLocal
                 End If
             End If
         End If
+    End Sub
+
+    Public Sub AutoSave(ByVal n As Integer)
+
+        mObjectToSave.PrepareToSave()
+        AutoWrite("OceanRecovery-" & Me.Archetype.Archetype_ID.ToString)
     End Sub
 
     Public Function SaveArchetype() As Boolean
@@ -769,6 +782,9 @@ Public Class FileManagerLocal
 
     End Function
 
+    Private Sub AutoWrite(ByVal fileName As String)
+        mArchetypeEngine.WriteFile(Application.StartupPath & "\" & fileName & "." & ParserType, ParserType, Me.ParserSynchronised)
+    End Sub
 
     Public Sub WriteArchetype()
 
@@ -989,8 +1005,15 @@ Class Filemanager
         Return True
     End Function
 
-
-
+    Public Shared Sub AutoFileSave()
+        Dim i As Integer
+        For Each f As FileManagerLocal In mFileManagerCollection
+            If f.FileEdited Then
+                i = i + 1
+                f.AutoSave(i)
+            End If
+        Next
+    End Sub
 
 End Class
 

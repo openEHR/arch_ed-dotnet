@@ -13,6 +13,8 @@
 '	last_change: "$LastChangedDate$"
 '
 '
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+
 Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Tools
         Inherits ParsingTools
@@ -33,7 +35,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Function
 
-        Public Shared Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.OE_INTERVAL_INTEGER_32) As RmCardinality 'JAR: 12APR07, EDT31 Update adl parser DLL's
+        Public Shared Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.INTERVAL_INTEGER_32) As RmCardinality
             Dim c As New RmCardinality
 
             If cadlOccurrences.upper_unbounded Then
@@ -53,7 +55,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-        Public Shared Sub SetExistence(ByVal cadlExistence As openehr.common_libs.basic.OE_INTERVAL_INTEGER_32, ByVal colChildren As Children)
+        Public Shared Sub SetExistence(ByVal cadlExistence As openehr.common_libs.basic.INTERVAL_INTEGER_32, ByVal colChildren As Children)
             Dim existence As New RmExistence
 
             If cadlExistence.upper_unbounded Then
@@ -71,7 +73,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim cp As New CodePhrase
 
             For i As Integer = 1 To Constraint.code_count
-                cp.Codes.Add(CType(Constraint.code_list.i_th(i), openehr.base.kernel.STRING).to_cil)
+                cp.Codes.Add(CType(Constraint.code_list.i_th(i), EiffelKernel.STRING_8).to_cil)
             Next
 
             cp.TerminologyID = Constraint.terminology_id.value.to_cil

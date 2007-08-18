@@ -11,8 +11,11 @@ Public Class Options
     Private mDefaultParser As String
     Private mShowTermsInHtml As Boolean
     Private mShowCommentsInHtml As Boolean
+    Private mTimerMinutes As Integer = 10
     Private mAllowWebSearch As Boolean
-    Private mURL As New Uri("http://www.archetypes.com.au/archetypefinder")
+    Private mArchetypeRepositoryURL As New Uri("http://www.archetypes.com.au/archetypefinder")
+    Private mAllowTerminologyLookUp As Boolean
+    Private mTerminologyURL As New Uri("http://ots.oceaninformatics.biz/OTS/OTSService.asmx")
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
     Property HelpLocationPath() As String
@@ -31,12 +34,20 @@ Public Class Options
             mRepositoryPath = Value
         End Set
     End Property
-    Property URL() As Uri
+    Property RepositoryURL() As Uri
         Get
-            Return mURL
+            Return mArchetypeRepositoryURL
         End Get
         Set(ByVal value As Uri)
-            mURL = value
+            mArchetypeRepositoryURL = value
+        End Set
+    End Property
+    Property TerminologyURL() As Uri
+        Get
+            Return mTerminologyURL
+        End Get
+        Set(ByVal value As Uri)
+            mTerminologyURL = value
         End Set
     End Property
     Property UserName() As String
@@ -98,6 +109,14 @@ Public Class Options
         End Set
     End Property
 
+    Property AllowTerminologyLookUp() As Boolean
+        Get
+            Return mAllowTerminologyLookUp
+        End Get
+        Set(ByVal Value As Boolean)
+            mAllowTerminologyLookUp = Value
+        End Set
+    End Property
     Property ShowTermsInHtml() As Boolean
         Get
             Return mShowTermsInHtml
@@ -116,6 +135,15 @@ Public Class Options
         End Set
     End Property
 
+    Property AutosaveInterval() As Integer
+        Get
+            Return mTimerMinutes
+        End Get
+        Set(ByVal value As Integer)
+            mTimerMinutes = value
+        End Set
+    End Property
+
     Sub ShowOptionsForm(Optional ByVal tabIndex As Integer = 0)
         Dim frm As New ApplicationOptionsForm
 
@@ -127,14 +155,17 @@ Public Class Options
         frm.txtEmail.Text = mUserEmail
         frm.txtOrganisation.Text = mUserOrganisation
         frm.txtRepositoryPath.Text = mRepositoryPath
+        frm.txtTerminologyURL.Text = OTSControls.Term.OtsWebService.Url
         frm.txtHelpFile.Text = mHelpPath
         frm.comboOccurrences.Text = mOccurrencesView
         frm.chkWebSearch.Checked = mAllowWebSearch
+        frm.chkTerminology.Checked = mAllowTerminologyLookUp
         For i As Integer = 0 To ReferenceModel.ValidReferenceModelNames.Length - 1
             frm.comboReferenceModel.Items.Add(ReferenceModel.ValidReferenceModelNames(i))
         Next
-
-        frm.txtURL.Text = mURL.ToString
+        frm.numAutoSave.Value = CDec(mTimerMinutes)
+        frm.txtURL.Text = mArchetypeRepositoryURL.ToString
+        frm.txtTerminologyURL.Text = mTerminologyURL.ToString
 
         If mDefaultParser = "xml" Then
             frm.chkParserXML.Checked = True
@@ -163,8 +194,14 @@ Public Class Options
             mOccurrencesView = frm.comboOccurrences.Text
             mShowTermsInHtml = frm.chkShowTerminologyInHTML.Checked
             mShowCommentsInHtml = frm.chkShowCommentsInHTML.Checked
-            mURL = New Uri(frm.txtURL.Text)
+            mArchetypeRepositoryURL = New Uri(frm.txtURL.Text)
+            If Uri.IsWellFormedUriString(frm.txtTerminologyURL.Text, UriKind.Absolute) Then
+                mTerminologyURL = New Uri(frm.txtTerminologyURL.Text)
+                OTSControls.Term.OtsWebService.Url = frm.txtTerminologyURL.Text
+            End If
+            mTimerMinutes = CInt(frm.numAutoSave.Value)
             mAllowWebSearch = frm.chkWebSearch.Checked
+            mAllowTerminologyLookUp = frm.chkTerminology.Checked
             If frm.chkParserADL.Checked Then
                 mDefaultParser = "adl"
             Else
@@ -232,7 +269,17 @@ Public Class Options
                                 Case "AllowSearchForArchetypesFromWeb"
                                     mAllowWebSearch = Boolean.Parse(y(1).Trim)
                                 Case "SharedRepositoryUrl"
-                                    mURL = New Uri(y(1).Trim)
+                                    mArchetypeRepositoryURL = New Uri(y(1).Trim)
+                                Case "AllowTerminologyLookUp"
+                                    mAllowTerminologyLookUp = Boolean.Parse(y(1).Trim)
+                                Case "AutosaveInterval"
+                                    mTimerMinutes = Integer.Parse(y(1).Trim)
+                                Case "TerminologyUrl"
+                                    Dim uriString As String = y(1).Trim
+                                    If Uri.IsWellFormedUriString(uriString, UriKind.Absolute) Then
+                                        mTerminologyURL = New Uri(uriString)
+                                        OTSControls.Term.OtsWebService.Url = mTerminologyURL.ToString
+                                    End If
                             End Select
                         Else
                             MessageBox.Show("Error reading '" & y(0) & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -268,13 +315,17 @@ Public Class Options
                 StrmWrite.WriteLine("UserEmail=" & mUserEmail)
                 StrmWrite.WriteLine("Organisation=" & mUserOrganisation)
                 StrmWrite.WriteLine("RepositoryPath=" & mRepositoryPath)
-                StrmWrite.WriteLine("SharedRepositoryUrl=" & mURL.ToString)
+                StrmWrite.WriteLine("SharedRepositoryUrl=" & mArchetypeRepositoryURL.ToString)
+                StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyURL.ToString)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
                 StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
                 StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
                 StrmWrite.WriteLine("ShowCommentsInHtml=" & mShowCommentsInHtml.ToString)
                 StrmWrite.WriteLine("AllowSearchForArchetypesFromWeb=" & mAllowWebSearch.ToString)
-               
+                StrmWrite.WriteLine("AllowTerminologyLookUp=" & mAllowTerminologyLookUp.ToString)
+                StrmWrite.WriteLine("AutosaveInterval=" & mTimerMinutes.ToString())
+
+
                 Dim s As String = ""
 
                 For i = 0 To mColors.Length - 1
@@ -349,6 +400,7 @@ Public Class Options
         mShowTermsInHtml = False
         mShowCommentsInHtml = False
         mAllowWebSearch = False
+        mAllowTerminologyLookUp = False
         LoadConfiguration()
         If Not ValidateConfiguration() Then
             Me.ShowOptionsForm(1)

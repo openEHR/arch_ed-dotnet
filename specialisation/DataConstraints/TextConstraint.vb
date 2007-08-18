@@ -106,25 +106,17 @@ Public Class Constraint_Text
             Return mTextConstraintType
         End Get
         Set(ByVal Value As TextConstrainType)
-            Select Case Value
-                Case TextConstrainType.Internal
-                    Me.AllowableValues.TerminologyID = "local"
-                Case Else
-                    Me.AllowableValues.TerminologyID = ""
-            End Select
+            If Value = TextConstrainType.Internal Then
+                Me.AllowableValues.TerminologyID = "local"
+            End If
             mTextConstraintType = Value
         End Set
     End Property
     Public Property ConstraintCode() As String
         Get
-            If mTextConstraintType = TextConstrainType.Terminology Then
                 Return mConstraintCode
-            Else
-                Return ""
-            End If
         End Get
         Set(ByVal Value As String)
-            mTextConstraintType = TextConstrainType.Terminology
             mConstraintCode = Value
         End Set
     End Property

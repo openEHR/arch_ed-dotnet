@@ -28,6 +28,31 @@ Public Class RmEntry
         End Set
     End Property
 
+    Protected mProviderMandatory As Boolean = False
+
+    Public Property ProviderIsMandatory() As Boolean
+        Get
+            Return mProviderMandatory
+        End Get
+        Set(ByVal value As Boolean)
+            mProviderMandatory = value
+        End Set
+    End Property
+
+    Protected mOtherParticipations As Collections.Generic.List(Of Participation)
+
+    Public Property OtherParticipations() As Collections.Generic.List(Of Participation)
+        Get
+            If mOtherParticipations Is Nothing Then
+                mOtherParticipations = New Collections.Generic.List(Of Participation)
+            End If
+            Return mOtherParticipations
+        End Get
+        Set(ByVal value As Collections.Generic.List(Of Participation))
+            mOtherParticipations = value
+        End Set
+    End Property
+
     Sub New()
         mType = StructureType.ENTRY
         mChildren = New Children(mType)

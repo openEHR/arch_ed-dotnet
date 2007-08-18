@@ -15,6 +15,7 @@
 '
 
 Option Explicit On 
+Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 
 Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Description
@@ -39,44 +40,44 @@ Namespace ArchetypeEditor.ADL_Classes
             mADL_Description.original_author.clear_all()
             If Me.OriginalAuthor <> "" Then
                 mADL_Description.add_original_author_item( _
-                     openehr.base.kernel.Create.STRING.make_from_cil("name"), _
-                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthor.Replace("""", "'")))
+                     EiffelKernel.Create.STRING_8.make_from_cil("name"), _
+                    EiffelKernel.Create.STRING_8.make_from_cil(Me.mOriginalAuthor.Replace("""", "'")))
             End If
             If Me.OriginalAuthorEmail <> "" Then
                 mADL_Description.add_original_author_item( _
-                     openehr.base.kernel.Create.STRING.make_from_cil("email"), _
-                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorEmail.Replace("""", "'")))
+                     EiffelKernel.Create.STRING_8.make_from_cil("email"), _
+                    EiffelKernel.Create.STRING_8.make_from_cil(Me.mOriginalAuthorEmail.Replace("""", "'")))
             End If
             If Me.OriginalAuthorOrganisation <> "" Then
                 mADL_Description.add_original_author_item( _
-                     openehr.base.kernel.Create.STRING.make_from_cil("organisation"), _
-                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorOrganisation.Replace("""", "'")))
+                     EiffelKernel.Create.STRING_8.make_from_cil("organisation"), _
+                    EiffelKernel.Create.STRING_8.make_from_cil(Me.mOriginalAuthorOrganisation.Replace("""", "'")))
             End If
             If Me.OriginalAuthorDate <> "" Then
                 mADL_Description.add_original_author_item( _
-                     openehr.base.kernel.Create.STRING.make_from_cil("date"), _
-                    openehr.base.kernel.Create.STRING.make_from_cil(Me.mOriginalAuthorDate.Replace("""", "'")))
+                     EiffelKernel.Create.STRING_8.make_from_cil("date"), _
+                    EiffelKernel.Create.STRING_8.make_from_cil(Me.mOriginalAuthorDate.Replace("""", "'")))
             End If
 
             mADL_Description.set_lifecycle_state( _
-                openehr.base.kernel.Create.STRING.make_from_cil(Me.LifeCycleStateAsString.Replace("""", "'")))
+                EiffelKernel.Create.STRING_8.make_from_cil(Me.LifeCycleStateAsString.Replace("""", "'")))
 
             If Not mArchetypePackageURI Is Nothing Then
                 mADL_Description.set_resource_package_uri( _
-                    openehr.base.kernel.Create.STRING.make_from_cil(mArchetypePackageURI.Replace("""", "'")))
+                    EiffelKernel.Create.STRING_8.make_from_cil(mArchetypePackageURI.Replace("""", "'")))
             End If
 
             'JAR: 24MAY2007, EDT-30 Add field for References
             If mReferences <> "" Then
                 mADL_Description.add_other_detail( _
-                                     openehr.base.kernel.Create.STRING.make_from_cil("references"), _
-                                    openehr.base.kernel.Create.STRING.make_from_cil(mReferences.Replace("""", "'")))
+                                     EiffelKernel.Create.STRING_8.make_from_cil("references"), _
+                                    EiffelKernel.Create.STRING_8.make_from_cil(mReferences.Replace("""", "'")))
             End If
 
             ' clear the other contributors and add them again
             mADL_Description.clear_other_contributors()
             For Each s As String In mOtherContributors
-                mADL_Description.add_other_contributor(openehr.base.kernel.Create.STRING.make_from_cil(s.Replace("""", "'")))
+                mADL_Description.add_other_contributor(EiffelKernel.Create.STRING_8.make_from_cil(s.Replace("""", "'")))
             Next
 
             Return mADL_Description
@@ -90,20 +91,20 @@ Namespace ArchetypeEditor.ADL_Classes
                 mArchetypePackageURI = mADL_Description.resource_package_uri.as_string.to_cil
             End If
 
-            If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("name")) Then
-                mOriginalAuthor = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("name")).to_cil()
+            If mADL_Description.original_author.has(EiffelKernel.Create.STRING_8.make_from_cil("name")) Then
+                mOriginalAuthor = mADL_Description.original_author.item(EiffelKernel.Create.STRING_8.make_from_cil("name")).to_cil()
             End If
 
-            If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("email")) Then
-                mOriginalAuthorEmail = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("email")).to_cil
+            If mADL_Description.original_author.has(EiffelKernel.Create.STRING_8.make_from_cil("email")) Then
+                mOriginalAuthorEmail = mADL_Description.original_author.item(EiffelKernel.Create.STRING_8.make_from_cil("email")).to_cil
             End If
 
-            If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("organisation")) Then
-                mOriginalAuthorOrganisation = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("organisation")).to_cil
+            If mADL_Description.original_author.has(EiffelKernel.Create.STRING_8.make_from_cil("organisation")) Then
+                mOriginalAuthorOrganisation = mADL_Description.original_author.item(EiffelKernel.Create.STRING_8.make_from_cil("organisation")).to_cil
             End If
 
-            If mADL_Description.original_author.has(openehr.base.kernel.Create.STRING.make_from_cil("date")) Then
-                mOriginalAuthorDate = mADL_Description.original_author.item(openehr.base.kernel.Create.STRING.make_from_cil("date")).to_cil
+            If mADL_Description.original_author.has(EiffelKernel.Create.STRING_8.make_from_cil("date")) Then
+                mOriginalAuthorDate = mADL_Description.original_author.item(EiffelKernel.Create.STRING_8.make_from_cil("date")).to_cil
             End If
 
             If Not mADL_Description.other_contributors Is Nothing Then
@@ -114,8 +115,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
             'JAR: 24MAY2007, EDT-30 Add field for References
             If Not mADL_Description.other_details Is Nothing Then
-                If mADL_Description.other_details.has(openehr.base.kernel.Create.STRING.make_from_cil("references")) Then
-                    mReferences = mADL_Description.other_details.item(openehr.base.kernel.Create.STRING.make_from_cil("references")).to_cil()
+                If mADL_Description.other_details.has(EiffelKernel.Create.STRING_8.make_from_cil("references")) Then
+                    mReferences = mADL_Description.other_details.item(EiffelKernel.Create.STRING_8.make_from_cil("references")).to_cil()
                 End If
             End If
 
@@ -128,8 +129,8 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Sub New(ByVal an_archetype_description As ArchetypeDescription, ByVal a_language As String)
-            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName), _
-                openehr.base.kernel.Create.STRING.make_from_cil(a_language))
+            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(EiffelKernel.Create.STRING_8.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName), _
+                EiffelKernel.Create.STRING_8.make_from_cil(a_language))
 
             'mADL_Version = mADL_Description.adl_version.to_cil ' set to 1.2 by default
             If Not an_archetype_description.ArchetypePackageURI Is Nothing Then
@@ -148,8 +149,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Sub New(ByVal original_language As String)
             mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make( _
-                openehr.base.kernel.Create.STRING.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName), _
-                openehr.base.kernel.Create.STRING.make_from_cil(original_language))
+                EiffelKernel.Create.STRING_8.make_from_cil(OceanArchetypeEditor.Instance.Options.UserName), _
+                EiffelKernel.Create.STRING_8.make_from_cil(original_language))
         End Sub
     End Class
 End Namespace

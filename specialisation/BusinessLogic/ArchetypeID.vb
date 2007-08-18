@@ -69,6 +69,12 @@ Public Class ArchetypeID
         Return mArchetypeID
     End Function
 
+    Public Shared Function ValidId(ByVal value As String) As Boolean
+        Dim rgx As New System.Text.RegularExpressions.Regex("^[a-zA-Z][a-zA-Z0-9_]+(-[a-zA-Z0-9_]+){2}\.[a-zA-Z][a-zA-Z0-9_]+(-[a-zA-Z0-9_]+)*\.v[0-9]+(\.[0-9]+)?[a-zA-Z0-9_-]*$")
+        Return rgx.Match(value).Success
+    End Function
+
+
     Private Sub ProcessStringValue(ByVal Value As String)
         Dim y() As String
         mArchetypeID = Value

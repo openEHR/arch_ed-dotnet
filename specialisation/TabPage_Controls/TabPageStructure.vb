@@ -629,22 +629,10 @@ Public Class TabPageStructure
 
     'JAR: 31MAY07, EDT-21 Empty structure raises an exception
     Public Function HasData() As Boolean 'Returns true if entry structure contains object(s)
-        HasData = False
-
+        'Changed: SRH - July 22nd - improved efficiency
         If Not ArchetypeDisplay Is Nothing Then
-            Select Case StructureType
-                Case StructureType.Single, StructureType.Tree, StructureType.Cluster
-                    HasData = Not Elements Is Nothing
-                Case StructureType.List
-                    HasData = CType(CType(ArchetypeDisplay, ListStructure).InterfaceBuilder, System.Windows.Forms.ListView.ListViewItemCollection).Count > 0
-                Case StructureType.Table
-                    HasData = CType(ArchetypeDisplay, TableStructure).HasData
-                Case Else
-                    'not supported
-            End Select
+            Return ArchetypeDisplay.HasData()
         End If
-
-        Return HasData
     End Function
 
     Public Function SaveAsStructure() As RmStructure

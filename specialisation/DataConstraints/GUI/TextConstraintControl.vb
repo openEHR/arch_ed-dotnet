@@ -322,57 +322,28 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         ' set constraint values on control
 
-        If IsState Then
-            Me.butDefaultItem.Visible = True
-            Me.txtAssumedValue.Visible = True
-        End If
-
         Select Case Me.Constraint.TypeOfTextConstraint
             Case TextConstrainType.Text
-                Dim s As String
-                Me.listAllowableValues.DataSource = Nothing
-                Me.listAllowableValues.Items.Clear()
-                Me.radioText.Checked = True
+                radioText.Checked = True
 
-                For Each s In Me.Constraint.AllowableValues.Codes
-                    Me.listAllowableValues.Items.Add(s)
-                Next
-                Me.txtAssumedValue.Text = CStr(Me.Constraint.AssumedValue)
+                'Dim s As String
+                'Me.listAllowableValues.DataSource = Nothing
+                'Me.listAllowableValues.Items.Clear()
+                'Me.radioText.Checked = True
 
-                ' clear the Terminology fields
-                Me.txtTermConstraintText.Text = ""
-                Me.txtTermConstraintDescription.Text = ""
+                'For Each s In Me.Constraint.AllowableValues.Codes
+                '    Me.listAllowableValues.Items.Add(s)
+                'Next
+                'Me.txtAssumedValue.Text = CStr(Me.Constraint.AssumedValue)
+
+                '' clear the Terminology fields
+                'Me.txtTermConstraintText.Text = ""
+                'Me.txtTermConstraintDescription.Text = ""
 
             Case TextConstrainType.Internal
                 Me.radioInternal.Checked = True
 
-                If Me.Constraint.AllowableValues.Codes.Count > 0 Then
-                    SetAllowableValuesFilter(Me.Constraint)
-
-                    Me.listAllowableValues.DataSource = mAllowedValuesDataView
-                    Me.listAllowableValues.DisplayMember = "Text"
-                    Me.listAllowableValues.ValueMember = "Code"
-
-                    ' now look up the default
-                    If Me.Constraint.HasAssumedValue Then
-                        Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(Me.Constraint.AssumedValue))
-                        Me.txtAssumedValue.Text = aTerm.Text
-
-                    Else
-                        Me.txtAssumedValue.Text = "(none)"
-                    End If
-
-                Else
-                    ' to hide values as they are not override if the filter is set
-                    Me.listAllowableValues.DataSource = Nothing
-                    Me.listAllowableValues.Items.Clear()
-                    Me.txtAssumedValue.Text = "(none)"
-
-                End If
-
-                ' clear the Terminology fields
-                Me.txtTermConstraintText.Text = ""
-                Me.txtTermConstraintDescription.Text = ""
+                SetInternalCodedValues(IsState)
 
             Case TextConstrainType.Terminology
                 Me.radioTerminology.Checked = True
@@ -382,6 +353,40 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 Me.txtTermConstraintDescription.Text = aTerm.Description
 
         End Select
+
+    End Sub
+
+    Private Sub SetInternalCodedValues(ByVal isState As Boolean)
+
+        If isState Then
+            Me.butDefaultItem.Visible = True
+            Me.txtAssumedValue.Visible = True
+        End If
+
+
+        If Me.Constraint.AllowableValues.Codes.Count > 0 Then
+            SetAllowableValuesFilter(Me.Constraint)
+
+            Me.listAllowableValues.DataSource = mAllowedValuesDataView
+            Me.listAllowableValues.DisplayMember = "Text"
+            Me.listAllowableValues.ValueMember = "Code"
+
+            ' now look up the default
+            If Me.Constraint.HasAssumedValue Then
+                Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(Me.Constraint.AssumedValue))
+                Me.txtAssumedValue.Text = aTerm.Text
+
+            Else
+                Me.txtAssumedValue.Text = "(none)"
+            End If
+
+        Else
+            ' to hide values as they are not override if the filter is set
+            Me.listAllowableValues.DataSource = Nothing
+            Me.listAllowableValues.Items.Clear()
+            Me.txtAssumedValue.Text = "(none)"
+
+        End If
 
     End Sub
 
@@ -426,20 +431,11 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         If Me.listAllowableValues.SelectedIndex > -1 Then
             Dim s As String = ""
-
-            If Me.radioInternal.Checked Then
-                ' the code is the default value, show the text
-                Me.txtAssumedValue.Text = CType(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item("Text"), String)
-                s = CStr(Me.listAllowableValues.SelectedValue)
-                Me.txtAssumedValue.Tag = s
-
-            ElseIf Me.radioText.Checked Then
-                ' the text is default and the value
-                s = Me.listAllowableValues.Text
-                Me.txtAssumedValue.Text = s
-
-            End If
-
+            ' the code is the default value, show the text
+            Me.txtAssumedValue.Text = CType(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item("Text"), String)
+            s = CStr(Me.listAllowableValues.SelectedValue)
+            Me.txtAssumedValue.Tag = s
+        
             Me.Constraint.AssumedValue = s
 
             ' automatically sets hasAssumedValue
@@ -449,57 +445,39 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub butNewItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButNewItem.Click
 
-        If Me.radioInternal.Checked Then
-            Dim s(1) As String
-            s = OceanArchetypeEditor.Instance.GetInput( _
-                Filemanager.GetOpenEhrTerm(603, "Add new term"), _
-                AE_Constants.Instance.Description, Me.ParentForm)
+        Dim s(1) As String
+        s = OceanArchetypeEditor.Instance.GetInput( _
+            Filemanager.GetOpenEhrTerm(603, "Add new term"), _
+            AE_Constants.Instance.Description, Me.ParentForm)
 
-            If s(0) <> "" Then
-                Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(s(0), s(1))
-                Dim term_id As String = aTerm.Code
+        If s(0) <> "" Then
+            Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(s(0), s(1))
+            Dim term_id As String = aTerm.Code
 
-                If Me.listAllowableValues.DataSource Is Nothing Then
-                    mAllowedValuesDataView.RowFilter = String.Format("(Code = '{0}') AND (id = '{1}')", _
-                            aTerm.Code, mFileManager.OntologyManager.LanguageCode)
+            If Me.listAllowableValues.DataSource Is Nothing Then
+                mAllowedValuesDataView.RowFilter = String.Format("(Code = '{0}') AND (id = '{1}')", _
+                        aTerm.Code, mFileManager.OntologyManager.LanguageCode)
 
-                    Me.listAllowableValues.DataSource = mAllowedValuesDataView
-                    Me.listAllowableValues.DisplayMember = "Text"
-                    Me.listAllowableValues.ValueMember = "Code"
-                Else
-                    ' add this id to the term filter
-                    Dim f As String = mAllowedValuesDataView.RowFilter
-                    Dim i As Integer = InStr(f, ") AND (") - 1
-                    Dim str As String = " OR Code = '" & term_id & "'"
-                    mAllowedValuesDataView.RowFilter = f.Insert(i, str)
-                End If
-
-                ' add the code to the constraint
-                Me.Constraint.AllowableValues.Codes.Add(term_id)
-
+                Me.listAllowableValues.DataSource = mAllowedValuesDataView
+                Me.listAllowableValues.DisplayMember = "Text"
+                Me.listAllowableValues.ValueMember = "Code"
             Else
-                Return
-
+                ' add this id to the term filter
+                Dim f As String = mAllowedValuesDataView.RowFilter
+                Dim i As Integer = InStr(f, ") AND (") - 1
+                Dim str As String = " OR Code = '" & term_id & "'"
+                mAllowedValuesDataView.RowFilter = f.Insert(i, str)
             End If
 
-        ElseIf Me.radioText.Checked Then
-            Dim s As String
-            s = OceanArchetypeEditor.Instance.GetInput("Enter the new item:", Me.ParentForm)
+            ' add the code to the constraint
+            Me.Constraint.AllowableValues.Codes.Add(term_id)
 
-            If s <> "" Then
-                Me.listAllowableValues.Items.Add(s)
-                't = CType(Aen.Constraint, Constraint_Text)
-                Me.Constraint.AllowableValues.Codes.Add(s)
 
-            Else
-                Return
-
-            End If
+            mFileManager.FileEdited = True
 
         End If
 
-        mFileManager.FileEdited = True
-
+        
     End Sub
 
     Private Sub butRemoveItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveItem.Click
@@ -515,78 +493,54 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Try
             Dim defaultText As String = Me.txtAssumedValue.Text
 
-            If Me.radioText.Checked Then
-                If Me.listAllowableValues.Items.Count > 0 Then
+            If mAllowedValuesDataView.Count > 0 Then
 
-                    If MessageBox.Show(AE_Constants.Instance.Remove & _
-                            CStr(Me.listAllowableValues.Items(Index)), _
-                            AE_Constants.Instance.MessageBoxCaption, _
-                            MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
+                If MessageBox.Show(AE_Constants.Instance.Remove & _
+                        CStr(Me.listAllowableValues.Text), _
+                        AE_Constants.Instance.MessageBoxCaption, _
+                        MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
 
-                        If CStr(Me.listAllowableValues.Items(Index)) = defaultText Then
-                            Me.txtAssumedValue.Text = "(none)"
-                            Me.Constraint.HasAssumedValue = False
-                        End If
-
-                        Me.Constraint.AllowableValues.Codes.Remove( _
-                                CStr(Me.listAllowableValues.Items(Index)))
-                        Me.listAllowableValues.Items.RemoveAt(Index)
+                    ' have to delete this from all languages
+                    If CStr(Me.listAllowableValues.Text) = defaultText Then
+                        Me.Constraint.HasAssumedValue = False
+                        Me.txtAssumedValue.Text = "(none)"
 
                     End If
 
-                End If
+                    Dim code As String = CStr(Me.listAllowableValues.SelectedValue) '("Code")
+                    Me.Constraint.AllowableValues.Codes.Remove(code)
 
-            ElseIf Me.radioInternal.Checked Then
+                    'FIXME - cannot remove terms as are reused in the archetype
+                    'ParentFrm.mFileManager.OntologyManager.RemoveTerm(Code)
+                    If Me.Constraint.AllowableValues.Codes.Count = 0 Then
+                        Me.listAllowableValues.DataSource = Nothing
+                        Me.listAllowableValues.Items.Clear()
 
-                If mAllowedValuesDataView.Count > 0 Then
-
-                    If MessageBox.Show(AE_Constants.Instance.Remove & _
-                            CStr(Me.listAllowableValues.Text), _
-                            AE_Constants.Instance.MessageBoxCaption, _
-                            MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
-
-                        ' have to delete this from all languages
-                        If CStr(Me.listAllowableValues.Text) = defaultText Then
-                            Me.Constraint.HasAssumedValue = False
-                            Me.txtAssumedValue.Text = "(none)"
-
+                    Else
+                        Dim f As String = mAllowedValuesDataView.RowFilter
+                        Dim i As Integer = InStr(f, "Code = '" & code & "' OR ")
+                        Dim Lengthof As Integer = ("Code = '" & code & "' OR ").Length - 1
+                        If i = 0 Then
+                            'might be the last code
+                            i = InStr(f, " OR Code = '" & code & "'")
+                            Lengthof = (" OR Code = '" & code & "'").Length - 1
                         End If
-
-                        Dim code As String = CStr(Me.listAllowableValues.SelectedValue) '("Code")
-                        Me.Constraint.AllowableValues.Codes.Remove(code)
-
-                        'FIXME - cannot remove terms as are reused in the archetype
-                        'ParentFrm.mFileManager.OntologyManager.RemoveTerm(Code)
-                        If Me.Constraint.AllowableValues.Codes.Count = 0 Then
-                            Me.listAllowableValues.DataSource = Nothing
-                            Me.listAllowableValues.Items.Clear()
-
-                        Else
-                            Dim f As String = mAllowedValuesDataView.RowFilter
-                            Dim i As Integer = InStr(f, "Code = '" & code & "' OR ")
-                            Dim Lengthof As Integer = ("Code = '" & code & "' OR ").Length - 1
-                            If i = 0 Then
-                                'might be the last code
-                                i = InStr(f, " OR Code = '" & code & "'")
-                                Lengthof = (" OR Code = '" & code & "'").Length - 1
-                            End If
-                            If i = 0 Then
-                                'might be the only code
-                                i = InStr(f, "Code = '" & code & "'")
-                                Lengthof = ("Code = '" & code & "'").Length - 1
-                            End If
-                            If i <> 0 Then
-                                f = f.Substring(0, i - 1) & f.Substring(i + Lengthof)
-                            End If
-                            mAllowedValuesDataView.RowFilter = f
+                        If i = 0 Then
+                            'might be the only code
+                            i = InStr(f, "Code = '" & code & "'")
+                            Lengthof = ("Code = '" & code & "'").Length - 1
                         End If
-
+                        If i <> 0 Then
+                            f = f.Substring(0, i - 1) & f.Substring(i + Lengthof)
+                        End If
+                        mAllowedValuesDataView.RowFilter = f
                     End If
 
                 End If
-
                 mFileManager.FileEdited = True
+
             End If
+
 
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
@@ -599,75 +553,24 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Me.gbAllowableValues.Visible = True
             Me.txtTermConstraintText.Visible = False
             Me.txtTermConstraintDescription.Visible = False
-            Me.butAddItem.Visible = True
-        Else
-            Me.butAddItem.Visible = False
         End If
 
         If MyBase.IsLoading Then Return
 
         If Me.radioInternal.Checked Then
 
-            If Me.Constraint.TypeOfTextConstraint = TextConstrainType.Text Then
+            Me.ButNewItem.Focus()
 
-                If Me.listAllowableValues.Items.Count > 0 Then
-
-                    'data will be lost so check it is OK
-                    If MessageBox.Show( _
-                               AE_Constants.Instance.Convert_constraint_loose_data, _
-                               AE_Constants.Instance.MessageBoxCaption, _
-                               MessageBoxButtons.OKCancel, _
-                               MessageBoxIcon.Warning, _
-                               MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
-
-
-                        ' could offer transform but risky as many variables!
-                        Me.listAllowableValues.DataSource = Nothing
-                        Me.listAllowableValues.Items.Clear()
-                        Me.txtAssumedValue.Text = "(none)"
-                        Me.Constraint.HasAssumedValue = False
-
-                        Me.Constraint.AllowableValues.Codes.Clear()
-
-                        Me.ButNewItem.Focus()
-                    Else
-                        ' put things back how they were
-
-                        MyBase.IsLoading = True
-
-                        Select Case Me.Constraint.TypeOfTextConstraint
-                            Case TextConstrainType.Text
-                                Me.radioText.Checked = True
-
-                            Case TextConstrainType.Terminology
-                                Me.radioTerminology.Checked = True
-
-                            Case Else
-                                Debug.Assert(False)
-                        End Select
-
-                        MyBase.IsLoading = False 'tempLoading
-
-                        Exit Sub
-
-                    End If
-                Else
-
-                    Me.Constraint.HasAssumedValue = False
-
-                    Me.Constraint.AllowableValues.Codes.Clear()
-
-                    Me.ButNewItem.Focus()
-
-                End If
-
-                Me.Constraint.TypeOfTextConstraint = TextConstrainType.Internal
-
-                mFileManager.FileEdited = True
+            Me.Constraint.TypeOfTextConstraint = TextConstrainType.Internal
+            If Me.listAllowableValues.Items.Count = 0 Then
+                SetInternalCodedValues(Me.butDefaultItem.Visible) 'It is true if it is state
             End If
+            mFileManager.FileEdited = True
         End If
 
     End Sub
+
+    Private mConstraintTerm As RmTerm
 
     Private Sub radioTerminology_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioTerminology.CheckedChanged
 
@@ -681,51 +584,29 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         If Me.radioTerminology.Checked Then
 
-            If MessageBox.Show(AE_Constants.Instance.Convert_constraint_loose_data, _
-                    AE_Constants.Instance.MessageBoxCaption, _
-                    MessageBoxButtons.OKCancel, _
-                    MessageBoxIcon.Warning, _
-                    MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
+            Me.Constraint.TypeOfTextConstraint = TextConstrainType.Terminology
 
-                If Me.Constraint.ConstraintCode = "" Then
-                    Dim term As RmTerm = mFileManager.OntologyManager.AddConstraint("New constraint")
-                    Me.Constraint.ConstraintCode = term.Code
-                    MyBase.IsLoading = True  ' avoids replacing the text
-                    Me.txtTermConstraintText.Text = "New constraint"
-                    MyBase.IsLoading = False
-
-                Else
-                    Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(Me.Constraint.ConstraintCode)
-                    Me.txtTermConstraintText.Text = term.Text
-                    Me.txtTermConstraintDescription.Text = term.Description
-
+            If Me.Constraint.ConstraintCode = "" Then
+                If mConstraintTerm Is Nothing Then
+                    mConstraintTerm = mFileManager.OntologyManager.AddConstraint(Filemanager.GetOpenEhrTerm(139, "New constraint"))
                 End If
-
-                ' could offer transform but risky as many variables!
-                Me.listAllowableValues.DataSource = Nothing
-                Me.listAllowableValues.Items.Clear()
-                Me.txtAssumedValue.Text = "(none)"
-                Me.Constraint.HasAssumedValue = False
-
-                Me.Constraint.AllowableValues.Codes.Clear()
-
-                Me.txtTermConstraintText.Focus()
-            Else
-                ' put things back how they were
-                MyBase.IsLoading = True
-                Select Case Me.Constraint.TypeOfTextConstraint
-                    Case TextConstrainType.Text
-                        Me.radioText.Checked = True
-                    Case TextConstrainType.Internal
-                        Me.radioInternal.Checked = True
-                End Select
+                Me.Constraint.ConstraintCode = mConstraintTerm.Code
+                MyBase.IsLoading = True  ' avoids replacing the text
+                Me.txtTermConstraintText.Text = mConstraintTerm.Text
+                Me.txtTermConstraintDescription.Text = mConstraintTerm.Description
                 MyBase.IsLoading = False
 
-                Exit Sub
+            Else
+                mConstraintTerm = mFileManager.OntologyManager.GetTerm(Me.Constraint.ConstraintCode)
+                Me.txtTermConstraintText.Text = mConstraintTerm.Text
+                Me.txtTermConstraintDescription.Text = mConstraintTerm.Description
 
             End If
 
-            Me.Constraint.TypeOfTextConstraint = TextConstrainType.Terminology
+            Me.txtAssumedValue.Text = ""
+            Me.Constraint.HasAssumedValue = False
+
+            Me.txtTermConstraintText.Focus()
 
             mFileManager.FileEdited = True
 
@@ -736,61 +617,18 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Private Sub radioText_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioText.CheckedChanged
 
         If Me.radioText.Checked Then
-            Me.gbAllowableValues.Visible = True
+            Me.gbAllowableValues.Visible = False
             Me.txtTermConstraintText.Visible = False
             Me.txtTermConstraintDescription.Visible = False
+            Me.lblConstraint.Visible = False
+            Me.lblDescription.Visible = False
         End If
 
         If MyBase.IsLoading Then Return
 
         If Me.radioText.Checked Then
-            If Me.Constraint.TypeOfTextConstraint = TextConstrainType.Internal _
-                    AndAlso Me.listAllowableValues.Items.Count > 1 Then
-
-                If MessageBox.Show(AE_Constants.Instance.Convert_internal_text, _
-                        AE_Constants.Instance.MessageBoxCaption, _
-                        MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, _
-                        MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
-
-                    Dim cp As New CodePhrase
-                    Dim aTerm As RmTerm = Nothing
-
-                    For Each ss As String In Me.Constraint.AllowableValues.Codes
-                        aTerm = mFileManager.OntologyManager.GetTerm(ss)
-                        cp.Codes.Add(aTerm.Text)
-                    Next
-
-                    If Me.Constraint.HasAssumedValue Then
-                        aTerm = mFileManager.OntologyManager.GetTerm(CStr(Me.Constraint.AssumedValue))
-                    End If
-
-                    Me.Constraint.AllowableValues = cp
-
-                    If Me.Constraint.HasAssumedValue Then
-                        Me.Constraint.AssumedValue = aTerm.Text
-                    End If
-
-                    Me.Constraint.ConstraintCode = ""
-
-                    Me.ButNewItem.Focus()
-
-                Else
-                    ' put things back how they were
-                    MyBase.IsLoading = True
-                    Me.radioInternal.Checked = True
-                    MyBase.IsLoading = False
-
-                    Exit Sub
-                End If
-
-            End If
-
-            Me.Constraint.TypeOfTextConstraint = TextConstrainType.Text
-
-            Me.listAllowableValues.DataSource = Nothing
-
+            Me.Constraint.TypeOfTextConstraint = TextConstrainType.Text  
             mFileManager.FileEdited = True
-
         End If
     End Sub
 
@@ -798,9 +636,10 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         If Not MyBase.IsLoading Then
             mFileManager.OntologyManager.SetDescription(txtTermConstraintDescription.Text, _
                     Me.Constraint.ConstraintCode)
+            'Remember if changes constraint type
+            Me.mConstraintTerm.Description = txtTermConstraintDescription.Text
 
             mFileManager.FileEdited = True
-
         End If
     End Sub
 
@@ -808,6 +647,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         If Not MyBase.IsLoading Then
             mFileManager.OntologyManager.SetText(txtTermConstraintText.Text, _
                     Me.Constraint.ConstraintCode)
+            'Remember if changes constraint type
+            Me.mConstraintTerm.Text = txtTermConstraintText.Text
         End If
     End Sub
 
@@ -822,126 +663,28 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     End Sub
 
-    Private Sub MenuItemCopyAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemCopyAll.Click
-
-        Me.MenuItemPasteAll.Enabled = True
-        Me.MenuItemCancelCopy.Visible = True
-        Me.MenuItemCopyAll.Enabled = False
-
-        mTempConstraint = Me.Constraint
-
-    End Sub
 
     Private Sub MenuItemAddExisting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemAddExisting.Click
         Me.butAddItem_Click(sender, e)
-    End Sub
-
-    Private Sub MenuItemPasteAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemPasteAll.Click
-        If mTempConstraint.Type = ConstraintType.Text Then
-
-            If Me.Constraint.TypeOfTextConstraint = mTempConstraint.TypeOfTextConstraint Then
-                MyBase.Constraint = mTempConstraint.copy
-
-            ElseIf Me.Constraint.TypeOfTextConstraint = TextConstrainType.Internal _
-                    AndAlso mTempConstraint.TypeOfTextConstraint = TextConstrainType.Text Then
-
-                If MessageBox.Show(AE_Constants.Instance.Convert_string_text, _
-                        AE_Constants.Instance.MessageBoxCaption, _
-                        MessageBoxButtons.OKCancel, _
-                        MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-
-                    For i As Integer = 0 To mTempConstraint.AllowableValues.Codes.Count - 1
-                        Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm( _
-                                mTempConstraint.AllowableValues.Codes.Item(i))
-                        Me.Constraint.AllowableValues.Codes.Add(aTerm.Code)
-
-                        If mTempConstraint.HasAssumedValue Then
-                            If CStr(mTempConstraint.AssumedValue) _
-                                    = mTempConstraint.AllowableValues.Codes.Item(i) Then
-                                Me.Constraint.AssumedValue = aTerm.Code
-
-                                Me.txtAssumedValue.Text = mTempConstraint.AllowableValues.Codes.Item(i)
-                            End If
-                        End If
-                    Next
-
-                Else
-                    Return ' cancel
-
-                End If
-
-            ElseIf Me.Constraint.TypeOfTextConstraint = TextConstrainType.Text _
-                    AndAlso mTempConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
-
-                If MessageBox.Show(AE_Constants.Instance.Convert_text_string, _
-                        AE_Constants.Instance.MessageBoxCaption, _
-                        MessageBoxButtons.OKCancel, _
-                        MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-
-                    For i As Integer = 0 To mTempConstraint.AllowableValues.Codes.Count - 1
-                        Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm( _
-                                mTempConstraint.AllowableValues.Codes.Item(i))
-
-                        Me.Constraint.AllowableValues.Codes.Add(aTerm.Code)
-
-                        If mTempConstraint.HasAssumedValue Then
-                            If CStr(mTempConstraint.AssumedValue) = mTempConstraint.AllowableValues.Codes.Item(i) Then
-                                Me.Constraint.AssumedValue = aTerm.Code
-                            End If
-
-                        End If
-
-                    Next
-
-                Else
-                    Return ' cancel
-
-                End If
-
-            End If
-
-        End If
-
-        mFileManager.FileEdited = True
-
-    End Sub
-
-    Private Sub MenuItemCancelCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemCancelCopy.Click
-        Me.MenuItemPasteAll.Enabled = False
-        Me.MenuItemCancelCopy.Visible = False
-        Me.MenuItemCopyAll.Enabled = True
-        mTempConstraint = Nothing
     End Sub
 
     Private Sub listAllowableValues_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAllowableValues.DoubleClick, MenuItemEdit.Click
         If Me.listAllowableValues.SelectedIndex > -1 Then
             Dim s(1) As String
 
-            If Me.radioText.Checked Then
-                Dim ss As String
-                ss = Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex)
-                ss = OceanArchetypeEditor.Instance.GetInput(ss, Me.ParentForm)
-                If ss <> "" Then
-                    Me.Constraint.AllowableValues.Codes.Item(Me.listAllowableValues.SelectedIndex) = ss
-                    Me.listAllowableValues.Items(Me.listAllowableValues.SelectedIndex) = ss
-                End If
-            ElseIf Me.radioInternal.Checked Then
                 ' get the term that is selected
-                Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item(1)))
+            Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item(1)))
 
-                If Not t Is Nothing Then
-                    s = OceanArchetypeEditor.Instance.GetInput(t, Me.ParentForm)
+            If Not t Is Nothing Then
+                s = OceanArchetypeEditor.Instance.GetInput(t, Me.ParentForm)
 
-                    If s(0) <> "" Then
-                        mFileManager.OntologyManager.SetText(t)
-                        mFileManager.OntologyManager.SetDescription(t.Description, t.Code)
-                    Else
-                        Return
-                    End If
+                If s(0) <> "" Then
+                    mFileManager.OntologyManager.SetText(t)
+                    mFileManager.OntologyManager.SetDescription(t.Description, t.Code)
+                Else
+                    Return
                 End If
             End If
-
-
         End If
 
     End Sub
