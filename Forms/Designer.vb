@@ -561,7 +561,7 @@ Public Class Designer
         Me.cbParticipation.Location = New System.Drawing.Point(288, 6)
         Me.cbParticipation.Name = "cbParticipation"
         Me.cbParticipation.Size = New System.Drawing.Size(154, 28)
-        Me.cbParticipation.TabIndex = 31
+        Me.cbParticipation.TabIndex = 30
         Me.cbParticipation.Text = "Participation"
         Me.ToolTip1.SetToolTip(Me.cbParticipation, "About who participated in what has been recorded")
         '
@@ -571,7 +571,7 @@ Public Class Designer
         Me.cbPersonState.Location = New System.Drawing.Point(527, 10)
         Me.cbPersonState.Name = "cbPersonState"
         Me.cbPersonState.Size = New System.Drawing.Size(228, 19)
-        Me.cbPersonState.TabIndex = 30
+        Me.cbPersonState.TabIndex = 31
         Me.cbPersonState.Text = "Person State with EventSeries"
         Me.ToolTip1.SetToolTip(Me.cbPersonState, "Only for situations where 'state' information requires a EventSeries event")
         '
@@ -953,7 +953,7 @@ Public Class Designer
         Me.PanelDescription.Name = "PanelDescription"
         Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
         Me.PanelDescription.Size = New System.Drawing.Size(969, 283)
-        Me.PanelDescription.TabIndex = 6
+        Me.PanelDescription.TabIndex = 4
         '
         'RichTextBoxDescription
         '
@@ -974,7 +974,7 @@ Public Class Designer
         Me.PanelConcept_1.Location = New System.Drawing.Point(0, 394)
         Me.PanelConcept_1.Name = "PanelConcept_1"
         Me.PanelConcept_1.Size = New System.Drawing.Size(969, 201)
-        Me.PanelConcept_1.TabIndex = 4
+        Me.PanelConcept_1.TabIndex = 5
         '
         'gbSpecialisation
         '
@@ -2680,7 +2680,6 @@ Public Class Designer
 
     Public Sub WriteToHTML(ByVal filename As String)
         Dim text As IO.StreamWriter
-        Dim s As String
         Dim commaspace As Char() = {" ", ","}
 
         text = IO.File.CreateText(Application.StartupPath & filename)

@@ -102,7 +102,7 @@ Public Class ConstraintBindingForm
         '
         Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(368, 128)
+        Me.butOK.Location = New System.Drawing.Point(256, 128)
         Me.butOK.Name = "butOK"
         Me.butOK.Size = New System.Drawing.Size(80, 32)
         Me.butOK.TabIndex = 6
@@ -112,7 +112,7 @@ Public Class ConstraintBindingForm
         '
         Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(256, 128)
+        Me.butCancel.Location = New System.Drawing.Point(368, 128)
         Me.butCancel.Name = "butCancel"
         Me.butCancel.Size = New System.Drawing.Size(96, 32)
         Me.butCancel.TabIndex = 7
