@@ -154,7 +154,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.listInclude.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
         Me.listInclude.Size = New System.Drawing.Size(368, 84)
         Me.listInclude.Sorted = True
-        Me.listInclude.TabIndex = 27
+        Me.listInclude.TabIndex = 38
         '
         'PanelExclude
         '
@@ -164,7 +164,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelExclude.Location = New System.Drawing.Point(3, 18)
         Me.PanelExclude.Name = "PanelExclude"
         Me.PanelExclude.Size = New System.Drawing.Size(418, 32)
-        Me.PanelExclude.TabIndex = 39
+        Me.PanelExclude.TabIndex = 33
         '
         'butExclude
         '
@@ -201,7 +201,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.listExclude.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
         Me.listExclude.Size = New System.Drawing.Size(368, 84)
         Me.listExclude.Sorted = True
-        Me.listExclude.TabIndex = 33
+        Me.listExclude.TabIndex = 38
         '
         'PanelSlotTop
         '
@@ -265,7 +265,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelExcludeStatements.Name = "PanelExcludeStatements"
         Me.PanelExcludeStatements.Padding = New System.Windows.Forms.Padding(0, 0, 10, 2)
         Me.PanelExcludeStatements.Size = New System.Drawing.Size(418, 99)
-        Me.PanelExcludeStatements.TabIndex = 38
+        Me.PanelExcludeStatements.TabIndex = 34
         '
         'PanelExcludeMinusTick
         '
@@ -274,7 +274,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelExcludeMinusTick.Location = New System.Drawing.Point(0, 0)
         Me.PanelExcludeMinusTick.Name = "PanelExcludeMinusTick"
         Me.PanelExcludeMinusTick.Size = New System.Drawing.Size(40, 97)
-        Me.PanelExcludeMinusTick.TabIndex = 34
+        Me.PanelExcludeMinusTick.TabIndex = 33
         '
         'PanelIncludeStatements
         '
@@ -285,7 +285,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelIncludeStatements.Name = "PanelIncludeStatements"
         Me.PanelIncludeStatements.Padding = New System.Windows.Forms.Padding(0, 0, 10, 0)
         Me.PanelIncludeStatements.Size = New System.Drawing.Size(418, 99)
-        Me.PanelIncludeStatements.TabIndex = 40
+        Me.PanelIncludeStatements.TabIndex = 34
         '
         'PanelIncludeMinusTick
         '
@@ -294,7 +294,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelIncludeMinusTick.Location = New System.Drawing.Point(0, 0)
         Me.PanelIncludeMinusTick.Name = "PanelIncludeMinusTick"
         Me.PanelIncludeMinusTick.Size = New System.Drawing.Size(40, 99)
-        Me.PanelIncludeMinusTick.TabIndex = 28
+        Me.PanelIncludeMinusTick.TabIndex = 33
         '
         'gbExclude
         '
@@ -304,7 +304,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.gbExclude.Location = New System.Drawing.Point(0, 256)
         Me.gbExclude.Name = "gbExclude"
         Me.gbExclude.Size = New System.Drawing.Size(424, 152)
-        Me.gbExclude.TabIndex = 41
+        Me.gbExclude.TabIndex = 42
         Me.gbExclude.TabStop = False
         Me.gbExclude.Text = "Exclude"
         '
@@ -316,7 +316,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.gbInclude.Location = New System.Drawing.Point(0, 88)
         Me.gbInclude.Name = "gbInclude"
         Me.gbInclude.Size = New System.Drawing.Size(424, 160)
-        Me.gbInclude.TabIndex = 42
+        Me.gbInclude.TabIndex = 41
         Me.gbInclude.TabStop = False
         Me.gbInclude.Text = "Include"
         '

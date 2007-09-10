@@ -113,7 +113,7 @@ Public Class TabPageSection
         Me.ButAddSubsection.Location = New System.Drawing.Point(6, 8)
         Me.ButAddSubsection.Name = "ButAddSubsection"
         Me.ButAddSubsection.Size = New System.Drawing.Size(24, 24)
-        Me.ButAddSubsection.TabIndex = 34
+        Me.ButAddSubsection.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.ButAddSubsection, "Add a section or a slot")
         '
         'butRemoveSection
@@ -124,7 +124,7 @@ Public Class TabPageSection
         Me.butRemoveSection.Location = New System.Drawing.Point(6, 36)
         Me.butRemoveSection.Name = "butRemoveSection"
         Me.butRemoveSection.Size = New System.Drawing.Size(24, 24)
-        Me.butRemoveSection.TabIndex = 35
+        Me.butRemoveSection.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.butRemoveSection, "Remove section or slot")
         '
         'butListUp
@@ -133,7 +133,7 @@ Public Class TabPageSection
         Me.butListUp.Location = New System.Drawing.Point(6, 64)
         Me.butListUp.Name = "butListUp"
         Me.butListUp.Size = New System.Drawing.Size(24, 24)
-        Me.butListUp.TabIndex = 32
+        Me.butListUp.TabIndex = 3
         '
         'butListDown
         '
@@ -141,7 +141,7 @@ Public Class TabPageSection
         Me.butListDown.Location = New System.Drawing.Point(6, 92)
         Me.butListDown.Name = "butListDown"
         Me.butListDown.Size = New System.Drawing.Size(24, 24)
-        Me.butListDown.TabIndex = 33
+        Me.butListDown.TabIndex = 4
         '
         'Splitter1
         '
@@ -164,7 +164,7 @@ Public Class TabPageSection
         Me.tvSection.Name = "tvSection"
         Me.tvSection.SelectedImageIndex = 0
         Me.tvSection.Size = New System.Drawing.Size(328, 347)
-        Me.tvSection.TabIndex = 3
+        Me.tvSection.TabIndex = 4
         '
         'ContextMenuTree
         '
@@ -200,7 +200,7 @@ Public Class TabPageSection
         Me.PanelLeft.Location = New System.Drawing.Point(0, 69)
         Me.PanelLeft.Name = "PanelLeft"
         Me.PanelLeft.Size = New System.Drawing.Size(32, 347)
-        Me.PanelLeft.TabIndex = 4
+        Me.PanelLeft.TabIndex = 3
         '
         'PanelSectionConstraint
         '

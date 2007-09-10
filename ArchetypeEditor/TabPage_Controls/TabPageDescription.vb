@@ -300,7 +300,7 @@ Public Class TabPageDescription
         Me.listKeyword.Location = New System.Drawing.Point(48, 92)
         Me.listKeyword.Name = "listKeyword"
         Me.listKeyword.Size = New System.Drawing.Size(168, 106)
-        Me.listKeyword.TabIndex = 2
+        Me.listKeyword.TabIndex = 36
         '
         'TabDescription
         '

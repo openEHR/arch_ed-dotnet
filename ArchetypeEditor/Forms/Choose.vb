@@ -88,22 +88,22 @@ Public Class Choose
         Me.LblForm.TabIndex = 1
         Me.LblForm.Text = "Choose"
         '
+        'butOK
+        '
+        Me.butOK.Location = New System.Drawing.Point(499, 258)
+        Me.butOK.Name = "butOK"
+        Me.butOK.Size = New System.Drawing.Size(67, 37)
+        Me.butOK.TabIndex = 2
+        Me.butOK.Text = "OK"
+        '
         'butCancel
         '
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(499, 258)
+        Me.butCancel.Location = New System.Drawing.Point(576, 258)
         Me.butCancel.Name = "butCancel"
         Me.butCancel.Size = New System.Drawing.Size(67, 37)
-        Me.butCancel.TabIndex = 2
+        Me.butCancel.TabIndex = 3
         Me.butCancel.Text = "Cancel"
-        '
-        'butOK
-        '
-        Me.butOK.Location = New System.Drawing.Point(576, 258)
-        Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(67, 37)
-        Me.butOK.TabIndex = 3
-        Me.butOK.Text = "OK"
         '
         'ListBox2
         '
