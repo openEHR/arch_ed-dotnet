@@ -117,10 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="butLinks.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAAAAADDDgAAww4AAAAAAAAAAAAAtaCRmIZ4
+        gm5dgGxadV9MdV9MdV9MdV9MclxJclxJclxJclxJclxJdF5LeGJPh3Jgu6eZ////////////////////
+        +fj37ern///9///9///8//30//vy//rx/Pz2ppKBuqWX///////9+fn49vXz//v4/vbw/vTv/vPu+fDo
+        +vbu//bt/Ozi/eri//XrpZCAwK2f////8vHySklIVFJQ/v79///+/vbx//351c/MXFlV9vbz//jx/ezl
+        //jvpZCAvKeZ////0M/PBQQEAAAAXVxa+vr6//z6///9493cAAAAVlRS9vX0/vPt//rzpZCAuaWW////
+        ////trW1DAwMAAAAXV1c///+////5+LgDQwMAAAA0c7M//75//33pZGBuaWW////////////ubm4Dg4O
+        AAAAXVxb+/v67eroDQwMCQkI1NLQ///7///7ppKDuaWW////////////////tbW1CgoKAAAAZmRk8/Hx
+        FRQUCQgI1dPS///+///+ppKCv6ud////////////////////tra2DQ0NAAAATUtLFBQUCgkJ1dTT////
+        ////qJSGv6ud////+/v7+fn5/Pz8/f39////0NDQHh4eAAAAAAAADAwM1dTU////////qpiKwKye////
+        29zcQkJCRkZGSUlJSkpKXFxcGxsbAAAAAAAADAsL1tXV////////rJqNwrCh////+vr6oKCgAAAAAAAA
+        AAAAAAAAAAAAAAAAAAAACAgI0dHQ////////rp2PxbKk////////////xMTEoKCgqampqKioqKioqKio
+        p6enpaWl7u7u////////sZ6Rzruu////////////////////////////////////////////////////
+        ////sZ+S0sG1///////////////+//////7////+///+/v/+///+//7///7+///+////rZmM1sO12si5
+        2cW218W118W12MW12se42se53Mq928q92sq82Me90cO4zL6zwK+is6CS
+</value>
+  </data>
   <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>654, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="butAdd.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8

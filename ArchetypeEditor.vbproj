@@ -227,6 +227,10 @@
       <DependentUpon>ChooseFix.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Links.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Links.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Recovery.resx">
       <SubType>Designer</SubType>
       <DependentUpon>Recovery.vb</DependentUpon>
@@ -234,6 +238,10 @@
     <EmbeddedResource Include="GUI_Classes\Specialised_VB_classes\RestrictedSet.resx">
       <SubType>Designer</SubType>
       <DependentUpon>RestrictedSet.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\Link.resx">
+      <DependentUpon>Link.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\Participation.resx">
       <SubType>Designer</SubType>
@@ -363,6 +371,7 @@
     </Compile>
     <Compile Include="ADL_Classes\ADL_TranslationDetails.vb" />
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="BusinessLogic\EHR_Classes\RmLink.vb" />
     <Compile Include="BusinessLogic\Proxy.vb" />
     <Compile Include="BusinessLogic\Duration.vb">
       <SubType>Code</SubType>
@@ -688,6 +697,12 @@
     <Compile Include="Forms\InputForm.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Links.Designer.vb">
+      <DependentUpon>Links.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Links.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\myArchetypeFromWeb.designer.vb">
       <DependentUpon>myArchetypeFromWeb.vb</DependentUpon>
     </Compile>
@@ -793,6 +808,12 @@
     </Compile>
     <Compile Include="Support\TerminologyServer.vb">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\Link.Designer.vb">
+      <DependentUpon>Link.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TabPage_Controls\Link.vb">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TabPage_Controls\Participation.Designer.vb">
       <DependentUpon>Participation.vb</DependentUpon>

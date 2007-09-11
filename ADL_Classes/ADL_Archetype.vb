@@ -1801,8 +1801,38 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 End Select
                 'Now synchronised with cDefintion
+
+                If Me.HasLinkConstraints Then
+                    BuildLinks(Me.Links, adlArchetype.definition)
+                End If
+
                 mSynchronised = True
             End If
+        End Sub
+
+        Sub BuildLinks(ByVal cLinks As System.Collections.Generic.List(Of RmLink), ByVal cObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+            Dim linksAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = _
+                mAomFactory.create_c_attribute_multiple(cObject, EiffelSoftware.Library.Base.kernel.Create.STRING_8.make_from_cil("links"), MakeCardinality(New RmCardinality(0)))
+
+            Dim anAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+            For Each l As RmLink In cLinks
+                If l.HasConstraint Then
+                    Dim linkObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = _
+                        mAomFactory.create_c_complex_object_anonymous(linksAttribute, EiffelSoftware.Library.Base.kernel.Create.STRING_8.make_from_cil("LINK"))
+                    If l.Meaning.TypeOfTextConstraint <> TextConstrainType.Text Then
+                        anAttribute = mAomFactory.create_c_attribute_single(linkObject, EiffelSoftware.Library.Base.kernel.Create.STRING_8.make_from_cil("meaning"))
+                        BuildText(anAttribute, l.Meaning)
+                    End If
+                    If l.LinkType.TypeOfTextConstraint <> TextConstrainType.Text Then
+                        anAttribute = mAomFactory.create_c_attribute_single(linkObject, EiffelSoftware.Library.Base.kernel.Create.STRING_8.make_from_cil("type"))
+                    End If
+                    If l.Target.RegularExpression <> String.Empty Then
+                        anAttribute = mAomFactory.create_c_attribute_single(linkObject, EiffelSoftware.Library.Base.kernel.Create.STRING_8.make_from_cil("target"))
+                        BuildURI(anAttribute, l.Target)
+                    End If
+                End If
+            Next
         End Sub
 
         Sub BuildEntryAttributes(ByVal anEntry As RmEntry, ByVal archetypeDefinition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
