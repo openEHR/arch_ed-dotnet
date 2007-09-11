@@ -69,6 +69,7 @@ Public Class Designer
     Friend WithEvents PanelConcept_1 As System.Windows.Forms.Panel
     Friend WithEvents gbSpecialisation As System.Windows.Forms.GroupBox
     Friend WithEvents tvSpecialisation As System.Windows.Forms.TreeView
+    Friend WithEvents butLinks As System.Windows.Forms.Button
     Friend WithEvents mTabPageDescription As TabPageDescription
 
 #Region " Windows Form Designer generated code "
@@ -393,6 +394,7 @@ Public Class Designer
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
+        Me.butLinks = New System.Windows.Forms.Button
         Me.PanelConcept.SuspendLayout()
         Me.tabComment.SuspendLayout()
         Me.tpConceptDescription.SuspendLayout()
@@ -459,6 +461,7 @@ Public Class Designer
         '
         Me.PanelConcept.BackColor = System.Drawing.Color.LightYellow
         Me.PanelConcept.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelConcept.Controls.Add(Me.butLinks)
         Me.PanelConcept.Controls.Add(Me.tabComment)
         Me.PanelConcept.Controls.Add(Me.lblConcept)
         Me.PanelConcept.Controls.Add(Me.txtConceptInFull)
@@ -1799,6 +1802,19 @@ Public Class Designer
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
         '
+        'butLinks
+        '
+        Me.butLinks.Image = CType(resources.GetObject("butLinks.Image"), System.Drawing.Image)
+        Me.butLinks.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.butLinks.Location = New System.Drawing.Point(318, 42)
+        Me.butLinks.Name = "butLinks"
+        Me.butLinks.Size = New System.Drawing.Size(97, 27)
+        Me.butLinks.TabIndex = 2
+        Me.butLinks.Text = "Links"
+        Me.butLinks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.butLinks.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
+        Me.butLinks.UseVisualStyleBackColor = True
+        '
         'Designer
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
@@ -2388,7 +2404,8 @@ Public Class Designer
         Me.tpConceptDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.tpConceptDescription.Text, language)
         Me.tpConceptComment.Text = Filemanager.GetOpenEhrTerm(652, Me.tpConceptComment.Text, language)
         Me.gbSpecialisation.Text = Filemanager.GetOpenEhrTerm(186, Me.gbSpecialisation.Text, language)
-        
+        Me.butLinks.Text = Filemanager.GetOpenEhrTerm(659, Me.butLinks.Text, language)
+
         'Entry tab on designer
         Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
         Me.cbParticipation.Text = Filemanager.GetOpenEhrTerm(654, Me.cbParticipation.Text, language)
@@ -5176,6 +5193,11 @@ Public Class Designer
 
     End Sub
 
+    Private Sub butLinks_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butLinks.Click
+        Dim frm As New Links
+        frm.ShowDialog(Me)
+
+    End Sub
 End Class
 
 
