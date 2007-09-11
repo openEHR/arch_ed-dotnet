@@ -629,10 +629,12 @@ Public Class TabPageStructure
 
     'JAR: 31MAY07, EDT-21 Empty structure raises an exception
     Public Function HasData() As Boolean 'Returns true if entry structure contains object(s)
-        'Changed: SRH - July 22nd - improved efficiency
-        If Not ArchetypeDisplay Is Nothing Then
-            Return ArchetypeDisplay.HasData()
+        'Changed: SRH - Sep 1st - bug with embedded slots
+        If (mIsEmbedded AndAlso Not mEmbeddedSlot Is Nothing) OrElse (Not ArchetypeDisplay Is Nothing AndAlso ArchetypeDisplay.HasData()) Then
+            Return True
         End If
+        'Return ArchetypeDisplay.HasData()
+        Return False
     End Function
 
     Public Function SaveAsStructure() As RmStructure
@@ -641,7 +643,6 @@ Public Class TabPageStructure
         'JAR: 31MAY07, EDT-21 Empty structure raises an exception
         If Not HasData() Then
             Return Nothing
-            Exit Function
         End If
 
         If mIsEmbedded Then

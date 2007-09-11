@@ -25,10 +25,9 @@ Partial Class TabPageParticipation
         Me.gbParticipations = New System.Windows.Forms.GroupBox
         Me.flowPanelParticipations = New System.Windows.Forms.FlowLayoutPanel
         Me.panelButtons = New System.Windows.Forms.Panel
-        Me.butListUp = New System.Windows.Forms.Button
-        Me.butListDown = New System.Windows.Forms.Button
         Me.butAddEvent = New System.Windows.Forms.Button
         Me.butRemoveElement = New System.Windows.Forms.Button
+        Me.panelOccurrences = New System.Windows.Forms.Panel
         Me.panelProvider.SuspendLayout()
         Me.gbParticipations.SuspendLayout()
         Me.panelButtons.SuspendLayout()
@@ -56,9 +55,9 @@ Partial Class TabPageParticipation
         'gbParticipations
         '
         Me.gbParticipations.Controls.Add(Me.flowPanelParticipations)
+        Me.gbParticipations.Controls.Add(Me.panelOccurrences)
         Me.gbParticipations.Controls.Add(Me.panelButtons)
         Me.gbParticipations.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbParticipations.Enabled = False
         Me.gbParticipations.Location = New System.Drawing.Point(0, 28)
         Me.gbParticipations.Name = "gbParticipations"
         Me.gbParticipations.Size = New System.Drawing.Size(602, 307)
@@ -68,17 +67,17 @@ Partial Class TabPageParticipation
         '
         'flowPanelParticipations
         '
+        Me.flowPanelParticipations.AutoScroll = True
         Me.flowPanelParticipations.Dock = System.Windows.Forms.DockStyle.Fill
         Me.flowPanelParticipations.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.flowPanelParticipations.Location = New System.Drawing.Point(33, 18)
+        Me.flowPanelParticipations.Location = New System.Drawing.Point(33, 73)
         Me.flowPanelParticipations.Name = "flowPanelParticipations"
-        Me.flowPanelParticipations.Size = New System.Drawing.Size(566, 286)
+        Me.flowPanelParticipations.Size = New System.Drawing.Size(566, 231)
         Me.flowPanelParticipations.TabIndex = 0
+        Me.flowPanelParticipations.WrapContents = False
         '
         'panelButtons
         '
-        Me.panelButtons.Controls.Add(Me.butListUp)
-        Me.panelButtons.Controls.Add(Me.butListDown)
         Me.panelButtons.Controls.Add(Me.butAddEvent)
         Me.panelButtons.Controls.Add(Me.butRemoveElement)
         Me.panelButtons.Dock = System.Windows.Forms.DockStyle.Left
@@ -86,22 +85,6 @@ Partial Class TabPageParticipation
         Me.panelButtons.Name = "panelButtons"
         Me.panelButtons.Size = New System.Drawing.Size(30, 286)
         Me.panelButtons.TabIndex = 1
-        '
-        'butListUp
-        '
-        Me.butListUp.Image = CType(resources.GetObject("butListUp.Image"), System.Drawing.Image)
-        Me.butListUp.Location = New System.Drawing.Point(3, 57)
-        Me.butListUp.Name = "butListUp"
-        Me.butListUp.Size = New System.Drawing.Size(24, 24)
-        Me.butListUp.TabIndex = 27
-        '
-        'butListDown
-        '
-        Me.butListDown.Image = CType(resources.GetObject("butListDown.Image"), System.Drawing.Image)
-        Me.butListDown.Location = New System.Drawing.Point(3, 83)
-        Me.butListDown.Name = "butListDown"
-        Me.butListDown.Size = New System.Drawing.Size(24, 24)
-        Me.butListDown.TabIndex = 28
         '
         'butAddEvent
         '
@@ -121,6 +104,15 @@ Partial Class TabPageParticipation
         Me.butRemoveElement.Name = "butRemoveElement"
         Me.butRemoveElement.Size = New System.Drawing.Size(24, 24)
         Me.butRemoveElement.TabIndex = 26
+        '
+        'panelOccurrences
+        '
+        Me.panelOccurrences.Dock = System.Windows.Forms.DockStyle.Top
+        Me.panelOccurrences.Location = New System.Drawing.Point(33, 18)
+        Me.panelOccurrences.Name = "panelOccurrences"
+        Me.panelOccurrences.Size = New System.Drawing.Size(566, 55)
+        Me.panelOccurrences.TabIndex = 2
+        Me.panelOccurrences.Visible = False
         '
         'TabPageParticipation
         '
@@ -142,9 +134,8 @@ Partial Class TabPageParticipation
     Friend WithEvents gbParticipations As System.Windows.Forms.GroupBox
     Friend WithEvents flowPanelParticipations As System.Windows.Forms.FlowLayoutPanel
     Friend WithEvents panelButtons As System.Windows.Forms.Panel
-    Friend WithEvents butListUp As System.Windows.Forms.Button
-    Friend WithEvents butListDown As System.Windows.Forms.Button
     Friend WithEvents butAddEvent As System.Windows.Forms.Button
     Friend WithEvents butRemoveElement As System.Windows.Forms.Button
+    Friend WithEvents panelOccurrences As System.Windows.Forms.Panel
 
 End Class

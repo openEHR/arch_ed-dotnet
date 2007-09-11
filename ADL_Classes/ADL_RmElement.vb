@@ -814,7 +814,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                                 End If
 
-                                If t.AllowableValues.TerminologyID = "local" Then
+                                If t.AllowableValues.TerminologyID = "local" Or t.AllowableValues.TerminologyID = "openehr" Then
                                     t.TypeOfTextConstraint = TextConstrainType.Internal
                                 End If
                         End Select

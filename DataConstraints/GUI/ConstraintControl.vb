@@ -172,6 +172,9 @@ Public Class ConstraintControl
         'Noop
     End Sub
 
+    Public Function HasConstraint() As Boolean
+        Return Not mConstraint Is Nothing
+    End Function
 
     Public Shared Function CreateConstraintControl(ByVal aConstraintType As ConstraintType, ByVal a_file_manager As FileManagerLocal) As ConstraintControl
 

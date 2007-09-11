@@ -101,9 +101,11 @@ Public Class RmStructureCompound
         Debug.Assert(a_structure_type = StructureType.Data Or _
             a_structure_type = StructureType.State Or _
             a_structure_type = StructureType.Protocol Or _
-            a_structure_type = StructureType.ism_transition Or _
+            a_structure_type = StructureType.ISM_TRANSITION Or _
             a_structure_type = StructureType.ActivityDescription Or _
-            a_structure_type = StructureType.Activities)
+            a_structure_type = StructureType.Activities Or _
+            a_structure_type = StructureType.OtherParticipations)
+
         colChildren = New Children(mType)
         ProcessData(EIF_Attribute, a_filemanager)
     End Sub
@@ -247,6 +249,8 @@ Public Class RmStructureCompound
                             End If
                         Case StructureType.Activity
                             colChildren.Add(New RmActivity(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
+                        Case StructureType.Participation
+                            colChildren.Add(New RmParticipation(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))) ', a_filemanager))
                         Case Else
                             Debug.Assert(False)
                     End Select
