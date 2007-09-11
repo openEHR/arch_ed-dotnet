@@ -363,8 +363,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Me.txtAssumedValue.Visible = True
         End If
 
+        If Me.Constraint.AllowableValues.Codes.Count > 0 AndAlso mFileManager.OntologyManager.Ontology.HasTermCode(TextConstraint.AllowableValues.Codes.Item(0)) Then
 
-        If Me.Constraint.AllowableValues.Codes.Count > 0 Then
             SetAllowableValuesFilter(Me.Constraint)
 
             Me.listAllowableValues.DataSource = mAllowedValuesDataView
@@ -385,7 +385,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Me.listAllowableValues.DataSource = Nothing
             Me.listAllowableValues.Items.Clear()
             Me.txtAssumedValue.Text = "(none)"
-
+            'May not be present so clear them if they are
+            TextConstraint.AllowableValues.Codes.Clear()
         End If
 
     End Sub
@@ -415,9 +416,13 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Private Sub SetAllowableValuesFilter(ByVal TextConstraint As Constraint_Text)
         Dim i As Integer
         Dim cd As String
+        Dim code As String
         cd = "Code = "
-        For i = 0 To TextConstraint.AllowableValues.Codes.Count - 1
-            cd = cd & "'" & TextConstraint.AllowableValues.Codes.Item(i) & "'"
+
+            For i = 0 To TextConstraint.AllowableValues.Codes.Count - 1
+            ' Codes could be out of date if a save has been carried out
+            code = TextConstraint.AllowableValues.Codes.Item(i)
+            cd = cd & "'" & code & "'"
             If i < (TextConstraint.AllowableValues.Codes.Count - 1) Then
                 cd = cd & " OR Code = "
             End If
@@ -562,9 +567,9 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Me.ButNewItem.Focus()
 
             Me.Constraint.TypeOfTextConstraint = TextConstrainType.Internal
-            If Me.listAllowableValues.Items.Count = 0 Then
-                SetInternalCodedValues(Me.butDefaultItem.Visible) 'It is true if it is state
-            End If
+            'If Me.listAllowableValues.Items.Count = 0 Then
+            SetInternalCodedValues(Me.butDefaultItem.Visible) 'It is true if it is state
+            'End If
             mFileManager.FileEdited = True
         End If
 
@@ -586,30 +591,28 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
             Me.Constraint.TypeOfTextConstraint = TextConstrainType.Terminology
 
-            If Me.Constraint.ConstraintCode = "" Then
-                If mConstraintTerm Is Nothing Then
-                    mConstraintTerm = mFileManager.OntologyManager.AddConstraint(Filemanager.GetOpenEhrTerm(139, "New constraint"))
-                End If
+            MyBase.IsLoading = True  ' avoids replacing the text
+
+            If Me.Constraint.ConstraintCode = "" OrElse Not mFileManager.OntologyManager.Ontology.HasTermCode(Me.Constraint.ConstraintCode) Then
+                mConstraintTerm = mFileManager.OntologyManager.AddConstraint(Filemanager.GetOpenEhrTerm(139, "New constraint"))
                 Me.Constraint.ConstraintCode = mConstraintTerm.Code
-                MyBase.IsLoading = True  ' avoids replacing the text
                 Me.txtTermConstraintText.Text = mConstraintTerm.Text
                 Me.txtTermConstraintDescription.Text = mConstraintTerm.Description
-                MyBase.IsLoading = False
 
             Else
                 mConstraintTerm = mFileManager.OntologyManager.GetTerm(Me.Constraint.ConstraintCode)
                 Me.txtTermConstraintText.Text = mConstraintTerm.Text
                 Me.txtTermConstraintDescription.Text = mConstraintTerm.Description
-
             End If
 
             Me.txtAssumedValue.Text = ""
             Me.Constraint.HasAssumedValue = False
+            MyBase.IsLoading = False
+
 
             Me.txtTermConstraintText.Focus()
 
             mFileManager.FileEdited = True
-
         End If
 
     End Sub
@@ -697,6 +700,17 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             MenuItemEdit.Visible = False
         End If
     End Sub
+
+    Friend Property TextConstraint() As Constraint_Text
+        Get
+            Return Constraint
+        End Get
+        Set(ByVal value As Constraint_Text)
+            MyBase.Constraint = value
+            SetControlValues(False)
+            IsLoading = False
+        End Set
+    End Property
 
 End Class
 

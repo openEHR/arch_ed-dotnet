@@ -261,6 +261,9 @@ Public Class OccurrencesPanel
                 Me.numMax.Value = 1
                 Me.cbUnbounded.Checked = False
                 Me.Enabled = False
+                If mMode = OccurrencesMode.Lexical Then
+                    Me.comboOptional.SelectedIndex = 1
+                End If
             Else
                 Me.Enabled = True
             End If

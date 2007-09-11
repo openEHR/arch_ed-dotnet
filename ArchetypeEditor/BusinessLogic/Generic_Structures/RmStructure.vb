@@ -53,6 +53,10 @@ Public Enum StructureType
     Activity = 586
     Activities = 587
     ActivityDescription = 509
+
+    Participation = 654
+    OtherParticipations = 659
+
     ISM_TRANSITION = 1005
 End Enum
 

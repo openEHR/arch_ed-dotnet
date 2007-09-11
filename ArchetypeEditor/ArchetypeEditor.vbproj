@@ -363,9 +363,6 @@
     </Compile>
     <Compile Include="ADL_Classes\ADL_TranslationDetails.vb" />
     <Compile Include="ApplicationEvents.vb" />
-    <Compile Include="BusinessLogic\EHR_Classes\Participation.vb">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="BusinessLogic\Proxy.vb" />
     <Compile Include="BusinessLogic\Duration.vb">
       <SubType>Code</SubType>
@@ -477,7 +474,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BusinessLogic\RmExistence.vb" />
-    <Compile Include="BusinessLogic\RmParticipation.vb" />
+    <Compile Include="BusinessLogic\EHR_Classes\RmParticipation.vb" />
     <Compile Include="DataConstraintsView\ArchetypeView.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -1054,6 +1051,7 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="ClassDiagram1.cd" />
     <None Include="My Project\Settings.settings">
       <CustomToolNamespace>My</CustomToolNamespace>
       <Generator>SettingsSingleFileGenerator</Generator>

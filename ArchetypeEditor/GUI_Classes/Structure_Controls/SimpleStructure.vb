@@ -196,6 +196,10 @@ Public Class SimpleStructure
         End Get
     End Property
 
+    Public Overrides Function HasData() As Boolean
+        Return Not mElement Is Nothing
+    End Function
+
     Public Overrides Sub Reset()
         Me.txtSimple.Text = ""
         Me.ButAddElement.Visible = True
@@ -384,7 +388,7 @@ Public Class SimpleStructure
 
     Private Sub txtSimple_DragDrop(ByVal sender As System.Object, _
     ByVal e As System.Windows.Forms.DragEventArgs) Handles txtSimple.DragDrop
-        
+
         If Not mNewConstraint Is Nothing Then
             AddNewElement(mNewConstraint)
             mNewConstraint = Nothing

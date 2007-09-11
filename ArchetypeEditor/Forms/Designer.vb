@@ -1,6 +1,7 @@
 '
 '
 '	component:   "openEHR Archetype Project"
+
 '	description: "$DESCRIPTION"
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
@@ -2015,6 +2016,14 @@ Public Class Designer
                     ' allow restriction of subject of data
                     InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
 
+                    If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                        Me.cbParticipation.Checked = True
+                        mTabPageParticipation.chkProvider.Checked = CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory
+                        If CType(mFileManager.Archetype.Definition, RmEntry).HasOtherParticipations Then
+                            mTabPageParticipation.OtherParticipations = CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations
+                        End If
+                    End If
+
                     ' deal with the various groups of information appropriate to the type
                     Select Case mFileManager.Archetype.RmEntity
                         Case StructureType.ENTRY ' "ENTRY"
@@ -3056,15 +3065,22 @@ Public Class Designer
         Me.tabComment.SelectedIndex = 0
         
         'set the other pages
-        Me.chkEventSeries.Enabled = False
         Me.cbStructurePersonState.Checked = False
+        Me.cbStructurePersonState.Visible = False
         Me.cbPersonState.Checked = False
+        Me.cbPersonState.Visible = False
         Me.chkEventSeries.Checked = False
+        Me.chkEventSeries.Visible = False
         Me.cbProtocol.Checked = False
+        Me.cbProtocol.Visible = False
         Me.cbStructurePersonState.Checked = False
-        Me.cbProtocol.Checked = False
+        Me.cbStructurePersonState.Visible = False
+
         'set the display panel to nothing
         Me.mRichTextArchetype.Clear()
+
+        'Set the participation to false
+        Me.cbParticipation.Checked = False
 
         'Get rid of the languages from menu
         Me.MenuLanguageChange.MenuItems.Clear()
@@ -3101,7 +3117,9 @@ Public Class Designer
         mTabPageSection = Nothing
         mTabPageDescription.Reset()
         mTermBindingPanel.Reset()
-
+        If Not mTabPageParticipation Is Nothing Then
+            mTabPageParticipation.Reset()
+        End If
 
 
     End Sub
@@ -3127,17 +3145,17 @@ Public Class Designer
                 Select Case archetyped_class
                     Case StructureType.ADMIN_ENTRY, StructureType.ENTRY
                         'no protocol, state or EventSeries
-                        Me.cbPersonState.Enabled = False
-                        Me.cbStructurePersonState.Enabled = False
-                        Me.cbProtocol.Enabled = False
+                        Me.cbPersonState.Visible = False
+                        Me.cbStructurePersonState.Visible = False
+                        Me.cbProtocol.Visible = False
                     Case StructureType.EVALUATION
-                        Me.cbPersonState.Enabled = False
-                        Me.cbStructurePersonState.Enabled = False
-                        Me.cbProtocol.Enabled = True
+                        Me.cbPersonState.Visible = False
+                        Me.cbStructurePersonState.Visible = False
+                        Me.cbProtocol.Visible = True
                     Case StructureType.OBSERVATION
-                        Me.cbPersonState.Enabled = True
-                        Me.cbStructurePersonState.Enabled = True
-                        Me.cbProtocol.Enabled = True
+                        Me.cbPersonState.Visible = True
+                        Me.cbStructurePersonState.Visible = True
+                        Me.cbProtocol.Visible = True
                 End Select
 
             Case StructureType.INSTRUCTION
@@ -3341,6 +3359,9 @@ Public Class Designer
         ' reset the data structure tab page
         mTabPageDataStructure = New TabPageStructure
 
+        'Changed SRH: Sep 1st 2007
+        mTabPageDataStructure.EmbeddedAllowed = False
+
         Me.tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
         Me.tpDataStructure.Controls.Add(mTabPageDataStructure)
         mTabPageDataStructure.Dock = DockStyle.Fill
@@ -3366,7 +3387,7 @@ Public Class Designer
         Select Case archetyped_class
             Case StructureType.OBSERVATION
                 'must have a EventSeries
-                Me.cbPersonState.Enabled = True
+                Me.cbPersonState.Visible = True
                 If isNew Then
                     SetUpDataStructure()
                     SetUpEventSeries()
@@ -3791,14 +3812,18 @@ Public Class Designer
 
     End Sub
 
-    Private Sub ProcessState(ByVal a_Structure As RmStructureCompound)
+    Private Sub ProcessState(ByVal a_Structure As RmStructure)
 
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageDataStateStructure = New TabPageStructure  'Me)
         mTabPageDataStateStructure.IsState = True ' allows assumed values to be set (buttons visible)
         Me.cbStructurePersonState.Checked = True
 
-        mTabPageDataStateStructure.ProcessStructure(a_Structure)
+        If a_Structure.Type = StructureType.Slot Then
+            mTabPageDataStateStructure.ProcessStructure(CType(a_Structure, RmSlot))
+        Else
+            mTabPageDataStateStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
+        End If
 
         ' add it to the collection of components that require translation
         tp.Title = mTabPageDataStateStructure.StructureType
@@ -3838,20 +3863,27 @@ Public Class Designer
     End Sub
 
     Private Sub ProcessDataStructure(ByVal a_Structure As RmStructure)
-        If a_Structure.Type = StructureType.Slot Then
-            mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmSlot))
-        Else
-            mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
-        End If
+        'Changed - no slots for data in archetypes (allowed in state and protocol)
+        'Added chkEmbedded = false
+        'If a_Structure.Type = StructureType.Slot Then
+        'mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmSlot))
+        'Else
+        mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
+        'End If
+        mTabPageDataStructure.EmbeddedAllowed = False
         Me.tpDataStructure.Title = mTabPageDataStructure.StructureTypeAsString
     End Sub
 
-    Private Sub ProcessProtocol(ByVal rm As RmStructureCompound, ByVal tbCtrl As Crownwood.Magic.Controls.TabControl)
+    Private Sub ProcessProtocol(ByVal rm As RmStructure, ByVal tbCtrl As Crownwood.Magic.Controls.TabControl)
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageProtocolStructure = New TabPageStructure '(Me)
         mTabPageProtocolStructure.BackColor = System.Drawing.Color.PaleGoldenrod
-        mTabPageProtocolStructure.ProcessStructure(rm)
-
+        If rm.Type = StructureType.Slot Then
+            mTabPageProtocolStructure.ProcessStructure(CType(rm, RmSlot))
+        Else
+            mTabPageProtocolStructure.ProcessStructure(CType(rm, RmStructureCompound))
+        End If
+        
         ' add it to the collection of components that require translation
         mComponentsCollection.Add(mTabPageProtocolStructure)
         tp.Controls.Add(mTabPageProtocolStructure)
@@ -3890,10 +3922,12 @@ Public Class Designer
                 StructureType.OBSERVATION, StructureType.INSTRUCTION, _
                 StructureType.ACTION, StructureType.ADMIN_ENTRY
 
+                'Subject of data
                 If Not mRestrictedSubject Is Nothing AndAlso mRestrictedSubject.HasRestriction Then
                     CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship = mRestrictedSubject.AsCodePhrase
                 End If
 
+                'Participations
                 If cbParticipation.Checked Then
                     'Participations may have been added
                     If mTabPageParticipation.chkProvider.Checked Then
@@ -3901,7 +3935,11 @@ Public Class Designer
                     Else
                         CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory = False
                     End If
-                    'ToDo: Check for further participations
+
+                    'Check for other participations
+                    If mTabPageParticipation.HasOtherParticipations Then
+                        CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations = mTabPageParticipation.OtherParticipations
+                    End If
                 End If
 
                 Select Case mFileManager.Archetype.Definition.Type
@@ -4170,8 +4208,6 @@ Public Class Designer
     Private Sub Designer_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         ' general initialisation
-        Dim frmSplash As New Splash
-        frmSplash.Show()
 
         AddHandler Filemanager.IsFileDirtyChanged, AddressOf FileManager_IsFileDirtyChanged
         mFileManager = New FileManagerLocal
@@ -4229,9 +4265,9 @@ Public Class Designer
                 ReferenceModel.SetModelType(ReferenceModelType.openEHR_EHR)
             End If
 
-            'JAR: 12APR07, EDT23 Continue to display splash screen for another 1 second (accounts for overhead to load archetype)
-            'System.Threading.Thread.Sleep(1000)
-            frmSplash.Hide() 'Hide splash screen before open as open can display messagebox that will otherwise sit behind splash screen
+            ''JAR: 12APR07, EDT23 Continue to display splash screen for another 1 second (accounts for overhead to load archetype)
+            ''System.Threading.Thread.Sleep(1000)
+            'frmSplash.Hide() 'Hide splash screen before open as open can display messagebox that will otherwise sit behind splash screen
 
             OpenArchetype(ArchetypeToOpen)
 
@@ -4242,9 +4278,9 @@ Public Class Designer
             End If
 
         Else
-            'JAR: 12APR07, EDT23: Continue to display splash screen for another 2 seconds
-            System.Threading.Thread.Sleep(2000)
-            frmSplash.Hide()
+            ''JAR: 12APR07, EDT23: Continue to display splash screen for another 2 seconds
+            'System.Threading.Thread.Sleep(2000)
+            'frmSplash.Hide()
             Me.Show()
 
             'load the start screen
@@ -4436,7 +4472,7 @@ Public Class Designer
 
         If cbStructurePersonState.Checked Then
             'cannot have rootstate - 'Person State With EventSeries'
-            Me.cbPersonState.Visible = False
+            Me.cbPersonState.Enabled = False
 
             If mFileManager.FileLoading Then Exit Sub
 
@@ -4474,13 +4510,13 @@ Public Class Designer
         Else
 
             If mFileManager.FileLoading Then
-                Me.cbPersonState.Visible = True
+                Me.cbPersonState.Enabled = True
             Else
                 Dim tp As Crownwood.Magic.Controls.TabPage
 
                 If MessageBox.Show(AE_Constants.Instance.Remove_state, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
                     Windows.Forms.DialogResult.OK Then
-                    Me.cbPersonState.Visible = True
+                    Me.cbPersonState.Enabled = True
                     For Each tp In Me.TabStructure.TabPages
                         If tp.Name = "tpStateStructure" Then
                             Me.TabStructure.TabPages.Remove(tp)

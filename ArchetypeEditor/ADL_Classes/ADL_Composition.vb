@@ -37,7 +37,7 @@ Class ADL_COMPOSITION
                     Case "category"
                         Dim t As Constraint_Text
                         t = ADL_RmElement.ProcessText(an_attribute.children.first)
-                        If t.AllowableValues.hasCode("431") Then
+                        If t.AllowableValues.HasCode("431") Then
                             'isPersistent defaults to false (openehr::433) for event
                             mIsPersistent = True
                         End If

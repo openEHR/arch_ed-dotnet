@@ -77,6 +77,9 @@ Public Class RestrictedSet
                 Case RestrictedSet.TermSet.Setting
                     Me.Title = Filemanager.GetOpenEhrTerm(226, "Setting")
                     Me.Visible = True
+                Case TermSet.ParticipationMode
+                    Me.Title = Filemanager.GetOpenEhrTerm(192, "Participation mode")
+                    Me.Visible = True
                 Case Else
                     Me.Visible = False
                     Debug.Assert(False, "Need to handle this sort of termset")

@@ -576,15 +576,17 @@ Namespace ArchetypeEditor.XML_Classes
             Dim events As Object()
             Dim history_event As XMLParser.C_COMPLEX_OBJECT
             Dim an_attribute As XMLParser.C_ATTRIBUTE
+            Dim embeddedState As Boolean = False
 
             Try
 
                 events = BuildHistory(a_history, RelNode)
 
-                Dim a_rm As RmStructureCompound
+                Dim a_rm As RmStructure = Nothing
 
-                a_rm = rmState.Children.items(0)
-
+                If rmState.Children.Count > 0 Then
+                    a_rm = rmState.Children.items(0)
+                End If
 
                 If events.Length > 0 AndAlso Not a_rm Is Nothing Then
                     Dim path As String = "?"
@@ -595,19 +597,29 @@ Namespace ArchetypeEditor.XML_Classes
 
                         'First event has the structure
                         If i = 0 Then
-                            Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                            'objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId)
-                            objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-                            BuildStructure(a_rm, objNode)
-                            path = Me.GetPathOfNode(a_rm.NodeId)
-                        Else
-                            'create a reference
-                            Dim ref_xmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF
-                            If Not path = "?" Then
-                                ref_xmlRefNode = mAomFactory.MakeArchetypeRef(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), path)
+                            If a_rm.Type = StructureType.Slot Then
+                                embeddedState = True
+                                BuildSlot(an_attribute, a_rm)
                             Else
-                                Debug.Assert(False, "Error with path")
+
+                                Dim objNode As XMLParser.C_COMPLEX_OBJECT
+                                'objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId)
+                                objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+
+                                BuildStructure(a_rm, objNode)
+                                path = Me.GetPathOfNode(a_rm.NodeId)
+                            End If
+                        Else
+                            If embeddedState Then
+                                BuildSlot(an_attribute, a_rm)
+                            Else
+                                'create a reference
+                                Dim ref_xmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF
+                                If Not path = "?" Then
+                                    ref_xmlRefNode = mAomFactory.MakeArchetypeRef(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), path)
+                                Else
+                                    Debug.Assert(False, "Error with path")
+                                End If
                             End If
                         End If
                     Next
@@ -2078,12 +2090,22 @@ Namespace ArchetypeEditor.XML_Classes
                     '    ReferenceModel.RM_StructureName(rmStructComp.Children.items(0).Type), _
                     '    rmStructComp.Children.items(0).NodeId)
 
-                    objNode = mAomFactory.MakeComplexObject( _
-                                            an_attribute, _
-                                            ReferenceModel.RM_StructureName(rmStructComp.Children.items(0).Type), _
-                                            rmStructComp.Children.items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
-                    BuildStructure(rmStructComp.Children.items(0), objNode)
+                    'Changed SRH - allow a slot for protocol
+                    Dim protocolRm As RmStructure
+
+                    protocolRm = rmStructComp.Children.items(0)
+                    If protocolRm.Type = StructureType.Slot Then
+                        BuildSlot(an_attribute, CType(protocolRm, RmSlot))
+
+                    Else
+                        objNode = mAomFactory.MakeComplexObject( _
+                            an_attribute, _
+                            ReferenceModel.RM_StructureName(rmStructComp.Children.items(0).Type), _
+                            rmStructComp.Children.items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+
+                        BuildStructure(CType(protocolRm, RmStructureCompound), objNode)
+                    End If
                 End If
             End If
 
@@ -2366,7 +2388,7 @@ Namespace ArchetypeEditor.XML_Classes
                                     Case StructureType.State
 
                                         'for the moment saving the state data on the first event EventSeries if there is one
-                                        Dim a_rm As RmStructureCompound
+                                        Dim a_rm As RmStructure
 
                                         a_rm = rm.Children.items(0)
 
