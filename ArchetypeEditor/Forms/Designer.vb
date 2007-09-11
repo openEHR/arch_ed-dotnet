@@ -2159,16 +2159,16 @@ Public Class Designer
             If mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) Then
                 Me.ListLanguages.SelectedValue = OceanArchetypeEditor.SpecificLanguageCode
                 Translate(OceanArchetypeEditor.SpecificLanguageCode)
-            ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) AndAlso _
-                Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.DefaultLanguageCode Then
-                Me.ListLanguages.SelectedValue = OceanArchetypeEditor.DefaultLanguageCode
-                Translate(OceanArchetypeEditor.DefaultLanguageCode)
+            ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) Then
+                If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.DefaultLanguageCode Then
+                    Me.ListLanguages.SelectedValue = OceanArchetypeEditor.DefaultLanguageCode
+                    Translate(OceanArchetypeEditor.DefaultLanguageCode)
+                End If
             Else
                 Me.ListLanguages.SelectedValue = mFileManager.OntologyManager.PrimaryLanguageCode
                 ChangeLanguage(Me.ListLanguages.SelectedValue)
             End If
         End If
-
 
         If Not mTermBindingPanel Is Nothing Then
             Me.mTermBindingPanel.PopulatePathTree()
