@@ -770,11 +770,11 @@ Public Class OceanArchetypeEditor
             frm.RightToLeft = RightToLeft.Yes
         End If
 
-        Try
-            OTSControls.Term.OtsWebService.dummyQueryNavigationNode(Nothing, Nothing)
-        Catch
-            Stop
-        End Try
+        'Try
+        '    OTSControls.Term.OtsWebService.dummyQueryNavigationNode(Nothing, Nothing)
+        'Catch
+        '    Stop
+        'End Try
 
         Try            
             frm.ShowDialog()
