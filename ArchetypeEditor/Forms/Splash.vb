@@ -56,9 +56,10 @@ Public Class Splash
         '
         'buttonClose
         '
-        Me.buttonClose.Location = New System.Drawing.Point(44, 194)
+        Me.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.buttonClose.Location = New System.Drawing.Point(32, 210)
         Me.buttonClose.Name = "buttonClose"
-        Me.buttonClose.Size = New System.Drawing.Size(75, 23)
+        Me.buttonClose.Size = New System.Drawing.Size(104, 23)
         Me.buttonClose.TabIndex = 0
         Me.buttonClose.Text = "Close"
         Me.buttonClose.UseVisualStyleBackColor = True
@@ -139,9 +140,8 @@ Public Class Splash
         End If
     End Sub
 
-
-    Private Sub buttonClose_Click(ByVal sender As Object, ByVal e As EventArgs)
-        Me.Close()
+    Private Sub buttonClose_Click(ByVal sender As Object, ByVal e As EventArgs) Handles buttonClose.Click
+        Close()
     End Sub
 
 End Class
