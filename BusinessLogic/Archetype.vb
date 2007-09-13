@@ -53,16 +53,6 @@ Public MustInherit Class Archetype
             mDescription = Value
         End Set
     End Property
-    Protected mLinks As New System.Collections.Generic.List(Of RmLink)
-
-    Public Property Links() As System.Collections.Generic.List(Of RmLink)
-        Get
-            Return mLinks
-        End Get
-        Set(ByVal value As System.Collections.Generic.List(Of RmLink))
-            mLinks = value
-        End Set
-    End Property
 
     Protected mTranslationDetails As Generic.SortedList(Of String, TranslationDetails) = New Generic.SortedList(Of String, TranslationDetails)
 
@@ -124,7 +114,7 @@ Public MustInherit Class Archetype
     End Property
 
     Public Function HasLinkConstraints() As Boolean
-        For Each l As RmLink In mLinks
+        For Each l As RmLink In cDefinition.RootLinks
             If l.HasConstraint Then
                 Return True
             End If
@@ -166,6 +156,7 @@ Public MustInherit Class Archetype
         If Not cDefinition Is Nothing AndAlso TypeOf (cDefinition) Is ArchetypeDefinition Then
             CType(cDefinition, ArchetypeDefinition).Data.Clear()
         End If
+        cDefinition.RootLinks.Clear()
         'Not archetype is not synchronised with definition
         mSynchronised = False
     End Sub

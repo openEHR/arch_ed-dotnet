@@ -20,26 +20,27 @@ Partial Class Links
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Links))
-        Me.Panel1 = New System.Windows.Forms.Panel
+        Me.PanelLeft = New System.Windows.Forms.Panel
         Me.butAddEvent = New System.Windows.Forms.Button
         Me.butRemoveElement = New System.Windows.Forms.Button
-        Me.flowPanelLinks = New System.Windows.Forms.FlowLayoutPanel
         Me.PanelBottom = New System.Windows.Forms.Panel
-        Me.butOK = New System.Windows.Forms.Button
         Me.butCancel = New System.Windows.Forms.Button
-        Me.Panel1.SuspendLayout()
+        Me.butOK = New System.Windows.Forms.Button
+        Me.panelLinks = New System.Windows.Forms.Panel
+        Me.PanelLeft.SuspendLayout()
         Me.PanelBottom.SuspendLayout()
         Me.SuspendLayout()
         '
-        'Panel1
+        'PanelLeft
         '
-        Me.Panel1.Controls.Add(Me.butAddEvent)
-        Me.Panel1.Controls.Add(Me.butRemoveElement)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Left
-        Me.Panel1.Location = New System.Drawing.Point(0, 0)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(35, 710)
-        Me.Panel1.TabIndex = 0
+        Me.PanelLeft.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelLeft.Controls.Add(Me.butAddEvent)
+        Me.PanelLeft.Controls.Add(Me.butRemoveElement)
+        Me.PanelLeft.Dock = System.Windows.Forms.DockStyle.Left
+        Me.PanelLeft.Location = New System.Drawing.Point(0, 0)
+        Me.PanelLeft.Name = "PanelLeft"
+        Me.PanelLeft.Size = New System.Drawing.Size(35, 656)
+        Me.PanelLeft.TabIndex = 0
         '
         'butAddEvent
         '
@@ -60,47 +61,46 @@ Partial Class Links
         Me.butRemoveElement.Size = New System.Drawing.Size(24, 24)
         Me.butRemoveElement.TabIndex = 28
         '
-        'flowPanelLinks
-        '
-        Me.flowPanelLinks.AutoScroll = True
-        Me.flowPanelLinks.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.flowPanelLinks.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.flowPanelLinks.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
-        Me.flowPanelLinks.Location = New System.Drawing.Point(35, 0)
-        Me.flowPanelLinks.Name = "flowPanelLinks"
-        Me.flowPanelLinks.Size = New System.Drawing.Size(771, 677)
-        Me.flowPanelLinks.TabIndex = 1
-        Me.flowPanelLinks.WrapContents = False
-        '
         'PanelBottom
         '
         Me.PanelBottom.Controls.Add(Me.butCancel)
         Me.PanelBottom.Controls.Add(Me.butOK)
         Me.PanelBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelBottom.Location = New System.Drawing.Point(35, 677)
+        Me.PanelBottom.Location = New System.Drawing.Point(35, 623)
         Me.PanelBottom.Name = "PanelBottom"
-        Me.PanelBottom.Size = New System.Drawing.Size(771, 33)
+        Me.PanelBottom.Size = New System.Drawing.Size(807, 33)
         Me.PanelBottom.TabIndex = 2
+        '
+        'butCancel
+        '
+        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.butCancel.Location = New System.Drawing.Point(727, 2)
+        Me.butCancel.Name = "butCancel"
+        Me.butCancel.Size = New System.Drawing.Size(75, 30)
+        Me.butCancel.TabIndex = 1
+        Me.butCancel.Text = "Cancel"
+        Me.butCancel.UseVisualStyleBackColor = True
         '
         'butOK
         '
+        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(612, 2)
+        Me.butOK.Location = New System.Drawing.Point(648, 2)
         Me.butOK.Name = "butOK"
         Me.butOK.Size = New System.Drawing.Size(75, 30)
         Me.butOK.TabIndex = 0
         Me.butOK.Text = "OK"
         Me.butOK.UseVisualStyleBackColor = True
         '
-        'butCancel
+        'panelLinks
         '
-        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(690, 2)
-        Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(75, 30)
-        Me.butCancel.TabIndex = 1
-        Me.butCancel.Text = "Cancel"
-        Me.butCancel.UseVisualStyleBackColor = True
+        Me.panelLinks.AutoScroll = True
+        Me.panelLinks.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.panelLinks.Location = New System.Drawing.Point(35, 0)
+        Me.panelLinks.Name = "panelLinks"
+        Me.panelLinks.Size = New System.Drawing.Size(807, 623)
+        Me.panelLinks.TabIndex = 3
         '
         'Links
         '
@@ -108,23 +108,23 @@ Partial Class Links
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.AutoScroll = True
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(806, 710)
-        Me.Controls.Add(Me.flowPanelLinks)
+        Me.ClientSize = New System.Drawing.Size(842, 656)
+        Me.Controls.Add(Me.panelLinks)
         Me.Controls.Add(Me.PanelBottom)
-        Me.Controls.Add(Me.Panel1)
+        Me.Controls.Add(Me.PanelLeft)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Links"
         Me.Text = "Links"
-        Me.Panel1.ResumeLayout(False)
+        Me.PanelLeft.ResumeLayout(False)
         Me.PanelBottom.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents PanelLeft As System.Windows.Forms.Panel
     Friend WithEvents butAddEvent As System.Windows.Forms.Button
     Friend WithEvents butRemoveElement As System.Windows.Forms.Button
-    Friend WithEvents flowPanelLinks As System.Windows.Forms.FlowLayoutPanel
     Friend WithEvents PanelBottom As System.Windows.Forms.Panel
     Friend WithEvents butCancel As System.Windows.Forms.Button
     Friend WithEvents butOK As System.Windows.Forms.Button
+    Friend WithEvents panelLinks As System.Windows.Forms.Panel
 End Class

@@ -627,23 +627,8 @@ Public Class TabPageStructure
         mIsLoading = False
     End Sub
 
-    'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-    Public Function HasData() As Boolean 'Returns true if entry structure contains object(s)
-        'Changed: SRH - Sep 1st - bug with embedded slots
-        If (mIsEmbedded AndAlso Not mEmbeddedSlot Is Nothing) OrElse (Not ArchetypeDisplay Is Nothing AndAlso ArchetypeDisplay.HasData()) Then
-            Return True
-        End If
-        'Return ArchetypeDisplay.HasData()
-        Return False
-    End Function
-
     Public Function SaveAsStructure() As RmStructure
         ' save as RmStructureCompound or RmSlot
-
-        'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-        If Not HasData() Then
-            Return Nothing
-        End If
 
         If mIsEmbedded Then
             If mEmbeddedSlot Is Nothing Then
@@ -667,8 +652,6 @@ Public Class TabPageStructure
     End Function
 
     Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
-        If Not HasData() Then Exit Sub 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-
         If Not mArchetypeControl Is Nothing Then
             text.WriteLine(mArchetypeControl.ToRichText(level, Chr(13) & Chr(10)))
             text.WriteLine("\pard\f0\fs20\par")
@@ -677,8 +660,6 @@ Public Class TabPageStructure
     End Sub
 
     Public Sub toHTML(ByRef text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "")
-        If Not HasData() Then Exit Sub 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-
         If Not mArchetypeControl Is Nothing Then
             text.WriteLine(mArchetypeControl.ToHTML(BackGroundColour))
             text.WriteLine("<hr>")
@@ -759,7 +740,7 @@ Public Class TabPageStructure
         End If
 
         'If Not mArchetypeControl Is Nothing Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-        If Not mArchetypeControl Is Nothing AndAlso HasData() Then
+        If Not mArchetypeControl Is Nothing AndAlso mArchetypeControl.HasData Then
             ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only, mFileManager)
         End If
     End Sub

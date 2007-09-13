@@ -22,7 +22,7 @@ Public Class Link
             mIsLoading = False
         End Set
     End Property
-    Private Sub Participation_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+    Private Sub Link_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Me.PanelTop.Controls.Add(mOccurrences)
         mOccurrences.Dock = DockStyle.Left
         Me.gbTarget.Dock = DockStyle.Fill
@@ -76,4 +76,14 @@ Public Class Link
             mLinkMeaning.TextConstraint.TypeOfTextConstraint <> TextConstrainType.Text OrElse _
             txtTarget.Text <> String.Empty
     End Function
+
+    Public Sub New()
+
+        ' This call is required by the Windows Form Designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        mOccurrences.Cardinality = mLink.Occurrences
+
+    End Sub
 End Class

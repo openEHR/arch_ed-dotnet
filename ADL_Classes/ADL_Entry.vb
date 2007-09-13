@@ -72,6 +72,8 @@ Class ADL_ENTRY
                         Me.ProviderIsMandatory = True
                     Case "other_participations"
                         Me.OtherParticipations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
+                    Case "links"
+
                     Case Else
                         Debug.Assert(False, String.Format("{0} not handled", an_attribute.rm_attribute_name.to_cil))
                 End Select
