@@ -1477,9 +1477,10 @@ Namespace ArchetypeEditor.ADL_Classes
             If rm.Children.Count > 0 Then
 
                 Dim rmStruct As RmStructure = rm.Children.items(0)
-                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(adlArchetype.definition, EiffelKernel.Create.STRING_8.make_from_cil("protocol"))
+                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
                 If rmStruct.Type = StructureType.Slot Then
+                    an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, EiffelKernel.Create.STRING_8.make_from_cil("protocol"))
                     BuildSlot(an_attribute, CType(rmStruct, RmSlot))
                 Else
                     an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, EiffelKernel.Create.STRING_8.make_from_cil("protocol"))
@@ -1802,8 +1803,10 @@ Namespace ArchetypeEditor.ADL_Classes
                 End Select
                 'Now synchronised with cDefintion
 
+
+
                 If Me.HasLinkConstraints Then
-                    BuildLinks(Me.Links, adlArchetype.definition)
+                    BuildLinks(Me.Definition.RootLinks, adlArchetype.definition)
                 End If
 
                 mSynchronised = True

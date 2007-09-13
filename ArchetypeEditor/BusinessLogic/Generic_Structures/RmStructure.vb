@@ -88,7 +88,7 @@ Public Class RmStructure
             mRunTimeConstraint = Value
         End Set
     End Property
-    Public Property Links() As System.Collections.Generic.List(Of RmLink)
+    Public Property Links() As System.Collections.Generic.List(Of RmLink) Implements ArcheTypeDefinitionBasic.RootLinks
         Get
             Return mLinks
         End Get

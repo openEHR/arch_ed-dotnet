@@ -153,7 +153,9 @@ Public Class SimpleStructure
         Get
             Dim rm As New RmStructureCompound(mNodeId, StructureType.Single)
             rm.Occurrences = New RmCardinality(1, 1)
-            rm.Children.Add(mElement.RM_Class)
+            If Not mElement Is Nothing Then
+                rm.Children.Add(mElement.RM_Class)
+            End If
             Return rm
         End Get
         Set(ByVal Value As RmStructureCompound)
