@@ -128,12 +128,21 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkWeeks.Tag = "wk"
         Me.chkWeeks.Text = "Weeks"
         '
+        'chkDays
+        '
+        Me.chkDays.Location = New System.Drawing.Point(16, 80)
+        Me.chkDays.Name = "chkDays"
+        Me.chkDays.Size = New System.Drawing.Size(176, 24)
+        Me.chkDays.TabIndex = 41
+        Me.chkDays.Tag = "d"
+        Me.chkDays.Text = "Days"
+        '
         'chkHours
         '
         Me.chkHours.Location = New System.Drawing.Point(224, 8)
         Me.chkHours.Name = "chkHours"
         Me.chkHours.Size = New System.Drawing.Size(152, 24)
-        Me.chkHours.TabIndex = 41
+        Me.chkHours.TabIndex = 42
         Me.chkHours.Tag = "h"
         Me.chkHours.Text = "Hours"
         '
@@ -142,7 +151,7 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkMinutes.Location = New System.Drawing.Point(224, 32)
         Me.chkMinutes.Name = "chkMinutes"
         Me.chkMinutes.Size = New System.Drawing.Size(152, 24)
-        Me.chkMinutes.TabIndex = 42
+        Me.chkMinutes.TabIndex = 43
         Me.chkMinutes.Tag = "min"
         Me.chkMinutes.Text = "Minutes"
         '
@@ -151,18 +160,9 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         Me.chkSeconds.Location = New System.Drawing.Point(224, 56)
         Me.chkSeconds.Name = "chkSeconds"
         Me.chkSeconds.Size = New System.Drawing.Size(152, 24)
-        Me.chkSeconds.TabIndex = 43
+        Me.chkSeconds.TabIndex = 44
         Me.chkSeconds.Tag = "s"
         Me.chkSeconds.Text = "Seconds"
-        '
-        'chkDays
-        '
-        Me.chkDays.Location = New System.Drawing.Point(16, 80)
-        Me.chkDays.Name = "chkDays"
-        Me.chkDays.Size = New System.Drawing.Size(176, 24)
-        Me.chkDays.TabIndex = 44
-        Me.chkDays.Tag = "d"
-        Me.chkDays.Text = "Days"
         '
         'chkMilliseconds
         '

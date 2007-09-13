@@ -82,7 +82,7 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         Me.LabelTrueFalseDefault.Location = New System.Drawing.Point(8, 40)
         Me.LabelTrueFalseDefault.Name = "LabelTrueFalseDefault"
         Me.LabelTrueFalseDefault.Size = New System.Drawing.Size(120, 36)
-        Me.LabelTrueFalseDefault.TabIndex = 2
+        Me.LabelTrueFalseDefault.TabIndex = 1
         Me.LabelTrueFalseDefault.Text = "Allowed values:"
         Me.LabelTrueFalseDefault.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -108,7 +108,7 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         Me.gbAssummedValue.Location = New System.Drawing.Point(56, 88)
         Me.gbAssummedValue.Name = "gbAssummedValue"
         Me.gbAssummedValue.Size = New System.Drawing.Size(160, 80)
-        Me.gbAssummedValue.TabIndex = 3
+        Me.gbAssummedValue.TabIndex = 4
         Me.gbAssummedValue.TabStop = False
         Me.gbAssummedValue.Text = "Assumed value"
         '
@@ -119,7 +119,7 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         Me.cbTrue.Location = New System.Drawing.Point(152, 32)
         Me.cbTrue.Name = "cbTrue"
         Me.cbTrue.Size = New System.Drawing.Size(72, 24)
-        Me.cbTrue.TabIndex = 4
+        Me.cbTrue.TabIndex = 2
         Me.cbTrue.Text = "True"
         '
         'cbFalse
@@ -129,7 +129,7 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         Me.cbFalse.Location = New System.Drawing.Point(152, 56)
         Me.cbFalse.Name = "cbFalse"
         Me.cbFalse.Size = New System.Drawing.Size(72, 24)
-        Me.cbFalse.TabIndex = 5
+        Me.cbFalse.TabIndex = 3
         Me.cbFalse.Text = "False"
         '
         'BooleanConstraintControl

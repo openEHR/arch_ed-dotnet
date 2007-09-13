@@ -167,7 +167,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
         Me.PanelDataConstraint.Name = "PanelDataConstraint"
         Me.PanelDataConstraint.Size = New System.Drawing.Size(420, 257)
-        Me.PanelDataConstraint.TabIndex = 31
+        Me.PanelDataConstraint.TabIndex = 32
         '
         'labelAny
         '
@@ -189,7 +189,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelNonAnonymous.Location = New System.Drawing.Point(0, 0)
         Me.PanelNonAnonymous.Name = "PanelNonAnonymous"
         Me.PanelNonAnonymous.Size = New System.Drawing.Size(420, 96)
-        Me.PanelNonAnonymous.TabIndex = 32
+        Me.PanelNonAnonymous.TabIndex = 31
         '
         'butSetRuntimeName
         '
@@ -295,7 +295,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbValueSets.Location = New System.Drawing.Point(3, 348)
         Me.gbValueSets.Name = "gbValueSets"
         Me.gbValueSets.Size = New System.Drawing.Size(420, 59)
-        Me.gbValueSets.TabIndex = 6
+        Me.gbValueSets.TabIndex = 8
         Me.gbValueSets.TabStop = False
         Me.gbValueSets.Text = "Value sets in external terminologies"
         Me.gbValueSets.Visible = False
@@ -319,7 +319,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.termLookUp.MinimumSize = New System.Drawing.Size(60, 55)
         Me.termLookUp.Name = "termLookUp"
         Me.termLookUp.Size = New System.Drawing.Size(420, 55)
-        Me.termLookUp.TabIndex = 8
+        Me.termLookUp.TabIndex = 7
         Me.termLookUp.Tag = ""
         Me.termLookUp.TermCaption = "SNOMED"
         Me.termLookUp.TermId = Nothing
@@ -335,7 +335,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.Splitter1.Location = New System.Drawing.Point(3, 290)
         Me.Splitter1.Name = "Splitter1"
         Me.Splitter1.Size = New System.Drawing.Size(420, 3)
-        Me.Splitter1.TabIndex = 7
+        Me.Splitter1.TabIndex = 6
         Me.Splitter1.TabStop = False
         '
         'gbTerminology
@@ -345,7 +345,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbTerminology.Location = New System.Drawing.Point(3, 178)
         Me.gbTerminology.Name = "gbTerminology"
         Me.gbTerminology.Size = New System.Drawing.Size(420, 112)
-        Me.gbTerminology.TabIndex = 4
+        Me.gbTerminology.TabIndex = 5
         Me.gbTerminology.TabStop = False
         Me.gbTerminology.Text = "Node meaning in terminologies"
         '
@@ -391,7 +391,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbComments.Location = New System.Drawing.Point(3, 3)
         Me.gbComments.Name = "gbComments"
         Me.gbComments.Size = New System.Drawing.Size(420, 175)
-        Me.gbComments.TabIndex = 5
+        Me.gbComments.TabIndex = 4
         Me.gbComments.TabStop = False
         Me.gbComments.Text = "Comments"
         '
