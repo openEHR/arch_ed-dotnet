@@ -68,7 +68,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
         Me.TabConstraints.Name = "TabConstraints"
         Me.TabConstraints.SelectedIndex = 0
         Me.TabConstraints.Size = New System.Drawing.Size(360, 232)
-        Me.TabConstraints.TabIndex = 0
+        Me.TabConstraints.TabIndex = 1
         '
         'PanelMultipleControl
         '
@@ -78,7 +78,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
         Me.PanelMultipleControl.Location = New System.Drawing.Point(0, 0)
         Me.PanelMultipleControl.Name = "PanelMultipleControl"
         Me.PanelMultipleControl.Size = New System.Drawing.Size(32, 232)
-        Me.PanelMultipleControl.TabIndex = 1
+        Me.PanelMultipleControl.TabIndex = 0
         '
         'butRemoveUnit
         '
@@ -88,7 +88,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
         Me.butRemoveUnit.Location = New System.Drawing.Point(4, 40)
         Me.butRemoveUnit.Name = "butRemoveUnit"
         Me.butRemoveUnit.Size = New System.Drawing.Size(24, 25)
-        Me.butRemoveUnit.TabIndex = 44
+        Me.butRemoveUnit.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.butRemoveUnit, "Remove selected constraint")
         '
         'butAddConstraint
@@ -100,7 +100,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
         Me.butAddConstraint.Location = New System.Drawing.Point(4, 8)
         Me.butAddConstraint.Name = "butAddConstraint"
         Me.butAddConstraint.Size = New System.Drawing.Size(24, 25)
-        Me.butAddConstraint.TabIndex = 43
+        Me.butAddConstraint.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.butAddConstraint, "Add new constraint")
         '
         'MultipleConstraintControl

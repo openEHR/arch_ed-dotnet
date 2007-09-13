@@ -85,14 +85,14 @@ Public Class OccurrencesPanel
         Me.panelNumeric.Location = New System.Drawing.Point(0, 128)
         Me.panelNumeric.Name = "panelNumeric"
         Me.panelNumeric.Size = New System.Drawing.Size(376, 32)
-        Me.panelNumeric.TabIndex = 0
+        Me.panelNumeric.TabIndex = 3
         '
         'lblNumMax
         '
         Me.lblNumMax.Location = New System.Drawing.Point(128, 3)
         Me.lblNumMax.Name = "lblNumMax"
         Me.lblNumMax.Size = New System.Drawing.Size(48, 16)
-        Me.lblNumMax.TabIndex = 7
+        Me.lblNumMax.TabIndex = 1
         Me.lblNumMax.Text = "Max:"
         Me.lblNumMax.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
@@ -102,7 +102,7 @@ Public Class OccurrencesPanel
         Me.lblNumMin.Location = New System.Drawing.Point(16, 3)
         Me.lblNumMin.Name = "lblNumMin"
         Me.lblNumMin.Size = New System.Drawing.Size(48, 16)
-        Me.lblNumMin.TabIndex = 5
+        Me.lblNumMin.TabIndex = 0
         Me.lblNumMin.Text = "Min:"
         Me.lblNumMin.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
@@ -111,7 +111,7 @@ Public Class OccurrencesPanel
         Me.cbUnbounded.Location = New System.Drawing.Point(248, 0)
         Me.cbUnbounded.Name = "cbUnbounded"
         Me.cbUnbounded.Size = New System.Drawing.Size(120, 24)
-        Me.cbUnbounded.TabIndex = 10
+        Me.cbUnbounded.TabIndex = 2
         Me.cbUnbounded.Text = "Unbounded"
         '
         'gbOccurrences
@@ -139,7 +139,7 @@ Public Class OccurrencesPanel
         Me.comboRepeat.Location = New System.Drawing.Point(115, 0)
         Me.comboRepeat.Name = "comboRepeat"
         Me.comboRepeat.Size = New System.Drawing.Size(149, 24)
-        Me.comboRepeat.TabIndex = 2
+        Me.comboRepeat.TabIndex = 1
         '
         'comboOptional
         '
@@ -154,7 +154,7 @@ Public Class OccurrencesPanel
         Me.lblDash.Location = New System.Drawing.Point(302, 4)
         Me.lblDash.Name = "lblDash"
         Me.lblDash.Size = New System.Drawing.Size(32, 16)
-        Me.lblDash.TabIndex = 13
+        Me.lblDash.TabIndex = 2
         Me.lblDash.Text = "-"
         Me.lblDash.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
@@ -164,7 +164,7 @@ Public Class OccurrencesPanel
         Me.numMin.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numMin.Name = "numMin"
         Me.numMin.Size = New System.Drawing.Size(40, 22)
-        Me.numMin.TabIndex = 13
+        Me.numMin.TabIndex = 4
         '
         'numMax
         '
@@ -172,7 +172,7 @@ Public Class OccurrencesPanel
         Me.numMax.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numMax.Name = "numMax"
         Me.numMax.Size = New System.Drawing.Size(40, 22)
-        Me.numMax.TabIndex = 14
+        Me.numMax.TabIndex = 5
         Me.numMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'cbOrdered
@@ -180,7 +180,7 @@ Public Class OccurrencesPanel
         Me.cbOrdered.Location = New System.Drawing.Point(16, 0)
         Me.cbOrdered.Name = "cbOrdered"
         Me.cbOrdered.Size = New System.Drawing.Size(112, 24)
-        Me.cbOrdered.TabIndex = 15
+        Me.cbOrdered.TabIndex = 0
         Me.cbOrdered.Text = "Ordered"
         Me.cbOrdered.Visible = False
         '

@@ -88,7 +88,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.listUnits.Location = New System.Drawing.Point(77, 100)
         Me.listUnits.Name = "listUnits"
         Me.listUnits.Size = New System.Drawing.Size(192, 68)
-        Me.listUnits.TabIndex = 15
+        Me.listUnits.TabIndex = 6
         '
         'lblListProperty
         '
@@ -96,7 +96,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.lblListProperty.Location = New System.Drawing.Point(24, 29)
         Me.lblListProperty.Name = "lblListProperty"
         Me.lblListProperty.Size = New System.Drawing.Size(224, 16)
-        Me.lblListProperty.TabIndex = 9
+        Me.lblListProperty.TabIndex = 1
         Me.lblListProperty.Text = "Property:"
         '
         'lblListUnits
@@ -105,7 +105,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.lblListUnits.Location = New System.Drawing.Point(28, 78)
         Me.lblListUnits.Name = "lblListUnits"
         Me.lblListUnits.Size = New System.Drawing.Size(136, 16)
-        Me.lblListUnits.TabIndex = 2
+        Me.lblListUnits.TabIndex = 3
         Me.lblListUnits.Text = "Units:"
         '
         'comboPhysicalProperty
@@ -116,7 +116,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.comboPhysicalProperty.Location = New System.Drawing.Point(41, 51)
         Me.comboPhysicalProperty.Name = "comboPhysicalProperty"
         Me.comboPhysicalProperty.Size = New System.Drawing.Size(289, 24)
-        Me.comboPhysicalProperty.TabIndex = 0
+        Me.comboPhysicalProperty.TabIndex = 2
         Me.comboPhysicalProperty.ValueMember = "id"
         '
         'butAddUnit
@@ -128,7 +128,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.butAddUnit.Location = New System.Drawing.Point(45, 100)
         Me.butAddUnit.Name = "butAddUnit"
         Me.butAddUnit.Size = New System.Drawing.Size(24, 25)
-        Me.butAddUnit.TabIndex = 40
+        Me.butAddUnit.TabIndex = 4
         Me.ToolTip1.SetToolTip(Me.butAddUnit, "Add new item")
         '
         'butRemoveUnit
@@ -139,7 +139,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.butRemoveUnit.Location = New System.Drawing.Point(45, 128)
         Me.butRemoveUnit.Name = "butRemoveUnit"
         Me.butRemoveUnit.Size = New System.Drawing.Size(24, 25)
-        Me.butRemoveUnit.TabIndex = 42
+        Me.butRemoveUnit.TabIndex = 5
         Me.ToolTip1.SetToolTip(Me.butRemoveUnit, "Remove highlighted item")
         '
         'LabelQuantity
@@ -148,7 +148,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.LabelQuantity.Location = New System.Drawing.Point(16, 8)
         Me.LabelQuantity.Name = "LabelQuantity"
         Me.LabelQuantity.Size = New System.Drawing.Size(88, 16)
-        Me.LabelQuantity.TabIndex = 43
+        Me.LabelQuantity.TabIndex = 0
         Me.LabelQuantity.Text = "Quantity"
         '
         'QuantityUnitConstraint
@@ -156,7 +156,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.QuantityUnitConstraint.Location = New System.Drawing.Point(0, 171)
         Me.QuantityUnitConstraint.Name = "QuantityUnitConstraint"
         Me.QuantityUnitConstraint.Size = New System.Drawing.Size(384, 120)
-        Me.QuantityUnitConstraint.TabIndex = 0
+        Me.QuantityUnitConstraint.TabIndex = 7
         Me.QuantityUnitConstraint.Visible = False
         '
         'QuantityConstraintControl

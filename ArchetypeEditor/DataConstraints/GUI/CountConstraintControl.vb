@@ -113,7 +113,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.LabelQuantity.Location = New System.Drawing.Point(8, 0)
         Me.LabelQuantity.Name = "LabelQuantity"
         Me.LabelQuantity.Size = New System.Drawing.Size(88, 16)
-        Me.LabelQuantity.TabIndex = 12
+        Me.LabelQuantity.TabIndex = 0
         Me.LabelQuantity.Text = "Count"
         '
         'cbMinValue
@@ -121,7 +121,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.cbMinValue.Location = New System.Drawing.Point(20, 29)
         Me.cbMinValue.Name = "cbMinValue"
         Me.cbMinValue.Size = New System.Drawing.Size(184, 24)
-        Me.cbMinValue.TabIndex = 0
+        Me.cbMinValue.TabIndex = 3
         Me.cbMinValue.Text = "Set min. value"
         '
         'cbMaxValue
@@ -129,7 +129,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.cbMaxValue.Location = New System.Drawing.Point(20, 57)
         Me.cbMaxValue.Name = "cbMaxValue"
         Me.cbMaxValue.Size = New System.Drawing.Size(184, 24)
-        Me.cbMaxValue.TabIndex = 3
+        Me.cbMaxValue.TabIndex = 6
         Me.cbMaxValue.Text = "Set max. value"
         '
         'NumericAssumed
@@ -139,7 +139,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.NumericAssumed.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.NumericAssumed.Name = "NumericAssumed"
         Me.NumericAssumed.Size = New System.Drawing.Size(88, 22)
-        Me.NumericAssumed.TabIndex = 7
+        Me.NumericAssumed.TabIndex = 10
         Me.NumericAssumed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericAssumed.ThousandsSeparator = True
         Me.NumericAssumed.Visible = False
@@ -151,7 +151,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numMaxValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMaxValue.Name = "numMaxValue"
         Me.numMaxValue.Size = New System.Drawing.Size(88, 22)
-        Me.numMaxValue.TabIndex = 5
+        Me.numMaxValue.TabIndex = 8
         Me.numMaxValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numMaxValue.ThousandsSeparator = True
         Me.numMaxValue.Visible = False
@@ -162,8 +162,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numMinValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMinValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMinValue.Name = "numMinValue"
-        Me.numMinValue.Size = New System.Drawing.Size(88, 22) 'JAR: 22MAY2007, EDT-20 Matched control width to numMaxValue
-        Me.numMinValue.TabIndex = 2
+        Me.numMinValue.Size = New System.Drawing.Size(88, 22)
+        Me.numMinValue.TabIndex = 5
         Me.numMinValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numMinValue.ThousandsSeparator = True
         Me.numMinValue.Visible = False
@@ -232,7 +232,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.comboIncludeMin.Location = New System.Drawing.Point(212, 29)
         Me.comboIncludeMin.Name = "comboIncludeMin"
         Me.comboIncludeMin.Size = New System.Drawing.Size(48, 24)
-        Me.comboIncludeMin.TabIndex = 1
+        Me.comboIncludeMin.TabIndex = 4
         Me.comboIncludeMin.Text = ">="
         Me.comboIncludeMin.Visible = False
         '
@@ -242,7 +242,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.comboIncludeMax.Location = New System.Drawing.Point(212, 56)
         Me.comboIncludeMax.Name = "comboIncludeMax"
         Me.comboIncludeMax.Size = New System.Drawing.Size(48, 24)
-        Me.comboIncludeMax.TabIndex = 4
+        Me.comboIncludeMax.TabIndex = 7
         Me.comboIncludeMax.Text = "<="
         Me.comboIncludeMax.Visible = False
         '
@@ -251,7 +251,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.lblAssumedValue.Location = New System.Drawing.Point(68, 83)
         Me.lblAssumedValue.Name = "lblAssumedValue"
         Me.lblAssumedValue.Size = New System.Drawing.Size(184, 24)
-        Me.lblAssumedValue.TabIndex = 13
+        Me.lblAssumedValue.TabIndex = 9
         Me.lblAssumedValue.Text = "Assumed value:"
         Me.lblAssumedValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lblAssumedValue.Visible = False
@@ -261,7 +261,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numPrecision.Location = New System.Drawing.Point(317, 4)
         Me.numPrecision.Name = "numPrecision"
         Me.numPrecision.Size = New System.Drawing.Size(39, 22)
-        Me.numPrecision.TabIndex = 14
+        Me.numPrecision.TabIndex = 2
         Me.numPrecision.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numPrecision.Value = New Decimal(New Integer() {3, 0, 0, 0})
         '
@@ -271,7 +271,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.chkDecimalPlaces.Location = New System.Drawing.Point(134, 4)
         Me.chkDecimalPlaces.Name = "chkDecimalPlaces"
         Me.chkDecimalPlaces.Size = New System.Drawing.Size(156, 21)
-        Me.chkDecimalPlaces.TabIndex = 15
+        Me.chkDecimalPlaces.TabIndex = 1
         Me.chkDecimalPlaces.Text = "Limit decimal places"
         Me.chkDecimalPlaces.UseVisualStyleBackColor = True
         '

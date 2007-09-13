@@ -131,7 +131,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.ButNewItem.Location = New System.Drawing.Point(15, 24)
         Me.ButNewItem.Name = "ButNewItem"
         Me.ButNewItem.Size = New System.Drawing.Size(24, 24)
-        Me.ButNewItem.TabIndex = 9
+        Me.ButNewItem.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.ButNewItem, "Add a new term")
         '
         'butDefaultItem
@@ -139,7 +139,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.butDefaultItem.Location = New System.Drawing.Point(11, 165)
         Me.butDefaultItem.Name = "butDefaultItem"
         Me.butDefaultItem.Size = New System.Drawing.Size(157, 24)
-        Me.butDefaultItem.TabIndex = 8
+        Me.butDefaultItem.TabIndex = 4
         Me.butDefaultItem.Text = "Set assumed value"
         Me.butDefaultItem.Visible = False
         '
@@ -150,7 +150,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.butRemoveItem.Location = New System.Drawing.Point(15, 56)
         Me.butRemoveItem.Name = "butRemoveItem"
         Me.butRemoveItem.Size = New System.Drawing.Size(24, 24)
-        Me.butRemoveItem.TabIndex = 7
+        Me.butRemoveItem.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.butRemoveItem, "Remove term")
         '
         'txtAssumedValue
@@ -179,7 +179,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.butAddItem.Location = New System.Drawing.Point(15, 88)
         Me.butAddItem.Name = "butAddItem"
         Me.butAddItem.Size = New System.Drawing.Size(24, 24)
-        Me.butAddItem.TabIndex = 4
+        Me.butAddItem.TabIndex = 2
         Me.butAddItem.Text = "..."
         Me.ToolTip1.SetToolTip(Me.butAddItem, "Add a term that is already defined")
         '
