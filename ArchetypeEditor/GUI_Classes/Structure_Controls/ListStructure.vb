@@ -254,12 +254,14 @@ Public Class ListStructure
     End Property
 
     Private Sub AddRmStructureToList(ByVal a_structure As RmStructure)
-        If a_structure.Type = StructureType.Element Then
-            lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmElement), mFileManager))
-        ElseIf a_structure.Type = StructureType.Slot Then
-            lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmSlot), mFileManager))
-        Else
-            Debug.Assert(False, "Type not handled")
+        If Not a_structure Is Nothing Then
+            If a_structure.Type = StructureType.Element Then
+                lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmElement), mFileManager))
+            ElseIf a_structure.Type = StructureType.Slot Then
+                lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmSlot), mFileManager))
+            Else
+                Debug.Assert(False, "Type not handled")
+            End If
         End If
     End Sub
 
