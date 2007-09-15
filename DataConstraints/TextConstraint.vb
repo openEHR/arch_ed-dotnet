@@ -68,6 +68,7 @@ Public Class Constraint_Text
 
             If cpTerms.Codes.Contains(CStr(Value)) Then
                 mAssumed_value = CStr(Value)
+                HasAssumedValue = True
             End If
         End Set
     End Property

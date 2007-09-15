@@ -322,28 +322,21 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         ' set constraint values on control
 
+        'Changed SRH: 16th Sep - need to make this visible regardless of type to ensure
+        ' it is displayed if type of constraint is changed (moved from SetInternalCodedValues)
+        If IsState Then
+            Me.butDefaultItem.Visible = True
+            Me.txtAssumedValue.Visible = True
+        End If
+
         Select Case Me.Constraint.TypeOfTextConstraint
             Case TextConstrainType.Text
                 radioText.Checked = True
 
-                'Dim s As String
-                'Me.listAllowableValues.DataSource = Nothing
-                'Me.listAllowableValues.Items.Clear()
-                'Me.radioText.Checked = True
-
-                'For Each s In Me.Constraint.AllowableValues.Codes
-                '    Me.listAllowableValues.Items.Add(s)
-                'Next
-                'Me.txtAssumedValue.Text = CStr(Me.Constraint.AssumedValue)
-
-                '' clear the Terminology fields
-                'Me.txtTermConstraintText.Text = ""
-                'Me.txtTermConstraintDescription.Text = ""
-
             Case TextConstrainType.Internal
                 Me.radioInternal.Checked = True
 
-                SetInternalCodedValues(IsState)
+                SetInternalCodedValues()
 
             Case TextConstrainType.Terminology
                 Me.radioTerminology.Checked = True
@@ -356,12 +349,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     End Sub
 
-    Private Sub SetInternalCodedValues(ByVal isState As Boolean)
-
-        If isState Then
-            Me.butDefaultItem.Visible = True
-            Me.txtAssumedValue.Visible = True
-        End If
+    Private Sub SetInternalCodedValues()
 
         If Me.Constraint.AllowableValues.Codes.Count > 0 AndAlso mFileManager.OntologyManager.Ontology.HasTermCode(TextConstraint.AllowableValues.Codes.Item(0)) Then
 
@@ -377,14 +365,14 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 Me.txtAssumedValue.Text = aTerm.Text
 
             Else
-                Me.txtAssumedValue.Text = "(none)"
+                Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
             End If
 
         Else
             ' to hide values as they are not override if the filter is set
             Me.listAllowableValues.DataSource = Nothing
             Me.listAllowableValues.Items.Clear()
-            Me.txtAssumedValue.Text = "(none)"
+            Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
             'May not be present so clear them if they are
             TextConstraint.AllowableValues.Codes.Clear()
         End If
@@ -440,10 +428,10 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Me.txtAssumedValue.Text = CType(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item("Text"), String)
             s = CStr(Me.listAllowableValues.SelectedValue)
             Me.txtAssumedValue.Tag = s
-        
+            ' automatically sets hasAssumedValue
             Me.Constraint.AssumedValue = s
 
-            ' automatically sets hasAssumedValue
+
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -508,7 +496,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                     ' have to delete this from all languages
                     If CStr(Me.listAllowableValues.Text) = defaultText Then
                         Me.Constraint.HasAssumedValue = False
-                        Me.txtAssumedValue.Text = "(none)"
+                        Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
 
                     End If
 
@@ -567,9 +555,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Me.ButNewItem.Focus()
 
             Me.Constraint.TypeOfTextConstraint = TextConstrainType.Internal
-            'If Me.listAllowableValues.Items.Count = 0 Then
-            SetInternalCodedValues(Me.butDefaultItem.Visible) 'It is true if it is state
-            'End If
+            SetInternalCodedValues()
             mFileManager.FileEdited = True
         End If
 
@@ -605,7 +591,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 Me.txtTermConstraintDescription.Text = mConstraintTerm.Description
             End If
 
-            Me.txtAssumedValue.Text = ""
+            Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
             Me.Constraint.HasAssumedValue = False
             MyBase.IsLoading = False
 
@@ -660,7 +646,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         If MyBase.IsLoading Then Return
 
         Me.Constraint.HasAssumedValue = False
-        Me.txtAssumedValue.Text = "(none)"
+        Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
 
         mFileManager.FileEdited = True
 
