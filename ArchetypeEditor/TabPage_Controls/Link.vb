@@ -11,6 +11,7 @@ Public Class Link
             mLink.Meaning = mLinkMeaning.TextConstraint
             'Occurrences set automatically
             mLink.LinkType = mLinkType.TextConstraint
+            mLink.Target.RegularExpression = Me.txtTarget.Text
             Return mLink
         End Get
         Set(ByVal value As RmLink)
@@ -19,6 +20,7 @@ Public Class Link
             mLinkMeaning.TextConstraint = mLink.Meaning
             mOccurrences.Cardinality = mLink.Occurrences
             mLinkType.TextConstraint = mLink.LinkType
+            Me.txtTarget.Text = mLink.Target.RegularExpression
             mIsLoading = False
         End Set
     End Property
@@ -86,4 +88,5 @@ Public Class Link
         mOccurrences.Cardinality = mLink.Occurrences
 
     End Sub
+
 End Class

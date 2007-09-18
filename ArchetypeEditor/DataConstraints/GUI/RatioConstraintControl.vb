@@ -180,6 +180,9 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
         Else
             cbIsIntegral.CheckState = CheckState.Indeterminate
         End If
+        'SRH 18th Sep - hide check decimal places in proportion as precision is not available
+        mNumeratorControl.chkDecimalPlaces.Visible = False
+        mDenominatorControl.chkDecimalPlaces.Visible = False
 
         If Me.Constraint.AllowAllTypes Then
             Me.cbAllowAll.Checked = True

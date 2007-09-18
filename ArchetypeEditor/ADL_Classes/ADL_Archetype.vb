@@ -589,7 +589,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             RatioObject = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(cp.Type)))
 
-            If cp.Numerator.HasMaximum Or cp.Numerator.HasMinimum Then
+            If cp.Numerator.HasMaximum Or cp.Numerator.HasMinimum Or cp.Numerator.Precision <> -1 Then
                 fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, EiffelKernel.Create.STRING_8.make_from_cil("numerator"))
                 BuildReal(fraction_attribute, cp.Numerator)
             End If
