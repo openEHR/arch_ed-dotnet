@@ -153,7 +153,6 @@ Section /o un.Main UNSEC0000
     RMDir /r /REBOOTOK $INSTDIR\Help
     RMDir /r /REBOOTOK $INSTDIR\HTML
     RMDir /r /REBOOTOK $INSTDIR\PropertyUnits
-    RMDir /r /REBOOTOK $INSTDIR\SampleArchetypes
     RMDir /r /REBOOTOK $INSTDIR\Terminology
     DeleteRegValue HKLM "${REGKEY}\Components" Main
 SectionEnd
