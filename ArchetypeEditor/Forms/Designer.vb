@@ -17,6 +17,8 @@
 
 'Option Strict On
 
+Imports System.IO
+
 Public Class Designer
     Inherits System.Windows.Forms.Form
 
@@ -2712,7 +2714,7 @@ Public Class Designer
         Dim text As IO.StreamWriter
         Dim commaspace As Char() = {" ", ","}
 
-        text = IO.File.CreateText(Application.StartupPath & filename)
+        text = IO.File.CreateText(filename)
 
         text.WriteLine("<HTML>")
         text.WriteLine("<HEAD>")
@@ -5054,8 +5056,16 @@ Public Class Designer
 
             Case "html"
                 Try
-                    WriteToHTML("\HTML\temp.html")
-                    Process.Start("file://" & Application.StartupPath & "\HTML\temp.html")
+                    Dim appData As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
+                    Dim appDataImages As String = Path.Combine(appData, "Images")
+
+                    If Not Directory.Exists(appDataImages) Then
+                        My.Computer.FileSystem.CopyDirectory(Path.Combine(Application.StartupPath, "HTML\images"), appDataImages)
+                    End If
+
+                    Dim filename As String = Path.Combine(appData, "temp.html")
+                    WriteToHTML(filename)
+                    Process.Start("file:///" & filename)
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
