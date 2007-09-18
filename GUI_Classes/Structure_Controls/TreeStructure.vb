@@ -573,15 +573,15 @@ Public Class TreeStructure
         If selNode Is Nothing Then
             Me.tvTree.Nodes.Add(tvNode)
         Else
-            If selNode.RM_Class.Type = StructureType.Cluster Then
-                selNode.Nodes.Add(tvNode)
-            Else
+            'if selnode.rm_class.type = structuretype.cluster then
+            '    selnode.nodes.add(tvnode)
+            'Else
                 If selNode.Parent Is Nothing Then
                     Me.tvTree.Nodes.Add(tvNode)
                 Else
                     Me.tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
                 End If
-            End If
+            'End If
         End If
 
         mFileManager.FileEdited = True
