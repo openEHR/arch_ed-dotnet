@@ -484,7 +484,19 @@ Namespace ArchetypeEditor.ADL_Classes
                         ' set the term for all languages
                         For Each selected_row In TheOntologyManager.LanguagesTable.Rows
                             ' take each term from the ADL ontology
-                            a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(EiffelKernel.Create.STRING_8.make_from_cil(selected_row(0)), s))
+                            'SRH: 20.9.2007 - Added check as found problem with handcrafted archetype
+                            Dim archetypeTerm As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM
+                            archetypeTerm = EIF_adlInterface.ontology.term_definition(EiffelKernel.Create.STRING_8.make_from_cil(selected_row(0)), s)
+                            If archetypeTerm Is Nothing Then
+                                Debug.Assert(False, "Term not in this language")
+                                a_term = New ADL_Term(s.to_cil)
+                                a_term.Text = "#Error#"
+                                a_term.Description = "#Error#"
+                                a_term.Comment = ""
+                            Else
+                                a_term = New ADL_Term(archetypeTerm)
+                            End If
+
                             ' and if it is not an internal ID for machine processing
                             d_row = TheOntologyManager.TermDefinitionTable.NewRow
                             d_row(0) = selected_row(0)

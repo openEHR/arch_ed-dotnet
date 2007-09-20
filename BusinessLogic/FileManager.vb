@@ -229,149 +229,155 @@ Public Class FileManagerLocal
     End Function
 
     Public Function OpenArchetype(ByVal aFileName As String) As Boolean
-        'Try
-        mPriorFileName = Me.FileName
+        Try
+            mPriorFileName = Me.FileName
 
-        'Need to check file name for eMail extensions
+            'Need to check file name for eMail extensions
 
-        'Dim i As Integer = aFileName.LastIndexOf("."c)
+            'Dim i As Integer = aFileName.LastIndexOf("."c)
 
-        'If i = 0 Then
-        '    Return False
-        'Else
-        '    Dim ext As String = aFileName.Substring(0, i).ToLowerInvariant
-        '    If ext <> "adl" Or ext <> "xml" Then
-        '        'could be an email temporary name
+            'If i = 0 Then
+            '    Return False
+            'Else
+            '    Dim ext As String = aFileName.Substring(0, i).ToLowerInvariant
+            '    If ext <> "adl" Or ext <> "xml" Then
+            '        'could be an email temporary name
 
-        '    End If
-        'End If
+            '    End If
+            'End If
 
 
-        Me.FileName = aFileName
+            Me.FileName = aFileName
 
-        If aFileName.ToLowerInvariant().EndsWith(".adl") Then
-            If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "xml" Then
-                mOntologyManager.Ontology = Nothing
-                mArchetypeEngine = Nothing
-                mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
-            End If
-        ElseIf aFileName.ToLowerInvariant().EndsWith(".xml") Then
-            If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "adl" Then
-                mOntologyManager.Ontology = Nothing
-                mArchetypeEngine = Nothing
-                mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface
-            End If
-        Else
-            MessageBox.Show("File type: " & aFileName & " is not supported", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Debug.Assert(False)
-            Return False
-        End If
-
-        mHasOpenFileError = False
-
-        ' next section: written by Jana Graenz, necessary for opening a "web archetype" (where path is a URL)
-        ' if this archtype comes from the web, aFileName will be the URL.
-        ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
-        ' it will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
-        ' This avoids data and file overflow.
-
-        If aFileName.StartsWith("http") Then
-
-            Dim fileUrl As New Uri(aFileName)
-            Dim request As System.Net.WebRequest
-            Dim response As Net.HttpWebResponse
-            Dim tempPath, strFileName, downloadPath As String
-            tempPath = System.IO.Path.GetTempPath
-
-            strFileName = System.IO.Path.GetFileName(fileUrl.AbsoluteUri)
-            downloadPath = System.IO.Path.Combine(tempPath, strFileName)
-            Try
-                request = System.Net.WebRequest.Create(fileUrl)
-                'CHANGED SRH - says use the default
-                'request.Proxy = System.Net.WebProxy.GetDefaultProxy
-                request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials ' to avoid eventually Proxy-Troubles
-                response = CType(request.GetResponse(), Net.HttpWebResponse)
-            Catch ex As Exception
+            If aFileName.ToLowerInvariant().EndsWith(".adl") Then
+                If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "xml" Then
+                    mOntologyManager.Ontology = Nothing
+                    mArchetypeEngine = Nothing
+                    mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
+                End If
+            ElseIf aFileName.ToLowerInvariant().EndsWith(".xml") Then
+                If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "adl" Then
+                    mOntologyManager.Ontology = Nothing
+                    mArchetypeEngine = Nothing
+                    mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface
+                End If
+            Else
+                MessageBox.Show("File type: " & aFileName & " is not supported", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Debug.Assert(False)
                 Return False
-            End Try
+            End If
 
-            Dim sw As New System.IO.StreamWriter(downloadPath)
+            mHasOpenFileError = False
 
-            Dim dataStream As IO.Stream = response.GetResponseStream()
-            ' Open the stream using a StreamReader for easy access.
-            Dim reader As New IO.StreamReader(dataStream)
-            ' Read the content.
-            Dim responseFromServer As String = reader.ReadToEnd()
-            ' Display the content.
-            sw.WriteLine(responseFromServer)
-            ' Cleanup the streams and the response.
-            reader.Close()
-            dataStream.Close()
-            response.Close()
-            sw.Close()
+            ' next section: written by Jana Graenz, necessary for opening a "web archetype" (where path is a URL)
+            ' if this archtype comes from the web, aFileName will be the URL.
+            ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
+            ' it will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
+            ' This avoids data and file overflow.
 
-            ' the web archetype has been written into a local temporary file!
-            aFileName = downloadPath
-        End If
+            If aFileName.StartsWith("http") Then
 
-        'end of addition
+                Dim fileUrl As New Uri(aFileName)
+                Dim request As System.Net.WebRequest
+                Dim response As Net.HttpWebResponse
+                Dim tempPath, strFileName, downloadPath As String
+                tempPath = System.IO.Path.GetTempPath
 
-        mArchetypeEngine.OpenFile(aFileName, Me)
+                strFileName = System.IO.Path.GetFileName(fileUrl.AbsoluteUri)
+                downloadPath = System.IO.Path.Combine(tempPath, strFileName)
+                Try
+                    request = System.Net.WebRequest.Create(fileUrl)
+                    'CHANGED SRH - says use the default
+                    'request.Proxy = System.Net.WebProxy.GetDefaultProxy
+                    request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials ' to avoid eventually Proxy-Troubles
+                    response = CType(request.GetResponse(), Net.HttpWebResponse)
+                Catch ex As Exception
+                    Return False
+                End Try
 
-        ' next section: written by Jana Graenz 2007-02-28
+                Dim sw As New System.IO.StreamWriter(downloadPath)
 
-        If aFileName.StartsWith(System.IO.Path.GetTempPath) Then
-            'delete the temporarily downloaded adl-file after opening it.
-            'user has to safe the file locally if he/she wants to keep it
-            Kill(aFileName)
-        End If
+                Dim dataStream As IO.Stream = response.GetResponseStream()
+                ' Open the stream using a StreamReader for easy access.
+                Dim reader As New IO.StreamReader(dataStream)
+                ' Read the content.
+                Dim responseFromServer As String = reader.ReadToEnd()
+                ' Display the content.
+                sw.WriteLine(responseFromServer)
+                ' Cleanup the streams and the response.
+                reader.Close()
+                dataStream.Close()
+                response.Close()
+                sw.Close()
 
-        'end of addition
+                ' the web archetype has been written into a local temporary file!
+                aFileName = downloadPath
+            End If
 
-        If mArchetypeEngine.OpenFileError Then
-            mHasOpenFileError = True
-            Return False
-        End If
+            'end of addition
 
-        'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
-        'Else
-        '' ensure the filename and archetype ID are in tune
-        'Dim i As Integer = aFileName.LastIndexOf("\")
-        'Dim shortFileName As String = aFileName.Substring(i + 1)
+            mArchetypeEngine.OpenFile(aFileName, Me)
 
-        'If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".") Then
-        '    If MessageBox.Show(mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & _
-        '       ": " & shortFileName & "; " & Environment.NewLine & _
-        '       mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & _
-        '       ": " & mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & _
-        '       mOntologyManager.GetOpenEHRTerm(147, "Change") & _
-        '       " " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name"), _
-        '       AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-        '        Me.FileName = aFileName.Substring(i + 1) + mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
-        '    End If
-        'End If
+            ' next section: written by Jana Graenz 2007-02-28
 
-        mPriorFileName = Nothing
-        mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
-        FileEdited = False
+            If aFileName.StartsWith(System.IO.Path.GetTempPath) Then
+                'delete the temporarily downloaded adl-file after opening it.
+                'user has to safe the file locally if he/she wants to keep it
+                Kill(aFileName)
+            End If
 
-        'ensure the filename and archetype ID match (ignore case!)        
-        Dim shortFileName As String = aFileName.Substring((aFileName.LastIndexOf("\")) + 1)
-        If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
-            If ArchetypeID.ValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
-                If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
+            'end of addition
+
+            If mArchetypeEngine.OpenFileError Then
+                mHasOpenFileError = True
+                Return False
+            End If
+
+            'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
+            'Else
+            '' ensure the filename and archetype ID are in tune
+            'Dim i As Integer = aFileName.LastIndexOf("\")
+            'Dim shortFileName As String = aFileName.Substring(i + 1)
+
+            'If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".") Then
+            '    If MessageBox.Show(mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & _
+            '       ": " & shortFileName & "; " & Environment.NewLine & _
+            '       mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & _
+            '       ": " & mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & _
+            '       mOntologyManager.GetOpenEHRTerm(147, "Change") & _
+            '       " " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name"), _
+            '       AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            '        Me.FileName = aFileName.Substring(i + 1) + mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
+            '    End If
+            'End If
+
+
+            mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
+            mPriorFileName = Nothing
+            FileEdited = False
+
+            'ensure the filename and archetype ID match (ignore case!)        
+            Dim shortFileName As String = aFileName.Substring((aFileName.LastIndexOf("\")) + 1)
+            If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
+                If ArchetypeID.ValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
+                    If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
+                        FileLoading = False
+                        FileEdited = True
+                        FileLoading = True
+                    End If
+                Else
+                    FileName = mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
                     FileLoading = False
                     FileEdited = True
                     FileLoading = True
                 End If
-            Else
-                FileName = mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
-                FileLoading = False
-                FileEdited = True
-                FileLoading = True
             End If
-        End If
-        Return True
+            Return True
+        Catch e As Exception
+            Me.FileName = mPriorFileName
+            mPriorFileName = Nothing
+        End Try
+
     End Function
 
     'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name

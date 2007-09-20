@@ -3591,7 +3591,9 @@ Public Class Designer
                 Return 1
             Case 6  'pressed the open button
                 frm.Close()
+
                 Me.OpenArchetype(Me, New System.EventArgs)
+
                 If mFileManager.Archetype Is Nothing Then
                     'open archetype was cancelled so go back to new
                     Return SetNewArchetypeName()
