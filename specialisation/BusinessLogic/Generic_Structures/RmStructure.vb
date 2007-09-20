@@ -53,6 +53,11 @@ Public Enum StructureType
     Activity = 586
     Activities = 587
     ActivityDescription = 509
+
+    Participation = 654
+    Link = 659
+    OtherParticipations = 660
+
     ISM_TRANSITION = 1005
 End Enum
 
@@ -65,6 +70,7 @@ Public Class RmStructure
     Protected cExistence As New RmExistence 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
     Protected mRunTimeConstraint As Constraint_Text
     Protected mType As StructureType
+    Protected mLinks As New System.Collections.Generic.List(Of RmLink)
 
     Public Overridable ReadOnly Property Type() As StructureType Implements ArcheTypeDefinitionBasic.Type
         Get
@@ -80,6 +86,14 @@ Public Class RmStructure
         End Get
         Set(ByVal Value As Constraint_Text)
             mRunTimeConstraint = Value
+        End Set
+    End Property
+    Public Property Links() As System.Collections.Generic.List(Of RmLink) Implements ArcheTypeDefinitionBasic.RootLinks
+        Get
+            Return mLinks
+        End Get
+        Set(ByVal value As System.Collections.Generic.List(Of RmLink))
+            mLinks = value
         End Set
     End Property
     Public Property HasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.hasNameConstraint
@@ -122,11 +136,20 @@ Public Class RmStructure
         End Set
     End Property
 
+    Public Overridable Function HasLinks() As Boolean
+        For Each l As RmLink In mLinks
+            If l.HasConstraint Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+
     Public Overridable Function Copy() As RmStructure
         Dim rm As New RmStructure(sNodeId, mType)
         rm.cOccurrences = Me.cOccurrences.Copy
         If Not Me.mRunTimeConstraint Is Nothing Then
-            rm.mRunTimeConstraint = Me.mRunTimeConstraint.copy
+            rm.mRunTimeConstraint = Me.mRunTimeConstraint.Copy
         End If
         Return rm
     End Function
@@ -197,9 +220,6 @@ Public Class RmStructure
 #End Region
 
 End Class
-
-
-
 
 
 

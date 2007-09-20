@@ -110,7 +110,7 @@ Public Class frmStartUp
         '
         'butOK
         '
-        Me.butOK.Location = New System.Drawing.Point(278, 138)
+        Me.butOK.Location = New System.Drawing.Point(173, 138)
         Me.butOK.Name = "butOK"
         Me.butOK.Size = New System.Drawing.Size(96, 37)
         Me.butOK.TabIndex = 5
@@ -119,7 +119,7 @@ Public Class frmStartUp
         'butCancel
         '
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(173, 138)
+        Me.butCancel.Location = New System.Drawing.Point(278, 138)
         Me.butCancel.Name = "butCancel"
         Me.butCancel.Size = New System.Drawing.Size(96, 37)
         Me.butCancel.TabIndex = 6

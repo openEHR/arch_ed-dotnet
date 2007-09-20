@@ -1,4 +1,6 @@
-Option Explicit On 
+Option Explicit On
+
+Imports System.IO
 
 Public Class Options
     Private mRepositoryPath As String
@@ -224,15 +226,19 @@ Public Class Options
     End Sub
 
     Public Function LoadConfiguration() As Boolean
-        Dim StrmRead As IO.StreamReader
+        Dim StrmRead As StreamReader
         Dim x As String
         Dim y() As String
         Dim i As Integer
-        Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
+        Dim filename As String = Path.Combine(ApplicationDataDirectory, "ArchetypeEditor.cfg")
 
-        If System.IO.File.Exists(path & "\ArchetypeEditor.cfg") Then
+        If Not File.Exists(filename) Then
+            filename = Path.Combine(Application.StartupPath, "ArchetypeEditor.cfg")
+        End If
+
+        If File.Exists(filename) Then
             Try
-                StrmRead = New IO.StreamReader(path & "\ArchetypeEditor.cfg")
+                StrmRead = New StreamReader(filename)
 
                 While StrmRead.Peek > 0
 
@@ -304,12 +310,12 @@ Public Class Options
     End Function
 
     Sub WriteConfiguration()
-        Dim StrmWrite As IO.StreamWriter
+        Dim StrmWrite As StreamWriter
         Dim i As Integer
-        Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
 
         Try
-            StrmWrite = New IO.StreamWriter(path & "\ArchetypeEditor.cfg", False)
+            StrmWrite = New StreamWriter(Path.Combine(ApplicationDataDirectory, "ArchetypeEditor.cfg"), False)
+
             Try
                 StrmWrite.WriteLine("UserName=" & mUserName)
                 StrmWrite.WriteLine("UserEmail=" & mUserEmail)
@@ -325,7 +331,6 @@ Public Class Options
                 StrmWrite.WriteLine("AllowTerminologyLookUp=" & mAllowTerminologyLookUp.ToString)
                 StrmWrite.WriteLine("AutosaveInterval=" & mTimerMinutes.ToString())
 
-
                 Dim s As String = ""
 
                 For i = 0 To mColors.Length - 1
@@ -334,6 +339,7 @@ Public Class Options
                         s &= ","
                     End If
                 Next
+
                 StrmWrite.WriteLine("StateMachineColours=" & s)
                 StrmWrite.WriteLine("OccurrencesView=" & mOccurrencesView)
                 StrmWrite.WriteLine("DefaultParser=" & mDefaultParser)
@@ -344,8 +350,19 @@ Public Class Options
             MessageBox.Show("Error reading Configuration File 'ArchetypeEditor.cfg' - please view options and save to restore: " & e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Exit Sub
         End Try
+
         StrmWrite.Close()
     End Sub
+
+    Function ApplicationDataDirectory() As String
+        Dim result As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.ProductName)
+
+        If Not Directory.Exists(result) Then
+            Directory.CreateDirectory(result)
+        End If
+
+        Return result
+    End Function
 
     Function StateMachineColour(ByVal a_StateMachineType As StateMachineType) As Color
         Debug.Assert(a_StateMachineType <> StateMachineType.Not_Set)
@@ -373,12 +390,12 @@ Public Class Options
     Function ValidateConfiguration() As Boolean
         Dim result As Boolean = True
         Dim message As String = "Errors:"
-        If Not System.IO.File.Exists(mHelpPath) Then
+        If Not File.Exists(mHelpPath) Then
             result = False
             message &= (": Help file does not exist @ " & mHelpPath)
         End If
 
-        If Not System.IO.Directory.Exists(mRepositoryPath) Then
+        If Not Directory.Exists(mRepositoryPath) Then
             result = False
             message &= (": Repository does not exist @ " & mRepositoryPath)
         End If

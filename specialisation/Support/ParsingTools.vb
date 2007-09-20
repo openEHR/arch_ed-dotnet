@@ -44,6 +44,7 @@ Public Class ParsingTools
     ' Singleton
     Private Shared mRmStateStructure As RmStructureCompound
 
+    'Changed SRH: 1 September 2007 - to allow slots for state
     Public Shared Property StateStructure() As RmStructureCompound
         ' may process a state structure within a EventSeries - and need to save it
         ' as state...so remember it here

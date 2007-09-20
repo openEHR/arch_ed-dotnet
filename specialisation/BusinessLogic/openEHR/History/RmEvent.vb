@@ -292,6 +292,8 @@ Class RmEvent
                     ' not available as yet
                 Case "C_COMPLEX_OBJECT"
                     ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure = New RmStructureCompound(Me.ADL_State, StructureType.State, a_filemanager)
+                Case "ARCHETYPE_SLOT"
+                    ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure = New RmStructureCompound(Me.ADL_State, StructureType.State, a_filemanager)
             End Select
         End If
 
@@ -418,6 +420,8 @@ Class RmEvent
                     ' Place holder for different structures at different events 
                     ' not available as yet
                 Case "XMLParser.C_COMPLEX_OBJECT"
+                    ArchetypeEditor.XML_Classes.XML_Tools.StateStructure = New RmStructureCompound(Me.XML_State, StructureType.State, a_filemanager)
+                Case "XMLParser.ARCHETYPE_SLOT"
                     ArchetypeEditor.XML_Classes.XML_Tools.StateStructure = New RmStructureCompound(Me.XML_State, StructureType.State, a_filemanager)
             End Select
         End If

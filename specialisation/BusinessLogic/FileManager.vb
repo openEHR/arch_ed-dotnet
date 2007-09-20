@@ -28,6 +28,7 @@ Public Class FileManagerLocal
     Private mIsNew As Boolean = False
     Private mObjectToSave As Object
     Private mOntologyManager As New OntologyManager(Me)
+    Private mTermBindingLookUpTables As Collections.Generic.SortedDictionary(Of String, DataTable)
 
     Public Property OntologyManager() As OntologyManager
         Get
@@ -67,13 +68,11 @@ Public Class FileManagerLocal
             mWorkingDirectory = Value
         End Set
     End Property
-
     Public ReadOnly Property ParserType() As String
         Get
             Return mArchetypeEngine.TypeName()
         End Get
     End Property
-
     Public Property FileName() As String
         Get
             Return mFileName
@@ -184,6 +183,50 @@ Public Class FileManagerLocal
             Return mArchetypeEngine.Archetype()
         End Get
     End Property
+
+    Private InitialisedTerminologies As Collections.Generic.List(Of String)
+    Private webError As Boolean
+
+    Public Function HasTermBindings(ByVal language As String, ByVal terminologyId As String) As Boolean
+
+        If webError Then Return False
+
+        If Not mTermBindingLookUpTables Is Nothing Then
+            If mTermBindingLookUpTables.ContainsKey(language & terminologyId) Then
+                Return True
+            End If
+        Else
+            mTermBindingLookUpTables = New Collections.Generic.SortedDictionary(Of String, DataTable)
+        End If
+        Try
+            If Not mOntologyManager.TermBindingsTable Is Nothing AndAlso mOntologyManager.TermBindingsTable.Rows.Count > 0 Then
+                Dim selected_rows As DataRow() = mOntologyManager.TermBindingsTable.Select("Terminology = 'SNOMED-CT'")
+                If Not selected_rows Is Nothing AndAlso selected_rows.Length > 0 Then
+                    Dim conceptIds(selected_rows.Length) As String
+                    For i As Integer = 0 To selected_rows.Length - 1
+                        conceptIds(i) = selected_rows(i).Item("Code")
+                    Next
+                    Dim termTable As DataTable = OTSControls.Term.OtsWebService.GetTerminologyPreferredTerms(OTSControls.OTSServer.TerminologyName.Snomed, language, conceptIds).Tables(0)
+                    mTermBindingLookUpTables.Add(language & terminologyId, termTable)
+                End If
+            End If
+        Catch
+            webError = True
+        End Try
+
+        Return False
+    End Function
+
+    Public Function BindingText(ByVal language As String, ByVal TerminologyId As String, ByVal terminologyCode As String) As String
+        Dim dTable As DataTable = mTermBindingLookUpTables.Item(language & TerminologyId)
+        If Not dTable Is Nothing Then
+            Dim dRow As DataRow = dTable.Rows.Find(terminologyCode).Item(1)
+            If Not dRow Is Nothing Then
+                Return dRow(1)
+            End If
+        End If
+        Return String.Empty
+    End Function
 
     Public Function OpenArchetype(ByVal aFileName As String) As Boolean
         'Try
@@ -341,36 +384,36 @@ Public Class FileManagerLocal
         Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
         Id1.ValidConcept(Id1.Concept, "") 'validation may update Id1.concept
 
-            Dim Id2 As New ArchetypeID(shortFileName)
-            Id2.ValidConcept(Id2.Concept, "") 'validation may update Id2.Concept 
+        Dim Id2 As New ArchetypeID(shortFileName)
+        Id2.ValidConcept(Id2.Concept, "") 'validation may update Id2.Concept 
 
-            Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
-            If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
+        Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
+        If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
 
-                'NOTE: The following updates can occur!
-                '    Update 1: Update if concept was changed in ValidConcept call
-                '    Update 2: Update according to the user selection
+            'NOTE: The following updates can occur!
+            '    Update 1: Update if concept was changed in ValidConcept call
+            '    Update 2: Update according to the user selection
 
+            updateOccurred = True
+
+            Dim Use As String = IIf(frm.selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
+
+            'update filename if changed
+            If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
+                mPriorFileName = Me.FileName
+                Me.FileName = Replace(Me.FileName, FileName, Use & "." & ParserType)
                 updateOccurred = True
-
-                Dim Use As String = IIf(frm.selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
-
-                'update filename if changed
-                If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
-                    mPriorFileName = Me.FileName
-                    Me.FileName = Replace(Me.FileName, FileName, Use & "." & ParserType)
-                    updateOccurred = True
-                End If
-
-                'update archetype id if changed
-                If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
-                    Archetype.Archetype_ID.SetFromString(Use)
-                    Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
-                End If
             End If
 
-            frm.Close()
-            Return Not updateOccurred
+            'update archetype id if changed
+            If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
+                Archetype.Archetype_ID.SetFromString(Use)
+                Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
+            End If
+        End If
+
+        frm.Close()
+        Return Not updateOccurred
     End Function
 
     Public Function FormatIsAvailable(ByVal a_format As String) As Boolean

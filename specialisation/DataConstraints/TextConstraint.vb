@@ -15,8 +15,8 @@
 Option Strict On
 
 Public Enum TextConstrainType
-    Internal
     Text
+    Internal
     Terminology
 End Enum
 
@@ -68,6 +68,7 @@ Public Class Constraint_Text
 
             If cpTerms.Codes.Contains(CStr(Value)) Then
                 mAssumed_value = CStr(Value)
+                HasAssumedValue = True
             End If
         End Set
     End Property
@@ -132,11 +133,11 @@ Public Class Constraint_Text
                 Return MyBase.ToString()
         End Select
     End Function
-
-    Sub New()
-        'default
-        mTextConstraintType = TextConstrainType.Internal
-    End Sub
+    'Changed SRH - Free text is now the default
+    'Sub New()
+    '    'default
+    '    mTextConstraintType = TextConstrainType.Internal
+    'End Sub
 End Class
 
 

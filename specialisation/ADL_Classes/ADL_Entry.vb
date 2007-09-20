@@ -50,7 +50,7 @@ Class ADL_ENTRY
             mNodeID = Definition.node_id.to_cil
             For i = 1 To Definition.attributes.count
                 an_attribute = Definition.attributes.i_th(i)
-                Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Select Case an_attribute.rm_attribute_name.to_cil.ToLowerInvariant
                     Case "subject"
                         ProcessSubjectOfData(an_attribute)
                     Case "name", "runtime_label" 'run_time_label is obsolete
@@ -65,9 +65,17 @@ Class ADL_ENTRY
                     Case "description"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ActivityDescription, a_filemanager))
                     Case "ism_transition", "pathway_specification" 'pathway_spec is obsolete 
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ism_transition, a_filemanager))
+                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ISM_TRANSITION, a_filemanager))
                     Case "activities"
                         mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activities, a_filemanager))
+                    Case "provider"
+                        Me.ProviderIsMandatory = True
+                    Case "other_participations"
+                        Me.OtherParticipations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
+                    Case "links"
+
+                    Case Else
+                        Debug.Assert(False, String.Format("{0} not handled", an_attribute.rm_attribute_name.to_cil))
                 End Select
             Next
             If Not ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure Is Nothing Then

@@ -123,12 +123,20 @@ Public Class CodePhrase
         End Set
     End Property
 
-    Function hasCode(ByVal code As String) As Boolean
-        If cCodes.Contains(code) Then
-            Return True
-        Else
-            Return False
+    Function HasCode(ByVal code As String) As Boolean
+        Return cCodes.Contains(code)
+    End Function
+
+    Function Copy() As CodePhrase
+        Dim cp As New CodePhrase()
+        cp.Separator = Separator
+        cp.TerminologyID = TerminologyID
+        If Codes.Count > 0 Then
+            Dim c(Codes.Count) As String
+            cCodes.CopyTo(c, 0)
+            cp.Codes.AddRange(c)
         End If
+        Return cp
     End Function
 
     Sub New()

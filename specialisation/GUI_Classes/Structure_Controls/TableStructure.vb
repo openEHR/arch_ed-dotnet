@@ -567,7 +567,10 @@ Public Class TableStructure
                     element = CType(mKeyColumns.Item(mKeyColumns.Count), ArchetypeElement)
                 Else
                     element = New ArchetypeElement("row_head", mFileManager)
-                    element.Constraint = New Constraint_Text
+                    'Added SRH: Need to set the constraint to internal (as no longer default)
+                    Dim c As Constraint_Text = New Constraint_Text
+                    c.TypeOfTextConstraint = TextConstrainType.Internal
+                    element.Constraint = c
                     mKeyColumns.Add(element)
                 End If
                 CType(element.Constraint, Constraint_Text).AllowableValues.Codes.Add(a_term.Code)

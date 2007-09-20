@@ -89,26 +89,26 @@ Public Class ConstraintForm
         Me.butDelete.Location = New System.Drawing.Point(96, 5)
         Me.butDelete.Name = "butDelete"
         Me.butDelete.Size = New System.Drawing.Size(104, 27)
-        Me.butDelete.TabIndex = 2
+        Me.butDelete.TabIndex = 0
         Me.butDelete.Text = "Delete All"
-        '
-        'butCancel
-        '
-        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(288, 5)
-        Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(96, 27)
-        Me.butCancel.TabIndex = 1
-        Me.butCancel.Text = "Cancel"
         '
         'butOK
         '
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(392, 5)
+        Me.butOK.Location = New System.Drawing.Point(288, 5)
         Me.butOK.Name = "butOK"
         Me.butOK.Size = New System.Drawing.Size(88, 27)
-        Me.butOK.TabIndex = 0
+        Me.butOK.TabIndex = 1
         Me.butOK.Text = "OK"
+        '
+        'butCancel
+        '
+        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.butCancel.Location = New System.Drawing.Point(392, 5)
+        Me.butCancel.Name = "butCancel"
+        Me.butCancel.Size = New System.Drawing.Size(96, 27)
+        Me.butCancel.TabIndex = 2
+        Me.butCancel.Text = "Cancel"
         '
         'ConstraintForm
         '

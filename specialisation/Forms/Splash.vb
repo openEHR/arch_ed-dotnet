@@ -38,6 +38,8 @@ Public Class Splash
         End If
         MyBase.Dispose(disposing)
     End Sub
+    Friend WithEvents buttonClose As System.Windows.Forms.Button
+    Public WithEvents timerSplash As System.Windows.Forms.Timer
 
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
@@ -46,8 +48,25 @@ Public Class Splash
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Splash))
+        Me.buttonClose = New System.Windows.Forms.Button
+        Me.timerSplash = New System.Windows.Forms.Timer(Me.components)
         Me.SuspendLayout()
+        '
+        'buttonClose
+        '
+        Me.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.buttonClose.Location = New System.Drawing.Point(32, 210)
+        Me.buttonClose.Name = "buttonClose"
+        Me.buttonClose.Size = New System.Drawing.Size(104, 23)
+        Me.buttonClose.TabIndex = 0
+        Me.buttonClose.Text = "Close"
+        Me.buttonClose.UseVisualStyleBackColor = True
+        '
+        'timerSplash
+        '
+        Me.timerSplash.Interval = 2000
         '
         'Splash
         '
@@ -57,6 +76,7 @@ Public Class Splash
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.ClientSize = New System.Drawing.Size(566, 254)
         Me.ControlBox = False
+        Me.Controls.Add(Me.buttonClose)
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -72,6 +92,57 @@ Public Class Splash
     End Sub
 
 #End Region
+
+    Private showingAsSplash As Boolean = False
+
+    Public ReadOnly Property AssemblyDescription() As String
+        Get
+            ' Get all Description attributes on this assembly
+            Dim attributes As Object() = System.Reflection.Assembly.GetExecutingAssembly().GetCustomAttributes(GetType(System.Reflection.AssemblyDescriptionAttribute), False)
+            ' If there aren't any Description attributes, return an empty string
+            If attributes.Length = 0 Then
+                Return ""
+            End If
+            ' If there is a Description attribute, return its value
+            Return DirectCast(attributes(0), System.Reflection.AssemblyDescriptionAttribute).Description
+        End Get
+    End Property
+
+    Public Overloads Sub Show(ByVal showAsSplash As Boolean)
+        Me.Text = String.Format("{0}, v{1}.{2}", "Archetype Editor", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor)
+
+        If showAsSplash Then
+            Me.buttonClose.Visible = False
+            Me.Text = String.Format("{0}, v{1}.{2}", "Archetype Editor", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor)
+            'Me.labelDescription.Visible = False
+            Me.timerSplash.Enabled = True
+        Else
+            Me.buttonClose.Visible = True
+            'Me.labelDescription.Visible = True
+            'Me.labelDescription.Text = AssemblyDescription
+            'Me.labelDescription.BackColor = Color.FromArgb(80, 255, 255, 255)
+            Me.Text = String.Format("{0}, v{1}", "Archetype Editor", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString)
+        End If
+
+        showingAsSplash = showAsSplash
+        Me.Show()
+    End Sub
+
+    Private Sub timerSplash_Tick(ByVal sender As Object, ByVal e As EventArgs) Handles timerSplash.Tick
+        timerSplash.Enabled = False
+        timerSplash.Interval = 50
+
+        If Me.Opacity = 0 Then
+            Me.Hide()
+        Else
+            Me.Opacity -= 0.05
+            timerSplash.Enabled = True
+        End If
+    End Sub
+
+    Private Sub buttonClose_Click(ByVal sender As Object, ByVal e As EventArgs) Handles buttonClose.Click
+        Close()
+    End Sub
 
 End Class
 

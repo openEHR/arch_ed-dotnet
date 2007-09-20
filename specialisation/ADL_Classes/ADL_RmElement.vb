@@ -29,39 +29,31 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Private Sub ProcessElement(ByVal ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-
             Try
+                Dim v As EiffelKernel.STRING_8 = EiffelKernel.Create.STRING_8.make_from_cil("value")
+                cConstraint = New Constraint
 
-                If ComplexObj.any_allowed Or (Not ComplexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("value"))) Then
-                    'This is an unknown and is available for specialisation
-                    Dim c As New Constraint
-                    Me.cConstraint = c
-                    Return
-                End If
-
-                ' Get the value
-                If ComplexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("value")) Then
+                If Not ComplexObj.any_allowed And ComplexObj.has_attribute(v) And ComplexObj.has_attribute(v) Then
                     Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                     Dim i As Integer
 
-                    an_attribute = ComplexObj.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("value"))
+                    an_attribute = ComplexObj.c_attribute_at_path(v)
 
                     If an_attribute.children.count > 1 Then
                         ' multiple constraints - not dealt with yet in the GUI
                         Dim m_c As New Constraint_Choice
+
                         For i = 1 To an_attribute.children.count
                             m_c.Constraints.Add(ProcessValue(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager))
                         Next
+
                         cConstraint = m_c
-                    Else
+                    ElseIf Not an_attribute.children.is_empty Then
                         cConstraint = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager)
                     End If
                 End If
-
             Catch ex As Exception
                 MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ComplexObj.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                ' set to any
-                cConstraint = New Constraint
             End Try
         End Sub
 
@@ -814,7 +806,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                                 End If
 
-                                If t.AllowableValues.TerminologyID = "local" Then
+                                If t.AllowableValues.TerminologyID = "local" Or t.AllowableValues.TerminologyID = "openehr" Then
                                     t.TypeOfTextConstraint = TextConstrainType.Internal
                                 End If
                         End Select

@@ -113,6 +113,15 @@ Public MustInherit Class Archetype
         End Set
     End Property
 
+    Public Function HasLinkConstraints() As Boolean
+        For Each l As RmLink In cDefinition.RootLinks
+            If l.HasConstraint Then
+                Return True
+            End If
+        Next
+        Return False
+    End Function
+
     Protected Sub setDefinition()
         ' lets each specialised archetype type set the entity
         ' in the GUI archetype
@@ -147,6 +156,7 @@ Public MustInherit Class Archetype
         If Not cDefinition Is Nothing AndAlso TypeOf (cDefinition) Is ArchetypeDefinition Then
             CType(cDefinition, ArchetypeDefinition).Data.Clear()
         End If
+        cDefinition.RootLinks.Clear()
         'Not archetype is not synchronised with definition
         mSynchronised = False
     End Sub

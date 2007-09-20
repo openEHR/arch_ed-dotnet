@@ -35,6 +35,10 @@ Public Class RmSlot
         End Get
     End Property
 
+    Public Overrides Function HasLinks() As Boolean
+        Return False
+    End Function
+
     Overrides Function Copy() As RmStructure
         Dim rm As New RmSlot(Me.mType)
         rm.mSlotConstraint = Me.mSlotConstraint

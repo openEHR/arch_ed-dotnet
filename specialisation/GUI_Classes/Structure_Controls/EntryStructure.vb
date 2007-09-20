@@ -221,7 +221,7 @@ Public Class EntryStructure
         Me.PanelIcons.Location = New System.Drawing.Point(0, 24)
         Me.PanelIcons.Name = "PanelIcons"
         Me.PanelIcons.Size = New System.Drawing.Size(40, 382)
-        Me.PanelIcons.TabIndex = 36
+        Me.PanelIcons.TabIndex = 1
         '
         'ButAddElement
         '
@@ -235,7 +235,7 @@ Public Class EntryStructure
         Me.ButAddElement.Name = "ButAddElement"
         Me.helpEntryStructure.SetShowHelp(Me.ButAddElement, True)
         Me.ButAddElement.Size = New System.Drawing.Size(24, 25)
-        Me.ButAddElement.TabIndex = 32
+        Me.ButAddElement.TabIndex = 0
         Me.ButAddElement.UseVisualStyleBackColor = False
         '
         'butRemoveElement
@@ -247,7 +247,7 @@ Public Class EntryStructure
         Me.butRemoveElement.Location = New System.Drawing.Point(8, 31)
         Me.butRemoveElement.Name = "butRemoveElement"
         Me.butRemoveElement.Size = New System.Drawing.Size(24, 25)
-        Me.butRemoveElement.TabIndex = 33
+        Me.butRemoveElement.TabIndex = 1
         Me.butRemoveElement.UseVisualStyleBackColor = False
         '
         'butListUp
@@ -258,7 +258,7 @@ Public Class EntryStructure
         Me.butListUp.Location = New System.Drawing.Point(8, 58)
         Me.butListUp.Name = "butListUp"
         Me.butListUp.Size = New System.Drawing.Size(24, 25)
-        Me.butListUp.TabIndex = 30
+        Me.butListUp.TabIndex = 2
         Me.butListUp.UseVisualStyleBackColor = False
         '
         'butListDown
@@ -269,7 +269,7 @@ Public Class EntryStructure
         Me.butListDown.Location = New System.Drawing.Point(8, 85)
         Me.butListDown.Name = "butListDown"
         Me.butListDown.Size = New System.Drawing.Size(24, 25)
-        Me.butListDown.TabIndex = 31
+        Me.butListDown.TabIndex = 3
         Me.butListDown.UseVisualStyleBackColor = False
         '
         'pbText
@@ -369,7 +369,7 @@ Public Class EntryStructure
         Me.butChangeDataType.Name = "butChangeDataType"
         Me.helpEntryStructure.SetShowHelp(Me.butChangeDataType, True)
         Me.butChangeDataType.Size = New System.Drawing.Size(24, 25)
-        Me.butChangeDataType.TabIndex = 34
+        Me.butChangeDataType.TabIndex = 4
         Me.butChangeDataType.Visible = False
         '
         'pbSlot
@@ -389,7 +389,7 @@ Public Class EntryStructure
         Me.PanelStructureHeader.Location = New System.Drawing.Point(0, 0)
         Me.PanelStructureHeader.Name = "PanelStructureHeader"
         Me.PanelStructureHeader.Size = New System.Drawing.Size(384, 21)
-        Me.PanelStructureHeader.TabIndex = 37
+        Me.PanelStructureHeader.TabIndex = 0
         '
         'lblAtcode
         '

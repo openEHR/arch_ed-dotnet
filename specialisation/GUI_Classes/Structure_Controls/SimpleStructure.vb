@@ -153,7 +153,9 @@ Public Class SimpleStructure
         Get
             Dim rm As New RmStructureCompound(mNodeId, StructureType.Single)
             rm.Occurrences = New RmCardinality(1, 1)
-            rm.Children.Add(mElement.RM_Class)
+            If Not mElement Is Nothing Then
+                rm.Children.Add(mElement.RM_Class)
+            End If
             Return rm
         End Get
         Set(ByVal Value As RmStructureCompound)
@@ -195,6 +197,10 @@ Public Class SimpleStructure
             End If
         End Get
     End Property
+
+    Public Overrides Function HasData() As Boolean
+        Return Not mElement Is Nothing
+    End Function
 
     Public Overrides Sub Reset()
         Me.txtSimple.Text = ""
@@ -384,7 +390,7 @@ Public Class SimpleStructure
 
     Private Sub txtSimple_DragDrop(ByVal sender As System.Object, _
     ByVal e As System.Windows.Forms.DragEventArgs) Handles txtSimple.DragDrop
-        
+
         If Not mNewConstraint Is Nothing Then
             AddNewElement(mNewConstraint)
             mNewConstraint = Nothing

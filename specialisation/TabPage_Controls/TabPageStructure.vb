@@ -627,22 +627,8 @@ Public Class TabPageStructure
         mIsLoading = False
     End Sub
 
-    'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-    Public Function HasData() As Boolean 'Returns true if entry structure contains object(s)
-        'Changed: SRH - July 22nd - improved efficiency
-        If Not ArchetypeDisplay Is Nothing Then
-            Return ArchetypeDisplay.HasData()
-        End If
-    End Function
-
     Public Function SaveAsStructure() As RmStructure
         ' save as RmStructureCompound or RmSlot
-
-        'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-        If Not HasData() Then
-            Return Nothing
-            Exit Function
-        End If
 
         If mIsEmbedded Then
             If mEmbeddedSlot Is Nothing Then
@@ -666,8 +652,6 @@ Public Class TabPageStructure
     End Function
 
     Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
-        If Not HasData() Then Exit Sub 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-
         If Not mArchetypeControl Is Nothing Then
             text.WriteLine(mArchetypeControl.ToRichText(level, Chr(13) & Chr(10)))
             text.WriteLine("\pard\f0\fs20\par")
@@ -676,8 +660,6 @@ Public Class TabPageStructure
     End Sub
 
     Public Sub toHTML(ByRef text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "")
-        If Not HasData() Then Exit Sub 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-
         If Not mArchetypeControl Is Nothing Then
             text.WriteLine(mArchetypeControl.ToHTML(BackGroundColour))
             text.WriteLine("<hr>")
@@ -758,7 +740,7 @@ Public Class TabPageStructure
         End If
 
         'If Not mArchetypeControl Is Nothing Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-        If Not mArchetypeControl Is Nothing AndAlso HasData() Then
+        If Not mArchetypeControl Is Nothing AndAlso mArchetypeControl.HasData Then
             ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only, mFileManager)
         End If
     End Sub
@@ -934,7 +916,7 @@ Public Class TabPageStructure
         If a_slot.SlotConstraint.Include.Count = 1 Then
             msg = msg & " '" & ReferenceModel.ReferenceModelName & "-" & _
                 ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
-                "." & a_slot.SlotConstraint.Include.Item(0) & ".adl'"
+                "." & a_slot.SlotConstraint.Include.Item(0).Replace("\", "") & ".adl'"
         End If
 
         If MessageBox.Show(msg, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
@@ -1015,25 +997,38 @@ Public Class TabPageStructure
 
     Private Overloads Function OpenArchetype(ByVal a_slot As RmSlot) As Boolean
         Dim archetype_name As String
+        Dim frm As New Choose
+        frm.Set_Single()
 
-        If a_slot.SlotConstraint.Include.Count > 1 Then
-            Dim frm As New Choose
-            frm.Set_Single()
-            frm.ListChoose.Items.AddRange(a_slot.SlotConstraint.Include.Items)
-            If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                archetype_name = ReferenceModel.ReferenceModelName & "-" & _
-                    ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
-                    "." & CStr(frm.ListChoose.SelectedItem) & ".adl"
-            Else
+        Dim dir As New IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure")
+        dir.GetFiles("*.adl")
+        Dim matchStrings As New System.Collections.Generic.List(Of System.Text.RegularExpressions.Regex)
+        For Each includeStatement As String In a_slot.SlotConstraint.Include
+            includeStatement = ReferenceModel.ReferenceModelName & "-" & _
+                                ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
+                                "\." & includeStatement & "\.adl"
+            matchStrings.Add(New System.Text.RegularExpressions.Regex(includeStatement))
+        Next
+        For Each f As IO.FileInfo In dir.GetFiles("*.adl")
+            For Each re As System.Text.RegularExpressions.Regex In matchStrings
+                If re.Match(f.Name).Success Then
+                    frm.ListChoose.Items.Add(f.Name)
+                End If
+            Next
+        Next
+
+        Select Case frm.ListChoose.Items.Count
+            Case 0
                 Return False
-            End If
-        ElseIf a_slot.SlotConstraint.Include.Count = 1 Then
-            archetype_name = ReferenceModel.ReferenceModelName & "-" & _
-                ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
-                "." & a_slot.SlotConstraint.Include.Item(0) & ".adl"
-        Else
-            Return False
-        End If
+            Case 1
+                archetype_name = frm.ListChoose.Items(0)
+            Case Else
+                If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                    archetype_name = CStr(frm.ListChoose.SelectedItem)
+                Else
+                    Return False
+                End If
+        End Select
 
         archetype_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure\" & archetype_name
 

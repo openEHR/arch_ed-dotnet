@@ -1,6 +1,7 @@
 '
 '
 '	component:   "openEHR Archetype Project"
+
 '	description: "$DESCRIPTION"
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
@@ -15,6 +16,8 @@
 '
 
 'Option Strict On
+
+Imports System.IO
 
 Public Class Designer
     Inherits System.Windows.Forms.Form
@@ -68,6 +71,7 @@ Public Class Designer
     Friend WithEvents PanelConcept_1 As System.Windows.Forms.Panel
     Friend WithEvents gbSpecialisation As System.Windows.Forms.GroupBox
     Friend WithEvents tvSpecialisation As System.Windows.Forms.TreeView
+    Friend WithEvents butLinks As System.Windows.Forms.Button
     Friend WithEvents mTabPageDescription As TabPageDescription
 
 #Region " Windows Form Designer generated code "
@@ -238,6 +242,7 @@ Public Class Designer
         Me.lblConcept = New System.Windows.Forms.Label
         Me.txtConceptInFull = New System.Windows.Forms.TextBox
         Me.PanelConcept = New System.Windows.Forms.Panel
+        Me.butLinks = New System.Windows.Forms.Button
         Me.tabComment = New System.Windows.Forms.TabControl
         Me.tpConceptDescription = New System.Windows.Forms.TabPage
         Me.tpConceptComment = New System.Windows.Forms.TabPage
@@ -458,6 +463,7 @@ Public Class Designer
         '
         Me.PanelConcept.BackColor = System.Drawing.Color.LightYellow
         Me.PanelConcept.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelConcept.Controls.Add(Me.butLinks)
         Me.PanelConcept.Controls.Add(Me.tabComment)
         Me.PanelConcept.Controls.Add(Me.lblConcept)
         Me.PanelConcept.Controls.Add(Me.txtConceptInFull)
@@ -466,6 +472,19 @@ Public Class Designer
         Me.PanelConcept.Name = "PanelConcept"
         Me.PanelConcept.Size = New System.Drawing.Size(969, 111)
         Me.PanelConcept.TabIndex = 3
+        '
+        'butLinks
+        '
+        Me.butLinks.Image = CType(resources.GetObject("butLinks.Image"), System.Drawing.Image)
+        Me.butLinks.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.butLinks.Location = New System.Drawing.Point(318, 42)
+        Me.butLinks.Name = "butLinks"
+        Me.butLinks.Size = New System.Drawing.Size(97, 27)
+        Me.butLinks.TabIndex = 2
+        Me.butLinks.Text = "Links"
+        Me.butLinks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.butLinks.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
+        Me.butLinks.UseVisualStyleBackColor = True
         '
         'tabComment
         '
@@ -561,7 +580,7 @@ Public Class Designer
         Me.cbParticipation.Location = New System.Drawing.Point(288, 6)
         Me.cbParticipation.Name = "cbParticipation"
         Me.cbParticipation.Size = New System.Drawing.Size(154, 28)
-        Me.cbParticipation.TabIndex = 31
+        Me.cbParticipation.TabIndex = 30
         Me.cbParticipation.Text = "Participation"
         Me.ToolTip1.SetToolTip(Me.cbParticipation, "About who participated in what has been recorded")
         '
@@ -571,7 +590,7 @@ Public Class Designer
         Me.cbPersonState.Location = New System.Drawing.Point(527, 10)
         Me.cbPersonState.Name = "cbPersonState"
         Me.cbPersonState.Size = New System.Drawing.Size(228, 19)
-        Me.cbPersonState.TabIndex = 30
+        Me.cbPersonState.TabIndex = 31
         Me.cbPersonState.Text = "Person State with EventSeries"
         Me.ToolTip1.SetToolTip(Me.cbPersonState, "Only for situations where 'state' information requires a EventSeries event")
         '
@@ -953,7 +972,7 @@ Public Class Designer
         Me.PanelDescription.Name = "PanelDescription"
         Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
         Me.PanelDescription.Size = New System.Drawing.Size(969, 283)
-        Me.PanelDescription.TabIndex = 6
+        Me.PanelDescription.TabIndex = 4
         '
         'RichTextBoxDescription
         '
@@ -974,7 +993,7 @@ Public Class Designer
         Me.PanelConcept_1.Location = New System.Drawing.Point(0, 394)
         Me.PanelConcept_1.Name = "PanelConcept_1"
         Me.PanelConcept_1.Size = New System.Drawing.Size(969, 201)
-        Me.PanelConcept_1.TabIndex = 4
+        Me.PanelConcept_1.TabIndex = 5
         '
         'gbSpecialisation
         '
@@ -2015,6 +2034,14 @@ Public Class Designer
                     ' allow restriction of subject of data
                     InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
 
+                    If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                        Me.cbParticipation.Checked = True
+                        mTabPageParticipation.chkProvider.Checked = CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory
+                        If CType(mFileManager.Archetype.Definition, RmEntry).HasOtherParticipations Then
+                            mTabPageParticipation.OtherParticipations = CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations
+                        End If
+                    End If
+
                     ' deal with the various groups of information appropriate to the type
                     Select Case mFileManager.Archetype.RmEntity
                         Case StructureType.ENTRY ' "ENTRY"
@@ -2028,6 +2055,10 @@ Public Class Designer
                             Next
 
                         Case StructureType.OBSERVATION ' "ENTRY.OBSERVATION"
+
+                            'Ensures there is a data structure even if empty
+                            SetUpDataStructure()
+
                             For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
                                     Case StructureType.Data
@@ -2038,7 +2069,7 @@ Public Class Designer
                                                 Case StructureType.History
                                                     ProcessEventSeries(rm_s)
                                                 Case Else
-                                                    SetUpDataStructure()
+                                                    'Redundant
                                                     Me.ProcessDataStructure(rm_s)
                                             End Select
                                         Next
@@ -2062,10 +2093,10 @@ Public Class Designer
                             Next
 
                         Case StructureType.EVALUATION ' "ENTRY.EVALUATION"
+                            SetUpDataStructure()
                             For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
                                     Case StructureType.Data
-                                        SetUpDataStructure()
                                         If rm.Children.Count > 0 Then
                                             ProcessDataStructure(rm.Children.items(0))
                                         End If
@@ -2150,16 +2181,16 @@ Public Class Designer
             If mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) Then
                 Me.ListLanguages.SelectedValue = OceanArchetypeEditor.SpecificLanguageCode
                 Translate(OceanArchetypeEditor.SpecificLanguageCode)
-            ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) AndAlso _
-                Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.DefaultLanguageCode Then
-                Me.ListLanguages.SelectedValue = OceanArchetypeEditor.DefaultLanguageCode
-                Translate(OceanArchetypeEditor.DefaultLanguageCode)
+            ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) Then
+                If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.DefaultLanguageCode Then
+                    Me.ListLanguages.SelectedValue = OceanArchetypeEditor.DefaultLanguageCode
+                    Translate(OceanArchetypeEditor.DefaultLanguageCode)
+                End If
             Else
                 Me.ListLanguages.SelectedValue = mFileManager.OntologyManager.PrimaryLanguageCode
                 ChangeLanguage(Me.ListLanguages.SelectedValue)
             End If
         End If
-
 
         If Not mTermBindingPanel Is Nothing Then
             Me.mTermBindingPanel.PopulatePathTree()
@@ -2379,7 +2410,8 @@ Public Class Designer
         Me.tpConceptDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.tpConceptDescription.Text, language)
         Me.tpConceptComment.Text = Filemanager.GetOpenEhrTerm(652, Me.tpConceptComment.Text, language)
         Me.gbSpecialisation.Text = Filemanager.GetOpenEhrTerm(186, Me.gbSpecialisation.Text, language)
-        
+        Me.butLinks.Text = Filemanager.GetOpenEhrTerm(659, Me.butLinks.Text, language)
+
         'Entry tab on designer
         Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
         Me.cbParticipation.Text = Filemanager.GetOpenEhrTerm(654, Me.cbParticipation.Text, language)
@@ -2680,10 +2712,9 @@ Public Class Designer
 
     Public Sub WriteToHTML(ByVal filename As String)
         Dim text As IO.StreamWriter
-        Dim s As String
         Dim commaspace As Char() = {" ", ","}
 
-        text = IO.File.CreateText(Application.StartupPath & filename)
+        text = IO.File.CreateText(filename)
 
         text.WriteLine("<HTML>")
         text.WriteLine("<HEAD>")
@@ -3002,6 +3033,18 @@ Public Class Designer
             Me.MenuFileSave.Visible = Value
         End Set
     End Property
+
+    Protected mLinks As New System.Collections.Generic.List(Of RmLink)
+
+    Public Property RootLinks() As System.Collections.Generic.List(Of RmLink)
+        Get
+            Return mLinks
+        End Get
+        Set(ByVal value As System.Collections.Generic.List(Of RmLink))
+            mLinks = value
+        End Set
+    End Property
+
     Public Property ShowAsDraft() As Boolean
         Get
             Return Me.lblLifecycle.Visible
@@ -3057,15 +3100,22 @@ Public Class Designer
         Me.tabComment.SelectedIndex = 0
         
         'set the other pages
-        Me.chkEventSeries.Enabled = False
         Me.cbStructurePersonState.Checked = False
+        Me.cbStructurePersonState.Visible = False
         Me.cbPersonState.Checked = False
+        Me.cbPersonState.Visible = False
         Me.chkEventSeries.Checked = False
+        Me.chkEventSeries.Visible = False
         Me.cbProtocol.Checked = False
+        Me.cbProtocol.Visible = False
         Me.cbStructurePersonState.Checked = False
-        Me.cbProtocol.Checked = False
+        Me.cbStructurePersonState.Visible = False
+
         'set the display panel to nothing
         Me.mRichTextArchetype.Clear()
+
+        'Set the participation to false
+        Me.cbParticipation.Checked = False
 
         'Get rid of the languages from menu
         Me.MenuLanguageChange.MenuItems.Clear()
@@ -3102,7 +3152,9 @@ Public Class Designer
         mTabPageSection = Nothing
         mTabPageDescription.Reset()
         mTermBindingPanel.Reset()
-
+        If Not mTabPageParticipation Is Nothing Then
+            mTabPageParticipation.Reset()
+        End If
 
 
     End Sub
@@ -3128,17 +3180,17 @@ Public Class Designer
                 Select Case archetyped_class
                     Case StructureType.ADMIN_ENTRY, StructureType.ENTRY
                         'no protocol, state or EventSeries
-                        Me.cbPersonState.Enabled = False
-                        Me.cbStructurePersonState.Enabled = False
-                        Me.cbProtocol.Enabled = False
+                        Me.cbPersonState.Visible = False
+                        Me.cbStructurePersonState.Visible = False
+                        Me.cbProtocol.Visible = False
                     Case StructureType.EVALUATION
-                        Me.cbPersonState.Enabled = False
-                        Me.cbStructurePersonState.Enabled = False
-                        Me.cbProtocol.Enabled = True
+                        Me.cbPersonState.Visible = False
+                        Me.cbStructurePersonState.Visible = False
+                        Me.cbProtocol.Visible = True
                     Case StructureType.OBSERVATION
-                        Me.cbPersonState.Enabled = True
-                        Me.cbStructurePersonState.Enabled = True
-                        Me.cbProtocol.Enabled = True
+                        Me.cbPersonState.Visible = True
+                        Me.cbStructurePersonState.Visible = True
+                        Me.cbProtocol.Visible = True
                 End Select
 
             Case StructureType.INSTRUCTION
@@ -3342,6 +3394,9 @@ Public Class Designer
         ' reset the data structure tab page
         mTabPageDataStructure = New TabPageStructure
 
+        'Changed SRH: Sep 1st 2007
+        mTabPageDataStructure.EmbeddedAllowed = False
+
         Me.tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
         Me.tpDataStructure.Controls.Add(mTabPageDataStructure)
         mTabPageDataStructure.Dock = DockStyle.Fill
@@ -3367,7 +3422,7 @@ Public Class Designer
         Select Case archetyped_class
             Case StructureType.OBSERVATION
                 'must have a EventSeries
-                Me.cbPersonState.Enabled = True
+                Me.cbPersonState.Visible = True
                 If isNew Then
                     SetUpDataStructure()
                     SetUpEventSeries()
@@ -3785,21 +3840,24 @@ Public Class Designer
 
         SetUpEventSeries(a_EventSeries.NodeId)
         mTabPageDataEventSeries.ProcessEventSeries(a_EventSeries)
-        SetUpDataStructure()
         If Not a_EventSeries.Data Is Nothing Then
             ProcessDataStructure(a_EventSeries.Data)
         End If
 
     End Sub
 
-    Private Sub ProcessState(ByVal a_Structure As RmStructureCompound)
+    Private Sub ProcessState(ByVal a_Structure As RmStructure)
 
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageDataStateStructure = New TabPageStructure  'Me)
         mTabPageDataStateStructure.IsState = True ' allows assumed values to be set (buttons visible)
         Me.cbStructurePersonState.Checked = True
 
-        mTabPageDataStateStructure.ProcessStructure(a_Structure)
+        If a_Structure.Type = StructureType.Slot Then
+            mTabPageDataStateStructure.ProcessStructure(CType(a_Structure, RmSlot))
+        Else
+            mTabPageDataStateStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
+        End If
 
         ' add it to the collection of components that require translation
         tp.Title = mTabPageDataStateStructure.StructureType
@@ -3839,20 +3897,27 @@ Public Class Designer
     End Sub
 
     Private Sub ProcessDataStructure(ByVal a_Structure As RmStructure)
-        If a_Structure.Type = StructureType.Slot Then
-            mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmSlot))
-        Else
-            mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
-        End If
+        'Changed - no slots for data in archetypes (allowed in state and protocol)
+        'Added chkEmbedded = false
+        'If a_Structure.Type = StructureType.Slot Then
+        'mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmSlot))
+        'Else
+        mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
+        'End If
+        mTabPageDataStructure.EmbeddedAllowed = False
         Me.tpDataStructure.Title = mTabPageDataStructure.StructureTypeAsString
     End Sub
 
-    Private Sub ProcessProtocol(ByVal rm As RmStructureCompound, ByVal tbCtrl As Crownwood.Magic.Controls.TabControl)
+    Private Sub ProcessProtocol(ByVal rm As RmStructure, ByVal tbCtrl As Crownwood.Magic.Controls.TabControl)
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageProtocolStructure = New TabPageStructure '(Me)
         mTabPageProtocolStructure.BackColor = System.Drawing.Color.PaleGoldenrod
-        mTabPageProtocolStructure.ProcessStructure(rm)
-
+        If rm.Type = StructureType.Slot Then
+            mTabPageProtocolStructure.ProcessStructure(CType(rm, RmSlot))
+        Else
+            mTabPageProtocolStructure.ProcessStructure(CType(rm, RmStructureCompound))
+        End If
+        
         ' add it to the collection of components that require translation
         mComponentsCollection.Add(mTabPageProtocolStructure)
         tp.Controls.Add(mTabPageProtocolStructure)
@@ -3883,6 +3948,11 @@ Public Class Designer
             mFileManager.Archetype.LifeCycle = "Initial"
         End If
 
+        'Set the root links of the archetype
+        If Me.RootLinks.Count > 0 Then
+            mFileManager.Archetype.Definition.RootLinks = Me.RootLinks
+        End If
+
         ' For all ENTRY subtypes
 
         ' get the subject of data information
@@ -3891,10 +3961,12 @@ Public Class Designer
                 StructureType.OBSERVATION, StructureType.INSTRUCTION, _
                 StructureType.ACTION, StructureType.ADMIN_ENTRY
 
+                'Subject of data
                 If Not mRestrictedSubject Is Nothing AndAlso mRestrictedSubject.HasRestriction Then
                     CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship = mRestrictedSubject.AsCodePhrase
                 End If
 
+                'Participations
                 If cbParticipation.Checked Then
                     'Participations may have been added
                     If mTabPageParticipation.chkProvider.Checked Then
@@ -3902,13 +3974,17 @@ Public Class Designer
                     Else
                         CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory = False
                     End If
-                    'ToDo: Check for further participations
+
+                    'Check for other participations
+                    If mTabPageParticipation.HasOtherParticipations Then
+                        CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations = mTabPageParticipation.OtherParticipations
+                    End If
                 End If
 
                 Select Case mFileManager.Archetype.Definition.Type
                     Case StructureType.INSTRUCTION
                         CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children
-                        If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing AndAlso mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                        If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
                             Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                             rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
                             CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
@@ -3916,7 +3992,7 @@ Public Class Designer
 
                     Case StructureType.ACTION
                         CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageAction.SaveAsAction.Children
-                        If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing AndAlso mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                        If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
                             Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                             rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
                             CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
@@ -3935,7 +4011,7 @@ Public Class Designer
 
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
-                                        If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                        If Not mTabPageDataStructure Is Nothing Then
                                             RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                         End If
                                         rm.Children.Add(RmHistory)
@@ -3943,7 +4019,7 @@ Public Class Designer
                                     End If
 
                                 Case "tpStateStructure"
-                                    If Not mTabPageDataStateStructure Is Nothing AndAlso mTabPageDataStateStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                    If Not mTabPageDataStateStructure Is Nothing Then
                                         Dim rmState As New RmStructureCompound(StructureType.State.ToString, StructureType.State)
                                         rmState.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
                                         CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rmState)
@@ -3960,7 +4036,7 @@ Public Class Designer
                                 Case "tpData"
                                     'No action as dealt with above
                                 Case "tpProtocol"
-                                    If Not mTabPageProtocolStructure Is Nothing AndAlso mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                    If Not mTabPageProtocolStructure Is Nothing Then
                                         Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                         rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
                                         CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
@@ -3983,7 +4059,7 @@ Public Class Designer
                                             If Tab.TabPages.Count = 2 Then
                                                 If Not mTabPageStateEventSeries Is Nothing Then
                                                     Dim stateHistory As RmHistory = mTabPageStateEventSeries.SaveAsEventSeries
-                                                    If Not mTabPageStateStructure Is Nothing AndAlso mTabPageStateStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                                    If Not mTabPageStateStructure Is Nothing Then
                                                         stateHistory.Data = Me.mTabPageStateStructure.SaveAsStructure
                                                         rm.Children.Add(stateHistory)
                                                     End If
@@ -4007,7 +4083,7 @@ Public Class Designer
                             Select Case tp.Name
 
                                 Case "tpDataStructure"
-                                    If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                    If Not mTabPageDataStructure Is Nothing Then 'AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
@@ -4015,7 +4091,7 @@ Public Class Designer
                                     End If
 
                                 Case "tpStateStructure"
-                                    If Not mTabPageDataStateStructure Is Nothing AndAlso mTabPageDataStateStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                    If Not mTabPageDataStateStructure Is Nothing Then
                                         STATE_processed = True
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
@@ -4031,7 +4107,7 @@ Public Class Designer
                                 Case "tpData"
                                     'No action as dealt with above
                                 Case "tpProtocol"
-                                    If Not mTabPageProtocolStructure Is Nothing AndAlso mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                    If Not mTabPageProtocolStructure Is Nothing Then
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
                                         rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
@@ -4051,7 +4127,7 @@ Public Class Designer
                                         If Not mTabPageDataEventSeries Is Nothing Then
                                             Dim RmHistory As RmHistory
                                             RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
-                                            If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                            If Not mTabPageDataStructure Is Nothing Then
                                                 RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                             End If
                                             CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(RmHistory)
@@ -4060,7 +4136,7 @@ Public Class Designer
 
                                 Case "tpDataStructure"
                                     If Not Me.chkEventSeries.Checked Then
-                                        If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                        If Not mTabPageDataStructure Is Nothing Then
                                             Dim rm As RmStructureCompound
                                             rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                             rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
@@ -4069,7 +4145,7 @@ Public Class Designer
                                     End If
 
                                 Case "tpStateStructure"
-                                    If Not mTabPageDataStateStructure Is Nothing AndAlso mTabPageDataStateStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                    If Not mTabPageDataStateStructure Is Nothing Then
                                         STATE_processed = True
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
@@ -4087,12 +4163,10 @@ Public Class Designer
                                 Case "tpData"
                                     'No action as dealt with above
                                 Case "tpProtocol"
-                                    If mTabPageProtocolStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-                                        Dim rm As RmStructureCompound
-                                        rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
-                                        rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                                    End If
+                                    Dim rm As RmStructureCompound
+                                    rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
+                                    rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
+                                    CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
                             End Select
                         Next
 
@@ -4102,7 +4176,7 @@ Public Class Designer
                         For Each tp In Me.TabStructure.TabPages
                             Select Case tp.Name
                                 Case "tpDataStructure"
-                                    If Not mTabPageDataStructure Is Nothing AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                    If Not mTabPageDataStructure Is Nothing Then
                                         Dim rm As RmStructureCompound
                                         rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                         rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
@@ -4128,9 +4202,7 @@ Public Class Designer
                 ' Added try to this call as it now throws an exception if
                 ' it encounters any components that are not clusters or elements
                 Try
-                    If mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception 
-                        mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
-                    End If
+                    mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
                 Catch e As Exception
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
@@ -4140,9 +4212,7 @@ Public Class Designer
                 ' Added try to this call as it now throws an exception if
                 ' it encounters any components that are not clusters or elements
                 Try
-                    If mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-                        mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
-                    End If
+                    mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
                 Catch e As Exception
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
@@ -4158,9 +4228,7 @@ Public Class Designer
 
 
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                If mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-                    mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
-                End If
+                mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
         End Select
     End Sub
 
@@ -4171,8 +4239,6 @@ Public Class Designer
     Private Sub Designer_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         ' general initialisation
-        Dim frmSplash As New Splash
-        frmSplash.Show()
 
         AddHandler Filemanager.IsFileDirtyChanged, AddressOf FileManager_IsFileDirtyChanged
         mFileManager = New FileManagerLocal
@@ -4230,9 +4296,9 @@ Public Class Designer
                 ReferenceModel.SetModelType(ReferenceModelType.openEHR_EHR)
             End If
 
-            'JAR: 12APR07, EDT23 Continue to display splash screen for another 1 second (accounts for overhead to load archetype)
-            'System.Threading.Thread.Sleep(1000)
-            frmSplash.Hide() 'Hide splash screen before open as open can display messagebox that will otherwise sit behind splash screen
+            ''JAR: 12APR07, EDT23 Continue to display splash screen for another 1 second (accounts for overhead to load archetype)
+            ''System.Threading.Thread.Sleep(1000)
+            'frmSplash.Hide() 'Hide splash screen before open as open can display messagebox that will otherwise sit behind splash screen
 
             OpenArchetype(ArchetypeToOpen)
 
@@ -4243,9 +4309,9 @@ Public Class Designer
             End If
 
         Else
-            'JAR: 12APR07, EDT23: Continue to display splash screen for another 2 seconds
-            System.Threading.Thread.Sleep(2000)
-            frmSplash.Hide()
+            ''JAR: 12APR07, EDT23: Continue to display splash screen for another 2 seconds
+            'System.Threading.Thread.Sleep(2000)
+            'frmSplash.Hide()
             Me.Show()
 
             'load the start screen
@@ -4437,7 +4503,7 @@ Public Class Designer
 
         If cbStructurePersonState.Checked Then
             'cannot have rootstate - 'Person State With EventSeries'
-            Me.cbPersonState.Visible = False
+            Me.cbPersonState.Enabled = False
 
             If mFileManager.FileLoading Then Exit Sub
 
@@ -4475,13 +4541,13 @@ Public Class Designer
         Else
 
             If mFileManager.FileLoading Then
-                Me.cbPersonState.Visible = True
+                Me.cbPersonState.Enabled = True
             Else
                 Dim tp As Crownwood.Magic.Controls.TabPage
 
                 If MessageBox.Show(AE_Constants.Instance.Remove_state, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
                     Windows.Forms.DialogResult.OK Then
-                    Me.cbPersonState.Visible = True
+                    Me.cbPersonState.Enabled = True
                     For Each tp In Me.TabStructure.TabPages
                         If tp.Name = "tpStateStructure" Then
                             Me.TabStructure.TabPages.Remove(tp)
@@ -4990,8 +5056,16 @@ Public Class Designer
 
             Case "html"
                 Try
-                    WriteToHTML("\HTML\temp.html")
-                    Process.Start("file://" & Application.StartupPath & "\HTML\temp.html")
+                    Dim appData As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
+                    Dim appDataImages As String = Path.Combine(appData, "Images")
+
+                    If Not Directory.Exists(appDataImages) Then
+                        My.Computer.FileSystem.CopyDirectory(Path.Combine(Application.StartupPath, "HTML\images"), appDataImages)
+                    End If
+
+                    Dim filename As String = Path.Combine(appData, "temp.html")
+                    WriteToHTML(filename)
+                    Process.Start("file:///" & filename)
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
@@ -5141,6 +5215,17 @@ Public Class Designer
 
     End Sub
 
+    Private Sub butLinks_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butLinks.Click
+        Dim frm As New Links
+        If Me.RootLinks.Count > 0 Then
+            frm.Links = Me.RootLinks
+        End If
+        If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            If frm.HasLinkConstraints Then
+                Me.RootLinks = frm.Links
+            End If
+        End If
+    End Sub
 End Class
 
 

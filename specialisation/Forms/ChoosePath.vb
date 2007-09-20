@@ -77,7 +77,7 @@ Public Class frmChoosePath
         'butOK
         '
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(472, 400)
+        Me.butOK.Location = New System.Drawing.Point(368, 400)
         Me.butOK.Name = "butOK"
         Me.butOK.Size = New System.Drawing.Size(88, 24)
         Me.butOK.TabIndex = 1
@@ -86,7 +86,7 @@ Public Class frmChoosePath
         'butCancel
         '
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(368, 400)
+        Me.butCancel.Location = New System.Drawing.Point(472, 400)
         Me.butCancel.Name = "butCancel"
         Me.butCancel.Size = New System.Drawing.Size(88, 24)
         Me.butCancel.TabIndex = 2

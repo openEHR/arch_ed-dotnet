@@ -39,16 +39,28 @@ Public Class RmEntry
         End Set
     End Property
 
-    Protected mOtherParticipations As Collections.Generic.List(Of Participation)
+    Public ReadOnly Property HasParticipationConstraint() As Boolean
+        Get
+            Return Me.ProviderIsMandatory Or HasOtherParticipations
+        End Get
+    End Property
 
-    Public Property OtherParticipations() As Collections.Generic.List(Of Participation)
+    Protected mOtherParticipations As RmStructureCompound
+
+    Public ReadOnly Property HasOtherParticipations() As Boolean
+        Get
+            Return (Not mOtherParticipations Is Nothing AndAlso mOtherParticipations.Children.Count > 0)
+        End Get
+    End Property
+
+    Public Property OtherParticipations() As RmStructureCompound
         Get
             If mOtherParticipations Is Nothing Then
-                mOtherParticipations = New Collections.Generic.List(Of Participation)
+                mOtherParticipations = New RmStructureCompound("other_participations", StructureType.OtherParticipations)
             End If
             Return mOtherParticipations
         End Get
-        Set(ByVal value As Collections.Generic.List(Of Participation))
+        Set(ByVal value As RmStructureCompound)
             mOtherParticipations = value
         End Set
     End Property

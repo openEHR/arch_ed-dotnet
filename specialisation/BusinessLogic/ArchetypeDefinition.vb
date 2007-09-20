@@ -22,13 +22,13 @@ Option Strict On
 Public Interface ArcheTypeDefinitionBasic
     ReadOnly Property Type() As StructureType
     Property RootNodeId() As String
+    Property RootLinks() As System.Collections.Generic.List(Of RmLink)
     Property NameConstraint() As Constraint_Text
     Property hasNameConstraint() As Boolean
 End Interface
 
 Public Interface ArchetypeDefinition
     Inherits ArcheTypeDefinitionBasic
-
     Property Data() As Children
     Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure
 End Interface
@@ -55,6 +55,18 @@ Public MustInherit Class ArchetypeDefinitionAbstract
             mChildren = Value
         End Set
     End Property
+
+    Protected mLinks As New System.Collections.Generic.List(Of RmLink)
+
+    Public Property Links() As System.Collections.Generic.List(Of RmLink) Implements ArcheTypeDefinitionBasic.RootLinks
+        Get
+            Return mLinks
+        End Get
+        Set(ByVal value As System.Collections.Generic.List(Of RmLink))
+            mLinks = value
+        End Set
+    End Property
+
     Public Property hasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.hasNameConstraint
         Get
             Return Not mRuntimeConstraint Is Nothing

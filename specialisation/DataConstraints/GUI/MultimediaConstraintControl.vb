@@ -184,7 +184,7 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
 
         For Each n As TreeNode In TvMultiMedia.Nodes
             For Each nn As TreeNode In n.Nodes
-                If cp.hasCode(nn.Tag.ToString) Then
+                If cp.HasCode(nn.Tag.ToString) Then
                     nn.Checked = True
                     n.Checked = True
                     nn.EnsureVisible()
@@ -212,14 +212,14 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
             Next
         Else
             If e.Node.Checked Then
-                Debug.Assert(Not cp.hasCode(e.Node.Tag.ToString))
+                Debug.Assert(Not cp.HasCode(e.Node.Tag.ToString))
                 cp.Codes.Add(e.Node.Tag.ToString)
                 ' check the parent - but stop processing of this
                 MyBase.IsLoading = True
                 e.Node.Parent.Checked = True
                 MyBase.IsLoading = False
             Else
-                Debug.Assert(cp.hasCode(e.Node.Tag.ToString))
+                Debug.Assert(cp.HasCode(e.Node.Tag.ToString))
                 cp.Codes.Remove(e.Node.Tag.ToString)
             End If
         End If

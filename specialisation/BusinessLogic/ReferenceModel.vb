@@ -115,6 +115,7 @@ Public Class ReferenceModel
                 mReferenceModelNames.Add(565, "INTERVAL_EVENT")
                 mReferenceModelNames.Add(563, "WORKFLOW_STEP")
                 mReferenceModelNames.Add(275, "EVENT_SERIES") 'Obsolete
+                mReferenceModelNames.Add(659, "other_participations")
                 mReferenceModelNames.Add(1005, "pathway_specification") 'Obsolete
         End Select
 
@@ -237,7 +238,7 @@ Public Class ReferenceModel
                         End Select
                     Case StructureType.State, StructureType.Protocol
                         Select Case Child
-                            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                            Case StructureType.Slot, StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                                 mStructureClass = Child
                                 Return True
                             Case StructureType.History ' Allows for history based state information
@@ -283,6 +284,11 @@ Public Class ReferenceModel
                     Case StructureType.ActivityDescription
                         Select Case Child
                             Case StructureType.Slot, StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                                Return True
+                        End Select
+                    Case StructureType.OtherParticipations
+                        Select Case Child
+                            Case StructureType.Participation
                                 Return True
                         End Select
                 End Select

@@ -100,10 +100,8 @@ Public Class OceanArchetypeEditor
     End Property
 
     Protected Sub New()
-
         mDataSet = New DataSet("DesignerDataSet")
-        OTSControls.Term.OtsWebService.Url = "http://ots.oceaninformatics.biz/OTS/OTSService.asmx"
-
+        OTSControls.Term.OtsWebService.Url = "http://ots.oceaninformatics.com/OTS/OTSService.asmx"
     End Sub
 
     Private mDataSet As DataSet
@@ -333,11 +331,14 @@ Public Class OceanArchetypeEditor
                         a_file_manager.OntologyManager.LanguageCode))
 
             For i = 0 To selected_rows.Length - 1
-                Dim New_row As DataRow
-                New_row = Frm.DTab_1.NewRow
-                New_row(1) = selected_rows(i).Item(1)
-                New_row(2) = selected_rows(i).Item(2)
-                Frm.DTab_1.Rows.Add(New_row)
+                'Ensure it is not an orphan term in the ontology
+                If a_file_manager.OntologyManager.Ontology.HasTermCode(CStr(selected_rows(i).Item(1))) Then
+                    Dim New_row As DataRow
+                    New_row = Frm.DTab_1.NewRow
+                    New_row(1) = selected_rows(i).Item(1)
+                    New_row(2) = selected_rows(i).Item(2)
+                    Frm.DTab_1.Rows.Add(New_row)
+                End If
             Next
             Frm.ListChoose.SelectionMode = SelectionMode.MultiExtended
             Frm.ListChoose.DataSource = Frm.DTab_1
@@ -709,6 +710,10 @@ Public Class OceanArchetypeEditor
         Dim di As New System.IO.DirectoryInfo(Application.StartupPath)
         Dim files As System.IO.FileInfo()
 
+        Dim frmSplash As New Splash
+        frmSplash.Show(True)
+        Application.DoEvents()
+
         'Loading from the command line argument
         If CmdArgs.Length > 0 AndAlso CStr(CmdArgs(0)) <> String.Empty Then
             frm.ArchetypeToOpen = CmdArgs(0)
@@ -764,6 +769,12 @@ Public Class OceanArchetypeEditor
         If IsLanguageRightToLeft(mDefaultLanguageCode) Then
             frm.RightToLeft = RightToLeft.Yes
         End If
+
+        'Try
+        '    OTSControls.Term.OtsWebService.dummyQueryNavigationNode(Nothing, Nothing)
+        'Catch
+        '    Stop
+        'End Try
 
         Try            
             frm.ShowDialog()

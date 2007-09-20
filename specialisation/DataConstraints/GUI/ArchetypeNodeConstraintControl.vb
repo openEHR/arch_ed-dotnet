@@ -167,7 +167,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
         Me.PanelDataConstraint.Name = "PanelDataConstraint"
         Me.PanelDataConstraint.Size = New System.Drawing.Size(420, 257)
-        Me.PanelDataConstraint.TabIndex = 31
+        Me.PanelDataConstraint.TabIndex = 32
         '
         'labelAny
         '
@@ -189,7 +189,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelNonAnonymous.Location = New System.Drawing.Point(0, 0)
         Me.PanelNonAnonymous.Name = "PanelNonAnonymous"
         Me.PanelNonAnonymous.Size = New System.Drawing.Size(420, 96)
-        Me.PanelNonAnonymous.TabIndex = 32
+        Me.PanelNonAnonymous.TabIndex = 31
         '
         'butSetRuntimeName
         '
@@ -295,7 +295,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbValueSets.Location = New System.Drawing.Point(3, 348)
         Me.gbValueSets.Name = "gbValueSets"
         Me.gbValueSets.Size = New System.Drawing.Size(420, 59)
-        Me.gbValueSets.TabIndex = 6
+        Me.gbValueSets.TabIndex = 8
         Me.gbValueSets.TabStop = False
         Me.gbValueSets.Text = "Value sets in external terminologies"
         Me.gbValueSets.Visible = False
@@ -319,7 +319,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.termLookUp.MinimumSize = New System.Drawing.Size(60, 55)
         Me.termLookUp.Name = "termLookUp"
         Me.termLookUp.Size = New System.Drawing.Size(420, 55)
-        Me.termLookUp.TabIndex = 8
+        Me.termLookUp.TabIndex = 7
         Me.termLookUp.Tag = ""
         Me.termLookUp.TermCaption = "SNOMED"
         Me.termLookUp.TermId = Nothing
@@ -335,7 +335,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.Splitter1.Location = New System.Drawing.Point(3, 290)
         Me.Splitter1.Name = "Splitter1"
         Me.Splitter1.Size = New System.Drawing.Size(420, 3)
-        Me.Splitter1.TabIndex = 7
+        Me.Splitter1.TabIndex = 6
         Me.Splitter1.TabStop = False
         '
         'gbTerminology
@@ -345,7 +345,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbTerminology.Location = New System.Drawing.Point(3, 178)
         Me.gbTerminology.Name = "gbTerminology"
         Me.gbTerminology.Size = New System.Drawing.Size(420, 112)
-        Me.gbTerminology.TabIndex = 4
+        Me.gbTerminology.TabIndex = 5
         Me.gbTerminology.TabStop = False
         Me.gbTerminology.Text = "Node meaning in terminologies"
         '
@@ -391,7 +391,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbComments.Location = New System.Drawing.Point(3, 3)
         Me.gbComments.Name = "gbComments"
         Me.gbComments.Size = New System.Drawing.Size(420, 175)
-        Me.gbComments.TabIndex = 5
+        Me.gbComments.TabIndex = 4
         Me.gbComments.TabStop = False
         Me.gbComments.Text = "Comments"
         '
@@ -467,6 +467,7 @@ Public Class ArchetypeNodeConstraintControl
         Try
             ' hide the label if there is no constraint (for ANY or Cluster) - see below
             Me.labelAny.Visible = False
+            Me.termLookUp.TermName = ""
 
             If Not mConstraintControl Is Nothing Then
                 Me.PanelDataConstraint.Controls.Remove(mConstraintControl)
@@ -567,11 +568,12 @@ Public Class ArchetypeNodeConstraintControl
                 Dim nodeID As String = CType(an_archetype_node, ArchetypeNodeAbstract).NodeId
                 mDataView.Table.Columns(1).DefaultValue = nodeID
                 mDataView.RowFilter = "Path = '" & CType(an_archetype_node, ArchetypeNodeAbstract).NodeId & "'"
-                If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 0 Then
-                    Me.dgNodeBindings.Enabled = False
-                Else
-                    Me.dgNodeBindings.Enabled = True
+                'Hide the termLookUp if there are no rows
+                If mDataView.Count = 0 Then
+                    termLookUp.Visible = False
                 End If
+
+
             Else
                 Me.dgNodeBindings.Visible = False
             End If
@@ -622,6 +624,7 @@ Public Class ArchetypeNodeConstraintControl
                 Me.PanelDataConstraint.Enabled = True
                 Me.PanelNonAnonymous.Enabled = True
             End If
+
         End If
 
     End Sub
@@ -687,6 +690,14 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Sub
 
+    Private Sub ArchetypeNodeConstraintControl_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Enter
+        If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 0 Then
+            Me.dgNodeBindings.Enabled = False
+        Else
+            Me.dgNodeBindings.Enabled = True
+        End If
+    End Sub
+
     Private Sub ArchetypeNodeConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         CType(Me.dgNodeBindings.Columns(0), DataGridViewComboBoxColumn).DataSource = mFileManager.OntologyManager.TerminologiesTable
         CType(Me.dgNodeBindings.Columns(0), DataGridViewComboBoxColumn).ValueMember = "Terminology"
@@ -699,6 +710,7 @@ Public Class ArchetypeNodeConstraintControl
     Private Sub SetTermLookUpVisibility(ByVal termID As String)
 
         If OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp AndAlso _
+            Not String.IsNullOrEmpty(termID) AndAlso _
             OceanArchetypeEditor.Instance.ServiceTerminology(termID) Then
             termLookUp.TermCaption = termID
             'ToDo: work this from the terminology server
@@ -731,17 +743,32 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Sub
 
-    Private Sub dgNodeBindings_CellClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellClick
-        Dim termID As String = CType(dgNodeBindings.CurrentRow.Cells(0), DataGridViewComboBoxCell).EditedFormattedValue.ToString
-        If termID <> String.Empty Then
-            SetTermLookUpVisibility(termID)
-        Else
-            If Me.termLookUp.Visible Then
-                Me.termLookUp.Visible = False
-            End If
+    'Private Sub dgNodeBindings_CellClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellClick
+    '    SetTermLookUpVisibility(CType(dgNodeBindings.CurrentRow.Cells(0), DataGridViewComboBoxCell).EditedFormattedValue.ToString)
+    '    Debug.WriteLine(String.Format("Cell click - Row index:{0}, Visible{1}", dgNodeBindings.CurrentRow.Index, Me.termLookUp.Visible))
+    'End Sub
+
+    'Private Sub dgNodeBindings_RowEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.RowEnter
+    '    SetTermLookUpVisibility(CStr(CType(dgNodeBindings.Rows(e.RowIndex).Cells(0), DataGridViewComboBoxCell).Value))
+    '    Debug.WriteLine(String.Format("Row enter - Row index:{0}, Visible{1}", e.RowIndex, Me.termLookUp.Visible))
+    'End Sub
+
+    Private Sub dgNodeBindings_RowPostPaint(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewRowPostPaintEventArgs) Handles dgNodeBindings.RowPostPaint
+        If (Not dgNodeBindings.CurrentRow Is Nothing) AndAlso (Not TypeOf dgNodeBindings.Rows(e.RowIndex).Cells(0).Value Is System.DBNull) AndAlso (dgNodeBindings.CurrentRow.Index = e.RowIndex) Then
+            SetTermLookUpVisibility(CStr(CType(dgNodeBindings.Rows(e.RowIndex).Cells(0), DataGridViewComboBoxCell).Value))
+            'If termLookUp.Visible Then
+            '    'Need to display term if there is one
+            '    Dim s As String = CStr(CType(dgNodeBindings.Rows(e.RowIndex).Cells(1), DataGridViewTextBoxCell).Value)
+            '    If s <> String.Empty AndAlso mFileManager.HasTermBindings("en-GB", s) Then
+            '        s = mFileManager.BindingText("en-GB", "Snomed", s)
+            '        If s <> String.Empty Then
+            '            Me.termLookUp.TermName = s
+            '        End If
+            '    End If
+            'End If
+            'Debug.WriteLine(String.Format("Row paint - Row index:{0}, Visible{1}", e.RowIndex, Me.termLookUp.Visible))
         End If
     End Sub
-
 End Class
 
 '

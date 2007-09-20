@@ -211,25 +211,25 @@ Public Class ApplicationOptionsForm
         Me.txtRepositoryPath.TabIndex = 16
         Me.ToolTip1.SetToolTip(Me.txtRepositoryPath, "Leave blank for last directory used")
         '
-        'butCancel
-        '
-        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(403, 240)
-        Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(96, 28)
-        Me.butCancel.TabIndex = 18
-        Me.butCancel.Text = "Cancel"
-        '
         'butOK
         '
         Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(518, 240)
+        Me.butOK.Location = New System.Drawing.Point(403, 240)
         Me.butOK.Name = "butOK"
         Me.butOK.Size = New System.Drawing.Size(96, 28)
-        Me.butOK.TabIndex = 19
+        Me.butOK.TabIndex = 18
         Me.butOK.Text = "OK"
+        '
+        'butCancel
+        '
+        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.butCancel.Location = New System.Drawing.Point(518, 240)
+        Me.butCancel.Name = "butCancel"
+        Me.butCancel.Size = New System.Drawing.Size(96, 28)
+        Me.butCancel.TabIndex = 19
+        Me.butCancel.Text = "Cancel"
         '
         'txtHelpFile
         '
