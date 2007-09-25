@@ -56,6 +56,7 @@ Public Class Splash
         '
         'buttonClose
         '
+        Me.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.buttonClose.Location = New System.Drawing.Point(32, 210)
         Me.buttonClose.Name = "buttonClose"
@@ -70,10 +71,12 @@ Public Class Splash
         '
         'Splash
         '
+        Me.AcceptButton = Me.buttonClose
         Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.BackColor = System.Drawing.Color.White
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+        Me.CancelButton = Me.buttonClose
         Me.ClientSize = New System.Drawing.Size(566, 254)
         Me.ControlBox = False
         Me.Controls.Add(Me.buttonClose)
@@ -93,55 +96,22 @@ Public Class Splash
 
 #End Region
 
-    Private showingAsSplash As Boolean = False
-
-    Public ReadOnly Property AssemblyDescription() As String
-        Get
-            ' Get all Description attributes on this assembly
-            Dim attributes As Object() = System.Reflection.Assembly.GetExecutingAssembly().GetCustomAttributes(GetType(System.Reflection.AssemblyDescriptionAttribute), False)
-            ' If there aren't any Description attributes, return an empty string
-            If attributes.Length = 0 Then
-                Return ""
-            End If
-            ' If there is a Description attribute, return its value
-            Return DirectCast(attributes(0), System.Reflection.AssemblyDescriptionAttribute).Description
-        End Get
-    End Property
-
-    Public Overloads Sub Show(ByVal showAsSplash As Boolean)
-        Me.Text = String.Format("{0}, v{1}.{2}", "Archetype Editor", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor)
-
-        If showAsSplash Then
-            Me.buttonClose.Visible = False
-            Me.Text = String.Format("{0}, v{1}.{2}", "Archetype Editor", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Major, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Minor)
-            'Me.labelDescription.Visible = False
-            Me.timerSplash.Enabled = True
-        Else
-            Me.buttonClose.Visible = True
-            'Me.labelDescription.Visible = True
-            'Me.labelDescription.Text = AssemblyDescription
-            'Me.labelDescription.BackColor = Color.FromArgb(80, 255, 255, 255)
-            Me.Text = String.Format("{0}, v{1}", "Archetype Editor", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString)
-        End If
-
-        showingAsSplash = showAsSplash
-        Me.Show()
+    Public Sub ShowAsSplash()
+        buttonClose.Hide()
+        timerSplash.Enabled = True
+        Show()
     End Sub
 
     Private Sub timerSplash_Tick(ByVal sender As Object, ByVal e As EventArgs) Handles timerSplash.Tick
         timerSplash.Enabled = False
         timerSplash.Interval = 50
 
-        If Me.Opacity = 0 Then
-            Me.Hide()
+        If Opacity <= 0 Then
+            Hide()
         Else
-            Me.Opacity -= 0.05
+            Opacity -= 0.05
             timerSplash.Enabled = True
         End If
-    End Sub
-
-    Private Sub buttonClose_Click(ByVal sender As Object, ByVal e As EventArgs) Handles buttonClose.Click
-        Close()
     End Sub
 
 End Class

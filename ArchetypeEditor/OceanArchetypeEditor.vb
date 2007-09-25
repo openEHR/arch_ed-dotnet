@@ -711,7 +711,7 @@ Public Class OceanArchetypeEditor
         Dim files As System.IO.FileInfo()
 
         Dim frmSplash As New Splash
-        frmSplash.Show(True)
+        frmSplash.ShowAsSplash()
         Application.DoEvents()
 
         'Loading from the command line argument
