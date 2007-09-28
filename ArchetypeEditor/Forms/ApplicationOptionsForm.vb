@@ -244,7 +244,8 @@ Public Class ApplicationOptionsForm
         Me.txtURL.Location = New System.Drawing.Point(20, 178)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(442, 22)
-        Me.txtURL.TabIndex = 25
+        Me.txtURL.TabIndex = 35
+        Me.txtURL.Visible = False
         Me.ToolTip1.SetToolTip(Me.txtURL, "Http address of repository")
         '
         'txtTerminologyURL
@@ -560,6 +561,7 @@ Public Class ApplicationOptionsForm
         Me.lblURL.Size = New System.Drawing.Size(261, 28)
         Me.lblURL.TabIndex = 26
         Me.lblURL.Text = "URL for shared repository"
+        Me.lblURL.Visible = False
         Me.lblURL.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'chkWebSearch
@@ -568,8 +570,9 @@ Public Class ApplicationOptionsForm
         Me.chkWebSearch.Location = New System.Drawing.Point(287, 158)
         Me.chkWebSearch.Name = "chkWebSearch"
         Me.chkWebSearch.Size = New System.Drawing.Size(175, 21)
-        Me.chkWebSearch.TabIndex = 24
+        Me.chkWebSearch.TabIndex = 34
         Me.chkWebSearch.Text = "Enable Internet Search"
+        Me.chkWebSearch.Visible = False
         Me.chkWebSearch.UseVisualStyleBackColor = True
         '
         'Label4
