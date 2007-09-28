@@ -3719,7 +3719,7 @@ Public Class Designer
 
     Private Sub MenuHelpOcean_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpOcean.Click
         'FIXME
-        Process.Start("http://www.oceaninformatics.biz")
+        Process.Start("http://www.oceaninformatics.com")
     End Sub
 
     Private Sub MenuHelpReport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpReport.Click
