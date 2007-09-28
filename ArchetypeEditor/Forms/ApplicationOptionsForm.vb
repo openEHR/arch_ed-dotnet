@@ -718,7 +718,7 @@ Public Class ApplicationOptionsForm
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ApplicationOptionsForm"
         Me.ShowInTaskbar = False
-        Me.Text = "ApplicationOptionsForm"
+        Me.Text = "Options"
         Me.gbUserDetails.ResumeLayout(False)
         Me.gbUserDetails.PerformLayout()
         Me.GroupBox1.ResumeLayout(False)
