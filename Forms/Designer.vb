@@ -274,14 +274,14 @@ Public Class Designer
         Me.lblPrimaryLanguageText = New System.Windows.Forms.Label
         Me.MainMenu = New System.Windows.Forms.MainMenu(Me.components)
         Me.MenuFile = New System.Windows.Forms.MenuItem
+        Me.MenuFileNew = New System.Windows.Forms.MenuItem
         Me.MenuFileOpen = New System.Windows.Forms.MenuItem
         Me.MenuFileOpenFromWeb = New System.Windows.Forms.MenuItem
-        Me.MenuFileNew = New System.Windows.Forms.MenuItem
-        Me.menuFileNewWindow = New System.Windows.Forms.MenuItem
         Me.MenuFileSave = New System.Windows.Forms.MenuItem
         Me.MenuFileSaveAs = New System.Windows.Forms.MenuItem
         Me.menuFileExport = New System.Windows.Forms.MenuItem
         Me.MenuFileExportType = New System.Windows.Forms.MenuItem
+        Me.menuFileNewWindow = New System.Windows.Forms.MenuItem
         Me.MenuFileClose = New System.Windows.Forms.MenuItem
         Me.MenuFileSpecialise = New System.Windows.Forms.MenuItem
         Me.MenuFileExit = New System.Windows.Forms.MenuItem
@@ -755,66 +755,66 @@ Public Class Designer
         'MenuFile
         '
         Me.MenuFile.Index = 0
-        Me.MenuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileOpen, Me.MenuFileOpenFromWeb, Me.MenuFileNew, Me.menuFileNewWindow, Me.MenuFileSave, Me.MenuFileSaveAs, Me.menuFileExport, Me.MenuFileClose, Me.MenuFileSpecialise, Me.MenuFileExit})
+        Me.MenuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileNew, Me.MenuFileOpen, Me.MenuFileOpenFromWeb, Me.MenuFileSave, Me.MenuFileSaveAs, Me.menuFileExport, Me.menuFileNewWindow, Me.MenuFileClose, Me.MenuFileSpecialise, Me.MenuFileExit})
         Me.MenuFile.Shortcut = System.Windows.Forms.Shortcut.CtrlF
         Me.MenuFile.ShowShortcut = False
-        Me.MenuFile.Text = "File"
-        '
-        'MenuFileOpen
-        '
-        Me.MenuFileOpen.Index = 0
-        Me.MenuFileOpen.Shortcut = System.Windows.Forms.Shortcut.CtrlO
-        Me.MenuFileOpen.Text = "Open "
-        '
-        'MenuFileOpenFromWeb
-        '
-        Me.MenuFileOpenFromWeb.Index = 1
-        Me.MenuFileOpenFromWeb.Shortcut = System.Windows.Forms.Shortcut.CtrlW
-        Me.MenuFileOpenFromWeb.Text = "Open from Web"
+        Me.MenuFile.Text = "&File"
         '
         'MenuFileNew
         '
-        Me.MenuFileNew.Index = 2
+        Me.MenuFileNew.Index = 0
         Me.MenuFileNew.Shortcut = System.Windows.Forms.Shortcut.CtrlN
-        Me.MenuFileNew.Text = "New"
+        Me.MenuFileNew.Text = "&New..."
         '
-        'menuFileNewWindow
+        'MenuFileOpen
         '
-        Me.menuFileNewWindow.Index = 3
-        Me.menuFileNewWindow.Text = "New window"
+        Me.MenuFileOpen.Index = 1
+        Me.MenuFileOpen.Shortcut = System.Windows.Forms.Shortcut.CtrlO
+        Me.MenuFileOpen.Text = "&Open..."
+        '
+        'MenuFileOpenFromWeb
+        '
+        Me.MenuFileOpenFromWeb.Index = 2
+        Me.MenuFileOpenFromWeb.Shortcut = System.Windows.Forms.Shortcut.CtrlW
+        Me.MenuFileOpenFromWeb.Text = "Open from &Web..."
         '
         'MenuFileSave
         '
-        Me.MenuFileSave.Index = 4
+        Me.MenuFileSave.Index = 3
         Me.MenuFileSave.Shortcut = System.Windows.Forms.Shortcut.CtrlS
-        Me.MenuFileSave.Text = "Save"
+        Me.MenuFileSave.Text = "&Save"
         Me.MenuFileSave.Visible = False
         '
         'MenuFileSaveAs
         '
-        Me.MenuFileSaveAs.Index = 5
-        Me.MenuFileSaveAs.Text = "Save As"
+        Me.MenuFileSaveAs.Index = 4
+        Me.MenuFileSaveAs.Text = "Save &As..."
         '
         'menuFileExport
         '
-        Me.menuFileExport.Index = 6
+        Me.menuFileExport.Index = 5
         Me.menuFileExport.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileExportType})
-        Me.menuFileExport.Text = "Export"
+        Me.menuFileExport.Text = "E&xport"
         '
         'MenuFileExportType
         '
         Me.MenuFileExportType.Index = 0
         Me.MenuFileExportType.Text = "Type"
         '
+        'menuFileNewWindow
+        '
+        Me.menuFileNewWindow.Index = 6
+        Me.menuFileNewWindow.Text = "N&ew Window"
+        '
         'MenuFileClose
         '
         Me.MenuFileClose.Index = 7
-        Me.MenuFileClose.Text = "Close"
+        Me.MenuFileClose.Text = "C&lose"
         '
         'MenuFileSpecialise
         '
         Me.MenuFileSpecialise.Index = 8
-        Me.MenuFileSpecialise.Text = "Specialise"
+        Me.MenuFileSpecialise.Text = "S&pecialise"
         Me.MenuFileSpecialise.Visible = False
         '
         'MenuFileExit
@@ -826,56 +826,56 @@ Public Class Designer
         '
         Me.menuEdit.Index = 1
         Me.menuEdit.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuEditArchID, Me.MenuViewConfig})
-        Me.menuEdit.Text = "Edit"
+        Me.menuEdit.Text = "&Edit"
         '
         'menuEditArchID
         '
         Me.menuEditArchID.Index = 0
-        Me.menuEditArchID.Text = "Archetype ID"
+        Me.menuEditArchID.Text = "&Archetype ID"
         '
         'MenuViewConfig
         '
         Me.MenuViewConfig.Index = 1
-        Me.MenuViewConfig.Text = "Preferences"
+        Me.MenuViewConfig.Text = "&Preferences"
         '
         'MenuPublish
         '
         Me.MenuPublish.Index = 2
         Me.MenuPublish.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuPublishPack, Me.MenuPublishFinalise})
-        Me.MenuPublish.Text = "Publish"
+        Me.MenuPublish.Text = "&Publish"
         '
         'MenuPublishPack
         '
         Me.MenuPublishPack.Enabled = False
         Me.MenuPublishPack.Index = 0
-        Me.MenuPublishPack.Text = "Pack"
+        Me.MenuPublishPack.Text = "&Pack"
         '
         'MenuPublishFinalise
         '
         Me.MenuPublishFinalise.Enabled = False
         Me.MenuPublishFinalise.Index = 1
-        Me.MenuPublishFinalise.Text = "Finalise"
+        Me.MenuPublishFinalise.Text = "&Finalise"
         '
         'MenuLanguage
         '
         Me.MenuLanguage.Index = 3
         Me.MenuLanguage.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuLanguageAvailable, Me.MenuLanguageAdd, Me.MenuLanguageChange})
-        Me.MenuLanguage.Text = "Language"
+        Me.MenuLanguage.Text = "&Language"
         '
         'MenuLanguageAvailable
         '
         Me.MenuLanguageAvailable.Index = 0
-        Me.MenuLanguageAvailable.Text = "Available languages"
+        Me.MenuLanguageAvailable.Text = "Available &Languages"
         '
         'MenuLanguageAdd
         '
         Me.MenuLanguageAdd.Index = 1
-        Me.MenuLanguageAdd.Text = "Add language"
+        Me.MenuLanguageAdd.Text = "&Add Language"
         '
         'MenuLanguageChange
         '
         Me.MenuLanguageChange.Index = 2
-        Me.MenuLanguageChange.Text = "Change language"
+        Me.MenuLanguageChange.Text = "&Change Language"
         '
         'MenuTerminology
         '
@@ -886,12 +886,12 @@ Public Class Designer
         'MenuTerminologyAvailable
         '
         Me.MenuTerminologyAvailable.Index = 0
-        Me.MenuTerminologyAvailable.Text = "Available terminologies"
+        Me.MenuTerminologyAvailable.Text = "Available &Terminologies"
         '
         'MenuTerminologyAdd
         '
         Me.MenuTerminologyAdd.Index = 1
-        Me.MenuTerminologyAdd.Text = "Add terminology"
+        Me.MenuTerminologyAdd.Text = "&Add Terminology"
         '
         'MenuHelp
         '
@@ -902,27 +902,27 @@ Public Class Designer
         'MenuHelpStart
         '
         Me.MenuHelpStart.Index = 0
-        Me.MenuHelpStart.Text = "Help Topics"
+        Me.MenuHelpStart.Text = "&Help Topics"
         '
         'MenuHelpReport
         '
         Me.MenuHelpReport.Index = 1
-        Me.MenuHelpReport.Text = "Report issue"
+        Me.MenuHelpReport.Text = "&Report issue"
         '
         'MenuHelpLicence
         '
         Me.MenuHelpLicence.Index = 2
-        Me.MenuHelpLicence.Text = "Licence"
+        Me.MenuHelpLicence.Text = "&Licence"
         '
         'MenuHelpOcean
         '
         Me.MenuHelpOcean.Index = 3
-        Me.MenuHelpOcean.Text = "About Ocean Informatics"
+        Me.MenuHelpOcean.Text = "About &Ocean Informatics"
         '
         'MenuHelpOceanEditor
         '
         Me.MenuHelpOceanEditor.Index = 4
-        Me.MenuHelpOceanEditor.Text = "About the Ocean Editor"
+        Me.MenuHelpOceanEditor.Text = "&About the Ocean Editor"
         '
         'PanelMain
         '
@@ -1910,37 +1910,32 @@ Public Class Designer
     ' loads the Windows form "WebSearchForm" for enabling a search for archetypes from the web 
     ' (accessing the web-based Archetype Finder via its provided Web Services)
     Private Sub OpenArchetypeFromWeb(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileOpenFromWeb.Click
-        If Not CheckOKtoClose() Then
-            Return
-        End If
+        If CheckOKtoClose() Then
+            Dim frm As New WebSearchForm
 
+            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+                frm.Text = Filemanager.GetOpenEhrTerm(658, frm.Text)
+                frm.lblSearch.Text = Filemanager.GetOpenEhrTerm(651, frm.lblSearch.Text)
+                frm.rdbtn_any.Text = Filemanager.GetOpenEhrTerm(657, frm.rdbtn_any.Text)
+                frm.rdbtn_id.Text = Filemanager.GetOpenEhrTerm(632, frm.rdbtn_id.Text)
+                frm.rdbtn_des.Text = Filemanager.GetOpenEhrTerm(113, frm.rdbtn_des.Text)
+                frm.rdbtn_con.Text = Filemanager.GetOpenEhrTerm(54, frm.rdbtn_con.Text)
+                frm.btnSearch.Text = Filemanager.GetOpenEhrTerm(655, frm.btnSearch.Text)
+                frm.btnReset.Text = Filemanager.GetOpenEhrTerm(656, frm.btnReset.Text)
+                frm.lblNum.Text = Filemanager.GetOpenEhrTerm(653, frm.lblNum.Text)
+            End If
 
-        Dim frm As New WebSearchForm
+            frm.ShowDialog(Me)
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            Dim myArchetypeURL As String
 
-            frm.Text = Filemanager.GetOpenEhrTerm(658, frm.Text)
-            frm.lblSearch.Text = Filemanager.GetOpenEhrTerm(651, frm.lblSearch.Text)
-            frm.rdbtn_any.Text = Filemanager.GetOpenEhrTerm(657, frm.rdbtn_any.Text)
-            frm.rdbtn_id.Text = Filemanager.GetOpenEhrTerm(632, frm.rdbtn_id.Text)
-            frm.rdbtn_des.Text = Filemanager.GetOpenEhrTerm(113, frm.rdbtn_des.Text)
-            frm.rdbtn_con.Text = Filemanager.GetOpenEhrTerm(54, frm.rdbtn_con.Text)
-            frm.btnSearch.Text = Filemanager.GetOpenEhrTerm(655, frm.btnSearch.Text)
-            frm.btnReset.Text = Filemanager.GetOpenEhrTerm(656, frm.btnReset.Text)
-            frm.lblNum.Text = Filemanager.GetOpenEhrTerm(653, frm.lblNum.Text)
-
-        End If
-
-        frm.ShowDialog(Me)
-        Dim myArchetypeURL As String
-        ' The boolean variable "chosen" determines if the user decided to open one found archetype 
-        ' (a result set is shown as a list with button a Open-Button for each archetype on the WebSearchForm)
-        ' is chosen true, we find out which archetypes has to be opened and takes its URL for further processing
-        If frm.chosen = True Then
-
-            myArchetypeURL = frm.getArchetypeIdTobeOpened().Trim
-            OpenArchetype(myArchetypeURL)
-
+            ' The boolean variable "chosen" determines if the user decided to open one found archetype 
+            ' (a result set is shown as a list with button a Open-Button for each archetype on the WebSearchForm)
+            ' is chosen true, we find out which archetypes has to be opened and takes its URL for further processing
+            If frm.chosen = True Then
+                myArchetypeURL = frm.getArchetypeIdTobeOpened().Trim
+                OpenArchetype(myArchetypeURL)
+            End If
         End If
     End Sub
 
@@ -2376,13 +2371,13 @@ Public Class Designer
         Me.MenuFile.Text = Filemanager.GetOpenEhrTerm(43, Me.MenuFile.Text, language)
         Me.MenuFileClose.Text = Filemanager.GetOpenEhrTerm(184, Me.MenuFileClose.Text, language)
         Me.MenuFileNew.Text = Filemanager.GetOpenEhrTerm(151, Me.MenuFileNew.Text, language)
-        Me.MenuFileExit.Text = Filemanager.GetOpenEhrTerm(63, Me.MenuFileExit.Text, language)
         Me.MenuFileOpen.Text = Filemanager.GetOpenEhrTerm(61, Me.MenuFileOpen.Text, language)
         Me.MenuFileOpenFromWeb.Text = Filemanager.GetOpenEhrTerm(651, Me.MenuFileOpenFromWeb.Text, language)
         Me.MenuFileSave.Text = Filemanager.GetOpenEhrTerm(183, Me.MenuFileSave.Text, language)
         Me.menuFileNewWindow.Text = Filemanager.GetOpenEhrTerm(595, Me.menuFileNewWindow.Text, language)
         Me.MenuFileSaveAs.Text = Filemanager.GetOpenEhrTerm(596, Me.MenuFileSaveAs.Text, language)
         Me.MenuFileSpecialise.Text = Filemanager.GetOpenEhrTerm(185, Me.MenuFileSpecialise.Text, language)
+        Me.MenuFileExit.Text = Filemanager.GetOpenEhrTerm(63, Me.MenuFileExit.Text, language)
         Me.menuEdit.Text = Filemanager.GetOpenEhrTerm(592, Me.menuEdit.Text, language)
         Me.menuEditArchID.Text = Filemanager.GetOpenEhrTerm(632, Me.menuEditArchID.Text, language)
         Me.MenuViewConfig.Text = Filemanager.GetOpenEhrTerm(598, Me.MenuViewConfig.Text, language)
@@ -3746,6 +3741,8 @@ Public Class Designer
 
     Private Sub MenuViewConfig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuViewConfig.Click
         OceanArchetypeEditor.Instance.Options.ShowOptionsForm()
+        ToolBarOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
+        MenuFileOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
     End Sub
 
     Private Sub menuFileNewWindow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuFileNewWindow.Click
@@ -4262,10 +4259,8 @@ Public Class Designer
         ' Set the help context
         Me.HelpProviderDesigner.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
-        If (OceanArchetypeEditor.Instance.Options.AllowWebSearch = False) Then
-            Me.ToolBarOpenFromWeb.Visible = False
-            Me.MenuFileOpenFromWeb.Visible = False
-        End If
+        ToolBarOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
+        MenuFileOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
 
         'Initialise the bindings of tables for all the lookups
         BindTables()
@@ -4329,23 +4324,23 @@ Public Class Designer
             End If
         End If
 
-            If OceanArchetypeEditor.Instance.Options.AutosaveInterval = 0 Then
-                Me.mAutoSaveTimer.Enabled = False
-            Else
-                Me.mAutoSaveTimer.Enabled = True
-                Me.mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
-            End If
+        If OceanArchetypeEditor.Instance.Options.AutosaveInterval = 0 Then
+            Me.mAutoSaveTimer.Enabled = False
+        Else
+            Me.mAutoSaveTimer.Enabled = True
+            Me.mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
+        End If
 
-            ''Add the display format buttons based on the parser types
-            'For Each format_type As String In mFileManager.AvailableFormats
-            '    format_type = format_type.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
-            '    If format_type <> "HTML" Then
-            '        Dim tbb As New ToolBarButton(format_type)
-            '        tbb.Tag = format_type
-            '        tbb.Style = ToolBarButtonStyle.ToggleButton
-            '        ToolBarRTF.Buttons.Insert(2, tbb)
-            '    End If
-            'Next
+        ''Add the display format buttons based on the parser types
+        'For Each format_type As String In mFileManager.AvailableFormats
+        '    format_type = format_type.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+        '    If format_type <> "HTML" Then
+        '        Dim tbb As New ToolBarButton(format_type)
+        '        tbb.Tag = format_type
+        '        tbb.Style = ToolBarButtonStyle.ToggleButton
+        '        ToolBarRTF.Buttons.Insert(2, tbb)
+        '    End If
+        'Next
     End Sub
 
     Private Sub Designer_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
