@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<title>ChangeLog</title>
+		<meta name="vs_defaultClientScript" content="JavaScript">
+		<meta name="vs_targetSchema" content="http://schemas.microsoft.com/intellisense/ie5">
+		<meta name="GENERATOR" content="Microsoft Visual Studio .NET 7.1">
+		<meta name="ProgId" content="VisualStudio.HTML">
+		<meta name="Originator" content="Microsoft Visual Studio .NET 7.1">
+	</head>
+	<body>
+		<H1 align="center">Change Log</H1>
+		<H3>Project: ArchetypeEditor</H3>
+		<TABLE id="Table1" cellSpacing="0" cellPadding="1" width="100%" border="1">
+			<TR>
+				<TD style="HEIGHT: 22px" vAlign="middle" align="center" width="100"><STRONG>Date</STRONG></TD>
+				<TD style="HEIGHT: 22px" vAlign="middle" align="center" width="100"><STRONG>Version 
+						(Release)</STRONG></TD>
+				<TD style="HEIGHT: 22px" vAlign="middle" align="center" width="70"><STRONG>Initials</STRONG></TD>
+				<TD style="HEIGHT: 22px" vAlign="middle" align="center" width="100"><STRONG>Classes</STRONG></TD>
+				<TD style="HEIGHT: 22px" vAlign="middle" align="center"><STRONG>Changes</STRONG></TD>
+			</TR>
+			<TR>
+				<TD vAlign="top" width="100">2004-5-25</TD>
+				<TD vAlign="top" width="100">1606</TD>
+				<TD vAlign="top" width="70">HKF</TD>
+				<TD vAlign="top" width="100">OntologyManager</TD>
+				<TD vAlign="top">Added TermBindingCriteria table</TD>
+			</TR>
+			<TR>
+				<TD vAlign="top" width="100">2004-5-24</TD>
+				<TD vAlign="top" width="100">1605</TD>
+				<TD vAlign="top" width="70">SH</TD>
+				<TD vAlign="top" width="100">TabPageStructure</TD>
+				<TD vAlign="top">drag and drop working properly. The main change to get it going 
+					was in tvTree_DragEnter where I changed the line to e.Effect = e.AllowedEffect
+				</TD>
+			</TR>
+			<TR>
+				<TD vAlign="top" width="100">2004-5-23</TD>
+				<TD vAlign="top" width="100">1604</TD>
+				<TD vAlign="top" width="70">SH</TD>
+				<TD vAlign="top" width="100">ADL_Parser</TD>
+				<TD vAlign="top">unbounded quantities were being saved as a maximum of zero...a 
+					couple of other minors that you probably won't notice - they did not cause 
+					errors.</TD>
+			</TR>
+			<TR>
+				<TD vAlign="top" width="100">2004-5-23</TD>
+				<TD vAlign="top" width="100">1604</TD>
+				<TD vAlign="top" width="70">SH</TD>
+				<TD vAlign="top" width="100">TabPageStructure</TD>
+				<TD vAlign="top">error&nbsp;in the MenuItemPasteAll_Click function</TD>
+			</TR>
+			<TR>
+				<TD vAlign="top" width="100">2004-5-22</TD>
+				<TD vAlign="top" width="100">1603</TD>
+				<TD vAlign="top" width="70">SH</TD>
+				<TD vAlign="top" width="100">Designer::<BR>
+					TabMain_SelectionChanged</TD>
+				<TD vAlign="top">I test for any changes when I leave the terminology tab but I need 
+					to accept changes when I arrive - else there are always changes see below</TD>
+			</TR>
+			<TR>
+				<TD vAlign="top" width="100">2004-5-22</TD>
+				<TD vAlign="top" width="100">1603</TD>
+				<TD vAlign="top" width="70">SH</TD>
+				<TD vAlign="top" width="100">TabpageHistory</TD>
+				<TD vAlign="top">Fixed problem - file changed during file load</TD>
+			</TR>
+			<TR>
+				<TD vAlign="top" width="100">2004-5-22</TD>
+				<TD vAlign="top" width="100">1603</TD>
+				<TD vAlign="top" width="70">SH</TD>
+				<TD vAlign="top" width="100">CodePhrase
+				</TD>
+				<TD vAlign="top">Prevent null codes being added as empty strings - test interface 
+					on Microbiology to see the effect
+				</TD>
+			</TR>
+			<TR>
+				<TD vAlign="top" width="100">2004-05-21</TD>
+				<TD vAlign="top" width="100">1602</TD>
+				<TD vAlign="top" width="70">SH</TD>
+				<TD vAlign="top" width="100">
+					<P>ADL_Parser<BR>
+						OntologyManager</P>
+				</TD>
+				<TD vAlign="top">
+					<P>Workaround due to exception being raised by Eiffel ADL dll when adding a binding 
+						to an archetype with no existing binding&nbsp;for an&nbsp;available terminology</P>
+					<P>I have changed the DLLs and some code which seems to work OK. For some reason, 
+						you seem to have to make sure there are no empty termbindings - that is at the 
+						top of the ontology section - as this causes an error. At the moment I am 
+						adding a terminology to the archetype when I do it in the GUI - this needs to 
+						be removed as if an empty terminology is there it causes this problem. The DLL 
+						is written in such a way as to add terminologies as required at the time of 
+						adding a binding - and the terminology is removed if there are no bindings 
+						left.
+					</P>
+				</TD>
+			</TR>
+			<TR>
+				<TD vAlign="top" width="100">2004-05-20</TD>
+				<TD vAlign="top" width="100">1601</TD>
+				<TD vAlign="top" width="70">SH</TD>
+				<TD vAlign="top" width="100">
+					<P>
+						AE_Constants</P>
+				</TD>
+				<TD vAlign="top">
+					<P>I have added code to make the constants language dependent. This should be 
+						called once when the editor loads and take the language from the operating 
+						system.
+					</P>
+				</TD>
+			</TR>
+		</TABLE>
+	</body>
+</html>
