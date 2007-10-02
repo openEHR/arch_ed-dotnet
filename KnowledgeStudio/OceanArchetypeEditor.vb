@@ -76,6 +76,7 @@ Public Class OceanArchetypeEditor
 
     Public Shared ReadOnly Property DefaultLanguageCode() As String
         Get
+            If mDefaultLanguageCode = "" Then mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
             Debug.Assert(mDefaultLanguageCode <> "", "DefaultLanguageCode not set")
             Return mDefaultLanguageCode
         End Get
@@ -84,6 +85,7 @@ Public Class OceanArchetypeEditor
     Private Shared mSpecificLanguageCode As String
     Public Shared ReadOnly Property SpecificLanguageCode() As String
         Get
+            If mSpecificLanguageCode = "" Then mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag.ToLowerInvariant()
             Debug.Assert(mSpecificLanguageCode <> "", "SpecificLanguageCode not set")
             Return mSpecificLanguageCode
         End Get
@@ -777,10 +779,10 @@ Public Class OceanArchetypeEditor
         'End Try
 
         Try            
-            frm.ShowDialog()
+            'frm.ShowDialog()
         Catch ex As Exception
             MessageBox.Show("This program has encountered an error and will shut down - a recovery file will be available on restart" & vbCrLf & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            frm.Close()
+            'frm.Close()
             Return
         End Try
         files = di.GetFiles("OceanRecovery-*.*")
