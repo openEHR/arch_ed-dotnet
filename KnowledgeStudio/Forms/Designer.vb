@@ -474,9 +474,10 @@ Public Class Designer
         '
         'tabComment
         '
+        Me.tabComment.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.tabComment.Controls.Add(Me.tpConceptDescription)
         Me.tabComment.Controls.Add(Me.tpConceptComment)
-        Me.tabComment.Dock = System.Windows.Forms.DockStyle.Right
         Me.tabComment.HotTrack = True
         Me.tabComment.Location = New System.Drawing.Point(525, 0)
         Me.tabComment.Multiline = True
