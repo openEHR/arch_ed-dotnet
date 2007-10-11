@@ -129,15 +129,9 @@ Namespace ArchetypeEditor.ADL_Classes
                     EiffelCompiler.parse_archetype()
 
                     If EiffelCompiler.archetype_parsed Then
-                        Dim the_ontology As ADL_Ontology
-                        the_ontology = New ADL_Ontology(EiffelCompiler)
-                        a_filemanager.OntologyManager.Ontology = the_ontology
-
+                        a_filemanager.OntologyManager.Ontology = New ADL_Ontology(EiffelCompiler)
                         adlArchetype = New ADL_Archetype(EiffelCompiler, a_filemanager)
-
-                        If Not EiffelCompiler.archetype Is Nothing Then
-                            mOpenFileError = False
-                        End If
+                        mOpenFileError = EiffelCompiler.archetype Is Nothing
                     End If
                 End If
             End If
