@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en-au">
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+  <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+  <meta name="ProgId" content="FrontPage.Editor.Document">
+  <title>Entry classes</title>
+</head>
+<body>
+<h1>ENTRY classes</h1>
+<p>In the <i>open</i>EHR reference model a 'composition' or document
+contains
+one or more organising 'sections' - which themselves contain 'entries'.
+The
+ENTRY class of the <i>open</i>EHR reference model is like the leaf
+node of the
+document and contains the information - the blood pressure, the
+assessment, the
+diagnosis, the medication order. Importantly, <b><i>'entries' can be
+interpreted
+independent of the composition or the section within which they are
+located</i></b>
+- this is a key principle of the <i>open</i>EHR methodology and is
+very
+important for automatic processing of EHR data.</p>
+<p>All Entry classes contain:</p>
+<ul>
+  <li>a <b>DATA</b> part which contains the core information e.g. the
+systolic and diastolic pressures when measuring a blood pressure.</li>
+  <li><a name="state"></a>a <b>STATE</b> part which contains
+information about the subject of data at the time the information was
+collected, and this information is required for safe clinical
+interpretation of the core information. An example is the position of
+the patient at the time of measuring a blood pressure.</li>
+  <li><a name="protocol"></a>a <b>PROTOCOL</b> part which contains
+information on how the information was gathered or measured, and any
+other information that is not required for safe clinical interpretation
+of the core information. By default, this information will not be
+displayed in the primary view of the EHR.</li>
+</ul>
+<p>ENTRY, which is an abstract type (and does not exist in <i>open</i>EHR
+compatible data) has 3 concrete subtypes:</p>
+<h2><a name="evaluation"></a>EVALUATION</h2>
+<p>Evaluations are 'meta-observations' - ideas, labels or views which
+arise
+within the clinician's mind, which involve interpretation of
+observations and
+formulation into a new form. These data do not require a time model,
+and there
+is no valid concept of average, maximum or modal values of this concept
+when
+considering an individual data subject. Examples of evaluations are:</p>
+<ul>
+  <li>Diagnosis</li>
+  <li>Assessment</li>
+  <li>Family history</li>
+  <li>Problem</li>
+  <li>Issue</li>
+  <li>Adverse reaction</li>
+</ul>
+<p>As EVALUATIONs have no history model (see observation), all dates
+and times
+must be expressed within the archetype. Hence, a diagnosis archetype
+will have
+'date of onset', 'date of resolution' etc as specific data points in
+the
+evaluation archetype.</p>
+<h2><a name="observation"></a>OBSERVATION</h2>
+<p>Observations are the 'uninterpreted' or raw information - the
+clinical
+observations. These may be reported by the patient, found by a
+clinician or by
+an instrument. These data will usually have a valid concept of average,
+maximum,
+delta/change or modal value. In fact, one test of whether information
+should be
+stored in an OBSERVATION is 'Does the idea of a modal value of this
+data make
+sense?'. In addition to the Data, State and Protocol parts described
+above,
+observations have:</p>
+<ul>
+  <li>a <b>HISTORY</b> part which contains information about the
+timing of the observation and the 'width' of the information.</li>
+</ul>
+<p>Examples of observations are:</p>
+<ul>
+  <li>Blood pressure</li>
+  <li>ECG</li>
+  <li>Weight</li>
+  <li>Height</li>
+</ul>
+<h2><a name="instruction"></a>INSTRUCTION</h2>
+<p>Instructions are statements about what should happen in the future
+and
+consist of two parts - an action specification - which is in fact a
+composition
+or an observation archetype - and information about the timing and
+status of the
+action or recording that is to be completed.</p>
+<h2>Archetypes</h2>
+<p>Entry classes may be archetyped; allowing the author to specify the
+constraints on, for example, the DATA, STATE and PROTOCOL parts of the
+archetype.</p>
+</body>
+</html>

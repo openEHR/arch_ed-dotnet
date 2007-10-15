@@ -79,7 +79,7 @@ Section -Main SEC0000
     SetOverwrite ifnewer
 
     SetOutPath $INSTDIR\Help
-    File ..\bin\Help\*
+    File ..\bin\Help\ArchetypeEditor.chm
 
     SetOutPath $INSTDIR\HTML\Images
     File ..\bin\HTML\Images\*
