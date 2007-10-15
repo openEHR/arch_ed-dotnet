@@ -3720,7 +3720,7 @@ Public Class Designer
     End Sub
 
     Private Sub MenuHelpReport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpReport.Click
-        Process.Start("http://www.oceaninformatics.biz/archetype_editor/bug_reporting_archetype_editor.htm")
+        Process.Start("https://projects.oceaninformatics.com/jira?&os_username=aecustomer&os_password=customer")
     End Sub
 
     Private Sub MenuHelpStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpStart.Click
