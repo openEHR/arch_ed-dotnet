@@ -160,32 +160,34 @@ Public Class TabPageAction
                 Return True
             End If
         Next
-        Return False
 
+        Return False
     End Function
 
     Private Sub TabPageAction_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsloading = True
+
         If mPathwaySpecification Is Nothing Then
             Me.tpPathway.Controls.Clear()
             mPathwaySpecification = New PathwaySpecification
             Me.tpPathway.Controls.Add(mPathwaySpecification)
             mPathwaySpecification.Dock = DockStyle.Fill
         End If
+
         If mActionDescription Is Nothing Then
             Me.tpAction.Controls.Clear()
             mActionDescription = New TabPageStructure
             Me.tpAction.Controls.Add(mActionDescription)
             mActionDescription.Dock = DockStyle.Fill
         End If
+
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
+
         Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
         mIsloading = False
-
     End Sub
-
 
     Public ReadOnly Property ComponentType() As StructureType
         Get
@@ -196,7 +198,10 @@ Public Class TabPageAction
     Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
         text.WriteLine("\par Action description: \par")
         text.WriteLine("\par")
-        mActionDescription.toRichText(text, level + 1)
+
+        If Not mActionDescription Is Nothing Then
+            mActionDescription.toRichText(text, level + 1)
+        End If
     End Sub
 
     Public Sub Reset()
