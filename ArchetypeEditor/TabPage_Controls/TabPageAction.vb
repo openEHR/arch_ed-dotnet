@@ -155,7 +155,7 @@ Public Class TabPageAction
 #End Region
 
     Public Function HasProtocol() As Boolean
-        For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlAction.TabPages
+        For Each tp As Crownwood.Magic.Controls.TabPage In TabControlAction.TabPages
             If tp.Name = "tpProtocol" Then
                 Return True
             End If
@@ -168,16 +168,16 @@ Public Class TabPageAction
         mIsloading = True
 
         If mPathwaySpecification Is Nothing Then
-            Me.tpPathway.Controls.Clear()
+            tpPathway.Controls.Clear()
             mPathwaySpecification = New PathwaySpecification
-            Me.tpPathway.Controls.Add(mPathwaySpecification)
+            tpPathway.Controls.Add(mPathwaySpecification)
             mPathwaySpecification.Dock = DockStyle.Fill
         End If
 
         If mActionDescription Is Nothing Then
-            Me.tpAction.Controls.Clear()
+            tpAction.Controls.Clear()
             mActionDescription = New TabPageStructure
-            Me.tpAction.Controls.Add(mActionDescription)
+            tpAction.Controls.Add(mActionDescription)
             mActionDescription.Dock = DockStyle.Fill
         End If
 
@@ -185,7 +185,7 @@ Public Class TabPageAction
             TranslateGUI()
         End If
 
-        Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
         mIsloading = False
     End Sub
 
@@ -205,9 +205,9 @@ Public Class TabPageAction
     End Sub
 
     Public Sub Reset()
-        Me.tpPathway.Controls.Clear()
+        tpPathway.Controls.Clear()
         mPathwaySpecification = New PathwaySpecification
-        Me.tpPathway.Controls.Add(mPathwaySpecification)
+        tpPathway.Controls.Add(mPathwaySpecification)
         mPathwaySpecification.Dock = DockStyle.Fill
     End Sub
 
@@ -216,22 +216,24 @@ Public Class TabPageAction
         For Each rm As RmStructureCompound In Struct
             Select Case rm.Type
                 Case StructureType.ISM_TRANSITION
-                    Me.tpPathway.Controls.Clear()
+                    tpPathway.Controls.Clear()
                     mPathwaySpecification = New PathwaySpecification
-                    Me.tpPathway.Controls.Add(mPathwaySpecification)
+                    tpPathway.Controls.Add(mPathwaySpecification)
                     mPathwaySpecification.Dock = DockStyle.Fill
                     mPathwaySpecification.PathwaySteps = rm
                 Case StructureType.ActivityDescription
                     Dim an_action As RmStructure = rm.Children.items(0)
-                    Me.tpAction.Controls.Clear()
+                    tpAction.Controls.Clear()
                     mActionDescription = New TabPageStructure
+
                     If an_action.Type = StructureType.Slot Then
                         mActionDescription.ProcessStructure(CType(an_action, RmSlot))
                     Else
                         Debug.Assert(an_action.Type = StructureType.Single Or an_action.Type = StructureType.List Or an_action.Type = StructureType.Tree Or an_action.Type = StructureType.Table)
                         mActionDescription.ProcessStructure(CType(an_action, RmStructureCompound))
                     End If
-                    Me.tpAction.Controls.Add(mActionDescription)
+
+                    tpAction.Controls.Add(mActionDescription)
                     mActionDescription.Dock = DockStyle.Fill
                 Case StructureType.Protocol
                     ' do nothing
@@ -252,20 +254,23 @@ Public Class TabPageAction
         If Not mActionDescription Is Nothing Then
             mActionDescription.BuildInterface(aContainer, pos, mandatory_only)
         End If
-
     End Sub
 
     Public Function SaveAsAction() As RmStructureCompound
         Dim rm As New RmStructureCompound("Action", StructureType.ACTION)
+
         If Not mPathwaySpecification Is Nothing Then
             rm.Children.Add(mPathwaySpecification.PathwaySteps)
         End If
+
         If Not mActionDescription Is Nothing Then
             Dim action_spec As New RmStructureCompound("activity_description", StructureType.ActivityDescription)
             Dim rm_struct As RmStructure = mActionDescription.SaveAsStructure
+
             If Not rm_struct Is Nothing Then
                 action_spec.Children.Add(rm_struct)
             End If
+
             rm.Children.Add(action_spec)
         End If
 
@@ -273,23 +278,29 @@ Public Class TabPageAction
     End Function
 
     Public Sub Translate()
-        mPathwaySpecification.Translate()
-        mActionDescription.Translate()
+        If Not mPathwaySpecification Is Nothing Then
+            mPathwaySpecification.Translate()
+        End If
+
+        If Not mActionDescription Is Nothing Then
+            mActionDescription.Translate()
+        End If
     End Sub
 
     Public Sub TranslateGUI()
-        Me.tpAction.Title = Filemanager.GetOpenEhrTerm(509, "Activity description")
-        Me.tpPathway.Title = Filemanager.GetOpenEhrTerm(510, "Pathway")
+        tpAction.Title = Filemanager.GetOpenEhrTerm(509, "Activity description")
+        tpPathway.Title = Filemanager.GetOpenEhrTerm(510, "Pathway")
         mPathwaySpecification.TranslateGUI()
         mActionDescription.TranslateGUI()
     End Sub
 
     Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
         If Not mFileManager.FileLoading Then
-            RaiseEvent ProtocolCheckChanged(Me.TabControlAction, cbProtocol.Checked)
+            RaiseEvent ProtocolCheckChanged(TabControlAction, cbProtocol.Checked)
             mFileManager.FileEdited = True
         End If
     End Sub
+
 End Class
 
 '
