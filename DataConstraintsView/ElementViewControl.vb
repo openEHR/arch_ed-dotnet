@@ -23,7 +23,7 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
 
     Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
         MyBase.New()
-
+        TabStop = False
         mFileManager = a_filemanager
 
         Dim location As New Point(0, 0)
@@ -37,6 +37,7 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
 
         ' cardinality and description as a tooltip
         Dim s As String
+
         If anElement.Description <> "*" Then
             s = anElement.Description & " (" & anElement.Occurrences.ToString & ")"
         Else
@@ -59,56 +60,41 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
                 lbl.TextAlign = ContentAlignment.MiddleLeft
         End Select
 
-        Me.Controls.Add(lbl)
+        Controls.Add(lbl)
 
         ' remember new position
         location.X = lbl.Right + 25
-
         InitialiseComponent(anElement.Constraint, location)
-
-        Me.SetSize()
-
-
+        SetSize()
     End Sub
 
     Public Sub New(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal)
         MyBase.New()
-
         mFileManager = a_filemanager
-
-        Dim location As New Point(0, 0)
-
-        InitialiseComponent(aConstraint, location)
-
-        Me.SetSize()
-
+        InitialiseComponent(aConstraint, New Point(0, 0))
+        SetSize()
     End Sub
 
-    'Protected MustOverride Sub InitialiseComponent(ByVal anElement As ArchetypeElement, _
-    '        ByVal aLocation As Point)
-    Protected MustOverride Sub InitialiseComponent(ByVal aConstraint As Constraint, _
-            ByVal aLocation As Point)
+    Protected MustOverride Sub InitialiseComponent(ByVal aConstraint As Constraint, ByVal aLocation As Point)
 
     Protected Sub SetSize()
         Dim s As Size = New Size
 
-        For Each ctrl As Control In Me.Controls
+        For Each ctrl As Control In Controls
             If ctrl.Visible Then
                 s.Width = Math.Max(s.Width, ctrl.Right) '+ 5)
                 s.Height = Math.Max(s.Height, ctrl.Bottom) ' + 1)
             End If
         Next
 
-        Me.Size = s
+        Size = s
     End Sub
 
 #If PaintBoundary Then
     Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
         MyBase.OnPaint(e)
-
         Dim g As Graphics = e.Graphics
         g.DrawRectangle(New Pen(Color.Green), 0, 0, Size.Width - 1, Size.Height - 1)
-
     End Sub
 #End If
 
@@ -129,13 +115,16 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
     'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         MyBase.Dispose(disposing)
-        For Each ctrl As Control In Me.Controls     
+
+        For Each ctrl As Control In Controls
             ctrl.Dispose()
             Controls.Remove(ctrl)
         Next
+
         mFileManager = Nothing
         mToolTips = Nothing
     End Sub
+
 End Class
 
 '
