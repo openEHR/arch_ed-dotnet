@@ -19,46 +19,49 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     Private Property Element() As RmElement
         Get
-            Return CType(Me.Item, RmElement)
+            Return CType(Item, RmElement)
         End Get
         Set(ByVal Value As RmElement)
-            Me.Item = Value
+            Item = Value
         End Set
     End Property
+
     Public Overrides ReadOnly Property IsReference() As Boolean
         Get
-            Return Me.Element.isReference
+            Return Element.isReference
         End Get
     End Property
-    Public Overrides ReadOnly Property HasReferences() As Boolean
 
+    Public Overrides ReadOnly Property HasReferences() As Boolean
         Get
-            Return Me.Element.hasReferences
+            Return Element.hasReferences
         End Get
     End Property
+
     Public Shadows ReadOnly Property RM_Class() As RmElement
         Get
             Debug.Assert(TypeOf MyBase.RM_Class Is RmElement)
             Return CType(MyBase.RM_Class, RmElement)
         End Get
     End Property
+
     Public Property Constraint() As Constraint
         Get
-            Return Me.Element.Constraint
+            Return Element.Constraint
         End Get
         Set(ByVal Value As Constraint)
-            Me.Element.Constraint = Value
+            Element.Constraint = Value
         End Set
     End Property
-    Public ReadOnly Property DataType() As String
 
+    Public ReadOnly Property DataType() As String
         Get
-            Return Me.Element.DataType
+            Return Element.DataType
         End Get
     End Property
 
     Public Overrides Function Copy() As ArchetypeNode
-        Return New ArchetypeElement(CType(Me.Element.Copy, RmElement), mFileManager)
+        Return New ArchetypeElement(CType(Element.Copy, RmElement), mFileManager)
     End Function
 
     Private Function TextConstraintToRichText(ByVal TextConstraint As Constraint_Text) As String
@@ -284,21 +287,21 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Dim s As String
         Dim ov As OrdinalValue
         Dim a_Term As RmTerm
-
         s = ""
+
         For Each ov In OrdinalConstraint.OrdinalValues
             a_Term = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
             s &= ov.Ordinal.ToString & ": <i> " & a_Term.Text & "<i><br> "
         Next
+
         s = s.Trim
         Return s
-
     End Function
 
     Private Function ProportionConstraintToHTML(ByVal RatioConstraint As Constraint_Proportion) As String
         Dim s As String
-
         s = CountConstraintToRichText(CType(RatioConstraint.Numerator, Constraint_Count))
+
         If RatioConstraint.IsPercent Then
             s &= " %"
         Else
@@ -306,7 +309,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End If
 
         Return s
-
     End Function
 
     Private Function IntervalCountToHTML(ByVal intervalCountConstraint As Constraint_Interval_Count) As String
@@ -316,7 +318,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         s += ", " & AE_Constants.Instance.Lower & ": "
         s += CountConstraintToRichText(CType(intervalCountConstraint.LowerLimit, Constraint_Count))
         Return s
-
     End Function
 
     Private Function SlotToHTML(ByVal a_slot_constraint As Constraint_Slot) As String
@@ -344,24 +345,17 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Else
             result &= Environment.NewLine & mFileManager.OntologyManager.GetOpenEHRTerm(628, "Include all") & "<br>"
         End If
+
         result &= "<br>"
         Return result
     End Function
 
     Private Function IntervalQuantityToHTML(ByVal intervalQuantityConstraint As Constraint_Interval_Quantity) As String
-        Dim s As String
-
-        s = QuantityIntervalConstraintToHTML(intervalQuantityConstraint)
-        Return s
-
+        Return QuantityIntervalConstraintToHTML(intervalQuantityConstraint)
     End Function
 
     Private Function IntervalDateTimeToHTML(ByVal intervalDateTimeConstraint As Constraint_Interval_DateTime) As String
-        Dim s As String
-
-        s = DateTimeIntervalConstraintToHTML(intervalDateTimeConstraint)
-        Return s
-
+        Return DateTimeIntervalConstraintToHTML(intervalDateTimeConstraint)
     End Function
 
     Public Overrides Function ToRichText(ByVal level As Integer) As String
@@ -379,14 +373,13 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
         result = result & Environment.NewLine & (Space(3 * level) & s & "\par")
 
-        result &= Environment.NewLine & (Space(3 * level) & "  DataType = " _
-                & Me.Element.Constraint.ConstraintTypeString & "\par")
-
-        result &= ConstraintToRichText(Me.Element.Constraint, level)
-        result &= Environment.NewLine & ("\par")
+        If Not Element.Constraint Is Nothing Then
+            result &= Environment.NewLine & (Space(3 * level) & "  DataType = " & Element.Constraint.ConstraintTypeString & "\par")
+            result &= ConstraintToRichText(Element.Constraint, level)
+            result &= Environment.NewLine & ("\par")
+        End If
 
         Return result
-
     End Function
 
     Private Function DateTimeConstraintToRichText(ByVal a_date_time_constraint As Constraint_DateTime) As String
@@ -397,19 +390,17 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     Private Function ConstraintToRichText(ByVal a_constraint As Constraint, ByVal level As Integer) As String
         Dim result As String = ""
+
         Select Case a_constraint.Type
 
             Case ConstraintType.Quantity
-
                 result &= Environment.NewLine _
                         & QuantityConstraintToRichText(CType(a_constraint, Constraint_Quantity), level)
 
             Case ConstraintType.Count
-
                 result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & CountConstraintToRichText(CType(a_constraint, Constraint_Count)) & "\par")
 
             Case ConstraintType.Text
-
                 result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & TextConstraintToRichText(CType(a_constraint, Constraint_Text)) & "\par")
 
             Case ConstraintType.Boolean
@@ -428,6 +419,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 If b.hasAssumedValue Then
                     s &= "; " & mFileManager.OntologyManager.GetOpenEHRTerm(158, "Assumed value") & " = " & b.AssumedValue.ToString
                 End If
+
                 result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & s & "\par")
 
             Case ConstraintType.DateTime
@@ -500,6 +492,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
             Case ConstraintType.Slot
                 Dim cSlot As Constraint_Slot = CType(a_constraint, Constraint_Slot)
+
                 If cSlot.hasSlots Then
                     If cSlot.IncludeAll Then
                         result &= Environment.NewLine & Space(3 * level) & mFileManager.OntologyManager.GetOpenEHRTerm(628, "Include all") & "\par"
@@ -509,6 +502,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                             result &= Environment.NewLine & Space(3 * (level + 1)) & slot & "\par"
                         Next
                     End If
+
                     If cSlot.ExcludeAll Then
                         result &= Environment.NewLine & Space(3 * level) & mFileManager.OntologyManager.GetOpenEHRTerm(629, "Exclude all") & "\par"
                     ElseIf cSlot.Exclude.Count > 0 Then
@@ -650,8 +644,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End Select
 
         Return html_dt
-
-
     End Function
 
 
@@ -660,22 +652,22 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         ' write the cardinality of the element
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("<tr>")
         Dim class_names As String = ""
-        Dim html_dt As HTML_Details = GetHtmlDetails(Me.Element.Constraint)
+        Dim html_dt As HTML_Details = GetHtmlDetails(Element.Constraint)
         Dim terminologyCode As String
 
         If OceanArchetypeEditor.Instance.Options.ShowTermsInHtml Then
             For Each terminologyRow As DataRow In mFileManager.OntologyManager.TerminologiesTable.Rows
                 terminologyCode = CStr(terminologyRow.Item(0))
-                If mFileManager.OntologyManager.Ontology.HasTermBinding(terminologyCode, Me.NodeId) Then
-                    html_dt.TerminologyCode = "<br>" & terminologyCode & ": " & mFileManager.OntologyManager.Ontology.TermBinding(terminologyCode, Me.NodeId)
+                If mFileManager.OntologyManager.Ontology.HasTermBinding(terminologyCode, NodeId) Then
+                    html_dt.TerminologyCode = "<br>" & terminologyCode & ": " & mFileManager.OntologyManager.Ontology.TermBinding(terminologyCode, NodeId)
                 End If
             Next
         End If
 
-        If Me.Element.Constraint.Type = ConstraintType.Multiple Then
+        If Element.Constraint.Type = ConstraintType.Multiple Then
             Dim first As Boolean = True
 
-            For Each c As Constraint In CType(Me.Element.Constraint, Constraint_Choice).Constraints
+            For Each c As Constraint In CType(Element.Constraint, Constraint_Choice).Constraints
                 If first Then
                     first = False
                     class_names &= c.Type.ToString
@@ -683,9 +675,8 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                     class_names &= "<hr>" & c.Type.ToString
                 End If
             Next
-
         Else
-            class_names = Me.Element.Constraint.ConstraintTypeString
+            class_names = Element.Constraint.ConstraintTypeString
         End If
 
         result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""{2}"" width=""32"" height=""32"" align=""middle""><b>{3}</b></td></table></td>", Environment.NewLine, (level * 20).ToString, html_dt.ImageSource, mText)
@@ -694,18 +685,20 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         result.AppendFormat("{0}{1}</td>", Environment.NewLine, mItem.Occurrences.ToString)
         result.AppendFormat("{0}<td>{1}", Environment.NewLine, html_dt.HTML)
         result.AppendFormat("{0}</td>", Environment.NewLine)
+
         If showComments Then
-            Dim s As String = Me.Comment
+            Dim s As String = Comment
+
             If s = "" Then
                 s = "&nbsp;"
             End If
+
             result.AppendFormat("{0}<td>{1}</td>", Environment.NewLine, s)
         End If
 
         Return result.ToString
 
     End Function
-
 
     Overrides Function ToString() As String
         Return mText
@@ -715,7 +708,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         MyBase.New(aText)
         mFileManager = a_file_manager
         Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(aText)
-        Me.Element = New RmElement(aTerm.Code)
+        Element = New RmElement(aTerm.Code)
     End Sub
 
     Public Sub New(ByVal aElement As RmElement, ByVal a_file_manager As FileManagerLocal)
