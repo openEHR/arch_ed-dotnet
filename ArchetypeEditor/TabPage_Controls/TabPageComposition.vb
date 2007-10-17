@@ -252,8 +252,13 @@ Public Class TabPageComposition
     End Function
 
     Public Sub Translate()
-        Me.mContextConstraint.Translate()
-        Me.mSectionConstraint.Translate()
+        If Not mContextConstraint Is Nothing Then
+            Me.mContextConstraint.Translate()
+        End If
+
+        If Not mSectionConstraint Is Nothing Then
+            Me.mSectionConstraint.Translate()
+        End If
     End Sub
 
     Public Sub TranslateGUI()
