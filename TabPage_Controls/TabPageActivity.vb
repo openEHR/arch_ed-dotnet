@@ -98,8 +98,11 @@ Public Class TabPageActivity
 
     Public Sub Translate()
         mActionSpecification.Translate()
-        If mFileManager.OntologyManager.Ontology.LanguageAvailable(mFileManager.OntologyManager.LanguageCode) Then
-            CType(Me.Parent, Crownwood.Magic.Controls.TabPage).Title = mFileManager.OntologyManager.GetText(mActivity.NodeId)
+
+        If Not mActivity Is Nothing Then
+            If mFileManager.OntologyManager.Ontology.LanguageAvailable(mFileManager.OntologyManager.LanguageCode) Then
+                CType(Me.Parent, Crownwood.Magic.Controls.TabPage).Title = mFileManager.OntologyManager.GetText(mActivity.NodeId)
+            End If
         End If
     End Sub
 
