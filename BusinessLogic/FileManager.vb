@@ -449,8 +449,10 @@ Public Class FileManagerLocal
         Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(xml_parser)
 
         'Set the root id which can be different than the concept ID
-        If Not mArchetypeEngine.Archetype.Definition.RootNodeId Is Nothing AndAlso xml_parser.Archetype.definition.node_id <> mArchetypeEngine.Archetype.Definition.RootNodeId Then
-            xml_parser.Archetype.definition.node_id = mArchetypeEngine.Archetype.Definition.RootNodeId
+        Dim definition As ArcheTypeDefinitionBasic = mArchetypeEngine.Archetype.Definition
+
+        If Not definition Is Nothing AndAlso Not definition.RootNodeId Is Nothing AndAlso xml_parser.Archetype.definition.node_id <> definition.RootNodeId Then
+            xml_parser.Archetype.definition.node_id = definition.RootNodeId
         End If
 
         If mOntologyManager.NumberOfSpecialisations > 0 Then
@@ -459,9 +461,10 @@ Public Class FileManagerLocal
             If xml_parser.Archetype.parent_archetype_id Is Nothing Then
                 xml_parser.Archetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
             End If
-            xml_parser.Archetype.parent_archetype_id.value = mArchetypeEngine.Archetype.ParentArchetype
 
+            xml_parser.Archetype.parent_archetype_id.value = mArchetypeEngine.Archetype.ParentArchetype
         End If
+
         'remove the concept code from ontology as will be set again
         xml_parser.Archetype.ontology.term_definitions = Nothing 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
@@ -506,9 +509,11 @@ Public Class FileManagerLocal
             Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
             Dim xml_detail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
             xml_detail.language = cp
+
             If archDetail.Copyright <> "" Then
                 xml_detail.copyright = archDetail.Copyright
             End If
+
             xml_detail.misuse = archDetail.MisUse
 
             'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
@@ -521,12 +526,14 @@ Public Class FileManagerLocal
 
             xml_detail.purpose = archDetail.Purpose
             xml_detail.use = archDetail.Use
+
             If (Not archDetail.KeyWords Is Nothing) AndAlso archDetail.KeyWords.Count > 0 Then
                 xml_detail.keywords = Array.CreateInstance(GetType(String), archDetail.KeyWords.Count)
                 For j As Integer = 0 To archDetail.KeyWords.Count - 1
                     xml_detail.keywords(j) = archDetail.KeyWords.Item(j)
                 Next
             End If
+
             details_array(ii) = xml_detail
             ii += 1
         Next
