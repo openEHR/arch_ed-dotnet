@@ -114,11 +114,14 @@ Public MustInherit Class Archetype
     End Property
 
     Public Function HasLinkConstraints() As Boolean
-        For Each l As RmLink In cDefinition.RootLinks
-            If l.HasConstraint Then
-                Return True
-            End If
-        Next
+        If Not cDefinition Is Nothing Then
+            For Each l As RmLink In cDefinition.RootLinks
+                If l.HasConstraint Then
+                    Return True
+                End If
+            Next
+        End If
+
         Return False
     End Function
 
