@@ -211,9 +211,7 @@ Public Class SimpleStructure
 
     Public Overrides Sub Translate()
         mIsLoading = True
-
         mElement.Translate()
-
         Me.txtSimple.Text = mElement.Text
 
         'call base translate to raise event to refresh constraint display
@@ -246,7 +244,6 @@ Public Class SimpleStructure
         End If
     End Sub
 
-
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
         mIsLoading = True
 
@@ -257,6 +254,7 @@ Public Class SimpleStructure
             mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
             CType(mElement, ArchetypeElement).Constraint = a_constraint
         End If
+
         mElement.Occurrences.MaxCount = 1
         Me.txtSimple.Text = mElement.Text
         Me.txtSimple.Enabled = True
@@ -291,7 +289,11 @@ Public Class SimpleStructure
     End Property
 
     Public Overrides Function ToRichText(ByVal indentlevel As Integer, ByVal new_line As String) As String
-        Return mElement.ToRichText(indentlevel)
+        If mElement Is Nothing Then
+            Return ""
+        Else
+            Return mElement.ToRichText(indentlevel)
+        End If
     End Function
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
@@ -307,7 +309,6 @@ Public Class SimpleStructure
         result.AppendFormat("{0}</table>", Environment.NewLine)
 
         Return result.ToString
-
     End Function
 
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
