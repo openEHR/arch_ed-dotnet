@@ -8,27 +8,30 @@ Public Class TabPageActivity
 
     Public Property Activity() As RmActivity
         Get
-            mActivity.Children.Clear()
+            If Not mActivity Is Nothing Then
+                mActivity.Children.Clear()
+                mActivity.Occurrences = mOccurrences.Cardinality
+                mActivity.ArchetypeId = Me.txtAction.Text
 
-            mActivity.Occurrences = mOccurrences.Cardinality
+                If Not mActionSpecification Is Nothing Then
+                    Dim action_specification As RmStructure
+                    action_specification = mActionSpecification.SaveAsStructure()
 
-            mActivity.ArchetypeId = Me.txtAction.Text
-
-            If Not mActionSpecification Is Nothing Then
-                Dim action_specification As RmStructure
-                action_specification = mActionSpecification.SaveAsStructure()
-                If Not action_specification Is Nothing Then
-                    mActivity.Children.Add(mActionSpecification.SaveAsStructure)
+                    If Not action_specification Is Nothing Then
+                        mActivity.Children.Add(mActionSpecification.SaveAsStructure)
+                    End If
                 End If
             End If
+
             Return mActivity
         End Get
         Set(ByVal value As RmActivity)
             mActivity = value
-            Me.lblNodeId.Text = mActivity.NodeId
+            lblNodeId.Text = mActivity.NodeId
 
             If mOccurrences Is Nothing Then
                 mOccurrences = New OccurrencesPanel(mFileManager)
+
                 Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
                     Case "lexical"
                         mOccurrences.Mode = OccurrencesMode.Lexical
@@ -37,14 +40,14 @@ Public Class TabPageActivity
                 End Select
             End If
 
-            Me.mOccurrences.Cardinality = mActivity.Occurrences
-            Me.txtAction.Text = mActivity.ArchetypeId
+            mOccurrences.Cardinality = mActivity.Occurrences
+            txtAction.Text = mActivity.ArchetypeId
 
             For Each rm As RmStructure In mActivity.Children
-
-                If Me.Controls.Contains(mActionSpecification) Then
-                    Me.txtAction.Controls.Remove(mActionSpecification)
+                If Controls.Contains(mActionSpecification) Then
+                    txtAction.Controls.Remove(mActionSpecification)
                 End If
+
                 mActionSpecification = New TabPageStructure
 
                 Select Case rm.Type
@@ -56,21 +59,23 @@ Public Class TabPageActivity
                         Debug.Assert(False, "Not handled yet")
                 End Select
 
-                Me.Controls.Add(mActionSpecification)
+                Controls.Add(mActionSpecification)
                 mActionSpecification.BringToFront()
                 mActionSpecification.Dock = DockStyle.Fill
             Next
-
         End Set
     End Property
 
     Private Sub TabPageActivity_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         mIsloading = True
+
         If mOccurrences Is Nothing Then
             mOccurrences = New OccurrencesPanel(mFileManager)
         End If
-        Me.PanelAction.Controls.Add(mOccurrences)
-        If Me.RightToLeft = Windows.Forms.RightToLeft.Yes Then
+
+        PanelAction.Controls.Add(mOccurrences)
+
+        If RightToLeft = Windows.Forms.RightToLeft.Yes Then
             OceanArchetypeEditor.Reflect(mOccurrences)
             mOccurrences.Dock = DockStyle.Left
         Else
@@ -81,7 +86,7 @@ Public Class TabPageActivity
             TranslateGUI()
         End If
 
-        Me.HelpProviderActivity.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderActivity.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
         'JAR: 30MAY07, EDT-44 Term already created in TabPageInstruction.  Below causes ontology to be thrown out!
         'If mFileManager.IsNew Then
         '    'need to add an RmActivity to the mActivities set
@@ -89,11 +94,10 @@ Public Class TabPageActivity
         '    mActivity = New RmActivity(a_term.Code)
         'End If
         mIsloading = False
-
     End Sub
 
     Sub TranslateGUI()
-        Me.lblAction.Text = Filemanager.GetOpenEhrTerm(556, "Action")
+        lblAction.Text = Filemanager.GetOpenEhrTerm(556, "Action")
     End Sub
 
     Public Sub Translate()
@@ -101,7 +105,7 @@ Public Class TabPageActivity
 
         If Not mActivity Is Nothing Then
             If mFileManager.OntologyManager.Ontology.LanguageAvailable(mFileManager.OntologyManager.LanguageCode) Then
-                CType(Me.Parent, Crownwood.Magic.Controls.TabPage).Title = mFileManager.OntologyManager.GetText(mActivity.NodeId)
+                CType(Parent, Crownwood.Magic.Controls.TabPage).Title = mFileManager.OntologyManager.GetText(mActivity.NodeId)
             End If
         End If
     End Sub
@@ -125,18 +129,18 @@ Public Class TabPageActivity
 
             ss = fd.FileName.Substring(fd.FileName.LastIndexOf("\") + s.Length + 2)
             'JAR: 07MAY2007, EDT-28 Display filename should match that when loaded (i.e. ArchetypeId)
-            'Me.txtAction.Text = ss.Substring(0, ss.LastIndexOf(".")).Replace(".", "\.")
-            Me.txtAction.Text = ss.Substring(0, ss.LastIndexOf("."))
+            'txtAction.Text = ss.Substring(0, ss.LastIndexOf(".")).Replace(".", "\.")
+            txtAction.Text = ss.Substring(0, ss.LastIndexOf("."))
         End If
     End Sub
 
     Private Sub menuItemRename_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RenameToolStripMenuItem.Click
         Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm(mActivity.NodeId)
 
-        Dim s() As String = OceanArchetypeEditor.Instance.GetInput(a_term, Me.ParentForm)
+        Dim s() As String = OceanArchetypeEditor.Instance.GetInput(a_term, ParentForm)
 
         If s(0) <> "" Then
-            CType(Me.Parent, Crownwood.Magic.Controls.TabPage).Title = a_term.Text
+            CType(Parent, Crownwood.Magic.Controls.TabPage).Title = a_term.Text
             mFileManager.OntologyManager.SetText(a_term)
             mFileManager.FileEdited = True
         End If
@@ -167,7 +171,7 @@ Public Class TabPageActivity
 
 
             ' get the name of the action
-            action_name = Me.txtAction.Text
+            action_name = txtAction.Text
             regx = New System.Text.RegularExpressions.Regex(action_name)
 
             Dim dirinfo As System.IO.DirectoryInfo
@@ -215,7 +219,7 @@ Public Class TabPageActivity
 
     Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
         text.WriteLine("\par Action archetype: \par")
-        text.WriteLine("      " & Me.txtAction.Text & "\par")
+        text.WriteLine("      " & txtAction.Text & "\par")
 
         If Not mActionSpecification Is Nothing Then
             text.WriteLine("\par Action specification: \par")
@@ -225,18 +229,18 @@ Public Class TabPageActivity
     End Sub
 
     Public Sub Reset()
-        Me.txtAction.Text = ""
+        txtAction.Text = ""
         mActionSpecification = New TabPageStructure
-        Me.lblNodeId.Text = ""
+        lblNodeId.Text = ""
     End Sub
 
     'JAR: 30MAY07, EDT-44 Multiple activities per instruction
     Public Sub ShowPopUp()
-        Me.ContextMenuStrip1.Show()
+        ContextMenuStrip1.Show()
     End Sub
 
     Public Sub ShowPopUp(ByVal location As Drawing.Point)
-        Me.ContextMenuStrip1.Show(location)
+        ContextMenuStrip1.Show(location)
     End Sub
 
     'JAR: 30MAY07, EDT-44 Multiple activities per instruction
@@ -252,13 +256,15 @@ Public Class TabPageActivity
         If mActionSpecification Is Nothing Then
             mActionSpecification = New TabPageStructure()
         End If
-        Me.Controls.Add(mActionSpecification)
+
+        Controls.Add(mActionSpecification)
         mActionSpecification.BringToFront()
         mActionSpecification.Dock = DockStyle.Fill
     End Sub
 
     Private Sub ContextMenuStrip1_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
-        RenameToolStripMenuItem.Text = AE_Constants.Instance.Rename & " - " & CType(Me.Parent, Crownwood.Magic.Controls.TabPage).Title
-        RemoveToolStripMenuItem.Text = AE_Constants.Instance.Remove & " - " & CType(Me.Parent, Crownwood.Magic.Controls.TabPage).Title 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+        RenameToolStripMenuItem.Text = AE_Constants.Instance.Rename & " - " & CType(Parent, Crownwood.Magic.Controls.TabPage).Title
+        RemoveToolStripMenuItem.Text = AE_Constants.Instance.Remove & " - " & CType(Parent, Crownwood.Magic.Controls.TabPage).Title 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
     End Sub
+
 End Class
