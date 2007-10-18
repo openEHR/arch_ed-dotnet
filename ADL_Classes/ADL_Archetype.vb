@@ -1359,20 +1359,19 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildRootElement(ByVal an_element As RmElement, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             If an_element.HasNameConstraint Then
-                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
-                an_attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("name"))
-                BuildText(an_attribute, an_element.NameConstraint)
-            End If
-            If an_element.Constraint.Type <> ConstraintType.Any Then
-                Dim value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
-                value_attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("value"))
-                BuildElementConstraint(value_attribute, an_element.Constraint)
+                attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("name"))
+                BuildText(attribute, an_element.NameConstraint)
             End If
 
+            If Not an_element.Constraint Is Nothing Then
+                If an_element.Constraint.Type <> ConstraintType.Any Then
+                    attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("value"))
+                    BuildElementConstraint(attribute, an_element.Constraint)
+                End If
+            End If
         End Sub
 
         Protected Sub BuildRootCluster(ByVal Cluster As RmCluster, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
