@@ -3950,287 +3950,282 @@ Public Class Designer
         End If
 
         'Set the root links of the archetype
-        If Me.RootLinks.Count > 0 Then
-            mFileManager.Archetype.Definition.RootLinks = Me.RootLinks
-        End If
+        Dim definition As ArcheTypeDefinitionBasic = mFileManager.Archetype.Definition
 
-        ' For all ENTRY subtypes
+        If Not definition Is Nothing Then
+            If Me.RootLinks.Count > 0 Then
+                definition.RootLinks = Me.RootLinks
+            End If
 
-        ' get the subject of data information
-        Select Case mFileManager.Archetype.Definition.Type
-            Case StructureType.ENTRY, StructureType.EVALUATION, _
-                StructureType.OBSERVATION, StructureType.INSTRUCTION, _
-                StructureType.ACTION, StructureType.ADMIN_ENTRY
+            ' get the subject of data information
+            Select Case definition.Type
+                Case StructureType.ENTRY, StructureType.EVALUATION, _
+                    StructureType.OBSERVATION, StructureType.INSTRUCTION, _
+                    StructureType.ACTION, StructureType.ADMIN_ENTRY
 
-                'Subject of data
-                If Not mRestrictedSubject Is Nothing AndAlso mRestrictedSubject.HasRestriction Then
-                    CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship = mRestrictedSubject.AsCodePhrase
-                End If
-
-                'Participations
-                If cbParticipation.Checked Then
-                    'Participations may have been added
-                    If mTabPageParticipation.chkProvider.Checked Then
-                        CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory = True
-                    Else
-                        CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory = False
+                    'Subject of data
+                    If Not mRestrictedSubject Is Nothing AndAlso mRestrictedSubject.HasRestriction Then
+                        CType(definition, RmEntry).SubjectOfData.Relationship = mRestrictedSubject.AsCodePhrase
                     End If
 
-                    'Check for other participations
-                    If mTabPageParticipation.HasOtherParticipations Then
-                        CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations = mTabPageParticipation.OtherParticipations
+                    'Participations
+                    If cbParticipation.Checked Then
+                        'Participations may have been added
+                        If mTabPageParticipation.chkProvider.Checked Then
+                            CType(definition, RmEntry).ProviderIsMandatory = True
+                        Else
+                            CType(definition, RmEntry).ProviderIsMandatory = False
+                        End If
+
+                        'Check for other participations
+                        If mTabPageParticipation.HasOtherParticipations Then
+                            CType(definition, RmEntry).OtherParticipations = mTabPageParticipation.OtherParticipations
+                        End If
                     End If
-                End If
 
-                Select Case mFileManager.Archetype.Definition.Type
-                    Case StructureType.INSTRUCTION
-                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children
-                        If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
-                            Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
-                            rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                            CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                        End If
+                    Select Case definition.Type
+                        Case StructureType.INSTRUCTION
+                            CType(definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children
 
-                    Case StructureType.ACTION
-                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data = mTabPageAction.SaveAsAction.Children
-                        If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
-                            Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
-                            rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                            CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                        End If
+                            If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
+                                Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
+                                rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
+                                CType(definition, ArchetypeDefinition).Data.Add(rm)
+                            End If
 
-                    Case StructureType.OBSERVATION
-                        For Each tp In Me.TabStructure.TabPages
+                        Case StructureType.ACTION
+                            CType(definition, ArchetypeDefinition).Data = mTabPageAction.SaveAsAction.Children
 
-                            ' Observation always has at least one event
-                            Select Case tp.Name
+                            If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
+                                Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
+                                rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
+                                CType(definition, ArchetypeDefinition).Data.Add(rm)
+                            End If
 
-                                Case "tpDataEventSeries"
-                                    If Not mTabPageDataEventSeries Is Nothing Then
-                                        Dim rm As RmStructureCompound
-                                        Dim RmHistory As RmHistory
+                        Case StructureType.OBSERVATION
+                            For Each tp In Me.TabStructure.TabPages
 
-                                        rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
-                                        RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
-                                        If Not mTabPageDataStructure Is Nothing Then
-                                            RmHistory.Data = mTabPageDataStructure.SaveAsStructure
-                                        End If
-                                        rm.Children.Add(RmHistory)
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                                    End If
+                                ' Observation always has at least one event
+                                Select Case tp.Name
 
-                                Case "tpStateStructure"
-                                    If Not mTabPageDataStateStructure Is Nothing Then
-                                        Dim rmState As New RmStructureCompound(StructureType.State.ToString, StructureType.State)
-                                        rmState.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rmState)
-                                        STATE_processed = True
-                                    End If
-                            End Select
-                        Next
-
-                        ' there may be PROTOCOL and ROOT_State
-
-                        For Each tp In Me.TabDesign.TabPages
-                            ' DATA will have STRUCTURE - simple, list, tree, table
-                            Select Case tp.Name
-                                Case "tpData"
-                                    'No action as dealt with above
-                                Case "tpProtocol"
-                                    If Not mTabPageProtocolStructure Is Nothing Then
-                                        Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
-                                        rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                                    End If
-
-                                Case "tpRootState"
-                                    If Not mTabPageStateStructure Is Nothing Then
-                                        ' check only one state expression
-                                        If STATE_processed Then
-                                            'FIXME - raise error
-                                            Exit Select
-                                        End If
-
-                                        Dim Tab As Crownwood.Magic.Controls.TabControl
-                                        Dim rm As New RmStructureCompound(StructureType.State.ToString, StructureType.State)
-
-                                        Try
-                                            Tab = CType(tp.Controls(0), Crownwood.Magic.Controls.TabControl)
-
-                                            If Tab.TabPages.Count = 2 Then
-                                                If Not mTabPageStateEventSeries Is Nothing Then
-                                                    Dim stateHistory As RmHistory = mTabPageStateEventSeries.SaveAsEventSeries
-                                                    If Not mTabPageStateStructure Is Nothing Then
-                                                        stateHistory.Data = Me.mTabPageStateStructure.SaveAsStructure
-                                                        rm.Children.Add(stateHistory)
-                                                    End If
-                                                End If
-                                            End If
-                                        Catch
-                                            'FIXME raise error
-                                            Beep()
-                                            Debug.Assert(False)
-
-                                        End Try
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                                    End If
-                            End Select
-                        Next
-
-                    Case StructureType.EVALUATION ' "ENTRY.Evaluation
-
-                        For Each tp In Me.TabStructure.TabPages
-
-                            Select Case tp.Name
-
-                                Case "tpDataStructure"
-                                    If Not mTabPageDataStructure Is Nothing Then 'AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
-                                        Dim rm As RmStructureCompound
-                                        rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
-                                        rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                                    End If
-
-                                Case "tpStateStructure"
-                                    If Not mTabPageDataStateStructure Is Nothing Then
-                                        STATE_processed = True
-                                        Dim rm As RmStructureCompound
-                                        rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
-                                        rm.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                                    End If
-                            End Select
-                        Next
-
-                        For Each tp In Me.TabDesign.TabPages
-                            ' DATA will have STRUCTURE - simple, list, tree, table
-                            Select Case tp.Name
-                                Case "tpData"
-                                    'No action as dealt with above
-                                Case "tpProtocol"
-                                    If Not mTabPageProtocolStructure Is Nothing Then
-                                        Dim rm As RmStructureCompound
-                                        rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
-                                        rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                                    End If
-                            End Select
-                        Next
-
-
-                    Case StructureType.ENTRY ' "ENTRY"
-
-                        For Each tp In Me.TabStructure.TabPages
-
-                            Select Case tp.Name
-                                Case "tpDataEventSeries"
-                                    If Me.chkEventSeries.Checked Then
+                                    Case "tpDataEventSeries"
                                         If Not mTabPageDataEventSeries Is Nothing Then
+                                            Dim rm As RmStructureCompound
                                             Dim RmHistory As RmHistory
+
+                                            rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                             RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
+
                                             If Not mTabPageDataStructure Is Nothing Then
                                                 RmHistory.Data = mTabPageDataStructure.SaveAsStructure
                                             End If
-                                            CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(RmHistory)
-                                        End If
-                                    End If
 
-                                Case "tpDataStructure"
-                                    If Not Me.chkEventSeries.Checked Then
+                                            rm.Children.Add(RmHistory)
+                                            CType(definition, ArchetypeDefinition).Data.Add(rm)
+                                        End If
+
+                                    Case "tpStateStructure"
+                                        If Not mTabPageDataStateStructure Is Nothing Then
+                                            Dim rmState As New RmStructureCompound(StructureType.State.ToString, StructureType.State)
+                                            rmState.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
+                                            CType(definition, ArchetypeDefinition).Data.Add(rmState)
+                                            STATE_processed = True
+                                        End If
+                                End Select
+                            Next
+
+                            ' there may be PROTOCOL and ROOT_State
+
+                            For Each tp In Me.TabDesign.TabPages
+                                ' DATA will have STRUCTURE - simple, list, tree, table
+                                Select Case tp.Name
+                                    Case "tpData"
+                                        'No action as dealt with above
+                                    Case "tpProtocol"
+                                        If Not mTabPageProtocolStructure Is Nothing Then
+                                            Dim rm As New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
+                                            rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
+                                            CType(definition, ArchetypeDefinition).Data.Add(rm)
+                                        End If
+
+                                    Case "tpRootState"
+                                        If Not mTabPageStateStructure Is Nothing Then
+                                            ' check only one state expression
+                                            If STATE_processed Then
+                                                'FIXME - raise error
+                                                Exit Select
+                                            End If
+
+                                            Dim Tab As Crownwood.Magic.Controls.TabControl
+                                            Dim rm As New RmStructureCompound(StructureType.State.ToString, StructureType.State)
+
+                                            Try
+                                                Tab = CType(tp.Controls(0), Crownwood.Magic.Controls.TabControl)
+
+                                                If Tab.TabPages.Count = 2 Then
+                                                    If Not mTabPageStateEventSeries Is Nothing Then
+                                                        Dim stateHistory As RmHistory = mTabPageStateEventSeries.SaveAsEventSeries
+
+                                                        If Not mTabPageStateStructure Is Nothing Then
+                                                            stateHistory.Data = Me.mTabPageStateStructure.SaveAsStructure
+                                                            rm.Children.Add(stateHistory)
+                                                        End If
+                                                    End If
+                                                End If
+                                            Catch
+                                                'FIXME raise error
+                                                Beep()
+                                                Debug.Assert(False)
+                                            End Try
+
+                                            CType(definition, ArchetypeDefinition).Data.Add(rm)
+                                        End If
+                                End Select
+                            Next
+
+                        Case StructureType.EVALUATION ' "ENTRY.Evaluation
+                            For Each tp In Me.TabStructure.TabPages
+                                Select Case tp.Name
+                                    Case "tpDataStructure"
+                                        If Not mTabPageDataStructure Is Nothing Then 'AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                            Dim rm As RmStructureCompound
+                                            rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
+                                            rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
+                                            CType(definition, ArchetypeDefinition).Data.Add(rm)
+                                        End If
+
+                                    Case "tpStateStructure"
+                                        If Not mTabPageDataStateStructure Is Nothing Then
+                                            STATE_processed = True
+                                            Dim rm As RmStructureCompound
+                                            rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
+                                            rm.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
+                                            CType(definition, ArchetypeDefinition).Data.Add(rm)
+                                        End If
+                                End Select
+                            Next
+
+                            For Each tp In Me.TabDesign.TabPages
+                                ' DATA will have STRUCTURE - simple, list, tree, table
+                                Select Case tp.Name
+                                    Case "tpData"
+                                        'No action as dealt with above
+                                    Case "tpProtocol"
+                                        If Not mTabPageProtocolStructure Is Nothing Then
+                                            Dim rm As RmStructureCompound
+                                            rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
+                                            rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
+                                            CType(definition, ArchetypeDefinition).Data.Add(rm)
+                                        End If
+                                End Select
+                            Next
+
+                        Case StructureType.ENTRY ' "ENTRY"
+                            For Each tp In Me.TabStructure.TabPages
+                                Select Case tp.Name
+                                    Case "tpDataEventSeries"
+                                        If Me.chkEventSeries.Checked Then
+                                            If Not mTabPageDataEventSeries Is Nothing Then
+                                                Dim RmHistory As RmHistory
+                                                RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
+
+                                                If Not mTabPageDataStructure Is Nothing Then
+                                                    RmHistory.Data = mTabPageDataStructure.SaveAsStructure
+                                                End If
+
+                                                CType(definition, ArchetypeDefinition).Data.Add(RmHistory)
+                                            End If
+                                        End If
+
+                                    Case "tpDataStructure"
+                                        If Not Me.chkEventSeries.Checked Then
+                                            If Not mTabPageDataStructure Is Nothing Then
+                                                Dim rm As RmStructureCompound
+                                                rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
+                                                rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
+                                                CType(definition, ArchetypeDefinition).Data.Add(rm)
+                                            End If
+                                        End If
+
+                                    Case "tpStateStructure"
+                                        If Not mTabPageDataStateStructure Is Nothing Then
+                                            STATE_processed = True
+                                            Dim rm As RmStructureCompound
+                                            rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
+                                            rm.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
+                                            CType(definition, ArchetypeDefinition).Data.Add(rm)
+                                        End If
+                                End Select
+                            Next
+
+                            ' there may be PROTOCOL and ROOT_State
+                            For Each tp In Me.TabDesign.TabPages
+                                ' DATA will have STRUCTURE - simple, list, tree, table
+                                Select Case tp.Name
+                                    Case "tpData"
+                                        'No action as dealt with above
+                                    Case "tpProtocol"
+                                        Dim rm As RmStructureCompound
+                                        rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
+                                        rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
+                                        CType(definition, ArchetypeDefinition).Data.Add(rm)
+                                End Select
+                            Next
+
+                        Case StructureType.ADMIN_ENTRY
+                            For Each tp In Me.TabStructure.TabPages
+                                Select Case tp.Name
+                                    Case "tpDataStructure"
                                         If Not mTabPageDataStructure Is Nothing Then
                                             Dim rm As RmStructureCompound
                                             rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                             rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
-                                            CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
+                                            CType(definition, ArchetypeDefinition).Data.Add(rm)
                                         End If
-                                    End If
+                                End Select
+                            Next
+                    End Select
 
-                                Case "tpStateStructure"
-                                    If Not mTabPageDataStateStructure Is Nothing Then
-                                        STATE_processed = True
-                                        Dim rm As RmStructureCompound
-                                        rm = New RmStructureCompound(StructureType.State.ToString, StructureType.State)
-                                        rm.Children.Add(mTabPageDataStateStructure.SaveAsStructure)
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                                    End If
-                            End Select
-                        Next
+                Case StructureType.SECTION ' "SECTION"
+                    ' Added try to this call as it now throws an exception if
+                    ' it encounters any components that are not sections
+                    Try
+                        mFileManager.Archetype.Definition = mTabPageSection.SaveAsSection()
+                    Catch e As Exception
+                        MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
 
-                        ' there may be PROTOCOL and ROOT_State
+                Case StructureType.Cluster ' "CLUSTER"
+                    ' Added try to this call as it now throws an exception if
+                    ' it encounters any components that are not clusters or elements
+                    Try
+                        mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
+                    Catch e As Exception
+                        MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
 
-                        For Each tp In Me.TabDesign.TabPages
-                            ' DATA will have STRUCTURE - simple, list, tree, table
-                            Select Case tp.Name
-                                Case "tpData"
-                                    'No action as dealt with above
-                                Case "tpProtocol"
-                                    Dim rm As RmStructureCompound
-                                    rm = New RmStructureCompound(StructureType.Protocol.ToString, StructureType.Protocol)
-                                    rm.Children.Add(mTabPageProtocolStructure.SaveAsStructure)
-                                    CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                            End Select
-                        Next
+                Case StructureType.Element
+                    ' Added try to this call as it now throws an exception if
+                    ' it encounters any components that are not clusters or elements
+                    Try
+                        mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
+                    Catch e As Exception
+                        MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
 
+                Case StructureType.COMPOSITION
+                    ' Throws exception if encounters any 
+                    ' components that are not sections
+                    Try
+                        mFileManager.Archetype.Definition = mTabPageComposition.SaveAsComposition()
+                    Catch e As Exception
+                        MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
 
-                    Case StructureType.ADMIN_ENTRY
-
-                        For Each tp In Me.TabStructure.TabPages
-                            Select Case tp.Name
-                                Case "tpDataStructure"
-                                    If Not mTabPageDataStructure Is Nothing Then
-                                        Dim rm As RmStructureCompound
-                                        rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
-                                        rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
-                                        CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Add(rm)
-                                    End If
-                            End Select
-                        Next
-
-                End Select
-
-            Case StructureType.SECTION ' "SECTION"
-
-                ' Added try to this call as it now throws an exception if
-                ' it encounters any components that are not sections
-                Try
-                    mFileManager.Archetype.Definition = mTabPageSection.SaveAsSection()
-                Catch e As Exception
-                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-
-            Case StructureType.Cluster ' "CLUSTER"
-
-                ' Added try to this call as it now throws an exception if
-                ' it encounters any components that are not clusters or elements
-                Try
-                    mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
-                Catch e As Exception
-                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-
-            Case StructureType.Element
-
-                ' Added try to this call as it now throws an exception if
-                ' it encounters any components that are not clusters or elements
-                Try
-                    mFileManager.Archetype.Definition = Me.mTabPageDataStructure.SaveAsStructure()
-                Catch e As Exception
-                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            Case StructureType.COMPOSITION
-
-                ' Throws exception if encounters any 
-                ' components that are not sections
-                Try
-                    mFileManager.Archetype.Definition = mTabPageComposition.SaveAsComposition()
-                Catch e As Exception
-                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-
-
-            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
-        End Select
+                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                    mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
+            End Select
+        End If
     End Sub
 
 #End Region
