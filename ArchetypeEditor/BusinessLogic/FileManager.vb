@@ -708,7 +708,6 @@ Public Class FileManagerLocal
     End Sub
 
     Public Sub AutoSave(ByVal n As Integer)
-
         mObjectToSave.PrepareToSave()
         AutoWrite("OceanRecovery-" & Me.Archetype.Archetype_ID.ToString)
     End Sub
@@ -815,12 +814,15 @@ Public Class FileManagerLocal
         saveFile.OverwritePrompt = True
         saveFile.DefaultExt = Me.ParserType
         Dim i As Integer = Me.IndexOfFormat(Me.ParserType) + 1
+
         If i > 0 Then
             saveFile.FilterIndex = i
         End If
+
         saveFile.AddExtension = True
         saveFile.Title = AE_Constants.Instance.MessageBoxCaption
         saveFile.ValidateNames = True
+
         If saveFile.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
             Return ""
         Else
@@ -829,35 +831,34 @@ Public Class FileManagerLocal
 
             ext = saveFile.Filter.Split("|".ToCharArray())((saveFile.FilterIndex - 1) * 2)
             s = saveFile.FileName.Substring(saveFile.FileName.LastIndexOf(".") + 1)
+
             If s = ext Then
                 Return saveFile.FileName
             Else
                 Return saveFile.FileName & "." & ext
             End If
         End If
-
     End Function
 
     Private Sub AutoWrite(ByVal fileName As String)
-        mArchetypeEngine.WriteFile(Application.StartupPath & "\" & fileName & "." & ParserType, ParserType, Me.ParserSynchronised)
+        Dim appata As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
+        mArchetypeEngine.WriteFile(IO.Path.Combine(appata, fileName & "." & ParserType), ParserType, ParserSynchronised)
     End Sub
 
     Public Sub WriteArchetype()
-
         'Check that the file name is an available format
-
         Dim s As String = mFileName.Substring(mFileName.LastIndexOf(".") + 1).ToLowerInvariant()
 
         If FormatIsAvailable(s) Then
             mHasWriteFileError = False
             mArchetypeEngine.WriteFile(mFileName, s, Me.ParserSynchronised)
+
             If mArchetypeEngine.WriteFileError Then
                 mHasWriteFileError = True
             End If
         Else
             MessageBox.Show(AE_Constants.Instance.Incorrect_format & "File: '" & mFileName & ", Format: '" & s & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
-
     End Sub
 
     'Public Sub ConvertToADL(ByVal anOntologyManager As OntologyManager)
