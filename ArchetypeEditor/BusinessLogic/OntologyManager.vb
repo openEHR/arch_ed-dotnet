@@ -411,7 +411,7 @@ Public Class OntologyManager
         If (mLanguageCode = Me.PrimaryLanguageCode) Then
             If mOntology.IsMultiLanguage Then
                 If mReplaceTranslations = 0 Then
-                    If MessageBox.Show(AE_Constants.Instance.ReplaceTranslations, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                    If MessageBox.Show(AE_Constants.Instance.ReplaceTranslations, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
                         mReplaceTranslations = -1 'true
                         Return True
                     Else

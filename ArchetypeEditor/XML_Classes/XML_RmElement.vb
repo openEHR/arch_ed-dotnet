@@ -259,7 +259,7 @@ Namespace ArchetypeEditor.XML_Classes
             End Try
         End Function
 
-        Private Function ProcessUri(ByVal dvUri As XMLParser.C_COMPLEX_OBJECT) As Constraint
+        Shared Function ProcessUri(ByVal dvUri As XMLParser.C_COMPLEX_OBJECT) As Constraint
             Dim cUri As New Constraint_URI
             Dim an_attribute As XMLParser.C_ATTRIBUTE
 

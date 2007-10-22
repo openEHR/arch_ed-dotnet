@@ -75,6 +75,8 @@ Namespace ArchetypeEditor.XML_Classes
                                     mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ISM_TRANSITION, a_filemanager))
                                 Case "activities"
                                     mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activities, a_filemanager))
+                                Case "links"
+                                    'No action as handled for all archetypes
                                 Case Else
                                     Debug.Assert(False, "Attribute '" & an_attribute.rm_attribute_name & "' is not handled")
                             End Select
