@@ -2444,12 +2444,44 @@ Namespace ArchetypeEditor.XML_Classes
                         End Select
                     End If
 
+
+                    If Me.HasLinkConstraints Then
+                        BuildLinks(Me.Definition.RootLinks, mXmlArchetype.definition)
+                    End If
+
                     mSynchronised = True
                 End If
             Catch ex As Exception
                 Debug.Assert(False)
             End Try
         End Sub
+
+        Sub BuildLinks(ByVal cLinks As System.Collections.Generic.List(Of RmLink), ByVal cObject As XMLParser.C_COMPLEX_OBJECT)
+            Dim linksAttribute As XMLParser.C_ATTRIBUTE = _
+                mAomFactory.MakeMultipleAttribute(cObject, "links", MakeCardinality(New RmCardinality(0)), New RmExistence(0).XmlExistence)
+
+            Dim anAttribute As XMLParser.C_ATTRIBUTE
+
+            For Each l As RmLink In cLinks
+                If l.HasConstraint Then
+                    Dim linkObject As XMLParser.C_COMPLEX_OBJECT = _
+                        mAomFactory.MakeComplexObject(linksAttribute, "LINK")
+                    If l.Meaning.TypeOfTextConstraint <> TextConstrainType.Text Then
+                        anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "meaning", New RmExistence().XmlExistence)
+                        BuildText(anAttribute, l.Meaning)
+                    End If
+                    If l.LinkType.TypeOfTextConstraint <> TextConstrainType.Text Then
+                        anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "type", New RmExistence().XmlExistence)
+                        BuildText(anAttribute, l.LinkType)
+                    End If
+                    If l.Target.RegularExpression <> String.Empty Then
+                        anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "target".ToLowerInvariant, New RmExistence().XmlExistence)
+                        BuildURI(anAttribute, l.Target)
+                    End If
+                End If
+            Next
+        End Sub
+
 
         Sub BuildEntryAttributes(ByVal anEntry As RmEntry, ByVal archetypeDefinition As XMLParser.C_COMPLEX_OBJECT)
 
@@ -2527,14 +2559,13 @@ Namespace ArchetypeEditor.XML_Classes
                 Case Else
                     Debug.Assert(False)
             End Select
-
             sLifeCycle = mXmlArchetype.description.lifecycle_state
 
         End Sub
 
         Sub New(ByVal a_parser As XMLParser.XmlArchetypeParser, ByVal a_filemanager As FileManagerLocal)
 
-            ' call to create an in memory archetype from the XDL parser
+            ' call to create an in memory archetype from the XML parser
             MyBase.New(a_parser.Archetype.original_language.code_string)
 
             Try
@@ -2580,6 +2611,39 @@ Namespace ArchetypeEditor.XML_Classes
                     Case Else
                         Debug.Assert(False)
                 End Select
+
+                'SRH: 24.9.2007 - Check for root links
+                If Not mXmlArchetype.definition.attributes Is Nothing Then
+                    For Each attrib As XMLParser.C_ATTRIBUTE In mXmlArchetype.definition.attributes
+                        If attrib.rm_attribute_name.ToLowerInvariant = "links" Then
+                            For Each complexObject As XMLParser.C_COMPLEX_OBJECT In attrib.children
+                                Dim link As New RmLink
+                                For Each linkAttribute As XMLParser.C_ATTRIBUTE In complexObject.attributes
+                                    Select Case linkAttribute.rm_attribute_name.ToLowerInvariant
+                                        Case "meaning"
+                                            If linkAttribute.children.Length > 0 Then
+                                                link.Meaning = XML_RmElement.ProcessText(linkAttribute.children(0))
+                                            End If
+                                        Case "type"
+                                            If linkAttribute.children.Length > 0 Then
+                                                link.LinkType = XML_RmElement.ProcessText(linkAttribute.children(0))
+                                            End If
+                                        Case "target"
+                                            Dim aURI As XMLParser.C_COMPLEX_OBJECT
+                                            aURI = CType(linkAttribute.children(0), XMLParser.C_COMPLEX_OBJECT)
+                                            If aURI.rm_type_name.ToLowerInvariant = "dv_ehr_uri" Then
+                                                link.Target = CType(XML_RmElement.ProcessUri(aURI), Constraint_URI)
+                                            Else
+                                                Debug.Assert(False, String.Format("Attribute '{0}' not handled", aURI.rm_type_name))
+                                            End If
+                                    End Select
+                                Next
+                                cDefinition.RootLinks.Add(link)
+                            Next
+
+                        End If
+                    Next
+                End If
 
                 sLifeCycle = mXmlArchetype.description.lifecycle_state
 

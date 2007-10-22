@@ -22,6 +22,8 @@ Public Class TabPageComposition
     Private mIsloading As Boolean
     Private mSectionConstraint As TabPageSection
     Private mContextConstraint As TabPageStructure
+    Private mParticipationConstraint As TabPageParticipation
+    Private mTabPageParticipation As Crownwood.Magic.Controls.TabPage
     Private mTabPageContext As Crownwood.Magic.Controls.TabPage
 
 
@@ -56,6 +58,7 @@ Public Class TabPageComposition
     Friend WithEvents HelpProviderInstruction As System.Windows.Forms.HelpProvider
     Friend WithEvents tpContext As Crownwood.Magic.Controls.TabPage
     Friend WithEvents tpSectionConstraint As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents tpParticipations As Crownwood.Magic.Controls.TabPage
     Friend WithEvents radioEvent As System.Windows.Forms.RadioButton
     Friend WithEvents radioPersist As System.Windows.Forms.RadioButton
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -66,6 +69,7 @@ Public Class TabPageComposition
         Me.radioPersist = New System.Windows.Forms.RadioButton
         Me.radioEvent = New System.Windows.Forms.RadioButton
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
+        Me.tpParticipations = New Crownwood.Magic.Controls.TabPage
         Me.PanelBaseTop.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -85,7 +89,7 @@ Public Class TabPageComposition
         Me.HelpProviderInstruction.SetShowHelp(Me.TabControlInstruction, True)
         Me.TabControlInstruction.Size = New System.Drawing.Size(848, 400)
         Me.TabControlInstruction.TabIndex = 0
-        Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpContext, Me.tpSectionConstraint})
+        Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpContext, Me.tpParticipations, Me.tpSectionConstraint})
         Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
         '
         'tpContext
@@ -136,6 +140,15 @@ Public Class TabPageComposition
         Me.radioEvent.TabStop = True
         Me.radioEvent.Text = "Event"
         '
+        'tpParticipations
+        '
+        Me.tpParticipations.Location = New System.Drawing.Point(0, 0)
+        Me.tpParticipations.Name = "tpParticipations"
+        Me.tpParticipations.Selected = False
+        Me.tpParticipations.Size = New System.Drawing.Size(848, 374)
+        Me.tpParticipations.TabIndex = 3
+        Me.tpParticipations.Title = "Participations"
+        '
         'TabPageComposition
         '
         Me.BackColor = System.Drawing.Color.LemonChiffon
@@ -154,6 +167,7 @@ Public Class TabPageComposition
         mIsloading = True
         'remember tabpage context
         mTabPageContext = Me.tpContext
+        mTabPageParticipation = Me.tpParticipations
 
         If Me.tpSectionConstraint.Controls.Count = 0 Then
             ' nothing loaded from archetype
@@ -167,6 +181,13 @@ Public Class TabPageComposition
             mContextConstraint = New TabPageStructure
             tpContext.Controls.Add(mContextConstraint)
             mContextConstraint.Dock = DockStyle.Fill
+        End If
+        'SRH: 35.9.2007 - Added participations to Composition
+        If Me.tpParticipations.Controls.Count = 0 Then
+            mParticipationConstraint = New TabPageParticipation
+            mParticipationConstraint.panelProvider.Visible = False ' only used for Entries
+            tpParticipations.Controls.Add(mParticipationConstraint)
+            mParticipationConstraint.Dock = DockStyle.Fill
         End If
 
         mSectionConstraint.IsRootOfComposition = True
@@ -200,6 +221,12 @@ Public Class TabPageComposition
         mSectionConstraint.IsRootOfComposition = True
         tpSectionConstraint.Controls.Add(mSectionConstraint)
         mSectionConstraint.Dock = DockStyle.Fill
+
+        Me.tpParticipations.Controls.Clear()
+        mParticipationConstraint = New TabPageParticipation
+        mParticipationConstraint.panelProvider.Visible = False
+        tpParticipations.Controls.Add(mParticipationConstraint)
+        mParticipationConstraint.Dock = DockStyle.Fill
     End Sub
 
     Public Sub ProcessComposition(ByVal a_composition As RmComposition)
@@ -215,6 +242,8 @@ Public Class TabPageComposition
                     mSectionConstraint.ProcessSection(CType(rm, RmSection))
                 Case StructureType.List, StructureType.Single, StructureType.Tree, StructureType.Table
                     mContextConstraint.ProcessStructure(CType(rm, RmStructureCompound))
+                Case StructureType.Participation
+                    mParticipationConstraint.OtherParticipations = CType(rm, RmStructureCompound)
                 Case Else
                     Debug.Assert(False, "Not handled yet")
             End Select
@@ -247,6 +276,7 @@ Public Class TabPageComposition
                 rm.Data.Add(section)
             End If
         End If
+
         rm.IsPersistent = Me.radioPersist.Checked
         Return rm
     End Function
@@ -278,13 +308,16 @@ Public Class TabPageComposition
         End If
         If radioPersist.Checked Then
             TabControlInstruction.TabPages.Remove(mTabPageContext)
+            TabControlInstruction.TabPages.Remove(tpParticipations)
         Else
             TabControlInstruction.TabPages.Insert(0, mTabPageContext)
+            TabControlInstruction.TabPages.Insert(1, tpParticipations)
         End If
         If Not Filemanager.Master.FileLoading Then
             Filemanager.Master.FileEdited = True
         End If
     End Sub
+
 End Class
 
 '

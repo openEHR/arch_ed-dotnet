@@ -73,7 +73,7 @@ Class ADL_ENTRY
                     Case "other_participations"
                         Me.OtherParticipations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
                     Case "links"
-
+                        ' No action as handled for all archetypes
                     Case Else
                         Debug.Assert(False, String.Format("{0} not handled", an_attribute.rm_attribute_name.to_cil))
                 End Select

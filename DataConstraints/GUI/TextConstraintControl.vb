@@ -674,7 +674,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub ContextMenuListAllowableValues_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuListAllowableValues.Popup
         If Me.listAllowableValues.SelectedIndex > -1 Then
-            MenuItemEdit.Text = "Edit " & CType(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item("Text"), String)
+            MenuItemEdit.Text = String.Format("{0} {1}", Filemanager.GetOpenEhrTerm(592, "Edit "), CType(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item("Text"), String))
             MenuItemEdit.Visible = True
         Else
             MenuItemEdit.Visible = False
