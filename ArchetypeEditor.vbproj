@@ -1103,7 +1103,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>"$(FrameworkSDKDir)bin\corflags.exe" $(TargetPath) /nologo /32bit+</PostBuildEvent>
   </PropertyGroup>
 </Project>
