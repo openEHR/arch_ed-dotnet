@@ -351,15 +351,15 @@ Public Class FileManagerLocal
             '    End If
             'End If
 
-
             mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
             mPriorFileName = Nothing
             FileEdited = False
 
             'ensure the filename and archetype ID match (ignore case!)        
             Dim shortFileName As String = aFileName.Substring((aFileName.LastIndexOf("\")) + 1)
+
             If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
-                If ArchetypeID.ValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
+                If ArchetypeID.IsValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
                     If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
                         FileLoading = False
                         FileEdited = True
@@ -372,12 +372,12 @@ Public Class FileManagerLocal
                     FileLoading = True
                 End If
             End If
+
             Return True
         Catch e As Exception
             Me.FileName = mPriorFileName
             mPriorFileName = Nothing
         End Try
-
     End Function
 
     'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
@@ -388,10 +388,10 @@ Public Class FileManagerLocal
 
         'validate the concept to update it with the correct case and remove illegal characters
         Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
-        Id1.ValidConcept(Id1.Concept, "") 'validation may update Id1.concept
+        Id1.Concept = Id1.ValidConcept(Id1.Concept, "")
 
         Dim Id2 As New ArchetypeID(shortFileName)
-        Id2.ValidConcept(Id2.Concept, "") 'validation may update Id2.Concept 
+        Id2.Concept = Id2.ValidConcept(Id2.Concept, "")
 
         Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
         If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made

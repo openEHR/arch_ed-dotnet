@@ -4283,7 +4283,7 @@ Public Class Designer
                 archID = archID.Substring(14)
             End If
 
-            If ArchetypeID.ValidId(archID) Then
+            If ArchetypeID.IsValidId(archID) Then
                 Dim archetypID As ArchetypeID = New ArchetypeID(archID)
                 ReferenceModel.SetModelType(archetypID.Reference_Model)
             Else
@@ -5096,34 +5096,17 @@ Public Class Designer
 
     Private Sub menuEditArchID_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuEditArchID.Click
         Dim arch_id As String = mFileManager.Archetype.Archetype_ID.Concept
-        Dim i As Integer = arch_id.LastIndexOf("-")
-        Dim new_concept As String
+        Dim new_concept As String = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me)
+        new_concept = mFileManager.Archetype.Archetype_ID.ValidConcept(new_concept, arch_id.ToString)
 
-        new_concept = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me)
-
-        'JAR: 22MAY07, EDT-41 Validate archetype ID  
-        'If new_concept = "" Then
-        '    Return
-        'End If
-
-        'If i > -1 Then
-        '    new_concept = arch_id.Substring(0, i + 1) + new_concept.Replace("-", "_")
-        'Else
-        '    new_concept = new_concept.Replace(" ", "_")
-        'End If
-
-        'mFileManager.Archetype.Archetype_ID.Concept = new_concept.ToLowerInvariant
-
-        If mFileManager.Archetype.Archetype_ID.ValidConcept(new_concept, arch_id.ToString) Then 'Note: new_concept can be updated in ValidConcept!
+        If new_concept <> "" Then
             mFileManager.Archetype.Archetype_ID.Concept = new_concept
-        Else
-            Return
-        End If
 
-        ' force save as to new file
-        mFileManager.IsNew = True
-        mFileManager.FileEdited = True
-        Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
+            ' force save as to new file
+            mFileManager.IsNew = True
+            mFileManager.FileEdited = True
+            lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
+        End If
     End Sub
 
     Private Sub MenuDisplayFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDisplayFind.Click, MenuDisplayFindAgain.Click
