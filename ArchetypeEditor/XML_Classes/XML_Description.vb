@@ -72,7 +72,6 @@ Namespace ArchetypeEditor.XML_Classes
 
             mXML_Description.original_author = authorDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
 
-            'JAR: 24MAY2007, EDT-30 Add field for References            
             Dim otherDetails As New ArrayList
             If Me.References <> "" Then
                 di = New XMLParser.StringDictionaryItem
