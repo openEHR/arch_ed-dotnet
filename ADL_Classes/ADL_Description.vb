@@ -32,50 +32,47 @@ Namespace ArchetypeEditor.ADL_Classes
             End Set
         End Property
 
-
         Function ADL_Description() As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
-            ' set the variables
-
-            ' Add the original author details
             mADL_Description.original_author.clear_all()
-            If Me.OriginalAuthor <> "" Then
+
+            If OriginalAuthor <> "" Then
                 mADL_Description.add_original_author_item( _
                      EiffelKernel.Create.STRING_8.make_from_cil("name"), _
-                    EiffelKernel.Create.STRING_8.make_from_cil(Me.mOriginalAuthor.Replace("""", "'")))
+                    EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthor.Replace("""", "'")))
             End If
-            If Me.OriginalAuthorEmail <> "" Then
+
+            If OriginalAuthorEmail <> "" Then
                 mADL_Description.add_original_author_item( _
                      EiffelKernel.Create.STRING_8.make_from_cil("email"), _
-                    EiffelKernel.Create.STRING_8.make_from_cil(Me.mOriginalAuthorEmail.Replace("""", "'")))
+                    EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthorEmail.Replace("""", "'")))
             End If
-            If Me.OriginalAuthorOrganisation <> "" Then
+
+            If OriginalAuthorOrganisation <> "" Then
                 mADL_Description.add_original_author_item( _
                      EiffelKernel.Create.STRING_8.make_from_cil("organisation"), _
-                    EiffelKernel.Create.STRING_8.make_from_cil(Me.mOriginalAuthorOrganisation.Replace("""", "'")))
+                    EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthorOrganisation.Replace("""", "'")))
             End If
-            If Me.OriginalAuthorDate <> "" Then
+
+            If OriginalAuthorDate <> "" Then
                 mADL_Description.add_original_author_item( _
                      EiffelKernel.Create.STRING_8.make_from_cil("date"), _
-                    EiffelKernel.Create.STRING_8.make_from_cil(Me.mOriginalAuthorDate.Replace("""", "'")))
+                    EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthorDate.Replace("""", "'")))
             End If
 
             mADL_Description.set_lifecycle_state( _
-                EiffelKernel.Create.STRING_8.make_from_cil(Me.LifeCycleStateAsString.Replace("""", "'")))
+                EiffelKernel.Create.STRING_8.make_from_cil(LifeCycleStateAsString.Replace("""", "'")))
 
             If Not mArchetypePackageURI Is Nothing Then
                 mADL_Description.set_resource_package_uri( _
                     EiffelKernel.Create.STRING_8.make_from_cil(mArchetypePackageURI.Replace("""", "'")))
             End If
 
-            'JAR: 24MAY2007, EDT-30 Add field for References
-            If mReferences <> "" Then
-                mADL_Description.add_other_detail( _
-                                     EiffelKernel.Create.STRING_8.make_from_cil("references"), _
-                                    EiffelKernel.Create.STRING_8.make_from_cil(mReferences.Replace("""", "'")))
-            End If
+            mADL_Description.add_other_detail( _
+                EiffelKernel.Create.STRING_8.make_from_cil("references"), _
+                EiffelKernel.Create.STRING_8.make_from_cil(mReferences.Replace("""", "'")))
 
-            ' clear the other contributors and add them again
             mADL_Description.clear_other_contributors()
+
             For Each s As String In mOtherContributors
                 mADL_Description.add_other_contributor(EiffelKernel.Create.STRING_8.make_from_cil(s.Replace("""", "'")))
             Next
@@ -113,7 +110,6 @@ Namespace ArchetypeEditor.ADL_Classes
                 Next
             End If
 
-            'JAR: 24MAY2007, EDT-30 Add field for References
             If Not mADL_Description.other_details Is Nothing Then
                 If mADL_Description.other_details.has(EiffelKernel.Create.STRING_8.make_from_cil("references")) Then
                     mReferences = mADL_Description.other_details.item(EiffelKernel.Create.STRING_8.make_from_cil("references")).to_cil()
@@ -122,7 +118,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             MyBase.LifeCycleStateAsString = mADL_Description.lifecycle_state.to_cil
             If mADL_Description.details.count = 0 Then
-                Me.mArchetypeDetails.AddOrReplace( _
+                mArchetypeDetails.AddOrReplace( _
                 Filemanager.Master.OntologyManager.LanguageCode, _
                 New ArchetypeDescriptionItem(Filemanager.Master.OntologyManager.LanguageCode))
             End If
@@ -142,7 +138,7 @@ Namespace ArchetypeEditor.ADL_Classes
             mOriginalAuthorOrganisation = an_archetype_description.OriginalAuthorOrganisation
             mOriginalAuthorDate = an_archetype_description.OriginalAuthorDate
             mOtherContributors = an_archetype_description.OtherContributors
-            mReferences = an_archetype_description.References 'JAR: 24MAY2007, EDT-30 Add field for References
+            mReferences = an_archetype_description.References
 
             MyBase.LifeCycleState = an_archetype_description.LifeCycleState
         End Sub
