@@ -24,7 +24,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("Archetype Editor")> 
-<Assembly: AssemblyDescription("openEHR Tool for editing archetypes. These text files have a defined model and .adl extension")> 
+<Assembly: AssemblyDescription("Tool for editing openEHR archetypes.")> 
 <Assembly: AssemblyCompany("Ocean Informatics")> 
 <Assembly: AssemblyProduct("Ocean Archetype Editor")> 
 <Assembly: AssemblyCopyright("Copyright 2004-7")> 
@@ -85,4 +85,4 @@ Imports System.Runtime.InteropServices
 '***** END LICENSE BLOCK *****
 '
 
-<Assembly: AssemblyFileVersionAttribute("1.0.1241")> 
+<Assembly: AssemblyFileVersionAttribute("1.0.1243")> 
