@@ -69,11 +69,10 @@ Public Class ArchetypeID
         Return mArchetypeID
     End Function
 
-    Public Shared Function ValidId(ByVal value As String) As Boolean
+    Public Shared Function IsValidId(ByVal value As String) As Boolean
         Dim rgx As New System.Text.RegularExpressions.Regex("^[a-zA-Z][a-zA-Z0-9_]+(-[a-zA-Z0-9_]+){2}\.[a-zA-Z][a-zA-Z0-9_]+(-[a-zA-Z0-9_]+)*\.v[0-9]+(\.[0-9]+)?[a-zA-Z0-9_-]*$")
         Return rgx.Match(value).Success
     End Function
-
 
     Private Sub ProcessStringValue(ByVal Value As String)
         Dim y() As String
@@ -93,31 +92,32 @@ Public Class ArchetypeID
         mRmModel = ReferenceModel.ModelType
     End Sub
 
-    'JAR: 22MAY07, EDT-41 Validate archetype ID
-    Public Function ValidConcept(ByRef Concept As String, ByVal OldConcept As String) As Boolean 'Note: Function can update the value passed in!
-        Dim i As Integer = OldConcept.LastIndexOf("-")
+    Public Function ValidConcept(ByRef Concept As String, ByVal OldConcept As String) As String
+        Dim result As String = Trim(Concept)
 
-        'check for spaces or empty 
-        If String.IsNullOrEmpty(Trim(Concept)) Then
-            Return False
+        If result <> "" Then
+            'convert illegal characters
+            result = result.Replace("-", "_")
+            result = result.Replace(" ", "_")
+            result = result.Replace(".", "_")
+            result = result.Replace("&", "_and_")
+            result = result.Replace("__", "_") 'remove repeated underscores that may occur from converting multiple illegal characters
+
+            'maintain specialisation. I.e. body_weight-birth
+            Dim i As Integer = OldConcept.LastIndexOf("-")
+
+            If i > -1 Then
+                result = OldConcept.Substring(0, i + 1) + result
+            End If
+
+            result = result.ToLowerInvariant
+
+            If Not IsValidId("xx-xx-xx." & result & ".v1") Then
+                result = ""
+            End If
         End If
 
-        'convert illegal characters
-        Concept = Concept.Replace("-", "_")
-        Concept = Concept.Replace(" ", "_")
-        Concept = Concept.Replace(".", "_")
-        Concept = Concept.Replace("&", "_and_")
-        Concept = Concept.Replace("__", "_") 'remove repeated underscores that may occur from converting multiple illegal characters
-
-        'maintain specialisation. I.e. body_weight-birth
-        If i > -1 Then
-            Concept = OldConcept.Substring(0, i + 1) + Concept
-        End If
-
-        'convert to lower case
-        Concept = Concept.ToLowerInvariant
-
-        Return True
+        Return result
     End Function
 
     Sub New(ByVal Value As String)

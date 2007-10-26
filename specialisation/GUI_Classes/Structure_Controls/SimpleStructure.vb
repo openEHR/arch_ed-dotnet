@@ -22,7 +22,6 @@ Public Class SimpleStructure
     Private mIsLoading As Boolean
     Private mOKtoEditSpecialisation As Boolean
 
-
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -142,7 +141,6 @@ Public Class SimpleStructure
 
 #End Region
 
-
     Public Overrides ReadOnly Property InterfaceBuilder() As Object
         Get
             Return mElement
@@ -153,9 +151,11 @@ Public Class SimpleStructure
         Get
             Dim rm As New RmStructureCompound(mNodeId, StructureType.Single)
             rm.Occurrences = New RmCardinality(1, 1)
+
             If Not mElement Is Nothing Then
                 rm.Children.Add(mElement.RM_Class)
             End If
+
             Return rm
         End Get
         Set(ByVal Value As RmStructureCompound)
@@ -164,22 +164,25 @@ Public Class SimpleStructure
             mNodeId = Value.NodeId
             element = Value.Children.FirstElementOrElementSlot
             mIsLoading = True
+
             If Not element Is Nothing Then
                 If element.Type = StructureType.Element Then
                     mElement = New ArchetypeElement(element, mFileManager)
                 Else
                     mElement = New ArchetypeNodeAnonymous(element)
                 End If
-                Me.txtSimple.Text = mElement.Text
-                Me.txtSimple.Enabled = True
-                Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForItem(mElement))
+
+                txtSimple.Text = mElement.Text
+                txtSimple.Enabled = True
+                PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement))
             Else
                 mElement = Nothing
-                Me.ButAddElement.Visible = True
-                Me.txtSimple.Text = AE_Constants.Instance.DragDropHere
-                Me.txtSimple.Enabled = False
-                Me.PictureBoxSimple.Image = Nothing
+                ButAddElement.Visible = True
+                txtSimple.Text = AE_Constants.Instance.DragDropHere
+                txtSimple.Enabled = False
+                PictureBoxSimple.Image = Nothing
             End If
+
             mIsLoading = False
             mFileManager.FileEdited = True
             SetCurrentItem(mElement)
@@ -203,18 +206,21 @@ Public Class SimpleStructure
     End Function
 
     Public Overrides Sub Reset()
-        Me.txtSimple.Text = ""
-        Me.ButAddElement.Visible = True
-        Me.txtSimple.Enabled = False
-        Me.PictureBoxSimple.Image = Nothing
+        txtSimple.Text = ""
+        ButAddElement.Visible = True
+        txtSimple.Enabled = False
+        PictureBoxSimple.Image = Nothing
     End Sub
 
     Public Overrides Sub Translate()
         mIsLoading = True
 
-        mElement.Translate()
-
-        Me.txtSimple.Text = mElement.Text
+        If mElement Is Nothing Then
+            txtSimple.Text = ""
+        Else
+            mElement.Translate()
+            txtSimple.Text = mElement.Text
+        End If
 
         'call base translate to raise event to refresh constraint display
         MyBase.Translate()
@@ -226,7 +232,7 @@ Public Class SimpleStructure
             If MessageBox.Show(AE_Constants.Instance.Specialise & " " & txtSimple.Text, AE_Constants.Instance.MessageBoxCaption, _
                 MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                 CType(mElement, ArchetypeElement).Specialise()
-                Me.txtSimple.Text = mElement.Text
+                txtSimple.Text = mElement.Text
                 mFileManager.FileEdited = True
             End If
         End If
@@ -246,7 +252,6 @@ Public Class SimpleStructure
         End If
     End Sub
 
-
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
         mIsLoading = True
 
@@ -257,15 +262,16 @@ Public Class SimpleStructure
             mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
             CType(mElement, ArchetypeElement).Constraint = a_constraint
         End If
+
         mElement.Occurrences.MaxCount = 1
-        Me.txtSimple.Text = mElement.Text
-        Me.txtSimple.Enabled = True
-        Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForItem(mElement))
-        Me.txtSimple.Focus()
-        Me.txtSimple.SelectAll()
+        txtSimple.Text = mElement.Text
+        txtSimple.Enabled = True
+        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement))
+        txtSimple.Focus()
+        txtSimple.SelectAll()
         mFileManager.FileEdited = True
         SetCurrentItem(mElement)
-        Me.ButAddElement.Visible = False
+        ButAddElement.Visible = False
         mIsLoading = False
     End Sub
 
@@ -275,10 +281,10 @@ Public Class SimpleStructure
             MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
             mIsLoading = True
             mElement = Nothing
-            Me.txtSimple.Text = ""
-            Me.ButAddElement.Visible = True
-            Me.txtSimple.Enabled = False
-            Me.PictureBoxSimple.Image = Nothing
+            txtSimple.Text = ""
+            ButAddElement.Visible = True
+            txtSimple.Enabled = False
+            PictureBoxSimple.Image = Nothing
             mIsLoading = False
             mFileManager.FileEdited = True
         End If
@@ -291,7 +297,11 @@ Public Class SimpleStructure
     End Property
 
     Public Overrides Function ToRichText(ByVal indentlevel As Integer, ByVal new_line As String) As String
-        Return mElement.ToRichText(indentlevel)
+        If mElement Is Nothing Then
+            Return ""
+        Else
+            Return mElement.ToRichText(indentlevel)
+        End If
     End Function
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
@@ -300,14 +310,13 @@ Public Class SimpleStructure
 
         result.AppendFormat("<p><i>Structure</i>: {0}", Filemanager.GetOpenEhrTerm(105, "SINGLE"))
         result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
-        result.AppendFormat(Me.HtmlHeader(BackGroundColour, showComments))
+        result.AppendFormat(HtmlHeader(BackGroundColour, showComments))
 
         result.AppendFormat("{0}{1}", Environment.NewLine, mElement.ToHTML(0, showComments))
         result.AppendFormat("{0}</tr>", Environment.NewLine)
         result.AppendFormat("{0}</table>", Environment.NewLine)
 
         Return result.ToString
-
     End Function
 
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -320,7 +329,7 @@ Public Class SimpleStructure
 
     Protected Overrides Sub RefreshIcons()
         Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
-        Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(element.Constraint.Type))
+        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(element.Constraint.Type))
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
@@ -330,37 +339,34 @@ Public Class SimpleStructure
         Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
 
         If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-            Me.MenuSpecialise.Text = AE_Constants.Instance.Specialise
-            Me.MenuSpecialise.Visible = True
+            MenuSpecialise.Text = AE_Constants.Instance.Specialise
+            MenuSpecialise.Visible = True
         Else
             MenuSpecialise.Visible = False
         End If
-
     End Sub
-
 
     Private Sub txtSimple_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSimple.MouseEnter
-        SetToolTipSpecialisation(Me.txtSimple, mElement)
+        SetToolTipSpecialisation(txtSimple, mElement)
     End Sub
-
 
     Private Sub txtSimple_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSimple.TextChanged
         If Not mIsLoading Then
             Dim i As Integer
             Debug.Assert(Not mCurrentItem.IsAnonymous)
             i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 If Not mOKtoEditSpecialisation Then
                     If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
-                        Me.txtSimple.Text = mElement.Text
+                        txtSimple.Text = mElement.Text
                     Else
                         mOKtoEditSpecialisation = True
                     End If
                 End If
             End If
 
-            mElement.Text = Me.txtSimple.Text
-
+            mElement.Text = txtSimple.Text
         End If
     End Sub
 
@@ -371,18 +377,20 @@ Public Class SimpleStructure
 
     Private Sub SimpleStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' set the variable in the base class
-        mControl = Me.txtSimple
+        mControl = txtSimple
+
         If Not mElement Is Nothing Then
             SetCurrentItem(mElement)
         Else
             mIsLoading = True
-            Me.txtSimple.Text = ""
+            txtSimple.Text = ""
             ButAddElement.Visible = True
-            Me.txtSimple.Enabled = False
+            txtSimple.Enabled = False
             mIsLoading = False
         End If
+
         ' add the change structure menu from EntryStructure
-        Me.ContextMenuSimple.MenuItems.Add(menuChangeStructure)
+        ContextMenuSimple.MenuItems.Add(menuChangeStructure)
     End Sub
 
 
@@ -405,7 +413,6 @@ Public Class SimpleStructure
         e.Effect = e.AllowedEffect
     End Sub
 #End Region
-
 
 End Class
 

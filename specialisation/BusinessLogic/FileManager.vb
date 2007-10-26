@@ -351,15 +351,15 @@ Public Class FileManagerLocal
             '    End If
             'End If
 
-
             mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
             mPriorFileName = Nothing
             FileEdited = False
 
             'ensure the filename and archetype ID match (ignore case!)        
             Dim shortFileName As String = aFileName.Substring((aFileName.LastIndexOf("\")) + 1)
+
             If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
-                If ArchetypeID.ValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
+                If ArchetypeID.IsValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
                     If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
                         FileLoading = False
                         FileEdited = True
@@ -372,12 +372,12 @@ Public Class FileManagerLocal
                     FileLoading = True
                 End If
             End If
+
             Return True
         Catch e As Exception
             Me.FileName = mPriorFileName
             mPriorFileName = Nothing
         End Try
-
     End Function
 
     'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
@@ -388,10 +388,10 @@ Public Class FileManagerLocal
 
         'validate the concept to update it with the correct case and remove illegal characters
         Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
-        Id1.ValidConcept(Id1.Concept, "") 'validation may update Id1.concept
+        Id1.Concept = Id1.ValidConcept(Id1.Concept, "")
 
         Dim Id2 As New ArchetypeID(shortFileName)
-        Id2.ValidConcept(Id2.Concept, "") 'validation may update Id2.Concept 
+        Id2.Concept = Id2.ValidConcept(Id2.Concept, "")
 
         Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
         If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
@@ -449,8 +449,10 @@ Public Class FileManagerLocal
         Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(xml_parser)
 
         'Set the root id which can be different than the concept ID
-        If Not mArchetypeEngine.Archetype.Definition.RootNodeId Is Nothing AndAlso xml_parser.Archetype.definition.node_id <> mArchetypeEngine.Archetype.Definition.RootNodeId Then
-            xml_parser.Archetype.definition.node_id = mArchetypeEngine.Archetype.Definition.RootNodeId
+        Dim definition As ArcheTypeDefinitionBasic = mArchetypeEngine.Archetype.Definition
+
+        If Not definition Is Nothing AndAlso Not definition.RootNodeId Is Nothing AndAlso xml_parser.Archetype.definition.node_id <> definition.RootNodeId Then
+            xml_parser.Archetype.definition.node_id = definition.RootNodeId
         End If
 
         If mOntologyManager.NumberOfSpecialisations > 0 Then
@@ -459,9 +461,10 @@ Public Class FileManagerLocal
             If xml_parser.Archetype.parent_archetype_id Is Nothing Then
                 xml_parser.Archetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
             End If
-            xml_parser.Archetype.parent_archetype_id.value = mArchetypeEngine.Archetype.ParentArchetype
 
+            xml_parser.Archetype.parent_archetype_id.value = mArchetypeEngine.Archetype.ParentArchetype
         End If
+
         'remove the concept code from ontology as will be set again
         xml_parser.Archetype.ontology.term_definitions = Nothing 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
@@ -506,9 +509,11 @@ Public Class FileManagerLocal
             Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
             Dim xml_detail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
             xml_detail.language = cp
+
             If archDetail.Copyright <> "" Then
                 xml_detail.copyright = archDetail.Copyright
             End If
+
             xml_detail.misuse = archDetail.MisUse
 
             'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
@@ -521,12 +526,14 @@ Public Class FileManagerLocal
 
             xml_detail.purpose = archDetail.Purpose
             xml_detail.use = archDetail.Use
+
             If (Not archDetail.KeyWords Is Nothing) AndAlso archDetail.KeyWords.Count > 0 Then
                 xml_detail.keywords = Array.CreateInstance(GetType(String), archDetail.KeyWords.Count)
                 For j As Integer = 0 To archDetail.KeyWords.Count - 1
                     xml_detail.keywords(j) = archDetail.KeyWords.Item(j)
                 Next
             End If
+
             details_array(ii) = xml_detail
             ii += 1
         Next
@@ -701,7 +708,6 @@ Public Class FileManagerLocal
     End Sub
 
     Public Sub AutoSave(ByVal n As Integer)
-
         mObjectToSave.PrepareToSave()
         AutoWrite("OceanRecovery-" & Me.Archetype.Archetype_ID.ToString)
     End Sub
@@ -808,12 +814,15 @@ Public Class FileManagerLocal
         saveFile.OverwritePrompt = True
         saveFile.DefaultExt = Me.ParserType
         Dim i As Integer = Me.IndexOfFormat(Me.ParserType) + 1
+
         If i > 0 Then
             saveFile.FilterIndex = i
         End If
+
         saveFile.AddExtension = True
         saveFile.Title = AE_Constants.Instance.MessageBoxCaption
         saveFile.ValidateNames = True
+
         If saveFile.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
             Return ""
         Else
@@ -822,35 +831,34 @@ Public Class FileManagerLocal
 
             ext = saveFile.Filter.Split("|".ToCharArray())((saveFile.FilterIndex - 1) * 2)
             s = saveFile.FileName.Substring(saveFile.FileName.LastIndexOf(".") + 1)
+
             If s = ext Then
                 Return saveFile.FileName
             Else
                 Return saveFile.FileName & "." & ext
             End If
         End If
-
     End Function
 
     Private Sub AutoWrite(ByVal fileName As String)
-        mArchetypeEngine.WriteFile(Application.StartupPath & "\" & fileName & "." & ParserType, ParserType, Me.ParserSynchronised)
+        Dim appata As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
+        mArchetypeEngine.WriteFile(IO.Path.Combine(appata, fileName & "." & ParserType), ParserType, ParserSynchronised)
     End Sub
 
     Public Sub WriteArchetype()
-
         'Check that the file name is an available format
-
         Dim s As String = mFileName.Substring(mFileName.LastIndexOf(".") + 1).ToLowerInvariant()
 
         If FormatIsAvailable(s) Then
             mHasWriteFileError = False
             mArchetypeEngine.WriteFile(mFileName, s, Me.ParserSynchronised)
+
             If mArchetypeEngine.WriteFileError Then
                 mHasWriteFileError = True
             End If
         Else
             MessageBox.Show(AE_Constants.Instance.Incorrect_format & "File: '" & mFileName & ", Format: '" & s & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
-
     End Sub
 
     'Public Sub ConvertToADL(ByVal anOntologyManager As OntologyManager)

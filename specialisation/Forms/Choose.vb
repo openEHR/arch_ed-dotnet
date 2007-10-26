@@ -19,7 +19,6 @@ Public Class Choose
     Friend DTab_2 As DataTable
     Friend DTab_1 As DataTable
 
-
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -63,7 +62,7 @@ Public Class Choose
     Friend WithEvents ListChoose As System.Windows.Forms.ListBox
     Friend WithEvents ListBox2 As System.Windows.Forms.ListBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(Choose))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Choose))
         Me.ListChoose = New System.Windows.Forms.ListBox
         Me.LblForm = New System.Windows.Forms.Label
         Me.butCancel = New System.Windows.Forms.Button
@@ -73,52 +72,56 @@ Public Class Choose
         '
         'ListChoose
         '
-        Me.ListChoose.ItemHeight = 16
-        Me.ListChoose.Location = New System.Drawing.Point(16, 46)
+        Me.ListChoose.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ListChoose.Location = New System.Drawing.Point(13, 32)
         Me.ListChoose.Name = "ListChoose"
-        Me.ListChoose.Size = New System.Drawing.Size(328, 180)
-        Me.ListChoose.TabIndex = 0
+        Me.ListChoose.Size = New System.Drawing.Size(274, 186)
+        Me.ListChoose.TabIndex = 1
         '
         'LblForm
         '
         Me.LblForm.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LblForm.Location = New System.Drawing.Point(19, 9)
+        Me.LblForm.Location = New System.Drawing.Point(16, 8)
         Me.LblForm.Name = "LblForm"
-        Me.LblForm.Size = New System.Drawing.Size(298, 28)
-        Me.LblForm.TabIndex = 1
+        Me.LblForm.Size = New System.Drawing.Size(248, 24)
+        Me.LblForm.TabIndex = 0
         Me.LblForm.Text = "Choose"
-        '
-        'butOK
-        '
-        Me.butOK.Location = New System.Drawing.Point(499, 258)
-        Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(67, 37)
-        Me.butOK.TabIndex = 2
-        Me.butOK.Text = "OK"
         '
         'butCancel
         '
+        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(576, 258)
+        Me.butCancel.Location = New System.Drawing.Point(457, 235)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(67, 37)
-        Me.butCancel.TabIndex = 3
+        Me.butCancel.Size = New System.Drawing.Size(84, 28)
+        Me.butCancel.TabIndex = 4
         Me.butCancel.Text = "Cancel"
+        '
+        'butOK
+        '
+        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.butOK.Location = New System.Drawing.Point(368, 235)
+        Me.butOK.Name = "butOK"
+        Me.butOK.Size = New System.Drawing.Size(84, 28)
+        Me.butOK.TabIndex = 3
+        Me.butOK.Text = "OK"
         '
         'ListBox2
         '
-        Me.ListBox2.ItemHeight = 16
-        Me.ListBox2.Location = New System.Drawing.Point(355, 46)
+        Me.ListBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ListBox2.Location = New System.Drawing.Point(296, 32)
         Me.ListBox2.Name = "ListBox2"
-        Me.ListBox2.Size = New System.Drawing.Size(288, 180)
-        Me.ListBox2.TabIndex = 4
+        Me.ListBox2.Size = New System.Drawing.Size(240, 186)
+        Me.ListBox2.TabIndex = 2
         '
         'Choose
         '
         Me.AcceptButton = Me.butOK
-        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(652, 306)
+        Me.ClientSize = New System.Drawing.Size(549, 276)
         Me.Controls.Add(Me.ListBox2)
         Me.Controls.Add(Me.butOK)
         Me.Controls.Add(Me.butCancel)
@@ -135,27 +138,19 @@ Public Class Choose
 #End Region
 
     Public Sub Set_Single()
-        Dim p As New Drawing.Point()
-        Me.Width = 380
-        p.X = 224
-        p.Y = Me.butOK.Location.Y
-        Me.butOK.Location = p
-        p.X = 149
-        p.Y = Me.butCancel.Location.Y
-        Me.butCancel.Location = p
-        Me.ListBox2.Visible = False
+        MinimumSize = New Size(Width - ClientSize.Width + ListBox2.Left, Height)
+        'Changed SRH 25.10.2007 - Interger MaxVal gave error in new version ? reason
+        MaximumSize = New Size(MinimumSize.Width, Height)
+        'MaximumSize = New Size(MinimumSize.Width, Integer.MaxValue)
+        ListBox2.Visible = False
     End Sub
 
     Public Sub Set_Double()
-        Dim p As New Drawing.Point()
-        Me.Width = 552
-        p.X = 480
-        p.Y = Me.butOK.Location.Y
-        Me.butOK.Location = p
-        p.X = 416
-        p.Y = Me.butCancel.Location.Y
-        Me.butCancel.Location = p
-        Me.ListBox2.Visible = True
+        MinimumSize = New Size(Width - ClientSize.Width + ListBox2.Left + ListBox2.Width + ListChoose.Left, Height)
+        'Changed SRH 25.10.2007 - Interger MaxVal gave error in new version ? reason
+        'MaximumSize = New Size(MinimumSize.Width, Integer.MaxValue)
+        MaximumSize = New Size(MinimumSize.Width, Height)
+        ListBox2.Visible = True
     End Sub
 
     Public Sub PrepareDataTable_for_List(ByVal n As Integer)
@@ -198,17 +193,13 @@ Public Class Choose
         End If
     End Sub
 
-
-
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click, ListChoose.DoubleClick
-        Me.DialogResult = Windows.Forms.DialogResult.OK
-
+        DialogResult = Windows.Forms.DialogResult.OK
     End Sub
 
     Private Sub butCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butCancel.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
-
 
 End Class
 

@@ -48,11 +48,15 @@ Public Class RmSlot
 
     Sub New()
         MyBase.New("", StructureType.Slot)
+        'Changed SRH 22/10/2007: set default occurrences to unbounded
+        cOccurrences.IsUnbounded = True
         mSlotConstraint = New Constraint_Slot
     End Sub
 
     Sub New(ByVal a_type As StructureType)
         MyBase.new("", StructureType.Slot)
+        'Changed SRH 22/10/2007: set default occurrences to unbounded
+        cOccurrences.IsUnbounded = True
         mSlotConstraint = New Constraint_Slot
         mSlotConstraint.RM_ClassType = a_type
     End Sub

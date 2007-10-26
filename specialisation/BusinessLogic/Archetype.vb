@@ -114,11 +114,14 @@ Public MustInherit Class Archetype
     End Property
 
     Public Function HasLinkConstraints() As Boolean
-        For Each l As RmLink In cDefinition.RootLinks
-            If l.HasConstraint Then
-                Return True
-            End If
-        Next
+        If Not cDefinition Is Nothing Then
+            For Each l As RmLink In cDefinition.RootLinks
+                If l.HasConstraint Then
+                    Return True
+                End If
+            Next
+        End If
+
         Return False
     End Function
 
@@ -145,6 +148,7 @@ Public MustInherit Class Archetype
             Case Else
                 Debug.Assert(False, String.Format("Type not handled: {0}", mArchetypeID.ReferenceModelEntity))
         End Select
+
         ReferenceModel.SetArchetypedClass(mArchetypeID.ReferenceModelEntity)
 
         'Not archetype is not synchronised with definition
@@ -152,11 +156,14 @@ Public MustInherit Class Archetype
     End Sub
 
     Public Sub ResetDefinitions()
-        Debug.Assert(Not cDefinition Is Nothing)
-        If Not cDefinition Is Nothing AndAlso TypeOf (cDefinition) Is ArchetypeDefinition Then
-            CType(cDefinition, ArchetypeDefinition).Data.Clear()
+        If Not cDefinition Is Nothing Then
+            If TypeOf (cDefinition) Is ArchetypeDefinition Then
+                CType(cDefinition, ArchetypeDefinition).Data.Clear()
+            End If
+
+            cDefinition.RootLinks.Clear()
         End If
-        cDefinition.RootLinks.Clear()
+
         'Not archetype is not synchronised with definition
         mSynchronised = False
     End Sub

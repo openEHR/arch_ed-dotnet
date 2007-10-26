@@ -352,7 +352,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return New Constraint
             End Select
         End Function
-        Private Function ProcessUri(ByVal dvUri As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
+        Shared Function ProcessUri(ByVal dvUri As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
             Dim cUri As New Constraint_URI
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
@@ -762,7 +762,6 @@ Namespace ArchetypeEditor.ADL_Classes
             Return b
 
         End Function
-
 
         Shared Function ProcessText(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Text
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE

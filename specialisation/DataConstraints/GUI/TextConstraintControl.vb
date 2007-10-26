@@ -543,81 +543,75 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub radioInternal_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioInternal.CheckedChanged
         If Me.radioInternal.Checked Then
-            Me.gbAllowableValues.Visible = True
-            Me.txtTermConstraintText.Visible = False
-            Me.txtTermConstraintDescription.Visible = False
+            gbAllowableValues.Visible = True
+            txtTermConstraintText.Visible = False
+            txtTermConstraintDescription.Visible = False
+            lblConstraint.Visible = False
+            lblDescription.Visible = False
         End If
 
-        If MyBase.IsLoading Then Return
-
-        If Me.radioInternal.Checked Then
-
-            Me.ButNewItem.Focus()
-
-            Me.Constraint.TypeOfTextConstraint = TextConstrainType.Internal
-            SetInternalCodedValues()
-            mFileManager.FileEdited = True
+        If Not MyBase.IsLoading Then
+            If radioInternal.Checked Then
+                ButNewItem.Focus()
+                Constraint.TypeOfTextConstraint = TextConstrainType.Internal
+                SetInternalCodedValues()
+                mFileManager.FileEdited = True
+            End If
         End If
-
     End Sub
 
     Private mConstraintTerm As RmTerm
 
     Private Sub radioTerminology_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioTerminology.CheckedChanged
 
-        If Me.radioTerminology.Checked Then
-            Me.gbAllowableValues.Visible = False
-            Me.txtTermConstraintText.Visible = True
-            Me.txtTermConstraintDescription.Visible = True
+        If radioTerminology.Checked Then
+            gbAllowableValues.Visible = False
+            txtTermConstraintText.Visible = True
+            txtTermConstraintDescription.Visible = True
+            lblConstraint.Visible = True
+            lblDescription.Visible = True
         End If
 
-        If MyBase.IsLoading Then Return
+        If Not MyBase.IsLoading Then
+            If radioTerminology.Checked Then
+                Constraint.TypeOfTextConstraint = TextConstrainType.Terminology
+                MyBase.IsLoading = True  ' avoids replacing the text
 
-        If Me.radioTerminology.Checked Then
+                If Constraint.ConstraintCode = "" OrElse Not mFileManager.OntologyManager.Ontology.HasTermCode(Constraint.ConstraintCode) Then
+                    mConstraintTerm = mFileManager.OntologyManager.AddConstraint(Filemanager.GetOpenEhrTerm(139, "New constraint"))
+                    Constraint.ConstraintCode = mConstraintTerm.Code
+                    txtTermConstraintText.Text = mConstraintTerm.Text
+                    txtTermConstraintDescription.Text = mConstraintTerm.Description
+                Else
+                    mConstraintTerm = mFileManager.OntologyManager.GetTerm(Constraint.ConstraintCode)
+                    txtTermConstraintText.Text = mConstraintTerm.Text
+                    txtTermConstraintDescription.Text = mConstraintTerm.Description
+                End If
 
-            Me.Constraint.TypeOfTextConstraint = TextConstrainType.Terminology
+                txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
+                Constraint.HasAssumedValue = False
+                MyBase.IsLoading = False
 
-            MyBase.IsLoading = True  ' avoids replacing the text
-
-            If Me.Constraint.ConstraintCode = "" OrElse Not mFileManager.OntologyManager.Ontology.HasTermCode(Me.Constraint.ConstraintCode) Then
-                mConstraintTerm = mFileManager.OntologyManager.AddConstraint(Filemanager.GetOpenEhrTerm(139, "New constraint"))
-                Me.Constraint.ConstraintCode = mConstraintTerm.Code
-                Me.txtTermConstraintText.Text = mConstraintTerm.Text
-                Me.txtTermConstraintDescription.Text = mConstraintTerm.Description
-
-            Else
-                mConstraintTerm = mFileManager.OntologyManager.GetTerm(Me.Constraint.ConstraintCode)
-                Me.txtTermConstraintText.Text = mConstraintTerm.Text
-                Me.txtTermConstraintDescription.Text = mConstraintTerm.Description
+                txtTermConstraintText.Focus()
+                mFileManager.FileEdited = True
             End If
-
-            Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
-            Me.Constraint.HasAssumedValue = False
-            MyBase.IsLoading = False
-
-
-            Me.txtTermConstraintText.Focus()
-
-            mFileManager.FileEdited = True
         End If
-
     End Sub
 
     Private Sub radioText_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioText.CheckedChanged
-
-        If Me.radioText.Checked Then
-            Me.gbAllowableValues.Visible = False
-            Me.txtTermConstraintText.Visible = False
-            Me.txtTermConstraintDescription.Visible = False
-            Me.lblConstraint.Visible = False
-            Me.lblDescription.Visible = False
+        If radioText.Checked Then
+            gbAllowableValues.Visible = False
+            txtTermConstraintText.Visible = False
+            txtTermConstraintDescription.Visible = False
+            lblConstraint.Visible = False
+            lblDescription.Visible = False
         End If
 
-        If MyBase.IsLoading Then Return
-
-        If Me.radioText.Checked Then
-            Me.Constraint.TypeOfTextConstraint = TextConstrainType.Text  
-            mFileManager.FileEdited = True
+        If Not MyBase.IsLoading Then
+            If radioText.Checked Then
+                Constraint.TypeOfTextConstraint = TextConstrainType.Text
+                mFileManager.FileEdited = True
+            End If
         End If
     End Sub
 
@@ -680,7 +674,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub ContextMenuListAllowableValues_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuListAllowableValues.Popup
         If Me.listAllowableValues.SelectedIndex > -1 Then
-            MenuItemEdit.Text = "Edit " & CType(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item("Text"), String)
+            MenuItemEdit.Text = String.Format("{0} {1}", Filemanager.GetOpenEhrTerm(592, "Edit "), CType(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item("Text"), String))
             MenuItemEdit.Visible = True
         Else
             MenuItemEdit.Visible = False

@@ -1,0 +1,44 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-au">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Entry screens</title>
+</head>
+
+<body>
+
+<h1>Entry Model Screen</h1>
+
+<p>The Entry model screen is the main screen which contains the data
+specification for an <a href="../openEHR/entry_classes.htm">ENTRY</a> archetype.
+It consists of a number of screens which are on Tabs; these mimic the <i>open</i>EHR
+model of an entry.</p>
+
+<p>The upper tab contains:</p>
+
+<ul>
+  <li><a href="data_screen.htm">Data screen</a> - which contains the core
+    information</li>
+  <li>Protocol screen - which contains information about the measurement, which
+    is not considered necessary for safe clinical interpretation of the data,
+    but should be available to the clinician if required.</li>
+  <li>State screen - which allows state information to be added in a time series
+    independent of the data.</li>
+</ul>
+<p>The check boxes have to be ticked to show these screens, and they may be
+removed by unchecking these boxes.</p>
+<p><img border="1" src="images/entry_tabs.gif" width="468" height="105"></p>
+<p>For example - the blood pressure archetype contains information about the
+device and the cuff used to measure the blood pressure in the protocol. State
+data may be added on a different history model when there is a complex
+relationship between the state information and the data, such as in an exercise
+ECG. If 'Person State with history' is checked it is not possible to add state
+information as part of the data (i.e. only one set of state data is possible
+with any observation).</p>
+
+</body>
+
+</html>

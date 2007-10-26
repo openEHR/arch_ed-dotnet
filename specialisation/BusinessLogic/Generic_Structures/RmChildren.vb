@@ -135,7 +135,8 @@ Public Class Children
     End Function
 
     Public Shadows Sub Add(ByVal an_RM_Structure As RmStructure)
-        Debug.Assert(Not an_RM_Structure Is Nothing)
+        'SRH: 24.9.2007 - handles this condition of null child so remove test
+        'Debug.Assert(Not an_RM_Structure Is Nothing)
         If (Not an_RM_Structure Is Nothing) AndAlso ReferenceModel.IsValidChild(mParentStructureType, an_RM_Structure.Type) Then
             'Is valid child traps post condition of false as should not arise
             MyBase.List.Add(an_RM_Structure)

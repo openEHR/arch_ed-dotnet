@@ -303,61 +303,53 @@ Public Class frmStartUp
         End Set
     End Property
 
-
     Private Sub comboModel_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboModel.SelectedIndexChanged
-
         ' set the reference model, which sets valid classes to archetype
         ReferenceModel.SetModelType(comboModel.SelectedIndex)
-        Me.comboComponent.Items.Clear()
+        comboComponent.Items.Clear()
+        comboComponent.SelectedIndex = -1
 
-        Me.comboComponent.SelectedIndex = -1
         For Each valid_archetype As StructureType In ReferenceModel.ValidArchetypeDefinitions
-            Me.comboComponent.Items.Add(valid_archetype.ToString)
+            comboComponent.Items.Add(valid_archetype.ToString)
         Next
-        Me.comboComponent.Enabled = True
-        Me.AcceptButton = Me.butOK
 
+        comboComponent.Enabled = True
+        AcceptButton = butOK
     End Sub
 
     Private Sub butOpen_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOpen.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Yes
+        DialogResult = Windows.Forms.DialogResult.Yes
     End Sub
 
     Private Sub butCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butCancel.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
+        DialogResult = Windows.Forms.DialogResult.Cancel
     End Sub
 
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
-        'Only allow OK if there is enough done
-        If Me.comboModel.SelectedIndex = -1 Then
+        If comboModel.SelectedIndex = -1 Then
             Beep()
-            Me.comboModel.Focus()
-            Return
-        ElseIf Me.comboComponent.SelectedIndex = -1 Then
+            comboModel.Focus()
+        ElseIf comboComponent.SelectedIndex = -1 Then
             Beep()
-            Me.comboComponent.Focus()
-            Return
+            comboComponent.Focus()
+        Else
+            Dim s As String = Archetype_ID.ValidConcept(txtConcept.Text, "")
 
-            'JAR: 22MAY07, EDT-41 Validate archetype ID
-            'ElseIf Me.txtConcept.Text = "" Then            
-        ElseIf Not Archetype_ID.ValidConcept(txtConcept.Text, "") Then 'Note: txtConcept.Text can be updated in ValidConcept!
-            Beep()
-            Me.txtConcept.Focus()
-            Return
+            If s = "" Then
+                Beep()
+                txtConcept.Focus()
+            Else
+                txtConcept.Text = s
+                DialogResult = Windows.Forms.DialogResult.OK
+            End If
         End If
-
-        'JAR: 22MAY07, EDT-41 Validate archetype ID
-        'need to check for illegal characters
-        'Me.txtConcept.Text = Me.txtConcept.Text.Replace(" ", "_")
-        'Me.txtConcept.Text = Me.txtConcept.Text.Replace("-", "_")
-
-        Me.DialogResult = Windows.Forms.DialogResult.OK
     End Sub
 
     Private Sub comboComponent_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboComponent.SelectedIndexChanged
-        If Me.comboComponent.SelectedIndex = -1 Then Return
-        ReferenceModel.SetArchetypedClass(ReferenceModel.ValidArchetypeDefinitions(comboComponent.SelectedIndex))
-        Me.AcceptButton = butOK
+        If comboComponent.SelectedIndex <> -1 Then
+            ReferenceModel.SetArchetypedClass(ReferenceModel.ValidArchetypeDefinitions(comboComponent.SelectedIndex))
+            AcceptButton = butOK
+        End If
     End Sub
 
     Private Sub frmStartUp_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load

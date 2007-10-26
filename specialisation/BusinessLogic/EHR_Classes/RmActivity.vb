@@ -95,47 +95,50 @@ Public Class RmActivity
         Me.Occurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(xml_Structure.occurrences)
 
         ' process the archetype id constraint
-        For Each an_attribute As XMLParser.C_ATTRIBUTE In xml_Structure.attributes
-            Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                Case "action_archetype_id"
-                    Dim obj As XMLParser.C_PRIMITIVE_OBJECT
-                    obj = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)                    
+        If Not xml_Structure.attributes Is Nothing Then
+            For Each an_attribute As XMLParser.C_ATTRIBUTE In xml_Structure.attributes
+                Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    Case "action_archetype_id"
+                        Dim obj As XMLParser.C_PRIMITIVE_OBJECT
+                        obj = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
 
-                    'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                    'If obj.any_allowed Then
-                    Dim primitiveObject As New C_PRIMITIVE_OBJECT_PROXY(obj)
-                    If primitiveobject.any_allowed Then                        
-                        Me.ArchetypeId = "."
-                    Else
-                        Dim id As XMLParser.C_STRING = CType(obj.item, XMLParser.C_STRING)
-                        If id.list Is Nothing Then
-                            If id.pattern Is Nothing Then
-                                Me.ArchetypeId = "."
-                            Else
-                                Me.ArchetypeId = id.pattern.Trim("/".ToCharArray()).Replace("\.", ".")
-                            End If
+                        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                        'If obj.any_allowed Then
+                        Dim primitiveObject As New C_PRIMITIVE_OBJECT_PROXY(obj)
+                        If primitiveObject.Any_Allowed Then
+                            Me.ArchetypeId = "."
                         Else
-                            Debug.Assert(False, "Should use pattern here")
-                            Me.ArchetypeId = id.list(0).Trim("/".ToCharArray()).Replace("\.", ".")
+                            Dim id As XMLParser.C_STRING = CType(obj.item, XMLParser.C_STRING)
+                            If id.list Is Nothing Then
+                                If id.pattern Is Nothing Then
+                                    Me.ArchetypeId = "."
+                                Else
+                                    Me.ArchetypeId = id.pattern.Trim("/".ToCharArray()).Replace("\.", ".")
+                                End If
+                            Else
+                                Debug.Assert(False, "Should use pattern here")
+                                Me.ArchetypeId = id.list(0).Trim("/".ToCharArray()).Replace("\.", ".")
+                            End If
                         End If
-                    End If
-                Case "description"
-                    Dim obj As XMLParser.C_OBJECT
-                    obj = CType(an_attribute.children(0), XMLParser.C_OBJECT)
-                    'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                    'If Not obj.any_allowed Then
-                    Dim cObject As New C_COMPLEX_OBJECT_PROXY(CType(obj, XMLParser.C_COMPLEX_OBJECT))
-                    If Not cObject.Any_Allowed Then
+                    Case "description"
+                        Dim obj As XMLParser.C_OBJECT
+                        obj = CType(an_attribute.children(0), XMLParser.C_OBJECT)
                         Select Case obj.GetType.ToString.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                             Case "xmlparser.archetype_slot"
                                 Me.Children.Add(New RmSlot(CType(obj, XMLParser.ARCHETYPE_SLOT)))
                             Case "xmlparser.c_complex_object"
-                                Me.Children.Add(New RmStructureCompound(CType(obj, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
-                        End Select
-                    End If
-            End Select
-        Next
+                                Dim cObject As New C_COMPLEX_OBJECT_PROXY(CType(obj, XMLParser.C_COMPLEX_OBJECT))
+                                'SRH: 22.10.2007 Moved to inside this case statement as cannot caste from slot to complex object
+                                'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                                'If Not obj.any_allowed Then
 
+                                If Not cObject.Any_Allowed Then
+                                    Me.Children.Add(New RmStructureCompound(CType(obj, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                                End If
+                        End Select
+                End Select
+            Next
+        End If
     End Sub
 
 #End Region
