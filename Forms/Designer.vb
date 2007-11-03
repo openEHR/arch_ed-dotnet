@@ -484,8 +484,8 @@ Public Class Designer
         Me.butLinks.Text = "Links"
         Me.butLinks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.butLinks.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
-        Me.butLinks.Visible = False
         Me.butLinks.UseVisualStyleBackColor = True
+        Me.butLinks.Visible = False
         '
         'tabComment
         '

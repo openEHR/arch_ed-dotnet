@@ -822,12 +822,12 @@ Namespace ArchetypeEditor.ADL_Classes
                 upper = EiffelKernel.Create.STRING_8.make_from_cil(durationIso.ISO_duration)
             End If
 
+            Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
+
             If Not pattern Is Nothing Or Not lower Is Nothing Or Not upper Is Nothing Then
                 Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
                 d = mAomFactory.create_c_duration_make(pattern, lower, upper, c.IncludeMinimum, c.IncludeMaximum)
-
-                Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
 
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
