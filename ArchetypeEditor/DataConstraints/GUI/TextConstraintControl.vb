@@ -340,10 +340,14 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
             Case TextConstrainType.Terminology
                 Me.radioTerminology.Checked = True
-                Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm( _
+                'SRH 2 Nov 2007: Changed to set the internal code
+                'Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm( _
+                '        Me.Constraint.ConstraintCode)
+                mConstraintTerm = mFileManager.OntologyManager.GetTerm( _
                         Me.Constraint.ConstraintCode)
-                Me.txtTermConstraintText.Text = aTerm.Text
-                Me.txtTermConstraintDescription.Text = aTerm.Description
+
+                Me.txtTermConstraintText.Text = mConstraintTerm.Text
+                Me.txtTermConstraintDescription.Text = mConstraintTerm.Description
 
         End Select
 
