@@ -67,9 +67,11 @@ Namespace ArchetypeEditor.ADL_Classes
                     EiffelKernel.Create.STRING_8.make_from_cil(mArchetypePackageURI.Replace("""", "'")))
             End If
 
-            mADL_Description.add_other_detail( _
-                EiffelKernel.Create.STRING_8.make_from_cil("references"), _
-                EiffelKernel.Create.STRING_8.make_from_cil(mReferences.Replace("""", "'")))
+            If Not mReferences Is Nothing Then
+                mADL_Description.add_other_detail( _
+                    EiffelKernel.Create.STRING_8.make_from_cil("references"), _
+                    EiffelKernel.Create.STRING_8.make_from_cil(mReferences.Replace("""", "'")))
+            End If
 
             mADL_Description.clear_other_contributors()
 
