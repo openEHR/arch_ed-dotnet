@@ -107,6 +107,7 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         Public Overrides Sub AddorReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
+
             ' Added ascerts required for this piece of code to run successfully
             ' and try statement
             Debug.Assert(sCode <> "", "Code is not set")
@@ -115,7 +116,15 @@ Namespace ArchetypeEditor.XML_Classes
 
             ' release is not utilised at this point
             Try
-                archetypeParser.Ontology.AddOrReplaceTermBinding(sCode, sPath, sTerminology)
+                ' EDT-134
+                'archetypeParser.Ontology.AddOrReplaceTermBinding(sCode, sPath, sTerminology)
+                Dim terminology_idValue As String = sTerminology
+                If Not String.IsNullOrEmpty(sRelease) Then
+                    terminology_idValue += "(" + sRelease + ")"
+                End If
+                archetypeParser.Ontology.AddOrReplaceTermBinding(sCode, sPath, sTerminology, _
+                    terminology_idValue)
+
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "XML parser", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
@@ -289,7 +298,16 @@ Namespace ArchetypeEditor.XML_Classes
             Dim data_row As System.Data.DataRow
             For Each data_row In a_termBinding_table.Rows
                 '                                                terminology id        code                path
-                archetypeParser.Ontology.AddOrReplaceTermBinding(CStr(data_row(2)), CStr(data_row(1)), CStr(data_row(0)))
+                'archetypeParser.Ontology.AddOrReplaceTermBinding(CStr(data_row(2)), CStr(data_row(1)), CStr(data_row(0)))
+
+                ' EDT-134
+                Dim terminology_idValue As String = CStr(data_row(0))
+                If Not data_row(3) Is Nothing AndAlso CStr(data_row(3)) <> "" Then
+                    terminology_idValue += "(" + CStr(data_row(3)) + ")"
+                End If
+                archetypeParser.Ontology.AddOrReplaceTermBinding( _
+                    CStr(data_row(2)), CStr(data_row(1)), CStr(data_row(0)), terminology_idValue)
+                '   code_string,       archetype path,    terminology key,   terminology_id/value    
             Next
         End Sub
 
@@ -405,13 +423,22 @@ Namespace ArchetypeEditor.XML_Classes
                                     d_row = tab.NewRow
                                     d_row(0) = selected_row(0)
                                     d_row(1) = bind.code
-                                    'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                                    'd_row(2) = bind.value.code_string 
+
                                     If Not bind.value Is Nothing Then
                                         If Not bind.value.terminology_id Is Nothing Then
-                                            d_row(2) = bind.value.terminology_id.value
+                                            ' EDT-134
+                                            'd_row(2) = bind.value.terminology_id.value
+                                            Dim strings() As String = bind.value.terminology_id.value.Split("("c)
+                                            If strings.Length > 1 Then
+                                                Dim release As String = strings(1).TrimEnd(")"c)
+                                                d_row(3) = release
+                                            End If
                                         End If
+
+                                        ' EDT-134
+                                        d_row(2) = bind.value.code_string
                                     End If
+
                                     tab.Rows.Add(d_row)
                                 Next
                             End If
