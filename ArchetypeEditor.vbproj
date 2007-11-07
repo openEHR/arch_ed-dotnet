@@ -112,7 +112,7 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="XMLParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="XMLParser, Version=1.0.2867.29610, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
