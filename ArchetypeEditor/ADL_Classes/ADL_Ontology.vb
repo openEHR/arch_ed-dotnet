@@ -546,6 +546,12 @@ Namespace ArchetypeEditor.ADL_Classes
                             d_row(0) = selected_row(0)
                             d_row(1) = code.to_cil
                             d_row(2) = cp.code_string
+
+                            ' EDT-134
+                            If Not cp.terminology_id.version_id Is Nothing Then
+                                d_row(3) = cp.terminology_id.version_id.to_cil    ' release
+                            End If
+
                             TheOntologyManager.TermBindingsTable.Rows.Add(d_row)
                             Bindings.forth()
                         Loop
