@@ -526,6 +526,6 @@
   <Unit property_id="29" Text="mm[H20]" name="millimeters of water" conversion="970.64" primary="false" />
   <Unit property_id="71" Text="mho" name="mho" conversion="1" primary="false" />
   <Unit property_id="71" Text="S" name="seimens" conversion="1" primary="true" case_ins="S" />
-  <Unit property_id="71" Text="millimho" conversion="1" coefficient="3" primary="false" />
+  <Unit property_id="71" Text="mmho" name="millimho" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="71" Text="mS" name="milliseimens" conversion="1" coefficient="3" primary="false" case_ins="mS" />
 </PropertyUnits>
