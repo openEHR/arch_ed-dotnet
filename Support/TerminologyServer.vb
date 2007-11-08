@@ -94,14 +94,14 @@ Public Class TerminologyServer
     Public Function CodeSetAsDataRow(ByVal CodeSetName As String) As DataRow()
         'languages, countries, Media types, terminologies, compression algorithms, integrity check algorithms
 
-        Select Case CodeSetName
-            Case "Concepts", "Concepts", "Terminologies", "terminologies", "CONCEPTS", "TERMINOLOGIES"
+        Select Case CodeSetName.ToLowerInvariant()
+            Case "concepts", "terminologies"
                 Dim selected_rows As DataRow()
 
                 selected_rows = Terminology.Tables("TerminologyIdentifiers").Select()
                 Return selected_rows
 
-            Case "languages", "Languages", "LANGUAGES", "language", "Language", "LANGUAGE"
+            Case "languages", "language"
                 Dim selected_rows As DataRow()
 
                 selected_rows = Terminology.Tables("Language").Select()
@@ -276,7 +276,7 @@ Public Class TerminologyServer
 
                 Next
 
-                filterString = "(" & f & ")) OR (" & g & "))"
+                filterString = "((" & f & ") OR (" & g & "))"
                 selected_terms = Terminology.Tables("Concept").Select(filterString)
 
             End If

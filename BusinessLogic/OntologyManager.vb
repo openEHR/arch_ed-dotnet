@@ -261,7 +261,10 @@ Public Class OntologyManager
                 aterm.Text = CStr(d_row(2))
                 aterm.Description = CStr(d_row(3))
                 If Not aterm.isConstraint Then
-                    aterm.Comment = CStr(d_row(4))
+                    'SRH 8 Nov 2007 - Added check for null
+                    If Not TypeOf (d_row(4)) Is System.DBNull Then
+                        aterm.Comment = CStr(d_row(4))
+                    End If
                 End If
             End If
             mLastTerm = aterm  ' remember last one for efficiency
