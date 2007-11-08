@@ -3533,25 +3533,18 @@ Public Class Designer
                 frm.gbExistingArchetype.Text = Filemanager.GetOpenEhrTerm(609, "Open existing archetypes")
                 frm.gbArchetypeFromWeb.Text = Filemanager.GetOpenEhrTerm(650, "Open Archetype from Web")
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(63, "Exit")
-                frm.gbFormat.Text = Filemanager.GetOpenEhrTerm(638, "Format")
             End If
             frm.RightToLeft = Me.RightToLeft
-        End If
-
-        If OceanArchetypeEditor.Instance.Options.DefaultParser.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "adl" Then
-            frm.rbADL.Checked = True
-        Else
-            frm.rbXML.Checked = True
         End If
 
         If Not AllowOpen Then
             frm.gbExistingArchetype.Visible = False
             frm.Height -= (frm.gbExistingArchetype.Height + 10)
+
             If (OceanArchetypeEditor.Instance.Options.AllowWebSearch = False) Then
                 frm.gbArchetypeFromWeb.Visible = False
                 Me.Height -= ((frm.gbArchetypeFromWeb.Height) + 10)
             End If
-
         End If
 
         i = frm.ShowDialog(Me)
