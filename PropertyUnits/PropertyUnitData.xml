@@ -227,7 +227,7 @@
   <Unit property_id="29" Text="N/m2" name="Newtons per sq. meter" conversion="1" primary="true" />
   <Unit property_id="29" Text="dyn/cm2" conversion="0.1" primary="false" />
   <Unit property_id="29" Text="kg/m2" conversion="9.8067" primary="false" />
-  <Unit property_id="29" Text="bar" name="bar" conversion="1" coefficient="5" primary="true" />
+  <Unit property_id="29" Text="bar" name="bar" conversion="1" coefficient="5" primary="false" />
   <Unit property_id="29" Text="atm" conversion="1.0125" coefficient="5" primary="false" case_ins="ATM" />
   <Unit property_id="29" Text="pdl/ft2" conversion="1.489" primary="false" />
   <Unit property_id="29" Text="lb/ft2" conversion="47.88" primary="false" />
@@ -459,7 +459,7 @@
   <Unit property_id="29" Text="cm[H20]" name="centimeters of water" conversion="97.64" primary="false" />
   <Unit property_id="29" Text="Pa" name="Pascal" conversion="1" primary="false" />
   <Unit property_id="29" Text="kPa" name="kiloPascal" conversion="1" coefficient="3" primary="false" />
-  <Unit property_id="29" Text="mbar" conversion="1" coefficient="2" primary="false" />
+  <Unit property_id="29" Text="mbar" name="millibar" conversion="1" coefficient="2" primary="false" />
   <Unit property_id="6" Text="fl" conversion="1" coefficient="-15" primary="false" />
   <Unit property_id="33" Text="KU" conversion="0" primary="false" />
   <Unit property_id="62" Text="Eq" conversion="1" primary="true" />
@@ -522,4 +522,10 @@
   <Unit property_id="79" Text="V s" name="Volt seconds" conversion="1" primary="true" />
   <Unit property_id="79" Text="Ashman Units" name="Ashman Units" conversion="4" coefficient="-6" primary="false" />
   <Unit property_id="79" Text="V h" name="Volt hours" conversion="3600" primary="false" />
+  <Unit property_id="29" Text="daPa" name="decaPascal" conversion="10" primary="false" />
+  <Unit property_id="29" Text="mm[H20]" name="millimeters of water" conversion="970.64" primary="false" />
+  <Unit property_id="71" Text="mho" name="mho" conversion="1" primary="false" />
+  <Unit property_id="71" Text="S" name="seimens" conversion="1" primary="true" case_ins="S" />
+  <Unit property_id="71" Text="millimho" conversion="1" coefficient="3" primary="false" />
+  <Unit property_id="71" Text="mS" name="milliseimens" conversion="1" coefficient="3" primary="false" case_ins="mS" />
 </PropertyUnits>
