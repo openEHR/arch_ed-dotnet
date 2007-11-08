@@ -112,7 +112,6 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="XMLParser, Version=1.0.2867.29610, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -338,7 +337,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="XMLParser.dll" />
     <Compile Include="ADL_Classes\ADL_Archetype.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -1094,6 +1092,12 @@
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="XMLParser\XMLParser.csproj">
+      <Project>{927EB444-A45E-4703-946F-78EB37FAD96E}</Project>
+      <Name>XMLParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SampleArchetypes\cluster\" />
