@@ -60,9 +60,6 @@ Public Class frmStartUp
 
     Friend WithEvents lblModel As System.Windows.Forms.Label
     Friend WithEvents HelpProviderStartUp As System.Windows.Forms.HelpProvider
-    Friend WithEvents gbFormat As System.Windows.Forms.GroupBox
-    Friend WithEvents rbXML As System.Windows.Forms.RadioButton
-    Friend WithEvents rbADL As System.Windows.Forms.RadioButton
     Friend WithEvents gbArchetypeFromWeb As System.Windows.Forms.GroupBox
     Friend WithEvents butOpenFromWeb As System.Windows.Forms.Button
     Friend WithEvents lblComponent As System.Windows.Forms.Label
@@ -78,16 +75,12 @@ Public Class frmStartUp
         Me.lblModel = New System.Windows.Forms.Label
         Me.lblComponent = New System.Windows.Forms.Label
         Me.gbExistingArchetype = New System.Windows.Forms.GroupBox
-        Me.gbFormat = New System.Windows.Forms.GroupBox
-        Me.rbXML = New System.Windows.Forms.RadioButton
-        Me.rbADL = New System.Windows.Forms.RadioButton
         Me.butOpen = New System.Windows.Forms.Button
         Me.HelpProviderStartUp = New System.Windows.Forms.HelpProvider
         Me.gbArchetypeFromWeb = New System.Windows.Forms.GroupBox
         Me.butOpenFromWeb = New System.Windows.Forms.Button
         Me.gbNew.SuspendLayout()
         Me.gbExistingArchetype.SuspendLayout()
-        Me.gbFormat.SuspendLayout()
         Me.gbArchetypeFromWeb.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -175,7 +168,6 @@ Public Class frmStartUp
         '
         'gbExistingArchetype
         '
-        Me.gbExistingArchetype.Controls.Add(Me.gbFormat)
         Me.gbExistingArchetype.Controls.Add(Me.butOpen)
         Me.gbExistingArchetype.Location = New System.Drawing.Point(19, 217)
         Me.gbExistingArchetype.Name = "gbExistingArchetype"
@@ -183,40 +175,6 @@ Public Class frmStartUp
         Me.gbExistingArchetype.TabIndex = 1
         Me.gbExistingArchetype.TabStop = False
         Me.gbExistingArchetype.Text = "Open existing archetype"
-        '
-        'gbFormat
-        '
-        Me.gbFormat.Controls.Add(Me.rbXML)
-        Me.gbFormat.Controls.Add(Me.rbADL)
-        Me.gbFormat.Enabled = False
-        Me.gbFormat.Location = New System.Drawing.Point(373, 14)
-        Me.gbFormat.Name = "gbFormat"
-        Me.gbFormat.Size = New System.Drawing.Size(155, 60)
-        Me.gbFormat.TabIndex = 9
-        Me.gbFormat.TabStop = False
-        Me.gbFormat.Text = "Format"
-        '
-        'rbXML
-        '
-        Me.rbXML.AutoSize = True
-        Me.rbXML.Location = New System.Drawing.Point(86, 20)
-        Me.rbXML.Name = "rbXML"
-        Me.rbXML.Size = New System.Drawing.Size(57, 21)
-        Me.rbXML.TabIndex = 1
-        Me.rbXML.TabStop = True
-        Me.rbXML.Text = "XML"
-        Me.rbXML.UseVisualStyleBackColor = True
-        '
-        'rbADL
-        '
-        Me.rbADL.AutoSize = True
-        Me.rbADL.Location = New System.Drawing.Point(14, 20)
-        Me.rbADL.Name = "rbADL"
-        Me.rbADL.Size = New System.Drawing.Size(56, 21)
-        Me.rbADL.TabIndex = 0
-        Me.rbADL.TabStop = True
-        Me.rbADL.Text = "ADL"
-        Me.rbADL.UseVisualStyleBackColor = True
         '
         'butOpen
         '
@@ -271,8 +229,6 @@ Public Class frmStartUp
         Me.gbNew.ResumeLayout(False)
         Me.gbNew.PerformLayout()
         Me.gbExistingArchetype.ResumeLayout(False)
-        Me.gbFormat.ResumeLayout(False)
-        Me.gbFormat.PerformLayout()
         Me.gbArchetypeFromWeb.ResumeLayout(False)
         Me.ResumeLayout(False)
 
@@ -367,18 +323,6 @@ Public Class frmStartUp
 
     Private Sub frmStartUp_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
         OceanArchetypeEditor.Reflect(Me)
-    End Sub
-
-    Private Sub rbADL_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbADL.CheckedChanged
-        If rbADL.Focused Then
-            OceanArchetypeEditor.Instance.Options.DefaultParser = "adl"
-        End If
-    End Sub
-
-    Private Sub rbXML_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbXML.CheckedChanged
-        If rbXML.Focused Then
-            OceanArchetypeEditor.Instance.Options.DefaultParser = "xml"
-        End If
     End Sub
 
     Private Sub butOpenFromWeb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOpenFromWeb.Click
