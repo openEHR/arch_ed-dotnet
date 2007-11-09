@@ -182,6 +182,7 @@ Partial Class WebSearchForm
         Me.ProgressBar1.Size = New System.Drawing.Size(265, 17)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 7
+        Me.ProgressBar1.Visible = False
         '
         'WebSearchForm
         '

@@ -1,13 +1,23 @@
 '
-'Written by Jana Graenz
-'13.02.2007
+'
+'	component:   "openEHR Archetype Project"
+'	description: "$DESCRIPTION"
+'	keywords:    "Archetype, Clinical, Editor"
+'	author:      "Jana Graenz, Sam Heard"
+'	support:     "Ocean Informatics <support@OceanInformatics.biz>"
+'	copyright:   "Copyright (c) 2004,2005,2006,2007 Ocean Informatics Pty Ltd"
+'	license:     "See notice at bottom of class"
+'
+'	file:        "$URL: http://svn.openehr.org/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/BusinessLogic/RmExistence.vb $"
+'	revision:    "$LastChangedRevision$"
+'	last_change: "$LastChangedDate: 2007-01-09 20:45:11 +1030 (Tue, 09 Jan 2007) $"
+'
+'
+'Written by Jana Graenz, Sam Heard
+'13.02.2007, 11.2007
 '
 ' WebSearchForm: window form to enable the search for archetypes from the web. 
 ' Is openend when user clicks one of the menu items designed for this form. "Open archetype from Web"
-' Includes basically a textfield to enter the search string and - so far - radiobuttons to precise the search. Plus buttons for Search and a Reset of the Form.
-' The result set of found archetypes will be organized in a table that lays on this WebSearchForm-Window. 
-' in this table (archetypeTable) each cell is representing one archetype. 
-' The Form for this archetype is a userControl called "myArchetypeFromWeb", represented by its own class.
 
 Option Explicit On
 
@@ -298,8 +308,8 @@ End Class
 'The Original Code is Designer.vb.
 '
 'The Initial Developer of the Original Code is
-'Sam Heard, Ocean Informatics (www.oceaninformatics.biz).
-'Portions created by the Initial Developer are Copyright (C) 2004
+'Sam Heard, Ocean Informatics (www.oceaninformatics.com).
+'Portions created by the Initial Developer are Copyright (C) 2007
 'the Initial Developer. All Rights Reserved.
 '
 'Contributor(s):
