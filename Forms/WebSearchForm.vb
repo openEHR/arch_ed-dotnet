@@ -26,7 +26,7 @@ Imports System.Web.Services.Description
 Public Class WebSearchForm
     Inherits System.Windows.Forms.Form
     Private archetypeIdToBeOpened As String
-    Private ArchetypeService As ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService
+    Private WithEvents ArchetypeService As ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService
     Private archetypeTable As New TableLayoutPanel
     Public chosen As Boolean = False
 
@@ -221,7 +221,22 @@ Public Class WebSearchForm
         End If
     End Sub
 
+    Private returnString As String
+    Private AsyncOpCompleted As Boolean
+
+
+    Private Sub ArchetypeWebService_GetADL(ByVal sender As Object, ByVal e As ArchetypeFinderWebServiceURL.getArchetypeInADLCompletedEventArgs) Handles ArchetypeService.getArchetypeInADLCompleted
+        If e.Error Is Nothing Then
+            returnString = e.Result
+            AsyncOpCompleted = True
+        Else
+            returnString = True
+            Throw New Exception(e.Error.Message)
+        End If
+    End Sub
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
+
+
         If Me.listViewArchetypes.SelectedItems.Count > 0 Then
             archetypeIdToBeOpened = listViewArchetypes.SelectedItems(0).Text
             'Dim request As System.Net.WebRequest
@@ -230,9 +245,19 @@ Public Class WebSearchForm
             tempPath = System.IO.Path.GetTempPath
             Try
                 Me.ProgressBar1.Visible = True
+                'Me.PanelBottom.Refresh()
                 Me.Cursor = Cursors.WaitCursor
+                Application.DoEvents()
 
-                Dim adl As String = ArchetypeService.getArchetypeInADL(archetypeIdToBeOpened)
+
+                ArchetypeService.getArchetypeInADLAsync(archetypeIdToBeOpened)
+
+                Do While (Not AsyncOpCompleted)
+                    System.Threading.Thread.Sleep(10)
+                    Application.DoEvents()
+                Loop
+
+                'archetypeservice.
 
                 downloadPath = System.IO.Path.Combine(tempPath, String.Format("{0}.adl", archetypeIdToBeOpened))
                 'Try
@@ -245,7 +270,7 @@ Public Class WebSearchForm
                 '    Return False
                 'End Try
 
-                If adl <> String.Empty Then
+                If returnString <> String.Empty Then
                     Dim sw As New System.IO.StreamWriter(downloadPath)
 
                     'Dim dataStream As IO.Stream = response.GetResponseStream()
@@ -255,7 +280,7 @@ Public Class WebSearchForm
                     'Dim responseFromServer As String = reader.ReadToEnd()
                     ' Display the content.
                     'sw.WriteLine(responseFromServer)
-                    sw.Write(adl)
+                    sw.Write(returnString)
                     '' Cleanup the streams and the response.
                     'reader.Close()
                     'dataStream.Close()
