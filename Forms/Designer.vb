@@ -1917,26 +1917,16 @@ Public Class Designer
 
             If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 frm.Text = Filemanager.GetOpenEhrTerm(658, frm.Text)
-                frm.lblSearch.Text = Filemanager.GetOpenEhrTerm(651, frm.lblSearch.Text)
-                frm.rdbtn_any.Text = Filemanager.GetOpenEhrTerm(657, frm.rdbtn_any.Text)
-                frm.rdbtn_id.Text = Filemanager.GetOpenEhrTerm(632, frm.rdbtn_id.Text)
-                frm.rdbtn_des.Text = Filemanager.GetOpenEhrTerm(113, frm.rdbtn_des.Text)
-                frm.rdbtn_con.Text = Filemanager.GetOpenEhrTerm(54, frm.rdbtn_con.Text)
-                frm.btnSearch.Text = Filemanager.GetOpenEhrTerm(655, frm.btnSearch.Text)
-                frm.btnReset.Text = Filemanager.GetOpenEhrTerm(656, frm.btnReset.Text)
-                frm.lblNum.Text = Filemanager.GetOpenEhrTerm(653, frm.lblNum.Text)
+                frm.gbSearch.Text = Filemanager.GetOpenEhrTerm(663, frm.gbSearch.Text)
+                frm.comboSearch.Items.Clear()
+                frm.comboSearch.Items.Add(Filemanager.GetOpenEhrTerm(101, "All"))
+                frm.comboSearch.Items.Add(Filemanager.GetOpenEhrTerm(632, "Archetype ID"))
+                frm.comboSearch.Items.Add(Filemanager.GetOpenEhrTerm(54, "Concept"))
+                frm.comboSearch.Items.Add(Filemanager.GetOpenEhrTerm(113, "Description"))
             End If
 
-            frm.ShowDialog(Me)
-
-            Dim myArchetypeURL As String
-
-            ' The boolean variable "chosen" determines if the user decided to open one found archetype 
-            ' (a result set is shown as a list with button a Open-Button for each archetype on the WebSearchForm)
-            ' is chosen true, we find out which archetypes has to be opened and takes its URL for further processing
-            If frm.chosen = True Then
-                myArchetypeURL = frm.getArchetypeIdTobeOpened().Trim
-                OpenArchetype(myArchetypeURL)
+            If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                OpenArchetype(frm.getArchetypeIdTobeOpened)
             End If
         End If
     End Sub

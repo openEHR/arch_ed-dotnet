@@ -19,182 +19,205 @@ Partial Class WebSearchForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(WebSearchForm))
-        Me.lblSearch = New System.Windows.Forms.Label
         Me.txtTerm = New System.Windows.Forms.TextBox
-        Me.rdbtn_any = New System.Windows.Forms.RadioButton
-        Me.rdbtn_id = New System.Windows.Forms.RadioButton
-        Me.rdbtn_con = New System.Windows.Forms.RadioButton
-        Me.rdbtn_des = New System.Windows.Forms.RadioButton
         Me.btnSearch = New System.Windows.Forms.Button
         Me.lblNum = New System.Windows.Forms.Label
-        Me.btnReset = New System.Windows.Forms.Button
         Me.img_globe = New System.Windows.Forms.PictureBox
-        Me.lbl_found = New System.Windows.Forms.Label
+        Me.gbSearch = New System.Windows.Forms.GroupBox
+        Me.comboSearch = New System.Windows.Forms.ComboBox
+        Me.listViewArchetypes = New System.Windows.Forms.ListView
+        Me.butOK = New System.Windows.Forms.Button
+        Me.butCancel = New System.Windows.Forms.Button
+        Me.PanelBottom = New System.Windows.Forms.Panel
+        Me.ImageListArchetypes = New System.Windows.Forms.ImageList(Me.components)
+        Me.ProgressBar1 = New System.Windows.Forms.ProgressBar
         CType(Me.img_globe, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.gbSearch.SuspendLayout()
+        Me.PanelBottom.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'lblSearch
-        '
-        Me.lblSearch.AutoSize = True
-        Me.lblSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSearch.ForeColor = System.Drawing.Color.DarkBlue
-        Me.lblSearch.Location = New System.Drawing.Point(30, 28)
-        Me.lblSearch.Name = "lblSearch"
-        Me.lblSearch.Size = New System.Drawing.Size(84, 17)
-        Me.lblSearch.TabIndex = 0
-        Me.lblSearch.Text = "Search for"
         '
         'txtTerm
         '
         Me.txtTerm.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTerm.Location = New System.Drawing.Point(203, 28)
+        Me.txtTerm.Location = New System.Drawing.Point(90, 21)
+        Me.txtTerm.Margin = New System.Windows.Forms.Padding(4)
         Me.txtTerm.Name = "txtTerm"
-        Me.txtTerm.Size = New System.Drawing.Size(550, 21)
+        Me.txtTerm.Size = New System.Drawing.Size(367, 24)
         Me.txtTerm.TabIndex = 1
-        '
-        'rdbtn_any
-        '
-        Me.rdbtn_any.AutoSize = True
-        Me.rdbtn_any.Checked = True
-        Me.rdbtn_any.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rdbtn_any.Location = New System.Drawing.Point(203, 65)
-        Me.rdbtn_any.Name = "rdbtn_any"
-        Me.rdbtn_any.Size = New System.Drawing.Size(76, 19)
-        Me.rdbtn_any.TabIndex = 2
-        Me.rdbtn_any.TabStop = True
-        Me.rdbtn_any.Text = "Any Term"
-        Me.rdbtn_any.UseVisualStyleBackColor = True
-        '
-        'rdbtn_id
-        '
-        Me.rdbtn_id.AutoSize = True
-        Me.rdbtn_id.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rdbtn_id.Location = New System.Drawing.Point(202, 96)
-        Me.rdbtn_id.Name = "rdbtn_id"
-        Me.rdbtn_id.Size = New System.Drawing.Size(91, 19)
-        Me.rdbtn_id.TabIndex = 3
-        Me.rdbtn_id.Text = "Archetype Id"
-        Me.rdbtn_id.UseVisualStyleBackColor = True
-        '
-        'rdbtn_con
-        '
-        Me.rdbtn_con.AutoSize = True
-        Me.rdbtn_con.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rdbtn_con.Location = New System.Drawing.Point(494, 96)
-        Me.rdbtn_con.Name = "rdbtn_con"
-        Me.rdbtn_con.Size = New System.Drawing.Size(70, 19)
-        Me.rdbtn_con.TabIndex = 4
-        Me.rdbtn_con.Text = "Concept"
-        Me.rdbtn_con.UseVisualStyleBackColor = True
-        '
-        'rdbtn_des
-        '
-        Me.rdbtn_des.AutoSize = True
-        Me.rdbtn_des.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rdbtn_des.Location = New System.Drawing.Point(353, 96)
-        Me.rdbtn_des.Name = "rdbtn_des"
-        Me.rdbtn_des.Size = New System.Drawing.Size(87, 19)
-        Me.rdbtn_des.TabIndex = 5
-        Me.rdbtn_des.Text = "Description"
-        Me.rdbtn_des.UseVisualStyleBackColor = True
         '
         'btnSearch
         '
         Me.btnSearch.BackColor = System.Drawing.Color.LightSteelBlue
         Me.btnSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSearch.Location = New System.Drawing.Point(203, 137)
+        Me.btnSearch.Image = CType(resources.GetObject("btnSearch.Image"), System.Drawing.Image)
+        Me.btnSearch.Location = New System.Drawing.Point(463, 17)
+        Me.btnSearch.Margin = New System.Windows.Forms.Padding(4)
         Me.btnSearch.Name = "btnSearch"
-        Me.btnSearch.Size = New System.Drawing.Size(100, 26)
-        Me.btnSearch.TabIndex = 6
-        Me.btnSearch.Text = "Search"
+        Me.btnSearch.Size = New System.Drawing.Size(42, 32)
+        Me.btnSearch.TabIndex = 2
+        Me.btnSearch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnSearch.UseVisualStyleBackColor = False
         '
         'lblNum
         '
+        Me.lblNum.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblNum.AutoSize = True
-        Me.lblNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNum.ForeColor = System.Drawing.Color.DarkBlue
-        Me.lblNum.Location = New System.Drawing.Point(30, 192)
-        Me.lblNum.Margin = New System.Windows.Forms.Padding(3)
+        Me.lblNum.Location = New System.Drawing.Point(502, 63)
+        Me.lblNum.Margin = New System.Windows.Forms.Padding(4)
         Me.lblNum.Name = "lblNum"
-        Me.lblNum.Size = New System.Drawing.Size(35, 17)
+        Me.lblNum.Size = New System.Drawing.Size(16, 18)
         Me.lblNum.TabIndex = 7
-        Me.lblNum.Text = "999"
+        Me.lblNum.Text = "0"
+        Me.lblNum.TextAlign = System.Drawing.ContentAlignment.TopRight
         Me.lblNum.Visible = False
-        '
-        'btnReset
-        '
-        Me.btnReset.AutoSize = True
-        Me.btnReset.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.btnReset.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnReset.Location = New System.Drawing.Point(353, 137)
-        Me.btnReset.Name = "btnReset"
-        Me.btnReset.Size = New System.Drawing.Size(100, 26)
-        Me.btnReset.TabIndex = 9
-        Me.btnReset.Text = "Reset"
-        Me.btnReset.UseVisualStyleBackColor = False
         '
         'img_globe
         '
         Me.img_globe.BackColor = System.Drawing.Color.LightSteelBlue
         Me.img_globe.Image = CType(resources.GetObject("img_globe.Image"), System.Drawing.Image)
         Me.img_globe.InitialImage = Nothing
-        Me.img_globe.Location = New System.Drawing.Point(33, 99)
+        Me.img_globe.Location = New System.Drawing.Point(7, 21)
+        Me.img_globe.Margin = New System.Windows.Forms.Padding(4)
         Me.img_globe.Name = "img_globe"
-        Me.img_globe.Size = New System.Drawing.Size(64, 64)
+        Me.img_globe.Size = New System.Drawing.Size(79, 71)
         Me.img_globe.TabIndex = 10
         Me.img_globe.TabStop = False
         '
-        'lbl_found
+        'gbSearch
         '
-        Me.lbl_found.AutoSize = True
-        Me.lbl_found.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_found.ForeColor = System.Drawing.Color.DarkBlue
-        Me.lbl_found.Location = New System.Drawing.Point(63, 192)
-        Me.lbl_found.Margin = New System.Windows.Forms.Padding(3)
-        Me.lbl_found.Name = "lbl_found"
-        Me.lbl_found.Size = New System.Drawing.Size(147, 17)
-        Me.lbl_found.TabIndex = 11
-        Me.lbl_found.Text = "Archetype(s) found"
-        Me.lbl_found.Visible = False
+        Me.gbSearch.Controls.Add(Me.comboSearch)
+        Me.gbSearch.Controls.Add(Me.img_globe)
+        Me.gbSearch.Controls.Add(Me.txtTerm)
+        Me.gbSearch.Controls.Add(Me.btnSearch)
+        Me.gbSearch.Controls.Add(Me.lblNum)
+        Me.gbSearch.Dock = System.Windows.Forms.DockStyle.Top
+        Me.gbSearch.Location = New System.Drawing.Point(3, 3)
+        Me.gbSearch.Name = "gbSearch"
+        Me.gbSearch.Size = New System.Drawing.Size(530, 90)
+        Me.gbSearch.TabIndex = 12
+        Me.gbSearch.TabStop = False
+        Me.gbSearch.Text = "Search"
+        '
+        'comboSearch
+        '
+        Me.comboSearch.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.comboSearch.FormattingEnabled = True
+        Me.comboSearch.Items.AddRange(New Object() {"All", "Archetype ID", "Concept", "Description"})
+        Me.comboSearch.Location = New System.Drawing.Point(94, 53)
+        Me.comboSearch.Name = "comboSearch"
+        Me.comboSearch.Size = New System.Drawing.Size(174, 24)
+        Me.comboSearch.TabIndex = 3
+        Me.comboSearch.Text = "All"
+        '
+        'listViewArchetypes
+        '
+        Me.listViewArchetypes.Activation = System.Windows.Forms.ItemActivation.OneClick
+        Me.listViewArchetypes.AutoArrange = False
+        Me.listViewArchetypes.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.listViewArchetypes.FullRowSelect = True
+        Me.listViewArchetypes.HideSelection = False
+        Me.listViewArchetypes.Location = New System.Drawing.Point(3, 93)
+        Me.listViewArchetypes.MultiSelect = False
+        Me.listViewArchetypes.Name = "listViewArchetypes"
+        Me.listViewArchetypes.Size = New System.Drawing.Size(530, 256)
+        Me.listViewArchetypes.SmallImageList = Me.ImageListArchetypes
+        Me.listViewArchetypes.TabIndex = 4
+        Me.listViewArchetypes.UseCompatibleStateImageBehavior = False
+        Me.listViewArchetypes.View = System.Windows.Forms.View.List
+        '
+        'butOK
+        '
+        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.butOK.Location = New System.Drawing.Point(353, 6)
+        Me.butOK.Name = "butOK"
+        Me.butOK.Size = New System.Drawing.Size(83, 28)
+        Me.butOK.TabIndex = 5
+        Me.butOK.Text = "OK"
+        Me.butOK.UseVisualStyleBackColor = True
+        '
+        'butCancel
+        '
+        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.butCancel.Location = New System.Drawing.Point(442, 6)
+        Me.butCancel.Name = "butCancel"
+        Me.butCancel.Size = New System.Drawing.Size(83, 28)
+        Me.butCancel.TabIndex = 6
+        Me.butCancel.Text = "Cancel"
+        Me.butCancel.UseVisualStyleBackColor = True
+        '
+        'PanelBottom
+        '
+        Me.PanelBottom.Controls.Add(Me.ProgressBar1)
+        Me.PanelBottom.Controls.Add(Me.butOK)
+        Me.PanelBottom.Controls.Add(Me.butCancel)
+        Me.PanelBottom.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PanelBottom.Location = New System.Drawing.Point(3, 349)
+        Me.PanelBottom.Name = "PanelBottom"
+        Me.PanelBottom.Size = New System.Drawing.Size(530, 40)
+        Me.PanelBottom.TabIndex = 16
+        '
+        'ImageListArchetypes
+        '
+        Me.ImageListArchetypes.ImageStream = CType(resources.GetObject("ImageListArchetypes.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageListArchetypes.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageListArchetypes.Images.SetKeyName(0, "structure.png")
+        Me.ImageListArchetypes.Images.SetKeyName(1, "action.png")
+        Me.ImageListArchetypes.Images.SetKeyName(2, "evaluation.png")
+        Me.ImageListArchetypes.Images.SetKeyName(3, "instruction.png")
+        Me.ImageListArchetypes.Images.SetKeyName(4, "observation.png")
+        Me.ImageListArchetypes.Images.SetKeyName(5, "Cluster.png")
+        Me.ImageListArchetypes.Images.SetKeyName(6, "composition.png")
+        Me.ImageListArchetypes.Images.SetKeyName(7, "section.gif")
+        '
+        'ProgressBar1
+        '
+        Me.ProgressBar1.ForeColor = System.Drawing.SystemColors.ActiveCaption
+        Me.ProgressBar1.Location = New System.Drawing.Point(13, 12)
+        Me.ProgressBar1.Name = "ProgressBar1"
+        Me.ProgressBar1.Size = New System.Drawing.Size(265, 17)
+        Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
+        Me.ProgressBar1.TabIndex = 7
         '
         'WebSearchForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AcceptButton = Me.btnSearch
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.ClientSize = New System.Drawing.Size(784, 191)
-        Me.Controls.Add(Me.lbl_found)
-        Me.Controls.Add(Me.img_globe)
-        Me.Controls.Add(Me.btnReset)
-        Me.Controls.Add(Me.lblNum)
-        Me.Controls.Add(Me.btnSearch)
-        Me.Controls.Add(Me.rdbtn_des)
-        Me.Controls.Add(Me.rdbtn_con)
-        Me.Controls.Add(Me.rdbtn_id)
-        Me.Controls.Add(Me.rdbtn_any)
-        Me.Controls.Add(Me.txtTerm)
-        Me.Controls.Add(Me.lblSearch)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.ClientSize = New System.Drawing.Size(536, 392)
+        Me.ControlBox = False
+        Me.Controls.Add(Me.listViewArchetypes)
+        Me.Controls.Add(Me.PanelBottom)
+        Me.Controls.Add(Me.gbSearch)
         Me.Location = New System.Drawing.Point(150, 100)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "WebSearchForm"
+        Me.Padding = New System.Windows.Forms.Padding(3)
+        Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Open from Web"
         CType(Me.img_globe, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.gbSearch.ResumeLayout(False)
+        Me.gbSearch.PerformLayout()
+        Me.PanelBottom.ResumeLayout(False)
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
-    Friend WithEvents lblSearch As System.Windows.Forms.Label
     Friend WithEvents txtTerm As System.Windows.Forms.TextBox
-    Friend WithEvents rdbtn_any As System.Windows.Forms.RadioButton
-    Friend WithEvents rdbtn_id As System.Windows.Forms.RadioButton
-    Friend WithEvents rdbtn_con As System.Windows.Forms.RadioButton
-    Friend WithEvents rdbtn_des As System.Windows.Forms.RadioButton
     Friend WithEvents btnSearch As System.Windows.Forms.Button
     Friend WithEvents lblNum As System.Windows.Forms.Label
-    Friend WithEvents btnReset As System.Windows.Forms.Button
     Friend WithEvents img_globe As System.Windows.Forms.PictureBox
-    Friend WithEvents lbl_found As System.Windows.Forms.Label
+    Friend WithEvents gbSearch As System.Windows.Forms.GroupBox
+    Friend WithEvents listViewArchetypes As System.Windows.Forms.ListView
+    Friend WithEvents comboSearch As System.Windows.Forms.ComboBox
+    Friend WithEvents butOK As System.Windows.Forms.Button
+    Friend WithEvents butCancel As System.Windows.Forms.Button
+    Friend WithEvents PanelBottom As System.Windows.Forms.Panel
+    Friend WithEvents ImageListArchetypes As System.Windows.Forms.ImageList
+    Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
 End Class
