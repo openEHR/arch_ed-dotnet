@@ -25,8 +25,9 @@ Public Class WebSearchForm
 
         ' Is the textfield empty, a messageBox asks the user to provide a search parameter first
         If (txtTerm.Text = "") Then
-            Dim message As String = Filemanager.GetOpenEhrTerm(652, "Please enter your search parameter")
+            Dim message As String = Filemanager.GetOpenEhrTerm(665, "Please enter your search parameter")
             MessageBox.Show(message)
+            Me.comboSearch.Focus()
         Else
             Dim ArchetypeIDs As Array = Nothing 'JAR: 18APR07, EDT-35 Clean up compile time warnings
             Dim aTerm(0) As String
@@ -34,47 +35,103 @@ Public Class WebSearchForm
             ' The referenced ArchetypeFinderService provides us an object to access all available services of the ArchetypeFinder
             Try
 
-              
+                Me.Cursor = Cursors.WaitCursor
+
+                Me.listViewArchetypes.Clear()
+
                 ArchetypeService = New ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService()
                 'get the required Archetypes depending on the radiobutton that is checked
 
-                If rdbtn_id.Checked Then
-                    ArchetypeIDs = ArchetypeService.getArchetypeIdsFromPartialId(txtTerm.Text.Trim)
-                ElseIf rdbtn_any.Checked Then
-                    aTerm(0) = "archetypeTermsCollect=" & txtTerm.Text.Trim
-                    ArchetypeIDs = ArchetypeService.getArchetypeIds(aTerm)
-                ElseIf rdbtn_con.Checked Then
-                    aTerm(0) = "archetypeConcept=" & txtTerm.Text.Trim
-                    ArchetypeIDs = ArchetypeService.getArchetypeIds(aTerm)
-                ElseIf rdbtn_des.Checked Then
-                    aTerm(0) = "archetypeDescription=" & txtTerm.Text.Trim
-                    ArchetypeIDs = ArchetypeService.getArchetypeIds(aTerm)
-                End If
+                Select Case comboSearch.SelectedIndex
+                    Case 1 ' ArchetypeID
+                        ArchetypeIDs = ArchetypeService.getArchetypeIdsFromPartialId(txtTerm.Text.Trim)
+                    Case 2 ' Concept
+                        aTerm(0) = "archetypeConcept=" & txtTerm.Text.Trim
+                        ArchetypeIDs = ArchetypeService.getArchetypeIds(aTerm)
+                    Case 3 ' Description
+                        aTerm(0) = "archetypeDescription=" & txtTerm.Text.Trim
+                        ArchetypeIDs = ArchetypeService.getArchetypeIds(aTerm)
+                    Case Else
+                        aTerm(0) = "archetypeTermsCollect=" & txtTerm.Text.Trim
+                        ArchetypeIDs = ArchetypeService.getArchetypeIds(aTerm)
+                End Select
 
                 ' no archetypes found
                 If (ArchetypeIDs Is Nothing) Then
-                    lblNum.Text = Filemanager.GetOpenEhrTerm(654, "No archetype(s) found")
+                    lblNum.Text = "0"
                     lblNum.Visible = True
-                    lbl_found.Visible = False
-                    archetypeTable.Controls.Clear()
-                    archetypeTable.Visible = False
-                    archetypeTable.Refresh()
-                    Me.Height = 250
-                    Me.Refresh()
-                    ' archetypes were found and we set them as a resultset to the form
+                    'archetypeTable.Controls.Clear()
+                    'archetypeTable.Visible = False
+                    'archetypeTable.Refresh()
+                    'Me.Height = 250
+                    'Me.Refresh()
+                    '' archetypes were found and we set them as a resultset to the form
                 Else
-                    Me.setResults(ArchetypeIDs)
+                    Application.EnableVisualStyles()
+                    Dim lvgAction As New ListViewGroup("Action")
+                    Dim lvgEvaluation As New ListViewGroup("Evaluation")
+                    Dim lvgInstruction As New ListViewGroup("Instruction")
+                    Dim lvgObservation As New ListViewGroup("Observation")
+                    Dim lvgStructure As New ListViewGroup("Structure")
+                    Dim lvgCluster As New ListViewGroup("Cluster")
+                    Dim lvgElement As New ListViewGroup("Element")
+                    Dim lvgSection As New ListViewGroup("Section")
+                    Dim lvgComposition As New ListViewGroup("Composition")
+                    For Each id As String In ArchetypeIDs
+                        Dim imageIndex As Integer
+                        Dim lvg As ListViewGroup
+
+                        If id.StartsWith("openEHR-EHR-OBSERVATION") Then
+                            imageIndex = 4
+                            lvg = lvgObservation
+                        ElseIf id.StartsWith("openEHR-EHR-EVALUATION") Then
+                            imageIndex = 2
+                            lvg = lvgEvaluation
+                        ElseIf id.StartsWith("openEHR-EHR-ACTION") Then
+                            imageIndex = 1
+                            lvg = lvgAction
+                        ElseIf id.StartsWith("openEHR-EHR-INSTRUCTION") Then
+                            imageIndex = 3
+                            lvg = lvgInstruction
+                        ElseIf id.StartsWith("openEHR-EHR-CLUSTER") Then
+                            imageIndex = 5
+                            lvg = lvgCluster
+                        ElseIf id.StartsWith("openEHR-EHR-SECTION") Then
+                            imageIndex = 7
+                            lvg = lvgSection
+                        ElseIf id.StartsWith("openEHR-EHR-COMPOSITION") Then
+                            imageIndex = 6
+                            lvg = lvgComposition
+                        ElseIf id.StartsWith("openEHR-EHR-ELEMENT") Then
+                            'imageIndex = 1
+                            lvg = lvgElement
+                        Else
+                            imageIndex = 0
+                            lvg = lvgStructure
+                        End If
+                        If Not Me.listViewArchetypes.Groups.Contains(lvg) Then
+                            Me.listViewArchetypes.Groups.Add(lvg)
+                        End If
+                        Dim lvi As ListViewItem = New ListViewItem(id, imageIndex, lvg)
+                        Me.listViewArchetypes.Items.Add(lvi)
+                    Next
+                    Me.listViewArchetypes.Focus()
+                    Me.listViewArchetypes.Items(0).Selected = True
+                    Me.AcceptButton = Me.butOK
+                    'Me.setResults(ArchetypeIDs)
                 End If
 
                 'throw exception if ArchetypeFinder Web Services can not be invoked
             Catch ex As System.Net.WebException
-                Dim message As String = Filemanager.GetOpenEhrTerm(659, "No network connection available.")
-                MessageBox.Show(message)
+                Dim message As String = Filemanager.GetOpenEhrTerm(664, "Network error")
+                MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 Me.Close()
                 'Catch ex2 As System.Web.Services.Protocols.SoapException
-                '    Dim message2 As String = Filemanager.GetOpenEhrTerm(654, "Service not available")
+                '    Dim message2 As String = Filemanager.GetOpenEhrTerm(664, "Service not available")
                 '    MessageBox.Show(message2, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
                 '    Me.Close()
+            Finally
+                Me.Cursor = Cursors.Default
             End Try
 
 
@@ -87,10 +144,8 @@ Public Class WebSearchForm
     Private Sub setResults(ByVal ids As Array)
 
         'show the number of found archetypes above the list
-        lblNum.Text = ids.Length
+        lblNum.Text = String.Format("{0} {1}", ids.Length, Filemanager.GetOpenEhrTerm(653, "archetype(s) found"))
         lblNum.Visible = True
-        lbl_found.Text = Filemanager.GetOpenEhrTerm(653, "archetype(s) found")
-        lbl_found.Visible = True
 
         ' create a Table "archetypeTable" to list the archetypes
         archetypeTable.CellBorderStyle = TableLayoutPanelCellBorderStyle.None
@@ -139,36 +194,90 @@ Public Class WebSearchForm
         Me.Refresh()
     End Sub
 
-    ' two helper functions to identify which archetype should be opened (after the user clicked the provided opening button)
+    Public ReadOnly Property getArchetypeIdTobeOpened() As String
+        Get
+            Return archetypeIdToBeOpened.Trim()
+        End Get
+    End Property
 
-    Public Sub setArchetypeIdToBeOpened(ByVal thisID As String) 'JAR: 18APR07, EDT-35 Clean up compile time warnings
-        archetypeIdToBeOpened = thisID
-
-        chosen = True
+    Private Sub butCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butCancel.Click
+        Me.DialogResult = Windows.Forms.DialogResult.Cancel
         Me.Close()
     End Sub
 
-    Public Function getArchetypeIdTobeOpened() As String
-        Return archetypeIdToBeOpened
-    End Function
-
-    ' this function resets the, clears the text-field and sets the bounds to its original state
-    Private Sub btnReset_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnReset.Click
-        txtTerm.Text = ""
-        lblNum.Visible = False
-        lbl_found.Visible = False
-
-        archetypeTable.Controls.Clear()
-        archetypeTable.Visible = False
-
-        archetypeTable.Refresh()
-        Me.Height = 240
-        Me.Refresh()
+    Private Sub txtTerm_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTerm.TextChanged
+        If Not Me.AcceptButton Is btnSearch Then
+            Me.AcceptButton = btnSearch
+        End If
     End Sub
 
-    ' pressing enter while the WebSearchForm is active starts the search
+    Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
+        If Me.listViewArchetypes.SelectedItems.Count > 0 Then
+            archetypeIdToBeOpened = listViewArchetypes.SelectedItems(0).Text
+            'Dim request As System.Net.WebRequest
+            'Dim response As Net.HttpWebResponse
+            Dim tempPath, downloadPath As String
+            tempPath = System.IO.Path.GetTempPath
+            Try
+                Me.ProgressBar1.Visible = True
+                Me.Cursor = Cursors.WaitCursor
+
+                Dim adl As String = ArchetypeService.getArchetypeInADL(archetypeIdToBeOpened)
+
+                downloadPath = System.IO.Path.Combine(tempPath, String.Format("{0}.adl", archetypeIdToBeOpened))
+                'Try
+                '    request = System.Net.WebRequest.Create(fileUrl)
+                '    'CHANGED SRH - says use the default
+                '    'request.Proxy = System.Net.WebProxy.GetDefaultProxy
+                '    request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials ' to avoid eventually Proxy-Troubles
+                '    response = CType(request.GetResponse(), Net.HttpWebResponse)
+                'Catch ex As Exception
+                '    Return False
+                'End Try
+
+                If adl <> String.Empty Then
+                    Dim sw As New System.IO.StreamWriter(downloadPath)
+
+                    'Dim dataStream As IO.Stream = response.GetResponseStream()
+                    '' Open the stream using a StreamReader for easy access.
+                    'Dim reader As New IO.StreamReader(dataStream)
+                    '' Read the content.
+                    'Dim responseFromServer As String = reader.ReadToEnd()
+                    ' Display the content.
+                    'sw.WriteLine(responseFromServer)
+                    sw.Write(adl)
+                    '' Cleanup the streams and the response.
+                    'reader.Close()
+                    'dataStream.Close()
+                    'response.Close()
+                    sw.Close()
+
+                    ' the web archetype has been written into a local temporary file!
+                    archetypeIdToBeOpened = downloadPath
+                    Me.DialogResult = Windows.Forms.DialogResult.OK
+                End If
+            Catch ex As Exception
+                Dim message As String = String.Format("{0} :{1}", Filemanager.GetOpenEhrTerm(664, "Network error"), ex.Message)
+                MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                archetypeIdToBeOpened = String.Empty
+                Me.DialogResult = Windows.Forms.DialogResult.Abort
+            Finally
+                Me.ProgressBar1.Visible = False
+                Me.Cursor = Cursors.Default
+            End Try
+        Else
+            archetypeIdToBeOpened = String.Empty
+            Me.DialogResult = Windows.Forms.DialogResult.Abort
+        End If
+        Me.Close()
+    End Sub
+
+    Private Sub listViewArchetypes_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listViewArchetypes.DoubleClick
+        Me.butOK_Click(sender, e)
+    End Sub
+
     Private Sub WebSearchForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.AcceptButton = btnSearch
+        Me.txtTerm.Focus()
     End Sub
 End Class
 
