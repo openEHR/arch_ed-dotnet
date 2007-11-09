@@ -101,11 +101,7 @@ Public Class FileManagerLocal
             If Not mIsFileLoading Then
                 mIsFileDirty = Value
                 Filemanager.SetFileChangedToolBar(Value)
-                If Value Then
-                    mParserSynchronised = False
-                Else
-                    mParserSynchronised = True
-                End If
+                mParserSynchronised = Not Value
             End If
         End Set
     End Property
