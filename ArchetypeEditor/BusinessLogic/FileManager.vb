@@ -625,19 +625,22 @@ Public Class FileManagerLocal
         Select Case a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "xml"
                 Dim xml_parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
+                Dim s As String = ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
 
-                Dim s As String = Me.ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
                 If s <> "" Then
                     xml_parser.WriteFile(s)
+
+                    If xml_parser.Status <> "" Then
+                        MessageBox.Show(xml_parser.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End If
                 End If
 
                 '-----------ADL--------------------------------------------
 
             Case "adl"
-                'Create a new parser
                 Dim adl_parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
+                Dim s As String = ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
 
-                Dim s As String = Me.ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
                 If s <> "" Then
                     adl_parser.WriteAdlDirect(s)
                 End If
