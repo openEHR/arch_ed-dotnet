@@ -363,6 +363,7 @@
     </Compile>
     <Compile Include="ADL_Classes\ADL_TranslationDetails.vb" />
     <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="BusinessLogic\EHR_Classes\Term.vb" />
     <Compile Include="BusinessLogic\EHR_Classes\RmLink.vb" />
     <Compile Include="BusinessLogic\Proxy.vb" />
     <Compile Include="BusinessLogic\Duration.vb">

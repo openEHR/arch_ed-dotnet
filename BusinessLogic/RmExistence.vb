@@ -211,7 +211,6 @@ Public Class RmExistence
     End Sub
 
     Sub New(ByVal lower As Integer, ByVal upper As Integer)
-        Debug.Assert(lower <> Nothing And upper <> Nothing)
         mMinCount = lower
         mMaxCount = upper
         mUnbounded = False

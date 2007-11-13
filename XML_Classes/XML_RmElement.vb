@@ -32,19 +32,26 @@ Namespace ArchetypeEditor.XML_Classes
             Try
                 If Not ComplexObj.attributes Is Nothing AndAlso ComplexObj.attributes.Length > 0 Then
                     For Each an_attribute As XMLParser.C_ATTRIBUTE In ComplexObj.attributes
-                        If an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "value" Then
-                            If an_attribute.children.Length > 1 Then
-                                'Multiple constraints
-                                Dim m_c As New Constraint_Choice
-                                For Each cObject As XMLParser.C_OBJECT In an_attribute.children
-                                    m_c.Constraints.Add(ProcessValue(cObject, a_filemanager))
-                                Next
-                                cConstraint = m_c
-                            Else
-                                cConstraint = ProcessValue(CType(an_attribute.children(0), XMLParser.C_OBJECT), a_filemanager)
-                            End If
-
-                        End If
+                        Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                            Case "value"
+                                If an_attribute.children.Length > 1 Then
+                                    'Multiple constraints
+                                    Dim m_c As New Constraint_Choice
+                                    For Each cObject As XMLParser.C_OBJECT In an_attribute.children
+                                        m_c.Constraints.Add(ProcessValue(cObject, a_filemanager))
+                                    Next
+                                    cConstraint = m_c
+                                Else
+                                    cConstraint = ProcessValue(CType(an_attribute.children(0), XMLParser.C_OBJECT), a_filemanager)
+                                End If
+                                'SRH 14th Nov 2007 - Added null flavor
+                            Case "null_flavor"
+                                'Single attribute so no multiples
+                                Dim c As Constraint_Text = ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                                If Not c Is Nothing AndAlso c.AllowableValues.Codes.Count > 0 Then
+                                    Me.ConstrainedNullFlavours = c.AllowableValues
+                                End If
+                        End Select
                     Next
                 Else
                     'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
@@ -64,7 +71,7 @@ Namespace ArchetypeEditor.XML_Classes
                     Return
                 End If
 
-            Catch ex As Exception                
+            Catch ex As Exception
                 MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ComplexObj.node_id & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 ' set to any
                 cConstraint = New Constraint

@@ -1111,7 +1111,23 @@ Namespace ArchetypeEditor.ADL_Classes
                     BuildElementConstraint(value_attribute, Element.Constraint)
                 End If
 
+                'Check for constraint on Flavours of Null
+                If Element.HasNullFlavourConstraint() Then
+                    Dim null_flavour_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                    null_flavour_attribute = mAomFactory.create_c_attribute_single(element_cadlObj, EiffelKernel.Create.STRING_8.make_from_cil("null_flavor"))
+                    null_flavour_attribute.set_existence(mAomFactory.create_c_integer_make_bounded(0, 1, True, True).interval)
+                    BuildCodedText(null_flavour_attribute, Element.ConstrainedNullFlavours)
+                End If
+
             End If
+
+            'SRH 13th Nov 2007 - Added flavours of null constraint
+
+
+
+
+
+
         End Sub
 
         Private Sub BuildStructure(ByVal rmStruct As RmStructureCompound, ByRef objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)

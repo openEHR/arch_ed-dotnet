@@ -1713,6 +1713,13 @@ Namespace ArchetypeEditor.XML_Classes
                         value_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "value", Element.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                         BuildElementConstraint(element_xmlObj, value_attribute, Element.Constraint)
                     End If
+
+                    'Check for constraint on Flavours of Null
+                    If Element.HasNullFlavourConstraint() Then
+                        Dim null_flavour_attribute As XMLParser.C_ATTRIBUTE
+                        null_flavour_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "null_flavor", New RmExistence(0, 1).XmlExistence)
+                        BuildCodedText(null_flavour_attribute, Element.ConstrainedNullFlavours)
+                    End If
                 End If
 
             Catch ex As Exception
