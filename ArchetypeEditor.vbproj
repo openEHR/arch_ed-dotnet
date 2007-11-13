@@ -80,14 +80,13 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="adl_dotnet_lib, Version=0.0.0.0, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\adl_dotnet_lib.dll</HintPath>
-    </Reference>
-    <Reference Include="EiffelSoftware.Runtime, Version=5.6.1127.0, Culture=neutral, PublicKeyToken=def26f296efef469">
+    <Reference Include="EiffelSoftware.Runtime, Version=6.0.6.9104, Culture=neutral, PublicKeyToken=def26f296efef469">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="MagicLibrary, Version=1.7.0.0, Culture=neutral, PublicKeyToken=3a6eb82f876a49bc" />
+    <Reference Include="OceanInformatics.AdlParser, Version=0.0.0.2, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="OTSControls, Version=1.0.2760.16002, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>OTS\OTSControls.dll</HintPath>
@@ -123,10 +122,8 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="adl_dotnet_lib.dll" />
     <Content Include="ArchetypeEditor.xml" />
     <Content Include="arch_ed.ico" />
-    <Content Include="EiffelSoftware.Runtime.dll" />
     <Content Include="HTML\Images\any.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -200,9 +197,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="MagicLibrary.dll" />
-    <Content Include="libadl_dotnet_lib.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -1062,6 +1056,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Content Include="AdlParser\EiffelSoftware.Runtime.dll" />
+    <Content Include="AdlParser\libOceanInformatics.AdlParser.dll">
+    </Content>
+    <Content Include="AdlParser\OceanInformatics.AdlParser.dll" />
     <Content Include="Archetype.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1107,6 +1105,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>"$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
+    <PostBuildEvent>copy "$(SolutionDir)AdlParser\libOceanInformatics.AdlParser.dll" "$(TargetDir)"
+"$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
   </PropertyGroup>
 </Project>
