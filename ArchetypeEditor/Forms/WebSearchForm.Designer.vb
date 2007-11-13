@@ -28,10 +28,10 @@ Partial Class WebSearchForm
         Me.gbSearch = New System.Windows.Forms.GroupBox
         Me.comboSearch = New System.Windows.Forms.ComboBox
         Me.listViewArchetypes = New System.Windows.Forms.ListView
+        Me.ImageListArchetypes = New System.Windows.Forms.ImageList(Me.components)
         Me.butOK = New System.Windows.Forms.Button
         Me.butCancel = New System.Windows.Forms.Button
         Me.PanelBottom = New System.Windows.Forms.Panel
-        Me.ImageListArchetypes = New System.Windows.Forms.ImageList(Me.components)
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar
         CType(Me.img_globe, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbSearch.SuspendLayout()
@@ -127,7 +127,20 @@ Partial Class WebSearchForm
         Me.listViewArchetypes.SmallImageList = Me.ImageListArchetypes
         Me.listViewArchetypes.TabIndex = 4
         Me.listViewArchetypes.UseCompatibleStateImageBehavior = False
-        Me.listViewArchetypes.View = System.Windows.Forms.View.List
+        Me.listViewArchetypes.View = System.Windows.Forms.View.SmallIcon
+        '
+        'ImageListArchetypes
+        '
+        Me.ImageListArchetypes.ImageStream = CType(resources.GetObject("ImageListArchetypes.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageListArchetypes.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageListArchetypes.Images.SetKeyName(0, "structure.png")
+        Me.ImageListArchetypes.Images.SetKeyName(1, "action.png")
+        Me.ImageListArchetypes.Images.SetKeyName(2, "evaluation.png")
+        Me.ImageListArchetypes.Images.SetKeyName(3, "instruction.png")
+        Me.ImageListArchetypes.Images.SetKeyName(4, "observation.png")
+        Me.ImageListArchetypes.Images.SetKeyName(5, "Cluster.png")
+        Me.ImageListArchetypes.Images.SetKeyName(6, "composition.png")
+        Me.ImageListArchetypes.Images.SetKeyName(7, "section.gif")
         '
         'butOK
         '
@@ -160,19 +173,6 @@ Partial Class WebSearchForm
         Me.PanelBottom.Name = "PanelBottom"
         Me.PanelBottom.Size = New System.Drawing.Size(530, 40)
         Me.PanelBottom.TabIndex = 16
-        '
-        'ImageListArchetypes
-        '
-        Me.ImageListArchetypes.ImageStream = CType(resources.GetObject("ImageListArchetypes.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageListArchetypes.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageListArchetypes.Images.SetKeyName(0, "structure.png")
-        Me.ImageListArchetypes.Images.SetKeyName(1, "action.png")
-        Me.ImageListArchetypes.Images.SetKeyName(2, "evaluation.png")
-        Me.ImageListArchetypes.Images.SetKeyName(3, "instruction.png")
-        Me.ImageListArchetypes.Images.SetKeyName(4, "observation.png")
-        Me.ImageListArchetypes.Images.SetKeyName(5, "Cluster.png")
-        Me.ImageListArchetypes.Images.SetKeyName(6, "composition.png")
-        Me.ImageListArchetypes.Images.SetKeyName(7, "section.gif")
         '
         'ProgressBar1
         '

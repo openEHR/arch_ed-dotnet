@@ -143,6 +143,10 @@ Public Class CodePhrase
 
     End Sub
 
+    Sub New(ByVal terminologyId As String)
+        sTerminology = terminologyId
+    End Sub
+
     Sub New(ByVal a_term As RmTerm)
         cCodes.Add(a_term.Code)
     End Sub

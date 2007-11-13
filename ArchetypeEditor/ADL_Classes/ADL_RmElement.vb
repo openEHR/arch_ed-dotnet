@@ -33,25 +33,42 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim v As EiffelKernel.STRING_8 = EiffelKernel.Create.STRING_8.make_from_cil("value")
                 cConstraint = New Constraint
 
-                If Not ComplexObj.any_allowed And ComplexObj.has_attribute(v) And ComplexObj.has_attribute(v) Then
+                If Not ComplexObj.any_allowed Then
                     Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                     Dim i As Integer
 
-                    an_attribute = ComplexObj.c_attribute_at_path(v)
+                    If ComplexObj.has_attribute(v) Then
 
-                    If an_attribute.children.count > 1 Then
-                        ' multiple constraints - not dealt with yet in the GUI
-                        Dim m_c As New Constraint_Choice
+                        an_attribute = ComplexObj.c_attribute_at_path(v)
 
-                        For i = 1 To an_attribute.children.count
-                            m_c.Constraints.Add(ProcessValue(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager))
-                        Next
+                        If an_attribute.children.count > 1 Then
+                            ' multiple constraints - not dealt with yet in the GUI
+                            Dim m_c As New Constraint_Choice
 
-                        cConstraint = m_c
-                    ElseIf Not an_attribute.children.is_empty Then
-                        cConstraint = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager)
+                            For i = 1 To an_attribute.children.count
+                                m_c.Constraints.Add(ProcessValue(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager))
+                            Next
+
+                            cConstraint = m_c
+                        ElseIf Not an_attribute.children.is_empty Then
+                            cConstraint = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager)
+                        End If
+                    End If
+
+                    'SRH 14th Nov 2007 - Added null flavor
+                    v = EiffelKernel.Create.STRING_8.make_from_cil("null_flavor")
+                    If ComplexObj.has_attribute(v) Then
+                        an_attribute = ComplexObj.c_attribute_at_path(v)
+
+                        If an_attribute.children.count = 1 Then
+                            Dim c As Constraint_Text = ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                            If Not c Is Nothing AndAlso c.AllowableValues.Codes.Count > 0 Then
+                                Me.ConstrainedNullFlavours = c.AllowableValues
+                            End If
+                        End If
                     End If
                 End If
+
             Catch ex As Exception
                 MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ComplexObj.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try

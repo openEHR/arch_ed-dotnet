@@ -976,7 +976,7 @@
   <Concept Language="en" ConceptID="250" Rubric="amendment" />
   <Concept Language="en" ConceptID="251" Rubric="modification" />
   <Concept Language="en" ConceptID="252" Rubric="synthesis" />
-  <Concept Language="en" ConceptID="253" Rubric="unknown" />
+  <Concept Language="en" ConceptID="253" Rubric="Unknown" />
   <Concept Language="en" ConceptID="254" Rubric="parent" />
   <Concept Language="en" ConceptID="255" Rubric="biological mother" />
   <Concept Language="en" ConceptID="256" Rubric="biological father" />
@@ -993,9 +993,9 @@
   <Concept Language="en" ConceptID="267" Rubric="mode" />
   <Concept Language="en" ConceptID="268" Rubric="median" />
   <Concept Language="en" ConceptID="270" Rubric="Null flavours" />
-  <Concept Language="en" ConceptID="271" Rubric="no information" />
-  <Concept Language="en" ConceptID="272" Rubric="masked" />
-  <Concept Language="en" ConceptID="273" Rubric="not applicable" />
+  <Concept Language="en" ConceptID="271" Rubric="No information" />
+  <Concept Language="en" ConceptID="272" Rubric="Masked" />
+  <Concept Language="en" ConceptID="273" Rubric="Not applicable" />
   <Concept Language="en" ConceptID="274" Rubric="openEHR structural components" />
   <Concept Language="en" ConceptID="275" Rubric="History" />
   <Concept Language="en" ConceptID="276" Rubric="Any event" />
@@ -3516,6 +3516,578 @@
   <Concept Language="fa" ConceptID="629" Rubric="کلیه موارد استثنا است" />
   <Concept Language="fa" ConceptID="630" Rubric="به صورت درصد" />
   <Concept Language="fa" ConceptID="631" Rubric="حذف کلیه موارد" />
+  <Concept Language="ko" ConceptID="280" Rubric="그리고 모든 참조" />
+  <Concept Language="ko" ConceptID="0" Rubric="자신" />
+  <Concept Language="ko" ConceptID="3" Rubric="태아" />
+  <Concept Language="ko" ConceptID="6" Rubric="공여자" />
+  <Concept Language="ko" ConceptID="7" Rubric="외할머니" />
+  <Concept Language="ko" ConceptID="8" Rubric="외할아버지" />
+  <Concept Language="ko" ConceptID="9" Rubric="아버지" />
+  <Concept Language="ko" ConceptID="10" Rubric="어머니" />
+  <Concept Language="ko" ConceptID="11" Rubric="모두 허용" />
+  <Concept Language="ko" ConceptID="12" Rubric="날짜와 시간" />
+  <Concept Language="ko" ConceptID="13" Rubric="날짜와 부분 시간" />
+  <Concept Language="ko" ConceptID="14" Rubric="날짜만" />
+  <Concept Language="ko" ConceptID="15" Rubric="전체 날짜" />
+  <Concept Language="ko" ConceptID="16" Rubric="부분 날짜" />
+  <Concept Language="ko" ConceptID="17" Rubric="월을 포함한 부분 날짜" />
+  <Concept Language="ko" ConceptID="547" Rubric="실패하다" />
+  <Concept Language="ko" ConceptID="531" Rubric="실패한" />
+  <Concept Language="ko" ConceptID="339" Rubric="가속도 (Acceleration)" />
+  <Concept Language="ko" ConceptID="342" Rubric="각가속도 (Acceleration, Angular)" />
+  <Concept Language="ko" ConceptID="651" Rubric="인정 (Accreditation)" />
+  <Concept Language="ko" ConceptID="18" Rubric="시간만" />
+  <Concept Language="ko" ConceptID="19" Rubric="전체 시간 hh:mm:ss" />
+  <Concept Language="ko" ConceptID="20" Rubric="부분 시간" />
+  <Concept Language="ko" ConceptID="21" Rubric="분을 포함한 부분 시간" />
+  <Concept Language="ko" ConceptID="22" Rubric="파트너/배우자" />
+  <Concept Language="ko" ConceptID="23" Rubric="형제" />
+  <Concept Language="ko" ConceptID="24" Rubric="자매" />
+  <Concept Language="ko" ConceptID="25" Rubric="이복 형제" />
+  <Concept Language="ko" ConceptID="26" Rubric="이복 자매" />
+  <Concept Language="ko" ConceptID="27" Rubric="친척형제" />
+  <Concept Language="ko" ConceptID="28" Rubric="아이" />
+  <Concept Language="ko" ConceptID="29" Rubric="딸" />
+  <Concept Language="ko" ConceptID="31" Rubric="아들" />
+  <Concept Language="ko" ConceptID="32" Rubric="데이터의 대상" />
+  <Concept Language="ko" ConceptID="33" Rubric="날짜시간 constraints" />
+  <Concept Language="ko" ConceptID="34" Rubric="없음" />
+  <Concept Language="ko" ConceptID="35" Rubric="모두 보여줌" />
+  <Concept Language="ko" ConceptID="36" Rubric="친할아버지" />
+  <Concept Language="ko" ConceptID="37" Rubric="친할머니" />
+  <Concept Language="ko" ConceptID="38" Rubric="외삼촌" />
+  <Concept Language="ko" ConceptID="39" Rubric="외숙모" />
+  <Concept Language="ko" ConceptID="40" Rubric="삼촌" />
+  <Concept Language="ko" ConceptID="41" Rubric="숙모" />
+  <Concept Language="ko" ConceptID="48" Rubric="도움말" />
+  <Concept Language="ko" ConceptID="42" Rubric="메뉴아이템 라벨" />
+  <Concept Language="ko" ConceptID="43" Rubric="파일" />
+  <Concept Language="ko" ConceptID="44" Rubric="보기" />
+  <Concept Language="ko" ConceptID="45" Rubric="출판" />
+  <Concept Language="ko" ConceptID="46" Rubric="언어" />
+  <Concept Language="ko" ConceptID="47" Rubric="용어" />
+  <Concept Language="ko" ConceptID="49" Rubric="폼 라벨" />
+  <Concept Language="ko" ConceptID="50" Rubric="아키타입" />
+  <Concept Language="ko" ConceptID="51" Rubric="모델과 컴포넌트" />
+  <Concept Language="ko" ConceptID="52" Rubric="간략한 컨셉 라벨" />
+  <Concept Language="ko" ConceptID="53" Rubric="버젼" />
+  <Concept Language="ko" ConceptID="54" Rubric="컨셉" />
+  <Concept Language="ko" ConceptID="56" Rubric="제한없는" />
+  <Concept Language="ko" ConceptID="57" Rubric="아키타입 파일명" />
+  <Concept Language="ko" ConceptID="58" Rubric="오션 인포매틱스의 아키타입 에디터" />
+  <Concept Language="ko" ConceptID="59" Rubric="툴팁" />
+  <Concept Language="ko" ConceptID="60" Rubric="데이터 타입 변경" />
+  <Concept Language="ko" ConceptID="61" Rubric="열기" />
+  <Concept Language="ko" ConceptID="62" Rubric="새로 만들기    Ctrl+N " />
+  <Concept Language="ko" ConceptID="63" Rubric="나가기" />
+  <Concept Language="ko" ConceptID="64" Rubric="아키타입 DB" />
+  <Concept Language="ko" ConceptID="65" Rubric="패키지" />
+  <Concept Language="ko" ConceptID="66" Rubric="최종" />
+  <Concept Language="ko" ConceptID="67" Rubric="사용가능한 언어" />
+  <Concept Language="ko" ConceptID="68" Rubric="언어 추가" />
+  <Concept Language="ko" ConceptID="69" Rubric="언어 변경" />
+  <Concept Language="ko" ConceptID="70" Rubric="사용가능한 용어들" />
+  <Concept Language="ko" ConceptID="71" Rubric="용어 추가" />
+  <Concept Language="ko" ConceptID="72" Rubric="시작" />
+  <Concept Language="ko" ConceptID="73" Rubric="라이센스" />
+  <Concept Language="ko" ConceptID="74" Rubric="오션 인포매틱스에 대하여" />
+  <Concept Language="ko" ConceptID="75" Rubric="오션 에디터에 대하여" />
+  <Concept Language="ko" ConceptID="76" Rubric="헤더" />
+  <Concept Language="ko" ConceptID="77" Rubric="Entry 모델" />
+  <Concept Language="ko" ConceptID="78" Rubric="프로토콜" />
+  <Concept Language="ko" ConceptID="79" Rubric="연혁을 포함한 개인 상태" />
+  <Concept Language="ko" ConceptID="80" Rubric="데이터" />
+  <Concept Language="ko" ConceptID="81" Rubric="Event 시리즈" />
+  <Concept Language="ko" ConceptID="82" Rubric="개인 상태" />
+  <Concept Language="ko" ConceptID="83" Rubric="디스플레이" />
+  <Concept Language="ko" ConceptID="84" Rubric="인터페이스" />
+  <Concept Language="ko" ConceptID="85" Rubric="스트럭처" />
+  <Concept Language="ko" ConceptID="86" Rubric="항목" />
+  <Concept Language="ko" ConceptID="87" Rubric="Constraints" />
+  <Concept Language="ko" ConceptID="88" Rubric="언어와 용어" />
+  <Concept Language="ko" ConceptID="89" Rubric="항목 정의" />
+  <Concept Language="ko" ConceptID="90" Rubric="코드" />
+  <Concept Language="ko" ConceptID="91" Rubric="Text (텍스트)" />
+  <Concept Language="ko" ConceptID="93" Rubric="바인딩" />
+  <Concept Language="ko" ConceptID="96" Rubric="패스" />
+  <Concept Language="ko" ConceptID="97" Rubric="릴리즈" />
+  <Concept Language="ko" ConceptID="98" Rubric="맵" />
+  <Concept Language="ko" ConceptID="99" Rubric="바인딩 추가" />
+  <Concept Language="ko" ConceptID="100" Rubric="특정한" />
+  <Concept Language="ko" ConceptID="101" Rubric="모두" />
+  <Concept Language="ko" ConceptID="102" Rubric="Complex" />
+  <Concept Language="ko" ConceptID="103" Rubric="RTF로 저장" />
+  <Concept Language="ko" ConceptID="104" Rubric="선택..." />
+  <Concept Language="ko" ConceptID="105" Rubric="Single" />
+  <Concept Language="ko" ConceptID="106" Rubric="List" />
+  <Concept Language="ko" ConceptID="107" Rubric="Tree" />
+  <Concept Language="ko" ConceptID="108" Rubric="Table" />
+  <Concept Language="ko" ConceptID="109" Rubric="새로운 Element" />
+  <Concept Language="ko" ConceptID="110" Rubric="Occurence" />
+  <Concept Language="ko" ConceptID="111" Rubric="최대: " />
+  <Concept Language="ko" ConceptID="112" Rubric="언바운디드" />
+  <Concept Language="ko" ConceptID="113" Rubric="설명" />
+  <Concept Language="ko" ConceptID="114" Rubric="Runtime name contraint" />
+  <Concept Language="ko" ConceptID="115" Rubric="Quantity (양)" />
+  <Concept Language="ko" ConceptID="116" Rubric="프로펄티" />
+  <Concept Language="ko" ConceptID="117" Rubric="단위" />
+  <Concept Language="ko" ConceptID="118" Rubric="세트가 아님" />
+  <Concept Language="ko" ConceptID="119" Rubric="농도 (Concentration)" />
+  <Concept Language="ko" ConceptID="120" Rubric="Count (카운트)" />
+  <Concept Language="ko" ConceptID="121" Rubric="에너지 (Energy)" />
+  <Concept Language="ko" ConceptID="122" Rubric="길이 (Length)" />
+  <Concept Language="ko" ConceptID="123" Rubric="소리의 세기 (Loudness)" />
+  <Concept Language="ko" ConceptID="124" Rubric="질량 (Mass)" />
+  <Concept Language="ko" ConceptID="125" Rubric="압력 (Pressure)" />
+  <Concept Language="ko" ConceptID="126" Rubric="부피 유속 (Flow rate, volume)" />
+  <Concept Language="ko" ConceptID="127" Rubric="온도 (Temperature)" />
+  <Concept Language="ko" ConceptID="128" Rubric="시간 (Time)" />
+  <Concept Language="ko" ConceptID="129" Rubric="부피 (Volume)" />
+  <Concept Language="ko" ConceptID="130" Rubric="일 (Work)" />
+  <Concept Language="ko" ConceptID="131" Rubric="최소값 설정" />
+  <Concept Language="ko" ConceptID="132" Rubric="최대값 설정" />
+  <Concept Language="ko" ConceptID="133" Rubric="Events" />
+  <Concept Language="ko" ConceptID="134" Rubric="Event 리스트" />
+  <Concept Language="ko" ConceptID="135" Rubric="열기 (Ctrl + O)" />
+  <Concept Language="ko" ConceptID="136" Rubric="고정 (Fixed)" />
+  <Concept Language="ko" ConceptID="137" Rubric="일정한 시구간에서의 Events" />
+  <Concept Language="ko" ConceptID="138" Rubric="Event 상세사항" />
+  <Concept Language="ko" ConceptID="139" Rubric="새로운 Constraint" />
+  <Concept Language="ko" ConceptID="140" Rubric="Point in time (시점)" />
+  <Concept Language="ko" ConceptID="141" Rubric="Interval (구간)" />
+  <Concept Language="ko" ConceptID="142" Rubric="Duration (기간)" />
+  <Concept Language="ko" ConceptID="143" Rubric="고정 구간" />
+  <Concept Language="ko" ConceptID="144" Rubric="최대" />
+  <Concept Language="ko" ConceptID="145" Rubric="최소" />
+  <Concept Language="ko" ConceptID="146" Rubric="평균" />
+  <Concept Language="ko" ConceptID="147" Rubric="변경" />
+  <Concept Language="ko" ConceptID="148" Rubric="전체; 총" />
+  <Concept Language="ko" ConceptID="149" Rubric="변이" />
+  <Concept Language="ko" ConceptID="150" Rubric="내부 코드" />
+  <Concept Language="ko" ConceptID="151" Rubric="새로 만들기" />
+  <Concept Language="ko" ConceptID="152" Rubric="제거" />
+  <Concept Language="ko" ConceptID="153" Rubric="가정(Assumed)값 설정" />
+  <Concept Language="ko" ConceptID="155" Rubric="추가" />
+  <Concept Language="ko" ConceptID="156" Rubric="Ordinal (서수)" />
+  <Concept Language="ko" ConceptID="157" Rubric="참/거짓" />
+  <Concept Language="ko" ConceptID="158" Rubric="Assumed 값:" />
+  <Concept Language="ko" ConceptID="159" Rubric="참" />
+  <Concept Language="ko" ConceptID="160" Rubric="거짓" />
+  <Concept Language="ko" ConceptID="161" Rubric="Date and Time (날짜와 시간)" />
+  <Concept Language="ko" ConceptID="162" Rubric="Ordered" />
+  <Concept Language="ko" ConceptID="163" Rubric="열" />
+  <Concept Language="ko" ConceptID="164" Rubric="행" />
+  <Concept Language="ko" ConceptID="165" Rubric="확인" />
+  <Concept Language="ko" ConceptID="166" Rubric="취소" />
+  <Concept Language="ko" ConceptID="167" Rubric="탭캡션" />
+  <Concept Language="ko" ConceptID="168" Rubric="Section 모델" />
+  <Concept Language="ko" ConceptID="169" Rubric="Naming" />
+  <Concept Language="ko" ConceptID="170" Rubric="Slot" />
+  <Concept Language="ko" ConceptID="171" Rubric="Entry Slot" />
+  <Concept Language="ko" ConceptID="172" Rubric="Entry 포함" />
+  <Concept Language="ko" ConceptID="173" Rubric="Entry 제외:" />
+  <Concept Language="ko" ConceptID="174" Rubric="Section Slot" />
+  <Concept Language="ko" ConceptID="175" Rubric="Section 포함" />
+  <Concept Language="ko" ConceptID="176" Rubric="Section 제외:" />
+  <Concept Language="ko" ConceptID="177" Rubric="상태" />
+  <Concept Language="ko" ConceptID="179" Rubric="오프셋" />
+  <Concept Language="ko" ConceptID="180" Rubric="고정 오프셋" />
+  <Concept Language="ko" ConceptID="182" Rubric="부호있는 음수 (Signed negative)" />
+  <Concept Language="ko" ConceptID="183" Rubric="저장" />
+  <Concept Language="ko" ConceptID="184" Rubric="닫기" />
+  <Concept Language="ko" ConceptID="185" Rubric="특수화" />
+  <Concept Language="ko" ConceptID="186" Rubric="Specialisation" />
+  <Concept Language="ko" ConceptID="187" Rubric="주언어" />
+  <Concept Language="ko" ConceptID="188" Rubric="까지 (to); 로 (to)" />
+  <Concept Language="ko" ConceptID="189" Rubric="신생아" />
+  <Concept Language="ko" ConceptID="192" Rubric="Participation 모드" />
+  <Concept Language="ko" ConceptID="193" Rubric="특별히 지정되지 않은" />
+  <Concept Language="ko" ConceptID="194" Rubric="비동기 시청각; 기록된 비디오" />
+  <Concept Language="ko" ConceptID="195" Rubric="생방송 시청각; 비디오회의; 비디오전화" />
+  <Concept Language="ko" ConceptID="196" Rubric="기록된 비디오" />
+  <Concept Language="ko" ConceptID="197" Rubric="비디오전화" />
+  <Concept Language="ko" ConceptID="198" Rubric="비디오회의" />
+  <Concept Language="ko" ConceptID="199" Rubric="비동기 음성; 구술된; 음성메일" />
+  <Concept Language="ko" ConceptID="200" Rubric="구술된" />
+  <Concept Language="ko" ConceptID="201" Rubric="음성메일" />
+  <Concept Language="ko" ConceptID="202" Rubric="생방송 음성; 전화; 인터넷전화" />
+  <Concept Language="ko" ConceptID="203" Rubric="원격회의" />
+  <Concept Language="ko" ConceptID="204" Rubric="전화" />
+  <Concept Language="ko" ConceptID="205" Rubric="인터넷전화" />
+  <Concept Language="ko" ConceptID="206" Rubric="비동기 문자; 이메일; 팩스; 문서; 손으로 직접쓴 노트; SMS 메세지" />
+  <Concept Language="ko" ConceptID="207" Rubric="이메일" />
+  <Concept Language="ko" ConceptID="208" Rubric="팩시밀리/원격팩스" />
+  <Concept Language="ko" ConceptID="209" Rubric="SMS 메세지" />
+  <Concept Language="ko" ConceptID="210" Rubric="출력된/타이핑된 문서" />
+  <Concept Language="ko" ConceptID="211" Rubric="손으로 직접쓴 노트" />
+  <Concept Language="ko" ConceptID="212" Rubric="문자 생방송; 인터넷 채팅; SMS 채팅; 양방향 필기 노트 " />
+  <Concept Language="ko" ConceptID="216" Rubric="대면 통신" />
+  <Concept Language="ko" ConceptID="217" Rubric="기호 (말을 통하지 않은 대면)" />
+  <Concept Language="ko" ConceptID="218" Rubric="비디오를 통한 기호" />
+  <Concept Language="ko" ConceptID="219" Rubric="실질적으로 존재" />
+  <Concept Language="ko" ConceptID="220" Rubric="실질적으로 먼" />
+  <Concept Language="ko" ConceptID="221" Rubric="번역된 텍스트" />
+  <Concept Language="ko" ConceptID="222" Rubric="통역된 음성만" />
+  <Concept Language="ko" ConceptID="223" Rubric="통역된 대면" />
+  <Concept Language="ko" ConceptID="224" Rubric="통역된 비디오 통신" />
+  <Concept Language="ko" ConceptID="225" Rubric="집" />
+  <Concept Language="ko" ConceptID="226" Rubric="세팅" />
+  <Concept Language="ko" ConceptID="227" Rubric="응급진료" />
+  <Concept Language="ko" ConceptID="228" Rubric="일차진료" />
+  <Concept Language="ko" ConceptID="229" Rubric="일차간호" />
+  <Concept Language="ko" ConceptID="230" Rubric="일차협력건강진료" />
+  <Concept Language="ko" ConceptID="231" Rubric="조산진료" />
+  <Concept Language="ko" ConceptID="232" Rubric="이차진료" />
+  <Concept Language="ko" ConceptID="233" Rubric="이차간호" />
+  <Concept Language="ko" ConceptID="234" Rubric="이차협력건강진료" />
+  <Concept Language="ko" ConceptID="235" Rubric="보조건강진료" />
+  <Concept Language="ko" ConceptID="236" Rubric="치과진료" />
+  <Concept Language="ko" ConceptID="237" Rubric="가정관리" />
+  <Concept Language="ko" ConceptID="238" Rubric="기타진료" />
+  <Concept Language="ko" ConceptID="239" Rubric="증명 근거 (Attestation reason)" />
+  <Concept Language="ko" ConceptID="240" Rubric="서명된" />
+  <Concept Language="ko" ConceptID="241" Rubric="의도된" />
+  <Concept Language="ko" ConceptID="242" Rubric="필수의" />
+  <Concept Language="ko" ConceptID="243" Rubric="버젼 생애주기" />
+  <Concept Language="ko" ConceptID="244" Rubric="초안" />
+  <Concept Language="ko" ConceptID="245" Rubric="활성" />
+  <Concept Language="ko" ConceptID="246" Rubric="비활성" />
+  <Concept Language="ko" ConceptID="247" Rubric="승인 대기" />
+  <Concept Language="ko" ConceptID="248" Rubric="감사 변경 타입" />
+  <Concept Language="ko" ConceptID="249" Rubric="생성" />
+  <Concept Language="ko" ConceptID="250" Rubric="개정" />
+  <Concept Language="ko" ConceptID="251" Rubric="수정" />
+  <Concept Language="ko" ConceptID="252" Rubric="합성" />
+  <Concept Language="ko" ConceptID="253" Rubric="알려지지 않은" />
+  <Concept Language="ko" ConceptID="254" Rubric="부모" />
+  <Concept Language="ko" ConceptID="255" Rubric="생물학적 어머니" />
+  <Concept Language="ko" ConceptID="256" Rubric="생물학적 아버지" />
+  <Concept Language="ko" ConceptID="257" Rubric="사촌" />
+  <Concept Language="ko" ConceptID="258" Rubric="양어머니" />
+  <Concept Language="ko" ConceptID="259" Rubric="양아버지" />
+  <Concept Language="ko" ConceptID="260" Rubric="양자" />
+  <Concept Language="ko" ConceptID="261" Rubric="양녀" />
+  <Concept Language="ko" ConceptID="262" Rubric="의붓어머니" />
+  <Concept Language="ko" ConceptID="263" Rubric="의붓아버지" />
+  <Concept Language="ko" ConceptID="264" Rubric="보호자" />
+  <Concept Language="ko" ConceptID="265" Rubric="동거자" />
+  <Concept Language="ko" ConceptID="266" Rubric="Event 수학 함수" />
+  <Concept Language="ko" ConceptID="267" Rubric="모드" />
+  <Concept Language="ko" ConceptID="268" Rubric="중앙값 (median)" />
+  <Concept Language="ko" ConceptID="270" Rubric="값없음 근거 (Null flavours)" />
+  <Concept Language="ko" ConceptID="271" Rubric="정보없음" />
+  <Concept Language="ko" ConceptID="272" Rubric="마스크된 (masked)" />
+  <Concept Language="ko" ConceptID="273" Rubric="가능하지 않은" />
+  <Concept Language="ko" ConceptID="274" Rubric="*openEHR 구조 컴포넌트" />
+  <Concept Language="ko" ConceptID="275" Rubric="연혁 (History)" />
+  <Concept Language="ko" ConceptID="276" Rubric="Any event" />
+  <Concept Language="ko" ConceptID="277" Rubric="테이블을 단순 값으로 바꿉니다" />
+  <Concept Language="ko" ConceptID="278" Rubric="상수" />
+  <Concept Language="ko" ConceptID="279" Rubric="메뉴 선택 &gt; 파일 &gt; 새로 만들기 또는 새로 시작하기 위해 [새로 만들기] 툴바를 누르세요" />
+  <Concept Language="ko" ConceptID="281" Rubric="모두 펴기" />
+  <Concept Language="ko" ConceptID="282" Rubric="모두 접기" />
+  <Concept Language="ko" ConceptID="283" Rubric="참조 추가" />
+  <Concept Language="ko" ConceptID="284" Rubric="오션 아키타입 에디터" />
+  <Concept Language="ko" ConceptID="285" Rubric="당신은 완전히 번역되지 않은 언어를 선ㅊ택하였습니다 - 용어 섹션을 채우겠습니까?" />
+  <Concept Language="ko" ConceptID="286" Rubric="언어 추가가 취소되었습니다" />
+  <Concept Language="ko" ConceptID="287" Rubric="현재 아키타입" />
+  <Concept Language="ko" ConceptID="288" Rubric="변경을 취소합니다" />
+  <Concept Language="ko" ConceptID="289" Rubric="을/를 찾을 수 없습니다" />
+  <Concept Language="ko" ConceptID="290" Rubric="먼저 컨셉 텍스트를 설정하기 바랍니다" />
+  <Concept Language="ko" ConceptID="291" Rubric="상태 정보를 제거하시겠습니까?" />
+  <Concept Language="ko" ConceptID="294" Rubric="아키타입 노드 코드 또는 아이디가 전달되지 않았습니다" />
+  <Concept Language="ko" ConceptID="296" Rubric="부정확한 포맷" />
+  <Concept Language="ko" ConceptID="297" Rubric="을 위한 정의 없음" />
+  <Concept Language="ko" ConceptID="298" Rubric="오브젝트 행이름이 이미 사용 중입니다" />
+  <Concept Language="ko" ConceptID="299" Rubric="그대로 진행하고 리스트를 단일 값으로 바꿉니다 " />
+  <Concept Language="ko" ConceptID="300" Rubric="선택된 노드는 엘레먼트가 아님:" />
+  <Concept Language="ko" ConceptID="301" Rubric="먼저 왼쪽에 있는 아이템을 선택하세요요" />
+  <Concept Language="ko" ConceptID="302" Rubric="그대로 진행하고 트리를 플랫 리스트로 바꿈 - 모든 클러스터는 없어질 것입니다" />
+  <Concept Language="ko" ConceptID="303" Rubric="이미 사용중인 이름입니다" />
+  <Concept Language="ko" ConceptID="304" Rubric="삭제할 수 없습니다" />
+  <Concept Language="ko" ConceptID="305" Rubric="새로운 이름을 입력하세요" />
+  <Concept Language="ko" ConceptID="306" Rubric="이름을 바꿀 수 없습니다" />
+  <Concept Language="ko" ConceptID="307" Rubric="Feature는 아직까지 사용될 수 없습니다" />
+  <Concept Language="ko" ConceptID="308" Rubric="Constraint 변환 - 데이터를 잃을수 있으니 주의바랍니다" />
+  <Concept Language="ko" ConceptID="309" Rubric="스트링 값을 텍스트로 변환" />
+  <Concept Language="ko" ConceptID="310" Rubric="텍스트 값을 스트링으로 변환" />
+  <Concept Language="ko" ConceptID="311" Rubric="서수 값을 허용된 값으로 변환" />
+  <Concept Language="ko" ConceptID="312" Rubric="Slot" />
+  <Concept Language="ko" ConceptID="313" Rubric="클러스트" />
+  <Concept Language="ko" ConceptID="314" Rubric="Section" />
+  <Concept Language="ko" ConceptID="315" Rubric="Boolean (불리언)" />
+  <Concept Language="ko" ConceptID="316" Rubric="Any (임의의 것)" />
+  <Concept Language="ko" ConceptID="317" Rubric="텍스트 값을 서수 값으로 변환" />
+  <Concept Language="ko" ConceptID="318" Rubric="내부 코드를 프리 텍스트로 변환" />
+  <Concept Language="ko" ConceptID="319" Rubric="이 아이템은 수정을 위한 특수화가 필요합니다. 계속 진행하시겠습니까?" />
+  <Concept Language="ko" ConceptID="320" Rubric="Choice (선택)" />
+  <Concept Language="ko" ConceptID="321" Rubric="비율" />
+  <Concept Language="ko" ConceptID="322" Rubric="새로운 Cluster" />
+  <Concept Language="ko" ConceptID="323" Rubric="새로운 행" />
+  <Concept Language="ko" ConceptID="324" Rubric="새로운 열" />
+  <Concept Language="ko" ConceptID="325" Rubric="이름 변경" />
+  <Concept Language="ko" ConceptID="326" Rubric="구조 변경" />
+  <Concept Language="ko" ConceptID="327" Rubric="이 바인딩은 이미 존재합니다 - 기준을 반드시 추가해야 합니다" />
+  <Concept Language="ko" ConceptID="329" Rubric="양의 구간" />
+  <Concept Language="ko" ConceptID="330" Rubric="정수의 구간" />
+  <Concept Language="ko" ConceptID="332" Rubric="절대 최대값 설정" />
+  <Concept Language="ko" ConceptID="333" Rubric="절대 최소값 설정" />
+  <Concept Language="ko" ConceptID="334" Rubric="전류" />
+  <Concept Language="ko" ConceptID="335" Rubric="면적" />
+  <Concept Language="ko" ConceptID="336" Rubric="특정 부피 (Specific volume)" />
+  <Concept Language="ko" ConceptID="337" Rubric="특정 면 (Specific surface)" />
+  <Concept Language="ko" ConceptID="338" Rubric="속도 (Velocity)" />
+  <Concept Language="ko" ConceptID="340" Rubric="모멘텀 (Momentum)" />
+  <Concept Language="ko" ConceptID="341" Rubric="각속도 (Velocity, Angular)" />
+  <Concept Language="ko" ConceptID="343" Rubric="각모멘텀 (Momentum, Angular)" />
+  <Concept Language="ko" ConceptID="344" Rubric="면적 관성 모멘트 (Momentum Inertia, Area)" />
+  <Concept Language="ko" ConceptID="345" Rubric="질량 관성 모멘트 (Momentum Inertia, Mass)" />
+  <Concept Language="ko" ConceptID="346" Rubric="모멘텀 유속 (Momentum Flow Rate)" />
+  <Concept Language="ko" ConceptID="347" Rubric="질량 유속 (Flow rate, Mass)" />
+  <Concept Language="ko" ConceptID="348" Rubric="질량 플럭스 (Flux, Mass)" />
+  <Concept Language="ko" ConceptID="349" Rubric="면적당 질량 (Mass per Area)" />
+  <Concept Language="ko" ConceptID="350" Rubric="밀도 (Density)" />
+  <Concept Language="ko" ConceptID="351" Rubric="질량/부피 유속 (Flow rate, Mass/Volume)" />
+  <Concept Language="ko" ConceptID="352" Rubric="질량/힘 유속 (Flow Rate, Mass/Force)" />
+  <Concept Language="ko" ConceptID="354" Rubric="특정 무게 (Specific weight)" />
+  <Concept Language="ko" ConceptID="355" Rubric="힘 (Force)" />
+  <Concept Language="ko" ConceptID="356" Rubric="표면장력 (Surface tension)" />
+  <Concept Language="ko" ConceptID="357" Rubric="물체력 (Force, Body)" />
+  <Concept Language="ko" ConceptID="358" Rubric="질량당 힘 (Force per Mass)" />
+  <Concept Language="ko" ConceptID="359" Rubric="토크 (Torque)" />
+  <Concept Language="ko" ConceptID="360" Rubric="동적 점도 (Viscosity, Dynamic)" />
+  <Concept Language="ko" ConceptID="361" Rubric="운동학적 점도 (Viscosity, Kinetic)" />
+  <Concept Language="ko" ConceptID="362" Rubric="확산계수 (Diffusion Coefficient)" />
+  <Concept Language="ko" ConceptID="363" Rubric="파워 (Power)" />
+  <Concept Language="ko" ConceptID="364" Rubric="선형 에너지 (Energy, Linear)" />
+  <Concept Language="ko" ConceptID="365" Rubric="면적당 에너지 (Energy per Area)" />
+  <Concept Language="ko" ConceptID="366" Rubric="에너지 밀도 (Energy Density)" />
+  <Concept Language="ko" ConceptID="367" Rubric="선형 파워 (Power, Linea)" />
+  <Concept Language="ko" ConceptID="368" Rubric="파워 플럭스 (Power Flux)" />
+  <Concept Language="ko" ConceptID="369" Rubric="파워 밀도 (Power Density)" />
+  <Concept Language="ko" ConceptID="370" Rubric="특정 에너지 (Specific Energy)" />
+  <Concept Language="ko" ConceptID="371" Rubric="특정 열, 가스 상수 (Specific Heat, Gas constant)" />
+  <Concept Language="ko" ConceptID="372" Rubric="열전도율 (Thermal confuctivity)" />
+  <Concept Language="ko" ConceptID="373" Rubric="열전달계수 (Heat transfer coefficient)" />
+  <Concept Language="ko" ConceptID="374" Rubric="전압, 전기전위 (Voltage, Electrical potential)" />
+  <Concept Language="ko" ConceptID="375" Rubric="저항 (Resistance)" />
+  <Concept Language="ko" ConceptID="377" Rubric="전기장력 (Electrical Field Strength)" />
+  <Concept Language="ko" ConceptID="378" Rubric="자속 (Magnetic Flux)" />
+  <Concept Language="ko" ConceptID="379" Rubric="인덕턴스 (Inductance)" />
+  <Concept Language="ko" ConceptID="380" Rubric="한정 실수 (Qualified real)" />
+  <Concept Language="ko" ConceptID="381" Rubric="양 (Amount) (Eq)" />
+  <Concept Language="ko" ConceptID="382" Rubric="주파수 (Frequency)" />
+  <Concept Language="ko" ConceptID="384" Rubric="양 (Amount) (mole)" />
+  <Concept Language="ko" ConceptID="385" Rubric="질량 (Mass) (IU)" />
+  <Concept Language="ko" ConceptID="386" Rubric="Multimedia (멀티미디어)" />
+  <Concept Language="ko" ConceptID="400" Rubric="*audio/G729E (en)" />
+  <Concept Language="ko" ConceptID="387" Rubric="*audio/DVI4 (en)" />
+  <Concept Language="ko" ConceptID="388" Rubric="*audio/G722 (en)" />
+  <Concept Language="ko" ConceptID="389" Rubric="*audio/G723 (en)" />
+  <Concept Language="ko" ConceptID="390" Rubric="*audio/G726-16 (en)" />
+  <Concept Language="ko" ConceptID="391" Rubric="*audio/G726-24 (en)" />
+  <Concept Language="ko" ConceptID="392" Rubric="*audio/G726-32 (en)" />
+  <Concept Language="ko" ConceptID="393" Rubric="*audio/G726-40 (en)" />
+  <Concept Language="ko" ConceptID="394" Rubric="*audio/G728 (en)" />
+  <Concept Language="ko" ConceptID="395" Rubric="*audio/L8 (en)" />
+  <Concept Language="ko" ConceptID="396" Rubric="*audio/L16 (en)" />
+  <Concept Language="ko" ConceptID="397" Rubric="*audio/LPC (en)" />
+  <Concept Language="ko" ConceptID="398" Rubric="*audio/G729 (en)" />
+  <Concept Language="ko" ConceptID="399" Rubric="*audio/G729D (en)" />
+  <Concept Language="ko" ConceptID="401" Rubric="*video/BT656 (en)" />
+  <Concept Language="ko" ConceptID="402" Rubric="*video/CelB (en)" />
+  <Concept Language="ko" ConceptID="403" Rubric="*video/JPEG (en)" />
+  <Concept Language="ko" ConceptID="404" Rubric="*video/H261 (en)" />
+  <Concept Language="ko" ConceptID="405" Rubric="*video/H263 (en)" />
+  <Concept Language="ko" ConceptID="406" Rubric="*video/H263-1998 (en)" />
+  <Concept Language="ko" ConceptID="407" Rubric="*video/H263-2000 (en)" />
+  <Concept Language="ko" ConceptID="408" Rubric="*video/MPV (en)" />
+  <Concept Language="ko" ConceptID="410" Rubric="*audio/mpeg4-generic (en)" />
+  <Concept Language="ko" ConceptID="409" Rubric="*audio/mpeg (en)" />
+  <Concept Language="ko" ConceptID="411" Rubric="*audio/L20 (en)" />
+  <Concept Language="ko" ConceptID="412" Rubric="*audio/L24 (en)" />
+  <Concept Language="ko" ConceptID="413" Rubric="*audio/telephone-event (en)" />
+  <Concept Language="ko" ConceptID="429" Rubric="*image/jpeg (en)" />
+  <Concept Language="ko" ConceptID="430" Rubric="URI - 리소스 식별자" />
+  <Concept Language="ko" ConceptID="431" Rubric="지속적인" />
+  <Concept Language="ko" ConceptID="432" Rubric="Composition 카테고리" />
+  <Concept Language="ko" ConceptID="433" Rubric="Event" />
+  <Concept Language="ko" ConceptID="434" Rubric="프로세스" />
+  <Concept Language="ko" ConceptID="435" Rubric="실험실" />
+  <Concept Language="ko" ConceptID="436" Rubric="이미징" />
+  <Concept Language="ko" ConceptID="437" Rubric="Cardinality" />
+  <Concept Language="ko" ConceptID="438" Rubric="값" />
+  <Concept Language="ko" ConceptID="439" Rubric="읽기전용" />
+  <Concept Language="ko" ConceptID="440" Rubric="데이터 타입을 정하기 위해 아이콘을 끌어서 여기에 놓십시오" />
+  <Concept Language="ko" ConceptID="441" Rubric="프리 텍스트" />
+  <Concept Language="ko" ConceptID="442" Rubric="이 용어의 번역으로 대체합니다" />
+  <Concept Language="ko" ConceptID="443" Rubric="타입" />
+  <Concept Language="ko" ConceptID="444" Rubric="프리 또는 코드화된 텍스트" />
+  <Concept Language="ko" ConceptID="445" Rubric="질량 (Mass) (Units)" />
+  <Concept Language="ko" ConceptID="446" Rubric="필수" />
+  <Concept Language="ko" ConceptID="447" Rubric="반복" />
+  <Concept Language="ko" ConceptID="448" Rubric="선택적인" />
+  <Concept Language="ko" ConceptID="449" Rubric="분모" />
+  <Concept Language="ko" ConceptID="450" Rubric="분자" />
+  <Concept Language="ko" ConceptID="497" Rubric="평면각 (Angle, plane)" />
+  <Concept Language="ko" ConceptID="498" Rubric="전하 (Electrical charge)" />
+  <Concept Language="ko" ConceptID="499" Rubric="광도 (:ight Intensity)" />
+  <Concept Language="ko" ConceptID="500" Rubric="입체각 (Angle, solid)" />
+  <Concept Language="ko" ConceptID="519" Rubric="*application/rtf (en)" />
+  <Concept Language="ko" ConceptID="501" Rubric="전기 캐패시턴스 (Electrical capacitance)" />
+  <Concept Language="ko" ConceptID="502" Rubric="전기 컨덕턴스 (Electrical conductance)" />
+  <Concept Language="ko" ConceptID="503" Rubric="자속밀도 (Magnetic flux density)" />
+  <Concept Language="ko" ConceptID="504" Rubric="광속 (Luminous flux)" />
+  <Concept Language="ko" ConceptID="505" Rubric="조명도 (Illiminance)" />
+  <Concept Language="ko" ConceptID="506" Rubric="방사능 (Radioactivity)" />
+  <Concept Language="ko" ConceptID="507" Rubric="Proportion(비율)" />
+  <Concept Language="ko" ConceptID="508" Rubric="에너지량 (Energy dose)" />
+  <Concept Language="ko" ConceptID="509" Rubric="Activity 설명" />
+  <Concept Language="ko" ConceptID="510" Rubric="경로" />
+  <Concept Language="ko" ConceptID="511" Rubric="다중" />
+  <Concept Language="ko" ConceptID="513" Rubric="Component" />
+  <Concept Language="ko" ConceptID="514" Rubric="Context" />
+  <Concept Language="ko" ConceptID="515" Rubric="Content" />
+  <Concept Language="ko" ConceptID="516" Rubric="날짜 또는 시간의 구간" />
+  <Concept Language="ko" ConceptID="517" Rubric="*application/msword (en)" />
+  <Concept Language="ko" ConceptID="518" Rubric="*application/pdf (en)" />
+  <Concept Language="ko" ConceptID="520" Rubric="프린트" />
+  <Concept Language="ko" ConceptID="521" Rubric="감소" />
+  <Concept Language="ko" ConceptID="522" Rubric="증가" />
+  <Concept Language="ko" ConceptID="523" Rubric="삭제된" />
+  <Concept Language="ko" ConceptID="524" Rubric="초기" />
+  <Concept Language="ko" ConceptID="525" Rubric="인스트럭션 상태" />
+  <Concept Language="ko" ConceptID="526" Rubric="계획된" />
+  <Concept Language="ko" ConceptID="527" Rubric="연기된" />
+  <Concept Language="ko" ConceptID="528" Rubric="취소된" />
+  <Concept Language="ko" ConceptID="529" Rubric="예정된" />
+  <Concept Language="ko" ConceptID="530" Rubric="중지된" />
+  <Concept Language="ko" ConceptID="532" Rubric="완료된" />
+  <Concept Language="ko" ConceptID="533" Rubric="만기된" />
+  <Concept Language="ko" ConceptID="534" Rubric="인스트럭션 이행" />
+  <Concept Language="ko" ConceptID="535" Rubric="초기화" />
+  <Concept Language="ko" ConceptID="536" Rubric="계획 단계" />
+  <Concept Language="ko" ConceptID="537" Rubric="연기" />
+  <Concept Language="ko" ConceptID="538" Rubric="복원" />
+  <Concept Language="ko" ConceptID="539" Rubric="예정" />
+  <Concept Language="ko" ConceptID="540" Rubric="시작" />
+  <Concept Language="ko" ConceptID="541" Rubric="하다" />
+  <Concept Language="ko" ConceptID="542" Rubric="연기된 단계" />
+  <Concept Language="ko" ConceptID="543" Rubric="활성 단계" />
+  <Concept Language="ko" ConceptID="544" Rubric="중지" />
+  <Concept Language="ko" ConceptID="545" Rubric="중지된 단계" />
+  <Concept Language="ko" ConceptID="546" Rubric="다시 시작" />
+  <Concept Language="ko" ConceptID="548" Rubric="종료" />
+  <Concept Language="ko" ConceptID="549" Rubric="시간 경과" />
+  <Concept Language="ko" ConceptID="550" Rubric="알림 실패" />
+  <Concept Language="ko" ConceptID="551" Rubric="알림 완료" />
+  <Concept Language="ko" ConceptID="552" Rubric="알림 취소" />
+  <Concept Language="ko" ConceptID="553" Rubric="미완료" />
+  <Concept Language="ko" ConceptID="554" Rubric="Observation" />
+  <Concept Language="ko" ConceptID="555" Rubric="Evaluation" />
+  <Concept Language="ko" ConceptID="556" Rubric="Action" />
+  <Concept Language="ko" ConceptID="557" Rubric="Instruction" />
+  <Concept Language="ko" ConceptID="558" Rubric="Sub-Section" />
+  <Concept Language="ko" ConceptID="559" Rubric="Entry" />
+  <Concept Language="ko" ConceptID="560" Rubric="Administration Entry" />
+  <Concept Language="ko" ConceptID="561" Rubric="Composition" />
+  <Concept Language="ko" ConceptID="563" Rubric="진료 경로 단계 (Care pathway step)" />
+  <Concept Language="ko" ConceptID="564" Rubric="레퍼런스" />
+  <Concept Language="ko" ConceptID="565" Rubric="Interval(구간) Event" />
+  <Concept Language="ko" ConceptID="566" Rubric="Point-in-time(시점) Event" />
+  <Concept Language="ko" ConceptID="567" Rubric="Element" />
+  <Concept Language="ko" ConceptID="568" Rubric="작성권한 생애주기" />
+  <Concept Language="ko" ConceptID="569" Rubric="작성자 초안" />
+  <Concept Language="ko" ConceptID="570" Rubric="위원회 초안" />
+  <Concept Language="ko" ConceptID="571" Rubric="기관 초안" />
+  <Concept Language="ko" ConceptID="572" Rubric="제출" />
+  <Concept Language="ko" ConceptID="573" Rubric="후보" />
+  <Concept Language="ko" ConceptID="574" Rubric="승인된 후보" />
+  <Concept Language="ko" ConceptID="575" Rubric="출판" />
+  <Concept Language="ko" ConceptID="576" Rubric="거부" />
+  <Concept Language="ko" ConceptID="577" Rubric="폐기" />
+  <Concept Language="ko" ConceptID="578" Rubric="키워드" />
+  <Concept Language="ko" ConceptID="579" Rubric="이름" />
+  <Concept Language="ko" ConceptID="580" Rubric="작성권한" />
+  <Concept Language="ko" ConceptID="581" Rubric="상세" />
+  <Concept Language="ko" ConceptID="582" Rubric="Use" />
+  <Concept Language="ko" ConceptID="583" Rubric="Misuse" />
+  <Concept Language="ko" ConceptID="584" Rubric="원작성자" />
+  <Concept Language="ko" ConceptID="585" Rubric="Purpose" />
+  <Concept Language="ko" ConceptID="586" Rubric="Activity" />
+  <Concept Language="ko" ConceptID="588" Rubric="최소:" />
+  <Concept Language="ko" ConceptID="589" Rubric="반복없음" />
+  <Concept Language="ko" ConceptID="590" Rubric="무제한 반복" />
+  <Concept Language="ko" ConceptID="591" Rubric="제한된 반복" />
+  <Concept Language="ko" ConceptID="592" Rubric="수정" />
+  <Concept Language="ko" ConceptID="593" Rubric="날짜" />
+  <Concept Language="ko" ConceptID="594" Rubric="기관" />
+  <Concept Language="ko" ConceptID="595" Rubric="새로운 창" />
+  <Concept Language="ko" ConceptID="596" Rubric="다른 이름으로 저장" />
+  <Concept Language="ko" ConceptID="597" Rubric="버그신고하기" />
+  <Concept Language="ko" ConceptID="598" Rubric="환경설정" />
+  <Concept Language="ko" ConceptID="599" Rubric="제한된" />
+  <Concept Language="ko" ConceptID="600" Rubric="허용된 값" />
+  <Concept Language="ko" ConceptID="601" Rubric="단위 값" />
+  <Concept Language="ko" ConceptID="602" Rubric="존재하는 용어 추가" />
+  <Concept Language="ko" ConceptID="603" Rubric="새로운 용어 추가" />
+  <Concept Language="ko" ConceptID="604" Rubric="공헌자" />
+  <Concept Language="ko" ConceptID="605" Rubric="임베디드 아키타입" />
+  <Concept Language="ko" ConceptID="606" Rubric="임베디드 아키타입 읽어오기" />
+  <Concept Language="ko" ConceptID="607" Rubric="레퍼런스를 특수화할 수 없습니다" />
+  <Concept Language="ko" ConceptID="608" Rubric="다른 Context" />
+  <Concept Language="ko" ConceptID="609" Rubric="기존의 아키타입 열기" />
+  <Concept Language="ko" ConceptID="610" Rubric="시간 약어들" />
+  <Concept Language="ko" ConceptID="611" Rubric="나노초 (nanosec)" />
+  <Concept Language="ko" ConceptID="612" Rubric="마이크로초 (microsec)" />
+  <Concept Language="ko" ConceptID="613" Rubric="밀리초 (millisec)" />
+  <Concept Language="ko" ConceptID="614" Rubric="초" />
+  <Concept Language="ko" ConceptID="615" Rubric="분" />
+  <Concept Language="ko" ConceptID="616" Rubric="시" />
+  <Concept Language="ko" ConceptID="617" Rubric="일" />
+  <Concept Language="ko" ConceptID="618" Rubric="달" />
+  <Concept Language="ko" ConceptID="619" Rubric="년" />
+  <Concept Language="ko" ConceptID="620" Rubric="주" />
+  <Concept Language="ko" ConceptID="621" Rubric="Node" />
+  <Concept Language="ko" ConceptID="622" Rubric="기준 (Criteria)" />
+  <Concept Language="ko" ConceptID="623" Rubric="Constraint 정의" />
+  <Concept Language="ko" ConceptID="624" Rubric="쿼리명" />
+  <Concept Language="ko" ConceptID="625" Rubric="포함 (Include)" />
+  <Concept Language="ko" ConceptID="626" Rubric="제외 (Exclude)" />
+  <Concept Language="ko" ConceptID="627" Rubric="열람 (Browse)" />
+  <Concept Language="ko" ConceptID="628" Rubric="모두 포함" />
+  <Concept Language="ko" ConceptID="629" Rubric="모두 제외" />
+  <Concept Language="ko" ConceptID="630" Rubric="퍼센트" />
+  <Concept Language="ko" ConceptID="631" Rubric="모두 삭제" />
+  <Concept Language="ko" ConceptID="632" Rubric="아키타입 Id" />
+  <Concept Language="ko" ConceptID="633" Rubric="식별자" />
+  <Concept Language="ko" ConceptID="634" Rubric="문단" />
+  <Concept Language="ko" ConceptID="635" Rubric="파서가능한" />
+  <Concept Language="ko" ConceptID="636" Rubric="코드화된 텍스트" />
+  <Concept Language="ko" ConceptID="637" Rubric="*application/dicom (en)" />
+  <Concept Language="ko" ConceptID="638" Rubric="포맷" />
+  <Concept Language="ko" ConceptID="639" Rubric="결로를 클립보드로 복사" />
+  <Concept Language="ko" ConceptID="640" Rubric="실제 (actual)" />
+  <Concept Language="ko" ConceptID="641" Rubric="하단 (lower)" />
+  <Concept Language="ko" ConceptID="642" Rubric="상단 (upper)" />
+  <Concept Language="ko" ConceptID="643" Rubric="정수 (Integral)" />
+  <Concept Language="ko" ConceptID="644" Rubric="단일 (Unitary)" />
+  <Concept Language="ko" ConceptID="645" Rubric="정수와 분수 (Integer and fraction)" />
+  <Concept Language="ko" ConceptID="646" Rubric="분수 (Fraction)" />
+  <Concept Language="ko" ConceptID="647" Rubric="정의" />
+  <Concept Language="ko" ConceptID="648" Rubric="증거 (Witnessed)" />
+  <Concept Language="ko" ConceptID="649" Rubric="소수점 제한 (Limit decimal places)" />
+  <Concept Language="ko" ConceptID="650" Rubric="번역" />
+  <Concept Language="ko" ConceptID="653" Rubric="새로운 Activity" />
+  <Concept Language="ko" ConceptID="654" Rubric="참여 (Participation)" />
+  <Concept Language="ko" ConceptID="655" Rubric="전위시 (Electrical Potential Time)" />
+  <Concept Language="ko" ConceptID="656" Rubric="EHR 내에서만 링크" />
+  <Concept Language="ko" ConceptID="657" Rubric="URI에서의 정규식" />
+  <Concept Language="ko" ConceptID="658" Rubric="참여자 함수 (Participant function)" />
+  <Concept Language="ko" ConceptID="659" Rubric="링크" />
+  <Concept Language="ko" ConceptID="660" Rubric="다른 참가자들 (Other participations)" />
+  <Concept Language="ko" ConceptID="661" Rubric="목표" />
+  <Concept Language="ko" ConceptID="662" Rubric="의미" />
   <Concept Language="tr" ConceptID="34" Rubric="Hiçbirisi" />
   <Concept Language="tr" ConceptID="32" Rubric="Verinin konusu olan kişi" />
   <Concept Language="tr" ConceptID="33" Rubric="Tarih Zaman kısıtları" />

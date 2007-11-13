@@ -15,36 +15,10 @@
 '
 
 Public Class RmTerm
-    Protected sCode As String
-    Protected sText As String 'New String("")
+    Inherits Term
     Protected sDescription As String 'New String("")
     Protected sComment As String
-    Protected sLanguageCode As String 'New String("")
-
-    ReadOnly Property Code() As String
-        Get
-            Return sCode
-        End Get
-    End Property
-
-    Property Language() As String
-        Get
-            Return sLanguageCode
-        End Get
-        Set(ByVal Value As String)
-            sLanguageCode = Value
-        End Set
-    End Property
-
-    Property Text() As String
-        Get
-            Return sText
-        End Get
-        Set(ByVal Value As String)
-            sText = Value
-        End Set
-    End Property
-
+    
     Property Description() As String
         Get
             Return sDescription
@@ -92,7 +66,7 @@ Public Class RmTerm
     End Function
 
     Sub New(ByVal Code As String)
-        sCode = Code
+        MyBase.New(Code)
     End Sub
 End Class
 
