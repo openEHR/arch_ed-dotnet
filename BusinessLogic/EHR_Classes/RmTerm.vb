@@ -37,12 +37,12 @@ Public Class RmTerm
         End Set
     End Property
 
-    ReadOnly Property isConstraint() As Boolean
+    ReadOnly Property IsConstraint() As Boolean
         Get
             Dim s As String
             ' cannot use toupper or lower safely with internationalisation
 
-            If isValidTermCode(Me.Code) Then
+            If IsValidTermCode(Me.Code) Then
                 s = Me.Code.Substring(0, 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 If s = "at" Then
                     Return False
@@ -52,17 +52,12 @@ Public Class RmTerm
             Else
                 Debug.Assert(False)
             End If
-
         End Get
     End Property
 
-    Friend Shared Function isValidTermCode(ByVal a_term_code As String) As Boolean
+    Friend Shared Function IsValidTermCode(ByVal a_term_code As String) As Boolean
         Dim rx As New System.Text.RegularExpressions.Regex("a[ct](0\.[0-9]{1,4}|[0-9]{4})(\.[0-9]{1,3})*")
         Return rx.Match(a_term_code).Success()
-    End Function
-
-    Overrides Function ToString() As String
-        Return sText
     End Function
 
     Sub New(ByVal Code As String)
