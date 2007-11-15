@@ -255,11 +255,14 @@ Public Class OceanArchetypeEditor
         Return True
     End Function
 
-    Public Function GetInput(ByVal label As String, ByVal parentForm As Form) As String
+    Public Function GetInput(ByVal label As String, ByVal parentForm As Form, Optional ByVal defaultValue As String = "") As String
         Dim frm As New InputForm
         Dim s As String = ""
 
         frm.lblInput.Text = label
+        If defaultValue <> "" Then
+            frm.txtInput.Text = defaultValue
+        End If
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
         If frm.ShowDialog(parentForm) = Windows.Forms.DialogResult.OK Then

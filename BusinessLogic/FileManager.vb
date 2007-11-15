@@ -346,10 +346,10 @@ Public Class FileManagerLocal
 
         'validate the concept to update it with the correct case and remove illegal characters
         Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
-        Id1.Concept = Id1.ValidConcept(Id1.Concept, "")
+        Id1.Concept = Id1.ValidConcept(Id1.Concept, "", False)
 
         Dim Id2 As New ArchetypeID(shortFileName)
-        Id2.Concept = Id2.ValidConcept(Id2.Concept, "")
+        Id2.Concept = Id2.ValidConcept(Id2.Concept, "", False)
 
         Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
         If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made

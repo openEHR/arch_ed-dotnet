@@ -289,7 +289,7 @@ Public Class frmStartUp
             Beep()
             comboComponent.Focus()
         Else
-            Dim s As String = Archetype_ID.ValidConcept(txtConcept.Text, "")
+            Dim s As String = Archetype_ID.ValidConcept(txtConcept.Text, "", True)
 
             If s = "" Then
                 Beep()
