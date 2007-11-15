@@ -1104,9 +1104,15 @@ Public Class TabPageStructure
             ' if it is not loading and is changed to false then
             ' need to remove the filemanager
             'ToDo: needs to be more comprehensive if more than one embedded
-            If Filemanager.HasEmbedded AndAlso (Not Filemanager.Master Is mFileManager) Then
-                Filemanager.RemoveEmbedded(mFileManager)
-                mFileManager = Filemanager.Master
+            If mIsEmbedded AndAlso Me.comboStructure.SelectedIndex = -1 Then
+                Me.comboStructure.Focus()
+                Me.comboStructure.DroppedDown = True
+                Return
+            Else
+                If Filemanager.HasEmbedded AndAlso (Not Filemanager.Master Is mFileManager) Then
+                    Filemanager.RemoveEmbedded(mFileManager)
+                    mFileManager = Filemanager.Master
+                End If
             End If
 
             Me.comboStructure_selectedIndexChanged(sender, e)
