@@ -92,7 +92,7 @@ Public Class ArchetypeID
         mRmModel = ReferenceModel.ModelType
     End Sub
 
-    Public Function ValidConcept(ByRef Concept As String, ByVal OldConcept As String, ByVal replaceHyphen As Boolean) As String
+    Public Function ValidConcept(ByVal Concept As String, ByVal OldConcept As String, ByVal replaceHyphen As Boolean) As String
         Dim result As String = Trim(Concept)
 
         If result <> "" Then
