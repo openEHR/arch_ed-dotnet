@@ -1106,7 +1106,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>copy "$(SolutionDir)AdlParser\libOceanInformatics.AdlParser.dll" "$(TargetDir)"
+    <PostBuildEvent>xcopy "$(SolutionDir)AdlParser\libOceanInformatics.AdlParser.dll" "$(TargetDir)" /d /i &gt;nul
 "$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
   </PropertyGroup>
 </Project>
