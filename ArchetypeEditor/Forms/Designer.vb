@@ -5079,8 +5079,20 @@ Public Class Designer
 
     Private Sub menuEditArchID_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuEditArchID.Click
         Dim arch_id As String = mFileManager.Archetype.Archetype_ID.Concept
-        Dim new_concept As String = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me)
-        new_concept = mFileManager.Archetype.Archetype_ID.ValidConcept(new_concept, arch_id.ToString)
+
+        'SRH 15 Nov 2007 - Added old value to make changes easier
+        Dim defaultValue As String
+        Dim i As Integer
+
+        i = arch_id.LastIndexOf("-")
+        If i > -1 Then
+            defaultValue = arch_id.Substring(i)
+        Else
+            defaultValue = arch_id
+        End If
+
+        Dim new_concept As String = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me, defaultValue)
+        new_concept = mFileManager.Archetype.Archetype_ID.ValidConcept(new_concept, arch_id.ToString, True)
 
         If new_concept <> "" Then
             mFileManager.Archetype.Archetype_ID.Concept = new_concept
