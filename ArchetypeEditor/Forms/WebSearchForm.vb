@@ -143,11 +143,7 @@ Public Class WebSearchForm
             Finally
                 Me.Cursor = Cursors.Default
             End Try
-
-
         End If
-
-
     End Sub
 
     ' the FinderService returned a result of archetype Ids, which we want to list now in a Table and show them to the user
@@ -210,11 +206,6 @@ Public Class WebSearchForm
         End Get
     End Property
 
-    Private Sub butCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butCancel.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
-        Me.Close()
-    End Sub
-
     Private Sub txtTerm_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTerm.TextChanged
         If Not Me.AcceptButton Is btnSearch Then
             Me.AcceptButton = btnSearch
@@ -223,7 +214,6 @@ Public Class WebSearchForm
 
     Private returnString As String
     Private AsyncOpCompleted As Boolean
-
 
     Private Sub ArchetypeWebService_GetADL(ByVal sender As Object, ByVal e As ArchetypeFinderWebServiceURL.getArchetypeInADLCompletedEventArgs) Handles ArchetypeService.getArchetypeInADLCompleted
         If e.Error Is Nothing Then
@@ -234,9 +224,8 @@ Public Class WebSearchForm
             Throw New Exception(e.Error.Message)
         End If
     End Sub
+
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
-
-
         If Me.listViewArchetypes.SelectedItems.Count > 0 Then
             archetypeIdToBeOpened = listViewArchetypes.SelectedItems(0).Text
             'Dim request As System.Net.WebRequest
@@ -248,7 +237,6 @@ Public Class WebSearchForm
                 'Me.PanelBottom.Refresh()
                 Me.Cursor = Cursors.WaitCursor
                 Application.DoEvents()
-
 
                 ArchetypeService.getArchetypeInADLAsync(archetypeIdToBeOpened)
 
@@ -314,6 +302,7 @@ Public Class WebSearchForm
     Private Sub WebSearchForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         Me.txtTerm.Focus()
     End Sub
+
 End Class
 
 '
