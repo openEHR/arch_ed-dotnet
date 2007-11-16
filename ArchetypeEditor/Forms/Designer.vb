@@ -5086,11 +5086,11 @@ Public Class Designer
 
         i = arch_id.LastIndexOf("-")
         If i > -1 Then
-            defaultValue = arch_id.Substring(i)
+            defaultValue = arch_id.Substring(i + 1)
         Else
             defaultValue = arch_id
         End If
-
+        '
         Dim new_concept As String = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me, defaultValue)
         new_concept = mFileManager.Archetype.Archetype_ID.ValidConcept(new_concept, arch_id.ToString, True)
 

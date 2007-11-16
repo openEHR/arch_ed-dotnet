@@ -262,6 +262,7 @@ Public Class OceanArchetypeEditor
         frm.lblInput.Text = label
         If defaultValue <> "" Then
             frm.txtInput.Text = defaultValue
+            frm.txtInput.SelectAll()
         End If
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
