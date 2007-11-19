@@ -1737,14 +1737,17 @@ Namespace ArchetypeEditor.ADL_Classes
                                         rm_data = rm
                                     Case StructureType.State
                                         'for the moment saving the state data on the first event EventSeries if there is one
-                                        Dim a_rm As RmStructure
-                                        a_rm = rm.Children.items(0)
+                                        Dim a_rm As RmStructure = Nothing
 
-                                        If a_rm.Type = StructureType.History Then
+                                        If rm.Children.items.Length > 0 Then
+                                            a_rm = rm.Children.items(0)
+                                        End If
+
+                                        If a_rm Is Nothing OrElse a_rm.Type <> StructureType.History Then
+                                            rm_state = rm
+                                        Else
                                             ' can have EventSeries for each state
                                             rm_state_history = a_rm
-                                        Else
-                                            rm_state = rm
                                         End If
                                 End Select
                             Next
