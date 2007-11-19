@@ -312,7 +312,10 @@ Public Class SimpleStructure
         result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
         result.AppendFormat(HtmlHeader(BackGroundColour, showComments))
 
-        result.AppendFormat("{0}{1}", Environment.NewLine, mElement.ToHTML(0, showComments))
+        If Not mElement Is Nothing Then
+            result.AppendFormat("{0}{1}", Environment.NewLine, mElement.ToHTML(0, showComments))
+        End If
+
         result.AppendFormat("{0}</tr>", Environment.NewLine)
         result.AppendFormat("{0}</table>", Environment.NewLine)
 
