@@ -109,9 +109,7 @@ Public Class ArchetypeView
         rowHeadings = CType(TableDetails(1), Collection)
         isRotated = CType(TableDetails(2), Boolean)
 
-        If isRotated Then
-
-
+        If isRotated And rowHeadings.Count > 0 Then
             For Each t As String In CType(CType(rowHeadings(1), ArchetypeElement).Constraint, Constraint_Text).AllowableValues.Codes
                 Dim Rel_Pos As New Point(20, 20)
 
@@ -147,7 +145,6 @@ Public Class ArchetypeView
             Next
         End If
     End Sub
-
 
     Private Function NodesToControls(ByVal NodeCol As TreeNodeCollection, _
         ByRef aLocation As Point, ByVal aContainer As Control, _

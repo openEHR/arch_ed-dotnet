@@ -568,13 +568,7 @@ Public Class TabPageStructure
 #Region "Functions"
 
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
-        If mEmbeddedAllowed Then
-            Me.chkEmbedded.Visible = True
-        Else
-            Me.chkEmbedded.Visible = False
-        End If
-
+        chkEmbedded.Visible = mEmbeddedAllowed
         Me.HelpProviderTabPageStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 
@@ -739,7 +733,6 @@ Public Class TabPageStructure
             aContainer.Size = New Size
         End If
 
-        'If Not mArchetypeControl Is Nothing Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
         If Not mArchetypeControl Is Nothing AndAlso mArchetypeControl.HasData Then
             ArchetypeView.Instance.BuildInterface(mArchetypeControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only, mFileManager)
         End If
