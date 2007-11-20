@@ -245,104 +245,105 @@ Public Class ArchetypeView
             aContainer.Controls.Add(view)
 
             aContainer.Width = Math.Max(aLocation.X + view.Width + 5, aContainer.Width)
+
             If aContainer.Name <> "tpInterface" Then
                 aContainer.Height = Math.Max(view.Top + view.Height + 1, aContainer.Height)
             End If
 
             aLocation.Y = view.Top + view.Height + spacer
         End If
-
     End Function
 
     Public Shared Function ElementView(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
-
         'any additions need to be processed in the overloaded function below
-        Select Case anElement.Constraint.Type
-            Case ConstraintType.Text
-                Return New TextViewControl(anElement, a_filemanager)
+        If Not anElement Is Nothing AndAlso Not anElement.Constraint Is Nothing Then
+            Select Case anElement.Constraint.Type
+                Case ConstraintType.Text
+                    Return New TextViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Quantity
-                Return New QuantityViewControl(anElement, a_filemanager)
+                Case ConstraintType.Quantity
+                    Return New QuantityViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Duration
-                Return New DurationViewControl(anElement, a_filemanager)
+                Case ConstraintType.Duration
+                    Return New DurationViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Boolean
-                Return New BooleanViewControl(anElement, a_filemanager)
+                Case ConstraintType.Boolean
+                    Return New BooleanViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Ordinal
-                Return New OrdinalViewControl(anElement, a_filemanager)
+                Case ConstraintType.Ordinal
+                    Return New OrdinalViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.DateTime
-                Return New DateTimeViewControl(anElement, a_filemanager)
+                Case ConstraintType.DateTime
+                    Return New DateTimeViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Count
-                Return New CountViewControl(anElement, a_filemanager)
+                Case ConstraintType.Count
+                    Return New CountViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Multiple
-                Return New MultipleViewControl(anElement, a_filemanager)
+                Case ConstraintType.Multiple
+                    Return New MultipleViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.URI
-                Return New URIViewControl(anElement, a_filemanager)
+                Case ConstraintType.URI
+                    Return New URIViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
-                Return New IntervalViewControl(anElement, a_filemanager)
+                Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
+                    Return New IntervalViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Proportion
-                Return New RatioViewControl(anElement, a_filemanager)
+                Case ConstraintType.Proportion
+                    Return New RatioViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.MultiMedia
-                Return New MultiMediaViewControl(anElement, a_filemanager)
+                Case ConstraintType.MultiMedia
+                    Return New MultiMediaViewControl(anElement, a_filemanager)
 
-            Case Else
-                Return New DatatypeViewControl(anElement, a_filemanager)
-        End Select
+                Case Else
+                    Return New DatatypeViewControl(anElement, a_filemanager)
+            End Select
+        End If
     End Function
 
     Public Shared Function ElementView(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
-
         'any additions need to be processed in the overloaded function above
+        If Not aConstraint Is Nothing Then
+            Select Case aConstraint.Type
+                Case ConstraintType.Text
+                    Return New TextViewControl(aConstraint, a_filemanager)
 
-        Select Case aConstraint.Type
-            Case ConstraintType.Text
-                Return New TextViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.Quantity
+                    Return New QuantityViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Quantity
-                Return New QuantityViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.Duration
+                    Return New DurationViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Duration
-                Return New DurationViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.Boolean
+                    Return New BooleanViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Boolean
-                Return New BooleanViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.Ordinal
+                    Return New OrdinalViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Ordinal
-                Return New OrdinalViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.DateTime
+                    Return New DateTimeViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.DateTime
-                Return New DateTimeViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.Count
+                    Return New CountViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Count
-                Return New CountViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.Multiple
+                    Return New MultipleViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Multiple
-                Return New MultipleViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.URI
+                    Return New URIViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.URI
-                Return New URIViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
+                    Return New IntervalViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
-                Return New IntervalViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.Proportion
+                    Return New RatioViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Proportion
-                Return New RatioViewControl(aConstraint, a_filemanager)
+                Case ConstraintType.MultiMedia
+                    Return New MultiMediaViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.MultiMedia
-                Return New MultiMediaViewControl(aConstraint, a_filemanager)
-
-            Case Else
-                Return New DatatypeViewControl(aConstraint, a_filemanager)
-        End Select
+                Case Else
+                    Return New DatatypeViewControl(aConstraint, a_filemanager)
+            End Select
+        End If
     End Function
 
     'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
