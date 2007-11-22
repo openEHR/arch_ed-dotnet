@@ -4249,8 +4249,8 @@ Public Class Designer
         AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
         ' Set Tooltips
-        Me.ToolBarOpen.ToolTipText = Filemanager.GetOpenEhrTerm(609, "Open archetype")
-        Me.ToolBarOpenFromWeb.ToolTipText = Filemanager.GetOpenEhrTerm(650, "Open Archetype from Web")
+        Me.ToolBarOpen.ToolTipText = Filemanager.GetOpenEhrTerm(609, "Open Archetype")
+        Me.ToolBarOpenFromWeb.ToolTipText = Filemanager.GetOpenEhrTerm(666, "Open Archetype from Web")
         Me.ToolBarNew.ToolTipText = Filemanager.GetOpenEhrTerm(151, "New")
         Me.ToolBarPrint.ToolTipText = Filemanager.GetOpenEhrTerm(520, "Print")
         Me.ToolBarSave.ToolTipText = Filemanager.GetOpenEhrTerm(183, "Save")
