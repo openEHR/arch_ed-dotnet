@@ -1083,6 +1083,8 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="AssemblyVersion.cmd">
+    </None>
     <None Include="Terminology\Terminology.xsx">
       <DependentUpon>Terminology.xsd</DependentUpon>
     </None>
@@ -1109,4 +1111,9 @@
     <PostBuildEvent>xcopy "$(SolutionDir)AdlParser\libOceanInformatics.AdlParser.dll" "$(TargetDir)" /d /i &gt;nul
 "$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
   </PropertyGroup>
+	<Target Name="BeforeBuild" Outputs="AssemblyVersion.vb">
+		<Exec Command="AssemblyVersion.cmd $(Configuration) > AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
+			<Output ItemName="Compile" TaskParameter="Outputs" />
+		</Exec>
+	</Target>
 </Project>
