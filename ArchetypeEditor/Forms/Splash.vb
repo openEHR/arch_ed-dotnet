@@ -21,12 +21,8 @@ Public Class Splash
 
     Public Sub New()
         MyBase.New()
-
-        'This call is required by the Windows Form Designer.
         InitializeComponent()
-
-        'Add any initialization after the InitializeComponent() call
-
+        VersionLabel.Text = "Version " + ProductVersion
     End Sub
 
     'Form overrides dispose to clean up the component list.
@@ -40,6 +36,7 @@ Public Class Splash
     End Sub
     Friend WithEvents buttonClose As System.Windows.Forms.Button
     Public WithEvents timerSplash As System.Windows.Forms.Timer
+    Friend WithEvents VersionLabel As System.Windows.Forms.Label
 
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
@@ -52,33 +49,47 @@ Public Class Splash
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Splash))
         Me.buttonClose = New System.Windows.Forms.Button
         Me.timerSplash = New System.Windows.Forms.Timer(Me.components)
+        Me.VersionLabel = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
         'buttonClose
         '
+        Me.buttonClose.BackColor = System.Drawing.Color.LightGoldenrodYellow
         Me.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.buttonClose.FlatAppearance.BorderColor = System.Drawing.Color.PaleGoldenrod
         Me.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonClose.Location = New System.Drawing.Point(32, 210)
+        Me.buttonClose.Location = New System.Drawing.Point(38, 197)
         Me.buttonClose.Name = "buttonClose"
-        Me.buttonClose.Size = New System.Drawing.Size(104, 23)
+        Me.buttonClose.Size = New System.Drawing.Size(86, 24)
         Me.buttonClose.TabIndex = 0
         Me.buttonClose.Text = "Close"
-        Me.buttonClose.UseVisualStyleBackColor = True
+        Me.buttonClose.UseVisualStyleBackColor = False
         '
         'timerSplash
         '
         Me.timerSplash.Interval = 2000
         '
+        'VersionLabel
+        '
+        Me.VersionLabel.AutoSize = True
+        Me.VersionLabel.BackColor = System.Drawing.Color.Transparent
+        Me.VersionLabel.Font = New System.Drawing.Font("Tahoma", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.VersionLabel.Location = New System.Drawing.Point(201, 138)
+        Me.VersionLabel.Name = "VersionLabel"
+        Me.VersionLabel.Size = New System.Drawing.Size(69, 13)
+        Me.VersionLabel.TabIndex = 1
+        Me.VersionLabel.Text = "Version 1.0"
+        '
         'Splash
         '
         Me.AcceptButton = Me.buttonClose
-        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
-        Me.BackColor = System.Drawing.Color.White
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.BackColor = System.Drawing.Color.PaleGoldenrod
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.CancelButton = Me.buttonClose
-        Me.ClientSize = New System.Drawing.Size(566, 254)
-        Me.ControlBox = False
+        Me.ClientSize = New System.Drawing.Size(578, 262)
+        Me.Controls.Add(Me.VersionLabel)
         Me.Controls.Add(Me.buttonClose)
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
@@ -88,9 +99,10 @@ Public Class Splash
         Me.Name = "Splash"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Archetype Editor    Release 1 candidate (1244)"
+        Me.Text = "About Ocean Archetype Editor"
         Me.TopMost = True
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -99,6 +111,7 @@ Public Class Splash
     Public Sub ShowAsSplash()
         buttonClose.Hide()
         timerSplash.Enabled = True
+        FormBorderStyle = Windows.Forms.FormBorderStyle.None
         Show()
     End Sub
 
