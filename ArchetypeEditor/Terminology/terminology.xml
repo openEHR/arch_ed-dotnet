@@ -738,6 +738,7 @@
   <PrimaryRubric Id="664" Language="en" />
   <PrimaryRubric Id="665" Language="en" />
   <PrimaryRubric Id="666" Language="en" />
+  <PrimaryRubric Id="667" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1268,7 +1269,7 @@
   <Concept Language="en" ConceptID="595" Rubric="New window" />
   <Concept Language="en" ConceptID="596" Rubric="Save as" />
   <Concept Language="en" ConceptID="597" Rubric="Report issue" />
-  <Concept Language="en" ConceptID="598" Rubric="Preferences" />
+  <Concept Language="en" ConceptID="598" Rubric="Options" />
   <Concept Language="en" ConceptID="599" Rubric="Restricted" />
   <Concept Language="en" ConceptID="600" Rubric="Allowed values" />
   <Concept Language="en" ConceptID="601" Rubric="Unit values" />
@@ -5050,6 +5051,7 @@
   <Concept Language="en" ConceptID="664" Rubric="Network error" />
   <Concept Language="en" ConceptID="665" Rubric="Please enter your search parameter" />
   <Concept Language="en" ConceptID="666" Rubric="Open existing Archetype from Web" />
+  <Concept Language="en" ConceptID="667" Rubric="Tools" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
