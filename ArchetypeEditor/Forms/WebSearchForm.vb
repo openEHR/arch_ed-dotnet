@@ -34,20 +34,18 @@ Public Class WebSearchForm
     Private Sub btnSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearch.Click
 
         ' Is the textfield empty, a messageBox asks the user to provide a search parameter first
-        If (txtTerm.Text = "") Then
+        If txtTerm.Text = "" Then
             Dim message As String = Filemanager.GetOpenEhrTerm(665, "Please enter your search parameter")
             MessageBox.Show(message)
-            Me.comboSearch.Focus()
+            comboSearch.Focus()
         Else
-            Dim ArchetypeIDs As Array = Nothing 'JAR: 18APR07, EDT-35 Clean up compile time warnings
+            Dim ArchetypeIDs As Array = Nothing
             Dim aTerm(0) As String
 
             ' The referenced ArchetypeFinderService provides us an object to access all available services of the ArchetypeFinder
             Try
-
-                Me.Cursor = Cursors.WaitCursor
-
-                Me.listViewArchetypes.Clear()
+                Cursor = Cursors.WaitCursor
+                listViewArchetypes.Clear()
 
                 ArchetypeService = New ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService()
                 'get the required Archetypes depending on the radiobutton that is checked
@@ -67,7 +65,7 @@ Public Class WebSearchForm
                 End Select
 
                 ' no archetypes found
-                If (ArchetypeIDs Is Nothing) Then
+                If ArchetypeIDs Is Nothing Then
                     lblNum.Text = "0"
                     lblNum.Visible = True
                     'archetypeTable.Controls.Clear()
@@ -87,6 +85,7 @@ Public Class WebSearchForm
                     Dim lvgElement As New ListViewGroup("Element")
                     Dim lvgSection As New ListViewGroup("Section")
                     Dim lvgComposition As New ListViewGroup("Composition")
+
                     For Each id As String In ArchetypeIDs
                         Dim imageIndex As Integer
                         Dim lvg As ListViewGroup
@@ -119,15 +118,17 @@ Public Class WebSearchForm
                             imageIndex = 0
                             lvg = lvgStructure
                         End If
-                        If Not Me.listViewArchetypes.Groups.Contains(lvg) Then
-                            Me.listViewArchetypes.Groups.Add(lvg)
+
+                        If Not listViewArchetypes.Groups.Contains(lvg) Then
+                            listViewArchetypes.Groups.Add(lvg)
                         End If
-                        Dim lvi As ListViewItem = New ListViewItem(id, imageIndex, lvg)
-                        Me.listViewArchetypes.Items.Add(lvi)
+
+                        listViewArchetypes.Items.Add(New ListViewItem(id, imageIndex, lvg))
                     Next
-                    Me.listViewArchetypes.Focus()
-                    Me.listViewArchetypes.Items(0).Selected = True
-                    Me.AcceptButton = Me.butOK
+
+                    listViewArchetypes.Focus()
+                    listViewArchetypes.Items(0).Selected = True
+                    AcceptButton = butOK
                     'Me.setResults(ArchetypeIDs)
                 End If
 

@@ -45,7 +45,7 @@ Partial Class WebSearchForm
         Me.txtTerm.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtTerm.Location = New System.Drawing.Point(79, 19)
         Me.txtTerm.Name = "txtTerm"
-        Me.txtTerm.Size = New System.Drawing.Size(309, 21)
+        Me.txtTerm.Size = New System.Drawing.Size(512, 21)
         Me.txtTerm.TabIndex = 1
         '
         'btnSearch
@@ -54,10 +54,11 @@ Partial Class WebSearchForm
         Me.btnSearch.BackColor = System.Drawing.Color.LightSteelBlue
         Me.btnSearch.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSearch.Image = CType(resources.GetObject("btnSearch.Image"), System.Drawing.Image)
-        Me.btnSearch.Location = New System.Drawing.Point(315, 45)
+        Me.btnSearch.Location = New System.Drawing.Point(518, 45)
         Me.btnSearch.Name = "btnSearch"
         Me.btnSearch.Size = New System.Drawing.Size(73, 26)
         Me.btnSearch.TabIndex = 3
+        Me.btnSearch.Text = "Search"
         Me.btnSearch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
         Me.btnSearch.UseVisualStyleBackColor = False
         '
@@ -67,7 +68,7 @@ Partial Class WebSearchForm
         Me.lblNum.AutoSize = True
         Me.lblNum.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNum.ForeColor = System.Drawing.Color.DarkBlue
-        Me.lblNum.Location = New System.Drawing.Point(374, 72)
+        Me.lblNum.Location = New System.Drawing.Point(577, 72)
         Me.lblNum.Margin = New System.Windows.Forms.Padding(3)
         Me.lblNum.Name = "lblNum"
         Me.lblNum.Size = New System.Drawing.Size(14, 15)
@@ -99,7 +100,7 @@ Partial Class WebSearchForm
         Me.gbSearch.Margin = New System.Windows.Forms.Padding(2)
         Me.gbSearch.Name = "gbSearch"
         Me.gbSearch.Padding = New System.Windows.Forms.Padding(2)
-        Me.gbSearch.Size = New System.Drawing.Size(396, 94)
+        Me.gbSearch.Size = New System.Drawing.Size(599, 94)
         Me.gbSearch.TabIndex = 1
         Me.gbSearch.TabStop = False
         Me.gbSearch.Text = "Search"
@@ -127,7 +128,7 @@ Partial Class WebSearchForm
         Me.listViewArchetypes.Margin = New System.Windows.Forms.Padding(2)
         Me.listViewArchetypes.MultiSelect = False
         Me.listViewArchetypes.Name = "listViewArchetypes"
-        Me.listViewArchetypes.Size = New System.Drawing.Size(396, 166)
+        Me.listViewArchetypes.Size = New System.Drawing.Size(599, 276)
         Me.listViewArchetypes.SmallImageList = Me.ImageListArchetypes
         Me.listViewArchetypes.TabIndex = 4
         Me.listViewArchetypes.UseCompatibleStateImageBehavior = False
@@ -149,7 +150,7 @@ Partial Class WebSearchForm
         'butOK
         '
         Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butOK.Location = New System.Drawing.Point(261, 8)
+        Me.butOK.Location = New System.Drawing.Point(456, 8)
         Me.butOK.Margin = New System.Windows.Forms.Padding(2)
         Me.butOK.Name = "butOK"
         Me.butOK.Size = New System.Drawing.Size(62, 23)
@@ -161,7 +162,7 @@ Partial Class WebSearchForm
         '
         Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(328, 8)
+        Me.butCancel.Location = New System.Drawing.Point(523, 8)
         Me.butCancel.Margin = New System.Windows.Forms.Padding(2)
         Me.butCancel.Name = "butCancel"
         Me.butCancel.Size = New System.Drawing.Size(62, 23)
@@ -175,10 +176,10 @@ Partial Class WebSearchForm
         Me.PanelBottom.Controls.Add(Me.butOK)
         Me.PanelBottom.Controls.Add(Me.butCancel)
         Me.PanelBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelBottom.Location = New System.Drawing.Point(2, 262)
+        Me.PanelBottom.Location = New System.Drawing.Point(2, 372)
         Me.PanelBottom.Margin = New System.Windows.Forms.Padding(2)
         Me.PanelBottom.Name = "PanelBottom"
-        Me.PanelBottom.Size = New System.Drawing.Size(396, 37)
+        Me.PanelBottom.Size = New System.Drawing.Size(599, 37)
         Me.PanelBottom.TabIndex = 16
         '
         'ProgressBar1
@@ -189,7 +190,7 @@ Partial Class WebSearchForm
         Me.ProgressBar1.Location = New System.Drawing.Point(10, 10)
         Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(2)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(227, 14)
+        Me.ProgressBar1.Size = New System.Drawing.Size(430, 16)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 7
         Me.ProgressBar1.Value = 30
@@ -202,7 +203,7 @@ Partial Class WebSearchForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.LightSteelBlue
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(400, 301)
+        Me.ClientSize = New System.Drawing.Size(603, 411)
         Me.ControlBox = False
         Me.Controls.Add(Me.listViewArchetypes)
         Me.Controls.Add(Me.PanelBottom)
