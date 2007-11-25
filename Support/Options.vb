@@ -15,7 +15,7 @@ Public Class Options
     Private mShowCommentsInHtml As Boolean
     Private mTimerMinutes As Integer = 10
     Private mAllowWebSearch As Boolean
-    Private mArchetypeRepositoryURL As New Uri("http://www.archetypes.com.au/archetypefinder")
+    Private mArchetypeRepositoryURL As New Uri("http://archetypes.com.au/archetypefinder/services/ArchetypeFinderBean?wsdl")
     Private mAllowTerminologyLookUp As Boolean
     Private mTerminologyURL As New Uri("http://ots.oceaninformatics.biz/OTS/OTSService.asmx")
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
