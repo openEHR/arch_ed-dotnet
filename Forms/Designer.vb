@@ -3613,10 +3613,8 @@ Public Class Designer
     End Sub
 
     Private Sub MenuHelpOceanEditor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpOceanEditor.Click
-        Dim Frm As New Splash
-        Frm.ControlBox = True
-        Frm.ShowDialog(Me)
-        Frm.Dispose()
+        Dim frm As New Splash
+        frm.ShowDialog(Me)
     End Sub
 
     Private Sub UpdateSpecialisationTree(ByVal Label As String, ByVal NodeId As String)
@@ -4281,23 +4279,14 @@ Public Class Designer
                 ReferenceModel.SetModelType(ReferenceModelType.openEHR_EHR)
             End If
 
-            ''JAR: 12APR07, EDT23 Continue to display splash screen for another 1 second (accounts for overhead to load archetype)
-            ''System.Threading.Thread.Sleep(1000)
-            'frmSplash.Hide() 'Hide splash screen before open as open can display messagebox that will otherwise sit behind splash screen
-
             OpenArchetype(ArchetypeToOpen)
-
-            Me.Show()
+            Show()
 
             If Not mFileManager.ArchetypeAvailable Then
-                Me.Close()
+                Close()
             End If
-
         Else
-            ''JAR: 12APR07, EDT23: Continue to display splash screen for another 2 seconds
-            'System.Threading.Thread.Sleep(2000)
-            'frmSplash.Hide()
-            Me.Show()
+            Show()
 
             'load the start screen
             If SetNewArchetypeName() = 2 Then

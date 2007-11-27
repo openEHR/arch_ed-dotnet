@@ -119,10 +119,10 @@ Public Class Splash
         timerSplash.Enabled = False
         timerSplash.Interval = 50
 
-        If Opacity <= 0 Then
+        If Opacity <= 0.05 Then
             Hide()
         Else
-            Opacity -= 0.05
+            Opacity *= 3 / 4
             timerSplash.Enabled = True
         End If
     End Sub
