@@ -432,11 +432,9 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Overridable Sub MaxValueChanged()
-        If numMaxValue.Text <> "" Then
-            Constraint.MaximumValue = Convert.ToInt32(CDec(numMaxValue.Text))
-        Else
-            Constraint.MaximumValue = 0
-        End If
+        Dim maximum As Decimal
+        Decimal.TryParse(numMaxValue.Text, maximum)
+        Constraint.MaximumValue = Convert.ToInt32(maximum, System.Globalization.NumberFormatInfo.InvariantInfo)
     End Sub
 
     Private Sub numMaxValue_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles numMaxValue.Validating
@@ -450,8 +448,9 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
     Protected Sub numMaxValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMaxValue.TextChanged
         If Not MyBase.IsLoading Then
-            Dim maximum As Decimal
-            If numMaxValue.Text <> "" Then maximum = CDec(numMaxValue.Text)
+            Dim minimum, maximum As Decimal
+            Decimal.TryParse(numMinValue.Text, minimum)
+            Decimal.TryParse(numMaxValue.Text, maximum)
 
             If NumericAssumed.Visible Then
                 NumericAssumed.Maximum = maximum
@@ -462,7 +461,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
                 End If
             End If
 
-            If numMinValue.Text <> "" AndAlso maximum < CDec(numMinValue.Text) Then
+            If minimum > maximum Then
                 numMinValue.Text = CStr(maximum)
             End If
 
@@ -472,11 +471,9 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Overridable Sub MinValueChanged()
-        If numMinValue.Text <> "" Then
-            Constraint.MinimumValue = Convert.ToInt32(CDec(numMinValue.Text))
-        Else
-            Constraint.MinimumValue = 0
-        End If
+        Dim minimum As Decimal
+        Decimal.TryParse(numMaxValue.Text, minimum)
+        Constraint.MinimumValue = Convert.ToInt32(minimum, System.Globalization.NumberFormatInfo.InvariantInfo)
     End Sub
 
     Private Sub numMinValue_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles numMinValue.Validating
@@ -490,8 +487,9 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
     Protected Sub numMinValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.TextChanged
         If Not MyBase.IsLoading Then
-            Dim minimum As Decimal
-            If numMinValue.Text <> "" Then minimum = CDec(numMinValue.Text)
+            Dim minimum, maximum As Decimal
+            Decimal.TryParse(numMinValue.Text, minimum)
+            Decimal.TryParse(numMaxValue.Text, maximum)
 
             If NumericAssumed.Visible Then
                 NumericAssumed.Minimum = minimum
@@ -502,7 +500,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
                 End If
             End If
 
-            If numMaxValue.Text <> "" AndAlso minimum > CDec(numMaxValue.Text) Then
+            If minimum > maximum Then
                 numMaxValue.Text = CStr(minimum)
             End If
 

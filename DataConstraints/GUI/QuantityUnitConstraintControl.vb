@@ -70,36 +70,32 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
     End Property
 
     Public Sub Reset()
-        Dim tempIsLoading As Boolean = MyBase.IsLoading
-        MyBase.IsLoading = True
+        Dim loading As Boolean = MyBase.IsLoading
 
-        Me.cbMaxValue.Checked = False
-        Me.numMaxValue.Value = 0
-        Me.cbMinValue.Checked = False
-        Me.numMinValue.Value = 0
-        Me.NumericAssumed.Value = 0
-        Me.comboIncludeMax.SelectedIndex = 0
-        Me.comboIncludeMin.SelectedIndex = 0
-
-        MyBase.IsLoading = tempIsLoading
+        Try
+            MyBase.IsLoading = True
+            cbMaxValue.Checked = False
+            numMaxValue.Value = 0
+            cbMinValue.Checked = False
+            numMinValue.Value = 0
+            NumericAssumed.Value = 0
+            comboIncludeMax.SelectedIndex = 0
+            comboIncludeMin.SelectedIndex = 0
+        Finally
+            MyBase.IsLoading = loading
+        End Try
     End Sub
 
     Protected Overrides Sub MaxValueChanged()
-        'JAR: 22MAY2007, EDT-20 Do not refer directly to .Value property as it triggers numeric reformat 
-        'of the display which incorrectly sets the character position to 1.  Use .Text instead!
-        'Constraint.MaximumValue = Convert.ToSingle(Me.numMaxValue.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
-        If numMaxValue.Text <> "" Then
-            Constraint.MaximumValue = Convert.ToSingle(CDec(Me.numMaxValue.Text), System.Globalization.NumberFormatInfo.InvariantInfo)
-        End If
+        Dim maximum As Decimal
+        Decimal.TryParse(numMaxValue.Text, maximum)
+        Constraint.MaximumValue = Convert.ToSingle(maximum, System.Globalization.NumberFormatInfo.InvariantInfo)
     End Sub
 
     Protected Overrides Sub MinValueChanged()
-        'JAR: 22MAY2007, EDT-20 Do not refer directly to .Value property as it triggers numeric reformat 
-        'of the display which incorrectly sets the character position to 1.  Use .Text instead!
-        'Constraint.MinimumValue = Convert.ToSingle(Me.numMinValue.Value, System.Globalization.NumberFormatInfo.InvariantInfo)
-        If numMinValue.Text <> "" Then
-            Constraint.MinimumValue = Convert.ToSingle(CDec(Me.numMinValue.Text), System.Globalization.NumberFormatInfo.InvariantInfo)
-        End If
+        Dim minimum As Decimal
+        Decimal.TryParse(numMinValue.Text, minimum)
+        Constraint.MinimumValue = Convert.ToSingle(minimum, System.Globalization.NumberFormatInfo.InvariantInfo)
     End Sub
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
