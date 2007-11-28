@@ -110,7 +110,6 @@ Public Class SimpleStructure
         '
         'txtSimple
         '
-        Me.txtSimple.ContextMenu = Me.ContextMenuSimple
         Me.txtSimple.Enabled = False
         Me.txtSimple.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSimple.Location = New System.Drawing.Point(96, 40)
@@ -130,6 +129,7 @@ Public Class SimpleStructure
         '
         'SimpleStructure
         '
+        Me.ContextMenu = Me.ContextMenuSimple
         Me.Controls.Add(Me.PictureBoxSimple)
         Me.Controls.Add(Me.txtSimple)
         Me.Name = "SimpleStructure"
@@ -339,13 +339,15 @@ Public Class SimpleStructure
         Debug.Assert(ContextMenuSimple.MenuItems.Count = 2)
         ' show specialisation if appropriate
 
-        Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
-
-        If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+        If mCurrentItem Is Nothing OrElse OceanArchetypeEditor.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".") >= mFileManager.OntologyManager.NumberOfSpecialisations Then
+            MenuSpecialise.Visible = False
+        Else
             MenuSpecialise.Text = AE_Constants.Instance.Specialise
             MenuSpecialise.Visible = True
-        Else
-            MenuSpecialise.Visible = False
+        End If
+
+        If mFileManager.OntologyManager.Ontology.NumberOfSpecialisations = 0 Then
+            ContextMenuSimple.MenuItems.Add(menuChangeStructure)
         End If
     End Sub
 
