@@ -183,13 +183,14 @@ Public Class TabPageStructure
         Me.panelEntry.SuspendLayout()
         Me.SuspendLayout()
         '
-        'PanelStructure
+        'panelStructure
         '
+        Me.panelStructure.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panelStructure.Controls.Add(Me.panelDisplay)
-        Me.panelStructure.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelStructure.Location = New System.Drawing.Point(0, 40)
-        Me.panelStructure.Name = "PanelStructure"
-        Me.panelStructure.Size = New System.Drawing.Size(658, 368)
+        Me.panelStructure.Name = "panelStructure"
+        Me.panelStructure.Size = New System.Drawing.Size(650, 500)
         Me.panelStructure.TabIndex = 8
         Me.panelStructure.Visible = False
         '
@@ -202,7 +203,7 @@ Public Class TabPageStructure
         Me.panelDisplay.Name = "panelDisplay"
         Me.panelDisplay.Padding = New System.Windows.Forms.Padding(2)
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.panelDisplay, True)
-        Me.panelDisplay.Size = New System.Drawing.Size(350, 368)
+        Me.panelDisplay.Size = New System.Drawing.Size(342, 350)
         Me.panelDisplay.TabIndex = 0
         '
         'ContextMenuGrid
@@ -418,7 +419,7 @@ Public Class TabPageStructure
         Me.panelEntry.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelEntry.Location = New System.Drawing.Point(0, 0)
         Me.panelEntry.Name = "panelEntry"
-        Me.panelEntry.Size = New System.Drawing.Size(658, 40)
+        Me.panelEntry.Size = New System.Drawing.Size(650, 40)
         Me.panelEntry.TabIndex = 9
         '
         'chkEmbedded
@@ -446,7 +447,7 @@ Public Class TabPageStructure
         Me.comboStructure.Location = New System.Drawing.Point(97, 8)
         Me.comboStructure.Name = "comboStructure"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.comboStructure, True)
-        Me.comboStructure.Size = New System.Drawing.Size(136, 24)
+        Me.comboStructure.Size = New System.Drawing.Size(136, 21)
         Me.comboStructure.TabIndex = 7
         Me.comboStructure.Text = "Choose..."
         '
@@ -456,6 +457,7 @@ Public Class TabPageStructure
         '
         'TabPageStructure
         '
+        Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.LemonChiffon
         Me.Controls.Add(Me.panelStructure)
         Me.Controls.Add(Me.panelEntry)
@@ -464,7 +466,7 @@ Public Class TabPageStructure
         Me.HelpProviderTabPageStructure.SetHelpString(Me, "")
         Me.Name = "TabPageStructure"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(658, 408)
+        Me.Size = New System.Drawing.Size(650, 408)
         Me.panelStructure.ResumeLayout(False)
         Me.panelEntry.ResumeLayout(False)
         Me.ResumeLayout(False)
