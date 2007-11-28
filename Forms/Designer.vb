@@ -1887,32 +1887,26 @@ Public Class Designer
 #Region "Principle functions"
 
     Private Sub OpenArchetype(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileOpen.Click
+        If CheckOKtoClose() Then
+            OpenFileDialogArchetype.Filter = "ADL|*.adl|XML|*.xml|All files|*.*"
 
-        If Not CheckOKtoClose() Then
-            Return
+            Select Case mFileManager.ParserType
+                Case "adl"
+                    OpenFileDialogArchetype.FilterIndex = 1
+                Case "xml"
+                    OpenFileDialogArchetype.FilterIndex = 2
+                Case Else
+                    OpenFileDialogArchetype.FilterIndex = 3
+            End Select
+
+            If mFileManager.WorkingDirectory <> "" Then
+                OpenFileDialogArchetype.InitialDirectory = mFileManager.WorkingDirectory
+            End If
+
+            If OpenFileDialogArchetype.ShowDialog(Me) = System.Windows.Forms.DialogResult.OK Then
+                OpenArchetype(OpenFileDialogArchetype.FileName)
+            End If
         End If
-
-        Me.OpenFileDialogArchetype.Filter = "ADL|*.adl|XML|*.xml|All files|*.*"
-
-        Select Case mFileManager.ParserType
-            Case "adl"
-                Me.OpenFileDialogArchetype.FilterIndex = 1
-            Case "xml"
-                Me.OpenFileDialogArchetype.FilterIndex = 2
-            Case Else
-                Me.OpenFileDialogArchetype.FilterIndex = 3
-        End Select
-
-        If mFileManager.WorkingDirectory <> "" Then
-            Me.OpenFileDialogArchetype.InitialDirectory = mFileManager.WorkingDirectory
-        End If
-
-        If OpenFileDialogArchetype.ShowDialog(Me) = System.Windows.Forms.DialogResult.Cancel Then
-            Return
-        End If
-
-        OpenArchetype(Me.OpenFileDialogArchetype.FileName)
-
     End Sub
 
     ' added funtion (by Jana Graenz)
@@ -1939,8 +1933,7 @@ Public Class Designer
     End Sub
 
     Private Sub OpenArchetype(ByVal a_file_name As String)
-        Dim i As Integer
-
+        Application.DoEvents()
         Me.Cursor = System.Windows.Forms.Cursors.WaitCursor
 
         ' stop auto updating of controls
@@ -1949,6 +1942,7 @@ Public Class Designer
         mFileManager.FileEdited = False
         mFileManager.FileLoading = True
         Dim watch As Stopwatch = Stopwatch.StartNew()
+
         If Not mFileManager.OpenArchetype(a_file_name) Then
             MessageBox.Show(mFileManager.Status, _
                 AE_Constants.Instance.MessageBoxCaption, _
@@ -1963,13 +1957,11 @@ Public Class Designer
         Debug.WriteLine(a_file_name + ": " + CStr(watch.Elapsed.TotalSeconds))
 
         'Show the correct display format toolbars
+        Dim i As Integer
+
         For i = 2 To 5
             Dim tbb As ToolBarButton = Me.ToolBarRTF.Buttons(i)
-            If Not mFileManager.AvailableFormats.Contains(tbb.Tag) Then
-                tbb.Visible = False
-            Else
-                tbb.Visible = True
-            End If
+            tbb.Visible = mFileManager.AvailableFormats.Contains(tbb.Tag)
         Next
 
         'remove embedded filemanagers
