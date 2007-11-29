@@ -298,6 +298,8 @@ Public Class Designer
         Me.MenuTerminology = New System.Windows.Forms.MenuItem
         Me.MenuTerminologyAvailable = New System.Windows.Forms.MenuItem
         Me.MenuTerminologyAdd = New System.Windows.Forms.MenuItem
+        Me.ToolsMenuItem = New System.Windows.Forms.MenuItem
+        Me.ToolsOptionsMenuItem = New System.Windows.Forms.MenuItem
         Me.MenuHelp = New System.Windows.Forms.MenuItem
         Me.MenuHelpStart = New System.Windows.Forms.MenuItem
         Me.MenuHelpReport = New System.Windows.Forms.MenuItem
@@ -397,8 +399,6 @@ Public Class Designer
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
-        Me.ToolsMenuItem = New System.Windows.Forms.MenuItem
-        Me.ToolsOptionsMenuItem = New System.Windows.Forms.MenuItem
         Me.PanelConcept.SuspendLayout()
         Me.tabComment.SuspendLayout()
         Me.tpConceptDescription.SuspendLayout()
@@ -522,7 +522,7 @@ Public Class Designer
         Me.tpConceptComment.Location = New System.Drawing.Point(4, 22)
         Me.tpConceptComment.Name = "tpConceptComment"
         Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptComment.Size = New System.Drawing.Size(185, 67)
+        Me.tpConceptComment.Size = New System.Drawing.Size(594, 67)
         Me.tpConceptComment.TabIndex = 1
         Me.tpConceptComment.Text = "Comment"
         Me.tpConceptComment.UseVisualStyleBackColor = True
@@ -533,7 +533,8 @@ Public Class Designer
         Me.txtConceptComment.Location = New System.Drawing.Point(3, 3)
         Me.txtConceptComment.Multiline = True
         Me.txtConceptComment.Name = "txtConceptComment"
-        Me.txtConceptComment.Size = New System.Drawing.Size(179, 61)
+        Me.txtConceptComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtConceptComment.Size = New System.Drawing.Size(588, 61)
         Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
@@ -891,6 +892,17 @@ Public Class Designer
         '
         Me.MenuTerminologyAdd.Index = 1
         Me.MenuTerminologyAdd.Text = "&Add Terminology"
+        '
+        'ToolsMenuItem
+        '
+        Me.ToolsMenuItem.Index = 5
+        Me.ToolsMenuItem.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.ToolsOptionsMenuItem})
+        Me.ToolsMenuItem.Text = "&Tools"
+        '
+        'ToolsOptionsMenuItem
+        '
+        Me.ToolsOptionsMenuItem.Index = 0
+        Me.ToolsOptionsMenuItem.Text = "&Options..."
         '
         'MenuHelp
         '
@@ -1814,17 +1826,6 @@ Public Class Designer
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
-        '
-        'ToolsMenuItem
-        '
-        Me.ToolsMenuItem.Index = 5
-        Me.ToolsMenuItem.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.ToolsOptionsMenuItem})
-        Me.ToolsMenuItem.Text = "&Tools"
-        '
-        'ToolsOptionsMenuItem
-        '
-        Me.ToolsOptionsMenuItem.Index = 0
-        Me.ToolsOptionsMenuItem.Text = "&Options..."
         '
         'Designer
         '

@@ -141,17 +141,13 @@ Public Class Choose
 
     Public Sub Set_Single()
         MinimumSize = New Size(Width - ClientSize.Width + ListBox2.Left, Height)
-        'Changed SRH 25.10.2007 - Interger MaxVal gave error in new version ? reason
-        MaximumSize = New Size(MinimumSize.Width, Height)
-        'MaximumSize = New Size(MinimumSize.Width, Integer.MaxValue)
+        MaximumSize = New Size(MinimumSize.Width, Screen.PrimaryScreen.Bounds.Height)
         ListBox2.Visible = False
     End Sub
 
     Public Sub Set_Double()
         MinimumSize = New Size(Width - ClientSize.Width + ListBox2.Left + ListBox2.Width + ListChoose.Left, Height)
-        'Changed SRH 25.10.2007 - Interger MaxVal gave error in new version ? reason
-        'MaximumSize = New Size(MinimumSize.Width, Integer.MaxValue)
-        MaximumSize = New Size(MinimumSize.Width, Height)
+        MaximumSize = New Size(MinimumSize.Width, Screen.PrimaryScreen.Bounds.Height)
         ListBox2.Visible = True
     End Sub
 
