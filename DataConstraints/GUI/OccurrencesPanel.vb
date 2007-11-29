@@ -92,7 +92,7 @@ Public Class OccurrencesPanel
         Me.lblNumMax.Location = New System.Drawing.Point(128, 3)
         Me.lblNumMax.Name = "lblNumMax"
         Me.lblNumMax.Size = New System.Drawing.Size(48, 16)
-        Me.lblNumMax.TabIndex = 1
+        Me.lblNumMax.TabIndex = 15
         Me.lblNumMax.Text = "Max:"
         Me.lblNumMax.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
@@ -111,7 +111,7 @@ Public Class OccurrencesPanel
         Me.cbUnbounded.Location = New System.Drawing.Point(248, 0)
         Me.cbUnbounded.Name = "cbUnbounded"
         Me.cbUnbounded.Size = New System.Drawing.Size(120, 24)
-        Me.cbUnbounded.TabIndex = 2
+        Me.cbUnbounded.TabIndex = 25
         Me.cbUnbounded.Text = "Unbounded"
         '
         'gbOccurrences
@@ -138,7 +138,7 @@ Public Class OccurrencesPanel
         Me.comboRepeat.Items.AddRange(New Object() {"not repeating", "repeating - no limit", "repeating - limited"})
         Me.comboRepeat.Location = New System.Drawing.Point(115, 0)
         Me.comboRepeat.Name = "comboRepeat"
-        Me.comboRepeat.Size = New System.Drawing.Size(149, 24)
+        Me.comboRepeat.Size = New System.Drawing.Size(149, 21)
         Me.comboRepeat.TabIndex = 1
         '
         'comboOptional
@@ -146,7 +146,7 @@ Public Class OccurrencesPanel
         Me.comboOptional.Items.AddRange(New Object() {"optional", "mandatory"})
         Me.comboOptional.Location = New System.Drawing.Point(5, 0)
         Me.comboOptional.Name = "comboOptional"
-        Me.comboOptional.Size = New System.Drawing.Size(104, 24)
+        Me.comboOptional.Size = New System.Drawing.Size(104, 21)
         Me.comboOptional.TabIndex = 0
         '
         'lblDash
@@ -154,7 +154,7 @@ Public Class OccurrencesPanel
         Me.lblDash.Location = New System.Drawing.Point(302, 4)
         Me.lblDash.Name = "lblDash"
         Me.lblDash.Size = New System.Drawing.Size(32, 16)
-        Me.lblDash.TabIndex = 2
+        Me.lblDash.TabIndex = 15
         Me.lblDash.Text = "-"
         Me.lblDash.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
@@ -163,16 +163,16 @@ Public Class OccurrencesPanel
         Me.numMin.Location = New System.Drawing.Point(232, 160)
         Me.numMin.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numMin.Name = "numMin"
-        Me.numMin.Size = New System.Drawing.Size(40, 22)
-        Me.numMin.TabIndex = 4
+        Me.numMin.Size = New System.Drawing.Size(40, 20)
+        Me.numMin.TabIndex = 10
         '
         'numMax
         '
         Me.numMax.Location = New System.Drawing.Point(280, 160)
         Me.numMax.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numMax.Name = "numMax"
-        Me.numMax.Size = New System.Drawing.Size(40, 22)
-        Me.numMax.TabIndex = 5
+        Me.numMax.Size = New System.Drawing.Size(40, 20)
+        Me.numMax.TabIndex = 20
         Me.numMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'cbOrdered
@@ -213,29 +213,31 @@ Public Class OccurrencesPanel
             mMode = Value
             Me.gbOccurrences.Controls.Clear()
             If mMode = OccurrencesMode.Lexical Then
-                Me.numMin.Location = New Drawing.Point(268, 0)
-                Me.panelLexical.Controls.Add(Me.numMin)
-                Me.numMin.BringToFront()
-                Me.numMax.Location = New Drawing.Point(324, 0)
-                Me.panelLexical.Controls.Add(Me.numMax)
-                Me.numMax.BringToFront()
-                Me.panelLexical.Dock = DockStyle.Fill
-                Me.gbOccurrences.Controls.Add(Me.panelLexical)
+                numMin.Location = New Drawing.Point(268, 0)
+                panelLexical.Controls.Add(numMin)
+                numMin.BringToFront()
+                numMax.Location = New Drawing.Point(324, 0)
+                panelLexical.Controls.Add(numMax)
+                numMax.BringToFront()
+                panelLexical.Dock = DockStyle.Fill
+                gbOccurrences.Controls.Add(panelLexical)
             Else
-                Me.numMin.Location = New Drawing.Point(80, 0)
-                Me.panelNumeric.Controls.Add(Me.numMin)
-                Me.numMax.Location = New Drawing.Point(185, 0)
-                Me.panelNumeric.Controls.Add(Me.numMax)
-                Me.panelNumeric.Dock = DockStyle.Fill
-                Me.gbOccurrences.Controls.Add(Me.panelNumeric)
+                numMin.Location = New Drawing.Point(80, 0)
+                panelNumeric.Controls.Add(numMin)
+                numMax.Location = New Drawing.Point(185, 0)
+                panelNumeric.Controls.Add(numMax)
+                panelNumeric.Dock = DockStyle.Fill
+                gbOccurrences.Controls.Add(panelNumeric)
             End If
         End Set
     End Property
+
     Public WriteOnly Property LocalFileManager() As FileManagerLocal
         Set(ByVal Value As FileManagerLocal)
             mFileManager = Value
         End Set
     End Property
+
     Public Property IsContainer() As Boolean
         Get
             Return mIncludeOrdered
@@ -251,6 +253,7 @@ Public Class OccurrencesPanel
             End If
         End Set
     End Property
+
     Public WriteOnly Property SetSingle() As Boolean
         Set(ByVal Value As Boolean)
             mIsLoading = True

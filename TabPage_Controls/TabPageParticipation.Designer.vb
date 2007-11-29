@@ -37,7 +37,7 @@ Partial Class TabPageParticipation
         '
         Me.chkProvider.AutoSize = True
         Me.chkProvider.Location = New System.Drawing.Point(28, 4)
-        Me.chkProvider.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.chkProvider.Margin = New System.Windows.Forms.Padding(2)
         Me.chkProvider.Name = "chkProvider"
         Me.chkProvider.Size = New System.Drawing.Size(218, 17)
         Me.chkProvider.TabIndex = 0
@@ -49,7 +49,7 @@ Partial Class TabPageParticipation
         Me.panelProvider.Controls.Add(Me.chkProvider)
         Me.panelProvider.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelProvider.Location = New System.Drawing.Point(0, 0)
-        Me.panelProvider.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.panelProvider.Margin = New System.Windows.Forms.Padding(2)
         Me.panelProvider.Name = "panelProvider"
         Me.panelProvider.Size = New System.Drawing.Size(452, 23)
         Me.panelProvider.TabIndex = 1
@@ -61,9 +61,9 @@ Partial Class TabPageParticipation
         Me.gbParticipations.Controls.Add(Me.panelButtons)
         Me.gbParticipations.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbParticipations.Location = New System.Drawing.Point(0, 23)
-        Me.gbParticipations.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbParticipations.Margin = New System.Windows.Forms.Padding(2)
         Me.gbParticipations.Name = "gbParticipations"
-        Me.gbParticipations.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbParticipations.Padding = New System.Windows.Forms.Padding(2)
         Me.gbParticipations.Size = New System.Drawing.Size(452, 249)
         Me.gbParticipations.TabIndex = 3
         Me.gbParticipations.TabStop = False
@@ -75,7 +75,7 @@ Partial Class TabPageParticipation
         Me.flowPanelParticipations.Dock = System.Windows.Forms.DockStyle.Fill
         Me.flowPanelParticipations.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
         Me.flowPanelParticipations.Location = New System.Drawing.Point(25, 60)
-        Me.flowPanelParticipations.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.flowPanelParticipations.Margin = New System.Windows.Forms.Padding(2)
         Me.flowPanelParticipations.Name = "flowPanelParticipations"
         Me.flowPanelParticipations.Size = New System.Drawing.Size(425, 187)
         Me.flowPanelParticipations.TabIndex = 3
@@ -85,7 +85,7 @@ Partial Class TabPageParticipation
         '
         Me.panelOccurrences.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelOccurrences.Location = New System.Drawing.Point(25, 15)
-        Me.panelOccurrences.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.panelOccurrences.Margin = New System.Windows.Forms.Padding(2)
         Me.panelOccurrences.Name = "panelOccurrences"
         Me.panelOccurrences.Size = New System.Drawing.Size(425, 45)
         Me.panelOccurrences.TabIndex = 2
@@ -97,7 +97,7 @@ Partial Class TabPageParticipation
         Me.panelButtons.Controls.Add(Me.butRemoveElement)
         Me.panelButtons.Dock = System.Windows.Forms.DockStyle.Left
         Me.panelButtons.Location = New System.Drawing.Point(2, 15)
-        Me.panelButtons.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.panelButtons.Margin = New System.Windows.Forms.Padding(2)
         Me.panelButtons.Name = "panelButtons"
         Me.panelButtons.Size = New System.Drawing.Size(23, 232)
         Me.panelButtons.TabIndex = 1
@@ -107,7 +107,7 @@ Partial Class TabPageParticipation
         Me.butAddEvent.Image = CType(resources.GetObject("butAddEvent.Image"), System.Drawing.Image)
         Me.butAddEvent.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.butAddEvent.Location = New System.Drawing.Point(2, 4)
-        Me.butAddEvent.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.butAddEvent.Margin = New System.Windows.Forms.Padding(2)
         Me.butAddEvent.Name = "butAddEvent"
         Me.butAddEvent.Size = New System.Drawing.Size(22, 24)
         Me.butAddEvent.TabIndex = 25
@@ -118,7 +118,7 @@ Partial Class TabPageParticipation
         Me.butRemoveElement.Image = CType(resources.GetObject("butRemoveElement.Image"), System.Drawing.Image)
         Me.butRemoveElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.butRemoveElement.Location = New System.Drawing.Point(2, 29)
-        Me.butRemoveElement.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.butRemoveElement.Margin = New System.Windows.Forms.Padding(2)
         Me.butRemoveElement.Name = "butRemoveElement"
         Me.butRemoveElement.Size = New System.Drawing.Size(22, 24)
         Me.butRemoveElement.TabIndex = 26
@@ -127,9 +127,11 @@ Partial Class TabPageParticipation
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScroll = True
+        Me.AutoSize = True
         Me.Controls.Add(Me.gbParticipations)
         Me.Controls.Add(Me.panelProvider)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "TabPageParticipation"
         Me.Size = New System.Drawing.Size(452, 272)
         Me.panelProvider.ResumeLayout(False)
