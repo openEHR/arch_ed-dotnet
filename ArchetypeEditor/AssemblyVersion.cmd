@@ -16,7 +16,7 @@
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 setlocal EnableDelayedExpansion
-set Version=1.0.1244
+set Version=1.0.1245
 
 if /i "%1" == "Release" (
 	for /f "delims=:MS" %%R in ('svnversion') do (
