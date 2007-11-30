@@ -1,0 +1,1119 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{179B4A54-F044-430D-9DB6-E950F80EC87F}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>ocean.ico</ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>ArchetypeEditor</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyMode>None</AssemblyOriginatorKeyMode>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionStrict>Off</OptionStrict>
+    <RootNamespace>ArchetypeEditor</RootNamespace>
+    <StartupObject>Sub Main</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>http://localhost/ArchetypeEditor/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationVersion>1.0.1241.%2a</ApplicationVersion>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>ArchetypeEditor.xml</DocumentationFile>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>PaintBoundary=false</DefineConstants>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>ArchetypeEditor.xml</DocumentationFile>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EiffelSoftware.Runtime, Version=6.0.6.9104, Culture=neutral, PublicKeyToken=def26f296efef469">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="MagicLibrary, Version=1.7.0.0, Culture=neutral, PublicKeyToken=3a6eb82f876a49bc" />
+    <Reference Include="OceanInformatics.AdlParser, Version=0.0.0.2, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="OTSControls, Version=1.0.2760.16002, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>OTS\OTSControls.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Design">
+      <Name>System.Design</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ArchetypeEditor.xml" />
+    <Content Include="arch_ed.ico" />
+    <Content Include="HTML\Images\any.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\choice.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\compound.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\count.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\datetime.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\duration.GIF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\edit.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\evaluation.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\instruction.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\interval.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\multimedia.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\multiple.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\new.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\observation.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\ordinal.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\pointintime.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\quantity.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\ratio.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\section.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\slot.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\text.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\truefalse.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="HTML\Images\uri.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Help\ArchetypeEditor.chm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="MagicLibrary.dll" />
+    <Content Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </Content>
+    <Content Include="Ocean Archetype Editor Licence Agreement.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ocean.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PropertyUnits\PropertyUnitData.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Support\ChangeLog.htm" />
+    <Content Include="Support\ocean.ico" />
+    <EmbeddedResource Include="DataConstraints\GUI\URIConstraintControl.resx">
+      <DependentUpon>URIConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChooseFix.resx">
+      <DependentUpon>ChooseFix.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Links.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Links.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Recovery.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Recovery.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Specialised_VB_classes\RestrictedSet.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>RestrictedSet.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\Link.resx">
+      <DependentUpon>Link.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\Participation.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Participation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageActivity.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TabPageActivity.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageParticipation.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TabPageParticipation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Terminology\openEHR_Translation.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Terminology\terminology.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PropertyUnits\PropertyUnits.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\composition\openEHR-EHR-COMPOSITION.report.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\action\openEHR-EHR-ACTION.imaging.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\action\openEHR-EHR-ACTION.referral.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.alert.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.excluded-adverse.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.excluded.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.injury.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.problem-diagnosis.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.problem.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\instruction\openEHR-EHR-INSTRUCTION.imaging.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\instruction\openEHR-EHR-INSTRUCTION.medication.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.apgar.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.blood_gases.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.blood_pressure.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.body_weight-birth.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.body_weight.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.dimensions-chest.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.dimensions.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\section\openEHR-EHR-SECTION.findings.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\section\openEHR-EHR-SECTION.SOAP.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\section\openEHR-EHR-SECTION.vital_signs.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\structure\openEHR-EHR-ITEM_TREE.referral.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SampleArchetypes\structure\openEHR-EHR-ITEM_TREE.imaging.v1.adl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Terminology\Terminology.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="ADL_Classes\ADL_Archetype.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_ArchetypeDetails.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_Composition.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_Description.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_Entry.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_Interface.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_Ontology.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_Section.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_Term.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_Tools.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_TranslationDetails.vb" />
+    <Compile Include="ApplicationEvents.vb" />
+    <Compile Include="BusinessLogic\EHR_Classes\Term.vb" />
+    <Compile Include="BusinessLogic\EHR_Classes\RmLink.vb" />
+    <Compile Include="BusinessLogic\Proxy.vb" />
+    <Compile Include="BusinessLogic\Duration.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADL_Classes\ADL_RmElement.vb" />
+    <Compile Include="AssemblyInfo.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\Archetype.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\ArchetypeDefinition.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\ArchetypeDescription\ArchetypeDescription.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\ArchetypeDescription\ArchetypeDescriptionItem.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\ArchetypeDescription\ArchetypeDetails.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\ArchetypeDescription\AuditDetails.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\ArchetypeDescription\OtherDefinitionDetails.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\ArchetypeDescription\TranslationDetails.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\ArchetypeID.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\CodePhrase.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RelatedParty.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RmActivity.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RmCluster.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RmComposition.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RmElement.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RmEntry.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RmPathwayStep.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RmSection.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RmSlot.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\EHR_Classes\RmTerm.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\FileManager.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\Generic_Structures\RmChildren.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\Generic_Structures\RmStructure.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\Generic_Structures\RmStructureCompound.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\Ontology.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\OntologyManager.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\openEHR\History\EventCollection.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\openEHR\History\RmEvent.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\openEHR\History\RmHistory.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\openEHR\RmReference.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\openEHR\RmTable.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\Parser.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\ReferenceModel.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\RmCardinality.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BusinessLogic\RmExistence.vb" />
+    <Compile Include="BusinessLogic\EHR_Classes\RmParticipation.vb" />
+    <Compile Include="DataConstraintsView\ArchetypeView.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\BooleanViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\ColumnLayout.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\DurationViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\CountViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\DatatypeViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\DateTimeViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\ElementViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\IntervalViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\LayoutManager.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\MultiMediaViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\MultipleViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\OrdinalViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\QuantityViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\RatioViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\TextViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\URIViewControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraintsView\ViewPanel.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\BooleanConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\ChoiceConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\CollectionOfSlots.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\Constraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\ConstraintCollection.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\ConstraintWithValue.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\CountConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\DateTimeConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\DurationConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\ArchetypeNodeConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\BooleanConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\ClusterControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\ConstraintContextMenu.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\ConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\URIConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\CountConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\DateTimeConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\DurationConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\IntervalConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\MultimediaConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\MultipleConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\OccurrencesPanel.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\OrdinalConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\QuantityConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\QuantityUnitConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\RatioConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\SlotConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\TextConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\IntervalConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\IntervalOfCountConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\IntervalOfDateTimeConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\IntervalOfQuantity.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\MultimediaConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\OrdinalTable.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\Ordinal_Constraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\ProportionConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\QuantityConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\QuantityUnitConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\RealConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\SlotConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\TextConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\UriConstraint.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Forms\ApplicationOptionsForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ArchetypeLibrary.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Choose.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChooseFix.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChoosePath.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChooseType.Designer.vb">
+      <DependentUpon>ChooseType.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ChooseType.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConstraintBindingForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ConstraintForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Designer.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\InputForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Links.Designer.vb">
+      <DependentUpon>Links.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Links.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\myArchetypeFromWeb.designer.vb">
+      <DependentUpon>myArchetypeFromWeb.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\myArchetypeFromWeb.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Recovery.Designer.vb">
+      <DependentUpon>Recovery.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Recovery.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Splash.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\StartUp.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WebSearchForm.designer.vb">
+      <DependentUpon>WebSearchForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WebSearchForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI_Archetype\ArchetypeComposite.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUI_Archetype\ArchetypeElement.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUI_Archetype\ArchetypeNode.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUI_Archetype\ArchetypeNodeAbstract.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUI_Archetype\ArchetypeNodeAnonymous.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Instruction_Controls\PathwayEvent.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Instruction_Controls\PathwaySpecification.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Specialised_VB_classes\RestrictedSet.Designer.vb">
+      <DependentUpon>RestrictedSet.vb</DependentUpon>
+    </Compile>
+    <Compile Include="GUI_Classes\Specialised_VB_classes\RestrictedSet.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Specialised_VB_classes\ArchetypeListViewItem.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Specialised_VB_classes\ArchetypeTreeNode.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Specialised_VB_classes\RichTextBoxPrintable.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Specialised_VB_classes\RichTextBoxUnicode.vb">
+    </Compile>
+    <Compile Include="GUI_Classes\Structure_Controls\ElementOnly.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Structure_Controls\EntryStructure.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Structure_Controls\ListStructure.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Structure_Controls\SimpleStructure.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Structure_Controls\TableStructure.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GUI_Classes\Structure_Controls\TreeStructure.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="OceanArchetypeEditor.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Support\AE_Constants.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Support\Options.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Support\TerminologyServer.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\Link.Designer.vb">
+      <DependentUpon>Link.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TabPage_Controls\Link.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\Participation.Designer.vb">
+      <DependentUpon>Participation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TabPage_Controls\Participation.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageAction.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageActivity.Designer.vb">
+      <DependentUpon>TabPageActivity.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageActivity.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageComposition.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageDescription.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageHistory.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageInstruction.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageParticipation.Designer.vb">
+      <DependentUpon>TabPageParticipation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageParticipation.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageSection.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TabPageStructure.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TabPage_Controls\TermBindingPanel.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TimeUnits.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Web References\ArchetypeFinderWebServiceURL\Reference.vb">
+      <SubType>code</SubType>
+    </Compile>
+    <Compile Include="XML_Classes\XML_RmElement.vb" />
+    <Compile Include="XML_Classes\XML_Term.vb" />
+    <Compile Include="XML_Classes\XML_Archetype.vb" />
+    <Compile Include="XML_Classes\XML_ArchetypeDetails.vb" />
+    <Compile Include="XML_Classes\XML_Composition.vb" />
+    <Compile Include="XML_Classes\XML_Description.vb" />
+    <Compile Include="XML_Classes\XML_Entry.vb" />
+    <Compile Include="XML_Classes\XML_Interface.vb" />
+    <Compile Include="XML_Classes\XML_Ontology.vb" />
+    <Compile Include="XML_Classes\XML_Section.vb" />
+    <Compile Include="Support\ParsingTools.vb" />
+    <Compile Include="XML_Classes\XML_Tools.vb" />
+    <Compile Include="XML_Classes\XML_TranslationDetails.vb" />
+    <EmbeddedResource Include="DataConstraintsView\BooleanViewControl.resx">
+      <DependentUpon>BooleanViewControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraintsView\CountViewControl.resx">
+      <DependentUpon>CountViewControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraintsView\ElementViewControl.resx">
+      <DependentUpon>ElementViewControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraintsView\RatioViewControl.resx">
+      <DependentUpon>RatioViewControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraintsView\TextViewControl.resx">
+      <DependentUpon>TextViewControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraintsView\URIViewControl.resx">
+      <DependentUpon>URIViewControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraintsView\ViewPanel.resx">
+      <DependentUpon>ViewPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\ArchetypeNodeConstraintControl.resx">
+      <DependentUpon>ArchetypeNodeConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\BooleanConstraintControl.resx">
+      <DependentUpon>BooleanConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\ClusterControl.resx">
+      <DependentUpon>ClusterControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\ConstraintContextMenu.resx">
+      <DependentUpon>ConstraintContextMenu.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\ConstraintControl.resx">
+      <DependentUpon>ConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\CountConstraintControl.resx">
+      <DependentUpon>CountConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\DateTimeConstraintControl.resx">
+      <DependentUpon>DateTimeConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\DurationConstraintControl.resx">
+      <DependentUpon>DurationConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\IntervalConstraintControl.resx">
+      <DependentUpon>IntervalConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\MultimediaConstraintControl.resx">
+      <DependentUpon>MultimediaConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\MultipleConstraintControl.resx">
+      <DependentUpon>MultipleConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\OccurrencesPanel.resx">
+      <DependentUpon>OccurrencesPanel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\OrdinalConstraintControl.resx">
+      <DependentUpon>OrdinalConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\QuantityConstraintControl.resx">
+      <DependentUpon>QuantityConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\QuantityUnitConstraintControl.resx">
+      <DependentUpon>QuantityUnitConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\RatioConstraintControl.resx">
+      <DependentUpon>RatioConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\SlotConstraintControl.resx">
+      <DependentUpon>SlotConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\TextConstraintControl.resx">
+      <DependentUpon>TextConstraintControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\OrdinalTable.resx">
+      <DependentUpon>OrdinalTable.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ApplicationOptionsForm.resx">
+      <DependentUpon>ApplicationOptionsForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ArchetypeLibrary.resx">
+      <DependentUpon>ArchetypeLibrary.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Choose.resx">
+      <DependentUpon>Choose.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChoosePath.resx">
+      <DependentUpon>ChoosePath.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChooseType.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ChooseType.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConstraintBindingForm.resx">
+      <DependentUpon>ConstraintBindingForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ConstraintForm.resx">
+      <DependentUpon>ConstraintForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Designer.resx">
+      <DependentUpon>Designer.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\InputForm.resx">
+      <DependentUpon>InputForm.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\myArchetypeFromWeb.resx">
+      <DependentUpon>myArchetypeFromWeb.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Splash.resx">
+      <DependentUpon>Splash.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StartUp.resx">
+      <DependentUpon>StartUp.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WebSearchForm.resx">
+      <DependentUpon>WebSearchForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Instruction_Controls\PathwayEvent.resx">
+      <DependentUpon>PathwayEvent.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Instruction_Controls\PathwaySpecification.resx">
+      <DependentUpon>PathwaySpecification.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Specialised_VB_classes\RichTextBoxPrintable.resx">
+      <DependentUpon>RichTextBoxPrintable.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Structure_Controls\ElementOnly.resx">
+      <DependentUpon>ElementOnly.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Structure_Controls\EntryStructure.resx">
+      <DependentUpon>EntryStructure.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Structure_Controls\ListStructure.resx">
+      <DependentUpon>ListStructure.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Structure_Controls\SimpleStructure.resx">
+      <DependentUpon>SimpleStructure.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Structure_Controls\TableStructure.resx">
+      <DependentUpon>TableStructure.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI_Classes\Structure_Controls\TreeStructure.resx">
+      <DependentUpon>TreeStructure.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <SubType>Designer</SubType>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageAction.resx">
+      <DependentUpon>TabPageAction.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageComposition.resx">
+      <DependentUpon>TabPageComposition.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageDescription.resx">
+      <DependentUpon>TabPageDescription.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageHistory.resx">
+      <DependentUpon>TabPageHistory.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageInstruction.resx">
+      <DependentUpon>TabPageInstruction.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageSection.resx">
+      <DependentUpon>TabPageSection.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TabPageStructure.resx">
+      <DependentUpon>TabPageStructure.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TabPage_Controls\TermBindingPanel.resx">
+      <DependentUpon>TermBindingPanel.vb</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <Content Include="AdlParser\EiffelSoftware.Runtime.dll" />
+    <Content Include="AdlParser\libOceanInformatics.AdlParser.dll">
+    </Content>
+    <Content Include="AdlParser\OceanInformatics.AdlParser.dll" />
+    <Content Include="Archetype.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BaseTypes.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="My Project\Settings.settings">
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <Content Include="OpenehrProfile.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resource.xsd">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="AssemblyVersion.cmd">
+    </None>
+    <None Include="Terminology\Terminology.xsx">
+      <DependentUpon>Terminology.xsd</DependentUpon>
+    </None>
+    <None Include="Web References\ArchetypeFinderWebServiceURL\ArchetypeFinderBean.wsdl" />
+    <None Include="Web References\ArchetypeFinderWebServiceURL\Reference.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="XMLParser\XMLParser.csproj">
+      <Project>{927EB444-A45E-4703-946F-78EB37FAD96E}</Project>
+      <Name>XMLParser</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SampleArchetypes\cluster\" />
+    <Folder Include="SampleArchetypes\element\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>xcopy "$(SolutionDir)AdlParser\libOceanInformatics.AdlParser.dll" "$(TargetDir)" /d /i &gt;nul
+"$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
+  </PropertyGroup>
+	<Target Name="BeforeBuild" Outputs="AssemblyVersion.vb">
+		<Exec Command="AssemblyVersion.cmd $(Configuration) > AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
+			<Output ItemName="Compile" TaskParameter="Outputs" />
+		</Exec>
+	</Target>
+</Project>
