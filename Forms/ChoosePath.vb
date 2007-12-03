@@ -59,6 +59,7 @@ Public Class frmChoosePath
     Friend WithEvents butOK As System.Windows.Forms.Button
     Friend WithEvents butCancel As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmChoosePath))
         Me.tvPaths = New System.Windows.Forms.TreeView
         Me.butOK = New System.Windows.Forms.Button
         Me.butCancel = New System.Windows.Forms.Button
@@ -66,10 +67,8 @@ Public Class frmChoosePath
         '
         'tvPaths
         '
-        Me.tvPaths.ImageIndex = -1
         Me.tvPaths.Location = New System.Drawing.Point(24, 24)
         Me.tvPaths.Name = "tvPaths"
-        Me.tvPaths.SelectedImageIndex = -1
         Me.tvPaths.ShowRootLines = False
         Me.tvPaths.Size = New System.Drawing.Size(536, 360)
         Me.tvPaths.TabIndex = 0
@@ -97,7 +96,10 @@ Public Class frmChoosePath
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.butCancel
         Me.ClientSize = New System.Drawing.Size(584, 430)
-        Me.Controls.AddRange(New System.Windows.Forms.Control() {Me.butCancel, Me.butOK, Me.tvPaths})
+        Me.Controls.Add(Me.butCancel)
+        Me.Controls.Add(Me.butOK)
+        Me.Controls.Add(Me.tvPaths)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "frmChoosePath"
         Me.Text = "ChoosePath"
         Me.ResumeLayout(False)
