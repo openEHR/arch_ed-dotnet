@@ -6,7 +6,7 @@
     <ProjectGuid>{179B4A54-F044-430D-9DB6-E950F80EC87F}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>ocean.ico</ApplicationIcon>
+    <ApplicationIcon>ocean-transparent.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>ArchetypeEditor</AssemblyName>
@@ -123,7 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ArchetypeEditor.xml" />
-    <Content Include="arch_ed.ico" />
     <Content Include="HTML\Images\any.gif">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1075,6 +1074,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <Content Include="ocean-transparent.ico" />
     <Content Include="OpenehrProfile.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -1111,9 +1111,9 @@
     <PostBuildEvent>xcopy "$(SolutionDir)AdlParser\libOceanInformatics.AdlParser.dll" "$(TargetDir)" /d /i &gt;nul
 "$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
   </PropertyGroup>
-	<Target Name="BeforeBuild" Outputs="AssemblyVersion.vb">
-		<Exec Command="AssemblyVersion.cmd $(Configuration) > AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
-			<Output ItemName="Compile" TaskParameter="Outputs" />
-		</Exec>
-	</Target>
+  <Target Name="BeforeBuild" Outputs="AssemblyVersion.vb">
+    <Exec Command="AssemblyVersion.cmd $(Configuration) &gt; AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
+      <Output ItemName="Compile" TaskParameter="Outputs" />
+    </Exec>
+  </Target>
 </Project>

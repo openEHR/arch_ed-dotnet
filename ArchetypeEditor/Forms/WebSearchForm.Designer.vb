@@ -208,6 +208,7 @@ Partial Class WebSearchForm
         Me.Controls.Add(Me.listViewArchetypes)
         Me.Controls.Add(Me.PanelBottom)
         Me.Controls.Add(Me.gbSearch)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Location = New System.Drawing.Point(150, 100)
         Me.MinimumSize = New System.Drawing.Size(408, 328)
         Me.Name = "WebSearchForm"

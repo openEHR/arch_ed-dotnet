@@ -19,6 +19,7 @@ Partial Class ChooseType
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ChooseType))
         Me.listType = New System.Windows.Forms.ListBox
         Me.SuspendLayout()
         '
@@ -27,19 +28,22 @@ Partial Class ChooseType
         Me.listType.Dock = System.Windows.Forms.DockStyle.Fill
         Me.listType.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.listType.FormattingEnabled = True
-        Me.listType.ItemHeight = 18
+        Me.listType.ItemHeight = 15
         Me.listType.Location = New System.Drawing.Point(0, 0)
+        Me.listType.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.listType.Name = "listType"
-        Me.listType.Size = New System.Drawing.Size(204, 40)
+        Me.listType.Size = New System.Drawing.Size(153, 19)
         Me.listType.TabIndex = 0
         '
         'ChooseType
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(204, 40)
+        Me.ClientSize = New System.Drawing.Size(153, 32)
         Me.Controls.Add(Me.listType)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "ChooseType"
