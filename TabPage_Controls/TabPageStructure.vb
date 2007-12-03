@@ -897,9 +897,7 @@ Public Class TabPageStructure
     End Property
 
     Public Sub ProcessStructure(ByVal a_slot As RmSlot)
-
         mIsLoading = True
-
         mIsEmbedded = True
         mEmbeddedSlot = New ArchetypeNodeAnonymous(a_slot)
 
@@ -921,6 +919,7 @@ Public Class TabPageStructure
             PanelDetails.LocalFileManager = mFileManager
 
             mFileManager.ObjectToSave = Me
+
             If OpenArchetype(a_slot) Then
                 Filemanager.AddEmbedded(mFileManager)
                 'Hide context menu to change structure
@@ -937,6 +936,7 @@ Public Class TabPageStructure
 
         ' set for slot unless has an embedded archetype
         Me.chkEmbedded.Checked = True
+
         Select Case a_slot.SlotConstraint.RM_ClassType
             Case StructureType.Single
                 Me.comboStructure.SelectedIndex = 0
@@ -949,7 +949,6 @@ Public Class TabPageStructure
         End Select
 
         ShowLanguage()
-
         mIsLoading = False
     End Sub
 
@@ -966,11 +965,11 @@ Public Class TabPageStructure
         Else
             mFileManager.OntologyManager.LanguageCode = mFileManager.OntologyManager.PrimaryLanguageCode
         End If
+
         Translate()
     End Sub
 
     Private Overloads Function OpenArchetype(ByVal an_archetype_ID As ArchetypeID) As Boolean
-
         mFileManager.OpenArchetype(an_archetype_ID.ToString)
 
         If mFileManager.ArchetypeAvailable Then
@@ -987,57 +986,66 @@ Public Class TabPageStructure
             MessageBox.Show(AE_Constants.Instance.Error_loading & ": " & an_archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return False
         End If
+
         Return True
     End Function
 
     Private Overloads Function OpenArchetype(ByVal a_slot As RmSlot) As Boolean
+        Dim result As Boolean
         Dim archetype_name As String
         Dim frm As New Choose
         frm.Set_Single()
 
         Dim dir As New IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure")
-        dir.GetFiles("*.adl")
-        Dim matchStrings As New System.Collections.Generic.List(Of System.Text.RegularExpressions.Regex)
-        For Each includeStatement As String In a_slot.SlotConstraint.Include
-            includeStatement = ReferenceModel.ReferenceModelName & "-" & _
-                                ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
-                                "\." & includeStatement & "\.adl"
-            matchStrings.Add(New System.Text.RegularExpressions.Regex(includeStatement))
-        Next
-        For Each f As IO.FileInfo In dir.GetFiles("*.adl")
-            For Each re As System.Text.RegularExpressions.Regex In matchStrings
-                If re.Match(f.Name).Success Then
-                    frm.ListChoose.Items.Add(f.Name)
-                End If
+
+        If dir.Exists Then
+            dir.GetFiles("*.adl")
+            Dim matchStrings As New System.Collections.Generic.List(Of System.Text.RegularExpressions.Regex)
+
+            For Each includeStatement As String In a_slot.SlotConstraint.Include
+                includeStatement = ReferenceModel.ReferenceModelName & "-" & _
+                                    ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
+                                    "\." & includeStatement & "\.adl"
+                matchStrings.Add(New System.Text.RegularExpressions.Regex(includeStatement))
             Next
-        Next
+
+            For Each f As IO.FileInfo In dir.GetFiles("*.adl")
+                For Each re As System.Text.RegularExpressions.Regex In matchStrings
+                    If re.Match(f.Name).Success Then
+                        frm.ListChoose.Items.Add(f.Name)
+                    End If
+                Next
+            Next
+        End If
 
         Select Case frm.ListChoose.Items.Count
             Case 0
-                Return False
+                archetype_name = Nothing
             Case 1
                 archetype_name = frm.ListChoose.Items(0)
             Case Else
                 If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
                     archetype_name = CStr(frm.ListChoose.SelectedItem)
                 Else
-                    Return False
+                    archetype_name = Nothing
                 End If
         End Select
 
-        archetype_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure\" & archetype_name
+        If Not archetype_name Is Nothing Then
+            archetype_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure\" & archetype_name
 
-        If System.IO.File.Exists(archetype_name) Then
-            OpenArchetype(archetype_name)
-            Return True
-
-        ElseIf MessageBox.Show(AE_Constants.Instance.Could_not_find & ": '" & archetype_name & "'" & vbCrLf & vbCrLf & AE_Constants.Instance.Locate_file_yourself & "?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-            If LocateEmbeddedArchetype(archetype_name) Then 'JAR: 12APR07, EDT-8 If embedded archetype is not found, allow the user to locate
+            If System.IO.File.Exists(archetype_name) Then
                 OpenArchetype(archetype_name)
-                Return True
+                result = True
+            ElseIf MessageBox.Show(AE_Constants.Instance.Could_not_find & ": '" & archetype_name & "'" & vbCrLf & vbCrLf & AE_Constants.Instance.Locate_file_yourself & "?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                If LocateEmbeddedArchetype(archetype_name) Then
+                    OpenArchetype(archetype_name)
+                    result = True
+                End If
             End If
         End If
-        Return False
+
+        Return result
     End Function
 
     Private Function LocateEmbeddedArchetype(ByRef fileName As String) As Boolean 'JAR: 12APR07, EDT-8 If embedded archetype is not found, allow the user to locate
