@@ -32,7 +32,7 @@ Partial Class Participation
         '
         Me.panelLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.panelLeft.Location = New System.Drawing.Point(25, 0)
-        Me.panelLeft.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.panelLeft.Margin = New System.Windows.Forms.Padding(2)
         Me.panelLeft.Name = "panelLeft"
         Me.panelLeft.Size = New System.Drawing.Size(350, 211)
         Me.panelLeft.TabIndex = 0
@@ -45,7 +45,7 @@ Partial Class Participation
         Me.butSelector.FlatAppearance.CheckedBackColor = System.Drawing.Color.Blue
         Me.butSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.butSelector.Location = New System.Drawing.Point(0, 0)
-        Me.butSelector.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.butSelector.Margin = New System.Windows.Forms.Padding(2)
         Me.butSelector.Name = "butSelector"
         Me.butSelector.Size = New System.Drawing.Size(25, 211)
         Me.butSelector.TabIndex = 1
@@ -57,10 +57,10 @@ Partial Class Participation
         '
         Me.gbFunction.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbFunction.Location = New System.Drawing.Point(375, 0)
-        Me.gbFunction.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbFunction.Margin = New System.Windows.Forms.Padding(2)
         Me.gbFunction.Name = "gbFunction"
-        Me.gbFunction.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
-        Me.gbFunction.Size = New System.Drawing.Size(357, 211)
+        Me.gbFunction.Padding = New System.Windows.Forms.Padding(2)
+        Me.gbFunction.Size = New System.Drawing.Size(389, 211)
         Me.gbFunction.TabIndex = 2
         Me.gbFunction.TabStop = False
         Me.gbFunction.Text = "Participant function"
@@ -70,10 +70,10 @@ Partial Class Participation
         Me.gbConstraints.Controls.Add(Me.lblDateTime)
         Me.gbConstraints.Controls.Add(Me.cbDateTime)
         Me.gbConstraints.Dock = System.Windows.Forms.DockStyle.Right
-        Me.gbConstraints.Location = New System.Drawing.Point(732, 0)
-        Me.gbConstraints.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbConstraints.Location = New System.Drawing.Point(764, 0)
+        Me.gbConstraints.Margin = New System.Windows.Forms.Padding(2)
         Me.gbConstraints.Name = "gbConstraints"
-        Me.gbConstraints.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbConstraints.Padding = New System.Windows.Forms.Padding(2)
         Me.gbConstraints.Size = New System.Drawing.Size(103, 211)
         Me.gbConstraints.TabIndex = 3
         Me.gbConstraints.TabStop = False
@@ -92,7 +92,7 @@ Partial Class Participation
         'cbDateTime
         '
         Me.cbDateTime.Location = New System.Drawing.Point(7, 41)
-        Me.cbDateTime.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.cbDateTime.Margin = New System.Windows.Forms.Padding(2)
         Me.cbDateTime.Name = "cbDateTime"
         Me.cbDateTime.Size = New System.Drawing.Size(84, 40)
         Me.cbDateTime.TabIndex = 0
@@ -108,9 +108,9 @@ Partial Class Participation
         Me.Controls.Add(Me.gbConstraints)
         Me.Controls.Add(Me.panelLeft)
         Me.Controls.Add(Me.butSelector)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Participation"
-        Me.Size = New System.Drawing.Size(835, 211)
+        Me.Size = New System.Drawing.Size(867, 211)
         Me.gbConstraints.ResumeLayout(False)
         Me.gbConstraints.PerformLayout()
         Me.ResumeLayout(False)
