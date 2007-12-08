@@ -16,11 +16,9 @@
 Public Class PathwaySpecification
     Inherits System.Windows.Forms.UserControl
 
-
     Private mValidStateMachineClasses As StateMachineType()
     Private WithEvents mPathwayEvent As PathwayEvent
     Private mIsloading As Boolean
-    Private mTabPages As New Collection
     Private mFileManager As FileManagerLocal
     Public Event StructureChanged(ByVal sender As Object, ByVal a_structure As StructureType)
 
@@ -202,7 +200,7 @@ Public Class PathwaySpecification
         Me.PanelRight.Location = New System.Drawing.Point(808, 0)
         Me.PanelRight.Name = "PanelRight"
         Me.PanelRight.Size = New System.Drawing.Size(160, 616)
-        Me.PanelRight.TabIndex = 3
+        Me.PanelRight.TabIndex = 8
         '
         'gbCompleted
         '
@@ -212,7 +210,7 @@ Public Class PathwaySpecification
         Me.gbCompleted.Location = New System.Drawing.Point(0, 152)
         Me.gbCompleted.Name = "gbCompleted"
         Me.gbCompleted.Size = New System.Drawing.Size(160, 316)
-        Me.gbCompleted.TabIndex = 0
+        Me.gbCompleted.TabIndex = 2
         Me.gbCompleted.TabStop = False
         Me.gbCompleted.Text = "Completed"
         '
@@ -221,10 +219,11 @@ Public Class PathwaySpecification
         Me.PanelCompleted.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelCompleted.ContextMenu = Me.ContextMenuState
         Me.PanelCompleted.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelCompleted.Location = New System.Drawing.Point(3, 18)
+        Me.PanelCompleted.Location = New System.Drawing.Point(3, 16)
         Me.PanelCompleted.Name = "PanelCompleted"
-        Me.PanelCompleted.Size = New System.Drawing.Size(154, 295)
+        Me.PanelCompleted.Size = New System.Drawing.Size(154, 297)
         Me.PanelCompleted.TabIndex = 0
+        Me.PanelCompleted.TabStop = True
         '
         'ContextMenuState
         '
@@ -262,9 +261,9 @@ Public Class PathwaySpecification
         Me.tpTransition.Controls.Add(Me.cbAborted)
         Me.tpTransition.Controls.Add(Me.cbSuspended)
         Me.tpTransition.Controls.Add(Me.Label2)
-        Me.tpTransition.Location = New System.Drawing.Point(4, 25)
+        Me.tpTransition.Location = New System.Drawing.Point(4, 22)
         Me.tpTransition.Name = "tpTransition"
-        Me.tpTransition.Size = New System.Drawing.Size(152, 119)
+        Me.tpTransition.Size = New System.Drawing.Size(152, 122)
         Me.tpTransition.TabIndex = 0
         Me.tpTransition.Text = "Transition"
         '
@@ -291,16 +290,16 @@ Public Class PathwaySpecification
         Me.Label2.Location = New System.Drawing.Point(8, 8)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(136, 32)
-        Me.Label2.TabIndex = 4
+        Me.Label2.TabIndex = 0
         Me.Label2.Text = "Allow transition to:"
         '
         'tpState
         '
         Me.tpState.Controls.Add(Me.Label1)
         Me.tpState.Controls.Add(Me.cbAlternativeState)
-        Me.tpState.Location = New System.Drawing.Point(4, 25)
+        Me.tpState.Location = New System.Drawing.Point(4, 22)
         Me.tpState.Name = "tpState"
-        Me.tpState.Size = New System.Drawing.Size(152, 119)
+        Me.tpState.Size = New System.Drawing.Size(152, 122)
         Me.tpState.TabIndex = 1
         Me.tpState.Text = "State"
         Me.tpState.Visible = False
@@ -328,7 +327,7 @@ Public Class PathwaySpecification
         Me.PanelRightTop.Location = New System.Drawing.Point(0, 0)
         Me.PanelRightTop.Name = "PanelRightTop"
         Me.PanelRightTop.Size = New System.Drawing.Size(160, 152)
-        Me.PanelRightTop.TabIndex = 1
+        Me.PanelRightTop.TabIndex = 0
         '
         'SplitterRight
         '
@@ -336,7 +335,7 @@ Public Class PathwaySpecification
         Me.SplitterRight.Location = New System.Drawing.Point(805, 0)
         Me.SplitterRight.Name = "SplitterRight"
         Me.SplitterRight.Size = New System.Drawing.Size(3, 616)
-        Me.SplitterRight.TabIndex = 4
+        Me.SplitterRight.TabIndex = 1
         Me.SplitterRight.TabStop = False
         '
         'gbSuspended
@@ -348,17 +347,17 @@ Public Class PathwaySpecification
         Me.gbSuspended.Location = New System.Drawing.Point(0, 0)
         Me.gbSuspended.Name = "gbSuspended"
         Me.gbSuspended.Size = New System.Drawing.Size(805, 128)
-        Me.gbSuspended.TabIndex = 5
+        Me.gbSuspended.TabIndex = 0
         Me.gbSuspended.TabStop = False
         '
         'gbSuspendedActive
         '
         Me.gbSuspendedActive.Controls.Add(Me.PanelSuspendActive)
         Me.gbSuspendedActive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbSuspendedActive.Location = New System.Drawing.Point(152, 18)
+        Me.gbSuspendedActive.Location = New System.Drawing.Point(152, 16)
         Me.gbSuspendedActive.Name = "gbSuspendedActive"
-        Me.gbSuspendedActive.Size = New System.Drawing.Size(650, 107)
-        Me.gbSuspendedActive.TabIndex = 4
+        Me.gbSuspendedActive.Size = New System.Drawing.Size(650, 109)
+        Me.gbSuspendedActive.TabIndex = 2
         Me.gbSuspendedActive.TabStop = False
         Me.gbSuspendedActive.Text = "Suspended"
         '
@@ -367,28 +366,29 @@ Public Class PathwaySpecification
         Me.PanelSuspendActive.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelSuspendActive.ContextMenu = Me.ContextMenuState
         Me.PanelSuspendActive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelSuspendActive.Location = New System.Drawing.Point(3, 18)
+        Me.PanelSuspendActive.Location = New System.Drawing.Point(3, 16)
         Me.PanelSuspendActive.Name = "PanelSuspendActive"
-        Me.PanelSuspendActive.Size = New System.Drawing.Size(644, 86)
-        Me.PanelSuspendActive.TabIndex = 1
+        Me.PanelSuspendActive.Size = New System.Drawing.Size(644, 90)
+        Me.PanelSuspendActive.TabIndex = 0
+        Me.PanelSuspendActive.TabStop = True
         '
         'gbTop
         '
         Me.gbTop.Dock = System.Windows.Forms.DockStyle.Left
-        Me.gbTop.Location = New System.Drawing.Point(128, 18)
+        Me.gbTop.Location = New System.Drawing.Point(128, 16)
         Me.gbTop.Name = "gbTop"
-        Me.gbTop.Size = New System.Drawing.Size(24, 107)
-        Me.gbTop.TabIndex = 3
+        Me.gbTop.Size = New System.Drawing.Size(24, 109)
+        Me.gbTop.TabIndex = 1
         Me.gbTop.TabStop = False
         '
         'gbSuspendedInitial
         '
         Me.gbSuspendedInitial.Controls.Add(Me.PanelSuspendInitial)
         Me.gbSuspendedInitial.Dock = System.Windows.Forms.DockStyle.Left
-        Me.gbSuspendedInitial.Location = New System.Drawing.Point(3, 18)
+        Me.gbSuspendedInitial.Location = New System.Drawing.Point(3, 16)
         Me.gbSuspendedInitial.Name = "gbSuspendedInitial"
-        Me.gbSuspendedInitial.Size = New System.Drawing.Size(125, 107)
-        Me.gbSuspendedInitial.TabIndex = 2
+        Me.gbSuspendedInitial.Size = New System.Drawing.Size(125, 109)
+        Me.gbSuspendedInitial.TabIndex = 0
         Me.gbSuspendedInitial.TabStop = False
         Me.gbSuspendedInitial.Text = "Postponed"
         '
@@ -397,10 +397,11 @@ Public Class PathwaySpecification
         Me.PanelSuspendInitial.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelSuspendInitial.ContextMenu = Me.ContextMenuState
         Me.PanelSuspendInitial.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelSuspendInitial.Location = New System.Drawing.Point(3, 18)
+        Me.PanelSuspendInitial.Location = New System.Drawing.Point(3, 16)
         Me.PanelSuspendInitial.Name = "PanelSuspendInitial"
-        Me.PanelSuspendInitial.Size = New System.Drawing.Size(119, 86)
+        Me.PanelSuspendInitial.Size = New System.Drawing.Size(119, 90)
         Me.PanelSuspendInitial.TabIndex = 0
+        Me.PanelSuspendInitial.TabStop = True
         '
         'gbAborted
         '
@@ -411,17 +412,17 @@ Public Class PathwaySpecification
         Me.gbAborted.Location = New System.Drawing.Point(0, 488)
         Me.gbAborted.Name = "gbAborted"
         Me.gbAborted.Size = New System.Drawing.Size(805, 128)
-        Me.gbAborted.TabIndex = 7
+        Me.gbAborted.TabIndex = 4
         Me.gbAborted.TabStop = False
         '
         'gbAbortedActive
         '
         Me.gbAbortedActive.Controls.Add(Me.PanelAbortActive)
         Me.gbAbortedActive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbAbortedActive.Location = New System.Drawing.Point(157, 18)
+        Me.gbAbortedActive.Location = New System.Drawing.Point(157, 16)
         Me.gbAbortedActive.Name = "gbAbortedActive"
-        Me.gbAbortedActive.Size = New System.Drawing.Size(645, 107)
-        Me.gbAbortedActive.TabIndex = 4
+        Me.gbAbortedActive.Size = New System.Drawing.Size(645, 109)
+        Me.gbAbortedActive.TabIndex = 2
         Me.gbAbortedActive.TabStop = False
         Me.gbAbortedActive.Text = "Aborted"
         '
@@ -430,28 +431,29 @@ Public Class PathwaySpecification
         Me.PanelAbortActive.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelAbortActive.ContextMenu = Me.ContextMenuState
         Me.PanelAbortActive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelAbortActive.Location = New System.Drawing.Point(3, 18)
+        Me.PanelAbortActive.Location = New System.Drawing.Point(3, 16)
         Me.PanelAbortActive.Name = "PanelAbortActive"
-        Me.PanelAbortActive.Size = New System.Drawing.Size(639, 86)
-        Me.PanelAbortActive.TabIndex = 1
+        Me.PanelAbortActive.Size = New System.Drawing.Size(639, 90)
+        Me.PanelAbortActive.TabIndex = 0
+        Me.PanelAbortActive.TabStop = True
         '
         'gbBottom
         '
         Me.gbBottom.Dock = System.Windows.Forms.DockStyle.Left
-        Me.gbBottom.Location = New System.Drawing.Point(128, 18)
+        Me.gbBottom.Location = New System.Drawing.Point(128, 16)
         Me.gbBottom.Name = "gbBottom"
-        Me.gbBottom.Size = New System.Drawing.Size(29, 107)
-        Me.gbBottom.TabIndex = 3
+        Me.gbBottom.Size = New System.Drawing.Size(29, 109)
+        Me.gbBottom.TabIndex = 1
         Me.gbBottom.TabStop = False
         '
         'gbAbortedInitial
         '
         Me.gbAbortedInitial.Controls.Add(Me.PanelAbortInitial)
         Me.gbAbortedInitial.Dock = System.Windows.Forms.DockStyle.Left
-        Me.gbAbortedInitial.Location = New System.Drawing.Point(3, 18)
+        Me.gbAbortedInitial.Location = New System.Drawing.Point(3, 16)
         Me.gbAbortedInitial.Name = "gbAbortedInitial"
-        Me.gbAbortedInitial.Size = New System.Drawing.Size(125, 107)
-        Me.gbAbortedInitial.TabIndex = 2
+        Me.gbAbortedInitial.Size = New System.Drawing.Size(125, 109)
+        Me.gbAbortedInitial.TabIndex = 0
         Me.gbAbortedInitial.TabStop = False
         Me.gbAbortedInitial.Text = "Cancelled"
         '
@@ -460,10 +462,11 @@ Public Class PathwaySpecification
         Me.PanelAbortInitial.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelAbortInitial.ContextMenu = Me.ContextMenuState
         Me.PanelAbortInitial.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelAbortInitial.Location = New System.Drawing.Point(3, 18)
+        Me.PanelAbortInitial.Location = New System.Drawing.Point(3, 16)
         Me.PanelAbortInitial.Name = "PanelAbortInitial"
-        Me.PanelAbortInitial.Size = New System.Drawing.Size(119, 86)
+        Me.PanelAbortInitial.Size = New System.Drawing.Size(119, 90)
         Me.PanelAbortInitial.TabIndex = 0
+        Me.PanelAbortInitial.TabStop = True
         '
         'PanelMiddle
         '
@@ -477,7 +480,7 @@ Public Class PathwaySpecification
         Me.PanelMiddle.Location = New System.Drawing.Point(0, 151)
         Me.PanelMiddle.Name = "PanelMiddle"
         Me.PanelMiddle.Size = New System.Drawing.Size(805, 314)
-        Me.PanelMiddle.TabIndex = 8
+        Me.PanelMiddle.TabIndex = 3
         '
         'gbActive
         '
@@ -496,10 +499,11 @@ Public Class PathwaySpecification
         Me.PanelActive.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelActive.ContextMenu = Me.ContextMenuState
         Me.PanelActive.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelActive.Location = New System.Drawing.Point(3, 18)
+        Me.PanelActive.Location = New System.Drawing.Point(3, 16)
         Me.PanelActive.Name = "PanelActive"
-        Me.PanelActive.Size = New System.Drawing.Size(492, 293)
+        Me.PanelActive.Size = New System.Drawing.Size(492, 295)
         Me.PanelActive.TabIndex = 0
+        Me.PanelActive.TabStop = True
         '
         'Splitter2
         '
@@ -516,7 +520,7 @@ Public Class PathwaySpecification
         Me.gbScheduled.Location = New System.Drawing.Point(163, 0)
         Me.gbScheduled.Name = "gbScheduled"
         Me.gbScheduled.Size = New System.Drawing.Size(112, 314)
-        Me.gbScheduled.TabIndex = 8
+        Me.gbScheduled.TabIndex = 1
         Me.gbScheduled.TabStop = False
         Me.gbScheduled.Text = "Scheduled"
         '
@@ -526,10 +530,11 @@ Public Class PathwaySpecification
         Me.PanelScheduled.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelScheduled.ContextMenu = Me.ContextMenuState
         Me.PanelScheduled.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelScheduled.Location = New System.Drawing.Point(3, 18)
+        Me.PanelScheduled.Location = New System.Drawing.Point(3, 16)
         Me.PanelScheduled.Name = "PanelScheduled"
-        Me.PanelScheduled.Size = New System.Drawing.Size(106, 293)
+        Me.PanelScheduled.Size = New System.Drawing.Size(106, 295)
         Me.PanelScheduled.TabIndex = 0
+        Me.PanelScheduled.TabStop = True
         '
         'Splitter1
         '
@@ -547,7 +552,7 @@ Public Class PathwaySpecification
         Me.PanelLeft.Location = New System.Drawing.Point(0, 0)
         Me.PanelLeft.Name = "PanelLeft"
         Me.PanelLeft.Size = New System.Drawing.Size(160, 314)
-        Me.PanelLeft.TabIndex = 6
+        Me.PanelLeft.TabIndex = 0
         '
         'gbInitial
         '
@@ -566,10 +571,11 @@ Public Class PathwaySpecification
         Me.PanelInitial.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelInitial.ContextMenu = Me.ContextMenuState
         Me.PanelInitial.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelInitial.Location = New System.Drawing.Point(3, 18)
+        Me.PanelInitial.Location = New System.Drawing.Point(3, 16)
         Me.PanelInitial.Name = "PanelInitial"
-        Me.PanelInitial.Size = New System.Drawing.Size(130, 293)
+        Me.PanelInitial.Size = New System.Drawing.Size(130, 295)
         Me.PanelInitial.TabIndex = 0
+        Me.PanelInitial.TabStop = True
         '
         'PanelSpacer
         '
@@ -579,7 +585,7 @@ Public Class PathwaySpecification
         Me.PanelSpacer.Location = New System.Drawing.Point(136, 0)
         Me.PanelSpacer.Name = "PanelSpacer"
         Me.PanelSpacer.Size = New System.Drawing.Size(24, 314)
-        Me.PanelSpacer.TabIndex = 3
+        Me.PanelSpacer.TabIndex = 1
         '
         'pbInitialToActive
         '
@@ -598,7 +604,7 @@ Public Class PathwaySpecification
         Me.PanelCompletedSpacer.Location = New System.Drawing.Point(781, 0)
         Me.PanelCompletedSpacer.Name = "PanelCompletedSpacer"
         Me.PanelCompletedSpacer.Size = New System.Drawing.Size(24, 314)
-        Me.PanelCompletedSpacer.TabIndex = 5
+        Me.PanelCompletedSpacer.TabIndex = 3
         '
         'pbActiveToCompleted
         '
@@ -647,7 +653,7 @@ Public Class PathwaySpecification
         Me.panelTopSpacer.Location = New System.Drawing.Point(0, 128)
         Me.panelTopSpacer.Name = "panelTopSpacer"
         Me.panelTopSpacer.Size = New System.Drawing.Size(805, 20)
-        Me.panelTopSpacer.TabIndex = 10
+        Me.panelTopSpacer.TabIndex = 2
         '
         'pbInitialTopDown
         '
@@ -700,7 +706,7 @@ Public Class PathwaySpecification
         Me.SplitterBottom.Location = New System.Drawing.Point(0, 465)
         Me.SplitterBottom.Name = "SplitterBottom"
         Me.SplitterBottom.Size = New System.Drawing.Size(805, 3)
-        Me.SplitterBottom.TabIndex = 12
+        Me.SplitterBottom.TabIndex = 3
         Me.SplitterBottom.TabStop = False
         '
         'PathwaySpecification
@@ -754,11 +760,7 @@ Public Class PathwaySpecification
 
     Private Sub PathwaySpecification_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mValidStateMachineClasses = ReferenceModel.ValidStateMachineTypes
-        Me.PathwaySpecification_Resize(sender, e)
-        'hold the tabpages in a collection so can remove them from the Tab as required
-        mTabPages.Add(Me.tpTransition, tpTransition.Name)
-        mTabPages.Add(Me.tpState, tpState.Name)
-
+        PathwaySpecification_Resize(sender, e)
     End Sub
 
     Property PathwaySteps() As RmStructureCompound
@@ -766,37 +768,31 @@ Public Class PathwaySpecification
             Return BuildPathwaySteps()
         End Get
         Set(ByVal Value As RmStructureCompound)
-            Dim Ctrl As Panel
+            Debug.Assert(Value.Type = StructureType.ISM_TRANSITION)
 
-            Debug.Assert(Value.Type = StructureType.ism_transition)
             For Each ms As RmPathwayStep In Value.Children
                 Dim pv As New PathwayEvent(ms, mFileManager)
+
                 Select Case pv.DefaultStateMachineType
                     Case StateMachineType.ActiveAborted
-                        Ctrl = Me.PanelAbortActive
+                        AddPathwayEvent(PanelAbortActive, pv)
                     Case StateMachineType.Active
-                        Ctrl = Me.PanelActive
+                        AddPathwayEvent(PanelActive, pv)
                     Case StateMachineType.ActiveSuspended
-                        Ctrl = Me.PanelSuspendActive
+                        AddPathwayEvent(PanelSuspendActive, pv)
                     Case StateMachineType.Initial
-                        Ctrl = Me.PanelInitial
+                        AddPathwayEvent(PanelInitial, pv)
                     Case StateMachineType.InitialAborted
-                        Ctrl = Me.PanelAbortInitial
+                        AddPathwayEvent(PanelAbortInitial, pv)
                     Case StateMachineType.InitialSuspended
-                        Ctrl = Me.PanelSuspendInitial
+                        AddPathwayEvent(PanelSuspendInitial, pv)
                     Case StateMachineType.Completed
-                        Ctrl = Me.PanelCompleted
+                        AddPathwayEvent(PanelCompleted, pv)
                     Case StateMachineType.Scheduled
-                        Ctrl = Me.PanelScheduled
+                        AddPathwayEvent(PanelScheduled, pv)
                     Case Else
                         Debug.Assert(False)
-                        Return
                 End Select
-                Ctrl.Controls.Add(pv)
-                pv.ContextMenuPathwayEvent.MergeMenu(Me.ContextMenuState)
-                AddHandler pv.SelectionChanged, AddressOf OnSelectionChanged
-                AddHandler pv.Deleted, AddressOf OnDeleted
-                LayOutControls(Ctrl)
             Next
         End Set
     End Property
@@ -812,24 +808,24 @@ Public Class PathwaySpecification
 
         i = Ctrl.Controls.Count
 
-        If i = 0 Then Return
+        If i <> 0 Then
+            total_width = PathwayEvent.DefaultWidth * i
 
-        total_width = PathwayEvent.DefaultWidth * i
+            If total_width > Ctrl.Width Then
+                scalefactor = (Ctrl.Width - (spacer * i) - left_margin) / total_width
+            Else
+                scalefactor = 1
+            End If
 
-        If total_width > Ctrl.Width Then
-            scalefactor = (Ctrl.Width - (spacer * i) - left_margin) / total_width
-        Else
-            scalefactor = 1
+            For i = 0 To Ctrl.Controls.Count - 1
+                path_event = CType(Ctrl.Controls(i), PathwayEvent)
+                path_event.Width = (PathwayEvent.DefaultWidth * scalefactor)
+                path_event.Height = Ctrl.Height - 6
+                path_event.Top = 3
+                path_event.Left = left_margin
+                left_margin = path_event.Left + path_event.Width + spacer
+            Next
         End If
-        For i = 0 To Ctrl.Controls.Count - 1
-            path_event = CType(Ctrl.Controls(i), PathwayEvent)
-            path_event.Width = (PathwayEvent.DefaultWidth * scalefactor)
-            path_event.Height = Ctrl.Height - 6
-            path_event.Top = 3
-            path_event.Left = left_margin
-            left_margin = path_event.Left + path_event.Width + spacer
-        Next
-
     End Sub
 
     Private Sub Panel_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles PanelActive.Resize, PanelAbortActive.Resize, PanelAbortInitial.Resize, PanelInitial.Resize, PanelSuspendInitial.Resize, PanelCompleted.Resize, PanelSuspendActive.Resize
@@ -847,16 +843,16 @@ Public Class PathwaySpecification
     End Sub
 
     Private Function BuildPathwaySteps() As RmStructureCompound
-        Dim rm As New RmStructureCompound("ism_transition", StructureType.ism_transition)
+        Dim rm As New RmStructureCompound("ism_transition", StructureType.ISM_TRANSITION)
 
-        GetPathwaySteps(rm.Children, Me.PanelInitial)
-        GetPathwaySteps(rm.Children, Me.PanelSuspendInitial)
-        GetPathwaySteps(rm.Children, Me.PanelAbortInitial)
-        GetPathwaySteps(rm.Children, Me.PanelScheduled)
-        GetPathwaySteps(rm.Children, Me.PanelActive)
-        GetPathwaySteps(rm.Children, Me.PanelSuspendActive)
-        GetPathwaySteps(rm.Children, Me.PanelAbortActive)
-        GetPathwaySteps(rm.Children, Me.PanelCompleted)
+        GetPathwaySteps(rm.Children, PanelInitial)
+        GetPathwaySteps(rm.Children, PanelSuspendInitial)
+        GetPathwaySteps(rm.Children, PanelAbortInitial)
+        GetPathwaySteps(rm.Children, PanelScheduled)
+        GetPathwaySteps(rm.Children, PanelActive)
+        GetPathwaySteps(rm.Children, PanelSuspendActive)
+        GetPathwaySteps(rm.Children, PanelAbortActive)
+        GetPathwaySteps(rm.Children, PanelCompleted)
 
         Return rm
     End Function
@@ -869,8 +865,6 @@ Public Class PathwaySpecification
 
         Dim selected_pv As PathwayEvent = CType(Sender, PathwayEvent)
 
-        Me.tabProperties.Visible = True
-
         Debug.Assert(selected_pv.Selected)
 
         If Not selected_pv Is mPathwayEvent Then
@@ -880,191 +874,145 @@ Public Class PathwaySpecification
         End If
 
         mPathwayEvent = selected_pv
+        tabProperties.Show()
 
         Select Case mPathwayEvent.DefaultStateMachineType
             Case StateMachineType.ActiveAborted, StateMachineType.InitialAborted, StateMachineType.Completed, StateMachineType.Scheduled
-                If Me.tabProperties.Contains(tpTransition) Then
-                    Me.tabProperties.TabPages.Remove(tpTransition)
-                End If
-                If Me.tabProperties.Contains(tpState) Then
-                    Me.tabProperties.TabPages.Remove(tpState)
-                End If
+                tabProperties.Hide()
 
             Case StateMachineType.InitialSuspended
-                If Not Me.tabProperties.Contains(tpTransition) Then
-                    Me.tabProperties.TabPages.Add(CType(mTabPages(tpTransition.Name), TabPage))
-                End If
-                If Not Me.tabProperties.Contains(tpState) Then
-                    Me.tabProperties.TabPages.Add(CType(mTabPages(tpState.Name), TabPage))
-                End If
                 cbAlternativeState.Text = StateMachineType.ActiveSuspended.ToString
                 cbAlternativeState.Tag = StateMachineType.ActiveSuspended
-                Me.cbAlternativeState.Visible = True
-                Me.cbSuspended.Visible = False
-                If Me.PanelAbortInitial.Controls.Count > 0 Then
-                    Me.cbAborted.Visible = True
-                Else
-                    Me.cbAborted.Visible = False
-                End If
+                cbAlternativeState.Show()
+                cbSuspended.Hide()
+                cbAborted.Visible = PanelAbortInitial.Controls.Count > 0
+
             Case StateMachineType.ActiveSuspended
-                If Not Me.tabProperties.Contains(tpTransition) Then
-                    Me.tabProperties.TabPages.Add(CType(mTabPages(tpTransition.Name), TabPage))
-                End If
-                If Not Me.tabProperties.Contains(tpState) Then
-                    Me.tabProperties.TabPages.Add(CType(mTabPages(tpState.Name), TabPage))
-                End If
                 cbAlternativeState.Text = StateMachineType.InitialSuspended.ToString
                 cbAlternativeState.Tag = StateMachineType.InitialSuspended
-                Me.cbAlternativeState.Visible = True
-                Me.cbSuspended.Visible = False
-                '? allow transitions to aborted
-                If Me.PanelAbortActive.Controls.Count > 0 Then
-                    Me.cbAborted.Visible = True
-                Else
-                    Me.cbAborted.Visible = False
-                End If
+                cbAlternativeState.Show()
+                cbSuspended.Hide()
+                cbAborted.Visible = PanelAbortActive.Controls.Count > 0
+
             Case StateMachineType.Active
-                If Not Me.tabProperties.Contains(tpTransition) Then
-                    Me.tabProperties.TabPages.Add(CType(mTabPages(tpTransition.Name), TabPage))
-                End If
-                If Not Me.tabProperties.Contains(tpState) Then
-                    Me.tabProperties.TabPages.Add(CType(mTabPages(tpState.Name), TabPage))
-                End If
                 cbAlternativeState.Text = StateMachineType.Initial.ToString
                 cbAlternativeState.Tag = StateMachineType.Initial
-                Me.cbAlternativeState.Visible = True
-                If Me.PanelAbortActive.Controls.Count > 0 Then
-                    Me.cbAborted.Visible = True
-                Else
-                    Me.cbAborted.Visible = False
-                End If
-                If Me.PanelSuspendActive.Controls.Count > 0 Then
-                    Me.cbSuspended.Visible = True
-                Else
-                    Me.cbSuspended.Visible = False
-                End If
+                cbAlternativeState.Show()
+                cbAborted.Visible = PanelAbortActive.Controls.Count > 0
+                cbSuspended.Visible = PanelSuspendActive.Controls.Count > 0
 
             Case StateMachineType.Initial
-                If Not Me.tabProperties.Contains(tpTransition) Then
-                    Me.tabProperties.TabPages.Add(CType(mTabPages(tpTransition.Name), TabPage))
-                End If
-                If Not Me.tabProperties.Contains(tpState) Then
-                    Me.tabProperties.TabPages.Add(CType(mTabPages(tpState.Name), TabPage))
-                End If
                 cbAlternativeState.Text = StateMachineType.Active.ToString
                 cbAlternativeState.Tag = StateMachineType.Active
-                If Me.PanelAbortInitial.Controls.Count > 0 Then
-                    Me.cbAborted.Visible = True
-                Else
-                    Me.cbAborted.Visible = False
-                End If
-                If Me.PanelSuspendInitial.Controls.Count > 0 Then
-                    Me.cbSuspended.Visible = True
-                Else
-                    Me.cbSuspended.Visible = False
-                End If
-                Me.cbAlternativeState.Visible = True
+                cbAborted.Visible = PanelAbortInitial.Controls.Count > 0
+                cbSuspended.Visible = PanelSuspendInitial.Controls.Count > 0
+                cbAlternativeState.Show()
         End Select
 
         mIsloading = True
-        cbAlternativeState.Checked = Me.mPathwayEvent.Item.HasAlternativeState
-        Me.cbSuspended.Checked = Me.mPathwayEvent.Item.SuspendAllowed
-        Me.cbAborted.Checked = Me.mPathwayEvent.Item.AbortAllowed
+        cbAlternativeState.Checked = mPathwayEvent.Item.HasAlternativeState
+        cbSuspended.Checked = mPathwayEvent.Item.SuspendAllowed
+        cbAborted.Checked = mPathwayEvent.Item.AbortAllowed
         mIsloading = False
     End Sub
 
+    Private Sub MenuAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuAdd.Click, PanelAbortActive.DoubleClick, PanelAbortInitial.DoubleClick, PanelActive.DoubleClick, PanelInitial.DoubleClick, PanelCompleted.DoubleClick, PanelSuspendInitial.DoubleClick, PanelSuspendActive.DoubleClick, PanelScheduled.DoubleClick
+        Dim ctrl As Control = Nothing
 
-    Private Sub MenuAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuAdd.Click
-
-        Dim pv As PathwayEvent
-        Dim ctrl As Control
-
-        ctrl = CType(sender, MenuItem).GetContextMenu.SourceControl
+        If TypeOf sender Is Control Then
+            ctrl = sender
+        ElseIf TypeOf sender Is MenuItem Then
+            ctrl = CType(sender, MenuItem).GetContextMenu.SourceControl
+        End If
 
         If ctrl Is Nothing Then
-            'may not pick up pathway event
             ctrl = mPathwayEvent
         End If
 
-        If TypeOf ctrl Is PathwayEvent Then ' needed as this menu is added to the pathway event's context
-            'menu - needed as the grid can fill up
-            ' get the parent
+        If TypeOf ctrl Is PathwayEvent Then
             ctrl = ctrl.Parent
         End If
 
-        If ctrl Is Me.PanelAbortActive Then
-            pv = New PathwayEvent(StateMachineType.ActiveAborted, mFileManager)
-        ElseIf ctrl Is Me.PanelAbortInitial Then
-            pv = New PathwayEvent(StateMachineType.InitialAborted, mFileManager)
-        ElseIf ctrl Is Me.PanelActive Then
-            pv = New PathwayEvent(StateMachineType.Active, mFileManager)
-        ElseIf ctrl Is Me.PanelInitial Then
-            pv = New PathwayEvent(StateMachineType.Initial, mFileManager)
-        ElseIf ctrl Is Me.PanelCompleted Then
-            pv = New PathwayEvent(StateMachineType.Completed, mFileManager)
-        ElseIf ctrl Is Me.PanelSuspendInitial Then
-            pv = New PathwayEvent(StateMachineType.InitialSuspended, mFileManager)
-        ElseIf ctrl Is Me.PanelSuspendActive Then
-            pv = New PathwayEvent(StateMachineType.ActiveSuspended, mFileManager)
-        ElseIf ctrl Is Me.PanelScheduled Then
-            pv = New PathwayEvent(StateMachineType.Scheduled, mFileManager)
+        If ctrl Is PanelAbortActive Then
+            AddMachineState(ctrl, StateMachineType.ActiveAborted)
+        ElseIf ctrl Is PanelAbortInitial Then
+            AddMachineState(ctrl, StateMachineType.InitialAborted)
+        ElseIf ctrl Is PanelActive Then
+            AddMachineState(ctrl, StateMachineType.Active)
+        ElseIf ctrl Is PanelInitial Then
+            AddMachineState(ctrl, StateMachineType.Initial)
+        ElseIf ctrl Is PanelCompleted Then
+            AddMachineState(ctrl, StateMachineType.Completed)
+        ElseIf ctrl Is PanelSuspendInitial Then
+            AddMachineState(ctrl, StateMachineType.InitialSuspended)
+        ElseIf ctrl Is PanelSuspendActive Then
+            AddMachineState(ctrl, StateMachineType.ActiveSuspended)
+        ElseIf ctrl Is PanelScheduled Then
+            AddMachineState(ctrl, StateMachineType.Scheduled)
         Else
             Debug.Assert(False)
             Beep()
-            Return
         End If
+    End Sub
+
+    Private Sub AddMachineState(ByVal ctrl As Control, ByVal defaultMachineStateType As StateMachineType)
+        Dim pv As PathwayEvent = New PathwayEvent(defaultMachineStateType, mFileManager)
+        pv.Edit()
+
+        If pv.LastEditWasOk Then
+            AddPathwayEvent(ctrl, pv)
+            pv.Focus()
+        End If
+    End Sub
+
+    Private Sub AddPathwayEvent(ByVal ctrl As Control, ByVal pv As PathwayEvent)
         ctrl.Controls.Add(pv)
-        pv.ContextMenuPathwayEvent.MergeMenu(Me.ContextMenuState)
+        pv.TabStop = True
+        pv.ContextMenuPathwayEvent.MergeMenu(ContextMenuState)
         AddHandler pv.SelectionChanged, AddressOf OnSelectionChanged
         AddHandler pv.Deleted, AddressOf OnDeleted
-        pv.Selected = True
         LayOutControls(ctrl)
     End Sub
 
     Private Sub cbAlternativeState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbAlternativeState.CheckedChanged
-        If Not mIsloading Then
-            If mPathwayEvent Is Nothing Then Return
-
+        If Not mIsloading AndAlso Not mPathwayEvent Is Nothing Then
             If cbAlternativeState.Checked Then
-                Me.mPathwayEvent.AlternativeState = CType(Me.cbAlternativeState.Tag, StateMachineType)
+                mPathwayEvent.AlternativeState = CType(cbAlternativeState.Tag, StateMachineType)
             Else
-                Me.mPathwayEvent.AlternativeState = StateMachineType.Not_Set
+                mPathwayEvent.AlternativeState = StateMachineType.Not_Set
             End If
+
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub cbSuspended_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbSuspended.CheckedChanged
-        If Not mIsloading Then
-            If mPathwayEvent Is Nothing Then Return
-
-            Me.mPathwayEvent.Item.SuspendAllowed = Me.cbSuspended.Checked
+        If Not mIsloading AndAlso Not mPathwayEvent Is Nothing Then
+            mPathwayEvent.Item.SuspendAllowed = cbSuspended.Checked
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub cbAborted_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbAborted.CheckedChanged
-        If Not mIsloading Then
-            If mPathwayEvent Is Nothing Then Return
-
-            Me.mPathwayEvent.Item.AbortAllowed = Me.cbAborted.Checked
+        If Not mIsloading AndAlso Not mPathwayEvent Is Nothing Then
+            mPathwayEvent.Item.AbortAllowed = cbAborted.Checked
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub Splitter_SplitterMoved(ByVal sender As System.Object, ByVal e As System.Windows.Forms.SplitterEventArgs) Handles SplitterBottom.SplitterMoved, Splitter1.SplitterMoved, Splitter2.SplitterMoved
-        Me.PathwaySpecification_Resize(sender, e)
+        PathwaySpecification_Resize(sender, e)
     End Sub
 
     Private Sub PathwaySpecification_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Resize
-        Me.pbActiveBottomDown.Left = Me.gbActive.Left + Int(Me.gbActive.Width / 2)
-        Me.pbActiveTopUp.Left = Me.gbActive.Left + Int(Me.gbActive.Width / 2) - 8
-        Me.pbActiveTopDown.Left = Me.gbActive.Left + Int(Me.gbActive.Width / 2) + 8
-        Me.pbActiveToCompleted.Top = Me.gbActive.Top + Int(Me.gbActive.Height / 2)
-        Me.pbInitialToActive.Top = Me.gbActive.Top + Int(Me.gbActive.Height / 2)
-        Me.gbSuspendedInitial.Width = Me.gbInitial.Width
-        Me.gbAbortedInitial.Width = Me.gbInitial.Width
-        Me.PanelRightTop.Height = Me.gbSuspended.Height + Me.panelTopSpacer.Height
+        pbActiveBottomDown.Left = gbActive.Left + Int(gbActive.Width / 2)
+        pbActiveTopUp.Left = gbActive.Left + Int(gbActive.Width / 2) - 8
+        pbActiveTopDown.Left = gbActive.Left + Int(gbActive.Width / 2) + 8
+        pbActiveToCompleted.Top = gbActive.Top + Int(gbActive.Height / 2)
+        pbInitialToActive.Top = gbActive.Top + Int(gbActive.Height / 2)
+        gbSuspendedInitial.Width = gbInitial.Width
+        gbAbortedInitial.Width = gbInitial.Width
+        PanelRightTop.Height = gbSuspended.Height + panelTopSpacer.Height
     End Sub
 
     Private Sub TranslatePathwayEvents(ByVal Ctrl As Control)
@@ -1076,14 +1024,14 @@ Public Class PathwaySpecification
     End Sub
 
     Public Sub TranslateGUI()
-        Me.gbInitial.Text = Filemanager.GetOpenEhrTerm(524, "Initial")
-        Me.gbSuspendedInitial.Text = Filemanager.GetOpenEhrTerm(527, "Postponed")
-        Me.gbAbortedInitial.Text = Filemanager.GetOpenEhrTerm(528, "Cancelled")
-        Me.gbScheduled.Text = Filemanager.GetOpenEhrTerm(529, "Scheduled")
-        Me.gbActive.Text = Filemanager.GetOpenEhrTerm(245, "Active")
-        Me.gbSuspendedActive.Text = Filemanager.GetOpenEhrTerm(530, "Suspended")
-        Me.gbAbortedActive.Text = Filemanager.GetOpenEhrTerm(547, "Abort")
-        Me.gbCompleted.Text = Filemanager.GetOpenEhrTerm(532, "Completed")
+        gbInitial.Text = Filemanager.GetOpenEhrTerm(524, "Initial")
+        gbSuspendedInitial.Text = Filemanager.GetOpenEhrTerm(527, "Postponed")
+        gbAbortedInitial.Text = Filemanager.GetOpenEhrTerm(528, "Cancelled")
+        gbScheduled.Text = Filemanager.GetOpenEhrTerm(529, "Scheduled")
+        gbActive.Text = Filemanager.GetOpenEhrTerm(245, "Active")
+        gbSuspendedActive.Text = Filemanager.GetOpenEhrTerm(530, "Suspended")
+        gbAbortedActive.Text = Filemanager.GetOpenEhrTerm(547, "Abort")
+        gbCompleted.Text = Filemanager.GetOpenEhrTerm(532, "Completed")
     End Sub
 
     Public Sub Translate()

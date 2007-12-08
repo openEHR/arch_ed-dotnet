@@ -20,7 +20,7 @@ Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 Namespace ArchetypeEditor.ADL_Classes
     Class ADL_Interface
         Implements Parser, IDisposable
-        Private EiffelCompiler As openehr.adl_parser.interface.ARCHETYPE_COMPILER
+        Private EiffelCompiler As openehr.adl_parser.interface.ARCHETYPE_PARSER
         Private mFileName As String
         Private adlArchetype As ADL_Archetype
         Private mOpenFileError As Boolean
@@ -33,7 +33,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Return mFileName
             End Get
         End Property
-        Public ReadOnly Property ADL_Parser() As openehr.adl_parser.interface.ARCHETYPE_COMPILER
+        Public ReadOnly Property ADL_Parser() As openehr.adl_parser.interface.ARCHETYPE_PARSER
             Get
                 Return EiffelCompiler
             End Get
@@ -131,7 +131,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     If EiffelCompiler.archetype_parsed Then
                         a_filemanager.OntologyManager.Ontology = New ADL_Ontology(EiffelCompiler)
                         adlArchetype = New ADL_Archetype(EiffelCompiler, a_filemanager)
-                        mOpenFileError = EiffelCompiler.archetype Is Nothing
+                        mOpenFileError = EiffelCompiler.archetype_flat Is Nothing
                     End If
                 End If
             End If
@@ -155,7 +155,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 If primary_language = language Then
                     EifLanguage = EiffelKernel.Create.STRING_8.make_from_cil(language)
                     term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)), CStr(dRow(4)))
-                    EiffelCompiler.archetype.ontology.add_term_definition(EifLanguage, term.EIF_Term)
+                    EiffelCompiler.archetype_flat.ontology.add_term_definition(EifLanguage, term.EIF_Term)
                 End If
             Next
 
@@ -165,7 +165,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 If primary_language <> language Then
                     EifLanguage = EiffelKernel.Create.STRING_8.make_from_cil(language)
                     term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(4), String))
-                    EiffelCompiler.archetype.ontology.replace_term_definition(EifLanguage, term.EIF_Term, False)
+                    EiffelCompiler.archetype_flat.ontology.replace_term_definition(EifLanguage, term.EIF_Term, False)
                 End If
             Next
         End Sub
@@ -179,7 +179,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 If primary_language = CType(dRow(0), String) Then
                     language = EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(0), String))
                     term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String))
-                    EiffelCompiler.archetype.ontology.add_constraint_definition(language, term.EIF_Term)
+                    EiffelCompiler.archetype_flat.ontology.add_constraint_definition(language, term.EIF_Term)
                 End If
             Next
 
@@ -188,7 +188,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 If primary_language <> CType(dRow(0), String) Then
                     language = EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(0), String))
                     term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String))
-                    EiffelCompiler.archetype.ontology.replace_constraint_definition(language, term.EIF_Term, False)
+                    EiffelCompiler.archetype_flat.ontology.replace_constraint_definition(language, term.EIF_Term, False)
                 End If
             Next
         End Sub
@@ -201,7 +201,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 path = EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(1), String))
                 codePhrase = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
                     EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(0), String) & "::" & CType(dRow(2), String)))
-                EiffelCompiler.archetype.ontology.add_term_binding(codePhrase, path)
+                EiffelCompiler.archetype_flat.ontology.add_term_binding(codePhrase, path)
             Next
         End Sub
 
@@ -214,7 +214,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 terminology = EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(0), String))
                 constraintCode = EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(1), String))
                 path = openehr.common_libs.basic.Create.URI.make_from_string(EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(2), String)))
-                EiffelCompiler.archetype.ontology.add_constraint_binding(path, terminology, constraintCode)
+                EiffelCompiler.archetype_flat.ontology.add_constraint_binding(path, terminology, constraintCode)
             Next
         End Sub
 
@@ -229,7 +229,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     adlArchetype.MakeParseTree()
                 End If
 
-                If Not EiffelCompiler.archetype Is Nothing Then
+                If Not EiffelCompiler.archetype_flat Is Nothing Then
                     adlArchetype.RemoveUnusedCodes()
 
                     If EiffelCompiler.has_archetype_serialiser_format(EiffelKernel.Create.STRING_8.make_from_cil(output_format)) Then
@@ -257,7 +257,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Sub WriteAdlDirect(ByVal FileName As String)
             Try
-                If Not EiffelCompiler.archetype Is Nothing Then
+                If Not EiffelCompiler.archetype_flat Is Nothing Then
                     adlArchetype.RemoveUnusedCodes()
 
                     If EiffelCompiler.has_archetype_serialiser_format(EiffelKernel.Create.STRING_8.make_from_cil("adl")) Then
@@ -309,7 +309,7 @@ Namespace ArchetypeEditor.ADL_Classes
 #End Region
 
         Sub New()
-            EiffelCompiler = openehr.adl_parser.interface.Create.ARCHETYPE_COMPILER.make
+            EiffelCompiler = openehr.adl_parser.interface.Create.ARCHETYPE_PARSER.make
         End Sub
 
     End Class

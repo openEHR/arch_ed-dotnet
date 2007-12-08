@@ -25,6 +25,7 @@ Public Class TabpageHistory
     Friend WithEvents panelLeft As System.Windows.Forms.Panel
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
     Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
+    Friend WithEvents RightPanel As System.Windows.Forms.Panel
     WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
@@ -40,10 +41,10 @@ Public Class TabpageHistory
         If Not Me.DesignMode Then
             mFileManager = Filemanager.Master
             mOccurrences = New OccurrencesPanel(mFileManager)
-            Me.gbEventDetails.Controls.Add(mOccurrences)
+            gbEventDetails.Controls.Add(mOccurrences)
             mOccurrences.Dock = DockStyle.Top
+            mOccurrences.TabIndex = 0
         End If
-
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -102,7 +103,6 @@ Public Class TabpageHistory
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabpageHistory))
         Me.gbEventDetails = New System.Windows.Forms.GroupBox
         Me.buSetRuntimeConstraint = New System.Windows.Forms.Button
-        Me.lblRuntimeName = New System.Windows.Forms.Label
         Me.txtRuntimeConstraint = New System.Windows.Forms.TextBox
         Me.txtEventDescription = New System.Windows.Forms.TextBox
         Me.gbDuration = New System.Windows.Forms.GroupBox
@@ -117,6 +117,7 @@ Public Class TabpageHistory
         Me.NumericOffset = New System.Windows.Forms.NumericUpDown
         Me.comboOffsetUnits = New System.Windows.Forms.ComboBox
         Me.lblDescription = New System.Windows.Forms.Label
+        Me.lblRuntimeName = New System.Windows.Forms.Label
         Me.butRemoveElement = New System.Windows.Forms.Button
         Me.butAddEvent = New System.Windows.Forms.Button
         Me.chkIsPeriodic = New System.Windows.Forms.CheckBox
@@ -135,6 +136,7 @@ Public Class TabpageHistory
         Me.panelLeft = New System.Windows.Forms.Panel
         Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.Splitter2 = New System.Windows.Forms.Splitter
+        Me.RightPanel = New System.Windows.Forms.Panel
         Me.gbEventDetails.SuspendLayout()
         Me.gbDuration.SuspendLayout()
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -143,12 +145,14 @@ Public Class TabpageHistory
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbEventList.SuspendLayout()
         Me.panelLeft.SuspendLayout()
+        Me.RightPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbEventDetails
         '
+        Me.gbEventDetails.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbEventDetails.Controls.Add(Me.buSetRuntimeConstraint)
-        Me.gbEventDetails.Controls.Add(Me.lblRuntimeName)
         Me.gbEventDetails.Controls.Add(Me.txtRuntimeConstraint)
         Me.gbEventDetails.Controls.Add(Me.txtEventDescription)
         Me.gbEventDetails.Controls.Add(Me.gbDuration)
@@ -156,46 +160,43 @@ Public Class TabpageHistory
         Me.gbEventDetails.Controls.Add(Me.radioPointInTime)
         Me.gbEventDetails.Controls.Add(Me.gbOffset)
         Me.gbEventDetails.Controls.Add(Me.lblDescription)
-        Me.gbEventDetails.Dock = System.Windows.Forms.DockStyle.Right
-        Me.gbEventDetails.Location = New System.Drawing.Point(448, 0)
+        Me.gbEventDetails.Controls.Add(Me.lblRuntimeName)
+        Me.gbEventDetails.Location = New System.Drawing.Point(8, 8)
         Me.gbEventDetails.Name = "gbEventDetails"
-        Me.gbEventDetails.Size = New System.Drawing.Size(376, 392)
+        Me.gbEventDetails.Size = New System.Drawing.Size(364, 351)
         Me.gbEventDetails.TabIndex = 34
         Me.gbEventDetails.TabStop = False
         Me.gbEventDetails.Text = "Event details"
         '
         'buSetRuntimeConstraint
         '
-        Me.buSetRuntimeConstraint.Location = New System.Drawing.Point(328, 160)
+        Me.buSetRuntimeConstraint.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.buSetRuntimeConstraint.Location = New System.Drawing.Point(319, 169)
         Me.buSetRuntimeConstraint.Name = "buSetRuntimeConstraint"
-        Me.buSetRuntimeConstraint.Size = New System.Drawing.Size(32, 20)
-        Me.buSetRuntimeConstraint.TabIndex = 4
+        Me.buSetRuntimeConstraint.Size = New System.Drawing.Size(32, 22)
+        Me.buSetRuntimeConstraint.TabIndex = 5
         Me.buSetRuntimeConstraint.Text = "..."
-        '
-        'lblRuntimeName
-        '
-        Me.lblRuntimeName.Location = New System.Drawing.Point(4, 152)
-        Me.lblRuntimeName.Name = "lblRuntimeName"
-        Me.lblRuntimeName.Size = New System.Drawing.Size(116, 32)
-        Me.lblRuntimeName.TabIndex = 2
-        Me.lblRuntimeName.Text = "Runtime name constraint:"
-        Me.lblRuntimeName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtRuntimeConstraint
         '
-        Me.txtRuntimeConstraint.Location = New System.Drawing.Point(128, 160)
+        Me.txtRuntimeConstraint.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtRuntimeConstraint.Location = New System.Drawing.Point(16, 170)
         Me.txtRuntimeConstraint.Name = "txtRuntimeConstraint"
         Me.txtRuntimeConstraint.ReadOnly = True
-        Me.txtRuntimeConstraint.Size = New System.Drawing.Size(190, 20)
-        Me.txtRuntimeConstraint.TabIndex = 3
+        Me.txtRuntimeConstraint.Size = New System.Drawing.Size(299, 20)
+        Me.txtRuntimeConstraint.TabIndex = 4
         '
         'txtEventDescription
         '
+        Me.txtEventDescription.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtEventDescription.Location = New System.Drawing.Point(16, 96)
         Me.txtEventDescription.Multiline = True
         Me.txtEventDescription.Name = "txtEventDescription"
-        Me.txtEventDescription.Size = New System.Drawing.Size(349, 46)
-        Me.txtEventDescription.TabIndex = 1
+        Me.txtEventDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtEventDescription.Size = New System.Drawing.Size(334, 46)
+        Me.txtEventDescription.TabIndex = 2
         '
         'gbDuration
         '
@@ -205,7 +206,7 @@ Public Class TabpageHistory
         Me.gbDuration.Controls.Add(Me.comboDurationUnits)
         Me.gbDuration.Location = New System.Drawing.Point(178, 232)
         Me.gbDuration.Name = "gbDuration"
-        Me.gbDuration.Size = New System.Drawing.Size(190, 104)
+        Me.gbDuration.Size = New System.Drawing.Size(172, 104)
         Me.gbDuration.TabIndex = 25
         Me.gbDuration.TabStop = False
         Me.gbDuration.Text = "Duration"
@@ -221,9 +222,11 @@ Public Class TabpageHistory
         '
         'comboIntervalViewPoint
         '
+        Me.comboIntervalViewPoint.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.comboIntervalViewPoint.Location = New System.Drawing.Point(10, 43)
         Me.comboIntervalViewPoint.Name = "comboIntervalViewPoint"
-        Me.comboIntervalViewPoint.Size = New System.Drawing.Size(174, 21)
+        Me.comboIntervalViewPoint.Size = New System.Drawing.Size(156, 21)
         Me.comboIntervalViewPoint.TabIndex = 12
         '
         'numericDuration
@@ -251,10 +254,11 @@ Public Class TabpageHistory
         Me.RadioInterval.Appearance = System.Windows.Forms.Appearance.Button
         Me.RadioInterval.AutoCheck = False
         Me.RadioInterval.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.RadioInterval.Location = New System.Drawing.Point(180, 200)
+        Me.RadioInterval.Location = New System.Drawing.Point(180, 202)
         Me.RadioInterval.Name = "RadioInterval"
-        Me.RadioInterval.Size = New System.Drawing.Size(128, 24)
+        Me.RadioInterval.Size = New System.Drawing.Size(172, 24)
         Me.RadioInterval.TabIndex = 7
+        Me.RadioInterval.TabStop = True
         Me.RadioInterval.Text = "Interval"
         Me.RadioInterval.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
@@ -263,10 +267,11 @@ Public Class TabpageHistory
         Me.radioPointInTime.Appearance = System.Windows.Forms.Appearance.Button
         Me.radioPointInTime.AutoCheck = False
         Me.radioPointInTime.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.radioPointInTime.Location = New System.Drawing.Point(26, 200)
+        Me.radioPointInTime.Location = New System.Drawing.Point(16, 202)
         Me.radioPointInTime.Name = "radioPointInTime"
-        Me.radioPointInTime.Size = New System.Drawing.Size(136, 24)
+        Me.radioPointInTime.Size = New System.Drawing.Size(152, 24)
         Me.radioPointInTime.TabIndex = 6
+        Me.radioPointInTime.TabStop = True
         Me.radioPointInTime.Text = "Point in time"
         Me.radioPointInTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
@@ -304,6 +309,8 @@ Public Class TabpageHistory
         '
         'comboOffsetUnits
         '
+        Me.comboOffsetUnits.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.comboOffsetUnits.Location = New System.Drawing.Point(61, 47)
         Me.comboOffsetUnits.Name = "comboOffsetUnits"
         Me.comboOffsetUnits.Size = New System.Drawing.Size(88, 21)
@@ -312,11 +319,23 @@ Public Class TabpageHistory
         '
         'lblDescription
         '
-        Me.lblDescription.Location = New System.Drawing.Point(18, 79)
+        Me.lblDescription.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblDescription.Location = New System.Drawing.Point(16, 77)
         Me.lblDescription.Name = "lblDescription"
-        Me.lblDescription.Size = New System.Drawing.Size(112, 24)
-        Me.lblDescription.TabIndex = 0
+        Me.lblDescription.Size = New System.Drawing.Size(334, 24)
+        Me.lblDescription.TabIndex = 1
         Me.lblDescription.Text = "Description:"
+        '
+        'lblRuntimeName
+        '
+        Me.lblRuntimeName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblRuntimeName.Location = New System.Drawing.Point(16, 151)
+        Me.lblRuntimeName.Name = "lblRuntimeName"
+        Me.lblRuntimeName.Size = New System.Drawing.Size(334, 24)
+        Me.lblRuntimeName.TabIndex = 3
+        Me.lblRuntimeName.Text = "Runtime name constraint:"
         '
         'butRemoveElement
         '
@@ -405,16 +424,20 @@ Public Class TabpageHistory
         '
         'radioOpen
         '
+        Me.radioOpen.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.radioOpen.Checked = True
         Me.radioOpen.Location = New System.Drawing.Point(8, 16)
         Me.radioOpen.Name = "radioOpen"
         Me.radioOpen.Size = New System.Drawing.Size(128, 32)
         Me.radioOpen.TabIndex = 16
         Me.radioOpen.TabStop = True
-        Me.radioOpen.Text = "open"
+        Me.radioOpen.Text = "Open"
         '
         'radioFixed
         '
+        Me.radioFixed.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.radioFixed.Location = New System.Drawing.Point(8, 56)
         Me.radioFixed.Name = "radioFixed"
         Me.radioFixed.Size = New System.Drawing.Size(128, 40)
@@ -433,9 +456,9 @@ Public Class TabpageHistory
         Me.ListEvents.Location = New System.Drawing.Point(203, 0)
         Me.ListEvents.MultiSelect = False
         Me.ListEvents.Name = "ListEvents"
-        Me.ListEvents.Size = New System.Drawing.Size(242, 392)
+        Me.ListEvents.Size = New System.Drawing.Size(238, 392)
         Me.ListEvents.SmallImageList = Me.ImageListEvents
-        Me.ListEvents.TabIndex = 0
+        Me.ListEvents.TabIndex = 1
         Me.ListEvents.UseCompatibleStateImageBehavior = False
         Me.ListEvents.View = System.Windows.Forms.View.Details
         '
@@ -457,6 +480,7 @@ Public Class TabpageHistory
         '
         'panelLeft
         '
+        Me.panelLeft.AutoScroll = True
         Me.panelLeft.Controls.Add(Me.chkIsPeriodic)
         Me.panelLeft.Controls.Add(Me.comboTimeUnits)
         Me.panelLeft.Controls.Add(Me.butListUp)
@@ -469,7 +493,7 @@ Public Class TabpageHistory
         Me.panelLeft.Location = New System.Drawing.Point(0, 0)
         Me.panelLeft.Name = "panelLeft"
         Me.panelLeft.Size = New System.Drawing.Size(200, 392)
-        Me.panelLeft.TabIndex = 36
+        Me.panelLeft.TabIndex = 0
         '
         'Splitter1
         '
@@ -482,11 +506,21 @@ Public Class TabpageHistory
         'Splitter2
         '
         Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Splitter2.Location = New System.Drawing.Point(445, 0)
+        Me.Splitter2.Location = New System.Drawing.Point(441, 0)
         Me.Splitter2.Name = "Splitter2"
         Me.Splitter2.Size = New System.Drawing.Size(3, 392)
         Me.Splitter2.TabIndex = 38
         Me.Splitter2.TabStop = False
+        '
+        'RightPanel
+        '
+        Me.RightPanel.AutoScroll = True
+        Me.RightPanel.Controls.Add(Me.gbEventDetails)
+        Me.RightPanel.Dock = System.Windows.Forms.DockStyle.Right
+        Me.RightPanel.Location = New System.Drawing.Point(444, 0)
+        Me.RightPanel.Name = "RightPanel"
+        Me.RightPanel.Size = New System.Drawing.Size(380, 392)
+        Me.RightPanel.TabIndex = 39
         '
         'TabpageHistory
         '
@@ -495,7 +529,7 @@ Public Class TabpageHistory
         Me.Controls.Add(Me.Splitter2)
         Me.Controls.Add(Me.Splitter1)
         Me.Controls.Add(Me.panelLeft)
-        Me.Controls.Add(Me.gbEventDetails)
+        Me.Controls.Add(Me.RightPanel)
         Me.HelpProviderEventSeries.SetHelpKeyword(Me, "HowTo/edit_EventSeries.htm")
         Me.HelpProviderEventSeries.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "TabpageHistory"
@@ -510,6 +544,7 @@ Public Class TabpageHistory
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbEventList.ResumeLayout(False)
         Me.panelLeft.ResumeLayout(False)
+        Me.RightPanel.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

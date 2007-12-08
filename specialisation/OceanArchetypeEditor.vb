@@ -255,11 +255,15 @@ Public Class OceanArchetypeEditor
         Return True
     End Function
 
-    Public Function GetInput(ByVal label As String, ByVal parentForm As Form) As String
+    Public Function GetInput(ByVal label As String, ByVal parentForm As Form, Optional ByVal defaultValue As String = "") As String
         Dim frm As New InputForm
         Dim s As String = ""
 
         frm.lblInput.Text = label
+        If defaultValue <> "" Then
+            frm.txtInput.Text = defaultValue
+            frm.txtInput.SelectAll()
+        End If
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
         If frm.ShowDialog(parentForm) = Windows.Forms.DialogResult.OK Then
@@ -673,7 +677,14 @@ Public Class OceanArchetypeEditor
         End Select
     End Function
 
+    Shared Sub ShowSplash()
+        Dim f As New Splash
+        f.ShowAsSplash()
+        Application.DoEvents()
+    End Sub
+
     Shared Sub main(ByVal CmdArgs() As String)
+        ShowSplash()
 
 #Const TEST_LANGUAGE_TRANSLATION = False
 
@@ -705,14 +716,10 @@ Public Class OceanArchetypeEditor
         'mDefaultLanguageCode = "de"
         'mSpecificLanguageCode = "de"
 #End If
-        Dim frm As New Designer
 
         Dim di As New System.IO.DirectoryInfo(Application.StartupPath)
         Dim files As System.IO.FileInfo()
-
-        Dim frmSplash As New Splash
-        frmSplash.ShowAsSplash()
-        Application.DoEvents()
+        Dim frm As New Designer
 
         'Loading from the command line argument
         If CmdArgs.Length > 0 AndAlso CStr(CmdArgs(0)) <> String.Empty Then
@@ -721,6 +728,7 @@ Public Class OceanArchetypeEditor
             'Pickup any Autosave files that are lying around in the same directory as the
             'Exe file as this is where they are saved and with OceanRecover- as a suffix
             files = di.GetFiles("OceanRecovery-*.*")
+
             If Not files Is Nothing AndAlso files.Length > 0 Then
                 Dim recoverFrm As New Recovery
                 recoverFrm.chkListRecovery.Items.AddRange(files)
@@ -728,16 +736,13 @@ Public Class OceanArchetypeEditor
                 Dim isFirst As Boolean = True
 
                 For Each f As System.IO.FileInfo In recoverFrm.chkListRecovery.Items
-
                     If recoverFrm.chkListRecovery.CheckedItems.Contains(f) Then
                         If isFirst Then
                             frm.ArchetypeToOpen = f.FullName
                             isFirst = False
                         Else
-
                             Dim start_info As New ProcessStartInfo
                             start_info.FileName = f.FullName ' Application.ExecutablePath
-
                             start_info.WorkingDirectory = Application.StartupPath
                             Process.Start(start_info)
                             'Dim p As New System.Diagnostics.Process
@@ -761,7 +766,6 @@ Public Class OceanArchetypeEditor
                 ' specific as four letter e.g. "en-AU"
                 mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.Name
             End Try
-
         End If
 
         mMenu = frm.MainMenu
@@ -776,18 +780,19 @@ Public Class OceanArchetypeEditor
         '    Stop
         'End Try
 
-        Try            
+        Try
             frm.ShowDialog()
         Catch ex As Exception
             MessageBox.Show("This program has encountered an error and will shut down - a recovery file will be available on restart" & vbCrLf & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             frm.Close()
             Return
         End Try
+
         files = di.GetFiles("OceanRecovery-*.*")
+
         For Each f As System.IO.FileInfo In files
             f.Delete()
         Next
-
     End Sub
 
     Shared Sub Reflect(ByVal a_control As Control)

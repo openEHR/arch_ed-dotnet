@@ -92,12 +92,15 @@ Public Class ArchetypeID
         mRmModel = ReferenceModel.ModelType
     End Sub
 
-    Public Function ValidConcept(ByRef Concept As String, ByVal OldConcept As String) As String
+    Public Function ValidConcept(ByVal Concept As String, ByVal OldConcept As String, ByVal replaceHyphen As Boolean) As String
         Dim result As String = Trim(Concept)
 
         If result <> "" Then
             'convert illegal characters
-            result = result.Replace("-", "_")
+            'SRH 15 Nov 2007 - comment out replace of hyphen as legal in specialisations
+            If replaceHyphen Then
+                result = result.Replace("-", "_")
+            End If
             result = result.Replace(" ", "_")
             result = result.Replace(".", "_")
             result = result.Replace("&", "_and_")

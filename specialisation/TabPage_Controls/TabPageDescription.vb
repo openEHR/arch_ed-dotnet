@@ -1060,7 +1060,7 @@ Public Class TabPageDescription
     Private Sub ButAddKeyWord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddKeyWord.Click
         Dim ipb As New InputForm
         ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(578, "Keyword")
-        If ipb.ShowDialog = Windows.Forms.DialogResult.OK Then
+        If ipb.ShowDialog(Me.ParentForm) = Windows.Forms.DialogResult.OK Then
             Me.listKeyword.Items.Add(ipb.txtInput.Text)
             Filemanager.Master.FileEdited = True
         End If

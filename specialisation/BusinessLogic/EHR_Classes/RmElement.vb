@@ -70,6 +70,21 @@ Public Class RmElement
         Return ae
     End Function
 
+    Private constraintNullFlavours As CodePhrase = New CodePhrase("openehr")
+
+    Public Property ConstrainedNullFlavours() As CodePhrase
+        Get
+            Return constraintNullFlavours
+        End Get
+        Set(ByVal value As CodePhrase)
+            constraintNullFlavours = value
+        End Set
+    End Property
+
+    Public Function HasNullFlavourConstraint() As Boolean
+        Return constraintNullFlavours.Codes.Count > 0
+    End Function
+
     Sub New(ByVal e As RmElement)
         MyBase.New(e)
         ' for reference

@@ -529,154 +529,138 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Dim TerminologyCode As String
     End Structure
 
-    Private Function GetHtmlDetails(ByVal c As Constraint) As HTML_Details
+    Private Function HtmlDetails(ByVal c As Constraint) As HTML_Details
+        Dim result As HTML_Details = New HTML_Details()
+        result.HTML = ""
+        result.ImageSource = ""
+        result.TerminologyCode = ""
 
-        Dim html_dt As HTML_Details = New HTML_Details()
+        If Not c Is Nothing Then
+            Select Case c.Type
+                Case ConstraintType.Multiple
+                    Dim prefix As String = ""
 
-        html_dt.HTML = ""
-        html_dt.ImageSource = ""
-        html_dt.TerminologyCode = ""
+                    For Each cc As Constraint In CType(c, Constraint_Choice).Constraints
+                        result.HTML &= prefix & HtmlDetails(cc).HTML
+                        prefix = "<hr>"
+                    Next
 
-        Select Case c.Type
+                    result.ImageSource = "Images/choice.gif"
 
-            Case ConstraintType.Multiple
-                Dim first As Boolean = True
+                Case ConstraintType.Any
+                    result.HTML = Environment.NewLine & "&nbsp;"
+                    result.ImageSource = "Images/any.gif"
 
-                For Each cc As Constraint In CType(c, Constraint_Choice).Constraints
-                    If first Then
-                        html_dt.HTML &= GetHtmlDetails(cc).HTML
-                        first = False
+                Case ConstraintType.Quantity
+                    result.HTML = Environment.NewLine & QuantityConstraintToHTML(CType(c, Constraint_Quantity))
+                    result.ImageSource = "Images/quantity.gif"
+
+                Case ConstraintType.Count
+                    result.HTML = Environment.NewLine & CountConstraintToRichText(CType(c, Constraint_Count))
+                    result.ImageSource = "Images/count.gif"
+
+                Case ConstraintType.Text
+                    result.HTML = Environment.NewLine & TextConstraintToRichText(CType(c, Constraint_Text))
+                    result.ImageSource = "Images/text.gif"
+
+                Case ConstraintType.Boolean
+                    Dim b As Constraint_Boolean = CType(c, Constraint_Boolean)
+                    result.HTML = Environment.NewLine
+
+                    If b.TrueFalseAllowed Then
+                        result.HTML &= Boolean.TrueString & ", " & Boolean.FalseString
+                    ElseIf b.TrueAllowed Then
+                        result.HTML &= Boolean.TrueString
                     Else
-                        html_dt.HTML &= "<hr>" + GetHtmlDetails(cc).HTML
+                        result.HTML &= Boolean.FalseString
                     End If
-                Next
-                html_dt.ImageSource = "Images/choice.gif"
 
-            Case ConstraintType.Any
-                html_dt.HTML = Environment.NewLine & "&nbsp;"
-                html_dt.ImageSource = "Images/any.gif"
+                    If b.hasAssumedValue Then
+                        result.HTML &= Filemanager.GetOpenEhrTerm(158, "Assumed value:") & " " & b.AssumedValue.ToString
+                    End If
 
-            Case ConstraintType.Quantity
+                    result.ImageSource = "Images/truefalse.gif"
 
-                html_dt.HTML = Environment.NewLine & QuantityConstraintToHTML(CType(c, Constraint_Quantity))
-                html_dt.ImageSource = "Images/quantity.gif"
+                Case ConstraintType.DateTime
+                    Dim dt As Constraint_DateTime
+                    dt = CType(c, Constraint_DateTime)
+                    result.HTML = Environment.NewLine & Filemanager.GetOpenEhrTerm(dt.TypeofDateTimeConstraint, "not known")
+                    result.ImageSource = "Images/datetime.gif"
 
-            Case ConstraintType.Count
+                Case ConstraintType.Ordinal
+                    result.HTML = Environment.NewLine & OrdinalConstraintToHTML(CType(c, Constraint_Ordinal))
+                    result.ImageSource = "Images/ordinal.gif"
 
-                html_dt.HTML = Environment.NewLine & CountConstraintToRichText(CType(c, Constraint_Count))
-                html_dt.ImageSource = "Images/count.gif"
+                Case ConstraintType.URI
+                    result.HTML = Environment.NewLine & "&nbsp;"
+                    result.ImageSource = "Images/uri.gif"
 
-            Case ConstraintType.Text
+                Case ConstraintType.Proportion
+                    result.HTML = Environment.NewLine & ProportionConstraintToHTML(CType(c, Constraint_Proportion))
+                    result.ImageSource = "Images/ratio.gif"
 
-                html_dt.HTML = Environment.NewLine & TextConstraintToRichText(CType(c, Constraint_Text))
-                html_dt.ImageSource = "Images/text.gif"
+                Case ConstraintType.Duration
+                    result.HTML = Environment.NewLine & DurationConstraintToRichText(CType(c, Constraint_Duration))
+                    result.ImageSource = "Images/duration.gif"
 
+                Case ConstraintType.Interval_Count
+                    result.HTML = Environment.NewLine & IntervalCountToHTML(CType(c, Constraint_Interval_Count))
+                    result.ImageSource = "Images/interval.gif"
 
-            Case ConstraintType.Boolean
-                Dim b As Constraint_Boolean
+                Case ConstraintType.Interval_Quantity
+                    result.HTML = Environment.NewLine & IntervalQuantityToHTML(CType(c, Constraint_Interval_Quantity))
+                    result.ImageSource = "Images/interval.gif"
 
-                b = CType(c, Constraint_Boolean)
+                Case ConstraintType.Interval_DateTime
+                    result.HTML = Environment.NewLine & IntervalDateTimeToHTML(CType(c, Constraint_Interval_DateTime))
+                    result.ImageSource = "Images/interval.gif"
 
-                html_dt.HTML = Environment.NewLine
+                Case ConstraintType.MultiMedia
+                    result.HTML = ""
+                    result.ImageSource = "Images/multimedia.gif"
 
-                If b.TrueFalseAllowed Then
-                    html_dt.HTML &= Boolean.TrueString & ", " & Boolean.FalseString
-                ElseIf b.TrueAllowed Then
-                    html_dt.HTML &= Boolean.TrueString
-                Else
-                    html_dt.HTML &= Boolean.FalseString
-                End If
+                Case ConstraintType.Slot
+                    result.HTML = Environment.NewLine & SlotToHTML(CType(c, Constraint_Slot))
+                    result.ImageSource = "Images/slot.gif"
 
-                If b.hasAssumedValue Then
-                    html_dt.HTML &= Filemanager.GetOpenEhrTerm(158, "Assumed value:") & " " & b.AssumedValue.ToString
-                End If
+                Case Else
+                    Debug.WriteLine(c.Type.ToString)
+                    Debug.Assert(False, "Not handled")
+            End Select
+        End If
 
-                html_dt.ImageSource = "Images/truefalse.gif"
-
-            Case ConstraintType.DateTime
-                Dim dt As Constraint_DateTime
-                dt = CType(c, Constraint_DateTime)
-                html_dt.HTML = Environment.NewLine & Filemanager.GetOpenEhrTerm(dt.TypeofDateTimeConstraint, "not known")
-
-                html_dt.ImageSource = "Images/datetime.gif"
-
-            Case ConstraintType.Ordinal
-                html_dt.HTML = Environment.NewLine & OrdinalConstraintToHTML(CType(c, Constraint_Ordinal))
-
-                html_dt.ImageSource = "Images/ordinal.gif"
-
-            Case ConstraintType.URI
-                html_dt.HTML = Environment.NewLine & "&nbsp;"
-                html_dt.ImageSource = "Images/uri.gif"
-
-            Case ConstraintType.Proportion
-                html_dt.HTML = Environment.NewLine & ProportionConstraintToHTML(CType(c, Constraint_Proportion))
-                html_dt.ImageSource = "Images/ratio.gif"
-
-            Case ConstraintType.Duration
-                html_dt.HTML = Environment.NewLine & DurationConstraintToRichText(CType(c, Constraint_Duration))
-                html_dt.ImageSource = "Images/duration.gif"
-
-            Case ConstraintType.Interval_Count
-                html_dt.HTML = Environment.NewLine & IntervalCountToHTML(CType(c, Constraint_Interval_Count))
-                html_dt.ImageSource = "Images/interval.gif"
-
-            Case ConstraintType.Interval_Quantity
-                html_dt.HTML = Environment.NewLine & IntervalQuantityToHTML(CType(c, Constraint_Interval_Quantity))
-                html_dt.ImageSource = "Images/interval.gif"
-
-            Case ConstraintType.Interval_DateTime
-                html_dt.HTML = Environment.NewLine & IntervalDateTimeToHTML(CType(c, Constraint_Interval_DateTime))
-                html_dt.ImageSource = "Images/interval.gif"
-
-            Case ConstraintType.MultiMedia
-                html_dt.HTML = ""
-                html_dt.ImageSource = "Images/multimedia.gif"
-
-            Case ConstraintType.Slot
-
-                html_dt.HTML = Environment.NewLine & SlotToHTML(CType(c, Constraint_Slot))
-                html_dt.ImageSource = "Images/slot.gif"
-
-            Case Else
-                Debug.WriteLine(c.Type.ToString)
-                Debug.Assert(False, "Not handled")
-        End Select
-
-        Return html_dt
+        Return result
     End Function
-
 
     Public Overrides Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
 
         ' write the cardinality of the element
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("<tr>")
         Dim class_names As String = ""
-        Dim html_dt As HTML_Details = GetHtmlDetails(Element.Constraint)
+        Dim html_dt As HTML_Details = HtmlDetails(Element.Constraint)
         Dim terminologyCode As String
 
         If OceanArchetypeEditor.Instance.Options.ShowTermsInHtml Then
             For Each terminologyRow As DataRow In mFileManager.OntologyManager.TerminologiesTable.Rows
                 terminologyCode = CStr(terminologyRow.Item(0))
+
                 If mFileManager.OntologyManager.Ontology.HasTermBinding(terminologyCode, NodeId) Then
                     html_dt.TerminologyCode = "<br>" & terminologyCode & ": " & mFileManager.OntologyManager.Ontology.TermBinding(terminologyCode, NodeId)
                 End If
             Next
         End If
 
-        If Element.Constraint.Type = ConstraintType.Multiple Then
-            Dim first As Boolean = True
+        If Not Element.Constraint Is Nothing Then
+            If Element.Constraint.Type = ConstraintType.Multiple Then
+                Dim prefix As String = ""
 
-            For Each c As Constraint In CType(Element.Constraint, Constraint_Choice).Constraints
-                If first Then
-                    first = False
-                    class_names &= c.Type.ToString
-                Else
-                    class_names &= "<hr>" & c.Type.ToString
-                End If
-            Next
-        Else
-            class_names = Element.Constraint.ConstraintTypeString
+                For Each c As Constraint In CType(Element.Constraint, Constraint_Choice).Constraints
+                    class_names &= prefix & c.Type.ToString
+                    prefix = "<hr>"
+                Next
+            Else
+                class_names = Element.Constraint.ConstraintTypeString
+            End If
         End If
 
         result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""{2}"" width=""32"" height=""32"" align=""middle""><b>{3}</b></td></table></td>", Environment.NewLine, (level * 20).ToString, html_dt.ImageSource, mText)
@@ -697,7 +681,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End If
 
         Return result.ToString
-
     End Function
 
     Overrides Function ToString() As String

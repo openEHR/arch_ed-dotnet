@@ -26,7 +26,7 @@ Namespace ArchetypeEditor.ADL_Classes
         'Builds all archetypes at present
 
         Protected adlArchetype As openehr.openehr.am.archetype.ARCHETYPE
-        Protected compiler As openehr.adl_parser.interface.ARCHETYPE_COMPILER
+        Protected compiler As openehr.adl_parser.interface.ARCHETYPE_PARSER
         Protected mAomFactory As openehr.openehr.am.archetype.constraint_model.C_FACTORY
 
         Protected Structure ReferenceToResolve
@@ -45,14 +45,14 @@ Namespace ArchetypeEditor.ADL_Classes
                 adlArchetype.definition.set_object_id(adlArchetype.concept) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
                 System.Diagnostics.Debug.Assert(Me.ConceptCode = Value)
-                System.Diagnostics.Debug.Assert(compiler.archetype.concept.to_cil = Value)
+                System.Diagnostics.Debug.Assert(compiler.archetype_flat.concept.to_cil = Value)
                 System.Diagnostics.Debug.Assert(adlArchetype.definition.node_id.to_cil = Value)
             End Set
         End Property
 
         Public Overrides ReadOnly Property ArchetypeAvailable() As Boolean
             Get
-                Return Not compiler.archetype Is Nothing
+                Return Not compiler.archetype_flat Is Nothing
             End Get
         End Property
 
@@ -95,8 +95,8 @@ Namespace ArchetypeEditor.ADL_Classes
         End Property
         Public Overrides ReadOnly Property SourceCode() As String
             Get
-                If Not compiler.source Is Nothing Then
-                    Return compiler.source.to_cil
+                If Not compiler.flat_text Is Nothing Then
+                    Return compiler.flat_text.to_cil
                 Else
                     Return Nothing
                 End If
@@ -107,7 +107,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Me.MakeParseTree()
                 Try
                     compiler.serialise_archetype(EiffelKernel.Create.STRING_8.make_from_cil(a_format))
-                    Return compiler.serialised_archetype.to_cil
+                    Return compiler.serialised_flat.to_cil
                 Catch e As Exception
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Return AE_Constants.Instance.Error_saving
@@ -143,7 +143,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             compiler.create_new_specialised_archetype(EiffelKernel.Create.STRING_8.make_from_cil(ConceptShortName))
             ' Update the GUI tables with the new term
-            a_term = New ADL_Term(compiler.archetype.ontology.term_definition(EiffelKernel.Create.STRING_8.make_from_cil(The_Ontology.LanguageCode), adlArchetype.concept))
+            a_term = New ADL_Term(compiler.archetype_flat.ontology.term_definition(EiffelKernel.Create.STRING_8.make_from_cil(The_Ontology.LanguageCode), adlArchetype.concept))
             The_Ontology.UpdateTerm(a_term)
             Me.mArchetypeID.Concept &= "-" & ConceptShortName
 
@@ -151,7 +151,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Sub RemoveUnusedCodes()
-            adlArchetype.ontology_remove_unused_codes()
+            adlArchetype.remove_ontology_unused_codes()
         End Sub
 
         Protected Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)
@@ -159,9 +159,9 @@ Namespace ArchetypeEditor.ADL_Classes
 
             id = openehr.openehr.rm.support.identification.Create.ARCHETYPE_ID.make_from_string(EiffelKernel.Create.STRING_8.make_from_cil(an_archetype_id.ToString))
             Try
-                If compiler.archetype Is Nothing Then
+                If compiler.archetype_flat Is Nothing Then
                     compiler.create_new_archetype(id.rm_originator, id.rm_name, id.rm_entity, EiffelKernel.Create.STRING_8.make_from_cil(sPrimaryLanguageCode))
-                    adlArchetype = compiler.archetype
+                    adlArchetype = compiler.archetype_flat
                     adlArchetype.definition.set_object_id(adlArchetype.concept)
                     setDefinition()
                 Else
@@ -822,12 +822,12 @@ Namespace ArchetypeEditor.ADL_Classes
                 upper = EiffelKernel.Create.STRING_8.make_from_cil(durationIso.ISO_duration)
             End If
 
+            Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
+
             If Not pattern Is Nothing Or Not lower Is Nothing Or Not upper Is Nothing Then
                 Dim d As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
                 d = mAomFactory.create_c_duration_make(pattern, lower, upper, c.IncludeMinimum, c.IncludeMaximum)
-
-                Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
 
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
@@ -1111,7 +1111,23 @@ Namespace ArchetypeEditor.ADL_Classes
                     BuildElementConstraint(value_attribute, Element.Constraint)
                 End If
 
+                'Check for constraint on Flavours of Null
+                If Element.HasNullFlavourConstraint() Then
+                    Dim null_flavour_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                    null_flavour_attribute = mAomFactory.create_c_attribute_single(element_cadlObj, EiffelKernel.Create.STRING_8.make_from_cil("null_flavor"))
+                    null_flavour_attribute.set_existence(mAomFactory.create_c_integer_make_bounded(0, 1, True, True).interval)
+                    BuildCodedText(null_flavour_attribute, Element.ConstrainedNullFlavours)
+                End If
+
             End If
+
+            'SRH 13th Nov 2007 - Added flavours of null constraint
+
+
+
+
+
+
         End Sub
 
         Private Sub BuildStructure(ByVal rmStruct As RmStructureCompound, ByRef objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -1721,14 +1737,17 @@ Namespace ArchetypeEditor.ADL_Classes
                                         rm_data = rm
                                     Case StructureType.State
                                         'for the moment saving the state data on the first event EventSeries if there is one
-                                        Dim a_rm As RmStructure
-                                        a_rm = rm.Children.items(0)
+                                        Dim a_rm As RmStructure = Nothing
 
-                                        If a_rm.Type = StructureType.History Then
+                                        If rm.Children.items.Length > 0 Then
+                                            a_rm = rm.Children.items(0)
+                                        End If
+
+                                        If a_rm Is Nothing OrElse a_rm.Type <> StructureType.History Then
+                                            rm_state = rm
+                                        Else
                                             ' can have EventSeries for each state
                                             rm_state_history = a_rm
-                                        Else
-                                            rm_state = rm
                                         End If
                                 End Select
                             Next
@@ -1839,7 +1858,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Sub New(ByRef c As openehr.adl_parser.interface.ARCHETYPE_COMPILER, ByVal an_ArchetypeID As ArchetypeID, ByVal primary_language As String)
+        Sub New(ByRef c As openehr.adl_parser.interface.ARCHETYPE_PARSER, ByVal an_ArchetypeID As ArchetypeID, ByVal primary_language As String)
             ' call to create a brand new archetype
             MyBase.New(primary_language, an_ArchetypeID)
             compiler = c
@@ -1851,7 +1870,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Try
                 compiler.create_new_archetype(id.rm_originator, id.rm_name, id.rm_entity, _
                     EiffelKernel.Create.STRING_8.make_from_cil(sPrimaryLanguageCode))
-                adlArchetype = compiler.archetype
+                adlArchetype = compiler.archetype_flat
                 adlArchetype.set_archetype_id(id)
                 adlArchetype.definition.set_object_id(adlArchetype.concept)
 
@@ -1859,14 +1878,14 @@ Namespace ArchetypeEditor.ADL_Classes
                 Debug.Assert(False)
                 ''FIXME raise error
             End Try
-            mDescription = New ADL_Description(compiler.archetype.original_language.code_string.to_cil) ' nothing to pass
+            mDescription = New ADL_Description(compiler.archetype_flat.original_language.code_string.to_cil) ' nothing to pass
         End Sub
 
-        Sub New(ByRef an_ADL_Engine As openehr.adl_parser.interface.ARCHETYPE_COMPILER, ByVal a_filemanager As FileManagerLocal)
+        Sub New(ByRef an_ADL_Engine As openehr.adl_parser.interface.ARCHETYPE_PARSER, ByVal a_filemanager As FileManagerLocal)
             ' call to create an in memory archetype from the ADL parser
-            MyBase.New(an_ADL_Engine.archetype.ontology.primary_language.to_cil)
+            MyBase.New(an_ADL_Engine.archetype_flat.ontology.primary_language.to_cil)
 
-            adlArchetype = an_ADL_Engine.archetype
+            adlArchetype = an_ADL_Engine.archetype_flat
             compiler = an_ADL_Engine
             mArchetypeID = New ArchetypeID(adlArchetype.archetype_id.as_string.to_cil)
             ReferenceModel.SetArchetypedClass(mArchetypeID.ReferenceModelEntity)
@@ -1927,13 +1946,13 @@ Namespace ArchetypeEditor.ADL_Classes
             MyBase.New(primary_language)
         End Sub
 
-        Sub New(ByRef c As openehr.adl_parser.interface.ARCHETYPE_COMPILER)
+        Sub New(ByRef c As openehr.adl_parser.interface.ARCHETYPE_PARSER)
             ' call use in create for export only
-            MyBase.New(c.archetype.ontology.primary_language.to_cil)
+            MyBase.New(c.archetype_flat.ontology.primary_language.to_cil)
             compiler = c
             ' make the new archetype
 
-            adlArchetype = compiler.archetype
+            adlArchetype = compiler.archetype_flat
             mArchetypeID = New ArchetypeID(adlArchetype.archetype_id.as_string.to_cil)
 
             ' get the parent ID

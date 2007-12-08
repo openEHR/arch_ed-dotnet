@@ -170,7 +170,7 @@ Public Class myArchetypeFromWeb
 
     Private Sub btn_open_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_open.Click
         Dim myID As Button = sender
-        myWebSearchForm.setArchetypeIdToBeOpened(myID.Name)
+        ' myWebSearchForm.setArchetypeIdToBeOpened(myID.Name)
     End Sub
 End Class
 '

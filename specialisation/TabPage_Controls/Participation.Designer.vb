@@ -23,17 +23,18 @@ Partial Class Participation
         Me.butSelector = New System.Windows.Forms.RadioButton
         Me.gbFunction = New System.Windows.Forms.GroupBox
         Me.gbConstraints = New System.Windows.Forms.GroupBox
-        Me.cbDateTime = New System.Windows.Forms.CheckBox
         Me.lblDateTime = New System.Windows.Forms.Label
+        Me.cbDateTime = New System.Windows.Forms.CheckBox
         Me.gbConstraints.SuspendLayout()
         Me.SuspendLayout()
         '
         'panelLeft
         '
         Me.panelLeft.Dock = System.Windows.Forms.DockStyle.Left
-        Me.panelLeft.Location = New System.Drawing.Point(28, 0)
+        Me.panelLeft.Location = New System.Drawing.Point(25, 0)
+        Me.panelLeft.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.panelLeft.Name = "panelLeft"
-        Me.panelLeft.Size = New System.Drawing.Size(343, 206)
+        Me.panelLeft.Size = New System.Drawing.Size(350, 211)
         Me.panelLeft.TabIndex = 0
         '
         'butSelector
@@ -44,8 +45,9 @@ Partial Class Participation
         Me.butSelector.FlatAppearance.CheckedBackColor = System.Drawing.Color.Blue
         Me.butSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.butSelector.Location = New System.Drawing.Point(0, 0)
+        Me.butSelector.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.butSelector.Name = "butSelector"
-        Me.butSelector.Size = New System.Drawing.Size(28, 206)
+        Me.butSelector.Size = New System.Drawing.Size(25, 211)
         Me.butSelector.TabIndex = 1
         Me.butSelector.TabStop = True
         Me.butSelector.Text = ">"
@@ -54,9 +56,11 @@ Partial Class Participation
         'gbFunction
         '
         Me.gbFunction.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbFunction.Location = New System.Drawing.Point(371, 0)
+        Me.gbFunction.Location = New System.Drawing.Point(375, 0)
+        Me.gbFunction.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.gbFunction.Name = "gbFunction"
-        Me.gbFunction.Size = New System.Drawing.Size(377, 206)
+        Me.gbFunction.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbFunction.Size = New System.Drawing.Size(357, 211)
         Me.gbFunction.TabIndex = 2
         Me.gbFunction.TabStop = False
         Me.gbFunction.Text = "Participant function"
@@ -66,42 +70,47 @@ Partial Class Participation
         Me.gbConstraints.Controls.Add(Me.lblDateTime)
         Me.gbConstraints.Controls.Add(Me.cbDateTime)
         Me.gbConstraints.Dock = System.Windows.Forms.DockStyle.Right
-        Me.gbConstraints.Location = New System.Drawing.Point(748, 0)
+        Me.gbConstraints.Location = New System.Drawing.Point(732, 0)
+        Me.gbConstraints.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.gbConstraints.Name = "gbConstraints"
-        Me.gbConstraints.Size = New System.Drawing.Size(124, 206)
+        Me.gbConstraints.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbConstraints.Size = New System.Drawing.Size(103, 211)
         Me.gbConstraints.TabIndex = 3
         Me.gbConstraints.TabStop = False
         Me.gbConstraints.Text = "Constraints"
         '
+        'lblDateTime
+        '
+        Me.lblDateTime.AutoSize = True
+        Me.lblDateTime.Location = New System.Drawing.Point(5, 20)
+        Me.lblDateTime.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.lblDateTime.Name = "lblDateTime"
+        Me.lblDateTime.Size = New System.Drawing.Size(73, 13)
+        Me.lblDateTime.TabIndex = 1
+        Me.lblDateTime.Text = "Date and time"
+        '
         'cbDateTime
         '
-        Me.cbDateTime.Location = New System.Drawing.Point(9, 50)
+        Me.cbDateTime.Location = New System.Drawing.Point(7, 41)
+        Me.cbDateTime.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.cbDateTime.Name = "cbDateTime"
-        Me.cbDateTime.Size = New System.Drawing.Size(112, 49)
+        Me.cbDateTime.Size = New System.Drawing.Size(84, 40)
         Me.cbDateTime.TabIndex = 0
         Me.cbDateTime.Text = "mandatory"
         Me.cbDateTime.UseVisualStyleBackColor = True
         '
-        'lblDateTime
-        '
-        Me.lblDateTime.AutoSize = True
-        Me.lblDateTime.Location = New System.Drawing.Point(7, 24)
-        Me.lblDateTime.Name = "lblDateTime"
-        Me.lblDateTime.Size = New System.Drawing.Size(96, 17)
-        Me.lblDateTime.TabIndex = 1
-        Me.lblDateTime.Text = "Date and time"
-        '
         'Participation
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Controls.Add(Me.gbFunction)
         Me.Controls.Add(Me.gbConstraints)
         Me.Controls.Add(Me.panelLeft)
         Me.Controls.Add(Me.butSelector)
+        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Name = "Participation"
-        Me.Size = New System.Drawing.Size(872, 206)
+        Me.Size = New System.Drawing.Size(835, 211)
         Me.gbConstraints.ResumeLayout(False)
         Me.gbConstraints.PerformLayout()
         Me.ResumeLayout(False)

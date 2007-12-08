@@ -22,12 +22,12 @@ Imports EiffelTable = EiffelSoftware.Library.Base.structures.table
 Namespace ArchetypeEditor.ADL_Classes
     Friend Class ADL_Ontology
         Inherits Ontology
-        Private EiffelCompiler As openehr.adl_parser.interface.ARCHETYPE_COMPILER
+        Private EiffelCompiler As openehr.adl_parser.interface.ARCHETYPE_PARSER
         Private sLanguageCode As String
 
         Protected ReadOnly Property Ontology() As openehr.openehr.am.archetype.ontology.ARCHETYPE_ONTOLOGY
             Get
-                Return EiffelCompiler.archetype.ontology
+                Return EiffelCompiler.archetype_flat.ontology
             End Get
         End Property
 
@@ -45,7 +45,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Overrides ReadOnly Property NumberOfSpecialisations() As Integer
             Get
-                Return EiffelCompiler.archetype.specialisation_depth
+                Return EiffelCompiler.archetype_flat.specialisation_depth
             End Get
         End Property
 
@@ -524,6 +524,12 @@ Namespace ArchetypeEditor.ADL_Classes
                             d_row(0) = selected_row(0)
                             d_row(1) = code.to_cil
                             d_row(2) = cp.code_string
+
+                            ' EDT-134
+                            If Not cp.terminology_id.version_id Is Nothing Then
+                                d_row(3) = cp.terminology_id.version_id.to_cil    ' release
+                            End If
+
                             TheOntologyManager.TermBindingsTable.Rows.Add(d_row)
                             Bindings.forth()
                         Loop
@@ -622,7 +628,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overrides Sub PopulateAllTerms(ByRef TheOntologyManager As OntologyManager)
-            If Not EiffelCompiler.archetype Is Nothing Then
+            If Not EiffelCompiler.archetype_flat Is Nothing Then
                 populate_languages(TheOntologyManager)
                 populate_terminologies(TheOntologyManager)
                 populate_term_definitions(TheOntologyManager)
@@ -633,7 +639,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Sub New(ByRef compiler As openehr.adl_parser.interface.ARCHETYPE_COMPILER, Optional ByVal Replace As Boolean = False)
+        Sub New(ByRef compiler As openehr.adl_parser.interface.ARCHETYPE_PARSER, Optional ByVal Replace As Boolean = False)
             EiffelCompiler = compiler
         End Sub
 

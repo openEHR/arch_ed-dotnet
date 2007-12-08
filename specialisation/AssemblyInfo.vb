@@ -27,24 +27,12 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Tool for editing openEHR archetypes.")> 
 <Assembly: AssemblyCompany("Ocean Informatics")> 
 <Assembly: AssemblyProduct("Ocean Archetype Editor")> 
-<Assembly: AssemblyCopyright("Copyright 2004-7")> 
+<Assembly: AssemblyCopyright("Copyright © 2004-2007")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: CLSCompliant(True)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("6888C5E9-0755-4764-A5AB-4FF1CDAFB5E8")> 
-
-' Version information for an assembly consists of the following four values:
-'
-'      Major Version
-'      Minor Version 
-'      Build Number
-'      Revision
-'
-' You can specify all the values or you can default the Build and Revision Numbers 
-' by using the '*' as shown below:
-
-<Assembly: AssemblyVersion("2.1.*")> 
 
 '
 '***** BEGIN LICENSE BLOCK *****
@@ -84,5 +72,3 @@ Imports System.Runtime.InteropServices
 '
 '***** END LICENSE BLOCK *****
 '
-
-<Assembly: AssemblyFileVersionAttribute("1.0.1243")> 

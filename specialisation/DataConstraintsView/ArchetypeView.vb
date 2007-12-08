@@ -109,9 +109,7 @@ Public Class ArchetypeView
         rowHeadings = CType(TableDetails(1), Collection)
         isRotated = CType(TableDetails(2), Boolean)
 
-        If isRotated Then
-
-
+        If isRotated And rowHeadings.Count > 0 Then
             For Each t As String In CType(CType(rowHeadings(1), ArchetypeElement).Constraint, Constraint_Text).AllowableValues.Codes
                 Dim Rel_Pos As New Point(20, 20)
 
@@ -147,7 +145,6 @@ Public Class ArchetypeView
             Next
         End If
     End Sub
-
 
     Private Function NodesToControls(ByVal NodeCol As TreeNodeCollection, _
         ByRef aLocation As Point, ByVal aContainer As Control, _
@@ -248,19 +245,24 @@ Public Class ArchetypeView
             aContainer.Controls.Add(view)
 
             aContainer.Width = Math.Max(aLocation.X + view.Width + 5, aContainer.Width)
+
             If aContainer.Name <> "tpInterface" Then
                 aContainer.Height = Math.Max(view.Top + view.Height + 1, aContainer.Height)
             End If
 
             aLocation.Y = view.Top + view.Height + spacer
         End If
-
     End Function
 
     Public Shared Function ElementView(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
-
         'any additions need to be processed in the overloaded function below
-        Select Case anElement.Constraint.Type
+        Dim t As ConstraintType
+
+        If Not anElement Is Nothing AndAlso Not anElement.Constraint Is Nothing Then
+            t = anElement.Constraint.Type
+        End If
+
+        Select Case t
             Case ConstraintType.Text
                 Return New TextViewControl(anElement, a_filemanager)
 
@@ -303,10 +305,14 @@ Public Class ArchetypeView
     End Function
 
     Public Shared Function ElementView(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
-
         'any additions need to be processed in the overloaded function above
+        Dim t As ConstraintType
 
-        Select Case aConstraint.Type
+        If Not aConstraint Is Nothing Then
+            t = aConstraint.Type
+        End If
+
+        Select Case t
             Case ConstraintType.Text
                 Return New TextViewControl(aConstraint, a_filemanager)
 

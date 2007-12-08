@@ -101,11 +101,7 @@ Public Class FileManagerLocal
             If Not mIsFileLoading Then
                 mIsFileDirty = Value
                 Filemanager.SetFileChangedToolBar(Value)
-                If Value Then
-                    mParserSynchronised = False
-                Else
-                    mParserSynchronised = True
-                End If
+                mParserSynchronised = Not Value
             End If
         End Set
     End Property
@@ -275,45 +271,7 @@ Public Class FileManagerLocal
             ' it will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
             ' This avoids data and file overflow.
 
-            If aFileName.StartsWith("http") Then
-
-                Dim fileUrl As New Uri(aFileName)
-                Dim request As System.Net.WebRequest
-                Dim response As Net.HttpWebResponse
-                Dim tempPath, strFileName, downloadPath As String
-                tempPath = System.IO.Path.GetTempPath
-
-                strFileName = System.IO.Path.GetFileName(fileUrl.AbsoluteUri)
-                downloadPath = System.IO.Path.Combine(tempPath, strFileName)
-                Try
-                    request = System.Net.WebRequest.Create(fileUrl)
-                    'CHANGED SRH - says use the default
-                    'request.Proxy = System.Net.WebProxy.GetDefaultProxy
-                    request.Proxy.Credentials = System.Net.CredentialCache.DefaultCredentials ' to avoid eventually Proxy-Troubles
-                    response = CType(request.GetResponse(), Net.HttpWebResponse)
-                Catch ex As Exception
-                    Return False
-                End Try
-
-                Dim sw As New System.IO.StreamWriter(downloadPath)
-
-                Dim dataStream As IO.Stream = response.GetResponseStream()
-                ' Open the stream using a StreamReader for easy access.
-                Dim reader As New IO.StreamReader(dataStream)
-                ' Read the content.
-                Dim responseFromServer As String = reader.ReadToEnd()
-                ' Display the content.
-                sw.WriteLine(responseFromServer)
-                ' Cleanup the streams and the response.
-                reader.Close()
-                dataStream.Close()
-                response.Close()
-                sw.Close()
-
-                ' the web archetype has been written into a local temporary file!
-                aFileName = downloadPath
-            End If
-
+            
             'end of addition
 
             mArchetypeEngine.OpenFile(aFileName, Me)
@@ -388,10 +346,10 @@ Public Class FileManagerLocal
 
         'validate the concept to update it with the correct case and remove illegal characters
         Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
-        Id1.Concept = Id1.ValidConcept(Id1.Concept, "")
+        Id1.Concept = Id1.ValidConcept(Id1.Concept, "", False)
 
         Dim Id2 As New ArchetypeID(shortFileName)
-        Id2.Concept = Id2.ValidConcept(Id2.Concept, "")
+        Id2.Concept = Id2.ValidConcept(Id2.Concept, "", False)
 
         Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
         If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
@@ -569,7 +527,7 @@ Public Class FileManagerLocal
         End If
 
         'set the adl version
-        adlParser.ADL_Parser.archetype.set_adl_version(EiffelKernel.Create.STRING_8.make_from_cil("1.4"))
+        adlParser.ADL_Parser.archetype_flat.set_adl_version(EiffelKernel.Create.STRING_8.make_from_cil("1.4"))
 
         'populate the ontology
 
@@ -583,7 +541,7 @@ Public Class FileManagerLocal
             If language <> mOntologyManager.PrimaryLanguageCode Then
                 Dim adlTranslationDetails As ADL_TranslationDetails = New ADL_TranslationDetails(Me.Archetype.TranslationDetails.Item(language))
                 translationsArray.Add(adlTranslationDetails.ADL_Translation)
-                adlParser.ADL_Parser.archetype.ontology.add_language(EiffelKernel.Create.STRING_8.make_from_cil(language))
+                adlParser.ADL_Parser.archetype_flat.ontology.add_language(EiffelKernel.Create.STRING_8.make_from_cil(language))
             End If
 
             Dim cp As openehr.openehr.rm.data_types.text.Impl.CODE_PHRASE
@@ -629,14 +587,14 @@ Public Class FileManagerLocal
 
         'description
         Dim adl_description As New ArchetypeEditor.ADL_Classes.ADL_Description(Me.Archetype.Description, mOntologyManager.PrimaryLanguageCode)
-        adlParser.ADL_Parser.archetype.set_description(adl_description.ADL_Description)
+        adlParser.ADL_Parser.archetype_flat.set_description(adl_description.ADL_Description)
         For Each an_adl_detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM In detailsArray
-            adlParser.ADL_Parser.archetype.description.add_detail(an_adl_detail)
+            adlParser.ADL_Parser.archetype_flat.description.add_detail(an_adl_detail)
         Next
 
         'translations
         For Each an_adl_translation As openehr.openehr.rm.common.resource.TRANSLATION_DETAILS In translationsArray
-            adlParser.ADL_Parser.archetype.add_translation(an_adl_translation, an_adl_translation.language.code_string)
+            adlParser.ADL_Parser.archetype_flat.add_translation(an_adl_translation, an_adl_translation.language.code_string)
         Next
 
         Return adlParser
@@ -667,19 +625,22 @@ Public Class FileManagerLocal
         Select Case a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "xml"
                 Dim xml_parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
+                Dim s As String = ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
 
-                Dim s As String = Me.ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
                 If s <> "" Then
                     xml_parser.WriteFile(s)
+
+                    If xml_parser.Status <> "" Then
+                        MessageBox.Show(xml_parser.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End If
                 End If
 
                 '-----------ADL--------------------------------------------
 
             Case "adl"
-                'Create a new parser
                 Dim adl_parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
+                Dim s As String = ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
 
-                Dim s As String = Me.ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
                 If s <> "" Then
                     adl_parser.WriteAdlDirect(s)
                 End If

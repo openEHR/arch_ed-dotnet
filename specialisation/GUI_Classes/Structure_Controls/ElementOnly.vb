@@ -220,7 +220,7 @@ Public Class ElementOnly
         mElement = New ArchetypeElement(temp, mFileManager)
         mElement.Constraint = a_constraint
         mElement.Occurrences.MaxCount = 1
-        Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
+        PictureBoxSimple.Image = ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
         mFileManager.FileEdited = True
         SetCurrentItem(Element)
         ButAddElement.Visible = False
@@ -245,11 +245,10 @@ Public Class ElementOnly
         Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
 
         result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
-        result.AppendFormat(Me.HtmlHeader(BackGroundColour, showComments))
-
+        result.AppendFormat(HtmlHeader(BackGroundColour, showComments))
         result.AppendFormat("{0}{1}", Environment.NewLine, mElement.ToHTML(0, showComments))
         result.AppendFormat("{0}</tr>", Environment.NewLine)
-        result.AppendFormat("{0}</table>, Environment.NewLine")
+        result.AppendFormat("{0}</table>", Environment.NewLine)
         Return result.ToString
     End Function
 
@@ -277,14 +276,12 @@ Public Class ElementOnly
         Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
 
         If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-            Me.MenuSpecialise.Text = AE_Constants.Instance.Specialise
-            Me.MenuSpecialise.Visible = True
+            MenuSpecialise.Text = AE_Constants.Instance.Specialise
+            MenuSpecialise.Visible = True
         Else
             MenuSpecialise.Visible = False
         End If
-
     End Sub
-
 
     Private Sub txtSimple_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs)
         'nothing for this class
