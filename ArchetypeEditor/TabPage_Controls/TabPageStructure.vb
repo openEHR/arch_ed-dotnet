@@ -185,12 +185,11 @@ Public Class TabPageStructure
         '
         'panelStructure
         '
-        Me.panelStructure.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panelStructure.Controls.Add(Me.panelDisplay)
+        Me.panelStructure.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelStructure.Location = New System.Drawing.Point(0, 40)
         Me.panelStructure.Name = "panelStructure"
-        Me.panelStructure.Size = New System.Drawing.Size(650, 500)
+        Me.panelStructure.Size = New System.Drawing.Size(650, 502)
         Me.panelStructure.TabIndex = 8
         Me.panelStructure.Visible = False
         '
@@ -458,6 +457,7 @@ Public Class TabPageStructure
         'TabPageStructure
         '
         Me.AutoScroll = True
+        Me.AutoScrollMinSize = New System.Drawing.Size(650, 542)
         Me.BackColor = System.Drawing.Color.LemonChiffon
         Me.Controls.Add(Me.panelStructure)
         Me.Controls.Add(Me.panelEntry)
@@ -466,7 +466,7 @@ Public Class TabPageStructure
         Me.HelpProviderTabPageStructure.SetHelpString(Me, "")
         Me.Name = "TabPageStructure"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(650, 408)
+        Me.Size = New System.Drawing.Size(650, 542)
         Me.panelStructure.ResumeLayout(False)
         Me.panelEntry.ResumeLayout(False)
         Me.ResumeLayout(False)
