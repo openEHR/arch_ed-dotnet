@@ -423,6 +423,8 @@ Public Class FileManagerLocal
             xml_parser.Archetype.parent_archetype_id.value = mArchetypeEngine.Archetype.ParentArchetype
         End If
 
+        xml_parser.Archetype.adl_version = "1.4"
+
         'remove the concept code from ontology as will be set again
         xml_parser.Archetype.ontology.term_definitions = Nothing 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
@@ -526,7 +528,6 @@ Public Class FileManagerLocal
             adlParser.Archetype.ParentArchetype = mArchetypeEngine.Archetype.ParentArchetype
         End If
 
-        'set the adl version
         adlParser.ADL_Parser.archetype.set_adl_version(EiffelKernel.Create.STRING_8.make_from_cil("1.4"))
 
         'populate the ontology
@@ -598,7 +599,6 @@ Public Class FileManagerLocal
         Next
 
         Return adlParser
-
     End Function
 
     Public Function ExportSerialised(ByVal a_format As String) As String

@@ -35,7 +35,6 @@ Namespace ArchetypeEditor.XML_Classes
 
         Protected ReferencesToResolve As ArrayList = New ArrayList
 
-
         Public Overrides Property ConceptCode() As String
             Get
                 Return mXmlArchetype.concept 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
@@ -50,6 +49,7 @@ Namespace ArchetypeEditor.XML_Classes
                 Return mArchetypeParser.ArchetypeAvailable
             End Get
         End Property
+
         Public Overrides Property Archetype_ID() As ArchetypeID
             Get
                 Try
@@ -77,6 +77,7 @@ Namespace ArchetypeEditor.XML_Classes
                 sLifeCycle = Value
             End Set
         End Property
+
         Public Overrides Property ParentArchetype() As String
             Get
                 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
@@ -2268,7 +2269,6 @@ Namespace ArchetypeEditor.XML_Classes
 
                     'reset the ADL definition to make it again
                     mXmlArchetype.definition.attributes = Nothing
-                    mXmlArchetype.adl_version = Archetype_ID.VersionAsString
                     mXmlArchetype.definition.occurrences = MakeOccurrences(New RmCardinality(1, 1))
 
                     'pick up the description data
