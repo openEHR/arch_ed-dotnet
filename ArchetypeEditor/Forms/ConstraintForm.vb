@@ -87,32 +87,35 @@ Public Class ConstraintForm
         '
         'butDelete
         '
-        Me.butDelete.Location = New System.Drawing.Point(80, 4)
+        Me.butDelete.Location = New System.Drawing.Point(96, 4)
         Me.butDelete.Name = "butDelete"
-        Me.butDelete.Size = New System.Drawing.Size(87, 24)
+        Me.butDelete.Size = New System.Drawing.Size(104, 24)
         Me.butDelete.TabIndex = 0
         Me.butDelete.Text = "Delete All"
         '
         'butCancel
         '
+        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(327, 4)
+        Me.butCancel.Location = New System.Drawing.Point(392, 4)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(80, 24)
+        Me.butCancel.Size = New System.Drawing.Size(88, 24)
         Me.butCancel.TabIndex = 2
         Me.butCancel.Text = "Cancel"
         '
         'butOK
         '
+        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(240, 4)
+        Me.butOK.Location = New System.Drawing.Point(292, 4)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(73, 24)
+        Me.butOK.Size = New System.Drawing.Size(88, 24)
         Me.butOK.TabIndex = 1
         Me.butOK.Text = "OK"
         '
         'ConstraintForm
         '
+        Me.AcceptButton = Me.butOK
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.butCancel
         Me.ClientSize = New System.Drawing.Size(489, 265)

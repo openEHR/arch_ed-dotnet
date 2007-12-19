@@ -94,84 +94,84 @@ Public Class frmStartUp
         Me.gbNew.Controls.Add(Me.lblShortConcept)
         Me.gbNew.Controls.Add(Me.lblModel)
         Me.gbNew.Controls.Add(Me.lblComponent)
-        Me.gbNew.Location = New System.Drawing.Point(16, 16)
+        Me.gbNew.Location = New System.Drawing.Point(19, 18)
         Me.gbNew.Name = "gbNew"
-        Me.gbNew.Size = New System.Drawing.Size(456, 160)
+        Me.gbNew.Size = New System.Drawing.Size(547, 185)
         Me.gbNew.TabIndex = 0
         Me.gbNew.TabStop = False
         Me.gbNew.Text = "New Archetype"
         '
         'butOK
         '
-        Me.butOK.Location = New System.Drawing.Point(144, 120)
+        Me.butOK.Location = New System.Drawing.Point(173, 138)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(80, 32)
+        Me.butOK.Size = New System.Drawing.Size(96, 37)
         Me.butOK.TabIndex = 5
         Me.butOK.Text = "OK"
         '
         'butCancel
         '
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(232, 120)
+        Me.butCancel.Location = New System.Drawing.Point(278, 138)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(80, 32)
+        Me.butCancel.Size = New System.Drawing.Size(96, 37)
         Me.butCancel.TabIndex = 6
         Me.butCancel.Text = "Cancel"
         '
         'txtConcept
         '
-        Me.txtConcept.Location = New System.Drawing.Point(11, 89)
+        Me.txtConcept.Location = New System.Drawing.Point(13, 103)
         Me.txtConcept.Name = "txtConcept"
-        Me.txtConcept.Size = New System.Drawing.Size(429, 20)
+        Me.txtConcept.Size = New System.Drawing.Size(515, 22)
         Me.txtConcept.TabIndex = 4
         '
         'comboComponent
         '
         Me.comboComponent.Enabled = False
-        Me.comboComponent.Location = New System.Drawing.Point(216, 42)
+        Me.comboComponent.Location = New System.Drawing.Point(259, 48)
         Me.comboComponent.Name = "comboComponent"
-        Me.comboComponent.Size = New System.Drawing.Size(224, 21)
+        Me.comboComponent.Size = New System.Drawing.Size(269, 24)
         Me.comboComponent.TabIndex = 3
         Me.comboComponent.Text = "Choose..."
         '
         'comboModel
         '
-        Me.comboModel.Location = New System.Drawing.Point(32, 42)
+        Me.comboModel.Location = New System.Drawing.Point(38, 48)
         Me.comboModel.Name = "comboModel"
-        Me.comboModel.Size = New System.Drawing.Size(160, 21)
+        Me.comboModel.Size = New System.Drawing.Size(192, 24)
         Me.comboModel.TabIndex = 2
         Me.comboModel.Text = "Choose..."
         '
         'lblShortConcept
         '
-        Me.lblShortConcept.Location = New System.Drawing.Point(8, 72)
+        Me.lblShortConcept.Location = New System.Drawing.Point(10, 83)
         Me.lblShortConcept.Name = "lblShortConcept"
-        Me.lblShortConcept.Size = New System.Drawing.Size(240, 24)
+        Me.lblShortConcept.Size = New System.Drawing.Size(288, 28)
         Me.lblShortConcept.TabIndex = 9
         Me.lblShortConcept.Text = "Short concept label:"
         '
         'lblModel
         '
-        Me.lblModel.Location = New System.Drawing.Point(32, 24)
+        Me.lblModel.Location = New System.Drawing.Point(38, 28)
         Me.lblModel.Name = "lblModel"
-        Me.lblModel.Size = New System.Drawing.Size(120, 24)
+        Me.lblModel.Size = New System.Drawing.Size(144, 27)
         Me.lblModel.TabIndex = 10
         Me.lblModel.Text = "Model"
         '
         'lblComponent
         '
-        Me.lblComponent.Location = New System.Drawing.Point(216, 24)
+        Me.lblComponent.Location = New System.Drawing.Point(259, 28)
         Me.lblComponent.Name = "lblComponent"
-        Me.lblComponent.Size = New System.Drawing.Size(176, 24)
+        Me.lblComponent.Size = New System.Drawing.Size(211, 27)
         Me.lblComponent.TabIndex = 11
         Me.lblComponent.Text = "Component"
         '
         'gbExistingArchetype
         '
         Me.gbExistingArchetype.Controls.Add(Me.butOpen)
-        Me.gbExistingArchetype.Location = New System.Drawing.Point(16, 188)
+        Me.gbExistingArchetype.Location = New System.Drawing.Point(19, 217)
         Me.gbExistingArchetype.Name = "gbExistingArchetype"
-        Me.gbExistingArchetype.Size = New System.Drawing.Size(456, 69)
+        Me.gbExistingArchetype.Size = New System.Drawing.Size(547, 80)
         Me.gbExistingArchetype.TabIndex = 1
         Me.gbExistingArchetype.TabStop = False
         Me.gbExistingArchetype.Text = "Open existing archetype"
@@ -180,18 +180,18 @@ Public Class frmStartUp
         '
         Me.butOpen.BackColor = System.Drawing.SystemColors.Control
         Me.butOpen.Image = CType(resources.GetObject("butOpen.Image"), System.Drawing.Image)
-        Me.butOpen.Location = New System.Drawing.Point(191, 18)
+        Me.butOpen.Location = New System.Drawing.Point(229, 21)
         Me.butOpen.Name = "butOpen"
-        Me.butOpen.Size = New System.Drawing.Size(76, 40)
+        Me.butOpen.Size = New System.Drawing.Size(91, 46)
         Me.butOpen.TabIndex = 7
         Me.butOpen.UseVisualStyleBackColor = False
         '
         'gbArchetypeFromWeb
         '
         Me.gbArchetypeFromWeb.Controls.Add(Me.butOpenFromWeb)
-        Me.gbArchetypeFromWeb.Location = New System.Drawing.Point(16, 275)
+        Me.gbArchetypeFromWeb.Location = New System.Drawing.Point(19, 317)
         Me.gbArchetypeFromWeb.Name = "gbArchetypeFromWeb"
-        Me.gbArchetypeFromWeb.Size = New System.Drawing.Size(456, 69)
+        Me.gbArchetypeFromWeb.Size = New System.Drawing.Size(547, 80)
         Me.gbArchetypeFromWeb.TabIndex = 3
         Me.gbArchetypeFromWeb.TabStop = False
         Me.gbArchetypeFromWeb.Text = "Open archetype from Web"
@@ -200,16 +200,16 @@ Public Class frmStartUp
         '
         Me.butOpenFromWeb.BackColor = System.Drawing.SystemColors.Control
         Me.butOpenFromWeb.Image = CType(resources.GetObject("butOpenFromWeb.Image"), System.Drawing.Image)
-        Me.butOpenFromWeb.Location = New System.Drawing.Point(196, 17)
+        Me.butOpenFromWeb.Location = New System.Drawing.Point(235, 20)
         Me.butOpenFromWeb.Name = "butOpenFromWeb"
-        Me.butOpenFromWeb.Size = New System.Drawing.Size(64, 40)
+        Me.butOpenFromWeb.Size = New System.Drawing.Size(77, 46)
         Me.butOpenFromWeb.TabIndex = 7
         Me.butOpenFromWeb.UseVisualStyleBackColor = False
         '
         'frmStartUp
         '
         Me.AcceptButton = Me.butOpen
-        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
         Me.CancelButton = Me.butCancel
         Me.ClientSize = New System.Drawing.Size(572, 404)
         Me.Controls.Add(Me.gbArchetypeFromWeb)
