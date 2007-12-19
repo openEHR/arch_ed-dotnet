@@ -53,48 +53,60 @@ Public Class ConstraintBindingForm
         '
         'comboTerminology
         '
-        Me.comboTerminology.Location = New System.Drawing.Point(40, 29)
+        Me.comboTerminology.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.comboTerminology.Location = New System.Drawing.Point(15, 29)
         Me.comboTerminology.Name = "comboTerminology"
-        Me.comboTerminology.Size = New System.Drawing.Size(327, 21)
+        Me.comboTerminology.Size = New System.Drawing.Size(437, 21)
         Me.comboTerminology.TabIndex = 0
         Me.comboTerminology.Text = "Choose..."
         '
         'txtQuery
         '
+        Me.txtQuery.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtQuery.Location = New System.Drawing.Point(147, 83)
         Me.txtQuery.Name = "txtQuery"
-        Me.txtQuery.Size = New System.Drawing.Size(220, 20)
+        Me.txtQuery.Size = New System.Drawing.Size(305, 20)
         Me.txtQuery.TabIndex = 1
         '
         'txtRelease
         '
-        Me.txtRelease.Location = New System.Drawing.Point(40, 132)
+        Me.txtRelease.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtRelease.Location = New System.Drawing.Point(15, 133)
         Me.txtRelease.Name = "txtRelease"
-        Me.txtRelease.Size = New System.Drawing.Size(287, 20)
+        Me.txtRelease.Size = New System.Drawing.Size(239, 20)
         Me.txtRelease.TabIndex = 2
         Me.txtRelease.Visible = False
         '
         'lblTerminology
         '
-        Me.lblTerminology.Location = New System.Drawing.Point(27, 7)
+        Me.lblTerminology.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblTerminology.Location = New System.Drawing.Point(12, 5)
         Me.lblTerminology.Name = "lblTerminology"
-        Me.lblTerminology.Size = New System.Drawing.Size(293, 21)
+        Me.lblTerminology.Size = New System.Drawing.Size(440, 21)
         Me.lblTerminology.TabIndex = 3
-        Me.lblTerminology.Text = "Terminology"
+        Me.lblTerminology.Text = "Terminology:"
         '
         'lblQueryName
         '
-        Me.lblQueryName.Location = New System.Drawing.Point(27, 64)
+        Me.lblQueryName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblQueryName.Location = New System.Drawing.Point(12, 65)
         Me.lblQueryName.Name = "lblQueryName"
-        Me.lblQueryName.Size = New System.Drawing.Size(293, 21)
+        Me.lblQueryName.Size = New System.Drawing.Size(440, 21)
         Me.lblQueryName.TabIndex = 4
-        Me.lblQueryName.Text = "Query name"
+        Me.lblQueryName.Text = "Query name:"
         '
         'lblRelease
         '
-        Me.lblRelease.Location = New System.Drawing.Point(27, 111)
+        Me.lblRelease.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lblRelease.Location = New System.Drawing.Point(12, 109)
         Me.lblRelease.Name = "lblRelease"
-        Me.lblRelease.Size = New System.Drawing.Size(293, 21)
+        Me.lblRelease.Size = New System.Drawing.Size(242, 21)
         Me.lblRelease.TabIndex = 5
         Me.lblRelease.Text = "Release"
         Me.lblRelease.Visible = False
@@ -103,9 +115,9 @@ Public Class ConstraintBindingForm
         '
         Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(290, 133)
+        Me.butOK.Location = New System.Drawing.Point(272, 127)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(67, 28)
+        Me.butOK.Size = New System.Drawing.Size(86, 28)
         Me.butOK.TabIndex = 6
         Me.butOK.Text = "OK"
         '
@@ -113,15 +125,15 @@ Public Class ConstraintBindingForm
         '
         Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(384, 133)
+        Me.butCancel.Location = New System.Drawing.Point(366, 127)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(80, 28)
+        Me.butCancel.Size = New System.Drawing.Size(86, 28)
         Me.butCancel.TabIndex = 7
         Me.butCancel.Text = "Cancel"
         '
         'lblQuery
         '
-        Me.lblQuery.Location = New System.Drawing.Point(7, 86)
+        Me.lblQuery.Location = New System.Drawing.Point(12, 86)
         Me.lblQuery.Name = "lblQuery"
         Me.lblQuery.Size = New System.Drawing.Size(133, 21)
         Me.lblQuery.TabIndex = 8
@@ -130,7 +142,9 @@ Public Class ConstraintBindingForm
         '
         'ConstraintBindingForm
         '
+        Me.AcceptButton = Me.butOK
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
+        Me.CancelButton = Me.butCancel
         Me.ClientSize = New System.Drawing.Size(464, 168)
         Me.Controls.Add(Me.lblQuery)
         Me.Controls.Add(Me.butCancel)
@@ -142,8 +156,9 @@ Public Class ConstraintBindingForm
         Me.Controls.Add(Me.comboTerminology)
         Me.Controls.Add(Me.lblRelease)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MinimumSize = New System.Drawing.Size(472, 194)
         Me.Name = "ConstraintBindingForm"
-        Me.Text = "Add binding"
+        Me.Text = "Add Binding"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

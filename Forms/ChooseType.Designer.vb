@@ -32,14 +32,14 @@ Partial Class ChooseType
         Me.listType.Location = New System.Drawing.Point(0, 0)
         Me.listType.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.listType.Name = "listType"
-        Me.listType.Size = New System.Drawing.Size(153, 19)
+        Me.listType.Size = New System.Drawing.Size(204, 40)
         Me.listType.TabIndex = 0
         '
         'ChooseType
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(153, 32)
+        Me.ClientSize = New System.Drawing.Size(204, 40)
         Me.Controls.Add(Me.listType)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
