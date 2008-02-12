@@ -65,7 +65,7 @@ Public Class WebSearchForm
                 End Select
 
                 ' no archetypes found
-                If ArchetypeIDs Is Nothing Then
+                If ArchetypeIDs Is Nothing OrElse ArchetypeIDs.Length = 0 Then
                     lblNum.Text = "0"
                     lblNum.Visible = True
                     'archetypeTable.Controls.Clear()
@@ -75,55 +75,97 @@ Public Class WebSearchForm
                     'Me.Refresh()
                     '' archetypes were found and we set them as a resultset to the form
                 Else
-                    Application.EnableVisualStyles()
-                    Dim lvgAction As New ListViewGroup("Action")
-                    Dim lvgEvaluation As New ListViewGroup("Evaluation")
-                    Dim lvgInstruction As New ListViewGroup("Instruction")
-                    Dim lvgObservation As New ListViewGroup("Observation")
-                    Dim lvgStructure As New ListViewGroup("Structure")
-                    Dim lvgCluster As New ListViewGroup("Cluster")
-                    Dim lvgElement As New ListViewGroup("Element")
-                    Dim lvgSection As New ListViewGroup("Section")
-                    Dim lvgComposition As New ListViewGroup("Composition")
+                    If Me.listViewArchetypes.Columns.Count = 0 Then
+
+                        ' Create and initialize column headers for ListViewArchetypes.
+
+                        Dim columnHeader0 As New ColumnHeader()
+
+                        columnHeader0.Text = Filemanager.GetOpenEhrTerm(54, "Concept")
+                        columnHeader0.Width = 250
+
+                        Dim columnHeader1 As New ColumnHeader()
+
+                        columnHeader1.Width = 100
+                        columnHeader1.Text = Filemanager.GetOpenEhrTerm(53, "Version")
+
+                        Dim columnHeader2 As New ColumnHeader()
+
+                        columnHeader2.Text = "Id"
+                        columnHeader2.Width = 400
+
+
+                        ' Add the column headers to CustomersListView.
+
+                        listViewArchetypes.Columns.AddRange(New ColumnHeader() _
+                            {columnHeader0, columnHeader1, columnHeader2})
+                    End If
+
+                    listViewArchetypes.ShowGroups = True
+
+                    Dim lvgAction As New ListViewGroup(Filemanager.GetOpenEhrTerm(556, "Action"))
+                    Dim lvgEvaluation As New ListViewGroup(Filemanager.GetOpenEhrTerm(555, "Evaluation"))
+                    Dim lvgInstruction As New ListViewGroup(Filemanager.GetOpenEhrTerm(557, "Instruction"))
+                    Dim lvgObservation As New ListViewGroup(Filemanager.GetOpenEhrTerm(554, "Observation"))
+                    Dim lvgAdmin As New ListViewGroup(Filemanager.GetOpenEhrTerm(560, "Administration entry"))
+                    Dim lvgStructure As New ListViewGroup(Filemanager.GetOpenEhrTerm(85, "Structure"))
+                    Dim lvgCluster As New ListViewGroup(Filemanager.GetOpenEhrTerm(313, "Cluster"))
+                    Dim lvgElement As New ListViewGroup(Filemanager.GetOpenEhrTerm(567, "Element"))
+                    Dim lvgSection As New ListViewGroup(Filemanager.GetOpenEhrTerm(314, "Section"))
+                    Dim lvgComposition As New ListViewGroup(Filemanager.GetOpenEhrTerm(561, "Composition"))
+
+                    listViewArchetypes.Groups.Add(lvgComposition)
+                    listViewArchetypes.Groups.Add(lvgSection)
+                    listViewArchetypes.Groups.Add(lvgObservation)
+                    listViewArchetypes.Groups.Add(lvgEvaluation)
+                    listViewArchetypes.Groups.Add(lvgInstruction)
+                    listViewArchetypes.Groups.Add(lvgAction)
+                    listViewArchetypes.Groups.Add(lvgAdmin)
+                    listViewArchetypes.Groups.Add(lvgStructure)
+                    listViewArchetypes.Groups.Add(lvgCluster)
+                    listViewArchetypes.Groups.Add(lvgElement)
 
                     For Each id As String In ArchetypeIDs
                         Dim imageIndex As Integer
                         Dim lvg As ListViewGroup
+                        Dim archId As New ArchetypeID(id)
 
-                        If id.StartsWith("openEHR-EHR-OBSERVATION") Then
-                            imageIndex = 4
-                            lvg = lvgObservation
-                        ElseIf id.StartsWith("openEHR-EHR-EVALUATION") Then
-                            imageIndex = 2
-                            lvg = lvgEvaluation
-                        ElseIf id.StartsWith("openEHR-EHR-ACTION") Then
-                            imageIndex = 1
-                            lvg = lvgAction
-                        ElseIf id.StartsWith("openEHR-EHR-INSTRUCTION") Then
-                            imageIndex = 3
-                            lvg = lvgInstruction
-                        ElseIf id.StartsWith("openEHR-EHR-CLUSTER") Then
-                            imageIndex = 5
-                            lvg = lvgCluster
-                        ElseIf id.StartsWith("openEHR-EHR-SECTION") Then
-                            imageIndex = 7
-                            lvg = lvgSection
-                        ElseIf id.StartsWith("openEHR-EHR-COMPOSITION") Then
-                            imageIndex = 6
-                            lvg = lvgComposition
-                        ElseIf id.StartsWith("openEHR-EHR-ELEMENT") Then
-                            'imageIndex = 1
-                            lvg = lvgElement
-                        Else
-                            imageIndex = 0
-                            lvg = lvgStructure
-                        End If
+                        Select Case archId.ReferenceModelEntity
+                            Case StructureType.OBSERVATION
+                                imageIndex = 4
+                                lvg = lvgObservation
+                            Case StructureType.EVALUATION
+                                imageIndex = 2
+                                lvg = lvgEvaluation
+                            Case StructureType.ACTION
+                                imageIndex = 1
+                                lvg = lvgAction
+                            Case StructureType.INSTRUCTION
+                                imageIndex = 3
+                                lvg = lvgInstruction
+                            Case StructureType.Cluster
+                                imageIndex = 5
+                                lvg = lvgCluster
+                            Case StructureType.SECTION
+                                imageIndex = 7
+                                lvg = lvgSection
+                            Case StructureType.COMPOSITION
+                                imageIndex = 6
+                                lvg = lvgComposition
+                            Case StructureType.Element
+                                lvg = lvgElement
+                            Case Else
+                                imageIndex = 0
+                                lvg = lvgStructure
+                        End Select
 
-                        If Not listViewArchetypes.Groups.Contains(lvg) Then
-                            listViewArchetypes.Groups.Add(lvg)
-                        End If
+                        'If Not listViewArchetypes.Groups.Contains(lvg) Then
+                        '    listViewArchetypes.Groups.Add(lvg)
+                        'End If
 
-                        listViewArchetypes.Items.Add(New ListViewItem(id, imageIndex, lvg))
+                        Dim s As String() = New String() {archId.Concept.Replace("_", " "), archId.VersionAsString(), id}
+
+                        listViewArchetypes.Items.Add(New ListViewItem(s, imageIndex, lvg))
                     Next
 
                     listViewArchetypes.Focus()
@@ -228,7 +270,7 @@ Public Class WebSearchForm
 
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
         If Me.listViewArchetypes.SelectedItems.Count > 0 Then
-            archetypeIdToBeOpened = listViewArchetypes.SelectedItems(0).Text
+            archetypeIdToBeOpened = listViewArchetypes.SelectedItems(0).SubItems(2).Text
             'Dim request As System.Net.WebRequest
             'Dim response As Net.HttpWebResponse
             Dim tempPath, downloadPath As String
