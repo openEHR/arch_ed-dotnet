@@ -780,6 +780,9 @@ Public Class OceanArchetypeEditor
         '    Stop
         'End Try
 
+        'To show groups in the web lookup
+        Application.EnableVisualStyles()
+
         Try
             frm.ShowDialog()
         Catch ex As Exception
