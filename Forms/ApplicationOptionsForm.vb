@@ -37,8 +37,8 @@ Public Class ApplicationOptionsForm
     Friend WithEvents butOK As System.Windows.Forms.Button
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents lblArchetypePath As System.Windows.Forms.Label
-    Friend WithEvents butBrowse As System.Windows.Forms.Button
-    Friend WithEvents txtRepositoryPath As System.Windows.Forms.TextBox
+    Friend WithEvents RepositoryBrowseButton As System.Windows.Forms.Button
+    Friend WithEvents RepositoryPathTextBox As System.Windows.Forms.TextBox
     Friend WithEvents comboReferenceModel As System.Windows.Forms.ComboBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
@@ -87,6 +87,11 @@ Public Class ApplicationOptionsForm
     Friend WithEvents chkTerminology As System.Windows.Forms.CheckBox
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents numAutoSave As System.Windows.Forms.NumericUpDown
+    Friend WithEvents XmlRepositoryPathTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents XmlRepositoryBrowseButton As System.Windows.Forms.Button
+    Friend WithEvents XmlRepositoryAutoSaveCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents RepositoryAutoSaveCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -96,14 +101,15 @@ Public Class ApplicationOptionsForm
         Me.Label2 = New System.Windows.Forms.Label
         Me.txtUsername = New System.Windows.Forms.TextBox
         Me.lblArchetypePath = New System.Windows.Forms.Label
-        Me.txtRepositoryPath = New System.Windows.Forms.TextBox
+        Me.RepositoryPathTextBox = New System.Windows.Forms.TextBox
         Me.butCancel = New System.Windows.Forms.Button
         Me.butOK = New System.Windows.Forms.Button
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.txtHelpFile = New System.Windows.Forms.TextBox
         Me.txtURL = New System.Windows.Forms.TextBox
         Me.txtTerminologyURL = New System.Windows.Forms.TextBox
-        Me.butBrowse = New System.Windows.Forms.Button
+        Me.XmlRepositoryPathTextBox = New System.Windows.Forms.TextBox
+        Me.RepositoryBrowseButton = New System.Windows.Forms.Button
         Me.comboReferenceModel = New System.Windows.Forms.ComboBox
         Me.Label1 = New System.Windows.Forms.Label
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog
@@ -132,6 +138,10 @@ Public Class ApplicationOptionsForm
         Me.TabConfiguration = New System.Windows.Forms.TabControl
         Me.tpUser = New System.Windows.Forms.TabPage
         Me.tpLocations = New System.Windows.Forms.TabPage
+        Me.XmlRepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
+        Me.RepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
+        Me.Label6 = New System.Windows.Forms.Label
+        Me.XmlRepositoryBrowseButton = New System.Windows.Forms.Button
         Me.lblTerminology = New System.Windows.Forms.Label
         Me.chkTerminology = New System.Windows.Forms.CheckBox
         Me.lblURL = New System.Windows.Forms.Label
@@ -200,28 +210,29 @@ Public Class ApplicationOptionsForm
         '
         'lblArchetypePath
         '
-        Me.lblArchetypePath.Location = New System.Drawing.Point(17, 0)
+        Me.lblArchetypePath.AutoSize = True
+        Me.lblArchetypePath.Location = New System.Drawing.Point(17, 11)
         Me.lblArchetypePath.Name = "lblArchetypePath"
-        Me.lblArchetypePath.Size = New System.Drawing.Size(144, 25)
-        Me.lblArchetypePath.TabIndex = 1
+        Me.lblArchetypePath.Size = New System.Drawing.Size(127, 13)
+        Me.lblArchetypePath.TabIndex = 0
         Me.lblArchetypePath.Text = "Archetype repository path"
         Me.lblArchetypePath.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
-        'txtRepositoryPath
+        'RepositoryPathTextBox
         '
-        Me.txtRepositoryPath.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.RepositoryPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtRepositoryPath.Location = New System.Drawing.Point(17, 28)
-        Me.txtRepositoryPath.Name = "txtRepositoryPath"
-        Me.txtRepositoryPath.Size = New System.Drawing.Size(490, 20)
-        Me.txtRepositoryPath.TabIndex = 2
-        Me.ToolTip1.SetToolTip(Me.txtRepositoryPath, "Leave blank for last directory used")
+        Me.RepositoryPathTextBox.Location = New System.Drawing.Point(17, 28)
+        Me.RepositoryPathTextBox.Name = "RepositoryPathTextBox"
+        Me.RepositoryPathTextBox.Size = New System.Drawing.Size(490, 20)
+        Me.RepositoryPathTextBox.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.RepositoryPathTextBox, "Leave blank for last directory used")
         '
         'butCancel
         '
         Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(539, 226)
+        Me.butCancel.Location = New System.Drawing.Point(539, 304)
         Me.butCancel.Name = "butCancel"
         Me.butCancel.Size = New System.Drawing.Size(80, 24)
         Me.butCancel.TabIndex = 3
@@ -231,7 +242,7 @@ Public Class ApplicationOptionsForm
         '
         Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(449, 226)
+        Me.butOK.Location = New System.Drawing.Point(449, 304)
         Me.butOK.Name = "butOK"
         Me.butOK.Size = New System.Drawing.Size(80, 24)
         Me.butOK.TabIndex = 2
@@ -241,43 +252,53 @@ Public Class ApplicationOptionsForm
         '
         Me.txtHelpFile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtHelpFile.Location = New System.Drawing.Point(17, 68)
+        Me.txtHelpFile.Location = New System.Drawing.Point(17, 128)
         Me.txtHelpFile.Name = "txtHelpFile"
         Me.txtHelpFile.Size = New System.Drawing.Size(490, 20)
-        Me.txtHelpFile.TabIndex = 5
+        Me.txtHelpFile.TabIndex = 9
         Me.ToolTip1.SetToolTip(Me.txtHelpFile, "Leave blank for last directory used")
         '
         'txtURL
         '
         Me.txtURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtURL.Location = New System.Drawing.Point(17, 154)
+        Me.txtURL.Location = New System.Drawing.Point(17, 228)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(490, 20)
-        Me.txtURL.TabIndex = 12
+        Me.txtURL.Size = New System.Drawing.Size(594, 20)
+        Me.txtURL.TabIndex = 16
         Me.ToolTip1.SetToolTip(Me.txtURL, "Http address of repository")
         '
         'txtTerminologyURL
         '
         Me.txtTerminologyURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTerminologyURL.Location = New System.Drawing.Point(17, 111)
+        Me.txtTerminologyURL.Location = New System.Drawing.Point(17, 178)
         Me.txtTerminologyURL.Name = "txtTerminologyURL"
-        Me.txtTerminologyURL.Size = New System.Drawing.Size(491, 20)
-        Me.txtTerminologyURL.TabIndex = 9
+        Me.txtTerminologyURL.Size = New System.Drawing.Size(595, 20)
+        Me.txtTerminologyURL.TabIndex = 13
         Me.ToolTip1.SetToolTip(Me.txtTerminologyURL, "Http address of repository")
         '
-        'butBrowse
+        'XmlRepositoryPathTextBox
         '
-        Me.butBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butBrowse.Image = CType(resources.GetObject("butBrowse.Image"), System.Drawing.Image)
-        Me.butBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butBrowse.Location = New System.Drawing.Point(517, 24)
-        Me.butBrowse.Name = "butBrowse"
-        Me.butBrowse.Size = New System.Drawing.Size(96, 32)
-        Me.butBrowse.TabIndex = 3
-        Me.butBrowse.Text = "Browse..."
-        Me.butBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.XmlRepositoryPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.XmlRepositoryPathTextBox.Location = New System.Drawing.Point(17, 78)
+        Me.XmlRepositoryPathTextBox.Name = "XmlRepositoryPathTextBox"
+        Me.XmlRepositoryPathTextBox.Size = New System.Drawing.Size(490, 20)
+        Me.XmlRepositoryPathTextBox.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.XmlRepositoryPathTextBox, "Leave blank for last directory used")
+        '
+        'RepositoryBrowseButton
+        '
+        Me.RepositoryBrowseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RepositoryBrowseButton.Image = CType(resources.GetObject("RepositoryBrowseButton.Image"), System.Drawing.Image)
+        Me.RepositoryBrowseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.RepositoryBrowseButton.Location = New System.Drawing.Point(517, 17)
+        Me.RepositoryBrowseButton.Name = "RepositoryBrowseButton"
+        Me.RepositoryBrowseButton.Size = New System.Drawing.Size(96, 32)
+        Me.RepositoryBrowseButton.TabIndex = 3
+        Me.RepositoryBrowseButton.Text = "Browse..."
+        Me.RepositoryBrowseButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'comboReferenceModel
         '
@@ -529,7 +550,7 @@ Public Class ApplicationOptionsForm
         Me.TabConfiguration.Location = New System.Drawing.Point(0, 0)
         Me.TabConfiguration.Name = "TabConfiguration"
         Me.TabConfiguration.SelectedIndex = 0
-        Me.TabConfiguration.Size = New System.Drawing.Size(643, 217)
+        Me.TabConfiguration.Size = New System.Drawing.Size(643, 295)
         Me.TabConfiguration.TabIndex = 1
         '
         'tpUser
@@ -537,74 +558,122 @@ Public Class ApplicationOptionsForm
         Me.tpUser.Controls.Add(Me.gbUserDetails)
         Me.tpUser.Location = New System.Drawing.Point(4, 22)
         Me.tpUser.Name = "tpUser"
-        Me.tpUser.Size = New System.Drawing.Size(635, 191)
+        Me.tpUser.Size = New System.Drawing.Size(635, 269)
         Me.tpUser.TabIndex = 0
         Me.tpUser.Text = "User details"
         '
         'tpLocations
         '
+        Me.tpLocations.Controls.Add(Me.XmlRepositoryAutoSaveCheckBox)
+        Me.tpLocations.Controls.Add(Me.RepositoryAutoSaveCheckBox)
+        Me.tpLocations.Controls.Add(Me.RepositoryPathTextBox)
+        Me.tpLocations.Controls.Add(Me.XmlRepositoryPathTextBox)
+        Me.tpLocations.Controls.Add(Me.Label6)
+        Me.tpLocations.Controls.Add(Me.XmlRepositoryBrowseButton)
         Me.tpLocations.Controls.Add(Me.txtHelpFile)
         Me.tpLocations.Controls.Add(Me.lblTerminology)
         Me.tpLocations.Controls.Add(Me.txtTerminologyURL)
         Me.tpLocations.Controls.Add(Me.chkTerminology)
-        Me.tpLocations.Controls.Add(Me.txtRepositoryPath)
         Me.tpLocations.Controls.Add(Me.lblURL)
         Me.tpLocations.Controls.Add(Me.txtURL)
         Me.tpLocations.Controls.Add(Me.chkWebSearch)
         Me.tpLocations.Controls.Add(Me.Label4)
         Me.tpLocations.Controls.Add(Me.butHelpBrowse)
         Me.tpLocations.Controls.Add(Me.lblArchetypePath)
-        Me.tpLocations.Controls.Add(Me.butBrowse)
+        Me.tpLocations.Controls.Add(Me.RepositoryBrowseButton)
         Me.tpLocations.Location = New System.Drawing.Point(4, 22)
         Me.tpLocations.Name = "tpLocations"
-        Me.tpLocations.Size = New System.Drawing.Size(635, 191)
+        Me.tpLocations.Size = New System.Drawing.Size(635, 269)
         Me.tpLocations.TabIndex = 1
         Me.tpLocations.Text = "File locations"
         '
+        'XmlRepositoryAutoSaveCheckBox
+        '
+        Me.XmlRepositoryAutoSaveCheckBox.AutoSize = True
+        Me.XmlRepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 61)
+        Me.XmlRepositoryAutoSaveCheckBox.Name = "XmlRepositoryAutoSaveCheckBox"
+        Me.XmlRepositoryAutoSaveCheckBox.Size = New System.Drawing.Size(196, 17)
+        Me.XmlRepositoryAutoSaveCheckBox.TabIndex = 5
+        Me.XmlRepositoryAutoSaveCheckBox.Text = "Always auto-save when saving ADL"
+        Me.XmlRepositoryAutoSaveCheckBox.UseVisualStyleBackColor = True
+        '
+        'RepositoryAutoSaveCheckBox
+        '
+        Me.RepositoryAutoSaveCheckBox.AutoSize = True
+        Me.RepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 11)
+        Me.RepositoryAutoSaveCheckBox.Name = "RepositoryAutoSaveCheckBox"
+        Me.RepositoryAutoSaveCheckBox.Size = New System.Drawing.Size(197, 17)
+        Me.RepositoryAutoSaveCheckBox.TabIndex = 1
+        Me.RepositoryAutoSaveCheckBox.Text = "Always auto-save when saving XML"
+        Me.RepositoryAutoSaveCheckBox.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(17, 61)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(152, 13)
+        Me.Label6.TabIndex = 4
+        Me.Label6.Text = "Archetype XML repository path"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        '
+        'XmlRepositoryBrowseButton
+        '
+        Me.XmlRepositoryBrowseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.XmlRepositoryBrowseButton.Image = CType(resources.GetObject("XmlRepositoryBrowseButton.Image"), System.Drawing.Image)
+        Me.XmlRepositoryBrowseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.XmlRepositoryBrowseButton.Location = New System.Drawing.Point(517, 67)
+        Me.XmlRepositoryBrowseButton.Name = "XmlRepositoryBrowseButton"
+        Me.XmlRepositoryBrowseButton.Size = New System.Drawing.Size(96, 32)
+        Me.XmlRepositoryBrowseButton.TabIndex = 7
+        Me.XmlRepositoryBrowseButton.Text = "Browse..."
+        Me.XmlRepositoryBrowseButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'lblTerminology
         '
-        Me.lblTerminology.Location = New System.Drawing.Point(17, 85)
+        Me.lblTerminology.Location = New System.Drawing.Point(17, 152)
         Me.lblTerminology.Name = "lblTerminology"
         Me.lblTerminology.Size = New System.Drawing.Size(218, 24)
-        Me.lblTerminology.TabIndex = 7
+        Me.lblTerminology.TabIndex = 11
         Me.lblTerminology.Text = "URL for Terminology Service"
         Me.lblTerminology.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'chkTerminology
         '
         Me.chkTerminology.AutoSize = True
-        Me.chkTerminology.Location = New System.Drawing.Point(240, 92)
+        Me.chkTerminology.Location = New System.Drawing.Point(240, 159)
         Me.chkTerminology.Name = "chkTerminology"
         Me.chkTerminology.Size = New System.Drawing.Size(160, 17)
-        Me.chkTerminology.TabIndex = 8
+        Me.chkTerminology.TabIndex = 12
         Me.chkTerminology.Text = "Enable Terminology LookUp"
         Me.chkTerminology.UseVisualStyleBackColor = True
         '
         'lblURL
         '
-        Me.lblURL.Location = New System.Drawing.Point(17, 129)
+        Me.lblURL.Location = New System.Drawing.Point(17, 203)
         Me.lblURL.Name = "lblURL"
         Me.lblURL.Size = New System.Drawing.Size(217, 24)
-        Me.lblURL.TabIndex = 10
+        Me.lblURL.TabIndex = 14
         Me.lblURL.Text = "URL for shared repository"
         Me.lblURL.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'chkWebSearch
         '
         Me.chkWebSearch.AutoSize = True
-        Me.chkWebSearch.Location = New System.Drawing.Point(239, 137)
+        Me.chkWebSearch.Location = New System.Drawing.Point(239, 211)
         Me.chkWebSearch.Name = "chkWebSearch"
         Me.chkWebSearch.Size = New System.Drawing.Size(135, 17)
-        Me.chkWebSearch.TabIndex = 11
+        Me.chkWebSearch.TabIndex = 15
         Me.chkWebSearch.Text = "Enable Internet Search"
         Me.chkWebSearch.UseVisualStyleBackColor = True
         '
         'Label4
         '
-        Me.Label4.Location = New System.Drawing.Point(17, 42)
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(17, 113)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(144, 25)
-        Me.Label4.TabIndex = 4
+        Me.Label4.Size = New System.Drawing.Size(45, 13)
+        Me.Label4.TabIndex = 8
         Me.Label4.Text = "Help file"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
@@ -613,10 +682,10 @@ Public Class ApplicationOptionsForm
         Me.butHelpBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butHelpBrowse.Image = CType(resources.GetObject("butHelpBrowse.Image"), System.Drawing.Image)
         Me.butHelpBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butHelpBrowse.Location = New System.Drawing.Point(519, 65)
+        Me.butHelpBrowse.Location = New System.Drawing.Point(519, 118)
         Me.butHelpBrowse.Name = "butHelpBrowse"
         Me.butHelpBrowse.Size = New System.Drawing.Size(96, 32)
-        Me.butHelpBrowse.TabIndex = 6
+        Me.butHelpBrowse.TabIndex = 10
         Me.butHelpBrowse.Text = "Browse..."
         Me.butHelpBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -629,14 +698,14 @@ Public Class ApplicationOptionsForm
         Me.tpAppearance.Controls.Add(Me.GroupBox1)
         Me.tpAppearance.Location = New System.Drawing.Point(4, 22)
         Me.tpAppearance.Name = "tpAppearance"
-        Me.tpAppearance.Size = New System.Drawing.Size(635, 191)
+        Me.tpAppearance.Size = New System.Drawing.Size(635, 269)
         Me.tpAppearance.TabIndex = 2
         Me.tpAppearance.Text = "Appearance"
         '
         'chkShowCommentsInHTML
         '
         Me.chkShowCommentsInHTML.AutoSize = True
-        Me.chkShowCommentsInHTML.Location = New System.Drawing.Point(274, 153)
+        Me.chkShowCommentsInHTML.Location = New System.Drawing.Point(274, 161)
         Me.chkShowCommentsInHTML.Name = "chkShowCommentsInHTML"
         Me.chkShowCommentsInHTML.Size = New System.Drawing.Size(148, 17)
         Me.chkShowCommentsInHTML.TabIndex = 5
@@ -646,7 +715,7 @@ Public Class ApplicationOptionsForm
         'chkShowTerminologyInHTML
         '
         Me.chkShowTerminologyInHTML.AutoSize = True
-        Me.chkShowTerminologyInHTML.Location = New System.Drawing.Point(274, 133)
+        Me.chkShowTerminologyInHTML.Location = New System.Drawing.Point(274, 141)
         Me.chkShowTerminologyInHTML.Name = "chkShowTerminologyInHTML"
         Me.chkShowTerminologyInHTML.Size = New System.Drawing.Size(153, 17)
         Me.chkShowTerminologyInHTML.TabIndex = 4
@@ -679,7 +748,7 @@ Public Class ApplicationOptionsForm
         Me.tpDefaults.Controls.Add(Me.Label1)
         Me.tpDefaults.Location = New System.Drawing.Point(4, 22)
         Me.tpDefaults.Name = "tpDefaults"
-        Me.tpDefaults.Size = New System.Drawing.Size(635, 191)
+        Me.tpDefaults.Size = New System.Drawing.Size(635, 269)
         Me.tpDefaults.TabIndex = 3
         Me.tpDefaults.Text = "Defaults"
         '
@@ -736,12 +805,12 @@ Public Class ApplicationOptionsForm
         Me.AcceptButton = Me.butOK
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(643, 255)
+        Me.ClientSize = New System.Drawing.Size(643, 334)
         Me.Controls.Add(Me.TabConfiguration)
         Me.Controls.Add(Me.butOK)
         Me.Controls.Add(Me.butCancel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MinimumSize = New System.Drawing.Size(600, 282)
+        Me.MinimumSize = New System.Drawing.Size(600, 360)
         Me.Name = "ApplicationOptionsForm"
         Me.ShowInTaskbar = False
         Me.Text = "Options"
@@ -766,15 +835,22 @@ Public Class ApplicationOptionsForm
 
 #End Region
 
+    Private Sub RepositoryBrowseButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RepositoryBrowseButton.Click
+        FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
+        FolderBrowserDialog1.ShowNewFolderButton = True
 
-    Private Sub butBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butBrowse.Click
-
-        Me.FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
-        Me.FolderBrowserDialog1.ShowNewFolderButton = True
         If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-            Me.txtRepositoryPath.Text = FolderBrowserDialog1.SelectedPath
+            RepositoryPathTextBox.Text = FolderBrowserDialog1.SelectedPath
         End If
+    End Sub
 
+    Private Sub XmlRepositoryBrowseButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles XmlRepositoryBrowseButton.Click
+        FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
+        FolderBrowserDialog1.ShowNewFolderButton = True
+
+        If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            XmlRepositoryPathTextBox.Text = FolderBrowserDialog1.SelectedPath
+        End If
     End Sub
 
     Private Sub ApplicationOptionsForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
