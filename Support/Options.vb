@@ -4,7 +4,9 @@ Imports System.IO
 
 Public Class Options
     Private mRepositoryPath As String
+    Private mRepositoryAutoSave As Boolean
     Private mXmlRepositoryPath As String
+    Private mXmlRepositoryAutoSave As Boolean
     Private mUserName As String
     Private mUserEmail As String
     Private mUserOrganisation As String
@@ -39,12 +41,30 @@ Public Class Options
         End Set
     End Property
 
+    Property RepositoryAutoSave() As Boolean
+        Get
+            Return mRepositoryAutoSave
+        End Get
+        Set(ByVal value As Boolean)
+            mRepositoryAutoSave = value
+        End Set
+    End Property
+
     Property XmlRepositoryPath() As String
         Get
             Return mXmlRepositoryPath
         End Get
         Set(ByVal Value As String)
             mXmlRepositoryPath = Value
+        End Set
+    End Property
+
+    Property XmlRepositoryAutoSave() As Boolean
+        Get
+            Return mXmlRepositoryAutoSave
+        End Get
+        Set(ByVal value As Boolean)
+            mXmlRepositoryAutoSave = value
         End Set
     End Property
 
@@ -176,7 +196,9 @@ Public Class Options
         frm.txtEmail.Text = mUserEmail
         frm.txtOrganisation.Text = mUserOrganisation
         frm.RepositoryPathTextBox.Text = mRepositoryPath
+        frm.RepositoryAutoSaveCheckBox.Checked = mRepositoryAutoSave
         frm.XmlRepositoryPathTextBox.Text = mXmlRepositoryPath
+        frm.XmlRepositoryAutoSaveCheckBox.Checked = mXmlRepositoryAutoSave
         frm.txtTerminologyURL.Text = OTSControls.Term.OtsWebService.Url
         frm.txtHelpFile.Text = mHelpPath
         frm.comboOccurrences.Text = mOccurrencesView
@@ -214,7 +236,9 @@ Public Class Options
             mUserEmail = frm.txtEmail.Text
             mUserOrganisation = frm.txtOrganisation.Text
             mRepositoryPath = frm.RepositoryPathTextBox.Text
+            mRepositoryAutoSave = frm.RepositoryAutoSaveCheckBox.Checked
             mXmlRepositoryPath = frm.XmlRepositoryPathTextBox.Text
+            mXmlRepositoryAutoSave = frm.XmlRepositoryAutoSaveCheckBox.Checked
             mHelpPath = frm.txtHelpFile.Text
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
             mOccurrencesView = frm.comboOccurrences.Text
@@ -279,8 +303,12 @@ Public Class Options
                                     mUserOrganisation = y(1)
                                 Case "RepositoryPath"
                                     mRepositoryPath = y(1).Trim
+                                Case "RepositoryAutoSave"
+                                    mRepositoryAutoSave = Boolean.Parse(y(1).Trim)
                                 Case "XmlRepositoryPath"
                                     mXmlRepositoryPath = y(1).Trim
+                                Case "XmlRepositoryAutoSave"
+                                    mXmlRepositoryAutoSave = Boolean.Parse(y(1).Trim)
                                 Case "HelpPath"
                                     mHelpPath = y(1).Trim
                                 Case "DefaultReferenceModel"
@@ -347,7 +375,9 @@ Public Class Options
                 StrmWrite.WriteLine("UserEmail=" & mUserEmail)
                 StrmWrite.WriteLine("Organisation=" & mUserOrganisation)
                 StrmWrite.WriteLine("RepositoryPath=" & mRepositoryPath)
+                StrmWrite.WriteLine("RepositoryAutoSave=" & mRepositoryAutoSave)
                 StrmWrite.WriteLine("XmlRepositoryPath=" & mXmlRepositoryPath)
+                StrmWrite.WriteLine("XmlRepositoryAutoSave=" & mXmlRepositoryAutoSave)
                 StrmWrite.WriteLine("SharedRepositoryUrl=" & mArchetypeRepositoryURL.ToString)
                 StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyURL.ToString)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)

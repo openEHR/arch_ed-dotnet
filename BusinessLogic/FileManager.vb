@@ -674,73 +674,104 @@ Public Class FileManagerLocal
     End Sub
 
     Public Function SaveArchetype() As Boolean
-        Dim s As String
+        Dim result As Boolean = False
+        Dim name As String
 
-        If Me.IsNew Then   ' never saved before
-            s = ChooseFileName()
+        If IsNew OrElse Not IO.File.Exists(FileName) Then
+            name = ChooseFileName()
         Else
-            If IO.File.Exists(Me.FileName) Then  ' check the file exists so it is saving over the top
-                s = FileName
-            Else
-                s = ChooseFileName()
-            End If
+            name = FileName
         End If
 
-        If s <> "" Then
-
-            ' The file might be in a repository and readonly
-            If IO.File.Exists(s) Then
-                ' if it isn't a new file
-                Dim fa As IO.FileAttributes = IO.File.GetAttributes(s)
-                'check it isn't readonly
-                If (fa And IO.FileAttributes.ReadOnly) > 0 Then
-                    MessageBox.Show(s & ": " & Filemanager.GetOpenEhrTerm(439, "Read only"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    Return False
-                End If
-            End If
-
+        If name <> "" Then
             mObjectToSave.PrepareToSave()
+            Dim ext As String = System.IO.Path.GetExtension(name.ToLowerInvariant())
+            result = SaveArchetypeAs(name)
 
-            If Not s.ToLowerInvariant().EndsWith("." & ParserType.ToLowerInvariant()) Then
-                'transfrom
-                If s.ToLowerInvariant().EndsWith("adl") Then
-                    'transform xml -> adl
-                    Dim adl_parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
-                    mArchetypeEngine = adl_parser
-                    Me.mOntologyManager.ReplaceOntology(New ArchetypeEditor.ADL_Classes.ADL_Ontology(adl_parser.ADL_Parser))
+            If result Then
+                If ext = ".adl" Then
+                    If OceanArchetypeEditor.Instance.Options.XmlRepositoryAutoSave Then
+                        Dim xml As String = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(name, ".xml"))
 
-                ElseIf s.ToLowerInvariant().EndsWith("xml") Then
-                    'transform adl -> xml
-                    Dim xml_parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
-                    mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface(xml_parser)
-                    Me.mOntologyManager.ReplaceOntology(New ArchetypeEditor.XML_Classes.XML_Ontology(xml_parser, True))
+                        If xml.StartsWith(OceanArchetypeEditor.Instance.Options.RepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
+                            xml = xml.Replace(OceanArchetypeEditor.Instance.Options.RepositoryPath, OceanArchetypeEditor.Instance.Options.XmlRepositoryPath)
+                            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(xml))
+                        End If
 
-                Else
-                    Debug.Assert(False, "File type is not catered for: " & s)
-                    Return False
+                        result = SaveArchetypeAs(xml)
+                        ApplyAdlParser()
+                        FileName = name
+                    End If
+                ElseIf ext = ".xml" Then
+                    If OceanArchetypeEditor.Instance.Options.RepositoryAutoSave Then
+                        Dim adl As String = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(name, ".adl"))
+
+                        If adl.StartsWith(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
+                            adl = adl.Replace(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath, OceanArchetypeEditor.Instance.Options.RepositoryPath)
+                            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(adl))
+                        End If
+
+                        result = SaveArchetypeAs(adl)
+                        ApplyXmlParser()
+                        FileName = name
+                    End If
                 End If
             End If
-
-            'Now write the arcehtype using the parser
-            Me.FileName = s
-
-            Try
-                WriteArchetype()
-                If Not mHasWriteFileError Then
-                    FileEdited = False
-                    Return True
-                Else
-                    Return False
-                End If
-            Catch ex As Exception
-                MessageBox.Show(AE_Constants.Instance.Error_saving & Me.FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Return False
-            End Try
-        Else
-            Return False  ' did not set a filename
         End If
 
+        Return result
     End Function
+
+    Private Function SaveArchetypeAs(ByRef name As String) As Boolean
+        Dim result As Boolean = False
+
+        If name <> "" Then
+            If IO.File.Exists(name) AndAlso (IO.File.GetAttributes(name) And IO.FileAttributes.ReadOnly) > 0 Then
+                MessageBox.Show(name & ": " & Filemanager.GetOpenEhrTerm(439, "Read only"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Else
+                Dim ext As String = System.IO.Path.GetExtension(name.ToLowerInvariant())
+
+                If ext <> "." & ParserType.ToLowerInvariant() Then
+                    If ext = ".adl" Then
+                        ApplyAdlParser()
+                    ElseIf ext = ".xml" Then
+                        ApplyXmlParser()
+                    Else
+                        Debug.Assert(False, "File type is not catered for: " & name)
+                        name = ""
+                    End If
+                End If
+
+                If name <> "" Then
+                    Try
+                        FileName = name
+                        WriteArchetype()
+
+                        If Not mHasWriteFileError Then
+                            FileEdited = False
+                            result = True
+                        End If
+                    Catch ex As Exception
+                        MessageBox.Show(AE_Constants.Instance.Error_saving & FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
+                End If
+            End If
+        End If
+
+        Return result
+    End Function
+
+    Private Sub ApplyAdlParser()
+        Dim parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
+        mArchetypeEngine = parser
+        mOntologyManager.ReplaceOntology(New ArchetypeEditor.ADL_Classes.ADL_Ontology(parser.ADL_Parser))
+    End Sub
+
+    Private Sub ApplyXmlParser()
+        Dim parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
+        mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface(parser)
+        mOntologyManager.ReplaceOntology(New ArchetypeEditor.XML_Classes.XML_Ontology(parser, True))
+    End Sub
 
     Private Function ChooseFileName(ByVal a_file_type As String) As String
         Dim saveFile As New SaveFileDialog
