@@ -684,6 +684,10 @@ Public Class OceanArchetypeEditor
     End Sub
 
     Shared Sub main(ByVal CmdArgs() As String)
+        ' Enable XP visual style in order to show groups in the web lookup form.
+        ' IMPORTANT! This must be the first call in the application; otherwise the icons do not display on the main toolbar!
+        Application.EnableVisualStyles()
+
         ShowSplash()
 
 #Const TEST_LANGUAGE_TRANSLATION = False
@@ -779,9 +783,6 @@ Public Class OceanArchetypeEditor
         'Catch
         '    Stop
         'End Try
-
-        'To show groups in the web lookup
-        Application.EnableVisualStyles()
 
         Try
             frm.ShowDialog()
