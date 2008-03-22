@@ -564,8 +564,6 @@ Public Class ApplicationOptionsForm
         '
         'tpLocations
         '
-        Me.tpLocations.Controls.Add(Me.XmlRepositoryAutoSaveCheckBox)
-        Me.tpLocations.Controls.Add(Me.RepositoryAutoSaveCheckBox)
         Me.tpLocations.Controls.Add(Me.RepositoryPathTextBox)
         Me.tpLocations.Controls.Add(Me.XmlRepositoryPathTextBox)
         Me.tpLocations.Controls.Add(Me.Label6)
@@ -581,6 +579,8 @@ Public Class ApplicationOptionsForm
         Me.tpLocations.Controls.Add(Me.butHelpBrowse)
         Me.tpLocations.Controls.Add(Me.lblArchetypePath)
         Me.tpLocations.Controls.Add(Me.RepositoryBrowseButton)
+        Me.tpLocations.Controls.Add(Me.RepositoryAutoSaveCheckBox)
+        Me.tpLocations.Controls.Add(Me.XmlRepositoryAutoSaveCheckBox)
         Me.tpLocations.Location = New System.Drawing.Point(4, 22)
         Me.tpLocations.Name = "tpLocations"
         Me.tpLocations.Size = New System.Drawing.Size(635, 269)
@@ -590,7 +590,7 @@ Public Class ApplicationOptionsForm
         'XmlRepositoryAutoSaveCheckBox
         '
         Me.XmlRepositoryAutoSaveCheckBox.AutoSize = True
-        Me.XmlRepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 61)
+        Me.XmlRepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 59)
         Me.XmlRepositoryAutoSaveCheckBox.Name = "XmlRepositoryAutoSaveCheckBox"
         Me.XmlRepositoryAutoSaveCheckBox.Size = New System.Drawing.Size(196, 17)
         Me.XmlRepositoryAutoSaveCheckBox.TabIndex = 5
@@ -600,7 +600,7 @@ Public Class ApplicationOptionsForm
         'RepositoryAutoSaveCheckBox
         '
         Me.RepositoryAutoSaveCheckBox.AutoSize = True
-        Me.RepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 11)
+        Me.RepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 9)
         Me.RepositoryAutoSaveCheckBox.Name = "RepositoryAutoSaveCheckBox"
         Me.RepositoryAutoSaveCheckBox.Size = New System.Drawing.Size(197, 17)
         Me.RepositoryAutoSaveCheckBox.TabIndex = 1
@@ -660,7 +660,7 @@ Public Class ApplicationOptionsForm
         'chkWebSearch
         '
         Me.chkWebSearch.AutoSize = True
-        Me.chkWebSearch.Location = New System.Drawing.Point(239, 211)
+        Me.chkWebSearch.Location = New System.Drawing.Point(239, 209)
         Me.chkWebSearch.Name = "chkWebSearch"
         Me.chkWebSearch.Size = New System.Drawing.Size(135, 17)
         Me.chkWebSearch.TabIndex = 15

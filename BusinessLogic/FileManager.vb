@@ -689,6 +689,9 @@ Public Class FileManagerLocal
             result = SaveArchetypeAs(name)
 
             If result Then
+                Dim parser As Parser = mArchetypeEngine
+                Dim ontology As Ontology = mOntologyManager.Ontology
+
                 If ext = ".adl" Then
                     If OceanArchetypeEditor.Instance.Options.XmlRepositoryAutoSave Then
                         Dim xml As String = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(name, ".xml"))
@@ -699,8 +702,6 @@ Public Class FileManagerLocal
                         End If
 
                         result = SaveArchetypeAs(xml)
-                        ApplyAdlParser()
-                        FileName = name
                     End If
                 ElseIf ext = ".xml" Then
                     If OceanArchetypeEditor.Instance.Options.RepositoryAutoSave Then
@@ -712,10 +713,12 @@ Public Class FileManagerLocal
                         End If
 
                         result = SaveArchetypeAs(adl)
-                        ApplyXmlParser()
-                        FileName = name
                     End If
                 End If
+
+                mArchetypeEngine = parser
+                mOntologyManager.ReplaceOntology(ontology)
+                FileName = name
             End If
         End If
 
@@ -733,9 +736,13 @@ Public Class FileManagerLocal
 
                 If ext <> "." & ParserType.ToLowerInvariant() Then
                     If ext = ".adl" Then
-                        ApplyAdlParser()
+                        Dim parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
+                        mArchetypeEngine = parser
+                        mOntologyManager.ReplaceOntology(New ArchetypeEditor.ADL_Classes.ADL_Ontology(parser.ADL_Parser))
                     ElseIf ext = ".xml" Then
-                        ApplyXmlParser()
+                        Dim parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
+                        mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface(parser)
+                        mOntologyManager.ReplaceOntology(New ArchetypeEditor.XML_Classes.XML_Ontology(parser, True))
                     Else
                         Debug.Assert(False, "File type is not catered for: " & name)
                         name = ""
@@ -760,18 +767,6 @@ Public Class FileManagerLocal
 
         Return result
     End Function
-
-    Private Sub ApplyAdlParser()
-        Dim parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
-        mArchetypeEngine = parser
-        mOntologyManager.ReplaceOntology(New ArchetypeEditor.ADL_Classes.ADL_Ontology(parser.ADL_Parser))
-    End Sub
-
-    Private Sub ApplyXmlParser()
-        Dim parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
-        mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface(parser)
-        mOntologyManager.ReplaceOntology(New ArchetypeEditor.XML_Classes.XML_Ontology(parser, True))
-    End Sub
 
     Private Function ChooseFileName(ByVal a_file_type As String) As String
         Dim saveFile As New SaveFileDialog
