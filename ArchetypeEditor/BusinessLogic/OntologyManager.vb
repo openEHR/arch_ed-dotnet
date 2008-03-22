@@ -525,24 +525,28 @@ Public Class OntologyManager
             keys(0) = mLanguageCode
             keys(1) = aTerm.Code
             d_row = aTable.Rows.Find(keys)
+
             If Not d_row Is Nothing Then
                 d_row.BeginEdit()
-                If CStr(d_row(2)) <> aTerm.Text Then
+
+                If IsDBNull(d_row(4)) OrElse CStr(d_row(2)) <> aTerm.Text Then
                     d_row(2) = aTerm.Text
                 End If
-                If CStr(d_row(3)) <> aTerm.Description Then
+
+                If IsDBNull(d_row(4)) OrElse CStr(d_row(3)) <> aTerm.Description Then
                     d_row(3) = aTerm.Description
                 End If
-                If CStr(d_row(4)) <> aTerm.Comment Then
+
+                If IsDBNull(d_row(4)) OrElse CStr(d_row(4)) <> aTerm.Comment Then
                     d_row(4) = aTerm.Comment
                 End If
+
                 d_row.EndEdit()
             End If
 
         End If
 
         mFileManager.FileEdited = True
-
     End Sub
 
 
@@ -946,9 +950,10 @@ Public Class OntologyManager
                 aterm.Language = CStr(e.Row(0))
                 aterm.Text = CStr(e.Row(2))
                 aterm.Description = CStr(e.Row(3))
+
                 If aterm.isConstraint Then
                     mOntology.ReplaceConstraint(aterm)
-                Else
+                ElseIf Not IsDBNull(e.Row(4)) Then
                     aterm.Comment = CStr(e.Row(4))
                     mOntology.ReplaceTerm(aterm, ReplaceTranslations())
                 End If
