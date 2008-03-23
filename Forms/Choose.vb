@@ -81,10 +81,11 @@ Public Class Choose
         '
         'LblForm
         '
+        Me.LblForm.AutoSize = True
         Me.LblForm.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LblForm.Location = New System.Drawing.Point(16, 8)
+        Me.LblForm.Location = New System.Drawing.Point(12, 8)
         Me.LblForm.Name = "LblForm"
-        Me.LblForm.Size = New System.Drawing.Size(248, 24)
+        Me.LblForm.Size = New System.Drawing.Size(55, 16)
         Me.LblForm.TabIndex = 0
         Me.LblForm.Text = "Choose"
         '
@@ -132,6 +133,7 @@ Public Class Choose
         Me.ShowInTaskbar = False
         Me.Text = "Choose"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 

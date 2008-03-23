@@ -497,6 +497,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         id = CInt(selected_rows(0).Item(0))
 
         selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id.ToString)
+
         If selected_rows.Length = 0 Then
             'FIXME Error
             Return ""
@@ -507,12 +508,10 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             Frm.ListChoose.Items.Add(d_row("Text"))
         Next
 
-
         Select Case y.Length
             Case 1
                 Frm.Set_Single()
                 Frm.ListChoose.SelectionMode = SelectionMode.One
-
 
                 Frm.ShowDialog(Me)
                 If Frm.ListChoose.SelectedIndex < 0 Then
@@ -530,10 +529,10 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 End If
 
             Case 2
-
                 Frm.Set_Double()
                 Frm.ListBox2.SelectionMode = SelectionMode.One
                 Frm.ListChoose.SelectionMode = SelectionMode.One
+                Frm.LblForm.Text = Filemanager.GetOpenEhrTerm(668, "Select one unit from the left and one from the right:")
 
                 ' Second property
 
@@ -550,8 +549,8 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 End If
 
                 id = CInt(selected_rows(0).Item(0))
-
                 selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id.ToString)
+
                 If selected_rows.Length = 0 Then
                     'FIXME Error
                     Return ""
@@ -559,7 +558,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
                 For Each d_row In selected_rows
                     ' cannot have no denominator or not set
-                    If (CStr(d_row("Text")) <> "?") Then
+                    If CStr(d_row("Text")) <> "?" Then
                         Frm.ListBox2.Items.Add(d_row("Text"))
                     End If
                 Next
@@ -591,8 +590,6 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         End Select
 
         Return CompoundUnit
-
-
     End Function
 
     Private Sub comboPhysicalProperty_SelectedIndexChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboPhysicalProperty.SelectedIndexChanged
