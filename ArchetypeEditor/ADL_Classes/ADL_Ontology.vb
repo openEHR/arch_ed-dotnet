@@ -271,14 +271,18 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overrides Function NextTermId() As String
+            Dim result As String = ""
+
             Try
                 If EIF_adlInterface.archetype_available Then
-                    Return EIF_adlInterface.ontology.new_non_specialised_term_code.to_cil
+                    result = EIF_adlInterface.ontology.new_non_specialised_term_code.to_cil
                 End If
             Catch e As Exception
                 Debug.Assert(False, e.Message)
-                Return ""
+                result = ""
             End Try
+
+            Return result
         End Function
 
         Public Overrides Function NextConstraintId() As String
