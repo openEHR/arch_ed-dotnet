@@ -458,15 +458,15 @@ Public Class FileManagerLocal
             cp.code_string = language
 
             'Add the translations
-            If language <> mOntologyManager.PrimaryLanguageCode Then
-                Dim translationDetail As TranslationDetails = Me.Archetype.TranslationDetails.Item(language)
+            If language <> mOntologyManager.PrimaryLanguageCode And Archetype.TranslationDetails.ContainsKey(language) Then
+                Dim translationDetail As TranslationDetails = Archetype.TranslationDetails.Item(language)
                 Dim xmlTranslationDetail As New XML_TranslationDetails(translationDetail)
                 translationsArray(i) = xmlTranslationDetail.XmlTranslation
                 i += 1
             End If
 
             'Add the archetype details in each language
-            Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
+            Dim archDetail As ArchetypeDescriptionItem = Archetype.Description.Details.DetailInLanguage(language)
             Dim xml_detail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
             xml_detail.language = cp
 
@@ -487,8 +487,9 @@ Public Class FileManagerLocal
             xml_detail.purpose = archDetail.Purpose
             xml_detail.use = archDetail.Use
 
-            If (Not archDetail.KeyWords Is Nothing) AndAlso archDetail.KeyWords.Count > 0 Then
+            If Not archDetail.KeyWords Is Nothing AndAlso archDetail.KeyWords.Count > 0 Then
                 xml_detail.keywords = Array.CreateInstance(GetType(String), archDetail.KeyWords.Count)
+
                 For j As Integer = 0 To archDetail.KeyWords.Count - 1
                     xml_detail.keywords(j) = archDetail.KeyWords.Item(j)
                 Next
@@ -500,13 +501,13 @@ Public Class FileManagerLocal
 
         'Definition
         Dim xmlArchetype As New ArchetypeEditor.XML_Classes.XML_Archetype(xml_parser)
-        xmlArchetype.Definition = Me.Archetype.Definition
-        xmlArchetype.Description = Me.Archetype.Description 'EDT33: View archetype as XML raises exception https://projects.oceanehr.com/jira/browse/EDT-33
+        xmlArchetype.Definition = Archetype.Definition
+        xmlArchetype.Description = Archetype.Description 'EDT33: View archetype as XML raises exception https://projects.oceanehr.com/jira/browse/EDT-33
         xmlArchetype.MakeParseTree()
-        Me.ParserSynchronised = True
+        ParserSynchronised = True
 
         'description
-        Dim xml_description As New ArchetypeEditor.XML_Classes.XML_Description(Me.Archetype.Description)
+        Dim xml_description As New ArchetypeEditor.XML_Classes.XML_Description(Archetype.Description)
         xml_parser.Archetype.description = xml_description.XML_Description
         xml_parser.Archetype.description.details = details_array
 
