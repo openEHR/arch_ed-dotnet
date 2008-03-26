@@ -58,7 +58,7 @@ VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
 VIAddVersionKey FileVersion ""
 VIAddVersionKey FileDescription ""
-VIAddVersionKey LegalCopyright "Copyright Ocean Informatics Pty Ltd 2007"
+VIAddVersionKey LegalCopyright "Copyright Ocean Informatics Pty Ltd 2008"
 InstallDirRegKey HKLM "${REGKEY}" Path
 ShowUninstDetails show
 
