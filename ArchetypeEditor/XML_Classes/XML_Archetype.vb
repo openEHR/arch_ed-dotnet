@@ -869,7 +869,7 @@ Namespace ArchetypeEditor.XML_Classes
                 BuildText(an_attribute, an_element.NameConstraint)
             End If
 
-            If an_element.Constraint.Type = ConstraintType.Any Then
+            If an_element.Constraint Is Nothing OrElse an_element.Constraint.Type = ConstraintType.Any Then
                 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 'If xmlObj.attributes Is Nothing OrElse xmlObj.attributes.Length = 0 Then
                 '    xmlObj.any_allowed = True
