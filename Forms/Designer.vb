@@ -487,7 +487,6 @@ Public Class Designer
         Me.butLinks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.butLinks.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage
         Me.butLinks.UseVisualStyleBackColor = True
-        Me.butLinks.Visible = False
         '
         'tabComment
         '
@@ -5179,15 +5178,18 @@ Public Class Designer
 
     Private Sub butLinks_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butLinks.Click
         Dim frm As New Links
-        If Me.RootLinks.Count > 0 Then
-            frm.Links = Me.RootLinks
+
+        If RootLinks.Count > 0 Then
+            frm.Links = RootLinks
         End If
+
         If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             If frm.HasLinkConstraints Then
-                Me.RootLinks = frm.Links
+                RootLinks = frm.Links
             End If
         End If
     End Sub
+
 End Class
 
 
