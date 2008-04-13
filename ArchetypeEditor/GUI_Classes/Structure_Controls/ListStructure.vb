@@ -40,7 +40,7 @@ Public Class ListStructure
         For Each item As RmStructure In rm.Children
             ' have to create links to the new archetype here to maintain updates
             Select Case item.Type
-                Case StructureType.Element
+                Case StructureType.Element, StructureType.Reference
                     Dim element As RmElement = CType(item, RmElement)
                     lvitem = New ArchetypeListViewItem(element, mFileManager)
                     'Sets selected if first in list
@@ -52,6 +52,7 @@ Public Class ListStructure
                     'Sets selected if first in list
                     lvitem.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, lvList.Items.Count = 0)
                     Me.lvList.Items.Add(lvitem)
+
                 Case Else
                     Debug.Assert(False, "Type not handled")
             End Select
@@ -255,13 +256,14 @@ Public Class ListStructure
 
     Private Sub AddRmStructureToList(ByVal a_structure As RmStructure)
         If Not a_structure Is Nothing Then
-            If a_structure.Type = StructureType.Element Then
-                lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmElement), mFileManager))
-            ElseIf a_structure.Type = StructureType.Slot Then
-                lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmSlot), mFileManager))
-            Else
-                Debug.Assert(False, "Type not handled")
-            End If
+            Select Case a_structure.Type
+                Case StructureType.Element, StructureType.Reference
+                    lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmElement), mFileManager))
+                Case StructureType.Slot
+                    lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmSlot), mFileManager))
+                Case Else
+                    Debug.Assert(False, "Type not handled")
+            End Select
         End If
     End Sub
 
@@ -566,7 +568,7 @@ Public Class ListStructure
 
     Private Sub lvList_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvList.SelectedIndexChanged
         Dim lvItem As ArchetypeListViewItem
-       
+
         If Me.lvList.Items.Count = 0 Then
             Me.butChangeDataType.Visible = False
             Return
@@ -576,14 +578,20 @@ Public Class ListStructure
             Me.MenuRemoveItemAndReference.Text = Me.lvList.SelectedItems(0).Text
             'Unselect the previous item
             For Each lvItem In Me.lvList.Items
-                lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item, False)
+                lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item, lvItem.Selected)
             Next
             lvItem = CType(Me.lvList.SelectedItems(0), ArchetypeListViewItem)
             'Force the change to selected image
-            lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item, True)
+            'lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item, True)
             SetCurrentItem(lvItem.Item)
             If lvItem.Item.HasReferences Then
-                MenuRemoveItemAndReference.Text = MenuRemoveItemAndReference.Text & " [+]"
+                MenuRemoveItemAndReference.Text = String.Format("{0} [+]", MenuRemoveItemAndReference.Text)
+            End If
+
+            If lvItem.Item.IsReference Then
+                lvList.LabelEdit = False
+            Else
+                lvList.LabelEdit = True
             End If
         Else
             Me.MenuRemove.Visible = False
@@ -635,7 +643,10 @@ Public Class ListStructure
             lvItem.Text = e.Label
             Me.MenuRemoveItemAndReference.Text = e.Label
             If lvItem.Item.HasReferences Then
-                MenuRemoveItemAndReference.Text = MenuRemoveItemAndReference.Text & " [+]"
+                'SRH 13 Apr 2008 - added update of text change
+                Me.Translate()
+
+                MenuRemoveItemAndReference.Text = String.Format("{0} [+]", MenuRemoveItemAndReference.Text)
             End If
             mFileManager.FileEdited = True
         End If
