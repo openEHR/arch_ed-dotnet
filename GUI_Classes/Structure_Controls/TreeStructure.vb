@@ -863,18 +863,17 @@ Public Class TreeStructure
     End Sub
 
     Private Sub tvTree_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles tvTree.AfterSelect
-        Dim aArcheTypeNode As ArchetypeNode
-
-        aArcheTypeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode).Item
+        Dim aArcheTypeNode As ArchetypeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode).Item
         SetCurrentItem(aArcheTypeNode)
+
         If aArcheTypeNode.RM_Class.Type = StructureType.Element Then
-            If CType(aArcheTypeNode, ArchetypeElement).HasReferences Then
-                Me.MenuRemoveItemAndReferences.Text = String.Format("{0} [+]", Me.MenuRemoveItemAndReferences.Text)
+            Dim element As ArchetypeElement = CType(aArcheTypeNode, ArchetypeElement)
+
+            If element.HasReferences Then
+                MenuRemoveItemAndReferences.Text = String.Format("{0} [+]", MenuRemoveItemAndReferences.Text)
             End If
-        End If
-        'SRH: 13 Apr 2008 - added check for reference
-        If CType(aArcheTypeNode, ArchetypeElement).IsReference Then
-            tvTree.LabelEdit = False
+
+            tvTree.LabelEdit = Not element.IsReference
         Else
             tvTree.LabelEdit = True
         End If
