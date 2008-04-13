@@ -576,6 +576,7 @@ Public Class TabPageStructure
 
     Sub ShowStructurePanel(ByVal Sender As Object, ByVal e As EventArgs) Handles mArchetypeControl.ChangeStructure
         panelEntry.Show()
+        Me.comboStructure.Focus()
     End Sub
 
     Sub ShowDetailPanel(ByVal CurrentItem As ArchetypeNode, ByVal e As EventArgs) Handles mArchetypeControl.CurrentItemChanged

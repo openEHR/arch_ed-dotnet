@@ -56,7 +56,7 @@ Public Class TreeStructure
                     ProcessCluster(CType(a_rm_structure, RmCluster), tvNode)
                     Me.tvTree.Nodes.Add(tvNode)
 
-                Case StructureType.Element ' "Element"
+                Case StructureType.Element, StructureType.Reference ' "Element"
                     Dim tvNode As ArchetypeTreeNode
                     Dim element As RmElement
 
@@ -336,7 +336,7 @@ Public Class TreeStructure
                         ProcessChildrenRM_Structures(tvNode.Nodes, a_cluster)
                         RM_S.Children.Add(a_cluster)
 
-                    Case StructureType.Element, StructureType.Slot
+                    Case StructureType.Element, StructureType.Slot, StructureType.Reference
                         RM_S.Children.Add(tvNode.Item.RM_Class)
 
                     Case Else
@@ -869,8 +869,14 @@ Public Class TreeStructure
         SetCurrentItem(aArcheTypeNode)
         If aArcheTypeNode.RM_Class.Type = StructureType.Element Then
             If CType(aArcheTypeNode, ArchetypeElement).HasReferences Then
-                Me.MenuRemoveItemAndReferences.Text = Me.MenuRemoveItemAndReferences.Text & " [+]"
+                Me.MenuRemoveItemAndReferences.Text = String.Format("{0} [+]", Me.MenuRemoveItemAndReferences.Text)
             End If
+        End If
+        'SRH: 13 Apr 2008 - added check for reference
+        If CType(aArcheTypeNode, ArchetypeElement).IsReference Then
+            tvTree.LabelEdit = False
+        Else
+            tvTree.LabelEdit = True
         End If
     End Sub
 
@@ -903,7 +909,8 @@ Public Class TreeStructure
             Me.MenuRemoveItemAndReferences.Text = e.Label
             If tvNode.Item.RM_Class.Type = StructureType.Element Then
                 If CType(tvNode.Item, ArchetypeElement).HasReferences Then
-                    MenuRemoveItemAndReferences.Text = MenuRemoveItemAndReferences.Text & " [+]"
+                    MenuRemoveItemAndReferences.Text = String.Format("{0} [+]", MenuRemoveItemAndReferences.Text)
+                    Me.Translate()
                 End If
             End If
         End If

@@ -32,6 +32,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Protected Structure ReferenceToResolve
             Dim Element As RmElement
             Dim Attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim Index As Integer
         End Structure
 
         Protected ReferencesToResolve As ArrayList = New ArrayList
@@ -569,13 +570,17 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If Cluster.Children.Count > 0 Then
                 an_attribute = mAomFactory.create_c_attribute_multiple(cluster_cadlObj, EiffelKernel.Create.STRING_8.make_from_cil("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
+                Dim index As Integer
                 For Each rm In Cluster.Children.items
                     If rm.Type = StructureType.Cluster Then
                         BuildCluster(rm, an_attribute)
+                        index += 1
                     ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                        BuildElementOrReference(rm, an_attribute)
+                        BuildElementOrReference(rm, an_attribute, index)
+                        index += 1
                     ElseIf rm.Type = StructureType.Slot Then
                         BuildSlot(an_attribute, rm)
+                        index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
                     End If
@@ -970,7 +975,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return path
                 End If
             Next
-            Debug.Assert(False, "Should be a path for every node")
+
             Return Nothing
 
         End Function
@@ -1084,16 +1089,30 @@ Namespace ArchetypeEditor.ADL_Classes
             End Select
 
         End Sub
-        Protected Sub BuildElementOrReference(ByVal Element As RmElement, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+        Protected Sub BuildElementOrReference(ByVal Element As RmElement, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal index As Integer)
             Dim value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             If Element.Type = StructureType.Reference Then
-                Dim ref As ReferenceToResolve
+                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
 
-                ref.Element = Element
-                ref.Attribute = RelNode
+                path = GetPathOfNode(Element.NodeId)
 
-                ReferencesToResolve.Add(ref)
+                If Not path Is Nothing Then
+
+                    Dim ref_cadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
+                    ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(RelNode, EiffelKernel.Create.STRING_8.make_from_cil("ELEMENT"), path.as_string)
+                    ref_cadlRefNode.set_occurrences(MakeOccurrences(Element.Occurrences))
+
+                Else
+                    'the origin of the reference has not been added yet
+                    Dim ref As ReferenceToResolve
+
+                    ref.Element = Element
+                    ref.Attribute = RelNode
+                    ref.Index = index
+
+                    ReferencesToResolve.Add(ref)
+                End If
 
             Else
                 Dim element_cadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
@@ -1127,7 +1146,6 @@ Namespace ArchetypeEditor.ADL_Classes
 
 
 
-
         End Sub
 
         Private Sub BuildStructure(ByVal rmStruct As RmStructureCompound, ByRef objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -1148,7 +1166,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         Dim rmStr As RmStructure = rmStruct.Children.items(0)
                         If rmStr.Type = StructureType.Element Or rmStr.Type = StructureType.Reference Then
-                            BuildElementOrReference(rmStr, an_attribute)
+                            BuildElementOrReference(rmStr, an_attribute, 0)
                         ElseIf rmStr.Type = StructureType.Slot Then
                             BuildSlot(an_attribute, rmStr)
                         Else
@@ -1160,11 +1178,14 @@ Namespace ArchetypeEditor.ADL_Classes
                             EiffelKernel.Create.STRING_8.make_from_cil("items"), _
                             MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
 
+                        Dim index As Integer = 0
                         For Each rm In rmStruct.Children.items
                             If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                                BuildElementOrReference(rm, an_attribute)
+                                BuildElementOrReference(rm, an_attribute, index)
+                                index += 1
                             ElseIf rm.Type = StructureType.Slot Then
                                 BuildSlot(an_attribute, rm)
+                                index += 1
                             Else
                                 Debug.Assert(False, "Type not handled")
                             End If
@@ -1174,13 +1195,18 @@ Namespace ArchetypeEditor.ADL_Classes
                             EiffelKernel.Create.STRING_8.make_from_cil("items"), _
                             MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
 
+                        Dim index As Integer = 0
+
                         For Each rm In rmStruct.Children.items
                             If rm.Type = StructureType.Cluster Then
                                 BuildCluster(rm, an_attribute)
+                                index += 1
                             ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                                BuildElementOrReference(rm, an_attribute)
+                                BuildElementOrReference(rm, an_attribute, index)
+                                index += 1
                             ElseIf rm.Type = StructureType.Slot Then
                                 BuildSlot(an_attribute, rm)
+                                index += 1
                             Else
                                 Debug.Assert(False, "Type not handled")
                             End If
@@ -1223,13 +1249,23 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     path = GetPathOfNode(ref.Element.NodeId)
                     If Not path Is Nothing Then
+
+                        'The following code needs to be updated to allow the insertion of a reference
+                        'if it appears before its defining node
+
+                        'ref_cadlRefNode = openehr.openehr.am.archetype.constraint_model.Create.ARCHETYPE_INTERNAL_REF.make(EiffelKernel.Create.STRING_8.make_from_cil("ELEMENT"), path.as_string)
+                        'ref.Attribute.children.insert(ref_cadlRefNode, ref.Index + 1) 'Eiffel has 1 based collections
+
+                        'The following line (1 only) will need to be turned off)
+
                         ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, EiffelKernel.Create.STRING_8.make_from_cil("ELEMENT"), path.as_string)
                         ref_cadlRefNode.set_occurrences(MakeOccurrences(ref.Element.Occurrences))
+
                     Else
                         'reference element no longer exists so build it as an element
                         Dim new_element As RmElement = ref.Element.Copy()
 
-                        BuildElementOrReference(new_element, ref.Attribute)
+                        BuildElementOrReference(new_element, ref.Attribute, ref.Index)
                     End If
 
                 Next
@@ -1398,13 +1434,18 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If Cluster.Children.Count > 0 Then
                 an_attribute = mAomFactory.create_c_attribute_multiple(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
+
+                Dim index As Integer = 0
                 For Each Rm As RmStructure In Cluster.Children.items
                     If Rm.Type = StructureType.Cluster Then
                         BuildCluster(Rm, an_attribute)
+                        index += 1
                     ElseIf Rm.Type = StructureType.Element Or Rm.Type = StructureType.Reference Then
-                        BuildElementOrReference(Rm, an_attribute)
+                        BuildElementOrReference(Rm, an_attribute, index)
+                        index += 1
                     ElseIf Rm.Type = StructureType.Slot Then
                         BuildSlot(an_attribute, Rm)
+                        index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
                     End If
@@ -1425,7 +1466,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         'reference element no longer exists so build it as an element
                         Dim new_element As RmElement = ref.Element.Copy()
 
-                        BuildElementOrReference(new_element, ref.Attribute)
+                        BuildElementOrReference(new_element, ref.Attribute, ref.Index)
                     End If
 
                 Next

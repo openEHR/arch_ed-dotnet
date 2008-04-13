@@ -794,7 +794,7 @@ Public Class EntryStructure
 
     Protected Function ImageIndexForItem(ByVal item As ArchetypeNode, Optional ByVal isSelected As Boolean = False) As Integer
         Select Case item.RM_Class.Type
-            Case StructureType.Element
+            Case StructureType.Element, StructureType.Reference
                 Dim element As ArchetypeElement = CType(item, ArchetypeElement)
                 Return ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, isSelected)
             Case StructureType.Slot
