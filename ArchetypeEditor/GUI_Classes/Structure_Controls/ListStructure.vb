@@ -588,11 +588,7 @@ Public Class ListStructure
                 MenuRemoveItemAndReference.Text = String.Format("{0} [+]", MenuRemoveItemAndReference.Text)
             End If
 
-            If lvItem.Item.IsReference Then
-                lvList.LabelEdit = False
-            Else
-                lvList.LabelEdit = True
-            End If
+            lvList.LabelEdit = Not lvItem.Item.IsReference
         Else
             Me.MenuRemove.Visible = False
         End If
