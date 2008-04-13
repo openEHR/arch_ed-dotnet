@@ -73,7 +73,7 @@ Public Class Splash
         '
         Me.VersionLabel.BackColor = System.Drawing.Color.Transparent
         Me.VersionLabel.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.VersionLabel.Location = New System.Drawing.Point(177, 150)
+        Me.VersionLabel.Location = New System.Drawing.Point(177, 152)
         Me.VersionLabel.Name = "VersionLabel"
         Me.VersionLabel.Size = New System.Drawing.Size(178, 14)
         Me.VersionLabel.TabIndex = 1
