@@ -1015,126 +1015,125 @@ Public Class TreeStructure
 
     'End Sub
 
-
     Private Sub tvTree_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragDrop
         Dim position As Point
         Dim DropNode As ArchetypeTreeNode
         Dim DropParent As TreeNodeCollection
         Dim DropIndex As Integer
         Dim DragParent As TreeNodeCollection
-        Dim mNodeDragged As ArchetypeTreeNode
+        Dim mNodeDragged As ArchetypeTreeNode = Nothing
         Dim allowEdit As Boolean = True
 
         If Not mDragTreeNode Is Nothing Then
             mNodeDragged = mDragTreeNode
         ElseIf Not mNewConstraint Is Nothing Then
-
             If TypeOf mNewConstraint Is Constraint_Slot Then
-                Dim newSlot As New RmSlot(StructureType.Element)
-
                 Dim frmChooseType As New ChooseType
-
                 frmChooseType.listType.Items.Add(Filemanager.GetOpenEhrTerm(567, "Element"))
                 frmChooseType.listType.Items.Add(Filemanager.GetOpenEhrTerm(313, "Cluster"))
                 frmChooseType.Text = Filemanager.GetOpenEhrTerm(104, "Choose..")
                 frmChooseType.StartPosition = FormStartPosition.Manual
                 frmChooseType.Location = New Point(e.X, e.Y)
-                Dim r As Integer = frmChooseType.ShowDialog(Me.ParentForm)
+                frmChooseType.ShowDialog(ParentForm)
 
-                Select Case r
-                    Case 1 'Cluster
-                        newSlot = New RmSlot(StructureType.Cluster)
-                End Select
+                If frmChooseType.DialogResult = DialogResult.OK Then
+                    If frmChooseType.listType.SelectedIndex = 0 Then
+                        mNodeDragged = New ArchetypeTreeNode(New RmSlot(StructureType.Element), mFileManager)
+                    Else
+                        mNodeDragged = New ArchetypeTreeNode(New RmSlot(StructureType.Cluster), mFileManager)
+                    End If
 
-                mNodeDragged = New ArchetypeTreeNode(newSlot, mFileManager)
-                mNodeDragged.ImageIndex = Me.ImageIndexForConstraintType(ConstraintType.Slot)
-                mNodeDragged.SelectedImageIndex = Me.ImageIndexForConstraintType(ConstraintType.Slot, False, True)
-                allowEdit = False
+                    mNodeDragged.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot)
+                    mNodeDragged.SelectedImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, True)
+                    allowEdit = False
+                End If
             Else
                 Dim archetype_element As ArchetypeElement
                 archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
                 archetype_element.Constraint = mNewConstraint
                 mNodeDragged = New ArchetypeTreeNode(archetype_element)
-                mNodeDragged.ImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference)
-                mNodeDragged.SelectedImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
+                mNodeDragged.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference)
+                mNodeDragged.SelectedImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
             End If
         ElseIf mNewCluster Then
             Dim new_cluster As ArchetypeComposite
             new_cluster = New ArchetypeComposite(Filemanager.GetOpenEhrTerm(322, "New cluster"), StructureType.Cluster, mFileManager)
             mNodeDragged = New ArchetypeTreeNode(new_cluster)
         Else
-            Debug.Assert(False, "No drag item set")
             mDragTreeNode = Nothing
-            Me.tvTree.Cursor = System.Windows.Forms.Cursors.Default
-            Return
+            tvTree.Cursor = System.Windows.Forms.Cursors.Default
         End If
 
-        position.X = e.X
-        position.Y = e.Y
-        position = Me.tvTree.PointToClient(position)
-        DropNode = CType(Me.tvTree.GetNodeAt(position), ArchetypeTreeNode)
+        If Not mNodeDragged Is Nothing Then
+            position.X = e.X
+            position.Y = e.Y
+            position = tvTree.PointToClient(position)
+            DropNode = CType(tvTree.GetNodeAt(position), ArchetypeTreeNode)
 
-        If Not DropNode Is Nothing Then
-            ' if the drop node exists then set the parent
+            If Not DropNode Is Nothing Then
+                ' if the drop node exists then set the parent
+                If DropNode.Item.RM_Class.Type = StructureType.Cluster Then
+                    ' drop as child of cluster
+                    DropParent = DropNode.Nodes
 
-            If DropNode.Item.RM_Class.Type = StructureType.Cluster Then
-                ' drop as child of cluster
-                DropParent = DropNode.Nodes
-                If DropNode.IsExpanded Then
-                    ' insert at the beginning
-                    DropIndex = 0
+                    If DropNode.IsExpanded Then
+                        ' insert at the beginning
+                        DropIndex = 0
+                    Else
+                        'insert at end
+                        DropIndex = DropNode.GetNodeCount(False)
+                    End If
                 Else
-                    'insert at end
-                    DropIndex = DropNode.GetNodeCount(False)
+                    DropIndex = DropNode.Index + 1
+
+                    If DropNode.Parent Is Nothing Then
+                        DropParent = tvTree.Nodes
+                    Else
+                        DropParent = DropNode.Parent.Nodes
+                    End If
                 End If
             Else
-                DropIndex = DropNode.Index + 1
-                If DropNode.Parent Is Nothing Then
-                    DropParent = Me.tvTree.Nodes
+                'otherwise add it to the tvTree
+                DropParent = Me.tvTree.Nodes
+                DropIndex = Me.tvTree.GetNodeCount(False) ' add at the end
+            End If
+
+            If e.Effect = DragDropEffects.Move Then
+                If mNodeDragged.Parent Is Nothing Then
+                    DragParent = tvTree.Nodes
                 Else
-                    DropParent = DropNode.Parent.Nodes
+                    DragParent = mNodeDragged.Parent.Nodes
+                End If
+
+                If Not mNodeDragged Is DropNode Then
+                    DragParent.Remove(mNodeDragged)
+                Else
+                    mNodeDragged = Nothing
+                    Beep()
                 End If
             End If
-        Else
-            'otherwise add it to the tvTree
-            DropParent = Me.tvTree.Nodes
-            DropIndex = Me.tvTree.GetNodeCount(False) ' add at the end
-        End If
 
-        If e.Effect = DragDropEffects.Move Then
-            If mNodeDragged.Parent Is Nothing Then
-                DragParent = Me.tvTree.Nodes
-            Else
-                DragParent = mNodeDragged.Parent.Nodes
-            End If
-            If Not mNodeDragged Is DropNode Then
-                DragParent.Remove(mNodeDragged)
-            Else
-                Beep()
-                mNewConstraint = Nothing
-                mNewCluster = False
-                mDragTreeNode = Nothing
-                Me.tvTree.Cursor = System.Windows.Forms.Cursors.Default
-                Return
+            'Add the node
+            If Not mNodeDragged Is Nothing Then
+                DropParent.Insert(DropIndex, mNodeDragged)
+
+                mNodeDragged.EnsureVisible()
+                tvTree.SelectedNode = mNodeDragged
+
+                If e.Effect = DragDropEffects.Copy And allowEdit Then
+                    ' have to do this last or not visible
+                    mNodeDragged.BeginEdit()
+                End If
+
+                mFileManager.FileEdited = True
             End If
         End If
-
-        'Add the node
-        DropParent.Insert(DropIndex, mNodeDragged)
-
-        mNodeDragged.EnsureVisible()
-        Me.tvTree.SelectedNode = mNodeDragged
-        If e.Effect = DragDropEffects.Copy And allowEdit Then
-            ' have to do this last or not visible
-            mNodeDragged.BeginEdit()
-        End If
-        mFileManager.FileEdited = True
 
         ' set the drag items to nothing
         mNewConstraint = Nothing
         mNewCluster = False
         mDragTreeNode = Nothing
-        Me.tvTree.Cursor = System.Windows.Forms.Cursors.Default
+        tvTree.Cursor = System.Windows.Forms.Cursors.Default
     End Sub
 
     Private Sub tvTree_DragEnter(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragEnter
