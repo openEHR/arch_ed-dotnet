@@ -74,6 +74,8 @@ Public Class Designer
     Friend WithEvents butLinks As System.Windows.Forms.Button
     Friend WithEvents ToolsMenuItem As System.Windows.Forms.MenuItem
     Friend WithEvents ToolsOptionsMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents ArchetypeNameContextMenu As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents CopyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mTabPageDescription As TabPageDescription
 
 #Region " Windows Form Designer generated code "
@@ -195,7 +197,6 @@ Public Class Designer
     Friend WithEvents MenuTerminologyAdd As System.Windows.Forms.MenuItem
     Friend WithEvents MenuTerminologyAvailable As System.Windows.Forms.MenuItem
     Friend WithEvents lblConcept As System.Windows.Forms.Label
-    Friend WithEvents lblArchetypeFileName As System.Windows.Forms.Label
     Friend WithEvents lblPrimaryLanguageText As System.Windows.Forms.Label
     Friend WithEvents MenuHelpLicence As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpOcean As System.Windows.Forms.MenuItem
@@ -270,7 +271,6 @@ Public Class Designer
         Me.DesignerColumnLabel = New System.Windows.Forms.DataGridTextBoxColumn
         Me.DesignerColumnDefinition = New System.Windows.Forms.DataGridTextBoxColumn
         Me.OpenFileDialogArchetype = New System.Windows.Forms.OpenFileDialog
-        Me.lblArchetypeFileName = New System.Windows.Forms.Label
         Me.lblPrimaryLanguage = New System.Windows.Forms.Label
         Me.lblPrimaryLanguageText = New System.Windows.Forms.Label
         Me.MainMenu = New System.Windows.Forms.MainMenu(Me.components)
@@ -399,6 +399,8 @@ Public Class Designer
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
+        Me.ArchetypeNameContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.CopyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.PanelConcept.SuspendLayout()
         Me.tabComment.SuspendLayout()
         Me.tpConceptDescription.SuspendLayout()
@@ -431,6 +433,7 @@ Public Class Designer
         Me.tpInterface.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.ArchetypeNameContextMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'TxtConceptDescription
@@ -440,24 +443,24 @@ Public Class Designer
         Me.TxtConceptDescription.Multiline = True
         Me.TxtConceptDescription.Name = "TxtConceptDescription"
         Me.TxtConceptDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TxtConceptDescription.Size = New System.Drawing.Size(515, 71)
+        Me.TxtConceptDescription.Size = New System.Drawing.Size(588, 61)
         Me.TxtConceptDescription.TabIndex = 1
         Me.TxtConceptDescription.Tag = ""
         '
         'lblConcept
         '
-        Me.lblConcept.Location = New System.Drawing.Point(13, 12)
+        Me.lblConcept.Location = New System.Drawing.Point(11, 10)
         Me.lblConcept.Name = "lblConcept"
-        Me.lblConcept.Size = New System.Drawing.Size(67, 21)
+        Me.lblConcept.Size = New System.Drawing.Size(56, 19)
         Me.lblConcept.TabIndex = 8
         Me.lblConcept.Text = "Concept:"
         Me.lblConcept.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'txtConceptInFull
         '
-        Me.txtConceptInFull.Location = New System.Drawing.Point(90, 12)
+        Me.txtConceptInFull.Location = New System.Drawing.Point(75, 10)
         Me.txtConceptInFull.Name = "txtConceptInFull"
-        Me.txtConceptInFull.Size = New System.Drawing.Size(325, 24)
+        Me.txtConceptInFull.Size = New System.Drawing.Size(271, 21)
         Me.txtConceptInFull.TabIndex = 0
         Me.txtConceptInFull.Tag = ""
         '
@@ -472,16 +475,16 @@ Public Class Designer
         Me.PanelConcept.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelConcept.Location = New System.Drawing.Point(0, 0)
         Me.PanelConcept.Name = "PanelConcept"
-        Me.PanelConcept.Size = New System.Drawing.Size(969, 111)
+        Me.PanelConcept.Size = New System.Drawing.Size(969, 96)
         Me.PanelConcept.TabIndex = 3
         '
         'butLinks
         '
         Me.butLinks.Image = CType(resources.GetObject("butLinks.Image"), System.Drawing.Image)
         Me.butLinks.ImageAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.butLinks.Location = New System.Drawing.Point(318, 42)
+        Me.butLinks.Location = New System.Drawing.Point(265, 36)
         Me.butLinks.Name = "butLinks"
-        Me.butLinks.Size = New System.Drawing.Size(97, 27)
+        Me.butLinks.Size = New System.Drawing.Size(81, 24)
         Me.butLinks.TabIndex = 2
         Me.butLinks.Text = "Links"
         Me.butLinks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -495,21 +498,21 @@ Public Class Designer
         Me.tabComment.Controls.Add(Me.tpConceptDescription)
         Me.tabComment.Controls.Add(Me.tpConceptComment)
         Me.tabComment.HotTrack = True
-        Me.tabComment.Location = New System.Drawing.Point(437, 0)
+        Me.tabComment.Location = New System.Drawing.Point(364, 0)
         Me.tabComment.Multiline = True
         Me.tabComment.Name = "tabComment"
         Me.tabComment.SelectedIndex = 0
-        Me.tabComment.Size = New System.Drawing.Size(529, 107)
+        Me.tabComment.Size = New System.Drawing.Size(602, 93)
         Me.tabComment.TabIndex = 10
         '
         'tpConceptDescription
         '
         Me.tpConceptDescription.BackColor = System.Drawing.Color.LightYellow
         Me.tpConceptDescription.Controls.Add(Me.TxtConceptDescription)
-        Me.tpConceptDescription.Location = New System.Drawing.Point(4, 26)
+        Me.tpConceptDescription.Location = New System.Drawing.Point(4, 22)
         Me.tpConceptDescription.Name = "tpConceptDescription"
         Me.tpConceptDescription.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptDescription.Size = New System.Drawing.Size(521, 77)
+        Me.tpConceptDescription.Size = New System.Drawing.Size(594, 67)
         Me.tpConceptDescription.TabIndex = 0
         Me.tpConceptDescription.Text = "Description"
         Me.tpConceptDescription.UseVisualStyleBackColor = True
@@ -518,10 +521,10 @@ Public Class Designer
         '
         Me.tpConceptComment.BackColor = System.Drawing.Color.LightYellow
         Me.tpConceptComment.Controls.Add(Me.txtConceptComment)
-        Me.tpConceptComment.Location = New System.Drawing.Point(4, 26)
+        Me.tpConceptComment.Location = New System.Drawing.Point(4, 22)
         Me.tpConceptComment.Name = "tpConceptComment"
         Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptComment.Size = New System.Drawing.Size(521, 77)
+        Me.tpConceptComment.Size = New System.Drawing.Size(185, 67)
         Me.tpConceptComment.TabIndex = 1
         Me.tpConceptComment.Text = "Comment"
         Me.tpConceptComment.UseVisualStyleBackColor = True
@@ -533,7 +536,7 @@ Public Class Designer
         Me.txtConceptComment.Multiline = True
         Me.txtConceptComment.Name = "txtConceptComment"
         Me.txtConceptComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtConceptComment.Size = New System.Drawing.Size(515, 71)
+        Me.txtConceptComment.Size = New System.Drawing.Size(179, 61)
         Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
@@ -545,14 +548,14 @@ Public Class Designer
         Me.PanelConfigStructure.Location = New System.Drawing.Point(0, 0)
         Me.PanelConfigStructure.Name = "PanelConfigStructure"
         Me.PanelConfigStructure.Padding = New System.Windows.Forms.Padding(1)
-        Me.PanelConfigStructure.Size = New System.Drawing.Size(969, 28)
+        Me.PanelConfigStructure.Size = New System.Drawing.Size(969, 24)
         Me.PanelConfigStructure.TabIndex = 9
         '
         'cbStructurePersonState
         '
-        Me.cbStructurePersonState.Location = New System.Drawing.Point(288, 5)
+        Me.cbStructurePersonState.Location = New System.Drawing.Point(240, 4)
         Me.cbStructurePersonState.Name = "cbStructurePersonState"
-        Me.cbStructurePersonState.Size = New System.Drawing.Size(230, 23)
+        Me.cbStructurePersonState.Size = New System.Drawing.Size(192, 20)
         Me.cbStructurePersonState.TabIndex = 31
         Me.cbStructurePersonState.Text = "Person State"
         Me.ToolTip1.SetToolTip(Me.cbStructurePersonState, "Information about the person that influences the interpretation")
@@ -560,9 +563,9 @@ Public Class Designer
         'chkEventSeries
         '
         Me.chkEventSeries.Enabled = False
-        Me.chkEventSeries.Location = New System.Drawing.Point(46, 0)
+        Me.chkEventSeries.Location = New System.Drawing.Point(38, 0)
         Me.chkEventSeries.Name = "chkEventSeries"
-        Me.chkEventSeries.Size = New System.Drawing.Size(236, 28)
+        Me.chkEventSeries.Size = New System.Drawing.Size(197, 24)
         Me.chkEventSeries.TabIndex = 8
         Me.chkEventSeries.Text = "Data: Event Series"
         Me.ToolTip1.SetToolTip(Me.chkEventSeries, "Repeated measurements in same series")
@@ -576,14 +579,14 @@ Public Class Designer
         Me.PanelRoot.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelRoot.Location = New System.Drawing.Point(0, 0)
         Me.PanelRoot.Name = "PanelRoot"
-        Me.PanelRoot.Size = New System.Drawing.Size(969, 37)
+        Me.PanelRoot.Size = New System.Drawing.Size(969, 32)
         Me.PanelRoot.TabIndex = 11
         '
         'cbParticipation
         '
-        Me.cbParticipation.Location = New System.Drawing.Point(288, 6)
+        Me.cbParticipation.Location = New System.Drawing.Point(240, 5)
         Me.cbParticipation.Name = "cbParticipation"
-        Me.cbParticipation.Size = New System.Drawing.Size(154, 27)
+        Me.cbParticipation.Size = New System.Drawing.Size(128, 24)
         Me.cbParticipation.TabIndex = 30
         Me.cbParticipation.Text = "Participation"
         Me.ToolTip1.SetToolTip(Me.cbParticipation, "About who participated in what has been recorded")
@@ -591,18 +594,18 @@ Public Class Designer
         'cbPersonState
         '
         Me.cbPersonState.Enabled = False
-        Me.cbPersonState.Location = New System.Drawing.Point(527, 10)
+        Me.cbPersonState.Location = New System.Drawing.Point(439, 9)
         Me.cbPersonState.Name = "cbPersonState"
-        Me.cbPersonState.Size = New System.Drawing.Size(228, 19)
+        Me.cbPersonState.Size = New System.Drawing.Size(190, 16)
         Me.cbPersonState.TabIndex = 31
         Me.cbPersonState.Text = "Person State with EventSeries"
         Me.ToolTip1.SetToolTip(Me.cbPersonState, "Only for situations where 'state' information requires a EventSeries event")
         '
         'cbProtocol
         '
-        Me.cbProtocol.Location = New System.Drawing.Point(72, 10)
+        Me.cbProtocol.Location = New System.Drawing.Point(60, 9)
         Me.cbProtocol.Name = "cbProtocol"
-        Me.cbProtocol.Size = New System.Drawing.Size(154, 19)
+        Me.cbProtocol.Size = New System.Drawing.Size(128, 16)
         Me.cbProtocol.TabIndex = 29
         Me.cbProtocol.Text = "Protocol"
         Me.ToolTip1.SetToolTip(Me.cbProtocol, "About HOW the information was collected")
@@ -615,10 +618,10 @@ Public Class Designer
         Me.DataGridConstraintDefinitions.DataMember = ""
         Me.DataGridConstraintDefinitions.Dock = System.Windows.Forms.DockStyle.Top
         Me.DataGridConstraintDefinitions.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.DataGridConstraintDefinitions.Location = New System.Drawing.Point(0, 8)
+        Me.DataGridConstraintDefinitions.Location = New System.Drawing.Point(0, 7)
         Me.DataGridConstraintDefinitions.Name = "DataGridConstraintDefinitions"
         Me.DataGridConstraintDefinitions.RowHeaderWidth = 20
-        Me.DataGridConstraintDefinitions.Size = New System.Drawing.Size(969, 295)
+        Me.DataGridConstraintDefinitions.Size = New System.Drawing.Size(969, 256)
         Me.DataGridConstraintDefinitions.TabIndex = 4
         Me.DataGridConstraintDefinitions.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.DataGridTableStyle2})
         '
@@ -657,10 +660,10 @@ Public Class Designer
         Me.DataGridDefinitions.DataMember = ""
         Me.DataGridDefinitions.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridDefinitions.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.DataGridDefinitions.Location = New System.Drawing.Point(0, 18)
+        Me.DataGridDefinitions.Location = New System.Drawing.Point(0, 16)
         Me.DataGridDefinitions.Name = "DataGridDefinitions"
         Me.DataGridDefinitions.RowHeaderWidth = 25
-        Me.DataGridDefinitions.Size = New System.Drawing.Size(969, 551)
+        Me.DataGridDefinitions.Size = New System.Drawing.Size(969, 584)
         Me.DataGridDefinitions.TabIndex = 1
         Me.DataGridDefinitions.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.DataGridTableStyle1})
         '
@@ -696,9 +699,9 @@ Public Class Designer
         'butAdd
         '
         Me.butAdd.Image = CType(resources.GetObject("butAdd.Image"), System.Drawing.Image)
-        Me.butAdd.Location = New System.Drawing.Point(10, 76)
+        Me.butAdd.Location = New System.Drawing.Point(8, 66)
         Me.butAdd.Name = "butAdd"
-        Me.butAdd.Size = New System.Drawing.Size(26, 26)
+        Me.butAdd.Size = New System.Drawing.Size(22, 22)
         Me.butAdd.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.butAdd, "Add a language")
         '
@@ -725,29 +728,21 @@ Public Class Designer
         '
         Me.OpenFileDialogArchetype.ReadOnlyChecked = True
         '
-        'lblArchetypeFileName
-        '
-        Me.lblArchetypeFileName.Location = New System.Drawing.Point(8, 32)
-        Me.lblArchetypeFileName.Name = "lblArchetypeFileName"
-        Me.lblArchetypeFileName.Size = New System.Drawing.Size(240, 19)
-        Me.lblArchetypeFileName.TabIndex = 6
-        Me.lblArchetypeFileName.Text = "Archetype file name:"
-        '
         'lblPrimaryLanguage
         '
         Me.lblPrimaryLanguage.Font = New System.Drawing.Font("Tahoma", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblPrimaryLanguage.Location = New System.Drawing.Point(20, 33)
+        Me.lblPrimaryLanguage.Location = New System.Drawing.Point(17, 29)
         Me.lblPrimaryLanguage.Name = "lblPrimaryLanguage"
-        Me.lblPrimaryLanguage.Size = New System.Drawing.Size(317, 19)
+        Me.lblPrimaryLanguage.Size = New System.Drawing.Size(264, 16)
         Me.lblPrimaryLanguage.TabIndex = 7
         Me.lblPrimaryLanguage.Text = "-"
         Me.lblPrimaryLanguage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblPrimaryLanguageText
         '
-        Me.lblPrimaryLanguageText.Location = New System.Drawing.Point(10, 0)
+        Me.lblPrimaryLanguageText.Location = New System.Drawing.Point(8, 0)
         Me.lblPrimaryLanguageText.Name = "lblPrimaryLanguageText"
-        Me.lblPrimaryLanguageText.Size = New System.Drawing.Size(163, 28)
+        Me.lblPrimaryLanguageText.Size = New System.Drawing.Size(136, 24)
         Me.lblPrimaryLanguageText.TabIndex = 8
         Me.lblPrimaryLanguageText.Text = "Primary Language:"
         Me.lblPrimaryLanguageText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -938,9 +933,9 @@ Public Class Designer
         '
         Me.PanelMain.Controls.Add(Me.TabMain)
         Me.PanelMain.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelMain.Location = New System.Drawing.Point(0, 92)
+        Me.PanelMain.Location = New System.Drawing.Point(0, 63)
         Me.PanelMain.Name = "PanelMain"
-        Me.PanelMain.Size = New System.Drawing.Size(969, 621)
+        Me.PanelMain.Size = New System.Drawing.Size(969, 650)
         Me.PanelMain.TabIndex = 9
         '
         'TabMain
@@ -954,7 +949,7 @@ Public Class Designer
         Me.TabMain.SelectedIndex = 0
         Me.TabMain.SelectedTab = Me.tpHeader
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
-        Me.TabMain.Size = New System.Drawing.Size(969, 621)
+        Me.TabMain.Size = New System.Drawing.Size(969, 650)
         Me.TabMain.TabIndex = 1
         Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
@@ -970,7 +965,7 @@ Public Class Designer
         Me.tpHeader.Location = New System.Drawing.Point(0, 0)
         Me.tpHeader.Name = "tpHeader"
         Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
-        Me.tpHeader.Size = New System.Drawing.Size(969, 595)
+        Me.tpHeader.Size = New System.Drawing.Size(969, 625)
         Me.tpHeader.TabIndex = 0
         Me.tpHeader.Title = "Header"
         '
@@ -978,10 +973,10 @@ Public Class Designer
         '
         Me.PanelDescription.Controls.Add(Me.RichTextBoxDescription)
         Me.PanelDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelDescription.Location = New System.Drawing.Point(0, 111)
+        Me.PanelDescription.Location = New System.Drawing.Point(0, 96)
         Me.PanelDescription.Name = "PanelDescription"
         Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
-        Me.PanelDescription.Size = New System.Drawing.Size(969, 283)
+        Me.PanelDescription.Size = New System.Drawing.Size(969, 355)
         Me.PanelDescription.TabIndex = 4
         '
         'RichTextBoxDescription
@@ -990,7 +985,7 @@ Public Class Designer
         Me.RichTextBoxDescription.Location = New System.Drawing.Point(10, 10)
         Me.RichTextBoxDescription.Name = "RichTextBoxDescription"
         Me.RichTextBoxDescription.ReadOnly = True
-        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 263)
+        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 335)
         Me.RichTextBoxDescription.TabIndex = 5
         Me.RichTextBoxDescription.Text = ""
         '
@@ -1000,17 +995,17 @@ Public Class Designer
         Me.PanelConcept_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelConcept_1.Controls.Add(Me.gbSpecialisation)
         Me.PanelConcept_1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelConcept_1.Location = New System.Drawing.Point(0, 394)
+        Me.PanelConcept_1.Location = New System.Drawing.Point(0, 451)
         Me.PanelConcept_1.Name = "PanelConcept_1"
-        Me.PanelConcept_1.Size = New System.Drawing.Size(969, 201)
+        Me.PanelConcept_1.Size = New System.Drawing.Size(969, 174)
         Me.PanelConcept_1.TabIndex = 5
         '
         'gbSpecialisation
         '
         Me.gbSpecialisation.Controls.Add(Me.tvSpecialisation)
-        Me.gbSpecialisation.Location = New System.Drawing.Point(328, 2)
+        Me.gbSpecialisation.Location = New System.Drawing.Point(273, 2)
         Me.gbSpecialisation.Name = "gbSpecialisation"
-        Me.gbSpecialisation.Size = New System.Drawing.Size(624, 190)
+        Me.gbSpecialisation.Size = New System.Drawing.Size(520, 164)
         Me.gbSpecialisation.TabIndex = 12
         Me.gbSpecialisation.TabStop = False
         Me.gbSpecialisation.Text = "Specialisation"
@@ -1018,9 +1013,9 @@ Public Class Designer
         '
         'tvSpecialisation
         '
-        Me.tvSpecialisation.Location = New System.Drawing.Point(16, 30)
+        Me.tvSpecialisation.Location = New System.Drawing.Point(13, 26)
         Me.tvSpecialisation.Name = "tvSpecialisation"
-        Me.tvSpecialisation.Size = New System.Drawing.Size(595, 138)
+        Me.tvSpecialisation.Size = New System.Drawing.Size(496, 120)
         Me.tvSpecialisation.TabIndex = 0
         '
         'tpDesign
@@ -1033,7 +1028,7 @@ Public Class Designer
         Me.tpDesign.Name = "tpDesign"
         Me.tpDesign.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpDesign, True)
-        Me.tpDesign.Size = New System.Drawing.Size(969, 595)
+        Me.tpDesign.Size = New System.Drawing.Size(969, 625)
         Me.tpDesign.TabIndex = 1
         Me.tpDesign.Title = "Definition"
         '
@@ -1045,13 +1040,13 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpKeyword(Me.TabDesign, "HowTo/edit_data.htm")
         Me.HelpProviderDesigner.SetHelpNavigator(Me.TabDesign, System.Windows.Forms.HelpNavigator.Topic)
         Me.TabDesign.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabDesign.Location = New System.Drawing.Point(0, 37)
+        Me.TabDesign.Location = New System.Drawing.Point(0, 32)
         Me.TabDesign.Name = "TabDesign"
         Me.TabDesign.PositionTop = True
         Me.TabDesign.SelectedIndex = 0
         Me.TabDesign.SelectedTab = Me.tpData
         Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
-        Me.TabDesign.Size = New System.Drawing.Size(969, 558)
+        Me.TabDesign.Size = New System.Drawing.Size(969, 593)
         Me.TabDesign.TabIndex = 12
         Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState, Me.tpParticipation})
         Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
@@ -1062,7 +1057,7 @@ Public Class Designer
         Me.tpData.Controls.Add(Me.PanelConfigStructure)
         Me.tpData.Location = New System.Drawing.Point(0, 0)
         Me.tpData.Name = "tpData"
-        Me.tpData.Size = New System.Drawing.Size(969, 532)
+        Me.tpData.Size = New System.Drawing.Size(969, 568)
         Me.tpData.TabIndex = 0
         Me.tpData.Title = "Data"
         '
@@ -1074,13 +1069,13 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpKeyword(Me.TabStructure, "HowTo/edit_data.htm")
         Me.HelpProviderDesigner.SetHelpNavigator(Me.TabStructure, System.Windows.Forms.HelpNavigator.Topic)
         Me.TabStructure.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabStructure.Location = New System.Drawing.Point(0, 28)
+        Me.TabStructure.Location = New System.Drawing.Point(0, 24)
         Me.TabStructure.Name = "TabStructure"
         Me.TabStructure.PositionTop = True
         Me.TabStructure.SelectedIndex = 0
         Me.TabStructure.SelectedTab = Me.tpDataStructure
         Me.HelpProviderDesigner.SetShowHelp(Me.TabStructure, True)
-        Me.TabStructure.Size = New System.Drawing.Size(969, 504)
+        Me.TabStructure.Size = New System.Drawing.Size(969, 544)
         Me.TabStructure.TabIndex = 10
         Me.TabStructure.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDataStructure})
         Me.TabStructure.TextInactiveColor = System.Drawing.Color.Black
@@ -1093,7 +1088,7 @@ Public Class Designer
         Me.tpDataStructure.Location = New System.Drawing.Point(0, 0)
         Me.tpDataStructure.Name = "tpDataStructure"
         Me.HelpProviderDesigner.SetShowHelp(Me.tpDataStructure, True)
-        Me.tpDataStructure.Size = New System.Drawing.Size(969, 478)
+        Me.tpDataStructure.Size = New System.Drawing.Size(969, 519)
         Me.tpDataStructure.TabIndex = 0
         Me.tpDataStructure.Title = "Structure"
         '
@@ -1104,7 +1099,7 @@ Public Class Designer
         Me.tpRootState.Location = New System.Drawing.Point(0, 0)
         Me.tpRootState.Name = "tpRootState"
         Me.tpRootState.Selected = False
-        Me.tpRootState.Size = New System.Drawing.Size(969, 532)
+        Me.tpRootState.Size = New System.Drawing.Size(969, 568)
         Me.tpRootState.TabIndex = 1
         Me.tpRootState.Title = "State"
         '
@@ -1116,13 +1111,13 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpKeyword(Me.TabState, "HowTo/edit_state.htm")
         Me.HelpProviderDesigner.SetHelpNavigator(Me.TabState, System.Windows.Forms.HelpNavigator.Topic)
         Me.TabState.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabState.Location = New System.Drawing.Point(0, 28)
+        Me.TabState.Location = New System.Drawing.Point(0, 24)
         Me.TabState.Name = "TabState"
         Me.TabState.PositionTop = True
         Me.TabState.SelectedIndex = 0
         Me.TabState.SelectedTab = Me.tpRootStateStructure
         Me.HelpProviderDesigner.SetShowHelp(Me.TabState, True)
-        Me.TabState.Size = New System.Drawing.Size(969, 504)
+        Me.TabState.Size = New System.Drawing.Size(969, 544)
         Me.TabState.TabIndex = 1
         Me.TabState.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpRootStateStructure, Me.tpRootStateEventSeries})
         '
@@ -1131,7 +1126,7 @@ Public Class Designer
         Me.tpRootStateStructure.BackColor = System.Drawing.Color.CornflowerBlue
         Me.tpRootStateStructure.Location = New System.Drawing.Point(0, 0)
         Me.tpRootStateStructure.Name = "tpRootStateStructure"
-        Me.tpRootStateStructure.Size = New System.Drawing.Size(969, 478)
+        Me.tpRootStateStructure.Size = New System.Drawing.Size(969, 519)
         Me.tpRootStateStructure.TabIndex = 0
         Me.tpRootStateStructure.Title = "Structure"
         '
@@ -1141,7 +1136,7 @@ Public Class Designer
         Me.tpRootStateEventSeries.Location = New System.Drawing.Point(0, 0)
         Me.tpRootStateEventSeries.Name = "tpRootStateEventSeries"
         Me.tpRootStateEventSeries.Selected = False
-        Me.tpRootStateEventSeries.Size = New System.Drawing.Size(969, 478)
+        Me.tpRootStateEventSeries.Size = New System.Drawing.Size(969, 519)
         Me.tpRootStateEventSeries.TabIndex = 1
         Me.tpRootStateEventSeries.Title = "State Event Series"
         '
@@ -1151,7 +1146,7 @@ Public Class Designer
         Me.PanelState.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelState.Location = New System.Drawing.Point(0, 0)
         Me.PanelState.Name = "PanelState"
-        Me.PanelState.Size = New System.Drawing.Size(969, 28)
+        Me.PanelState.Size = New System.Drawing.Size(969, 24)
         Me.PanelState.TabIndex = 0
         '
         'tpParticipation
@@ -1159,7 +1154,7 @@ Public Class Designer
         Me.tpParticipation.Location = New System.Drawing.Point(0, 0)
         Me.tpParticipation.Name = "tpParticipation"
         Me.tpParticipation.Selected = False
-        Me.tpParticipation.Size = New System.Drawing.Size(969, 532)
+        Me.tpParticipation.Size = New System.Drawing.Size(969, 568)
         Me.tpParticipation.TabIndex = 2
         Me.tpParticipation.Title = "Participation"
         '
@@ -1172,7 +1167,7 @@ Public Class Designer
         Me.tpSectionPage.Name = "tpSectionPage"
         Me.tpSectionPage.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpSectionPage, True)
-        Me.tpSectionPage.Size = New System.Drawing.Size(969, 595)
+        Me.tpSectionPage.Size = New System.Drawing.Size(969, 625)
         Me.tpSectionPage.TabIndex = 4
         Me.tpSectionPage.Title = "Definition"
         '
@@ -1185,7 +1180,7 @@ Public Class Designer
         Me.tpTerminology.Name = "tpTerminology"
         Me.tpTerminology.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpTerminology, True)
-        Me.tpTerminology.Size = New System.Drawing.Size(969, 595)
+        Me.tpTerminology.Size = New System.Drawing.Size(969, 625)
         Me.tpTerminology.TabIndex = 2
         Me.tpTerminology.Title = "Terminology"
         '
@@ -1200,7 +1195,7 @@ Public Class Designer
         Me.TabTerminology.PositionTop = True
         Me.TabTerminology.SelectedIndex = 0
         Me.TabTerminology.SelectedTab = Me.tpTerms
-        Me.TabTerminology.Size = New System.Drawing.Size(969, 595)
+        Me.TabTerminology.Size = New System.Drawing.Size(969, 625)
         Me.TabTerminology.TabIndex = 0
         Me.TabTerminology.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpTerms, Me.tpBindings, Me.tpConstraints, Me.tpLanguages})
         '
@@ -1214,7 +1209,7 @@ Public Class Designer
         Me.tpTerms.Location = New System.Drawing.Point(0, 0)
         Me.tpTerms.Name = "tpTerms"
         Me.HelpProviderDesigner.SetShowHelp(Me.tpTerms, True)
-        Me.tpTerms.Size = New System.Drawing.Size(969, 569)
+        Me.tpTerms.Size = New System.Drawing.Size(969, 600)
         Me.tpTerms.TabIndex = 2
         Me.tpTerms.Title = "Terms "
         Me.ToolTip1.SetToolTip(Me.tpTerms, "Internal term definitions")
@@ -1225,7 +1220,7 @@ Public Class Designer
         Me.PanelTermDefinitions.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelTermDefinitions.Location = New System.Drawing.Point(0, 0)
         Me.PanelTermDefinitions.Name = "PanelTermDefinitions"
-        Me.PanelTermDefinitions.Size = New System.Drawing.Size(969, 18)
+        Me.PanelTermDefinitions.Size = New System.Drawing.Size(969, 16)
         Me.PanelTermDefinitions.TabIndex = 3
         '
         'tpBindings
@@ -1236,7 +1231,7 @@ Public Class Designer
         Me.tpBindings.Name = "tpBindings"
         Me.tpBindings.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpBindings, True)
-        Me.tpBindings.Size = New System.Drawing.Size(969, 569)
+        Me.tpBindings.Size = New System.Drawing.Size(969, 600)
         Me.tpBindings.TabIndex = 3
         Me.tpBindings.Title = "Term Bindings"
         '
@@ -1255,7 +1250,7 @@ Public Class Designer
         Me.tpConstraints.Name = "tpConstraints"
         Me.tpConstraints.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpConstraints, True)
-        Me.tpConstraints.Size = New System.Drawing.Size(969, 569)
+        Me.tpConstraints.Size = New System.Drawing.Size(969, 600)
         Me.tpConstraints.TabIndex = 1
         Me.tpConstraints.Title = "Constraints"
         Me.ToolTip1.SetToolTip(Me.tpConstraints, "Constraint definitions")
@@ -1265,10 +1260,10 @@ Public Class Designer
         Me.DataGridConstraintStatements.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridConstraintStatements.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ID, Me.terminology, Me.Code, Me.release})
         Me.DataGridConstraintStatements.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridConstraintStatements.Location = New System.Drawing.Point(0, 338)
+        Me.DataGridConstraintStatements.Location = New System.Drawing.Point(0, 293)
         Me.DataGridConstraintStatements.Name = "DataGridConstraintStatements"
         Me.DataGridConstraintStatements.RowTemplate.Height = 24
-        Me.DataGridConstraintStatements.Size = New System.Drawing.Size(969, 167)
+        Me.DataGridConstraintStatements.Size = New System.Drawing.Size(969, 252)
         Me.DataGridConstraintStatements.TabIndex = 12
         '
         'ID
@@ -1308,9 +1303,9 @@ Public Class Designer
         Me.panelConstraintStatementTop.BackColor = System.Drawing.Color.CornflowerBlue
         Me.panelConstraintStatementTop.Controls.Add(Me.lblConstraintStatements)
         Me.panelConstraintStatementTop.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelConstraintStatementTop.Location = New System.Drawing.Point(0, 314)
+        Me.panelConstraintStatementTop.Location = New System.Drawing.Point(0, 272)
         Me.panelConstraintStatementTop.Name = "panelConstraintStatementTop"
-        Me.panelConstraintStatementTop.Size = New System.Drawing.Size(969, 24)
+        Me.panelConstraintStatementTop.Size = New System.Drawing.Size(969, 21)
         Me.panelConstraintStatementTop.TabIndex = 14
         '
         'lblConstraintStatements
@@ -1318,18 +1313,18 @@ Public Class Designer
         Me.lblConstraintStatements.AutoSize = True
         Me.lblConstraintStatements.Font = New System.Drawing.Font("Tahoma", 14.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.World)
         Me.lblConstraintStatements.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.lblConstraintStatements.Location = New System.Drawing.Point(8, 3)
+        Me.lblConstraintStatements.Location = New System.Drawing.Point(7, 3)
         Me.lblConstraintStatements.Name = "lblConstraintStatements"
-        Me.lblConstraintStatements.Size = New System.Drawing.Size(153, 18)
+        Me.lblConstraintStatements.Size = New System.Drawing.Size(143, 17)
         Me.lblConstraintStatements.TabIndex = 13
         Me.lblConstraintStatements.Text = "Constraint bindings"
         '
         'Splitter1
         '
         Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Splitter1.Location = New System.Drawing.Point(0, 303)
+        Me.Splitter1.Location = New System.Drawing.Point(0, 263)
         Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(969, 11)
+        Me.Splitter1.Size = New System.Drawing.Size(969, 9)
         Me.Splitter1.TabIndex = 11
         Me.Splitter1.TabStop = False
         '
@@ -1339,7 +1334,7 @@ Public Class Designer
         Me.PanelConstraintDefTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelConstraintDefTop.Location = New System.Drawing.Point(0, 0)
         Me.PanelConstraintDefTop.Name = "PanelConstraintDefTop"
-        Me.PanelConstraintDefTop.Size = New System.Drawing.Size(969, 8)
+        Me.PanelConstraintDefTop.Size = New System.Drawing.Size(969, 7)
         Me.PanelConstraintDefTop.TabIndex = 10
         '
         'PanelConstraintBinding
@@ -1347,18 +1342,18 @@ Public Class Designer
         Me.PanelConstraintBinding.BackColor = System.Drawing.Color.LemonChiffon
         Me.PanelConstraintBinding.Controls.Add(Me.butLookUpConstraint)
         Me.PanelConstraintBinding.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelConstraintBinding.Location = New System.Drawing.Point(0, 505)
+        Me.PanelConstraintBinding.Location = New System.Drawing.Point(0, 545)
         Me.PanelConstraintBinding.Name = "PanelConstraintBinding"
-        Me.PanelConstraintBinding.Size = New System.Drawing.Size(969, 64)
+        Me.PanelConstraintBinding.Size = New System.Drawing.Size(969, 55)
         Me.PanelConstraintBinding.TabIndex = 7
         '
         'butLookUpConstraint
         '
         Me.butLookUpConstraint.BackColor = System.Drawing.Color.LemonChiffon
         Me.butLookUpConstraint.Font = New System.Drawing.Font("Tahoma", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
-        Me.butLookUpConstraint.Location = New System.Drawing.Point(264, 16)
+        Me.butLookUpConstraint.Location = New System.Drawing.Point(220, 14)
         Me.butLookUpConstraint.Name = "butLookUpConstraint"
-        Me.butLookUpConstraint.Size = New System.Drawing.Size(320, 28)
+        Me.butLookUpConstraint.Size = New System.Drawing.Size(267, 24)
         Me.butLookUpConstraint.TabIndex = 2
         Me.butLookUpConstraint.Text = "Add constraint binding"
         Me.butLookUpConstraint.UseVisualStyleBackColor = False
@@ -1376,7 +1371,7 @@ Public Class Designer
         Me.tpLanguages.Name = "tpLanguages"
         Me.tpLanguages.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpLanguages, True)
-        Me.tpLanguages.Size = New System.Drawing.Size(969, 569)
+        Me.tpLanguages.Size = New System.Drawing.Size(969, 600)
         Me.tpLanguages.TabIndex = 0
         Me.tpLanguages.Title = "Languages && Terminologies"
         Me.ToolTip1.SetToolTip(Me.tpLanguages, "Available Languages and terminologies")
@@ -1388,10 +1383,10 @@ Public Class Designer
         Me.DataGridTerminologies.DataMember = ""
         Me.DataGridTerminologies.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridTerminologies.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.DataGridTerminologies.Location = New System.Drawing.Point(384, 46)
+        Me.DataGridTerminologies.Location = New System.Drawing.Point(320, 40)
         Me.DataGridTerminologies.Name = "DataGridTerminologies"
         Me.DataGridTerminologies.ReadOnly = True
-        Me.DataGridTerminologies.Size = New System.Drawing.Size(585, 523)
+        Me.DataGridTerminologies.Size = New System.Drawing.Size(649, 560)
         Me.DataGridTerminologies.TabIndex = 10
         Me.DataGridTerminologies.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.DataGridTableStyle3, Me.DataGridTableStyle4, Me.DataGridTableStyle5})
         '
@@ -1470,34 +1465,34 @@ Public Class Designer
         Me.Panel2.Controls.Add(Me.butAddTerminology)
         Me.Panel2.Controls.Add(Me.lblAvailableTerminologies)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(384, 0)
+        Me.Panel2.Location = New System.Drawing.Point(320, 0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(585, 46)
+        Me.Panel2.Size = New System.Drawing.Size(649, 40)
         Me.Panel2.TabIndex = 13
         '
         'butAddTerminology
         '
         Me.butAddTerminology.Image = CType(resources.GetObject("butAddTerminology.Image"), System.Drawing.Image)
         Me.butAddTerminology.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddTerminology.Location = New System.Drawing.Point(10, 9)
+        Me.butAddTerminology.Location = New System.Drawing.Point(8, 8)
         Me.butAddTerminology.Name = "butAddTerminology"
-        Me.butAddTerminology.Size = New System.Drawing.Size(27, 31)
+        Me.butAddTerminology.Size = New System.Drawing.Size(23, 27)
         Me.butAddTerminology.TabIndex = 11
         Me.ToolTip1.SetToolTip(Me.butAddTerminology, "Add a language")
         '
         'lblAvailableTerminologies
         '
-        Me.lblAvailableTerminologies.Location = New System.Drawing.Point(48, 15)
+        Me.lblAvailableTerminologies.Location = New System.Drawing.Point(40, 13)
         Me.lblAvailableTerminologies.Name = "lblAvailableTerminologies"
-        Me.lblAvailableTerminologies.Size = New System.Drawing.Size(250, 25)
+        Me.lblAvailableTerminologies.Size = New System.Drawing.Size(208, 22)
         Me.lblAvailableTerminologies.TabIndex = 11
         Me.lblAvailableTerminologies.Text = "Available terminologies:"
         '
         'Splitter2
         '
-        Me.Splitter2.Location = New System.Drawing.Point(374, 0)
+        Me.Splitter2.Location = New System.Drawing.Point(312, 0)
         Me.Splitter2.Name = "Splitter2"
-        Me.Splitter2.Size = New System.Drawing.Size(10, 569)
+        Me.Splitter2.Size = New System.Drawing.Size(8, 600)
         Me.Splitter2.TabIndex = 12
         Me.Splitter2.TabStop = False
         '
@@ -1509,16 +1504,15 @@ Public Class Designer
         Me.panelLanguages.Dock = System.Windows.Forms.DockStyle.Left
         Me.panelLanguages.Location = New System.Drawing.Point(0, 0)
         Me.panelLanguages.Name = "panelLanguages"
-        Me.panelLanguages.Size = New System.Drawing.Size(374, 569)
+        Me.panelLanguages.Size = New System.Drawing.Size(312, 600)
         Me.panelLanguages.TabIndex = 2
         '
         'ListLanguages
         '
         Me.ListLanguages.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListLanguages.ItemHeight = 17
-        Me.ListLanguages.Location = New System.Drawing.Point(0, 111)
+        Me.ListLanguages.Location = New System.Drawing.Point(0, 96)
         Me.ListLanguages.Name = "ListLanguages"
-        Me.ListLanguages.Size = New System.Drawing.Size(374, 446)
+        Me.ListLanguages.Size = New System.Drawing.Size(312, 498)
         Me.ListLanguages.TabIndex = 9
         '
         'Panel1
@@ -1530,14 +1524,14 @@ Public Class Designer
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(374, 111)
+        Me.Panel1.Size = New System.Drawing.Size(312, 96)
         Me.Panel1.TabIndex = 11
         '
         'lblAvailableLanguages
         '
-        Me.lblAvailableLanguages.Location = New System.Drawing.Point(49, 80)
+        Me.lblAvailableLanguages.Location = New System.Drawing.Point(41, 69)
         Me.lblAvailableLanguages.Name = "lblAvailableLanguages"
-        Me.lblAvailableLanguages.Size = New System.Drawing.Size(250, 27)
+        Me.lblAvailableLanguages.Size = New System.Drawing.Size(208, 24)
         Me.lblAvailableLanguages.TabIndex = 10
         Me.lblAvailableLanguages.Text = "Available languages:"
         '
@@ -1552,17 +1546,17 @@ Public Class Designer
         Me.tpText.Name = "tpText"
         Me.tpText.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpText, True)
-        Me.tpText.Size = New System.Drawing.Size(969, 595)
+        Me.tpText.Size = New System.Drawing.Size(969, 625)
         Me.tpText.TabIndex = 3
         Me.tpText.Title = "Display"
         '
         'Panel3
         '
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel3.Location = New System.Drawing.Point(0, 40)
+        Me.Panel3.Location = New System.Drawing.Point(0, 35)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Padding = New System.Windows.Forms.Padding(5)
-        Me.Panel3.Size = New System.Drawing.Size(969, 555)
+        Me.Panel3.Size = New System.Drawing.Size(969, 590)
         Me.Panel3.TabIndex = 4
         '
         'panelDiplayTop
@@ -1571,7 +1565,7 @@ Public Class Designer
         Me.panelDiplayTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.panelDiplayTop.Location = New System.Drawing.Point(0, 0)
         Me.panelDiplayTop.Name = "panelDiplayTop"
-        Me.panelDiplayTop.Size = New System.Drawing.Size(969, 40)
+        Me.panelDiplayTop.Size = New System.Drawing.Size(969, 35)
         Me.panelDiplayTop.TabIndex = 3
         '
         'ToolBarRTF
@@ -1588,7 +1582,7 @@ Public Class Designer
         Me.ToolBarRTF.Location = New System.Drawing.Point(0, 0)
         Me.ToolBarRTF.Name = "ToolBarRTF"
         Me.ToolBarRTF.ShowToolTips = True
-        Me.ToolBarRTF.Size = New System.Drawing.Size(969, 40)
+        Me.ToolBarRTF.Size = New System.Drawing.Size(969, 35)
         Me.ToolBarRTF.TabIndex = 4
         Me.ToolBarRTF.Wrappable = False
         '
@@ -1685,16 +1679,16 @@ Public Class Designer
         Me.tpInterface.Name = "tpInterface"
         Me.tpInterface.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpInterface, True)
-        Me.tpInterface.Size = New System.Drawing.Size(969, 595)
+        Me.tpInterface.Size = New System.Drawing.Size(969, 625)
         Me.tpInterface.TabIndex = 5
         Me.tpInterface.Title = "Interface"
         '
         'cbMandatory
         '
         Me.cbMandatory.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cbMandatory.Location = New System.Drawing.Point(792, 8)
+        Me.cbMandatory.Location = New System.Drawing.Point(821, 7)
         Me.cbMandatory.Name = "cbMandatory"
-        Me.cbMandatory.Size = New System.Drawing.Size(152, 24)
+        Me.cbMandatory.Size = New System.Drawing.Size(127, 21)
         Me.cbMandatory.TabIndex = 0
         Me.cbMandatory.Text = "Mandatory"
         '
@@ -1703,7 +1697,7 @@ Public Class Designer
         Me.tpDescription.Location = New System.Drawing.Point(0, 0)
         Me.tpDescription.Name = "tpDescription"
         Me.tpDescription.Selected = False
-        Me.tpDescription.Size = New System.Drawing.Size(969, 595)
+        Me.tpDescription.Size = New System.Drawing.Size(969, 625)
         Me.tpDescription.TabIndex = 6
         Me.tpDescription.Title = "Description"
         '
@@ -1734,7 +1728,6 @@ Public Class Designer
         'PanelHeader
         '
         Me.PanelHeader.BackColor = System.Drawing.Color.Ivory
-        Me.PanelHeader.Controls.Add(Me.lblArchetypeFileName)
         Me.PanelHeader.Controls.Add(Me.lblArchetypeName)
         Me.PanelHeader.Controls.Add(Me.lblLifecycle)
         Me.PanelHeader.Controls.Add(Me.ToolBarMain)
@@ -1742,26 +1735,27 @@ Public Class Designer
         Me.PanelHeader.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelHeader.Location = New System.Drawing.Point(0, 0)
         Me.PanelHeader.Name = "PanelHeader"
-        Me.PanelHeader.Size = New System.Drawing.Size(969, 92)
+        Me.PanelHeader.Size = New System.Drawing.Size(969, 63)
         Me.PanelHeader.TabIndex = 10
         '
         'lblArchetypeName
         '
-        Me.lblArchetypeName.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.lblArchetypeName.ContextMenuStrip = Me.ArchetypeNameContextMenu
         Me.lblArchetypeName.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblArchetypeName.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblArchetypeName.Location = New System.Drawing.Point(0, 57)
+        Me.lblArchetypeName.Location = New System.Drawing.Point(7, 31)
         Me.lblArchetypeName.Name = "lblArchetypeName"
-        Me.lblArchetypeName.Size = New System.Drawing.Size(881, 35)
-        Me.lblArchetypeName.TabIndex = 10
+        Me.lblArchetypeName.Size = New System.Drawing.Size(898, 27)
+        Me.lblArchetypeName.TabIndex = 2
         Me.lblArchetypeName.Text = "Archetype Editor by Ocean Informatics"
+        Me.lblArchetypeName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lblLifecycle
         '
         Me.lblLifecycle.Font = New System.Drawing.Font("Verdana", 9.75!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblLifecycle.Location = New System.Drawing.Point(797, 37)
+        Me.lblLifecycle.Location = New System.Drawing.Point(664, 32)
         Me.lblLifecycle.Name = "lblLifecycle"
-        Me.lblLifecycle.Size = New System.Drawing.Size(57, 46)
+        Me.lblLifecycle.Size = New System.Drawing.Size(48, 26)
         Me.lblLifecycle.TabIndex = 12
         Me.lblLifecycle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.lblLifecycle.Visible = False
@@ -1774,8 +1768,8 @@ Public Class Designer
         Me.ToolBarMain.Location = New System.Drawing.Point(0, 0)
         Me.ToolBarMain.Name = "ToolBarMain"
         Me.ToolBarMain.ShowToolTips = True
-        Me.ToolBarMain.Size = New System.Drawing.Size(881, 28)
-        Me.ToolBarMain.TabIndex = 11
+        Me.ToolBarMain.Size = New System.Drawing.Size(911, 28)
+        Me.ToolBarMain.TabIndex = 1
         '
         'ToolBarNew
         '
@@ -1820,16 +1814,28 @@ Public Class Designer
         Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Right
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(881, 0)
+        Me.PictureBox1.Location = New System.Drawing.Point(911, 0)
         Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(88, 92)
+        Me.PictureBox1.Size = New System.Drawing.Size(58, 63)
         Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
         '
+        'ArchetypeNameContextMenu
+        '
+        Me.ArchetypeNameContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem})
+        Me.ArchetypeNameContextMenu.Name = "ArchetypeNameContextMenu"
+        Me.ArchetypeNameContextMenu.Size = New System.Drawing.Size(100, 26)
+        '
+        'CopyToolStripMenuItem
+        '
+        Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
+        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.CopyToolStripMenuItem.Text = "Copy"
+        '
         'Designer
         '
-        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.AutoScroll = True
         Me.ClientSize = New System.Drawing.Size(969, 713)
         Me.Controls.Add(Me.PanelMain)
@@ -1879,6 +1885,7 @@ Public Class Designer
         Me.PanelHeader.ResumeLayout(False)
         Me.PanelHeader.PerformLayout()
         CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ArchetypeNameContextMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -2392,7 +2399,6 @@ Public Class Designer
         Me.MenuTerminologyAvailable.Text = Filemanager.GetOpenEhrTerm(70, Me.MenuTerminologyAvailable.Text, language)
 
         'Front panel of designer
-        Me.lblArchetypeFileName.Text = Filemanager.GetOpenEhrTerm(57, Me.lblArchetypeFileName.Text, language)
         Me.lblArchetypeName.Text = Filemanager.GetOpenEhrTerm(58, Me.lblArchetypeName.Text, language)
         Me.lblConcept.Text = Filemanager.GetOpenEhrTerm(54, Me.lblConcept.Text, language)
         Me.tpConceptDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.tpConceptDescription.Text, language)
@@ -5189,6 +5195,10 @@ Public Class Designer
                 RootLinks = frm.Links
             End If
         End If
+    End Sub
+
+    Private Sub CopyToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyToolStripMenuItem.Click
+        Clipboard.SetText(lblArchetypeName.Text)
     End Sub
 
 End Class
