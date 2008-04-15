@@ -388,6 +388,8 @@ Public Class Designer
         Me.menuDisplaySaveAs = New System.Windows.Forms.MenuItem
         Me.PanelHeader = New System.Windows.Forms.Panel
         Me.lblArchetypeName = New System.Windows.Forms.Label
+        Me.ArchetypeNameContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.CopyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.lblLifecycle = New System.Windows.Forms.Label
         Me.ToolBarMain = New System.Windows.Forms.ToolBar
         Me.ToolBarNew = New System.Windows.Forms.ToolBarButton
@@ -399,8 +401,6 @@ Public Class Designer
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
-        Me.ArchetypeNameContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
-        Me.CopyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.PanelConcept.SuspendLayout()
         Me.tabComment.SuspendLayout()
         Me.tpConceptDescription.SuspendLayout()
@@ -432,8 +432,8 @@ Public Class Designer
         Me.panelDiplayTop.SuspendLayout()
         Me.tpInterface.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.ArchetypeNameContextMenu.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TxtConceptDescription
@@ -524,7 +524,7 @@ Public Class Designer
         Me.tpConceptComment.Location = New System.Drawing.Point(4, 22)
         Me.tpConceptComment.Name = "tpConceptComment"
         Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptComment.Size = New System.Drawing.Size(185, 67)
+        Me.tpConceptComment.Size = New System.Drawing.Size(594, 67)
         Me.tpConceptComment.TabIndex = 1
         Me.tpConceptComment.Text = "Comment"
         Me.tpConceptComment.UseVisualStyleBackColor = True
@@ -536,7 +536,7 @@ Public Class Designer
         Me.txtConceptComment.Multiline = True
         Me.txtConceptComment.Name = "txtConceptComment"
         Me.txtConceptComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtConceptComment.Size = New System.Drawing.Size(179, 61)
+        Me.txtConceptComment.Size = New System.Drawing.Size(588, 61)
         Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
@@ -1740,6 +1740,9 @@ Public Class Designer
         '
         'lblArchetypeName
         '
+        Me.lblArchetypeName.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblArchetypeName.ContextMenuStrip = Me.ArchetypeNameContextMenu
         Me.lblArchetypeName.Font = New System.Drawing.Font("Tahoma", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblArchetypeName.ForeColor = System.Drawing.SystemColors.ControlText
@@ -1749,6 +1752,18 @@ Public Class Designer
         Me.lblArchetypeName.TabIndex = 2
         Me.lblArchetypeName.Text = "Archetype Editor by Ocean Informatics"
         Me.lblArchetypeName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'ArchetypeNameContextMenu
+        '
+        Me.ArchetypeNameContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem})
+        Me.ArchetypeNameContextMenu.Name = "ArchetypeNameContextMenu"
+        Me.ArchetypeNameContextMenu.Size = New System.Drawing.Size(100, 26)
+        '
+        'CopyToolStripMenuItem
+        '
+        Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
+        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(99, 22)
+        Me.CopyToolStripMenuItem.Text = "Copy"
         '
         'lblLifecycle
         '
@@ -1821,18 +1836,6 @@ Public Class Designer
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
         '
-        'ArchetypeNameContextMenu
-        '
-        Me.ArchetypeNameContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem})
-        Me.ArchetypeNameContextMenu.Name = "ArchetypeNameContextMenu"
-        Me.ArchetypeNameContextMenu.Size = New System.Drawing.Size(100, 26)
-        '
-        'CopyToolStripMenuItem
-        '
-        Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
-        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.CopyToolStripMenuItem.Text = "Copy"
-        '
         'Designer
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
@@ -1884,8 +1887,8 @@ Public Class Designer
         Me.tpInterface.ResumeLayout(False)
         Me.PanelHeader.ResumeLayout(False)
         Me.PanelHeader.PerformLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ArchetypeNameContextMenu.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
