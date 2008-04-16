@@ -27,14 +27,6 @@ Public Class ChooseFix
 
         'Add any initialization after the InitializeComponent() call
         Initialise(mOntologyManager, ArchetypeId, FileName)
-
-        If Not Me.DesignMode Then
-            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-                Me.butCancel.Text = AE_Constants.Instance.Cancel
-                Me.butOK.Text = AE_Constants.Instance.OK
-            End If
-        End If
-
     End Sub
 
     'Form overrides dispose to clean up the component list.
@@ -54,127 +46,108 @@ Public Class ChooseFix
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     Friend WithEvents lblInfo As System.Windows.Forms.Label
-    Friend WithEvents butOK As System.Windows.Forms.Button
-    Friend WithEvents butCancel As System.Windows.Forms.Button
-    Friend WithEvents cboFix As System.Windows.Forms.ComboBox
-    Friend WithEvents lblArchetypeId As System.Windows.Forms.Label
-    Friend WithEvents lblFileName As System.Windows.Forms.Label
-    Friend WithEvents lblArchetypeIdValue As System.Windows.Forms.Label
-    Friend WithEvents lblFileNameValue As System.Windows.Forms.Label
+    Friend WithEvents IgnoreButton As System.Windows.Forms.Button
+    Friend WithEvents ArchetypeIdButton As System.Windows.Forms.Button
+    Friend WithEvents FileNameButton As System.Windows.Forms.Button
+    Friend WithEvents ArchetypeIdLabel As System.Windows.Forms.Label
+    Friend WithEvents FileNameLabel As System.Windows.Forms.Label
     Friend WithEvents lblFix As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ChooseFix))
         Me.lblInfo = New System.Windows.Forms.Label
-        Me.butOK = New System.Windows.Forms.Button
-        Me.butCancel = New System.Windows.Forms.Button
-        Me.cboFix = New System.Windows.Forms.ComboBox
         Me.lblFix = New System.Windows.Forms.Label
-        Me.lblArchetypeId = New System.Windows.Forms.Label
-        Me.lblFileName = New System.Windows.Forms.Label
-        Me.lblArchetypeIdValue = New System.Windows.Forms.Label
-        Me.lblFileNameValue = New System.Windows.Forms.Label
+        Me.IgnoreButton = New System.Windows.Forms.Button
+        Me.ArchetypeIdButton = New System.Windows.Forms.Button
+        Me.FileNameButton = New System.Windows.Forms.Button
+        Me.ArchetypeIdLabel = New System.Windows.Forms.Label
+        Me.FileNameLabel = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
         'lblInfo
         '
-        Me.lblInfo.Location = New System.Drawing.Point(12, 9)
+        Me.lblInfo.Location = New System.Drawing.Point(12, 5)
         Me.lblInfo.Name = "lblInfo"
-        Me.lblInfo.Size = New System.Drawing.Size(332, 24)
-        Me.lblInfo.TabIndex = 1
+        Me.lblInfo.Size = New System.Drawing.Size(453, 24)
+        Me.lblInfo.TabIndex = 0
         Me.lblInfo.Text = "The Archetype Id and the Archetype file name must be the same!"
         Me.lblInfo.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
-        'butOK
-        '
-        Me.butOK.Location = New System.Drawing.Point(350, 9)
-        Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(79, 24)
-        Me.butOK.TabIndex = 2
-        Me.butOK.Text = "OK"
-        '
-        'butCancel
-        '
-        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(350, 40)
-        Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(79, 24)
-        Me.butCancel.TabIndex = 3
-        Me.butCancel.Text = "Cancel"
-        '
-        'cboFix
-        '
-        Me.cboFix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cboFix.FormattingEnabled = True
-        Me.cboFix.Location = New System.Drawing.Point(15, 110)
-        Me.cboFix.Name = "cboFix"
-        Me.cboFix.Size = New System.Drawing.Size(414, 21)
-        Me.cboFix.TabIndex = 6
-        '
         'lblFix
         '
-        Me.lblFix.Location = New System.Drawing.Point(12, 80)
+        Me.lblFix.Location = New System.Drawing.Point(12, 29)
         Me.lblFix.Name = "lblFix"
-        Me.lblFix.Size = New System.Drawing.Size(322, 27)
-        Me.lblFix.TabIndex = 7
+        Me.lblFix.Size = New System.Drawing.Size(453, 22)
+        Me.lblFix.TabIndex = 1
         Me.lblFix.Text = "Select an option to resolve this issue:"
         Me.lblFix.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
-        'lblArchetypeId
+        'IgnoreButton
         '
-        Me.lblArchetypeId.AutoSize = True
-        Me.lblArchetypeId.Location = New System.Drawing.Point(12, 45)
-        Me.lblArchetypeId.Name = "lblArchetypeId"
-        Me.lblArchetypeId.Size = New System.Drawing.Size(70, 13)
-        Me.lblArchetypeId.TabIndex = 8
-        Me.lblArchetypeId.Text = "Archetype Id:"
+        Me.IgnoreButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.IgnoreButton.Location = New System.Drawing.Point(15, 121)
+        Me.IgnoreButton.Name = "IgnoreButton"
+        Me.IgnoreButton.Size = New System.Drawing.Size(172, 23)
+        Me.IgnoreButton.TabIndex = 2
+        Me.IgnoreButton.Text = "Ignore (for now)"
+        Me.IgnoreButton.UseVisualStyleBackColor = True
         '
-        'lblFileName
+        'ArchetypeIdButton
         '
-        Me.lblFileName.AutoSize = True
-        Me.lblFileName.Location = New System.Drawing.Point(12, 67)
-        Me.lblFileName.Name = "lblFileName"
-        Me.lblFileName.Size = New System.Drawing.Size(103, 13)
-        Me.lblFileName.TabIndex = 9
-        Me.lblFileName.Text = "Archetype file name:"
+        Me.ArchetypeIdButton.Location = New System.Drawing.Point(15, 63)
+        Me.ArchetypeIdButton.Name = "ArchetypeIdButton"
+        Me.ArchetypeIdButton.Size = New System.Drawing.Size(172, 23)
+        Me.ArchetypeIdButton.TabIndex = 3
+        Me.ArchetypeIdButton.Text = "Use Archetype Id"
+        Me.ArchetypeIdButton.UseVisualStyleBackColor = True
         '
-        'lblArchetypeIdValue
+        'FileNameButton
         '
-        Me.lblArchetypeIdValue.AutoSize = True
-        Me.lblArchetypeIdValue.Location = New System.Drawing.Point(121, 45)
-        Me.lblArchetypeIdValue.Name = "lblArchetypeIdValue"
-        Me.lblArchetypeIdValue.Size = New System.Drawing.Size(33, 13)
-        Me.lblArchetypeIdValue.TabIndex = 10
-        Me.lblArchetypeIdValue.Text = "value"
+        Me.FileNameButton.Location = New System.Drawing.Point(15, 92)
+        Me.FileNameButton.Name = "FileNameButton"
+        Me.FileNameButton.Size = New System.Drawing.Size(172, 23)
+        Me.FileNameButton.TabIndex = 5
+        Me.FileNameButton.Text = "Use Archetype file name"
+        Me.FileNameButton.UseVisualStyleBackColor = True
         '
-        'lblFileNameValue
+        'ArchetypeIdLabel
         '
-        Me.lblFileNameValue.AutoSize = True
-        Me.lblFileNameValue.Location = New System.Drawing.Point(121, 67)
-        Me.lblFileNameValue.Name = "lblFileNameValue"
-        Me.lblFileNameValue.Size = New System.Drawing.Size(33, 13)
-        Me.lblFileNameValue.TabIndex = 11
-        Me.lblFileNameValue.Text = "value"
+        Me.ArchetypeIdLabel.AutoSize = True
+        Me.ArchetypeIdLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ArchetypeIdLabel.Location = New System.Drawing.Point(193, 68)
+        Me.ArchetypeIdLabel.Name = "ArchetypeIdLabel"
+        Me.ArchetypeIdLabel.Size = New System.Drawing.Size(13, 13)
+        Me.ArchetypeIdLabel.TabIndex = 4
+        Me.ArchetypeIdLabel.Text = "?"
+        '
+        'FileNameLabel
+        '
+        Me.FileNameLabel.AutoSize = True
+        Me.FileNameLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.FileNameLabel.Location = New System.Drawing.Point(193, 97)
+        Me.FileNameLabel.Name = "FileNameLabel"
+        Me.FileNameLabel.Size = New System.Drawing.Size(13, 13)
+        Me.FileNameLabel.TabIndex = 6
+        Me.FileNameLabel.Text = "?"
         '
         'ChooseFix
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.ClientSize = New System.Drawing.Size(439, 142)
+        Me.CancelButton = Me.IgnoreButton
+        Me.ClientSize = New System.Drawing.Size(550, 163)
         Me.ControlBox = False
-        Me.Controls.Add(Me.lblFileNameValue)
-        Me.Controls.Add(Me.lblArchetypeIdValue)
-        Me.Controls.Add(Me.lblFileName)
-        Me.Controls.Add(Me.lblArchetypeId)
+        Me.Controls.Add(Me.FileNameLabel)
+        Me.Controls.Add(Me.ArchetypeIdLabel)
+        Me.Controls.Add(Me.FileNameButton)
+        Me.Controls.Add(Me.ArchetypeIdButton)
+        Me.Controls.Add(Me.IgnoreButton)
         Me.Controls.Add(Me.lblFix)
-        Me.Controls.Add(Me.cboFix)
-        Me.Controls.Add(Me.butCancel)
-        Me.Controls.Add(Me.butOK)
         Me.Controls.Add(Me.lblInfo)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ChooseFix"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Ocean Archetype Editor"
+        Me.Text = "Ocean Archetype Editor - Mismatched Id and File Name"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -187,46 +160,27 @@ Public Class ChooseFix
         Ignore = 2
     End Enum
 
-    Public selection As FixOption = FixOption.Ignore
+    Public Selection As FixOption
 
     Private Sub Initialise(ByVal mOntologyManager As OntologyManager, ByVal ArchetypeId As String, ByVal FileName As String)
-        'lblInfo.Text = "The " & mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & " does not match the " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & "!"
+        Selection = FixOption.Ignore
         lblInfo.Text = "The " & mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & " and the " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & " must be the same!"
-        lblArchetypeId.Text = Space(8) & mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & ": " & ArchetypeId
-        lblFileName.Text = Space(8) & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & ": " & FileName
-        lblArchetypeIdValue.Text = ArchetypeId
-        lblFileNameValue.Text = FileName
-
-        'must be the same
-        'The Archetype Id and the file name must be the same
-
-        lblArchetypeIdValue.Visible = False
-        lblFileNameValue.Visible = False
-
-        cboFix.Items.Clear()
-        'cboFix.Items.Add("Use " & ArchetypeId) '0 UseId
-        'cboFix.Items.Add("Use " & mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & Space(1) & ArchetypeId) '0 UseId
-        cboFix.Items.Add("Use " & ArchetypeId & "  (" & mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & ")") '0 UseId
-        'cboFix.Items.Add("Use (" & mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & ") " & ArchetypeId) '0 UseId
-        'cboFix.Items.Add("Use " & FileName)    '1 UseFileName
-        'cboFix.Items.Add("Use " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & Space(1) & FileName)    '1 UseFileName
-        cboFix.Items.Add("Use " & FileName & "  (" & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & ")")    '1 UseFileName
-        'cboFix.Items.Add("Use (" & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & ") " & FileName)    '1 UseFileName
-        cboFix.Items.Add("Ignore (for now)")   '2 Ignore
-        cboFix.SelectedIndex = 2
+        ArchetypeIdButton.Text = "Use " & mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & ":"
+        ArchetypeIdLabel.Text = ArchetypeId
+        FileNameButton.Text = "Use " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & ":"
+        FileNameLabel.Text = FileName
     End Sub
 
-    Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
-        selection = cboFix.SelectedIndex
-
-        Me.DialogResult = Windows.Forms.DialogResult.OK
-        Me.Hide()
+    Private Sub ArchetypeIdButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ArchetypeIdButton.Click
+        Selection = FixOption.UseId
+        Close()
     End Sub
 
-    Private Sub butCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butCancel.Click
-        Me.DialogResult = Windows.Forms.DialogResult.Cancel
-        Me.Hide()
+    Private Sub FileNameButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles FileNameButton.Click
+        Selection = FixOption.UseFileName
+        Close()
     End Sub
+
 End Class
 
 '

@@ -2284,6 +2284,8 @@ Public Class Designer
                 Me.MenuFileSpecialise.Visible = True
             End If
         End If
+
+        lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
     End Sub
 
 #End Region
