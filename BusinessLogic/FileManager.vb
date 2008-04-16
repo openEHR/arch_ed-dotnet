@@ -312,82 +312,66 @@ Public Class FileManagerLocal
             mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
             mPriorFileName = Nothing
             FileEdited = False
-
-            'ensure the filename and archetype ID match (ignore case!)        
-            Dim shortFileName As String = aFileName.Substring((aFileName.LastIndexOf("\")) + 1)
-
-            If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
-                If ArchetypeID.IsValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
-                    If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
-                        FileLoading = False
-                        FileEdited = True
-                        FileLoading = True
-                    End If
-                Else
-                    FileName = mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
-                    FileLoading = False
-                    FileEdited = True
-                    FileLoading = True
-                End If
-            End If
+            CheckFileNameAgainstArchetypeId()
 
             Return True
         Catch e As Exception
-            Me.FileName = mPriorFileName
+            FileName = mPriorFileName
             mPriorFileName = Nothing
         End Try
     End Function
 
-    'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
-    Private Function CheckFileName(ByVal FileName As String) As Boolean 'returns false if an update occurred
+    Private Sub CheckFileNameAgainstArchetypeId()
+        Dim name As String = FileName.Substring(FileName.LastIndexOf("\") + 1)
 
-        Dim updateOccurred As Boolean = False
-        Dim shortFileName As String = Left(FileName, FileName.LastIndexOf("."))
+        If Not name.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
+            Dim shortFileName As String = Left(name, name.LastIndexOf("."))
 
-        'validate the concept to update it with the correct case and remove illegal characters
-        Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
-        Id1.Concept = Id1.ValidConcept(Id1.Concept, "", False)
+            If ArchetypeID.IsValidId(shortFileName) Then
+                'validate the concept to update it with the correct case and remove illegal characters
+                Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
+                Id1.Concept = Id1.ValidConcept(Id1.Concept, "", False)
 
-        Dim Id2 As New ArchetypeID(shortFileName)
-        Id2.Concept = Id2.ValidConcept(Id2.Concept, "", False)
+                Dim Id2 As New ArchetypeID(shortFileName)
+                Id2.Concept = Id2.ValidConcept(Id2.Concept, "", False)
 
-        Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
-        If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
+                Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
+                frm.ShowDialog()
 
-            'NOTE: The following updates can occur!
-            '    Update 1: Update if concept was changed in ValidConcept call
-            '    Update 2: Update according to the user selection
+                If frm.Selection <> ChooseFix.FixOption.Ignore Then
+                    'NOTE: The following updates can occur!
+                    '    Update 1: Update if concept was changed in ValidConcept call
+                    '    Update 2: Update according to the user selection
 
-            updateOccurred = True
+                    Dim Use As String = IIf(frm.Selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
 
-            Dim Use As String = IIf(frm.selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
+                    'update filename if changed
+                    If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
+                        mPriorFileName = FileName
+                        FileName = Replace(FileName, name, Use & "." & ParserType)
+                    End If
 
-            'update filename if changed
-            If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
-                mPriorFileName = Me.FileName
-                Me.FileName = Replace(Me.FileName, FileName, Use & "." & ParserType)
-                updateOccurred = True
-            End If
+                    'update archetype id if changed
+                    If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
+                        Archetype.Archetype_ID.SetFromString(Use)
+                        Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
+                    End If
 
-            'update archetype id if changed
-            If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
-                Archetype.Archetype_ID.SetFromString(Use)
-                Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
+                    FileLoading = False
+                    FileEdited = True
+                    FileLoading = True
+                End If
+            Else
+                FileName = mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
+                FileLoading = False
+                FileEdited = True
+                FileLoading = True
             End If
         End If
-
-        frm.Close()
-        Return Not updateOccurred
-    End Function
+    End Sub
 
     Public Function FormatIsAvailable(ByVal a_format As String) As Boolean
-
-        If mArchetypeEngine.AvailableFormats.Contains(a_format) Then
-            Return True
-        Else
-            Return False
-        End If
-
+        Return mArchetypeEngine.AvailableFormats.Contains(a_format)
     End Function
 
     Public Sub SerialiseArchetype(ByVal a_format As String)
@@ -686,40 +670,41 @@ Public Class FileManagerLocal
 
         If name <> "" Then
             mObjectToSave.PrepareToSave()
-            Dim ext As String = System.IO.Path.GetExtension(name.ToLowerInvariant())
-            result = SaveArchetypeAs(name)
+            FileName = name
+            CheckFileNameAgainstArchetypeId()
+            result = SaveArchetypeAs(FileName)
 
             If result Then
                 Dim parser As Parser = mArchetypeEngine
                 Dim ontology As Ontology = mOntologyManager.Ontology
+                Dim ext As String = System.IO.Path.GetExtension(FileName.ToLowerInvariant())
 
                 If ext = ".adl" Then
                     If OceanArchetypeEditor.Instance.Options.XmlRepositoryAutoSave Then
-                        Dim xml As String = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(name, ".xml"))
+                        name = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(FileName, ".xml"))
 
-                        If xml.StartsWith(OceanArchetypeEditor.Instance.Options.RepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
-                            xml = xml.Replace(OceanArchetypeEditor.Instance.Options.RepositoryPath, OceanArchetypeEditor.Instance.Options.XmlRepositoryPath)
-                            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(xml))
+                        If name.StartsWith(OceanArchetypeEditor.Instance.Options.RepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
+                            name = name.Replace(OceanArchetypeEditor.Instance.Options.RepositoryPath, OceanArchetypeEditor.Instance.Options.XmlRepositoryPath)
+                            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(name))
                         End If
 
-                        result = SaveArchetypeAs(xml)
+                        result = SaveArchetypeAs(name)
                     End If
                 ElseIf ext = ".xml" Then
                     If OceanArchetypeEditor.Instance.Options.RepositoryAutoSave Then
-                        Dim adl As String = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(name, ".adl"))
+                        name = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(FileName, ".adl"))
 
-                        If adl.StartsWith(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
-                            adl = adl.Replace(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath, OceanArchetypeEditor.Instance.Options.RepositoryPath)
-                            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(adl))
+                        If name.StartsWith(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
+                            name = name.Replace(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath, OceanArchetypeEditor.Instance.Options.RepositoryPath)
+                            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(name))
                         End If
 
-                        result = SaveArchetypeAs(adl)
+                        result = SaveArchetypeAs(name)
                     End If
                 End If
 
                 mArchetypeEngine = parser
                 mOntologyManager.ReplaceOntology(ontology)
-                FileName = name
             End If
         End If
 
@@ -752,8 +737,7 @@ Public Class FileManagerLocal
 
                 If name <> "" Then
                     Try
-                        FileName = name
-                        WriteArchetype()
+                        WriteArchetype(name)
 
                         If Not mHasWriteFileError Then
                             FileEdited = False
@@ -833,19 +817,19 @@ Public Class FileManagerLocal
         mArchetypeEngine.WriteFile(IO.Path.Combine(appata, fileName & "." & ParserType), ParserType, ParserSynchronised)
     End Sub
 
-    Public Sub WriteArchetype()
+    Protected Sub WriteArchetype(ByVal fileName As String)
         'Check that the file name is an available format
-        Dim s As String = mFileName.Substring(mFileName.LastIndexOf(".") + 1).ToLowerInvariant()
+        Dim s As String = fileName.Substring(fileName.LastIndexOf(".") + 1).ToLowerInvariant()
 
         If FormatIsAvailable(s) Then
             mHasWriteFileError = False
-            mArchetypeEngine.WriteFile(mFileName, s, Me.ParserSynchronised)
+            mArchetypeEngine.WriteFile(fileName, s, ParserSynchronised)
 
             If mArchetypeEngine.WriteFileError Then
                 mHasWriteFileError = True
             End If
         Else
-            MessageBox.Show(AE_Constants.Instance.Incorrect_format & "File: '" & mFileName & ", Format: '" & s & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(AE_Constants.Instance.Incorrect_format & "File: '" & fileName & ", Format: '" & s & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
