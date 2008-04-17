@@ -58,14 +58,14 @@ VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
 VIAddVersionKey FileVersion ""
 VIAddVersionKey FileDescription ""
-VIAddVersionKey LegalCopyright "Copyright Ocean Informatics Pty Ltd 2008"
+VIAddVersionKey LegalCopyright "Copyright © Ocean Informatics Pty Ltd 2008"
 InstallDirRegKey HKLM "${REGKEY}" Path
 ShowUninstDetails show
 
 # Installer sections
 Section -Main SEC0000
     SetOutPath $INSTDIR
-    SetOverwrite ifnewer 
+    SetOverwrite on 
     File ..\bin\ArchetypeEditor.exe
     File ..\bin\*.dll
     File ..\bin\*.ico
@@ -76,7 +76,7 @@ Section -Main SEC0000
 
     SetOverwrite off
     File ..\bin\ArchetypeEditor.exe.config
-    SetOverwrite ifnewer
+    SetOverwrite on
 
     SetOutPath $INSTDIR\Help
     File ..\bin\Help\ArchetypeEditor.chm
@@ -112,6 +112,18 @@ Section -Main SEC0000
     File ..\bin\Terminology\*
 
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
+SectionEnd
+
+Section
+    DeleteRegKey HKCR ".adl"
+    WriteRegStr HKCR ".adl" "" "AdlFile"
+
+    WriteRegStr HKCR "AdlFile" "" "ADL File Type"
+    WriteRegStr HKCR "AdlFile\DefaultIcon" "" "$INSTDIR\ArchetypeEditor.exe,0"
+    WriteRegStr HKCR "AdlFile\shell" "" "open"
+    WriteRegStr HKCR "AdlFile\shell\open\command" "" '$INSTDIR\ArchetypeEditor.exe "%1"'
+
+    System::Call 'Shell32::SHChangeNotify(i 0x8000000, i 0, i 0, i 0)'
 SectionEnd
 
 Section -post SEC0001
