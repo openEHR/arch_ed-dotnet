@@ -730,7 +730,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     s = "HH:??:XX"
                     dtType = "t"
                 Case 21                'Partial time with minutes
-                    s = "HH:MM:XX"
+                    s = "HH:MM:??"
                     dtType = "t"
                 Case Else
                     Throw New ApplicationException("Invalid date time type")

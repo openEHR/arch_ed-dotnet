@@ -194,7 +194,6 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Function
 
-
         Private Function ProcessDuration(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT, ByVal duration As Constraint_Duration) As Constraint_Duration
             If ObjNode.any_allowed Then
                 Return duration
@@ -284,6 +283,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     duration.IncludeMinimum = cadlC.interval.lower_included
                 End If
             End If
+
             Return duration
         End Function
 
@@ -310,7 +310,6 @@ Namespace ArchetypeEditor.ADL_Classes
             End Try
 
             Return mm
-
         End Function
 
         Private Function ProcessValue(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint
@@ -369,6 +368,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return New Constraint
             End Select
         End Function
+
         Shared Function ProcessUri(ByVal dvUri As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
             Dim cUri As New Constraint_URI
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
@@ -395,7 +395,6 @@ Namespace ArchetypeEditor.ADL_Classes
             End Try
 
             Return cUri
-
         End Function
 
         Private Function ProcessCount(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Count
@@ -440,6 +439,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         Debug.Assert(False)
                 End Select
             Next
+
             Return ct
         End Function
 
@@ -470,7 +470,6 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             Return ct
-
         End Function
 
         'OBSOLETE
@@ -495,7 +494,6 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             Return rat
-
         End Function
 
         Private Function ProcessProportion(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Proportion
@@ -546,12 +544,9 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             Return proportion
-
         End Function
 
-
         Private Function ProcessDateTime(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_DateTime
-
             If ObjNode.any_allowed Then
                 Return New Constraint_DateTime
             Else
@@ -574,76 +569,65 @@ Namespace ArchetypeEditor.ADL_Classes
             'Shouldn't get to here
             Debug.Assert(False, "Error processing boolean")
             Return New Constraint_DateTime
-
         End Function
 
         Private Function ProcessDateTime(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_DateTime
-            Dim dt As New Constraint_DateTime
+            Dim result As New Constraint_DateTime
             Dim s As String
 
-            If ObjNode.any_allowed Then
-                Return dt
+            If Not ObjNode.any_allowed Then
+                Select Case ObjNode.rm_type_name.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+                    Case "DATE_TIME"
+                        s = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE_TIME).pattern.to_cil
+
+                    Case "DATE"
+                        s = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE).pattern.to_cil
+
+                    Case "TIME"
+                        s = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_TIME).pattern.to_cil
+
+                    Case Else
+                        Debug.Assert(False)
+                        s = ""
+                End Select
+
+                Select Case s.ToLowerInvariant()
+                    Case "yyyy-??-?? ??:??:??", "yyyy-??-??t??:??:??"
+                        ' Allow all
+                        result.TypeofDateTimeConstraint = 11
+                    Case "yyyy-mm-dd hh:mm:ss", "yyyy-mm-ddthh:mm:ss"
+                        result.TypeofDateTimeConstraint = 12
+                    Case "yyyy-mm-dd hh:??:??", "yyyy-mm-ddthh:??:??"
+                        'Partial Date time
+                        result.TypeofDateTimeConstraint = 13
+                    Case "yyyy-??-??"
+                        'Date only
+                        result.TypeofDateTimeConstraint = 14
+                    Case "yyyy-mm-dd"
+                        'Full date
+                        result.TypeofDateTimeConstraint = 15
+                    Case "yyyy-??-xx"
+                        'Partial date
+                        result.TypeofDateTimeConstraint = 16
+                    Case "yyyy-mm-??"
+                        'Partial date with month
+                        result.TypeofDateTimeConstraint = 17
+                    Case "hh:??:??", "thh:??:??"
+                        'TimeOnly
+                        result.TypeofDateTimeConstraint = 18
+                    Case "hh:mm:ss", "thh:mm:ss"
+                        'Full time
+                        result.TypeofDateTimeConstraint = 19
+                    Case "hh:??:xx", "thh:??:xx"
+                        'Partial time
+                        result.TypeofDateTimeConstraint = 20
+                    Case "hh:mm:??", "thh:mm:??"
+                        'Partial time with minutes
+                        result.TypeofDateTimeConstraint = 21
+                End Select
             End If
 
-            Select Case ObjNode.rm_type_name.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
-                Case "DATE_TIME"
-                    Dim cadlDT As openehr.openehr.am.archetype.constraint_model.primitive.C_DATE_TIME
-                    cadlDT = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE_TIME)
-                    s = cadlDT.pattern.to_cil
-
-                Case "DATE"
-                    Dim cadlD As openehr.openehr.am.archetype.constraint_model.primitive.C_DATE
-                    cadlD = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE)
-                    s = cadlD.pattern.to_cil
-
-                Case "TIME"
-                    Dim cadlT As openehr.openehr.am.archetype.constraint_model.primitive.C_TIME
-                    cadlT = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_TIME)
-                    s = cadlT.pattern.to_cil
-
-                Case Else
-                    Debug.Assert(False)
-                    Return Nothing
-            End Select
-
-
-            Select Case s.ToLowerInvariant()
-                Case "yyyy-??-?? ??:??:??", "yyyy-??-??t??:??:??"
-                    ' Allow all
-                    dt.TypeofDateTimeConstraint = 11
-                Case "yyyy-mm-dd hh:mm:ss", "yyyy-mm-ddthh:mm:ss"
-                    dt.TypeofDateTimeConstraint = 12
-                Case "yyyy-mm-dd hh:??:??", "yyyy-mm-ddthh:??:??"
-                    'Partial Date time
-                    dt.TypeofDateTimeConstraint = 13
-                Case "yyyy-??-??"
-                    'Date only
-                    dt.TypeofDateTimeConstraint = 14
-                Case "yyyy-mm-dd"
-                    'Full date
-                    dt.TypeofDateTimeConstraint = 15
-                Case "yyyy-??-xx"
-                    'Partial date
-                    dt.TypeofDateTimeConstraint = 16
-                Case "yyyy-mm-??"
-                    'Partial date with month
-                    dt.TypeofDateTimeConstraint = 17
-                Case "hh:??:??", "thh:??:??"
-                    'TimeOnly
-                    dt.TypeofDateTimeConstraint = 18
-                Case "hh:mm:ss", "thh:mm:ss"
-                    'Full time
-                    dt.TypeofDateTimeConstraint = 19
-                Case "hh:??:xx", "thh:??:xx"
-                    'Partial time
-                    dt.TypeofDateTimeConstraint = 20
-                Case "hh:mm:??", "thh:mm:??"
-                    'Partial time with minutes
-                    dt.TypeofDateTimeConstraint = 21
-            End Select
-
-            Return dt
-
+            Return result
         End Function
 
         Private Function ProcessOrdinal(ByVal an_ordinal_constraint As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
