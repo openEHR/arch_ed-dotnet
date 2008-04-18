@@ -5054,6 +5054,7 @@
   <Concept Language="en" ConceptID="666" Rubric="Open existing Archetype from Web" />
   <Concept Language="en" ConceptID="667" Rubric="Tools" />
   <Concept Language="en" ConceptID="668" Rubric="Select one unit from the left and one from the right:" />
+  <Concept Language="en" ConceptID="669" Rubric="Use specialisations too?" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />

@@ -17,6 +17,7 @@
 Public Class AE_Constants
 
     Private mSpecialise As String = "Specialise"
+    Private mSpecialisationsToo As String = "Use specialisations too?"
     Private mMustAddCriteria As String = "Must add criteria"
     Private mReduceTableToSimpleValue As String = "Reduce table to single value"
     Private mChooseMenuFileNew As String = "Choose Menu > File > New"
@@ -214,6 +215,12 @@ Public Class AE_Constants
     Friend ReadOnly Property Specialise() As String
         Get
             Return mSpecialise
+        End Get
+    End Property
+
+    Friend ReadOnly Property SpecialisationsToo() As String
+        Get
+            Return mSpecialisationsToo
         End Get
     End Property
 
@@ -614,6 +621,7 @@ Public Class AE_Constants
 
     Protected Sub New(ByVal Language As String)
         mSpecialise = TerminologyServer.Instance.RubricForCode(185, Language)
+        mSpecialisationsToo = TerminologyServer.Instance.RubricForCode(669, Language)
         mReduceTableToSimpleValue = TerminologyServer.Instance.RubricForCode(277, Language)
         mChooseMenuFileNew = TerminologyServer.Instance.RubricForCode(279, Language)
         mAndAllReferences = TerminologyServer.Instance.RubricForCode(280, Language)
