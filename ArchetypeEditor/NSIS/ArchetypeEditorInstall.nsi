@@ -68,6 +68,7 @@ Section -Main SEC0000
     SetOverwrite on 
     File ..\bin\ArchetypeEditor.exe
     File ..\bin\*.dll
+    File ..\AdlParser\libOceanInformatics.AdlParser.dll
     File ..\bin\*.ico
     File ..\bin\*.xml
     File ..\bin\*.xsd
