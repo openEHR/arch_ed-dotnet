@@ -147,8 +147,6 @@ Namespace ArchetypeEditor.ADL_Classes
             a_term = New ADL_Term(adlEngine.ontology.term_definition(EiffelKernel.Create.STRING_8.make_from_cil(The_Ontology.LanguageCode), adlArchetype.concept))
             The_Ontology.UpdateTerm(a_term)
             Me.mArchetypeID.Concept &= "-" & ConceptShortName
-
-
         End Sub
 
         Public Sub RemoveUnusedCodes()
@@ -191,18 +189,14 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim match_operator As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR
 
             Debug.Assert((Not id Is Nothing) And (id <> ""))
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'id_expression_leaf = mAomFactory.create.create_expr_leaf_object_ref(EiffelKernel.Create.STRING_8.make_from_cil(id))
             id_expression_leaf = mAomFactory.create_expr_leaf_archetype_ref(EiffelKernel.Create.STRING_8.make_from_cil(id))
-
             id_pattern_expression_leaf = mAomFactory.create_expr_leaf_constraint(mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(expression)))
+
             match_operator = mAomFactory.create_expr_binary_operator_node( _
-                openehr.openehr.am.archetype.assertion.Create.OPERATOR_KIND.make_from_string( _
-                    EiffelKernel.Create.STRING_8.make_from_cil("matches")), _
+                openehr.openehr.am.archetype.assertion.Create.OPERATOR_KIND.make_from_string(EiffelKernel.Create.STRING_8.make_from_cil("matches")), _
                 id_expression_leaf, id_pattern_expression_leaf)
 
             Return mAomFactory.create_assertion(match_operator, Nothing)
-
         End Function
 
         Protected Function MakeCardinality(ByVal c As RmCardinality, Optional ByVal IsOrdered As Boolean = True) As openehr.openehr.am.archetype.constraint_model.CARDINALITY
@@ -213,15 +207,15 @@ Namespace ArchetypeEditor.ADL_Classes
             Else
                 cardObj = mAomFactory.create_cardinality_make_bounded(c.MinCount, c.MaxCount)
             End If
+
             If Not c.Ordered Then
                 cardObj.set_unordered()
             End If
-            Return cardObj
 
+            Return cardObj
         End Function
 
         Protected Function MakeOccurrences(ByVal c As RmCardinality) As openehr.common_libs.basic.INTERVAL_INTEGER_32
-
             If c.IsUnbounded Then
                 Return mAomFactory.create_c_integer_make_upper_unbounded(c.MinCount, c.IncludeLower).interval
             Else
@@ -759,51 +753,47 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Protected Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal sl As Constraint_Slot, ByVal an_occurrence As RmCardinality)
             Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
-
             slot = mAomFactory.create_archetype_slot_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(sl.RM_ClassType)))
-
             slot.set_occurrences(MakeOccurrences(an_occurrence))
 
             If sl.hasSlots Then
                 If sl.IncludeAll Then
                     slot.add_include(MakeAssertion("archetype_id/value", ".*"))
                 Else
+                    Dim pattern As String = ""
+
                     For Each s As String In sl.Include
-                        'Dim escapedString As String
-                        'Dim i As Integer
-                        ''Must have at least one escaped . or it is not valid unless it is the end
-                        'i = s.IndexOf("\")
-                        'If i > -1 AndAlso i <> (s.Length - 1) Then
-                        '    escapedString = s
-                        'Else
-                        '    escapedString = s.Replace(".", "\.")
-                        'End If
-                        slot.add_include(MakeAssertion("archetype_id/value", s))
+                        If pattern = "" Then
+                            pattern = s
+                        Else
+                            pattern &= "|" & s
+                        End If
                     Next
+
+                    slot.add_include(MakeAssertion("archetype_id/value", pattern))
                 End If
+
                 If sl.ExcludeAll Then
                     slot.add_exclude(MakeAssertion("archetype_id/value", ".*"))
                 Else
+                    Dim pattern As String = ""
+
                     For Each s As String In sl.Exclude
-                        'Dim escapedString As String
-                        'Dim i As Integer
-                        ''Must have at least one escaped . or it is not valid unless it is the end
-                        'i = s.IndexOf("\")
-                        'If i > -1 AndAlso i <> (s.Length - 1) Then
-                        '    escapedString = s
-                        'Else
-                        '    escapedString = s.Replace(".", "\.")
-                        'End If
-                        slot.add_exclude(MakeAssertion("archetype_id/value", s))
+                        If pattern = "" Then
+                            pattern = s
+                        Else
+                            pattern &= "|" & s
+                        End If
                     Next
+
+                    slot.add_exclude(MakeAssertion("archetype_id/value", pattern))
                 End If
+
                 Debug.Assert(slot.has_excludes Or slot.has_includes)
             Else
                 slot.add_include(MakeAssertion("archetype_id/value", ".*"))
             End If
-
         End Sub
-
 
         Private Sub BuildDuration(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Duration)
             Dim durationIso As New Duration
