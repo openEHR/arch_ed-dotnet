@@ -98,34 +98,42 @@ Public Class RmSlot
         End Select
 
         If an_archetype_slot.has_includes Then
-            Dim s As String
+            Dim pattern As String
+
             For i As Integer = 1 To an_archetype_slot.includes.count
                 Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
                 assert = CType(an_archetype_slot.includes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
-                s = ArchetypeEditor.ADL_Classes.ADL_Tools.GetConstraintFromAssertion(assert)
-                If s = ".*" Then
+                pattern = ArchetypeEditor.ADL_Classes.ADL_Tools.GetConstraintFromAssertion(assert)
+
+                If pattern = ".*" Then
                     mSlotConstraint.IncludeAll = True
                 Else
-                    mSlotConstraint.Include.Add(s)
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Include.Add(s)
+                    Next
                 End If
-
             Next
         End If
 
         If an_archetype_slot.has_excludes Then
-            Dim s As String
+            Dim pattern As String
+
             For i As Integer = 1 To an_archetype_slot.excludes.count
                 Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
                 assert = CType(an_archetype_slot.excludes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
-                s = ArchetypeEditor.ADL_Classes.ADL_Tools.GetConstraintFromAssertion(assert)
-                If s = ".*" Then
+                pattern = ArchetypeEditor.ADL_Classes.ADL_Tools.GetConstraintFromAssertion(assert)
+
+                If pattern = ".*" Then
                     mSlotConstraint.ExcludeAll = True
                 Else
-                    mSlotConstraint.Exclude.Add(s)
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Exclude.Add(s)
+                    Next
                 End If
             Next
         End If
     End Sub
+
     Sub New(ByVal an_archetype_slot As XMLParser.ARCHETYPE_SLOT)
         MyBase.New(an_archetype_slot)
 
