@@ -13,9 +13,10 @@ Public Class Options
     Private mDefaultRM As Integer
     Private mOccurrencesView As String
     Private mHelpPath As String
-    Private mDefaultParser As String
+    Private mXsltScriptPath As String
     Private mShowTermsInHtml As Boolean
     Private mShowCommentsInHtml As Boolean
+    Private mDefaultParser As String
     Private mTimerMinutes As Integer = 10
     Private mAllowWebSearch As Boolean
     Private mArchetypeRepositoryURL As New Uri("http://archetypes.com.au/archetypefinder/services/ArchetypeFinderBean?wsdl")
@@ -23,12 +24,30 @@ Public Class Options
     Private mTerminologyURL As New Uri("http://ots.oceaninformatics.biz/OTS/OTSService.asmx")
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
-    Property HelpLocationPath() As String
+    Property UserName() As String
         Get
-            Return mHelpPath
+            Return mUserName
         End Get
         Set(ByVal Value As String)
-            mHelpPath = Value
+            mUserName = Value
+        End Set
+    End Property
+
+    Property UserOrganisation() As String
+        Get
+            Return mUserOrganisation
+        End Get
+        Set(ByVal Value As String)
+            mUserOrganisation = Value
+        End Set
+    End Property
+
+    Property UserEmail() As String
+        Get
+            Return mUserEmail
+        End Get
+        Set(ByVal Value As String)
+            mUserEmail = Value
         End Set
     End Property
 
@@ -86,21 +105,39 @@ Public Class Options
         End Set
     End Property
 
-    Property UserName() As String
+    Property HelpLocationPath() As String
         Get
-            Return mUserName
+            Return mHelpPath
         End Get
         Set(ByVal Value As String)
-            mUserName = Value
+            mHelpPath = Value
         End Set
     End Property
 
-    Property UserOrganisation() As String
+    Property XsltScriptPath() As String
         Get
-            Return mUserOrganisation
+            Return mXsltScriptPath
         End Get
         Set(ByVal Value As String)
-            mUserOrganisation = Value
+            mXsltScriptPath = Value
+        End Set
+    End Property
+
+    Property ShowTermsInHtml() As Boolean
+        Get
+            Return mShowTermsInHtml
+        End Get
+        Set(ByVal value As Boolean)
+            mShowTermsInHtml = value
+        End Set
+    End Property
+
+    Property ShowCommentsInHtml() As Boolean
+        Get
+            Return mShowCommentsInHtml
+        End Get
+        Set(ByVal value As Boolean)
+            mShowCommentsInHtml = value
         End Set
     End Property
 
@@ -110,15 +147,6 @@ Public Class Options
         End Get
         Set(ByVal Value As String)
             mOccurrencesView = Value
-        End Set
-    End Property
-
-    Property UserEmail() As String
-        Get
-            Return mUserEmail
-        End Get
-        Set(ByVal Value As String)
-            mUserEmail = Value
         End Set
     End Property
 
@@ -155,24 +183,6 @@ Public Class Options
         End Get
         Set(ByVal Value As Boolean)
             mAllowTerminologyLookUp = Value
-        End Set
-    End Property
-
-    Property ShowTermsInHtml() As Boolean
-        Get
-            Return mShowTermsInHtml
-        End Get
-        Set(ByVal value As Boolean)
-            mShowTermsInHtml = value
-        End Set
-    End Property
-
-    Property ShowCommentsInHtml() As Boolean
-        Get
-            Return mShowCommentsInHtml
-        End Get
-        Set(ByVal value As Boolean)
-            mShowCommentsInHtml = value
         End Set
     End Property
 
@@ -219,9 +229,11 @@ Public Class Options
             frm.chkParserADL.Checked = True
         End If
 
-        frm.comboReferenceModel.SelectedIndex = mDefaultRM
+        frm.XsltScriptPathTextBox.Text = mXsltScriptPath
         frm.chkShowTerminologyInHTML.Checked = mShowTermsInHtml
         frm.chkShowCommentsInHTML.Checked = mShowCommentsInHtml
+
+        frm.comboReferenceModel.SelectedIndex = mDefaultRM
         frm.Panel_0.BackColor = mColors(0)
         frm.Panel_1.BackColor = mColors(1)
         frm.Panel_2.BackColor = mColors(2)
@@ -240,23 +252,30 @@ Public Class Options
             mXmlRepositoryPath = frm.XmlRepositoryPathTextBox.Text
             mXmlRepositoryAutoSave = frm.XmlRepositoryAutoSaveCheckBox.Checked
             mHelpPath = frm.txtHelpFile.Text
-            mDefaultRM = frm.comboReferenceModel.SelectedIndex
-            mOccurrencesView = frm.comboOccurrences.Text
+
+            mXsltScriptPath = frm.XsltScriptPathTextBox.Text
             mShowTermsInHtml = frm.chkShowTerminologyInHTML.Checked
             mShowCommentsInHtml = frm.chkShowCommentsInHTML.Checked
+
+            mDefaultRM = frm.comboReferenceModel.SelectedIndex
+            mOccurrencesView = frm.comboOccurrences.Text
             mArchetypeRepositoryURL = New Uri(frm.txtURL.Text)
+
             If Uri.IsWellFormedUriString(frm.txtTerminologyURL.Text, UriKind.Absolute) Then
                 mTerminologyURL = New Uri(frm.txtTerminologyURL.Text)
                 OTSControls.Term.OtsWebService.Url = frm.txtTerminologyURL.Text
             End If
+
             mTimerMinutes = CInt(frm.numAutoSave.Value)
             mAllowWebSearch = frm.chkWebSearch.Checked
             mAllowTerminologyLookUp = frm.chkTerminology.Checked
+
             If frm.chkParserADL.Checked Then
                 mDefaultParser = "adl"
             Else
                 mDefaultParser = "xml"
             End If
+
             mColors(0) = frm.Panel_0.BackColor
             mColors(1) = frm.Panel_1.BackColor
             mColors(2) = frm.Panel_2.BackColor
@@ -311,6 +330,12 @@ Public Class Options
                                     mXmlRepositoryAutoSave = Boolean.Parse(y(1).Trim)
                                 Case "HelpPath"
                                     mHelpPath = y(1).Trim
+                                Case "XsltScriptPath"
+                                    mXsltScriptPath = y(1).Trim
+                                Case "ShowTermsInHtml"
+                                    mShowTermsInHtml = Boolean.Parse(y(1).Trim)
+                                Case "ShowCommentsInHtml"
+                                    mShowCommentsInHtml = Boolean.Parse(y(1).Trim)
                                 Case "DefaultReferenceModel"
                                     mDefaultRM = Val(y(1).Trim)
                                 Case "StateMachineColours"
@@ -322,10 +347,6 @@ Public Class Options
                                     mOccurrencesView = y(1).Trim
                                 Case "DefaultParser"
                                     mDefaultParser = y(1).Trim.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                                Case "ShowTermsInHtml"
-                                    mShowTermsInHtml = Boolean.Parse(y(1).Trim)
-                                Case "ShowCommentsInHtml"
-                                    mShowCommentsInHtml = Boolean.Parse(y(1).Trim)
                                 Case "AllowSearchForArchetypesFromWeb"
                                     mAllowWebSearch = Boolean.Parse(y(1).Trim)
                                 Case "SharedRepositoryUrl"
@@ -381,9 +402,10 @@ Public Class Options
                 StrmWrite.WriteLine("SharedRepositoryUrl=" & mArchetypeRepositoryURL.ToString)
                 StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyURL.ToString)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
-                StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
+                StrmWrite.WriteLine("XsltScriptPath=" & mXsltScriptPath)
                 StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
                 StrmWrite.WriteLine("ShowCommentsInHtml=" & mShowCommentsInHtml.ToString)
+                StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
                 StrmWrite.WriteLine("AllowSearchForArchetypesFromWeb=" & mAllowWebSearch.ToString)
                 StrmWrite.WriteLine("AllowTerminologyLookUp=" & mAllowTerminologyLookUp.ToString)
                 StrmWrite.WriteLine("AutosaveInterval=" & mTimerMinutes.ToString())
@@ -450,17 +472,17 @@ Public Class Options
 
         If Not File.Exists(mHelpPath) Then
             result = False
-            message &= (": Help file does not exist @ " & mHelpPath)
+            message &= ": Help file does not exist @ " & mHelpPath
         End If
 
         If Not Directory.Exists(mRepositoryPath) Then
             result = False
-            message &= (": Repository does not exist @ " & mRepositoryPath)
+            message &= ": Repository does not exist @ " & mRepositoryPath
         End If
 
         If Not Directory.Exists(mXmlRepositoryPath) Then
             result = False
-            message &= (": XML Repository does not exist @ " & mXmlRepositoryPath)
+            message &= ": XML Repository does not exist @ " & mXmlRepositoryPath
         End If
 
         If Not result Then
@@ -471,22 +493,23 @@ Public Class Options
     End Function
 
     Sub New()
-        Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
-        mRepositoryPath = path + "SampleArchetypes"
+        mRepositoryPath = Path.Combine(Application.StartupPath, "SampleArchetypes")
         mXmlRepositoryPath = mRepositoryPath
         mUserName = ""
         mUserEmail = ""
-        mHelpPath = path & "Help\ArchetypeEditor.chm"
-        mOccurrencesView = "numeric"
-        mDefaultParser = "adl"
+        mHelpPath = Path.Combine(Application.StartupPath, "Help\ArchetypeEditor.chm")
+        mXsltScriptPath = Path.Combine(Application.StartupPath, "HTML\adlxml-to-html.xsl")
         mShowTermsInHtml = False
         mShowCommentsInHtml = False
+        mOccurrencesView = "numeric"
+        mDefaultParser = "adl"
         mAllowWebSearch = False
         mAllowTerminologyLookUp = False
         LoadConfiguration()
 
         If Not ValidateConfiguration() Then
-            Me.ShowOptionsForm(1)
+            ShowOptionsForm(1)
         End If
     End Sub
+
 End Class

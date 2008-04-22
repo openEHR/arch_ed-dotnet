@@ -5015,6 +5015,7 @@ Public Class Designer
                 saveFile.AddExtension = True
                 saveFile.Title = AE_Constants.Instance.MessageBoxCaption
                 saveFile.ValidateNames = True
+
                 If saveFile.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
                     Select Case format
                         Case "rtf"
@@ -5024,7 +5025,7 @@ Public Class Designer
                     End Select
 
                     Try
-                        Me.mRichTextArchetype.SaveFile(saveFile.FileName, ds)
+                        mRichTextArchetype.SaveFile(saveFile.FileName, ds)
                     Catch
                         MessageBox.Show(AE_Constants.Instance.Error_saving & mFileManager.Archetype.Archetype_ID.ToString & ".rtf", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
@@ -5036,14 +5037,27 @@ Public Class Designer
                 Try
                     Dim appData As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
                     Dim appDataImages As String = Path.Combine(appData, "Images")
+                    Dim html As String = Path.Combine(appData, "temp.html")
+                    Dim xslt As String = OceanArchetypeEditor.Instance.Options.XsltScriptPath
+                    My.Computer.FileSystem.CopyDirectory(Path.Combine(Application.StartupPath, "HTML\Images"), appDataImages, True)
 
-                    If Not Directory.Exists(appDataImages) Then
-                        My.Computer.FileSystem.CopyDirectory(Path.Combine(Application.StartupPath, "HTML\images"), appDataImages)
+                    If xslt <> "" Then
+                        Dim reader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
+                        Dim transform As New Xml.Xsl.XslCompiledTransform()
+                        transform.Load(xslt)
+                        Dim args As New Xml.Xsl.XsltArgumentList()
+                        args.AddParam("language", "", Filemanager.Master.OntologyManager.LanguageCode)
+                        args.AddParam("show-terminology-flag", "", OceanArchetypeEditor.Instance.Options.ShowTermsInHtml.ToString().ToLower())
+                        args.AddParam("show-comments-flag", "", OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml.ToString().ToLower())
+                        args.AddParam("css-path", "", "Images/default.css")
+                        Dim stream As New IO.FileStream(html, FileMode.Create)
+                        transform.Transform(reader, args, stream)
+                        stream.Close()
+                    Else
+                        WriteToHTML(html)
                     End If
 
-                    Dim filename As String = Path.Combine(appData, "temp.html")
-                    WriteToHTML(filename)
-                    Process.Start("file:///" & filename)
+                    Process.Start("file:///" & html)
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
@@ -5062,15 +5076,14 @@ Public Class Designer
                     WriteRichText()
                 Else
                     If s = mFileManager.ParserType.ToLowerInvariant() Then
-                        Me.PrepareToSave()
-                        Me.mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
+                        PrepareToSave()
+                        mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
                     Else
-                        Me.mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
+                        mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
                     End If
                 End If
         End Select
     End Sub
-
 
 #End Region
 

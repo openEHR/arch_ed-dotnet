@@ -1,0 +1,17 @@
+#adlhtml-body { width:100%; margin:0px;}
+#adlhtml-header { width:100%; margin:4px 4px 0px 4px; background-color:#eee; color:#000;}
+#adlhtml-terminology {}
+#adlhtml-definition {width:100%;}
+#adlhtml-footer {width:100%;background-color:#eee; color:#000;}
+
+#adlhtml-C_OBJECT { border:solid 1px #888; margin:10px;}
+
+.adlhtml-COMPOSITION { background-color:#fdd; color:#000;}
+.adlhtml-SECTION { background-color:#ffd; color:#000;}
+.adlhtml-OBSERVATION { background-color:#ddf; color:#000;}
+.adlhtml-EVALUATION { background-color:#fdf; color:#000;}
+.adlhtml-INSTRUCTION { background-color:#dfd; color:#000;}
+
+.adlhtml-ITEM_TREE { background-color:#ddf; color:#000;}
+.adlhtml-CLUSTER { background-color:#dfd; color:#000;}
+.adlhtml-ELEMENT { background-color:#ffd; color:#000;}

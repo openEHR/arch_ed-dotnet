@@ -82,6 +82,9 @@ Section -Main SEC0000
     SetOutPath $INSTDIR\Help
     File ..\bin\Help\ArchetypeEditor.chm
 
+    SetOutPath $INSTDIR\HTML
+    File ..\bin\HTML\*
+
     SetOutPath $INSTDIR\HTML\Images
     File ..\bin\HTML\Images\*
 
