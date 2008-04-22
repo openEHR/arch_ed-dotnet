@@ -257,75 +257,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="SampleArchetypes\composition\openEHR-EHR-COMPOSITION.report.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\action\openEHR-EHR-ACTION.imaging.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\action\openEHR-EHR-ACTION.referral.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.alert.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.excluded-adverse.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.excluded.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.injury.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.problem-diagnosis.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\evaluation\openEHR-EHR-EVALUATION.problem.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\instruction\openEHR-EHR-INSTRUCTION.imaging.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\instruction\openEHR-EHR-INSTRUCTION.medication.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.apgar.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.blood_gases.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.blood_pressure.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.body_weight-birth.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.body_weight.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.dimensions-chest.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\entry\observation\openEHR-EHR-OBSERVATION.dimensions.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\section\openEHR-EHR-SECTION.findings.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\section\openEHR-EHR-SECTION.SOAP.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\section\openEHR-EHR-SECTION.vital_signs.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\structure\openEHR-EHR-ITEM_TREE.referral.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="SampleArchetypes\structure\openEHR-EHR-ITEM_TREE.imaging.v1.adl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Terminology\Terminology.xsd">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1105,10 +1036,6 @@
       <Project>{927EB444-A45E-4703-946F-78EB37FAD96E}</Project>
       <Name>XMLParser</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SampleArchetypes\cluster\" />
-    <Folder Include="SampleArchetypes\element\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>

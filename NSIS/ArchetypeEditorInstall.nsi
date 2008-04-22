@@ -64,8 +64,8 @@ ShowUninstDetails show
 
 # Installer sections
 Section -Main SEC0000
-    SetOutPath $INSTDIR
     SetOverwrite on 
+    SetOutPath $INSTDIR
     File ..\bin\ArchetypeEditor.exe
     File ..\bin\*.dll
     File ..\AdlParser\libOceanInformatics.AdlParser.dll
@@ -74,10 +74,6 @@ Section -Main SEC0000
     File ..\bin\*.xsd
     File ..\ocean-transparent.ico
     File "..\Ocean Archetype Editor Licence Agreement.html"
-
-    SetOverwrite off
-    File ..\bin\ArchetypeEditor.exe.config
-    SetOverwrite on
 
     SetOutPath $INSTDIR\Help
     File ..\bin\Help\ArchetypeEditor.chm
@@ -91,29 +87,29 @@ Section -Main SEC0000
     SetOutPath $INSTDIR\PropertyUnits
     File ..\bin\PropertyUnits\*
 
-    SetOutPath $INSTDIR\SampleArchetypes\composition
-    File ..\bin\SampleArchetypes\composition\*
-
-    SetOutPath $INSTDIR\SampleArchetypes\entry\action
-    File ..\bin\SampleArchetypes\entry\action\*
-
-    SetOutPath $INSTDIR\SampleArchetypes\entry\evaluation
-    File ..\bin\SampleArchetypes\entry\evaluation\*
-
-    SetOutPath $INSTDIR\SampleArchetypes\entry\instruction
-    File ..\bin\SampleArchetypes\entry\instruction\*
-
-    SetOutPath $INSTDIR\SampleArchetypes\entry\observation
-    File ..\bin\SampleArchetypes\entry\observation\*
-
-    SetOutPath $INSTDIR\SampleArchetypes\section
-    File ..\bin\SampleArchetypes\section\*
-
-    SetOutPath $INSTDIR\SampleArchetypes\structure
-    File ..\bin\SampleArchetypes\structure\*
-
     SetOutPath $INSTDIR\Terminology
     File ..\bin\Terminology\*
+
+    SetOverwrite off
+    File ..\bin\ArchetypeEditor.exe.config
+
+    SetOverwrite ifnewer
+    SetOutPath $INSTDIR\..\Archetypes\composition
+    File ..\Archetypes\composition\*.adl
+    SetOutPath $INSTDIR\..\Archetypes\entry\action
+    File ..\Archetypes\entry\action\*.adl
+    SetOutPath $INSTDIR\..\Archetypes\entry\admin_entry
+    File ..\Archetypes\entry\admin_entry\*.adl
+    SetOutPath $INSTDIR\..\Archetypes\entry\evaluation
+    File ..\Archetypes\entry\evaluation\*.adl
+    SetOutPath $INSTDIR\..\Archetypes\entry\instruction
+    File ..\Archetypes\entry\instruction\*.adl
+    SetOutPath $INSTDIR\..\Archetypes\entry\observation
+    File ..\Archetypes\entry\observation\*.adl
+    SetOutPath $INSTDIR\..\Archetypes\section
+    File ..\Archetypes\section\*.adl
+    SetOutPath $INSTDIR\..\Archetypes\structure
+    File ..\Archetypes\structure\*.adl
 
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd

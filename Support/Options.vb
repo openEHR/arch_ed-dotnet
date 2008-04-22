@@ -493,7 +493,7 @@ Public Class Options
     End Function
 
     Sub New()
-        mRepositoryPath = Path.Combine(Application.StartupPath, "SampleArchetypes")
+        mRepositoryPath = Path.Combine(Application.StartupPath, "..\Archetypes")
         mXmlRepositoryPath = mRepositoryPath
         mUserName = ""
         mUserEmail = ""
