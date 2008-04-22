@@ -5042,7 +5042,6 @@ Public Class Designer
                     My.Computer.FileSystem.CopyDirectory(Path.Combine(Application.StartupPath, "HTML\Images"), appDataImages, True)
 
                     If xslt <> "" Then
-                        Dim reader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
                         Dim transform As New Xml.Xsl.XslCompiledTransform()
                         transform.Load(xslt)
                         Dim args As New Xml.Xsl.XsltArgumentList()
@@ -5050,9 +5049,12 @@ Public Class Designer
                         args.AddParam("show-terminology-flag", "", OceanArchetypeEditor.Instance.Options.ShowTermsInHtml.ToString().ToLower())
                         args.AddParam("show-comments-flag", "", OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml.ToString().ToLower())
                         args.AddParam("css-path", "", "Images/default.css")
+
+                        Dim reader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
                         Dim stream As New IO.FileStream(html, FileMode.Create)
                         transform.Transform(reader, args, stream)
                         stream.Close()
+                        reader.Close()
                     Else
                         WriteToHTML(html)
                     End If
