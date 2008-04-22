@@ -64,8 +64,11 @@ ShowUninstDetails show
 
 # Installer sections
 Section -Main SEC0000
-    SetOverwrite on 
     SetOutPath $INSTDIR
+    SetOverwrite off
+    File ..\bin\ArchetypeEditor.exe.config
+
+    SetOverwrite on 
     File ..\bin\ArchetypeEditor.exe
     File ..\bin\*.dll
     File ..\AdlParser\libOceanInformatics.AdlParser.dll
@@ -89,9 +92,6 @@ Section -Main SEC0000
 
     SetOutPath $INSTDIR\Terminology
     File ..\bin\Terminology\*
-
-    SetOverwrite off
-    File ..\bin\ArchetypeEditor.exe.config
 
     SetOverwrite ifnewer
     SetOutPath $INSTDIR\..\Archetypes\composition
