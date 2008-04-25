@@ -2541,14 +2541,13 @@ Public Class Designer
         RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
         RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
 
-        Select Case Me.TabMain.SelectedTab.Name
+        Select Case TabMain.SelectedTab.Name
             Case "tpInterface"
-                BuildInterface()
-                Me.cbMandatory.BringToFront()
+                BuildInterfaceTabPage()
+                cbMandatory.BringToFront()
             Case "tpText"
                 WriteRichText()
         End Select
-
     End Sub
 
     Private Sub BindTables()
@@ -4598,7 +4597,6 @@ Public Class Designer
         End If
 
         mFileManager.FileEdited = True
-
     End Sub
 
     Private Sub TabMain_SelectionChanging(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanging
@@ -4609,27 +4607,13 @@ Public Class Designer
 
             If Not mFileManager.FileLoading Then
                 ' if this is not due to a file load (e.g. opening a file)
-
                 If Not mFileManager.OntologyManager.TermDefinitionTable.GetChanges Is Nothing Then
                     ' and there have been some changes to the table
                     mFileManager.OntologyManager.TermDefinitionTable.AcceptChanges()
                     mFileManager.FileEdited = True
-
-                    Me.Translate()
-
+                    Translate()
                 End If
-
             End If
-
-        ElseIf TabMain.SelectedTab Is Me.tpInterface Then
-            'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
-            'force garbage collection
-            'tpInterface.Dispose() 'Note: Me.tpInterface.Controls.Clear() and tpInterface = Nothing have no affect on held objects!
-            'GC.Collect()
-            'GC.WaitForPendingFinalizers()
-
-            'next time visit tab, tab is empty!
-            'BuildTab()
 
         ElseIf TabMain.SelectedTab Is Me.tpDescription Then
             'Ensure the description is up to date
@@ -4638,54 +4622,24 @@ Public Class Designer
         End If
     End Sub
 
-    'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
-    'Private Sub BuildTab() 'tpInterface is unusable after the dispose
-    '    Me.tpInterface = New Crownwood.Magic.Controls.TabPage
-
-    '    Me.tpInterface.SuspendLayout()
-
-    '    Me.tpInterface.AutoScroll = True
-    '    Me.tpInterface.Controls.Add(Me.cbMandatory)
-    '    Me.HelpProviderDesigner.SetHelpKeyword(Me.tpInterface, "Screens/interface_screen.html")
-    '    Me.HelpProviderDesigner.SetHelpNavigator(Me.tpInterface, System.Windows.Forms.HelpNavigator.Topic)
-    '    Me.tpInterface.Location = New System.Drawing.Point(0, 0)
-    '    Me.tpInterface.Name = "tpInterface"
-    '    Me.tpInterface.Selected = False
-    '    Me.HelpProviderDesigner.SetShowHelp(Me.tpInterface, True)
-    '    Me.tpInterface.Size = New System.Drawing.Size(969, 595)
-    '    Me.tpInterface.TabIndex = 5
-    '    Me.tpInterface.Title = "Interface"
-    '    Me.tpInterface.ResumeLayout(False)
-
-    '    Me.tpInterface.Title = Filemanager.GetOpenEhrTerm(84, Me.tpInterface.Title) 'language?
-
-    '    TabMain.SuspendLayout()
-    '    TabMain.TabPages.Remove(TabMain.TabPages.Item("Interface"))
-    '    TabMain.TabPages.Add(tpInterface)        
-    '    TabMain.ResumeLayout()
-
-    '    'Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
-
-    'End Sub
-
     Private Sub TabMain_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanged
-
         If TabMain.SelectedTab Is tpText Then
-            If Me.mRichTextArchetype.Text = "" Then
-                For Each tbb As System.Windows.Forms.ToolBarButton In Me.ToolBarRTF.Buttons
+            If mRichTextArchetype.Text = "" Then
+                For Each tbb As System.Windows.Forms.ToolBarButton In ToolBarRTF.Buttons
                     tbb.Pushed = False
                 Next
-                Me.butRTF.Pushed = True
+
+                butRTF.Pushed = True
                 WriteRichText()
             Else
                 RefreshRichText()
             End If
 
-        ElseIf Me.TabMain.SelectedTab Is tpInterface Then
-            BuildInterface()
-            Me.cbMandatory.BringToFront()
+        ElseIf TabMain.SelectedTab Is tpInterface Then
+            BuildInterfaceTabPage()
+            cbMandatory.BringToFront()
 
-        ElseIf Me.TabMain.SelectedTab Is tpTerminology Then
+        ElseIf TabMain.SelectedTab Is tpTerminology Then
             ' rebuild the ParseTree to ensure the
             ' paths are all available
             If mFileManager.FileEdited Then
@@ -4696,7 +4650,6 @@ Public Class Designer
             ' accept all changes in the termdefinitions table
             'so can test if any changes made
             mFileManager.OntologyManager.TermDefinitionTable.AcceptChanges()
-
         End If
     End Sub
 
@@ -4725,7 +4678,6 @@ Public Class Designer
                 End Try
             End If
         End If
-
     End Sub
 
     Private Sub butLookUpConstraint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butLookUpConstraint.Click
@@ -4788,63 +4740,56 @@ Public Class Designer
         End If
     End Sub
 
-
-    Private Sub BuildInterface()
-        ' build the data
-
-        Me.tpInterface.Controls.Clear()
+    Private Sub BuildInterfaceTabPage()
+        For i As Integer = tpInterface.Controls.Count - 1 To 0 Step -1
+            If Not tpInterface.Controls(i) Is cbMandatory Then
+                tpInterface.Controls(i).Dispose()
+            End If
+        Next
 
         ' ? use tabcontrol in the future for protocol and state
         Select Case mFileManager.Archetype.RmEntity
             Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
-                Dim pos As New Point
-                pos.X = 10
-                pos.Y = 10
+                Dim pos As New Point(10, 10)
 
-                If Me.chkEventSeries.Checked Then
+                If chkEventSeries.Checked Then
                     Dim gb As New GroupBox
-                    Dim rel_pos As New Point
-
                     gb.Text = Filemanager.GetOpenEhrTerm(275, "History")
-
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
                     gb.Location = pos
-                    rel_pos.X = 20
-                    rel_pos.Y = 20
-                    If Not Me.mTabPageDataEventSeries Is Nothing Then
-                        Me.mTabPageDataEventSeries.BuildInterface(gb, rel_pos, Me.cbMandatory.Checked)
+
+                    If Not mTabPageDataEventSeries Is Nothing Then
+                        mTabPageDataEventSeries.BuildInterface(gb, New Point(20, 20), cbMandatory.Checked)
                     End If
-                    gb.Height = gb.Height + 10
-                    Me.tpInterface.Controls.Add(gb)
-                    pos.Y = pos.Y + gb.Height + 10
+
+                    gb.Height += 10
+                    tpInterface.Controls.Add(gb)
+                    pos.Y += gb.Height + 10
                 End If
 
-                If Not Me.mTabPageDataStructure Is Nothing Then
-                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                If Not mTabPageDataStructure Is Nothing Then
+                    mTabPageDataStructure.BuildInterface(tpInterface, pos, cbMandatory.Checked)
                 End If
 
-                If Me.cbStructurePersonState.Checked Then
+                If cbStructurePersonState.Checked Then
                     Dim gb As New GroupBox
-                    Dim rel_pos As New Point
-
                     gb.Text = Filemanager.GetOpenEhrTerm(177, "State")
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
                     gb.Location = pos
-                    rel_pos.X = 20
-                    rel_pos.Y = 20
-                    Me.mTabPageDataStateStructure.BuildInterface(gb, rel_pos, Me.cbMandatory.Checked)
-                    gb.Height = gb.Height + 10
+                    mTabPageDataStateStructure.BuildInterface(gb, New Point(20, 20), cbMandatory.Checked)
+                    gb.Height += 10
+
                     If gb.Controls.Count > 0 Then
-                        Me.tpInterface.Controls.Add(gb)
+                        tpInterface.Controls.Add(gb)
                     End If
-                    pos.Y = pos.Y + gb.Height + 10
+
+                    pos.Y += gb.Height + 10
                 End If
 
-                If Me.cbPersonState.Checked Then
+                If cbPersonState.Checked Then
                     Dim gb, hist As GroupBox
-                    Dim rel_pos As New Point
                     gb = New GroupBox
                     gb.Text = Filemanager.GetOpenEhrTerm(79, "Person State with History")
                     gb.FlatStyle = FlatStyle.Popup
@@ -4854,115 +4799,86 @@ Public Class Designer
 
                     ' now add the EventSeries element
                     hist = New GroupBox
-                    Dim hist_pos As New Point
                     hist.Text = Filemanager.GetOpenEhrTerm(275, "History")
                     hist.FlatStyle = FlatStyle.Popup
-                    hist_pos.X = 20
-                    hist_pos.Y = 20
-                    hist.Location = hist_pos
-                    rel_pos.X = 20
-                    rel_pos.Y = 20
-                    If Not Me.mTabPageStateEventSeries Is Nothing Then
-                        Me.mTabPageStateEventSeries.BuildInterface(hist, rel_pos, Me.cbMandatory.Checked)
+                    hist.Location = New Point(20, 20)
+                    Dim rel_pos As New Point(20, 20)
+
+                    If Not mTabPageStateEventSeries Is Nothing Then
+                        mTabPageStateEventSeries.BuildInterface(hist, rel_pos, cbMandatory.Checked)
                     End If
+
                     gb.Controls.Add(hist)
                     gb.Height = hist.Height + 10
-                    pos.Y = pos.Y + hist.Height + 10
+                    pos.Y += gb.Height
                     rel_pos.X = 20
-                    rel_pos.Y = rel_pos.Y + hist.Height + 10
-                    Me.mTabPageStateStructure.BuildInterface(gb, rel_pos, cbMandatory.Checked)
+                    rel_pos.Y += gb.Height
+                    mTabPageStateStructure.BuildInterface(gb, rel_pos, cbMandatory.Checked)
                     gb.Height = gb.Height + 10
+
                     If gb.Controls.Count > 0 Then
-                        Me.tpInterface.Controls.Add(gb)
+                        tpInterface.Controls.Add(gb)
                     End If
-                    pos.Y = pos.Y + gb.Height + 10
+
+                    pos.Y += gb.Height + 10
                 End If
 
-                If Me.cbProtocol.Checked Then
+                If cbProtocol.Checked Then
                     Dim gb As New GroupBox
-                    Dim rel_pos As New Point
-
                     gb.Text = Filemanager.GetOpenEhrTerm(78, "Protocol")
                     gb.FlatStyle = FlatStyle.Popup
                     pos.X = 10
                     gb.Location = pos
-                    rel_pos.X = 20
-                    rel_pos.Y = 20
-                    If Not Me.mTabPageProtocolStructure Is Nothing Then
-                        Me.mTabPageProtocolStructure.BuildInterface(gb, rel_pos, Me.cbMandatory.Checked)
+
+                    If Not mTabPageProtocolStructure Is Nothing Then
+                        mTabPageProtocolStructure.BuildInterface(gb, New Point(20, 20), cbMandatory.Checked)
                     End If
-                    gb.Height = gb.Height + 10
+
+                    gb.Height += 10
+
                     If gb.Controls.Count > 0 Then
-                        Me.tpInterface.Controls.Add(gb)
+                        tpInterface.Controls.Add(gb)
                     End If
-                    pos.Y = pos.Y + gb.Height + 10
+
+                    pos.Y += gb.Height + 10
                 End If
 
             Case StructureType.INSTRUCTION
-
-                Dim pos As New Point
-                pos.X = 10
-                pos.Y = 10
-
-                If Not Me.mTabPageInstruction Is Nothing Then
-                    Me.mTabPageInstruction.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                If Not mTabPageInstruction Is Nothing Then
+                    mTabPageInstruction.BuildInterface(tpInterface, New Point(10, 10), cbMandatory.Checked)
                 End If
 
             Case StructureType.ACTION
-
-                Dim pos As New Point
-                pos.X = 10
-                pos.Y = 10
-
-                If Not Me.mTabPageAction Is Nothing Then
-                    Me.mTabPageAction.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                If Not mTabPageAction Is Nothing Then
+                    mTabPageAction.BuildInterface(tpInterface, New Point(10, 10), cbMandatory.Checked)
                 End If
 
             Case StructureType.Cluster
-                Dim pos As New Point
-                pos.X = 10
-                pos.Y = 10
-
-                If Not Me.mTabPageDataStructure Is Nothing Then
-                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                If Not mTabPageDataStructure Is Nothing Then
+                    mTabPageDataStructure.BuildInterface(tpInterface, New Point(10, 10), cbMandatory.Checked)
                 End If
 
             Case StructureType.Element
-                Dim pos As New Point
-                pos.X = 10
-                pos.Y = 10
-
-                If Not Me.mTabPageDataStructure Is Nothing Then
-                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                If Not mTabPageDataStructure Is Nothing Then
+                    mTabPageDataStructure.BuildInterface(tpInterface, New Point(10, 10), cbMandatory.Checked)
                 End If
 
             Case StructureType.SECTION
 
             Case StructureType.COMPOSITION
-                Dim pos As New Point
-                pos.X = 10
-                pos.Y = 10
-
-                If Not Me.mTabPageComposition Is Nothing Then
-                    Me.mTabPageComposition.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                If Not mTabPageComposition Is Nothing Then
+                    mTabPageComposition.BuildInterface(tpInterface, New Point(10, 10), cbMandatory.Checked)
                 End If
 
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                Dim pos As New Point
-                pos.X = 10
-                pos.Y = 10
-
-                If Not Me.mTabPageDataStructure Is Nothing Then
-                    Me.mTabPageDataStructure.BuildInterface(tpInterface, pos, Me.cbMandatory.Checked)
+                If Not mTabPageDataStructure Is Nothing Then
+                    mTabPageDataStructure.BuildInterface(tpInterface, New Point(10, 10), cbMandatory.Checked)
                 End If
         End Select
 
-        If Me.RightToLeft = Windows.Forms.RightToLeft.Yes Then
+        If RightToLeft = Windows.Forms.RightToLeft.Yes Then
             OceanArchetypeEditor.Reflect(tpInterface)
         End If
-        'Put back the mandatory text box
-        Me.tpInterface.Controls.Add(Me.cbMandatory)
-
     End Sub
 
     Sub RefreshRichText()
@@ -4991,11 +4907,9 @@ Public Class Designer
                     End If
                 End If
         End Select
-
     End Sub
 
     Private Sub ToolBarRTF_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBarRTF.ButtonClick
-
         Static Dim format As String = "rtf" ' remember the format that has been set
         Dim saveFile As New SaveFileDialog
 
@@ -5149,7 +5063,7 @@ Public Class Designer
     End Sub
 
     Private Sub cbMandatory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMandatory.CheckedChanged
-        BuildInterface()
+        BuildInterfaceTabPage()
     End Sub
 
     Private Sub MenuFileExportCEN_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)

@@ -112,6 +112,7 @@ Public Class ConstraintContextMenu
             Case ConstraintType.URI
                 mMI_URI.Visible = False
         End Select
+
         If mMI_Interval_Count.Visible = False And mMI_Interval_Quantity.Visible = False And mMI_Interval_DateTime.Visible = False Then
             mMI_Interval.Visible = False
         Else
@@ -144,7 +145,6 @@ Public Class ConstraintContextMenu
         'Rest are not usual datatypes
         mMI_QuantityUnit.Visible = False
     End Sub
-
 
     Sub HideAll()
         mMI_Text.Visible = False
@@ -207,7 +207,6 @@ Public Class ConstraintContextMenu
             Debug.Assert(False, "Menu item is not loaded")
         End If
     End Sub
-
 
     Sub New(ByVal a_sub As ProcessMenuClick, ByVal a_filemanager As FileManagerLocal)
         mFileManager = a_filemanager
@@ -281,13 +280,8 @@ Public Class ConstraintContextMenu
         Me.MenuItems.Add(mMI_QuantityUnit)
         AddHandler mMI_QuantityUnit.Click, AddressOf InternalProcessMenuItemClick
         mMI_QuantityUnit.Visible = False
-
     End Sub
 
-
-    Protected Overrides Sub Finalize()
-        MyBase.Finalize()
-    End Sub
 End Class
 
 '
