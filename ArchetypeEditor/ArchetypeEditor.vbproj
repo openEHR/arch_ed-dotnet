@@ -434,9 +434,6 @@
     <Compile Include="DataConstraintsView\IntervalViewControl.vb">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DataConstraintsView\LayoutManager.vb">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DataConstraintsView\MultiMediaViewControl.vb">
       <SubType>Component</SubType>
     </Compile>

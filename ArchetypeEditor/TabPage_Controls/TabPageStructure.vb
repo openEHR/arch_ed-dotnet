@@ -686,24 +686,19 @@ Public Class TabPageStructure
 
             Select Case a_compound_structure.Type '.TypeName
                 Case StructureType.Single ' "Single", "Simple"
-
                     ArchetypeDisplay = New SimpleStructure(a_compound_structure, mFileManager)
 
                 Case StructureType.List
-
                     ' this also shows the panels and sets lvList to visible
                     ArchetypeDisplay = New ListStructure(a_compound_structure, mFileManager)
 
                 Case StructureType.Tree
-
                     ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
 
                 Case StructureType.Table
-
                     ArchetypeDisplay = New TableStructure(CType(a_compound_structure, RmTable), mFileManager)
 
                 Case StructureType.Cluster
-
                     ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
 
                 Case Else
