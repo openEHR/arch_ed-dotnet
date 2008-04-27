@@ -3503,7 +3503,7 @@ Public Class Designer
         RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
     End Sub
 
-    Private Function SetNewArchetypeName(Optional ByVal AllowOpen As Boolean = True) As Integer
+    Private Function SetNewArchetypeName(ByVal AllowOpen As Boolean) As Integer
         ' returns 0 if cancelled
         ' returns  1 if archetype is opened
         ' returns 2 if new archetype
@@ -3528,6 +3528,7 @@ Public Class Designer
             frm.lblModel.Text = Filemanager.GetOpenEhrTerm(51, frm.lblModel.Text, OceanArchetypeEditor.DefaultLanguageCode)
             frm.lblShortConcept.Text = Filemanager.GetOpenEhrTerm(52, frm.lblShortConcept.Text, OceanArchetypeEditor.DefaultLanguageCode)
             frm.butOK.Text = Filemanager.GetOpenEhrTerm(165, frm.butOK.Text, OceanArchetypeEditor.DefaultLanguageCode)
+
             If Not AllowOpen Then
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(166, "Cancel")
             Else
@@ -3535,23 +3536,23 @@ Public Class Designer
                 frm.gbArchetypeFromWeb.Text = Filemanager.GetOpenEhrTerm(650, "Open Archetype from Web")
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(63, "Exit")
             End If
-            frm.RightToLeft = Me.RightToLeft
+
+            frm.RightToLeft = RightToLeft
         End If
 
         If Not AllowOpen Then
-            frm.gbExistingArchetype.Visible = False
-            frm.Height -= (frm.gbExistingArchetype.Height + 10)
+            frm.gbExistingArchetype.Hide()
+            frm.Height -= frm.gbExistingArchetype.Height + 18
+        End If
 
-            If (OceanArchetypeEditor.Instance.Options.AllowWebSearch = False) Then
-                frm.gbArchetypeFromWeb.Visible = False
-                Me.Height -= ((frm.gbArchetypeFromWeb.Height) + 10)
-            End If
+        If Not AllowOpen Or Not OceanArchetypeEditor.Instance.Options.AllowWebSearch Then
+            frm.gbArchetypeFromWeb.Hide()
+            frm.Height -= frm.gbArchetypeFromWeb.Height + 18
         End If
 
         i = frm.ShowDialog(Me)
 
         Select Case i
-
             Case 1
                 'this creates an archetype and sets the ontology
                 mFileManager.NewArchetype(frm.Archetype_ID, OceanArchetypeEditor.Instance.Options.DefaultParser)
@@ -3577,7 +3578,7 @@ Public Class Designer
                 Me.OpenArchetypeFromWeb(Me, New System.EventArgs)
                 If mFileManager.Archetype Is Nothing Then
                     'open archetype was cancelled so go back to new
-                    Return SetNewArchetypeName()
+                    Return SetNewArchetypeName(True)
                 End If
                 Return 1
             Case 6  'pressed the open button
@@ -3587,7 +3588,7 @@ Public Class Designer
 
                 If mFileManager.Archetype Is Nothing Then
                     'open archetype was cancelled so go back to new
-                    Return SetNewArchetypeName()
+                    Return SetNewArchetypeName(True)
                 End If
                 Return 1
         End Select
@@ -4292,7 +4293,7 @@ Public Class Designer
             Show()
 
             'load the start screen
-            If SetNewArchetypeName() = 2 Then
+            If SetNewArchetypeName(True) = 2 Then
 
                 ' new archetype
                 SetUpGUI(ReferenceModel.ArchetypedClass, True)
