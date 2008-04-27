@@ -4953,12 +4953,11 @@ Public Class Designer
                     Dim appData As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
                     Dim appDataImages As String = Path.Combine(appData, "Images")
                     Dim html As String = Path.Combine(appData, "temp.html")
-                    Dim xslt As String = OceanArchetypeEditor.Instance.Options.XsltScriptPath
                     My.Computer.FileSystem.CopyDirectory(Path.Combine(Application.StartupPath, "HTML\Images"), appDataImages, True)
 
-                    If xslt <> "" Then
+                    If OceanArchetypeEditor.Instance.Options.UseXsltForHtml And OceanArchetypeEditor.Instance.Options.XsltScriptPath <> "" Then
                         Dim transform As New Xml.Xsl.XslCompiledTransform()
-                        transform.Load(xslt)
+                        transform.Load(OceanArchetypeEditor.Instance.Options.XsltScriptPath)
                         Dim args As New Xml.Xsl.XsltArgumentList()
                         args.AddParam("language", "", Filemanager.Master.OntologyManager.LanguageCode)
                         args.AddParam("show-terminology-flag", "", OceanArchetypeEditor.Instance.Options.ShowTermsInHtml.ToString().ToLower())

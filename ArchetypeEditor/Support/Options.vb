@@ -14,6 +14,7 @@ Public Class Options
     Private mOccurrencesView As String
     Private mHelpPath As String
     Private mXsltScriptPath As String
+    Private mUseXsltForHtml As Boolean
     Private mShowTermsInHtml As Boolean
     Private mShowCommentsInHtml As Boolean
     Private mDefaultParser As String
@@ -120,6 +121,15 @@ Public Class Options
         End Get
         Set(ByVal Value As String)
             mXsltScriptPath = Value
+        End Set
+    End Property
+
+    Property UseXsltForHtml() As Boolean
+        Get
+            Return mUseXsltForHtml
+        End Get
+        Set(ByVal value As Boolean)
+            mUseXsltForHtml = value
         End Set
     End Property
 
@@ -230,6 +240,7 @@ Public Class Options
         End If
 
         frm.XsltScriptPathTextBox.Text = mXsltScriptPath
+        frm.XsltScriptPathCheckBox.Checked = mUseXsltForHtml
         frm.chkShowTerminologyInHTML.Checked = mShowTermsInHtml
         frm.chkShowCommentsInHTML.Checked = mShowCommentsInHtml
 
@@ -254,6 +265,7 @@ Public Class Options
             mHelpPath = frm.txtHelpFile.Text
 
             mXsltScriptPath = frm.XsltScriptPathTextBox.Text
+            mUseXsltForHtml = frm.XsltScriptPathCheckBox.Checked
             mShowTermsInHtml = frm.chkShowTerminologyInHTML.Checked
             mShowCommentsInHtml = frm.chkShowCommentsInHTML.Checked
 
@@ -332,6 +344,8 @@ Public Class Options
                                     mHelpPath = y(1).Trim
                                 Case "XsltScriptPath"
                                     mXsltScriptPath = y(1).Trim
+                                Case "UseXsltForHtml"
+                                    mUseXsltForHtml = Boolean.Parse(y(1).Trim)
                                 Case "ShowTermsInHtml"
                                     mShowTermsInHtml = Boolean.Parse(y(1).Trim)
                                 Case "ShowCommentsInHtml"
@@ -403,6 +417,7 @@ Public Class Options
                 StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyURL.ToString)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
                 StrmWrite.WriteLine("XsltScriptPath=" & mXsltScriptPath)
+                StrmWrite.WriteLine("UseXsltForHtml=" & mUseXsltForHtml.ToString)
                 StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
                 StrmWrite.WriteLine("ShowCommentsInHtml=" & mShowCommentsInHtml.ToString)
                 StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
@@ -499,6 +514,7 @@ Public Class Options
         mUserEmail = ""
         mHelpPath = Path.Combine(Application.StartupPath, "Help\ArchetypeEditor.chm")
         mXsltScriptPath = Path.Combine(Application.StartupPath, "HTML\adlxml-to-html.xsl")
+        mUseXsltForHtml = False
         mShowTermsInHtml = False
         mShowCommentsInHtml = False
         mOccurrencesView = "numeric"
