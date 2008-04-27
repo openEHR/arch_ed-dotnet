@@ -486,13 +486,17 @@ Public Class FileManagerLocal
         'Definition
         Dim xmlArchetype As New ArchetypeEditor.XML_Classes.XML_Archetype(xml_parser)
         xmlArchetype.Definition = Archetype.Definition
-        xmlArchetype.Description = Archetype.Description 'EDT33: View archetype as XML raises exception https://projects.oceanehr.com/jira/browse/EDT-33
+        xmlArchetype.Description = Archetype.Description
         xmlArchetype.MakeParseTree()
         ParserSynchronised = True
 
         'description
-        Dim xml_description As New ArchetypeEditor.XML_Classes.XML_Description(Archetype.Description)
-        xml_parser.Archetype.description = xml_description.XML_Description
+        If TypeOf Archetype.Description Is ArchetypeEditor.XML_Classes.XML_Description Then
+            xml_parser.Archetype.description = CType(Archetype.Description, ArchetypeEditor.XML_Classes.XML_Description).XML_Description
+        Else
+            xml_parser.Archetype.description = New ArchetypeEditor.XML_Classes.XML_Description(Archetype.Description).XML_Description
+        End If
+
         xml_parser.Archetype.description.details = details_array
 
         'translations
