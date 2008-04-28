@@ -18,141 +18,122 @@ Option Strict On
 
 Public Class DateTimeViewControl : Inherits ElementViewControl
 
-    'Private WithEvents mComboBox As ComboBox
-
     Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(anElement, a_filemanager)
     End Sub
 
     Public Sub New(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(aConstraint, a_filemanager)
-
     End Sub
 
-    Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, _
-            ByVal aLocation As System.Drawing.Point)
-
-        'Dim p As New Panel
-        'Dim rel_pos As New Point
+    Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, ByVal aLocation As System.Drawing.Point)
         Dim max_width As Integer
-
-        Dim dt As Constraint_DateTime = CType(aConstraint, Constraint_DateTime)
         Dim rel_pos As Point = aLocation
         Dim p As Control = Me
 
-        Select Case dt.TypeofDateTimeConstraint
+        Select Case CType(aConstraint, Constraint_DateTime).TypeofDateTimeConstraint
             Case 11 ' allow all
-
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "[dd]", 31, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 12, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "yyyy", System.DateTime.Today.Year, 1900))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 12, 1))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "[dd]", 31, 1))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "[hh]", 23, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 59, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "[ss]", 59, 0))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 12 'Date and time
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "dd", 31, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 12, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "yyyy", System.DateTime.Today.Year, 1900))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 12, 1))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "dd", 31, 1))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "hh", 23, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 59, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "ss", 59, 0))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 13 'Date and partial time
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "dd", 31, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 12, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "yyyy", 2003, 1900))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "hh", 23, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 12, 1))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "dd", 31, 1))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "[hh]", 23, 0))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 59, 0))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 14 'Date only
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "[dd]", 31, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 12, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "yyyy", System.DateTime.Today.Year, 1900))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 12, 1))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "[dd]", 31, 1))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 15 'Full date
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "dd", 31, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 12, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "yyyy", System.DateTime.Today.Year, 1900))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 12, 1))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "dd", 31, 1))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 16 'Partial date
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "[dd]", 31, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 12, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "yyyy", System.DateTime.Today.Year, 1900))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 12, 1))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 17 'Partial date with month
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "[dd]", 31, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 12, 1))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "yyyy", System.DateTime.Today.Year, 1900))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 12, 1))
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
+                p.Controls.AddRange(LabelNumValPair(rel_pos, "[dd]", 31, 1))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 18 'Time only
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "hh", 23, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 59, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "[ss]", 59, 0))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 19 'Full time
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "hh", 23, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 59, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "ss", 59, 0))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 20 'Partial time
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "hh", 23, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "[mm]", 59, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-                p.Controls.AddRange(LabelNumValPair(rel_pos, "[ss]", 59, 0))
-                max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
 
             Case 21 'Partial time with minutes
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "hh", 23, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "mm", 59, 0))
-                rel_pos.X = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
+                rel_pos.X += p.Controls.Item(p.Controls.Count - 1).Width + 5
                 p.Controls.AddRange(LabelNumValPair(rel_pos, "[ss]", 59, 0))
                 max_width = rel_pos.X + p.Controls.Item(p.Controls.Count - 1).Width + 5
-
-
         End Select
 
         p.Width = max_width
-
-        'Me.Controls.Add(p)
-
     End Sub
 
     Private Function LabelNumValPair(ByRef pos As Point, ByVal text As String, _
@@ -170,19 +151,21 @@ Public Class DateTimeViewControl : Inherits ElementViewControl
         num.Maximum = maxval
         num.Minimum = minval
         num.Height = 25
+
         If text.StartsWith("[") Then
             num.Width = (10 * (text.Length - 2)) + 20
         Else
             num.Width = (10 * text.Length) + 20
         End If
+
         num.Location = New Drawing.Point(pos.X, pos.Y + 26)
         ctrl(1) = num
         Return ctrl
-
     End Function
 
     ' Value = -1 => not selected
     Private mValue As Integer
+
     Public Overrides Property Value() As Object
         Get
             Return mValue
@@ -191,13 +174,12 @@ Public Class DateTimeViewControl : Inherits ElementViewControl
             If (Value Is Nothing AndAlso mValue >= 0) _
                     OrElse (Not Value Is Nothing AndAlso mValue < 0) _
                     OrElse (Not Value Is Nothing AndAlso mValue <> CInt(Value)) Then
-
-                If Not Value Is Nothing Then
-                    mValue = CInt(Value)
-
-                Else    ' not selected
+                If Value Is Nothing Then
                     mValue = -1
+                Else
+                    mValue = CInt(Value)
                 End If
+
                 Tag = mValue
                 MyBase.OnValueChanged()
             End If
