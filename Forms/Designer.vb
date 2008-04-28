@@ -1791,7 +1791,6 @@ Public Class Designer
         Me.ToolBarNew.ImageIndex = 3
         Me.ToolBarNew.Name = "ToolBarNew"
         Me.ToolBarNew.ToolTipText = "Create a new archetype"
-        Me.ToolBarNew.Visible = False
         '
         'ToolBarOpen
         '
@@ -2212,21 +2211,19 @@ Public Class Designer
     End Sub
 
     Private Sub NewArchetype(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuFileNew.Click, MenuFileClose.Click
-
         If CheckOKtoClose() Then
-
             'reset the header
-
-            If SetNewArchetypeName(sender Is MenuFileClose) = 2 Then  ' a new archetype
+            If SetNewArchetypeName(sender Is MenuFileClose) = 2 Then
                 'remove embedded filemanagers
                 Filemanager.ClearEmbedded()
 
-                Me.SuspendLayout()
+                SuspendLayout()
 
                 RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
+
                 ' stop auto updating of controls
                 mFileManager.FileLoading = True
-                Me.ResetDefaults()
+                ResetDefaults()
 
                 'reset the filename to null to force SaveAs
                 mFileManager.FileName = ""
@@ -2238,17 +2235,10 @@ Public Class Designer
 
                 AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
-                Me.ResumeLayout()
-
-                ' reset to event model
-                ' clear all additions
-
-                Me.ShowAsDraft = False
-
-                Me.ToolBarNew.Visible = False
+                ResumeLayout()
+                ShowAsDraft = False
             End If
         End If
-
     End Sub
 
     Private Sub SaveArchetype(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSave.Click, MenuFileSaveAs.Click
@@ -2342,21 +2332,16 @@ Public Class Designer
             End If
             Me.MenuLanguageChange.MenuItems.Add(MI)
         End If
-
     End Sub
 
     Private Sub FileManager_IsFileDirtyChanged(ByVal e As FileManagerEventArgs)
-        'Handles FileManager.IsFileDirtyChanged
-
-        If e.IsFileDirty = True And Me.ShowMenuFileSave = False Then
-            Me.ShowMenuFileSave = True
-            Me.ShowToolbarSaveButton = True
-            Me.ShowToolbarNewButton = True
-            Me.ShowAsDraft = True
-
-        ElseIf e.IsFileDirty = False And Me.ShowMenuFileSave = True Then
-            Me.ShowMenuFileSave = False
-            Me.ShowToolbarSaveButton = False
+        If e.IsFileDirty And Not ShowMenuFileSave Then
+            ShowMenuFileSave = True
+            ShowToolbarSaveButton = True
+            ShowAsDraft = True
+        ElseIf Not e.IsFileDirty And ShowMenuFileSave Then
+            ShowMenuFileSave = False
+            ShowToolbarSaveButton = False
         End If
     End Sub
 #End Region
@@ -3007,14 +2992,6 @@ Public Class Designer
         End Set
     End Property
 
-    Public Property ShowToolbarNewButton() As Boolean
-        Get
-            Return Me.ToolBarNew.Visible
-        End Get
-        Set(ByVal Value As Boolean)
-            Me.ToolBarNew.Visible = Value
-        End Set
-    End Property
     Public Property ShowMenuFileNew() As Boolean
         Get
             Return Me.MenuFileNew.Visible
@@ -5055,11 +5032,7 @@ Public Class Designer
     End Sub
 
     Private Sub ContextMenuDisplay_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuDisplay.Popup
-        If mFindStringFrom <> -1 Then
-            Me.MenuDisplayFindAgain.Visible = True
-        Else
-            Me.MenuDisplayFindAgain.Visible = False
-        End If
+        MenuDisplayFindAgain.Visible = mFindStringFrom <> -1
     End Sub
 
     Private Sub cbMandatory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMandatory.CheckedChanged
@@ -5078,19 +5051,14 @@ Public Class Designer
         If Filemanager.Master.ParserType = "adl" Then
             MenuFileExportType.Text = "XML"
         Else
-            'MenuFileExportType.Text = AE_Constants.Instance.Feature_not_available
             MenuFileExportType.Text = "ADL"
         End If
     End Sub
 
     Private Sub MenuFileExportType_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileExportType.Click
-        Me.Cursor = Cursors.WaitCursor
-        If MenuFileExportType.Text = "XML" Then
-            Filemanager.Master.Export("XML")
-        ElseIf MenuFileExportType.Text = "ADL" Then
-            Filemanager.Master.Export("ADL")
-        End If
-        Me.Cursor = Cursors.Default
+        Cursor = Cursors.WaitCursor
+        Filemanager.Master.Export(MenuFileExportType.Text)
+        Cursor = Cursors.Default
     End Sub
 
     Private Sub RichTextBoxDescription_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RichTextBoxDescription.DoubleClick
