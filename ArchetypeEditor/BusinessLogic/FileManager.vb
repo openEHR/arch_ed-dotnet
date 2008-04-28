@@ -113,6 +113,7 @@ Public Class FileManagerLocal
             mParserSynchronised = Value
         End Set
     End Property
+
     Public ReadOnly Property AvailableFormatFilter() As String
         Get
             ' returns a filedialog filter
@@ -120,32 +121,36 @@ Public Class FileManagerLocal
 
             For i As Integer = 0 To mArchetypeEngine.AvailableFormats.Count - 1
                 Dim s As String = CStr(mArchetypeEngine.AvailableFormats(i))
-                format_filter &= s & "|*." & s & "|"
+                format_filter &= s.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|*." & s & "|"
             Next
+
             Select Case ParserType
                 Case "adl"
-                    format_filter &= "xml|*.xml"
+                    format_filter &= "XML|*.xml"
                 Case "xml"
-                    format_filter &= "adl|*.adl"
+                    format_filter &= "ADL|*.adl"
                 Case Else
                     Debug.Assert(False, ParserType & " not handled")
             End Select
+
             Return format_filter
         End Get
     End Property
+
     Public ReadOnly Property AvailableFormats() As ArrayList
         Get
             Dim formats As ArrayList = mArchetypeEngine.AvailableFormats
+
             'Ensure ADL and XML available as provided by parsers
             If Not formats.Contains("xml") Then
                 formats.Add("xml")
             End If
+
             If Not formats.Contains("adl") Then
                 formats.Add("adl")
             End If
 
             Return formats
-
         End Get
     End Property
 
@@ -592,6 +597,7 @@ Public Class FileManagerLocal
 
     Public Function ExportSerialised(ByVal a_format As String) As String
         mObjectToSave.PrepareToSave()
+
         Select Case a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "xml"
                 Dim xml_parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
@@ -603,7 +609,6 @@ Public Class FileManagerLocal
                 Debug.Assert(False, "Format not handled")
                 Return "Format not available"
         End Select
-
     End Function
 
     Public Sub Export(ByVal a_format As String)
@@ -614,7 +619,7 @@ Public Class FileManagerLocal
         Select Case a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "xml"
                 Dim xml_parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
-                Dim s As String = ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
+                Dim s As String = ChooseFileNameOfType(a_format)
 
                 If s <> "" Then
                     xml_parser.WriteFile(s)
@@ -624,11 +629,9 @@ Public Class FileManagerLocal
                     End If
                 End If
 
-                '-----------ADL--------------------------------------------
-
             Case "adl"
                 Dim adl_parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
-                Dim s As String = ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
+                Dim s As String = ChooseFileNameOfType(a_format)
 
                 If s <> "" Then
                     adl_parser.WriteAdlDirect(s)
@@ -637,7 +640,6 @@ Public Class FileManagerLocal
             Case Else
                 MessageBox.Show(AE_Constants.Instance.Feature_not_available, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
         End Select
-
     End Sub
 
     Public Sub ParserReset(Optional ByVal an_archetype_ID As ArchetypeID = Nothing)
@@ -663,7 +665,6 @@ Public Class FileManagerLocal
     End Sub
 
     Public Function SaveArchetype() As Boolean
-        Dim result As Boolean = False
         Dim name As String
 
         If IsNew OrElse Not IO.File.Exists(FileName) Then
@@ -676,15 +677,16 @@ Public Class FileManagerLocal
             mObjectToSave.PrepareToSave()
             FileName = name
             CheckFileNameAgainstArchetypeId()
-            result = SaveArchetypeAs(FileName)
+            SaveArchetypeAs(FileName)
 
-            If result Then
+            If Not FileEdited Then
                 Dim parser As Parser = mArchetypeEngine
                 Dim ontology As Ontology = mOntologyManager.Ontology
                 Dim ext As String = System.IO.Path.GetExtension(FileName.ToLowerInvariant())
 
                 If ext = ".adl" Then
                     If OceanArchetypeEditor.Instance.Options.XmlRepositoryAutoSave Then
+                        FileEdited = True
                         name = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(FileName, ".xml"))
 
                         If name.StartsWith(OceanArchetypeEditor.Instance.Options.RepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
@@ -692,10 +694,11 @@ Public Class FileManagerLocal
                             System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(name))
                         End If
 
-                        result = SaveArchetypeAs(name)
+                        SaveArchetypeAs(name)
                     End If
                 ElseIf ext = ".xml" Then
                     If OceanArchetypeEditor.Instance.Options.RepositoryAutoSave Then
+                        FileEdited = True
                         name = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(FileName, ".adl"))
 
                         If name.StartsWith(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
@@ -703,7 +706,7 @@ Public Class FileManagerLocal
                             System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(name))
                         End If
 
-                        result = SaveArchetypeAs(name)
+                        SaveArchetypeAs(name)
                     End If
                 End If
 
@@ -712,12 +715,10 @@ Public Class FileManagerLocal
             End If
         End If
 
-        Return result
+        Return Not FileEdited
     End Function
 
-    Private Function SaveArchetypeAs(ByRef name As String) As Boolean
-        Dim result As Boolean = False
-
+    Private Sub SaveArchetypeAs(ByRef name As String)
         If name <> "" Then
             If IO.File.Exists(name) AndAlso (IO.File.GetAttributes(name) And IO.FileAttributes.ReadOnly) > 0 Then
                 MessageBox.Show(name & ": " & Filemanager.GetOpenEhrTerm(439, "Read only"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -733,63 +734,49 @@ Public Class FileManagerLocal
                         Dim parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
                         mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface(parser)
                         mOntologyManager.ReplaceOntology(New ArchetypeEditor.XML_Classes.XML_Ontology(parser, True))
-                    Else
-                        Debug.Assert(False, "File type is not catered for: " & name)
-                        name = ""
                     End If
                 End If
 
-                If name <> "" Then
-                    Try
-                        WriteArchetype(name)
+                Try
+                    WriteArchetype(name)
 
-                        If Not mHasWriteFileError Then
-                            FileEdited = False
-                            result = True
-                        End If
-                    Catch ex As Exception
-                        MessageBox.Show(AE_Constants.Instance.Error_saving & FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    End Try
-                End If
+                    If Not mHasWriteFileError Then
+                        FileEdited = False
+                    End If
+                Catch ex As Exception
+                    MessageBox.Show(AE_Constants.Instance.Error_saving & FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
             End If
+        End If
+    End Sub
+
+    Private Function ChooseFileNameOfType(ByVal fileType As String) As String
+        Dim result As String = ""
+        Dim ext As String = fileType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        Dim saveFile As New SaveFileDialog
+        saveFile.Filter = fileType.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|" & "*." & ext
+        saveFile.FileName = Archetype.Archetype_ID.ToString
+        saveFile.OverwritePrompt = True
+        saveFile.DefaultExt = ext
+        saveFile.AddExtension = True
+        saveFile.Title = AE_Constants.Instance.MessageBoxCaption
+        saveFile.ValidateNames = True
+
+        If saveFile.ShowDialog() <> Windows.Forms.DialogResult.Cancel Then
+            result = IO.Path.ChangeExtension(saveFile.FileName, ext)
         End If
 
         Return result
     End Function
 
-    Private Function ChooseFileName(ByVal a_file_type As String) As String
-        Dim saveFile As New SaveFileDialog
-
-        saveFile.Filter = a_file_type.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|" & a_file_type
-        saveFile.FileName = Me.Archetype.Archetype_ID.ToString
-        saveFile.OverwritePrompt = True
-        saveFile.DefaultExt = a_file_type
-        saveFile.AddExtension = True
-        saveFile.Title = AE_Constants.Instance.MessageBoxCaption
-        saveFile.ValidateNames = True
-        If saveFile.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
-            Return ""
-        Else
-            'Check the file extension is added
-            Dim s As String
-            s = saveFile.FileName.Substring(saveFile.FileName.LastIndexOf(".") + 1)
-            If s = a_file_type Then
-                Return saveFile.FileName
-            Else
-                Return saveFile.FileName & "." & a_file_type
-            End If
-        End If
-
-    End Function
-
     Private Function ChooseFileName() As String
+        Dim result As String = ""
         Dim saveFile As New SaveFileDialog
-
-        saveFile.Filter = Me.AvailableFormatFilter
-        saveFile.FileName = Me.Archetype.Archetype_ID.ToString
+        saveFile.Filter = AvailableFormatFilter
+        saveFile.FileName = Archetype.Archetype_ID.ToString
         saveFile.OverwritePrompt = True
-        saveFile.DefaultExt = Me.ParserType
-        Dim i As Integer = Me.IndexOfFormat(Me.ParserType) + 1
+        saveFile.DefaultExt = ParserType
+        Dim i As Integer = IndexOfFormat(ParserType) + 1
 
         If i > 0 Then
             saveFile.FilterIndex = i
@@ -799,21 +786,12 @@ Public Class FileManagerLocal
         saveFile.Title = AE_Constants.Instance.MessageBoxCaption
         saveFile.ValidateNames = True
 
-        If saveFile.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
-            Return ""
-        Else
-            'Check the file extension is added
-            Dim s, ext As String
-
-            ext = saveFile.Filter.Split("|".ToCharArray())((saveFile.FilterIndex - 1) * 2)
-            s = saveFile.FileName.Substring(saveFile.FileName.LastIndexOf(".") + 1)
-
-            If s = ext Then
-                Return saveFile.FileName
-            Else
-                Return saveFile.FileName & "." & ext
-            End If
+        If saveFile.ShowDialog() <> Windows.Forms.DialogResult.Cancel Then
+            Dim ext As String = saveFile.Filter.Split("|"c)((saveFile.FilterIndex - 1) * 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            result = IO.Path.ChangeExtension(saveFile.FileName, ext)
         End If
+
+        Return result
     End Function
 
     Private Sub AutoWrite(ByVal fileName As String)
