@@ -75,6 +75,10 @@ Namespace ArchetypeEditor.XML_Classes
                                     mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ISM_TRANSITION, a_filemanager))
                                 Case "activities"
                                     mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activities, a_filemanager))
+                                Case "provider"
+                                    Me.ProviderIsMandatory = True
+                                Case "other_participations"
+                                    Me.OtherParticipations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
                                 Case "links"
                                     'No action as handled for all archetypes
                                 Case Else

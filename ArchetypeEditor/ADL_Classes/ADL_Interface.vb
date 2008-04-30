@@ -151,7 +151,11 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim language As String = CType(dRow(0), String)
                 If primary_language = language Then
                     EifLanguage = EiffelKernel.Create.STRING_8.make_from_cil(language)
-                    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)), CStr(dRow(4)))
+                    If TypeOf dRow(4) Is System.DBNull Then
+                        term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
+                    Else
+                        term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)), CStr(dRow(4)))
+                    End If
                     EIF_adlInterface.ontology.add_term_definition(EifLanguage, term.EIF_Term)
                 End If
             Next

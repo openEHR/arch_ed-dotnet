@@ -79,6 +79,20 @@ Public Class RmParticipation
     End Sub
     Sub New(ByVal a_participation As XMLParser.C_COMPLEX_OBJECT)
         MyBase.New(a_participation)
+
+        For Each attribute As XMLParser.C_ATTRIBUTE In a_participation.attributes
+            Select Case attribute.rm_attribute_name.ToLowerInvariant
+                Case "mode"
+                    Dim modeConstraint As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(attribute.children(0))
+                    If Not modeConstraint Is Nothing AndAlso modeConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
+                        mModeSet = modeConstraint.AllowableValues
+                    End If
+                Case "function"
+                    mTextConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(attribute.children(0))
+                Case "time"
+                    mMandateDateTime = True
+            End Select
+        Next
     End Sub
 #End Region
 
