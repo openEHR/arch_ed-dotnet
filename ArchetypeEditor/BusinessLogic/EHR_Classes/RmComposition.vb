@@ -37,6 +37,10 @@ Public Class RmComposition : Inherits ArchetypeDefinitionAbstract
         End Set
     End Property
 
+    Public Sub ResetParticipations()
+        mParticipations = Nothing
+    End Sub
+
     Public ReadOnly Property HasParticipations() As Boolean
         Get
             Return (Not mParticipations Is Nothing AndAlso mParticipations.Children.Count > 0)
