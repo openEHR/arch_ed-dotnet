@@ -45,6 +45,11 @@ Public Class RmEntry
         End Get
     End Property
 
+    Public Sub ResetParticipations()
+        Me.ProviderIsMandatory = False
+        mOtherParticipations = Nothing
+    End Sub
+
     Protected mOtherParticipations As RmStructureCompound
 
     Public ReadOnly Property HasOtherParticipations() As Boolean

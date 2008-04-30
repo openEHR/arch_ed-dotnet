@@ -67,7 +67,6 @@ Public Class Designer
     Friend WithEvents MenuFileOpenFromWeb As System.Windows.Forms.MenuItem
     Friend WithEvents ToolBarOpenFromWeb As System.Windows.Forms.ToolBarButton
     Friend WithEvents cbParticipation As System.Windows.Forms.CheckBox
-    Friend WithEvents tpParticipation As Crownwood.Magic.Controls.TabPage
     Friend WithEvents PanelConcept_1 As System.Windows.Forms.Panel
     Friend WithEvents gbSpecialisation As System.Windows.Forms.GroupBox
     Friend WithEvents tvSpecialisation As System.Windows.Forms.TreeView
@@ -324,7 +323,6 @@ Public Class Designer
         Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
         Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
         Me.PanelState = New System.Windows.Forms.Panel
-        Me.tpParticipation = New Crownwood.Magic.Controls.TabPage
         Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpTerminology = New Crownwood.Magic.Controls.TabPage
         Me.TabTerminology = New Crownwood.Magic.Controls.TabControl
@@ -524,7 +522,7 @@ Public Class Designer
         Me.tpConceptComment.Location = New System.Drawing.Point(4, 26)
         Me.tpConceptComment.Name = "tpConceptComment"
         Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptComment.Size = New System.Drawing.Size(1227, 77)
+        Me.tpConceptComment.Size = New System.Drawing.Size(521, 77)
         Me.tpConceptComment.TabIndex = 1
         Me.tpConceptComment.Text = "Comment"
         Me.tpConceptComment.UseVisualStyleBackColor = True
@@ -536,7 +534,7 @@ Public Class Designer
         Me.txtConceptComment.Multiline = True
         Me.txtConceptComment.Name = "txtConceptComment"
         Me.txtConceptComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtConceptComment.Size = New System.Drawing.Size(1221, 71)
+        Me.txtConceptComment.Size = New System.Drawing.Size(515, 71)
         Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
@@ -946,8 +944,8 @@ Public Class Designer
         Me.TabMain.Location = New System.Drawing.Point(0, 0)
         Me.TabMain.Name = "TabMain"
         Me.TabMain.PositionTop = True
-        Me.TabMain.SelectedIndex = 0
-        Me.TabMain.SelectedTab = Me.tpHeader
+        Me.TabMain.SelectedIndex = 1
+        Me.TabMain.SelectedTab = Me.tpDesign
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
         Me.TabMain.Size = New System.Drawing.Size(969, 640)
         Me.TabMain.TabIndex = 1
@@ -1026,7 +1024,6 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDesign, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpDesign.Location = New System.Drawing.Point(0, 0)
         Me.tpDesign.Name = "tpDesign"
-        Me.tpDesign.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpDesign, True)
         Me.tpDesign.Size = New System.Drawing.Size(969, 614)
         Me.tpDesign.TabIndex = 1
@@ -1048,7 +1045,7 @@ Public Class Designer
         Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
         Me.TabDesign.Size = New System.Drawing.Size(969, 577)
         Me.TabDesign.TabIndex = 12
-        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState, Me.tpParticipation})
+        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState})
         Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
         '
         'tpData
@@ -1148,15 +1145,6 @@ Public Class Designer
         Me.PanelState.Name = "PanelState"
         Me.PanelState.Size = New System.Drawing.Size(969, 28)
         Me.PanelState.TabIndex = 0
-        '
-        'tpParticipation
-        '
-        Me.tpParticipation.Location = New System.Drawing.Point(0, 0)
-        Me.tpParticipation.Name = "tpParticipation"
-        Me.tpParticipation.Selected = False
-        Me.tpParticipation.Size = New System.Drawing.Size(969, 551)
-        Me.tpParticipation.TabIndex = 2
-        Me.tpParticipation.Title = "Participation"
         '
         'tpSectionPage
         '
@@ -2031,17 +2019,14 @@ Public Class Designer
                     ' allow restriction of subject of data
                     InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
 
-                    If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
-                        Me.cbParticipation.Checked = True
-                        mTabPageParticipation.chkProvider.Checked = CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory
-                        If CType(mFileManager.Archetype.Definition, RmEntry).HasOtherParticipations Then
-                            mTabPageParticipation.OtherParticipations = CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations
-                        End If
-                    End If
-
                     ' deal with the various groups of information appropriate to the type
                     Select Case mFileManager.Archetype.RmEntity
                         Case StructureType.ENTRY ' "ENTRY"
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                cbParticipation.Checked = True
+                                SetUpParticipations()
+                            End If
+
                             For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
                                     Case StructureType.Data
@@ -2052,6 +2037,11 @@ Public Class Designer
                             Next
 
                         Case StructureType.OBSERVATION ' "ENTRY.OBSERVATION"
+
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                cbParticipation.Checked = True
+                                SetUpParticipations()
+                            End If
 
                             'Ensures there is a data structure even if empty
                             SetUpDataStructure()
@@ -2090,6 +2080,11 @@ Public Class Designer
                             Next
 
                         Case StructureType.EVALUATION ' "ENTRY.EVALUATION"
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                cbParticipation.Checked = True
+                                SetUpParticipations()
+                            End If
+
                             SetUpDataStructure()
                             For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
@@ -2108,7 +2103,14 @@ Public Class Designer
 
                         Case StructureType.INSTRUCTION ' "ENTRY.INSTRUCTION"
                             SetUpInstruction()
+                           
                             mTabPageInstruction.ProcessInstruction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                mTabPageInstruction.HasParticipation = True
+                                SetUpParticipations()
+                            End If
+
                             For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 If rmStruct.Type = StructureType.Protocol Then
                                     mTabPageInstruction.cbProtocol.Checked = True
@@ -2119,6 +2121,12 @@ Public Class Designer
                         Case StructureType.ACTION
                             SetUpAction()
                             mTabPageAction.ProcessAction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                mTabPageAction.HasParticipation = True
+                                SetUpParticipations()
+                            End If
+
                             For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 If rmStruct.Type = StructureType.Protocol Then
                                     mTabPageAction.cbProtocol.Checked = True
@@ -2127,6 +2135,10 @@ Public Class Designer
                             Next
 
                         Case StructureType.ADMIN_ENTRY
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                cbParticipation.Checked = True
+                                SetUpParticipations()
+                            End If
                             rm = CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.items(0)
                             SetUpDataStructure()
                             If rm.Children.Count > 0 Then
@@ -2209,6 +2221,13 @@ Public Class Designer
             mRestrictedSubject.Reset()
         End If
         mRestrictedSubject.TermSetToRestrict = aRestriction
+    End Sub
+
+    Sub SetUpParticipations()
+        mTabPageParticipation.chkProvider.Checked = CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory
+        If CType(mFileManager.Archetype.Definition, RmEntry).HasOtherParticipations Then
+            mTabPageParticipation.OtherParticipations = CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations
+        End If
     End Sub
 
     Private Sub NewArchetype(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuFileNew.Click, MenuFileClose.Click
@@ -2296,8 +2315,8 @@ Public Class Designer
         ' add the data page to the base collection to use as the root state incase
         mBaseTabPagesCollection.Add(Me.tpRootState, Me.tpRootState.Name)
         Me.TabDesign.TabPages.Remove(Me.tpRootState)
-        mBaseTabPagesCollection.Add(Me.tpParticipation, Me.tpParticipation.Name)
-        Me.TabDesign.TabPages.Remove(Me.tpParticipation)
+        'mBaseTabPagesCollection.Add(Me.tpParticipation, Me.tpParticipation.Name)
+        'Me.TabDesign.TabPages.Remove(Me.tpParticipation)
         mBaseTabPagesCollection.Add(Me.tpSectionPage, Me.tpSectionPage.Name)
         Me.TabMain.TabPages.Remove(Me.tpSectionPage)
         mBaseTabPagesCollection.Add(Me.tpDesign, Me.tpDesign.Name)
@@ -2445,7 +2464,7 @@ Public Class Designer
         'TabControl headings
         Me.tpHeader.Title = Filemanager.GetOpenEhrTerm(76, Me.tpHeader.Title, language)
         Me.tpDesign.Title = Filemanager.GetOpenEhrTerm(647, Me.tpDesign.Title, language)
-        Me.tpParticipation.Title = Filemanager.GetOpenEhrTerm(654, Me.tpParticipation.Title, language)
+        'Me.tpParticipation.Title = Filemanager.GetOpenEhrTerm(654, Me.tpParticipation.Title, language)
         Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(647, Me.tpSectionPage.Title, language)
         Me.tpTerminology.Title = Filemanager.GetOpenEhrTerm(47, Me.tpTerminology.Title, language)
         Me.tpText.Title = Filemanager.GetOpenEhrTerm(83, Me.tpText.Title, language)
@@ -3939,23 +3958,13 @@ Public Class Designer
                         CType(definition, RmEntry).SubjectOfData.Relationship = mRestrictedSubject.AsCodePhrase
                     End If
 
-                    'Participations
-                    If cbParticipation.Checked Then
-                        'Participations may have been added
-                        If mTabPageParticipation.chkProvider.Checked Then
-                            CType(definition, RmEntry).ProviderIsMandatory = True
-                        Else
-                            CType(definition, RmEntry).ProviderIsMandatory = False
-                        End If
-
-                        'Check for other participations
-                        If mTabPageParticipation.HasOtherParticipations Then
-                            CType(definition, RmEntry).OtherParticipations = mTabPageParticipation.OtherParticipations
-                        End If
-                    End If
-
                     Select Case definition.Type
                         Case StructureType.INSTRUCTION
+
+                            If mTabPageInstruction.HasParticipation AndAlso Not mTabPageParticipation Is Nothing Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             CType(definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children
 
                             If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
@@ -3965,6 +3974,10 @@ Public Class Designer
                             End If
 
                         Case StructureType.ACTION
+                            If mTabPageAction.HasParticipation AndAlso Not mTabPageParticipation Is Nothing Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             CType(definition, ArchetypeDefinition).Data = mTabPageAction.SaveAsAction.Children
 
                             If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
@@ -3974,6 +3987,11 @@ Public Class Designer
                             End If
 
                         Case StructureType.OBSERVATION
+                            'Participations
+                            If cbParticipation.Checked Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             For Each tp In Me.TabStructure.TabPages
 
                                 ' Observation always has at least one event
@@ -4055,6 +4073,11 @@ Public Class Designer
                             Next
 
                         Case StructureType.EVALUATION ' "ENTRY.Evaluation
+                            'Participations
+                            If cbParticipation.Checked Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             For Each tp In Me.TabStructure.TabPages
                                 Select Case tp.Name
                                     Case "tpDataStructure"
@@ -4092,6 +4115,11 @@ Public Class Designer
                             Next
 
                         Case StructureType.ENTRY ' "ENTRY"
+                            'Participations
+                            If cbParticipation.Checked Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             For Each tp In Me.TabStructure.TabPages
                                 Select Case tp.Name
                                     Case "tpDataEventSeries"
@@ -4144,6 +4172,10 @@ Public Class Designer
                             Next
 
                         Case StructureType.ADMIN_ENTRY
+                            'Participations
+                            If cbParticipation.Checked Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
                             For Each tp In Me.TabStructure.TabPages
                                 Select Case tp.Name
                                     Case "tpDataStructure"
@@ -4196,6 +4228,20 @@ Public Class Designer
                 Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                     mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
             End Select
+        End If
+    End Sub
+
+    Private Sub GetParticipations(ByVal entry As RmEntry, ByVal participations As TabPageParticipation)
+        'Participations may have been added
+        If participations.chkProvider.Checked Then
+            entry.ProviderIsMandatory = True
+        Else
+            entry.ProviderIsMandatory = False
+        End If
+
+        'Check for other participations
+        If participations.HasOtherParticipations Then
+            entry.OtherParticipations = mTabPageParticipation.OtherParticipations
         End If
     End Sub
 
@@ -4445,6 +4491,57 @@ Public Class Designer
         End If
     End Sub
 
+    Private Sub ParticipationCheckChanged(ByVal tbCtrl As Object, ByVal state As Boolean) Handles mTabPageAction.ProtocolCheckChanged, mTabPageInstruction.ParticipationCheckChanged, mTabPageAction.ParticipationCheckChanged
+        Dim tp As Crownwood.Magic.Controls.TabPage
+        Dim CrownCtrl As Crownwood.Magic.Controls.TabControl = tbCtrl
+
+        If state Then
+            If Me.mTabPagesCollection.Contains("tpParticipation") Then
+                If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
+                    CrownCtrl.TabPages.Insert(0, Me.mTabPagesCollection.Item("tpParticipation"))
+                Else
+                    CrownCtrl.TabPages.Add(Me.mTabPagesCollection.Item("tpParticipation"))
+                End If
+            Else
+                mTabPageParticipation = New TabPageParticipation()
+                tp = New Crownwood.Magic.Controls.TabPage
+                tp.Name = "tpParticipation"
+                tp.Title = AE_Constants.Instance.Participation
+                tp.Controls.Add(mTabPageParticipation)
+                mTabPageParticipation.Dock = DockStyle.Fill
+                mComponentsCollection.Add(mTabPageParticipation)
+                If Not mTabPagesCollection.Contains(tp.Name) Then
+                    Me.mTabPagesCollection.Add(tp.Name, tp)
+                End If
+                If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
+                    CrownCtrl.TabPages.Insert(0, tp) 'JAR: 30MAY07, EDT-44 Protocol to be the first tab
+                Else
+                    CrownCtrl.TabPages.Add(tp)
+                End If
+
+                'Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
+                'Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_participation.htm")
+            End If
+            ' now set the selected tab page to this one
+            Dim i As Integer
+            For i = 0 To CrownCtrl.TabPages.Count - 1
+                If CrownCtrl.TabPages(i).Name = "tpParticipation" Then
+                    Me.TabDesign.SelectedIndex = i
+                End If
+            Next
+        Else
+            For Each tp In CrownCtrl.TabPages
+                If tp.Name = "tpParticipation" Then
+                    If Not Me.mTabPagesCollection.ContainsKey("tpParticipation") Then
+                        Me.mTabPagesCollection.Add("tpParticipation", tp) ' save it incase reinstate
+                    End If
+                    CrownCtrl.TabPages.Remove(tp)
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+
     Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
 
         If mFileManager.FileLoading Then Exit Sub
@@ -4453,6 +4550,13 @@ Public Class Designer
 
         mFileManager.FileEdited = True
 
+    End Sub
+    Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
+
+        ParticipationCheckChanged(Me.TabDesign, Me.cbParticipation.Checked)
+        If Not mFileManager.FileLoading Then
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub cbStructurePersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbStructurePersonState.CheckedChanged
@@ -5070,20 +5174,6 @@ Public Class Designer
         If (e.KeyChar > "0"c And e.KeyChar < "z"c) Then
             Me.TabMain.SelectedTab = Me.tpDescription
         End If
-    End Sub
-
-    Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
-        If cbParticipation.Checked Then
-            If mTabPageParticipation Is Nothing Then
-                mTabPageParticipation = New TabPageParticipation()
-                tpParticipation.Controls.Add(mTabPageParticipation)
-                mTabPageParticipation.Dock = DockStyle.Fill
-            End If
-            Me.TabDesign.TabPages.Add(Me.mBaseTabPagesCollection.Item("tpParticipation"))
-        Else
-            Me.TabDesign.TabPages.Remove(Me.tpParticipation)
-        End If
-
     End Sub
 
     Private Sub butLinks_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butLinks.Click

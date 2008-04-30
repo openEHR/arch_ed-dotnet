@@ -22,8 +22,10 @@ Public Class TabPageAction
     Private mIsloading As Boolean
     Private mPathwaySpecification As PathwaySpecification
     Private mActionDescription As TabPageStructure
+    Friend WithEvents cbParticipation As System.Windows.Forms.CheckBox
     Private mFileManager As FileManagerLocal
     Public Event ProtocolCheckChanged(ByVal sender As Object, ByVal state As Boolean)
+    Public Event ParticipationCheckChanged(ByVal sender As Object, ByVal state As Boolean)
 
 #Region " Windows Form Designer generated code "
 
@@ -72,6 +74,7 @@ Public Class TabPageAction
         Me.PanelBaseTop = New System.Windows.Forms.Panel
         Me.cbProtocol = New System.Windows.Forms.CheckBox
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
+        Me.cbParticipation = New System.Windows.Forms.CheckBox
         Me.PanelBaseTop.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -125,6 +128,7 @@ Public Class TabPageAction
         '
         'PanelBaseTop
         '
+        Me.PanelBaseTop.Controls.Add(Me.cbParticipation)
         Me.PanelBaseTop.Controls.Add(Me.cbProtocol)
         Me.PanelBaseTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelBaseTop.Location = New System.Drawing.Point(0, 0)
@@ -139,6 +143,14 @@ Public Class TabPageAction
         Me.cbProtocol.Size = New System.Drawing.Size(136, 24)
         Me.cbProtocol.TabIndex = 0
         Me.cbProtocol.Text = "Protocol"
+        '
+        'cbParticipation
+        '
+        Me.cbParticipation.Location = New System.Drawing.Point(298, 0)
+        Me.cbParticipation.Name = "cbParticipation"
+        Me.cbParticipation.Size = New System.Drawing.Size(136, 24)
+        Me.cbParticipation.TabIndex = 1
+        Me.cbParticipation.Text = "Participation"
         '
         'TabPageAction
         '
@@ -163,6 +175,16 @@ Public Class TabPageAction
 
         Return False
     End Function
+
+
+    Public Property HasParticipation() As Boolean
+        Get
+            Return Not Me.TabControlAction.TabPages.Item(AE_Constants.Instance.Participation) Is Nothing
+        End Get
+        Set(ByVal value As Boolean)
+            cbParticipation.Checked = value
+        End Set
+    End Property
 
     Private Sub TabPageAction_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsloading = True
@@ -297,6 +319,13 @@ Public Class TabPageAction
     Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
         If Not mFileManager.FileLoading Then
             RaiseEvent ProtocolCheckChanged(TabControlAction, cbProtocol.Checked)
+            mFileManager.FileEdited = True
+        End If
+    End Sub
+
+    Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
+        RaiseEvent ParticipationCheckChanged(Me.TabControlAction, cbParticipation.Checked)
+        If Not mFileManager.FileLoading Then
             mFileManager.FileEdited = True
         End If
     End Sub

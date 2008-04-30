@@ -103,6 +103,7 @@ Public Class AE_Constants
     Private mFalse As String = "False"
     Private mChangeDataType As String = "Change data type"
     Private mCardinality As String = "Cardinality"
+    Private mParticipation As String = "Participation"
 
     Friend ReadOnly Property Lower() As String
         Get
@@ -426,6 +427,12 @@ Public Class AE_Constants
         End Get
     End Property
 
+    Friend ReadOnly Property Participation() As String
+        Get
+            Return mParticipation
+        End Get
+    End Property
+
     Friend ReadOnly Property Duplicate_name() As String
         Get
             Return mNameAlreadyInUse
@@ -634,7 +641,7 @@ Public Class AE_Constants
         mLanguageAdditionCancelled = TerminologyServer.Instance.RubricForCode(286, Language)
         mCurrentArchetype = TerminologyServer.Instance.RubricForCode(287, Language)
         mDiscardChanges = TerminologyServer.Instance.RubricForCode(288, Language)
-        mCouldNotFind = TerminologyServer.Instance.RubricForCode(289, Language)        
+        mCouldNotFind = TerminologyServer.Instance.RubricForCode(289, Language)
         mPleaseSetConceptText = TerminologyServer.Instance.RubricForCode(290, Language)
         mRemoveState = TerminologyServer.Instance.RubricForCode(291, Language)
         mErrorLoading = TerminologyServer.Instance.RubricForCode(292, Language)
@@ -707,6 +714,7 @@ Public Class AE_Constants
         mChangeDataType = TerminologyServer.Instance.RubricForCode(60, Language)
         mCardinality = TerminologyServer.Instance.RubricForCode(437, Language)
         'mLocateFile = TerminologyServer.Instance.RubricForCode(?, Language)
+        mParticipation = TerminologyServer.Instance.RubricForCode(654, Language)
     End Sub
 End Class
 

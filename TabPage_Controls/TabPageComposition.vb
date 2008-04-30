@@ -274,7 +274,7 @@ Public Class TabPageComposition
                 rm.Data.Add(context)
             End If
         End If
-        If Not mParticipationConstraint Is Nothing Then
+        If Not mParticipationConstraint Is Nothing AndAlso mParticipationConstraint.HasOtherParticipations Then
             rm.Participations = mParticipationConstraint.OtherParticipations
         End If
         If Not mSectionConstraint Is Nothing Then
