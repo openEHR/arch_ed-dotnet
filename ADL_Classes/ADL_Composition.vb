@@ -49,6 +49,10 @@ Class ADL_COMPOSITION
                             mChildren.Add(New RmStructureCompound(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                             ' remembers the Processed data off events
                         End If
+                        If complexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("participations")) Then
+                            an_attribute = complexObj.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("participations"))
+                            Me.Participations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
+                        End If
                     Case "content"
                             ' a set of slots constraining what sections can be added
 

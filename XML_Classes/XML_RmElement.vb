@@ -859,7 +859,7 @@ Namespace ArchetypeEditor.XML_Classes
                                     t.AssumedValue = CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value.code_string()
                                 End If
 
-                                If t.AllowableValues.TerminologyID = "local" Then
+                                If t.AllowableValues.TerminologyID = "local" Or t.AllowableValues.TerminologyID = "openehr" Then
                                     t.TypeOfTextConstraint = TextConstrainType.Internal
                                 End If
                         End Select

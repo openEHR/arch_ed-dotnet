@@ -297,7 +297,8 @@ Public Class RmStructureCompound
             a_structure_type = StructureType.Protocol Or _
             a_structure_type = StructureType.ISM_TRANSITION Or _
             a_structure_type = StructureType.ActivityDescription Or _
-            a_structure_type = StructureType.Activities)
+            a_structure_type = StructureType.Activities Or _
+            a_structure_type = StructureType.OtherParticipations)
         colChildren = New Children(mType)
         ProcessData(XML_Attribute, a_filemanager)
     End Sub
@@ -428,6 +429,10 @@ Public Class RmStructureCompound
 
                             Case StructureType.Activity
                                 colChildren.Add(New RmActivity(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+
+                            Case StructureType.Participation
+                                colChildren.Add(New RmParticipation(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))) ', a_filemanager))
+
                             Case Else
                                 Debug.Assert(False)
                         End Select

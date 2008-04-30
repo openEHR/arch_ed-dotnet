@@ -43,9 +43,12 @@ Namespace ArchetypeEditor.XML_Classes
                             Dim complexObj As XMLParser.C_COMPLEX_OBJECT
                             complexObj = an_attribute.children(0)
                             For Each context_attribute As XMLParser.C_ATTRIBUTE In complexObj.attributes
-                                If context_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "other_context" Then
-                                    mChildren.Add(New RmStructureCompound(CType(context_attribute.children(0), XMLParser.C_COMPLEX_OBJECT), a_filemanager))
-                                End If
+                                Select Case context_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                                    Case "participations"
+                                        Me.Participations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
+                                    Case "other_context"
+                                        mChildren.Add(New RmStructureCompound(CType(context_attribute.children(0), XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                                End Select
                             Next
                         Case "content"
                             ' a set of slots constraining what sections can be added
