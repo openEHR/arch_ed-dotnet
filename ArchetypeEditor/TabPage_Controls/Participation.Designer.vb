@@ -96,7 +96,7 @@ Partial Class Participation
         Me.cbDateTime.Name = "cbDateTime"
         Me.cbDateTime.Size = New System.Drawing.Size(84, 40)
         Me.cbDateTime.TabIndex = 0
-        Me.cbDateTime.Text = "mandatory"
+        Me.cbDateTime.Text = "Mandatory"
         Me.cbDateTime.UseVisualStyleBackColor = True
         '
         'Participation

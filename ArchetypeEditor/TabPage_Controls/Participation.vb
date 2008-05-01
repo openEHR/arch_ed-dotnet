@@ -19,41 +19,46 @@ Public Class Participation
             mOccurrences.Cardinality = mParticipation.Occurrences
             mRestrictedModeSet.LocalFileManager = Filemanager.Master
             mRestrictedModeSet.AsCodePhrase = mParticipation.ModeSet
-            Me.cbDateTime.Checked = mParticipation.MandatoryDateTime
+            cbDateTime.Checked = mParticipation.MandatoryDateTime
             mIsLoading = False
         End Set
     End Property
+
     Private Sub Participation_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         mRestrictedModeSet.LocalFileManager = Filemanager.Master
         mRestrictedModeSet.TermSetToRestrict = RestrictedSet.TermSet.ParticipationMode
-        Me.panelLeft.Controls.Add(mOccurrences)
+        panelLeft.Controls.Add(mOccurrences)
         mOccurrences.Dock = DockStyle.Top
-        Me.panelLeft.Controls.Add(mRestrictedModeSet)
+        panelLeft.Controls.Add(mRestrictedModeSet)
         mRestrictedModeSet.BringToFront()
         mRestrictedModeSet.Dock = DockStyle.Fill
+
         If Not mParticipationFunction.HasConstraint Then
             'if it has not been set from the archetype
             mParticipationFunction.TextConstraint = New Constraint_Text
         End If
-        Me.gbFunction.Controls.Add(mParticipationFunction)
+
+        gbFunction.Controls.Add(mParticipationFunction)
         mParticipationFunction.Dock = DockStyle.Fill
+
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
+
         mIsLoading = False
     End Sub
 
     Public Property Selected() As Boolean
         Get
-            Return Me.butSelector.Checked
+            Return butSelector.Checked
         End Get
         Set(ByVal value As Boolean)
-            Me.butSelector.Checked = False
+            butSelector.Checked = False
         End Set
     End Property
 
     Private Sub Participation_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Enter
-        Me.butSelector.Checked = True
+        butSelector.Checked = True
     End Sub
 
     Public Sub TranslateGUI()
@@ -66,7 +71,7 @@ Public Class Participation
     End Sub
 
     Public Sub Translate()
-        Me.mRestrictedModeSet.Translate()
+        mRestrictedModeSet.Translate()
         mParticipationFunction.TextConstraint = mParticipation.FunctionConstraint
     End Sub
 
@@ -80,4 +85,5 @@ Public Class Participation
     Public Function HasConstraint() As Boolean
         Return mRestrictedModeSet.HasRestriction() OrElse cbDateTime.Checked OrElse mParticipationFunction.TextConstraint.TypeOfTextConstraint <> TextConstrainType.Text
     End Function
+
 End Class

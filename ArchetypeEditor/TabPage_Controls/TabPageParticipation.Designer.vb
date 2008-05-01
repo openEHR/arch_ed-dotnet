@@ -105,7 +105,6 @@ Partial Class TabPageParticipation
         'butAddEvent
         '
         Me.butAddEvent.Image = CType(resources.GetObject("butAddEvent.Image"), System.Drawing.Image)
-        Me.butAddEvent.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.butAddEvent.Location = New System.Drawing.Point(2, 4)
         Me.butAddEvent.Margin = New System.Windows.Forms.Padding(2)
         Me.butAddEvent.Name = "butAddEvent"
@@ -116,7 +115,6 @@ Partial Class TabPageParticipation
         '
         Me.butRemoveElement.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butRemoveElement.Image = CType(resources.GetObject("butRemoveElement.Image"), System.Drawing.Image)
-        Me.butRemoveElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.butRemoveElement.Location = New System.Drawing.Point(2, 29)
         Me.butRemoveElement.Margin = New System.Windows.Forms.Padding(2)
         Me.butRemoveElement.Name = "butRemoveElement"
