@@ -391,14 +391,17 @@ Public Class ListStructure
 
                 ' leave an item selected if there is one
                 If lvItem.Index > 0 Then
-                    Me.lvList.Items(lvItem.Index - 1).Selected = True
-                ElseIf Me.lvList.Items.Count > 1 Then
-                    Me.lvList.Items(lvItem.Index + 1).Selected = True
+                    lvList.Items(lvItem.Index - 1).Selected = True
+                ElseIf lvList.Items.Count > 1 Then
+                    lvList.Items(lvItem.Index + 1).Selected = True
+                Else
+                    SetCurrentItem(Nothing)
                 End If
 
                 ' if this is a reference then remove all items with nodeid
                 If lvItem.Item.HasReferences Then
                     nodeid = CType(lvItem.Item, ArchetypeElement).NodeId
+
                     For Each lvItem In lvList.Items
                         If Not lvItem.Item.IsAnonymous AndAlso CType(lvItem.Item, ArchetypeElement).NodeId = nodeid Then
                             lvItem.Remove()
@@ -569,30 +572,29 @@ Public Class ListStructure
     Private Sub lvList_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvList.SelectedIndexChanged
         Dim lvItem As ArchetypeListViewItem
 
-        If Me.lvList.Items.Count = 0 Then
-            Me.butChangeDataType.Visible = False
-            Return
-        End If
-        'make sure there is a selected item
-        If Me.lvList.SelectedItems.Count = 1 Then
-            Me.MenuRemoveItemAndReference.Text = Me.lvList.SelectedItems(0).Text
+        If lvList.Items.Count = 0 Then
+            butChangeDataType.Hide()
+        ElseIf lvList.SelectedItems.Count = 1 Then
+            MenuRemoveItemAndReference.Text = lvList.SelectedItems(0).Text
+
             'Unselect the previous item
-            For Each lvItem In Me.lvList.Items
-                lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item, lvItem.Selected)
+            For Each lvItem In lvList.Items
+                lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, lvItem.Selected)
             Next
+
             lvItem = CType(Me.lvList.SelectedItems(0), ArchetypeListViewItem)
             'Force the change to selected image
             'lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item, True)
             SetCurrentItem(lvItem.Item)
+
             If lvItem.Item.HasReferences Then
                 MenuRemoveItemAndReference.Text = String.Format("{0} [+]", MenuRemoveItemAndReference.Text)
             End If
 
             lvList.LabelEdit = Not lvItem.Item.IsReference
         Else
-            Me.MenuRemove.Visible = False
+            MenuRemove.Visible = False
         End If
-
     End Sub
 
     Private Sub lvList_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lvList.MouseMove
@@ -614,10 +616,10 @@ Public Class ListStructure
                     Dim numSpecs As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
 
                     If numSpecs = 0 Or (i = numSpecs And ((id.StartsWith("at0.") Or (id.IndexOf(".0.") > -1)))) Then
-                        Me.RemoveItemAndReferences(sender, e)
+                        RemoveItemAndReferences(sender, e)
                     End If
                 Else
-                    Me.RemoveItemAndReferences(sender, e)
+                    RemoveItemAndReferences(sender, e)
                 End If
             End If
         End If
@@ -637,7 +639,8 @@ Public Class ListStructure
 
             lvItem = CType(Me.lvList.Items(e.Item), ArchetypeListViewItem)
             lvItem.Text = e.Label
-            Me.MenuRemoveItemAndReference.Text = e.Label
+            MenuRemoveItemAndReference.Text = e.Label
+
             If lvItem.Item.HasReferences Then
                 'SRH 13 Apr 2008 - added update of text change
                 Me.Translate()

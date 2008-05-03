@@ -600,10 +600,10 @@ Public Class TreeStructure
         Dim has_references As Boolean
         Dim message As String
 
-        If Not Me.tvTree.SelectedNode Is Nothing Then
-
+        If Not tvTree.SelectedNode Is Nothing Then
             tvNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
             message = AE_Constants.Instance.Remove & Me.tvTree.SelectedNode.Text
+
             If tvNode.Item.RM_Class.Type = StructureType.Element Then
                 If CType(tvNode.Item.RM_Class, RmElement).hasReferences Then
                     has_references = True
@@ -614,24 +614,25 @@ Public Class TreeStructure
             If MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                 ' leave an item selected if there is one
                 If Not tvNode.PrevNode Is Nothing Then
-                    Me.tvTree.SelectedNode = tvNode.PrevNode
+                    tvTree.SelectedNode = tvNode.PrevNode
                 ElseIf Not tvNode.NextNode Is Nothing Then
-                    Me.tvTree.SelectedNode = tvNode.NextNode
+                    tvTree.SelectedNode = tvNode.NextNode
                 Else
                     If tvNode.Parent Is Nothing Then
-                        Me.tvTree.SelectedNode = Nothing
+                        tvTree.SelectedNode = Nothing
                         SetCurrentItem(Nothing)
-
                     Else
-                        Me.tvTree.SelectedNode = tvNode.Parent
+                        tvTree.SelectedNode = tvNode.Parent
                     End If
                 End If
+
                 'if the current node has references then remove all nodes with the same id
                 If has_references Then
                     RemoveTreeNodeAndReferences(Me.tvTree.Nodes, CType(tvNode.Item, ArchetypeElement).NodeId)
                 Else
                     tvNode.Remove()
                 End If
+
                 mFileManager.FileEdited = True
             End If
         End If

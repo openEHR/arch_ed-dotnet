@@ -56,7 +56,7 @@ Public Class TableStructure
             Dim rmStr As RmStructure
             Dim archNode As ArchetypeNode = Nothing
 
-            Me.butChangeDataType.Visible = True
+            butChangeDataType.Show()
 
             If rm.isRotated Then
                 For i As Integer = 0 To mRow.Children.Count - 1
@@ -603,35 +603,35 @@ Public Class TableStructure
 
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles MenuRemoveRow.Click
-        Dim rowIndex As Integer
-        Dim rowLabel As String
+        Dim rowIndex As Integer = dgGrid.CurrentRowIndex
 
-        rowIndex = Me.dgGrid.CurrentRowIndex
-
-        If rowIndex = -1 Then
-            'Nothing to delete
+        If rowIndex < 0 Then
             MessageBox.Show(AE_Constants.Instance.Cannot_delete & ": " & AE_Constants.Instance.SelectItem, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Return
-        End If
+        Else
+            Dim rowLabel As String
 
-        'If Not row_selected Then
-        '    ' and the column label
-        '    ii = Me.dgGrid.CurrentCell.ColumnNumber
-        '    label = Me.TableArchetypeStyle.GridColumnStyles(ii).HeaderText
-        '    If ii < 2 Then
-        '        'not a valid column to remove
-        '        MessageBox.Show(AE_Constants.Instance.Cannot_delete & "'" & label & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-        '        Return
-        '    End If
+            'If Not row_selected Then
+            '    ' and the column label
+            '    ii = Me.dgGrid.CurrentCell.ColumnNumber
+            '    label = Me.TableArchetypeStyle.GridColumnStyles(ii).HeaderText
+            '    If ii < 2 Then
+            '        'not a valid column to remove
+            '        MessageBox.Show(AE_Constants.Instance.Cannot_delete & "'" & label & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            '        Return
+            '    End If
+            'End If
 
-        'End If
-
-        If rowIndex > -1 Then
             ' a row is selected
-            rowLabel = CStr(Me.dgGrid.Item(rowIndex, 1))
+            rowLabel = CStr(dgGrid.Item(rowIndex, 1))
+
             If MessageBox.Show(AE_Constants.Instance.Remove & "'" & rowLabel & "'", AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
                 mArchetypeTable.Rows.RemoveAt(dgGrid.CurrentRowIndex)
+
+                If dgGrid.CurrentRowIndex < 0 Then
+                    SetCurrentItem(Nothing)
+                End If
             End If
+
             'Dim selected_rows As DataRow()
             'If row_selected Then
             '    selected_rows = mArchetypeTable.Select("Text = '" & Label & "'")
@@ -656,7 +656,6 @@ Public Class TableStructure
             '    'RemoveTerms(Me.ArchetypeTable.Rows(0).Item(ii * 2))
             '    mArchetypeTable.Columns.RemoveAt(ii * 2)
             'End If
-
         End If
     End Sub
 
