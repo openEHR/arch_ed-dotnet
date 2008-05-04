@@ -116,7 +116,7 @@ Public Class OccurrencesPanel
         '
         'gbOccurrences
         '
-        Me.gbOccurrences.Location = New System.Drawing.Point(0, 20)
+        Me.gbOccurrences.Location = New System.Drawing.Point(0, 24)
         Me.gbOccurrences.Name = "gbOccurrences"
         Me.gbOccurrences.Size = New System.Drawing.Size(376, 48)
         Me.gbOccurrences.TabIndex = 1
@@ -177,7 +177,7 @@ Public Class OccurrencesPanel
         '
         'cbOrdered
         '
-        Me.cbOrdered.Location = New System.Drawing.Point(16, 0)
+        Me.cbOrdered.Location = New System.Drawing.Point(9, 0)
         Me.cbOrdered.Name = "cbOrdered"
         Me.cbOrdered.Size = New System.Drawing.Size(112, 24)
         Me.cbOrdered.TabIndex = 0
@@ -186,12 +186,12 @@ Public Class OccurrencesPanel
         '
         'OccurrencesPanel
         '
-        Me.Controls.Add(Me.cbOrdered)
         Me.Controls.Add(Me.numMax)
         Me.Controls.Add(Me.numMin)
         Me.Controls.Add(Me.panelLexical)
         Me.Controls.Add(Me.gbOccurrences)
         Me.Controls.Add(Me.panelNumeric)
+        Me.Controls.Add(Me.cbOrdered)
         Me.Name = "OccurrencesPanel"
         Me.Size = New System.Drawing.Size(376, 208)
         Me.panelNumeric.ResumeLayout(False)
