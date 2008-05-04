@@ -421,8 +421,8 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(13, "")
         Me.ilSmall.Images.SetKeyName(14, "")
         Me.ilSmall.Images.SetKeyName(15, "")
-        Me.ilSmall.Images.SetKeyName(16, "")
-        Me.ilSmall.Images.SetKeyName(17, "")
+        Me.ilSmall.Images.SetKeyName(16, "id.bmp")
+        Me.ilSmall.Images.SetKeyName(17, "currency.bmp")
         Me.ilSmall.Images.SetKeyName(18, "")
         Me.ilSmall.Images.SetKeyName(19, "")
         Me.ilSmall.Images.SetKeyName(20, "")
@@ -439,8 +439,8 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(31, "")
         Me.ilSmall.Images.SetKeyName(32, "")
         Me.ilSmall.Images.SetKeyName(33, "")
-        Me.ilSmall.Images.SetKeyName(34, "")
-        Me.ilSmall.Images.SetKeyName(35, "")
+        Me.ilSmall.Images.SetKeyName(34, "id_ref.bmp")
+        Me.ilSmall.Images.SetKeyName(35, "currency_ref.bmp")
         Me.ilSmall.Images.SetKeyName(36, "")
         Me.ilSmall.Images.SetKeyName(37, "")
         Me.ilSmall.Images.SetKeyName(38, "")
@@ -457,8 +457,8 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(49, "")
         Me.ilSmall.Images.SetKeyName(50, "")
         Me.ilSmall.Images.SetKeyName(51, "")
-        Me.ilSmall.Images.SetKeyName(52, "")
-        Me.ilSmall.Images.SetKeyName(53, "")
+        Me.ilSmall.Images.SetKeyName(52, "id_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(53, "currency_selected.bmp")
         Me.ilSmall.Images.SetKeyName(54, "")
         Me.ilSmall.Images.SetKeyName(55, "")
         Me.ilSmall.Images.SetKeyName(56, "")
@@ -471,6 +471,14 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(63, "")
         Me.ilSmall.Images.SetKeyName(64, "")
         Me.ilSmall.Images.SetKeyName(65, "")
+        Me.ilSmall.Images.SetKeyName(66, "")
+        Me.ilSmall.Images.SetKeyName(67, "")
+        Me.ilSmall.Images.SetKeyName(68, "")
+        Me.ilSmall.Images.SetKeyName(69, "")
+        Me.ilSmall.Images.SetKeyName(70, "id_ref_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(71, "currency_ref_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(72, "")
+        Me.ilSmall.Images.SetKeyName(73, "")
         '
         'ToolTipSpecialisation
         '
@@ -520,7 +528,7 @@ Public Class EntryStructure
 
     Public ReadOnly Property SelectedImageOffset() As Integer
         Get
-            Return 32
+            Return 36
         End Get
     End Property
     'implement as overrided property
@@ -794,9 +802,9 @@ Public Class EntryStructure
                 Return ImageIndexForConstraintType(ConstraintType.Slot, False, isSelected)
             Case StructureType.Cluster
                 If isSelected Then
-                    Return 64
+                    Return 72
                 Else
-                    Return 65
+                    Return 73
                 End If
         End Select
 
@@ -807,7 +815,7 @@ Public Class EntryStructure
 
         Dim offset As Integer
 
-        If isReference Then offset = 16
+        If isReference Then offset = 18
         If isSelected Then offset += Me.SelectedImageOffset
 
         Select Case ct
@@ -843,6 +851,10 @@ Public Class EntryStructure
                 Return 14 + offset
             Case ConstraintType.Slot
                 Return 15 + offset
+            Case ConstraintType.Identifier
+                Return 16 + offset
+            Case ConstraintType.Currency
+                Return 17 + offset
             Case Else
                 Debug.Assert(False, "Constraint not handled")
         End Select

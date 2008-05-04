@@ -1025,6 +1025,42 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
+        Private Sub BuildIdentifier(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
+            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+
+            
+            objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
+            
+            If c.IssuerRegex <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("issuer"))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.IssuerRegex))
+                mAomFactory.create_c_primitive_object(attribute, cSt)
+            End If
+
+            If c.TypeRegex <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("type"))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.TypeRegex))
+                mAomFactory.create_c_primitive_object(attribute, cSt)
+            End If
+
+            If c.IDRegex <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("id"))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.IDRegex))
+                mAomFactory.create_c_primitive_object(attribute, cSt)
+            End If
+
+
+        End Sub
+
         Protected Sub BuildElementConstraint(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint)
 
             ' cannot have a value with no constraint on datatype
@@ -1075,6 +1111,16 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Case ConstraintType.Duration
                     BuildDuration(value_attribute, c)
+
+                    'Case ConstraintType.Currency
+                    '    BuildCurrency(value_attribute, c)
+
+                Case ConstraintType.Identifier
+                    BuildIdentifier(value_attribute, c)
+
+                Case Else
+                    Debug.Assert(False, String.Format("{0} constraint type is not handled", c.ToString()))
+
 
             End Select
 

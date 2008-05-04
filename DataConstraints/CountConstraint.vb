@@ -17,9 +17,9 @@ Option Strict On
 Public Class Constraint_Count
     Inherits Constraint_with_value
 
-    Protected mMinVal As Single = 0
-    Protected mMaxVal As Single = 0
-    Protected mAssumedValue As Single
+    Protected mMinVal As Double = 0
+    Protected mMaxVal As Double = 0
+    Protected mAssumedValue As Double
     Protected mHasMaxVal As Boolean
     Protected mHasMinVal As Boolean
     Protected mIncludeMax As Boolean = True
