@@ -314,8 +314,13 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             SetStateValues()
         End If
 
-        IsIntegral = Not (TypeOf Constraint Is Constraint_Real)
+        IsIntegral = Not (TypeOf Constraint Is Constraint_Real Or TypeOf Constraint Is Constraint_Currency)
         SetMaxAndMin()
+        If TypeOf Constraint Is Constraint_Currency Then
+            LabelQuantity.Text = AE_Constants.Instance.Currency
+        Else
+            LabelQuantity.Text = AE_Constants.Instance.Count
+        End If
         LabelQuantity.Text = AE_Constants.Instance.Count
     End Sub
 
@@ -373,15 +378,22 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             Else
                 chkDecimalPlaces.Show()
 
-                If CType(Constraint, Constraint_Real).Precision > -1 Then
-                    chkDecimalPlaces.Checked = True
-                    numPrecision.Value = CType(Constraint, Constraint_Real).Precision
-                    numPrecision.Show()
-                Else
-                    chkDecimalPlaces.Checked = False
+                If TypeOf Constraint Is Constraint_Real Then
+                    If CType(Constraint, Constraint_Real).Precision > -1 Then
+                        chkDecimalPlaces.Checked = True
+                        numPrecision.Value = CType(Constraint, Constraint_Real).Precision
+                        numPrecision.Show()
+                        Else
+                            chkDecimalPlaces.Checked = False
+                            numPrecision.Hide()
+                    End If
+                ElseIf TypeOf Constraint Is Constraint_Currency Then
+                    numPrecision.Value = 2
                     numPrecision.Hide()
                 End If
+
             End If
+
         End Set
     End Property
 

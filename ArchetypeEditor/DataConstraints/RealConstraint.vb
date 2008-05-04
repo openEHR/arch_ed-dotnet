@@ -27,18 +27,18 @@ Public Class Constraint_Real
 
     Public Shadows Property MinimumValue() As Single
         Get
-            Return mMinval
+            Return Convert.ToSingle(mMinVal)
         End Get
         Set(ByVal Value As Single)
-            mMinval = Value
+            mMinVal = Convert.ToDouble(Value)
         End Set
     End Property
     Public Shadows Property MaximumValue() As Single
         Get
-            Return mMaxval
+            Return Convert.ToSingle(mMaxVal)
         End Get
         Set(ByVal Value As Single)
-            mMaxVal = Value
+            mMaxVal = Convert.ToDouble(Value)
         End Set
     End Property
 

@@ -447,6 +447,12 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Case ConstraintType.URI
                 'add nothing
 
+            Case ConstraintType.Identifier
+                'add nothing
+
+            Case ConstraintType.Currency
+                'add nothing
+
             Case ConstraintType.Interval_Count
                 Dim cic As Constraint_Interval_Count = CType(a_constraint, Constraint_Interval_Count)
                 result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": "
