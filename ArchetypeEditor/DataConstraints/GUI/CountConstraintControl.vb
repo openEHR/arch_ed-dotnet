@@ -383,17 +383,15 @@ Public Class CountConstraintControl : Inherits ConstraintControl
                         chkDecimalPlaces.Checked = True
                         numPrecision.Value = CType(Constraint, Constraint_Real).Precision
                         numPrecision.Show()
-                        Else
-                            chkDecimalPlaces.Checked = False
-                            numPrecision.Hide()
+                    Else
+                        chkDecimalPlaces.Checked = False
+                        numPrecision.Hide()
                     End If
                 ElseIf TypeOf Constraint Is Constraint_Currency Then
-                    numPrecision.Value = 2
+                    numPrecision.Value = 2  ' FIXME: Not all currencies have a precision of 2!
                     numPrecision.Hide()
                 End If
-
             End If
-
         End Set
     End Property
 
