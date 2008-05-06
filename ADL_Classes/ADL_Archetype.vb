@@ -770,7 +770,9 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
                     Next
 
-                    slot.add_include(MakeAssertion("archetype_id/value", pattern))
+                    If pattern <> "" Then
+                        slot.add_include(MakeAssertion("archetype_id/value", pattern))
+                    End If
                 End If
 
                 If sl.ExcludeAll Then
@@ -786,7 +788,9 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
                     Next
 
-                    slot.add_exclude(MakeAssertion("archetype_id/value", pattern))
+                    If pattern <> "" Then
+                        slot.add_exclude(MakeAssertion("archetype_id/value", pattern))
+                    End If
                 End If
 
                 Debug.Assert(slot.has_excludes Or slot.has_includes)
