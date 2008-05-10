@@ -476,7 +476,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         If cadlC.has_assumed_value Then
                             ct.HasAssumedValue = True
-                            ct.AssumedValue = CType(cadlC.assumed_value, EiffelKernel.INTEGER_32_REF).item
+                            ct.AssumedValue = CType(cadlC.assumed_value, EiffelKernel.INTEGER_32).item
                         End If
                     Case Else
                         Debug.Assert(False)
