@@ -118,8 +118,8 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Private Sub SetImageIndex()
         Select Case mArchetypeNode.RM_Class.Type
             Case StructureType.Cluster
-                MyBase.ImageIndex = 64
-                MyBase.SelectedImageIndex = 65
+                MyBase.ImageIndex = 72
+                MyBase.SelectedImageIndex = 73
             Case StructureType.SECTION
                 MyBase.ImageIndex = 1
                 MyBase.SelectedImageIndex = 3
