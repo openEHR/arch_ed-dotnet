@@ -26,8 +26,11 @@ Public Class TabPageInstruction
     Friend WithEvents butRemoveActivity As System.Windows.Forms.Button
     Friend WithEvents butAddActivity As System.Windows.Forms.Button
     Friend WithEvents toolTipAction As System.Windows.Forms.ToolTip
+    Friend WithEvents cbParticipation As System.Windows.Forms.CheckBox
     Private mFileManager As FileManagerLocal
     Public Event ProtocolCheckChanged(ByVal sender As Object, ByVal state As Boolean)
+    Public Event ParticipationCheckChanged(ByVal sender As Object, ByVal state As Boolean)
+
 
 #Region " Windows Form Designer generated code "
 
@@ -74,6 +77,7 @@ Public Class TabPageInstruction
         Me.butRemoveActivity = New System.Windows.Forms.Button
         Me.butAddActivity = New System.Windows.Forms.Button
         Me.PanelBaseTop = New System.Windows.Forms.Panel
+        Me.cbParticipation = New System.Windows.Forms.CheckBox
         Me.cbProtocol = New System.Windows.Forms.CheckBox
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
         Me.toolTipAction = New System.Windows.Forms.ToolTip(Me.components)
@@ -98,7 +102,6 @@ Public Class TabPageInstruction
         Me.TabControlInstruction.Size = New System.Drawing.Size(848, 400)
         Me.TabControlInstruction.TabIndex = 0
         Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
-        Me.TabControlInstruction.CausesValidation = True        
         '
         'butRemoveActivity
         '
@@ -122,16 +125,25 @@ Public Class TabPageInstruction
         Me.butAddActivity.Size = New System.Drawing.Size(27, 25)
         Me.butAddActivity.TabIndex = 16
         Me.toolTipAction.SetToolTip(Me.butAddActivity, "Add new activity")
-        Me.butAddActivity.Visible = False 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+        Me.butAddActivity.Visible = False
         '
         'PanelBaseTop
         '
+        Me.PanelBaseTop.Controls.Add(Me.cbParticipation)
         Me.PanelBaseTop.Controls.Add(Me.cbProtocol)
         Me.PanelBaseTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelBaseTop.Location = New System.Drawing.Point(0, 0)
         Me.PanelBaseTop.Name = "PanelBaseTop"
         Me.PanelBaseTop.Size = New System.Drawing.Size(848, 24)
         Me.PanelBaseTop.TabIndex = 1
+        '
+        'cbParticipation
+        '
+        Me.cbParticipation.Location = New System.Drawing.Point(245, 0)
+        Me.cbParticipation.Name = "cbParticipation"
+        Me.cbParticipation.Size = New System.Drawing.Size(136, 24)
+        Me.cbParticipation.TabIndex = 2
+        Me.cbParticipation.Text = "Participation"
         '
         'cbProtocol
         '
@@ -164,8 +176,17 @@ Public Class TabPageInstruction
         '    End If
         'Next
         'Return False
-        Return Not TabControlInstruction.TabPages.Item(AE_Constants.Instance.Protocol) Is Nothing        
+        Return Not TabControlInstruction.TabPages.Item(AE_Constants.Instance.Protocol) Is Nothing
     End Function
+
+    Public Property HasParticipation() As Boolean
+        Get
+            Return Not TabControlInstruction.TabPages.Item(AE_Constants.Instance.Participation) Is Nothing
+        End Get
+        Set(ByVal value As Boolean)
+            cbParticipation.Checked = value
+        End Set
+    End Property
 
     Private Sub TabPageInstruction_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsloading = True
@@ -364,6 +385,13 @@ Public Class TabPageInstruction
         End If
     End Sub
 
+    Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
+        RaiseEvent ParticipationCheckChanged(Me.TabControlInstruction, cbParticipation.Checked)
+        If Not mFileManager.FileLoading Then
+            mFileManager.FileEdited = True
+        End If
+    End Sub
+
     Private Sub TabPageInstruction_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
         OceanArchetypeEditor.Reflect(Me)
     End Sub
@@ -400,7 +428,7 @@ Public Class TabPageInstruction
     End Sub
 
     Private Sub NewActivity() 'Prompts for activity description then adds
-        Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New activity"))        
+        Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New activity"))
         Dim s As String() = OceanArchetypeEditor.Instance.GetInput(a_term, Me.ParentForm)
         mFileManager.OntologyManager.SetText(a_term)
 

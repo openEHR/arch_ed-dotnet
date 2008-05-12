@@ -354,6 +354,10 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "dv_uri", "uri", "dv_ehr_uri"
                     Return ProcessUri(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                Case "dv_identifier"
+                    Return ProcessIdentifier(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    'Case "dv_currency"
+                    'Return ProcessCurrency(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "dv_duration", "duration"
                     If TypeOf ObjNode Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
                         Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -396,6 +400,45 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Return cUri
         End Function
+
+        Shared Function ProcessIdentifier(ByVal dvIdentifier As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
+            Dim cIdentifier As New Constraint_Identifier
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = Nothing
+
+            If dvIdentifier.any_allowed Then
+                Return cIdentifier
+            End If
+
+            Try
+                For i As Integer = 1 To dvIdentifier.attributes.count
+                    an_attribute = CType(dvIdentifier.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+
+                    If Not an_attribute Is Nothing Then
+                        Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = _
+                                            CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                        Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = _
+                            CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+
+                        Select Case an_attribute.rm_attribute_name.to_cil.ToLowerInvariant()
+                            Case "issuer"
+                                cIdentifier.IssuerRegex = cadlC.regexp.to_cil
+                            Case "type"
+                                cIdentifier.TypeRegex = cadlC.regexp.to_cil
+                            Case "id"
+                                cIdentifier.IDRegex = cadlC.regexp.to_cil
+                        End Select
+                    End If
+
+                Next
+
+                
+            Catch e As Exception
+                MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+
+            Return cIdentifier
+        End Function
+
 
         Private Function ProcessCount(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Count
             Dim ct As New Constraint_Count

@@ -248,6 +248,10 @@ Public Class TabPageComposition
                     Debug.Assert(False, "Not handled yet")
             End Select
         Next
+
+        If Not a_composition.Participations Is Nothing Then
+            mParticipationConstraint.OtherParticipations = a_composition.Participations
+        End If
     End Sub
 
     Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point, ByVal mandatory_only As Boolean)
@@ -269,6 +273,9 @@ Public Class TabPageComposition
             If Not context Is Nothing Then
                 rm.Data.Add(context)
             End If
+        End If
+        If Not mParticipationConstraint Is Nothing AndAlso mParticipationConstraint.HasOtherParticipations Then
+            rm.Participations = mParticipationConstraint.OtherParticipations
         End If
         If Not mSectionConstraint Is Nothing Then
             Dim section As RmSection = mSectionConstraint.SaveAsSection

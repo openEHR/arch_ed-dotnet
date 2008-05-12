@@ -247,6 +247,10 @@ Namespace ArchetypeEditor.XML_Classes
                         Return ProcessMultiMedia(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
                     Case "dv_uri", "uri"
                         Return ProcessUri(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                    Case "dv_identifier"
+                        Return ProcessIdentifier(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                        'Case "dv_currency"
+                        '    Return ProcessCurrency(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
                     Case "dv_duration", "duration"
                         If TypeOf ObjNode Is XMLParser.C_COMPLEX_OBJECT Then
                             Return ProcessDuration(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
@@ -292,6 +296,35 @@ Namespace ArchetypeEditor.XML_Classes
             End If
             Return cUri
 
+        End Function
+
+        Function ProcessIdentifier(ByVal dvIdentifier As XMLParser.C_COMPLEX_OBJECT) As Constraint
+            Dim cIdentifier As New Constraint_Identifier
+            Dim an_attribute As XMLParser.C_ATTRIBUTE
+
+            Try
+                For Each an_attribute In dvIdentifier.attributes
+                    If an_attribute.children.Length > 0 Then
+                        Dim cadlOS As XMLParser.C_PRIMITIVE_OBJECT = _
+                            CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
+                        Dim cadlC As XMLParser.C_STRING = _
+                            CType(cadlOS.item, XMLParser.C_STRING)
+
+                        Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
+                            Case "issuer"
+                                cIdentifier.IssuerRegex = cadlC.pattern
+                            Case "type"
+                                cIdentifier.TypeRegex = cadlC.pattern
+                            Case "id"
+                                cIdentifier.IDRegex = cadlC.pattern
+                        End Select
+                    End If
+                Next
+            Catch e As Exception
+                MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+
+            Return cIdentifier
         End Function
 
         Private Function ProcessDuration(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Duration
@@ -362,12 +395,12 @@ Namespace ArchetypeEditor.XML_Classes
                     duration.HasMinimum = False
                 End If
 
-                    'If Not cadlC.range.maximum Is Nothing Then
-                    If cadlC.range.upper_included Then
-                        If duration.MinMaxValueUnits = "" Then
-                            duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
-                        End If
-                        duration.HasMaximum = True
+                'If Not cadlC.range.maximum Is Nothing Then
+                If cadlC.range.upper_included Then
+                    If duration.MinMaxValueUnits = "" Then
+                        duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
+                    End If
+                    duration.HasMaximum = True
                     If cadlC.range.upper.StartsWith("P") Then
                         duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper.Substring(1))) ' leave the P of the front
                     Else
@@ -444,7 +477,7 @@ Namespace ArchetypeEditor.XML_Classes
                             ct.HasMaximum = False
                         End If
                         'If cadlC.assumed_value <> Nothing Then
-                        If cadlC.assumed_valueSpecified Then                            
+                        If cadlC.assumed_valueSpecified Then
                             ct.HasAssumedValue = True
                             ct.AssumedValue = CInt(cadlC.assumed_value)
                         End If
@@ -828,10 +861,10 @@ Namespace ArchetypeEditor.XML_Classes
         Shared Function ProcessText(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Text
             Dim an_attribute As XMLParser.C_ATTRIBUTE
             Dim t As New Constraint_Text
-            
+
             'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
             'If Not ObjNode.any_allowed = Nothing AndAlso ObjNode.any_allowed Then
-            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)            
+            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
             If Not complexObject.Any_Allowed = Nothing AndAlso complexObject.Any_Allowed Then
                 t.TypeOfTextConstraint = TextConstrainType.Text
                 Return t
@@ -859,7 +892,7 @@ Namespace ArchetypeEditor.XML_Classes
                                     t.AssumedValue = CType(Obj, XMLParser.C_CODE_PHRASE).assumed_value.code_string()
                                 End If
 
-                                If t.AllowableValues.TerminologyID = "local" Then
+                                If t.AllowableValues.TerminologyID = "local" Or t.AllowableValues.TerminologyID = "openehr" Then
                                     t.TypeOfTextConstraint = TextConstrainType.Internal
                                 End If
                         End Select
@@ -947,7 +980,7 @@ Namespace ArchetypeEditor.XML_Classes
 
             'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1 
             'If ObjNode.any_allowed <> Nothing AndAlso ObjNode.any_allowed Then
-            Dim DvQuantity As New C_DV_QUANTITY_PROXY(ObjNode)            
+            Dim DvQuantity As New C_DV_QUANTITY_PROXY(ObjNode)
             If DvQuantity.Any_Allowed <> Nothing AndAlso DvQuantity.Any_Allowed Then
                 Return q
             End If

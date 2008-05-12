@@ -1619,6 +1619,38 @@ Namespace ArchetypeEditor.XML_Classes
 
         End Sub
 
+        Private Sub BuildIdentifier(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
+            Dim objNode As XMLParser.C_COMPLEX_OBJECT
+
+            objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+
+            If c.IssuerRegex <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As XMLParser.C_ATTRIBUTE
+                attribute = mAomFactory.MakeSingleAttribute(objNode, "issuer", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim cSt As New XMLParser.C_STRING
+                cSt.pattern = c.IssuerRegex
+                mAomFactory.MakePrimitiveObject(attribute, cSt)
+            End If
+            If c.TypeRegex <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As XMLParser.C_ATTRIBUTE
+                attribute = mAomFactory.MakeSingleAttribute(objNode, "type", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim cSt As New XMLParser.C_STRING
+                cSt.pattern = c.TypeRegex
+                mAomFactory.MakePrimitiveObject(attribute, cSt)
+            End If
+            If c.IDRegex <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As XMLParser.C_ATTRIBUTE
+                attribute = mAomFactory.MakeSingleAttribute(objNode, "id", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim cSt As New XMLParser.C_STRING
+                cSt.pattern = c.IDRegex
+                mAomFactory.MakePrimitiveObject(attribute, cSt)
+            End If
+
+        End Sub
+
         Private Sub BuildElementConstraint(ByVal parent As XMLParser.C_COMPLEX_OBJECT, ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint)
             Try
                 ' cannot have a value with no constraint on datatype
@@ -1668,6 +1700,15 @@ Namespace ArchetypeEditor.XML_Classes
 
                     Case ConstraintType.Duration
                         BuildDuration(value_attribute, c)
+
+                        'Case ConstraintType.Currency
+                        '    BuildCurrency(value_attribute, c)
+
+                    Case ConstraintType.Identifier
+                        BuildIdentifier(value_attribute, c)
+
+                    Case Else
+                        Debug.Assert(False, String.Format("{0} constraint type is not handled", c.ToString()))
 
                 End Select
 
@@ -1962,6 +2003,17 @@ Namespace ArchetypeEditor.XML_Classes
 
             BuildCodedText(an_attribute, t.AllowableValues)
 
+            'Changed SRH 29 Apr 2008 - added handling of participations
+
+            Dim eventContext As XMLParser.C_COMPLEX_OBJECT = Nothing
+
+            If Rm.HasParticipations Then
+                an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
+                eventContext = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+                BuildParticipations(eventContext, Rm.Participations)
+            End If
+
+
             ' Deal with the content and context
             If Rm.Data.Count > 0 Then
 
@@ -1975,9 +2027,13 @@ Namespace ArchetypeEditor.XML_Classes
                             'new_structure = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", ""))
                             'an_attribute = mAomFactory.MakeSingleAttribute(new_structure, "other_context")
                             'new_structure = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_structure.Type), a_structure.NodeId)
-                            an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
-                            new_structure = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
-                            an_attribute = mAomFactory.MakeSingleAttribute(new_structure, "other_context", New RmExistence(1).XmlExistence)
+
+                            'Changed SRH 29 Apr 2008 - added handling of participations
+                            If eventContext Is Nothing Then
+                                an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
+                                eventContext = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+                            End If
+                            an_attribute = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
                             new_structure = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_structure.Type), a_structure.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
                             BuildStructure(a_structure, new_structure)
 
@@ -2505,9 +2561,44 @@ Namespace ArchetypeEditor.XML_Classes
                 objnode = mAomFactory.MakeComplexObject(an_attribute, "PARTY_PROXY", "", MakeOccurrences(New RmCardinality(1, 1)))
             End If
 
-            'BuildParticipations(CType(cDefinition, RmEntry).OtherParticipations, adlArchetype.definition)
+            BuildParticipations(Me.mXmlArchetype.definition, CType(cDefinition, RmEntry).OtherParticipations)
 
         End Sub
+
+        Protected Sub BuildParticipations(ByVal aRmClass As XMLParser.C_COMPLEX_OBJECT, ByVal participations As RmStructureCompound)
+            If participations.Children.Count > 0 Then
+                Dim participationAttribute As XMLParser.C_ATTRIBUTE
+                participationAttribute = mAomFactory.MakeMultipleAttribute(aRmClass, participations.NodeId, MakeCardinality(participations.Children.Cardinality), New RmExistence(1).XmlExistence)
+                For Each p As RmParticipation In participations.Children
+                    BuildParticipation(participationAttribute, p)
+                Next
+            End If
+
+        End Sub
+        Protected Sub BuildParticipation(ByVal attribute As XmlParser.C_ATTRIBUTE, ByVal participation As RmParticipation)
+            Dim cObject As XmlParser.C_COMPLEX_OBJECT
+            cObject = mAomFactory.MakeComplexObject(attribute, "PARTICIPATION", "", MakeOccurrences(participation.Occurrences))
+            If participation.MandatoryDateTime Then
+                Dim timeAttrib As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(cObject, "time", New RmExistence(1).XmlExistence)
+            End If
+
+            If participation.ModeSet.Codes.Count > 0 Then
+                BuildCodedText(mAomFactory.MakeSingleAttribute(cObject, "mode", New RmExistence(1).XmlExistence), participation.ModeSet)
+            End If
+
+            If participation.FunctionConstraint.TypeOfTextConstraint <> TextConstrainType.Text Then
+                Dim constraintAttribute As XMLParser.C_ATTRIBUTE
+                constraintAttribute = mAomFactory.MakeSingleAttribute(cObject, "function", New RmExistence(1).XmlExistence)
+
+                If participation.FunctionConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
+
+                    BuildCodedText(constraintAttribute, participation.FunctionConstraint.AllowableValues)
+                Else
+                    BuildCodedText(constraintAttribute, participation.FunctionConstraint.ConstraintCode)
+                End If
+            End If
+        End Sub
+
 
         Sub New(ByVal an_XML_Parser As XMLParser.XmlArchetypeParser, ByVal an_ArchetypeID As ArchetypeID, ByVal primary_language As String)
             ' call to create a brand new archetype

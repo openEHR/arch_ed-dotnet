@@ -38,9 +38,9 @@ Partial Class RestrictedSet
         Me.gbRestrictedData.Controls.Add(Me.butAddToRestrictedSet)
         Me.gbRestrictedData.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbRestrictedData.Location = New System.Drawing.Point(0, 0)
-        Me.gbRestrictedData.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbRestrictedData.Margin = New System.Windows.Forms.Padding(2)
         Me.gbRestrictedData.Name = "gbRestrictedData"
-        Me.gbRestrictedData.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbRestrictedData.Padding = New System.Windows.Forms.Padding(2)
         Me.gbRestrictedData.Size = New System.Drawing.Size(212, 113)
         Me.gbRestrictedData.TabIndex = 17
         Me.gbRestrictedData.TabStop = False
@@ -52,7 +52,7 @@ Partial Class RestrictedSet
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.listRestrictionSet.Location = New System.Drawing.Point(34, 37)
-        Me.listRestrictionSet.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.listRestrictionSet.Margin = New System.Windows.Forms.Padding(2)
         Me.listRestrictionSet.Name = "listRestrictionSet"
         Me.listRestrictionSet.Size = New System.Drawing.Size(171, 69)
         Me.listRestrictionSet.TabIndex = 16
@@ -61,9 +61,8 @@ Partial Class RestrictedSet
         'butRemoveFromRestrictedSet
         '
         Me.butRemoveFromRestrictedSet.Image = CType(resources.GetObject("butRemoveFromRestrictedSet.Image"), System.Drawing.Image)
-        Me.butRemoveFromRestrictedSet.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.butRemoveFromRestrictedSet.Location = New System.Drawing.Point(6, 67)
-        Me.butRemoveFromRestrictedSet.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.butRemoveFromRestrictedSet.Margin = New System.Windows.Forms.Padding(2)
         Me.butRemoveFromRestrictedSet.Name = "butRemoveFromRestrictedSet"
         Me.butRemoveFromRestrictedSet.Size = New System.Drawing.Size(24, 24)
         Me.butRemoveFromRestrictedSet.TabIndex = 15
@@ -72,7 +71,7 @@ Partial Class RestrictedSet
         'radioRestrictedSet
         '
         Me.radioRestrictedSet.Location = New System.Drawing.Point(120, 15)
-        Me.radioRestrictedSet.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.radioRestrictedSet.Margin = New System.Windows.Forms.Padding(2)
         Me.radioRestrictedSet.Name = "radioRestrictedSet"
         Me.radioRestrictedSet.Size = New System.Drawing.Size(102, 23)
         Me.radioRestrictedSet.TabIndex = 1
@@ -82,7 +81,7 @@ Partial Class RestrictedSet
         '
         Me.radioUnrestrictedSubject.Checked = True
         Me.radioUnrestrictedSubject.Location = New System.Drawing.Point(10, 15)
-        Me.radioUnrestrictedSubject.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.radioUnrestrictedSubject.Margin = New System.Windows.Forms.Padding(2)
         Me.radioUnrestrictedSubject.Name = "radioUnrestrictedSubject"
         Me.radioUnrestrictedSubject.Size = New System.Drawing.Size(104, 23)
         Me.radioUnrestrictedSubject.TabIndex = 0
@@ -92,9 +91,8 @@ Partial Class RestrictedSet
         'butAddToRestrictedSet
         '
         Me.butAddToRestrictedSet.Image = CType(resources.GetObject("butAddToRestrictedSet.Image"), System.Drawing.Image)
-        Me.butAddToRestrictedSet.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.butAddToRestrictedSet.Location = New System.Drawing.Point(6, 41)
-        Me.butAddToRestrictedSet.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.butAddToRestrictedSet.Margin = New System.Windows.Forms.Padding(2)
         Me.butAddToRestrictedSet.Name = "butAddToRestrictedSet"
         Me.butAddToRestrictedSet.Size = New System.Drawing.Size(24, 24)
         Me.butAddToRestrictedSet.TabIndex = 14
@@ -105,7 +103,7 @@ Partial Class RestrictedSet
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.gbRestrictedData)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "RestrictedSet"
         Me.Size = New System.Drawing.Size(212, 113)
         Me.gbRestrictedData.ResumeLayout(False)

@@ -67,7 +67,6 @@ Public Class Designer
     Friend WithEvents MenuFileOpenFromWeb As System.Windows.Forms.MenuItem
     Friend WithEvents ToolBarOpenFromWeb As System.Windows.Forms.ToolBarButton
     Friend WithEvents cbParticipation As System.Windows.Forms.CheckBox
-    Friend WithEvents tpParticipation As Crownwood.Magic.Controls.TabPage
     Friend WithEvents PanelConcept_1 As System.Windows.Forms.Panel
     Friend WithEvents gbSpecialisation As System.Windows.Forms.GroupBox
     Friend WithEvents tvSpecialisation As System.Windows.Forms.TreeView
@@ -308,12 +307,6 @@ Public Class Designer
         Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
-        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
-        Me.PanelDescription = New System.Windows.Forms.Panel
-        Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
-        Me.PanelConcept_1 = New System.Windows.Forms.Panel
-        Me.gbSpecialisation = New System.Windows.Forms.GroupBox
-        Me.tvSpecialisation = New System.Windows.Forms.TreeView
         Me.tpDesign = New Crownwood.Magic.Controls.TabPage
         Me.TabDesign = New Crownwood.Magic.Controls.TabControl
         Me.tpData = New Crownwood.Magic.Controls.TabPage
@@ -324,7 +317,12 @@ Public Class Designer
         Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
         Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
         Me.PanelState = New System.Windows.Forms.Panel
-        Me.tpParticipation = New Crownwood.Magic.Controls.TabPage
+        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
+        Me.PanelDescription = New System.Windows.Forms.Panel
+        Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
+        Me.PanelConcept_1 = New System.Windows.Forms.Panel
+        Me.gbSpecialisation = New System.Windows.Forms.GroupBox
+        Me.tvSpecialisation = New System.Windows.Forms.TreeView
         Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpTerminology = New Crownwood.Magic.Controls.TabPage
         Me.TabTerminology = New Crownwood.Magic.Controls.TabControl
@@ -410,13 +408,13 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
+        Me.tpDesign.SuspendLayout()
+        Me.tpData.SuspendLayout()
+        Me.tpRootState.SuspendLayout()
         Me.tpHeader.SuspendLayout()
         Me.PanelDescription.SuspendLayout()
         Me.PanelConcept_1.SuspendLayout()
         Me.gbSpecialisation.SuspendLayout()
-        Me.tpDesign.SuspendLayout()
-        Me.tpData.SuspendLayout()
-        Me.tpRootState.SuspendLayout()
         Me.tpTerminology.SuspendLayout()
         Me.tpTerms.SuspendLayout()
         Me.tpConstraints.SuspendLayout()
@@ -524,7 +522,7 @@ Public Class Designer
         Me.tpConceptComment.Location = New System.Drawing.Point(4, 22)
         Me.tpConceptComment.Name = "tpConceptComment"
         Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptComment.Size = New System.Drawing.Size(594, 67)
+        Me.tpConceptComment.Size = New System.Drawing.Size(185, 67)
         Me.tpConceptComment.TabIndex = 1
         Me.tpConceptComment.Text = "Comment"
         Me.tpConceptComment.UseVisualStyleBackColor = True
@@ -536,7 +534,7 @@ Public Class Designer
         Me.txtConceptComment.Multiline = True
         Me.txtConceptComment.Name = "txtConceptComment"
         Me.txtConceptComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtConceptComment.Size = New System.Drawing.Size(588, 61)
+        Me.txtConceptComment.Size = New System.Drawing.Size(179, 61)
         Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
@@ -793,7 +791,7 @@ Public Class Designer
         '
         Me.menuFileExport.Index = 5
         Me.menuFileExport.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileExportType})
-        Me.menuFileExport.Text = "E&xport"
+        Me.menuFileExport.Text = "&Export"
         '
         'MenuFileExportType
         '
@@ -803,7 +801,7 @@ Public Class Designer
         'menuFileNewWindow
         '
         Me.menuFileNewWindow.Index = 6
-        Me.menuFileNewWindow.Text = "N&ew Window"
+        Me.menuFileNewWindow.Text = "New &Window"
         '
         'MenuFileClose
         '
@@ -954,70 +952,6 @@ Public Class Designer
         Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
         '
-        'tpHeader
-        '
-        Me.tpHeader.BackColor = System.Drawing.Color.LemonChiffon
-        Me.tpHeader.Controls.Add(Me.PanelDescription)
-        Me.tpHeader.Controls.Add(Me.PanelConcept_1)
-        Me.tpHeader.Controls.Add(Me.PanelConcept)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpHeader, "Screens/header.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpHeader.Location = New System.Drawing.Point(0, 0)
-        Me.tpHeader.Name = "tpHeader"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
-        Me.tpHeader.Size = New System.Drawing.Size(969, 625)
-        Me.tpHeader.TabIndex = 0
-        Me.tpHeader.Title = "Header"
-        '
-        'PanelDescription
-        '
-        Me.PanelDescription.Controls.Add(Me.RichTextBoxDescription)
-        Me.PanelDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PanelDescription.Location = New System.Drawing.Point(0, 96)
-        Me.PanelDescription.Name = "PanelDescription"
-        Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
-        Me.PanelDescription.Size = New System.Drawing.Size(969, 355)
-        Me.PanelDescription.TabIndex = 4
-        '
-        'RichTextBoxDescription
-        '
-        Me.RichTextBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.RichTextBoxDescription.Location = New System.Drawing.Point(10, 10)
-        Me.RichTextBoxDescription.Name = "RichTextBoxDescription"
-        Me.RichTextBoxDescription.ReadOnly = True
-        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 335)
-        Me.RichTextBoxDescription.TabIndex = 5
-        Me.RichTextBoxDescription.Text = ""
-        '
-        'PanelConcept_1
-        '
-        Me.PanelConcept_1.BackColor = System.Drawing.Color.LightGoldenrodYellow
-        Me.PanelConcept_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.PanelConcept_1.Controls.Add(Me.gbSpecialisation)
-        Me.PanelConcept_1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelConcept_1.Location = New System.Drawing.Point(0, 451)
-        Me.PanelConcept_1.Name = "PanelConcept_1"
-        Me.PanelConcept_1.Size = New System.Drawing.Size(969, 174)
-        Me.PanelConcept_1.TabIndex = 5
-        '
-        'gbSpecialisation
-        '
-        Me.gbSpecialisation.Controls.Add(Me.tvSpecialisation)
-        Me.gbSpecialisation.Location = New System.Drawing.Point(273, 2)
-        Me.gbSpecialisation.Name = "gbSpecialisation"
-        Me.gbSpecialisation.Size = New System.Drawing.Size(520, 164)
-        Me.gbSpecialisation.TabIndex = 12
-        Me.gbSpecialisation.TabStop = False
-        Me.gbSpecialisation.Text = "Specialisation"
-        Me.gbSpecialisation.Visible = False
-        '
-        'tvSpecialisation
-        '
-        Me.tvSpecialisation.Location = New System.Drawing.Point(13, 26)
-        Me.tvSpecialisation.Name = "tvSpecialisation"
-        Me.tvSpecialisation.Size = New System.Drawing.Size(496, 120)
-        Me.tvSpecialisation.TabIndex = 0
-        '
         'tpDesign
         '
         Me.tpDesign.Controls.Add(Me.TabDesign)
@@ -1048,7 +982,7 @@ Public Class Designer
         Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
         Me.TabDesign.Size = New System.Drawing.Size(969, 593)
         Me.TabDesign.TabIndex = 12
-        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState, Me.tpParticipation})
+        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState})
         Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
         '
         'tpData
@@ -1149,14 +1083,69 @@ Public Class Designer
         Me.PanelState.Size = New System.Drawing.Size(969, 24)
         Me.PanelState.TabIndex = 0
         '
-        'tpParticipation
+        'tpHeader
         '
-        Me.tpParticipation.Location = New System.Drawing.Point(0, 0)
-        Me.tpParticipation.Name = "tpParticipation"
-        Me.tpParticipation.Selected = False
-        Me.tpParticipation.Size = New System.Drawing.Size(969, 568)
-        Me.tpParticipation.TabIndex = 2
-        Me.tpParticipation.Title = "Participation"
+        Me.tpHeader.BackColor = System.Drawing.Color.LemonChiffon
+        Me.tpHeader.Controls.Add(Me.PanelDescription)
+        Me.tpHeader.Controls.Add(Me.PanelConcept_1)
+        Me.tpHeader.Controls.Add(Me.PanelConcept)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpHeader, "Screens/header.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpHeader.Location = New System.Drawing.Point(0, 0)
+        Me.tpHeader.Name = "tpHeader"
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
+        Me.tpHeader.Size = New System.Drawing.Size(969, 625)
+        Me.tpHeader.TabIndex = 0
+        Me.tpHeader.Title = "Header"
+        '
+        'PanelDescription
+        '
+        Me.PanelDescription.Controls.Add(Me.RichTextBoxDescription)
+        Me.PanelDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PanelDescription.Location = New System.Drawing.Point(0, 96)
+        Me.PanelDescription.Name = "PanelDescription"
+        Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
+        Me.PanelDescription.Size = New System.Drawing.Size(969, 355)
+        Me.PanelDescription.TabIndex = 4
+        '
+        'RichTextBoxDescription
+        '
+        Me.RichTextBoxDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.RichTextBoxDescription.Location = New System.Drawing.Point(10, 10)
+        Me.RichTextBoxDescription.Name = "RichTextBoxDescription"
+        Me.RichTextBoxDescription.ReadOnly = True
+        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 335)
+        Me.RichTextBoxDescription.TabIndex = 5
+        Me.RichTextBoxDescription.Text = ""
+        '
+        'PanelConcept_1
+        '
+        Me.PanelConcept_1.BackColor = System.Drawing.Color.LightGoldenrodYellow
+        Me.PanelConcept_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelConcept_1.Controls.Add(Me.gbSpecialisation)
+        Me.PanelConcept_1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PanelConcept_1.Location = New System.Drawing.Point(0, 451)
+        Me.PanelConcept_1.Name = "PanelConcept_1"
+        Me.PanelConcept_1.Size = New System.Drawing.Size(969, 174)
+        Me.PanelConcept_1.TabIndex = 5
+        '
+        'gbSpecialisation
+        '
+        Me.gbSpecialisation.Controls.Add(Me.tvSpecialisation)
+        Me.gbSpecialisation.Location = New System.Drawing.Point(273, 2)
+        Me.gbSpecialisation.Name = "gbSpecialisation"
+        Me.gbSpecialisation.Size = New System.Drawing.Size(520, 164)
+        Me.gbSpecialisation.TabIndex = 12
+        Me.gbSpecialisation.TabStop = False
+        Me.gbSpecialisation.Text = "Specialisation"
+        Me.gbSpecialisation.Visible = False
+        '
+        'tvSpecialisation
+        '
+        Me.tvSpecialisation.Location = New System.Drawing.Point(13, 26)
+        Me.tvSpecialisation.Name = "tvSpecialisation"
+        Me.tvSpecialisation.Size = New System.Drawing.Size(496, 120)
+        Me.tvSpecialisation.TabIndex = 0
         '
         'tpSectionPage
         '
@@ -1839,7 +1828,7 @@ Public Class Designer
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.AutoScroll = True
-        Me.ClientSize = New System.Drawing.Size(969, 713)
+        Me.ClientSize = New System.Drawing.Size(969, 750)
         Me.Controls.Add(Me.PanelMain)
         Me.Controls.Add(Me.PanelHeader)
         Me.HelpProviderDesigner.SetHelpKeyword(Me, "HowTo/ocean_archetype_editor.htm")
@@ -1862,13 +1851,13 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
+        Me.tpDesign.ResumeLayout(False)
+        Me.tpData.ResumeLayout(False)
+        Me.tpRootState.ResumeLayout(False)
         Me.tpHeader.ResumeLayout(False)
         Me.PanelDescription.ResumeLayout(False)
         Me.PanelConcept_1.ResumeLayout(False)
         Me.gbSpecialisation.ResumeLayout(False)
-        Me.tpDesign.ResumeLayout(False)
-        Me.tpData.ResumeLayout(False)
-        Me.tpRootState.ResumeLayout(False)
         Me.tpTerminology.ResumeLayout(False)
         Me.tpTerms.ResumeLayout(False)
         Me.tpConstraints.ResumeLayout(False)
@@ -2030,17 +2019,14 @@ Public Class Designer
                     ' allow restriction of subject of data
                     InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
 
-                    If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
-                        Me.cbParticipation.Checked = True
-                        mTabPageParticipation.chkProvider.Checked = CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory
-                        If CType(mFileManager.Archetype.Definition, RmEntry).HasOtherParticipations Then
-                            mTabPageParticipation.OtherParticipations = CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations
-                        End If
-                    End If
-
                     ' deal with the various groups of information appropriate to the type
                     Select Case mFileManager.Archetype.RmEntity
                         Case StructureType.ENTRY ' "ENTRY"
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                cbParticipation.Checked = True
+                                SetUpParticipations()
+                            End If
+
                             For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
                                     Case StructureType.Data
@@ -2051,6 +2037,11 @@ Public Class Designer
                             Next
 
                         Case StructureType.OBSERVATION ' "ENTRY.OBSERVATION"
+
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                cbParticipation.Checked = True
+                                SetUpParticipations()
+                            End If
 
                             'Ensures there is a data structure even if empty
                             SetUpDataStructure()
@@ -2089,6 +2080,11 @@ Public Class Designer
                             Next
 
                         Case StructureType.EVALUATION ' "ENTRY.EVALUATION"
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                cbParticipation.Checked = True
+                                SetUpParticipations()
+                            End If
+
                             SetUpDataStructure()
                             For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
@@ -2107,7 +2103,14 @@ Public Class Designer
 
                         Case StructureType.INSTRUCTION ' "ENTRY.INSTRUCTION"
                             SetUpInstruction()
+                           
                             mTabPageInstruction.ProcessInstruction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                mTabPageInstruction.HasParticipation = True
+                                SetUpParticipations()
+                            End If
+
                             For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 If rmStruct.Type = StructureType.Protocol Then
                                     mTabPageInstruction.cbProtocol.Checked = True
@@ -2118,6 +2121,12 @@ Public Class Designer
                         Case StructureType.ACTION
                             SetUpAction()
                             mTabPageAction.ProcessAction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
+
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                mTabPageAction.HasParticipation = True
+                                SetUpParticipations()
+                            End If
+
                             For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 If rmStruct.Type = StructureType.Protocol Then
                                     mTabPageAction.cbProtocol.Checked = True
@@ -2126,6 +2135,10 @@ Public Class Designer
                             Next
 
                         Case StructureType.ADMIN_ENTRY
+                            If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
+                                cbParticipation.Checked = True
+                                SetUpParticipations()
+                            End If
                             rm = CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.items(0)
                             SetUpDataStructure()
                             If rm.Children.Count > 0 Then
@@ -2208,6 +2221,13 @@ Public Class Designer
             mRestrictedSubject.Reset()
         End If
         mRestrictedSubject.TermSetToRestrict = aRestriction
+    End Sub
+
+    Sub SetUpParticipations()
+        mTabPageParticipation.chkProvider.Checked = CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory
+        If CType(mFileManager.Archetype.Definition, RmEntry).HasOtherParticipations Then
+            mTabPageParticipation.OtherParticipations = CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations
+        End If
     End Sub
 
     Private Sub NewArchetype(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuFileNew.Click, MenuFileClose.Click
@@ -2295,8 +2315,8 @@ Public Class Designer
         ' add the data page to the base collection to use as the root state incase
         mBaseTabPagesCollection.Add(Me.tpRootState, Me.tpRootState.Name)
         Me.TabDesign.TabPages.Remove(Me.tpRootState)
-        mBaseTabPagesCollection.Add(Me.tpParticipation, Me.tpParticipation.Name)
-        Me.TabDesign.TabPages.Remove(Me.tpParticipation)
+        'mBaseTabPagesCollection.Add(Me.tpParticipation, Me.tpParticipation.Name)
+        'Me.TabDesign.TabPages.Remove(Me.tpParticipation)
         mBaseTabPagesCollection.Add(Me.tpSectionPage, Me.tpSectionPage.Name)
         Me.TabMain.TabPages.Remove(Me.tpSectionPage)
         mBaseTabPagesCollection.Add(Me.tpDesign, Me.tpDesign.Name)
@@ -2444,7 +2464,7 @@ Public Class Designer
         'TabControl headings
         Me.tpHeader.Title = Filemanager.GetOpenEhrTerm(76, Me.tpHeader.Title, language)
         Me.tpDesign.Title = Filemanager.GetOpenEhrTerm(647, Me.tpDesign.Title, language)
-        Me.tpParticipation.Title = Filemanager.GetOpenEhrTerm(654, Me.tpParticipation.Title, language)
+        'Me.tpParticipation.Title = Filemanager.GetOpenEhrTerm(654, Me.tpParticipation.Title, language)
         Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(647, Me.tpSectionPage.Title, language)
         Me.tpTerminology.Title = Filemanager.GetOpenEhrTerm(47, Me.tpTerminology.Title, language)
         Me.tpText.Title = Filemanager.GetOpenEhrTerm(83, Me.tpText.Title, language)
@@ -3938,23 +3958,13 @@ Public Class Designer
                         CType(definition, RmEntry).SubjectOfData.Relationship = mRestrictedSubject.AsCodePhrase
                     End If
 
-                    'Participations
-                    If cbParticipation.Checked Then
-                        'Participations may have been added
-                        If mTabPageParticipation.chkProvider.Checked Then
-                            CType(definition, RmEntry).ProviderIsMandatory = True
-                        Else
-                            CType(definition, RmEntry).ProviderIsMandatory = False
-                        End If
-
-                        'Check for other participations
-                        If mTabPageParticipation.HasOtherParticipations Then
-                            CType(definition, RmEntry).OtherParticipations = mTabPageParticipation.OtherParticipations
-                        End If
-                    End If
-
                     Select Case definition.Type
                         Case StructureType.INSTRUCTION
+
+                            If mTabPageInstruction.HasParticipation AndAlso Not mTabPageParticipation Is Nothing Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             CType(definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children
 
                             If mTabPageInstruction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
@@ -3964,6 +3974,10 @@ Public Class Designer
                             End If
 
                         Case StructureType.ACTION
+                            If mTabPageAction.HasParticipation AndAlso Not mTabPageParticipation Is Nothing Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             CType(definition, ArchetypeDefinition).Data = mTabPageAction.SaveAsAction.Children
 
                             If mTabPageAction.HasProtocol AndAlso Not mTabPageProtocolStructure Is Nothing Then
@@ -3973,6 +3987,11 @@ Public Class Designer
                             End If
 
                         Case StructureType.OBSERVATION
+                            'Participations
+                            If cbParticipation.Checked Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             For Each tp In Me.TabStructure.TabPages
 
                                 ' Observation always has at least one event
@@ -4054,6 +4073,11 @@ Public Class Designer
                             Next
 
                         Case StructureType.EVALUATION ' "ENTRY.Evaluation
+                            'Participations
+                            If cbParticipation.Checked Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             For Each tp In Me.TabStructure.TabPages
                                 Select Case tp.Name
                                     Case "tpDataStructure"
@@ -4091,6 +4115,11 @@ Public Class Designer
                             Next
 
                         Case StructureType.ENTRY ' "ENTRY"
+                            'Participations
+                            If cbParticipation.Checked Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
+
                             For Each tp In Me.TabStructure.TabPages
                                 Select Case tp.Name
                                     Case "tpDataEventSeries"
@@ -4143,6 +4172,10 @@ Public Class Designer
                             Next
 
                         Case StructureType.ADMIN_ENTRY
+                            'Participations
+                            If cbParticipation.Checked Then
+                                GetParticipations(definition, mTabPageParticipation)
+                            End If
                             For Each tp In Me.TabStructure.TabPages
                                 Select Case tp.Name
                                     Case "tpDataStructure"
@@ -4195,6 +4228,20 @@ Public Class Designer
                 Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                     mFileManager.Archetype.Definition = mTabPageDataStructure.SaveAsStructure
             End Select
+        End If
+    End Sub
+
+    Private Sub GetParticipations(ByVal entry As RmEntry, ByVal participations As TabPageParticipation)
+        'Participations may have been added
+        If participations.chkProvider.Checked Then
+            entry.ProviderIsMandatory = True
+        Else
+            entry.ProviderIsMandatory = False
+        End If
+
+        'Check for other participations
+        If participations.HasOtherParticipations Then
+            entry.OtherParticipations = mTabPageParticipation.OtherParticipations
         End If
     End Sub
 
@@ -4444,6 +4491,57 @@ Public Class Designer
         End If
     End Sub
 
+    Private Sub ParticipationCheckChanged(ByVal tbCtrl As Object, ByVal state As Boolean) Handles mTabPageAction.ProtocolCheckChanged, mTabPageInstruction.ParticipationCheckChanged, mTabPageAction.ParticipationCheckChanged
+        Dim tp As Crownwood.Magic.Controls.TabPage
+        Dim CrownCtrl As Crownwood.Magic.Controls.TabControl = tbCtrl
+
+        If state Then
+            If Me.mTabPagesCollection.Contains("tpParticipation") Then
+                If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
+                    CrownCtrl.TabPages.Insert(0, Me.mTabPagesCollection.Item("tpParticipation"))
+                Else
+                    CrownCtrl.TabPages.Add(Me.mTabPagesCollection.Item("tpParticipation"))
+                End If
+            Else
+                mTabPageParticipation = New TabPageParticipation()
+                tp = New Crownwood.Magic.Controls.TabPage
+                tp.Name = "tpParticipation"
+                tp.Title = AE_Constants.Instance.Participation
+                tp.Controls.Add(mTabPageParticipation)
+                mTabPageParticipation.Dock = DockStyle.Fill
+                mComponentsCollection.Add(mTabPageParticipation)
+                If Not mTabPagesCollection.Contains(tp.Name) Then
+                    Me.mTabPagesCollection.Add(tp.Name, tp)
+                End If
+                If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
+                    CrownCtrl.TabPages.Insert(0, tp) 'JAR: 30MAY07, EDT-44 Protocol to be the first tab
+                Else
+                    CrownCtrl.TabPages.Add(tp)
+                End If
+
+                'Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
+                'Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_participation.htm")
+            End If
+            ' now set the selected tab page to this one
+            Dim i As Integer
+            For i = 0 To CrownCtrl.TabPages.Count - 1
+                If CrownCtrl.TabPages(i).Name = "tpParticipation" Then
+                    Me.TabDesign.SelectedIndex = i
+                End If
+            Next
+        Else
+            For Each tp In CrownCtrl.TabPages
+                If tp.Name = "tpParticipation" Then
+                    If Not Me.mTabPagesCollection.ContainsKey("tpParticipation") Then
+                        Me.mTabPagesCollection.Add("tpParticipation", tp) ' save it incase reinstate
+                    End If
+                    CrownCtrl.TabPages.Remove(tp)
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+
     Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
 
         If mFileManager.FileLoading Then Exit Sub
@@ -4452,6 +4550,13 @@ Public Class Designer
 
         mFileManager.FileEdited = True
 
+    End Sub
+    Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
+
+        ParticipationCheckChanged(Me.TabDesign, Me.cbParticipation.Checked)
+        If Not mFileManager.FileLoading Then
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub cbStructurePersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbStructurePersonState.CheckedChanged
@@ -5069,20 +5174,6 @@ Public Class Designer
         If (e.KeyChar > "0"c And e.KeyChar < "z"c) Then
             Me.TabMain.SelectedTab = Me.tpDescription
         End If
-    End Sub
-
-    Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
-        If cbParticipation.Checked Then
-            If mTabPageParticipation Is Nothing Then
-                mTabPageParticipation = New TabPageParticipation()
-                tpParticipation.Controls.Add(mTabPageParticipation)
-                mTabPageParticipation.Dock = DockStyle.Fill
-            End If
-            Me.TabDesign.TabPages.Add(Me.mBaseTabPagesCollection.Item("tpParticipation"))
-        Else
-            Me.TabDesign.TabPages.Remove(Me.tpParticipation)
-        End If
-
     End Sub
 
     Private Sub butLinks_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butLinks.Click

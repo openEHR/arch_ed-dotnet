@@ -34,6 +34,8 @@ Public Enum ConstraintType
     URI = 16
     Duration = 17
     Real = 18
+    Identifier = 19
+    Currency = 20
 End Enum
 
 

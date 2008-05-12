@@ -26,6 +26,26 @@ Public Class RmComposition : Inherits ArchetypeDefinitionAbstract
             mIsPersistent = Value
         End Set
     End Property
+    Protected mParticipations As RmStructureCompound
+    Public Property Participations() As RmStructureCompound
+        Get
+            Return mParticipations
+        End Get
+        Set(ByVal value As RmStructureCompound)
+            mParticipations = value
+            mParticipations.NodeId = "participations" ' the attribute name
+        End Set
+    End Property
+
+    Public Sub ResetParticipations()
+        mParticipations = Nothing
+    End Sub
+
+    Public ReadOnly Property HasParticipations() As Boolean
+        Get
+            Return (Not mParticipations Is Nothing AndAlso mParticipations.Children.Count > 0)
+        End Get
+    End Property
 
     Sub New()
         mType = StructureType.COMPOSITION

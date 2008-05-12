@@ -159,6 +159,12 @@ Public MustInherit Class Archetype
         If Not cDefinition Is Nothing Then
             If TypeOf (cDefinition) Is ArchetypeDefinition Then
                 CType(cDefinition, ArchetypeDefinition).Data.Clear()
+
+                If TypeOf (cDefinition) Is RmEntry Then
+                    CType(cDefinition, RmEntry).ResetParticipations()
+                ElseIf TypeOf (cDefinition) Is RmComposition Then
+                    CType(cDefinition, RmComposition).ResetParticipations()
+                End If
             End If
 
             cDefinition.RootLinks.Clear()

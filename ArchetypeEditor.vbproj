@@ -211,6 +211,10 @@
     </Content>
     <Content Include="Support\ChangeLog.htm" />
     <Content Include="Support\ocean.ico" />
+    <EmbeddedResource Include="DataConstraints\GUI\IdentifierConstraintControl.resx">
+      <DependentUpon>IdentifierConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\URIConstraintControl.resx">
       <DependentUpon>URIConstraintControl.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -476,6 +480,7 @@
     <Compile Include="DataConstraints\ConstraintWithValue.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataConstraints\CurrencyConstraint.vb" />
     <Compile Include="DataConstraints\CountConstraint.vb">
       <SubType>Code</SubType>
     </Compile>
@@ -500,6 +505,10 @@
     <Compile Include="DataConstraints\GUI\ConstraintControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="DataConstraints\GUI\IdentifierConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\IdentifierConstraint.vb" />
     <Compile Include="DataConstraints\GUI\URIConstraintControl.vb">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1038,7 +1047,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>xcopy "$(SolutionDir)AdlParser\libOceanInformatics.AdlParser.dll" "$(TargetDir)" /i &gt;nul
+    <PostBuildEvent>xcopy "$(SolutionDir)AdlParser\libOceanInformatics.AdlParser.dll" "$(TargetDir)" /i /y &gt;nul
 "$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild" Outputs="AssemblyVersion.vb">

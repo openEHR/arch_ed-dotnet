@@ -421,8 +421,8 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(13, "")
         Me.ilSmall.Images.SetKeyName(14, "")
         Me.ilSmall.Images.SetKeyName(15, "")
-        Me.ilSmall.Images.SetKeyName(16, "")
-        Me.ilSmall.Images.SetKeyName(17, "")
+        Me.ilSmall.Images.SetKeyName(16, "id.bmp")
+        Me.ilSmall.Images.SetKeyName(17, "currency.bmp")
         Me.ilSmall.Images.SetKeyName(18, "")
         Me.ilSmall.Images.SetKeyName(19, "")
         Me.ilSmall.Images.SetKeyName(20, "")
@@ -439,8 +439,8 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(31, "")
         Me.ilSmall.Images.SetKeyName(32, "")
         Me.ilSmall.Images.SetKeyName(33, "")
-        Me.ilSmall.Images.SetKeyName(34, "")
-        Me.ilSmall.Images.SetKeyName(35, "")
+        Me.ilSmall.Images.SetKeyName(34, "id_ref.bmp")
+        Me.ilSmall.Images.SetKeyName(35, "currency_ref.bmp")
         Me.ilSmall.Images.SetKeyName(36, "")
         Me.ilSmall.Images.SetKeyName(37, "")
         Me.ilSmall.Images.SetKeyName(38, "")
@@ -457,8 +457,8 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(49, "")
         Me.ilSmall.Images.SetKeyName(50, "")
         Me.ilSmall.Images.SetKeyName(51, "")
-        Me.ilSmall.Images.SetKeyName(52, "")
-        Me.ilSmall.Images.SetKeyName(53, "")
+        Me.ilSmall.Images.SetKeyName(52, "id_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(53, "currency_selected.bmp")
         Me.ilSmall.Images.SetKeyName(54, "")
         Me.ilSmall.Images.SetKeyName(55, "")
         Me.ilSmall.Images.SetKeyName(56, "")
@@ -471,6 +471,14 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(63, "")
         Me.ilSmall.Images.SetKeyName(64, "")
         Me.ilSmall.Images.SetKeyName(65, "")
+        Me.ilSmall.Images.SetKeyName(66, "")
+        Me.ilSmall.Images.SetKeyName(67, "")
+        Me.ilSmall.Images.SetKeyName(68, "")
+        Me.ilSmall.Images.SetKeyName(69, "")
+        Me.ilSmall.Images.SetKeyName(70, "id_ref_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(71, "currency_ref_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(72, "")
+        Me.ilSmall.Images.SetKeyName(73, "")
         '
         'ToolTipSpecialisation
         '
@@ -520,7 +528,7 @@ Public Class EntryStructure
 
     Public ReadOnly Property SelectedImageOffset() As Integer
         Get
-            Return 32
+            Return 36
         End Get
     End Property
     'implement as overrided property
@@ -704,38 +712,36 @@ Public Class EntryStructure
     Protected Overloads Sub SetCurrentItem(ByVal a_node As ArchetypeNode)
         ' if nothing this hides panelDetails
         mCurrentItem = a_node
+
         If Not a_node Is Nothing Then
-            Me.lblAtcode.Text = a_node.RM_Class.NodeId
-            SetButtonVisibility(a_node)
+            lblAtcode.Text = a_node.RM_Class.NodeId
         Else
-            Me.lblAtcode.Text = ""
+            lblAtcode.Text = ""
         End If
+
+        SetButtonVisibility(a_node)
         RaiseEvent CurrentItemChanged(a_node, New EventArgs)
     End Sub
 
     Protected Sub SetButtonVisibility(ByVal a_node As ArchetypeNode)
-
         'Hide the icons if simple to stop drag and drop
         If mStructureType = StructureType.Single AndAlso Me.pbText.Visible Then
-            Me.pbAny.Visible = False
-            Me.pbBoolean.Visible = False
-            Me.pbCount.Visible = False
-            Me.pbDateTime.Visible = False
-            Me.pbOrdinal.Visible = False
-            Me.pbQuantity.Visible = False
-            Me.pbText.Visible = False
+            pbAny.Hide()
+            pbBoolean.Hide()
+            pbCount.Hide()
+            pbDateTime.Hide()
+            pbOrdinal.Hide()
+            pbQuantity.Hide()
+            pbText.Hide()
             LayoutIcons()
         End If
 
-        If a_node.RM_Class.Type = StructureType.Element Then
-            If CType(a_node, ArchetypeElement).IsReference Then
-                Me.butChangeDataType.Enabled = False
-            Else
-                Me.butChangeDataType.Enabled = True
-            End If
-
-            Me.butChangeDataType.Visible = True
-            Me.butRemoveElement.Enabled = True
+        If a_node Is Nothing OrElse a_node.RM_Class.Type <> StructureType.Element Then
+            butChangeDataType.Hide()
+        Else
+            butChangeDataType.Enabled = Not CType(a_node, ArchetypeElement).IsReference
+            butChangeDataType.Show()
+            butRemoveElement.Enabled = True
 
             If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
                 ' ensure that datatypes cannot be changed in specialisations not at this level
@@ -744,19 +750,14 @@ Public Class EntryStructure
                 Dim equalSpecialisation As Boolean = (mFileManager.OntologyManager.NumberOfSpecialisations = OceanArchetypeEditor.Instance.CountInString(a_node.RM_Class.NodeId, "."))
 
                 If Not equalSpecialisation Then
-                    Me.butRemoveElement.Enabled = False
-                    Me.butChangeDataType.Visible = False
+                    butRemoveElement.Enabled = False
+                    butChangeDataType.Hide()
                 End If
 
                 If CType(a_node, ArchetypeElement).Constraint.Type = ConstraintType.Any Then
-                    Me.butChangeDataType.Visible = True
+                    butChangeDataType.Show()
                 End If
-            Else
-                
             End If
-        Else
-            ' a cluster
-            Me.butChangeDataType.Visible = False
         End If
     End Sub
 
@@ -801,9 +802,9 @@ Public Class EntryStructure
                 Return ImageIndexForConstraintType(ConstraintType.Slot, False, isSelected)
             Case StructureType.Cluster
                 If isSelected Then
-                    Return 64
+                    Return 72
                 Else
-                    Return 65
+                    Return 73
                 End If
         End Select
 
@@ -814,7 +815,7 @@ Public Class EntryStructure
 
         Dim offset As Integer
 
-        If isReference Then offset = 16
+        If isReference Then offset = 18
         If isSelected Then offset += Me.SelectedImageOffset
 
         Select Case ct
@@ -850,6 +851,10 @@ Public Class EntryStructure
                 Return 14 + offset
             Case ConstraintType.Slot
                 Return 15 + offset
+            Case ConstraintType.Identifier
+                Return 16 + offset
+            Case ConstraintType.Currency
+                Return 17 + offset
             Case Else
                 Debug.Assert(False, "Constraint not handled")
         End Select
@@ -859,44 +864,44 @@ Public Class EntryStructure
         ' now space the buttons consistently
         Dim ctrl As Control
         Dim loc As New System.Drawing.Point(8, 4)
+
         For Each ctrl In PanelIcons.Controls
             If ctrl.Visible Then
                 ctrl.Location = loc
                 loc.Y += 27
             End If
         Next
-        'tag the change datatype button on the end
-        Me.butChangeDataType.Location = loc
 
+        'tag the change datatype button on the end
+        butChangeDataType.Location = loc
     End Sub
 
     Protected Sub ShowIcons()
         ' turn off any inappropriate buttons
         Select Case mStructureType
             Case StructureType.List
-                Me.pbCluster.Visible = False
+                pbCluster.Hide()
             Case StructureType.Table
-                Me.butListUp.Visible = False
-                Me.butListDown.Visible = False
-                Me.pbCluster.Visible = False
+                butListUp.Hide()
+                butListDown.Hide()
+                pbCluster.Hide()
             Case StructureType.Element, StructureType.Single
-                Me.butListUp.Visible = False
-                Me.butListDown.Visible = False
-                Me.pbCluster.Visible = False
-                Me.ButAddElement.Visible = False
-                Me.butRemoveElement.Visible = False
-                Me.pbSlot.Visible = False
-                Me.pbText.Visible = False
-                Me.pbQuantity.Visible = False
-                Me.pbDateTime.Visible = False
-                Me.pbCount.Visible = False
-                Me.pbOrdinal.Visible = False
-                Me.pbBoolean.Visible = False
-                Me.pbAny.Visible = False
+                butListUp.Hide()
+                butListDown.Hide()
+                pbCluster.Hide()
+                ButAddElement.Hide()
+                butRemoveElement.Hide()
+                pbSlot.Hide()
+                pbText.Hide()
+                pbQuantity.Hide()
+                pbDateTime.Hide()
+                pbCount.Hide()
+                pbOrdinal.Hide()
+                pbBoolean.Hide()
+                pbAny.Hide()
         End Select
 
         LayoutIcons()
-
     End Sub
 
     Private Sub ButAddElement_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddElement.Click
@@ -943,21 +948,20 @@ Public Class EntryStructure
     End Sub
 
     Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        If mCurrentItem Is Nothing Then Return
-
-        mFileManager.FileEdited = True
+        If Not mCurrentItem Is Nothing Then
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Protected Overrides Sub OnBackColorChanged(ByVal e As System.EventArgs)
         ' changes the colour of some buttons when the background colour changes
         If Me.BackColor.Equals(System.Drawing.Color.LightSteelBlue) Then
-            Me.ButAddElement.BackColor = System.Drawing.Color.CornflowerBlue
-            Me.butRemoveElement.BackColor = System.Drawing.Color.CornflowerBlue
-            Me.butListUp.BackColor = System.Drawing.Color.CornflowerBlue
-            Me.butListDown.BackColor = System.Drawing.Color.CornflowerBlue
+            ButAddElement.BackColor = System.Drawing.Color.CornflowerBlue
+            butRemoveElement.BackColor = System.Drawing.Color.CornflowerBlue
+            butListUp.BackColor = System.Drawing.Color.CornflowerBlue
+            butListDown.BackColor = System.Drawing.Color.CornflowerBlue
         End If
     End Sub
-
 
     Private Sub EntryStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Not Me.DesignMode Then

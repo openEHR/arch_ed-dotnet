@@ -25,7 +25,7 @@ Public Class ConstraintContextMenu
         mMI_Ordinal, mMI_Boolean, mMI_any, mMI_Multiple, _
         mMI_Slot, mMI_Ratio, mMI_QuantityUnit, mMI_Interval, _
         mMI_Interval_Quantity, mMI_Interval_Count, mMI_Interval_DateTime, _
-        mMI_Duration, mMI_MultiMedia, mMI_URI As MenuItem
+        mMI_Duration, mMI_MultiMedia, mMI_URI, mMI_Identifier, mMI_Currency As MenuItem
 
     Sub ShowHeader(ByVal header_text As String)
         mMI_Header.Text = header_text
@@ -72,6 +72,10 @@ Public Class ConstraintContextMenu
                 mMI_MultiMedia.Visible = True
             Case ConstraintType.URI
                 mMI_URI.Visible = True
+            Case ConstraintType.Currency
+                mMI_Currency.Visible = True
+            Case ConstraintType.Identifier
+                mMI_Identifier.Visible = True
         End Select
     End Sub
 
@@ -111,6 +115,10 @@ Public Class ConstraintContextMenu
                 mMI_MultiMedia.Visible = False
             Case ConstraintType.URI
                 mMI_URI.Visible = False
+            Case ConstraintType.Currency
+                mMI_Currency.Visible = False
+            Case ConstraintType.Identifier
+                mMI_Identifier.Visible = False
         End Select
 
         If mMI_Interval_Count.Visible = False And mMI_Interval_Quantity.Visible = False And mMI_Interval_DateTime.Visible = False Then
@@ -140,6 +148,8 @@ Public Class ConstraintContextMenu
         mMI_URI.Visible = True
         mMI_Ratio.Visible = True
         mMI_Slot.Visible = True
+        mMI_Currency.Visible = True
+        mMI_Identifier.Visible = True
 
         '==========================
         'Rest are not usual datatypes
@@ -165,6 +175,8 @@ Public Class ConstraintContextMenu
         mMI_Interval_DateTime.Visible = False
         mMI_MultiMedia.Visible = False
         mMI_URI.Visible = False
+        mMI_Currency.Visible = False
+        mMI_Identifier.Visible = False
     End Sub
 
     Private Sub InternalProcessMenuItemClick(ByVal Sender As Object, ByVal e As EventArgs)
@@ -203,6 +215,10 @@ Public Class ConstraintContextMenu
             _ProcessMenuClick(New Constraint_MultiMedia)
         ElseIf Sender Is mMI_URI Then
             _ProcessMenuClick(New Constraint_URI)
+        ElseIf Sender Is mMI_Identifier Then
+            _ProcessMenuClick(New Constraint_Identifier)
+        ElseIf Sender Is mMI_Currency Then
+            _ProcessMenuClick(New Constraint_Currency)
         Else
             Debug.Assert(False, "Menu item is not loaded")
         End If
@@ -271,6 +287,13 @@ Public Class ConstraintContextMenu
         mMI_Ratio = New MenuItem(AE_Constants.Instance.Proportion)
         Me.MenuItems.Add(mMI_Ratio)
         AddHandler mMI_Ratio.Click, AddressOf InternalProcessMenuItemClick
+        mMI_Identifier = New MenuItem(AE_Constants.Instance.Identifier)
+        Me.MenuItems.Add(mMI_Identifier)
+        AddHandler mMI_Identifier.Click, AddressOf InternalProcessMenuItemClick
+        mMI_Currency = New MenuItem(AE_Constants.Instance.Currency)
+        'UNCOMMENT TO ADD CURRENCY
+        'Me.MenuItems.Add(mMI_Currency)
+        'AddHandler mMI_Currency.Click, AddressOf InternalProcessMenuItemClick
 
         mMI_Slot = New MenuItem(AE_Constants.Instance.Slot)
         Me.MenuItems.Add(mMI_Slot)

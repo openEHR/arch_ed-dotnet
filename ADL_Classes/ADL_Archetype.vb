@@ -770,7 +770,9 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
                     Next
 
-                    slot.add_include(MakeAssertion("archetype_id/value", pattern))
+                    If pattern <> "" Then
+                        slot.add_include(MakeAssertion("archetype_id/value", pattern))
+                    End If
                 End If
 
                 If sl.ExcludeAll Then
@@ -786,7 +788,9 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
                     Next
 
-                    slot.add_exclude(MakeAssertion("archetype_id/value", pattern))
+                    If pattern <> "" Then
+                        slot.add_exclude(MakeAssertion("archetype_id/value", pattern))
+                    End If
                 End If
 
                 Debug.Assert(slot.has_excludes Or slot.has_includes)
@@ -1025,6 +1029,42 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
+        Private Sub BuildIdentifier(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
+            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+
+            
+            objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
+            
+            If c.IssuerRegex <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("issuer"))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.IssuerRegex))
+                mAomFactory.create_c_primitive_object(attribute, cSt)
+            End If
+
+            If c.TypeRegex <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("type"))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.TypeRegex))
+                mAomFactory.create_c_primitive_object(attribute, cSt)
+            End If
+
+            If c.IDRegex <> Nothing Then
+                'Add a constraint to C_STRING
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("id"))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.IDRegex))
+                mAomFactory.create_c_primitive_object(attribute, cSt)
+            End If
+
+
+        End Sub
+
         Protected Sub BuildElementConstraint(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint)
 
             ' cannot have a value with no constraint on datatype
@@ -1075,6 +1115,16 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Case ConstraintType.Duration
                     BuildDuration(value_attribute, c)
+
+                    'Case ConstraintType.Currency
+                    '    BuildCurrency(value_attribute, c)
+
+                Case ConstraintType.Identifier
+                    BuildIdentifier(value_attribute, c)
+
+                Case Else
+                    Debug.Assert(False, String.Format("{0} constraint type is not handled", c.ToString()))
+
 
             End Select
 
@@ -1302,11 +1352,11 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Protected Sub BuildOtherParticipations(ByVal entry As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal otherParticipations As RmStructureCompound)
-            If otherParticipations.Children.Count > 0 Then
+        Protected Sub BuildParticipations(ByVal aRmClass As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal participations As RmStructureCompound)
+            If participations.Children.Count > 0 Then
                 Dim participationAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                participationAttribute = mAomFactory.create_c_attribute_multiple(entry, EiffelKernel.Create.STRING_8.make_from_cil("other_participations"), MakeCardinality(otherParticipations.Children.Cardinality))
-                For Each p As RmParticipation In otherParticipations.Children
+                participationAttribute = mAomFactory.create_c_attribute_multiple(aRmClass, EiffelKernel.Create.STRING_8.make_from_cil(participations.NodeId), MakeCardinality(participations.Children.Cardinality))
+                For Each p As RmParticipation In participations.Children
                     BuildParticipation(participationAttribute, p)
                 Next
             End If
@@ -1362,6 +1412,15 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             BuildCodedText(an_attribute, t.AllowableValues)
+            'Changed SRH 29 Apr 2008 - added handling of participations
+
+            Dim eventContext As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = Nothing
+
+            If Rm.HasParticipations Then
+                an_attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("context"))
+                eventContext = mAomFactory.create_c_complex_object_anonymous(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil("EVENT_CONTEXT"))
+                BuildParticipations(eventContext, Rm.Participations)
+            End If
 
             ' Deal with the content and context
             If Rm.Data.Count > 0 Then
@@ -1372,11 +1431,17 @@ Namespace ArchetypeEditor.ADL_Classes
 
                             Dim new_structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-                            an_attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("context"))
-                            new_structure = mAomFactory.create_c_complex_object_anonymous(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil("EVENT_CONTEXT"))
-                            an_attribute = mAomFactory.create_c_attribute_single(new_structure, EiffelKernel.Create.STRING_8.make_from_cil("other_context"))
+                            'Changed SRH 29 Apr 2008 - added handling of participations
+
+                            If eventContext Is Nothing Then
+                                an_attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("context"))
+                                eventContext = mAomFactory.create_c_complex_object_anonymous(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil("EVENT_CONTEXT"))
+                            End If
+
+                            an_attribute = mAomFactory.create_c_attribute_single(eventContext, EiffelKernel.Create.STRING_8.make_from_cil("other_context"))
                             new_structure = mAomFactory.create_c_complex_object_identified(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_structure.Type)), EiffelKernel.Create.STRING_8.make_from_cil(a_structure.NodeId))
                             BuildStructure(a_structure, new_structure)
+
 
                         Case StructureType.SECTION
 
@@ -1885,7 +1950,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 an_attribute.put_child(objnode)
             End If
             If anEntry.HasOtherParticipations Then
-                BuildOtherParticipations(adlArchetype.definition, CType(cDefinition, RmEntry).OtherParticipations)
+                BuildParticipations(adlArchetype.definition, CType(cDefinition, RmEntry).OtherParticipations)
             End If
         End Sub
 
