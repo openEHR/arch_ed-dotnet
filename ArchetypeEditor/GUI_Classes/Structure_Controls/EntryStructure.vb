@@ -801,13 +801,13 @@ Public Class EntryStructure
             Case StructureType.Slot
                 Return ImageIndexForConstraintType(ConstraintType.Slot, False, isSelected)
             Case StructureType.Cluster
+                ' FIXME: This doesn't appear to be called from anywhere. Should we clean it up or delete it?
                 If isSelected Then
-                    Return 72
-                Else
                     Return 73
+                Else
+                    Return 72
                 End If
         End Select
-
     End Function
 
     Protected Function ImageIndexForConstraintType(ByVal ct As ConstraintType, Optional ByVal isReference As Boolean = False, _
