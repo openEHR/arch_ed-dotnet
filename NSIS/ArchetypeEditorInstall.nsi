@@ -5,7 +5,7 @@ Name "Archetype Editor"
 
 # Defines
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION "1.0.1247.0"
+!define VERSION "1.0.1248.0"
 !define COMPANY "Ocean Informatics Pty Ltd"
 !define URL www.oceaninformatics.com
 
