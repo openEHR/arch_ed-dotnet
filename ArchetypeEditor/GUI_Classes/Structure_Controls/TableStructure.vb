@@ -62,6 +62,7 @@ Public Class TableStructure
                 For i As Integer = 0 To mRow.Children.Count - 1
                     'set column heading as always rotated - at the moment
                     rmStr = mRow.Children.items(i)
+
                     If rmStr.Type = StructureType.Element Then
                         archNode = New ArchetypeElement(CType(rmStr, RmElement), mFileManager)
                     ElseIf rmStr.Type = StructureType.Slot Then
@@ -75,12 +76,13 @@ Public Class TableStructure
                         AddColumnElement(CType(archNode, ArchetypeElement))
                     Else
                         d_row = mArchetypeTable.NewRow
-                        d_row.Item(0) = Me.ImageIndexForItem(archNode)
+                        d_row.Item(0) = ImageIndexForItem(archNode, False)
                         d_row.Item(1) = archNode.Text
                         d_row.Item(2) = archNode
                         mArchetypeTable.Rows.Add(d_row)
                     End If
                 Next
+
                 If mArchetypeTable.Rows.Count > 0 Then
                     SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeNode))
                 End If
@@ -91,11 +93,11 @@ Public Class TableStructure
 
         If mArchetypeTable.Rows.Count = 0 Then
             'FIXME raise error
+            'FIXME: This is exiting early without resetting mIsLoading!!! Apart from being bad software engineering (it's a GOTO), is it a bug?
             Return
         End If
 
         mIsLoading = False
-
     End Sub
 
     Public Sub New()
@@ -298,60 +300,39 @@ Public Class TableStructure
             Return RM_T
         End Get
         Set(ByVal Value As RmStructureCompound)
-            Dim element As ArchetypeNode
-            Dim aStructure As RmStructure
-            Dim new_row As DataRow
-
             MyBase.SetCardinality(Value)
 
             mControl = dgGrid
+
             If mArchetypeTable Is Nothing Then
                 ' no archetype driving constructor
                 SetArchetypeTable()
             End If
 
             ' handles conversion from other structures
-            Me.mArchetypeTable.Rows.Clear()
+            mArchetypeTable.Rows.Clear()
             mNodeId = Value.NodeId
 
             mIsLoading = True
 
-            Select Case Value.Type '.TypeName
-                Case StructureType.Tree ' "TREE"
-                    ProcessNodesToTable(Value.Children)
+            Select Case Value.Type
+                Case StructureType.Tree
+                    AddNodesToTable(Value.Children)
 
-                Case StructureType.Single ' "SINGLE"
-                    aStructure = Value.Children.FirstElementOrElementSlot
-                    If Not aStructure Is Nothing Then
-                        If aStructure.Type = StructureType.Element Then
-                            element = New ArchetypeElement(CType(aStructure, RmElement), mFileManager)
-                        Else ' a slot
-                            element = New ArchetypeNodeAnonymous(CType(aStructure, RmSlot))
-                        End If
-                        new_row = mArchetypeTable.NewRow
-                        new_row(1) = element.Text
-                        new_row(2) = element
-                        new_row(0) = Me.ImageIndexForItem(element)
-                        mArchetypeTable.Rows.Add(new_row)
+                Case StructureType.Single
+                    Dim rm As RmStructure = Value.Children.FirstElementOrElementSlot
+
+                    If Not rm Is Nothing Then
+                        AddTableRow(rm)
                     End If
 
-                Case StructureType.List ' "list"
-                    For Each aStructure In Value.Children
-                        If aStructure.Type = StructureType.Element Then
-                            element = New ArchetypeElement(CType(aStructure, RmElement), mFileManager)
-                        Else ' a slot
-                            element = New ArchetypeNodeAnonymous(CType(aStructure, RmSlot))
-                        End If
-                        new_row = mArchetypeTable.NewRow
-                        new_row(1) = element.Text
-                        new_row(2) = element
-                        new_row(0) = Me.ImageIndexForItem(element)
-                        mArchetypeTable.Rows.Add(new_row)
+                Case StructureType.List
+                    For Each rm As RmStructure In Value.Children
+                        AddTableRow(rm)
                     Next
             End Select
 
             mIsLoading = False
-
         End Set
     End Property
 
@@ -364,30 +345,34 @@ Public Class TableStructure
         End If
     End Function
 
-    Sub ProcessNodesToTable(ByVal ch As Children)
-        Dim an_rm_structure As RmStructure
-
-        For Each an_rm_structure In ch
-            'If an_rm_structure.TypeName = "Cluster" Then
-            If an_rm_structure.Type = StructureType.Cluster Then
-                ProcessNodesToTable(CType(an_rm_structure, RmStructureCompound).Children)
+    Sub AddNodesToTable(ByVal ch As Children)
+        For Each rm As RmStructure In ch
+            If rm.Type = StructureType.Cluster Then
+                AddNodesToTable(CType(rm, RmStructureCompound).Children)
             Else
-                Dim element As ArchetypeElement
-                Dim new_row As DataRow
-
-                element = New ArchetypeElement(CType(an_rm_structure, RmElement), mFileManager)
-                new_row = mArchetypeTable.NewRow
-
-                new_row(1) = element.Text
-                new_row(2) = element
-                new_row(0) = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference)
-                mArchetypeTable.Rows.Add(new_row)
+                AddTableRow(rm)
             End If
         Next
     End Sub
 
+    Protected Sub AddTableRow(ByVal rm As RmStructure)
+        Dim element As ArchetypeNode
+
+        If rm.Type = StructureType.Element Then
+            element = New ArchetypeElement(CType(rm, RmElement), mFileManager)
+        Else
+            element = New ArchetypeNodeAnonymous(CType(rm, RmSlot))
+        End If
+
+        Dim row As DataRow = mArchetypeTable.NewRow
+        row(1) = element.Text
+        row(2) = element
+        row(0) = ImageIndexForItem(element, False)
+        mArchetypeTable.Rows.Add(row)
+    End Sub
+
     Public Overrides Sub Reset()
-        Me.mArchetypeTable.Rows.Clear()
+        mArchetypeTable.Rows.Clear()
     End Sub
 
     Public Overrides Sub Translate()
@@ -437,7 +422,7 @@ Public Class TableStructure
                 new_row(1) = new_element.Text
                 mArchetypeTable.Rows.InsertAt(new_row, Me.dgGrid.CurrentRowIndex + 1)
                 new_row(2) = new_element
-                new_row(0) = Me.ImageIndexForConstraintType(new_element.Constraint.Type, CType(new_element.RM_Class, RmElement).isReference)
+                new_row(0) = ImageIndexForConstraintType(new_element.Constraint.Type, CType(new_element.RM_Class, RmElement).isReference, False)
                 ' go to the new entry
                 a_cell.RowNumber = Me.dgGrid.CurrentRowIndex + 1
                 a_cell.ColumnNumber = 1
@@ -504,7 +489,7 @@ Public Class TableStructure
         el.Occurrences.MaxCount = 1
         el.Constraint = a_constraint
         new_row(2) = el
-        new_row(0) = Me.ImageIndexForConstraintType(a_constraint.Type)
+        new_row(0) = ImageIndexForConstraintType(a_constraint.Type, False, False)
         ' go to the new entry
         a_cell.RowNumber = mArchetypeTable.Rows.Count - 1
         a_cell.ColumnNumber = 1
@@ -790,7 +775,7 @@ Public Class TableStructure
         Else
             d_row = mArchetypeTable.Rows(dgGrid.CurrentRowIndex)
             d_row.BeginEdit()
-            d_row(0) = Me.ImageIndexForItem(CType(d_row.Item(2), ArchetypeNode))
+            d_row(0) = ImageIndexForItem(CType(d_row.Item(2), ArchetypeNode), False)
             d_row.EndEdit()
         End If
         dgGrid.Refresh()
@@ -1027,12 +1012,13 @@ Public Class TableStructure
                 table_archetype = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
                 CType(table_archetype, ArchetypeElement).Constraint = mNewConstraint
             End If
+
             mCurrentItem = Nothing
             mIsLoading = True
             new_row = mArchetypeTable.NewRow
             'Change Sam Heard 2004-06-11
             'Change to use constraint.type
-            new_row(0) = Me.ImageIndexForItem(table_archetype)
+            new_row(0) = ImageIndexForItem(table_archetype, False)
             new_row(1) = table_archetype.Text
             new_row(2) = table_archetype
             mArchetypeTable.Rows.Add(new_row)
@@ -1040,13 +1026,12 @@ Public Class TableStructure
             ' go to the new entry
             a_cell.RowNumber = mArchetypeTable.Rows.Count - 1
             a_cell.ColumnNumber = 1
-            Me.dgGrid.Focus()
-            Me.dgGrid.CurrentCell = a_cell
+            dgGrid.Focus()
+            dgGrid.CurrentCell = a_cell
             mFileManager.FileEdited = True
             mIsLoading = False
             mNewConstraint = Nothing
         End If
-
     End Sub
 
 
@@ -1059,11 +1044,9 @@ Public Class TableStructure
             MyBase.New()
             _icons = Icons
             _getIconIndex = getIconIndex
-
         End Sub
 
         Protected Overloads Overrides Sub Paint(ByVal g As Graphics, ByVal bounds As Rectangle, ByVal source As CurrencyManager, ByVal rowNum As Integer, ByVal backBrush As Brush, ByVal foreBrush As Brush, ByVal alignToRight As Boolean)
-
             Try
                 'erase background
                 g.FillRectangle(backBrush, bounds)
@@ -1076,18 +1059,13 @@ Public Class TableStructure
             Catch ex As System.Exception
                 ' empty catch 
             End Try
-
         End Sub
 
-
         Protected Overloads Overrides Sub Edit(ByVal source As CurrencyManager, ByVal rowNum As Integer, ByVal bounds As Rectangle, ByVal readOnly1 As Boolean, ByVal instantText As String, ByVal cellIsVisible As Boolean)
-
             'do not allow the unbound cell to become active
-            If (Me.MappingName Is "Icon") Then
-                Return
+            If Not MappingName Is "Icon" Then
+                MyBase.Edit(source, rowNum, bounds, readOnly1, instantText, cellIsVisible)
             End If
-            MyBase.Edit(source, rowNum, bounds, readOnly1, instantText, cellIsVisible)
-
         End Sub
     End Class
 

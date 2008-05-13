@@ -50,11 +50,8 @@ Public Class SimpleStructure
         MyBase.New(rm, a_file_manager)
         'This call is required by the Windows Form Designer.
         InitializeComponent()
-
-        Dim element As RmStructure
-
         mIsLoading = True
-        element = rm.Children.FirstElementOrElementSlot
+        Dim element As RmStructure = rm.Children.FirstElementOrElementSlot
 
         If Not element Is Nothing Then
             If element.Type = StructureType.Element Then
@@ -62,12 +59,14 @@ Public Class SimpleStructure
             Else
                 mElement = New ArchetypeNodeAnonymous(element)
             End If
-            Me.txtSimple.Text = mElement.Text
-            Me.txtSimple.Enabled = True
-            Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForItem(mElement))
+
+            txtSimple.Text = mElement.Text
+            txtSimple.Enabled = True
+            PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement, False))
         Else
-            ButAddElement.Visible = True
+            ButAddElement.Show()
         End If
+
         mIsLoading = False
     End Sub
 
@@ -159,11 +158,9 @@ Public Class SimpleStructure
             Return rm
         End Get
         Set(ByVal Value As RmStructureCompound)
-            Dim element As RmStructure
-
-            mNodeId = Value.NodeId
-            element = Value.Children.FirstElementOrElementSlot
             mIsLoading = True
+            mNodeId = Value.NodeId
+            Dim element As RmStructure = Value.Children.FirstElementOrElementSlot
 
             If Not element Is Nothing Then
                 If element.Type = StructureType.Element Then
@@ -174,10 +171,10 @@ Public Class SimpleStructure
 
                 txtSimple.Text = mElement.Text
                 txtSimple.Enabled = True
-                PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement))
+                PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement, False))
             Else
                 mElement = Nothing
-                ButAddElement.Visible = True
+                ButAddElement.Show()
                 txtSimple.Text = AE_Constants.Instance.DragDropHere
                 txtSimple.Enabled = False
                 PictureBoxSimple.Image = Nothing
@@ -207,7 +204,7 @@ Public Class SimpleStructure
 
     Public Overrides Sub Reset()
         txtSimple.Text = ""
-        ButAddElement.Visible = True
+        ButAddElement.Show()
         txtSimple.Enabled = False
         PictureBoxSimple.Image = Nothing
     End Sub
@@ -266,12 +263,12 @@ Public Class SimpleStructure
         mElement.Occurrences.MaxCount = 1
         txtSimple.Text = mElement.Text
         txtSimple.Enabled = True
-        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement))
+        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement, False))
         txtSimple.Focus()
         txtSimple.SelectAll()
         mFileManager.FileEdited = True
         SetCurrentItem(mElement)
-        ButAddElement.Visible = False
+        ButAddElement.Hide()
         mIsLoading = False
     End Sub
 
@@ -282,7 +279,7 @@ Public Class SimpleStructure
             mIsLoading = True
             mElement = Nothing
             txtSimple.Text = ""
-            ButAddElement.Visible = True
+            ButAddElement.Show()
             txtSimple.Enabled = False
             PictureBoxSimple.Image = Nothing
             mIsLoading = False
@@ -332,7 +329,7 @@ Public Class SimpleStructure
 
     Protected Overrides Sub RefreshIcons()
         Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
-        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(element.Constraint.Type))
+        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(element.Constraint.Type, False, False))
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
