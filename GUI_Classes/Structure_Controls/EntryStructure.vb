@@ -793,7 +793,7 @@ Public Class EntryStructure
 
     End Sub
 
-    Protected Function ImageIndexForItem(ByVal item As ArchetypeNode, Optional ByVal isSelected As Boolean = False) As Integer
+    Protected Function ImageIndexForItem(ByVal item As ArchetypeNode, ByVal isSelected As Boolean) As Integer
         Select Case item.RM_Class.Type
             Case StructureType.Element, StructureType.Reference
                 Dim element As ArchetypeElement = CType(item, ArchetypeElement)
@@ -810,9 +810,7 @@ Public Class EntryStructure
         End Select
     End Function
 
-    Protected Function ImageIndexForConstraintType(ByVal ct As ConstraintType, Optional ByVal isReference As Boolean = False, _
-        Optional ByVal isSelected As Boolean = False) As Integer
-
+    Protected Function ImageIndexForConstraintType(ByVal ct As ConstraintType, ByVal isReference As Boolean, ByVal isSelected As Boolean) As Integer
         Dim offset As Integer
 
         If isReference Then offset = 18

@@ -51,39 +51,27 @@ Public Class TreeStructure
 
             Select Case a_rm_structure.Type '.TypeName
                 Case StructureType.Cluster ' "Cluster"
-                    Dim tvNode As ArchetypeTreeNode
-                    tvNode = New ArchetypeTreeNode(CType(a_rm_structure, RmCluster), mFileManager)
+                    Dim tvNode As ArchetypeTreeNode = New ArchetypeTreeNode(CType(a_rm_structure, RmCluster), mFileManager)
                     ProcessCluster(CType(a_rm_structure, RmCluster), tvNode)
-                    Me.tvTree.Nodes.Add(tvNode)
+                    tvTree.Nodes.Add(tvNode)
 
-                Case StructureType.Element, StructureType.Reference ' "Element"
-                    Dim tvNode As ArchetypeTreeNode
-                    Dim element As RmElement
-
-                    element = CType(a_rm_structure, RmElement)
-                    tvNode = New ArchetypeTreeNode(element, mFileManager)
-                    tvNode.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
-
-                    Me.tvTree.Nodes.Add(tvNode)
+                Case StructureType.Element, StructureType.Reference
+                    Dim element As RmElement = CType(a_rm_structure, RmElement)
+                    Dim tvNode As ArchetypeTreeNode = New ArchetypeTreeNode(element, mFileManager)
+                    tvNode.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.isReference, False)
+                    tvNode.SelectedImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
+                    tvTree.Nodes.Add(tvNode)
 
                 Case StructureType.Slot
-                    Dim tvNode As ArchetypeTreeNode
-                    Dim slot As RmSlot
-
-                    slot = CType(a_rm_structure, RmSlot)
-                    tvNode = New ArchetypeTreeNode(slot, mFileManager)
-                    tvNode.ImageIndex = Me.ImageIndexForItem(tvNode.Item, False)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForItem(tvNode.Item, True)
-
-                    Me.tvTree.Nodes.Add(tvNode)
+                    Dim tvNode As ArchetypeTreeNode = New ArchetypeTreeNode(CType(a_rm_structure, RmSlot), mFileManager)
+                    tvNode.ImageIndex = ImageIndexForItem(tvNode.Item, False)
+                    tvNode.SelectedImageIndex = ImageIndexForItem(tvNode.Item, True)
+                    tvTree.Nodes.Add(tvNode)
 
                 Case Else
                     Debug.Assert(False)
             End Select
-
         Next
-
     End Sub
 
     Public Sub New()
@@ -347,52 +335,29 @@ Public Class TreeStructure
         End Get
         Set(ByVal Value As RmStructureCompound)
             ' handles conversion from other structures
-
-            Me.tvTree.Nodes.Clear()
+            tvTree.Nodes.Clear()
             mNodeId = Value.NodeId
             MyBase.SetCardinality(Value)
 
-            Select Case Value.Type '.TypeName
-                Case StructureType.List ' "List"
-                    Dim element As RmElement
-
-                    For Each element In Value.Children
-                        Dim node As New ArchetypeTreeNode(element, mFileManager)
-                        node.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
-                        node.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
-                        tvTree.Nodes.Add(node)
+            Select Case Value.Type
+                Case StructureType.List
+                    For Each rm As RmStructure In Value.Children
+                        AddTreeNode(rm)
                     Next
 
-                Case StructureType.Single ' "SINGLE"
-                    Dim element As RmStructure
-                    element = Value.Children.FirstElementOrElementSlot
+                Case StructureType.Single
+                    Dim rm As RmStructure = Value.Children.FirstElementOrElementSlot
 
-                    If Not element Is Nothing Then
-                        Dim node As ArchetypeTreeNode
-
-                        If element.Type = StructureType.Element Then
-                            node = New ArchetypeTreeNode(CType(element, RmElement), mFileManager)
-                        Else
-                            node = New ArchetypeTreeNode(CType(element, RmSlot), mFileManager)
-                        End If
-
-                        node.ImageIndex = Me.ImageIndexForItem(node.Item)
-                        node.SelectedImageIndex = Me.ImageIndexForItem(node.Item, True)
-                        tvTree.Nodes.Add(node)
+                    If Not rm Is Nothing Then
+                        AddTreeNode(rm)
                     End If
 
-                Case StructureType.Table ' "TABLE"
+                Case StructureType.Table
                     If Value.Children.items(0).Type = StructureType.Cluster Then
-                        Dim clust As RmCluster
-                        Dim element As RmElement
+                        Dim clust As RmCluster = CType(Value.Children.items(0), RmCluster)
 
-                        clust = CType(Value.Children.items(0), RmCluster)
-
-                        For Each element In clust.Children
-                            Dim node As New ArchetypeTreeNode(element, mFileManager)
-                            node.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
-                            node.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
-                            tvTree.Nodes.Add(node)
+                        For Each rm As RmStructure In clust.Children
+                            AddTreeNode(rm)
                         Next
                     Else
                         Debug.Assert(False, "Not expected type")
@@ -401,13 +366,26 @@ Public Class TreeStructure
         End Set
     End Property
 
+    Protected Sub AddTreeNode(ByVal rm As RmStructure)
+        Dim node As ArchetypeTreeNode
+
+        If rm.Type = StructureType.Element Then
+            node = New ArchetypeTreeNode(CType(rm, RmElement), mFileManager)
+        Else
+            node = New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
+        End If
+
+        node.ImageIndex = ImageIndexForItem(node.Item, False)
+        node.SelectedImageIndex = ImageIndexForItem(node.Item, True)
+        tvTree.Nodes.Add(node)
+    End Sub
+
     Public Overrides Sub reset()
-        Me.tvTree.Nodes.Clear()
+        tvTree.Nodes.Clear()
     End Sub
 
     Private Sub PopulateTreeNodes(ByRef tvnodes As TreeNodeCollection)
-        Dim tn As ArchetypeTreeNode
-        For Each tn In tvnodes
+        For Each tn As ArchetypeTreeNode In tvnodes
             CType(tn, ArchetypeTreeNode).Translate()
             PopulateTreeNodes(tn.Nodes)
         Next
@@ -420,9 +398,7 @@ Public Class TreeStructure
     End Sub
 
     Friend Sub ProcessCluster(ByRef a_Cluster As RmCluster, ByRef ParentTreeNode As ArchetypeTreeNode)
-        Dim rm As RmStructure
-
-        For Each rm In a_Cluster.Children
+        For Each rm As RmStructure In a_Cluster.Children
             ' have to create links to the new archetype here to maintain updates
             Select Case rm.Type '.TypeName
                 Case StructureType.Cluster ' "Cluster"
@@ -432,22 +408,21 @@ Public Class TreeStructure
 
                 Case StructureType.Element, StructureType.Reference ' "Element", "Reference"
                     Dim tvNode As New ArchetypeTreeNode(CType(rm, RmElement), mFileManager)
-                    Dim archetype_element As ArchetypeElement = CType(tvNode.item, ArchetypeElement)
-                    tvNode.ImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
+                    Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
+                    tvNode.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, False)
+                    tvNode.SelectedImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
                     ParentTreeNode.Nodes.Add(tvNode)
 
                 Case StructureType.Slot
                     Dim tvNode As New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
                     Dim slot As ArchetypeNodeAnonymous = CType(tvNode.Item, ArchetypeNodeAnonymous)
-                    tvNode.ImageIndex = Me.ImageIndexForItem(slot)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForItem(slot, True)
+                    tvNode.ImageIndex = ImageIndexForItem(slot, False)
+                    tvNode.SelectedImageIndex = ImageIndexForItem(slot, True)
                     ParentTreeNode.Nodes.Add(tvNode)
 
                 Case Else
                     Debug.Assert(False, "Type not handled")
             End Select
-
         Next
     End Sub
 
@@ -469,8 +444,8 @@ Public Class TreeStructure
                     If tvNode.Item.RM_Class.Type = StructureType.Element Then
                         Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
                         'Cannot specialise a reference
-                        tvNode.ImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type)
-                        tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, False, True)
+                        tvNode.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, False, False)
+                        tvNode.SelectedImageIndex = ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, False, True)
                     End If
 
                     If tvTree.SelectedNode.Parent Is Nothing Then
@@ -490,6 +465,7 @@ Public Class TreeStructure
     Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles MenuAddReference.Click
         Dim tvNode As ArchetypeTreeNode
         Dim ref As RmReference
+
         If Not tvTree.SelectedNode Is Nothing Then
             tvNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
             ' create a new reference element pointing to this element
@@ -497,13 +473,15 @@ Public Class TreeStructure
             ' record the presence of the reference so a delete can be safe
             CType(tvNode.Item.RM_Class, RmElement).hasReferences = True
             tvNode = New ArchetypeTreeNode(ref, mFileManager)
-            tvNode.ImageIndex = Me.ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, True)
-            tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, True, True)
+            tvNode.ImageIndex = ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, True, False)
+            tvNode.SelectedImageIndex = ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, True, True)
+
             If Me.tvTree.SelectedNode.Parent Is Nothing Then
                 Me.tvTree.Nodes.Insert(Me.tvTree.SelectedNode.Index + 1, tvNode)
             Else
                 Me.tvTree.SelectedNode.Parent.Nodes.Insert(Me.tvTree.SelectedNode.Index + 1, tvNode)
             End If
+
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -534,8 +512,8 @@ Public Class TreeStructure
 
         tvNode = New ArchetypeTreeNode(Filemanager.GetOpenEhrTerm(109, "New Element"), StructureType.Element, mFileManager)
         ' set the image indexes
-        tvNode.ImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type)
-        tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type, False, True)
+        tvNode.ImageIndex = ImageIndexForConstraintType(a_constraint.Type, False, False)
+        tvNode.SelectedImageIndex = ImageIndexForConstraintType(a_constraint.Type, False, True)
         CType(tvNode.Item, ArchetypeElement).Constraint = a_constraint
 
         If Me.tvTree.SelectedNode Is Nothing Then
@@ -553,15 +531,13 @@ Public Class TreeStructure
                 Else
                     Me.tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
                 End If
-
             End If
-
         End If
+
         mFileManager.FileEdited = True
         tvNode.EnsureVisible()
         Me.tvTree.SelectedNode = tvNode
         tvNode.BeginEdit()
-
     End Sub
 
     Sub AddNewCluster(ByVal sender As Object, ByVal e As EventArgs)
@@ -697,7 +673,6 @@ Public Class TreeStructure
                 Me.tvTree.SelectedNode = tvN
             End If
         End If
-
     End Sub
 
     Protected Overrides Sub RefreshIcons()
@@ -706,10 +681,9 @@ Public Class TreeStructure
         If element.HasReferences Then
             RefreshTreeNodeIcons(tvTree.Nodes, element)
         Else
-            tvTree.SelectedNode.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference)
-            tvTree.SelectedNode.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, True)
+            tvTree.SelectedNode.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, False)
+            tvTree.SelectedNode.SelectedImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, True)
         End If
-
     End Sub
 
     Private Sub RefreshTreeNodeIcons(ByVal a_node_collection As TreeNodeCollection, ByVal reference As ArchetypeElement)
@@ -717,14 +691,11 @@ Public Class TreeStructure
         For Each tvNode As ArchetypeTreeNode In a_node_collection
             If tvNode.Item.RM_Class.Type = StructureType.Cluster Then
                 RefreshTreeNodeIcons(tvNode.Nodes, reference)
-            Else
-                If (Not tvNode.Item.IsAnonymous) AndAlso _
-                CType(tvNode.Item, ArchetypeNodeAbstract).NodeId = reference.NodeId Then
-                    Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
-                    Debug.Assert(archetype_element.IsReference, "Must be a reference here")
-                    tvNode.ImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, True, False)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, True, True)
-                End If
+            ElseIf Not tvNode.Item.IsAnonymous AndAlso CType(tvNode.Item, ArchetypeNodeAbstract).NodeId = reference.NodeId Then
+                Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
+                Debug.Assert(archetype_element.IsReference, "Must be a reference here")
+                tvNode.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, True, False)
+                tvNode.SelectedImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, True, True)
             End If
         Next
     End Sub
@@ -1044,7 +1015,7 @@ Public Class TreeStructure
                         mNodeDragged = New ArchetypeTreeNode(New RmSlot(StructureType.Cluster), mFileManager)
                     End If
 
-                    mNodeDragged.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot)
+                    mNodeDragged.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, False)
                     mNodeDragged.SelectedImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, True)
                     allowEdit = False
                 End If
@@ -1053,7 +1024,7 @@ Public Class TreeStructure
                 archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
                 archetype_element.Constraint = mNewConstraint
                 mNodeDragged = New ArchetypeTreeNode(archetype_element)
-                mNodeDragged.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference)
+                mNodeDragged.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, False)
                 mNodeDragged.SelectedImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
             End If
         ElseIf mNewCluster Then

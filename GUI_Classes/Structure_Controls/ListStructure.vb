@@ -333,7 +333,7 @@ Public Class ListStructure
                 CType(lvItem.Item.RM_Class, RmElement).hasReferences = True
                 lvItem = New ArchetypeListViewItem(ref, mFileManager)
                 ' insert in the list
-                lvItem.ImageIndex = Me.ImageIndexForConstraintType(CType(lvItem.Item, ArchetypeElement).Constraint.Type, True)
+                lvItem.ImageIndex = ImageIndexForConstraintType(CType(lvItem.Item, ArchetypeElement).Constraint.Type, True, False)
                 Me.lvList.Items.Insert(lvList.SelectedIndices(0) + 1, lvItem)
                 mFileManager.FileEdited = True
             Else
@@ -512,7 +512,7 @@ Public Class ListStructure
             Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
             For Each lvItem As ArchetypeListViewItem In lvList.Items
                 If Not lvItem.Item.IsAnonymous AndAlso CType(lvItem.Item, ArchetypeElement).NodeId = element.NodeId Then
-                    lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item)
+                    lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, False)
                 End If
             Next
         Else
