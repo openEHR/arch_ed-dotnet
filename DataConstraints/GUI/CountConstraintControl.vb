@@ -259,6 +259,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         'numPrecision
         '
         Me.numPrecision.Location = New System.Drawing.Point(317, 4)
+        Me.numPrecision.Maximum = New Decimal(New Integer() {15, 0, 0, 0})
         Me.numPrecision.Name = "numPrecision"
         Me.numPrecision.Size = New System.Drawing.Size(51, 20)
         Me.numPrecision.TabIndex = 2
