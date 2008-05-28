@@ -68,9 +68,8 @@ Public Class QuantityViewControl : Inherits ElementViewControl
 
                     Debug.Assert(TypeOf quantityConstraint.Units(1) Is Constraint_QuantityUnit)
                     lbl.Text = CType(quantityConstraint.Units(1), Constraint_QuantityUnit).Unit
-
-                    Me.Controls.Add(lbl)
-
+                    lbl.AutoSize = True
+                    Controls.Add(lbl)
                 Else
                     ' shows all allowable units as per constraint
                     Dim combo As New ComboBox
@@ -78,11 +77,12 @@ Public Class QuantityViewControl : Inherits ElementViewControl
                     Dim u As Constraint_QuantityUnit
                     combo.Height = 25
                     combo.Width = 150
+
                     For Each u In quantityConstraint.Units
                         combo.Items.Add(u)
                     Next
 
-                    Me.Controls.Add(combo)
+                    Controls.Add(combo)
                 End If
             Else
                 ' shows all allowable units for that property
