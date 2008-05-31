@@ -737,9 +737,7 @@ Namespace ArchetypeEditor.XML_Classes
             If Not an_ordinal_value.list Is Nothing Then
                 For Each ehr_ordinal In an_ordinal_value.list
 
-                    Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
 
-                    newOrdinal.Ordinal = CInt(ehr_ordinal.value)
 
                     'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
                     'If ehr_ordinal.symbol.terminology_id = "local" Then
@@ -753,8 +751,14 @@ Namespace ArchetypeEditor.XML_Classes
                         If Not ehr_ordinal.symbol.defining_code Is Nothing Then
                             If Not ehr_ordinal.symbol.defining_code.terminology_id Is Nothing Then
                                 If ehr_ordinal.symbol.defining_code.terminology_id.value = "local" Then
-                                    newOrdinal.InternalCode = ehr_ordinal.symbol.defining_code.code_string
-                                    ord.OrdinalValues.Add(newOrdinal)
+                                    'SRH: 31 May 2008 - check for redundancy in AT codes when adding ordinals (had a problem after manual cutting and pasting by some users
+                                    If Array.IndexOf(ord.InternalCodes, ehr_ordinal.symbol.defining_code.code_string) = -1 Then
+                                        Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
+
+                                        newOrdinal.Ordinal = CInt(ehr_ordinal.value)
+                                        newOrdinal.InternalCode = ehr_ordinal.symbol.defining_code.code_string
+                                        ord.OrdinalValues.Add(newOrdinal)
+                                    End If
                                 End If
                             End If
                         End If
