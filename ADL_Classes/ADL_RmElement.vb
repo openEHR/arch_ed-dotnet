@@ -688,14 +688,15 @@ Namespace ArchetypeEditor.ADL_Classes
                 Do While Not Ordinals.off
                     openehr_ordinal = CType(Ordinals.active.item, openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL)
 
-                    Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
-
-                    newOrdinal.Ordinal = openehr_ordinal.value
                     c_phrase.Phrase = openehr_ordinal.symbol.as_string.to_cil
-
-                    If c_phrase.TerminologyID = "local" Then
-                        newOrdinal.InternalCode = c_phrase.FirstCode
-                        ord.OrdinalValues.Add(newOrdinal)
+                    'SRH: 31 May 2008 - check for redundancy in AT codes when adding ordinals (had a problem after manual cutting and pasting by some users
+                    If c_phrase.TerminologyID.ToLowerInvariant = "local" Then
+                        If Array.IndexOf(ord.InternalCodes, c_phrase.FirstCode) = -1 Then
+                            Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
+                            newOrdinal.InternalCode = c_phrase.FirstCode
+                            newOrdinal.Ordinal = openehr_ordinal.value
+                            ord.OrdinalValues.Add(newOrdinal)
+                        End If
                     Else
                         Beep()
                         Debug.Assert(False)
