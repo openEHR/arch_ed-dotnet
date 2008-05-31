@@ -396,10 +396,13 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub butAddItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddItem.Click
 
-
         If MyBase.IsLoading Then Return
 
-        Dim s() As String = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager)
+        'SRH: 30 Jun 2008 - added check to avoid values already added
+        Dim currentValues(Me.Constraint.AllowableValues.Codes.Count) As String
+        Me.Constraint.AllowableValues.Codes.CopyTo(currentValues, 0)
+
+        Dim s() As String = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager, currentValues)
 
         If s Is Nothing Then Return
 

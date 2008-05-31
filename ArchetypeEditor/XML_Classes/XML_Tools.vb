@@ -54,7 +54,12 @@ Namespace ArchetypeEditor.XML_Classes
             Dim cp As New CodePhrase
 
             If Not Constraint.code_list Is Nothing AndAlso Constraint.code_list.Length > 0 Then
-                cp.Codes.AddRange(Constraint.code_list)
+                'SRH: 31 May 2008 - Check for repeats
+                For Each s As String In Constraint.code_list
+                    If Not cp.Codes.Contains(s) Then
+                        cp.Codes.Add(s)
+                    End If
+                Next
             End If
             'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             'cp.TerminologyID = Constraint.terminology
