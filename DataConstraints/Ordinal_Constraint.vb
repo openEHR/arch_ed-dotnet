@@ -149,6 +149,21 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         End Get
     End Property
 
+    'SRH: Added 1 Jul 2008
+    ReadOnly Property InternalCodes() As String()
+        Get
+            If (Not mOrdinalTable Is Nothing AndAlso mOrdinalTable.Rows.Count > 0) Then
+                Dim upperBound As Integer = mOrdinalTable.Rows.Count - 1
+                Dim result(upperBound) As String
+                For i As Integer = 0 To upperBound
+                    result(i) = CStr(mOrdinalTable.Rows(i).Item(2))
+                Next
+                Return result
+            End If
+            Return CType(Array.CreateInstance(GetType(String), 0), String())
+        End Get
+    End Property
+
     Property Language() As String
         Get
             Return mLanguage

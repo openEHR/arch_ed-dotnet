@@ -321,7 +321,8 @@ Public Class OceanArchetypeEditor
         Return s
     End Function
 
-    Public Function ChooseInternal(ByVal a_file_manager As FileManagerLocal) As String()
+    'SRH: 1 Jun 2008: added check for invalid terms
+    Public Function ChooseInternal(ByVal a_file_manager As FileManagerLocal, ByVal excludedTerms As String()) As String()
         Try
             Dim Frm As New Choose
             Dim selected_rows As DataRow()
@@ -336,10 +337,11 @@ Public Class OceanArchetypeEditor
 
             For i = 0 To selected_rows.Length - 1
                 'Ensure it is not an orphan term in the ontology
-                If a_file_manager.OntologyManager.Ontology.HasTermCode(CStr(selected_rows(i).Item(1))) Then
+                Dim s As String = CStr(selected_rows(i).Item(1))
+                If a_file_manager.OntologyManager.Ontology.HasTermCode(s) AndAlso Not Array.IndexOf(excludedTerms, s) > -1 Then
                     Dim New_row As DataRow
                     New_row = Frm.DTab_1.NewRow
-                    New_row(1) = selected_rows(i).Item(1)
+                    New_row(1) = s
                     New_row(2) = selected_rows(i).Item(2)
                     Frm.DTab_1.Rows.Add(New_row)
                 End If
