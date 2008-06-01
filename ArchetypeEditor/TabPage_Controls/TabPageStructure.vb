@@ -907,10 +907,12 @@ Public Class TabPageStructure
 
             If OpenArchetype(a_slot) Then
                 Filemanager.AddEmbedded(mFileManager)
-                'Hide context menu to change structure
-                mArchetypeControl.ShowChangeStructureMenu = False
 
-                ShowLanguage()
+                'Hide context menu to change structure
+                If Not mArchetypeControl Is Nothing Then
+                    mArchetypeControl.ShowChangeStructureMenu = False
+                    ShowLanguage()
+                End If
 
                 mIsLoading = False
                 Return
