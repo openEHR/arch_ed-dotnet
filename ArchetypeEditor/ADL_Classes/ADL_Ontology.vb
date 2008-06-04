@@ -164,6 +164,9 @@ Namespace ArchetypeEditor.ADL_Classes
             Try
                 If EIF_adlInterface.archetype_available Then
                     Dim str As EiffelKernel.STRING_8 = EiffelKernel.Create.STRING_8.make_from_cil(sPath)
+                    If sRelease <> "" Then
+                        sTerminology = String.Format("{0}({1})", sTerminology, sRelease)
+                    End If
                     Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(EiffelKernel.Create.STRING_8.make_from_cil(sTerminology & "::" & sCode))
 
                     If EIF_adlInterface.ontology.has_term_binding(cp.terminology_id.value, Str) Then
@@ -206,6 +209,10 @@ Namespace ArchetypeEditor.ADL_Classes
                 If EIF_adlInterface.archetype_available Then
                     Dim cd As EiffelKernel.STRING_8 = EiffelKernel.Create.STRING_8.make_from_cil(sCode)
                     Dim qry As EiffelKernel.STRING_8 = EiffelKernel.Create.STRING_8.make_from_cil(sQuery)
+
+                    If sRelease <> "" Then
+                        sTerminology = String.Format("{0}({1})", sTerminology, sRelease)
+                    End If
 
                     If EIF_adlInterface.ontology.has_constraint_binding( _
                         EiffelKernel.Create.STRING_8.make_from_cil(sTerminology), _

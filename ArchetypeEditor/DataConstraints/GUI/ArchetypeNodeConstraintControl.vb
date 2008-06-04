@@ -852,6 +852,7 @@ Public Class ArchetypeNodeConstraintControl
             End If
         End If
     End Sub
+
 End Class
 
 '
