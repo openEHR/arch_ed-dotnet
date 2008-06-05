@@ -105,27 +105,28 @@ Public Class TerminologyServer
     End Function
 
     Public Function CodeSetItemDescription(ByVal CodeSetName As String, ByVal Code As String) As String
+        Dim result As String = Nothing
+
         Select Case CodeSetName.ToLowerInvariant()
             Case "concept", "terminologies"
                 Dim key(0) As Object
                 key(0) = Code
+                Dim row As DataRow = TerminologyIdentifiers.Rows.Find(key)
 
-                Try
-                    Return TerminologyIdentifiers.Rows.Find(key).Item(1)
-                Catch
-                    Debug.Assert(False)
-                End Try
+                If Not row Is Nothing Then
+                    result = row.Item(1)
+                End If
 
             Case "language", "languages"
                 Dim selected_rows As DataRow()
                 selected_rows = Languages.Select("Code = '" & Code & "'")
 
                 If selected_rows.Length > 0 Then
-                    Return selected_rows(0).Item("Description")
+                    result = selected_rows(0).Item("Description")
                 End If
         End Select
 
-        Return Nothing
+        Return result
     End Function
 
     Public Function RubricForCode(ByVal Code As Integer, ByVal language As String) As String
