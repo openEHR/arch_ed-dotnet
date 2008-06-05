@@ -30,7 +30,7 @@ if /i "%1" == "Release" (
 
 :WriteAssemblyVersion
 	echo ' This file was generated automatically by %~nx0.
-	echo ^<Assembly: System.Reflection.AssemblyVersion^("!Version!"^)^>
+	echo ^<Assembly: System.Reflection.AssemblyVersion^("!Version!.!Revision!.*"^)^>
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
