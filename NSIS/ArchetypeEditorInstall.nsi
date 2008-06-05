@@ -51,7 +51,7 @@ InstallDir "$PROGRAMFILES\Ocean Informatics\Archetype Editor"
 CRCCheck on
 XPStyle on
 ShowInstDetails show
-VIProductVersion ${VERSION}
+VIProductVersion ${VERSION}.0.0
 VIAddVersionKey ProductName "Ocean Archetype Editor"
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
