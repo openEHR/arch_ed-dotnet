@@ -16,11 +16,12 @@
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 setlocal EnableDelayedExpansion
-set Version=1.1.0
+set Version=2.0
+set Revision=0
 
 if /i "%1" == "Release" (
 	for /f "delims=:MS" %%R in ('svnversion') do (
-		set Version=!Version!.%%R
+		set Revision=%%R
 		goto WriteAssemblyVersion
 	)
 
