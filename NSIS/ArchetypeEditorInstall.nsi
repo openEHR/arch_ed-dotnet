@@ -94,8 +94,12 @@ Section -Main SEC0000
     File ..\bin\Terminology\*
 
     SetOverwrite ifnewer
+    SetOutPath $INSTDIR\..\Archetypes\cluster
+    File ..\Archetypes\cluster\*.adl
     SetOutPath $INSTDIR\..\Archetypes\composition
     File ..\Archetypes\composition\*.adl
+    SetOutPath $INSTDIR\..\Archetypes\element
+    File ..\Archetypes\element\*.adl
     SetOutPath $INSTDIR\..\Archetypes\entry\action
     File ..\Archetypes\entry\action\*.adl
     SetOutPath $INSTDIR\..\Archetypes\entry\admin_entry
