@@ -166,7 +166,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Else
                     ' does this involve a change in the entity (affects the GUI a great deal!)
                     If Not id.rm_entity.is_equal(adlArchetype.archetype_id.rm_entity) Then
-                        Debug.Assert(False, "Not handled")
+                        Debug.Assert(False, "RM entity " & id.rm_entity.to_cil & " does not match " & adlArchetype.archetype_id.rm_entity.to_cil & ": changing the RM entity is not yet implemented.")
                         ' will need to reset the GUI to the new entity
                         setDefinition()
                     End If
