@@ -303,10 +303,12 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Private Function NextSpecialisedId(ByVal ParentCode As String) As EiffelKernel.STRING_8
-            Dim result As String = ""
+            Dim result As EiffelKernel.STRING_8
 
             If EIF_adlInterface.archetype_available Then
                 result = EIF_adlInterface.ontology.new_specialised_term_code(EiffelKernel.Create.STRING_8.make_from_cil(ParentCode))
+            Else
+                result = EiffelKernel.Create.STRING_8.make_empty
             End If
 
             Return result

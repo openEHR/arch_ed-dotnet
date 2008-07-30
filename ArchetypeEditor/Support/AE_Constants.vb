@@ -25,7 +25,7 @@ Public Class AE_Constants
     Private mExpandAll As String = "Expand all"
     Private mCollapseAll As String = "Collapse all"
     Private mAddReference As String = "Add reference"
-    Private mOceanArchetypeEditor As String = "Ocean archetype editor"
+    Private mOceanArchetypeEditor As String = "Ocean Archetype Editor"
     Private mYouHaveChosenALanguage As String = "You have chosen a language "
     Private mAddTerminology As String = "Add terminology"
     Private mLanguageAdditionCancelled As String = "Adding language cancelled"

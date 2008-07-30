@@ -2907,7 +2907,7 @@ Public Class Designer
             ' stop the handler while we get all the languages
             RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
-            ' check with user they want to add a languge
+            ' check with user they want to add a language
             If (MessageBox.Show(AE_Constants.Instance.NewLanguage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
                 Windows.Forms.DialogResult.OK) Then
                 mFileManager.OntologyManager.AddLanguage(lang, frm.ListChoose.Text)
