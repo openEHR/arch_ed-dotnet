@@ -355,27 +355,31 @@ Public Class TreeStructure
             Select Case Value.Type '.TypeName
                 Case StructureType.List ' "List"
                     Dim element As RmElement
+
                     For Each element In Value.Children
                         Dim node As New ArchetypeTreeNode(element, mFileManager)
                         node.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
                         node.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
                         tvTree.Nodes.Add(node)
                     Next
+
                 Case StructureType.Single ' "SINGLE"
                     Dim element As RmStructure
                     element = Value.Children.FirstElementOrElementSlot
-                    Dim node As ArchetypeTreeNode
 
-                    If element.Type = StructureType.Element Then
-                        node = New ArchetypeTreeNode(CType(element, RmElement), mFileManager)
-                    Else
-                        node = New ArchetypeTreeNode(CType(element, RmSlot), mFileManager)
+                    If Not element Is Nothing Then
+                        Dim node As ArchetypeTreeNode
+
+                        If element.Type = StructureType.Element Then
+                            node = New ArchetypeTreeNode(CType(element, RmElement), mFileManager)
+                        Else
+                            node = New ArchetypeTreeNode(CType(element, RmSlot), mFileManager)
+                        End If
+
+                        node.ImageIndex = Me.ImageIndexForItem(node.Item)
+                        node.SelectedImageIndex = Me.ImageIndexForItem(node.Item, True)
+                        tvTree.Nodes.Add(node)
                     End If
-
-                    node.ImageIndex = Me.ImageIndexForItem(node.Item)
-                    node.SelectedImageIndex = Me.ImageIndexForItem(node.Item, True)
-
-                    tvTree.Nodes.Add(node)
 
                 Case StructureType.Table ' "TABLE"
                     If Value.Children.items(0).Type = StructureType.Cluster Then

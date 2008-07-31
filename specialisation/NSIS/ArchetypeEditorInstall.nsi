@@ -5,12 +5,12 @@ Name "Archetype Editor"
 
 # Defines
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION "1.0 rc1"
+!define VERSION "1.0.1245.0"
 !define COMPANY "Ocean Informatics Pty Ltd"
 !define URL www.oceaninformatics.com
 
 # MUI defines
-!define MUI_ICON "..\arch_ed.ico"
+!define MUI_ICON "..\ocean-transparent.ico"
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_LICENSEPAGE_RADIOBUTTONS
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
@@ -18,7 +18,7 @@ Name "Archetype Editor"
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER "Ocean Informatics\Archetype Editor"
-!define MUI_UNICON "..\arch_ed.ico"
+!define MUI_UNICON "..\ocean-transparent.ico"
 !define MUI_WELCOMEFINISHPAGE_BITMAP "ocean.bmp"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP "oceanheader.bmp"
@@ -51,14 +51,14 @@ InstallDir "$PROGRAMFILES\Ocean Informatics\Archetype Editor"
 CRCCheck on
 XPStyle on
 ShowInstDetails show
-VIProductVersion 1.0.1243.0
+VIProductVersion ${VERSION}
 VIAddVersionKey ProductName "Ocean Archetype Editor"
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
 VIAddVersionKey FileVersion ""
 VIAddVersionKey FileDescription ""
-VIAddVersionKey LegalCopyright "Copyright Ocean Informatics Pty Ltd 2007"
+VIAddVersionKey LegalCopyright "Copyright Ocean Informatics Pty Ltd 2008"
 InstallDirRegKey HKLM "${REGKEY}" Path
 ShowUninstDetails show
 
@@ -71,7 +71,7 @@ Section -Main SEC0000
     File ..\bin\*.ico
     File ..\bin\*.xml
     File ..\bin\*.xsd
-    File ..\arch_ed.ico
+    File ..\ocean-transparent.ico
     File "..\Ocean Archetype Editor Licence Agreement.html"
 
     SetOverwrite off

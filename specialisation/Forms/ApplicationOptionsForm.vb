@@ -37,8 +37,8 @@ Public Class ApplicationOptionsForm
     Friend WithEvents butOK As System.Windows.Forms.Button
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents lblArchetypePath As System.Windows.Forms.Label
-    Friend WithEvents butBrowse As System.Windows.Forms.Button
-    Friend WithEvents txtRepositoryPath As System.Windows.Forms.TextBox
+    Friend WithEvents RepositoryBrowseButton As System.Windows.Forms.Button
+    Friend WithEvents RepositoryPathTextBox As System.Windows.Forms.TextBox
     Friend WithEvents comboReferenceModel As System.Windows.Forms.ComboBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents FolderBrowserDialog1 As System.Windows.Forms.FolderBrowserDialog
@@ -87,6 +87,11 @@ Public Class ApplicationOptionsForm
     Friend WithEvents chkTerminology As System.Windows.Forms.CheckBox
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents numAutoSave As System.Windows.Forms.NumericUpDown
+    Friend WithEvents XmlRepositoryPathTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents XmlRepositoryBrowseButton As System.Windows.Forms.Button
+    Friend WithEvents XmlRepositoryAutoSaveCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents RepositoryAutoSaveCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -96,14 +101,15 @@ Public Class ApplicationOptionsForm
         Me.Label2 = New System.Windows.Forms.Label
         Me.txtUsername = New System.Windows.Forms.TextBox
         Me.lblArchetypePath = New System.Windows.Forms.Label
-        Me.txtRepositoryPath = New System.Windows.Forms.TextBox
+        Me.RepositoryPathTextBox = New System.Windows.Forms.TextBox
         Me.butCancel = New System.Windows.Forms.Button
         Me.butOK = New System.Windows.Forms.Button
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.txtHelpFile = New System.Windows.Forms.TextBox
         Me.txtURL = New System.Windows.Forms.TextBox
         Me.txtTerminologyURL = New System.Windows.Forms.TextBox
-        Me.butBrowse = New System.Windows.Forms.Button
+        Me.XmlRepositoryPathTextBox = New System.Windows.Forms.TextBox
+        Me.RepositoryBrowseButton = New System.Windows.Forms.Button
         Me.comboReferenceModel = New System.Windows.Forms.ComboBox
         Me.Label1 = New System.Windows.Forms.Label
         Me.FolderBrowserDialog1 = New System.Windows.Forms.FolderBrowserDialog
@@ -132,6 +138,10 @@ Public Class ApplicationOptionsForm
         Me.TabConfiguration = New System.Windows.Forms.TabControl
         Me.tpUser = New System.Windows.Forms.TabPage
         Me.tpLocations = New System.Windows.Forms.TabPage
+        Me.XmlRepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
+        Me.RepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
+        Me.Label6 = New System.Windows.Forms.Label
+        Me.XmlRepositoryBrowseButton = New System.Windows.Forms.Button
         Me.lblTerminology = New System.Windows.Forms.Label
         Me.chkTerminology = New System.Windows.Forms.CheckBox
         Me.lblURL = New System.Windows.Forms.Label
@@ -164,152 +174,180 @@ Public Class ApplicationOptionsForm
         '
         'Label3
         '
-        Me.Label3.Location = New System.Drawing.Point(10, 62)
+        Me.Label3.Location = New System.Drawing.Point(8, 54)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(124, 28)
-        Me.Label3.TabIndex = 13
+        Me.Label3.Size = New System.Drawing.Size(104, 24)
+        Me.Label3.TabIndex = 3
         Me.Label3.Text = "Email"
         Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtEmail
         '
-        Me.txtEmail.Location = New System.Drawing.Point(144, 65)
+        Me.txtEmail.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtEmail.Location = New System.Drawing.Point(120, 56)
         Me.txtEmail.Name = "txtEmail"
-        Me.txtEmail.Size = New System.Drawing.Size(274, 22)
-        Me.txtEmail.TabIndex = 12
+        Me.txtEmail.Size = New System.Drawing.Size(469, 20)
+        Me.txtEmail.TabIndex = 4
         '
         'Label2
         '
-        Me.Label2.Location = New System.Drawing.Point(29, 28)
+        Me.Label2.Location = New System.Drawing.Point(24, 24)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(105, 27)
-        Me.Label2.TabIndex = 11
+        Me.Label2.Size = New System.Drawing.Size(88, 24)
+        Me.Label2.TabIndex = 1
         Me.Label2.Text = "Name"
         Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtUsername
         '
-        Me.txtUsername.Location = New System.Drawing.Point(144, 28)
+        Me.txtUsername.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtUsername.Location = New System.Drawing.Point(120, 24)
         Me.txtUsername.Name = "txtUsername"
-        Me.txtUsername.Size = New System.Drawing.Size(202, 22)
-        Me.txtUsername.TabIndex = 10
+        Me.txtUsername.Size = New System.Drawing.Size(412, 20)
+        Me.txtUsername.TabIndex = 2
         '
         'lblArchetypePath
         '
-        Me.lblArchetypePath.Location = New System.Drawing.Point(20, 0)
+        Me.lblArchetypePath.AutoSize = True
+        Me.lblArchetypePath.Location = New System.Drawing.Point(17, 11)
         Me.lblArchetypePath.Name = "lblArchetypePath"
-        Me.lblArchetypePath.Size = New System.Drawing.Size(173, 29)
-        Me.lblArchetypePath.TabIndex = 17
+        Me.lblArchetypePath.Size = New System.Drawing.Size(127, 13)
+        Me.lblArchetypePath.TabIndex = 0
         Me.lblArchetypePath.Text = "Archetype repository path"
         Me.lblArchetypePath.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
-        'txtRepositoryPath
+        'RepositoryPathTextBox
         '
-        Me.txtRepositoryPath.Location = New System.Drawing.Point(20, 32)
-        Me.txtRepositoryPath.Name = "txtRepositoryPath"
-        Me.txtRepositoryPath.Size = New System.Drawing.Size(442, 22)
-        Me.txtRepositoryPath.TabIndex = 16
-        Me.ToolTip1.SetToolTip(Me.txtRepositoryPath, "Leave blank for last directory used")
-        '
-        'butOK
-        '
-        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(403, 240)
-        Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(96, 28)
-        Me.butOK.TabIndex = 18
-        Me.butOK.Text = "OK"
+        Me.RepositoryPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RepositoryPathTextBox.Location = New System.Drawing.Point(17, 28)
+        Me.RepositoryPathTextBox.Name = "RepositoryPathTextBox"
+        Me.RepositoryPathTextBox.Size = New System.Drawing.Size(490, 20)
+        Me.RepositoryPathTextBox.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.RepositoryPathTextBox, "Leave blank for last directory used")
         '
         'butCancel
         '
         Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(518, 240)
+        Me.butCancel.Location = New System.Drawing.Point(539, 304)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(96, 28)
-        Me.butCancel.TabIndex = 19
+        Me.butCancel.Size = New System.Drawing.Size(80, 24)
+        Me.butCancel.TabIndex = 3
         Me.butCancel.Text = "Cancel"
+        '
+        'butOK
+        '
+        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.butOK.Location = New System.Drawing.Point(449, 304)
+        Me.butOK.Name = "butOK"
+        Me.butOK.Size = New System.Drawing.Size(80, 24)
+        Me.butOK.TabIndex = 2
+        Me.butOK.Text = "OK"
         '
         'txtHelpFile
         '
-        Me.txtHelpFile.Location = New System.Drawing.Point(20, 79)
+        Me.txtHelpFile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtHelpFile.Location = New System.Drawing.Point(17, 128)
         Me.txtHelpFile.Name = "txtHelpFile"
-        Me.txtHelpFile.Size = New System.Drawing.Size(442, 22)
-        Me.txtHelpFile.TabIndex = 21
+        Me.txtHelpFile.Size = New System.Drawing.Size(490, 20)
+        Me.txtHelpFile.TabIndex = 9
         Me.ToolTip1.SetToolTip(Me.txtHelpFile, "Leave blank for last directory used")
         '
         'txtURL
         '
-        Me.txtURL.Location = New System.Drawing.Point(20, 178)
+        Me.txtURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtURL.Location = New System.Drawing.Point(17, 228)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(442, 22)
-        Me.txtURL.TabIndex = 35
+        Me.txtURL.Size = New System.Drawing.Size(594, 20)
+        Me.txtURL.TabIndex = 16
         Me.ToolTip1.SetToolTip(Me.txtURL, "Http address of repository")
         '
         'txtTerminologyURL
         '
-        Me.txtTerminologyURL.Location = New System.Drawing.Point(21, 128)
+        Me.txtTerminologyURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtTerminologyURL.Location = New System.Drawing.Point(17, 178)
         Me.txtTerminologyURL.Name = "txtTerminologyURL"
-        Me.txtTerminologyURL.Size = New System.Drawing.Size(442, 22)
-        Me.txtTerminologyURL.TabIndex = 28
+        Me.txtTerminologyURL.Size = New System.Drawing.Size(595, 20)
+        Me.txtTerminologyURL.TabIndex = 13
         Me.ToolTip1.SetToolTip(Me.txtTerminologyURL, "Http address of repository")
         '
-        'butBrowse
+        'XmlRepositoryPathTextBox
         '
-        Me.butBrowse.Image = CType(resources.GetObject("butBrowse.Image"), System.Drawing.Image)
-        Me.butBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butBrowse.Location = New System.Drawing.Point(479, 15)
-        Me.butBrowse.Name = "butBrowse"
-        Me.butBrowse.Size = New System.Drawing.Size(115, 37)
-        Me.butBrowse.TabIndex = 20
-        Me.butBrowse.Text = "Browse..."
-        Me.butBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.XmlRepositoryPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.XmlRepositoryPathTextBox.Location = New System.Drawing.Point(17, 78)
+        Me.XmlRepositoryPathTextBox.Name = "XmlRepositoryPathTextBox"
+        Me.XmlRepositoryPathTextBox.Size = New System.Drawing.Size(490, 20)
+        Me.XmlRepositoryPathTextBox.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.XmlRepositoryPathTextBox, "Leave blank for last directory used")
+        '
+        'RepositoryBrowseButton
+        '
+        Me.RepositoryBrowseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RepositoryBrowseButton.Image = CType(resources.GetObject("RepositoryBrowseButton.Image"), System.Drawing.Image)
+        Me.RepositoryBrowseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.RepositoryBrowseButton.Location = New System.Drawing.Point(517, 17)
+        Me.RepositoryBrowseButton.Name = "RepositoryBrowseButton"
+        Me.RepositoryBrowseButton.Size = New System.Drawing.Size(96, 32)
+        Me.RepositoryBrowseButton.TabIndex = 3
+        Me.RepositoryBrowseButton.Text = "Browse..."
+        Me.RepositoryBrowseButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'comboReferenceModel
         '
-        Me.comboReferenceModel.Location = New System.Drawing.Point(19, 65)
+        Me.comboReferenceModel.Location = New System.Drawing.Point(16, 56)
         Me.comboReferenceModel.Name = "comboReferenceModel"
-        Me.comboReferenceModel.Size = New System.Drawing.Size(250, 24)
-        Me.comboReferenceModel.TabIndex = 21
+        Me.comboReferenceModel.Size = New System.Drawing.Size(208, 21)
+        Me.comboReferenceModel.TabIndex = 2
         '
         'Label1
         '
-        Me.Label1.Location = New System.Drawing.Point(19, 24)
+        Me.Label1.Location = New System.Drawing.Point(16, 21)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(240, 37)
-        Me.Label1.TabIndex = 22
+        Me.Label1.Size = New System.Drawing.Size(200, 32)
+        Me.Label1.TabIndex = 1
         Me.Label1.Text = "Default reference model"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'gbUserDetails
         '
+        Me.gbUserDetails.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.gbUserDetails.Controls.Add(Me.txtOrganisation)
         Me.gbUserDetails.Controls.Add(Me.lblOrganisation)
         Me.gbUserDetails.Controls.Add(Me.Label2)
         Me.gbUserDetails.Controls.Add(Me.txtUsername)
         Me.gbUserDetails.Controls.Add(Me.txtEmail)
         Me.gbUserDetails.Controls.Add(Me.Label3)
-        Me.gbUserDetails.Location = New System.Drawing.Point(19, 8)
+        Me.gbUserDetails.Location = New System.Drawing.Point(16, 7)
         Me.gbUserDetails.Name = "gbUserDetails"
-        Me.gbUserDetails.Size = New System.Drawing.Size(519, 144)
+        Me.gbUserDetails.Size = New System.Drawing.Size(602, 125)
         Me.gbUserDetails.TabIndex = 23
         Me.gbUserDetails.TabStop = False
         Me.gbUserDetails.Text = "User details"
         '
         'txtOrganisation
         '
-        Me.txtOrganisation.Location = New System.Drawing.Point(144, 104)
+        Me.txtOrganisation.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtOrganisation.Location = New System.Drawing.Point(120, 90)
         Me.txtOrganisation.Name = "txtOrganisation"
-        Me.txtOrganisation.Size = New System.Drawing.Size(274, 22)
-        Me.txtOrganisation.TabIndex = 14
+        Me.txtOrganisation.Size = New System.Drawing.Size(469, 20)
+        Me.txtOrganisation.TabIndex = 6
         '
         'lblOrganisation
         '
-        Me.lblOrganisation.Location = New System.Drawing.Point(8, 99)
+        Me.lblOrganisation.Location = New System.Drawing.Point(7, 86)
         Me.lblOrganisation.Name = "lblOrganisation"
-        Me.lblOrganisation.Size = New System.Drawing.Size(124, 28)
-        Me.lblOrganisation.TabIndex = 15
+        Me.lblOrganisation.Size = New System.Drawing.Size(103, 24)
+        Me.lblOrganisation.TabIndex = 5
         Me.lblOrganisation.Text = "Organisation"
         Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -331,10 +369,10 @@ Public Class ApplicationOptionsForm
         Me.GroupBox1.Controls.Add(Me.Label_0)
         Me.GroupBox1.Controls.Add(Me.Panel_5)
         Me.GroupBox1.Controls.Add(Me.Label_5)
-        Me.GroupBox1.Location = New System.Drawing.Point(19, 9)
+        Me.GroupBox1.Location = New System.Drawing.Point(16, 8)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(557, 135)
-        Me.GroupBox1.TabIndex = 24
+        Me.GroupBox1.Size = New System.Drawing.Size(464, 117)
+        Me.GroupBox1.TabIndex = 1
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "State machine colours"
         '
@@ -342,17 +380,18 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_7.BackColor = System.Drawing.Color.Orange
         Me.Panel_7.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_7.Location = New System.Drawing.Point(509, 112)
+        Me.Panel_7.Location = New System.Drawing.Point(424, 97)
         Me.Panel_7.Name = "Panel_7"
-        Me.Panel_7.Size = New System.Drawing.Size(38, 18)
-        Me.Panel_7.TabIndex = 15
+        Me.Panel_7.Size = New System.Drawing.Size(32, 16)
+        Me.Panel_7.TabIndex = 16
+        Me.Panel_7.TabStop = True
         '
         'Label_7
         '
-        Me.Label_7.Location = New System.Drawing.Point(288, 112)
+        Me.Label_7.Location = New System.Drawing.Point(240, 97)
         Me.Label_7.Name = "Label_7"
-        Me.Label_7.Size = New System.Drawing.Size(211, 18)
-        Me.Label_7.TabIndex = 14
+        Me.Label_7.Size = New System.Drawing.Size(176, 16)
+        Me.Label_7.TabIndex = 15
         Me.Label_7.Text = "Label7"
         Me.Label_7.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -360,17 +399,18 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_6.BackColor = System.Drawing.Color.LightGray
         Me.Panel_6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_6.Location = New System.Drawing.Point(509, 80)
+        Me.Panel_6.Location = New System.Drawing.Point(424, 69)
         Me.Panel_6.Name = "Panel_6"
-        Me.Panel_6.Size = New System.Drawing.Size(38, 18)
-        Me.Panel_6.TabIndex = 13
+        Me.Panel_6.Size = New System.Drawing.Size(32, 16)
+        Me.Panel_6.TabIndex = 14
+        Me.Panel_6.TabStop = True
         '
         'Label_6
         '
-        Me.Label_6.Location = New System.Drawing.Point(288, 80)
+        Me.Label_6.Location = New System.Drawing.Point(240, 69)
         Me.Label_6.Name = "Label_6"
-        Me.Label_6.Size = New System.Drawing.Size(211, 18)
-        Me.Label_6.TabIndex = 12
+        Me.Label_6.Size = New System.Drawing.Size(176, 16)
+        Me.Label_6.TabIndex = 13
         Me.Label_6.Text = "Label6"
         Me.Label_6.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -379,26 +419,27 @@ Public Class ApplicationOptionsForm
         Me.Panel_4.BackColor = System.Drawing.Color.Red
         Me.Panel_4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Panel_4.Controls.Add(Me.Panel2)
-        Me.Panel_4.Location = New System.Drawing.Point(509, 20)
+        Me.Panel_4.Location = New System.Drawing.Point(424, 17)
         Me.Panel_4.Name = "Panel_4"
-        Me.Panel_4.Size = New System.Drawing.Size(38, 18)
-        Me.Panel_4.TabIndex = 9
+        Me.Panel_4.Size = New System.Drawing.Size(32, 16)
+        Me.Panel_4.TabIndex = 10
+        Me.Panel_4.TabStop = True
         '
         'Panel2
         '
         Me.Panel2.BackColor = System.Drawing.Color.Red
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel2.Location = New System.Drawing.Point(113, -2)
+        Me.Panel2.Location = New System.Drawing.Point(94, -2)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(38, 27)
+        Me.Panel2.Size = New System.Drawing.Size(32, 24)
         Me.Panel2.TabIndex = 11
         '
         'Label_4
         '
-        Me.Label_4.Location = New System.Drawing.Point(288, 18)
+        Me.Label_4.Location = New System.Drawing.Point(240, 16)
         Me.Label_4.Name = "Label_4"
-        Me.Label_4.Size = New System.Drawing.Size(211, 18)
-        Me.Label_4.TabIndex = 8
+        Me.Label_4.Size = New System.Drawing.Size(176, 15)
+        Me.Label_4.TabIndex = 9
         Me.Label_4.Text = "Label4"
         Me.Label_4.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -406,17 +447,18 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_1.BackColor = System.Drawing.Color.Lime
         Me.Panel_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_1.Location = New System.Drawing.Point(240, 48)
+        Me.Panel_1.Location = New System.Drawing.Point(200, 42)
         Me.Panel_1.Name = "Panel_1"
-        Me.Panel_1.Size = New System.Drawing.Size(38, 18)
-        Me.Panel_1.TabIndex = 7
+        Me.Panel_1.Size = New System.Drawing.Size(32, 15)
+        Me.Panel_1.TabIndex = 4
+        Me.Panel_1.TabStop = True
         '
         'Label_1
         '
-        Me.Label_1.Location = New System.Drawing.Point(10, 48)
+        Me.Label_1.Location = New System.Drawing.Point(8, 42)
         Me.Label_1.Name = "Label_1"
-        Me.Label_1.Size = New System.Drawing.Size(211, 18)
-        Me.Label_1.TabIndex = 6
+        Me.Label_1.Size = New System.Drawing.Size(176, 15)
+        Me.Label_1.TabIndex = 3
         Me.Label_1.Text = "Label1"
         Me.Label_1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -424,17 +466,18 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_3.BackColor = System.Drawing.Color.Tomato
         Me.Panel_3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_3.Location = New System.Drawing.Point(240, 113)
+        Me.Panel_3.Location = New System.Drawing.Point(200, 98)
         Me.Panel_3.Name = "Panel_3"
-        Me.Panel_3.Size = New System.Drawing.Size(38, 18)
-        Me.Panel_3.TabIndex = 5
+        Me.Panel_3.Size = New System.Drawing.Size(32, 16)
+        Me.Panel_3.TabIndex = 8
+        Me.Panel_3.TabStop = True
         '
         'Label_3
         '
-        Me.Label_3.Location = New System.Drawing.Point(10, 112)
+        Me.Label_3.Location = New System.Drawing.Point(8, 97)
         Me.Label_3.Name = "Label_3"
-        Me.Label_3.Size = New System.Drawing.Size(211, 18)
-        Me.Label_3.TabIndex = 4
+        Me.Label_3.Size = New System.Drawing.Size(176, 16)
+        Me.Label_3.TabIndex = 7
         Me.Label_3.Text = "Label3"
         Me.Label_3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -442,17 +485,18 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_2.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.Panel_2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_2.Location = New System.Drawing.Point(240, 81)
+        Me.Panel_2.Location = New System.Drawing.Point(200, 70)
         Me.Panel_2.Name = "Panel_2"
-        Me.Panel_2.Size = New System.Drawing.Size(38, 18)
-        Me.Panel_2.TabIndex = 3
+        Me.Panel_2.Size = New System.Drawing.Size(32, 16)
+        Me.Panel_2.TabIndex = 6
+        Me.Panel_2.TabStop = True
         '
         'Label_2
         '
-        Me.Label_2.Location = New System.Drawing.Point(10, 80)
+        Me.Label_2.Location = New System.Drawing.Point(8, 69)
         Me.Label_2.Name = "Label_2"
-        Me.Label_2.Size = New System.Drawing.Size(211, 18)
-        Me.Label_2.TabIndex = 2
+        Me.Label_2.Size = New System.Drawing.Size(176, 16)
+        Me.Label_2.TabIndex = 5
         Me.Label_2.Text = "Label2"
         Me.Label_2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -460,17 +504,18 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_0.BackColor = System.Drawing.Color.Yellow
         Me.Panel_0.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_0.Location = New System.Drawing.Point(240, 19)
+        Me.Panel_0.Location = New System.Drawing.Point(200, 16)
         Me.Panel_0.Name = "Panel_0"
-        Me.Panel_0.Size = New System.Drawing.Size(38, 18)
-        Me.Panel_0.TabIndex = 1
+        Me.Panel_0.Size = New System.Drawing.Size(32, 16)
+        Me.Panel_0.TabIndex = 2
+        Me.Panel_0.TabStop = True
         '
         'Label_0
         '
-        Me.Label_0.Location = New System.Drawing.Point(10, 18)
+        Me.Label_0.Location = New System.Drawing.Point(8, 16)
         Me.Label_0.Name = "Label_0"
-        Me.Label_0.Size = New System.Drawing.Size(211, 18)
-        Me.Label_0.TabIndex = 0
+        Me.Label_0.Size = New System.Drawing.Size(176, 15)
+        Me.Label_0.TabIndex = 1
         Me.Label_0.Text = "Label0"
         Me.Label_0.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -478,117 +523,169 @@ Public Class ApplicationOptionsForm
         '
         Me.Panel_5.BackColor = System.Drawing.Color.Silver
         Me.Panel_5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.Panel_5.Location = New System.Drawing.Point(509, 49)
+        Me.Panel_5.Location = New System.Drawing.Point(424, 42)
         Me.Panel_5.Name = "Panel_5"
-        Me.Panel_5.Size = New System.Drawing.Size(38, 18)
-        Me.Panel_5.TabIndex = 11
+        Me.Panel_5.Size = New System.Drawing.Size(32, 16)
+        Me.Panel_5.TabIndex = 12
+        Me.Panel_5.TabStop = True
         '
         'Label_5
         '
-        Me.Label_5.Location = New System.Drawing.Point(288, 48)
+        Me.Label_5.Location = New System.Drawing.Point(240, 42)
         Me.Label_5.Name = "Label_5"
-        Me.Label_5.Size = New System.Drawing.Size(211, 18)
-        Me.Label_5.TabIndex = 10
+        Me.Label_5.Size = New System.Drawing.Size(176, 15)
+        Me.Label_5.TabIndex = 11
         Me.Label_5.Text = "Label5"
         Me.Label_5.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'TabConfiguration
         '
+        Me.TabConfiguration.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TabConfiguration.Controls.Add(Me.tpUser)
         Me.TabConfiguration.Controls.Add(Me.tpLocations)
         Me.TabConfiguration.Controls.Add(Me.tpAppearance)
         Me.TabConfiguration.Controls.Add(Me.tpDefaults)
-        Me.TabConfiguration.Dock = System.Windows.Forms.DockStyle.Top
         Me.TabConfiguration.Location = New System.Drawing.Point(0, 0)
         Me.TabConfiguration.Name = "TabConfiguration"
         Me.TabConfiguration.SelectedIndex = 0
-        Me.TabConfiguration.Size = New System.Drawing.Size(643, 234)
-        Me.TabConfiguration.TabIndex = 25
+        Me.TabConfiguration.Size = New System.Drawing.Size(643, 295)
+        Me.TabConfiguration.TabIndex = 1
         '
         'tpUser
         '
         Me.tpUser.Controls.Add(Me.gbUserDetails)
-        Me.tpUser.Location = New System.Drawing.Point(4, 25)
+        Me.tpUser.Location = New System.Drawing.Point(4, 22)
         Me.tpUser.Name = "tpUser"
-        Me.tpUser.Size = New System.Drawing.Size(635, 205)
+        Me.tpUser.Size = New System.Drawing.Size(635, 269)
         Me.tpUser.TabIndex = 0
         Me.tpUser.Text = "User details"
         '
         'tpLocations
         '
+        Me.tpLocations.Controls.Add(Me.RepositoryPathTextBox)
+        Me.tpLocations.Controls.Add(Me.XmlRepositoryPathTextBox)
+        Me.tpLocations.Controls.Add(Me.Label6)
+        Me.tpLocations.Controls.Add(Me.XmlRepositoryBrowseButton)
         Me.tpLocations.Controls.Add(Me.txtHelpFile)
         Me.tpLocations.Controls.Add(Me.lblTerminology)
         Me.tpLocations.Controls.Add(Me.txtTerminologyURL)
         Me.tpLocations.Controls.Add(Me.chkTerminology)
-        Me.tpLocations.Controls.Add(Me.txtRepositoryPath)
         Me.tpLocations.Controls.Add(Me.lblURL)
         Me.tpLocations.Controls.Add(Me.txtURL)
         Me.tpLocations.Controls.Add(Me.chkWebSearch)
         Me.tpLocations.Controls.Add(Me.Label4)
         Me.tpLocations.Controls.Add(Me.butHelpBrowse)
         Me.tpLocations.Controls.Add(Me.lblArchetypePath)
-        Me.tpLocations.Controls.Add(Me.butBrowse)
-        Me.tpLocations.Location = New System.Drawing.Point(4, 25)
+        Me.tpLocations.Controls.Add(Me.RepositoryBrowseButton)
+        Me.tpLocations.Controls.Add(Me.RepositoryAutoSaveCheckBox)
+        Me.tpLocations.Controls.Add(Me.XmlRepositoryAutoSaveCheckBox)
+        Me.tpLocations.Location = New System.Drawing.Point(4, 22)
         Me.tpLocations.Name = "tpLocations"
-        Me.tpLocations.Size = New System.Drawing.Size(635, 205)
+        Me.tpLocations.Size = New System.Drawing.Size(635, 269)
         Me.tpLocations.TabIndex = 1
         Me.tpLocations.Text = "File locations"
         '
+        'XmlRepositoryAutoSaveCheckBox
+        '
+        Me.XmlRepositoryAutoSaveCheckBox.AutoSize = True
+        Me.XmlRepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 59)
+        Me.XmlRepositoryAutoSaveCheckBox.Name = "XmlRepositoryAutoSaveCheckBox"
+        Me.XmlRepositoryAutoSaveCheckBox.Size = New System.Drawing.Size(196, 17)
+        Me.XmlRepositoryAutoSaveCheckBox.TabIndex = 5
+        Me.XmlRepositoryAutoSaveCheckBox.Text = "Always auto-save when saving ADL"
+        Me.XmlRepositoryAutoSaveCheckBox.UseVisualStyleBackColor = True
+        '
+        'RepositoryAutoSaveCheckBox
+        '
+        Me.RepositoryAutoSaveCheckBox.AutoSize = True
+        Me.RepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 9)
+        Me.RepositoryAutoSaveCheckBox.Name = "RepositoryAutoSaveCheckBox"
+        Me.RepositoryAutoSaveCheckBox.Size = New System.Drawing.Size(197, 17)
+        Me.RepositoryAutoSaveCheckBox.TabIndex = 1
+        Me.RepositoryAutoSaveCheckBox.Text = "Always auto-save when saving XML"
+        Me.RepositoryAutoSaveCheckBox.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(17, 61)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(152, 13)
+        Me.Label6.TabIndex = 4
+        Me.Label6.Text = "Archetype XML repository path"
+        Me.Label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        '
+        'XmlRepositoryBrowseButton
+        '
+        Me.XmlRepositoryBrowseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.XmlRepositoryBrowseButton.Image = CType(resources.GetObject("XmlRepositoryBrowseButton.Image"), System.Drawing.Image)
+        Me.XmlRepositoryBrowseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.XmlRepositoryBrowseButton.Location = New System.Drawing.Point(517, 67)
+        Me.XmlRepositoryBrowseButton.Name = "XmlRepositoryBrowseButton"
+        Me.XmlRepositoryBrowseButton.Size = New System.Drawing.Size(96, 32)
+        Me.XmlRepositoryBrowseButton.TabIndex = 7
+        Me.XmlRepositoryBrowseButton.Text = "Browse..."
+        Me.XmlRepositoryBrowseButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'lblTerminology
         '
-        Me.lblTerminology.Location = New System.Drawing.Point(21, 98)
+        Me.lblTerminology.Location = New System.Drawing.Point(17, 152)
         Me.lblTerminology.Name = "lblTerminology"
-        Me.lblTerminology.Size = New System.Drawing.Size(261, 28)
-        Me.lblTerminology.TabIndex = 29
+        Me.lblTerminology.Size = New System.Drawing.Size(218, 24)
+        Me.lblTerminology.TabIndex = 11
         Me.lblTerminology.Text = "URL for Terminology Service"
         Me.lblTerminology.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'chkTerminology
         '
         Me.chkTerminology.AutoSize = True
-        Me.chkTerminology.Location = New System.Drawing.Point(288, 106)
+        Me.chkTerminology.Location = New System.Drawing.Point(240, 159)
         Me.chkTerminology.Name = "chkTerminology"
-        Me.chkTerminology.Size = New System.Drawing.Size(209, 21)
-        Me.chkTerminology.TabIndex = 27
+        Me.chkTerminology.Size = New System.Drawing.Size(160, 17)
+        Me.chkTerminology.TabIndex = 12
         Me.chkTerminology.Text = "Enable Terminology LookUp"
         Me.chkTerminology.UseVisualStyleBackColor = True
         '
         'lblURL
         '
-        Me.lblURL.Location = New System.Drawing.Point(20, 149)
+        Me.lblURL.Location = New System.Drawing.Point(17, 203)
         Me.lblURL.Name = "lblURL"
-        Me.lblURL.Size = New System.Drawing.Size(261, 28)
-        Me.lblURL.TabIndex = 26
+        Me.lblURL.Size = New System.Drawing.Size(217, 24)
+        Me.lblURL.TabIndex = 14
         Me.lblURL.Text = "URL for shared repository"
         Me.lblURL.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'chkWebSearch
         '
         Me.chkWebSearch.AutoSize = True
-        Me.chkWebSearch.Location = New System.Drawing.Point(287, 158)
+        Me.chkWebSearch.Location = New System.Drawing.Point(239, 209)
         Me.chkWebSearch.Name = "chkWebSearch"
-        Me.chkWebSearch.Size = New System.Drawing.Size(175, 21)
-        Me.chkWebSearch.TabIndex = 34
+        Me.chkWebSearch.Size = New System.Drawing.Size(135, 17)
+        Me.chkWebSearch.TabIndex = 15
         Me.chkWebSearch.Text = "Enable Internet Search"
         Me.chkWebSearch.UseVisualStyleBackColor = True
         '
         'Label4
         '
-        Me.Label4.Location = New System.Drawing.Point(20, 49)
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(17, 113)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(173, 28)
-        Me.Label4.TabIndex = 22
+        Me.Label4.Size = New System.Drawing.Size(45, 13)
+        Me.Label4.TabIndex = 8
         Me.Label4.Text = "Help file"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'butHelpBrowse
         '
+        Me.butHelpBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butHelpBrowse.Image = CType(resources.GetObject("butHelpBrowse.Image"), System.Drawing.Image)
         Me.butHelpBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butHelpBrowse.Location = New System.Drawing.Point(481, 62)
+        Me.butHelpBrowse.Location = New System.Drawing.Point(519, 118)
         Me.butHelpBrowse.Name = "butHelpBrowse"
-        Me.butHelpBrowse.Size = New System.Drawing.Size(115, 37)
-        Me.butHelpBrowse.TabIndex = 23
+        Me.butHelpBrowse.Size = New System.Drawing.Size(96, 32)
+        Me.butHelpBrowse.TabIndex = 10
         Me.butHelpBrowse.Text = "Browse..."
         Me.butHelpBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -599,47 +696,47 @@ Public Class ApplicationOptionsForm
         Me.tpAppearance.Controls.Add(Me.lblOccurrences)
         Me.tpAppearance.Controls.Add(Me.comboOccurrences)
         Me.tpAppearance.Controls.Add(Me.GroupBox1)
-        Me.tpAppearance.Location = New System.Drawing.Point(4, 25)
+        Me.tpAppearance.Location = New System.Drawing.Point(4, 22)
         Me.tpAppearance.Name = "tpAppearance"
-        Me.tpAppearance.Size = New System.Drawing.Size(635, 205)
+        Me.tpAppearance.Size = New System.Drawing.Size(635, 269)
         Me.tpAppearance.TabIndex = 2
         Me.tpAppearance.Text = "Appearance"
         '
         'chkShowCommentsInHTML
         '
         Me.chkShowCommentsInHTML.AutoSize = True
-        Me.chkShowCommentsInHTML.Location = New System.Drawing.Point(329, 177)
+        Me.chkShowCommentsInHTML.Location = New System.Drawing.Point(274, 161)
         Me.chkShowCommentsInHTML.Name = "chkShowCommentsInHTML"
-        Me.chkShowCommentsInHTML.Size = New System.Drawing.Size(189, 21)
-        Me.chkShowCommentsInHTML.TabIndex = 28
+        Me.chkShowCommentsInHTML.Size = New System.Drawing.Size(148, 17)
+        Me.chkShowCommentsInHTML.TabIndex = 5
         Me.chkShowCommentsInHTML.Text = "Show comments in HTML"
         Me.chkShowCommentsInHTML.UseVisualStyleBackColor = True
         '
         'chkShowTerminologyInHTML
         '
         Me.chkShowTerminologyInHTML.AutoSize = True
-        Me.chkShowTerminologyInHTML.Location = New System.Drawing.Point(329, 153)
+        Me.chkShowTerminologyInHTML.Location = New System.Drawing.Point(274, 141)
         Me.chkShowTerminologyInHTML.Name = "chkShowTerminologyInHTML"
-        Me.chkShowTerminologyInHTML.Size = New System.Drawing.Size(198, 21)
-        Me.chkShowTerminologyInHTML.TabIndex = 27
+        Me.chkShowTerminologyInHTML.Size = New System.Drawing.Size(153, 17)
+        Me.chkShowTerminologyInHTML.TabIndex = 4
         Me.chkShowTerminologyInHTML.Text = "Show terminology in HTML"
         Me.chkShowTerminologyInHTML.UseVisualStyleBackColor = True
         '
         'lblOccurrences
         '
-        Me.lblOccurrences.Location = New System.Drawing.Point(24, 164)
+        Me.lblOccurrences.Location = New System.Drawing.Point(20, 142)
         Me.lblOccurrences.Name = "lblOccurrences"
-        Me.lblOccurrences.Size = New System.Drawing.Size(112, 16)
-        Me.lblOccurrences.TabIndex = 26
+        Me.lblOccurrences.Size = New System.Drawing.Size(93, 14)
+        Me.lblOccurrences.TabIndex = 2
         Me.lblOccurrences.Text = "Occurrences"
         '
         'comboOccurrences
         '
         Me.comboOccurrences.Items.AddRange(New Object() {"numeric", "lexical"})
-        Me.comboOccurrences.Location = New System.Drawing.Point(144, 160)
+        Me.comboOccurrences.Location = New System.Drawing.Point(120, 139)
         Me.comboOccurrences.Name = "comboOccurrences"
-        Me.comboOccurrences.Size = New System.Drawing.Size(136, 24)
-        Me.comboOccurrences.TabIndex = 25
+        Me.comboOccurrences.Size = New System.Drawing.Size(113, 21)
+        Me.comboOccurrences.TabIndex = 3
         Me.comboOccurrences.Text = "numeric"
         '
         'tpDefaults
@@ -649,46 +746,46 @@ Public Class ApplicationOptionsForm
         Me.tpDefaults.Controls.Add(Me.grpParser)
         Me.tpDefaults.Controls.Add(Me.comboReferenceModel)
         Me.tpDefaults.Controls.Add(Me.Label1)
-        Me.tpDefaults.Location = New System.Drawing.Point(4, 25)
+        Me.tpDefaults.Location = New System.Drawing.Point(4, 22)
         Me.tpDefaults.Name = "tpDefaults"
-        Me.tpDefaults.Size = New System.Drawing.Size(635, 205)
+        Me.tpDefaults.Size = New System.Drawing.Size(635, 269)
         Me.tpDefaults.TabIndex = 3
         Me.tpDefaults.Text = "Defaults"
         '
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(19, 114)
+        Me.Label5.Location = New System.Drawing.Point(16, 99)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(180, 17)
-        Me.Label5.TabIndex = 25
+        Me.Label5.Size = New System.Drawing.Size(134, 13)
+        Me.Label5.TabIndex = 4
         Me.Label5.Text = "Autosave interval (minutes)"
         '
         'numAutoSave
         '
-        Me.numAutoSave.Location = New System.Drawing.Point(19, 134)
+        Me.numAutoSave.Location = New System.Drawing.Point(16, 116)
         Me.numAutoSave.Name = "numAutoSave"
-        Me.numAutoSave.Size = New System.Drawing.Size(76, 22)
-        Me.numAutoSave.TabIndex = 24
+        Me.numAutoSave.Size = New System.Drawing.Size(63, 20)
+        Me.numAutoSave.TabIndex = 5
         Me.numAutoSave.Value = New Decimal(New Integer() {15, 0, 0, 0})
         '
         'grpParser
         '
         Me.grpParser.Controls.Add(Me.chkParserXML)
         Me.grpParser.Controls.Add(Me.chkParserADL)
-        Me.grpParser.Location = New System.Drawing.Point(352, 42)
+        Me.grpParser.Location = New System.Drawing.Point(293, 36)
         Me.grpParser.Name = "grpParser"
-        Me.grpParser.Size = New System.Drawing.Size(186, 77)
-        Me.grpParser.TabIndex = 23
+        Me.grpParser.Size = New System.Drawing.Size(155, 67)
+        Me.grpParser.TabIndex = 3
         Me.grpParser.TabStop = False
         Me.grpParser.Text = "Parser"
         '
         'chkParserXML
         '
         Me.chkParserXML.AutoSize = True
-        Me.chkParserXML.Location = New System.Drawing.Point(33, 44)
+        Me.chkParserXML.Location = New System.Drawing.Point(27, 38)
         Me.chkParserXML.Name = "chkParserXML"
-        Me.chkParserXML.Size = New System.Drawing.Size(58, 21)
+        Me.chkParserXML.Size = New System.Drawing.Size(48, 17)
         Me.chkParserXML.TabIndex = 1
         Me.chkParserXML.Text = "XML"
         Me.chkParserXML.UseVisualStyleBackColor = True
@@ -696,9 +793,9 @@ Public Class ApplicationOptionsForm
         'chkParserADL
         '
         Me.chkParserADL.AutoSize = True
-        Me.chkParserADL.Location = New System.Drawing.Point(33, 21)
+        Me.chkParserADL.Location = New System.Drawing.Point(27, 18)
         Me.chkParserADL.Name = "chkParserADL"
-        Me.chkParserADL.Size = New System.Drawing.Size(57, 21)
+        Me.chkParserADL.Size = New System.Drawing.Size(47, 17)
         Me.chkParserADL.TabIndex = 0
         Me.chkParserADL.Text = "ADL"
         Me.chkParserADL.UseVisualStyleBackColor = True
@@ -706,13 +803,14 @@ Public Class ApplicationOptionsForm
         'ApplicationOptionsForm
         '
         Me.AcceptButton = Me.butOK
-        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(643, 274)
+        Me.ClientSize = New System.Drawing.Size(643, 334)
         Me.Controls.Add(Me.TabConfiguration)
         Me.Controls.Add(Me.butOK)
         Me.Controls.Add(Me.butCancel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.MinimumSize = New System.Drawing.Size(600, 360)
         Me.Name = "ApplicationOptionsForm"
         Me.ShowInTaskbar = False
         Me.Text = "Options"
@@ -737,15 +835,22 @@ Public Class ApplicationOptionsForm
 
 #End Region
 
+    Private Sub RepositoryBrowseButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RepositoryBrowseButton.Click
+        FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
+        FolderBrowserDialog1.ShowNewFolderButton = True
 
-    Private Sub butBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butBrowse.Click
-
-        Me.FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
-        Me.FolderBrowserDialog1.ShowNewFolderButton = True
         If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-            Me.txtRepositoryPath.Text = FolderBrowserDialog1.SelectedPath
+            RepositoryPathTextBox.Text = FolderBrowserDialog1.SelectedPath
         End If
+    End Sub
 
+    Private Sub XmlRepositoryBrowseButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles XmlRepositoryBrowseButton.Click
+        FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
+        FolderBrowserDialog1.ShowNewFolderButton = True
+
+        If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+            XmlRepositoryPathTextBox.Text = FolderBrowserDialog1.SelectedPath
+        End If
     End Sub
 
     Private Sub ApplicationOptionsForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load

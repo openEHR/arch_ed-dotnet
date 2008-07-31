@@ -230,10 +230,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
 
                 If Not EiffelCompiler.archetype_flat Is Nothing Then
-                    adlArchetype.RemoveUnusedCodes()
-
                     If EiffelCompiler.has_archetype_serialiser_format(EiffelKernel.Create.STRING_8.make_from_cil(output_format)) Then
-                        EiffelCompiler.save_archetype_as(EiffelKernel.Create.STRING_8.make_from_cil(FileName), EiffelKernel.Create.STRING_8.make_from_cil(output_format))
+                        EiffelCompiler.save_archetype_flat_as(EiffelKernel.Create.STRING_8.make_from_cil(FileName), EiffelKernel.Create.STRING_8.make_from_cil(output_format))
 
                         If EiffelCompiler.exception_encountered Then
                             MessageBox.Show(EiffelCompiler.status.to_cil)
@@ -258,10 +256,8 @@ Namespace ArchetypeEditor.ADL_Classes
         Public Sub WriteAdlDirect(ByVal FileName As String)
             Try
                 If Not EiffelCompiler.archetype_flat Is Nothing Then
-                    adlArchetype.RemoveUnusedCodes()
-
                     If EiffelCompiler.has_archetype_serialiser_format(EiffelKernel.Create.STRING_8.make_from_cil("adl")) Then
-                        EiffelCompiler.save_archetype_as(EiffelKernel.Create.STRING_8.make_from_cil(FileName), EiffelKernel.Create.STRING_8.make_from_cil("adl"))
+                        EiffelCompiler.save_archetype_flat_as(EiffelKernel.Create.STRING_8.make_from_cil(FileName), EiffelKernel.Create.STRING_8.make_from_cil("adl"))
 
                         If EiffelCompiler.exception_encountered Then
                             MessageBox.Show(EiffelCompiler.status.to_cil)

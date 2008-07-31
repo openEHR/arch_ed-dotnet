@@ -25,7 +25,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Private EiffelCompiler As openehr.adl_parser.interface.ARCHETYPE_PARSER
         Private sLanguageCode As String
 
-        Protected ReadOnly Property Ontology() As openehr.openehr.am.archetype.ontology.ARCHETYPE_ONTOLOGY
+        Protected ReadOnly Property Ontology() As openehr.openehr.am.archetype.ontology.FLAT_ARCHETYPE_ONTOLOGY
             Get
                 Return EiffelCompiler.archetype_flat.ontology
             End Get
@@ -76,7 +76,8 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Public Overrides Function IsMultiLanguage() As Boolean
-            Return Ontology.languages_available.count > 1
+            Dim hackForCompilerError_AmbiguousCountBetween_SET_And_ARRAYED_LIST As EiffelList.ARRAYED_LIST_REFERENCE = Ontology.languages_available
+            Return hackForCompilerError_AmbiguousCountBetween_SET_And_ARRAYED_LIST.count > 1
         End Function
 
         Public Overrides Sub Reset()

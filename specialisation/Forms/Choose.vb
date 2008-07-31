@@ -74,18 +74,18 @@ Public Class Choose
         '
         Me.ListChoose.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.ListChoose.ItemHeight = 16
-        Me.ListChoose.Location = New System.Drawing.Point(16, 37)
+        Me.ListChoose.Location = New System.Drawing.Point(13, 32)
         Me.ListChoose.Name = "ListChoose"
-        Me.ListChoose.Size = New System.Drawing.Size(328, 148)
+        Me.ListChoose.Size = New System.Drawing.Size(274, 199)
         Me.ListChoose.TabIndex = 1
         '
         'LblForm
         '
+        Me.LblForm.AutoSize = True
         Me.LblForm.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LblForm.Location = New System.Drawing.Point(19, 9)
+        Me.LblForm.Location = New System.Drawing.Point(12, 8)
         Me.LblForm.Name = "LblForm"
-        Me.LblForm.Size = New System.Drawing.Size(298, 28)
+        Me.LblForm.Size = New System.Drawing.Size(55, 16)
         Me.LblForm.TabIndex = 0
         Me.LblForm.Text = "Choose"
         '
@@ -93,18 +93,18 @@ Public Class Choose
         '
         Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(438, 229)
+        Me.butCancel.Location = New System.Drawing.Point(452, 237)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(101, 32)
+        Me.butCancel.Size = New System.Drawing.Size(84, 28)
         Me.butCancel.TabIndex = 4
         Me.butCancel.Text = "Cancel"
         '
         'butOK
         '
         Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butOK.Location = New System.Drawing.Point(332, 229)
+        Me.butOK.Location = New System.Drawing.Point(364, 237)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(100, 32)
+        Me.butOK.Size = New System.Drawing.Size(83, 28)
         Me.butOK.TabIndex = 3
         Me.butOK.Text = "OK"
         '
@@ -112,16 +112,15 @@ Public Class Choose
         '
         Me.ListBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.ListBox2.ItemHeight = 16
-        Me.ListBox2.Location = New System.Drawing.Point(355, 37)
+        Me.ListBox2.Location = New System.Drawing.Point(296, 32)
         Me.ListBox2.Name = "ListBox2"
-        Me.ListBox2.Size = New System.Drawing.Size(288, 148)
+        Me.ListBox2.Size = New System.Drawing.Size(240, 199)
         Me.ListBox2.TabIndex = 2
         '
         'Choose
         '
         Me.AcceptButton = Me.butOK
-        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.butCancel
         Me.ClientSize = New System.Drawing.Size(549, 276)
         Me.Controls.Add(Me.ListBox2)
@@ -134,6 +133,7 @@ Public Class Choose
         Me.ShowInTaskbar = False
         Me.Text = "Choose"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 

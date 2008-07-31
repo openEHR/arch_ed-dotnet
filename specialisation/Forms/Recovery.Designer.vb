@@ -19,6 +19,7 @@ Partial Class Recovery
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Recovery))
         Me.chkListRecovery = New System.Windows.Forms.CheckedListBox
         Me.panelBottom = New System.Windows.Forms.Panel
         Me.butOK = New System.Windows.Forms.Button
@@ -83,6 +84,7 @@ Partial Class Recovery
         Me.Controls.Add(Me.chkListRecovery)
         Me.Controls.Add(Me.panelTop)
         Me.Controls.Add(Me.panelBottom)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Recovery"
         Me.Text = "Recovery"
         Me.panelBottom.ResumeLayout(False)

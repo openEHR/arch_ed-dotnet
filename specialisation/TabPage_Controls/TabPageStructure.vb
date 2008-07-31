@@ -185,12 +185,11 @@ Public Class TabPageStructure
         '
         'panelStructure
         '
-        Me.panelStructure.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panelStructure.Controls.Add(Me.panelDisplay)
+        Me.panelStructure.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelStructure.Location = New System.Drawing.Point(0, 40)
         Me.panelStructure.Name = "panelStructure"
-        Me.panelStructure.Size = New System.Drawing.Size(650, 500)
+        Me.panelStructure.Size = New System.Drawing.Size(650, 502)
         Me.panelStructure.TabIndex = 8
         Me.panelStructure.Visible = False
         '
@@ -458,6 +457,7 @@ Public Class TabPageStructure
         'TabPageStructure
         '
         Me.AutoScroll = True
+        Me.AutoScrollMinSize = New System.Drawing.Size(650, 542)
         Me.BackColor = System.Drawing.Color.LemonChiffon
         Me.Controls.Add(Me.panelStructure)
         Me.Controls.Add(Me.panelEntry)
@@ -466,7 +466,7 @@ Public Class TabPageStructure
         Me.HelpProviderTabPageStructure.SetHelpString(Me, "")
         Me.Name = "TabPageStructure"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(650, 408)
+        Me.Size = New System.Drawing.Size(650, 542)
         Me.panelStructure.ResumeLayout(False)
         Me.panelEntry.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -571,55 +571,55 @@ Public Class TabPageStructure
 
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         chkEmbedded.Visible = mEmbeddedAllowed
-        Me.HelpProviderTabPageStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderTabPageStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 
     Sub ShowStructurePanel(ByVal Sender As Object, ByVal e As EventArgs) Handles mArchetypeControl.ChangeStructure
-        Me.panelEntry.Visible = True
+        panelEntry.Show()
     End Sub
 
     Sub ShowDetailPanel(ByVal CurrentItem As ArchetypeNode, ByVal e As EventArgs) Handles mArchetypeControl.CurrentItemChanged
         If CurrentItem Is Nothing Then
-            Me.PanelDetails.Visible = False
-        ElseIf mArchetypeControl Is Nothing Then  'with a slot only
-            PanelDetails.ShowConstraint(CType(CurrentItem, ArchetypeNodeAnonymous).RM_Class.Type, _
-                     IsState, CurrentItem, mFileManager)
-            If Not Me.PanelDetails.Visible Then
-                Me.PanelDetails.Visible = True
-            End If
+            PanelDetails.Hide()
         Else
-            PanelDetails.ShowConstraint(mArchetypeControl.StructureType, _
-                     IsState, CurrentItem, mFileManager)
-            If Not Me.PanelDetails.Visible Then
-                Me.PanelDetails.Visible = True
+            Dim s As StructureType
+
+            If mArchetypeControl Is Nothing Then  'with a slot only
+                s = CType(CurrentItem, ArchetypeNodeAnonymous).RM_Class.Type
+            Else
+                s = mArchetypeControl.StructureType
+            End If
+
+            PanelDetails.ShowConstraint(s, IsState, CurrentItem, mFileManager)
+
+            If Not PanelDetails.Visible Then
+                PanelDetails.Show()
             End If
         End If
     End Sub
 
     Public Sub Translate()
-
         If Not mArchetypeControl Is Nothing Then
             mArchetypeControl.Translate()
         End If
-
     End Sub
 
     Public Sub TranslateGUI()
-
         mIsLoading = True
-        Me.comboStructure.Items.Clear()
+        comboStructure.Items.Clear()
 
         If Not mValidStructureClasses Is Nothing Then
             For Each ValidStructure As StructureType In mValidStructureClasses
-                Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(ValidStructure, ValidStructure.ToString))
+                comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(ValidStructure, ValidStructure.ToString))
             Next
         End If
 
-        Me.lblStructure.Text = Filemanager.GetOpenEhrTerm(85, Me.lblStructure.Text)
+        lblStructure.Text = Filemanager.GetOpenEhrTerm(85, lblStructure.Text)
 
-        If Me.chkEmbedded.Visible Then
-            Me.chkEmbedded.Text = Filemanager.GetOpenEhrTerm(605, Me.chkEmbedded.Text)
+        If chkEmbedded.Visible Then
+            chkEmbedded.Text = Filemanager.GetOpenEhrTerm(605, chkEmbedded.Text)
         End If
+
         mIsLoading = False
     End Sub
 
@@ -632,7 +632,6 @@ Public Class TabPageStructure
             Else
                 Return mEmbeddedSlot.RM_Class
             End If
-
         Else
             If mArchetypeControl Is Nothing Then
                 Return Nothing
@@ -642,7 +641,6 @@ Public Class TabPageStructure
                 Else
                     Return mArchetypeControl.Archetype
                 End If
-
             End If
         End If
     End Function
@@ -652,7 +650,6 @@ Public Class TabPageStructure
             text.WriteLine(mArchetypeControl.ToRichText(level, Chr(13) & Chr(10)))
             text.WriteLine("\pard\f0\fs20\par")
         End If
-
     End Sub
 
     Public Sub toHTML(ByRef text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "")
@@ -667,61 +664,56 @@ Public Class TabPageStructure
     End Sub
 
     Public Sub ProcessStructure(ByVal an_element As RmElement)
-
         mIsLoading = True
         mIsElement = True
-        Me.panelEntry.Visible = False
-        Me.panelStructure.Visible = True
-
-        Me.ArchetypeDisplay = New ElementOnly(an_element, mFileManager)
+        panelEntry.Hide()
+        panelStructure.Show()
+        ArchetypeDisplay = New ElementOnly(an_element, mFileManager)
 
         'Set the initial value
-        Me.ArchetypeDisplay.SetInitial()
+        ArchetypeDisplay.SetInitial()
 
         mIsLoading = False
     End Sub
 
     Public Sub ProcessStructure(ByVal a_compound_structure As RmStructureCompound)
-
         mIsLoading = True
 
         If Not a_compound_structure.Children Is Nothing Then ' Not sure that it should be there
-
-            Me.panelEntry.Visible = False
-            Me.panelStructure.Visible = True
+            panelEntry.Hide()
+            panelStructure.Show()
 
             Select Case a_compound_structure.Type '.TypeName
                 Case StructureType.Single ' "Single", "Simple"
 
-                    Me.ArchetypeDisplay = New SimpleStructure(a_compound_structure, mFileManager)
+                    ArchetypeDisplay = New SimpleStructure(a_compound_structure, mFileManager)
 
                 Case StructureType.List
 
                     ' this also shows the panels and sets lvList to visible
-                    Me.ArchetypeDisplay = New ListStructure(a_compound_structure, mFileManager)
+                    ArchetypeDisplay = New ListStructure(a_compound_structure, mFileManager)
 
                 Case StructureType.Tree
 
-                    Me.ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
+                    ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
 
                 Case StructureType.Table
 
-                    Me.ArchetypeDisplay = New TableStructure(CType(a_compound_structure, RmTable), mFileManager)
+                    ArchetypeDisplay = New TableStructure(CType(a_compound_structure, RmTable), mFileManager)
 
                 Case StructureType.Cluster
 
-                    Me.ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
+                    ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
 
                 Case Else
                     Debug.Assert(False)
             End Select
 
             'Set the initial value
-            Me.ArchetypeDisplay.SetInitial()
-
+            ArchetypeDisplay.SetInitial()
         Else
-            Me.panelEntry.Visible = True
-            Me.panelStructure.Visible = False
+            panelEntry.Show()
+            panelStructure.Hide()
         End If
 
         mIsLoading = False
@@ -741,9 +733,8 @@ Public Class TabPageStructure
     End Sub
 
     Public Sub SetAsElement(ByVal a_node_id As String)
-
         mIsElement = True
-        Me.panelEntry.Visible = False
+        panelEntry.Hide()
 
         If mIsEmbedded Then
             If mIsLoading Then
@@ -754,28 +745,27 @@ Public Class TabPageStructure
                 ' have to have a new slot if change the structure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Element)
             End If
-            Me.panelStructure.Visible = True
-            Me.panelDisplay.Visible = False
-            Me.ShowDetailPanel(mEmbeddedSlot, New EventArgs)
+
+            panelStructure.Show()
+            panelDisplay.Hide()
+            ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
             ' ensure the structure component is visible
-            If Me.panelDisplay.Visible = False Then
-                Me.panelDisplay.Visible = True
+            If Not panelDisplay.Visible Then
+                panelDisplay.Show()
             End If
 
             Dim newElementOnly As New ElementOnly(New RmElement(mFileManager.Archetype.ConceptCode), mFileManager)
-            Me.ArchetypeDisplay = newElementOnly
-            Me.PanelDetails.Visible = False
+            ArchetypeDisplay = newElementOnly
+            PanelDetails.Hide()
         End If
 
-        Me.panelStructure.Visible = True
-
+        panelStructure.Show()
     End Sub
 
     Public Sub SetAsCluster(ByVal a_node_id As String)
-
         mIsCluster = True
-        Me.panelEntry.Visible = False
+        panelEntry.Hide()
 
         If mIsEmbedded Then
             If mIsLoading Then
@@ -786,26 +776,25 @@ Public Class TabPageStructure
                 ' have to have a new slot if change the structure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Cluster)
             End If
-            Me.panelStructure.Visible = True
-            Me.panelDisplay.Visible = False
-            Me.ShowDetailPanel(mEmbeddedSlot, New EventArgs)
+
+            panelStructure.Show()
+            panelDisplay.Hide()
+            ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
             ' ensure the structure component is visible
-            If Me.panelDisplay.Visible = False Then
-                Me.panelDisplay.Visible = True
+            If Not panelDisplay.Visible Then
+                panelDisplay.Show()
             End If
 
             Dim newTreeStructure As New TreeStructure(New RmCluster(mFileManager.Archetype.ConceptCode), mFileManager)
-            Me.ArchetypeDisplay = newTreeStructure
-            Me.PanelDetails.Visible = False
+            ArchetypeDisplay = newTreeStructure
+            PanelDetails.Hide()
         End If
 
-        Me.panelStructure.Visible = True
-
+        panelStructure.Show()
     End Sub
 
     Private Sub comboStructure_selectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboStructure.SelectedIndexChanged
-
         Dim entry_structure As EntryStructure ' User control to provide the list or whatever
         Dim chosen_structure As StructureType
         Dim switchOffPanelDetails As Boolean = False
@@ -814,9 +803,9 @@ Public Class TabPageStructure
 
         Debug.Assert(Not mValidStructureClasses Is Nothing)  ' This should be set to populate the list
 
-        If Me.comboStructure.SelectedIndex = -1 Then Return ' nothing selected
+        If comboStructure.SelectedIndex = -1 Then Return ' nothing selected
 
-        chosen_structure = mValidStructureClasses(Me.comboStructure.SelectedIndex)
+        chosen_structure = mValidStructureClasses(comboStructure.SelectedIndex)
         ReferenceModel.SetStructureClass(chosen_structure)
 
         If mIsEmbedded Then
@@ -828,9 +817,9 @@ Public Class TabPageStructure
                 ' have to have a new slot if change the structure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(chosen_structure)
             End If
-            Me.panelStructure.Visible = True
-            Me.panelDisplay.Visible = False
-            Me.ShowDetailPanel(mEmbeddedSlot, New EventArgs)
+            panelStructure.Show()
+            panelDisplay.Hide()
+            ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
 
             panelStructure.SuspendLayout()
@@ -838,7 +827,7 @@ Public Class TabPageStructure
             panelDisplay.SuspendLayout()
 
             ' ensure the structure component is visible
-            Me.panelDisplay.Visible = True
+            panelDisplay.Show()
 
             Select Case chosen_structure
                 Case StructureType.Single
@@ -855,7 +844,7 @@ Public Class TabPageStructure
             End Select
 
             If mArchetypeControl Is Nothing Then
-                Me.ArchetypeDisplay = entry_structure
+                ArchetypeDisplay = entry_structure
 
                 'new structure so hide details
                 'JAR: 17APR07, EDT-22 Adding constraint details when no object exists raises exception
@@ -866,13 +855,13 @@ Public Class TabPageStructure
                 'Changing structures
                 If entry_structure.StructureType <> mArchetypeControl.StructureType Then
                     entry_structure.Archetype = mArchetypeControl.Archetype
-                    Me.ArchetypeDisplay = entry_structure
+                    ArchetypeDisplay = entry_structure
                 End If
             End If
 
             'pane visibility
-            Me.panelStructure.Visible = True
-            Me.panelEntry.Visible = False
+            panelStructure.Show()
+            panelEntry.Hide()
             PanelDetails.Visible = Not switchOffPanelDetails 'JAR: 17APR07, EDT-22 Adding constraint details when no object exists raises exception
 
             panelStructure.ResumeLayout(True)
@@ -897,9 +886,7 @@ Public Class TabPageStructure
     End Property
 
     Public Sub ProcessStructure(ByVal a_slot As RmSlot)
-
         mIsLoading = True
-
         mIsEmbedded = True
         mEmbeddedSlot = New ArchetypeNodeAnonymous(a_slot)
 
@@ -921,6 +908,7 @@ Public Class TabPageStructure
             PanelDetails.LocalFileManager = mFileManager
 
             mFileManager.ObjectToSave = Me
+
             If OpenArchetype(a_slot) Then
                 Filemanager.AddEmbedded(mFileManager)
                 'Hide context menu to change structure
@@ -936,20 +924,20 @@ Public Class TabPageStructure
         End If
 
         ' set for slot unless has an embedded archetype
-        Me.chkEmbedded.Checked = True
+        chkEmbedded.Checked = True
+
         Select Case a_slot.SlotConstraint.RM_ClassType
             Case StructureType.Single
-                Me.comboStructure.SelectedIndex = 0
+                comboStructure.SelectedIndex = 0
             Case StructureType.List
-                Me.comboStructure.SelectedIndex = 1
+                comboStructure.SelectedIndex = 1
             Case StructureType.Tree
-                Me.comboStructure.SelectedIndex = 2
+                comboStructure.SelectedIndex = 2
             Case StructureType.Table
-                Me.comboStructure.SelectedIndex = 3
+                comboStructure.SelectedIndex = 3
         End Select
 
         ShowLanguage()
-
         mIsLoading = False
     End Sub
 
@@ -966,11 +954,11 @@ Public Class TabPageStructure
         Else
             mFileManager.OntologyManager.LanguageCode = mFileManager.OntologyManager.PrimaryLanguageCode
         End If
+
         Translate()
     End Sub
 
     Private Overloads Function OpenArchetype(ByVal an_archetype_ID As ArchetypeID) As Boolean
-
         mFileManager.OpenArchetype(an_archetype_ID.ToString)
 
         If mFileManager.ArchetypeAvailable Then
@@ -978,7 +966,7 @@ Public Class TabPageStructure
             lbl.Location = New System.Drawing.Point(120, 2)
             lbl.Width = 320
             lbl.Height = 36
-            Me.ProcessStructure(CType(mFileManager.Archetype.Definition, RmStructureCompound))
+            ProcessStructure(CType(mFileManager.Archetype.Definition, RmStructureCompound))
             lbl.Text = mFileManager.Archetype.Archetype_ID.ToString
             mArchetypeControl.PanelStructureHeader.Controls.Add(lbl)
             mArchetypeControl.PanelStructureHeader.Height = 36
@@ -987,57 +975,66 @@ Public Class TabPageStructure
             MessageBox.Show(AE_Constants.Instance.Error_loading & ": " & an_archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return False
         End If
+
         Return True
     End Function
 
     Private Overloads Function OpenArchetype(ByVal a_slot As RmSlot) As Boolean
+        Dim result As Boolean
         Dim archetype_name As String
         Dim frm As New Choose
         frm.Set_Single()
 
         Dim dir As New IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure")
-        dir.GetFiles("*.adl")
-        Dim matchStrings As New System.Collections.Generic.List(Of System.Text.RegularExpressions.Regex)
-        For Each includeStatement As String In a_slot.SlotConstraint.Include
-            includeStatement = ReferenceModel.ReferenceModelName & "-" & _
-                                ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
-                                "\." & includeStatement & "\.adl"
-            matchStrings.Add(New System.Text.RegularExpressions.Regex(includeStatement))
-        Next
-        For Each f As IO.FileInfo In dir.GetFiles("*.adl")
-            For Each re As System.Text.RegularExpressions.Regex In matchStrings
-                If re.Match(f.Name).Success Then
-                    frm.ListChoose.Items.Add(f.Name)
-                End If
+
+        If dir.Exists Then
+            dir.GetFiles("*.adl")
+            Dim matchStrings As New System.Collections.Generic.List(Of System.Text.RegularExpressions.Regex)
+
+            For Each includeStatement As String In a_slot.SlotConstraint.Include
+                includeStatement = ReferenceModel.ReferenceModelName & "-" & _
+                                    ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
+                                    "\." & includeStatement & "\.adl"
+                matchStrings.Add(New System.Text.RegularExpressions.Regex(includeStatement))
             Next
-        Next
+
+            For Each f As IO.FileInfo In dir.GetFiles("*.adl")
+                For Each re As System.Text.RegularExpressions.Regex In matchStrings
+                    If re.Match(f.Name).Success Then
+                        frm.ListChoose.Items.Add(f.Name)
+                    End If
+                Next
+            Next
+        End If
 
         Select Case frm.ListChoose.Items.Count
             Case 0
-                Return False
+                archetype_name = Nothing
             Case 1
                 archetype_name = frm.ListChoose.Items(0)
             Case Else
                 If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
                     archetype_name = CStr(frm.ListChoose.SelectedItem)
                 Else
-                    Return False
+                    archetype_name = Nothing
                 End If
         End Select
 
-        archetype_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure\" & archetype_name
+        If Not archetype_name Is Nothing Then
+            archetype_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure\" & archetype_name
 
-        If System.IO.File.Exists(archetype_name) Then
-            OpenArchetype(archetype_name)
-            Return True
-
-        ElseIf MessageBox.Show(AE_Constants.Instance.Could_not_find & ": '" & archetype_name & "'" & vbCrLf & vbCrLf & AE_Constants.Instance.Locate_file_yourself & "?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-            If LocateEmbeddedArchetype(archetype_name) Then 'JAR: 12APR07, EDT-8 If embedded archetype is not found, allow the user to locate
+            If System.IO.File.Exists(archetype_name) Then
                 OpenArchetype(archetype_name)
-                Return True
+                result = True
+            ElseIf MessageBox.Show(AE_Constants.Instance.Could_not_find & ": '" & archetype_name & "'" & vbCrLf & vbCrLf & AE_Constants.Instance.Locate_file_yourself & "?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                If LocateEmbeddedArchetype(archetype_name) Then
+                    OpenArchetype(archetype_name)
+                    result = True
+                End If
             End If
         End If
-        Return False
+
+        Return result
     End Function
 
     Private Function LocateEmbeddedArchetype(ByRef fileName As String) As Boolean 'JAR: 12APR07, EDT-8 If embedded archetype is not found, allow the user to locate
@@ -1069,7 +1066,6 @@ Public Class TabPageStructure
     End Function
 
     Private Overloads Function openArchetype(ByVal an_archetype_name As String) As Boolean
-
         mFileManager.OpenArchetype(an_archetype_name)
 
         If mFileManager.ArchetypeAvailable Then
@@ -1077,7 +1073,7 @@ Public Class TabPageStructure
             lbl.Location = New System.Drawing.Point(120, 2)
             lbl.Width = 320
             lbl.Height = 24
-            Me.ProcessStructure(CType(mFileManager.Archetype.Definition, RmStructureCompound))
+            ProcessStructure(CType(mFileManager.Archetype.Definition, RmStructureCompound))
             lbl.Text = mFileManager.Archetype.Archetype_ID.ToString
             mArchetypeControl.PanelStructureHeader.Controls.Add(lbl)
             lbl.BringToFront()
@@ -1085,6 +1081,7 @@ Public Class TabPageStructure
             MessageBox.Show(AE_Constants.Instance.Error_loading & ": " & an_archetype_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Return False
         End If
+
         Return True
     End Function
 
@@ -1099,9 +1096,9 @@ Public Class TabPageStructure
             ' if it is not loading and is changed to false then
             ' need to remove the filemanager
             'ToDo: needs to be more comprehensive if more than one embedded
-            If mIsEmbedded AndAlso Me.comboStructure.SelectedIndex = -1 Then
-                Me.comboStructure.Focus()
-                Me.comboStructure.DroppedDown = True
+            If mIsEmbedded AndAlso comboStructure.SelectedIndex = -1 Then
+                comboStructure.Focus()
+                comboStructure.DroppedDown = True
                 Return
             Else
                 If Filemanager.HasEmbedded AndAlso (Not Filemanager.Master Is mFileManager) Then
@@ -1110,7 +1107,7 @@ Public Class TabPageStructure
                 End If
             End If
 
-            Me.comboStructure_selectedIndexChanged(sender, e)
+            comboStructure_selectedIndexChanged(sender, e)
         End If
     End Sub
 

@@ -576,12 +576,7 @@ Public Class ArchetypeNodeConstraintControl
             End Select
 
             mArchetypeNode = an_archetype_node
-
-            If aStructureType = StructureType.Single Then
-                mOccurrences.SetSingle = True
-            Else
-                mOccurrences.SetSingle = False
-            End If
+            mOccurrences.SetSingle = (aStructureType = StructureType.Single)
 
             If IsState Then
                 Me.tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue
@@ -595,26 +590,22 @@ Public Class ArchetypeNodeConstraintControl
 
             'Enable the node code if not anonymous and there is a terminology added
             If Not an_archetype_node.IsAnonymous Then
-                Me.dgNodeBindings.Visible = True
+                dgNodeBindings.Show()
                 Dim nodeID As String = CType(an_archetype_node, ArchetypeNodeAbstract).NodeId
                 mDataView.Table.Columns(1).DefaultValue = nodeID
                 mDataView.RowFilter = "Path = '" & CType(an_archetype_node, ArchetypeNodeAbstract).NodeId & "'"
+
                 'Hide the termLookUp if there are no rows
                 If mDataView.Count = 0 Then
-                    termLookUp.Visible = False
+                    termLookUp.Hide()
                 End If
-
-
             Else
-                Me.dgNodeBindings.Visible = False
+                dgNodeBindings.Hide()
             End If
 
             If OceanArchetypeEditor.IsDefaultLanguageRightToLeft Then
                 OceanArchetypeEditor.Reflect(mConstraintControl)
             End If
-
-
-
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
         End Try

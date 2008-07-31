@@ -4,6 +4,9 @@ Imports System.IO
 
 Public Class Options
     Private mRepositoryPath As String
+    Private mRepositoryAutoSave As Boolean
+    Private mXmlRepositoryPath As String
+    Private mXmlRepositoryAutoSave As Boolean
     Private mUserName As String
     Private mUserEmail As String
     Private mUserOrganisation As String
@@ -28,6 +31,7 @@ Public Class Options
             mHelpPath = Value
         End Set
     End Property
+
     Property RepositoryPath() As String
         Get
             Return mRepositoryPath
@@ -36,6 +40,34 @@ Public Class Options
             mRepositoryPath = Value
         End Set
     End Property
+
+    Property RepositoryAutoSave() As Boolean
+        Get
+            Return mRepositoryAutoSave
+        End Get
+        Set(ByVal value As Boolean)
+            mRepositoryAutoSave = value
+        End Set
+    End Property
+
+    Property XmlRepositoryPath() As String
+        Get
+            Return mXmlRepositoryPath
+        End Get
+        Set(ByVal Value As String)
+            mXmlRepositoryPath = Value
+        End Set
+    End Property
+
+    Property XmlRepositoryAutoSave() As Boolean
+        Get
+            Return mXmlRepositoryAutoSave
+        End Get
+        Set(ByVal value As Boolean)
+            mXmlRepositoryAutoSave = value
+        End Set
+    End Property
+
     Property RepositoryURL() As Uri
         Get
             Return mArchetypeRepositoryURL
@@ -44,6 +76,7 @@ Public Class Options
             mArchetypeRepositoryURL = value
         End Set
     End Property
+
     Property TerminologyURL() As Uri
         Get
             Return mTerminologyURL
@@ -52,6 +85,7 @@ Public Class Options
             mTerminologyURL = value
         End Set
     End Property
+
     Property UserName() As String
         Get
             Return mUserName
@@ -60,6 +94,7 @@ Public Class Options
             mUserName = Value
         End Set
     End Property
+
     Property UserOrganisation() As String
         Get
             Return mUserOrganisation
@@ -68,6 +103,7 @@ Public Class Options
             mUserOrganisation = Value
         End Set
     End Property
+
     Property OccurrencesView() As String
         Get
             Return mOccurrencesView
@@ -76,6 +112,7 @@ Public Class Options
             mOccurrencesView = Value
         End Set
     End Property
+
     Property UserEmail() As String
         Get
             Return mUserEmail
@@ -84,6 +121,7 @@ Public Class Options
             mUserEmail = Value
         End Set
     End Property
+
     Property DefaultReferenceModel() As Integer
         Get
             Return mDefaultRM
@@ -119,6 +157,7 @@ Public Class Options
             mAllowTerminologyLookUp = Value
         End Set
     End Property
+
     Property ShowTermsInHtml() As Boolean
         Get
             Return mShowTermsInHtml
@@ -156,15 +195,20 @@ Public Class Options
         frm.txtUsername.Text = mUserName
         frm.txtEmail.Text = mUserEmail
         frm.txtOrganisation.Text = mUserOrganisation
-        frm.txtRepositoryPath.Text = mRepositoryPath
+        frm.RepositoryPathTextBox.Text = mRepositoryPath
+        frm.RepositoryAutoSaveCheckBox.Checked = mRepositoryAutoSave
+        frm.XmlRepositoryPathTextBox.Text = mXmlRepositoryPath
+        frm.XmlRepositoryAutoSaveCheckBox.Checked = mXmlRepositoryAutoSave
         frm.txtTerminologyURL.Text = OTSControls.Term.OtsWebService.Url
         frm.txtHelpFile.Text = mHelpPath
         frm.comboOccurrences.Text = mOccurrencesView
         frm.chkWebSearch.Checked = mAllowWebSearch
         frm.chkTerminology.Checked = mAllowTerminologyLookUp
+
         For i As Integer = 0 To ReferenceModel.ValidReferenceModelNames.Length - 1
             frm.comboReferenceModel.Items.Add(ReferenceModel.ValidReferenceModelNames(i))
         Next
+
         frm.numAutoSave.Value = CDec(mTimerMinutes)
         frm.txtURL.Text = mArchetypeRepositoryURL.ToString
         frm.txtTerminologyURL.Text = mTerminologyURL.ToString
@@ -174,6 +218,7 @@ Public Class Options
         Else
             frm.chkParserADL.Checked = True
         End If
+
         frm.comboReferenceModel.SelectedIndex = mDefaultRM
         frm.chkShowTerminologyInHTML.Checked = mShowTermsInHtml
         frm.chkShowCommentsInHTML.Checked = mShowCommentsInHtml
@@ -190,7 +235,10 @@ Public Class Options
             mUserName = frm.txtUsername.Text
             mUserEmail = frm.txtEmail.Text
             mUserOrganisation = frm.txtOrganisation.Text
-            mRepositoryPath = frm.txtRepositoryPath.Text
+            mRepositoryPath = frm.RepositoryPathTextBox.Text
+            mRepositoryAutoSave = frm.RepositoryAutoSaveCheckBox.Checked
+            mXmlRepositoryPath = frm.XmlRepositoryPathTextBox.Text
+            mXmlRepositoryAutoSave = frm.XmlRepositoryAutoSaveCheckBox.Checked
             mHelpPath = frm.txtHelpFile.Text
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
             mOccurrencesView = frm.comboOccurrences.Text
@@ -222,7 +270,6 @@ Public Class Options
         End If
 
         frm.Close()
-
     End Sub
 
     Public Function LoadConfiguration() As Boolean
@@ -245,6 +292,7 @@ Public Class Options
                     x = StrmRead.ReadLine
                     Try
                         y = x.Split("=")
+
                         If y.Length = 2 Then
                             Select Case y(0)
                                 Case "UserName"
@@ -255,6 +303,12 @@ Public Class Options
                                     mUserOrganisation = y(1)
                                 Case "RepositoryPath"
                                     mRepositoryPath = y(1).Trim
+                                Case "RepositoryAutoSave"
+                                    mRepositoryAutoSave = Boolean.Parse(y(1).Trim)
+                                Case "XmlRepositoryPath"
+                                    mXmlRepositoryPath = y(1).Trim
+                                Case "XmlRepositoryAutoSave"
+                                    mXmlRepositoryAutoSave = Boolean.Parse(y(1).Trim)
                                 Case "HelpPath"
                                     mHelpPath = y(1).Trim
                                 Case "DefaultReferenceModel"
@@ -321,6 +375,9 @@ Public Class Options
                 StrmWrite.WriteLine("UserEmail=" & mUserEmail)
                 StrmWrite.WriteLine("Organisation=" & mUserOrganisation)
                 StrmWrite.WriteLine("RepositoryPath=" & mRepositoryPath)
+                StrmWrite.WriteLine("RepositoryAutoSave=" & mRepositoryAutoSave)
+                StrmWrite.WriteLine("XmlRepositoryPath=" & mXmlRepositoryPath)
+                StrmWrite.WriteLine("XmlRepositoryAutoSave=" & mXmlRepositoryAutoSave)
                 StrmWrite.WriteLine("SharedRepositoryUrl=" & mArchetypeRepositoryURL.ToString)
                 StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyURL.ToString)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
@@ -390,6 +447,7 @@ Public Class Options
     Function ValidateConfiguration() As Boolean
         Dim result As Boolean = True
         Dim message As String = "Errors:"
+
         If Not File.Exists(mHelpPath) Then
             result = False
             message &= (": Help file does not exist @ " & mHelpPath)
@@ -400,15 +458,22 @@ Public Class Options
             message &= (": Repository does not exist @ " & mRepositoryPath)
         End If
 
+        If Not Directory.Exists(mXmlRepositoryPath) Then
+            result = False
+            message &= (": XML Repository does not exist @ " & mXmlRepositoryPath)
+        End If
+
         If Not result Then
             MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
+
         Return result
     End Function
 
     Sub New()
         Dim path As String = Application.ExecutablePath.Substring(0, Application.ExecutablePath.LastIndexOf("\") + 1)
         mRepositoryPath = path + "SampleArchetypes"
+        mXmlRepositoryPath = mRepositoryPath
         mUserName = ""
         mUserEmail = ""
         mHelpPath = path & "Help\ArchetypeEditor.chm"
@@ -419,6 +484,7 @@ Public Class Options
         mAllowWebSearch = False
         mAllowTerminologyLookUp = False
         LoadConfiguration()
+
         If Not ValidateConfiguration() Then
             Me.ShowOptionsForm(1)
         End If

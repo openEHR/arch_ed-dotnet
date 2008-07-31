@@ -76,7 +76,7 @@ Public Class formCreateClinicalModel
     Friend WithEvents LblContains As System.Windows.Forms.Label
     Friend WithEvents butOK As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(formCreateClinicalModel))
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(formCreateClinicalModel))
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.TabComponents = New System.Windows.Forms.TabControl
         Me.TabPgFolder = New System.Windows.Forms.TabPage
@@ -118,6 +118,7 @@ Public Class formCreateClinicalModel
         Me.TabPgEval.SuspendLayout()
         Me.TabPgAction.SuspendLayout()
         Me.TabPgOrg.SuspendLayout()
+        CType(Me.PictureBoxComponents, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Panel1
@@ -162,10 +163,8 @@ Public Class formCreateClinicalModel
         Me.TreeFolder.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TreeFolder.FullRowSelect = True
         Me.TreeFolder.HideSelection = False
-        Me.TreeFolder.ImageIndex = -1
         Me.TreeFolder.Location = New System.Drawing.Point(0, 0)
         Me.TreeFolder.Name = "TreeFolder"
-        Me.TreeFolder.SelectedImageIndex = -1
         Me.TreeFolder.Size = New System.Drawing.Size(276, 542)
         Me.TreeFolder.TabIndex = 0
         '
@@ -182,10 +181,8 @@ Public Class formCreateClinicalModel
         'TreeTransaction
         '
         Me.TreeTransaction.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TreeTransaction.ImageIndex = -1
         Me.TreeTransaction.Location = New System.Drawing.Point(0, 0)
         Me.TreeTransaction.Name = "TreeTransaction"
-        Me.TreeTransaction.SelectedImageIndex = -1
         Me.TreeTransaction.Size = New System.Drawing.Size(276, 542)
         Me.TreeTransaction.TabIndex = 0
         '
@@ -224,10 +221,8 @@ Public Class formCreateClinicalModel
         'TreeObservation
         '
         Me.TreeObservation.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TreeObservation.ImageIndex = -1
         Me.TreeObservation.Location = New System.Drawing.Point(0, 0)
         Me.TreeObservation.Name = "TreeObservation"
-        Me.TreeObservation.SelectedImageIndex = -1
         Me.TreeObservation.Size = New System.Drawing.Size(268, 516)
         Me.TreeObservation.Sorted = True
         Me.TreeObservation.TabIndex = 0
@@ -245,10 +240,8 @@ Public Class formCreateClinicalModel
         'TreeInstruction
         '
         Me.TreeInstruction.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TreeInstruction.ImageIndex = -1
         Me.TreeInstruction.Location = New System.Drawing.Point(0, 0)
         Me.TreeInstruction.Name = "TreeInstruction"
-        Me.TreeInstruction.SelectedImageIndex = -1
         Me.TreeInstruction.Size = New System.Drawing.Size(268, 516)
         Me.TreeInstruction.Sorted = True
         Me.TreeInstruction.TabIndex = 0
@@ -266,10 +259,8 @@ Public Class formCreateClinicalModel
         'TreeEvaluation
         '
         Me.TreeEvaluation.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TreeEvaluation.ImageIndex = -1
         Me.TreeEvaluation.Location = New System.Drawing.Point(0, 0)
         Me.TreeEvaluation.Name = "TreeEvaluation"
-        Me.TreeEvaluation.SelectedImageIndex = -1
         Me.TreeEvaluation.Size = New System.Drawing.Size(268, 516)
         Me.TreeEvaluation.Sorted = True
         Me.TreeEvaluation.TabIndex = 0
@@ -286,10 +277,8 @@ Public Class formCreateClinicalModel
         'TreeAction
         '
         Me.TreeAction.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TreeAction.ImageIndex = -1
         Me.TreeAction.Location = New System.Drawing.Point(0, 0)
         Me.TreeAction.Name = "TreeAction"
-        Me.TreeAction.SelectedImageIndex = -1
         Me.TreeAction.Size = New System.Drawing.Size(268, 516)
         Me.TreeAction.Sorted = True
         Me.TreeAction.TabIndex = 0
@@ -307,10 +296,8 @@ Public Class formCreateClinicalModel
         'TreeOrganiser
         '
         Me.TreeOrganiser.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TreeOrganiser.ImageIndex = -1
         Me.TreeOrganiser.Location = New System.Drawing.Point(0, 0)
         Me.TreeOrganiser.Name = "TreeOrganiser"
-        Me.TreeOrganiser.SelectedImageIndex = -1
         Me.TreeOrganiser.Size = New System.Drawing.Size(276, 542)
         Me.TreeOrganiser.TabIndex = 0
         '
@@ -329,7 +316,6 @@ Public Class formCreateClinicalModel
         Me.TxtSearch.Name = "TxtSearch"
         Me.TxtSearch.Size = New System.Drawing.Size(160, 20)
         Me.TxtSearch.TabIndex = 4
-        Me.TxtSearch.Text = ""
         '
         'ComboFilter
         '
@@ -370,15 +356,7 @@ Public Class formCreateClinicalModel
         '
         'OleDbConnection1
         '
-        Me.OleDbConnection1.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Password="""";User ID=Admin;Data Source=C:\Documen" & _
-        "ts and Settings\Sam Heard\My Documents\Develop\openEHR\Archetype editor\bin\Data" & _
-        "\openEHR_Clinical_Models.mdb;Mode=Share Deny None;Extended Properties="""";Jet OLE" & _
-        "DB:System database="""";Jet OLEDB:Registry Path="""";Jet OLEDB:Database Password="""";" & _
-        "Jet OLEDB:Engine Type=5;Jet OLEDB:Database Locking Mode=1;Jet OLEDB:Global Parti" & _
-        "al Bulk Ops=2;Jet OLEDB:Global Bulk Transactions=1;Jet OLEDB:New Database Passwo" & _
-        "rd="""";Jet OLEDB:Create System Database=False;Jet OLEDB:Encrypt Database=False;Je" & _
-        "t OLEDB:Don't Copy Locale on Compact=False;Jet OLEDB:Compact Without Replica Rep" & _
-        "air=False;Jet OLEDB:SFP=False"
+        Me.OleDbConnection1.ConnectionString = resources.GetString("OleDbConnection1.ConnectionString")
         '
         'OleDbClinicalModels
         '
@@ -396,6 +374,7 @@ Public Class formCreateClinicalModel
         Me.ListReturnValues.Name = "ListReturnValues"
         Me.ListReturnValues.Size = New System.Drawing.Size(352, 144)
         Me.ListReturnValues.TabIndex = 8
+        Me.ListReturnValues.UseCompatibleStateImageBehavior = False
         Me.ListReturnValues.View = System.Windows.Forms.View.List
         '
         'LblContains
@@ -427,6 +406,7 @@ Public Class formCreateClinicalModel
         Me.Name = "formCreateClinicalModel"
         Me.Text = "Choose and archetype"
         Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.TabComponents.ResumeLayout(False)
         Me.TabPgFolder.ResumeLayout(False)
         Me.TabPgTx.ResumeLayout(False)
@@ -437,6 +417,7 @@ Public Class formCreateClinicalModel
         Me.TabPgEval.ResumeLayout(False)
         Me.TabPgAction.ResumeLayout(False)
         Me.TabPgOrg.ResumeLayout(False)
+        CType(Me.PictureBoxComponents, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

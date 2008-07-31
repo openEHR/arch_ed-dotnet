@@ -65,6 +65,7 @@ Public Class ConstraintForm
     Friend WithEvents butDelete As System.Windows.Forms.Button
     Friend WithEvents HelpProviderConstraintForm As System.Windows.Forms.HelpProvider
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConstraintForm))
         Me.PanelBottom = New System.Windows.Forms.Panel
         Me.butDelete = New System.Windows.Forms.Button
         Me.butCancel = New System.Windows.Forms.Button
@@ -79,46 +80,50 @@ Public Class ConstraintForm
         Me.PanelBottom.Controls.Add(Me.butCancel)
         Me.PanelBottom.Controls.Add(Me.butOK)
         Me.PanelBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelBottom.Location = New System.Drawing.Point(0, 228)
+        Me.PanelBottom.Location = New System.Drawing.Point(0, 233)
         Me.PanelBottom.Name = "PanelBottom"
-        Me.PanelBottom.Size = New System.Drawing.Size(489, 37)
+        Me.PanelBottom.Size = New System.Drawing.Size(489, 32)
         Me.PanelBottom.TabIndex = 0
         '
         'butDelete
         '
-        Me.butDelete.Location = New System.Drawing.Point(96, 5)
+        Me.butDelete.Location = New System.Drawing.Point(96, 4)
         Me.butDelete.Name = "butDelete"
-        Me.butDelete.Size = New System.Drawing.Size(104, 27)
+        Me.butDelete.Size = New System.Drawing.Size(104, 24)
         Me.butDelete.TabIndex = 0
         Me.butDelete.Text = "Delete All"
         '
-        'butOK
-        '
-        Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(288, 5)
-        Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(88, 27)
-        Me.butOK.TabIndex = 1
-        Me.butOK.Text = "OK"
-        '
         'butCancel
         '
+        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(392, 5)
+        Me.butCancel.Location = New System.Drawing.Point(392, 4)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(96, 27)
+        Me.butCancel.Size = New System.Drawing.Size(88, 24)
         Me.butCancel.TabIndex = 2
         Me.butCancel.Text = "Cancel"
         '
+        'butOK
+        '
+        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.butOK.Location = New System.Drawing.Point(292, 4)
+        Me.butOK.Name = "butOK"
+        Me.butOK.Size = New System.Drawing.Size(88, 24)
+        Me.butOK.TabIndex = 1
+        Me.butOK.Text = "OK"
+        '
         'ConstraintForm
         '
-        Me.AutoScaleBaseSize = New System.Drawing.Size(6, 15)
+        Me.AcceptButton = Me.butOK
+        Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.butCancel
         Me.ClientSize = New System.Drawing.Size(489, 265)
         Me.ControlBox = False
         Me.Controls.Add(Me.PanelBottom)
         Me.HelpProviderConstraintForm.SetHelpKeyword(Me, "HowTo/Edit data/Set_runtime_name.html")
         Me.HelpProviderConstraintForm.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "ConstraintForm"
         Me.HelpProviderConstraintForm.SetShowHelp(Me, True)
         Me.Text = "ConstraintForm"

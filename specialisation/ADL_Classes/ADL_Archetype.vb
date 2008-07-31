@@ -25,7 +25,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         'Builds all archetypes at present
 
-        Protected adlArchetype As openehr.openehr.am.archetype.ARCHETYPE
+        Protected adlArchetype As openehr.openehr.am.archetype.FLAT_ARCHETYPE
         Protected compiler As openehr.adl_parser.interface.ARCHETYPE_PARSER
         Protected mAomFactory As openehr.openehr.am.archetype.constraint_model.C_FACTORY
 
@@ -124,7 +124,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
                 ' showing the task with logical paths takes a lot of space
                 If Logical Then
-                    list = adlArchetype.logical_paths(EiffelKernel.Create.STRING_8.make_from_cil(LanguageCode))
+                    list = adlArchetype.logical_paths(EiffelKernel.Create.STRING_8.make_from_cil(LanguageCode), False)
                 Else
                     list = adlArchetype.physical_paths()
                 End If
@@ -148,10 +148,6 @@ Namespace ArchetypeEditor.ADL_Classes
             Me.mArchetypeID.Concept &= "-" & ConceptShortName
 
 
-        End Sub
-
-        Public Sub RemoveUnusedCodes()
-            adlArchetype.remove_ontology_unused_codes()
         End Sub
 
         Protected Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)
@@ -1655,7 +1651,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Next
 
                 If Not cDefinition Is Nothing Then
-                    mAomFactory = compiler.constraint_model_factory
+                    mAomFactory = openehr.openehr.am.archetype.constraint_model.Create.C_FACTORY.make
 
                     If cDefinition.hasNameConstraint Then
                         an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, EiffelKernel.Create.STRING_8.make_from_cil("name"))
