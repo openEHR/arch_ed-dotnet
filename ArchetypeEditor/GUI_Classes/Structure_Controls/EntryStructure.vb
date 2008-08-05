@@ -668,7 +668,6 @@ Public Class EntryStructure
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
 
-
     Protected Overridable Sub SetUpAddElementMenu()
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
@@ -723,9 +722,9 @@ Public Class EntryStructure
         RaiseEvent CurrentItemChanged(a_node, New EventArgs)
     End Sub
 
-    Protected Sub SetButtonVisibility(ByVal a_node As ArchetypeNode)
+    Public Sub SetButtonVisibility(ByVal a_node As ArchetypeNode)
         'Hide the icons if simple to stop drag and drop
-        If mStructureType = StructureType.Single AndAlso Me.pbText.Visible Then
+        If mStructureType = StructureType.Single AndAlso pbText.Visible Then
             pbAny.Hide()
             pbBoolean.Hide()
             pbCount.Hide()
@@ -737,6 +736,7 @@ Public Class EntryStructure
         End If
 
         If a_node Is Nothing OrElse a_node.RM_Class.Type <> StructureType.Element Then
+            butRemoveElement.Enabled = False
             butChangeDataType.Hide()
         Else
             butChangeDataType.Enabled = Not CType(a_node, ArchetypeElement).IsReference
@@ -976,7 +976,6 @@ Public Class EntryStructure
             Me.ttElement.SetToolTip(Me.pbSlot, AE_Constants.Instance.Slot)
 
             Me.helpEntryStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
-
         End If
     End Sub
 

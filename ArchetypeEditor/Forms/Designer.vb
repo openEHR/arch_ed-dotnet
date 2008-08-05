@@ -2191,8 +2191,8 @@ Public Class Designer
 
         mFileManager.FileLoading = False
 
-        Me.MenuFileSpecialise.Visible = True
-        Me.Cursor = System.Windows.Forms.Cursors.Default
+        MenuFileSpecialise.Visible = True
+        Cursor = System.Windows.Forms.Cursors.Default
     End Sub
 
     Sub InitialiseRestrictedSet(ByVal aRestriction As RestrictedSet.TermSet)
@@ -2258,8 +2258,7 @@ Public Class Designer
 
             If Not Filemanager.Master.SaveArchetype() Then
                 Filemanager.Master.FileName = s
-                Me.MenuFileSpecialise.Visible = True
-
+                MenuFileSpecialise.Visible = True
             Else
                 If mFileManager.ParserType <> parserType Then
                     'Saved in a different format so set the description to right format
@@ -2268,15 +2267,14 @@ Public Class Designer
                     mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
                     Filemanager.Master.FileLoading = False
                 End If
+
                 If Not Filemanager.HasFileToSave Then
                     'Hide save button on Toolbar
                     Filemanager.SetFileChangedToolBar(False)
                 End If
             End If
-        Else
-            If Filemanager.SaveFiles(False) Then
-                Me.MenuFileSpecialise.Visible = True
-            End If
+        ElseIf Filemanager.SaveFiles(False) Then
+            MenuFileSpecialise.Visible = True
         End If
 
         lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
@@ -3636,6 +3634,7 @@ Public Class Designer
             Windows.Forms.DialogResult.OK Then
             Dim s As String
             s = "-"
+
             While InStr(s, "-") > 0
                 s = OceanArchetypeEditor.Instance.GetInput("Enter the new concept ('-' is not allowed)", Me)
             End While
@@ -3651,25 +3650,28 @@ Public Class Designer
                 mFileManager.Archetype.Specialise(s, mFileManager.OntologyManager)
 
                 ' show the new archetype ID in the GUI
-                Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
+                lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
                 a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
-                Me.txtConceptInFull.Text = a_Term.Text
-                Me.TxtConceptDescription.Text = a_Term.Description
-                Me.txtConceptComment.Text = ""
-                Me.gbSpecialisation.Visible = True
+                txtConceptInFull.Text = a_Term.Text
+                TxtConceptDescription.Text = a_Term.Description
+                txtConceptComment.Text = ""
+                gbSpecialisation.Show()
                 UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
-                Me.MenuFileSpecialise.Visible = False
+                MenuFileSpecialise.Visible = False
                 mFileManager.FileLoading = False
                 mFileManager.FileEdited = True
                 mFileManager.IsNew = True
                 mFileManager.FileName = ""    'new filename and needs to save as
+
+                If Not mTabPageDataStructure Is Nothing Then
+                    mTabPageDataStructure.ArchetypeDisplay.SetButtonVisibility(Nothing)
+                End If
             End If
         End If
     End Sub
 
     Private Sub ToolBarMain_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBarMain.ButtonClick
         Select Case ToolBarMain.Buttons.IndexOf(e.Button)
-
             Case 0 ' New
                 NewArchetype(sender, e)
             Case 1 ' open
@@ -3678,13 +3680,12 @@ Public Class Designer
                 OpenArchetypeFromWeb(sender, e)
             Case 3 ' Save                                
                 If Filemanager.SaveFiles(False) Then
-                    Me.MenuFileSpecialise.Visible = True
+                    MenuFileSpecialise.Visible = True
                 End If
             Case 4 ' separator
 
             Case 5 ' Print
                 ' only available when displaying archetype
-
         End Select
     End Sub
 
