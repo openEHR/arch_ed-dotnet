@@ -356,19 +356,25 @@ Public Class TableStructure
     End Sub
 
     Protected Sub AddTableRow(ByVal rm As RmStructure)
-        Dim element As ArchetypeNode
+        Dim node As ArchetypeNode
 
-        If rm.Type = StructureType.Element Then
-            element = New ArchetypeElement(CType(rm, RmElement), mFileManager)
-        Else
-            element = New ArchetypeNodeAnonymous(CType(rm, RmSlot))
+        Select Case rm.Type
+            Case StructureType.Element, StructureType.Reference
+                node = New ArchetypeElement(CType(rm, RmElement), mFileManager)
+            Case StructureType.Slot
+                node = New ArchetypeNodeAnonymous(CType(rm, RmSlot))
+            Case Else
+                node = Nothing
+                Debug.Assert(False, "Type not handled")
+        End Select
+
+        If Not node Is Nothing Then
+            Dim row As DataRow = mArchetypeTable.NewRow
+            row(1) = node.Text
+            row(2) = node
+            row(0) = ImageIndexForItem(node, False)
+            mArchetypeTable.Rows.Add(row)
         End If
-
-        Dim row As DataRow = mArchetypeTable.NewRow
-        row(1) = element.Text
-        row(2) = element
-        row(0) = ImageIndexForItem(element, False)
-        mArchetypeTable.Rows.Add(row)
     End Sub
 
     Public Overrides Sub Reset()

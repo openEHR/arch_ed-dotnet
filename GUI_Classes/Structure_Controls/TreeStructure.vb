@@ -369,15 +369,21 @@ Public Class TreeStructure
     Protected Sub AddTreeNode(ByVal rm As RmStructure)
         Dim node As ArchetypeTreeNode
 
-        If rm.Type = StructureType.Element Then
-            node = New ArchetypeTreeNode(CType(rm, RmElement), mFileManager)
-        Else
-            node = New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
-        End If
+        Select Case rm.Type
+            Case StructureType.Element, StructureType.Reference
+                node = New ArchetypeTreeNode(CType(rm, RmElement), mFileManager)
+            Case StructureType.Slot
+                node = New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
+            Case Else
+                node = Nothing
+                Debug.Assert(False, "Type not handled")
+        End Select
 
-        node.ImageIndex = ImageIndexForItem(node.Item, False)
-        node.SelectedImageIndex = ImageIndexForItem(node.Item, True)
-        tvTree.Nodes.Add(node)
+        If Not node Is Nothing Then
+            node.ImageIndex = ImageIndexForItem(node.Item, False)
+            node.SelectedImageIndex = ImageIndexForItem(node.Item, True)
+            tvTree.Nodes.Add(node)
+        End If
     End Sub
 
     Public Overrides Sub reset()
