@@ -679,23 +679,24 @@ Public Class TreeStructure
         Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
 
         If element.HasReferences Then
-            RefreshTreeNodeIcons(tvTree.Nodes, element)
-        Else
-            tvTree.SelectedNode.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, False)
-            tvTree.SelectedNode.SelectedImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, True)
+            RefreshReferenceNodeIcons(tvTree.Nodes, element)
         End If
+
+        tvTree.SelectedNode.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, False)
+        tvTree.SelectedNode.SelectedImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, True)
     End Sub
 
-    Private Sub RefreshTreeNodeIcons(ByVal a_node_collection As TreeNodeCollection, ByVal reference As ArchetypeElement)
-
+    Private Sub RefreshReferenceNodeIcons(ByVal a_node_collection As TreeNodeCollection, ByVal reference As ArchetypeElement)
         For Each tvNode As ArchetypeTreeNode In a_node_collection
             If tvNode.Item.RM_Class.Type = StructureType.Cluster Then
-                RefreshTreeNodeIcons(tvNode.Nodes, reference)
+                RefreshReferenceNodeIcons(tvNode.Nodes, reference)
             ElseIf Not tvNode.Item.IsAnonymous AndAlso CType(tvNode.Item, ArchetypeNodeAbstract).NodeId = reference.NodeId Then
-                Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
-                Debug.Assert(archetype_element.IsReference, "Must be a reference here")
-                tvNode.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, True, False)
-                tvNode.SelectedImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, True, True)
+                Dim element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
+
+                If element.IsReference Then
+                    tvNode.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, True, False)
+                    tvNode.SelectedImageIndex = ImageIndexForConstraintType(element.Constraint.Type, True, True)
+                End If
             End If
         Next
     End Sub
@@ -721,13 +722,14 @@ Public Class TreeStructure
 
         text = new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 TREE\cf0\par")
         s = ""
+
         If mCardinalityControl.Cardinality.Ordered Then
             s = "ordered"
         End If
+
         s = s.Trim
         text = text & new_line & (Space(3 * indentlevel) & "\cf2 Items\cf0  " & s & "\par")
         text = text & new_line & TreeToRichText(tvTree.Nodes, indentlevel + 3, new_line)
-
         Return text
     End Function
 
@@ -756,7 +758,6 @@ Public Class TreeStructure
         result.AppendFormat("{0}</table>", Environment.NewLine)
 
         Return result.ToString
-
     End Function
 
     Public Overrides Function HasData() As Boolean
