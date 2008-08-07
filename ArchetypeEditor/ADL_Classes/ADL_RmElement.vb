@@ -495,14 +495,14 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If Not cadlC.interval.lower_unbounded Then
                 ct.HasMinimum = True
-                ct.MinimumValue = cadlC.interval.lower
+                ct.MinimumRealValue = cadlC.interval.lower
                 ct.IncludeMinimum = cadlC.interval.lower_included
             Else
                 ct.HasMinimum = False
             End If
             If Not cadlC.interval.upper_unbounded Then
                 ct.HasMaximum = True
-                ct.MaximumValue = cadlC.interval.upper
+                ct.MaximumRealValue = cadlC.interval.upper
                 ct.IncludeMaximum = cadlC.interval.upper_included
             Else
                 ct.HasMaximum = False
@@ -932,12 +932,12 @@ Namespace ArchetypeEditor.ADL_Classes
                         If Not cqi.any_magnitude_allowed Then
                             u.HasMaximum = Not cqi.magnitude.upper_unbounded
                             If u.HasMaximum Then
-                                u.MaximumValue = CSng(cqi.magnitude.upper)
+                                u.MaximumRealValue = CSng(cqi.magnitude.upper)
                                 u.IncludeMaximum = cqi.magnitude.upper_included
                             End If
                             u.HasMinimum = Not cqi.magnitude.lower_unbounded
                             If u.HasMinimum Then
-                                u.MinimumValue = CSng(cqi.magnitude.lower)
+                                u.MinimumRealValue = CSng(cqi.magnitude.lower)
                                 u.IncludeMinimum = cqi.magnitude.lower_included
                             End If
                         End If

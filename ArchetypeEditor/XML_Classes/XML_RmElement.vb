@@ -522,14 +522,14 @@ Namespace ArchetypeEditor.XML_Classes
 
             If cadlC.range.lowerSpecified Then
                 ct.HasMinimum = True
-                ct.MinimumValue = cadlC.range.lower
+                ct.MinimumRealValue = cadlC.range.lower
                 ct.IncludeMinimum = cadlC.range.lower_included
             Else
                 ct.HasMinimum = False
             End If
             If cadlC.range.upperSpecified Then
                 ct.HasMaximum = True
-                ct.MaximumValue = cadlC.range.upper
+                ct.MaximumRealValue = cadlC.range.upper
                 ct.IncludeMaximum = cadlC.range.upper_included
             Else
                 ct.HasMaximum = False
@@ -1030,12 +1030,12 @@ Namespace ArchetypeEditor.XML_Classes
 
                             u.HasMaximum = (cqi.magnitude.upperSpecified)
                             If u.HasMaximum Then
-                                u.MaximumValue = cqi.magnitude.upper
+                                u.MaximumRealValue = cqi.magnitude.upper
                                 u.IncludeMaximum = cqi.magnitude.upper_included
                             End If
                             u.HasMinimum = (cqi.magnitude.lowerSpecified)
                             If u.HasMinimum Then
-                                u.MinimumValue = cqi.magnitude.lower
+                                u.MinimumRealValue = cqi.magnitude.lower
                                 u.IncludeMinimum = cqi.magnitude.lower_included
                             End If
                         End If

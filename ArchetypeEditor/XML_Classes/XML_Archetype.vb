@@ -1330,7 +1330,7 @@ Namespace ArchetypeEditor.XML_Classes
                             'a_real.has_minimum = unit_constraint.HasMinimum
 
                             If unit_constraint.HasMaximum Then
-                                a_real.upper = unit_constraint.MaximumValue
+                                a_real.upper = unit_constraint.MaximumRealValue
                                 a_real.upperSpecified = True
                                 a_real.upper_included = unit_constraint.IncludeMaximum
                                 a_real.upper_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
@@ -1339,7 +1339,7 @@ Namespace ArchetypeEditor.XML_Classes
                             End If
 
                             If unit_constraint.HasMinimum Then
-                                a_real.lower = unit_constraint.MinimumValue
+                                a_real.lower = unit_constraint.MinimumRealValue
                                 a_real.lowerSpecified = True
                                 a_real.lower_included = unit_constraint.IncludeMinimum
                                 a_real.lower_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1

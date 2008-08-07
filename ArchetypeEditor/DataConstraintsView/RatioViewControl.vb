@@ -52,7 +52,7 @@ Public Class RatioViewControl : Inherits ElementViewControl
         Me.Controls.Add(lbl)
 
 
-        If c.Denominator.HasMaximum AndAlso c.Denominator.MaximumValue = 100 AndAlso c.Denominator.MinimumValue = 100 Then
+        If c.Denominator.HasMaximum AndAlso c.Denominator.MaximumRealValue = 100 AndAlso c.Denominator.MinimumRealValue = 100 Then
             lbl.Text = "%"
             mIsPercent = True
         Else
@@ -69,13 +69,13 @@ Public Class RatioViewControl : Inherits ElementViewControl
     Private Sub SetMaxMin(ByVal aControl As NumericUpDown, ByVal u As Constraint_Count)
         If u.HasMaximum Then
             aControl.Maximum = u.MaximumValue
-            'CHANGE Sam Heard 2004-05-24
-            'Added set increment
+
             If u.MaximumValue <= 10 Then
                 If u.Type = ConstraintType.QuantityUnit Then
                     aControl.Increment = CDec(0.1)
                 End If
             End If
+
             If u.MaximumValue <= 1 Then
                 If u.Type = ConstraintType.QuantityUnit Then
                     aControl.Increment = CDec(0.01)
@@ -84,6 +84,7 @@ Public Class RatioViewControl : Inherits ElementViewControl
         Else
             aControl.Maximum = 1000000
         End If
+
         If u.HasMinimum Then
             aControl.Minimum = u.MinimumValue
         End If

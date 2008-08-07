@@ -631,11 +631,11 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim magnitude As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
             If ct.HasMaximum And ct.HasMinimum Then
-                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_bounded(ct.MinimumValue, ct.MaximumValue, ct.IncludeMinimum, ct.IncludeMaximum))
+                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_bounded(ct.MinimumRealValue, ct.MaximumRealValue, ct.IncludeMinimum, ct.IncludeMaximum))
             ElseIf ct.HasMaximum Then
-                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum))
+                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_lower_unbounded(ct.MaximumRealValue, ct.IncludeMaximum))
             ElseIf ct.HasMinimum Then
-                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_upper_unbounded(ct.MinimumValue, ct.IncludeMinimum))
+                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_upper_unbounded(ct.MinimumRealValue, ct.IncludeMinimum))
             Else
                 Debug.Assert(False)
                 Return
@@ -860,11 +860,11 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         If unit_constraint.HasMaximum Or unit_constraint.HasMinimum Then
                             If unit_constraint.HasMaximum And unit_constraint.HasMinimum Then
-                                a_real = mAomFactory.create_real_interval_make_bounded(unit_constraint.MinimumValue, unit_constraint.MaximumValue, unit_constraint.IncludeMinimum, unit_constraint.IncludeMaximum)
+                                a_real = mAomFactory.create_real_interval_make_bounded(unit_constraint.MinimumRealValue, unit_constraint.MaximumRealValue, unit_constraint.IncludeMinimum, unit_constraint.IncludeMaximum)
                             ElseIf unit_constraint.HasMaximum Then
-                                a_real = mAomFactory.create_real_interval_make_lower_unbounded(unit_constraint.MaximumValue, unit_constraint.IncludeMaximum)
+                                a_real = mAomFactory.create_real_interval_make_lower_unbounded(unit_constraint.MaximumRealValue, unit_constraint.IncludeMaximum)
                             ElseIf unit_constraint.HasMinimum Then
-                                a_real = mAomFactory.create_real_interval_make_upper_unbounded(unit_constraint.MinimumValue, unit_constraint.IncludeMinimum)
+                                a_real = mAomFactory.create_real_interval_make_upper_unbounded(unit_constraint.MinimumRealValue, unit_constraint.IncludeMinimum)
                             End If
                         End If
 
