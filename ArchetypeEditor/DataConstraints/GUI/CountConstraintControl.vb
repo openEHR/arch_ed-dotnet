@@ -317,11 +317,13 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         IsIntegral = Not (TypeOf Constraint Is Constraint_Real Or TypeOf Constraint Is Constraint_Currency)
         SetMaxAndMin()
+
         If TypeOf Constraint Is Constraint_Currency Then
             LabelQuantity.Text = AE_Constants.Instance.Currency
         Else
             LabelQuantity.Text = AE_Constants.Instance.Count
         End If
+
         LabelQuantity.Text = AE_Constants.Instance.Count
     End Sub
 
@@ -337,7 +339,12 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     Private Sub SetMaxAndMin()
         If Constraint.HasMaximum Then
             cbMaxValue.Checked = True
-            numMaxValue.Value = CDec(Constraint.MaximumValue)
+
+            If TypeOf Constraint Is Constraint_Real Then
+                numMaxValue.Value = CDec(CType(Constraint, Constraint_Real).MaximumRealValue)
+            Else
+                numMaxValue.Value = Constraint.MaximumValue
+            End If
 
             If Constraint.IncludeMaximum Then
                 comboIncludeMax.SelectedIndex = 0
@@ -352,7 +359,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             cbMinValue.Checked = True
 
             If TypeOf Constraint Is Constraint_Real Then
-                numMinValue.Value = CDec(Constraint.MinimumValue)
+                numMinValue.Value = CDec(CType(Constraint, Constraint_Real).MinimumRealValue)
             Else
                 numMinValue.Value = Constraint.MinimumValue
             End If
