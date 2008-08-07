@@ -204,8 +204,8 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
 
                 Select Case Me.Constraint.Denominator.Type
                     Case ConstraintType.Real
-                        CType(Me.Constraint.Denominator, Constraint_Real).MinimumValue = 100
-                        CType(Me.Constraint.Denominator, Constraint_Real).MaximumValue = 100
+                        CType(Me.Constraint.Denominator, Constraint_Real).MinimumRealValue = 100
+                        CType(Me.Constraint.Denominator, Constraint_Real).MaximumRealValue = 100
                 End Select
             Else
                 Me.TabConstraints.TabPages.Add(mDenominator)

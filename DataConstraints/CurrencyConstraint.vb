@@ -23,7 +23,7 @@ Public Class Constraint_Currency
         End Get
     End Property
 
-    Public Shadows Property MinimumValue() As Double
+    Public Property MinimumMoneyValue() As Double
         Get
             Return mMinVal
         End Get
@@ -31,23 +31,13 @@ Public Class Constraint_Currency
             mMinVal = Value
         End Set
     End Property
-    Public Shadows Property MaximumValue() As Double
+
+    Public Property MaximumMoneyValue() As Double
         Get
             Return mMaxVal
         End Get
         Set(ByVal Value As Double)
             mMaxVal = Value
-        End Set
-    End Property
-
-    Public Property Precision() As Integer
-        Get
-            Return mPrecision
-        End Get
-        Set(ByVal value As Integer)
-            If value > -2 Then ' must be -1 or >= 0
-                mPrecision = value
-            End If
         End Set
     End Property
 
@@ -70,14 +60,13 @@ Public Class Constraint_Currency
 
     Public Overrides Function Copy() As Constraint
         Dim c As New Constraint_Currency
-
-        c.mHasMaxVal = Me.mHasMaxVal
-        c.mHasMinVal = Me.mHasMinVal
-        c.mMaxVal = Me.mMaxVal
-        c.mMinVal = Me.mMinVal
-        c.mAssumedValue = Me.mAssumedValue
-        c.HasAssumedValue = Me.HasAssumedValue
-        c.mPrecision = Me.Precision
+        c.mHasMaxVal = mHasMaxVal
+        c.mHasMinVal = mHasMinVal
+        c.mMaxVal = mMaxVal
+        c.mMinVal = mMinVal
+        c.mAssumedValue = mAssumedValue
+        c.HasAssumedValue = HasAssumedValue
+        c.mPrecision = Precision
         Return c
     End Function
 

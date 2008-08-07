@@ -186,7 +186,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Else
                 s &= " >"
             End If
-            s &= u.MinimumValue.ToString & ";"
+            s &= u.MinimumRealValue.ToString & ";"
         End If
         If u.HasMaximum Then
             If u.IncludeMaximum Then
@@ -194,7 +194,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Else
                 s &= " <"
             End If
-            s &= u.MaximumValue.ToString & ";"
+            s &= u.MaximumRealValue.ToString & ";"
         End If
 
         Return s

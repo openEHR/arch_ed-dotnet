@@ -129,17 +129,15 @@ Public Class QuantityViewControl : Inherits ElementViewControl
 
     Private Sub SetMaxMin(ByVal aControl As NumericUpDown, ByVal u As Constraint_QuantityUnit)
         If u.HasMaximum Then
-            aControl.Maximum = u.MaximumValue
-            'CHANGE Sam Heard 2004-05-24
-            'Added set increment
-            If u.MaximumValue <= 10 Then
-                'If u.ConstraintType = "QuantityUnit" Then
+            aControl.Maximum = u.MaximumRealValue
+
+            If u.MaximumRealValue <= 10 Then
                 If u.Type = ConstraintType.QuantityUnit Then
                     aControl.Increment = CDec(0.1)
                 End If
             End If
-            If u.MaximumValue <= 1 Then
-                'If u.ConstraintType = "QuantityUnit" Then
+
+            If u.MaximumRealValue <= 1 Then
                 If u.Type = ConstraintType.QuantityUnit Then
                     aControl.Increment = CDec(0.01)
                 End If
@@ -148,7 +146,7 @@ Public Class QuantityViewControl : Inherits ElementViewControl
             aControl.Maximum = 1000000
         End If
         If u.HasMinimum Then
-            aControl.Minimum = u.MinimumValue
+            aControl.Minimum = u.MinimumRealValue
         End If
     End Sub
 

@@ -89,13 +89,13 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
     Protected Overrides Sub MaxValueChanged()
         Dim maximum As Decimal
         Decimal.TryParse(numMaxValue.Text, maximum)
-        Constraint.MaximumValue = Convert.ToSingle(maximum, System.Globalization.NumberFormatInfo.InvariantInfo)
+        Constraint.MaximumRealValue = Convert.ToSingle(maximum, System.Globalization.NumberFormatInfo.InvariantInfo)
     End Sub
 
     Protected Overrides Sub MinValueChanged()
         Dim minimum As Decimal
         Decimal.TryParse(numMinValue.Text, minimum)
-        Constraint.MinimumValue = Convert.ToSingle(minimum, System.Globalization.NumberFormatInfo.InvariantInfo)
+        Constraint.MinimumRealValue = Convert.ToSingle(minimum, System.Globalization.NumberFormatInfo.InvariantInfo)
     End Sub
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
