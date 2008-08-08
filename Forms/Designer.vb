@@ -5024,12 +5024,13 @@ Public Class Designer
 
                     If OceanArchetypeEditor.Instance.Options.UseXsltForHtml And OceanArchetypeEditor.Instance.Options.XsltScriptPath <> "" Then
                         Dim transform As New Xml.Xsl.XslCompiledTransform()
-                        transform.Load(OceanArchetypeEditor.Instance.Options.XsltScriptPath)
+                        transform.Load(OceanArchetypeEditor.Instance.Options.XsltScriptPath, New Xml.Xsl.XsltSettings(True, False), New Xml.XmlUrlResolver())
                         Dim args As New Xml.Xsl.XsltArgumentList()
                         args.AddParam("language", "", Filemanager.Master.OntologyManager.LanguageCode)
                         args.AddParam("show-terminology-flag", "", OceanArchetypeEditor.Instance.Options.ShowTermsInHtml.ToString().ToLower())
                         args.AddParam("show-comments-flag", "", OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml.ToString().ToLower())
                         args.AddParam("css-path", "", "Images/default.css")
+                        args.AddParam("terminology-xml-document-path", "", "../Terminology/terminology.xml")
 
                         Dim reader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
                         Dim stream As New IO.FileStream(html, FileMode.Create)
