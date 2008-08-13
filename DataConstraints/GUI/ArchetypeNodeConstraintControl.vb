@@ -373,7 +373,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.termLookUp.Tag = ""
         Me.termLookUp.TermCaption = "SNOMED"
         Me.termLookUp.TermId = Nothing
-        Me.termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.Snomed
+        Me.termLookUp.TerminologyName = "Snomed"
         Me.termLookUp.TermLanguage = "en-GB"
         Me.termLookUp.TermName = Nothing
         Me.termLookUp.TermQueryName = "AllSnomed"
@@ -774,12 +774,12 @@ Public Class ArchetypeNodeConstraintControl
             'ToDo: work this from the terminology server
             Select Case termID
                 Case "SNOMED-CT"
-                    termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.Snomed
+                    termLookUp.TerminologyName = "Snomed"
                     termLookUp.TermQueryName = "AllSnomed"
                     termLookUp.Visible = True
 
                 Case "LNC205"
-                    termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.LOINC
+                    termLookUp.TerminologyName = "LOINC"
                     termLookUp.TermQueryName = "LOINC"
                     termLookUp.Visible = True
 
