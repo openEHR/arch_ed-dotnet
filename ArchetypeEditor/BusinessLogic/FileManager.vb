@@ -207,7 +207,7 @@ Public Class FileManagerLocal
                     For i As Integer = 0 To selected_rows.Length - 1
                         conceptIds(i) = selected_rows(i).Item("Code")
                     Next
-                    Dim termTable As DataTable = OTSControls.Term.OtsWebService.GetTerminologyPreferredTerms(OTSControls.OTSServer.TerminologyName.Snomed, language, conceptIds).Tables(0)
+                    Dim termTable As DataTable = OTSControls.Term.OtsWebService.TerminologyGetPreferredTerms("Snomed", language, conceptIds).Tables(0)
                     mTermBindingLookUpTables.Add(language & terminologyId, termTable)
                 End If
             End If

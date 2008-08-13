@@ -76,6 +76,7 @@
   <Property id="77" Text="Proportion" openEHR="507" />
   <Property id="78" Text="Glomerular filtration rate" openEHR="586" />
   <Property id="79" Text="Electrical Potential Time" openEHR="655" />
+  <Property id="80" Text="Time Fraction" openEHR="670" />
   <Unit property_id="0" Text="m" name="meter" conversion="1" primary="true" />
   <Unit property_id="0" Text="cm" name="centimeter" conversion="0.01" primary="false" />
   <Unit property_id="0" Text="µm" name="micrometer" conversion="1" coefficient="-6" primary="false" />
@@ -528,4 +529,5 @@
   <Unit property_id="71" Text="S" name="seimens" conversion="1" primary="true" case_ins="S" />
   <Unit property_id="71" Text="mmho" name="millimho" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="71" Text="mS" name="milliseimens" conversion="1" coefficient="3" primary="false" case_ins="mS" />
+  <Unit property_id="80" Text="{Time/Time}" conversion="0" primary="false" />
 </PropertyUnits>
