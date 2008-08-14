@@ -95,25 +95,25 @@ Section -Main SEC0000
 
     SetOverwrite ifnewer
     SetOutPath $INSTDIR\..\Archetypes\cluster
-    File ..\Archetypes\cluster\*.adl
+    File /nonfatal ..\Archetypes\cluster\*.adl
     SetOutPath $INSTDIR\..\Archetypes\composition
-    File ..\Archetypes\composition\*.adl
+    File /nonfatal ..\Archetypes\composition\*.adl
     SetOutPath $INSTDIR\..\Archetypes\element
-    File ..\Archetypes\element\*.adl
+    File /nonfatal ..\Archetypes\element\*.adl
     SetOutPath $INSTDIR\..\Archetypes\entry\action
-    File ..\Archetypes\entry\action\*.adl
+    File /nonfatal ..\Archetypes\entry\action\*.adl
     SetOutPath $INSTDIR\..\Archetypes\entry\admin_entry
-    File ..\Archetypes\entry\admin_entry\*.adl
+    File /nonfatal ..\Archetypes\entry\admin_entry\*.adl
     SetOutPath $INSTDIR\..\Archetypes\entry\evaluation
-    File ..\Archetypes\entry\evaluation\*.adl
+    File /nonfatal ..\Archetypes\entry\evaluation\*.adl
     SetOutPath $INSTDIR\..\Archetypes\entry\instruction
-    File ..\Archetypes\entry\instruction\*.adl
+    File /nonfatal ..\Archetypes\entry\instruction\*.adl
     SetOutPath $INSTDIR\..\Archetypes\entry\observation
-    File ..\Archetypes\entry\observation\*.adl
+    File /nonfatal ..\Archetypes\entry\observation\*.adl
     SetOutPath $INSTDIR\..\Archetypes\section
-    File ..\Archetypes\section\*.adl
+    File /nonfatal ..\Archetypes\section\*.adl
     SetOutPath $INSTDIR\..\Archetypes\structure
-    File ..\Archetypes\structure\*.adl
+    File /nonfatal ..\Archetypes\structure\*.adl
 
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd
