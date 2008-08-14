@@ -6184,6 +6184,7 @@
   <TerminologyIdentifiers VSAB="ICD10AMAE_2000" SourceName="International Statistical Classification of Diseases and Related Health Problems, Australian Modification, Americanized English Equivalents, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ICD10AM_2000" SourceName="International Statistical Classification of Diseases and Related Health Problems, 10th Revision, Australian Modification, January 2000 Release" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ICD10_1998" SourceName="ICD10, 1998" Authority="UMLS2003AA" />
+  <TerminologyIdentifiers VSAB="ICD-O-3" SourceName="ICD Oncology (3), 1976" Authority="WHO" />
   <TerminologyIdentifiers VSAB="ICD9CM_2003" SourceName="ICD-9-CM, 2003" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ICPC2AE_1998" SourceName="International Classification of Primary Care, Americanized English Equivalents, 2E, 1998" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ICPC2E_1998" SourceName="International Classification of Primary Care 2nd Edition, Electronic, 2E, 1998" Authority="UMLS2003AA" />
