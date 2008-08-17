@@ -315,6 +315,10 @@ Public Class FileManagerLocal
             'End If
 
             mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
+
+            'SRH: Aug 15 2008 - language handling for embedded
+            mOntologyManager.SetBestLanguage()
+
             mPriorFileName = Nothing
             FileEdited = False
             CheckFileNameAgainstArchetypeId()

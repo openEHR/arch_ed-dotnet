@@ -601,7 +601,18 @@ Public Class TabPageStructure
 
     Public Sub Translate()
         If Not mArchetypeControl Is Nothing Then
-            mArchetypeControl.Translate()
+            If mFileManager Is Filemanager.Master Then
+                mArchetypeControl.Translate()
+            Else
+                'SRH: 17 Aug 2008 - added translation control for embedded archetype
+                Dim lang As String = Filemanager.Master.OntologyManager.LanguageCode
+                If mFileManager.OntologyManager.LanguageIsAvailable(lang) Then
+                    If mFileManager.OntologyManager.LanguageCode <> lang Then
+                        mFileManager.OntologyManager.LanguageCode = lang
+                        mArchetypeControl.Translate()
+                    End If
+                End If
+            End If
         End If
     End Sub
 
@@ -911,7 +922,7 @@ Public Class TabPageStructure
                 'Hide context menu to change structure
                 If Not mArchetypeControl Is Nothing Then
                     mArchetypeControl.ShowChangeStructureMenu = False
-                    ShowLanguage()
+                    Translate()
                 End If
 
                 mIsLoading = False
@@ -935,26 +946,10 @@ Public Class TabPageStructure
                 comboStructure.SelectedIndex = 3
         End Select
 
-        ShowLanguage()
+        Translate()
         mIsLoading = False
     End Sub
 
-    Private Sub ShowLanguage()
-        ' set the specific language if it is present e.g. en-US, en-AU
-        If mFileManager.OntologyManager.LanguageIsAvailable(Filemanager.Master.OntologyManager.LanguageCode) Then
-            mFileManager.OntologyManager.LanguageCode = Filemanager.Master.OntologyManager.LanguageCode
-        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) AndAlso _
-            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.SpecificLanguageCode Then
-            Filemanager.Master.OntologyManager.LanguageCode = OceanArchetypeEditor.SpecificLanguageCode
-        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) AndAlso _
-            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.DefaultLanguageCode Then
-            mFileManager.OntologyManager.LanguageCode = OceanArchetypeEditor.DefaultLanguageCode
-        Else
-            mFileManager.OntologyManager.LanguageCode = mFileManager.OntologyManager.PrimaryLanguageCode
-        End If
-
-        Translate()
-    End Sub
 
     Private Overloads Function OpenArchetype(ByVal an_archetype_ID As ArchetypeID) As Boolean
         mFileManager.OpenArchetype(an_archetype_ID.ToString)
@@ -986,7 +981,7 @@ Public Class TabPageStructure
         Dim dir As New IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure")
 
         If dir.Exists Then
-            dir.GetFiles("*.adl")
+            'dir.GetFiles("*.adl")
             Dim matchStrings As New System.Collections.Generic.List(Of System.Text.RegularExpressions.Regex)
 
             For Each includeStatement As String In a_slot.SlotConstraint.Include
@@ -996,17 +991,23 @@ Public Class TabPageStructure
                 matchStrings.Add(New System.Text.RegularExpressions.Regex(includeStatement))
             Next
 
+        
             For Each f As IO.FileInfo In dir.GetFiles("*.adl")
-                For Each re As System.Text.RegularExpressions.Regex In matchStrings
-                    If re.Match(f.Name).Success Then
-                        frm.ListChoose.Items.Add(f.Name)
-                    End If
-                Next
+                'SRH: this command on windows will return adls files as well (ext of length 3 are treated as wild!! ie = adl*)
+                If f.Extension.ToLowerInvariant() = ".adl" Then
+                    For Each re As System.Text.RegularExpressions.Regex In matchStrings
+                        If re.Match(f.Name).Success Then
+                            frm.ListChoose.Items.Add(f.Name)
+                        End If
+                    Next
+                End If
             Next
         End If
 
         Select Case frm.ListChoose.Items.Count
             Case 0
+                'SRH: Need message if there are no matching files to know what directory
+                MessageBox.Show(String.Format(AE_Constants.Instance.NoArchetypeMatches, dir.FullName), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
                 archetype_name = Nothing
             Case 1
                 archetype_name = frm.ListChoose.Items(0)

@@ -106,6 +106,13 @@ Public Class AE_Constants
     Private mParticipation As String = "Participation"
     Private mCurrency As String = "Currency"
     Private mIdentifier As String = "Identifier"
+    Private mNoArchetypeMatches As String = "No archetype matches {0}"
+
+    Friend ReadOnly Property NoArchetypeMatches() As String
+        Get
+            Return mNoArchetypeMatches
+        End Get
+    End Property
 
     Friend ReadOnly Property Lower() As String
         Get
@@ -728,6 +735,7 @@ Public Class AE_Constants
         mParticipation = TerminologyServer.Instance.RubricForCode(654, Language)
         mCurrency = TerminologyServer.Instance.RubricForCode(672, Language)
         mIdentifier = TerminologyServer.Instance.RubricForCode(633, Language)
+        mNoArchetypeMatches = TerminologyServer.Instance.RubricForCode(671, Language)
     End Sub
 End Class
 

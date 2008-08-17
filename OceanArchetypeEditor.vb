@@ -704,8 +704,8 @@ Public Class OceanArchetypeEditor
 
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
-        mDefaultLanguageCode = "es"
-        mSpecificLanguageCode = "es-cl"
+        'mDefaultLanguageCode = "es"
+        ' mSpecificLanguageCode = "es-cl"
 
         'mDefaultLanguageCode = "fa"
         'mSpecificLanguageCode = "fa"
@@ -719,8 +719,8 @@ Public Class OceanArchetypeEditor
         'mDefaultLanguageCode = "nl"
         'mSpecificLanguageCode = "nl"
 
-        'mDefaultLanguageCode = "de"
-        'mSpecificLanguageCode = "de"
+        mDefaultLanguageCode = "de"
+        mSpecificLanguageCode = "de"
 #End If
 
         Dim di As New System.IO.DirectoryInfo(Application.StartupPath)
