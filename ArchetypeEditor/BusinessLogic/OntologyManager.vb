@@ -663,6 +663,27 @@ Public Class OntologyManager
         Return SoCTable
     End Function
 
+    Public Sub SetBestLanguage()
+        ' set the specific language if it is present e.g. en-US, en-AU
+        'SRH Aug 15 2008: change to ensure best language choice
+
+        Dim bestLanguage As String
+
+        If LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) Then
+            bestLanguage = OceanArchetypeEditor.SpecificLanguageCode
+        ElseIf LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) Then
+            bestLanguage = OceanArchetypeEditor.DefaultLanguageCode
+        ElseIf LanguageIsAvailable(Filemanager.Master.OntologyManager.LanguageCode) Then
+            bestLanguage = Filemanager.Master.OntologyManager.LanguageCode
+        Else
+            bestLanguage = PrimaryLanguageCode
+        End If
+
+        If mFileManager.OntologyManager.LanguageCode <> bestLanguage Then
+            LanguageCode = bestLanguage
+        End If
+    End Sub
+
     Private Function MakeLanguagesTable() As DataTable
         ' Create a new DataTable titled 'Languages'
         Dim LangTable As DataTable = New DataTable("Languages")

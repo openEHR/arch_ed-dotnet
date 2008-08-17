@@ -1959,7 +1959,7 @@ Public Class Designer
         ' Deal with the languages, terms and terminology bindings
 
         ' set the language that is chosen
-        mFileManager.OntologyManager.LanguageCode = Me.ListLanguages.SelectedValue
+        '  mFileManager.OntologyManager.LanguageCode = Me.ListLanguages.SelectedValue
 
         ' set the concept and description
         Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm( _
@@ -2170,20 +2170,21 @@ Public Class Designer
         AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
         ' set the specific language if it is present e.g. en-US, en-AU
-        If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.SpecificLanguageCode Then
-            If mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) Then
-                Me.ListLanguages.SelectedValue = OceanArchetypeEditor.SpecificLanguageCode
-                Translate(OceanArchetypeEditor.SpecificLanguageCode)
-            ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) Then
-                If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.DefaultLanguageCode Then
-                    Me.ListLanguages.SelectedValue = OceanArchetypeEditor.DefaultLanguageCode
-                    Translate(OceanArchetypeEditor.DefaultLanguageCode)
-                End If
-            Else
-                Me.ListLanguages.SelectedValue = mFileManager.OntologyManager.PrimaryLanguageCode
-                ChangeLanguage(Me.ListLanguages.SelectedValue)
-            End If
-        End If
+        'SRH: Aug 17th 2008 - removed as now redundant (see SetBestLanguage on ontologyManager)
+        'If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.SpecificLanguageCode Then
+        '    If mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) Then
+        '        Me.ListLanguages.SelectedValue = OceanArchetypeEditor.SpecificLanguageCode
+        '        ChangeLanguage(OceanArchetypeEditor.SpecificLanguageCode)
+        '    ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) Then
+        '        If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.DefaultLanguageCode Then
+        '            Me.ListLanguages.SelectedValue = OceanArchetypeEditor.DefaultLanguageCode
+        '            ChangeLanguage(OceanArchetypeEditor.DefaultLanguageCode)
+        '        End If
+        '    Else
+        '        Me.ListLanguages.SelectedValue = mFileManager.OntologyManager.PrimaryLanguageCode
+        '        ChangeLanguage(Me.ListLanguages.SelectedValue)
+        '    End If
+        'End If
 
         If Not mTermBindingPanel Is Nothing Then
             Me.mTermBindingPanel.PopulatePathTree()
