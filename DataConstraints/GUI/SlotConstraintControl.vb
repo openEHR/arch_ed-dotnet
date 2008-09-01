@@ -72,6 +72,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     Friend WithEvents gbExclude As System.Windows.Forms.GroupBox
     Friend WithEvents gbInclude As System.Windows.Forms.GroupBox
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
+    Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     Friend WithEvents butBrowse As System.Windows.Forms.Button
     Friend WithEvents AvailableArchetypesListBox As System.Windows.Forms.ListBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -98,6 +99,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.gbExclude = New System.Windows.Forms.GroupBox
         Me.gbInclude = New System.Windows.Forms.GroupBox
         Me.Splitter1 = New System.Windows.Forms.Splitter
+        Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.PanelInlcude.SuspendLayout()
         Me.PanelExclude.SuspendLayout()
         Me.PanelSlotTop.SuspendLayout()
@@ -197,7 +199,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.listExclude.Location = New System.Drawing.Point(40, 0)
         Me.listExclude.Name = "listExclude"
         Me.listExclude.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
-        Me.listExclude.Size = New System.Drawing.Size(368, 95)
+        Me.listExclude.Size = New System.Drawing.Size(368, 82)
         Me.listExclude.Sorted = True
         Me.listExclude.TabIndex = 38
         '
@@ -209,14 +211,14 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelSlotTop.Controls.Add(Me.lblSlot)
         Me.PanelSlotTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelSlotTop.Location = New System.Drawing.Point(0, 0)
+        Me.PanelSlotTop.MinimumSize = New System.Drawing.Size(100, 50)
         Me.PanelSlotTop.Name = "PanelSlotTop"
         Me.PanelSlotTop.Size = New System.Drawing.Size(424, 88)
         Me.PanelSlotTop.TabIndex = 1
         '
         'butBrowse
         '
-        Me.butBrowse.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.butBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butBrowse.Location = New System.Drawing.Point(389, 8)
         Me.butBrowse.Name = "butBrowse"
         Me.butBrowse.Size = New System.Drawing.Size(32, 29)
@@ -225,7 +227,8 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         'AvailableArchetypesListBox
         '
-        Me.AvailableArchetypesListBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.AvailableArchetypesListBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.AvailableArchetypesListBox.Location = New System.Drawing.Point(128, 1)
         Me.AvailableArchetypesListBox.Name = "AvailableArchetypesListBox"
@@ -236,6 +239,8 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         'lblClass
         '
+        Me.lblClass.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.lblClass.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblClass.Location = New System.Drawing.Point(8, 24)
         Me.lblClass.Name = "lblClass"
@@ -261,7 +266,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelExcludeStatements.Location = New System.Drawing.Point(3, 48)
         Me.PanelExcludeStatements.Name = "PanelExcludeStatements"
         Me.PanelExcludeStatements.Padding = New System.Windows.Forms.Padding(0, 0, 10, 2)
-        Me.PanelExcludeStatements.Size = New System.Drawing.Size(418, 101)
+        Me.PanelExcludeStatements.Size = New System.Drawing.Size(418, 93)
         Me.PanelExcludeStatements.TabIndex = 34
         '
         'PanelExcludeMinusTick
@@ -270,7 +275,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelExcludeMinusTick.Dock = System.Windows.Forms.DockStyle.Left
         Me.PanelExcludeMinusTick.Location = New System.Drawing.Point(0, 0)
         Me.PanelExcludeMinusTick.Name = "PanelExcludeMinusTick"
-        Me.PanelExcludeMinusTick.Size = New System.Drawing.Size(40, 99)
+        Me.PanelExcludeMinusTick.Size = New System.Drawing.Size(40, 91)
         Me.PanelExcludeMinusTick.TabIndex = 33
         '
         'PanelIncludeStatements
@@ -298,10 +303,10 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.gbExclude.Controls.Add(Me.PanelExcludeStatements)
         Me.gbExclude.Controls.Add(Me.PanelExclude)
         Me.gbExclude.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.gbExclude.Location = New System.Drawing.Point(0, 256)
+        Me.gbExclude.Location = New System.Drawing.Point(0, 264)
         Me.gbExclude.Name = "gbExclude"
-        Me.gbExclude.Size = New System.Drawing.Size(424, 152)
-        Me.gbExclude.TabIndex = 42
+        Me.gbExclude.Size = New System.Drawing.Size(424, 144)
+        Me.gbExclude.TabIndex = 5
         Me.gbExclude.TabStop = False
         Me.gbExclude.Text = "Exclude"
         '
@@ -310,27 +315,37 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.gbInclude.Controls.Add(Me.PanelIncludeStatements)
         Me.gbInclude.Controls.Add(Me.PanelInlcude)
         Me.gbInclude.Dock = System.Windows.Forms.DockStyle.Top
-        Me.gbInclude.Location = New System.Drawing.Point(0, 88)
+        Me.gbInclude.Location = New System.Drawing.Point(0, 96)
         Me.gbInclude.Name = "gbInclude"
         Me.gbInclude.Size = New System.Drawing.Size(424, 160)
-        Me.gbInclude.TabIndex = 41
+        Me.gbInclude.TabIndex = 3
         Me.gbInclude.TabStop = False
         Me.gbInclude.Text = "Include"
         '
         'Splitter1
         '
         Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Splitter1.Location = New System.Drawing.Point(0, 248)
+        Me.Splitter1.Location = New System.Drawing.Point(0, 88)
         Me.Splitter1.Name = "Splitter1"
         Me.Splitter1.Size = New System.Drawing.Size(424, 8)
-        Me.Splitter1.TabIndex = 43
+        Me.Splitter1.TabIndex = 2
         Me.Splitter1.TabStop = False
+        '
+        'Splitter2
+        '
+        Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Splitter2.Location = New System.Drawing.Point(0, 256)
+        Me.Splitter2.Name = "Splitter2"
+        Me.Splitter2.Size = New System.Drawing.Size(424, 8)
+        Me.Splitter2.TabIndex = 4
+        Me.Splitter2.TabStop = False
         '
         'SlotConstraintControl
         '
         Me.Controls.Add(Me.gbExclude)
-        Me.Controls.Add(Me.Splitter1)
+        Me.Controls.Add(Me.Splitter2)
         Me.Controls.Add(Me.gbInclude)
+        Me.Controls.Add(Me.Splitter1)
         Me.Controls.Add(Me.PanelSlotTop)
         Me.Name = "SlotConstraintControl"
         Me.Size = New System.Drawing.Size(424, 408)
