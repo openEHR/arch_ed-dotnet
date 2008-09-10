@@ -20,8 +20,8 @@ Public Class EntryStructure
     Inherits System.Windows.Forms.UserControl
 
     Private mStructureType As StructureType   'implement as overrided property
-    Protected MenuItemSpecialise As MenuItem
-    Protected MenuItemAddReference As MenuItem
+    'Protected MenuItemSpecialise As MenuItem
+    'Protected MenuItemAddReference As MenuItem
     Protected OKtoEditSpecialisation As Boolean
     Protected mNodeId As String
     Protected mIsState As Boolean
@@ -677,6 +677,10 @@ Public Class EntryStructure
     End Sub
 
     Protected Overridable Sub AddReference(ByVal sender As Object, ByVal e As EventArgs)
+        Throw New NotImplementedException("Subclass must override this method")
+    End Sub
+
+    Protected Overridable Sub NameSlot(ByVal sender As Object, ByVal e As EventArgs)
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
 

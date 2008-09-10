@@ -748,50 +748,74 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
-            BuildSlot(value_attribute, a_slot.SlotConstraint, a_slot.Occurrences)
+            Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
+
+            If a_slot.NodeId = String.Empty Then
+                slot = mAomFactory.create_archetype_slot_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)))
+            Else
+                slot = mAomFactory.create_archetype_slot_identified(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)), EiffelKernel.Create.STRING_8.make_from_cil(a_slot.NodeId))
+            End If
+            slot.set_occurrences(MakeOccurrences(a_slot.Occurrences))
+
+            BuildSlot(slot, a_slot.SlotConstraint)
         End Sub
 
-        Protected Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal sl As Constraint_Slot, ByVal an_occurrence As RmCardinality)
-            Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
-            slot = mAomFactory.create_archetype_slot_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(sl.RM_ClassType)))
-            slot.set_occurrences(MakeOccurrences(an_occurrence))
+        Protected Sub BuildSlot(ByVal slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT, ByVal sl As Constraint_Slot)
+            Dim pattern As New System.Text.StringBuilder()
+            Dim classPreFix As String = ""
 
             If sl.hasSlots Then
+
+                If Not ReferenceModel.IsAbstract(sl.RM_ClassType) Then
+                    ' ids will be clipped
+                    classPreFix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, sl.RM_ClassType.ToString.ToUpperInvariant)
+                End If
+
                 If sl.IncludeAll Then
                     slot.add_include(MakeAssertion("archetype_id/value", ".*"))
                 Else
-                    Dim pattern As String = ""
+                    If sl.Include.Items.GetLength(0) > 0 Then
 
-                    For Each s As String In sl.Include
-                        If pattern = "" Then
-                            pattern = s
-                        Else
-                            pattern &= "|" & s
+
+                        For Each s As String In sl.Include
+                            If pattern.ToString() = "" Then
+                                pattern.AppendFormat("{0}{1}", classPreFix, s)
+                            Else
+                                pattern.AppendFormat("|{0}{1}", classPreFix, s)
+                            End If
+                        Next
+
+                        If pattern.ToString <> "" Then
+                            slot.add_include(MakeAssertion("archetype_id/value", pattern.ToString()))
                         End If
-                    Next
-
-                    If pattern <> "" Then
-                        slot.add_include(MakeAssertion("archetype_id/value", pattern))
+                    Else
+                        If sl.Exclude.Items.GetLength(0) > 0 Then
+                            ' have specific exclusions but no inclusions
+                            slot.add_include(MakeAssertion("archetype_id/value", ".*"))
+                        End If
                     End If
                 End If
+
+                pattern = New System.Text.StringBuilder()
 
                 If sl.ExcludeAll Then
                     slot.add_exclude(MakeAssertion("archetype_id/value", ".*"))
                 Else
-                    Dim pattern As String = ""
+
 
                     For Each s As String In sl.Exclude
-                        If pattern = "" Then
-                            pattern = s
+                        If pattern.ToString() = "" Then
+                            pattern.AppendFormat("{0}{1}", classPreFix, s)
                         Else
-                            pattern &= "|" & s
+                            pattern.AppendFormat("|{0}{1}", classPreFix, s)
                         End If
                     Next
 
-                    If pattern <> "" Then
-                        slot.add_exclude(MakeAssertion("archetype_id/value", pattern))
+                    If pattern.ToString <> "" Then
+                        slot.add_exclude(MakeAssertion("archetype_id/value", pattern.ToString))
                     End If
                 End If
+
 
                 Debug.Assert(slot.has_excludes Or slot.has_includes)
             Else

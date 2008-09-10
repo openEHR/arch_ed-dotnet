@@ -48,10 +48,12 @@ Public Class ListStructure
                     Me.lvList.Items.Add(lvitem)
                 Case StructureType.Slot
                     Dim slot As RmSlot = CType(item, RmSlot)
-                    lvitem = New ArchetypeListViewItem(slot, mFileManager)
-                    'Sets selected if first in list
-                    lvitem.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, lvList.Items.Count = 0)
-                    Me.lvList.Items.Add(lvitem)
+                    If slot.SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
+                        lvitem = New ArchetypeListViewItem(slot, mFileManager)
+                        'Sets selected if first in list
+                        lvitem.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, lvList.Items.Count = 0)
+                        Me.lvList.Items.Add(lvitem)
+                    End If
 
                 Case Else
                     Debug.Assert(False, "Type not handled")
@@ -95,6 +97,7 @@ Public Class ListStructure
     Friend WithEvents ElementName As System.Windows.Forms.ColumnHeader
     Friend WithEvents ContextMenuList As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuRemove As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuNameSlot As MenuItem
     Friend WithEvents SpecialiseMenuItem As System.Windows.Forms.MenuItem
     Friend WithEvents MenuAddReference As System.Windows.Forms.MenuItem
     Friend WithEvents MenuRemoveItemAndReference As System.Windows.Forms.MenuItem
@@ -103,6 +106,7 @@ Public Class ListStructure
         Me.ElementName = New System.Windows.Forms.ColumnHeader
         Me.ContextMenuList = New System.Windows.Forms.ContextMenu
         Me.MenuRemove = New System.Windows.Forms.MenuItem
+        Me.MenuNameSlot = New System.Windows.Forms.MenuItem
         Me.MenuRemoveItemAndReference = New System.Windows.Forms.MenuItem
         Me.SpecialiseMenuItem = New System.Windows.Forms.MenuItem
         Me.MenuAddReference = New System.Windows.Forms.MenuItem
@@ -133,7 +137,7 @@ Public Class ListStructure
         '
         'ContextMenuList
         '
-        Me.ContextMenuList.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRemove, Me.SpecialiseMenuItem, Me.MenuAddReference})
+        Me.ContextMenuList.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRemove, Me.SpecialiseMenuItem, Me.MenuAddReference, Me.MenuNameSlot})
         '
         'MenuRemove
         '
@@ -155,6 +159,12 @@ Public Class ListStructure
         '
         Me.MenuAddReference.Index = 2
         Me.MenuAddReference.Text = "Add Reference"
+        '
+        'MenuNameSlot
+        '
+        Me.MenuNameSlot.Index = 3
+        Me.MenuNameSlot.Text = "Name this slot?"
+        '
 
         '
         'ListStructure
@@ -179,6 +189,7 @@ Public Class ListStructure
                 Me.MenuRemove.Text = AE_Constants.Instance.Remove
                 Me.SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
                 Me.MenuAddReference.Text = AE_Constants.Instance.Add_Reference
+                Me.MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
             End If
             ' add the change structure menu from EntryStructure
             If Not Me.ContextMenuList.MenuItems.Contains(menuChangeStructure) Then
@@ -260,7 +271,9 @@ Public Class ListStructure
                 Case StructureType.Element, StructureType.Reference
                     lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmElement), mFileManager))
                 Case StructureType.Slot
-                    lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmSlot), mFileManager))
+                    If CType(a_structure, RmSlot).SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
+                        lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmSlot), mFileManager))
+                    End If
                 Case Else
                     Debug.Assert(False, "Type not handled")
             End Select
@@ -343,6 +356,37 @@ Public Class ListStructure
 
     End Sub
 
+    Protected Overrides Sub NameSlot(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuNameSlot.Click
+        If Me.lvList.SelectedItems.Count > 0 Then
+            Dim lvItem As ArchetypeListViewItem
+
+            lvItem = CType(Me.lvList.SelectedItems(0), ArchetypeListViewItem)
+            If lvItem.Item.IsAnonymous Then
+                Try
+                    Dim newSlot As New ArchetypeSlot(CType(lvItem.Item, ArchetypeNodeAnonymous), mFileManager)
+                    Dim i As Integer = lvItem.Index
+                    lvList.Items.RemoveAt(i)
+                    lvItem = New ArchetypeListViewItem(newSlot)
+                    lvItem.ImageIndex = Me.ImageIndexForConstraintType(ConstraintType.Slot, False, True)
+
+                    lvList.Items.Insert(i, lvItem)
+
+                    If Not lvItem.Selected Then
+                        ' needed for first element in the list
+                        lvItem.Selected = True
+                    End If
+                    mFileManager.FileEdited = True
+                    lvItem.BeginEdit()
+                Catch ex As Exception
+                    Debug.Assert(False, "Incorrect type?")
+                End Try
+
+            End If
+
+        End If
+
+    End Sub
+
     Protected Overrides Sub SetUpAddElementMenu()
         mConstraintMenu.Show(ButAddElement, New System.Drawing.Point(5, 5))
     End Sub
@@ -354,15 +398,23 @@ Public Class ListStructure
     End Sub
 
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
-        Dim lvItem As ArchetypeListViewItem
+        Dim lvItem As ArchetypeListViewItem = Nothing
+        Dim editLabel As Boolean = False
 
         If a_constraint.Type = ConstraintType.Slot Then
-            Dim newSlot As New RmSlot(CType(a_constraint, Constraint_Slot).RM_ClassType)
-            lvItem = New ArchetypeListViewItem(newSlot, mFileManager)
+            Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                Case DialogResult.Yes
+                    Dim archetype_slot As New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
+                    lvItem = New ArchetypeListViewItem(archetype_slot)
+                    editLabel = True
+                Case DialogResult.No
+                    Dim newSlot As New RmSlot(StructureType.Element)
+                    lvItem = New ArchetypeListViewItem(newSlot, mFileManager)
+            End Select
         Else
             lvItem = New ArchetypeListViewItem(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
             CType(lvItem.Item, ArchetypeElement).Constraint = a_constraint
-            lvItem.BeginEdit()
+            editLabel = True
         End If
         lvItem.ImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type, False, True)
         Me.lvList.Items.Add(lvItem)
@@ -371,6 +423,11 @@ Public Class ListStructure
             ' needed for first element in the list
             lvItem.Selected = True
         End If
+
+        If editLabel Then
+            lvItem.BeginEdit()
+        End If
+
     End Sub
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles MenuRemoveItemAndReference.Click
@@ -531,6 +588,7 @@ Public Class ListStructure
         Me.MenuRemove.Visible = False
         Me.SpecialiseMenuItem.Visible = False
         Me.MenuAddReference.Visible = False
+        Me.MenuNameSlot.Visible = False
 
         If lvList.SelectedItems.Count > 0 Then
             Dim lvItem As ArchetypeListViewItem
@@ -542,23 +600,28 @@ Public Class ListStructure
             'If it is an element and not a slot
             If Not lvItem.Item.IsAnonymous Then
                 'may be a reference and can't add a reference
-                Dim element As ArchetypeElement = CType(lvItem.Item, ArchetypeElement)
-                If Not element.IsReference Then
-                    Me.MenuAddReference.Visible = True
+                If TypeOf lvItem.Item Is ArchetypeElement Then
+                    Dim element As ArchetypeElement = CType(lvItem.Item, ArchetypeElement)
+                    If Not element.IsReference Then
+                        Me.MenuAddReference.Visible = True
+                    End If
                 End If
                 ' show specialisation if appropriate
-                i = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
+                Dim nodeId As String = CType(lvItem.Item, ArchetypeNodeAbstract).NodeId
+
+                i = OceanArchetypeEditor.Instance.CountInString(nodeId, ".")
 
                 Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
 
                 If i < numberSpecialisations Then
                     Me.SpecialiseMenuItem.Visible = True
                 Else
-                    If numberSpecialisations = 0 Or ((element.NodeId.StartsWith("at0.") Or (element.NodeId.IndexOf(".0.") > -1))) Then
+                    If numberSpecialisations = 0 Or ((nodeId.StartsWith("at0.") Or (nodeId.IndexOf(".0.") > -1))) Then
                         Me.MenuRemove.Visible = True
                     End If
                 End If
             Else
+                Me.MenuNameSlot.Visible = True
                 Me.MenuRemove.Visible = True
             End If
         End If
@@ -630,7 +693,7 @@ Public Class ListStructure
 
         If Not e.Label Is Nothing Then
 
-            If e.Label = "" Then
+            If e.Label = "" Or e.Label = " " Or e.Label = "  " Then
                 e.CancelEdit = True
                 Return
             End If
@@ -639,6 +702,7 @@ Public Class ListStructure
 
             lvItem = CType(Me.lvList.Items(e.Item), ArchetypeListViewItem)
             lvItem.Text = e.Label
+
             MenuRemoveItemAndReference.Text = e.Label
 
             If lvItem.Item.HasReferences Then
@@ -647,6 +711,12 @@ Public Class ListStructure
 
                 MenuRemoveItemAndReference.Text = String.Format("{0} [+]", MenuRemoveItemAndReference.Text)
             End If
+
+            'Slots set the text to include the class
+            If lvItem.Text <> e.Label Then
+                e.CancelEdit = True
+            End If
+
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -666,6 +736,8 @@ Public Class ListStructure
                         e.CancelEdit = True
                     End If
                 End If
+            Else
+                e.CancelEdit = True
             End If
         End If
     End Sub
@@ -685,8 +757,15 @@ Public Class ListStructure
         ElseIf Not mNewConstraint Is Nothing Then
 
             If TypeOf mNewConstraint Is Constraint_Slot Then
-                Dim newSlot As New RmSlot(StructureType.Element)
-                list_item_dragged = New ArchetypeListViewItem(newSlot, mFileManager)
+                Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    Case DialogResult.Yes
+                        Dim archetype_slot As New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
+                        list_item_dragged = New ArchetypeListViewItem(archetype_slot)
+                    Case DialogResult.No
+                        Dim newSlot As New RmSlot(StructureType.Element)
+                        list_item_dragged = New ArchetypeListViewItem(newSlot, mFileManager)
+                End Select
+
             Else
                 Dim archetype_element As ArchetypeElement
                 archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)

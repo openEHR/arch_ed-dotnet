@@ -31,8 +31,8 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
             Return mArchetypeNode.Text
         End Get
         Set(ByVal Value As String)
-            MyBase.Text = Value
             mArchetypeNode.Text = Value
+            MyBase.Text = mArchetypeNode.Text
         End Set
     End Property
 
@@ -72,8 +72,13 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
 
     Sub New(ByVal slot As RmSlot, ByVal a_file_manager As FileManagerLocal)
         MyBase.New()
-        MyBase.Text = a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
-        mArchetypeNode = New ArchetypeNodeAnonymous(slot)
+        If slot.NodeId <> "" Then
+            mArchetypeNode = New ArchetypeSlot(slot, a_file_manager)
+            MyBase.Text = mArchetypeNode.Text
+        Else
+            MyBase.Text = a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
+            mArchetypeNode = New ArchetypeNodeAnonymous(slot)
+        End If
     End Sub
 
     Sub New(ByVal an_archetype_node As ArchetypeNode)

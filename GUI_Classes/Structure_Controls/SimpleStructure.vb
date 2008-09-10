@@ -56,8 +56,8 @@ Public Class SimpleStructure
         If Not element Is Nothing Then
             If element.Type = StructureType.Element Then
                 mElement = New ArchetypeElement(element, mFileManager)
-            Else
-                mElement = New ArchetypeNodeAnonymous(element)
+            Else 'Slot
+                mElement = New ArchetypeSlot(element, mFileManager)
             End If
 
             txtSimple.Text = mElement.Text
@@ -166,7 +166,7 @@ Public Class SimpleStructure
                 If element.Type = StructureType.Element Then
                     mElement = New ArchetypeElement(element, mFileManager)
                 Else
-                    mElement = New ArchetypeNodeAnonymous(element)
+                    mElement = New ArchetypeSlot(element, mFileManager)
                 End If
 
                 txtSimple.Text = mElement.Text
@@ -254,7 +254,7 @@ Public Class SimpleStructure
 
         If a_constraint.Type = ConstraintType.Slot Then
             Dim newSlot As New RmSlot(CType(a_constraint, Constraint_Slot).RM_ClassType)
-            mElement = New ArchetypeNodeAnonymous(newSlot)
+            mElement = New ArchetypeSlot(newSlot, mFileManager)
         Else
             mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
             CType(mElement, ArchetypeElement).Constraint = a_constraint

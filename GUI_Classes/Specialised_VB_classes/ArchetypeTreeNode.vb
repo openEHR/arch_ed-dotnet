@@ -33,8 +33,12 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
             Return mArchetypeNode.Text
         End Get
         Set(ByVal Value As String)
-            MyBase.Text = Value
             mArchetypeNode.Text = Value
+            If TypeOf (mArchetypeNode) Is ArchetypeSlot Then
+                MyBase.Text = mArchetypeNode.Text
+            Else
+                MyBase.Text = Value
+            End If
         End Set
     End Property
 
@@ -95,6 +99,12 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
                 Return New ArchetypeTreeNode(mArchetypeNode)
             Case StructureType.Reference
                 Return New ArchetypeTreeNode(mArchetypeNode)
+            Case StructureType.Slot
+                If (TypeOf mArchetypeNode Is ArchetypeSlot) Then
+                    Return (New ArchetypeTreeNode(mArchetypeNode))
+                Else
+                    Return Nothing
+                End If
             Case Else
                 Debug.Assert(False, "Type not handled")
                 Return Nothing
@@ -143,8 +153,11 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
             Case StructureType.SECTION
                 mArchetypeNode = New ArchetypeComposite(aText, a_type, a_file_manager)
                 SetImageIndex()
-            Case StructureType.Slot
-                mArchetypeNode = New ArchetypeNodeAnonymous(a_type)
+            Case Else
+                Debug.Assert(False, String.Format("Type {0} is not handled", a_type.ToString.ToUpper))
+                'Case StructureType.Slot
+                '    mArchetypeNode = New ArchetypeSlot(aText, a_file_manager)
+                '    'mArchetypeNode = New ArchetypeNodeAnonymous(a_type)
         End Select
 
         Me.Item.Occurrences.MaxCount = 1
@@ -189,8 +202,18 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     End Sub
 
     Sub New(ByVal a_slot As RmSlot, ByVal a_file_manager As FileManagerLocal)
-        MyBase.New(a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(a_slot.SlotConstraint.RM_ClassType), a_slot.SlotConstraint.RM_ClassType.ToString))
-        mArchetypeNode = New ArchetypeNodeAnonymous(a_slot)
+        'SRH: Changed 18 Aug 2008
+        MyBase.New()
+        If a_slot.NodeId <> String.Empty Then
+            mArchetypeNode = New ArchetypeSlot(a_slot, a_file_manager)
+            MyBase.Text = mArchetypeNode.Text
+        Else
+            MyBase.Text = a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(a_slot.SlotConstraint.RM_ClassType), a_slot.SlotConstraint.RM_ClassType.ToString)
+            mArchetypeNode = New ArchetypeNodeAnonymous(a_slot)
+        End If
+
+        'MyBase.New(a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(a_slot.SlotConstraint.RM_ClassType), a_slot.SlotConstraint.RM_ClassType.ToString))
+        'mArchetypeNode = New ArchetypeNodeAnonymous(a_slot)
     End Sub
 
 End Class
