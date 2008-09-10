@@ -37,6 +37,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
+        lblParser.Text = String.Format("({0})", mFileManager.ParserType)
 
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             Me.lblSlot.Text = Filemanager.GetOpenEhrTerm(312, Me.lblSlot.Text)
@@ -74,6 +75,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
     Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     Friend WithEvents butBrowse As System.Windows.Forms.Button
+    Friend WithEvents lblParser As System.Windows.Forms.Label
     Friend WithEvents AvailableArchetypesListBox As System.Windows.Forms.ListBox
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(SlotConstraintControl))
@@ -88,6 +90,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.butExcludeRemove = New System.Windows.Forms.Button
         Me.listExclude = New System.Windows.Forms.ListBox
         Me.PanelSlotTop = New System.Windows.Forms.Panel
+        Me.lblParser = New System.Windows.Forms.Label
         Me.butBrowse = New System.Windows.Forms.Button
         Me.AvailableArchetypesListBox = New System.Windows.Forms.ListBox
         Me.lblClass = New System.Windows.Forms.Label
@@ -205,6 +208,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         'PanelSlotTop
         '
+        Me.PanelSlotTop.Controls.Add(Me.lblParser)
         Me.PanelSlotTop.Controls.Add(Me.butBrowse)
         Me.PanelSlotTop.Controls.Add(Me.AvailableArchetypesListBox)
         Me.PanelSlotTop.Controls.Add(Me.lblClass)
@@ -216,12 +220,20 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.PanelSlotTop.Size = New System.Drawing.Size(424, 88)
         Me.PanelSlotTop.TabIndex = 1
         '
+        'lblParser
+        '
+        Me.lblParser.Location = New System.Drawing.Point(390, 49)
+        Me.lblParser.Name = "lblParser"
+        Me.lblParser.Size = New System.Drawing.Size(38, 19)
+        Me.lblParser.TabIndex = 4
+        Me.lblParser.Text = "(ADL)"
+        '
         'butBrowse
         '
         Me.butBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butBrowse.Location = New System.Drawing.Point(389, 8)
+        Me.butBrowse.Location = New System.Drawing.Point(397, 8)
         Me.butBrowse.Name = "butBrowse"
-        Me.butBrowse.Size = New System.Drawing.Size(32, 29)
+        Me.butBrowse.Size = New System.Drawing.Size(24, 29)
         Me.butBrowse.TabIndex = 3
         Me.butBrowse.Text = "..."
         '
@@ -230,10 +242,10 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.AvailableArchetypesListBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.AvailableArchetypesListBox.Location = New System.Drawing.Point(128, 1)
+        Me.AvailableArchetypesListBox.Location = New System.Drawing.Point(106, 1)
         Me.AvailableArchetypesListBox.Name = "AvailableArchetypesListBox"
         Me.AvailableArchetypesListBox.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple
-        Me.AvailableArchetypesListBox.Size = New System.Drawing.Size(255, 82)
+        Me.AvailableArchetypesListBox.Size = New System.Drawing.Size(283, 82)
         Me.AvailableArchetypesListBox.Sorted = True
         Me.AvailableArchetypesListBox.TabIndex = 2
         '
@@ -244,7 +256,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Me.lblClass.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblClass.Location = New System.Drawing.Point(8, 24)
         Me.lblClass.Name = "lblClass"
-        Me.lblClass.Size = New System.Drawing.Size(112, 56)
+        Me.lblClass.Size = New System.Drawing.Size(94, 56)
         Me.lblClass.TabIndex = 1
         Me.lblClass.Text = "Class name"
         Me.lblClass.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -462,10 +474,16 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub butInclude_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butInclude.Click
+        If Me.chkIncludeAll.Checked Then
+            Me.chkIncludeAll.Checked = False
+        End If
         AddSlot(AvailableArchetypesListBox.SelectedItems, listInclude, listExclude, Constraint.Include, Constraint.Exclude)
     End Sub
 
     Private Sub butExclude_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butExclude.Click
+        If Me.chkExcludeAll.Checked Then
+            Me.chkExcludeAll.Checked = False
+        End If
         AddSlot(AvailableArchetypesListBox.SelectedItems, listExclude, listInclude, Constraint.Exclude, Constraint.Include)
     End Sub
 
@@ -473,14 +491,25 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         If names.Count > 0 Then
             Dim specialisation As String
 
-            If MessageBox.Show(AE_Constants.Instance.SpecialisationsToo, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            Dim label As New System.Text.StringBuilder()
+            For Each s As String In names
+                label.AppendLine(s)
+            Next
+            label.AppendLine()
+            label.AppendLine(AE_Constants.Instance.SpecialisationsToo)
+
+            If MessageBox.Show(label.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 specialisation = "(-[a-zA-Z0-9_]+)*"
             Else
                 specialisation = ""
             End If
 
             For Each s As String In names
-                s = s.Replace(".", specialisation & "\.")
+                'SRH Aug 20 2008 - now have full IDs so this doesn't work
+                's = s.Replace(".", specialisation & "\.")
+                Dim i As Integer = s.LastIndexOf(".")
+                s = String.Format("{0}{1}{2}", s.Substring(0, i), specialisation, s.Substring(i))
+                s = s.Replace(".", "\.")
 
                 If Not col.Contains(s) Then
                     col.Add(s)
@@ -524,7 +553,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Dim s As String
 
         s = ReferenceModel.ReferenceModelName & "-" & ReferenceModel.RM_StructureName(Constraint.RM_ClassType)
-        fd.Filter = s & "|" & s & ".*.adl"
+        fd.Filter = String.Format("{0}.*.{1}|{0}.*.{1}", s, Filemanager.Master.ParserType)
         fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath
 
         If fd.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
@@ -536,22 +565,38 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    Private Sub RetrieveFiles(ByVal a_directory As System.IO.DirectoryInfo)
+    Private Sub AddFilestoListBox(ByVal a_directory As System.IO.DirectoryInfo, ByVal pattern As String, ByVal clipFileName As Boolean)
+        For Each f As System.IO.FileInfo In a_directory.GetFiles(pattern, IO.SearchOption.AllDirectories)
+
+            Dim fileName As String
+            If clipFileName Then
+                Dim i, j As Integer
+                i = f.Name.IndexOf(".") + 1
+                j = f.Name.LastIndexOf(".adl")
+                fileName = f.Name.Substring(i, j - i)
+            Else
+                fileName = f.Name.Substring(0, f.Name.LastIndexOf(".adl"))
+            End If
+
+            AvailableArchetypesListBox.Items.Insert(0, fileName)
+        Next
+    End Sub
+
+    Private Sub RetrieveFiles(ByVal a_directory As System.IO.DirectoryInfo, ByVal fileExtension As String)
         Dim f As System.IO.FileInfo
         Dim s As String
         Dim d As System.IO.DirectoryInfo
-        s = String.Format("{0}-{1}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(Constraint.RM_ClassType))
 
-        For Each f In a_directory.GetFiles(s & ".*.adl")
-            Dim fileName As String = f.Name.Substring(s.Length + 1, f.Name.LastIndexOf(".") - (s.Length + 1))
-            AvailableArchetypesListBox.Items.Insert(0, fileName)
-        Next
+        If ReferenceModel.IsAbstract(Constraint.RM_ClassType) Then
+            For Each t As StructureType In ReferenceModel.Specialisations(Constraint.RM_ClassType)
+                s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(t), fileExtension)
+                AddFilestoListBox(a_directory, s, False)
+            Next
+        Else
+            s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(Constraint.RM_ClassType), fileExtension)
+            AddFilestoListBox(a_directory, s, True)
+        End If
 
-        For Each d In a_directory.GetDirectories
-            If d.Extension = String.Empty Then
-                RetrieveFiles(d)
-            End If
-        Next
     End Sub
 
     Private Sub butShowAll()
@@ -560,7 +605,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         d = New System.IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath)
 
         If d.Exists Then
-            RetrieveFiles(d)
+            RetrieveFiles(d, Filemanager.Master.ParserType)
             Cursor = Cursors.Default
         Else
             Cursor = Cursors.Default

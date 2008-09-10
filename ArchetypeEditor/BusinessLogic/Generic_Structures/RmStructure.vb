@@ -19,11 +19,13 @@ Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 
 Public Enum StructureType
     Not_Set = 0
+    [Structure] = 85
     [Single] = 105
     List = 106
     Tree = 107
     Table = 108
     Columns = 164
+    Item = 673
     Cluster = 313
     Element = 567
 
@@ -36,6 +38,7 @@ Public Enum StructureType
     CarePathwayStep = 563
 
     ENTRY = 559
+    CARE_ENTRY = 674
     EVALUATION = 555
     OBSERVATION = 554
     INSTRUCTION = 557
@@ -180,7 +183,9 @@ Public Class RmStructure
 #Region "ADL and XML oriented features"
 
     Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
-        sNodeId = EIF_Structure.node_id.to_cil
+        If EIF_Structure.is_addressable Then
+            sNodeId = EIF_Structure.node_id.to_cil
+        End If
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(EIF_Structure.occurrences)
         mType = ReferenceModel.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
 
@@ -202,7 +207,9 @@ Public Class RmStructure
     End Sub
 
     Sub New(ByVal XML_Structure As XMLParser.C_OBJECT)
-        sNodeId = XML_Structure.node_id
+        If Not String.IsNullOrEmpty(XML_Structure.node_id) Then
+            sNodeId = XML_Structure.node_id
+        End If
         cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(XML_Structure.occurrences)
         mType = ReferenceModel.StructureTypeFromString(XML_Structure.rm_type_name)
 

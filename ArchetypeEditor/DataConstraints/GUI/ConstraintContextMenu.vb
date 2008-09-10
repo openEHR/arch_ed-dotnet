@@ -298,7 +298,7 @@ Public Class ConstraintContextMenu
         mMI_Slot = New MenuItem(AE_Constants.Instance.Slot)
         Me.MenuItems.Add(mMI_Slot)
         AddHandler mMI_Slot.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Slot.Visible = False
+        'mMI_Slot.Visible = False
         mMI_QuantityUnit = New MenuItem(AE_Constants.Instance.Unit)
         Me.MenuItems.Add(mMI_QuantityUnit)
         AddHandler mMI_QuantityUnit.Click, AddressOf InternalProcessMenuItemClick

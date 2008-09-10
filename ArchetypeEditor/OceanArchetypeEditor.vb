@@ -101,7 +101,11 @@ Public Class OceanArchetypeEditor
 
     Protected Sub New()
         mDataSet = New DataSet("DesignerDataSet")
-        OTSControls.Term.OtsWebService.Url = "http://ots.oceaninformatics.com/OTS/OTSService.asmx"
+        Try
+            OTSControls.Term.OtsWebService.Url = "http://ots.oceaninformatics.com/OTS/OTSService.asmx"
+        Catch
+
+        End Try
     End Sub
 
     Private mDataSet As DataSet

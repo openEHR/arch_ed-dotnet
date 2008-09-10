@@ -671,6 +671,7 @@
     <Compile Include="GUI_Archetype\ArchetypeNodeAnonymous.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GUI_Archetype\ArchetypeSlot.vb" />
     <Compile Include="GUI_Classes\Instruction_Controls\PathwayEvent.vb">
       <SubType>UserControl</SubType>
     </Compile>

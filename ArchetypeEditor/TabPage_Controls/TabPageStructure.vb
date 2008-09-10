@@ -586,17 +586,21 @@ Public Class TabPageStructure
             Dim s As StructureType
 
             If mArchetypeControl Is Nothing Then  'with a slot only
-                s = CType(CurrentItem, ArchetypeNodeAnonymous).RM_Class.Type
+                If TypeOf (CurrentItem) Is ArchetypeNodeAnonymous Then
+                    s = CType(CurrentItem, ArchetypeNodeAnonymous).RM_Class.Type
+                ElseIf TypeOf (CurrentItem) Is ArchetypeSlot Then
+                    s = CType(CurrentItem, ArchetypeSlot).RM_Class.Type
+                End If
             Else
                 s = mArchetypeControl.StructureType
             End If
 
-            PanelDetails.ShowConstraint(s, IsState, CurrentItem, mFileManager)
+                PanelDetails.ShowConstraint(s, IsState, CurrentItem, mFileManager)
 
-            If Not PanelDetails.Visible Then
-                PanelDetails.Show()
+                If Not PanelDetails.Visible Then
+                    PanelDetails.Show()
+                End If
             End If
-        End If
     End Sub
 
     Public Sub Translate()

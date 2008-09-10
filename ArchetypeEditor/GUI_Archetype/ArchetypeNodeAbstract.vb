@@ -26,7 +26,7 @@ Public MustInherit Class ArchetypeNodeAbstract
     Protected mComment As String
     Protected mItem As RmStructure
 
-    Public Property Text() As String Implements ArchetypeNode.Text
+    Public Overridable Property Text() As String Implements ArchetypeNode.Text
         Get
             Return mText
         End Get

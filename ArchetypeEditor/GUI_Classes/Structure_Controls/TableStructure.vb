@@ -66,7 +66,12 @@ Public Class TableStructure
                     If rmStr.Type = StructureType.Element Then
                         archNode = New ArchetypeElement(CType(rmStr, RmElement), mFileManager)
                     ElseIf rmStr.Type = StructureType.Slot Then
-                        archNode = New ArchetypeNodeAnonymous(CType(rmStr, RmSlot))
+                        If String.IsNullOrEmpty(rmStr.NodeId) Then
+                            archNode = New ArchetypeNodeAnonymous(CType(rmStr, RmSlot))
+                        Else
+                            archNode = New ArchetypeSlot(CType(rmStr, RmSlot), mFileManager)
+                        End If
+
                     Else
                         Debug.Assert(False, "Type not handled")
                         Throw New Exception("Table row of invalid type")
@@ -137,6 +142,8 @@ Public Class TableStructure
     Friend WithEvents ContextMenuGrid As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuRenameColumn As System.Windows.Forms.MenuItem
     Friend WithEvents MenuRename As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuNameSlot As MenuItem
+
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.dgGrid = New System.Windows.Forms.DataGrid
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
@@ -164,13 +171,18 @@ Public Class TableStructure
         '
         'ContextMenuGrid
         '
-        Me.ContextMenuGrid.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRename, Me.MenuRemoveColumnOrRow})
+        Me.ContextMenuGrid.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRename, Me.MenuRemoveColumnOrRow, Me.MenuNameSlot})
         '
         'MenuRename
         '
         Me.MenuRename.Index = 0
         Me.MenuRename.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRenameColumn})
         Me.MenuRename.Text = "Rename"
+        '
+        'MenuNameSlot
+        '
+        Me.MenuNameSlot.Index = 3
+        Me.MenuNameSlot.Text = "Name this slot"
         '
         'MenuRenameColumn
         '
@@ -243,6 +255,9 @@ Public Class TableStructure
             If mArchetypeTable.Rows.Count > 0 Then
                 dgGrid_CurrentCellChanged(sender, e)
             End If
+        End If
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            Me.MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
         End If
         ' add the change structure menu from EntryStructure
         Me.ContextMenuGrid.MenuItems.Add(menuChangeStructure)
@@ -349,6 +364,11 @@ Public Class TableStructure
         For Each rm As RmStructure In ch
             If rm.Type = StructureType.Cluster Then
                 AddNodesToTable(CType(rm, RmStructureCompound).Children)
+            ElseIf rm.Type = StructureType.Slot Then
+                'Have to lose cluster slots
+                If CType(rm, RmSlot).SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
+                    AddTableRow(rm)
+                End If
             Else
                 AddTableRow(rm)
             End If
@@ -362,7 +382,7 @@ Public Class TableStructure
             Case StructureType.Element, StructureType.Reference
                 node = New ArchetypeElement(CType(rm, RmElement), mFileManager)
             Case StructureType.Slot
-                node = New ArchetypeNodeAnonymous(CType(rm, RmSlot))
+                node = New ArchetypeSlot(CType(rm, RmSlot), mFileManager)
             Case Else
                 node = Nothing
                 Debug.Assert(False, "Type not handled")
@@ -944,10 +964,36 @@ Public Class TableStructure
 
             i = Me.dgGrid.CurrentCell.RowNumber
             element = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode)
+            If TypeOf element Is ArchetypeNodeAnonymous AndAlso element.RM_Class.Type = Global.ArchetypeEditor.StructureType.Slot Then
+                MenuNameSlot.Visible = True
+            Else
+                MenuNameSlot.Visible = False
+            End If
             SetCurrentItem(element)
         Else
             Debug.Assert(False, "TODO")
         End If
+    End Sub
+
+    Protected Overrides Sub NameSlot(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuNameSlot.Click
+        Dim slot As ArchetypeNodeAnonymous
+
+        Dim i As Integer = Me.dgGrid.CurrentCell.RowNumber
+        slot = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNodeAnonymous)
+
+        Try
+            ' move to an ArchetypeSlot (allows naming)
+            'Dim newSlot As New ArchetypeSlot(Filemanager.GetOpenEhrTerm(567, "Element"), Global.ArchetypeEditor.StructureType.Element, mFileManager)
+            Dim newSlot As New ArchetypeSlot(slot, mFileManager)
+            mArchetypeTable.Rows(i).Item(2) = newSlot
+            mIsLoading = True
+            mArchetypeTable.Rows(i).Item(1) = newSlot.Text
+            mIsLoading = False
+            mFileManager.FileEdited = True
+        Catch ex As Exception
+            Debug.Assert(False, "Incorrect type?")
+        End Try
+
     End Sub
 
 
@@ -966,9 +1012,18 @@ Public Class TableStructure
                         e.ProposedValue = element.Text
                     End If
                 End If
+            ElseIf archetype_node.RM_Class.Type = Global.ArchetypeEditor.StructureType.Slot AndAlso TypeOf (archetype_node) Is ArchetypeNodeAnonymous Then
+                e.ProposedValue = archetype_node.Text
+                Return
             End If
-            archetype_node = CType(e.Row.Item(2), ArchetypeNode)
+            'archetype_node = CType(e.Row.Item(2), ArchetypeNode)
             archetype_node.Text = CStr(e.ProposedValue)
+
+            'Slot may reset text to include class
+            If archetype_node.Text <> CStr(e.ProposedValue) Then
+                e.ProposedValue = archetype_node.Text
+            End If
+
         End If
     End Sub
 
@@ -1011,8 +1066,15 @@ Public Class TableStructure
             Dim a_cell As DataGridCell
 
             If TypeOf mNewConstraint Is Constraint_Slot Then
-                Dim newSlot As New RmSlot(StructureType.Element)
-                table_archetype = New ArchetypeNodeAnonymous(newSlot)
+
+                Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                    Case DialogResult.Yes
+                        table_archetype = New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
+                    Case DialogResult.No
+                        Dim newSlot As New RmSlot(StructureType.Element)
+                        table_archetype = New ArchetypeNodeAnonymous(newSlot)
+                End Select
+
             Else
 
                 table_archetype = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
