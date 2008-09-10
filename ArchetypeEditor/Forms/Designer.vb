@@ -3631,42 +3631,40 @@ Public Class Designer
 
     Private Sub MenuFileSpecialise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSpecialise.Click
         'Enable specialisation of the archetype
-        If MessageBox.Show(AE_Constants.Instance.Specialise & " " & mFileManager.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
-            Windows.Forms.DialogResult.OK Then
-            Dim s As String
-            s = "-"
+        Dim s As String
+        s = "-"
 
-            While InStr(s, "-") > 0
-                s = OceanArchetypeEditor.Instance.GetInput("Enter the new concept ('-' is not allowed)", Me)
-            End While
+        While InStr(s, "-") > 0
+            Dim prompt As String = AE_Constants.Instance.Specialise & " " & mFileManager.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & Environment.NewLine & "Enter the new concept ('-' is not allowed)."
+            s = OceanArchetypeEditor.Instance.GetInput(prompt, Me)
+        End While
 
-            If s <> "" Then
-                Dim a_Term As RmTerm
+        If s <> "" Then
+            Dim a_Term As RmTerm
 
-                ' replace spaces with underscore
-                s = s.Replace(" "c, "_"c)
+            ' replace spaces with underscore
+            s = s.Replace(" "c, "_"c)
 
-                'specialise concept
-                mFileManager.FileLoading = True
-                mFileManager.Archetype.Specialise(s, mFileManager.OntologyManager)
+            'specialise concept
+            mFileManager.FileLoading = True
+            mFileManager.Archetype.Specialise(s, mFileManager.OntologyManager)
 
-                ' show the new archetype ID in the GUI
-                lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
-                a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
-                txtConceptInFull.Text = a_Term.Text
-                TxtConceptDescription.Text = a_Term.Description
-                txtConceptComment.Text = ""
-                gbSpecialisation.Show()
-                UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
-                MenuFileSpecialise.Visible = False
-                mFileManager.FileLoading = False
-                mFileManager.FileEdited = True
-                mFileManager.IsNew = True
-                mFileManager.FileName = ""    'new filename and needs to save as
+            ' show the new archetype ID in the GUI
+            lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
+            a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
+            txtConceptInFull.Text = a_Term.Text
+            TxtConceptDescription.Text = a_Term.Description
+            txtConceptComment.Text = ""
+            gbSpecialisation.Show()
+            UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
+            MenuFileSpecialise.Visible = False
+            mFileManager.FileLoading = False
+            mFileManager.FileEdited = True
+            mFileManager.IsNew = True
+            mFileManager.FileName = ""    'new filename and needs to save as
 
-                If Not mTabPageDataStructure Is Nothing Then
-                    mTabPageDataStructure.ArchetypeDisplay.SetButtonVisibility(Nothing)
-                End If
+            If Not mTabPageDataStructure Is Nothing Then
+                mTabPageDataStructure.ArchetypeDisplay.SetButtonVisibility(Nothing)
             End If
         End If
     End Sub
