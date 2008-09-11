@@ -429,14 +429,8 @@ Public Class TreeStructure
 
                 Case StructureType.Slot
                     Dim tvNode As New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
-                    Dim slot As ArchetypeNodeAbstract
-                    If TypeOf (tvNode.Item) Is ArchetypeNodeAnonymous Then
-                        slot = CType(tvNode.Item, ArchetypeNodeAbstract)
-                    Else
-                        slot = CType(tvNode.Item, ArchetypeSlot)
-                    End If
-                    tvNode.ImageIndex = ImageIndexForItem(slot, False)
-                    tvNode.SelectedImageIndex = ImageIndexForItem(slot, True)
+                    tvNode.ImageIndex = ImageIndexForItem(tvNode.Item, False)
+                    tvNode.SelectedImageIndex = ImageIndexForItem(tvNode.Item, True)
                     ParentTreeNode.Nodes.Add(tvNode)
 
                 Case Else
