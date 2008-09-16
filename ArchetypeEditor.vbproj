@@ -80,7 +80,7 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EiffelSoftware.Runtime, Version=6.0.6.9104, Culture=neutral, PublicKeyToken=def26f296efef469">
+    <Reference Include="EiffelSoftware.Runtime, Version=6.2.7.1629, Culture=neutral, PublicKeyToken=def26f296efef469">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="MagicLibrary, Version=1.7.0.0, Culture=neutral, PublicKeyToken=3a6eb82f876a49bc" />
