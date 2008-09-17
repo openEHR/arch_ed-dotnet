@@ -332,6 +332,7 @@ Public Class FileManagerLocal
 
     Private Sub CheckFileNameAgainstArchetypeId()
         Dim name As String = FileName.Substring(FileName.LastIndexOf("\") + 1)
+        Dim priorFileLoading As Boolean
 
         If Not name.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
             Dim shortFileName As String = Left(name, name.LastIndexOf("."))
@@ -366,15 +367,21 @@ Public Class FileManagerLocal
                         Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
                     End If
 
+                    'SRH 17 Sep 2008 - set back to prior setting
+                    priorFileLoading = FileLoading
                     FileLoading = False
                     FileEdited = True
-                    FileLoading = True
+                    FileLoading = priorFileLoading
                 End If
             Else
                 FileName = mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
+
+                'SRH 17 Sep 2008 - set back to prior setting
+                priorFileLoading = FileLoading
                 FileLoading = False
                 FileEdited = True
-                FileLoading = True
+                FileLoading = priorFileLoading
+
             End If
         End If
     End Sub
@@ -720,6 +727,7 @@ Public Class FileManagerLocal
         End If
 
         Return Not FileEdited
+
     End Function
 
     Private Sub SaveArchetypeAs(ByRef name As String)
