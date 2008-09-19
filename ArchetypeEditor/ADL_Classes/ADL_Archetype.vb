@@ -119,10 +119,12 @@ Namespace ArchetypeEditor.ADL_Classes
             Get
                 Dim list As EiffelList.ARRAYED_LIST_REFERENCE
                 Dim i As Integer
+
                 ' must call the prepareToSave to ensure it is accurate
-                If (Not Filemanager.Master.FileLoading) AndAlso (Not parserIsSynchronised) Then
+                If Not Filemanager.Master.FileLoading AndAlso Not parserIsSynchronised Then
                     MakeParseTree()
                 End If
+
                 ' showing the task with logical paths takes a lot of space
                 If Logical Then
                     list = adlArchetype.logical_paths(EiffelKernel.Create.STRING_8.make_from_cil(LanguageCode))

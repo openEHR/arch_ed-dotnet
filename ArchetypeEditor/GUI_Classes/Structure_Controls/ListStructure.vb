@@ -748,14 +748,12 @@ Public Class ListStructure
     ByVal e As System.Windows.Forms.DragEventArgs) Handles lvList.DragDrop
         Dim position As Point
         Dim DropListItem As ArchetypeListViewItem
-        Dim list_item_dragged As ArchetypeListViewItem
+        Dim list_item_dragged As ArchetypeListViewItem = Nothing
         Dim i As Integer
 
         If Not mDragItem Is Nothing Then
             list_item_dragged = mDragItem
-            'ElseIf Not mDragArchetypeNode Is Nothing Then
         ElseIf Not mNewConstraint Is Nothing Then
-
             If TypeOf mNewConstraint Is Constraint_Slot Then
                 Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     Case DialogResult.Yes
@@ -765,14 +763,12 @@ Public Class ListStructure
                         Dim newSlot As New RmSlot(StructureType.Element)
                         list_item_dragged = New ArchetypeListViewItem(newSlot, mFileManager)
                 End Select
-
             Else
                 Dim archetype_element As ArchetypeElement
                 archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
                 archetype_element.Constraint = mNewConstraint
                 list_item_dragged = New ArchetypeListViewItem(archetype_element)
             End If
-            
         Else
             Debug.Assert(False, "No item dragged")
             mNewConstraint = Nothing
