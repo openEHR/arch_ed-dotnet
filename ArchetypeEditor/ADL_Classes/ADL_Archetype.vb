@@ -770,7 +770,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 If Not ReferenceModel.IsAbstract(sl.RM_ClassType) Then
                     ' ids will be clipped
-                    classPreFix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, sl.RM_ClassType.ToString.ToUpperInvariant)
+                    classPreFix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, sl.RM_ClassType.ToString.ToUpperInvariant)
                 End If
 
                 If sl.IncludeAll Then
