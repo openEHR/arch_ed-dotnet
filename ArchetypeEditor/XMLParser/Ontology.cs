@@ -116,7 +116,9 @@ namespace XMLParser
             //foreach (terminology_set t in _archetype.ontology.term_bindings) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
             foreach (TermBindingSet t in _archetype.ontology.term_bindings)
             {
-                if (t.terminology == a_terminology_id)
+                //SRH: 3 Jun 2008 - changed to starts with to allow return if release not specified
+                if (t.terminology.StartsWith(a_terminology_id))
+                //if (t.terminology == a_terminology_id)
                 {
                     //foreach (binding b in t.bindings) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
                     foreach (TERM_BINDING_ITEM b in t.items)
@@ -304,7 +306,9 @@ namespace XMLParser
         {
             foreach (ConstraintBindingSet t in _archetype.ontology.constraint_bindings)
             {
-                if (t.terminology == a_terminology_id)
+                //SRH: 3 Jun 2008 - change to starts with to work if release is not specified
+                //if (t.terminology == a_terminology_id)
+                if (t.terminology.StartsWith( a_terminology_id))
                 {
                     foreach (CONSTRAINT_BINDING_ITEM b in t.items)
                     {
@@ -320,7 +324,9 @@ namespace XMLParser
         {
             foreach (ConstraintBindingSet t in _archetype.ontology.constraint_bindings)
             {
-                if (t.terminology == a_terminology_id)
+                //SRH: 3 Jun 2008 - change to starts with to work if release is not specified
+                //if (t.terminology == a_terminology_id)
+                if (t.terminology.StartsWith(a_terminology_id))
                 {
                     foreach (CONSTRAINT_BINDING_ITEM b in t.items)
                     {
