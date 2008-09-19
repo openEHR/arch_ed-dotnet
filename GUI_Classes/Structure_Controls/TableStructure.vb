@@ -1059,14 +1059,13 @@ Public Class TableStructure
     End Sub
 
     Private Sub dgGrid_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles dgGrid.DragDrop
-        Dim table_archetype As ArchetypeNode
+        Dim table_archetype As ArchetypeNode = Nothing
 
         If Not mNewConstraint Is Nothing Then
             Dim new_row As DataRow
             Dim a_cell As DataGridCell
 
             If TypeOf mNewConstraint Is Constraint_Slot Then
-
                 Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     Case DialogResult.Yes
                         table_archetype = New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
@@ -1074,9 +1073,7 @@ Public Class TableStructure
                         Dim newSlot As New RmSlot(StructureType.Element)
                         table_archetype = New ArchetypeNodeAnonymous(newSlot)
                 End Select
-
             Else
-
                 table_archetype = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
                 CType(table_archetype, ArchetypeElement).Constraint = mNewConstraint
             End If
@@ -1101,7 +1098,6 @@ Public Class TableStructure
             mNewConstraint = Nothing
         End If
     End Sub
-
 
     Private Class DataGridIconOnlyColumn
         Inherits DataGridTextBoxColumn

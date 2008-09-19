@@ -583,9 +583,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub RetrieveFiles(ByVal a_directory As System.IO.DirectoryInfo, ByVal fileExtension As String)
-        Dim f As System.IO.FileInfo
         Dim s As String
-        Dim d As System.IO.DirectoryInfo
 
         If ReferenceModel.IsAbstract(Constraint.RM_ClassType) Then
             For Each t As StructureType In ReferenceModel.Specialisations(Constraint.RM_ClassType)
@@ -596,7 +594,6 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
             s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(Constraint.RM_ClassType), fileExtension)
             AddFilestoListBox(a_directory, s, True)
         End If
-
     End Sub
 
     Private Sub butShowAll()
