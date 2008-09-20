@@ -114,7 +114,7 @@ Public Class RmSlot
                     mSlotConstraint.IncludeAll = True
                 Else
                     If Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
-                        classPrefix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
+                        classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
 
                         For Each s As String In pattern.Split("|"c)
                             mSlotConstraint.Include.Add(s.Replace(classPrefix, ""))
@@ -141,7 +141,7 @@ Public Class RmSlot
                     mSlotConstraint.ExcludeAll = True
                 Else
                     If Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
-                        classPrefix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
+                        classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
 
                         For Each s As String In pattern.Split("|"c)
                             mSlotConstraint.Exclude.Add(s.Replace(classPrefix, ""))
@@ -195,16 +195,16 @@ Public Class RmSlot
         Dim classPrefix As String = ""
 
         If (Not an_archetype_slot.includes Is Nothing) AndAlso (an_archetype_slot.includes.Length > 0) Then
-      
             For i As Integer = 0 To an_archetype_slot.includes.Length - 1
                 Dim assert As XMLParser.ASSERTION
                 assert = CType(an_archetype_slot.includes(i), XMLParser.ASSERTION)
                 Dim pattern As String = ArchetypeEditor.XML_Classes.XML_Tools.GetConstraintFromAssertion(assert)
+
                 If pattern = ".*" Then
                     mSlotConstraint.IncludeAll = True
                 Else
                     If Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
-                        classPrefix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
+                        classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
 
                         For Each s As String In pattern.Split("|"c)
                             mSlotConstraint.Include.Add(s.Replace(classPrefix, ""))
@@ -215,12 +215,12 @@ Public Class RmSlot
                         Next
                     End If
                 End If
-
             Next
         End If
 
         If (Not an_archetype_slot.excludes Is Nothing) AndAlso (an_archetype_slot.excludes.Length > 0) Then
             Dim pattern As String
+
             For i As Integer = 0 To an_archetype_slot.excludes.Length - 1
                 Dim assert As XMLParser.ASSERTION
                 assert = CType(an_archetype_slot.excludes(i), XMLParser.ASSERTION)
@@ -230,7 +230,7 @@ Public Class RmSlot
                     mSlotConstraint.ExcludeAll = True
                 Else
                     If Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
-                        classPrefix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
+                        classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
 
                         For Each s As String In pattern.Split("|"c)
                             mSlotConstraint.Exclude.Add(s.Replace(classPrefix, ""))
@@ -246,7 +246,6 @@ Public Class RmSlot
     End Sub
 
 #End Region
-
 
 End Class
 
