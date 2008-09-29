@@ -106,9 +106,18 @@ Namespace ArchetypeEditor.ADL_Classes
         Public Overrides ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
             Get
                 Me.MakeParseTree()
+
                 Try
                     adlEngine.serialise(EiffelKernel.Create.STRING_8.make_from_cil(a_format))
                     Return adlEngine.serialised_archetype.to_cil
+                Catch e As System.Reflection.TargetInvocationException
+                    If Not e.InnerException Is Nothing Then
+                        MessageBox.Show(e.InnerException.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Else
+                        MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End If
+
+                    Return AE_Constants.Instance.Error_saving
                 Catch e As Exception
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Return AE_Constants.Instance.Error_saving
