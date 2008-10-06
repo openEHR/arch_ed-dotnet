@@ -148,6 +148,7 @@ Public Class TableStructure
         Me.dgGrid = New System.Windows.Forms.DataGrid
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
         Me.MenuRename = New System.Windows.Forms.MenuItem
+        Me.MenuNameSlot = New System.Windows.Forms.MenuItem
         Me.MenuRenameColumn = New System.Windows.Forms.MenuItem
         Me.MenuRemoveColumnOrRow = New System.Windows.Forms.MenuItem
         Me.MenuRemoveColumn = New System.Windows.Forms.MenuItem
@@ -181,7 +182,7 @@ Public Class TableStructure
         '
         'MenuNameSlot
         '
-        Me.MenuNameSlot.Index = 3
+        Me.MenuNameSlot.Index = 2
         Me.MenuNameSlot.Text = "Name this slot"
         '
         'MenuRenameColumn
