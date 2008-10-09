@@ -264,6 +264,9 @@ Public Class ArchetypeView
             Case ConstraintType.URI
                 Return New URIViewControl(anElement, a_filemanager)
 
+            Case ConstraintType.Identifier
+                Return New IdentifierViewControl(anElement, a_filemanager)
+
             Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
                 Return New IntervalViewControl(anElement, a_filemanager)
 
@@ -313,6 +316,9 @@ Public Class ArchetypeView
 
             Case ConstraintType.URI
                 Return New URIViewControl(aConstraint, a_filemanager)
+
+            Case ConstraintType.Identifier
+                Return New IdentifierViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
                 Return New IntervalViewControl(aConstraint, a_filemanager)
