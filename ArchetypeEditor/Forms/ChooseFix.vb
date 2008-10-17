@@ -84,7 +84,7 @@ Public Class ChooseFix
         'IgnoreButton
         '
         Me.IgnoreButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.IgnoreButton.Location = New System.Drawing.Point(15, 121)
+        Me.IgnoreButton.Location = New System.Drawing.Point(15, 63)
         Me.IgnoreButton.Name = "IgnoreButton"
         Me.IgnoreButton.Size = New System.Drawing.Size(172, 23)
         Me.IgnoreButton.TabIndex = 2
@@ -93,7 +93,7 @@ Public Class ChooseFix
         '
         'ArchetypeIdButton
         '
-        Me.ArchetypeIdButton.Location = New System.Drawing.Point(15, 63)
+        Me.ArchetypeIdButton.Location = New System.Drawing.Point(15, 92)
         Me.ArchetypeIdButton.Name = "ArchetypeIdButton"
         Me.ArchetypeIdButton.Size = New System.Drawing.Size(172, 23)
         Me.ArchetypeIdButton.TabIndex = 3
@@ -102,7 +102,7 @@ Public Class ChooseFix
         '
         'FileNameButton
         '
-        Me.FileNameButton.Location = New System.Drawing.Point(15, 92)
+        Me.FileNameButton.Location = New System.Drawing.Point(15, 121)
         Me.FileNameButton.Name = "FileNameButton"
         Me.FileNameButton.Size = New System.Drawing.Size(172, 23)
         Me.FileNameButton.TabIndex = 5
@@ -113,7 +113,7 @@ Public Class ChooseFix
         '
         Me.ArchetypeIdLabel.AutoSize = True
         Me.ArchetypeIdLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ArchetypeIdLabel.Location = New System.Drawing.Point(193, 68)
+        Me.ArchetypeIdLabel.Location = New System.Drawing.Point(193, 97)
         Me.ArchetypeIdLabel.Name = "ArchetypeIdLabel"
         Me.ArchetypeIdLabel.Size = New System.Drawing.Size(13, 13)
         Me.ArchetypeIdLabel.TabIndex = 4
@@ -123,7 +123,7 @@ Public Class ChooseFix
         '
         Me.FileNameLabel.AutoSize = True
         Me.FileNameLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FileNameLabel.Location = New System.Drawing.Point(193, 97)
+        Me.FileNameLabel.Location = New System.Drawing.Point(193, 126)
         Me.FileNameLabel.Name = "FileNameLabel"
         Me.FileNameLabel.Size = New System.Drawing.Size(13, 13)
         Me.FileNameLabel.TabIndex = 6
@@ -133,7 +133,7 @@ Public Class ChooseFix
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.IgnoreButton
-        Me.ClientSize = New System.Drawing.Size(550, 163)
+        Me.ClientSize = New System.Drawing.Size(690, 163)
         Me.ControlBox = False
         Me.Controls.Add(Me.FileNameLabel)
         Me.Controls.Add(Me.ArchetypeIdLabel)
