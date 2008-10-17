@@ -330,18 +330,16 @@ Public Class FileManagerLocal
     End Function
 
     Private Sub CheckFileNameAgainstArchetypeId()
-        Dim name As String = FileName.Substring(FileName.LastIndexOf("\") + 1)
-        Dim priorFileLoading As Boolean
+        Dim name As String = IO.Path.GetFileNameWithoutExtension(FileName)
+        Dim priorFileLoading As Boolean = FileLoading
 
-        If Not name.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
-            Dim shortFileName As String = Left(name, name.LastIndexOf("."))
-
-            If ArchetypeID.IsValidId(shortFileName) Then
+        If String.Compare(name, Archetype.Archetype_ID.ToString, True) <> 0 Then
+            If ArchetypeID.IsValidId(name) Then
                 'validate the concept to update it with the correct case and remove illegal characters
                 Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
                 Id1.Concept = Id1.ValidConcept(Id1.Concept, "", False)
 
-                Dim Id2 As New ArchetypeID(shortFileName)
+                Dim Id2 As New ArchetypeID(name)
                 Id2.Concept = Id2.ValidConcept(Id2.Concept, "", False)
 
                 Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
@@ -352,35 +350,34 @@ Public Class FileManagerLocal
                     '    Update 1: Update if concept was changed in ValidConcept call
                     '    Update 2: Update according to the user selection
 
-                    Dim Use As String = IIf(frm.Selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
+                    Dim use As String = IIf(frm.Selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
 
                     'update filename if changed
-                    If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
+                    If String.Compare(name, use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
                         mPriorFileName = FileName
-                        FileName = Replace(FileName, name, Use & "." & ParserType)
+                        FileName = IO.Path.Combine(IO.Path.GetDirectoryName(FileName), use & "." & ParserType)
                     End If
 
                     'update archetype id if changed
-                    If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
-                        Archetype.Archetype_ID.SetFromString(Use)
+                    If Archetype.Archetype_ID.ToString <> use Then 'case sensitive
+                        Archetype.Archetype_ID.SetFromString(use)
                         Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
                     End If
 
-                    'SRH 17 Sep 2008 - set back to prior setting
-                    priorFileLoading = FileLoading
                     FileLoading = False
                     FileEdited = True
                     FileLoading = priorFileLoading
                 End If
             Else
-                FileName = mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
+                Dim text As String = "Invalid " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & ":" & Environment.NewLine & FileName
 
-                'SRH 17 Sep 2008 - set back to prior setting
-                priorFileLoading = FileLoading
+                FileName = IO.Path.Combine(IO.Path.GetDirectoryName(FileName), Archetype.Archetype_ID.ToString & "." & ParserType)
                 FileLoading = False
                 FileEdited = True
                 FileLoading = priorFileLoading
 
+                text = text & Environment.NewLine & Environment.NewLine & "Saving as:" & Environment.NewLine & FileName
+                MessageBox.Show(text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
         End If
     End Sub
@@ -759,17 +756,17 @@ Public Class FileManagerLocal
     Private Function ChooseFileNameOfType(ByVal fileType As String) As String
         Dim result As String = ""
         Dim ext As String = fileType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-        Dim saveFile As New SaveFileDialog
-        saveFile.Filter = fileType.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|" & "*." & ext
-        saveFile.FileName = Archetype.Archetype_ID.ToString
-        saveFile.OverwritePrompt = True
-        saveFile.DefaultExt = ext
-        saveFile.AddExtension = True
-        saveFile.Title = AE_Constants.Instance.MessageBoxCaption
-        saveFile.ValidateNames = True
+        Dim dlg As New SaveFileDialog
+        dlg.Filter = fileType.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|" & "*." & ext
+        dlg.FileName = Archetype.Archetype_ID.ToString & "." & ext
+        dlg.OverwritePrompt = True
+        dlg.DefaultExt = ext
+        dlg.AddExtension = True
+        dlg.Title = AE_Constants.Instance.MessageBoxCaption
+        dlg.ValidateNames = True
 
-        If saveFile.ShowDialog() <> Windows.Forms.DialogResult.Cancel Then
-            result = IO.Path.ChangeExtension(saveFile.FileName, ext)
+        If dlg.ShowDialog() <> Windows.Forms.DialogResult.Cancel Then
+            result = IO.Path.ChangeExtension(dlg.FileName, ext)
         End If
 
         Return result
@@ -777,24 +774,25 @@ Public Class FileManagerLocal
 
     Private Function ChooseFileName() As String
         Dim result As String = ""
-        Dim saveFile As New SaveFileDialog
-        saveFile.Filter = AvailableFormatFilter
-        saveFile.FileName = Archetype.Archetype_ID.ToString
-        saveFile.OverwritePrompt = True
-        saveFile.DefaultExt = ParserType
-        Dim i As Integer = IndexOfFormat(ParserType) + 1
+        Dim ext As String = ParserType
+        Dim dlg As New SaveFileDialog
+        dlg.Filter = AvailableFormatFilter
+        dlg.FileName = Archetype.Archetype_ID.ToString & "." & ext
+        dlg.OverwritePrompt = True
+        dlg.DefaultExt = ext
+        Dim i As Integer = IndexOfFormat(ext) + 1
 
         If i > 0 Then
-            saveFile.FilterIndex = i
+            dlg.FilterIndex = i
         End If
 
-        saveFile.AddExtension = True
-        saveFile.Title = AE_Constants.Instance.MessageBoxCaption
-        saveFile.ValidateNames = True
+        dlg.AddExtension = True
+        dlg.Title = AE_Constants.Instance.MessageBoxCaption
+        dlg.ValidateNames = True
 
-        If saveFile.ShowDialog() <> Windows.Forms.DialogResult.Cancel Then
-            Dim ext As String = saveFile.Filter.Split("|"c)((saveFile.FilterIndex - 1) * 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            result = IO.Path.ChangeExtension(saveFile.FileName, ext)
+        If dlg.ShowDialog() <> Windows.Forms.DialogResult.Cancel Then
+            ext = dlg.Filter.Split("|"c)((dlg.FilterIndex - 1) * 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            result = IO.Path.ChangeExtension(dlg.FileName, ext)
         End If
 
         Return result
