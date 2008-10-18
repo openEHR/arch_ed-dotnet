@@ -17,6 +17,7 @@ Public Class Options
     Private mUseXsltForHtml As Boolean
     Private mShowTermsInHtml As Boolean
     Private mShowCommentsInHtml As Boolean
+    Private mShowLinksButton As Boolean
     Private mDefaultParser As String
     Private mTimerMinutes As Integer = 10
     Private mAllowWebSearch As Boolean
@@ -151,6 +152,15 @@ Public Class Options
         End Set
     End Property
 
+    Property ShowLinksButton() As Boolean
+        Get
+            Return mShowLinksButton
+        End Get
+        Set(ByVal value As Boolean)
+            mShowLinksButton = value
+        End Set
+    End Property
+
     Property OccurrencesView() As String
         Get
             Return mOccurrencesView
@@ -243,6 +253,7 @@ Public Class Options
         frm.XsltScriptPathCheckBox.Checked = mUseXsltForHtml
         frm.chkShowTerminologyInHTML.Checked = mShowTermsInHtml
         frm.chkShowCommentsInHTML.Checked = mShowCommentsInHtml
+        frm.ShowLinksButtonCheckBox.Checked = mShowLinksButton
 
         frm.comboReferenceModel.SelectedIndex = mDefaultRM
         frm.Panel_0.BackColor = mColors(0)
@@ -268,6 +279,7 @@ Public Class Options
             mUseXsltForHtml = frm.XsltScriptPathCheckBox.Checked
             mShowTermsInHtml = frm.chkShowTerminologyInHTML.Checked
             mShowCommentsInHtml = frm.chkShowCommentsInHTML.Checked
+            mShowLinksButton = frm.ShowLinksButtonCheckBox.Checked
 
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
             mOccurrencesView = frm.comboOccurrences.Text
@@ -350,6 +362,8 @@ Public Class Options
                                     mShowTermsInHtml = Boolean.Parse(y(1).Trim)
                                 Case "ShowCommentsInHtml"
                                     mShowCommentsInHtml = Boolean.Parse(y(1).Trim)
+                                Case "ShowLinksButton"
+                                    mShowLinksButton = Boolean.Parse(y(1).Trim)
                                 Case "DefaultReferenceModel"
                                     mDefaultRM = Val(y(1).Trim)
                                 Case "StateMachineColours"
@@ -420,6 +434,7 @@ Public Class Options
                 StrmWrite.WriteLine("UseXsltForHtml=" & mUseXsltForHtml.ToString)
                 StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
                 StrmWrite.WriteLine("ShowCommentsInHtml=" & mShowCommentsInHtml.ToString)
+                StrmWrite.WriteLine("ShowLinksButton=" & mShowLinksButton.ToString)
                 StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
                 StrmWrite.WriteLine("AllowSearchForArchetypesFromWeb=" & mAllowWebSearch.ToString)
                 StrmWrite.WriteLine("AllowTerminologyLookUp=" & mAllowTerminologyLookUp.ToString)
@@ -517,6 +532,7 @@ Public Class Options
         mUseXsltForHtml = False
         mShowTermsInHtml = False
         mShowCommentsInHtml = False
+        mShowLinksButton = False
         mOccurrencesView = "numeric"
         mDefaultParser = "adl"
         mAllowWebSearch = False
