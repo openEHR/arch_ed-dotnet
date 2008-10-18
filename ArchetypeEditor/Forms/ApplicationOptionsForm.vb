@@ -98,6 +98,7 @@ Public Class ApplicationOptionsForm
     Friend WithEvents chkShowTerminologyInHTML As System.Windows.Forms.CheckBox
     Friend WithEvents XsltScriptPathExplanatoryLabel As System.Windows.Forms.Label
     Friend WithEvents XsltScriptPathCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents ShowLinksButtonCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -156,6 +157,7 @@ Public Class ApplicationOptionsForm
         Me.RepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
         Me.XmlRepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
         Me.HtmlTabPage = New System.Windows.Forms.TabPage
+        Me.XsltScriptPathCheckBox = New System.Windows.Forms.CheckBox
         Me.XsltScriptPathExplanatoryLabel = New System.Windows.Forms.Label
         Me.XsltScriptPathLabel = New System.Windows.Forms.Label
         Me.XsltScriptPathButton = New System.Windows.Forms.Button
@@ -171,7 +173,7 @@ Public Class ApplicationOptionsForm
         Me.chkParserXML = New System.Windows.Forms.CheckBox
         Me.chkParserADL = New System.Windows.Forms.CheckBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.XsltScriptPathCheckBox = New System.Windows.Forms.CheckBox
+        Me.ShowLinksButtonCheckBox = New System.Windows.Forms.CheckBox
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -731,6 +733,16 @@ Public Class ApplicationOptionsForm
         Me.HtmlTabPage.Text = "HTML"
         Me.HtmlTabPage.UseVisualStyleBackColor = True
         '
+        'XsltScriptPathCheckBox
+        '
+        Me.XsltScriptPathCheckBox.AutoSize = True
+        Me.XsltScriptPathCheckBox.Location = New System.Drawing.Point(239, 9)
+        Me.XsltScriptPathCheckBox.Name = "XsltScriptPathCheckBox"
+        Me.XsltScriptPathCheckBox.Size = New System.Drawing.Size(165, 17)
+        Me.XsltScriptPathCheckBox.TabIndex = 1
+        Me.XsltScriptPathCheckBox.Text = "Use XSLT to generate HTML"
+        Me.XsltScriptPathCheckBox.UseVisualStyleBackColor = True
+        '
         'XsltScriptPathExplanatoryLabel
         '
         Me.XsltScriptPathExplanatoryLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -785,6 +797,7 @@ Public Class ApplicationOptionsForm
         '
         'AppearanceTabPage
         '
+        Me.AppearanceTabPage.Controls.Add(Me.ShowLinksButtonCheckBox)
         Me.AppearanceTabPage.Controls.Add(Me.lblOccurrences)
         Me.AppearanceTabPage.Controls.Add(Me.comboOccurrences)
         Me.AppearanceTabPage.Controls.Add(Me.GroupBox1)
@@ -875,15 +888,15 @@ Public Class ApplicationOptionsForm
         Me.chkParserADL.Text = "ADL"
         Me.chkParserADL.UseVisualStyleBackColor = True
         '
-        'XsltScriptPathCheckBox
+        'ShowLinksButtonCheckBox
         '
-        Me.XsltScriptPathCheckBox.AutoSize = True
-        Me.XsltScriptPathCheckBox.Location = New System.Drawing.Point(239, 9)
-        Me.XsltScriptPathCheckBox.Name = "XsltScriptPathCheckBox"
-        Me.XsltScriptPathCheckBox.Size = New System.Drawing.Size(165, 17)
-        Me.XsltScriptPathCheckBox.TabIndex = 1
-        Me.XsltScriptPathCheckBox.Text = "Use XSLT to generate HTML"
-        Me.XsltScriptPathCheckBox.UseVisualStyleBackColor = True
+        Me.ShowLinksButtonCheckBox.AutoSize = True
+        Me.ShowLinksButtonCheckBox.Location = New System.Drawing.Point(273, 142)
+        Me.ShowLinksButtonCheckBox.Name = "ShowLinksButtonCheckBox"
+        Me.ShowLinksButtonCheckBox.Size = New System.Drawing.Size(138, 17)
+        Me.ShowLinksButtonCheckBox.TabIndex = 4
+        Me.ShowLinksButtonCheckBox.Text = "Show the Links button?"
+        Me.ShowLinksButtonCheckBox.UseVisualStyleBackColor = True
         '
         'ApplicationOptionsForm
         '
@@ -910,6 +923,7 @@ Public Class ApplicationOptionsForm
         Me.HtmlTabPage.ResumeLayout(False)
         Me.HtmlTabPage.PerformLayout()
         Me.AppearanceTabPage.ResumeLayout(False)
+        Me.AppearanceTabPage.PerformLayout()
         Me.DefaultsTabPage.ResumeLayout(False)
         Me.DefaultsTabPage.PerformLayout()
         CType(Me.numAutoSave, System.ComponentModel.ISupportInitialize).EndInit()

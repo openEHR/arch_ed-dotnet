@@ -2454,8 +2454,6 @@ Public Class Designer
         Me.tpRootStateEventSeries.Title = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(177, Me.chkEventSeries.Text, language), Filemanager.GetOpenEhrTerm(81, Me.chkEventSeries.Text, language))
         Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(177, Me.tpRootStateStructure.Title, language)
         Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(446, Me.cbMandatory.Text, language)
-
-
     End Sub
 
     Private Sub TranslateSpecialisationNodes(ByVal tnc As TreeNodeCollection)
@@ -2470,7 +2468,6 @@ Public Class Designer
     End Sub
 
     Private Sub Translate(Optional ByVal LanguageCode As String = "")
-
         Dim obj As Object
         Dim a_Term As RmTerm
 
@@ -2713,15 +2710,19 @@ Public Class Designer
         text.WriteLine("<table border=""1"" cellpadding=""3"" width=""100%"">")
 
         Dim width As String = "50"
+
         If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
             width = "33"
         End If
+
         text.WriteLine("<tr>")
         text.WriteLine(String.Format("<td width=""{0}%""><h4>Concept description:</h4></td>", width))
         text.WriteLine(String.Format("<td width=""{0}%""><h4>Identification:</h4></td>", width))
+
         If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
             text.WriteLine(String.Format("<td width=""{0}%""><h4>Comments:</h4></td>", width))
         End If
+
         text.WriteLine("</tr>")
         text.WriteLine("<tr>")
         text.WriteLine(String.Format("<td width=""{0}%"">{1}</td>", width, TxtConceptDescription.Text))
@@ -2733,6 +2734,7 @@ Public Class Designer
         If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
             text.WriteLine(String.Format("<td width=""{0}%"">{1}</td>", width, CStr(IIf(Me.txtConceptComment.Text <> String.Empty, Me.txtConceptComment.Text, commentString))))
         End If
+
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
 
@@ -3708,6 +3710,7 @@ Public Class Designer
         OceanArchetypeEditor.Instance.Options.ShowOptionsForm()
         ToolBarOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
         MenuFileOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
+        butLinks.Visible = OceanArchetypeEditor.Instance.Options.ShowLinksButton
     End Sub
 
     Private Sub menuFileNewWindow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuFileNewWindow.Click
@@ -4248,6 +4251,7 @@ Public Class Designer
 
         ToolBarOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
         MenuFileOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
+        butLinks.Visible = OceanArchetypeEditor.Instance.Options.ShowLinksButton
 
         'Initialise the bindings of tables for all the lookups
         BindTables()
