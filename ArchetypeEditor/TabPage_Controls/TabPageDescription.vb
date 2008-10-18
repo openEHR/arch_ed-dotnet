@@ -21,6 +21,11 @@ Public Class TabPageDescription
     Friend WithEvents tpReferences As Crownwood.Magic.Controls.TabPage
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents txtReferences As System.Windows.Forms.TextBox
+    Friend WithEvents UseAllAuthorDefaultsButton As System.Windows.Forms.Button
+    Friend WithEvents TodayButton As System.Windows.Forms.Button
+    Friend WithEvents UseYourOrganisationButton As System.Windows.Forms.Button
+    Friend WithEvents UseYourEmailButton As System.Windows.Forms.Button
+    Friend WithEvents UseYourNameButton As System.Windows.Forms.Button
 
     Private mIsLoading As Boolean = False
 
@@ -82,13 +87,6 @@ Public Class TabPageDescription
     Friend WithEvents lblDate As System.Windows.Forms.Label
     Friend WithEvents txtOrganisation As System.Windows.Forms.TextBox
     Friend WithEvents txtDate As System.Windows.Forms.TextBox
-    Friend WithEvents ContextMenu1 As System.Windows.Forms.ContextMenu
-    Friend WithEvents c_menuPaste As System.Windows.Forms.MenuItem
-    Friend WithEvents c_menuPasteAll As System.Windows.Forms.MenuItem
-    Friend WithEvents c_menuPasteName As System.Windows.Forms.MenuItem
-    Friend WithEvents c_menuPasteEmail As System.Windows.Forms.MenuItem
-    Friend WithEvents c_menuPasteOrg As System.Windows.Forms.MenuItem
-    Friend WithEvents c_menPasteDate As System.Windows.Forms.MenuItem
     Friend WithEvents listContributors As System.Windows.Forms.ListBox
     Friend WithEvents butRemoveContributor As System.Windows.Forms.Button
     Friend WithEvents butAddContributor As System.Windows.Forms.Button
@@ -109,23 +107,17 @@ Public Class TabPageDescription
         Me.lblKeyword = New System.Windows.Forms.Label
         Me.listKeyword = New System.Windows.Forms.ListBox
         Me.TabDescription = New Crownwood.Magic.Controls.TabControl
-        Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage
-        Me.Splitter3 = New System.Windows.Forms.Splitter
-        Me.Splitter2 = New System.Windows.Forms.Splitter
-        Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.tpAuthor = New Crownwood.Magic.Controls.TabPage
         Me.gbContributors = New System.Windows.Forms.GroupBox
         Me.listContributors = New System.Windows.Forms.ListBox
         Me.butAddContributor = New System.Windows.Forms.Button
         Me.butRemoveContributor = New System.Windows.Forms.Button
         Me.gbAuthor = New System.Windows.Forms.GroupBox
-        Me.ContextMenu1 = New System.Windows.Forms.ContextMenu
-        Me.c_menuPaste = New System.Windows.Forms.MenuItem
-        Me.c_menuPasteAll = New System.Windows.Forms.MenuItem
-        Me.c_menuPasteName = New System.Windows.Forms.MenuItem
-        Me.c_menuPasteEmail = New System.Windows.Forms.MenuItem
-        Me.c_menuPasteOrg = New System.Windows.Forms.MenuItem
-        Me.c_menPasteDate = New System.Windows.Forms.MenuItem
+        Me.UseAllAuthorDefaultsButton = New System.Windows.Forms.Button
+        Me.TodayButton = New System.Windows.Forms.Button
+        Me.UseYourOrganisationButton = New System.Windows.Forms.Button
+        Me.UseYourEmailButton = New System.Windows.Forms.Button
+        Me.UseYourNameButton = New System.Windows.Forms.Button
         Me.lblDate = New System.Windows.Forms.Label
         Me.txtDate = New System.Windows.Forms.TextBox
         Me.lblOrganisation = New System.Windows.Forms.Label
@@ -134,6 +126,10 @@ Public Class TabPageDescription
         Me.txtOriginalAuthor = New System.Windows.Forms.TextBox
         Me.lblEmail = New System.Windows.Forms.Label
         Me.txtOriginalEmail = New System.Windows.Forms.TextBox
+        Me.tpDescDetails = New Crownwood.Magic.Controls.TabPage
+        Me.Splitter3 = New System.Windows.Forms.Splitter
+        Me.Splitter2 = New System.Windows.Forms.Splitter
+        Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.tpTranslation = New Crownwood.Magic.Controls.TabPage
         Me.gbTranslator = New System.Windows.Forms.GroupBox
         Me.lblAccreditation = New System.Windows.Forms.Label
@@ -151,10 +147,10 @@ Public Class TabPageDescription
         Me.gbMisuse.SuspendLayout()
         Me.gbPurpose.SuspendLayout()
         Me.panelDescription.SuspendLayout()
-        Me.tpDescDetails.SuspendLayout()
         Me.tpAuthor.SuspendLayout()
         Me.gbContributors.SuspendLayout()
         Me.gbAuthor.SuspendLayout()
+        Me.tpDescDetails.SuspendLayout()
         Me.tpTranslation.SuspendLayout()
         Me.gbTranslator.SuspendLayout()
         Me.tpReferences.SuspendLayout()
@@ -310,53 +306,11 @@ Public Class TabPageDescription
         Me.TabDescription.Location = New System.Drawing.Point(2, 2)
         Me.TabDescription.Name = "TabDescription"
         Me.TabDescription.PositionTop = True
-        Me.TabDescription.SelectedIndex = 0
-        Me.TabDescription.SelectedTab = Me.tpDescDetails
+        Me.TabDescription.SelectedIndex = 1
+        Me.TabDescription.SelectedTab = Me.tpAuthor
         Me.TabDescription.Size = New System.Drawing.Size(700, 500)
         Me.TabDescription.TabIndex = 15
         Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
-        '
-        'tpDescDetails
-        '
-        Me.tpDescDetails.Controls.Add(Me.gbPurpose)
-        Me.tpDescDetails.Controls.Add(Me.Splitter3)
-        Me.tpDescDetails.Controls.Add(Me.panelDescription)
-        Me.tpDescDetails.Controls.Add(Me.Splitter2)
-        Me.tpDescDetails.Controls.Add(Me.gbUse)
-        Me.tpDescDetails.Controls.Add(Me.Splitter1)
-        Me.tpDescDetails.Controls.Add(Me.gbMisuse)
-        Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
-        Me.tpDescDetails.Name = "tpDescDetails"
-        Me.tpDescDetails.Size = New System.Drawing.Size(700, 475)
-        Me.tpDescDetails.TabIndex = 0
-        Me.tpDescDetails.Title = "Details"
-        '
-        'Splitter3
-        '
-        Me.Splitter3.Dock = System.Windows.Forms.DockStyle.Right
-        Me.Splitter3.Location = New System.Drawing.Point(465, 0)
-        Me.Splitter3.Name = "Splitter3"
-        Me.Splitter3.Size = New System.Drawing.Size(3, 229)
-        Me.Splitter3.TabIndex = 17
-        Me.Splitter3.TabStop = False
-        '
-        'Splitter2
-        '
-        Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Splitter2.Location = New System.Drawing.Point(0, 229)
-        Me.Splitter2.Name = "Splitter2"
-        Me.Splitter2.Size = New System.Drawing.Size(700, 3)
-        Me.Splitter2.TabIndex = 16
-        Me.Splitter2.TabStop = False
-        '
-        'Splitter1
-        '
-        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.Splitter1.Location = New System.Drawing.Point(0, 360)
-        Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(700, 3)
-        Me.Splitter1.TabIndex = 15
-        Me.Splitter1.TabStop = False
         '
         'tpAuthor
         '
@@ -364,7 +318,6 @@ Public Class TabPageDescription
         Me.tpAuthor.Controls.Add(Me.gbAuthor)
         Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
         Me.tpAuthor.Name = "tpAuthor"
-        Me.tpAuthor.Selected = False
         Me.tpAuthor.Size = New System.Drawing.Size(700, 475)
         Me.tpAuthor.TabIndex = 1
         Me.tpAuthor.Title = "Authorship"
@@ -419,7 +372,11 @@ Public Class TabPageDescription
         '
         'gbAuthor
         '
-        Me.gbAuthor.ContextMenu = Me.ContextMenu1
+        Me.gbAuthor.Controls.Add(Me.UseAllAuthorDefaultsButton)
+        Me.gbAuthor.Controls.Add(Me.TodayButton)
+        Me.gbAuthor.Controls.Add(Me.UseYourOrganisationButton)
+        Me.gbAuthor.Controls.Add(Me.UseYourEmailButton)
+        Me.gbAuthor.Controls.Add(Me.UseYourNameButton)
         Me.gbAuthor.Controls.Add(Me.lblDate)
         Me.gbAuthor.Controls.Add(Me.txtDate)
         Me.gbAuthor.Controls.Add(Me.lblOrganisation)
@@ -436,104 +393,157 @@ Public Class TabPageDescription
         Me.gbAuthor.TabStop = False
         Me.gbAuthor.Text = "Original author"
         '
-        'ContextMenu1
+        'UseAllAuthorDefaultsButton
         '
-        Me.ContextMenu1.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.c_menuPaste})
+        Me.UseAllAuthorDefaultsButton.Location = New System.Drawing.Point(547, 117)
+        Me.UseAllAuthorDefaultsButton.Name = "UseAllAuthorDefaultsButton"
+        Me.UseAllAuthorDefaultsButton.Size = New System.Drawing.Size(133, 23)
+        Me.UseAllAuthorDefaultsButton.TabIndex = 12
+        Me.UseAllAuthorDefaultsButton.Text = "Use all Author defaults"
+        Me.UseAllAuthorDefaultsButton.UseVisualStyleBackColor = True
         '
-        'c_menuPaste
+        'TodayButton
         '
-        Me.c_menuPaste.Index = 0
-        Me.c_menuPaste.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.c_menuPasteAll, Me.c_menuPasteName, Me.c_menuPasteEmail, Me.c_menuPasteOrg, Me.c_menPasteDate})
-        Me.c_menuPaste.Text = "Paste"
+        Me.TodayButton.Location = New System.Drawing.Point(283, 116)
+        Me.TodayButton.Name = "TodayButton"
+        Me.TodayButton.Size = New System.Drawing.Size(76, 23)
+        Me.TodayButton.TabIndex = 11
+        Me.TodayButton.Text = "Today"
+        Me.TodayButton.UseVisualStyleBackColor = True
         '
-        'c_menuPasteAll
+        'UseYourOrganisationButton
         '
-        Me.c_menuPasteAll.Index = 0
-        Me.c_menuPasteAll.Text = "All"
+        Me.UseYourOrganisationButton.Location = New System.Drawing.Point(547, 84)
+        Me.UseYourOrganisationButton.Name = "UseYourOrganisationButton"
+        Me.UseYourOrganisationButton.Size = New System.Drawing.Size(133, 23)
+        Me.UseYourOrganisationButton.TabIndex = 8
+        Me.UseYourOrganisationButton.Text = "Use your Organisation"
+        Me.UseYourOrganisationButton.UseVisualStyleBackColor = True
         '
-        'c_menuPasteName
+        'UseYourEmailButton
         '
-        Me.c_menuPasteName.Index = 1
-        Me.c_menuPasteName.Text = "Name"
+        Me.UseYourEmailButton.Location = New System.Drawing.Point(547, 52)
+        Me.UseYourEmailButton.Name = "UseYourEmailButton"
+        Me.UseYourEmailButton.Size = New System.Drawing.Size(133, 23)
+        Me.UseYourEmailButton.TabIndex = 5
+        Me.UseYourEmailButton.Text = "Use your Email"
+        Me.UseYourEmailButton.UseVisualStyleBackColor = True
         '
-        'c_menuPasteEmail
+        'UseYourNameButton
         '
-        Me.c_menuPasteEmail.Index = 2
-        Me.c_menuPasteEmail.Text = "Email"
-        '
-        'c_menuPasteOrg
-        '
-        Me.c_menuPasteOrg.Index = 3
-        Me.c_menuPasteOrg.Text = "Organisation"
-        '
-        'c_menPasteDate
-        '
-        Me.c_menPasteDate.Index = 4
-        Me.c_menPasteDate.Text = "Date"
+        Me.UseYourNameButton.Location = New System.Drawing.Point(547, 20)
+        Me.UseYourNameButton.Name = "UseYourNameButton"
+        Me.UseYourNameButton.Size = New System.Drawing.Size(133, 23)
+        Me.UseYourNameButton.TabIndex = 2
+        Me.UseYourNameButton.Text = "Use your Name"
+        Me.UseYourNameButton.UseVisualStyleBackColor = True
         '
         'lblDate
         '
-        Me.lblDate.Location = New System.Drawing.Point(16, 120)
+        Me.lblDate.Location = New System.Drawing.Point(14, 116)
         Me.lblDate.Name = "lblDate"
-        Me.lblDate.Size = New System.Drawing.Size(128, 24)
-        Me.lblDate.TabIndex = 7
+        Me.lblDate.Size = New System.Drawing.Size(95, 24)
+        Me.lblDate.TabIndex = 9
         Me.lblDate.Text = "Date:"
         Me.lblDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtDate
         '
-        Me.txtDate.Location = New System.Drawing.Point(152, 120)
+        Me.txtDate.Location = New System.Drawing.Point(117, 116)
         Me.txtDate.Name = "txtDate"
         Me.txtDate.Size = New System.Drawing.Size(160, 21)
-        Me.txtDate.TabIndex = 6
+        Me.txtDate.TabIndex = 10
         '
         'lblOrganisation
         '
-        Me.lblOrganisation.Location = New System.Drawing.Point(16, 88)
+        Me.lblOrganisation.Location = New System.Drawing.Point(14, 84)
         Me.lblOrganisation.Name = "lblOrganisation"
-        Me.lblOrganisation.Size = New System.Drawing.Size(128, 24)
-        Me.lblOrganisation.TabIndex = 5
+        Me.lblOrganisation.Size = New System.Drawing.Size(95, 24)
+        Me.lblOrganisation.TabIndex = 6
         Me.lblOrganisation.Text = "Organisation:"
         Me.lblOrganisation.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtOrganisation
         '
-        Me.txtOrganisation.Location = New System.Drawing.Point(152, 88)
+        Me.txtOrganisation.Location = New System.Drawing.Point(117, 84)
         Me.txtOrganisation.Name = "txtOrganisation"
         Me.txtOrganisation.Size = New System.Drawing.Size(424, 21)
-        Me.txtOrganisation.TabIndex = 4
+        Me.txtOrganisation.TabIndex = 7
         '
         'lblName
         '
-        Me.lblName.Location = New System.Drawing.Point(16, 24)
+        Me.lblName.Location = New System.Drawing.Point(14, 20)
         Me.lblName.Name = "lblName"
-        Me.lblName.Size = New System.Drawing.Size(128, 24)
-        Me.lblName.TabIndex = 2
+        Me.lblName.Size = New System.Drawing.Size(95, 24)
+        Me.lblName.TabIndex = 0
         Me.lblName.Text = "Name:"
         Me.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtOriginalAuthor
         '
-        Me.txtOriginalAuthor.Location = New System.Drawing.Point(152, 24)
+        Me.txtOriginalAuthor.Location = New System.Drawing.Point(117, 20)
         Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
         Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 21)
-        Me.txtOriginalAuthor.TabIndex = 0
+        Me.txtOriginalAuthor.TabIndex = 1
         '
         'lblEmail
         '
-        Me.lblEmail.Location = New System.Drawing.Point(16, 56)
+        Me.lblEmail.Location = New System.Drawing.Point(14, 52)
         Me.lblEmail.Name = "lblEmail"
-        Me.lblEmail.Size = New System.Drawing.Size(128, 24)
+        Me.lblEmail.Size = New System.Drawing.Size(95, 24)
         Me.lblEmail.TabIndex = 3
         Me.lblEmail.Text = "Email:"
         Me.lblEmail.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'txtOriginalEmail
         '
-        Me.txtOriginalEmail.Location = New System.Drawing.Point(152, 56)
+        Me.txtOriginalEmail.Location = New System.Drawing.Point(117, 52)
         Me.txtOriginalEmail.Name = "txtOriginalEmail"
         Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 21)
-        Me.txtOriginalEmail.TabIndex = 1
+        Me.txtOriginalEmail.TabIndex = 4
+        '
+        'tpDescDetails
+        '
+        Me.tpDescDetails.Controls.Add(Me.gbPurpose)
+        Me.tpDescDetails.Controls.Add(Me.Splitter3)
+        Me.tpDescDetails.Controls.Add(Me.panelDescription)
+        Me.tpDescDetails.Controls.Add(Me.Splitter2)
+        Me.tpDescDetails.Controls.Add(Me.gbUse)
+        Me.tpDescDetails.Controls.Add(Me.Splitter1)
+        Me.tpDescDetails.Controls.Add(Me.gbMisuse)
+        Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
+        Me.tpDescDetails.Name = "tpDescDetails"
+        Me.tpDescDetails.Selected = False
+        Me.tpDescDetails.Size = New System.Drawing.Size(700, 475)
+        Me.tpDescDetails.TabIndex = 0
+        Me.tpDescDetails.Title = "Details"
+        '
+        'Splitter3
+        '
+        Me.Splitter3.Dock = System.Windows.Forms.DockStyle.Right
+        Me.Splitter3.Location = New System.Drawing.Point(465, 0)
+        Me.Splitter3.Name = "Splitter3"
+        Me.Splitter3.Size = New System.Drawing.Size(3, 229)
+        Me.Splitter3.TabIndex = 17
+        Me.Splitter3.TabStop = False
+        '
+        'Splitter2
+        '
+        Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Splitter2.Location = New System.Drawing.Point(0, 229)
+        Me.Splitter2.Name = "Splitter2"
+        Me.Splitter2.Size = New System.Drawing.Size(700, 3)
+        Me.Splitter2.TabIndex = 16
+        Me.Splitter2.TabStop = False
+        '
+        'Splitter1
+        '
+        Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Splitter1.Location = New System.Drawing.Point(0, 360)
+        Me.Splitter1.Name = "Splitter1"
+        Me.Splitter1.Size = New System.Drawing.Size(700, 3)
+        Me.Splitter1.TabIndex = 15
+        Me.Splitter1.TabStop = False
         '
         'tpTranslation
         '
@@ -548,7 +558,6 @@ Public Class TabPageDescription
         '
         'gbTranslator
         '
-        Me.gbTranslator.ContextMenu = Me.ContextMenu1
         Me.gbTranslator.Controls.Add(Me.lblAccreditation)
         Me.gbTranslator.Controls.Add(Me.txtTranslationAccreditation)
         Me.gbTranslator.Controls.Add(Me.lblTranslatorOrganisation)
@@ -674,11 +683,11 @@ Public Class TabPageDescription
         Me.gbPurpose.ResumeLayout(False)
         Me.gbPurpose.PerformLayout()
         Me.panelDescription.ResumeLayout(False)
-        Me.tpDescDetails.ResumeLayout(False)
         Me.tpAuthor.ResumeLayout(False)
         Me.gbContributors.ResumeLayout(False)
         Me.gbAuthor.ResumeLayout(False)
         Me.gbAuthor.PerformLayout()
+        Me.tpDescDetails.ResumeLayout(False)
         Me.tpTranslation.ResumeLayout(False)
         Me.gbTranslator.ResumeLayout(False)
         Me.gbTranslator.PerformLayout()
@@ -777,7 +786,7 @@ Public Class TabPageDescription
         mArchetypeDescription.OriginalAuthorDate = Me.txtDate.Text.Replace("""", "'")
 
         'JAR: 24MAY2007, EDT-30 Add field for references
-        mArchetypeDescription.References = Me.txtReferences.Text.Replace("""", "'")        
+        mArchetypeDescription.References = Me.txtReferences.Text.Replace("""", "'")
 
         ' get the contributors
         mArchetypeDescription.OtherContributors.Clear()
@@ -846,7 +855,7 @@ Public Class TabPageDescription
         'result.AppendLine(Filemanager.GetOpenEhrTerm(???, "References")) 'no OpenEhrTerm for References!
         result.AppendLine("References")
         result.Append(":\b0")
-        result.AppendLine("\par")        
+        result.AppendLine("\par")
         result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ARCHETYPE_REFERENCES)) 'JAR: 13APR07, EDT-32 Support unicode
         result.AppendLine("\par")
         result.AppendLine("\par")
@@ -1059,6 +1068,7 @@ Public Class TabPageDescription
     Private Sub ButAddKeyWord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddKeyWord.Click
         Dim ipb As New InputForm
         ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(578, "Keyword")
+
         If ipb.ShowDialog(Me.ParentForm) = Windows.Forms.DialogResult.OK Then
             Me.listKeyword.Items.Add(ipb.txtInput.Text)
             Filemanager.Master.FileEdited = True
@@ -1074,25 +1084,28 @@ Public Class TabPageDescription
         End If
     End Sub
 
-    Private Sub c_menuPasteAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles c_menuPasteAll.Click, c_menPasteDate.Click, c_menuPasteEmail.Click, c_menuPasteName.Click, c_menuPasteOrg.Click
-        If sender Is Me.c_menuPasteAll Or sender Is Me.c_menuPasteName Then
-            Me.txtOriginalAuthor.Text = OceanArchetypeEditor.Instance.Options.UserName
-        End If
-        If sender Is Me.c_menuPasteAll Or sender Is Me.c_menuPasteEmail Then
-            Me.txtOriginalEmail.Text = OceanArchetypeEditor.Instance.Options.UserEmail
-        End If
-        If sender Is Me.c_menuPasteAll Or sender Is Me.c_menuPasteOrg Then
-            Me.txtOrganisation.Text = OceanArchetypeEditor.Instance.Options.UserOrganisation
-        End If
-        If sender Is Me.c_menuPasteAll Or sender Is Me.c_menPasteDate Then
-            Me.txtDate.Text = System.DateTime.Now().ToShortDateString
+    Private Sub UseAllAuthorDefaultsButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UseAllAuthorDefaultsButton.Click, UseYourNameButton.Click, UseYourEmailButton.Click, UseYourOrganisationButton.Click, TodayButton.Click
+        If sender Is UseAllAuthorDefaultsButton Or sender Is UseYourNameButton Then
+            txtOriginalAuthor.Text = OceanArchetypeEditor.Instance.Options.UserName
         End If
 
+        If sender Is UseAllAuthorDefaultsButton Or sender Is UseYourEmailButton Then
+            txtOriginalEmail.Text = OceanArchetypeEditor.Instance.Options.UserEmail
+        End If
+
+        If sender Is UseAllAuthorDefaultsButton Or sender Is UseYourOrganisationButton Then
+            txtOrganisation.Text = OceanArchetypeEditor.Instance.Options.UserOrganisation
+        End If
+
+        If sender Is UseAllAuthorDefaultsButton Or sender Is TodayButton Then
+            txtDate.Text = System.DateTime.Now().ToShortDateString
+        End If
     End Sub
 
     Private Sub butAddContributor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddContributor.Click
         Dim ipb As New InputForm
         ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(604, "Contributors")
+
         If ipb.ShowDialog = Windows.Forms.DialogResult.OK Then
             Me.listContributors.Items.Add(ipb.txtInput.Text)
             Filemanager.Master.FileEdited = True
@@ -1130,4 +1143,5 @@ Public Class TabPageDescription
             Filemanager.Master.FileEdited = True
         End If
     End Sub
+
 End Class
