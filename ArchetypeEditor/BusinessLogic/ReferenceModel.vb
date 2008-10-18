@@ -380,7 +380,6 @@ Public Class ReferenceModel
 
         Debug.Assert(False)
         Return False
-
     End Function
 
     Public Shared Function IsValidEntryType(ByVal a_structure_type As StructureType) As Boolean
