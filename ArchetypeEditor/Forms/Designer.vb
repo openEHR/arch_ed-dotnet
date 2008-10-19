@@ -3705,8 +3705,7 @@ Public Class Designer
     End Sub
 
     Private Sub ChangeLanguage(ByVal LangCode As String)
-        If Not LangCode Is Nothing AndAlso mFileManager.OntologyManager.LanguageCode <> LangCode Then
-            ' a new language is selected so populate the terms
+        If mFileManager.OntologyManager.HasLanguage(LangCode) AndAlso mFileManager.OntologyManager.LanguageCode <> LangCode Then
             previousLanguageCode = mFileManager.OntologyManager.LanguageCode
             mFileManager.OntologyManager.LanguageCode = LangCode
             Translate(LangCode)
@@ -3714,8 +3713,6 @@ Public Class Designer
     End Sub
 
     Private Sub ListLanguages_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListLanguages.SelectedIndexChanged
-        ' need to load the definitions
-
         If ListLanguages.Focused Then
             ' crownwood controls have a bug where selecting a tabpage triggers select index on this control
             ' the following if statement short circuits this
