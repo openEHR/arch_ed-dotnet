@@ -75,6 +75,7 @@ Public Class Designer
     Friend WithEvents ToolsOptionsMenuItem As System.Windows.Forms.MenuItem
     Friend WithEvents ArchetypeNameContextMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents CopyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuLanguageToggle As System.Windows.Forms.MenuItem
     Friend WithEvents mTabPageDescription As TabPageDescription
 
 #Region " Windows Form Designer generated code "
@@ -304,21 +305,6 @@ Public Class Designer
         Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
-        Me.tpText = New Crownwood.Magic.Controls.TabPage
-        Me.Panel3 = New System.Windows.Forms.Panel
-        Me.DisplayToolBar = New System.Windows.Forms.ToolBar
-        Me.tbSep1 = New System.Windows.Forms.ToolBarButton
-        Me.butRTF = New System.Windows.Forms.ToolBarButton
-        Me.butADL = New System.Windows.Forms.ToolBarButton
-        Me.butXML = New System.Windows.Forms.ToolBarButton
-        Me.butOWL = New System.Windows.Forms.ToolBarButton
-        Me.tbSep2 = New System.Windows.Forms.ToolBarButton
-        Me.butHTML1 = New System.Windows.Forms.ToolBarButton
-        Me.ToolBarButton1 = New System.Windows.Forms.ToolBarButton
-        Me.butSaveFile = New System.Windows.Forms.ToolBarButton
-        Me.ToolBarButton2 = New System.Windows.Forms.ToolBarButton
-        Me.butPrint = New System.Windows.Forms.ToolBarButton
-        Me.ImageListToolbar = New System.Windows.Forms.ImageList(Me.components)
         Me.tpHeader = New Crownwood.Magic.Controls.TabPage
         Me.PanelDescription = New System.Windows.Forms.Panel
         Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
@@ -372,6 +358,21 @@ Public Class Designer
         Me.ListLanguages = New System.Windows.Forms.ListBox
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.lblAvailableLanguages = New System.Windows.Forms.Label
+        Me.tpText = New Crownwood.Magic.Controls.TabPage
+        Me.Panel3 = New System.Windows.Forms.Panel
+        Me.DisplayToolBar = New System.Windows.Forms.ToolBar
+        Me.tbSep1 = New System.Windows.Forms.ToolBarButton
+        Me.butRTF = New System.Windows.Forms.ToolBarButton
+        Me.butADL = New System.Windows.Forms.ToolBarButton
+        Me.butXML = New System.Windows.Forms.ToolBarButton
+        Me.butOWL = New System.Windows.Forms.ToolBarButton
+        Me.tbSep2 = New System.Windows.Forms.ToolBarButton
+        Me.butHTML1 = New System.Windows.Forms.ToolBarButton
+        Me.ToolBarButton1 = New System.Windows.Forms.ToolBarButton
+        Me.butSaveFile = New System.Windows.Forms.ToolBarButton
+        Me.ToolBarButton2 = New System.Windows.Forms.ToolBarButton
+        Me.butPrint = New System.Windows.Forms.ToolBarButton
+        Me.ImageListToolbar = New System.Windows.Forms.ImageList(Me.components)
         Me.tpInterface = New Crownwood.Magic.Controls.TabPage
         Me.cbMandatory = New System.Windows.Forms.CheckBox
         Me.tpDescription = New Crownwood.Magic.Controls.TabPage
@@ -395,6 +396,7 @@ Public Class Designer
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
+        Me.MenuLanguageToggle = New System.Windows.Forms.MenuItem
         Me.PanelConcept.SuspendLayout()
         Me.tabComment.SuspendLayout()
         Me.tpConceptDescription.SuspendLayout()
@@ -404,7 +406,6 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
-        Me.tpText.SuspendLayout()
         Me.tpHeader.SuspendLayout()
         Me.PanelDescription.SuspendLayout()
         Me.PanelConcept_1.SuspendLayout()
@@ -423,6 +424,7 @@ Public Class Designer
         Me.Panel2.SuspendLayout()
         Me.panelLanguages.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.tpText.SuspendLayout()
         Me.tpInterface.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.ArchetypeNameContextMenu.SuspendLayout()
@@ -841,7 +843,7 @@ Public Class Designer
         'MenuLanguage
         '
         Me.MenuLanguage.Index = 3
-        Me.MenuLanguage.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuLanguageAvailable, Me.MenuLanguageAdd, Me.MenuLanguageChange})
+        Me.MenuLanguage.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuLanguageAvailable, Me.MenuLanguageAdd, Me.MenuLanguageChange, Me.MenuLanguageToggle})
         Me.MenuLanguage.Text = "&Language"
         '
         'MenuLanguageAvailable
@@ -941,127 +943,6 @@ Public Class Designer
         Me.TabMain.TabIndex = 1
         Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpText
-        '
-        Me.tpText.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.tpText.Controls.Add(Me.Panel3)
-        Me.tpText.Controls.Add(Me.DisplayToolBar)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpText, "Screens/display_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpText, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpText.Location = New System.Drawing.Point(0, 0)
-        Me.tpText.Name = "tpText"
-        Me.tpText.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpText, True)
-        Me.tpText.Size = New System.Drawing.Size(969, 660)
-        Me.tpText.TabIndex = 3
-        Me.tpText.Title = "Display"
-        '
-        'Panel3
-        '
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel3.Location = New System.Drawing.Point(0, 42)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Padding = New System.Windows.Forms.Padding(5)
-        Me.Panel3.Size = New System.Drawing.Size(969, 618)
-        Me.Panel3.TabIndex = 4
-        '
-        'DisplayToolBar
-        '
-        Me.DisplayToolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
-        Me.DisplayToolBar.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.butADL, Me.butXML, Me.butOWL, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butSaveFile, Me.ToolBarButton2, Me.butPrint})
-        Me.DisplayToolBar.ButtonSize = New System.Drawing.Size(20, 30)
-        Me.DisplayToolBar.DropDownArrows = True
-        Me.DisplayToolBar.ImageList = Me.ImageListToolbar
-        Me.DisplayToolBar.Location = New System.Drawing.Point(0, 0)
-        Me.DisplayToolBar.Name = "DisplayToolBar"
-        Me.DisplayToolBar.ShowToolTips = True
-        Me.DisplayToolBar.Size = New System.Drawing.Size(969, 42)
-        Me.DisplayToolBar.TabIndex = 1
-        Me.DisplayToolBar.Wrappable = False
-        '
-        'tbSep1
-        '
-        Me.tbSep1.Name = "tbSep1"
-        Me.tbSep1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butRTF
-        '
-        Me.butRTF.ImageIndex = 4
-        Me.butRTF.Name = "butRTF"
-        Me.butRTF.Pushed = True
-        Me.butRTF.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
-        Me.butRTF.Tag = "rtf"
-        Me.butRTF.Text = "RTF"
-        '
-        'butADL
-        '
-        Me.butADL.Name = "butADL"
-        Me.butADL.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
-        Me.butADL.Tag = "adl"
-        Me.butADL.Text = "ADL"
-        '
-        'butXML
-        '
-        Me.butXML.Name = "butXML"
-        Me.butXML.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
-        Me.butXML.Tag = "xml"
-        Me.butXML.Text = "XML"
-        '
-        'butOWL
-        '
-        Me.butOWL.Name = "butOWL"
-        Me.butOWL.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
-        Me.butOWL.Tag = "owl"
-        Me.butOWL.Text = "OWL"
-        '
-        'tbSep2
-        '
-        Me.tbSep2.Name = "tbSep2"
-        Me.tbSep2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butHTML1
-        '
-        Me.butHTML1.ImageIndex = 5
-        Me.butHTML1.Name = "butHTML1"
-        Me.butHTML1.Tag = "html"
-        Me.butHTML1.Text = "HTML"
-        '
-        'ToolBarButton1
-        '
-        Me.ToolBarButton1.Name = "ToolBarButton1"
-        Me.ToolBarButton1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butSaveFile
-        '
-        Me.butSaveFile.ImageIndex = 1
-        Me.butSaveFile.Name = "butSaveFile"
-        Me.butSaveFile.Tag = "save"
-        Me.butSaveFile.Text = "Save"
-        '
-        'ToolBarButton2
-        '
-        Me.ToolBarButton2.Name = "ToolBarButton2"
-        Me.ToolBarButton2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butPrint
-        '
-        Me.butPrint.ImageIndex = 2
-        Me.butPrint.Name = "butPrint"
-        Me.butPrint.Tag = "print"
-        Me.butPrint.Text = "Print"
-        '
-        'ImageListToolbar
-        '
-        Me.ImageListToolbar.ImageStream = CType(resources.GetObject("ImageListToolbar.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageListToolbar.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageListToolbar.Images.SetKeyName(0, "")
-        Me.ImageListToolbar.Images.SetKeyName(1, "")
-        Me.ImageListToolbar.Images.SetKeyName(2, "")
-        Me.ImageListToolbar.Images.SetKeyName(3, "")
-        Me.ImageListToolbar.Images.SetKeyName(4, "")
-        Me.ImageListToolbar.Images.SetKeyName(5, "")
-        Me.ImageListToolbar.Images.SetKeyName(6, "searchweb.ico")
         '
         'tpHeader
         '
@@ -1635,6 +1516,127 @@ Public Class Designer
         Me.lblAvailableLanguages.TabIndex = 10
         Me.lblAvailableLanguages.Text = "Available languages:"
         '
+        'tpText
+        '
+        Me.tpText.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.tpText.Controls.Add(Me.Panel3)
+        Me.tpText.Controls.Add(Me.DisplayToolBar)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpText, "Screens/display_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpText, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpText.Location = New System.Drawing.Point(0, 0)
+        Me.tpText.Name = "tpText"
+        Me.tpText.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpText, True)
+        Me.tpText.Size = New System.Drawing.Size(969, 660)
+        Me.tpText.TabIndex = 3
+        Me.tpText.Title = "Display"
+        '
+        'Panel3
+        '
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel3.Location = New System.Drawing.Point(0, 42)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Padding = New System.Windows.Forms.Padding(5)
+        Me.Panel3.Size = New System.Drawing.Size(969, 618)
+        Me.Panel3.TabIndex = 4
+        '
+        'DisplayToolBar
+        '
+        Me.DisplayToolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
+        Me.DisplayToolBar.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.butADL, Me.butXML, Me.butOWL, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butSaveFile, Me.ToolBarButton2, Me.butPrint})
+        Me.DisplayToolBar.ButtonSize = New System.Drawing.Size(20, 30)
+        Me.DisplayToolBar.DropDownArrows = True
+        Me.DisplayToolBar.ImageList = Me.ImageListToolbar
+        Me.DisplayToolBar.Location = New System.Drawing.Point(0, 0)
+        Me.DisplayToolBar.Name = "DisplayToolBar"
+        Me.DisplayToolBar.ShowToolTips = True
+        Me.DisplayToolBar.Size = New System.Drawing.Size(969, 42)
+        Me.DisplayToolBar.TabIndex = 1
+        Me.DisplayToolBar.Wrappable = False
+        '
+        'tbSep1
+        '
+        Me.tbSep1.Name = "tbSep1"
+        Me.tbSep1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butRTF
+        '
+        Me.butRTF.ImageIndex = 4
+        Me.butRTF.Name = "butRTF"
+        Me.butRTF.Pushed = True
+        Me.butRTF.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
+        Me.butRTF.Tag = "rtf"
+        Me.butRTF.Text = "RTF"
+        '
+        'butADL
+        '
+        Me.butADL.Name = "butADL"
+        Me.butADL.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
+        Me.butADL.Tag = "adl"
+        Me.butADL.Text = "ADL"
+        '
+        'butXML
+        '
+        Me.butXML.Name = "butXML"
+        Me.butXML.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
+        Me.butXML.Tag = "xml"
+        Me.butXML.Text = "XML"
+        '
+        'butOWL
+        '
+        Me.butOWL.Name = "butOWL"
+        Me.butOWL.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
+        Me.butOWL.Tag = "owl"
+        Me.butOWL.Text = "OWL"
+        '
+        'tbSep2
+        '
+        Me.tbSep2.Name = "tbSep2"
+        Me.tbSep2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butHTML1
+        '
+        Me.butHTML1.ImageIndex = 5
+        Me.butHTML1.Name = "butHTML1"
+        Me.butHTML1.Tag = "html"
+        Me.butHTML1.Text = "HTML"
+        '
+        'ToolBarButton1
+        '
+        Me.ToolBarButton1.Name = "ToolBarButton1"
+        Me.ToolBarButton1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butSaveFile
+        '
+        Me.butSaveFile.ImageIndex = 1
+        Me.butSaveFile.Name = "butSaveFile"
+        Me.butSaveFile.Tag = "save"
+        Me.butSaveFile.Text = "Save"
+        '
+        'ToolBarButton2
+        '
+        Me.ToolBarButton2.Name = "ToolBarButton2"
+        Me.ToolBarButton2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butPrint
+        '
+        Me.butPrint.ImageIndex = 2
+        Me.butPrint.Name = "butPrint"
+        Me.butPrint.Tag = "print"
+        Me.butPrint.Text = "Print"
+        '
+        'ImageListToolbar
+        '
+        Me.ImageListToolbar.ImageStream = CType(resources.GetObject("ImageListToolbar.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageListToolbar.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageListToolbar.Images.SetKeyName(0, "")
+        Me.ImageListToolbar.Images.SetKeyName(1, "")
+        Me.ImageListToolbar.Images.SetKeyName(2, "")
+        Me.ImageListToolbar.Images.SetKeyName(3, "")
+        Me.ImageListToolbar.Images.SetKeyName(4, "")
+        Me.ImageListToolbar.Images.SetKeyName(5, "")
+        Me.ImageListToolbar.Images.SetKeyName(6, "searchweb.ico")
+        '
         'tpInterface
         '
         Me.tpInterface.AutoScroll = True
@@ -1801,6 +1803,12 @@ Public Class Designer
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
         '
+        'MenuLanguageToggle
+        '
+        Me.MenuLanguageToggle.Index = 3
+        Me.MenuLanguageToggle.Shortcut = System.Windows.Forms.Shortcut.CtrlL
+        Me.MenuLanguageToggle.Text = "&Toggle Language"
+        '
         'Designer
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
@@ -1828,8 +1836,6 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
-        Me.tpText.ResumeLayout(False)
-        Me.tpText.PerformLayout()
         Me.tpHeader.ResumeLayout(False)
         Me.PanelDescription.ResumeLayout(False)
         Me.PanelConcept_1.ResumeLayout(False)
@@ -1849,6 +1855,8 @@ Public Class Designer
         Me.Panel2.ResumeLayout(False)
         Me.panelLanguages.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
+        Me.tpText.ResumeLayout(False)
+        Me.tpText.PerformLayout()
         Me.tpInterface.ResumeLayout(False)
         Me.PanelHeader.ResumeLayout(False)
         Me.PanelHeader.PerformLayout()
@@ -3688,6 +3696,8 @@ Public Class Designer
 
 #Region "Language related functions - Add, Change, List_selectedIndex, Menu Change"
 
+    Dim previousLanguageCode As String
+
     Private Sub AddLanguage(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAdd.Click, MenuLanguageAdd.Click
         If ChooseLanguage() Then
             mFileManager.FileEdited = True
@@ -3695,27 +3705,27 @@ Public Class Designer
     End Sub
 
     Private Sub ChangeLanguage(ByVal LangCode As String)
-        If mFileManager.OntologyManager.LanguageCode <> LangCode Then
+        If Not LangCode Is Nothing AndAlso mFileManager.OntologyManager.LanguageCode <> LangCode Then
             ' a new language is selected so populate the terms
+            previousLanguageCode = mFileManager.OntologyManager.LanguageCode
             mFileManager.OntologyManager.LanguageCode = LangCode
             Translate(LangCode)
         End If
     End Sub
 
     Private Sub ListLanguages_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListLanguages.SelectedIndexChanged
-
         ' need to load the definitions
 
-        If Me.ListLanguages.Focused Then
+        If ListLanguages.Focused Then
             ' crownwood controls have a bug where selecting a tabpage triggers select index on this control
             ' the following if statement short circuits this
             ChangeLanguage(Me.ListLanguages.SelectedValue)
         End If
-
     End Sub
 
     Private Sub MenuLanguageChange_Popup(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuLanguageChange.Popup
         Dim MI As MenuItem
+
         For Each MI In MenuLanguageChange.MenuItems
             AddHandler MI.Click, AddressOf MenuChangeLanguage_Click
         Next
@@ -3723,11 +3733,16 @@ Public Class Designer
 
     Private Sub MenuChangeLanguage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Dim i As Integer
-        i = Me.ListLanguages.FindStringExact(sender.text)
+        i = ListLanguages.FindStringExact(sender.text)
+
         If i > -1 Then
-            Me.ListLanguages.SelectedIndex = i
+            ListLanguages.SelectedIndex = i
             ChangeLanguage(Me.ListLanguages.SelectedValue)
         End If
+    End Sub
+
+    Private Sub MenuLanguageToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuLanguageToggle.Click
+        ChangeLanguage(previousLanguageCode)
     End Sub
 
 #End Region
