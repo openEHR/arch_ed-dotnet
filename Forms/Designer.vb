@@ -1910,7 +1910,7 @@ Public Class Designer
 
     Private Sub OpenArchetype(ByVal a_file_name As String)
         Application.DoEvents()
-        Me.Cursor = System.Windows.Forms.Cursors.WaitCursor
+        Cursor = System.Windows.Forms.Cursors.WaitCursor
 
         ' stop auto updating of controls
         Dim previousEditedState As Boolean = mFileManager.FileEdited
@@ -1920,19 +1920,16 @@ Public Class Designer
         Dim watch As Stopwatch = Stopwatch.StartNew()
 
         If Not mFileManager.OpenArchetype(a_file_name) Then
-            MessageBox.Show(mFileManager.Status, _
-                AE_Constants.Instance.MessageBoxCaption, _
-                MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Me.Cursor = System.Windows.Forms.Cursors.Default
+            MessageBox.Show(mFileManager.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Cursor = System.Windows.Forms.Cursors.Default
             mFileManager.ParserReset()
             mFileManager.FileLoading = False
             mFileManager.FileEdited = previousEditedState
-            Exit Sub
+            Exit Sub            ' FIXME: Spaghetti code!
         End If
 
         Debug.WriteLine(a_file_name + ": " + CStr(watch.Elapsed.TotalSeconds))
 
-        'Show the correct display format toolbars
         Dim i As Integer
 
         For i = 2 To 5
@@ -1940,27 +1937,18 @@ Public Class Designer
             tbb.Visible = mFileManager.AvailableFormats.Contains(tbb.Tag)
         Next
 
-        'remove embedded filemanagers
         Filemanager.ClearEmbedded()
 
         ' stop the handler while we get all the languages
         RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
+        ResetDefaults()
 
-        Me.ResetDefaults()
+        Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
 
-        '-----------------------------------------------
-        ' Deal with the languages, terms and terminology bindings
-
-        ' set the language that is chosen
-        '  mFileManager.OntologyManager.LanguageCode = Me.ListLanguages.SelectedValue
-
-        ' set the concept and description
-        Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm( _
-                mFileManager.Archetype.ConceptCode)
         If Not a_term Is Nothing Then
-            Me.txtConceptInFull.Text = a_term.Text
-            Me.TxtConceptDescription.Text = a_term.Description
-            Me.txtConceptComment.Text = a_term.Comment
+            txtConceptInFull.Text = a_term.Text
+            TxtConceptDescription.Text = a_term.Description
+            txtConceptComment.Text = a_term.Comment
         End If
 
         If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
@@ -1968,8 +1956,9 @@ Public Class Designer
             Dim tnc As TreeNodeCollection
             Dim ct As CodeAndTerm()
 
-            tnc = Me.tvSpecialisation.Nodes
+            tnc = tvSpecialisation.Nodes
             ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(mFileManager.Archetype.ConceptCode, mFileManager)
+
             For i = 0 To ct.Length - 1
                 tn = New TreeNode
                 tn.Text = ct(i).Text
@@ -1977,15 +1966,12 @@ Public Class Designer
                 tnc.Add(tn)
                 tnc = tn.Nodes
             Next
-            Me.tvSpecialisation.ExpandAll()
-            Me.gbSpecialisation.Visible = True
+
+            tvSpecialisation.ExpandAll()
+            gbSpecialisation.Show()
         End If
 
         If mFileManager.Archetype.hasData Then
-            'Dim sType As String
-
-            'sType = mFileManager.Archetype.Definition.TypeName
-
             Select Case mFileManager.Archetype.RmEntity
 
                 Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, _
@@ -2127,6 +2113,7 @@ Public Class Designer
                     ' fill the subject of data if required
                     Dim cp As CodePhrase
                     cp = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
+
                     If Not cp Is Nothing Then
                         If cp.Codes.Count > 0 Then
                             Me.mRestrictedSubject.AsCodePhrase = cp
@@ -2134,7 +2121,6 @@ Public Class Designer
                     End If
 
                 Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-
                     ProcessStructure(mFileManager.Archetype.Definition)
 
                 Case StructureType.Cluster
@@ -2145,46 +2131,25 @@ Public Class Designer
 
                 Case StructureType.SECTION
                     SetUpSection()
-                    mTabPageSection.ProcessSection( _
-                            mFileManager.Archetype.Definition)
+                    mTabPageSection.ProcessSection(mFileManager.Archetype.Definition)
 
                 Case StructureType.COMPOSITION
                     InitialiseRestrictedSet(RestrictedSet.TermSet.Setting)
-
                     SetUpComposition()
-                    mTabPageComposition.ProcessComposition( _
-                        mFileManager.Archetype.Definition)
+                    mTabPageComposition.ProcessComposition(mFileManager.Archetype.Definition)
             End Select
-
         End If
 
         SetUpGUI(mFileManager.Archetype.RmEntity, False)
 
         AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
-
-        ' set the specific language if it is present e.g. en-US, en-AU
-        'SRH: Aug 17th 2008 - removed as now redundant (see SetBestLanguage on ontologyManager)
-        'If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.SpecificLanguageCode Then
-        '    If mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) Then
-        '        Me.ListLanguages.SelectedValue = OceanArchetypeEditor.SpecificLanguageCode
-        '        ChangeLanguage(OceanArchetypeEditor.SpecificLanguageCode)
-        '    ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) Then
-        '        If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.DefaultLanguageCode Then
-        '            Me.ListLanguages.SelectedValue = OceanArchetypeEditor.DefaultLanguageCode
-        '            ChangeLanguage(OceanArchetypeEditor.DefaultLanguageCode)
-        '        End If
-        '    Else
-        '        Me.ListLanguages.SelectedValue = mFileManager.OntologyManager.PrimaryLanguageCode
-        '        ChangeLanguage(Me.ListLanguages.SelectedValue)
-        '    End If
-        'End If
+        ListLanguages.SelectedValue = mFileManager.OntologyManager.LanguageCode
 
         If Not mTermBindingPanel Is Nothing Then
-            Me.mTermBindingPanel.PopulatePathTree()
+            mTermBindingPanel.PopulatePathTree()
         End If
 
         mFileManager.FileLoading = False
-
         MenuFileSpecialise.Visible = True
         Cursor = System.Windows.Forms.Cursors.Default
     End Sub
@@ -2473,22 +2438,17 @@ Public Class Designer
 
         ' file loading so no updates
         mFileManager.FileLoading = True
-        ' set the language
+
         If LanguageCode <> "" Then
             Dim MI As MenuItem
-
             mFileManager.OntologyManager.LanguageCode = LanguageCode
-            For Each MI In Me.MenuLanguageChange.MenuItems
-                If MI.Text = mFileManager.OntologyManager.LanguageText Then
-                    MI.Checked = True
-                Else
-                    MI.Checked = False
-                End If
+
+            For Each MI In MenuLanguageChange.MenuItems
+                MI.Checked = MI.Text = mFileManager.OntologyManager.LanguageText
             Next
-
         End If
-        ' Concept and description fields on header and the form text
 
+        ' Concept and description fields on header and the form text
         a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
         Me.txtConceptInFull.Text = a_Term.Text
         Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & a_Term.Text & "]"
