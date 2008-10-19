@@ -224,7 +224,7 @@ Public Class OntologyManager
         mOntology.PopulateAllTerms(Me)
     End Sub
 
-    Public Function LanguageIsAvailable(ByVal code As String) As Boolean
+    Public Function HasLanguage(ByVal code As String) As Boolean
         Return Not mLanguagesTable.Rows.Find(code) Is Nothing
     End Function
 
@@ -269,7 +269,7 @@ Public Class OntologyManager
             End If
             mLastTerm = aterm  ' remember last one for efficiency
             Return aterm
-            End If
+        End If
     End Function
 
     Public Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
@@ -355,7 +355,7 @@ Public Class OntologyManager
             Next
 
         Else
-           
+
             For Each l_row In mLanguagesTable.Rows
 
                 d_row = mTermDefinitionsTable.NewRow
@@ -518,7 +518,7 @@ Public Class OntologyManager
                     mDoUpdateOntology = priorSetting
                 End If
             Next
-            
+
         Else
             'Need to update ontology here
             Dim keys(1) As Object
@@ -669,11 +669,11 @@ Public Class OntologyManager
 
         Dim bestLanguage As String
 
-        If LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) Then
+        If HasLanguage(OceanArchetypeEditor.SpecificLanguageCode) Then
             bestLanguage = OceanArchetypeEditor.SpecificLanguageCode
-        ElseIf LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) Then
+        ElseIf HasLanguage(OceanArchetypeEditor.DefaultLanguageCode) Then
             bestLanguage = OceanArchetypeEditor.DefaultLanguageCode
-        ElseIf LanguageIsAvailable(Filemanager.Master.OntologyManager.LanguageCode) Then
+        ElseIf HasLanguage(Filemanager.Master.OntologyManager.LanguageCode) Then
             bestLanguage = Filemanager.Master.OntologyManager.LanguageCode
         Else
             bestLanguage = PrimaryLanguageCode

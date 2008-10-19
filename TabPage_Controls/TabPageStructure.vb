@@ -610,7 +610,7 @@ Public Class TabPageStructure
             Else
                 'SRH: 17 Aug 2008 - added translation control for embedded archetype
                 Dim lang As String = Filemanager.Master.OntologyManager.LanguageCode
-                If mFileManager.OntologyManager.LanguageIsAvailable(lang) Then
+                If mFileManager.OntologyManager.HasLanguage(lang) Then
                     If mFileManager.OntologyManager.LanguageCode <> lang Then
                         mFileManager.OntologyManager.LanguageCode = lang
                         mArchetypeControl.Translate()
