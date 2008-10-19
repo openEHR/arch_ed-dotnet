@@ -231,7 +231,7 @@ Public Class FileManagerLocal
 
     Public Function OpenArchetype(ByVal aFileName As String) As Boolean
         Try
-            mPriorFileName = Me.FileName
+            mPriorFileName = FileName
 
             'Need to check file name for eMail extensions
 
@@ -247,7 +247,7 @@ Public Class FileManagerLocal
             '    End If
             'End If
 
-            Me.FileName = aFileName
+            FileName = aFileName
 
             If aFileName.ToLowerInvariant().EndsWith(".adl") Then
                 If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "xml" Then
@@ -263,66 +263,35 @@ Public Class FileManagerLocal
                 End If
             Else
                 MessageBox.Show("File type: " & aFileName & " is not supported", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                Debug.Assert(False)
-                Return False
+                Return False    ' FIXME: spaghetti code!
             End If
 
             mHasOpenFileError = False
-
-            ' next section: written by Jana Graenz, necessary for opening a "web archetype" (where path is a URL)
-            ' if this archtype comes from the web, aFileName will be the URL.
-            ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
-            ' it will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
-            ' This avoids data and file overflow.
-
-            
-            'end of addition
-
             mArchetypeEngine.OpenFile(aFileName, Me)
 
-            ' next section: written by Jana Graenz 2007-02-28
+            ' if this archtype comes from the web, aFileName will be the URL.
+            ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
+            ' It will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
+            ' User has to save the file manually if a local copy of it is wanted.
+            ' This avoids data and file overflow.
 
             If aFileName.StartsWith(System.IO.Path.GetTempPath) Then
-                'delete the temporarily downloaded adl-file after opening it.
-                'user has to safe the file locally if he/she wants to keep it
                 Kill(aFileName)
             End If
 
-            'end of addition
-
             If mArchetypeEngine.OpenFileError Then
                 mHasOpenFileError = True
-                Return False
+                Return False    ' FIXME: spaghetti code!
             End If
 
-            'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
-            'Else
-            '' ensure the filename and archetype ID are in tune
-            'Dim i As Integer = aFileName.LastIndexOf("\")
-            'Dim shortFileName As String = aFileName.Substring(i + 1)
-
-            'If Not shortFileName.StartsWith(Archetype.Archetype_ID.ToString & ".") Then
-            '    If MessageBox.Show(mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & _
-            '       ": " & shortFileName & "; " & Environment.NewLine & _
-            '       mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & _
-            '       ": " & Archetype.Archetype_ID.ToString & "." & Environment.NewLine & _
-            '       mOntologyManager.GetOpenEHRTerm(147, "Change") & _
-            '       " " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name"), _
-            '       AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-            '        Me.FileName = aFileName.Substring(i + 1) + Archetype.Archetype_ID.ToString & "." & ParserType
-            '    End If
-            'End If
-
             mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
-
-            'SRH: Aug 15 2008 - language handling for embedded
             mOntologyManager.SetBestLanguage()
 
             mPriorFileName = Nothing
             FileEdited = False
             CheckFileNameAgainstArchetypeId()
 
-            Return True
+            Return True ' FIXME: spaghetti code!
         Catch e As Exception
             FileName = mPriorFileName
             mPriorFileName = Nothing
