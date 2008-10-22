@@ -28,7 +28,6 @@ Public Class FileManagerLocal
     Private mIsNew As Boolean = False
     Private mObjectToSave As Object
     Private mOntologyManager As New OntologyManager(Me)
-    Private mTermBindingLookUpTables As Collections.Generic.SortedDictionary(Of String, DataTable)
 
     Public Property OntologyManager() As OntologyManager
         Get
@@ -187,47 +186,6 @@ Public Class FileManagerLocal
 
     Private InitialisedTerminologies As Collections.Generic.List(Of String)
     Private webError As Boolean
-
-    Public Function HasTermBindings(ByVal language As String, ByVal terminologyId As String) As Boolean
-
-        If webError Then Return False
-
-        If Not mTermBindingLookUpTables Is Nothing Then
-            If mTermBindingLookUpTables.ContainsKey(language & terminologyId) Then
-                Return True
-            End If
-        Else
-            mTermBindingLookUpTables = New Collections.Generic.SortedDictionary(Of String, DataTable)
-        End If
-        Try
-            If Not mOntologyManager.TermBindingsTable Is Nothing AndAlso mOntologyManager.TermBindingsTable.Rows.Count > 0 Then
-                Dim selected_rows As DataRow() = mOntologyManager.TermBindingsTable.Select("Terminology = 'SNOMED-CT'")
-                If Not selected_rows Is Nothing AndAlso selected_rows.Length > 0 Then
-                    Dim conceptIds(selected_rows.Length) As String
-                    For i As Integer = 0 To selected_rows.Length - 1
-                        conceptIds(i) = selected_rows(i).Item("Code")
-                    Next
-                    Dim termTable As DataTable = OTSControls.Term.OtsWebService.TerminologyGetPreferredTerms("Snomed", language, conceptIds).Tables(0)
-                    mTermBindingLookUpTables.Add(language & terminologyId, termTable)
-                End If
-            End If
-        Catch
-            webError = True
-        End Try
-
-        Return False
-    End Function
-
-    Public Function BindingText(ByVal language As String, ByVal TerminologyId As String, ByVal terminologyCode As String) As String
-        Dim dTable As DataTable = mTermBindingLookUpTables.Item(language & TerminologyId)
-        If Not dTable Is Nothing Then
-            Dim dRow As DataRow = dTable.Rows.Find(terminologyCode).Item(1)
-            If Not dRow Is Nothing Then
-                Return dRow(1)
-            End If
-        End If
-        Return String.Empty
-    End Function
 
     Public Function OpenArchetype(ByVal aFileName As String) As Boolean
         Try
