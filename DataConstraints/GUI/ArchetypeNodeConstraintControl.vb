@@ -792,34 +792,31 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub SetTermLookUpVisibility(ByVal termID As String)
-
         If OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp AndAlso _
             Not String.IsNullOrEmpty(termID) AndAlso _
             OceanArchetypeEditor.Instance.ServiceTerminology(termID) Then
             termLookUp.TermCaption = termID
+
             'ToDo: work this from the terminology server
             Select Case termID
                 Case "SNOMED-CT"
                     termLookUp.TerminologyName = "Snomed"
                     termLookUp.TermQueryName = "AllSnomed"
-                    termLookUp.Visible = True
+                    termLookUp.Show()
 
                 Case "LNC205"
                     termLookUp.TerminologyName = "LOINC"
                     termLookUp.TermQueryName = "LOINC"
-                    termLookUp.Visible = True
+                    termLookUp.Show()
 
                 Case Else
                     Debug.Assert(False, String.Format("{0} terminology available but fails case statement", termID))
-                    termLookUp.Visible = False
+                    termLookUp.Hide()
             End Select
-
         Else
-            termLookUp.Visible = False
+            termLookUp.Hide()
         End If
-
     End Sub
-
 
     Private Sub termLookUp_TermChanged(ByVal sender As System.Object, ByVal e As EventArgs) Handles termLookUp.TermChanged
         If Not dgNodeBindings.CurrentRow Is Nothing AndAlso Not termLookUp.TermId Is Nothing Then
