@@ -1202,7 +1202,7 @@ Public Class TermBindingPanel
         End If
 
         If Not termConstraint Is Nothing Then
-            mCriteriaElementView = ArchetypeView.ElementView(termConstraint, mFileManager)
+            mCriteriaElementView = ArchetypeView.ConstraintView(termConstraint, mFileManager)
             mCriteriaElementView.Location = Me.CriteriaValueTextBox.Location 'New Point(520, 64)
             AddBindingCriteriaGroupBox.Controls.Add(mCriteriaElementView)
         End If
