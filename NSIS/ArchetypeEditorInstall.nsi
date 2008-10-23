@@ -65,7 +65,7 @@ ShowUninstDetails show
 # Installer sections
 Section -Main SEC0000
     SetOutPath $INSTDIR
-    SetOverwrite off
+    SetOverwrite on
     File ..\bin\ArchetypeEditor.exe.config
 
     SetOverwrite on 
