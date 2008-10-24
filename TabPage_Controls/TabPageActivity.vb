@@ -162,56 +162,35 @@ Public Class TabPageActivity
     Private Sub butOpenArchetype_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOpenArchetype.Click
         Try
             Dim start_info As New ProcessStartInfo
-            Dim action_name As String
-            Dim regx As System.Text.RegularExpressions.Regex
-            Dim matchingFileNames As New ArrayList
-
             start_info.FileName = Application.ExecutablePath
             start_info.WorkingDirectory = Application.StartupPath
 
+            Dim regex As New System.Text.RegularExpressions.Regex(txtAction.Text & "\.adl$")
+            Dim dir As New System.IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\entry\action\")
+            Dim matchingFileNames As New ArrayList
 
-            ' get the name of the action
-            action_name = txtAction.Text
-            regx = New System.Text.RegularExpressions.Regex(action_name)
-
-            Dim dirinfo As System.IO.DirectoryInfo
-            dirinfo = New System.IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath & _
-                "\entry\action\")
-
-            For Each f As System.IO.FileInfo In dirinfo.GetFiles("*.adl")
-                If regx.Match(f.Name).Success Then
+            For Each f As System.IO.FileInfo In dir.GetFiles("*.adl")
+                If regex.IsMatch(f.Name) Then
                     matchingFileNames.Add(f.Name)
                 End If
             Next
 
             Select Case matchingFileNames.Count
                 Case 0
-                    MessageBox.Show(AE_Constants.Instance.Could_not_find & " " & action_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-                    Return
+                    MessageBox.Show(AE_Constants.Instance.Could_not_find & " " & txtAction.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
                 Case 1
-                    action_name = CStr(matchingFileNames(0))
+                    start_info.Arguments = Chr(34) & dir.FullName & CStr(matchingFileNames(0)) & Chr(34)
+                    Process.Start(start_info)
                 Case Else
-                    'more than one
                     Dim frm As New Choose
                     frm.Set_Single()
                     frm.ListChoose.Items.AddRange(matchingFileNames.ToArray)
-                    If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                        action_name = CStr(frm.ListChoose.SelectedItem)
-                    Else
-                        Return
+
+                    If frm.ShowDialog = DialogResult.OK Then
+                        start_info.Arguments = Chr(34) & dir.FullName & CStr(frm.ListChoose.SelectedItem) & Chr(34)
+                        Process.Start(start_info)
                     End If
             End Select
-
-            action_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & _
-                "\entry\action\" & action_name
-            
-            If IO.File.Exists(action_name) Then
-                start_info.Arguments = Chr(34) & action_name & Chr(34) 'JAR: 07MAY2007, EDT-28 File name is split on space characters
-                Process.Start(start_info)
-            Else
-                MessageBox.Show(AE_Constants.Instance.Could_not_find & " '" & action_name & "'", _
-                    AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            End If
         Catch
             MessageBox.Show(AE_Constants.Instance.Error_loading & " Archetype Editor", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try

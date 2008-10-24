@@ -974,7 +974,7 @@ Public Class TabPageStructure
             For Each f As IO.FileInfo In dir.GetFiles("*.adl")
                 'SRH: this command on windows will return adls files as well (ext of length 3 are treated as wild!! ie = adl*)
                 For Each re As System.Text.RegularExpressions.Regex In regexes
-                    If re.Match(f.Name).Success Then
+                    If re.IsMatch(f.Name) Then
                         frm.ListChoose.Items.Add(f.Name)
                     End If
                 Next
