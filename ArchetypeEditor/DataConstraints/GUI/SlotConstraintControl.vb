@@ -538,7 +538,6 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub chkExcludeAll_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkExcludeAll.CheckedChanged
-
         PanelExcludeStatements.Visible = Not chkExcludeAll.Checked
         chkIncludeAll.Enabled = Not chkExcludeAll.Checked ' can't have include all and exclude all
 
@@ -549,26 +548,42 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub butBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butBrowse.Click
-        Dim fd As New OpenFileDialog
-        Dim s As String
+        Dim description As String = ReferenceModel.RM_StructureName(Constraint.RM_ClassType)
+        Dim patterns As String = ""
 
-        s = ReferenceModel.ReferenceModelName & "-" & ReferenceModel.RM_StructureName(Constraint.RM_ClassType)
-        fd.Filter = String.Format("{0}.*.{1}|{0}.*.{1}", s, Filemanager.Master.ParserType)
+        If ReferenceModel.IsAbstract(Constraint.RM_ClassType) Then
+            Dim separator As String = ""
+            description &= ": "
+
+            For Each t As StructureType In ReferenceModel.Specialisations(Constraint.RM_ClassType)
+                description &= separator & ReferenceModel.RM_StructureName(t)
+                patterns &= separator & ReferenceModel.ReferenceModelName & "-" & ReferenceModel.RM_StructureName(t) & ".*." & Filemanager.Master.ParserType
+                separator = ";"
+            Next
+        Else
+            patterns = ReferenceModel.ReferenceModelName & "-" & description & ".*." & Filemanager.Master.ParserType
+        End If
+
+        Dim fd As New OpenFileDialog
+        fd.Filter = description & "|" & patterns
         fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath
 
-        If fd.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-            Dim ss As String
+        If fd.ShowDialog(Me) = DialogResult.OK Then
+            Dim name As String = IO.Path.GetFileNameWithoutExtension(fd.FileName)
 
-            ss = fd.FileName.Substring(fd.FileName.LastIndexOf("\") + s.Length + 2)
-            AvailableArchetypesListBox.Items.Insert(0, (ss.Substring(0, ss.LastIndexOf("."))))
-            AvailableArchetypesListBox.SelectedIndex = 0
+            If Not ReferenceModel.IsAbstract(Constraint.RM_ClassType) Then
+                name = name.Substring(name.IndexOf(".") + 1)
+            End If
+
+            AvailableArchetypesListBox.Items.Add(name)
+            AvailableArchetypesListBox.SelectedIndex = AvailableArchetypesListBox.FindStringExact(name)
         End If
     End Sub
 
     Private Sub AddFilestoListBox(ByVal a_directory As System.IO.DirectoryInfo, ByVal pattern As String, ByVal clipFileName As Boolean)
         For Each f As System.IO.FileInfo In a_directory.GetFiles(pattern, IO.SearchOption.AllDirectories)
-
             Dim fileName As String
+
             If clipFileName Then
                 Dim i, j As Integer
                 i = f.Name.IndexOf(".") + 1
