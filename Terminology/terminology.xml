@@ -1978,7 +1978,7 @@
   <Concept Language="de" ConceptID="74" Rubric="Über Ocean Informatics" />
   <Concept Language="de" ConceptID="75" Rubric="Über the Ocean Editor" />
   <Concept Language="de" ConceptID="76" Rubric="Kopfdaten" />
-  <Concept Language="de" ConceptID="77" Rubric="ENTRY-Modell" />
+  <Concept Language="de" ConceptID="77" Rubric="Entry-Modell" />
   <Concept Language="de" ConceptID="78" Rubric="Protokoll" />
   <Concept Language="de" ConceptID="79" Rubric="Personenstatus mit Verlauf" />
   <Concept Language="de" ConceptID="80" Rubric="Daten" />
@@ -2068,7 +2068,7 @@
   <Concept Language="de" ConceptID="168" Rubric="SECTION (Ordnungs-) Model" />
   <Concept Language="de" ConceptID="169" Rubric="Benennung" />
   <Concept Language="de" ConceptID="170" Rubric="Slots" />
-  <Concept Language="de" ConceptID="171" Rubric="Eintrag slots" />
+  <Concept Language="de" ConceptID="171" Rubric="Eintrag-Slots" />
   <Concept Language="de" ConceptID="172" Rubric="ENTRYs (Einträge) einschliessen" />
   <Concept Language="de" ConceptID="173" Rubric="ENTRYs (Einträge) ausschliessen" />
   <Concept Language="de" ConceptID="174" Rubric="Bereich slots " />
@@ -2400,7 +2400,7 @@
   <Concept Language="de" ConceptID="557" Rubric="Instruktion" />
   <Concept Language="de" ConceptID="558" Rubric="Untersektion" />
   <Concept Language="de" ConceptID="559" Rubric="Eintrag (Entry)" />
-  <Concept Language="de" ConceptID="560" Rubric="Verwaltungseintrag (administration entry)" />
+  <Concept Language="de" ConceptID="560" Rubric="Verwaltungseintrag (Administration entry)" />
   <Concept Language="de" ConceptID="561" Rubric="Composition" />
   <Concept Language="de" ConceptID="563" Rubric="Behandlungspfadschritt" />
   <Concept Language="de" ConceptID="564" Rubric="Referenz" />
@@ -5668,6 +5668,49 @@
   <Concept Language="en" ConceptID="672" Rubric="Name this slot?" />
   <Concept Language="en" ConceptID="673" Rubric="Item" />
   <Concept Language="en" ConceptID="674" Rubric="Care entry" />
+  <Concept Language="de" ConceptID="632" Rubric="Archetyp Id" />
+  <Concept Language="de" ConceptID="633" Rubric="Identifier" />
+  <Concept Language="de" ConceptID="634" Rubric="Paragraph" />
+  <Concept Language="de" ConceptID="635" Rubric="Parsbar" />
+  <Concept Language="de" ConceptID="636" Rubric="Codierter Text" />
+  <Concept Language="de" ConceptID="637" Rubric="application/dicom" />
+  <Concept Language="de" ConceptID="638" Rubric="Format" />
+  <Concept Language="de" ConceptID="639" Rubric="Pfad in Ablage kopieren" />
+  <Concept Language="de" ConceptID="640" Rubric="tatsächlich" />
+  <Concept Language="de" ConceptID="641" Rubric="Untere Grenze" />
+  <Concept Language="de" ConceptID="642" Rubric="Obere Grenze" />
+  <Concept Language="de" ConceptID="643" Rubric="ganzzahlig" />
+  <Concept Language="de" ConceptID="644" Rubric="Unitär (Nenner=1)" />
+  <Concept Language="de" ConceptID="645" Rubric="Ganzzahl und Bruchteil (z.B. 1 1/2)" />
+  <Concept Language="de" ConceptID="646" Rubric="Bruchteil" />
+  <Concept Language="de" ConceptID="647" Rubric="Definition" />
+  <Concept Language="de" ConceptID="648" Rubric="bezeugt" />
+  <Concept Language="de" ConceptID="649" Rubric="Nachkommastellen einschränken" />
+  <Concept Language="de" ConceptID="650" Rubric="Übersetzung" />
+  <Concept Language="de" ConceptID="651" Rubric="Akkreditierung" />
+  <Concept Language="de" ConceptID="652" Rubric="Kommentare" />
+  <Concept Language="de" ConceptID="653" Rubric="Neue Aktivität" />
+  <Concept Language="de" ConceptID="654" Rubric="Partizipation" />
+  <Concept Language="de" ConceptID="655" Rubric="Elektrische Potential Zeit" />
+  <Concept Language="de" ConceptID="656" Rubric="Link innerhalb der EHR" />
+  <Concept Language="de" ConceptID="657" Rubric="Regulärer Ausdruck für URI" />
+  <Concept Language="de" ConceptID="658" Rubric="Partizipant Funktion" />
+  <Concept Language="de" ConceptID="659" Rubric="Link" />
+  <Concept Language="de" ConceptID="660" Rubric="Andere Partizipationen" />
+  <Concept Language="de" ConceptID="661" Rubric="Ziel" />
+  <Concept Language="de" ConceptID="662" Rubric="Bedeutung" />
+  <Concept Language="de" ConceptID="663" Rubric="Suche" />
+  <Concept Language="de" ConceptID="664" Rubric="Netzwerkfehler" />
+  <Concept Language="de" ConceptID="665" Rubric="Bitte Suchparameter eingeben" />
+  <Concept Language="de" ConceptID="666" Rubric="Öffne existierenden Archetyp aus dem Internet" />
+  <Concept Language="de" ConceptID="667" Rubric="Werkzeuge" />
+  <Concept Language="de" ConceptID="668" Rubric="Bitte eine Einheit von der linken und eine von der rechten Seite auswählen" />
+  <Concept Language="de" ConceptID="669" Rubric="Auch Spezialierungen verwenden?" />
+  <Concept Language="de" ConceptID="670" Rubric="Bruchteil (Zeit)" />
+  <Concept Language="de" ConceptID="671" Rubric="Kein Archetype passt zu {0}" />
+  <Concept Language="de" ConceptID="672" Rubric="Diesen Slot bennenen?" />
+  <Concept Language="de" ConceptID="673" Rubric="Item" />
+  <Concept Language="de" ConceptID="674" Rubric="Versorgungseintrag (Care entry)" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
