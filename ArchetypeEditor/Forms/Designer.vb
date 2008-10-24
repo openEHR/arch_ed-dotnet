@@ -4440,7 +4440,7 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub ParticipationCheckChanged(ByVal tbCtrl As Object, ByVal state As Boolean) Handles mTabPageAction.ProtocolCheckChanged, mTabPageInstruction.ParticipationCheckChanged, mTabPageAction.ParticipationCheckChanged
+    Private Sub ParticipationCheckChanged(ByVal tbCtrl As Object, ByVal state As Boolean) Handles mTabPageInstruction.ParticipationCheckChanged, mTabPageAction.ParticipationCheckChanged
         Dim tp As Crownwood.Magic.Controls.TabPage
         Dim CrownCtrl As Crownwood.Magic.Controls.TabControl = tbCtrl
 
