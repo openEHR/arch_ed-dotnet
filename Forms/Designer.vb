@@ -2440,32 +2440,28 @@ Public Class Designer
         Next
     End Sub
 
-    Private Sub Translate(Optional ByVal LanguageCode As String = "")
-        Dim obj As Object
-        Dim a_Term As RmTerm
-
+    Private Sub Translate(ByVal languageCode As String)
         ' file loading so no updates
         mFileManager.FileLoading = True
 
-        If LanguageCode <> "" Then
-            Dim MI As MenuItem
-            mFileManager.OntologyManager.LanguageCode = LanguageCode
+        If languageCode <> "" Then
+            mFileManager.OntologyManager.LanguageCode = languageCode
 
-            For Each MI In MenuLanguageChange.MenuItems
-                MI.Checked = MI.Text = mFileManager.OntologyManager.LanguageText
+            For Each mi As MenuItem In MenuLanguageChange.MenuItems
+                mi.Checked = mi.Text = mFileManager.OntologyManager.LanguageText
             Next
         End If
 
         ' Concept and description fields on header and the form text
-        a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
-        Me.txtConceptInFull.Text = a_Term.Text
-        Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & a_Term.Text & "]"
-        Me.TxtConceptDescription.Text = a_Term.Description
-        Me.txtConceptComment.Text = a_Term.Comment
+        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
+        txtConceptInFull.Text = term.Text
+        Text = AE_Constants.Instance.MessageBoxCaption & " [" & term.Text & "]"
+        TxtConceptDescription.Text = term.Description
+        txtConceptComment.Text = term.Comment
 
         'and in the specialisation chain
-        If Me.tvSpecialisation.GetNodeCount(False) > 0 Then
-            TranslateSpecialisationNodes(Me.tvSpecialisation.Nodes)
+        If tvSpecialisation.GetNodeCount(False) > 0 Then
+            TranslateSpecialisationNodes(tvSpecialisation.Nodes)
         End If
 
         ' and the subject of care
@@ -2475,7 +2471,7 @@ Public Class Designer
 
         mFileManager.FileLoading = False
 
-        For Each obj In mComponentsCollection
+        For Each obj As Object In mComponentsCollection
             ' each component must have a populate terms method to enable translation
             obj.Translate()
         Next
@@ -3696,7 +3692,7 @@ Public Class Designer
 
 #Region "Language related functions - Add, Change, List_selectedIndex, Menu Change"
 
-    Dim previousLanguageCode As String
+    Dim previousLanguageCode, previousLanguageText As String
 
     Private Sub AddLanguage(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAdd.Click, MenuLanguageAdd.Click
         If ChooseLanguage() Then
@@ -3704,42 +3700,44 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub ChangeLanguage(ByVal LangCode As String)
-        If mFileManager.OntologyManager.HasLanguage(LangCode) AndAlso mFileManager.OntologyManager.LanguageCode <> LangCode Then
+    Private Sub ChangeLanguageText(ByVal langText As String)
+        Dim i As Integer = ListLanguages.FindStringExact(langText)
+
+        If i > -1 Then
+            ListLanguages.SelectedIndex = i
+            ChangeLanguage(ListLanguages.SelectedValue)
+        End If
+    End Sub
+
+    Private Sub ChangeLanguage(ByVal langCode As String)
+        If mFileManager.OntologyManager.HasLanguage(langCode) AndAlso mFileManager.OntologyManager.LanguageCode <> langCode Then
             previousLanguageCode = mFileManager.OntologyManager.LanguageCode
-            mFileManager.OntologyManager.LanguageCode = LangCode
-            Translate(LangCode)
+            previousLanguageText = mFileManager.OntologyManager.LanguageText
+            mFileManager.OntologyManager.LanguageCode = langCode
+            Translate(langCode)
         End If
     End Sub
 
     Private Sub ListLanguages_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListLanguages.SelectedIndexChanged
         If ListLanguages.Focused Then
-            ' crownwood controls have a bug where selecting a tabpage triggers select index on this control
-            ' the following if statement short circuits this
-            ChangeLanguage(Me.ListLanguages.SelectedValue)
+            ' Crownwood controls have a bug where selecting a tabpage triggers select index on this control.
+            ' The above if statement short circuits this.
+            ChangeLanguage(ListLanguages.SelectedValue)
         End If
     End Sub
 
     Private Sub MenuLanguageChange_Popup(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuLanguageChange.Popup
-        Dim MI As MenuItem
-
-        For Each MI In MenuLanguageChange.MenuItems
-            AddHandler MI.Click, AddressOf MenuChangeLanguage_Click
+        For Each mi As MenuItem In MenuLanguageChange.MenuItems
+            AddHandler mi.Click, AddressOf MenuChangeLanguage_Click
         Next
     End Sub
 
     Private Sub MenuChangeLanguage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim i As Integer
-        i = ListLanguages.FindStringExact(sender.text)
-
-        If i > -1 Then
-            ListLanguages.SelectedIndex = i
-            ChangeLanguage(Me.ListLanguages.SelectedValue)
-        End If
+        ChangeLanguageText(sender.Text)
     End Sub
 
     Private Sub MenuLanguageToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuLanguageToggle.Click
-        ChangeLanguage(previousLanguageCode)
+        ChangeLanguageText(previousLanguageText)
     End Sub
 
 #End Region
@@ -4643,7 +4641,7 @@ Public Class Designer
                     ' and there have been some changes to the table
                     mFileManager.OntologyManager.TermDefinitionTable.AcceptChanges()
                     mFileManager.FileEdited = True
-                    Translate()
+                    Translate("")
                 End If
             End If
 
