@@ -587,10 +587,7 @@ Public Class ListStructure
         MenuNameSlot.Visible = False
 
         If lvList.SelectedItems.Count > 0 Then
-            Dim lvItem As ArchetypeListViewItem
-            Dim i As Integer
-
-            lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
+            Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
             MenuRemoveItemAndReference.Text = lvItem.Text
 
             'If it is an element and not a slot
@@ -603,11 +600,10 @@ Public Class ListStructure
                         MenuAddReference.Visible = True
                     End If
                 End If
+
                 ' show specialisation if appropriate
                 Dim nodeId As String = CType(lvItem.Item, ArchetypeNodeAbstract).NodeId
-
-                i = OceanArchetypeEditor.Instance.CountInString(nodeId, ".")
-
+                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(nodeId, ".")
                 Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
 
                 If i < numberSpecialisations Then
@@ -624,10 +620,17 @@ Public Class ListStructure
         End If
     End Sub
 
-    Private Sub lvList_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lvList.MouseDown
+    Private Sub lvList_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lvList.MouseUp
         If e.Button = Windows.Forms.MouseButtons.Left Then
             If lvList.SelectedItems.Count > 0 AndAlso lvList.SelectedItems(0).Bounds.Contains(e.Location) Then
-                ReplaceAnonymousSlot()
+                Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
+
+                If Not lvItem Is Nothing AndAlso lvItem.Item.IsAnonymous Then
+                    If MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                        ReplaceAnonymousSlot()
+                        lvList.SelectedItems(0).BeginEdit()
+                    End If
+                End If
             End If
         End If
     End Sub
