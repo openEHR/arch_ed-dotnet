@@ -258,7 +258,7 @@ Public Class TableStructure
             End If
         End If
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
+            MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
         End If
         ' add the change structure menu from EntryStructure
         Me.ContextMenuGrid.MenuItems.Add(menuChangeStructure)
@@ -1067,7 +1067,7 @@ Public Class TableStructure
             Dim a_cell As DataGridCell
 
             If TypeOf mNewConstraint Is Constraint_Slot Then
-                Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     Case DialogResult.Yes
                         table_archetype = New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
                     Case DialogResult.No
