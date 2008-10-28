@@ -559,7 +559,7 @@ Public Class TabPageSection
         Dim editLabel As Boolean = False
 
         struct_type = CInt(CType(sender, MenuItem).Tag)
-        Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+        Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             Case DialogResult.Yes
                 tvNode = New ArchetypeTreeNode(New ArchetypeSlot(struct_type.ToString, struct_type, mFileManager))
                 editLabel = True

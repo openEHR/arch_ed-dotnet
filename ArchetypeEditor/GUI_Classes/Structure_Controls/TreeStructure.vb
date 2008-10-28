@@ -567,7 +567,7 @@ Public Class TreeStructure
             tvNode = New ArchetypeTreeNode(Filemanager.GetOpenEhrTerm(109, "New Element"), StructureType.Element, mFileManager)
             ' set the image indexes
             CType(tvNode.Item, ArchetypeElement).Constraint = a_constraint
-        ElseIf MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+        ElseIf MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
             Dim archetype_slot As New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
             tvNode = New ArchetypeTreeNode(archetype_slot)
         Else
@@ -1043,7 +1043,7 @@ Public Class TreeStructure
 
             If Not tvNode Is Nothing Then
                 If tvNode.IsSelected And tvNode.Item.IsAnonymous Then
-                    If MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    If MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                         ReplaceAnonymousSlot()
                     End If
                 End If
@@ -1114,7 +1114,7 @@ Public Class TreeStructure
                     slotClass = Global.ArchetypeEditor.StructureType.Item
             End Select
 
-            If MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            If MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                 Dim archetype_slot As New ArchetypeSlot(slotClass.ToString, slotClass, mFileManager)
                 result = New ArchetypeTreeNode(archetype_slot)
             Else

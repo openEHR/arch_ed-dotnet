@@ -190,6 +190,7 @@ Public Class ListStructure
                 MenuAddReference.Text = AE_Constants.Instance.Add_Reference
                 MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
             End If
+
             ' add the change structure menu from EntryStructure
             If Not ContextMenuList.MenuItems.Contains(menuChangeStructure) Then
                 ContextMenuList.MenuItems.Add(menuChangeStructure)
@@ -398,7 +399,7 @@ Public Class ListStructure
         Dim editLabel As Boolean = False
 
         If a_constraint.Type = ConstraintType.Slot Then
-            Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 Case DialogResult.Yes
                     Dim archetype_slot As New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
                     lvItem = New ArchetypeListViewItem(archetype_slot)
@@ -626,7 +627,7 @@ Public Class ListStructure
                 Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
 
                 If Not lvItem Is Nothing AndAlso lvItem.Item.IsAnonymous Then
-                    If MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    If MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                         ReplaceAnonymousSlot()
                         lvList.SelectedItems(0).BeginEdit()
                     End If
@@ -764,7 +765,7 @@ Public Class ListStructure
             list_item_dragged = mDragItem
         ElseIf Not mNewConstraint Is Nothing Then
             If TypeOf mNewConstraint Is Constraint_Slot Then
-                Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlot, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+                Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                     Case DialogResult.Yes
                         Dim archetype_slot As New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
                         list_item_dragged = New ArchetypeListViewItem(archetype_slot)
