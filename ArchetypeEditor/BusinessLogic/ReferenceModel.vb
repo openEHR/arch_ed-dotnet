@@ -262,6 +262,7 @@ Public Class ReferenceModel
                         End Select
                     Case StructureType.Data 'openEHR
                         Debug.Assert(mArchetypedClass <> 0)
+
                         Select Case mArchetypedClass
                             Case StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                                 Select Case Child

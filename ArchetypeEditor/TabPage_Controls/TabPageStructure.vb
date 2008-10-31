@@ -1007,15 +1007,17 @@ Public Class TabPageStructure
                     End If
                 End If
             Case 1
-                OpenArchetypeForSlot = OpenArchetype(IO.Path.Combine(path, frm.ListChoose.Items(0)))
+                OpenArchetype(IO.Path.Combine(path, frm.ListChoose.Items(0)))
+                OpenArchetypeForSlot = mFileManager.ArchetypeAvailable
             Case Else
-                If frm.ShowDialog = Windows.Forms.DialogResult.OK And Not frm.ListChoose.SelectedItem Is Nothing Then
-                    OpenArchetypeForSlot = OpenArchetype(IO.Path.Combine(path, CStr(frm.ListChoose.SelectedItem)))
+                If frm.ShowDialog = Windows.Forms.DialogResult.OK And frm.ListChoose.SelectedItem IsNot Nothing Then
+                    OpenArchetype(IO.Path.Combine(path, CStr(frm.ListChoose.SelectedItem)))
+                    OpenArchetypeForSlot = mFileManager.ArchetypeAvailable
                 End If
         End Select
     End Function
 
-    Private Function OpenArchetype(ByVal an_archetype_name As String) As Boolean
+    Private Sub OpenArchetype(ByVal an_archetype_name As String)
         mFileManager.OpenArchetype(an_archetype_name)
 
         If mFileManager.ArchetypeAvailable Then
@@ -1029,11 +1031,8 @@ Public Class TabPageStructure
             lbl.BringToFront()
         Else
             MessageBox.Show(AE_Constants.Instance.Error_loading & ": " & an_archetype_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return False
         End If
-
-        Return True
-    End Function
+    End Sub
 
     Public Sub PrepareToSave()
         mFileManager.Archetype.Definition = mArchetypeControl.Archetype

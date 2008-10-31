@@ -2148,6 +2148,7 @@ Public Class Designer
             End Select
         End If
 
+        ReferenceModel.SetArchetypedClass(mFileManager.Archetype.Archetype_ID.ReferenceModelEntity)
         SetUpGUI(mFileManager.Archetype.RmEntity, False)
 
         AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
@@ -3881,7 +3882,7 @@ Public Class Designer
         mFileManager.Archetype.Description = mTabPageDescription.Description
         mFileManager.Archetype.TranslationDetails = mTabPageDescription.TranslationDetails
 
-        If Me.ShowAsDraft Then
+        If ShowAsDraft Then
             mFileManager.Archetype.LifeCycle = "Initial"
         End If
 
@@ -3945,17 +3946,14 @@ Public Class Designer
 
                                     Case "tpDataEventSeries"
                                         If Not mTabPageDataEventSeries Is Nothing Then
-                                            Dim rm As RmStructureCompound
-                                            Dim RmHistory As RmHistory
-
-                                            rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
-                                            RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
+                                            Dim rm As New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
+                                            Dim history As RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
 
                                             If Not mTabPageDataStructure Is Nothing Then
-                                                RmHistory.Data = mTabPageDataStructure.SaveAsStructure
+                                                history.Data = mTabPageDataStructure.SaveAsStructure
                                             End If
 
-                                            rm.Children.Add(RmHistory)
+                                            rm.Children.Add(history)
                                             CType(definition, ArchetypeDefinition).Data.Add(rm)
                                         End If
 
