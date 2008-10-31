@@ -961,23 +961,37 @@ Public Class TabPageStructure
         Dim dir As New IO.DirectoryInfo(path)
 
         If dir.Exists Then
-            Dim regexes As New System.Collections.Generic.List(Of System.Text.RegularExpressions.Regex)
+            Dim sl As Constraint_Slot = slot.SlotConstraint
+            Dim classPrefix As String = ReferenceModel.ReferenceModelName & "-" & ReferenceModel.RM_StructureName(sl.RM_ClassType)
+            Dim pattern As String = ""
+            Dim separator As String = ""
 
-            For Each includeStatement As String In slot.SlotConstraint.Include
-                includeStatement = "^" & ReferenceModel.ReferenceModelName & "-" & _
-                                    ReferenceModel.RM_StructureName(slot.SlotConstraint.RM_ClassType) & _
-                                    "\." & includeStatement & "\.adl$"
-
-                regexes.Add(New System.Text.RegularExpressions.Regex(includeStatement))
+            For Each include As String In sl.Include
+                pattern &= separator & include
+                separator = "|"
             Next
 
-            For Each f As IO.FileInfo In dir.GetFiles("*.adl")
+            If pattern = "" And Not sl.ExcludeAll Then
+                pattern = "[^.]+\.[^.]+"
+            End If
+
+            Dim inclusions As New System.Text.RegularExpressions.Regex("^" & classPrefix & "\.(" & pattern & ")\.adl$")
+
+            pattern = ""
+            separator = ""
+
+            For Each exclude As String In sl.Exclude
+                pattern &= separator & exclude
+                separator = "|"
+            Next
+
+            Dim exclusions As New System.Text.RegularExpressions.Regex("^" & classPrefix & "\.(" & pattern & ")\.adl$")
+
+            For Each f As IO.FileInfo In dir.GetFiles(classPrefix & ".*.adl")
                 'SRH: this command on windows will return adls files as well (ext of length 3 are treated as wild!! ie = adl*)
-                For Each re As System.Text.RegularExpressions.Regex In regexes
-                    If re.IsMatch(f.Name) Then
-                        frm.ListChoose.Items.Add(f.Name)
-                    End If
-                Next
+                If inclusions.IsMatch(f.Name) And Not exclusions.IsMatch(f.Name) Then
+                    frm.ListChoose.Items.Add(f.Name)
+                End If
             Next
         End If
 
@@ -995,7 +1009,7 @@ Public Class TabPageStructure
             Case 1
                 OpenArchetypeForSlot = OpenArchetype(IO.Path.Combine(path, frm.ListChoose.Items(0)))
             Case Else
-                If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
+                If frm.ShowDialog = Windows.Forms.DialogResult.OK And Not frm.ListChoose.SelectedItem Is Nothing Then
                     OpenArchetypeForSlot = OpenArchetype(IO.Path.Combine(path, CStr(frm.ListChoose.SelectedItem)))
                 End If
         End Select
