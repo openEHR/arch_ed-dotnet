@@ -1963,7 +1963,7 @@
   <Concept Language="de" ConceptID="58" Rubric="Archetyp Editor von Ocean Informatics" />
   <Concept Language="de" ConceptID="59" Rubric="Tooltips" />
   <Concept Language="de" ConceptID="60" Rubric="Ändern des Datentyps" />
-  <Concept Language="de" ConceptID="61" Rubric="Öffnen Strg+O" />
+  <Concept Language="de" ConceptID="61" Rubric="Öffnen" />
   <Concept Language="de" ConceptID="62" Rubric="Neu Strg+N" />
   <Concept Language="de" ConceptID="63" Rubric="Beenden" />
   <Concept Language="de" ConceptID="64" Rubric="Archetypen Datenbank" />
@@ -1977,7 +1977,7 @@
   <Concept Language="de" ConceptID="72" Rubric="Erste Schritte" />
   <Concept Language="de" ConceptID="73" Rubric="Lizenz" />
   <Concept Language="de" ConceptID="74" Rubric="Über Ocean Informatics" />
-  <Concept Language="de" ConceptID="75" Rubric="Über the Ocean Editor" />
+  <Concept Language="de" ConceptID="75" Rubric="Über den Ocean Editor" />
   <Concept Language="de" ConceptID="76" Rubric="Kopfdaten" />
   <Concept Language="de" ConceptID="77" Rubric="Entry-Modell" />
   <Concept Language="de" ConceptID="78" Rubric="Protokoll" />
@@ -2010,7 +2010,7 @@
   <Concept Language="de" ConceptID="108" Rubric="Tabelle" />
   <Concept Language="de" ConceptID="109" Rubric="Neues Element" />
   <Concept Language="de" ConceptID="110" Rubric="Vorkommen" />
-  <Concept Language="de" ConceptID="111" Rubric="Maximum" />
+  <Concept Language="de" ConceptID="111" Rubric="Max:" />
   <Concept Language="de" ConceptID="112" Rubric="Unbegrenzt" />
   <Concept Language="de" ConceptID="113" Rubric="Beschreibung" />
   <Concept Language="de" ConceptID="114" Rubric="Namesbeschränkung zur Laufzeit" />
@@ -2117,7 +2117,7 @@
   <Concept Language="de" ConceptID="220" Rubric="physisch abwesend" />
   <Concept Language="de" ConceptID="221" Rubric="übersetzter Text" />
   <Concept Language="de" ConceptID="222" Rubric="übersetztes Nur-audio" />
-  <Concept Language="de" ConceptID="223" Rubric="übersetztes direktes Gespraech" />
+  <Concept Language="de" ConceptID="223" Rubric="übersetztes direktes Gespräch" />
   <Concept Language="de" ConceptID="224" Rubric="übersetzte Videokommunikation" />
   <Concept Language="de" ConceptID="225" Rubric="zu Hause" />
   <Concept Language="de" ConceptID="226" Rubric="(Arbeits-)Umgebung" />
@@ -2449,7 +2449,7 @@
   <Concept Language="de" ConceptID="606" Rubric="Eingebetteten Archetyp laden" />
   <Concept Language="de" ConceptID="607" Rubric="Referenz nicht spezialisierbar" />
   <Concept Language="de" ConceptID="608" Rubric="Anderer Kontext" />
-  <Concept Language="de" ConceptID="609" Rubric="Öffne bestehenden Archetypen" />
+  <Concept Language="de" ConceptID="609" Rubric="Öffne bestehenden Archetyp" />
   <Concept Language="de" ConceptID="610" Rubric="Abkürzungen für Zeiteinheiten" />
   <Concept Language="de" ConceptID="611" Rubric="Nano-Sekunden" />
   <Concept Language="de" ConceptID="612" Rubric="Mikro-Sekunden" />
@@ -5704,7 +5704,7 @@
   <Concept Language="de" ConceptID="663" Rubric="Suche" />
   <Concept Language="de" ConceptID="664" Rubric="Netzwerkfehler" />
   <Concept Language="de" ConceptID="665" Rubric="Bitte Suchparameter eingeben" />
-  <Concept Language="de" ConceptID="666" Rubric="Öffne existierenden Archetyp aus dem Internet" />
+  <Concept Language="de" ConceptID="666" Rubric="Öffne Archetyp aus dem Internet" />
   <Concept Language="de" ConceptID="667" Rubric="Werkzeuge" />
   <Concept Language="de" ConceptID="668" Rubric="Bitte eine Einheit von der linken und eine von der rechten Seite auswählen" />
   <Concept Language="de" ConceptID="669" Rubric="Auch Spezialierungen verwenden?" />
