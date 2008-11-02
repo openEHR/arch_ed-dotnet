@@ -56,8 +56,16 @@ Namespace ArchetypeEditor.ADL_Classes
                     End If
 
                     'SRH 14th Nov 2007 - Added null flavor
-                    v = EiffelKernel.Create.STRING_8.make_from_cil("null_flavor")
-                    If ComplexObj.has_attribute(v) Then
+                    'SRH 30 Oct 2008 - correct spelling of null flavour EDT-397
+                    Dim hasNullFlavour As Boolean = False
+                    v = EiffelKernel.Create.STRING_8.make_from_cil("null_flavor") ' Obsolete
+                    hasNullFlavour = ComplexObj.has_attribute(v)
+                    If Not hasNullFlavour Then
+                        v = EiffelKernel.Create.STRING_8.make_from_cil("null_flavour") ' redundant
+                        hasNullFlavour = ComplexObj.has_attribute(v)
+                    End If
+
+                    If hasNullFlavour Then
                         an_attribute = ComplexObj.c_attribute_at_path(v)
 
                         If an_attribute.children.count = 1 Then

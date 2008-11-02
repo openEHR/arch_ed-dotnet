@@ -26,7 +26,7 @@ Imports System.Web.Services.Description
 Public Class WebSearchForm
     Inherits System.Windows.Forms.Form
     Private archetypeIdToBeOpened As String
-    Private WithEvents ArchetypeService As ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService
+    Private WithEvents ArchetypeService As org.openehr.ArchetypeFinderBean
     Private archetypeTable As New TableLayoutPanel
     Public chosen As Boolean = False
 
@@ -39,7 +39,7 @@ Public Class WebSearchForm
             MessageBox.Show(message)
             comboSearch.Focus()
         Else
-            Dim ArchetypeIDs As Array = Nothing
+            Dim ArchetypeIDs As String() = Nothing
             Dim aTerm(0) As String
 
             ' The referenced ArchetypeFinderService provides us an object to access all available services of the ArchetypeFinder
@@ -47,7 +47,7 @@ Public Class WebSearchForm
                 Cursor = Cursors.WaitCursor
                 listViewArchetypes.Clear()
 
-                ArchetypeService = New ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService()
+                ArchetypeService = New org.openehr.ArchetypeFinderBean()
                 'get the required Archetypes depending on the radiobutton that is checked
 
                 Select Case comboSearch.SelectedIndex
@@ -65,7 +65,7 @@ Public Class WebSearchForm
                 End Select
 
                 ' no archetypes found
-                If ArchetypeIDs Is Nothing OrElse ArchetypeIDs.Length = 0 Then
+                If ArchetypeIDs Is Nothing OrElse ArchetypeIDs(0) Is Nothing Then
                     lblNum.Text = "0"
                     lblNum.Visible = True
                     'archetypeTable.Controls.Clear()
@@ -75,6 +75,7 @@ Public Class WebSearchForm
                     'Me.Refresh()
                     '' archetypes were found and we set them as a resultset to the form
                 Else
+                    lblNum.Text = ArchetypeIDs.Length.ToString()
                     If Me.listViewArchetypes.Columns.Count = 0 Then
 
                         ' Create and initialize column headers for ListViewArchetypes.
@@ -258,7 +259,7 @@ Public Class WebSearchForm
     Private returnString As String
     Private AsyncOpCompleted As Boolean
 
-    Private Sub ArchetypeWebService_GetADL(ByVal sender As Object, ByVal e As ArchetypeFinderWebServiceURL.getArchetypeInADLCompletedEventArgs) Handles ArchetypeService.getArchetypeInADLCompleted
+    Private Sub ArchetypeWebService_GetADL(ByVal sender As Object, ByVal e As org.openehr.getArchetypeInADLCompletedEventArgs) Handles ArchetypeService.getArchetypeInADLCompleted
         If e.Error Is Nothing Then
             returnString = e.Result
             AsyncOpCompleted = True
