@@ -1822,7 +1822,9 @@ Namespace ArchetypeEditor.XML_Classes
                     'Check for constraint on Flavours of Null
                     If Element.HasNullFlavourConstraint() Then
                         Dim null_flavour_attribute As XMLParser.C_ATTRIBUTE
-                        null_flavour_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "null_flavor", New RmExistence(0, 1).XmlExistence)
+                        'SRH: 30 Oct 2008 - change spelling of null flavour EDT-397
+                        ' null_flavour_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "null_flavor", New RmExistence(0, 1).XmlExistence)
+                        null_flavour_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "null_flavour", New RmExistence(0, 1).XmlExistence)
                         BuildCodedText(null_flavour_attribute, Element.ConstrainedNullFlavours)
                     End If
                 End If

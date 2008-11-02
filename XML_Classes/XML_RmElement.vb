@@ -45,7 +45,7 @@ Namespace ArchetypeEditor.XML_Classes
                                     cConstraint = ProcessValue(CType(an_attribute.children(0), XMLParser.C_OBJECT), a_filemanager)
                                 End If
                                 'SRH 14th Nov 2007 - Added null flavor
-                            Case "null_flavor"
+                            Case "null_flavor", "null_flavour" 'SRH 30 Oct 2008 - new spelling added EDT-397
                                 'Single attribute so no multiples
                                 Dim c As Constraint_Text = ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                                 If Not c Is Nothing AndAlso c.AllowableValues.Codes.Count > 0 Then
