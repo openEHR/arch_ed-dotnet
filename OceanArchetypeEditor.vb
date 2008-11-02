@@ -35,11 +35,13 @@ Public Class OceanArchetypeEditor
     End Property
 
     Private mOptions As Options
+
     ReadOnly Property Options() As Options
         Get
             If mOptions Is Nothing Then
                 mOptions = New Options
             End If
+
             Return mOptions
         End Get
     End Property
@@ -82,6 +84,7 @@ Public Class OceanArchetypeEditor
     End Property
 
     Private Shared mSpecificLanguageCode As String
+
     Public Shared ReadOnly Property SpecificLanguageCode() As String
         Get
             Debug.Assert(mSpecificLanguageCode <> "", "SpecificLanguageCode not set")
@@ -90,6 +93,7 @@ Public Class OceanArchetypeEditor
     End Property
 
     Private mConstraint As Constraint
+
     Public Property TempConstraint() As Constraint
         Get
             Return mConstraint
@@ -101,16 +105,15 @@ Public Class OceanArchetypeEditor
 
     Protected Sub New()
         mDataSet = New DataSet("DesignerDataSet")
-        OTSControls.Term.OtsWebService.Url = "http://ots.oceaninformatics.com/OTS/OTSService.asmx"
     End Sub
 
     Private mDataSet As DataSet
+
     Public ReadOnly Property DataSet() As DataSet
         Get
             Return mDataSet
         End Get
     End Property
-
 
     Private Function MakeUnitsTable() As DataTable
         Dim tTable As DataTable
@@ -140,7 +143,6 @@ Public Class OceanArchetypeEditor
         tTable.PrimaryKey = keys
 
         MakeUnitsTable = tTable
-
     End Function
 
     Public Function MakeTerminologyDataTable() As DataTable
@@ -160,8 +162,7 @@ Public Class OceanArchetypeEditor
         TextColumn.ColumnName = "Text"
         mDataTable.Columns.Add(TextColumn)
 
-        Dim Terminologies As DataRow() _
-                = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
+        Dim Terminologies As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
 
         mDataTable.DefaultView.Sort = "Text"
 
@@ -174,7 +175,6 @@ Public Class OceanArchetypeEditor
 
         Return mDataTable
     End Function
-
 
     Private Function MakePhysicalPropertiesTable() As DataTable
         Dim tTable As DataTable
@@ -321,7 +321,8 @@ Public Class OceanArchetypeEditor
         Return s
     End Function
 
-    Public Function ChooseInternal(ByVal a_file_manager As FileManagerLocal) As String()
+    'SRH: 1 Jun 2008: added check for invalid terms
+    Public Function ChooseInternal(ByVal a_file_manager As FileManagerLocal, ByVal excludedTerms As String()) As String()
         Try
             Dim Frm As New Choose
             Dim selected_rows As DataRow()
@@ -336,10 +337,11 @@ Public Class OceanArchetypeEditor
 
             For i = 0 To selected_rows.Length - 1
                 'Ensure it is not an orphan term in the ontology
-                If a_file_manager.OntologyManager.Ontology.HasTermCode(CStr(selected_rows(i).Item(1))) Then
+                Dim s As String = CStr(selected_rows(i).Item(1))
+                If a_file_manager.OntologyManager.Ontology.HasTermCode(s) AndAlso Not Array.IndexOf(excludedTerms, s) > -1 Then
                     Dim New_row As DataRow
                     New_row = Frm.DTab_1.NewRow
-                    New_row(1) = selected_rows(i).Item(1)
+                    New_row(1) = s
                     New_row(2) = selected_rows(i).Item(2)
                     Frm.DTab_1.Rows.Add(New_row)
                 End If
@@ -702,8 +704,8 @@ Public Class OceanArchetypeEditor
 
 #Else
         'FOR TESTING LANGUAGE TRANSLATION
-        mDefaultLanguageCode = "es"
-        mSpecificLanguageCode = "es-cl"
+        'mDefaultLanguageCode = "es"
+        ' mSpecificLanguageCode = "es-cl"
 
         'mDefaultLanguageCode = "fa"
         'mSpecificLanguageCode = "fa"
@@ -717,8 +719,8 @@ Public Class OceanArchetypeEditor
         'mDefaultLanguageCode = "nl"
         'mSpecificLanguageCode = "nl"
 
-        'mDefaultLanguageCode = "de"
-        'mSpecificLanguageCode = "de"
+        mDefaultLanguageCode = "de"
+        mSpecificLanguageCode = "de"
 #End If
 
         Dim di As New System.IO.DirectoryInfo(Application.StartupPath)
@@ -777,12 +779,6 @@ Public Class OceanArchetypeEditor
         If IsLanguageRightToLeft(mDefaultLanguageCode) Then
             frm.RightToLeft = RightToLeft.Yes
         End If
-
-        'Try
-        '    OTSControls.Term.OtsWebService.dummyQueryNavigationNode(Nothing, Nothing)
-        'Catch
-        '    Stop
-        'End Try
 
         Try
             frm.ShowDialog()

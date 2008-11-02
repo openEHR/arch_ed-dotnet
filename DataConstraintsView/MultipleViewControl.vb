@@ -30,8 +30,8 @@ Public Class MultipleViewControl : Inherits ElementViewControl
 
         Dim tabctrl As New TabControl
 
-        tabctrl.Height = 60
-        tabctrl.Width = 600
+        tabctrl.Height = 80
+        tabctrl.Width = 620
         tabctrl.Location = aLocation
 
         'Dim rel_pos As New Point(5, 5)
@@ -57,7 +57,7 @@ Public Class MultipleViewControl : Inherits ElementViewControl
             '    Case Else
             '        tp.Controls.Add(DataTypeToControl(c, rel_pos))
             'End Select
-            Dim viewControl As ElementViewControl = ArchetypeView.ElementView(c, mFileManager)
+            Dim viewControl As ElementViewControl = ArchetypeView.ConstraintView(c, mFileManager)
             'If viewControl.Width > max_width Then
             '    max_width = viewControl.Width
             'End If

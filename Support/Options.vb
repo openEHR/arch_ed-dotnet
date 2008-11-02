@@ -17,12 +17,13 @@ Public Class Options
     Private mUseXsltForHtml As Boolean
     Private mShowTermsInHtml As Boolean
     Private mShowCommentsInHtml As Boolean
+    Private mShowLinksButton As Boolean
     Private mDefaultParser As String
     Private mTimerMinutes As Integer = 10
     Private mAllowWebSearch As Boolean
-    Private mArchetypeRepositoryURL As New Uri("http://archetypes.com.au/archetypefinder/services/ArchetypeFinderBean?wsdl")
+    Private mArchetypeRepositoryUrl As New Uri("http://archetypes.com.au/archetypefinder/services/ArchetypeFinderBean?wsdl")
     Private mAllowTerminologyLookUp As Boolean
-    Private mTerminologyURL As New Uri("http://ots.oceaninformatics.biz/OTS/OTSService.asmx")
+    Private mTerminologyUrl As New Uri("http://ots.oceaninformatics.com/OTS/OTSService.asmx")
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
     Property UserName() As String
@@ -88,21 +89,30 @@ Public Class Options
         End Set
     End Property
 
-    Property RepositoryURL() As Uri
+    Property RepositoryUrl() As Uri
         Get
-            Return mArchetypeRepositoryURL
+            Return mArchetypeRepositoryUrl
         End Get
         Set(ByVal value As Uri)
-            mArchetypeRepositoryURL = value
+            mArchetypeRepositoryUrl = value
         End Set
     End Property
 
-    Property TerminologyURL() As Uri
+    Property TerminologyUrl() As Uri
         Get
-            Return mTerminologyURL
+            Return mTerminologyUrl
         End Get
         Set(ByVal value As Uri)
-            mTerminologyURL = value
+            mTerminologyUrl = value
+        End Set
+    End Property
+
+    Property AllowTerminologyLookUp() As Boolean
+        Get
+            Return mAllowTerminologyLookUp
+        End Get
+        Set(ByVal Value As Boolean)
+            mAllowTerminologyLookUp = Value
         End Set
     End Property
 
@@ -151,6 +161,15 @@ Public Class Options
         End Set
     End Property
 
+    Property ShowLinksButton() As Boolean
+        Get
+            Return mShowLinksButton
+        End Get
+        Set(ByVal value As Boolean)
+            mShowLinksButton = value
+        End Set
+    End Property
+
     Property OccurrencesView() As String
         Get
             Return mOccurrencesView
@@ -187,15 +206,6 @@ Public Class Options
         End Set
     End Property
 
-    Property AllowTerminologyLookUp() As Boolean
-        Get
-            Return mAllowTerminologyLookUp
-        End Get
-        Set(ByVal Value As Boolean)
-            mAllowTerminologyLookUp = Value
-        End Set
-    End Property
-
     Property AutosaveInterval() As Integer
         Get
             Return mTimerMinutes
@@ -219,7 +229,7 @@ Public Class Options
         frm.RepositoryAutoSaveCheckBox.Checked = mRepositoryAutoSave
         frm.XmlRepositoryPathTextBox.Text = mXmlRepositoryPath
         frm.XmlRepositoryAutoSaveCheckBox.Checked = mXmlRepositoryAutoSave
-        frm.txtTerminologyURL.Text = OTSControls.Term.OtsWebService.Url
+        frm.txtTerminologyURL.Text = mTerminologyUrl.ToString
         frm.txtHelpFile.Text = mHelpPath
         frm.comboOccurrences.Text = mOccurrencesView
         frm.chkWebSearch.Checked = mAllowWebSearch
@@ -230,8 +240,7 @@ Public Class Options
         Next
 
         frm.numAutoSave.Value = CDec(mTimerMinutes)
-        frm.txtURL.Text = mArchetypeRepositoryURL.ToString
-        frm.txtTerminologyURL.Text = mTerminologyURL.ToString
+        frm.txtURL.Text = mArchetypeRepositoryUrl.ToString
 
         If mDefaultParser = "xml" Then
             frm.chkParserXML.Checked = True
@@ -243,6 +252,7 @@ Public Class Options
         frm.XsltScriptPathCheckBox.Checked = mUseXsltForHtml
         frm.chkShowTerminologyInHTML.Checked = mShowTermsInHtml
         frm.chkShowCommentsInHTML.Checked = mShowCommentsInHtml
+        frm.ShowLinksButtonCheckBox.Checked = mShowLinksButton
 
         frm.comboReferenceModel.SelectedIndex = mDefaultRM
         frm.Panel_0.BackColor = mColors(0)
@@ -268,14 +278,14 @@ Public Class Options
             mUseXsltForHtml = frm.XsltScriptPathCheckBox.Checked
             mShowTermsInHtml = frm.chkShowTerminologyInHTML.Checked
             mShowCommentsInHtml = frm.chkShowCommentsInHTML.Checked
+            mShowLinksButton = frm.ShowLinksButtonCheckBox.Checked
 
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
             mOccurrencesView = frm.comboOccurrences.Text
-            mArchetypeRepositoryURL = New Uri(frm.txtURL.Text)
+            mArchetypeRepositoryUrl = New Uri(frm.txtURL.Text)
 
             If Uri.IsWellFormedUriString(frm.txtTerminologyURL.Text, UriKind.Absolute) Then
-                mTerminologyURL = New Uri(frm.txtTerminologyURL.Text)
-                OTSControls.Term.OtsWebService.Url = frm.txtTerminologyURL.Text
+                mTerminologyUrl = New Uri(frm.txtTerminologyURL.Text)
             End If
 
             mTimerMinutes = CInt(frm.numAutoSave.Value)
@@ -319,8 +329,8 @@ Public Class Options
                 StrmRead = New StreamReader(filename)
 
                 While StrmRead.Peek > 0
-
                     x = StrmRead.ReadLine
+
                     Try
                         y = x.Split("=")
 
@@ -350,6 +360,8 @@ Public Class Options
                                     mShowTermsInHtml = Boolean.Parse(y(1).Trim)
                                 Case "ShowCommentsInHtml"
                                     mShowCommentsInHtml = Boolean.Parse(y(1).Trim)
+                                Case "ShowLinksButton"
+                                    mShowLinksButton = Boolean.Parse(y(1).Trim)
                                 Case "DefaultReferenceModel"
                                     mDefaultRM = Val(y(1).Trim)
                                 Case "StateMachineColours"
@@ -364,38 +376,41 @@ Public Class Options
                                 Case "AllowSearchForArchetypesFromWeb"
                                     mAllowWebSearch = Boolean.Parse(y(1).Trim)
                                 Case "SharedRepositoryUrl"
-                                    mArchetypeRepositoryURL = New Uri(y(1).Trim)
+                                    mArchetypeRepositoryUrl = New Uri(y(1).Trim)
                                 Case "AllowTerminologyLookUp"
                                     mAllowTerminologyLookUp = Boolean.Parse(y(1).Trim)
                                 Case "AutosaveInterval"
                                     mTimerMinutes = Integer.Parse(y(1).Trim)
                                 Case "TerminologyUrl"
                                     Dim uriString As String = y(1).Trim
+
                                     If Uri.IsWellFormedUriString(uriString, UriKind.Absolute) Then
-                                        mTerminologyURL = New Uri(uriString)
-                                        OTSControls.Term.OtsWebService.Url = mTerminologyURL.ToString
+                                        mTerminologyUrl = New Uri(uriString)
                                     End If
                             End Select
                         Else
                             MessageBox.Show("Error reading '" & y(0) & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                         End If
                     Catch e As Exception
-                        MessageBox.Show("Error reading Configuration File 'ArchetypeEditor.cfg' - please view options and save to restore: " & e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        MessageBox.Show("Error reading Configuration File '" & filename & "' - please view options and save to restore: " & e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                         If Not StrmRead Is Nothing Then
                             StrmRead.Close()
                         End If
-                        Return False
+
+                        Return False    ' FIXME: Spaghetti code and command-query separation
                     End Try
                 End While
             Catch e As Exception
                 MessageBox.Show("Error reading Configuration File 'ArchetypeEditor.cfg' - please view options and save to restore: " & e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Return False
+                Return False    ' FIXME: Spaghetti code and command-query separation
             End Try
+
             StrmRead.Close()
         Else
-            Return False
+            Return False    ' FIXME: Spaghetti code and command-query separation
         End If
-        Return True
+
+        Return True ' FIXME: Spaghetti code and command-query separation
     End Function
 
     Sub WriteConfiguration()
@@ -413,13 +428,14 @@ Public Class Options
                 StrmWrite.WriteLine("RepositoryAutoSave=" & mRepositoryAutoSave)
                 StrmWrite.WriteLine("XmlRepositoryPath=" & mXmlRepositoryPath)
                 StrmWrite.WriteLine("XmlRepositoryAutoSave=" & mXmlRepositoryAutoSave)
-                StrmWrite.WriteLine("SharedRepositoryUrl=" & mArchetypeRepositoryURL.ToString)
-                StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyURL.ToString)
+                StrmWrite.WriteLine("SharedRepositoryUrl=" & mArchetypeRepositoryUrl.ToString)
+                StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyUrl.ToString)
                 StrmWrite.WriteLine("HelpPath=" & mHelpPath)
                 StrmWrite.WriteLine("XsltScriptPath=" & mXsltScriptPath)
                 StrmWrite.WriteLine("UseXsltForHtml=" & mUseXsltForHtml.ToString)
                 StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
                 StrmWrite.WriteLine("ShowCommentsInHtml=" & mShowCommentsInHtml.ToString)
+                StrmWrite.WriteLine("ShowLinksButton=" & mShowLinksButton.ToString)
                 StrmWrite.WriteLine("DefaultReferenceModel=" & mDefaultRM.ToString)
                 StrmWrite.WriteLine("AllowSearchForArchetypesFromWeb=" & mAllowWebSearch.ToString)
                 StrmWrite.WriteLine("AllowTerminologyLookUp=" & mAllowTerminologyLookUp.ToString)
@@ -460,6 +476,7 @@ Public Class Options
 
     Function StateMachineColour(ByVal a_StateMachineType As StateMachineType) As Color
         Debug.Assert(a_StateMachineType <> StateMachineType.Not_Set)
+
         Select Case a_StateMachineType
             Case StateMachineType.Initial
                 Return mColors(0)
@@ -478,7 +495,6 @@ Public Class Options
             Case StateMachineType.Scheduled
                 Return mColors(7)
         End Select
-
     End Function
 
     Function ValidateConfiguration() As Boolean
@@ -517,6 +533,7 @@ Public Class Options
         mUseXsltForHtml = False
         mShowTermsInHtml = False
         mShowCommentsInHtml = False
+        mShowLinksButton = False
         mOccurrencesView = "numeric"
         mDefaultParser = "adl"
         mAllowWebSearch = False

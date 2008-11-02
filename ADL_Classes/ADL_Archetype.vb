@@ -106,9 +106,18 @@ Namespace ArchetypeEditor.ADL_Classes
         Public Overrides ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
             Get
                 Me.MakeParseTree()
+
                 Try
                     adlEngine.serialise(EiffelKernel.Create.STRING_8.make_from_cil(a_format))
                     Return adlEngine.serialised_archetype.to_cil
+                Catch e As System.Reflection.TargetInvocationException
+                    If Not e.InnerException Is Nothing Then
+                        MessageBox.Show(e.InnerException.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Else
+                        MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End If
+
+                    Return AE_Constants.Instance.Error_saving
                 Catch e As Exception
                     MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Return AE_Constants.Instance.Error_saving
@@ -119,10 +128,12 @@ Namespace ArchetypeEditor.ADL_Classes
             Get
                 Dim list As EiffelList.ARRAYED_LIST_REFERENCE
                 Dim i As Integer
+
                 ' must call the prepareToSave to ensure it is accurate
-                If (Not Filemanager.Master.FileLoading) AndAlso (Not parserIsSynchronised) Then
+                If Not Filemanager.Master.FileLoading AndAlso Not parserIsSynchronised Then
                     MakeParseTree()
                 End If
+
                 ' showing the task with logical paths takes a lot of space
                 If Logical Then
                     list = adlArchetype.logical_paths(EiffelKernel.Create.STRING_8.make_from_cil(LanguageCode))
@@ -166,7 +177,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Else
                     ' does this involve a change in the entity (affects the GUI a great deal!)
                     If Not id.rm_entity.is_equal(adlArchetype.archetype_id.rm_entity) Then
-                        Debug.Assert(False, "Not handled")
+                        Debug.Assert(False, "RM entity " & id.rm_entity.to_cil & " does not match " & adlArchetype.archetype_id.rm_entity.to_cil & ": changing the RM entity is not yet implemented.")
                         ' will need to reset the GUI to the new entity
                         setDefinition()
                     End If
@@ -415,7 +426,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             BuildStructure(a_rm, objNode)
                             path = Me.GetPathOfNode(a_rm.NodeId)
                         End If
-                        
+
                     Else
                         If embeddedState Then
                             BuildSlot(an_attribute, a_rm)
@@ -631,11 +642,11 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim magnitude As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
             If ct.HasMaximum And ct.HasMinimum Then
-                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_bounded(ct.MinimumValue, ct.MaximumValue, ct.IncludeMinimum, ct.IncludeMaximum))
+                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_bounded(ct.MinimumRealValue, ct.MaximumRealValue, ct.IncludeMinimum, ct.IncludeMaximum))
             ElseIf ct.HasMaximum Then
-                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum))
+                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_lower_unbounded(ct.MaximumRealValue, ct.IncludeMaximum))
             ElseIf ct.HasMinimum Then
-                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_upper_unbounded(ct.MinimumValue, ct.IncludeMinimum))
+                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_upper_unbounded(ct.MinimumRealValue, ct.IncludeMinimum))
             Else
                 Debug.Assert(False)
                 Return
@@ -748,48 +759,62 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
-            BuildSlot(value_attribute, a_slot.SlotConstraint, a_slot.Occurrences)
+            Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
+
+            If a_slot.NodeId = String.Empty Then
+                slot = mAomFactory.create_archetype_slot_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)))
+            Else
+                slot = mAomFactory.create_archetype_slot_identified(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)), EiffelKernel.Create.STRING_8.make_from_cil(a_slot.NodeId))
+            End If
+            slot.set_occurrences(MakeOccurrences(a_slot.Occurrences))
+
+            BuildSlot(slot, a_slot.SlotConstraint)
         End Sub
 
-        Protected Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal sl As Constraint_Slot, ByVal an_occurrence As RmCardinality)
-            Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
-            slot = mAomFactory.create_archetype_slot_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(sl.RM_ClassType)))
-            slot.set_occurrences(MakeOccurrences(an_occurrence))
+        Protected Sub BuildSlot(ByVal slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT, ByVal sl As Constraint_Slot)
+            Dim pattern As New System.Text.StringBuilder()
+            Dim classPrefix As String = ""
 
             If sl.hasSlots Then
+                If Not ReferenceModel.IsAbstract(sl.RM_ClassType) Then
+                    ' ids will be clipped
+                    classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, sl.RM_ClassType.ToString.ToUpperInvariant)
+                End If
+
                 If sl.IncludeAll Then
                     slot.add_include(MakeAssertion("archetype_id/value", ".*"))
-                Else
-                    Dim pattern As String = ""
-
+                ElseIf sl.Include.Items.GetLength(0) > 0 Then
                     For Each s As String In sl.Include
-                        If pattern = "" Then
-                            pattern = s
-                        Else
-                            pattern &= "|" & s
+                        If pattern.Length > 0 Then
+                            pattern.Append("|")
                         End If
+
+                        pattern.AppendFormat("{0}{1}", classPrefix, s)
                     Next
 
-                    If pattern <> "" Then
-                        slot.add_include(MakeAssertion("archetype_id/value", pattern))
+                    If pattern.Length > 0 Then
+                        slot.add_include(MakeAssertion("archetype_id/value", pattern.ToString()))
                     End If
+                ElseIf sl.Exclude.Items.GetLength(0) > 0 Then
+                    ' have specific exclusions but no inclusions
+                    slot.add_include(MakeAssertion("archetype_id/value", ".*"))
                 End If
+
+                pattern = New System.Text.StringBuilder()
 
                 If sl.ExcludeAll Then
                     slot.add_exclude(MakeAssertion("archetype_id/value", ".*"))
                 Else
-                    Dim pattern As String = ""
-
                     For Each s As String In sl.Exclude
-                        If pattern = "" Then
-                            pattern = s
-                        Else
-                            pattern &= "|" & s
+                        If pattern.Length > 0 Then
+                            pattern.Append("|")
                         End If
+
+                        pattern.AppendFormat("{0}{1}", classPrefix, s)
                     Next
 
-                    If pattern <> "" Then
-                        slot.add_exclude(MakeAssertion("archetype_id/value", pattern))
+                    If pattern.Length > 0 Then
+                        slot.add_exclude(MakeAssertion("archetype_id/value", pattern.ToString()))
                     End If
                 End If
 
@@ -860,11 +885,11 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         If unit_constraint.HasMaximum Or unit_constraint.HasMinimum Then
                             If unit_constraint.HasMaximum And unit_constraint.HasMinimum Then
-                                a_real = mAomFactory.create_real_interval_make_bounded(unit_constraint.MinimumValue, unit_constraint.MaximumValue, unit_constraint.IncludeMinimum, unit_constraint.IncludeMaximum)
+                                a_real = mAomFactory.create_real_interval_make_bounded(unit_constraint.MinimumRealValue, unit_constraint.MaximumRealValue, unit_constraint.IncludeMinimum, unit_constraint.IncludeMaximum)
                             ElseIf unit_constraint.HasMaximum Then
-                                a_real = mAomFactory.create_real_interval_make_lower_unbounded(unit_constraint.MaximumValue, unit_constraint.IncludeMaximum)
+                                a_real = mAomFactory.create_real_interval_make_lower_unbounded(unit_constraint.MaximumRealValue, unit_constraint.IncludeMaximum)
                             ElseIf unit_constraint.HasMinimum Then
-                                a_real = mAomFactory.create_real_interval_make_upper_unbounded(unit_constraint.MinimumValue, unit_constraint.IncludeMinimum)
+                                a_real = mAomFactory.create_real_interval_make_upper_unbounded(unit_constraint.MinimumRealValue, unit_constraint.IncludeMinimum)
                             End If
                         End If
 
@@ -922,19 +947,14 @@ Namespace ArchetypeEditor.ADL_Classes
             c_value = mAomFactory.create_c_dv_ordinal(value_attribute)
             If o.OrdinalValues.Count > 0 Then
                 For Each o_v In o.OrdinalValues
-                    'SRH: Added 20070210 - the table can offer ordinals that are empty
-                    Try
-                        If o_v.InternalCode <> Nothing Then
-                            Dim cadlO As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
-                            cadlO = mAomFactory.create_ordinal(o_v.Ordinal, EiffelKernel.Create.STRING_8.make_from_cil("local::" & o_v.InternalCode))
-                            c_value.add_item(cadlO)
-                            If o.HasAssumedValue And o_v.Ordinal = CInt(o.AssumedValue) Then
-                                c_value.set_assumed_value_from_integer(CInt(o.AssumedValue))
-                            End If
+                    If o_v.InternalCode <> Nothing Then
+                        Dim cadlO As openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL
+                        cadlO = mAomFactory.create_ordinal(o_v.Ordinal, EiffelKernel.Create.STRING_8.make_from_cil("local::" & o_v.InternalCode))
+                        c_value.add_item(cadlO)
+                        If o.HasAssumedValue And o_v.Ordinal = CInt(o.AssumedValue) Then
+                            c_value.set_assumed_value_from_integer(CInt(o.AssumedValue))
                         End If
-                    Catch
-                        'No action as dbnull
-                    End Try
+                    End If
                 Next
             End If
         End Sub
@@ -1032,9 +1052,9 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Sub BuildIdentifier(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
-            
+
             objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
-            
+
             If c.IssuerRegex <> Nothing Then
                 'Add a constraint to C_STRING
                 Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE

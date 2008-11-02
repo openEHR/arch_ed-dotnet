@@ -522,14 +522,14 @@ Namespace ArchetypeEditor.XML_Classes
 
             If cadlC.range.lowerSpecified Then
                 ct.HasMinimum = True
-                ct.MinimumValue = cadlC.range.lower
+                ct.MinimumRealValue = cadlC.range.lower
                 ct.IncludeMinimum = cadlC.range.lower_included
             Else
                 ct.HasMinimum = False
             End If
             If cadlC.range.upperSpecified Then
                 ct.HasMaximum = True
-                ct.MaximumValue = cadlC.range.upper
+                ct.MaximumRealValue = cadlC.range.upper
                 ct.IncludeMaximum = cadlC.range.upper_included
             Else
                 ct.HasMaximum = False
@@ -737,9 +737,7 @@ Namespace ArchetypeEditor.XML_Classes
             If Not an_ordinal_value.list Is Nothing Then
                 For Each ehr_ordinal In an_ordinal_value.list
 
-                    Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
 
-                    newOrdinal.Ordinal = CInt(ehr_ordinal.value)
 
                     'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
                     'If ehr_ordinal.symbol.terminology_id = "local" Then
@@ -753,8 +751,14 @@ Namespace ArchetypeEditor.XML_Classes
                         If Not ehr_ordinal.symbol.defining_code Is Nothing Then
                             If Not ehr_ordinal.symbol.defining_code.terminology_id Is Nothing Then
                                 If ehr_ordinal.symbol.defining_code.terminology_id.value = "local" Then
-                                    newOrdinal.InternalCode = ehr_ordinal.symbol.defining_code.code_string
-                                    ord.OrdinalValues.Add(newOrdinal)
+                                    'SRH: 31 May 2008 - check for redundancy in AT codes when adding ordinals (had a problem after manual cutting and pasting by some users
+                                    If Array.IndexOf(ord.InternalCodes, ehr_ordinal.symbol.defining_code.code_string) = -1 Then
+                                        Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
+
+                                        newOrdinal.Ordinal = CInt(ehr_ordinal.value)
+                                        newOrdinal.InternalCode = ehr_ordinal.symbol.defining_code.code_string
+                                        ord.OrdinalValues.Add(newOrdinal)
+                                    End If
                                 End If
                             End If
                         End If
@@ -1026,12 +1030,12 @@ Namespace ArchetypeEditor.XML_Classes
 
                             u.HasMaximum = (cqi.magnitude.upperSpecified)
                             If u.HasMaximum Then
-                                u.MaximumValue = cqi.magnitude.upper
+                                u.MaximumRealValue = cqi.magnitude.upper
                                 u.IncludeMaximum = cqi.magnitude.upper_included
                             End If
                             u.HasMinimum = (cqi.magnitude.lowerSpecified)
                             If u.HasMinimum Then
-                                u.MinimumValue = cqi.magnitude.lower
+                                u.MinimumRealValue = cqi.magnitude.lower
                                 u.IncludeMinimum = cqi.magnitude.lower_included
                             End If
                         End If

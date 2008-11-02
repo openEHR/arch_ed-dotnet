@@ -66,6 +66,7 @@ Public Class TabPageSection
     Friend WithEvents ilSection As System.Windows.Forms.ImageList
     Friend WithEvents ContextMenuTree As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuSectionAdd As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuNameSlot As System.Windows.Forms.MenuItem
     Friend WithEvents MenuSectionRemove As System.Windows.Forms.MenuItem
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents butListUp As System.Windows.Forms.Button
@@ -87,6 +88,7 @@ Public Class TabPageSection
         Me.tvSection = New System.Windows.Forms.TreeView
         Me.ContextMenuTree = New System.Windows.Forms.ContextMenu
         Me.MenuSectionAdd = New System.Windows.Forms.MenuItem
+        Me.MenuNameSlot = New System.Windows.Forms.MenuItem
         Me.MenuSectionRemove = New System.Windows.Forms.MenuItem
         Me.ilSection = New System.Windows.Forms.ImageList(Me.components)
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -168,7 +170,7 @@ Public Class TabPageSection
         '
         'ContextMenuTree
         '
-        Me.ContextMenuTree.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuSectionAdd, Me.MenuSectionRemove})
+        Me.ContextMenuTree.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuSectionAdd, Me.MenuSectionRemove, Me.MenuNameSlot})
         '
         'MenuSectionAdd
         '
@@ -179,6 +181,12 @@ Public Class TabPageSection
         '
         Me.MenuSectionRemove.Index = 1
         Me.MenuSectionRemove.Text = "Remove"
+        Me.MenuSectionRemove.Visible = False
+        '
+        'MenuNameSlot
+        '
+        Me.MenuNameSlot.Index = 2
+        Me.MenuNameSlot.Text = "Name this slot"
         Me.MenuSectionRemove.Visible = False
         '
         'ilSection
@@ -426,12 +434,18 @@ Public Class TabPageSection
             Dim tvNode As ArchetypeTreeNode
 
             tvNode = e.Node
-            If tvNode.Text = "" Then
+            If e.Label = "" Or e.Label = " " Or e.Label = "  " Then
                 e.CancelEdit = True
                 Return
             End If
 
             tvNode.Text = e.Label
+
+            'Slots may set text to include class
+            If tvNode.Text <> e.Label Then
+                e.CancelEdit = True
+            End If
+
         End If
     End Sub
 
@@ -441,8 +455,7 @@ Public Class TabPageSection
         Dim tvNode As ArchetypeTreeNode
 
         tvNode = e.Node
-        If tvNode.RM_Class.Type = StructureType.Slot Then
-            Beep()
+        If tvNode.RM_Class.Type = StructureType.Slot AndAlso TypeOf (tvNode.Item) Is ArchetypeNodeAnonymous Then
             e.CancelEdit = True
         End If
     End Sub
@@ -457,9 +470,39 @@ Public Class TabPageSection
         End If
     End Sub
 
+    Private Sub NameSlot_Click(ByVal sender As Object, ByVal e As EventArgs) Handles MenuNameSlot.Click
+        Dim a_node As ArchetypeTreeNode = tvSection.SelectedNode
+        Dim slot As ArchetypeNodeAnonymous = CType(a_node.Item, ArchetypeNodeAnonymous)
+        Dim newSlot As New ArchetypeSlot(slot, mFileManager)
+        Dim i As Integer = a_node.Index
+        Dim nc As TreeNodeCollection
+        If a_node.Parent Is Nothing Then
+            nc = tvSection.Nodes
+        Else
+            nc = a_node.Parent.Nodes
+        End If
+
+        a_node.Remove()
+
+        a_node = New ArchetypeTreeNode(newSlot)
+        nc.Insert(i, a_node)
+
+        a_node.ImageIndex = 0
+        a_node.SelectedImageIndex = 2
+
+        a_node.EnsureVisible()
+        tvSection.SelectedNode = a_node
+
+        mFileManager.FileEdited = True
+        a_node.BeginEdit()
+
+    End Sub
+
 
     Private Sub tvSection_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles tvSection.AfterSelect
         ' pass the active selection as an iArchetypeItemNode
+        MenuNameSlot.Visible = False
+
         If tvSection.SelectedNode Is Nothing Then
             MenuSectionRemove.Visible = False
             mConstraintDisplay.Visible = False
@@ -473,7 +516,12 @@ Public Class TabPageSection
                 Me.ResumeLayout()
             Catch
                 Debug.Assert(False, "Type is not catered for")
+                Return
             End Try
+
+            If a_node.Item.RM_Class.Type = StructureType.Slot AndAlso TypeOf a_node.Item Is ArchetypeNodeAnonymous Then
+                MenuNameSlot.Visible = True
+            End If
 
             If Not mConstraintDisplay.Visible Then
                 mConstraintDisplay.Visible = True
@@ -507,24 +555,28 @@ Public Class TabPageSection
 
     Sub AddSlot(ByVal sender As Object, ByVal e As EventArgs)
         Dim struct_type As StructureType
-        Dim tvNode As ArchetypeTreeNode
+        Dim tvNode As ArchetypeTreeNode = Nothing
+        Dim editLabel As Boolean = False
+
+        struct_type = CInt(CType(sender, MenuItem).Tag)
+        Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            Case DialogResult.Yes
+                tvNode = New ArchetypeTreeNode(New ArchetypeSlot(struct_type.ToString, struct_type, mFileManager))
+                editLabel = True
+            Case DialogResult.No
+                tvNode = New ArchetypeTreeNode(New ArchetypeNodeAnonymous(struct_type))
+            Case DialogResult.Cancel
+                Return
+        End Select
+
+        tvNode.ImageIndex = 0
+        tvNode.SelectedImageIndex = 2
 
         If mRootOfComposition Then
-            struct_type = ReferenceModel.validArchetypeSlots(StructureType.COMPOSITION).GetValue(CType(sender, MenuItem).Index)
 
-            Dim archNode As New ArchetypeNodeAnonymous(struct_type)
-
-            tvNode = New ArchetypeTreeNode(archNode)
-            tvNode.SelectedImageIndex = 2
             Me.tvSection.Nodes.Add(tvNode)
 
         Else
-            struct_type = ReferenceModel.validArchetypeSlots(StructureType.SECTION).GetValue(CType(sender, MenuItem).Index)
-
-            Dim archNode As New ArchetypeNodeAnonymous(struct_type)
-
-            tvNode = New ArchetypeTreeNode(archNode)
-            tvNode.SelectedImageIndex = 2
 
             If tvSection.SelectedNode Is Nothing Or mNoHitNode Then
                 Me.tvSection.Nodes.Add(tvNode)
@@ -540,8 +592,8 @@ Public Class TabPageSection
         End If
         mFileManager.FileEdited = True
         tvNode.EnsureVisible()
+        tvNode.BeginEdit()
         Me.tvSection.SelectedNode = tvNode
-
 
     End Sub
 
@@ -551,7 +603,7 @@ Public Class TabPageSection
         Debug.Assert(mRootOfComposition = False)
 
         'Fixme
-        s = Filemanager.GetOpenEhrTerm(2000, "New Section")
+        s = Filemanager.GetOpenEhrTerm(314, "Section")
         Dim tvNode As New ArchetypeTreeNode(s, StructureType.SECTION, mFileManager)
 
         If Me.tvSection.SelectedNode Is Nothing Or mNoHitNode Then
@@ -588,7 +640,7 @@ Public Class TabPageSection
 
             For Each strtype As StructureType In ReferenceModel.validArchetypeSlots(StructureType.COMPOSITION)
                 mi = New MenuItem(Filemanager.GetOpenEhrTerm(strtype, strtype.ToString))
-
+                mi.Tag = CInt(strtype)
                 AddHandler mi.Click, AddressOf AddSlot
                 cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)
             Next
@@ -611,7 +663,7 @@ Public Class TabPageSection
 
             For Each strtype As StructureType In ReferenceModel.validArchetypeSlots(StructureType.SECTION)
                 mi = New MenuItem(Filemanager.GetOpenEhrTerm(strtype, strtype.ToString))
-
+                mi.Tag = CInt(strtype)
                 AddHandler mi.Click, AddressOf AddSlot
                 cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)
             Next

@@ -291,7 +291,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
     Private Sub AddCodeToOrdinal()
         If MyBase.IsLoading Then Return
 
-        Dim s As String() = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager)
+        Dim s As String() = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager, Me.Constraint.InternalCodes)
         If s Is Nothing Then Return
 
         For i As Integer = 0 To s.Length - 1

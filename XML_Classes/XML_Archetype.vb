@@ -1162,56 +1162,114 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildSlot(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal a_slot As RmSlot)
-            BuildSlot(value_attribute, a_slot.SlotConstraint, a_slot.Occurrences)
-        End Sub
-
-        Private Sub BuildSlot(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal sl As Constraint_Slot, ByVal an_occurrence As RmCardinality)
             Dim slot As XMLParser.ARCHETYPE_SLOT
 
             slot = New XMLParser.ARCHETYPE_SLOT
 
-            slot.rm_type_name = ReferenceModel.RM_StructureName(sl.RM_ClassType)
-            slot.occurrences = MakeOccurrences(an_occurrence)
-            slot.node_id = ""
+            slot.rm_type_name = ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)
+            slot.occurrences = MakeOccurrences(a_slot.Occurrences)
+            slot.node_id = a_slot.NodeId
+
+            BuildSlot(slot, a_slot.SlotConstraint)
+            mAomFactory.add_object(value_attribute, slot)
+
+        End Sub
+
+        Private Sub BuildSlot(ByRef slot As XMLParser.ARCHETYPE_SLOT, ByVal sl As Constraint_Slot)
+            Dim pattern As New System.Text.StringBuilder()
+            Dim classPreFix As String = ""
 
             If sl.hasSlots Then
+
+                If Not ReferenceModel.IsAbstract(sl.RM_ClassType) Then
+                    ' ids will be clipped
+                    classPreFix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, sl.RM_ClassType.ToString.ToUpperInvariant)
+                End If
+
                 If sl.IncludeAll Then
                     mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
                 Else
-                    For Each s As String In sl.Include
-                        Dim escapedString As String
-                        Dim i As Integer
-                        'Must have at least one escaped . or it is not valid unless it is the end
-                        i = s.IndexOf("\")
-                        If i > -1 AndAlso i <> (s.Length - 1) Then
-                            escapedString = s
-                        Else
-                            escapedString = s.Replace(".", "\.")
+                    If sl.Include.Items.GetLength(0) > 0 Then
+
+
+                        For Each s As String In sl.Include
+                            If pattern.ToString() = "" Then
+                                pattern.AppendFormat("{0}{1}", classPreFix, s)
+                            Else
+                                pattern.AppendFormat("|{0}{1}", classPreFix, s)
+                            End If
+                        Next
+
+                        If pattern.ToString <> "" Then
+                            mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", pattern.ToString()))
                         End If
-                        mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", escapedString))
-                    Next
+                    Else
+                        If sl.Exclude.Items.GetLength(0) > 0 Then
+                            ' have specific exclusions but no inclusions
+                            mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
+                        End If
+                    End If
                 End If
+
+                pattern = New System.Text.StringBuilder()
+
                 If sl.ExcludeAll Then
                     mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
                 Else
+
+
                     For Each s As String In sl.Exclude
-                        Dim escapedString As String
-                        Dim i As Integer
-                        'Must have at least one escaped . or it is not valid unless it is the end
-                        i = s.IndexOf("\")
-                        If i > -1 AndAlso i <> (s.Length - 1) Then
-                            escapedString = s
+                        If pattern.ToString() = "" Then
+                            pattern.AppendFormat("{0}{1}", classPreFix, s)
                         Else
-                            escapedString = s.Replace(".", "\.")
+                            pattern.AppendFormat("|{0}{1}", classPreFix, s)
                         End If
-                        mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", escapedString))
                     Next
+
+                    If pattern.ToString <> "" Then
+                        mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", pattern.ToString))
+                    End If
                 End If
             Else
                 mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
             End If
 
-            mAomFactory.add_object(value_attribute, slot)
+            'If sl.hasSlots Then
+            '    If sl.IncludeAll Then
+            '        mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
+            '    Else
+            '        For Each s As String In sl.Include
+            '            Dim escapedString As String
+            '            Dim i As Integer
+            '            'Must have at least one escaped . or it is not valid unless it is the end
+            '            i = s.IndexOf("\")
+            '            If i > -1 AndAlso i <> (s.Length - 1) Then
+            '                escapedString = s
+            '            Else
+            '                escapedString = s.Replace(".", "\.")
+            '            End If
+            '            mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", escapedString))
+            '        Next
+            '    End If
+            '    If sl.ExcludeAll Then
+            '        mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
+            '    Else
+            '        For Each s As String In sl.Exclude
+            '            Dim escapedString As String
+            '            Dim i As Integer
+            '            'Must have at least one escaped . or it is not valid unless it is the end
+            '            i = s.IndexOf("\")
+            '            If i > -1 AndAlso i <> (s.Length - 1) Then
+            '                escapedString = s
+            '            Else
+            '                escapedString = s.Replace(".", "\.")
+            '            End If
+            '            mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", escapedString))
+            '        Next
+            '    End If
+            'Else
+            '    mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
+            'End If
 
         End Sub
 
@@ -1330,7 +1388,7 @@ Namespace ArchetypeEditor.XML_Classes
                             'a_real.has_minimum = unit_constraint.HasMinimum
 
                             If unit_constraint.HasMaximum Then
-                                a_real.upper = unit_constraint.MaximumValue
+                                a_real.upper = unit_constraint.MaximumRealValue
                                 a_real.upperSpecified = True
                                 a_real.upper_included = unit_constraint.IncludeMaximum
                                 a_real.upper_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
@@ -1339,7 +1397,7 @@ Namespace ArchetypeEditor.XML_Classes
                             End If
 
                             If unit_constraint.HasMinimum Then
-                                a_real.lower = unit_constraint.MinimumValue
+                                a_real.lower = unit_constraint.MinimumRealValue
                                 a_real.lowerSpecified = True
                                 a_real.lower_included = unit_constraint.IncludeMinimum
                                 a_real.lower_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
@@ -1682,7 +1740,12 @@ Namespace ArchetypeEditor.XML_Classes
                         BuildDateTime(value_attribute, c)
 
                     Case ConstraintType.Slot
-                        BuildSlot(value_attribute, c, New RmCardinality)
+                        Dim slot As New RmSlot()
+
+                        slot.SlotConstraint = c
+                        slot.Occurrences.IsUnbounded = True
+
+                        BuildSlot(value_attribute, slot)
 
                     Case ConstraintType.Multiple
                         For Each a_constraint As Constraint In CType(c, Constraint_Choice).Constraints

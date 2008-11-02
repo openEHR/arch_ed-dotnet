@@ -73,7 +73,11 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim cp As New CodePhrase
 
             For i As Integer = 1 To Constraint.code_count
-                cp.Codes.Add(CType(Constraint.code_list.i_th(i), EiffelKernel.STRING_8).to_cil)
+                'SRH: 31 May 2008 - Check for repeats
+                Dim s As String = CType(Constraint.code_list.i_th(i), EiffelKernel.STRING_8).to_cil
+                If Not cp.Codes.Contains(s) Then
+                    cp.Codes.Add(s)
+                End If
             Next
 
             cp.TerminologyID = Constraint.terminology_id.value.to_cil

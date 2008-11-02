@@ -229,7 +229,7 @@ Public Class ArchetypeView
     End Sub
 
     Public Shared Function ElementView(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
-        'any additions need to be processed in the overloaded function below
+        'any additions need to be processed in the function below
         Dim t As ConstraintType
 
         If Not anElement Is Nothing AndAlso Not anElement.Constraint Is Nothing Then
@@ -264,6 +264,9 @@ Public Class ArchetypeView
             Case ConstraintType.URI
                 Return New URIViewControl(anElement, a_filemanager)
 
+            Case ConstraintType.Identifier
+                Return New IdentifierViewControl(anElement, a_filemanager)
+
             Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
                 Return New IntervalViewControl(anElement, a_filemanager)
 
@@ -278,8 +281,8 @@ Public Class ArchetypeView
         End Select
     End Function
 
-    Public Shared Function ElementView(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
-        'any additions need to be processed in the overloaded function above
+    Public Shared Function ConstraintView(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
+        'any additions need to be processed in the function above
         Dim t As ConstraintType
 
         If Not aConstraint Is Nothing Then
@@ -314,7 +317,10 @@ Public Class ArchetypeView
             Case ConstraintType.URI
                 Return New URIViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
+            Case ConstraintType.Identifier
+                Return New IdentifierViewControl(aConstraint, a_filemanager)
+
+            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
                 Return New IntervalViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Proportion

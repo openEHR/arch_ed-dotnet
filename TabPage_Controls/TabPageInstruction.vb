@@ -339,22 +339,18 @@ Public Class TabPageInstruction
 
     Public Function SaveAsInstruction() As RmStructureCompound
         Dim rm As New RmStructureCompound("Instruction", StructureType.INSTRUCTION)
-
-        'Add the activities
         Dim activities As New RmStructureCompound("activities", StructureType.Activities)
 
-        'for each activity - there is only one at present! EDT-44 Not any more!
-
         For Each tp As Crownwood.Magic.Controls.TabPage In Me.TabControlInstruction.TabPages
-            If Not tp Is tpNewActivity Then 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+            If Not tp Is tpNewActivity Then
                 Dim uc As Control = tp.Controls(0)
+
                 If TypeOf (uc) Is TabPageActivity Then
                     activities.Children.Add(CType(uc, TabPageActivity).Activity)
-                ElseIf TypeOf (uc) Is TabPageStructure Then 'Protocol
-                    rm.Children.Add(CType(uc, TabPageStructure).SaveAsStructure)
                 End If
             End If
         Next
+
         rm.Children.Add(activities)
         Return rm
     End Function

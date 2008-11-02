@@ -20,8 +20,8 @@ Public Class EntryStructure
     Inherits System.Windows.Forms.UserControl
 
     Private mStructureType As StructureType   'implement as overrided property
-    Protected MenuItemSpecialise As MenuItem
-    Protected MenuItemAddReference As MenuItem
+    'Protected MenuItemSpecialise As MenuItem
+    'Protected MenuItemAddReference As MenuItem
     Protected OKtoEditSpecialisation As Boolean
     Protected mNodeId As String
     Protected mIsState As Boolean
@@ -668,7 +668,6 @@ Public Class EntryStructure
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
 
-
     Protected Overridable Sub SetUpAddElementMenu()
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
@@ -678,6 +677,10 @@ Public Class EntryStructure
     End Sub
 
     Protected Overridable Sub AddReference(ByVal sender As Object, ByVal e As EventArgs)
+        Throw New NotImplementedException("Subclass must override this method")
+    End Sub
+
+    Protected Overridable Sub NameSlot(ByVal sender As Object, ByVal e As EventArgs)
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
 
@@ -723,9 +726,9 @@ Public Class EntryStructure
         RaiseEvent CurrentItemChanged(a_node, New EventArgs)
     End Sub
 
-    Protected Sub SetButtonVisibility(ByVal a_node As ArchetypeNode)
+    Public Sub SetButtonVisibility(ByVal a_node As ArchetypeNode)
         'Hide the icons if simple to stop drag and drop
-        If mStructureType = StructureType.Single AndAlso Me.pbText.Visible Then
+        If mStructureType = StructureType.Single AndAlso pbText.Visible Then
             pbAny.Hide()
             pbBoolean.Hide()
             pbCount.Hide()
@@ -737,6 +740,7 @@ Public Class EntryStructure
         End If
 
         If a_node Is Nothing OrElse a_node.RM_Class.Type <> StructureType.Element Then
+            butRemoveElement.Enabled = False
             butChangeDataType.Hide()
         Else
             butChangeDataType.Enabled = Not CType(a_node, ArchetypeElement).IsReference
@@ -793,7 +797,7 @@ Public Class EntryStructure
 
     End Sub
 
-    Protected Function ImageIndexForItem(ByVal item As ArchetypeNode, Optional ByVal isSelected As Boolean = False) As Integer
+    Protected Function ImageIndexForItem(ByVal item As ArchetypeNode, ByVal isSelected As Boolean) As Integer
         Select Case item.RM_Class.Type
             Case StructureType.Element, StructureType.Reference
                 Dim element As ArchetypeElement = CType(item, ArchetypeElement)
@@ -801,18 +805,16 @@ Public Class EntryStructure
             Case StructureType.Slot
                 Return ImageIndexForConstraintType(ConstraintType.Slot, False, isSelected)
             Case StructureType.Cluster
+                ' FIXME: This doesn't appear to be called from anywhere. Should we clean it up or delete it?
                 If isSelected Then
-                    Return 72
-                Else
                     Return 73
+                Else
+                    Return 72
                 End If
         End Select
-
     End Function
 
-    Protected Function ImageIndexForConstraintType(ByVal ct As ConstraintType, Optional ByVal isReference As Boolean = False, _
-        Optional ByVal isSelected As Boolean = False) As Integer
-
+    Protected Function ImageIndexForConstraintType(ByVal ct As ConstraintType, ByVal isReference As Boolean, ByVal isSelected As Boolean) As Integer
         Dim offset As Integer
 
         If isReference Then offset = 18
@@ -978,7 +980,6 @@ Public Class EntryStructure
             Me.ttElement.SetToolTip(Me.pbSlot, AE_Constants.Instance.Slot)
 
             Me.helpEntryStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
-
         End If
     End Sub
 

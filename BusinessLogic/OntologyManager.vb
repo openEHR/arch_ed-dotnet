@@ -224,7 +224,7 @@ Public Class OntologyManager
         mOntology.PopulateAllTerms(Me)
     End Sub
 
-    Public Function LanguageIsAvailable(ByVal code As String) As Boolean
+    Public Function HasLanguage(ByVal code As String) As Boolean
         Return Not mLanguagesTable.Rows.Find(code) Is Nothing
     End Function
 
@@ -269,7 +269,7 @@ Public Class OntologyManager
             End If
             mLastTerm = aterm  ' remember last one for efficiency
             Return aterm
-            End If
+        End If
     End Function
 
     Public Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
@@ -355,7 +355,7 @@ Public Class OntologyManager
             Next
 
         Else
-           
+
             For Each l_row In mLanguagesTable.Rows
 
                 d_row = mTermDefinitionsTable.NewRow
@@ -518,7 +518,7 @@ Public Class OntologyManager
                     mDoUpdateOntology = priorSetting
                 End If
             Next
-            
+
         Else
             'Need to update ontology here
             Dim keys(1) As Object
@@ -662,6 +662,27 @@ Public Class OntologyManager
         ' Return the new DataTable.
         Return SoCTable
     End Function
+
+    Public Sub SetBestLanguage()
+        ' set the specific language if it is present e.g. en-US, en-AU
+        'SRH Aug 15 2008: change to ensure best language choice
+
+        Dim bestLanguage As String
+
+        If HasLanguage(OceanArchetypeEditor.SpecificLanguageCode) Then
+            bestLanguage = OceanArchetypeEditor.SpecificLanguageCode
+        ElseIf HasLanguage(OceanArchetypeEditor.DefaultLanguageCode) Then
+            bestLanguage = OceanArchetypeEditor.DefaultLanguageCode
+        ElseIf HasLanguage(Filemanager.Master.OntologyManager.LanguageCode) Then
+            bestLanguage = Filemanager.Master.OntologyManager.LanguageCode
+        Else
+            bestLanguage = PrimaryLanguageCode
+        End If
+
+        If mFileManager.OntologyManager.LanguageCode <> bestLanguage Then
+            LanguageCode = bestLanguage
+        End If
+    End Sub
 
     Private Function MakeLanguagesTable() As DataTable
         ' Create a new DataTable titled 'Languages'

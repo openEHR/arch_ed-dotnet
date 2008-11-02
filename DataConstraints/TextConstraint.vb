@@ -107,7 +107,10 @@ Public Class Constraint_Text
             Return mTextConstraintType
         End Get
         Set(ByVal Value As TextConstrainType)
-            If Value = TextConstrainType.Internal Then
+            ' HKF: 29 Sep 2008 - EDT-335, resolve AdlParser ERROR - Serialisation failed Found leaf term code 271 not defined in ontology 
+            ' Ensure that Null Flavor code phrase terminology ID  of 'openehr' is not overwritten with local when TextConstraint set                
+            'If Value = TextConstrainType.Internal Then
+            If Value = TextConstrainType.Internal AndAlso Me.AllowableValues.TerminologyID <> "openehr" Then
                 Me.AllowableValues.TerminologyID = "local"
             End If
             mTextConstraintType = Value

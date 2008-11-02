@@ -51,39 +51,27 @@ Public Class TreeStructure
 
             Select Case a_rm_structure.Type '.TypeName
                 Case StructureType.Cluster ' "Cluster"
-                    Dim tvNode As ArchetypeTreeNode
-                    tvNode = New ArchetypeTreeNode(CType(a_rm_structure, RmCluster), mFileManager)
+                    Dim tvNode As ArchetypeTreeNode = New ArchetypeTreeNode(CType(a_rm_structure, RmCluster), mFileManager)
                     ProcessCluster(CType(a_rm_structure, RmCluster), tvNode)
-                    Me.tvTree.Nodes.Add(tvNode)
+                    tvTree.Nodes.Add(tvNode)
 
-                Case StructureType.Element, StructureType.Reference ' "Element"
-                    Dim tvNode As ArchetypeTreeNode
-                    Dim element As RmElement
-
-                    element = CType(a_rm_structure, RmElement)
-                    tvNode = New ArchetypeTreeNode(element, mFileManager)
-                    tvNode.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
-
-                    Me.tvTree.Nodes.Add(tvNode)
+                Case StructureType.Element, StructureType.Reference
+                    Dim element As RmElement = CType(a_rm_structure, RmElement)
+                    Dim tvNode As ArchetypeTreeNode = New ArchetypeTreeNode(element, mFileManager)
+                    tvNode.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.isReference, False)
+                    tvNode.SelectedImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
+                    tvTree.Nodes.Add(tvNode)
 
                 Case StructureType.Slot
-                    Dim tvNode As ArchetypeTreeNode
-                    Dim slot As RmSlot
-
-                    slot = CType(a_rm_structure, RmSlot)
-                    tvNode = New ArchetypeTreeNode(slot, mFileManager)
-                    tvNode.ImageIndex = Me.ImageIndexForItem(tvNode.Item, False)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForItem(tvNode.Item, True)
-
-                    Me.tvTree.Nodes.Add(tvNode)
+                    Dim tvNode As ArchetypeTreeNode = New ArchetypeTreeNode(CType(a_rm_structure, RmSlot), mFileManager)
+                    tvNode.ImageIndex = ImageIndexForItem(tvNode.Item, False)
+                    tvNode.SelectedImageIndex = ImageIndexForItem(tvNode.Item, True)
+                    tvTree.Nodes.Add(tvNode)
 
                 Case Else
                     Debug.Assert(False)
             End Select
-
         Next
-
     End Sub
 
     Public Sub New()
@@ -134,6 +122,7 @@ Public Class TreeStructure
     'Friend WithEvents ContextMenuTree As System.Windows.Forms.ContextMenu
     Friend WithEvents TreeContextMenu As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuRemove As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuNameSlot As MenuItem
     Friend WithEvents MenuExpandAll As System.Windows.Forms.MenuItem
     Friend WithEvents MenuCollapseAll As System.Windows.Forms.MenuItem
     Friend WithEvents MenuSpecialise As System.Windows.Forms.MenuItem
@@ -143,6 +132,7 @@ Public Class TreeStructure
         Me.tvTree = New System.Windows.Forms.TreeView
         Me.TreeContextMenu = New System.Windows.Forms.ContextMenu
         Me.MenuRemove = New System.Windows.Forms.MenuItem
+        Me.MenuNameSlot = New System.Windows.Forms.MenuItem
         Me.MenuRemoveItemAndReferences = New System.Windows.Forms.MenuItem
         Me.MenuExpandAll = New System.Windows.Forms.MenuItem
         Me.MenuCollapseAll = New System.Windows.Forms.MenuItem
@@ -169,7 +159,7 @@ Public Class TreeStructure
         '
         'TreeContextMenu
         '
-        Me.TreeContextMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRemove, Me.MenuExpandAll, Me.MenuCollapseAll, Me.MenuSpecialise, Me.MenuAddReference})
+        Me.TreeContextMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRemove, Me.MenuExpandAll, Me.MenuCollapseAll, Me.MenuSpecialise, Me.MenuAddReference, Me.MenuNameSlot})
         '
         'MenuRemove
         '
@@ -202,6 +192,11 @@ Public Class TreeStructure
         Me.MenuAddReference.Index = 4
         Me.MenuAddReference.Text = "Add reference"
         '
+        'MenuNameSlot
+        '
+        Me.MenuNameSlot.Index = 5
+        Me.MenuNameSlot.Text = "Name this slot"
+        '
         'TreeStructure
         '
         Me.Controls.Add(Me.tvTree)
@@ -213,7 +208,6 @@ Public Class TreeStructure
     End Sub
 
 #End Region
-
 
     Public Overrides ReadOnly Property Elements() As ArchetypeElement()
         Get
@@ -258,34 +252,33 @@ Public Class TreeStructure
         Next
     End Sub
 
-
     Private Sub TreeStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' set the variable in the base class
         mControl = tvTree
 
-        If Not Me.DesignMode Then
+        If Not DesignMode Then
             'set the text for the menus
-            Me.MenuRemove.Text = AE_Constants.Instance.Remove
-            Me.MenuExpandAll.Text = AE_Constants.Instance.Expand_All
-            Me.MenuCollapseAll.Text = AE_Constants.Instance.Collapse_All
-            Me.MenuSpecialise.Text = AE_Constants.Instance.Specialise
-            Me.MenuAddReference.Text = AE_Constants.Instance.Add_Reference
-            If Me.tvTree.GetNodeCount(False) > 0 Then
-                Me.tvTree.SelectedNode = Me.tvTree.Nodes(0)
+            MenuRemove.Text = AE_Constants.Instance.Remove
+            MenuExpandAll.Text = AE_Constants.Instance.Expand_All
+            MenuCollapseAll.Text = AE_Constants.Instance.Collapse_All
+            MenuSpecialise.Text = AE_Constants.Instance.Specialise
+            MenuAddReference.Text = AE_Constants.Instance.Add_Reference
+            MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
+
+            If tvTree.GetNodeCount(False) > 0 Then
+                tvTree.SelectedNode = tvTree.Nodes(0)
             End If
             ' add the change structure menu from EntryStructure
-            If (Not Me.IsCluster) AndAlso (Not Me.TreeContextMenu.MenuItems.Contains(menuChangeStructure)) Then
-                Me.TreeContextMenu.MenuItems.Add(menuChangeStructure)
+            If Not IsCluster AndAlso Not TreeContextMenu.MenuItems.Contains(menuChangeStructure) Then
+                TreeContextMenu.MenuItems.Add(menuChangeStructure)
             End If
         End If
-
     End Sub
 
     Private Sub ProcessChildrenRM_Structures(ByVal colNodes As TreeNodeCollection, _
         ByVal rm As RmStructureCompound)
 
         For Each tvNode As ArchetypeTreeNode In colNodes
-
             Select Case tvNode.Item.RM_Class.Type
                 Case StructureType.Cluster
                     Dim clusterNode As New RmCluster(CType(tvNode.Item, ArchetypeComposite))
@@ -299,7 +292,7 @@ Public Class TreeStructure
 
                 Case StructureType.Slot
                     Dim slotNode As RmSlot = CType(tvNode.Item.RM_Class, RmSlot)
-                    rm.Children.Add(SlotNode)
+                    rm.Children.Add(slotNode)
 
                 Case Else
                     Debug.Assert(False)
@@ -347,52 +340,29 @@ Public Class TreeStructure
         End Get
         Set(ByVal Value As RmStructureCompound)
             ' handles conversion from other structures
-
-            Me.tvTree.Nodes.Clear()
+            tvTree.Nodes.Clear()
             mNodeId = Value.NodeId
             MyBase.SetCardinality(Value)
 
-            Select Case Value.Type '.TypeName
-                Case StructureType.List ' "List"
-                    Dim element As RmElement
-
-                    For Each element In Value.Children
-                        Dim node As New ArchetypeTreeNode(element, mFileManager)
-                        node.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
-                        node.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
-                        tvTree.Nodes.Add(node)
+            Select Case Value.Type
+                Case StructureType.List
+                    For Each rm As RmStructure In Value.Children
+                        AddTreeNode(rm)
                     Next
 
-                Case StructureType.Single ' "SINGLE"
-                    Dim element As RmStructure
-                    element = Value.Children.FirstElementOrElementSlot
+                Case StructureType.Single
+                    Dim rm As RmStructure = Value.Children.FirstElementOrElementSlot
 
-                    If Not element Is Nothing Then
-                        Dim node As ArchetypeTreeNode
-
-                        If element.Type = StructureType.Element Then
-                            node = New ArchetypeTreeNode(CType(element, RmElement), mFileManager)
-                        Else
-                            node = New ArchetypeTreeNode(CType(element, RmSlot), mFileManager)
-                        End If
-
-                        node.ImageIndex = Me.ImageIndexForItem(node.Item)
-                        node.SelectedImageIndex = Me.ImageIndexForItem(node.Item, True)
-                        tvTree.Nodes.Add(node)
+                    If Not rm Is Nothing Then
+                        AddTreeNode(rm)
                     End If
 
-                Case StructureType.Table ' "TABLE"
+                Case StructureType.Table
                     If Value.Children.items(0).Type = StructureType.Cluster Then
-                        Dim clust As RmCluster
-                        Dim element As RmElement
+                        Dim clust As RmCluster = CType(Value.Children.items(0), RmCluster)
 
-                        clust = CType(Value.Children.items(0), RmCluster)
-
-                        For Each element In clust.Children
-                            Dim node As New ArchetypeTreeNode(element, mFileManager)
-                            node.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference)
-                            node.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.isReference, True)
-                            tvTree.Nodes.Add(node)
+                        For Each rm As RmStructure In clust.Children
+                            AddTreeNode(rm)
                         Next
                     Else
                         Debug.Assert(False, "Not expected type")
@@ -401,13 +371,32 @@ Public Class TreeStructure
         End Set
     End Property
 
+    Protected Sub AddTreeNode(ByVal rm As RmStructure)
+        Dim node As ArchetypeTreeNode
+
+        Select Case rm.Type
+            Case StructureType.Element, StructureType.Reference
+                node = New ArchetypeTreeNode(CType(rm, RmElement), mFileManager)
+            Case StructureType.Slot
+                node = New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
+            Case Else
+                node = Nothing
+                Debug.Assert(False, "Type not handled")
+        End Select
+
+        If Not node Is Nothing Then
+            node.ImageIndex = ImageIndexForItem(node.Item, False)
+            node.SelectedImageIndex = ImageIndexForItem(node.Item, True)
+            tvTree.Nodes.Add(node)
+        End If
+    End Sub
+
     Public Overrides Sub reset()
-        Me.tvTree.Nodes.Clear()
+        tvTree.Nodes.Clear()
     End Sub
 
     Private Sub PopulateTreeNodes(ByRef tvnodes As TreeNodeCollection)
-        Dim tn As ArchetypeTreeNode
-        For Each tn In tvnodes
+        For Each tn As ArchetypeTreeNode In tvnodes
             CType(tn, ArchetypeTreeNode).Translate()
             PopulateTreeNodes(tn.Nodes)
         Next
@@ -420,9 +409,7 @@ Public Class TreeStructure
     End Sub
 
     Friend Sub ProcessCluster(ByRef a_Cluster As RmCluster, ByRef ParentTreeNode As ArchetypeTreeNode)
-        Dim rm As RmStructure
-
-        For Each rm In a_Cluster.Children
+        For Each rm As RmStructure In a_Cluster.Children
             ' have to create links to the new archetype here to maintain updates
             Select Case rm.Type '.TypeName
                 Case StructureType.Cluster ' "Cluster"
@@ -432,22 +419,20 @@ Public Class TreeStructure
 
                 Case StructureType.Element, StructureType.Reference ' "Element", "Reference"
                     Dim tvNode As New ArchetypeTreeNode(CType(rm, RmElement), mFileManager)
-                    Dim archetype_element As ArchetypeElement = CType(tvNode.item, ArchetypeElement)
-                    tvNode.ImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
+                    Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
+                    tvNode.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, False)
+                    tvNode.SelectedImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
                     ParentTreeNode.Nodes.Add(tvNode)
 
                 Case StructureType.Slot
                     Dim tvNode As New ArchetypeTreeNode(CType(rm, RmSlot), mFileManager)
-                    Dim slot As ArchetypeNodeAnonymous = CType(tvNode.Item, ArchetypeNodeAnonymous)
-                    tvNode.ImageIndex = Me.ImageIndexForItem(slot)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForItem(slot, True)
+                    tvNode.ImageIndex = ImageIndexForItem(tvNode.Item, False)
+                    tvNode.SelectedImageIndex = ImageIndexForItem(tvNode.Item, True)
                     ParentTreeNode.Nodes.Add(tvNode)
 
                 Case Else
                     Debug.Assert(False, "Type not handled")
             End Select
-
         Next
     End Sub
 
@@ -460,7 +445,9 @@ Public Class TreeStructure
 
                 Dim tvNode As ArchetypeTreeNode = CType(Me.tvTree.SelectedNode, ArchetypeTreeNode)
 
-                If tvNode.Item.Occurrences.IsUnbounded Or tvNode.Item.Occurrences.MaxCount > 1 Then
+                If TypeOf tvNode.Item Is ArchetypeSlot Then
+                    tvNode.Specialise()
+                ElseIf tvNode.Item.Occurrences.IsUnbounded Or tvNode.Item.Occurrences.MaxCount > 1 Then
                     Dim i As Integer
 
                     i = CType(tvNode, ArchetypeTreeNode).Index
@@ -469,8 +456,8 @@ Public Class TreeStructure
                     If tvNode.Item.RM_Class.Type = StructureType.Element Then
                         Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
                         'Cannot specialise a reference
-                        tvNode.ImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type)
-                        tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, False, True)
+                        tvNode.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, False, False)
+                        tvNode.SelectedImageIndex = ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, False, True)
                     End If
 
                     If tvTree.SelectedNode.Parent Is Nothing Then
@@ -490,6 +477,7 @@ Public Class TreeStructure
     Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles MenuAddReference.Click
         Dim tvNode As ArchetypeTreeNode
         Dim ref As RmReference
+
         If Not tvTree.SelectedNode Is Nothing Then
             tvNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
             ' create a new reference element pointing to this element
@@ -497,14 +485,53 @@ Public Class TreeStructure
             ' record the presence of the reference so a delete can be safe
             CType(tvNode.Item.RM_Class, RmElement).hasReferences = True
             tvNode = New ArchetypeTreeNode(ref, mFileManager)
-            tvNode.ImageIndex = Me.ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, True)
-            tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, True, True)
+            tvNode.ImageIndex = ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, True, False)
+            tvNode.SelectedImageIndex = ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, True, True)
+
             If Me.tvTree.SelectedNode.Parent Is Nothing Then
                 Me.tvTree.Nodes.Insert(Me.tvTree.SelectedNode.Index + 1, tvNode)
             Else
                 Me.tvTree.SelectedNode.Parent.Nodes.Insert(Me.tvTree.SelectedNode.Index + 1, tvNode)
             End If
+
             mFileManager.FileEdited = True
+        End If
+    End Sub
+
+    Protected Overrides Sub NameSlot(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuNameSlot.Click
+        If Not tvTree.SelectedNode Is Nothing Then
+            ReplaceAnonymousSlot()
+            tvTree.SelectedNode.BeginEdit()
+        End If
+    End Sub
+
+    Protected Sub ReplaceAnonymousSlot()
+        If Not tvTree.SelectedNode Is Nothing Then
+            Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+
+            If tvNode.Item.IsAnonymous Then
+                Dim newSlot As New ArchetypeSlot(CType(tvNode.Item, ArchetypeNodeAnonymous), mFileManager)
+                Dim i As Integer = tvNode.Index
+                Dim nc As TreeNodeCollection
+
+                If tvNode.Parent Is Nothing Then
+                    nc = tvTree.Nodes
+                Else
+                    nc = tvNode.Parent.Nodes
+                End If
+
+                tvNode.Remove()
+                tvNode = New ArchetypeTreeNode(newSlot)
+
+                tvNode.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, False)
+                tvNode.SelectedImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, True)
+
+                nc.Insert(i, tvNode)
+
+                mFileManager.FileEdited = True
+                tvNode.EnsureVisible()
+                tvTree.SelectedNode = tvNode
+            End If
         End If
     End Sub
 
@@ -519,6 +546,10 @@ Public Class TreeStructure
         AddHandler mAddClusterMenuItem.Click, AddressOf AddNewCluster
         cm.MenuItems.Add(mAddClusterMenuItem)
 
+        Dim addSlotMenuItem As New MenuItem(Filemanager.GetOpenEhrTerm(312, "New slot"))
+        AddHandler addSlotMenuItem.Click, AddressOf AddNewSlot
+        cm.MenuItems.Add(addSlotMenuItem)
+
         cm.Show(Me.ButAddElement, New System.Drawing.Point(5, 5))
     End Sub
 
@@ -528,71 +559,104 @@ Public Class TreeStructure
         End If
     End Sub
 
-    Protected Overrides Sub addNewElement(ByVal a_constraint As Constraint)
+    Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
         Dim tvNode As ArchetypeTreeNode
-        Dim a_node As ArchetypeTreeNode
+        Dim editLabel As Boolean = True
 
-        tvNode = New ArchetypeTreeNode(Filemanager.GetOpenEhrTerm(109, "New Element"), StructureType.Element, mFileManager)
-        ' set the image indexes
-        tvNode.ImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type)
-        tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type, False, True)
-        CType(tvNode.Item, ArchetypeElement).Constraint = a_constraint
-
-        If Me.tvTree.SelectedNode Is Nothing Then
-            Me.tvTree.Nodes.Add(tvNode)
+        If a_constraint.Type <> ConstraintType.Slot Then
+            tvNode = New ArchetypeTreeNode(Filemanager.GetOpenEhrTerm(109, "New Element"), StructureType.Element, mFileManager)
+            ' set the image indexes
+            CType(tvNode.Item, ArchetypeElement).Constraint = a_constraint
+        ElseIf MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            Dim archetype_slot As New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
+            tvNode = New ArchetypeTreeNode(archetype_slot)
         Else
-            a_node = CType(Me.tvTree.SelectedNode, ArchetypeTreeNode)
+            Dim newSlot As New RmSlot(StructureType.Element)
+            tvNode = New ArchetypeTreeNode(newSlot, mFileManager)
+            editLabel = False
+        End If
+
+        tvNode.ImageIndex = ImageIndexForConstraintType(a_constraint.Type, False, False)
+        tvNode.SelectedImageIndex = ImageIndexForConstraintType(a_constraint.Type, False, True)
+
+        If tvTree.SelectedNode Is Nothing Then
+            tvTree.Nodes.Add(tvNode)
+        Else
+            Dim a_node As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
 
             If a_node.Item.RM_Class.Type = StructureType.Cluster Then
                 ' cluster selected so add at deeper level
-                Me.tvTree.SelectedNode.Nodes.Add(tvNode)
+                tvTree.SelectedNode.Nodes.Add(tvNode)
             Else
                 ' element selected so add at the same level
-                If Me.tvTree.SelectedNode.Parent Is Nothing Then
-                    Me.tvTree.Nodes.Add(tvNode)
+                If tvTree.SelectedNode.Parent Is Nothing Then
+                    tvTree.Nodes.Add(tvNode)
                 Else
-                    Me.tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
+                    tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
                 End If
-
             End If
-
         End If
+
         mFileManager.FileEdited = True
         tvNode.EnsureVisible()
-        Me.tvTree.SelectedNode = tvNode
-        tvNode.BeginEdit()
+        tvTree.SelectedNode = tvNode
 
+        If editLabel Then
+            tvNode.BeginEdit()
+        End If
     End Sub
 
     Sub AddNewCluster(ByVal sender As Object, ByVal e As EventArgs)
-        ' adds a new cluster
-        Dim tvNode, selNode As ArchetypeTreeNode
-        '        Dim a_node As ArchetypeTreeNode
-        Dim s As String
-
-        s = Filemanager.GetOpenEhrTerm(322, "New cluster")
-        tvNode = New ArchetypeTreeNode(s, StructureType.Cluster, mFileManager)
-        selNode = CType(Me.tvTree.SelectedNode, ArchetypeTreeNode)
+        Dim s As String = Filemanager.GetOpenEhrTerm(322, "New cluster")
+        Dim tvNode As New ArchetypeTreeNode(s, StructureType.Cluster, mFileManager)
+        Dim selNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
 
         If selNode Is Nothing Then
-            Me.tvTree.Nodes.Add(tvNode)
+            tvTree.Nodes.Add(tvNode)
+        ElseIf selNode.RM_Class.Type = StructureType.Cluster Then
+            selNode.Nodes.Add(tvNode)
+        ElseIf selNode.Parent Is Nothing Then
+            tvTree.Nodes.Add(tvNode)
         Else
-            If selNode.RM_Class.Type = StructureType.Cluster Then
-                selNode.Nodes.Add(tvNode)
+            tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
+        End If
+
+        mFileManager.FileEdited = True
+        tvNode.EnsureVisible()
+        tvTree.SelectedNode = tvNode
+        SetCurrentItem(tvNode.Item)
+        tvNode.BeginEdit()
+    End Sub
+
+    Sub AddNewSlot(ByVal sender As Object, ByVal e As EventArgs)
+        Dim editLabel As Boolean = True
+        Dim tvNode As ArchetypeTreeNode = GetSlotNode(PointToScreen(CType(sender, MenuItem).Parent.GetContextMenu.SourceControl.Location), editLabel)
+
+        If tvTree.SelectedNode Is Nothing Then
+            tvTree.Nodes.Add(tvNode)
+        Else
+            Dim a_node As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+
+            If a_node.Item.RM_Class.Type = StructureType.Cluster Then
+                ' cluster selected so add at deeper level
+                tvTree.SelectedNode.Nodes.Add(tvNode)
             Else
-                If selNode.Parent Is Nothing Then
-                    Me.tvTree.Nodes.Add(tvNode)
+                ' element selected so add at the same level
+                If tvTree.SelectedNode.Parent Is Nothing Then
+                    tvTree.Nodes.Add(tvNode)
                 Else
-                    Me.tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
+                    tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
                 End If
             End If
         End If
 
         mFileManager.FileEdited = True
         tvNode.EnsureVisible()
-        Me.tvTree.SelectedNode = tvNode
-        SetCurrentItem(tvNode.Item)
-        tvNode.BeginEdit()
+        tvTree.SelectedNode = tvNode
+
+        If editLabel Then
+            tvNode.BeginEdit()
+        End If
     End Sub
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles MenuRemoveItemAndReferences.Click
@@ -697,33 +761,29 @@ Public Class TreeStructure
                 Me.tvTree.SelectedNode = tvN
             End If
         End If
-
     End Sub
 
     Protected Overrides Sub RefreshIcons()
         Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
 
         If element.HasReferences Then
-            RefreshTreeNodeIcons(tvTree.Nodes, element)
-        Else
-            tvTree.SelectedNode.ImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference)
-            tvTree.SelectedNode.SelectedImageIndex = Me.ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, True)
+            RefreshReferenceNodeIcons(tvTree.Nodes, element)
         End If
 
+        tvTree.SelectedNode.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, False)
+        tvTree.SelectedNode.SelectedImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, True)
     End Sub
 
-    Private Sub RefreshTreeNodeIcons(ByVal a_node_collection As TreeNodeCollection, ByVal reference As ArchetypeElement)
-
+    Private Sub RefreshReferenceNodeIcons(ByVal a_node_collection As TreeNodeCollection, ByVal reference As ArchetypeElement)
         For Each tvNode As ArchetypeTreeNode In a_node_collection
             If tvNode.Item.RM_Class.Type = StructureType.Cluster Then
-                RefreshTreeNodeIcons(tvNode.Nodes, reference)
-            Else
-                If (Not tvNode.Item.IsAnonymous) AndAlso _
-                CType(tvNode.Item, ArchetypeNodeAbstract).NodeId = reference.NodeId Then
-                    Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
-                    Debug.Assert(archetype_element.IsReference, "Must be a reference here")
-                    tvNode.ImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, True, False)
-                    tvNode.SelectedImageIndex = Me.ImageIndexForConstraintType(archetype_element.Constraint.Type, True, True)
+                RefreshReferenceNodeIcons(tvNode.Nodes, reference)
+            ElseIf Not tvNode.Item.IsAnonymous AndAlso CType(tvNode.Item, ArchetypeNodeAbstract).NodeId = reference.NodeId Then
+                Dim element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
+
+                If element.IsReference Then
+                    tvNode.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, True, False)
+                    tvNode.SelectedImageIndex = ImageIndexForConstraintType(element.Constraint.Type, True, True)
                 End If
             End If
         Next
@@ -750,13 +810,14 @@ Public Class TreeStructure
 
         text = new_line & (Space(3 * indentlevel) & "\cf1 Structure\cf0  = \cf2 TREE\cf0\par")
         s = ""
+
         If mCardinalityControl.Cardinality.Ordered Then
             s = "ordered"
         End If
+
         s = s.Trim
         text = text & new_line & (Space(3 * indentlevel) & "\cf2 Items\cf0  " & s & "\par")
         text = text & new_line & TreeToRichText(tvTree.Nodes, indentlevel + 3, new_line)
-
         Return text
     End Function
 
@@ -785,7 +846,6 @@ Public Class TreeStructure
         result.AppendFormat("{0}</table>", Environment.NewLine)
 
         Return result.ToString
-
     End Function
 
     Public Overrides Function HasData() As Boolean
@@ -811,10 +871,12 @@ Public Class TreeStructure
         For Each an As ArchetypeTreeNode In TreeNodes
             text &= Environment.NewLine & an.Item.ToHTML(level, showComments)
             text &= Environment.NewLine & "</tr>"
+
             If an.GetNodeCount(False) > 0 Then
                 text &= Environment.NewLine & TreeToHTML(an.Nodes, level + 1, showComments)
             End If
         Next
+
         Return text
     End Function
 
@@ -827,40 +889,39 @@ Public Class TreeStructure
     End Sub
 
     Private Sub ContextMenuTree_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TreeContextMenu.Popup
-
-        Me.MenuRemove.Visible = False
-        Me.MenuSpecialise.Visible = False
-        Me.MenuAddReference.Visible = False
+        MenuRemove.Visible = False
+        MenuSpecialise.Visible = False
+        MenuAddReference.Visible = False
+        MenuNameSlot.Visible = False
 
         If Not tvTree.SelectedNode Is Nothing Then
             Dim i As Integer
             Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
-            Me.MenuRemoveItemAndReferences.Text = tvNode.Text
+            MenuRemoveItemAndReferences.Text = tvNode.Text
 
             If tvNode.Item.RM_Class.Type = StructureType.Element Then
-                'If mFileManager.OntologyManager.NumberOfSpecialisations = 0 Then
                 If Not CType(tvNode.Item.RM_Class, RmElement).isReference Then
-                    Me.MenuAddReference.Visible = True
+                    MenuAddReference.Visible = True
                 End If
-                'End If
             End If
 
             ' show specialisation if appropriate
             If Not tvNode.Item.IsAnonymous Then
                 i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
                 Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+
                 If i < numberSpecialisations Then
-                    Me.MenuSpecialise.Visible = True
+                    MenuSpecialise.Visible = True
                 Else
                     If numberSpecialisations = 0 Or ((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))) Then
-                        Me.MenuRemove.Visible = True
+                        MenuRemove.Visible = True
                     End If
                 End If
             Else
-                Me.MenuRemove.Visible = True
+                MenuNameSlot.Visible = True
+                MenuRemove.Visible = True
             End If
         End If
-
     End Sub
 
     Private Sub tvTree_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles tvTree.AfterSelect
@@ -883,12 +944,12 @@ Public Class TreeStructure
     Dim mHoverNode As ArchetypeTreeNode
 
     Private Sub tvTree_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvTree.MouseMove
-        Dim a_node As ArchetypeTreeNode
-        a_node = CType(Me.tvTree.GetNodeAt(e.X, e.Y), ArchetypeTreeNode)
-        If Not a_node Is Nothing Then
-            If Not mHoverNode Is a_node Then
-                mHoverNode = a_node
-                SetToolTipSpecialisation(Me.tvTree, a_node.Item)
+        Dim tvNode As ArchetypeTreeNode = CType(tvTree.GetNodeAt(e.X, e.Y), ArchetypeTreeNode)
+
+        If Not tvNode Is Nothing Then
+            If Not mHoverNode Is tvNode Then
+                mHoverNode = tvNode
+                SetToolTipSpecialisation(Me.tvTree, tvNode.Item)
             End If
         End If
     End Sub
@@ -899,92 +960,102 @@ Public Class TreeStructure
         If Not e.Label Is Nothing Then
             If e.Label = "" Then
                 e.CancelEdit = True
-                Return
-            End If
+            Else
+                Dim tvNode As ArchetypeTreeNode = CType(e.Node, ArchetypeTreeNode)
+                tvNode.Text = e.Label
+                MenuRemoveItemAndReferences.Text = e.Label
 
-            Dim tvNode As ArchetypeTreeNode
+                If tvNode.Item.RM_Class.Type = StructureType.Element Then
+                    If CType(tvNode.Item, ArchetypeElement).HasReferences Then
+                        MenuRemoveItemAndReferences.Text = String.Format("{0} [+]", MenuRemoveItemAndReferences.Text)
+                        Translate()
+                    End If
+                End If
 
-            tvNode = CType(e.Node, ArchetypeTreeNode)
-            tvNode.Text = e.Label
-            Me.MenuRemoveItemAndReferences.Text = e.Label
-            If tvNode.Item.RM_Class.Type = StructureType.Element Then
-                If CType(tvNode.Item, ArchetypeElement).HasReferences Then
-                    MenuRemoveItemAndReferences.Text = String.Format("{0} [+]", MenuRemoveItemAndReferences.Text)
-                    Me.Translate()
+                If tvNode.Text <> e.Label Then
+                    e.CancelEdit = True ' need to show slots text if it is different
                 End If
             End If
         End If
     End Sub
 
     Private Sub tvTree_BeforeLabelEdit(ByVal sender As System.Object, ByVal e As System.Windows.Forms.NodeLabelEditEventArgs) Handles tvTree.BeforeLabelEdit
-        Dim i As Integer
-        Dim tvNode As ArchetypeTreeNode
-
-        tvNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+        Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
 
         If tvNode.Item.IsAnonymous Then
-            'cannot edit
-            MessageBox.Show(AE_Constants.Instance.Cannot_rename, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
             e.CancelEdit = True
-            Return
-        End If
+        Else
+            Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
 
-        If Not tvNode Is Nothing Then
-            i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
                     e.CancelEdit = True
                 End If
             End If
         End If
-
     End Sub
 
     Private Sub tvTree_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tvTree.KeyDown
-        If e.KeyCode = Keys.Delete Then
-            Dim i As Integer
-            Dim tvNode As ArchetypeTreeNode
-
-            tvNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
-
-            If Not tvNode.Item.IsAnonymous Then
-                Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
-
-                i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
-                If (numberSpecialisations = 0) Or (i = numberSpecialisations And _
-                    (((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))))) Then
-                    Me.RemoveItemAndReferences(sender, e)
+        Select Case e.KeyCode
+            Case Keys.F2
+                If Not tvTree.SelectedNode Is Nothing Then
+                    ReplaceAnonymousSlot()
+                    tvTree.SelectedNode.BeginEdit()
                 End If
-            Else
-                Me.RemoveItemAndReferences(sender, e)
-            End If
-        End If
+            Case Keys.Delete
+                Dim i As Integer
+                Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+
+                If Not tvNode.Item.IsAnonymous Then
+                    Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+
+                    i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
+
+                    If (numberSpecialisations = 0) Or (i = numberSpecialisations And _
+                        (((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))))) Then
+                        RemoveItemAndReferences(sender, e)
+                    End If
+                Else
+                    RemoveItemAndReferences(sender, e)
+                End If
+        End Select
     End Sub
 
 #Region "Drag and drop"
 
     Private Sub tvTree_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvTree.MouseDown
-        Dim tn As TreeNode
-        tn = Me.tvTree.GetNodeAt(e.X, e.Y)
+        Dim tn As TreeNode = tvTree.GetNodeAt(e.X, e.Y)
+
         If Not tn Is Nothing Then
-            If e.Button = Windows.Forms.MouseButtons.Left Then
-                Me.tvTree.Cursor = System.Windows.Forms.Cursors.Hand
-            ElseIf e.Button = Windows.Forms.MouseButtons.Right Then
-                Me.tvTree.SelectedNode = tn
+            If e.Button = MouseButtons.Left Then
+                tvTree.Cursor = Cursors.Hand
             End If
+        ElseIf e.Button = MouseButtons.Right Then
+            tvTree.SelectedNode = tn
         End If
     End Sub
 
-
     Private Sub tvTree_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvTree.MouseUp
-        Me.tvTree.Cursor = System.Windows.Forms.Cursors.Default
+        tvTree.Cursor = System.Windows.Forms.Cursors.Default
+
+        If e.Button = MouseButtons.Left Then
+            Dim tvNode As ArchetypeTreeNode = CType(tvTree.GetNodeAt(e.X, e.Y), ArchetypeTreeNode)
+
+            If Not tvNode Is Nothing Then
+                If tvNode.IsSelected And tvNode.Item.IsAnonymous Then
+                    If MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                        ReplaceAnonymousSlot()
+                    End If
+                End If
+            End If
+        End If
     End Sub
 
     Private Sub tvTree_ItemDrag(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemDragEventArgs) Handles tvTree.ItemDrag
         mDragTreeNode = CType(e.Item, ArchetypeTreeNode)
         mDragTreeNode.Collapse()
-        Me.tvTree.AllowDrop = True
-        Me.tvTree.DoDragDrop(e.Item, DragDropEffects.Move)
+        tvTree.AllowDrop = True
+        tvTree.DoDragDrop(e.Item, DragDropEffects.Move)
     End Sub
 
     'Not needed as collapse containers before dragging which prevents dragging them onto their children
@@ -1016,121 +1087,139 @@ Public Class TreeStructure
 
     'End Sub
 
-    Private Sub tvTree_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragDrop
-        Dim position As Point
-        Dim DropNode As ArchetypeTreeNode
-        Dim DropParent As TreeNodeCollection
-        Dim DropIndex As Integer
-        Dim DragParent As TreeNodeCollection
-        Dim mNodeDragged As ArchetypeTreeNode = Nothing
-        Dim allowEdit As Boolean = True
+    Private Function GetSlotNode(ByVal pt As Point, ByRef allowEdit As Boolean) As ArchetypeTreeNode
+        Dim frmChooseType As New ChooseType
+        Dim result As ArchetypeTreeNode = Nothing
 
-        If Not mDragTreeNode Is Nothing Then
-            mNodeDragged = mDragTreeNode
-        ElseIf Not mNewConstraint Is Nothing Then
-            If TypeOf mNewConstraint Is Constraint_Slot Then
-                Dim frmChooseType As New ChooseType
-                frmChooseType.listType.Items.Add(Filemanager.GetOpenEhrTerm(567, "Element"))
-                frmChooseType.listType.Items.Add(Filemanager.GetOpenEhrTerm(313, "Cluster"))
-                frmChooseType.Text = Filemanager.GetOpenEhrTerm(104, "Choose..")
-                frmChooseType.StartPosition = FormStartPosition.Manual
-                frmChooseType.Location = New Point(e.X, e.Y)
-                frmChooseType.ShowDialog(ParentForm)
+        For Each t As Integer In ReferenceModel.validArchetypeSlots(Global.ArchetypeEditor.StructureType.Cluster)
+            frmChooseType.listType.Items.Add(Filemanager.GetOpenEhrTerm(t, "Slot"))
+        Next
 
-                If frmChooseType.DialogResult = DialogResult.OK Then
-                    If frmChooseType.listType.SelectedIndex = 0 Then
-                        mNodeDragged = New ArchetypeTreeNode(New RmSlot(StructureType.Element), mFileManager)
-                    Else
-                        mNodeDragged = New ArchetypeTreeNode(New RmSlot(StructureType.Cluster), mFileManager)
-                    End If
+        'frmChooseType.listType.Items.Add(Filemanager.GetOpenEhrTerm(567, "Element"))
+        'frmChooseType.listType.Items.Add(Filemanager.GetOpenEhrTerm(313, "Cluster"))
+        frmChooseType.Text = Filemanager.GetOpenEhrTerm(104, "Choose..")
+        frmChooseType.StartPosition = FormStartPosition.Manual
+        frmChooseType.Location = New Point(pt.X, pt.Y)
+        frmChooseType.ShowDialog(ParentForm)
 
-                    mNodeDragged.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot)
-                    mNodeDragged.SelectedImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, True)
-                    allowEdit = False
-                End If
+        If frmChooseType.DialogResult = DialogResult.OK Then
+            Dim slotClass As StructureType
+
+            Select Case frmChooseType.listType.SelectedIndex
+                Case 0
+                    slotClass = StructureType.Element
+                Case 1
+                    slotClass = Global.ArchetypeEditor.StructureType.Cluster
+                Case 2
+                    slotClass = Global.ArchetypeEditor.StructureType.Item
+            End Select
+
+            If MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                Dim archetype_slot As New ArchetypeSlot(slotClass.ToString, slotClass, mFileManager)
+                result = New ArchetypeTreeNode(archetype_slot)
             Else
-                Dim archetype_element As ArchetypeElement
-                archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
-                archetype_element.Constraint = mNewConstraint
-                mNodeDragged = New ArchetypeTreeNode(archetype_element)
-                mNodeDragged.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference)
-                mNodeDragged.SelectedImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
+                Dim newSlot As New RmSlot(slotClass)
+                result = New ArchetypeTreeNode(newSlot, mFileManager)
+                allowEdit = False
             End If
-        ElseIf mNewCluster Then
-            Dim new_cluster As ArchetypeComposite
-            new_cluster = New ArchetypeComposite(Filemanager.GetOpenEhrTerm(322, "New cluster"), StructureType.Cluster, mFileManager)
-            mNodeDragged = New ArchetypeTreeNode(new_cluster)
-        Else
-            mDragTreeNode = Nothing
-            tvTree.Cursor = System.Windows.Forms.Cursors.Default
+
+            result.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, False)
+            result.SelectedImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, True)
         End If
 
-        If Not mNodeDragged Is Nothing Then
+        Return result
+    End Function
+
+    Private Sub tvTree_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragDrop
+        Dim position As Point
+        Dim dropNode As ArchetypeTreeNode
+        Dim dropParent As TreeNodeCollection
+        Dim dropIndex As Integer
+        Dim dragParent As TreeNodeCollection
+        Dim allowEdit As Boolean = True
+        Dim nodeDragged As ArchetypeTreeNode = mDragTreeNode
+
+        If nodeDragged Is Nothing Then
+            If Not mNewConstraint Is Nothing Then
+                If TypeOf mNewConstraint Is Constraint_Slot Then
+                    nodeDragged = GetSlotNode(New Point(e.X, e.Y), allowEdit)
+                Else
+                    Dim archetype_element As New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
+                    archetype_element.Constraint = mNewConstraint
+                    nodeDragged = New ArchetypeTreeNode(archetype_element)
+                    nodeDragged.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, False)
+                    nodeDragged.SelectedImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, archetype_element.IsReference, True)
+                End If
+            ElseIf mNewCluster Then
+                Dim new_cluster As New ArchetypeComposite(Filemanager.GetOpenEhrTerm(322, "New cluster"), StructureType.Cluster, mFileManager)
+                nodeDragged = New ArchetypeTreeNode(new_cluster)
+            End If
+        End If
+
+        If Not nodeDragged Is Nothing Then
             position.X = e.X
             position.Y = e.Y
             position = tvTree.PointToClient(position)
-            DropNode = CType(tvTree.GetNodeAt(position), ArchetypeTreeNode)
+            dropNode = CType(tvTree.GetNodeAt(position), ArchetypeTreeNode)
 
-            If Not DropNode Is Nothing Then
+            If Not dropNode Is Nothing Then
                 ' if the drop node exists then set the parent
-                If DropNode.Item.RM_Class.Type = StructureType.Cluster Then
+                If dropNode.Item.RM_Class.Type = StructureType.Cluster Then
                     ' drop as child of cluster
-                    DropParent = DropNode.Nodes
+                    dropParent = dropNode.Nodes
 
-                    If DropNode.IsExpanded Then
+                    If dropNode.IsExpanded Then
                         ' insert at the beginning
-                        DropIndex = 0
+                        dropIndex = 0
                     Else
                         'insert at end
-                        DropIndex = DropNode.GetNodeCount(False)
+                        dropIndex = dropNode.GetNodeCount(False)
                     End If
                 Else
-                    DropIndex = DropNode.Index + 1
+                    dropIndex = dropNode.Index + 1
 
-                    If DropNode.Parent Is Nothing Then
-                        DropParent = tvTree.Nodes
+                    If dropNode.Parent Is Nothing Then
+                        dropParent = tvTree.Nodes
                     Else
-                        DropParent = DropNode.Parent.Nodes
+                        dropParent = dropNode.Parent.Nodes
                     End If
                 End If
             Else
                 'otherwise add it to the tvTree
-                DropParent = Me.tvTree.Nodes
-                DropIndex = Me.tvTree.GetNodeCount(False) ' add at the end
+                dropParent = Me.tvTree.Nodes
+                dropIndex = Me.tvTree.GetNodeCount(False) ' add at the end
             End If
 
             If e.Effect = DragDropEffects.Move Then
-                If mNodeDragged.Parent Is Nothing Then
-                    DragParent = tvTree.Nodes
+                If nodeDragged.Parent Is Nothing Then
+                    dragParent = tvTree.Nodes
                 Else
-                    DragParent = mNodeDragged.Parent.Nodes
+                    dragParent = nodeDragged.Parent.Nodes
                 End If
 
-                If Not mNodeDragged Is DropNode Then
-                    DragParent.Remove(mNodeDragged)
+                If Not nodeDragged Is dropNode Then
+                    dragParent.Remove(nodeDragged)
                 Else
-                    mNodeDragged = Nothing
+                    nodeDragged = Nothing
                     Beep()
                 End If
             End If
 
             'Add the node
-            If Not mNodeDragged Is Nothing Then
-                DropParent.Insert(DropIndex, mNodeDragged)
-
-                mNodeDragged.EnsureVisible()
-                tvTree.SelectedNode = mNodeDragged
+            If Not nodeDragged Is Nothing Then
+                dropParent.Insert(dropIndex, nodeDragged)
+                nodeDragged.EnsureVisible()
+                tvTree.SelectedNode = nodeDragged
 
                 If e.Effect = DragDropEffects.Copy And allowEdit Then
                     ' have to do this last or not visible
-                    mNodeDragged.BeginEdit()
+                    nodeDragged.BeginEdit()
                 End If
 
                 mFileManager.FileEdited = True
             End If
         End If
 
-        ' set the drag items to nothing
         mNewConstraint = Nothing
         mNewCluster = False
         mDragTreeNode = Nothing

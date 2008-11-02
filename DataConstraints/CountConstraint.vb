@@ -56,6 +56,7 @@ Public Class Constraint_Count
             mHasMinVal = Value
         End Set
     End Property
+
     Public Property HasMaximum() As Boolean
         Get
             Return mHasMaxVal
@@ -64,6 +65,7 @@ Public Class Constraint_Count
             mHasMaxVal = Value
         End Set
     End Property
+
     Public Property MinimumValue() As Long
         Get
             Return CLng(mMinVal)
@@ -72,6 +74,7 @@ Public Class Constraint_Count
             mMinVal = CSng(Value)
         End Set
     End Property
+
     Public Property MaximumValue() As Long
         Get
             Return CLng(mMaxVal)
@@ -99,35 +102,38 @@ Public Class Constraint_Count
         End Set
     End Property
 
-
     Public Overrides Function Copy() As Constraint
         Dim c As New Constraint_Count
-
-        c.mHasMaxVal = Me.mHasMaxVal
-        c.mHasMinVal = Me.mHasMinVal
-        c.mMaxVal = Me.mMaxVal
-        c.mMinVal = Me.mMinVal
-        c.mAssumedValue = Me.mAssumedValue
-        c.HasAssumedValue = Me.HasAssumedValue
-
+        c.mHasMaxVal = mHasMaxVal
+        c.mHasMinVal = mHasMinVal
+        c.mMaxVal = mMaxVal
+        c.mMinVal = mMinVal
+        c.mAssumedValue = mAssumedValue
+        c.HasAssumedValue = HasAssumedValue
         Return c
     End Function
 
     Public Sub SetFromReal(ByVal r As Constraint_Real)
-        Me.HasAssumedValue = r.HasAssumedValue
+        HasAssumedValue = r.HasAssumedValue
+
         If r.HasAssumedValue Then
-            Me.AssumedValue = r.AssumedValue
+            AssumedValue = r.AssumedValue
         End If
-        Me.HasMaximum = r.HasMaximum
+
+        HasMaximum = r.HasMaximum
+
         If r.HasMaximum Then
-            Me.MaximumValue = CLng(r.MaximumValue)
+            MaximumValue = r.MaximumValue
         End If
-        Me.HasMinimum = r.HasMinimum
+
+        HasMinimum = r.HasMinimum
+
         If r.HasMinimum Then
-            Me.MinimumValue = CLng(r.MinimumValue)
+            MinimumValue = r.MinimumValue
         End If
-        Me.IncludeMaximum = r.IncludeMaximum
-        Me.IncludeMinimum = r.IncludeMinimum
+
+        IncludeMaximum = r.IncludeMaximum
+        IncludeMinimum = r.IncludeMinimum
     End Sub
 
 End Class

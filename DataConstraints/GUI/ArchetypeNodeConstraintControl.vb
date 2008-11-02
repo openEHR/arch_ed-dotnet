@@ -39,6 +39,7 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents Path As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents gbNullFlavours As System.Windows.Forms.GroupBox
     Friend WithEvents chkListNull As System.Windows.Forms.CheckedListBox
+    Friend WithEvents PanelName As System.Windows.Forms.Panel
     Friend WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
@@ -105,7 +106,7 @@ Public Class ArchetypeNodeConstraintControl
     'Do not modify it using the code editor.
     Friend WithEvents PanelGenericConstraint As System.Windows.Forms.Panel
     Friend WithEvents PanelDataConstraint As System.Windows.Forms.Panel
-    Friend WithEvents PanelNonAnonymous As System.Windows.Forms.Panel
+    Friend WithEvents PanelAddressable As System.Windows.Forms.Panel
     Friend WithEvents txtRuntimeName As System.Windows.Forms.TextBox
     Friend WithEvents txtTermDescription As System.Windows.Forms.TextBox
     Friend WithEvents PanelLower As System.Windows.Forms.Panel
@@ -118,7 +119,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.PanelGenericConstraint = New System.Windows.Forms.Panel
         Me.PanelDataConstraint = New System.Windows.Forms.Panel
         Me.labelAny = New System.Windows.Forms.Label
-        Me.PanelNonAnonymous = New System.Windows.Forms.Panel
+        Me.PanelAddressable = New System.Windows.Forms.Panel
         Me.butSetRuntimeName = New System.Windows.Forms.Button
         Me.txtRuntimeName = New System.Windows.Forms.TextBox
         Me.lblRunTimeName = New System.Windows.Forms.Label
@@ -142,8 +143,9 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbValueSets = New System.Windows.Forms.GroupBox
         Me.dgValueSets = New System.Windows.Forms.DataGridView
         Me.Splitter1 = New System.Windows.Forms.Splitter
+        Me.PanelName = New System.Windows.Forms.Panel
         Me.PanelDataConstraint.SuspendLayout()
-        Me.PanelNonAnonymous.SuspendLayout()
+        Me.PanelAddressable.SuspendLayout()
         Me.PanelLower.SuspendLayout()
         Me.tabConstraint.SuspendLayout()
         Me.tpConstraint.SuspendLayout()
@@ -154,6 +156,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbNullFlavours.SuspendLayout()
         Me.gbValueSets.SuspendLayout()
         CType(Me.dgValueSets, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.PanelName.SuspendLayout()
         Me.SuspendLayout()
         '
         'PanelGenericConstraint
@@ -182,24 +185,23 @@ Public Class ArchetypeNodeConstraintControl
         Me.labelAny.TabIndex = 0
         Me.labelAny.Text = "Any"
         '
-        'PanelNonAnonymous
+        'PanelAddressable
         '
-        Me.PanelNonAnonymous.Controls.Add(Me.butSetRuntimeName)
-        Me.PanelNonAnonymous.Controls.Add(Me.txtRuntimeName)
-        Me.PanelNonAnonymous.Controls.Add(Me.lblRunTimeName)
-        Me.PanelNonAnonymous.Controls.Add(Me.txtTermDescription)
-        Me.PanelNonAnonymous.Controls.Add(Me.lblDescription)
-        Me.PanelNonAnonymous.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelNonAnonymous.Location = New System.Drawing.Point(0, 0)
-        Me.PanelNonAnonymous.Name = "PanelNonAnonymous"
-        Me.PanelNonAnonymous.Size = New System.Drawing.Size(420, 96)
-        Me.PanelNonAnonymous.TabIndex = 31
+        Me.PanelAddressable.Controls.Add(Me.PanelName)
+        Me.PanelAddressable.Controls.Add(Me.txtTermDescription)
+        Me.PanelAddressable.Controls.Add(Me.lblDescription)
+        Me.PanelAddressable.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelAddressable.Location = New System.Drawing.Point(0, 0)
+        Me.PanelAddressable.Name = "PanelAddressable"
+        Me.PanelAddressable.Size = New System.Drawing.Size(420, 96)
+        Me.PanelAddressable.TabIndex = 31
         '
         'butSetRuntimeName
         '
+        Me.butSetRuntimeName.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.HelpProviderCommonConstraint.SetHelpKeyword(Me.butSetRuntimeName, "HowTo/Edit data/Set_runtime_name.html")
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me.butSetRuntimeName, System.Windows.Forms.HelpNavigator.Topic)
-        Me.butSetRuntimeName.Location = New System.Drawing.Point(334, 63)
+        Me.butSetRuntimeName.Location = New System.Drawing.Point(381, 7)
         Me.butSetRuntimeName.Name = "butSetRuntimeName"
         Me.HelpProviderCommonConstraint.SetShowHelp(Me.butSetRuntimeName, True)
         Me.butSetRuntimeName.Size = New System.Drawing.Size(26, 20)
@@ -208,15 +210,15 @@ Public Class ArchetypeNodeConstraintControl
         '
         'txtRuntimeName
         '
-        Me.txtRuntimeName.Location = New System.Drawing.Point(136, 62)
+        Me.txtRuntimeName.Location = New System.Drawing.Point(136, 8)
         Me.txtRuntimeName.Name = "txtRuntimeName"
         Me.txtRuntimeName.ReadOnly = True
-        Me.txtRuntimeName.Size = New System.Drawing.Size(192, 20)
+        Me.txtRuntimeName.Size = New System.Drawing.Size(206, 20)
         Me.txtRuntimeName.TabIndex = 7
         '
         'lblRunTimeName
         '
-        Me.lblRunTimeName.Location = New System.Drawing.Point(8, 62)
+        Me.lblRunTimeName.Location = New System.Drawing.Point(10, 2)
         Me.lblRunTimeName.Name = "lblRunTimeName"
         Me.lblRunTimeName.Size = New System.Drawing.Size(120, 32)
         Me.lblRunTimeName.TabIndex = 6
@@ -244,7 +246,7 @@ Public Class ArchetypeNodeConstraintControl
         'PanelLower
         '
         Me.PanelLower.Controls.Add(Me.PanelDataConstraint)
-        Me.PanelLower.Controls.Add(Me.PanelNonAnonymous)
+        Me.PanelLower.Controls.Add(Me.PanelAddressable)
         Me.PanelLower.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelLower.Location = New System.Drawing.Point(3, 54)
         Me.PanelLower.Name = "PanelLower"
@@ -373,7 +375,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.termLookUp.Tag = ""
         Me.termLookUp.TermCaption = "SNOMED"
         Me.termLookUp.TermId = Nothing
-        Me.termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.Snomed
+        Me.termLookUp.TerminologyName = "Snomed"
         Me.termLookUp.TermLanguage = "en-GB"
         Me.termLookUp.TermName = Nothing
         Me.termLookUp.TermQueryName = "AllSnomed"
@@ -431,6 +433,17 @@ Public Class ArchetypeNodeConstraintControl
         Me.Splitter1.TabIndex = 6
         Me.Splitter1.TabStop = False
         '
+        'PanelName
+        '
+        Me.PanelName.Controls.Add(Me.butSetRuntimeName)
+        Me.PanelName.Controls.Add(Me.lblRunTimeName)
+        Me.PanelName.Controls.Add(Me.txtRuntimeName)
+        Me.PanelName.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.PanelName.Location = New System.Drawing.Point(0, 62)
+        Me.PanelName.Name = "PanelName"
+        Me.PanelName.Size = New System.Drawing.Size(420, 34)
+        Me.PanelName.TabIndex = 27
+        '
         'ArchetypeNodeConstraintControl
         '
         Me.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange
@@ -441,8 +454,8 @@ Public Class ArchetypeNodeConstraintControl
         Me.HelpProviderCommonConstraint.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(434, 439)
         Me.PanelDataConstraint.ResumeLayout(False)
-        Me.PanelNonAnonymous.ResumeLayout(False)
-        Me.PanelNonAnonymous.PerformLayout()
+        Me.PanelAddressable.ResumeLayout(False)
+        Me.PanelAddressable.PerformLayout()
         Me.PanelLower.ResumeLayout(False)
         Me.tabConstraint.ResumeLayout(False)
         Me.tpConstraint.ResumeLayout(False)
@@ -454,6 +467,8 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbNullFlavours.ResumeLayout(False)
         Me.gbValueSets.ResumeLayout(False)
         CType(Me.dgValueSets, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.PanelName.ResumeLayout(False)
+        Me.PanelName.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -515,8 +530,14 @@ Public Class ArchetypeNodeConstraintControl
                 If tabConstraint.TabPages.Contains(tpConstraintDetails) Then
                     tabConstraint.TabPages.Remove(tpConstraintDetails)      'Hide details tab if a Slot
                 End If
-            ElseIf Not tabConstraint.TabPages.Contains(tpConstraintDetails) Then
-                tabConstraint.TabPages.Add(tpConstraintDetails)         'Show details tab if not a slot
+                'Hide runtime name constraint as not applicable
+                PanelName.Visible = False
+            Else
+                If Not tabConstraint.TabPages.Contains(tpConstraintDetails) Then
+                    tabConstraint.TabPages.Add(tpConstraintDetails)         'Show details tab if not a slot
+                End If
+                'Show Runtime name constraint
+                PanelName.Visible = True
             End If
 
             Select Case an_archetype_node.RM_Class.Type
@@ -561,8 +582,13 @@ Public Class ArchetypeNodeConstraintControl
                     mConstraintControl.Dock = DockStyle.Fill
 
                     ' HKF: 1620
-                    mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint)
 
+                    'SRH: Aug 19 2008
+                    If TypeOf an_archetype_node Is ArchetypeNodeAnonymous Then
+                        mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint)
+                    Else
+                        mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeSlot).RM_Class, RmSlot).SlotConstraint)
+                    End If
                 Case StructureType.Cluster
                     ' Me.labelAnyCluster.Text = AE_Constants.Instance.Cluster
                     Me.labelAny.Visible = False
@@ -618,7 +644,7 @@ Public Class ArchetypeNodeConstraintControl
 
         Dim cp As CodePhrase = archetypeElmnt.RM_Class.ConstrainedNullFlavours
         Dim t As Term
-        
+
         If chkListNull.Items.Count = 0 Then
             Dim dr As DataRow() = TerminologyServer.Instance.CodesForGrouperID(15)
             For Each r As DataRow In dr
@@ -659,12 +685,12 @@ Public Class ArchetypeNodeConstraintControl
         mOccurrences.Cardinality = mArchetypeNode.Occurrences
 
         If mArchetypeNode.IsAnonymous Then
-            Me.PanelNonAnonymous.Visible = False
+            Me.PanelAddressable.Visible = False
             Me.gbTerminology.Visible = False
 
 
         Else
-            Me.PanelNonAnonymous.Visible = True
+            Me.PanelAddressable.Visible = True
             Me.gbTerminology.Visible = True
 
             ' set the description of the term
@@ -677,10 +703,10 @@ Public Class ArchetypeNodeConstraintControl
             'Disable all but occurrences for References
             If mArchetypeNode.RM_Class.Type = StructureType.Reference Then
                 Me.PanelDataConstraint.Enabled = False
-                Me.PanelNonAnonymous.Enabled = False
+                Me.PanelAddressable.Enabled = False
             Else
                 Me.PanelDataConstraint.Enabled = True
-                Me.PanelNonAnonymous.Enabled = True
+                Me.PanelAddressable.Enabled = True
             End If
 
         End If
@@ -766,34 +792,31 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub SetTermLookUpVisibility(ByVal termID As String)
-
         If OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp AndAlso _
             Not String.IsNullOrEmpty(termID) AndAlso _
             OceanArchetypeEditor.Instance.ServiceTerminology(termID) Then
             termLookUp.TermCaption = termID
+
             'ToDo: work this from the terminology server
             Select Case termID
                 Case "SNOMED-CT"
-                    termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.Snomed
+                    termLookUp.TerminologyName = "Snomed"
                     termLookUp.TermQueryName = "AllSnomed"
-                    termLookUp.Visible = True
+                    termLookUp.Show()
 
                 Case "LNC205"
-                    termLookUp.TerminologyName = OTSControls.OTSServer.TerminologyName.LOINC
+                    termLookUp.TerminologyName = "LOINC"
                     termLookUp.TermQueryName = "LOINC"
-                    termLookUp.Visible = True
+                    termLookUp.Show()
 
                 Case Else
                     Debug.Assert(False, String.Format("{0} terminology available but fails case statement", termID))
-                    termLookUp.Visible = False
+                    termLookUp.Hide()
             End Select
-
         Else
-            termLookUp.Visible = False
+            termLookUp.Hide()
         End If
-
     End Sub
-
 
     Private Sub termLookUp_TermChanged(ByVal sender As System.Object, ByVal e As EventArgs) Handles termLookUp.TermChanged
         If Not dgNodeBindings.CurrentRow Is Nothing AndAlso Not termLookUp.TermId Is Nothing Then
@@ -852,6 +875,7 @@ Public Class ArchetypeNodeConstraintControl
             End If
         End If
     End Sub
+
 End Class
 
 '

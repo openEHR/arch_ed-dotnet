@@ -75,6 +75,7 @@ Public Class Designer
     Friend WithEvents ToolsOptionsMenuItem As System.Windows.Forms.MenuItem
     Friend WithEvents ArchetypeNameContextMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents CopyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents MenuLanguageToggle As System.Windows.Forms.MenuItem
     Friend WithEvents mTabPageDescription As TabPageDescription
 
 #Region " Windows Form Designer generated code "
@@ -131,7 +132,6 @@ Public Class Designer
     Friend WithEvents PanelMain As System.Windows.Forms.Panel
     Friend WithEvents PanelHeader As System.Windows.Forms.Panel
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents MenuFileClose As System.Windows.Forms.MenuItem
     Friend WithEvents cbPersonState As System.Windows.Forms.CheckBox
     Friend WithEvents PanelRoot As System.Windows.Forms.Panel
     Friend WithEvents cbProtocol As System.Windows.Forms.CheckBox
@@ -212,7 +212,6 @@ Public Class Designer
     Friend WithEvents MenuFileSaveAs As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpReport As System.Windows.Forms.MenuItem
     Friend WithEvents HelpProviderDesigner As System.Windows.Forms.HelpProvider
-    Friend WithEvents panelDiplayTop As System.Windows.Forms.Panel
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
     Friend WithEvents ContextMenuDisplay As System.Windows.Forms.ContextMenu
     Friend WithEvents menuDisplayPrint As System.Windows.Forms.MenuItem
@@ -224,7 +223,7 @@ Public Class Designer
     Friend WithEvents tpDescription As Crownwood.Magic.Controls.TabPage
     Friend WithEvents DataGridTableStyle5 As System.Windows.Forms.DataGridTableStyle
     Friend WithEvents DataGridTextBoxColumn13 As System.Windows.Forms.DataGridTextBoxColumn
-    Friend WithEvents ToolBarRTF As System.Windows.Forms.ToolBar
+    Friend WithEvents DisplayToolBar As System.Windows.Forms.ToolBar
     Friend WithEvents butRTF As System.Windows.Forms.ToolBarButton
     Friend WithEvents tbSep1 As System.Windows.Forms.ToolBarButton
     Friend WithEvents tbSep2 As System.Windows.Forms.ToolBarButton
@@ -282,7 +281,6 @@ Public Class Designer
         Me.menuFileExport = New System.Windows.Forms.MenuItem
         Me.MenuFileExportType = New System.Windows.Forms.MenuItem
         Me.menuFileNewWindow = New System.Windows.Forms.MenuItem
-        Me.MenuFileClose = New System.Windows.Forms.MenuItem
         Me.MenuFileSpecialise = New System.Windows.Forms.MenuItem
         Me.MenuFileExit = New System.Windows.Forms.MenuItem
         Me.menuEdit = New System.Windows.Forms.MenuItem
@@ -307,6 +305,12 @@ Public Class Designer
         Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
+        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
+        Me.PanelDescription = New System.Windows.Forms.Panel
+        Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
+        Me.PanelConcept_1 = New System.Windows.Forms.Panel
+        Me.gbSpecialisation = New System.Windows.Forms.GroupBox
+        Me.tvSpecialisation = New System.Windows.Forms.TreeView
         Me.tpDesign = New Crownwood.Magic.Controls.TabPage
         Me.TabDesign = New Crownwood.Magic.Controls.TabControl
         Me.tpData = New Crownwood.Magic.Controls.TabPage
@@ -317,12 +321,6 @@ Public Class Designer
         Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
         Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
         Me.PanelState = New System.Windows.Forms.Panel
-        Me.tpHeader = New Crownwood.Magic.Controls.TabPage
-        Me.PanelDescription = New System.Windows.Forms.Panel
-        Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
-        Me.PanelConcept_1 = New System.Windows.Forms.Panel
-        Me.gbSpecialisation = New System.Windows.Forms.GroupBox
-        Me.tvSpecialisation = New System.Windows.Forms.TreeView
         Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpTerminology = New Crownwood.Magic.Controls.TabPage
         Me.TabTerminology = New Crownwood.Magic.Controls.TabControl
@@ -362,8 +360,7 @@ Public Class Designer
         Me.lblAvailableLanguages = New System.Windows.Forms.Label
         Me.tpText = New Crownwood.Magic.Controls.TabPage
         Me.Panel3 = New System.Windows.Forms.Panel
-        Me.panelDiplayTop = New System.Windows.Forms.Panel
-        Me.ToolBarRTF = New System.Windows.Forms.ToolBar
+        Me.DisplayToolBar = New System.Windows.Forms.ToolBar
         Me.tbSep1 = New System.Windows.Forms.ToolBarButton
         Me.butRTF = New System.Windows.Forms.ToolBarButton
         Me.butADL = New System.Windows.Forms.ToolBarButton
@@ -399,6 +396,7 @@ Public Class Designer
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
+        Me.MenuLanguageToggle = New System.Windows.Forms.MenuItem
         Me.PanelConcept.SuspendLayout()
         Me.tabComment.SuspendLayout()
         Me.tpConceptDescription.SuspendLayout()
@@ -408,13 +406,13 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
-        Me.tpDesign.SuspendLayout()
-        Me.tpData.SuspendLayout()
-        Me.tpRootState.SuspendLayout()
         Me.tpHeader.SuspendLayout()
         Me.PanelDescription.SuspendLayout()
         Me.PanelConcept_1.SuspendLayout()
         Me.gbSpecialisation.SuspendLayout()
+        Me.tpDesign.SuspendLayout()
+        Me.tpData.SuspendLayout()
+        Me.tpRootState.SuspendLayout()
         Me.tpTerminology.SuspendLayout()
         Me.tpTerms.SuspendLayout()
         Me.tpConstraints.SuspendLayout()
@@ -427,7 +425,6 @@ Public Class Designer
         Me.panelLanguages.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.tpText.SuspendLayout()
-        Me.panelDiplayTop.SuspendLayout()
         Me.tpInterface.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.ArchetypeNameContextMenu.SuspendLayout()
@@ -522,7 +519,7 @@ Public Class Designer
         Me.tpConceptComment.Location = New System.Drawing.Point(4, 22)
         Me.tpConceptComment.Name = "tpConceptComment"
         Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptComment.Size = New System.Drawing.Size(185, 67)
+        Me.tpConceptComment.Size = New System.Drawing.Size(594, 67)
         Me.tpConceptComment.TabIndex = 1
         Me.tpConceptComment.Text = "Comment"
         Me.tpConceptComment.UseVisualStyleBackColor = True
@@ -534,7 +531,7 @@ Public Class Designer
         Me.txtConceptComment.Multiline = True
         Me.txtConceptComment.Name = "txtConceptComment"
         Me.txtConceptComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtConceptComment.Size = New System.Drawing.Size(179, 61)
+        Me.txtConceptComment.Size = New System.Drawing.Size(588, 61)
         Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
@@ -661,7 +658,7 @@ Public Class Designer
         Me.DataGridDefinitions.Location = New System.Drawing.Point(0, 16)
         Me.DataGridDefinitions.Name = "DataGridDefinitions"
         Me.DataGridDefinitions.RowHeaderWidth = 25
-        Me.DataGridDefinitions.Size = New System.Drawing.Size(969, 584)
+        Me.DataGridDefinitions.Size = New System.Drawing.Size(969, 619)
         Me.DataGridDefinitions.TabIndex = 1
         Me.DataGridDefinitions.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.DataGridTableStyle1})
         '
@@ -752,7 +749,7 @@ Public Class Designer
         'MenuFile
         '
         Me.MenuFile.Index = 0
-        Me.MenuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileNew, Me.MenuFileOpen, Me.MenuFileOpenFromWeb, Me.MenuFileSave, Me.MenuFileSaveAs, Me.menuFileExport, Me.menuFileNewWindow, Me.MenuFileClose, Me.MenuFileSpecialise, Me.MenuFileExit})
+        Me.MenuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileNew, Me.MenuFileOpen, Me.MenuFileOpenFromWeb, Me.MenuFileSave, Me.MenuFileSaveAs, Me.menuFileExport, Me.menuFileNewWindow, Me.MenuFileSpecialise, Me.MenuFileExit})
         Me.MenuFile.Shortcut = System.Windows.Forms.Shortcut.CtrlF
         Me.MenuFile.ShowShortcut = False
         Me.MenuFile.Text = "&File"
@@ -803,20 +800,15 @@ Public Class Designer
         Me.menuFileNewWindow.Index = 6
         Me.menuFileNewWindow.Text = "New &Window"
         '
-        'MenuFileClose
-        '
-        Me.MenuFileClose.Index = 7
-        Me.MenuFileClose.Text = "C&lose"
-        '
         'MenuFileSpecialise
         '
-        Me.MenuFileSpecialise.Index = 8
+        Me.MenuFileSpecialise.Index = 7
         Me.MenuFileSpecialise.Text = "S&pecialise"
         Me.MenuFileSpecialise.Visible = False
         '
         'MenuFileExit
         '
-        Me.MenuFileExit.Index = 9
+        Me.MenuFileExit.Index = 8
         Me.MenuFileExit.Text = "E&xit"
         '
         'menuEdit
@@ -851,7 +843,7 @@ Public Class Designer
         'MenuLanguage
         '
         Me.MenuLanguage.Index = 3
-        Me.MenuLanguage.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuLanguageAvailable, Me.MenuLanguageAdd, Me.MenuLanguageChange})
+        Me.MenuLanguage.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuLanguageAvailable, Me.MenuLanguageAdd, Me.MenuLanguageChange, Me.MenuLanguageToggle})
         Me.MenuLanguage.Text = "&Language"
         '
         'MenuLanguageAvailable
@@ -933,7 +925,7 @@ Public Class Designer
         Me.PanelMain.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelMain.Location = New System.Drawing.Point(0, 63)
         Me.PanelMain.Name = "PanelMain"
-        Me.PanelMain.Size = New System.Drawing.Size(969, 650)
+        Me.PanelMain.Size = New System.Drawing.Size(969, 685)
         Me.PanelMain.TabIndex = 9
         '
         'TabMain
@@ -947,141 +939,10 @@ Public Class Designer
         Me.TabMain.SelectedIndex = 0
         Me.TabMain.SelectedTab = Me.tpHeader
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
-        Me.TabMain.Size = New System.Drawing.Size(969, 650)
+        Me.TabMain.Size = New System.Drawing.Size(969, 685)
         Me.TabMain.TabIndex = 1
         Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpDesign
-        '
-        Me.tpDesign.Controls.Add(Me.TabDesign)
-        Me.tpDesign.Controls.Add(Me.PanelRoot)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDesign, "Screens/Entry Model screen.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDesign, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpDesign.Location = New System.Drawing.Point(0, 0)
-        Me.tpDesign.Name = "tpDesign"
-        Me.tpDesign.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpDesign, True)
-        Me.tpDesign.Size = New System.Drawing.Size(969, 625)
-        Me.tpDesign.TabIndex = 1
-        Me.tpDesign.Title = "Definition"
-        '
-        'TabDesign
-        '
-        Me.TabDesign.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.TabDesign.BoldSelectedPage = True
-        Me.TabDesign.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabDesign, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabDesign, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabDesign.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabDesign.Location = New System.Drawing.Point(0, 32)
-        Me.TabDesign.Name = "TabDesign"
-        Me.TabDesign.PositionTop = True
-        Me.TabDesign.SelectedIndex = 0
-        Me.TabDesign.SelectedTab = Me.tpData
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
-        Me.TabDesign.Size = New System.Drawing.Size(969, 593)
-        Me.TabDesign.TabIndex = 12
-        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState})
-        Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpData
-        '
-        Me.tpData.Controls.Add(Me.TabStructure)
-        Me.tpData.Controls.Add(Me.PanelConfigStructure)
-        Me.tpData.Location = New System.Drawing.Point(0, 0)
-        Me.tpData.Name = "tpData"
-        Me.tpData.Size = New System.Drawing.Size(969, 568)
-        Me.tpData.TabIndex = 0
-        Me.tpData.Title = "Data"
-        '
-        'TabStructure
-        '
-        Me.TabStructure.BackColor = System.Drawing.Color.RoyalBlue
-        Me.TabStructure.BoldSelectedPage = True
-        Me.TabStructure.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabStructure, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabStructure.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabStructure.Location = New System.Drawing.Point(0, 24)
-        Me.TabStructure.Name = "TabStructure"
-        Me.TabStructure.PositionTop = True
-        Me.TabStructure.SelectedIndex = 0
-        Me.TabStructure.SelectedTab = Me.tpDataStructure
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabStructure, True)
-        Me.TabStructure.Size = New System.Drawing.Size(969, 544)
-        Me.TabStructure.TabIndex = 10
-        Me.TabStructure.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDataStructure})
-        Me.TabStructure.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpDataStructure
-        '
-        Me.tpDataStructure.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDataStructure, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDataStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpDataStructure.Location = New System.Drawing.Point(0, 0)
-        Me.tpDataStructure.Name = "tpDataStructure"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpDataStructure, True)
-        Me.tpDataStructure.Size = New System.Drawing.Size(969, 519)
-        Me.tpDataStructure.TabIndex = 0
-        Me.tpDataStructure.Title = "Structure"
-        '
-        'tpRootState
-        '
-        Me.tpRootState.Controls.Add(Me.TabState)
-        Me.tpRootState.Controls.Add(Me.PanelState)
-        Me.tpRootState.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootState.Name = "tpRootState"
-        Me.tpRootState.Selected = False
-        Me.tpRootState.Size = New System.Drawing.Size(969, 568)
-        Me.tpRootState.TabIndex = 1
-        Me.tpRootState.Title = "State"
-        '
-        'TabState
-        '
-        Me.TabState.BackColor = System.Drawing.Color.RoyalBlue
-        Me.TabState.BoldSelectedPage = True
-        Me.TabState.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabState, "HowTo/edit_state.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabState, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabState.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabState.Location = New System.Drawing.Point(0, 24)
-        Me.TabState.Name = "TabState"
-        Me.TabState.PositionTop = True
-        Me.TabState.SelectedIndex = 0
-        Me.TabState.SelectedTab = Me.tpRootStateStructure
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabState, True)
-        Me.TabState.Size = New System.Drawing.Size(969, 544)
-        Me.TabState.TabIndex = 1
-        Me.TabState.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpRootStateStructure, Me.tpRootStateEventSeries})
-        '
-        'tpRootStateStructure
-        '
-        Me.tpRootStateStructure.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.tpRootStateStructure.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootStateStructure.Name = "tpRootStateStructure"
-        Me.tpRootStateStructure.Size = New System.Drawing.Size(969, 519)
-        Me.tpRootStateStructure.TabIndex = 0
-        Me.tpRootStateStructure.Title = "Structure"
-        '
-        'tpRootStateEventSeries
-        '
-        Me.tpRootStateEventSeries.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.tpRootStateEventSeries.Location = New System.Drawing.Point(0, 0)
-        Me.tpRootStateEventSeries.Name = "tpRootStateEventSeries"
-        Me.tpRootStateEventSeries.Selected = False
-        Me.tpRootStateEventSeries.Size = New System.Drawing.Size(969, 519)
-        Me.tpRootStateEventSeries.TabIndex = 1
-        Me.tpRootStateEventSeries.Title = "State Event Series"
-        '
-        'PanelState
-        '
-        Me.PanelState.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.PanelState.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelState.Location = New System.Drawing.Point(0, 0)
-        Me.PanelState.Name = "PanelState"
-        Me.PanelState.Size = New System.Drawing.Size(969, 24)
-        Me.PanelState.TabIndex = 0
         '
         'tpHeader
         '
@@ -1094,7 +955,7 @@ Public Class Designer
         Me.tpHeader.Location = New System.Drawing.Point(0, 0)
         Me.tpHeader.Name = "tpHeader"
         Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
-        Me.tpHeader.Size = New System.Drawing.Size(969, 625)
+        Me.tpHeader.Size = New System.Drawing.Size(969, 660)
         Me.tpHeader.TabIndex = 0
         Me.tpHeader.Title = "Header"
         '
@@ -1105,7 +966,7 @@ Public Class Designer
         Me.PanelDescription.Location = New System.Drawing.Point(0, 96)
         Me.PanelDescription.Name = "PanelDescription"
         Me.PanelDescription.Padding = New System.Windows.Forms.Padding(10)
-        Me.PanelDescription.Size = New System.Drawing.Size(969, 355)
+        Me.PanelDescription.Size = New System.Drawing.Size(969, 390)
         Me.PanelDescription.TabIndex = 4
         '
         'RichTextBoxDescription
@@ -1114,7 +975,7 @@ Public Class Designer
         Me.RichTextBoxDescription.Location = New System.Drawing.Point(10, 10)
         Me.RichTextBoxDescription.Name = "RichTextBoxDescription"
         Me.RichTextBoxDescription.ReadOnly = True
-        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 335)
+        Me.RichTextBoxDescription.Size = New System.Drawing.Size(949, 370)
         Me.RichTextBoxDescription.TabIndex = 5
         Me.RichTextBoxDescription.Text = ""
         '
@@ -1124,7 +985,7 @@ Public Class Designer
         Me.PanelConcept_1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.PanelConcept_1.Controls.Add(Me.gbSpecialisation)
         Me.PanelConcept_1.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelConcept_1.Location = New System.Drawing.Point(0, 451)
+        Me.PanelConcept_1.Location = New System.Drawing.Point(0, 486)
         Me.PanelConcept_1.Name = "PanelConcept_1"
         Me.PanelConcept_1.Size = New System.Drawing.Size(969, 174)
         Me.PanelConcept_1.TabIndex = 5
@@ -1147,6 +1008,137 @@ Public Class Designer
         Me.tvSpecialisation.Size = New System.Drawing.Size(496, 120)
         Me.tvSpecialisation.TabIndex = 0
         '
+        'tpDesign
+        '
+        Me.tpDesign.Controls.Add(Me.TabDesign)
+        Me.tpDesign.Controls.Add(Me.PanelRoot)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDesign, "Screens/Entry Model screen.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDesign, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpDesign.Location = New System.Drawing.Point(0, 0)
+        Me.tpDesign.Name = "tpDesign"
+        Me.tpDesign.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpDesign, True)
+        Me.tpDesign.Size = New System.Drawing.Size(969, 660)
+        Me.tpDesign.TabIndex = 1
+        Me.tpDesign.Title = "Definition"
+        '
+        'TabDesign
+        '
+        Me.TabDesign.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.TabDesign.BoldSelectedPage = True
+        Me.TabDesign.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabDesign, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabDesign, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabDesign.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabDesign.Location = New System.Drawing.Point(0, 32)
+        Me.TabDesign.Name = "TabDesign"
+        Me.TabDesign.PositionTop = True
+        Me.TabDesign.SelectedIndex = 0
+        Me.TabDesign.SelectedTab = Me.tpData
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
+        Me.TabDesign.Size = New System.Drawing.Size(969, 628)
+        Me.TabDesign.TabIndex = 12
+        Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState})
+        Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
+        '
+        'tpData
+        '
+        Me.tpData.Controls.Add(Me.TabStructure)
+        Me.tpData.Controls.Add(Me.PanelConfigStructure)
+        Me.tpData.Location = New System.Drawing.Point(0, 0)
+        Me.tpData.Name = "tpData"
+        Me.tpData.Size = New System.Drawing.Size(969, 603)
+        Me.tpData.TabIndex = 0
+        Me.tpData.Title = "Data"
+        '
+        'TabStructure
+        '
+        Me.TabStructure.BackColor = System.Drawing.Color.RoyalBlue
+        Me.TabStructure.BoldSelectedPage = True
+        Me.TabStructure.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabStructure, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabStructure, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabStructure.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabStructure.Location = New System.Drawing.Point(0, 24)
+        Me.TabStructure.Name = "TabStructure"
+        Me.TabStructure.PositionTop = True
+        Me.TabStructure.SelectedIndex = 0
+        Me.TabStructure.SelectedTab = Me.tpDataStructure
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabStructure, True)
+        Me.TabStructure.Size = New System.Drawing.Size(969, 579)
+        Me.TabStructure.TabIndex = 10
+        Me.TabStructure.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDataStructure})
+        Me.TabStructure.TextInactiveColor = System.Drawing.Color.Black
+        '
+        'tpDataStructure
+        '
+        Me.tpDataStructure.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDataStructure, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDataStructure, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpDataStructure.Location = New System.Drawing.Point(0, 0)
+        Me.tpDataStructure.Name = "tpDataStructure"
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpDataStructure, True)
+        Me.tpDataStructure.Size = New System.Drawing.Size(969, 554)
+        Me.tpDataStructure.TabIndex = 0
+        Me.tpDataStructure.Title = "Structure"
+        '
+        'tpRootState
+        '
+        Me.tpRootState.Controls.Add(Me.TabState)
+        Me.tpRootState.Controls.Add(Me.PanelState)
+        Me.tpRootState.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootState.Name = "tpRootState"
+        Me.tpRootState.Selected = False
+        Me.tpRootState.Size = New System.Drawing.Size(969, 603)
+        Me.tpRootState.TabIndex = 1
+        Me.tpRootState.Title = "State"
+        '
+        'TabState
+        '
+        Me.TabState.BackColor = System.Drawing.Color.RoyalBlue
+        Me.TabState.BoldSelectedPage = True
+        Me.TabState.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabState, "HowTo/edit_state.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabState, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabState.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabState.Location = New System.Drawing.Point(0, 24)
+        Me.TabState.Name = "TabState"
+        Me.TabState.PositionTop = True
+        Me.TabState.SelectedIndex = 0
+        Me.TabState.SelectedTab = Me.tpRootStateStructure
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabState, True)
+        Me.TabState.Size = New System.Drawing.Size(969, 579)
+        Me.TabState.TabIndex = 1
+        Me.TabState.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpRootStateStructure, Me.tpRootStateEventSeries})
+        '
+        'tpRootStateStructure
+        '
+        Me.tpRootStateStructure.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.tpRootStateStructure.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootStateStructure.Name = "tpRootStateStructure"
+        Me.tpRootStateStructure.Size = New System.Drawing.Size(969, 554)
+        Me.tpRootStateStructure.TabIndex = 0
+        Me.tpRootStateStructure.Title = "Structure"
+        '
+        'tpRootStateEventSeries
+        '
+        Me.tpRootStateEventSeries.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.tpRootStateEventSeries.Location = New System.Drawing.Point(0, 0)
+        Me.tpRootStateEventSeries.Name = "tpRootStateEventSeries"
+        Me.tpRootStateEventSeries.Selected = False
+        Me.tpRootStateEventSeries.Size = New System.Drawing.Size(969, 554)
+        Me.tpRootStateEventSeries.TabIndex = 1
+        Me.tpRootStateEventSeries.Title = "State Event Series"
+        '
+        'PanelState
+        '
+        Me.PanelState.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.PanelState.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelState.Location = New System.Drawing.Point(0, 0)
+        Me.PanelState.Name = "PanelState"
+        Me.PanelState.Size = New System.Drawing.Size(969, 24)
+        Me.PanelState.TabIndex = 0
+        '
         'tpSectionPage
         '
         Me.tpSectionPage.BackColor = System.Drawing.Color.LightYellow
@@ -1156,7 +1148,7 @@ Public Class Designer
         Me.tpSectionPage.Name = "tpSectionPage"
         Me.tpSectionPage.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpSectionPage, True)
-        Me.tpSectionPage.Size = New System.Drawing.Size(969, 625)
+        Me.tpSectionPage.Size = New System.Drawing.Size(969, 660)
         Me.tpSectionPage.TabIndex = 4
         Me.tpSectionPage.Title = "Definition"
         '
@@ -1169,7 +1161,7 @@ Public Class Designer
         Me.tpTerminology.Name = "tpTerminology"
         Me.tpTerminology.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpTerminology, True)
-        Me.tpTerminology.Size = New System.Drawing.Size(969, 625)
+        Me.tpTerminology.Size = New System.Drawing.Size(969, 660)
         Me.tpTerminology.TabIndex = 2
         Me.tpTerminology.Title = "Terminology"
         '
@@ -1184,7 +1176,7 @@ Public Class Designer
         Me.TabTerminology.PositionTop = True
         Me.TabTerminology.SelectedIndex = 0
         Me.TabTerminology.SelectedTab = Me.tpTerms
-        Me.TabTerminology.Size = New System.Drawing.Size(969, 625)
+        Me.TabTerminology.Size = New System.Drawing.Size(969, 660)
         Me.TabTerminology.TabIndex = 0
         Me.TabTerminology.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpTerms, Me.tpBindings, Me.tpConstraints, Me.tpLanguages})
         '
@@ -1198,7 +1190,7 @@ Public Class Designer
         Me.tpTerms.Location = New System.Drawing.Point(0, 0)
         Me.tpTerms.Name = "tpTerms"
         Me.HelpProviderDesigner.SetShowHelp(Me.tpTerms, True)
-        Me.tpTerms.Size = New System.Drawing.Size(969, 600)
+        Me.tpTerms.Size = New System.Drawing.Size(969, 635)
         Me.tpTerms.TabIndex = 2
         Me.tpTerms.Title = "Terms "
         Me.ToolTip1.SetToolTip(Me.tpTerms, "Internal term definitions")
@@ -1220,7 +1212,7 @@ Public Class Designer
         Me.tpBindings.Name = "tpBindings"
         Me.tpBindings.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpBindings, True)
-        Me.tpBindings.Size = New System.Drawing.Size(969, 600)
+        Me.tpBindings.Size = New System.Drawing.Size(969, 635)
         Me.tpBindings.TabIndex = 3
         Me.tpBindings.Title = "Term Bindings"
         '
@@ -1239,7 +1231,7 @@ Public Class Designer
         Me.tpConstraints.Name = "tpConstraints"
         Me.tpConstraints.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpConstraints, True)
-        Me.tpConstraints.Size = New System.Drawing.Size(969, 600)
+        Me.tpConstraints.Size = New System.Drawing.Size(969, 635)
         Me.tpConstraints.TabIndex = 1
         Me.tpConstraints.Title = "Constraints"
         Me.ToolTip1.SetToolTip(Me.tpConstraints, "Constraint definitions")
@@ -1252,7 +1244,7 @@ Public Class Designer
         Me.DataGridConstraintStatements.Location = New System.Drawing.Point(0, 293)
         Me.DataGridConstraintStatements.Name = "DataGridConstraintStatements"
         Me.DataGridConstraintStatements.RowTemplate.Height = 24
-        Me.DataGridConstraintStatements.Size = New System.Drawing.Size(969, 252)
+        Me.DataGridConstraintStatements.Size = New System.Drawing.Size(969, 287)
         Me.DataGridConstraintStatements.TabIndex = 12
         '
         'ID
@@ -1331,7 +1323,7 @@ Public Class Designer
         Me.PanelConstraintBinding.BackColor = System.Drawing.Color.LemonChiffon
         Me.PanelConstraintBinding.Controls.Add(Me.butLookUpConstraint)
         Me.PanelConstraintBinding.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelConstraintBinding.Location = New System.Drawing.Point(0, 545)
+        Me.PanelConstraintBinding.Location = New System.Drawing.Point(0, 580)
         Me.PanelConstraintBinding.Name = "PanelConstraintBinding"
         Me.PanelConstraintBinding.Size = New System.Drawing.Size(969, 55)
         Me.PanelConstraintBinding.TabIndex = 7
@@ -1360,7 +1352,7 @@ Public Class Designer
         Me.tpLanguages.Name = "tpLanguages"
         Me.tpLanguages.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpLanguages, True)
-        Me.tpLanguages.Size = New System.Drawing.Size(969, 600)
+        Me.tpLanguages.Size = New System.Drawing.Size(969, 635)
         Me.tpLanguages.TabIndex = 0
         Me.tpLanguages.Title = "Languages && Terminologies"
         Me.ToolTip1.SetToolTip(Me.tpLanguages, "Available Languages and terminologies")
@@ -1375,7 +1367,7 @@ Public Class Designer
         Me.DataGridTerminologies.Location = New System.Drawing.Point(320, 40)
         Me.DataGridTerminologies.Name = "DataGridTerminologies"
         Me.DataGridTerminologies.ReadOnly = True
-        Me.DataGridTerminologies.Size = New System.Drawing.Size(649, 560)
+        Me.DataGridTerminologies.Size = New System.Drawing.Size(649, 595)
         Me.DataGridTerminologies.TabIndex = 10
         Me.DataGridTerminologies.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.DataGridTableStyle3, Me.DataGridTableStyle4, Me.DataGridTableStyle5})
         '
@@ -1481,7 +1473,7 @@ Public Class Designer
         '
         Me.Splitter2.Location = New System.Drawing.Point(312, 0)
         Me.Splitter2.Name = "Splitter2"
-        Me.Splitter2.Size = New System.Drawing.Size(8, 600)
+        Me.Splitter2.Size = New System.Drawing.Size(8, 635)
         Me.Splitter2.TabIndex = 12
         Me.Splitter2.TabStop = False
         '
@@ -1493,7 +1485,7 @@ Public Class Designer
         Me.panelLanguages.Dock = System.Windows.Forms.DockStyle.Left
         Me.panelLanguages.Location = New System.Drawing.Point(0, 0)
         Me.panelLanguages.Name = "panelLanguages"
-        Me.panelLanguages.Size = New System.Drawing.Size(312, 600)
+        Me.panelLanguages.Size = New System.Drawing.Size(312, 635)
         Me.panelLanguages.TabIndex = 2
         '
         'ListLanguages
@@ -1501,7 +1493,7 @@ Public Class Designer
         Me.ListLanguages.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListLanguages.Location = New System.Drawing.Point(0, 96)
         Me.ListLanguages.Name = "ListLanguages"
-        Me.ListLanguages.Size = New System.Drawing.Size(312, 498)
+        Me.ListLanguages.Size = New System.Drawing.Size(312, 537)
         Me.ListLanguages.TabIndex = 9
         '
         'Panel1
@@ -1528,52 +1520,39 @@ Public Class Designer
         '
         Me.tpText.BackColor = System.Drawing.Color.LightSteelBlue
         Me.tpText.Controls.Add(Me.Panel3)
-        Me.tpText.Controls.Add(Me.panelDiplayTop)
+        Me.tpText.Controls.Add(Me.DisplayToolBar)
         Me.HelpProviderDesigner.SetHelpKeyword(Me.tpText, "Screens/display_screen.html")
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpText, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpText.Location = New System.Drawing.Point(0, 0)
         Me.tpText.Name = "tpText"
         Me.tpText.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpText, True)
-        Me.tpText.Size = New System.Drawing.Size(969, 625)
+        Me.tpText.Size = New System.Drawing.Size(969, 660)
         Me.tpText.TabIndex = 3
         Me.tpText.Title = "Display"
         '
         'Panel3
         '
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel3.Location = New System.Drawing.Point(0, 35)
+        Me.Panel3.Location = New System.Drawing.Point(0, 42)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Padding = New System.Windows.Forms.Padding(5)
-        Me.Panel3.Size = New System.Drawing.Size(969, 590)
+        Me.Panel3.Size = New System.Drawing.Size(969, 618)
         Me.Panel3.TabIndex = 4
         '
-        'panelDiplayTop
+        'DisplayToolBar
         '
-        Me.panelDiplayTop.Controls.Add(Me.ToolBarRTF)
-        Me.panelDiplayTop.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelDiplayTop.Location = New System.Drawing.Point(0, 0)
-        Me.panelDiplayTop.Name = "panelDiplayTop"
-        Me.panelDiplayTop.Size = New System.Drawing.Size(969, 35)
-        Me.panelDiplayTop.TabIndex = 3
-        '
-        'ToolBarRTF
-        '
-        Me.ToolBarRTF.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ToolBarRTF.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
-        Me.ToolBarRTF.AutoSize = False
-        Me.ToolBarRTF.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.butADL, Me.butXML, Me.butOWL, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butSaveFile, Me.ToolBarButton2, Me.butPrint})
-        Me.ToolBarRTF.ButtonSize = New System.Drawing.Size(20, 30)
-        Me.ToolBarRTF.Dock = System.Windows.Forms.DockStyle.None
-        Me.ToolBarRTF.DropDownArrows = True
-        Me.ToolBarRTF.ImageList = Me.ImageListToolbar
-        Me.ToolBarRTF.Location = New System.Drawing.Point(0, 0)
-        Me.ToolBarRTF.Name = "ToolBarRTF"
-        Me.ToolBarRTF.ShowToolTips = True
-        Me.ToolBarRTF.Size = New System.Drawing.Size(969, 35)
-        Me.ToolBarRTF.TabIndex = 4
-        Me.ToolBarRTF.Wrappable = False
+        Me.DisplayToolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
+        Me.DisplayToolBar.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.butADL, Me.butXML, Me.butOWL, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butSaveFile, Me.ToolBarButton2, Me.butPrint})
+        Me.DisplayToolBar.ButtonSize = New System.Drawing.Size(20, 30)
+        Me.DisplayToolBar.DropDownArrows = True
+        Me.DisplayToolBar.ImageList = Me.ImageListToolbar
+        Me.DisplayToolBar.Location = New System.Drawing.Point(0, 0)
+        Me.DisplayToolBar.Name = "DisplayToolBar"
+        Me.DisplayToolBar.ShowToolTips = True
+        Me.DisplayToolBar.Size = New System.Drawing.Size(969, 42)
+        Me.DisplayToolBar.TabIndex = 1
+        Me.DisplayToolBar.Wrappable = False
         '
         'tbSep1
         '
@@ -1668,7 +1647,7 @@ Public Class Designer
         Me.tpInterface.Name = "tpInterface"
         Me.tpInterface.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpInterface, True)
-        Me.tpInterface.Size = New System.Drawing.Size(969, 625)
+        Me.tpInterface.Size = New System.Drawing.Size(969, 660)
         Me.tpInterface.TabIndex = 5
         Me.tpInterface.Title = "Interface"
         '
@@ -1686,7 +1665,7 @@ Public Class Designer
         Me.tpDescription.Location = New System.Drawing.Point(0, 0)
         Me.tpDescription.Name = "tpDescription"
         Me.tpDescription.Selected = False
-        Me.tpDescription.Size = New System.Drawing.Size(969, 625)
+        Me.tpDescription.Size = New System.Drawing.Size(969, 660)
         Me.tpDescription.TabIndex = 6
         Me.tpDescription.Title = "Description"
         '
@@ -1824,11 +1803,17 @@ Public Class Designer
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
         '
+        'MenuLanguageToggle
+        '
+        Me.MenuLanguageToggle.Index = 3
+        Me.MenuLanguageToggle.Shortcut = System.Windows.Forms.Shortcut.CtrlL
+        Me.MenuLanguageToggle.Text = "&Toggle Language"
+        '
         'Designer
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.AutoScroll = True
-        Me.ClientSize = New System.Drawing.Size(969, 750)
+        Me.ClientSize = New System.Drawing.Size(969, 748)
         Me.Controls.Add(Me.PanelMain)
         Me.Controls.Add(Me.PanelHeader)
         Me.HelpProviderDesigner.SetHelpKeyword(Me, "HowTo/ocean_archetype_editor.htm")
@@ -1851,13 +1836,13 @@ Public Class Designer
         CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
-        Me.tpDesign.ResumeLayout(False)
-        Me.tpData.ResumeLayout(False)
-        Me.tpRootState.ResumeLayout(False)
         Me.tpHeader.ResumeLayout(False)
         Me.PanelDescription.ResumeLayout(False)
         Me.PanelConcept_1.ResumeLayout(False)
         Me.gbSpecialisation.ResumeLayout(False)
+        Me.tpDesign.ResumeLayout(False)
+        Me.tpData.ResumeLayout(False)
+        Me.tpRootState.ResumeLayout(False)
         Me.tpTerminology.ResumeLayout(False)
         Me.tpTerms.ResumeLayout(False)
         Me.tpConstraints.ResumeLayout(False)
@@ -1871,7 +1856,7 @@ Public Class Designer
         Me.panelLanguages.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.tpText.ResumeLayout(False)
-        Me.panelDiplayTop.ResumeLayout(False)
+        Me.tpText.PerformLayout()
         Me.tpInterface.ResumeLayout(False)
         Me.PanelHeader.ResumeLayout(False)
         Me.PanelHeader.PerformLayout()
@@ -1933,7 +1918,7 @@ Public Class Designer
 
     Private Sub OpenArchetype(ByVal a_file_name As String)
         Application.DoEvents()
-        Me.Cursor = System.Windows.Forms.Cursors.WaitCursor
+        Cursor = System.Windows.Forms.Cursors.WaitCursor
 
         ' stop auto updating of controls
         Dim previousEditedState As Boolean = mFileManager.FileEdited
@@ -1943,47 +1928,35 @@ Public Class Designer
         Dim watch As Stopwatch = Stopwatch.StartNew()
 
         If Not mFileManager.OpenArchetype(a_file_name) Then
-            MessageBox.Show(mFileManager.Status, _
-                AE_Constants.Instance.MessageBoxCaption, _
-                MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Me.Cursor = System.Windows.Forms.Cursors.Default
+            MessageBox.Show(mFileManager.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Cursor = System.Windows.Forms.Cursors.Default
             mFileManager.ParserReset()
             mFileManager.FileLoading = False
             mFileManager.FileEdited = previousEditedState
-            Exit Sub
+            Exit Sub            ' FIXME: Spaghetti code!
         End If
 
         Debug.WriteLine(a_file_name + ": " + CStr(watch.Elapsed.TotalSeconds))
 
-        'Show the correct display format toolbars
         Dim i As Integer
 
         For i = 2 To 5
-            Dim tbb As ToolBarButton = Me.ToolBarRTF.Buttons(i)
+            Dim tbb As ToolBarButton = DisplayToolBar.Buttons(i)
             tbb.Visible = mFileManager.AvailableFormats.Contains(tbb.Tag)
         Next
 
-        'remove embedded filemanagers
         Filemanager.ClearEmbedded()
 
         ' stop the handler while we get all the languages
         RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
+        ResetDefaults()
 
-        Me.ResetDefaults()
+        Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
 
-        '-----------------------------------------------
-        ' Deal with the languages, terms and terminology bindings
-
-        ' set the language that is chosen
-        mFileManager.OntologyManager.LanguageCode = Me.ListLanguages.SelectedValue
-
-        ' set the concept and description
-        Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm( _
-                mFileManager.Archetype.ConceptCode)
         If Not a_term Is Nothing Then
-            Me.txtConceptInFull.Text = a_term.Text
-            Me.TxtConceptDescription.Text = a_term.Description
-            Me.txtConceptComment.Text = a_term.Comment
+            txtConceptInFull.Text = a_term.Text
+            TxtConceptDescription.Text = a_term.Description
+            txtConceptComment.Text = a_term.Comment
         End If
 
         If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
@@ -1991,8 +1964,9 @@ Public Class Designer
             Dim tnc As TreeNodeCollection
             Dim ct As CodeAndTerm()
 
-            tnc = Me.tvSpecialisation.Nodes
+            tnc = tvSpecialisation.Nodes
             ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(mFileManager.Archetype.ConceptCode, mFileManager)
+
             For i = 0 To ct.Length - 1
                 tn = New TreeNode
                 tn.Text = ct(i).Text
@@ -2000,15 +1974,12 @@ Public Class Designer
                 tnc.Add(tn)
                 tnc = tn.Nodes
             Next
-            Me.tvSpecialisation.ExpandAll()
-            Me.gbSpecialisation.Visible = True
+
+            tvSpecialisation.ExpandAll()
+            gbSpecialisation.Show()
         End If
 
         If mFileManager.Archetype.hasData Then
-            'Dim sType As String
-
-            'sType = mFileManager.Archetype.Definition.TypeName
-
             Select Case mFileManager.Archetype.RmEntity
 
                 Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, _
@@ -2103,7 +2074,7 @@ Public Class Designer
 
                         Case StructureType.INSTRUCTION ' "ENTRY.INSTRUCTION"
                             SetUpInstruction()
-                           
+
                             mTabPageInstruction.ProcessInstruction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
 
                             If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
@@ -2150,6 +2121,7 @@ Public Class Designer
                     ' fill the subject of data if required
                     Dim cp As CodePhrase
                     cp = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
+
                     If Not cp Is Nothing Then
                         If cp.Codes.Count > 0 Then
                             Me.mRestrictedSubject.AsCodePhrase = cp
@@ -2157,7 +2129,6 @@ Public Class Designer
                     End If
 
                 Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-
                     ProcessStructure(mFileManager.Archetype.Definition)
 
                 Case StructureType.Cluster
@@ -2168,47 +2139,28 @@ Public Class Designer
 
                 Case StructureType.SECTION
                     SetUpSection()
-                    mTabPageSection.ProcessSection( _
-                            mFileManager.Archetype.Definition)
+                    mTabPageSection.ProcessSection(mFileManager.Archetype.Definition)
 
                 Case StructureType.COMPOSITION
                     InitialiseRestrictedSet(RestrictedSet.TermSet.Setting)
-
                     SetUpComposition()
-                    mTabPageComposition.ProcessComposition( _
-                        mFileManager.Archetype.Definition)
+                    mTabPageComposition.ProcessComposition(mFileManager.Archetype.Definition)
             End Select
-
         End If
 
+        ReferenceModel.SetArchetypedClass(mFileManager.Archetype.Archetype_ID.ReferenceModelEntity)
         SetUpGUI(mFileManager.Archetype.RmEntity, False)
 
         AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
-
-        ' set the specific language if it is present e.g. en-US, en-AU
-        If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.SpecificLanguageCode Then
-            If mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) Then
-                Me.ListLanguages.SelectedValue = OceanArchetypeEditor.SpecificLanguageCode
-                Translate(OceanArchetypeEditor.SpecificLanguageCode)
-            ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) Then
-                If Me.ListLanguages.SelectedValue <> OceanArchetypeEditor.DefaultLanguageCode Then
-                    Me.ListLanguages.SelectedValue = OceanArchetypeEditor.DefaultLanguageCode
-                    Translate(OceanArchetypeEditor.DefaultLanguageCode)
-                End If
-            Else
-                Me.ListLanguages.SelectedValue = mFileManager.OntologyManager.PrimaryLanguageCode
-                ChangeLanguage(Me.ListLanguages.SelectedValue)
-            End If
-        End If
+        ListLanguages.SelectedValue = mFileManager.OntologyManager.LanguageCode
 
         If Not mTermBindingPanel Is Nothing Then
-            Me.mTermBindingPanel.PopulatePathTree()
+            mTermBindingPanel.PopulatePathTree()
         End If
 
         mFileManager.FileLoading = False
-
-        Me.MenuFileSpecialise.Visible = True
-        Me.Cursor = System.Windows.Forms.Cursors.Default
+        MenuFileSpecialise.Visible = True
+        Cursor = System.Windows.Forms.Cursors.Default
     End Sub
 
     Sub InitialiseRestrictedSet(ByVal aRestriction As RestrictedSet.TermSet)
@@ -2230,10 +2182,10 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub NewArchetype(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuFileNew.Click, MenuFileClose.Click
+    Private Sub NewArchetype(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuFileNew.Click
         If CheckOKtoClose() Then
             'reset the header
-            If SetNewArchetypeName(sender Is MenuFileClose) = 2 Then
+            If SetNewArchetypeName(False) = 2 Then
                 'remove embedded filemanagers
                 Filemanager.ClearEmbedded()
 
@@ -2274,8 +2226,7 @@ Public Class Designer
 
             If Not Filemanager.Master.SaveArchetype() Then
                 Filemanager.Master.FileName = s
-                Me.MenuFileSpecialise.Visible = True
-
+                MenuFileSpecialise.Visible = True
             Else
                 If mFileManager.ParserType <> parserType Then
                     'Saved in a different format so set the description to right format
@@ -2284,15 +2235,14 @@ Public Class Designer
                     mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
                     Filemanager.Master.FileLoading = False
                 End If
+
                 If Not Filemanager.HasFileToSave Then
                     'Hide save button on Toolbar
                     Filemanager.SetFileChangedToolBar(False)
                 End If
             End If
-        Else
-            If Filemanager.SaveFiles(False) Then
-                Me.MenuFileSpecialise.Visible = True
-            End If
+        ElseIf Filemanager.SaveFiles(False) Then
+            MenuFileSpecialise.Visible = True
         End If
 
         lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
@@ -2378,7 +2328,6 @@ Public Class Designer
 
         'MenuItem labels
         Me.MenuFile.Text = Filemanager.GetOpenEhrTerm(43, Me.MenuFile.Text, language)
-        Me.MenuFileClose.Text = Filemanager.GetOpenEhrTerm(184, Me.MenuFileClose.Text, language)
         Me.MenuFileNew.Text = Filemanager.GetOpenEhrTerm(151, Me.MenuFileNew.Text, language)
         Me.MenuFileOpen.Text = Filemanager.GetOpenEhrTerm(61, Me.MenuFileOpen.Text, language)
         Me.MenuFileOpenFromWeb.Text = Filemanager.GetOpenEhrTerm(651, Me.MenuFileOpenFromWeb.Text, language)
@@ -2479,8 +2428,6 @@ Public Class Designer
         Me.tpRootStateEventSeries.Title = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(177, Me.chkEventSeries.Text, language), Filemanager.GetOpenEhrTerm(81, Me.chkEventSeries.Text, language))
         Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(177, Me.tpRootStateStructure.Title, language)
         Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(446, Me.cbMandatory.Text, language)
-
-
     End Sub
 
     Private Sub TranslateSpecialisationNodes(ByVal tnc As TreeNodeCollection)
@@ -2494,38 +2441,28 @@ Public Class Designer
         Next
     End Sub
 
-    Private Sub Translate(Optional ByVal LanguageCode As String = "")
-
-        Dim obj As Object
-        Dim a_Term As RmTerm
-
+    Private Sub Translate(ByVal languageCode As String)
         ' file loading so no updates
         mFileManager.FileLoading = True
-        ' set the language
-        If LanguageCode <> "" Then
-            Dim MI As MenuItem
 
-            mFileManager.OntologyManager.LanguageCode = LanguageCode
-            For Each MI In Me.MenuLanguageChange.MenuItems
-                If MI.Text = mFileManager.OntologyManager.LanguageText Then
-                    MI.Checked = True
-                Else
-                    MI.Checked = False
-                End If
+        If languageCode <> "" Then
+            mFileManager.OntologyManager.LanguageCode = languageCode
+
+            For Each mi As MenuItem In MenuLanguageChange.MenuItems
+                mi.Checked = mi.Text = mFileManager.OntologyManager.LanguageText
             Next
-
         End If
-        ' Concept and description fields on header and the form text
 
-        a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
-        Me.txtConceptInFull.Text = a_Term.Text
-        Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & a_Term.Text & "]"
-        Me.TxtConceptDescription.Text = a_Term.Description
-        Me.txtConceptComment.Text = a_Term.Comment
+        ' Concept and description fields on header and the form text
+        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
+        txtConceptInFull.Text = term.Text
+        Text = AE_Constants.Instance.MessageBoxCaption & " [" & term.Text & "]"
+        TxtConceptDescription.Text = term.Description
+        txtConceptComment.Text = term.Comment
 
         'and in the specialisation chain
-        If Me.tvSpecialisation.GetNodeCount(False) > 0 Then
-            TranslateSpecialisationNodes(Me.tvSpecialisation.Nodes)
+        If tvSpecialisation.GetNodeCount(False) > 0 Then
+            TranslateSpecialisationNodes(tvSpecialisation.Nodes)
         End If
 
         ' and the subject of care
@@ -2535,7 +2472,7 @@ Public Class Designer
 
         mFileManager.FileLoading = False
 
-        For Each obj In mComponentsCollection
+        For Each obj As Object In mComponentsCollection
             ' each component must have a populate terms method to enable translation
             obj.Translate()
         Next
@@ -2738,15 +2675,19 @@ Public Class Designer
         text.WriteLine("<table border=""1"" cellpadding=""3"" width=""100%"">")
 
         Dim width As String = "50"
+
         If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
             width = "33"
         End If
+
         text.WriteLine("<tr>")
         text.WriteLine(String.Format("<td width=""{0}%""><h4>Concept description:</h4></td>", width))
         text.WriteLine(String.Format("<td width=""{0}%""><h4>Identification:</h4></td>", width))
+
         If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
             text.WriteLine(String.Format("<td width=""{0}%""><h4>Comments:</h4></td>", width))
         End If
+
         text.WriteLine("</tr>")
         text.WriteLine("<tr>")
         text.WriteLine(String.Format("<td width=""{0}%"">{1}</td>", width, TxtConceptDescription.Text))
@@ -2758,6 +2699,7 @@ Public Class Designer
         If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
             text.WriteLine(String.Format("<td width=""{0}%"">{1}</td>", width, CStr(IIf(Me.txtConceptComment.Text <> String.Empty, Me.txtConceptComment.Text, commentString))))
         End If
+
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
 
@@ -2876,7 +2818,6 @@ Public Class Designer
 
         text.Flush()
         text.Close()
-
     End Sub
 
 #End Region
@@ -2923,7 +2864,7 @@ Public Class Designer
             ' stop the handler while we get all the languages
             RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
-            ' check with user they want to add a languge
+            ' check with user they want to add a language
             If (MessageBox.Show(AE_Constants.Instance.NewLanguage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
                 Windows.Forms.DialogResult.OK) Then
                 mFileManager.OntologyManager.AddLanguage(lang, frm.ListChoose.Text)
@@ -3565,6 +3506,7 @@ Public Class Designer
                 End If
             Case 2 'cancel or exit
                 frm.Close()
+
                 If AllowOpen Then
                     Me.Close() ' close the application
                 Else
@@ -3572,16 +3514,17 @@ Public Class Designer
                 End If
             Case 4 'pressed the open-From-Web Button
                 frm.Close()
-                Me.OpenArchetypeFromWeb(Me, New System.EventArgs)
+                OpenArchetypeFromWeb(Me, New System.EventArgs)
+
                 If mFileManager.Archetype Is Nothing Then
                     'open archetype was cancelled so go back to new
                     Return SetNewArchetypeName(True)
                 End If
+
                 Return 1
             Case 6  'pressed the open button
                 frm.Close()
-
-                Me.OpenArchetype(Me, New System.EventArgs)
+                OpenArchetype(Me, New System.EventArgs)
 
                 If mFileManager.Archetype Is Nothing Then
                     'open archetype was cancelled so go back to new
@@ -3592,11 +3535,7 @@ Public Class Designer
     End Function
 
     Private Sub MenuFileExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileExit.Click
-        'If CheckOKtoClose() Then
-        'Close checks if it is OK to close
-        Me.Close()
-        'Me.Dispose()
-        'End If
+        Close()
     End Sub
 
     Private Sub MenuViewLanguageTerminology_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuLanguageAvailable.Click, MenuTerminologyAvailable.Click
@@ -3648,44 +3587,46 @@ Public Class Designer
 
     Private Sub MenuFileSpecialise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSpecialise.Click
         'Enable specialisation of the archetype
-        If MessageBox.Show(AE_Constants.Instance.Specialise & " " & mFileManager.Archetype.Archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
-            Windows.Forms.DialogResult.OK Then
-            Dim s As String
-            s = "-"
-            While InStr(s, "-") > 0
-                s = OceanArchetypeEditor.Instance.GetInput("Enter the new concept ('-' is not allowed)", Me)
-            End While
+        Dim s As String
+        s = "-"
 
-            If s <> "" Then
-                Dim a_Term As RmTerm
+        While InStr(s, "-") > 0
+            Dim prompt As String = AE_Constants.Instance.Specialise & " " & mFileManager.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & Environment.NewLine & "Enter the new concept ('-' is not allowed)."
+            s = OceanArchetypeEditor.Instance.GetInput(prompt, Me)
+        End While
 
-                ' replace spaces with underscore
-                s = s.Replace(" "c, "_"c)
+        If s <> "" Then
+            Dim a_Term As RmTerm
 
-                'specialise concept
-                mFileManager.FileLoading = True
-                mFileManager.Archetype.Specialise(s, mFileManager.OntologyManager)
+            ' replace spaces with underscore
+            s = s.Replace(" "c, "_"c)
 
-                ' show the new archetype ID in the GUI
-                Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
-                a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
-                Me.txtConceptInFull.Text = a_Term.Text
-                Me.TxtConceptDescription.Text = a_Term.Description
-                Me.txtConceptComment.Text = ""
-                Me.gbSpecialisation.Visible = True
-                UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
-                Me.MenuFileSpecialise.Visible = False
-                mFileManager.FileLoading = False
-                mFileManager.FileEdited = True
-                mFileManager.IsNew = True
-                mFileManager.FileName = ""    'new filename and needs to save as
+            'specialise concept
+            mFileManager.FileLoading = True
+            mFileManager.Archetype.Specialise(s, mFileManager.OntologyManager)
+
+            ' show the new archetype ID in the GUI
+            lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
+            a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
+            txtConceptInFull.Text = a_Term.Text
+            TxtConceptDescription.Text = a_Term.Description
+            txtConceptComment.Text = ""
+            gbSpecialisation.Show()
+            UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
+            MenuFileSpecialise.Visible = False
+            mFileManager.FileLoading = False
+            mFileManager.FileEdited = True
+            mFileManager.IsNew = True
+            mFileManager.FileName = ""    'new filename and needs to save as
+
+            If Not mTabPageDataStructure Is Nothing Then
+                mTabPageDataStructure.ArchetypeDisplay.SetButtonVisibility(Nothing)
             End If
         End If
     End Sub
 
     Private Sub ToolBarMain_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBarMain.ButtonClick
         Select Case ToolBarMain.Buttons.IndexOf(e.Button)
-
             Case 0 ' New
                 NewArchetype(sender, e)
             Case 1 ' open
@@ -3694,13 +3635,12 @@ Public Class Designer
                 OpenArchetypeFromWeb(sender, e)
             Case 3 ' Save                                
                 If Filemanager.SaveFiles(False) Then
-                    Me.MenuFileSpecialise.Visible = True
+                    MenuFileSpecialise.Visible = True
                 End If
             Case 4 ' separator
 
             Case 5 ' Print
                 ' only available when displaying archetype
-
         End Select
     End Sub
 
@@ -3735,6 +3675,7 @@ Public Class Designer
         OceanArchetypeEditor.Instance.Options.ShowOptionsForm()
         ToolBarOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
         MenuFileOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
+        butLinks.Visible = OceanArchetypeEditor.Instance.Options.ShowLinksButton
     End Sub
 
     Private Sub menuFileNewWindow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuFileNewWindow.Click
@@ -3752,46 +3693,52 @@ Public Class Designer
 
 #Region "Language related functions - Add, Change, List_selectedIndex, Menu Change"
 
+    Dim previousLanguageCode, previousLanguageText As String
+
     Private Sub AddLanguage(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAdd.Click, MenuLanguageAdd.Click
         If ChooseLanguage() Then
             mFileManager.FileEdited = True
         End If
     End Sub
 
-    Private Sub ChangeLanguage(ByVal LangCode As String)
-        If mFileManager.OntologyManager.LanguageCode <> LangCode Then
-            ' a new language is selected so populate the terms
-            mFileManager.OntologyManager.LanguageCode = LangCode
-            Translate(LangCode)
+    Private Sub ChangeLanguageText(ByVal langText As String)
+        Dim i As Integer = ListLanguages.FindStringExact(langText)
+
+        If i > -1 Then
+            ListLanguages.SelectedIndex = i
+            ChangeLanguage(ListLanguages.SelectedValue)
+        End If
+    End Sub
+
+    Private Sub ChangeLanguage(ByVal langCode As String)
+        If mFileManager.OntologyManager.HasLanguage(langCode) AndAlso mFileManager.OntologyManager.LanguageCode <> langCode Then
+            previousLanguageCode = mFileManager.OntologyManager.LanguageCode
+            previousLanguageText = mFileManager.OntologyManager.LanguageText
+            mFileManager.OntologyManager.LanguageCode = langCode
+            Translate(langCode)
         End If
     End Sub
 
     Private Sub ListLanguages_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListLanguages.SelectedIndexChanged
-
-        ' need to load the definitions
-
-        If Me.ListLanguages.Focused Then
-            ' crownwood controls have a bug where selecting a tabpage triggers select index on this control
-            ' the following if statement short circuits this
-            ChangeLanguage(Me.ListLanguages.SelectedValue)
+        If ListLanguages.Focused Then
+            ' Crownwood controls have a bug where selecting a tabpage triggers select index on this control.
+            ' The above if statement short circuits this.
+            ChangeLanguage(ListLanguages.SelectedValue)
         End If
-
     End Sub
 
     Private Sub MenuLanguageChange_Popup(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuLanguageChange.Popup
-        Dim MI As MenuItem
-        For Each MI In MenuLanguageChange.MenuItems
-            AddHandler MI.Click, AddressOf MenuChangeLanguage_Click
+        For Each mi As MenuItem In MenuLanguageChange.MenuItems
+            AddHandler mi.Click, AddressOf MenuChangeLanguage_Click
         Next
     End Sub
 
     Private Sub MenuChangeLanguage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim i As Integer
-        i = Me.ListLanguages.FindStringExact(sender.text)
-        If i > -1 Then
-            Me.ListLanguages.SelectedIndex = i
-            ChangeLanguage(Me.ListLanguages.SelectedValue)
-        End If
+        ChangeLanguageText(sender.Text)
+    End Sub
+
+    Private Sub MenuLanguageToggle_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuLanguageToggle.Click
+        ChangeLanguageText(previousLanguageText)
     End Sub
 
 #End Region
@@ -3935,7 +3882,7 @@ Public Class Designer
         mFileManager.Archetype.Description = mTabPageDescription.Description
         mFileManager.Archetype.TranslationDetails = mTabPageDescription.TranslationDetails
 
-        If Me.ShowAsDraft Then
+        If ShowAsDraft Then
             mFileManager.Archetype.LifeCycle = "Initial"
         End If
 
@@ -3999,17 +3946,14 @@ Public Class Designer
 
                                     Case "tpDataEventSeries"
                                         If Not mTabPageDataEventSeries Is Nothing Then
-                                            Dim rm As RmStructureCompound
-                                            Dim RmHistory As RmHistory
-
-                                            rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
-                                            RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
+                                            Dim rm As New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
+                                            Dim history As RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
 
                                             If Not mTabPageDataStructure Is Nothing Then
-                                                RmHistory.Data = mTabPageDataStructure.SaveAsStructure
+                                                history.Data = mTabPageDataStructure.SaveAsStructure
                                             End If
 
-                                            rm.Children.Add(RmHistory)
+                                            rm.Children.Add(history)
                                             CType(definition, ArchetypeDefinition).Data.Add(rm)
                                         End If
 
@@ -4275,6 +4219,7 @@ Public Class Designer
 
         ToolBarOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
         MenuFileOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
+        butLinks.Visible = OceanArchetypeEditor.Instance.Options.ShowLinksButton
 
         'Initialise the bindings of tables for all the lookups
         BindTables()
@@ -4343,7 +4288,7 @@ Public Class Designer
         '        Dim tbb As New ToolBarButton(format_type)
         '        tbb.Tag = format_type
         '        tbb.Style = ToolBarButtonStyle.ToggleButton
-        '        ToolBarRTF.Buttons.Insert(2, tbb)
+        '        DisplayToolBar.Buttons.Insert(2, tbb)
         '    End If
         'Next
     End Sub
@@ -4491,7 +4436,7 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub ParticipationCheckChanged(ByVal tbCtrl As Object, ByVal state As Boolean) Handles mTabPageAction.ProtocolCheckChanged, mTabPageInstruction.ParticipationCheckChanged, mTabPageAction.ParticipationCheckChanged
+    Private Sub ParticipationCheckChanged(ByVal tbCtrl As Object, ByVal state As Boolean) Handles mTabPageInstruction.ParticipationCheckChanged, mTabPageAction.ParticipationCheckChanged
         Dim tp As Crownwood.Magic.Controls.TabPage
         Dim CrownCtrl As Crownwood.Magic.Controls.TabControl = tbCtrl
 
@@ -4694,7 +4639,7 @@ Public Class Designer
                     ' and there have been some changes to the table
                     mFileManager.OntologyManager.TermDefinitionTable.AcceptChanges()
                     mFileManager.FileEdited = True
-                    Translate()
+                    Translate("")
                 End If
             End If
 
@@ -4708,7 +4653,7 @@ Public Class Designer
     Private Sub TabMain_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanged
         If TabMain.SelectedTab Is tpText Then
             If mRichTextArchetype.Text = "" Then
-                For Each tbb As System.Windows.Forms.ToolBarButton In ToolBarRTF.Buttons
+                For Each tbb As System.Windows.Forms.ToolBarButton In DisplayToolBar.Buttons
                     tbb.Pushed = False
                 Next
 
@@ -4968,7 +4913,7 @@ Public Class Designer
         ' refreshes the output of the rich text box
         Dim s As String = ""
 
-        For Each tbb As System.Windows.Forms.ToolBarButton In Me.ToolBarRTF.Buttons
+        For Each tbb As System.Windows.Forms.ToolBarButton In DisplayToolBar.Buttons
             If tbb.Pushed Then
                 s = CType(tbb.Tag, String).ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Exit For
@@ -4992,7 +4937,7 @@ Public Class Designer
         End Select
     End Sub
 
-    Private Sub ToolBarRTF_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles ToolBarRTF.ButtonClick
+    Private Sub DisplayToolBar_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles DisplayToolBar.ButtonClick
         Static Dim format As String = "rtf" ' remember the format that has been set
         Dim saveFile As New SaveFileDialog
 
@@ -5039,12 +4984,13 @@ Public Class Designer
 
                     If OceanArchetypeEditor.Instance.Options.UseXsltForHtml And OceanArchetypeEditor.Instance.Options.XsltScriptPath <> "" Then
                         Dim transform As New Xml.Xsl.XslCompiledTransform()
-                        transform.Load(OceanArchetypeEditor.Instance.Options.XsltScriptPath)
+                        transform.Load(OceanArchetypeEditor.Instance.Options.XsltScriptPath, New Xml.Xsl.XsltSettings(True, False), New Xml.XmlUrlResolver())
                         Dim args As New Xml.Xsl.XsltArgumentList()
                         args.AddParam("language", "", Filemanager.Master.OntologyManager.LanguageCode)
                         args.AddParam("show-terminology-flag", "", OceanArchetypeEditor.Instance.Options.ShowTermsInHtml.ToString().ToLower())
                         args.AddParam("show-comments-flag", "", OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml.ToString().ToLower())
                         args.AddParam("css-path", "", "Images/default.css")
+                        args.AddParam("terminology-xml-document-path", "", "../Terminology/terminology.xml")
 
                         Dim reader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
                         Dim stream As New IO.FileStream(html, FileMode.Create)
@@ -5064,7 +5010,7 @@ Public Class Designer
                 format = s
 
                 ' toggle the buttons
-                For Each bt As ToolBarButton In ToolBarRTF.Buttons
+                For Each bt As ToolBarButton In DisplayToolBar.Buttons
                     If Not bt Is e.Button Then
                         bt.Pushed = False
                     End If

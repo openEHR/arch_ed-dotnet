@@ -39,19 +39,14 @@ Public Class RmTerm
 
     ReadOnly Property IsConstraint() As Boolean
         Get
-            Dim s As String
-            ' cannot use toupper or lower safely with internationalisation
+            Dim result As Boolean = False
 
-            If IsValidTermCode(Me.Code) Then
-                s = Me.Code.Substring(0, 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                If s = "at" Then
-                    Return False
-                ElseIf s = "ac" Then
-                    Return True
-                End If
-            Else
-                Debug.Assert(False)
+            If IsValidTermCode(Code) Then
+                Dim s As String = Code.Substring(0, 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                result = s = "ac"
             End If
+
+            Return result
         End Get
     End Property
 

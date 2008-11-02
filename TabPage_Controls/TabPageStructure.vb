@@ -586,22 +586,37 @@ Public Class TabPageStructure
             Dim s As StructureType
 
             If mArchetypeControl Is Nothing Then  'with a slot only
-                s = CType(CurrentItem, ArchetypeNodeAnonymous).RM_Class.Type
+                If TypeOf (CurrentItem) Is ArchetypeNodeAnonymous Then
+                    s = CType(CurrentItem, ArchetypeNodeAnonymous).RM_Class.Type
+                ElseIf TypeOf (CurrentItem) Is ArchetypeSlot Then
+                    s = CType(CurrentItem, ArchetypeSlot).RM_Class.Type
+                End If
             Else
                 s = mArchetypeControl.StructureType
             End If
 
-            PanelDetails.ShowConstraint(s, IsState, CurrentItem, mFileManager)
+                PanelDetails.ShowConstraint(s, IsState, CurrentItem, mFileManager)
 
-            If Not PanelDetails.Visible Then
-                PanelDetails.Show()
+                If Not PanelDetails.Visible Then
+                    PanelDetails.Show()
+                End If
             End If
-        End If
     End Sub
 
     Public Sub Translate()
         If Not mArchetypeControl Is Nothing Then
-            mArchetypeControl.Translate()
+            If mFileManager Is Filemanager.Master Then
+                mArchetypeControl.Translate()
+            Else
+                'SRH: 17 Aug 2008 - added translation control for embedded archetype
+                Dim lang As String = Filemanager.Master.OntologyManager.LanguageCode
+                If mFileManager.OntologyManager.HasLanguage(lang) Then
+                    If mFileManager.OntologyManager.LanguageCode <> lang Then
+                        mFileManager.OntologyManager.LanguageCode = lang
+                        mArchetypeControl.Translate()
+                    End If
+                End If
+            End If
         End If
     End Sub
 
@@ -905,12 +920,14 @@ Public Class TabPageStructure
 
             mFileManager.ObjectToSave = Me
 
-            If OpenArchetype(a_slot) Then
+            If OpenArchetypeForSlot(a_slot, OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure") Then
                 Filemanager.AddEmbedded(mFileManager)
-                'Hide context menu to change structure
-                mArchetypeControl.ShowChangeStructureMenu = False
 
-                ShowLanguage()
+                'Hide context menu to change structure
+                If Not mArchetypeControl Is Nothing Then
+                    mArchetypeControl.ShowChangeStructureMenu = False
+                    Translate()
+                End If
 
                 mIsLoading = False
                 Return
@@ -933,135 +950,74 @@ Public Class TabPageStructure
                 comboStructure.SelectedIndex = 3
         End Select
 
-        ShowLanguage()
+        Translate()
         mIsLoading = False
     End Sub
 
-    Private Sub ShowLanguage()
-        ' set the specific language if it is present e.g. en-US, en-AU
-        If mFileManager.OntologyManager.LanguageIsAvailable(Filemanager.Master.OntologyManager.LanguageCode) Then
-            mFileManager.OntologyManager.LanguageCode = Filemanager.Master.OntologyManager.LanguageCode
-        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.SpecificLanguageCode) AndAlso _
-            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.SpecificLanguageCode Then
-            Filemanager.Master.OntologyManager.LanguageCode = OceanArchetypeEditor.SpecificLanguageCode
-        ElseIf mFileManager.OntologyManager.LanguageIsAvailable(OceanArchetypeEditor.DefaultLanguageCode) AndAlso _
-            Filemanager.Master.OntologyManager.LanguageCode <> OceanArchetypeEditor.DefaultLanguageCode Then
-            mFileManager.OntologyManager.LanguageCode = OceanArchetypeEditor.DefaultLanguageCode
-        Else
-            mFileManager.OntologyManager.LanguageCode = mFileManager.OntologyManager.PrimaryLanguageCode
-        End If
-
-        Translate()
-    End Sub
-
-    Private Overloads Function OpenArchetype(ByVal an_archetype_ID As ArchetypeID) As Boolean
-        mFileManager.OpenArchetype(an_archetype_ID.ToString)
-
-        If mFileManager.ArchetypeAvailable Then
-            Dim lbl As New Label
-            lbl.Location = New System.Drawing.Point(120, 2)
-            lbl.Width = 320
-            lbl.Height = 36
-            ProcessStructure(CType(mFileManager.Archetype.Definition, RmStructureCompound))
-            lbl.Text = mFileManager.Archetype.Archetype_ID.ToString
-            mArchetypeControl.PanelStructureHeader.Controls.Add(lbl)
-            mArchetypeControl.PanelStructureHeader.Height = 36
-            lbl.BringToFront()
-        Else
-            MessageBox.Show(AE_Constants.Instance.Error_loading & ": " & an_archetype_ID.ToString, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return False
-        End If
-
-        Return True
-    End Function
-
-    Private Overloads Function OpenArchetype(ByVal a_slot As RmSlot) As Boolean
-        Dim result As Boolean
-        Dim archetype_name As String
+    Private Function OpenArchetypeForSlot(ByVal slot As RmSlot, ByVal path As String) As Boolean
         Dim frm As New Choose
         frm.Set_Single()
 
-        Dim dir As New IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure")
+        Dim dir As New IO.DirectoryInfo(path)
 
         If dir.Exists Then
-            dir.GetFiles("*.adl")
-            Dim matchStrings As New System.Collections.Generic.List(Of System.Text.RegularExpressions.Regex)
+            Dim sl As Constraint_Slot = slot.SlotConstraint
+            Dim classPrefix As String = ReferenceModel.ReferenceModelName & "-" & ReferenceModel.RM_StructureName(sl.RM_ClassType)
+            Dim pattern As String = ""
+            Dim separator As String = ""
 
-            For Each includeStatement As String In a_slot.SlotConstraint.Include
-                includeStatement = ReferenceModel.ReferenceModelName & "-" & _
-                                    ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
-                                    "\." & includeStatement & "\.adl"
-                matchStrings.Add(New System.Text.RegularExpressions.Regex(includeStatement))
+            For Each include As String In sl.Include
+                pattern &= separator & include
+                separator = "|"
             Next
 
-            For Each f As IO.FileInfo In dir.GetFiles("*.adl")
-                For Each re As System.Text.RegularExpressions.Regex In matchStrings
-                    If re.Match(f.Name).Success Then
-                        frm.ListChoose.Items.Add(f.Name)
-                    End If
-                Next
+            If pattern = "" And Not sl.ExcludeAll Then
+                pattern = "[^.]+\.[^.]+"
+            End If
+
+            Dim inclusions As New System.Text.RegularExpressions.Regex("^" & classPrefix & "\.(" & pattern & ")\.adl$")
+
+            pattern = ""
+            separator = ""
+
+            For Each exclude As String In sl.Exclude
+                pattern &= separator & exclude
+                separator = "|"
+            Next
+
+            Dim exclusions As New System.Text.RegularExpressions.Regex("^" & classPrefix & "\.(" & pattern & ")\.adl$")
+
+            For Each f As IO.FileInfo In dir.GetFiles(classPrefix & ".*.adl")
+                'SRH: this command on windows will return adls files as well (ext of length 3 are treated as wild!! ie = adl*)
+                If inclusions.IsMatch(f.Name) And Not exclusions.IsMatch(f.Name) Then
+                    frm.ListChoose.Items.Add(f.Name)
+                End If
             Next
         End If
 
         Select Case frm.ListChoose.Items.Count
             Case 0
-                archetype_name = Nothing
+                Dim question As String = String.Format(AE_Constants.Instance.NoArchetypeMatches, path) & vbCrLf & vbCrLf & AE_Constants.Instance.Locate_file_yourself & "?"
+
+                If MessageBox.Show(question, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    Dim dlg As New FolderBrowserDialog
+
+                    If dlg.ShowDialog(Me) = DialogResult.OK Then
+                        OpenArchetypeForSlot = OpenArchetypeForSlot(slot, dlg.SelectedPath)
+                    End If
+                End If
             Case 1
-                archetype_name = frm.ListChoose.Items(0)
+                OpenArchetype(IO.Path.Combine(path, frm.ListChoose.Items(0)))
+                OpenArchetypeForSlot = mFileManager.ArchetypeAvailable
             Case Else
-                If frm.ShowDialog = Windows.Forms.DialogResult.OK Then
-                    archetype_name = CStr(frm.ListChoose.SelectedItem)
-                Else
-                    archetype_name = Nothing
+                If frm.ShowDialog = Windows.Forms.DialogResult.OK And frm.ListChoose.SelectedItem IsNot Nothing Then
+                    OpenArchetype(IO.Path.Combine(path, CStr(frm.ListChoose.SelectedItem)))
+                    OpenArchetypeForSlot = mFileManager.ArchetypeAvailable
                 End If
         End Select
-
-        If Not archetype_name Is Nothing Then
-            archetype_name = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure\" & archetype_name
-
-            If System.IO.File.Exists(archetype_name) Then
-                OpenArchetype(archetype_name)
-                result = True
-            ElseIf MessageBox.Show(AE_Constants.Instance.Could_not_find & ": '" & archetype_name & "'" & vbCrLf & vbCrLf & AE_Constants.Instance.Locate_file_yourself & "?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                If LocateEmbeddedArchetype(archetype_name) Then
-                    OpenArchetype(archetype_name)
-                    result = True
-                End If
-            End If
-        End If
-
-        Return result
     End Function
 
-    Private Function LocateEmbeddedArchetype(ByRef fileName As String) As Boolean 'JAR: 12APR07, EDT-8 If embedded archetype is not found, allow the user to locate
-        Dim openFileDialog As New System.Windows.Forms.OpenFileDialog
-
-        With openFileDialog
-            .ReadOnlyChecked = True
-            .Filter = "ADL|*.adl|XML|*.xml|All files|*.*"
-            .FileName = fileName
-
-            Select Case mFileManager.ParserType
-                Case "adl"
-                    .FilterIndex = 1
-                Case "xml"
-                    .FilterIndex = 2
-                Case Else
-                    .FilterIndex = 3
-            End Select
-
-            If mFileManager.WorkingDirectory <> "" Then
-                .InitialDirectory = mFileManager.WorkingDirectory
-            End If
-
-            If Not (.ShowDialog(Me) = System.Windows.Forms.DialogResult.Cancel) Then
-                LocateEmbeddedArchetype = True
-                fileName = .FileName
-            End If
-        End With
-    End Function
-
-    Private Overloads Function openArchetype(ByVal an_archetype_name As String) As Boolean
+    Private Sub OpenArchetype(ByVal an_archetype_name As String)
         mFileManager.OpenArchetype(an_archetype_name)
 
         If mFileManager.ArchetypeAvailable Then
@@ -1075,11 +1031,8 @@ Public Class TabPageStructure
             lbl.BringToFront()
         Else
             MessageBox.Show(AE_Constants.Instance.Error_loading & ": " & an_archetype_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Return False
         End If
-
-        Return True
-    End Function
+    End Sub
 
     Public Sub PrepareToSave()
         mFileManager.Archetype.Definition = mArchetypeControl.Archetype

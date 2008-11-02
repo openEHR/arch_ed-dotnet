@@ -25,7 +25,7 @@ Public Class AE_Constants
     Private mExpandAll As String = "Expand all"
     Private mCollapseAll As String = "Collapse all"
     Private mAddReference As String = "Add reference"
-    Private mOceanArchetypeEditor As String = "Ocean archetype editor"
+    Private mOceanArchetypeEditor As String = "Ocean Archetype Editor"
     Private mYouHaveChosenALanguage As String = "You have chosen a language "
     Private mAddTerminology As String = "Add terminology"
     Private mLanguageAdditionCancelled As String = "Adding language cancelled"
@@ -106,7 +106,25 @@ Public Class AE_Constants
     Private mParticipation As String = "Participation"
     Private mCurrency As String = "Currency"
     Private mIdentifier As String = "Identifier"
+    Private mNoArchetypeMatches As String = "No archetype matches {0}"
+    Private mNameThisSlot As String = "Name this slot"
+    Private mNameThisSlotQuestion As String = "Name this slot?"
 
+    Friend ReadOnly Property NameThisSlot() As String
+        Get
+            Return mNameThisSlot
+        End Get
+    End Property
+    Friend ReadOnly Property NameThisSlotQuestion() As String
+        Get
+            Return mNameThisSlotQuestion
+        End Get
+    End Property
+    Friend ReadOnly Property NoArchetypeMatches() As String
+        Get
+            Return mNoArchetypeMatches
+        End Get
+    End Property
     Friend ReadOnly Property Lower() As String
         Get
             Return mLower
@@ -639,99 +657,100 @@ Public Class AE_Constants
     End Function
 
     Protected Sub New(ByVal Language As String)
-        If Not Language.StartsWith("en") Then
-            mSpecialise = TerminologyServer.Instance.RubricForCode(185, Language)
-            mSpecialisationsToo = TerminologyServer.Instance.RubricForCode(669, Language)
-            mReduceTableToSimpleValue = TerminologyServer.Instance.RubricForCode(277, Language)
-            mChooseMenuFileNew = TerminologyServer.Instance.RubricForCode(279, Language)
-            mAndAllReferences = TerminologyServer.Instance.RubricForCode(280, Language)
-            mExpandAll = TerminologyServer.Instance.RubricForCode(281, Language)
-            mCollapseAll = TerminologyServer.Instance.RubricForCode(282, Language)
-            mAddReference = TerminologyServer.Instance.RubricForCode(283, Language)
-            mOceanArchetypeEditor = TerminologyServer.Instance.RubricForCode(284, Language)
-            mYouHaveChosenALanguage = TerminologyServer.Instance.RubricForCode(285, Language)
-            mAddTerminology = TerminologyServer.Instance.RubricForCode(71, Language)
-            mLanguageAdditionCancelled = TerminologyServer.Instance.RubricForCode(286, Language)
-            mCurrentArchetype = TerminologyServer.Instance.RubricForCode(287, Language)
-            mDiscardChanges = TerminologyServer.Instance.RubricForCode(288, Language)
-            mCouldNotFind = TerminologyServer.Instance.RubricForCode(289, Language)
-            mPleaseSetConceptText = TerminologyServer.Instance.RubricForCode(290, Language)
-            mRemoveState = TerminologyServer.Instance.RubricForCode(291, Language)
-            mErrorLoading = TerminologyServer.Instance.RubricForCode(292, Language)
-            mErrorSaving = TerminologyServer.Instance.RubricForCode(293, Language)
-            mArchetypeNodeCodeNotPassed = TerminologyServer.Instance.RubricForCode(294, Language)
-            mSaveChanges = TerminologyServer.Instance.RubricForCode(295, Language)
-            mIncorrectFormat = TerminologyServer.Instance.RubricForCode(296, Language)
-            mNoDefinitionFor = TerminologyServer.Instance.RubricForCode(297, Language)
-            mRemove = TerminologyServer.Instance.RubricForCode(152, Language)
-            mObjectColumnNameAlreadyInUse = TerminologyServer.Instance.RubricForCode(298, Language)
-            mReduceListToSingleValue = TerminologyServer.Instance.RubricForCode(299, Language)
-            mSelectedNodeIsNotElement = TerminologyServer.Instance.RubricForCode(300, Language)
-            mSelectItem = TerminologyServer.Instance.RubricForCode(301, Language)
-            mReduceTreeToList = TerminologyServer.Instance.RubricForCode(302, Language)
-            mNameAlreadyInUse = TerminologyServer.Instance.RubricForCode(303, Language)
-            mProtocol = TerminologyServer.Instance.RubricForCode(78, Language)
-            mPersonState = TerminologyServer.Instance.RubricForCode(82, Language)
-            mCannotDelete = TerminologyServer.Instance.RubricForCode(304, Language)
-            mEnterNewName = TerminologyServer.Instance.RubricForCode(305, Language)
-            mCannotRename = TerminologyServer.Instance.RubricForCode(306, Language)
-            mFeatureNotAvailable = TerminologyServer.Instance.RubricForCode(307, Language)
-            mConvertConstraint = TerminologyServer.Instance.RubricForCode(308, Language)
-            mConvertStringToText = TerminologyServer.Instance.RubricForCode(309, Language)
-            mConvertTextToStrings = TerminologyServer.Instance.RubricForCode(310, Language)
-            mConvertTextToOrdinals = TerminologyServer.Instance.RubricForCode(317, Language)
-            mConvertOrdinalToAllowableValues = TerminologyServer.Instance.RubricForCode(311, Language)
-            mConvertInternalCodedToFreeText = TerminologyServer.Instance.RubricForCode(318, Language)
-            mSlot = TerminologyServer.Instance.RubricForCode(312, Language)
-            mCluster = TerminologyServer.Instance.RubricForCode(313, Language)
-            mSection = TerminologyServer.Instance.RubricForCode(314, Language)
-            mText = TerminologyServer.Instance.RubricForCode(91, Language)
-            mCount = TerminologyServer.Instance.RubricForCode(120, Language)
-            mBoolean = TerminologyServer.Instance.RubricForCode(315, Language)
-            mAny = TerminologyServer.Instance.RubricForCode(316, Language)
-            mQuantity = TerminologyServer.Instance.RubricForCode(115, Language)
-            mDateTime = TerminologyServer.Instance.RubricForCode(161, Language)
-            mDuration = TerminologyServer.Instance.RubricForCode(142, Language)
-            mOrdinal = TerminologyServer.Instance.RubricForCode(156, Language)
-            mRequiresSpecialisationToEdit = TerminologyServer.Instance.RubricForCode(319, Language)
-            mProportion = TerminologyServer.Instance.RubricForCode(507, Language)
-            mUnit = TerminologyServer.Instance.RubricForCode(117, Language)
-            mMultiple = TerminologyServer.Instance.RubricForCode(320, Language)
-            mCannotSpecialiseReference = TerminologyServer.Instance.RubricForCode(607, Language)
-            mMustAddCriteria = TerminologyServer.Instance.RubricForCode(327, Language)
-            mDescription = TerminologyServer.Instance.RubricForCode(113, Language)
-            mInterval = TerminologyServer.Instance.RubricForCode(141, Language)
-            mIntervalCount = TerminologyServer.Instance.RubricForCode(330, Language)
-            mIntervalQuantity = TerminologyServer.Instance.RubricForCode(329, Language)
-            mIntervalDateTime = TerminologyServer.Instance.RubricForCode(516, Language)
-            mSetAbsoluteMax = TerminologyServer.Instance.RubricForCode(332, Language)
-            mSetAbsoluteMin = TerminologyServer.Instance.RubricForCode(333, Language)
-            mOK = TerminologyServer.Instance.RubricForCode(165, Language)
-            mCancel = TerminologyServer.Instance.RubricForCode(166, Language)
-            mTerminology = TerminologyServer.Instance.RubricForCode(47, Language)
-            mInternalCodes = TerminologyServer.Instance.RubricForCode(150, Language)
-            mMultiMedia = TerminologyServer.Instance.RubricForCode(386, Language)
-            mURI = TerminologyServer.Instance.RubricForCode(430, Language)
-            mDragDropHere = TerminologyServer.Instance.RubricForCode(440, Language)
-            mReplaceTranslations = TerminologyServer.Instance.RubricForCode(442, Language)
-            mRename = TerminologyServer.Instance.RubricForCode(325, Language)
-            mChangeStructure = TerminologyServer.Instance.RubricForCode(326, Language)
-            mLower = TerminologyServer.Instance.RubricForCode(641, Language)
-            mUpper = TerminologyServer.Instance.RubricForCode(642, Language)
-            mIntegral = TerminologyServer.Instance.RubricForCode(643, Language)
-            mUnitary = TerminologyServer.Instance.RubricForCode(644, Language)
-            mIntegerFraction = TerminologyServer.Instance.RubricForCode(645, Language)
-            mFraction = TerminologyServer.Instance.RubricForCode(646, Language)
-            mTrue = TerminologyServer.Instance.RubricForCode(159, Language)
-            mFalse = TerminologyServer.Instance.RubricForCode(160, Language)
-            mChangeDataType = TerminologyServer.Instance.RubricForCode(60, Language)
-            mCardinality = TerminologyServer.Instance.RubricForCode(437, Language)
-            'mLocateFile = TerminologyServer.Instance.RubricForCode(?, Language)
-            mParticipation = TerminologyServer.Instance.RubricForCode(654, Language)
-            mCurrency = TerminologyServer.Instance.RubricForCode(672, Language)
-            mIdentifier = TerminologyServer.Instance.RubricForCode(633, Language)
-        End If
+        mSpecialise = TerminologyServer.Instance.RubricForCode(185, Language)
+        mSpecialisationsToo = TerminologyServer.Instance.RubricForCode(669, Language)
+        mReduceTableToSimpleValue = TerminologyServer.Instance.RubricForCode(277, Language)
+        mChooseMenuFileNew = TerminologyServer.Instance.RubricForCode(279, Language)
+        mAndAllReferences = TerminologyServer.Instance.RubricForCode(280, Language)
+        mExpandAll = TerminologyServer.Instance.RubricForCode(281, Language)
+        mCollapseAll = TerminologyServer.Instance.RubricForCode(282, Language)
+        mAddReference = TerminologyServer.Instance.RubricForCode(283, Language)
+        mOceanArchetypeEditor = TerminologyServer.Instance.RubricForCode(284, Language)
+        mYouHaveChosenALanguage = TerminologyServer.Instance.RubricForCode(285, Language)
+        mAddTerminology = TerminologyServer.Instance.RubricForCode(71, Language)
+        mLanguageAdditionCancelled = TerminologyServer.Instance.RubricForCode(286, Language)
+        mCurrentArchetype = TerminologyServer.Instance.RubricForCode(287, Language)
+        mDiscardChanges = TerminologyServer.Instance.RubricForCode(288, Language)
+        mCouldNotFind = TerminologyServer.Instance.RubricForCode(289, Language)
+        mPleaseSetConceptText = TerminologyServer.Instance.RubricForCode(290, Language)
+        mRemoveState = TerminologyServer.Instance.RubricForCode(291, Language)
+        mErrorLoading = TerminologyServer.Instance.RubricForCode(292, Language)
+        mErrorSaving = TerminologyServer.Instance.RubricForCode(293, Language)
+        mArchetypeNodeCodeNotPassed = TerminologyServer.Instance.RubricForCode(294, Language)
+        mSaveChanges = TerminologyServer.Instance.RubricForCode(295, Language)
+        mIncorrectFormat = TerminologyServer.Instance.RubricForCode(296, Language)
+        mNoDefinitionFor = TerminologyServer.Instance.RubricForCode(297, Language)
+        mRemove = TerminologyServer.Instance.RubricForCode(152, Language)
+        mObjectColumnNameAlreadyInUse = TerminologyServer.Instance.RubricForCode(298, Language)
+        mReduceListToSingleValue = TerminologyServer.Instance.RubricForCode(299, Language)
+        mSelectedNodeIsNotElement = TerminologyServer.Instance.RubricForCode(300, Language)
+        mSelectItem = TerminologyServer.Instance.RubricForCode(301, Language)
+        mReduceTreeToList = TerminologyServer.Instance.RubricForCode(302, Language)
+        mNameAlreadyInUse = TerminologyServer.Instance.RubricForCode(303, Language)
+        mProtocol = TerminologyServer.Instance.RubricForCode(78, Language)
+        mPersonState = TerminologyServer.Instance.RubricForCode(82, Language)
+        mCannotDelete = TerminologyServer.Instance.RubricForCode(304, Language)
+        mEnterNewName = TerminologyServer.Instance.RubricForCode(305, Language)
+        mCannotRename = TerminologyServer.Instance.RubricForCode(306, Language)
+        mFeatureNotAvailable = TerminologyServer.Instance.RubricForCode(307, Language)
+        mConvertConstraint = TerminologyServer.Instance.RubricForCode(308, Language)
+        mConvertStringToText = TerminologyServer.Instance.RubricForCode(309, Language)
+        mConvertTextToStrings = TerminologyServer.Instance.RubricForCode(310, Language)
+        mConvertTextToOrdinals = TerminologyServer.Instance.RubricForCode(317, Language)
+        mConvertOrdinalToAllowableValues = TerminologyServer.Instance.RubricForCode(311, Language)
+        mConvertInternalCodedToFreeText = TerminologyServer.Instance.RubricForCode(318, Language)
+        mSlot = TerminologyServer.Instance.RubricForCode(312, Language)
+        mCluster = TerminologyServer.Instance.RubricForCode(313, Language)
+        mSection = TerminologyServer.Instance.RubricForCode(314, Language)
+        mText = TerminologyServer.Instance.RubricForCode(91, Language)
+        mCount = TerminologyServer.Instance.RubricForCode(120, Language)
+        mBoolean = TerminologyServer.Instance.RubricForCode(315, Language)
+        mAny = TerminologyServer.Instance.RubricForCode(316, Language)
+        mQuantity = TerminologyServer.Instance.RubricForCode(115, Language)
+        mDateTime = TerminologyServer.Instance.RubricForCode(161, Language)
+        mDuration = TerminologyServer.Instance.RubricForCode(142, Language)
+        mOrdinal = TerminologyServer.Instance.RubricForCode(156, Language)
+        mRequiresSpecialisationToEdit = TerminologyServer.Instance.RubricForCode(319, Language)
+        mProportion = TerminologyServer.Instance.RubricForCode(507, Language)
+        mUnit = TerminologyServer.Instance.RubricForCode(117, Language)
+        mMultiple = TerminologyServer.Instance.RubricForCode(320, Language)
+        mCannotSpecialiseReference = TerminologyServer.Instance.RubricForCode(607, Language)
+        mMustAddCriteria = TerminologyServer.Instance.RubricForCode(327, Language)
+        mDescription = TerminologyServer.Instance.RubricForCode(113, Language)
+        mInterval = TerminologyServer.Instance.RubricForCode(141, Language)
+        mIntervalCount = TerminologyServer.Instance.RubricForCode(330, Language)
+        mIntervalQuantity = TerminologyServer.Instance.RubricForCode(329, Language)
+        mIntervalDateTime = TerminologyServer.Instance.RubricForCode(516, Language)
+        mSetAbsoluteMax = TerminologyServer.Instance.RubricForCode(332, Language)
+        mSetAbsoluteMin = TerminologyServer.Instance.RubricForCode(333, Language)
+        mOK = TerminologyServer.Instance.RubricForCode(165, Language)
+        mCancel = TerminologyServer.Instance.RubricForCode(166, Language)
+        mTerminology = TerminologyServer.Instance.RubricForCode(47, Language)
+        mInternalCodes = TerminologyServer.Instance.RubricForCode(150, Language)
+        mMultiMedia = TerminologyServer.Instance.RubricForCode(386, Language)
+        mURI = TerminologyServer.Instance.RubricForCode(430, Language)
+        mDragDropHere = TerminologyServer.Instance.RubricForCode(440, Language)
+        mReplaceTranslations = TerminologyServer.Instance.RubricForCode(442, Language)
+        mRename = TerminologyServer.Instance.RubricForCode(325, Language)
+        mChangeStructure = TerminologyServer.Instance.RubricForCode(326, Language)
+        mLower = TerminologyServer.Instance.RubricForCode(641, Language)
+        mUpper = TerminologyServer.Instance.RubricForCode(642, Language)
+        mIntegral = TerminologyServer.Instance.RubricForCode(643, Language)
+        mUnitary = TerminologyServer.Instance.RubricForCode(644, Language)
+        mIntegerFraction = TerminologyServer.Instance.RubricForCode(645, Language)
+        mFraction = TerminologyServer.Instance.RubricForCode(646, Language)
+        mTrue = TerminologyServer.Instance.RubricForCode(159, Language)
+        mFalse = TerminologyServer.Instance.RubricForCode(160, Language)
+        mChangeDataType = TerminologyServer.Instance.RubricForCode(60, Language)
+        mCardinality = TerminologyServer.Instance.RubricForCode(437, Language)
+        mParticipation = TerminologyServer.Instance.RubricForCode(654, Language)
+        mCurrency = TerminologyServer.Instance.RubricForCode(672, Language)
+        mIdentifier = TerminologyServer.Instance.RubricForCode(633, Language)
+        mNoArchetypeMatches = TerminologyServer.Instance.RubricForCode(671, Language)
+        mNameThisSlotQuestion = TerminologyServer.Instance.RubricForCode(672, Language)
+        mNameThisSlot = TerminologyServer.Instance.RubricForCode(675, Language)
     End Sub
+
 End Class
 
 '
