@@ -163,7 +163,6 @@ Public Class Designer
     Friend WithEvents ToolBarSeparator1 As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarPrint As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarNew As System.Windows.Forms.ToolBarButton
-    Friend WithEvents MenuPublish As System.Windows.Forms.MenuItem
     Friend WithEvents MenuFileSpecialise As System.Windows.Forms.MenuItem
     Friend WithEvents PanelConstraintBinding As System.Windows.Forms.Panel
     Friend WithEvents tpSectionPage As Crownwood.Magic.Controls.TabPage
@@ -200,8 +199,6 @@ Public Class Designer
     Friend WithEvents MenuHelpLicence As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpOcean As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpStart As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuPublishPack As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuPublishFinalise As System.Windows.Forms.MenuItem
     Friend WithEvents MenuTerminology As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelp As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpOceanEditor As System.Windows.Forms.MenuItem
@@ -285,13 +282,11 @@ Public Class Designer
         Me.MenuFileExit = New System.Windows.Forms.MenuItem
         Me.menuEdit = New System.Windows.Forms.MenuItem
         Me.menuEditArchID = New System.Windows.Forms.MenuItem
-        Me.MenuPublish = New System.Windows.Forms.MenuItem
-        Me.MenuPublishPack = New System.Windows.Forms.MenuItem
-        Me.MenuPublishFinalise = New System.Windows.Forms.MenuItem
         Me.MenuLanguage = New System.Windows.Forms.MenuItem
         Me.MenuLanguageAvailable = New System.Windows.Forms.MenuItem
         Me.MenuLanguageAdd = New System.Windows.Forms.MenuItem
         Me.MenuLanguageChange = New System.Windows.Forms.MenuItem
+        Me.MenuLanguageToggle = New System.Windows.Forms.MenuItem
         Me.MenuTerminology = New System.Windows.Forms.MenuItem
         Me.MenuTerminologyAvailable = New System.Windows.Forms.MenuItem
         Me.MenuTerminologyAdd = New System.Windows.Forms.MenuItem
@@ -396,7 +391,6 @@ Public Class Designer
         Me.PictureBox1 = New System.Windows.Forms.PictureBox
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
-        Me.MenuLanguageToggle = New System.Windows.Forms.MenuItem
         Me.PanelConcept.SuspendLayout()
         Me.tabComment.SuspendLayout()
         Me.tpConceptDescription.SuspendLayout()
@@ -744,7 +738,7 @@ Public Class Designer
         '
         'MainMenu
         '
-        Me.MainMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFile, Me.menuEdit, Me.MenuPublish, Me.MenuLanguage, Me.MenuTerminology, Me.ToolsMenuItem, Me.MenuHelp})
+        Me.MainMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFile, Me.menuEdit, Me.MenuLanguage, Me.MenuTerminology, Me.ToolsMenuItem, Me.MenuHelp})
         '
         'MenuFile
         '
@@ -822,27 +816,9 @@ Public Class Designer
         Me.menuEditArchID.Index = 0
         Me.menuEditArchID.Text = "&Archetype ID..."
         '
-        'MenuPublish
-        '
-        Me.MenuPublish.Index = 2
-        Me.MenuPublish.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuPublishPack, Me.MenuPublishFinalise})
-        Me.MenuPublish.Text = "&Publish"
-        '
-        'MenuPublishPack
-        '
-        Me.MenuPublishPack.Enabled = False
-        Me.MenuPublishPack.Index = 0
-        Me.MenuPublishPack.Text = "&Pack"
-        '
-        'MenuPublishFinalise
-        '
-        Me.MenuPublishFinalise.Enabled = False
-        Me.MenuPublishFinalise.Index = 1
-        Me.MenuPublishFinalise.Text = "&Finalise"
-        '
         'MenuLanguage
         '
-        Me.MenuLanguage.Index = 3
+        Me.MenuLanguage.Index = 2
         Me.MenuLanguage.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuLanguageAvailable, Me.MenuLanguageAdd, Me.MenuLanguageChange, Me.MenuLanguageToggle})
         Me.MenuLanguage.Text = "&Language"
         '
@@ -861,9 +837,15 @@ Public Class Designer
         Me.MenuLanguageChange.Index = 2
         Me.MenuLanguageChange.Text = "&Change Language"
         '
+        'MenuLanguageToggle
+        '
+        Me.MenuLanguageToggle.Index = 3
+        Me.MenuLanguageToggle.Shortcut = System.Windows.Forms.Shortcut.CtrlL
+        Me.MenuLanguageToggle.Text = "&Toggle Language"
+        '
         'MenuTerminology
         '
-        Me.MenuTerminology.Index = 4
+        Me.MenuTerminology.Index = 3
         Me.MenuTerminology.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuTerminologyAvailable, Me.MenuTerminologyAdd})
         Me.MenuTerminology.Text = "Terminolog&y"
         '
@@ -879,7 +861,7 @@ Public Class Designer
         '
         'ToolsMenuItem
         '
-        Me.ToolsMenuItem.Index = 5
+        Me.ToolsMenuItem.Index = 4
         Me.ToolsMenuItem.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.ToolsOptionsMenuItem})
         Me.ToolsMenuItem.Text = "&Tools"
         '
@@ -890,7 +872,7 @@ Public Class Designer
         '
         'MenuHelp
         '
-        Me.MenuHelp.Index = 6
+        Me.MenuHelp.Index = 5
         Me.MenuHelp.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuHelpStart, Me.MenuHelpReport, Me.MenuHelpLicence, Me.MenuHelpOcean, Me.MenuHelpOceanEditor})
         Me.MenuHelp.Text = "&Help"
         '
@@ -1803,12 +1785,6 @@ Public Class Designer
         Me.PictureBox1.TabIndex = 9
         Me.PictureBox1.TabStop = False
         '
-        'MenuLanguageToggle
-        '
-        Me.MenuLanguageToggle.Index = 3
-        Me.MenuLanguageToggle.Shortcut = System.Windows.Forms.Shortcut.CtrlL
-        Me.MenuLanguageToggle.Text = "&Toggle Language"
-        '
         'Designer
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
@@ -2351,9 +2327,6 @@ Public Class Designer
         Me.MenuLanguageAdd.Text = Filemanager.GetOpenEhrTerm(68, Me.MenuLanguageAdd.Text, language)
         Me.MenuLanguageChange.Text = Filemanager.GetOpenEhrTerm(69, Me.MenuLanguageChange.Text, language)
         Me.MenuLanguageAvailable.Text = Filemanager.GetOpenEhrTerm(67, Me.MenuLanguageAvailable.Text, language)
-        Me.MenuPublish.Text = Filemanager.GetOpenEhrTerm(45, Me.MenuPublish.Text, language)
-        Me.MenuPublishFinalise.Text = Filemanager.GetOpenEhrTerm(66, Me.MenuPublishFinalise.Text, language)
-        Me.MenuPublishPack.Text = Filemanager.GetOpenEhrTerm(65, Me.MenuPublishPack.Text, language)
         Me.MenuTerminologyAdd.Text = Filemanager.GetOpenEhrTerm(71, Me.MenuTerminologyAdd.Text, language)
         Me.MenuTerminologyAvailable.Text = Filemanager.GetOpenEhrTerm(70, Me.MenuTerminologyAvailable.Text, language)
 
