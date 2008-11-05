@@ -1029,9 +1029,9 @@ Public Class TreeStructure
         If Not tn Is Nothing Then
             If e.Button = MouseButtons.Left Then
                 tvTree.Cursor = Cursors.Hand
+            ElseIf e.Button = MouseButtons.Right Then
+                tvTree.SelectedNode = tn
             End If
-        ElseIf e.Button = MouseButtons.Right Then
-            tvTree.SelectedNode = tn
         End If
     End Sub
 
