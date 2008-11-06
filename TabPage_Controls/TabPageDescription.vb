@@ -741,6 +741,7 @@ Public Class TabPageDescription
     Private Sub SaveTranslation()
         If mTranslationAltered Then
             Dim t As TranslationDetails = Nothing
+
             If mTranslationDetails.Keys.Contains(mCurrentLanguage) Then
                 t = mTranslationDetails.Item(mCurrentLanguage)
             Else
@@ -751,20 +752,23 @@ Public Class TabPageDescription
                         t = New XML_TranslationDetails(mCurrentLanguage)
                 End Select
             End If
-            t.Accreditation = Me.txtTranslationAccreditation.Text.Replace("""", "'")
-            t.AuthorName = Me.txtTranslatorName.Text.Replace("""", "'")
-            t.AuthorOrganisation = Me.txtTranslatorOrganisation.Text.Replace("""", "'")
-            t.AuthorEmail = Me.txtTranslatorEmail.Text.Replace("""", "'")
+
+            t.Accreditation = txtTranslationAccreditation.Text.Replace("""", "'")
+            t.AuthorName = txtTranslatorName.Text.Replace("""", "'")
+            t.AuthorOrganisation = txtTranslatorOrganisation.Text.Replace("""", "'")
+            t.AuthorEmail = txtTranslatorEmail.Text.Replace("""", "'")
+
             If mTranslationDetails.Keys.Contains(t.Language) Then
                 mTranslationDetails.Item(t.Language) = t
             Else
                 mTranslationDetails.Add(t.Language, t)
             End If
         End If
+
         mTranslationAltered = False
     End Sub
-    Private Sub SaveDescription()
 
+    Private Sub SaveDescription()
         If mArchetypeDescription Is Nothing Then
             Select Case Filemanager.Master.ParserType
                 Case "adl"
@@ -773,6 +777,7 @@ Public Class TabPageDescription
                     mArchetypeDescription = New ArchetypeEditor.XML_Classes.XML_Description
             End Select
         End If
+
         If comboLifeCycle.SelectedIndex > -1 Then
             mArchetypeDescription.LifeCycleState = CType([Enum].ToObject(GetType(LifeCycleStates), Convert.ToInt32(Me.comboLifeCycle.SelectedValue)), LifeCycleStates)
         Else
@@ -912,14 +917,15 @@ Public Class TabPageDescription
         mIsLoading = True
 
         If mCurrentLanguage = Filemanager.Master.OntologyManager.PrimaryLanguageCode Then
-            Me.txtTranslationAccreditation.Text = ""
-            Me.txtTranslatorEmail.Text = ""
-            Me.txtTranslatorName.Text = ""
-            Me.txtTranslatorOrganisation.Text = ""
-            Me.gbTranslator.Visible = False
+            txtTranslationAccreditation.Text = ""
+            txtTranslatorEmail.Text = ""
+            txtTranslatorName.Text = ""
+            txtTranslatorOrganisation.Text = ""
+            gbTranslator.Visible = False
         Else
-            Me.gbTranslator.Visible = True
+            gbTranslator.Visible = True
             Dim t As TranslationDetails = Nothing
+
             If mTranslationDetails.Keys.Contains(mCurrentLanguage) Then
                 t = mTranslationDetails.Item(mCurrentLanguage)
             Else
@@ -929,34 +935,37 @@ Public Class TabPageDescription
                     Case "xml"
                         t = New XML_TranslationDetails(mCurrentLanguage)
                 End Select
+
                 t.AuthorName = "?"
                 mTranslationAltered = True
                 Filemanager.Master.FileEdited = True
             End If
-            Me.txtTranslatorName.Text = t.AuthorName
-            Me.txtTranslationAccreditation.Text = t.Accreditation
-            Me.txtTranslatorEmail.Text = t.AuthorEmail
-            Me.txtTranslatorOrganisation.Text = t.AuthorOrganisation
+
+            txtTranslatorName.Text = t.AuthorName
+            txtTranslationAccreditation.Text = t.Accreditation
+            txtTranslatorEmail.Text = t.AuthorEmail
+            txtTranslatorOrganisation.Text = t.AuthorOrganisation
         End If
+
         mIsLoading = False
     End Sub
 
     Public Sub Reset()
-        Me.txtOriginalAuthor.Text = OceanArchetypeEditor.Instance.Options.UserName
-        Me.txtOriginalEmail.Text = OceanArchetypeEditor.Instance.Options.UserEmail
-        Me.txtPurpose.Text = ""
-        Me.comboLifeCycle.SelectedIndex = -1
-        Me.txtUse.Text = ""
-        Me.txtMisuse.Text = ""
-        Me.txtReferences.Text = "" 'JAR: 24MAY2007, EDT-30 Add field for References
-        Me.listKeyword.Items.Clear()
-        Me.listContributors.Items.Clear()
-        Me.txtTranslationAccreditation.Text = ""
-        Me.txtTranslatorEmail.Text = ""
-        Me.txtTranslatorName.Text = ""
-        Me.txtTranslatorOrganisation.Text = ""
+        txtOriginalAuthor.Text = OceanArchetypeEditor.Instance.Options.UserName
+        txtOriginalEmail.Text = OceanArchetypeEditor.Instance.Options.UserEmail
+        txtPurpose.Text = ""
+        comboLifeCycle.SelectedIndex = -1
+        txtUse.Text = ""
+        txtMisuse.Text = ""
+        txtReferences.Text = ""
+        listKeyword.Items.Clear()
+        listContributors.Items.Clear()
+        txtTranslationAccreditation.Text = ""
+        txtTranslatorEmail.Text = ""
+        txtTranslatorName.Text = ""
+        txtTranslatorOrganisation.Text = ""
         mTranslationAltered = False
-        Me.gbTranslator.Visible = False
+        gbTranslator.Visible = False
     End Sub
 
     Public Sub Translate()
@@ -972,24 +981,24 @@ Public Class TabPageDescription
     End Sub
 
     Private Sub TranslateGUI()
-        Me.lblKeyword.Text = Filemanager.GetOpenEhrTerm(578, Me.lblKeyword.Text)
-        Me.lblStatus.Text = Filemanager.GetOpenEhrTerm(568, Me.lblStatus.Text)
-        Me.lblName.Text = Filemanager.GetOpenEhrTerm(579, Me.lblName.Text)
-        Me.lblTranslatorName.Text = lblName.Text
-        Me.lblEmail.Text = Filemanager.GetOpenEhrTerm(207, Me.lblEmail.Text)
-        Me.lblTranslatorEmail.Text = Me.lblEmail.Text
-        Me.lblDate.Text = Filemanager.GetOpenEhrTerm(593, Me.lblDate.Text)
-        Me.lblAccreditation.Text = Filemanager.GetOpenEhrTerm(651, Me.lblAccreditation.Text)
-        Me.lblOrganisation.Text = Filemanager.GetOpenEhrTerm(594, Me.lblOrganisation.Text)
-        Me.lblTranslatorOrganisation.Text = Me.lblOrganisation.Text
-        Me.tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, Me.tpAuthor.Title)
-        Me.tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, Me.tpDescDetails.Title)
-        Me.tpTranslation.Title = Filemanager.GetOpenEhrTerm(650, Me.tpTranslation.Title)
-        Me.gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, Me.gbPurpose.Text)
-        Me.gbUse.Text = Filemanager.GetOpenEhrTerm(582, Me.gbUse.Text)
-        Me.gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, Me.gbMisuse.Text)
-        Me.gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, Me.gbAuthor.Text)
-        Me.gbContributors.Text = Filemanager.GetOpenEhrTerm(604, Me.gbContributors.Text)
+        lblKeyword.Text = Filemanager.GetOpenEhrTerm(578, lblKeyword.Text)
+        lblStatus.Text = Filemanager.GetOpenEhrTerm(568, lblStatus.Text)
+        lblName.Text = Filemanager.GetOpenEhrTerm(579, lblName.Text)
+        lblTranslatorName.Text = lblName.Text
+        lblEmail.Text = Filemanager.GetOpenEhrTerm(207, lblEmail.Text)
+        lblTranslatorEmail.Text = lblEmail.Text
+        lblDate.Text = Filemanager.GetOpenEhrTerm(593, lblDate.Text)
+        lblAccreditation.Text = Filemanager.GetOpenEhrTerm(651, lblAccreditation.Text)
+        lblOrganisation.Text = Filemanager.GetOpenEhrTerm(594, lblOrganisation.Text)
+        lblTranslatorOrganisation.Text = lblOrganisation.Text
+        tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, tpAuthor.Title)
+        tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, tpDescDetails.Title)
+        tpTranslation.Title = Filemanager.GetOpenEhrTerm(650, tpTranslation.Title)
+        gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, gbPurpose.Text)
+        gbUse.Text = Filemanager.GetOpenEhrTerm(582, gbUse.Text)
+        gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, gbMisuse.Text)
+        gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, gbAuthor.Text)
+        gbContributors.Text = Filemanager.GetOpenEhrTerm(604, gbContributors.Text)
     End Sub
 
     Private Function MakeLifeCycleTable() As DataTable
