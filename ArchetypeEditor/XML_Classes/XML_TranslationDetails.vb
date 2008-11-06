@@ -1,4 +1,3 @@
-'Option Strict On
 Option Explicit On
 
 Public Class XML_TranslationDetails
