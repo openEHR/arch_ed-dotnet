@@ -104,33 +104,27 @@ Public Class RmSlot
             Dim pattern As String
 
             For i As Integer = 1 To an_archetype_slot.includes.count
-                Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
-                Dim classPrefix As String = ""
-
-                assert = CType(an_archetype_slot.includes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
+                Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION = CType(an_archetype_slot.includes.i_th(i), openehr.openehr.am.archetype.assertion.ASSERTION)
                 pattern = ArchetypeEditor.ADL_Classes.ADL_Tools.GetConstraintFromAssertion(assert)
 
                 If pattern = ".*" Then
                     mSlotConstraint.IncludeAll = True
-                Else
-                    If Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
-                        classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
+                ElseIf Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
+                    Dim classPrefix As String = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
 
-                        For Each s As String In pattern.Split("|"c)
-                            mSlotConstraint.Include.Add(s.Replace(classPrefix, ""))
-                        Next
-                    Else
-                        For Each s As String In pattern.Split("|"c)
-                            mSlotConstraint.Include.Add(s)
-                        Next
-                    End If
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Include.Add(s.Replace(classPrefix, ""))
+                    Next
+                Else
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Include.Add(s)
+                    Next
                 End If
             Next
         End If
 
         If an_archetype_slot.has_excludes Then
             Dim pattern As String
-            Dim classPrefix As String = ""
 
             For i As Integer = 1 To an_archetype_slot.excludes.count
                 Dim assert As openehr.openehr.am.archetype.assertion.ASSERTION
@@ -139,18 +133,16 @@ Public Class RmSlot
 
                 If pattern = ".*" Then
                     mSlotConstraint.ExcludeAll = True
-                Else
-                    If Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
-                        classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
+                ElseIf Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
+                    Dim classPrefix As String = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
 
-                        For Each s As String In pattern.Split("|"c)
-                            mSlotConstraint.Exclude.Add(s.Replace(classPrefix, ""))
-                        Next
-                    Else
-                        For Each s As String In pattern.Split("|"c)
-                            mSlotConstraint.Exclude.Add(s)
-                        Next
-                    End If
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Exclude.Add(s.Replace(classPrefix, ""))
+                    Next
+                Else
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Exclude.Add(s)
+                    Next
                 End If
             Next
         End If
@@ -192,8 +184,6 @@ Public Class RmSlot
                 mSlotConstraint.RM_ClassType = StructureType.Element
         End Select
 
-        Dim classPrefix As String = ""
-
         If (Not an_archetype_slot.includes Is Nothing) AndAlso (an_archetype_slot.includes.Length > 0) Then
             For i As Integer = 0 To an_archetype_slot.includes.Length - 1
                 Dim assert As XMLParser.ASSERTION
@@ -202,18 +192,16 @@ Public Class RmSlot
 
                 If pattern = ".*" Then
                     mSlotConstraint.IncludeAll = True
-                Else
-                    If Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
-                        classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
+                ElseIf Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
+                    Dim classPrefix As String = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
 
-                        For Each s As String In pattern.Split("|"c)
-                            mSlotConstraint.Include.Add(s.Replace(classPrefix, ""))
-                        Next
-                    Else
-                        For Each s As String In pattern.Split("|"c)
-                            mSlotConstraint.Include.Add(s)
-                        Next
-                    End If
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Include.Add(s.Replace(classPrefix, ""))
+                    Next
+                Else
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Include.Add(s)
+                    Next
                 End If
             Next
         End If
@@ -228,18 +216,16 @@ Public Class RmSlot
 
                 If pattern = ".*" Then
                     mSlotConstraint.ExcludeAll = True
-                Else
-                    If Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
-                        classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
+                ElseIf Not ReferenceModel.IsAbstract(mSlotConstraint.RM_ClassType) Then
+                    Dim classPrefix As String = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, mSlotConstraint.RM_ClassType.ToString.ToUpperInvariant)
 
-                        For Each s As String In pattern.Split("|"c)
-                            mSlotConstraint.Exclude.Add(s.Replace(classPrefix, ""))
-                        Next
-                    Else
-                        For Each s As String In pattern.Split("|"c)
-                            mSlotConstraint.Exclude.Add(s)
-                        Next
-                    End If
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Exclude.Add(s.Replace(classPrefix, ""))
+                    Next
+                Else
+                    For Each s As String In pattern.Split("|"c)
+                        mSlotConstraint.Exclude.Add(s)
+                    Next
                 End If
             Next
         End If

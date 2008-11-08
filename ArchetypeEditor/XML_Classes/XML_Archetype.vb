@@ -157,17 +157,18 @@ Namespace ArchetypeEditor.XML_Classes
             Return False
         End Function
 
-
         Public Shared Sub RemoveAttribute(ByVal complexObject As XMLParser.C_COMPLEX_OBJECT, ByVal attributeName As String)
             Dim i As Integer
+
             For i = 0 To complexObject.attributes.Length - 1
                 Dim attr As XMLParser.C_ATTRIBUTE = complexObject.attributes(i)
+
                 If attr.rm_attribute_name = attributeName Then
                     Exit For
                 End If
             Next
-            Array.Clear(complexObject.attributes, i, 1)
 
+            Array.Clear(complexObject.attributes, i, 1)
         End Sub
 
         Protected Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)
@@ -215,12 +216,8 @@ Namespace ArchetypeEditor.XML_Classes
             id_pattern_expression_leaf.reference_type = "constraint"
 
             Dim c_s As New XMLParser.C_STRING()
+            c_s.pattern = "/" + expression + "/"
 
-            If expression = "*" Then
-                c_s.pattern = "/.*/"
-            Else
-                c_s.pattern = "/" + expression + "/"
-            End If
             id_pattern_expression_leaf.item = c_s
 
             match_operator = New XMLParser.EXPR_BINARY_OPERATOR()
@@ -232,7 +229,6 @@ Namespace ArchetypeEditor.XML_Classes
             assert.expression = match_operator
 
             Return assert
-
         End Function
 
         Private Function MakeCardinality(ByVal c As RmCardinality, Optional ByVal IsOrdered As Boolean = True) As XMLParser.CARDINALITY
@@ -600,7 +596,7 @@ Namespace ArchetypeEditor.XML_Classes
                         If i = 0 Then
                             If a_rm.Type = StructureType.Slot Then
                                 embeddedState = True
-                                BuildSlot(an_attribute, a_rm)
+                                BuildSlotFromAttribute(an_attribute, a_rm)
                             Else
 
                                 Dim objNode As XMLParser.C_COMPLEX_OBJECT
@@ -612,7 +608,7 @@ Namespace ArchetypeEditor.XML_Classes
                             End If
                         Else
                             If embeddedState Then
-                                BuildSlot(an_attribute, a_rm)
+                                BuildSlotFromAttribute(an_attribute, a_rm)
                             Else
                                 'create a reference
                                 Dim ref_xmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF
@@ -804,7 +800,7 @@ Namespace ArchetypeEditor.XML_Classes
                     ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
                         BuildElementOrReference(rm, an_attribute)
                     ElseIf rm.Type = StructureType.Slot Then
-                        BuildSlot(an_attribute, rm)
+                        BuildSlotFromAttribute(an_attribute, rm)
                     Else
                         Debug.Assert(False, "Type not handled")
                     End If
@@ -829,7 +825,7 @@ Namespace ArchetypeEditor.XML_Classes
                     ElseIf Rm.Type = StructureType.Element Or Rm.Type = StructureType.Reference Then
                         BuildElementOrReference(Rm, an_attribute)
                     ElseIf Rm.Type = StructureType.Slot Then
-                        BuildSlot(an_attribute, Rm)
+                        BuildSlotFromAttribute(an_attribute, Rm)
                     Else
                         Debug.Assert(False, "Type not handled")
                     End If
@@ -1161,18 +1157,14 @@ Namespace ArchetypeEditor.XML_Classes
 
         End Sub
 
-        Private Sub BuildSlot(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal a_slot As RmSlot)
-            Dim slot As XMLParser.ARCHETYPE_SLOT
-
-            slot = New XMLParser.ARCHETYPE_SLOT
-
+        Private Sub BuildSlotFromAttribute(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal a_slot As RmSlot)
+            Dim slot As New XMLParser.ARCHETYPE_SLOT
             slot.rm_type_name = ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)
             slot.occurrences = MakeOccurrences(a_slot.Occurrences)
             slot.node_id = a_slot.NodeId
 
             BuildSlot(slot, a_slot.SlotConstraint)
             mAomFactory.add_object(value_attribute, slot)
-
         End Sub
 
         Private Sub BuildSlot(ByRef slot As XMLParser.ARCHETYPE_SLOT, ByVal sl As Constraint_Slot)
@@ -1180,7 +1172,6 @@ Namespace ArchetypeEditor.XML_Classes
             Dim classPreFix As String = ""
 
             If sl.hasSlots Then
-
                 If Not ReferenceModel.IsAbstract(sl.RM_ClassType) Then
                     ' ids will be clipped
                     classPreFix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, sl.RM_ClassType.ToString.ToUpperInvariant)
@@ -1190,8 +1181,6 @@ Namespace ArchetypeEditor.XML_Classes
                     mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
                 Else
                     If sl.Include.Items.GetLength(0) > 0 Then
-
-
                         For Each s As String In sl.Include
                             If pattern.ToString() = "" Then
                                 pattern.AppendFormat("{0}{1}", classPreFix, s)
@@ -1216,8 +1205,6 @@ Namespace ArchetypeEditor.XML_Classes
                 If sl.ExcludeAll Then
                     mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
                 Else
-
-
                     For Each s As String In sl.Exclude
                         If pattern.ToString() = "" Then
                             pattern.AppendFormat("{0}{1}", classPreFix, s)
@@ -1745,7 +1732,7 @@ Namespace ArchetypeEditor.XML_Classes
                         slot.SlotConstraint = c
                         slot.Occurrences.IsUnbounded = True
 
-                        BuildSlot(value_attribute, slot)
+                        BuildSlotFromAttribute(value_attribute, slot)
 
                     Case ConstraintType.Multiple
                         For Each a_constraint As Constraint In CType(c, Constraint_Choice).Constraints
@@ -1853,7 +1840,7 @@ Namespace ArchetypeEditor.XML_Classes
                             If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
                                 BuildElementOrReference(rm, an_attribute)
                             ElseIf rm.Type = StructureType.Slot Then
-                                BuildSlot(an_attribute, rm)
+                                BuildSlotFromAttribute(an_attribute, rm)
                             Else
                                 Debug.Assert(False, "Type not handled")
                             End If
@@ -1869,7 +1856,7 @@ Namespace ArchetypeEditor.XML_Classes
                                 If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
                                     BuildElementOrReference(rm, an_attribute)
                                 ElseIf rm.Type = StructureType.Slot Then
-                                    BuildSlot(an_attribute, rm)
+                                    BuildSlotFromAttribute(an_attribute, rm)
                                 Else
                                     Debug.Assert(False, "Type not handled")
                                 End If
@@ -1888,7 +1875,7 @@ Namespace ArchetypeEditor.XML_Classes
                                 ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
                                     BuildElementOrReference(rm, an_attribute)
                                 ElseIf rm.Type = StructureType.Slot Then
-                                    BuildSlot(an_attribute, rm)
+                                    BuildSlotFromAttribute(an_attribute, rm)
                                 Else
                                     Debug.Assert(False, "Type not handled")
                                 End If
@@ -2042,7 +2029,7 @@ Namespace ArchetypeEditor.XML_Classes
                         'new_section.any_allowed = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                     End If
                 ElseIf a_structure.Type = StructureType.Slot Then
-                    BuildSlot(an_attribute, a_structure)
+                    BuildSlotFromAttribute(an_attribute, a_structure)
                 Else
                     Debug.Assert(False)
                 End If
@@ -2109,7 +2096,7 @@ Namespace ArchetypeEditor.XML_Classes
                                 an_attribute = mAomFactory.MakeMultipleAttribute(xmlObj, "content", MakeCardinality(Rm.Data.Cardinality), a_structure.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
                                 For Each slot As RmSlot In CType(a_structure, RmSection).Children
-                                    BuildSlot(an_attribute, slot)
+                                    BuildSlotFromAttribute(an_attribute, slot)
                                 Next
 
                             End If
@@ -2160,7 +2147,7 @@ Namespace ArchetypeEditor.XML_Classes
                         End If
                         mAomFactory.add_object(an_attribute, new_section)
                     ElseIf a_structure.Type = StructureType.Slot Then
-                        BuildSlot(an_attribute, a_structure)
+                        BuildSlotFromAttribute(an_attribute, a_structure)
                     Else
                         Debug.Assert(False)
                     End If
@@ -2179,7 +2166,7 @@ Namespace ArchetypeEditor.XML_Classes
             an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
             If CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot Then
-                BuildSlot(an_attribute, rm.Children.items(0))
+                BuildSlotFromAttribute(an_attribute, rm.Children.items(0))
             Else
                 Dim objNode As XMLParser.C_COMPLEX_OBJECT
 
@@ -2205,7 +2192,7 @@ Namespace ArchetypeEditor.XML_Classes
             If rm.Type = StructureType.Slot Then
                 'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol")
                 an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                BuildSlot(an_attribute, rm)
+                BuildSlotFromAttribute(an_attribute, rm)
             Else
                 rmStructComp = CType(rm, RmStructureCompound)
                 If rmStructComp.Children.Count > 0 Then
@@ -2225,7 +2212,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                     protocolRm = rmStructComp.Children.items(0)
                     If protocolRm.Type = StructureType.Slot Then
-                        BuildSlot(an_attribute, CType(protocolRm, RmSlot))
+                        BuildSlotFromAttribute(an_attribute, CType(protocolRm, RmSlot))
 
                     Else
                         objNode = mAomFactory.MakeComplexObject( _
@@ -2280,24 +2267,26 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildActivity(ByVal rm As RmActivity, ByVal an_attribute As XMLParser.C_ATTRIBUTE)
-            Dim objNode As XMLParser.C_COMPLEX_OBJECT
-            Dim objNodeSimple As XMLParser.C_PRIMITIVE_OBJECT
+            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(an_attribute, "ACTIVITY", rm.NodeId, MakeOccurrences(rm.Occurrences))
 
-            objNode = mAomFactory.MakeComplexObject( _
-                an_attribute, _
-                "ACTIVITY", _
-                rm.NodeId, _
-                MakeOccurrences(rm.Occurrences))
+            Dim escapedString As String = rm.ArchetypeId
 
-            If rm.ArchetypeId <> "" Then
-                an_attribute = mAomFactory.MakeSingleAttribute(objNode, "action_archetype_id", rm.Children.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            If escapedString <> "" Then
+                Dim i As Integer = escapedString.IndexOf("\")
+
+                'Must have at least one escaped . or it is not valid unless it is the end
+                If i < 0 Or i = escapedString.Length - 1 Then
+                    escapedString = escapedString.Replace(".", "\.")
+                End If
+
+                escapedString = ReferenceModel.ReferenceModelName & "-ACTION\." + escapedString
+                an_attribute = mAomFactory.MakeSingleAttribute(objNode, "action_archetype_id", rm.Children.Existence.XmlExistence)
                 Dim c_s As New XMLParser.C_STRING
-                c_s.pattern = "/" + rm.ArchetypeId + "/"
-                objNodeSimple = mAomFactory.MakePrimitiveObject(an_attribute, c_s)
+                c_s.pattern = "/" + escapedString + "/"
+                mAomFactory.MakePrimitiveObject(an_attribute, c_s)
             End If
 
             For Each rm_struct As RmStructure In rm.Children
-
                 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 'an_attribute = mAomFactory.MakeMultipleAttribute(objNode, "description", MakeCardinality(rm.Children.Cardinality)) 
                 an_attribute = mAomFactory.MakeSingleAttribute(objNode, "description", rm.Children.Existence.XmlExistence)
@@ -2317,10 +2306,9 @@ Namespace ArchetypeEditor.XML_Classes
                     Case StructureType.Slot
                         ' this allows a structure to be archetyped at this point
                         Debug.Assert(CType(rm_struct, RmStructure).Type = StructureType.Slot)
-                        BuildSlot(an_attribute, rm_struct)
+                        BuildSlotFromAttribute(an_attribute, rm_struct)
                 End Select
             Next
-
         End Sub
 
         Private Sub BuildInstruction(ByVal data As RmChildren)
@@ -2377,7 +2365,7 @@ Namespace ArchetypeEditor.XML_Classes
                         ' allows action to be specified in another archetype
                         Dim slot As RmSlot = CType(action_spec, RmSlot)
 
-                        BuildSlot(an_attribute, slot)
+                        BuildSlotFromAttribute(an_attribute, slot)
                 End Select
             End If
         End Sub
