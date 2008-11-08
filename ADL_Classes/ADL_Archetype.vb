@@ -418,7 +418,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     If i = 0 Then
                         If a_rm.Type = StructureType.Slot Then
                             embeddedState = True
-                            BuildSlot(an_attribute, a_rm)
+                            BuildSlotFromAttribute(an_attribute, a_rm)
                         Else
                             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
@@ -429,7 +429,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     Else
                         If embeddedState Then
-                            BuildSlot(an_attribute, a_rm)
+                            BuildSlotFromAttribute(an_attribute, a_rm)
                         Else
                             'create a reference
                             Dim ref_cadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
@@ -584,7 +584,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         BuildElementOrReference(rm, an_attribute, index)
                         index += 1
                     ElseIf rm.Type = StructureType.Slot Then
-                        BuildSlot(an_attribute, rm)
+                        BuildSlotFromAttribute(an_attribute, rm)
                         index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
@@ -758,7 +758,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
-        Protected Sub BuildSlot(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
+        Protected Sub BuildSlotFromAttribute(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
             Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
 
             If a_slot.NodeId = String.Empty Then
@@ -766,8 +766,8 @@ Namespace ArchetypeEditor.ADL_Classes
             Else
                 slot = mAomFactory.create_archetype_slot_identified(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)), EiffelKernel.Create.STRING_8.make_from_cil(a_slot.NodeId))
             End If
-            slot.set_occurrences(MakeOccurrences(a_slot.Occurrences))
 
+            slot.set_occurrences(MakeOccurrences(a_slot.Occurrences))
             BuildSlot(slot, a_slot.SlotConstraint)
         End Sub
 
@@ -1228,7 +1228,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         If rmStr.Type = StructureType.Element Or rmStr.Type = StructureType.Reference Then
                             BuildElementOrReference(rmStr, an_attribute, 0)
                         ElseIf rmStr.Type = StructureType.Slot Then
-                            BuildSlot(an_attribute, rmStr)
+                            BuildSlotFromAttribute(an_attribute, rmStr)
                         Else
                             Debug.Assert(False, "Type not handled")
                         End If
@@ -1244,7 +1244,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                 BuildElementOrReference(rm, an_attribute, index)
                                 index += 1
                             ElseIf rm.Type = StructureType.Slot Then
-                                BuildSlot(an_attribute, rm)
+                                BuildSlotFromAttribute(an_attribute, rm)
                                 index += 1
                             Else
                                 Debug.Assert(False, "Type not handled")
@@ -1265,7 +1265,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                 BuildElementOrReference(rm, an_attribute, index)
                                 index += 1
                             ElseIf rm.Type = StructureType.Slot Then
-                                BuildSlot(an_attribute, rm)
+                                BuildSlotFromAttribute(an_attribute, rm)
                                 index += 1
                             Else
                                 Debug.Assert(False, "Type not handled")
@@ -1409,7 +1409,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     End If
                     an_attribute.put_child(new_section)
                 ElseIf a_structure.Type = StructureType.Slot Then
-                    BuildSlot(an_attribute, a_structure)
+                    BuildSlotFromAttribute(an_attribute, a_structure)
                 Else
                     Debug.Assert(False)
                 End If
@@ -1473,7 +1473,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                                 For Each slot As RmSlot In CType(a_structure, RmSection).Children
 
-                                    BuildSlot(an_attribute, slot)
+                                    BuildSlotFromAttribute(an_attribute, slot)
                                 Next
 
                             End If
@@ -1519,7 +1519,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         BuildElementOrReference(Rm, an_attribute, index)
                         index += 1
                     ElseIf Rm.Type = StructureType.Slot Then
-                        BuildSlot(an_attribute, Rm)
+                        BuildSlotFromAttribute(an_attribute, Rm)
                         index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
@@ -1576,7 +1576,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
                         an_attribute.put_child(new_section)
                     ElseIf a_structure.Type = StructureType.Slot Then
-                        BuildSlot(an_attribute, a_structure)
+                        BuildSlotFromAttribute(an_attribute, a_structure)
                     Else
                         Debug.Assert(False)
                     End If
@@ -1593,7 +1593,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If rm.Children.Count > 0 Then
                 If CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot Then
-                    BuildSlot(an_attribute, rm.Children.items(0))
+                    BuildSlotFromAttribute(an_attribute, rm.Children.items(0))
                 Else
                     Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
@@ -1604,15 +1604,13 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Private Sub BuildProtocol(ByVal rm As RmStructureCompound, ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-
             If rm.Children.Count > 0 Then
-
                 Dim rmStruct As RmStructure = rm.Children.items(0)
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
                 If rmStruct.Type = StructureType.Slot Then
                     an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, EiffelKernel.Create.STRING_8.make_from_cil("protocol"))
-                    BuildSlot(an_attribute, CType(rmStruct, RmSlot))
+                    BuildSlotFromAttribute(an_attribute, CType(rmStruct, RmSlot))
                 Else
                     an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, EiffelKernel.Create.STRING_8.make_from_cil("protocol"))
                     ' only 1 protocol allowed
@@ -1622,7 +1620,6 @@ Namespace ArchetypeEditor.ADL_Classes
                     BuildStructure(CType(rmStruct, RmStructureCompound), objNode)
                 End If
             End If
-
         End Sub
 
         Private Sub BuildWorkFlowStep(ByVal rm As RmPathwayStep, ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
@@ -1643,7 +1640,6 @@ Namespace ArchetypeEditor.ADL_Classes
             code_phrase = New CodePhrase
             code_phrase.Codes.Add(rm.NodeId)  ' local is default terminology, node_id of rm is same as term code of name
             BuildCodedText(a_step, code_phrase)
-
         End Sub
 
         Private Sub BuildPathway(ByVal rm As RmStructureCompound, ByVal arch_def As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -1659,27 +1655,22 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Private Sub BuildActivity(ByVal rm As RmActivity, ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim objNodeSimple As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-
-            objNode = mAomFactory.create_c_complex_object_identified(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil("ACTIVITY"), EiffelKernel.Create.STRING_8.make_from_cil(rm.NodeId))
+            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = mAomFactory.create_c_complex_object_identified(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil("ACTIVITY"), EiffelKernel.Create.STRING_8.make_from_cil(rm.NodeId))
             objNode.set_occurrences(MakeOccurrences(rm.Occurrences))
 
-            If rm.ArchetypeId <> "" Then
-                Dim escapedString As String
-                Dim i As Integer
+            Dim escapedString As String = rm.ArchetypeId
+
+            If escapedString <> "" Then
+                Dim i As Integer = escapedString.IndexOf("\")
+
                 'Must have at least one escaped . or it is not valid unless it is the end
-                i = rm.ArchetypeId.IndexOf("\")
-                If i > -1 AndAlso i <> (rm.ArchetypeId.Length - 1) Then
-                    escapedString = rm.ArchetypeId
-                Else
-                    escapedString = rm.ArchetypeId.Replace(".", "\.")
+                If i < 0 Or i = escapedString.Length - 1 Then
+                    escapedString = escapedString.Replace(".", "\.")
                 End If
 
+                escapedString = ReferenceModel.ReferenceModelName & "-ACTION\." + escapedString
                 an_attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("action_archetype_id"))
-                objNodeSimple = mAomFactory.create_c_primitive_object(an_attribute, _
-                    mAomFactory.create_c_string_make_from_regexp( _
-                    EiffelKernel.Create.STRING_8.make_from_cil(escapedString)))
+                mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(escapedString)))
             End If
 
             For Each rm_struct As RmStructure In rm.Children
@@ -1696,10 +1687,9 @@ Namespace ArchetypeEditor.ADL_Classes
                     Case StructureType.Slot
                         ' this allows a structure to be archetyped at this point
                         Debug.Assert(CType(rm_struct, RmStructure).Type = StructureType.Slot)
-                        BuildSlot(an_attribute, rm_struct)
+                        BuildSlotFromAttribute(an_attribute, rm_struct)
                 End Select
             Next
-
         End Sub
 
         Private Sub BuildInstruction(ByVal data As RmChildren)
@@ -1745,7 +1735,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         ' allows action to be specified in another archetype
                         Dim slot As RmSlot = CType(action_spec, RmSlot)
 
-                        BuildSlot(an_attribute, slot)
+                        BuildSlotFromAttribute(an_attribute, slot)
                 End Select
             End If
         End Sub
