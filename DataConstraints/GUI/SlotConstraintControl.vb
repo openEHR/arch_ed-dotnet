@@ -580,8 +580,8 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    Private Sub AddFilestoListBox(ByVal a_directory As System.IO.DirectoryInfo, ByVal pattern As String, ByVal clipFileName As Boolean)
-        For Each f As System.IO.FileInfo In a_directory.GetFiles(pattern, IO.SearchOption.AllDirectories)
+    Private Sub AddFilestoListBox(ByVal directory As System.IO.DirectoryInfo, ByVal pattern As String, ByVal clipFileName As Boolean)
+        For Each f As System.IO.FileInfo In directory.GetFiles(pattern, IO.SearchOption.AllDirectories)
             Dim fileName As String
 
             If clipFileName Then
@@ -597,31 +597,40 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Next
     End Sub
 
-    Private Sub RetrieveFiles(ByVal a_directory As System.IO.DirectoryInfo, ByVal fileExtension As String)
+    Private Sub RetrieveFiles(ByVal directory As System.IO.DirectoryInfo, ByVal fileExtension As String)
         Dim s As String
 
         If ReferenceModel.IsAbstract(Constraint.RM_ClassType) Then
             For Each t As StructureType In ReferenceModel.Specialisations(Constraint.RM_ClassType)
                 s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(t), fileExtension)
-                AddFilestoListBox(a_directory, s, False)
+                AddFilestoListBox(directory, s, False)
             Next
         Else
             s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(Constraint.RM_ClassType), fileExtension)
-            AddFilestoListBox(a_directory, s, True)
+            AddFilestoListBox(directory, s, True)
         End If
     End Sub
 
     Private Sub butShowAll()
-        Dim d As System.IO.DirectoryInfo
+        Dim errorMessage As String = Nothing
+
         Cursor = Cursors.WaitCursor
-        d = New System.IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath)
+        Dim d As New System.IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath)
 
         If d.Exists Then
-            RetrieveFiles(d, Filemanager.Master.ParserType)
-            Cursor = Cursors.Default
+            Try
+                RetrieveFiles(d, Filemanager.Master.ParserType)
+            Catch ex As Exception
+                errorMessage = AE_Constants.Instance.Error_loading & " '" & OceanArchetypeEditor.Instance.Options.RepositoryPath & "':" & Environment.NewLine & ex.Message
+            End Try
         Else
-            Cursor = Cursors.Default
-            MessageBox.Show(AE_Constants.Instance.Error_loading & " - " & OceanArchetypeEditor.Instance.Options.RepositoryPath, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            errorMessage = AE_Constants.Instance.Error_loading & " '" & OceanArchetypeEditor.Instance.Options.RepositoryPath & "'."
+        End If
+
+        Cursor = Cursors.Default
+
+        If errorMessage IsNot Nothing Then
+            MessageBox.Show(errorMessage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
