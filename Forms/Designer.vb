@@ -2129,6 +2129,7 @@ Public Class Designer
 
         AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
         ListLanguages.SelectedValue = mFileManager.OntologyManager.LanguageCode
+        Translate(ListLanguages.SelectedValue)
 
         If Not mTermBindingPanel Is Nothing Then
             mTermBindingPanel.PopulatePathTree()
@@ -3687,7 +3688,6 @@ Public Class Designer
         If mFileManager.OntologyManager.HasLanguage(langCode) AndAlso mFileManager.OntologyManager.LanguageCode <> langCode Then
             previousLanguageCode = mFileManager.OntologyManager.LanguageCode
             previousLanguageText = mFileManager.OntologyManager.LanguageText
-            mFileManager.OntologyManager.LanguageCode = langCode
             Translate(langCode)
         End If
     End Sub
