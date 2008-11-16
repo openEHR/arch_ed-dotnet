@@ -36,19 +36,24 @@ Public Class DatatypeViewControl : Inherits ElementViewControl 'Viewcontrol
     End Sub
 
     Friend Function DataTypeToControl(ByVal aConstraint As Constraint, ByRef Pos As Point) As Control
-        Select Case aConstraint.Type
-            Case ConstraintType.Any, ConstraintType.Slot
-                Dim lbl As New Label
-                lbl.Height = 25
-                lbl.Width = 70
-                lbl.Text = "[" & aConstraint.ConstraintTypeString & "]"
-                lbl.Location = Pos
-                Return lbl
-            Case Else
-                Throw New NotSupportedException( _
-                        String.Format("Constraint type '{0}' not supported as a view", _
-                        aConstraint.Type.ToString))
-        End Select
+        Dim result As Label = Nothing
+
+        If aConstraint IsNot Nothing Then
+            Select Case aConstraint.Type
+                Case ConstraintType.Any, ConstraintType.Slot
+                    result = New Label
+                    result.Height = 25
+                    result.Width = 70
+                    result.Text = "[" & aConstraint.ConstraintTypeString & "]"
+                    result.Location = Pos
+                Case Else
+                    Throw New NotSupportedException(String.Format("Constraint type '{0}' not supported as a view.", aConstraint.Type.ToString))
+            End Select
+        Else
+            Throw New NotSupportedException("Cannot view without a Constraint.")
+        End If
+
+        Return result
     End Function
 
     Private Sub ComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mComboBox.SelectedIndexChanged
