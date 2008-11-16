@@ -49,18 +49,24 @@ Public MustInherit Class ElementViewControl : Inherits Control
             lbl.Font = New System.Drawing.Font(lbl.Font, FontStyle.Bold)
         End If
 
-        Select Case anElement.Constraint.Type
-            Case ConstraintType.Text
-                lbl.TextAlign = ContentAlignment.TopLeft
-            Case ConstraintType.DateTime
-                lbl.TextAlign = ContentAlignment.MiddleLeft
-        End Select
+        If anElement.Constraint IsNot Nothing Then
+            Select Case anElement.Constraint.Type
+                Case ConstraintType.Text
+                    lbl.TextAlign = ContentAlignment.TopLeft
+                Case ConstraintType.DateTime
+                    lbl.TextAlign = ContentAlignment.MiddleLeft
+            End Select
+        End If
 
         Controls.Add(lbl)
 
         ' remember new position
         location.X = lbl.Right + 25
-        InitialiseComponent(anElement.Constraint, location)
+
+        If anElement.Constraint IsNot Nothing Then
+            InitialiseComponent(anElement.Constraint, location)
+        End If
+
         SetSize()
     End Sub
 

@@ -262,8 +262,9 @@ Public Class TabPageComposition
             aContainer.Size = New Size
         End If
 
-        mContextConstraint.BuildInterface(aContainer, pos, mandatory_only)
-
+        If mContextConstraint IsNot Nothing Then
+            mContextConstraint.BuildInterface(aContainer, pos, mandatory_only)
+        End If
     End Sub
 
     Public Function SaveAsComposition() As RmComposition
