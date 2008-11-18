@@ -307,11 +307,6 @@ Public Class OntologyManager
     End Function
 
     Public Function AddTerm(ByVal Text As String, Optional ByVal Description As String = "*") As RmTerm
-
-        ' ensure there are no " in the string
-        Text = Text.Replace("""", "'")
-        Description = Description.Replace("""", "'")
-
         mLastTerm = New RmTerm(mOntology.NextTermId)
         mLastTerm.Text = Text
         mLastTerm.Description = Description
@@ -379,18 +374,11 @@ Public Class OntologyManager
     End Sub
 
     Public Function AddConstraint(ByVal Text As String, Optional ByVal Description As String = "*") As RmTerm
-        Dim d_row As DataRow
-
-
-        ' ensure there are no " in the string
-        Text = Text.Replace("""", "'")
-        Description = Description.Replace("""", "'")
-
         mLastTerm = New RmTerm(mOntology.NextConstraintID)
         mLastTerm.Text = Text
         mLastTerm.Description = Description
         mOntology.AddConstraint(mLastTerm)
-        d_row = mConstraintDefinitionsTable.NewRow
+        Dim d_row As DataRow = mConstraintDefinitionsTable.NewRow
         d_row(0) = mLanguageCode
         d_row(1) = mLastTerm.Code
         d_row(2) = Text
@@ -400,12 +388,7 @@ Public Class OntologyManager
     End Function
 
     Public Overloads Sub SetText(ByVal Value As String, ByVal code As String)
-
-
-        ' ensure there are no " in the string
-        Value = Value.Replace("""", "'")
-
-        mLastTerm = Me.GetTerm(code)
+        mLastTerm = GetTerm(code)
         mLastTerm.Text = Value
         SetText(mLastTerm)
     End Sub
@@ -452,14 +435,9 @@ Public Class OntologyManager
     End Function
 
     Public Overloads Sub SetDescription(ByVal Value As String, ByVal code As String)
-
-        ' ensure there are no " in the string
-        Value = Value.Replace("""", "'")
-
-        mLastTerm = Me.GetTerm(code)
+        mLastTerm = GetTerm(code)
         mLastTerm.Description = Value
         SetText(mLastTerm)
-
     End Sub
 
     Public Function GetDescription(ByVal ConceptCode As String) As String 'JAR: 13APR07, EDT-32 Support unicode
@@ -472,14 +450,9 @@ Public Class OntologyManager
     End Function
 
     Public Overloads Sub SetComment(ByVal Value As String, ByVal code As String)
-
-        ' ensure there are no " in the string
-        Value = Value.Replace("""", "'")
-
-        mLastTerm = Me.GetTerm(code)
+        mLastTerm = GetTerm(code)
         mLastTerm.Comment = Value
         SetText(mLastTerm)
-
     End Sub
 
     Private Sub Update(ByVal aTerm As RmTerm, ByVal aTable As DataTable, Optional ByVal ReplaceTranslations As Boolean = False)

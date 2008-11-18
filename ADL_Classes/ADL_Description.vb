@@ -36,47 +36,35 @@ Namespace ArchetypeEditor.ADL_Classes
             mADL_Description.original_author.clear_all()
 
             If OriginalAuthor <> "" Then
-                mADL_Description.add_original_author_item( _
-                     EiffelKernel.Create.STRING_8.make_from_cil("name"), _
-                    EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthor.Replace("""", "'")))
+                mADL_Description.add_original_author_item(EiffelKernel.Create.STRING_8.make_from_cil("name"), EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthor))
             End If
 
             If OriginalAuthorEmail <> "" Then
-                mADL_Description.add_original_author_item( _
-                     EiffelKernel.Create.STRING_8.make_from_cil("email"), _
-                    EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthorEmail.Replace("""", "'")))
+                mADL_Description.add_original_author_item(EiffelKernel.Create.STRING_8.make_from_cil("email"), EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthorEmail))
             End If
 
             If OriginalAuthorOrganisation <> "" Then
-                mADL_Description.add_original_author_item( _
-                     EiffelKernel.Create.STRING_8.make_from_cil("organisation"), _
-                    EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthorOrganisation.Replace("""", "'")))
+                mADL_Description.add_original_author_item(EiffelKernel.Create.STRING_8.make_from_cil("organisation"), EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthorOrganisation))
             End If
 
             If OriginalAuthorDate <> "" Then
-                mADL_Description.add_original_author_item( _
-                     EiffelKernel.Create.STRING_8.make_from_cil("date"), _
-                    EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthorDate.Replace("""", "'")))
+                mADL_Description.add_original_author_item(EiffelKernel.Create.STRING_8.make_from_cil("date"), EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthorDate))
             End If
 
-            mADL_Description.set_lifecycle_state( _
-                EiffelKernel.Create.STRING_8.make_from_cil(LifeCycleStateAsString.Replace("""", "'")))
+            mADL_Description.set_lifecycle_state(EiffelKernel.Create.STRING_8.make_from_cil(LifeCycleStateAsString))
 
             If Not mArchetypePackageURI Is Nothing Then
-                mADL_Description.set_resource_package_uri( _
-                    EiffelKernel.Create.STRING_8.make_from_cil(mArchetypePackageURI.Replace("""", "'")))
+                mADL_Description.set_resource_package_uri(EiffelKernel.Create.STRING_8.make_from_cil(mArchetypePackageURI))
             End If
 
             If Not mReferences Is Nothing Then
-                mADL_Description.add_other_detail( _
-                    EiffelKernel.Create.STRING_8.make_from_cil("references"), _
-                    EiffelKernel.Create.STRING_8.make_from_cil(mReferences.Replace("""", "'")))
+                mADL_Description.add_other_detail(EiffelKernel.Create.STRING_8.make_from_cil("references"), EiffelKernel.Create.STRING_8.make_from_cil(mReferences))
             End If
 
             mADL_Description.clear_other_contributors()
 
             For Each s As String In mOtherContributors
-                mADL_Description.add_other_contributor(EiffelKernel.Create.STRING_8.make_from_cil(s.Replace("""", "'")))
+                mADL_Description.add_other_contributor(EiffelKernel.Create.STRING_8.make_from_cil(s))
             Next
 
             Return mADL_Description
