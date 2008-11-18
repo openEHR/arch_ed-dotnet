@@ -753,10 +753,10 @@ Public Class TabPageDescription
                 End Select
             End If
 
-            t.Accreditation = txtTranslationAccreditation.Text.Replace("""", "'")
-            t.AuthorName = txtTranslatorName.Text.Replace("""", "'")
-            t.AuthorOrganisation = txtTranslatorOrganisation.Text.Replace("""", "'")
-            t.AuthorEmail = txtTranslatorEmail.Text.Replace("""", "'")
+            t.Accreditation = txtTranslationAccreditation.Text
+            t.AuthorName = txtTranslatorName.Text
+            t.AuthorOrganisation = txtTranslatorOrganisation.Text
+            t.AuthorEmail = txtTranslatorEmail.Text
 
             If mTranslationDetails.Keys.Contains(t.Language) Then
                 mTranslationDetails.Item(t.Language) = t
@@ -785,35 +785,31 @@ Public Class TabPageDescription
             mArchetypeDescription.LifeCycleState = CType([Enum].ToObject(GetType(LifeCycleStates), 0), LifeCycleStates)
         End If
 
-        mArchetypeDescription.OriginalAuthor = Me.txtOriginalAuthor.Text.Replace("""", "'")
-        mArchetypeDescription.OriginalAuthorEmail = Me.txtOriginalEmail.Text.Replace("""", "'")
-        mArchetypeDescription.OriginalAuthorOrganisation = Me.txtOrganisation.Text.Replace("""", "'")
-        mArchetypeDescription.OriginalAuthorDate = Me.txtDate.Text.Replace("""", "'")
-
-        'JAR: 24MAY2007, EDT-30 Add field for references
-        mArchetypeDescription.References = Me.txtReferences.Text.Replace("""", "'")
-
-        ' get the contributors
+        mArchetypeDescription.OriginalAuthor = txtOriginalAuthor.Text
+        mArchetypeDescription.OriginalAuthorEmail = txtOriginalEmail.Text
+        mArchetypeDescription.OriginalAuthorOrganisation = txtOrganisation.Text
+        mArchetypeDescription.OriginalAuthorDate = txtDate.Text
+        mArchetypeDescription.References = txtReferences.Text
         mArchetypeDescription.OtherContributors.Clear()
+
         For Each s As String In Me.listContributors.Items
-            mArchetypeDescription.OtherContributors.Add(s.Replace("""", "'"))
+            mArchetypeDescription.OtherContributors.Add(s)
         Next
 
         If mCurrentLanguage Is Nothing Then
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         End If
 
-        Dim archDescriptionItem As New ArchetypeDescriptionItem( _
-            mCurrentLanguage)
+        Dim archDescriptionItem As New ArchetypeDescriptionItem(mCurrentLanguage)
 
         ' get the key words
         For Each s As String In Me.listKeyword.Items
             archDescriptionItem.KeyWords.Add(s)
         Next
 
-        archDescriptionItem.Purpose = Me.txtPurpose.Text.Replace("""", "'")
-        archDescriptionItem.Use = Me.txtUse.Text.Replace("""", "'")
-        archDescriptionItem.MisUse = Me.txtMisuse.Text.Replace("""", "'")
+        archDescriptionItem.Purpose = txtPurpose.Text
+        archDescriptionItem.Use = txtUse.Text
+        archDescriptionItem.MisUse = txtMisuse.Text
         mArchetypeDescription.Details.AddOrReplace(archDescriptionItem.Language, archDescriptionItem)
     End Sub
 
