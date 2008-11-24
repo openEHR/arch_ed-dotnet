@@ -1174,7 +1174,7 @@ Namespace ArchetypeEditor.XML_Classes
             If sl.hasSlots Then
                 If Not ReferenceModel.IsAbstract(sl.RM_ClassType) Then
                     ' ids will be clipped
-                    classPreFix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, sl.RM_ClassType.ToString.ToUpperInvariant)
+                    classPreFix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(sl.RM_ClassType))
                 End If
 
                 If sl.IncludeAll Then
