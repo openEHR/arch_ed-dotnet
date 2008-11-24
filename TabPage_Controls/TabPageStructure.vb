@@ -975,7 +975,11 @@ Public Class TabPageStructure
                 pattern = "[^.]+\.[^.]+"
             End If
 
-            Dim inclusions As New System.Text.RegularExpressions.Regex("^" & classPrefix & "\.(" & pattern & ")\.adl$")
+            If Not pattern.StartsWith(classPrefix) Then
+                pattern = classPrefix & "\.(" & pattern & ")"
+            End If
+
+            Dim inclusions As New System.Text.RegularExpressions.Regex("^" & pattern & "\.adl$")
 
             pattern = ""
             separator = ""
@@ -985,7 +989,11 @@ Public Class TabPageStructure
                 separator = "|"
             Next
 
-            Dim exclusions As New System.Text.RegularExpressions.Regex("^" & classPrefix & "\.(" & pattern & ")\.adl$")
+            If Not pattern.StartsWith(classPrefix) Then
+                pattern = classPrefix & "\.(" & pattern & ")"
+            End If
+
+            Dim exclusions As New System.Text.RegularExpressions.Regex("^" & pattern & "\.adl$")
 
             For Each f As IO.FileInfo In dir.GetFiles(classPrefix & ".*.adl")
                 'SRH: this command on windows will return adls files as well (ext of length 3 are treated as wild!! ie = adl*)
