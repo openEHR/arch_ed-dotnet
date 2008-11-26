@@ -719,8 +719,12 @@ Public Class OceanArchetypeEditor
         'mDefaultLanguageCode = "nl"
         'mSpecificLanguageCode = "nl"
 
-        mDefaultLanguageCode = "de"
-        mSpecificLanguageCode = "de"
+        'mDefaultLanguageCode = "de"
+        'mSpecificLanguageCode = "de"
+
+        mDefaultLanguageCode = "ja"
+        mSpecificLanguageCode = "ja"
+
 #End If
 
         Dim di As New System.IO.DirectoryInfo(Application.StartupPath)

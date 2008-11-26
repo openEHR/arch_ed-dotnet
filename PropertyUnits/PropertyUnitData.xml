@@ -530,4 +530,5 @@
   <Unit property_id="71" Text="mmho" name="millimho" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="71" Text="mS" name="milliseimens" conversion="1" coefficient="3" primary="false" case_ins="mS" />
   <Unit property_id="80" Text="{Time/Time}" conversion="0" primary="false" />
+  <Unit property_id="7" Text="drops/min" conversion="0" primary="false" />
 </PropertyUnits>
