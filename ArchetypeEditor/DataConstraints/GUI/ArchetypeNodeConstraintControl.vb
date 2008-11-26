@@ -821,6 +821,10 @@ Public Class ArchetypeNodeConstraintControl
     Private Sub termLookUp_TermChanged(ByVal sender As System.Object, ByVal e As EventArgs) Handles termLookUp.TermChanged
         If Not dgNodeBindings.CurrentRow Is Nothing AndAlso Not termLookUp.TermId Is Nothing Then
             dgNodeBindings.CurrentRow.Cells(2).Value = termLookUp.TermId
+            Dim s As String = termLookUp.TermName
+            termLookUp.Reset()
+            termLookUp.termTextBox.Text = s
+            termLookUp.termTextBox.SelectAll()
         End If
     End Sub
 
