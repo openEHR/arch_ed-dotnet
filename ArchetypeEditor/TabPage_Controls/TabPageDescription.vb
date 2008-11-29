@@ -708,22 +708,23 @@ Public Class TabPageDescription
         Set(ByVal Value As ArchetypeDescription)
             ' add the lifecycle states to the combo box
             LoadAuthorStatesTableCombo()
-            Me.comboLifeCycle.SelectedValue = CInt(Value.LifeCycleState)
-            Me.txtOriginalAuthor.Text = Value.OriginalAuthor
-            Me.txtOriginalEmail.Text = Value.OriginalAuthorEmail
-            Me.txtOrganisation.Text = Value.OriginalAuthorOrganisation
-            Me.txtDate.Text = Value.OriginalAuthorDate
+            comboLifeCycle.SelectedValue = CInt(Value.LifeCycleState)
+            txtOriginalAuthor.Text = Value.OriginalAuthor
+            txtOriginalEmail.Text = Value.OriginalAuthorEmail
+            txtOrganisation.Text = Value.OriginalAuthorOrganisation
+            txtDate.Text = Value.OriginalAuthorDate
+
             For Each s As String In Value.OtherContributors
-                Me.listContributors.Items.Add(s)
+                listContributors.Items.Add(s)
             Next
-            Me.txtReferences.Text = Replace(Value.References, vbLf, vbCrLf) 'JAR: 24MAY2007, EDT-30 Eiffel parser converts vbCrLf to vbLf.  Text box does not display vbLF
+
+            txtReferences.Text = NewlinesNormalised(Value.References)
 
             mArchetypeDescription = Value
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
             SetDescriptionDetailValues(False)
         End Set
     End Property
-
 
     Dim mTranslationDetails As Generic.SortedList(Of String, TranslationDetails) = New Generic.SortedList(Of String, TranslationDetails)
 
@@ -865,45 +866,50 @@ Public Class TabPageDescription
 
     End Function
 
+    Protected Overridable Function NewlinesNormalised(ByVal s As String) As String
+        NewlinesNormalised = ""
+
+        If s IsNot Nothing Then
+            NewlinesNormalised = System.Text.RegularExpressions.Regex.Replace(s, "(\r\n|\n)", Environment.NewLine)
+        End If
+    End Function
+
     Private Sub SetDescriptionDetailValues(ByVal translate As Boolean)
         Dim archDescriptionItem As ArchetypeDescriptionItem
-        Me.listKeyword.Items.Clear()
+        listKeyword.Items.Clear()
+
         If mArchetypeDescription.Details.HasDetailInLanguage(mCurrentLanguage) Then
             archDescriptionItem = mArchetypeDescription.Details.DetailInLanguage(mCurrentLanguage)
-            For Each s As String In archDescriptionItem.KeyWords
-                Me.listKeyword.Items.Add(s)
-            Next
-            'JAR: 24MAY2007, EDT-30 Eiffel parser converts vbCrLf to vbLf.  Text box does not display vbLF
-            'Me.txtPurpose.Text = archDescriptionItem.Purpose
-            'Me.txtUse.Text = archDescriptionItem.Use
-            'Me.txtMisuse.Text = archDescriptionItem.MisUse
-            Me.txtPurpose.Text = Replace(archDescriptionItem.Purpose, vbLf, vbCrLf)
-            Me.txtUse.Text = Replace(archDescriptionItem.Use, vbLf, vbCrLf)
-            Me.txtMisuse.Text = Replace(archDescriptionItem.MisUse, vbLf, vbCrLf)
 
+            For Each s As String In archDescriptionItem.KeyWords
+                listKeyword.Items.Add(s)
+            Next
+
+            txtPurpose.Text = NewlinesNormalised(archDescriptionItem.Purpose)
+            txtUse.Text = NewlinesNormalised(archDescriptionItem.Use)
+            txtMisuse.Text = NewlinesNormalised(archDescriptionItem.MisUse)
         ElseIf translate Then
             If mArchetypeDescription.Details.HasDetailInLanguage(Filemanager.Master.OntologyManager.PrimaryLanguageCode) Then
                 archDescriptionItem = mArchetypeDescription.Details.DetailInLanguage(Filemanager.Master.OntologyManager.PrimaryLanguageCode)
-                For Each s As String In archDescriptionItem.KeyWords
-                    Me.listKeyword.Items.Add(String.Format("*{0}({1})", s, Filemanager.Master.OntologyManager.PrimaryLanguageCode))
-                Next
-                'JAR: 24MAY2007, EDT-30 Eiffel parser converts vbCrLf to vbLf.  Text box does not display vbLF
-                'Me.txtPurpose.Text = String.Format("*{0}({1})", archDescriptionItem.Purpose, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
-                'Me.txtUse.Text = String.Format("*{0}({1})", archDescriptionItem.Use, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
-                'Me.txtMisuse.Text = String.Format("*{0}({1})", archDescriptionItem.MisUse, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
-                Me.txtPurpose.Text = String.Format("*{0}({1})", Replace(archDescriptionItem.Purpose, vbLf, vbCrLf), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
-                Me.txtUse.Text = String.Format("*{0}({1})", Replace(archDescriptionItem.Use, vbLf, vbCrLf), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
-                Me.txtMisuse.Text = String.Format("*{0}({1})", Replace(archDescriptionItem.MisUse, vbLf, vbCrLf), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
 
+                For Each s As String In archDescriptionItem.KeyWords
+                    listKeyword.Items.Add(String.Format("*{0}({1})", s, Filemanager.Master.OntologyManager.PrimaryLanguageCode))
+                Next
+
+                txtPurpose.Text = String.Format("*{0}({1})", NewlinesNormalised(archDescriptionItem.Purpose), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                txtUse.Text = String.Format("*{0}({1})", NewlinesNormalised(archDescriptionItem.Use), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                txtMisuse.Text = String.Format("*{0}({1})", NewlinesNormalised(archDescriptionItem.MisUse), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
             Else
-                If Me.txtPurpose.Text <> "" Then
-                    Me.txtPurpose.Text = String.Format("*{0}({1})", Me.txtPurpose.Text, mCurrentLanguage)
+                If txtPurpose.Text <> "" Then
+                    txtPurpose.Text = String.Format("*{0}({1})", txtPurpose.Text, mCurrentLanguage)
                 End If
-                If Me.txtUse.Text <> "" Then
-                    Me.txtUse.Text = String.Format("*{0}({1})", Me.txtUse.Text, mCurrentLanguage)
+
+                If txtUse.Text <> "" Then
+                    txtUse.Text = String.Format("*{0}({1})", txtUse.Text, mCurrentLanguage)
                 End If
-                If Me.txtMisuse.Text <> "" Then
-                    Me.txtMisuse.Text = String.Format("*{0}({1})", Me.txtMisuse.Text, mCurrentLanguage)
+
+                If txtMisuse.Text <> "" Then
+                    txtMisuse.Text = String.Format("*{0}({1})", txtMisuse.Text, mCurrentLanguage)
                 End If
             End If
         End If
