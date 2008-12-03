@@ -245,7 +245,7 @@ Namespace ArchetypeEditor.XML_Classes
                         Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
                     Case "dv_multimedia", "multi_media", "multimedia"
                         Return ProcessMultiMedia(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Case "dv_uri", "uri"
+                    Case "dv_uri", "uri", "dv_ehr_uri"
                         Return ProcessUri(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
                     Case "dv_identifier"
                         Return ProcessIdentifier(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
@@ -278,7 +278,7 @@ Namespace ArchetypeEditor.XML_Classes
                 cUri.EhrUriOnly = True
             End If
 
-            If dvUri.attributes.Length > 0 Then
+            If Not dvUri.attributes Is Nothing AndAlso dvUri.attributes.Length > 0 Then
                 Try
                     an_attribute = CType(dvUri.attributes(0), XMLParser.C_ATTRIBUTE)
                     Debug.Assert(an_attribute.rm_attribute_name.ToLowerInvariant = "value")
@@ -302,27 +302,30 @@ Namespace ArchetypeEditor.XML_Classes
             Dim cIdentifier As New Constraint_Identifier
             Dim an_attribute As XMLParser.C_ATTRIBUTE
 
-            Try
-                For Each an_attribute In dvIdentifier.attributes
-                    If an_attribute.children.Length > 0 Then
-                        Dim cadlOS As XMLParser.C_PRIMITIVE_OBJECT = _
-                            CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
-                        Dim cadlC As XMLParser.C_STRING = _
-                            CType(cadlOS.item, XMLParser.C_STRING)
+            'SRH added check for null attributes EDT-444
+            If Not dvIdentifier.attributes Is Nothing Then
+                Try
+                    For Each an_attribute In dvIdentifier.attributes
+                        If an_attribute.children.Length > 0 Then
+                            Dim cadlOS As XMLParser.C_PRIMITIVE_OBJECT = _
+                                CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
+                            Dim cadlC As XMLParser.C_STRING = _
+                                CType(cadlOS.item, XMLParser.C_STRING)
 
-                        Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
-                            Case "issuer"
-                                cIdentifier.IssuerRegex = cadlC.pattern
-                            Case "type"
-                                cIdentifier.TypeRegex = cadlC.pattern
-                            Case "id"
-                                cIdentifier.IDRegex = cadlC.pattern
-                        End Select
-                    End If
-                Next
-            Catch e As Exception
-                MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
+                            Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
+                                Case "issuer"
+                                    cIdentifier.IssuerRegex = cadlC.pattern
+                                Case "type"
+                                    cIdentifier.TypeRegex = cadlC.pattern
+                                Case "id"
+                                    cIdentifier.IDRegex = cadlC.pattern
+                            End Select
+                        End If
+                    Next
+                Catch e As Exception
+                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
 
             Return cIdentifier
         End Function
