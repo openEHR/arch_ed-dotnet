@@ -850,6 +850,7 @@ Public Class ArchetypeNodeConstraintControl
 
     Private Sub dgNodeBindings_RowPostPaint(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewRowPostPaintEventArgs) Handles dgNodeBindings.RowPostPaint
         If (Not dgNodeBindings.CurrentRow Is Nothing) AndAlso (Not TypeOf dgNodeBindings.Rows(e.RowIndex).Cells(0).Value Is System.DBNull) AndAlso (dgNodeBindings.CurrentRow.Index = e.RowIndex) Then
+            Me.SuspendLayout()
             If SetTermLookUpVisibility(CStr(CType(dgNodeBindings.Rows(e.RowIndex).Cells(0), DataGridViewComboBoxCell).Value)) AndAlso (String.IsNullOrEmpty(termLookUp.TermName)) Then
                 If Not TypeOf dgNodeBindings.Rows(e.RowIndex).Cells(0).Value Is System.DBNull Then
                     Dim termInUse As OTSControls.OTSServer.TerminologyName
@@ -859,20 +860,23 @@ Public Class ArchetypeNodeConstraintControl
                         termInUse = OTSControls.OTSServer.TerminologyName.LOINC
                     End If
                     Me.Cursor = Cursors.WaitCursor
-                    Dim ds As Data.DataSet = OTSControls.Term.OtsWebService.GetTermsForConcept(termInUse, Me.termLookUp.TermLanguage, CStr(dgNodeBindings.Rows(e.RowIndex).Cells(2).Value))
+
                     Try
-                        Dim s As String
+                        Dim ds As Data.DataSet = OTSControls.Term.OtsWebService.GetTermsForConcept(termInUse, Me.termLookUp.TermLanguage, CStr(dgNodeBindings.Rows(e.RowIndex).Cells(2).Value))
+                        If Not ds Is Nothing Then
+                            Dim s As String = ""
 
-                        For i As Integer = 0 To ds.Tables(0).Rows.Count - 1
-                            If CType(ds.Tables(0).Rows(i).Item(3), Boolean) Then
-                                s = CStr(ds.Tables(0).Rows(i).Item(1))
-                                Exit For
-                            End If
+                            For i As Integer = 0 To ds.Tables(0).Rows.Count - 1
+                                If CType(ds.Tables(0).Rows(i).Item(3), Boolean) Then
+                                    s = CStr(ds.Tables(0).Rows(i).Item(1))
+                                    Exit For
+                                End If
 
-                        Next
+                            Next
 
+                            termLookUp.TermName = s
 
-                        termLookUp.TermName = s
+                        End If
 
                     Catch
                     Finally
@@ -880,6 +884,7 @@ Public Class ArchetypeNodeConstraintControl
                     End Try
                 End If
             End If
+            Me.ResumeLayout()
         Else
             'no concept id to look up
             termLookUp.TermName = ""
