@@ -397,41 +397,37 @@ namespace XMLParser
 
         private void get_paths(System.Collections.ArrayList list, C_COMPLEX_OBJECT node, string path)
         {
-            try
+            if (path != "")
             {
-                if (path != "")
+                path += "[" + node.node_id + "]";
+                list.Add(path);
+            }
+
+            if (node.attributes != null)
+            {
+                foreach (C_ATTRIBUTE attrib in node.attributes)
                 {
-                    path += "[" + node.node_id + "]";
-                    list.Add(path);
-                }
-                if (node.attributes != null)
-                {
-                    foreach (C_ATTRIBUTE attrib in node.attributes)
+                    if (attrib.children != null)
                     {
-                        if (attrib.children != null)
+                        if (attrib.GetType() == typeof(C_MULTIPLE_ATTRIBUTE))
                         {
-                            if (attrib.GetType() == typeof(C_MULTIPLE_ATTRIBUTE))
+                            foreach (C_OBJECT obj in attrib.children)
                             {
-                                foreach (C_OBJECT obj in attrib.children)
-                                {
-                                    //if (obj.node_id != null)
-                                    if (!string.IsNullOrEmpty(obj.node_id)) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                                        get_paths(list, (C_COMPLEX_OBJECT)obj, path + "/" + attrib.rm_attribute_name);
-                                }
+                                C_COMPLEX_OBJECT co = obj as C_COMPLEX_OBJECT;
+
+                                if (co != null && !string.IsNullOrEmpty(co.node_id))
+                                    get_paths(list, co, path + "/" + attrib.rm_attribute_name);
                             }
-                            else //single attribute
-                            {
-                                //if (attrib.children[0].node_id != null)
-                                if (!string.IsNullOrEmpty (attrib.children[0].node_id)) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                                    get_paths(list, (C_COMPLEX_OBJECT)attrib.children[0], path + "/" + attrib.rm_attribute_name);
-                            }
+                        }
+                        else //single attribute
+                        {
+                            C_COMPLEX_OBJECT co = attrib.children[0] as C_COMPLEX_OBJECT;
+
+                            if (co != null && !string.IsNullOrEmpty(co.node_id))
+                                get_paths(list, co, path + "/" + attrib.rm_attribute_name);
                         }
                     }
                 }
-            }
-            catch
-            {
-                System.Diagnostics.Debug.Assert(true);
             }
         }
 
@@ -443,6 +439,7 @@ namespace XMLParser
                 path += "[" + getText(a_language_code, node.node_id) + "]";
                 list.Add(path);
             }
+
             if (node.attributes != null)
             {
                 foreach (C_ATTRIBUTE attrib in node.attributes)
@@ -453,16 +450,18 @@ namespace XMLParser
                         {
                             foreach (C_OBJECT obj in attrib.children)
                             {
-                                //if (obj.node_id != null)
-                                if (!string.IsNullOrEmpty(obj.node_id)) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                                    get_logical_paths(list, (C_COMPLEX_OBJECT)obj, path + "/" + attrib.rm_attribute_name, a_language_code);
+                                C_COMPLEX_OBJECT co = obj as C_COMPLEX_OBJECT;
+
+                                if (co != null && !string.IsNullOrEmpty(co.node_id))
+                                    get_logical_paths(list, co, path + "/" + attrib.rm_attribute_name, a_language_code);
                             }
                         }
                         else //single attribute
-                        {                            
-                            //if (attrib.children[0].node_id != null)
-                            if (!string.IsNullOrEmpty(attrib.children[0].node_id)) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                                get_logical_paths(list, (C_COMPLEX_OBJECT)attrib.children[0], path + "/" + attrib.rm_attribute_name, a_language_code);
+                        {
+                            C_COMPLEX_OBJECT co = attrib.children[0] as C_COMPLEX_OBJECT;
+
+                            if (co != null && !string.IsNullOrEmpty(co.node_id))
+                                get_logical_paths(list, co, path + "/" + attrib.rm_attribute_name, a_language_code);
                         }
                     }
                 }

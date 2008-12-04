@@ -967,7 +967,7 @@ namespace XMLParser
 
         private void AddTerms(System.Collections.ArrayList result, C_OBJECT obj)
         {
-            if(obj.GetType() == typeof(C_COMPLEX_OBJECT))
+            if (obj.GetType() == typeof(C_COMPLEX_OBJECT))
             {
                 C_COMPLEX_OBJECT co = (C_COMPLEX_OBJECT)obj;
                 //Add the node id
@@ -977,11 +977,16 @@ namespace XMLParser
 
                 if (co.attributes != null)
                     foreach (C_ATTRIBUTE attribute in co.attributes)
-						if (attribute.children != null)
+                        if (attribute.children != null)
                             foreach (C_OBJECT obj_1 in attribute.children)
                                 AddTerms(result, obj_1);
             }
-                //check for internal codes
+            else if (obj.GetType() == typeof(ARCHETYPE_SLOT))
+            {
+                if (!string.IsNullOrEmpty(obj.node_id) && !result.Contains(obj.node_id))
+                    result.Add(obj.node_id);
+            }
+            //check for internal codes
             else if(obj.GetType() == typeof(C_CODE_PHRASE))
             {
                 C_CODE_PHRASE ct = (C_CODE_PHRASE)obj;
