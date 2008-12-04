@@ -414,16 +414,18 @@ namespace XMLParser
                             {
                                 foreach (C_OBJECT obj in attrib.children)
                                 {
-                                    //if (obj.node_id != null)
-                                    if (!string.IsNullOrEmpty(obj.node_id)) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                                        get_paths(list, (C_COMPLEX_OBJECT)obj, path + "/" + attrib.rm_attribute_name);
+                                    C_COMPLEX_OBJECT co = obj as C_COMPLEX_OBJECT;
+
+                                    if (co != null && !string.IsNullOrEmpty(co.node_id))
+                                        get_paths(list, co, path + "/" + attrib.rm_attribute_name);
                                 }
                             }
                             else //single attribute
                             {
-                                //if (attrib.children[0].node_id != null)
-                                if (!string.IsNullOrEmpty (attrib.children[0].node_id)) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                                    get_paths(list, (C_COMPLEX_OBJECT)attrib.children[0], path + "/" + attrib.rm_attribute_name);
+                                C_COMPLEX_OBJECT co = attrib.children[0] as C_COMPLEX_OBJECT;
+
+                                if (co != null && !string.IsNullOrEmpty(co.node_id))
+                                    get_paths(list, co, path + "/" + attrib.rm_attribute_name);
                             }
                         }
                     }
@@ -453,16 +455,18 @@ namespace XMLParser
                         {
                             foreach (C_OBJECT obj in attrib.children)
                             {
-                                //if (obj.node_id != null)
-                                if (!string.IsNullOrEmpty(obj.node_id)) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                                    get_logical_paths(list, (C_COMPLEX_OBJECT)obj, path + "/" + attrib.rm_attribute_name, a_language_code);
+                                C_COMPLEX_OBJECT co = obj as C_COMPLEX_OBJECT;
+
+                                if (co != null && !string.IsNullOrEmpty(co.node_id))
+                                    get_logical_paths(list, co, path + "/" + attrib.rm_attribute_name, a_language_code);
                             }
                         }
                         else //single attribute
-                        {                            
-                            //if (attrib.children[0].node_id != null)
-                            if (!string.IsNullOrEmpty(attrib.children[0].node_id)) //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                                get_logical_paths(list, (C_COMPLEX_OBJECT)attrib.children[0], path + "/" + attrib.rm_attribute_name, a_language_code);
+                        {
+                            C_COMPLEX_OBJECT co = attrib.children[0] as C_COMPLEX_OBJECT;
+
+                            if (co != null && !string.IsNullOrEmpty(co.node_id))
+                                get_logical_paths(list, co, path + "/" + attrib.rm_attribute_name, a_language_code);
                         }
                     }
                 }
