@@ -86,6 +86,7 @@ Public Class ArchetypeNodeConstraintControl
 
         Me.HelpProviderCommonConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
+
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -473,11 +474,13 @@ Public Class ArchetypeNodeConstraintControl
 
     End Sub
 
+
 #End Region
 
     Private mArchetypeNode As ArchetypeNode
 
     Private mIsLoading As Boolean = True
+   
     Protected ReadOnly Property IsLoading() As Boolean
         Get
             Return mIsLoading
@@ -848,57 +851,70 @@ Public Class ArchetypeNodeConstraintControl
     '    Debug.WriteLine(String.Format("Row enter - Row index:{0}, Visible{1}", e.RowIndex, Me.termLookUp.Visible))
     'End Sub
 
-    Private Sub dgNodeBindings_RowPostPaint(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewRowPostPaintEventArgs) Handles dgNodeBindings.RowPostPaint
-        If (Not dgNodeBindings.CurrentRow Is Nothing) AndAlso (Not TypeOf dgNodeBindings.Rows(e.RowIndex).Cells(0).Value Is System.DBNull) AndAlso (dgNodeBindings.CurrentRow.Index = e.RowIndex) Then
-            Me.SuspendLayout()
-            If SetTermLookUpVisibility(CStr(CType(dgNodeBindings.Rows(e.RowIndex).Cells(0), DataGridViewComboBoxCell).Value)) AndAlso (String.IsNullOrEmpty(termLookUp.TermName)) Then
-                If Not TypeOf dgNodeBindings.Rows(e.RowIndex).Cells(0).Value Is System.DBNull Then
-                    Dim termInUse As OTSControls.OTSServer.TerminologyName
-                    If termLookUp.TerminologyName.ToLowerInvariant() = "snomed" Then
-                        termInUse = OTSControls.OTSServer.TerminologyName.Snomed
-                    ElseIf termLookUp.TerminologyName.ToLowerInvariant() = "loinc" Then
-                        termInUse = OTSControls.OTSServer.TerminologyName.LOINC
-                    End If
-                    Me.Cursor = Cursors.WaitCursor
-
-                    Try
-                        Dim ds As Data.DataSet = OTSControls.Term.OtsWebService.GetTermsForConcept(termInUse, Me.termLookUp.TermLanguage, CStr(dgNodeBindings.Rows(e.RowIndex).Cells(2).Value))
-                        If Not ds Is Nothing Then
-                            Dim s As String = ""
-
-                            For i As Integer = 0 To ds.Tables(0).Rows.Count - 1
-                                If CType(ds.Tables(0).Rows(i).Item(3), Boolean) Then
-                                    s = CStr(ds.Tables(0).Rows(i).Item(1))
-                                    Exit For
-                                End If
-
-                            Next
-
-                            termLookUp.TermName = s
-
-                        End If
-
-                    Catch
-                    Finally
-                        Me.Cursor = Cursors.Default
-                    End Try
-                End If
+    Private Sub GetPreferredTermsCompleted(ByVal sender As Object, ByVal e As OTSControls.OTSServer.TerminologyGetPreferredTermsCompletedEventArgs)
+        If e.Error Is Nothing AndAlso Not e.Cancelled AndAlso (CInt(e.UserState) = asynchronousIdentifier) Then
+            Dim ds As Data.DataSet = e.Result
+            If ds.Tables(0).Rows.Count > 0 Then
+                termLookUp.TermName = CStr(ds.Tables(0).Rows(0).Item(2))
             End If
-            Me.ResumeLayout()
-        Else
-            'no concept id to look up
-            termLookUp.TermName = ""
-            'If termLookUp.Visible Then
-            '    'Need to display term if there is one
-            '    Dim s As String = CStr(CType(dgNodeBindings.Rows(e.RowIndex).Cells(1), DataGridViewTextBoxCell).Value)
-            '    If s <> String.Empty AndAlso mFileManager.HasTermBindings("en-GB", s) Then
-            '        s = mFileManager.BindingText("en-GB", "Snomed", s)
-            '        If s <> String.Empty Then
-            '            Me.termLookUp.TermName = s
-            '        End If
-            '    End If
-            'End If
-            'Debug.WriteLine(String.Format("Row paint - Row index:{0}, Visible{1}", e.RowIndex, Me.termLookUp.Visible))
+        End If
+
+        ' RemoveHandler OTSControls.Term.OtsWebService.TerminologyGetPreferredTermsCompleted, AddressOf GetPreferredTermsCompleted
+
+        Debug.WriteLine("handler: " & asynchronousIdentifier & "remove handler " & e.UserState.ToString())
+    End Sub
+
+    Private asynchronousIdentifierGenerator As System.Random = New System.Random()
+    Private asynchronousIdentifier As Integer
+    Private handlerAdded As Boolean = False
+
+    Private Sub dgNodeBindings_RowPostPaint(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellEnter
+        If Not mFileManager.FileLoading Then
+            If (Not dgNodeBindings.CurrentRow Is Nothing) AndAlso (Not TypeOf dgNodeBindings.Rows(e.RowIndex).Cells(0).Value Is System.DBNull) AndAlso (dgNodeBindings.CurrentRow.Index = e.RowIndex) Then
+                Me.SuspendLayout()
+                If SetTermLookUpVisibility(CStr(CType(dgNodeBindings.Rows(e.RowIndex).Cells(0), DataGridViewComboBoxCell).Value)) Then
+                    If Not TypeOf dgNodeBindings.Rows(e.RowIndex).Cells(0).Value Is System.DBNull AndAlso (String.IsNullOrEmpty(termLookUp.TermName)) Then
+                        Me.Cursor = Cursors.WaitCursor
+
+                        Try
+                            'RemoveHandler OTSControls.Term.OtsWebService.TerminologyGetPreferredTermsCompleted, AddressOf GetPreferredTermsCompleted
+
+                            If Not handlerAdded Then
+                                AddHandler OTSControls.Term.OtsWebService.TerminologyGetPreferredTermsCompleted, AddressOf GetPreferredTermsCompleted
+                                handlerAdded = True
+                            End If
+
+                            asynchronousIdentifier = asynchronousIdentifierGenerator.Next
+
+
+                            OTSControls.Term.OtsWebService.TerminologyGetPreferredTermsAsync(termLookUp.TerminologyName, Me.termLookUp.TermLanguage, New String() {CStr(dgNodeBindings.Rows(e.RowIndex).Cells(2).Value)}, asynchronousIdentifier)
+                            Debug.WriteLine("started " & asynchronousIdentifier)
+
+                        Catch ex As Exception
+                            Debug.WriteLine(ex.Message)
+
+
+                        Finally
+                            Me.Cursor = Cursors.Default
+                        End Try
+                    End If
+                End If
+                Me.ResumeLayout()
+            Else
+                'no concept id to look up
+                termLookUp.TermName = ""
+                'If termLookUp.Visible Then
+                '    'Need to display term if there is one
+                '    Dim s As String = CStr(CType(dgNodeBindings.Rows(e.RowIndex).Cells(1), DataGridViewTextBoxCell).Value)
+                '    If s <> String.Empty AndAlso mFileManager.HasTermBindings("en-GB", s) Then
+                '        s = mFileManager.BindingText("en-GB", "Snomed", s)
+                '        If s <> String.Empty Then
+                '            Me.termLookUp.TermName = s
+                '        End If
+                '    End If
+                'End If
+                'Debug.WriteLine(String.Format("Row paint - Row index:{0}, Visible{1}", e.RowIndex, Me.termLookUp.Visible))
+            End If
         End If
     End Sub
 
