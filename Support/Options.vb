@@ -21,7 +21,8 @@ Public Class Options
     Private mDefaultParser As String
     Private mTimerMinutes As Integer = 10
     Private mAllowWebSearch As Boolean
-    Private mArchetypeRepositoryUrl As New Uri("http://archetypes.com.au/archetypefinder/services/ArchetypeFinderBean?wsdl")
+    Private defaultArchetypeRepositoryUrl As String = "http://openehr.org/knowledge/services/ArchetypeFinderBean?wsdl"
+    Private mArchetypeRepositoryUrl As New Uri(defaultArchetypeRepositoryUrl)
     Private mAllowTerminologyLookUp As Boolean
     Private mTerminologyUrl As New Uri("http://ots.oceaninformatics.com/OTS/OTSService.asmx")
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
@@ -376,7 +377,14 @@ Public Class Options
                                 Case "AllowSearchForArchetypesFromWeb"
                                     mAllowWebSearch = Boolean.Parse(y(1).Trim)
                                 Case "SharedRepositoryUrl"
-                                    mArchetypeRepositoryUrl = New Uri(y(1).Trim)
+                                    Dim obsoleteUrl As String = "archetypes.com.au/archetypefinder/services/ArchetypeFinderBean?wsdl"
+                                    Dim url As String = y(1).Trim
+
+                                    If url.EndsWith(obsoleteUrl) Then
+                                        url = defaultArchetypeRepositoryUrl
+                                    End If
+
+                                    mArchetypeRepositoryUrl = New Uri(url)
                                 Case "AllowTerminologyLookUp"
                                     mAllowTerminologyLookUp = Boolean.Parse(y(1).Trim)
                                 Case "AutosaveInterval"

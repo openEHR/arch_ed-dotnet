@@ -1,260 +1,517 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns1="http://Properties.archetypeServlet" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns2="http://model.owl.protegex.smi.stanford.edu" xmlns:impl="http://archetypeServlet" xmlns:intf="http://archetypeServlet" targetNamespace="http://archetypeServlet" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns="http://archetypeServlet" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ax22="http://io.java/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax21="http://net.java/xsd" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://archetypeServlet" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation />
   <wsdl:types>
-    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://archetypeServlet">
-      <xsd:import namespace="http://model.owl.protegex.smi.stanford.edu" />
-      <xsd:import namespace="http://Properties.archetypeServlet" />
-      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
-      <xsd:complexType name="ArrayOf_xsd_anyType">
-        <xsd:complexContent mixed="false">
-          <xsd:restriction base="soapenc:Array">
-            <xsd:attribute wsdl:arrayType="xsd:anyType[]" ref="soapenc:arrayType" />
-          </xsd:restriction>
-        </xsd:complexContent>
-      </xsd:complexType>
-      <xsd:complexType name="ArrayOfString">
-        <xsd:complexContent mixed="false">
-          <xsd:restriction base="soapenc:Array">
-            <xsd:attribute wsdl:arrayType="xsd:string[]" ref="soapenc:arrayType" />
-          </xsd:restriction>
-        </xsd:complexContent>
-      </xsd:complexType>
-    </xsd:schema>
+    <xs:schema xmlns:ax24="http://io.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://net.java/xsd">
+      <xs:import namespace="http://io.java/xsd" />
+      <xs:complexType name="MalformedURLException">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ax24:IOException">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ax23="http://archetypeServlet" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://io.java/xsd">
+      <xs:import namespace="http://archetypeServlet" />
+      <xs:complexType name="IOException">
+        <xs:complexContent mixed="false">
+          <xs:extension base="ax23:Exception">
+            <xs:sequence />
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+    </xs:schema>
+    <xs:schema xmlns:ax26="http://io.java/xsd" xmlns:ax25="http://net.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://archetypeServlet">
+      <xs:import namespace="http://net.java/xsd" />
+      <xs:import namespace="http://io.java/xsd" />
+      <xs:element name="getArchetypeADLURL">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="archetypeId" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypeADLURLResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:complexType name="Exception">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:element name="MalformedURLException">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="MalformedURLException" nillable="true" type="ax25:MalformedURLException" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="IOException">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="IOException" nillable="true" type="ax26:IOException" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypeInADL">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="archetypeId" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypeInADLResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypeADLURLs">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="archetypeIds" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypeADLURLsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypeIds">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="searchParams" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypeIdsResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypeIdsFromPartialId">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="archetypeIdPart" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypeIdsFromPartialIdResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypesInADL">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="archetypeIds" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getArchetypesInADLResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDescriptionForArchetype">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="archetypeId" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="language" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="descriptionTerms" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDescriptionForArchetypeResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDescriptionForArchetypes">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="archetypeIds" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" name="language" nillable="true" type="xs:string" />
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="descriptionTerms" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="getDescriptionForArchetypesResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="return" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:schema>
   </wsdl:types>
-  <wsdl:message name="setOwlModelResponse" />
-  <wsdl:message name="getArchetypeIdsResponse">
-    <wsdl:part name="getArchetypeIdsReturn" type="intf:ArrayOfString" />
+  <wsdl:message name="getArchetypeADLURLsRequest">
+    <wsdl:part name="parameters" element="ns:getArchetypeADLURLs" />
   </wsdl:message>
-  <wsdl:message name="setExcludedParametersForSearchModelResponse" />
-  <wsdl:message name="setExcludedParametersForSearchModelRequest">
-    <wsdl:part name="excludedParametersForSearch" type="intf:ArrayOf_xsd_anyType" />
+  <wsdl:message name="getArchetypeADLURLsResponse">
+    <wsdl:part name="parameters" element="ns:getArchetypeADLURLsResponse" />
   </wsdl:message>
-  <wsdl:message name="getArchetypeADLURL_langRequest">
-    <wsdl:part name="archetypeId" type="xsd:string" />
-    <wsdl:part name="language" type="xsd:string" />
+  <wsdl:message name="getArchetypesInADLRequest">
+    <wsdl:part name="parameters" element="ns:getArchetypesInADL" />
   </wsdl:message>
-  <wsdl:message name="getArchetypeHTMLURL_langRequest">
-    <wsdl:part name="archetypeId" type="xsd:string" />
-    <wsdl:part name="language" type="xsd:string" />
+  <wsdl:message name="getArchetypesInADLResponse">
+    <wsdl:part name="parameters" element="ns:getArchetypesInADLResponse" />
   </wsdl:message>
-  <wsdl:message name="getArchetypeHTMLURLRequest">
-    <wsdl:part name="archetypeId" type="xsd:string" />
+  <wsdl:message name="MalformedURLException">
+    <wsdl:part name="parameters" element="ns:MalformedURLException" />
   </wsdl:message>
-  <wsdl:message name="getArchetypeHTMLURL_langResponse">
-    <wsdl:part name="getArchetypeHTMLURL_langReturn" type="xsd:string" />
-  </wsdl:message>
-  <wsdl:message name="getArchetypeInHTMLRequest">
-    <wsdl:part name="archetypeId" type="xsd:string" />
-  </wsdl:message>
-  <wsdl:message name="getArchetypeADLURLResponse">
-    <wsdl:part name="getArchetypeADLURLReturn" type="xsd:string" />
-  </wsdl:message>
-  <wsdl:message name="getArchetypeIdsFromPartialIdResponse">
-    <wsdl:part name="getArchetypeIdsFromPartialIdReturn" type="intf:ArrayOfString" />
-  </wsdl:message>
-  <wsdl:message name="getArchetypeADLURLRequest">
-    <wsdl:part name="archetypeId" type="xsd:string" />
-  </wsdl:message>
-  <wsdl:message name="getArchetypeInADLResponse">
-    <wsdl:part name="getArchetypeInADLReturn" type="xsd:string" />
+  <wsdl:message name="IOException">
+    <wsdl:part name="parameters" element="ns:IOException" />
   </wsdl:message>
   <wsdl:message name="getArchetypeInADLRequest">
-    <wsdl:part name="archetypeId" type="xsd:string" />
+    <wsdl:part name="parameters" element="ns:getArchetypeInADL" />
   </wsdl:message>
-  <wsdl:message name="getArchetypeInHTMLResponse">
-    <wsdl:part name="getArchetypeInHTMLReturn" type="xsd:string" />
+  <wsdl:message name="getArchetypeInADLResponse">
+    <wsdl:part name="parameters" element="ns:getArchetypeInADLResponse" />
   </wsdl:message>
-  <wsdl:message name="getArchetypeADLURL_langResponse">
-    <wsdl:part name="getArchetypeADLURL_langReturn" type="xsd:string" />
+  <wsdl:message name="getDescriptionForArchetypesRequest">
+    <wsdl:part name="parameters" element="ns:getDescriptionForArchetypes" />
   </wsdl:message>
-  <wsdl:message name="getDescriptionForArchetypeRequest">
-    <wsdl:part name="archetypeId" type="xsd:string" />
-    <wsdl:part name="language" type="xsd:string" />
-    <wsdl:part name="descriptionTerms" type="intf:ArrayOfString" />
-  </wsdl:message>
-  <wsdl:message name="getDescriptionForArchetypeResponse">
-    <wsdl:part name="getDescriptionForArchetypeReturn" type="intf:ArrayOfString" />
-  </wsdl:message>
-  <wsdl:message name="setMyServletPropertiesRequest">
-    <wsdl:part name="myServletProperties" type="xsd:anyType" />
-  </wsdl:message>
-  <wsdl:message name="setOwlModelRequest">
-    <wsdl:part name="owlModel" type="xsd:anyType" />
-  </wsdl:message>
-  <wsdl:message name="getArchetypeHTMLURLResponse">
-    <wsdl:part name="getArchetypeHTMLURLReturn" type="xsd:string" />
+  <wsdl:message name="getDescriptionForArchetypesResponse">
+    <wsdl:part name="parameters" element="ns:getDescriptionForArchetypesResponse" />
   </wsdl:message>
   <wsdl:message name="getArchetypeIdsRequest">
-    <wsdl:part name="searchParams" type="intf:ArrayOfString" />
+    <wsdl:part name="parameters" element="ns:getArchetypeIds" />
   </wsdl:message>
-  <wsdl:message name="setMyServletPropertiesResponse" />
+  <wsdl:message name="getArchetypeIdsResponse">
+    <wsdl:part name="parameters" element="ns:getArchetypeIdsResponse" />
+  </wsdl:message>
+  <wsdl:message name="getDescriptionForArchetypeRequest">
+    <wsdl:part name="parameters" element="ns:getDescriptionForArchetype" />
+  </wsdl:message>
+  <wsdl:message name="getDescriptionForArchetypeResponse">
+    <wsdl:part name="parameters" element="ns:getDescriptionForArchetypeResponse" />
+  </wsdl:message>
   <wsdl:message name="getArchetypeIdsFromPartialIdRequest">
-    <wsdl:part name="archetypeIdPart" type="xsd:string" />
+    <wsdl:part name="parameters" element="ns:getArchetypeIdsFromPartialId" />
   </wsdl:message>
-  <wsdl:portType name="ArchetypeFinderBean">
-    <wsdl:operation name="setMyServletProperties" parameterOrder="myServletProperties">
-      <wsdl:input name="setMyServletPropertiesRequest" message="intf:setMyServletPropertiesRequest" />
-      <wsdl:output name="setMyServletPropertiesResponse" message="intf:setMyServletPropertiesResponse" />
+  <wsdl:message name="getArchetypeIdsFromPartialIdResponse">
+    <wsdl:part name="parameters" element="ns:getArchetypeIdsFromPartialIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="getArchetypeADLURLRequest">
+    <wsdl:part name="parameters" element="ns:getArchetypeADLURL" />
+  </wsdl:message>
+  <wsdl:message name="getArchetypeADLURLResponse">
+    <wsdl:part name="parameters" element="ns:getArchetypeADLURLResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ArchetypeFinderBeanPortType">
+    <wsdl:operation name="getArchetypeADLURLs">
+      <wsdl:input wsaw:Action="urn:getArchetypeADLURLs" message="ns:getArchetypeADLURLsRequest" />
+      <wsdl:output wsaw:Action="urn:getArchetypeADLURLsResponse" message="ns:getArchetypeADLURLsResponse" />
     </wsdl:operation>
-    <wsdl:operation name="setOwlModel" parameterOrder="owlModel">
-      <wsdl:input name="setOwlModelRequest" message="intf:setOwlModelRequest" />
-      <wsdl:output name="setOwlModelResponse" message="intf:setOwlModelResponse" />
+    <wsdl:operation name="getArchetypesInADL">
+      <wsdl:input wsaw:Action="urn:getArchetypesInADL" message="ns:getArchetypesInADLRequest" />
+      <wsdl:output wsaw:Action="urn:getArchetypesInADLResponse" message="ns:getArchetypesInADLResponse" />
+      <wsdl:fault wsaw:Action="urn:getArchetypesInADLMalformedURLException" name="MalformedURLException" message="ns:MalformedURLException" />
+      <wsdl:fault wsaw:Action="urn:getArchetypesInADLIOException" name="IOException" message="ns:IOException" />
     </wsdl:operation>
-    <wsdl:operation name="setExcludedParametersForSearchModel" parameterOrder="excludedParametersForSearch">
-      <wsdl:input name="setExcludedParametersForSearchModelRequest" message="intf:setExcludedParametersForSearchModelRequest" />
-      <wsdl:output name="setExcludedParametersForSearchModelResponse" message="intf:setExcludedParametersForSearchModelResponse" />
+    <wsdl:operation name="getArchetypeInADL">
+      <wsdl:input wsaw:Action="urn:getArchetypeInADL" message="ns:getArchetypeInADLRequest" />
+      <wsdl:output wsaw:Action="urn:getArchetypeInADLResponse" message="ns:getArchetypeInADLResponse" />
+      <wsdl:fault wsaw:Action="urn:getArchetypeInADLMalformedURLException" name="MalformedURLException" message="ns:MalformedURLException" />
+      <wsdl:fault wsaw:Action="urn:getArchetypeInADLIOException" name="IOException" message="ns:IOException" />
     </wsdl:operation>
-    <wsdl:operation name="getArchetypeIdsFromPartialId" parameterOrder="archetypeIdPart">
-      <wsdl:input name="getArchetypeIdsFromPartialIdRequest" message="intf:getArchetypeIdsFromPartialIdRequest" />
-      <wsdl:output name="getArchetypeIdsFromPartialIdResponse" message="intf:getArchetypeIdsFromPartialIdResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="getArchetypeIds" parameterOrder="searchParams">
-      <wsdl:input name="getArchetypeIdsRequest" message="intf:getArchetypeIdsRequest" />
-      <wsdl:output name="getArchetypeIdsResponse" message="intf:getArchetypeIdsResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="getDescriptionForArchetype" parameterOrder="archetypeId language descriptionTerms">
-      <wsdl:input name="getDescriptionForArchetypeRequest" message="intf:getDescriptionForArchetypeRequest" />
-      <wsdl:output name="getDescriptionForArchetypeResponse" message="intf:getDescriptionForArchetypeResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="getArchetypeInADL" parameterOrder="archetypeId">
-      <wsdl:input name="getArchetypeInADLRequest" message="intf:getArchetypeInADLRequest" />
-      <wsdl:output name="getArchetypeInADLResponse" message="intf:getArchetypeInADLResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="getArchetypeInHTML" parameterOrder="archetypeId">
-      <wsdl:input name="getArchetypeInHTMLRequest" message="intf:getArchetypeInHTMLRequest" />
-      <wsdl:output name="getArchetypeInHTMLResponse" message="intf:getArchetypeInHTMLResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="getArchetypeHTMLURL" parameterOrder="archetypeId">
-      <wsdl:input name="getArchetypeHTMLURLRequest" message="intf:getArchetypeHTMLURLRequest" />
-      <wsdl:output name="getArchetypeHTMLURLResponse" message="intf:getArchetypeHTMLURLResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="getArchetypeHTMLURL_lang" parameterOrder="archetypeId language">
-      <wsdl:input name="getArchetypeHTMLURL_langRequest" message="intf:getArchetypeHTMLURL_langRequest" />
-      <wsdl:output name="getArchetypeHTMLURL_langResponse" message="intf:getArchetypeHTMLURL_langResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="getArchetypeADLURL" parameterOrder="archetypeId">
-      <wsdl:input name="getArchetypeADLURLRequest" message="intf:getArchetypeADLURLRequest" />
-      <wsdl:output name="getArchetypeADLURLResponse" message="intf:getArchetypeADLURLResponse" />
-    </wsdl:operation>
-    <wsdl:operation name="getArchetypeADLURL_lang" parameterOrder="archetypeId language">
-      <wsdl:input name="getArchetypeADLURL_langRequest" message="intf:getArchetypeADLURL_langRequest" />
-      <wsdl:output name="getArchetypeADLURL_langResponse" message="intf:getArchetypeADLURL_langResponse" />
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="ArchetypeFinderBeanSoapBinding" type="intf:ArchetypeFinderBean">
-    <wsdlsoap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
-    <wsdl:operation name="setMyServletProperties">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="setMyServletPropertiesRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:input>
-      <wsdl:output name="setMyServletPropertiesResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="setOwlModel">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="setOwlModelRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:input>
-      <wsdl:output name="setOwlModelResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="setExcludedParametersForSearchModel">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="setExcludedParametersForSearchModelRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:input>
-      <wsdl:output name="setExcludedParametersForSearchModelResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="getArchetypeIdsFromPartialId">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="getArchetypeIdsFromPartialIdRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:input>
-      <wsdl:output name="getArchetypeIdsFromPartialIdResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:output>
+    <wsdl:operation name="getDescriptionForArchetypes">
+      <wsdl:input wsaw:Action="urn:getDescriptionForArchetypes" message="ns:getDescriptionForArchetypesRequest" />
+      <wsdl:output wsaw:Action="urn:getDescriptionForArchetypesResponse" message="ns:getDescriptionForArchetypesResponse" />
     </wsdl:operation>
     <wsdl:operation name="getArchetypeIds">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="getArchetypeIdsRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:input>
-      <wsdl:output name="getArchetypeIdsResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:output>
+      <wsdl:input wsaw:Action="urn:getArchetypeIds" message="ns:getArchetypeIdsRequest" />
+      <wsdl:output wsaw:Action="urn:getArchetypeIdsResponse" message="ns:getArchetypeIdsResponse" />
     </wsdl:operation>
     <wsdl:operation name="getDescriptionForArchetype">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="getDescriptionForArchetypeRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      <wsdl:input wsaw:Action="urn:getDescriptionForArchetype" message="ns:getDescriptionForArchetypeRequest" />
+      <wsdl:output wsaw:Action="urn:getDescriptionForArchetypeResponse" message="ns:getDescriptionForArchetypeResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeIdsFromPartialId">
+      <wsdl:input wsaw:Action="urn:getArchetypeIdsFromPartialId" message="ns:getArchetypeIdsFromPartialIdRequest" />
+      <wsdl:output wsaw:Action="urn:getArchetypeIdsFromPartialIdResponse" message="ns:getArchetypeIdsFromPartialIdResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeADLURL">
+      <wsdl:input wsaw:Action="urn:getArchetypeADLURL" message="ns:getArchetypeADLURLRequest" />
+      <wsdl:output wsaw:Action="urn:getArchetypeADLURLResponse" message="ns:getArchetypeADLURLResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ArchetypeFinderBeanSoap11Binding" type="ns:ArchetypeFinderBeanPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getArchetypeADLURLs">
+      <soap:operation soapAction="urn:getArchetypeADLURLs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
       </wsdl:input>
-      <wsdl:output name="getDescriptionForArchetypeResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      <wsdl:output>
+        <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getArchetypeInADL">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="getArchetypeInADLRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      <soap:operation soapAction="urn:getArchetypeInADL" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
       </wsdl:input>
-      <wsdl:output name="getArchetypeInADLResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MalformedURLException">
+        <soap:fault use="literal" name="MalformedURLException" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="IOException">
+        <soap:fault use="literal" name="IOException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypesInADL">
+      <soap:operation soapAction="urn:getArchetypesInADL" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MalformedURLException">
+        <soap:fault use="literal" name="MalformedURLException" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="IOException">
+        <soap:fault use="literal" name="IOException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeIds">
+      <soap:operation soapAction="urn:getArchetypeIds" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="getArchetypeInHTML">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="getArchetypeInHTMLRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <wsdl:operation name="getDescriptionForArchetypes">
+      <soap:operation soapAction="urn:getDescriptionForArchetypes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
       </wsdl:input>
-      <wsdl:output name="getArchetypeInHTMLResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      <wsdl:output>
+        <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="getArchetypeHTMLURL">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="getArchetypeHTMLURLRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <wsdl:operation name="getDescriptionForArchetype">
+      <soap:operation soapAction="urn:getDescriptionForArchetype" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
       </wsdl:input>
-      <wsdl:output name="getArchetypeHTMLURLResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      <wsdl:output>
+        <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="getArchetypeHTMLURL_lang">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="getArchetypeHTMLURL_langRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+    <wsdl:operation name="getArchetypeIdsFromPartialId">
+      <soap:operation soapAction="urn:getArchetypeIdsFromPartialId" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
       </wsdl:input>
-      <wsdl:output name="getArchetypeHTMLURL_langResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      <wsdl:output>
+        <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="getArchetypeADLURL">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="getArchetypeADLURLRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      <soap:operation soapAction="urn:getArchetypeADLURL" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
       </wsdl:input>
-      <wsdl:output name="getArchetypeADLURLResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="getArchetypeADLURL_lang">
-      <wsdlsoap:operation soapAction="" />
-      <wsdl:input name="getArchetypeADLURL_langRequest">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-      </wsdl:input>
-      <wsdl:output name="getArchetypeADLURL_langResponse">
-        <wsdlsoap:body use="encoded" namespace="http://archetypeServlet" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      <wsdl:output>
+        <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="ArchetypeFinderBeanService">
-    <wsdl:port name="ArchetypeFinderBean" binding="intf:ArchetypeFinderBeanSoapBinding">
-      <wsdlsoap:address location="http://archetypes.com.au/archetypefinder/services/ArchetypeFinderBean" />
+  <wsdl:binding name="ArchetypeFinderBeanSoap12Binding" type="ns:ArchetypeFinderBeanPortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getArchetypeADLURLs">
+      <soap12:operation soapAction="urn:getArchetypeADLURLs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeInADL">
+      <soap12:operation soapAction="urn:getArchetypeInADL" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MalformedURLException">
+        <soap12:fault use="literal" name="MalformedURLException" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="IOException">
+        <soap12:fault use="literal" name="IOException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypesInADL">
+      <soap12:operation soapAction="urn:getArchetypesInADL" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="MalformedURLException">
+        <soap12:fault use="literal" name="MalformedURLException" namespace="" />
+      </wsdl:fault>
+      <wsdl:fault name="IOException">
+        <soap12:fault use="literal" name="IOException" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeIds">
+      <soap12:operation soapAction="urn:getArchetypeIds" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDescriptionForArchetypes">
+      <soap12:operation soapAction="urn:getDescriptionForArchetypes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDescriptionForArchetype">
+      <soap12:operation soapAction="urn:getDescriptionForArchetype" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeIdsFromPartialId">
+      <soap12:operation soapAction="urn:getArchetypeIdsFromPartialId" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeADLURL">
+      <soap12:operation soapAction="urn:getArchetypeADLURL" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ArchetypeFinderBeanHttpBinding" type="ns:ArchetypeFinderBeanPortType">
+    <http:binding verb="POST" />
+    <wsdl:operation name="getArchetypeADLURLs">
+      <http:operation location="ArchetypeFinderBean/getArchetypeADLURLs" />
+      <wsdl:input>
+        <mime:content part="getArchetypeADLURLs" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getArchetypeADLURLs" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeInADL">
+      <http:operation location="ArchetypeFinderBean/getArchetypeInADL" />
+      <wsdl:input>
+        <mime:content part="getArchetypeInADL" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getArchetypeInADL" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypesInADL">
+      <http:operation location="ArchetypeFinderBean/getArchetypesInADL" />
+      <wsdl:input>
+        <mime:content part="getArchetypesInADL" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getArchetypesInADL" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeIds">
+      <http:operation location="ArchetypeFinderBean/getArchetypeIds" />
+      <wsdl:input>
+        <mime:content part="getArchetypeIds" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getArchetypeIds" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDescriptionForArchetypes">
+      <http:operation location="ArchetypeFinderBean/getDescriptionForArchetypes" />
+      <wsdl:input>
+        <mime:content part="getDescriptionForArchetypes" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getDescriptionForArchetypes" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDescriptionForArchetype">
+      <http:operation location="ArchetypeFinderBean/getDescriptionForArchetype" />
+      <wsdl:input>
+        <mime:content part="getDescriptionForArchetype" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getDescriptionForArchetype" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeIdsFromPartialId">
+      <http:operation location="ArchetypeFinderBean/getArchetypeIdsFromPartialId" />
+      <wsdl:input>
+        <mime:content part="getArchetypeIdsFromPartialId" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getArchetypeIdsFromPartialId" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArchetypeADLURL">
+      <http:operation location="ArchetypeFinderBean/getArchetypeADLURL" />
+      <wsdl:input>
+        <mime:content part="getArchetypeADLURL" type="text/xml" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="getArchetypeADLURL" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ArchetypeFinderBean">
+    <wsdl:port name="ArchetypeFinderBeanHttpSoap11Endpoint" binding="ns:ArchetypeFinderBeanSoap11Binding">
+      <soap:address location="http://128.40.182.18:80/knowledge/services/ArchetypeFinderBean.ArchetypeFinderBeanHttpSoap11Endpoint" />
+    </wsdl:port>
+    <wsdl:port name="ArchetypeFinderBeanHttpSoap12Endpoint" binding="ns:ArchetypeFinderBeanSoap12Binding">
+      <soap12:address location="http://128.40.182.18:80/knowledge/services/ArchetypeFinderBean.ArchetypeFinderBeanHttpSoap12Endpoint" />
+    </wsdl:port>
+    <wsdl:port name="ArchetypeFinderBeanHttpEndpoint" binding="ns:ArchetypeFinderBeanHttpBinding">
+      <http:address location="http://128.40.182.18:80/knowledge/services/ArchetypeFinderBean.ArchetypeFinderBeanHttpEndpoint" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
