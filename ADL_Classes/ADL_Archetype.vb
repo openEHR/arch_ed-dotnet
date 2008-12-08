@@ -772,14 +772,10 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildSlot(ByVal slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT, ByVal sl As Constraint_Slot)
-            Dim pattern As New System.Text.StringBuilder()
-            Dim classPrefix As String = ""
-
             If sl.hasSlots Then
-                If Not ReferenceModel.IsAbstract(sl.RM_ClassType) Then
-                    ' ids will be clipped
-                    classPrefix = String.Format("{0}-{1}\.", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(sl.RM_ClassType))
-                End If
+                Dim pattern As New System.Text.StringBuilder()
+                Dim rmNamePrefix As String = ReferenceModel.ReferenceModelName & "-"
+                Dim classPrefix As String = rmNamePrefix & ReferenceModel.RM_StructureName(sl.RM_ClassType) & "\."
 
                 If sl.IncludeAll Then
                     slot.add_include(MakeAssertion("archetype_id/value", ".*"))
@@ -789,7 +785,11 @@ Namespace ArchetypeEditor.ADL_Classes
                             pattern.Append("|")
                         End If
 
-                        pattern.AppendFormat("{0}{1}", classPrefix, s)
+                        If Not s.StartsWith(rmNamePrefix) Then
+                            pattern.Append(classPrefix)
+                        End If
+
+                        pattern.Append(s)
                     Next
 
                     If pattern.Length > 0 Then
@@ -810,7 +810,11 @@ Namespace ArchetypeEditor.ADL_Classes
                             pattern.Append("|")
                         End If
 
-                        pattern.AppendFormat("{0}{1}", classPrefix, s)
+                        If Not s.StartsWith(rmNamePrefix) Then
+                            pattern.Append(classPrefix)
+                        End If
+
+                        pattern.Append(s)
                     Next
 
                     If pattern.Length > 0 Then

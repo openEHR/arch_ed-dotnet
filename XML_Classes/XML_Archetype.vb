@@ -576,7 +576,6 @@ Namespace ArchetypeEditor.XML_Classes
             Dim embeddedState As Boolean = False
 
             Try
-
                 events = BuildHistory(a_history, RelNode)
 
                 Dim a_rm As RmStructure = Nothing
@@ -1168,36 +1167,32 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildSlot(ByRef slot As XMLParser.ARCHETYPE_SLOT, ByVal sl As Constraint_Slot)
-            Dim pattern As New System.Text.StringBuilder()
-            Dim classPreFix As String = ""
-
             If sl.hasSlots Then
-                If Not ReferenceModel.IsAbstract(sl.RM_ClassType) Then
-                    ' ids will be clipped
-                    classPreFix = String.Format("{0}-{1}.", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(sl.RM_ClassType))
-                End If
+                Dim pattern As New System.Text.StringBuilder()
+                Dim rmNamePrefix As String = ReferenceModel.ReferenceModelName & "-"
+                Dim classPrefix As String = rmNamePrefix & ReferenceModel.RM_StructureName(sl.RM_ClassType) & "\."
 
                 If sl.IncludeAll Then
                     mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
-                Else
-                    If sl.Include.Items.GetLength(0) > 0 Then
-                        For Each s As String In sl.Include
-                            If pattern.ToString() = "" Then
-                                pattern.AppendFormat("{0}{1}", classPreFix, s)
-                            Else
-                                pattern.AppendFormat("|{0}{1}", classPreFix, s)
-                            End If
-                        Next
+                ElseIf sl.Include.Items.GetLength(0) > 0 Then
+                    For Each s As String In sl.Include
+                        If pattern.Length > 0 Then
+                            pattern.Append("|")
+                        End If
 
-                        If pattern.ToString <> "" Then
-                            mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", pattern.ToString()))
+                        If Not s.StartsWith(rmNamePrefix) Then
+                            pattern.Append(classPrefix)
                         End If
-                    Else
-                        If sl.Exclude.Items.GetLength(0) > 0 Then
-                            ' have specific exclusions but no inclusions
-                            mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
-                        End If
+
+                        pattern.Append(s)
+                    Next
+
+                    If pattern.Length > 0 Then
+                        mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", pattern.ToString()))
                     End If
+                ElseIf sl.Exclude.Items.GetLength(0) > 0 Then
+                    ' have specific exclusions but no inclusions
+                    mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
                 End If
 
                 pattern = New System.Text.StringBuilder()
@@ -1206,58 +1201,24 @@ Namespace ArchetypeEditor.XML_Classes
                     mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
                 Else
                     For Each s As String In sl.Exclude
-                        If pattern.ToString() = "" Then
-                            pattern.AppendFormat("{0}{1}", classPreFix, s)
-                        Else
-                            pattern.AppendFormat("|{0}{1}", classPreFix, s)
+                        If pattern.Length > 0 Then
+                            pattern.Append("|")
                         End If
+
+                        If Not s.StartsWith(rmNamePrefix) Then
+                            pattern.Append(classPrefix)
+                        End If
+
+                        pattern.Append(s)
                     Next
 
-                    If pattern.ToString <> "" Then
+                    If pattern.Length > 0 Then
                         mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", pattern.ToString))
                     End If
                 End If
             Else
                 mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
             End If
-
-            'If sl.hasSlots Then
-            '    If sl.IncludeAll Then
-            '        mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
-            '    Else
-            '        For Each s As String In sl.Include
-            '            Dim escapedString As String
-            '            Dim i As Integer
-            '            'Must have at least one escaped . or it is not valid unless it is the end
-            '            i = s.IndexOf("\")
-            '            If i > -1 AndAlso i <> (s.Length - 1) Then
-            '                escapedString = s
-            '            Else
-            '                escapedString = s.Replace(".", "\.")
-            '            End If
-            '            mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", escapedString))
-            '        Next
-            '    End If
-            '    If sl.ExcludeAll Then
-            '        mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
-            '    Else
-            '        For Each s As String In sl.Exclude
-            '            Dim escapedString As String
-            '            Dim i As Integer
-            '            'Must have at least one escaped . or it is not valid unless it is the end
-            '            i = s.IndexOf("\")
-            '            If i > -1 AndAlso i <> (s.Length - 1) Then
-            '                escapedString = s
-            '            Else
-            '                escapedString = s.Replace(".", "\.")
-            '            End If
-            '            mAomFactory.AddExcludeToSlot(slot, MakeAssertion("archetype_id/value", escapedString))
-            '        Next
-            '    End If
-            'Else
-            '    mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
-            'End If
-
         End Sub
 
         Private Sub BuildDuration(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Duration)
