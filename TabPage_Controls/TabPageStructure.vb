@@ -896,61 +896,42 @@ Public Class TabPageStructure
         End Get
     End Property
 
-    Public Sub ProcessStructure(ByVal a_slot As RmSlot)
+    Public Sub ProcessStructure(ByVal slot As RmSlot)
         mIsLoading = True
         mIsEmbedded = True
-        mEmbeddedSlot = New ArchetypeNodeAnonymous(a_slot)
+        mEmbeddedSlot = New ArchetypeNodeAnonymous(slot)
 
-        'setup message prompt
-        'JAR: 12APR07, EDT-9 include the name of the embedded archetype if a single embedded archetype exists
-        Dim msg As String
-        msg = Filemanager.GetOpenEhrTerm(606, "Load embedded archetype")
+        Dim sl As Constraint_Slot = slot.SlotConstraint
+        mFileManager = New FileManagerLocal
+        PanelDetails.LocalFileManager = mFileManager
+        mFileManager.ObjectToSave = Me
 
-        If a_slot.SlotConstraint.Include.Count = 1 Then
-            msg = msg & " '" & ReferenceModel.ReferenceModelName & "-" & _
-                ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType) & _
-                "." & a_slot.SlotConstraint.Include.Item(0).Replace("\", "") & ".adl'"
-        End If
+        If OpenArchetypeForSlot(slot, OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure") Then
+            Filemanager.AddEmbedded(mFileManager)
 
-        If MessageBox.Show(msg, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-            mFileManager = New FileManagerLocal
-
-            ' set the filemanager on the Details Panel as well
-            PanelDetails.LocalFileManager = mFileManager
-
-            mFileManager.ObjectToSave = Me
-
-            If OpenArchetypeForSlot(a_slot, OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure") Then
-                Filemanager.AddEmbedded(mFileManager)
-
-                'Hide context menu to change structure
-                If Not mArchetypeControl Is Nothing Then
-                    mArchetypeControl.ShowChangeStructureMenu = False
-                    Translate()
-                End If
-
-                mIsLoading = False
-                Return
-            Else
-                mFileManager = Filemanager.Master
+            'Hide context menu to change structure
+            If Not mArchetypeControl Is Nothing Then
+                mArchetypeControl.ShowChangeStructureMenu = False
+                Translate()
             End If
+        Else
+            mFileManager = Filemanager.Master
+            chkEmbedded.Checked = True
+
+            Select Case slot.SlotConstraint.RM_ClassType
+                Case StructureType.Single
+                    comboStructure.SelectedIndex = 0
+                Case StructureType.List
+                    comboStructure.SelectedIndex = 1
+                Case StructureType.Tree
+                    comboStructure.SelectedIndex = 2
+                Case StructureType.Table
+                    comboStructure.SelectedIndex = 3
+            End Select
+
+            Translate()
         End If
 
-        ' set for slot unless has an embedded archetype
-        chkEmbedded.Checked = True
-
-        Select Case a_slot.SlotConstraint.RM_ClassType
-            Case StructureType.Single
-                comboStructure.SelectedIndex = 0
-            Case StructureType.List
-                comboStructure.SelectedIndex = 1
-            Case StructureType.Tree
-                comboStructure.SelectedIndex = 2
-            Case StructureType.Table
-                comboStructure.SelectedIndex = 3
-        End Select
-
-        Translate()
         mIsLoading = False
     End Sub
 
@@ -1005,7 +986,7 @@ Public Class TabPageStructure
 
         Select Case frm.ListChoose.Items.Count
             Case 0
-                Dim question As String = String.Format(AE_Constants.Instance.NoArchetypeMatches, path) & vbCrLf & vbCrLf & AE_Constants.Instance.Locate_file_yourself & "?"
+                Dim question As String = String.Format(AE_Constants.Instance.NoEmbeddedArchetypeMatches, path) & vbCrLf & vbCrLf & AE_Constants.Instance.Locate_file_yourself & "?"
 
                 If MessageBox.Show(question, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
                     Dim dlg As New FolderBrowserDialog
@@ -1015,9 +996,15 @@ Public Class TabPageStructure
                     End If
                 End If
             Case 1
-                OpenArchetype(IO.Path.Combine(path, frm.ListChoose.Items(0)))
-                OpenArchetypeForSlot = mFileManager.ArchetypeAvailable
+                Dim question As String = Filemanager.GetOpenEhrTerm(606, "Load embedded archetype") & vbCrLf & frm.ListChoose.Items(0)
+
+                If MessageBox.Show(question, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                    OpenArchetype(IO.Path.Combine(path, frm.ListChoose.Items(0)))
+                    OpenArchetypeForSlot = mFileManager.ArchetypeAvailable
+                End If
             Case Else
+                frm.LblForm.Text = Filemanager.GetOpenEhrTerm(605, "Embedded archetype")
+
                 If frm.ShowDialog = Windows.Forms.DialogResult.OK And frm.ListChoose.SelectedItem IsNot Nothing Then
                     OpenArchetype(IO.Path.Combine(path, CStr(frm.ListChoose.SelectedItem)))
                     OpenArchetypeForSlot = mFileManager.ArchetypeAvailable

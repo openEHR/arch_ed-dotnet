@@ -5669,7 +5669,7 @@
   <Concept Language="en" ConceptID="668" Rubric="Select one unit from the left and one from the right:" />
   <Concept Language="en" ConceptID="669" Rubric="Use specialisations too?" />
   <Concept Language="en" ConceptID="670" Rubric="Time Fraction" />
-  <Concept Language="en" ConceptID="671" Rubric="No archetype matches at {0}" />
+  <Concept Language="en" ConceptID="671" Rubric="No embedded archetype matches at {0}" />
   <Concept Language="en" ConceptID="672" Rubric="Name this slot?" />
   <Concept Language="en" ConceptID="673" Rubric="Item" />
   <Concept Language="en" ConceptID="674" Rubric="Care entry" />
@@ -5713,7 +5713,7 @@
   <Concept Language="de" ConceptID="668" Rubric="Bitte eine Einheit von der linken und eine von der rechten Seite auswählen" />
   <Concept Language="de" ConceptID="669" Rubric="Auch Spezialierungen verwenden?" />
   <Concept Language="de" ConceptID="670" Rubric="Bruchteil (Zeit)" />
-  <Concept Language="de" ConceptID="671" Rubric="Kein Archetype passt zu {0}" />
+  <Concept Language="de" ConceptID="671" Rubric="Kein eingebetteter Archetyp passt zu {0}" />
   <Concept Language="de" ConceptID="672" Rubric="Diesen Slot bennenen?" />
   <Concept Language="de" ConceptID="673" Rubric="Item" />
   <Concept Language="de" ConceptID="674" Rubric="Versorgungseintrag (Care entry)" />
