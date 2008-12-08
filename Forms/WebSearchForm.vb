@@ -30,10 +30,7 @@ Public Class WebSearchForm
     Private archetypeTable As New TableLayoutPanel
     Public chosen As Boolean = False
 
-    ' Function handles all actions that happen when the user clicks the button "Search" within this form
     Private Sub btnSearch_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSearch.Click
-
-        ' Is the textfield empty, a messageBox asks the user to provide a search parameter first
         If txtTerm.Text = "" Then
             Dim message As String = Filemanager.GetOpenEhrTerm(665, "Please enter your search parameter")
             MessageBox.Show(message)
@@ -46,9 +43,7 @@ Public Class WebSearchForm
             Try
                 Cursor = Cursors.WaitCursor
                 listViewArchetypes.Clear()
-
                 ArchetypeService = New org.openehr.ArchetypeFinderBean()
-                'get the required Archetypes depending on the radiobutton that is checked
 
                 Select Case comboSearch.SelectedIndex
                     Case 1 ' ArchetypeID
@@ -77,29 +72,21 @@ Public Class WebSearchForm
                 Else
                     lblNum.Text = ArchetypeIDs.Length.ToString()
                     If Me.listViewArchetypes.Columns.Count = 0 Then
-
                         ' Create and initialize column headers for ListViewArchetypes.
-
                         Dim columnHeader0 As New ColumnHeader()
-
                         columnHeader0.Text = Filemanager.GetOpenEhrTerm(54, "Concept")
                         columnHeader0.Width = 250
 
                         Dim columnHeader1 As New ColumnHeader()
-
                         columnHeader1.Width = 100
                         columnHeader1.Text = Filemanager.GetOpenEhrTerm(53, "Version")
 
                         Dim columnHeader2 As New ColumnHeader()
-
                         columnHeader2.Text = "Id"
                         columnHeader2.Width = 400
 
-
                         ' Add the column headers to CustomersListView.
-
-                        listViewArchetypes.Columns.AddRange(New ColumnHeader() _
-                            {columnHeader0, columnHeader1, columnHeader2})
+                        listViewArchetypes.Columns.AddRange(New ColumnHeader() {columnHeader0, columnHeader1, columnHeader2})
                     End If
 
                     listViewArchetypes.ShowGroups = True
@@ -165,27 +152,23 @@ Public Class WebSearchForm
                         'End If
 
                         Dim s As String() = New String() {archId.Concept.Replace("_", " "), archId.VersionAsString(), id}
-
                         listViewArchetypes.Items.Add(New ListViewItem(s, imageIndex, lvg))
                     Next
 
                     listViewArchetypes.Focus()
                     listViewArchetypes.Items(0).Selected = True
                     AcceptButton = butOK
-                    'Me.setResults(ArchetypeIDs)
                 End If
-
-                'throw exception if ArchetypeFinder Web Services can not be invoked
             Catch ex As System.Net.WebException
-                Dim message As String = Filemanager.GetOpenEhrTerm(664, "Network error")
+                Dim message As String = Filemanager.GetOpenEhrTerm(664, "Network error") + Environment.NewLine + ex.Message
                 MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Me.Close()
-                'Catch ex2 As System.Web.Services.Protocols.SoapException
-                '    Dim message2 As String = Filemanager.GetOpenEhrTerm(664, "Service not available")
-                '    MessageBox.Show(message2, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-                '    Me.Close()
+                Close()
+            Catch ex2 As System.Web.Services.Protocols.SoapException
+                Dim message As String = Filemanager.GetOpenEhrTerm(664, "Network error") + Environment.NewLine + ex2.Message
+                MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Close()
             Finally
-                Me.Cursor = Cursors.Default
+                Cursor = Cursors.Default
             End Try
         End If
     End Sub
@@ -251,12 +234,13 @@ Public Class WebSearchForm
     End Property
 
     Private Sub txtTerm_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTerm.TextChanged
-        If Not Me.AcceptButton Is btnSearch Then
-            Me.AcceptButton = btnSearch
+        If Not AcceptButton Is btnSearch Then
+            AcceptButton = btnSearch
         End If
     End Sub
 
     Private returnString As String
+
     Private AsyncOpCompleted As Boolean
 
     Private Sub ArchetypeWebService_GetADL(ByVal sender As Object, ByVal e As org.openehr.getArchetypeInADLCompletedEventArgs) Handles ArchetypeService.getArchetypeInADLCompleted
@@ -270,16 +254,16 @@ Public Class WebSearchForm
     End Sub
 
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
-        If Me.listViewArchetypes.SelectedItems.Count > 0 Then
+        If listViewArchetypes.SelectedItems.Count > 0 Then
             archetypeIdToBeOpened = listViewArchetypes.SelectedItems(0).SubItems(2).Text
             'Dim request As System.Net.WebRequest
             'Dim response As Net.HttpWebResponse
             Dim tempPath, downloadPath As String
             tempPath = System.IO.Path.GetTempPath
+
             Try
-                Me.ProgressBar1.Visible = True
-                'Me.PanelBottom.Refresh()
-                Me.Cursor = Cursors.WaitCursor
+                ProgressBar1.Show()
+                Cursor = Cursors.WaitCursor
                 Application.DoEvents()
 
                 ArchetypeService.getArchetypeInADLAsync(archetypeIdToBeOpened)
@@ -302,7 +286,7 @@ Public Class WebSearchForm
                 '    Return False
                 'End Try
 
-                If returnString <> String.Empty Then
+                If returnString <> "" Then
                     Dim sw As New System.IO.StreamWriter(downloadPath)
 
                     'Dim dataStream As IO.Stream = response.GetResponseStream()
@@ -321,30 +305,31 @@ Public Class WebSearchForm
 
                     ' the web archetype has been written into a local temporary file!
                     archetypeIdToBeOpened = downloadPath
-                    Me.DialogResult = Windows.Forms.DialogResult.OK
+                    DialogResult = Windows.Forms.DialogResult.OK
                 End If
             Catch ex As Exception
                 Dim message As String = String.Format("{0} :{1}", Filemanager.GetOpenEhrTerm(664, "Network error"), ex.Message)
                 MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                archetypeIdToBeOpened = String.Empty
-                Me.DialogResult = Windows.Forms.DialogResult.Abort
+                archetypeIdToBeOpened = ""
+                DialogResult = Windows.Forms.DialogResult.Abort
             Finally
-                Me.ProgressBar1.Visible = False
-                Me.Cursor = Cursors.Default
+                ProgressBar1.Hide()
+                Cursor = Cursors.Default
             End Try
         Else
-            archetypeIdToBeOpened = String.Empty
+            archetypeIdToBeOpened = ""
             Me.DialogResult = Windows.Forms.DialogResult.Abort
         End If
-        Me.Close()
+
+        Close()
     End Sub
 
     Private Sub listViewArchetypes_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listViewArchetypes.DoubleClick
-        Me.butOK_Click(sender, e)
+        butOK_Click(sender, e)
     End Sub
 
     Private Sub WebSearchForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.txtTerm.Focus()
+        txtTerm.Focus()
     End Sub
 
 End Class
