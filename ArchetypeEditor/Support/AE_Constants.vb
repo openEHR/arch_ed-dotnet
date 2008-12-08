@@ -106,7 +106,7 @@ Public Class AE_Constants
     Private mParticipation As String = "Participation"
     Private mCurrency As String = "Currency"
     Private mIdentifier As String = "Identifier"
-    Private mNoArchetypeMatches As String = "No archetype matches {0}"
+    Private mNoEmbeddedArchetypeMatches As String = "No embedded archetype matches {0}"
     Private mNameThisSlot As String = "Name this slot"
     Private mNameThisSlotQuestion As String = "Name this slot?"
 
@@ -120,9 +120,9 @@ Public Class AE_Constants
             Return mNameThisSlotQuestion
         End Get
     End Property
-    Friend ReadOnly Property NoArchetypeMatches() As String
+    Friend ReadOnly Property NoEmbeddedArchetypeMatches() As String
         Get
-            Return mNoArchetypeMatches
+            Return mNoEmbeddedArchetypeMatches
         End Get
     End Property
     Friend ReadOnly Property Lower() As String
@@ -746,7 +746,7 @@ Public Class AE_Constants
         mParticipation = TerminologyServer.Instance.RubricForCode(654, Language)
         mCurrency = TerminologyServer.Instance.RubricForCode(672, Language)
         mIdentifier = TerminologyServer.Instance.RubricForCode(633, Language)
-        mNoArchetypeMatches = TerminologyServer.Instance.RubricForCode(671, Language)
+        mNoEmbeddedArchetypeMatches = TerminologyServer.Instance.RubricForCode(671, Language)
         mNameThisSlotQuestion = TerminologyServer.Instance.RubricForCode(672, Language)
         mNameThisSlot = TerminologyServer.Instance.RubricForCode(675, Language)
     End Sub
