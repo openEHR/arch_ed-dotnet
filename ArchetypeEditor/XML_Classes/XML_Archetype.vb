@@ -1168,7 +1168,7 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Sub BuildSlot(ByRef slot As XMLParser.ARCHETYPE_SLOT, ByVal sl As Constraint_Slot)
             If sl.hasSlots Then
-                Dim pattern As New System.Text.StringBuilder()
+            Dim pattern As New System.Text.StringBuilder()
                 Dim rmNamePrefix As String = ReferenceModel.ReferenceModelName & "-"
                 Dim classPrefix As String = rmNamePrefix & ReferenceModel.RM_StructureName(sl.RM_ClassType) & "\."
 
@@ -1281,7 +1281,10 @@ Namespace ArchetypeEditor.XML_Classes
                     Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
                 End With
             End If
-            If Not c.AllowableUnits Is Nothing Then
+
+            'HKF: 8 Dec 2008
+            'If Not c.AllowableUnits Is Nothing Then
+            If Not String.IsNullOrEmpty(c.AllowableUnits) AndAlso c.AllowableUnits <> "PYMWDTHMS" Then
                 d.pattern = c.AllowableUnits
             End If
 
