@@ -2209,7 +2209,10 @@ Public Class Designer
                     'Saved in a different format so set the description to right format
                     Filemanager.Master.FileLoading = True
                     mTabPageDescription.Description = mFileManager.Archetype.Description
+
+                    Debug.Assert(mTabPageDescription.TranslationDetails.Count = mFileManager.Archetype.TranslationDetails.Count, "translation count must be equal")
                     mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
+
                     Filemanager.Master.FileLoading = False
                 End If
 
@@ -2987,7 +2990,15 @@ Public Class Designer
                 Me.mAutoSaveTimer.Enabled = True
                 Me.mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
             End If
-            Filemanager.AutoFileSave()
+            Try
+                Filemanager.AutoFileSave()
+            Catch ex As Exception
+                Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
+                If Not ex.InnerException Is Nothing Then
+                    errorMessage &= vbCrLf & ex.InnerException.Message
+                End If
+                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End Try
         End If
     End Sub
 
@@ -4901,11 +4912,19 @@ Public Class Designer
                     WriteRichText()
                 Else
                     Me.PrepareToSave()
-                    If s = mFileManager.ParserType.ToLowerInvariant() Then
-                        Me.mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
-                    Else
-                        Me.mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
-                    End If
+                    Try
+                        If s = mFileManager.ParserType.ToLowerInvariant() Then
+                            Me.mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
+                        Else
+                            Me.mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
+                        End If
+                    Catch ex As Exception
+                        Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
+                        If Not ex.InnerException Is Nothing Then
+                            errorMessage &= vbCrLf & ex.InnerException.Message
+                        End If
+                        MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    End Try
                 End If
         End Select
     End Sub
@@ -4965,7 +4984,20 @@ Public Class Designer
                         args.AddParam("css-path", "", "Images/default.css")
                         args.AddParam("terminology-xml-document-path", "", "../Terminology/terminology.xml")
 
-                        Dim reader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
+
+                        Dim reader As Xml.XmlReader = Nothing
+                        Try
+                            reader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
+                        Catch ex As Exception
+                            Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
+                            If Not ex.InnerException Is Nothing Then
+                                errorMessage &= vbCrLf & ex.InnerException.Message
+                            End If
+                            MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+
+                            Return
+                        End Try
+
                         Dim stream As New IO.FileStream(html, FileMode.Create)
                         transform.Transform(reader, args, stream)
                         stream.Close()
@@ -4992,12 +5024,20 @@ Public Class Designer
                 If s = "rtf" Then
                     WriteRichText()
                 Else
-                    If s = mFileManager.ParserType.ToLowerInvariant() Then
-                        PrepareToSave()
-                        mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
-                    Else
-                        mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
-                    End If
+                    Try
+                        If s = mFileManager.ParserType.ToLowerInvariant() Then
+                            PrepareToSave()
+                            mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
+                        Else
+                            mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
+                        End If
+                    Catch ex As Exception
+                        Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
+                        If Not ex.InnerException Is Nothing Then
+                            errorMessage &= vbCrLf & ex.InnerException.Message
+                        End If
+                        MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    End Try
                 End If
         End Select
     End Sub
@@ -5081,7 +5121,16 @@ Public Class Designer
 
     Private Sub MenuFileExportType_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileExportType.Click
         Cursor = Cursors.WaitCursor
-        Filemanager.Master.Export(MenuFileExportType.Text)
+        Try
+            Filemanager.Master.Export(MenuFileExportType.Text)
+        Catch ex As Exception
+            Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
+            If Not ex.InnerException Is Nothing Then
+                errorMessage &= vbCrLf & ex.InnerException.Message
+            End If
+            MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+
         Cursor = Cursors.Default
     End Sub
 

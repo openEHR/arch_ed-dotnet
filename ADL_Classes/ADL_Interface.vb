@@ -243,6 +243,10 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
                 If EIF_adlInterface.archetype_available Then
                     adlArchetype.RemoveUnusedCodes()
+
+                    ' HKF: 8 Dec 2008
+                    adlArchetype.SetArchetypeDigest()
+
                     If EIF_adlInterface.has_archetype_serialiser_format(EiffelKernel.Create.STRING_8.make_from_cil(output_format)) Then
                         EIF_adlInterface.save_archetype(EiffelKernel.Create.STRING_8.make_from_cil(FileName), EiffelKernel.Create.STRING_8.make_from_cil(output_format))
                         If EIF_adlInterface.exception_encountered Then
@@ -269,6 +273,10 @@ Namespace ArchetypeEditor.ADL_Classes
             Try
                 If EIF_adlInterface.archetype_available Then
                     adlArchetype.RemoveUnusedCodes()
+
+                    ' HKF: 8 Dec 2008
+                    adlArchetype.SetArchetypeDigest()
+
                     If EIF_adlInterface.has_archetype_serialiser_format(EiffelKernel.Create.STRING_8.make_from_cil("adl")) Then
                         EIF_adlInterface.save_archetype(EiffelKernel.Create.STRING_8.make_from_cil(FileName), EiffelKernel.Create.STRING_8.make_from_cil("adl"))
                         If EIF_adlInterface.exception_encountered Then

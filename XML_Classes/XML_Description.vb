@@ -79,6 +79,15 @@ Namespace ArchetypeEditor.XML_Classes
                 di.Value = mReferences
                 otherDetails.Add(di)
             End If
+
+            ' HKF: 8 Dec 2008
+            If Not Me.ArchetypeDigest Is Nothing Then
+                di = New XMLParser.StringDictionaryItem
+                di.id = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID
+                di.Value = ArchetypeDigest
+                otherDetails.Add(di)
+            End If
+
             mXML_Description.other_details = otherDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
 
             mXML_Description.lifecycle_state = LifeCycleStateAsString

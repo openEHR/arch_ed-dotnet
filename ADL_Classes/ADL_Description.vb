@@ -57,8 +57,20 @@ Namespace ArchetypeEditor.ADL_Classes
                 mADL_Description.set_resource_package_uri(EiffelKernel.Create.STRING_8.make_from_cil(mArchetypePackageURI))
             End If
 
+            ' HKF: 8 Dec 2008
+            If Not mADL_Description.other_details Is Nothing Then
+                mADL_Description.other_details.clear_all()
+            End If
+
             If Not mReferences Is Nothing Then
                 mADL_Description.add_other_detail(EiffelKernel.Create.STRING_8.make_from_cil("references"), EiffelKernel.Create.STRING_8.make_from_cil(mReferences))
+            End If
+
+            ' HKF: 8 Dec 2008
+            If Not ArchetypeDigest Is Nothing Then
+                mADL_Description.add_other_detail( _
+                    EiffelKernel.Create.STRING_8.make_from_cil(OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), _
+                    EiffelKernel.Create.STRING_8.make_from_cil(ArchetypeDigest))
             End If
 
             mADL_Description.clear_other_contributors()

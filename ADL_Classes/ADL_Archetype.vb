@@ -108,6 +108,9 @@ Namespace ArchetypeEditor.ADL_Classes
                 Me.MakeParseTree()
 
                 Try
+                    ' HKF: 8 Dec 2008
+                    SetArchetypeDigest()
+
                     adlEngine.serialise(EiffelKernel.Create.STRING_8.make_from_cil(a_format))
                     Return adlEngine.serialised_archetype.to_cil
                 Catch e As System.Reflection.TargetInvocationException
@@ -1922,6 +1925,20 @@ Namespace ArchetypeEditor.ADL_Classes
                     mSynchronised = True
                 End If
             End If
+        End Sub
+
+        ' HKF 8 Dec 2008
+        Public Sub SetArchetypeDigest()
+            Dim amArchetype As XMLParser.ARCHETYPE
+            amArchetype = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.Build(adlArchetype)
+
+            Dim canonicalArchetype As XMLParser.ARCHETYPE
+            canonicalArchetype = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.CanonicalArchetype(amArchetype)
+
+            Dim ArchetypeDigest As String = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ArchetypeDigest(canonicalArchetype)
+            adlArchetype.description.add_other_detail( _
+                EiffelKernel.Create.STRING_8.make_from_cil(OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), _
+                EiffelKernel.Create.STRING_8.make_from_cil(ArchetypeDigest))
         End Sub
 
         Sub BuildLinks(ByVal cLinks As System.Collections.Generic.List(Of RmLink), ByVal cObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)

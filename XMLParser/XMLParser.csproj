@@ -28,38 +28,49 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EiffelSoftware.Runtime, Version=6.2.7.1629, Culture=neutral, PublicKeyToken=def26f296efef469, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AdlParser\EiffelSoftware.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="OceanInformatics.AdlParser, Version=1.4.0.759, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AdlParser\OceanInformatics.AdlParser.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchetypeModelBuilder.cs" />
     <Compile Include="CadlFactory.cs" />
+    <Compile Include="CloneConstraintVisitor.cs" />
     <Compile Include="Ontology.cs" />
     <Compile Include="OpenehrProfile.cs">
       <DependentUpon>OpenehrProfile.xsd</DependentUpon>
     </Compile>
     <Compile Include="XmlArchetypeParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XmlSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Archetype.xsd">
+    <EmbeddedResource Include="Archetype.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <None Include="Archetype.xsx">
       <DependentUpon>Archetype.xsd</DependentUpon>
     </None>
-    <None Include="BaseTypes.xsd">
+    <EmbeddedResource Include="BaseTypes.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="OpenehrProfile.xsd">
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenehrProfile.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <None Include="OpenehrProfile.xsx">
       <DependentUpon>OpenehrProfile.xsd</DependentUpon>
     </None>
-    <None Include="Resource.xsd">
+    <EmbeddedResource Include="Resource.xsd">
       <SubType>Designer</SubType>
-    </None>
+    </EmbeddedResource>
     <None Include="Resource.xsx">
       <DependentUpon>Resource.xsd</DependentUpon>
     </None>
