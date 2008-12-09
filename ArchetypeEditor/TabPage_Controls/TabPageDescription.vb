@@ -803,6 +803,10 @@ Public Class TabPageDescription
 
         Dim archDescriptionItem As New ArchetypeDescriptionItem(mCurrentLanguage)
 
+        ' HKF: 8 Dec 2008
+        Dim existingArchetypeDetails As ArchetypeDescriptionItem = mArchetypeDescription.Details.DetailInLanguage(mCurrentLanguage)
+        archDescriptionItem.Copyright = existingArchetypeDetails.Copyright
+
         ' get the key words
         For Each s As String In Me.listKeyword.Items
             archDescriptionItem.KeyWords.Add(s)

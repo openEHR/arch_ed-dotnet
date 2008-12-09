@@ -103,6 +103,12 @@ Namespace ArchetypeEditor.XML_Classes
                         If Not XML_detail.keywords Is Nothing Then
                             archDescriptDetail.KeyWords.AddRange(XML_detail.keywords)
                         End If
+
+                        ' HKF: 8 Dec 2008
+                        If Not XML_detail.copyright Is Nothing Then
+                            archDescriptDetail.Copyright = XML_detail.copyright
+                        End If
+
                         Exit For
                     End If
                 Next
