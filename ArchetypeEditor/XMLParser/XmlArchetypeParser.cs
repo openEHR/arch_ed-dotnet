@@ -168,9 +168,15 @@ namespace XMLParser
 
             if(this.ArchetypeAvailable)
             {
-                System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
+                // HKF: 8 Dec 2008
+                SetArchetypeDigest();
+
+                // HKF: 8 Dec 2008
+                //System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
                 System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                xmlSerialiser.Serialize(ms, _archetype);
+                //xmlSerialiser.Serialize(ms, _archetype);
+                ms = OceanInformatics.ArchetypeModel.XmlSerializer.Serialize((System.Xml.XmlWriterSettings)null, _archetype);
+
                 ms.Position = 0;
                 System.IO.StreamReader a_reader = new System.IO.StreamReader(ms);
                 result = a_reader.ReadToEnd();
@@ -180,6 +186,43 @@ namespace XMLParser
             return result;
         }
         
+        // HKF 8 Dec 2008
+        void SetArchetypeDigest()
+        {
+            System.Diagnostics.Debug.Assert(_archetype != null, "archetype must not be null");
+            System.Diagnostics.Debug.Assert(_archetype.description != null, "archetype description must not be null");
+
+            XMLParser.ARCHETYPE canonicalArchetype = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.CanonicalArchetype(_archetype);
+
+            string archetypDigest = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ArchetypeDigest(canonicalArchetype);
+
+            Dictionary<string, StringDictionaryItem> otherDetails = new Dictionary<string, StringDictionaryItem>();
+            if (_archetype.description.other_details != null)
+            {
+                foreach (StringDictionaryItem item in _archetype.description.other_details)
+                    otherDetails.Add(item.id, item);
+            }
+            if (!otherDetails.ContainsKey(OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID))
+            {
+                StringDictionaryItem item = new StringDictionaryItem();
+                item.id = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID;
+                item.Value = archetypDigest;
+
+                otherDetails.Add(OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID, item);
+            }
+            else
+            {
+                StringDictionaryItem item = otherDetails[OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID];
+
+                item.Value = archetypDigest;
+            }
+
+            StringDictionaryItem[] sortedResult = new StringDictionaryItem[otherDetails.Count];
+            otherDetails.Values.CopyTo(sortedResult, 0);
+
+            _archetype.description.other_details = sortedResult;
+        }
+
         public System.Collections.ArrayList AvailableFormats
         {
             get
@@ -279,7 +322,8 @@ namespace XMLParser
                 }
             }
             _archetype.description.details = descriptionItems;
-            AddTranslation(a_language);
+            // HKF: 8 Dec 2008
+            //AddTranslation(a_language);
         }
 
         public void AddTranslation(CODE_PHRASE a_language)
@@ -366,9 +410,16 @@ namespace XMLParser
             try
             {
                 _ontology.RemoveUnusedCodes();
+
+                // HKF: 8 Dec 2008
+                SetArchetypeDigest();
+
                 System.Xml.XmlWriter xml_writer = System.Xml.XmlWriter.Create(a_file_name);
-                System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
-                xmlSerialiser.Serialize(xml_writer, _archetype);
+                // HKF: 8 Dec 2008
+                //System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
+                //xmlSerialiser.Serialize(xml_writer, _archetype);
+                OceanInformatics.ArchetypeModel.XmlSerializer.Serialize(xml_writer, _archetype);
+
                 xml_writer.Close();
             }
             catch (Exception e)

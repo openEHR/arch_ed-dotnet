@@ -27,6 +27,8 @@ Public MustInherit Class ArchetypeDescription
     Protected mOtherContributors As New Collections.Specialized.StringCollection
     Protected mReferences As String 'JAR: 24MAY2007, EDT-30 Add field for References
 
+    Private mArchetypeDigest As String  'HKF: 8 Dec 2008
+
     Property OriginalAuthor() As String
         Get
             Return mOriginalAuthor
@@ -76,6 +78,17 @@ Public MustInherit Class ArchetypeDescription
             mReferences = Value
         End Set
     End Property
+
+    ' HKF: 8 Dec 2008
+    Property ArchetypeDigest() As String
+        Get
+            Return mArchetypeDigest
+        End Get
+        Set(ByVal Value As String)
+            mArchetypeDigest = Value
+        End Set
+    End Property
+
     Property CopyRight() As String
         Get
             Return mCopyRight
