@@ -200,8 +200,20 @@ Namespace ArchetypeEditor.ADL_Classes
 
             For Each dRow As DataRow In a_table.Rows
                 path = EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(1), String))
+
+                ' HKF: 8 Dec 2008
+                'codePhrase = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
+                '    EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(0), String) & "::" & CType(dRow(2), String)))
+                Dim terminologyId As String = CType(dRow(0), String)
+                If Not dRow.IsNull(3) Then
+                    Dim version As String = CType(dRow(3), String)
+                    If version <> String.Empty Then
+                        terminologyId &= "(" & version & ")"
+                    End If
+                End If
                 codePhrase = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                    EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(0), String) & "::" & CType(dRow(2), String)))
+                    EiffelKernel.Create.STRING_8.make_from_cil(terminologyId & "::" & CType(dRow(2), String)))
+
                 EIF_adlInterface.ontology.add_term_binding(codePhrase, path)
             Next
         End Sub

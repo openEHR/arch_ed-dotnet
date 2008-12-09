@@ -14,6 +14,10 @@ Public Class XML_TranslationDetails
             Return mXmlTranslation
         End Get
         Set(ByVal value As XMLParser.TRANSLATION_DETAILS)
+            If value Is Nothing Then Throw New ArgumentException("translation details must not be null")
+            If value.author Is Nothing Then Throw New ArgumentException("translation details author must not be null")
+            If value.language Is Nothing Then Throw New ArgumentException("translation details language must not be null")
+
             mXmlTranslation = value
             Me.Language = value.language.code_string
             Me.Accreditation = value.accreditation
