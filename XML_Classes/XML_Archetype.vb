@@ -1281,7 +1281,10 @@ Namespace ArchetypeEditor.XML_Classes
                     Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
                 End With
             End If
-            If Not c.AllowableUnits Is Nothing Then
+
+            'HKF: 8 Dec 2008
+            'If Not c.AllowableUnits Is Nothing Then
+            If Not String.IsNullOrEmpty(c.AllowableUnits) AndAlso c.AllowableUnits <> "PYMWDTHMS" Then
                 d.pattern = c.AllowableUnits
             End If
 
