@@ -26,6 +26,11 @@ Public Class ADL_ArchetypeDetails
         EIF_detail.set_misuse(EiffelKernel.Create.STRING_8.make_from_cil(a_detail.MisUse))
         EIF_detail.set_use(EiffelKernel.Create.STRING_8.make_from_cil(a_detail.Use))
         EIF_detail.set_purpose(EiffelKernel.Create.STRING_8.make_from_cil(a_detail.Purpose))
+        ' HKF: 8 Dec 2008
+        If Not a_detail.Copyright Is Nothing Then
+            EIF_detail.set_copyright(EiffelKernel.Create.STRING_8.make_from_cil(a_detail.Copyright))
+        End If
+
         mADL_Description.add_detail(EIF_detail)
     End Sub
 
@@ -57,6 +62,10 @@ Public Class ADL_ArchetypeDetails
                     For i As Integer = 1 To EIF_detail.keywords.count
                         archDescriptDetail.KeyWords.Add(EIF_detail.keywords.i_th(i).to_cil)
                     Next
+                End If
+                'HKF: 8 Dec 2008
+                If Not EIF_detail.copyright Is Nothing Then
+                    archDescriptDetail.Copyright = EIF_detail.copyright.to_cil
                 End If
             End If
         End If

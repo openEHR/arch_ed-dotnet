@@ -391,7 +391,7 @@ Public Class FileManagerLocal
             Dim xml_detail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
             xml_detail.language = cp
 
-            If archDetail.Copyright <> "" Then
+            If Not String.IsNullOrEmpty(archDetail.Copyright) Then
                 xml_detail.copyright = archDetail.Copyright
             End If
 
