@@ -69,6 +69,16 @@ namespace OceanInformatics.ArchetypeModel
             System.IO.MemoryStream archetypeStream = XmlSerializer.Serialize(settings, archetype);
             XmlSerializer.ValidateArchetype(archetypeStream);
 
+#if DEBUG
+            archetypeStream.Position = 0;
+            System.IO.StreamReader reader = new System.IO.StreamReader(archetypeStream);
+            using (System.IO.StreamWriter writer = new System.IO.StreamWriter("CanonicalArchetype.xml", false, Encoding.UTF8))
+            {
+                writer.Write(reader.ReadToEnd());
+                writer.Close();
+                reader.Close();
+            }
+#endif
             byte[] data = archetypeStream.ToArray();
 
             System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
