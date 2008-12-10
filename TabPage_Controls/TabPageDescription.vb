@@ -714,6 +714,8 @@ Public Class TabPageDescription
             txtOrganisation.Text = Value.OriginalAuthorOrganisation
             txtDate.Text = Value.OriginalAuthorDate
 
+            ' HKF: 8 Dec 2008
+            listContributors.Items.Clear()
             For Each s As String In Value.OtherContributors
                 listContributors.Items.Add(s)
             Next

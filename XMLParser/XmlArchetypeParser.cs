@@ -279,30 +279,31 @@ namespace XMLParser
                 }
             }
             _archetype.description.details = descriptionItems;
-            AddTranslation(a_language);
+            // HKF: 8 Dec 2008
+            //AddTranslation(a_language);
         }
 
-        public void AddTranslation(CODE_PHRASE a_language)
-        {
-            TRANSLATION_DETAILS td = new TRANSLATION_DETAILS();
-            TRANSLATION_DETAILS[] translationDetails;
-            td.language = a_language;
-            if (_archetype.translations == null)
-            {
-                //create an array
-                translationDetails = Array.CreateInstance(typeof(TRANSLATION_DETAILS), 1) as TRANSLATION_DETAILS[];
-                translationDetails[0] = td;
-            }
-            else
-            {
-                //resize the array
-                translationDetails = _archetype.translations;
-                int i = translationDetails.Length;
-                Array.Resize(ref translationDetails, i + 1);
-                translationDetails[i] = td;
-            }
-            _archetype.translations = translationDetails;    
-        }
+        //public void AddTranslation(CODE_PHRASE a_language)
+        //{
+        //    TRANSLATION_DETAILS td = new TRANSLATION_DETAILS();
+        //    TRANSLATION_DETAILS[] translationDetails;
+        //    td.language = a_language;
+        //    if (_archetype.translations == null)
+        //    {
+        //        //create an array
+        //        translationDetails = Array.CreateInstance(typeof(TRANSLATION_DETAILS), 1) as TRANSLATION_DETAILS[];
+        //        translationDetails[0] = td;
+        //    }
+        //    else
+        //    {
+        //        //resize the array
+        //        translationDetails = _archetype.translations;
+        //        int i = translationDetails.Length;
+        //        Array.Resize(ref translationDetails, i + 1);
+        //        translationDetails[i] = td;
+        //    }
+        //    _archetype.translations = translationDetails;    
+        //}
 
         public void ReadXml(string xmlString)
         {
