@@ -384,7 +384,9 @@ namespace OceanInformatics.ArchetypeModel
             AM.C_STRING cloneObject = new AM.C_STRING();
             
             //0..1 pattern string
-            cloneObject.pattern = currentObject.ToString();//pattern().to_cil(); //jar check
+            //HKF: EDT-415
+            //cloneObject.pattern = currentObject.ToString();//pattern().to_cil(); //jar check
+            cloneObject.pattern = currentObject.regexp().to_cil();
 
             // 0..1 assumed_value string
             if (currentObject.has_assumed_value().Equals(true))
@@ -868,8 +870,9 @@ namespace OceanInformatics.ArchetypeModel
             switch (cloneObject.type)
             {
                 case "C_STRING":
-                //case "C_PRIMITIVE":           
-                    cloneObject.item = CloneC_Primitive((openehr.openehr.am.archetype.constraint_model.primitive.C_PRIMITIVE) currentObject.item());
+                    // HKF: EDT-415
+                    //cloneObject.item = CloneC_Primitive((openehr.openehr.am.archetype.constraint_model.primitive.C_PRIMITIVE) currentObject.item());
+                    cloneObject.item = CloneString(currentObject.item() as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_STRING);
                     break;
 
                 case "String":

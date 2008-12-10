@@ -189,6 +189,7 @@ Public Class RmSlot
                 Dim assert As XMLParser.ASSERTION
                 assert = CType(an_archetype_slot.includes(i), XMLParser.ASSERTION)
                 Dim pattern As String = ArchetypeEditor.XML_Classes.XML_Tools.GetConstraintFromAssertion(assert)
+                System.Diagnostics.Debug.Assert(Not pattern.StartsWith("/") AndAlso Not pattern.EndsWith("/"), "pattern must not begin or end with '/'")
 
                 If pattern = ".*" Then
                     mSlotConstraint.IncludeAll = True
