@@ -1177,25 +1177,25 @@ Namespace ArchetypeEditor.XML_Classes
                 If sl.IncludeAll Then
                     mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
                 ElseIf sl.Include.Items.GetLength(0) > 0 Then
-                        For Each s As String In sl.Include
+                    For Each s As String In sl.Include
                         If pattern.Length > 0 Then
                             pattern.Append("|")
-                            End If
+                        End If
 
                         If Not s.StartsWith(rmNamePrefix) Then
                             pattern.Append(classPrefix)
                         End If
 
                         pattern.Append(s)
-                        Next
+                    Next
 
                     If pattern.Length > 0 Then
-                            mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", pattern.ToString()))
-                        End If
+                        mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", pattern.ToString()))
+                    End If
                 ElseIf sl.Exclude.Items.GetLength(0) > 0 Then
-                            ' have specific exclusions but no inclusions
-                            mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
-                        End If
+                    ' have specific exclusions but no inclusions
+                    mAomFactory.AddIncludeToSlot(slot, MakeAssertion("archetype_id/value", ".*"))
+                End If
 
                 pattern = New System.Text.StringBuilder()
 
