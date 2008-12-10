@@ -216,7 +216,7 @@ Namespace ArchetypeEditor.XML_Classes
             id_pattern_expression_leaf.reference_type = "constraint"
 
             Dim c_s As New XMLParser.C_STRING()
-            c_s.pattern = "/" + expression + "/"
+            c_s.pattern = expression
 
             id_pattern_expression_leaf.item = c_s
 
