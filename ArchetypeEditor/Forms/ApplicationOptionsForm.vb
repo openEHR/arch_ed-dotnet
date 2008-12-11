@@ -99,6 +99,8 @@ Public Class ApplicationOptionsForm
     Friend WithEvents XsltScriptPathExplanatoryLabel As System.Windows.Forms.Label
     Friend WithEvents XsltScriptPathCheckBox As System.Windows.Forms.CheckBox
     Friend WithEvents ShowLinksButtonCheckBox As System.Windows.Forms.CheckBox
+    Friend WithEvents RestoreDefaultSharedRepositoryUrlButton As System.Windows.Forms.Button
+    Friend WithEvents RestoreDefaultTerminologyServiceUrlButton As System.Windows.Forms.Button
     Friend WithEvents Label_7 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -146,6 +148,8 @@ Public Class ApplicationOptionsForm
         Me.TabConfiguration = New System.Windows.Forms.TabControl
         Me.UserDetailsTabPage = New System.Windows.Forms.TabPage
         Me.FileLocationsTabPage = New System.Windows.Forms.TabPage
+        Me.RestoreDefaultTerminologyServiceUrlButton = New System.Windows.Forms.Button
+        Me.RestoreDefaultSharedRepositoryUrlButton = New System.Windows.Forms.Button
         Me.Label6 = New System.Windows.Forms.Label
         Me.XmlRepositoryBrowseButton = New System.Windows.Forms.Button
         Me.lblTerminology = New System.Windows.Forms.Label
@@ -164,6 +168,7 @@ Public Class ApplicationOptionsForm
         Me.chkShowCommentsInHTML = New System.Windows.Forms.CheckBox
         Me.chkShowTerminologyInHTML = New System.Windows.Forms.CheckBox
         Me.AppearanceTabPage = New System.Windows.Forms.TabPage
+        Me.ShowLinksButtonCheckBox = New System.Windows.Forms.CheckBox
         Me.lblOccurrences = New System.Windows.Forms.Label
         Me.comboOccurrences = New System.Windows.Forms.ComboBox
         Me.DefaultsTabPage = New System.Windows.Forms.TabPage
@@ -173,7 +178,6 @@ Public Class ApplicationOptionsForm
         Me.chkParserXML = New System.Windows.Forms.CheckBox
         Me.chkParserADL = New System.Windows.Forms.CheckBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
-        Me.ShowLinksButtonCheckBox = New System.Windows.Forms.CheckBox
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
         Me.Panel_4.SuspendLayout()
@@ -279,8 +283,8 @@ Public Class ApplicationOptionsForm
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtURL.Location = New System.Drawing.Point(17, 228)
         Me.txtURL.Name = "txtURL"
-        Me.txtURL.Size = New System.Drawing.Size(594, 20)
-        Me.txtURL.TabIndex = 16
+        Me.txtURL.Size = New System.Drawing.Size(490, 20)
+        Me.txtURL.TabIndex = 17
         Me.ToolTip1.SetToolTip(Me.txtURL, "Http address of repository")
         '
         'txtTerminologyURL
@@ -289,7 +293,7 @@ Public Class ApplicationOptionsForm
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtTerminologyURL.Location = New System.Drawing.Point(17, 178)
         Me.txtTerminologyURL.Name = "txtTerminologyURL"
-        Me.txtTerminologyURL.Size = New System.Drawing.Size(595, 20)
+        Me.txtTerminologyURL.Size = New System.Drawing.Size(490, 20)
         Me.txtTerminologyURL.TabIndex = 13
         Me.ToolTip1.SetToolTip(Me.txtTerminologyURL, "Http address of repository")
         '
@@ -318,7 +322,7 @@ Public Class ApplicationOptionsForm
         Me.RepositoryBrowseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.RepositoryBrowseButton.Image = CType(resources.GetObject("RepositoryBrowseButton.Image"), System.Drawing.Image)
         Me.RepositoryBrowseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.RepositoryBrowseButton.Location = New System.Drawing.Point(517, 17)
+        Me.RepositoryBrowseButton.Location = New System.Drawing.Point(517, 21)
         Me.RepositoryBrowseButton.Name = "RepositoryBrowseButton"
         Me.RepositoryBrowseButton.Size = New System.Drawing.Size(96, 32)
         Me.RepositoryBrowseButton.TabIndex = 3
@@ -591,6 +595,8 @@ Public Class ApplicationOptionsForm
         '
         'FileLocationsTabPage
         '
+        Me.FileLocationsTabPage.Controls.Add(Me.RestoreDefaultTerminologyServiceUrlButton)
+        Me.FileLocationsTabPage.Controls.Add(Me.RestoreDefaultSharedRepositoryUrlButton)
         Me.FileLocationsTabPage.Controls.Add(Me.RepositoryPathTextBox)
         Me.FileLocationsTabPage.Controls.Add(Me.XmlRepositoryPathTextBox)
         Me.FileLocationsTabPage.Controls.Add(Me.Label6)
@@ -615,6 +621,26 @@ Public Class ApplicationOptionsForm
         Me.FileLocationsTabPage.Text = "File Locations"
         Me.FileLocationsTabPage.UseVisualStyleBackColor = True
         '
+        'RestoreDefaultTerminologyServiceUrlButton
+        '
+        Me.RestoreDefaultTerminologyServiceUrlButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RestoreDefaultTerminologyServiceUrlButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.RestoreDefaultTerminologyServiceUrlButton.Location = New System.Drawing.Point(517, 171)
+        Me.RestoreDefaultTerminologyServiceUrlButton.Name = "RestoreDefaultTerminologyServiceUrlButton"
+        Me.RestoreDefaultTerminologyServiceUrlButton.Size = New System.Drawing.Size(96, 32)
+        Me.RestoreDefaultTerminologyServiceUrlButton.TabIndex = 14
+        Me.RestoreDefaultTerminologyServiceUrlButton.Text = "Restore Default"
+        '
+        'RestoreDefaultSharedRepositoryUrlButton
+        '
+        Me.RestoreDefaultSharedRepositoryUrlButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.RestoreDefaultSharedRepositoryUrlButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.RestoreDefaultSharedRepositoryUrlButton.Location = New System.Drawing.Point(517, 221)
+        Me.RestoreDefaultSharedRepositoryUrlButton.Name = "RestoreDefaultSharedRepositoryUrlButton"
+        Me.RestoreDefaultSharedRepositoryUrlButton.Size = New System.Drawing.Size(96, 32)
+        Me.RestoreDefaultSharedRepositoryUrlButton.TabIndex = 18
+        Me.RestoreDefaultSharedRepositoryUrlButton.Text = "Restore Default"
+        '
         'Label6
         '
         Me.Label6.AutoSize = True
@@ -630,7 +656,7 @@ Public Class ApplicationOptionsForm
         Me.XmlRepositoryBrowseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.XmlRepositoryBrowseButton.Image = CType(resources.GetObject("XmlRepositoryBrowseButton.Image"), System.Drawing.Image)
         Me.XmlRepositoryBrowseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.XmlRepositoryBrowseButton.Location = New System.Drawing.Point(517, 67)
+        Me.XmlRepositoryBrowseButton.Location = New System.Drawing.Point(517, 71)
         Me.XmlRepositoryBrowseButton.Name = "XmlRepositoryBrowseButton"
         Me.XmlRepositoryBrowseButton.Size = New System.Drawing.Size(96, 32)
         Me.XmlRepositoryBrowseButton.TabIndex = 7
@@ -661,7 +687,7 @@ Public Class ApplicationOptionsForm
         Me.lblURL.Location = New System.Drawing.Point(17, 201)
         Me.lblURL.Name = "lblURL"
         Me.lblURL.Size = New System.Drawing.Size(217, 24)
-        Me.lblURL.TabIndex = 14
+        Me.lblURL.TabIndex = 15
         Me.lblURL.Text = "URL for shared repository:"
         Me.lblURL.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
@@ -671,7 +697,7 @@ Public Class ApplicationOptionsForm
         Me.chkWebSearch.Location = New System.Drawing.Point(239, 209)
         Me.chkWebSearch.Name = "chkWebSearch"
         Me.chkWebSearch.Size = New System.Drawing.Size(135, 17)
-        Me.chkWebSearch.TabIndex = 15
+        Me.chkWebSearch.TabIndex = 16
         Me.chkWebSearch.Text = "Enable Internet Search"
         Me.chkWebSearch.UseVisualStyleBackColor = True
         '
@@ -690,7 +716,7 @@ Public Class ApplicationOptionsForm
         Me.butHelpBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.butHelpBrowse.Image = CType(resources.GetObject("butHelpBrowse.Image"), System.Drawing.Image)
         Me.butHelpBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butHelpBrowse.Location = New System.Drawing.Point(519, 118)
+        Me.butHelpBrowse.Location = New System.Drawing.Point(519, 122)
         Me.butHelpBrowse.Name = "butHelpBrowse"
         Me.butHelpBrowse.Size = New System.Drawing.Size(96, 32)
         Me.butHelpBrowse.TabIndex = 10
@@ -808,6 +834,16 @@ Public Class ApplicationOptionsForm
         Me.AppearanceTabPage.Text = "Appearance"
         Me.AppearanceTabPage.UseVisualStyleBackColor = True
         '
+        'ShowLinksButtonCheckBox
+        '
+        Me.ShowLinksButtonCheckBox.AutoSize = True
+        Me.ShowLinksButtonCheckBox.Location = New System.Drawing.Point(273, 142)
+        Me.ShowLinksButtonCheckBox.Name = "ShowLinksButtonCheckBox"
+        Me.ShowLinksButtonCheckBox.Size = New System.Drawing.Size(138, 17)
+        Me.ShowLinksButtonCheckBox.TabIndex = 4
+        Me.ShowLinksButtonCheckBox.Text = "Show the Links button?"
+        Me.ShowLinksButtonCheckBox.UseVisualStyleBackColor = True
+        '
         'lblOccurrences
         '
         Me.lblOccurrences.Location = New System.Drawing.Point(20, 142)
@@ -871,7 +907,7 @@ Public Class ApplicationOptionsForm
         'chkParserXML
         '
         Me.chkParserXML.AutoSize = True
-        Me.chkParserXML.Location = New System.Drawing.Point(27, 38)
+        Me.chkParserXML.Location = New System.Drawing.Point(27, 42)
         Me.chkParserXML.Name = "chkParserXML"
         Me.chkParserXML.Size = New System.Drawing.Size(48, 17)
         Me.chkParserXML.TabIndex = 1
@@ -881,22 +917,12 @@ Public Class ApplicationOptionsForm
         'chkParserADL
         '
         Me.chkParserADL.AutoSize = True
-        Me.chkParserADL.Location = New System.Drawing.Point(27, 18)
+        Me.chkParserADL.Location = New System.Drawing.Point(27, 19)
         Me.chkParserADL.Name = "chkParserADL"
         Me.chkParserADL.Size = New System.Drawing.Size(47, 17)
         Me.chkParserADL.TabIndex = 0
         Me.chkParserADL.Text = "ADL"
         Me.chkParserADL.UseVisualStyleBackColor = True
-        '
-        'ShowLinksButtonCheckBox
-        '
-        Me.ShowLinksButtonCheckBox.AutoSize = True
-        Me.ShowLinksButtonCheckBox.Location = New System.Drawing.Point(273, 142)
-        Me.ShowLinksButtonCheckBox.Name = "ShowLinksButtonCheckBox"
-        Me.ShowLinksButtonCheckBox.Size = New System.Drawing.Size(138, 17)
-        Me.ShowLinksButtonCheckBox.TabIndex = 4
-        Me.ShowLinksButtonCheckBox.Text = "Show the Links button?"
-        Me.ShowLinksButtonCheckBox.UseVisualStyleBackColor = True
         '
         'ApplicationOptionsForm
         '
