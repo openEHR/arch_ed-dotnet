@@ -24,7 +24,8 @@ Public Class Options
     Private defaultArchetypeRepositoryUrl As String = "http://openehr.org/knowledge/services/ArchetypeFinderBean?wsdl"
     Private mArchetypeRepositoryUrl As New Uri(defaultArchetypeRepositoryUrl)
     Private mAllowTerminologyLookUp As Boolean
-    Private mTerminologyUrl As New Uri("http://ots.oceaninformatics.com/OTS/OTSService.asmx")
+    Private defaultTerminologyUrl As String = "http://ots.oceaninformatics.com/OTS/OTSService.asmx"
+    Private mTerminologyUrl As New Uri(defaultTerminologyUrl)
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
     Property UserName() As String
@@ -265,6 +266,9 @@ Public Class Options
         frm.Panel_6.BackColor = mColors(6)
         frm.Panel_7.BackColor = mColors(7)
 
+        AddHandler frm.RestoreDefaultTerminologyServiceUrlButton.Click, AddressOf RestoreDefaultTerminologyServiceUrlButton_Click
+        AddHandler frm.RestoreDefaultSharedRepositoryUrlButton.Click, AddressOf RestoreDefaultSharedRepositoryUrlButton_Click
+
         If frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
             mUserName = frm.txtUsername.Text
             mUserEmail = frm.txtEmail.Text
@@ -283,10 +287,17 @@ Public Class Options
 
             mDefaultRM = frm.comboReferenceModel.SelectedIndex
             mOccurrencesView = frm.comboOccurrences.Text
-            mArchetypeRepositoryUrl = New Uri(frm.txtURL.Text)
 
             If Uri.IsWellFormedUriString(frm.txtTerminologyURL.Text, UriKind.Absolute) Then
                 mTerminologyUrl = New Uri(frm.txtTerminologyURL.Text)
+            Else
+                MessageBox.Show("Invalid URL for Terminology Service: " & frm.txtTerminologyURL.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+
+            If Uri.IsWellFormedUriString(frm.txtURL.Text, UriKind.Absolute) Then
+                mArchetypeRepositoryUrl = New Uri(frm.txtURL.Text)
+            Else
+                MessageBox.Show("Invalid URL for Shared Repository: " & frm.txtURL.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
 
             mTimerMinutes = CInt(frm.numAutoSave.Value)
@@ -530,6 +541,14 @@ Public Class Options
 
         Return result
     End Function
+
+    Private Sub RestoreDefaultTerminologyServiceUrlButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        CType(CType(sender, Control).FindForm(), ApplicationOptionsForm).txtTerminologyURL.Text = defaultTerminologyUrl
+    End Sub
+
+    Private Sub RestoreDefaultSharedRepositoryUrlButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        CType(CType(sender, Control).FindForm(), ApplicationOptionsForm).txtURL.Text = defaultArchetypeRepositoryUrl
+    End Sub
 
     Sub New()
         mRepositoryPath = Path.Combine(Application.StartupPath, "..\Archetypes")
