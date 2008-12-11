@@ -10,7 +10,11 @@ Public Class XML_TranslationDetails
             SetAuthorValue("name", Me.AuthorName)
             SetAuthorValue("email", Me.AuthorEmail)
             SetAuthorValue("organisation", Me.AuthorOrganisation)
-            mXmlTranslation.accreditation = Me.Accreditation
+            ' HKF: 11 Dec 08
+            If Not String.IsNullOrEmpty(Me.Accreditation) Then
+                mXmlTranslation.accreditation = Me.Accreditation
+            End If
+
             Return mXmlTranslation
         End Get
         Set(ByVal value As XMLParser.TRANSLATION_DETAILS)
@@ -20,7 +24,9 @@ Public Class XML_TranslationDetails
 
             mXmlTranslation = value
             Me.Language = value.language.code_string
-            Me.Accreditation = value.accreditation
+            If value.accreditation IsNot Nothing Then
+                Me.Accreditation = value.accreditation
+            End If
 
             'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
             'For Each di As XMLParser.dictionaryItem In value.author

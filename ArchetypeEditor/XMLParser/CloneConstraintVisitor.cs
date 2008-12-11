@@ -1022,8 +1022,8 @@ namespace OceanInformatics.ArchetypeModel
 
                         if (td.accreditation() != null)
                             translation.accreditation = td.accreditation().ToString();
-                        else
-                            translation.accreditation = "";
+                        //else
+                        //    translation.accreditation = "";
                                        
                         translation.author = CloneHashTableAny(td.author());
                         translation.language = CloneCodePhrase(td.language());
