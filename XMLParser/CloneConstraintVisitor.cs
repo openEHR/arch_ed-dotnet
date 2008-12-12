@@ -386,16 +386,21 @@ namespace OceanInformatics.ArchetypeModel
             //0..1 pattern string
             //HKF: EDT-415
             //cloneObject.pattern = currentObject.ToString();//pattern().to_cil(); //jar check
-            cloneObject.pattern = currentObject.regexp().to_cil();
+            if (currentObject.regexp() != null)
+                cloneObject.pattern = currentObject.regexp().to_cil();
 
             // 0..1 assumed_value string
             if (currentObject.has_assumed_value().Equals(true))
                 cloneObject.assumed_value = currentObject.assumed_value().ToString();
 
-            // 0..* list string (LIST IS NOT USED - DO NOT CODE!)
-            if (cloneObject.list != null)
-                if (cloneObject.list.Length > 0)
-                    throw new NotImplementedException("CloneString list is not implemented!");         
+            // 0..* string list
+            if (currentObject.strings() != null && currentObject.strings().count() > 0)
+            {
+                int numStrings = currentObject.strings().count();
+                cloneObject.list = new string[numStrings];
+                for (int i = 1; i <= numStrings; i++)
+                    cloneObject.list[i - 1] = currentObject.strings().i_th(i).ToString();
+            }
 
             // 0..1 list_open
             if (currentObject.is_open())
