@@ -1160,7 +1160,12 @@ Namespace ArchetypeEditor.XML_Classes
             Dim slot As New XMLParser.ARCHETYPE_SLOT
             slot.rm_type_name = ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)
             slot.occurrences = MakeOccurrences(a_slot.Occurrences)
-            slot.node_id = a_slot.NodeId
+
+            If a_slot.NodeId Is Nothing Then
+                slot.node_id = ""
+            Else
+                slot.node_id = a_slot.NodeId
+            End If
 
             BuildSlot(slot, a_slot.SlotConstraint)
             mAomFactory.add_object(value_attribute, slot)
