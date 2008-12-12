@@ -708,13 +708,13 @@ Namespace ArchetypeEditor.ADL_Classes
 
             Select Case dt.TypeofDateTimeConstraint
                 Case 11                 ' Allow all
-                    s = "yyyy-??-?? ??:??:??"
+                    s = "yyyy-??-??T??:??:??"
                     dtType = "dt"
                 Case 12                 ' Full date time
-                    s = "yyyy-mm-dd HH:MM:SS"
+                    s = "yyyy-mm-ddTHH:MM:SS"
                     dtType = "dt"
                 Case 13                 'Partial Date time
-                    s = "yyyy-mm-dd HH:??:??"
+                    s = "yyyy-mm-ddTHH:??:??"
                     dtType = "dt"
                 Case 14                 'Date only
                     s = "yyyy-??-??"
