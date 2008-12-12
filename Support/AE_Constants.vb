@@ -109,6 +109,13 @@ Public Class AE_Constants
     Private mNoEmbeddedArchetypeMatches As String = "No embedded archetype matches {0}"
     Private mNameThisSlot As String = "Name this slot"
     Private mNameThisSlotQuestion As String = "Name this slot?"
+    Private mReplaceExistingFileQuestion As String = "File {0} already exists. Do you want to replace it?"
+
+    Friend ReadOnly Property ReplaceExistingFileQuestion() As String
+        Get
+            Return mReplaceExistingFileQuestion
+        End Get
+    End Property
 
     Friend ReadOnly Property NameThisSlot() As String
         Get
@@ -749,6 +756,7 @@ Public Class AE_Constants
         mNoEmbeddedArchetypeMatches = TerminologyServer.Instance.RubricForCode(671, Language)
         mNameThisSlotQuestion = TerminologyServer.Instance.RubricForCode(672, Language)
         mNameThisSlot = TerminologyServer.Instance.RubricForCode(675, Language)
+        mReplaceExistingFileQuestion = TerminologyServer.Instance.RubricForCode(680, Language)
     End Sub
 
 End Class
