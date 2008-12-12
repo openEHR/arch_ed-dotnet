@@ -510,30 +510,32 @@ Public Class FileManagerLocal
         End Select
     End Function
 
-    Public Sub Export(ByVal a_format As String)
+    Public Sub Export(ByVal format As String)
         'Use another parser to save file
 
         mObjectToSave.PrepareToSave()
+        Dim ext As String = format.ToLower(Globalization.CultureInfo.InvariantCulture)
+        Dim filter As String = format.ToUpper(Globalization.CultureInfo.InvariantCulture) & "|" & "*." & ext
 
-        Select Case a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        Select Case ext
             Case "xml"
-                Dim xml_parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
-                Dim s As String = ChooseFileNameOfType(a_format)
+                Dim parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
+                Dim s As String = FileNameChosenByUser(ext, filter)
 
                 If s <> "" Then
-                    xml_parser.WriteFile(s)
+                    parser.WriteFile(s)
 
-                    If xml_parser.Status <> "" Then
-                        MessageBox.Show(xml_parser.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    If parser.Status <> "" Then
+                        MessageBox.Show(parser.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End If
                 End If
 
             Case "adl"
-                Dim adl_parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
-                Dim s As String = ChooseFileNameOfType(a_format)
+                Dim parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
+                Dim s As String = FileNameChosenByUser(ext, filter)
 
                 If s <> "" Then
-                    adl_parser.WriteAdlDirect(s)
+                    parser.WriteAdlDirect(s)
                 End If
 
             Case Else
@@ -567,7 +569,7 @@ Public Class FileManagerLocal
         Dim name As String
 
         If IsNew OrElse Not IO.File.Exists(FileName) Then
-            name = ChooseFileName()
+            name = FileNameChosenByUser(ParserType, AvailableFormatFilter)
         Else
             name = FileName
         End If
@@ -649,32 +651,11 @@ Public Class FileManagerLocal
         End If
     End Sub
 
-    Private Function ChooseFileNameOfType(ByVal fileType As String) As String
+    Private Function FileNameChosenByUser(ByVal ext As String, ByVal filter As String) As String
         Dim result As String = ""
-        Dim ext As String = fileType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
         Dim dlg As New SaveFileDialog
-        dlg.Filter = fileType.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|" & "*." & ext
+        dlg.Filter = filter
         dlg.FileName = Archetype.Archetype_ID.ToString & "." & ext
-        dlg.OverwritePrompt = True
-        dlg.DefaultExt = ext
-        dlg.AddExtension = True
-        dlg.Title = AE_Constants.Instance.MessageBoxCaption
-        dlg.ValidateNames = True
-
-        If dlg.ShowDialog() <> Windows.Forms.DialogResult.Cancel Then
-            result = IO.Path.ChangeExtension(dlg.FileName, ext)
-        End If
-
-        Return result
-    End Function
-
-    Private Function ChooseFileName() As String
-        Dim result As String = ""
-        Dim ext As String = ParserType
-        Dim dlg As New SaveFileDialog
-        dlg.Filter = AvailableFormatFilter
-        dlg.FileName = Archetype.Archetype_ID.ToString & "." & ext
-        dlg.OverwritePrompt = True
         dlg.DefaultExt = ext
         Dim i As Integer = IndexOfFormat(ext) + 1
 
@@ -685,14 +666,26 @@ Public Class FileManagerLocal
         dlg.AddExtension = True
         dlg.Title = AE_Constants.Instance.MessageBoxCaption
         dlg.ValidateNames = True
+        dlg.OverwritePrompt = False
+        AddHandler dlg.FileOk, AddressOf ValidateFileNameChosenByUser
 
-        If dlg.ShowDialog() <> Windows.Forms.DialogResult.Cancel Then
-            ext = dlg.Filter.Split("|"c)((dlg.FilterIndex - 1) * 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            result = IO.Path.ChangeExtension(dlg.FileName, ext)
+        If dlg.ShowDialog() <> DialogResult.Cancel Then
+            result = dlg.FileName
         End If
 
         Return result
     End Function
+
+    Private Sub ValidateFileNameChosenByUser(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs)
+        Dim dlg As SaveFileDialog = CType(sender, SaveFileDialog)
+        Dim ext As String = dlg.Filter.Split("|"c)((dlg.FilterIndex - 1) * 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        dlg.FileName = IO.Path.ChangeExtension(dlg.FileName, ext)
+
+        If IO.File.Exists(dlg.FileName) Then
+            Dim question As String = String.Format(AE_Constants.Instance.ReplaceExistingFileQuestion, dlg.FileName)
+            e.Cancel = MessageBox.Show(question, dlg.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.No
+        End If
+    End Sub
 
     Private Sub AutoWrite(ByVal fileName As String)
         Dim appata As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
