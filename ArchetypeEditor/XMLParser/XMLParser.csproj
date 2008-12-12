@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="ArchetypeModelBuilder.cs" />
     <Compile Include="CadlFactory.cs" />
+    <Compile Include="CanonicalAmVisitor.cs" />
     <Compile Include="CloneConstraintVisitor.cs" />
     <Compile Include="Ontology.cs" />
     <Compile Include="OpenehrProfile.cs">
