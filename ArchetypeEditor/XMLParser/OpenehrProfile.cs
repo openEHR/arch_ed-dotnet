@@ -2769,7 +2769,11 @@ namespace XMLParser {
         }
         
         /// <remarks/>
-        [System.ComponentModel.DefaultValueAttribute(-1)]
+        // HKF: **** MANUAL EDIT ****
+        // HKF: THIS SHOULD NOT BE USED FOR DATA SERIALIZATION
+        // HKF: including this attribute removes the element when -1, which means null rather than default value
+        // HKF: Would need to implement custom serialisation to do this properly i.e. <precision />
+        //[System.ComponentModel.DefaultValueAttribute(-1)] 
         public int precision {
             get {
                 return this.precisionField;
