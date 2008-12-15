@@ -122,7 +122,11 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     Return AE_Constants.Instance.Error_saving
                 Catch e As Exception
-                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & e.Message
+                    If Not e.InnerException Is Nothing Then
+                        errorMessage &= vbCrLf & e.InnerException.Message
+                    End If
+                    MessageBox.Show(errorMessage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Return AE_Constants.Instance.Error_saving
                 End Try
             End Get
