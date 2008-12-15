@@ -27,7 +27,8 @@ namespace OceanInformatics.ArchetypeModel
                         if (archetypeSchemaSet == null)
                         {
                             Assembly assembly = Assembly.GetExecutingAssembly();
-                            string[] archetypeSchemaNames = { "BaseTypes", "Resource", "Archetype", "OpenehrProfile" };
+                            //string[] archetypeSchemaNames = { "BaseTypes", "Resource", "Archetype", "OpenehrProfile" };
+                            string[] archetypeSchemaNames = { "OpenehrProfile" };
 
                             XmlSchemaSet tempSchemaSet = new XmlSchemaSet();
                             foreach (string schemaName in archetypeSchemaNames)

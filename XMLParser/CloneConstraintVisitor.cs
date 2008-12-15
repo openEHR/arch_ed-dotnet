@@ -11,7 +11,7 @@ namespace OceanInformatics.ArchetypeModel
 {
     class CloneConstraintVisitor
     {
-        private static CloneConstraintVisitor nodeVisitor = new CloneConstraintVisitor();
+        //private static CloneConstraintVisitor nodeVisitor = new CloneConstraintVisitor();
 
         private System.Reflection.MethodInfo lastMethod = null;
         private openehr.openehr.am.archetype.constraint_model.C_OBJECT lastObject = null;
@@ -26,7 +26,9 @@ namespace OceanInformatics.ArchetypeModel
             AM.ARCHETYPE cloneObject = CloneArchetypeDetails(adlArchetype);
             
             // clone definition (root C_COMPLEX_OBJECT)
-            object rootNode = nodeVisitor.Visit(adlArchetype.definition(), 0);
+            //object rootNode = nodeVisitor.Visit(adlArchetype.definition(), 0);
+            object rootNode = Visit(adlArchetype.definition(), 0);
+
             AM.C_COMPLEX_OBJECT rootComplexObject = rootNode as AM.C_COMPLEX_OBJECT;
                         
             // link defintion to archetype
@@ -39,9 +41,10 @@ namespace OceanInformatics.ArchetypeModel
             return cloneObject;
         }
 
-        static private void CloneTree(openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT adlComplexObject, AM.C_COMPLEX_OBJECT parentComplexObject, int depth)
+        //static private void CloneTree(openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT adlComplexObject, AM.C_COMPLEX_OBJECT parentComplexObject, int depth)
+        private void CloneTree(openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT adlComplexObject, AM.C_COMPLEX_OBJECT parentComplexObject, int depth)
         {
-            //Console.WriteLine("C_COMPLEX_OBJECT\t" + string.Join("\t", new string[depth + 1]) + adlComplexObject.rm_type_name().to_cil() + " [" + adlComplexObject.node_id().to_cil() + "]");
+            CloneConstraintVisitor nodeVisitor = new CloneConstraintVisitor();
 
             openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE adlAttribute;
             parentComplexObject.attributes = new AM.C_ATTRIBUTE[adlComplexObject.attributes().count()];
@@ -95,8 +98,11 @@ namespace OceanInformatics.ArchetypeModel
                         lastMethod = method;
                         lastObject = currentObject;
                         object itemObject = method.Invoke(this, new object[] { currentObject, depth });
-                        
+
                         return itemObject;
+                    }
+                    else
+                    {
                     }
             }
 
