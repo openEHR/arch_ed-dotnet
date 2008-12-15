@@ -60,198 +60,26 @@ namespace OceanInformatics.ArchetypeModel
 #endif
             byte[] data = archetypeStream.ToArray();
 
+            // Remove UTF-8 BOM 
+            int offset = 0;
+            if (data.Length < 1)
+                throw new ApplicationException("Canonical archetype model must have length greater than 0");
+
+            if (data[0] == 239) // UTF-8 BOM: EF BB BF (239 187 191)
+            {
+                offset = 3;
+                if (data.Length <= offset)
+                    throw new ApplicationException("Canonical archetype model must have length greater than the BOM offset");
+            }
+
+            if (data[offset] != 60) // XML root element (<)
+                throw new ApplicationException("Unexpected start character of canonical archetype model");
+
             System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            SoapHexBinary hexEncoder = new SoapHexBinary(md5.ComputeHash(data));
+            SoapHexBinary hexEncoder = new SoapHexBinary(md5.ComputeHash(data, offset, data.Length-offset));
             string digest = hexEncoder.ToString();
 
             return digest;
         }
-
-        ///// <summary>
-        ///// canonicalise translations hash list
-        ///// </summary>
-        ///// <param name="translations"></param>
-        ///// <returns></returns>
-        //static AM.TRANSLATION_DETAILS[] CanonicaliseTranslations(AM.TRANSLATION_DETAILS[] translations)
-        //{
-        //    if (translations == null)
-        //        return null;
-
-        //    SortedDictionary<string, AM.TRANSLATION_DETAILS> sortedTranslations = new SortedDictionary<string, AM.TRANSLATION_DETAILS>();
-        //    foreach (AM.TRANSLATION_DETAILS translation in translations)
-        //    {
-        //        if (translation == null)
-        //            throw new ApplicationException("translations list must not contain null");
-
-        //        AM.TRANSLATION_DETAILS canonicalTranslation = new AM.TRANSLATION_DETAILS();
-        //        canonicalTranslation.accreditation = translation.accreditation;
-        //        canonicalTranslation.language = translation.language;
-        //        // sort translations author hash list
-        //        canonicalTranslation.author = SortStringDictionary(translation.author);
-        //        // sort translations other_details hash list
-        //        canonicalTranslation.other_details = SortStringDictionary(translation.other_details);
-
-        //        sortedTranslations.Add(translation.language.code_string, canonicalTranslation);
-        //    }
-
-        //    AM.TRANSLATION_DETAILS[] sortedResult = new XMLParser.TRANSLATION_DETAILS[sortedTranslations.Count]; 
-        //    sortedTranslations.Values.CopyTo(sortedResult, 0);
-
-        //    return sortedResult;
-        //}
-
-        //static AM.ARCHETYPE_ONTOLOGY CanonicaliseOntology(AM.ARCHETYPE_ONTOLOGY ontology)
-        //{
-        //    AM.ARCHETYPE_ONTOLOGY canonicalOntology = new XMLParser.ARCHETYPE_ONTOLOGY();
-
-        //    // canonicalise ontology term_definitions
-        //    canonicalOntology.term_definitions = CanonicaliseCodeDefinitions(ontology.term_definitions);
-        //    // canonicalise ontology constraint_definitions
-        //    canonicalOntology.constraint_definitions = CanonicaliseCodeDefinitions(ontology.constraint_definitions);
-
-        //    // canonicalise ontology term_bindings
-        //    canonicalOntology.term_bindings = CanonicaliseTermBindings(ontology.term_bindings);
-
-        //    // canonicalise ontology constraint_bindings
-        //    canonicalOntology.constraint_bindings = CanonicaliseConstraintBindings(ontology.constraint_bindings);
-
-        //    return canonicalOntology;
-        //}
-
-        //static AM.CodeDefinitionSet[] CanonicaliseCodeDefinitions(AM.CodeDefinitionSet[] codeDefinitions)
-        //{
-        //    if (codeDefinitions == null)
-        //        return null;
-
-        //    SortedDictionary<string, AM.CodeDefinitionSet> sortedCodeDefinitions = new SortedDictionary<string, AM.CodeDefinitionSet>();
-        //    foreach (AM.CodeDefinitionSet codeDefinitionItem in codeDefinitions)
-        //    {
-        //        AM.CodeDefinitionSet canonicalItem = new AM.CodeDefinitionSet();
-
-        //        canonicalItem.language = codeDefinitionItem.language;
-        //        // Canonicalise code definitions items
-        //        canonicalItem.items = CanonicaliseArchetypeTerms(codeDefinitionItem.items);
-
-        //        sortedCodeDefinitions.Add(codeDefinitionItem.language, canonicalItem);
-        //    }
-
-        //    AM.CodeDefinitionSet[] sortedResult = new AM.CodeDefinitionSet[sortedCodeDefinitions.Count];
-        //    sortedCodeDefinitions.Values.CopyTo(sortedResult, 0);
-
-        //    return sortedResult;
-
-        //}
-
-        //static AM.ARCHETYPE_TERM[] CanonicaliseArchetypeTerms(AM.ARCHETYPE_TERM[] archetypeTerms)
-        //{
-        //    if (archetypeTerms == null)
-        //        return null;
-
-        //    SortedDictionary<string, AM.ARCHETYPE_TERM> sortedItems = new SortedDictionary<string, AM.ARCHETYPE_TERM>();
-        //    foreach (AM.ARCHETYPE_TERM termItem in archetypeTerms)
-        //    {
-        //        AM.ARCHETYPE_TERM canonicalTerm = new XMLParser.ARCHETYPE_TERM();
-        //        canonicalTerm.code = termItem.code;
-        //        canonicalTerm.items = SortStringDictionary(termItem.items);
-        //        sortedItems.Add(termItem.code, canonicalTerm);
-        //    }
-
-        //    AM.ARCHETYPE_TERM[] sortedResult = new AM.ARCHETYPE_TERM[sortedItems.Count];
-        //    sortedItems.Values.CopyTo(sortedResult, 0);
-
-        //    return sortedResult;
-        //}
-
-        //static AM.TermBindingSet[] CanonicaliseTermBindings(AM.TermBindingSet[] termBindings)
-        //{
-        //    if (termBindings == null)
-        //        return null;
-
-        //    SortedDictionary<string, AM.TermBindingSet> sortedItems = new SortedDictionary<string, AM.TermBindingSet>();
-        //    foreach (AM.TermBindingSet bindingItem in termBindings)
-        //    {
-        //        AM.TermBindingSet canonicalItem = new AM.TermBindingSet();
-
-        //        canonicalItem.terminology = bindingItem.terminology;
-        //        // sort term bindings items hash list
-        //        canonicalItem.items = SortTermBindingItems(bindingItem.items);
-
-        //        sortedItems.Add(bindingItem.terminology, canonicalItem);
-        //    }
-
-        //    AM.TermBindingSet[] sortedResult = new AM.TermBindingSet[sortedItems.Count];
-        //    sortedItems.Values.CopyTo(sortedResult, 0);
-
-        //    return sortedResult;
-        //}
-
-        //static AM.TERM_BINDING_ITEM[] SortTermBindingItems(AM.TERM_BINDING_ITEM[] bindingItems)
-        //{
-        //    if (bindingItems == null)
-        //        return null;
-
-        //    SortedDictionary<string, AM.TERM_BINDING_ITEM> sortedItems = new SortedDictionary<string, AM.TERM_BINDING_ITEM>();
-        //    foreach (AM.TERM_BINDING_ITEM item in bindingItems)
-        //        sortedItems.Add(item.code, item);
-
-        //    AM.TERM_BINDING_ITEM[] sortedResult = new AM.TERM_BINDING_ITEM[sortedItems.Count];
-        //    sortedItems.Values.CopyTo(sortedResult, 0);
-
-        //    return sortedResult;
-        //}
-
-        //static AM.ConstraintBindingSet[] CanonicaliseConstraintBindings(AM.ConstraintBindingSet[] constraintBindings)
-        //{
-        //    if (constraintBindings == null)
-        //        return null;
-
-        //    SortedDictionary<string, AM.ConstraintBindingSet> sortedItems = new SortedDictionary<string, AM.ConstraintBindingSet>();
-        //    foreach (AM.ConstraintBindingSet constraintBindingsItem in constraintBindings)
-        //    {
-        //        AM.ConstraintBindingSet canonicalItem = new AM.ConstraintBindingSet();
-
-        //        canonicalItem.terminology = constraintBindingsItem.terminology;
-        //        // sort constraint bindings items hash list
-        //        canonicalItem.items = SortConstraintBindingItems(constraintBindingsItem.items);
-
-        //        sortedItems.Add(constraintBindingsItem.terminology, canonicalItem);
-        //    }
-
-        //    AM.ConstraintBindingSet[] sortedResult = new AM.ConstraintBindingSet[sortedItems.Count];
-        //    sortedItems.Values.CopyTo(sortedResult, 0);
-
-        //    return sortedResult;
-        //}
-
-        //static AM.CONSTRAINT_BINDING_ITEM[] SortConstraintBindingItems(AM.CONSTRAINT_BINDING_ITEM[] bindingItems)
-        //{
-        //    if (bindingItems == null)
-        //        return null;
-
-        //    SortedDictionary<string, AM.CONSTRAINT_BINDING_ITEM> sortedItems = new SortedDictionary<string, AM.CONSTRAINT_BINDING_ITEM>();
-        //    foreach (AM.CONSTRAINT_BINDING_ITEM item in bindingItems)
-        //        sortedItems.Add(item.code, item);
-
-        //    AM.CONSTRAINT_BINDING_ITEM[] sortedResult = new AM.CONSTRAINT_BINDING_ITEM[sortedItems.Count];
-        //    sortedItems.Values.CopyTo(sortedResult, 0);
-
-        //    return sortedResult;
-        //}
-
-        //static AM.StringDictionaryItem[] SortStringDictionary(AM.StringDictionaryItem[] stringDictionary)
-        //{
-        //    if (stringDictionary == null)
-        //        return null;
-
-        //    SortedDictionary<string, AM.StringDictionaryItem> sortedItems = new SortedDictionary<string, AM.StringDictionaryItem>();
-        //    foreach (AM.StringDictionaryItem dictionaryItem in stringDictionary)
-        //        sortedItems.Add(dictionaryItem.id, dictionaryItem);
-
-        //    AM.StringDictionaryItem[] sortedResult = new AM.StringDictionaryItem[sortedItems.Count];
-        //    sortedItems.Values.CopyTo(sortedResult, 0);
-
-        //    return sortedResult;
-        //}
-
     }
 }
