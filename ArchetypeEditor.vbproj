@@ -1010,15 +1010,6 @@
     <Content Include="AdlParser\libOceanInformatics.AdlParser.dll">
     </Content>
     <Content Include="AdlParser\OceanInformatics.AdlParser.dll" />
-    <Content Include="Archetype.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="BaseTypes.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="ClassDiagram1.cd" />
     <None Include="My Project\Settings.settings">
       <CustomToolNamespace>My</CustomToolNamespace>
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -1031,14 +1022,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ocean-transparent.ico" />
-    <Content Include="OpenehrProfile.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource.xsd">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="AssemblyVersion.cmd">
     </None>
     <None Include="Terminology\Terminology.xsx">
