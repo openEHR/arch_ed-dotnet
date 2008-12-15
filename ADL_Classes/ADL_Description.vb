@@ -35,7 +35,8 @@ Namespace ArchetypeEditor.ADL_Classes
         Function ADL_Description() As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
             mADL_Description.original_author.clear_all()
 
-            If OriginalAuthor <> "" Then
+            'If OriginalAuthor <> "" Then
+            If (OriginalAuthor IsNot Nothing) Then
                 mADL_Description.add_original_author_item(EiffelKernel.Create.STRING_8.make_from_cil("name"), EiffelKernel.Create.STRING_8.make_from_cil(mOriginalAuthor))
             End If
 
