@@ -16,6 +16,7 @@
 
 Option Explicit On 
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports AM = OpenEhr.V1.Its.Xml.AM
 
 Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Description
@@ -70,7 +71,7 @@ Namespace ArchetypeEditor.ADL_Classes
             ' HKF: 8 Dec 2008
             If Not ArchetypeDigest Is Nothing Then
                 mADL_Description.add_other_detail( _
-                    EiffelKernel.Create.STRING_8.make_from_cil(OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), _
+                    EiffelKernel.Create.STRING_8.make_from_cil(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), _
                     EiffelKernel.Create.STRING_8.make_from_cil(ArchetypeDigest))
             End If
 

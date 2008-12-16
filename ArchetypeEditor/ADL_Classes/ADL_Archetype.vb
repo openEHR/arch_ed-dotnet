@@ -17,6 +17,7 @@
 Option Explicit On
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 Imports EiffelList = EiffelSoftware.Library.Base.structures.list
+Imports AM = OpenEhr.V1.Its.Xml.AM
 
 Namespace ArchetypeEditor.ADL_Classes
 
@@ -1936,14 +1937,14 @@ Namespace ArchetypeEditor.ADL_Classes
         ' HKF 8 Dec 2008
         Public Sub SetArchetypeDigest()
             Dim amArchetype As XMLParser.ARCHETYPE
-            amArchetype = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.Build(adlArchetype)
+            amArchetype = AM.ArchetypeModelBuilder.Build(adlArchetype)
 
             Dim canonicalArchetype As XMLParser.ARCHETYPE
-            canonicalArchetype = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.CanonicalArchetype(amArchetype)
+            canonicalArchetype = openehr.V1.Its.Xml.AM.ArchetypeModelBuilder.CanonicalArchetype(amArchetype)
 
-            Dim ArchetypeDigest As String = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ArchetypeDigest(canonicalArchetype)
+            Dim ArchetypeDigest As String = AM.ArchetypeModelBuilder.ArchetypeDigest(canonicalArchetype)
             adlArchetype.description.add_other_detail( _
-                EiffelKernel.Create.STRING_8.make_from_cil(OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), _
+                EiffelKernel.Create.STRING_8.make_from_cil(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), _
                 EiffelKernel.Create.STRING_8.make_from_cil(ArchetypeDigest))
         End Sub
 
