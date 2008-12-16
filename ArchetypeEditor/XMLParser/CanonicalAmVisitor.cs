@@ -2,14 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+#if XMLParser
+using XMLParser;
+#endif
 
-namespace XMLParser
+namespace OpenEhr.V1.Its.Xml.AM
 {
     class CanonicalAmVisitor
     {
         public ARCHETYPE VisitArchetype(ARCHETYPE archetype)
         {
-            ARCHETYPE canonicalArchetype = new XMLParser.ARCHETYPE();
+            ARCHETYPE canonicalArchetype = new ARCHETYPE();
 
             canonicalArchetype.adl_version = archetype.adl_version;
             canonicalArchetype.archetype_id = archetype.archetype_id;
@@ -313,7 +316,7 @@ namespace XMLParser
                 sortedTranslations.Add(translation.language.code_string, canonicalTranslation);
             }
 
-            TRANSLATION_DETAILS[] sortedResult = new XMLParser.TRANSLATION_DETAILS[sortedTranslations.Count];
+            TRANSLATION_DETAILS[] sortedResult = new TRANSLATION_DETAILS[sortedTranslations.Count];
             sortedTranslations.Values.CopyTo(sortedResult, 0);
 
             return sortedResult;
@@ -321,7 +324,7 @@ namespace XMLParser
 
         ARCHETYPE_ONTOLOGY VisitOntology(ARCHETYPE_ONTOLOGY ontology)
         {
-            ARCHETYPE_ONTOLOGY canonicalOntology = new XMLParser.ARCHETYPE_ONTOLOGY();
+            ARCHETYPE_ONTOLOGY canonicalOntology = new ARCHETYPE_ONTOLOGY();
 
             // canonicalise ontology term_definitions
             canonicalOntology.term_definitions = VisitCodeDefinitions(ontology.term_definitions);
@@ -369,7 +372,7 @@ namespace XMLParser
             SortedDictionary<string, ARCHETYPE_TERM> sortedItems = new SortedDictionary<string, ARCHETYPE_TERM>();
             foreach (ARCHETYPE_TERM termItem in archetypeTerms)
             {
-                ARCHETYPE_TERM canonicalTerm = new XMLParser.ARCHETYPE_TERM();
+                ARCHETYPE_TERM canonicalTerm = new ARCHETYPE_TERM();
                 canonicalTerm.code = termItem.code;
                 canonicalTerm.items = VisitStringDictionary(termItem.items);
                 sortedItems.Add(termItem.code, canonicalTerm);

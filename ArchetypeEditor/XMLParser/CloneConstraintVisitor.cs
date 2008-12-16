@@ -4,10 +4,11 @@ using System.Text;
 using System.Reflection;
 using System.Collections;
 
-//using AM = OpenEhr.V1.Its.Xml.AM;
-using AM = XMLParser;
+#if XMLParser
+using XMLParser;
+#endif
 
-namespace OceanInformatics.ArchetypeModel
+namespace OpenEhr.V1.Its.Xml.AM
 {
     class CloneConstraintVisitor
     {
@@ -20,16 +21,16 @@ namespace OceanInformatics.ArchetypeModel
         /// Uses the Eiffel engine to parse an archetype to create an empty instance using local classes
         /// Class to clone the archetype
         /// </summary>
-        public AM.ARCHETYPE CloneArchetype(openehr.openehr.am.archetype.ARCHETYPE adlArchetype)
+        public ARCHETYPE CloneArchetype(openehr.openehr.am.archetype.ARCHETYPE adlArchetype)
         {
             // clone archetype
-            AM.ARCHETYPE cloneObject = CloneArchetypeDetails(adlArchetype);
+            ARCHETYPE cloneObject = CloneArchetypeDetails(adlArchetype);
             
             // clone definition (root C_COMPLEX_OBJECT)
             //object rootNode = nodeVisitor.Visit(adlArchetype.definition(), 0);
             object rootNode = Visit(adlArchetype.definition(), 0);
 
-            AM.C_COMPLEX_OBJECT rootComplexObject = rootNode as AM.C_COMPLEX_OBJECT;
+            C_COMPLEX_OBJECT rootComplexObject = rootNode as C_COMPLEX_OBJECT;
                         
             // link defintion to archetype
             cloneObject.definition = rootComplexObject;
@@ -41,20 +42,20 @@ namespace OceanInformatics.ArchetypeModel
             return cloneObject;
         }
 
-        //static private void CloneTree(openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT adlComplexObject, AM.C_COMPLEX_OBJECT parentComplexObject, int depth)
-        private void CloneTree(openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT adlComplexObject, AM.C_COMPLEX_OBJECT parentComplexObject, int depth)
+        //static private void CloneTree(openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT adlComplexObject, C_COMPLEX_OBJECT parentComplexObject, int depth)
+        private void CloneTree(openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT adlComplexObject, C_COMPLEX_OBJECT parentComplexObject, int depth)
         {
             CloneConstraintVisitor nodeVisitor = new CloneConstraintVisitor();
 
             openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE adlAttribute;
-            parentComplexObject.attributes = new AM.C_ATTRIBUTE[adlComplexObject.attributes().count()];
+            parentComplexObject.attributes = new C_ATTRIBUTE[adlComplexObject.attributes().count()];
 
             for (int i = 1; i <= adlComplexObject.attributes().count(); i++)
             {
                 // clone attribute
                 adlAttribute = adlComplexObject.attributes().i_th(i) as openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE;
-                AM.C_ATTRIBUTE attributeNode = nodeVisitor.CloneAttribute(adlAttribute);
-                attributeNode.children = new AM.C_OBJECT[adlAttribute.children().count()];                                      
+                C_ATTRIBUTE attributeNode = nodeVisitor.CloneAttribute(adlAttribute);
+                attributeNode.children = new C_OBJECT[adlAttribute.children().count()];                                      
 
                 //Console.WriteLine("C_ATTRIBUTE\t\t" + string.Join("\t", new string[depth + 1]) + adlAttribute.rm_attribute_name().to_cil());
 
@@ -70,10 +71,10 @@ namespace OceanInformatics.ArchetypeModel
                     object childNode = nodeVisitor.Visit(child, depth);
 
                     // link child to attribute
-                    attributeNode.children[j - 1] = childNode as AM.C_OBJECT;
+                    attributeNode.children[j - 1] = childNode as C_OBJECT;
 
                     if (child is openehr.openehr.am.archetype.constraint_model.Impl.C_COMPLEX_OBJECT)
-                        CloneTree(child as openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, childNode as AM.C_COMPLEX_OBJECT, ++depth);
+                        CloneTree(child as openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, childNode as C_COMPLEX_OBJECT, ++depth);
                 }
             }
         }
@@ -143,10 +144,10 @@ namespace OceanInformatics.ArchetypeModel
         private object Visit(openehr.openehr.am.archetype.constraint_model.Impl.C_COMPLEX_OBJECT currentObject, int depth)
         {
             ////Console.WriteLine("C_COMPLEX_OBJECT\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
-            AM.C_COMPLEX_OBJECT cloneObject = new AM.C_COMPLEX_OBJECT();
+            C_COMPLEX_OBJECT cloneObject = new C_COMPLEX_OBJECT();
         
             // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as AM.C_COMPLEX_OBJECT;                                    
+            cloneObject = CloneC_Object(cloneObject, currentObject) as C_COMPLEX_OBJECT;                                    
                                    
             // 0..* Attributes C_ATTRIBUTE (added in CloneTree)
                                     
@@ -157,10 +158,10 @@ namespace OceanInformatics.ArchetypeModel
         {
             //Console.WriteLine("C_PRIMITIVE_OBJECT\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
 
-            AM.C_PRIMITIVE_OBJECT cloneObject = new AM.C_PRIMITIVE_OBJECT();
+            C_PRIMITIVE_OBJECT cloneObject = new C_PRIMITIVE_OBJECT();
 
             // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as AM.C_PRIMITIVE_OBJECT;
+            cloneObject = CloneC_Object(cloneObject, currentObject) as C_PRIMITIVE_OBJECT;
             
             // C_Primitive Item 0..1
             if (currentObject.item() != null )
@@ -170,9 +171,9 @@ namespace OceanInformatics.ArchetypeModel
         }
 
         
-        private AM.C_DATE CloneDate(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE currentObject)
+        private C_DATE CloneDate(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE currentObject)
         {
-            AM.C_DATE cloneObject = new AM.C_DATE();
+            C_DATE cloneObject = new C_DATE();
 
             // 0..1 assumed_value Iso8601Date
             if (currentObject.has_assumed_value().Equals(true))                                
@@ -183,7 +184,7 @@ namespace OceanInformatics.ArchetypeModel
                 cloneObject.pattern = currentObject.pattern().ToString();
 
             // 0..1 timezone_validity VALIDITY_KIND    
-            //cloneObject.timezone_validity = AM.VALIDITY_KIND.Item1001 
+            //cloneObject.timezone_validity = VALIDITY_KIND.Item1001 
 
             // 0..1 range IntervalOfDate            
             cloneObject.range = CloneIntervalOfDate(currentObject.interval());
@@ -191,9 +192,9 @@ namespace OceanInformatics.ArchetypeModel
             return cloneObject;
         }
         
-        private AM.C_DATE_TIME CloneDateTime(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE_TIME currentObject)
+        private C_DATE_TIME CloneDateTime(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE_TIME currentObject)
         {
-            AM.C_DATE_TIME cloneObject = new AM.C_DATE_TIME();
+            C_DATE_TIME cloneObject = new C_DATE_TIME();
 
             // 0..1 assumed_value Iso8601DateTime
             if (currentObject.has_assumed_value().Equals(true))
@@ -212,9 +213,9 @@ namespace OceanInformatics.ArchetypeModel
         }
 
 
-        private AM.C_TIME CloneTime(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_TIME currentObject)
+        private C_TIME CloneTime(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_TIME currentObject)
         {
-            AM.C_TIME cloneObject = new AM.C_TIME();
+            C_TIME cloneObject = new C_TIME();
 
             // 0..1 assumed_value Iso8601DateTime
             if (currentObject.has_assumed_value().Equals(true))
@@ -233,9 +234,9 @@ namespace OceanInformatics.ArchetypeModel
         }
 
 
-        private AM.C_DURATION CloneDuration(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DURATION currentObject)
+        private C_DURATION CloneDuration(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DURATION currentObject)
         {
-            AM.C_DURATION cloneObject = new AM.C_DURATION();
+            C_DURATION cloneObject = new C_DURATION();
 
             // 0..1 assumed_value Iso8601Duration
             if (currentObject.has_assumed_value().Equals(true))
@@ -252,11 +253,11 @@ namespace OceanInformatics.ArchetypeModel
         }
 
         
-        private AM.IntervalOfDuration cloneDurationRange(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject) //Type
+        private IntervalOfDuration cloneDurationRange(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject) //Type
         {            
             if (currentObject != null)
             {                                	
-                AM.IntervalOfDuration cloneObject = new AM.IntervalOfDuration();
+                IntervalOfDuration cloneObject = new IntervalOfDuration();
                 
                 cloneObject.lower_unbounded = currentObject.lower_unbounded();
                 if (!currentObject.lower_unbounded())
@@ -280,11 +281,11 @@ namespace OceanInformatics.ArchetypeModel
                 return null;            
         }
 
-        private AM.IntervalOfDate CloneIntervalOfDate(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject) 
+        private IntervalOfDate CloneIntervalOfDate(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject) 
         {
             if (currentObject != null)
             {
-                AM.IntervalOfDate cloneObject = new AM.IntervalOfDate();
+                IntervalOfDate cloneObject = new IntervalOfDate();
                 
                 cloneObject.lower_unbounded = currentObject.lower_unbounded();
                 if (!currentObject.lower_unbounded())
@@ -308,11 +309,11 @@ namespace OceanInformatics.ArchetypeModel
                 return null;
         }
 
-        private AM.IntervalOfDateTime CloneIntervalOfDateTime(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject)
+        private IntervalOfDateTime CloneIntervalOfDateTime(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject)
         {
             if (currentObject != null)
             {
-                AM.IntervalOfDateTime cloneObject = new AM.IntervalOfDateTime();
+                IntervalOfDateTime cloneObject = new IntervalOfDateTime();
 
                 cloneObject.lower_unbounded = currentObject.lower_unbounded();
                 if (!currentObject.lower_unbounded())
@@ -336,11 +337,11 @@ namespace OceanInformatics.ArchetypeModel
                 return null;
         }
 
-        private AM.IntervalOfTime CloneIntervalOfTime(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject)
+        private IntervalOfTime CloneIntervalOfTime(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject)
         {
             if (currentObject != null)
             {
-                AM.IntervalOfTime cloneObject = new AM.IntervalOfTime();
+                IntervalOfTime cloneObject = new IntervalOfTime();
 
                 cloneObject.lower_unbounded = currentObject.lower_unbounded();
                 if (!currentObject.lower_unbounded())
@@ -364,9 +365,9 @@ namespace OceanInformatics.ArchetypeModel
                 return null;
         }
 
-        private AM.C_BOOLEAN CloneBoolean(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_BOOLEAN currentObject)
+        private C_BOOLEAN CloneBoolean(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_BOOLEAN currentObject)
         {
-            AM.C_BOOLEAN cloneObject = new AM.C_BOOLEAN();
+            C_BOOLEAN cloneObject = new C_BOOLEAN();
 
             // 1 true_valid
             cloneObject.true_valid = currentObject.true_valid();
@@ -385,9 +386,9 @@ namespace OceanInformatics.ArchetypeModel
         }
         
 
-        private AM.C_STRING CloneString(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_STRING currentObject)
+        private C_STRING CloneString(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_STRING currentObject)
         {
-            AM.C_STRING cloneObject = new AM.C_STRING();
+            C_STRING cloneObject = new C_STRING();
             
             //0..1 pattern string
             //HKF: EDT-415
@@ -420,9 +421,9 @@ namespace OceanInformatics.ArchetypeModel
 
 
         //See AE XML_Archetype BuildReal
-        private AM.C_INTEGER CloneInteger(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER currentObject)
+        private C_INTEGER CloneInteger(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER currentObject)
         {
-            AM.C_INTEGER cloneObject = new AM.C_INTEGER ();
+            C_INTEGER cloneObject = new C_INTEGER ();
 
             //0..1 range Interval
             if (currentObject.interval() != null)
@@ -450,9 +451,9 @@ namespace OceanInformatics.ArchetypeModel
         }
 
         //See AE XML_Archetype BuildReal
-        private AM.C_REAL CloneReal(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_REAL currentObject)
+        private C_REAL CloneReal(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_REAL currentObject)
         {            
-            AM.C_REAL cloneObject = new AM.C_REAL();
+            C_REAL cloneObject = new C_REAL();
                         
             //0..1 range IntervalOfReal
             if (currentObject.interval() != null)
@@ -483,10 +484,10 @@ namespace OceanInformatics.ArchetypeModel
         {
             //Console.WriteLine("CONSTRAINT_REF\t" + string.Join("\t", new string[depth + 1])+ currentObject.rm_type_name().to_cil());
 
-            AM.CONSTRAINT_REF cloneObject = new AM.CONSTRAINT_REF();
+            CONSTRAINT_REF cloneObject = new CONSTRAINT_REF();
 
             // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as AM.CONSTRAINT_REF;
+            cloneObject = CloneC_Object(cloneObject, currentObject) as CONSTRAINT_REF;
 
             // 1 reference string
             cloneObject.reference = currentObject.target().ToString();
@@ -498,10 +499,10 @@ namespace OceanInformatics.ArchetypeModel
         {
             //Console.WriteLine("ARCHETYPE_INTERNAL_REF\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
 
-            AM.ARCHETYPE_INTERNAL_REF cloneObject = new AM.ARCHETYPE_INTERNAL_REF();
+            ARCHETYPE_INTERNAL_REF cloneObject = new ARCHETYPE_INTERNAL_REF();
 
             // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as AM.ARCHETYPE_INTERNAL_REF;
+            cloneObject = CloneC_Object(cloneObject, currentObject) as ARCHETYPE_INTERNAL_REF;
 
             // 1 target_path string
             cloneObject.target_path = currentObject.target_path().to_cil();
@@ -513,10 +514,10 @@ namespace OceanInformatics.ArchetypeModel
         {
             //Console.WriteLine("ARCHETYPE_SLOT\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
 
-            AM.ARCHETYPE_SLOT cloneObject = new AM.ARCHETYPE_SLOT();
+            ARCHETYPE_SLOT cloneObject = new ARCHETYPE_SLOT();
 
             // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as AM.ARCHETYPE_SLOT;
+            cloneObject = CloneC_Object(cloneObject, currentObject) as ARCHETYPE_SLOT;
 
             // 0..* includes ASSERTION
             if (currentObject.has_includes())
@@ -533,10 +534,10 @@ namespace OceanInformatics.ArchetypeModel
         {
             //Console.WriteLine("C_DV_QUANTITY\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
 
-            AM.C_DV_QUANTITY cloneObject = new AM.C_DV_QUANTITY();
+            C_DV_QUANTITY cloneObject = new C_DV_QUANTITY();
 
             // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as AM.C_DV_QUANTITY;
+            cloneObject = CloneC_Object(cloneObject, currentObject) as C_DV_QUANTITY;
 
             // 0..1 assumed_value DV_QUANTITY
             if (currentObject.assumed_value() != null)                
@@ -551,7 +552,7 @@ namespace OceanInformatics.ArchetypeModel
                 // 0..* List C_QUANTITY_ITEM
                 if (currentObject.list() != null && currentObject.list().count() > 0)
                 {
-                    AM.C_QUANTITY_ITEM[] localQuantityList = new AM.C_QUANTITY_ITEM[currentObject.list().count()];
+                    C_QUANTITY_ITEM[] localQuantityList = new C_QUANTITY_ITEM[currentObject.list().count()];
                     cloneObject.list = localQuantityList;
 
                     for (int i = 1; i <= currentObject.list().count(); i++)
@@ -561,10 +562,10 @@ namespace OceanInformatics.ArchetypeModel
             return cloneObject;
         }
 
-        private  AM.DV_ORDINAL CloneDvOrdinal(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL currentObject)
+        private  DV_ORDINAL CloneDvOrdinal(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL currentObject)
         {
             // Ordinal constraint
-            AM.DV_ORDINAL cloneObject = new AM.DV_ORDINAL();
+            DV_ORDINAL cloneObject = new DV_ORDINAL();
 
             // Inherits DV_ORDERED (only in Reference Model)
             // 0..1 normal_range DV_INTERVAL
@@ -575,16 +576,16 @@ namespace OceanInformatics.ArchetypeModel
             cloneObject.value = currentObject.value();
 
             // 1 symbol DV_CODED_TEXT            
-            cloneObject.symbol = new AM.DV_CODED_TEXT();
+            cloneObject.symbol = new DV_CODED_TEXT();
             cloneObject.symbol.defining_code = CloneCodePhrase(currentObject.symbol());
             cloneObject.symbol.value = "";  // what should this be?
             
             return cloneObject;
         }
 
-        private AM.DV_QUANTITY CloneDvQuantity(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.QUANTITY currentObject)
+        private DV_QUANTITY CloneDvQuantity(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.QUANTITY currentObject)
         {
-            AM.DV_QUANTITY cloneObject = new AM.DV_QUANTITY();
+            DV_QUANTITY cloneObject = new DV_QUANTITY();
 
             // Inherits DV_AMOUNT (only in Reference Model)
             // 0..1 normal_range DV_INTERVAL
@@ -611,10 +612,10 @@ namespace OceanInformatics.ArchetypeModel
         {
             //Console.WriteLine("C_DV_ORDINAL\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
             
-            AM.C_DV_ORDINAL cloneObject = new AM.C_DV_ORDINAL();            
+            C_DV_ORDINAL cloneObject = new C_DV_ORDINAL();            
 
             // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as AM.C_DV_ORDINAL;
+            cloneObject = CloneC_Object(cloneObject, currentObject) as C_DV_ORDINAL;
 
             // 0..1 assumed_value DV_ORDINAL
             if (currentObject.assumed_value() != null)
@@ -625,13 +626,13 @@ namespace OceanInformatics.ArchetypeModel
             if (currentObject.any_allowed().Equals (false))
             {                
                 EiffelSoftware.Library.Base.structures.list.LINKED_LIST_REFERENCE adlOrdinals = currentObject.items();
-                AM.DV_ORDINAL[] localOrdinals = new AM.DV_ORDINAL[adlOrdinals.count()];                        
+                DV_ORDINAL[] localOrdinals = new DV_ORDINAL[adlOrdinals.count()];                        
                 
                 adlOrdinals.start();
                 for (int i = 0; i < adlOrdinals.count(); i++)
                 {
                     openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL adlOrdinal = (openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL)adlOrdinals.active().item();
-                    AM.DV_ORDINAL localOrdinal = CloneDvOrdinal(adlOrdinal);                
+                    DV_ORDINAL localOrdinal = CloneDvOrdinal(adlOrdinal);                
                     localOrdinals[i] = localOrdinal;                    
 
                     adlOrdinals.forth();
@@ -646,15 +647,15 @@ namespace OceanInformatics.ArchetypeModel
         {
             //Console.WriteLine("C_CODE_PHRASE\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
             
-            AM.C_CODE_PHRASE cloneObject = new AM.C_CODE_PHRASE();
+            C_CODE_PHRASE cloneObject = new C_CODE_PHRASE();
 
             // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as AM.C_CODE_PHRASE;
+            cloneObject = CloneC_Object(cloneObject, currentObject) as C_CODE_PHRASE;
             
             // 0..1 terminology_id TERMINOLOGY_ID
             if (currentObject.terminology_id() != null)
             {
-                AM.TERMINOLOGY_ID terminologyId = new AM.TERMINOLOGY_ID();
+                TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
                 terminologyId.value = currentObject.terminology_id().value().ToString();
                 cloneObject.terminology_id = terminologyId;
             }
@@ -682,7 +683,7 @@ namespace OceanInformatics.ArchetypeModel
             return cloneObject;
         }
 
-        private AM.C_OBJECT CloneC_Object(AM.C_OBJECT cloneObject, openehr.openehr.am.archetype.constraint_model.C_OBJECT currentObject)
+        private C_OBJECT CloneC_Object(C_OBJECT cloneObject, openehr.openehr.am.archetype.constraint_model.C_OBJECT currentObject)
         {
             // 1 node_id string            
             if (!currentObject.node_id().to_cil().StartsWith ("unknown"))  //hack for xml conversion 
@@ -700,9 +701,9 @@ namespace OceanInformatics.ArchetypeModel
         }
 
 
-        private AM.IntervalOfReal CloneIntervalOfReal(openehr.common_libs.basic.INTERVAL_REAL_32  currentObject)
+        private IntervalOfReal CloneIntervalOfReal(openehr.common_libs.basic.INTERVAL_REAL_32  currentObject)
         {
-            AM.IntervalOfReal cloneObject = new AM.IntervalOfReal();
+            IntervalOfReal cloneObject = new IntervalOfReal();
                         
             System.Diagnostics.Debug.Assert(!cloneObject.lower_includedSpecified, "lower included specified must be false!");
             
@@ -728,10 +729,10 @@ namespace OceanInformatics.ArchetypeModel
         }
 
         
-        private AM.IntervalOfInteger CloneIntervalOfInteger(openehr.common_libs.basic.INTERVAL_INTEGER_32 currentObject)
+        private IntervalOfInteger CloneIntervalOfInteger(openehr.common_libs.basic.INTERVAL_INTEGER_32 currentObject)
         {
-            AM.IntervalOfInteger cloneObject = null;
-            cloneObject = new AM.IntervalOfInteger();
+            IntervalOfInteger cloneObject = null;
+            cloneObject = new IntervalOfInteger();
 
             System.Diagnostics.Debug.Assert(!cloneObject.lower_includedSpecified, "lower included specified must be false!");
 
@@ -757,7 +758,7 @@ namespace OceanInformatics.ArchetypeModel
         }
 
  
-        private AM.C_PRIMITIVE CloneC_Primitive(openehr.openehr.am.archetype.constraint_model.primitive.C_PRIMITIVE currentObject)
+        private C_PRIMITIVE CloneC_Primitive(openehr.openehr.am.archetype.constraint_model.primitive.C_PRIMITIVE currentObject)
         {
             string typeName = currentObject.GetType().Name;
             typeName = typeName.ToUpper();
@@ -795,9 +796,9 @@ namespace OceanInformatics.ArchetypeModel
         }
 
 
-        private AM.C_QUANTITY_ITEM CloneQuantityItem(openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM currentObject)
+        private C_QUANTITY_ITEM CloneQuantityItem(openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM currentObject)
         {
-            AM.C_QUANTITY_ITEM cloneObject = new AM.C_QUANTITY_ITEM();
+            C_QUANTITY_ITEM cloneObject = new C_QUANTITY_ITEM();
 
             // 0..1 units string
             cloneObject.units = currentObject.units().to_cil();
@@ -814,16 +815,16 @@ namespace OceanInformatics.ArchetypeModel
         }
 
 
-        private AM.ASSERTION[] CloneAssertion(EiffelSoftware.Library.Base.structures.list.ARRAYED_LIST_REFERENCE adlList)
+        private ASSERTION[] CloneAssertion(EiffelSoftware.Library.Base.structures.list.ARRAYED_LIST_REFERENCE adlList)
         {
             if (adlList != null)
             {
-                AM.ASSERTION[] localList = new AM.ASSERTION[adlList.count()];
+                ASSERTION[] localList = new ASSERTION[adlList.count()];
 
                 for (int i = 1; i <= adlList.count(); i++)
                 {
                     openehr.openehr.am.archetype.assertion.ASSERTION assert = adlList.i_th(i) as openehr.openehr.am.archetype.assertion.ASSERTION;
-                    AM.ASSERTION localAssertion = new AM.ASSERTION();
+                    ASSERTION localAssertion = new ASSERTION();
 
                     // 0..1 tag string
                     if (assert.tag() != null)
@@ -846,7 +847,7 @@ namespace OceanInformatics.ArchetypeModel
             return null;
         }
 
-        private AM.EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_ITEM currentObject)
+        private EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_ITEM currentObject)
         {
             if (currentObject is openehr.openehr.am.archetype.assertion.EXPR_LEAF)
                 return CloneExprItem(currentObject as openehr.openehr.am.archetype.assertion.EXPR_LEAF);
@@ -861,9 +862,9 @@ namespace OceanInformatics.ArchetypeModel
                 return null;
         }
         
-        private AM.EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_LEAF currentObject)
+        private EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_LEAF currentObject)
         {
-            AM.EXPR_LEAF cloneObject = new AM.EXPR_LEAF();
+            EXPR_LEAF cloneObject = new EXPR_LEAF();
 
             // 1 type string
             if (currentObject.type() == null)
@@ -894,12 +895,12 @@ namespace OceanInformatics.ArchetypeModel
                     throw new NotSupportedException(cloneObject.type);
             }
 
-            return cloneObject as AM.EXPR_ITEM;
+            return cloneObject as EXPR_ITEM;
         }
 
-        private AM.EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR currentObject)
+        private EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR currentObject)
         {            
-            AM.EXPR_BINARY_OPERATOR cloneObject = new AM.EXPR_BINARY_OPERATOR();
+            EXPR_BINARY_OPERATOR cloneObject = new EXPR_BINARY_OPERATOR();
 
             // 1 type string
             if (currentObject.type() != null)
@@ -910,7 +911,7 @@ namespace OceanInformatics.ArchetypeModel
 
             // 1 operator OPERATOR_KIND
             if (currentObject.@operator().value() >= 2001 && currentObject.@operator().value() <= 2020)
-                cloneObject.@operator = ((AM.OPERATOR_KIND)currentObject.@operator().value()) - 2001;  //enum cast            
+                cloneObject.@operator = ((OPERATOR_KIND)currentObject.@operator().value()) - 2001;  //enum cast            
 
             // 1 left_operand EXPR_ITEM
             if (currentObject.left_operand() != null)
@@ -920,12 +921,12 @@ namespace OceanInformatics.ArchetypeModel
             if (currentObject.right_operand() != null)
                 cloneObject.right_operand = CloneExprItem(currentObject.right_operand()); //recursion
 
-            return cloneObject as AM.EXPR_ITEM;
+            return cloneObject as EXPR_ITEM;
         }
 
-        private AM.EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_UNARY_OPERATOR currentObject)
+        private EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_UNARY_OPERATOR currentObject)
         {
-            AM.EXPR_UNARY_OPERATOR cloneObject = new AM.EXPR_UNARY_OPERATOR();
+            EXPR_UNARY_OPERATOR cloneObject = new EXPR_UNARY_OPERATOR();
 
             // 1 type string
             if (currentObject.type() != null)
@@ -933,7 +934,7 @@ namespace OceanInformatics.ArchetypeModel
             
             // 1 operator OPERATOR_KIND
             if (currentObject.@operator().value() >= 2001 && currentObject.@operator().value() <= 2020)
-                cloneObject.@operator = ((AM.OPERATOR_KIND)currentObject.@operator().value()) - 2001;  //enum cast            
+                cloneObject.@operator = ((OPERATOR_KIND)currentObject.@operator().value()) - 2001;  //enum cast            
 
             // 1 precedence_overridden boolean
             cloneObject.precedence_overridden = currentObject.precedence_overridden();
@@ -942,15 +943,15 @@ namespace OceanInformatics.ArchetypeModel
             if (currentObject.operand() != null)
                 cloneObject.operand = CloneExprItem(currentObject.operand()); //recursive
             
-            return cloneObject as AM.EXPR_ITEM;
+            return cloneObject as EXPR_ITEM;
         }
 
         
-        private AM.CODE_PHRASE CloneCodePhrase(openehr.openehr.rm.data_types.text.CODE_PHRASE currentObject)
+        private CODE_PHRASE CloneCodePhrase(openehr.openehr.rm.data_types.text.CODE_PHRASE currentObject)
         {
             if (currentObject != null)
             {
-                AM.CODE_PHRASE cloneObject = new AM.CODE_PHRASE();
+                CODE_PHRASE cloneObject = new CODE_PHRASE();
 
                 // 1 code_string string
                 if (currentObject.code_string() != null)
@@ -961,7 +962,7 @@ namespace OceanInformatics.ArchetypeModel
                 // 1 terminology_id TERMINOLOGY_ID
                 if (currentObject.terminology_id() != null)
                 {
-                    AM.TERMINOLOGY_ID terminologyId = new AM.TERMINOLOGY_ID();
+                    TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
                     terminologyId.value = currentObject.terminology_id().value().ToString();
                     cloneObject.terminology_id = terminologyId;
                 }
@@ -970,16 +971,16 @@ namespace OceanInformatics.ArchetypeModel
             return null;
         }
         
-        private AM.ARCHETYPE CloneArchetypeDetails(openehr.openehr.am.archetype.ARCHETYPE archetype)
+        private ARCHETYPE CloneArchetypeDetails(openehr.openehr.am.archetype.ARCHETYPE archetype)
         {
-            AM.ARCHETYPE cloneObject = new AM.ARCHETYPE();
+            ARCHETYPE cloneObject = new ARCHETYPE();
             
             // 0..1 uid HIER_OBJECT_ID (not implemented in adl object)            
 
             // 1 archtype_id ARCHETYPE_ID
             if (archetype.archetype_id() != null)
             {
-                AM.ARCHETYPE_ID archetypeId = new AM.ARCHETYPE_ID();
+                ARCHETYPE_ID archetypeId = new ARCHETYPE_ID();
                 archetypeId.value = archetype.archetype_id().value().ToString();                
                 cloneObject.archetype_id = archetypeId;
             }
@@ -1003,7 +1004,7 @@ namespace OceanInformatics.ArchetypeModel
             // 0..1 parent_archetype_id ARCHETYPE_ID
             if (archetype.parent_archetype_id() != null)
             {
-                AM.ARCHETYPE_ID parentId = new AM.ARCHETYPE_ID();
+                ARCHETYPE_ID parentId = new ARCHETYPE_ID();
                 parentId.value = archetype.parent_archetype_id().value().ToString();
                 cloneObject.parent_archetype_id = parentId;
             }
@@ -1023,12 +1024,12 @@ namespace OceanInformatics.ArchetypeModel
             {
                 if (archetype.translations().count() >= 0)
                 {
-                    AM.TRANSLATION_DETAILS[] translations = new AM.TRANSLATION_DETAILS[archetype.translations().count()];
+                    TRANSLATION_DETAILS[] translations = new TRANSLATION_DETAILS[archetype.translations().count()];
                     archetype.translations().start();
 
                     for (int i = 1; i <= archetype.translations().count(); i++)
                     {
-                        AM.TRANSLATION_DETAILS translation = new AM.TRANSLATION_DETAILS();                        
+                        TRANSLATION_DETAILS translation = new TRANSLATION_DETAILS();                        
                         openehr.openehr.rm.common.resource.TRANSLATION_DETAILS td = archetype.translations().item_for_iteration() as openehr.openehr.rm.common.resource.TRANSLATION_DETAILS;
 
                         if (td.accreditation() != null)
@@ -1056,9 +1057,9 @@ namespace OceanInformatics.ArchetypeModel
         }
 
 
-        private AM.ARCHETYPE_ONTOLOGY CloneOntology(openehr.openehr.am.archetype.ontology.ARCHETYPE_ONTOLOGY currentObject)
+        private ARCHETYPE_ONTOLOGY CloneOntology(openehr.openehr.am.archetype.ontology.ARCHETYPE_ONTOLOGY currentObject)
         {
-            AM.ARCHETYPE_ONTOLOGY cloneObject = new AM.ARCHETYPE_ONTOLOGY();
+            ARCHETYPE_ONTOLOGY cloneObject = new ARCHETYPE_ONTOLOGY();
                                                 
             // 1..* term_definitions CodeDefinitionSet
             cloneObject.term_definitions = CloneCodeDefinitions(currentObject.term_definitions());
@@ -1075,20 +1076,20 @@ namespace OceanInformatics.ArchetypeModel
             return cloneObject;
         }
 
-        private AM.TermBindingSet[] CloneTermBindingSet(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
+        private TermBindingSet[] CloneTermBindingSet(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
         {            
             if (currentObject != null)
             {
                 if (currentObject.count() > 0)
                 {
-                    AM.TermBindingSet[] termBindingSets = new AM.TermBindingSet[currentObject.count()];
+                    TermBindingSet[] termBindingSets = new TermBindingSet[currentObject.count()];
                     
                     currentObject.start();
 
                     // 0..* items TERM_BINDING_ITEM                    
                     for (int i = 1; i <= currentObject.count(); i++)
                     {
-                        AM.TermBindingSet termBindingSet = new AM.TermBindingSet();
+                        TermBindingSet termBindingSet = new TermBindingSet();
                         
                         //1 terminology string
                         termBindingSet.terminology = currentObject.key_for_iteration().ToString();
@@ -1098,9 +1099,9 @@ namespace OceanInformatics.ArchetypeModel
                         adlTerms = currentObject.item_for_iteration() as EiffelSoftware.Library.Base.structures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE;
 
                         //BJP: 18/9/2008 The term_bindings should also be sorted.
-                        //AM.TERM_BINDING_ITEM[] localTerms = new AM.TERM_BINDING_ITEM[adlTerms.count()];
-                        SortedList<string, AM.TERM_BINDING_ITEM> localTerms =
-                            new SortedList<string, AM.TERM_BINDING_ITEM>();
+                        //TERM_BINDING_ITEM[] localTerms = new TERM_BINDING_ITEM[adlTerms.count()];
+                        SortedList<string, TERM_BINDING_ITEM> localTerms =
+                            new SortedList<string, TERM_BINDING_ITEM>();
 
                         adlTerms.start();
                         for (int j = 1; j <= adlTerms.count(); j++)
@@ -1109,13 +1110,13 @@ namespace OceanInformatics.ArchetypeModel
 
                             if (term != null)
                             {
-                                AM.TERM_BINDING_ITEM localTerm = new AM.TERM_BINDING_ITEM();
+                                TERM_BINDING_ITEM localTerm = new TERM_BINDING_ITEM();
 
                                 // 1 code string
                                 localTerm.code = adlTerms.key_for_iteration().ToString();
 
                                 // 1 value CODE_PHRASE (CODE_PHRASE to HASH TABLE)                                
-                                AM.CODE_PHRASE codePhrase = new AM.CODE_PHRASE();
+                                CODE_PHRASE codePhrase = new CODE_PHRASE();
                                 
                                 // 1 code_string string
                                 // HKF: TLS-6
@@ -1125,7 +1126,7 @@ namespace OceanInformatics.ArchetypeModel
                                 // 1 terminology_id TERMINOLOGY_ID                                
                                 if (term.code_string() != null) 
                                 {                                
-                                    AM.TERMINOLOGY_ID terminologyId = new AM.TERMINOLOGY_ID();
+                                    TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
                                     // HKF: TLS-6
                                     //terminologyId.value = term.code_string().ToString();
                                     terminologyId.value = term.terminology_id().value().ToString();
@@ -1139,7 +1140,7 @@ namespace OceanInformatics.ArchetypeModel
                             adlTerms.forth();
                         }
 
-                        termBindingSet.items = new AM.TERM_BINDING_ITEM[localTerms.Count];
+                        termBindingSet.items = new TERM_BINDING_ITEM[localTerms.Count];
                         localTerms.Values.CopyTo(termBindingSet.items, 0);
 
                         //termBindingSet.items = localTerms;
@@ -1153,20 +1154,20 @@ namespace OceanInformatics.ArchetypeModel
             return null;
         }
 
-        private AM.CodeDefinitionSet[] CloneCodeDefinitions(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
+        private CodeDefinitionSet[] CloneCodeDefinitions(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
         {            
             if (currentObject != null)
             {
                 //if (currentObject.count() > 0)
                 {
-                    AM.CodeDefinitionSet[] codeDefinitionSets = new AM.CodeDefinitionSet[currentObject.count()];
+                    CodeDefinitionSet[] codeDefinitionSets = new CodeDefinitionSet[currentObject.count()];
                                         
                     currentObject.start();
                     
                     // 0..* items ARCHETYPE_TERM
                     for (int i = 1; i <= currentObject.count(); i++)
                     {
-                        AM.CodeDefinitionSet codeDefinitionSet = new AM.CodeDefinitionSet();
+                        CodeDefinitionSet codeDefinitionSet = new CodeDefinitionSet();
 
                         // 1 language string
                         codeDefinitionSet.language = currentObject.key_for_iteration().ToString();
@@ -1175,15 +1176,15 @@ namespace OceanInformatics.ArchetypeModel
                         EiffelSoftware.Library.Base.structures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE adlTerms;
                         adlTerms = currentObject.item_for_iteration() as EiffelSoftware.Library.Base.structures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE;
 
-                        System.Collections.Generic.SortedList<string, AM.ARCHETYPE_TERM> localTerms =
-                            new System.Collections.Generic.SortedList<string, AM.ARCHETYPE_TERM>();                        
+                        System.Collections.Generic.SortedList<string, ARCHETYPE_TERM> localTerms =
+                            new System.Collections.Generic.SortedList<string, ARCHETYPE_TERM>();                        
 
                         adlTerms.start();
                         for (int j = 1; j <= adlTerms.count(); j++)
                         {
                             openehr.openehr.am.archetype.ontology.Impl.ARCHETYPE_TERM term = adlTerms.item_for_iteration() as openehr.openehr.am.archetype.ontology.Impl.ARCHETYPE_TERM;                            
                                                         
-                            AM.ARCHETYPE_TERM localTerm = new AM.ARCHETYPE_TERM();
+                            ARCHETYPE_TERM localTerm = new ARCHETYPE_TERM();
                             
                             // 1 code string
                             localTerm.code = term.code().ToString();                            
@@ -1196,7 +1197,7 @@ namespace OceanInformatics.ArchetypeModel
                             adlTerms.forth();
                         }
                                                                         
-                        codeDefinitionSet.items = new AM.ARCHETYPE_TERM[localTerms.Count];                        
+                        codeDefinitionSet.items = new ARCHETYPE_TERM[localTerms.Count];                        
                         localTerms.Values.CopyTo(codeDefinitionSet.items, 0);
 
                         codeDefinitionSets[i - 1] = codeDefinitionSet; 
@@ -1209,18 +1210,18 @@ namespace OceanInformatics.ArchetypeModel
             return null;
         }
 
-        private AM.ConstraintBindingSet[] CloneConstraintBindingSet(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
+        private ConstraintBindingSet[] CloneConstraintBindingSet(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
         {
             if (currentObject != null)
             {
                 if (currentObject.count() > 0)
                 {
-                    AM.ConstraintBindingSet[] constraintBindingSets = new AM.ConstraintBindingSet[currentObject.count()];
+                    ConstraintBindingSet[] constraintBindingSets = new ConstraintBindingSet[currentObject.count()];
 
                     currentObject.start();                   
                     for (int i = 1; i <= currentObject.count(); i++)
                     {
-                        AM.ConstraintBindingSet constraintBindingSet = new AM.ConstraintBindingSet();
+                        ConstraintBindingSet constraintBindingSet = new ConstraintBindingSet();
 
                         // 1 terminology string
                         constraintBindingSet.terminology = currentObject.key_for_iteration().ToString();
@@ -1229,14 +1230,14 @@ namespace OceanInformatics.ArchetypeModel
                         EiffelSoftware.Library.Base.structures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE adlTerms;
                         adlTerms = currentObject.item_for_iteration() as EiffelSoftware.Library.Base.structures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE;
 
-                        AM.CONSTRAINT_BINDING_ITEM[] localTerms = new AM.CONSTRAINT_BINDING_ITEM[adlTerms.count()];
+                        CONSTRAINT_BINDING_ITEM[] localTerms = new CONSTRAINT_BINDING_ITEM[adlTerms.count()];
 
                         adlTerms.start();
                         for (int j = 1; j <= adlTerms.count(); j++)
                         {                            
                             openehr.common_libs.basic.Impl.URI term = adlTerms.item_for_iteration() as openehr.common_libs.basic.Impl.URI;
 
-                            AM.CONSTRAINT_BINDING_ITEM localTerm = new AM.CONSTRAINT_BINDING_ITEM();
+                            CONSTRAINT_BINDING_ITEM localTerm = new CONSTRAINT_BINDING_ITEM();
                             
                             // 1 code string
                             localTerm.code = adlTerms.key_for_iteration().ToString();
@@ -1259,9 +1260,9 @@ namespace OceanInformatics.ArchetypeModel
         }
 
 
-        private AM.RESOURCE_DESCRIPTION CloneDescription(openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION currentObject)
+        private RESOURCE_DESCRIPTION CloneDescription(openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION currentObject)
         {
-            AM.RESOURCE_DESCRIPTION cloneObject = new AM.RESOURCE_DESCRIPTION();
+            RESOURCE_DESCRIPTION cloneObject = new RESOURCE_DESCRIPTION();
                         
             // 1..* original_author StringDictionaryItem
             cloneObject.original_author = CloneHashTableAny(currentObject.original_author());
@@ -1300,14 +1301,14 @@ namespace OceanInformatics.ArchetypeModel
             //0..* details RESOURCE_DESCRIPTION_ITEM
             if (currentObject.details().count() > 0)
             {
-                AM.RESOURCE_DESCRIPTION_ITEM[] details = new AM.RESOURCE_DESCRIPTION_ITEM[currentObject.details().count()];
+                RESOURCE_DESCRIPTION_ITEM[] details = new RESOURCE_DESCRIPTION_ITEM[currentObject.details().count()];
 
                 currentObject.details().start();              
                 for (int i = 1; i <= currentObject.details().count(); i++)
                 {
                     openehr.openehr.rm.common.resource.Impl.RESOURCE_DESCRIPTION_ITEM item = currentObject.details().item_for_iteration() as openehr.openehr.rm.common.resource.Impl.RESOURCE_DESCRIPTION_ITEM;
                     
-                    details[i - 1] = new AM.RESOURCE_DESCRIPTION_ITEM ();
+                    details[i - 1] = new RESOURCE_DESCRIPTION_ITEM ();
 
                     // 1 language CODE_PHRASE
                     details[i - 1].language = CloneCodePhrase(item.language());
@@ -1362,26 +1363,26 @@ namespace OceanInformatics.ArchetypeModel
             return cloneObject;            
         }
 
-        private AM.StringDictionaryItem[] CloneHashTableAny(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
+        private StringDictionaryItem[] CloneHashTableAny(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
         {            
             if (currentObject != null)
             {
                 if (currentObject.count() > 0)
                 {
-                    //AM.StringDictionaryItem[] dictionaryItem = new AM.StringDictionaryItem[currentObject.count()];
-                    SortedList<string, AM.StringDictionaryItem> dictionaryItem = new SortedList<string, AM.StringDictionaryItem>();
+                    //StringDictionaryItem[] dictionaryItem = new StringDictionaryItem[currentObject.count()];
+                    SortedList<string, StringDictionaryItem> dictionaryItem = new SortedList<string, StringDictionaryItem>();
                     currentObject.start();
                     while (currentObject.key_for_iteration() != null)
                     {
 
-                        AM.StringDictionaryItem item = new AM.StringDictionaryItem();
+                        StringDictionaryItem item = new StringDictionaryItem();
                         item.id = currentObject.key_for_iteration().ToString();
                         item.Value = currentObject.item_for_iteration().ToString();
                         dictionaryItem.Add(item.id, item);
                         currentObject.forth();
                     }
 
-                    AM.StringDictionaryItem[] items = new AM.StringDictionaryItem[dictionaryItem.Count];
+                    StringDictionaryItem[] items = new StringDictionaryItem[dictionaryItem.Count];
 
                     dictionaryItem.Values.CopyTo(items,0);
 
@@ -1391,9 +1392,9 @@ namespace OceanInformatics.ArchetypeModel
             return null;
         }
 
-        private AM.CARDINALITY CloneCardinality(openehr.openehr.am.archetype.constraint_model.CARDINALITY  currentObject)
+        private CARDINALITY CloneCardinality(openehr.openehr.am.archetype.constraint_model.CARDINALITY  currentObject)
         {            
-            AM.CARDINALITY cloneObject = new AM.CARDINALITY();                    
+            CARDINALITY cloneObject = new CARDINALITY();                    
             
             // 1 is_ordered string
             cloneObject.is_ordered = currentObject.is_ordered();                         
@@ -1407,21 +1408,21 @@ namespace OceanInformatics.ArchetypeModel
             return cloneObject;            
         }
        
-        private AM.C_ATTRIBUTE CloneAttribute(openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE currentObject)
+        private C_ATTRIBUTE CloneAttribute(openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE currentObject)
         {            
-            AM.C_ATTRIBUTE cloneAttribute = null;
+            C_ATTRIBUTE cloneAttribute = null;
 
             // Single
             if (currentObject.cardinality() == null)             
             {                                
-                AM.C_SINGLE_ATTRIBUTE cloneSingle = new AM.C_SINGLE_ATTRIBUTE();                                                
+                C_SINGLE_ATTRIBUTE cloneSingle = new C_SINGLE_ATTRIBUTE();                                                
                 cloneAttribute = cloneSingle;
             }
             
             // Multiple
             else
             {
-                AM.C_MULTIPLE_ATTRIBUTE cloneMultiple = new AM.C_MULTIPLE_ATTRIBUTE();
+                C_MULTIPLE_ATTRIBUTE cloneMultiple = new C_MULTIPLE_ATTRIBUTE();
 
                 // 1 cardinality CARDINALITY
                 if (currentObject.cardinality() != null)
