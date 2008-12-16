@@ -960,6 +960,18 @@ namespace XMLParser
         {
             System.Collections.ArrayList result = new System.Collections.ArrayList();
             result.Add(an_archetype.concept);
+
+            string parentConceptId = "";
+            string[] strings = an_archetype.concept.Split(new char[] { '.' });
+            for (int i = 0; i < strings.Length - 1; i++)
+            {
+                if (i > 0)
+                    parentConceptId += ".";
+                parentConceptId += strings[i];
+
+                result.Add(parentConceptId);
+            }
+
             //Get all ac and at codes used in the archetype
             AddTerms(result, an_archetype.definition);
             return result;
