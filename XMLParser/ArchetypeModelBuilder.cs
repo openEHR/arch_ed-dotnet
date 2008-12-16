@@ -5,9 +5,11 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
+#if XMLParser
 using XMLParser;
+#endif
 
-namespace OceanInformatics.ArchetypeModel
+namespace OpenEhr.V1.Its.Xml.AM
 {
     public static class ArchetypeModelBuilder
     {
@@ -26,7 +28,7 @@ namespace OceanInformatics.ArchetypeModel
             if(archetypeObject == null)
                 throw new ApplicationException("Archetype object must not be null");
 
-            XmlSerializer.ValidateArchetype(archetypeObject);
+            AmSerializer.ValidateArchetype(archetypeObject);
             return archetypeObject;            
         }
 
@@ -45,8 +47,8 @@ namespace OceanInformatics.ArchetypeModel
             settings.OmitXmlDeclaration = true;
             settings.Indent = false;
 
-            System.IO.MemoryStream archetypeStream = XmlSerializer.Serialize(settings, archetype);
-            XmlSerializer.ValidateArchetype(archetypeStream);
+            System.IO.MemoryStream archetypeStream = AmSerializer.Serialize(settings, archetype);
+            AmSerializer.ValidateArchetype(archetypeStream);
 
 #if DEBUG
             archetypeStream.Position = 0;

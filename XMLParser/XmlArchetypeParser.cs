@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
+using OpenEhr.V1.Its.Xml.AM;
+
 [assembly: CLSCompliant(true)]
+
 
 namespace XMLParser
 {
@@ -175,7 +179,7 @@ namespace XMLParser
                 //System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
                 System.IO.MemoryStream ms = new System.IO.MemoryStream();
                 //xmlSerialiser.Serialize(ms, _archetype);
-                ms = OceanInformatics.ArchetypeModel.XmlSerializer.Serialize((System.Xml.XmlWriterSettings)null, _archetype);
+                ms = AmSerializer.Serialize((System.Xml.XmlWriterSettings)null, _archetype);
 
                 ms.Position = 0;
                 System.IO.StreamReader a_reader = new System.IO.StreamReader(ms);
@@ -192,9 +196,9 @@ namespace XMLParser
             System.Diagnostics.Debug.Assert(_archetype != null, "archetype must not be null");
             System.Diagnostics.Debug.Assert(_archetype.description != null, "archetype description must not be null");
 
-            XMLParser.ARCHETYPE canonicalArchetype = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.CanonicalArchetype(_archetype);
+            XMLParser.ARCHETYPE canonicalArchetype = ArchetypeModelBuilder.CanonicalArchetype(_archetype);
 
-            string archetypDigest = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ArchetypeDigest(canonicalArchetype);
+            string archetypDigest = ArchetypeModelBuilder.ArchetypeDigest(canonicalArchetype);
 
             Dictionary<string, StringDictionaryItem> otherDetails = new Dictionary<string, StringDictionaryItem>();
             if (_archetype.description.other_details != null)
@@ -202,17 +206,17 @@ namespace XMLParser
                 foreach (StringDictionaryItem item in _archetype.description.other_details)
                     otherDetails.Add(item.id, item);
             }
-            if (!otherDetails.ContainsKey(OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID))
+            if (!otherDetails.ContainsKey(ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID))
             {
                 StringDictionaryItem item = new StringDictionaryItem();
-                item.id = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID;
+                item.id = ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID;
                 item.Value = archetypDigest;
 
-                otherDetails.Add(OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID, item);
+                otherDetails.Add(ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID, item);
             }
             else
             {
-                StringDictionaryItem item = otherDetails[OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID];
+                StringDictionaryItem item = otherDetails[ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID];
 
                 item.Value = archetypDigest;
             }
@@ -418,7 +422,7 @@ namespace XMLParser
                 // HKF: 8 Dec 2008
                 //System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
                 //xmlSerialiser.Serialize(xml_writer, _archetype);
-                OceanInformatics.ArchetypeModel.XmlSerializer.Serialize(xml_writer, _archetype);
+                AmSerializer.Serialize(xml_writer, _archetype);
 
                 xml_writer.Close();
             }

@@ -7,11 +7,19 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Xml.XPath;
 
-namespace OceanInformatics.ArchetypeModel
+#if XMLParser
+using XMLParser;
+#endif
+
+namespace OpenEhr.V1.Its.Xml.AM
 {
-    static class XmlSerializer
+    static public class AmSerializer
     {
-        private const string SCHEMA_LOCATOR_PATTERN = "XMLParser.{0}.xsd";
+#if XMLParser
+        private const string SCHEMA_LOCATOR_PATTERN = "{0}.{1}.xsd";
+#else
+        private const string SCHEMA_LOCATOR_PATTERN = "{0}.Schemas.{1}.xsd";
+#endif
 
         private static object archetypeSchemaLock = new object();
         private static volatile XmlSchemaSet archetypeSchemaSet;
@@ -28,11 +36,12 @@ namespace OceanInformatics.ArchetypeModel
                         {
                             Assembly assembly = Assembly.GetExecutingAssembly();
                             string[] archetypeSchemaNames = { "BaseTypes", "Resource", "Archetype", "OpenehrProfile" };
+                            AssemblyName name = assembly.GetName();
 
                             XmlSchemaSet tempSchemaSet = new XmlSchemaSet();
                             foreach (string schemaName in archetypeSchemaNames)
                             {
-                                string schemaPath = string.Format(SCHEMA_LOCATOR_PATTERN, schemaName);
+                                string schemaPath = string.Format(SCHEMA_LOCATOR_PATTERN, name.Name, schemaName);
                                 using (XmlReader schemaReader = XmlTextReader.Create(assembly.GetManifestResourceStream(schemaPath)))
                                 {
                                     tempSchemaSet.Add(XmlSchema.Read(schemaReader, null));
@@ -61,19 +70,19 @@ namespace OceanInformatics.ArchetypeModel
                     {
                         if (archetypeSerialiser == null)
                             archetypeSerialiser =
-                                new System.Xml.Serialization.XmlSerializer(typeof(XMLParser.ARCHETYPE));
+                                new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
                     }
                 }
                 return archetypeSerialiser;
             }
         }
 
-        public static void Serialize(XmlWriter writer, XMLParser.ARCHETYPE archetype)
+        public static void Serialize(XmlWriter writer, ARCHETYPE archetype)
         {
             ArchetypeSerialiser.Serialize(writer, archetype);
         }
 
-        public static System.IO.MemoryStream Serialize(XmlWriterSettings settings, XMLParser.ARCHETYPE archetype)
+        public static System.IO.MemoryStream Serialize(XmlWriterSettings settings, ARCHETYPE archetype)
         {
             System.IO.MemoryStream stream = new System.IO.MemoryStream();
             if (settings != null)
@@ -103,7 +112,7 @@ namespace OceanInformatics.ArchetypeModel
             {
                 //System.Xml.XmlDocument archetypeDoc = new System.Xml.XmlDocument();
                 //    archetypeDoc.Load(reader);
-                XMLParser.ARCHETYPE archetype = ArchetypeSerialiser.Deserialize(reader) as XMLParser.ARCHETYPE;
+                ARCHETYPE archetype = ArchetypeSerialiser.Deserialize(reader) as ARCHETYPE;
                 if (archetype == null)
                     throw new ApplicationException("application must not be null");
 
@@ -113,7 +122,7 @@ namespace OceanInformatics.ArchetypeModel
             archetypeStream.Position = position;
         }
 
-        public static bool ValidateArchetype(XMLParser.ARCHETYPE archetype)
+        public static bool ValidateArchetype(ARCHETYPE archetype)
         {
             System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
             settings.Encoding = Encoding.UTF8;
@@ -121,7 +130,7 @@ namespace OceanInformatics.ArchetypeModel
             settings.Indent = false;
 
             System.IO.MemoryStream stream = Serialize(settings, archetype);
-            XmlSerializer.ValidateArchetype(stream);
+            AmSerializer.ValidateArchetype(stream);
 
             return true;
         }
