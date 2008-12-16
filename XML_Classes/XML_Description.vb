@@ -15,6 +15,7 @@
 '
 'option Strict On 
 Option Explicit On 
+Imports AM = OpenEhr.V1.Its.Xml.AM
 
 Namespace ArchetypeEditor.XML_Classes
     Public Class XML_Description
@@ -83,7 +84,7 @@ Namespace ArchetypeEditor.XML_Classes
             ' HKF: 8 Dec 2008
             If Not Me.ArchetypeDigest Is Nothing Then
                 di = New XMLParser.StringDictionaryItem
-                di.id = OceanInformatics.ArchetypeModel.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID
+                di.id = AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID
                 di.Value = ArchetypeDigest
                 otherDetails.Add(di)
             End If

@@ -32,7 +32,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AdlParser\EiffelSoftware.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="OceanInformatics.AdlParser, Version=1.4.0.759, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="OceanInformatics.AdlParser, Version=1.4.0.766, Culture=neutral, PublicKeyToken=13a58ca100ef917a, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\AdlParser\OceanInformatics.AdlParser.dll</HintPath>
     </Reference>
