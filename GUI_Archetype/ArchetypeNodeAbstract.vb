@@ -168,7 +168,7 @@ Public MustInherit Class ArchetypeNodeAbstract
 
     Sub New(ByVal a_node As ArchetypeNodeAbstract)
         mFileManager = a_node.mFileManager
-        mItem = CType(a_node.mItem.Copy, RmStructure)
+        mItem = a_node.mItem.Copy
         mText = a_node.Text
         mDescription = a_node.Description
         mComment = a_node.Comment
