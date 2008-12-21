@@ -126,20 +126,20 @@ Class RmEvent
     End Property
 
     Public Overrides Function Copy() As RmStructure
-        Dim ae As New RmEvent(Me.NodeId)
-        ae.cOccurrences = Me.cOccurrences
-        ae.mType = mType
-        ae.sNodeId = Me.sNodeId
-        ae.mRunTimeConstraint = Me.mRunTimeConstraint
-        ae.iOffset = Me.iOffset
-        ae.sOffset = Me.sOffset
-        ae.iWidth = Me.iWidth
-        ae.sWidth = Me.sWidth
-        ae.mEventType = Me.EventType
-        ae.boolSignNeg = Me.boolSignNeg
-        ae.boolFixedDuration = Me.boolFixedDuration
-        ae.boolFixedOffset = ae.boolFixedOffset
-        Return ae
+        Dim result As New RmEvent(NodeId)
+        result.cOccurrences = cOccurrences
+        result.mType = mType
+        result.sNodeId = sNodeId
+        result.mRunTimeConstraint = mRunTimeConstraint
+        result.iOffset = iOffset
+        result.sOffset = sOffset
+        result.iWidth = iWidth
+        result.sWidth = sWidth
+        result.mEventType = EventType
+        result.boolSignNeg = boolSignNeg
+        result.boolFixedDuration = boolFixedDuration
+        result.boolFixedOffset = boolFixedOffset
+        Return result
     End Function
 
     Sub New(ByVal NodeId As String)
