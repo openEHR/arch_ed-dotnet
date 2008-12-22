@@ -333,7 +333,9 @@ Public Class Options
         Dim filename As String = Path.Combine(ApplicationDataDirectory, "ArchetypeEditor.cfg")
 
         If Not File.Exists(filename) Then
-            filename = Path.Combine(Application.StartupPath, "ArchetypeEditor.cfg")
+            ' HKF: 22 Dec 2008
+            'filename = Path.Combine(Application.StartupPath, "ArchetypeEditor.cfg")
+            filename = Path.Combine(Options.AssemblyPath, "ArchetypeEditor.cfg")
         End If
 
         If File.Exists(filename) Then
@@ -484,7 +486,9 @@ Public Class Options
     End Sub
 
     Function ApplicationDataDirectory() As String
-        Dim result As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.ProductName)
+        ' HKF: 22 Dec 2008
+        'Dim result As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.ProductName)
+        Dim result As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Options.ProductName)
 
         If Not Directory.Exists(result) Then
             Directory.CreateDirectory(result)
@@ -551,12 +555,17 @@ Public Class Options
     End Sub
 
     Sub New()
-        mRepositoryPath = Path.Combine(Application.StartupPath, "..\Archetypes")
+        ' HKF: 22 Dec 2008
+        'mRepositoryPath = Path.Combine(Application.StartupPath, "..\Archetypes")
+        mRepositoryPath = Path.Combine(Options.AssemblyPath, "..\Archetypes")
         mXmlRepositoryPath = mRepositoryPath
         mUserName = ""
         mUserEmail = ""
-        mHelpPath = Path.Combine(Application.StartupPath, "Help\ArchetypeEditor.chm")
-        mXsltScriptPath = Path.Combine(Application.StartupPath, "HTML\adlxml-to-html.xsl")
+        ' HKF: 22 Dec 2008
+        'mHelpPath = Path.Combine(Application.StartupPath, "Help\ArchetypeEditor.chm")
+        'mXsltScriptPath = Path.Combine(Application.StartupPath, "HTML\adlxml-to-html.xsl")
+        mHelpPath = Path.Combine(Options.AssemblyPath, "Help\ArchetypeEditor.chm")
+        mXsltScriptPath = Path.Combine(Options.AssemblyPath, "HTML\adlxml-to-html.xsl")
         mUseXsltForHtml = False
         mShowTermsInHtml = False
         mShowCommentsInHtml = False
@@ -571,5 +580,32 @@ Public Class Options
             ShowOptionsForm(1)
         End If
     End Sub
+
+    Public Shared ReadOnly Property AssemblyPath() As String
+        Get
+            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+            Dim basePath As String = System.IO.Path.GetDirectoryName(assembly.CodeBase)
+
+            If basePath.StartsWith("file:\") Then
+                basePath = basePath.Substring(6)
+            End If
+
+            Return basePath
+        End Get
+    End Property
+
+    Shared ReadOnly Property ProductName() As String
+        Get
+            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+            Dim productAttributes() As System.Reflection.AssemblyProductAttribute
+            productAttributes = assembly.GetCustomAttributes(GetType(System.Reflection.AssemblyProductAttribute), False)
+
+            If productAttributes Is Nothing Or productAttributes.Length < 1 Then
+                Throw New ApplicationException("Assembly must contain AssemblyProductAttribute")
+            End If
+
+            Return productAttributes(0).Product
+        End Get
+    End Property
 
 End Class
