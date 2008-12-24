@@ -454,7 +454,8 @@ namespace XMLParser
         {
             if (path != "")
             {
-                path += "[" + node.node_id + "]";
+                if (!string.IsNullOrEmpty(node.node_id)) 
+                    path += "[" + node.node_id + "]";
                 list.Add(path);
             }
 
@@ -478,7 +479,8 @@ namespace XMLParser
                         {
                             C_COMPLEX_OBJECT co = attrib.children[0] as C_COMPLEX_OBJECT;
 
-                            if (co != null && !string.IsNullOrEmpty(co.node_id))
+                            //if (co != null && !string.IsNullOrEmpty(co.node_id))
+                            if (co != null)
                                 get_paths(list, co, path + "/" + attrib.rm_attribute_name);
                         }
                     }

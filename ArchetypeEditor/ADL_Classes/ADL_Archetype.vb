@@ -990,21 +990,23 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Protected Function GetPathOfNode(ByVal NodeId As String) As openehr.common_libs.structures.object_graph.path.OG_PATH
             Dim tablePaths As EiffelList.LIST_REFERENCE
-            Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
+            Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH = Nothing
             Dim s As String
             Dim i As Integer
 
             tablePaths = Me.adlArchetype.physical_paths
 
+            'System.Diagnostics.Debug.WriteLine(tablePaths.count)
             For i = 1 To tablePaths.count
                 s = tablePaths.i_th(i).out.to_cil
+                'System.Diagnostics.Debug.WriteLine(s)
                 If s.EndsWith(NodeId & "]") Then
                     path = openehr.common_libs.structures.object_graph.path.Create.OG_PATH.make_from_string(EiffelKernel.Create.STRING_8.make_from_cil(s))
-                    Return path
+                    Exit For
                 End If
             Next
 
-            Return Nothing
+            Return path
 
         End Function
 
