@@ -1554,17 +1554,21 @@ Namespace ArchetypeEditor.XML_Classes
 
         Protected Function GetPathOfNode(ByVal NodeId As String) As String
             Dim an_arraylist As System.Collections.ArrayList
-            Dim s As String
+            Dim path As String = ""
 
             an_arraylist = mArchetypeParser.PhysicalPaths()
 
-            For Each s In an_arraylist
+            'System.Diagnostics.Debug.WriteLine(an_arraylist.Count)
+            For Each s As String In an_arraylist
+                'System.Diagnostics.Debug.WriteLine(s)
                 If s.EndsWith(NodeId & "]") Then
-                    Return s
+                    path = s
+                    Exit For
                 End If
             Next
-            Debug.Assert(False, "Should be a path for every node")
-            Return ""
+
+            Debug.Assert(Not String.IsNullOrEmpty(path), "Should be a path for every node")
+            Return path
         End Function
 
         Private Sub BuildInterval(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Interval)
@@ -1787,7 +1791,7 @@ Namespace ArchetypeEditor.XML_Classes
                 End If
 
             Catch ex As Exception
-                Debug.Assert(False)
+                Debug.Assert(False, ex.Message)
             End Try
         End Sub
 
