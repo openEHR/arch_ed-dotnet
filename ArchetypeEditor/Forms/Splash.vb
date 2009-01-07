@@ -22,7 +22,7 @@ Public Class Splash
     Public Sub New()
         MyBase.New()
         InitializeComponent()
-        VersionLabel.Text = "Version " + ProductVersion
+        VersionLabel.Text = "Version " + ProductVersion + " Alpha"
     End Sub
 
     'Form overrides dispose to clean up the component list.
@@ -37,6 +37,7 @@ Public Class Splash
     Friend WithEvents buttonClose As System.Windows.Forms.Button
     Public WithEvents timerSplash As System.Windows.Forms.Timer
     Friend WithEvents VersionLabel As System.Windows.Forms.Label
+    Friend WithEvents CopyrightLabel As System.Windows.Forms.Label
 
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
@@ -50,6 +51,7 @@ Public Class Splash
         Me.buttonClose = New System.Windows.Forms.Button
         Me.timerSplash = New System.Windows.Forms.Timer(Me.components)
         Me.VersionLabel = New System.Windows.Forms.Label
+        Me.CopyrightLabel = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
         'buttonClose
@@ -73,12 +75,23 @@ Public Class Splash
         '
         Me.VersionLabel.BackColor = System.Drawing.Color.Transparent
         Me.VersionLabel.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.VersionLabel.Location = New System.Drawing.Point(177, 152)
+        Me.VersionLabel.Location = New System.Drawing.Point(157, 152)
         Me.VersionLabel.Name = "VersionLabel"
-        Me.VersionLabel.Size = New System.Drawing.Size(178, 14)
+        Me.VersionLabel.Size = New System.Drawing.Size(218, 14)
         Me.VersionLabel.TabIndex = 1
         Me.VersionLabel.Text = "Version 1.0"
         Me.VersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'CopyrightLabel
+        '
+        Me.CopyrightLabel.BackColor = System.Drawing.Color.Transparent
+        Me.CopyrightLabel.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CopyrightLabel.Location = New System.Drawing.Point(157, 169)
+        Me.CopyrightLabel.Name = "CopyrightLabel"
+        Me.CopyrightLabel.Size = New System.Drawing.Size(218, 14)
+        Me.CopyrightLabel.TabIndex = 2
+        Me.CopyrightLabel.Text = "Copyright © Ocean Informatics 2009"
+        Me.CopyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Splash
         '
@@ -89,6 +102,7 @@ Public Class Splash
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.CancelButton = Me.buttonClose
         Me.ClientSize = New System.Drawing.Size(578, 262)
+        Me.Controls.Add(Me.CopyrightLabel)
         Me.Controls.Add(Me.VersionLabel)
         Me.Controls.Add(Me.buttonClose)
         Me.DoubleBuffered = True
