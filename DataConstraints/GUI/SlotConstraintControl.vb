@@ -581,16 +581,11 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub AddFilestoListBox(ByVal directory As System.IO.DirectoryInfo, ByVal pattern As String, ByVal clipFileName As Boolean)
-        For Each f As System.IO.FileInfo In directory.GetFiles(pattern, IO.SearchOption.AllDirectories)
-            Dim fileName As String
+        For Each f As IO.FileInfo In directory.GetFiles(pattern, IO.SearchOption.AllDirectories)
+            Dim fileName As String = IO.Path.ChangeExtension(f.Name, Nothing)
 
             If clipFileName Then
-                Dim i, j As Integer
-                i = f.Name.IndexOf(".") + 1
-                j = f.Name.LastIndexOf(".adl")
-                fileName = f.Name.Substring(i, j - i)
-            Else
-                fileName = f.Name.Substring(0, f.Name.LastIndexOf(".adl"))
+                fileName = fileName.Substring(fileName.IndexOf(".") + 1)
             End If
 
             AvailableArchetypesListBox.Items.Insert(0, fileName)
