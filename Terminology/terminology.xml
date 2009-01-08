@@ -6220,25 +6220,17 @@
   <TerminologyIdentifiers VSAB="ALT2000" SourceName="Alternative Billing Concepts, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="AOD2000" SourceName="Alcohol and Other Drug Thesaurus, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="BI98" SourceName="Beth Israel Vocabulary, 1.0" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="BRMP2002" SourceName="Portuguese translation of the Medical Subject Headings, 2002" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="BRMS2002" SourceName="Spanish translation of the Medical Subject Headings, 2002" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CCPSS99" SourceName="Canonical Clinical Problem Statement System, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CCS99" SourceName="Clinical Classifications Software, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CDT4" SourceName="Current Dental Terminology(CDT), 4" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="COSTAR_89-95" SourceName="COSTAR, 1989-1995" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CPM93" SourceName="Medical Entities Dictionary, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="CPT01SP" SourceName="Physicians' Current Procedural Terminology, Spanish Translation, 2001" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CPT2003" SourceName="Physicians' Current Procedural Terminology, 2003" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CSP2002" SourceName="CRISP Thesaurus, 2002" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CST95" SourceName="COSTART, 1995" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="DDB00" SourceName="Diseases Database, 2000" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DMD2003" SourceName="German translation of the Medical Subject Headings, 2003" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DMDICD10_1995" SourceName="German translation of ICD10, 1995" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DMDUMD_1996" SourceName="German translation of UMDNS, 1996" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="DSM3R_1987" SourceName="DSM-III-R, 1987" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="DSM4_1994" SourceName="DSM-IV, 1994" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DUT2001" SourceName="Dutch Translation of the Medical Subject Headings, 2001" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DXP94" SourceName="DXplain, 1994" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="FIN2003" SourceName="Finnish translations of the Medical Subject Headings, 2003" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="HCDT4" SourceName="HCPCS Version of Current Dental Terminology(CDT), 4" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="HCPCS03" SourceName="Healthcare Common Procedure Coding System, 2003" Authority="UMLS2003AA" />
@@ -6247,44 +6239,21 @@
   <TerminologyIdentifiers VSAB="HL7_1998-2002" SourceName="Health Level Seven Vocabulary, 1998-2002" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="HLREL_1998" SourceName="ICPC2E-ICD10 relationships from Dr. Henk Lamberts, 1998" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="HPC99" SourceName="Health Product Comparison System, 1999" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICD10AE_1998" SourceName="ICD10, American English Equivalents, 1998" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICD10AMAE_2000" SourceName="International Statistical Classification of Diseases and Related Health Problems, Australian Modification, Americanized English Equivalents, 2000" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICD10AM_2000" SourceName="International Statistical Classification of Diseases and Related Health Problems, 10th Revision, Australian Modification, January 2000 Release" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICD10_1998" SourceName="ICD10, 1998" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICD-O-3" SourceName="ICD Oncology (3), 1976" Authority="WHO" />
+  <TerminologyIdentifiers VSAB="ICD10AM_2000" SourceName="ICD-10, Australian Modification, 2000" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.135"/>
+  <TerminologyIdentifiers VSAB="ICD10_1998" SourceName="ICD-10, 1998" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.3"/>
+  <TerminologyIdentifiers VSAB="ICD10CM" SourceName="ICD-10 Clinical Modification (US)" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.90"/>
+  <TerminologyIdentifiers VSAB="ICD-O-3" SourceName="ICD Oncology (3), 1976" Authority="WHO" Hl7Oid="2.16.840.1.113883.6.43"/>
   <TerminologyIdentifiers VSAB="ICD9CM_2003" SourceName="ICD-9-CM, 2003" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPC2AE_1998" SourceName="International Classification of Primary Care, Americanized English Equivalents, 2E, 1998" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ICPC2E_1998" SourceName="International Classification of Primary Care 2nd Edition, Electronic, 2E, 1998" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPC2P_2000" SourceName="International Classification of Primary Care, Version2-Plus, 2000" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPC93" SourceName="International Classification of Primary Care, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCBAQ_1993" SourceName="ICPC, Basque Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCDAN_1993" SourceName="ICPC, Danish Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCDUT_1993" SourceName="ICPC, Dutch Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCFIN_1993" SourceName="ICPC, Finnish Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCFRE_1993" SourceName="ICPC, French Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCGER_1993" SourceName="ICPC, German Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCHEB_1993" SourceName="ICPC, Hebrew Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCHUN_1993" SourceName="ICPC, Hungarian Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCITA_1993" SourceName="ICPC, Italian Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCNOR_1993" SourceName="ICPC, Norwegian Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCPAE_2000" SourceName="International Classification of Primary Care ,Version2-Plus, Americanized English Equivalents, 2000" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCPOR_1993" SourceName="ICPC, Portuguese Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCSPA_1993" SourceName="ICPC, Spanish Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCSWE_1993" SourceName="ICPC, Swedish Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="INS2002" SourceName="French translation of the Medical Subject Headings, 2002" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ITA2003" SourceName="Italian translation of Medical Subject Headings, 2003" Authority="UMLS2003AA" />
+  <TerminologyIdentifiers VSAB="ICPC2P_2000" SourceName="International Classification of Primary Care, Version2-Plus, 2000" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.140.2"/>
+  <TerminologyIdentifiers VSAB="ICPC93" SourceName="International Classification of Primary Care, 1993" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.138"/>
   <TerminologyIdentifiers VSAB="JABL99" SourceName="Online Congenital Multiple Anomaly/ Mental Retardation Syndromes, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="LCH90" SourceName="Library of Congress Subject Headings, 1990" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="LNC205" SourceName="LOINC, 2.05" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="LOINC" SourceName="LOINC" Authority="openEHR 2003" />
+  <TerminologyIdentifiers VSAB="LOINC" SourceName="LOINC" Authority="HL7 2007" Hl7Oid="2.16.840.1.113883.6.1"/>
   <TerminologyIdentifiers VSAB="MCM92" SourceName="McMaster University Epidemiology Terms, 1992" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MDDB99" SourceName="MasterDrug DataBase, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MDR51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), 5.1" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="MDRAE51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), American English Equivalents, 5.1" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="MDREA51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), American English, with expanded abbreviations, 5.1" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MDREX51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), with expanded abbreviations, 5.1" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="MDRPOR51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), 5.1, Portuguese Edition" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="MDRSPA51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), 5.1, Spanish Edition" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MIM93" SourceName="Online Mendelian Inheritance in Man, 1993" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MMSL01" SourceName="Multum MediSource Lexicon, 2001" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MMX01" SourceName="Micromedex DRUGDEX, 2001-08" Authority="UMLS2003AA" />
@@ -6313,14 +6282,12 @@
   <TerminologyIdentifiers VSAB="QMR96" SourceName="Quick Medical Reference (QMR), 1996" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="RAM99" SourceName="QMR clinically related terms from Randolph A. Miller, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="RCD99" SourceName="Clinical Terms Version 3 (CTV3) (Read Codes), 1999" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="RCDAE_1999" SourceName="Read thesaurus, American English Equivalents, 1999" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="RCDSA_1999" SourceName="Read thesaurus Americanized Synthesized Terms, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="RCDSY_1999" SourceName="Read thesaurus, Synthesized Terms, 1999" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="RUS2003" SourceName="Russian Translation of MeSH, 2003" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="RXNORM_03AA" SourceName="RXNORM Project, META2003AA" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="SNM2" SourceName="SNOMED-2, 2" Authority="UMLS2003AA" />
+  <TerminologyIdentifiers VSAB="RXNORM_03AA" SourceName="RXNORM Drug terminology 2003" Authority="UMLS2003AA" />
+  <TerminologyIdentifiers VSAB="SNM2" SourceName="SNOMED-2, 1979" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="SNMI98" SourceName="SNOMED International, 1998" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="SNOMED-CT" SourceName="SNOMED International Clinical Terms, 2002" Authority="openEHR 2003" />
+  <TerminologyIdentifiers VSAB="SNOMED-RT" SourceName="SNOMED RT (Reference Terminology) 1997" Authority="HL7" Hl7Oid="2.16.840.1.113883.6.5"/>
+  <TerminologyIdentifiers VSAB="SNOMED-CT" SourceName="SNOMED International Clinical Terms, 2002" Authority="HL7" Hl7Oid="2.16.840.1.113883.6.96"/>
   <TerminologyIdentifiers VSAB="SPN02" SourceName="Standard Product Nomenclature, 2002" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="SRC" SourceName="Metathesaurus Source Terminology Names" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ULT93" SourceName="UltraSTAR, 1993" Authority="UMLS2003AA" />
@@ -6329,10 +6296,6 @@
   <TerminologyIdentifiers VSAB="UWDA155" SourceName="University of Washington Digital Anatomist, 1.5.5" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="VANDF01" SourceName="Veterans Health Administration National Drug File, 2001" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="WHO97" SourceName="WHO Adverse Reaction Terminology, 1997" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="WHOFRE_1997" SourceName="WHOART, French Translation, 1997" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="WHOGER_1997" SourceName="WHOART, German Translation, 1997" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="WHOPOR_1997" SourceName="WHOART, Portuguese Translation, 1997" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="WHOSPA_1997" SourceName="WHOART, Spanish Translation, 1997" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MST2" SourceName="World Organisation of Digestive Endoscopy" Authority="Manually added" />
   <Territory NumericCode="004" TwoLetter="AF" ThreeLetter="AFG" Text="Afghanistan" />
   <Territory NumericCode="008" TwoLetter="AL" ThreeLetter="ALB" Text="Albania, People's Socialist Republic of" />
