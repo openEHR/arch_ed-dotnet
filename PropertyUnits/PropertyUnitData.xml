@@ -531,4 +531,6 @@
   <Unit property_id="71" Text="mS" name="milliseimens" conversion="1" coefficient="3" primary="false" case_ins="mS" />
   <Unit property_id="80" Text="{Time/Time}" conversion="0" primary="false" />
   <Unit property_id="7" Text="drops/min" conversion="0" primary="false" />
+  <Unit property_id="19" Text="mg/hr" conversion="2.78" coefficient="-10" primary="false" />
+  <Unit property_id="19" Text="mg/min" conversion="1.6" coefficient="-8" primary="false" />
 </PropertyUnits>
