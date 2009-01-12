@@ -20,6 +20,43 @@ namespace OpenEhr.V1.Its.Xml.AM
 #else
         private const string SCHEMA_LOCATOR_PATTERN = "{0}.Schemas.{1}.xsd";
 #endif
+        static System.Xml.Serialization.XmlSerializer xmlSchemaSerializer;
+        static object xmlSchemaSerializerLock = new object();
+
+        static System.Xml.Serialization.XmlSerializer XmlSchemaSerializer
+        {
+            get
+            {
+                if (xmlSchemaSerializer == null)
+                {
+                    lock (xmlSchemaSerializerLock)
+                    {
+                        if (xmlSchemaSerializer == null)
+                            xmlSchemaSerializer = new System.Xml.Serialization.XmlSerializer(typeof(XmlSchema));
+                    }
+                }
+                return xmlSchemaSerializer;
+            }
+        }
+
+        public static XmlSchema GetSchema(string schemaName)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            //string[] names = assembly.GetManifestResourceNames();
+            AssemblyName name = assembly.GetName();
+
+            string resourceName = string.Format(SCHEMA_LOCATOR_PATTERN, name.Name, schemaName);
+            XmlSchema schema = null;
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                    throw new ArgumentException("schemaName", "Schema resource " + resourceName + " not found in manifest");
+
+                schema = (XmlSchema)XmlSchemaSerializer.Deserialize(new XmlTextReader(stream));
+            }
+
+            return schema;
+        }
 
         private static object archetypeSchemaLock = new object();
         private static volatile XmlSchemaSet archetypeSchemaSet;
@@ -34,19 +71,26 @@ namespace OpenEhr.V1.Its.Xml.AM
                     {
                         if (archetypeSchemaSet == null)
                         {
-                            Assembly assembly = Assembly.GetExecutingAssembly();
-                            string[] archetypeSchemaNames = { "BaseTypes", "Resource", "Archetype", "OpenehrProfile" };
-                            AssemblyName name = assembly.GetName();
+                            XmlSchema amSchema = GetSchema("OpenehrProfile");
+                            amSchema.Includes.RemoveAt(0);
+
+                            XmlSchema schema = GetSchema("Archetype");
+
+                            foreach (XmlSchemaObject item in schema.Items)
+                                amSchema.Items.Add(item);
+
+                            XmlSchema contentSchema = GetSchema("Resource");
+
+                            foreach (XmlSchemaObject item in contentSchema.Items)
+                                amSchema.Items.Add(item);
+
+                            XmlSchema baseTypesSchema = GetSchema("BaseTypes");
+
+                            foreach (XmlSchemaObject item in baseTypesSchema.Items)
+                                amSchema.Items.Add(item);
 
                             XmlSchemaSet tempSchemaSet = new XmlSchemaSet();
-                            foreach (string schemaName in archetypeSchemaNames)
-                            {
-                                string schemaPath = string.Format(SCHEMA_LOCATOR_PATTERN, name.Name, schemaName);
-                                using (XmlReader schemaReader = XmlTextReader.Create(assembly.GetManifestResourceStream(schemaPath)))
-                                {
-                                    tempSchemaSet.Add(XmlSchema.Read(schemaReader, null));
-                                }
-                            }
+                            tempSchemaSet.Add(amSchema);
                             tempSchemaSet.Compile();
 
                             archetypeSchemaSet = tempSchemaSet;
