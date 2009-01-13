@@ -180,7 +180,7 @@
   <Unit property_id="19" Text="kg/h" conversion="2.78" coefficient="-4" primary="false" />
   <Unit property_id="19" Text="lb/s" conversion="0.4536" primary="false" />
   <Unit property_id="19" Text="lb/min" conversion="7.56" coefficient="-3" primary="false" />
-  <Unit property_id="19" Text="lb/hr" conversion="1.26" coefficient="-4" primary="false" />
+  <Unit property_id="19" Text="lb/h" conversion="1.26" coefficient="-4" primary="false" />
   <Unit property_id="20" Text="kg/m2-s" conversion="1" primary="true" />
   <Unit property_id="20" Text="g/cm2-s" conversion="10" primary="false" />
   <Unit property_id="20" Text="g/m2-min" conversion="1.667" coefficient="-5" primary="false" />
@@ -418,10 +418,10 @@
   <Unit property_id="56" Text="10*9" conversion="1" coefficient="9" primary="false" />
   <Unit property_id="56" Text="10*12" conversion="1" coefficient="12" primary="false" />
   <Unit property_id="6" Text="cc" conversion="1" coefficient="-6" primary="false" />
-  <Unit property_id="7" Text="ml/m" conversion="6" coefficient="-5" primary="false" />
+  <Unit property_id="7" Text="ml/min" conversion="6" coefficient="-5" primary="false" />
   <Unit property_id="7" Text="ml/h" conversion="3.6" coefficient="-4" primary="false" />
   <Unit property_id="7" Text="l/s" conversion="1" coefficient="-3" primary="false" />
-  <Unit property_id="7" Text="l/m" conversion="6" coefficient="-2" primary="false" />
+  <Unit property_id="7" Text="l/min" conversion="6" coefficient="-2" primary="false" />
   <Unit property_id="7" Text="l/h" conversion="0.36" primary="false" />
   <Unit property_id="5" Text="% body" conversion="1" primary="false" />
   <Unit property_id="5" Text="% trunk" conversion="0.22" primary="false" />
@@ -453,7 +453,7 @@
   <Unit property_id="38" Text="milliW" conversion="1" coefficient="-3" primary="false" />
   <Unit property_id="38" Text="kW" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="1" Text="AU" conversion="0.9105953" coefficient="-30" primary="false" />
-  <Unit property_id="19" Text="g/24hr" conversion="6.672" coefficient="-6" primary="false" />
+  <Unit property_id="19" Text="g/24h" conversion="6.672" coefficient="-6" primary="false" />
   <Unit property_id="19" Text="g/d" conversion="6.672" coefficient="-6" primary="false" />
   <Unit property_id="59" Text="{MASS/MASS}" conversion="0" primary="false" />
   <Unit property_id="57" Text="kIU" conversion="1" coefficient="3" primary="false" />
@@ -531,6 +531,11 @@
   <Unit property_id="71" Text="mS" name="milliseimens" conversion="1" coefficient="3" primary="false" case_ins="mS" />
   <Unit property_id="80" Text="{Time/Time}" conversion="0" primary="false" />
   <Unit property_id="7" Text="drops/min" conversion="0" primary="false" />
-  <Unit property_id="19" Text="mg/hr" conversion="2.78" coefficient="-10" primary="false" />
+  <Unit property_id="19" Text="mg/h" conversion="2.78" coefficient="-10" primary="false" />
   <Unit property_id="19" Text="mg/min" conversion="1.6" coefficient="-8" primary="false" />
+  <Unit property_id="19" Text="mg/24h" conversion="1.158" coefficient="-11" primary="false" />
+  <Unit property_id="10" Text="mm/24h" conversion="1.158" coefficient="-8" primary="false" />
+  <Unit property_id="19" Text="microgm/h" conversion="2.78" coefficient="-13" primary="false" />
+  <Unit property_id="19" Text="microgm/min" conversion="1.6" coefficient="-11" primary="false" />
+  <Unit property_id="19" Text="microgm/24h" conversion="1.158" coefficient="-14" primary="false" />
 </PropertyUnits>
