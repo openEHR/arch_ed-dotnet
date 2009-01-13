@@ -242,6 +242,10 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Function
 
+        Protected Function MakeExistence(ByVal e As RmExistence) As openehr.common_libs.basic.INTERVAL_INTEGER_32
+            Return mAomFactory.create_c_integer_make_bounded(e.MinCount, e.MaxCount, True, True).interval
+        End Function
+
         Protected Overloads Sub BuildCodedText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ConstraintID As String)
             Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
@@ -448,6 +452,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         End If
                     End If
+                    'SRH: 11 Jan 2009 - EDT-502 - set existence of protocol and state attributes
+                    an_attribute.set_existence(MakeExistence(rmState.Children.Existence))
                 Next
             End If
         End Sub
@@ -1617,6 +1623,12 @@ Namespace ArchetypeEditor.ADL_Classes
                     BuildStructure(rm.Children.items(0), objNode)
                 End If
             End If
+
+            'SRH: 11 Jan 2009 - EDT-502 - set existence of protocol and state attributes
+            If attribute_name = "state" Or attribute_name = "protocol" Then
+                an_attribute.set_existence(MakeExistence(rm.Children.Existence))
+            End If
+
         End Sub
 
         Private Sub BuildProtocol(ByVal rm As RmStructureCompound, ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -1635,6 +1647,8 @@ Namespace ArchetypeEditor.ADL_Classes
                     objNode = mAomFactory.create_c_complex_object_identified(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(rmStruct.Type)), EiffelKernel.Create.STRING_8.make_from_cil(rmStruct.NodeId))
                     BuildStructure(CType(rmStruct, RmStructureCompound), objNode)
                 End If
+                'SRH: 11 Jan 2009 - EDT-502 - set existence of protocol and state attributes
+                an_attribute.set_existence(MakeExistence(rm.Children.Existence))
             End If
         End Sub
 

@@ -7,7 +7,7 @@ End Enum
 Public Class OccurrencesPanel
     Inherits System.Windows.Forms.UserControl
     Private mMode As OccurrencesMode
-    Private mCardinality As New RmCardinality
+    Private WithEvents mCardinality As New RmCardinality
     Private mIsLoading As Boolean = False
     Private mIsSingle As Boolean = False
     Private mIncludeOrdered As Boolean = False
@@ -238,6 +238,14 @@ Public Class OccurrencesPanel
         End Set
     End Property
 
+    Private Sub CardinalityUpdatedExternally(ByVal sender As Object, ByVal e As EventArgs) Handles mCardinality.Updated
+
+        If Not mIsLoading Then
+            UpdateControl()
+        End If
+
+    End Sub
+
     Public Property IsContainer() As Boolean
         Get
             Return mIncludeOrdered
@@ -442,9 +450,11 @@ Public Class OccurrencesPanel
     Private Sub numMin_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMin.TextChanged ', numMax.ValueChanged
         If Not mIsLoading Then
             mFileManager.FileEdited = True
+            'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+            mIsLoading = True
 
             If mMode = OccurrencesMode.Lexical Then
-                mIsLoading = True
+                'mIsLoading = True
 
                 If numMin.Value = 0 Then
                     comboOptional.SelectedIndex = 0
@@ -452,7 +462,7 @@ Public Class OccurrencesPanel
                     comboOptional.SelectedIndex = 1
                 End If
 
-                mIsLoading = False
+                'mIsLoading = False
             End If
 
             mCardinality.MinCount = numMin.Value
@@ -461,8 +471,11 @@ Public Class OccurrencesPanel
                 'Protect max val being changed if unbounded
                 mIsLoading = cbUnbounded.Checked
                 numMax.Value = numMin.Value
-                mIsLoading = False
+                'mIsLoading = False
             End If
+
+            mIsLoading = False
+
         End If
     End Sub
 
@@ -470,8 +483,11 @@ Public Class OccurrencesPanel
         If Not mIsLoading Then
             mFileManager.FileEdited = True
 
+            'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+            mIsLoading = True
+
             If mMode = OccurrencesMode.Lexical Then
-                mIsLoading = True
+                'mIsLoading = True
 
                 If numMax.Value = 1 Then
                     comboRepeat.SelectedIndex = 0
@@ -479,14 +495,17 @@ Public Class OccurrencesPanel
                     comboRepeat.SelectedIndex = 2
                 End If
 
-                mIsLoading = False
+                'mIsLoading = False
             End If
 
             mCardinality.MaxCount = numMax.Value
 
+            mIsLoading = False
+
             If numMin.Value > numMax.Value Then
                 numMin.Value = numMax.Value
             End If
+
         End If
     End Sub
 
@@ -494,11 +513,18 @@ Public Class OccurrencesPanel
         numMax.Visible = Not cbUnbounded.Checked
 
         If Not mIsLoading Then
+            'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+            mIsLoading = True
+
             If Not cbUnbounded.Checked Then
                 mCardinality.MaxCount = numMax.Value
             End If
 
             mCardinality.IsUnbounded = cbUnbounded.Checked
+
+            'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+            mIsLoading = False
+
             mFileManager.FileEdited = True
         End If
     End Sub
