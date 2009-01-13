@@ -432,7 +432,7 @@ Public Class Designer
         Me.TxtConceptDescription.Multiline = True
         Me.TxtConceptDescription.Name = "TxtConceptDescription"
         Me.TxtConceptDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TxtConceptDescription.Size = New System.Drawing.Size(588, 61)
+        Me.TxtConceptDescription.Size = New System.Drawing.Size(588, 59)
         Me.TxtConceptDescription.TabIndex = 1
         Me.TxtConceptDescription.Tag = ""
         '
@@ -449,7 +449,7 @@ Public Class Designer
         '
         Me.txtConceptInFull.Location = New System.Drawing.Point(75, 10)
         Me.txtConceptInFull.Name = "txtConceptInFull"
-        Me.txtConceptInFull.Size = New System.Drawing.Size(271, 21)
+        Me.txtConceptInFull.Size = New System.Drawing.Size(271, 23)
         Me.txtConceptInFull.TabIndex = 0
         Me.txtConceptInFull.Tag = ""
         '
@@ -498,10 +498,10 @@ Public Class Designer
         '
         Me.tpConceptDescription.BackColor = System.Drawing.Color.LightYellow
         Me.tpConceptDescription.Controls.Add(Me.TxtConceptDescription)
-        Me.tpConceptDescription.Location = New System.Drawing.Point(4, 22)
+        Me.tpConceptDescription.Location = New System.Drawing.Point(4, 24)
         Me.tpConceptDescription.Name = "tpConceptDescription"
         Me.tpConceptDescription.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptDescription.Size = New System.Drawing.Size(594, 67)
+        Me.tpConceptDescription.Size = New System.Drawing.Size(594, 65)
         Me.tpConceptDescription.TabIndex = 0
         Me.tpConceptDescription.Text = "Description"
         Me.tpConceptDescription.UseVisualStyleBackColor = True
@@ -510,10 +510,10 @@ Public Class Designer
         '
         Me.tpConceptComment.BackColor = System.Drawing.Color.LightYellow
         Me.tpConceptComment.Controls.Add(Me.txtConceptComment)
-        Me.tpConceptComment.Location = New System.Drawing.Point(4, 22)
+        Me.tpConceptComment.Location = New System.Drawing.Point(4, 24)
         Me.tpConceptComment.Name = "tpConceptComment"
         Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptComment.Size = New System.Drawing.Size(594, 67)
+        Me.tpConceptComment.Size = New System.Drawing.Size(594, 65)
         Me.tpConceptComment.TabIndex = 1
         Me.tpConceptComment.Text = "Comment"
         Me.tpConceptComment.UseVisualStyleBackColor = True
@@ -525,7 +525,7 @@ Public Class Designer
         Me.txtConceptComment.Multiline = True
         Me.txtConceptComment.Name = "txtConceptComment"
         Me.txtConceptComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtConceptComment.Size = New System.Drawing.Size(588, 61)
+        Me.txtConceptComment.Size = New System.Drawing.Size(588, 59)
         Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
@@ -1473,9 +1473,10 @@ Public Class Designer
         'ListLanguages
         '
         Me.ListLanguages.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListLanguages.ItemHeight = 15
         Me.ListLanguages.Location = New System.Drawing.Point(0, 96)
         Me.ListLanguages.Name = "ListLanguages"
-        Me.ListLanguages.Size = New System.Drawing.Size(312, 537)
+        Me.ListLanguages.Size = New System.Drawing.Size(312, 529)
         Me.ListLanguages.TabIndex = 9
         '
         'Panel1
@@ -1516,10 +1517,10 @@ Public Class Designer
         'Panel3
         '
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel3.Location = New System.Drawing.Point(0, 42)
+        Me.Panel3.Location = New System.Drawing.Point(0, 44)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Padding = New System.Windows.Forms.Padding(5)
-        Me.Panel3.Size = New System.Drawing.Size(969, 618)
+        Me.Panel3.Size = New System.Drawing.Size(969, 616)
         Me.Panel3.TabIndex = 4
         '
         'DisplayToolBar
@@ -1532,7 +1533,7 @@ Public Class Designer
         Me.DisplayToolBar.Location = New System.Drawing.Point(0, 0)
         Me.DisplayToolBar.Name = "DisplayToolBar"
         Me.DisplayToolBar.ShowToolTips = True
-        Me.DisplayToolBar.Size = New System.Drawing.Size(969, 42)
+        Me.DisplayToolBar.Size = New System.Drawing.Size(969, 44)
         Me.DisplayToolBar.TabIndex = 1
         Me.DisplayToolBar.Wrappable = False
         '
@@ -1707,12 +1708,12 @@ Public Class Designer
         '
         Me.ArchetypeNameContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem})
         Me.ArchetypeNameContextMenu.Name = "ArchetypeNameContextMenu"
-        Me.ArchetypeNameContextMenu.Size = New System.Drawing.Size(100, 26)
+        Me.ArchetypeNameContextMenu.Size = New System.Drawing.Size(103, 26)
         '
         'CopyToolStripMenuItem
         '
         Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
-        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(99, 22)
+        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(102, 22)
         Me.CopyToolStripMenuItem.Text = "Copy"
         '
         'lblLifecycle
@@ -5161,6 +5162,12 @@ Public Class Designer
     Private Sub CopyToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyToolStripMenuItem.Click
         Clipboard.SetText(lblArchetypeName.Text)
     End Sub
+
+    'SRH: Jan 11 2009 - EDT-486 - update structure
+    Private Sub SubDataStructureChanged(ByVal sender As Object, ByVal newStructure As StructureType) Handles mTabPageDataStructure.UpdateStructure
+        tpDataStructure.Title = Filemanager.GetOpenEhrTerm(CInt(newStructure), newStructure.ToString)
+    End Sub
+
 
 End Class
 

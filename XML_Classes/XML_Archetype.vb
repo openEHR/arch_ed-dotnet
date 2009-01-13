@@ -592,7 +592,11 @@ Namespace ArchetypeEditor.XML_Classes
                     For i As Integer = 0 To events.Length - 1
                         history_event = CType(events(i), XMLParser.C_COMPLEX_OBJECT)
                         'an_attribute = mAomFactory.MakeSingleAttribute(history_event, "state")
-                        an_attribute = mAomFactory.MakeSingleAttribute(history_event, "state", a_history.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+
+                        'SRH: 11 Jan 2009 - EDT-502 - set the correct existence on state and protocol
+                        'an_attribute = mAomFactory.MakeSingleAttribute(history_event, "state", a_history.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+
+                        an_attribute = mAomFactory.MakeSingleAttribute(history_event, "state", rmState.Children.Existence.XmlExistence)
 
                         'First event has the structure
                         If i = 0 Then
@@ -2137,11 +2141,13 @@ Namespace ArchetypeEditor.XML_Classes
             Dim an_attribute As XMLParser.C_ATTRIBUTE
 
             'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name)
-            an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
             If CType(rm.Children.items(0), RmStructure).Type = StructureType.Slot Then
+                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 BuildSlotFromAttribute(an_attribute, rm.Children.items(0))
             Else
+                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Children.Existence.XmlExistence)
                 Dim objNode As XMLParser.C_COMPLEX_OBJECT
 
                 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
@@ -2171,7 +2177,9 @@ Namespace ArchetypeEditor.XML_Classes
                 rmStructComp = CType(rm, RmStructureCompound)
                 If rmStructComp.Children.Count > 0 Then
                     'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol")
-                    an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    'SRH: 11 Jan 2009 - EDT-502 - setting the existance of the attribute
+                    an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rmStructComp.Children.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                     ' only 1 protocol allowed
                     Dim objNode As XMLParser.C_COMPLEX_OBJECT
 

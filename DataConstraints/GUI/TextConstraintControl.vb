@@ -344,6 +344,18 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Case TextConstrainType.Text
                 radioText.Checked = True
 
+                'Added for backward compatibility with some archetypes with textural constraints
+                If Me.Constraint.AllowableValues.Codes.Count > 0 Then
+                    Dim s As String
+                    Me.listAllowableValues.DataSource = Nothing
+                    Me.listAllowableValues.Items.Clear()
+
+                    For Each s In Me.Constraint.AllowableValues.Codes
+                        Me.listAllowableValues.Items.Add(s)
+                    Next
+                    Me.txtAssumedValue.Text = CStr(Me.Constraint.AssumedValue)
+                End If
+
             Case TextConstrainType.Internal
                 Me.radioInternal.Checked = True
 
@@ -402,18 +414,24 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Dim currentValues(Me.Constraint.AllowableValues.Codes.Count) As String
         Me.Constraint.AllowableValues.Codes.CopyTo(currentValues, 0)
 
-        Dim s() As String = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager, currentValues)
+        If Me.radioText.Checked Then
 
-        If s Is Nothing Then Return
+        ElseIf Me.radioInternal.Checked Then
 
-        For i As Integer = 0 To s.Length - 1
-            Me.Constraint.AllowableValues.Codes.Add(s(i))
-        Next
+            Dim s() As String = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager, currentValues)
 
-        SetAllowableValuesFilter(Me.Constraint)
-        Me.listAllowableValues.DataSource = mAllowedValuesDataView
-        Me.listAllowableValues.DisplayMember = "Text"
-        Me.listAllowableValues.ValueMember = "Code"
+            If s Is Nothing Then Return
+
+            For i As Integer = 0 To s.Length - 1
+                Me.Constraint.AllowableValues.Codes.Add(s(i))
+            Next
+
+            SetAllowableValuesFilter(Me.Constraint)
+            Me.listAllowableValues.DataSource = mAllowedValuesDataView
+            Me.listAllowableValues.DisplayMember = "Text"
+            Me.listAllowableValues.ValueMember = "Code"
+
+        End If
 
         mFileManager.FileEdited = True
 
@@ -456,39 +474,49 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub butNewItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButNewItem.Click
 
-        Dim s(1) As String
-        s = OceanArchetypeEditor.Instance.GetInput( _
-            Filemanager.GetOpenEhrTerm(603, "Add new term"), _
-            AE_Constants.Instance.Description, Me.ParentForm)
+        If Me.radioInternal.Checked Then
+            Dim s(1) As String
+            s = OceanArchetypeEditor.Instance.GetInput( _
+                Filemanager.GetOpenEhrTerm(603, "Add new term"), _
+                AE_Constants.Instance.Description, Me.ParentForm)
 
-        If s(0) <> "" Then
-            Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(s(0), s(1))
-            Dim term_id As String = aTerm.Code
+            If s(0) <> "" Then
+                Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(s(0), s(1))
+                Dim term_id As String = aTerm.Code
 
-            If Me.listAllowableValues.DataSource Is Nothing Then
-                mAllowedValuesDataView.RowFilter = String.Format("(Code = '{0}') AND (id = '{1}')", _
-                        aTerm.Code, mFileManager.OntologyManager.LanguageCode)
+                If Me.listAllowableValues.DataSource Is Nothing Then
+                    mAllowedValuesDataView.RowFilter = String.Format("(Code = '{0}') AND (id = '{1}')", _
+                            aTerm.Code, mFileManager.OntologyManager.LanguageCode)
 
-                Me.listAllowableValues.DataSource = mAllowedValuesDataView
-                Me.listAllowableValues.DisplayMember = "Text"
-                Me.listAllowableValues.ValueMember = "Code"
-            Else
-                ' add this id to the term filter
-                Dim f As String = mAllowedValuesDataView.RowFilter
-                Dim i As Integer = InStr(f, ") AND (") - 1
-                Dim str As String = " OR Code = '" & term_id & "'"
-                mAllowedValuesDataView.RowFilter = f.Insert(i, str)
+                    Me.listAllowableValues.DataSource = mAllowedValuesDataView
+                    Me.listAllowableValues.DisplayMember = "Text"
+                    Me.listAllowableValues.ValueMember = "Code"
+                Else
+                    ' add this id to the term filter
+                    Dim f As String = mAllowedValuesDataView.RowFilter
+                    Dim i As Integer = InStr(f, ") AND (") - 1
+                    Dim str As String = " OR Code = '" & term_id & "'"
+                    mAllowedValuesDataView.RowFilter = f.Insert(i, str)
+                End If
+
+                ' add the code to the constraint
+                Me.Constraint.AllowableValues.Codes.Add(term_id)
+
+
+                mFileManager.FileEdited = True
+
             End If
-
-            ' add the code to the constraint
-            Me.Constraint.AllowableValues.Codes.Add(term_id)
-
-
-            mFileManager.FileEdited = True
-
+            'SRH: Dec 16 2008 - reintroduced for backward compatibility with textural constraints in archetypes
+        ElseIf Me.radioText.Checked Then
+            Dim s As String
+            s = OceanArchetypeEditor.Instance.GetInput("Enter the new item:", Me.ParentForm)
+            If s <> "" Then
+                Me.listAllowableValues.Items.Add(s)
+                Me.Constraint.AllowableValues.Codes.Add(s)
+                mFileManager.FileEdited = True
+            End If
         End If
 
-        
     End Sub
 
     Private Sub butRemoveItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveItem.Click
@@ -504,54 +532,79 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Try
             Dim defaultText As String = Me.txtAssumedValue.Text
 
-            If mAllowedValuesDataView.Count > 0 Then
+            If Me.radioText.Checked Then
+                If Me.radioText.Checked Then
+                    If Me.listAllowableValues.Items.Count > 0 Then
+                        If MessageBox.Show(AE_Constants.Instance.Remove & _
+                                    CStr(Me.listAllowableValues.Items(Index)), _
+                                    AE_Constants.Instance.MessageBoxCaption, _
+                                    MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
+                            If CStr(Me.listAllowableValues.Items(Index)) = defaultText Then
+                                Me.txtAssumedValue.Text = "(none)"
+                                Me.Constraint.HasAssumedValue = False
+                            End If
 
-                If MessageBox.Show(AE_Constants.Instance.Remove & _
-                        CStr(Me.listAllowableValues.Text), _
-                        AE_Constants.Instance.MessageBoxCaption, _
-                        MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
+                            Me.Constraint.AllowableValues.Codes.Remove( _
+                                            CStr(Me.listAllowableValues.Items(Index)))
+                            Me.listAllowableValues.Items.RemoveAt(Index)
 
-                    ' have to delete this from all languages
-                    If CStr(Me.listAllowableValues.Text) = defaultText Then
-                        Me.Constraint.HasAssumedValue = False
-                        Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
+                            mFileManager.FileEdited = True
+
+                        End If
 
                     End If
+                End If
+            ElseIf Me.radioInternal.Checked Then
 
-                    Dim code As String = CStr(Me.listAllowableValues.SelectedValue) '("Code")
-                    Me.Constraint.AllowableValues.Codes.Remove(code)
+                If mAllowedValuesDataView.Count > 0 Then
 
-                    'FIXME - cannot remove terms as are reused in the archetype
-                    'ParentFrm.mFileManager.OntologyManager.RemoveTerm(Code)
-                    If Me.Constraint.AllowableValues.Codes.Count = 0 Then
-                        Me.listAllowableValues.DataSource = Nothing
-                        Me.listAllowableValues.Items.Clear()
+                    If MessageBox.Show(AE_Constants.Instance.Remove & _
+                            CStr(Me.listAllowableValues.Text), _
+                            AE_Constants.Instance.MessageBoxCaption, _
+                            MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
 
-                    Else
-                        Dim f As String = mAllowedValuesDataView.RowFilter
-                        Dim i As Integer = InStr(f, "Code = '" & code & "' OR ")
-                        Dim Lengthof As Integer = ("Code = '" & code & "' OR ").Length - 1
-                        If i = 0 Then
-                            'might be the last code
-                            i = InStr(f, " OR Code = '" & code & "'")
-                            Lengthof = (" OR Code = '" & code & "'").Length - 1
+                        ' have to delete this from all languages
+                        If CStr(Me.listAllowableValues.Text) = defaultText Then
+                            Me.Constraint.HasAssumedValue = False
+                            Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
+
                         End If
-                        If i = 0 Then
-                            'might be the only code
-                            i = InStr(f, "Code = '" & code & "'")
-                            Lengthof = ("Code = '" & code & "'").Length - 1
+
+                        Dim code As String = CStr(Me.listAllowableValues.SelectedValue) '("Code")
+                        Me.Constraint.AllowableValues.Codes.Remove(code)
+
+                        'Cannot remove terms as are reused in the archetype - if this term is redundant it will be removed on save
+                        'ParentFrm.mFileManager.OntologyManager.RemoveTerm(Code)
+
+                        If Me.Constraint.AllowableValues.Codes.Count = 0 Then
+                            Me.listAllowableValues.DataSource = Nothing
+                            Me.listAllowableValues.Items.Clear()
+
+                        Else
+                            Dim f As String = mAllowedValuesDataView.RowFilter
+                            Dim i As Integer = InStr(f, "Code = '" & code & "' OR ")
+                            Dim Lengthof As Integer = ("Code = '" & code & "' OR ").Length - 1
+                            If i = 0 Then
+                                'might be the last code
+                                i = InStr(f, " OR Code = '" & code & "'")
+                                Lengthof = (" OR Code = '" & code & "'").Length - 1
+                            End If
+                            If i = 0 Then
+                                'might be the only code
+                                i = InStr(f, "Code = '" & code & "'")
+                                Lengthof = ("Code = '" & code & "'").Length - 1
+                            End If
+                            If i <> 0 Then
+                                f = f.Substring(0, i - 1) & f.Substring(i + Lengthof)
+                            End If
+                            mAllowedValuesDataView.RowFilter = f
                         End If
-                        If i <> 0 Then
-                            f = f.Substring(0, i - 1) & f.Substring(i + Lengthof)
-                        End If
-                        mAllowedValuesDataView.RowFilter = f
+
                     End If
+                    mFileManager.FileEdited = True
 
                 End If
-                mFileManager.FileEdited = True
-
             End If
-
 
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
@@ -618,7 +671,13 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub radioText_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioText.CheckedChanged
         If radioText.Checked Then
-            gbAllowableValues.Visible = False
+            'SRH: Dec 16 2008 - backward compatibility for existing textural constraints
+            If Constraint.AllowableValues.Codes.Count > 0 Then
+                gbAllowableValues.Visible = True
+            Else
+                gbAllowableValues.Visible = False
+            End If
+
             txtTermConstraintText.Visible = False
             txtTermConstraintDescription.Visible = False
             lblConstraint.Visible = False

@@ -33,6 +33,11 @@ Public Class TabPageStructure
     Private WithEvents mSplitter As Splitter
     Private mFileManager As FileManagerLocal
     Friend WithEvents PanelDetails As ArchetypeNodeConstraintControl
+
+    'SRH: Jan 11 2009 - EDT-486 - update structure
+    Public Event UpdateStructure(ByVal sender As Object, ByVal newStructure As StructureType)
+    Public Delegate Sub TabPageStructureUpdateStructure(ByVal sender As Object, ByVal newStructure As StructureType)
+
     
 
 #Region " Windows Form Designer generated code "
@@ -198,7 +203,7 @@ Public Class TabPageStructure
         Me.panelDisplay.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.HelpProviderTabPageStructure.SetHelpNavigator(Me.panelDisplay, System.Windows.Forms.HelpNavigator.Index)
-        Me.panelDisplay.Location = New System.Drawing.Point(80, 0)
+        Me.panelDisplay.Location = New System.Drawing.Point(192, 84)
         Me.panelDisplay.Name = "panelDisplay"
         Me.panelDisplay.Padding = New System.Windows.Forms.Padding(2)
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.panelDisplay, True)
@@ -882,6 +887,8 @@ Public Class TabPageStructure
 
         If Not mIsLoading Then
             mFileManager.FileEdited = True
+            'SRH: Jan 11 2009 - EDT-486 - update structure
+            RaiseEvent UpdateStructure(Me, chosen_structure)
         End If
 
     End Sub

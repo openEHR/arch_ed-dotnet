@@ -26,6 +26,9 @@ Public Class RmCardinality
     Private mOrdered As Boolean = False
     Private mIsDefault As Boolean = False
 
+    'SRH: 11 Jan 2009 - EDT-502 - handling of existence and cardinality
+    Public Event Updated As CardinalityUpdatedEventHandler
+    Public Delegate Sub CardinalityUpdatedEventHandler(ByVal sender As Object, ByVal e As EventArgs)
 
     'Private sCount As String
 
@@ -43,6 +46,10 @@ Public Class RmCardinality
                     End If
                     'setCount()
                 End If
+
+                'SRH: 11 Jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
+
             End If
             mIsDefault = False
         End Set
@@ -65,6 +72,10 @@ Public Class RmCardinality
                     End If
                     'setCount()
                 End If
+
+                'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
+
             End If
             mIsDefault = False
         End Set
@@ -75,13 +86,19 @@ Public Class RmCardinality
             Return mUnbounded
         End Get
         Set(ByVal Value As Boolean)
-            mUnbounded = Value
-            If Not mUnbounded Then
-                If mMinCount > mMaxCount Then
-                    mMaxCount = mMinCount
+            If mUnbounded <> Value Then
+                mUnbounded = Value
+                If Not mUnbounded Then
+                    If mMinCount > mMaxCount Then
+                        mMaxCount = mMinCount
+                    End If
                 End If
+                mIsDefault = False
+
+                'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
+
             End If
-            mIsDefault = False
             'setCount()
         End Set
     End Property
@@ -95,8 +112,14 @@ Public Class RmCardinality
             End If
         End Get
         Set(ByVal Value As Boolean)
-            mIncludeUpper = Value
-            mIsDefault = False
+            If mIncludeUpper <> Value Then
+                mIncludeUpper = Value
+                mIsDefault = False
+
+                'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
+
+            End If
         End Set
     End Property
 
@@ -105,8 +128,14 @@ Public Class RmCardinality
             Return mIncludeLower
         End Get
         Set(ByVal Value As Boolean)
-            mIncludeLower = Value
-            mIsDefault = False
+            If mIncludeLower <> Value Then
+                mIncludeLower = Value
+                mIsDefault = False
+
+                'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
+
+            End If
         End Set
     End Property
     Public Property Ordered() As Boolean
@@ -136,6 +165,7 @@ Public Class RmCardinality
     End Function
 
     Public Sub SetFromOpenEHRCardinality(ByVal a_cardinality As openehr.openehr.am.archetype.constraint_model.CARDINALITY)
+
         If a_cardinality.interval.upper_unbounded Then
             mUnbounded = True
         Else

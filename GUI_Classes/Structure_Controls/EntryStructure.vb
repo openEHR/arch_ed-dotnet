@@ -218,9 +218,9 @@ Public Class EntryStructure
         Me.PanelIcons.Controls.Add(Me.butChangeDataType)
         Me.PanelIcons.Controls.Add(Me.pbSlot)
         Me.PanelIcons.Dock = System.Windows.Forms.DockStyle.Left
-        Me.PanelIcons.Location = New System.Drawing.Point(0, 24)
+        Me.PanelIcons.Location = New System.Drawing.Point(0, 27)
         Me.PanelIcons.Name = "PanelIcons"
-        Me.PanelIcons.Size = New System.Drawing.Size(40, 382)
+        Me.PanelIcons.Size = New System.Drawing.Size(40, 379)
         Me.PanelIcons.TabIndex = 1
         '
         'ButAddElement
@@ -388,7 +388,7 @@ Public Class EntryStructure
         Me.PanelStructureHeader.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelStructureHeader.Location = New System.Drawing.Point(0, 0)
         Me.PanelStructureHeader.Name = "PanelStructureHeader"
-        Me.PanelStructureHeader.Size = New System.Drawing.Size(384, 21)
+        Me.PanelStructureHeader.Size = New System.Drawing.Size(384, 24)
         Me.PanelStructureHeader.TabIndex = 0
         '
         'lblAtcode
@@ -397,7 +397,7 @@ Public Class EntryStructure
         Me.lblAtcode.ForeColor = System.Drawing.SystemColors.GrayText
         Me.lblAtcode.Location = New System.Drawing.Point(312, 0)
         Me.lblAtcode.Name = "lblAtcode"
-        Me.lblAtcode.Size = New System.Drawing.Size(72, 21)
+        Me.lblAtcode.Size = New System.Drawing.Size(72, 24)
         Me.lblAtcode.TabIndex = 0
         Me.lblAtcode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
@@ -493,7 +493,7 @@ Public Class EntryStructure
         'Splitter1
         '
         Me.Splitter1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Splitter1.Location = New System.Drawing.Point(0, 21)
+        Me.Splitter1.Location = New System.Drawing.Point(0, 24)
         Me.Splitter1.Name = "Splitter1"
         Me.Splitter1.Size = New System.Drawing.Size(384, 3)
         Me.Splitter1.TabIndex = 38
@@ -594,6 +594,8 @@ Public Class EntryStructure
     Protected Sub SetCardinality(ByVal rm As RmStructureCompound)
         SetCardinality(rm.Type)
         mCardinalityControl.Cardinality = rm.Children.Cardinality
+        AddHandler mCardinalityControl.Cardinality.Updated, AddressOf CardinalityUpdated
+        CardinalityUpdated(mCardinalityControl, New EventArgs)
     End Sub
 
     Protected Sub SetCardinality(ByVal a_structure_type As StructureType)
@@ -605,7 +607,17 @@ Public Class EntryStructure
             mCardinalityControl.IsContainer = True
             mCardinalityControl.Location = New Drawing.Point(0, 0)
             Me.PanelStructureHeader.Controls.Add(mCardinalityControl)
+            AddHandler mCardinalityControl.Cardinality.Updated, AddressOf CardinalityUpdated
         End If
+    End Sub
+
+    Private Sub CardinalityUpdated(ByVal sender As Object, ByVal e As EventArgs)
+        If mCardinalityControl.Cardinality.ToString() = "0..*" Then
+            Me.PanelStructureHeader.Height = 25
+        Else
+            Me.PanelStructureHeader.Height = 75
+        End If
+
     End Sub
 
     Protected Function HtmlHeader(ByVal aBackGroundColour As String, ByVal showComments As Boolean) As String
