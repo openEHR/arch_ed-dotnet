@@ -718,10 +718,14 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim dtType As String = ""
             Dim cadlDateTime As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            Dim allowAll As Boolean = False
+
             Select Case dt.TypeofDateTimeConstraint
                 Case 11                 ' Allow all
                     s = "yyyy-??-??T??:??:??"
                     dtType = "dt"
+                    allowAll = True
                 Case 12                 ' Full date time
                     s = "yyyy-mm-ddTHH:MM:SS"
                     dtType = "dt"
@@ -731,6 +735,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case 14                 'Date only
                     s = "yyyy-??-??"
                     dtType = "d"
+                    allowAll = True
                 Case 15                'Full date
                     s = "yyyy-mm-dd"
                     dtType = "d"
@@ -743,6 +748,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case 18                'TimeOnly
                     s = "HH:??:??"
                     dtType = "t"
+                    allowAll = True
                 Case 19                 'Full time
                     s = "HH:MM:SS"
                     dtType = "t"
@@ -759,16 +765,25 @@ Namespace ArchetypeEditor.ADL_Classes
             Select Case dtType
                 Case "dt"
                     an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_DATE_TIME"))
-                    an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
-                    cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_date_time_make_pattern(EiffelKernel.Create.STRING_8.make_from_cil(s)))
+                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+                    If Not allowAll Then
+                        an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
+                        cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_date_time_make_pattern(EiffelKernel.Create.STRING_8.make_from_cil(s)))
+                    End If
                 Case "d"
                     an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_DATE"))
-                    an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
-                    cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_date_make_pattern(EiffelKernel.Create.STRING_8.make_from_cil(s)))
+                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+                    If Not allowAll Then
+                        an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
+                        cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_date_make_pattern(EiffelKernel.Create.STRING_8.make_from_cil(s)))
+                    End If
                 Case "t"
                     an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_TIME"))
-                    an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
-                    cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_time_make_pattern(EiffelKernel.Create.STRING_8.make_from_cil(s)))
+                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+                    If Not allowAll Then
+                        an_attribute = mAomFactory.create_c_attribute_single(an_object, EiffelKernel.Create.STRING_8.make_from_cil("value"))
+                        cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_time_make_pattern(EiffelKernel.Create.STRING_8.make_from_cil(s)))
+                    End If
             End Select
 
         End Sub

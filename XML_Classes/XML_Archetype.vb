@@ -1096,11 +1096,19 @@ Namespace ArchetypeEditor.XML_Classes
             Dim cd As XMLParser.C_PRIMITIVE
             Dim xmlDateTime As New XMLParser.C_PRIMITIVE_OBJECT
 
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            Dim allowAll As Boolean = False
+
             Select Case dt.TypeofDateTimeConstraint
                 Case 11                 ' Allow all
+                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+
                     Dim dtc As New XMLParser.C_DATE_TIME
-                    dtc.pattern = "YYYY-??-??T??:??:??"
+                    'dtc.pattern = "YYYY-??-??T??:??:??"
                     cd = dtc
+
+                    allowAll = True
+
                 Case 12                 ' Full date time
                     Dim dtc As New XMLParser.C_DATE_TIME
                     dtc.pattern = "YYYY-MM-DDTHH:MM:SS"
@@ -1110,9 +1118,11 @@ Namespace ArchetypeEditor.XML_Classes
                     dtc.pattern = "YYYY-MM-DDTHH:??:??"
                     cd = dtc
                 Case 14                 'Date only
+                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
                     Dim dtc As New XMLParser.C_DATE
-                    dtc.pattern = "YYYY-??-??"
+                    'dtc.pattern = "YYYY-??-??"
                     cd = dtc
+                    allowAll = True
                 Case 15                'Full date
                     Dim dtc As New XMLParser.C_DATE
                     dtc.pattern = "YYYY-MM-DD"
@@ -1126,9 +1136,11 @@ Namespace ArchetypeEditor.XML_Classes
                     dtc.pattern = "YYYY-MM-??"
                     cd = dtc
                 Case 18                'TimeOnly
+                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
                     Dim dtc As New XMLParser.C_TIME
-                    dtc.pattern = "HH:??:??"
+                    'dtc.pattern = "HH:??:??"
                     cd = dtc
+                    allowAll = True
                 Case 19                 'Full time
                     Dim dtc As New XMLParser.C_TIME
                     dtc.pattern = "HH:MM:SS"
@@ -1158,8 +1170,12 @@ Namespace ArchetypeEditor.XML_Classes
             'an_object = mAomFactory.MakeComplexObject(value_attribute, a_type)
             an_object = mAomFactory.MakeComplexObject(value_attribute, a_type, "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             'an_attribute = mAomFactory.MakeSingleAttribute(an_object, "value")
-            an_attribute = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            mAomFactory.MakePrimitiveObject(an_attribute, cd)
+
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            If Not allowAll Then
+                an_attribute = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                mAomFactory.MakePrimitiveObject(an_attribute, cd)
+            End If
 
         End Sub
 
@@ -1299,8 +1315,10 @@ Namespace ArchetypeEditor.XML_Classes
                 d.pattern = c.AllowableUnits
             End If
 
-            objNode = mAomFactory.MakePrimitiveObject(an_attribute, d)
-
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            If Not d.range Is Nothing And Not String.IsNullOrEmpty(d.pattern) And Not String.IsNullOrEmpty(d.assumed_value) Then
+                objNode = mAomFactory.MakePrimitiveObject(an_attribute, d)
+            End If
             ' Validate Interval PostConditions
         End Sub
 
