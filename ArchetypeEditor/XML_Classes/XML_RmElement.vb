@@ -372,7 +372,11 @@ Namespace ArchetypeEditor.XML_Classes
 
             Dim cadlC As XMLParser.C_DURATION
             cadlC = CType(ObjNode.item, XMLParser.C_DURATION)
-            duration.AllowableUnits = cadlC.pattern
+
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            If Not String.IsNullOrEmpty(cadlC.pattern) Then
+                duration.AllowableUnits = cadlC.pattern
+            End If
             If Not cadlC.range Is Nothing Then
 
                 ' Validate Interval PreConditions
@@ -597,8 +601,20 @@ Namespace ArchetypeEditor.XML_Classes
             'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
             'If ObjNode.any_allowed Then
             Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
+
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+
+            Dim result As New Constraint_DateTime()
+
             If complexObject.Any_Allowed Then
-                Return New Constraint_DateTime
+                Select Case complexObject.ConstraintObject.rm_type_name.ToUpperInvariant
+                    Case "DV_DATE_TIME"
+                        result.TypeofDateTimeConstraint = 11
+                    Case "DV_DATE"
+                        result.TypeofDateTimeConstraint = 14
+                    Case "DV_TIME"
+                        result.TypeofDateTimeConstraint = 18
+                End Select
             Else
                 Dim an_attribute As XMLParser.C_ATTRIBUTE
 
@@ -610,15 +626,20 @@ Namespace ArchetypeEditor.XML_Classes
                             Dim constraint As XMLParser.C_PRIMITIVE_OBJECT
                             If an_attribute.children.Length > 0 Then
                                 constraint = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
-                                Return ProcessDateTime(constraint)
+
+                                'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+                                'Return ProcessDateTime(constraint)
+                                result = ProcessDateTime(constraint)
+                                Exit For
                             End If
                     End Select
                 Next
             End If
 
-            'Shouldn't get to here
-            Debug.Assert(False, "Error processing DateTime")
-            Return New Constraint_DateTime
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            ''Shouldn't get to here
+            'Debug.Assert(False, "Error processing DateTime")
+            Return result
 
         End Function
 
@@ -630,25 +651,38 @@ Namespace ArchetypeEditor.XML_Classes
             'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
             'If ObjNode.any_allowed Then
             Dim primitiveObject As New C_PRIMITIVE_OBJECT_PROXY(ObjNode)
-            If primitiveObject.Any_Allowed Then
-                Return dt
-            End If
+
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            'If primitiveObject.Any_Allowed Then
+            '    Return dt
+            'End If
 
             Select Case ObjNode.rm_type_name.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
                 Case "DATE_TIME"
                     Dim cadlDT As XMLParser.C_DATE_TIME
                     cadlDT = CType(ObjNode.item, XMLParser.C_DATE_TIME)
-                    s = cadlDT.pattern
+                    If primitiveObject.Any_Allowed Then
+                        s = "yyyy-??-??t??:??:??"
+                    Else
+                        s = cadlDT.pattern
+                    End If
 
                 Case "DATE"
                     Dim cadlD As XMLParser.C_DATE
                     cadlD = CType(ObjNode.item, XMLParser.C_DATE)
-                    s = cadlD.pattern
-
+                    If primitiveObject.Any_Allowed Then
+                        s = "yyyy-??-??"
+                    Else
+                        s = cadlD.pattern
+                    End If
                 Case "TIME"
                     Dim cadlT As XMLParser.C_TIME
                     cadlT = CType(ObjNode.item, XMLParser.C_TIME)
-                    s = cadlT.pattern
+                    If primitiveObject.Any_Allowed Then
+                        s = "t??:??:??"
+                    Else
+                        s = cadlT.pattern
+                    End If
 
                 Case Else
                     Debug.Assert(False)
@@ -656,7 +690,7 @@ Namespace ArchetypeEditor.XML_Classes
             End Select
 
 
-            Select Case s.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Select Case s.ToLowerInvariant
                 Case "yyyy-??-?? ??:??:??", "yyyy-??-??t??:??:??"
                     ' Allow all
                     dt.TypeofDateTimeConstraint = 11

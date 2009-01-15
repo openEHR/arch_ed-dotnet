@@ -598,8 +598,20 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Private Function ProcessDateTime(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_DateTime
+
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+
+            Dim result As New Constraint_DateTime()
+
             If ObjNode.any_allowed Then
-                Return New Constraint_DateTime
+                Select Case ObjNode.rm_type_name.to_cil.ToUpperInvariant
+                    Case "DV_DATE_TIME"
+                        result.TypeofDateTimeConstraint = 11
+                    Case "DV_DATE"
+                        result.TypeofDateTimeConstraint = 14
+                    Case "DV_TIME"
+                        result.TypeofDateTimeConstraint = 18
+                End Select
             Else
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
@@ -611,72 +623,82 @@ Namespace ArchetypeEditor.ADL_Classes
                             Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
                             If an_attribute.children.count > 0 Then
                                 constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                                Return ProcessDateTime(constraint)
+                                result = ProcessDateTime(constraint)
+                                Exit For
                             End If
                     End Select
                 Next
             End If
 
-            'Shouldn't get to here
-            Debug.Assert(False, "Error processing boolean")
-            Return New Constraint_DateTime
+            
+            Return result
         End Function
 
         Private Function ProcessDateTime(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_DateTime
             Dim result As New Constraint_DateTime
             Dim s As String
 
-            If Not ObjNode.any_allowed Then
-                Select Case ObjNode.rm_type_name.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
-                    Case "DATE_TIME"
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            'If Not ObjNode.any_allowed Then
+            Select Case ObjNode.rm_type_name.to_cil.ToUpperInvariant
+                Case "DATE_TIME"
+                    If ObjNode.any_allowed Then
+                        s = "yyyy-??-??t??:??:??"
+                    Else
                         s = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE_TIME).pattern.to_cil
-
-                    Case "DATE"
+                    End If
+                Case "DATE"
+                    If ObjNode.any_allowed Then
+                        s = "yyyy-??-??"
+                    Else
                         s = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE).pattern.to_cil
-
-                    Case "TIME"
+                    End If
+                Case "TIME"
+                    If ObjNode.any_allowed Then
+                        s = "thh:??:??"
+                    Else
                         s = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_TIME).pattern.to_cil
+                    End If
+                Case Else
+                    Debug.Assert(False)
+                    s = ""
+            End Select
 
-                    Case Else
-                        Debug.Assert(False)
-                        s = ""
-                End Select
-
-                Select Case s.ToLowerInvariant()
-                    Case "yyyy-??-?? ??:??:??", "yyyy-??-??t??:??:??"
-                        ' Allow all
-                        result.TypeofDateTimeConstraint = 11
-                    Case "yyyy-mm-dd hh:mm:ss", "yyyy-mm-ddthh:mm:ss"
-                        result.TypeofDateTimeConstraint = 12
-                    Case "yyyy-mm-dd hh:??:??", "yyyy-mm-ddthh:??:??"
-                        'Partial Date time
-                        result.TypeofDateTimeConstraint = 13
-                    Case "yyyy-??-??"
-                        'Date only
-                        result.TypeofDateTimeConstraint = 14
-                    Case "yyyy-mm-dd"
-                        'Full date
-                        result.TypeofDateTimeConstraint = 15
-                    Case "yyyy-??-xx"
-                        'Partial date
-                        result.TypeofDateTimeConstraint = 16
-                    Case "yyyy-mm-??"
-                        'Partial date with month
-                        result.TypeofDateTimeConstraint = 17
-                    Case "hh:??:??", "thh:??:??"
-                        'TimeOnly
-                        result.TypeofDateTimeConstraint = 18
-                    Case "hh:mm:ss", "thh:mm:ss"
-                        'Full time
-                        result.TypeofDateTimeConstraint = 19
-                    Case "hh:??:xx", "thh:??:xx"
-                        'Partial time
-                        result.TypeofDateTimeConstraint = 20
-                    Case "hh:mm:??", "thh:mm:??"
-                        'Partial time with minutes
-                        result.TypeofDateTimeConstraint = 21
-                End Select
-            End If
+            Select Case s.ToLowerInvariant()
+                Case "yyyy-??-?? ??:??:??", "yyyy-??-??t??:??:??"
+                    ' Allow all
+                    result.TypeofDateTimeConstraint = 11
+                Case "yyyy-mm-dd hh:mm:ss", "yyyy-mm-ddthh:mm:ss"
+                    result.TypeofDateTimeConstraint = 12
+                Case "yyyy-mm-dd hh:??:??", "yyyy-mm-ddthh:??:??"
+                    'Partial Date time
+                    result.TypeofDateTimeConstraint = 13
+                Case "yyyy-??-??"
+                    'Date only
+                    result.TypeofDateTimeConstraint = 14
+                Case "yyyy-mm-dd"
+                    'Full date
+                    result.TypeofDateTimeConstraint = 15
+                Case "yyyy-??-xx"
+                    'Partial date
+                    result.TypeofDateTimeConstraint = 16
+                Case "yyyy-mm-??"
+                    'Partial date with month
+                    result.TypeofDateTimeConstraint = 17
+                Case "hh:??:??", "thh:??:??"
+                    'TimeOnly
+                    result.TypeofDateTimeConstraint = 18
+                Case "hh:mm:ss", "thh:mm:ss"
+                    'Full time
+                    result.TypeofDateTimeConstraint = 19
+                Case "hh:??:xx", "thh:??:xx"
+                    'Partial time
+                    result.TypeofDateTimeConstraint = 20
+                Case "hh:mm:??", "thh:mm:??"
+                    'Partial time with minutes
+                    result.TypeofDateTimeConstraint = 21
+            End Select
+            'End If
 
             Return result
         End Function
