@@ -329,7 +329,10 @@ Public Class OntologyManager
             Return
         ElseIf aterm.Text = "" Then
             Debug.Assert(False)
-            aterm.Text = "?"
+            'SRH: 13 Jan 2009 - EDT-491  consistent naming in ADL and AE before saving.
+            'a_term.Text = "?"
+            aterm.Text = "unknown"
+            aterm.Description = "unknown"
         ElseIf aterm.Description = "" Then
             aterm.Description = "*"
         End If
@@ -991,7 +994,9 @@ Public Class OntologyManager
                 End If
 
                 If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
-                    If (sTerminology <> "" And sPath <> "" And sCode <> "") Then
+                    'SRH: 13 Jan 2009 - EDT-421 - ensure that no empty or inappropriate code is saved
+                    sCode = System.Text.RegularExpressions.Regex.Replace(sCode, "[\*\(\)\]\[\~\`\!\@\#\$\%\^\&\+\=\""\{\}\|\;\:\?/\<\>\s]", "")
+                    If (Not String.IsNullOrEmpty(sTerminology) And Not String.IsNullOrEmpty(sPath) And Not String.IsNullOrEmpty(sCode)) Then
                         mOntology.AddorReplaceTermBinding(sTerminology, sPath, sCode, sRelease)
                     End If
                 ElseIf e.Action = DataRowAction.Delete Then
