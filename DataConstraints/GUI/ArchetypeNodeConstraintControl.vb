@@ -943,6 +943,19 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Sub
 
+    'SRH: 13 Jan 2009 - EDT-483 - remove illegal characters from code string
+    Private Sub dgNodeBindings_CellValueChanged(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellValueChanged
+        If Not dgNodeBindings Is Nothing AndAlso Not dgNodeBindings.CurrentCell Is Nothing Then
+            'Check there are no illegal characters in the codestring
+            If e.ColumnIndex = 2 AndAlso dgNodeBindings.CurrentCell.ColumnIndex = e.ColumnIndex And dgNodeBindings.CurrentCell.RowIndex = e.RowIndex Then
+                Dim s As String = CStr(dgNodeBindings.CurrentCell.Value)
+                Dim ss As String = System.Text.RegularExpressions.Regex.Replace(s, "[\*\(\)\]\[\~\`\!\@\#\$\%\^\&\+\=\""\{\}\|\;\:\?/\<\>\s]", "")
+                If s <> ss Then
+                    dgNodeBindings.CurrentCell.Value = ss
+                End If
+            End If
+        End If
+    End Sub
 End Class
 
 '

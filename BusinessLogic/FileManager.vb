@@ -752,7 +752,10 @@ Public Class FileManagerLocal
                     OntologyManager.Ontology = a_ontology
                     ' a new archetype always has a concept code set to "at0000"
                     a_term = New RmTerm(Archetype.ConceptCode)
-                    a_term.Text = "?"
+                    'SRH: 13 Jan 2009 - EDT-491  consistent naming in ADL and AE before saving.
+                    'a_term.Text = "?"
+                    a_term.Text = "unknown"
+                    a_term.Description = "unknown"
                     OntologyManager.UpdateTerm(a_term)
                 End If
             Case "xml"
@@ -768,7 +771,10 @@ Public Class FileManagerLocal
                     OntologyManager.Ontology = a_ontology
                     ' a new archetype always has a concept code set to "at0000"
                     a_term = New RmTerm(Archetype.ConceptCode)
-                    a_term.Text = "?"
+                    'SRH: 13 Jan 2009 - EDT-491  consistent naming in ADL and AE before saving.
+                    'a_term.Text = "?"
+                    a_term.Text = "unknown"
+                    a_term.Description = "unknown"
                     OntologyManager.UpdateTerm(a_term)
                 End If
             Case Else
