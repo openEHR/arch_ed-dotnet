@@ -340,13 +340,14 @@ Namespace ArchetypeEditor.XML_Classes
             Else
                 Dim an_attribute As XMLParser.C_ATTRIBUTE
 
-                For i As Integer = 0 To ObjNode.attributes.Length
+                'For i As Integer = 0 To ObjNode.attributes.Length
+                For i As Integer = 0 To ObjNode.attributes.Length - 1
 
                     an_attribute = ObjNode.attributes(i)
                     Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "value"
                             Dim constraint As XMLParser.C_PRIMITIVE_OBJECT
-                            If an_attribute.children.Length > 0 Then
+                            If Not an_attribute.children Is Nothing AndAlso an_attribute.children.Length > 0 Then
                                 constraint = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
                                 Return ProcessDuration(constraint)
                             End If
