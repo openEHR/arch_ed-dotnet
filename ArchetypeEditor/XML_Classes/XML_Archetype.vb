@@ -1253,7 +1253,9 @@ Namespace ArchetypeEditor.XML_Classes
             'Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type))
             Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             'Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value")
-            Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+
+            'SRH: 19 Jan 2008 - Fix bug in DV_DURATION if no constraint
+            'Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
             Dim objNode As XMLParser.C_PRIMITIVE_OBJECT
             Dim d As New XMLParser.C_DURATION
@@ -1316,7 +1318,11 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
-            If Not d.range Is Nothing And Not String.IsNullOrEmpty(d.pattern) And Not String.IsNullOrEmpty(d.assumed_value) Then
+            'If Not d.range Is Nothing And Not String.IsNullOrEmpty(d.pattern) And Not String.IsNullOrEmpty(d.assumed_value) Then
+            'SRH: 13 jan 2009 - EDT-497 - Further bug fixed
+            If Not d.range Is Nothing Or Not String.IsNullOrEmpty(d.pattern) Or Not String.IsNullOrEmpty(d.assumed_value) Then
+                'SRH: 19 Jan 2008 - Fix bug in DV_DURATION if no constraint
+                Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 objNode = mAomFactory.MakePrimitiveObject(an_attribute, d)
             End If
             ' Validate Interval PostConditions

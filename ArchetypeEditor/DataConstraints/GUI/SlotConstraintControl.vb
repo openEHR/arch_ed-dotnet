@@ -575,8 +575,10 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
                 name = name.Substring(name.IndexOf(".") + 1)
             End If
 
-            AvailableArchetypesListBox.Items.Add(name)
-            AvailableArchetypesListBox.SelectedIndex = AvailableArchetypesListBox.FindStringExact(name)
+            If Not AvailableArchetypesListBox.Items.Contains(name) Then
+                AvailableArchetypesListBox.Items.Add(name)
+                AvailableArchetypesListBox.SelectedIndex = AvailableArchetypesListBox.FindStringExact(name)
+            End If
         End If
     End Sub
 
@@ -588,21 +590,32 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
                 fileName = fileName.Substring(fileName.IndexOf(".") + 1)
             End If
 
-            AvailableArchetypesListBox.Items.Insert(0, fileName)
+            'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
+            If Not AvailableArchetypesListBox.Items.Contains(fileName) Then
+                AvailableArchetypesListBox.Items.Insert(0, fileName)
+            End If
         Next
     End Sub
+    'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
 
-    Private Sub RetrieveFiles(ByVal directory As System.IO.DirectoryInfo, ByVal fileExtension As String)
+    'Private Sub RetrieveFiles(ByVal directory As System.IO.DirectoryInfo, ByVal fileExtension As String)
+    Private Sub RetrieveFiles(ByVal directory As System.IO.DirectoryInfo, ByVal fileExtensions As ArrayList)
         Dim s As String
 
         If ReferenceModel.IsAbstract(Constraint.RM_ClassType) Then
             For Each t As StructureType In ReferenceModel.Specialisations(Constraint.RM_ClassType)
-                s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(t), fileExtension)
-                AddFilestoListBox(directory, s, False)
+                'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
+                For Each fileType As String In fileExtensions
+                    s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(t), fileType)
+                    AddFilestoListBox(directory, s, False)
+                Next
             Next
         Else
-            s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(Constraint.RM_ClassType), fileExtension)
-            AddFilestoListBox(directory, s, True)
+            'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
+            For Each fileType As String In fileExtensions
+                s = String.Format("{0}-{1}.*.{2}", ReferenceModel.ReferenceModelName, ReferenceModel.RM_StructureName(Constraint.RM_ClassType), fileType)
+                AddFilestoListBox(directory, s, True)
+            Next
         End If
     End Sub
 
@@ -614,7 +627,10 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
         If d.Exists Then
             Try
-                RetrieveFiles(d, Filemanager.Master.ParserType)
+                'SRH: 19 Jan 2009 - EDT-503 - Show archetypes whether ADL or XML
+
+                'RetrieveFiles(d, Filemanager.Master.ParserType)
+                RetrieveFiles(d, Filemanager.Master.AvailableFormats)
             Catch ex As Exception
                 errorMessage = AE_Constants.Instance.Error_loading & " '" & OceanArchetypeEditor.Instance.Options.RepositoryPath & "':" & Environment.NewLine & ex.Message
             End Try
