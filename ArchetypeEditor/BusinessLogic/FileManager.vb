@@ -251,6 +251,7 @@ Public Class FileManagerLocal
 
             Return True ' FIXME: spaghetti code!
         Catch e As Exception
+            ' Need to indicate reason for exception
             FileName = mPriorFileName
             mPriorFileName = Nothing
         End Try
@@ -541,6 +542,41 @@ Public Class FileManagerLocal
             Case Else
                 MessageBox.Show(AE_Constants.Instance.Feature_not_available, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
         End Select
+    End Sub
+
+    Public Sub ExportCanonicalArchetypeModel()
+        mObjectToSave.PrepareToSave()
+        Dim ext As String = "cam"
+        'Dim filter As String = ext & "|" & "*." & ext
+        Dim filter As String = String.Format("Canonical Archetype Model (*.{0})|*.{0}|All files (*.*)|*.*", ext)
+
+        'Dim filename As String = FileNameChosenByUser(ext, filter)
+
+        Dim dlg As New SaveFileDialog
+        dlg.Filter = filter
+        dlg.FileName = Archetype.Archetype_ID.ToString & "." & ext
+        dlg.DefaultExt = ext
+        'dlg.AddExtension = True
+        dlg.Title = AE_Constants.Instance.MessageBoxCaption
+        dlg.ValidateNames = True
+        dlg.OverwritePrompt = True
+
+        If dlg.ShowDialog() <> DialogResult.Cancel Then
+            Dim canonicalArchetype As XMLParser.ARCHETYPE = mArchetypeEngine.GetCanonicalArchetype()
+
+            Dim settings As System.Xml.XmlWriterSettings = New System.Xml.XmlWriterSettings()
+            settings.Encoding = System.Text.Encoding.UTF8
+            settings.OmitXmlDeclaration = True
+            settings.Indent = False
+
+            Dim xmlWriter As System.Xml.XmlWriter
+            xmlWriter = System.Xml.XmlWriter.Create(dlg.FileName, settings)
+            Try
+                openehr.V1.Its.Xml.AM.AmSerializer.Serialize(xmlWriter, canonicalArchetype)
+            Finally
+                xmlWriter.Close()
+            End Try
+        End If
     End Sub
 
     Public Sub ParserReset(Optional ByVal an_archetype_ID As ArchetypeID = Nothing)

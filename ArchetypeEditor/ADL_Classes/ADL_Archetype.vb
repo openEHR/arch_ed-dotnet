@@ -1965,19 +1965,29 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        ' HKF 8 Dec 2008
         Public Sub SetArchetypeDigest()
-            Dim amArchetype As XMLParser.ARCHETYPE
-            amArchetype = AM.ArchetypeModelBuilder.Build(adlArchetype)
+            'Dim amArchetype As XMLParser.ARCHETYPE
+            'amArchetype = AM.ArchetypeModelBuilder.Build(adlArchetype)
 
             Dim canonicalArchetype As XMLParser.ARCHETYPE
-            canonicalArchetype = openehr.V1.Its.Xml.AM.ArchetypeModelBuilder.CanonicalArchetype(amArchetype)
+            'canonicalArchetype = openehr.V1.Its.Xml.AM.ArchetypeModelBuilder.CanonicalArchetype(amArchetype)
+            canonicalArchetype = GetCanonicalArchetype()
 
             Dim ArchetypeDigest As String = AM.ArchetypeModelBuilder.ArchetypeDigest(canonicalArchetype)
             adlArchetype.description.add_other_detail( _
                 EiffelKernel.Create.STRING_8.make_from_cil(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), _
                 EiffelKernel.Create.STRING_8.make_from_cil(ArchetypeDigest))
         End Sub
+
+        Public Function GetCanonicalArchetype() As XMLParser.ARCHETYPE
+            Dim amArchetype As XMLParser.ARCHETYPE
+            amArchetype = AM.ArchetypeModelBuilder.Build(adlArchetype)
+
+            Dim canonicalArchetype As XMLParser.ARCHETYPE
+            canonicalArchetype = openehr.V1.Its.Xml.AM.ArchetypeModelBuilder.CanonicalArchetype(amArchetype)
+
+            Return canonicalArchetype
+        End Function
 
         Sub BuildLinks(ByVal cLinks As System.Collections.Generic.List(Of RmLink), ByVal cObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             Dim linksAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = _

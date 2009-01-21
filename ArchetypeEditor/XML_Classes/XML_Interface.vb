@@ -124,6 +124,13 @@ Namespace ArchetypeEditor.XML_Classes
             mArchetype = New XML_Archetype(mXmlParser, an_ArchetypeID, LanguageCode)
         End Sub
 
+        Public Function GetCanonicalArchetype() As XMLParser.ARCHETYPE Implements Parser.GetCanonicalArchetype
+            mArchetype.MakeParseTree()
+            Dim canonicalArchetype As XMLParser.ARCHETYPE = mXmlParser.GetCanonicalArchetype()
+
+            Return canonicalArchetype
+        End Function
+
         Public Sub WriteFile(ByVal a_file_name As String, ByVal output_format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
             'Change from intermediate format to XML
             ' then make it again

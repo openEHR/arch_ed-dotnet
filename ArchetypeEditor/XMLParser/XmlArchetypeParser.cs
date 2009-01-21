@@ -227,6 +227,15 @@ namespace XMLParser
             _archetype.description.other_details = sortedResult;
         }
 
+        public XMLParser.ARCHETYPE GetCanonicalArchetype()
+        {
+            System.Diagnostics.Debug.Assert(_archetype != null, "archetype must not be null");
+
+            XMLParser.ARCHETYPE canonicalArchetype = ArchetypeModelBuilder.CanonicalArchetype(_archetype);
+
+            return canonicalArchetype;
+        }
+
         public System.Collections.ArrayList AvailableFormats
         {
             get

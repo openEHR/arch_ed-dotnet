@@ -50,6 +50,8 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Public Shared Sub SetCardinality(ByVal cadlCardinality As openehr.openehr.am.archetype.constraint_model.CARDINALITY, ByVal colChildren As Children)
+            If cadlCardinality Is Nothing Then Throw New ArgumentNullException("cadlCardinality")
+
             colChildren.Cardinality = SetOccurrences(cadlCardinality.interval)
             colChildren.Cardinality.Ordered = cadlCardinality.is_ordered
         End Sub
