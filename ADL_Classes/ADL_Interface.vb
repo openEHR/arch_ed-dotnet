@@ -231,6 +231,12 @@ Namespace ArchetypeEditor.ADL_Classes
             Next
         End Sub
 
+        Public Function GetCanonicalArchetype() As XMLParser.ARCHETYPE Implements Parser.GetCanonicalArchetype
+            adlArchetype.MakeParseTree()
+            Dim canonicalArchetype As XMLParser.ARCHETYPE = adlArchetype.GetCanonicalArchetype()
+
+            Return canonicalArchetype
+        End Function
 
         Public Sub WriteFile(ByVal FileName As String, ByVal output_format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
             'Change from intermediate format to ADL

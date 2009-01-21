@@ -48,6 +48,7 @@ Public Class Designer
     Friend WithEvents mTermBindingPanel As TermBindingPanel
     Friend WithEvents menuFileExport As System.Windows.Forms.MenuItem
     Friend WithEvents MenuFileExportType As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuFileExportCAM As System.Windows.Forms.MenuItem
     Friend WithEvents butADL As System.Windows.Forms.ToolBarButton
     Friend WithEvents butXML As System.Windows.Forms.ToolBarButton
     Friend WithEvents butOWL As System.Windows.Forms.ToolBarButton
@@ -276,6 +277,7 @@ Public Class Designer
         Me.MenuFileSave = New System.Windows.Forms.MenuItem
         Me.MenuFileSaveAs = New System.Windows.Forms.MenuItem
         Me.menuFileExport = New System.Windows.Forms.MenuItem
+        Me.MenuFileExportCAM = New System.Windows.Forms.MenuItem
         Me.MenuFileExportType = New System.Windows.Forms.MenuItem
         Me.menuFileNewWindow = New System.Windows.Forms.MenuItem
         Me.MenuFileSpecialise = New System.Windows.Forms.MenuItem
@@ -781,13 +783,19 @@ Public Class Designer
         'menuFileExport
         '
         Me.menuFileExport.Index = 5
-        Me.menuFileExport.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileExportType})
+        Me.menuFileExport.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileExportType, Me.MenuFileExportCAM})
         Me.menuFileExport.Text = "&Export"
         '
         'MenuFileExportType
         '
         Me.MenuFileExportType.Index = 0
         Me.MenuFileExportType.Text = "Type"
+        '
+        '
+        'MenuFileExportCAM
+        '
+        Me.MenuFileExportCAM.Index = 1
+        Me.MenuFileExportCAM.Text = "Canonical Archetype Model"
         '
         'menuFileNewWindow
         '
@@ -5126,6 +5134,21 @@ Public Class Designer
             Filemanager.Master.Export(MenuFileExportType.Text)
         Catch ex As Exception
             Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
+            If Not ex.InnerException Is Nothing Then
+                errorMessage &= vbCrLf & ex.InnerException.Message
+            End If
+            MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+
+        Cursor = Cursors.Default
+    End Sub
+
+    Private Sub MenuFileExportCAM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileExportCAM.Click
+        Cursor = Cursors.WaitCursor
+        Try
+            Filemanager.Master.ExportCanonicalArchetypeModel()
+        Catch ex As Exception
+            Dim errorMessage As String = "Error exporting Canonical Archetype Model" & vbCrLf & vbCrLf & ex.Message
             If Not ex.InnerException Is Nothing Then
                 errorMessage &= vbCrLf & ex.InnerException.Message
             End If
