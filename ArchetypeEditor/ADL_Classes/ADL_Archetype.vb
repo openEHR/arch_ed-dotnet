@@ -1086,6 +1086,33 @@ Namespace ArchetypeEditor.ADL_Classes
 
         End Sub
 
+
+        Private Sub BuildParsable(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Parsable)
+            Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+
+            objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_PARSABLE"))
+
+            If Not String.IsNullOrEmpty(c.RegularExpression) Then
+                'Add a constraint to C_STRING
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("value"))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.RegularExpression))
+                mAomFactory.create_c_primitive_object(attribute, cSt)
+            End If
+
+            If Not String.IsNullOrEmpty(c.Formalism) Then
+                'Add a constraint to C_STRING
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("formalism"))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.Formalism))
+                mAomFactory.create_c_primitive_object(attribute, cSt)
+            End If
+
+
+        End Sub
+
         Private Sub BuildIdentifier(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
 
@@ -1178,6 +1205,9 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Case ConstraintType.Identifier
                     BuildIdentifier(value_attribute, c)
+
+                Case ConstraintType.Parsable
+                    BuildParsable(value_attribute, c)
 
                 Case Else
                     Debug.Assert(False, String.Format("{0} constraint type is not handled", c.ToString()))

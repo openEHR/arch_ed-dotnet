@@ -226,6 +226,9 @@ Public Class ConstraintControl
             Case ConstraintType.Currency
                 Return New CountConstraintControl(a_file_manager)
 
+            Case ConstraintType.Parsable
+                Return New ParsableConstraintControl(a_file_manager)
+
             Case Else
                 Throw New ArgumentException( _
                         String.Format("'{0}' does not have a corresponding constraint control implemented", _

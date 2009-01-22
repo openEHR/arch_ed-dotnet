@@ -375,10 +375,45 @@ Namespace ArchetypeEditor.ADL_Classes
                         constraintDuration = ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT), constraintDuration)
                         Return constraintDuration
                     End If
+                Case "dv_parsable"
+                    Return ProcessParsable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case Else
                     Debug.Assert(False, String.Format("Attribute not handled: {0}", ObjNode.rm_type_name.to_cil))
                     Return New Constraint
             End Select
+        End Function
+
+        Shared Function ProcessParsable(ByVal dvParse As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
+            Dim cParse As New Constraint_Parsable
+            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+            Try
+
+                For i As Integer = 1 To dvParse.attributes.count
+
+                    an_attribute = CType(dvParse.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+
+                    Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = _
+                        CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                    Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = _
+                        CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+
+                    Select Case an_attribute.rm_attribute_name.to_cil.ToLowerInvariant()
+                        Case "value"
+                            cParse.RegularExpression = cadlC.regexp.to_cil
+
+                        Case "formalism"
+                            cParse.Formalism = cadlC.regexp.to_cil
+
+                    End Select
+
+                Next
+
+            Catch e As Exception
+                MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+
+            Return cParse
         End Function
 
         Shared Function ProcessUri(ByVal dvUri As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint

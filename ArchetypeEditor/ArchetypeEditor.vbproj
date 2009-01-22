@@ -220,6 +220,10 @@
       <DependentUpon>IdentifierViewControl.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\ParsableConstraintControl.resx">
+      <DependentUpon>ParsableConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\IdentifierConstraintControl.resx">
       <DependentUpon>IdentifierConstraintControl.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -492,6 +496,10 @@
     <Compile Include="DataConstraints\ConstraintWithValue.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataConstraints\GUI\ParsableConstraintControl.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\ParsableConstraint.vb" />
     <Compile Include="DataConstraints\CurrencyConstraint.vb" />
     <Compile Include="DataConstraints\CountConstraint.vb">
       <SubType>Code</SubType>

@@ -25,7 +25,8 @@ Public Class ConstraintContextMenu
         mMI_Ordinal, mMI_Boolean, mMI_any, mMI_Multiple, _
         mMI_Slot, mMI_Ratio, mMI_QuantityUnit, mMI_Interval, _
         mMI_Interval_Quantity, mMI_Interval_Count, mMI_Interval_DateTime, _
-        mMI_Duration, mMI_MultiMedia, mMI_URI, mMI_Identifier, mMI_Currency As MenuItem
+        mMI_Duration, mMI_MultiMedia, mMI_URI, mMI_Identifier, mMI_Currency, _
+        mMI_Parsable As MenuItem
 
     Sub ShowHeader(ByVal header_text As String)
         mMI_Header.Text = header_text
@@ -76,6 +77,8 @@ Public Class ConstraintContextMenu
                 mMI_Currency.Visible = True
             Case ConstraintType.Identifier
                 mMI_Identifier.Visible = True
+            Case ConstraintType.Parsable
+                mMI_Parsable.Visible = True
         End Select
     End Sub
 
@@ -119,6 +122,8 @@ Public Class ConstraintContextMenu
                 mMI_Currency.Visible = False
             Case ConstraintType.Identifier
                 mMI_Identifier.Visible = False
+            Case ConstraintType.Parsable
+                mMI_Parsable.Visible = False
         End Select
 
         If mMI_Interval_Count.Visible = False And mMI_Interval_Quantity.Visible = False And mMI_Interval_DateTime.Visible = False Then
@@ -150,6 +155,7 @@ Public Class ConstraintContextMenu
         mMI_Slot.Visible = True
         mMI_Currency.Visible = True
         mMI_Identifier.Visible = True
+        mMI_Parsable.Visible = True
 
         '==========================
         'Rest are not usual datatypes
@@ -177,6 +183,8 @@ Public Class ConstraintContextMenu
         mMI_URI.Visible = False
         mMI_Currency.Visible = False
         mMI_Identifier.Visible = False
+        mMI_Parsable.Visible = False
+
     End Sub
 
     Private Sub InternalProcessMenuItemClick(ByVal Sender As Object, ByVal e As EventArgs)
@@ -219,6 +227,8 @@ Public Class ConstraintContextMenu
             _ProcessMenuClick(New Constraint_Identifier)
         ElseIf Sender Is mMI_Currency Then
             _ProcessMenuClick(New Constraint_Currency)
+        ElseIf Sender Is mMI_Parsable Then
+            _ProcessMenuClick(New Constraint_Parsable)
         Else
             Debug.Assert(False, "Menu item is not loaded")
         End If
@@ -303,6 +313,9 @@ Public Class ConstraintContextMenu
         Me.MenuItems.Add(mMI_QuantityUnit)
         AddHandler mMI_QuantityUnit.Click, AddressOf InternalProcessMenuItemClick
         mMI_QuantityUnit.Visible = False
+        mMI_Parsable = New MenuItem(AE_Constants.Instance.Parsable)
+        Me.MenuItems.Add(mMI_Parsable)
+        AddHandler mMI_Parsable.Click, AddressOf InternalProcessMenuItemClick
     End Sub
 
 End Class

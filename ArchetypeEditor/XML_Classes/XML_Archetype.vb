@@ -1657,7 +1657,7 @@ Namespace ArchetypeEditor.XML_Classes
                 objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             End If
 
-            If c.RegularExpression <> Nothing Then
+            If Not String.IsNullOrEmpty(c.RegularExpression) Then
                 'Add a constraint to C_STRING
                 Dim attribute As XMLParser.C_ATTRIBUTE
                 attribute = mAomFactory.MakeSingleAttribute(objNode, "value", MakeOccurrences(New RmCardinality(1, 1)))
@@ -1667,6 +1667,32 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
         End Sub
+
+        Private Sub BuildParsable(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Parsable)
+            Dim objNode As XMLParser.C_COMPLEX_OBJECT
+
+            objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1)))
+
+            If Not String.IsNullOrEmpty(c.RegularExpression) Then
+                'Add a constraint to C_STRING
+                Dim attribute As XMLParser.C_ATTRIBUTE
+                attribute = mAomFactory.MakeSingleAttribute(objNode, "value", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim cSt As New XMLParser.C_STRING
+                cSt.pattern = c.RegularExpression
+                mAomFactory.MakePrimitiveObject(attribute, cSt)
+            End If
+
+            If Not String.IsNullOrEmpty(c.Formalism) Then
+                'Add a constraint to C_STRING
+                Dim attribute As XMLParser.C_ATTRIBUTE
+                attribute = mAomFactory.MakeSingleAttribute(objNode, "formalism", MakeOccurrences(New RmCardinality(1, 1)))
+                Dim cSt As New XMLParser.C_STRING
+                cSt.pattern = c.Formalism
+                mAomFactory.MakePrimitiveObject(attribute, cSt)
+            End If
+
+        End Sub
+
 
         Private Sub BuildIdentifier(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
@@ -1760,6 +1786,9 @@ Namespace ArchetypeEditor.XML_Classes
 
                     Case ConstraintType.Identifier
                         BuildIdentifier(value_attribute, c)
+
+                    Case ConstraintType.Parsable
+                        BuildParsable(value_attribute, c)
 
                     Case Else
                         Debug.Assert(False, String.Format("{0} constraint type is not handled", c.ToString()))
