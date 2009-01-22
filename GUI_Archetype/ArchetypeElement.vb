@@ -447,6 +447,9 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
             Case ConstraintType.URI
                 'add nothing
 
+            Case ConstraintType.Parsable
+                'add nothing
+
             Case ConstraintType.Identifier
                 'add nothing
 

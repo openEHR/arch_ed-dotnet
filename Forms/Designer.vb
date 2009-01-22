@@ -277,8 +277,8 @@ Public Class Designer
         Me.MenuFileSave = New System.Windows.Forms.MenuItem
         Me.MenuFileSaveAs = New System.Windows.Forms.MenuItem
         Me.menuFileExport = New System.Windows.Forms.MenuItem
-        Me.MenuFileExportCAM = New System.Windows.Forms.MenuItem
         Me.MenuFileExportType = New System.Windows.Forms.MenuItem
+        Me.MenuFileExportCAM = New System.Windows.Forms.MenuItem
         Me.menuFileNewWindow = New System.Windows.Forms.MenuItem
         Me.MenuFileSpecialise = New System.Windows.Forms.MenuItem
         Me.MenuFileExit = New System.Windows.Forms.MenuItem
@@ -790,7 +790,6 @@ Public Class Designer
         '
         Me.MenuFileExportType.Index = 0
         Me.MenuFileExportType.Text = "Type"
-        '
         '
         'MenuFileExportCAM
         '

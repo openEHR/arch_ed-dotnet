@@ -110,6 +110,8 @@ Public Class AE_Constants
     Private mNameThisSlot As String = "Name this slot"
     Private mNameThisSlotQuestion As String = "Name this slot?"
     Private mReplaceExistingFileQuestion As String = "File {0} already exists. Do you want to replace it?"
+    Private mParsable As String = "Parsable"
+
 
     Friend ReadOnly Property ReplaceExistingFileQuestion() As String
         Get
@@ -140,6 +142,11 @@ Public Class AE_Constants
     Friend ReadOnly Property Upper() As String
         Get
             Return mUpper
+        End Get
+    End Property
+    Friend ReadOnly Property Parsable() As String
+        Get
+            Return mParsable
         End Get
     End Property
     Friend ReadOnly Property ReplaceTranslations() As String
@@ -757,6 +764,7 @@ Public Class AE_Constants
         mNameThisSlotQuestion = TerminologyServer.Instance.RubricForCode(672, Language)
         mNameThisSlot = TerminologyServer.Instance.RubricForCode(675, Language)
         mReplaceExistingFileQuestion = TerminologyServer.Instance.RubricForCode(680, Language)
+        mParsable = TerminologyServer.Instance.RubricForCode(635, Language)
     End Sub
 
 End Class

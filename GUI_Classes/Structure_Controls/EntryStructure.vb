@@ -423,7 +423,7 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(15, "")
         Me.ilSmall.Images.SetKeyName(16, "id.bmp")
         Me.ilSmall.Images.SetKeyName(17, "currency.bmp")
-        Me.ilSmall.Images.SetKeyName(18, "")
+        Me.ilSmall.Images.SetKeyName(18, "parsable.gif")
         Me.ilSmall.Images.SetKeyName(19, "")
         Me.ilSmall.Images.SetKeyName(20, "")
         Me.ilSmall.Images.SetKeyName(21, "")
@@ -439,10 +439,10 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(31, "")
         Me.ilSmall.Images.SetKeyName(32, "")
         Me.ilSmall.Images.SetKeyName(33, "")
-        Me.ilSmall.Images.SetKeyName(34, "id_ref.bmp")
-        Me.ilSmall.Images.SetKeyName(35, "currency_ref.bmp")
-        Me.ilSmall.Images.SetKeyName(36, "")
-        Me.ilSmall.Images.SetKeyName(37, "")
+        Me.ilSmall.Images.SetKeyName(34, "")
+        Me.ilSmall.Images.SetKeyName(35, "id_ref.bmp")
+        Me.ilSmall.Images.SetKeyName(36, "currency_ref.bmp")
+        Me.ilSmall.Images.SetKeyName(37, "parsable_ref.png")
         Me.ilSmall.Images.SetKeyName(38, "")
         Me.ilSmall.Images.SetKeyName(39, "")
         Me.ilSmall.Images.SetKeyName(40, "")
@@ -457,11 +457,11 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(49, "")
         Me.ilSmall.Images.SetKeyName(50, "")
         Me.ilSmall.Images.SetKeyName(51, "")
-        Me.ilSmall.Images.SetKeyName(52, "id_selected.bmp")
-        Me.ilSmall.Images.SetKeyName(53, "currency_selected.bmp")
-        Me.ilSmall.Images.SetKeyName(54, "")
-        Me.ilSmall.Images.SetKeyName(55, "")
-        Me.ilSmall.Images.SetKeyName(56, "")
+        Me.ilSmall.Images.SetKeyName(52, "")
+        Me.ilSmall.Images.SetKeyName(53, "")
+        Me.ilSmall.Images.SetKeyName(54, "id_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(55, "currency_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(56, "parsable_selected.png")
         Me.ilSmall.Images.SetKeyName(57, "")
         Me.ilSmall.Images.SetKeyName(58, "")
         Me.ilSmall.Images.SetKeyName(59, "")
@@ -475,10 +475,14 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(67, "")
         Me.ilSmall.Images.SetKeyName(68, "")
         Me.ilSmall.Images.SetKeyName(69, "")
-        Me.ilSmall.Images.SetKeyName(70, "id_ref_selected.bmp")
-        Me.ilSmall.Images.SetKeyName(71, "currency_ref_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(70, "")
+        Me.ilSmall.Images.SetKeyName(71, "")
         Me.ilSmall.Images.SetKeyName(72, "")
-        Me.ilSmall.Images.SetKeyName(73, "")
+        Me.ilSmall.Images.SetKeyName(73, "id_ref_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(74, "currency_ref_selected.bmp")
+        Me.ilSmall.Images.SetKeyName(75, "parsable_ref_selected.png")
+        Me.ilSmall.Images.SetKeyName(76, "")
+        Me.ilSmall.Images.SetKeyName(77, "")
         '
         'ToolTipSpecialisation
         '
@@ -528,7 +532,7 @@ Public Class EntryStructure
 
     Public ReadOnly Property SelectedImageOffset() As Integer
         Get
-            Return 36
+            Return 38
         End Get
     End Property
     'implement as overrided property
@@ -819,9 +823,9 @@ Public Class EntryStructure
             Case StructureType.Cluster
                 ' FIXME: This doesn't appear to be called from anywhere. Should we clean it up or delete it?
                 If isSelected Then
-                    Return 73
+                    Return 77
                 Else
-                    Return 72
+                    Return 76
                 End If
         End Select
     End Function
@@ -829,7 +833,7 @@ Public Class EntryStructure
     Protected Function ImageIndexForConstraintType(ByVal ct As ConstraintType, ByVal isReference As Boolean, ByVal isSelected As Boolean) As Integer
         Dim offset As Integer
 
-        If isReference Then offset = 18
+        If isReference Then offset = 19
         If isSelected Then offset += Me.SelectedImageOffset
 
         Select Case ct
@@ -869,6 +873,8 @@ Public Class EntryStructure
                 Return 16 + offset
             Case ConstraintType.Currency
                 Return 17 + offset
+            Case ConstraintType.Parsable
+                Return 18 + offset
             Case Else
                 Debug.Assert(False, "Constraint not handled")
         End Select

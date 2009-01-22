@@ -258,6 +258,8 @@ Namespace ArchetypeEditor.XML_Classes
                             'obsolete
                             Return ProcessDuration(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
                         End If
+                    Case "dv_parsable"
+                        Return ProcessParsable(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
 
                     Case Else
                         Debug.Assert(False)
@@ -296,6 +298,44 @@ Namespace ArchetypeEditor.XML_Classes
             End If
             Return cUri
 
+        End Function
+
+        Shared Function ProcessParsable(ByVal dvParse As XMLParser.C_COMPLEX_OBJECT) As Constraint
+            Dim cParse As New Constraint_Parsable
+            Dim an_attribute As XMLParser.C_ATTRIBUTE
+
+            If Not dvParse.attributes Is Nothing AndAlso dvParse.attributes.Length > 0 Then
+
+
+                Try
+
+                    For i As Integer = 0 To dvParse.attributes.Length - 1
+
+                        an_attribute = CType(dvParse.attributes(i), XMLParser.C_ATTRIBUTE)
+
+                        Dim cadlOS As XMLParser.C_PRIMITIVE_OBJECT = _
+                            CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
+                        Dim cadlC As XMLParser.C_STRING = _
+                            CType(cadlOS.item, XMLParser.C_STRING)
+
+                        Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
+                            Case "value"
+                                cParse.RegularExpression = cadlC.pattern
+
+                            Case "formalism"
+                                cParse.Formalism = cadlC.pattern
+
+                        End Select
+
+                    Next
+
+                Catch e As Exception
+                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+
+            End If
+
+            Return cParse
         End Function
 
         Function ProcessIdentifier(ByVal dvIdentifier As XMLParser.C_COMPLEX_OBJECT) As Constraint
