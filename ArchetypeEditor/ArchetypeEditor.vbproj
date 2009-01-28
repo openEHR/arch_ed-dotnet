@@ -1032,6 +1032,9 @@
     <Content Include="ocean-transparent.ico" />
     <None Include="AssemblyVersion.cmd">
     </None>
+    <None Include="PropertyUnits\PropertyUnits.xsx">
+      <DependentUpon>PropertyUnits.xsd</DependentUpon>
+    </None>
     <None Include="Terminology\Terminology.xsx">
       <DependentUpon>Terminology.xsd</DependentUpon>
     </None>

@@ -719,11 +719,11 @@ Public Class OceanArchetypeEditor
         'mDefaultLanguageCode = "nl"
         'mSpecificLanguageCode = "nl"
 
-        'mDefaultLanguageCode = "de"
-        'mSpecificLanguageCode = "de"
+        mDefaultLanguageCode = "de"
+        mSpecificLanguageCode = "de"
 
-        mDefaultLanguageCode = "ja"
-        mSpecificLanguageCode = "ja"
+        'mDefaultLanguageCode = "ja"
+        'mSpecificLanguageCode = "ja"
 
 #End If
 
