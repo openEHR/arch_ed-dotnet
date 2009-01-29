@@ -143,7 +143,7 @@ Namespace ArchetypeEditor.XML_Classes
                         MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
                     Return ciq
-                Case "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>"
+                Case "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", "dv_interval<dv_time>", "dv_interval<dv_date>"
                     Dim cidt As New Constraint_Interval_DateTime
                     Try
                         For Each attrib As XMLParser.C_ATTRIBUTE In ObjNode.attributes
@@ -241,7 +241,9 @@ Namespace ArchetypeEditor.XML_Classes
                         Return ProcessCount(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
                     Case "interval_count", "interval_quantity" ' OBSOLETE
                         Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
-                    Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>"
+                    Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", _
+                         "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>", _
+                         "dv_interval<dv_date>", "dv_interval<dv_time>"
                         Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
                     Case "dv_multimedia", "multi_media", "multimedia"
                         Return ProcessMultiMedia(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
