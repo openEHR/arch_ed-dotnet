@@ -2158,6 +2158,8 @@ Public Class Designer
             mRestrictedSubject.Reset()
         End If
         mRestrictedSubject.TermSetToRestrict = aRestriction
+        mRestrictedSubject.TranslateGUI()
+
     End Sub
 
     Sub SetUpParticipations()
@@ -2341,6 +2343,7 @@ Public Class Designer
         Me.MenuLanguageAvailable.Text = Filemanager.GetOpenEhrTerm(67, Me.MenuLanguageAvailable.Text, language)
         Me.MenuTerminologyAdd.Text = Filemanager.GetOpenEhrTerm(71, Me.MenuTerminologyAdd.Text, language)
         Me.MenuTerminologyAvailable.Text = Filemanager.GetOpenEhrTerm(70, Me.MenuTerminologyAvailable.Text, language)
+        Me.menuFileExport.Text = Filemanager.GetOpenEhrTerm(681, Me.MenuTerminologyAvailable.Text, language)
 
         'Front panel of designer
         Me.lblArchetypeName.Text = Filemanager.GetOpenEhrTerm(58, Me.lblArchetypeName.Text, language)
@@ -2349,6 +2352,7 @@ Public Class Designer
         Me.tpConceptComment.Text = Filemanager.GetOpenEhrTerm(652, Me.tpConceptComment.Text, language)
         Me.gbSpecialisation.Text = Filemanager.GetOpenEhrTerm(186, Me.gbSpecialisation.Text, language)
         Me.butLinks.Text = Filemanager.GetOpenEhrTerm(659, Me.butLinks.Text, language)
+
 
         'Entry tab on designer
         Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
@@ -2434,7 +2438,7 @@ Public Class Designer
             mFileManager.OntologyManager.LanguageCode = languageCode
 
             For Each mi As MenuItem In MenuLanguageChange.MenuItems
-                mi.Checked = mi.Text = mFileManager.OntologyManager.LanguageText
+                mi.Checked = (mi.Text = mFileManager.OntologyManager.LanguageText)
             Next
         End If
 
