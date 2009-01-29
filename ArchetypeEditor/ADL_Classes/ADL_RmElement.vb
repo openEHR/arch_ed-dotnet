@@ -154,7 +154,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
                     Return ciq
-                Case "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>"
+                Case "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", "dv_interval<dv_date>", "dv_interval<dv_time>"
                     Dim cidt As New Constraint_Interval_DateTime
                     Try
                         ' Get the upper value
@@ -356,7 +356,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return ProcessCount(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "interval_count", "interval_quantity" 'OBSOLETE
                     Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
-                Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>"
+                Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>", "dv_interval<dv_date>", "dv_interval<dv_time>"
                     Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
                 Case "dv_multimedia", "multimedia", "multi_media"
                     Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))

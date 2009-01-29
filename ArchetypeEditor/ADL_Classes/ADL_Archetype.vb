@@ -1047,6 +1047,16 @@ Namespace ArchetypeEditor.ADL_Classes
             an_attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("lower"))
             BuildElementConstraint(an_attribute, c.LowerLimit)
 
+
+            'SRH: 29 Jan 2009 - EDT-361 - need to test to see the actual class type of the lower limit
+            If c.Type = ConstraintType.Interval_DateTime Then
+                Dim s As String = CType(an_attribute.children.i_th(1), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).rm_type_name.to_cil
+                If s <> "DV_DATE_TIME" Then
+                    CType(value_attribute.children.i_th(1), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)._set_rm_type_name(EiffelKernel.Create.STRING_8.make_from_cil(String.Format("DV_INTERVAL<{0}>", s)))
+                End If
+
+            End If
+
         End Sub
 
         Private Sub BuildMultiMedia(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_MultiMedia)
