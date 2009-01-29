@@ -1615,6 +1615,15 @@ Namespace ArchetypeEditor.XML_Classes
             'an_attribute = mAomFactory.MakeSingleAttribute(objNode, "lower")
             an_attribute = mAomFactory.MakeSingleAttribute(objNode, "lower", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             BuildElementConstraint(objNode, an_attribute, c.LowerLimit)
+
+            'SRH: 29 Jan 2009 - EDT-361 - need to test to see the actual class type of the lower limit
+            If c.Type = ConstraintType.Interval_DateTime AndAlso Not an_attribute Is Nothing AndAlso Not an_attribute.children Is Nothing Then
+                Dim s As String = CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT).rm_type_name
+                If s <> "DV_DATE_TIME" Then
+                    CType(value_attribute.children(0), XMLParser.C_COMPLEX_OBJECT).rm_type_name = String.Format("DV_INTERVAL<{0}>", s)
+                End If
+
+            End If
         End Sub
 
         Private Sub BuildMultiMedia(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_MultiMedia)
