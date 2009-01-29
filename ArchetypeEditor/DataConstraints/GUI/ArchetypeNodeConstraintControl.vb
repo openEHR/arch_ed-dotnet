@@ -497,6 +497,8 @@ Public Class ArchetypeNodeConstraintControl
     Public Sub TranslateGUI()
         Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
         Me.lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, Me.lblRunTimeName.Text)
+        Me.tpConstraint.Text = Filemanager.GetOpenEhrTerm(87, Me.tpConstraint.Text)
+        Me.tpConstraintDetails.Text = Filemanager.GetOpenEhrTerm(113, Me.tpConstraintDetails.Text)
     End Sub
 
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _

@@ -498,9 +498,9 @@ Public Class OceanArchetypeEditor
                 ' 4 = language code
                 For Each dr As DataRow In mDataSet.Tables("Property").Rows
                     dr.BeginEdit()
-                    dr(3) = dr(1)
+                    'dr(3) = dr(1)
                     dr(1) = Filemanager.GetOpenEhrTerm(CInt(dr(2)), CStr(dr(1)), mDefaultLanguageCode)
-                    dr(4) = mDefaultLanguageCode
+                    'dr(4) = mDefaultLanguageCode
                     dr.EndEdit()
                 Next
             End If
@@ -692,7 +692,7 @@ Public Class OceanArchetypeEditor
 
         ShowSplash()
 
-#Const TEST_LANGUAGE_TRANSLATION = False
+#Const TEST_LANGUAGE_TRANSLATION = True
 
 #If Not TEST_LANGUAGE_TRANSLATION Then
 
