@@ -110,7 +110,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Try
                     ' HKF: 8 Dec 2008
-                    SetArchetypeDigest()
+                    'SetArchetypeDigest()
 
                     adlEngine.serialise(EiffelKernel.Create.STRING_8.make_from_cil(a_format))
                     Return adlEngine.serialised_archetype.to_cil
@@ -1102,24 +1102,22 @@ Namespace ArchetypeEditor.ADL_Classes
 
             objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_PARSABLE"))
 
-            If Not String.IsNullOrEmpty(c.RegularExpression) Then
-                'Add a constraint to C_STRING
-                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("value"))
-                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
-                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.RegularExpression))
-                mAomFactory.create_c_primitive_object(attribute, cSt)
-            End If
+            'If Not String.IsNullOrEmpty(c.RegularExpression) Then
+            '    'Add a constraint to C_STRING
+            '    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            '    attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("value"))
+            '    Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+            '    cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.RegularExpression))
+            '    mAomFactory.create_c_primitive_object(attribute, cSt)
+            'End If
 
-            If Not String.IsNullOrEmpty(c.Formalism) Then
+            If c.AllowableValues.Codes.Count > 0 Then
                 'Add a constraint to C_STRING
                 Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("formalism"))
-                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
-                cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.Formalism))
-                mAomFactory.create_c_primitive_object(attribute, cSt)
+                Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE
+                ca_Term = mAomFactory.create_c_code_phrase_from_pattern(attribute, EiffelKernel.Create.STRING_8.make_from_cil(c.AllowableValues.Phrase))
             End If
-
 
         End Sub
 
