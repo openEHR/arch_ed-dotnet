@@ -628,8 +628,10 @@ Public Class TabpageHistory
                         " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "\par")
                     End If
                     Try
-                        Text.WriteLine(Space(3 * level) & Filemanager.GetOpenEhrTerm(266, "Event math function") + _
-                        " = " & Filemanager.GetOpenEhrTerm(Integer.Parse(elvi.AggregateMathFunction), "Fixed interval") & "\par")
+                        If Not String.IsNullOrEmpty(elvi.AggregateMathFunction) Then
+                            Text.WriteLine(Space(3 * level) & Filemanager.GetOpenEhrTerm(266, "Event math function") + _
+                            " = " & Filemanager.GetOpenEhrTerm(Integer.Parse(elvi.AggregateMathFunction), "Fixed interval") & "\par")
+                        End If
                     Catch
                     End Try
             End Select
@@ -1103,13 +1105,16 @@ Public Class TabpageHistory
                 current_item.EventType = RmEvent.ObservationEventType.PointInTime
             ElseIf RadioInterval.Checked Then
                 current_item.EventType = RmEvent.ObservationEventType.Interval
-                current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
+                'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
+                If CInt(comboIntervalViewPoint.SelectedValue) <> 118 Then
+                    current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
+                End If
                 cbFixedInterval_CheckedChanged(sender, e)
-            Else
-                current_item.EventType = RmEvent.ObservationEventType.Event
-            End If
+                Else
+                    current_item.EventType = RmEvent.ObservationEventType.Event
+                End If
 
-            mFileManager.FileEdited = True
+                mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -1132,7 +1137,8 @@ Public Class TabpageHistory
         cbFixedOffset.Checked = False
         mOccurrences.Cardinality = elvi.Occurrences
         numericDuration.Value = 1
-        comboIntervalViewPoint.SelectedIndex = 1  ' delta
+        'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
+        comboIntervalViewPoint.SelectedValue = 118  ' not set
         ListEvents.Items.Add(elvi)
         elvi.Selected = True
         current_item = elvi
@@ -1160,11 +1166,12 @@ Public Class TabpageHistory
             comboDurationUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.WidthUnits)
         End If
 
-        If elvi.AggregateMathFunction <> "" Then
+        If Not String.IsNullOrEmpty(elvi.AggregateMathFunction) Then
             Dim i As UInt64
 
             ' has to deal with the change of archetypes from a string
             ' to a code phrase and the openEHR code as an integer
+
             Try
                 i = UInt64.Parse(elvi.AggregateMathFunction)  ' new form
                 comboIntervalViewPoint.SelectedValue = i
@@ -1256,7 +1263,12 @@ Public Class TabpageHistory
 
     Private Sub comboIntervalViewPoint_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboIntervalViewPoint.SelectedIndexChanged
         If Not current_item Is Nothing And Not mIsLoading Then
-            current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
+            'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
+            If CInt(comboIntervalViewPoint.SelectedValue) <> 118 Then
+                current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
+            Else
+                current_item.AggregateMathFunction = ""
+            End If
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -1439,6 +1451,12 @@ Public Class TabpageHistory
         'math_functions = mFileManager.OntologyManager.CodeForGroupID(14, mFileManager.OntologyManager.LanguageCode) 'event math function
         math_functions = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.DefaultLanguageCode) 'event math function
 
+        'SRH: 4 Feb 2009 - add not set
+        new_row = MathFunctionTable.NewRow
+        new_row("Code") = 118
+        new_row("Text") = String.Format("<{0}>", Filemanager.GetOpenEhrTerm(118, "Not set"))
+        MathFunctionTable.Rows.Add(new_row)
+
         For Each rw As DataRow In math_functions
             new_row = MathFunctionTable.NewRow
             new_row("Code") = rw.Item(1)
@@ -1447,6 +1465,9 @@ Public Class TabpageHistory
         Next
 
         MathFunctionTable.DefaultView.Sort = "Text"
+
+        comboIntervalViewPoint.SelectedValue = 118
+
 
         comboIntervalViewPoint.DataSource = MathFunctionTable
         comboIntervalViewPoint.DisplayMember = "Text"
