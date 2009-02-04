@@ -8,9 +8,9 @@
 '	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL: http://svn.openehr.org/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/DataConstraints/GUI/ClusterControl.vb $"
-'	revision:    "$LastChangedRevision: 140 $"
-'	last_change: "$LastChangedDate: 2007-01-09 19:45:11 +0930 (Tue, 09 Jan 2007) $"
+'	file:        "$URL: http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/DataConstraints/GUI/MultimediaConstraintControl.vb $"
+'	revision:    "$LastChangedRevision: 146 $"
+'	last_change: "$LastChangedDate: 2007-09-11 02:48:04 +0200 (Tue, 11 Sep 2007) $"
 '
 '
 
@@ -18,118 +18,144 @@ Option Strict On
 
 Public Class ParsableConstraintControl : Inherits ConstraintControl
 
-
 #Region " Windows Form Designer generated code "
-
-    Public Sub New(ByVal aFileManager As FileManagerLocal)
+    Public Sub New()
         MyBase.New()
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-        mFileManager = aFileManager
+
+
+    End Sub
+
+    Public Sub New(ByVal a_file_manager As FileManagerLocal)
+        MyBase.New()
+
+        'This call is required by the Windows Form Designer.
+        InitializeComponent()
+
+        'Add any initialization after the InitializeComponent() call
+
+        mFileManager = a_file_manager
+
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Translate()
+            Me.lblParsable.Text = Filemanager.GetOpenEhrTerm(684, Me.lblParsable.Text)
         End If
+
+        Dim d_row As DataRow() = mFileManager.OntologyManager.CodeForGroupID(25, "en") ' must be in English
+        Dim s() As String
+        Dim n As TreeNode
+
+        For Each r As DataRow In d_row
+
+            s = CType(r.Item(2), String).Split("/".Chars(0))
+
+            'Select Case s(0)
+            '    Case "audio"
+            '        n = New TreeNode(s(1))
+            '        n.Tag = r.Item(1).ToString
+            '        n.ImageIndex = 0
+            '        TvParsable.Nodes.Item(0).Nodes.Add(n) ' Audio
+
+            '    Case "image"
+            '        n = New TreeNode(s(1))
+            '        n.Tag = r.Item(1).ToString
+            '        n.ImageIndex = 1
+            '        TvParsable.Nodes.Item(1).Nodes.Add(n) ' image
+
+            'Case "text"
+            n = New TreeNode(s(1))
+            n.Tag = r.Item(1).ToString
+            n.ImageIndex = 0
+            TvParsable.Nodes.Add(n) ' text
+
+            '    Case "video"
+            'n = New TreeNode(s(1))
+            'n.Tag = r.Item(1).ToString
+            'n.ImageIndex = 3
+            'TvParsable.Nodes.Item(3).Nodes.Add(n) ' video
+
+            '    Case "application"
+            'n = New TreeNode(s(1))
+            'n.Tag = r.Item(1).ToString
+            'n.ImageIndex = 4
+            'TvParsable.Nodes.Item(4).Nodes.Add(n) ' application
+
+            'End Select
+
+        Next
 
     End Sub
 
-    'UserControl overrides dispose to clean up the component list.
-    Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
-        If disposing Then
-            If Not (components Is Nothing) Then
-                components.Dispose()
-            End If
-        End If
-        MyBase.Dispose(disposing)
-    End Sub
 
-    'Required by the Windows Form Designer
-    Private components As System.ComponentModel.IContainer
 
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents ClusterPanelTop As System.Windows.Forms.Panel
-    Friend WithEvents txtRegEx As System.Windows.Forms.TextBox
-    Friend WithEvents lblRegex As System.Windows.Forms.Label
-    Friend WithEvents txtFormalism As System.Windows.Forms.TextBox
-    Friend WithEvents lblFormalism As System.Windows.Forms.Label
-    Friend WithEvents LabelTop As System.Windows.Forms.Label
-
+    Private components As System.ComponentModel.IContainer
+    Friend WithEvents ImageListMIME As System.Windows.Forms.ImageList
+    Friend WithEvents TvParsable As System.Windows.Forms.TreeView
+    Friend WithEvents lblParsable As System.Windows.Forms.Label
+    Friend WithEvents PanelTop As System.Windows.Forms.Panel
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
-        Me.ClusterPanelTop = New System.Windows.Forms.Panel
-        Me.LabelTop = New System.Windows.Forms.Label
-        Me.txtRegEx = New System.Windows.Forms.TextBox
-        Me.lblRegex = New System.Windows.Forms.Label
-        Me.txtFormalism = New System.Windows.Forms.TextBox
-        Me.lblFormalism = New System.Windows.Forms.Label
-        Me.ClusterPanelTop.SuspendLayout()
+        Me.components = New System.ComponentModel.Container
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ParsableConstraintControl))
+        Me.TvParsable = New System.Windows.Forms.TreeView
+        Me.ImageListMIME = New System.Windows.Forms.ImageList(Me.components)
+        Me.lblParsable = New System.Windows.Forms.Label
+        Me.PanelTop = New System.Windows.Forms.Panel
+        Me.PanelTop.SuspendLayout()
         Me.SuspendLayout()
         '
-        'ClusterPanelTop
+        'TvParsable
         '
-        Me.ClusterPanelTop.Controls.Add(Me.LabelTop)
-        Me.ClusterPanelTop.Dock = System.Windows.Forms.DockStyle.Top
-        Me.ClusterPanelTop.Location = New System.Drawing.Point(0, 0)
-        Me.ClusterPanelTop.Name = "ClusterPanelTop"
-        Me.ClusterPanelTop.Size = New System.Drawing.Size(376, 32)
-        Me.ClusterPanelTop.TabIndex = 0
+        Me.TvParsable.CheckBoxes = True
+        Me.TvParsable.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TvParsable.HideSelection = False
+        Me.TvParsable.HotTracking = True
+        Me.TvParsable.ImageIndex = 0
+        Me.TvParsable.ImageList = Me.ImageListMIME
+        Me.TvParsable.Location = New System.Drawing.Point(0, 32)
+        Me.TvParsable.Name = "TvParsable"
+        Me.TvParsable.SelectedImageIndex = 0
+        Me.TvParsable.Size = New System.Drawing.Size(304, 136)
+        Me.TvParsable.TabIndex = 37
         '
-        'LabelTop
+        'ImageListMIME
         '
-        Me.LabelTop.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LabelTop.Location = New System.Drawing.Point(16, 8)
-        Me.LabelTop.Name = "LabelTop"
-        Me.LabelTop.Size = New System.Drawing.Size(144, 16)
-        Me.LabelTop.TabIndex = 0
-        Me.LabelTop.Text = "Parsable"
+        Me.ImageListMIME.ImageStream = CType(resources.GetObject("ImageListMIME.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageListMIME.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageListMIME.Images.SetKeyName(0, "")
         '
-        'txtRegEx
+        'lblParsable
         '
-        Me.txtRegEx.Location = New System.Drawing.Point(34, 107)
-        Me.txtRegEx.Name = "txtRegEx"
-        Me.txtRegEx.Size = New System.Drawing.Size(303, 20)
-        Me.txtRegEx.TabIndex = 2
+        Me.lblParsable.BackColor = System.Drawing.Color.Transparent
+        Me.lblParsable.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblParsable.Location = New System.Drawing.Point(8, 13)
+        Me.lblParsable.Name = "lblParsable"
+        Me.lblParsable.Size = New System.Drawing.Size(96, 27)
+        Me.lblParsable.TabIndex = 36
+        Me.lblParsable.Text = "Parsable text"
         '
-        'lblRegex
+        'PanelTop
         '
-        Me.lblRegex.AutoSize = True
-        Me.lblRegex.Location = New System.Drawing.Point(31, 87)
-        Me.lblRegex.Name = "lblRegex"
-        Me.lblRegex.Size = New System.Drawing.Size(99, 13)
-        Me.lblRegex.TabIndex = 3
-        Me.lblRegex.Text = "Constraint on Value"
-        '
-        'txtFormalism
-        '
-        Me.txtFormalism.Location = New System.Drawing.Point(34, 59)
-        Me.txtFormalism.Name = "txtFormalism"
-        Me.txtFormalism.Size = New System.Drawing.Size(249, 20)
-        Me.txtFormalism.TabIndex = 4
-        '
-        'lblFormalism
-        '
-        Me.lblFormalism.AutoSize = True
-        Me.lblFormalism.Location = New System.Drawing.Point(31, 40)
-        Me.lblFormalism.Name = "lblFormalism"
-        Me.lblFormalism.Size = New System.Drawing.Size(118, 13)
-        Me.lblFormalism.TabIndex = 5
-        Me.lblFormalism.Text = "Constraint on Formalism"
+        Me.PanelTop.Controls.Add(Me.lblParsable)
+        Me.PanelTop.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PanelTop.Location = New System.Drawing.Point(0, 0)
+        Me.PanelTop.Name = "PanelTop"
+        Me.PanelTop.Size = New System.Drawing.Size(304, 32)
+        Me.PanelTop.TabIndex = 38
         '
         'ParsableConstraintControl
         '
-        Me.Controls.Add(Me.txtRegEx)
-        Me.Controls.Add(Me.txtFormalism)
-        Me.Controls.Add(Me.lblFormalism)
-        Me.Controls.Add(Me.lblRegex)
-        Me.Controls.Add(Me.ClusterPanelTop)
+        Me.Controls.Add(Me.TvParsable)
+        Me.Controls.Add(Me.PanelTop)
         Me.Name = "ParsableConstraintControl"
-        Me.Size = New System.Drawing.Size(376, 136)
-        Me.ClusterPanelTop.ResumeLayout(False)
+        Me.Size = New System.Drawing.Size(304, 168)
+        Me.PanelTop.ResumeLayout(False)
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
 
@@ -138,41 +164,77 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
     Private Shadows ReadOnly Property Constraint() As Constraint_Parsable
         Get
             Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Parsable)
+
             Return CType(MyBase.Constraint, Constraint_Parsable)
         End Get
     End Property
 
-    Public Sub Translate()
-        Me.LabelTop.Text = Filemanager.GetOpenEhrTerm(656, Me.LabelTop.Text)
-        Me.lblRegex.Text = Filemanager.GetOpenEhrTerm(657, Me.lblRegex.Text)
-    End Sub
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
 
         ' set constraint values on control
-        MyBase.IsLoading = True
 
-        If Constraint.Formalism <> Nothing Then
-            Me.txtFormalism.Text = Constraint.Formalism
+        Dim cp As CodePhrase = Me.Constraint.AllowableValues
+
+        Debug.Assert(cp.TerminologyID = "openEHR")
+
+        For Each n As TreeNode In TvParsable.Nodes
+
+            If cp.HasCode(n.Tag.ToString) Then
+                n.Checked = True
+                n.EnsureVisible()
+            End If
+        Next
+
+
+    End Sub
+
+    Private Sub TvParsable_AfterCheck(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles TvParsable.AfterCheck
+        'Dim ae As iArchetypeElementNode
+
+        If MyBase.IsLoading Then Return
+
+        Dim cp As CodePhrase = Me.Constraint.AllowableValues
+        If e.Node.Checked Then
+            Debug.Assert(Not cp.HasCode(e.Node.Tag.ToString))
+            cp.Codes.Add(e.Node.Tag.ToString)
+        Else
+            Debug.Assert(cp.HasCode(e.Node.Tag.ToString))
+            cp.Codes.Remove(e.Node.Tag.ToString)
         End If
 
-        If Constraint.RegularExpression <> Nothing Then
-            Me.txtRegEx.Text = Constraint.RegularExpression
-        End If
 
-    End Sub
-
-    Private Sub txtRegEx_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtRegEx.TextChanged
-        If MyBase.IsLoading Then Return
-        Constraint.RegularExpression = txtRegEx.Text
         mFileManager.FileEdited = True
+
     End Sub
 
-    Private Sub txtFormalism_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtFormalism.TextChanged
-        If MyBase.IsLoading Then Return
-        Constraint.Formalism = txtFormalism.Text
-        mFileManager.FileEdited = True
+    Private Function FindNode(ByVal NodeCol As TreeNodeCollection, ByVal sText As String, _
+            Optional ByVal Tag As Boolean = False) As TreeNode
+
+        'Dim n As TreeNode
+
+        For Each n As TreeNode In NodeCol
+            If Tag Then
+                If CStr(n.Tag) = sText Then
+                    Return n
+                End If
+            Else
+                If n.Text = sText Then
+                    Return n
+                End If
+            End If
+            If Not n Is Nothing Then
+                Return n
+            End If
+        Next
+        Return Nothing
+
+    End Function
+
+    Sub TranslateGUI()
+        Me.lblParsable.Text = Filemanager.GetOpenEhrTerm(684, "Parsable")
     End Sub
+
 End Class
 
 '
@@ -189,7 +251,7 @@ End Class
 'for the specific language governing rights and limitations under the
 'License.
 '
-'The Original Code is ConstraintControl.vb.
+'The Original Code is MultimediaConstraintControl.vb.
 '
 'The Initial Developer of the Original Code is
 'Sam Heard, Ocean Informatics (www.oceaninformatics.biz).
@@ -197,7 +259,6 @@ End Class
 'the Initial Developer. All Rights Reserved.
 '
 'Contributor(s):
-'	Heath Frankel
 '
 'Alternatively, the contents of this file may be used under the terms of
 'either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -213,3 +274,4 @@ End Class
 '
 '***** END LICENSE BLOCK *****
 '
+

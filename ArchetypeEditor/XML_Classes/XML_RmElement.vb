@@ -315,18 +315,26 @@ Namespace ArchetypeEditor.XML_Classes
 
                         an_attribute = CType(dvParse.attributes(i), XMLParser.C_ATTRIBUTE)
 
-                        Dim cadlOS As XMLParser.C_PRIMITIVE_OBJECT = _
-                            CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
-                        Dim cadlC As XMLParser.C_STRING = _
-                            CType(cadlOS.item, XMLParser.C_STRING)
+                        Dim cadlOS As XMLParser.C_OBJECT = _
+                            CType(an_attribute.children(0), XMLParser.C_OBJECT)
+                        Dim cadlC As XMLParser.C_CODE_PHRASE = _
+                            CType(cadlOS, XMLParser.C_CODE_PHRASE)
 
                         Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
                             Case "value"
-                                cParse.RegularExpression = cadlC.pattern
+                                'obsolete
+                                'cParse.RegularExpression = cadlC.pattern
 
                             Case "formalism"
-                                cParse.Formalism = cadlC.pattern
+                                Try
 
+                                    cParse.AllowableValues = ArchetypeEditor.XML_Classes.XML_Tools.ProcessCodes(cadlC)
+
+                                Catch ex As Exception
+                                    Debug.Assert(False)
+                                    MessageBox.Show(AE_Constants.Instance.Error_loading & " Parsable constraint:" & dvParse.node_id & _
+                                        " - " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                End Try
                         End Select
 
                     Next

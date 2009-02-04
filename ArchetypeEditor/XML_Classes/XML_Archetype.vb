@@ -1679,25 +1679,38 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Sub BuildParsable(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Parsable)
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
+            Dim code_rel_node As XMLParser.C_ATTRIBUTE
+            Dim ca_Term As XMLParser.C_CODE_PHRASE
 
             objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1)))
 
-            If Not String.IsNullOrEmpty(c.RegularExpression) Then
-                'Add a constraint to C_STRING
-                Dim attribute As XMLParser.C_ATTRIBUTE
-                attribute = mAomFactory.MakeSingleAttribute(objNode, "value", MakeOccurrences(New RmCardinality(1, 1)))
-                Dim cSt As New XMLParser.C_STRING
-                cSt.pattern = c.RegularExpression
-                mAomFactory.MakePrimitiveObject(attribute, cSt)
-            End If
+            'If Not String.IsNullOrEmpty(c.RegularExpression) Then
+            '    'Add a constraint to C_STRING
+            '    Dim attribute As XMLParser.C_ATTRIBUTE
+            '    attribute = mAomFactory.MakeSingleAttribute(objNode, "value", MakeOccurrences(New RmCardinality(1, 1)))
+            '    Dim cSt As New XMLParser.C_STRING
+            '    cSt.pattern = c.RegularExpression
+            '    mAomFactory.MakePrimitiveObject(attribute, cSt)
+            'End If
 
-            If Not String.IsNullOrEmpty(c.Formalism) Then
+            If c.AllowableValues.Codes.Count > 0 Then
                 'Add a constraint to C_STRING
                 Dim attribute As XMLParser.C_ATTRIBUTE
                 attribute = mAomFactory.MakeSingleAttribute(objNode, "formalism", MakeOccurrences(New RmCardinality(1, 1)))
-                Dim cSt As New XMLParser.C_STRING
-                cSt.pattern = c.Formalism
-                mAomFactory.MakePrimitiveObject(attribute, cSt)
+                ca_Term = New XMLParser.C_CODE_PHRASE
+                ca_Term.rm_type_name = "CODE_PHRASE"
+                ca_Term.node_id = ""
+                ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
+
+                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                ca_Term.terminology_id = New XMLParser.TERMINOLOGY_ID
+                ca_Term.terminology_id.value = c.AllowableValues.TerminologyID
+                If c.AllowableValues.TerminologyID = "" Then
+                    ca_Term.terminology_id.value = "local"
+                End If
+                ca_Term.code_list = Array.CreateInstance(GetType(String), c.AllowableValues.Codes.Count)
+                c.AllowableValues.Codes.CopyTo(ca_Term.code_list, 0)
+                mAomFactory.add_object(attribute, ca_Term)
             End If
 
         End Sub

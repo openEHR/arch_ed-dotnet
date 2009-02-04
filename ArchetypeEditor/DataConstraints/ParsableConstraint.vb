@@ -16,36 +16,34 @@ Option Strict On
 
 Public Class Constraint_Parsable
     Inherits Constraint
-
-    ' no constraint data at the moment
-
+    
     Public Overrides ReadOnly Property Type() As ConstraintType
         Get
             Return ConstraintType.Parsable
         End Get
     End Property
 
-    Dim mFormalism As String
+    Dim mFormalism As New CodePhrase("openEHR")
 
-    Public Property Formalism() As String
+    Public Property AllowableValues() As CodePhrase
         Get
             Return mFormalism
         End Get
-        Set(ByVal value As String)
-            mFormalism = value
+        Set(ByVal Value As CodePhrase)
+            mFormalism = Value
         End Set
     End Property
 
-    Dim mRegex As String
+    'Dim mRegex As String
 
-    Public Property RegularExpression() As String
-        Get
-            Return mRegex
-        End Get
-        Set(ByVal value As String)
-            mRegex = value
-        End Set
-    End Property
+    'Public Property RegularExpression() As String
+    '    Get
+    '        Return mRegex
+    '    End Get
+    '    Set(ByVal value As String)
+    '        mRegex = value
+    '    End Set
+    'End Property
 
 End Class
 

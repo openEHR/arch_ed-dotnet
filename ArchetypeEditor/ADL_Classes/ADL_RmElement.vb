@@ -393,17 +393,26 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     an_attribute = CType(dvParse.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                    Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = _
-                        CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                    Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = _
-                        CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+                    Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_OBJECT = _
+                        CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+                    Dim cadlC As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE = _
+                        CType(cadlOS, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE)
 
                     Select Case an_attribute.rm_attribute_name.to_cil.ToLowerInvariant()
                         Case "value"
-                            cParse.RegularExpression = cadlC.regexp.to_cil
+                            'OBSOLETE
+                            'cParse.RegularExpression = cadlC.regexp.to_cil
 
                         Case "formalism"
-                            cParse.Formalism = cadlC.regexp.to_cil
+                            Try
+
+                                cParse.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessCodes(cadlC)
+
+                            Catch ex As Exception
+                                Debug.Assert(False)
+                                MessageBox.Show(AE_Constants.Instance.Error_loading & " Multimedia constraint:" & dvParse.node_id.to_cil & _
+                                    " - " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            End Try
 
                     End Select
 

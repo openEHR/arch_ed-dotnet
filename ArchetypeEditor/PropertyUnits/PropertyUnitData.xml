@@ -325,7 +325,6 @@
   <Unit property_id="42" Text="erg/s-cm" conversion="1" coefficient="-5" primary="false" />
   <Unit property_id="42" Text="ft-lbf/s-ft" conversion="4.449" primary="false" />
   <Unit property_id="42" Text="Btu/s-ft" conversion="3461" primary="false" />
-  <Unit property_id="42" Text="2447" conversion="0.961" primary="false" />
   <Unit property_id="43" Text="W/m2" conversion="1" primary="true" />
   <Unit property_id="43" Text="cal/s-cm2" conversion="41" primary="false" />
   <Unit property_id="43" Text="kcal/s-cm2" conversion="4.187" coefficient="7" primary="false" />
@@ -544,4 +543,5 @@
   <Unit property_id="1" Text="fg" name="femtogram" conversion="1" coefficient="-18" primary="false" UCUM="fg" />
   <Unit property_id="1" Text="cg" name="centogram" conversion="1" coefficient="-2" primary="false" UCUM="cg" />
   <Unit property_id="1" Text="dg" name="decigram" conversion="1" coefficient="-1" primary="false" UCUM="dg" />
+  <Unit property_id="19" Text="{124/128}" conversion="0" primary="false" />
 </PropertyUnits>
