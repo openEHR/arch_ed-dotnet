@@ -692,7 +692,7 @@ Public Class OceanArchetypeEditor
 
         ShowSplash()
 
-#Const TEST_LANGUAGE_TRANSLATION = True
+#Const TEST_LANGUAGE_TRANSLATION = False
 
 #If Not TEST_LANGUAGE_TRANSLATION Then
 
