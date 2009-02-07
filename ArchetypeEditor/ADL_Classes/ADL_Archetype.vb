@@ -1563,10 +1563,11 @@ Namespace ArchetypeEditor.ADL_Classes
         Protected Sub BuildRootElement(ByVal an_element As RmElement, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-            If an_element.HasNameConstraint Then
-                attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("name"))
-                BuildText(attribute, an_element.NameConstraint)
-            End If
+            'SRH: 7 Feb 2009 - EDT-509 - writing name constraint has already been done in calling class
+            'If an_element.HasNameConstraint Then
+            '    attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("name"))
+            '    BuildText(attribute, an_element.NameConstraint)
+            'End If
 
             If Not an_element.Constraint Is Nothing Then
                 If an_element.Constraint.Type <> ConstraintType.Any Then

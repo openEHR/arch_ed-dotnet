@@ -466,7 +466,7 @@
   <Unit property_id="62" Text="mEq" conversion="1" coefficient="-3" primary="false" />
   <Unit property_id="10" Text="mm/h" conversion="2.78" coefficient="-7" primary="false" />
   <Unit property_id="19" Text="mmol/24h" conversion="0" primary="false" />
-  <Unit property_id="19" Text="{384/128}" name="{MASS (mole)/TIME}" conversion="0" primary="false" />
+  <Unit property_id="19" Text="{384/128}" name="{Amount (mole)/TIME}" conversion="0" primary="false" />
   <Unit property_id="58" Text="osmol" conversion="0" primary="false" />
   <Unit property_id="58" Text="mosmol" name="milliosmol" conversion="0" primary="false" />
   <Unit property_id="6" Text="HPF" name="High power field" conversion="0" primary="false" />
