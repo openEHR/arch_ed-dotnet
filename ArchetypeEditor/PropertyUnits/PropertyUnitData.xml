@@ -77,6 +77,7 @@
   <Property id="78" Text="Glomerular filtration rate" openEHR="586" />
   <Property id="79" Text="Electrical Potential Time" openEHR="655" />
   <Property id="80" Text="Time Fraction" openEHR="670" />
+  <Property id="81" Text="Refractive power" />
   <Unit property_id="0" Text="m" name="meter" conversion="1" primary="true" />
   <Unit property_id="0" Text="cm" name="centimeter" conversion="0.01" primary="false" />
   <Unit property_id="0" Text="µm" name="micrometer" conversion="1" coefficient="-6" primary="false" />
@@ -544,4 +545,6 @@
   <Unit property_id="1" Text="cg" name="centogram" conversion="1" coefficient="-2" primary="false" UCUM="cg" />
   <Unit property_id="1" Text="dg" name="decigram" conversion="1" coefficient="-1" primary="false" UCUM="dg" />
   <Unit property_id="19" Text="{124/128}" conversion="0" primary="false" />
+  <Unit property_id="81" Text="dioptre" name="Dioptre" conversion="1" primary="true" />
+  <Unit property_id="81" Text="dpt" name="Dioptre" conversion="1" primary="false" />
 </PropertyUnits>
