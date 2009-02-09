@@ -45,12 +45,8 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
         End If
 
         Dim d_row As DataRow() = mFileManager.OntologyManager.CodeForGroupID(25, "en") ' must be in English
-        Dim s() As String
-        Dim n As TreeNode
 
         For Each r As DataRow In d_row
-
-            s = CType(r.Item(2), String).Split("/".Chars(0))
 
             'Select Case s(0)
             '    Case "audio"
@@ -66,10 +62,10 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
             '        TvParsable.Nodes.Item(1).Nodes.Add(n) ' image
 
             'Case "text"
-            n = New TreeNode(s(1))
-            n.Tag = r.Item(1).ToString
-            n.ImageIndex = 0
-            TvParsable.Nodes.Add(n) ' text
+            Dim key As String = CStr(r.Item(2))
+            Dim labelText As String = Filemanager.GetOpenEhrTerm(CInt(r.Item(1)), CStr(r.Item(2)))
+            TvParsable.Nodes.Add(key, labelText.Substring(labelText.IndexOf("/"c) + 1), 0)
+            TvParsable.Nodes(TvParsable.Nodes.IndexOfKey(key)).Tag = key
 
             '    Case "video"
             'n = New TreeNode(s(1))
@@ -98,6 +94,9 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
     Friend WithEvents ImageListMIME As System.Windows.Forms.ImageList
     Friend WithEvents TvParsable As System.Windows.Forms.TreeView
     Friend WithEvents lblParsable As System.Windows.Forms.Label
+    Friend WithEvents Panelbottom As System.Windows.Forms.Panel
+    Friend WithEvents txtNewFormalism As System.Windows.Forms.TextBox
+    Friend WithEvents ButNewItem As System.Windows.Forms.Button
     Friend WithEvents PanelTop As System.Windows.Forms.Panel
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -106,7 +105,11 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
         Me.ImageListMIME = New System.Windows.Forms.ImageList(Me.components)
         Me.lblParsable = New System.Windows.Forms.Label
         Me.PanelTop = New System.Windows.Forms.Panel
+        Me.Panelbottom = New System.Windows.Forms.Panel
+        Me.txtNewFormalism = New System.Windows.Forms.TextBox
+        Me.ButNewItem = New System.Windows.Forms.Button
         Me.PanelTop.SuspendLayout()
+        Me.Panelbottom.SuspendLayout()
         Me.SuspendLayout()
         '
         'TvParsable
@@ -120,7 +123,7 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
         Me.TvParsable.Location = New System.Drawing.Point(0, 32)
         Me.TvParsable.Name = "TvParsable"
         Me.TvParsable.SelectedImageIndex = 0
-        Me.TvParsable.Size = New System.Drawing.Size(304, 136)
+        Me.TvParsable.Size = New System.Drawing.Size(304, 105)
         Me.TvParsable.TabIndex = 37
         '
         'ImageListMIME
@@ -148,13 +151,43 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
         Me.PanelTop.Size = New System.Drawing.Size(304, 32)
         Me.PanelTop.TabIndex = 38
         '
+        'Panelbottom
+        '
+        Me.Panelbottom.Controls.Add(Me.ButNewItem)
+        Me.Panelbottom.Controls.Add(Me.txtNewFormalism)
+        Me.Panelbottom.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.Panelbottom.Location = New System.Drawing.Point(0, 137)
+        Me.Panelbottom.Name = "Panelbottom"
+        Me.Panelbottom.Size = New System.Drawing.Size(304, 31)
+        Me.Panelbottom.TabIndex = 39
+        '
+        'txtNewFormalism
+        '
+        Me.txtNewFormalism.Location = New System.Drawing.Point(41, 7)
+        Me.txtNewFormalism.Name = "txtNewFormalism"
+        Me.txtNewFormalism.Size = New System.Drawing.Size(260, 20)
+        Me.txtNewFormalism.TabIndex = 0
+        '
+        'ButNewItem
+        '
+        Me.ButNewItem.Image = CType(resources.GetObject("ButNewItem.Image"), System.Drawing.Image)
+        Me.ButNewItem.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.ButNewItem.Location = New System.Drawing.Point(11, 3)
+        Me.ButNewItem.Name = "ButNewItem"
+        Me.ButNewItem.Size = New System.Drawing.Size(24, 24)
+        Me.ButNewItem.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.ButNewItem, "Add a new term")
+        '
         'ParsableConstraintControl
         '
         Me.Controls.Add(Me.TvParsable)
+        Me.Controls.Add(Me.Panelbottom)
         Me.Controls.Add(Me.PanelTop)
         Me.Name = "ParsableConstraintControl"
         Me.Size = New System.Drawing.Size(304, 168)
         Me.PanelTop.ResumeLayout(False)
+        Me.Panelbottom.ResumeLayout(False)
+        Me.Panelbottom.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -174,16 +207,16 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
 
         ' set constraint values on control
 
-        Dim cp As CodePhrase = Me.Constraint.AllowableValues
-
-        Debug.Assert(cp.TerminologyID = "openEHR")
-
-        For Each n As TreeNode In TvParsable.Nodes
-
-            If cp.HasCode(n.Tag.ToString) Then
-                n.Checked = True
-                n.EnsureVisible()
+        For Each s As String In Me.Constraint.AllowableFormalisms
+            Dim n As TreeNode
+            If Not TvParsable.Nodes.ContainsKey(s) Then
+                TvParsable.Nodes.Add(s, s)
+                n = TvParsable.Nodes(TvParsable.Nodes.IndexOfKey(s))
+                n.Tag = s
+            Else
+                n = TvParsable.Nodes(TvParsable.Nodes.IndexOfKey(s))
             End If
+            n.Checked = True
         Next
 
 
@@ -194,15 +227,14 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
 
         If MyBase.IsLoading Then Return
 
-        Dim cp As CodePhrase = Me.Constraint.AllowableValues
+        Dim cp As Generic.List(Of String) = Me.Constraint.AllowableFormalisms
         If e.Node.Checked Then
-            Debug.Assert(Not cp.HasCode(e.Node.Tag.ToString))
-            cp.Codes.Add(e.Node.Tag.ToString)
+            Debug.Assert(Not cp.Contains(e.Node.Tag.ToString))
+            cp.Add(e.Node.Tag.ToString)
         Else
-            Debug.Assert(cp.HasCode(e.Node.Tag.ToString))
-            cp.Codes.Remove(e.Node.Tag.ToString)
+            Debug.Assert(cp.Contains(e.Node.Tag.ToString))
+            cp.Remove(e.Node.Tag.ToString)
         End If
-
 
         mFileManager.FileEdited = True
 
@@ -235,6 +267,13 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
         Me.lblParsable.Text = Filemanager.GetOpenEhrTerm(684, "Parsable")
     End Sub
 
+    Private Sub ButNewItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButNewItem.Click
+        If txtNewFormalism.Text.Trim.Length > 2 Then
+            Dim s As String = txtNewFormalism.Text.Trim
+            TvParsable.Nodes.Add(s, s)
+            TvParsable.Nodes(TvParsable.Nodes.IndexOfKey(s)).Tag = s
+        End If
+    End Sub
 End Class
 
 '

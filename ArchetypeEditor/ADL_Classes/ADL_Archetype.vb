@@ -1111,13 +1111,26 @@ Namespace ArchetypeEditor.ADL_Classes
             '    mAomFactory.create_c_primitive_object(attribute, cSt)
             'End If
 
-            If c.AllowableValues.Codes.Count > 0 Then
+            If c.AllowableFormalisms.Count > 0 Then
                 'Add a constraint to C_STRING
                 Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("formalism"))
-                Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE
-                ca_Term = mAomFactory.create_c_code_phrase_from_pattern(attribute, EiffelKernel.Create.STRING_8.make_from_cil(c.AllowableValues.Phrase))
+                Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
+                'cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.Formalism))
+                cSt = mAomFactory.create_c_string_make_from_string(EiffelKernel.Create.STRING_8.make_from_cil(c.AllowableFormalisms.Item(0)))
+                For i As Integer = 1 To c.AllowableFormalisms.Count - 1
+                    cSt.add_string(EiffelKernel.Create.STRING_8.make_from_cil(c.AllowableFormalisms.Item(i)))
+                Next
+                mAomFactory.create_c_primitive_object(attribute, cSt)
             End If
+
+            'If c.AllowableValues.Codes.Count > 0 Then
+            '    'Add a constraint to C_STRING
+            '    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            '    attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("formalism"))
+            '    Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE
+            '    ca_Term = mAomFactory.create_c_code_phrase_from_pattern(attribute, EiffelKernel.Create.STRING_8.make_from_cil(c.AllowableValues.Phrase))
+            'End If
 
         End Sub
 
