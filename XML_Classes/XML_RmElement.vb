@@ -315,10 +315,10 @@ Namespace ArchetypeEditor.XML_Classes
 
                         an_attribute = CType(dvParse.attributes(i), XMLParser.C_ATTRIBUTE)
 
-                        Dim cadlOS As XMLParser.C_OBJECT = _
-                            CType(an_attribute.children(0), XMLParser.C_OBJECT)
-                        Dim cadlC As XMLParser.C_CODE_PHRASE = _
-                            CType(cadlOS, XMLParser.C_CODE_PHRASE)
+                        Dim cadlOS As XMLParser.C_PRIMITIVE_OBJECT = _
+                            CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
+                        Dim cadlC As XMLParser.C_STRING = _
+                            CType(cadlOS.item, XMLParser.C_STRING)
 
                         Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
                             Case "value"
@@ -328,7 +328,7 @@ Namespace ArchetypeEditor.XML_Classes
                             Case "formalism"
                                 Try
 
-                                    cParse.AllowableValues = ArchetypeEditor.XML_Classes.XML_Tools.ProcessCodes(cadlC)
+                                    cParse.AllowableFormalisms.AddRange(cadlC.list)
 
                                 Catch ex As Exception
                                     Debug.Assert(False)

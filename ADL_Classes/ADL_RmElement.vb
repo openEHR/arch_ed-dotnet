@@ -393,10 +393,10 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     an_attribute = CType(dvParse.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                    Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_OBJECT = _
-                        CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
-                    Dim cadlC As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE = _
-                        CType(cadlOS, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE)
+                    Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = _
+                        CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                    Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = _
+                        CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
 
                     Select Case an_attribute.rm_attribute_name.to_cil.ToLowerInvariant()
                         Case "value"
@@ -405,8 +405,9 @@ Namespace ArchetypeEditor.ADL_Classes
 
                         Case "formalism"
                             Try
-
-                                cParse.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessCodes(cadlC)
+                                For ii As Integer = 1 To cadlC.strings.count
+                                    cParse.AllowableFormalisms.Add(CType(cadlC.strings.i_th(ii), EiffelKernel.STRING_8).to_cil)
+                                Next
 
                             Catch ex As Exception
                                 Debug.Assert(False)

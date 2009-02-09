@@ -23,13 +23,13 @@ Public Class Constraint_Parsable
         End Get
     End Property
 
-    Dim mFormalism As New CodePhrase("openEHR")
+    Dim mFormalism As New Generic.List(Of String)
 
-    Public Property AllowableValues() As CodePhrase
+    Public Property AllowableFormalisms() As Generic.List(Of String)
         Get
             Return mFormalism
         End Get
-        Set(ByVal Value As CodePhrase)
+        Set(ByVal Value As Generic.List(Of String))
             mFormalism = Value
         End Set
     End Property
