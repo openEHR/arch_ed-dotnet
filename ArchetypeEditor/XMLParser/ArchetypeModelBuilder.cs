@@ -50,16 +50,16 @@ namespace OpenEhr.V1.Its.Xml.AM
             System.IO.MemoryStream archetypeStream = AmSerializer.Serialize(settings, archetype);
             AmSerializer.ValidateArchetype(archetypeStream);
 
-#if DEBUG
-            archetypeStream.Position = 0;
-            System.IO.StreamReader reader = new System.IO.StreamReader(archetypeStream);
-            using (System.IO.StreamWriter writer = new System.IO.StreamWriter("CanonicalArchetype.xml", false, Encoding.UTF8))
-            {
-                writer.Write(reader.ReadToEnd());
-                writer.Close();
-                reader.Close();
-            }
-#endif
+//#if DEBUG
+//            archetypeStream.Position = 0;
+//            System.IO.StreamReader reader = new System.IO.StreamReader(archetypeStream);
+//            using (System.IO.StreamWriter writer = new System.IO.StreamWriter("CanonicalArchetype.xml", false, Encoding.UTF8))
+//            {
+//                writer.Write(reader.ReadToEnd());
+//                writer.Close();
+//                reader.Close();
+//            }
+//#endif
             byte[] data = archetypeStream.ToArray();
 
             // Remove UTF-8 BOM 
