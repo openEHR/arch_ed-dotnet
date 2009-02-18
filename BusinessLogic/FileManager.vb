@@ -880,28 +880,29 @@ Class Filemanager
 
     Public Shared Function SaveFiles(ByVal askToSave As Boolean) As Boolean
         For Each f As FileManagerLocal In mFileManagerCollection
-            If f.FileEdited Then
-                If mFileManagerCollection.Count > 1 Or askToSave Then
-                    Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & " '" & f.Archetype.Archetype_ID.ToString & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
-                        Case Windows.Forms.DialogResult.Cancel
-                            Return False
-                        Case Windows.Forms.DialogResult.No
-                            Return True
-                        Case Windows.Forms.DialogResult.Yes
-                            If f.SaveArchetype() Then
-                                f.IsNew = False
-                            Else
-                                Return False
-                            End If
-                    End Select
-                Else
-                    If f.SaveArchetype() Then
-                        f.IsNew = False
-                    Else
+            'SRH: Jan 2009 EDT-495,276 - force a regeneration as this means the archetype is always up to date when saved
+            'If f.FileEdited Then 
+            If mFileManagerCollection.Count > 1 Or askToSave Then
+                Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & " '" & f.Archetype.Archetype_ID.ToString & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
+                    Case Windows.Forms.DialogResult.Cancel
                         Return False
-                    End If
+                    Case Windows.Forms.DialogResult.No
+                        Return True
+                    Case Windows.Forms.DialogResult.Yes
+                        If f.SaveArchetype() Then
+                            f.IsNew = False
+                        Else
+                            Return False
+                        End If
+                End Select
+            Else
+                If f.SaveArchetype() Then
+                    f.IsNew = False
+                Else
+                    Return False
                 End If
             End If
+            'End If
         Next
         Return True
     End Function

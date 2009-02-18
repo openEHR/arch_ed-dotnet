@@ -2201,6 +2201,9 @@ Public Class Designer
             s = Filemanager.Master.FileName
             Filemanager.Master.FileName = ""
 
+            ' HKF: 17 Feb EDT-276: force save as 
+            Filemanager.Master.FileEdited = True
+
             If Not Filemanager.Master.SaveArchetype() Then
                 Filemanager.Master.FileName = s
                 MenuFileSpecialise.Visible = True
