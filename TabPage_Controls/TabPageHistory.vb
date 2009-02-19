@@ -13,6 +13,8 @@
 '	last_change: "$LastChangedDate$"
 '
 '
+Option Explicit On
+Option Strict On
 
 Public Class TabpageHistory
     Inherits System.Windows.Forms.UserControl
@@ -732,8 +734,8 @@ Public Class TabpageHistory
         If ListEvents.Items.Count > 0 Then
             ListEvents.Items.Item(0).Selected = True
             butRemoveElement.Visible = True
-            ProcessEvent(ListEvents.Items.Item(0))
-            current_item = ListEvents.Items.Item(0)
+            ProcessEvent(CType(ListEvents.Items.Item(0), EventListViewItem))
+            current_item = CType(ListEvents.Items.Item(0), EventListViewItem)
             current_item.Selected = True
         End If
     End Sub
@@ -754,7 +756,7 @@ Public Class TabpageHistory
         Next
 
         If ListEvents.SelectedItems.Count > 0 Then
-            elvi = ListEvents.SelectedItems(0)
+            elvi = CType(ListEvents.SelectedItems(0), EventListViewItem)
             txtEventDescription.Text = elvi.Description
 
             If elvi.hasNameConstraint Then
@@ -789,7 +791,7 @@ Public Class TabpageHistory
         Hist = New RmHistory(NodeId)
 
         If chkIsPeriodic.Checked AndAlso Not comboTimeUnits.SelectedItem Is Nothing Then
-            Hist.Period = numPeriod.Value
+            Hist.Period = CInt(numPeriod.Value)
             Hist.PeriodUnits = CType(comboTimeUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
             Hist.isPeriodic = True
         End If
@@ -801,7 +803,7 @@ Public Class TabpageHistory
         End If
 
         For Each ev In ListEvents.Items
-            Hist.Children.Add(ev.RM_Class)
+            Hist.Children.Add(CType(ev.RM_Class, RmEvent))
         Next
 
         SetEventSeriesCardinality(Hist)
@@ -936,7 +938,7 @@ Public Class TabpageHistory
         End Property
         Public Property Width() As Integer
             Get
-                Return element.Width
+                Return CInt(element.Width)
             End Get
             Set(ByVal Value As Integer)
                 element.Width = Value
@@ -1078,7 +1080,7 @@ Public Class TabpageHistory
             MyBase.Text = elvi.Text
             sDescription = elvi.Description
             ' need to copy here as may be a copy process
-            element = elvi.RM_Class.Copy
+            element = CType(elvi.RM_Class.Copy, RmEvent)
             SetImageIndex()
         End Sub
 
@@ -1217,7 +1219,7 @@ Public Class TabpageHistory
                     current_item = Nothing  ' stops processes when writing information
                 End If
 
-                elvi = ListEvents.SelectedItems(0)
+                elvi = CType(ListEvents.SelectedItems(0), EventListViewItem)
                 ProcessEvent(elvi)
                 current_item = elvi
                 ' set the image to selected, don't use selected to change as it will call this again!
@@ -1235,7 +1237,7 @@ Public Class TabpageHistory
 
     Private Sub NumericOffset_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericOffset.ValueChanged, NumericOffset.TextChanged
         If Not current_item Is Nothing And Not mIsLoading Then
-            current_item.Offset = NumericOffset.Value
+            current_item.Offset = CInt(NumericOffset.Value)
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -1249,7 +1251,7 @@ Public Class TabpageHistory
 
     Private Sub numericDuration_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numericDuration.ValueChanged, numericDuration.TextChanged
         If Not current_item Is Nothing And Not mIsLoading Then
-            current_item.Width = numericDuration.Value
+            current_item.Width = CInt(numericDuration.Value)
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -1293,7 +1295,7 @@ Public Class TabpageHistory
             If cbFixedOffset.Checked Then
                 current_item.hasFixedOffset = True
                 ' may accept default so set them
-                current_item.Offset = NumericOffset.Value
+                current_item.Offset = CInt(NumericOffset.Value)
                 current_item.OffsetUnits = CType(comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
             Else
                 current_item.hasFixedOffset = False
@@ -1317,7 +1319,7 @@ Public Class TabpageHistory
             If cbFixedInterval.Checked Then
                 current_item.hasFixedWidth = True
                 ' may accept default so load these
-                current_item.Width = numericDuration.Value
+                current_item.Width = CInt(numericDuration.Value)
                 current_item.WidthUnits = CType(comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
             Else
                 current_item.hasFixedWidth = False
@@ -1332,7 +1334,7 @@ Public Class TabpageHistory
             'must be one selected and more than one in the list - have to have one event!
             Beep()
         Else
-            Dim elvi As EventListViewItem = ListEvents.SelectedItems(0)
+            Dim elvi As EventListViewItem = CType(ListEvents.SelectedItems(0), EventListViewItem)
 
             If MessageBox.Show(AE_Constants.Instance.Remove & elvi.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
                 ' leave an item selected if there is one
@@ -1384,7 +1386,7 @@ Public Class TabpageHistory
 
     Private Sub ListEvents_AfterLabelEdit(ByVal sender As Object, ByVal e As System.Windows.Forms.LabelEditEventArgs) Handles ListEvents.AfterLabelEdit
         If Not e.Label Is Nothing Then
-            Dim lvItem As EventListViewItem = ListEvents.Items(e.Item)
+            Dim lvItem As EventListViewItem = CType(ListEvents.Items(e.Item), EventListViewItem)
 
             If e.Label = "" Then
                 e.CancelEdit = True
@@ -1401,7 +1403,7 @@ Public Class TabpageHistory
         has_constraint = current_item.hasNameConstraint
 
         If has_constraint Then
-            t = current_item.NameConstraint.Copy
+            t = CType(current_item.NameConstraint.Copy, Constraint_Text)
         End If
 
         frm.ShowConstraint(False, current_item.NameConstraint, mFileManager)

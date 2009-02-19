@@ -20,6 +20,9 @@ Friend Class Duration
     Private sISODuration As String
     Private sUnits As String
     Private iValue As Integer
+    Private yr As Integer
+    Private mo As Integer
+    Private w As Integer
     Private d As Integer
     Private h As Integer
     Private m As Integer
@@ -89,65 +92,115 @@ Friend Class Duration
     Private Sub ProcessIso()
         Dim str As String
         Dim y() As String
+        Dim ymwd As String
 
         ' drop the leading P and convert to lower
-        str = sISODuration.Substring(1).ToLower(System.Globalization.CultureInfo.InvariantCulture)
-        y = str.Split("d".ToCharArray())
+        str = sISODuration.Substring(1).ToLowerInvariant
+
+        'SH: EDT-518 - support wk, mth, yr
+        'y = str.Split("d".ToCharArray())
+        y = str.Split("t".ToCharArray)
         If y.Length > 1 Then
-            d = Val(y(0))
+            ymwd = Val(y(0))
             str = y(1)
+        Else
+            ymwd = str
+            str = ""
         End If
 
-        str = str.Trim("t"c)
+        'Process ymwd
+        If Not String.IsNullOrEmpty(ymwd) Then
+            'Yrs
+            y = ymwd.Split("y".ToCharArray)
+            If y.Length > 1 Then
+                yr = CInt(y(0))
+                ymwd = y(1)
+            End If
 
-        y = str.Split("h")
-        If y.Length > 1 Then
-            h = Val(y(0))
-            str = y(1)
-        End If
-        y = str.Split("m")
-        If y.Length > 1 Then
-            m = Val(y(0))
-            str = y(1)
-        End If
-        y = str.Split("s")
-        If y.Length > 1 Then
-            s = Val(y(0))
-        End If
+            'Process months
+            y = ymwd.Split("m".ToCharArray)
+            If y.Length > 1 Then
+                mo = CInt(y(0))
+                sUnits = "mo"
+                ymwd = y(1)
+            End If
 
+            'Process weeks
+            y = ymwd.Split("w".ToCharArray)
+            If y.Length > 1 Then
+                w = CInt(y(0))
+                ymwd = y(1)
+            End If
 
-        If sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("d") Then
-            sUnits = "d"
-        ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("h") Then
-            sUnits = "h"
-        ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("m") Then
-            sUnits = "min"
-        ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("s") Then
-            If InStr(s.ToString, ".") > 0 Then
-                ' this means there is a decimal point and the period must have been in millisecs
-                If InStr(iValue.ToString, ".") Then
-                    iValue = s * 1000
-                    sUnits = "millisec"
-                End If
-            Else
-                sUnits = "s"
+            'Process days
+            y = ymwd.Split("d".ToCharArray)
+            If y.Length > 1 Then
+                d = CInt(y(0))
+                ymwd = y(1)
             End If
         End If
 
+        'Process time
+        If Not String.IsNullOrEmpty(str) Then
 
-        If sUnits = "d" Then
-            iValue = d
-        ElseIf sUnits = "h" Then
-            iValue = (d * 24) + h
+            y = str.Split("h")
+            If y.Length > 1 Then
+                h = Val(y(0))
+                str = y(1)
+            End If
+            y = str.Split("m")
+            If y.Length > 1 Then
+                m = Val(y(0))
+                str = y(1)
+            End If
+            y = str.Split("s")
+            If y.Length > 1 Then
+                s = Val(y(0))
+            End If
+        End If
 
-        ElseIf sUnits = "min" Then
-            iValue = (((d * 24) + h) * 60) + m
+        If sUnits <> "mo" Then
+            If sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("y") Then
+                sUnits = "yr"
+            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("w") Then
+                sUnits = "wk"
+            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("d") Then
+                sUnits = "d"
+            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("h") Then
+                sUnits = "h"
+            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("m") Then
+                sUnits = "min"
+            ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("s") Then
+                If InStr(s.ToString, ".") > 0 Then
+                    ' this means there is a decimal point and the period must have been in millisecs
+                    If InStr(iValue.ToString, ".") Then
+                        iValue = s * 1000
+                        sUnits = "millisec"
+                    End If
+                Else
+                    sUnits = "s"
+                End If
+            End If
 
-        ElseIf sUnits = "s" Then
-            iValue = (((((d * 24) + h) * 60) + m) * 60) + s
+            If sUnits = "yr" Then
+                iValue = yr
+            ElseIf sUnits = "wk" Then
+                iValue = (yr * 52) + w
+            ElseIf sUnits = "d" Then
+                iValue = (yr * 52) + (w * 7) + d
+            ElseIf sUnits = "h" Then
+                iValue = (d * 24) + h
+
+            ElseIf sUnits = "min" Then
+                iValue = (((d * 24) + h) * 60) + m
+
+            ElseIf sUnits = "s" Then
+                iValue = (((((d * 24) + h) * 60) + m) * 60) + s
+            End If
+        Else
+            iValue = mo
         End If
     End Sub
-
 End Class
 
 '

@@ -36,6 +36,8 @@ Public Class TimeUnits
     End Function
 
     Public Function GetIsoUnitForDuration(ByVal a_duration As String) As String
+        Debug.Assert(Not String.IsNullOrEmpty(a_duration), "duration string must not be null or empty")
+
         Select Case a_duration.ToLowerInvariant
             Case "y"
                 Return "a"
