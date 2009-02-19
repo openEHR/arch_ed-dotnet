@@ -47,8 +47,10 @@ Class RmEvent
             Return iWidth
         End Get
         Set(ByVal Value As Long)
-            iWidth = Value
-            boolFixedDuration = True
+            If Value >= 1 Then
+                iWidth = Value
+                boolFixedDuration = True
+            End If
         End Set
     End Property
     Public Property WidthUnits() As String
