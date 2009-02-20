@@ -161,7 +161,7 @@ Friend Class Duration
 
         If sUnits <> "mo" Then
             If sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("y") Then
-                sUnits = "yr"
+                sUnits = "a"
             ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("w") Then
                 sUnits = "wk"
             ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("d") Then
@@ -182,7 +182,7 @@ Friend Class Duration
                 End If
             End If
 
-            If sUnits = "yr" Then
+            If sUnits = "a" Then
                 iValue = yr
             ElseIf sUnits = "wk" Then
                 iValue = (yr * 52) + w
