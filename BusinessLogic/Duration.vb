@@ -22,14 +22,14 @@ Friend Class Duration
     Private sUnits As String
     'Private iValue As Integer
     Private iValue As Decimal
-    Private yr As Integer
-    Private mo As Integer
-    Private w As Integer
-    Private d As Integer
-    Private h As Integer
-    Private m As Integer
-    Private s As Long
-    Private fractionalSecond As Double
+    'Private yr As Integer
+    'Private mo As Integer
+    'Private w As Integer
+    'Private d As Integer
+    'Private h As Integer
+    'Private m As Integer
+    'Private s As Long
+    'Private fractionalSecond As Double
 
     Property ISO_duration() As String
         Get
@@ -114,6 +114,11 @@ Friend Class Duration
             str = ""
         End If
 
+        Dim yr As Integer
+        Dim mo As Integer
+        Dim w As Integer
+        Dim d As Integer
+
         'Process ymwd
         If Not String.IsNullOrEmpty(ymwd) Then
             'Yrs
@@ -146,6 +151,11 @@ Friend Class Duration
             End If
         End If
 
+        Dim h As Integer
+        Dim m As Integer
+        Dim s As Long
+        Dim fractionalSecond As Double
+
         'Process time
         If Not String.IsNullOrEmpty(str) Then
 
@@ -161,8 +171,8 @@ Friend Class Duration
             End If
             y = str.Split("s"c)
             If y.Length > 1 Then
-                fractionalSecond = Val(y(0))
                 s = CLng(Val(y(0)))
+                fractionalSecond = Val(y(0)) - s
             End If
         End If
 
@@ -206,7 +216,7 @@ Friend Class Duration
             ElseIf sUnits = "s" Then
                 iValue = (((((d * 24) + h) * 60) + m) * 60) + s
             ElseIf sUnits = "millisec" Then
-                iValue = CDec(((((((d * 24) + h) * 60) + m) * 60) + fractionalSecond) * 1000)
+                iValue = CDec((((((((d * 24) + h) * 60) + m) * 60) + s + fractionalSecond) * 1000))
             End If
         Else
             iValue = mo
