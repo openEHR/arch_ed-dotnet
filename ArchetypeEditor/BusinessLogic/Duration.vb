@@ -14,12 +14,14 @@
 '
 '
 
-Option Explicit On 
+Option Explicit On
+Option Strict On
 
 Friend Class Duration
     Private sISODuration As String
     Private sUnits As String
-    Private iValue As Integer
+    'Private iValue As Integer
+    Private iValue As Decimal
     Private yr As Integer
     Private mo As Integer
     Private w As Integer
@@ -27,6 +29,7 @@ Friend Class Duration
     Private h As Integer
     Private m As Integer
     Private s As Long
+    Private fractionalSecond As Double
 
     Property ISO_duration() As String
         Get
@@ -37,11 +40,13 @@ Friend Class Duration
             ProcessIso()
         End Set
     End Property
-    Property GUI_duration() As Integer
+    'Property GUI_duration() As Integer
+    Property GUI_duration() As Decimal
         Get
             Return iValue
         End Get
-        Set(ByVal Value As Integer)
+        'Set(ByVal Value As Integer)
+        Set(ByVal Value As Decimal)
             Debug.Assert(sUnits <> "", "Value set before units") 'ToDo: Stop this dependency
             iValue = Value
             SetIsoDuration()
@@ -79,7 +84,7 @@ Friend Class Duration
 
     Private Sub SetIsoDuration()
         If sUnits = "millisec" Then
-            sISODuration = "PT" & (iValue / 1000).ToString & "s"
+            sISODuration = "PT" & (iValue / 1000).ToString & "S"
         Else
             If (sUnits.ToLowerInvariant = "d") Or (sUnits.ToLowerInvariant = "mo") Or (sUnits.ToLowerInvariant = "wk") Or (sUnits.ToLowerInvariant = "a") Then
                 sISODuration = "P" & iValue.ToString & toDuration(sUnits)
@@ -99,9 +104,10 @@ Friend Class Duration
 
         'SH: EDT-518 - support wk, mth, yr
         'y = str.Split("d".ToCharArray())
-        y = str.Split("t".ToCharArray)
+        y = str.Split(("t".ToCharArray))
         If y.Length > 1 Then
-            ymwd = Val(y(0))
+            'ymwd = Val(y(0)).ToString
+            ymwd = y(0)
             str = y(1)
         Else
             ymwd = str
@@ -143,19 +149,20 @@ Friend Class Duration
         'Process time
         If Not String.IsNullOrEmpty(str) Then
 
-            y = str.Split("h")
+            y = str.Split("h"c)
             If y.Length > 1 Then
-                h = Val(y(0))
+                h = CInt(Val(y(0)))
                 str = y(1)
             End If
-            y = str.Split("m")
+            y = str.Split("m"c)
             If y.Length > 1 Then
-                m = Val(y(0))
+                m = CInt(Val(y(0)))
                 str = y(1)
             End If
-            y = str.Split("s")
+            y = str.Split("s"c)
             If y.Length > 1 Then
-                s = Val(y(0))
+                fractionalSecond = Val(y(0))
+                s = CLng(Val(y(0)))
             End If
         End If
 
@@ -171,12 +178,14 @@ Friend Class Duration
             ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("m") Then
                 sUnits = "min"
             ElseIf sISODuration.ToLower(System.Globalization.CultureInfo.InvariantCulture).EndsWith("s") Then
-                If InStr(s.ToString, ".") > 0 Then
+                'If InStr(s.ToString, ".") > 0 Then
+                If InStr(fractionalSecond.ToString, ".") > 0 Then
                     ' this means there is a decimal point and the period must have been in millisecs
-                    If InStr(iValue.ToString, ".") Then
-                        iValue = s * 1000
-                        sUnits = "millisec"
-                    End If
+                    'If InStr(iValue.ToString, ".") Then
+                    '    iValue = s * 1000
+                    'iValue = CInt((fractionalSecond - s) * 1000)
+                    sUnits = "millisec"
+                    'End If
                 Else
                     sUnits = "s"
                 End If
@@ -196,6 +205,8 @@ Friend Class Duration
 
             ElseIf sUnits = "s" Then
                 iValue = (((((d * 24) + h) * 60) + m) * 60) + s
+            ElseIf sUnits = "millisec" Then
+                iValue = CDec(((((((d * 24) + h) * 60) + m) * 60) + fractionalSecond) * 1000)
             End If
         Else
             iValue = mo
