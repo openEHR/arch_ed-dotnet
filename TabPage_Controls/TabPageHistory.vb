@@ -107,6 +107,11 @@ Public Class TabpageHistory
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabpageHistory))
         Me.gbEventDetails = New System.Windows.Forms.GroupBox
+        Me.gbDuration = New System.Windows.Forms.GroupBox
+        Me.cbFixedInterval = New System.Windows.Forms.CheckBox
+        Me.comboIntervalViewPoint = New System.Windows.Forms.ComboBox
+        Me.numericDuration = New System.Windows.Forms.NumericUpDown
+        Me.comboDurationUnits = New System.Windows.Forms.ComboBox
         Me.gbOffset = New System.Windows.Forms.GroupBox
         Me.cbFixedOffset = New System.Windows.Forms.CheckBox
         Me.NumericOffset = New System.Windows.Forms.NumericUpDown
@@ -115,11 +120,6 @@ Public Class TabpageHistory
         Me.buSetRuntimeConstraint = New System.Windows.Forms.Button
         Me.txtRuntimeConstraint = New System.Windows.Forms.TextBox
         Me.txtEventDescription = New System.Windows.Forms.TextBox
-        Me.gbDuration = New System.Windows.Forms.GroupBox
-        Me.cbFixedInterval = New System.Windows.Forms.CheckBox
-        Me.comboIntervalViewPoint = New System.Windows.Forms.ComboBox
-        Me.numericDuration = New System.Windows.Forms.NumericUpDown
-        Me.comboDurationUnits = New System.Windows.Forms.ComboBox
         Me.RadioInterval = New System.Windows.Forms.RadioButton
         Me.radioPointInTime = New System.Windows.Forms.RadioButton
         Me.lblDescription = New System.Windows.Forms.Label
@@ -144,10 +144,10 @@ Public Class TabpageHistory
         Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.RightPanel = New System.Windows.Forms.Panel
         Me.gbEventDetails.SuspendLayout()
-        Me.gbOffset.SuspendLayout()
-        CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbDuration.SuspendLayout()
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.gbOffset.SuspendLayout()
+        CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbEventList.SuspendLayout()
         Me.panelLeft.SuspendLayout()
@@ -174,6 +174,61 @@ Public Class TabpageHistory
         Me.gbEventDetails.TabIndex = 34
         Me.gbEventDetails.TabStop = False
         Me.gbEventDetails.Text = "Event details"
+        '
+        'gbDuration
+        '
+        Me.gbDuration.Controls.Add(Me.cbFixedInterval)
+        Me.gbDuration.Controls.Add(Me.comboIntervalViewPoint)
+        Me.gbDuration.Controls.Add(Me.numericDuration)
+        Me.gbDuration.Controls.Add(Me.comboDurationUnits)
+        Me.gbDuration.Location = New System.Drawing.Point(178, 13)
+        Me.gbDuration.Name = "gbDuration"
+        Me.gbDuration.Size = New System.Drawing.Size(172, 104)
+        Me.gbDuration.TabIndex = 25
+        Me.gbDuration.TabStop = False
+        Me.gbDuration.Text = "Duration"
+        Me.gbDuration.Visible = False
+        '
+        'cbFixedInterval
+        '
+        Me.cbFixedInterval.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbFixedInterval.Location = New System.Drawing.Point(10, 16)
+        Me.cbFixedInterval.Name = "cbFixedInterval"
+        Me.cbFixedInterval.Size = New System.Drawing.Size(153, 24)
+        Me.cbFixedInterval.TabIndex = 1
+        Me.cbFixedInterval.Text = "Fixed Interval"
+        '
+        'comboIntervalViewPoint
+        '
+        Me.comboIntervalViewPoint.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.comboIntervalViewPoint.Location = New System.Drawing.Point(10, 73)
+        Me.comboIntervalViewPoint.Name = "comboIntervalViewPoint"
+        Me.comboIntervalViewPoint.Size = New System.Drawing.Size(156, 21)
+        Me.comboIntervalViewPoint.TabIndex = 4
+        '
+        'numericDuration
+        '
+        Me.numericDuration.Location = New System.Drawing.Point(10, 42)
+        Me.numericDuration.Maximum = New Decimal(New Integer() {-1, -1, -1, 0})
+        Me.numericDuration.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.numericDuration.Name = "numericDuration"
+        Me.numericDuration.Size = New System.Drawing.Size(46, 20)
+        Me.numericDuration.TabIndex = 2
+        Me.numericDuration.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.numericDuration.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.numericDuration.Visible = False
+        '
+        'comboDurationUnits
+        '
+        Me.comboDurationUnits.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.comboDurationUnits.Location = New System.Drawing.Point(61, 42)
+        Me.comboDurationUnits.Name = "comboDurationUnits"
+        Me.comboDurationUnits.Size = New System.Drawing.Size(105, 21)
+        Me.comboDurationUnits.TabIndex = 3
+        Me.comboDurationUnits.Visible = False
         '
         'gbOffset
         '
@@ -257,61 +312,6 @@ Public Class TabpageHistory
         Me.txtEventDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtEventDescription.Size = New System.Drawing.Size(334, 95)
         Me.txtEventDescription.TabIndex = 2
-        '
-        'gbDuration
-        '
-        Me.gbDuration.Controls.Add(Me.cbFixedInterval)
-        Me.gbDuration.Controls.Add(Me.comboIntervalViewPoint)
-        Me.gbDuration.Controls.Add(Me.numericDuration)
-        Me.gbDuration.Controls.Add(Me.comboDurationUnits)
-        Me.gbDuration.Location = New System.Drawing.Point(178, 13)
-        Me.gbDuration.Name = "gbDuration"
-        Me.gbDuration.Size = New System.Drawing.Size(172, 104)
-        Me.gbDuration.TabIndex = 25
-        Me.gbDuration.TabStop = False
-        Me.gbDuration.Text = "Duration"
-        Me.gbDuration.Visible = False
-        '
-        'cbFixedInterval
-        '
-        Me.cbFixedInterval.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cbFixedInterval.Location = New System.Drawing.Point(10, 16)
-        Me.cbFixedInterval.Name = "cbFixedInterval"
-        Me.cbFixedInterval.Size = New System.Drawing.Size(153, 24)
-        Me.cbFixedInterval.TabIndex = 1
-        Me.cbFixedInterval.Text = "Fixed Interval"
-        '
-        'comboIntervalViewPoint
-        '
-        Me.comboIntervalViewPoint.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.comboIntervalViewPoint.Location = New System.Drawing.Point(10, 73)
-        Me.comboIntervalViewPoint.Name = "comboIntervalViewPoint"
-        Me.comboIntervalViewPoint.Size = New System.Drawing.Size(156, 21)
-        Me.comboIntervalViewPoint.TabIndex = 4
-        '
-        'numericDuration
-        '
-        Me.numericDuration.Location = New System.Drawing.Point(10, 42)
-        Me.numericDuration.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numericDuration.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numericDuration.Name = "numericDuration"
-        Me.numericDuration.Size = New System.Drawing.Size(46, 20)
-        Me.numericDuration.TabIndex = 2
-        Me.numericDuration.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.numericDuration.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numericDuration.Visible = False
-        '
-        'comboDurationUnits
-        '
-        Me.comboDurationUnits.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.comboDurationUnits.Location = New System.Drawing.Point(61, 42)
-        Me.comboDurationUnits.Name = "comboDurationUnits"
-        Me.comboDurationUnits.Size = New System.Drawing.Size(105, 21)
-        Me.comboDurationUnits.TabIndex = 3
-        Me.comboDurationUnits.Visible = False
         '
         'RadioInterval
         '
@@ -551,10 +551,10 @@ Public Class TabpageHistory
         Me.Size = New System.Drawing.Size(824, 392)
         Me.gbEventDetails.ResumeLayout(False)
         Me.gbEventDetails.PerformLayout()
-        Me.gbOffset.ResumeLayout(False)
-        CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbDuration.ResumeLayout(False)
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.gbOffset.ResumeLayout(False)
+        CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbEventList.ResumeLayout(False)
         Me.panelLeft.ResumeLayout(False)
