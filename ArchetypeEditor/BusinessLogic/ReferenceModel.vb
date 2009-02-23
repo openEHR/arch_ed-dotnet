@@ -157,6 +157,7 @@ Public Class ReferenceModel
                 mReferenceModelNames.Add(106, "ITEM_LIST")
                 mReferenceModelNames.Add(107, "ITEM_TREE")
                 mReferenceModelNames.Add(108, "ITEM_TABLE")
+                mReferenceModelNames.Add(673, "ITEM")
                 mReferenceModelNames.Add(313, "CLUSTER")
                 mReferenceModelNames.Add(567, "ELEMENT")
                 mReferenceModelNames.Add(433, "EVENT")
