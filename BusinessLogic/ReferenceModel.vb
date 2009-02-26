@@ -226,7 +226,7 @@ Public Class ReferenceModel
                 Select Case Parent
                     Case StructureType.COMPOSITION 'openEHR
                         Select Case Child
-                            Case StructureType.SECTION, StructureType.List, StructureType.Table, StructureType.Single, StructureType.Tree
+                            Case StructureType.SECTION, StructureType.List, StructureType.Table, StructureType.Single, StructureType.Tree, StructureType.Slot
                                 Return True
                         End Select
                     Case StructureType.SECTION 'openEHR

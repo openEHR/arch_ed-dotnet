@@ -913,7 +913,10 @@ Public Class TabPageStructure
         PanelDetails.LocalFileManager = mFileManager
         mFileManager.ObjectToSave = Me
 
+        mFileManager.FileLoading = True
+
         If OpenArchetypeForSlot(slot, OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure") Then
+            mFileManager.FileLoading = False
             Filemanager.AddEmbedded(mFileManager)
 
             'Hide context menu to change structure

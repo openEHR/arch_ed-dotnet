@@ -2149,6 +2149,17 @@ Namespace ArchetypeEditor.XML_Classes
                             new_structure = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_structure.Type), a_structure.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
                             BuildStructure(a_structure, new_structure)
 
+                            'SRH: 26 Feb 2009 - EDT-419
+                        Case StructureType.Slot
+
+                            If eventContext Is Nothing Then
+                                an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
+                                eventContext = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
+                            End If
+                            an_attribute = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
+                            BuildSlotFromAttribute(an_attribute, a_structure)
+
+
                         Case StructureType.SECTION
 
                             If CType(a_structure, RmSection).Children.Count > 0 Then
