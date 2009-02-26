@@ -1477,6 +1477,9 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             an_attribute = mAomFactory.create_c_attribute_multiple(cadlObj, EiffelKernel.Create.STRING_8.make_from_cil("items"), MakeCardinality(rmChildren.Cardinality, rmChildren.Cardinality.Ordered))
+            'SRH - 11 Feb 2009 - EDT 514 - set the minimum cardinality of cluster and structures to 1
+            'As cardinality is expressed in the RM as 1..* this forces existence at the moment to be 1..1 - however this is not the intent.
+            'an_attribute.set_existence(MakeExistence(rmChildren.Existence))
 
             For Each a_structure As RmStructure In rmChildren
 
@@ -1549,6 +1552,18 @@ Namespace ArchetypeEditor.ADL_Classes
                             an_attribute = mAomFactory.create_c_attribute_single(eventContext, EiffelKernel.Create.STRING_8.make_from_cil("other_context"))
                             new_structure = mAomFactory.create_c_complex_object_identified(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_structure.Type)), EiffelKernel.Create.STRING_8.make_from_cil(a_structure.NodeId))
                             BuildStructure(a_structure, new_structure)
+
+                            'SRH: 26 Feb 2009 - EDT-419 - allow slot for context
+
+                        Case StructureType.Slot
+
+                            If eventContext Is Nothing Then
+                                an_attribute = mAomFactory.create_c_attribute_single(CadlObj, EiffelKernel.Create.STRING_8.make_from_cil("context"))
+                                eventContext = mAomFactory.create_c_complex_object_anonymous(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil("EVENT_CONTEXT"))
+                            End If
+
+                            an_attribute = mAomFactory.create_c_attribute_single(eventContext, EiffelKernel.Create.STRING_8.make_from_cil("other_context"))
+                            BuildSlotFromAttribute(an_attribute, a_structure)
 
 
                         Case StructureType.SECTION

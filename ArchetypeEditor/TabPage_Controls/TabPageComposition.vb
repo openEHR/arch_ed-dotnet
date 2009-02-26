@@ -235,7 +235,9 @@ Public Class TabPageComposition
 
         Me.radioPersist.Checked = a_composition.IsPersistent
 
-        For Each rm As RmStructureCompound In a_composition.Data
+        'Srh: 26 fEB 2009 - edt-419
+        'For Each rm As RmStructureCompound In a_composition.Data
+        For Each rm As RmStructure In a_composition.Data
             Select Case rm.Type
                 Case StructureType.SECTION
                     mSectionConstraint.IsRootOfComposition = True
@@ -244,6 +246,8 @@ Public Class TabPageComposition
                     mContextConstraint.ProcessStructure(CType(rm, RmStructureCompound))
                 Case StructureType.Participation
                     mParticipationConstraint.OtherParticipations = CType(rm, RmStructureCompound)
+                Case StructureType.Slot
+                    mContextConstraint.ProcessStructure(CType(rm, RmSlot))
                 Case Else
                     Debug.Assert(False, "Not handled yet")
             End Select

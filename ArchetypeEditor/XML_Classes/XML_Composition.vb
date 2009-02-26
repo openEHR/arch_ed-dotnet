@@ -47,7 +47,14 @@ Namespace ArchetypeEditor.XML_Classes
                                     Case "participations"
                                         Me.Participations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
                                     Case "other_context"
-                                        mChildren.Add(New RmStructureCompound(CType(context_attribute.children(0), XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                                        'SRH: 26 Feb 2009, EDT-419
+                                        Dim child As Object = context_attribute.children(0)
+                                        If TypeOf child Is XMLParser.C_COMPLEX_OBJECT Then
+                                            mChildren.Add(New RmStructureCompound(CType(child, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
+                                        Else
+                                            mChildren.Add(New RmSlot(CType(child, XMLParser.ARCHETYPE_SLOT)))
+                                        End If
+
                                 End Select
                             Next
                         Case "content"

@@ -46,32 +46,37 @@ Class ADL_COMPOSITION
                         complexObj = an_attribute.children.first
                         If complexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("other_context")) Then
                             an_attribute = complexObj.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("other_context"))
-                            mChildren.Add(New RmStructureCompound(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
-                            ' remembers the Processed data off events
+                            Dim child As Object = an_attribute.children.first
+                            If TypeOf child Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
+                                mChildren.Add(New RmStructureCompound(CType(child, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
+                                ' remembers the Processed data off events
+                            Else
+                                mChildren.Add(New RmSlot(CType(child, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                            End If
                         End If
-                        If complexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("participations")) Then
-                            an_attribute = complexObj.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("participations"))
-                            Me.Participations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
-                        End If
+                            If complexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("participations")) Then
+                                an_attribute = complexObj.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("participations"))
+                                Me.Participations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
+                            End If
                     Case "content"
                             ' a set of slots constraining what sections can be added
 
                             Dim section As RmSection = New RmSection("root")
 
-                        For j As Integer = 1 To an_attribute.children.count
-                            Try
-                                Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = an_attribute.children.i_th(j)
-                                If obj.generating_type.to_cil = "ARCHETYPE_SLOT" Then
-                                    section.Children.Add(New RmSlot(CType(an_attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
-                                Else
-                                    MessageBox.Show("Editor does not support compositions with fixed sections. Create slots and separate suitable section archetype", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-                                End If
-                            Catch ex As Exception
-                                MessageBox.Show(String.Format("{0}- ({1}): {2}", AE_Constants.Instance.Error_loading, a_filemanager.Archetype.Archetype_ID.ToString(), ex.Message), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            For j As Integer = 1 To an_attribute.children.count
+                                Try
+                                    Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = an_attribute.children.i_th(j)
+                                    If obj.generating_type.to_cil = "ARCHETYPE_SLOT" Then
+                                        section.Children.Add(New RmSlot(CType(an_attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                                    Else
+                                        MessageBox.Show("Editor does not support compositions with fixed sections. Create slots and separate suitable section archetype", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                    End If
+                                Catch ex As Exception
+                                    MessageBox.Show(String.Format("{0}- ({1}): {2}", AE_Constants.Instance.Error_loading, a_filemanager.Archetype.Archetype_ID.ToString(), ex.Message), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
 
-                            End Try
+                                End Try
 
-                        Next
+                            Next
                             mChildren.Add(section)
                 End Select
             Next
