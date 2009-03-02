@@ -110,7 +110,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Try
                     ' HKF: 8 Dec 2008
-                    'SetArchetypeDigest()
+                    SetArchetypeDigest()
 
                     adlEngine.serialise(EiffelKernel.Create.STRING_8.make_from_cil(a_format))
                     Return adlEngine.serialised_archetype.to_cil
