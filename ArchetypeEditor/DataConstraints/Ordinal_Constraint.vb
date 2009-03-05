@@ -34,8 +34,12 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
         ord.mFixed = mFixed
         ord.OrdinalValues.Copy(mOrdinalTable)
-        ord.HasAssumedValue = Me.HasAssumedValue
-        ord.AssumedValue = mAssumedValue
+
+        'SRH - 4th March 2009 - EDT-523 - error with assumed value being set to zero
+        'ord.HasAssumedValue = Me.HasAssumedValue
+        If Me.HasAssumedValue Then
+            ord.AssumedValue = mAssumedValue
+        End If
 
         'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
         ord.AssumedValue_TerminologyId = mTerminologyId
