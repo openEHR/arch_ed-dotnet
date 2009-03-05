@@ -23,7 +23,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
     Private mFixed As Boolean
     Private WithEvents mOrdinalTable As OrdinalTable
     Private mAssumedValue As Integer
-    Private mTerminologyId As String 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+    Private mTerminologyId As String = "local" 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
     Private mCodeString As String 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
     Private mIsLoadingComplete As Boolean
     Private mLanguage As String
@@ -74,6 +74,12 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
             mAssumedValue = CInt(Value)
             HasAssumedValue = True
+
+            'SRH - EDT-523 - need to set the ordinal value for XML output
+            Dim dr As DataRow = mOrdinalTable.Rows.Find(Value)
+            If Not dr Is Nothing Then
+                AssumedValue_CodeString = CStr(dr.Item(2))
+            End If
 
             OnAssumedValueChanged()
         End Set
