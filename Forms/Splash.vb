@@ -22,7 +22,7 @@ Public Class Splash
     Public Sub New()
         MyBase.New()
         InitializeComponent()
-        VersionLabel.Text = "Version " + ProductVersion + " Alpha"
+        VersionLabel.Text = "Version " + ProductVersion + " RC"
     End Sub
 
     'Form overrides dispose to clean up the component list.
