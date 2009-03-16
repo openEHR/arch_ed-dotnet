@@ -472,12 +472,13 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                     End Try
                 End If
 
-                If quantityUnit.Unit <> "" Then
-                    Constraint.Units.Add(quantityUnit, quantityUnit.Unit)
-                    listUnits.Items.Add(quantityUnit)
-                    listUnits.SelectedItem = quantityUnit
-                    mFileManager.FileEdited = True
-                End If
+                'SRH: 16 Mar 2009 - EDT-256 - allow no unit
+                'If quantityUnit.Unit <> "" Then
+                Constraint.Units.Add(quantityUnit, quantityUnit.Unit)
+                listUnits.Items.Add(quantityUnit)
+                listUnits.SelectedItem = quantityUnit
+                mFileManager.FileEdited = True
+                'End If
             Catch ex As Exception
                 Debug.Assert(False, ex.ToString)
                 MessageBox.Show(AE_Constants.Instance.Duplicate_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
