@@ -127,6 +127,23 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
     Private Sub AddConstraintControl(ByVal c As Constraint)
         Dim tp As TabPage
         Dim cc As ConstraintControl
+        Dim isText As Boolean = (c.Type = ConstraintType.Text)
+        Dim tcType As TextConstrainType
+
+        '-------------------------------------
+        'SRH: 16 Mar 2009 - EDT-527 - Limit the choices to one of each type except for dv_text (but need to ensure one is coded, one is free)
+
+        If isText Then
+            nTextConstraints = nTextConstraints + 1
+            If nTextConstraints = 2 Then
+                tcType = RestrictExistingTextControl(False)
+            ElseIf nTextConstraints > 2 Then
+                'ToDo - accurate error text
+                MessageBox.Show(String.Format("{0}: {1}", AE_Constants.Instance.Duplicate_name, CType(c, Constraint_Text).TypeOfTextConstraint.ToString()), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Return
+            End If
+        End If
+        '----------------------------------------
 
         tp = New TabPage(c.ConstraintTypeString)
 
@@ -136,8 +153,25 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
             tp.Controls.Add(cc)
             cc.ShowConstraint(mIsState, c)
             cc.Dock = DockStyle.Fill
+
+            '----------------------------------------
+            'SRH: 16 Mar 2009 - EDT-527 - Limit the choices to one of each type except for dv_text (but need to ensure one is coded, one is free)
+
+            If isText AndAlso nTextConstraints = 2 Then
+                If tcType = TextConstrainType.Text Then
+                    CType(cc, TextConstraintControl).radioText.Enabled = False
+                    CType(cc, TextConstraintControl).radioTerminology.Checked = True
+                Else
+                    CType(cc, TextConstraintControl).radioTerminology.Enabled = False
+                    CType(cc, TextConstraintControl).radioInternal.Enabled = False
+                End If
+            End If
+            '----------------------------------------
+
         End If
+
         Me.TabConstraints.TabPages.Add(tp)
+
     End Sub
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
         Dim i As Integer
@@ -150,18 +184,69 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
         Next
 
     End Sub
+
+   'SRH: 16 Mar 2009 - EDT-527 - Limit the choices to one of each type except for dv_text (but need to ensure one is coded, one is free)
+    Private nTextConstraints As Integer
+
     Private Sub AddConstraint(ByVal a_constraint As Constraint)
+
         Me.Constraint.Constraints.Add(a_constraint)
         AddConstraintControl(a_constraint)
         mFileManager.FileEdited = True
+
     End Sub
+
+    'SRH: 16 Mar 2009 - EDT-527 - Limit the choices to one of each type except for dv_text (but need to ensure one is coded, one is free)
+    Private Function RestrictExistingTextControl(ByVal choiceEnabled As Boolean) As TextConstrainType
+
+        Dim result As TextConstrainType
+
+        'check each of the constraints
+        For Each c As Constraint In Me.Constraint.Constraints
+            If c.Type = ConstraintType.Text Then
+                'if it is text then remember the type
+                result = CType(c, Constraint_Text).TypeOfTextConstraint()
+
+                For Each tp As TabPage In Me.TabConstraints.TabPages
+                    Dim cc As ConstraintControl = CType(tp.Controls(0), ConstraintControl)
+                    If cc.Name = "TextConstraintControl" Then
+                        If result = TextConstrainType.Text Then
+                            CType(cc, TextConstraintControl).radioInternal.Enabled = choiceEnabled
+                            CType(cc, TextConstraintControl).radioTerminology.Enabled = choiceEnabled
+                        Else
+                            CType(cc, TextConstraintControl).radioText.Enabled = choiceEnabled
+                        End If
+                        Exit For
+                    End If
+                Next
+                Exit For
+            End If
+        Next
+        Return result
+    End Function
     Private Sub butAddConstraint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddConstraint.Click
         If AddConstraintMenu Is Nothing Then
             AddConstraintMenu = New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf AddConstraint), mFileManager)
         Else
             AddConstraintMenu.Reset()
         End If
+
         AddConstraintMenu.HideMenuItem(ConstraintType.Multiple)
+
+        '-------------------------------------
+        'SRH: 16 Mar 2009 - EDT-527 - Limit the choices to one of each type except for dv_text (but need to ensure one is coded, one is free)
+
+        If nTextConstraints = 2 Then
+            AddConstraintMenu.HideMenuItem(ConstraintType.Text)
+        End If
+
+        For Each c As Constraint In Me.Constraint.Constraints
+            If c.Type <> ConstraintType.Text Then
+                AddConstraintMenu.HideMenuItem(c.Type)
+            End If
+        Next
+        '-----------------------------------------
+
         AddConstraintMenu.Show(butAddConstraint, New System.Drawing.Point(5, 5))
     End Sub
 
@@ -169,8 +254,15 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
         If MessageBox.Show(AE_Constants.Instance.Remove & Me.TabConstraints.SelectedTab.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
             Dim i As Integer
             i = Me.TabConstraints.SelectedIndex
-            Me.Constraint.Constraints.RemoveAt(i)
+            'SRH: 16 Mar 2009 - EDT-527 - count down the number of text fields
             Me.TabConstraints.TabPages.Remove(Me.TabConstraints.SelectedTab)
+            If Me.Constraint.Constraints.Item(i).Type = ConstraintType.Text Then
+                nTextConstraints = nTextConstraints - 1
+                RestrictExistingTextControl(True)
+            End If
+            'SRH: 16 Mar 2009 - EDT-527 - count down the number of text fields
+            AddConstraintMenu.ShowMenuItem(Me.Constraint.Constraints.Item(i).Type)
+            Me.Constraint.Constraints.RemoveAt(i)
             mFileManager.FileEdited = True
         End If
     End Sub

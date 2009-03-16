@@ -901,35 +901,38 @@ Namespace ArchetypeEditor.ADL_Classes
                         'coded - could be a constraint or the actual codes so..
                         Dim Obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT
 
-                        Obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+                        'SRH: 16 Mar 2009 - EDT-527 - found that it is possible to have ADL with no codes
+                        If an_attribute.children.count > 0 Then
 
-                        Select Case Obj.generating_type.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
-                            Case "CONSTRAINT_REF"
-                                t.TypeOfTextConstraint = TextConstrainType.Terminology
-                                t.ConstraintCode = CType(Obj, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).target.to_cil
-                            Case "C_CODE_PHRASE"
-                                t.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE))
+                            Obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
 
-                                'get the code for the assumed value if it exists
-                                If CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).has_assumed_value Then
-                                    t.HasAssumedValue = True
-                                    t.AssumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE).code_string.to_cil
+                            Select Case Obj.generating_type.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+                                Case "CONSTRAINT_REF"
+                                    t.TypeOfTextConstraint = TextConstrainType.Terminology
+                                    t.ConstraintCode = CType(Obj, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).target.to_cil
+                                Case "C_CODE_PHRASE"
+                                    t.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE))
 
-                                    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                                    Dim assumedValue As openehr.openehr.rm.data_types.text.CODE_PHRASE
-                                    assumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE)
-                                    t.AssumedValue = assumedValue.code_string().to_cil()
-                                    If Not assumedValue.terminology_id Is Nothing Then
-                                        t.AssumedValue_TerminologyId = assumedValue.terminology_id.value.to_cil()
+                                    'get the code for the assumed value if it exists
+                                    If CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).has_assumed_value Then
+                                        t.HasAssumedValue = True
+                                        t.AssumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE).code_string.to_cil
+
+                                        'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                        Dim assumedValue As openehr.openehr.rm.data_types.text.CODE_PHRASE
+                                        assumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE)
+                                        t.AssumedValue = assumedValue.code_string().to_cil()
+                                        If Not assumedValue.terminology_id Is Nothing Then
+                                            t.AssumedValue_TerminologyId = assumedValue.terminology_id.value.to_cil()
+                                        End If
+
                                     End If
 
-                                End If
-
-                                If t.AllowableValues.TerminologyID = "local" Or t.AllowableValues.TerminologyID = "openehr" Then
-                                    t.TypeOfTextConstraint = TextConstrainType.Internal
-                                End If
-                        End Select
-
+                                    If t.AllowableValues.TerminologyID = "local" Or t.AllowableValues.TerminologyID = "openehr" Then
+                                        t.TypeOfTextConstraint = TextConstrainType.Internal
+                                    End If
+                            End Select
+                        End If
 
                     Case "value"
                         Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
