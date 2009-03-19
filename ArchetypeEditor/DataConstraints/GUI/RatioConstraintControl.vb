@@ -192,6 +192,8 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
                 Me.chkListType.SetItemChecked(i, Me.Constraint.IsTypeAllowed(i))
             Next
         End If
+        'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
+        SetControlTabs(-1, CheckState.Indeterminate)
 
 
     End Sub
@@ -199,9 +201,11 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
     Private WriteOnly Property SetAsPercent() As Boolean
         Set(ByVal value As Boolean)
             If value Then
-                mDenominator = Me.TabConstraints.TabPages.Item(1)
-                Me.TabConstraints.TabPages.RemoveAt(1)
-
+                'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
+                If Me.TabConstraints.TabPages.Count > 1 Then
+                    mDenominator = Me.TabConstraints.TabPages.Item(1)
+                    Me.TabConstraints.TabPages.RemoveAt(1)
+                End If
                 Select Case Me.Constraint.Denominator.Type
                     Case ConstraintType.Real
                         CType(Me.Constraint.Denominator, Constraint_Real).MinimumRealValue = 100
@@ -250,12 +254,87 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
         Next
         MyBase.IsLoading = False
 
+        If Me.TabConstraints.TabPages.Count = 1 Then
+            Me.TabConstraints.TabPages.Insert(1, mDenominator)
+        End If
+
         mFileManager.FileEdited = True
 
     End Sub
 
-    
+    'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
+
+    ''' <summary>
+    ''' Returns -1 if there is more than one item and the index of the item if there is only one
+    ''' </summary>
+    ''' <returns>-1 if more than one item and the index if there is only one</returns>
+    Private Function IsSingleOption(ByVal itemIndex As Integer) As Integer
+        If itemIndex > -1 Then
+            If chkListType.CheckedIndices.Count = 2 Then
+                For Each i As Integer In chkListType.CheckedIndices
+                    If i <> itemIndex Then
+                        Return i
+                    End If
+                Next
+            End If
+        Else
+            If chkListType.CheckedIndices.Count = 1 Then
+                Return chkListType.CheckedIndices.Item(0)
+            End If
+        End If
+        Return -1
+    End Function
+
+    'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
+    Private Function UnitaryOrPercent(ByVal itemIndex As Integer) As Boolean
+        If (itemIndex = -1 And chkListType.CheckedIndices.Count = 2) Or chkListType.CheckedIndices.Count = 3 Then
+            For Each index As Integer In chkListType.CheckedIndices
+                If index <> itemIndex Then
+                    If index < 1 Or index > 2 Then
+                        Return False
+                    End If
+                End If
+            Next
+            Return True
+        End If
+
+        Return False
+    End Function
+
+    'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
+    Private Sub SetControlTabs(ByVal itemIndex As Integer, ByVal checkedStatus As CheckState)
+
+        Dim i As Integer
+        If checkedStatus = CheckState.Unchecked Then
+            i = IsSingleOption(itemIndex)
+        Else
+            i = IsSingleOption(-1)
+        End If
+
+        If i = 2 And checkedStatus <> CheckState.Checked Then
+            SetAsPercent = True
+        ElseIf (i = 1 And checkedStatus <> CheckState.Checked) Or _
+            (i = 1 And itemIndex = 2 And checkedStatus = CheckState.Checked) Or _
+            (i = 2 And itemIndex = 1 And checkedStatus = CheckState.Checked) Then
+            If Me.TabConstraints.TabPages.Count = 2 Then
+                mDenominator = Me.TabConstraints.TabPages(1)
+                Me.TabConstraints.TabPages.RemoveAt(1)
+            End If
+        ElseIf UnitaryOrPercent(itemIndex) Then
+            If Me.TabConstraints.TabPages.Count = 2 Then
+                mDenominator = Me.TabConstraints.TabPages(1)
+                Me.TabConstraints.TabPages.RemoveAt(1)
+            End If
+        Else
+            If Me.TabConstraints.TabPages.Count = 1 Then
+                Me.TabConstraints.TabPages.Insert(1, mDenominator)
+            End If
+        End If
+    End Sub
+
     Private Sub chkListType_ItemCheck(ByVal sender As Object, ByVal e As System.Windows.Forms.ItemCheckEventArgs) Handles chkListType.ItemCheck
+
+        
 
         If MyBase.IsLoading Then Return
 
@@ -269,6 +348,10 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
         Else
             Me.Constraint.DisAllowType(e.Index)
         End If
+
+        'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
+        'check for a unique state
+        SetControlTabs(e.Index, e.NewValue)
 
         mFileManager.FileEdited = True
     End Sub
