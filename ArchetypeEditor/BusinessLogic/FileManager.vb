@@ -280,7 +280,7 @@ Public Class FileManagerLocal
                     Dim use As String = IIf(frm.Selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
 
                     'update filename if changed
-                    If String.Compare(name, use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
+                    If String.Compare(name, use, True) <> 0 Then 'case insensitive (windows o/s has issues updating file name case!)
                         mPriorFileName = FileName
                         FileName = IO.Path.Combine(IO.Path.GetDirectoryName(FileName), use & "." & ParserType)
                     End If
