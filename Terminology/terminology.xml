@@ -5727,6 +5727,7 @@
   <Concept Language="de" ConceptID="676" Rubric="Übergang" />
   <Concept Language="de" ConceptID="677" Rubric="Erlaube Übergang nach " />
   <Concept Language="de" ConceptID="678" Rubric="Alternativen Status für diese Aktion erlauben" />
+  <Concept Language="en" ConceptID="686" Rubric="Invalid archetype file name {0}. Save as {1}?" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
