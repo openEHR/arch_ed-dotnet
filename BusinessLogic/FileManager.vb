@@ -259,7 +259,6 @@ Public Class FileManagerLocal
 
     Private Sub CheckFileNameAgainstArchetypeId()
         Dim name As String = IO.Path.GetFileNameWithoutExtension(FileName)
-        Dim priorFileLoading As Boolean = FileLoading
 
         If String.Compare(name, Archetype.Archetype_ID.ToString, True) <> 0 Then
             If ArchetypeID.IsValidId(name) Then
@@ -281,7 +280,7 @@ Public Class FileManagerLocal
                     Dim use As String = IIf(frm.Selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
 
                     'update filename if changed
-                    If String.Compare(name, use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
+                    If String.Compare(name, use, True) <> 0 Then 'case insensitive (windows o/s has issues updating file name case!)
                         mPriorFileName = FileName
                         FileName = IO.Path.Combine(IO.Path.GetDirectoryName(FileName), use & "." & ParserType)
                     End If
@@ -292,20 +291,11 @@ Public Class FileManagerLocal
                         Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
                     End If
 
+                    Dim priorFileLoading As Boolean = FileLoading
                     FileLoading = False
                     FileEdited = True
                     FileLoading = priorFileLoading
                 End If
-            Else
-                Dim text As String = "Invalid " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & ":" & Environment.NewLine & FileName
-
-                FileName = IO.Path.Combine(IO.Path.GetDirectoryName(FileName), Archetype.Archetype_ID.ToString & "." & ParserType)
-                FileLoading = False
-                FileEdited = True
-                FileLoading = priorFileLoading
-
-                text = text & Environment.NewLine & Environment.NewLine & "Saving as:" & Environment.NewLine & FileName
-                MessageBox.Show(text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
         End If
     End Sub
@@ -614,41 +604,54 @@ Public Class FileManagerLocal
             mObjectToSave.PrepareToSave()
             FileName = name
             CheckFileNameAgainstArchetypeId()
-            SaveArchetypeAs(FileName)
 
-            If Not FileEdited Then
-                Dim parser As Parser = mArchetypeEngine
-                Dim ontology As Ontology = mOntologyManager.Ontology
-                Dim ext As String = IO.Path.GetExtension(FileName.ToLowerInvariant())
+            If Not ArchetypeID.IsValidId(IO.Path.GetFileNameWithoutExtension(FileName)) Then
+                Dim newName As String = Archetype.Archetype_ID.ToString & "." & ParserType
+                Dim text As String = String.Format(mOntologyManager.GetOpenEHRTerm(686, "Invalid archetype file name {0}. Save as {1}?"), IO.Path.GetFileName(FileName), newName)
 
-                If ext = ".adl" Then
-                    If OceanArchetypeEditor.Instance.Options.XmlRepositoryAutoSave Then
-                        FileEdited = True
-                        name = IO.Path.GetFullPath(IO.Path.ChangeExtension(FileName, ".xml"))
-
-                        If name.StartsWith(OceanArchetypeEditor.Instance.Options.RepositoryPath + IO.Path.DirectorySeparatorChar) Then
-                            name = name.Replace(OceanArchetypeEditor.Instance.Options.RepositoryPath, OceanArchetypeEditor.Instance.Options.XmlRepositoryPath)
-                            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(name))
-                        End If
-
-                        SaveArchetypeAs(name)
-                    End If
-                ElseIf ext = ".xml" Then
-                    If OceanArchetypeEditor.Instance.Options.RepositoryAutoSave Then
-                        FileEdited = True
-                        name = IO.Path.GetFullPath(IO.Path.ChangeExtension(FileName, ".adl"))
-
-                        If name.StartsWith(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath + IO.Path.DirectorySeparatorChar) Then
-                            name = name.Replace(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath, OceanArchetypeEditor.Instance.Options.RepositoryPath)
-                            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(name))
-                        End If
-
-                        SaveArchetypeAs(name)
-                    End If
+                If MessageBox.Show(text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+                    FileName = IO.Path.Combine(IO.Path.GetDirectoryName(FileName), newName)
+                    FileEdited = True
                 End If
+            End If
 
-                mArchetypeEngine = parser
-                mOntologyManager.ReplaceOntology(ontology)
+            If ArchetypeID.IsValidId(IO.Path.GetFileNameWithoutExtension(FileName)) Then
+                SaveArchetypeAs(FileName)
+
+                If Not FileEdited Then
+                    Dim parser As Parser = mArchetypeEngine
+                    Dim ontology As Ontology = mOntologyManager.Ontology
+                    Dim ext As String = IO.Path.GetExtension(FileName.ToLowerInvariant())
+
+                    If ext = ".adl" Then
+                        If OceanArchetypeEditor.Instance.Options.XmlRepositoryAutoSave Then
+                            FileEdited = True
+                            name = IO.Path.GetFullPath(IO.Path.ChangeExtension(FileName, ".xml"))
+
+                            If name.StartsWith(OceanArchetypeEditor.Instance.Options.RepositoryPath + IO.Path.DirectorySeparatorChar) Then
+                                name = name.Replace(OceanArchetypeEditor.Instance.Options.RepositoryPath, OceanArchetypeEditor.Instance.Options.XmlRepositoryPath)
+                                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(name))
+                            End If
+
+                            SaveArchetypeAs(name)
+                        End If
+                    ElseIf ext = ".xml" Then
+                        If OceanArchetypeEditor.Instance.Options.RepositoryAutoSave Then
+                            FileEdited = True
+                            name = IO.Path.GetFullPath(IO.Path.ChangeExtension(FileName, ".adl"))
+
+                            If name.StartsWith(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath + IO.Path.DirectorySeparatorChar) Then
+                                name = name.Replace(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath, OceanArchetypeEditor.Instance.Options.RepositoryPath)
+                                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(name))
+                            End If
+
+                            SaveArchetypeAs(name)
+                        End If
+                    End If
+
+                    mArchetypeEngine = parser
+                    mOntologyManager.ReplaceOntology(ontology)
+                End If
             End If
         End If
 

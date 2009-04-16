@@ -5737,6 +5737,7 @@
   <Concept Language="en" ConceptID="683" Rubric="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
   <Concept Language="en" ConceptID="684" Rubric="ParsableText" />
   <Concept Language="en" ConceptID="685" Rubric="Refractive power" />
+  <Concept Language="en" ConceptID="686" Rubric="Invalid archetype file name {0}. Save as {1}?" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
