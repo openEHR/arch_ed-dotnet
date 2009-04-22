@@ -1029,10 +1029,10 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
 
                 If ObjNode.has_assumed_value Then
-                    Dim assumed_units As String = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil
-                    Dim assumed_value As Single = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
-                    CType(q.Units.Item(assumed_units), Constraint_QuantityUnit).AssumedValue = assumed_value
-                    CType(q.Units.Item(assumed_units), Constraint_QuantityUnit).HasAssumedValue = True
+                    Dim units As String = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil
+                    Dim assumedUnits As Constraint_QuantityUnit = CType(q.Units.Item(OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(units)), Constraint_QuantityUnit)
+                    assumedUnits.AssumedValue = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
+                    assumedUnits.HasAssumedValue = True
                 End If
 
             End If
