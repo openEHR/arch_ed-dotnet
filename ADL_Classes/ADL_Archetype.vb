@@ -461,12 +461,9 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Function BuildHistory(ByVal a_history As RmHistory, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As Object()
             Dim cadlHistory, cadlEvent As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim events_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            'Set to nothing as not guaranteed to be set from a programming point of view
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = Nothing
-
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim an_event As RmEvent
-            Dim data_processed As Boolean
-            Dim data_path As openehr.common_libs.structures.object_graph.path.OG_PATH = Nothing
+            Dim dataPath As openehr.common_libs.structures.object_graph.path.OG_PATH = Nothing
             Dim array_list_events As New ArrayList
 
             cadlHistory = mAomFactory.create_c_complex_object_identified(RelNode, _
@@ -475,21 +472,21 @@ Namespace ArchetypeEditor.ADL_Classes
             cadlHistory.set_occurrences(MakeOccurrences(a_history.Occurrences))
 
             If a_history.HasNameConstraint Then
-                an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, EiffelKernel.Create.STRING_8.make_from_cil("name"))
-                BuildText(an_attribute, a_history.NameConstraint)
+                attribute = mAomFactory.create_c_attribute_single(cadlHistory, EiffelKernel.Create.STRING_8.make_from_cil("name"))
+                BuildText(attribute, a_history.NameConstraint)
             End If
 
             If a_history.isPeriodic Then
                 Dim period As New Constraint_Duration
 
-                an_attribute = mAomFactory.create_c_attribute_single(cadlHistory, EiffelKernel.Create.STRING_8.make_from_cil("period"))
+                attribute = mAomFactory.create_c_attribute_single(cadlHistory, EiffelKernel.Create.STRING_8.make_from_cil("period"))
                 period.MinMaxValueUnits = a_history.PeriodUnits
                 'Set max and min to offset value
                 period.MinimumValue = a_history.Period
                 period.HasMinimum = True
                 period.MaximumValue = a_history.Period
                 period.HasMaximum = True
-                BuildDuration(an_attribute, period)
+                BuildDuration(attribute, period)
             End If
 
             ' now build the events
@@ -509,67 +506,55 @@ Namespace ArchetypeEditor.ADL_Classes
                         If an_event.hasFixedOffset Then
                             Dim offset As New Constraint_Duration
 
-                            an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("offset"))
+                            attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("offset"))
                             offset.MinMaxValueUnits = an_event.OffsetUnits
                             'Set max and min to offset value
                             offset.MinimumValue = an_event.Offset
                             offset.HasMinimum = True
                             offset.MaximumValue = an_event.Offset
                             offset.HasMaximum = True
-                            BuildDuration(an_attribute, offset)
+                            BuildDuration(attribute, offset)
                         End If
                     Case StructureType.IntervalEvent
 
                         If an_event.AggregateMathFunction <> "" Then
-                            an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("math_function"))
+                            attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("math_function"))
                             Dim a_code_phrase As CodePhrase = New CodePhrase
                             a_code_phrase.FirstCode = an_event.AggregateMathFunction
                             a_code_phrase.TerminologyID = "openehr"
-                            BuildCodedText(an_attribute, a_code_phrase)
+                            BuildCodedText(attribute, a_code_phrase)
                         End If
 
                         If an_event.hasFixedDuration Then
                             Dim fixedDuration As New Constraint_Duration
 
-                            an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("width"))
+                            attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("width"))
                             fixedDuration.MinMaxValueUnits = an_event.WidthUnits
                             'Set max and min to offset value
                             fixedDuration.MinimumValue = an_event.Width
                             fixedDuration.HasMinimum = True
                             fixedDuration.MaximumValue = an_event.Width
                             fixedDuration.HasMaximum = True
-                            BuildDuration(an_attribute, fixedDuration)
+                            BuildDuration(attribute, fixedDuration)
                         End If
                 End Select
 
-                ' runtime name
                 If an_event.HasNameConstraint Then
-                    an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("name"))
-                    BuildText(an_attribute, an_event.NameConstraint)
+                    attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("name"))
+                    BuildText(attribute, an_event.NameConstraint)
                 End If
 
-                ' data
+                If Not a_history.Data Is Nothing Then
+                    attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("data"))
+                    Dim typeName As EiffelKernel.STRING_8 = EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_history.Data.Type))
 
-                If Not data_processed Then
-                    If Not a_history.Data Is Nothing Then
-                        an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("data"))
-                        Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
-                        objNode = mAomFactory.create_c_complex_object_identified(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_history.Data.Type)), EiffelKernel.Create.STRING_8.make_from_cil(a_history.Data.NodeId))
-                        BuildStructure(a_history.Data, objNode)
-
-                        ''data_path = cadlEvent.path
-                        data_path = GetPathOfNode(a_history.Data.NodeId)
+                    If dataPath Is Nothing Then
+                        BuildStructure(a_history.Data, mAomFactory.create_c_complex_object_identified(attribute, typeName, EiffelKernel.Create.STRING_8.make_from_cil(a_history.Data.NodeId)))
+                        dataPath = GetPathOfNode(a_history.Data.NodeId)
+                    Else
+                        mAomFactory.create_archetype_internal_ref(attribute, typeName, dataPath.as_string)
                     End If
-                    data_processed = True
-                Else
-                    Dim NodeRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
-                    If Not cadlEvent.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("data")) Then
-                        an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("data"))
-                    End If
-                    NodeRef = mAomFactory.create_archetype_internal_ref(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_history.Data.Type)), data_path.as_string)
                 End If
-
             Next
 
             Return array_list_events.ToArray()

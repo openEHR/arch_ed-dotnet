@@ -634,11 +634,10 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Function BuildHistory(ByVal a_history As RmHistory, ByRef RelNode As XMLParser.C_ATTRIBUTE) As Object()
             Dim xmlHistory, xmlEvent As XMLParser.C_COMPLEX_OBJECT
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
             Dim events_rel_node As New XMLParser.C_MULTIPLE_ATTRIBUTE()
+            Dim attribute As XMLParser.C_ATTRIBUTE
             Dim an_event As RmEvent
-            Dim data_processed As Boolean
-            Dim data_path As String = ""
+            Dim dataPath As String = Nothing
             Dim array_list_events As New ArrayList
 
             Try
@@ -649,16 +648,16 @@ Namespace ArchetypeEditor.XML_Classes
                     MakeOccurrences(a_history.Occurrences))
 
                 If a_history.HasNameConstraint Then
-                    an_attribute = New XMLParser.C_SINGLE_ATTRIBUTE()
-                    an_attribute.rm_attribute_name = "name"
-                    BuildText(an_attribute, a_history.NameConstraint)
+                    attribute = New XMLParser.C_SINGLE_ATTRIBUTE()
+                    attribute.rm_attribute_name = "name"
+                    BuildText(attribute, a_history.NameConstraint)
                 End If
 
                 If a_history.isPeriodic Then
                     Dim durationConstraint As New Constraint_Duration
 
                     'an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period")
-                    an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period", a_history.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period", a_history.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
                     durationConstraint.MinMaxValueUnits = a_history.PeriodUnits
                     'Set max and min to offset value
@@ -666,7 +665,7 @@ Namespace ArchetypeEditor.XML_Classes
                     durationConstraint.HasMinimum = True
                     durationConstraint.MaximumValue = a_history.Period
                     durationConstraint.HasMaximum = True
-                    BuildDuration(an_attribute, durationConstraint)
+                    BuildDuration(attribute, durationConstraint)
                 End If
 
                 ' now build the events
@@ -698,7 +697,7 @@ Namespace ArchetypeEditor.XML_Classes
                                 Dim durationConstraint As New Constraint_Duration
 
                                 'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset")
-                                an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
                                 durationConstraint.MinMaxValueUnits = an_event.OffsetUnits
                                 'Set max and min to offset value
@@ -706,65 +705,49 @@ Namespace ArchetypeEditor.XML_Classes
                                 durationConstraint.HasMinimum = True
                                 durationConstraint.MaximumValue = an_event.Offset
                                 durationConstraint.HasMaximum = True
-                                BuildDuration(an_attribute, durationConstraint)
+                                BuildDuration(attribute, durationConstraint)
                             End If
                         Case StructureType.IntervalEvent
 
                             If an_event.AggregateMathFunction <> "" Then
                                 'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function")
-                                an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                                 Dim a_code_phrase As CodePhrase = New CodePhrase
                                 a_code_phrase.FirstCode = an_event.AggregateMathFunction
                                 a_code_phrase.TerminologyID = "openehr"
-                                BuildCodedText(an_attribute, a_code_phrase)
+                                BuildCodedText(attribute, a_code_phrase)
                             End If
 
                             If an_event.hasFixedDuration Then
                                 Dim durationConstraint As New Constraint_Duration
 
                                 'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width")
-                                an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                                 durationConstraint.MinMaxValueUnits = an_event.WidthUnits
                                 'Set max and min to offset value
                                 durationConstraint.MinimumValue = an_event.Width
                                 durationConstraint.HasMinimum = True
                                 durationConstraint.MaximumValue = an_event.Width
                                 durationConstraint.HasMaximum = True
-                                BuildDuration(an_attribute, durationConstraint)
+                                BuildDuration(attribute, durationConstraint)
                             End If
                     End Select
 
-                    ' runtime name
                     If an_event.HasNameConstraint Then
-                        'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "name")
-                        an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "name", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                        BuildText(an_attribute, an_event.NameConstraint)
+                        attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "name", an_event.Existence.XmlExistence)
+                        BuildText(attribute, an_event.NameConstraint)
                     End If
 
-                    ' data
-                    'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "data")
-                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "data", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                    If Not data_processed Then
-                        If Not a_history.Data Is Nothing Then
-                            Dim objNode As XMLParser.C_COMPLEX_OBJECT
+                    If Not a_history.Data Is Nothing Then
+                        attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "data", an_event.Existence.XmlExistence)
+                        Dim typeName As String = ReferenceModel.RM_StructureName(a_history.Data.Type)
 
-                            'objNode = mAomFactory.MakeComplexObject( _
-                            '    an_attribute, _
-                            '    ReferenceModel.RM_StructureName(a_history.Data.Type), _
-                            '    a_history.Data.NodeId)
-
-                            objNode = mAomFactory.MakeComplexObject( _
-                                an_attribute, _
-                                ReferenceModel.RM_StructureName(a_history.Data.Type), _
-                                a_history.Data.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-                            BuildStructure(a_history.Data, objNode)
-
-                            data_path = GetPathOfNode(a_history.Data.NodeId)
+                        If dataPath Is Nothing Then
+                            BuildStructure(a_history.Data, mAomFactory.MakeComplexObject(attribute, typeName, a_history.Data.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
+                            dataPath = GetPathOfNode(a_history.Data.NodeId)
+                        Else
+                            mAomFactory.MakeArchetypeRef(attribute, typeName, dataPath)
                         End If
-                        data_processed = True
-                    Else
-                        mAomFactory.MakeArchetypeRef(an_attribute, ReferenceModel.RM_StructureName(a_history.Data.Type), data_path)
                     End If
                 Next
 
