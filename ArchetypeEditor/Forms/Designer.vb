@@ -42,8 +42,7 @@ Public Class Designer
     Private mDataViewConstraintBindings As DataView
     Private mDataViewTerminologies As DataView
     Private mFindString As String = ""
-    Private mFindStringFrom As Integer = -1
-    Private mFileManager As FileManagerLocal    
+    Private mFileManager As FileManagerLocal
     Friend WithEvents mRichTextArchetype As ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
     Friend WithEvents mTermBindingPanel As TermBindingPanel
     Friend WithEvents menuFileExport As System.Windows.Forms.MenuItem
@@ -213,7 +212,6 @@ Public Class Designer
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
     Friend WithEvents ContextMenuDisplay As System.Windows.Forms.ContextMenu
     Friend WithEvents menuDisplayPrint As System.Windows.Forms.MenuItem
-    Friend WithEvents menuDisplaySaveAs As System.Windows.Forms.MenuItem
     Friend WithEvents menuEdit As System.Windows.Forms.MenuItem
     Friend WithEvents menuEditArchID As System.Windows.Forms.MenuItem
     Friend WithEvents MenuDisplayFind As System.Windows.Forms.MenuItem
@@ -226,7 +224,7 @@ Public Class Designer
     Friend WithEvents tbSep1 As System.Windows.Forms.ToolBarButton
     Friend WithEvents tbSep2 As System.Windows.Forms.ToolBarButton
     Friend WithEvents butHTML1 As System.Windows.Forms.ToolBarButton
-    Friend WithEvents butSaveFile As System.Windows.Forms.ToolBarButton
+    Friend WithEvents butDisplayFind As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarButton1 As System.Windows.Forms.ToolBarButton
     Friend WithEvents butPrint As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarButton2 As System.Windows.Forms.ToolBarButton
@@ -366,7 +364,7 @@ Public Class Designer
         Me.tbSep2 = New System.Windows.Forms.ToolBarButton
         Me.butHTML1 = New System.Windows.Forms.ToolBarButton
         Me.ToolBarButton1 = New System.Windows.Forms.ToolBarButton
-        Me.butSaveFile = New System.Windows.Forms.ToolBarButton
+        Me.butDisplayFind = New System.Windows.Forms.ToolBarButton
         Me.ToolBarButton2 = New System.Windows.Forms.ToolBarButton
         Me.butPrint = New System.Windows.Forms.ToolBarButton
         Me.ImageListToolbar = New System.Windows.Forms.ImageList(Me.components)
@@ -377,7 +375,6 @@ Public Class Designer
         Me.menuDisplayPrint = New System.Windows.Forms.MenuItem
         Me.MenuDisplayFind = New System.Windows.Forms.MenuItem
         Me.MenuDisplayFindAgain = New System.Windows.Forms.MenuItem
-        Me.menuDisplaySaveAs = New System.Windows.Forms.MenuItem
         Me.PanelHeader = New System.Windows.Forms.Panel
         Me.lblArchetypeName = New System.Windows.Forms.Label
         Me.ArchetypeNameContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -1533,7 +1530,7 @@ Public Class Designer
         'DisplayToolBar
         '
         Me.DisplayToolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
-        Me.DisplayToolBar.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.butADL, Me.butXML, Me.butOWL, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butSaveFile, Me.ToolBarButton2, Me.butPrint})
+        Me.DisplayToolBar.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.butADL, Me.butXML, Me.butOWL, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butDisplayFind, Me.ToolBarButton2, Me.butPrint})
         Me.DisplayToolBar.ButtonSize = New System.Drawing.Size(20, 30)
         Me.DisplayToolBar.DropDownArrows = True
         Me.DisplayToolBar.ImageList = Me.ImageListToolbar
@@ -1596,12 +1593,11 @@ Public Class Designer
         Me.ToolBarButton1.Name = "ToolBarButton1"
         Me.ToolBarButton1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
         '
-        'butSaveFile
+        'butDisplayFind
         '
-        Me.butSaveFile.ImageIndex = 1
-        Me.butSaveFile.Name = "butSaveFile"
-        Me.butSaveFile.Tag = "save"
-        Me.butSaveFile.Text = "Save"
+        Me.butDisplayFind.Name = "butDisplayFind"
+        Me.butDisplayFind.Tag = "find"
+        Me.butDisplayFind.Text = "Find"
         '
         'ToolBarButton2
         '
@@ -1661,7 +1657,7 @@ Public Class Designer
         '
         'ContextMenuDisplay
         '
-        Me.ContextMenuDisplay.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuDisplayPrint, Me.MenuDisplayFind, Me.MenuDisplayFindAgain, Me.menuDisplaySaveAs})
+        Me.ContextMenuDisplay.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuDisplayPrint, Me.MenuDisplayFind, Me.MenuDisplayFindAgain})
         '
         'menuDisplayPrint
         '
@@ -1677,11 +1673,6 @@ Public Class Designer
         '
         Me.MenuDisplayFindAgain.Index = 2
         Me.MenuDisplayFindAgain.Text = "Find again"
-        '
-        'menuDisplaySaveAs
-        '
-        Me.menuDisplaySaveAs.Index = 3
-        Me.menuDisplaySaveAs.Text = "Save as"
         '
         'PanelHeader
         '
@@ -2270,6 +2261,7 @@ Public Class Designer
         mRichTextArchetype = New ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
         Me.Panel3.Controls.Add(mRichTextArchetype)
         mRichTextArchetype.Dock = DockStyle.Fill
+        mRichTextArchetype.ContextMenu = ContextMenuDisplay
 
         ' add the term binding panel
         mTermBindingPanel = New TermBindingPanel
@@ -2367,7 +2359,6 @@ Public Class Designer
         Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
 
         'Display tab on Designer
-        Me.butSaveFile.Text = Filemanager.GetOpenEhrTerm(103, Me.butSaveFile.Text, language)
         Me.butPrint.Text = Filemanager.GetOpenEhrTerm(520, Me.butPrint.Text, language)
 
         'Interface tab
@@ -4921,67 +4912,38 @@ Public Class Designer
         Next
 
         Select Case s
-            Case "save", "print", "html", ""
-                ' do nothing
-            Case Else
-                If s = "rtf" Then
-                    WriteRichText()
-                Else
-                    Me.PrepareToSave()
-                    Try
-                        If s = mFileManager.ParserType.ToLowerInvariant() Then
-                            Me.mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
-                        Else
-                            Me.mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
-                        End If
-                    Catch ex As Exception
-                        Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
-                        If Not ex.InnerException Is Nothing Then
-                            errorMessage &= vbCrLf & ex.InnerException.Message
-                        End If
-                        MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                    End Try
-                End If
+            Case "rtf"
+                WriteRichText()
+            Case "adl", "xml", "owl"
+                PrepareToSave()
+
+                Try
+                    If s = mFileManager.ParserType.ToLowerInvariant() Then
+                        mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
+                    Else
+                        mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
+                    End If
+                Catch ex As Exception
+                    Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
+
+                    If Not ex.InnerException Is Nothing Then
+                        errorMessage &= vbCrLf & ex.InnerException.Message
+                    End If
+
+                    MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                End Try
         End Select
     End Sub
 
     Private Sub DisplayToolBar_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles DisplayToolBar.ButtonClick
-        Static Dim format As String = "rtf" ' remember the format that has been set
-        Dim saveFile As New SaveFileDialog
+        ' Buttons are tagged with the file extension and the fixed buttons are tagged with standard english text.
 
-        Dim s As String = CStr(e.Button.Tag).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        Select Case CStr(e.Button.Tag).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Case "find"
+                MenuDisplayFind_Click(sender, e)
 
-        ' buttons are tagged with the file extension and the fixed buttons are tagged with
-        ' standard english text.
-
-        Select Case s
-            Case "save"
-
-                Dim ds As New Windows.Forms.RichTextBoxStreamType
-
-                saveFile.Filter = format.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|*." & format
-                saveFile.FileName = mFileManager.Archetype.Archetype_ID.ToString & "." & format
-                saveFile.OverwritePrompt = True
-                saveFile.AddExtension = True
-                saveFile.Title = AE_Constants.Instance.MessageBoxCaption
-                saveFile.ValidateNames = True
-
-                If saveFile.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-                    Select Case format
-                        Case "rtf"
-                            ds = RichTextBoxStreamType.RichNoOleObjs
-                        Case Else
-                            ds = RichTextBoxStreamType.PlainText
-                    End Select
-
-                    Try
-                        mRichTextArchetype.SaveFile(saveFile.FileName, ds)
-                    Catch
-                        MessageBox.Show(AE_Constants.Instance.Error_saving & mFileManager.Archetype.Archetype_ID.ToString & ".rtf", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    End Try
-                End If
             Case "print"
-                Me.mRichTextArchetype.Print()
+                mRichTextArchetype.Print()
 
             Case "html"
                 Try
@@ -5027,9 +4989,6 @@ Public Class Designer
                     MessageBox.Show(ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             Case Else
-                ' remember this for when the save button is pushed
-                format = s
-
                 ' toggle the buttons
                 For Each bt As ToolBarButton In DisplayToolBar.Buttons
                     If Not bt Is e.Button Then
@@ -5037,24 +4996,7 @@ Public Class Designer
                     End If
                 Next
 
-                If s = "rtf" Then
-                    WriteRichText()
-                Else
-                    Try
-                        If s = mFileManager.ParserType.ToLowerInvariant() Then
-                            PrepareToSave()
-                            mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
-                        Else
-                            mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
-                        End If
-                    Catch ex As Exception
-                        Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
-                        If Not ex.InnerException Is Nothing Then
-                            errorMessage &= vbCrLf & ex.InnerException.Message
-                        End If
-                        MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                    End Try
-                End If
+                RefreshRichText()
         End Select
     End Sub
 
@@ -5091,28 +5033,32 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub MenuDisplayFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDisplayFind.Click, MenuDisplayFindAgain.Click
-        If sender Is MenuDisplayFind Then
-            mFindString = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.Text, Me)
-            If mFindString <> "" Then
-                mFindStringFrom = Me.mRichTextArchetype.Find(mFindString)
-                If mFindStringFrom > -1 Then
-                    Me.mRichTextArchetype.Select(mFindStringFrom, mFindString.Length)
-                End If
-            End If
+    Private Sub MenuDisplayFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDisplayFind.Click
+        Dim s As String = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.Text, Me, mFindString)
+
+        If s <> "" Then
+            mFindString = s
+            MenuDisplayFindAgain_Click(sender, e)
+        End If
+    End Sub
+
+    Private Sub MenuDisplayFindAgain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDisplayFindAgain.Click
+        Dim from As Integer = -1
+
+        If mFindString <> "" Then
+            from = mRichTextArchetype.Find(mFindString, mRichTextArchetype.SelectionStart + mRichTextArchetype.SelectionLength, RichTextBoxFinds.None)
+        End If
+
+        If from > -1 Then
+            mRichTextArchetype.Focus()
+            mRichTextArchetype.Select(from, mFindString.Length)
         Else
-            mFindStringFrom = Me.mRichTextArchetype.Find(mFindString, mFindStringFrom + mFindString.Length, RichTextBoxFinds.None)
-            If mFindStringFrom > -1 Then
-                Me.mRichTextArchetype.Select(mFindStringFrom, mFindString.Length)
-            Else
-                Beep()
-                Me.mRichTextArchetype.Select(0, 0)
-            End If
+            Beep()
         End If
     End Sub
 
     Private Sub ContextMenuDisplay_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuDisplay.Popup
-        MenuDisplayFindAgain.Visible = mFindStringFrom <> -1
+        MenuDisplayFindAgain.Visible = mFindString <> ""
     End Sub
 
     Private Sub cbMandatory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMandatory.CheckedChanged
