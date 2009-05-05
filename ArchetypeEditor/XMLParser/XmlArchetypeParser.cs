@@ -179,7 +179,10 @@ namespace XMLParser
                 //System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
                 System.IO.MemoryStream ms = new System.IO.MemoryStream();
                 //xmlSerialiser.Serialize(ms, _archetype);
-                ms = AmSerializer.Serialize((System.Xml.XmlWriterSettings)null, _archetype);
+                System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
+                settings.Indent = true;
+                settings.Encoding = Encoding.UTF8;
+                ms = AmSerializer.Serialize(settings, _archetype);
 
                 ms.Position = 0;
                 System.IO.StreamReader a_reader = new System.IO.StreamReader(ms);
@@ -427,7 +430,11 @@ namespace XMLParser
                 // HKF: 8 Dec 2008
                 SetArchetypeDigest();
 
-                System.Xml.XmlWriter xml_writer = System.Xml.XmlWriter.Create(a_file_name);
+                System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
+                settings.Indent = true;
+                settings.Encoding = Encoding.UTF8;
+
+                System.Xml.XmlWriter xml_writer = System.Xml.XmlWriter.Create(a_file_name, settings);
                 // HKF: 8 Dec 2008
                 //System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
                 //xmlSerialiser.Serialize(xml_writer, _archetype);
