@@ -2340,7 +2340,7 @@ Namespace ArchetypeEditor.XML_Classes
                 escapedString = ReferenceModel.ReferenceModelName & "-ACTION\." + escapedString
                 an_attribute = mAomFactory.MakeSingleAttribute(objNode, "action_archetype_id", rm.Children.Existence.XmlExistence)
                 Dim c_s As New XMLParser.C_STRING
-                c_s.pattern = "/" + escapedString + "/"
+                c_s.pattern = escapedString
                 mAomFactory.MakePrimitiveObject(an_attribute, c_s)
             End If
 
