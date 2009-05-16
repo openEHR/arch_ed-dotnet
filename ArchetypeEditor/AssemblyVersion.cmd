@@ -16,7 +16,7 @@
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 setlocal EnableDelayedExpansion
-set Version=2.1
+set Version=2.2
 set Revision=0
 
 if /i "%1" == "Release" (
