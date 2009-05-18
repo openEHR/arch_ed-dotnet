@@ -133,12 +133,9 @@ Namespace ArchetypeEditor.XML_Classes
         End Property
 
         Public Overrides Sub Specialise(ByVal ConceptShortName As String, ByRef The_Ontology As OntologyManager)
-            Dim a_term As RmTerm
-
             mArchetypeParser.SpecialiseArchetype(ConceptShortName)
             ' Update the GUI tables with the new term
-            a_term = New XML_Term(mArchetypeParser.Ontology.TermDefinition(The_Ontology.LanguageCode, mXmlArchetype.concept))
-            The_Ontology.UpdateTerm(a_term)
+            The_Ontology.AddTerm(mXmlArchetype.concept)
             Me.mArchetypeID.Concept &= "-" & ConceptShortName
         End Sub
 

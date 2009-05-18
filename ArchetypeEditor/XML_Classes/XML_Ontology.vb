@@ -182,22 +182,18 @@ Namespace ArchetypeEditor.XML_Classes
 
         Public Overrides Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
             ' increase the number of specialisations
-            Dim an_Term As XML_Classes.XML_Term
-
-            an_Term = New XML_Classes.XML_Term(NextSpecialisedId(Id))
-            an_Term.Text = Text
-            an_Term.Description = Description
-            Me.AddTerm(an_Term)
-            Return an_Term
+            Dim result As New XML_Term(NextSpecialisedId(Id))
+            result.Text = Text
+            result.Description = Description
+            AddTerm(result)
+            Return result
         End Function
 
         Public Overrides Sub SetPrimaryLanguage(ByVal LanguageCode As String)
             ' sets the primary language of this archetype
             ' if this language is not in the available languages it adds it
 
-            If LanguageCode = "" Then
-                Return
-            Else
+            If LanguageCode <> "" Then
                 archetypeParser.Ontology.SetPrimaryLanguage(LanguageCode)
             End If
         End Sub
@@ -220,9 +216,7 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         Public Overrides Sub AddTerm(ByVal a_Term As RmTerm)
-            Dim an_xml_Term As XML_Classes.XML_Term
-
-            an_xml_Term = New XML_Classes.XML_Term(a_Term)
+            Dim an_xml_Term As New XML_Term(a_Term)
 
             Try
                 If Not archetypeParser.Ontology.HasTermCode(an_xml_Term.Code) Then
@@ -248,7 +242,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                 Try
                     If archetypeParser.Ontology.HasTermCode(a_Term.Code) Then
-                        Dim term As XML_Term = New XML_Term(a_Term)
+                        Dim term As New XML_Term(a_Term)
                         archetypeParser.Ontology.ReplaceTermDefinition(language_code, term.XML_Term, ReplaceTranslations)
                     Else
                         Debug.Assert(False, "Term code is not available: " & a_Term.Code)
