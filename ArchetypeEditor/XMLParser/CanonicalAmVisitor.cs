@@ -6,7 +6,7 @@ using System.Text;
 using XMLParser;
 #endif
 
-namespace OpenEhr.V1.Its.Xml.AM
+namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 {
     class CanonicalAmVisitor
     {

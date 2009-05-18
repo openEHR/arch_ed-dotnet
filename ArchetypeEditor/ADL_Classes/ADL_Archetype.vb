@@ -17,7 +17,7 @@
 Option Explicit On
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 Imports EiffelList = EiffelSoftware.Library.Base.structures.list
-Imports AM = OpenEhr.V1.Its.Xml.AM
+Imports AM = XMLParser.OpenEhr.V1.Its.Xml.AM
 
 Namespace ArchetypeEditor.ADL_Classes
 
@@ -2036,7 +2036,7 @@ Namespace ArchetypeEditor.ADL_Classes
             amArchetype = AM.ArchetypeModelBuilder.Build(adlArchetype)
 
             Dim canonicalArchetype As XMLParser.ARCHETYPE
-            canonicalArchetype = openehr.V1.Its.Xml.AM.ArchetypeModelBuilder.CanonicalArchetype(amArchetype)
+            canonicalArchetype = XMLParser.OpenEhr.V1.Its.Xml.AM.ArchetypeModelBuilder.CanonicalArchetype(amArchetype)
 
             Return canonicalArchetype
         End Function

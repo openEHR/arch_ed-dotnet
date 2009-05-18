@@ -15,7 +15,7 @@
 '
 'option Strict On 
 Option Explicit On 
-Imports AM = OpenEhr.V1.Its.Xml.AM
+Imports AM = XMLParser.OpenEhr.V1.Its.Xml.AM
 
 Namespace ArchetypeEditor.XML_Classes
     Public Class XML_Description

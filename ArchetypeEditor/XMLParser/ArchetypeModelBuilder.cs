@@ -9,7 +9,7 @@ using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using XMLParser;
 #endif
 
-namespace OpenEhr.V1.Its.Xml.AM
+namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 {
     public static class ArchetypeModelBuilder
     {

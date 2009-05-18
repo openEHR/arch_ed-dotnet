@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
-using OpenEhr.V1.Its.Xml.AM;
+using XMLParser.OpenEhr.V1.Its.Xml.AM;
 
 [assembly: CLSCompliant(true)]
-
 
 namespace XMLParser
 {

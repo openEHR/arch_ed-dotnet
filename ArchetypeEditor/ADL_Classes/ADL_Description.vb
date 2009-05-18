@@ -16,7 +16,7 @@
 
 Option Explicit On 
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
-Imports AM = OpenEhr.V1.Its.Xml.AM
+Imports AM = XMLParser.OpenEhr.V1.Its.Xml.AM
 
 Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Description

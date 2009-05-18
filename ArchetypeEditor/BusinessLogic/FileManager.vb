@@ -562,7 +562,7 @@ Public Class FileManagerLocal
             Dim xmlWriter As System.Xml.XmlWriter
             xmlWriter = System.Xml.XmlWriter.Create(dlg.FileName, settings)
             Try
-                openehr.V1.Its.Xml.AM.AmSerializer.Serialize(xmlWriter, canonicalArchetype)
+                XMLParser.OpenEhr.V1.Its.Xml.AM.AmSerializer.Serialize(xmlWriter, canonicalArchetype)
             Finally
                 xmlWriter.Close()
             End Try

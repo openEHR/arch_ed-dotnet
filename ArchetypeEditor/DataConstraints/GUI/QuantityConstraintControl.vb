@@ -491,7 +491,6 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Dim Frm As New Choose
         Dim y, U_2, U_1 As String()
         Dim Phys_Prop As String
-        Dim id As Integer
         Dim selected_rows As DataRow()
         Dim d_row As DataRow
         Dim curlybrackets As Char() = {"{"c, "}"c}
