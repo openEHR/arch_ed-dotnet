@@ -7,6 +7,8 @@ using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 #if XMLParser
 using XMLParser;
+#else
+using OpenEhr.V1.Its.Xml.AM;
 #endif
 
 namespace XMLParser.OpenEhr.V1.Its.Xml.AM
