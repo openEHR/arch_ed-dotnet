@@ -632,30 +632,32 @@ Public Class TreeStructure
         Dim editLabel As Boolean = True
         Dim tvNode As ArchetypeTreeNode = GetSlotNode(PointToScreen(CType(sender, MenuItem).Parent.GetContextMenu.SourceControl.Location), editLabel)
 
-        If tvTree.SelectedNode Is Nothing Then
-            tvTree.Nodes.Add(tvNode)
-        Else
-            Dim a_node As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
-
-            If a_node.Item.RM_Class.Type = StructureType.Cluster Then
-                ' cluster selected so add at deeper level
-                tvTree.SelectedNode.Nodes.Add(tvNode)
+        If Not tvNode Is Nothing Then
+            If tvTree.SelectedNode Is Nothing Then
+                tvTree.Nodes.Add(tvNode)
             Else
-                ' element selected so add at the same level
-                If tvTree.SelectedNode.Parent Is Nothing Then
-                    tvTree.Nodes.Add(tvNode)
+                Dim a_node As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+
+                If a_node.Item.RM_Class.Type = StructureType.Cluster Then
+                    ' cluster selected so add at deeper level
+                    tvTree.SelectedNode.Nodes.Add(tvNode)
                 Else
-                    tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
+                    ' element selected so add at the same level
+                    If tvTree.SelectedNode.Parent Is Nothing Then
+                        tvTree.Nodes.Add(tvNode)
+                    Else
+                        tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
+                    End If
                 End If
             End If
-        End If
 
-        mFileManager.FileEdited = True
-        tvNode.EnsureVisible()
-        tvTree.SelectedNode = tvNode
+            mFileManager.FileEdited = True
+            tvNode.EnsureVisible()
+            tvTree.SelectedNode = tvNode
 
-        If editLabel Then
-            tvNode.BeginEdit()
+            If editLabel Then
+                tvNode.BeginEdit()
+            End If
         End If
     End Sub
 
