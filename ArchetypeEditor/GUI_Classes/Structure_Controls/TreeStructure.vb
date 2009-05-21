@@ -437,22 +437,20 @@ Public Class TreeStructure
     End Sub
 
     Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles MenuSpecialise.Click
-
         If Not tvTree.SelectedNode Is Nothing Then
-            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & Me.tvTree.SelectedNode.Text & "'", _
+            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & tvTree.SelectedNode.Text & "'?", _
                 AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
                 MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
 
-                Dim tvNode As ArchetypeTreeNode = CType(Me.tvTree.SelectedNode, ArchetypeTreeNode)
+                Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
 
-                If TypeOf tvNode.Item Is ArchetypeSlot Then
+                If TypeOf tvNode.Item Is ArchetypeSlot Or Not (tvNode.Item.Occurrences.IsUnbounded Or tvNode.Item.Occurrences.MaxCount > 1) Then
                     tvNode.Specialise()
-                ElseIf tvNode.Item.Occurrences.IsUnbounded Or tvNode.Item.Occurrences.MaxCount > 1 Then
-                    Dim i As Integer
-
-                    i = CType(tvNode, ArchetypeTreeNode).Index
+                Else
+                    Dim i As Integer = CType(tvNode, ArchetypeTreeNode).Index
                     tvNode = tvNode.Copy(mFileManager)
                     tvNode.Specialise()
+
                     If tvNode.Item.RM_Class.Type = StructureType.Element Then
                         Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
                         'Cannot specialise a reference
@@ -461,14 +459,15 @@ Public Class TreeStructure
                     End If
 
                     If tvTree.SelectedNode.Parent Is Nothing Then
-                        Me.tvTree.Nodes.Insert(i + 1, tvNode)
+                        tvTree.Nodes.Insert(i + 1, tvNode)
                     Else
-                        Me.tvTree.SelectedNode.Parent.Nodes.Insert(i + 1, tvNode)
+                        tvTree.SelectedNode.Parent.Nodes.Insert(i + 1, tvNode)
                     End If
-                Else
-                    tvNode.Specialise()
                 End If
-                'SetCurrentItem(tvNode.Item)
+
+                tvTree.SelectedNode = tvNode
+                SetCurrentItem(tvNode.Item)
+                tvNode.BeginEdit()
                 mFileManager.FileEdited = True
             End If
         End If
