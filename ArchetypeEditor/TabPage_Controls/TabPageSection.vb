@@ -247,10 +247,6 @@ Public Class TabPageSection
         End Set
     End Property
 
-
-#Region "Functions"
-
-
     Private Sub TreeToRichText(ByVal TreeNodes As TreeNodeCollection, ByRef text As IO.StringWriter, ByVal level As Integer)
         Dim n As ArchetypeTreeNode
 
@@ -263,9 +259,8 @@ Public Class TabPageSection
     End Sub
 
     Public Sub ToRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
-        Dim s As String
+        Dim s As String = ""
 
-        s = ""
         If mCardinalityControl.cbOrdered.Checked Then
             s = "ordered"
         End If
@@ -275,18 +270,16 @@ Public Class TabPageSection
         If s <> "" Then
             text.WriteLine(Space(3 * level) & s & "\par")
         End If
-        TreeToRichText(Me.tvSection.Nodes, text, level + 1)
+
+        TreeToRichText(tvSection.Nodes, text, level + 1)
         text.WriteLine("\pard\f0\fs20\par")
-
     End Sub
-
 
     Private Sub ProcessSection(ByVal A_sect As RmSection, ByVal tvNodes As TreeNodeCollection)
         Dim rm As Object
 
         ' can be RmSlot or RmStructureCompound
         For Each rm In A_sect.Children
-
             If TypeOf rm Is RmSection Then
                 Dim n As ArchetypeTreeNode
                 n = New ArchetypeTreeNode(CType(rm, RmSection), mFileManager)
@@ -297,17 +290,15 @@ Public Class TabPageSection
                 tvNodes.Add(n)
             End If
         Next
-
     End Sub
 
     Private Sub ProcessChildrenRM_Structures(ByVal colNodes As TreeNodeCollection, ByRef a_section As RmSection)
-
         Dim tvNode As TreeNode
         Dim SectionNode As RmSection
 
         For Each tvNode In colNodes
-            Dim rm As RmStructure
-            rm = CType(tvNode, ArchetypeTreeNode).Item.RM_Class
+            Dim rm As RmStructure = CType(tvNode, ArchetypeTreeNode).Item.RM_Class
+
             If rm.Type = StructureType.SECTION Then
                 SectionNode = New RmSection(rm)
                 ProcessChildrenRM_Structures(tvNode.Nodes, SectionNode)
@@ -318,28 +309,26 @@ Public Class TabPageSection
                 Debug.Assert(False, "Type is not catered for")
             End If
         Next
-
     End Sub
 
     Public Function SaveAsSection() As RmSection
         Dim SectNode As RmSection
 
-        'Try
         If mRootOfComposition Then
             SectNode = New RmSection("root")
-            ProcessChildrenRM_Structures(Me.tvSection.Nodes, SectNode)
-
+            ProcessChildrenRM_Structures(tvSection.Nodes, SectNode)
         Else
             SectNode = New RmSection(mFileManager.Archetype.ConceptCode)
-            If Me.tvSection.GetNodeCount(False) > 0 Then
-                ProcessChildrenRM_Structures(Me.tvSection.Nodes, SectNode)
+
+            If tvSection.GetNodeCount(False) > 0 Then
+                ProcessChildrenRM_Structures(tvSection.Nodes, SectNode)
             End If
         End If
 
         If SectNode.Children.Count > 0 Then
             SectNode.Children.Cardinality = mCardinalityControl.Cardinality
             'Changed SRH Jan 2007 - added cardinality control
-            'If Me.cbFixed.Checked Then
+            'If cbFixed.Checked Then
             '    Dim i As Integer
             '    For Each rm As RmStructure In SectNode.Children
             '        If rm.Occurrences.IsUnbounded Then
@@ -350,48 +339,40 @@ Public Class TabPageSection
             '    SectNode.Children.Cardinality.MaxCount = i
             'End If
         End If
-        Return SectNode
 
-        'Catch e As Exception
-        '   MessageBox.Show(AE_Constants.Instance.Error_saving & " " & AE_Constants.Instance.Section & ": " & e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-        'End Try
+        Return SectNode
     End Function
 
     Public Sub ProcessSection(ByVal a_section As RmSection)
         Dim rm_node As Object
-
         SetCardinality(a_section)
-
-        Me.tvSection.Nodes.Clear()
+        tvSection.Nodes.Clear()
 
         If mRootOfComposition Then
-
             For Each slot As RmSlot In a_section.Children
                 Dim n As New ArchetypeTreeNode(CType(slot, RmSlot), mFileManager)
-
                 tvSection.Nodes.Add(n)
             Next
         Else
             For Each rm_node In a_section.Children
-
                 If TypeOf rm_node Is RmSection Then
                     Dim n As New ArchetypeTreeNode(CType(rm_node, RmStructureCompound), mFileManager)
-                    Me.tvSection.Nodes.Add(n)
+                    tvSection.Nodes.Add(n)
                     ProcessSection(rm_node, n.Nodes)
                 ElseIf TypeOf rm_node Is RmSlot Then
                     Dim n As New ArchetypeTreeNode(CType(rm_node, RmSlot), mFileManager)
-                    Me.tvSection.Nodes.Add(n)
+                    tvSection.Nodes.Add(n)
                 Else
                     Debug.Assert(False, "Type not catered for")
                 End If
             Next
         End If
-
     End Sub
 
     Private Sub TranslateSectionNodes(ByRef tvnodes As TreeNodeCollection)
         For Each n As TreeNode In tvnodes
             CType(n, ArchetypeTreeNode).Translate()
+
             If n.GetNodeCount(False) > 0 Then
                 TranslateSectionNodes(n.Nodes)
             End If
@@ -399,31 +380,31 @@ Public Class TabPageSection
     End Sub
 
     Public Sub Translate()
-        TranslateSectionNodes(Me.tvSection.Nodes)
+        TranslateSectionNodes(tvSection.Nodes)
     End Sub
 
     Public Sub TranslateGUI()
         mCardinalityControl.TranslateGUI()
     End Sub
 
-#End Region
-
     Protected Sub SetCardinality(ByVal rm As RmStructureCompound)
         If mCardinalityControl Is Nothing Then
             SetCardinality(rm.Type)
         End If
+
         mCardinalityControl.Cardinality = rm.Children.Cardinality
     End Sub
 
     Protected Sub SetCardinality(ByVal a_structure_type As StructureType)
         mCardinalityControl = New OccurrencesPanel(mFileManager)
         mCardinalityControl.LocalFileManager = mFileManager
+
         If a_structure_type = StructureType.Single Then
             mCardinalityControl.SetSingle = True
         Else
             mCardinalityControl.IsContainer = True
             mCardinalityControl.Location = New Drawing.Point(0, 0)
-            Me.PanelTop.Controls.Add(mCardinalityControl)
+            PanelTop.Controls.Add(mCardinalityControl)
         End If
     End Sub
 
@@ -431,21 +412,18 @@ Public Class TabPageSection
         ' add the update of the Term and description
 
         If Not e.Label Is Nothing Then
-            Dim tvNode As ArchetypeTreeNode
+            Dim tvNode As ArchetypeTreeNode = e.Node
 
-            tvNode = e.Node
             If e.Label = "" Or e.Label = " " Or e.Label = "  " Then
                 e.CancelEdit = True
-                Return
+            Else
+                tvNode.Text = e.Label
+
+                'Slots may set text to include class
+                If tvNode.Text <> e.Label Then
+                    e.CancelEdit = True
+                End If
             End If
-
-            tvNode.Text = e.Label
-
-            'Slots may set text to include class
-            If tvNode.Text <> e.Label Then
-                e.CancelEdit = True
-            End If
-
         End If
     End Sub
 
@@ -461,10 +439,11 @@ Public Class TabPageSection
     End Sub
 
     Private Sub butRemoveSection_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveSection.Click, MenuSectionRemove.Click
-        Dim n As TreeNode = Me.tvSection.SelectedNode
+        Dim n As TreeNode = tvSection.SelectedNode
+
         If Not n Is Nothing Then
             If MessageBox.Show(AE_Constants.Instance.Remove & " " & n.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
-                Me.tvSection.Nodes.Remove(n)
+                tvSection.Nodes.Remove(n)
                 mFileManager.FileEdited = True
             End If
         End If
@@ -476,6 +455,7 @@ Public Class TabPageSection
         Dim newSlot As New ArchetypeSlot(slot, mFileManager)
         Dim i As Integer = a_node.Index
         Dim nc As TreeNodeCollection
+
         If a_node.Parent Is Nothing Then
             nc = tvSection.Nodes
         Else
@@ -495,9 +475,7 @@ Public Class TabPageSection
 
         mFileManager.FileEdited = True
         a_node.BeginEdit()
-
     End Sub
-
 
     Private Sub tvSection_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles tvSection.AfterSelect
         ' pass the active selection as an iArchetypeItemNode
@@ -509,11 +487,11 @@ Public Class TabPageSection
         Else
             MenuSectionRemove.Visible = True
             Dim a_node As ArchetypeTreeNode = tvSection.SelectedNode
+
             Try
-                Me.SuspendLayout()
-                mConstraintDisplay.ShowConstraint(a_node.RM_Class.Type, _
-                     False, a_node.Item, mFileManager)
-                Me.ResumeLayout()
+                SuspendLayout()
+                mConstraintDisplay.ShowConstraint(a_node.RM_Class.Type, False, a_node.Item, mFileManager)
+                ResumeLayout()
             Catch
                 Debug.Assert(False, "Type is not catered for")
                 Return
@@ -527,9 +505,7 @@ Public Class TabPageSection
                 mConstraintDisplay.Visible = True
             End If
         End If
-
     End Sub
-
 
     Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         mFileManager.FileEdited = True
@@ -540,25 +516,26 @@ Public Class TabPageSection
     End Sub
 
     Private Sub TabPageSection_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.tvSection.ExpandAll()
+        tvSection.ExpandAll()
         mConstraintDisplay = New ArchetypeNodeConstraintControl(mFileManager)
         mConstraintDisplay.Visible = False
-        Me.PanelSectionConstraint.Controls.Add(mConstraintDisplay)
+        PanelSectionConstraint.Controls.Add(mConstraintDisplay)
         mConstraintDisplay.Dock = DockStyle.Fill
-        If Me.tvSection.GetNodeCount(False) > 0 Then
-            Me.tvSection.SelectedNode = Me.tvSection.Nodes(0)
+
+        If tvSection.GetNodeCount(False) > 0 Then
+            tvSection.SelectedNode = tvSection.Nodes(0)
         End If
-        Me.HelpProviderSection.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+
+        HelpProviderSection.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
 
 #Region "Buttons and menus - adding and removing slots and sections"
 
     Sub AddSlot(ByVal sender As Object, ByVal e As EventArgs)
-        Dim struct_type As StructureType
         Dim tvNode As ArchetypeTreeNode = Nothing
         Dim editLabel As Boolean = False
+        Dim struct_type As StructureType = CInt(CType(sender, MenuItem).Tag)
 
-        struct_type = CInt(CType(sender, MenuItem).Tag)
         Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
             Case DialogResult.Yes
                 tvNode = New ArchetypeTreeNode(New ArchetypeSlot(struct_type.ToString, struct_type, mFileManager))
@@ -573,28 +550,21 @@ Public Class TabPageSection
         tvNode.SelectedImageIndex = 2
 
         If mRootOfComposition Then
-
-            Me.tvSection.Nodes.Add(tvNode)
-
+            tvSection.Nodes.Add(tvNode)
+        ElseIf tvSection.SelectedNode Is Nothing Or mNoHitNode Then
+            tvSection.Nodes.Add(tvNode)
+        ElseIf CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = StructureType.SECTION Then
+            tvSection.SelectedNode.Nodes.Add(tvNode)
+        ElseIf tvSection.SelectedNode.Parent Is Nothing Then
+            tvSection.Nodes.Add(tvNode)
         Else
-
-            If tvSection.SelectedNode Is Nothing Or mNoHitNode Then
-                Me.tvSection.Nodes.Add(tvNode)
-            ElseIf CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = StructureType.SECTION Then
-                Me.tvSection.SelectedNode.Nodes.Add(tvNode)
-            Else
-                If Me.tvSection.SelectedNode.Parent Is Nothing Then
-                    Me.tvSection.Nodes.Add(tvNode)
-                Else
-                    Me.tvSection.SelectedNode.Parent.Nodes.Add(tvNode)
-                End If
-            End If
+            tvSection.SelectedNode.Parent.Nodes.Add(tvNode)
         End If
+
         mFileManager.FileEdited = True
         tvNode.EnsureVisible()
         tvNode.BeginEdit()
-        Me.tvSection.SelectedNode = tvNode
-
+        tvSection.SelectedNode = tvNode
     End Sub
 
     Sub AddSection(ByVal sender As Object, ByVal e As EventArgs)
@@ -606,22 +576,19 @@ Public Class TabPageSection
         s = Filemanager.GetOpenEhrTerm(314, "Section")
         Dim tvNode As New ArchetypeTreeNode(s, StructureType.SECTION, mFileManager)
 
-        If Me.tvSection.SelectedNode Is Nothing Or mNoHitNode Then
-            Me.tvSection.Nodes.Add(tvNode)
+        If tvSection.SelectedNode Is Nothing Or mNoHitNode Then
+            tvSection.Nodes.Add(tvNode)
+        ElseIf CType(sender, MenuItem).Index = 1 Then  ' add as subsection
+            tvSection.SelectedNode.Nodes.Add(tvNode)
+        ElseIf tvSection.SelectedNode.Parent Is Nothing Then
+            tvSection.Nodes.Add(tvNode)
         Else
-            If CType(sender, MenuItem).Index = 1 Then  ' add as subsection
-                Me.tvSection.SelectedNode.Nodes.Add(tvNode)
-            Else
-                If Me.tvSection.SelectedNode.Parent Is Nothing Then
-                    Me.tvSection.Nodes.Add(tvNode)
-                Else
-                    Me.tvSection.SelectedNode.Parent.Nodes.Add(tvNode)
-                End If
-            End If
+            tvSection.SelectedNode.Parent.Nodes.Add(tvNode)
         End If
+
         mFileManager.FileEdited = True
         tvNode.EnsureVisible()
-        Me.tvSection.SelectedNode = tvNode
+        tvSection.SelectedNode = tvNode
         tvNode.BeginEdit()
     End Sub
 
@@ -633,7 +600,6 @@ Public Class TabPageSection
         Dim cm As New ContextMenu
         Dim mi As MenuItem
 
-
         If mRootOfComposition Then
             mi = New MenuItem(Filemanager.GetOpenEhrTerm(312, "Slot"))
             cm.MenuItems.Add(mi)
@@ -644,7 +610,6 @@ Public Class TabPageSection
                 AddHandler mi.Click, AddressOf AddSlot
                 cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)
             Next
-            Return cm
         Else
             'Change SRH: Only subsections allowed
             'mi = New MenuItem(Filemanager.GetOpenEhrTerm(314, "Section"))
@@ -667,9 +632,9 @@ Public Class TabPageSection
                 AddHandler mi.Click, AddressOf AddSlot
                 cm.MenuItems(cm.MenuItems.Count - 1).MenuItems.Add(mi)
             Next
-            Return cm
         End If
 
+        Return cm
     End Function
 
     Private Sub ContextMenuTree_Popup(ByVal sender As System.Object, ByVal e As EventArgs) Handles ContextMenuTree.Popup
@@ -677,24 +642,35 @@ Public Class TabPageSection
         ContextMenuTree.MenuItems(0).MergeMenu(CreateContextMenu)
     End Sub
 
+    Private Sub tvSection_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tvSection.KeyDown
+        Select Case e.KeyCode
+            Case Keys.F2
+                If Not tvSection.SelectedNode Is Nothing Then
+                    tvSection.SelectedNode.BeginEdit()
+                End If
+            Case Keys.Delete
+                butRemoveSection_Click(sender, New EventArgs)
+        End Select
+    End Sub
+
 #End Region
 
 #Region "Moving and dragging slots and sections"
 
     Private Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click
-        If Not Me.tvSection.SelectedNode Is Nothing Then
-            Dim tvN As TreeNode
+        If Not tvSection.SelectedNode Is Nothing Then
             Dim tvNodeCollection As TreeNodeCollection
             Dim tvParentNodeCollection As TreeNodeCollection = Nothing
             Dim i As Integer
+            Dim tvN As TreeNode = tvSection.SelectedNode
 
-            tvN = Me.tvSection.SelectedNode
             If tvN.Parent Is Nothing Then
-                tvNodeCollection = Me.tvSection.Nodes
+                tvNodeCollection = tvSection.Nodes
             Else
                 tvNodeCollection = tvN.Parent.Nodes
+
                 If tvN.Parent.Parent Is Nothing Then
-                    tvParentNodeCollection = Me.tvSection.Nodes
+                    tvParentNodeCollection = tvSection.Nodes
                 Else
                     tvParentNodeCollection = tvN.Parent.Parent.Nodes
                 End If
@@ -704,34 +680,33 @@ Public Class TabPageSection
 
             If i > 0 Then
                 tvN.Remove()
-                tvNodeCollection.Insert((i - 1), tvN)
+                tvNodeCollection.Insert(i - 1, tvN)
                 mFileManager.FileEdited = True
-                Me.tvSection.SelectedNode = tvN
+                tvSection.SelectedNode = tvN
             ElseIf i = 0 AndAlso Not tvParentNodeCollection Is Nothing Then
                 Dim ii As Integer = tvN.Parent.Index
                 tvN.Remove()
                 tvParentNodeCollection.Insert(ii, tvN)
                 mFileManager.FileEdited = True
-                Me.tvSection.SelectedNode = tvN
+                tvSection.SelectedNode = tvN
             End If
         End If
-
     End Sub
 
     Private Sub butListDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListDown.Click
-        If Not Me.tvSection.SelectedNode Is Nothing Then
-            Dim tvN As TreeNode
+        If Not tvSection.SelectedNode Is Nothing Then
             Dim tvNodeCollection As TreeNodeCollection
             Dim tvParentNodeCollection As TreeNodeCollection = Nothing
             Dim i As Integer
+            Dim tvN As TreeNode = tvSection.SelectedNode
 
-            tvN = Me.tvSection.SelectedNode
             If tvN.Parent Is Nothing Then
-                tvNodeCollection = Me.tvSection.Nodes
+                tvNodeCollection = tvSection.Nodes
             Else
                 tvNodeCollection = tvN.Parent.Nodes
+
                 If tvN.Parent.Parent Is Nothing Then
-                    tvParentNodeCollection = Me.tvSection.Nodes
+                    tvParentNodeCollection = tvSection.Nodes
                 Else
                     tvParentNodeCollection = tvN.Parent.Parent.Nodes
                 End If
@@ -741,43 +716,42 @@ Public Class TabPageSection
 
             If Not tvN.NextNode Is Nothing Then
                 tvN.Remove()
-                tvNodeCollection.Insert((i + 1), tvN)
+                tvNodeCollection.Insert(i + 1, tvN)
                 mFileManager.FileEdited = True
-                Me.tvSection.SelectedNode = tvN
+                tvSection.SelectedNode = tvN
             ElseIf i = tvNodeCollection.Count - 1 AndAlso Not tvParentNodeCollection Is Nothing Then
                 Dim ii As Integer = tvN.Parent.Index
                 tvN.Remove()
                 tvParentNodeCollection.Insert(ii + 1, tvN)
                 mFileManager.FileEdited = True
-                Me.tvSection.SelectedNode = tvN
+                tvSection.SelectedNode = tvN
             End If
         End If
     End Sub
 
     Private Sub tvSection_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvSection.MouseDown
+        mNoHitNode = False
+
         If e.Button = System.Windows.Forms.MouseButtons.Left Then
-            Me.tvSection.Cursor = System.Windows.Forms.Cursors.Hand
+            tvSection.Cursor = System.Windows.Forms.Cursors.Hand
         ElseIf e.Button = System.Windows.Forms.MouseButtons.Right Then
-            Dim tn As TreeNode
-            tn = Me.tvSection.GetNodeAt(e.X, e.Y)
+            Dim tn As TreeNode = tvSection.GetNodeAt(e.X, e.Y)
+
             If Not tn Is Nothing Then
-                Me.tvSection.SelectedNode = tn
+                tvSection.SelectedNode = tn
             Else
                 mNoHitNode = True
-                Return
             End If
         End If
-        mNoHitNode = False
     End Sub
 
     Private Sub tvSection_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvSection.MouseUp
-        Me.tvSection.Cursor = System.Windows.Forms.Cursors.Default
+        tvSection.Cursor = System.Windows.Forms.Cursors.Default
     End Sub
 
     Private Sub tvSection_ItemDrag(ByVal sender As Object, ByVal e As System.Windows.Forms.ItemDragEventArgs) Handles tvSection.ItemDrag
         mNodeDragged = e.Item
-        'mNodeDragged.Collapse()
-        Me.tvSection.DoDragDrop(e, DragDropEffects.Move)
+        tvSection.DoDragDrop(e, DragDropEffects.Move)
     End Sub
 
     Private Sub tvSection_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvSection.DragEnter
@@ -785,96 +759,82 @@ Public Class TabPageSection
     End Sub
 
     Private Sub tvSection_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvSection.DragOver
-        Dim dropNode As TreeNode
-        Dim position As Drawing.Point
-        Dim parentNode As TreeNode
-
         'Prevent dropping a parent on a child
-        If Not mNodeDragged Is Nothing Then
-            position.X = e.X
-            position.Y = e.Y
-            position = Me.tvSection.PointToClient(position)
-            dropNode = CType(Me.tvSection.GetNodeAt(position), ArchetypeTreeNode)
-            If Not dropNode Is Nothing Then
-                parentNode = dropNode.Parent
-                While Not parentNode Is Nothing
-                    If parentNode Is mNodeDragged Then
-                        e.Effect = DragDropEffects.None
-                        Return
-                    End If
-                    parentNode = parentNode.Parent
-                End While
-            End If
-        End If
-        'Allow the allowed effect
+
         e.Effect = e.AllowedEffect
 
+        If Not mNodeDragged Is Nothing Then
+            Dim position As Drawing.Point
+            position.X = e.X
+            position.Y = e.Y
+            position = tvSection.PointToClient(position)
+            Dim node As TreeNode = tvSection.GetNodeAt(position)
+
+            While Not node Is Nothing
+                node = node.Parent
+
+                If node Is mNodeDragged Then
+                    e.Effect = DragDropEffects.None
+                    node = Nothing
+                End If
+            End While
+        End If
     End Sub
 
     Private Sub tvSection_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvSection.DragDrop
-        Dim position As Point
-        Dim DropNode As ArchetypeTreeNode
-        Dim DropParent As TreeNodeCollection
-        Dim DragParent As TreeNodeCollection
-
-
         If Not mNodeDragged Is Nothing Then
-
+            Dim position As Point
             position.X = e.X
             position.Y = e.Y
-            position = Me.tvSection.PointToClient(position)
-            DropNode = Me.tvSection.GetNodeAt(position)
+            position = tvSection.PointToClient(position)
+            Dim dropNode As ArchetypeTreeNode = tvSection.GetNodeAt(position)
 
-            If DropNode Is mNodeDragged Then
-                Return
-            End If
+            If dropNode Is mNodeDragged Then
+                Beep()
+            Else
+                Dim dropParent, dragParent As TreeNodeCollection
+                Dim dropIndex As Integer
 
-            If Not DropNode Is Nothing Then
-                If DropNode.Parent Is Nothing Then
-                    ' force drop on the section that is parent
-                    DropParent = Me.tvSection.Nodes(0).Nodes
+                If dropNode Is Nothing Then
+                    dropParent = tvSection.Nodes
+                    dropIndex = tvSection.GetNodeCount(False)
+                ElseIf dropNode.Item.RM_Class.Type = StructureType.SECTION Then
+                    dropParent = dropNode.Nodes
+
+                    If dropNode.IsExpanded Then
+                        dropIndex = 0
+                    Else
+                        dropIndex = dropNode.GetNodeCount(False)
+                    End If
                 Else
-                    DropParent = DropNode.Parent.Nodes  ' if it is a slot, need to drop it on the drop parent
+                    If dropNode.Parent Is Nothing Then
+                        dropParent = tvSection.Nodes
+                    Else
+                        dropParent = dropNode.Parent.Nodes
+                    End If
+
+                    dropIndex = dropNode.Index + 1
                 End If
 
                 If mNodeDragged.Parent Is Nothing Then
-                    DragParent = tvSection.Nodes
+                    dragParent = tvSection.Nodes
                 Else
-                    DragParent = mNodeDragged.Parent.Nodes
+                    dragParent = mNodeDragged.Parent.Nodes
                 End If
 
-                DragParent.Remove(mNodeDragged)
-
-                ' indent if start at same level
-                If (DropParent Is DragParent) And (DropNode.RM_Class.Type = StructureType.SECTION) Then
-                    DropNode.Nodes.Add(mNodeDragged)
-                Else
-                    ' different level or not section
-                    If mNodeDragged.RM_Class.Type = StructureType.Slot And DropNode.RM_Class.Type = StructureType.SECTION Then
-                        DropNode.Nodes.Add(mNodeDragged)
-                    Else
-                        DropParent.Insert(DropNode.Index + 1, mNodeDragged)
-                    End If
-
-                End If
-                mFileManager.FileEdited = True
+                dragParent.Remove(mNodeDragged)
+                dropParent.Insert(dropIndex, mNodeDragged)
                 mNodeDragged.EnsureVisible()
-                Me.tvSection.SelectedNode = mNodeDragged
+                tvSection.SelectedNode = mNodeDragged
+                mFileManager.FileEdited = True
             End If
-
         End If
 
-        Me.tvSection.Cursor = System.Windows.Forms.Cursors.Default
-
+        tvSection.Cursor = System.Windows.Forms.Cursors.Default
     End Sub
+
 #End Region
 
-    Private Sub tvSection_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tvSection.KeyDown
-        If e.KeyCode = Keys.Delete Then
-            butRemoveSection_Click(sender, New EventArgs)
-        End If
-
-    End Sub
 End Class
 
 '

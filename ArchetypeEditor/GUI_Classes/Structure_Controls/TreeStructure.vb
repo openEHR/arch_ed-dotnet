@@ -1132,11 +1132,6 @@ Public Class TreeStructure
     End Function
 
     Private Sub tvTree_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragDrop
-        Dim position As Point
-        Dim dropNode As ArchetypeTreeNode
-        Dim dropParent As TreeNodeCollection
-        Dim dropIndex As Integer
-        Dim dragParent As TreeNodeCollection
         Dim allowEdit As Boolean = True
         Dim nodeDragged As ArchetypeTreeNode = mDragTreeNode
 
@@ -1158,56 +1153,49 @@ Public Class TreeStructure
         End If
 
         If Not nodeDragged Is Nothing Then
+            Dim position As Point
             position.X = e.X
             position.Y = e.Y
             position = tvTree.PointToClient(position)
-            dropNode = CType(tvTree.GetNodeAt(position), ArchetypeTreeNode)
+            Dim dropNode As ArchetypeTreeNode = CType(tvTree.GetNodeAt(position), ArchetypeTreeNode)
 
-            If Not dropNode Is Nothing Then
-                ' if the drop node exists then set the parent
-                If dropNode.Item.RM_Class.Type = StructureType.Cluster Then
-                    ' drop as child of cluster
+            If nodeDragged Is dropNode Then
+                Beep()
+            Else
+                Dim dropParent, dragParent As TreeNodeCollection
+                Dim dropIndex As Integer
+
+                If dropNode Is Nothing Then
+                    dropParent = tvTree.Nodes
+                    dropIndex = tvTree.GetNodeCount(False)
+                ElseIf dropNode.Item.RM_Class.Type = StructureType.Cluster Then
                     dropParent = dropNode.Nodes
 
                     If dropNode.IsExpanded Then
-                        ' insert at the beginning
                         dropIndex = 0
                     Else
-                        'insert at end
                         dropIndex = dropNode.GetNodeCount(False)
                     End If
                 Else
-                    dropIndex = dropNode.Index + 1
-
                     If dropNode.Parent Is Nothing Then
                         dropParent = tvTree.Nodes
                     Else
                         dropParent = dropNode.Parent.Nodes
                     End If
-                End If
-            Else
-                'otherwise add it to the tvTree
-                dropParent = Me.tvTree.Nodes
-                dropIndex = Me.tvTree.GetNodeCount(False) ' add at the end
-            End If
 
-            If e.Effect = DragDropEffects.Move Then
-                If nodeDragged.Parent Is Nothing Then
-                    dragParent = tvTree.Nodes
-                Else
-                    dragParent = nodeDragged.Parent.Nodes
+                    dropIndex = dropNode.Index + 1
                 End If
 
-                If Not nodeDragged Is dropNode Then
+                If e.Effect = DragDropEffects.Move Then
+                    If nodeDragged.Parent Is Nothing Then
+                        dragParent = tvTree.Nodes
+                    Else
+                        dragParent = nodeDragged.Parent.Nodes
+                    End If
+
                     dragParent.Remove(nodeDragged)
-                Else
-                    nodeDragged = Nothing
-                    Beep()
                 End If
-            End If
 
-            'Add the node
-            If Not nodeDragged Is Nothing Then
                 dropParent.Insert(dropIndex, nodeDragged)
                 nodeDragged.EnsureVisible()
                 tvTree.SelectedNode = nodeDragged
