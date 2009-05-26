@@ -105,17 +105,14 @@ namespace XMLParser
             //ii++;
             //_archetype.ontology.specialisation_depth = ii.ToString();
 
-            //set the current archetype id to the parent value
-            //_archetype.parent_archetype_id = _archetype.archetype_id; 
-            if (_archetype.parent_archetype_id != null)
-                _archetype.parent_archetype_id.value = _archetype.archetype_id.value; //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-
-            //get the specialised concept code
+            _archetype.parent_archetype_id = _archetype.archetype_id;
             _archetype.concept = _ontology.NextSpecialisedTermId(_archetype.concept);
 
             //now add the addition to the concept name in the archetype ID
             string[] y = _archetype.archetype_id.value.ToString().Split(".".ToCharArray());
+            _archetype.archetype_id = new ARCHETYPE_ID();
             _archetype.archetype_id.value = y[0] + "." + y[1] + "-" + addition_to_concept_name;
+
             for (int i = 2; i < y.Length; i++)
             {
                 _archetype.archetype_id.value += "." + y[i];
@@ -123,7 +120,6 @@ namespace XMLParser
 
             //don't overwrite the old archetype
             _file_name = null;
-
         }
 
         public void SetDefinitionId(string a_concept_id)
