@@ -99,18 +99,25 @@ namespace XMLParser
 
         public void SpecialiseArchetype(string addition_to_concept_name)
         {
-            //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            //Increase the specialisation depth
-            //int ii  = int.Parse(_archetype.ontology.specialisation_depth);
-            //ii++;
-            //_archetype.ontology.specialisation_depth = ii.ToString();
+            ARCHETYPE_TERM term = new ARCHETYPE_TERM();
+            ARCHETYPE_TERM parentTerm = _ontology.TermDefinition(_ontology.PrimaryLanguageCode, _archetype.concept);
+            term.code = _ontology.NextSpecialisedTermId(parentTerm.code);
+            term.items = new StringDictionaryItem[parentTerm.items.Length];
 
-            bool isConceptSameAsRootNodeId = _archetype.concept == _archetype.definition.node_id;
+            for (int i = 0; i < parentTerm.items.Length; i++)
+            {
+                term.items[i] = new StringDictionaryItem();
+                term.items[i].id = parentTerm.items[i].id;
+                term.items[i].Value = parentTerm.items[i].Value;
+            }
+
+            _ontology.AddTermOrConstraintDefinition(term, false);
+
+            if (_archetype.definition.node_id == _archetype.concept)
+                _archetype.definition.node_id = term.code;
+
+            _archetype.concept = term.code;
             _archetype.parent_archetype_id = _archetype.archetype_id;
-            _archetype.concept = _ontology.NextSpecialisedTermId(_archetype.concept);
-
-            if (isConceptSameAsRootNodeId)
-                _archetype.definition.node_id = _archetype.concept;
 
             //now add the addition to the concept name in the archetype ID
             string[] y = _archetype.archetype_id.value.ToString().Split(".".ToCharArray());
