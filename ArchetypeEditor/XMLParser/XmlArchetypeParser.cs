@@ -105,8 +105,12 @@ namespace XMLParser
             //ii++;
             //_archetype.ontology.specialisation_depth = ii.ToString();
 
+            bool isConceptSameAsRootNodeId = _archetype.concept == _archetype.definition.node_id;
             _archetype.parent_archetype_id = _archetype.archetype_id;
             _archetype.concept = _ontology.NextSpecialisedTermId(_archetype.concept);
+
+            if (isConceptSameAsRootNodeId)
+                _archetype.definition.node_id = _archetype.concept;
 
             //now add the addition to the concept name in the archetype ID
             string[] y = _archetype.archetype_id.value.ToString().Split(".".ToCharArray());
