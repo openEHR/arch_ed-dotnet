@@ -4,6 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.IO;
 
 #if XMLParser
 using XMLParser;
@@ -16,6 +17,42 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
     public static class ArchetypeModelBuilder
     {
         public const string ARCHETYPE_DIGEST_ID = "MD5-CAM-1.0.1";
+
+        public static ARCHETYPE Build(string adlFilePath)
+        {
+            //Check.Assert(System.IO.File.Exists(adlFilePath), "File '" + adlFilePath + "' does not exist.");
+
+            ARCHETYPE archetypeObject;
+            openehr.adl_parser.@interface.ADL_INTERFACE adlParser;
+            adlParser = openehr.adl_parser.@interface.Create.ADL_INTERFACE.make();
+            adlParser.open_adl_file(EiffelSoftware.Library.Base.kernel.Create.STRING_8.make_from_cil(adlFilePath));
+
+            // check file opened successfully by checking status
+            if (!adlParser.archetype_source_loaded())
+                throw new ApplicationException(String.Format("{0}\n{1}",
+                    adlFilePath,
+                    adlParser.status().to_cil()));
+            else
+            {
+                adlParser.parse_archetype();
+                if (!adlParser.parse_succeeded())
+                    throw new ApplicationException(String.Format("{0}\n{1}",
+                         Path.GetFileName(adlFilePath),
+                         adlParser.status().to_cil()));
+                else
+                {
+                    openehr.adl_parser.syntax.adl.ADL_ENGINE adlEngine = adlParser.adl_engine();
+                    if (!adlParser.archetype_available())
+                        throw new ApplicationException(String.Format("{0}\n{1}",
+                                           adlFilePath,
+                                           adlParser.status().to_cil()));
+                    else                                            
+                        archetypeObject = Build(adlEngine.archetype());                    
+                }
+            }
+            
+            return archetypeObject;
+        }
 
         public static ARCHETYPE Build(openehr.openehr.am.archetype.ARCHETYPE archetype)
         {

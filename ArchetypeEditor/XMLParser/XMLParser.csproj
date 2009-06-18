@@ -9,6 +9,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XMLParser</RootNamespace>
     <AssemblyName>XMLParser</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>OceanEhr.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -67,6 +69,7 @@
     <EmbeddedResource Include="OpenehrProfile.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="OceanEhr.snk" />
     <None Include="OpenehrProfile.xsx">
       <DependentUpon>OpenehrProfile.xsd</DependentUpon>
     </None>
