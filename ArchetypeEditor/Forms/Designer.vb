@@ -3611,7 +3611,9 @@ Public Class Designer
             mFileManager.IsNew = True
             mFileManager.FileName = ""    'new filename and needs to save as
 
-            If Not mTabPageDataStructure Is Nothing Then
+            'EDT-553 - if there is no structure chosen then there is an error
+            'If Not mTabPageDataStructure Is Nothing
+            If Not mTabPageDataStructure Is Nothing AndAlso Not mTabPageDataStructure.ArchetypeDisplay Is Nothing Then
                 mTabPageDataStructure.ArchetypeDisplay.SetButtonVisibility(Nothing)
             End If
         End If
