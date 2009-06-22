@@ -98,6 +98,7 @@ Public Class TabPageActivity
 
     Sub TranslateGUI()
         lblAction.Text = Filemanager.GetOpenEhrTerm(556, "Action")
+        Me.butOpenArchetype.Text = Filemanager.GetOpenEhrTerm(687, "Open action archetype")
     End Sub
 
     Public Sub Translate()

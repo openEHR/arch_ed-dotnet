@@ -56,18 +56,18 @@ Partial Class TabPageActivity
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameToolStripMenuItem, Me.RemoveToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(114, 48)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(118, 48)
         '
         'RenameToolStripMenuItem
         '
         Me.RenameToolStripMenuItem.Name = "RenameToolStripMenuItem"
-        Me.RenameToolStripMenuItem.Size = New System.Drawing.Size(113, 22)
+        Me.RenameToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
         Me.RenameToolStripMenuItem.Text = "Rename"
         '
         'RemoveToolStripMenuItem
         '
         Me.RemoveToolStripMenuItem.Name = "RemoveToolStripMenuItem"
-        Me.RemoveToolStripMenuItem.Size = New System.Drawing.Size(113, 22)
+        Me.RemoveToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
         Me.RemoveToolStripMenuItem.Text = "Remove"
         '
         'butOpenArchetype
@@ -79,7 +79,7 @@ Partial Class TabPageActivity
         Me.butOpenArchetype.Name = "butOpenArchetype"
         Me.butOpenArchetype.Size = New System.Drawing.Size(169, 26)
         Me.butOpenArchetype.TabIndex = 5
-        Me.butOpenArchetype.Text = "View embedded archetype"
+        Me.butOpenArchetype.Text = "Open Action archetype"
         '
         'lblNodeId
         '

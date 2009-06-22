@@ -29,6 +29,8 @@ Public Class TabpageHistory
     Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     Friend WithEvents RightPanel As System.Windows.Forms.Panel
     Friend WithEvents EitherRadioButton As System.Windows.Forms.RadioButton
+    Friend WithEvents ContextMenuEvents As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents SpecialiseToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
@@ -49,6 +51,7 @@ Public Class TabpageHistory
             mOccurrences.TabIndex = 0
             gbDuration.Location = gbOffset.Location
             gbDuration.Height = gbOffset.Height
+            
         End If
     End Sub
 
@@ -143,6 +146,8 @@ Public Class TabpageHistory
         Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.RightPanel = New System.Windows.Forms.Panel
+        Me.ContextMenuEvents = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SpecialiseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.gbEventDetails.SuspendLayout()
         Me.gbDuration.SuspendLayout()
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -152,6 +157,7 @@ Public Class TabpageHistory
         Me.gbEventList.SuspendLayout()
         Me.panelLeft.SuspendLayout()
         Me.RightPanel.SuspendLayout()
+        Me.ContextMenuEvents.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbEventDetails
@@ -462,6 +468,7 @@ Public Class TabpageHistory
         '
         Me.ListEvents.Alignment = System.Windows.Forms.ListViewAlignment.Left
         Me.ListEvents.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.TheEvents})
+        Me.ListEvents.ContextMenuStrip = Me.ContextMenuEvents
         Me.ListEvents.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListEvents.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListEvents.HideSelection = False
@@ -536,6 +543,18 @@ Public Class TabpageHistory
         Me.RightPanel.Size = New System.Drawing.Size(380, 392)
         Me.RightPanel.TabIndex = 39
         '
+        'ContextMenuEvents
+        '
+        Me.ContextMenuEvents.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpecialiseToolStripMenuItem})
+        Me.ContextMenuEvents.Name = "ContextMenuEvents"
+        Me.ContextMenuEvents.Size = New System.Drawing.Size(126, 26)
+        '
+        'SpecialiseToolStripMenuItem
+        '
+        Me.SpecialiseToolStripMenuItem.Name = "SpecialiseToolStripMenuItem"
+        Me.SpecialiseToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.SpecialiseToolStripMenuItem.Text = "Specialise"
+        '
         'TabpageHistory
         '
         Me.BackColor = System.Drawing.Color.LemonChiffon
@@ -559,6 +578,7 @@ Public Class TabpageHistory
         Me.gbEventList.ResumeLayout(False)
         Me.panelLeft.ResumeLayout(False)
         Me.RightPanel.ResumeLayout(False)
+        Me.ContextMenuEvents.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -782,6 +802,7 @@ Public Class TabpageHistory
         gbEventList.Text = Filemanager.GetOpenEhrTerm(134, gbEventList.Text)
         radioOpen.Text = Filemanager.GetOpenEhrTerm(135, radioOpen.Text)
         radioFixed.Text = Filemanager.GetOpenEhrTerm(136, radioFixed.Text)
+        SpecialiseToolStripMenuItem.Text = AE_Constants.Instance.Specialise
     End Sub
 
     Friend Function SaveAsEventSeries() As RmHistory
@@ -1112,11 +1133,11 @@ Public Class TabpageHistory
                     current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
                 End If
                 cbFixedInterval_CheckedChanged(sender, e)
-                Else
-                    current_item.EventType = RmEvent.ObservationEventType.Event
-                End If
+            Else
+                current_item.EventType = RmEvent.ObservationEventType.Event
+            End If
 
-                mFileManager.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -1225,7 +1246,19 @@ Public Class TabpageHistory
                 ' set the image to selected, don't use selected to change as it will call this again!
                 current_item.Selected = True
             End If
+
+            SpecialiseToolStripMenuItem.Visible = False
+
+            If Not current_item Is Nothing Then
+                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(current_item.RM_Class.NodeId, ".")
+                Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+
+                If i < numberSpecialisations Then
+                    SpecialiseToolStripMenuItem.Visible = True
+                End If
+            End If
         End If
+
     End Sub
 
     Private Sub txtEventDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtEventDescription.TextChanged
@@ -1506,6 +1539,31 @@ Public Class TabpageHistory
         If Not current_item Is Nothing AndAlso e.KeyCode = Keys.Delete Then
             If MessageBox.Show(AE_Constants.Instance.Remove + " " + current_item.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
                 current_item.Remove()
+            End If
+        End If
+    End Sub
+
+    Private Sub SpecialiseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpecialiseToolStripMenuItem.Click
+        If Not current_item Is Nothing Then
+            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & current_item.Text & "'?", _
+                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
+                MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+
+                If Not (current_item.Occurrences.IsUnbounded Or current_item.Occurrences.MaxCount > 1) Then
+
+                    current_item.Specialise()
+                Else
+                    Dim i As Integer = current_item.Index
+
+                    current_item = current_item.Copy()
+                    current_item.Specialise()
+
+                    Me.ListEvents.Items.Insert(i + 1, current_item)
+
+                    current_item.Selected = True
+                    current_item.BeginEdit()
+                    mFileManager.FileEdited = True
+                End If
             End If
         End If
     End Sub

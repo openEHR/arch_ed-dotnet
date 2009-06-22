@@ -1033,14 +1033,21 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 If ObjNode.has_assumed_value Then
                     Dim units As String = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil
-                    Dim assumedUnits As Constraint_QuantityUnit = CType(q.Units.Item(OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(units)), Constraint_QuantityUnit)
+                    'SRH: June 22 2009 - error with blood pressure archetype with assumed unit of degrees - apply only to time
+
+                    Dim assumedUnits As Constraint_QuantityUnit
+                    If q.IsCoded AndAlso q.OpenEhrCode = 128 Then  'time
+                        assumedUnits = CType(q.Units.Item(OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(units)), Constraint_QuantityUnit)
+                    Else
+                        assumedUnits = CType(q.Units.Item(units), Constraint_QuantityUnit)
+                    End If
                     assumedUnits.AssumedValue = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
                     assumedUnits.HasAssumedValue = True
                 End If
 
-            End If
+                End If
 
-            Return q
+                Return q
 
         End Function
 
