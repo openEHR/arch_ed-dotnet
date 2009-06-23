@@ -511,6 +511,8 @@ Namespace ArchetypeEditor.ADL_Classes
                             d_row(2) = a_term.Text
                             d_row(3) = a_term.Description
                             d_row(4) = a_term.Comment
+                            'SRH: 22 Jun 2009 EDT-549 - allow other annotations
+                            d_row(5) = a_term
                             ' add it to the GUI ontology
                             TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
                         Next

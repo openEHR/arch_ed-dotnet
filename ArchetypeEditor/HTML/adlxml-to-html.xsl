@@ -4,7 +4,7 @@
     <xsl:param name="language" select="/oe:archetype/oe:original_language/oe:code_string"/>
     <xsl:param name="contact-email">info@openehr.org</xsl:param>
     <xsl:param name="contact-text">Email comments to info@openehr.org</xsl:param>
-    <xsl:param name="copyright-text">© Copyright openEHR Foundation 2008</xsl:param>
+    <xsl:param name="copyright-text">© Copyright openEHR Foundation 2009</xsl:param>
     
     <xsl:param name="show-terminology-flag">true</xsl:param> <!-- send in anything that's not 'true' to hide terminology -->
     <xsl:param name="show-comments-flag">true</xsl:param> <!-- send in anything that's not 'true' to hide comments -->

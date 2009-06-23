@@ -18,6 +18,7 @@ Public Class RmTerm
     Inherits Term
     Protected sDescription As String 'New String("")
     Protected sComment As String
+    Protected sAnnotations As System.Collections.SortedList
     
     Property Description() As String
         Get
@@ -35,6 +36,17 @@ Public Class RmTerm
         Set(ByVal value As String)
             sComment = value
         End Set
+    End Property
+
+
+    'SRH: 23 Jun 2009 - EDT-549: Need to be able to write and store other annotations
+    ReadOnly Property OtherAnnotations() As System.Collections.SortedList
+        Get
+            If sAnnotations Is Nothing Then
+                sAnnotations = New System.Collections.SortedList
+            End If
+            Return sAnnotations
+        End Get
     End Property
 
     ReadOnly Property IsConstraint() As Boolean

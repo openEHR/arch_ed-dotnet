@@ -253,18 +253,15 @@ Public Class OntologyManager
 
             If aterm.isConstraint Then
                 d_row = mConstraintDefinitionsTable.Rows.Find(Keys)
+                If Not d_row Is Nothing Then
+                    aterm.Language = mLanguageCode
+                    aterm.Text = CStr(d_row(2))
+                    aterm.Description = CStr(d_row(3))
+                End If
             Else
                 d_row = mTermDefinitionsTable.Rows.Find(Keys)
-            End If
-            If Not d_row Is Nothing Then
-                aterm.Language = mLanguageCode
-                aterm.Text = CStr(d_row(2))
-                aterm.Description = CStr(d_row(3))
-                If Not aterm.isConstraint Then
-                    'SRH 8 Nov 2007 - Added check for null
-                    If Not TypeOf (d_row(4)) Is System.DBNull Then
-                        aterm.Comment = CStr(d_row(4))
-                    End If
+                If Not d_row Is Nothing Then
+                    aterm = CType(d_row(5), RmTerm)
                 End If
             End If
             mLastTerm = aterm  ' remember last one for efficiency
@@ -361,6 +358,8 @@ Public Class OntologyManager
                 d_row(1) = aterm.Code
                 d_row(2) = aterm.Text
                 d_row(3) = aterm.Description
+                'SRH: 22 Jun 2009 EDT-549 adding non-standard annotations
+                d_row(5) = aterm
                 Try
                     mTermDefinitionsTable.Rows.Add(d_row)
                 Catch e As Exception
@@ -458,6 +457,38 @@ Public Class OntologyManager
         SetText(mLastTerm)
     End Sub
 
+    Public Sub SetOtherAnnotation(ByVal Key As String, ByVal Value As String, ByVal code As String)    'SRH: 22 Jun 2009 EDT-549 - Allow non-standard annotations in archetype
+        mLastTerm = GetTerm(code)
+        If mLastTerm.OtherAnnotations.ContainsKey(Key) Then
+            mLastTerm.OtherAnnotations.Item(Key) = Value
+        Else
+            mLastTerm.OtherAnnotations.Add(Key, Value)
+        End If
+        SetText(mLastTerm)
+    End Sub
+
+    Public Sub DeleteOtherAnnotation(ByVal Key As String, ByVal code As String)    'SRH: 22 Jun 2009 EDT-549 - Allow non-standard annotations in archetype
+        mLastTerm = GetTerm(code)
+        If mLastTerm.OtherAnnotations.ContainsKey(Key) Then
+            mLastTerm.OtherAnnotations.Remove(Key)
+        End If
+        SetText(mLastTerm)
+    End Sub
+
+    Public Sub RenameAnnotationKey(ByVal oldKey As String, ByVal newKey As String, ByVal code As String)    'SRH: 22 Jun 2009 EDT-549 - Allow non-standard annotations in archetype
+        mLastTerm = GetTerm(code)
+        Debug.Assert(mLastTerm.OtherAnnotations.ContainsKey(oldKey), "Must have key")
+        Dim value As String
+
+        If mLastTerm.OtherAnnotations.ContainsKey(oldKey) Then
+            value = CStr(mLastTerm.OtherAnnotations.Item(oldKey))
+            mLastTerm.OtherAnnotations.Remove(oldKey)
+            mLastTerm.OtherAnnotations.Add(newKey, value)
+            SetText(mLastTerm)
+        End If
+
+    End Sub
+
     Private Sub Update(ByVal aTerm As RmTerm, ByVal aTable As DataTable, Optional ByVal ReplaceTranslations As Boolean = False)
         Dim d_row As DataRow
 
@@ -474,10 +505,14 @@ Public Class OntologyManager
                     If CStr(d_row(3)) <> aTerm.Description Then
                         d_row(3) = aTerm.Description
                     End If
-                    If Not aTerm.isConstraint Then
-                        If CStr(d_row(4)) <> aTerm.Comment Then
-                            d_row(4) = aTerm.Comment
+                    If Not aTerm.IsConstraint Then
+                        If Not (IsDBNull(d_row(4)) And String.IsNullOrEmpty(aTerm.Comment)) Then
+                            If CStr(d_row(4)) <> aTerm.Comment Then
+                                d_row(4) = aTerm.Comment
+                            End If
                         End If
+                        'SRH: 22 Jun 2009 EDT-549 - allow non-standard annotations
+                        d_row(5) = aTerm
                     End If
                     d_row.EndEdit()
                 Else
@@ -485,10 +520,11 @@ Public Class OntologyManager
                     d_row.BeginEdit()
                     d_row(2) = "*" & aTerm.Text & "(" & mLanguageCode & ")"
                     d_row(3) = "*" & aTerm.Description & "(" & mLanguageCode & ")"
-                    If Not aTerm.isConstraint Then
-                        If Not (CStr(d_row(4)) = "" And aTerm.Comment = "") Then
+                    If Not aTerm.IsConstraint Then
+                        If Not (IsDBNull(d_row(4)) And String.IsNullOrEmpty(aTerm.Comment)) Then
                             d_row(4) = "*" & aTerm.Comment & "(" & mLanguageCode & ")"
                         End If
+                        d_row(5) = aTerm
                     End If
                     d_row.EndEdit()
                     mDoUpdateOntology = priorSetting
@@ -505,17 +541,23 @@ Public Class OntologyManager
             If Not d_row Is Nothing Then
                 d_row.BeginEdit()
 
-                If IsDBNull(d_row(4)) OrElse CStr(d_row(2)) <> aTerm.Text Then
+                'SRH: 22 Jun 2009 - bug?
+                ' If IsDBNull(d_row(4)) OrElse CStr(d_row(2)) <> aTerm.Text Then
+                If IsDBNull(d_row(2)) OrElse CStr(d_row(2)) <> aTerm.Text Then
                     d_row(2) = aTerm.Text
                 End If
 
-                If IsDBNull(d_row(4)) OrElse CStr(d_row(3)) <> aTerm.Description Then
+                'SRH: 22 Jun 2009 - bug?
+                'If IsDBNull(d_row(4)) OrElse CStr(d_row(3)) <> aTerm.Description Then
+                If IsDBNull(d_row(3)) OrElse CStr(d_row(3)) <> aTerm.Description Then
                     d_row(3) = aTerm.Description
                 End If
 
                 If IsDBNull(d_row(4)) OrElse CStr(d_row(4)) <> aTerm.Comment Then
                     d_row(4) = aTerm.Comment
                 End If
+
+                d_row(5) = aTerm
 
                 d_row.EndEdit()
             End If
@@ -861,6 +903,11 @@ Public Class OntologyManager
         CommentColumn.ColumnName = "Comment"
         CommentColumn.DefaultValue = ""
         DefinitionsTable.Columns.Add(CommentColumn)
+        Dim TermAsObjectColumn As DataColumn = New DataColumn
+        TermAsObjectColumn.DataType = System.Type.GetType("System.Object")
+        TermAsObjectColumn.ColumnName = "TermAsObject"
+        TermAsObjectColumn.DefaultValue = ""
+        DefinitionsTable.Columns.Add(TermAsObjectColumn)
         ' Return the new DataTable.
         Dim keys(1) As DataColumn
         keys(0) = idColumn
@@ -943,22 +990,30 @@ Public Class OntologyManager
     Public Sub DefinitionsTable_RowChanged(ByVal sender As Object, ByVal e As DataRowChangeEventArgs) Handles mTermDefinitionsTable.RowChanged, mConstraintDefinitionsTable.RowChanged
         If mDoUpdateOntology Then
             If e.Action = DataRowAction.Change Then
+                'SRH: 22 Jun 2009 EDT-549
                 Dim aterm As New RmTerm(CStr(e.Row(1)))
+                If Not aterm.IsConstraint Then
+                    If Not IsDBNull(e.Row(5)) Then
+                        aterm = CType(e.Row(5), RmTerm)
+                    End If
+                End If
                 aterm.Language = CStr(e.Row(0))
                 aterm.Text = CStr(e.Row(2))
                 aterm.Description = CStr(e.Row(3))
 
-                If aterm.isConstraint Then
+                If aterm.IsConstraint Then
                     mOntology.ReplaceConstraint(aterm)
-                ElseIf Not IsDBNull(e.Row(4)) Then
-                    aterm.Comment = CStr(e.Row(4))
+                Else
+                    If Not IsDBNull(e.Row(4)) Then
+                        aterm.Comment = CStr(e.Row(4))
+                    End If
                     mOntology.ReplaceTerm(aterm, ReplaceTranslations())
                 End If
 
-                mFileManager.FileEdited = True
-                'DO NOT DELETE TERMS - these may be used elsewhere so are removed at end of session
-                'ElseIf e.Action = DataRowAction.Delete Then
-                '    mOntology.DeleteTerm(aterm)
+                    mFileManager.FileEdited = True
+                    'DO NOT DELETE TERMS - these may be used elsewhere so are removed at end of session
+                    'ElseIf e.Action = DataRowAction.Delete Then
+                    '    mOntology.DeleteTerm(aterm)
             End If
         End If
     End Sub

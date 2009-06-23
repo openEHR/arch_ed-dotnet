@@ -282,8 +282,9 @@ Namespace ArchetypeEditor.XML_Classes
         Public Sub AddTermDefinitionsFromTable(ByVal a_termdef_table As System.Data.DataTable)
 
             For Each data_row As System.Data.DataRow In a_termdef_table.Rows
-                Dim aTerm As New XML_Term(CStr(data_row(1)), CStr(data_row(2)), _
-                    CStr(data_row(3)), CStr(data_row(4)))
+                'Dim aTerm As New XML_Term(CStr(data_row(1)), CStr(data_row(2)), _
+                '    CStr(data_row(3)), CStr(data_row(4)))
+                Dim aTerm As New XML_Term(CType(data_row(5), RmTerm))
                 archetypeParser.Ontology.AddTermOrConstraintDefinition(CStr(data_row(0)), aTerm.XML_Term, True)
             Next
         End Sub
@@ -388,6 +389,7 @@ Namespace ArchetypeEditor.XML_Classes
                                 d_row(3) = a_term.Description
                                 d_row(4) = a_term.Comment
                                 ' add it to the GUI ontology
+                                d_row(5) = a_term
                                 TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
                             Next
                         End If

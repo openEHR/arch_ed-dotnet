@@ -24,6 +24,8 @@ Public MustInherit Class ArchetypeNodeAbstract
     Protected mText As String
     Protected mDescription As String
     Protected mComment As String
+    'SRH: 22 Jun 2009 EDT-549 to allow non-standard annotations
+    Protected mAnnotations As New System.Collections.SortedList
     Protected mItem As RmStructure
 
     Public Overridable Property Text() As String Implements ArchetypeNode.Text
@@ -61,6 +63,12 @@ Public MustInherit Class ArchetypeNodeAbstract
             mFileManager.FileEdited = True
         End Set
     End Property
+    Public ReadOnly Property Annotations() As System.Collections.SortedList
+        Get
+            Return mAnnotations
+        End Get
+    End Property
+
     Public ReadOnly Property RuntimeNameText() As String
         Get
             If Item.HasNameConstraint Then
@@ -164,14 +172,17 @@ Public MustInherit Class ArchetypeNodeAbstract
         mText = aTerm.Text
         mDescription = aTerm.Description
         mComment = aTerm.Comment
+        mAnnotations = aTerm.OtherAnnotations
     End Sub
 
     Sub New(ByVal a_node As ArchetypeNodeAbstract)
         mFileManager = a_node.mFileManager
         mItem = a_node.mItem.Copy
-        mText = a_node.Text
-        mDescription = a_node.Description
-        mComment = a_node.Comment
+        Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(a_node.NodeId)
+        mText = aTerm.Text
+        mDescription = aTerm.Description
+        mComment = aTerm.Comment
+        mAnnotations = aTerm.OtherAnnotations
     End Sub
 
 End Class

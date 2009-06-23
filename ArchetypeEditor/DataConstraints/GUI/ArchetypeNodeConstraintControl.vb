@@ -21,6 +21,7 @@ Public Class ArchetypeNodeConstraintControl
 
     '    Private AnyConstraints As AnyConstraintControl
     Private mConstraintControl As ConstraintControl
+    Private WithEvents mAnnotationsTable As DataTable
     Private mFileManager As FileManagerLocal
     Private mDataView As DataView
     Friend WithEvents tabConstraint As System.Windows.Forms.TabControl
@@ -40,6 +41,11 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents gbNullFlavours As System.Windows.Forms.GroupBox
     Friend WithEvents chkListNull As System.Windows.Forms.CheckedListBox
     Friend WithEvents PanelName As System.Windows.Forms.Panel
+    Friend WithEvents gbAnnotations As System.Windows.Forms.GroupBox
+    Friend WithEvents dgAnnotations As System.Windows.Forms.DataGridView
+    Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
+    Friend WithEvents key As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents valueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
@@ -59,6 +65,14 @@ Public Class ArchetypeNodeConstraintControl
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
+
+        mAnnotationsTable = New DataTable
+        Dim keyColumn As New DataColumn("Key", System.Type.GetType("System.String"))
+        mAnnotationsTable.Columns.Add(keyColumn)
+        Dim valueColumn As New DataColumn("Value", System.Type.GetType("System.String"))
+        mAnnotationsTable.Columns.Add(valueColumn)
+
+        dgAnnotations.DataSource = mAnnotationsTable
 
         mIsLoading = True
 
@@ -132,6 +146,9 @@ Public Class ArchetypeNodeConstraintControl
         Me.tabConstraint = New System.Windows.Forms.TabControl
         Me.tpConstraint = New System.Windows.Forms.TabPage
         Me.tpConstraintDetails = New System.Windows.Forms.TabPage
+        Me.gbAnnotations = New System.Windows.Forms.GroupBox
+        Me.dgAnnotations = New System.Windows.Forms.DataGridView
+        Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.gbComments = New System.Windows.Forms.GroupBox
         Me.txtComments = New System.Windows.Forms.TextBox
         Me.gbTerminology = New System.Windows.Forms.GroupBox
@@ -145,6 +162,8 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbValueSets = New System.Windows.Forms.GroupBox
         Me.dgValueSets = New System.Windows.Forms.DataGridView
         Me.Splitter1 = New System.Windows.Forms.Splitter
+        Me.key = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.valueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.PanelDataConstraint.SuspendLayout()
         Me.PanelAddressable.SuspendLayout()
         Me.PanelName.SuspendLayout()
@@ -152,6 +171,8 @@ Public Class ArchetypeNodeConstraintControl
         Me.tabConstraint.SuspendLayout()
         Me.tpConstraint.SuspendLayout()
         Me.tpConstraintDetails.SuspendLayout()
+        Me.gbAnnotations.SuspendLayout()
+        CType(Me.dgAnnotations, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbComments.SuspendLayout()
         Me.gbTerminology.SuspendLayout()
         CType(Me.dgNodeBindings, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -293,6 +314,8 @@ Public Class ArchetypeNodeConstraintControl
         'tpConstraintDetails
         '
         Me.tpConstraintDetails.BackColor = System.Drawing.Color.LemonChiffon
+        Me.tpConstraintDetails.Controls.Add(Me.gbAnnotations)
+        Me.tpConstraintDetails.Controls.Add(Me.Splitter2)
         Me.tpConstraintDetails.Controls.Add(Me.gbComments)
         Me.tpConstraintDetails.Controls.Add(Me.gbTerminology)
         Me.tpConstraintDetails.Controls.Add(Me.termLookUp)
@@ -307,13 +330,43 @@ Public Class ArchetypeNodeConstraintControl
         Me.tpConstraintDetails.Text = "Details"
         Me.tpConstraintDetails.UseVisualStyleBackColor = True
         '
+        'gbAnnotations
+        '
+        Me.gbAnnotations.Controls.Add(Me.dgAnnotations)
+        Me.gbAnnotations.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gbAnnotations.Location = New System.Drawing.Point(3, 74)
+        Me.gbAnnotations.Name = "gbAnnotations"
+        Me.gbAnnotations.Size = New System.Drawing.Size(420, 34)
+        Me.gbAnnotations.TabIndex = 10
+        Me.gbAnnotations.TabStop = False
+        Me.gbAnnotations.Text = "Annotations"
+        '
+        'dgAnnotations
+        '
+        Me.dgAnnotations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.dgAnnotations.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.key, Me.valueColumn})
+        Me.dgAnnotations.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.dgAnnotations.Location = New System.Drawing.Point(3, 16)
+        Me.dgAnnotations.Name = "dgAnnotations"
+        Me.dgAnnotations.Size = New System.Drawing.Size(414, 15)
+        Me.dgAnnotations.TabIndex = 0
+        '
+        'Splitter2
+        '
+        Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Splitter2.Location = New System.Drawing.Point(3, 71)
+        Me.Splitter2.Name = "Splitter2"
+        Me.Splitter2.Size = New System.Drawing.Size(420, 3)
+        Me.Splitter2.TabIndex = 11
+        Me.Splitter2.TabStop = False
+        '
         'gbComments
         '
         Me.gbComments.Controls.Add(Me.txtComments)
-        Me.gbComments.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gbComments.Dock = System.Windows.Forms.DockStyle.Top
         Me.gbComments.Location = New System.Drawing.Point(3, 6)
         Me.gbComments.Name = "gbComments"
-        Me.gbComments.Size = New System.Drawing.Size(420, 74)
+        Me.gbComments.Size = New System.Drawing.Size(420, 65)
         Me.gbComments.TabIndex = 4
         Me.gbComments.TabStop = False
         Me.gbComments.Text = "Comments"
@@ -325,16 +378,16 @@ Public Class ArchetypeNodeConstraintControl
         Me.txtComments.Multiline = True
         Me.txtComments.Name = "txtComments"
         Me.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtComments.Size = New System.Drawing.Size(414, 55)
+        Me.txtComments.Size = New System.Drawing.Size(414, 46)
         Me.txtComments.TabIndex = 0
         '
         'gbTerminology
         '
         Me.gbTerminology.Controls.Add(Me.dgNodeBindings)
         Me.gbTerminology.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.gbTerminology.Location = New System.Drawing.Point(3, 80)
+        Me.gbTerminology.Location = New System.Drawing.Point(3, 108)
         Me.gbTerminology.Name = "gbTerminology"
-        Me.gbTerminology.Size = New System.Drawing.Size(420, 112)
+        Me.gbTerminology.Size = New System.Drawing.Size(420, 84)
         Me.gbTerminology.TabIndex = 5
         Me.gbTerminology.TabStop = False
         Me.gbTerminology.Text = "Node meaning in terminologies"
@@ -347,7 +400,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.dgNodeBindings.Location = New System.Drawing.Point(3, 16)
         Me.dgNodeBindings.Name = "dgNodeBindings"
         Me.dgNodeBindings.RowTemplate.Height = 24
-        Me.dgNodeBindings.Size = New System.Drawing.Size(414, 93)
+        Me.dgNodeBindings.Size = New System.Drawing.Size(414, 65)
         Me.dgNodeBindings.TabIndex = 2
         '
         'terminology
@@ -445,6 +498,22 @@ Public Class ArchetypeNodeConstraintControl
         Me.Splitter1.TabIndex = 6
         Me.Splitter1.TabStop = False
         '
+        'key
+        '
+        Me.key.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.key.DataPropertyName = "Key"
+        Me.key.FillWeight = 25.0!
+        Me.key.HeaderText = "Key"
+        Me.key.Name = "key"
+        '
+        'valueColumn
+        '
+        Me.valueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.valueColumn.DataPropertyName = "Value"
+        Me.valueColumn.FillWeight = 75.0!
+        Me.valueColumn.HeaderText = "Value"
+        Me.valueColumn.Name = "valueColumn"
+        '
         'ArchetypeNodeConstraintControl
         '
         Me.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange
@@ -463,6 +532,8 @@ Public Class ArchetypeNodeConstraintControl
         Me.tabConstraint.ResumeLayout(False)
         Me.tpConstraint.ResumeLayout(False)
         Me.tpConstraintDetails.ResumeLayout(False)
+        Me.gbAnnotations.ResumeLayout(False)
+        CType(Me.dgAnnotations, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbComments.ResumeLayout(False)
         Me.gbComments.PerformLayout()
         Me.gbTerminology.ResumeLayout(False)
@@ -480,7 +551,7 @@ Public Class ArchetypeNodeConstraintControl
     Private mArchetypeNode As ArchetypeNode
 
     Private mIsLoading As Boolean = True
-   
+
     Protected ReadOnly Property IsLoading() As Boolean
         Get
             Return mIsLoading
@@ -499,6 +570,9 @@ Public Class ArchetypeNodeConstraintControl
         Me.lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, Me.lblRunTimeName.Text)
         Me.tpConstraint.Text = Filemanager.GetOpenEhrTerm(87, Me.tpConstraint.Text)
         Me.tpConstraintDetails.Text = Filemanager.GetOpenEhrTerm(113, Me.tpConstraintDetails.Text)
+        Me.dgAnnotations.Columns(0).HeaderText = Filemanager.GetOpenEhrTerm(688, "Key")
+        Me.dgAnnotations.Columns(1).HeaderText = Filemanager.GetOpenEhrTerm(689, "Value")
+        Me.gbAnnotations.Text = Filemanager.GetOpenEhrTerm(690, "Annotations")
     End Sub
 
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _
@@ -692,7 +766,7 @@ Public Class ArchetypeNodeConstraintControl
         If mArchetypeNode.IsAnonymous Then
             Me.PanelAddressable.Visible = False
             Me.gbTerminology.Visible = False
-
+            Me.gbAnnotations.Visible = False
 
         Else
             Me.PanelAddressable.Visible = True
@@ -701,6 +775,17 @@ Public Class ArchetypeNodeConstraintControl
             ' set the description of the term
             Me.txtTermDescription.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Description
             Me.txtComments.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Comment
+
+            mAnnotationsTable.Clear()
+            Me.gbAnnotations.Visible = True
+            If CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Count > 0 Then
+                For Each k As String In CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Keys
+                    Dim dr As DataRow = mAnnotationsTable.NewRow
+                    dr(0) = k
+                    dr(1) = CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Item(k)
+                    mAnnotationsTable.Rows.Add(dr)
+                Next
+            End If
 
             ' set the runtime name text
             Me.txtRuntimeName.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).RuntimeNameText
@@ -839,6 +924,36 @@ Public Class ArchetypeNodeConstraintControl
             termLookUp.Reset()
             termLookUp.termTextBox.Text = s
             termLookUp.termTextBox.SelectAll()
+        End If
+    End Sub
+
+    'SRH: 22 Jun 2009 EDT-549 Allow changes to non-standard annotations
+    Private Sub mAnnotations_ColumnChanged(ByVal sender As Object, ByVal e As System.Data.DataColumnChangeEventArgs) Handles mAnnotationsTable.ColumnChanging
+        If Not mIsLoading And Not e.Row.RowState = DataRowState.Detached Then
+            If String.IsNullOrEmpty(CStr(e.ProposedValue)) Then
+                e.ProposedValue = CStr(e.Row(e.Column.Ordinal))
+            Else
+                If e.Column.Ordinal = 0 Then
+                    'Key name changed
+                    Dim oldKey As String = CStr(e.Row(0))
+                    Dim newKey As String = CStr(e.ProposedValue)
+                    mFileManager.OntologyManager.RenameAnnotationKey(oldKey, newKey, mArchetypeNode.RM_Class.NodeId)
+                End If
+                mFileManager.FileEdited = True
+            End If
+        End If
+    End Sub
+
+    'SRH: 22 Jun 2009 EDT-549 Allow changes to non-standard annotations
+    Private Sub mAnnotations_RowChanged(ByVal sender As Object, ByVal e As System.Data.DataRowChangeEventArgs) Handles mAnnotationsTable.RowChanging, mAnnotationsTable.RowDeleting
+        If Not (mIsLoading Or mFileManager.FileLoading) Then
+            Select Case e.Action
+                Case DataRowAction.Add, DataRowAction.Commit, DataRowAction.Change
+                    mFileManager.OntologyManager.SetOtherAnnotation(CStr(e.Row(0)), CStr(e.Row(1)), mArchetypeNode.RM_Class.NodeId)
+                Case DataRowAction.Delete
+                    mFileManager.OntologyManager.DeleteOtherAnnotation(CStr(e.Row(0)), mArchetypeNode.RM_Class.NodeId)
+            End Select
+            mFileManager.FileEdited = True
         End If
     End Sub
 
