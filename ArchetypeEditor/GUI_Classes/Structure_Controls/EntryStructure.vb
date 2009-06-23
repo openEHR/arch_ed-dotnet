@@ -611,6 +611,10 @@ Public Class EntryStructure
             mCardinalityControl.IsContainer = True
             mCardinalityControl.Location = New Drawing.Point(0, 0)
             Me.PanelStructureHeader.Controls.Add(mCardinalityControl)
+            'SRH: 23 Jun 2009 EDT 514
+            If a_structure_type = Global.ArchetypeEditor.StructureType.Cluster Then
+                mCardinalityControl.numMin.Minimum = 1
+            End If
             AddHandler mCardinalityControl.Cardinality.Updated, AddressOf CardinalityUpdated
         End If
     End Sub

@@ -141,6 +141,7 @@ Public Class ClusterControl : Inherits ConstraintControl
         Me.Controls.Add(mOccurrences)
         mOccurrences.BringToFront()
         mOccurrences.Dock = DockStyle.Top
+        mOccurrences.numMin.Minimum = 1
     End Sub
 End Class
 

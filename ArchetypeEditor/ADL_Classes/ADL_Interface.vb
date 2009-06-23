@@ -151,11 +151,15 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim language As String = CType(dRow(0), String)
                 If primary_language = language Then
                     EifLanguage = EiffelKernel.Create.STRING_8.make_from_cil(language)
-                    If TypeOf dRow(4) Is System.DBNull Then
-                        term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
-                    Else
-                        term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)), CStr(dRow(4)))
-                    End If
+
+                    'If TypeOf dRow(4) Is System.DBNull Then
+                    '    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
+                    'Else
+                    '    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)), CStr(dRow(4)))
+                    'End If
+
+                    term = New ADL_Term(CType(dRow(5), RmTerm))
+
                     EIF_adlInterface.ontology.add_term_definition(EifLanguage, term.EIF_Term)
                 End If
             Next
@@ -165,7 +169,8 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim language As String = CType(dRow(0), String)
                 If primary_language <> language Then
                     EifLanguage = EiffelKernel.Create.STRING_8.make_from_cil(language)
-                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(4), String))
+                    'term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(4), String))
+                    term = New ADL_Term(CType(dRow(5), RmTerm))
                     EIF_adlInterface.ontology.replace_term_definition(EifLanguage, term.EIF_Term, False)
                 End If
             Next
@@ -179,7 +184,7 @@ Namespace ArchetypeEditor.ADL_Classes
             For Each dRow As DataRow In a_table.Rows
                 If primary_language = CType(dRow(0), String) Then
                     language = EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(0), String))
-                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String))
+                    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
                     EIF_adlInterface.ontology.add_constraint_definition(language, term.EIF_Term)
                 End If
             Next
@@ -188,7 +193,7 @@ Namespace ArchetypeEditor.ADL_Classes
             For Each dRow As DataRow In a_table.Rows
                 If primary_language <> CType(dRow(0), String) Then
                     language = EiffelKernel.Create.STRING_8.make_from_cil(CType(dRow(0), String))
-                    term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String))
+                    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
                     EIF_adlInterface.ontology.replace_constraint_definition(language, term.EIF_Term, False)
                 End If
             Next

@@ -139,6 +139,10 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Public Sub New(ByVal aArchetypeNode As ArchetypeNode)
         MyBase.New(aArchetypeNode.Text)
         mArchetypeNode = aArchetypeNode.Copy
+
+        If mArchetypeNode.RM_Class.Type = StructureType.Cluster AndAlso CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
+            CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
+        End If
         SetImageIndex()
     End Sub
 
@@ -149,6 +153,9 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
                 mArchetypeNode = New ArchetypeElement(aText, a_file_manager)
             Case StructureType.Cluster
                 mArchetypeNode = New ArchetypeComposite(aText, a_type, a_file_manager)
+                If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
+                    CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
+                End If
                 SetImageIndex()
             Case StructureType.SECTION
                 mArchetypeNode = New ArchetypeComposite(aText, a_type, a_file_manager)
@@ -167,6 +174,9 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Sub New(ByVal aCluster As RmCluster, ByVal a_file_manager As FileManagerLocal)
         MyBase.New()
         mArchetypeNode = New ArchetypeComposite(aCluster, a_file_manager)
+        If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
+            CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
+        End If
         MyBase.Text = mArchetypeNode.Text
         SetImageIndex()
     End Sub
@@ -175,6 +185,9 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         MyBase.New()
         mArchetypeNode = aCluster.Copy
         MyBase.Text = mArchetypeNode.Text
+        If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
+            CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
+        End If
         SetImageIndex()
     End Sub
 

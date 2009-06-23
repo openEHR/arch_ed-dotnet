@@ -180,6 +180,12 @@ Public Class Children
         'If ParentStructureType = StructureType.Protocol Or ParentStructureType = StructureType.State Then
         '    Me.Existence.MinCount = 0
         'End If
+        If ParentStructureType = StructureType.Cluster Then
+            'Default to 1..*
+            If Cardinality.MinCount < 1 Then
+                Cardinality.MinCount = 1
+            End If
+        End If
     End Sub
 
 End Class

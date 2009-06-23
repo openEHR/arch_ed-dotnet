@@ -349,8 +349,13 @@ Public Class OccurrencesPanel
 
     Private Sub UpdateControl()
         mIsLoading = True
-        numMin.Value = mCardinality.MinCount
 
+        'SRH: 23 Jun 2009 EDT-514
+        If numMin.Minimum <= mCardinality.MinCount Then
+            numMin.Value = mCardinality.MinCount
+        Else
+            mCardinality.MinCount = numMin.Minimum
+        End If
         If mMode = OccurrencesMode.Lexical Then
             If mCardinality.MinCount = 0 Then
                 comboOptional.SelectedIndex = 0 ' optional
