@@ -1015,8 +1015,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <Content Include="AdlParser\EiffelSoftware.Runtime.dll" />
-    <Content Include="AdlParser\libOceanInformatics.AdlParser.dll">
-    </Content>
     <Content Include="AdlParser\OceanInformatics.AdlParser.dll" />
     <None Include="My Project\Settings.settings">
       <CustomToolNamespace>My</CustomToolNamespace>
@@ -1054,8 +1052,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>xcopy "$(SolutionDir)AdlParser\libOceanInformatics.AdlParser.dll" "$(TargetDir)" /i /y &gt;nul
-"$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
+    <PostBuildEvent>"$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild" Outputs="AssemblyVersion.vb">
     <Exec Command="AssemblyVersion.cmd $(Configuration) &gt; AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
