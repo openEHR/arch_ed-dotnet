@@ -234,7 +234,13 @@ Public Class FileManagerLocal
             ' This avoids data and file overflow.
 
             If aFileName.StartsWith(System.IO.Path.GetTempPath) Then
-                Kill(aFileName)
+                'SRH 22 Aug 2009 - [EDT-570]
+                System.IO.File.SetAttributes(aFileName, IO.FileAttributes.Normal)
+                System.IO.File.Delete(aFileName)
+                'From VB subassembly (to be avoided)
+                'Kill(aFileName)
+                'Set the file name to the current directory and not the temp folder
+                FileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), System.IO.Path.GetFileName(aFileName))
             End If
 
             If mArchetypeEngine.OpenFileError Then
