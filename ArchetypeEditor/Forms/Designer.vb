@@ -922,8 +922,8 @@ Public Class Designer
         Me.TabMain.Location = New System.Drawing.Point(0, 0)
         Me.TabMain.Name = "TabMain"
         Me.TabMain.PositionTop = True
-        Me.TabMain.SelectedIndex = 0
-        Me.TabMain.SelectedTab = Me.tpHeader
+        Me.TabMain.SelectedIndex = 4
+        Me.TabMain.SelectedTab = Me.tpText
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
         Me.TabMain.Size = New System.Drawing.Size(969, 685)
         Me.TabMain.TabIndex = 1
@@ -940,6 +940,7 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpHeader.Location = New System.Drawing.Point(0, 0)
         Me.tpHeader.Name = "tpHeader"
+        Me.tpHeader.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
         Me.tpHeader.Size = New System.Drawing.Size(969, 660)
         Me.tpHeader.TabIndex = 0
@@ -1512,7 +1513,6 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpText, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpText.Location = New System.Drawing.Point(0, 0)
         Me.tpText.Name = "tpText"
-        Me.tpText.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpText, True)
         Me.tpText.Size = New System.Drawing.Size(969, 660)
         Me.tpText.TabIndex = 3

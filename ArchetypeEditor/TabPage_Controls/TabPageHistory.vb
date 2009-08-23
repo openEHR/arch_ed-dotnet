@@ -630,8 +630,13 @@ Public Class TabpageHistory
         End If
 
         For Each elvi In ListEvents.Items
-            Text.WriteLine(Space(3 * level) & "\b " & elvi.Text & " (" & elvi.Occurrences.ToString & ") \b0\par")
-            Text.WriteLine(Space(3 * level) & "\i   - " & elvi.Description & "\i0\par")
+            Dim s As String = RichTextBoxUnicode.CreateRichTextBoxTag(elvi.RM_Class.NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) 'SRH: 23 Aug 2009 [EDT-575] Support unicode
+
+            Text.WriteLine(Space(3 * level) & "\b " & s & " (" & elvi.Occurrences.ToString & ") \b0\par")
+
+            s = RichTextBoxUnicode.CreateRichTextBoxTag(elvi.RM_Class.NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC) 'SRH: 23 Aug 2009 [EDT-575] Support unicode
+
+            Text.WriteLine(Space(3 * level) & "\i   - " & s & "\i0\par")
 
             Text.WriteLine(Space(3 * level) & elvi.RM_Class.Type.ToString & "\par")
 
