@@ -24,6 +24,13 @@ Public Class OccurrencesPanel
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_filemanager
+
+        'SRH: 24 Aug 2009 [EDT-576] - set mode before setting values (was in load)
+        If OceanArchetypeEditor.Instance.Options.OccurrencesView = "numeric" Then
+            Me.Mode = OccurrencesMode.Numeric
+        Else
+            Me.Mode = OccurrencesMode.Lexical
+        End If
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             Me.TranslateGUI()
         End If
@@ -326,10 +333,10 @@ Public Class OccurrencesPanel
             gbOccurrences.Dock = DockStyle.Fill
         End If
 
-        If OceanArchetypeEditor.Instance.Options.OccurrencesView = "numeric" Then
-            Mode = OccurrencesMode.Numeric
-        Else
-            Mode = OccurrencesMode.Lexical
+        'If OceanArchetypeEditor.Instance.Options.OccurrencesView = "numeric" Then
+        '   Mode = OccurrencesMode.Numeric
+        'Else
+        If Mode = OccurrencesMode.Lexical Then
 
             If comboRepeat.SelectedIndex = -1 Then
                 If mCardinality.IsUnbounded Then
