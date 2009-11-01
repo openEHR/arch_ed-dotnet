@@ -362,12 +362,9 @@ Namespace ArchetypeEditor.ADL_Classes
                                 End If
                             Case RmEvent.ObservationEventType.Interval
 
-                                If an_event.AggregateMathFunction <> "" Then
+                                If an_event.AggregateMathFunction.Codes.Count > 0 Then
                                     an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("math_function"))
-                                    Dim a_code_phrase As CodePhrase = New CodePhrase
-                                    a_code_phrase.FirstCode = an_event.AggregateMathFunction
-                                    a_code_phrase.TerminologyID = "openehr"
-                                    BuildCodedText(an_attribute, a_code_phrase)
+                                    BuildCodedText(an_attribute, an_event.AggregateMathFunction)
                                 End If
 
                                 If an_event.hasFixedDuration Then
@@ -517,12 +514,9 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
                     Case StructureType.IntervalEvent
 
-                        If an_event.AggregateMathFunction <> "" Then
+                        If an_event.AggregateMathFunction.Codes.Count > 0 Then
                             attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("math_function"))
-                            Dim a_code_phrase As CodePhrase = New CodePhrase
-                            a_code_phrase.FirstCode = an_event.AggregateMathFunction
-                            a_code_phrase.TerminologyID = "openehr"
-                            BuildCodedText(attribute, a_code_phrase)
+                            BuildCodedText(attribute, an_event.AggregateMathFunction)
                         End If
 
                         If an_event.hasFixedDuration Then

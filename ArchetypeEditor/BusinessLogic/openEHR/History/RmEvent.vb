@@ -28,7 +28,7 @@ Class RmEvent
 
     Dim iOffset As Integer
     Dim sOffset As String
-    Dim sMath As String
+    Dim sMath As CodePhrase
     Dim iWidth As Long = 1
     Dim sWidth As String
     Dim boolSignNeg, boolFixedDuration, boolFixedOffset As Boolean
@@ -94,11 +94,11 @@ Class RmEvent
             sOffset = Value
         End Set
     End Property
-    Property AggregateMathFunction() As String
+    Property AggregateMathFunction() As CodePhrase
         Get
             Return sMath
         End Get
-        Set(ByVal Value As String)
+        Set(ByVal Value As CodePhrase)
             sMath = Value
         End Set
     End Property
@@ -227,15 +227,17 @@ Class RmEvent
                     Debug.Assert(mType = StructureType.IntervalEvent)
 
                     MathFunc = an_attribute.children.first
-                    Me.sMath = MathFunc.item.as_string.to_cil.Trim("""")
+                    'SRH: 1 Nov 2009 - EDT-568
+                    Me.AggregateMathFunction.Codes.Add(MathFunc.item.as_string.to_cil.Trim(""""))
 
                 Case "math_function"
 
                     Debug.Assert(mType = StructureType.IntervalEvent)
-
+                    'SRH: 1 Nov 2009 - EDT-568
                     Dim textConstraint As Constraint_Text = _
                     ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                    Me.sMath = textConstraint.AllowableValues.FirstCode ' only one allowed
+                    'SRH: 1 Nov 2009 - EDT-568
+                    Me.AggregateMathFunction = textConstraint.AllowableValues
 
                 Case "display_as_positive"  ' OBSOLETE
                     Dim DisplayPos As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
@@ -244,8 +246,9 @@ Class RmEvent
 
                     DisplayPos = an_attribute.children.first
                     boolSignNeg = (DisplayPos.item.as_string.to_cil = "True")
+                    'SRH: 1 Nov 2009 - EDT-568
                     If boolSignNeg Then
-                        sMath = "521" ' a change that is displayed in absolute terms
+                        Me.AggregateMathFunction.Codes.Add("521") ' a change that is displayed in absolute terms
                     End If
 
                 Case "data", "item" 'item is OBSOLETE
@@ -376,7 +379,8 @@ Class RmEvent
 
                     Dim textConstraint As Constraint_Text = _
                     ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
-                    Me.sMath = textConstraint.AllowableValues.FirstCode ' only one allowed
+                    'SRH: 1 Nov 2009 - EDT-568
+                    Me.AggregateMathFunction = textConstraint.AllowableValues
 
                 Case "data", "item" 'item is OBSOLETE
                     ' return the data for processing

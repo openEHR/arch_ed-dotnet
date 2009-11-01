@@ -513,13 +513,11 @@ Namespace ArchetypeEditor.XML_Classes
                                 End If
                             Case RmEvent.ObservationEventType.Interval
 
-                                If an_event.AggregateMathFunction <> "" Then
+                                If an_event.AggregateMathFunction.Codes.Count > 0 Then
                                     'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function")
                                     an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                                    Dim a_code_phrase As CodePhrase = New CodePhrase
-                                    a_code_phrase.FirstCode = an_event.AggregateMathFunction
-                                    a_code_phrase.TerminologyID = "openehr"
-                                    BuildCodedText(an_attribute, a_code_phrase)
+                                    'SRH: 1 Nov 2009 - EDT-568
+                                    BuildCodedText(an_attribute, an_event.AggregateMathFunction)
                                 End If
 
                                 If an_event.hasFixedDuration Then
@@ -706,13 +704,11 @@ Namespace ArchetypeEditor.XML_Classes
                             End If
                         Case StructureType.IntervalEvent
 
-                            If an_event.AggregateMathFunction <> "" Then
+                            'SRH: 1 Nov 2009 - EDT-568
+                            If an_event.AggregateMathFunction.Codes.Count > 0 Then
                                 'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function")
                                 attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                                Dim a_code_phrase As CodePhrase = New CodePhrase
-                                a_code_phrase.FirstCode = an_event.AggregateMathFunction
-                                a_code_phrase.TerminologyID = "openehr"
-                                BuildCodedText(attribute, a_code_phrase)
+                                BuildCodedText(attribute, an_event.AggregateMathFunction)
                             End If
 
                             If an_event.hasFixedDuration Then
