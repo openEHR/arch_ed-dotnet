@@ -1,0 +1,68 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-au">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>Designing an archetype</title>
+</head>
+
+<body>
+
+<h1>Designing an archetype</h1>
+
+<p>Before <a href="new_archetype.htm">creating a new archetype</a> it is worth
+taking some time to consider the design principles behind <i>open</i>EHR and the
+archetype methodology.</p>
+
+<p>The first aspect to consider is that an <i>open</i>EHR health record consists
+of just a few 'classes' which contain information about the patient or data
+subject. The 'container classes' are:</p>
+
+<ul>
+  <li>EHR - this is the top level class and contains all information about the
+    data subject.</li>
+  <li>Extract - this class contains all information that is to be transferred to
+    another EHR.</li>
+  <li>Folder - this class allows information within an EHR to be organised.</li>
+  <li><a href="../openEHR/composition.htm">Composition</a> (or
+    document) - this is the class that contains information committed to the EHR
+    by a clinician.</li>
+  <li><a href="../openEHR/section.htm">Section</a> - this class
+    allows information within a composition to be organised.</li>
+  <li><a href="../openEHR/entry_classes.htm">Entry</a> - this class
+    contains meaningful information that is to be processed by the machine and
+    read by the clinician.</li>
+</ul>
+
+<p>These classes contain no clinical or demographic concepts at all - and it is
+this feature which differentiates the <i>open</i>EHR approach. The classes do
+have attributes which ensure that it is clear how the information in the EHR was
+collected, by whom, and who took responsibility for it - as well as meeting many
+other complex requirements. The clinical or demographic requirements are met
+through designing archetypes for the purpose.</p>
+
+<p>When designing archetypes it is important to consider which of the above
+classes best represent the aspect which you are trying to represent.</p>
+
+<ul>
+  <li><a href="../openEHR/extract_when.htm">When to use an Extract</a></li>
+  <li><a href="../openEHR/composition_when.htm">When to use a
+    Composition</a></li>
+  <li><a href="../openEHR/section_when.htm">When to use a Section</a></li>
+  <li><a href="../openEHR/entry_when.htm">When to use an Entry</a></li>
+</ul>
+
+<p>A further consideration is required. Is the concept that you are endeavouring
+to represent in an archetype a specialisation of a concept that has already been
+represented in an accepted archetype. If so, it may be more appropriate to <a href="specialise.htm">specialise</a>
+that archetype rather than create a new one. The advantage of specialisation is
+that data based on the specialised archetype will be returned in a query based
+on the parent archetype. For example, as diagnosis is a specialisation of
+problem, all diagnoses will be returned when seeking all the problems of a
+person.</p>
+
+</body>
+
+</html>

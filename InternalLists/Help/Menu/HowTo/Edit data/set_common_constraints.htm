@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en-au">
+  <meta http-equiv="Content-Type"
+ content="text/html; charset=windows-1252">
+  <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+  <meta name="ProgId" content="FrontPage.Editor.Document">
+  <title>Set constraints on an element or cluster</title>
+</head>
+<body>
+<h1>Set constraints on an element or cluster</h1>
+<p>All elements and clusters have common constraints - which are
+present on the
+top left hand panel.</p>
+<p><img border="1" src="../../Screens/images/common_constraints.gif"
+ width="408" height="112"></p>
+<h2>Occurrences</h2>
+<p>The first numeric counter from the left sets the minimum number of
+occurrences
+of this element or cluster. The default is 0, which indicates that this
+element
+or cluster is optional. The maximum number of occurrences can be set in
+the
+numeric box - the default is 1 - or by ticking the unbounded box to
+indicate
+there is no upper limit. It is important to realise that if a node's
+maximum
+occurrences are set to a number greater than 1 (or unbounded), then the
+data
+points will be identified by the 'meaning' attribute in the <i>open</i>EHR
+reference model. The editor calls this attribute the run-time name -
+and enables
+you to set a 'title' for the constraint on these runtime names - called
+the
+runtime name constraint.</p>
+<h2>Description</h2>
+<p>The description adds clarity to other users of the archetype when
+identifying
+the data point represented.</p>
+<h2>Runtime name constraint</h2>
+<p>At present there is no standard means of constraining a set of terms
+from an
+external terminology. If you add text to the <a
+ href="../../openEHR/archetype_paths.html#RunTime">Runtime name
+constraint</a>, a
+code
+acXXXX will be created which can then be bound to an external
+terminology. The
+text at this point in the editor should give some indication of the
+type of
+<a href="../../openEHR/constraint_binding.htm">constraint </a>intended.</p>
+<p>Further constraints depend on the data type:</p>
+<ul>
+  <li><a href="Data%20constraints/set_constraints_text.htm">Text</a></li>
+  <li><a href="Data%20constraints/set_constraints_quantity.htm">Quantity</a></li>
+  <li><a href="Data%20constraints/set_constraints_count.htm">Count</a></li>
+  <li><a href="Data%20constraints/set_constraints_ordinal.htm">Ordinal</a></li>
+  <li><a href="Data%20constraints/set_constraints_date_time.html">Date/Time</a></li>
+  <li><a href="Data%20constraints/set_constraints_boolean.htm">B</a><a
+ href="Data%20constraints/set_constraints_boolean.htm">oolean</a></li>
+  <li>Any - no constraints</li>
+</ul>
+</body>
+</html>

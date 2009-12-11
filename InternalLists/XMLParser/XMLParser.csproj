@@ -1,0 +1,91 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{927EB444-A45E-4703-946F-78EB37FAD96E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XMLParser</RootNamespace>
+    <AssemblyName>XMLParser</AssemblyName>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>OceanEhr.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;XMLParser</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\release\</OutputPath>
+    <DefineConstants>TRACE;XMLParser</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EiffelSoftware.Runtime, Version=6.2.7.1629, Culture=neutral, PublicKeyToken=def26f296efef469, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AdlParser\EiffelSoftware.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="OceanInformatics.AdlParser, Version=1.4.0.766, Culture=neutral, PublicKeyToken=13a58ca100ef917a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AdlParser\OceanInformatics.AdlParser.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AmSerializer.cs" />
+    <Compile Include="ArchetypeModelBuilder.cs" />
+    <Compile Include="CadlFactory.cs" />
+    <Compile Include="CanonicalAmVisitor.cs" />
+    <Compile Include="CloneConstraintVisitor.cs" />
+    <Compile Include="Ontology.cs" />
+    <Compile Include="OpenehrProfile.cs">
+      <DependentUpon>OpenehrProfile.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="XmlArchetypeParser.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Archetype.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Archetype.xsx">
+      <DependentUpon>Archetype.xsd</DependentUpon>
+    </None>
+    <EmbeddedResource Include="BaseTypes.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenehrProfile.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="OceanEhr.snk" />
+    <None Include="OpenehrProfile.xsx">
+      <DependentUpon>OpenehrProfile.xsd</DependentUpon>
+    </None>
+    <EmbeddedResource Include="Resource.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Resource.xsx">
+      <DependentUpon>Resource.xsd</DependentUpon>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
