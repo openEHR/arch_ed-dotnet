@@ -668,13 +668,13 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE castList = currentObject.code_list() as EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE;   // returns null (not exception)                
                 EiffelSoftware.Library.Base.kernel.dotnet.Impl.SPECIAL_REFERENCE sList = (EiffelSoftware.Library.Base.kernel.dotnet.Impl.SPECIAL_REFERENCE)(castList.area());
 
-                string[] copyList = new string[sList.count()];
-
+                //string[] copyList = new string[sList.count()];
+                List<string> copyList = new List<string>();
                 for (int i = 0; i < sList.count(); i++)
                     if (sList.item(i) != null)
-                        copyList[i] = sList.item(i).ToString();
+                        copyList.Add(sList.item(i).ToString());
 
-                cloneObject.code_list = copyList;
+                cloneObject.code_list = copyList.ToArray();
             }
 
             // 0..1 assumed_value CODE_PHRASE
@@ -1201,6 +1201,17 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                                                                         
                         codeDefinitionSet.items = new ARCHETYPE_TERM[localTerms.Count];                        
                         localTerms.Values.CopyTo(codeDefinitionSet.items, 0);
+
+                        foreach (ARCHETYPE_TERM term in codeDefinitionSet.items)
+                        { 
+                            foreach(StringDictionaryItem item in term.items)
+                                if (item.id == "text")
+                                {
+                                    item.Value.Trim();
+                                    break;
+                                }
+                        }
+
 
                         codeDefinitionSets[i - 1] = codeDefinitionSet; 
                         currentObject.forth();
