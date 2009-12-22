@@ -1207,7 +1207,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                             foreach(StringDictionaryItem item in term.items)
                                 if (item.id == "text")
                                 {
-                                    item.Value.Trim();
+                                    item.Value = item.Value.Trim();
                                     break;
                                 }
                         }
