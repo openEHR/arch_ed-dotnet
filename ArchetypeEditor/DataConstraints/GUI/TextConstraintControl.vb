@@ -118,9 +118,9 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.gbAllowableValues.Controls.Add(Me.txtAssumedValue)
         Me.gbAllowableValues.Controls.Add(Me.butAddItem)
         Me.gbAllowableValues.Controls.Add(Me.listAllowableValues)
-        Me.gbAllowableValues.Location = New System.Drawing.Point(16, 40)
+        Me.gbAllowableValues.Location = New System.Drawing.Point(16, 48)
         Me.gbAllowableValues.Name = "gbAllowableValues"
-        Me.gbAllowableValues.Size = New System.Drawing.Size(360, 147)
+        Me.gbAllowableValues.Size = New System.Drawing.Size(360, 149)
         Me.gbAllowableValues.TabIndex = 36
         Me.gbAllowableValues.TabStop = False
         '
@@ -137,7 +137,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         'butDefaultItem
         '
         Me.butDefaultItem.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.butDefaultItem.Location = New System.Drawing.Point(11, 120)
+        Me.butDefaultItem.Location = New System.Drawing.Point(11, 122)
         Me.butDefaultItem.Name = "butDefaultItem"
         Me.butDefaultItem.Size = New System.Drawing.Size(157, 24)
         Me.butDefaultItem.TabIndex = 4
@@ -159,10 +159,10 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.txtAssumedValue.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtAssumedValue.ContextMenu = Me.ContextMenuClearText
-        Me.txtAssumedValue.Location = New System.Drawing.Point(176, 120)
+        Me.txtAssumedValue.Location = New System.Drawing.Point(176, 122)
         Me.txtAssumedValue.Name = "txtAssumedValue"
         Me.txtAssumedValue.ReadOnly = True
-        Me.txtAssumedValue.Size = New System.Drawing.Size(176, 20)
+        Me.txtAssumedValue.Size = New System.Drawing.Size(176, 22)
         Me.txtAssumedValue.TabIndex = 5
         Me.txtAssumedValue.Text = "(none)"
         Me.txtAssumedValue.Visible = False
@@ -193,9 +193,10 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.listAllowableValues.ContextMenu = Me.ContextMenuListAllowableValues
         Me.listAllowableValues.DisplayMember = "Text"
+        Me.listAllowableValues.ItemHeight = 16
         Me.listAllowableValues.Location = New System.Drawing.Point(46, 20)
         Me.listAllowableValues.Name = "listAllowableValues"
-        Me.listAllowableValues.Size = New System.Drawing.Size(306, 95)
+        Me.listAllowableValues.Size = New System.Drawing.Size(306, 84)
         Me.listAllowableValues.TabIndex = 3
         Me.listAllowableValues.ValueMember = "Code"
         '
@@ -253,7 +254,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.radioInternal.Location = New System.Drawing.Point(120, 6)
         Me.radioInternal.Name = "radioInternal"
-        Me.radioInternal.Size = New System.Drawing.Size(120, 32)
+        Me.radioInternal.Size = New System.Drawing.Size(120, 56)
         Me.radioInternal.TabIndex = 32
         Me.radioInternal.Text = "Internal codes"
         '
@@ -261,7 +262,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.radioText.Location = New System.Drawing.Point(9, 6)
         Me.radioText.Name = "radioText"
-        Me.radioText.Size = New System.Drawing.Size(103, 32)
+        Me.radioText.Size = New System.Drawing.Size(103, 56)
         Me.radioText.TabIndex = 31
         Me.radioText.Text = "Free text or coded"
         '
@@ -269,7 +270,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.radioTerminology.Location = New System.Drawing.Point(248, 6)
         Me.radioTerminology.Name = "radioTerminology"
-        Me.radioTerminology.Size = New System.Drawing.Size(128, 32)
+        Me.radioTerminology.Size = New System.Drawing.Size(128, 56)
         Me.radioTerminology.TabIndex = 33
         Me.radioTerminology.Text = "Terminology"
         '
@@ -282,7 +283,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.txtTermConstraintDescription.Multiline = True
         Me.txtTermConstraintDescription.Name = "txtTermConstraintDescription"
         Me.txtTermConstraintDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtTermConstraintDescription.Size = New System.Drawing.Size(354, 56)
+        Me.txtTermConstraintDescription.Size = New System.Drawing.Size(354, 69)
         Me.txtTermConstraintDescription.TabIndex = 35
         Me.txtTermConstraintDescription.Visible = False
         '
@@ -292,7 +293,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtTermConstraintText.Location = New System.Drawing.Point(19, 72)
         Me.txtTermConstraintText.Name = "txtTermConstraintText"
-        Me.txtTermConstraintText.Size = New System.Drawing.Size(354, 20)
+        Me.txtTermConstraintText.Size = New System.Drawing.Size(354, 22)
         Me.txtTermConstraintText.TabIndex = 34
         Me.txtTermConstraintText.Visible = False
         '
@@ -307,7 +308,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.txtTermConstraintDescription)
         Me.Controls.Add(Me.txtTermConstraintText)
         Me.Name = "TextConstraintControl"
-        Me.Size = New System.Drawing.Size(392, 205)
+        Me.Size = New System.Drawing.Size(392, 218)
         Me.gbAllowableValues.ResumeLayout(False)
         Me.gbAllowableValues.PerformLayout()
         Me.ResumeLayout(False)

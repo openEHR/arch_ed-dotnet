@@ -490,7 +490,11 @@ Public Class TabPageSection
 
             Try
                 SuspendLayout()
-                mConstraintDisplay.ShowConstraint(a_node.RM_Class.Type, False, a_node.Item, mFileManager)
+
+                'SRH: 6th Jan 2009 - EDT-585
+                mConstraintDisplay.ShowConstraint(a_node.RM_Class.Type, False, False, a_node.Item, mFileManager)
+                'mConstraintDisplay.ShowConstraint(a_node.RM_Class.Type, False, a_node.Item, mFileManager)
+
                 ResumeLayout()
             Catch
                 Debug.Assert(False, "Type is not catered for")

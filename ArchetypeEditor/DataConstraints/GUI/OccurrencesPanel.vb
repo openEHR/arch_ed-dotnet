@@ -293,6 +293,52 @@ Public Class OccurrencesPanel
         End Set
     End Property
 
+    Public WriteOnly Property SetMandatory() As Boolean
+        Set(ByVal Value As Boolean)
+            mIsLoading = True
+            mIncludeOrdered = False
+
+            If Value Then
+                numMin.Value = 1
+                numMin.Minimum = 1
+                numMax.Minimum = 1
+                
+                If mMode = OccurrencesMode.Lexical Then
+                    comboOptional.SelectedIndex = 1
+                End If
+            Else
+                numMin.Minimum = 0
+                numMax.Minimum = 0
+            End If
+
+            mIsLoading = False
+        End Set
+    End Property
+
+    Public WriteOnly Property SetUnitary() As Boolean
+        Set(ByVal Value As Boolean)
+            mIsLoading = True
+            mIncludeOrdered = False
+
+            If Value Then
+                numMax.Value = 1
+                numMax.Maximum = 1
+                numMin.Maximum = 1
+                cbUnbounded.Checked = False
+                cbUnbounded.Visible = False
+                If mMode = OccurrencesMode.Lexical Then
+                    comboOptional.SelectedIndex = 1
+                End If
+            Else
+                numMax.Maximum = 1000
+                numMin.Maximum = 1000
+                cbUnbounded.Visible = True
+            End If
+
+            mIsLoading = False
+        End Set
+    End Property
+
     Public Property Cardinality() As RmCardinality
         Get
             Return mCardinality

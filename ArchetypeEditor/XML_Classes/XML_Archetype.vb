@@ -981,6 +981,14 @@ Namespace ArchetypeEditor.XML_Classes
             End With
         End Sub
 
+        Private Function StringToIntegerConverter(ByVal input As String) As Integer
+            Dim result As Integer
+            If Integer.TryParse(input, result) Then
+                Return result
+            Else
+                Throw New Exception(String.Format("{0} is not a valid integer", input))
+            End If
+        End Function
 
         Private Sub BuildCount(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal ct As Constraint_Count)
             Dim an_attribute As XMLParser.C_ATTRIBUTE
@@ -990,6 +998,17 @@ Namespace ArchetypeEditor.XML_Classes
             'xmlCount = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(ct.Type))
             xmlCount = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(ct.Type), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
+            'Uncomment to allow lists of integers
+            'If ct.HasList Then
+            '    an_attribute = mAomFactory.MakeSingleAttribute(xmlCount, "magnitude", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            '    Dim c_int As New XMLParser.C_INTEGER
+
+            '    Dim y As String()
+            '    y = ct.ValueList.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+            '    Dim intToString As New Converter(Of String, Integer)(AddressOf StringToIntegerConverter)
+            '    c_int.list = Array.ConvertAll(Of String, Integer)(y, intToString)
+
+            'Else
             If ct.HasMaximum Or ct.HasMinimum Then
                 ' set the magnitude constraint
                 'an_attribute = mAomFactory.MakeSingleAttribute(xmlCount, "magnitude")
@@ -1063,6 +1082,7 @@ Namespace ArchetypeEditor.XML_Classes
                     Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
                 End With
             End If
+            'End If
         End Sub
 
         Private Sub BuildDateTime(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal dt As Constraint_DateTime)

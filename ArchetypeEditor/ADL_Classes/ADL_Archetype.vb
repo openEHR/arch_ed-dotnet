@@ -663,30 +663,34 @@ Namespace ArchetypeEditor.ADL_Classes
 
             cadlCount = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(ct.Type)))
 
-            If ct.HasMaximum Or ct.HasMinimum Then
-                ' set the magnitude constraint
-                an_attribute = mAomFactory.create_c_attribute_single(cadlCount, EiffelKernel.Create.STRING_8.make_from_cil("magnitude"))
+            'If ct.HasList Then
+            '    Dim count_list As EiffelList.LIST_CHARACTER_32
+            '    mAomFactory.create_c_integer_make_list()
+            '    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum))
+            'Else
+            ' set the magnitude constraint
+            an_attribute = mAomFactory.create_c_attribute_single(cadlCount, EiffelKernel.Create.STRING_8.make_from_cil("magnitude"))
 
-                If ct.HasMaximum And ct.HasMinimum Then
-                    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_bounded(ct.MinimumValue, ct.MaximumValue, ct.IncludeMinimum, ct.IncludeMaximum))
-                ElseIf ct.HasMaximum Then
-                    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum))
-                ElseIf ct.HasMinimum Then
-                    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_upper_unbounded(ct.MinimumValue, ct.IncludeMinimum))
-                Else
-                    Debug.Assert(False)
-                    Return
-                End If
-
-                If ct.HasAssumedValue Then
-                    Dim int_ref As EiffelKernel.INTEGER_32_REF
-
-                    int_ref = EiffelKernel.Create.INTEGER_32_REF.default_create
-                    int_ref.set_item(CType(ct.AssumedValue, Integer))
-
-                    CType(magnitude.item, openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER).set_assumed_value(int_ref)
-                End If
+            If ct.HasMaximum And ct.HasMinimum Then
+                magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_bounded(ct.MinimumValue, ct.MaximumValue, ct.IncludeMinimum, ct.IncludeMaximum))
+            ElseIf ct.HasMaximum Then
+                magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum))
+            ElseIf ct.HasMinimum Then
+                magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_upper_unbounded(ct.MinimumValue, ct.IncludeMinimum))
+            Else
+                Debug.Assert(False)
+                Return
             End If
+
+            If ct.HasAssumedValue Then
+                Dim int_ref As EiffelKernel.INTEGER_32_REF
+
+                int_ref = EiffelKernel.Create.INTEGER_32_REF.default_create
+                int_ref.set_item(CType(ct.AssumedValue, Integer))
+
+                CType(magnitude.item, openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER).set_assumed_value(int_ref)
+            End If
+            'End If
         End Sub
 
         Private Sub BuildDateTime(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal dt As Constraint_DateTime)

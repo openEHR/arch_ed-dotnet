@@ -181,7 +181,7 @@ Public Class ConstraintControl
         Select Case aConstraintType
             'Case ConstraintType.Any
 
-        Case ConstraintType.Boolean
+            Case ConstraintType.Boolean
                 Return New BooleanConstraintControl(a_file_manager)
 
             Case ConstraintType.Quantity

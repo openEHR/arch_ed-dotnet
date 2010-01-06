@@ -1922,6 +1922,9 @@ Public Class Designer
 
         Filemanager.ClearEmbedded()
 
+        mFileManager.IsNew = False
+
+
         ' stop the handler while we get all the languages
         RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
         ResetDefaults()
@@ -3325,6 +3328,10 @@ Public Class Designer
         'Changed SRH: Sep 1st 2007
         mTabPageDataStructure.EmbeddedAllowed = False
 
+        'SRH: Jan 6th 2010 - EDT 585
+        'Data is a mandatory structure in data
+        mTabPageDataStructure.IsMandatory = True
+
         Me.tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
         Me.tpDataStructure.Controls.Add(mTabPageDataStructure)
         mTabPageDataStructure.Dock = DockStyle.Fill
@@ -3836,6 +3843,10 @@ Public Class Designer
         mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
         'End If
         mTabPageDataStructure.EmbeddedAllowed = False
+
+        'SRH: Jan 6th 2010 - EDT 585 - has to be 1..1
+        mTabPageDataStructure.IsMandatory = True
+
         Me.tpDataStructure.Title = mTabPageDataStructure.StructureTypeAsString
     End Sub
 
