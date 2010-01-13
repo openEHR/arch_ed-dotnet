@@ -665,11 +665,10 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             // 0..* code_list string
             if (currentObject.code_list() != null)
             {
-                EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE castList = currentObject.code_list() as EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE;   // returns null (not exception)                
+                EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE castList = currentObject.code_list() as EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE;
                 EiffelSoftware.Library.Base.kernel.dotnet.Impl.SPECIAL_REFERENCE sList = (EiffelSoftware.Library.Base.kernel.dotnet.Impl.SPECIAL_REFERENCE)(castList.area());
-
-                //string[] copyList = new string[sList.count()];
                 List<string> copyList = new List<string>();
+
                 for (int i = 0; i < sList.count(); i++)
                     if (sList.item(i) != null)
                         copyList.Add(sList.item(i).ToString());
