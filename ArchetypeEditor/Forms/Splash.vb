@@ -90,7 +90,7 @@ Public Class Splash
         Me.CopyrightLabel.Name = "CopyrightLabel"
         Me.CopyrightLabel.Size = New System.Drawing.Size(218, 14)
         Me.CopyrightLabel.TabIndex = 2
-        Me.CopyrightLabel.Text = "Copyright © Ocean Informatics 2009"
+        Me.CopyrightLabel.Text = "Copyright © Ocean Informatics 2010"
         Me.CopyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Splash
