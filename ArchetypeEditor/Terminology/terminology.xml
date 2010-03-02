@@ -3656,7 +3656,7 @@
   <Concept Language="ja" ConceptID="109" Rubric="新規Element" />
   <Concept Language="ja" ConceptID="110" Rubric="Occurrence" />
   <Concept Language="ja" ConceptID="111" Rubric="最大:" />
-  <Concept Language="ja" ConceptID="112" Rubric="バインドされていない(Unbounded)" />
+  <Concept Language="ja" ConceptID="112" Rubric="上限なし" />
   <Concept Language="ja" ConceptID="113" Rubric="詳細" />
   <Concept Language="ja" ConceptID="114" Rubric="Runtime name constraint" />
   <Concept Language="ja" ConceptID="115" Rubric="量" />
@@ -3987,8 +3987,8 @@
   <Concept Language="ja" ConceptID="510" Rubric="パスウェイ" />
   <Concept Language="ja" ConceptID="511" Rubric="多重" />
   <Concept Language="ja" ConceptID="513" Rubric="Component" />
-  <Concept Language="ja" ConceptID="514" Rubric="コンテキスト(Context )" />
-  <Concept Language="ja" ConceptID="515" Rubric="コンテキスト(Context)" />
+  <Concept Language="ja" ConceptID="514" Rubric="コンテキスト" />
+  <Concept Language="ja" ConceptID="515" Rubric="コンテンツ" />
   <Concept Language="ja" ConceptID="516" Rubric="日時の間隔" />
   <Concept Language="ja" ConceptID="517" Rubric="application/msword" />
   <Concept Language="ja" ConceptID="518" Rubric="application/pdf" />
@@ -4058,7 +4058,7 @@
   <Concept Language="ja" ConceptID="585" Rubric="目的" />
   <Concept Language="ja" ConceptID="586" Rubric="アクティビティ" />
   <Concept Language="ja" ConceptID="587" Rubric="アクティビティ" />
-  <Concept Language="ja" ConceptID="588" Rubric="分:" />
+  <Concept Language="ja" ConceptID="588" Rubric="最小:" />
   <Concept Language="ja" ConceptID="589" Rubric="繰り返しなし" />
   <Concept Language="ja" ConceptID="590" Rubric="繰り返しあり，無制限" />
   <Concept Language="ja" ConceptID="591" Rubric="繰り返しあり，制限あり" />
@@ -5741,6 +5741,23 @@
   <Concept Language="en" ConceptID="685" Rubric="Refractive power" />
   <Concept Language="en" ConceptID="686" Rubric="Invalid archetype file name {0}. Save as {1}?" />
   <Concept Language="en" ConceptID="687" Rubric="Open action archetype" />
+  <Concept Language="ja" ConceptID="670" Rubric="*Time Fraction (en)" />
+  <Concept Language="ja" ConceptID="671" Rubric="*No embedded archetype matches at {0} (en)" />
+  <Concept Language="ja" ConceptID="672" Rubric="このスロットに名前をつけますか?" />
+  <Concept Language="ja" ConceptID="673" Rubric="アイテム" />
+  <Concept Language="ja" ConceptID="674" Rubric="*Care entry (en)" />
+  <Concept Language="ja" ConceptID="675" Rubric="このスロットに名前を付ける" />
+  <Concept Language="ja" ConceptID="676" Rubric="繊維" />
+  <Concept Language="ja" ConceptID="677" Rubric="*Allow transition to (en)" />
+  <Concept Language="ja" ConceptID="678" Rubric="*Allow an alternative state for this action (en)" />
+  <Concept Language="ja" ConceptID="679" Rubric="*Alternative state (en)" />
+  <Concept Language="ja" ConceptID="680" Rubric="*File {0} already exists. Do you want to replace it? (en)" />
+  <Concept Language="ja" ConceptID="681" Rubric="エクスポート" />
+  <Concept Language="ja" ConceptID="682" Rubric="*application/vnd.oasis.opendocument.text (en)" />
+  <Concept Language="ja" ConceptID="683" Rubric="*application/vnd.openxmlformats-officedocument.wordprocessingml.document (en)" />
+  <Concept Language="ja" ConceptID="684" Rubric="*ParsableText (en)" />
+  <Concept Language="ja" ConceptID="685" Rubric="*Refractive power (en)" />
+  <Concept Language="ja" ConceptID="686" Rubric="アーキタイプのファイル名{0}が不正です。{1}として保存しますか？ (en)" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
