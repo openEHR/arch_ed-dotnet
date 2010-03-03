@@ -1123,15 +1123,15 @@ namespace XMLParser
             languageSet.items = (ARCHETYPE_TERM[])temp.ToArray(typeof(ARCHETYPE_TERM));
         }
 
-        private void RemoveUnusedTerms(CodeDefinitionSet a_language_set, ArrayList termsUsed)
+        private void RemoveUnusedTerms(CodeDefinitionSet languageSet, ArrayList termsUsed)
         {
             ArrayList indexOfTermsNotUsed = new ArrayList();
 
-            if (a_language_set != null)
+            if (languageSet != null && languageSet.items != null)
             {
-                for (int i = 0; i < a_language_set.items.Length; i++)
+                for (int i = languageSet.items.Length - 1; i >= 0; i--)
                 {
-                    ARCHETYPE_TERM at = a_language_set.items[i];
+                    ARCHETYPE_TERM at = languageSet.items[i];
 
                     if (!termsUsed.Contains(at.code))
                     {
@@ -1141,8 +1141,7 @@ namespace XMLParser
 
                 if (indexOfTermsNotUsed.Count > 0)
                 {
-                    indexOfTermsNotUsed.Reverse(); //Ensures the higher indexes are removed first
-                    RemoveTermsByIndex(a_language_set, (int[])indexOfTermsNotUsed.ToArray(typeof(int)));
+                    RemoveTermsByIndex(languageSet, (int[])indexOfTermsNotUsed.ToArray(typeof(int)));
                 }
             }
         }
