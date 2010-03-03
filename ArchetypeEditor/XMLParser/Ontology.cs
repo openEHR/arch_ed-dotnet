@@ -98,14 +98,19 @@ namespace XMLParser
 
         public bool HasTermBinding(string a_terminology_id, string a_path)
         {
-            foreach (TermBindingSet t in _archetype.ontology.term_bindings)
+            TermBindingSet[] bindings = _archetype.ontology.term_bindings;
+
+            if (bindings != null)
             {
-                if (t.terminology == a_terminology_id)
+                foreach (TermBindingSet t in bindings)
                 {
-                    foreach (TERM_BINDING_ITEM b in t.items)
+                    if (t.terminology == a_terminology_id)
                     {
-                        if (b.code == a_path)
-                            return true;
+                        foreach (TERM_BINDING_ITEM b in t.items)
+                        {
+                            if (b.code == a_path)
+                                return true;
+                        }
                     }
                 }
             }
@@ -115,15 +120,20 @@ namespace XMLParser
 
         public string TermBinding(string a_terminology_id, string a_path)
         {
-            foreach (TermBindingSet t in _archetype.ontology.term_bindings)
+            TermBindingSet[] bindings = _archetype.ontology.term_bindings;
+
+            if (bindings != null)
             {
-                if (t.terminology.StartsWith(a_terminology_id))
+                foreach (TermBindingSet t in bindings)
                 {
-                    foreach (TERM_BINDING_ITEM b in t.items)
+                    if (t.terminology.StartsWith(a_terminology_id))
                     {
-                        if (b.code == a_path)
-                            if (b.value != null)
-                                return b.value.code_string;                       
+                        foreach (TERM_BINDING_ITEM b in t.items)
+                        {
+                            if (b.code == a_path)
+                                if (b.value != null)
+                                    return b.value.code_string;                       
+                        }
                     }
                 }
             }
@@ -136,22 +146,22 @@ namespace XMLParser
             string code = a_term.code.ToLower(System.Globalization.CultureInfo.InvariantCulture);
 
             System.Diagnostics.Debug.Assert(HasTermCode(a_term.code), "Does not have code " + code);
-            CodeDefinitionSet[] languageSets;
+            CodeDefinitionSet[] definitions;
 
             if (code.StartsWith("at"))
-                languageSets = _archetype.ontology.term_definitions;
+                definitions = _archetype.ontology.term_definitions;
             else
-                languageSets = _archetype.ontology.constraint_definitions;
+                definitions = _archetype.ontology.constraint_definitions;
 
-            foreach (CodeDefinitionSet ls in languageSets)
+            if (definitions != null)
             {
-                if (ls.language == language_code)
+                foreach (CodeDefinitionSet ls in definitions)
                 {
-                    ReplaceTerm(ls, a_term);
-                }
-                else
-                {
-                    if (replace_translations && language_code == PrimaryLanguageCode)
+                    if (ls.language == language_code)
+                    {
+                        ReplaceTerm(ls, a_term);
+                    }
+                    else if (replace_translations && language_code == PrimaryLanguageCode)
                     {           
                         foreach (StringDictionaryItem di in a_term.items)
                         {                            
@@ -281,9 +291,11 @@ namespace XMLParser
 
             if (a_term_code.StartsWith("at"))
             {
-                if (_archetype.ontology.term_definitions.Length > 0)
+                CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
+
+                if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
                 {
-                    foreach (ARCHETYPE_TERM at in _archetype.ontology.term_definitions[0].items)
+                    foreach (ARCHETYPE_TERM at in definitions[0].items)
                     {
                         if (at.code.ToLower(System.Globalization.CultureInfo.InvariantCulture) == a_term_code)
                             return true;
@@ -292,9 +304,11 @@ namespace XMLParser
             }
             else if (a_term_code.StartsWith("ac"))
             {
-                if (_archetype.ontology.constraint_definitions.Length > 0)
+                CodeDefinitionSet[] definitions = _archetype.ontology.constraint_definitions;
+
+                if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
                 {
-                    foreach (ARCHETYPE_TERM ac in _archetype.ontology.constraint_definitions[0].items)
+                    foreach (ARCHETYPE_TERM ac in definitions[0].items)
                     {
                         if (ac.code.ToLower(System.Globalization.CultureInfo.InvariantCulture) == a_term_code)
                             return true;
@@ -537,12 +551,16 @@ namespace XMLParser
         {
             termId += ".";
             ArrayList counters = new ArrayList();
+            CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
 
-            foreach (ARCHETYPE_TERM t in _archetype.ontology.term_definitions[0].items)
+            if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
             {
-                if (t.code.StartsWith(termId))
+                foreach (ARCHETYPE_TERM t in definitions[0].items)
                 {
-                    counters.Add(t.code.Substring(termId.Length));
+                    if (t.code.StartsWith(termId))
+                    {
+                        counters.Add(t.code.Substring(termId.Length));
+                    }
                 }
             }
 
@@ -559,16 +577,20 @@ namespace XMLParser
         public string NextTermId()
         {
             ArrayList counters = new ArrayList();
+            CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
 
-            foreach (ARCHETYPE_TERM t in _archetype.ontology.term_definitions[0].items)
+            if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
             {
-                if (NumberOfSpecialisations == 0)
+                foreach (ARCHETYPE_TERM t in definitions[0].items)
                 {
-                    counters.Add(int.Parse(t.code.Substring(2))); //leave the at off the front
-                }
-                else if (number_of(Char.Parse("."), t.code) == NumberOfSpecialisations)
-                {
-                    counters.Add(int.Parse(t.code.Substring(t.code.LastIndexOf(".") + 1)));
+                    if (NumberOfSpecialisations == 0)
+                    {
+                        counters.Add(int.Parse(t.code.Substring(2))); //leave the at off the front
+                    }
+                    else if (number_of(Char.Parse("."), t.code) == NumberOfSpecialisations)
+                    {
+                        counters.Add(int.Parse(t.code.Substring(t.code.LastIndexOf(".") + 1)));
+                    }
                 }
             }
 
@@ -598,16 +620,20 @@ namespace XMLParser
         public string NextConstraintId()
         {
             ArrayList counters = new ArrayList();
+            CodeDefinitionSet[] definitions = _archetype.ontology.constraint_definitions;
 
-            foreach (ARCHETYPE_TERM t in _archetype.ontology.constraint_definitions[0].items)
+            if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
             {
-                if (NumberOfSpecialisations == 0)
+                foreach (ARCHETYPE_TERM t in definitions[0].items)
                 {
-                    counters.Add(int.Parse(t.code.Substring(2))); //leave the ac off the front
-                }
-                else if (number_of(Char.Parse("."), t.code) == NumberOfSpecialisations)
-                {
-                    counters.Add(int.Parse(t.code.Substring(t.code.LastIndexOf(".") + 1)));
+                    if (NumberOfSpecialisations == 0)
+                    {
+                        counters.Add(int.Parse(t.code.Substring(2))); //leave the ac off the front
+                    }
+                    else if (number_of(Char.Parse("."), t.code) == NumberOfSpecialisations)
+                    {
+                        counters.Add(int.Parse(t.code.Substring(t.code.LastIndexOf(".") + 1)));
+                    }
                 }
             }
 
@@ -655,74 +681,72 @@ namespace XMLParser
         public CodeDefinitionSet GetTermLanguageSet(string a_language)
         {
             int i = 1;
-            CodeDefinitionSet[] languageSets = _archetype.ontology.term_definitions;
+            CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
 
-            if (languageSets != null)
+            if (definitions != null)
             {
-                foreach (CodeDefinitionSet ls in languageSets)
+                foreach (CodeDefinitionSet ls in definitions)
                 {
                     if (ls.language == a_language)
                         return ls;
                 }
 
-                i = languageSets.Length + 1;
+                i = definitions.Length + 1;
             }
 
-            Array.Resize(ref languageSets, i);
+            Array.Resize(ref definitions, i);
             CodeDefinitionSet new_ls = new CodeDefinitionSet();
             new_ls.language = a_language;
-            languageSets[i - 1] = new_ls;
-            _archetype.ontology.term_definitions = languageSets;
+            definitions[i - 1] = new_ls;
+            _archetype.ontology.term_definitions = definitions;
             return new_ls;
         }
 
         public CodeDefinitionSet GetConstraintLanguageSet(string a_language)
         {
             int i = 1;
-            CodeDefinitionSet[] languageSets;
-            languageSets = _archetype.ontology.constraint_definitions;
+            CodeDefinitionSet[] definitions = _archetype.ontology.constraint_definitions;
 
-            if (languageSets != null)
+            if (definitions != null)
             {
-                foreach (CodeDefinitionSet ls in languageSets)
+                foreach (CodeDefinitionSet ls in definitions)
                 {
                     if (ls.language == a_language)
                         return ls;
                 }
 
-                i = languageSets.Length + 1;
+                i = definitions.Length + 1;
             }
 
-            Array.Resize(ref languageSets, i);
+            Array.Resize(ref definitions, i);
             CodeDefinitionSet new_ls = new CodeDefinitionSet();
             new_ls.language = a_language;
-            languageSets[i - 1] = new_ls;
-            _archetype.ontology.constraint_definitions = languageSets;
+            definitions[i - 1] = new_ls;
+            _archetype.ontology.constraint_definitions = definitions;
             return new_ls;
         }
 
         private TermBindingSet GetTermBindingSet(string a_terminology)
         {
             int i = 1;
-            TermBindingSet[] terminologySets;
-            terminologySets = _archetype.ontology.term_bindings;
+            TermBindingSet[] bindings = _archetype.ontology.term_bindings;
 
-            if (terminologySets != null)
+            if (bindings != null)
             {
-                foreach (TermBindingSet ts in terminologySets)
+                foreach (TermBindingSet ts in bindings)
                 {
                     if (ts.terminology == a_terminology)
                         return ts;
                 }
 
-                i = terminologySets.Length + 1;
+                i = bindings.Length + 1;
             }
 
-            Array.Resize(ref terminologySets, i);
+            Array.Resize(ref bindings, i);
             TermBindingSet new_ts = new TermBindingSet();
             new_ts.terminology = a_terminology;
-            terminologySets[i - 1] = new_ts;
-            _archetype.ontology.term_bindings = terminologySets;
+            bindings[i - 1] = new_ts;
+            _archetype.ontology.term_bindings = bindings;
             return new_ts;
         }
 
@@ -753,19 +777,19 @@ namespace XMLParser
 
         public void AddTermOrConstraintDefinition(string a_language, ARCHETYPE_TERM a_term, bool isLoading)
         {
-            CodeDefinitionSet languageSet;
-            CodeDefinitionSet[] languageSets;
+            CodeDefinitionSet definition;
+            CodeDefinitionSet[] definitions;
             string code = a_term.code.ToLowerInvariant();
 
             if (code.StartsWith("at"))
             {
-                languageSet = GetTermLanguageSet(a_language);
-                languageSets = _archetype.ontology.term_definitions;
+                definition = GetTermLanguageSet(a_language);
+                definitions = _archetype.ontology.term_definitions;
             }
             else if (code.StartsWith("ac"))
             {
-                languageSet = GetConstraintLanguageSet(a_language);
-                languageSets = _archetype.ontology.constraint_definitions;
+                definition = GetConstraintLanguageSet(a_language);
+                definitions = _archetype.ontology.constraint_definitions;
             }
             else
             {
@@ -774,11 +798,11 @@ namespace XMLParser
             }
 
             //Add the term to that language - ensures there is a language set for the language
-            AddTermOrConstraintDefinitionForLanguage(languageSet, a_term);
+            AddTermOrConstraintDefinitionForLanguage(definition, a_term);
 
-            if (!isLoading & languageSets.Length > 1) // if there is more than one language then add the term to those
+            if (!isLoading && definitions != null && definitions.Length > 1) // if there is more than one language then add the term to those
             {
-                foreach (CodeDefinitionSet ls in languageSets)
+                foreach (CodeDefinitionSet ls in definitions)
                 {
                     if (ls.language != a_language)
                     {
@@ -815,10 +839,15 @@ namespace XMLParser
 
         private CodeDefinitionSet TermDefinitions(string a_language_code)
         {
-            foreach (CodeDefinitionSet ls in _archetype.ontology.term_definitions)
+            CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
+
+            if (definitions != null)
             {
-                if (ls.language == a_language_code)
-                    return ls;
+                foreach (CodeDefinitionSet ls in definitions)
+                {
+                    if (ls.language == a_language_code)
+                        return ls;
+                }
             }
 
             return null;
@@ -1148,9 +1177,11 @@ namespace XMLParser
 
         private CodeDefinitionSet ConstraintDefinitions(string a_language_code)
         {
-            if (_archetype.ontology.constraint_definitions != null)
+            CodeDefinitionSet[] definitions = _archetype.ontology.constraint_definitions;
+
+            if (definitions != null)
             {
-                foreach (CodeDefinitionSet ls in _archetype.ontology.constraint_definitions)
+                foreach (CodeDefinitionSet ls in definitions)
                 {
                     if (ls.language == a_language_code)
                         return ls;
