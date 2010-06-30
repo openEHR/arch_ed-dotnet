@@ -665,16 +665,15 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             // 0..* code_list string
             if (currentObject.code_list() != null)
             {
-                EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE castList = currentObject.code_list() as EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE;   // returns null (not exception)                
+                EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE castList = currentObject.code_list() as EiffelSoftware.Library.Base.structures.list.Impl.ARRAYED_LIST_REFERENCE;
                 EiffelSoftware.Library.Base.kernel.dotnet.Impl.SPECIAL_REFERENCE sList = (EiffelSoftware.Library.Base.kernel.dotnet.Impl.SPECIAL_REFERENCE)(castList.area());
-
-                string[] copyList = new string[sList.count()];
+                List<string> copyList = new List<string>();
 
                 for (int i = 0; i < sList.count(); i++)
                     if (sList.item(i) != null)
-                        copyList[i] = sList.item(i).ToString();
+                        copyList.Add(sList.item(i).ToString());
 
-                cloneObject.code_list = copyList;
+                cloneObject.code_list = copyList.ToArray();
             }
 
             // 0..1 assumed_value CODE_PHRASE
@@ -1079,12 +1078,14 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
         }
 
         private TermBindingSet[] CloneTermBindingSet(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
-        {            
+        {
+            List<TermBindingSet> termBindingSets = new List<TermBindingSet>();
+
             if (currentObject != null)
             {
                 if (currentObject.count() > 0)
                 {
-                    TermBindingSet[] termBindingSets = new TermBindingSet[currentObject.count()];
+                    //TermBindingSet[] termBindingSets = new TermBindingSet[currentObject.count()];
                     
                     currentObject.start();
 
@@ -1106,54 +1107,70 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                             new SortedList<string, TERM_BINDING_ITEM>();
 
                         adlTerms.start();
-                        for (int j = 1; j <= adlTerms.count(); j++)
-                        {                            
-                            openehr.openehr.rm.data_types.text.CODE_PHRASE term = adlTerms.item_for_iteration() as openehr.openehr.rm.data_types.text.CODE_PHRASE;
-
-                            if (term != null)
+                        if (adlTerms.count() > 0)
+                        {
+                            for (int j = 1; j <= adlTerms.count(); j++)
                             {
-                                TERM_BINDING_ITEM localTerm = new TERM_BINDING_ITEM();
+                                openehr.openehr.rm.data_types.text.CODE_PHRASE term = adlTerms.item_for_iteration() as openehr.openehr.rm.data_types.text.CODE_PHRASE;
 
-                                // 1 code string
-                                localTerm.code = adlTerms.key_for_iteration().ToString();
+                                if (term != null)
+                                {
+                                    TERM_BINDING_ITEM localTerm = new TERM_BINDING_ITEM();
 
-                                // 1 value CODE_PHRASE (CODE_PHRASE to HASH TABLE)                                
-                                CODE_PHRASE codePhrase = new CODE_PHRASE();
-                                
-                                // 1 code_string string
-                                // HKF: TLS-6
-                                //codePhrase.code_string = "";
-                                codePhrase.code_string = term.code_string().ToString();
+                                    // 1 code string
+                                    localTerm.code = adlTerms.key_for_iteration().ToString();
 
-                                // 1 terminology_id TERMINOLOGY_ID                                
-                                if (term.code_string() != null) 
-                                {                                
-                                    TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
+                                    // 1 value CODE_PHRASE (CODE_PHRASE to HASH TABLE)                                
+                                    CODE_PHRASE codePhrase = new CODE_PHRASE();
+
+                                    // 1 code_string string
                                     // HKF: TLS-6
-                                    //terminologyId.value = term.code_string().ToString();
-                                    terminologyId.value = term.terminology_id().value().ToString();
-                                    codePhrase.terminology_id = terminologyId;       
-                                    
+                                    //codePhrase.code_string = "";
+                                    codePhrase.code_string = term.code_string().ToString();
+
+                                    // 1 terminology_id TERMINOLOGY_ID                                
+                                    if (term.code_string() != null)
+                                    {
+                                        TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
+                                        // HKF: TLS-6
+                                        //terminologyId.value = term.code_string().ToString();
+                                        terminologyId.value = term.terminology_id().value().ToString();
+                                        codePhrase.terminology_id = terminologyId;
+
+                                    }
+                                    localTerm.value = codePhrase;
+                                    localTerms.Add(localTerm.code, localTerm);
                                 }
-                                localTerm.value = codePhrase;
-                                localTerms.Add(localTerm.code, localTerm);                                 
-                            }         
 
-                            adlTerms.forth();
+                                adlTerms.forth();
+                            }
+
+                            termBindingSet.items = new TERM_BINDING_ITEM[localTerms.Count];
+                            localTerms.Values.CopyTo(termBindingSet.items, 0);
+
+                            //termBindingSet.items = localTerms;
                         }
-
-                        termBindingSet.items = new TERM_BINDING_ITEM[localTerms.Count];
-                        localTerms.Values.CopyTo(termBindingSet.items, 0);
-
-                        //termBindingSet.items = localTerms;
-                        
-                        termBindingSets[i - 1] = termBindingSet;               
+                        if (termBindingSet.items != null)
+                        {
+                            termBindingSets.Add(termBindingSet);
+                        }
                         currentObject.forth();
                     }
-                    return termBindingSets;
+
+                    //return termBindingSets;
                 }
             }
-            return null;
+            //return null;
+            if (termBindingSets.Count > 0)
+            {
+                TermBindingSet[] termBindingSetArray = new TermBindingSet[termBindingSets.Count];
+                termBindingSets.CopyTo(termBindingSetArray);
+                return termBindingSetArray;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private CodeDefinitionSet[] CloneCodeDefinitions(EiffelSoftware.Library.Base.structures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
@@ -1201,6 +1218,17 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                                                                         
                         codeDefinitionSet.items = new ARCHETYPE_TERM[localTerms.Count];                        
                         localTerms.Values.CopyTo(codeDefinitionSet.items, 0);
+
+                        foreach (ARCHETYPE_TERM term in codeDefinitionSet.items)
+                        { 
+                            foreach(StringDictionaryItem item in term.items)
+                                if (item.id == "text")
+                                {
+                                    item.Value = item.Value.Trim();
+                                    break;
+                                }
+                        }
+
 
                         codeDefinitionSets[i - 1] = codeDefinitionSet; 
                         currentObject.forth();

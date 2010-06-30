@@ -922,8 +922,8 @@ Public Class Designer
         Me.TabMain.Location = New System.Drawing.Point(0, 0)
         Me.TabMain.Name = "TabMain"
         Me.TabMain.PositionTop = True
-        Me.TabMain.SelectedIndex = 1
-        Me.TabMain.SelectedTab = Me.tpDesign
+        Me.TabMain.SelectedIndex = 0
+        Me.TabMain.SelectedTab = Me.tpHeader
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
         Me.TabMain.Size = New System.Drawing.Size(969, 689)
         Me.TabMain.TabIndex = 1
@@ -940,7 +940,6 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpHeader, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpHeader.Location = New System.Drawing.Point(0, 0)
         Me.tpHeader.Name = "tpHeader"
-        Me.tpHeader.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpHeader, True)
         Me.tpHeader.Size = New System.Drawing.Size(969, 664)
         Me.tpHeader.TabIndex = 0
@@ -1006,6 +1005,7 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDesign, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpDesign.Location = New System.Drawing.Point(0, 0)
         Me.tpDesign.Name = "tpDesign"
+        Me.tpDesign.Selected = False
         Me.HelpProviderDesigner.SetShowHelp(Me.tpDesign, True)
         Me.tpDesign.Size = New System.Drawing.Size(969, 664)
         Me.tpDesign.TabIndex = 1
@@ -1022,8 +1022,8 @@ Public Class Designer
         Me.TabDesign.Location = New System.Drawing.Point(0, 32)
         Me.TabDesign.Name = "TabDesign"
         Me.TabDesign.PositionTop = True
-        Me.TabDesign.SelectedIndex = 1
-        Me.TabDesign.SelectedTab = Me.tpRootState
+        Me.TabDesign.SelectedIndex = 0
+        Me.TabDesign.SelectedTab = Me.tpData
         Me.HelpProviderDesigner.SetShowHelp(Me.TabDesign, True)
         Me.TabDesign.Size = New System.Drawing.Size(969, 632)
         Me.TabDesign.TabIndex = 12
@@ -1036,6 +1036,7 @@ Public Class Designer
         Me.tpRootState.Controls.Add(Me.PanelState)
         Me.tpRootState.Location = New System.Drawing.Point(0, 0)
         Me.tpRootState.Name = "tpRootState"
+        Me.tpRootState.Selected = False
         Me.tpRootState.Size = New System.Drawing.Size(969, 607)
         Me.tpRootState.TabIndex = 1
         Me.tpRootState.Title = "State"
@@ -1092,7 +1093,6 @@ Public Class Designer
         Me.tpData.Controls.Add(Me.PanelConfigStructure)
         Me.tpData.Location = New System.Drawing.Point(0, 0)
         Me.tpData.Name = "tpData"
-        Me.tpData.Selected = False
         Me.tpData.Size = New System.Drawing.Size(969, 607)
         Me.tpData.TabIndex = 0
         Me.tpData.Title = "Data"
@@ -1926,6 +1926,9 @@ Public Class Designer
         Next
 
         Filemanager.ClearEmbedded()
+
+        mFileManager.IsNew = False
+
 
         ' stop the handler while we get all the languages
         RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
@@ -3330,6 +3333,10 @@ Public Class Designer
         'Changed SRH: Sep 1st 2007
         mTabPageDataStructure.EmbeddedAllowed = False
 
+        'SRH: Jan 6th 2010 - EDT 585
+        'Data is a mandatory structure in data
+        mTabPageDataStructure.IsMandatory = True
+
         Me.tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
         Me.tpDataStructure.Controls.Add(mTabPageDataStructure)
         mTabPageDataStructure.Dock = DockStyle.Fill
@@ -3841,6 +3848,10 @@ Public Class Designer
         mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
         'End If
         mTabPageDataStructure.EmbeddedAllowed = False
+
+        'SRH: Jan 6th 2010 - EDT 585 - has to be 1..1
+        mTabPageDataStructure.IsMandatory = True
+
         Me.tpDataStructure.Title = mTabPageDataStructure.StructureTypeAsString
     End Sub
 

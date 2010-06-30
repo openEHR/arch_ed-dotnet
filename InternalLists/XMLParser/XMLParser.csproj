@@ -69,6 +69,9 @@
     <EmbeddedResource Include="OpenehrProfile.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="BaseTypes.xsx">
+      <DependentUpon>BaseTypes.xsd</DependentUpon>
+    </None>
     <None Include="OceanEhr.snk" />
     <None Include="OpenehrProfile.xsx">
       <DependentUpon>OpenehrProfile.xsd</DependentUpon>

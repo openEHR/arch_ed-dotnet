@@ -548,4 +548,5 @@
   <Unit property_id="81" Text="dioptre" name="Dioptre" conversion="1" primary="true" />
   <Unit property_id="81" Text="dpt" name="Dioptre" conversion="1" primary="false" />
   <Unit property_id="7" Text="{129/128}" name="Volume per time" conversion="0" primary="false" />
+  <Unit property_id="0" Text="Fr" name="French" conversion="0.33333333" coefficient="-3" primary="false" />
 </PropertyUnits>

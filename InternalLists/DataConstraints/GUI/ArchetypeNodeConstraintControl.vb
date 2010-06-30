@@ -580,7 +580,7 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _
-            ByVal IsState As Boolean, ByVal an_archetype_node As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
+            ByVal IsState As Boolean, ByVal IsMandatory As Boolean, ByVal an_archetype_node As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
 
         'If a_file_manager.OntologyManager.NumberOfSpecialisations() <> OceanArchetypeEditor.Instance.CountInString(an_archetype_node.RM_Class.NodeId, ".") Then
         '    Me.Enabled = False
@@ -624,6 +624,14 @@ Public Class ArchetypeNodeConstraintControl
             End If
 
             Select Case an_archetype_node.RM_Class.Type
+
+                Case StructureType.Tree, StructureType.List, StructureType.Table, StructureType.Single
+                    'SRH: 6th Jan 2010 - EDT-585
+                    If IsMandatory Then
+                        mOccurrences.SetMandatory = True
+                    End If
+                    mOccurrences.SetUnitary = True
+
                 Case StructureType.Element, StructureType.Reference
 
                     Dim archetypeElem As ArchetypeElement = CType(an_archetype_node, ArchetypeElement)
@@ -669,9 +677,33 @@ Public Class ArchetypeNodeConstraintControl
                     'SRH: Aug 19 2008
                     If TypeOf an_archetype_node Is ArchetypeNodeAnonymous Then
                         mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint)
+
+                        'SRH: 6th Jan 2010 - EDT-585
+                        Dim rm_ct As StructureType = CType(CType(an_archetype_node, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint.RM_ClassType
+
+                        If rm_ct = StructureType.Tree Or rm_ct = StructureType.Table Or rm_ct = StructureType.List Or rm_ct = StructureType.Single Or rm_ct = StructureType.Structure Then
+                            If IsMandatory Then
+                                mOccurrences.SetMandatory = True
+
+                            End If
+                            mOccurrences.SetUnitary = True
+                        End If
+
                     Else
                         mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeSlot).RM_Class, RmSlot).SlotConstraint)
+
+                        'SRH: 6th Jan 2010 - EDT-585
+                        Dim rm_ct As StructureType = CType(CType(an_archetype_node, ArchetypeSlot).RM_Class, RmSlot).SlotConstraint.RM_ClassType
+
+                        If rm_ct = StructureType.Tree Or rm_ct = StructureType.Table Or rm_ct = StructureType.List Or rm_ct = StructureType.Single Or rm_ct = StructureType.Structure Then
+                            If IsMandatory Then
+                                mOccurrences.SetMandatory = True
+                            End If
+                            mOccurrences.SetUnitary = True
+                        End If
+
                     End If
+
                 Case StructureType.Cluster
                     ' Me.labelAnyCluster.Text = AE_Constants.Instance.Cluster
                     Me.labelAny.Visible = False
@@ -685,7 +717,6 @@ Public Class ArchetypeNodeConstraintControl
             End Select
 
             mArchetypeNode = an_archetype_node
-            mOccurrences.SetSingle = (aStructureType = StructureType.Single)
 
             If IsState Then
                 Me.tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue

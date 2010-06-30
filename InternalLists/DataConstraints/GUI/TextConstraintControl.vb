@@ -136,7 +136,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.gbAllowableValues.Controls.Add(Me.txtAssumedValue)
         Me.gbAllowableValues.Controls.Add(Me.butAddItem)
         Me.gbAllowableValues.Controls.Add(Me.listAllowableValues)
-        Me.gbAllowableValues.Location = New System.Drawing.Point(16, 40)
+        Me.gbAllowableValues.Location = New System.Drawing.Point(16, 48)
         Me.gbAllowableValues.Name = "gbAllowableValues"
         Me.gbAllowableValues.Size = New System.Drawing.Size(372, 362)
         Me.gbAllowableValues.TabIndex = 36
@@ -208,7 +208,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         'butDefaultItem
         '
         Me.butDefaultItem.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.butDefaultItem.Location = New System.Drawing.Point(48, 333)
+        Me.butDefaultItem.Location = New System.Drawing.Point(46, 331)
         Me.butDefaultItem.Name = "butDefaultItem"
         Me.butDefaultItem.Size = New System.Drawing.Size(122, 24)
         Me.butDefaultItem.TabIndex = 4
@@ -330,7 +330,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.radioInternal.Location = New System.Drawing.Point(148, 6)
         Me.radioInternal.Name = "radioInternal"
-        Me.radioInternal.Size = New System.Drawing.Size(120, 32)
+        Me.radioInternal.Size = New System.Drawing.Size(120, 56)
         Me.radioInternal.TabIndex = 32
         Me.radioInternal.Text = "Internal codes"
         '
@@ -338,13 +338,13 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.radioText.Location = New System.Drawing.Point(16, 6)
         Me.radioText.Name = "radioText"
-        Me.radioText.Size = New System.Drawing.Size(103, 32)
+        Me.radioText.Size = New System.Drawing.Size(103, 56)
         Me.radioText.TabIndex = 31
         Me.radioText.Text = "Free text or coded"
         '
         'radioTerminology
         '
-        Me.radioTerminology.Location = New System.Drawing.Point(275, 6)
+        Me.radioTerminology.Location = New System.Drawing.Point(275, 18)
         Me.radioTerminology.Name = "radioTerminology"
         Me.radioTerminology.Size = New System.Drawing.Size(112, 32)
         Me.radioTerminology.TabIndex = 33
@@ -460,8 +460,11 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         'Changed SRH: 16th Sep - need to make this visible regardless of type to ensure
         ' it is displayed if type of constraint is changed (moved from SetInternalCodedValues)
         ' If IsState Then
-        Me.butDefaultItem.Visible = True
-        Me.txtAssumedValue.Visible = True
+        If IsState Then
+            Me.butDefaultItem.Visible = True
+            Me.txtAssumedValue.Visible = True
+        End If
+
         'End If
 
         Select Case Me.Constraint.TypeOfTextConstraint

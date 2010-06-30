@@ -76,6 +76,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     Friend WithEvents comboIncludeMax As System.Windows.Forms.ComboBox
     Friend WithEvents numPrecision As System.Windows.Forms.NumericUpDown
     Friend WithEvents chkDecimalPlaces As System.Windows.Forms.CheckBox
+    Friend WithEvents chkList As System.Windows.Forms.CheckBox
+    Friend WithEvents txtList As System.Windows.Forms.TextBox
     Friend WithEvents lblAssumedValue As System.Windows.Forms.Label
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -101,6 +103,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.lblAssumedValue = New System.Windows.Forms.Label
         Me.numPrecision = New System.Windows.Forms.NumericUpDown
         Me.chkDecimalPlaces = New System.Windows.Forms.CheckBox
+        Me.chkList = New System.Windows.Forms.CheckBox
+        Me.txtList = New System.Windows.Forms.TextBox
         CType(Me.NumericAssumed, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numMaxValue, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numMinValue, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -134,11 +138,11 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         '
         'NumericAssumed
         '
-        Me.NumericAssumed.Location = New System.Drawing.Point(268, 82)
+        Me.NumericAssumed.Location = New System.Drawing.Point(268, 83)
         Me.NumericAssumed.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.NumericAssumed.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.NumericAssumed.Name = "NumericAssumed"
-        Me.NumericAssumed.Size = New System.Drawing.Size(100, 20)
+        Me.NumericAssumed.Size = New System.Drawing.Size(100, 22)
         Me.NumericAssumed.TabIndex = 10
         Me.NumericAssumed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericAssumed.ThousandsSeparator = True
@@ -150,7 +154,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numMaxValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMaxValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMaxValue.Name = "numMaxValue"
-        Me.numMaxValue.Size = New System.Drawing.Size(100, 20)
+        Me.numMaxValue.Size = New System.Drawing.Size(100, 22)
         Me.numMaxValue.TabIndex = 8
         Me.numMaxValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numMaxValue.ThousandsSeparator = True
@@ -162,7 +166,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numMinValue.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
         Me.numMinValue.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
         Me.numMinValue.Name = "numMinValue"
-        Me.numMinValue.Size = New System.Drawing.Size(100, 20)
+        Me.numMinValue.Size = New System.Drawing.Size(100, 22)
         Me.numMinValue.TabIndex = 5
         Me.numMinValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numMinValue.ThousandsSeparator = True
@@ -231,7 +235,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.comboIncludeMin.Items.AddRange(New Object() {">=", ">"})
         Me.comboIncludeMin.Location = New System.Drawing.Point(212, 29)
         Me.comboIncludeMin.Name = "comboIncludeMin"
-        Me.comboIncludeMin.Size = New System.Drawing.Size(48, 21)
+        Me.comboIncludeMin.Size = New System.Drawing.Size(48, 24)
         Me.comboIncludeMin.TabIndex = 4
         Me.comboIncludeMin.Text = ">="
         Me.comboIncludeMin.Visible = False
@@ -241,14 +245,14 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.comboIncludeMax.Items.AddRange(New Object() {"<=", "<"})
         Me.comboIncludeMax.Location = New System.Drawing.Point(212, 56)
         Me.comboIncludeMax.Name = "comboIncludeMax"
-        Me.comboIncludeMax.Size = New System.Drawing.Size(48, 21)
+        Me.comboIncludeMax.Size = New System.Drawing.Size(48, 24)
         Me.comboIncludeMax.TabIndex = 7
         Me.comboIncludeMax.Text = "<="
         Me.comboIncludeMax.Visible = False
         '
         'lblAssumedValue
         '
-        Me.lblAssumedValue.Location = New System.Drawing.Point(68, 83)
+        Me.lblAssumedValue.Location = New System.Drawing.Point(68, 84)
         Me.lblAssumedValue.Name = "lblAssumedValue"
         Me.lblAssumedValue.Size = New System.Drawing.Size(184, 24)
         Me.lblAssumedValue.TabIndex = 9
@@ -261,7 +265,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numPrecision.Location = New System.Drawing.Point(317, 4)
         Me.numPrecision.Maximum = New Decimal(New Integer() {15, 0, 0, 0})
         Me.numPrecision.Name = "numPrecision"
-        Me.numPrecision.Size = New System.Drawing.Size(51, 20)
+        Me.numPrecision.Size = New System.Drawing.Size(51, 22)
         Me.numPrecision.TabIndex = 2
         Me.numPrecision.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numPrecision.Value = New Decimal(New Integer() {3, 0, 0, 0})
@@ -271,13 +275,34 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.chkDecimalPlaces.AutoSize = True
         Me.chkDecimalPlaces.Location = New System.Drawing.Point(134, 4)
         Me.chkDecimalPlaces.Name = "chkDecimalPlaces"
-        Me.chkDecimalPlaces.Size = New System.Drawing.Size(120, 17)
+        Me.chkDecimalPlaces.Size = New System.Drawing.Size(156, 21)
         Me.chkDecimalPlaces.TabIndex = 1
         Me.chkDecimalPlaces.Text = "Limit decimal places"
         Me.chkDecimalPlaces.UseVisualStyleBackColor = True
         '
+        'chkList
+        '
+        Me.chkList.AutoSize = True
+        Me.chkList.Location = New System.Drawing.Point(20, 111)
+        Me.chkList.Name = "chkList"
+        Me.chkList.Size = New System.Drawing.Size(126, 21)
+        Me.chkList.TabIndex = 11
+        Me.chkList.Text = "List (e.g. 1,4,6)"
+        Me.chkList.UseVisualStyleBackColor = True
+        Me.chkList.Visible = False
+        '
+        'txtList
+        '
+        Me.txtList.Location = New System.Drawing.Point(212, 109)
+        Me.txtList.Name = "txtList"
+        Me.txtList.Size = New System.Drawing.Size(156, 22)
+        Me.txtList.TabIndex = 12
+        Me.txtList.Visible = False
+        '
         'CountConstraintControl
         '
+        Me.Controls.Add(Me.txtList)
+        Me.Controls.Add(Me.chkList)
         Me.Controls.Add(Me.chkDecimalPlaces)
         Me.Controls.Add(Me.numPrecision)
         Me.Controls.Add(Me.lblAssumedValue)
@@ -290,7 +315,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.numMaxValue)
         Me.Controls.Add(Me.numMinValue)
         Me.Name = "CountConstraintControl"
-        Me.Size = New System.Drawing.Size(375, 112)
+        Me.Size = New System.Drawing.Size(375, 141)
         CType(Me.NumericAssumed, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numMaxValue, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numMinValue, System.ComponentModel.ISupportInitialize).EndInit()
@@ -337,40 +362,46 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub SetMaxAndMin()
-        If Constraint.HasMaximum Then
-            cbMaxValue.Checked = True
 
-            If TypeOf Constraint Is Constraint_Real Then
-                numMaxValue.Value = CDec(CType(Constraint, Constraint_Real).MaximumRealValue)
-            Else
-                numMaxValue.Value = Constraint.MaximumValue
-            End If
-
-            If Constraint.IncludeMaximum Then
-                comboIncludeMax.SelectedIndex = 0
-            Else
-                comboIncludeMax.SelectedIndex = 1
-            End If
+        If Constraint.HasList Then
+            chkList.Checked = True
+            txtList.Text = Constraint.ValueList
         Else
-            cbMaxValue.Checked = False
-        End If
+            If Constraint.HasMaximum Then
+                cbMaxValue.Checked = True
 
-        If Constraint.HasMinimum Then
-            cbMinValue.Checked = True
+                If TypeOf Constraint Is Constraint_Real Then
+                    numMaxValue.Value = CDec(CType(Constraint, Constraint_Real).MaximumRealValue)
+                Else
+                    numMaxValue.Value = Constraint.MaximumValue
+                End If
 
-            If TypeOf Constraint Is Constraint_Real Then
-                numMinValue.Value = CDec(CType(Constraint, Constraint_Real).MinimumRealValue)
+                If Constraint.IncludeMaximum Then
+                    comboIncludeMax.SelectedIndex = 0
+                Else
+                    comboIncludeMax.SelectedIndex = 1
+                End If
             Else
-                numMinValue.Value = Constraint.MinimumValue
+                cbMaxValue.Checked = False
             End If
 
-            If Constraint.IncludeMinimum Then
-                comboIncludeMin.SelectedIndex = 0
+            If Constraint.HasMinimum Then
+                cbMinValue.Checked = True
+
+                If TypeOf Constraint Is Constraint_Real Then
+                    numMinValue.Value = CDec(CType(Constraint, Constraint_Real).MinimumRealValue)
+                Else
+                    numMinValue.Value = Constraint.MinimumValue
+                End If
+
+                If Constraint.IncludeMinimum Then
+                    comboIncludeMin.SelectedIndex = 0
+                Else
+                    comboIncludeMin.SelectedIndex = 1
+                End If
             Else
-                comboIncludeMin.SelectedIndex = 1
+                cbMinValue.Checked = False
             End If
-        Else
-            cbMinValue.Checked = False
         End If
     End Sub
 
@@ -673,6 +704,50 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
+   
+    Private Sub txtList_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtList.KeyPress
+        If e.KeyChar = ","c Then
+            If txtList.TextLength = 0 Or txtList.Text.EndsWith(",") Then
+                e.Handled = True
+            Else
+                e.Handled = False
+            End If
+
+        ElseIf "1234567890".Contains(e.KeyChar.ToString()) Then
+            e.Handled = False
+        Else
+            e.Handled = True
+        End If
+    End Sub
+
+    Protected Sub chkList_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkList.CheckedChanged
+        If Not IsLoading Then
+            mFileManager.FileEdited = True
+            If chkList.Checked Then
+                Constraint.HasList = True
+                Constraint.ValueList = txtList.Text
+            Else
+                Constraint.HasList = False
+            End If
+        End If
+        If chkList.Checked Then
+            Me.txtList.Visible = True
+            Me.cbMinValue.Checked = False
+            Me.cbMinValue.Enabled = False
+            Me.cbMaxValue.Checked = False
+            Me.cbMaxValue.Enabled = False
+        Else
+            Me.txtList.Visible = False
+            Me.cbMinValue.Enabled = True
+            Me.cbMaxValue.Enabled = True
+        End If
+    End Sub
+
+    Private Sub txtList_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtList.TextChanged
+        If Not IsLoading Then
+            Constraint.ValueList = txtList.Text
+        End If
+    End Sub
 End Class
 
 '

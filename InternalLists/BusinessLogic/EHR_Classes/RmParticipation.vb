@@ -54,29 +54,29 @@ Public Class RmParticipation
         MyBase.New("", StructureType.Participation)
     End Sub
 
-#Region "ADL and XML oriented features"
-
     Sub New(ByVal a_participation As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         MyBase.New(a_participation)
 
-        Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
         For i As Integer = 1 To a_participation.attributes.count
-            attribute = a_participation.attributes.i_th(i)
-            Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant
-                Case "mode"
-                    Dim modeConstraint As Constraint_Text = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(attribute.children.first)
-                    If Not modeConstraint Is Nothing AndAlso modeConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
-                        mModeSet = modeConstraint.AllowableValues
-                    End If
-                Case "function"
-                    mTextConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(attribute.children.first)
-                Case "time"
-                    mMandateDateTime = True
-            End Select
-        Next
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = a_participation.attributes.i_th(i)
 
+            If attribute.has_children Then
+                Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant
+                    Case "mode"
+                        Dim modeConstraint As Constraint_Text = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(attribute.children.first)
+
+                        If Not modeConstraint Is Nothing AndAlso modeConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
+                            mModeSet = modeConstraint.AllowableValues
+                        End If
+                    Case "function"
+                        mTextConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(attribute.children.first)
+                    Case "time"
+                        mMandateDateTime = True
+                End Select
+            End If
+        Next
     End Sub
+
     Sub New(ByVal a_participation As XMLParser.C_COMPLEX_OBJECT)
         MyBase.New(a_participation)
 
@@ -94,8 +94,5 @@ Public Class RmParticipation
             End Select
         Next
     End Sub
-#End Region
-
-
 
 End Class

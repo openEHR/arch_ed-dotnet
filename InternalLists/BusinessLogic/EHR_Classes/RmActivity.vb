@@ -39,7 +39,6 @@ Public Class RmActivity
         MyBase.New(NodeId, StructureType.Activity)
     End Sub
 
-#Region "ADL and XML Handling"
     Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(EIF_Structure, a_filemanager)
 
@@ -47,45 +46,43 @@ Public Class RmActivity
 
         ' process the archetype id constraint
         If EIF_Structure.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("action_archetype_id")) Then
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            an_attribute = EIF_Structure.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("action_archetype_id"))
-            Dim obj As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = EIF_Structure.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("action_archetype_id"))
 
-            If obj.any_allowed Then
-                ArchetypeId = "."
-            Else
-                Dim item As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = CType(obj.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
-                Dim classPrefix As String = ReferenceModel.ReferenceModelName + "-ACTION\."
+            If attribute.has_children Then
+                Dim obj As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
 
-                If item.regexp IsNot Nothing Then
-                    ArchetypeId = item.regexp.to_cil.Replace(classPrefix, "").Replace("\.", ".")
-                ElseIf item.strings IsNot Nothing Then
-                    ArchetypeId = CType(item.strings.i_th(1), EiffelKernel.STRING_8).to_cil.Replace(classPrefix, "").Replace("\.", ".")
-                Else
+                If obj.any_allowed Then
                     ArchetypeId = "."
+                Else
+                    Dim item As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = CType(obj.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+                    Dim classPrefix As String = ReferenceModel.ReferenceModelName + "-ACTION\."
+
+                    If item.regexp IsNot Nothing Then
+                        ArchetypeId = item.regexp.to_cil.Replace(classPrefix, "").Replace("\.", ".")
+                    ElseIf item.strings IsNot Nothing Then
+                        ArchetypeId = CType(item.strings.i_th(1), EiffelKernel.STRING_8).to_cil.Replace(classPrefix, "").Replace("\.", ".")
+                    Else
+                        ArchetypeId = "."
+                    End If
                 End If
             End If
         End If
 
         'process any activity descriptions
-
         If EIF_Structure.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("description")) Then
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            an_attribute = EIF_Structure.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("description"))
-            ' could be a C_COMPLEX_OBJECT or an ARCHETYPE_SLOT
-            Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT
-            obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = EIF_Structure.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("description"))
 
-            Select Case obj.generating_type.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
-                Case "archetype_slot"
-                    Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
-                    slot = CType(obj, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)
-                    Children.Add(New RmSlot(CType(obj, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
-                Case "c_complex_object"
-                    Dim complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                    complexObj = CType(obj, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-                    Children.Add(New RmStructureCompound(CType(obj, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
-            End Select
+            If attribute.has_children Then
+                ' could be a C_COMPLEX_OBJECT or an ARCHETYPE_SLOT
+                Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+
+                Select Case obj.generating_type.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+                    Case "archetype_slot"
+                        Children.Add(New RmSlot(CType(obj, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                    Case "c_complex_object"
+                        Children.Add(New RmStructureCompound(CType(obj, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
+                End Select
+            End If
         End If
     End Sub
 
@@ -135,8 +132,6 @@ Public Class RmActivity
             Next
         End If
     End Sub
-
-#End Region
 
 End Class
 '

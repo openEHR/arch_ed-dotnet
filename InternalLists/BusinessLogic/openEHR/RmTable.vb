@@ -61,85 +61,58 @@ Public Class RmTable : Inherits RmStructureCompound
         MyBase.New(NodeId, StructureType.Table)
     End Sub
 
-    Private Sub ProcessRows(ByVal RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
-        Dim rows As RmCluster
-
-        rows = New RmCluster(CType(RelNode.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
-
-        Me.Children.Add(rows)
-    End Sub
-
-    Private Sub ProcessTable(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-        Dim i As Integer
-
-        For i = 1 To ObjNode.attributes.count
-            an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
-                Case "name", "runtime_label"
-                    mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                Case "rotated"
-                    Dim b As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN
-
-                    b = CType(CType(an_attribute.children.first, _
-                            openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT).item, openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN)
-                    If b.true_valid Then
-                        mRotated = True
-                    Else
-                        mRotated = False
-                    End If
-                Case "number_key_columns"
-                    Dim int As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
-
-                    int = CType(CType(an_attribute.children.first, _
-                            openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT).item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
-                    mNumberKeyColumns = int.interval.lower ' lower or higher will get the number
-
-                Case "rows"
-                    ProcessRows(an_attribute, a_filemanager)
-            End Select
-        Next
-
+    Private Sub ProcessRows(ByVal relNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
+        If relNode.has_children Then
+            Dim rows As RmCluster = New RmCluster(CType(relNode.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
+            Children.Add(rows)
+        End If
     End Sub
 
     Private Sub ProcessRows(ByVal RelNode As XMLParser.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
-        Dim rows As RmCluster
+        Dim rows As RmCluster = New RmCluster(CType(RelNode.children(0), XMLParser.C_COMPLEX_OBJECT), a_filemanager)
+        Children.Add(rows)
+    End Sub
 
-        rows = New RmCluster(CType(RelNode.children(0), XMLParser.C_COMPLEX_OBJECT), a_filemanager)
+    Private Sub ProcessTable(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Dim i As Integer
 
-        Me.Children.Add(rows)
+        For i = 1 To ObjNode.attributes.count
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+
+            If attribute.has_children Then
+                Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+                    Case "name", "runtime_label"
+                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    Case "rotated"
+                        Dim b As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN = CType(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT).item, openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN)
+                        mRotated = b.true_valid
+                    Case "number_key_columns"
+                        Dim int As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER = CType(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT).item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
+                        mNumberKeyColumns = int.interval.lower ' lower or higher will get the number
+                    Case "rows"
+                        ProcessRows(attribute, a_filemanager)
+                End Select
+            End If
+        Next
     End Sub
 
     Private Sub ProcessTable(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        Dim an_attribute As XMLParser.C_ATTRIBUTE
+        Dim attribute As XMLParser.C_ATTRIBUTE
 
-        For Each an_attribute In ObjNode.attributes
-            Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+        For Each attribute In ObjNode.attributes
+            Select Case attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label"
-                    mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                    mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                 Case "rotated"
-                    Dim b As XMLParser.C_BOOLEAN
-
-                    b = CType(CType(an_attribute.children(0), _
-                            XMLParser.C_PRIMITIVE_OBJECT).item, XMLParser.C_BOOLEAN)
-                    If b.true_valid Then
-                        mRotated = True
-                    Else
-                        mRotated = False
-                    End If
+                    Dim b As XMLParser.C_BOOLEAN = CType(CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT).item, XMLParser.C_BOOLEAN)
+                    mRotated = b.true_valid
                 Case "number_key_columns"
-                    Dim int As XMLParser.C_INTEGER
-
-                    int = CType(CType(an_attribute.children(0), _
-                            XMLParser.C_PRIMITIVE_OBJECT).item, XMLParser.C_INTEGER)
-                    'mNumberKeyColumns = int.range.minimum ' lower or higher will get the number 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                    Dim int As XMLParser.C_INTEGER = CType(CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT).item, XMLParser.C_INTEGER)
                     mNumberKeyColumns = int.range.lower ' lower or higher will get the number
-
                 Case "rows"
-                    ProcessRows(an_attribute, a_filemanager)
+                    ProcessRows(attribute, a_filemanager)
             End Select
         Next
-
     End Sub
 
 End Class

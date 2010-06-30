@@ -199,6 +199,10 @@ Public Class TabPageAction
         If mActionDescription Is Nothing Then
             tpAction.Controls.Clear()
             mActionDescription = New TabPageStructure
+
+            'SRH: Jan 6 2010  EDT-585
+            mActionDescription.IsMandatory = True
+
             tpAction.Controls.Add(mActionDescription)
             mActionDescription.Dock = DockStyle.Fill
         End If
@@ -247,6 +251,9 @@ Public Class TabPageAction
                     Dim an_action As RmStructure = rm.Children.items(0)
                     tpAction.Controls.Clear()
                     mActionDescription = New TabPageStructure
+
+                    'SRH: Jan 6 2010  EDT-585
+                    mActionDescription.IsMandatory = True
 
                     If an_action.Type = StructureType.Slot Then
                         mActionDescription.ProcessStructure(CType(an_action, RmSlot))

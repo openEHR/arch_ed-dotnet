@@ -49,6 +49,7 @@ Public Class TabPageActivity
                 End If
 
                 mActionSpecification = New TabPageStructure
+                mActionSpecification.IsMandatory = True
 
                 Select Case rm.Type
                     Case StructureType.List, StructureType.Table, StructureType.Tree, StructureType.Single
@@ -236,6 +237,9 @@ Public Class TabPageActivity
         If mActionSpecification Is Nothing Then
             mActionSpecification = New TabPageStructure()
         End If
+
+        'SRH: 6 Jan 2010 EDT-585
+        mActionSpecification.IsMandatory = True
 
         Controls.Add(mActionSpecification)
         mActionSpecification.BringToFront()

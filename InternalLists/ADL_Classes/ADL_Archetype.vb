@@ -362,12 +362,9 @@ Namespace ArchetypeEditor.ADL_Classes
                                 End If
                             Case RmEvent.ObservationEventType.Interval
 
-                                If an_event.AggregateMathFunction <> "" Then
+                                If an_event.AggregateMathFunction.Codes.Count > 0 Then
                                     an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("math_function"))
-                                    Dim a_code_phrase As CodePhrase = New CodePhrase
-                                    a_code_phrase.FirstCode = an_event.AggregateMathFunction
-                                    a_code_phrase.TerminologyID = "openehr"
-                                    BuildCodedText(an_attribute, a_code_phrase)
+                                    BuildCodedText(an_attribute, an_event.AggregateMathFunction)
                                 End If
 
                                 If an_event.hasFixedDuration Then
@@ -517,12 +514,9 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
                     Case StructureType.IntervalEvent
 
-                        If an_event.AggregateMathFunction <> "" Then
+                        If an_event.AggregateMathFunction.Codes.Count > 0 Then
                             attribute = mAomFactory.create_c_attribute_single(cadlEvent, EiffelKernel.Create.STRING_8.make_from_cil("math_function"))
-                            Dim a_code_phrase As CodePhrase = New CodePhrase
-                            a_code_phrase.FirstCode = an_event.AggregateMathFunction
-                            a_code_phrase.TerminologyID = "openehr"
-                            BuildCodedText(attribute, a_code_phrase)
+                            BuildCodedText(attribute, an_event.AggregateMathFunction)
                         End If
 
                         If an_event.hasFixedDuration Then
@@ -663,47 +657,35 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildCount(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ct As Constraint_Count)
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim cadlCount As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim magnitude As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+            Dim cadlCount As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(ct.Type)))
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(cadlCount, EiffelKernel.Create.STRING_8.make_from_cil("magnitude"))
+            Dim magnitude As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER = Nothing
 
-            cadlCount = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(ct.Type)))
+            If ct.HasMaximum And ct.HasMinimum Then
+                magnitude = mAomFactory.create_c_integer_make_bounded(ct.MinimumValue, ct.MaximumValue, ct.IncludeMinimum, ct.IncludeMaximum)
+            ElseIf ct.HasMaximum Then
+                magnitude = mAomFactory.create_c_integer_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum)
+            ElseIf ct.HasMinimum Then
+                magnitude = mAomFactory.create_c_integer_make_upper_unbounded(ct.MinimumValue, ct.IncludeMinimum)
+            End If
 
-            If ct.HasMaximum Or ct.HasMinimum Then
-                ' set the magnitude constraint
-                an_attribute = mAomFactory.create_c_attribute_single(cadlCount, EiffelKernel.Create.STRING_8.make_from_cil("magnitude"))
-
-                If ct.HasMaximum And ct.HasMinimum Then
-                    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_bounded(ct.MinimumValue, ct.MaximumValue, ct.IncludeMinimum, ct.IncludeMaximum))
-                ElseIf ct.HasMaximum Then
-                    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_lower_unbounded(ct.MaximumValue, ct.IncludeMaximum))
-                ElseIf ct.HasMinimum Then
-                    magnitude = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_integer_make_upper_unbounded(ct.MinimumValue, ct.IncludeMinimum))
-                Else
-                    Debug.Assert(False)
-                    Return
-                End If
+            If Not magnitude Is Nothing Then
+                mAomFactory.create_c_primitive_object(attribute, magnitude)
 
                 If ct.HasAssumedValue Then
-                    Dim int_ref As EiffelKernel.INTEGER_32_REF
-
-                    int_ref = EiffelKernel.Create.INTEGER_32_REF.default_create
+                    Dim int_ref As EiffelKernel.INTEGER_32_REF = EiffelKernel.Create.INTEGER_32_REF.default_create
                     int_ref.set_item(CType(ct.AssumedValue, Integer))
-
-                    CType(magnitude.item, openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER).set_assumed_value(int_ref)
+                    magnitude.set_assumed_value(int_ref)
                 End If
             End If
         End Sub
 
         Private Sub BuildDateTime(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal dt As Constraint_DateTime)
-
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim s As String
             Dim dtType As String = ""
             Dim cadlDateTime As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-
-            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
             Dim allowAll As Boolean = False
 
             Select Case dt.TypeofDateTimeConstraint

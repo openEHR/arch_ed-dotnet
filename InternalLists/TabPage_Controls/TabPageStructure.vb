@@ -34,6 +34,9 @@ Public Class TabPageStructure
     Private mFileManager As FileManagerLocal
     Friend WithEvents PanelDetails As ArchetypeNodeConstraintControl
 
+    'SRH: Jan 6th 2010 - EDT 585
+    Private mIsMandatory As Boolean = False
+
     'SRH: Jan 11 2009 - EDT-486 - update structure
     Public Event UpdateStructure(ByVal sender As Object, ByVal newStructure As StructureType)
     Public Delegate Sub TabPageStructureUpdateStructure(ByVal sender As Object, ByVal newStructure As StructureType)
@@ -514,6 +517,15 @@ Public Class TabPageStructure
             End If
         End Set
     End Property
+    'SRH: Jan 6th 2010 - EDT 585
+    Public Property IsMandatory() As Boolean
+        Get
+            Return mIsMandatory
+        End Get
+        Set(ByVal Value As Boolean)
+            mIsMandatory = Value
+        End Set
+    End Property
     Public Property EmbeddedAllowed() As Boolean
         Get
             Return mEmbeddedAllowed
@@ -601,7 +613,7 @@ Public Class TabPageStructure
                 s = mArchetypeControl.StructureType
             End If
 
-                PanelDetails.ShowConstraint(s, IsState, CurrentItem, mFileManager)
+            PanelDetails.ShowConstraint(s, IsState, IsMandatory, CurrentItem, mFileManager)
 
                 If Not PanelDetails.Visible Then
                     PanelDetails.Show()
@@ -833,6 +845,7 @@ Public Class TabPageStructure
             Else
                 ' have to have a new slot if change the structure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(chosen_structure)
+                
             End If
             panelStructure.Show()
             panelDisplay.Hide()
