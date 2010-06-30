@@ -178,7 +178,6 @@ Class RmEvent
     End Property
 
     Private Sub ProcessEvent(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
         Select Case ObjNode.rm_type_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
@@ -195,87 +194,79 @@ Class RmEvent
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(ObjNode.occurrences)
 
         For i = 1 To ObjNode.attributes.count
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = ObjNode.attributes.i_th(i)
 
-            an_attribute = ObjNode.attributes.i_th(i)
-
-            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+            Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label" ' runtime_label is OBSOLETE
-                    mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    If attribute.has_children Then
+                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    End If
                 Case "offset"
                     Try
-                        Dim d As Duration = _
-                            ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(an_attribute)
-                        Me.Offset = d.GUI_duration
-                        Me.OffsetUnits = d.ISO_Units
+                        Dim d As Duration = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(attribute)
+                        Offset = d.GUI_duration
+                        OffsetUnits = d.ISO_Units
                     Catch e As Exception
                         MessageBox.Show(String.Format("Event[{1}]/offset attribute - {0}", Me.NodeId, e.Message))
                     End Try
 
                 Case "width"
                     Try
-                        Dim d As Duration = _
-                            ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(an_attribute)
-                        Me.Width = d.GUI_duration
-                        Me.WidthUnits = d.ISO_Units
+                        Dim d As Duration = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(attribute)
+                        Width = d.GUI_duration
+                        WidthUnits = d.ISO_Units
                     Catch e As Exception
                         MessageBox.Show(String.Format("Event[{1}]/width attribute - {0}", Me.NodeId, e.Message))
                     End Try
 
                 Case "aggregate_math_function" ' OBSOLETE
-                    Dim MathFunc As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-
                     Debug.Assert(mType = StructureType.IntervalEvent)
 
-                    MathFunc = an_attribute.children.first
-                    'SRH: 1 Nov 2009 - EDT-568
-                    Me.AggregateMathFunction.Codes.Add(MathFunc.item.as_string.to_cil.Trim(""""))
+                    If attribute.has_children Then
+                        Dim MathFunc As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = attribute.children.first
+                        AggregateMathFunction.Codes.Add(MathFunc.item.as_string.to_cil.Trim(""""))
+                    End If
 
                 Case "math_function"
-
                     Debug.Assert(mType = StructureType.IntervalEvent)
-                    'SRH: 1 Nov 2009 - EDT-568
-                    Dim textConstraint As Constraint_Text = _
-                    ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                    'SRH: 1 Nov 2009 - EDT-568
-                    Me.AggregateMathFunction = textConstraint.AllowableValues
+
+                    If attribute.has_children Then
+                        Dim textConstraint As Constraint_Text = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        AggregateMathFunction = textConstraint.AllowableValues
+                    End If
 
                 Case "display_as_positive"  ' OBSOLETE
-                    Dim DisplayPos As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-
                     Debug.Assert(False, "archetype contains obsolete data - will be written correctly")
 
-                    DisplayPos = an_attribute.children.first
-                    boolSignNeg = (DisplayPos.item.as_string.to_cil = "True")
-                    'SRH: 1 Nov 2009 - EDT-568
-                    If boolSignNeg Then
-                        Me.AggregateMathFunction.Codes.Add("521") ' a change that is displayed in absolute terms
+                    If attribute.has_children Then
+                        Dim DisplayPos As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = attribute.children.first
+                        boolSignNeg = (DisplayPos.item.as_string.to_cil = "True")
+
+                        If boolSignNeg Then
+                            AggregateMathFunction.Codes.Add("521") ' a change that is displayed in absolute terms
+                        End If
                     End If
 
                 Case "data", "item" 'item is OBSOLETE
                     ' return the data for processing
-                    mEIF_Data = an_attribute
+                    mEIF_Data = attribute
 
                 Case "state"
-                    mEIF_State = an_attribute
-
+                    mEIF_State = attribute
             End Select
-
         Next
 
-
-        If Not Me.ADL_Data Is Nothing Then
+        If Not ADL_Data Is Nothing AndAlso ADL_Data.has_children Then
             Dim cadlStruct As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim generatingType As String = ADL_Data.children.first.Generating_Type.to_cil
 
-            Dim generating_type As String = Me.ADL_Data.children.first.Generating_Type.to_cil
-            Select Case generating_type
+            Select Case generatingType
                 Case "ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
                 Case "C_COMPLEX_OBJECT"
                     cadlStruct = CType(Me.ADL_Data.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-                    Dim structure_type As StructureType
-
-                    structure_type = ReferenceModel.StructureTypeFromString(cadlStruct.rm_type_name.to_cil)
+                    Dim structure_type As StructureType = ReferenceModel.StructureTypeFromString(cadlStruct.rm_type_name.to_cil)
 
                     Debug.Assert(structure_type <> StructureType.Not_Set)
 
@@ -287,11 +278,10 @@ Class RmEvent
             End Select
         End If
 
+        If Not ADL_State Is Nothing AndAlso ADL_State.has_children Then
+            Dim generatingType As String = ADL_State.children.first.Generating_Type.to_cil
 
-        If Not Me.ADL_State Is Nothing Then
-            Dim generating_type As String = Me.ADL_State.children.first.Generating_Type.to_cil
-
-            Select Case generating_type
+            Select Case generatingType
                 Case "ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
@@ -301,7 +291,6 @@ Class RmEvent
                     ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure = New RmStructureCompound(Me.ADL_State, StructureType.State, a_filemanager)
             End Select
         End If
-
     End Sub
 
 #End Region

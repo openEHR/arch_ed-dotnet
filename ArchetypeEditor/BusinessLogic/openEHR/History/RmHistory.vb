@@ -86,38 +86,36 @@ Class RmHistory
     End Sub
 
 #Region "ADL and XML Handling"
-    Public Overrides Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure
 
-        Dim child As RmStructure '= MyBase.GetChildByNodeId(aNodeId)
-        'If child Is Nothing Then
-        child = Data.GetChildByNodeId(aNodeId)
-        'end if
-        If child Is Nothing Then
-            child = Children.GetChildByNodeId(aNodeId)
+    Public Overrides Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure
+        Dim result As RmStructure = Data.GetChildByNodeId(aNodeId)
+
+        If result Is Nothing Then
+            result = Children.GetChildByNodeId(aNodeId)
         End If
 
-        Return child
+        Return result
     End Function
 
     Private Sub ProcessEventSeries(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
-
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(ObjNode.occurrences)
 
         For i = 1 To ObjNode.attributes.count
-            an_attribute = ObjNode.attributes.i_th(i)
-            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = ObjNode.attributes.i_th(i)
+
+            Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label"  'run_time_label is obsolete
-                    mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    If attribute.has_children Then
+                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    End If
 
                 Case "period"
                     Try
-                        Dim d As Duration = _
-                            ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(an_attribute)
-                        Me.Period = d.GUI_duration
-                        Me.PeriodUnits = d.ISO_Units
-                        Me.isPeriodic = True
+                        Dim d As Duration = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(attribute)
+                        Period = d.GUI_duration
+                        PeriodUnits = d.ISO_Units
+                        isPeriodic = True
                     Catch e As Exception
                         MessageBox.Show(String.Format("History[{1}]/period attribute - {0}", Me.NodeId, e.Message))
                     End Try
@@ -129,12 +127,11 @@ Class RmHistory
                     ' empty the remembered structure
                     ArchetypeEditor.ADL_Classes.ADL_Tools.LastProcessedStructure = Nothing
 
-                    colEvt.Cardinality.SetFromOpenEHRCardinality(an_attribute.cardinality)
-                    colEvt.Existence.SetFromOpenEHRExistence(an_attribute.existence) 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1                    
+                    colEvt.Cardinality.SetFromOpenEHRCardinality(attribute.cardinality)
+                    colEvt.Existence.SetFromOpenEHRExistence(attribute.existence) 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1                    
 
-                    For ii = 1 To an_attribute.children.count
-                        'Dim Struct_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                        an_Event = an_attribute.children.i_th(ii)
+                    For ii = 1 To attribute.children.count
+                        an_Event = attribute.children.i_th(ii)
                         ' process the event and expose the data structure if it is present
                         ' as ADL_Data property
                         ' this means there is only one structure per EventSeries as in the GUI -
@@ -151,15 +148,15 @@ Class RmHistory
                         rmData = ArchetypeEditor.ADL_Classes.ADL_Tools.LastProcessedStructure
                     End If
                 Case Else
-                    MessageBox.Show(AE_Constants.Instance.Incorrect_format & ": illegal attribute - " & an_attribute.rm_attribute_name.to_cil & " in EventSeries", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show(AE_Constants.Instance.Incorrect_format & ": illegal attribute - " & attribute.rm_attribute_name.to_cil & " in EventSeries", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Select
         Next
     End Sub
 
     Private Sub ProcessEventSeries(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         Dim an_attribute As XMLParser.C_ATTRIBUTE
-        Try
 
+        Try
             cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(ObjNode.occurrences)
 
             For Each an_attribute In ObjNode.attributes

@@ -111,59 +111,65 @@ Public Class RmStructureCompound
     End Sub
 
     Private Sub ProcessList(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
         For i = 1 To ObjNode.attributes.count
-            an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+
+            Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label" 'runtime_label is obsolete
-                    mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    If attribute.has_children Then
+                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    End If
                 Case "items"
                     Dim ii As Integer
                     'Set whether the list is ordered or not
-                    colChildren.Cardinality.SetFromOpenEHRCardinality(an_attribute.cardinality)
-                    colChildren.Existence.SetFromOpenEHRExistence(an_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    colChildren.Cardinality.SetFromOpenEHRCardinality(attribute.cardinality)
+                    colChildren.Existence.SetFromOpenEHRExistence(attribute.existence)
 
-                    For ii = 1 To an_attribute.children.count
+                    For ii = 1 To attribute.children.count
                         Dim a_ComplexObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                        Select Case CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil
+
+                        Select Case CType(attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil
                             Case "C_COMPLEX_OBJECT"
-                                a_ComplexObject = CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+                                a_ComplexObject = CType(attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
                                 colChildren.Add(New ArchetypeEditor.ADL_Classes.ADL_RmElement(a_ComplexObject, a_filemanager))
                             Case "ARCHETYPE_SLOT"
-                                colChildren.Add(New RmSlot(CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                                colChildren.Add(New RmSlot(CType(attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
                             Case "ARCHETYPE_INTERNAL_REF"
-                                colChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessReference(CType(an_attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
+                                colChildren.Add(ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessReference(CType(attribute.children.i_th(ii), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF)))
                         End Select
                     Next
                 Case Else
-                    Debug.Assert(False, an_attribute.rm_attribute_name.to_cil & " not handled")
+                    Debug.Assert(False, attribute.rm_attribute_name.to_cil & " not handled")
             End Select
         Next
     End Sub
 
     Private Sub ProcessSimple(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
         For i = 1 To ObjNode.attributes.count
-            an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+
+            Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label" ' runtime_label is obsolete
-                    mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    If attribute.has_children Then
+                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    End If
                 Case "item"
-                    colChildren.Existence.SetFromOpenEHRExistence(an_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                    Select Case CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil.ToUpperInvariant()
-                        Case "C_COMPLEX_OBJECT"
-                            colChildren.Add(New ArchetypeEditor.ADL_Classes.ADL_RmElement(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
-                        Case "ARCHETYPE_SLOT"
-                            colChildren.Add(New RmSlot(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
-                    End Select
+                    colChildren.Existence.SetFromOpenEHRExistence(attribute.existence)
+
+                    If attribute.has_children Then
+                        Select Case CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT).generating_type.to_cil.ToUpperInvariant()
+                            Case "C_COMPLEX_OBJECT"
+                                colChildren.Add(New ArchetypeEditor.ADL_Classes.ADL_RmElement(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
+                            Case "ARCHETYPE_SLOT"
+                                colChildren.Add(New RmSlot(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                        End Select
+                    End If
             End Select
-
         Next
-
     End Sub
 
     Protected Sub ProcessTree(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
@@ -203,14 +209,11 @@ Public Class RmStructureCompound
     End Sub
 
     Private Sub ProcessData(ByVal data_rel_node As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_filemanager As FileManagerLocal)
-        Dim ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT
         Dim i As Integer
         Dim structure_type As StructureType
 
-
         For i = 1 To data_rel_node.children.count
-
-            ObjNode = CType(data_rel_node.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+            Dim ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT = CType(data_rel_node.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT)
             structure_type = ReferenceModel.StructureTypeFromString(ObjNode.rm_type_name.to_cil)
 
             Select Case ObjNode.generating_type.to_cil
@@ -226,23 +229,20 @@ Public Class RmStructureCompound
                             colChildren.Add(New RmTable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                         Case StructureType.ISM_TRANSITION, StructureType.CarePathwayStep
                             'need to get the node_id from the workflow step to get the text displayed
-
                             'make sure there is a valid node_id for the careflow_step
                             Dim eif_string As EiffelKernel.STRING_8
                             eif_string = EiffelKernel.Create.STRING_8.make_from_cil("careflow_step")
+
                             If CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(eif_string) Then
-                                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(eif_string)
 
-                                an_attribute = CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(eif_string)
-                                If Not an_attribute Is Nothing Then
+                                If Not attribute Is Nothing AndAlso attribute.has_children Then
                                     Dim node_id As String
-                                    Dim coded_text As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                                    Dim t As Constraint_Text
-
-                                    coded_text = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-                                    t = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(coded_text)
+                                    Dim codedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+                                    Dim t As Constraint_Text = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(codedText)
                                     node_id = t.AllowableValues.FirstCode
-                                    If RmTerm.isValidTermCode(node_id) Then
+
+                                    If RmTerm.IsValidTermCode(node_id) Then
                                         colChildren.Add(New RmPathwayStep(node_id, CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                                     End If
                                 End If
@@ -250,16 +250,14 @@ Public Class RmStructureCompound
                         Case StructureType.Activity
                             colChildren.Add(New RmActivity(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
                         Case StructureType.Participation
-                            colChildren.Add(New RmParticipation(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))) ', a_filemanager))
+                            colChildren.Add(New RmParticipation(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case Else
                             Debug.Assert(False)
                     End Select
                 Case "ARCHETYPE_SLOT"
                     colChildren.Add(New RmSlot(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
             End Select
-
         Next
-
     End Sub
 
 #End Region
@@ -415,13 +413,11 @@ Public Class RmStructureCompound
                                 For Each attribute As XMLParser.C_ATTRIBUTE In CType(ObjNode, XMLParser.C_COMPLEX_OBJECT).attributes
                                     If attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "careflow_step" Then
                                         Dim node_id As String
-                                        Dim coded_text As XMLParser.C_COMPLEX_OBJECT
-                                        Dim t As Constraint_Text
-
-                                        coded_text = CType(attribute.children(0), XMLParser.C_COMPLEX_OBJECT)
-                                        t = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(coded_text)
+                                        Dim codedText As XMLParser.C_COMPLEX_OBJECT = CType(attribute.children(0), XMLParser.C_COMPLEX_OBJECT)
+                                        Dim t As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(codedText)
                                         node_id = t.AllowableValues.FirstCode
-                                        If RmTerm.isValidTermCode(node_id) Then
+
+                                        If RmTerm.IsValidTermCode(node_id) Then
                                             colChildren.Add(New RmPathwayStep(node_id, CType(ObjNode, XMLParser.C_COMPLEX_OBJECT)))
                                         End If
                                     End If

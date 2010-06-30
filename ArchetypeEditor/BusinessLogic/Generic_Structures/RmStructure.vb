@@ -170,6 +170,7 @@ Public Class RmStructure
         mType = a_RmStructure.mType
         sNodeId = a_RmStructure.sNodeId
         cOccurrences = a_RmStructure.cOccurrences.Copy()
+
         If a_RmStructure.HasNameConstraint Then
             mRunTimeConstraint = a_RmStructure.NameConstraint
         End If
@@ -180,17 +181,17 @@ Public Class RmStructure
         mType = a_structure_type
     End Sub
 
-#Region "ADL and XML oriented features"
-
     Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
         If EIF_Structure.is_addressable Then
             sNodeId = EIF_Structure.node_id.to_cil
         End If
+
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(EIF_Structure.occurrences)
         mType = ReferenceModel.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
 
         If EIF_Structure.generating_type.to_cil = "C_COMPLEX_OBJECT" Then
             Dim s As String
+
             ' need to cope with runtime_label
             If CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("name")) Then
                 s = "name"
@@ -200,9 +201,12 @@ Public Class RmStructure
             Else
                 Return
             End If
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            attribute = CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil(s))
-            mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil(s))
+
+            If attribute.has_children Then
+                mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+            End If
         End If
     End Sub
 
@@ -210,6 +214,7 @@ Public Class RmStructure
         If Not String.IsNullOrEmpty(XML_Structure.node_id) Then
             sNodeId = XML_Structure.node_id
         End If
+
         cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(XML_Structure.occurrences)
         mType = ReferenceModel.StructureTypeFromString(XML_Structure.rm_type_name)
 
@@ -223,8 +228,6 @@ Public Class RmStructure
             End If
         End If
     End Sub
-
-#End Region
 
 End Class
 
