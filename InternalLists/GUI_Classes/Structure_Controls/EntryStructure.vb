@@ -225,7 +225,7 @@ Public Class EntryStructure
         '
         'ButAddElement
         '
-        Me.ButAddElement.BackColor = System.Drawing.Color.PeachPuff
+        Me.ButAddElement.BackColor = System.Drawing.Color.LightSteelBlue
         Me.ButAddElement.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButAddElement.ForeColor = System.Drawing.SystemColors.ControlText
         Me.helpEntryStructure.SetHelpNavigator(Me.ButAddElement, System.Windows.Forms.HelpNavigator.Topic)
@@ -240,7 +240,7 @@ Public Class EntryStructure
         '
         'butRemoveElement
         '
-        Me.butRemoveElement.BackColor = System.Drawing.Color.PeachPuff
+        Me.butRemoveElement.BackColor = System.Drawing.Color.LightSteelBlue
         Me.butRemoveElement.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butRemoveElement.Image = CType(resources.GetObject("butRemoveElement.Image"), System.Drawing.Image)
         Me.butRemoveElement.ImageAlign = System.Drawing.ContentAlignment.TopRight
@@ -252,7 +252,7 @@ Public Class EntryStructure
         '
         'butListUp
         '
-        Me.butListUp.BackColor = System.Drawing.Color.PeachPuff
+        Me.butListUp.BackColor = System.Drawing.Color.LightSteelBlue
         Me.butListUp.Image = CType(resources.GetObject("butListUp.Image"), System.Drawing.Image)
         Me.butListUp.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.butListUp.Location = New System.Drawing.Point(8, 58)
@@ -263,7 +263,7 @@ Public Class EntryStructure
         '
         'butListDown
         '
-        Me.butListDown.BackColor = System.Drawing.Color.PeachPuff
+        Me.butListDown.BackColor = System.Drawing.Color.LightSteelBlue
         Me.butListDown.Image = CType(resources.GetObject("butListDown.Image"), System.Drawing.Image)
         Me.butListDown.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.butListDown.Location = New System.Drawing.Point(8, 85)
