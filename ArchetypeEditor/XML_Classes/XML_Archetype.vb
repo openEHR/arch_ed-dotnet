@@ -1596,29 +1596,33 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         Private Sub BuildInterval(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Interval)
+            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1)))
 
-            Dim objNode As XMLParser.C_COMPLEX_OBJECT
-
-            'objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type))
-            objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             'Upper of type T
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
-            'an_attribute = mAomFactory.MakeSingleAttribute(objNode, "upper")
-            an_attribute = mAomFactory.MakeSingleAttribute(objNode, "upper", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            BuildElementConstraint(objNode, an_attribute, c.UpperLimit)
+            Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(objNode, "upper", value_attribute.existence)
+            BuildElementConstraint(objNode, attribute, c.UpperLimit)
 
             'Lower of type T
-            'an_attribute = mAomFactory.MakeSingleAttribute(objNode, "lower")
-            an_attribute = mAomFactory.MakeSingleAttribute(objNode, "lower", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            BuildElementConstraint(objNode, an_attribute, c.LowerLimit)
+            attribute = mAomFactory.MakeSingleAttribute(objNode, "lower", value_attribute.existence)
+            BuildElementConstraint(objNode, attribute, c.LowerLimit)
 
-            'SRH: 29 Jan 2009 - EDT-361 - need to test to see the actual class type of the lower limit
-            If c.Type = ConstraintType.Interval_DateTime AndAlso Not an_attribute Is Nothing AndAlso Not an_attribute.children Is Nothing Then
-                Dim s As String = CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT).rm_type_name
+            'For a date or time interval, we need to set the actual class type of the lower limit
+            If c.Type = ConstraintType.Interval_DateTime AndAlso Not attribute Is Nothing AndAlso Not attribute.children Is Nothing Then
+                Dim s As String = CType(attribute.children(0), XMLParser.C_COMPLEX_OBJECT).rm_type_name
+
                 If s <> "DV_DATE_TIME" Then
-                    CType(value_attribute.children(0), XMLParser.C_COMPLEX_OBJECT).rm_type_name = String.Format("DV_INTERVAL<{0}>", s)
-                End If
+                    Dim i As Integer = value_attribute.children.Length
 
+                    While i > 0
+                        i = i - 1
+                        Dim o As XMLParser.C_COMPLEX_OBJECT = CType(value_attribute.children(i), XMLParser.C_COMPLEX_OBJECT)
+
+                        If o.rm_type_name = "DV_INTERVAL<DV_DATE_TIME>" Then
+                            i = 0
+                            o.rm_type_name = "DV_INTERVAL<" & s & ">"
+                        End If
+                    End While
+                End If
             End If
         End Sub
 

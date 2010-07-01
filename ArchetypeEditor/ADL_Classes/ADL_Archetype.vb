@@ -961,7 +961,6 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal t As Constraint_Text)
-
             Select Case t.TypeOfTextConstraint
                 Case TextConstrainType.Terminology
                     If t.ConstraintCode <> "" Then
@@ -970,8 +969,6 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case TextConstrainType.Internal
                     BuildCodedText(value_attribute, t.AllowableValues, t.AssumedValue)
                 Case TextConstrainType.Text
-                    'HKF: reinstated BuildPlainText to be able to read old archetypes
-                    'mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil("DV_TEXT"))
                     BuildPlainText(value_attribute, t.AllowableValues.Codes)
             End Select
         End Sub
@@ -984,10 +981,9 @@ Namespace ArchetypeEditor.ADL_Classes
 
             tablePaths = Me.adlArchetype.physical_paths
 
-            'System.Diagnostics.Debug.WriteLine(tablePaths.count)
             For i = 1 To tablePaths.count
                 s = tablePaths.i_th(i).out.to_cil
-                'System.Diagnostics.Debug.WriteLine(s)
+
                 If s.EndsWith(NodeId & "]") Then
                     path = openehr.common_libs.structures.object_graph.path.Create.OG_PATH.make_from_string(EiffelKernel.Create.STRING_8.make_from_cil(s))
                     Exit For
@@ -995,35 +991,42 @@ Namespace ArchetypeEditor.ADL_Classes
             Next
 
             Return path
-
         End Function
 
         Private Sub BuildInterval(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Interval)
-
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             ' Interval<T>
 
             objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(c.Type)))
 
             'Upper of type T
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            an_attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("upper"))
-            BuildElementConstraint(an_attribute, c.UpperLimit)
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("upper"))
+            BuildElementConstraint(attribute, c.UpperLimit)
 
             'Lower of type T
-            an_attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("lower"))
-            BuildElementConstraint(an_attribute, c.LowerLimit)
+            attribute = mAomFactory.create_c_attribute_single(objNode, EiffelKernel.Create.STRING_8.make_from_cil("lower"))
+            BuildElementConstraint(attribute, c.LowerLimit)
 
-
-            'SRH: 29 Jan 2009 - EDT-361 - need to test to see the actual class type of the lower limit
+            'For a date or time interval, we need to set the actual class type of the lower limit
             If c.Type = ConstraintType.Interval_DateTime Then
-                Dim s As String = CType(an_attribute.children.i_th(1), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).rm_type_name.to_cil
+                Dim s As String = CType(attribute.children.i_th(1), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).rm_type_name.to_cil
+
                 If s <> "DV_DATE_TIME" Then
-                    CType(value_attribute.children.i_th(1), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)._set_rm_type_name(EiffelKernel.Create.STRING_8.make_from_cil(String.Format("DV_INTERVAL<{0}>", s)))
+                    Dim i As Integer = value_attribute.children.count
+
+                    While i > 0
+                        Dim o As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = CType(value_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+
+                        If o.rm_type_name.to_cil <> "DV_INTERVAL<DV_DATE_TIME>" Then
+                            i = i - 1
+                        Else
+                            i = 0
+                            o._set_rm_type_name(EiffelKernel.Create.STRING_8.make_from_cil("DV_INTERVAL<" & s & ">"))
+                        End If
+                    End While
                 End If
-
             End If
-
         End Sub
 
         Private Sub BuildMultiMedia(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_MultiMedia)
@@ -1133,8 +1136,6 @@ Namespace ArchetypeEditor.ADL_Classes
                 cSt = mAomFactory.create_c_string_make_from_regexp(EiffelKernel.Create.STRING_8.make_from_cil(c.IDRegex))
                 mAomFactory.create_c_primitive_object(attribute, cSt)
             End If
-
-
         End Sub
 
         Protected Sub BuildElementConstraint(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint)
