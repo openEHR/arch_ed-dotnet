@@ -193,6 +193,7 @@ Public Class TabPageStructure
         '
         'panelStructure
         '
+        Me.panelStructure.BackColor = System.Drawing.Color.Transparent
         Me.panelStructure.Controls.Add(Me.panelDisplay)
         Me.panelStructure.Dock = System.Windows.Forms.DockStyle.Fill
         Me.panelStructure.Location = New System.Drawing.Point(0, 40)
@@ -466,7 +467,7 @@ Public Class TabPageStructure
         '
         Me.AutoScroll = True
         Me.AutoScrollMinSize = New System.Drawing.Size(650, 542)
-        Me.BackColor = System.Drawing.Color.LemonChiffon
+        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
         Me.Controls.Add(Me.panelStructure)
         Me.Controls.Add(Me.panelEntry)
         Me.HelpProviderTabPageStructure.SetHelpKeyword(Me, "Screens/data_screen.htm")

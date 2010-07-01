@@ -193,6 +193,7 @@ Public Class OccurrencesPanel
         '
         'OccurrencesPanel
         '
+        Me.BackColor = System.Drawing.Color.Transparent
         Me.Controls.Add(Me.numMax)
         Me.Controls.Add(Me.numMin)
         Me.Controls.Add(Me.panelLexical)

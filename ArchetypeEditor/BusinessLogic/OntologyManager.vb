@@ -25,8 +25,6 @@ Public Class OntologyManager
     Private WithEvents mConstraintDefinitionsTable As DataTable
     Private WithEvents mConstraintBindingsTable As DataTable
     Private WithEvents mTermBindingsTable As DataTable
-
-    ' HKF: 1606
     Private WithEvents mTermBindingCriteriaTable As DataTable
 
     Private mTerminologiesTable As DataTable
@@ -36,12 +34,10 @@ Public Class OntologyManager
     Private mPrimaryLanguageText As String
     Private mLastLanguageText As String
     Private mLastTerminologyText As String
-    'Private sDefaultLanguageCode As String
     Private mOntology As Ontology
     Private mLastTerm As RmTerm
     Private mDoUpdateOntology As Boolean = False
     Private mReplaceTranslations As Integer = 0  ' 0 = ?, -1 = yes, 1 = no
-
 
     Public Property PrimaryLanguageCode() As String
         Get
@@ -187,13 +183,11 @@ Public Class OntologyManager
                 ' must accept these before calling clear
                 mLanguageDS.AcceptChanges()
             End If
+
             mLanguageDS.Clear()
         End Try
 
         Debug.Assert(TermDefinitionTable.Rows.Count = 0)
-        'If Me.TermDefinitionTable.Rows.Count > 0 Then
-        '    Stop
-        'End If
 
         LanguageText = TerminologyServer.Instance.CodeSetItemDescription("Language", LanguageCode)
         mPrimaryLanguageText = Nothing
@@ -205,19 +199,19 @@ Public Class OntologyManager
         new_row(1) = mLanguageText
         mLanguagesTable.Rows.Add(new_row)
         mLastTerm = Nothing
-        Me.mReplaceTranslations = 0
-
+        mReplaceTranslations = 0
     End Sub
 
     Public Sub Reset(Optional ByVal LanguageCode As String = "") ' resets for beginning a new archetype
-        Me.mReplaceTranslations = 0
+        mReplaceTranslations = 0
         mOntology.Reset()
+
         If LanguageCode = "" Then
             LanguageCode = OceanArchetypeEditor.DefaultLanguageCode
         End If
+
         mOntology.SetPrimaryLanguage(LanguageCode)
         InitialiseOntologyManager(LanguageCode)
-
     End Sub
 
     Public Sub PopulateAllTerms()
@@ -269,34 +263,30 @@ Public Class OntologyManager
         End If
     End Function
 
-    Public Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
-        Dim aterm As RmTerm
-
-        aterm = mOntology.SpecialiseTerm(Text, Description, Id)
-        UpdateTerm(aterm)
-        Return aterm
-
+    Public Function SpecialiseTerm(ByVal text As String, ByVal description As String, ByVal id As String) As RmTerm
+        Dim result As RmTerm = mOntology.SpecialiseTerm(text, description, id)
+        UpdateTerm(result)
+        Return result
     End Function
 
-    Public Function SpecialiseTerm(ByVal a_term As RmTerm) As RmTerm
-        Dim new_term As RmTerm
-
-        new_term = mOntology.SpecialiseTerm(a_term.Text & "**", a_term.Description, a_term.Code)
-        UpdateTerm(new_term)
-        Return new_term
+    Public Function SpecialiseTerm(ByVal term As RmTerm) As RmTerm
+        Dim result As RmTerm = mOntology.SpecialiseTerm(term.Text & "**", term.Description, term.Code)
+        UpdateTerm(result)
+        Return result
     End Function
 
     Public Function SpecialiseTerm(ByVal a_term_code As String) As RmTerm
-        Dim new_term As RmTerm = Nothing
+        Dim result As RmTerm = Nothing
         Dim a_term As RmTerm
 
         a_term = mOntology.TermForCode(a_term_code, mLanguageCode)
-        If Not a_term Is Nothing Then
-            new_term = mOntology.SpecialiseTerm(a_term.Text & "**", a_term.Description, a_term.Code)
-            UpdateTerm(new_term)
-        End If
-        Return new_term
 
+        If Not a_term Is Nothing Then
+            result = mOntology.SpecialiseTerm(a_term.Text & "**", a_term.Description, a_term.Code)
+            UpdateTerm(result)
+        End If
+
+        Return result
     End Function
 
     Public Function NextTermId() As String
@@ -312,63 +302,54 @@ Public Class OntologyManager
         Return mLastTerm
     End Function
 
-    Public Sub UpdateTerm(ByVal aterm As RmTerm)
+    Public Sub UpdateTerm(ByVal term As RmTerm)
+        ' add it to the GUI if it is not internal
+        Debug.Assert(term.Code <> "")
+        Debug.Assert(term.Text <> "")
+
         Dim d_row, l_row As DataRow
 
-        ' add it to the GUI if it is not internal
-        Debug.Assert(aterm.Code <> "")
-        Debug.Assert(aterm.Text <> "")
-        'CHANGE Sam Heard 2004-06-17
-        'Can have empty description
-        'Debug.Assert(aterm.Description <> "")
-        If aterm.Code = "" Then
+        If term.Code = "" Then
             Debug.Assert(False)
             Return
-        ElseIf aterm.Text = "" Then
+        ElseIf term.Text = "" Then
             Debug.Assert(False)
-            'SRH: 13 Jan 2009 - EDT-491  consistent naming in ADL and AE before saving.
-            'a_term.Text = "?"
-            aterm.Text = "unknown"
-            aterm.Description = "unknown"
-        ElseIf aterm.Description = "" Then
-            aterm.Description = "*"
+            term.Text = "unknown"
+            term.Description = "unknown"
+        ElseIf term.Description = "" Then
+            term.Description = "*"
         End If
 
-        If aterm.isConstraint Then
+        If term.isConstraint Then
             For Each l_row In mLanguagesTable.Rows
-
                 d_row = mConstraintDefinitionsTable.NewRow
                 d_row(0) = l_row(0)
-                d_row(1) = aterm.Code
-                d_row(2) = aterm.Text
-                d_row(3) = aterm.Description
+                d_row(1) = term.Code
+                d_row(2) = term.Text
+                d_row(3) = term.Description
+
                 Try
                     mConstraintDefinitionsTable.Rows.Add(d_row)
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             Next
-
         Else
-
             For Each l_row In mLanguagesTable.Rows
-
                 d_row = mTermDefinitionsTable.NewRow
                 d_row(0) = l_row(0)
-                d_row(1) = aterm.Code
-                d_row(2) = aterm.Text
-                d_row(3) = aterm.Description
-                'SRH: 22 Jun 2009 EDT-549 adding non-standard annotations
-                d_row(5) = aterm
+                d_row(1) = term.Code
+                d_row(2) = term.Text
+                d_row(3) = term.Description
+                d_row(5) = term
+
                 Try
                     mTermDefinitionsTable.Rows.Add(d_row)
-                Catch e As Exception
-                    MessageBox.Show(e.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             Next
-
         End If
-
     End Sub
 
     Private Sub UpdateLanguage(ByVal LanguageCode As String)
@@ -496,41 +477,48 @@ Public Class OntologyManager
             Dim priorSetting As Boolean = mDoUpdateOntology
             Dim selected_rows As DataRow()
             selected_rows = aTable.Select("Code ='" & aTerm.Code & "'")
+
             For Each d_row In selected_rows
                 If CStr(d_row(0)) = mLanguageCode Then
                     d_row.BeginEdit()
+
                     If CStr(d_row(2)) <> aTerm.Text Then
                         d_row(2) = aTerm.Text
                     End If
+
                     If CStr(d_row(3)) <> aTerm.Description Then
                         d_row(3) = aTerm.Description
                     End If
+
                     If Not aTerm.IsConstraint Then
                         If Not (IsDBNull(d_row(4)) And String.IsNullOrEmpty(aTerm.Comment)) Then
                             If CStr(d_row(4)) <> aTerm.Comment Then
                                 d_row(4) = aTerm.Comment
                             End If
                         End If
-                        'SRH: 22 Jun 2009 EDT-549 - allow non-standard annotations
+
                         d_row(5) = aTerm
                     End If
+
                     d_row.EndEdit()
                 Else
                     mDoUpdateOntology = False 'as ontology changes are handled there
                     d_row.BeginEdit()
                     d_row(2) = "*" & aTerm.Text & "(" & mLanguageCode & ")"
                     d_row(3) = "*" & aTerm.Description & "(" & mLanguageCode & ")"
+
                     If Not aTerm.IsConstraint Then
                         If Not (IsDBNull(d_row(4)) And String.IsNullOrEmpty(aTerm.Comment)) Then
                             d_row(4) = "*" & aTerm.Comment & "(" & mLanguageCode & ")"
                         End If
+
                         d_row(5) = aTerm
                     End If
+
                     d_row.EndEdit()
                     mDoUpdateOntology = priorSetting
                 End If
             Next
-
         Else
             'Need to update ontology here
             Dim keys(1) As Object
@@ -541,14 +529,10 @@ Public Class OntologyManager
             If Not d_row Is Nothing Then
                 d_row.BeginEdit()
 
-                'SRH: 22 Jun 2009 - bug?
-                ' If IsDBNull(d_row(4)) OrElse CStr(d_row(2)) <> aTerm.Text Then
                 If IsDBNull(d_row(2)) OrElse CStr(d_row(2)) <> aTerm.Text Then
                     d_row(2) = aTerm.Text
                 End If
 
-                'SRH: 22 Jun 2009 - bug?
-                'If IsDBNull(d_row(4)) OrElse CStr(d_row(3)) <> aTerm.Description Then
                 If IsDBNull(d_row(3)) OrElse CStr(d_row(3)) <> aTerm.Description Then
                     d_row(3) = aTerm.Description
                 End If
@@ -558,15 +542,12 @@ Public Class OntologyManager
                 End If
 
                 d_row(5) = aTerm
-
                 d_row.EndEdit()
             End If
-
         End If
 
         mFileManager.FileEdited = True
     End Sub
-
 
     Public Sub AddLanguage(ByVal a_LanguageCode As String, Optional ByVal LanguageText As String = "")
         Dim key As Object
@@ -599,7 +580,6 @@ Public Class OntologyManager
             End If
 
             mFileManager.FileEdited = True
-
         End If
     End Sub
 
@@ -612,7 +592,9 @@ Public Class OntologyManager
         Else
             mLastTerminologyText = TerminologyText
         End If
+
         key = TerminologyCode
+
         If TerminologiesTable.Rows.Find(key) Is Nothing Then
             Dim new_row As DataRow
             new_row = mTerminologiesTable.NewRow
@@ -620,20 +602,19 @@ Public Class OntologyManager
             new_row(1) = mLastTerminologyText
             mTerminologiesTable.Rows.Add(new_row)
         End If
+
         ' ensure it is in the ontology as well
         If mDoUpdateOntology Then
             mOntology.AddTerminology(TerminologyCode)
         End If
 
         mFileManager.FileEdited = True
-
     End Sub
 
     Public Function GetOpenEHRTerm(ByVal code As Integer, ByVal DefaultTerm As String, Optional ByVal Language As String = "?") As String
         Dim s As String = Nothing
 
         ' returns the string in the language
-
         If Language = "?" Then
             Language = OceanArchetypeEditor.SpecificLanguageCode
         End If
@@ -643,6 +624,7 @@ Public Class OntologyManager
         Catch except As Exception
             MessageBox.Show("Error in terminology server: " & except.Message, "Ocean Archetype Parser", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
+
         If s Is Nothing Then
             Return DefaultTerm
         Else
@@ -683,8 +665,6 @@ Public Class OntologyManager
 
     Public Sub SetBestLanguage()
         ' set the specific language if it is present e.g. en-US, en-AU
-        'SRH Aug 15 2008: change to ensure best language choice
-
         Dim bestLanguage As String
 
         If HasLanguage(OceanArchetypeEditor.SpecificLanguageCode) Then
@@ -788,7 +768,6 @@ Public Class OntologyManager
         Return BindingsTable
     End Function
 
-
     Private Function MakeTermBindingTable() As DataTable
         ' Note - there are no versions of the Terminology at present
         ' as if the knowledge model shifted fundamentally then I believe
@@ -832,34 +811,33 @@ Public Class OntologyManager
         Return BindingsTable
     End Function
 
-    ' HKF: 1606
     Private Function MakeTermBindingCriteriaTable() As DataTable
         Dim BindingCriteriaTable As New DataTable("TermBindingCriteria")
 
         ' Add six column objects to the table.
         Dim terminologyColumn As DataColumn = New DataColumn
-        terminologyColumn.DataType = GetType(String) 'System.Type.GetType("System.String")
+        terminologyColumn.DataType = GetType(String)
         terminologyColumn.ColumnName = "Terminology"
         BindingCriteriaTable.Columns.Add(terminologyColumn)
 
         Dim PathColumn As DataColumn = New DataColumn
-        PathColumn.DataType = GetType(String) 'System.Type.GetType("System.String")
+        PathColumn.DataType = GetType(String)
         PathColumn.ColumnName = "Path"
         BindingCriteriaTable.Columns.Add(PathColumn)
 
         Dim CodeColumn As DataColumn = New DataColumn
-        CodeColumn.DataType = GetType(String) 'System.Type.GetType("System.String")
+        CodeColumn.DataType = GetType(String)
         CodeColumn.ColumnName = "Code"
         BindingCriteriaTable.Columns.Add(CodeColumn)
 
         Dim ReleaseColumn As DataColumn = New DataColumn
-        ReleaseColumn.DataType = GetType(String) 'System.Type.GetType("System.String")
+        ReleaseColumn.DataType = GetType(String)
         ReleaseColumn.ColumnName = "Release"
         ReleaseColumn.DefaultValue = ""
         BindingCriteriaTable.Columns.Add(ReleaseColumn)
 
         Dim CriteriaColumn As New DataColumn
-        CriteriaColumn.DataType = GetType(String) 'System.Type.GetType("System.String")
+        CriteriaColumn.DataType = GetType(String)
         CriteriaColumn.ColumnName = "Criteria"
         CriteriaColumn.DefaultValue = ""
         BindingCriteriaTable.Columns.Add(CriteriaColumn)
@@ -876,50 +854,61 @@ Public Class OntologyManager
     End Function
 
     Private Function MakeDefinitionsTable(ByVal nm As String) As DataTable
-        Dim DefinitionsTable As DataTable
         ' Create a new DataTable titled 'TermDefinitions' or 'ConstraintDefinitions'
-        DefinitionsTable = New DataTable(nm)
+        Dim result As DataTable
+        result = New DataTable(nm)
+
         ' Add Four column objects to the table.
         ' The id is the language of the term defintion
         Dim idColumn As DataColumn = New DataColumn
         idColumn.DataType = System.Type.GetType("System.String")
         idColumn.ColumnName = "id"
-        DefinitionsTable.Columns.Add(idColumn)
+        result.Columns.Add(idColumn)
+
         Dim CodeColumn As DataColumn = New DataColumn
         CodeColumn.DataType = System.Type.GetType("System.String")
         CodeColumn.ColumnName = "Code"
-        DefinitionsTable.Columns.Add(CodeColumn)
+        result.Columns.Add(CodeColumn)
+
         Dim TextColumn As DataColumn = New DataColumn
         TextColumn.DataType = System.Type.GetType("System.String")
         TextColumn.ColumnName = "Text"
-        DefinitionsTable.Columns.Add(TextColumn)
+        result.Columns.Add(TextColumn)
+
         Dim DescriptionColumn As DataColumn = New DataColumn
         DescriptionColumn.DataType = System.Type.GetType("System.String")
         DescriptionColumn.ColumnName = "Description"
         DescriptionColumn.DefaultValue = "*"
-        DefinitionsTable.Columns.Add(DescriptionColumn)
+        result.Columns.Add(DescriptionColumn)
+
         Dim CommentColumn As DataColumn = New DataColumn
         CommentColumn.DataType = System.Type.GetType("System.String")
         CommentColumn.ColumnName = "Comment"
         CommentColumn.DefaultValue = ""
-        DefinitionsTable.Columns.Add(CommentColumn)
+        result.Columns.Add(CommentColumn)
+
         Dim TermAsObjectColumn As DataColumn = New DataColumn
         TermAsObjectColumn.DataType = System.Type.GetType("System.Object")
         TermAsObjectColumn.ColumnName = "TermAsObject"
         TermAsObjectColumn.DefaultValue = ""
-        DefinitionsTable.Columns.Add(TermAsObjectColumn)
+        result.Columns.Add(TermAsObjectColumn)
+
+        ' Support temporary correct ordering of internal codelists to match order in Definition
+        Dim listOrderColumn As DataColumn = New DataColumn
+        listOrderColumn.DataType = System.Type.GetType("System.Int32")
+        listOrderColumn.ColumnName = "ListOrder"
+        result.Columns.Add(listOrderColumn)
+
         ' Return the new DataTable.
         Dim keys(1) As DataColumn
         keys(0) = idColumn
         keys(1) = CodeColumn
-        DefinitionsTable.PrimaryKey = keys
+        result.PrimaryKey = keys
 
-        Return DefinitionsTable
-
+        Return result
     End Function
 
     Private Sub InitialiseTables()
-
         Dim new_relation As DataRelation
         ' make the tables
         mLanguagesTable = MakeLanguagesTable()
@@ -948,16 +937,12 @@ Public Class OntologyManager
         new_relation = New DataRelation("TerminologiesBindings", mTerminologiesTable.Columns(0), mTermBindingsTable.Columns(0))
         mLanguageDS.Relations.Add(new_relation)
 
-        ' HKF: 1606
         ' TermBindingCriteria
         mTermBindingCriteriaTable = MakeTermBindingCriteriaTable()
         mLanguageDS.Tables.Add(mTermBindingCriteriaTable)
-        Dim termBindingColumns As DataColumn() = {mTermBindingsTable.Columns(0), _
-                mTermBindingsTable.Columns(1), mTermBindingsTable.Columns(2)}
-        Dim termBindingCriteriaColumns As DataColumn() = {mTermBindingCriteriaTable.Columns(0), _
-                mTermBindingCriteriaTable.Columns(1), mTermBindingCriteriaTable.Columns(2)}
-        new_relation = New DataRelation("TermBindingTermBindingCriteria", _
-                termBindingColumns, termBindingCriteriaColumns)
+        Dim termBindingColumns As DataColumn() = {mTermBindingsTable.Columns(0), mTermBindingsTable.Columns(1), mTermBindingsTable.Columns(2)}
+        Dim termBindingCriteriaColumns As DataColumn() = {mTermBindingCriteriaTable.Columns(0), mTermBindingCriteriaTable.Columns(1), mTermBindingCriteriaTable.Columns(2)}
+        new_relation = New DataRelation("TermBindingTermBindingCriteria", termBindingColumns, termBindingCriteriaColumns)
 
         mLanguageDS.Relations.Add(new_relation)
 
@@ -968,11 +953,11 @@ Public Class OntologyManager
         mLanguageDS.Relations.Add(new_relation)
 
         mSubjectOfDataTable = MakeSubjectOfDataTable()
-        Me.mLanguageDS.Tables.Add(mSubjectOfDataTable)
+        mLanguageDS.Tables.Add(mSubjectOfDataTable)
+
         ' add relations
         new_relation = New DataRelation("LanguageSubjectOfData", mLanguagesTable.Columns(0), mSubjectOfDataTable.Columns(0))
         mLanguageDS.Relations.Add(new_relation)
-
     End Sub
 
     Public Function GetTerminologyDescription(ByVal TerminologyCode As String) As String
@@ -990,13 +975,14 @@ Public Class OntologyManager
     Public Sub DefinitionsTable_RowChanged(ByVal sender As Object, ByVal e As DataRowChangeEventArgs) Handles mTermDefinitionsTable.RowChanged, mConstraintDefinitionsTable.RowChanged
         If mDoUpdateOntology Then
             If e.Action = DataRowAction.Change Then
-                'SRH: 22 Jun 2009 EDT-549
                 Dim aterm As New RmTerm(CStr(e.Row(1)))
+
                 If Not aterm.IsConstraint Then
                     If Not IsDBNull(e.Row(5)) Then
                         aterm = CType(e.Row(5), RmTerm)
                     End If
                 End If
+
                 aterm.Language = CStr(e.Row(0))
                 aterm.Text = CStr(e.Row(2))
                 aterm.Description = CStr(e.Row(3))
@@ -1007,13 +993,14 @@ Public Class OntologyManager
                     If Not IsDBNull(e.Row(4)) Then
                         aterm.Comment = CStr(e.Row(4))
                     End If
+
                     mOntology.ReplaceTerm(aterm, ReplaceTranslations())
                 End If
 
-                    mFileManager.FileEdited = True
-                    'DO NOT DELETE TERMS - these may be used elsewhere so are removed at end of session
-                    'ElseIf e.Action = DataRowAction.Delete Then
-                    '    mOntology.DeleteTerm(aterm)
+                mFileManager.FileEdited = True
+                'DO NOT DELETE TERMS - these may be used elsewhere so are removed at end of session
+                'ElseIf e.Action = DataRowAction.Delete Then
+                '    mOntology.DeleteTerm(aterm)
             End If
         End If
     End Sub
@@ -1022,6 +1009,7 @@ Public Class OntologyManager
         If mDoUpdateOntology Then
             Try
                 Dim sTerminology As String
+
                 If Not e.Row(0) Is Nothing Then     'Terminology
                     sTerminology = CStr(e.Row(0))
                 Else
@@ -1044,14 +1032,15 @@ Public Class OntologyManager
                 End If
 
                 Dim sRelease As String = ""
+
                 If Not e.Row(3) Is Nothing Then     'Release
                     sRelease = CStr(e.Row(3))
                 End If
 
                 If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
-                    'SRH: 13 Jan 2009 - EDT-421 - ensure that no empty or inappropriate code is saved
                     sCode = System.Text.RegularExpressions.Regex.Replace(sCode, "[\*\(\)\]\[\~\`\!\@\#\$\%\^\&\+\=\""\{\}\|\;\:\?/\<\>\s]", "")
-                    If (Not String.IsNullOrEmpty(sTerminology) And Not String.IsNullOrEmpty(sPath) And Not String.IsNullOrEmpty(sCode)) Then
+
+                    If Not String.IsNullOrEmpty(sTerminology) And Not String.IsNullOrEmpty(sPath) And Not String.IsNullOrEmpty(sCode) Then
                         mOntology.AddorReplaceTermBinding(sTerminology, sPath, sCode, sRelease)
                     End If
                 ElseIf e.Action = DataRowAction.Delete Then
@@ -1059,7 +1048,6 @@ Public Class OntologyManager
                 End If
 
                 mFileManager.FileEdited = True
-
             Catch ex As Exception
                 Debug.Assert(False, ex.ToString)
             End Try
@@ -1070,6 +1058,7 @@ Public Class OntologyManager
         If mDoUpdateOntology Then
             Try
                 Dim sTerminology As String
+
                 If Not e.Row(0) Is Nothing Then     'Terminology
                     sTerminology = CStr(e.Row(0))
                 Else
@@ -1077,6 +1066,7 @@ Public Class OntologyManager
                 End If
 
                 Dim sCode As String = ""
+
                 If Not e.Row(1) Is Nothing Then     'Code
                     sCode = CStr(e.Row(1))
                 Else
@@ -1091,8 +1081,8 @@ Public Class OntologyManager
                     Return
                 End If
 
-
                 Dim sRelease As String = ""
+
                 If Not e.Row(3) Is Nothing Then     'Release
                     sRelease = CStr(e.Row(3))
                 End If
@@ -1104,7 +1094,6 @@ Public Class OntologyManager
                 End If
 
                 mFileManager.FileEdited = True
-
             Catch ex As Exception
                 Debug.Assert(False, ex.ToString)
             End Try
@@ -1117,7 +1106,6 @@ Public Class OntologyManager
         AE_Constants.Create(OceanArchetypeEditor.DefaultLanguageCode)
         mFileManager = a_file_manager
     End Sub
-
 
 End Class
 

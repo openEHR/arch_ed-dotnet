@@ -148,6 +148,8 @@ Public Class ArchetypeNodeConstraintControl
         Me.tpConstraintDetails = New System.Windows.Forms.TabPage
         Me.gbAnnotations = New System.Windows.Forms.GroupBox
         Me.dgAnnotations = New System.Windows.Forms.DataGridView
+        Me.key = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.valueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.gbComments = New System.Windows.Forms.GroupBox
         Me.txtComments = New System.Windows.Forms.TextBox
@@ -162,8 +164,6 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbValueSets = New System.Windows.Forms.GroupBox
         Me.dgValueSets = New System.Windows.Forms.DataGridView
         Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.key = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.valueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.PanelDataConstraint.SuspendLayout()
         Me.PanelAddressable.SuspendLayout()
         Me.PanelName.SuspendLayout()
@@ -183,6 +183,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'PanelGenericConstraint
         '
+        Me.PanelGenericConstraint.BackColor = System.Drawing.Color.Transparent
         Me.PanelGenericConstraint.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelGenericConstraint.Location = New System.Drawing.Point(3, 3)
         Me.PanelGenericConstraint.Name = "PanelGenericConstraint"
@@ -191,6 +192,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'PanelDataConstraint
         '
+        Me.PanelDataConstraint.BackColor = System.Drawing.Color.Transparent
         Me.PanelDataConstraint.Controls.Add(Me.labelAny)
         Me.PanelDataConstraint.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelDataConstraint.Location = New System.Drawing.Point(0, 96)
@@ -209,6 +211,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'PanelAddressable
         '
+        Me.PanelAddressable.BackColor = System.Drawing.Color.Transparent
         Me.PanelAddressable.Controls.Add(Me.PanelName)
         Me.PanelAddressable.Controls.Add(Me.txtTermDescription)
         Me.PanelAddressable.Controls.Add(Me.lblDescription)
@@ -278,6 +281,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'PanelLower
         '
+        Me.PanelLower.BackColor = System.Drawing.Color.Transparent
         Me.PanelLower.Controls.Add(Me.PanelDataConstraint)
         Me.PanelLower.Controls.Add(Me.PanelAddressable)
         Me.PanelLower.Dock = System.Windows.Forms.DockStyle.Fill
@@ -299,7 +303,7 @@ Public Class ArchetypeNodeConstraintControl
         '
         'tpConstraint
         '
-        Me.tpConstraint.BackColor = System.Drawing.Color.LemonChiffon
+        Me.tpConstraint.BackColor = System.Drawing.Color.Transparent
         Me.tpConstraint.Controls.Add(Me.PanelLower)
         Me.tpConstraint.Controls.Add(Me.PanelGenericConstraint)
         Me.tpConstraint.Location = New System.Drawing.Point(4, 22)
@@ -309,11 +313,10 @@ Public Class ArchetypeNodeConstraintControl
         Me.tpConstraint.Size = New System.Drawing.Size(426, 413)
         Me.tpConstraint.TabIndex = 0
         Me.tpConstraint.Text = "Constraint"
-        Me.tpConstraint.UseVisualStyleBackColor = True
         '
         'tpConstraintDetails
         '
-        Me.tpConstraintDetails.BackColor = System.Drawing.Color.LemonChiffon
+        Me.tpConstraintDetails.BackColor = System.Drawing.Color.Transparent
         Me.tpConstraintDetails.Controls.Add(Me.gbAnnotations)
         Me.tpConstraintDetails.Controls.Add(Me.Splitter2)
         Me.tpConstraintDetails.Controls.Add(Me.gbComments)
@@ -328,7 +331,6 @@ Public Class ArchetypeNodeConstraintControl
         Me.tpConstraintDetails.Size = New System.Drawing.Size(426, 413)
         Me.tpConstraintDetails.TabIndex = 1
         Me.tpConstraintDetails.Text = "Details"
-        Me.tpConstraintDetails.UseVisualStyleBackColor = True
         '
         'gbAnnotations
         '
@@ -340,6 +342,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.gbAnnotations.TabIndex = 10
         Me.gbAnnotations.TabStop = False
         Me.gbAnnotations.Text = "Annotations"
+        Me.gbAnnotations.Visible = False
         '
         'dgAnnotations
         '
@@ -350,6 +353,22 @@ Public Class ArchetypeNodeConstraintControl
         Me.dgAnnotations.Name = "dgAnnotations"
         Me.dgAnnotations.Size = New System.Drawing.Size(414, 15)
         Me.dgAnnotations.TabIndex = 0
+        '
+        'key
+        '
+        Me.key.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.key.DataPropertyName = "Key"
+        Me.key.FillWeight = 25.0!
+        Me.key.HeaderText = "Key"
+        Me.key.Name = "key"
+        '
+        'valueColumn
+        '
+        Me.valueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.valueColumn.DataPropertyName = "Value"
+        Me.valueColumn.FillWeight = 75.0!
+        Me.valueColumn.HeaderText = "Value"
+        Me.valueColumn.Name = "valueColumn"
         '
         'Splitter2
         '
@@ -498,25 +517,10 @@ Public Class ArchetypeNodeConstraintControl
         Me.Splitter1.TabIndex = 6
         Me.Splitter1.TabStop = False
         '
-        'key
-        '
-        Me.key.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.key.DataPropertyName = "Key"
-        Me.key.FillWeight = 25.0!
-        Me.key.HeaderText = "Key"
-        Me.key.Name = "key"
-        '
-        'valueColumn
-        '
-        Me.valueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.valueColumn.DataPropertyName = "Value"
-        Me.valueColumn.FillWeight = 75.0!
-        Me.valueColumn.HeaderText = "Value"
-        Me.valueColumn.Name = "valueColumn"
-        '
         'ArchetypeNodeConstraintControl
         '
         Me.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange
+        Me.BackColor = System.Drawing.Color.Transparent
         Me.Controls.Add(Me.tabConstraint)
         Me.HelpProviderCommonConstraint.SetHelpKeyword(Me, "HowTo/Edit data/set_common_constraints.htm")
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
@@ -718,8 +722,8 @@ Public Class ArchetypeNodeConstraintControl
                 Me.tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue
                 Me.tpConstraintDetails.BackColor = System.Drawing.Color.LightSteelBlue
             Else
-                Me.tpConstraint.BackColor = System.Drawing.Color.LemonChiffon
-                Me.tpConstraintDetails.BackColor = System.Drawing.Color.LemonChiffon
+                Me.tpConstraint.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
+                Me.tpConstraintDetails.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
             End If
 
             SetControlValues(IsState)
@@ -1040,8 +1044,6 @@ Public Class ArchetypeNodeConstraintControl
 
                         Catch ex As Exception
                             Debug.WriteLine(ex.Message)
-
-
                         Finally
                             Me.Cursor = Cursors.Default
                         End Try

@@ -96,6 +96,7 @@ Public Class SimpleStructure
         Me.txtSimple = New System.Windows.Forms.TextBox
         Me.ContextMenuSimple = New System.Windows.Forms.ContextMenu
         Me.MenuSpecialise = New System.Windows.Forms.MenuItem
+        CType(Me.PictureBoxSimple, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PictureBoxSimple
@@ -113,9 +114,8 @@ Public Class SimpleStructure
         Me.txtSimple.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSimple.Location = New System.Drawing.Point(96, 40)
         Me.txtSimple.Name = "txtSimple"
-        Me.txtSimple.Size = New System.Drawing.Size(280, 23)
+        Me.txtSimple.Size = New System.Drawing.Size(280, 20)
         Me.txtSimple.TabIndex = 38
-        Me.txtSimple.Text = ""
         '
         'ContextMenuSimple
         '
@@ -134,7 +134,9 @@ Public Class SimpleStructure
         Me.Name = "SimpleStructure"
         Me.Controls.SetChildIndex(Me.txtSimple, 0)
         Me.Controls.SetChildIndex(Me.PictureBoxSimple, 0)
+        CType(Me.PictureBoxSimple, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
