@@ -313,23 +313,29 @@ Public Class ListStructure
             If MessageBox.Show(String.Format("{0} '{1}'", AE_Constants.Instance.Specialise, lvitem.Text), _
                 AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
                 MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                SpecialiseListNode()
 
-                If lvitem.Item.Occurrences.IsUnbounded Or lvitem.Item.Occurrences.MaxCount > 1 Then
-                    Dim i As Integer
-
-                    i = lvitem.Index
-                    lvitem = lvitem.Copy
-                    lvitem.Specialise()
-                    Me.lvList.Items.Insert(i + 1, lvitem)
-                Else
-                    lvitem.Specialise()
-                End If
-
-                'force refresh
-                SetCurrentItem(lvitem.Item)
-                mFileManager.FileEdited = True
             End If
         End If
+    End Sub
+
+    Private Sub SpecialiseListNode()
+        Dim lvitem As ArchetypeListViewItem = CType(lvList.SelectedItems.Item(0), ArchetypeListViewItem)
+
+        If lvitem.Item.Occurrences.IsUnbounded Or lvitem.Item.Occurrences.MaxCount > 1 Then
+            Dim i As Integer
+
+            i = lvitem.Index
+            lvitem = lvitem.Copy
+            lvitem.Specialise()
+            Me.lvList.Items.Insert(i + 1, lvitem)
+        Else
+            lvitem.Specialise()
+        End If
+
+        'force refresh
+        SetCurrentItem(lvitem.Item)
+        mFileManager.FileEdited = True
     End Sub
 
     Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles MenuAddReference.Click
@@ -744,6 +750,10 @@ Public Class ListStructure
                         MessageBoxIcon.Warning, _
                         MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
                         e.CancelEdit = True
+                    Else
+                        '//IMCN 21 May 2010 Force edited parent node to be spceialised
+                        e.CancelEdit = True
+                        SpecialiseListNode()
                     End If
                 End If
             Else
