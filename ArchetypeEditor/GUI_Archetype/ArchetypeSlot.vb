@@ -37,6 +37,10 @@ Public Class ArchetypeSlot : Inherits ArchetypeNodeAbstract
         Set(ByVal value As String)
             Dim i As Integer = value.IndexOf("["c)
             If i > 0 Then
+                '// IMCN 02 July 2010 EDT-609: strip spurious space character
+                If (i > 1) And value.Substring(i - 1, 1) = " " Then
+                    i = i - 1
+                End If
                 MyBase.Text = value.Substring(0, i)
             Else
                 MyBase.Text = value
