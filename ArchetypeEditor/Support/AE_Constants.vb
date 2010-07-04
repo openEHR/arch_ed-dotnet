@@ -76,7 +76,6 @@ Public Class AE_Constants
     Private mProportion As String = "Proportion"
     Private mUnit As String = "Unit"
     Private mMultiple As String = "Multiple"
-    Private mRequiresSpecialisationToEdit As String = "Requires specialisation to edit"
     Private mInterval As String = "Interval"
     Private mIntervalCount As String = "Interval of Count"
     Private mIntervalQuantity As String = "Interval of Quantity"
@@ -618,11 +617,7 @@ Public Class AE_Constants
             Return mOrdinal
         End Get
     End Property
-    Friend ReadOnly Property RequiresSpecialisationToEdit() As String
-        Get
-            Return mRequiresSpecialisationToEdit
-        End Get
-    End Property
+
     Friend ReadOnly Property Integral() As String
         Get
             Return mIntegral
@@ -724,7 +719,6 @@ Public Class AE_Constants
         mDateTime = TerminologyServer.Instance.RubricForCode(161, Language)
         mDuration = TerminologyServer.Instance.RubricForCode(142, Language)
         mOrdinal = TerminologyServer.Instance.RubricForCode(156, Language)
-        mRequiresSpecialisationToEdit = TerminologyServer.Instance.RubricForCode(319, Language)
         mProportion = TerminologyServer.Instance.RubricForCode(507, Language)
         mUnit = TerminologyServer.Instance.RubricForCode(117, Language)
         mMultiple = TerminologyServer.Instance.RubricForCode(320, Language)

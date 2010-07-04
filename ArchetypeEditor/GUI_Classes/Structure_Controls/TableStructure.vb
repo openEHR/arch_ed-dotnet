@@ -431,36 +431,39 @@ Public Class TableStructure
     End Sub
 
     Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
-        If Me.dgGrid.CurrentRowIndex > -1 AndAlso TypeOf mArchetypeTable.Rows(Me.dgGrid.CurrentCell.RowNumber).Item(2) Is ArchetypeElement Then
-            Dim mElement As ArchetypeElement = CType(mArchetypeTable.Rows(Me.dgGrid.CurrentCell.RowNumber).Item(2), ArchetypeElement)
+        If dgGrid.CurrentRowIndex > -1 AndAlso TypeOf mArchetypeTable.Rows(dgGrid.CurrentCell.RowNumber).Item(2) Is ArchetypeElement Then
+            Dim mElement As ArchetypeElement = CType(mArchetypeTable.Rows(dgGrid.CurrentCell.RowNumber).Item(2), ArchetypeElement)
+
             If mElement.IsReference Then
                 MessageBox.Show(AE_Constants.Instance.Cannot_specialise_reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                Return
+            ElseIf MessageBox.Show(AE_Constants.Instance.Specialise & "?", _
+                    AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+
+                If mElement.Occurrences.IsUnbounded Or mElement.Occurrences.MaxCount > 1 Then
+                    Dim new_element As ArchetypeElement
+                    Dim new_row As DataRow
+                    Dim a_cell As DataGridCell
+
+                    new_element = CType(CType(mElement, ArchetypeElement).Copy, ArchetypeElement)
+                    new_element.Specialise()
+
+                    new_row = mArchetypeTable.NewRow
+                    new_row(1) = new_element.Text
+                    mArchetypeTable.Rows.InsertAt(new_row, Me.dgGrid.CurrentRowIndex + 1)
+                    new_row(2) = new_element
+                    new_row(0) = ImageIndexForConstraintType(new_element.Constraint.Type, CType(new_element.RM_Class, RmElement).isReference, False)
+                    ' go to the new entry
+                    a_cell.RowNumber = dgGrid.CurrentRowIndex + 1
+                    a_cell.ColumnNumber = 1
+                    dgGrid.Focus()
+                    dgGrid.CurrentCell = a_cell
+                Else
+                    mElement.Specialise()
+                    mArchetypeTable.Rows(dgGrid.CurrentRowIndex).Item(1) = mCurrentItem.Text
+                End If
+
+                mFileManager.FileEdited = True
             End If
-            If mElement.Occurrences.IsUnbounded Or mElement.Occurrences.MaxCount > 1 Then
-                Dim new_element As ArchetypeElement
-                Dim new_row As DataRow
-                Dim a_cell As DataGridCell
-
-                new_element = CType(CType(mElement, ArchetypeElement).Copy, ArchetypeElement)
-                new_element.Specialise()
-
-                new_row = mArchetypeTable.NewRow
-                new_row(1) = new_element.Text
-                mArchetypeTable.Rows.InsertAt(new_row, Me.dgGrid.CurrentRowIndex + 1)
-                new_row(2) = new_element
-                new_row(0) = ImageIndexForConstraintType(new_element.Constraint.Type, CType(new_element.RM_Class, RmElement).isReference, False)
-                ' go to the new entry
-                a_cell.RowNumber = Me.dgGrid.CurrentRowIndex + 1
-                a_cell.ColumnNumber = 1
-                Me.dgGrid.Focus()
-                Me.dgGrid.CurrentCell = a_cell
-
-            Else
-                mElement.Specialise()
-                mArchetypeTable.Rows(Me.dgGrid.CurrentRowIndex).Item(1) = mCurrentItem.Text
-            End If
-            mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -495,7 +498,6 @@ Public Class TableStructure
             SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeNode))
         End If
     End Sub
-
 
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
         Dim el As ArchetypeElement
@@ -997,34 +999,33 @@ Public Class TableStructure
 
     End Sub
 
-
     Private Sub ArchetypeTable_ColumnChanging(ByVal sender As Object, ByVal e As System.Data.DataColumnChangeEventArgs)
-
         If Not mIsLoading Then
-            Dim i As Integer
-            Dim archetype_node As ArchetypeNode
+            Dim archetype_node As ArchetypeNode = CType(e.Row.Item(2), ArchetypeNode)
 
-            archetype_node = CType(e.Row.Item(2), ArchetypeNode)
             If archetype_node.RM_Class.Type = StructureType.Element Then
                 Dim element As ArchetypeElement = CType(archetype_node, ArchetypeElement)
-                i = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
+                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
+
                 If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                    If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
+                    SpecialiseCurrentItem(sender, e)
+                    i = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
+
+                    If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                         e.ProposedValue = element.Text
                     End If
                 End If
             ElseIf archetype_node.RM_Class.Type = Global.ArchetypeEditor.StructureType.Slot AndAlso TypeOf (archetype_node) Is ArchetypeNodeAnonymous Then
                 e.ProposedValue = archetype_node.Text
-                Return
+                Return  ' FIXME: Eliminate spaghetti code
             End If
-            'archetype_node = CType(e.Row.Item(2), ArchetypeNode)
+
             archetype_node.Text = CStr(e.ProposedValue)
 
             'Slot may reset text to include class
             If archetype_node.Text <> CStr(e.ProposedValue) Then
                 e.ProposedValue = archetype_node.Text
             End If
-
         End If
     End Sub
 

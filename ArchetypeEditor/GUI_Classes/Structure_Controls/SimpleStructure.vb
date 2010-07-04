@@ -20,7 +20,6 @@ Public Class SimpleStructure
     Inherits EntryStructure
     Private mElement As ArchetypeNode
     Private mIsLoading As Boolean
-    Private mOKtoEditSpecialisation As Boolean
 
 #Region " Windows Form Designer generated code "
 
@@ -228,8 +227,8 @@ Public Class SimpleStructure
 
     Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
         If TypeOf mElement Is ArchetypeElement Then
-            If MessageBox.Show(AE_Constants.Instance.Specialise & " " & txtSimple.Text, AE_Constants.Instance.MessageBoxCaption, _
-                MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & txtSimple.Text & "'?", _
+                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 CType(mElement, ArchetypeElement).Specialise()
                 txtSimple.Text = mElement.Text
                 mFileManager.FileEdited = True
@@ -356,21 +355,25 @@ Public Class SimpleStructure
 
     Private Sub txtSimple_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSimple.TextChanged
         If Not mIsLoading Then
-            Dim i As Integer
             Debug.Assert(Not mCurrentItem.IsAnonymous)
-            i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
 
-            If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                If Not mOKtoEditSpecialisation Then
-                    If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
-                        txtSimple.Text = mElement.Text
-                    Else
-                        mOKtoEditSpecialisation = True
-                    End If
+            Dim newText As String = txtSimple.Text
+
+            If newText <> mElement.Text Then
+                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+
+                If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                    txtSimple.Text = mElement.Text
+                    SpecialiseCurrentItem(sender, e)
+                End If
+
+                i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+
+                If i >= mFileManager.OntologyManager.NumberOfSpecialisations Then
+                    txtSimple.Text = newText
+                    mElement.Text = newText
                 End If
             End If
-
-            mElement.Text = txtSimple.Text
         End If
     End Sub
 

@@ -439,43 +439,37 @@ Public Class TreeStructure
     Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles MenuSpecialise.Click
         If Not tvTree.SelectedNode Is Nothing Then
             If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & tvTree.SelectedNode.Text & "'?", _
-                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
-                MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-                SpecialiseTreeNode()
+                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
 
+                Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+
+                If TypeOf tvNode.Item Is ArchetypeSlot Or Not (tvNode.Item.Occurrences.IsUnbounded Or tvNode.Item.Occurrences.MaxCount > 1) Then
+                    tvNode.Specialise()
+                Else
+                    Dim i As Integer = CType(tvNode, ArchetypeTreeNode).Index
+                    tvNode = tvNode.Copy(mFileManager)
+                    tvNode.Specialise()
+
+                    If tvNode.Item.RM_Class.Type = StructureType.Element Then
+                        Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
+                        'Cannot specialise a reference
+                        tvNode.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, False, False)
+                        tvNode.SelectedImageIndex = ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, False, True)
+                    End If
+
+                    If tvTree.SelectedNode.Parent Is Nothing Then
+                        tvTree.Nodes.Insert(i + 1, tvNode)
+                    Else
+                        tvTree.SelectedNode.Parent.Nodes.Insert(i + 1, tvNode)
+                    End If
+                End If
+
+                tvTree.SelectedNode = tvNode
+                SetCurrentItem(tvNode.Item)
+                tvNode.BeginEdit()
+                mFileManager.FileEdited = True
             End If
         End If
-    End Sub
-
-    Private Sub SpecialiseTreeNode()
-
-        Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
-
-        If TypeOf tvNode.Item Is ArchetypeSlot Or Not (tvNode.Item.Occurrences.IsUnbounded Or tvNode.Item.Occurrences.MaxCount > 1) Then
-            tvNode.Specialise()
-        Else
-            Dim i As Integer = CType(tvNode, ArchetypeTreeNode).Index
-            tvNode = tvNode.Copy(mFileManager)
-            tvNode.Specialise()
-
-            If tvNode.Item.RM_Class.Type = StructureType.Element Then
-                Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
-                'Cannot specialise a reference
-                tvNode.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, False, False)
-                tvNode.SelectedImageIndex = ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, False, True)
-            End If
-
-            If tvTree.SelectedNode.Parent Is Nothing Then
-                tvTree.Nodes.Insert(i + 1, tvNode)
-            Else
-                tvTree.SelectedNode.Parent.Nodes.Insert(i + 1, tvNode)
-            End If
-        End If
-
-        tvTree.SelectedNode = tvNode
-        SetCurrentItem(tvNode.Item)
-        tvNode.BeginEdit()
-        mFileManager.FileEdited = True
     End Sub
 
     Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles MenuAddReference.Click
@@ -994,13 +988,8 @@ Public Class TreeStructure
             Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
 
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
-                    e.CancelEdit = True
-                Else
-                    e.CancelEdit = True
-                    '// IMCN 21 May 2010 - Forces Specialisation if parent node being renamed
-                    SpecialiseTreeNode()
-                End If
+                e.CancelEdit = True
+                SpecialiseCurrentItem(sender, e)
             End If
         End If
     End Sub

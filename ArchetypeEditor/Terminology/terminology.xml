@@ -437,7 +437,6 @@
   <PrimaryRubric Id="316" Language="en" />
   <PrimaryRubric Id="317" Language="en" />
   <PrimaryRubric Id="318" Language="en" />
-  <PrimaryRubric Id="319" Language="en" />
   <PrimaryRubric Id="320" Language="en" />
   <PrimaryRubric Id="321" Language="en" />
   <PrimaryRubric Id="322" Language="en" />
@@ -1063,7 +1062,6 @@
   <Concept Language="en" ConceptID="316" Rubric="Any" />
   <Concept Language="en" ConceptID="317" Rubric="Convert text values to ordinal values" />
   <Concept Language="en" ConceptID="318" Rubric="Convert internal codes to free text" />
-  <Concept Language="en" ConceptID="319" Rubric="This item requires specialisation to edit. Do you wish to continue?" />
   <Concept Language="en" ConceptID="320" Rubric="Choice" />
   <Concept Language="en" ConceptID="321" Rubric="Ratio" />
   <Concept Language="en" ConceptID="322" Rubric="New cluster" />
@@ -1644,7 +1642,6 @@
   <Concept Language="da" ConceptID="316" Rubric="Enhver" />
   <Concept Language="da" ConceptID="317" Rubric="Konvertér tekstværdier til talværdier" />
   <Concept Language="da" ConceptID="318" Rubric="Konvertér interne koder til fri tekst" />
-  <Concept Language="da" ConceptID="319" Rubric="Dette element kan kun redigeres hvis det er specialiseret. Vil du fortsætte?" />
   <Concept Language="da" ConceptID="320" Rubric="Valg" />
   <Concept Language="da" ConceptID="321" Rubric="Ratio" />
   <Concept Language="da" ConceptID="322" Rubric="Ny klynge" />
@@ -2224,7 +2221,6 @@
   <Concept Language="de" ConceptID="316" Rubric="Jeder" />
   <Concept Language="de" ConceptID="317" Rubric="Konvertiere Textwerte in Ordinalwerte" />
   <Concept Language="de" ConceptID="318" Rubric="Konvertiere interne Kodierung zu Freitext" />
-  <Concept Language="de" ConceptID="319" Rubric="Um zu editieren muss das Element zuvor spezialisiert werden. Wollen Sie fortfahren?" />
   <Concept Language="de" ConceptID="320" Rubric="Multiple" />
   <Concept Language="de" ConceptID="321" Rubric="Quotient" />
   <Concept Language="de" ConceptID="322" Rubric="Neues Cluster" />
@@ -2766,7 +2762,6 @@
   <Concept Language="es" ConceptID="316" Rubric="Cualquiera" />
   <Concept Language="es" ConceptID="317" Rubric="Convierte laores de texto a valores ordinales" />
   <Concept Language="es" ConceptID="318" Rubric="Convierte códigos internos a valores ordinales" />
-  <Concept Language="es" ConceptID="319" Rubric="Este ítem requiere especialización para editarse. ¿Desea continuar?" />
   <Concept Language="es" ConceptID="320" Rubric="Elección" />
   <Concept Language="es" ConceptID="321" Rubric="Razón" />
   <Concept Language="es" ConceptID="323" Rubric="Columna nueva" />
@@ -3278,7 +3273,6 @@
   <Concept Language="fa" ConceptID="316" Rubric="هر" />
   <Concept Language="fa" ConceptID="317" Rubric="تبدیل ارزشهای متنی به ارزشهای شفاهی" />
   <Concept Language="fa" ConceptID="318" Rubric="تبدیل کدهای داخلی به متن آزاد" />
-  <Concept Language="fa" ConceptID="319" Rubric="این واژه برای ویرایش نیاز به تخصصی نمودن دارد:آیا شما مایل به ادامه هستید؟ " />
   <Concept Language="fa" ConceptID="320" Rubric="انتخاب" />
   <Concept Language="fa" ConceptID="321" Rubric="سهم" />
   <Concept Language="fa" ConceptID="322" Rubric="خوشه جدید" />
@@ -3545,7 +3539,6 @@
   <Concept Language="ja" ConceptID="342" Rubric="角加速度" />
   <Concept Language="ja" ConceptID="317" Rubric="テキスト値を序数に変換する" />
   <Concept Language="ja" ConceptID="318" Rubric="内部コードをフリーテキストに変換" />
-  <Concept Language="ja" ConceptID="319" Rubric="このアイテムには編集すべき内容があります。続けますか？" />
   <Concept Language="ja" ConceptID="320" Rubric="選択" />
   <Concept Language="ja" ConceptID="321" Rubric="比率" />
   <Concept Language="ja" ConceptID="322" Rubric="新しいクラスタ" />
@@ -4443,7 +4436,6 @@
   <Concept Language="ko" ConceptID="316" Rubric="Any (임의의 것)" />
   <Concept Language="ko" ConceptID="317" Rubric="텍스트 값을 서수 값으로 변환" />
   <Concept Language="ko" ConceptID="318" Rubric="내부 코드를 프리 텍스트로 변환" />
-  <Concept Language="ko" ConceptID="319" Rubric="이 아이템은 수정을 위한 특수화가 필요합니다. 계속 진행하시겠습니까?" />
   <Concept Language="ko" ConceptID="320" Rubric="Choice (선택)" />
   <Concept Language="ko" ConceptID="321" Rubric="비율" />
   <Concept Language="ko" ConceptID="322" Rubric="새로운 Cluster" />
@@ -5018,7 +5010,6 @@
   <Concept Language="tr" ConceptID="316" Rubric="Herhangisi" />
   <Concept Language="tr" ConceptID="317" Rubric="Metin değerleri sıralı değere dönüştür" />
   <Concept Language="tr" ConceptID="318" Rubric="Dahili kodları serbest metine dönüştür" />
-  <Concept Language="tr" ConceptID="319" Rubric="Değişiklik yapmak için özelleştirme gerekiyor. Devam etmek istiyor musunuz?" />
   <Concept Language="tr" ConceptID="320" Rubric="Çoklu" />
   <Concept Language="tr" ConceptID="321" Rubric="Oran" />
   <Concept Language="tr" ConceptID="322" Rubric="Yeni grup(Cluster)" />
@@ -6075,7 +6066,6 @@
   <GroupedConcept GrouperID="17" ChildID="316" />
   <GroupedConcept GrouperID="17" ChildID="317" />
   <GroupedConcept GrouperID="17" ChildID="318" />
-  <GroupedConcept GrouperID="17" ChildID="319" />
   <GroupedConcept GrouperID="16" ChildID="108" />
   <GroupedConcept GrouperID="16" ChildID="106" />
   <GroupedConcept GrouperID="16" ChildID="105" />

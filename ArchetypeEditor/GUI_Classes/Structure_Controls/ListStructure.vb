@@ -310,32 +310,25 @@ Public Class ListStructure
             Dim lvitem As ArchetypeListViewItem = CType(lvList.SelectedItems.Item(0), ArchetypeListViewItem)
             'Fixme - need to add code to check if can be specialised
 
-            If MessageBox.Show(String.Format("{0} '{1}'", AE_Constants.Instance.Specialise, lvitem.Text), _
-                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
-                MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-                SpecialiseListNode()
+            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & lvitem.Text & "'?", _
+                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
 
+                If lvitem.Item.Occurrences.IsUnbounded Or lvitem.Item.Occurrences.MaxCount > 1 Then
+                    Dim i As Integer
+
+                    i = lvitem.Index
+                    lvitem = lvitem.Copy
+                    lvitem.Specialise()
+                    Me.lvList.Items.Insert(i + 1, lvitem)
+                Else
+                    lvitem.Specialise()
+                End If
+
+                'force refresh
+                SetCurrentItem(lvitem.Item)
+                mFileManager.FileEdited = True
             End If
-        End If
-    End Sub
-
-    Private Sub SpecialiseListNode()
-        Dim lvitem As ArchetypeListViewItem = CType(lvList.SelectedItems.Item(0), ArchetypeListViewItem)
-
-        If lvitem.Item.Occurrences.IsUnbounded Or lvitem.Item.Occurrences.MaxCount > 1 Then
-            Dim i As Integer
-
-            i = lvitem.Index
-            lvitem = lvitem.Copy
-            lvitem.Specialise()
-            Me.lvList.Items.Insert(i + 1, lvitem)
-        Else
-            lvitem.Specialise()
-        End If
-
-        'force refresh
-        SetCurrentItem(lvitem.Item)
-        mFileManager.FileEdited = True
+            End If
     End Sub
 
     Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles MenuAddReference.Click
@@ -737,24 +730,13 @@ Public Class ListStructure
     End Sub
 
     Private Sub lvList_BeforeLabelEdit(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LabelEditEventArgs) Handles lvList.BeforeLabelEdit
-        Dim i As Integer
-
         If Not mCurrentItem Is Nothing Then
             If Not mCurrentItem.IsAnonymous And lvList.SelectedItems.Count = 1 Then
-                i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
 
                 If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                    If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, _
-                        AE_Constants.Instance.MessageBoxCaption, _
-                        MessageBoxButtons.YesNo, _
-                        MessageBoxIcon.Warning, _
-                        MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
-                        e.CancelEdit = True
-                    Else
-                        '//IMCN 21 May 2010 Force edited parent node to be spceialised
-                        e.CancelEdit = True
-                        SpecialiseListNode()
-                    End If
+                    e.CancelEdit = True
+                    SpecialiseCurrentItem(sender, e)
                 End If
             Else
                 e.CancelEdit = True
