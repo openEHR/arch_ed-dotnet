@@ -222,45 +222,41 @@ Public Class OntologyManager
         Return Not mLanguagesTable.Rows.Find(code) Is Nothing
     End Function
 
-    Public Function GetTerm(ByVal Code As String) As RmTerm
-        Dim Keys(1) As Object
+    Public Function GetTerm(ByVal code As String) As RmTerm
+        Dim result As RmTerm
 
-        If Code Is Nothing Then
-            ' return empty term
-            Dim aterm As New RmTerm("")
-            Return aterm
+        If code Is Nothing Then
+            result = New RmTerm("")
+        ElseIf Not mLastTerm Is Nothing AndAlso mLastTerm.Code = code AndAlso mLastTerm.Language = mLanguageCode Then
+            result = mLastTerm
         Else
-            If Not mLastTerm Is Nothing Then
-                If mLastTerm.Code = Code Then
-                    If mLastTerm.Language = mLanguageCode Then
-                        Return mLastTerm
-                    End If
-                End If
-            End If
-
-            Dim aterm As RmTerm
             Dim d_row As DataRow
 
+            Dim Keys(1) As Object
             Keys(0) = mLanguageCode
-            Keys(1) = Code
-            aterm = New RmTerm(Code)
+            Keys(1) = code
+            result = New RmTerm(code)
 
-            If aterm.isConstraint Then
+            If result.IsConstraint Then
                 d_row = mConstraintDefinitionsTable.Rows.Find(Keys)
+
                 If Not d_row Is Nothing Then
-                    aterm.Language = mLanguageCode
-                    aterm.Text = CStr(d_row(2))
-                    aterm.Description = CStr(d_row(3))
+                    result.Language = mLanguageCode
+                    result.Text = CStr(d_row(2))
+                    result.Description = CStr(d_row(3))
                 End If
             Else
                 d_row = mTermDefinitionsTable.Rows.Find(Keys)
-                If Not d_row Is Nothing Then
-                    aterm = CType(d_row(5), RmTerm)
+
+                If Not d_row Is Nothing AndAlso TypeOf d_row(5) Is RmTerm Then
+                    result = CType(d_row(5), RmTerm)
                 End If
             End If
-            mLastTerm = aterm  ' remember last one for efficiency
-            Return aterm
+
+            mLastTerm = result  ' remember last one for efficiency
         End If
+
+        Return result
     End Function
 
     Public Function SpecialiseTerm(ByVal text As String, ByVal description As String, ByVal id As String) As RmTerm
