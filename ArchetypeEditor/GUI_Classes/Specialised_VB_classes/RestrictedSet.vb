@@ -213,8 +213,6 @@ Public Class RestrictedSet
     Public Sub TranslateGUI()
         radioUnrestrictedSubject.Text = Filemanager.GetOpenEhrTerm(56, radioUnrestrictedSubject.Text)
         radioRestrictedSet.Text = Filemanager.GetOpenEhrTerm(599, radioRestrictedSet.Text)
-        butRemoveFromRestrictedSet.Text = Filemanager.GetOpenEhrTerm(665, butRemoveFromRestrictedSet.Text)
-        butAddToRestrictedSet.Text = Filemanager.GetOpenEhrTerm(664, butAddToRestrictedSet.Text)
     End Sub
 
 End Class
