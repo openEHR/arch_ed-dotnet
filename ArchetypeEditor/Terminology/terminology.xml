@@ -5735,7 +5735,7 @@
   <Concept Language="en" ConceptID="686" Rubric="Invalid archetype file name {0}. Save as {1}?" />
   <Concept Language="en" ConceptID="687" Rubric="Open action archetype" />
   <Concept Language="en" ConceptID="688" Rubric="contact" />
-  <Concept Language="en" ConceptID="689" Rubric="exposure group" />
+  <Concept Language="en" ConceptID="689" Rubric="exposure source" />
   <Concept Language="ja" ConceptID="670" Rubric="*Time Fraction (en)" />
   <Concept Language="ja" ConceptID="671" Rubric="*No embedded archetype matches at {0} (en)" />
   <Concept Language="ja" ConceptID="672" Rubric="このスロットに名前をつけますか?" />
