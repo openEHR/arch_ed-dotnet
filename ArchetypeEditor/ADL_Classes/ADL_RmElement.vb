@@ -580,7 +580,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Function ProcessRatio(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Proportion
             Dim result As New Constraint_Proportion
 
-            If ObjNode.any_allowed Then
+            If Not ObjNode.any_allowed Then
                 For i As Integer = 1 To ObjNode.attributes.count
                     Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
@@ -603,7 +603,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Function ProcessProportion(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Proportion
             Dim result As New Constraint_Proportion
 
-            If ObjNode.any_allowed Then
+            If Not ObjNode.any_allowed Then
                 For i As Integer = 1 To ObjNode.attributes.count
                     Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
