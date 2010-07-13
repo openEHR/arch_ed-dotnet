@@ -658,7 +658,6 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Protected Sub BuildCount(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ct As Constraint_Count)
             Dim cadlCount As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = mAomFactory.create_c_complex_object_anonymous(value_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_DataTypeName(ct.Type)))
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(cadlCount, EiffelKernel.Create.STRING_8.make_from_cil("magnitude"))
             Dim magnitude As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER = Nothing
 
             If ct.HasMaximum And ct.HasMinimum Then
@@ -670,7 +669,7 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             If Not magnitude Is Nothing Then
-                mAomFactory.create_c_primitive_object(attribute, magnitude)
+                mAomFactory.create_c_primitive_object(mAomFactory.create_c_attribute_single(cadlCount, EiffelKernel.Create.STRING_8.make_from_cil("magnitude")), magnitude)
 
                 If ct.HasAssumedValue Then
                     Dim int_ref As EiffelKernel.INTEGER_32_REF = EiffelKernel.Create.INTEGER_32_REF.default_create
