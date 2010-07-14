@@ -49,6 +49,8 @@
     <Compile Include="CadlFactory.cs" />
     <Compile Include="CanonicalAmVisitor.cs" />
     <Compile Include="CloneConstraintVisitor.cs" />
+    <Compile Include="CloneConstraintVisitorForOpt.cs" />
+    <Compile Include="Eiffel.cs" />
     <Compile Include="Ontology.cs" />
     <Compile Include="OpenehrProfile.cs">
       <DependentUpon>OpenehrProfile.xsd</DependentUpon>

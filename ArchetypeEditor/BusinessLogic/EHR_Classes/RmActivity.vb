@@ -16,6 +16,7 @@
 Option Strict On
 Option Explicit On
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Public Class RmActivity
     Inherits RmStructureCompound
@@ -45,8 +46,8 @@ Public Class RmActivity
         Occurrences.SetFromString(EIF_Structure.occurrences.as_occurrences_string.to_cil)
 
         ' process the archetype id constraint
-        If EIF_Structure.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("action_archetype_id")) Then
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = EIF_Structure.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("action_archetype_id"))
+        If EIF_Structure.has_attribute(Eiffel.String("action_archetype_id")) Then
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = EIF_Structure.c_attribute_at_path(Eiffel.String("action_archetype_id"))
 
             If attribute.has_children Then
                 Dim obj As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
@@ -69,8 +70,8 @@ Public Class RmActivity
         End If
 
         'process any activity descriptions
-        If EIF_Structure.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("description")) Then
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = EIF_Structure.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("description"))
+        If EIF_Structure.has_attribute(Eiffel.String("description")) Then
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = EIF_Structure.c_attribute_at_path(Eiffel.String("description"))
 
             If attribute.has_children Then
                 ' could be a C_COMPLEX_OBJECT or an ARCHETYPE_SLOT

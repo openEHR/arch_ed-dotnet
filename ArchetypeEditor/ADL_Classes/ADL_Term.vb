@@ -16,6 +16,7 @@
 
 Option Strict On
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
 
@@ -41,7 +42,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Function getItem(ByVal key As String) As String
             Dim s As EiffelKernel.STRING_8
 
-            s = EiffelKernel.Create.STRING_8.make_from_cil(key)
+            s = Eiffel.String(key)
             If EIF_a_Term.has_key(s) Then
                 Return EIF_a_Term.item(s).to_cil
             Else
@@ -50,16 +51,16 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Private Sub setItem(ByVal Item As String, ByVal Value As String)
-            If EIF_a_Term.has_key(EiffelKernel.Create.STRING_8.make_from_cil(Item)) Then
-                EIF_a_Term.replace_item(EiffelKernel.Create.STRING_8.make_from_cil(Item), EiffelKernel.Create.STRING_8.make_from_cil(Value))
+            If EIF_a_Term.has_key(Eiffel.String(Item)) Then
+                EIF_a_Term.replace_item(Eiffel.String(Item), Eiffel.String(Value))
             Else
-                EIF_a_Term.add_item(EiffelKernel.Create.STRING_8.make_from_cil(Item), EiffelKernel.Create.STRING_8.make_from_cil(Value))
+                EIF_a_Term.add_item(Eiffel.String(Item), Eiffel.String(Value))
             End If
         End Sub
 
         Sub New(ByVal ID As String)
             MyBase.new(ID)
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EiffelKernel.Create.STRING_8.make_from_cil(ID))
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(ID))
         End Sub
 
         Sub New(ByVal EIF_ID As EiffelKernel.STRING_8)
@@ -74,7 +75,7 @@ Namespace ArchetypeEditor.ADL_Classes
             sComment = a_Term.Comment
             'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
             sAnnotations = a_Term.OtherAnnotations
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EiffelKernel.Create.STRING_8.make_from_cil(a_Term.Code))
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(a_Term.Code))
         End Sub
 
         Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal comment As String = "")
@@ -83,7 +84,7 @@ Namespace ArchetypeEditor.ADL_Classes
             sText = text
             sDescription = description
             sComment = comment
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EiffelKernel.Create.STRING_8.make_from_cil(code))
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(code))
         End Sub
 
         Sub New(ByVal an_adlTerm As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM)

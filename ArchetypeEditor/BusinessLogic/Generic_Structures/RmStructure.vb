@@ -15,7 +15,7 @@
 '
 
 Option Explicit On 
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Public Enum StructureType
     Not_Set = 0
@@ -193,16 +193,16 @@ Public Class RmStructure
             Dim s As String
 
             ' need to cope with runtime_label
-            If CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("name")) Then
+            If CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(Eiffel.String("name")) Then
                 s = "name"
-            ElseIf CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("runtime_label")) Then
+            ElseIf CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(Eiffel.String("runtime_label")) Then
                 'can be removed in the future
                 s = "runtime_label"
             Else
                 Return
             End If
 
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil(s))
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(Eiffel.String(s))
 
             If attribute.has_children Then
                 mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))

@@ -15,7 +15,7 @@
 '
 'Option Strict On
 Option Explicit On 
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Namespace ArchetypeEditor.XML_Classes
 
@@ -795,8 +795,6 @@ Namespace ArchetypeEditor.XML_Classes
         Protected Sub BuildRootCluster(ByVal Cluster As RmCluster, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
             Dim an_attribute As XMLParser.C_ATTRIBUTE
-
-            ' CadlObj.SetObjectId(EiffelKernel.Create.STRING_8.make_from_cil(Rm.NodeId))
 
             If Cluster.Children.Count > 0 Then
                 'an_attribute = mAomFactory.MakeMultipleAttribute(xmlObj, "items", MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
@@ -1679,7 +1677,7 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Sub BuildParsable(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Parsable)
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
-           
+
             objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type), "", MakeOccurrences(New RmCardinality(1, 1)))
 
             'If Not String.IsNullOrEmpty(c.RegularExpression) Then
@@ -2600,8 +2598,7 @@ Namespace ArchetypeEditor.XML_Classes
                                             Case Else
                                                 Debug.Assert(False) '?OBSOLETE
                                                 Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                                                'objNode = mAomFactory.MakeComplexObject(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_rm.Type)), a_rm.NodeId)
-                                                objNode = mAomFactory.MakeComplexObject(an_attribute, EiffelKernel.Create.STRING_8.make_from_cil(ReferenceModel.RM_StructureName(a_rm.Type)), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                                objNode = mAomFactory.MakeComplexObject(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_rm.Type)), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                                                 BuildStructure(a_rm, objNode)
                                         End Select
                                     Next

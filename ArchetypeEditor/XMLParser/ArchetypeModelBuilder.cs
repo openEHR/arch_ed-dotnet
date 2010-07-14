@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using System.Xml.Schema;
@@ -18,65 +19,49 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
     {
         public const string ARCHETYPE_DIGEST_ID = "MD5-CAM-1.0.1";
 
-        public static ARCHETYPE Build(string adlFilePath)
+        public static ARCHETYPE BuildFromAdlFile(string adlFilePath, CloneConstraintVisitor visitor)
         {
             //Check.Assert(System.IO.File.Exists(adlFilePath), "File '" + adlFilePath + "' does not exist.");
 
-            ARCHETYPE archetypeObject;
+            ARCHETYPE result = null;
             openehr.adl_parser.@interface.ADL_INTERFACE adlParser;
             adlParser = openehr.adl_parser.@interface.Create.ADL_INTERFACE.make();
-            adlParser.open_adl_file(EiffelSoftware.Library.Base.kernel.Create.STRING_8.make_from_cil(adlFilePath));
+            adlParser.open_adl_file(Eiffel.String(adlFilePath));
 
             // check file opened successfully by checking status
             if (!adlParser.archetype_source_loaded())
-                throw new ApplicationException(String.Format("{0}\n{1}",
-                    adlFilePath,
-                    adlParser.status().to_cil()));
+                throw new ApplicationException(String.Format("{0}\n{1}", adlFilePath, adlParser.status().to_cil()));
             else
             {
                 adlParser.parse_archetype();
+
                 if (!adlParser.parse_succeeded())
-                    throw new ApplicationException(String.Format("{0}\n{1}",
-                         Path.GetFileName(adlFilePath),
-                         adlParser.status().to_cil()));
+                    throw new ApplicationException(String.Format("{0}\n{1}", Path.GetFileName(adlFilePath), adlParser.status().to_cil()));
+                else if (!adlParser.archetype_available())
+                    throw new ApplicationException(String.Format("{0}\n{1}", adlFilePath, adlParser.status().to_cil()));
                 else
-                {
-                    openehr.adl_parser.syntax.adl.ADL_ENGINE adlEngine = adlParser.adl_engine();
-                    if (!adlParser.archetype_available())
-                        throw new ApplicationException(String.Format("{0}\n{1}",
-                                           adlFilePath,
-                                           adlParser.status().to_cil()));
-                    else                                            
-                        archetypeObject = Build(adlEngine.archetype());                    
-                }
+                    result = Build(adlParser.adl_engine().archetype(), visitor);
             }
             
-            return archetypeObject;
+            return result;
         }
 
-        public static ARCHETYPE Build(openehr.openehr.am.archetype.ARCHETYPE archetype)
+        public static ARCHETYPE Build(openehr.openehr.am.archetype.ARCHETYPE archetype, CloneConstraintVisitor visitor)
         {
             if (archetype == null)
                 throw new ArgumentNullException("archetype must not be null");
 
-            CloneConstraintVisitor cloneVisitor = new CloneConstraintVisitor();
+            if (visitor == null)
+                throw new ArgumentNullException("visitor must not be null");
 
-            //Clone eiffel ADL archetype as OpenEhr.V1.Its.Xml.AM.ARCHETYPE
-            ARCHETYPE archetypeObject = cloneVisitor.CloneArchetype(archetype);
-
-            if(archetypeObject == null)
-                throw new ApplicationException("Archetype object must not be null");
-
-            AmSerializer.ValidateArchetype(archetypeObject);
-            return archetypeObject;            
+            ARCHETYPE result = visitor.CloneArchetype(archetype);
+            AmSerializer.ValidateArchetype(result);
+            return result;            
         }
 
         public static ARCHETYPE CanonicalArchetype(ARCHETYPE archetype)
         {
-            CanonicalAmVisitor visitor = new CanonicalAmVisitor();
-            ARCHETYPE canonicalArchetype = visitor.VisitArchetype(archetype);
-
-            return canonicalArchetype;
+            return new CanonicalAmVisitor().VisitArchetype(archetype);
         }
 
         public static string ArchetypeDigest(ARCHETYPE archetype)
@@ -116,7 +101,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             if (data[offset] != 60) // XML root element (<)
                 throw new ApplicationException("Unexpected start character of canonical archetype model");
 
-            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            MD5 md5 = new MD5CryptoServiceProvider();
             SoapHexBinary hexEncoder = new SoapHexBinary(md5.ComputeHash(data, offset, data.Length-offset));
             string digest = hexEncoder.ToString();
 

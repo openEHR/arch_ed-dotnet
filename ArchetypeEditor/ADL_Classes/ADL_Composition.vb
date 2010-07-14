@@ -15,7 +15,7 @@
 '
 
 Option Explicit On 
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
 
@@ -48,8 +48,8 @@ Class ADL_COMPOSITION
                         If attribute.has_children Then
                             Dim complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = attribute.children.first
 
-                            If complexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("other_context")) Then
-                                attribute = complexObj.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("other_context"))
+                            If complexObj.has_attribute(Eiffel.String("other_context")) Then
+                                attribute = complexObj.c_attribute_at_path(Eiffel.String("other_context"))
 
                                 If attribute.has_children Then
                                     Dim child As Object = attribute.children.first
@@ -63,8 +63,8 @@ Class ADL_COMPOSITION
                                 End If
                             End If
 
-                            If complexObj.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("participations")) Then
-                                attribute = complexObj.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("participations"))
+                            If complexObj.has_attribute(Eiffel.String("participations")) Then
+                                attribute = complexObj.c_attribute_at_path(Eiffel.String("participations"))
                                 Participations = New RmStructureCompound(attribute, StructureType.OtherParticipations, a_filemanager)
                             End If
                         End If

@@ -17,6 +17,7 @@
 Option Strict On
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 Imports EiffelList = EiffelSoftware.Library.Base.structures.list
+Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
 
@@ -30,7 +31,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Private Sub ProcessElement(ByVal ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
             Try
-                Dim v As EiffelKernel.STRING_8 = EiffelKernel.Create.STRING_8.make_from_cil("value")
+                Dim v As EiffelKernel.STRING_8 = Eiffel.String("value")
                 cConstraint = New Constraint
 
                 If Not ComplexObj.any_allowed Then
@@ -55,11 +56,11 @@ Namespace ArchetypeEditor.ADL_Classes
                     End If
 
                     Dim hasNullFlavour As Boolean = False
-                    v = EiffelKernel.Create.STRING_8.make_from_cil("null_flavor") ' Obsolete
+                    v = Eiffel.String("null_flavor") ' Obsolete
                     hasNullFlavour = ComplexObj.has_attribute(v)
 
                     If Not hasNullFlavour Then
-                        v = EiffelKernel.Create.STRING_8.make_from_cil("null_flavour") ' redundant
+                        v = Eiffel.String("null_flavour") ' redundant
                         hasNullFlavour = ComplexObj.has_attribute(v)
                     End If
 
@@ -112,8 +113,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     Try
                         ' Get the upper value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("upper")) Then
-                            attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("upper"))
+                        If ObjNode.has_attribute(Eiffel.String("upper")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
 
                             If attribute.has_children Then
                                 cic.UpperLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
@@ -121,8 +122,8 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
 
                         ' Get the lower value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("lower")) Then
-                            attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("lower"))
+                        If ObjNode.has_attribute(Eiffel.String("lower")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
 
                             If attribute.has_children Then
                                 cic.LowerLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
@@ -156,8 +157,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     Try
                         ' Get the upper value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("upper")) Then
-                            attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("upper"))
+                        If ObjNode.has_attribute(Eiffel.String("upper")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
 
                             If attribute.has_children Then
                                 ciq.UpperLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
@@ -165,8 +166,8 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
 
                         ' Get the lower value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("lower")) Then
-                            attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("lower"))
+                        If ObjNode.has_attribute(Eiffel.String("lower")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
 
                             If attribute.has_children Then
                                 ciq.LowerLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
@@ -182,8 +183,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     Try
                         ' Get the upper value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("upper")) Then
-                            attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("upper"))
+                        If ObjNode.has_attribute(Eiffel.String("upper")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
 
                             If attribute.has_children Then
                                 cidt.UpperLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)
@@ -191,8 +192,8 @@ Namespace ArchetypeEditor.ADL_Classes
                         End If
 
                         ' Get the lower value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("lower")) Then
-                            attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("lower"))
+                        If ObjNode.has_attribute(Eiffel.String("lower")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
 
                             If attribute.has_children Then
                                 cidt.LowerLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)

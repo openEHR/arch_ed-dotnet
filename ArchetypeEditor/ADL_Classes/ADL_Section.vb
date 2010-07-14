@@ -15,7 +15,7 @@
 '
 
 Option Explicit On 
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
     Class ADL_SECTION
@@ -94,11 +94,11 @@ Namespace ArchetypeEditor.ADL_Classes
         Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
             MyBase.New(Definition, a_filemanager)
 
-            If Definition.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("items")) Then
+            If Definition.has_attribute(Eiffel.String("items")) Then
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 Dim i As Integer
 
-                an_attribute = Definition.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("items"))
+                an_attribute = Definition.c_attribute_at_path(Eiffel.String("items"))
                 ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.cardinality, Me.Children)
 
                 For i = 1 To an_attribute.children.count

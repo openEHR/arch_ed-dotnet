@@ -15,7 +15,7 @@
 '
 'Option Strict On
 Option Explicit On 
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Public Class FileManagerLocal
     Private mIsFileDirty As Boolean
@@ -448,7 +448,7 @@ Public Class FileManagerLocal
             adlParser.Archetype.ParentArchetype = Archetype.ParentArchetype
         End If
 
-        adlParser.ADL_Parser.archetype.set_adl_version(EiffelKernel.Create.STRING_8.make_from_cil("1.4"))
+        adlParser.ADL_Parser.archetype.set_adl_version(Eiffel.String("1.4"))
 
         'HKF: 8 Dec 2008
         'description
@@ -462,7 +462,7 @@ Public Class FileManagerLocal
             Dim language As String = CStr(dRow(0))
             If language <> mOntologyManager.PrimaryLanguageCode Then
                 Dim adlTranslationDetails As ADL_TranslationDetails = New ADL_TranslationDetails(Me.Archetype.TranslationDetails.Item(language))
-                adlParser.ADL_Parser.ontology.add_language(EiffelKernel.Create.STRING_8.make_from_cil(language))
+                adlParser.ADL_Parser.ontology.add_language(Eiffel.String(language))
                 'HKF: 8 Dec 2008
                 adlParser.Archetype.TranslationDetails.Add(language, adlTranslationDetails)
             End If

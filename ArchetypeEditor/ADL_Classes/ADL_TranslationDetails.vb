@@ -1,4 +1,5 @@
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Public Class ADL_TranslationDetails
     Inherits TranslationDetails
@@ -12,7 +13,7 @@ Public Class ADL_TranslationDetails
             SetAuthorValue("organisation", AuthorOrganisation)
 
             If Accreditation <> "" Then
-                mADL_Translation.set_accreditation(EiffelKernel.Create.STRING_8.make_from_cil(Accreditation))
+                mADL_Translation.set_accreditation(Eiffel.String(Accreditation))
             End If
 
             Return mADL_Translation
@@ -27,19 +28,19 @@ Public Class ADL_TranslationDetails
 
             'get author details
             Dim s As EiffelKernel.STRING_8
-            s = EiffelKernel.Create.STRING_8.make_from_cil("name")
+            s = Eiffel.String("name")
 
             If value.author.has(s) Then
                 AuthorName = CType(value.author.item(s), EiffelKernel.STRING_8).to_cil
             End If
 
-            s = EiffelKernel.Create.STRING_8.make_from_cil("email")
+            s = Eiffel.String("email")
 
             If value.author.has(s) Then
                 AuthorEmail = CType(value.author.item(s), EiffelKernel.STRING_8).to_cil
             End If
 
-            s = EiffelKernel.Create.STRING_8.make_from_cil("organisation")
+            s = Eiffel.String("organisation")
 
             If value.author.has(s) Then
                 AuthorOrganisation = CType(value.author.item(s), EiffelKernel.STRING_8).to_cil
@@ -52,8 +53,8 @@ Public Class ADL_TranslationDetails
             Dim adlKey As EiffelKernel.STRING_8
             Dim adlValue As EiffelKernel.STRING_8
 
-            adlKey = EiffelKernel.Create.STRING_8.make_from_cil(a_key)
-            adlValue = EiffelKernel.Create.STRING_8.make_from_cil(a_value)
+            adlKey = Eiffel.String(a_key)
+            adlValue = Eiffel.String(a_value)
 
             If mADL_Translation.author.has(adlKey) Then
                 mADL_Translation.author.replace(adlValue, adlKey)
@@ -64,7 +65,7 @@ Public Class ADL_TranslationDetails
     End Sub
 
     Sub New(ByVal a_language As String)
-        mADL_Translation = openehr.openehr.rm.common.resource.Create.TRANSLATION_DETAILS.make_from_language(EiffelKernel.Create.STRING_8.make_from_cil(a_language))
+        mADL_Translation = openehr.openehr.rm.common.resource.Create.TRANSLATION_DETAILS.make_from_language(Eiffel.String(a_language))
         Language = a_language
     End Sub
 
@@ -73,7 +74,7 @@ Public Class ADL_TranslationDetails
     End Sub
 
     Sub New(ByVal a_translation As TranslationDetails)
-        mADL_Translation = openehr.openehr.rm.common.resource.Create.TRANSLATION_DETAILS.make_from_language(EiffelKernel.Create.STRING_8.make_from_cil(a_translation.Language))
+        mADL_Translation = openehr.openehr.rm.common.resource.Create.TRANSLATION_DETAILS.make_from_language(Eiffel.String(a_translation.Language))
         Language = a_translation.Language
         Accreditation = a_translation.Accreditation
         AuthorName = a_translation.AuthorName
