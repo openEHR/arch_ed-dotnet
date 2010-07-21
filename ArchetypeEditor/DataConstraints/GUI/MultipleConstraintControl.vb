@@ -193,16 +193,15 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
                 result = CType(c, Constraint_Text).TypeOfTextConstraint()
 
                 For Each tp As TabPage In TabConstraints.TabPages
-                    Dim cc As ConstraintControl = CType(tp.Controls(0), ConstraintControl)
+                    If tp.Controls.Count > 0 AndAlso TypeOf tp.Controls(0) Is TextConstraintControl Then
+                        Dim cc As TextConstraintControl = CType(tp.Controls(0), TextConstraintControl)
 
-                    If cc.Name = "TextConstraintControl" Then
                         If result = TextConstrainType.Text Then
-                            CType(cc, TextConstraintControl).radioInternal.Enabled = choiceEnabled
-                            CType(cc, TextConstraintControl).radioTerminology.Enabled = choiceEnabled
+                            cc.radioInternal.Enabled = choiceEnabled
+                            cc.radioTerminology.Enabled = choiceEnabled
                         Else
-                            CType(cc, TextConstraintControl).radioText.Enabled = choiceEnabled
+                            cc.radioText.Enabled = choiceEnabled
                         End If
-                        Exit For
                     End If
                 Next
 
