@@ -25,16 +25,15 @@ Public Class OccurrencesPanel
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_filemanager
 
-        'SRH: 24 Aug 2009 [EDT-576] - set mode before setting values (was in load)
         If OceanArchetypeEditor.Instance.Options.OccurrencesView = "numeric" Then
-            Me.Mode = OccurrencesMode.Numeric
+            Mode = OccurrencesMode.Numeric
         Else
-            Me.Mode = OccurrencesMode.Lexical
-        End If
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.TranslateGUI()
+            Mode = OccurrencesMode.Lexical
         End If
 
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            TranslateGUI()
+        End If
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -247,11 +246,9 @@ Public Class OccurrencesPanel
     End Property
 
     Private Sub CardinalityUpdatedExternally(ByVal sender As Object, ByVal e As EventArgs) Handles mCardinality.Updated
-
         If Not mIsLoading Then
             UpdateControl()
         End If
-
     End Sub
 
     Public Property IsContainer() As Boolean
@@ -298,6 +295,7 @@ Public Class OccurrencesPanel
         Set(ByVal Value As Boolean)
             mIsLoading = True
             mIncludeOrdered = False
+            comboOptional.Enabled = Not Value
 
             If Value Then
                 numMin.Value = 1
@@ -327,6 +325,7 @@ Public Class OccurrencesPanel
                 numMin.Maximum = 1
                 cbUnbounded.Checked = False
                 cbUnbounded.Visible = False
+
                 If mMode = OccurrencesMode.Lexical Then
                     comboOptional.SelectedIndex = 1
                 End If
@@ -380,11 +379,7 @@ Public Class OccurrencesPanel
             gbOccurrences.Dock = DockStyle.Fill
         End If
 
-        'If OceanArchetypeEditor.Instance.Options.OccurrencesView = "numeric" Then
-        '   Mode = OccurrencesMode.Numeric
-        'Else
         If Mode = OccurrencesMode.Lexical Then
-
             If comboRepeat.SelectedIndex = -1 Then
                 If mCardinality.IsUnbounded Then
                     comboRepeat.SelectedIndex = 1
@@ -404,12 +399,12 @@ Public Class OccurrencesPanel
     Private Sub UpdateControl()
         mIsLoading = True
 
-        'SRH: 23 Jun 2009 EDT-514
         If numMin.Minimum <= mCardinality.MinCount Then
             numMin.Value = mCardinality.MinCount
         Else
             mCardinality.MinCount = numMin.Minimum
         End If
+
         If mMode = OccurrencesMode.Lexical Then
             If mCardinality.MinCount = 0 Then
                 comboOptional.SelectedIndex = 0 ' optional
@@ -499,29 +494,26 @@ Public Class OccurrencesPanel
 
     Private Sub comboOptional_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboOptional.SelectedIndexChanged
         If Not mIsLoading Then
-            numMin.Value = comboOptional.SelectedIndex
-            mFileManager.FileEdited = True
+            If numMin.Minimum <= comboOptional.SelectedIndex Then
+                numMin.Value = comboOptional.SelectedIndex
+                mFileManager.FileEdited = True
+            End If
         End If
 
         SetGUI()
     End Sub
 
-    Private Sub numMin_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMin.TextChanged ', numMax.ValueChanged
+    Private Sub numMin_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMin.TextChanged
         If Not mIsLoading Then
             mFileManager.FileEdited = True
-            'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
             mIsLoading = True
 
             If mMode = OccurrencesMode.Lexical Then
-                'mIsLoading = True
-
                 If numMin.Value = 0 Then
                     comboOptional.SelectedIndex = 0
                 Else
                     comboOptional.SelectedIndex = 1
                 End If
-
-                'mIsLoading = False
             End If
 
             mCardinality.MinCount = numMin.Value
@@ -530,41 +522,32 @@ Public Class OccurrencesPanel
                 'Protect max val being changed if unbounded
                 mIsLoading = cbUnbounded.Checked
                 numMax.Value = numMin.Value
-                'mIsLoading = False
             End If
 
             mIsLoading = False
-
         End If
     End Sub
 
-    Private Sub numMax_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMax.TextChanged ', numMax.ValueChanged
+    Private Sub numMax_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMax.TextChanged
         If Not mIsLoading Then
             mFileManager.FileEdited = True
-
-            'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
             mIsLoading = True
 
             If mMode = OccurrencesMode.Lexical Then
-                'mIsLoading = True
-
                 If numMax.Value = 1 Then
                     comboRepeat.SelectedIndex = 0
                 Else
                     comboRepeat.SelectedIndex = 2
                 End If
-
-                'mIsLoading = False
             End If
 
             mCardinality.MaxCount = numMax.Value
 
             mIsLoading = False
 
-            If numMin.Value > numMax.Value Then
+            If numMin.Value > numMax.Value And numMin.Minimum <= numMax.Value Then
                 numMin.Value = numMax.Value
             End If
-
         End If
     End Sub
 
@@ -572,7 +555,6 @@ Public Class OccurrencesPanel
         numMax.Visible = Not cbUnbounded.Checked
 
         If Not mIsLoading Then
-            'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
             mIsLoading = True
 
             If Not cbUnbounded.Checked Then
@@ -580,10 +562,7 @@ Public Class OccurrencesPanel
             End If
 
             mCardinality.IsUnbounded = cbUnbounded.Checked
-
-            'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
             mIsLoading = False
-
             mFileManager.FileEdited = True
         End If
     End Sub

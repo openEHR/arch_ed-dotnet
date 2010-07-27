@@ -605,16 +605,19 @@ Public Class EntryStructure
     Protected Sub SetCardinality(ByVal a_structure_type As StructureType)
         mCardinalityControl = New OccurrencesPanel(mFileManager)
         mCardinalityControl.LocalFileManager = mFileManager
+
         If a_structure_type = StructureType.Single Then
             mCardinalityControl.SetSingle = True
         Else
             mCardinalityControl.IsContainer = True
             mCardinalityControl.Location = New Drawing.Point(0, 0)
-            Me.PanelStructureHeader.Controls.Add(mCardinalityControl)
-            'SRH: 23 Jun 2009 EDT 514
+            PanelStructureHeader.Controls.Add(mCardinalityControl)
+
             If a_structure_type = Global.ArchetypeEditor.StructureType.Cluster Then
-                mCardinalityControl.numMin.Minimum = 1
+                mCardinalityControl.SetMandatory = True
+                mCardinalityControl.IsContainer = True
             End If
+
             AddHandler mCardinalityControl.Cardinality.Updated, AddressOf CardinalityUpdated
         End If
     End Sub
@@ -625,11 +628,9 @@ Public Class EntryStructure
         Else
             Me.PanelStructureHeader.Height = 75
         End If
-
     End Sub
 
     Protected Function HtmlHeader(ByVal aBackGroundColour As String, ByVal showComments As Boolean) As String
-
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
         Dim displayWidth As String = "20"
 

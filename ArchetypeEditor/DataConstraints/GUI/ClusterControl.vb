@@ -32,11 +32,12 @@ Public Class ClusterControl : Inherits ConstraintControl
         'Add any initialization after the InitializeComponent() call
         mFileManager = aFileManager
         mOccurrences = New OccurrencesPanel(mFileManager)
+        mOccurrences.SetMandatory = True
         mOccurrences.IsContainer = True
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.LabelTop.Text = Filemanager.GetOpenEhrTerm(313, Me.LabelTop.Text)
-        End If
 
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            LabelTop.Text = Filemanager.GetOpenEhrTerm(313, Me.LabelTop.Text)
+        End If
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -126,23 +127,20 @@ Public Class ClusterControl : Inherits ConstraintControl
                     ctrl.Location = New Drawing.Point(ctrl.Location.X, ctrl.Location.Y + adjust)
                 Next
             End If
-
         End Set
     End Property
 
     Private Sub SetValues()
         ' set the cardinality
-
         mOccurrences.Cardinality = mItem.Cardinality
     End Sub
 
-
     Private Sub ClusterControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.Controls.Add(mOccurrences)
+        Controls.Add(mOccurrences)
         mOccurrences.BringToFront()
         mOccurrences.Dock = DockStyle.Top
-        mOccurrences.numMin.Minimum = 1
     End Sub
+
 End Class
 
 '
