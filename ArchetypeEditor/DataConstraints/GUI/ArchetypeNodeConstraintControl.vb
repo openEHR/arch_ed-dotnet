@@ -582,9 +582,6 @@ Public Class ArchetypeNodeConstraintControl
     Public Sub ShowConstraint(ByVal aStructureType As StructureType, _
             ByVal IsState As Boolean, ByVal IsMandatory As Boolean, ByVal an_archetype_node As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
 
-        'If a_file_manager.OntologyManager.NumberOfSpecialisations() <> OceanArchetypeEditor.Instance.CountInString(an_archetype_node.RM_Class.NodeId, ".") Then
-        '    Me.Enabled = False
-        'End If
         mFileManager = a_file_manager
         mIsLoading = True
         Me.SuspendLayout()
@@ -623,13 +620,15 @@ Public Class ArchetypeNodeConstraintControl
                 PanelName.Visible = True
             End If
 
+            mOccurrences.SetSingle = (aStructureType = StructureType.Single)
+
             Select Case an_archetype_node.RM_Class.Type
 
                 Case StructureType.Tree, StructureType.List, StructureType.Table, StructureType.Single
-                    'SRH: 6th Jan 2010 - EDT-585
                     If IsMandatory Then
                         mOccurrences.SetMandatory = True
                     End If
+
                     mOccurrences.SetUnitary = True
 
                 Case StructureType.Element, StructureType.Reference
@@ -672,40 +671,34 @@ Public Class ArchetypeNodeConstraintControl
                     ' Ensures the ZOrder leads to no overlap
                     mConstraintControl.Dock = DockStyle.Fill
 
-                    ' HKF: 1620
-
-                    'SRH: Aug 19 2008
                     If TypeOf an_archetype_node Is ArchetypeNodeAnonymous Then
                         mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint)
 
-                        'SRH: 6th Jan 2010 - EDT-585
                         Dim rm_ct As StructureType = CType(CType(an_archetype_node, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint.RM_ClassType
 
                         If rm_ct = StructureType.Tree Or rm_ct = StructureType.Table Or rm_ct = StructureType.List Or rm_ct = StructureType.Single Or rm_ct = StructureType.Structure Then
                             If IsMandatory Then
                                 mOccurrences.SetMandatory = True
-
                             End If
+
                             mOccurrences.SetUnitary = True
                         End If
 
                     Else
                         mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeSlot).RM_Class, RmSlot).SlotConstraint)
 
-                        'SRH: 6th Jan 2010 - EDT-585
                         Dim rm_ct As StructureType = CType(CType(an_archetype_node, ArchetypeSlot).RM_Class, RmSlot).SlotConstraint.RM_ClassType
 
                         If rm_ct = StructureType.Tree Or rm_ct = StructureType.Table Or rm_ct = StructureType.List Or rm_ct = StructureType.Single Or rm_ct = StructureType.Structure Then
                             If IsMandatory Then
                                 mOccurrences.SetMandatory = True
                             End If
+
                             mOccurrences.SetUnitary = True
                         End If
-
                     End If
 
                 Case StructureType.Cluster
-                    ' Me.labelAnyCluster.Text = AE_Constants.Instance.Cluster
                     Me.labelAny.Visible = False
                     mConstraintControl = New ClusterControl(a_file_manager)
                     CType(mConstraintControl, ClusterControl).Item = CType(an_archetype_node, ArchetypeComposite)
