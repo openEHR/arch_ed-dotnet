@@ -1,0 +1,186 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+ArchetypeEditor
+</name>
+</assembly>
+<members>
+<member name="P:ArchetypeEditor.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:ArchetypeEditor.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:ArchetypeEditor.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.#ctor">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setMyServletPropertiesCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setOwlModelCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setExcludedParametersForSearchModelCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeIdsFromPartialIdCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeIdsCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getDescriptionForArchetypeCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeInADLCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeInHTMLCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeHTMLURLCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeHTMLURL_langCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeADLURLCompleted">
+	<remarks/>
+</member><member name="E:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeADLURL_langCompleted">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setMyServletProperties(System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setMyServletPropertiesAsync(System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setMyServletPropertiesAsync(System.Object,System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setOwlModel(System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setOwlModelAsync(System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setOwlModelAsync(System.Object,System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setExcludedParametersForSearchModel(System.Object[])">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setExcludedParametersForSearchModelAsync(System.Object[])">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.setExcludedParametersForSearchModelAsync(System.Object[],System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeIdsFromPartialId(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeIdsFromPartialIdAsync(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeIdsFromPartialIdAsync(System.String,System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeIds(System.String[])">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeIdsAsync(System.String[])">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeIdsAsync(System.String[],System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getDescriptionForArchetype(System.String,System.String,System.String[])">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getDescriptionForArchetypeAsync(System.String,System.String,System.String[])">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getDescriptionForArchetypeAsync(System.String,System.String,System.String[],System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeInADL(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeInADLAsync(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeInADLAsync(System.String,System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeInHTML(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeInHTMLAsync(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeInHTMLAsync(System.String,System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeHTMLURL(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeHTMLURLAsync(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeHTMLURLAsync(System.String,System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeHTMLURL_lang(System.String,System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeHTMLURL_langAsync(System.String,System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeHTMLURL_langAsync(System.String,System.String,System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeADLURL(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeADLURLAsync(System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeADLURLAsync(System.String,System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeADLURL_lang(System.String,System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeADLURL_langAsync(System.String,System.String)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.getArchetypeADLURL_langAsync(System.String,System.String,System.Object)">
+	<remarks/>
+</member><member name="M:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService.CancelAsync(System.Object)">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.setMyServletPropertiesCompletedEventHandler">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.setOwlModelCompletedEventHandler">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.setExcludedParametersForSearchModelCompletedEventHandler">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeIdsFromPartialIdCompletedEventHandler">
+	<remarks/>
+</member><member name="P:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeIdsFromPartialIdCompletedEventArgs.Result">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeIdsFromPartialIdCompletedEventArgs">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeIdsCompletedEventHandler">
+	<remarks/>
+</member><member name="P:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeIdsCompletedEventArgs.Result">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeIdsCompletedEventArgs">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getDescriptionForArchetypeCompletedEventHandler">
+	<remarks/>
+</member><member name="P:ArchetypeEditor.ArchetypeFinderWebServiceURL.getDescriptionForArchetypeCompletedEventArgs.Result">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getDescriptionForArchetypeCompletedEventArgs">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeInADLCompletedEventHandler">
+	<remarks/>
+</member><member name="P:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeInADLCompletedEventArgs.Result">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeInADLCompletedEventArgs">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeInHTMLCompletedEventHandler">
+	<remarks/>
+</member><member name="P:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeInHTMLCompletedEventArgs.Result">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeInHTMLCompletedEventArgs">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeHTMLURLCompletedEventHandler">
+	<remarks/>
+</member><member name="P:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeHTMLURLCompletedEventArgs.Result">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeHTMLURLCompletedEventArgs">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeHTMLURL_langCompletedEventHandler">
+	<remarks/>
+</member><member name="P:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeHTMLURL_langCompletedEventArgs.Result">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeHTMLURL_langCompletedEventArgs">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeADLURLCompletedEventHandler">
+	<remarks/>
+</member><member name="P:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeADLURLCompletedEventArgs.Result">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeADLURLCompletedEventArgs">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeADLURL_langCompletedEventHandler">
+	<remarks/>
+</member><member name="P:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeADLURL_langCompletedEventArgs.Result">
+	<remarks/>
+</member><member name="T:ArchetypeEditor.ArchetypeFinderWebServiceURL.getArchetypeADLURL_langCompletedEventArgs">
+	<remarks/>
+</member>
+</members>
+</doc>

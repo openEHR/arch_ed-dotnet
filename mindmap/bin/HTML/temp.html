@@ -1,0 +1,181 @@
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Language" content="nl">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Barthel Index</title>
+</HEAD>
+<BODY>
+<table border="0" cellpadding="2" width="100%">
+<tr>
+<td width="100%" bgcolor="#000080">
+<h1 align="center"><font color="#FFFFFF">Barthel Index</font></h1>
+</td>
+</tr>
+</table>
+<p><i>Entity</i>: OBSERVATION</p>
+<table border="1" cellpadding="3" width="100%">
+<tr>
+<td width="50%"><h4>Concept description:</h4></td>
+<td width="50%"><h4>Identification:</h4></td>
+</tr>
+<tr>
+<td width="50%">Een valide en betrouwbare manier te kunnen vastleggen en volgen van activiteiten van het dagelijks leven van patiënten, vooral de mate van afhankelijk zijn van hulp</td>
+<td width="50%"><i>Id</i>: openEHR-EHR-OBSERVATION.barthel.v1<br><i>Reference model</i>: openEHR_EHR</td>
+</tr>
+</table>
+<table border="1" cellpadding="3" style="background-color: rgb(229, 229, 229); width:100%;" >
+<tr>
+<td width="33%"><h4>Purpose</h4></td>
+<td width="33%"><h4>Use</h4></td>
+<td width="33%"><h4>Misuse</h4></td>
+<td width="33%"><h4>References</h4></td>
+</tr>
+<tr>
+<td width="33%">To record a score of dependency on help to undertake important activities of daily living. The total score is the sum of the ordinal scores for each attribute.</td>
+<td width="33%">For scoring people's independence - often in a nursing home.</td>
+<td width="33%">Not to be used to record individual features.</td>
+<td width="33%">&nbsp;</td>
+</tr>
+</table>
+<hr>
+<table border="0" cellpadding="2" width="100%">
+<tr>
+<td width="100%" bgcolor="#FFFF53">
+<h2>Data</h2>
+</td>
+</tr>
+</table>
+<p><i>Structure</i>: Table , ordered</p>
+<table border="1" cellpadding="2" width="100%"><tr  bgcolor="#FFFF53">
+<td width="20%"><h4>Concept</h4></td>
+<td width="20%"><h4>Description</h4></td>
+<td width="20%"><h4>Constraints</h4></td>
+<td width="20%"><h4>Values</h4></td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Blaas</b></td></table></td>
+<td>Voorgaande week: Af en toe = 1 keer per dagEen patiÃ«nt die zijn catheter zelf kan verzorgen wordt aangemerkt als 'continent'</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> incontinent<i><br> 1: <i> af en toe een ongelukje (max. 1 keer per 24 uur)<i><br> 2: <i> continent<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Darm</b></td></table></td>
+<td>Voorgaande week: Indien klysma noodzakelijk is dan wordt dit aangemerkt als 'incontinent'. Af en toe = 1 keer per week</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> incontinent of catheter<i><br> 1: <i> af en toe een ongelukje (max. 1 keer per 24 uur)<i><br> 2: <i> continent (gedurende meer dan 7 dagen)<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Uiterlijke verzorging</b></td></table></td>
+<td>Voorgaande 24-48 uur: Verwijst naar persoonlijke hygiÃ«ne zoals tandenpoetsen, scheren en wassen. Hierbij benodigde attributen mogen worden aangereikt.</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> heeft hulp nodig<i><br> 1: <i> onafhankelijk (gezicht, haar, tanden, scheren)<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Toiletgebruik</b></td></table></td>
+<td>Met hulp = kan zich afvegen en enige van bovenstaande handelingen uitvoeren.Onafhankelijk = in staat om naar toilet te gaan, zich voldoende uit te kleden, schoon te maken, aan te kleden en weg te gaan.</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> afhankelijk<i><br> 1: <i> heeft enige hulp nodig maar kan sommige dingen zelf<i><br> 2: <i> onafhankelijk (op en af, uit- en aankleden, afvegen)<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Eten</b></td></table></td>
+<td>Hulp = voedsel wordt fijngemaakt; patiÃ«nt eet zelf.In staat om normaal voedsel (ook hard voedsel) te eten. (Het eten mag gekookt en geserveerd worden door anderen maar mag niet worden fijngemaakt).</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> niet in staat<i><br> 1: <i> heeft hulp nodig bij snijden, smeren van boter, enz.<i><br> 2: <i> onafhankelijk<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Transfer (van bed naar stoel en terug)</b></td></table></td>
+<td>Afhankelijk = niet in staat om te zitten; er wordt gebruik gemaakt van tillift.Veel hulp = een sterk, getraind persoon of 2 gewone personen; patiÃ«nt kan rechtop zitten.Weinig hulp = een persoon voor toezicht of enige hulp.</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> niet in staat<i><br> 1: <i> veel hulp (1-2 mensen lichamelijk)<i><br> 2: <i> weinig hulp (met hulp van woorden of lichamelijk)<i><br> 3: <i> onafhankelijk<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Mobiliteit</b></td></table></td>
+<td>Hulp = een ongetraind persoon, incl. toezicht en morele steun.Onafhankelijk = kan zich verplaatsen in huis of op afdeling; hulpmiddel mag worden gebruikt.Een patiÃ«nt in rolstoel moet zonder hulp met hoeken en deuren kunnen omgaan.</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> kan zich niet verplaatsen<i><br> 1: <i> onafhankelijk, maar maakt gebruik van rolstoel, incl. hoeken enz<i><br> 2: <i> loopt met hulp van 1 persoon (hulp van woorden of lichamelijk)<i><br> 3: <i> onafhankelijk<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Aan - en uitkleden</b></td></table></td>
+<td>De helft  = alleen hulp bij knopen, ritssluitingen enz; kan enkele kledingstukken zelf aandoen.Onafhankelijk = in staat kleren te kiezen en aan te doen.</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> afhankelijk<i><br> 1: <i> heeft hulp nodig maar kan oeveer de helft zelf<i><br> 2: <i> onafinankelik<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Trappen</b></td></table></td>
+<td>Trappen</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> neit in staat<i><br> 1: <i> heeft hulp nodig (woorden, lichamelijk of hulpmiddel)<i><br> 2: <i> onafhankelijk naar boven en naar beneden<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/ordinal.gif" width="32" height="32" align="middle"><b>Baden/douche</b></td></table></td>
+<td>Onafhankelijk = zonder toezicht of hulp in en uit bad stappen en zichzelf wassen.</td>
+<td><b><i>Ordinal</i></b><br>
+0..1</td>
+<td>
+0: <i> afhankelijk<i><br> 1: <i> onafinankelik<i><br>
+</td>
+</tr>
+<tr>
+<td><table><tr><td width="0"></td><td><img border="0" src="Images/count.gif" width="32" height="32" align="middle"><b>Totaal</b></td></table></td>
+<td>Totaal Barthel-index voorbeeld</td>
+<td><b><i>Count</i></b><br>
+0..1</td>
+<td>
+0..20
+</td>
+</tr></table>
+<hr>
+<table border="0" cellpadding="2" width="100%">
+<tr>
+<td width="100%" bgcolor="#AAFE92">
+<h2>Event Series</h2>
+</td>
+</tr>
+</table>
+
+<table border="1" cellpadding="2" width="100%">
+
+<tr  bgcolor="#AAFE92">
+<td width="20%"><h4>Events</h4></td>
+<td width = "40%"><h4>Description</h4></td>
+<td width = "20%"><h4>Constraints</h4></td>
+</tr>
+<tr>
+<td><b>Any event</b></td>
+<td><b>*</b></td>
+<td>
+Event
+</tr>
+
+</table>
+
+<hr>
+</BODY>
+</HTML>

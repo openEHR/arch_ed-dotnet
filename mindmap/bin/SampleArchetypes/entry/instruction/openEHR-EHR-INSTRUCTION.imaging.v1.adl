@@ -1,0 +1,58 @@
+archetype (adl_version=1.4)
+	openEHR-EHR-INSTRUCTION.imaging.v1
+
+concept
+	[at0000]	-- Imaging request
+description
+	original_author = <
+		["name"] = <"Sam Heard">
+		["organisation"] = <"Ocean Informatics">
+		["date"] = <"22/04/2006">
+		["email"] = <"sam.heard@oceaninformatics.biz">
+	>
+	details = <
+		["en"] = <
+			language = <"en">
+			purpose = <"For recording information about a request for diagnostic imaging services.">
+			use = <"For clinicians to order diagnostic imaging services for a person and record this request in the EHR.">
+			keywords = <"Xray", "ultrasound", "scan", "MRI", "CT", "CAT", "nuclear">
+			misuse = <"Not for recording findings - Use openEHR-EHR-OBSERVATION.">
+		>
+	>
+	lifecycle_state = <"AuthorDraft">
+	other_contributors = <>
+
+definition
+	INSTRUCTION[at0000] matches {	-- Imaging request
+		activities cardinality matches {0..*; unordered} matches {
+			ACTIVITY[at0001] occurrences matches {1..*} matches {	-- Imaging activity
+				action_archetype_id matches {/imaging\.v1/}
+				description matches {
+					allow_archetype ITEM_TREE occurrences matches {0..1} matches {
+						include
+							domain_concept matches {/imaging\.v1/}
+						exclude
+							domain_concept matches {/.*/}
+					}
+				}
+			}
+		}
+	}
+
+ontology
+	primary_language = <"en">
+	languages_available = <"en", ...>
+	term_definitions = <
+		["en"] = <
+			items = <
+				["at0000"] = <
+					description = <"Request for imaging services">
+					text = <"Imaging request">
+				>
+				["at0001"] = <
+					description = <"Information about the imaging action(s) to be carried out">
+					text = <"Imaging activity">
+				>
+			>
+		>
+	>
