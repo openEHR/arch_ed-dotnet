@@ -16,8 +16,6 @@
 
 
 Public MustInherit Class Archetype
-    'Protected adlEngine As openehr.openehr.am.archetype.constraint_model.AdlEngine
-
     Protected cDefinition As ArcheTypeDefinitionBasic
     Protected mDescription As ArchetypeDescription
     Protected sParentArchetypeID As String
@@ -27,24 +25,37 @@ Public MustInherit Class Archetype
     Protected sLifeCycle As New String("draft")
     Protected iVersion As Integer = 1
     Protected WithEvents mArchetypeID As ArchetypeID
-    Protected mSynchronised As Boolean = False 'synchronised with defintion
+    Protected mSynchronised As Boolean = False 'synchronised with definition
 
     MustOverride Property LifeCycle() As String
     MustOverride Property ConceptCode() As String
-    MustOverride Property Archetype_ID() As ArchetypeID
     MustOverride ReadOnly Property ArchetypeAvailable() As Boolean
     MustOverride ReadOnly Property Paths(ByVal languageCode As String, ByVal parserIsSynchronised As Boolean, Optional ByVal Logical As Boolean = False) As String()
 
     MustOverride ReadOnly Property SourceCode() As String
     MustOverride ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
     MustOverride Sub Specialise(ByVal NewConceptShortName As String, ByRef The_Ontology As OntologyManager)
-    MustOverride Sub UpdateArchetypeId() 'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
+    Protected MustOverride Sub SetArchetypeId(ByVal value As ArchetypeID)
+
+    Public Property Archetype_ID() As ArchetypeID
+        Get
+            Return mArchetypeID
+        End Get
+        Set(ByVal Value As ArchetypeID)
+            SetArchetypeId(Value)
+        End Set
+    End Property
+
+    Public Sub UpdateArchetypeId() 'Forces changes made to ArchetypeID to be updated in parser
+        SetArchetypeId(Archetype_ID)
+    End Sub
 
     Public ReadOnly Property RmEntity() As StructureType
         Get
             Return mArchetypeID.ReferenceModelEntity
         End Get
     End Property
+
     Public Property Description() As ArchetypeDescription
         Get
             Return mDescription
@@ -74,6 +85,7 @@ Public MustInherit Class Archetype
         '    'will need a whole rule engine to do this
         'End Set
     End Property
+
     Public Overridable Property ParentArchetype() As String
         Get
             Return sParentArchetypeID
@@ -82,11 +94,13 @@ Public MustInherit Class Archetype
             sParentArchetypeID = Value
         End Set
     End Property
-    Public ReadOnly Property hasData() As Boolean
+
+    Public ReadOnly Property HasData() As Boolean
         Get
             Return Not cDefinition Is Nothing
         End Get
     End Property
+
     Public Property Version() As Integer
         Get
             Return iVersion
@@ -95,6 +109,7 @@ Public MustInherit Class Archetype
             iVersion = Value
         End Set
     End Property
+
     Public Property Definition() As ArcheTypeDefinitionBasic
         Get
             Return cDefinition
@@ -104,6 +119,7 @@ Public MustInherit Class Archetype
             mSynchronised = False
         End Set
     End Property
+
     Public Property Extendable() As Boolean
         Get
             'FIXME - can it be specialised?
@@ -125,9 +141,9 @@ Public MustInherit Class Archetype
         Return False
     End Function
 
-    Protected Sub setDefinition()
-        ' lets each specialised archetype type set the entity
-        ' in the GUI archetype
+    Protected Sub SetDefinition()
+        ' lets each specialised archetype type set the entity in the GUI archetype
+
         Select Case mArchetypeID.ReferenceModelEntity
             Case StructureType.COMPOSITION
                 cDefinition = New RmComposition
@@ -150,8 +166,6 @@ Public MustInherit Class Archetype
         End Select
 
         ReferenceModel.SetArchetypedClass(mArchetypeID.ReferenceModelEntity)
-
-        'Not archetype is not synchronised with definition
         mSynchronised = False
     End Sub
 
@@ -159,23 +173,28 @@ Public MustInherit Class Archetype
         If Not cDefinition Is Nothing Then
             If TypeOf (cDefinition) Is ArchetypeDefinition Then
                 CType(cDefinition, ArchetypeDefinition).Data.Clear()
+
+                If TypeOf (cDefinition) Is RmEntry Then
+                    CType(cDefinition, RmEntry).ResetParticipations()
+                ElseIf TypeOf (cDefinition) Is RmComposition Then
+                    CType(cDefinition, RmComposition).ResetParticipations()
+                End If
             End If
 
             cDefinition.RootLinks.Clear()
         End If
 
-        'Not archetype is not synchronised with definition
         mSynchronised = False
     End Sub
 
-    Sub New(ByVal Primary_Language As String)
-        sPrimaryLanguageCode = Primary_Language
+    Sub New(ByVal primaryLanguage As String)
+        sPrimaryLanguageCode = primaryLanguage
     End Sub
 
-    Sub New(ByVal Primary_Language As String, ByVal an_archetypeID As ArchetypeID)
-        sPrimaryLanguageCode = Primary_Language
-        mArchetypeID = an_archetypeID
-        setDefinition()
+    Sub New(ByVal primaryLanguage As String, ByVal archetypeID As ArchetypeID)
+        sPrimaryLanguageCode = primaryLanguage
+        mArchetypeID = archetypeID
+        SetDefinition()
     End Sub
 
 End Class

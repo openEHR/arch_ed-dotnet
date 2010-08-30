@@ -181,7 +181,7 @@ Public Class ConstraintControl
         Select Case aConstraintType
             'Case ConstraintType.Any
 
-        Case ConstraintType.Boolean
+            Case ConstraintType.Boolean
                 Return New BooleanConstraintControl(a_file_manager)
 
             Case ConstraintType.Quantity
@@ -219,6 +219,15 @@ Public Class ConstraintControl
 
             Case ConstraintType.URI
                 Return New UriConstraintControl(a_file_manager)
+
+            Case ConstraintType.Identifier
+                Return New IdentifierConstraintControl(a_file_manager)
+
+            Case ConstraintType.Currency
+                Return New CountConstraintControl(a_file_manager)
+
+            Case ConstraintType.Parsable
+                Return New ParsableConstraintControl(a_file_manager)
 
             Case Else
                 Throw New ArgumentException( _

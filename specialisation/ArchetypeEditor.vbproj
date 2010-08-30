@@ -1033,6 +1033,9 @@
     <None Include="PropertyUnits\PropertyUnits.xsx">
       <DependentUpon>PropertyUnits.xsd</DependentUpon>
     </None>
+    <None Include="rm_schemas\openehr_rm_102.dadl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Terminology\Terminology.xsx">
       <DependentUpon>Terminology.xsd</DependentUpon>
     </None>

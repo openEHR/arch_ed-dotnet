@@ -15,20 +15,19 @@
 '
 'Option Strict On
 Option Explicit On 
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Public Class FileManagerLocal
     Private mIsFileDirty As Boolean
     Private mIsFileLoading As Boolean
     Private mParserSynchronised As Boolean = True
-    Private mHasOpenFileError, mHasWriteFileError As Boolean
+    Private mHasOpenFileError As Boolean
     Private mArchetypeEngine As Parser
     Private mFileName, mPriorFileName As String
     Private mWorkingDirectory As String
     Private mIsNew As Boolean = False
     Private mObjectToSave As Object
     Private mOntologyManager As New OntologyManager(Me)
-    Private mTermBindingLookUpTables As Collections.Generic.SortedDictionary(Of String, DataTable)
 
     Public Property OntologyManager() As OntologyManager
         Get
@@ -38,11 +37,13 @@ Public Class FileManagerLocal
             mOntologyManager = Value
         End Set
     End Property
+
     Public ReadOnly Property ArchetypeAvailable() As Boolean
         Get
-            Return mArchetypeEngine.ArchetypeAvailable()
+            Return mArchetypeEngine.ArchetypeAvailable
         End Get
     End Property
+
     Public Property IsNew() As Boolean
         Get
             Return mIsNew
@@ -54,12 +55,14 @@ Public Class FileManagerLocal
             End If
         End Set
     End Property
+
     Public WriteOnly Property ObjectToSave() As Object
         Set(ByVal Value As Object)
             'Containing object must have a "PrepareToSave" sub
             mObjectToSave = Value
         End Set
     End Property
+
     Public Property WorkingDirectory() As String
         Get
             Return mWorkingDirectory
@@ -68,11 +71,13 @@ Public Class FileManagerLocal
             mWorkingDirectory = Value
         End Set
     End Property
+
     Public ReadOnly Property ParserType() As String
         Get
             Return mArchetypeEngine.TypeName()
         End Get
     End Property
+
     Public Property FileName() As String
         Get
             Return mFileName
@@ -81,16 +86,13 @@ Public Class FileManagerLocal
             mFileName = Value
         End Set
     End Property
+
     Public ReadOnly Property OpenFileError() As Boolean
         Get
             Return mHasOpenFileError
         End Get
     End Property
-    Public ReadOnly Property WriteFileError() As Boolean
-        Get
-            Return mHasWriteFileError
-        End Get
-    End Property
+
     Public Property FileEdited() As Boolean
         Get
             Return mIsFileDirty
@@ -105,6 +107,7 @@ Public Class FileManagerLocal
             End If
         End Set
     End Property
+
     Public Property ParserSynchronised() As Boolean
         Get
             Return mParserSynchronised
@@ -113,6 +116,7 @@ Public Class FileManagerLocal
             mParserSynchronised = Value
         End Set
     End Property
+
     Public ReadOnly Property AvailableFormatFilter() As String
         Get
             ' returns a filedialog filter
@@ -120,32 +124,36 @@ Public Class FileManagerLocal
 
             For i As Integer = 0 To mArchetypeEngine.AvailableFormats.Count - 1
                 Dim s As String = CStr(mArchetypeEngine.AvailableFormats(i))
-                format_filter &= s & "|*." & s & "|"
+                format_filter &= s.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|*." & s & "|"
             Next
+
             Select Case ParserType
                 Case "adl"
-                    format_filter &= "xml|*.xml"
+                    format_filter &= "XML|*.xml"
                 Case "xml"
-                    format_filter &= "adl|*.adl"
+                    format_filter &= "ADL|*.adl"
                 Case Else
                     Debug.Assert(False, ParserType & " not handled")
             End Select
+
             Return format_filter
         End Get
     End Property
+
     Public ReadOnly Property AvailableFormats() As ArrayList
         Get
             Dim formats As ArrayList = mArchetypeEngine.AvailableFormats
+
             'Ensure ADL and XML available as provided by parsers
             If Not formats.Contains("xml") Then
                 formats.Add("xml")
             End If
+
             If Not formats.Contains("adl") Then
                 formats.Add("adl")
             End If
 
             Return formats
-
         End Get
     End Property
 
@@ -183,50 +191,9 @@ Public Class FileManagerLocal
     Private InitialisedTerminologies As Collections.Generic.List(Of String)
     Private webError As Boolean
 
-    Public Function HasTermBindings(ByVal language As String, ByVal terminologyId As String) As Boolean
-
-        If webError Then Return False
-
-        If Not mTermBindingLookUpTables Is Nothing Then
-            If mTermBindingLookUpTables.ContainsKey(language & terminologyId) Then
-                Return True
-            End If
-        Else
-            mTermBindingLookUpTables = New Collections.Generic.SortedDictionary(Of String, DataTable)
-        End If
-        Try
-            If Not mOntologyManager.TermBindingsTable Is Nothing AndAlso mOntologyManager.TermBindingsTable.Rows.Count > 0 Then
-                Dim selected_rows As DataRow() = mOntologyManager.TermBindingsTable.Select("Terminology = 'SNOMED-CT'")
-                If Not selected_rows Is Nothing AndAlso selected_rows.Length > 0 Then
-                    Dim conceptIds(selected_rows.Length) As String
-                    For i As Integer = 0 To selected_rows.Length - 1
-                        conceptIds(i) = selected_rows(i).Item("Code")
-                    Next
-                    Dim termTable As DataTable = OTSControls.Term.OtsWebService.GetTerminologyPreferredTerms(OTSControls.OTSServer.TerminologyName.Snomed, language, conceptIds).Tables(0)
-                    mTermBindingLookUpTables.Add(language & terminologyId, termTable)
-                End If
-            End If
-        Catch
-            webError = True
-        End Try
-
-        Return False
-    End Function
-
-    Public Function BindingText(ByVal language As String, ByVal TerminologyId As String, ByVal terminologyCode As String) As String
-        Dim dTable As DataTable = mTermBindingLookUpTables.Item(language & TerminologyId)
-        If Not dTable Is Nothing Then
-            Dim dRow As DataRow = dTable.Rows.Find(terminologyCode).Item(1)
-            If Not dRow Is Nothing Then
-                Return dRow(1)
-            End If
-        End If
-        Return String.Empty
-    End Function
-
     Public Function OpenArchetype(ByVal aFileName As String) As Boolean
         Try
-            mPriorFileName = Me.FileName
+            mPriorFileName = FileName
 
             'Need to check file name for eMail extensions
 
@@ -242,8 +209,7 @@ Public Class FileManagerLocal
             '    End If
             'End If
 
-
-            Me.FileName = aFileName
+            FileName = aFileName
 
             If aFileName.ToLowerInvariant().EndsWith(".adl") Then
                 If mArchetypeEngine Is Nothing Or ParserType.ToLowerInvariant() = "xml" Then
@@ -259,177 +225,126 @@ Public Class FileManagerLocal
                 End If
             Else
                 MessageBox.Show("File type: " & aFileName & " is not supported", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                Debug.Assert(False)
-                Return False
+                Return False    ' FIXME: spaghetti code!
             End If
 
             mHasOpenFileError = False
-
-            ' next section: written by Jana Graenz, necessary for opening a "web archetype" (where path is a URL)
-            ' if this archtype comes from the web, aFileName will be the URL.
-            ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
-            ' it will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
-            ' This avoids data and file overflow.
-
-            
-            'end of addition
-
             mArchetypeEngine.OpenFile(aFileName, Me)
 
-            ' next section: written by Jana Graenz 2007-02-28
+            ' if this archtype comes from the web, aFileName will be the URL.
+            ' In this case we have to download the file temporarily on the users system so that it can be opened in the Editor.
+            ' It will be downloaded in the temporary system folder and deleted immediatly after it has been opened in the Editor.
+            ' User has to save the file manually if a local copy of it is wanted.
+            ' This avoids data and file overflow.
 
             If aFileName.StartsWith(System.IO.Path.GetTempPath) Then
-                'delete the temporarily downloaded adl-file after opening it.
-                'user has to safe the file locally if he/she wants to keep it
-                Kill(aFileName)
+                'SRH 22 Aug 2009 - [EDT-570]
+                System.IO.File.SetAttributes(aFileName, IO.FileAttributes.Normal)
+                System.IO.File.Delete(aFileName)
+                'From VB subassembly (to be avoided)
+                'Kill(aFileName)
+                'Set the file name to the current directory and not the temp folder
+                FileName = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), System.IO.Path.GetFileName(aFileName))
             End If
-
-            'end of addition
 
             If mArchetypeEngine.OpenFileError Then
                 mHasOpenFileError = True
-                Return False
+                Return False    ' FIXME: spaghetti code!
             End If
-
-            'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
-            'Else
-            '' ensure the filename and archetype ID are in tune
-            'Dim i As Integer = aFileName.LastIndexOf("\")
-            'Dim shortFileName As String = aFileName.Substring(i + 1)
-
-            'If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".") Then
-            '    If MessageBox.Show(mOntologyManager.GetOpenEHRTerm(57, "Archetype file name") & _
-            '       ": " & shortFileName & "; " & Environment.NewLine & _
-            '       mOntologyManager.GetOpenEHRTerm(632, "Archetype Id") & _
-            '       ": " & mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & _
-            '       mOntologyManager.GetOpenEHRTerm(147, "Change") & _
-            '       " " & mOntologyManager.GetOpenEHRTerm(57, "Archetype file name"), _
-            '       AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-            '        Me.FileName = aFileName.Substring(i + 1) + mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
-            '    End If
-            'End If
 
             mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
+            mOntologyManager.SetBestLanguage()
+
             mPriorFileName = Nothing
             FileEdited = False
+            CheckFileNameAgainstArchetypeId()
 
-            'ensure the filename and archetype ID match (ignore case!)        
-            Dim shortFileName As String = aFileName.Substring((aFileName.LastIndexOf("\")) + 1)
-
-            If Not shortFileName.StartsWith(mArchetypeEngine.Archetype.Archetype_ID.ToString & ".", StringComparison.InvariantCultureIgnoreCase) Then
-                If ArchetypeID.IsValidId(shortFileName.Substring(0, shortFileName.LastIndexOf("."))) Then
-                    If Not CheckFileName(shortFileName) Then 'returns false if an update occurred
-                        FileLoading = False
-                        FileEdited = True
-                        FileLoading = True
-                    End If
-                Else
-                    FileName = mArchetypeEngine.Archetype.Archetype_ID.ToString & "." & ParserType
-                    FileLoading = False
-                    FileEdited = True
-                    FileLoading = True
-                End If
-            End If
-
-            Return True
+            Return True ' FIXME: spaghetti code!
         Catch e As Exception
-            Me.FileName = mPriorFileName
+            ' Need to indicate reason for exception
+            FileName = mPriorFileName
             mPriorFileName = Nothing
         End Try
     End Function
 
-    'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
-    Private Function CheckFileName(ByVal FileName As String) As Boolean 'returns false if an update occurred
+    Private Sub CheckFileNameAgainstArchetypeId()
+        Dim name As String = IO.Path.GetFileNameWithoutExtension(FileName)
 
-        Dim updateOccurred As Boolean = False
-        Dim shortFileName As String = Left(FileName, FileName.LastIndexOf("."))
+        If String.Compare(name, Archetype.Archetype_ID.ToString, True) <> 0 Then
+            If ArchetypeID.IsValidId(name) Then
+                'validate the concept to update it with the correct case and remove illegal characters
+                Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
+                Id1.Concept = Id1.ValidConcept(Id1.Concept, "", False)
 
-        'validate the concept to update it with the correct case and remove illegal characters
-        Dim Id1 As New ArchetypeID(Archetype.Archetype_ID.ToString)
-        Id1.Concept = Id1.ValidConcept(Id1.Concept, "", False)
+                Dim Id2 As New ArchetypeID(name)
+                Id2.Concept = Id2.ValidConcept(Id2.Concept, "", False)
 
-        Dim Id2 As New ArchetypeID(shortFileName)
-        Id2.Concept = Id2.ValidConcept(Id2.Concept, "", False)
+                Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
+                frm.ShowDialog()
 
-        Dim frm As New ChooseFix(mOntologyManager, Id1.ToString, Id2.ToString)
-        If frm.ShowDialog <> Windows.Forms.DialogResult.Cancel And frm.selection <> ChooseFix.FixOption.Ignore Then 'selection made
+                If frm.Selection <> ChooseFix.FixOption.Ignore Then
+                    'NOTE: The following updates can occur!
+                    '    Update 1: Update if concept was changed in ValidConcept call
+                    '    Update 2: Update according to the user selection
 
-            'NOTE: The following updates can occur!
-            '    Update 1: Update if concept was changed in ValidConcept call
-            '    Update 2: Update according to the user selection
+                    Dim use As String = IIf(frm.Selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
 
-            updateOccurred = True
+                    'update filename if changed
+                    If String.Compare(name, use, True) <> 0 Then 'case insensitive (windows o/s has issues updating file name case!)
+                        mPriorFileName = FileName
+                        FileName = IO.Path.Combine(IO.Path.GetDirectoryName(FileName), use & "." & ParserType)
+                    End If
 
-            Dim Use As String = IIf(frm.selection = ChooseFix.FixOption.UseId, Id1.ToString, Id2.ToString)
+                    'update archetype id if changed
+                    If Archetype.Archetype_ID.ToString <> use Then 'case sensitive
+                        Archetype.Archetype_ID.SetFromString(use)
+                        Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
+                    End If
 
-            'update filename if changed
-            If String.Compare(shortFileName, Use, True) > 0 Then 'case insensitive (windows o/s has issues updating file name case!)
-                mPriorFileName = Me.FileName
-                Me.FileName = Replace(Me.FileName, FileName, Use & "." & ParserType)
-                updateOccurred = True
-            End If
-
-            'update archetype id if changed
-            If Archetype.Archetype_ID.ToString <> Use Then 'case sensitive
-                Archetype.Archetype_ID.SetFromString(Use)
-                Archetype.UpdateArchetypeId() 'force details set above to be updated in the Eiffel parser                
+                    Dim priorFileLoading As Boolean = FileLoading
+                    FileLoading = False
+                    FileEdited = True
+                    FileLoading = priorFileLoading
+                End If
             End If
         End If
-
-        frm.Close()
-        Return Not updateOccurred
-    End Function
+    End Sub
 
     Public Function FormatIsAvailable(ByVal a_format As String) As Boolean
-
-        If mArchetypeEngine.AvailableFormats.Contains(a_format) Then
-            Return True
-        Else
-            Return False
-        End If
-
+        Return mArchetypeEngine.AvailableFormats.Contains(a_format)
     End Function
-
-    Public Sub SerialiseArchetype(ByVal a_format As String)
-        mArchetypeEngine.Serialise(a_format)
-    End Sub
 
     Public Function CreateXMLParser() As XMLParser.XmlArchetypeParser
         'Create a new parser
-        Dim xml_parser As New XMLParser.XmlArchetypeParser()
+        Dim result As New XMLParser.XmlArchetypeParser()
+        result.NewArchetype(Archetype.Archetype_ID.ToString, mOntologyManager.PrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
+        result.Archetype.concept = Archetype.ConceptCode
+        result.Archetype.definition.node_id = result.Archetype.concept
 
-        xml_parser.NewArchetype( _
-                   mArchetypeEngine.Archetype.Archetype_ID.ToString, _
-                   mOntologyManager.PrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
-        xml_parser.Archetype.concept = mArchetypeEngine.Archetype.ConceptCode
-        xml_parser.Archetype.definition.node_id = xml_parser.Archetype.concept 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-        Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(xml_parser)
+        Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(result)
 
         'Set the root id which can be different than the concept ID
-        Dim definition As ArcheTypeDefinitionBasic = mArchetypeEngine.Archetype.Definition
+        Dim definition As ArcheTypeDefinitionBasic = Archetype.Definition
 
-        If Not definition Is Nothing AndAlso Not definition.RootNodeId Is Nothing AndAlso xml_parser.Archetype.definition.node_id <> definition.RootNodeId Then
-            xml_parser.Archetype.definition.node_id = definition.RootNodeId
+        If Not definition Is Nothing AndAlso Not definition.RootNodeId Is Nothing AndAlso result.Archetype.definition.node_id <> definition.RootNodeId Then
+            result.Archetype.definition.node_id = definition.RootNodeId
         End If
 
         If mOntologyManager.NumberOfSpecialisations > 0 Then
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'xml_parser.Archetype.parent_archetype_id = mArchetypeEngine.Archetype.ParentArchetype 
-            If xml_parser.Archetype.parent_archetype_id Is Nothing Then
-                xml_parser.Archetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
+            If result.Archetype.parent_archetype_id Is Nothing Then
+                result.Archetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
             End If
 
-            xml_parser.Archetype.parent_archetype_id.value = mArchetypeEngine.Archetype.ParentArchetype
+            result.Archetype.parent_archetype_id.value = Archetype.ParentArchetype
         End If
 
-        xml_parser.Archetype.adl_version = "1.4"
+        result.Archetype.adl_version = "1.4"
 
         'remove the concept code from ontology as will be set again
-        xml_parser.Archetype.ontology.term_definitions = Nothing 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+        result.Archetype.ontology.term_definitions = Nothing
 
         'populate the ontology
-        'xml_parser.Archetype.ontology.specialisation_depth = mOntologyManager.NumberOfSpecialisations.ToString 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1        
+        'xmlParser.Archetype.ontology.specialisation_depth = mOntologyManager.NumberOfSpecialisations.ToString 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1        
 
         'term definitions
         xmlOntology.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable)
@@ -458,26 +373,24 @@ Public Class FileManagerLocal
             cp.code_string = language
 
             'Add the translations
-            If language <> mOntologyManager.PrimaryLanguageCode Then
-                Dim translationDetail As TranslationDetails = Me.Archetype.TranslationDetails.Item(language)
+            If language <> mOntologyManager.PrimaryLanguageCode And Archetype.TranslationDetails.ContainsKey(language) Then
+                Dim translationDetail As TranslationDetails = Archetype.TranslationDetails.Item(language)
                 Dim xmlTranslationDetail As New XML_TranslationDetails(translationDetail)
                 translationsArray(i) = xmlTranslationDetail.XmlTranslation
                 i += 1
             End If
 
             'Add the archetype details in each language
-            Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
+            Dim archDetail As ArchetypeDescriptionItem = Archetype.Description.Details.DetailInLanguage(language)
             Dim xml_detail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
             xml_detail.language = cp
 
-            If archDetail.Copyright <> "" Then
+            If Not String.IsNullOrEmpty(archDetail.Copyright) Then
                 xml_detail.copyright = archDetail.Copyright
             End If
 
             xml_detail.misuse = archDetail.MisUse
 
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'xml_detail.original_resource_uri = archDetail.OriginalResourceURI
             If archDetail.OriginalResourceURI <> "" Then
                 Dim new_items(0) As XMLParser.StringDictionaryItem
                 new_items(0).Value = archDetail.OriginalResourceURI
@@ -487,8 +400,9 @@ Public Class FileManagerLocal
             xml_detail.purpose = archDetail.Purpose
             xml_detail.use = archDetail.Use
 
-            If (Not archDetail.KeyWords Is Nothing) AndAlso archDetail.KeyWords.Count > 0 Then
+            If Not archDetail.KeyWords Is Nothing AndAlso archDetail.KeyWords.Count > 0 Then
                 xml_detail.keywords = Array.CreateInstance(GetType(String), archDetail.KeyWords.Count)
+
                 For j As Integer = 0 To archDetail.KeyWords.Count - 1
                     xml_detail.keywords(j) = archDetail.KeyWords.Item(j)
                 Next
@@ -499,110 +413,71 @@ Public Class FileManagerLocal
         Next
 
         'Definition
-        Dim xmlArchetype As New ArchetypeEditor.XML_Classes.XML_Archetype(xml_parser)
-        xmlArchetype.Definition = Me.Archetype.Definition
-        xmlArchetype.Description = Me.Archetype.Description 'EDT33: View archetype as XML raises exception https://projects.oceanehr.com/jira/browse/EDT-33
+        Dim xmlArchetype As New ArchetypeEditor.XML_Classes.XML_Archetype(result)
+        xmlArchetype.Definition = Archetype.Definition
+        xmlArchetype.Description = Archetype.Description
         xmlArchetype.MakeParseTree()
-        Me.ParserSynchronised = True
+        ParserSynchronised = True
 
         'description
-        Dim xml_description As New ArchetypeEditor.XML_Classes.XML_Description(Me.Archetype.Description)
-        xml_parser.Archetype.description = xml_description.XML_Description
-        xml_parser.Archetype.description.details = details_array
+        If TypeOf Archetype.Description Is ArchetypeEditor.XML_Classes.XML_Description Then
+            result.Archetype.description = CType(Archetype.Description, ArchetypeEditor.XML_Classes.XML_Description).XML_Description
+        Else
+            result.Archetype.description = New ArchetypeEditor.XML_Classes.XML_Description(Archetype.Description).XML_Description
+        End If
+
+        result.Archetype.description.details = details_array
 
         'translations
-        xml_parser.Archetype.translations = translationsArray
-        Return xml_parser
+        result.Archetype.translations = translationsArray
+        Return result
     End Function
 
     Private Function CreateAdlParser() As ArchetypeEditor.ADL_Classes.ADL_Interface
         'Create a new parser
-        Dim adlParser As New ArchetypeEditor.ADL_Classes.ADL_Interface()
-        adlParser.NewArchetype( _
-            mArchetypeEngine.Archetype.Archetype_ID, _
-            mOntologyManager.PrimaryLanguageCode)
-        adlParser.Archetype.ConceptCode = mArchetypeEngine.Archetype.ConceptCode
-        'adlParser.Archetype.Definition.RootNodeId = mArchetypeEngine.Archetype.Definition.RootNodeId 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1        
+        Dim result As New ArchetypeEditor.ADL_Classes.ADL_Interface()
+        result.CreateNewArchetype(Archetype.Archetype_ID, mOntologyManager.PrimaryLanguageCode)
+        result.Archetype.ConceptCode = Archetype.ConceptCode
 
         If mOntologyManager.NumberOfSpecialisations > 0 Then
-            adlParser.Archetype.ParentArchetype = mArchetypeEngine.Archetype.ParentArchetype
+            result.Archetype.ParentArchetype = Archetype.ParentArchetype
         End If
 
-        adlParser.ADL_Parser.archetype_flat.set_adl_version(EiffelKernel.Create.STRING_8.make_from_cil("1.4"))
+        result.Archetype.Description = New ArchetypeEditor.ADL_Classes.ADL_Description(Archetype.Description, mOntologyManager.PrimaryLanguageCode)
 
         'populate the ontology
-
         'languages - need translations and details for each language
-        Dim translationsArray As New ArrayList
-        Dim detailsArray As New ArrayList
-
         'First deal with the original language
         For Each dRow As DataRow In mOntologyManager.LanguagesTable.Rows
             Dim language As String = CStr(dRow(0))
+
             If language <> mOntologyManager.PrimaryLanguageCode Then
-                Dim adlTranslationDetails As ADL_TranslationDetails = New ADL_TranslationDetails(Me.Archetype.TranslationDetails.Item(language))
-                translationsArray.Add(adlTranslationDetails.ADL_Translation)
-                adlParser.ADL_Parser.archetype_flat.ontology.add_language(EiffelKernel.Create.STRING_8.make_from_cil(language))
+                Dim adlTranslationDetails As ADL_TranslationDetails = New ADL_TranslationDetails(Archetype.TranslationDetails.Item(language))
+                result.ArchetypeParser.DifferentialArchetype.AddLanguage(Eiffel.String(language))
+                result.Archetype.TranslationDetails.Add(language, adlTranslationDetails)
             End If
 
-            Dim cp As openehr.openehr.rm.data_types.text.Impl.CODE_PHRASE
-            cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                EiffelKernel.Create.STRING_8.make_from_cil(OceanArchetypeEditor.DefaultLanguageCodeSet & "::" & language))
             Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
-
-            Dim adl_detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
-            adl_detail = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION_ITEM.make_from_language( _
-                EiffelKernel.Create.STRING_8.make_from_cil(language), _
-                EiffelKernel.Create.STRING_8.make_from_cil((archDetail.Purpose)))
-            If archDetail.Copyright <> "" Then
-                adl_detail.set_copyright(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.Copyright))
-            End If
-            adl_detail.set_misuse(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.MisUse))
-            'ToDo: adl_detail.add_original_resource_uri()
-            adl_detail.set_purpose(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.Purpose))
-            adl_detail.set_use(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.Use))
-            If (Not archDetail.KeyWords Is Nothing) AndAlso archDetail.KeyWords.Count > 0 Then
-                For j As Integer = 0 To archDetail.KeyWords.Count - 1
-                    adl_detail.add_keyword(EiffelKernel.Create.STRING_8.make_from_cil(archDetail.KeyWords.Item(j)))
-                Next
-            End If
-            detailsArray.Add(adl_detail)
-
+            result.Archetype.Description.Details.AddOrReplace(language, archDetail)
         Next
-        'term definitions
-        adlParser.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable, mOntologyManager.PrimaryLanguageCode)
 
-        'constraint definitions
-        adlParser.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable, mOntologyManager.PrimaryLanguageCode)
-
-        'bindings
-        adlParser.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
-        adlParser.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
-
+        result.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable, mOntologyManager.PrimaryLanguageCode)
+        result.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable, mOntologyManager.PrimaryLanguageCode)
+        result.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
+        result.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
 
         'Build the Definition
-        Dim adl_archetype As ArchetypeEditor.ADL_Classes.ADL_Archetype = adlParser.Archetype
+        Dim adl_archetype As ArchetypeEditor.ADL_Classes.ADL_Archetype = result.Archetype
         adl_archetype.Definition = Me.Archetype.Definition
         adl_archetype.MakeParseTree()
-        Me.ParserSynchronised = True
+        ParserSynchronised = True
 
-        'description
-        Dim adl_description As New ArchetypeEditor.ADL_Classes.ADL_Description(Me.Archetype.Description, mOntologyManager.PrimaryLanguageCode)
-        adlParser.ADL_Parser.archetype_flat.set_description(adl_description.ADL_Description)
-        For Each an_adl_detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM In detailsArray
-            adlParser.ADL_Parser.archetype_flat.description.add_detail(an_adl_detail)
-        Next
-
-        'translations
-        For Each an_adl_translation As openehr.openehr.rm.common.resource.TRANSLATION_DETAILS In translationsArray
-            adlParser.ADL_Parser.archetype_flat.add_translation(an_adl_translation, an_adl_translation.language.code_string)
-        Next
-
-        Return adlParser
+        Return result
     End Function
 
     Public Function ExportSerialised(ByVal a_format As String) As String
         mObjectToSave.PrepareToSave()
+
         Select Case a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "xml"
                 Dim xml_parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
@@ -614,120 +489,158 @@ Public Class FileManagerLocal
                 Debug.Assert(False, "Format not handled")
                 Return "Format not available"
         End Select
-
     End Function
 
-    Public Sub Export(ByVal a_format As String)
+    Public Sub Export(ByVal format As String)
         'Use another parser to save file
 
         mObjectToSave.PrepareToSave()
+        Dim ext As String = format.ToLower(Globalization.CultureInfo.InvariantCulture)
+        Dim filter As String = format.ToUpper(Globalization.CultureInfo.InvariantCulture) & "|" & "*." & ext
 
-        Select Case a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        Select Case ext
             Case "xml"
-                Dim xml_parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
-                Dim s As String = ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
+                Dim parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
+                Dim s As String = FileNameChosenByUser(ext, filter)
 
                 If s <> "" Then
-                    xml_parser.WriteFile(s)
+                    parser.WriteFile(s)
 
-                    If xml_parser.Status <> "" Then
-                        MessageBox.Show(xml_parser.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    If parser.Status <> "" Then
+                        MessageBox.Show(parser.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End If
                 End If
 
-                '-----------ADL--------------------------------------------
-
             Case "adl"
-                Dim adl_parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
-                Dim s As String = ChooseFileName(a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture))
+                Dim parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
+                Dim s As String = FileNameChosenByUser(ext, filter)
 
                 If s <> "" Then
-                    adl_parser.WriteAdlDirect(s)
+                    parser.WriteFile(s, "adl", True)
                 End If
 
             Case Else
                 MessageBox.Show(AE_Constants.Instance.Feature_not_available, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
         End Select
-
     End Sub
 
-    Public Sub ParserReset(Optional ByVal an_archetype_ID As ArchetypeID = Nothing)
+    Public Sub ExportCanonicalArchetypeModel()
+        mObjectToSave.PrepareToSave()
+        Dim ext As String = "cam"
+        Dim filter As String = String.Format("Canonical Archetype Model (*.{0})|*.{0}|All files (*.*)|*.*", ext)
+
+        Dim dlg As New SaveFileDialog
+        dlg.Filter = filter
+        dlg.FileName = Archetype.Archetype_ID.ToString & "." & ext
+        dlg.DefaultExt = ext
+        dlg.Title = AE_Constants.Instance.MessageBoxCaption
+        dlg.ValidateNames = True
+        dlg.OverwritePrompt = True
+
+        If dlg.ShowDialog() <> DialogResult.Cancel Then
+            Dim canonicalArchetype As XMLParser.ARCHETYPE = mArchetypeEngine.CanonicalArchetype()
+            Dim settings As System.Xml.XmlWriterSettings = New System.Xml.XmlWriterSettings()
+            settings.Encoding = System.Text.Encoding.UTF8
+            settings.OmitXmlDeclaration = True
+            settings.Indent = False
+
+            Dim xmlWriter As System.Xml.XmlWriter = System.Xml.XmlWriter.Create(dlg.FileName, settings)
+
+            Try
+                XMLParser.OpenEhr.V1.Its.Xml.AM.AmSerializer.Serialize(xmlWriter, canonicalArchetype)
+            Finally
+                xmlWriter.Close()
+            End Try
+        End If
+    End Sub
+
+    Public Sub ResetParser()
         If mArchetypeEngine Is Nothing Then
             mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
         Else
-            If Not an_archetype_ID Is Nothing Then
-                NewArchetype(an_archetype_ID, OceanArchetypeEditor.Instance.Options.DefaultParser)
-            Else
-                mArchetypeEngine.ResetAll()
-                ' need to reload the current archetype if there is one
-                If Not mPriorFileName = Nothing Then
-                    mArchetypeEngine.OpenFile(mPriorFileName, Me)
-                    mPriorFileName = Nothing
-                End If
+            mArchetypeEngine.ResetAll()
+
+            ' need to reload the current archetype if there is one
+            If Not mPriorFileName = Nothing Then
+                mArchetypeEngine.OpenFile(mPriorFileName, Me)
+                mPriorFileName = Nothing
             End If
         End If
     End Sub
 
     Public Sub AutoSave(ByVal n As Integer)
         mObjectToSave.PrepareToSave()
-        AutoWrite("OceanRecovery-" & Me.Archetype.Archetype_ID.ToString)
+        AutoWrite("OceanRecovery-" & Archetype.Archetype_ID.ToString)
     End Sub
 
     Public Function SaveArchetype() As Boolean
-        Dim result As Boolean = False
         Dim name As String
 
         If IsNew OrElse Not IO.File.Exists(FileName) Then
-            name = ChooseFileName()
+            name = FileNameChosenByUser(ParserType, AvailableFormatFilter)
         Else
             name = FileName
         End If
 
         If name <> "" Then
             mObjectToSave.PrepareToSave()
-            Dim ext As String = System.IO.Path.GetExtension(name.ToLowerInvariant())
-            result = SaveArchetypeAs(name)
+            FileName = name
+            CheckFileNameAgainstArchetypeId()
 
-            If result Then
-                Dim parser As Parser = mArchetypeEngine
-                Dim ontology As Ontology = mOntologyManager.Ontology
+            If Not ArchetypeID.IsValidId(IO.Path.GetFileNameWithoutExtension(FileName)) Then
+                Dim newName As String = Archetype.Archetype_ID.ToString & "." & ParserType
+                Dim text As String = String.Format(mOntologyManager.GetOpenEHRTerm(686, "Invalid archetype file name {0}. Save as {1}?"), IO.Path.GetFileName(FileName), newName)
 
-                If ext = ".adl" Then
-                    If OceanArchetypeEditor.Instance.Options.XmlRepositoryAutoSave Then
-                        Dim xml As String = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(name, ".xml"))
-
-                        If xml.StartsWith(OceanArchetypeEditor.Instance.Options.RepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
-                            xml = xml.Replace(OceanArchetypeEditor.Instance.Options.RepositoryPath, OceanArchetypeEditor.Instance.Options.XmlRepositoryPath)
-                            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(xml))
-                        End If
-
-                        result = SaveArchetypeAs(xml)
-                    End If
-                ElseIf ext = ".xml" Then
-                    If OceanArchetypeEditor.Instance.Options.RepositoryAutoSave Then
-                        Dim adl As String = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(name, ".adl"))
-
-                        If adl.StartsWith(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath + System.IO.Path.DirectorySeparatorChar) Then
-                            adl = adl.Replace(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath, OceanArchetypeEditor.Instance.Options.RepositoryPath)
-                            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(adl))
-                        End If
-
-                        result = SaveArchetypeAs(adl)
-                    End If
+                If MessageBox.Show(text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+                    FileName = IO.Path.Combine(IO.Path.GetDirectoryName(FileName), newName)
+                    FileEdited = True
                 End If
+            End If
 
-                mArchetypeEngine = parser
-                mOntologyManager.ReplaceOntology(ontology)
-                FileName = name
+            If ArchetypeID.IsValidId(IO.Path.GetFileNameWithoutExtension(FileName)) Then
+                SaveArchetypeAs(FileName)
+
+                If Not FileEdited Then
+                    Dim parser As Parser = mArchetypeEngine
+                    Dim ontology As Ontology = mOntologyManager.Ontology
+                    Dim ext As String = IO.Path.GetExtension(FileName.ToLowerInvariant())
+
+                    If ext = ".adl" Then
+                        If OceanArchetypeEditor.Instance.Options.XmlRepositoryAutoSave Then
+                            FileEdited = True
+                            name = IO.Path.GetFullPath(IO.Path.ChangeExtension(FileName, ".xml"))
+
+                            If name.StartsWith(OceanArchetypeEditor.Instance.Options.RepositoryPath + IO.Path.DirectorySeparatorChar) Then
+                                name = name.Replace(OceanArchetypeEditor.Instance.Options.RepositoryPath, OceanArchetypeEditor.Instance.Options.XmlRepositoryPath)
+                                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(name))
+                            End If
+
+                            SaveArchetypeAs(name)
+                        End If
+                    ElseIf ext = ".xml" Then
+                        If OceanArchetypeEditor.Instance.Options.RepositoryAutoSave Then
+                            FileEdited = True
+                            name = IO.Path.GetFullPath(IO.Path.ChangeExtension(FileName, ".adl"))
+
+                            If name.StartsWith(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath + IO.Path.DirectorySeparatorChar) Then
+                                name = name.Replace(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath, OceanArchetypeEditor.Instance.Options.RepositoryPath)
+                                IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(name))
+                            End If
+
+                            SaveArchetypeAs(name)
+                        End If
+                    End If
+
+                    mArchetypeEngine = parser
+                    mOntologyManager.ReplaceOntology(ontology)
+                End If
             End If
         End If
 
-        Return result
+        Return Not FileEdited
     End Function
 
-    Private Function SaveArchetypeAs(ByRef name As String) As Boolean
-        Dim result As Boolean = False
-
+    Private Sub SaveArchetypeAs(ByRef name As String)
         If name <> "" Then
             If IO.File.Exists(name) AndAlso (IO.File.GetAttributes(name) And IO.FileAttributes.ReadOnly) > 0 Then
                 MessageBox.Show(name & ": " & Filemanager.GetOpenEhrTerm(439, "Read only"), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -738,113 +651,76 @@ Public Class FileManagerLocal
                     If ext = ".adl" Then
                         Dim parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
                         mArchetypeEngine = parser
-                        mOntologyManager.ReplaceOntology(New ArchetypeEditor.ADL_Classes.ADL_Ontology(parser.ADL_Parser))
+                        mOntologyManager.ReplaceOntology(New ArchetypeEditor.ADL_Classes.ADL_Ontology(parser.ArchetypeParser))
                     ElseIf ext = ".xml" Then
                         Dim parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
                         mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface(parser)
                         mOntologyManager.ReplaceOntology(New ArchetypeEditor.XML_Classes.XML_Ontology(parser, True))
-                    Else
-                        Debug.Assert(False, "File type is not catered for: " & name)
-                        name = ""
                     End If
                 End If
 
-                If name <> "" Then
-                    Try
-                        FileName = name
-                        WriteArchetype()
-
-                        If Not mHasWriteFileError Then
-                            FileEdited = False
-                            result = True
-                        End If
-                    Catch ex As Exception
-                        MessageBox.Show(AE_Constants.Instance.Error_saving & FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    End Try
-                End If
+                Try
+                    WriteArchetype(name)
+                Catch ex As Exception
+                    MessageBox.Show(AE_Constants.Instance.Error_saving & FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
             End If
+        End If
+    End Sub
+
+    Private Function FileNameChosenByUser(ByVal ext As String, ByVal filter As String) As String
+        Dim result As String = ""
+        Dim dlg As New SaveFileDialog
+        dlg.Filter = filter
+        dlg.FileName = Archetype.Archetype_ID.ToString & "." & ext
+        dlg.DefaultExt = ext
+        Dim i As Integer = IndexOfFormat(ext) + 1
+
+        If i > 0 Then
+            dlg.FilterIndex = i
+        End If
+
+        dlg.AddExtension = True
+        dlg.Title = AE_Constants.Instance.MessageBoxCaption
+        dlg.ValidateNames = True
+        dlg.OverwritePrompt = False
+        AddHandler dlg.FileOk, AddressOf ValidateFileNameChosenByUser
+
+        If dlg.ShowDialog() <> DialogResult.Cancel Then
+            result = dlg.FileName
         End If
 
         Return result
     End Function
 
-    Private Function ChooseFileName(ByVal a_file_type As String) As String
-        Dim saveFile As New SaveFileDialog
+    Private Sub ValidateFileNameChosenByUser(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs)
+        Dim dlg As SaveFileDialog = CType(sender, SaveFileDialog)
+        Dim ext As String = dlg.Filter.Split("|"c)((dlg.FilterIndex - 1) * 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        dlg.FileName = IO.Path.ChangeExtension(dlg.FileName, ext)
 
-        saveFile.Filter = a_file_type.ToUpper(System.Globalization.CultureInfo.InvariantCulture) & "|" & a_file_type
-        saveFile.FileName = Me.Archetype.Archetype_ID.ToString
-        saveFile.OverwritePrompt = True
-        saveFile.DefaultExt = a_file_type
-        saveFile.AddExtension = True
-        saveFile.Title = AE_Constants.Instance.MessageBoxCaption
-        saveFile.ValidateNames = True
-        If saveFile.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
-            Return ""
-        Else
-            'Check the file extension is added
-            Dim s As String
-            s = saveFile.FileName.Substring(saveFile.FileName.LastIndexOf(".") + 1)
-            If s = a_file_type Then
-                Return saveFile.FileName
-            Else
-                Return saveFile.FileName & "." & a_file_type
-            End If
+        If IO.File.Exists(dlg.FileName) Then
+            Dim question As String = String.Format(AE_Constants.Instance.ReplaceExistingFileQuestion, dlg.FileName)
+            e.Cancel = MessageBox.Show(question, dlg.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) = DialogResult.No
         End If
-
-    End Function
-
-    Private Function ChooseFileName() As String
-        Dim saveFile As New SaveFileDialog
-
-        saveFile.Filter = Me.AvailableFormatFilter
-        saveFile.FileName = Me.Archetype.Archetype_ID.ToString
-        saveFile.OverwritePrompt = True
-        saveFile.DefaultExt = Me.ParserType
-        Dim i As Integer = Me.IndexOfFormat(Me.ParserType) + 1
-
-        If i > 0 Then
-            saveFile.FilterIndex = i
-        End If
-
-        saveFile.AddExtension = True
-        saveFile.Title = AE_Constants.Instance.MessageBoxCaption
-        saveFile.ValidateNames = True
-
-        If saveFile.ShowDialog() = Windows.Forms.DialogResult.Cancel Then
-            Return ""
-        Else
-            'Check the file extension is added
-            Dim s, ext As String
-
-            ext = saveFile.Filter.Split("|".ToCharArray())((saveFile.FilterIndex - 1) * 2)
-            s = saveFile.FileName.Substring(saveFile.FileName.LastIndexOf(".") + 1)
-
-            If s = ext Then
-                Return saveFile.FileName
-            Else
-                Return saveFile.FileName & "." & ext
-            End If
-        End If
-    End Function
+    End Sub
 
     Private Sub AutoWrite(ByVal fileName As String)
         Dim appata As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
         mArchetypeEngine.WriteFile(IO.Path.Combine(appata, fileName & "." & ParserType), ParserType, ParserSynchronised)
     End Sub
 
-    Public Sub WriteArchetype()
+    Protected Sub WriteArchetype(ByVal fileName As String)
         'Check that the file name is an available format
-        Dim s As String = mFileName.Substring(mFileName.LastIndexOf(".") + 1).ToLowerInvariant()
+        Dim s As String = fileName.Substring(fileName.LastIndexOf(".") + 1).ToLowerInvariant()
 
         If FormatIsAvailable(s) Then
-            mHasWriteFileError = False
-            mArchetypeEngine.WriteFile(mFileName, s, Me.ParserSynchronised)
+            mArchetypeEngine.WriteFile(fileName, s, ParserSynchronised)
 
-            If mArchetypeEngine.WriteFileError Then
-                mHasWriteFileError = True
+            If Not mArchetypeEngine.WriteFileError Then
+                FileEdited = False
             End If
         Else
-            MessageBox.Show(AE_Constants.Instance.Incorrect_format & "File: '" & mFileName & ", Format: '" & s & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show(AE_Constants.Instance.Incorrect_format & "File: '" & fileName & ", Format: '" & s & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End If
     End Sub
 
@@ -858,18 +734,18 @@ Public Class FileManagerLocal
     '    mArchetypeEngine = New ADL_Interface
     '    mArchetypeEngine.NewArchetype(old_archetype_engine.Archetype.ArchetypeID, _
     '            anOntologyManager.LanguageCode)
-    '    mArchetypeEngine.Archetype.ConceptCode = old_archetype_engine.Archetype.ConceptCode
-    '    mArchetypeEngine.Archetype.LifeCycle = old_archetype_engine.Archetype.LifeCycle
+    '    Archetype.ConceptCode = old_archetype_engine.Archetype.ConceptCode
+    '    Archetype.LifeCycle = old_archetype_engine.Archetype.LifeCycle
 
     '    If Not old_archetype_engine.Archetype.ParentArchetype Is Nothing Then
-    '        mArchetypeEngine.Archetype.ParentArchetype _
+    '        Archetype.ParentArchetype _
     '                = old_archetype_engine.Archetype.ParentArchetype
     '    End If
 
     '    'anOntologyManager.ConvertToADL(New ADL_Ontology(CType(mArchetypeEngine, ADL_Interface).EIF_adlInterface, False))
     'End Sub
 
-    Public Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal FileType As String)
+    Public Sub CreateNewArchetype(ByVal archetypeID As ArchetypeID, ByVal fileType As String)
         If ParserType <> OceanArchetypeEditor.Instance.Options.DefaultParser Then
             Select Case OceanArchetypeEditor.Instance.Options.DefaultParser
                 Case "adl"
@@ -879,45 +755,18 @@ Public Class FileManagerLocal
             End Select
         End If
 
-        Select Case FileType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            Case "adl"
-                Dim a_ontology As ArchetypeEditor.ADL_Classes.ADL_Ontology
-                Dim a_term As RmTerm
-                mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.DefaultLanguageCode)
+        mArchetypeEngine.CreateNewArchetype(archetypeID, OceanArchetypeEditor.DefaultLanguageCode)
 
+        If ArchetypeAvailable Then
+            Dim ontology As Ontology = mArchetypeEngine.NewOntology
+            ontology.SetLanguage(OceanArchetypeEditor.DefaultLanguageCode)
 
-                If mArchetypeEngine.ArchetypeAvailable Then
+            'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
+            OntologyManager.Ontology = ontology
 
-                    a_ontology = New ArchetypeEditor.ADL_Classes.ADL_Ontology(CType(mArchetypeEngine, ArchetypeEditor.ADL_Classes.ADL_Interface).ADL_Parser)
-
-                    'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
-                    OntologyManager.Ontology = a_ontology
-                    ' a new archetype always has a concept code set to "at0000"
-                    a_term = New RmTerm(mArchetypeEngine.Archetype.ConceptCode)
-                    a_term.Text = "?"
-                    OntologyManager.UpdateTerm(a_term)
-                End If
-            Case "xml"
-                Dim a_ontology As ArchetypeEditor.XML_Classes.XML_Ontology
-                Dim a_term As RmTerm
-                mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.DefaultLanguageCode)
-
-                If mArchetypeEngine.ArchetypeAvailable Then
-
-                    a_ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(CType(mArchetypeEngine, ArchetypeEditor.XML_Classes.XML_Interface).Xml_Parser)
-                    a_ontology.SetLanguage(OceanArchetypeEditor.DefaultLanguageCode)
-
-                    'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
-                    OntologyManager.Ontology = a_ontology
-                    ' a new archetype always has a concept code set to "at0000"
-                    a_term = New RmTerm(mArchetypeEngine.Archetype.ConceptCode)
-                    a_term.Text = "?"
-                    OntologyManager.UpdateTerm(a_term)
-                End If
-            Case Else
-                Debug.Assert(False, "Type is not handled: " & FileType)
-        End Select
-
+            ' a new archetype always has a concept code set to "at0000"
+            OntologyManager.UpdateTerm(New RmTerm(Archetype.ConceptCode))
+        End If
     End Sub
 
     Sub New()
@@ -927,7 +776,6 @@ Public Class FileManagerLocal
             Case "xml"
                 mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface
         End Select
-
     End Sub
 End Class
 
@@ -935,6 +783,7 @@ Public Delegate Sub FileManagerEventHandler(ByVal e As FileManagerEventArgs)
 
 Public Class FileManagerEventArgs
     Private mIsFileDirty As Boolean
+
     Public ReadOnly Property IsFileDirty() As Boolean
         Get
             Return mIsFileDirty
@@ -947,11 +796,8 @@ Public Class FileManagerEventArgs
 End Class
 
 Class Filemanager
-    'Inherits FileManagerLocal
     ' Allows Designer wide access to FileManager, while enabling local access if required
 
-    ' FileManager Singleton
-    'Private Shared mInstance As FileManagerLocal
     Private Shared mFileManagerCollection As New ArrayList
     Shared Event IsFileDirtyChanged As FileManagerEventHandler
     Private Shared mHasEmbedded As Boolean = False
@@ -1023,26 +869,25 @@ Class Filemanager
 
     Public Shared Function SaveFiles(ByVal askToSave As Boolean) As Boolean
         For Each f As FileManagerLocal In mFileManagerCollection
-            If f.FileEdited Then
-                If mFileManagerCollection.Count > 1 Or askToSave Then
-                    Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & " '" & f.Archetype.Archetype_ID.ToString & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
-                        Case Windows.Forms.DialogResult.Cancel
-                            Return False
-                        Case Windows.Forms.DialogResult.No
-                            Return True
-                        Case Windows.Forms.DialogResult.Yes
-                            If f.SaveArchetype() Then
-                                f.IsNew = False
-                            Else
-                                Return False
-                            End If
-                    End Select
-                Else
-                    If f.SaveArchetype() Then
-                        f.IsNew = False
-                    Else
+            'SRH: Jan 2009 EDT-495,276 - force a regeneration as this means the archetype is always up to date when saved
+            If mFileManagerCollection.Count > 1 Or askToSave Then
+                Select Case MessageBox.Show(AE_Constants.Instance.Save_changes & " '" & f.Archetype.Archetype_ID.ToString & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1)
+                    Case Windows.Forms.DialogResult.Cancel
                         Return False
-                    End If
+                    Case Windows.Forms.DialogResult.No
+                        Return True
+                    Case Windows.Forms.DialogResult.Yes
+                        If f.SaveArchetype() Then
+                            f.IsNew = False
+                        Else
+                            Return False
+                        End If
+                End Select
+            Else
+                If f.SaveArchetype() Then
+                    f.IsNew = False
+                Else
+                    Return False
                 End If
             End If
         Next

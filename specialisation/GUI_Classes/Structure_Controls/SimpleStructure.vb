@@ -362,10 +362,10 @@ Public Class SimpleStructure
             If newText <> mElement.Text Then
                 Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
 
-            If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                        txtSimple.Text = mElement.Text
+                If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                    txtSimple.Text = mElement.Text
                     SpecialiseCurrentItem(sender, e)
-                    End If
+                End If
 
                 i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
 

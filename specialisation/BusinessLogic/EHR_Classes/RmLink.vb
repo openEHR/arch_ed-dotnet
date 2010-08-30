@@ -73,7 +73,7 @@ Public Class RmLink
         MyBase.New(XML_Element)
     End Sub
 
-    Sub New(ByVal EIF_Element As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+    Sub New(ByVal EIF_Element As AdlParser.CComplexObject)
         MyBase.New(EIF_Element)
     End Sub
 

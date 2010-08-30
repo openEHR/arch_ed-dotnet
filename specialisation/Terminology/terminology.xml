@@ -68,6 +68,7 @@
   <Language code="it" Description="Italian (Standard)" />
   <Language code="it-ch" Description="Italian (Switzerland)" />
   <Language code="ja" Description="Japanese" />
+  <Language code="kk" Description="Kazakh" />
   <Language code="ko" Description="Korean" />
   <Language code="ko" Description="Korean (Johab)" />
   <Language code="lv" Description="Latvian" />
@@ -437,7 +438,6 @@
   <PrimaryRubric Id="316" Language="en" />
   <PrimaryRubric Id="317" Language="en" />
   <PrimaryRubric Id="318" Language="en" />
-  <PrimaryRubric Id="319" Language="en" />
   <PrimaryRubric Id="320" Language="en" />
   <PrimaryRubric Id="321" Language="en" />
   <PrimaryRubric Id="322" Language="en" />
@@ -740,6 +740,27 @@
   <PrimaryRubric Id="666" Language="en" />
   <PrimaryRubric Id="667" Language="en" />
   <PrimaryRubric Id="668" Language="en" />
+  <PrimaryRubric Id="669" Language="en" />
+  <PrimaryRubric Id="670" Language="en" />
+  <PrimaryRubric Id="671" Language="en" />
+  <PrimaryRubric Id="672" Language="en" />
+  <PrimaryRubric Id="673" Language="en" />
+  <PrimaryRubric Id="674" Language="en" />
+  <PrimaryRubric Id="675" Language="en" />
+  <PrimaryRubric Id="676" Language="en" />
+  <PrimaryRubric Id="677" Language="en" />
+  <PrimaryRubric Id="678" Language="en" />
+  <PrimaryRubric Id="679" Language="en" />
+  <PrimaryRubric Id="680" Language="en" />
+  <PrimaryRubric Id="681" Language="en" />
+  <PrimaryRubric Id="682" Language="en" />
+  <PrimaryRubric Id="683" Language="en" />
+  <PrimaryRubric Id="684" Language="en" />
+  <PrimaryRubric Id="685" Language="en" />
+  <PrimaryRubric Id="686" Language="en" />
+  <PrimaryRubric Id="687" Language="en" />
+  <PrimaryRubric Id="688" Language="en" />
+  <PrimaryRubric Id="689" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1044,7 +1065,6 @@
   <Concept Language="en" ConceptID="316" Rubric="Any" />
   <Concept Language="en" ConceptID="317" Rubric="Convert text values to ordinal values" />
   <Concept Language="en" ConceptID="318" Rubric="Convert internal codes to free text" />
-  <Concept Language="en" ConceptID="319" Rubric="This item requires specialisation to edit. Do you wish to continue?" />
   <Concept Language="en" ConceptID="320" Rubric="Choice" />
   <Concept Language="en" ConceptID="321" Rubric="Ratio" />
   <Concept Language="en" ConceptID="322" Rubric="New cluster" />
@@ -1625,7 +1645,6 @@
   <Concept Language="da" ConceptID="316" Rubric="Enhver" />
   <Concept Language="da" ConceptID="317" Rubric="Konvertér tekstværdier til talværdier" />
   <Concept Language="da" ConceptID="318" Rubric="Konvertér interne koder til fri tekst" />
-  <Concept Language="da" ConceptID="319" Rubric="Dette element kan kun redigeres hvis det er specialiseret. Vil du fortsætte?" />
   <Concept Language="da" ConceptID="320" Rubric="Valg" />
   <Concept Language="da" ConceptID="321" Rubric="Ratio" />
   <Concept Language="da" ConceptID="322" Rubric="Ny klynge" />
@@ -1956,7 +1975,7 @@
   <Concept Language="de" ConceptID="58" Rubric="Archetyp Editor von Ocean Informatics" />
   <Concept Language="de" ConceptID="59" Rubric="Tooltips" />
   <Concept Language="de" ConceptID="60" Rubric="Ändern des Datentyps" />
-  <Concept Language="de" ConceptID="61" Rubric="Öffnen Strg+O" />
+  <Concept Language="de" ConceptID="61" Rubric="Öffnen" />
   <Concept Language="de" ConceptID="62" Rubric="Neu Strg+N" />
   <Concept Language="de" ConceptID="63" Rubric="Beenden" />
   <Concept Language="de" ConceptID="64" Rubric="Archetypen Datenbank" />
@@ -1970,9 +1989,9 @@
   <Concept Language="de" ConceptID="72" Rubric="Erste Schritte" />
   <Concept Language="de" ConceptID="73" Rubric="Lizenz" />
   <Concept Language="de" ConceptID="74" Rubric="Über Ocean Informatics" />
-  <Concept Language="de" ConceptID="75" Rubric="Über the Ocean Editor" />
+  <Concept Language="de" ConceptID="75" Rubric="Über den Ocean Editor" />
   <Concept Language="de" ConceptID="76" Rubric="Kopfdaten" />
-  <Concept Language="de" ConceptID="77" Rubric="ENTRY-Modell" />
+  <Concept Language="de" ConceptID="77" Rubric="Entry-Modell" />
   <Concept Language="de" ConceptID="78" Rubric="Protokoll" />
   <Concept Language="de" ConceptID="79" Rubric="Personenstatus mit Verlauf" />
   <Concept Language="de" ConceptID="80" Rubric="Daten" />
@@ -2003,7 +2022,7 @@
   <Concept Language="de" ConceptID="108" Rubric="Tabelle" />
   <Concept Language="de" ConceptID="109" Rubric="Neues Element" />
   <Concept Language="de" ConceptID="110" Rubric="Vorkommen" />
-  <Concept Language="de" ConceptID="111" Rubric="Maximum" />
+  <Concept Language="de" ConceptID="111" Rubric="Max:" />
   <Concept Language="de" ConceptID="112" Rubric="Unbegrenzt" />
   <Concept Language="de" ConceptID="113" Rubric="Beschreibung" />
   <Concept Language="de" ConceptID="114" Rubric="Namesbeschränkung zur Laufzeit" />
@@ -2062,7 +2081,7 @@
   <Concept Language="de" ConceptID="168" Rubric="SECTION (Ordnungs-) Model" />
   <Concept Language="de" ConceptID="169" Rubric="Benennung" />
   <Concept Language="de" ConceptID="170" Rubric="Slots" />
-  <Concept Language="de" ConceptID="171" Rubric="Eintrag slots" />
+  <Concept Language="de" ConceptID="171" Rubric="Eintrag-Slots" />
   <Concept Language="de" ConceptID="172" Rubric="ENTRYs (Einträge) einschliessen" />
   <Concept Language="de" ConceptID="173" Rubric="ENTRYs (Einträge) ausschliessen" />
   <Concept Language="de" ConceptID="174" Rubric="Bereich slots " />
@@ -2110,7 +2129,7 @@
   <Concept Language="de" ConceptID="220" Rubric="physisch abwesend" />
   <Concept Language="de" ConceptID="221" Rubric="übersetzter Text" />
   <Concept Language="de" ConceptID="222" Rubric="übersetztes Nur-audio" />
-  <Concept Language="de" ConceptID="223" Rubric="übersetztes direktes Gespraech" />
+  <Concept Language="de" ConceptID="223" Rubric="übersetztes direktes Gespräch" />
   <Concept Language="de" ConceptID="224" Rubric="übersetzte Videokommunikation" />
   <Concept Language="de" ConceptID="225" Rubric="zu Hause" />
   <Concept Language="de" ConceptID="226" Rubric="(Arbeits-)Umgebung" />
@@ -2205,7 +2224,6 @@
   <Concept Language="de" ConceptID="316" Rubric="Jeder" />
   <Concept Language="de" ConceptID="317" Rubric="Konvertiere Textwerte in Ordinalwerte" />
   <Concept Language="de" ConceptID="318" Rubric="Konvertiere interne Kodierung zu Freitext" />
-  <Concept Language="de" ConceptID="319" Rubric="Um zu editieren muss das Element zuvor spezialisiert werden. Wollen Sie fortfahren?" />
   <Concept Language="de" ConceptID="320" Rubric="Multiple" />
   <Concept Language="de" ConceptID="321" Rubric="Quotient" />
   <Concept Language="de" ConceptID="322" Rubric="Neues Cluster" />
@@ -2394,7 +2412,7 @@
   <Concept Language="de" ConceptID="557" Rubric="Instruktion" />
   <Concept Language="de" ConceptID="558" Rubric="Untersektion" />
   <Concept Language="de" ConceptID="559" Rubric="Eintrag (Entry)" />
-  <Concept Language="de" ConceptID="560" Rubric="Verwaltungseintrag (administration entry)" />
+  <Concept Language="de" ConceptID="560" Rubric="Verwaltungseintrag (Administration entry)" />
   <Concept Language="de" ConceptID="561" Rubric="Composition" />
   <Concept Language="de" ConceptID="563" Rubric="Behandlungspfadschritt" />
   <Concept Language="de" ConceptID="564" Rubric="Referenz" />
@@ -2442,7 +2460,7 @@
   <Concept Language="de" ConceptID="606" Rubric="Eingebetteten Archetyp laden" />
   <Concept Language="de" ConceptID="607" Rubric="Referenz nicht spezialisierbar" />
   <Concept Language="de" ConceptID="608" Rubric="Anderer Kontext" />
-  <Concept Language="de" ConceptID="609" Rubric="Öffne bestehenden Archetypen" />
+  <Concept Language="de" ConceptID="609" Rubric="Öffne bestehenden Archetyp" />
   <Concept Language="de" ConceptID="610" Rubric="Abkürzungen für Zeiteinheiten" />
   <Concept Language="de" ConceptID="611" Rubric="Nano-Sekunden" />
   <Concept Language="de" ConceptID="612" Rubric="Mikro-Sekunden" />
@@ -2747,7 +2765,6 @@
   <Concept Language="es" ConceptID="316" Rubric="Cualquiera" />
   <Concept Language="es" ConceptID="317" Rubric="Convierte laores de texto a valores ordinales" />
   <Concept Language="es" ConceptID="318" Rubric="Convierte códigos internos a valores ordinales" />
-  <Concept Language="es" ConceptID="319" Rubric="Este ítem requiere especialización para editarse. ¿Desea continuar?" />
   <Concept Language="es" ConceptID="320" Rubric="Elección" />
   <Concept Language="es" ConceptID="321" Rubric="Razón" />
   <Concept Language="es" ConceptID="323" Rubric="Columna nueva" />
@@ -3259,7 +3276,6 @@
   <Concept Language="fa" ConceptID="316" Rubric="هر" />
   <Concept Language="fa" ConceptID="317" Rubric="تبدیل ارزشهای متنی به ارزشهای شفاهی" />
   <Concept Language="fa" ConceptID="318" Rubric="تبدیل کدهای داخلی به متن آزاد" />
-  <Concept Language="fa" ConceptID="319" Rubric="این واژه برای ویرایش نیاز به تخصصی نمودن دارد:آیا شما مایل به ادامه هستید؟ " />
   <Concept Language="fa" ConceptID="320" Rubric="انتخاب" />
   <Concept Language="fa" ConceptID="321" Rubric="سهم" />
   <Concept Language="fa" ConceptID="322" Rubric="خوشه جدید" />
@@ -3519,6 +3535,607 @@
   <Concept Language="fa" ConceptID="629" Rubric="کلیه موارد استثنا است" />
   <Concept Language="fa" ConceptID="630" Rubric="به صورت درصد" />
   <Concept Language="fa" ConceptID="631" Rubric="حذف کلیه موارد" />
+  <Concept Language="ja" ConceptID="547" Rubric="中断" />
+  <Concept Language="ja" ConceptID="531" Rubric="中断した" />
+  <Concept Language="ja" ConceptID="74" Rubric="Ocean Informaticsについて" />
+  <Concept Language="ja" ConceptID="339" Rubric="加速度" />
+  <Concept Language="ja" ConceptID="342" Rubric="角加速度" />
+  <Concept Language="ja" ConceptID="317" Rubric="テキスト値を序数に変換する" />
+  <Concept Language="ja" ConceptID="318" Rubric="内部コードをフリーテキストに変換" />
+  <Concept Language="ja" ConceptID="320" Rubric="選択" />
+  <Concept Language="ja" ConceptID="321" Rubric="比率" />
+  <Concept Language="ja" ConceptID="322" Rubric="新しいクラスタ" />
+  <Concept Language="ja" ConceptID="323" Rubric="新しい行" />
+  <Concept Language="ja" ConceptID="324" Rubric="新しい列" />
+  <Concept Language="ja" ConceptID="325" Rubric="名前の変更" />
+  <Concept Language="ja" ConceptID="326" Rubric="構造を変更" />
+  <Concept Language="ja" ConceptID="327" Rubric="このバインドは既に存在します。基準を追加してください" />
+  <Concept Language="ja" ConceptID="0" Rubric="自己" />
+  <Concept Language="ja" ConceptID="3" Rubric="胎児" />
+  <Concept Language="ja" ConceptID="6" Rubric="ドナー" />
+  <Concept Language="ja" ConceptID="7" Rubric="母方の祖母" />
+  <Concept Language="ja" ConceptID="8" Rubric="母方の祖父" />
+  <Concept Language="ja" ConceptID="9" Rubric="父" />
+  <Concept Language="ja" ConceptID="10" Rubric="母" />
+  <Concept Language="ja" ConceptID="11" Rubric="全て許可" />
+  <Concept Language="ja" ConceptID="12" Rubric="日時" />
+  <Concept Language="ja" ConceptID="13" Rubric="日付と時間の一部" />
+  <Concept Language="ja" ConceptID="14" Rubric="日付のみ" />
+  <Concept Language="ja" ConceptID="15" Rubric="全ての日付情報" />
+  <Concept Language="ja" ConceptID="16" Rubric="一部の日付情報" />
+  <Concept Language="ja" ConceptID="17" Rubric="月と一部の日付情報" />
+  <Concept Language="ja" ConceptID="18" Rubric="時刻のみ" />
+  <Concept Language="ja" ConceptID="19" Rubric="全ての時刻情報 hh:mm:ss" />
+  <Concept Language="ja" ConceptID="20" Rubric="一部の時刻情報" />
+  <Concept Language="ja" ConceptID="21" Rubric="一部の時刻と分情報" />
+  <Concept Language="ja" ConceptID="22" Rubric="パートナー／配偶者" />
+  <Concept Language="ja" ConceptID="23" Rubric="兄弟" />
+  <Concept Language="ja" ConceptID="24" Rubric="姉妹" />
+  <Concept Language="ja" ConceptID="25" Rubric="異母あるいは異父兄弟" />
+  <Concept Language="ja" ConceptID="26" Rubric="異母あるいは異父姉妹" />
+  <Concept Language="ja" ConceptID="27" Rubric="同胞" />
+  <Concept Language="ja" ConceptID="28" Rubric="子" />
+  <Concept Language="ja" ConceptID="29" Rubric="娘" />
+  <Concept Language="ja" ConceptID="31" Rubric="息子" />
+  <Concept Language="ja" ConceptID="32" Rubric="データの対象" />
+  <Concept Language="ja" ConceptID="33" Rubric="日時制約" />
+  <Concept Language="ja" ConceptID="34" Rubric="なし" />
+  <Concept Language="ja" ConceptID="35" Rubric="全て表示" />
+  <Concept Language="ja" ConceptID="36" Rubric="父方の祖父" />
+  <Concept Language="ja" ConceptID="37" Rubric="母方の祖父" />
+  <Concept Language="ja" ConceptID="38" Rubric="母方の伯父" />
+  <Concept Language="ja" ConceptID="39" Rubric="母方の伯母" />
+  <Concept Language="ja" ConceptID="40" Rubric="父方の伯父" />
+  <Concept Language="ja" ConceptID="41" Rubric="父方の伯母" />
+  <Concept Language="ja" ConceptID="42" Rubric="メニュー項目のラベル" />
+  <Concept Language="ja" ConceptID="43" Rubric="ファイル" />
+  <Concept Language="ja" ConceptID="44" Rubric="表示" />
+  <Concept Language="ja" ConceptID="45" Rubric="発行" />
+  <Concept Language="ja" ConceptID="46" Rubric="言語" />
+  <Concept Language="ja" ConceptID="47" Rubric="用語体系" />
+  <Concept Language="ja" ConceptID="48" Rubric="ヘルプ" />
+  <Concept Language="ja" ConceptID="49" Rubric="フォームのラベル" />
+  <Concept Language="ja" ConceptID="50" Rubric="アーキタイプ" />
+  <Concept Language="ja" ConceptID="51" Rubric="モデルとコンポーネント" />
+  <Concept Language="ja" ConceptID="52" Rubric="短い概念ラベル" />
+  <Concept Language="ja" ConceptID="53" Rubric="バージョン" />
+  <Concept Language="ja" ConceptID="54" Rubric="概念" />
+  <Concept Language="ja" ConceptID="56" Rubric="無制限" />
+  <Concept Language="ja" ConceptID="57" Rubric="アーキタイプファイル名" />
+  <Concept Language="ja" ConceptID="58" Rubric="Archetypeエディタ by Ocean Informatics" />
+  <Concept Language="ja" ConceptID="59" Rubric="ツールチップ" />
+  <Concept Language="ja" ConceptID="60" Rubric="データ型の変更" />
+  <Concept Language="ja" ConceptID="61" Rubric="開く" />
+  <Concept Language="ja" ConceptID="62" Rubric="新規作成    Ctrl+N" />
+  <Concept Language="ja" ConceptID="63" Rubric="終了" />
+  <Concept Language="ja" ConceptID="64" Rubric="アーキタイプDB" />
+  <Concept Language="ja" ConceptID="65" Rubric="圧縮する" />
+  <Concept Language="ja" ConceptID="66" Rubric="仕上げる" />
+  <Concept Language="ja" ConceptID="67" Rubric="利用できる言語" />
+  <Concept Language="ja" ConceptID="68" Rubric="言語を追加" />
+  <Concept Language="ja" ConceptID="69" Rubric="言語を変更" />
+  <Concept Language="ja" ConceptID="70" Rubric="利用できる用語体系" />
+  <Concept Language="ja" ConceptID="71" Rubric="用語体系に加える" />
+  <Concept Language="ja" ConceptID="72" Rubric="はじめに" />
+  <Concept Language="ja" ConceptID="73" Rubric="ライセンス" />
+  <Concept Language="ja" ConceptID="75" Rubric="Ocean Editorについて" />
+  <Concept Language="ja" ConceptID="76" Rubric="ヘッダ" />
+  <Concept Language="ja" ConceptID="77" Rubric="Entryモデル" />
+  <Concept Language="ja" ConceptID="78" Rubric="プロトコル" />
+  <Concept Language="ja" ConceptID="79" Rubric="身体の状態と病歴" />
+  <Concept Language="ja" ConceptID="80" Rubric="データ" />
+  <Concept Language="ja" ConceptID="81" Rubric="一連のEvent" />
+  <Concept Language="ja" ConceptID="82" Rubric="身体の状態" />
+  <Concept Language="ja" ConceptID="83" Rubric="表示" />
+  <Concept Language="ja" ConceptID="84" Rubric="インターフェース" />
+  <Concept Language="ja" ConceptID="85" Rubric="構造" />
+  <Concept Language="ja" ConceptID="86" Rubric="用語" />
+  <Concept Language="ja" ConceptID="87" Rubric="制約" />
+  <Concept Language="ja" ConceptID="88" Rubric="言語と用語体系" />
+  <Concept Language="ja" ConceptID="89" Rubric="用語定義" />
+  <Concept Language="ja" ConceptID="90" Rubric="コード" />
+  <Concept Language="ja" ConceptID="91" Rubric="テキスト" />
+  <Concept Language="ja" ConceptID="93" Rubric="バインディング" />
+  <Concept Language="ja" ConceptID="96" Rubric="パス" />
+  <Concept Language="ja" ConceptID="97" Rubric="リリース" />
+  <Concept Language="ja" ConceptID="98" Rubric="マップ" />
+  <Concept Language="ja" ConceptID="99" Rubric="バインディングを追加" />
+  <Concept Language="ja" ConceptID="100" Rubric="特異的" />
+  <Concept Language="ja" ConceptID="101" Rubric="全て" />
+  <Concept Language="ja" ConceptID="102" Rubric="Complex" />
+  <Concept Language="ja" ConceptID="103" Rubric="RTF形式で保存" />
+  <Concept Language="ja" ConceptID="104" Rubric="選択..." />
+  <Concept Language="ja" ConceptID="105" Rubric="Single" />
+  <Concept Language="ja" ConceptID="106" Rubric="List" />
+  <Concept Language="ja" ConceptID="107" Rubric="Tree" />
+  <Concept Language="ja" ConceptID="108" Rubric="Table" />
+  <Concept Language="ja" ConceptID="109" Rubric="新規Element" />
+  <Concept Language="ja" ConceptID="110" Rubric="Occurrence" />
+  <Concept Language="ja" ConceptID="111" Rubric="最大:" />
+  <Concept Language="ja" ConceptID="112" Rubric="上限なし" />
+  <Concept Language="ja" ConceptID="113" Rubric="詳細" />
+  <Concept Language="ja" ConceptID="114" Rubric="Runtime name constraint" />
+  <Concept Language="ja" ConceptID="115" Rubric="量" />
+  <Concept Language="ja" ConceptID="116" Rubric="プロパティ" />
+  <Concept Language="ja" ConceptID="117" Rubric="単位" />
+  <Concept Language="ja" ConceptID="118" Rubric="未設定" />
+  <Concept Language="ja" ConceptID="119" Rubric="濃度(Concentration)" />
+  <Concept Language="ja" ConceptID="120" Rubric="数量" />
+  <Concept Language="ja" ConceptID="121" Rubric="エネルギー" />
+  <Concept Language="ja" ConceptID="122" Rubric="長さ(length)" />
+  <Concept Language="ja" ConceptID="123" Rubric="音量(Loudness)" />
+  <Concept Language="ja" ConceptID="124" Rubric="質量(Mass)" />
+  <Concept Language="ja" ConceptID="125" Rubric="圧(Pressure)&#xD;&#xA;" />
+  <Concept Language="ja" ConceptID="126" Rubric="流速，量(Flow rate, volume)" />
+  <Concept Language="ja" ConceptID="127" Rubric="温度(Temperature)" />
+  <Concept Language="ja" ConceptID="128" Rubric="時刻(Time)" />
+  <Concept Language="ja" ConceptID="129" Rubric="量(Volume)" />
+  <Concept Language="ja" ConceptID="130" Rubric="作業(Work)" />
+  <Concept Language="ja" ConceptID="131" Rubric="最小値を設定" />
+  <Concept Language="ja" ConceptID="132" Rubric="最大値を設定" />
+  <Concept Language="ja" ConceptID="133" Rubric="Event" />
+  <Concept Language="ja" ConceptID="134" Rubric="Eventリスト" />
+  <Concept Language="ja" ConceptID="135" Rubric="開く (Ctrl + O)" />
+  <Concept Language="ja" ConceptID="136" Rubric="固定(Fixed)" />
+  <Concept Language="ja" ConceptID="137" Rubric="一定期間ごとのEvent" />
+  <Concept Language="ja" ConceptID="138" Rubric="Event詳細" />
+  <Concept Language="ja" ConceptID="139" Rubric="新しい制約(Constraint)" />
+  <Concept Language="ja" ConceptID="140" Rubric="Point in time (事典)" />
+  <Concept Language="ja" ConceptID="141" Rubric="Interval (区間)" />
+  <Concept Language="ja" ConceptID="142" Rubric="Duration (期間)" />
+  <Concept Language="ja" ConceptID="143" Rubric="固定区間" />
+  <Concept Language="ja" ConceptID="144" Rubric="最大" />
+  <Concept Language="ja" ConceptID="145" Rubric="最小" />
+  <Concept Language="ja" ConceptID="146" Rubric="平均" />
+  <Concept Language="ja" ConceptID="147" Rubric="変更" />
+  <Concept Language="ja" ConceptID="148" Rubric="全体" />
+  <Concept Language="ja" ConceptID="149" Rubric="変異(Variation)" />
+  <Concept Language="ja" ConceptID="150" Rubric="内部コード" />
+  <Concept Language="ja" ConceptID="151" Rubric="新規作成" />
+  <Concept Language="ja" ConceptID="152" Rubric="削除" />
+  <Concept Language="ja" ConceptID="153" Rubric="仮定(Assumed)値を設定" />
+  <Concept Language="ja" ConceptID="155" Rubric="追加" />
+  <Concept Language="ja" ConceptID="156" Rubric="Ordinal (序数)" />
+  <Concept Language="ja" ConceptID="157" Rubric="真/偽" />
+  <Concept Language="ja" ConceptID="158" Rubric="仮定(Assumed)値" />
+  <Concept Language="ja" ConceptID="159" Rubric="真(True)" />
+  <Concept Language="ja" ConceptID="160" Rubric="偽(False)" />
+  <Concept Language="ja" ConceptID="161" Rubric="日時" />
+  <Concept Language="ja" ConceptID="162" Rubric="整列" />
+  <Concept Language="ja" ConceptID="163" Rubric="列" />
+  <Concept Language="ja" ConceptID="164" Rubric="行" />
+  <Concept Language="ja" ConceptID="165" Rubric="OK" />
+  <Concept Language="ja" ConceptID="166" Rubric="キャンセル" />
+  <Concept Language="ja" ConceptID="167" Rubric="タブ見出し" />
+  <Concept Language="ja" ConceptID="168" Rubric="Sectionモデル" />
+  <Concept Language="ja" ConceptID="169" Rubric="Naming" />
+  <Concept Language="ja" ConceptID="170" Rubric="スロット(Slot)" />
+  <Concept Language="ja" ConceptID="171" Rubric="Entryスロット" />
+  <Concept Language="ja" ConceptID="172" Rubric="Entryを包含" />
+  <Concept Language="ja" ConceptID="173" Rubric="Entryを除外" />
+  <Concept Language="ja" ConceptID="174" Rubric="Sectionスロット" />
+  <Concept Language="ja" ConceptID="175" Rubric="Sectionを包含" />
+  <Concept Language="ja" ConceptID="176" Rubric="Sectionを除外" />
+  <Concept Language="ja" ConceptID="177" Rubric="状態" />
+  <Concept Language="ja" ConceptID="179" Rubric="オフセット" />
+  <Concept Language="ja" ConceptID="180" Rubric="固定オフセット" />
+  <Concept Language="ja" ConceptID="182" Rubric="符号付きマイナス(signed negative)" />
+  <Concept Language="ja" ConceptID="183" Rubric="保存" />
+  <Concept Language="ja" ConceptID="184" Rubric="閉じる" />
+  <Concept Language="ja" ConceptID="185" Rubric="特化する(Specialise)" />
+  <Concept Language="ja" ConceptID="186" Rubric="特化(Specialisation)" />
+  <Concept Language="ja" ConceptID="187" Rubric="一次言語" />
+  <Concept Language="ja" ConceptID="188" Rubric="to" />
+  <Concept Language="ja" ConceptID="189" Rubric="新生児" />
+  <Concept Language="ja" ConceptID="192" Rubric="Participationモード" />
+  <Concept Language="ja" ConceptID="193" Rubric="詳細未定" />
+  <Concept Language="ja" ConceptID="194" Rubric="非同期視聴覚；記録された映像" />
+  <Concept Language="ja" ConceptID="195" Rubric="同期された視聴覚；テレビ会議；テレビ電話" />
+  <Concept Language="ja" ConceptID="196" Rubric="記録された映像" />
+  <Concept Language="ja" ConceptID="197" Rubric="テレビ電話" />
+  <Concept Language="ja" ConceptID="198" Rubric="テレビ会議" />
+  <Concept Language="ja" ConceptID="199" Rubric="非同期音声のみ；口述筆記；ボイスメール" />
+  <Concept Language="ja" ConceptID="200" Rubric="口述筆記" />
+  <Concept Language="ja" ConceptID="201" Rubric="ボイスメール" />
+  <Concept Language="ja" ConceptID="202" Rubric="同期音声のみ；電話；インターネット電話；電話会議" />
+  <Concept Language="ja" ConceptID="203" Rubric="電話会議" />
+  <Concept Language="ja" ConceptID="204" Rubric="電話番号" />
+  <Concept Language="ja" ConceptID="205" Rubric="インターネット電話" />
+  <Concept Language="ja" ConceptID="206" Rubric="非同期テキスト；Email；Fax；手紙；手書きのメモ；SMSメッセージ" />
+  <Concept Language="ja" ConceptID="207" Rubric="Email" />
+  <Concept Language="ja" ConceptID="208" Rubric="Fax" />
+  <Concept Language="ja" ConceptID="209" Rubric="SMSメッセージ" />
+  <Concept Language="ja" ConceptID="210" Rubric="印刷されたあるいはタイプされた手紙" />
+  <Concept Language="ja" ConceptID="211" Rubric="手書きのメモ" />
+  <Concept Language="ja" ConceptID="212" Rubric="同期テキストのみ；インターネットチャット；SMSチャット；相互筆記メモ" />
+  <Concept Language="ja" ConceptID="213" Rubric="インターネットチャット" />
+  <Concept Language="ja" ConceptID="214" Rubric="SMSチャット" />
+  <Concept Language="ja" ConceptID="215" Rubric="相互筆記メモ" />
+  <Concept Language="ja" ConceptID="216" Rubric="対面コミュニケーション" />
+  <Concept Language="ja" ConceptID="217" Rubric="（対面で非言語的な）サインを送る" />
+  <Concept Language="ja" ConceptID="218" Rubric="映像を通じてサインを送る" />
+  <Concept Language="ja" ConceptID="219" Rubric="身体的表現" />
+  <Concept Language="ja" ConceptID="220" Rubric="物理的遠隔地" />
+  <Concept Language="ja" ConceptID="221" Rubric="翻訳されたテキスト" />
+  <Concept Language="ja" ConceptID="222" Rubric="翻訳された音声のみ" />
+  <Concept Language="ja" ConceptID="223" Rubric="翻訳された対面会話" />
+  <Concept Language="ja" ConceptID="224" Rubric="翻訳された映像通信" />
+  <Concept Language="ja" ConceptID="225" Rubric="家庭" />
+  <Concept Language="ja" ConceptID="226" Rubric="設定" />
+  <Concept Language="ja" ConceptID="227" Rubric="緊急処置" />
+  <Concept Language="ja" ConceptID="228" Rubric="初期診療" />
+  <Concept Language="ja" ConceptID="229" Rubric="初期看護ケア" />
+  <Concept Language="ja" ConceptID="230" Rubric="初期共同診療" />
+  <Concept Language="ja" ConceptID="231" Rubric="助産処置" />
+  <Concept Language="ja" ConceptID="232" Rubric="二次診療" />
+  <Concept Language="ja" ConceptID="233" Rubric="二次看護ケア" />
+  <Concept Language="ja" ConceptID="234" Rubric="二次共同診療" />
+  <Concept Language="ja" ConceptID="235" Rubric="代替医療" />
+  <Concept Language="ja" ConceptID="236" Rubric="歯科診療" />
+  <Concept Language="ja" ConceptID="237" Rubric="ナーシングホームケア" />
+  <Concept Language="ja" ConceptID="238" Rubric="その他の医療" />
+  <Concept Language="ja" ConceptID="239" Rubric="認証理由" />
+  <Concept Language="ja" ConceptID="240" Rubric="署名済み" />
+  <Concept Language="ja" ConceptID="241" Rubric="対象とする" />
+  <Concept Language="ja" ConceptID="242" Rubric="必須の" />
+  <Concept Language="ja" ConceptID="243" Rubric="バージョンライフサイクル" />
+  <Concept Language="ja" ConceptID="244" Rubric="草稿" />
+  <Concept Language="ja" ConceptID="245" Rubric="アクティブ" />
+  <Concept Language="ja" ConceptID="246" Rubric="アクティブでない" />
+  <Concept Language="ja" ConceptID="247" Rubric="承認待ち" />
+  <Concept Language="ja" ConceptID="248" Rubric="タイプの変更を監査" />
+  <Concept Language="ja" ConceptID="249" Rubric="作成" />
+  <Concept Language="ja" ConceptID="250" Rubric="修正" />
+  <Concept Language="ja" ConceptID="251" Rubric="変更" />
+  <Concept Language="ja" ConceptID="252" Rubric="合成" />
+  <Concept Language="ja" ConceptID="253" Rubric="未知" />
+  <Concept Language="ja" ConceptID="254" Rubric="親" />
+  <Concept Language="ja" ConceptID="255" Rubric="生物学的母親" />
+  <Concept Language="ja" ConceptID="256" Rubric="生物学的父親" />
+  <Concept Language="ja" ConceptID="257" Rubric="いとこ" />
+  <Concept Language="ja" ConceptID="258" Rubric="養母" />
+  <Concept Language="ja" ConceptID="259" Rubric="養父" />
+  <Concept Language="ja" ConceptID="260" Rubric="養子(男)" />
+  <Concept Language="ja" ConceptID="261" Rubric="養子(女)" />
+  <Concept Language="ja" ConceptID="262" Rubric="継母" />
+  <Concept Language="ja" ConceptID="263" Rubric="継父" />
+  <Concept Language="ja" ConceptID="264" Rubric="保護者" />
+  <Concept Language="ja" ConceptID="265" Rubric="同棲者" />
+  <Concept Language="ja" ConceptID="266" Rubric="Event数学関数" />
+  <Concept Language="ja" ConceptID="267" Rubric="最頻値" />
+  <Concept Language="ja" ConceptID="268" Rubric="中央値" />
+  <Concept Language="ja" ConceptID="270" Rubric="ヌルフレーバー(Null Flavour)" />
+  <Concept Language="ja" ConceptID="271" Rubric="情報がありません" />
+  <Concept Language="ja" ConceptID="272" Rubric="マスクされた" />
+  <Concept Language="ja" ConceptID="273" Rubric="適用できません" />
+  <Concept Language="ja" ConceptID="274" Rubric="openEHR構造コンポーネント" />
+  <Concept Language="ja" ConceptID="275" Rubric="履歴" />
+  <Concept Language="ja" ConceptID="276" Rubric="任意のイベント(Event)" />
+  <Concept Language="ja" ConceptID="277" Rubric="表を単純値(simple value)に変換" />
+  <Concept Language="ja" ConceptID="278" Rubric="制約(Constant)" />
+  <Concept Language="ja" ConceptID="279" Rubric="メニュー &gt; ファイル &gt; 新規作成を選択するかツールバーの[新規] を押してやり直してください" />
+  <Concept Language="ja" ConceptID="280" Rubric="さらに全ての参照(reference)" />
+  <Concept Language="ja" ConceptID="281" Rubric="すべて展開" />
+  <Concept Language="ja" ConceptID="282" Rubric="すべて折りたたむ" />
+  <Concept Language="ja" ConceptID="283" Rubric="参照(reference)を追加" />
+  <Concept Language="ja" ConceptID="284" Rubric="Ocean Archetypeエディタ" />
+  <Concept Language="ja" ConceptID="285" Rubric="選択された言語は完全に翻訳されていません。Terminology sectionに追加しますか？" />
+  <Concept Language="ja" ConceptID="286" Rubric="言語の追加はキャンセルされました" />
+  <Concept Language="ja" ConceptID="287" Rubric="現在のArchetype" />
+  <Concept Language="ja" ConceptID="288" Rubric="変更を破棄する" />
+  <Concept Language="ja" ConceptID="289" Rubric="見つかりません" />
+  <Concept Language="ja" ConceptID="290" Rubric="まずConceptにテキストをセットしてください" />
+  <Concept Language="ja" ConceptID="291" Rubric="State情報を削除しますか？" />
+  <Concept Language="ja" ConceptID="292" Rubric="読み込みエラー" />
+  <Concept Language="ja" ConceptID="293" Rubric="保存に失敗" />
+  <Concept Language="ja" ConceptID="294" Rubric="ArchetypeノードあるいはIDが不適切です" />
+  <Concept Language="ja" ConceptID="295" Rubric="変更を保存:" />
+  <Concept Language="ja" ConceptID="296" Rubric="不正なフォーマット" />
+  <Concept Language="ja" ConceptID="297" Rubric="未定義:" />
+  <Concept Language="ja" ConceptID="298" Rubric="そのオブジェクト列名は既に使われています" />
+  <Concept Language="ja" ConceptID="299" Rubric="このままリストをシングル値に変換します" />
+  <Concept Language="ja" ConceptID="300" Rubric="選択されたノードはエレメントではありませｎ" />
+  <Concept Language="ja" ConceptID="301" Rubric="左のアイテムをまず選んでください" />
+  <Concept Language="ja" ConceptID="302" Rubric="このままツリーを値のフラットリストに変換します- 全クラスタのアイテムは失われます" />
+  <Concept Language="ja" ConceptID="303" Rubric="その名前は既に使われています" />
+  <Concept Language="ja" ConceptID="304" Rubric="削除できません" />
+  <Concept Language="ja" ConceptID="305" Rubric="新しい名前を入力してください:" />
+  <Concept Language="ja" ConceptID="306" Rubric="名前を変更できません" />
+  <Concept Language="ja" ConceptID="307" Rubric="Featureを利用することはまだできません" />
+  <Concept Language="ja" ConceptID="308" Rubric="Constraintを変換します。すべてのデータが失われますが，いいですか？" />
+  <Concept Language="ja" ConceptID="309" Rubric="Stringをテキストに変換します" />
+  <Concept Language="ja" ConceptID="310" Rubric="TextをStringに変換します。" />
+  <Concept Language="ja" ConceptID="311" Rubric="序数(Ordinal)を妥当な値に変換します" />
+  <Concept Language="ja" ConceptID="312" Rubric="スロット" />
+  <Concept Language="ja" ConceptID="313" Rubric="Cluster" />
+  <Concept Language="ja" ConceptID="314" Rubric="Section" />
+  <Concept Language="ja" ConceptID="315" Rubric="Boolean" />
+  <Concept Language="ja" ConceptID="316" Rubric="Any" />
+  <Concept Language="ja" ConceptID="329" Rubric="量の範囲*" />
+  <Concept Language="ja" ConceptID="330" Rubric="整数（カウント）の範囲" />
+  <Concept Language="ja" ConceptID="332" Rubric="最大の絶対値をセット" />
+  <Concept Language="ja" ConceptID="333" Rubric="最小の絶対値をセット" />
+  <Concept Language="ja" ConceptID="334" Rubric="電流" />
+  <Concept Language="ja" ConceptID="335" Rubric="面積" />
+  <Concept Language="ja" ConceptID="336" Rubric="比体積" />
+  <Concept Language="ja" ConceptID="337" Rubric="比表面積" />
+  <Concept Language="ja" ConceptID="338" Rubric="速度" />
+  <Concept Language="ja" ConceptID="340" Rubric="モーメント" />
+  <Concept Language="ja" ConceptID="341" Rubric="各速度" />
+  <Concept Language="ja" ConceptID="343" Rubric="角モーメント" />
+  <Concept Language="ja" ConceptID="344" Rubric="慣性モーメント，面積" />
+  <Concept Language="ja" ConceptID="345" Rubric="慣性モーメント，質量" />
+  <Concept Language="ja" ConceptID="346" Rubric="流量モーメント" />
+  <Concept Language="ja" ConceptID="347" Rubric="流量，質量" />
+  <Concept Language="ja" ConceptID="348" Rubric="流束，質量" />
+  <Concept Language="ja" ConceptID="349" Rubric="面積あたり質量" />
+  <Concept Language="ja" ConceptID="350" Rubric="密度" />
+  <Concept Language="ja" ConceptID="351" Rubric="流速，質量/体積" />
+  <Concept Language="ja" ConceptID="352" Rubric="流速，質量/力" />
+  <Concept Language="ja" ConceptID="354" Rubric="固有の重量" />
+  <Concept Language="ja" ConceptID="355" Rubric="力" />
+  <Concept Language="ja" ConceptID="356" Rubric="表面張力" />
+  <Concept Language="ja" ConceptID="357" Rubric="力，物体" />
+  <Concept Language="ja" ConceptID="358" Rubric="質量あたり力" />
+  <Concept Language="ja" ConceptID="359" Rubric="トルク" />
+  <Concept Language="ja" ConceptID="360" Rubric="動的粘度" />
+  <Concept Language="ja" ConceptID="361" Rubric="動粘性率" />
+  <Concept Language="ja" ConceptID="362" Rubric="拡散係数" />
+  <Concept Language="ja" ConceptID="363" Rubric="出力" />
+  <Concept Language="ja" ConceptID="364" Rubric="直線エネルギー" />
+  <Concept Language="ja" ConceptID="365" Rubric="面積あたりエネルギー" />
+  <Concept Language="ja" ConceptID="366" Rubric="エネルギー密度" />
+  <Concept Language="ja" ConceptID="367" Rubric="線形電力" />
+  <Concept Language="ja" ConceptID="368" Rubric="電力束密度" />
+  <Concept Language="ja" ConceptID="369" Rubric="出力密度" />
+  <Concept Language="ja" ConceptID="370" Rubric="固有エネルギー" />
+  <Concept Language="ja" ConceptID="371" Rubric="比熱，気体定数" />
+  <Concept Language="ja" ConceptID="372" Rubric="熱伝導率" />
+  <Concept Language="ja" ConceptID="373" Rubric="熱伝導係数" />
+  <Concept Language="ja" ConceptID="374" Rubric="電圧，電位差" />
+  <Concept Language="ja" ConceptID="375" Rubric="抵抗" />
+  <Concept Language="ja" ConceptID="377" Rubric="電界強度" />
+  <Concept Language="ja" ConceptID="378" Rubric="磁束" />
+  <Concept Language="ja" ConceptID="379" Rubric="インダクタンス" />
+  <Concept Language="ja" ConceptID="380" Rubric="条件付き実数" />
+  <Concept Language="ja" ConceptID="381" Rubric="総量(Eq)" />
+  <Concept Language="ja" ConceptID="382" Rubric="頻度" />
+  <Concept Language="ja" ConceptID="384" Rubric="総量 (mole) " />
+  <Concept Language="ja" ConceptID="385" Rubric="質量 (IU) " />
+  <Concept Language="ja" ConceptID="386" Rubric="マルチメディア" />
+  <Concept Language="ja" ConceptID="387" Rubric="audio/DVI4" />
+  <Concept Language="ja" ConceptID="388" Rubric="audio/G722" />
+  <Concept Language="ja" ConceptID="389" Rubric="audio/G723" />
+  <Concept Language="ja" ConceptID="390" Rubric="audio/G726-16" />
+  <Concept Language="ja" ConceptID="391" Rubric="audio/G726-24" />
+  <Concept Language="ja" ConceptID="392" Rubric="audio/G726-32" />
+  <Concept Language="ja" ConceptID="393" Rubric="audio/G726-40" />
+  <Concept Language="ja" ConceptID="394" Rubric="audio/G728" />
+  <Concept Language="ja" ConceptID="395" Rubric="audio/L8" />
+  <Concept Language="ja" ConceptID="396" Rubric="audio/L16" />
+  <Concept Language="ja" ConceptID="397" Rubric="audio/LPC" />
+  <Concept Language="ja" ConceptID="398" Rubric="audio/G729" />
+  <Concept Language="ja" ConceptID="399" Rubric="audio/G729D" />
+  <Concept Language="ja" ConceptID="400" Rubric="audio/G729E" />
+  <Concept Language="ja" ConceptID="401" Rubric="video/BT656" />
+  <Concept Language="ja" ConceptID="402" Rubric="video/CelB" />
+  <Concept Language="ja" ConceptID="403" Rubric="video/JPEG" />
+  <Concept Language="ja" ConceptID="404" Rubric="video/H261" />
+  <Concept Language="ja" ConceptID="405" Rubric="video/H263" />
+  <Concept Language="ja" ConceptID="406" Rubric="video/H263-1998" />
+  <Concept Language="ja" ConceptID="407" Rubric="video/H263-2000" />
+  <Concept Language="ja" ConceptID="408" Rubric="video/MPV" />
+  <Concept Language="ja" ConceptID="409" Rubric="audio/mpeg" />
+  <Concept Language="ja" ConceptID="410" Rubric="audio/mpeg4-generic" />
+  <Concept Language="ja" ConceptID="411" Rubric="audio/L20" />
+  <Concept Language="ja" ConceptID="412" Rubric="audio/L24" />
+  <Concept Language="ja" ConceptID="413" Rubric="audio/telephone-event" />
+  <Concept Language="ja" ConceptID="414" Rubric="video/quicktime" />
+  <Concept Language="ja" ConceptID="415" Rubric="text/calendar" />
+  <Concept Language="ja" ConceptID="416" Rubric="text/directory" />
+  <Concept Language="ja" ConceptID="417" Rubric="text/html" />
+  <Concept Language="ja" ConceptID="418" Rubric="text/plain" />
+  <Concept Language="ja" ConceptID="419" Rubric="text/rtf" />
+  <Concept Language="ja" ConceptID="420" Rubric="text/sgml" />
+  <Concept Language="ja" ConceptID="421" Rubric="text/tab-separated-values" />
+  <Concept Language="ja" ConceptID="422" Rubric="text/uri-list" />
+  <Concept Language="ja" ConceptID="423" Rubric="text/xml" />
+  <Concept Language="ja" ConceptID="424" Rubric="text/xml-external-parsed-entity" />
+  <Concept Language="ja" ConceptID="425" Rubric="image/cgm" />
+  <Concept Language="ja" ConceptID="426" Rubric="image/gif" />
+  <Concept Language="ja" ConceptID="427" Rubric="image/png" />
+  <Concept Language="ja" ConceptID="428" Rubric="image/tiff" />
+  <Concept Language="ja" ConceptID="429" Rubric="image/jpeg" />
+  <Concept Language="ja" ConceptID="430" Rubric="URI - resource identifier" />
+  <Concept Language="ja" ConceptID="431" Rubric="永続" />
+  <Concept Language="ja" ConceptID="432" Rubric="Compositionカテゴリー" />
+  <Concept Language="ja" ConceptID="433" Rubric="イベント" />
+  <Concept Language="ja" ConceptID="434" Rubric="プロセス" />
+  <Concept Language="ja" ConceptID="435" Rubric="検査室" />
+  <Concept Language="ja" ConceptID="436" Rubric="画像" />
+  <Concept Language="ja" ConceptID="437" Rubric="濃度(Cardinality)" />
+  <Concept Language="ja" ConceptID="438" Rubric="値(Value)" />
+  <Concept Language="ja" ConceptID="439" Rubric="読み取り専用" />
+  <Concept Language="ja" ConceptID="440" Rubric="アイコンをドラッグしここにドロップしてデータ型を指定しなさい" />
+  <Concept Language="ja" ConceptID="441" Rubric="フリーテキスト" />
+  <Concept Language="ja" ConceptID="442" Rubric="このアイテムの翻訳を置き換えますか？" />
+  <Concept Language="ja" ConceptID="443" Rubric="型(Type)" />
+  <Concept Language="ja" ConceptID="444" Rubric="フリーあるいはコード化されたテキスト" />
+  <Concept Language="ja" ConceptID="445" Rubric="質量(単位)" />
+  <Concept Language="ja" ConceptID="446" Rubric="必須" />
+  <Concept Language="ja" ConceptID="447" Rubric="繰り返し" />
+  <Concept Language="ja" ConceptID="448" Rubric="オプション" />
+  <Concept Language="ja" ConceptID="449" Rubric="分母" />
+  <Concept Language="ja" ConceptID="450" Rubric="分子" />
+  <Concept Language="ja" ConceptID="497" Rubric="平面角" />
+  <Concept Language="ja" ConceptID="498" Rubric="充電" />
+  <Concept Language="ja" ConceptID="499" Rubric="光度" />
+  <Concept Language="ja" ConceptID="500" Rubric="立体角" />
+  <Concept Language="ja" ConceptID="501" Rubric="電気容量" />
+  <Concept Language="ja" ConceptID="502" Rubric="電気伝導度" />
+  <Concept Language="ja" ConceptID="503" Rubric="磁束密度" />
+  <Concept Language="ja" ConceptID="504" Rubric="光束" />
+  <Concept Language="ja" ConceptID="505" Rubric="照度" />
+  <Concept Language="ja" ConceptID="506" Rubric="放射能" />
+  <Concept Language="ja" ConceptID="507" Rubric="比率" />
+  <Concept Language="ja" ConceptID="508" Rubric="エネルギー量" />
+  <Concept Language="ja" ConceptID="509" Rubric="アクティビティ(Activity)説明" />
+  <Concept Language="ja" ConceptID="510" Rubric="パスウェイ" />
+  <Concept Language="ja" ConceptID="511" Rubric="多重" />
+  <Concept Language="ja" ConceptID="513" Rubric="Component" />
+  <Concept Language="ja" ConceptID="514" Rubric="コンテキスト" />
+  <Concept Language="ja" ConceptID="515" Rubric="コンテンツ" />
+  <Concept Language="ja" ConceptID="516" Rubric="日時の間隔" />
+  <Concept Language="ja" ConceptID="517" Rubric="application/msword" />
+  <Concept Language="ja" ConceptID="518" Rubric="application/pdf" />
+  <Concept Language="ja" ConceptID="519" Rubric="application/rtf" />
+  <Concept Language="ja" ConceptID="520" Rubric="印刷" />
+  <Concept Language="ja" ConceptID="521" Rubric="減少" />
+  <Concept Language="ja" ConceptID="522" Rubric="増加" />
+  <Concept Language="ja" ConceptID="523" Rubric="削除された" />
+  <Concept Language="ja" ConceptID="524" Rubric="初期" />
+  <Concept Language="ja" ConceptID="525" Rubric="指示(Instruction)の状態" />
+  <Concept Language="ja" ConceptID="526" Rubric="計画された" />
+  <Concept Language="ja" ConceptID="527" Rubric="延期された" />
+  <Concept Language="ja" ConceptID="528" Rubric="キャンセルされた" />
+  <Concept Language="ja" ConceptID="529" Rubric="予定された" />
+  <Concept Language="ja" ConceptID="530" Rubric="一時停止した" />
+  <Concept Language="ja" ConceptID="532" Rubric="完成した" />
+  <Concept Language="ja" ConceptID="533" Rubric="期限切れた" />
+  <Concept Language="ja" ConceptID="534" Rubric="指示の遷移" />
+  <Concept Language="ja" ConceptID="535" Rubric="開始" />
+  <Concept Language="ja" ConceptID="536" Rubric="プランのステップ" />
+  <Concept Language="ja" ConceptID="537" Rubric="延期する" />
+  <Concept Language="ja" ConceptID="538" Rubric="リストア" />
+  <Concept Language="ja" ConceptID="539" Rubric="予定" />
+  <Concept Language="ja" ConceptID="540" Rubric="開始" />
+  <Concept Language="ja" ConceptID="541" Rubric="実行" />
+  <Concept Language="ja" ConceptID="542" Rubric="延期されたステップ" />
+  <Concept Language="ja" ConceptID="543" Rubric="現在のステップ" />
+  <Concept Language="ja" ConceptID="544" Rubric="一時中断" />
+  <Concept Language="ja" ConceptID="545" Rubric="中断されたステップ" />
+  <Concept Language="ja" ConceptID="546" Rubric="再開" />
+  <Concept Language="ja" ConceptID="548" Rubric="完了" />
+  <Concept Language="ja" ConceptID="549" Rubric="時間切れ" />
+  <Concept Language="ja" ConceptID="550" Rubric="中断を通知" />
+  <Concept Language="ja" ConceptID="551" Rubric="完了を通知" />
+  <Concept Language="ja" ConceptID="552" Rubric="キャンセルを通知" />
+  <Concept Language="ja" ConceptID="553" Rubric="不完全" />
+  <Concept Language="ja" ConceptID="554" Rubric="観察" />
+  <Concept Language="ja" ConceptID="555" Rubric="評価" />
+  <Concept Language="ja" ConceptID="556" Rubric="行為" />
+  <Concept Language="ja" ConceptID="557" Rubric="指示" />
+  <Concept Language="ja" ConceptID="558" Rubric="Sub-Section" />
+  <Concept Language="ja" ConceptID="559" Rubric="Entry" />
+  <Concept Language="ja" ConceptID="560" Rubric="Administration Entry" />
+  <Concept Language="ja" ConceptID="561" Rubric="Composition " />
+  <Concept Language="ja" ConceptID="563" Rubric="ケアパスウェイのステップ" />
+  <Concept Language="ja" ConceptID="564" Rubric="参照(Reference)" />
+  <Concept Language="ja" ConceptID="565" Rubric="イベントの間隔" />
+  <Concept Language="ja" ConceptID="566" Rubric="その時点のイベント" />
+  <Concept Language="ja" ConceptID="567" Rubric="Element (en)" />
+  <Concept Language="ja" ConceptID="568" Rubric="原作者のライフサイクル" />
+  <Concept Language="ja" ConceptID="569" Rubric="作者の草稿" />
+  <Concept Language="ja" ConceptID="570" Rubric="委員会のドラフト" />
+  <Concept Language="ja" ConceptID="571" Rubric="組織の草稿" />
+  <Concept Language="ja" ConceptID="572" Rubric="投稿された" />
+  <Concept Language="ja" ConceptID="573" Rubric="候補" />
+  <Concept Language="ja" ConceptID="574" Rubric="公認候補" />
+  <Concept Language="ja" ConceptID="575" Rubric="発行された" />
+  <Concept Language="ja" ConceptID="576" Rubric="拒否された" />
+  <Concept Language="ja" ConceptID="577" Rubric="廃止された" />
+  <Concept Language="ja" ConceptID="578" Rubric="キーワード" />
+  <Concept Language="ja" ConceptID="579" Rubric="名前" />
+  <Concept Language="ja" ConceptID="580" Rubric="原作者" />
+  <Concept Language="ja" ConceptID="581" Rubric="詳細" />
+  <Concept Language="ja" ConceptID="582" Rubric="使用" />
+  <Concept Language="ja" ConceptID="583" Rubric="誤用" />
+  <Concept Language="ja" ConceptID="584" Rubric="原著作者" />
+  <Concept Language="ja" ConceptID="585" Rubric="目的" />
+  <Concept Language="ja" ConceptID="586" Rubric="アクティビティ" />
+  <Concept Language="ja" ConceptID="587" Rubric="アクティビティ" />
+  <Concept Language="ja" ConceptID="588" Rubric="最小:" />
+  <Concept Language="ja" ConceptID="589" Rubric="繰り返しなし" />
+  <Concept Language="ja" ConceptID="590" Rubric="繰り返しあり，無制限" />
+  <Concept Language="ja" ConceptID="591" Rubric="繰り返しあり，制限あり" />
+  <Concept Language="ja" ConceptID="592" Rubric="編集" />
+  <Concept Language="ja" ConceptID="593" Rubric="日付" />
+  <Concept Language="ja" ConceptID="594" Rubric="組織" />
+  <Concept Language="ja" ConceptID="595" Rubric="新規ウインドウ" />
+  <Concept Language="ja" ConceptID="596" Rubric="名前を付けて保存" />
+  <Concept Language="ja" ConceptID="597" Rubric="問題を報告" />
+  <Concept Language="ja" ConceptID="598" Rubric="オプション" />
+  <Concept Language="ja" ConceptID="599" Rubric="制限された" />
+  <Concept Language="ja" ConceptID="600" Rubric="許容される値" />
+  <Concept Language="ja" ConceptID="601" Rubric="ユニット値" />
+  <Concept Language="ja" ConceptID="602" Rubric="既存のTermに追加" />
+  <Concept Language="ja" ConceptID="603" Rubric="新規Termを追加" />
+  <Concept Language="ja" ConceptID="604" Rubric="貢献者" />
+  <Concept Language="ja" ConceptID="605" Rubric="組み込まれたArchetype" />
+  <Concept Language="ja" ConceptID="606" Rubric="組み込まれたArchetypeの読み込み" />
+  <Concept Language="ja" ConceptID="607" Rubric="参照を特化(specialise)できません" />
+  <Concept Language="ja" ConceptID="608" Rubric="その他のコンテキスト" />
+  <Concept Language="ja" ConceptID="609" Rubric="既存のArchetypeを開く" />
+  <Concept Language="ja" ConceptID="610" Rubric="時に関する略語" />
+  <Concept Language="ja" ConceptID="611" Rubric="ナノ秒" />
+  <Concept Language="ja" ConceptID="612" Rubric="マイクロ秒" />
+  <Concept Language="ja" ConceptID="613" Rubric="ミリ秒" />
+  <Concept Language="ja" ConceptID="614" Rubric="秒" />
+  <Concept Language="ja" ConceptID="615" Rubric="分" />
+  <Concept Language="ja" ConceptID="616" Rubric="時" />
+  <Concept Language="ja" ConceptID="617" Rubric="日" />
+  <Concept Language="ja" ConceptID="618" Rubric="月" />
+  <Concept Language="ja" ConceptID="619" Rubric="年" />
+  <Concept Language="ja" ConceptID="620" Rubric="週" />
+  <Concept Language="ja" ConceptID="621" Rubric="ノード" />
+  <Concept Language="ja" ConceptID="622" Rubric="基準" />
+  <Concept Language="ja" ConceptID="623" Rubric="制約(Constraint)定義" />
+  <Concept Language="ja" ConceptID="624" Rubric="クエリー名" />
+  <Concept Language="ja" ConceptID="625" Rubric="包含" />
+  <Concept Language="ja" ConceptID="626" Rubric="除外" />
+  <Concept Language="ja" ConceptID="627" Rubric="閲覧" />
+  <Concept Language="ja" ConceptID="628" Rubric="全てを包含" />
+  <Concept Language="ja" ConceptID="629" Rubric="全てを除外" />
+  <Concept Language="ja" ConceptID="630" Rubric="パーセントで" />
+  <Concept Language="ja" ConceptID="631" Rubric="全て削除" />
+  <Concept Language="ja" ConceptID="632" Rubric="アーキタイプID" />
+  <Concept Language="ja" ConceptID="633" Rubric="識別子" />
+  <Concept Language="ja" ConceptID="634" Rubric="段落" />
+  <Concept Language="ja" ConceptID="635" Rubric="パースできる" />
+  <Concept Language="ja" ConceptID="636" Rubric="コード化されたテキスト" />
+  <Concept Language="ja" ConceptID="637" Rubric="アプリケーション/DICOM" />
+  <Concept Language="ja" ConceptID="638" Rubric="フォーマット" />
+  <Concept Language="ja" ConceptID="639" Rubric="パスをクリップボードにコピー" />
+  <Concept Language="ja" ConceptID="640" Rubric="実際(actual)" />
+  <Concept Language="ja" ConceptID="641" Rubric="下部の(Lower)" />
+  <Concept Language="ja" ConceptID="642" Rubric="上部の(Upper)" />
+  <Concept Language="ja" ConceptID="643" Rubric="整数(Integral)" />
+  <Concept Language="ja" ConceptID="644" Rubric="単一(Unitary)" />
+  <Concept Language="ja" ConceptID="645" Rubric="整数と端数(integral and fraction))" />
+  <Concept Language="ja" ConceptID="646" Rubric="端数(Fraction)" />
+  <Concept Language="ja" ConceptID="647" Rubric="定義" />
+  <Concept Language="ja" ConceptID="648" Rubric="立ち会った(witnessed)" />
+  <Concept Language="ja" ConceptID="649" Rubric="小数点以下を制限(Limit decimal places)" />
+  <Concept Language="ja" ConceptID="650" Rubric="翻訳" />
+  <Concept Language="ja" ConceptID="651" Rubric="認定" />
+  <Concept Language="ja" ConceptID="652" Rubric="コメント" />
+  <Concept Language="ja" ConceptID="653" Rubric="新規Activity" />
+  <Concept Language="ja" ConceptID="654" Rubric="参加(Participation)" />
+  <Concept Language="ja" ConceptID="655" Rubric="電位時間(Electrical Potential Time)" />
+  <Concept Language="ja" ConceptID="656" Rubric="EHR内部のみのリンク" />
+  <Concept Language="ja" ConceptID="657" Rubric="URIの正規表現" />
+  <Concept Language="ja" ConceptID="658" Rubric="参加者の役割" />
+  <Concept Language="ja" ConceptID="659" Rubric="リンク" />
+  <Concept Language="ja" ConceptID="660" Rubric="他の参加" />
+  <Concept Language="ja" ConceptID="661" Rubric="目標" />
+  <Concept Language="ja" ConceptID="662" Rubric="意味" />
+  <Concept Language="ja" ConceptID="663" Rubric="検索" />
+  <Concept Language="ja" ConceptID="664" Rubric="ネットワークエラー" />
+  <Concept Language="ja" ConceptID="665" Rubric="検索するパラメータを入力してください" />
+  <Concept Language="ja" ConceptID="666" Rubric="ウェブから既存のアーキタイプを開く" />
+  <Concept Language="ja" ConceptID="667" Rubric="ツール" />
+  <Concept Language="ja" ConceptID="668" Rubric="左側と右側からユニットを一つづつ選択" />
+  <Concept Language="ja" ConceptID="669" Rubric="特化(specialisation)も行いますか？" />
   <Concept Language="ko" ConceptID="280" Rubric="그리고 모든 참조" />
   <Concept Language="ko" ConceptID="0" Rubric="자신" />
   <Concept Language="ko" ConceptID="3" Rubric="태아" />
@@ -3822,7 +4439,6 @@
   <Concept Language="ko" ConceptID="316" Rubric="Any (임의의 것)" />
   <Concept Language="ko" ConceptID="317" Rubric="텍스트 값을 서수 값으로 변환" />
   <Concept Language="ko" ConceptID="318" Rubric="내부 코드를 프리 텍스트로 변환" />
-  <Concept Language="ko" ConceptID="319" Rubric="이 아이템은 수정을 위한 특수화가 필요합니다. 계속 진행하시겠습니까?" />
   <Concept Language="ko" ConceptID="320" Rubric="Choice (선택)" />
   <Concept Language="ko" ConceptID="321" Rubric="비율" />
   <Concept Language="ko" ConceptID="322" Rubric="새로운 Cluster" />
@@ -4397,7 +5013,6 @@
   <Concept Language="tr" ConceptID="316" Rubric="Herhangisi" />
   <Concept Language="tr" ConceptID="317" Rubric="Metin değerleri sıralı değere dönüştür" />
   <Concept Language="tr" ConceptID="318" Rubric="Dahili kodları serbest metine dönüştür" />
-  <Concept Language="tr" ConceptID="319" Rubric="Değişiklik yapmak için özelleştirme gerekiyor. Devam etmek istiyor musunuz?" />
   <Concept Language="tr" ConceptID="320" Rubric="Çoklu" />
   <Concept Language="tr" ConceptID="321" Rubric="Oran" />
   <Concept Language="tr" ConceptID="322" Rubric="Yeni grup(Cluster)" />
@@ -5054,6 +5669,91 @@
   <Concept Language="en" ConceptID="666" Rubric="Open existing Archetype from Web" />
   <Concept Language="en" ConceptID="667" Rubric="Tools" />
   <Concept Language="en" ConceptID="668" Rubric="Select one unit from the left and one from the right:" />
+  <Concept Language="en" ConceptID="669" Rubric="Use specialisations too?" />
+  <Concept Language="en" ConceptID="670" Rubric="Time Fraction" />
+  <Concept Language="en" ConceptID="671" Rubric="No embedded archetype matches at {0}" />
+  <Concept Language="en" ConceptID="672" Rubric="Name this slot?" />
+  <Concept Language="en" ConceptID="673" Rubric="Item" />
+  <Concept Language="en" ConceptID="674" Rubric="Care entry" />
+  <Concept Language="en" ConceptID="675" Rubric="Name this slot" />
+  <Concept Language="en" ConceptID="676" Rubric="Transition" />
+  <Concept Language="en" ConceptID="677" Rubric="Allow transition to" />
+  <Concept Language="en" ConceptID="678" Rubric="Allow an alternative state for this action" />
+  <Concept Language="en" ConceptID="679" Rubric="Alternative state" />
+  <Concept Language="en" ConceptID="680" Rubric="File {0} already exists. Do you want to replace it?" />
+  <Concept Language="de" ConceptID="632" Rubric="Archetyp Id" />
+  <Concept Language="de" ConceptID="633" Rubric="Identifier" />
+  <Concept Language="de" ConceptID="634" Rubric="Paragraph" />
+  <Concept Language="de" ConceptID="635" Rubric="Parsbar" />
+  <Concept Language="de" ConceptID="636" Rubric="Codierter Text" />
+  <Concept Language="de" ConceptID="637" Rubric="application/dicom" />
+  <Concept Language="de" ConceptID="638" Rubric="Format" />
+  <Concept Language="de" ConceptID="639" Rubric="Pfad in Ablage kopieren" />
+  <Concept Language="de" ConceptID="640" Rubric="tatsächlich" />
+  <Concept Language="de" ConceptID="641" Rubric="Untere Grenze" />
+  <Concept Language="de" ConceptID="642" Rubric="Obere Grenze" />
+  <Concept Language="de" ConceptID="643" Rubric="ganzzahlig" />
+  <Concept Language="de" ConceptID="644" Rubric="Unitär (Nenner=1)" />
+  <Concept Language="de" ConceptID="645" Rubric="Ganzzahl und Bruchteil (z.B. 1 1/2)" />
+  <Concept Language="de" ConceptID="646" Rubric="Bruchteil" />
+  <Concept Language="de" ConceptID="647" Rubric="Definition" />
+  <Concept Language="de" ConceptID="648" Rubric="bezeugt" />
+  <Concept Language="de" ConceptID="649" Rubric="Nachkommastellen einschränken" />
+  <Concept Language="de" ConceptID="650" Rubric="Übersetzung" />
+  <Concept Language="de" ConceptID="651" Rubric="Akkreditierung" />
+  <Concept Language="de" ConceptID="652" Rubric="Kommentare" />
+  <Concept Language="de" ConceptID="653" Rubric="Neue Aktivität" />
+  <Concept Language="de" ConceptID="654" Rubric="Partizipation" />
+  <Concept Language="de" ConceptID="655" Rubric="Elektrische Potential Zeit" />
+  <Concept Language="de" ConceptID="656" Rubric="Link innerhalb der EHR" />
+  <Concept Language="de" ConceptID="657" Rubric="Regulärer Ausdruck für URI" />
+  <Concept Language="de" ConceptID="658" Rubric="Partizipant Funktion" />
+  <Concept Language="de" ConceptID="659" Rubric="Link" />
+  <Concept Language="de" ConceptID="660" Rubric="Andere Partizipationen" />
+  <Concept Language="de" ConceptID="661" Rubric="Ziel" />
+  <Concept Language="de" ConceptID="662" Rubric="Bedeutung" />
+  <Concept Language="de" ConceptID="663" Rubric="Suche" />
+  <Concept Language="de" ConceptID="664" Rubric="Netzwerkfehler" />
+  <Concept Language="de" ConceptID="665" Rubric="Bitte Suchparameter eingeben" />
+  <Concept Language="de" ConceptID="666" Rubric="Öffne Archetyp aus dem Internet" />
+  <Concept Language="de" ConceptID="667" Rubric="Werkzeuge" />
+  <Concept Language="de" ConceptID="668" Rubric="Bitte eine Einheit von der linken und eine von der rechten Seite auswählen" />
+  <Concept Language="de" ConceptID="669" Rubric="Auch Spezialierungen verwenden?" />
+  <Concept Language="de" ConceptID="670" Rubric="Bruchteil (Zeit)" />
+  <Concept Language="de" ConceptID="671" Rubric="Kein eingebetteter Archetyp passt zu {0}" />
+  <Concept Language="de" ConceptID="672" Rubric="Diesen Slot bennenen?" />
+  <Concept Language="de" ConceptID="673" Rubric="Item" />
+  <Concept Language="de" ConceptID="674" Rubric="Versorgungseintrag (Care entry)" />
+  <Concept Language="de" ConceptID="675" Rubric="*Name this slot (en)" />
+  <Concept Language="de" ConceptID="676" Rubric="Übergang" />
+  <Concept Language="de" ConceptID="677" Rubric="Erlaube Übergang nach " />
+  <Concept Language="de" ConceptID="678" Rubric="Alternativen Status für diese Aktion erlauben" />
+  <Concept Language="en" ConceptID="681" Rubric="Export" />
+  <Concept Language="en" ConceptID="682" Rubric="application/vnd.oasis.opendocument.text" />
+  <Concept Language="en" ConceptID="683" Rubric="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+  <Concept Language="en" ConceptID="684" Rubric="ParsableText" />
+  <Concept Language="en" ConceptID="685" Rubric="Refractive power" />
+  <Concept Language="en" ConceptID="686" Rubric="Invalid archetype file name {0}. Save as {1}?" />
+  <Concept Language="en" ConceptID="687" Rubric="Open action archetype" />
+  <Concept Language="en" ConceptID="688" Rubric="contact" />
+  <Concept Language="en" ConceptID="689" Rubric="exposure source" />
+  <Concept Language="ja" ConceptID="670" Rubric="*Time Fraction (en)" />
+  <Concept Language="ja" ConceptID="671" Rubric="*No embedded archetype matches at {0} (en)" />
+  <Concept Language="ja" ConceptID="672" Rubric="このスロットに名前をつけますか?" />
+  <Concept Language="ja" ConceptID="673" Rubric="アイテム" />
+  <Concept Language="ja" ConceptID="674" Rubric="*Care entry (en)" />
+  <Concept Language="ja" ConceptID="675" Rubric="このスロットに名前を付ける" />
+  <Concept Language="ja" ConceptID="676" Rubric="繊維" />
+  <Concept Language="ja" ConceptID="677" Rubric="*Allow transition to (en)" />
+  <Concept Language="ja" ConceptID="678" Rubric="*Allow an alternative state for this action (en)" />
+  <Concept Language="ja" ConceptID="679" Rubric="*Alternative state (en)" />
+  <Concept Language="ja" ConceptID="680" Rubric="*File {0} already exists. Do you want to replace it? (en)" />
+  <Concept Language="ja" ConceptID="681" Rubric="エクスポート" />
+  <Concept Language="ja" ConceptID="682" Rubric="*application/vnd.oasis.opendocument.text (en)" />
+  <Concept Language="ja" ConceptID="683" Rubric="*application/vnd.openxmlformats-officedocument.wordprocessingml.document (en)" />
+  <Concept Language="ja" ConceptID="684" Rubric="*ParsableText (en)" />
+  <Concept Language="ja" ConceptID="685" Rubric="*Refractive power (en)" />
+  <Concept Language="ja" ConceptID="686" Rubric="アーキタイプのファイル名{0}が不正です。{1}として保存しますか？ (en)" />
   <Grouper id="0" ConceptID="154" />
   <Grouper id="1" ConceptID="32" />
   <Grouper id="2" ConceptID="33" />
@@ -5078,6 +5778,7 @@
   <Grouper id="22" ConceptID="534" />
   <Grouper id="23" ConceptID="568" />
   <Grouper id="24" ConceptID="610" />
+  <Grouper id="25" ConceptID="684" />
   <GroupedConcept GrouperID="1" ChildID="0" />
   <GroupedConcept GrouperID="1" ChildID="3" />
   <GroupedConcept GrouperID="1" ChildID="6" />
@@ -5370,7 +6071,6 @@
   <GroupedConcept GrouperID="17" ChildID="316" />
   <GroupedConcept GrouperID="17" ChildID="317" />
   <GroupedConcept GrouperID="17" ChildID="318" />
-  <GroupedConcept GrouperID="17" ChildID="319" />
   <GroupedConcept GrouperID="16" ChildID="108" />
   <GroupedConcept GrouperID="16" ChildID="106" />
   <GroupedConcept GrouperID="16" ChildID="105" />
@@ -5542,29 +6242,31 @@
   <GroupedConcept GrouperID="14" ChildID="640" />
   <GroupedConcept GrouperID="11" ChildID="648" />
   <GroupedConcept GrouperID="8" ChildID="655" />
+  <GroupedConcept GrouperID="8" ChildID="670" />
+  <GroupedConcept GrouperID="19" ChildID="682" />
+  <GroupedConcept GrouperID="19" ChildID="683" />
+  <GroupedConcept GrouperID="25" ChildID="417" />
+  <GroupedConcept GrouperID="25" ChildID="418" />
+  <GroupedConcept GrouperID="25" ChildID="423" />
+  <GroupedConcept GrouperID="25" ChildID="419" />
+  <GroupedConcept GrouperID="8" ChildID="685" />
+  <GroupedConcept GrouperID="1" ChildID="688" />
+  <GroupedConcept GrouperID="1" ChildID="689" />
   <TerminologyIdentifiers VSAB="AIR93" SourceName="AI/RHEUM,1993" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ALT2000" SourceName="Alternative Billing Concepts, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="AOD2000" SourceName="Alcohol and Other Drug Thesaurus, 2000" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="BI98" SourceName="Beth Israel Vocabulary, 1.0" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="BRMP2002" SourceName="Portuguese translation of the Medical Subject Headings, 2002" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="BRMS2002" SourceName="Spanish translation of the Medical Subject Headings, 2002" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CCPSS99" SourceName="Canonical Clinical Problem Statement System, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CCS99" SourceName="Clinical Classifications Software, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CDT4" SourceName="Current Dental Terminology(CDT), 4" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="COSTAR_89-95" SourceName="COSTAR, 1989-1995" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CPM93" SourceName="Medical Entities Dictionary, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="CPT01SP" SourceName="Physicians' Current Procedural Terminology, Spanish Translation, 2001" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CPT2003" SourceName="Physicians' Current Procedural Terminology, 2003" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CSP2002" SourceName="CRISP Thesaurus, 2002" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="CST95" SourceName="COSTART, 1995" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="DDB00" SourceName="Diseases Database, 2000" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DMD2003" SourceName="German translation of the Medical Subject Headings, 2003" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DMDICD10_1995" SourceName="German translation of ICD10, 1995" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DMDUMD_1996" SourceName="German translation of UMDNS, 1996" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="DSM3R_1987" SourceName="DSM-III-R, 1987" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="DSM4_1994" SourceName="DSM-IV, 1994" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DUT2001" SourceName="Dutch Translation of the Medical Subject Headings, 2001" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="DXP94" SourceName="DXplain, 1994" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="FIN2003" SourceName="Finnish translations of the Medical Subject Headings, 2003" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="HCDT4" SourceName="HCPCS Version of Current Dental Terminology(CDT), 4" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="HCPCS03" SourceName="Healthcare Common Procedure Coding System, 2003" Authority="UMLS2003AA" />
@@ -5573,43 +6275,21 @@
   <TerminologyIdentifiers VSAB="HL7_1998-2002" SourceName="Health Level Seven Vocabulary, 1998-2002" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="HLREL_1998" SourceName="ICPC2E-ICD10 relationships from Dr. Henk Lamberts, 1998" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="HPC99" SourceName="Health Product Comparison System, 1999" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICD10AE_1998" SourceName="ICD10, American English Equivalents, 1998" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICD10AMAE_2000" SourceName="International Statistical Classification of Diseases and Related Health Problems, Australian Modification, Americanized English Equivalents, 2000" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICD10AM_2000" SourceName="International Statistical Classification of Diseases and Related Health Problems, 10th Revision, Australian Modification, January 2000 Release" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICD10_1998" SourceName="ICD10, 1998" Authority="UMLS2003AA" />
+  <TerminologyIdentifiers VSAB="ICD10AM_2000" SourceName="ICD-10, Australian Modification, 2000" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.135" />
+  <TerminologyIdentifiers VSAB="ICD10_1998" SourceName="ICD-10, 1998" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.3" />
+  <TerminologyIdentifiers VSAB="ICD10CM" SourceName="ICD-10 Clinical Modification (US)" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.90" />
+  <TerminologyIdentifiers VSAB="ICD-O-3" SourceName="ICD Oncology (3), 1976" Authority="WHO" Hl7Oid="2.16.840.1.113883.6.43" />
   <TerminologyIdentifiers VSAB="ICD9CM_2003" SourceName="ICD-9-CM, 2003" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPC2AE_1998" SourceName="International Classification of Primary Care, Americanized English Equivalents, 2E, 1998" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ICPC2E_1998" SourceName="International Classification of Primary Care 2nd Edition, Electronic, 2E, 1998" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPC2P_2000" SourceName="International Classification of Primary Care, Version2-Plus, 2000" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPC93" SourceName="International Classification of Primary Care, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCBAQ_1993" SourceName="ICPC, Basque Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCDAN_1993" SourceName="ICPC, Danish Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCDUT_1993" SourceName="ICPC, Dutch Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCFIN_1993" SourceName="ICPC, Finnish Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCFRE_1993" SourceName="ICPC, French Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCGER_1993" SourceName="ICPC, German Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCHEB_1993" SourceName="ICPC, Hebrew Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCHUN_1993" SourceName="ICPC, Hungarian Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCITA_1993" SourceName="ICPC, Italian Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCNOR_1993" SourceName="ICPC, Norwegian Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCPAE_2000" SourceName="International Classification of Primary Care ,Version2-Plus, Americanized English Equivalents, 2000" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCPOR_1993" SourceName="ICPC, Portuguese Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCSPA_1993" SourceName="ICPC, Spanish Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ICPCSWE_1993" SourceName="ICPC, Swedish Translation, 1993" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="INS2002" SourceName="French translation of the Medical Subject Headings, 2002" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="ITA2003" SourceName="Italian translation of Medical Subject Headings, 2003" Authority="UMLS2003AA" />
+  <TerminologyIdentifiers VSAB="ICPC2P_2000" SourceName="International Classification of Primary Care, Version2-Plus, 2000" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.140.2" />
+  <TerminologyIdentifiers VSAB="ICPC93" SourceName="International Classification of Primary Care, 1993" Authority="UMLS2003AA" Hl7Oid="2.16.840.1.113883.6.138" />
   <TerminologyIdentifiers VSAB="JABL99" SourceName="Online Congenital Multiple Anomaly/ Mental Retardation Syndromes, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="LCH90" SourceName="Library of Congress Subject Headings, 1990" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="LNC205" SourceName="LOINC, 2.05" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="LOINC" SourceName="LOINC" Authority="openEHR 2003" />
+  <TerminologyIdentifiers VSAB="LOINC" SourceName="LOINC" Authority="HL7 2007" Hl7Oid="2.16.840.1.113883.6.1" />
   <TerminologyIdentifiers VSAB="MCM92" SourceName="McMaster University Epidemiology Terms, 1992" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MDDB99" SourceName="MasterDrug DataBase, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MDR51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), 5.1" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="MDRAE51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), American English Equivalents, 5.1" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="MDREA51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), American English, with expanded abbreviations, 5.1" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MDREX51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), with expanded abbreviations, 5.1" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="MDRPOR51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), 5.1, Portuguese Edition" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="MDRSPA51" SourceName="Medical Dictionary for Regulatory Activities Terminology (MedDRA), 5.1, Spanish Edition" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MIM93" SourceName="Online Mendelian Inheritance in Man, 1993" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MMSL01" SourceName="Multum MediSource Lexicon, 2001" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MMX01" SourceName="Micromedex DRUGDEX, 2001-08" Authority="UMLS2003AA" />
@@ -5638,14 +6318,12 @@
   <TerminologyIdentifiers VSAB="QMR96" SourceName="Quick Medical Reference (QMR), 1996" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="RAM99" SourceName="QMR clinically related terms from Randolph A. Miller, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="RCD99" SourceName="Clinical Terms Version 3 (CTV3) (Read Codes), 1999" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="RCDAE_1999" SourceName="Read thesaurus, American English Equivalents, 1999" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="RCDSA_1999" SourceName="Read thesaurus Americanized Synthesized Terms, 1999" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="RCDSY_1999" SourceName="Read thesaurus, Synthesized Terms, 1999" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="RUS2003" SourceName="Russian Translation of MeSH, 2003" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="RXNORM_03AA" SourceName="RXNORM Project, META2003AA" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="SNM2" SourceName="SNOMED-2, 2" Authority="UMLS2003AA" />
+  <TerminologyIdentifiers VSAB="RXNORM_03AA" SourceName="RXNORM Drug terminology 2003" Authority="UMLS2003AA" />
+  <TerminologyIdentifiers VSAB="SNM2" SourceName="SNOMED-2, 1979" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="SNMI98" SourceName="SNOMED International, 1998" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="SNOMED-CT" SourceName="SNOMED International Clinical Terms, 2002" Authority="openEHR 2003" />
+  <TerminologyIdentifiers VSAB="SNOMED-RT" SourceName="SNOMED RT (Reference Terminology) 1997" Authority="HL7" Hl7Oid="2.16.840.1.113883.6.5" />
+  <TerminologyIdentifiers VSAB="SNOMED-CT" SourceName="SNOMED International Clinical Terms, 2002" Authority="HL7" Hl7Oid="2.16.840.1.113883.6.96" />
   <TerminologyIdentifiers VSAB="SPN02" SourceName="Standard Product Nomenclature, 2002" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="SRC" SourceName="Metathesaurus Source Terminology Names" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="ULT93" SourceName="UltraSTAR, 1993" Authority="UMLS2003AA" />
@@ -5654,10 +6332,6 @@
   <TerminologyIdentifiers VSAB="UWDA155" SourceName="University of Washington Digital Anatomist, 1.5.5" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="VANDF01" SourceName="Veterans Health Administration National Drug File, 2001" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="WHO97" SourceName="WHO Adverse Reaction Terminology, 1997" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="WHOFRE_1997" SourceName="WHOART, French Translation, 1997" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="WHOGER_1997" SourceName="WHOART, German Translation, 1997" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="WHOPOR_1997" SourceName="WHOART, Portuguese Translation, 1997" Authority="UMLS2003AA" />
-  <TerminologyIdentifiers VSAB="WHOSPA_1997" SourceName="WHOART, Spanish Translation, 1997" Authority="UMLS2003AA" />
   <TerminologyIdentifiers VSAB="MST2" SourceName="World Organisation of Digestive Endoscopy" Authority="Manually added" />
   <Territory NumericCode="004" TwoLetter="AF" ThreeLetter="AFG" Text="Afghanistan" />
   <Territory NumericCode="008" TwoLetter="AL" ThreeLetter="ALB" Text="Albania, People's Socialist Republic of" />

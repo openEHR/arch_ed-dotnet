@@ -305,9 +305,9 @@ Public Class ElementOnly
             mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
             mElement.Constraint = mNewConstraint
             PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(mElement.Constraint.Type, False, False))
-        SetCurrentItem(mElement)
-        mFileManager.FileEdited = True
-        mNewConstraint = Nothing
+            SetCurrentItem(mElement)
+            mFileManager.FileEdited = True
+            mNewConstraint = Nothing
         Else
             Debug.Assert(False, "No item dragged")
         End If

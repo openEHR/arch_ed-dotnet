@@ -16,11 +16,12 @@
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 setlocal EnableDelayedExpansion
-set Version=1.0.1245
+set Version=2.2
+set Revision=0
 
 if /i "%1" == "Release" (
 	for /f "delims=:MS" %%R in ('svnversion') do (
-		set Version=!Version!.%%R
+		set Revision=%%R
 		goto WriteAssemblyVersion
 	)
 
@@ -29,7 +30,7 @@ if /i "%1" == "Release" (
 
 :WriteAssemblyVersion
 	echo ' This file was generated automatically by %~nx0.
-	echo ^<Assembly: System.Reflection.AssemblyVersion^("!Version!"^)^>
+	echo ^<Assembly: System.Reflection.AssemblyVersion^("!Version!.!Revision!.*"^)^>
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::

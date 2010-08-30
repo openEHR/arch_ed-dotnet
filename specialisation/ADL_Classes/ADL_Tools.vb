@@ -13,90 +13,87 @@
 '	last_change: "$LastChangedDate$"
 '
 '
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports EiffelKernel = EiffelSoftware.Library.Base.Kernel
 
 Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Tools
         Inherits ParsingTools
 
-
-        Public Shared Function ProcessReference(ByVal objRef As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF) As RmReference
-            Dim rm As RmReference
-
-            rm = New RmReference
-
+        Public Shared Function ProcessReference(ByVal objRef As AdlParser.ArchetypeInternalRef) As RmReference
+            Dim result As RmReference = New RmReference
 
             ' get the path - this also sets the nodeid of the leaf in ref
             ' populating the references is done at the end in case references appear before their targets
-            rm.Path = objRef.target_path.to_cil
-            rm.Occurrences = SetOccurrences(objRef.occurrences)
-
-            Return rm
-
+            result.Path = objRef.TargetPath.ToCil
+            result.Occurrences = NewOccurrences(objRef.Occurrences)
+            Return result
         End Function
 
-        Public Shared Function SetOccurrences(ByVal cadlOccurrences As openehr.common_libs.basic.INTERVAL_INTEGER_32) As RmCardinality
-            Dim c As New RmCardinality
+        Public Shared Function NewOccurrences(ByVal cadlOccurrences As AdlParser.IntervalInteger_32) As RmCardinality
+            Dim result As New RmCardinality
 
-            If cadlOccurrences.upper_unbounded Then
-                c.IsUnbounded = True
+            If cadlOccurrences.UpperUnbounded Then
+                result.IsUnbounded = True
             Else
-                c.MaxCount = cadlOccurrences.upper
+                result.MaxCount = cadlOccurrences.Upper
             End If
-            If Not cadlOccurrences.lower_unbounded Then
-                c.MinCount = cadlOccurrences.lower
+
+            If Not cadlOccurrences.LowerUnbounded Then
+                result.MinCount = cadlOccurrences.Lower
             End If
-            Return c
+
+            Return result
         End Function
 
-        Public Shared Sub SetCardinality(ByVal cadlCardinality As openehr.openehr.am.archetype.constraint_model.CARDINALITY, ByVal colChildren As Children)
+        Public Shared Sub SetCardinality(ByVal cadlCardinality As AdlParser.Cardinality, ByVal colChildren As Children)
             If cadlCardinality Is Nothing Then Throw New ArgumentNullException("cadlCardinality")
 
-            colChildren.Cardinality = SetOccurrences(cadlCardinality.interval)
-            colChildren.Cardinality.Ordered = cadlCardinality.is_ordered
+            colChildren.Cardinality = NewOccurrences(cadlCardinality.Interval)
+            colChildren.Cardinality.Ordered = cadlCardinality.IsOrdered
         End Sub
 
-        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-        Public Shared Sub SetExistence(ByVal cadlExistence As openehr.common_libs.basic.INTERVAL_INTEGER_32, ByVal colChildren As Children)
+        Public Shared Sub SetExistence(ByVal cadlExistence As AdlParser.IntervalInteger_32, ByVal colChildren As Children)
             Dim existence As New RmExistence
 
-            If cadlExistence.upper_unbounded Then
+            If cadlExistence.UpperUnbounded Then
                 existence.IsUnbounded = True
             Else
-                existence.MaxCount = cadlExistence.upper
+                existence.MaxCount = cadlExistence.Upper
             End If
-            If Not cadlExistence.lower_unbounded Then
-                existence.MinCount = cadlExistence.lower
+
+            If Not cadlExistence.LowerUnbounded Then
+                existence.MinCount = cadlExistence.Lower
             End If
+
             colChildren.Existence = existence
         End Sub
 
-        Public Shared Function ProcessCodes(ByVal Constraint As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE) As CodePhrase
-            Dim cp As New CodePhrase
+        Public Shared Function ProcessCodes(ByVal Constraint As AdlParser.CCodePhrase) As CodePhrase
+            Dim result As New CodePhrase
 
-            For i As Integer = 1 To Constraint.code_count
-                'SRH: 31 May 2008 - Check for repeats
-                Dim s As String = CType(Constraint.code_list.i_th(i), EiffelKernel.STRING_8).to_cil
-                If Not cp.Codes.Contains(s) Then
-                    cp.Codes.Add(s)
+            For i As Integer = 1 To Constraint.CodeCount
+                Dim s As String = CType(Constraint.CodeList.ITh(i), EiffelKernel.String_8).ToCil
+
+                If Not result.Codes.Contains(s) Then
+                    result.Codes.Add(s)
                 End If
             Next
 
-            cp.TerminologyID = Constraint.terminology_id.value.to_cil
-            Return cp
+            result.TerminologyID = Constraint.TerminologyId.Value.ToCil
+            Return result
         End Function
 
-        Public Shared Function GetConstraintFromAssertion(ByVal assert As openehr.openehr.am.archetype.assertion.ASSERTION) As String
-            Select Case assert.expression.generating_type.to_cil
+        Public Shared Function GetConstraintFromAssertion(ByVal assert As AdlParser.Assertion) As String
+            Select Case assert.Expression.GeneratingType.Out.ToCil
                 Case "EXPR_BINARY_OPERATOR"
-                    Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression
+                    Dim expr As AdlParser.ExprBinaryOperator = assert.Expression
 
-                    If expr.left_operand.as_string.to_cil = "archetype_id/value" Then
-                        Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil.Trim("/".ToCharArray())
-                    ElseIf expr.left_operand.as_string.to_cil = "concept" Then 'Obsolete
-                        Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil.Trim("/".ToCharArray())
-                    ElseIf expr.left_operand.as_string.to_cil = "domain_concept" Then 'Obsolete
-                        Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil.Trim("/".ToCharArray())
+                    If expr.LeftOperand.AsString.ToCil = "archetype_id/value" Then
+                        Return CType(expr.RightOperand, AdlParser.ExprLeaf).Out.ToCil.Trim("/".ToCharArray())
+                    ElseIf expr.LeftOperand.AsString.ToCil = "concept" Then 'Obsolete
+                        Return CType(expr.RightOperand, AdlParser.ExprLeaf).Out.ToCil.Trim("/".ToCharArray())
+                    ElseIf expr.LeftOperand.AsString.ToCil = "domain_concept" Then 'Obsolete
+                        Return CType(expr.RightOperand, AdlParser.ExprLeaf).Out.ToCil.Trim("/".ToCharArray())
                     End If
                 Case Else
                     Debug.Assert(False)
@@ -105,34 +102,34 @@ Namespace ArchetypeEditor.ADL_Classes
             Return "????"
         End Function
 
-        Friend Shared Function GetDuration(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As Duration
+        Friend Shared Function GetDuration(ByVal an_attribute As AdlParser.CAttribute) As Duration
             Dim result As New Duration
-            Dim durationObject As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = Nothing
+            Dim durationObject As AdlParser.CPrimitiveObject = Nothing
 
-            If an_attribute.has_children Then
-            Try
-                If TypeOf (an_attribute.children.first) Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
-                    Dim durationAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                    durationAttribute = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).attributes.i_th(1)
-                    durationObject = durationAttribute.children.first
-                Else
-                    'obsolete: C_PRIMITIVE_OBJECT
-                    durationObject = an_attribute.children.first
-                End If
-            Catch
-                Debug.Assert(False, "Error casting to width")
-                Throw New Exception("Parsing error: Duration")
-            End Try
+            If an_attribute.HasChildren Then
+                Try
+                    If TypeOf (an_attribute.Children.First) Is AdlParser.CComplexObject Then
+                        Dim durationAttribute As AdlParser.CAttribute
+                        durationAttribute = CType(an_attribute.Children.First, AdlParser.CComplexObject).Attributes.ITh(1)
+                        durationObject = durationAttribute.Children.First
+                    Else
+                        'obsolete: C_PRIMITIVE_OBJECT
+                        durationObject = an_attribute.Children.First
+                    End If
+                Catch
+                    Debug.Assert(False, "Error casting to width")
+                    Throw New Exception("Parsing error: Duration")
+                End Try
             End If
 
             If Not durationObject Is Nothing Then
-                Dim durationConstraint As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION = CType(durationObject.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
+                Dim durationConstraint As AdlParser.CDuration = CType(durationObject.Item, AdlParser.CDuration)
 
-                If Not durationConstraint.interval Is Nothing Then
+                If Not durationConstraint.Range Is Nothing Then
                     'ToDo: deal with genuine range as now max = min only
-                    result.ISO_duration = CType(durationConstraint.interval.upper, openehr.common_libs.date_time.Impl.ISO8601_DURATION).as_string.to_cil
-                ElseIf Not durationConstraint.pattern Is Nothing Then 'obsolete (error in previous archetypes)
-                    result.ISO_duration = durationConstraint.pattern.to_cil
+                    result.ISO_duration = CType(durationConstraint.Range.Upper, AdlParser.Iso8601Duration).AsString.ToCil
+                ElseIf Not durationConstraint.Pattern Is Nothing Then 'obsolete (error in previous archetypes)
+                    result.ISO_duration = durationConstraint.Pattern.ToCil
                 End If
             End If
 

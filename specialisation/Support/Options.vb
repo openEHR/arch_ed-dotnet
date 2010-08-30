@@ -559,7 +559,6 @@ Public Class Options
         'mRepositoryPath = Path.Combine(Application.StartupPath, "..\Archetypes")
         mRepositoryPath = Path.Combine(Options.AssemblyPath, "..\Archetypes")
         mXmlRepositoryPath = mRepositoryPath
-        mXmlRepositoryPath = mRepositoryPath
         mUserName = ""
         mUserEmail = ""
         ' HKF: 22 Dec 2008

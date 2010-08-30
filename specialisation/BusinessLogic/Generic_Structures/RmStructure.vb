@@ -15,15 +15,17 @@
 '
 
 Option Explicit On 
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Public Enum StructureType
     Not_Set = 0
+    [Structure] = 85
     [Single] = 105
     List = 106
     Tree = 107
     Table = 108
     Columns = 164
+    Item = 673
     Cluster = 313
     Element = 567
 
@@ -36,6 +38,7 @@ Public Enum StructureType
     CarePathwayStep = 563
 
     ENTRY = 559
+    CARE_ENTRY = 674
     EVALUATION = 555
     OBSERVATION = 554
     INSTRUCTION = 557
@@ -67,7 +70,7 @@ Public Class RmStructure
     '  maps to C_OBJECT in ADL
     Protected sNodeId As String
     Protected cOccurrences As New RmCardinality
-    Protected cExistence As New RmExistence 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+    Protected cExistence As New RmExistence
     Protected mRunTimeConstraint As Constraint_Text
     Protected mType As StructureType
     Protected mLinks As New System.Collections.Generic.List(Of RmLink)
@@ -77,6 +80,7 @@ Public Class RmStructure
             Return mType
         End Get
     End Property
+
     Public Property NameConstraint() As Constraint_Text Implements ArcheTypeDefinitionBasic.NameConstraint
         Get
             If mRunTimeConstraint Is Nothing Then
@@ -88,6 +92,7 @@ Public Class RmStructure
             mRunTimeConstraint = Value
         End Set
     End Property
+
     Public Property Links() As System.Collections.Generic.List(Of RmLink) Implements ArcheTypeDefinitionBasic.RootLinks
         Get
             Return mLinks
@@ -96,6 +101,7 @@ Public Class RmStructure
             mLinks = value
         End Set
     End Property
+
     Public Property HasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.hasNameConstraint
         Get
             Return Not mRunTimeConstraint Is Nothing
@@ -110,6 +116,7 @@ Public Class RmStructure
             End If
         End Set
     End Property
+
     Public Property NodeId() As String Implements ArcheTypeDefinitionBasic.RootNodeId
         Get
             Return sNodeId
@@ -118,6 +125,7 @@ Public Class RmStructure
             sNodeId = Value
         End Set
     End Property
+
     Public Property Occurrences() As RmCardinality
         Get
             Return cOccurrences
@@ -127,7 +135,7 @@ Public Class RmStructure
         End Set
     End Property
 
-    Public Property Existence() As RmExistence 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+    Public Property Existence() As RmExistence
         Get
             Return cExistence
         End Get
@@ -142,12 +150,14 @@ Public Class RmStructure
                 Return True
             End If
         Next
+
         Return False
     End Function
 
     Public Overridable Function Copy() As RmStructure
         Dim rm As New RmStructure(sNodeId, mType)
         rm.cOccurrences = Me.cOccurrences.Copy
+
         If Not Me.mRunTimeConstraint Is Nothing Then
             rm.mRunTimeConstraint = Me.mRunTimeConstraint.Copy
         End If
@@ -167,6 +177,7 @@ Public Class RmStructure
         mType = a_RmStructure.mType
         sNodeId = a_RmStructure.sNodeId
         cOccurrences = a_RmStructure.cOccurrences.Copy()
+
         If a_RmStructure.HasNameConstraint Then
             mRunTimeConstraint = a_RmStructure.NameConstraint
         End If
@@ -177,32 +188,40 @@ Public Class RmStructure
         mType = a_structure_type
     End Sub
 
-#Region "ADL and XML oriented features"
+    Sub New(ByVal EIF_Structure As AdlParser.CObject)
+        If EIF_Structure.IsAddressable Then
+            sNodeId = EIF_Structure.NodeId.ToCil
+        End If
 
-    Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
-        sNodeId = EIF_Structure.node_id.to_cil
-        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(EIF_Structure.occurrences)
-        mType = ReferenceModel.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
+        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.NewOccurrences(EIF_Structure.Occurrences)
+        mType = ReferenceModel.StructureTypeFromString(EIF_Structure.RmTypeName.ToCil)
 
-        If EIF_Structure.generating_type.to_cil = "C_COMPLEX_OBJECT" Then
+        If EIF_Structure.GeneratingType.Out.ToCil = "C_COMPLEX_OBJECT" Then
             Dim s As String
+
             ' need to cope with runtime_label
-            If CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("name")) Then
+            If CType(EIF_Structure, AdlParser.CComplexObject).HasAttribute(Eiffel.String("name")) Then
                 s = "name"
-            ElseIf CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("runtime_label")) Then
+            ElseIf CType(EIF_Structure, AdlParser.CComplexObject).HasAttribute(Eiffel.String("runtime_label")) Then
                 'can be removed in the future
                 s = "runtime_label"
             Else
                 Return
             End If
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            attribute = CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil(s))
-            mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+
+            Dim attribute As AdlParser.CAttribute = CType(EIF_Structure, AdlParser.CComplexObject).CAttributeAtPath(Eiffel.String(s))
+
+            If attribute.HasChildren Then
+                mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.Children.First, AdlParser.CComplexObject))
+            End If
         End If
     End Sub
 
     Sub New(ByVal XML_Structure As XMLParser.C_OBJECT)
-        sNodeId = XML_Structure.node_id
+        If Not String.IsNullOrEmpty(XML_Structure.node_id) Then
+            sNodeId = XML_Structure.node_id
+        End If
+
         cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(XML_Structure.occurrences)
         mType = ReferenceModel.StructureTypeFromString(XML_Structure.rm_type_name)
 
@@ -216,8 +235,6 @@ Public Class RmStructure
             End If
         End If
     End Sub
-
-#End Region
 
 End Class
 

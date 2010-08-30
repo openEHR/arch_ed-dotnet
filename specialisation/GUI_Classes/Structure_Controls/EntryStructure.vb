@@ -616,7 +616,7 @@ Public Class EntryStructure
             If a_structure_type = Global.ArchetypeEditor.StructureType.Cluster Then
                 mCardinalityControl.SetMandatory = True
                 mCardinalityControl.IsContainer = True
-        End If
+            End If
 
             AddHandler mCardinalityControl.Cardinality.Updated, AddressOf CardinalityUpdated
         End If
@@ -763,7 +763,7 @@ Public Class EntryStructure
         If a_node Is Nothing OrElse a_node.RM_Class.Type <> StructureType.Element Then
             butRemoveElement.Enabled = False
             butChangeDataType.Hide()
-            Else
+        Else
             butChangeDataType.Enabled = Not CType(a_node, ArchetypeElement).IsReference
             butChangeDataType.Show()
             butRemoveElement.Enabled = True
@@ -974,7 +974,7 @@ Public Class EntryStructure
 
     Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
         If Not mCurrentItem Is Nothing Then
-        mFileManager.FileEdited = True
+            mFileManager.FileEdited = True
         End If
     End Sub
 

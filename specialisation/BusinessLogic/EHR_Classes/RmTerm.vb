@@ -16,8 +16,9 @@
 
 Public Class RmTerm
     Inherits Term
-    Protected sDescription As String 'New String("")
+    Protected sDescription As String
     Protected sComment As String
+    Protected sAnnotations As System.Collections.SortedList
     
     Property Description() As String
         Get
@@ -37,21 +38,25 @@ Public Class RmTerm
         End Set
     End Property
 
+    ReadOnly Property OtherAnnotations() As System.Collections.SortedList
+        Get
+            If sAnnotations Is Nothing Then
+                sAnnotations = New System.Collections.SortedList
+            End If
+
+            Return sAnnotations
+        End Get
+    End Property
+
     ReadOnly Property IsConstraint() As Boolean
         Get
-            Dim s As String
-            ' cannot use toupper or lower safely with internationalisation
+            Dim result As Boolean = False
 
-            If IsValidTermCode(Me.Code) Then
-                s = Me.Code.Substring(0, 2).ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                If s = "at" Then
-                    Return False
-                ElseIf s = "ac" Then
-                    Return True
-                End If
-            Else
-                Debug.Assert(False)
+            If IsValidTermCode(Code) Then
+                result = Code.Substring(0, 2).ToLower(System.Globalization.CultureInfo.InvariantCulture) = "ac"
             End If
+
+            Return result
         End Get
     End Property
 
@@ -60,8 +65,8 @@ Public Class RmTerm
         Return rx.Match(a_term_code).Success()
     End Function
 
-    Sub New(ByVal Code As String)
-        MyBase.New(Code)
+    Sub New(ByVal code As String)
+        MyBase.New(code)
     End Sub
 End Class
 

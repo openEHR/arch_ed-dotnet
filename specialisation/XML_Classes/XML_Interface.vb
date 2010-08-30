@@ -74,59 +74,47 @@ Namespace ArchetypeEditor.XML_Classes
             mXmlParser.ResetAll()
         End Sub
 
-        Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
-            If Me.AvailableFormats.Contains(a_format) Then
-                Try
-                    mArchetype.MakeParseTree()
-                Catch e As Exception
-                    Debug.Assert(False, e.Message)
-                    MessageBox.Show(AE_Constants.Instance.Error_saving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End If
-        End Sub
-
-
-        Public Sub OpenFile(ByVal a_file_name As String, ByVal a_filemanager As FileManagerLocal) Implements Parser.OpenFile
-
+        Public Sub OpenFile(ByVal fileName As String, ByVal fileManager As FileManagerLocal) Implements Parser.OpenFile
             Dim current_culture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CurrentCulture
             Dim replace_culture As Boolean
 
-            mOpenFileError = True  ' default unless all goes wel
-            mFileName = a_file_name
+            mOpenFileError = True  ' default unless all goes well
+            mFileName = fileName
 
-            ' ADDED 2004-11-18
-            ' Sam Heard
             ' This code is essential to ensure that the parser reads regardless of the local culture
-
             If System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator <> "." Then
                 replace_culture = True
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture()
             End If
 
-            mXmlParser.OpenFile(a_file_name)
+            mXmlParser.OpenFile(fileName)
 
-            ' check that file openned successfully by checking status
             If Not mXmlParser.OpenFileError Then
-                Dim the_ontology As XML_Classes.XML_Ontology
-                the_ontology = New XML_Classes.XML_Ontology(mXmlParser)
-                a_filemanager.OntologyManager.Ontology = the_ontology
-                mArchetype = New XML_Archetype(mXmlParser, a_filemanager)
-                If mXmlParser.ArchetypeAvailable Then
-                    mOpenFileError = False
-                End If
+                fileManager.OntologyManager.Ontology = NewOntology()
+                mArchetype = New XML_Archetype(mXmlParser, fileManager)
+                mOpenFileError = mXmlParser.ArchetypeAvailable
             End If
+
             If replace_culture Then
                 System.Threading.Thread.CurrentThread.CurrentCulture = current_culture
             End If
         End Sub
 
-        Public Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal LanguageCode As String) Implements Parser.NewArchetype
+        Public Sub CreateNewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal LanguageCode As String) Implements Parser.CreateNewArchetype
             mArchetype = New XML_Archetype(mXmlParser, an_ArchetypeID, LanguageCode)
         End Sub
 
+        Public Function NewOntology() As Ontology Implements Parser.NewOntology
+            Return New XML_Ontology(mXmlParser)
+        End Function
+
+        Public Function GetCanonicalArchetype() As XMLParser.ARCHETYPE Implements Parser.CanonicalArchetype
+            mArchetype.MakeParseTree()
+            Return mXmlParser.GetCanonicalArchetype()
+        End Function
+
         Public Sub WriteFile(ByVal a_file_name As String, ByVal output_format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
-            'Change from intermediate format to XML
-            ' then make it again
+            'Change from intermediate format to XML then make it again
 
             Debug.Assert(output_format = "xml")
 

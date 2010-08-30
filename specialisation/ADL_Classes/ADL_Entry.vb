@@ -17,50 +17,50 @@
 Option Explicit On 
 Namespace ArchetypeEditor.ADL_Classes
 
-Class ADL_ENTRY
-    Inherits RmEntry
+    Class ADL_ENTRY
+        Inherits RmEntry
 
-    'highest_level that need to be processed
-    ' to discover reference pointers
-    Private highest_level_children As Children
+        'highest_level that need to be processed
+        ' to discover reference pointers
+        Private highest_level_children As Children
 
-    Private Sub ProcessSubjectOfData(ByVal SubjectOfData As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-        Dim ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-        Dim i As Integer
+        Private Sub ProcessSubjectOfData(ByVal SubjectOfData As AdlParser.CAttribute)
+            Dim ComplexObj As AdlParser.CComplexObject
+            Dim attribute As AdlParser.CAttribute
+            Dim i As Integer
 
-        For i = 1 To SubjectOfData.children.count
-            ComplexObj = SubjectOfData.children.i_th(i)
+            For i = 1 To SubjectOfData.Children.Count
+                ComplexObj = SubjectOfData.Children.ITh(i)
 
-                Select Case ComplexObj.rm_type_name.to_cil.ToLowerInvariant()
+                Select Case ComplexObj.RmTypeName.ToCil.ToLowerInvariant()
                     Case "party_related", "related_party" ' related party is obsolete
-                        attribute = ComplexObj.attributes.first  ' get the 'relationship' an_attribute
+                        attribute = ComplexObj.Attributes.First  ' get the 'relationship' an_attribute
 
-                        If attribute.has_children Then
-                            ComplexObj = attribute.children.first  ' CODED_TEXT
-                            attribute = ComplexObj.attributes.first  ' defining_code
-                            rSubjectOfData.Relationship = ADL_Tools.ProcessCodes(attribute.children.first)
+                        If attribute.HasChildren Then
+                            ComplexObj = attribute.Children.First  ' CODED_TEXT
+                            attribute = ComplexObj.Attributes.First  ' defining_code
+                            rSubjectOfData.Relationship = ADL_Tools.ProcessCodes(attribute.Children.First)
                         End If
                 End Select
-        Next
-    End Sub
+            Next
+        End Sub
 
-        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-            MyBase.New(Definition.rm_type_name.to_cil) ' sets the type to OBSERVATION, EVALUATION etc
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        Sub New(ByRef Definition As AdlParser.CComplexObject, ByVal a_filemanager As FileManagerLocal)
+            MyBase.New(Definition.RmTypeName.ToCil) ' sets the type to OBSERVATION, EVALUATION etc
+            Dim attribute As AdlParser.CAttribute
             Dim i As Integer
 
             ' set the root node id - usually the same as the concept
-            mNodeID = Definition.node_id.to_cil
+            mNodeID = Definition.NodeId.ToCil
 
-            For i = 1 To Definition.attributes.count
-                attribute = Definition.attributes.i_th(i)
+            For i = 1 To Definition.Attributes.Count
+                attribute = Definition.Attributes.ITh(i)
 
-                Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant
+                Select Case attribute.RmAttributeName.ToCil.ToLowerInvariant
                     Case "subject"
                         ProcessSubjectOfData(attribute)
                     Case "name", "runtime_label" 'run_time_label is obsolete
-                        mRuntimeConstraint = ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        mRuntimeConstraint = ADL_RmElement.ProcessText(CType(attribute.Children.First, AdlParser.CComplexObject))
                     Case "data"
                         mChildren.Add(New RmStructureCompound(attribute, StructureType.Data, a_filemanager))
                         ' remembers the Processed data off events
@@ -81,7 +81,7 @@ Class ADL_ENTRY
                     Case "links"
                         ' No action as handled for all archetypes
                     Case Else
-                        Debug.Assert(False, String.Format("{0} not handled", attribute.rm_attribute_name.to_cil))
+                        Debug.Assert(False, String.Format("{0} not handled", attribute.RmAttributeName.ToCil))
                 End Select
             Next
             If Not ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure Is Nothing Then

@@ -33,26 +33,22 @@ Public Class ArchetypeView
     End Property
 
     Public Sub BuildInterface(ByVal an_element As ArchetypeElement, _
-            ByVal aContainer As Control, ByRef aLocation As Point, _
-            ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
+            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
 
-        If (mandatory_only And (Not an_element.IsMandatory)) Then
-            Return
+        If Not mandatory_only Or an_element.IsMandatory Then
+            Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT))
+            view.Location = New Point(pos.X, pos.Y)
+            view.Controls.Add(ElementView(an_element, a_filemanager))
+            pos.Y = view.Top + view.Height + spacer
+            aContainer.Controls.Add(view)
         End If
-
-        Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT))
-        view.Location = New Point(aLocation.X, aLocation.Y)
-        view.Controls.Add(ElementView(an_element, a_filemanager))
-        aLocation.Y = view.Top + view.Height + spacer
-        aContainer.Controls.Add(view)
     End Sub
 
-    Public Sub BuildInterface(ByVal Items As Windows.forms.ListView.ListViewItemCollection, _
-            ByVal aContainer As Control, ByRef aLocation As Point, _
-            ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
+    Public Sub BuildInterface(ByVal Items As Windows.Forms.ListView.ListViewItemCollection, _
+            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
 
         Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
-        view.Location = New Point(aLocation.X, aLocation.Y)
+        view.Location = New Point(pos.X, pos.Y)
         view.SuspendLayout()
 
         For Each lvitem As ArchetypeListViewItem In Items
@@ -69,29 +65,27 @@ Public Class ArchetypeView
                     Case Else
                         Debug.Assert(False, "Type not handled")
                 End Select
-
             End If
         Next
 
-        view.ResumeLayout() '(False)
+        view.ResumeLayout()
 
         If view.Controls.Count > 0 Then
             aContainer.Controls.Add(view)
-
-            aContainer.Width = Math.Max(aLocation.X + view.Width + 5, aContainer.Width)
+            aContainer.Width = Math.Max(pos.X + view.Width + 5, aContainer.Width)
 
             If aContainer.Name <> "tpInterface" Then
                 aContainer.Height = Math.Max(view.Top + view.Height + 1, aContainer.Height)
             End If
 
-            aLocation.Y = view.Top + view.Height + spacer
+            pos.Y = view.Top + view.Height + spacer
         End If
     End Sub
 
     Public Sub BuildInterface(ByVal Nodes As TreeNodeCollection, _
-        ByVal aContainer As Control, ByRef Pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
+        ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
 
-        NodesToControls(Nodes, Pos, aContainer, spacer, mandatory_only, a_filemanager)
+        NodesToControls(Nodes, aContainer, pos, spacer, mandatory_only, a_filemanager)
     End Sub
 
     Public Sub BuildInterface(ByVal TableDetails As ArrayList, _
@@ -117,14 +111,14 @@ Public Class ArchetypeView
                 gb.Text = a_filemanager.OntologyManager.GetTerm(t).Text
                 gb.Location = pos
 
-                Dim view As New ViewPanel( _
-                        New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
+                Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
                 view.Location = New Point(Rel_Pos.X, Rel_Pos.Y)
                 view.SuspendLayout()
 
                 For Each d_row As DataRow In archetypeTable.Rows
                     Debug.Assert(TypeOf d_row(2) Is ArchetypeElement)
                     Dim ae As ArchetypeElement = CType(d_row(2), ArchetypeElement)
+
                     If mandatory_only Then
                         If ae.Occurrences.MinCount > 0 Then
                             view.Controls.Add(ElementView(ae, a_filemanager))
@@ -140,46 +134,36 @@ Public Class ArchetypeView
                 gb.Width = Rel_Pos.X + view.Width + 5
                 gb.Height = view.Top + view.Height + 1
 
-                pos.X = pos.X + gb.Width + 5
+                pos.X += gb.Width + 5
                 aContainer.Controls.Add(gb)
             Next
         End If
     End Sub
 
-    Private Function NodesToControls(ByVal NodeCol As TreeNodeCollection, _
-        ByRef aLocation As Point, ByVal aContainer As Control, _
-        ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal) As Integer
+    Private Sub NodesToControls(ByVal NodeCol As TreeNodeCollection, _
+        ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
 
         'Displays the archetype nodes as GUI controls on the Interface TAB
 
-        Dim view As New ViewPanel( _
-        New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
-        view.Location = New Point(aLocation.X, aLocation.Y)
+        Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
+        view.Location = New Point(pos.X, pos.Y)
         view.SuspendLayout()
 
         For Each tvNode As ArchetypeTreeNode In NodeCol
-
-            If ((tvNode.Item.IsMandatory) Or (Not mandatory_only)) Then
-
+            If tvNode.Item.IsMandatory Or Not mandatory_only Then
                 Select Case tvNode.Item.RM_Class.Type
                     Case StructureType.Cluster
                         Dim ctrl As New Panel
-                        ctrl.Location = aLocation
+                        ctrl.Location = pos
 
+                        Dim rel_pos As New Point(0, 20)
                         Dim lbl As New Label
                         lbl.Width = 150
                         lbl.Height = 20
                         lbl.Text = tvNode.Text
-                        If lbl.Text.Length > 20 Then
-                            lbl.AutoSize = True
-                        End If
-
-                        Dim rel_pos As New Point(0, 20)
-
+                        lbl.AutoSize = lbl.Text.Length > 20
                         lbl.Location = rel_pos
                         lbl.BorderStyle = BorderStyle.FixedSingle
-
-                        ' cardinality as a tooltip
                         ToolTip1.SetToolTip(lbl, tvNode.Item.Occurrences.ToString)
 
                         'bold if must exist
@@ -188,7 +172,6 @@ Public Class ArchetypeView
                         End If
 
                         ctrl.Controls.Add(lbl)
-
                         lbl.BackColor = System.Drawing.Color.CornflowerBlue
 
                         If Not tvNode.Item.IsAnonymous AndAlso CType(tvNode.Item, ArchetypeNodeAbstract).RuntimeNameText <> "" Then
@@ -207,16 +190,12 @@ Public Class ArchetypeView
                             ctrl.Width = 300
                         End If
 
-
                         rel_pos.X = 20
                         rel_pos.Y = 40
-
-                        NodesToControls(tvNode.Nodes, rel_pos, ctrl, spacer, mandatory_only, a_filemanager)
-
+                        NodesToControls(tvNode.Nodes, ctrl, rel_pos, spacer, mandatory_only, a_filemanager)
                         view.Controls.Add(ctrl)
 
                     Case StructureType.Element, StructureType.Reference
-
                         view.Controls.Add(ElementView(CType(tvNode.Item, ArchetypeElement), a_filemanager))
 
                     Case StructureType.Slot
@@ -225,37 +204,32 @@ Public Class ArchetypeView
                         newPanel.Size = New Size(150, 25)
                         Dim lbl As New Label
                         lbl.Text = Filemanager.GetOpenEhrTerm(312, "Slot") & ": " & tvNode.Text
-
                         newPanel.Controls.Add(lbl)
-
                         view.Controls.Add(newPanel)
 
                     Case Else
                         Beep()
                         Debug.Assert(False)
-
-
                 End Select
             End If
         Next
 
-        view.ResumeLayout() '(False)
+        view.ResumeLayout()
 
         If view.Controls.Count > 0 Then
             aContainer.Controls.Add(view)
-
-            aContainer.Width = Math.Max(aLocation.X + view.Width + 5, aContainer.Width)
+            aContainer.Width = Math.Max(pos.X + view.Width + 5, aContainer.Width)
 
             If aContainer.Name <> "tpInterface" Then
                 aContainer.Height = Math.Max(view.Top + view.Height + 1, aContainer.Height)
             End If
 
-            aLocation.Y = view.Top + view.Height + spacer
+            pos.Y = view.Top + view.Height + spacer
         End If
-    End Function
+    End Sub
 
     Public Shared Function ElementView(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
-        'any additions need to be processed in the overloaded function below
+        'any additions need to be processed in the function below
         Dim t As ConstraintType
 
         If Not anElement Is Nothing AndAlso Not anElement.Constraint Is Nothing Then
@@ -290,6 +264,9 @@ Public Class ArchetypeView
             Case ConstraintType.URI
                 Return New URIViewControl(anElement, a_filemanager)
 
+            Case ConstraintType.Identifier
+                Return New IdentifierViewControl(anElement, a_filemanager)
+
             Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
                 Return New IntervalViewControl(anElement, a_filemanager)
 
@@ -304,8 +281,8 @@ Public Class ArchetypeView
         End Select
     End Function
 
-    Public Shared Function ElementView(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
-        'any additions need to be processed in the overloaded function above
+    Public Shared Function ConstraintView(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
+        'any additions need to be processed in the function above
         Dim t As ConstraintType
 
         If Not aConstraint Is Nothing Then
@@ -340,7 +317,10 @@ Public Class ArchetypeView
             Case ConstraintType.URI
                 Return New URIViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity
+            Case ConstraintType.Identifier
+                Return New IdentifierViewControl(aConstraint, a_filemanager)
+
+            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
                 Return New IntervalViewControl(aConstraint, a_filemanager)
 
             Case ConstraintType.Proportion
@@ -354,11 +334,6 @@ Public Class ArchetypeView
         End Select
     End Function
 
-    'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
-    Protected Sub Dispose(ByVal disposing As Boolean)
-        mInstance = Nothing
-        ToolTip1 = Nothing
-    End Sub
 End Class
 
 '

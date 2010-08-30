@@ -33,7 +33,6 @@ Partial Class ChooseType
         Me.listType.ItemHeight = 15
         Me.listType.Location = New System.Drawing.Point(4, 5)
         Me.listType.Margin = New System.Windows.Forms.Padding(2)
-        Me.listType.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.listType.Name = "listType"
         Me.listType.Size = New System.Drawing.Size(206, 64)
         Me.listType.TabIndex = 0

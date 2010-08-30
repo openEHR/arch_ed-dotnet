@@ -25,23 +25,23 @@ Public Class RmExistence
     Private mIncludeLower As Boolean = True
     Private mIsDefault As Boolean = False
 
-    'Private sCount As String
-
     Public Property MaxCount() As Integer
         Get
             Return mMaxCount
         End Get
         Set(ByVal Value As Integer)
             mUnbounded = False
+
             If Value <> mMaxCount Then
                 If Value >= 1 Then
                     mMaxCount = Value
+
                     If Value < mMinCount Then
                         mMinCount = Value
                     End If
-                    'setCount()
                 End If
             End If
+
             mIsDefault = False
         End Set
     End Property
@@ -60,12 +60,14 @@ Public Class RmExistence
             If Value <> mMinCount Then
                 If Value >= 0 Then
                     mMinCount = Value
+
                     If Value > mMaxCount Then
                         mMaxCount = Value
                     End If
                     'setCount()
                 End If
             End If
+
             mIsDefault = False
         End Set
     End Property
@@ -76,13 +78,14 @@ Public Class RmExistence
         End Get
         Set(ByVal Value As Boolean)
             mUnbounded = Value
+
             If Not mUnbounded Then
                 If mMinCount > mMaxCount Then
                     mMaxCount = mMinCount
                 End If
             End If
+
             mIsDefault = False
-            'setCount()
         End Set
     End Property
 
@@ -115,33 +118,27 @@ Public Class RmExistence
     End Function
 
     Public Overrides Function ToString() As String
-
         Dim max As String = "*"
+
         If Not mUnbounded Then
-            '    max = "*"
-            'Else
             max = mMaxCount.ToString
         End If
 
         Return mMinCount.ToString & ".." & max
-
     End Function
 
-    Public Sub SetFromOpenEHRExistence(ByVal a_existence As openehr.common_libs.basic.INTERVAL_INTEGER_32)
-        If a_existence Is Nothing Then
-            Debug.Assert(True)
+    Public Sub SetFromOpenEHRExistence(ByVal existence As AdlParser.IntervalInteger_32)
+        If Not existence Is Nothing Then
+            If existence.UpperUnbounded Then
+                mUnbounded = True
+            Else
+                mUnbounded = False
+                mMaxCount = existence.Upper
+            End If
+
+            mMinCount = existence.Lower
+            mIsDefault = False
         End If
-
-        If a_existence.upper_unbounded Then
-            mUnbounded = True
-        Else
-            mUnbounded = False
-            mMaxCount = a_existence.upper
-        End If
-        mMinCount = a_existence.lower
-
-        mIsDefault = False
-
     End Sub
 
     Public ReadOnly Property XmlExistence() As XMLParser.IntervalOfInteger
@@ -152,17 +149,17 @@ Public Class RmExistence
 
             If IsUnbounded Then
                 an_interval.lower_included = IncludeLower
-                an_interval.lower_includedSpecified = True 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                an_interval.lower_includedSpecified = True
                 an_interval.lower = MinCount
                 an_interval.lowerSpecified = IncludeLower
             Else
                 an_interval.lower_included = IncludeLower
-                an_interval.lower_includedSpecified = True 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                an_interval.lower_includedSpecified = True
                 an_interval.lower = MinCount
                 an_interval.lowerSpecified = IncludeLower
 
                 an_interval.upper_included = IncludeUpper
-                an_interval.upper_includedSpecified = True 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                an_interval.upper_includedSpecified = True
                 an_interval.upper = MaxCount
                 an_interval.upperSpecified = IncludeUpper
             End If
@@ -172,8 +169,6 @@ Public Class RmExistence
     End Property
 
     Public Sub SetFromXmlExistence(ByVal a_existence As XMLParser.IntervalOfInteger)
-
-        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
         If a_existence Is Nothing Then
             a_existence = New XMLParser.IntervalOfInteger
         End If
@@ -184,8 +179,8 @@ Public Class RmExistence
         Else
             mUnbounded = True
         End If
-        mMinCount = a_existence.lower
 
+        mMinCount = a_existence.lower
         mIsDefault = False
     End Sub
 
@@ -219,7 +214,6 @@ Public Class RmExistence
     Sub New(ByVal lower As Integer)
         mMinCount = lower
         mMaxCount = 1
-        '        mUnbounded = True
     End Sub
 
     Sub New()

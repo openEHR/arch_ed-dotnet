@@ -16,11 +16,10 @@
 
 Option Strict On
 
-Public Class ViewPanel : Inherits Panel 'Windows.Forms.ContainerControl
+Public Class ViewPanel : Inherits Panel
 
-    Public Sub New(ByVal aLayoutManager As LayoutManager)
+    Public Sub New(ByVal aLayoutManager As ColumnLayout)
         Me.New()
-
         mLayoutManager = aLayoutManager
     End Sub
 
@@ -33,76 +32,51 @@ Public Class ViewPanel : Inherits Panel 'Windows.Forms.ContainerControl
 #Else
         mInsets = New Insets(1, 1, 1, 1)
 #End If
-
     End Sub
 
+    Private mLayoutManager As ColumnLayout
 
-    Private mLayoutManager As LayoutManager
-    Public Property LayoutManager() As LayoutManager
+    Public Property LayoutManager() As ColumnLayout
         Get
             Return mLayoutManager
         End Get
-        Set(ByVal Value As LayoutManager)
+        Set(ByVal Value As ColumnLayout)
             mLayoutManager = Value
         End Set
     End Property
 
     Private mInsets As Insets
+
     Public ReadOnly Property Insets() As Insets
         Get
             Return mInsets
         End Get
     End Property
 
-    ''Public Sub Add(ByVal aName As String, ByVal aControl As Control)
-    'Public Sub Add(ByVal aControl As Control)
-    '    'If Not mLayoutManager Is Nothing Then
-    '    '    'mLayoutManager.AddLayoutComponent(aName, aControl)
-    '    '    mLayoutManager.AddLayoutComponent(aControl)
-    '    'End If
-
-    '    Me.Controls.Add(aControl)
-    'End Sub
-
     Public Function LayoutSize() As System.Drawing.Size
-        If Not mLayoutManager Is Nothing Then
-            Return mLayoutManager.LayoutSize(Me)
+        If mLayoutManager Is Nothing Then
+            Return Size
         Else
-            Return Me.Size
+            Return mLayoutManager.LayoutSize(Me)
         End If
     End Function
 
-    'Public Sub ClearControls()
-    '    Controls.Clear()
-    '    mInitialised = False
-    'End Sub
-
     Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
-        'If Not mInitialised Then
-        '    mInitialised = True
-        '    OnLayout(e)
-        'End If
         MyBase.OnPaint(e)
 
 #If PaintBoundary Then
-        Dim g As Graphics = e.Graphics
-        g.DrawRectangle(New Pen(Color.Red), 0, 0, Size.Width - 1, Size.Height - 1)
+        e.Graphics.DrawRectangle(New Pen(Color.Red), 0, 0, Size.Width - 1, Size.Height - 1)
 #End If
     End Sub
 
-    Protected Overrides Sub OnLayout(ByVal levent As System.Windows.Forms.LayoutEventArgs)
+    Protected Overrides Sub OnLayout(ByVal e As System.Windows.Forms.LayoutEventArgs)
+        MyBase.OnLayout(e)
+
         If Not mLayoutManager Is Nothing Then
             mLayoutManager.LayoutContainer(Me)
-            'Application.DoEvents()
         End If
     End Sub
 
-
-    'Private Shadows ReadOnly Property Controls() As ControlCollection
-    '    Get
-    '        Return MyBase.Controls
-    '    End Get
-    'End Property
 End Class
 
 Public Structure Insets

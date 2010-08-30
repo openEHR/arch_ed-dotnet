@@ -26,8 +26,8 @@ Public Class RmCardinality
     Private mOrdered As Boolean = False
     Private mIsDefault As Boolean = False
 
-
-    'Private sCount As String
+    Public Event Updated As CardinalityUpdatedEventHandler
+    Public Delegate Sub CardinalityUpdatedEventHandler(ByVal sender As Object, ByVal e As EventArgs)
 
     Public Property MaxCount() As Integer
         Get
@@ -35,23 +35,30 @@ Public Class RmCardinality
         End Get
         Set(ByVal Value As Integer)
             mUnbounded = False
+
             If Value <> mMaxCount Then
                 If Value >= 1 Then
                     mMaxCount = Value
+
                     If Value < mMinCount Then
                         mMinCount = Value
                     End If
-                    'setCount()
                 End If
+
+                'SRH: 11 Jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
             End If
+
             mIsDefault = False
         End Set
     End Property
+
     Public ReadOnly Property IsDefault() As Boolean
         Get
             Return mIsDefault
         End Get
     End Property
+
     Public Property MinCount() As Integer
         Get
             Return mMinCount
@@ -60,12 +67,16 @@ Public Class RmCardinality
             If Value <> mMinCount Then
                 If Value >= 0 Then
                     mMinCount = Value
+
                     If Value > mMaxCount Then
                         mMaxCount = Value
                     End If
-                    'setCount()
                 End If
+
+                'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
             End If
+
             mIsDefault = False
         End Set
     End Property
@@ -75,14 +86,20 @@ Public Class RmCardinality
             Return mUnbounded
         End Get
         Set(ByVal Value As Boolean)
-            mUnbounded = Value
-            If Not mUnbounded Then
-                If mMinCount > mMaxCount Then
-                    mMaxCount = mMinCount
+            If mUnbounded <> Value Then
+                mUnbounded = Value
+
+                If Not mUnbounded Then
+                    If mMinCount > mMaxCount Then
+                        mMaxCount = mMinCount
+                    End If
                 End If
+
+                mIsDefault = False
+
+                'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
             End If
-            mIsDefault = False
-            'setCount()
         End Set
     End Property
 
@@ -95,8 +112,13 @@ Public Class RmCardinality
             End If
         End Get
         Set(ByVal Value As Boolean)
-            mIncludeUpper = Value
-            mIsDefault = False
+            If mIncludeUpper <> Value Then
+                mIncludeUpper = Value
+                mIsDefault = False
+
+                'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
+            End If
         End Set
     End Property
 
@@ -105,10 +127,16 @@ Public Class RmCardinality
             Return mIncludeLower
         End Get
         Set(ByVal Value As Boolean)
-            mIncludeLower = Value
-            mIsDefault = False
+            If mIncludeLower <> Value Then
+                mIncludeLower = Value
+                mIsDefault = False
+
+                'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
+                RaiseEvent Updated(Me, New EventArgs)
+            End If
         End Set
     End Property
+
     Public Property Ordered() As Boolean
         Get
             Return mOrdered
@@ -118,65 +146,53 @@ Public Class RmCardinality
             mIsDefault = False
         End Set
     End Property
+
     Public Function Copy() As RmCardinality
         Return New RmCardinality(Me)
     End Function
 
     Public Overrides Function ToString() As String
-
         Dim max As String = "*"
+
         If Not mUnbounded Then
-            '    max = "*"
-            'Else
             max = mMaxCount.ToString
         End If
 
         Return mMinCount.ToString & ".." & max
-
     End Function
 
-    Public Sub SetFromOpenEHRCardinality(ByVal a_cardinality As openehr.openehr.am.archetype.constraint_model.CARDINALITY)
-        If a_cardinality.interval.upper_unbounded Then
-            mUnbounded = True
-        Else
-            mUnbounded = False
-            mMaxCount = a_cardinality.interval.upper
+    Public Sub SetFromOpenEHRCardinality(ByVal cardinality As AdlParser.Cardinality)
+        If Not cardinality Is Nothing Then
+            If cardinality.Interval.UpperUnbounded Then
+                mUnbounded = True
+            Else
+                mUnbounded = False
+                mMaxCount = cardinality.Interval.Upper
+            End If
+
+            mMinCount = cardinality.Interval.Lower
+            mOrdered = cardinality.IsOrdered
+            mIsDefault = False
         End If
-        mMinCount = a_cardinality.interval.lower
-
-        mOrdered = a_cardinality.is_ordered
-
-        mIsDefault = False
-
     End Sub
 
-    Public Sub SetFromXmlCardinality(ByVal a_cardinality As XMLParser.CARDINALITY)
+    Public Sub SetFromXmlCardinality(ByVal cardinality As XMLParser.CARDINALITY)
+        If Not cardinality Is Nothing Then
+            If cardinality.interval.upperSpecified Then
+                mUnbounded = False
+                mMaxCount = cardinality.interval.upper
+            Else
+                mUnbounded = True
+            End If
 
-        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-        If a_cardinality.interval.upperSpecified = True Then
-            mUnbounded = False
-            mMaxCount = a_cardinality.interval.upper
-        Else
-            mUnbounded = True
+            mMinCount = cardinality.interval.lower
+            mOrdered = cardinality.is_ordered
+            mIsDefault = False
         End If
-        mMinCount = a_cardinality.interval.lower
-
-        'If a_cardinality.interval.maximum <> "" Then
-        '    mUnbounded = False
-        '    mMaxCount = CInt(a_cardinality.interval.maximum)
-        'Else
-        '    mUnbounded = True
-        'End If
-        'mMinCount = CInt(a_cardinality.interval.minimum)
-
-        mOrdered = a_cardinality.is_ordered
-
-        mIsDefault = False
     End Sub
 
     Public Sub SetFromString(ByVal a_string As String)
-        'Format is n..* or n..n
-        ' or n (= n..n)
+        'Format is n..* or n..n or n (= n..n)
 
         Dim i As Integer = a_string.IndexOf("..")
 
@@ -187,11 +203,13 @@ Public Class RmCardinality
                 mUnbounded = False
                 mMaxCount = Integer.Parse(a_string.Substring(a_string.LastIndexOf(".") + 1))
             End If
+
             mMinCount = Integer.Parse(a_string.Substring(0, a_string.IndexOf(".")))
         Else
             mMinCount = Integer.Parse(a_string)
             mMaxCount = Integer.Parse(a_string)
         End If
+
         mIsDefault = False
     End Sub
 
@@ -210,18 +228,18 @@ Public Class RmCardinality
 
     Sub New()
         'default is 0..1
-        mMaxCount = 1
         mMinCount = 0
+        mMaxCount = 1
         mUnbounded = False
         mIsDefault = True
     End Sub
 
-    Sub New(ByVal aCount As RmCardinality)
-        mUnbounded = aCount.IsUnbounded
-        mMaxCount = aCount.MaxCount
-        mMinCount = aCount.MinCount
-        mIncludeLower = aCount.IncludeLower
-        mIncludeUpper = aCount.IncludeUpper
+    Sub New(ByVal other As RmCardinality)
+        mMinCount = other.MinCount
+        mMaxCount = other.MaxCount
+        mUnbounded = other.IsUnbounded
+        mIncludeLower = other.IncludeLower
+        mIncludeUpper = other.IncludeUpper
     End Sub
 
 End Class

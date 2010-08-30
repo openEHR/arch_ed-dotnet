@@ -30,6 +30,16 @@ Public MustInherit Class RmChildren
 
     Public Property Cardinality() As RmCardinality
         Get
+            'SRH: 11 Jan 2009 - EDT-502 - added check for cardinality to be set to minimum
+            Dim minCardinalityCount As Integer = 0
+            For Each child As RmStructure In Me.List
+                If Not TypeOf child Is RmReference AndAlso child.Occurrences.MinCount > 0 Then
+                    minCardinalityCount += child.Occurrences.MinCount
+                End If
+            Next
+            If mCardinality.MinCount < minCardinalityCount Then
+                mCardinality.MinCount = minCardinalityCount
+            End If
             Return mCardinality
         End Get
         Set(ByVal Value As RmCardinality)
@@ -39,6 +49,28 @@ Public MustInherit Class RmChildren
 
     Public Property Existence() As RmExistence 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
         Get
+            ' HKF: Revert EDT-502 - allowing this to remain as 1..1 results in a null statement about existence in the ADL but results in incorrect XML, which must be ignored 
+            'SRH: 11 Jan 2009 - EDT-502 - added check for existence to be mandatory if contains any mandatory children (only relevant for structures as protocol or state)
+            'Try
+            '    If mExistence.MinCount = 0 Then
+            '        For Each child As RmStructure In Me.List
+            '            If TypeOf child Is RmStructureCompound Then
+            '                If CType(child, RmStructureCompound).Children.Cardinality.MinCount > 0 Then
+            '                    mExistence.MinCount = 1
+            '                    Exit For
+            '                End If
+            '            Else ' a slot
+            '                If child.Occurrences.MinCount > 0 Then
+            '                    mExistence.MinCount = 1
+            '                    Exit For
+            '                End If
+            '            End If
+
+            '        Next
+            '    End If
+            'Catch
+            '    Debug.Assert(False, "Error in setting existence")
+            'End Try
             Return mExistence
         End Get
         Set(ByVal value As RmExistence)
@@ -131,13 +163,10 @@ Public Class Children
         Next
 
         Return child
-
     End Function
 
     Public Shadows Sub Add(ByVal an_RM_Structure As RmStructure)
-        'SRH: 24.9.2007 - handles this condition of null child so remove test
-        'Debug.Assert(Not an_RM_Structure Is Nothing)
-        If (Not an_RM_Structure Is Nothing) AndAlso ReferenceModel.IsValidChild(mParentStructureType, an_RM_Structure.Type) Then
+        If an_RM_Structure IsNot Nothing AndAlso ReferenceModel.IsValidChild(mParentStructureType, an_RM_Structure.Type) Then
             'Is valid child traps post condition of false as should not arise
             MyBase.List.Add(an_RM_Structure)
         End If
@@ -145,7 +174,20 @@ Public Class Children
 
     Sub New(ByVal ParentStructureType As StructureType)
         mParentStructureType = ParentStructureType
+
+        ' HKF: Revert EDT-502 - allowing this to remain as 1..1 results in a null statement about existence in the ADL but results in incorrect XML, which must be ignored 
+        ''SRH: 11 Jan 2009 - EDT-502 - added check for existence to be mandatory if contains any mandatory children (only relevant for structures as protocol or state)
+        'If ParentStructureType = StructureType.Protocol Or ParentStructureType = StructureType.State Then
+        '    Me.Existence.MinCount = 0
+        'End If
+        If ParentStructureType = StructureType.Cluster Then
+            'Default to 1..*
+            If Cardinality.MinCount < 1 Then
+                Cardinality.MinCount = 1
+            End If
+        End If
     End Sub
+
 End Class
 
 

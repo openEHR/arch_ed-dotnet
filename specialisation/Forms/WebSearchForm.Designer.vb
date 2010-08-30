@@ -43,10 +43,9 @@ Partial Class WebSearchForm
         Me.txtTerm.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtTerm.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtTerm.Location = New System.Drawing.Point(105, 23)
-        Me.txtTerm.Margin = New System.Windows.Forms.Padding(4)
+        Me.txtTerm.Location = New System.Drawing.Point(79, 19)
         Me.txtTerm.Name = "txtTerm"
-        Me.txtTerm.Size = New System.Drawing.Size(680, 24)
+        Me.txtTerm.Size = New System.Drawing.Size(512, 21)
         Me.txtTerm.TabIndex = 1
         '
         'btnSearch
@@ -57,7 +56,7 @@ Partial Class WebSearchForm
         Me.btnSearch.Image = CType(resources.GetObject("btnSearch.Image"), System.Drawing.Image)
         Me.btnSearch.Location = New System.Drawing.Point(519, 45)
         Me.btnSearch.Name = "btnSearch"
-        Me.btnSearch.Size = New System.Drawing.Size(97, 32)
+        Me.btnSearch.Size = New System.Drawing.Size(73, 26)
         Me.btnSearch.TabIndex = 3
         Me.btnSearch.Text = "Search"
         Me.btnSearch.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText
@@ -72,7 +71,7 @@ Partial Class WebSearchForm
         Me.lblNum.Location = New System.Drawing.Point(577, 72)
         Me.lblNum.Margin = New System.Windows.Forms.Padding(3, 3, 3, 3)
         Me.lblNum.Name = "lblNum"
-        Me.lblNum.Size = New System.Drawing.Size(16, 18)
+        Me.lblNum.Size = New System.Drawing.Size(14, 15)
         Me.lblNum.TabIndex = 7
         Me.lblNum.Text = "0"
         Me.lblNum.TextAlign = System.Drawing.ContentAlignment.TopRight
@@ -83,10 +82,9 @@ Partial Class WebSearchForm
         Me.img_globe.BackColor = System.Drawing.Color.LightSteelBlue
         Me.img_globe.Image = CType(resources.GetObject("img_globe.Image"), System.Drawing.Image)
         Me.img_globe.InitialImage = Nothing
-        Me.img_globe.Location = New System.Drawing.Point(7, 21)
-        Me.img_globe.Margin = New System.Windows.Forms.Padding(4)
+        Me.img_globe.Location = New System.Drawing.Point(5, 17)
         Me.img_globe.Name = "img_globe"
-        Me.img_globe.Size = New System.Drawing.Size(91, 85)
+        Me.img_globe.Size = New System.Drawing.Size(68, 69)
         Me.img_globe.TabIndex = 10
         Me.img_globe.TabStop = False
         '
@@ -115,7 +113,7 @@ Partial Class WebSearchForm
         Me.comboSearch.Location = New System.Drawing.Point(79, 48)
         Me.comboSearch.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.comboSearch.Name = "comboSearch"
-        Me.comboSearch.Size = New System.Drawing.Size(209, 24)
+        Me.comboSearch.Size = New System.Drawing.Size(158, 21)
         Me.comboSearch.TabIndex = 2
         Me.comboSearch.Text = "All"
         '
@@ -129,7 +127,7 @@ Partial Class WebSearchForm
         Me.listViewArchetypes.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.listViewArchetypes.MultiSelect = False
         Me.listViewArchetypes.Name = "listViewArchetypes"
-        Me.listViewArchetypes.Size = New System.Drawing.Size(798, 340)
+        Me.listViewArchetypes.Size = New System.Drawing.Size(599, 276)
         Me.listViewArchetypes.SmallImageList = Me.ImageListArchetypes
         Me.listViewArchetypes.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.listViewArchetypes.TabIndex = 4
@@ -155,7 +153,7 @@ Partial Class WebSearchForm
         Me.butOK.Location = New System.Drawing.Point(456, 8)
         Me.butOK.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(83, 28)
+        Me.butOK.Size = New System.Drawing.Size(62, 23)
         Me.butOK.TabIndex = 5
         Me.butOK.Text = "OK"
         Me.butOK.UseVisualStyleBackColor = True
@@ -167,7 +165,7 @@ Partial Class WebSearchForm
         Me.butCancel.Location = New System.Drawing.Point(523, 8)
         Me.butCancel.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(83, 28)
+        Me.butCancel.Size = New System.Drawing.Size(62, 23)
         Me.butCancel.TabIndex = 6
         Me.butCancel.Text = "Cancel"
         Me.butCancel.UseVisualStyleBackColor = True
@@ -181,7 +179,7 @@ Partial Class WebSearchForm
         Me.PanelBottom.Location = New System.Drawing.Point(2, 372)
         Me.PanelBottom.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.PanelBottom.Name = "PanelBottom"
-        Me.PanelBottom.Size = New System.Drawing.Size(798, 46)
+        Me.PanelBottom.Size = New System.Drawing.Size(599, 37)
         Me.PanelBottom.TabIndex = 16
         '
         'ProgressBar1
@@ -192,7 +190,7 @@ Partial Class WebSearchForm
         Me.ProgressBar1.Location = New System.Drawing.Point(10, 10)
         Me.ProgressBar1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.ProgressBar1.Name = "ProgressBar1"
-        Me.ProgressBar1.Size = New System.Drawing.Size(572, 20)
+        Me.ProgressBar1.Size = New System.Drawing.Size(430, 16)
         Me.ProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee
         Me.ProgressBar1.TabIndex = 7
         Me.ProgressBar1.Value = 30
@@ -201,11 +199,11 @@ Partial Class WebSearchForm
         'WebSearchForm
         '
         Me.AcceptButton = Me.btnSearch
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.LightSteelBlue
         Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(804, 506)
+        Me.ClientSize = New System.Drawing.Size(603, 411)
         Me.ControlBox = False
         Me.Controls.Add(Me.listViewArchetypes)
         Me.Controls.Add(Me.PanelBottom)

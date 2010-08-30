@@ -37,7 +37,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
             If TypeOf (mArchetypeNode) Is ArchetypeSlot Then
                 MyBase.Text = mArchetypeNode.Text
             Else
-            MyBase.Text = Value
+                MyBase.Text = Value
             End If
         End Set
     End Property
@@ -222,7 +222,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
             MyBase.Text = mArchetypeNode.Text
         Else
             MyBase.Text = a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(a_slot.SlotConstraint.RM_ClassType), a_slot.SlotConstraint.RM_ClassType.ToString)
-        mArchetypeNode = New ArchetypeNodeAnonymous(a_slot)
+            mArchetypeNode = New ArchetypeNodeAnonymous(a_slot)
         End If
 
         'MyBase.New(a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(a_slot.SlotConstraint.RM_ClassType), a_slot.SlotConstraint.RM_ClassType.ToString))

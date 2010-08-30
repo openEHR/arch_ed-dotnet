@@ -29,16 +29,19 @@ Public Class ArchetypeID
             Return mRmModel
         End Get
     End Property
+
     ReadOnly Property VersionAsString() As String
         Get
             Return mVersion
         End Get
     End Property
+
     ReadOnly Property Version() As Double
         Get
             Return Val(Mid(mVersion, 2))
         End Get
     End Property
+
     Property Concept() As String
         Get
             Return mConcept
@@ -49,6 +52,7 @@ Public Class ArchetypeID
             RaiseEvent ArchetypeID_Changed(Me, New EventArgs)
         End Set
     End Property
+
     ReadOnly Property ReferenceModelEntity() As StructureType
         Get
             Return mRmEntity
@@ -74,12 +78,11 @@ Public Class ArchetypeID
         Return rgx.Match(value).Success
     End Function
 
-    Private Sub ProcessStringValue(ByVal Value As String)
-        Dim y() As String
-        mArchetypeID = Value
+    Private Sub ProcessStringValue(ByVal value As String)
+        mArchetypeID = value
         'pattern
         'authority-model-entity.concept.version[.detail]
-        y = Value.Split(".")
+        Dim y() As String = value.Split(".")
         Debug.Assert(y.Length > 2)
         mConcept = y(1)
         mVersion = y(2)
@@ -97,10 +100,10 @@ Public Class ArchetypeID
 
         If result <> "" Then
             'convert illegal characters
-            'SRH 15 Nov 2007 - comment out replace of hyphen as legal in specialisations
             If replaceHyphen Then
                 result = result.Replace("-", "_")
             End If
+
             result = result.Replace(" ", "_")
             result = result.Replace(".", "_")
             result = result.Replace("&", "_and_")
@@ -123,9 +126,10 @@ Public Class ArchetypeID
         Return result
     End Function
 
-    Sub New(ByVal Value As String)
-        ProcessStringValue(Value)
+    Sub New(ByVal value As String)
+        ProcessStringValue(value)
     End Sub
+
 End Class
 
 '

@@ -42,7 +42,7 @@ Public Class Designer
     Private mDataViewConstraintBindings As DataView
     Private mDataViewTerminologies As DataView
     Private mFindString As String = ""
-    Private mFileManager As FileManagerLocal    
+    Private mFileManager As FileManagerLocal
     Friend WithEvents mRichTextArchetype As ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
     Friend WithEvents mTermBindingPanel As TermBindingPanel
     Friend WithEvents menuFileExport As System.Windows.Forms.MenuItem
@@ -1910,7 +1910,7 @@ Public Class Designer
         If Not mFileManager.OpenArchetype(a_file_name) Then
             MessageBox.Show(mFileManager.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Cursor = System.Windows.Forms.Cursors.Default
-            mFileManager.ParserReset()
+            mFileManager.ResetParser()
             mFileManager.FileLoading = False
             mFileManager.FileEdited = previousEditedState
             Exit Sub            ' FIXME: Spaghetti code!
@@ -1928,7 +1928,6 @@ Public Class Designer
         Filemanager.ClearEmbedded()
 
         mFileManager.IsNew = False
-
 
         ' stop the handler while we get all the languages
         RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
@@ -2236,7 +2235,7 @@ Public Class Designer
             End If
         ElseIf Filemanager.SaveFiles(False) Then
             MenuFileSpecialise.Visible = True
-            End If
+        End If
 
         lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
     End Sub
@@ -3006,12 +3005,12 @@ Public Class Designer
                 Me.mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
             End If
             Try
-            Filemanager.AutoFileSave()
+                Filemanager.AutoFileSave()
             Catch ex As Exception
                 Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
                 If Not ex.InnerException Is Nothing Then
                     errorMessage &= vbCrLf & ex.InnerException.Message
-        End If
+                End If
                 MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End Try
         End If
@@ -3490,14 +3489,14 @@ Public Class Designer
         If Not AllowOpen Or Not OceanArchetypeEditor.Instance.Options.AllowWebSearch Then
             frm.gbArchetypeFromWeb.Hide()
             frm.Height -= frm.gbArchetypeFromWeb.Height + 18
-            End If
+        End If
 
         i = frm.ShowDialog(Me)
 
         Select Case i
             Case 1
                 'this creates an archetype and sets the ontology
-                mFileManager.NewArchetype(frm.Archetype_ID, OceanArchetypeEditor.Instance.Options.DefaultParser)
+                mFileManager.CreateNewArchetype(frm.Archetype_ID, OceanArchetypeEditor.Instance.Options.DefaultParser)
 
                 If mFileManager.Archetype.ArchetypeAvailable Then
                     mFileManager.Archetype.Version = 1
@@ -3591,37 +3590,37 @@ Public Class Designer
 
     Private Sub MenuFileSpecialise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSpecialise.Click
         'Enable specialisation of the archetype
-            Dim s As String
-            s = "-"
+        Dim s As String
+        s = "-"
 
-            While InStr(s, "-") > 0
+        While InStr(s, "-") > 0
             Dim prompt As String = AE_Constants.Instance.Specialise & " " & mFileManager.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & Environment.NewLine & "Enter the new concept ('-' is not allowed)."
             s = OceanArchetypeEditor.Instance.GetInput(prompt, Me)
-            End While
+        End While
 
-            If s <> "" Then
-                Dim a_Term As RmTerm
+        If s <> "" Then
+            Dim a_Term As RmTerm
 
-                ' replace spaces with underscore
-                s = s.Replace(" "c, "_"c)
+            ' replace spaces with underscore
+            s = s.Replace(" "c, "_"c)
 
-                'specialise concept
-                mFileManager.FileLoading = True
-                mFileManager.Archetype.Specialise(s, mFileManager.OntologyManager)
+            'specialise concept
+            mFileManager.FileLoading = True
+            mFileManager.Archetype.Specialise(s, mFileManager.OntologyManager)
 
-                ' show the new archetype ID in the GUI
+            ' show the new archetype ID in the GUI
             lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
-                a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
+            a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
             txtConceptInFull.Text = a_Term.Text
             TxtConceptDescription.Text = a_Term.Description
             txtConceptComment.Text = ""
             gbSpecialisation.Show()
-                UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
+            UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
             MenuFileSpecialise.Visible = False
-                mFileManager.FileLoading = False
-                mFileManager.FileEdited = True
-                mFileManager.IsNew = True
-                mFileManager.FileName = ""    'new filename and needs to save as
+            mFileManager.FileLoading = False
+            mFileManager.FileEdited = True
+            mFileManager.IsNew = True
+            mFileManager.FileName = ""    'new filename and needs to save as
 
             'EDT-553 - if there is no structure chosen then there is an error
             'If Not mTabPageDataStructure Is Nothing
@@ -3919,7 +3918,7 @@ Public Class Designer
 
                             If mTabPageInstruction.HasParticipation AndAlso Not mTabPageParticipation Is Nothing Then
                                 GetParticipations(definition, mTabPageParticipation)
-                        End If
+                            End If
 
                             CType(definition, ArchetypeDefinition).Data = mTabPageInstruction.SaveAsInstruction.Children
 
@@ -4931,7 +4930,7 @@ Public Class Designer
 
         Select Case s
             Case "rtf"
-                    WriteRichText()
+                WriteRichText()
             Case "adl", "xml", "owl"
                 PrepareToSave()
 
@@ -4946,7 +4945,7 @@ Public Class Designer
 
                     If Not ex.InnerException Is Nothing Then
                         errorMessage &= vbCrLf & ex.InnerException.Message
-                End If
+                    End If
 
                     MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 End Try
@@ -4982,13 +4981,13 @@ Public Class Designer
 
 
                         Dim reader As Xml.XmlReader = Nothing
-                    Try
+                        Try
                             reader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
                         Catch ex As Exception
                             Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
                             If Not ex.InnerException Is Nothing Then
                                 errorMessage &= vbCrLf & ex.InnerException.Message
-                End If
+                            End If
                             MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
 
                             Return
@@ -5063,16 +5062,16 @@ Public Class Designer
     Private Sub MenuDisplayFindAgain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDisplayFindAgain.Click
         Dim from As Integer = -1
 
-            If mFindString <> "" Then
+        If mFindString <> "" Then
             from = mRichTextArchetype.Find(mFindString, mRichTextArchetype.SelectionStart + mRichTextArchetype.SelectionLength, RichTextBoxFinds.None)
-                End If
+        End If
 
         If from > -1 Then
             mRichTextArchetype.Focus()
             mRichTextArchetype.Select(from, mFindString.Length)
         Else
-                Beep()
-            End If
+            Beep()
+        End If
     End Sub
 
     Private Sub ContextMenuDisplay_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuDisplay.Popup
@@ -5107,7 +5106,7 @@ Public Class Designer
             Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
             If Not ex.InnerException Is Nothing Then
                 errorMessage &= vbCrLf & ex.InnerException.Message
-        End If
+            End If
             MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
 

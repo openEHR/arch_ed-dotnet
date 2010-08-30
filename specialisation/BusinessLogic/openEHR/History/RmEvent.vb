@@ -28,7 +28,7 @@ Class RmEvent
 
     Dim iOffset As Integer
     Dim sOffset As String
-    Dim sMath As String
+    Dim sMath As CodePhrase
     Dim iWidth As Long = 1
     Dim sWidth As String
     Dim boolSignNeg, boolFixedDuration, boolFixedOffset As Boolean
@@ -47,8 +47,10 @@ Class RmEvent
             Return iWidth
         End Get
         Set(ByVal Value As Long)
-            iWidth = Value
-            boolFixedDuration = True
+            If Value >= 1 Then
+                iWidth = Value
+                boolFixedDuration = True
+            End If
         End Set
     End Property
     Public Property WidthUnits() As String
@@ -92,11 +94,11 @@ Class RmEvent
             sOffset = Value
         End Set
     End Property
-    Property AggregateMathFunction() As String
+    Property AggregateMathFunction() As CodePhrase
         Get
             Return sMath
         End Get
-        Set(ByVal Value As String)
+        Set(ByVal Value As CodePhrase)
             sMath = Value
         End Set
     End Property
@@ -126,20 +128,20 @@ Class RmEvent
     End Property
 
     Public Overrides Function Copy() As RmStructure
-        Dim ae As New RmEvent(Me.NodeId)
-        ae.cOccurrences = Me.cOccurrences
-        ae.mType = mType
-        ae.sNodeId = Me.sNodeId
-        ae.mRunTimeConstraint = Me.mRunTimeConstraint
-        ae.iOffset = Me.iOffset
-        ae.sOffset = Me.sOffset
-        ae.iWidth = Me.iWidth
-        ae.sWidth = Me.sWidth
-        ae.mEventType = Me.EventType
-        ae.boolSignNeg = Me.boolSignNeg
-        ae.boolFixedDuration = Me.boolFixedDuration
-        ae.boolFixedOffset = ae.boolFixedOffset
-        Return ae
+        Dim result As New RmEvent(NodeId)
+        result.cOccurrences = cOccurrences
+        result.mType = mType
+        result.sNodeId = sNodeId
+        result.mRunTimeConstraint = mRunTimeConstraint
+        result.iOffset = iOffset
+        result.sOffset = sOffset
+        result.iWidth = iWidth
+        result.sWidth = sWidth
+        result.mEventType = EventType
+        result.boolSignNeg = boolSignNeg
+        result.boolFixedDuration = boolFixedDuration
+        result.boolFixedOffset = boolFixedOffset
+        Return result
     End Function
 
     Sub New(ByVal NodeId As String)
@@ -148,38 +150,37 @@ Class RmEvent
 
 #Region "ADL Processing"
 
-    Sub New(ByVal An_Event As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        MyBase.New(An_Event.node_id.to_cil, StructureType.Event)
+    Sub New(ByVal An_Event As AdlParser.CComplexObject, ByVal a_filemanager As FileManagerLocal)
+        MyBase.New(An_Event.NodeId.ToCil, StructureType.Event)
         ProcessEvent(An_Event, a_filemanager)
     End Sub
 
-    Private mEIF_Data As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+    Private mEIF_Data As AdlParser.CAttribute
 
-    Property ADL_Data() As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+    Property ADL_Data() As AdlParser.CAttribute
         Get
             Return mEIF_Data
         End Get
-        Set(ByVal Value As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+        Set(ByVal Value As AdlParser.CAttribute)
             Debug.Assert(False)
         End Set
     End Property
 
-    Private mEIF_State As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+    Private mEIF_State As AdlParser.CAttribute
 
-    Property ADL_State() As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+    Property ADL_State() As AdlParser.CAttribute
         Get
             Return mEIF_State
         End Get
-        Set(ByVal Value As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+        Set(ByVal Value As AdlParser.CAttribute)
             Debug.Assert(False)
         End Set
     End Property
 
-    Private Sub ProcessEvent(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+    Private Sub ProcessEvent(ByVal ObjNode As AdlParser.CComplexObject, ByVal a_filemanager As FileManagerLocal)
         Dim i As Integer
 
-        Select Case ObjNode.rm_type_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        Select Case ObjNode.RmTypeName.ToCil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "event"
                 EventType = ObservationEventType.Event
             Case "point_event"
@@ -190,87 +191,82 @@ Class RmEvent
                 Debug.Assert(False)
         End Select
 
-        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(ObjNode.occurrences)
+        cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.NewOccurrences(ObjNode.occurrences)
 
         For i = 1 To ObjNode.attributes.count
+            Dim attribute As AdlParser.CAttribute = ObjNode.Attributes.ITh(i)
 
-            an_attribute = ObjNode.attributes.i_th(i)
-
-            Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
+            Select Case attribute.RmAttributeName.ToCil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label" ' runtime_label is OBSOLETE
-                    mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    If attribute.HasChildren Then
+                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.Children.First, AdlParser.CComplexObject))
+                    End If
                 Case "offset"
                     Try
-                        Dim d As Duration = _
-                            ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(an_attribute)
-                        Me.Offset = d.GUI_duration
-                        Me.OffsetUnits = d.ISO_Units
+                        Dim d As Duration = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(attribute)
+                        Offset = d.GUI_duration
+                        OffsetUnits = d.ISO_Units
                     Catch e As Exception
                         MessageBox.Show(String.Format("Event[{1}]/offset attribute - {0}", Me.NodeId, e.Message))
                     End Try
 
                 Case "width"
                     Try
-                        Dim d As Duration = _
-                            ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(an_attribute)
-                        Me.Width = d.GUI_duration
-                        Me.WidthUnits = d.ISO_Units
+                        Dim d As Duration = ArchetypeEditor.ADL_Classes.ADL_Tools.GetDuration(attribute)
+                        Width = d.GUI_duration
+                        WidthUnits = d.ISO_Units
                     Catch e As Exception
                         MessageBox.Show(String.Format("Event[{1}]/width attribute - {0}", Me.NodeId, e.Message))
                     End Try
 
                 Case "aggregate_math_function" ' OBSOLETE
-                    Dim MathFunc As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-
                     Debug.Assert(mType = StructureType.IntervalEvent)
 
-                    MathFunc = an_attribute.children.first
-                    Me.sMath = MathFunc.item.as_string.to_cil.Trim("""")
+                    If attribute.HasChildren Then
+                        Dim MathFunc As AdlParser.CPrimitiveObject = attribute.Children.First
+                        AggregateMathFunction.Codes.Add(MathFunc.Item.AsString.ToCil.Trim(""""))
+                    End If
 
                 Case "math_function"
-
                     Debug.Assert(mType = StructureType.IntervalEvent)
 
-                    Dim textConstraint As Constraint_Text = _
-                    ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                    Me.sMath = textConstraint.AllowableValues.FirstCode ' only one allowed
+                    If attribute.HasChildren Then
+                        Dim textConstraint As Constraint_Text = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.Children.First, AdlParser.CComplexObject))
+                        AggregateMathFunction = textConstraint.AllowableValues
+                    End If
 
                 Case "display_as_positive"  ' OBSOLETE
-                    Dim DisplayPos As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-
                     Debug.Assert(False, "archetype contains obsolete data - will be written correctly")
 
-                    DisplayPos = an_attribute.children.first
-                    boolSignNeg = (DisplayPos.item.as_string.to_cil = "True")
-                    If boolSignNeg Then
-                        sMath = "521" ' a change that is displayed in absolute terms
+                    If attribute.HasChildren Then
+                        Dim DisplayPos As AdlParser.CPrimitiveObject = attribute.Children.First
+                        boolSignNeg = (DisplayPos.Item.AsString.ToCil = "True")
+
+                        If boolSignNeg Then
+                            AggregateMathFunction.Codes.Add("521") ' a change that is displayed in absolute terms
+                        End If
                     End If
 
                 Case "data", "item" 'item is OBSOLETE
                     ' return the data for processing
-                    mEIF_Data = an_attribute
+                    mEIF_Data = attribute
 
                 Case "state"
-                    mEIF_State = an_attribute
-
+                    mEIF_State = attribute
             End Select
-
         Next
 
+        If Not ADL_Data Is Nothing AndAlso ADL_Data.HasChildren Then
+            Dim cadlStruct As AdlParser.CComplexObject
+            Dim generatingType As String = ADL_Data.Children.First.GeneratingType.ToCil
 
-        If Not Me.ADL_Data Is Nothing Then
-            Dim cadlStruct As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
-            Dim generating_type As String = Me.ADL_Data.children.first.Generating_Type.to_cil
-            Select Case generating_type
+            Select Case generatingType
                 Case "ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
                 Case "C_COMPLEX_OBJECT"
-                    cadlStruct = CType(Me.ADL_Data.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-                    Dim structure_type As StructureType
-
-                    structure_type = ReferenceModel.StructureTypeFromString(cadlStruct.rm_type_name.to_cil)
+                    cadlStruct = CType(Me.ADL_Data.Children.First, AdlParser.CComplexObject)
+                    Dim structure_type As StructureType = ReferenceModel.StructureTypeFromString(cadlStruct.RmTypeName.ToCil)
 
                     Debug.Assert(structure_type <> StructureType.Not_Set)
 
@@ -282,11 +278,10 @@ Class RmEvent
             End Select
         End If
 
+        If Not ADL_State Is Nothing AndAlso ADL_State.HasChildren Then
+            Dim generatingType As String = ADL_State.Children.First.Generating_Type.ToCil
 
-        If Not Me.ADL_State Is Nothing Then
-            Dim generating_type As String = Me.ADL_State.children.first.Generating_Type.to_cil
-
-            Select Case generating_type
+            Select Case generatingType
                 Case "ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
@@ -296,7 +291,6 @@ Class RmEvent
                     ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure = New RmStructureCompound(Me.ADL_State, StructureType.State, a_filemanager)
             End Select
         End If
-
     End Sub
 
 #End Region
@@ -374,7 +368,8 @@ Class RmEvent
 
                     Dim textConstraint As Constraint_Text = _
                     ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
-                    Me.sMath = textConstraint.AllowableValues.FirstCode ' only one allowed
+                    'SRH: 1 Nov 2009 - EDT-568
+                    Me.AggregateMathFunction = textConstraint.AllowableValues
 
                 Case "data", "item" 'item is OBSOLETE
                     ' return the data for processing
@@ -387,12 +382,11 @@ Class RmEvent
 
         Next
 
-
         If Not Me.XML_Data Is Nothing AndAlso Not Me.XML_Data.children Is Nothing AndAlso Me.XML_Data.children.Length > 0 Then
             Dim cadlStruct As XMLParser.C_COMPLEX_OBJECT
 
-            Dim generating_type As String = Me.XML_Data.children(0).GetType.ToString
-            Select Case generating_type
+            Dim GeneratingType As String = Me.XML_Data.children(0).GetType.ToString
+            Select Case GeneratingType
                 Case "XMLParser.ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
@@ -413,9 +407,9 @@ Class RmEvent
         End If
 
         If Not Me.XML_State Is Nothing AndAlso Not Me.XML_State.children Is Nothing AndAlso Me.XML_State.children.Length > 0 Then
-            Dim generating_type As String = Me.XML_State.children(0).GetType.ToString
+            Dim GeneratingType As String = Me.XML_State.children(0).GetType.ToString
 
-            Select Case generating_type
+            Select Case GeneratingType
                 Case "XMLParser.ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet

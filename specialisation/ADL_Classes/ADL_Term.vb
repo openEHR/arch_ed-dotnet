@@ -15,16 +15,16 @@
 '
 
 Option Strict On
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports EiffelKernel = EiffelSoftware.Library.Base.Kernel
 Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
 
     Class ADL_Term
         Inherits RmTerm
-        Private EIF_a_Term As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM
+        Private EIF_a_Term As AdlParser.ArchetypeTerm
 
-        Public ReadOnly Property EIF_Term() As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM
+        Public ReadOnly Property EIF_Term() As AdlParser.ArchetypeTerm
             Get
                 Me.setItem("text", sText)
                 Me.setItem("description", sDescription)
@@ -40,32 +40,31 @@ Namespace ArchetypeEditor.ADL_Classes
             End Get
         End Property
         Private Function getItem(ByVal key As String) As String
-            Dim s As EiffelKernel.STRING_8
+            Dim s As EiffelKernel.String_8 = Eiffel.String(key)
 
-            s = Eiffel.String(key)
-            If EIF_a_Term.has_key(s) Then
-                Return EIF_a_Term.item(s).to_cil
+            If EIF_a_Term.HasKey(s) Then
+                Return EIF_a_Term.Item(s).ToCil
             Else
                 Return ""
             End If
         End Function
 
         Private Sub setItem(ByVal Item As String, ByVal Value As String)
-            If EIF_a_Term.has_key(Eiffel.String(Item)) Then
-                EIF_a_Term.replace_item(Eiffel.String(Item), Eiffel.String(Value))
+            If EIF_a_Term.HasKey(Eiffel.String(Item)) Then
+                EIF_a_Term.ReplaceItem(Eiffel.String(Item), Eiffel.String(Value))
             Else
-                EIF_a_Term.add_item(Eiffel.String(Item), Eiffel.String(Value))
+                EIF_a_Term.AddItem(Eiffel.String(Item), Eiffel.String(Value))
             End If
         End Sub
 
         Sub New(ByVal ID As String)
             MyBase.new(ID)
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(ID))
+            EIF_a_Term = AdlParser.Create.ArchetypeTerm.Make(Eiffel.String(ID))
         End Sub
 
-        Sub New(ByVal EIF_ID As EiffelKernel.STRING_8)
-            MyBase.New(EIF_ID.to_cil)
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EIF_ID)
+        Sub New(ByVal EIF_ID As EiffelKernel.String_8)
+            MyBase.New(EIF_ID.ToCil)
+            EIF_a_Term = AdlParser.Create.ArchetypeTerm.Make(EIF_ID)
         End Sub
 
         Sub New(ByVal a_Term As RmTerm)
@@ -73,9 +72,8 @@ Namespace ArchetypeEditor.ADL_Classes
             sText = a_Term.Text
             sDescription = a_Term.Description
             sComment = a_Term.Comment
-            'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
             sAnnotations = a_Term.OtherAnnotations
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(a_Term.Code))
+            EIF_a_Term = AdlParser.Create.ArchetypeTerm.Make(Eiffel.String(a_Term.Code))
         End Sub
 
         Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal comment As String = "")
@@ -84,37 +82,31 @@ Namespace ArchetypeEditor.ADL_Classes
             sText = text
             sDescription = description
             sComment = comment
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(code))
+            EIF_a_Term = AdlParser.Create.ArchetypeTerm.Make(Eiffel.String(code))
         End Sub
 
-        Sub New(ByVal an_adlTerm As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM)
-            MyBase.New(an_adlTerm.code.to_cil)
-
-
+        Sub New(ByVal an_adlTerm As AdlParser.ArchetypeTerm)
+            MyBase.New(an_adlTerm.code.ToCil)
             EIF_a_Term = an_adlTerm
 
-
             For i As Integer = 1 To an_adlTerm.keys.count
-                Dim s As String = CType(an_adlTerm.keys.i_th(i), EiffelKernel.STRING_8).to_cil
+                Dim s As String = CType(an_adlTerm.Keys.ITh(i), EiffelKernel.String_8).ToCil
+
                 Select Case s.ToLowerInvariant()
                     Case "text"
-            sText = Me.getItem("text")
+                        sText = Me.getItem("text")
 
                     Case "description"
-            sDescription = Me.getItem("description")
+                        sDescription = Me.getItem("description")
 
                     Case "comment"
-            sComment = Me.getItem("comment")
+                        sComment = Me.getItem("comment")
 
                     Case Else
                         Me.OtherAnnotations.Add(s, Me.getItem(s))
 
                 End Select
-
-
             Next
-
-
         End Sub
 
     End Class

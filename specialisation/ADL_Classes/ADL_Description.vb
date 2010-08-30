@@ -22,107 +22,107 @@ Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Description
         Inherits ArchetypeDescription
 
-        Private mADL_Description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
+        Private adlDescription As AdlParser.ResourceDescription
 
         Public Overrides Property Details() As ArchetypeDetails
             Get
-                Return New ADL_ArchetypeDetails(mADL_Description)
+                Return New ADL_ArchetypeDetails(adlDescription)
             End Get
             Set(ByVal value As ArchetypeDetails)
                 mArchetypeDetails = value
             End Set
         End Property
 
-        Function ADL_Description() As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
-            mADL_Description.original_author.clear_all()
+        Function ADL_Description() As AdlParser.ResourceDescription
+            adlDescription.OriginalAuthor.ClearAll()
 
             If OriginalAuthor IsNot Nothing Then
-                mADL_Description.add_original_author_item(Eiffel.String("name"), Eiffel.String(mOriginalAuthor))
+                adlDescription.AddOriginalAuthorItem(Eiffel.String("name"), Eiffel.String(mOriginalAuthor))
             End If
 
             If OriginalAuthorEmail <> "" Then
-                mADL_Description.add_original_author_item(Eiffel.String("email"), Eiffel.String(mOriginalAuthorEmail))
+                adlDescription.AddOriginalAuthorItem(Eiffel.String("email"), Eiffel.String(mOriginalAuthorEmail))
             End If
 
             If OriginalAuthorOrganisation <> "" Then
-                mADL_Description.add_original_author_item(Eiffel.String("organisation"), Eiffel.String(mOriginalAuthorOrganisation))
+                adlDescription.AddOriginalAuthorItem(Eiffel.String("organisation"), Eiffel.String(mOriginalAuthorOrganisation))
             End If
 
             If OriginalAuthorDate <> "" Then
-                mADL_Description.add_original_author_item(Eiffel.String("date"), Eiffel.String(mOriginalAuthorDate))
+                adlDescription.AddOriginalAuthorItem(Eiffel.String("date"), Eiffel.String(mOriginalAuthorDate))
             End If
 
-            mADL_Description.set_lifecycle_state(Eiffel.String(LifeCycleStateAsString))
+            adlDescription.SetLifecycleState(Eiffel.String(LifeCycleStateAsString))
 
             If Not mArchetypePackageURI Is Nothing Then
-                mADL_Description.set_resource_package_uri(Eiffel.String(mArchetypePackageURI))
+                adlDescription.SetResourcePackageUri(Eiffel.String(mArchetypePackageURI))
             End If
 
-            If Not mADL_Description.other_details Is Nothing Then
-                mADL_Description.other_details.clear_all()
+            If Not adlDescription.OtherDetails Is Nothing Then
+                adlDescription.OtherDetails.ClearAll()
             End If
 
             If mReferences <> "" Then
-                mADL_Description.add_other_detail(Eiffel.String("references"), Eiffel.String(mReferences))
+                adlDescription.AddOtherDetail(Eiffel.String("references"), Eiffel.String(mReferences))
             End If
 
             If ArchetypeDigest <> "" Then
-                mADL_Description.add_other_detail(Eiffel.String(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), Eiffel.String(ArchetypeDigest))
+                adlDescription.AddOtherDetail(Eiffel.String(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), Eiffel.String(ArchetypeDigest))
             End If
 
-            mADL_Description.clear_other_contributors()
+            adlDescription.ClearOtherContributors()
 
             For Each s As String In mOtherContributors
-                mADL_Description.add_other_contributor(Eiffel.String(s))
+                adlDescription.AddOtherContributor(Eiffel.String(s))
             Next
 
-            Return mADL_Description
+            Return adlDescription
         End Function
 
-        Sub New(ByVal an_adl_archetype_description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION)
-            mADL_Description = an_adl_archetype_description
+        Sub New(ByVal an_adl_archetype_description As AdlParser.ResourceDescription)
+            adlDescription = an_adl_archetype_description
 
-            If Not mADL_Description.resource_package_uri Is Nothing Then
-                mArchetypePackageURI = mADL_Description.resource_package_uri.as_string.to_cil
+            If Not adlDescription.ResourcePackageUri Is Nothing Then
+                mArchetypePackageURI = adlDescription.ResourcePackageUri.AsString.ToCil
             End If
 
-            If mADL_Description.original_author.has(Eiffel.String("name")) Then
-                mOriginalAuthor = mADL_Description.original_author.item(Eiffel.String("name")).to_cil()
+            If adlDescription.OriginalAuthor.Has(Eiffel.String("name")) Then
+                mOriginalAuthor = adlDescription.OriginalAuthor.At(Eiffel.String("name")).ToCil
             End If
 
-            If mADL_Description.original_author.has(Eiffel.String("email")) Then
-                mOriginalAuthorEmail = mADL_Description.original_author.item(Eiffel.String("email")).to_cil
+            If adlDescription.OriginalAuthor.Has(Eiffel.String("email")) Then
+                mOriginalAuthorEmail = adlDescription.OriginalAuthor.At(Eiffel.String("email")).ToCil
             End If
 
-            If mADL_Description.original_author.has(Eiffel.String("organisation")) Then
-                mOriginalAuthorOrganisation = mADL_Description.original_author.item(Eiffel.String("organisation")).to_cil
+            If adlDescription.OriginalAuthor.Has(Eiffel.String("organisation")) Then
+                mOriginalAuthorOrganisation = adlDescription.OriginalAuthor.At(Eiffel.String("organisation")).ToCil
             End If
 
-            If mADL_Description.original_author.has(Eiffel.String("date")) Then
-                mOriginalAuthorDate = mADL_Description.original_author.item(Eiffel.String("date")).to_cil
+            If adlDescription.OriginalAuthor.Has(Eiffel.String("date")) Then
+                mOriginalAuthorDate = adlDescription.OriginalAuthor.At(Eiffel.String("date")).ToCil
             End If
 
-            If Not mADL_Description.other_contributors Is Nothing Then
-                For i As Integer = 1 To mADL_Description.other_contributors.count
-                    mOtherContributors.Add(mADL_Description.other_contributors.i_th(i).to_cil)
+            If Not adlDescription.OtherContributors Is Nothing Then
+                For i As Integer = 1 To adlDescription.OtherContributors.Count
+                    mOtherContributors.Add(adlDescription.OtherContributors.ITh(i).ToCil)
                 Next
             End If
 
-            If Not mADL_Description.other_details Is Nothing Then
-                If mADL_Description.other_details.has(Eiffel.String("references")) Then
-                    mReferences = mADL_Description.other_details.item(Eiffel.String("references")).to_cil()
+            If Not adlDescription.OtherDetails Is Nothing Then
+                If adlDescription.OtherDetails.Has(Eiffel.String("references")) Then
+                    mReferences = adlDescription.OtherDetails.At(Eiffel.String("references")).ToCil
                 End If
             End If
 
-            MyBase.LifeCycleStateAsString = mADL_Description.lifecycle_state.to_cil
+            MyBase.LifeCycleStateAsString = adlDescription.LifecycleState.ToCil
 
-            If mADL_Description.details.count = 0 Then
+            If adlDescription.Details.Count = 0 Then
                 mArchetypeDetails.AddOrReplace(Filemanager.Master.OntologyManager.LanguageCode, New ArchetypeDescriptionItem(Filemanager.Master.OntologyManager.LanguageCode))
             End If
         End Sub
 
         Sub New(ByVal an_archetype_description As ArchetypeDescription, ByVal a_language As String)
-            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(OceanArchetypeEditor.Instance.Options.UserName), Eiffel.String(a_language))
+            adlDescription = AdlParser.Create.ResourceDescription.Make(Eiffel.String(OceanArchetypeEditor.Instance.Options.UserName), Eiffel.String(a_language))
 
             If Not an_archetype_description.ArchetypePackageURI Is Nothing Then
                 mArchetypePackageURI = an_archetype_description.ArchetypePackageURI
@@ -139,7 +139,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Sub New(ByVal original_language As String)
-            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(OceanArchetypeEditor.Instance.Options.UserName), Eiffel.String(original_language))
+            adlDescription = AdlParser.Create.ResourceDescription.Make(Eiffel.String(OceanArchetypeEditor.Instance.Options.UserName), Eiffel.String(original_language))
         End Sub
     End Class
 End Namespace

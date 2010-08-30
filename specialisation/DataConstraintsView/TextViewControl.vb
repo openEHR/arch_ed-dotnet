@@ -82,37 +82,38 @@ Public Class TextViewControl : Inherits ElementViewControl ' ViewControl
 
             Case TextConstrainType.Internal
                 If textConstraint.AllowableValues.Codes.Count > 0 Then
-                    'Dim ctrl As New ComboBox
                     mComboBox = New ComboBox
-                    'Dim s As String
                     Dim lth As Integer = 150
                     Dim a_Term As RmTerm
 
                     mComboBox.Location = aLocation 'pos
                     mComboBox.Height = 25
                     mComboBox.Width = 150
+
                     For Each s As String In textConstraint.AllowableValues.Codes
                         a_Term = Filemanager.Master.OntologyManager.GetTerm(s)
-                        If a_Term.Text.Length > lth Then
-                            lth = a_Term.Text.Length
+
+                        If Not a_Term.Text Is Nothing Then
+                            If a_Term.Text.Length > lth Then
+                                lth = a_Term.Text.Length
+                            End If
+
+                            mComboBox.Items.Add(a_Term)
                         End If
-                        mComboBox.Items.Add(a_Term)
-                        's = a_Term.Text
-                        'If s.Length > lth Then
-                        '    lth = s.Length
-                        'End If
-                        'mComboBox.Items.Add(s)
                     Next
+
                     If lth > 250 Then
                         lth = 250
                     End If
+
                     mComboBox.Width = lth
+
                     If textConstraint.HasAssumedValue Then
                         a_Term = Filemanager.Master.OntologyManager.GetTerm(CStr(textConstraint.AssumedValue))
                         mComboBox.Text = a_Term.Text
                     End If
 
-                    Me.Controls.Add(mComboBox)
+                    Controls.Add(mComboBox)
 
                 Else
                     'Dim ctrl As New TextBox

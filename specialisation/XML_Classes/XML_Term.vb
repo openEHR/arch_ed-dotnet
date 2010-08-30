@@ -29,6 +29,10 @@ Namespace ArchetypeEditor.XML_Classes
                 If Not (sComment Is Nothing OrElse sComment = "") Then
                     Me.setItem("comment", sComment)
                 End If
+                'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
+                For Each k As String In OtherAnnotations.Keys
+                    Me.setItem(k, CStr(sAnnotations.Item(k)))
+                Next
                 Return a_Xml_Term
             End Get
         End Property
@@ -92,6 +96,7 @@ Namespace ArchetypeEditor.XML_Classes
             sText = a_Term.Text
             sDescription = a_Term.Description
             sComment = a_Term.Comment
+            sAnnotations = a_Term.OtherAnnotations
             a_Xml_Term = New XMLParser.ARCHETYPE_TERM()
 
             'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
@@ -107,6 +112,10 @@ Namespace ArchetypeEditor.XML_Classes
             setItem("text", sText)
             setItem("description", sDescription)
             setItem("comment", sComment)
+            'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
+            For Each k As String In OtherAnnotations.Keys
+                Me.setItem(k, CStr(sAnnotations.Item(k)))
+            Next
         End Sub
 
         Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal comment As String = "")
@@ -124,12 +133,31 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Sub New(ByVal an_adlTerm As XMLParser.ARCHETYPE_TERM)
-            MyBase.New(an_adlTerm.code)
-            a_Xml_Term = an_adlTerm
-            sText = Me.getItem("text")
-            sDescription = Me.getItem("description")
-            sComment = Me.getItem("comment")
+        Sub New(ByVal an_xmlTerm As XMLParser.ARCHETYPE_TERM)
+            MyBase.New(an_xmlTerm.code)
+            a_Xml_Term = an_xmlTerm
+            'sText = Me.getItem("text")
+            'sDescription = Me.getItem("description")
+            'sComment = Me.getItem("comment")
+            'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
+            For Each di As XMLParser.StringDictionaryItem In an_xmlTerm.items
+                Select Case di.id.ToLowerInvariant()
+                    Case "text"
+                        sText = di.Value
+
+                    Case "description"
+                        sDescription = di.Value
+
+                    Case "comment"
+                        sComment = di.Value
+
+                    Case Else
+                        Me.OtherAnnotations.Add(di.id, di.Value)
+
+                End Select
+
+
+            Next
         End Sub
 
     End Class

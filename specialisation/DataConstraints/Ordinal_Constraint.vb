@@ -23,7 +23,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
     Private mFixed As Boolean
     Private WithEvents mOrdinalTable As OrdinalTable
     Private mAssumedValue As Integer
-    Private mTerminologyId As String 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+    Private mTerminologyId As String = "local" 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
     Private mCodeString As String 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
     Private mIsLoadingComplete As Boolean
     Private mLanguage As String
@@ -34,8 +34,12 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
         ord.mFixed = mFixed
         ord.OrdinalValues.Copy(mOrdinalTable)
-        ord.HasAssumedValue = Me.HasAssumedValue
-        ord.AssumedValue = mAssumedValue
+
+        'SRH - 4th March 2009 - EDT-523 - error with assumed value being set to zero
+        'ord.HasAssumedValue = Me.HasAssumedValue
+        If Me.HasAssumedValue Then
+            ord.AssumedValue = mAssumedValue
+        End If
 
         'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
         ord.AssumedValue_TerminologyId = mTerminologyId
@@ -44,7 +48,6 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         ord.EndLoading()
 
         Return ord
-
     End Function
 
     Public Sub ClearOrdinalValues()
@@ -70,6 +73,12 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
             mAssumedValue = CInt(Value)
             HasAssumedValue = True
+
+            'SRH - EDT-523 - need to set the ordinal value for XML output
+            Dim dr As DataRow = mOrdinalTable.Rows.Find(Value)
+            If Not dr Is Nothing Then
+                AssumedValue_CodeString = CStr(dr.Item(2))
+            End If
 
             OnAssumedValueChanged()
         End Set
@@ -149,6 +158,20 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         End Get
     End Property
 
+    ReadOnly Property InternalCodes() As String()
+        Get
+            If (Not mOrdinalTable Is Nothing AndAlso mOrdinalTable.Rows.Count > 0) Then
+                Dim upperBound As Integer = mOrdinalTable.Rows.Count - 1
+                Dim result(upperBound) As String
+                For i As Integer = 0 To upperBound
+                    result(i) = CStr(mOrdinalTable.Rows(i).Item(2))
+                Next
+                Return result
+            End If
+            Return CType(Array.CreateInstance(GetType(String), 0), String())
+        End Get
+    End Property
+
     Property Language() As String
         Get
             Return mLanguage
@@ -195,9 +218,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
 
             mFileManager.FileEdited = True
         End If
-
     End Sub
-
 
     Private Sub OrdinalTable_ColumnChanging(ByVal sender As Object, ByVal e As System.Data.DataColumnChangeEventArgs) _
             Handles mOrdinalTable.ColumnChanging
@@ -217,26 +238,22 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
                 If TypeOf e.Row.Item(2) Is System.DBNull Then
                     'add ordinal to ontology when new ordinal is added
                     mIsLoadingComplete = False
-                    Dim a_Term As RmTerm = mFileManager.OntologyManager.AddTerm( _
-                            CStr(e.ProposedValue))
+                    Dim a_Term As RmTerm = mFileManager.OntologyManager.AddTerm(CStr(e.ProposedValue))
                     ordinal.InternalCode = a_Term.Code
                     e.Row.Item(1) = a_term.Text
                     mIsLoadingComplete = True
                 Else
                     'update ontology with ordinal text value when ordinal is edited
-                    mFileManager.OntologyManager.SetText(CStr(e.ProposedValue), _
-                            ordinal.InternalCode)
+                    mFileManager.OntologyManager.SetText(CStr(e.ProposedValue), ordinal.InternalCode)
                 End If
 
-                'Added Sam Heard 2004-07-05
             Case "Ordinal"
                 If TypeOf e.Row.Item(2) Is System.DBNull Then
                     mIsLoadingComplete = False
                     Dim ordinal As New OrdinalValue(e.Row)
-                    Dim a_Term As RmTerm = mFileManager.OntologyManager.AddTerm( _
-                                              "new ordinal")
-                    ordinal.InternalCode = a_term.Code
-                    e.Row.Item(1) = a_term.Text
+                    Dim a_Term As RmTerm = mFileManager.OntologyManager.AddTerm("new ordinal")
+                    ordinal.InternalCode = a_Term.Code
+                    e.Row.Item(1) = a_Term.Text
                     mIsLoadingComplete = True
                 End If
 
@@ -245,8 +262,7 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
                     e.ProposedValue = System.DBNull.Value
                 Else
                     'update ontology with ordinal text value when ordinal is edited
-                    mFileManager.OntologyManager.SetDescription(CStr(e.ProposedValue), _
-                            CStr(e.Row.Item(2)))
+                    mFileManager.OntologyManager.SetDescription(CStr(e.ProposedValue), CStr(e.Row.Item(2)))
                 End If
 
 

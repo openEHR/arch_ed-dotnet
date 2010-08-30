@@ -15,69 +15,73 @@
 '
 
 Option Strict On
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports EiffelKernel = EiffelSoftware.Library.Base.Kernel
 Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
     Class ADL_Interface
         Implements Parser, IDisposable
-        Private EiffelCompiler As openehr.adl_parser.interface.ARCHETYPE_PARSER
+        Private marchetypeParser As AdlParser.ArchetypeParser
         Private mFileName As String
         Private adlArchetype As ADL_Archetype
         Private mOpenFileError As Boolean
         Private mWriteFileError As Boolean
         Protected disposed As Boolean = False
 
-
         Public ReadOnly Property FileName() As String Implements Parser.FileName
             Get
                 Return mFileName
             End Get
         End Property
-        Public ReadOnly Property ADL_Parser() As openehr.adl_parser.interface.ARCHETYPE_PARSER
+
+        Public ReadOnly Property ArchetypeParser() As AdlParser.ArchetypeParser
             Get
-                Return EiffelCompiler
+                Return marchetypeParser
             End Get
         End Property
+
         Public ReadOnly Property AvailableFormats() As ArrayList Implements Parser.AvailableFormats
             Get
-                Dim formats As New ArrayList
-                Dim s As String
+                Dim result As New ArrayList
 
-                For i As Integer = 1 To EiffelCompiler.archetype_serialiser_formats.count
-                    s = CType(EiffelCompiler.archetype_serialiser_formats.i_th(i), EiffelKernel.STRING_8).to_cil
-                    ' sml is not valid
-                    formats.Add(s)
+                For i As Integer = 1 To ArchetypeParser.ArchetypeSerialiserFormats.Count
+                    result.Add(ArchetypeParser.ArchetypeSerialiserFormats.ITh(i).ToString)
                 Next
 
-                Return formats
+                Return result
             End Get
         End Property
+
         Public ReadOnly Property TypeName() As String Implements Parser.TypeName
             Get
                 Return "adl"
             End Get
         End Property
+
         Public ReadOnly Property Status() As String Implements Parser.Status
             Get
-                Return EiffelCompiler.status.to_cil
+                Return ArchetypeParser.AppRoot.Billboard.Content.ToCil
             End Get
         End Property
+
         Public ReadOnly Property ArchetypeAvailable() As Boolean Implements Parser.ArchetypeAvailable
             Get
                 Return Not adlArchetype Is Nothing
             End Get
         End Property
+
         Public ReadOnly Property Archetype() As Archetype Implements Parser.Archetype
             Get
                 Return adlArchetype
             End Get
         End Property
+
         Public ReadOnly Property OpenFileError() As Boolean Implements Parser.OpenFileError
             Get
                 Return mOpenFileError
             End Get
         End Property
+
         Public ReadOnly Property WriteFileError() As Boolean Implements Parser.WriteFileError
             Get
                 Return mWriteFileError
@@ -85,53 +89,32 @@ Namespace ArchetypeEditor.ADL_Classes
         End Property
 
         Public Sub ResetAll() Implements Parser.ResetAll
-            EiffelCompiler.reset()
+            ArchetypeParser.AppRoot.Billboard.Clear()
         End Sub
 
-        Public Sub Serialise(ByVal a_format As String) Implements Parser.Serialise
-            If Me.AvailableFormats.Contains(a_format) Then
-                Try
-                    adlArchetype.MakeParseTree()
-                    EIF_adlInterface.serialise_archetype(Eiffel.String(a_format))
-                Catch e As Exception
-                    Debug.Assert(False, e.Message)
-                    MessageBox.Show(AE_Constants.Instance.Error_saving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            End If
-        End Sub
-
-
-        Public Sub OpenFile(ByVal FileName As String, ByVal a_filemanager As FileManagerLocal) Implements Parser.OpenFile
-
+        Public Sub OpenFile(ByVal fileName As String, ByVal fileManager As FileManagerLocal) Implements Parser.OpenFile
             Dim current_culture As System.Globalization.CultureInfo = System.Globalization.CultureInfo.CurrentCulture
             Dim replace_culture As Boolean
 
             mOpenFileError = True  ' default unless all goes well
-            mFileName = FileName
+            mFileName = fileName
 
-            ' ADDED 2004-11-18
-            ' Sam Heard
             ' This code is essential to ensure that the parser reads regardless of the local culture
-
             If System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator <> "." Then
                 replace_culture = True
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture()
             End If
 
-            EIF_adlInterface.open_adl_file(Eiffel.String(FileName))
+            ArchetypeParser.ArchDir.AddAdhocItem(Eiffel.String(fileName))
+            Dim archetype As AdlParser.ArchRepArchetype = ArchetypeParser.ArchDir.SelectedArchetype
 
-            If repository.is_valid_path(path) Then
-                repository.add_item(path)
+            If Not archetype Is Nothing AndAlso Not ArchetypeParser.AppRoot.Billboard.HasErrors Then
+                archetype.Compile()
 
-                If repository.has(path) Then
-                    EiffelCompiler.set_target(repository.item(path))
-                    EiffelCompiler.parse_archetype()
-
-                    If EiffelCompiler.archetype_parsed Then
-                        a_filemanager.OntologyManager.Ontology = New ADL_Ontology(EiffelCompiler)
-                        adlArchetype = New ADL_Archetype(EiffelCompiler, a_filemanager)
-                        mOpenFileError = EiffelCompiler.archetype_flat Is Nothing
-                    End If
+                If archetype.IsValid Then
+                    fileManager.OntologyManager.Ontology = NewOntology()
+                    adlArchetype = New ADL_Archetype(ArchetypeParser, fileManager)
+                    mOpenFileError = False
                 End If
             End If
 
@@ -140,175 +123,151 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Public Sub NewArchetype(ByVal adlArchetypeID As ArchetypeID, ByVal LanguageCode As String) Implements Parser.NewArchetype
-            adlArchetype = New ADL_Archetype(EiffelCompiler, adlArchetypeID, LanguageCode)
+        Public Sub CreateNewArchetype(ByVal archetypeID As ArchetypeID, ByVal primaryLanguage As String) Implements Parser.CreateNewArchetype
+            adlArchetype = New ADL_Archetype(ArchetypeParser, archetypeID, primaryLanguage)
         End Sub
 
-        Public Sub AddTermDefinitionsFromTable(ByVal a_table As DataTable, ByVal primary_language As String)
-            Dim term As ADL_Term
-            Dim EifLanguage As EiffelKernel.STRING_8
-
-            'First pass do primary language only
-            For Each dRow As DataRow In a_table.Rows
-                Dim language As String = CType(dRow(0), String)
-                If primary_language = language Then
-                    EifLanguage = Eiffel.String(language)
-
-                    'If TypeOf dRow(4) Is System.DBNull Then
-                    '    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
-                    'Else
-                    '    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)), CStr(dRow(4)))
-                    'End If
-
-                    term = New ADL_Term(CType(dRow(5), RmTerm))
-
-                    EiffelCompiler.archetype_flat.ontology.add_term_definition(EifLanguage, term.EIF_Term)
-                End If
-            Next
-
-            'Then subsequent languages
-            For Each dRow As DataRow In a_table.Rows
-                Dim language As String = CType(dRow(0), String)
-                If primary_language <> language Then
-                    EifLanguage = Eiffel.String(language)
-                    'term = New ADL_Term(CType(dRow(1), String), CType(dRow(2), String), CType(dRow(3), String), CType(dRow(4), String))
-                    term = New ADL_Term(CType(dRow(5), RmTerm))
-                    EiffelCompiler.archetype_flat.ontology.replace_term_definition(EifLanguage, term.EIF_Term, False)
-                End If
-            Next
-        End Sub
-
-        Public Sub AddConstraintDefinitionsFromTable(ByVal a_table As DataTable, ByVal primary_language As String)
-            Dim term As ADL_Term
-            Dim language As EiffelKernel.STRING_8
-
-            'First pass do primary language only
-            For Each dRow As DataRow In a_table.Rows
-                If primary_language = CType(dRow(0), String) Then
-                    language = Eiffel.String(CType(dRow(0), String))
-                    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
-                    EiffelCompiler.archetype_flat.ontology.add_constraint_definition(language, term.EIF_Term)
-                End If
-            Next
-
-            'Then subsequent languages
-            For Each dRow As DataRow In a_table.Rows
-                If primary_language <> CType(dRow(0), String) Then
-                    language = Eiffel.String(CType(dRow(0), String))
-                    term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
-                    EiffelCompiler.archetype_flat.ontology.replace_constraint_definition(language, term.EIF_Term, False)
-                End If
-            Next
-        End Sub
-
-        Public Sub AddTermBindingsFromTable(ByVal a_table As DataTable)
-            Dim path As EiffelKernel.STRING_8
-            Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
-
-            For Each dRow As DataRow In a_table.Rows
-                path = Eiffel.String(CType(dRow(1), String))
-
-                ' HKF: 8 Dec 2008
-                'codePhrase = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                '    Eiffel.String(CType(dRow(0), String) & "::" & CType(dRow(2), String)))
-                Dim terminologyId As String = CType(dRow(0), String)
-                If Not dRow.IsNull(3) Then
-                    Dim version As String = CType(dRow(3), String)
-                    If version <> String.Empty Then
-                        terminologyId &= "(" & version & ")"
-                    End If
-                End If
-                codePhrase = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                    Eiffel.String(terminologyId & "::" & CType(dRow(2), String)))
-
-                EiffelCompiler.archetype_flat.ontology.add_term_binding(codePhrase, path)
-            Next
-        End Sub
-
-        Public Sub AddConstraintBindingsFromTable(ByVal a_table As DataTable)
-            Dim terminology As EiffelKernel.STRING_8
-            Dim constraintCode As EiffelKernel.STRING_8
-            Dim path As openehr.common_libs.basic.URI
-
-            For Each dRow As DataRow In a_table.Rows
-                terminology = Eiffel.String(CType(dRow(0), String))
-                constraintCode = Eiffel.String(CType(dRow(1), String))
-                path = openehr.common_libs.basic.Create.URI.make_from_string(Eiffel.String(CType(dRow(2), String)))
-                EiffelCompiler.archetype_flat.ontology.add_constraint_binding(path, terminology, constraintCode)
-            Next
-        End Sub
-
-        Public Function GetCanonicalArchetype() As XMLParser.ARCHETYPE Implements Parser.GetCanonicalArchetype
-            adlArchetype.MakeParseTree()
-            Dim canonicalArchetype As XMLParser.ARCHETYPE = adlArchetype.GetCanonicalArchetype()
-
-            Return canonicalArchetype
+        Public Function NewOntology() As Ontology Implements Parser.NewOntology
+            Return New ADL_Ontology(ArchetypeParser)
         End Function
 
-        Public Sub WriteFile(ByVal FileName As String, ByVal output_format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
-            'Change from intermediate format to ADL
-            ' then make it again
+        Public Sub AddTermDefinitionsFromTable(ByVal table As DataTable, ByVal primaryLanguage As String)
+            Dim arch As AdlParser.DifferentialArchetype = ArchetypeParser.DifferentialArchetype
 
-            mWriteFileError = True ' default is that an error occurred
+            If Not arch Is Nothing Then
+                Dim term As ADL_Term
+
+                'First pass do primary language only
+                For Each dRow As DataRow In table.Rows
+                    Dim language As String = CType(dRow(0), String)
+
+                    If primaryLanguage = language Then
+                        term = New ADL_Term(CType(dRow(5), RmTerm))
+                        arch.Ontology.AddTermDefinition(Eiffel.String(language), term.EIF_Term)
+                    End If
+                Next
+
+                'Then subsequent languages
+                For Each dRow As DataRow In table.Rows
+                    Dim language As String = CType(dRow(0), String)
+
+                    If primaryLanguage <> language Then
+                        term = New ADL_Term(CType(dRow(5), RmTerm))
+                        arch.Ontology.ReplaceTermDefinition(Eiffel.String(language), term.EIF_Term, False)
+                    End If
+                Next
+            End If
+        End Sub
+
+        Public Sub AddConstraintDefinitionsFromTable(ByVal table As DataTable, ByVal primaryLanguage As String)
+            Dim arch As AdlParser.DifferentialArchetype = ArchetypeParser.DifferentialArchetype
+
+            If Not arch Is Nothing Then
+                Dim term As ADL_Term
+
+                'First pass do primary language only
+                For Each dRow As DataRow In table.Rows
+                    Dim language As String = CType(dRow(0), String)
+
+                    If primaryLanguage = language Then
+                        term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
+                        arch.Ontology.AddConstraintDefinition(Eiffel.String(language), term.EIF_Term)
+                    End If
+                Next
+
+                'Then subsequent languages
+                For Each dRow As DataRow In table.Rows
+                    Dim language As String = CType(dRow(0), String)
+
+                    If primaryLanguage <> language Then
+                        term = New ADL_Term(CStr(dRow(1)), CStr(dRow(2)), CStr(dRow(3)))
+                        arch.Ontology.ReplaceConstraintDefinition(Eiffel.String(language), term.EIF_Term, False)
+                    End If
+                Next
+            End If
+        End Sub
+
+        Public Sub AddTermBindingsFromTable(ByVal table As DataTable)
+            Dim arch As AdlParser.DifferentialArchetype = ArchetypeParser.DifferentialArchetype
+
+            If Not arch Is Nothing Then
+                Dim path As EiffelKernel.String_8
+                Dim codePhrase As AdlParser.CodePhrase
+
+                For Each dRow As DataRow In table.Rows
+                    path = Eiffel.String(CType(dRow(1), String))
+                    Dim terminologyId As String = CType(dRow(0), String)
+
+                    If Not dRow.IsNull(3) Then
+                        Dim version As String = CType(dRow(3), String)
+
+                        If version <> String.Empty Then
+                            terminologyId &= "(" & version & ")"
+                        End If
+                    End If
+
+                    codePhrase = AdlParser.Create.CodePhrase.MakeFromString(Eiffel.String(terminologyId & "::" & CType(dRow(2), String)))
+                    arch.Ontology.AddTermBinding(codePhrase, path)
+                Next
+            End If
+        End Sub
+
+        Public Sub AddConstraintBindingsFromTable(ByVal table As DataTable)
+            Dim arch As AdlParser.DifferentialArchetype = ArchetypeParser.DifferentialArchetype
+
+            If Not arch Is Nothing Then
+                Dim terminology As EiffelKernel.String_8
+                Dim constraintCode As EiffelKernel.String_8
+                Dim path As AdlParser.Uri
+
+                For Each dRow As DataRow In table.Rows
+                    terminology = Eiffel.String(CType(dRow(0), String))
+                    constraintCode = Eiffel.String(CType(dRow(1), String))
+                    path = AdlParser.Create.Uri.MakeFromString(Eiffel.String(CType(dRow(2), String)))
+                    arch.Ontology.AddConstraintBinding(path, terminology, constraintCode)
+                Next
+            End If
+        End Sub
+
+        Public Function GetCanonicalArchetype() As XMLParser.ARCHETYPE Implements Parser.CanonicalArchetype
+            adlArchetype.MakeParseTree()
+            Return adlArchetype.CanonicalArchetype()
+        End Function
+
+        Public Sub WriteFile(ByVal fileName As String, ByVal format As String, ByVal parserSynchronised As Boolean) Implements Parser.WriteFile
+            'Change from intermediate format to ADL then make it again
+            Dim errorMessage As String = Nothing
+
             Try
                 If Not parserSynchronised Then
                     adlArchetype.MakeParseTree()
                 End If
-                If EIF_adlInterface.archetype_available Then
-                    adlArchetype.RemoveUnusedCodes()
 
-                    ' HKF: 8 Dec 2008
-                    adlArchetype.SetArchetypeDigest()
+                Dim arch As AdlParser.ArchRepArchetype = ArchetypeParser.SelectedArchetype
 
-                    If EIF_adlInterface.has_archetype_serialiser_format(Eiffel.String(output_format)) Then
-                        EIF_adlInterface.save_archetype(Eiffel.String(FileName), Eiffel.String(output_format))
-                        If EIF_adlInterface.exception_encountered Then
-                            MessageBox.Show(EIF_adlInterface.status.to_cil)
-                            EIF_adlInterface.reset()
-                        ElseIf Not EIF_adlInterface.save_succeeded Then
-                            MessageBox.Show(EIF_adlInterface.status.to_cil)
-                        Else
-                            mWriteFileError = False
-                        End If
-                    Else
-                        MessageBox.Show("Archetype format - " & output_format & " -  no longer available")
-                    End If
+                If arch Is Nothing Then
+                    errorMessage = "Archetype is not available"
+                ElseIf Not ArchetypeParser.HasArchetypeSerialiserFormat(Eiffel.String(format)) Then
+                    errorMessage = "Archetype format '" & format & "' is not available"
                 Else
-                    MessageBox.Show("Archetype not available - error on making parse tree")
+                    adlArchetype.RemoveUnusedCodes()
+                    adlArchetype.SetArchetypeDigest()
+                    arch.SaveFlatAs(Eiffel.String(fileName), Eiffel.String(format))
+
+                    If Not arch.SaveSucceeded Then
+                        errorMessage = arch.Status.ToCil
+                        arch.Reset()
+                    End If
                 End If
             Catch ex As Exception
-                MessageBox.Show(AE_Constants.Instance.Error_saving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                errorMessage = ex.Message
             End Try
-        End Sub
 
+            mWriteFileError = Not errorMessage Is Nothing
 
-        Public Sub WriteAdlDirect(ByVal FileName As String)
-            Try
-                If EIF_adlInterface.archetype_available Then
-                    adlArchetype.RemoveUnusedCodes()
-
-                    ' HKF: 8 Dec 2008
-                    adlArchetype.SetArchetypeDigest()
-
-                    If EIF_adlInterface.has_archetype_serialiser_format(Eiffel.String("adl")) Then
-                        EIF_adlInterface.save_archetype(Eiffel.String(FileName), Eiffel.String("adl"))
-                        If EIF_adlInterface.exception_encountered Then
-                            MessageBox.Show(EIF_adlInterface.status.to_cil)
-                            EIF_adlInterface.reset()
-                        ElseIf Not EIF_adlInterface.save_succeeded Then
-                            MessageBox.Show(EIF_adlInterface.status.to_cil)
-                        Else
-                            mWriteFileError = False
-                        End If
-                    Else
-                        MessageBox.Show("Archetype format - ADL -  no longer available")
-                    End If
-                Else
-                    MessageBox.Show("Archetype not available - error on making parse tree")
-                End If
-            Catch ex As Exception
-                MessageBox.Show(AE_Constants.Instance.Error_saving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
+            If Not errorMessage Is Nothing Then
+                MessageBox.Show(AE_Constants.Instance.Error_saving & " " & errorMessage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
         End Sub
 
         ' This method disposes the base object's resources.
@@ -318,9 +277,8 @@ Namespace ArchetypeEditor.ADL_Classes
                     ' Insert code to free unmanaged resources.
                 End If
                 adlArchetype = Nothing
-                EiffelCompiler = Nothing
+                marchetypeParser = Nothing
             End If
-
             Me.disposed = True
         End Sub
 
@@ -338,7 +296,7 @@ Namespace ArchetypeEditor.ADL_Classes
 #End Region
 
         Sub New()
-            EiffelCompiler = openehr.adl_parser.interface.Create.ARCHETYPE_PARSER.make
+            marchetypeParser = AdlParser.Create.ArchetypeParser.DefaultCreate
         End Sub
 
     End Class

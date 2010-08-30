@@ -235,7 +235,9 @@ Public Class TabPageComposition
 
         Me.radioPersist.Checked = a_composition.IsPersistent
 
-        For Each rm As RmStructureCompound In a_composition.Data
+        'Srh: 26 fEB 2009 - edt-419
+        'For Each rm As RmStructureCompound In a_composition.Data
+        For Each rm As RmStructure In a_composition.Data
             Select Case rm.Type
                 Case StructureType.SECTION
                     mSectionConstraint.IsRootOfComposition = True
@@ -244,10 +246,16 @@ Public Class TabPageComposition
                     mContextConstraint.ProcessStructure(CType(rm, RmStructureCompound))
                 Case StructureType.Participation
                     mParticipationConstraint.OtherParticipations = CType(rm, RmStructureCompound)
+                Case StructureType.Slot
+                    mContextConstraint.ProcessStructure(CType(rm, RmSlot))
                 Case Else
                     Debug.Assert(False, "Not handled yet")
             End Select
         Next
+
+        If Not a_composition.Participations Is Nothing Then
+            mParticipationConstraint.OtherParticipations = a_composition.Participations
+        End If
     End Sub
 
     Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point, ByVal mandatory_only As Boolean)
@@ -258,8 +266,9 @@ Public Class TabPageComposition
             aContainer.Size = New Size
         End If
 
-        mContextConstraint.BuildInterface(aContainer, pos, mandatory_only)
-
+        If mContextConstraint IsNot Nothing Then
+            mContextConstraint.BuildInterface(aContainer, pos, mandatory_only)
+        End If
     End Sub
 
     Public Function SaveAsComposition() As RmComposition
@@ -269,6 +278,9 @@ Public Class TabPageComposition
             If Not context Is Nothing Then
                 rm.Data.Add(context)
             End If
+        End If
+        If Not mParticipationConstraint Is Nothing AndAlso mParticipationConstraint.HasOtherParticipations Then
+            rm.Participations = mParticipationConstraint.OtherParticipations
         End If
         If Not mSectionConstraint Is Nothing Then
             Dim section As RmSection = mSectionConstraint.SaveAsSection

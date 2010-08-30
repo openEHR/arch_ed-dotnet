@@ -24,11 +24,8 @@ Public Enum Orientation
     BOTTOM
 End Enum
 
-Public Class ColumnLayout : Inherits LayoutManager
-    'Inherits BaseLayout
-
+Public Class ColumnLayout
     Private Shared mDefaultGap As Integer = 2
-
     Private mGap As Integer
     Private mVerticalOrientation As Orientation
     Private mHorizontalOrientation As Orientation
@@ -59,41 +56,32 @@ Public Class ColumnLayout : Inherits LayoutManager
         mHorizontalOrientation = horizontalOrientation
     End Sub
 
-    Public Overrides Sub LayoutContainer(ByVal target As ViewPanel)
-        Dim insets As insets = target.Insets
+    Public Sub LayoutContainer(ByVal target As ViewPanel)
+        Dim insets As Insets = target.Insets
         Dim top As Integer = insets.Top
         Dim tps As Size = target.LayoutSize
 
         target.Size = tps
-
         Dim targetSize As Size = target.Size
 
         If mVerticalOrientation = Orientation.CENTER Then
-            top = top + CInt((targetSize.Height / 2) - (tps.Height / 2))
+            top += CInt(targetSize.Height / 2 - tps.Height / 2)
         ElseIf mVerticalOrientation = Orientation.BOTTOM Then
-            top = top + targetSize.Height - tps.Height + insets.Top
+            top += targetSize.Height - tps.Height + insets.Top
         End If
 
         For Each comp As Control In target.Controls
-            Dim left As Integer = insets.Left
-
             If comp.Visible Then
-                'If TypeOf comp Is IDynaControl Then
-                '    ps = CType(comp, IDynaControl).PreferredSize
-                'Else
-                '    ps = comp.Size
-                'End If
+                Dim left As Integer = insets.Left
 
                 If mHorizontalOrientation = Orientation.CENTER Then
-                    left = CInt((targetSize.Width / 2) - (comp.Width / 2))
+                    left = CInt(targetSize.Width / 2 - comp.Width / 2)
                 ElseIf mHorizontalOrientation = Orientation.RIGHT Then
                     left = targetSize.Width - comp.Width - insets.Right
                 End If
 
                 comp.Location = New System.Drawing.Point(left, top)
-
-                top = top + comp.Height + mGap
-
+                top += comp.Height + mGap
             End If
         Next
     End Sub
@@ -154,31 +142,30 @@ Public Class ColumnLayout : Inherits LayoutManager
     '    Return s
     'End Function
 
-    Public Overrides Function LayoutSize(ByVal aTarget As ViewPanel) As System.Drawing.Size
+    Public Function LayoutSize(ByVal target As ViewPanel) As System.Drawing.Size
+        Dim result As Size = New Size
 
-        Dim s As Size = New Size
-        For i As Integer = 0 To aTarget.Controls.Count - 1
-            Dim comp As Control = aTarget.Controls(i)
+        For i As Integer = 0 To target.Controls.Count - 1
+            Dim comp As Control = target.Controls(i)
+
             If comp.Visible Then
-                'If TypeOf comp Is IDynaControl Then
-                '    d = CType(comp, IDynaControl).PreferredSize
-                'Else
                 Dim d As Size = comp.Size
-                'End If
+
                 If i > 0 Then
-                    s.Height = s.Height + mGap
+                    result.Height += mGap
                 End If
-                s.Height = s.Height + d.Height
-                s.Width = Math.Max(d.Width, s.Width)
+
+                result.Height += d.Height
+                result.Width = Math.Max(d.Width, result.Width)
             End If
         Next
 
-        Dim insets As insets = aTarget.Insets
-        s.Width = s.Width + insets.Left + insets.Right
-        s.Height = s.Height + insets.Top + insets.Bottom
-
-        Return s
+        Dim insets As Insets = target.Insets
+        result.Width += insets.Left + insets.Right
+        result.Height += insets.Top + insets.Bottom
+        Return result
     End Function
+
 End Class
 
 '

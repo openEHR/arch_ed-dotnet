@@ -19,13 +19,13 @@ Public MustInherit Class ArchetypeDescription
     Protected mOriginalAuthorOrganisation As String
     Protected mOriginalAuthorDate As String
     Protected mLifeCycleState As LifeCycleStates
-    Protected mADL_Version As String = "1.4"
     Protected mArchetypePackageURI As String
     Protected mOtherDetails As New OtherDefinitionDetails
     Protected mArchetypeDetails As New ArchetypeDetails
     Protected mCopyRight As String
     Protected mOtherContributors As New Collections.Specialized.StringCollection
-    Protected mReferences As String 'JAR: 24MAY2007, EDT-30 Add field for References
+    Protected mReferences As String
+    Protected mArchetypeDigest As String
 
     Property OriginalAuthor() As String
         Get
@@ -35,6 +35,7 @@ Public MustInherit Class ArchetypeDescription
             mOriginalAuthor = Value
         End Set
     End Property
+
     Property OriginalAuthorEmail() As String
         Get
             Return mOriginalAuthorEmail
@@ -43,6 +44,7 @@ Public MustInherit Class ArchetypeDescription
             mOriginalAuthorEmail = Value
         End Set
     End Property
+
     Property OriginalAuthorOrganisation() As String
         Get
             Return mOriginalAuthorOrganisation
@@ -51,6 +53,7 @@ Public MustInherit Class ArchetypeDescription
             mOriginalAuthorOrganisation = Value
         End Set
     End Property
+
     Property OriginalAuthorDate() As String
         Get
             Return mOriginalAuthorDate
@@ -59,6 +62,7 @@ Public MustInherit Class ArchetypeDescription
             mOriginalAuthorDate = Value
         End Set
     End Property
+
     Property OtherContributors() As Collections.Specialized.StringCollection
         Get
             Return mOtherContributors
@@ -67,7 +71,7 @@ Public MustInherit Class ArchetypeDescription
             mOtherContributors = value
         End Set
     End Property
-    'JAR: 24MAY2007, EDT-30 Add field for References
+
     Property References() As String
         Get
             Return mReferences
@@ -76,6 +80,16 @@ Public MustInherit Class ArchetypeDescription
             mReferences = Value
         End Set
     End Property
+
+    Property ArchetypeDigest() As String
+        Get
+            Return mArchetypeDigest
+        End Get
+        Set(ByVal Value As String)
+            mArchetypeDigest = Value
+        End Set
+    End Property
+
     Property CopyRight() As String
         Get
             Return mCopyRight
@@ -84,6 +98,7 @@ Public MustInherit Class ArchetypeDescription
             mCopyRight = Value
         End Set
     End Property
+
     Public Overridable Property Details() As ArchetypeDetails
         Get
             Return mArchetypeDetails
@@ -92,6 +107,7 @@ Public MustInherit Class ArchetypeDescription
             mArchetypeDetails = value
         End Set
     End Property
+
     Property LifeCycleState() As LifeCycleStates
         Get
             Return mLifeCycleState
@@ -100,11 +116,7 @@ Public MustInherit Class ArchetypeDescription
             mLifeCycleState = Value
         End Set
     End Property
-    ReadOnly Property ADL_Version() As String
-        Get
-            Return mADL_Version
-        End Get
-    End Property
+
     Property LifeCycleStateAsString() As String
         Get
             Return mLifeCycleState.ToString()
@@ -119,6 +131,7 @@ Public MustInherit Class ArchetypeDescription
             End Try
         End Set
     End Property
+
     Property ArchetypePackageURI() As String
         Get
             Return mArchetypePackageURI
@@ -127,12 +140,4 @@ Public MustInherit Class ArchetypeDescription
             mArchetypePackageURI = Value
         End Set
     End Property
-    'Public Property OtherDetails() As OtherDefinitionDetails 'JAR: 24MAY2007, EDT-30 Add field for References
-    '    Get
-    '        Return mOtherDetails
-    '    End Get
-    '    Set(ByVal value As OtherDefinitionDetails)
-    '        mOtherDetails = value
-    '    End Set        
-    'End Property
 End Class

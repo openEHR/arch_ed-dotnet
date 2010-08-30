@@ -219,6 +219,14 @@ Public Class ArchetypeNodeAnonymous
     Sub New(ByVal a_type As StructureType)
         ' set the text value to the class type
         mRMStructure = New RmSlot(a_type)
+
+        'SRH: 6th Jan 2010 - EDT 585 - default for structures should be 0..1 (except for Data which should be 1..1)
+
+        If a_type = StructureType.Tree Or a_type = StructureType.Table Or a_type = StructureType.List Or a_type = StructureType.Single Then
+            Occurrences.MinCount = 0
+            Occurrences.MaxCount = 1
+        End If
+
         Translate()
     End Sub
 

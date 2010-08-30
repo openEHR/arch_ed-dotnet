@@ -24,6 +24,7 @@ Partial Class TabPageActivity
         Me.PanelAction = New System.Windows.Forms.Panel
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.RenameToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
+        Me.RemoveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.butOpenArchetype = New System.Windows.Forms.Button
         Me.lblNodeId = New System.Windows.Forms.Label
         Me.lblAction = New System.Windows.Forms.Label
@@ -32,7 +33,6 @@ Partial Class TabPageActivity
         Me.HelpProviderActivity = New System.Windows.Forms.HelpProvider
         Me.openToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.selectToolTip = New System.Windows.Forms.ToolTip(Me.components)
-        Me.RemoveToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.PanelAction.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
@@ -47,7 +47,7 @@ Partial Class TabPageActivity
         Me.PanelAction.Controls.Add(Me.txtAction)
         Me.PanelAction.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelAction.Location = New System.Drawing.Point(0, 0)
-        Me.PanelAction.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.PanelAction.Margin = New System.Windows.Forms.Padding(2)
         Me.PanelAction.Name = "PanelAction"
         Me.PanelAction.Size = New System.Drawing.Size(467, 37)
         Me.PanelAction.TabIndex = 3
@@ -56,23 +56,30 @@ Partial Class TabPageActivity
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.RenameToolStripMenuItem, Me.RemoveToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(153, 70)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(118, 48)
         '
         'RenameToolStripMenuItem
         '
         Me.RenameToolStripMenuItem.Name = "RenameToolStripMenuItem"
-        Me.RenameToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.RenameToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
         Me.RenameToolStripMenuItem.Text = "Rename"
+        '
+        'RemoveToolStripMenuItem
+        '
+        Me.RemoveToolStripMenuItem.Name = "RemoveToolStripMenuItem"
+        Me.RemoveToolStripMenuItem.Size = New System.Drawing.Size(117, 22)
+        Me.RemoveToolStripMenuItem.Text = "Remove"
         '
         'butOpenArchetype
         '
         Me.butOpenArchetype.Image = CType(resources.GetObject("butOpenArchetype.Image"), System.Drawing.Image)
+        Me.butOpenArchetype.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.butOpenArchetype.Location = New System.Drawing.Point(252, 6)
-        Me.butOpenArchetype.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.butOpenArchetype.Margin = New System.Windows.Forms.Padding(2)
         Me.butOpenArchetype.Name = "butOpenArchetype"
-        Me.butOpenArchetype.Size = New System.Drawing.Size(18, 20)
+        Me.butOpenArchetype.Size = New System.Drawing.Size(169, 26)
         Me.butOpenArchetype.TabIndex = 5
-        Me.openToolTip.SetToolTip(Me.butOpenArchetype, "View embedded archetype")
+        Me.butOpenArchetype.Text = "Open Action archetype"
         '
         'lblNodeId
         '
@@ -96,7 +103,7 @@ Partial Class TabPageActivity
         'butGetAction
         '
         Me.butGetAction.Location = New System.Drawing.Point(222, 6)
-        Me.butGetAction.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.butGetAction.Margin = New System.Windows.Forms.Padding(2)
         Me.butGetAction.Name = "butGetAction"
         Me.butGetAction.Size = New System.Drawing.Size(24, 20)
         Me.butGetAction.TabIndex = 2
@@ -106,23 +113,17 @@ Partial Class TabPageActivity
         'txtAction
         '
         Me.txtAction.Location = New System.Drawing.Point(54, 6)
-        Me.txtAction.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtAction.Margin = New System.Windows.Forms.Padding(2)
         Me.txtAction.Name = "txtAction"
         Me.txtAction.Size = New System.Drawing.Size(163, 20)
         Me.txtAction.TabIndex = 1
-        '
-        'RemoveToolStripMenuItem
-        '
-        Me.RemoveToolStripMenuItem.Name = "RemoveToolStripMenuItem"
-        Me.RemoveToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.RemoveToolStripMenuItem.Text = "Remove"
         '
         'TabPageActivity
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.Controls.Add(Me.PanelAction)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "TabPageActivity"
         Me.Size = New System.Drawing.Size(467, 306)
         Me.PanelAction.ResumeLayout(False)

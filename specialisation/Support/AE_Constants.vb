@@ -680,7 +680,7 @@ Public Class AE_Constants
         mLanguageAdditionCancelled = TerminologyServer.Instance.RubricForCode(286, Language)
         mCurrentArchetype = TerminologyServer.Instance.RubricForCode(287, Language)
         mDiscardChanges = TerminologyServer.Instance.RubricForCode(288, Language)
-        mCouldNotFind = TerminologyServer.Instance.RubricForCode(289, Language)        
+        mCouldNotFind = TerminologyServer.Instance.RubricForCode(289, Language)
         mPleaseSetConceptText = TerminologyServer.Instance.RubricForCode(290, Language)
         mRemoveState = TerminologyServer.Instance.RubricForCode(291, Language)
         mErrorLoading = TerminologyServer.Instance.RubricForCode(292, Language)

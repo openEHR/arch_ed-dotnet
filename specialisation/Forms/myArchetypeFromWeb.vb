@@ -19,19 +19,14 @@ Public Class myArchetypeFromWeb
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
-
     End Sub
 
     Public Sub setTerms(ByVal id As String)
-
         Dim ArchetypeService As org.openehr.ArchetypeFinderBean = New org.openehr.ArchetypeFinderBean()
-        Dim ArchetypeDescTermsReturn As Array = Nothing 'JAR: 18APR07, EDT-35 Clean up compile time warnings
-       
+        Dim ArchetypeDescTermsReturn As Array = Nothing
         Dim ArchetypeDescAvailable As Boolean = False
         Dim ArchetypeURL As String
-        Dim language As String
-
-        language = OceanArchetypeEditor.DefaultLanguageCode
+        Dim language As String = OceanArchetypeEditor.DefaultLanguageCode
 
         Try
             'The ADL-URL is required for locating and opening the archetype
@@ -46,24 +41,20 @@ Public Class myArchetypeFromWeb
             btn_open.Hide()
         End Try
 
-
         ' DescriptionTerms-Array : this is a collection of all elements 
         ' we want to have in our resultset as description for an archetype
         ' they will be displayed in a table, similar to the Archetype Finders resultset!
         ' developer of the AE can define here maually what types of description is useful and should be shown
         ' It is necesaary to use extactly the property-names of the Ontology, as all is retrieved from the Ontology!
         Dim DescriptionTerms(2) As String
-
         DescriptionTerms(0) = "hasEHRClass"
         DescriptionTerms(1) = "archetypeDescription"
         DescriptionTerms(2) = "archetypePurpose"
-
 
         Try
             'The description helps the user to "identify" the archetype by seeing more information than just the ID.
             ArchetypeDescTermsReturn = ArchetypeService.getDescriptionForArchetype(id, language, DescriptionTerms)
             ArchetypeDescAvailable = True
-
         Catch ex As System.Web.Services.Protocols.SoapException
             ArchetypeDescAvailable = False
         End Try
@@ -72,6 +63,7 @@ Public Class myArchetypeFromWeb
             Dim aTerm As String
             Dim y As Int32
             Dim row As Int32 = 0
+
             For y = 0 To ArchetypeDescTermsReturn.Length - 1
                 aTerm = ArchetypeDescTermsReturn.GetValue(y).ToString
 
@@ -93,7 +85,6 @@ Public Class myArchetypeFromWeb
                 keylabel.ForeColor = Color.DarkBlue
                 keylabel.Width = 120
 
-
                 Dim valuelabel As New System.Windows.Forms.Label
                 valuelabel.Name = value.ToString
                 valuelabel.Text = value
@@ -101,15 +92,12 @@ Public Class myArchetypeFromWeb
                 valuelabel.TextAlign = ContentAlignment.MiddleLeft
                 valuelabel.ForeColor = Color.DarkBlue
                 valuelabel.Width = 580
-
                 valuelabel.AutoSize = True
-
 
                 descriptionTable.Controls.Add(keylabel, 0, row)
                 descriptionTable.Controls.Add(valuelabel, 1, row)
 
                 row = row + 1
-
             Next y
 
             'set the Concept and the ID
@@ -118,6 +106,7 @@ Public Class myArchetypeFromWeb
 
             term(0) = "archetypeConcept"
             TermReturn = ArchetypeService.getDescriptionForArchetype(id, language, term)
+
             For y = 0 To TermReturn.Length - 1
                 aTerm = TermReturn.GetValue(y).ToString
                 Dim splittedTerms() As String
@@ -130,9 +119,9 @@ Public Class myArchetypeFromWeb
                 lbl_thisConcept.Text = value
             Next y
 
-
             term(0) = "archetypeID"
             TermReturn = ArchetypeService.getDescriptionForArchetype(id, language, term)
+
             For y = 0 To TermReturn.Length - 1
                 aTerm = TermReturn.GetValue(y).ToString
                 Dim splittedTerms() As String
@@ -144,9 +133,7 @@ Public Class myArchetypeFromWeb
                 lbl_thisID.Text = "(" & value & ")"
                 lbl_thisID.SetBounds(lbl_thisConcept.Location.X + lbl_thisConcept.Width + 20, lbl_thisID.Location.Y, lbl_thisID.Width, lbl_thisID.Height)
                 lbl_thisID.Refresh()
-
             Next y
-
 
             Me.Height = descriptionTable.Location.Y + descriptionTable.Height + 10
         ElseIf (ArchetypeDescAvailable = False) Then
@@ -156,17 +143,12 @@ Public Class myArchetypeFromWeb
             lbl_thisID.Visible = False
             lbl_thisID.SendToBack()
             Me.Height = 40
-
-
         End If
 
         Me.Controls.Add(descriptionTable)
         Me.Margin = New Padding(0, 0, 0, 5)
             Me.Refresh()
-
-
     End Sub
-
 
     Private Sub btn_open_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_open.Click
         Dim myID As Button = sender

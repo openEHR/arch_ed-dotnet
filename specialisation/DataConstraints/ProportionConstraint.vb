@@ -123,11 +123,11 @@ Class Constraint_Proportion
         End Get
         Set(ByVal value As Boolean)
             If value Then
-                mDenominator.MinimumValue = 100
-                mDenominator.MaximumValue = 100
+                mDenominator.MinimumRealValue = 100
+                mDenominator.MaximumRealValue = 100
             Else
                 mDenominator.HasMinimum = True
-                mDenominator.MinimumValue = 0
+                mDenominator.MinimumRealValue = 0
                 mDenominator.IncludeMinimum = False
                 mDenominator.HasMaximum = False
             End If
@@ -140,11 +140,11 @@ Class Constraint_Proportion
         End Get
         Set(ByVal value As Boolean)
             If value Then
-                mDenominator.MinimumValue = 1
-                mDenominator.MaximumValue = 1
+                mDenominator.MinimumRealValue = 1
+                mDenominator.MaximumRealValue = 1
             Else
                 mDenominator.HasMinimum = True
-                mDenominator.MinimumValue = 0
+                mDenominator.MinimumRealValue = 0
                 mDenominator.IncludeMinimum = False
                 mDenominator.HasMaximum = False
             End If

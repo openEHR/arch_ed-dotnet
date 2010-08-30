@@ -74,6 +74,55 @@ Public Class ReferenceModel
         Return mArchetypedClass
     End Function
 
+    Public Shared Function IsAbstract(ByVal value As StructureType) As Boolean
+        Select Case value
+            Case StructureType.ENTRY, StructureType.CARE_ENTRY, StructureType.Event, StructureType.Item, StructureType.Structure
+                Return True
+            Case Else
+                Return False
+        End Select
+    End Function
+
+    Public Shared Function Specialisations(ByVal Value As StructureType) As StructureType()
+        Select Case Value
+            Case StructureType.ENTRY
+                Dim s(4) As StructureType
+                s(0) = StructureType.OBSERVATION
+                s(1) = StructureType.EVALUATION
+                s(2) = StructureType.INSTRUCTION
+                s(3) = StructureType.ACTION
+                s(4) = StructureType.ADMIN_ENTRY
+                Return s
+            Case StructureType.CARE_ENTRY
+                Dim s(3) As StructureType
+                s(0) = StructureType.OBSERVATION
+                s(1) = StructureType.EVALUATION
+                s(2) = StructureType.INSTRUCTION
+                s(3) = StructureType.ACTION
+                Return s
+            Case StructureType.Structure
+                Dim s(3) As StructureType
+                s(0) = StructureType.Single
+                s(1) = StructureType.List
+                s(2) = StructureType.Tree
+                s(3) = StructureType.Table
+                Return s
+            Case StructureType.Event
+                Dim s(1) As StructureType
+                s(0) = StructureType.IntervalEvent
+                s(1) = StructureType.PointEvent
+                Return s
+            Case StructureType.Item
+                Dim s(1) As StructureType
+                s(0) = StructureType.Element
+                s(1) = StructureType.Cluster
+                Return s
+            Case Else
+                Debug.Assert(False, "Not available")
+                Return Nothing
+        End Select
+    End Function
+
     Public Shared Sub SetArchetypedClass(ByVal Value As StructureType)
         ' not a null value
         Debug.Assert(Not Value = StructureType.Not_Set)
@@ -108,6 +157,7 @@ Public Class ReferenceModel
                 mReferenceModelNames.Add(106, "ITEM_LIST")
                 mReferenceModelNames.Add(107, "ITEM_TREE")
                 mReferenceModelNames.Add(108, "ITEM_TABLE")
+                mReferenceModelNames.Add(673, "ITEM")
                 mReferenceModelNames.Add(313, "CLUSTER")
                 mReferenceModelNames.Add(567, "ELEMENT")
                 mReferenceModelNames.Add(433, "EVENT")
@@ -176,7 +226,7 @@ Public Class ReferenceModel
                 Select Case Parent
                     Case StructureType.COMPOSITION 'openEHR
                         Select Case Child
-                            Case StructureType.SECTION, StructureType.List, StructureType.Table, StructureType.Single, StructureType.Tree
+                            Case StructureType.SECTION, StructureType.List, StructureType.Table, StructureType.Single, StructureType.Tree, StructureType.Slot
                                 Return True
                         End Select
                     Case StructureType.SECTION 'openEHR
@@ -213,6 +263,7 @@ Public Class ReferenceModel
                         End Select
                     Case StructureType.Data 'openEHR
                         Debug.Assert(mArchetypedClass <> 0)
+
                         Select Case mArchetypedClass
                             Case StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                                 Select Case Child
@@ -331,7 +382,6 @@ Public Class ReferenceModel
 
         Debug.Assert(False)
         Return False
-
     End Function
 
     Public Shared Function IsValidEntryType(ByVal a_structure_type As StructureType) As Boolean
@@ -460,6 +510,12 @@ Public Class ReferenceModel
                     Case Else
                         Debug.Assert(False)
                 End Select
+            Case StructureType.Cluster
+                Dim s(2) As StructureType
+                s(0) = StructureType.Element
+                s(1) = StructureType.Cluster
+                s(2) = StructureType.Item
+                Return s
             Case Else
                 Select Case mStructureClass
                     Case StructureType.Single, StructureType.List
@@ -467,12 +523,13 @@ Public Class ReferenceModel
                         s(0) = StructureType.Element
                         Return s
                     Case StructureType.Tree
-                        Dim s(1) As StructureType
+                        Dim s(2) As StructureType
                         s(0) = StructureType.Element
                         s(1) = StructureType.Cluster
+                        s(2) = StructureType.Item
                         Return s
                     Case StructureType.Table
-                        Debug.Assert(False)                      
+                        Debug.Assert(False)
                 End Select
         End Select
         Return Nothing

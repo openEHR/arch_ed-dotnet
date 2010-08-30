@@ -67,8 +67,8 @@ Public Class TableStructure
                         archNode = New ArchetypeElement(CType(rmStr, RmElement), mFileManager)
                     ElseIf rmStr.Type = StructureType.Slot Then
                         If String.IsNullOrEmpty(rmStr.NodeId) Then
-                        archNode = New ArchetypeNodeAnonymous(CType(rmStr, RmSlot))
-                    Else
+                            archNode = New ArchetypeNodeAnonymous(CType(rmStr, RmSlot))
+                        Else
                             archNode = New ArchetypeSlot(CType(rmStr, RmSlot), mFileManager)
                         End If
 
@@ -340,7 +340,7 @@ Public Class TableStructure
 
                     If Not rm Is Nothing Then
                         AddTableRow(rm)
-                        End If
+                    End If
 
                 Case StructureType.List
                     For Each rm As RmStructure In Value.Children
@@ -395,7 +395,7 @@ Public Class TableStructure
             row(2) = node
             row(0) = ImageIndexForItem(node, False)
             mArchetypeTable.Rows.Add(row)
-            End If
+        End If
     End Sub
 
     Public Overrides Sub Reset()
@@ -439,31 +439,31 @@ Public Class TableStructure
             ElseIf MessageBox.Show(AE_Constants.Instance.Specialise & "?", _
                     AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
 
-            If mElement.Occurrences.IsUnbounded Or mElement.Occurrences.MaxCount > 1 Then
-                Dim new_element As ArchetypeElement
-                Dim new_row As DataRow
-                Dim a_cell As DataGridCell
+                If mElement.Occurrences.IsUnbounded Or mElement.Occurrences.MaxCount > 1 Then
+                    Dim new_element As ArchetypeElement
+                    Dim new_row As DataRow
+                    Dim a_cell As DataGridCell
 
-                new_element = CType(CType(mElement, ArchetypeElement).Copy, ArchetypeElement)
-                new_element.Specialise()
+                    new_element = CType(CType(mElement, ArchetypeElement).Copy, ArchetypeElement)
+                    new_element.Specialise()
 
-                new_row = mArchetypeTable.NewRow
-                new_row(1) = new_element.Text
-                mArchetypeTable.Rows.InsertAt(new_row, Me.dgGrid.CurrentRowIndex + 1)
-                new_row(2) = new_element
+                    new_row = mArchetypeTable.NewRow
+                    new_row(1) = new_element.Text
+                    mArchetypeTable.Rows.InsertAt(new_row, Me.dgGrid.CurrentRowIndex + 1)
+                    new_row(2) = new_element
                     new_row(0) = ImageIndexForConstraintType(new_element.Constraint.Type, CType(new_element.RM_Class, RmElement).isReference, False)
-                ' go to the new entry
+                    ' go to the new entry
                     a_cell.RowNumber = dgGrid.CurrentRowIndex + 1
-                a_cell.ColumnNumber = 1
+                    a_cell.ColumnNumber = 1
                     dgGrid.Focus()
                     dgGrid.CurrentCell = a_cell
-            Else
-                mElement.Specialise()
+                Else
+                    mElement.Specialise()
                     mArchetypeTable.Rows(dgGrid.CurrentRowIndex).Item(1) = mCurrentItem.Text
-            End If
+                End If
 
-            mFileManager.FileEdited = True
-        End If
+                mFileManager.FileEdited = True
+            End If
         End If
     End Sub
 
@@ -624,16 +624,16 @@ Public Class TableStructure
         Else
             Dim rowLabel As String
 
-        'If Not row_selected Then
-        '    ' and the column label
-        '    ii = Me.dgGrid.CurrentCell.ColumnNumber
-        '    label = Me.TableArchetypeStyle.GridColumnStyles(ii).HeaderText
-        '    If ii < 2 Then
-        '        'not a valid column to remove
-        '        MessageBox.Show(AE_Constants.Instance.Cannot_delete & "'" & label & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-        '        Return
-        '    End If
-        'End If
+            'If Not row_selected Then
+            '    ' and the column label
+            '    ii = Me.dgGrid.CurrentCell.ColumnNumber
+            '    label = Me.TableArchetypeStyle.GridColumnStyles(ii).HeaderText
+            '    If ii < 2 Then
+            '        'not a valid column to remove
+            '        MessageBox.Show(AE_Constants.Instance.Cannot_delete & "'" & label & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            '        Return
+            '    End If
+            'End If
 
             ' a row is selected
             rowLabel = CStr(dgGrid.Item(rowIndex, 1))
@@ -643,7 +643,7 @@ Public Class TableStructure
 
                 If dgGrid.CurrentRowIndex < 0 Then
                     SetCurrentItem(Nothing)
-            End If
+                End If
             End If
 
             'Dim selected_rows As DataRow()
@@ -1009,9 +1009,9 @@ Public Class TableStructure
 
                 If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                     SpecialiseCurrentItem(sender, e)
-                i = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
+                    i = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
 
-                If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                    If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                         e.ProposedValue = element.Text
                     End If
                 End If
@@ -1025,7 +1025,7 @@ Public Class TableStructure
             'Slot may reset text to include class
             If archetype_node.Text <> CStr(e.ProposedValue) Then
                 e.ProposedValue = archetype_node.Text
-        End If
+            End If
         End If
     End Sub
 
@@ -1072,8 +1072,8 @@ Public Class TableStructure
                     Case DialogResult.Yes
                         table_archetype = New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
                     Case DialogResult.No
-                Dim newSlot As New RmSlot(StructureType.Element)
-                table_archetype = New ArchetypeNodeAnonymous(newSlot)
+                        Dim newSlot As New RmSlot(StructureType.Element)
+                        table_archetype = New ArchetypeNodeAnonymous(newSlot)
                 End Select
             Else
                 table_archetype = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)

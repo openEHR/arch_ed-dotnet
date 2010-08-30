@@ -121,36 +121,33 @@
   <data name="ButAddKeyWord.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScwAA
-        EnMBjCK5BwAAAERJREFUOE9jYKAx+A80H4TJBmADGhoayDZkJBkAC21SaXjskKoRM3BBUYWOoWkAQxxZ
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScgAA
+        EnIBXmVb4wAAAERJREFUOE9jYKAx+A80H4TJBmADGhoayDZkJBkAC21SaXjskKoRM3BBUYWOoWkAQxxZ
         HaEEMpKiEVdYUBwGDLAQx2UDAMB/cjSyNK39AAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="butRemoveKeyWord.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScwAA
-        EnMBjCK5BwAAACpJREFUOE9jYBgFwygE/gP9Qg6GBwE5mv83NDSA9EEAiEMOHkaxMIS9AgATrkFWTbkN
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScgAA
+        EnIBXmVb4wAAACpJREFUOE9jYBgFwygE/gP9Qg6GBwE5mv83NDSA9EEAiEMOHkaxMIS9AgATrkFWTbkN
         0QAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="butAddContributor.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScwAA
-        EnMBjCK5BwAAAERJREFUOE9jYKAx+A80H4TJBmADGhoayDZkJBkAC21SaXjskKoRM3BBUYWOoWkAQxxZ
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScgAA
+        EnIBXmVb4wAAAERJREFUOE9jYKAx+A80H4TJBmADGhoayDZkJBkAC21SaXjskKoRM3BBUYWOoWkAQxxZ
         HaEEMpKiEVdYUBwGDLAQx2UDAMB/cjSyNK39AAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="butRemoveContributor.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScwAA
-        EnMBjCK5BwAAACpJREFUOE9jYBgFwygE/gP9Qg6GBwE5mv83NDSA9EEAiEMOHkaxMIS9AgATrkFWTbkN
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAScgAA
+        EnIBXmVb4wAAACpJREFUOE9jYBgFwygE/gP9Qg6GBwE5mv83NDSA9EEAiEMOHkaxMIS9AgATrkFWTbkN
         0QAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="ContextMenu1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
 </root>

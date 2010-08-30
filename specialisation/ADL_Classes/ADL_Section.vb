@@ -21,23 +21,23 @@ Namespace ArchetypeEditor.ADL_Classes
     Class ADL_SECTION
         Inherits RmSection
 
-        Private Function GetRunTimeConstraintID(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As String
+        Private Function GetRunTimeConstraintID(ByVal an_attribute As AdlParser.CAttribute) As String
             Dim result As String = ""
-            Dim CodedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim constraint_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT
+            Dim CodedText As AdlParser.CComplexObject
+            Dim constraint_object As AdlParser.CObject
 
-            If an_attribute.has_children Then
-            CodedText = an_attribute.children.first
-            an_attribute = CodedText.attributes.first
+            If an_attribute.HasChildren Then
+                CodedText = an_attribute.Children.First
+                an_attribute = CodedText.Attributes.First
 
-                If an_attribute.has_children Then
-            constraint_object = an_attribute.children.first
+                If an_attribute.HasChildren Then
+                    constraint_object = an_attribute.Children.First
 
-            If constraint_object.generating_type.to_cil = "CONSTRAINT_REF" Then
-                        result = CType(constraint_object, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).as_string.to_cil
-            ElseIf constraint_object.generating_type.to_cil = "C_CODE_PHRASE" Then
-                        result = CType(constraint_object, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).as_string.to_cil()
-            End If
+                    If constraint_object.GeneratingType.Out.ToCil = "CONSTRAINT_REF" Then
+                        result = CType(constraint_object, AdlParser.ConstraintRef).AsString.ToCil
+                    ElseIf constraint_object.GeneratingType.Out.ToCil = "C_CODE_PHRASE" Then
+                        result = CType(constraint_object, AdlParser.CCodePhrase).AsString.ToCil()
+                    End If
                 End If
             End If
 
@@ -52,64 +52,64 @@ Namespace ArchetypeEditor.ADL_Classes
             Return result
         End Function
 
-        Private Sub ProcessSection(ByVal a_rm_section As Object, ByVal an_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+        Private Sub ProcessSection(ByVal a_rm_section As Object, ByVal an_object As AdlParser.CObject)
             'ccomplex object means it is a section, otherwise a slot
             'a_rm_section is passed as object so that definition can be passed at the first level
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim an_attribute As AdlParser.CAttribute
             Dim i, j As Integer
 
-            Select Case an_object.generating_type.to_cil
+            Select Case an_object.GeneratingType.Out.ToCil
                 Case "C_COMPLEX_OBJECT"
-                    Dim a_complex_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                    Dim a_complex_object As AdlParser.CComplexObject
                     Dim a_section As RmSection
 
-                    a_section = New RmSection(an_object.node_id.to_cil)
+                    a_section = New RmSection(an_object.NodeId.ToCil)
                     a_complex_object = an_object
 
-                    For i = 1 To a_complex_object.attributes.count
-                        an_attribute = a_complex_object.attributes.i_th(i)
+                    For i = 1 To a_complex_object.Attributes.Count
+                        an_attribute = a_complex_object.Attributes.ITh(i)
 
-                        If an_attribute.has_children Then
-                        Select Case an_attribute.rm_attribute_name.to_cil
-                            Case "name", "Name", "NAME", "runtime_label"
-                                a_section.NameConstraint = ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                            Case "items", "Items", "ITEMS"
-                                For j = 1 To an_attribute.children.count
-                                    ProcessSection(a_section, an_attribute.children.i_th(j))
-                                Next
-                        End Select
+                        If an_attribute.HasChildren Then
+                            Select Case an_attribute.RmAttributeName.ToCil
+                                Case "name", "Name", "NAME", "runtime_label"
+                                    a_section.NameConstraint = ADL_RmElement.ProcessText(CType(an_attribute.Children.First, AdlParser.CComplexObject))
+                                Case "items", "Items", "ITEMS"
+                                    For j = 1 To an_attribute.Children.Count
+                                        ProcessSection(a_section, an_attribute.Children.ITh(j))
+                                    Next
+                            End Select
                         End If
                     Next
 
                     a_rm_section.Children.Add(a_section)
 
                 Case "ARCHETYPE_SLOT"
-                    a_rm_section.children.add(New RmSlot(CType(an_object, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                    a_rm_section.children.add(New RmSlot(CType(an_object, AdlParser.ArchetypeSlot)))
 
                 Case Else
                     Debug.Assert(False, "Type is not catered for")
             End Select
         End Sub
 
-        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Sub New(ByRef Definition As AdlParser.CComplexObject, ByVal a_filemanager As FileManagerLocal)
             MyBase.New(Definition, a_filemanager)
 
-            If Definition.has_attribute(Eiffel.String("items")) Then
-                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            If Definition.HasAttribute(Eiffel.String("items")) Then
+                Dim an_attribute As AdlParser.CAttribute
                 Dim i As Integer
 
-                an_attribute = Definition.c_attribute_at_path(Eiffel.String("items"))
-                ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.cardinality, Me.Children)
+                an_attribute = Definition.CAttributeAtPath(Eiffel.String("items"))
+                ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.Cardinality, Children)
 
-                For i = 1 To an_attribute.children.count
-                    ProcessSection(Me, an_attribute.children.i_th(i))
+                For i = 1 To an_attribute.Children.Count
+                    ProcessSection(Me, an_attribute.Children.ITh(i))
                 Next
             End If
-
         End Sub
 
     End Class
 End Namespace
+
 '
 '***** BEGIN LICENSE BLOCK *****
 'Version: MPL 1.1/GPL 2.0/LGPL 2.1

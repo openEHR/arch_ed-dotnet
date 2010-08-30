@@ -160,7 +160,11 @@ Public Class OrdinalValue ': Inherits DataRow
 
     Public Property InternalCode() As String
         Get
-            Return CStr(mDataRow(2))
+            If mDataRow.IsNull(2) Then
+                Return ""
+            Else
+                Return CStr(mDataRow(2))
+            End If
         End Get
         Set(ByVal Value As String)
             mDataRow(2) = Value

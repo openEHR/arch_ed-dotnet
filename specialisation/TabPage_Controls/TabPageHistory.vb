@@ -13,6 +13,8 @@
 '	last_change: "$LastChangedDate$"
 '
 '
+Option Explicit On
+Option Strict On
 
 Public Class TabpageHistory
     Inherits System.Windows.Forms.UserControl
@@ -26,6 +28,11 @@ Public Class TabpageHistory
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
     Friend WithEvents Splitter2 As System.Windows.Forms.Splitter
     Friend WithEvents RightPanel As System.Windows.Forms.Panel
+    Friend WithEvents EitherRadioButton As System.Windows.Forms.RadioButton
+    Friend WithEvents ContextMenuEvents As System.Windows.Forms.ContextMenuStrip
+    Friend WithEvents SpecialiseToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents listViewMathsFunctions As System.Windows.Forms.ListView
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
     WithEvents mOccurrences As OccurrencesPanel
 
 #Region " Windows Form Designer generated code "
@@ -38,12 +45,15 @@ Public Class TabpageHistory
 
         'Add any initialization after the InitializeComponent() call
 
-        If Not Me.DesignMode Then
+        If Not DesignMode Then
             mFileManager = Filemanager.Master
             mOccurrences = New OccurrencesPanel(mFileManager)
             gbEventDetails.Controls.Add(mOccurrences)
             mOccurrences.Dock = DockStyle.Top
             mOccurrences.TabIndex = 0
+            'gbDuration.Location = gbOffset.Location
+            'gbDuration.Height = gbOffset.Height
+
         End If
     End Sub
 
@@ -67,7 +77,6 @@ Public Class TabpageHistory
     Friend WithEvents txtEventDescription As System.Windows.Forms.TextBox
     Friend WithEvents butAddEvent As System.Windows.Forms.Button
     Friend WithEvents gbDuration As System.Windows.Forms.GroupBox
-    Friend WithEvents comboIntervalViewPoint As System.Windows.Forms.ComboBox
     Friend WithEvents numericDuration As System.Windows.Forms.NumericUpDown
     Friend WithEvents comboDurationUnits As System.Windows.Forms.ComboBox
     Friend WithEvents RadioInterval As System.Windows.Forms.RadioButton
@@ -102,20 +111,22 @@ Public Class TabpageHistory
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabpageHistory))
         Me.gbEventDetails = New System.Windows.Forms.GroupBox
-        Me.buSetRuntimeConstraint = New System.Windows.Forms.Button
-        Me.txtRuntimeConstraint = New System.Windows.Forms.TextBox
-        Me.txtEventDescription = New System.Windows.Forms.TextBox
         Me.gbDuration = New System.Windows.Forms.GroupBox
+        Me.listViewMathsFunctions = New System.Windows.Forms.ListView
+        Me.Panel1 = New System.Windows.Forms.Panel
         Me.cbFixedInterval = New System.Windows.Forms.CheckBox
-        Me.comboIntervalViewPoint = New System.Windows.Forms.ComboBox
-        Me.numericDuration = New System.Windows.Forms.NumericUpDown
         Me.comboDurationUnits = New System.Windows.Forms.ComboBox
-        Me.RadioInterval = New System.Windows.Forms.RadioButton
-        Me.radioPointInTime = New System.Windows.Forms.RadioButton
+        Me.numericDuration = New System.Windows.Forms.NumericUpDown
         Me.gbOffset = New System.Windows.Forms.GroupBox
         Me.cbFixedOffset = New System.Windows.Forms.CheckBox
         Me.NumericOffset = New System.Windows.Forms.NumericUpDown
         Me.comboOffsetUnits = New System.Windows.Forms.ComboBox
+        Me.EitherRadioButton = New System.Windows.Forms.RadioButton
+        Me.buSetRuntimeConstraint = New System.Windows.Forms.Button
+        Me.txtRuntimeConstraint = New System.Windows.Forms.TextBox
+        Me.txtEventDescription = New System.Windows.Forms.TextBox
+        Me.RadioInterval = New System.Windows.Forms.RadioButton
+        Me.radioPointInTime = New System.Windows.Forms.RadioButton
         Me.lblDescription = New System.Windows.Forms.Label
         Me.lblRuntimeName = New System.Windows.Forms.Label
         Me.butRemoveElement = New System.Windows.Forms.Button
@@ -131,6 +142,8 @@ Public Class TabpageHistory
         Me.radioFixed = New System.Windows.Forms.RadioButton
         Me.ListEvents = New System.Windows.Forms.ListView
         Me.TheEvents = New System.Windows.Forms.ColumnHeader
+        Me.ContextMenuEvents = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.SpecialiseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.ImageListEvents = New System.Windows.Forms.ImageList(Me.components)
         Me.HelpProviderEventSeries = New System.Windows.Forms.HelpProvider
         Me.panelLeft = New System.Windows.Forms.Panel
@@ -139,39 +152,162 @@ Public Class TabpageHistory
         Me.RightPanel = New System.Windows.Forms.Panel
         Me.gbEventDetails.SuspendLayout()
         Me.gbDuration.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbOffset.SuspendLayout()
         CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.gbEventList.SuspendLayout()
+        Me.ContextMenuEvents.SuspendLayout()
         Me.panelLeft.SuspendLayout()
         Me.RightPanel.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbEventDetails
         '
-        Me.gbEventDetails.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.gbEventDetails.Controls.Add(Me.gbDuration)
+        Me.gbEventDetails.Controls.Add(Me.gbOffset)
+        Me.gbEventDetails.Controls.Add(Me.EitherRadioButton)
         Me.gbEventDetails.Controls.Add(Me.buSetRuntimeConstraint)
         Me.gbEventDetails.Controls.Add(Me.txtRuntimeConstraint)
         Me.gbEventDetails.Controls.Add(Me.txtEventDescription)
-        Me.gbEventDetails.Controls.Add(Me.gbDuration)
         Me.gbEventDetails.Controls.Add(Me.RadioInterval)
         Me.gbEventDetails.Controls.Add(Me.radioPointInTime)
-        Me.gbEventDetails.Controls.Add(Me.gbOffset)
         Me.gbEventDetails.Controls.Add(Me.lblDescription)
         Me.gbEventDetails.Controls.Add(Me.lblRuntimeName)
-        Me.gbEventDetails.Location = New System.Drawing.Point(8, 8)
+        Me.gbEventDetails.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.gbEventDetails.Location = New System.Drawing.Point(0, 0)
         Me.gbEventDetails.Name = "gbEventDetails"
-        Me.gbEventDetails.Size = New System.Drawing.Size(364, 351)
+        Me.gbEventDetails.Size = New System.Drawing.Size(380, 494)
         Me.gbEventDetails.TabIndex = 34
         Me.gbEventDetails.TabStop = False
         Me.gbEventDetails.Text = "Event details"
         '
+        'gbDuration
+        '
+        Me.gbDuration.Controls.Add(Me.listViewMathsFunctions)
+        Me.gbDuration.Controls.Add(Me.Panel1)
+        Me.gbDuration.Location = New System.Drawing.Point(149, 246)
+        Me.gbDuration.Name = "gbDuration"
+        Me.gbDuration.Size = New System.Drawing.Size(218, 248)
+        Me.gbDuration.TabIndex = 25
+        Me.gbDuration.TabStop = False
+        Me.gbDuration.Text = "Duration"
+        Me.gbDuration.Visible = False
+        '
+        'listViewMathsFunctions
+        '
+        Me.listViewMathsFunctions.CheckBoxes = True
+        Me.listViewMathsFunctions.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.listViewMathsFunctions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
+        Me.listViewMathsFunctions.Location = New System.Drawing.Point(3, 83)
+        Me.listViewMathsFunctions.Name = "listViewMathsFunctions"
+        Me.listViewMathsFunctions.ShowGroups = False
+        Me.listViewMathsFunctions.Size = New System.Drawing.Size(212, 162)
+        Me.listViewMathsFunctions.TabIndex = 4
+        Me.listViewMathsFunctions.UseCompatibleStateImageBehavior = False
+        Me.listViewMathsFunctions.View = System.Windows.Forms.View.List
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.cbFixedInterval)
+        Me.Panel1.Controls.Add(Me.comboDurationUnits)
+        Me.Panel1.Controls.Add(Me.numericDuration)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel1.Location = New System.Drawing.Point(3, 18)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(212, 65)
+        Me.Panel1.TabIndex = 5
+        '
+        'cbFixedInterval
+        '
+        Me.cbFixedInterval.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbFixedInterval.Location = New System.Drawing.Point(8, 12)
+        Me.cbFixedInterval.Name = "cbFixedInterval"
+        Me.cbFixedInterval.Size = New System.Drawing.Size(198, 24)
+        Me.cbFixedInterval.TabIndex = 1
+        Me.cbFixedInterval.Text = "Fixed Interval"
+        '
+        'comboDurationUnits
+        '
+        Me.comboDurationUnits.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.comboDurationUnits.Location = New System.Drawing.Point(59, 38)
+        Me.comboDurationUnits.Name = "comboDurationUnits"
+        Me.comboDurationUnits.Size = New System.Drawing.Size(150, 24)
+        Me.comboDurationUnits.TabIndex = 3
+        Me.comboDurationUnits.Visible = False
+        '
+        'numericDuration
+        '
+        Me.numericDuration.Location = New System.Drawing.Point(8, 38)
+        Me.numericDuration.Maximum = New Decimal(New Integer() {-1, -1, -1, 0})
+        Me.numericDuration.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.numericDuration.Name = "numericDuration"
+        Me.numericDuration.Size = New System.Drawing.Size(41, 22)
+        Me.numericDuration.TabIndex = 2
+        Me.numericDuration.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.numericDuration.Value = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.numericDuration.Visible = False
+        '
+        'gbOffset
+        '
+        Me.gbOffset.Controls.Add(Me.cbFixedOffset)
+        Me.gbOffset.Controls.Add(Me.NumericOffset)
+        Me.gbOffset.Controls.Add(Me.comboOffsetUnits)
+        Me.gbOffset.Location = New System.Drawing.Point(162, 244)
+        Me.gbOffset.Name = "gbOffset"
+        Me.gbOffset.Size = New System.Drawing.Size(172, 76)
+        Me.gbOffset.TabIndex = 22
+        Me.gbOffset.TabStop = False
+        Me.gbOffset.Text = "Offset"
+        Me.gbOffset.Visible = False
+        '
+        'cbFixedOffset
+        '
+        Me.cbFixedOffset.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbFixedOffset.Location = New System.Drawing.Point(11, 16)
+        Me.cbFixedOffset.Name = "cbFixedOffset"
+        Me.cbFixedOffset.Size = New System.Drawing.Size(155, 24)
+        Me.cbFixedOffset.TabIndex = 8
+        Me.cbFixedOffset.Text = "Fixed Offset"
+        '
+        'NumericOffset
+        '
+        Me.NumericOffset.Location = New System.Drawing.Point(10, 43)
+        Me.NumericOffset.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
+        Me.NumericOffset.Minimum = New Decimal(New Integer() {1000, 0, 0, -2147483648})
+        Me.NumericOffset.Name = "NumericOffset"
+        Me.NumericOffset.Size = New System.Drawing.Size(46, 22)
+        Me.NumericOffset.TabIndex = 9
+        Me.NumericOffset.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.NumericOffset.Visible = False
+        '
+        'comboOffsetUnits
+        '
+        Me.comboOffsetUnits.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.comboOffsetUnits.Location = New System.Drawing.Point(61, 43)
+        Me.comboOffsetUnits.Name = "comboOffsetUnits"
+        Me.comboOffsetUnits.Size = New System.Drawing.Size(105, 24)
+        Me.comboOffsetUnits.TabIndex = 10
+        Me.comboOffsetUnits.Visible = False
+        '
+        'EitherRadioButton
+        '
+        Me.EitherRadioButton.Location = New System.Drawing.Point(16, 307)
+        Me.EitherRadioButton.Name = "EitherRadioButton"
+        Me.EitherRadioButton.Size = New System.Drawing.Size(156, 24)
+        Me.EitherRadioButton.TabIndex = 8
+        Me.EitherRadioButton.TabStop = True
+        Me.EitherRadioButton.Text = "Any Event"
+        '
         'buSetRuntimeConstraint
         '
         Me.buSetRuntimeConstraint.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.buSetRuntimeConstraint.Location = New System.Drawing.Point(319, 169)
+        Me.buSetRuntimeConstraint.Location = New System.Drawing.Point(335, 209)
         Me.buSetRuntimeConstraint.Name = "buSetRuntimeConstraint"
         Me.buSetRuntimeConstraint.Size = New System.Drawing.Size(32, 22)
         Me.buSetRuntimeConstraint.TabIndex = 5
@@ -181,149 +317,48 @@ Public Class TabpageHistory
         '
         Me.txtRuntimeConstraint.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtRuntimeConstraint.Location = New System.Drawing.Point(16, 170)
+        Me.txtRuntimeConstraint.Location = New System.Drawing.Point(16, 210)
         Me.txtRuntimeConstraint.Name = "txtRuntimeConstraint"
         Me.txtRuntimeConstraint.ReadOnly = True
-        Me.txtRuntimeConstraint.Size = New System.Drawing.Size(299, 20)
+        Me.txtRuntimeConstraint.Size = New System.Drawing.Size(315, 22)
         Me.txtRuntimeConstraint.TabIndex = 4
         '
         'txtEventDescription
         '
         Me.txtEventDescription.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtEventDescription.Location = New System.Drawing.Point(16, 96)
+        Me.txtEventDescription.Location = New System.Drawing.Point(15, 95)
         Me.txtEventDescription.Multiline = True
         Me.txtEventDescription.Name = "txtEventDescription"
         Me.txtEventDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtEventDescription.Size = New System.Drawing.Size(334, 46)
+        Me.txtEventDescription.Size = New System.Drawing.Size(350, 95)
         Me.txtEventDescription.TabIndex = 2
-        '
-        'gbDuration
-        '
-        Me.gbDuration.Controls.Add(Me.cbFixedInterval)
-        Me.gbDuration.Controls.Add(Me.comboIntervalViewPoint)
-        Me.gbDuration.Controls.Add(Me.numericDuration)
-        Me.gbDuration.Controls.Add(Me.comboDurationUnits)
-        Me.gbDuration.Location = New System.Drawing.Point(178, 232)
-        Me.gbDuration.Name = "gbDuration"
-        Me.gbDuration.Size = New System.Drawing.Size(172, 104)
-        Me.gbDuration.TabIndex = 25
-        Me.gbDuration.TabStop = False
-        Me.gbDuration.Text = "Duration"
-        Me.gbDuration.Visible = False
-        '
-        'cbFixedInterval
-        '
-        Me.cbFixedInterval.Location = New System.Drawing.Point(10, 16)
-        Me.cbFixedInterval.Name = "cbFixedInterval"
-        Me.cbFixedInterval.Size = New System.Drawing.Size(120, 24)
-        Me.cbFixedInterval.TabIndex = 11
-        Me.cbFixedInterval.Text = "Fixed Interval"
-        '
-        'comboIntervalViewPoint
-        '
-        Me.comboIntervalViewPoint.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.comboIntervalViewPoint.Location = New System.Drawing.Point(10, 43)
-        Me.comboIntervalViewPoint.Name = "comboIntervalViewPoint"
-        Me.comboIntervalViewPoint.Size = New System.Drawing.Size(156, 21)
-        Me.comboIntervalViewPoint.TabIndex = 12
-        '
-        'numericDuration
-        '
-        Me.numericDuration.Location = New System.Drawing.Point(10, 69)
-        Me.numericDuration.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.numericDuration.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numericDuration.Name = "numericDuration"
-        Me.numericDuration.Size = New System.Drawing.Size(46, 20)
-        Me.numericDuration.TabIndex = 13
-        Me.numericDuration.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.numericDuration.Value = New Decimal(New Integer() {1, 0, 0, 0})
-        Me.numericDuration.Visible = False
-        '
-        'comboDurationUnits
-        '
-        Me.comboDurationUnits.Location = New System.Drawing.Point(61, 69)
-        Me.comboDurationUnits.Name = "comboDurationUnits"
-        Me.comboDurationUnits.Size = New System.Drawing.Size(86, 21)
-        Me.comboDurationUnits.TabIndex = 14
-        Me.comboDurationUnits.Visible = False
         '
         'RadioInterval
         '
-        Me.RadioInterval.Appearance = System.Windows.Forms.Appearance.Button
-        Me.RadioInterval.AutoCheck = False
-        Me.RadioInterval.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.RadioInterval.Location = New System.Drawing.Point(180, 202)
+        Me.RadioInterval.Location = New System.Drawing.Point(16, 277)
         Me.RadioInterval.Name = "RadioInterval"
-        Me.RadioInterval.Size = New System.Drawing.Size(172, 24)
+        Me.RadioInterval.Size = New System.Drawing.Size(156, 24)
         Me.RadioInterval.TabIndex = 7
         Me.RadioInterval.TabStop = True
         Me.RadioInterval.Text = "Interval"
-        Me.RadioInterval.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'radioPointInTime
         '
-        Me.radioPointInTime.Appearance = System.Windows.Forms.Appearance.Button
-        Me.radioPointInTime.AutoCheck = False
-        Me.radioPointInTime.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.radioPointInTime.Location = New System.Drawing.Point(16, 202)
+        Me.radioPointInTime.Location = New System.Drawing.Point(16, 247)
         Me.radioPointInTime.Name = "radioPointInTime"
-        Me.radioPointInTime.Size = New System.Drawing.Size(152, 24)
+        Me.radioPointInTime.Size = New System.Drawing.Size(156, 24)
         Me.radioPointInTime.TabIndex = 6
         Me.radioPointInTime.TabStop = True
         Me.radioPointInTime.Text = "Point in time"
-        Me.radioPointInTime.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'gbOffset
-        '
-        Me.gbOffset.Controls.Add(Me.cbFixedOffset)
-        Me.gbOffset.Controls.Add(Me.NumericOffset)
-        Me.gbOffset.Controls.Add(Me.comboOffsetUnits)
-        Me.gbOffset.Location = New System.Drawing.Point(15, 232)
-        Me.gbOffset.Name = "gbOffset"
-        Me.gbOffset.Size = New System.Drawing.Size(153, 104)
-        Me.gbOffset.TabIndex = 22
-        Me.gbOffset.TabStop = False
-        Me.gbOffset.Text = "Offset"
-        Me.gbOffset.Visible = False
-        '
-        'cbFixedOffset
-        '
-        Me.cbFixedOffset.Location = New System.Drawing.Point(11, 16)
-        Me.cbFixedOffset.Name = "cbFixedOffset"
-        Me.cbFixedOffset.Size = New System.Drawing.Size(112, 24)
-        Me.cbFixedOffset.TabIndex = 8
-        Me.cbFixedOffset.Text = "Fixed offset"
-        '
-        'NumericOffset
-        '
-        Me.NumericOffset.Location = New System.Drawing.Point(10, 47)
-        Me.NumericOffset.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.NumericOffset.Minimum = New Decimal(New Integer() {1000, 0, 0, -2147483648})
-        Me.NumericOffset.Name = "NumericOffset"
-        Me.NumericOffset.Size = New System.Drawing.Size(46, 20)
-        Me.NumericOffset.TabIndex = 9
-        Me.NumericOffset.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.NumericOffset.Visible = False
-        '
-        'comboOffsetUnits
-        '
-        Me.comboOffsetUnits.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.comboOffsetUnits.Location = New System.Drawing.Point(61, 47)
-        Me.comboOffsetUnits.Name = "comboOffsetUnits"
-        Me.comboOffsetUnits.Size = New System.Drawing.Size(88, 21)
-        Me.comboOffsetUnits.TabIndex = 10
-        Me.comboOffsetUnits.Visible = False
         '
         'lblDescription
         '
         Me.lblDescription.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblDescription.Location = New System.Drawing.Point(16, 77)
+        Me.lblDescription.Location = New System.Drawing.Point(15, 73)
         Me.lblDescription.Name = "lblDescription"
-        Me.lblDescription.Size = New System.Drawing.Size(334, 24)
+        Me.lblDescription.Size = New System.Drawing.Size(350, 24)
         Me.lblDescription.TabIndex = 1
         Me.lblDescription.Text = "Description:"
         '
@@ -331,9 +366,9 @@ Public Class TabpageHistory
         '
         Me.lblRuntimeName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblRuntimeName.Location = New System.Drawing.Point(16, 151)
+        Me.lblRuntimeName.Location = New System.Drawing.Point(16, 193)
         Me.lblRuntimeName.Name = "lblRuntimeName"
-        Me.lblRuntimeName.Size = New System.Drawing.Size(334, 24)
+        Me.lblRuntimeName.Size = New System.Drawing.Size(350, 24)
         Me.lblRuntimeName.TabIndex = 3
         Me.lblRuntimeName.Text = "Runtime name constraint:"
         '
@@ -362,19 +397,19 @@ Public Class TabpageHistory
         '
         'chkIsPeriodic
         '
-        Me.chkIsPeriodic.Location = New System.Drawing.Point(21, 130)
+        Me.chkIsPeriodic.Location = New System.Drawing.Point(13, 135)
         Me.chkIsPeriodic.Name = "chkIsPeriodic"
-        Me.chkIsPeriodic.Size = New System.Drawing.Size(144, 64)
+        Me.chkIsPeriodic.Size = New System.Drawing.Size(178, 53)
         Me.chkIsPeriodic.TabIndex = 18
         Me.chkIsPeriodic.Text = "Events at regular time period"
         '
         'numPeriod
         '
-        Me.numPeriod.Location = New System.Drawing.Point(21, 194)
+        Me.numPeriod.Location = New System.Drawing.Point(13, 194)
         Me.numPeriod.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
         Me.numPeriod.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.numPeriod.Name = "numPeriod"
-        Me.numPeriod.Size = New System.Drawing.Size(48, 20)
+        Me.numPeriod.Size = New System.Drawing.Size(48, 22)
         Me.numPeriod.TabIndex = 19
         Me.numPeriod.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numPeriod.Value = New Decimal(New Integer() {1, 0, 0, 0})
@@ -382,9 +417,9 @@ Public Class TabpageHistory
         '
         'comboTimeUnits
         '
-        Me.comboTimeUnits.Location = New System.Drawing.Point(77, 194)
+        Me.comboTimeUnits.Location = New System.Drawing.Point(69, 194)
         Me.comboTimeUnits.Name = "comboTimeUnits"
-        Me.comboTimeUnits.Size = New System.Drawing.Size(88, 21)
+        Me.comboTimeUnits.Size = New System.Drawing.Size(122, 24)
         Me.comboTimeUnits.TabIndex = 20
         Me.comboTimeUnits.Visible = False
         '
@@ -420,7 +455,7 @@ Public Class TabpageHistory
         Me.gbEventList.Size = New System.Drawing.Size(144, 111)
         Me.gbEventList.TabIndex = 0
         Me.gbEventList.TabStop = False
-        Me.gbEventList.Text = "Event list:"
+        Me.gbEventList.Text = "Event list"
         '
         'radioOpen
         '
@@ -448,6 +483,7 @@ Public Class TabpageHistory
         '
         Me.ListEvents.Alignment = System.Windows.Forms.ListViewAlignment.Left
         Me.ListEvents.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.TheEvents})
+        Me.ListEvents.ContextMenuStrip = Me.ContextMenuEvents
         Me.ListEvents.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListEvents.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
         Me.ListEvents.HideSelection = False
@@ -456,7 +492,7 @@ Public Class TabpageHistory
         Me.ListEvents.Location = New System.Drawing.Point(203, 0)
         Me.ListEvents.MultiSelect = False
         Me.ListEvents.Name = "ListEvents"
-        Me.ListEvents.Size = New System.Drawing.Size(238, 392)
+        Me.ListEvents.Size = New System.Drawing.Size(238, 494)
         Me.ListEvents.SmallImageList = Me.ImageListEvents
         Me.ListEvents.TabIndex = 1
         Me.ListEvents.UseCompatibleStateImageBehavior = False
@@ -466,6 +502,18 @@ Public Class TabpageHistory
         '
         Me.TheEvents.Text = "Events"
         Me.TheEvents.Width = 200
+        '
+        'ContextMenuEvents
+        '
+        Me.ContextMenuEvents.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpecialiseToolStripMenuItem})
+        Me.ContextMenuEvents.Name = "ContextMenuEvents"
+        Me.ContextMenuEvents.Size = New System.Drawing.Size(145, 28)
+        '
+        'SpecialiseToolStripMenuItem
+        '
+        Me.SpecialiseToolStripMenuItem.Name = "SpecialiseToolStripMenuItem"
+        Me.SpecialiseToolStripMenuItem.Size = New System.Drawing.Size(144, 24)
+        Me.SpecialiseToolStripMenuItem.Text = "Specialise"
         '
         'ImageListEvents
         '
@@ -492,14 +540,14 @@ Public Class TabpageHistory
         Me.panelLeft.Dock = System.Windows.Forms.DockStyle.Left
         Me.panelLeft.Location = New System.Drawing.Point(0, 0)
         Me.panelLeft.Name = "panelLeft"
-        Me.panelLeft.Size = New System.Drawing.Size(200, 392)
+        Me.panelLeft.Size = New System.Drawing.Size(200, 494)
         Me.panelLeft.TabIndex = 0
         '
         'Splitter1
         '
         Me.Splitter1.Location = New System.Drawing.Point(200, 0)
         Me.Splitter1.Name = "Splitter1"
-        Me.Splitter1.Size = New System.Drawing.Size(3, 392)
+        Me.Splitter1.Size = New System.Drawing.Size(3, 494)
         Me.Splitter1.TabIndex = 37
         Me.Splitter1.TabStop = False
         '
@@ -508,7 +556,7 @@ Public Class TabpageHistory
         Me.Splitter2.Dock = System.Windows.Forms.DockStyle.Right
         Me.Splitter2.Location = New System.Drawing.Point(441, 0)
         Me.Splitter2.Name = "Splitter2"
-        Me.Splitter2.Size = New System.Drawing.Size(3, 392)
+        Me.Splitter2.Size = New System.Drawing.Size(3, 494)
         Me.Splitter2.TabIndex = 38
         Me.Splitter2.TabStop = False
         '
@@ -519,7 +567,7 @@ Public Class TabpageHistory
         Me.RightPanel.Dock = System.Windows.Forms.DockStyle.Right
         Me.RightPanel.Location = New System.Drawing.Point(444, 0)
         Me.RightPanel.Name = "RightPanel"
-        Me.RightPanel.Size = New System.Drawing.Size(380, 392)
+        Me.RightPanel.Size = New System.Drawing.Size(380, 494)
         Me.RightPanel.TabIndex = 39
         '
         'TabpageHistory
@@ -534,15 +582,17 @@ Public Class TabpageHistory
         Me.HelpProviderEventSeries.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "TabpageHistory"
         Me.HelpProviderEventSeries.SetShowHelp(Me, True)
-        Me.Size = New System.Drawing.Size(824, 392)
+        Me.Size = New System.Drawing.Size(824, 494)
         Me.gbEventDetails.ResumeLayout(False)
         Me.gbEventDetails.PerformLayout()
         Me.gbDuration.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         CType(Me.numericDuration, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbOffset.ResumeLayout(False)
         CType(Me.NumericOffset, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.numPeriod, System.ComponentModel.ISupportInitialize).EndInit()
         Me.gbEventList.ResumeLayout(False)
+        Me.ContextMenuEvents.ResumeLayout(False)
         Me.panelLeft.ResumeLayout(False)
         Me.RightPanel.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -565,22 +615,24 @@ Public Class TabpageHistory
     Friend Sub BuildInterface(ByVal aContainer As Control, ByVal pos As Point, ByVal mandatory_only As Boolean)
         Dim spacer As Integer = 15
         Dim leftmargin As Integer = pos.X
-
         Dim combo As New ComboBox
-        For Each elvi As EventListViewItem In Me.ListEvents.Items
-            If ((elvi.IsMandatory) Or (Not mandatory_only)) Then
+
+        For Each elvi As EventListViewItem In ListEvents.Items
+            If elvi.IsMandatory Or Not mandatory_only Then
                 combo.Items.Add(elvi.Text)
             End If
         Next
+
         combo.Height = 25
         combo.Width = 150
         combo.Location = pos
+
         If combo.Items.Count > 0 Then
             combo.SelectedIndex = 0
         End If
+
         aContainer.Height = pos.Y + combo.Height + 10
         aContainer.Controls.Add(combo)
-
     End Sub
 
     Friend Sub ToRichText(ByRef Text As IO.StringWriter, ByVal level As Integer)
@@ -588,13 +640,19 @@ Public Class TabpageHistory
 
         Text.WriteLine(Space(3 * level) & "\cf1 EventSeries\cf0  = \{\par")
         level = level + 1
-        If Me.chkIsPeriodic.Checked Then
-            Text.WriteLine(Space(3 * level) & "Periodic offset = " & Me.numPeriod.Value.ToString & " " & Me.comboTimeUnits.Text & "\par")
+
+        If chkIsPeriodic.Checked Then
+            Text.WriteLine(Space(3 * level) & "Periodic offset = " & numPeriod.Value.ToString & " " & comboTimeUnits.Text & "\par")
         End If
 
-        For Each elvi In Me.ListEvents.Items
-            Text.WriteLine(Space(3 * level) & "\b " & elvi.Text & " (" & elvi.Occurrences.ToString & ") \b0\par")
-            Text.WriteLine(Space(3 * level) & "\i   - " & elvi.Description & "\i0\par")
+        For Each elvi In ListEvents.Items
+            Dim s As String = RichTextBoxUnicode.CreateRichTextBoxTag(elvi.RM_Class.NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) 'SRH: 23 Aug 2009 [EDT-575] Support unicode
+
+            Text.WriteLine(Space(3 * level) & "\b " & s & " (" & elvi.Occurrences.ToString & ") \b0\par")
+
+            s = RichTextBoxUnicode.CreateRichTextBoxTag(elvi.RM_Class.NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC) 'SRH: 23 Aug 2009 [EDT-575] Support unicode
+
+            Text.WriteLine(Space(3 * level) & "\i   - " & s & "\i0\par")
 
             Text.WriteLine(Space(3 * level) & elvi.RM_Class.Type.ToString & "\par")
 
@@ -613,8 +671,22 @@ Public Class TabpageHistory
                         " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "\par")
                     End If
                     Try
-                        Text.WriteLine(Space(3 * level) & Filemanager.GetOpenEhrTerm(266, "Event math function") + _
-                        " = " & Filemanager.GetOpenEhrTerm(Integer.Parse(elvi.AggregateMathFunction), "Fixed interval") & "\par")
+                        'SRH: 1 Nov 2009 - EDT-568
+                        If elvi.AggregateMathFunction.Codes.Count > 0 Then
+                            Text.Write(Space(3 * level) & Filemanager.GetOpenEhrTerm(266, "Event math function"))
+                            Text.Write(" = ")
+                            Dim separator As String = ""
+                            For Each code As String In elvi.AggregateMathFunction.Codes
+                                Dim i As Integer
+                                If Integer.TryParse(code, i) Then
+                                    Text.Write(separator & Filemanager.GetOpenEhrTerm(i, "Fixed interval"))
+                                    If separator = "" Then
+                                        separator = ", "
+                                    End If
+                                End If
+                            Next
+                            Text.WriteLine("\par")
+                        End If
                     Catch
                     End Try
             End Select
@@ -629,8 +701,8 @@ Public Class TabpageHistory
     Friend Sub ToHTML(ByRef Text As IO.StreamWriter, Optional ByVal BackGroundColour As String = "")
         Dim elvi As EventListViewItem
 
-        If Me.chkIsPeriodic.Checked Then
-            Text.WriteLine("<p>Periodic offset = " & Me.numPeriod.Value.ToString & " " & Me.comboTimeUnits.Text & "</p>")
+        If chkIsPeriodic.Checked Then
+            Text.WriteLine("<p>Periodic offset = " & numPeriod.Value.ToString & " " & comboTimeUnits.Text & "</p>")
         End If
 
         Text.WriteLine(Environment.NewLine & "<table border=""1"" cellpadding=""2"" width=""100%"">")
@@ -647,13 +719,11 @@ Public Class TabpageHistory
         Text.WriteLine("</tr>")
 
 
-        For Each elvi In Me.ListEvents.Items
-
+        For Each elvi In ListEvents.Items
             Text.WriteLine("<tr>")
             Text.WriteLine("<td><b>" & elvi.Text & "</b></td>")
             Text.WriteLine("<td><b>" & elvi.Description & "</b></td>")
             Text.WriteLine("<td>")
-
             Text.WriteLine(elvi.RM_Class.Type.ToString)
 
             Select Case elvi.RM_Class.Type
@@ -666,52 +736,57 @@ Public Class TabpageHistory
                     End If
 
                 Case StructureType.IntervalEvent
+                    'SRH: 1 Nov 2009 - EDT-568
                     If elvi.hasFixedWidth Then
                         Text.WriteLine("<br>" + Filemanager.GetOpenEhrTerm(143, "Fixed interval") + _
                         " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "<br>")
                     End If
                     Try
-                        Text.WriteLine("<br>" + Filemanager.GetOpenEhrTerm(266, "Event math function") + _
-                        " = " + Filemanager.GetOpenEhrTerm(Integer.Parse(elvi.AggregateMathFunction), "Fixed interval"))
+                        Text.Write("<br>" + Filemanager.GetOpenEhrTerm(266, "Event math function"))
+                        Dim separator As String = ""
+                        For Each code As String In elvi.AggregateMathFunction.Codes
+                            Dim i As Integer
+                            If Integer.TryParse(code, i) Then
+                                Text.Write(separator & Filemanager.GetOpenEhrTerm(i, "Fixed interval"))
+                                If separator = "" Then
+                                    separator = ", "
+                                End If
+                            End If
+                        Next
+                        Text.WriteLine("")
                     Catch
                     End Try
             End Select
+
             Text.WriteLine("</tr>")
         Next
 
         Text.WriteLine(Environment.NewLine & "</table>")
         Text.WriteLine(Environment.NewLine & "<hr>")
-
-
     End Sub
 
     Friend Sub ProcessEventSeries(ByVal rm As RmHistory)
         Dim ev As RmEvent
         Dim HistEvent As EventListViewItem
-
         sNodeID = rm.NodeId
 
         If rm.isPeriodic Then
-
-            ' periodic
-            Me.chkIsPeriodic.Checked = True
-            Me.numPeriod.Value = rm.Period
-            Me.comboTimeUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(rm.PeriodUnits)
+            chkIsPeriodic.Checked = True
+            numPeriod.Value = rm.Period
+            comboTimeUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(rm.PeriodUnits)
         Else
-            ' not periodic
-            Me.chkIsPeriodic.Checked = False
+            chkIsPeriodic.Checked = False
         End If
 
         If rm.Children.Fixed Then
-            ' fixed EventSeries
-            Me.radioFixed.Checked = True
+            radioFixed.Checked = True
         Else
-            Me.radioOpen.Checked = True
+            radioOpen.Checked = True
         End If
 
         For Each ev In rm.Children
             HistEvent = New EventListViewItem(ev, mFileManager)
-            Me.ListEvents.Items.Add(HistEvent)
+            ListEvents.Items.Add(HistEvent)
         Next
 
         Translate()
@@ -720,14 +795,13 @@ Public Class TabpageHistory
         'Changed the order - set current_item after process event
         'and call process event on the first item in listEvents
 
-        If Me.ListEvents.Items.Count > 0 Then
-            Me.ListEvents.Items.Item(0).Selected = True
-            Me.butRemoveElement.Visible = True
-            ProcessEvent(Me.ListEvents.Items.Item(0))
-            current_item = Me.ListEvents.Items.Item(0)
+        If ListEvents.Items.Count > 0 Then
+            ListEvents.Items.Item(0).Selected = True
+            butRemoveElement.Visible = True
+            ProcessEvent(CType(ListEvents.Items.Item(0), EventListViewItem))
+            current_item = CType(ListEvents.Items.Item(0), EventListViewItem)
             current_item.Selected = True
         End If
-
     End Sub
 
     Public ReadOnly Property ComponentType() As String
@@ -737,117 +811,112 @@ Public Class TabpageHistory
     End Property
 
     Public Sub Translate()
-
         Dim HistEvent As EventListViewItem
         Dim elvi As EventListViewItem
-
         current_item = Nothing
 
-        For Each HistEvent In Me.ListEvents.Items
+        For Each HistEvent In ListEvents.Items
             HistEvent.Translate()
         Next
 
-        If Me.ListEvents.SelectedItems.Count > 0 Then
-            elvi = Me.ListEvents.SelectedItems(0)
-            Me.txtEventDescription.Text = elvi.Description
+        If ListEvents.SelectedItems.Count > 0 Then
+            elvi = CType(ListEvents.SelectedItems(0), EventListViewItem)
+            txtEventDescription.Text = elvi.Description
+
             If elvi.hasNameConstraint Then
-                Me.txtRuntimeConstraint.Text = elvi.NameConstraint.ToString
+                txtRuntimeConstraint.Text = elvi.NameConstraint.ToString
             End If
+
             current_item = elvi
         End If
-
     End Sub
 
     Public Sub TranslateGUI()
-        Me.cbFixedInterval.Text = Filemanager.GetOpenEhrTerm(143, Me.cbFixedInterval.Text)
-        Me.cbFixedOffset.Text = Filemanager.GetOpenEhrTerm(180, Me.cbFixedOffset.Text)
-        Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
-        Me.lblRuntimeName.Text = Filemanager.GetOpenEhrTerm(114, Me.lblRuntimeName.Text)
-        Me.gbEventDetails.Text = Filemanager.GetOpenEhrTerm(138, Me.gbEventDetails.Text)
-        Me.gbOffset.Text = Filemanager.GetOpenEhrTerm(179, Me.gbOffset.Text)
-        Me.gbDuration.Text = Filemanager.GetOpenEhrTerm(142, Me.gbDuration.Text)
-        Me.radioPointInTime.Text = Filemanager.GetOpenEhrTerm(140, Me.radioPointInTime.Text)
-        Me.RadioInterval.Text = Filemanager.GetOpenEhrTerm(141, Me.RadioInterval.Text)
-        Me.chkIsPeriodic.Text = Filemanager.GetOpenEhrTerm(137, Me.chkIsPeriodic.Text)
-        Me.gbEventList.Text = Filemanager.GetOpenEhrTerm(134, Me.gbEventList.Text)
-        Me.radioOpen.Text = Filemanager.GetOpenEhrTerm(135, Me.radioOpen.Text)
-        Me.radioFixed.Text = Filemanager.GetOpenEhrTerm(136, Me.radioFixed.Text)
-
-
-
-
+        cbFixedInterval.Text = Filemanager.GetOpenEhrTerm(143, cbFixedInterval.Text)
+        cbFixedOffset.Text = Filemanager.GetOpenEhrTerm(180, cbFixedOffset.Text)
+        lblDescription.Text = Filemanager.GetOpenEhrTerm(113, lblDescription.Text)
+        lblRuntimeName.Text = Filemanager.GetOpenEhrTerm(114, lblRuntimeName.Text)
+        gbEventDetails.Text = Filemanager.GetOpenEhrTerm(138, gbEventDetails.Text)
+        gbOffset.Text = Filemanager.GetOpenEhrTerm(179, gbOffset.Text)
+        gbDuration.Text = Filemanager.GetOpenEhrTerm(142, gbDuration.Text)
+        radioPointInTime.Text = Filemanager.GetOpenEhrTerm(140, radioPointInTime.Text)
+        RadioInterval.Text = Filemanager.GetOpenEhrTerm(141, RadioInterval.Text)
+        EitherRadioButton.Text = Filemanager.GetOpenEhrTerm(276, RadioInterval.Text)
+        chkIsPeriodic.Text = Filemanager.GetOpenEhrTerm(137, chkIsPeriodic.Text)
+        gbEventList.Text = Filemanager.GetOpenEhrTerm(134, gbEventList.Text)
+        radioOpen.Text = Filemanager.GetOpenEhrTerm(135, radioOpen.Text)
+        radioFixed.Text = Filemanager.GetOpenEhrTerm(136, radioFixed.Text)
+        SpecialiseToolStripMenuItem.Text = AE_Constants.Instance.Specialise
     End Sub
 
     Friend Function SaveAsEventSeries() As RmHistory
         Dim ev As EventListViewItem
         Dim Hist As RmHistory
 
-        Hist = New RmHistory(Me.NodeId)
+        Hist = New RmHistory(NodeId)
 
-        If Me.chkIsPeriodic.Checked AndAlso (Not Me.comboTimeUnits.SelectedItem Is Nothing) Then
-            Hist.Period = Me.numPeriod.Value
-            Hist.PeriodUnits = CType(Me.comboTimeUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+        If chkIsPeriodic.Checked AndAlso Not comboTimeUnits.SelectedItem Is Nothing Then
+            Hist.Period = CInt(numPeriod.Value)
+            Hist.PeriodUnits = CType(comboTimeUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
             Hist.isPeriodic = True
         End If
 
-        If Me.ListEvents.Items.Count = 0 Then
+        If ListEvents.Items.Count = 0 Then
             ' there must be at least one event
             Debug.Assert(False)
             butAddEvent_Click(New Object, New System.EventArgs)
         End If
 
-        For Each ev In Me.ListEvents.Items
-            Hist.Children.Add(ev.RM_Class)
+        For Each ev In ListEvents.Items
+            Hist.Children.Add(CType(ev.RM_Class, RmEvent))
         Next
 
         SetEventSeriesCardinality(Hist)
-
         Return Hist
     End Function
 
     Private Sub SetEventSeriesCardinality(ByVal a_EventSeries As RmHistory)
-
-        If Me.radioFixed.Checked Then
+        If radioFixed.Checked Then
             Dim i As Integer
+
             For Each evnt As RmEvent In a_EventSeries.Children
                 If evnt.Occurrences.IsUnbounded Then
                     a_EventSeries.Children.Cardinality.IsUnbounded = True
                     Return
+                    ' FIXME: Spaghetti code!
                 End If
+
                 i += evnt.Occurrences.MaxCount
             Next
+
             a_EventSeries.Children.Cardinality.MaxCount = i
-            Return
+        Else
+            a_EventSeries.Children.Cardinality.IsUnbounded = True
         End If
-        a_EventSeries.Children.Cardinality.IsUnbounded = True
     End Sub
 
     Friend Sub Reset()
         ' empty and reset all controls
-        Me.ListEvents.Items.Clear()
-        Me.txtEventDescription.Text = ""
-        Me.NumericOffset.Value = 0
-        Me.chkIsPeriodic.Checked = False
-        Me.numericDuration.Value = 0
+        ListEvents.Items.Clear()
+        txtEventDescription.Text = ""
+        NumericOffset.Value = 0
+        chkIsPeriodic.Checked = False
+        numericDuration.Value = 0
     End Sub
 
     Friend Sub AddBaseLineEvent()
-        Dim elvi As EventListViewItem
-
-        elvi = New EventListViewItem(Filemanager.GetOpenEhrTerm(276, "Baseline event"), mFileManager)
-        Me.txtEventDescription.Text = "*"
+        Dim elvi As New EventListViewItem(Filemanager.GetOpenEhrTerm(276, "Baseline event"), mFileManager)
+        txtEventDescription.Text = "*"
         elvi.Width = 1
         elvi.WidthUnits = "min"
-        Me.radioPointInTime.Checked = False
-        Me.cbFixedInterval.Checked = False
-        Me.cbFixedOffset.Checked = False
-        Me.numericDuration.Value = 1
+        radioPointInTime.Checked = False
+        cbFixedInterval.Checked = False
+        cbFixedOffset.Checked = False
+        numericDuration.Value = 1
         mOccurrences.Cardinality = elvi.Occurrences
-        'elvi.Occurrences.IsUnbounded = True
-        Me.ListEvents.Items.Add(elvi)
+        ListEvents.Items.Add(elvi)
         elvi.Selected = True
         current_item = elvi
-
     End Sub
 
 #End Region
@@ -934,7 +1003,7 @@ Public Class TabpageHistory
         End Property
         Public Property Width() As Integer
             Get
-                Return element.Width
+                Return CInt(element.Width)
             End Get
             Set(ByVal Value As Integer)
                 element.Width = Value
@@ -948,13 +1017,19 @@ Public Class TabpageHistory
                 element.WidthUnits = Value
             End Set
         End Property
-        Public Property AggregateMathFunction() As String
+        'SRH: 1 Nov 2009 - EDT-568
+        Public Property AggregateMathFunction() As CodePhrase
             Get
                 Return element.AggregateMathFunction
             End Get
-            Set(ByVal Value As String)
+            Set(ByVal Value As CodePhrase)
                 element.AggregateMathFunction = Value
             End Set
+        End Property
+        Public ReadOnly Property HasMathsFunction() As Boolean
+            Get
+                Return ((element.EventType = RmEvent.ObservationEventType.Interval) AndAlso (Not element.AggregateMathFunction Is Nothing) AndAlso (element.AggregateMathFunction.Codes.Count > 0))
+            End Get
         End Property
         Public Property hasFixedOffset() As Boolean
             Get
@@ -1035,13 +1110,12 @@ Public Class TabpageHistory
 
             Select Case element.Type
                 Case StructureType.Event
-                    Me.ImageIndex = 2 + offset  '?
+                    ImageIndex = 2 + offset  '?
                 Case StructureType.PointEvent
-                    Me.ImageIndex = 0 + offset      'o
+                    ImageIndex = 0 + offset      'o
                 Case StructureType.IntervalEvent
-                    Me.ImageIndex = 1 + offset  'H
+                    ImageIndex = 1 + offset  'H
             End Select
-
         End Sub
 
         Sub New(ByVal Text As String, ByVal a_filemanager As FileManagerLocal)
@@ -1077,9 +1151,8 @@ Public Class TabpageHistory
             MyBase.Text = elvi.Text
             sDescription = elvi.Description
             ' need to copy here as may be a copy process
-            element = elvi.RM_Class.Copy
+            element = CType(elvi.RM_Class.Copy, RmEvent)
             SetImageIndex()
-
         End Sub
 
     End Class
@@ -1087,71 +1160,50 @@ Public Class TabpageHistory
 #End Region
 
     Private Sub chkIsPeriodic_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkIsPeriodic.CheckedChanged
-        Dim check As Boolean
+        numPeriod.Visible = chkIsPeriodic.Checked
+        comboTimeUnits.Visible = chkIsPeriodic.Checked
+        gbOffset.Visible = radioPointInTime.Checked And Not chkIsPeriodic.Checked
 
-        check = Me.chkIsPeriodic.Checked
-        Me.numPeriod.Visible = check
-        Me.comboTimeUnits.Visible = check
-        If Me.radioPointInTime.Checked Then
-            Me.gbOffset.Visible = Not check
+        If Not current_item Is Nothing Then
+            mFileManager.FileEdited = True
         End If
-
-        If current_item Is Nothing Then Exit Sub
-
-        mFileManager.FileEdited = True
-
     End Sub
 
-    Private Sub radioPointInTime_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioPointInTime.CheckedChanged
-        If Not Me.chkIsPeriodic.Checked Then
-            Me.gbOffset.Visible = Me.radioPointInTime.Checked
-        End If
+    Private Sub RadioEventType_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioPointInTime.CheckedChanged, EitherRadioButton.CheckedChanged, RadioInterval.CheckedChanged
+        gbDuration.Visible = RadioInterval.Checked
+        gbOffset.Visible = radioPointInTime.Checked And Not chkIsPeriodic.Checked
 
-        If current_item Is Nothing Then Exit Sub
+        If Not current_item Is Nothing And Not mIsLoading Then
+            If radioPointInTime.Checked Then
+                current_item.EventType = RmEvent.ObservationEventType.PointInTime
+            ElseIf RadioInterval.Checked Then
+                current_item.EventType = RmEvent.ObservationEventType.Interval
 
-        If radioPointInTime.Checked Then
-            current_item.EventType = RmEvent.ObservationEventType.PointInTime
-        Else
-            If current_item.EventType = RmEvent.ObservationEventType.PointInTime Then
+                'SRH: 1 Nov 2009 - EDT-568 - commented out
+                'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
+                'If CInt(comboIntervalViewPoint.SelectedValue) <> 118 Then
+                '    current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
+                'End If
+
+                'SRH: 1 Nov 2009 - EDT-568
+                current_item.AggregateMathFunction = GetAggregateFunctions()
+
+                cbFixedInterval_CheckedChanged(sender, e)
+            Else
                 current_item.EventType = RmEvent.ObservationEventType.Event
             End If
-        End If
-        mFileManager.FileEdited = True
 
-    End Sub
-
-    Private Sub RadioInterval_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioInterval.CheckedChanged
-        Me.gbDuration.Visible = RadioInterval.Checked
-
-        If (current_item Is Nothing) Or mIsLoading Then Return
-
-        If RadioInterval.Checked Then
-            current_item.EventType = RmEvent.ObservationEventType.Interval
-            current_item.AggregateMathFunction = Convert.ToString(Me.comboIntervalViewPoint.SelectedValue)
-            cbFixedInterval_CheckedChanged(sender, e)
-        Else
-            If current_item.EventType = RmEvent.ObservationEventType.Interval Then
-                current_item.EventType = RmEvent.ObservationEventType.Event
-            End If
-        End If
-
-        mFileManager.FileEdited = True
-    End Sub
-
-    Private Sub radioInteval_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RadioInterval.Click
-        RadioInterval.Checked = Not RadioInterval.Checked
-        If RadioInterval.Checked Then
-            radioPointInTime.Checked = False
+            mFileManager.FileEdited = True
         End If
     End Sub
 
-    Private Sub radioPointInTime_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioPointInTime.Click
-        radioPointInTime.Checked = Not radioPointInTime.Checked
-        If radioPointInTime.Checked Then
-            RadioInterval.Checked = False
-        End If
-    End Sub
-
+    Private Function GetAggregateFunctions() As CodePhrase
+        Dim result As New CodePhrase("openehr")
+        For Each l As ListViewItem In listViewMathsFunctions.CheckedItems
+            result.Codes.Add(CStr(l.Tag))
+        Next
+        Return result
+    End Function
 
     Private Sub butAddEvent_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddEvent.Click
         Dim elvi As EventListViewItem
@@ -1164,267 +1216,311 @@ Public Class TabpageHistory
 
         ' create a new generic event and set the screen accordingly
         elvi = New EventListViewItem(Filemanager.GetOpenEhrTerm(276, "Any event"), mFileManager)
-        Me.txtEventDescription.Text = "*"
+        txtEventDescription.Text = "*"
         elvi.Width = 1
         elvi.WidthUnits = "min"
-        Me.radioPointInTime.Checked = False
-        Me.cbFixedInterval.Checked = False
-        Me.cbFixedOffset.Checked = False
+        radioPointInTime.Checked = False
+        cbFixedInterval.Checked = False
+        cbFixedOffset.Checked = False
         mOccurrences.Cardinality = elvi.Occurrences
-        Me.numericDuration.Value = 1
-        Me.comboIntervalViewPoint.SelectedIndex = 1  ' delta
-        Me.ListEvents.Items.Add(elvi)
+        numericDuration.Value = 1
+
+        'SRH: 1 Nov 2009 - EDT-568 - commented out
+        'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
+        'comboIntervalViewPoint.SelectedValue = 118  ' not set
+
+        ListEvents.Items.Add(elvi)
         elvi.Selected = True
         current_item = elvi
         elvi.Selected = True
-        butRemoveElement.Visible = True
+        butRemoveElement.Show()
         mFileManager.FileEdited = True
         elvi.BeginEdit()
-
     End Sub
 
     Private Sub ProcessEvent(ByVal elvi As EventListViewItem)
-        Me.txtEventDescription.Text = elvi.Description
-        Me.NumericOffset.Value = elvi.Offset
+        txtEventDescription.Text = elvi.Description
+        NumericOffset.Value = elvi.Offset
 
         If elvi.OffsetUnits <> "" Then
-            Me.comboOffsetUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.OffsetUnits)
+            comboOffsetUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.OffsetUnits)
         End If
 
         mOccurrences.Cardinality = elvi.Occurrences
 
         If elvi.Width <> 0 Then
-            Me.numericDuration.Value = elvi.Width
+            numericDuration.Value = elvi.Width
         End If
 
         If elvi.WidthUnits <> "" Then
-            Me.comboDurationUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.WidthUnits)
+            comboDurationUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.WidthUnits)
         End If
 
-        If elvi.AggregateMathFunction <> "" Then
-            Dim i As UInt64
+        If listViewMathsFunctions.CheckedItems.Count > 0 Then
+            mIsLoading = True
+            For Each l As ListViewItem In Me.listViewMathsFunctions.CheckedItems
+                l.Checked = False
+            Next
+            mIsLoading = False
+        End If
 
+        'SRH: 1 Nov 2009 - EDT-568
+
+        If elvi.HasMathsFunction Then
             ' has to deal with the change of archetypes from a string
             ' to a code phrase and the openEHR code as an integer
-            Try
-                i = UInt64.Parse(elvi.AggregateMathFunction)  ' new form
-                Me.comboIntervalViewPoint.SelectedValue = i
-            Catch
-                'text that is not a code
-                If elvi.AggregateMathFunction = "Change" Then
-                    Me.comboIntervalViewPoint.SelectedIndex = _
-                    Me.comboIntervalViewPoint.FindStringExact("delta")
-                    elvi.AggregateMathFunction = "147" ' as delta may not lead to a change
-                Else
-                    Me.comboIntervalViewPoint.SelectedIndex = _
-                    Me.comboIntervalViewPoint.FindStringExact(elvi.AggregateMathFunction)
+
+            Dim count As Integer = 0
+            For Each l As ListViewItem In Me.listViewMathsFunctions.Items
+                If elvi.AggregateMathFunction.Codes.Contains(CStr(l.Tag)) Then
+                    l.Checked = True
+                    count += 1
                 End If
-            End Try
+                If count = elvi.AggregateMathFunction.Codes.Count Then
+                    Exit For
+                End If
+            Next
         End If
+
+
+        'SRH: 1 Nov 2009 - EDT-568 - commented out
+        'Try
+        '    i = UInt64.Parse(elvi.AggregateMathFunction)  ' new form
+        '    comboIntervalViewPoint.SelectedValue = i
+        'Catch
+        '    'text that is not a code
+        '    If elvi.AggregateMathFunction = "Change" Then
+        '        comboIntervalViewPoint.SelectedIndex = _
+        '        comboIntervalViewPoint.FindStringExact("delta")
+        '        elvi.AggregateMathFunction = "147" ' as delta may not lead to a change
+        '    Else
+        '        comboIntervalViewPoint.SelectedIndex = _
+        '        comboIntervalViewPoint.FindStringExact(elvi.AggregateMathFunction)
+        '    End If
+        'End Try
+
+        'End If
 
         Select Case elvi.EventType
             Case RmEvent.ObservationEventType.Event
-                Me.radioPointInTime.Checked = False
-                Me.RadioInterval.Checked = False
+                EitherRadioButton.Checked = True
             Case RmEvent.ObservationEventType.PointInTime
-                Me.radioPointInTime.Checked = True
-                Me.RadioInterval.Checked = False
-                If elvi.hasFixedOffset Then
-                    Me.cbFixedOffset.Checked = True
-                Else
-                    Me.cbFixedOffset.Checked = False
-                End If
+                radioPointInTime.Checked = True
+                cbFixedOffset.Checked = elvi.hasFixedOffset
             Case RmEvent.ObservationEventType.Interval
-                Me.RadioInterval.Checked = True
-                Me.radioPointInTime.Checked = False
-                If elvi.hasFixedWidth Then
-                    Me.cbFixedInterval.Checked = True
-                Else
-                    Me.cbFixedInterval.Checked = False
-                End If
+                RadioInterval.Checked = True
+                cbFixedInterval.Checked = elvi.hasFixedWidth
         End Select
 
         If elvi.hasNameConstraint Then
-            Me.txtRuntimeConstraint.Text = elvi.NameConstraint.ToString
+            txtRuntimeConstraint.Text = elvi.NameConstraint.ToString
         End If
     End Sub
 
     Private Sub listEvents_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListEvents.SelectedIndexChanged
         Dim elvi As EventListViewItem
 
-        If Me.ListEvents.SelectedItems.Count = 1 Then
+        If ListEvents.SelectedItems.Count = 1 Then
             ' must be at least one selected - this is called twice when change selection
             ' first set to 0 then selects one
-            If Not current_item Is Me.ListEvents.SelectedItems(0) Then
+            If Not current_item Is ListEvents.SelectedItems(0) Then
                 If Not current_item Is Nothing Then
                     elvi = current_item
                     elvi.Selected = False   ' sets the imageindex to unselected (and the listitem to selected if it is not)
                     current_item = Nothing  ' stops processes when writing information
                 End If
-                elvi = Me.ListEvents.SelectedItems(0)
+
+                elvi = CType(ListEvents.SelectedItems(0), EventListViewItem)
                 ProcessEvent(elvi)
                 current_item = elvi
                 ' set the image to selected, don't use selected to change as it will call this again!
                 current_item.Selected = True
+            End If
+
+            SpecialiseToolStripMenuItem.Visible = False
+
+            If Not current_item Is Nothing Then
+                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(current_item.RM_Class.NodeId, ".")
+                Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+
+                If i < numberSpecialisations Then
+                    SpecialiseToolStripMenuItem.Visible = True
+                End If
             End If
         End If
 
     End Sub
 
     Private Sub txtEventDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtEventDescription.TextChanged
-
-        If (current_item Is Nothing) Or mIsLoading Then Return
-
-        current_item.Description = Me.txtEventDescription.Text
-        mFileManager.FileEdited = True
+        If Not current_item Is Nothing And Not mIsLoading Then
+            current_item.Description = txtEventDescription.Text
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub NumericOffset_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericOffset.ValueChanged, NumericOffset.TextChanged
-
-        If (current_item Is Nothing) Or mIsLoading Then Return
-
-        current_item.Offset = Me.NumericOffset.Value
-        mFileManager.FileEdited = True
+        If Not current_item Is Nothing And Not mIsLoading Then
+            current_item.Offset = CInt(NumericOffset.Value)
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub comboOffsetUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboOffsetUnits.SelectedIndexChanged
-
-        If (current_item Is Nothing) Or mIsLoading Then Return
-
-        current_item.OffsetUnits = CType(Me.comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
-        mFileManager.FileEdited = True
-
+        If Not current_item Is Nothing And Not mIsLoading Then
+            current_item.OffsetUnits = CType(comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub numericDuration_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numericDuration.ValueChanged, numericDuration.TextChanged
-
-        If (current_item Is Nothing) Or mIsLoading Then Return
-
-        current_item.Width = Me.numericDuration.Value
-        mFileManager.FileEdited = True
+        If Not current_item Is Nothing And Not mIsLoading Then
+            current_item.Width = CInt(numericDuration.Value)
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub comboDurationUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboDurationUnits.SelectedIndexChanged
-
-        If (current_item Is Nothing) Or mIsLoading Then Return
-
-        current_item.WidthUnits = CType(Me.comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
-        mFileManager.FileEdited = True
+        If Not current_item Is Nothing And Not mIsLoading Then
+            current_item.WidthUnits = CType(comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
-    Private Sub comboIntervalViewPoint_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboIntervalViewPoint.SelectedIndexChanged
+    'SRH: 1 Nov 2009 - EDT-568 - commented out
 
-        If (current_item Is Nothing) Or mIsLoading Then Return
+    'Private Sub comboIntervalViewPoint_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+    '    If Not current_item Is Nothing And Not mIsLoading Then
+    '        'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
+    '        If CInt(comboIntervalViewPoint.SelectedValue) <> 118 Then
+    '            current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
+    '        Else
+    '            current_item.AggregateMathFunction = ""
+    '        End If
+    '        mFileManager.FileEdited = True
+    '    End If
+    'End Sub
 
-        current_item.AggregateMathFunction = Convert.ToString(Me.comboIntervalViewPoint.SelectedValue)
-        mFileManager.FileEdited = True
+    'SRH: 1 Nov 2009 - EDT-568 - added
 
+    Private Sub listViewMathsFunctions_ItemCheck(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemCheckedEventArgs) Handles listViewMathsFunctions.ItemChecked
+        If Not current_item Is Nothing And Not mIsLoading Then
+
+            'SRH: 1 Nov 2009 - EDT-568 - commented out
+            'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
+            'If CInt(comboIntervalViewPoint.SelectedValue) <> 118 Then
+            '    current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
+            'Else
+            '    current_item.AggregateMathFunction = ""
+            'End If
+            current_item.AggregateMathFunction = GetAggregateFunctions()
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub radioOpen_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioOpen.CheckedChanged
-        If current_item Is Nothing Then Return
-
-        mFileManager.FileEdited = True
+        If Not current_item Is Nothing Then
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub radioFixed_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioFixed.CheckedChanged
-        If current_item Is Nothing Then Return
-        mFileManager.FileEdited = True
+        If Not current_item Is Nothing Then
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub cbFixedOffset_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFixedOffset.CheckedChanged
+        NumericOffset.Visible = cbFixedOffset.Checked
+        comboOffsetUnits.Visible = cbFixedOffset.Checked
 
-        Me.NumericOffset.Visible = cbFixedOffset.Checked
-        Me.comboOffsetUnits.Visible = cbFixedOffset.Checked
+        If Not current_item Is Nothing Then
+            If cbFixedOffset.Checked Then
+                current_item.hasFixedOffset = True
+                ' may accept default so set them
+                current_item.Offset = CInt(NumericOffset.Value)
+                current_item.OffsetUnits = CType(comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+            Else
+                current_item.hasFixedOffset = False
+            End If
 
-        If current_item Is Nothing Then Return
-
-        If Me.cbFixedOffset.Checked Then
-            current_item.hasFixedOffset = True
-            ' may accept default so set them
-            current_item.Offset = Me.NumericOffset.Value
-            current_item.OffsetUnits = CType(Me.comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
-        Else
-            current_item.hasFixedOffset = False
+            mFileManager.FileEdited = True
         End If
-        mFileManager.FileEdited = True
-
-
     End Sub
 
     Private Sub cbFixedInterval_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFixedInterval.CheckedChanged
-        Me.numericDuration.Visible = Me.cbFixedInterval.Checked
-        Me.comboDurationUnits.Visible = Me.cbFixedInterval.Checked
+        numericDuration.Visible = cbFixedInterval.Checked
+        comboDurationUnits.Visible = cbFixedInterval.Checked
 
-        If current_item Is Nothing Then Return
+        'If cbFixedInterval.Checked Then
+        '    'gbDuration.Height = numericDuration.Location.Y + 62
+        '    gbDuration.Height = numericDuration.Location.Y + 120
+        'Else
+        '    gbDuration.Height = gbOffset.Height + 80
+        'End If
 
-        If cbFixedInterval.Checked Then
-            current_item.hasFixedWidth = True
-            ' may accept default so load these
-            current_item.Width = Me.numericDuration.Value
-            current_item.WidthUnits = CType(Me.comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
-        Else
-            current_item.hasFixedWidth = False
+        If Not current_item Is Nothing Then
+            If cbFixedInterval.Checked Then
+                current_item.hasFixedWidth = True
+                ' may accept default so load these
+                current_item.Width = CInt(numericDuration.Value)
+                current_item.WidthUnits = CType(comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+            Else
+                current_item.hasFixedWidth = False
+            End If
+
+            mFileManager.FileEdited = True
         End If
-        mFileManager.FileEdited = True
     End Sub
 
     Private Sub butRemoveElement_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveElement.Click
-
-        If Me.ListEvents.SelectedIndices.Count = 0 Or Me.ListEvents.Items.Count = 1 Then
+        If ListEvents.SelectedIndices.Count = 0 Or ListEvents.Items.Count = 1 Then
             'must be one selected and more than one in the list - have to have one event!
             Beep()
         Else
-            Dim elvi As EventListViewItem
-
-            elvi = ListEvents.SelectedItems(0)
+            Dim elvi As EventListViewItem = CType(ListEvents.SelectedItems(0), EventListViewItem)
 
             If MessageBox.Show(AE_Constants.Instance.Remove & elvi.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-                
                 ' leave an item selected if there is one
                 If elvi.Index > 0 Then
-                    Me.ListEvents.Items(elvi.Index - 1).Selected = True
-                ElseIf Me.ListEvents.Items.Count > 1 Then
-                    Me.ListEvents.Items(elvi.Index + 1).Selected = True
+                    ListEvents.Items(elvi.Index - 1).Selected = True
+                ElseIf ListEvents.Items.Count > 1 Then
+                    ListEvents.Items(elvi.Index + 1).Selected = True
                 End If
+
                 elvi.Remove()
                 mFileManager.FileEdited = True
             End If
-
         End If
     End Sub
 
     Private Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click
-
-        If Not Me.ListEvents.SelectedIndices.Count = 0 Then
+        If Not ListEvents.SelectedIndices.Count = 0 Then
             Dim lvI As ListViewItem
             Dim i As Integer
-            i = Me.ListEvents.SelectedIndices(0)
-            lvI = Me.ListEvents.SelectedItems(0)
+            i = ListEvents.SelectedIndices(0)
+            lvI = ListEvents.SelectedItems(0)
 
             If i > 0 Then
-                Me.ListEvents.Items.Remove(lvI)
-                Me.ListEvents.Items.Insert((i - 1), lvI)
+                ListEvents.Items.Remove(lvI)
+                ListEvents.Items.Insert((i - 1), lvI)
                 mFileManager.FileEdited = True
-                Me.ListEvents.Items.Item(i - 1).Selected = True
+                ListEvents.Items.Item(i - 1).Selected = True
             End If
         End If
-
     End Sub
 
     Private Sub butListDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListDown.Click
-
-        If Not Me.ListEvents.SelectedIndices.Count = 0 Then
+        If Not ListEvents.SelectedIndices.Count = 0 Then
             Dim lvI As ListViewItem
             Dim i, c As Integer
 
-            c = Me.ListEvents.Items.Count
-            i = Me.ListEvents.SelectedIndices(0)
-            lvI = Me.ListEvents.SelectedItems(0)
+            c = ListEvents.Items.Count
+            i = ListEvents.SelectedIndices(0)
+            lvI = ListEvents.SelectedItems(0)
 
-            If i < (c - 1) Then
-                Me.ListEvents.Items.Remove(lvI)
-                Me.ListEvents.Items.Insert((i + 1), lvI)
+            If i < c - 1 Then
+                ListEvents.Items.Remove(lvI)
+                ListEvents.Items.Insert((i + 1), lvI)
                 lvI.Selected = True
                 mFileManager.FileEdited = True
             End If
@@ -1432,18 +1528,14 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub ListEvents_AfterLabelEdit(ByVal sender As Object, ByVal e As System.Windows.Forms.LabelEditEventArgs) Handles ListEvents.AfterLabelEdit
-
         If Not e.Label Is Nothing Then
-            Dim lvItem As EventListViewItem
-
-            lvItem = Me.ListEvents.Items(e.Item)
+            Dim lvItem As EventListViewItem = CType(ListEvents.Items(e.Item), EventListViewItem)
 
             If e.Label = "" Then
                 e.CancelEdit = True
-                Return
+            Else
+                lvItem.Text = e.Label
             End If
-
-            lvItem.Text = e.Label
         End If
     End Sub
 
@@ -1451,13 +1543,14 @@ Public Class TabpageHistory
         Dim frm As New ConstraintForm
         Dim has_constraint As Boolean
         Dim t As Constraint_Text = Nothing
-
         has_constraint = current_item.hasNameConstraint
+
         If has_constraint Then
-            t = current_item.NameConstraint.copy
+            t = CType(current_item.NameConstraint.Copy, Constraint_Text)
         End If
 
         frm.ShowConstraint(False, current_item.NameConstraint, mFileManager)
+
         Select Case frm.ShowDialog
             Case Windows.Forms.DialogResult.OK
                 'no action
@@ -1475,14 +1568,14 @@ Public Class TabpageHistory
         End Select
 
         If current_item.hasNameConstraint Then
-            Me.txtRuntimeConstraint.Text = current_item.NameConstraint.ToString
+            txtRuntimeConstraint.Text = current_item.NameConstraint.ToString
         Else
-            Me.txtRuntimeConstraint.Text = ""
+            txtRuntimeConstraint.Text = ""
         End If
     End Sub
 
     Private Sub TabPageEventSeries_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.HelpProviderEventSeries.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderEventSeries.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
 
         mIsLoading = True
 
@@ -1490,55 +1583,63 @@ Public Class TabpageHistory
             TranslateGUI()
         End If
 
-        MathFunctionTable = New DataTable("MathFunction")
-        Dim newcol As New DataColumn("Code", System.Type.GetType("System.UInt64"))
-        MathFunctionTable.Columns.Add(newcol)
-        newcol = New DataColumn("Text", System.Type.GetType("System.String"))
-        MathFunctionTable.Columns.Add(newcol)
+        'MathFunctionTable = New DataTable("MathFunction")
+        'Dim newcol As New DataColumn("Code", System.Type.GetType("System.UInt64"))
+        'MathFunctionTable.Columns.Add(newcol)
+        'newcol = New DataColumn("Text", System.Type.GetType("System.String"))
+        'MathFunctionTable.Columns.Add(newcol)
 
         Dim math_functions As DataRow()
-        Dim new_row As DataRow
+        'Dim new_row As DataRow
 
         'Load according to the language of the interface, not the archetype
         'math_functions = mFileManager.OntologyManager.CodeForGroupID(14, mFileManager.OntologyManager.LanguageCode) 'event math function
         math_functions = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.DefaultLanguageCode) 'event math function
 
+        'SRH: 4 Feb 2009 - add not set
+        'new_row = MathFunctionTable.NewRow
+        'new_row("Code") = 118
+        'new_row("Text") = String.Format("<{0}>", Filemanager.GetOpenEhrTerm(118, "Not set"))
+        'MathFunctionTable.Rows.Add(new_row)
+
         For Each rw As DataRow In math_functions
-            new_row = MathFunctionTable.NewRow
-            new_row("Code") = rw.Item(1)
-            new_row("Text") = rw.Item(2)
-            MathFunctionTable.Rows.Add(new_row)
+            'new_row = MathFunctionTable.NewRow
+            'new_row("Code") = rw.Item(1)
+            'new_row("Text") = rw.Item(2)
+            'MathFunctionTable.Rows.Add(new_row)
+            Dim lv As New ListViewItem
+
+            lv.Tag = CStr(rw.Item(1))
+            lv.Text = CStr(rw.Item(2))
+            listViewMathsFunctions.Items.Add(lv)
         Next
 
-        MathFunctionTable.DefaultView.Sort = "Text"
+        'MathFunctionTable.DefaultView.Sort = "Text"
 
-        Me.comboIntervalViewPoint.DataSource = MathFunctionTable
-        Me.comboIntervalViewPoint.DisplayMember = "Text"
-        Me.comboIntervalViewPoint.ValueMember = "Code"
+        'comboIntervalViewPoint.SelectedValue = 118
+        'comboIntervalViewPoint.DataSource = MathFunctionTable
+        'comboIntervalViewPoint.DisplayMember = "Text"
+        'comboIntervalViewPoint.ValueMember = "Code"
 
-        Me.comboTimeUnits.Items.Clear()
-        Me.comboTimeUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboTimeUnits.Items.Clear()
+        comboTimeUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
         'Set default to minutes
-        Me.comboTimeUnits.SelectedIndex = 3
-        Me.comboOffsetUnits.Items.Clear()
-        Me.comboOffsetUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboTimeUnits.SelectedIndex = 3
+        comboOffsetUnits.Items.Clear()
+        comboOffsetUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
         'Set default to minutes
-        Me.comboOffsetUnits.SelectedIndex = 3
-        Me.comboDurationUnits.Items.Clear()
-        Me.comboDurationUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboOffsetUnits.SelectedIndex = 3
+        comboDurationUnits.Items.Clear()
+        comboDurationUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
         'Set default to minutes
-        Me.comboDurationUnits.SelectedIndex = 3
+        comboDurationUnits.SelectedIndex = 3
 
         mIsLoading = False
-
-
     End Sub
 
     Private Sub comboTimeUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboTimeUnits.SelectedIndexChanged
         'Initialising
-        If mFileManager Is Nothing Then Return
-
-        If Not mIsLoading Then
+        If Not mFileManager Is Nothing And Not mIsLoading Then
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -1548,12 +1649,38 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub ListEvents_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles ListEvents.KeyDown
-        If (Not current_item Is Nothing) AndAlso e.KeyCode = Keys.Delete Then
+        If Not current_item Is Nothing AndAlso e.KeyCode = Keys.Delete Then
             If MessageBox.Show(AE_Constants.Instance.Remove + " " + current_item.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
                 current_item.Remove()
             End If
         End If
     End Sub
+
+    Private Sub SpecialiseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpecialiseToolStripMenuItem.Click
+        If Not current_item Is Nothing Then
+            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & current_item.Text & "'?", _
+                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
+                MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+
+                If Not (current_item.Occurrences.IsUnbounded Or current_item.Occurrences.MaxCount > 1) Then
+
+                    current_item.Specialise()
+                Else
+                    Dim i As Integer = current_item.Index
+
+                    current_item = current_item.Copy()
+                    current_item.Specialise()
+
+                    Me.ListEvents.Items.Insert(i + 1, current_item)
+
+                    current_item.Selected = True
+                    current_item.BeginEdit()
+                    mFileManager.FileEdited = True
+                End If
+            End If
+        End If
+    End Sub
+
 End Class
 
 '

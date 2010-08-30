@@ -15,6 +15,7 @@
 '
 'option Strict On 
 Option Explicit On 
+Imports AM = XMLParser.OpenEhr.V1.Its.Xml.AM
 
 Namespace ArchetypeEditor.XML_Classes
     Public Class XML_Description
@@ -45,28 +46,28 @@ Namespace ArchetypeEditor.XML_Classes
             'di.key = "name"
             di.id = "name"
             If (Not Me.OriginalAuthor Is Nothing) Then
-                di.value = Me.mOriginalAuthor.Replace("""", "'")
+                di.Value = mOriginalAuthor
             End If
             authorDetails.Add(di)
 
             If Me.mOriginalAuthorEmail <> "" Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = "email"
-                di.value = Me.mOriginalAuthorEmail.Replace("""", "'")
+                di.Value = mOriginalAuthorEmail
                 authorDetails.Add(di)
             End If
 
             If Me.mOriginalAuthorDate <> "" Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = "date"
-                di.value = Me.mOriginalAuthorDate.Replace("""", "'")
+                di.Value = mOriginalAuthorDate
                 authorDetails.Add(di)
             End If
 
             If Me.mOriginalAuthorOrganisation <> "" Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = "organisation"
-                di.value = Me.mOriginalAuthorOrganisation.Replace("""", "'")
+                di.Value = mOriginalAuthorOrganisation
                 authorDetails.Add(di)
             End If
 
@@ -76,15 +77,24 @@ Namespace ArchetypeEditor.XML_Classes
             If Me.References <> "" Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = "references"
-                di.Value = Me.mReferences.Replace("""", "'")
+                di.Value = mReferences
                 otherDetails.Add(di)
             End If
+
+            ' HKF: 8 Dec 2008
+            If Not Me.ArchetypeDigest Is Nothing Then
+                di = New XMLParser.StringDictionaryItem
+                di.id = AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID
+                di.Value = ArchetypeDigest
+                otherDetails.Add(di)
+            End If
+
             mXML_Description.other_details = otherDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
 
-            mXML_Description.lifecycle_state = Me.LifeCycleStateAsString.Replace("""", "'")
+            mXML_Description.lifecycle_state = LifeCycleStateAsString
 
             If Not mArchetypePackageURI Is Nothing Then
-                mXML_Description.resource_package_uri = mArchetypePackageURI.Replace("""", "'")
+                mXML_Description.resource_package_uri = mArchetypePackageURI
             End If
 
             ' clear the other contributors and add them again
@@ -113,7 +123,6 @@ Namespace ArchetypeEditor.XML_Classes
         Sub New(ByVal an_xml_archetype_description As XMLParser.RESOURCE_DESCRIPTION, ByVal a_language_code As String)
             mXML_Description = an_xml_archetype_description
 
-            mADL_Version = "2.0" ' this is actually the archetype model rather than ADL
             If Not mXML_Description.resource_package_uri Is Nothing Then
                 mArchetypePackageURI = mXML_Description.resource_package_uri
             End If

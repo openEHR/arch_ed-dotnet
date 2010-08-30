@@ -19,65 +19,65 @@ Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
 
-Class ADL_COMPOSITION
-    Inherits RmComposition
+    Class ADL_COMPOSITION
+        Inherits RmComposition
 
-        Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
+        Sub New(ByRef Definition As AdlParser.CComplexObject, ByVal a_filemanager As FileManagerLocal)
             MyBase.New()
 
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim attribute As AdlParser.CAttribute
             Dim i As Integer
 
             ' set the root node id - usually the same as the concept
-            mNodeID = Definition.node_id.to_cil
+            mNodeID = Definition.NodeId.ToCil
 
-            For i = 1 To Definition.attributes.count
-                attribute = Definition.attributes.i_th(i)
+            For i = 1 To Definition.Attributes.Count
+                attribute = Definition.Attributes.ITh(i)
 
-                Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Select Case attribute.RmAttributeName.ToCil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                     Case "category"
-                        If attribute.has_children Then
-                            Dim t As Constraint_Text = ADL_RmElement.ProcessText(attribute.children.first)
+                        If attribute.HasChildren Then
+                            Dim t As Constraint_Text = ADL_RmElement.ProcessText(attribute.Children.First)
 
-                        If t.AllowableValues.HasCode("431") Then
-                            'isPersistent defaults to false (openehr::433) for event
-                            mIsPersistent = True
-                        End If
+                            If t.AllowableValues.HasCode("431") Then
+                                'isPersistent defaults to false (openehr::433) for event
+                                mIsPersistent = True
+                            End If
                         End If
                     Case "context"
-                        If attribute.has_children Then
-                            Dim complexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = attribute.children.first
+                        If attribute.HasChildren Then
+                            Dim complexObj As AdlParser.CComplexObject = attribute.Children.First
 
-                            If complexObj.has_attribute(Eiffel.String("other_context")) Then
-                                attribute = complexObj.c_attribute_at_path(Eiffel.String("other_context"))
+                            If complexObj.HasAttribute(Eiffel.String("other_context")) Then
+                                attribute = complexObj.CAttributeAtPath(Eiffel.String("other_context"))
 
-                                If attribute.has_children Then
-                                    Dim child As Object = attribute.children.first
+                                If attribute.HasChildren Then
+                                    Dim child As Object = attribute.Children.First
 
-                                    If TypeOf child Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
-                                        mChildren.Add(New RmStructureCompound(CType(child, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager))
-                            ' remembers the Processed data off events
+                                    If TypeOf child Is AdlParser.CComplexObject Then
+                                        mChildren.Add(New RmStructureCompound(CType(child, AdlParser.CComplexObject), a_filemanager))
+                                        ' remembers the Processed data off events
                                     Else
-                                        mChildren.Add(New RmSlot(CType(child, openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
-                        End If
+                                        mChildren.Add(New RmSlot(CType(child, AdlParser.ArchetypeSlot)))
+                                    End If
                                 End If
                             End If
 
-                            If complexObj.has_attribute(Eiffel.String("participations")) Then
-                                attribute = complexObj.c_attribute_at_path(Eiffel.String("participations"))
+                            If complexObj.HasAttribute(Eiffel.String("participations")) Then
+                                attribute = complexObj.CAttributeAtPath(Eiffel.String("participations"))
                                 Participations = New RmStructureCompound(attribute, StructureType.OtherParticipations, a_filemanager)
                             End If
                         End If
                     Case "content"
-                            ' a set of slots constraining what sections can be added
-                            Dim section As RmSection = New RmSection("root")
+                        ' a set of slots constraining what sections can be added
+                        Dim section As RmSection = New RmSection("root")
 
-                        For j As Integer = 1 To attribute.children.count
+                        For j As Integer = 1 To attribute.Children.Count
                             Try
-                                Dim obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = attribute.children.i_th(j)
+                                Dim obj As AdlParser.CObject = attribute.Children.ITh(j)
 
-                                If obj.generating_type.to_cil = "ARCHETYPE_SLOT" Then
-                                    section.Children.Add(New RmSlot(CType(attribute.children.i_th(j), openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT)))
+                                If obj.GeneratingType.Out.ToCil = "ARCHETYPE_SLOT" Then
+                                    section.Children.Add(New RmSlot(CType(attribute.Children.ITh(j), AdlParser.ArchetypeSlot)))
                                 Else
                                     MessageBox.Show("Editor does not support compositions with fixed sections. Create slots and separate suitable section archetype", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
                                 End If
@@ -86,7 +86,7 @@ Class ADL_COMPOSITION
                             End Try
                         Next
 
-                            mChildren.Add(section)
+                        mChildren.Add(section)
                 End Select
             Next
         End Sub

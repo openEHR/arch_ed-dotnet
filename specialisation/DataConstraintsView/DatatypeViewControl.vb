@@ -31,40 +31,32 @@ Public Class DatatypeViewControl : Inherits ElementViewControl 'Viewcontrol
 
     End Sub
 
-    Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, _
-            ByVal aLocation As System.Drawing.Point)
-
-        Dim ctrl As Control = DataTypeToControl(aConstraint, aLocation)
-
-        Me.Controls.Add(ctrl)
+    Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, ByVal aLocation As System.Drawing.Point)
+        Controls.Add(DataTypeToControl(aConstraint, aLocation))
     End Sub
 
-    Friend Function DataTypeToControl(ByVal aConstraint As Constraint, _
-            ByRef Pos As Point) As Control
+    Friend Function DataTypeToControl(ByVal aConstraint As Constraint, ByRef Pos As Point) As Control
+        Dim result As Label = Nothing
 
-        Select Case aConstraint.Type
+        If aConstraint IsNot Nothing Then
+            Select Case aConstraint.Type
+                Case ConstraintType.Any, ConstraintType.Slot
+                    result = New Label
+                    result.Height = 25
+                    result.Width = 70
+                    result.Text = "[" & aConstraint.ConstraintTypeString & "]"
+                    result.Location = Pos
+                Case Else
+                    Throw New NotSupportedException(String.Format("Constraint type '{0}' not supported as a view.", aConstraint.Type.ToString))
+            End Select
+        Else
+            Throw New NotSupportedException("Cannot view without a Constraint.")
+        End If
 
-            Case ConstraintType.Any
-                Dim lbl As New Label
-                lbl.Height = 25
-                lbl.Width = 70
-                lbl.Text = "[Any]"
-                lbl.Location = Pos
-
-                Return lbl
-
-
-            Case Else
-                'Debug.Assert(False)
-                Throw New NotSupportedException( _
-                        String.Format("Constraint type '{0}' not supported as a view", _
-                        aConstraint.Type.ToString))
-        End Select
+        Return result
     End Function
 
-    Private Sub ComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-        Handles mComboBox.SelectedIndexChanged
-
+    Private Sub ComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mComboBox.SelectedIndexChanged
         If mComboBox.SelectedValue Is Nothing Then
             Value = mComboBox.Text
         Else
@@ -72,19 +64,16 @@ Public Class DatatypeViewControl : Inherits ElementViewControl 'Viewcontrol
         End If
     End Sub
 
-    Private Sub TextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles mTextBox.TextChanged
-
+    Private Sub TextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mTextBox.TextChanged
         Value = mTextBox.Text
     End Sub
 
-    Private Sub Numeric_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) _
-        Handles mNumeric.ValueChanged
-
+    Private Sub Numeric_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles mNumeric.ValueChanged
         Value = mNumeric.Value
     End Sub
 
     Private mValue As Object
+
     Public Overrides Property Value() As Object
         Get
             Return mValue
@@ -95,15 +84,14 @@ Public Class DatatypeViewControl : Inherits ElementViewControl 'Viewcontrol
         End Set
     End Property
 
-    Private Sub ListBox_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) _
-            Handles mListBox.SelectedValueChanged
-
+    Private Sub ListBox_SelectedValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles mListBox.SelectedValueChanged
         If mListBox.SelectedValue Is Nothing Then
             Value = mListBox.Text
         Else
             Value = CStr(mListBox.SelectedValue)
         End If
     End Sub
+
 End Class
 
 '

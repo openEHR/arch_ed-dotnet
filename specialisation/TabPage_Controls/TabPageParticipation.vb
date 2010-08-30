@@ -26,6 +26,7 @@ Public Class TabPageParticipation
                 Return True
             End If
         Next
+
         Return False
     End Function
 
@@ -33,19 +34,22 @@ Public Class TabPageParticipation
         flowPanelParticipations.Controls.Clear()
         mParticipation = Nothing
         chkProvider.Checked = False
-        Me.panelOccurrences.Visible = False
-        Me.panelOccurrences.Controls.Clear()
+        panelOccurrences.Hide()
+        panelOccurrences.Controls.Clear()
     End Sub
 
     Public Property OtherParticipations() As RmStructureCompound
         Get
             If HasOtherParticipations() Then
                 Dim otherPart As New RmStructureCompound("other_participations", StructureType.OtherParticipations)
+
                 For Each p As Participation In flowPanelParticipations.Controls
                     otherPart.Children.Add(p.ParticipationConstraint)
                 Next
+
                 Return otherPart
             End If
+
             Return Nothing
         End Get
         Set(ByVal value As RmStructureCompound)
@@ -54,8 +58,10 @@ Public Class TabPageParticipation
                 new_participation.ParticipationConstraint = p
                 flowPanelParticipations.Controls.Add(new_participation)
             Next
+
             If flowPanelParticipations.Controls.Count > 1 Then
                 DisplayCardinality()
+
                 If Not mCardinality Is Nothing Then
                     mCardinality.Cardinality = value.Children.Cardinality
                 End If
@@ -65,12 +71,13 @@ Public Class TabPageParticipation
 
     Private Sub butAddEvent_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddEvent.Click
         DisplayCardinality()
-        Me.flowPanelParticipations.Controls.Add(New Participation)
+        flowPanelParticipations.Controls.Add(New Participation)
     End Sub
 
     Private Sub DisplayCardinality()
-        If (flowPanelParticipations.Controls.Count = 1) Then
-            Me.panelOccurrences.Visible = True
+        If flowPanelParticipations.Controls.Count = 1 Then
+            panelOccurrences.Show()
+
             If mCardinality Is Nothing Then
                 mCardinality = New OccurrencesPanel(Filemanager.Master)
                 mCardinality.Title = Filemanager.GetOpenEhrTerm(437, "Cardinality")
@@ -82,11 +89,12 @@ Public Class TabPageParticipation
 
     Private Sub butRemoveElement_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveElement.Click
         If Not mParticipation Is Nothing Then
-            If (flowPanelParticipations.Controls.Count = 2) Then
-                Me.panelOccurrences.Visible = False
+            If flowPanelParticipations.Controls.Count = 2 Then
+                panelOccurrences.Hide()
                 panelOccurrences.Controls.Clear()
                 mCardinality = Nothing
             End If
+
             RemoveHandler mParticipation.Enter, AddressOf SelectedParticipationChanged
             flowPanelParticipations.Controls.Remove(mParticipation)
         End If
@@ -95,4 +103,11 @@ Public Class TabPageParticipation
     Private Sub flowPanelParticipations_ControlAdded(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ControlEventArgs) Handles flowPanelParticipations.ControlAdded
         AddHandler e.Control.Enter, AddressOf SelectedParticipationChanged
     End Sub
+
+    Public Sub Translate()
+        For Each p As Participation In flowPanelParticipations.Controls
+            p.Translate()
+        Next
+    End Sub
+
 End Class

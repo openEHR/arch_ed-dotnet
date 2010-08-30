@@ -14,7 +14,7 @@
 '
 '
 
-Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'viewpanel
+Public MustInherit Class ElementViewControl : Inherits Control
 
     Public Event ValueChanged As EventHandler
 
@@ -28,7 +28,6 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
 
         Dim location As New Point(0, 0)
         Dim lbl As New Label
-
         lbl.Width = 100
         lbl.Height = 35
         location.Y += 5
@@ -46,25 +45,28 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
 
         mToolTips.SetToolTip(lbl, s)
 
-        'bold if must exist
         If anElement.Occurrences.MinCount > 0 Then
             lbl.Font = New System.Drawing.Font(lbl.Font, FontStyle.Bold)
         End If
 
-        'Change Sam Heard 2004-06-20
-        'Change to constraint type
-        Select Case anElement.Constraint.Type
-            Case ConstraintType.Text
-                lbl.TextAlign = ContentAlignment.TopLeft
-            Case ConstraintType.DateTime
-                lbl.TextAlign = ContentAlignment.MiddleLeft
-        End Select
+        If anElement.Constraint IsNot Nothing Then
+            Select Case anElement.Constraint.Type
+                Case ConstraintType.Text
+                    lbl.TextAlign = ContentAlignment.TopLeft
+                Case ConstraintType.DateTime
+                    lbl.TextAlign = ContentAlignment.MiddleLeft
+            End Select
+        End If
 
         Controls.Add(lbl)
 
         ' remember new position
         location.X = lbl.Right + 25
-        InitialiseComponent(anElement.Constraint, location)
+
+        If anElement.Constraint IsNot Nothing Then
+            InitialiseComponent(anElement.Constraint, location)
+        End If
+
         SetSize()
     End Sub
 
@@ -78,12 +80,12 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
     Protected MustOverride Sub InitialiseComponent(ByVal aConstraint As Constraint, ByVal aLocation As Point)
 
     Protected Sub SetSize()
-        Dim s As Size = New Size
+        Dim s As New Size
 
         For Each ctrl As Control In Controls
             If ctrl.Visible Then
-                s.Width = Math.Max(s.Width, ctrl.Right) '+ 5)
-                s.Height = Math.Max(s.Height, ctrl.Bottom) ' + 1)
+                s.Width = Math.Max(s.Width, ctrl.Right)
+                s.Height = Math.Max(s.Height, ctrl.Bottom)
             End If
         Next
 
@@ -110,19 +112,6 @@ Public MustInherit Class ElementViewControl : Inherits Control 'ViewControl 'vie
 
     Protected Sub OnValueChanged()
         RaiseEvent ValueChanged(Me, New EventArgs)
-    End Sub
-
-    'JAR: 01JUN07, EDT-24 Interface tab does not release UID objects which causes crash
-    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
-        MyBase.Dispose(disposing)
-
-        For Each ctrl As Control In Controls
-            ctrl.Dispose()
-            Controls.Remove(ctrl)
-        Next
-
-        mFileManager = Nothing
-        mToolTips = Nothing
     End Sub
 
 End Class

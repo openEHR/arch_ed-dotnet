@@ -23,11 +23,12 @@ Public Interface Parser
     ReadOnly Property WriteFileError() As Boolean
     ReadOnly Property TypeName() As String
     Sub ResetAll()
-    Sub Serialise(ByVal a_format As String)
     ReadOnly Property AvailableFormats() As ArrayList
-    Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal LanguageCode As String)
+    Function NewOntology() As Ontology
+    Sub CreateNewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal LanguageCode As String)
     Sub OpenFile(ByVal FileName As String, ByVal a_filemanager As FileManagerLocal)
     Sub WriteFile(ByVal FileName As String, ByVal output_format As String, ByVal parserSynchronised As Boolean)
+    Function CanonicalArchetype() As XMLParser.ARCHETYPE
 End Interface
 
 

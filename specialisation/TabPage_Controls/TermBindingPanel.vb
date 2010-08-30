@@ -71,7 +71,7 @@ Public Class TermBindingPanel
     Friend WithEvents BindingOkButton As System.Windows.Forms.Button
     Friend WithEvents ReleaseTextBox As System.Windows.Forms.TextBox
     Friend WithEvents CodeTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents NodePathLabel As System.Windows.Forms.Label
+    Friend WithEvents NodeLabel As System.Windows.Forms.Label
     Friend WithEvents PathRadioButton As System.Windows.Forms.RadioButton
     Friend WithEvents NodeRadioButton As System.Windows.Forms.RadioButton
     Friend WithEvents AddBindingGroupBox As System.Windows.Forms.GroupBox
@@ -105,6 +105,7 @@ Public Class TermBindingPanel
     Friend WithEvents Code As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents Terminology As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents BindingToolTip As System.Windows.Forms.ToolTip
+    Friend WithEvents PathLabel As System.Windows.Forms.Label
     Friend WithEvents tpComplex As Crownwood.Magic.Controls.TabPage
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -125,13 +126,14 @@ Public Class TermBindingPanel
         Me.BindingCriteriaListBox = New System.Windows.Forms.ListBox
         Me.AddCriteriaButton = New System.Windows.Forms.Button
         Me.AddBindingGroupBox = New System.Windows.Forms.GroupBox
+        Me.PathLabel = New System.Windows.Forms.Label
         Me.CancelAddBindingButton = New System.Windows.Forms.Button
         Me.BindingOkButton = New System.Windows.Forms.Button
         Me.lblRelease = New System.Windows.Forms.Label
         Me.lblCode = New System.Windows.Forms.Label
         Me.ReleaseTextBox = New System.Windows.Forms.TextBox
         Me.CodeTextBox = New System.Windows.Forms.TextBox
-        Me.NodePathLabel = New System.Windows.Forms.Label
+        Me.NodeLabel = New System.Windows.Forms.Label
         Me.PathRadioButton = New System.Windows.Forms.RadioButton
         Me.NodeRadioButton = New System.Windows.Forms.RadioButton
         Me.AddBindingCriteriaGroupBox = New System.Windows.Forms.GroupBox
@@ -150,12 +152,12 @@ Public Class TermBindingPanel
         Me.PanelBindings = New System.Windows.Forms.Panel
         Me.gbCriteria = New System.Windows.Forms.GroupBox
         Me.tabBindings = New Crownwood.Magic.Controls.TabControl
+        Me.tpComplex = New Crownwood.Magic.Controls.TabPage
         Me.tpSimple = New Crownwood.Magic.Controls.TabPage
         Me.dgTermBindings = New System.Windows.Forms.DataGridView
         Me.Node = New System.Windows.Forms.DataGridViewComboBoxColumn
         Me.Code = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.Terminology = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.tpComplex = New Crownwood.Magic.Controls.TabPage
         Me.ContextMenuTermBinding.SuspendLayout()
         Me.BindingGroupBox.SuspendLayout()
         Me.AddBindingGroupBox.SuspendLayout()
@@ -163,9 +165,9 @@ Public Class TermBindingPanel
         Me.TopPanel.SuspendLayout()
         Me.PanelBindings.SuspendLayout()
         Me.gbCriteria.SuspendLayout()
+        Me.tpComplex.SuspendLayout()
         Me.tpSimple.SuspendLayout()
         CType(Me.dgTermBindings, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tpComplex.SuspendLayout()
         Me.SuspendLayout()
         '
         'PathsTreeView
@@ -180,32 +182,32 @@ Public Class TermBindingPanel
         Me.PathsTreeView.PathSeparator = "/"
         Me.PathsTreeView.SelectedImageIndex = 0
         Me.PathsTreeView.ShowRootLines = False
-        Me.PathsTreeView.Size = New System.Drawing.Size(880, 160)
+        Me.PathsTreeView.Size = New System.Drawing.Size(880, 161)
         Me.PathsTreeView.TabIndex = 1
         '
         'ContextMenuTermBinding
         '
         Me.ContextMenuTermBinding.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmBindingPastePath})
         Me.ContextMenuTermBinding.Name = "ContextMenuTermBinding"
-        Me.ContextMenuTermBinding.Size = New System.Drawing.Size(238, 26)
+        Me.ContextMenuTermBinding.Size = New System.Drawing.Size(197, 26)
         '
         'cmBindingPastePath
         '
         Me.cmBindingPastePath.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmBindingPastePathLogical, Me.cmBindingPastePathPhysical})
         Me.cmBindingPastePath.Name = "cmBindingPastePath"
-        Me.cmBindingPastePath.Size = New System.Drawing.Size(237, 22)
+        Me.cmBindingPastePath.Size = New System.Drawing.Size(196, 22)
         Me.cmBindingPastePath.Text = "Copy path to clipboard"
         '
         'cmBindingPastePathLogical
         '
         Me.cmBindingPastePathLogical.Name = "cmBindingPastePathLogical"
-        Me.cmBindingPastePathLogical.Size = New System.Drawing.Size(175, 22)
+        Me.cmBindingPastePathLogical.Size = New System.Drawing.Size(144, 22)
         Me.cmBindingPastePathLogical.Text = "Logical path"
         '
         'cmBindingPastePathPhysical
         '
         Me.cmBindingPastePathPhysical.Name = "cmBindingPastePathPhysical"
-        Me.cmBindingPastePathPhysical.Size = New System.Drawing.Size(175, 22)
+        Me.cmBindingPastePathPhysical.Size = New System.Drawing.Size(144, 22)
         Me.cmBindingPastePathPhysical.Text = "Physical path"
         '
         'BindingImageList
@@ -229,7 +231,7 @@ Public Class TermBindingPanel
         Me.BindingGroupBox.Location = New System.Drawing.Point(0, 0)
         Me.BindingGroupBox.Name = "BindingGroupBox"
         Me.BindingGroupBox.Size = New System.Drawing.Size(224, 96)
-        Me.BindingGroupBox.TabIndex = 9
+        Me.BindingGroupBox.TabIndex = 1
         Me.BindingGroupBox.TabStop = False
         Me.BindingGroupBox.Text = "Bindings"
         '
@@ -255,88 +257,92 @@ Public Class TermBindingPanel
         'DeleteBindingButton
         '
         Me.DeleteBindingButton.Image = CType(resources.GetObject("DeleteBindingButton.Image"), System.Drawing.Image)
-        Me.DeleteBindingButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.DeleteBindingButton.Location = New System.Drawing.Point(24, 49)
         Me.DeleteBindingButton.Name = "DeleteBindingButton"
-        Me.DeleteBindingButton.Size = New System.Drawing.Size(22, 22)
+        Me.DeleteBindingButton.Size = New System.Drawing.Size(26, 27)
         Me.DeleteBindingButton.TabIndex = 7
         Me.DeleteBindingButton.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'AddBindingButton
         '
         Me.AddBindingButton.Image = CType(resources.GetObject("AddBindingButton.Image"), System.Drawing.Image)
-        Me.AddBindingButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.AddBindingButton.Location = New System.Drawing.Point(24, 22)
         Me.AddBindingButton.Name = "AddBindingButton"
-        Me.AddBindingButton.Size = New System.Drawing.Size(22, 22)
+        Me.AddBindingButton.Size = New System.Drawing.Size(26, 27)
         Me.AddBindingButton.TabIndex = 6
         Me.AddBindingButton.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'DeleteCriteriaButton
         '
         Me.DeleteCriteriaButton.Image = CType(resources.GetObject("DeleteCriteriaButton.Image"), System.Drawing.Image)
-        Me.DeleteCriteriaButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.DeleteCriteriaButton.Location = New System.Drawing.Point(19, 51)
+        Me.DeleteCriteriaButton.Location = New System.Drawing.Point(15, 51)
         Me.DeleteCriteriaButton.Name = "DeleteCriteriaButton"
-        Me.DeleteCriteriaButton.Size = New System.Drawing.Size(24, 22)
+        Me.DeleteCriteriaButton.Size = New System.Drawing.Size(26, 27)
         Me.DeleteCriteriaButton.TabIndex = 10
         '
         'BindingCriteriaListBox
         '
         Me.BindingCriteriaListBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BindingCriteriaListBox.ItemHeight = 17
+        Me.BindingCriteriaListBox.ItemHeight = 15
         Me.BindingCriteriaListBox.Location = New System.Drawing.Point(48, 16)
         Me.BindingCriteriaListBox.Name = "BindingCriteriaListBox"
-        Me.BindingCriteriaListBox.Size = New System.Drawing.Size(600, 55)
+        Me.BindingCriteriaListBox.Size = New System.Drawing.Size(600, 34)
         Me.BindingCriteriaListBox.TabIndex = 11
         Me.BindingCriteriaListBox.TabStop = False
         '
         'AddCriteriaButton
         '
         Me.AddCriteriaButton.Image = CType(resources.GetObject("AddCriteriaButton.Image"), System.Drawing.Image)
-        Me.AddCriteriaButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.AddCriteriaButton.Location = New System.Drawing.Point(20, 22)
+        Me.AddCriteriaButton.Location = New System.Drawing.Point(16, 22)
         Me.AddCriteriaButton.Name = "AddCriteriaButton"
-        Me.AddCriteriaButton.Size = New System.Drawing.Size(22, 22)
+        Me.AddCriteriaButton.Size = New System.Drawing.Size(26, 27)
         Me.AddCriteriaButton.TabIndex = 9
         '
         'AddBindingGroupBox
         '
+        Me.AddBindingGroupBox.Controls.Add(Me.PathLabel)
         Me.AddBindingGroupBox.Controls.Add(Me.CancelAddBindingButton)
         Me.AddBindingGroupBox.Controls.Add(Me.BindingOkButton)
         Me.AddBindingGroupBox.Controls.Add(Me.lblRelease)
         Me.AddBindingGroupBox.Controls.Add(Me.lblCode)
         Me.AddBindingGroupBox.Controls.Add(Me.ReleaseTextBox)
         Me.AddBindingGroupBox.Controls.Add(Me.CodeTextBox)
-        Me.AddBindingGroupBox.Controls.Add(Me.NodePathLabel)
+        Me.AddBindingGroupBox.Controls.Add(Me.NodeLabel)
         Me.AddBindingGroupBox.Controls.Add(Me.PathRadioButton)
         Me.AddBindingGroupBox.Controls.Add(Me.NodeRadioButton)
         Me.AddBindingGroupBox.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.AddBindingGroupBox.Location = New System.Drawing.Point(0, 328)
+        Me.AddBindingGroupBox.Location = New System.Drawing.Point(0, 329)
         Me.AddBindingGroupBox.Name = "AddBindingGroupBox"
         Me.AddBindingGroupBox.Size = New System.Drawing.Size(880, 90)
-        Me.AddBindingGroupBox.TabIndex = 12
+        Me.AddBindingGroupBox.TabIndex = 4
         Me.AddBindingGroupBox.TabStop = False
         Me.AddBindingGroupBox.Text = "Add Binding"
         Me.AddBindingGroupBox.Visible = False
         '
+        'PathLabel
+        '
+        Me.PathLabel.Location = New System.Drawing.Point(88, 39)
+        Me.PathLabel.Name = "PathLabel"
+        Me.PathLabel.Size = New System.Drawing.Size(784, 18)
+        Me.PathLabel.TabIndex = 4
+        '
         'CancelAddBindingButton
         '
         Me.CancelAddBindingButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CancelAddBindingButton.Location = New System.Drawing.Point(728, 53)
+        Me.CancelAddBindingButton.Location = New System.Drawing.Point(808, 57)
         Me.CancelAddBindingButton.Name = "CancelAddBindingButton"
         Me.CancelAddBindingButton.Size = New System.Drawing.Size(64, 28)
-        Me.CancelAddBindingButton.TabIndex = 27
+        Me.CancelAddBindingButton.TabIndex = 10
         Me.CancelAddBindingButton.Text = "Cancel"
         '
         'BindingOkButton
         '
         Me.BindingOkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BindingOkButton.Location = New System.Drawing.Point(808, 53)
+        Me.BindingOkButton.Location = New System.Drawing.Point(737, 57)
         Me.BindingOkButton.Name = "BindingOkButton"
         Me.BindingOkButton.Size = New System.Drawing.Size(64, 28)
-        Me.BindingOkButton.TabIndex = 26
+        Me.BindingOkButton.TabIndex = 9
         Me.BindingOkButton.Text = "OK"
         '
         'lblRelease
@@ -344,16 +350,16 @@ Public Class TermBindingPanel
         Me.lblRelease.Location = New System.Drawing.Point(216, 63)
         Me.lblRelease.Name = "lblRelease"
         Me.lblRelease.Size = New System.Drawing.Size(72, 16)
-        Me.lblRelease.TabIndex = 32
+        Me.lblRelease.TabIndex = 7
         Me.lblRelease.Text = "Release"
         Me.lblRelease.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lblCode
         '
-        Me.lblCode.Location = New System.Drawing.Point(16, 63)
+        Me.lblCode.Location = New System.Drawing.Point(10, 63)
         Me.lblCode.Name = "lblCode"
         Me.lblCode.Size = New System.Drawing.Size(88, 16)
-        Me.lblCode.TabIndex = 31
+        Me.lblCode.TabIndex = 5
         Me.lblCode.Text = "Code"
         Me.lblCode.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -361,31 +367,31 @@ Public Class TermBindingPanel
         '
         Me.ReleaseTextBox.Location = New System.Drawing.Point(296, 63)
         Me.ReleaseTextBox.Name = "ReleaseTextBox"
-        Me.ReleaseTextBox.Size = New System.Drawing.Size(100, 24)
-        Me.ReleaseTextBox.TabIndex = 25
+        Me.ReleaseTextBox.Size = New System.Drawing.Size(100, 23)
+        Me.ReleaseTextBox.TabIndex = 8
         '
         'CodeTextBox
         '
         Me.CodeTextBox.Location = New System.Drawing.Point(104, 63)
         Me.CodeTextBox.Name = "CodeTextBox"
-        Me.CodeTextBox.Size = New System.Drawing.Size(100, 24)
-        Me.CodeTextBox.TabIndex = 24
+        Me.CodeTextBox.Size = New System.Drawing.Size(100, 23)
+        Me.CodeTextBox.TabIndex = 6
         '
-        'NodePathLabel
+        'NodeLabel
         '
-        Me.NodePathLabel.Location = New System.Drawing.Point(88, 18)
-        Me.NodePathLabel.Name = "NodePathLabel"
-        Me.NodePathLabel.Size = New System.Drawing.Size(784, 32)
-        Me.NodePathLabel.TabIndex = 26
+        Me.NodeLabel.Location = New System.Drawing.Point(88, 19)
+        Me.NodeLabel.Name = "NodeLabel"
+        Me.NodeLabel.Size = New System.Drawing.Size(784, 18)
+        Me.NodeLabel.TabIndex = 2
         '
         'PathRadioButton
         '
         Me.PathRadioButton.CheckAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.PathRadioButton.Checked = True
-        Me.PathRadioButton.Location = New System.Drawing.Point(8, 40)
+        Me.PathRadioButton.Location = New System.Drawing.Point(8, 38)
         Me.PathRadioButton.Name = "PathRadioButton"
         Me.PathRadioButton.Size = New System.Drawing.Size(74, 20)
-        Me.PathRadioButton.TabIndex = 29
+        Me.PathRadioButton.TabIndex = 3
         Me.PathRadioButton.TabStop = True
         Me.PathRadioButton.Text = "Path"
         Me.PathRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -396,7 +402,7 @@ Public Class TermBindingPanel
         Me.NodeRadioButton.Location = New System.Drawing.Point(8, 18)
         Me.NodeRadioButton.Name = "NodeRadioButton"
         Me.NodeRadioButton.Size = New System.Drawing.Size(74, 18)
-        Me.NodeRadioButton.TabIndex = 28
+        Me.NodeRadioButton.TabIndex = 1
         Me.NodeRadioButton.Text = "Node"
         Me.NodeRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -410,10 +416,10 @@ Public Class TermBindingPanel
         Me.AddBindingCriteriaGroupBox.Controls.Add(Me.CriteriaOkButton)
         Me.AddBindingCriteriaGroupBox.Controls.Add(Me.CriteriaValueTextBox)
         Me.AddBindingCriteriaGroupBox.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.AddBindingCriteriaGroupBox.Location = New System.Drawing.Point(0, 256)
+        Me.AddBindingCriteriaGroupBox.Location = New System.Drawing.Point(0, 257)
         Me.AddBindingCriteriaGroupBox.Name = "AddBindingCriteriaGroupBox"
         Me.AddBindingCriteriaGroupBox.Size = New System.Drawing.Size(880, 72)
-        Me.AddBindingCriteriaGroupBox.TabIndex = 13
+        Me.AddBindingCriteriaGroupBox.TabIndex = 3
         Me.AddBindingCriteriaGroupBox.TabStop = False
         Me.AddBindingCriteriaGroupBox.Text = "Add Binding Criteria"
         Me.AddBindingCriteriaGroupBox.Visible = False
@@ -424,7 +430,7 @@ Public Class TermBindingPanel
         Me.CriteriaPathRadioButton.Location = New System.Drawing.Point(8, 44)
         Me.CriteriaPathRadioButton.Name = "CriteriaPathRadioButton"
         Me.CriteriaPathRadioButton.Size = New System.Drawing.Size(74, 22)
-        Me.CriteriaPathRadioButton.TabIndex = 39
+        Me.CriteriaPathRadioButton.TabIndex = 2
         Me.CriteriaPathRadioButton.Text = "Path"
         Me.CriteriaPathRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -435,7 +441,7 @@ Public Class TermBindingPanel
         Me.CriteriaNodeRadioButton.Location = New System.Drawing.Point(8, 22)
         Me.CriteriaNodeRadioButton.Name = "CriteriaNodeRadioButton"
         Me.CriteriaNodeRadioButton.Size = New System.Drawing.Size(74, 22)
-        Me.CriteriaNodeRadioButton.TabIndex = 38
+        Me.CriteriaNodeRadioButton.TabIndex = 1
         Me.CriteriaNodeRadioButton.TabStop = True
         Me.CriteriaNodeRadioButton.Text = "Node"
         Me.CriteriaNodeRadioButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -447,41 +453,41 @@ Public Class TermBindingPanel
         Me.CriteriaTermLabel.Location = New System.Drawing.Point(91, 20)
         Me.CriteriaTermLabel.Name = "CriteriaTermLabel"
         Me.CriteriaTermLabel.Size = New System.Drawing.Size(381, 40)
-        Me.CriteriaTermLabel.TabIndex = 40
+        Me.CriteriaTermLabel.TabIndex = 3
         '
         'OperatorComboBox
         '
         Me.OperatorComboBox.Items.AddRange(New Object() {"=", "<", "<=", ">", ">=", "!="})
         Me.OperatorComboBox.Location = New System.Drawing.Point(488, 20)
         Me.OperatorComboBox.Name = "OperatorComboBox"
-        Me.OperatorComboBox.Size = New System.Drawing.Size(64, 25)
-        Me.OperatorComboBox.TabIndex = 34
+        Me.OperatorComboBox.Size = New System.Drawing.Size(64, 23)
+        Me.OperatorComboBox.TabIndex = 4
         Me.OperatorComboBox.Text = "="
         '
         'BindingCriteriaCancelButton
         '
         Me.BindingCriteriaCancelButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.BindingCriteriaCancelButton.Location = New System.Drawing.Point(728, 42)
+        Me.BindingCriteriaCancelButton.Location = New System.Drawing.Point(808, 42)
         Me.BindingCriteriaCancelButton.Name = "BindingCriteriaCancelButton"
         Me.BindingCriteriaCancelButton.Size = New System.Drawing.Size(64, 28)
-        Me.BindingCriteriaCancelButton.TabIndex = 37
+        Me.BindingCriteriaCancelButton.TabIndex = 7
         Me.BindingCriteriaCancelButton.Text = "Cancel"
         '
         'CriteriaOkButton
         '
         Me.CriteriaOkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.CriteriaOkButton.Location = New System.Drawing.Point(808, 42)
+        Me.CriteriaOkButton.Location = New System.Drawing.Point(737, 42)
         Me.CriteriaOkButton.Name = "CriteriaOkButton"
         Me.CriteriaOkButton.Size = New System.Drawing.Size(64, 28)
-        Me.CriteriaOkButton.TabIndex = 36
+        Me.CriteriaOkButton.TabIndex = 6
         Me.CriteriaOkButton.Text = "OK"
         '
         'CriteriaValueTextBox
         '
         Me.CriteriaValueTextBox.Location = New System.Drawing.Point(568, 20)
         Me.CriteriaValueTextBox.Name = "CriteriaValueTextBox"
-        Me.CriteriaValueTextBox.Size = New System.Drawing.Size(200, 24)
-        Me.CriteriaValueTextBox.TabIndex = 35
+        Me.CriteriaValueTextBox.Size = New System.Drawing.Size(200, 23)
+        Me.CriteriaValueTextBox.TabIndex = 5
         Me.CriteriaValueTextBox.Visible = False
         '
         'BindingToolTip
@@ -508,11 +514,10 @@ Public Class TermBindingPanel
         'AddTerminologyButton
         '
         Me.AddTerminologyButton.Image = CType(resources.GetObject("AddTerminologyButton.Image"), System.Drawing.Image)
-        Me.AddTerminologyButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
         Me.AddTerminologyButton.Location = New System.Drawing.Point(695, 7)
         Me.AddTerminologyButton.Name = "AddTerminologyButton"
         Me.AddTerminologyButton.Size = New System.Drawing.Size(26, 27)
-        Me.AddTerminologyButton.TabIndex = 13
+        Me.AddTerminologyButton.TabIndex = 3
         '
         'TerminologyComboBox
         '
@@ -520,8 +525,8 @@ Public Class TermBindingPanel
         Me.TerminologyComboBox.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TerminologyComboBox.Location = New System.Drawing.Point(256, 5)
         Me.TerminologyComboBox.Name = "TerminologyComboBox"
-        Me.TerminologyComboBox.Size = New System.Drawing.Size(433, 26)
-        Me.TerminologyComboBox.TabIndex = 12
+        Me.TerminologyComboBox.Size = New System.Drawing.Size(433, 23)
+        Me.TerminologyComboBox.TabIndex = 2
         Me.TerminologyComboBox.ValueMember = "Terminology"
         '
         'lblBindingterminology
@@ -529,7 +534,7 @@ Public Class TermBindingPanel
         Me.lblBindingterminology.Location = New System.Drawing.Point(8, 3)
         Me.lblBindingterminology.Name = "lblBindingterminology"
         Me.lblBindingterminology.Size = New System.Drawing.Size(240, 29)
-        Me.lblBindingterminology.TabIndex = 12
+        Me.lblBindingterminology.TabIndex = 1
         Me.lblBindingterminology.Text = "Binding terminology:"
         Me.lblBindingterminology.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
@@ -538,10 +543,10 @@ Public Class TermBindingPanel
         Me.PanelBindings.Controls.Add(Me.gbCriteria)
         Me.PanelBindings.Controls.Add(Me.BindingGroupBox)
         Me.PanelBindings.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelBindings.Location = New System.Drawing.Point(0, 160)
+        Me.PanelBindings.Location = New System.Drawing.Point(0, 161)
         Me.PanelBindings.Name = "PanelBindings"
         Me.PanelBindings.Size = New System.Drawing.Size(880, 96)
-        Me.PanelBindings.TabIndex = 15
+        Me.PanelBindings.TabIndex = 2
         '
         'gbCriteria
         '
@@ -552,32 +557,46 @@ Public Class TermBindingPanel
         Me.gbCriteria.Location = New System.Drawing.Point(224, 0)
         Me.gbCriteria.Name = "gbCriteria"
         Me.gbCriteria.Size = New System.Drawing.Size(656, 96)
-        Me.gbCriteria.TabIndex = 0
+        Me.gbCriteria.TabIndex = 2
         Me.gbCriteria.TabStop = False
         Me.gbCriteria.Text = "Criteria"
         Me.gbCriteria.Visible = False
         '
         'tabBindings
         '
-        Me.tabBindings.BackColor = System.Drawing.Color.LightGoldenrodYellow
+        Me.tabBindings.BackColor = System.Drawing.Color.OldLace
         Me.tabBindings.BoldSelectedPage = True
         Me.tabBindings.Dock = System.Windows.Forms.DockStyle.Fill
         Me.tabBindings.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
         Me.tabBindings.Location = New System.Drawing.Point(4, 40)
         Me.tabBindings.Name = "tabBindings"
         Me.tabBindings.PositionTop = True
-        Me.tabBindings.SelectedIndex = 0
-        Me.tabBindings.SelectedTab = Me.tpSimple
+        Me.tabBindings.SelectedIndex = 1
+        Me.tabBindings.SelectedTab = Me.tpComplex
         Me.tabBindings.Size = New System.Drawing.Size(880, 444)
         Me.tabBindings.TabIndex = 16
         Me.tabBindings.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpSimple, Me.tpComplex})
+        '
+        'tpComplex
+        '
+        Me.tpComplex.BackColor = System.Drawing.Color.FloralWhite
+        Me.tpComplex.Controls.Add(Me.PathsTreeView)
+        Me.tpComplex.Controls.Add(Me.PanelBindings)
+        Me.tpComplex.Controls.Add(Me.AddBindingCriteriaGroupBox)
+        Me.tpComplex.Controls.Add(Me.AddBindingGroupBox)
+        Me.tpComplex.Location = New System.Drawing.Point(0, 0)
+        Me.tpComplex.Name = "tpComplex"
+        Me.tpComplex.Size = New System.Drawing.Size(880, 419)
+        Me.tpComplex.TabIndex = 1
+        Me.tpComplex.Title = "Complex"
         '
         'tpSimple
         '
         Me.tpSimple.Controls.Add(Me.dgTermBindings)
         Me.tpSimple.Location = New System.Drawing.Point(0, 0)
         Me.tpSimple.Name = "tpSimple"
-        Me.tpSimple.Size = New System.Drawing.Size(880, 418)
+        Me.tpSimple.Selected = False
+        Me.tpSimple.Size = New System.Drawing.Size(880, 419)
         Me.tpSimple.TabIndex = 0
         Me.tpSimple.Title = "Node"
         '
@@ -590,7 +609,7 @@ Public Class TermBindingPanel
         Me.dgTermBindings.Location = New System.Drawing.Point(0, 0)
         Me.dgTermBindings.Name = "dgTermBindings"
         Me.dgTermBindings.RowTemplate.Height = 24
-        Me.dgTermBindings.Size = New System.Drawing.Size(657, 418)
+        Me.dgTermBindings.Size = New System.Drawing.Size(657, 419)
         Me.dgTermBindings.TabIndex = 0
         '
         'Node
@@ -616,22 +635,9 @@ Public Class TermBindingPanel
         Me.Terminology.Name = "Terminology"
         Me.Terminology.Visible = False
         '
-        'tpComplex
-        '
-        Me.tpComplex.Controls.Add(Me.PathsTreeView)
-        Me.tpComplex.Controls.Add(Me.PanelBindings)
-        Me.tpComplex.Controls.Add(Me.AddBindingCriteriaGroupBox)
-        Me.tpComplex.Controls.Add(Me.AddBindingGroupBox)
-        Me.tpComplex.Location = New System.Drawing.Point(0, 0)
-        Me.tpComplex.Name = "tpComplex"
-        Me.tpComplex.Selected = False
-        Me.tpComplex.Size = New System.Drawing.Size(880, 418)
-        Me.tpComplex.TabIndex = 1
-        Me.tpComplex.Title = "Complex"
-        '
         'TermBindingPanel
         '
-        Me.BackColor = System.Drawing.Color.LightYellow
+        Me.BackColor = System.Drawing.Color.FloralWhite
         Me.Controls.Add(Me.tabBindings)
         Me.Controls.Add(Me.TopPanel)
         Me.Name = "TermBindingPanel"
@@ -646,9 +652,9 @@ Public Class TermBindingPanel
         Me.TopPanel.ResumeLayout(False)
         Me.PanelBindings.ResumeLayout(False)
         Me.gbCriteria.ResumeLayout(False)
+        Me.tpComplex.ResumeLayout(False)
         Me.tpSimple.ResumeLayout(False)
         CType(Me.dgTermBindings, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.tpComplex.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -662,16 +668,15 @@ Public Class TermBindingPanel
     Private mCurrentBindingCriteria As BindingCriteria
     Private mCriteriaMode As Boolean
     Private WithEvents mCriteriaElementView As ElementViewControl
-    Private mIsLoading As Boolean
     Private mCriteriaNewRow As DataRow
 
     Private Sub BindingTerminologyComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TerminologyComboBox.SelectedIndexChanged
-        If Not Me.TerminologyComboBox.SelectedValue Is Nothing Then
-            'PopulateNodeTree()
+        If Not TerminologyComboBox.SelectedValue Is Nothing Then
             ShowNodesImage(PathsTreeView.Nodes)
             SetTermBindingFilter()  ' for the tree view
             SetDvTermBindingsFilter() ' for the node only view
-            If dgTermBindings.AllowUserToAddRows = False Then
+
+            If Not dgTermBindings.AllowUserToAddRows Then
                 dgTermBindings.AllowUserToAddRows = True
             End If
         Else
@@ -680,7 +685,6 @@ Public Class TermBindingPanel
     End Sub
 
     Private Function GetTextFromPath(ByVal path As String, ByVal insideSqBrackets As Boolean) As String
-
         Dim splitNode As String() = path.Split("[]".ToCharArray)
 
         If splitNode.Length = 3 Then
@@ -692,19 +696,16 @@ Public Class TermBindingPanel
         Else
             Return path
         End If
-
     End Function
 
     Private Sub PopulateNodeTree()
         Try
-
             PathsTreeView.SuspendLayout()
 
             Dim languageCode As String = mFileManager.OntologyManager.LanguageCode
 
             ' get the paths with the NodeId labels
             Dim physicalPaths As String() = mFileManager.Archetype.Paths(languageCode, mFileManager.ParserSynchronised, False)
-
 
             'Temporary fix for paths notation which included value[unknown_1] and such
             'Match number, bracket at end of string - but no underscore
@@ -723,12 +724,11 @@ Public Class TermBindingPanel
                     For j As Integer = 1 To z.Length - 1
                         Dim nodeFound As Boolean = False
                         Dim node As TermNode = Nothing
-                        Dim splitPathSegment As String()
+                        Dim splitPathSegment As String() = z(j).Split("[]".ToCharArray())
 
-
-                        splitPathSegment = z(j).Split("[]".ToCharArray())
                         If splitPathSegment.Length > 1 Then
                             Dim nId As String = splitPathSegment(1)
+
                             ' does this node exist elsewhere?
                             For Each n As TermNode In nodes
                                 If n.NodeId = nId Then
@@ -741,6 +741,7 @@ Public Class TermBindingPanel
 
                         If Not nodeFound Then
                             node = New TermNode(z(j), mFileManager)
+
                             If z(j).StartsWith("data") Then
                                 nodes.Insert(0, node)
                             ElseIf z(j).StartsWith("events") Then
@@ -756,33 +757,24 @@ Public Class TermBindingPanel
                         End If
 
                         nodes = node.Nodes
-
                     Next    ' z index
-
                 End If
-
             Next    ' LogPath index
 
-
-            If mIsLoading Then
-                PathsTreeView.ExpandAll()
-            Else
-                ShowNodesImage(PathsTreeView.Nodes)
-            End If
+            ShowNodesImage(PathsTreeView.Nodes)
 
             If PathsTreeView.GetNodeCount(False) > 0 Then
+                PathsTreeView.ExpandAll()
                 PathsTreeView.SelectedNode = PathsTreeView.Nodes(0)
             End If
-            PathsTreeView.ResumeLayout()
 
+            PathsTreeView.ResumeLayout()
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
         End Try
     End Sub
 
     Private Sub ShowNodesImage(ByVal aNodes As TreeNodeCollection)
-
-        Static imageTermBindingDataView As DataView
         If imageTermBindingDataView Is Nothing Then
             imageTermBindingDataView = New DataView(mFileManager.OntologyManager.TermBindingsTable)
         End If
@@ -792,20 +784,15 @@ Public Class TermBindingPanel
             node.SelectedImageIndex = 0
 
             If Not TerminologyComboBox.SelectedValue Is Nothing Then
-                SetTermBindingFilter(imageTermBindingDataView, _
-                        CStr(TerminologyComboBox.SelectedValue), _
-                        node.NodeId, node.PhysicalPath)
+                SetTermBindingFilter(imageTermBindingDataView, CStr(TerminologyComboBox.SelectedValue), node.NodeId, node.PhysicalPath)
 
                 If imageTermBindingDataView.Count > 0 Then
                     node.ImageIndex = 1
-                    node.SelectedImageIndex = 1 '2
+                    node.SelectedImageIndex = 1
                 End If
-
             End If
 
-            If Not node.Parent Is Nothing _
-        AndAlso node.Parent.ImageIndex <= 0 Then
-
+            If Not node.Parent Is Nothing AndAlso node.Parent.ImageIndex <= 0 Then
                 node.Parent.ImageIndex = 4
                 node.Parent.SelectedImageIndex = 4
             End If
@@ -814,19 +801,17 @@ Public Class TermBindingPanel
         Next
     End Sub
 
+    Private imageTermBindingDataView As DataView
     Private dvTermBindings As Data.DataView
     Private dvTermDefinitions As Data.DataView
 
     Private Sub SetDvTermBindingsFilter()
-        If Me.TerminologyComboBox.SelectedIndex > -1 Then
-            dvTermBindings.RowFilter = "Terminology = '" & CStr(Me.TerminologyComboBox.SelectedValue) & "' AND Path LIKE 'at%'"
-            dvTermBindings.Table.Columns(0).DefaultValue = CStr(Me.TerminologyComboBox.SelectedValue)
+        If TerminologyComboBox.SelectedIndex > -1 Then
+            dvTermBindings.RowFilter = "Terminology = '" & CStr(TerminologyComboBox.SelectedValue) & "' AND Path LIKE 'at%'"
+            dvTermBindings.Table.Columns(0).DefaultValue = CStr(TerminologyComboBox.SelectedValue)
         End If
-        If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 0 Then
-            dgTermBindings.Enabled = False
-        Else
-            dgTermBindings.Enabled = True
-        End If
+
+        dgTermBindings.Enabled = mFileManager.OntologyManager.TerminologiesTable.Rows.Count > 0
     End Sub
 
     Private Sub SetDvTermDefinitionsFilter()
@@ -834,8 +819,7 @@ Public Class TermBindingPanel
     End Sub
 
     Private Sub TermBindingPanel_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        If Not Me.DesignMode Then
-
+        If Not DesignMode Then
             If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 TranslateGUI()
             End If
@@ -844,28 +828,22 @@ Public Class TermBindingPanel
                 'Set up the view of the node (only) term bindings for that terminology
                 dvTermBindings = New Data.DataView(mFileManager.OntologyManager.TermBindingsTable)
                 'Now set the terminology source which calls SetDvTermBindingsFilter if there are any terminologies
-                Me.TerminologyComboBox.DataSource = mFileManager.OntologyManager.TerminologiesTable
+                TerminologyComboBox.DataSource = mFileManager.OntologyManager.TerminologiesTable
 
-                Me.dgTermBindings.DataSource = dvTermBindings
+                dgTermBindings.DataSource = dvTermBindings
 
                 'set up the text display for the terms in the current language
                 dvTermDefinitions = New Data.DataView(mFileManager.OntologyManager.TermDefinitionTable)
                 SetDvTermDefinitionsFilter()
                 'Node column
-                CType(Me.dgTermBindings.Columns(1), DataGridViewComboBoxColumn).DataSource = dvTermDefinitions
-                CType(Me.dgTermBindings.Columns(1), DataGridViewComboBoxColumn).DisplayMember = "Text"
-                CType(Me.dgTermBindings.Columns(1), DataGridViewComboBoxColumn).ValueMember = "Code"
+                CType(dgTermBindings.Columns(1), DataGridViewComboBoxColumn).DataSource = dvTermDefinitions
+                CType(dgTermBindings.Columns(1), DataGridViewComboBoxColumn).DisplayMember = "Text"
+                CType(dgTermBindings.Columns(1), DataGridViewComboBoxColumn).ValueMember = "Code"
 
-                If PathsTreeView.Nodes.Count = 0 Then
-                    PopulateNodeTree()
-                End If
-
-                BindingToolTip.SetToolTip(Me.AddBindingButton, Filemanager.GetOpenEhrTerm(99, "Add binding"))
-                BindingToolTip.SetToolTip(Me.DeleteBindingButton, Filemanager.GetOpenEhrTerm(152, "Remove"))
-
+                BindingToolTip.SetToolTip(AddBindingButton, Filemanager.GetOpenEhrTerm(99, "Add binding"))
+                BindingToolTip.SetToolTip(DeleteBindingButton, Filemanager.GetOpenEhrTerm(152, "Remove"))
             Catch ex As Exception
                 Debug.Assert(False, ex.ToString)
-
             End Try
         End If
     End Sub
@@ -873,10 +851,8 @@ Public Class TermBindingPanel
     Public Sub PopulatePathTree()
         PathsTreeView.SuspendLayout()
         PathsTreeView.Nodes.Clear()
-        mIsLoading = True
         PopulateNodeTree()
         SetDvTermBindingsFilter()
-        mIsLoading = False
         PathsTreeView.ResumeLayout()
     End Sub
 
@@ -884,16 +860,8 @@ Public Class TermBindingPanel
         PathsTreeView.Nodes.Clear()
     End Sub
 
-    Private Sub NodeScopeCheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles PathRadioButton.CheckedChanged, NodeRadioButton.CheckedChanged
-
-        If Not PathsTreeView.SelectedNode Is Nothing Then
-            Debug.Assert(Not PathsTreeView.SelectedNode Is Nothing)
-            PopulateNewBindingPath()
-        End If
-
-        Me.CodeTextBox.Focus()
-
+    Private Sub NodeScopeCheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PathRadioButton.CheckedChanged, NodeRadioButton.CheckedChanged
+        CodeTextBox.Focus()
     End Sub
 
     Private Sub PathsTreeView_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles PathsTreeView.AfterSelect
@@ -902,53 +870,41 @@ Public Class TermBindingPanel
 
         Try
             If Not CriteriaMode Then
-
                 SetTermBindingFilter()
 
                 If AddBindingGroupBox.Visible Then
                     PopulateNewBindingPath()
                 End If
-
             Else
                 PopulateCriteriaPath()
-
                 ShowCriteriaElementView()
             End If
 
             Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
             BindingToolTip.SetToolTip(PathsTreeView, selectedNode.PhysicalPath)
-
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
-
         End Try
     End Sub
 
     Private Sub SetTermBindingFilter()
         Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
+
         If Not selectedNode Is Nothing Then
-            SetTermBindingFilter(mTermBindingView, CStr(TerminologyComboBox.SelectedValue), _
-                    selectedNode.NodeId, selectedNode.PhysicalPath)
+            SetTermBindingFilter(mTermBindingView, CStr(TerminologyComboBox.SelectedValue), selectedNode.NodeId, selectedNode.PhysicalPath)
         End If
     End Sub
 
-    Private Sub SetTermBindingFilter(ByVal TermBindingView As DataView, _
-            ByVal TerminologyId As String, ByVal NodeId As String, ByVal NodePath As String)
-
-        TermBindingView.RowFilter = String.Format( _
-                "Terminology = '{0}' AND (Path = '{1}' OR Path = '{2}')", _
-                TerminologyId, NodeId, NodePath)
+    Private Sub SetTermBindingFilter(ByVal TermBindingView As DataView, ByVal TerminologyId As String, ByVal NodeId As String, ByVal NodePath As String)
+        TermBindingView.RowFilter = String.Format("Terminology = '{0}' AND (Path = '{1}' OR Path = '{2}')", TerminologyId, NodeId, NodePath)
     End Sub
 
     Private Sub AddBindingButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddBindingButton.Click
-
         If Not TerminologyComboBox.SelectedValue Is Nothing Then
-            AddBindingGroupBox.Visible = True
-            Me.PanelBindings.Enabled = False
-
+            AddBindingGroupBox.Show()
+            PanelBindings.Enabled = False
             CodeTextBox.Text = ""
             ReleaseTextBox.Text = ""
-
             PopulateNewBindingPath()
         Else
             MsgBox("Select a terminology")
@@ -958,27 +914,12 @@ Public Class TermBindingPanel
     Private Sub PopulateNewBindingPath()
         Debug.Assert(Not PathsTreeView.SelectedNode Is Nothing)
         Debug.Assert(TypeOf PathsTreeView.SelectedNode Is TermNode)
-
-        Try
-            Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
-
-            If PathRadioButton.Checked Then
-                NodePathLabel.Text = selectedNode.PhysicalPath
-
-            Else
-                Debug.Assert(NodeRadioButton.Checked, "No node scope option selected")
-
-                NodePathLabel.Text = selectedNode.NodeId
-            End If
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-
-        End Try
+        Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
+        NodeLabel.Text = selectedNode.NodeId
+        PathLabel.Text = selectedNode.PhysicalPath
     End Sub
 
     Private Sub AddPathToBindings(ByVal aPath As String, ByVal aCode As String, Optional ByVal aCriteria As String = "")
-
         mCriteriaNewRow = mFileManager.OntologyManager.TermBindingsTable.NewRow
         mCriteriaNewRow(0) = Me.TerminologyComboBox.SelectedValue
         mCriteriaNewRow(1) = aPath
@@ -992,7 +933,6 @@ Public Class TermBindingPanel
         End If
 
         mFileManager.OntologyManager.TermBindingsTable.Rows.Add(mCriteriaNewRow)
-
         mFileManager.FileEdited = True
 
         Debug.Assert(BindingList.Items.Count > 0, "BindingList not updated")
@@ -1000,11 +940,9 @@ Public Class TermBindingPanel
         If BindingList.Items.Count > 0 Then
             BindingList.Items(BindingList.Items.Count - 1).Selected = True
         End If
-
     End Sub
 
     Private Sub RemovePathFromBindings(ByVal aPath As String, ByVal aCode As String, Optional ByVal aCriteria As String = "")
-
         Dim SelectedRows As DataRow()
 
         SelectedRows = mFileManager.OntologyManager.TermBindingsTable.Select _
@@ -1017,7 +955,6 @@ Public Class TermBindingPanel
         Next
 
         mFileManager.OntologyManager.TermBindingsTable.AcceptChanges()
-
         mFileManager.FileEdited = True
 
         If BindingList.Items.Count > 0 Then
@@ -1025,24 +962,23 @@ Public Class TermBindingPanel
         End If
     End Sub
 
-    Private Sub AddTerminologyButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles AddTerminologyButton.Click
-
+    Private Sub AddTerminologyButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddTerminologyButton.Click
         Try
             If OceanArchetypeEditor.Instance.AddTerminology() Then
                 If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 1 Then
                     SetTermBindingFilter()  ' for the tree view
                     SetDvTermBindingsFilter() ' for the node only view
                     dgTermBindings.Enabled = True
+
                     If dgTermBindings.AllowUserToAddRows = False Then
                         dgTermBindings.AllowUserToAddRows = True
                     End If
                 Else
                     TerminologyComboBox.SelectedIndex = TerminologyComboBox.Items.Count - 1
                 End If
+
                 mFileManager.FileEdited = True
             End If
-
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
         End Try
@@ -1077,57 +1013,47 @@ Public Class TermBindingPanel
         End If
     End Sub
 
-    Private Sub BindingOkButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles BindingOkButton.Click
+    Private Sub BindingOkButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BindingOkButton.Click
+        Debug.Assert(NodeLabel.Text <> "", "Node not set")
+        Debug.Assert(PathLabel.Text <> "", "Path not set")
 
-        Debug.Assert(Me.NodePathLabel.Text <> "", "Node path not set")
-
-        If Me.CodeTextBox.Text = "" Then
+        If CodeTextBox.Text = "" Then
             MessageBox.Show("Binding code required", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Exit Sub
-        End If
-
-        If Me.TerminologyComboBox.SelectedValue Is Nothing Then
+        ElseIf TerminologyComboBox.SelectedValue Is Nothing Then
             MessageBox.Show("Binding terminology required", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            Exit Sub
-        End If
-
-        'add "//" if this is a node binding
-
-        If Me.NodeRadioButton.Checked Then
-            Me.NodePathLabel.Text = "//" & Me.NodePathLabel.Text
-        End If
-
-        If mFileManager.OntologyManager.hasTermBinding(CStr(TerminologyComboBox.SelectedValue), CodeTextBox.Text, NodePathLabel.Text) Then
-            If MessageBox.Show(AE_Constants.Instance.Must_add_criteria, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.OK Then
-                AddBindingGroupBox.Visible = False
-                AddCriteriaButton_Click(sender, e)
-                mCriteriaMode = True
-            Else
-                Me.PanelBindings.Enabled = True
-                AddBindingGroupBox.Visible = False
-            End If
         Else
-            Try
-                AddPathToBindings(NodePathLabel.Text, CodeTextBox.Text)
+            Dim path As String
 
-                ShowNodesImage(PathsTreeView.Nodes)
+            If NodeRadioButton.Checked Then
+                path = "//" & NodeLabel.Text
+            Else
+                path = PathLabel.Text
+            End If
 
-                Me.PanelBindings.Enabled = True
-                AddBindingGroupBox.Visible = False
-
-            Catch ex As Exception
-
-                Debug.Assert(False, ex.ToString)
-                MessageBox.Show(AE_Constants.Instance.Duplicate_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
+            If mFileManager.OntologyManager.hasTermBinding(CStr(TerminologyComboBox.SelectedValue), CodeTextBox.Text, path) Then
+                If MessageBox.Show(AE_Constants.Instance.Must_add_criteria, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) = Windows.Forms.DialogResult.OK Then
+                    AddBindingGroupBox.Hide()
+                    AddCriteriaButton_Click(sender, e)
+                    mCriteriaMode = True
+                Else
+                    Me.PanelBindings.Enabled = True
+                    AddBindingGroupBox.Hide()
+                End If
+            Else
+                Try
+                    AddPathToBindings(path, CodeTextBox.Text)
+                    ShowNodesImage(PathsTreeView.Nodes)
+                    PanelBindings.Enabled = True
+                    AddBindingGroupBox.Hide()
+                Catch ex As Exception
+                    Debug.Assert(False, ex.ToString)
+                    MessageBox.Show(AE_Constants.Instance.Duplicate_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
         End If
-
     End Sub
 
-    Private Sub mTermBindingView_ListChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ListChangedEventArgs) _
-            Handles mTermBindingView.ListChanged
-
+    Private Sub mTermBindingView_ListChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ListChangedEventArgs) Handles mTermBindingView.ListChanged
         PopulateBindingList()
     End Sub
 
@@ -1135,8 +1061,8 @@ Public Class TermBindingPanel
         BindingList.Items.Clear()
 
         For Each bindingRow As DataRowView In mTermBindingView
-
             Dim imageIndex As Integer
+
             If bindingRow.Item("Path").ToString.IndexOf("/") > 0 Then
                 ' Path
                 imageIndex = 6
@@ -1146,24 +1072,20 @@ Public Class TermBindingPanel
             End If
 
             BindingList.Items.Add(CStr(bindingRow.Item("code")), imageIndex)
-
         Next
 
         If BindingList.Items.Count > 0 Then
             BindingList.Items(0).Selected = True
-
         Else
             BindingToolTip.SetToolTip(BindingList, "")
             ' hide the criteria as there are no nodes
-            Me.gbCriteria.Visible = False
+            gbCriteria.Hide()
             SetBindingCriteriaFilter("", "")
         End If
-
     End Sub
 
     Private Sub SetBindingCriteriaFilter(ByVal Path As String, ByVal Code As String)
-        '    Called during load before terminologyComboBox has a selected value so...
-
+        ' Called during load before terminologyComboBox has a selected value so...
         If Not TerminologyComboBox.SelectedValue Is Nothing Then
             mTermBindingCriteriaView.RowFilter = String.Format( _
                 "Terminology = '{0}' AND Path = '{1}' AND Code = '{2}'", _
@@ -1171,24 +1093,21 @@ Public Class TermBindingPanel
         End If
     End Sub
 
-    Private Sub CancelAddBindingButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles CancelAddBindingButton.Click
-
-        Me.PanelBindings.Enabled = True
-        AddBindingGroupBox.Visible = False
-
+    Private Sub CancelAddBindingButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CancelAddBindingButton.Click
+        PanelBindings.Enabled = True
+        AddBindingGroupBox.Hide()
     End Sub
 
-    Private Sub DeleteBindingButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles DeleteBindingButton.Click
-
+    Private Sub DeleteBindingButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DeleteBindingButton.Click
         Debug.Assert(BindingList.SelectedIndices.Count <= 1)
-        If BindingList.SelectedIndices.Count = 1 Then
 
+        If BindingList.SelectedIndices.Count = 1 Then
             Dim index As Integer = BindingList.SelectedIndices.Item(0)
+
             If index >= 0 Then
                 Dim a_code As String = CStr(mTermBindingView.Item(index).Item("Code"))
                 Dim a_path As String = CStr(mTermBindingView.Item(index).Item("Path"))
+
                 If mFileManager.OntologyManager.hasTermBinding(CStr(TerminologyComboBox.SelectedValue), a_code, a_path) Then
                     Try
                         RemovePathFromBindings(a_path, a_code)
@@ -1200,13 +1119,10 @@ Public Class TermBindingPanel
             End If
 
             ShowNodesImage(PathsTreeView.Nodes)
-
         End If
     End Sub
 
-    Private Sub AddCriteriaButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles AddCriteriaButton.Click
-
+    Private Sub AddCriteriaButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddCriteriaButton.Click
         If BindingList.SelectedIndices.Count > 0 Then
             'Preconditions
             Debug.Assert(Not PathsTreeView.SelectedNode Is Nothing)
@@ -1247,17 +1163,17 @@ Public Class TermBindingPanel
     End Sub
 
     Private Sub CriteriaOkButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CriteriaOkButton.Click
-
         mCurrentBindingCriteria.[Operator] = CStr(OperatorComboBox.Text)
         mCurrentBindingCriteria.ValueOperand = CStr(CriteriaValueTextBox.Tag)
+
         If mCriteriaMode Then
             ' have to add the binding and the criteria
             AddBindingCriteria()
             AddPathToBindings(Me.CodeTextBox.Text & "{" & mCurrentBindingCriteria.ToPhysicalCriteria & "}", BindingList.SelectedItems(0).Text)
             ShowNodesImage(PathsTreeView.Nodes)
         End If
-        BindingCriteriaCancelButton_Click(sender, e)
 
+        BindingCriteriaCancelButton_Click(sender, e)
     End Sub
 
     Private Sub PopulateCriteriaPath()
@@ -1288,7 +1204,7 @@ Public Class TermBindingPanel
         End If
 
         If Not termConstraint Is Nothing Then
-            mCriteriaElementView = ArchetypeView.ElementView(termConstraint, mFileManager)
+            mCriteriaElementView = ArchetypeView.ConstraintView(termConstraint, mFileManager)
             mCriteriaElementView.Location = Me.CriteriaValueTextBox.Location 'New Point(520, 64)
             AddBindingCriteriaGroupBox.Controls.Add(mCriteriaElementView)
         End If
@@ -1589,9 +1505,8 @@ Public Class TermBindingPanel
         Public ReadOnly Property ValueText() As String
             Get
                 Dim nodeId As String = NodeOperand
-                If nodeId.IndexOf("/") > 0 Then
-                    'Debug.Assert(False)
 
+                If nodeId.IndexOf("/") > 0 Then
                     Dim path As String = nodeId.TrimEnd("/"c)
                     Dim pathParts() As String = path.Split("/"c)
                     nodeId = pathParts(pathParts.Length - 1)
@@ -1603,11 +1518,9 @@ Public Class TermBindingPanel
                     Debug.Assert(j > 0)
 
                     nodeId = nodeId.Substring(i, j - i)
-
                 End If
 
-                Dim rmClass As RmStructure
-                rmClass = CType(mFilemanager.Archetype.Definition, ArchetypeDefinition).Data.GetChildByNodeId(nodeId)
+                Dim rmClass As RmStructure = CType(mFilemanager.Archetype.Definition, ArchetypeDefinition).Data.GetChildByNodeId(nodeId)
 
                 Debug.Assert(TypeOf rmClass Is RmElement)
                 Dim valueConstraint As Constraint = CType(rmClass, RmElement).Constraint
@@ -1618,12 +1531,9 @@ Public Class TermBindingPanel
                         Dim rows() As DataRow = ordinalConstraint.OrdinalValues.Select("Ordinal = " & ValueOperand)
                         Debug.Assert(rows.Length = 1)
                         Dim ordinal As New OrdinalValue(rows(0))
-
                         Return ordinal.Text
-
                     Case Else
                         Return ValueOperand
-
                 End Select
             End Get
         End Property
@@ -1645,15 +1555,14 @@ Public Class TermBindingPanel
     End Class
 
     Private Sub AddBindingGroupBox_VisibleChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles AddBindingGroupBox.VisibleChanged
-        If Me.AddBindingGroupBox.Visible Then
-            Me.CodeTextBox.Focus()
+        If AddBindingGroupBox.Visible Then
+            CodeTextBox.Focus()
         End If
     End Sub
 
     Private Sub TermBindingPanel_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
         OceanArchetypeEditor.Reflect(Me)
     End Sub
-
 
     Dim mCurrentLogicalPath As String
     Dim mCurrentPhysicalPath As String
@@ -1662,6 +1571,7 @@ Public Class TermBindingPanel
         If e.Button = Windows.Forms.MouseButtons.Right Then
             Dim pathNode As TermNode
             pathNode = CType(PathsTreeView.GetNodeAt(New Drawing.Point(e.X, e.Y)), TermNode)
+
             If pathNode Is Nothing Then
                 mCurrentLogicalPath = ""
                 mCurrentPhysicalPath = ""

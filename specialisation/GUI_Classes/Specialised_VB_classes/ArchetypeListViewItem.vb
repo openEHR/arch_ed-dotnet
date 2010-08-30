@@ -76,8 +76,8 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
             mArchetypeNode = New ArchetypeSlot(slot, a_file_manager)
             MyBase.Text = mArchetypeNode.Text
         Else
-        MyBase.Text = a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
-        mArchetypeNode = New ArchetypeNodeAnonymous(slot)
+            MyBase.Text = a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
+            mArchetypeNode = New ArchetypeNodeAnonymous(slot)
         End If
     End Sub
 

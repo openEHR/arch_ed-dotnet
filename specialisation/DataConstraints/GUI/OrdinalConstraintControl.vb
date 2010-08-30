@@ -222,13 +222,15 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
         Debug.Assert(TypeOf aArchetypeElement.Constraint Is Constraint_Ordinal)
         mOrdinalConstraint = CType(aArchetypeElement.Constraint, Constraint_Ordinal)
 
+        InitialiseOrdinals()
+
         ' set constraint values on control
         If IsState Then
             Me.butSetAssumedOrdinal.Visible = True
             Me.txtAssumedOrdinal.Visible = True
+            'SRH: 5 March 2009 - EDT-523 ordinal fix
+            Me.txtAssumedOrdinal.Text = GetOrdinalText(CInt(mOrdinalConstraint.AssumedValue))
         End If
-
-        InitialiseOrdinals()
 
         If (Not OceanArchetypeEditor.Instance.TempConstraint Is Nothing) AndAlso (OceanArchetypeEditor.Instance.TempConstraint.Type = ConstraintType.Ordinal) Then
             Me.MenuItemPasteAll.Enabled = True
@@ -244,15 +246,30 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
         mOrdinalConstraint = CType(c, Constraint_Ordinal)
 
+        InitialiseOrdinals()
+
         ' set constraint values on control
         If IsState Then
             Me.butSetAssumedOrdinal.Visible = True
             Me.txtAssumedOrdinal.Visible = True
+            'SRH: 5 March 2009 - EDT-523 ordinal fix
+            Me.txtAssumedOrdinal.Text = GetOrdinalText(CInt(mOrdinalConstraint.AssumedValue))
         End If
 
-        InitialiseOrdinals()
+
 
     End Sub
+
+    'SRH: 5 March 2009 - EDT-523 ordinal fix
+
+    Private Function GetOrdinalText(ByVal ordinal As Integer) As String
+        Dim result As String = ""
+        Dim dr As DataRow = Me.Constraint.OrdinalValues.Rows.Find(ordinal)
+        If Not dr Is Nothing Then
+            result = mFileManager.OntologyManager.GetText(CStr(dr.Item(2)))
+        End If
+        Return result
+    End Function
 
 
     Private Sub butSetAssumedOrdinal_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) _
@@ -291,7 +308,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
     Private Sub AddCodeToOrdinal()
         If MyBase.IsLoading Then Return
 
-        Dim s As String() = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager)
+        Dim s As String() = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager, Me.Constraint.InternalCodes)
         If s Is Nothing Then Return
 
         For i As Integer = 0 To s.Length - 1

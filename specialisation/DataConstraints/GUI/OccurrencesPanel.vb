@@ -7,7 +7,7 @@ End Enum
 Public Class OccurrencesPanel
     Inherits System.Windows.Forms.UserControl
     Private mMode As OccurrencesMode
-    Private mCardinality As New RmCardinality
+    Private WithEvents mCardinality As New RmCardinality
     Private mIsLoading As Boolean = False
     Private mIsSingle As Boolean = False
     Private mIncludeOrdered As Boolean = False
@@ -24,10 +24,16 @@ Public Class OccurrencesPanel
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_filemanager
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.TranslateGUI()
+
+        If OceanArchetypeEditor.Instance.Options.OccurrencesView = "numeric" Then
+            Mode = OccurrencesMode.Numeric
+        Else
+            Mode = OccurrencesMode.Lexical
         End If
 
+        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            TranslateGUI()
+        End If
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -116,7 +122,7 @@ Public Class OccurrencesPanel
         '
         'gbOccurrences
         '
-        Me.gbOccurrences.Location = New System.Drawing.Point(0, 20)
+        Me.gbOccurrences.Location = New System.Drawing.Point(0, 24)
         Me.gbOccurrences.Name = "gbOccurrences"
         Me.gbOccurrences.Size = New System.Drawing.Size(376, 48)
         Me.gbOccurrences.TabIndex = 1
@@ -177,7 +183,7 @@ Public Class OccurrencesPanel
         '
         'cbOrdered
         '
-        Me.cbOrdered.Location = New System.Drawing.Point(16, 0)
+        Me.cbOrdered.Location = New System.Drawing.Point(9, 0)
         Me.cbOrdered.Name = "cbOrdered"
         Me.cbOrdered.Size = New System.Drawing.Size(112, 24)
         Me.cbOrdered.TabIndex = 0
@@ -186,12 +192,13 @@ Public Class OccurrencesPanel
         '
         'OccurrencesPanel
         '
-        Me.Controls.Add(Me.cbOrdered)
+        Me.BackColor = System.Drawing.Color.Transparent
         Me.Controls.Add(Me.numMax)
         Me.Controls.Add(Me.numMin)
         Me.Controls.Add(Me.panelLexical)
         Me.Controls.Add(Me.gbOccurrences)
         Me.Controls.Add(Me.panelNumeric)
+        Me.Controls.Add(Me.cbOrdered)
         Me.Name = "OccurrencesPanel"
         Me.Size = New System.Drawing.Size(376, 208)
         Me.panelNumeric.ResumeLayout(False)
@@ -238,6 +245,12 @@ Public Class OccurrencesPanel
         End Set
     End Property
 
+    Private Sub CardinalityUpdatedExternally(ByVal sender As Object, ByVal e As EventArgs) Handles mCardinality.Updated
+        If Not mIsLoading Then
+            UpdateControl()
+        End If
+    End Sub
+
     Public Property IsContainer() As Boolean
         Get
             Return mIncludeOrdered
@@ -272,6 +285,54 @@ Public Class OccurrencesPanel
                 End If
             Else
                 Enabled = True
+            End If
+
+            mIsLoading = False
+        End Set
+    End Property
+
+    Public WriteOnly Property SetMandatory() As Boolean
+        Set(ByVal Value As Boolean)
+            mIsLoading = True
+            mIncludeOrdered = False
+            comboOptional.Enabled = Not Value
+
+            If Value Then
+                numMin.Value = 1
+                numMin.Minimum = 1
+                numMax.Minimum = 1
+                
+                If mMode = OccurrencesMode.Lexical Then
+                    comboOptional.SelectedIndex = 1
+                End If
+            Else
+                numMin.Minimum = 0
+                numMax.Minimum = 0
+            End If
+
+            mIsLoading = False
+        End Set
+    End Property
+
+    Public WriteOnly Property SetUnitary() As Boolean
+        Set(ByVal Value As Boolean)
+            mIsLoading = True
+            mIncludeOrdered = False
+
+            If Value Then
+                numMax.Value = 1
+                numMax.Maximum = 1
+                numMin.Maximum = 1
+                cbUnbounded.Checked = False
+                cbUnbounded.Visible = False
+
+                If mMode = OccurrencesMode.Lexical Then
+                    comboOptional.SelectedIndex = 1
+                End If
+            Else
+                numMax.Maximum = 1000
+                numMin.Maximum = 1000
+                cbUnbounded.Visible = True
             End If
 
             mIsLoading = False
@@ -318,11 +379,7 @@ Public Class OccurrencesPanel
             gbOccurrences.Dock = DockStyle.Fill
         End If
 
-        If OceanArchetypeEditor.Instance.Options.OccurrencesView = "numeric" Then
-            Mode = OccurrencesMode.Numeric
-        Else
-            Mode = OccurrencesMode.Lexical
-
+        If Mode = OccurrencesMode.Lexical Then
             If comboRepeat.SelectedIndex = -1 Then
                 If mCardinality.IsUnbounded Then
                     comboRepeat.SelectedIndex = 1
@@ -341,7 +398,12 @@ Public Class OccurrencesPanel
 
     Private Sub UpdateControl()
         mIsLoading = True
-        numMin.Value = mCardinality.MinCount
+
+        If numMin.Minimum <= mCardinality.MinCount Then
+            numMin.Value = mCardinality.MinCount
+        Else
+            mCardinality.MinCount = numMin.Minimum
+        End If
 
         If mMode = OccurrencesMode.Lexical Then
             If mCardinality.MinCount = 0 Then
@@ -432,27 +494,26 @@ Public Class OccurrencesPanel
 
     Private Sub comboOptional_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboOptional.SelectedIndexChanged
         If Not mIsLoading Then
-            numMin.Value = comboOptional.SelectedIndex
-            mFileManager.FileEdited = True
+            If numMin.Minimum <= comboOptional.SelectedIndex Then
+                numMin.Value = comboOptional.SelectedIndex
+                mFileManager.FileEdited = True
+            End If
         End If
 
         SetGUI()
     End Sub
 
-    Private Sub numMin_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMin.TextChanged ', numMax.ValueChanged
+    Private Sub numMin_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMin.TextChanged
         If Not mIsLoading Then
             mFileManager.FileEdited = True
+            mIsLoading = True
 
             If mMode = OccurrencesMode.Lexical Then
-                mIsLoading = True
-
                 If numMin.Value = 0 Then
                     comboOptional.SelectedIndex = 0
                 Else
                     comboOptional.SelectedIndex = 1
                 End If
-
-                mIsLoading = False
             End If
 
             mCardinality.MinCount = numMin.Value
@@ -461,30 +522,30 @@ Public Class OccurrencesPanel
                 'Protect max val being changed if unbounded
                 mIsLoading = cbUnbounded.Checked
                 numMax.Value = numMin.Value
-                mIsLoading = False
             End If
+
+            mIsLoading = False
         End If
     End Sub
 
-    Private Sub numMax_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMax.TextChanged ', numMax.ValueChanged
+    Private Sub numMax_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMax.TextChanged
         If Not mIsLoading Then
             mFileManager.FileEdited = True
+            mIsLoading = True
 
             If mMode = OccurrencesMode.Lexical Then
-                mIsLoading = True
-
                 If numMax.Value = 1 Then
                     comboRepeat.SelectedIndex = 0
                 Else
                     comboRepeat.SelectedIndex = 2
                 End If
-
-                mIsLoading = False
             End If
 
             mCardinality.MaxCount = numMax.Value
 
-            If numMin.Value > numMax.Value Then
+            mIsLoading = False
+
+            If numMin.Value > numMax.Value And numMin.Minimum <= numMax.Value Then
                 numMin.Value = numMax.Value
             End If
         End If
@@ -494,11 +555,14 @@ Public Class OccurrencesPanel
         numMax.Visible = Not cbUnbounded.Checked
 
         If Not mIsLoading Then
+            mIsLoading = True
+
             If Not cbUnbounded.Checked Then
                 mCardinality.MaxCount = numMax.Value
             End If
 
             mCardinality.IsUnbounded = cbUnbounded.Checked
+            mIsLoading = False
             mFileManager.FileEdited = True
         End If
     End Sub

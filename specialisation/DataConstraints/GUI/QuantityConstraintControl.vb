@@ -84,10 +84,9 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         '
         'listUnits
         '
-        Me.listUnits.ItemHeight = 16
         Me.listUnits.Location = New System.Drawing.Point(77, 100)
         Me.listUnits.Name = "listUnits"
-        Me.listUnits.Size = New System.Drawing.Size(192, 68)
+        Me.listUnits.Size = New System.Drawing.Size(192, 56)
         Me.listUnits.TabIndex = 6
         '
         'lblListProperty
@@ -115,7 +114,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.comboPhysicalProperty.DisplayMember = "Text"
         Me.comboPhysicalProperty.Location = New System.Drawing.Point(41, 51)
         Me.comboPhysicalProperty.Name = "comboPhysicalProperty"
-        Me.comboPhysicalProperty.Size = New System.Drawing.Size(289, 24)
+        Me.comboPhysicalProperty.Size = New System.Drawing.Size(289, 21)
         Me.comboPhysicalProperty.TabIndex = 2
         Me.comboPhysicalProperty.ValueMember = "id"
         '
@@ -171,7 +170,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.lblListProperty)
         Me.Controls.Add(Me.lblListUnits)
         Me.Name = "QuantityConstraintControl"
-        Me.Size = New System.Drawing.Size(326, 278)
+        Me.Size = New System.Drawing.Size(419, 297)
         Me.ResumeLayout(False)
 
     End Sub
@@ -345,7 +344,30 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                             s = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(s)
                         End If
 
-                        Dim MI As MenuItem = New MenuItem(s)
+                        Dim MI As MenuItem = New MenuItem()
+
+                        If s.StartsWith("{") Then
+                            'If these are numeric then substitute the terms in the appropriate language
+                            Dim y() As String = (s.Trim("{}".ToCharArray())).Split("/"c)
+                            Dim label As New System.Text.StringBuilder("{")
+                            For Each code As String In y
+                                Dim ii As Integer
+                                If label.ToString() <> "{" Then
+                                    label.Append("/")
+                                End If
+                                If Integer.TryParse(code, ii) Then
+                                    label.Append(Filemanager.GetOpenEhrTerm(ii, "#Error#"))
+                                Else
+                                    label.Append(y)
+                                End If
+                            Next
+                            label.Append("}")
+                            MI.Text = label.ToString()
+                            MI.Tag = s
+                        Else
+                            MI.Text = s
+                        End If
+
                         AddHandler MI.Click, AddressOf AddUnit
 
                         c_menu.MenuItems.Add(MI)
@@ -434,8 +456,6 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub AddUnit(ByVal sender As System.Object, ByVal e As System.EventArgs)
-
-        'If Not MyBase.ArchetypeElement Is Nothing Then
         If Not MyBase.IsLoading Then
             Try
                 Dim quantityUnit As New Constraint_QuantityUnit(mIsTime)
@@ -444,65 +464,67 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 quantityUnit.Unit = CType(sender, MenuItem).Text
 
                 If quantityUnit.isCompoundUnit Then
-                    Me.AddCompoundUnits(quantityUnit)
+                    Try
+                        quantityUnit.Unit = ChooseCompoundUnits(quantityUnit.Unit, CType(sender, MenuItem).Tag.ToString())
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Return
+                    End Try
                 End If
 
+                'SRH: 16 Mar 2009 - EDT-256 - allow no unit
+                'If quantityUnit.Unit <> "" Then
                 Constraint.Units.Add(quantityUnit, quantityUnit.Unit)
                 listUnits.Items.Add(quantityUnit)
                 listUnits.SelectedItem = quantityUnit
-
                 mFileManager.FileEdited = True
-
+                'End If
             Catch ex As Exception
                 Debug.Assert(False, ex.ToString)
                 MessageBox.Show(AE_Constants.Instance.Duplicate_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End Try
-
         End If
     End Sub
 
-    Private Sub AddCompoundUnits(ByVal a_unit_constraint As Constraint_QuantityUnit)
-        Dim s As String
-
-        s = ChooseCompoundUnits(a_unit_constraint.Unit)
-        'Update the archetype
-        If s <> "" Then
-            a_unit_constraint.Unit = s
-        End If
-    End Sub
-
-    Private Function ChooseCompoundUnits(ByVal Units As String) As String
+    Private Function ChooseCompoundUnits(ByVal Units As String, ByVal codes As String) As String
+        Dim result As String = ""
         Dim Frm As New Choose
         Dim y, U_2, U_1 As String()
-        Dim Phys_Prop, CompoundUnit As String
-        Dim id As Integer
+        Dim Phys_Prop As String
         Dim selected_rows As DataRow()
         Dim d_row As DataRow
         Dim curlybrackets As Char() = {"{"c, "}"c}
+        Dim isTextCompoundUnits As Boolean
 
-        y = Units.Split("/"c)
+        'SRH Jan 2009 added language independent compound units
+        If Not String.IsNullOrEmpty(codes) Then
+            y = (codes.Trim("{}".ToCharArray())).Split("/"c)
+            'Get the power if there is one
+            U_1 = y(0).Split("^"c)
+            Phys_Prop = U_1(0)
+            selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select(String.Format("openEHR = {0}", Phys_Prop))
 
-        y(0) = y(0).Trim(curlybrackets)
-        'Get the power if there is one
-        U_1 = y(0).Split("^"c)
-        Phys_Prop = U_1(0)
+        Else
+            'Obsolete
+            isTextCompoundUnits = True
+            y = (Units.Trim("{}".ToCharArray())).Split("/"c)
+            'Get the power if there is one
+            U_1 = y(0).Split("^"c)
+            Phys_Prop = U_1(0)
+            selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select(String.Format("Text = '{0}'", Phys_Prop))
 
-        selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select("Text = '" & Phys_Prop & "'")
+        End If
 
         If selected_rows.Length <> 1 Then
-            'FIXME - report error
-            Return ""
+            Throw New Exception(String.Format("Error loading property values for {0}", Phys_Prop))
+        Else
+            Phys_Prop = CStr(selected_rows(0).Item(0))
         End If
 
-        id = CInt(selected_rows(0).Item(0))
+        'Now get the units
+        selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select(String.Format("property_id = {0}", Phys_Prop))
 
-        selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id.ToString)
-
-        If selected_rows.Length = 0 Then
-            'FIXME Error
-            Return ""
-        End If
-
+        
         For Each d_row In selected_rows
             ' cannot have not set at this level
             Frm.ListChoose.Items.Add(d_row("Text"))
@@ -514,18 +536,17 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 Frm.ListChoose.SelectionMode = SelectionMode.One
 
                 Frm.ShowDialog(Me)
-                If Frm.ListChoose.SelectedIndex < 0 Then
-                    ' cancel sets this
-                    Return ""
-                End If
 
-                CompoundUnit = CStr(Frm.ListChoose.SelectedItem)
-                If CompoundUnit = "(none)" Then
-                    CompoundUnit = ""
-                End If
+                If Frm.DialogResult = DialogResult.OK And Frm.ListChoose.SelectedIndex >= 0 Then
+                    result = CStr(Frm.ListChoose.SelectedItem)
 
-                If U_1.Length = 2 Then
-                    CompoundUnit = CompoundUnit & U_1(1)
+                    If result = "(none)" Then
+                        result = ""
+                    End If
+
+                    If U_1.Length = 2 Then
+                        result = result & U_1(1)
+                    End If
                 End If
 
             Case 2
@@ -535,66 +556,65 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 Frm.LblForm.Text = Filemanager.GetOpenEhrTerm(668, "Select one unit from the left and one from the right:")
 
                 ' Second property
-
-                y(1) = y(1).TrimEnd(curlybrackets)
                 'Get the power if there is one
                 U_2 = y(1).Split("^"c)
                 Phys_Prop = U_2(0)
 
-                selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select("Text = '" & Phys_Prop & "'")
+                If isTextCompoundUnits Then
+                    'Obsolete
+                    selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select(String.Format("Text = '{0}'", Phys_Prop))
+                Else
+                    selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select(String.Format("openEHR = '{0}'", Phys_Prop))
+                End If
 
                 If selected_rows.Length <> 1 Then
-                    'FIXME - report error
-                    Return ""
+                    Throw (New Exception(String.Format("Error loading property values for {0}", Phys_Prop)))
+                Else
+                    Phys_Prop = CStr(selected_rows(0).Item(0))
                 End If
 
-                id = CInt(selected_rows(0).Item(0))
-                selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id.ToString)
+                selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & Phys_Prop)
 
                 If selected_rows.Length = 0 Then
-                    'FIXME Error
-                    Return ""
-                End If
+                    Throw New Exception(String.Format("Error loading property values for {0}", Phys_Prop))
+                Else
+                    For Each d_row In selected_rows
+                        ' cannot have no denominator or not set
+                        If CStr(d_row("Text")) <> "?" Then
+                            Frm.ListBox2.Items.Add(d_row("Text"))
+                        End If
+                    Next
 
-                For Each d_row In selected_rows
-                    ' cannot have no denominator or not set
-                    If CStr(d_row("Text")) <> "?" Then
-                        Frm.ListBox2.Items.Add(d_row("Text"))
+                    Frm.ShowDialog(Me)
+
+                    If Frm.DialogResult = DialogResult.OK Then
+                        If Frm.ListChoose.SelectedIndex >= 0 And Frm.ListBox2.SelectedIndex >= 0 Then
+                            result = CStr(Frm.ListChoose.SelectedItem)
+
+                            If result = "(none)" Then
+                                result = ""
+                            End If
+
+                            If U_1.Length = 2 Then
+                                result = result & U_1(1)
+                            End If
+
+                            result = result & "/" & CStr(Frm.ListBox2.SelectedItem)
+
+                            If U_2.Length = 2 Then
+                                result = result & U_2(1)
+                            End If
+                        ElseIf Frm.ListChoose.SelectedIndex < 0 And Frm.ListBox2.SelectedIndex < 0 Then
+                            result = Units
+                        End If
                     End If
-                Next
-
-                Frm.ShowDialog(Me)
-
-                If Frm.ListChoose.SelectedIndex < 0 Or Frm.ListBox2.SelectedIndex < 0 Then
-                    ' cancel sets this
-                    Return ""
                 End If
 
-                CompoundUnit = CStr(Frm.ListChoose.SelectedItem)
-                If CompoundUnit = "(none)" Then
-                    CompoundUnit = ""
-                End If
-
-                If U_1.Length = 2 Then
-                    CompoundUnit = CompoundUnit & U_1(1)
-                End If
-
-                CompoundUnit = CompoundUnit & "/" & CStr(Frm.ListBox2.SelectedItem)
-
-                If U_2.Length = 2 Then
-                    CompoundUnit = CompoundUnit & U_2(1)
-                End If
-
-            Case Else
-                Return ""
         End Select
 
-        Return CompoundUnit
+        Return result
     End Function
 
-    Private Sub comboPhysicalProperty_SelectedIndexChanged_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboPhysicalProperty.SelectedIndexChanged
-
-    End Sub
 End Class
 
 '

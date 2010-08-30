@@ -16,8 +16,8 @@
 
 Public Class Term
     Protected sCode As String
-    Protected sText As String 'New String("")
-    Protected sLanguageCode As String 'New String("")
+    Protected sText As String
+    Protected sLanguageCode As String
 
     ReadOnly Property Code() As String
         Get
@@ -47,8 +47,8 @@ Public Class Term
         Return sText
     End Function
 
-    Sub New(ByVal Code As String)
-        sCode = Code
+    Sub New(ByVal code As String)
+        sCode = code
     End Sub
 End Class
 

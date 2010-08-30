@@ -152,10 +152,6 @@ Public Class ApplicationOptionsForm
         Me.RestoreDefaultSharedRepositoryUrlButton = New System.Windows.Forms.Button
         Me.Label6 = New System.Windows.Forms.Label
         Me.XmlRepositoryBrowseButton = New System.Windows.Forms.Button
-        Me.XmlRepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
-        Me.RepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
-        Me.Label6 = New System.Windows.Forms.Label
-        Me.XmlRepositoryBrowseButton = New System.Windows.Forms.Button
         Me.lblTerminology = New System.Windows.Forms.Label
         Me.chkTerminology = New System.Windows.Forms.CheckBox
         Me.lblURL = New System.Windows.Forms.Label
