@@ -20,7 +20,6 @@ Public Class SimpleStructure
     Inherits EntryStructure
     Private mElement As ArchetypeNode
     Private mIsLoading As Boolean
-    Private mOKtoEditSpecialisation As Boolean
 
 #Region " Windows Form Designer generated code "
 
@@ -50,24 +49,23 @@ Public Class SimpleStructure
         MyBase.New(rm, a_file_manager)
         'This call is required by the Windows Form Designer.
         InitializeComponent()
-
-        Dim element As RmStructure
-
         mIsLoading = True
-        element = rm.Children.FirstElementOrElementSlot
+        Dim element As RmStructure = rm.Children.FirstElementOrElementSlot
 
         If Not element Is Nothing Then
             If element.Type = StructureType.Element Then
                 mElement = New ArchetypeElement(element, mFileManager)
-            Else
-                mElement = New ArchetypeNodeAnonymous(element)
+            Else 'Slot
+                mElement = New ArchetypeSlot(element, mFileManager)
             End If
-            Me.txtSimple.Text = mElement.Text
-            Me.txtSimple.Enabled = True
-            Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForItem(mElement))
+
+            txtSimple.Text = mElement.Text
+            txtSimple.Enabled = True
+            PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement, False))
         Else
-            ButAddElement.Visible = True
+            ButAddElement.Show()
         End If
+
         mIsLoading = False
     End Sub
 
@@ -97,6 +95,7 @@ Public Class SimpleStructure
         Me.txtSimple = New System.Windows.Forms.TextBox
         Me.ContextMenuSimple = New System.Windows.Forms.ContextMenu
         Me.MenuSpecialise = New System.Windows.Forms.MenuItem
+        CType(Me.PictureBoxSimple, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'PictureBoxSimple
@@ -114,9 +113,8 @@ Public Class SimpleStructure
         Me.txtSimple.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtSimple.Location = New System.Drawing.Point(96, 40)
         Me.txtSimple.Name = "txtSimple"
-        Me.txtSimple.Size = New System.Drawing.Size(280, 23)
+        Me.txtSimple.Size = New System.Drawing.Size(280, 20)
         Me.txtSimple.TabIndex = 38
-        Me.txtSimple.Text = ""
         '
         'ContextMenuSimple
         '
@@ -135,7 +133,9 @@ Public Class SimpleStructure
         Me.Name = "SimpleStructure"
         Me.Controls.SetChildIndex(Me.txtSimple, 0)
         Me.Controls.SetChildIndex(Me.PictureBoxSimple, 0)
+        CType(Me.PictureBoxSimple, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -159,25 +159,23 @@ Public Class SimpleStructure
             Return rm
         End Get
         Set(ByVal Value As RmStructureCompound)
-            Dim element As RmStructure
-
-            mNodeId = Value.NodeId
-            element = Value.Children.FirstElementOrElementSlot
             mIsLoading = True
+            mNodeId = Value.NodeId
+            Dim element As RmStructure = Value.Children.FirstElementOrElementSlot
 
             If Not element Is Nothing Then
                 If element.Type = StructureType.Element Then
                     mElement = New ArchetypeElement(element, mFileManager)
                 Else
-                    mElement = New ArchetypeNodeAnonymous(element)
+                    mElement = New ArchetypeSlot(element, mFileManager)
                 End If
 
                 txtSimple.Text = mElement.Text
                 txtSimple.Enabled = True
-                PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement))
+                PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement, False))
             Else
                 mElement = Nothing
-                ButAddElement.Visible = True
+                ButAddElement.Show()
                 txtSimple.Text = AE_Constants.Instance.DragDropHere
                 txtSimple.Enabled = False
                 PictureBoxSimple.Image = Nothing
@@ -207,7 +205,7 @@ Public Class SimpleStructure
 
     Public Overrides Sub Reset()
         txtSimple.Text = ""
-        ButAddElement.Visible = True
+        ButAddElement.Show()
         txtSimple.Enabled = False
         PictureBoxSimple.Image = Nothing
     End Sub
@@ -229,8 +227,8 @@ Public Class SimpleStructure
 
     Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
         If TypeOf mElement Is ArchetypeElement Then
-            If MessageBox.Show(AE_Constants.Instance.Specialise & " " & txtSimple.Text, AE_Constants.Instance.MessageBoxCaption, _
-                MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & txtSimple.Text & "'?", _
+                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
                 CType(mElement, ArchetypeElement).Specialise()
                 txtSimple.Text = mElement.Text
                 mFileManager.FileEdited = True
@@ -257,7 +255,7 @@ Public Class SimpleStructure
 
         If a_constraint.Type = ConstraintType.Slot Then
             Dim newSlot As New RmSlot(CType(a_constraint, Constraint_Slot).RM_ClassType)
-            mElement = New ArchetypeNodeAnonymous(newSlot)
+            mElement = New ArchetypeSlot(newSlot, mFileManager)
         Else
             mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
             CType(mElement, ArchetypeElement).Constraint = a_constraint
@@ -266,12 +264,12 @@ Public Class SimpleStructure
         mElement.Occurrences.MaxCount = 1
         txtSimple.Text = mElement.Text
         txtSimple.Enabled = True
-        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement))
+        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement, False))
         txtSimple.Focus()
         txtSimple.SelectAll()
         mFileManager.FileEdited = True
         SetCurrentItem(mElement)
-        ButAddElement.Visible = False
+        ButAddElement.Hide()
         mIsLoading = False
     End Sub
 
@@ -282,7 +280,7 @@ Public Class SimpleStructure
             mIsLoading = True
             mElement = Nothing
             txtSimple.Text = ""
-            ButAddElement.Visible = True
+            ButAddElement.Show()
             txtSimple.Enabled = False
             PictureBoxSimple.Image = Nothing
             mIsLoading = False
@@ -332,7 +330,7 @@ Public Class SimpleStructure
 
     Protected Overrides Sub RefreshIcons()
         Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
-        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(element.Constraint.Type))
+        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(element.Constraint.Type, False, False))
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
@@ -357,21 +355,25 @@ Public Class SimpleStructure
 
     Private Sub txtSimple_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSimple.TextChanged
         If Not mIsLoading Then
-            Dim i As Integer
             Debug.Assert(Not mCurrentItem.IsAnonymous)
-            i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+
+            Dim newText As String = txtSimple.Text
+
+            If newText <> mElement.Text Then
+                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
 
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                If Not mOKtoEditSpecialisation Then
-                    If MessageBox.Show(AE_Constants.Instance.RequiresSpecialisationToEdit, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.No Then
                         txtSimple.Text = mElement.Text
-                    Else
-                        mOKtoEditSpecialisation = True
+                    SpecialiseCurrentItem(sender, e)
                     End If
+
+                i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+
+                If i >= mFileManager.OntologyManager.NumberOfSpecialisations Then
+                    txtSimple.Text = newText
+                    mElement.Text = newText
                 End If
             End If
-
-            mElement.Text = txtSimple.Text
         End If
     End Sub
 

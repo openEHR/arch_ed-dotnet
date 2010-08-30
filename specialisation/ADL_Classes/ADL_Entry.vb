@@ -26,56 +26,62 @@ Class ADL_ENTRY
 
     Private Sub ProcessSubjectOfData(ByVal SubjectOfData As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
         Dim ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-        Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
         Dim i As Integer
 
         For i = 1 To SubjectOfData.children.count
             ComplexObj = SubjectOfData.children.i_th(i)
+
                 Select Case ComplexObj.rm_type_name.to_cil.ToLowerInvariant()
                     Case "party_related", "related_party" ' related party is obsolete
-                        an_attribute = ComplexObj.attributes.first  ' get the 'relationship' an_attribute
-                        ComplexObj = an_attribute.children.first  ' CODED_TEXT
-                        an_attribute = ComplexObj.attributes.first  ' defining_code
-                        rSubjectOfData.Relationship = ADL_Tools.ProcessCodes(an_attribute.children.first)
+                        attribute = ComplexObj.attributes.first  ' get the 'relationship' an_attribute
+
+                        If attribute.has_children Then
+                            ComplexObj = attribute.children.first  ' CODED_TEXT
+                            attribute = ComplexObj.attributes.first  ' defining_code
+                            rSubjectOfData.Relationship = ADL_Tools.ProcessCodes(attribute.children.first)
+                        End If
                 End Select
         Next
     End Sub
 
         Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
             MyBase.New(Definition.rm_type_name.to_cil) ' sets the type to OBSERVATION, EVALUATION etc
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim i As Integer
 
             ' set the root node id - usually the same as the concept
             mNodeID = Definition.node_id.to_cil
+
             For i = 1 To Definition.attributes.count
-                an_attribute = Definition.attributes.i_th(i)
-                Select Case an_attribute.rm_attribute_name.to_cil.ToLowerInvariant
+                attribute = Definition.attributes.i_th(i)
+
+                Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant
                     Case "subject"
-                        ProcessSubjectOfData(an_attribute)
+                        ProcessSubjectOfData(attribute)
                     Case "name", "runtime_label" 'run_time_label is obsolete
-                        mRuntimeConstraint = ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        mRuntimeConstraint = ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     Case "data"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Data, a_filemanager))
+                        mChildren.Add(New RmStructureCompound(attribute, StructureType.Data, a_filemanager))
                         ' remembers the Processed data off events
                     Case "state"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.State, a_filemanager))
+                        mChildren.Add(New RmStructureCompound(attribute, StructureType.State, a_filemanager))
                     Case "protocol"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Protocol, a_filemanager))
+                        mChildren.Add(New RmStructureCompound(attribute, StructureType.Protocol, a_filemanager))
                     Case "description"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ActivityDescription, a_filemanager))
+                        mChildren.Add(New RmStructureCompound(attribute, StructureType.ActivityDescription, a_filemanager))
                     Case "ism_transition", "pathway_specification" 'pathway_spec is obsolete 
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.ISM_TRANSITION, a_filemanager))
+                        mChildren.Add(New RmStructureCompound(attribute, StructureType.ISM_TRANSITION, a_filemanager))
                     Case "activities"
-                        mChildren.Add(New RmStructureCompound(an_attribute, StructureType.Activities, a_filemanager))
+                        mChildren.Add(New RmStructureCompound(attribute, StructureType.Activities, a_filemanager))
                     Case "provider"
                         Me.ProviderIsMandatory = True
                     Case "other_participations"
-                        Me.OtherParticipations = New RmStructureCompound(an_attribute, StructureType.OtherParticipations, a_filemanager)
+                        Me.OtherParticipations = New RmStructureCompound(attribute, StructureType.OtherParticipations, a_filemanager)
                     Case "links"
                         ' No action as handled for all archetypes
                     Case Else
-                        Debug.Assert(False, String.Format("{0} not handled", an_attribute.rm_attribute_name.to_cil))
+                        Debug.Assert(False, String.Format("{0} not handled", attribute.rm_attribute_name.to_cil))
                 End Select
             Next
             If Not ArchetypeEditor.ADL_Classes.ADL_Tools.StateStructure Is Nothing Then
@@ -84,7 +90,7 @@ Class ADL_ENTRY
             End If
         End Sub
 
-End Class 'ADL_ENTRY
+    End Class
 End Namespace
 '
 '***** BEGIN LICENSE BLOCK *****

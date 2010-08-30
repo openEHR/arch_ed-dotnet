@@ -2,13 +2,14 @@ Public Class Links
 
     Private Sub butAddEvent_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddEvent.Click
         Dim l As New Link
-        Me.panelLinks.Controls.Add(l)
+        panelLinks.Controls.Add(l)
         l.BringToFront()
         l.Dock = DockStyle.Top
-        Me.panelLinks.ScrollControlIntoView(l)
+        panelLinks.ScrollControlIntoView(l)
     End Sub
 
     Private WithEvents mLink As Link
+
     Private Sub SelectedLinkChanged(ByVal sender As Object, ByVal e As EventArgs)
         For Each l As Link In panelLinks.Controls
             If Not l Is sender Then
@@ -26,17 +27,20 @@ Public Class Links
                 Return True
             End If
         Next
+
         Return False
     End Function
 
     Public Property Links() As System.Collections.Generic.List(Of RmLink)
         Get
             Dim result As New System.Collections.Generic.List(Of RmLink)
+
             For Each l As Link In panelLinks.Controls
                 If l.HasConstraint Then
                     result.Add(l.LinkConstraint)
                 End If
             Next
+
             Return result
         End Get
         Set(ByVal value As System.Collections.Generic.List(Of RmLink))
@@ -59,4 +63,5 @@ Public Class Links
             panelLinks.Controls.Remove(mLink)
         End If
     End Sub
+
 End Class

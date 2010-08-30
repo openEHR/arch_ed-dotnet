@@ -18,6 +18,7 @@ Option Explicit On
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 Imports EiffelList = EiffelSoftware.Library.Base.structures.list
 Imports EiffelTable = EiffelSoftware.Library.Base.structures.table
+Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
     Friend Class ADL_Ontology
@@ -33,7 +34,13 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Overrides ReadOnly Property PrimaryLanguageCode() As String
             Get
-                Return Ontology.primary_language.to_cil
+                Dim result As String = ""
+
+                If EIF_adlInterface.archetype_available Then
+                    result = EIF_adlInterface.ontology.primary_language.to_cil
+                End If
+
+                Return result
             End Get
         End Property
 
@@ -45,39 +52,44 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Overrides ReadOnly Property NumberOfSpecialisations() As Integer
             Get
-                Return EiffelCompiler.archetype_flat.specialisation_depth
+                Dim result As Integer = 0
+
+                If EIF_adlInterface.archetype_available Then
+                    result = EIF_adlInterface.adl_engine.archetype.specialisation_depth()
+                End If
+
+                Return result
             End Get
         End Property
 
         Public Overrides Function LanguageAvailable(ByVal code As String) As Boolean
-            Return Ontology.has_language(EiffelKernel.Create.STRING_8.make_from_cil(code))
+            Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.has_language(Eiffel.String(code))
         End Function
 
         Public Overrides Function TerminologyAvailable(ByVal code As String) As Boolean
-            Return Ontology.has_terminology(EiffelKernel.Create.STRING_8.make_from_cil(code))
+            Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.has_terminology(Eiffel.String(code))
         End Function
 
         Public Overrides Function TermForCode(ByVal Code As String, ByVal Language As String) As RmTerm
+            Dim result As RmTerm = Nothing
 
+            If EIF_adlInterface.archetype_available Then
             If Code.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("at") Then
-                If Ontology.has_term_code(EiffelKernel.Create.STRING_8.make_from_cil(Code)) Then
-                    Return New ADL_Term(Ontology.term_definition(EiffelKernel.Create.STRING_8.make_from_cil(Language), EiffelKernel.Create.STRING_8.make_from_cil(Code)))
+                    If EIF_adlInterface.ontology.has_term_code(Eiffel.String(Code)) Then
+                        result = New ADL_Term(EIF_adlInterface.ontology.term_definition(Eiffel.String(Language), Eiffel.String(Code)))
                 End If
             ElseIf Code.ToLower(System.Globalization.CultureInfo.InvariantCulture).StartsWith("ac") Then
-                If Ontology.has_constraint_code(EiffelKernel.Create.STRING_8.make_from_cil(Code)) Then
-                    Return New ADL_Term(Ontology.constraint_definition(EiffelKernel.Create.STRING_8.make_from_cil(Language), EiffelKernel.Create.STRING_8.make_from_cil(Code)))
+                    If EIF_adlInterface.ontology.has_constraint_code(Eiffel.String(Code)) Then
+                        result = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(Eiffel.String(Language), Eiffel.String(Code)))
                 End If
-            Else
-                Debug.Assert(False, "Code type is not available")
+            End If
             End If
 
-            Return Nothing
-
+            Return result
         End Function
 
         Public Overrides Function IsMultiLanguage() As Boolean
-            Dim hackForCompilerError_AmbiguousCountBetween_SET_And_ARRAYED_LIST As EiffelList.ARRAYED_LIST_REFERENCE = Ontology.languages_available
-            Return hackForCompilerError_AmbiguousCountBetween_SET_And_ARRAYED_LIST.count > 1
+            Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.languages_available.count > 1
         End Function
 
         Public Overrides Sub Reset()
@@ -86,17 +98,17 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overrides Sub AddLanguage(ByVal code As String)
-            Ontology.add_language(EiffelKernel.Create.STRING_8.make_from_cil(code))
+            If EIF_adlInterface.archetype_available Then
+                EIF_adlInterface.ontology.add_language(Eiffel.String(code))
+            End If
         End Sub
 
         Public Overrides Sub AddTerminology(ByVal code As String)
-            Dim s As EiffelKernel.STRING_8
-
-            s = EiffelKernel.Create.STRING_8.make_from_cil(code)
+            Dim s As EiffelKernel.STRING_8 = Eiffel.String(code)
 
             Try
-                If Not Ontology.has_terminology(s) Then
-                    Ontology.add_binding_terminology(s)
+                If EIF_adlInterface.archetype_available AndAlso Not EIF_adlInterface.ontology.has_terminology(s) Then
+                    EIF_adlInterface.ontology.add_binding_terminology(s)
                 End If
             Catch e As Exception
                 Debug.Assert(False)
@@ -105,65 +117,71 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overrides Function HasTermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
-            Return Ontology.has_term_binding( _
-                EiffelKernel.Create.STRING_8.make_from_cil(a_terminology_id), _
-                EiffelKernel.Create.STRING_8.make_from_cil(a_path))
+            Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.has_term_binding( _
+                Eiffel.String(a_terminology_id), _
+                Eiffel.String(a_path))
         End Function
 
         Public Overrides Function HasConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
-            Return Ontology.has_constraint_binding( _
-                EiffelKernel.Create.STRING_8.make_from_cil(a_terminology_id), _
-                EiffelKernel.Create.STRING_8.make_from_cil(a_path))
+            Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.has_constraint_binding( _
+                Eiffel.String(a_terminology_id), _
+                Eiffel.String(a_path))
         End Function
 
         Public Overrides Function TermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
+            Dim result As String = ""
             Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
 
-            codePhrase = Ontology.term_binding( _
-                EiffelKernel.Create.STRING_8.make_from_cil(a_terminology_id), _
-                EiffelKernel.Create.STRING_8.make_from_cil(a_path))
+            If EIF_adlInterface.archetype_available Then
+                codePhrase = EIF_adlInterface.ontology.term_binding( _
+                    Eiffel.String(a_terminology_id), _
+                    Eiffel.String(a_path))
 
-            If codePhrase Is Nothing Then
-                Return ""
-            Else
-                Return codePhrase.code_string.to_cil
+                If Not codePhrase Is Nothing Then
+                    result = codePhrase.code_string.to_cil
             End If
+            End If
+
+            Return result
         End Function
 
         Public Overrides Function ConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
+            Dim result As String = ""
             Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
 
-            codePhrase = Ontology.constraint_binding( _
-                EiffelKernel.Create.STRING_8.make_from_cil(a_terminology_id), _
-                EiffelKernel.Create.STRING_8.make_from_cil(a_path))
+            If EIF_adlInterface.archetype_available Then
+                codePhrase = EIF_adlInterface.ontology.constraint_binding( _
+                    Eiffel.String(a_terminology_id), _
+                    Eiffel.String(a_path))
 
-            If codePhrase Is Nothing Then
-                Return ""
-            Else
-                Return codePhrase.code_string.to_cil
+                If Not codePhrase Is Nothing Then
+                    result = codePhrase.code_string.to_cil
             End If
+            End If
+
+            Return result
         End Function
 
-
         Public Overrides Sub AddorReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
-            ' CHANGE - Sam Heard 2005.05.15
-            ' Added ascerts required for this piece of code to run successfully
-            ' and try statement
             Debug.Assert(sCode <> "", "Code is not set")
             Debug.Assert(sPath <> "", "Path or nodeID are not set")
             Debug.Assert(sTerminology <> "", "TerminologyID is not set")
+
             ' release is not utilised at this point
             Try
-                Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE
-                Dim str As EiffelKernel.STRING_8
+                If EIF_adlInterface.archetype_available Then
+                    Dim str As EiffelKernel.STRING_8 = Eiffel.String(sPath)
+                    If sRelease <> "" Then
+                        sTerminology = String.Format("{0}({1})", sTerminology, sRelease)
+                    End If
+                    Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(Eiffel.String(sTerminology & "::" & sCode))
 
-                str = EiffelKernel.Create.STRING_8.make_from_cil(sPath)
-                cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(EiffelKernel.Create.STRING_8.make_from_cil(sTerminology & "::" & sCode))
 
                 If Ontology.has_term_binding(cp.terminology_id.value, str) Then
                     Ontology.replace_term_binding(cp, str)
                 Else
                     Ontology.add_term_binding(cp, str)
+                End If
                 End If
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "ADL DLL", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -171,70 +189,74 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overrides Sub RemoveTermBinding(ByVal sTerminology As String, ByVal sCode As String)
-            ' Added - Sam Heard 2005.05.15
             Debug.Assert(sCode <> "", "Code is not set")
             Debug.Assert(sTerminology <> "", "TerminologyID is not set")
+
             ' release is not utilised at this point
             Try
-                Dim str, terminology As EiffelKernel.STRING_8
+                If EIF_adlInterface.archetype_available Then
+                    Dim str As EiffelKernel.STRING_8 = Eiffel.String(sCode)
+                    Dim terminology As EiffelKernel.STRING_8 = Eiffel.String(sTerminology)
 
-                str = EiffelKernel.Create.STRING_8.make_from_cil(sCode)
-                terminology = EiffelKernel.Create.STRING_8.make_from_cil(sTerminology)
 
                 If Ontology.has_term_binding(terminology, str) Then
                     Ontology.remove_term_binding(str, terminology)
                 End If
-
+                End If
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "ADL DLL error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 
         Public Overrides Sub AddorReplaceConstraintBinding(ByVal sTerminology As String, ByVal sCode As String, ByVal sQuery As String, ByVal sRelease As String)
-            ' CHANGE - Sam Heard 2006.05.07
-            ' Added ascerts required for this piece of code to run successfully
-            ' and try statement
             Debug.Assert(sCode <> "", "Code is not set")
             Debug.Assert(sQuery <> "", "Query is not set")
             Debug.Assert(sTerminology <> "", "TerminologyID is not set")
+
             ' release is not utilised at this point
             Try
-                Dim cd, qry As EiffelKernel.STRING_8
+                If EIF_adlInterface.archetype_available Then
+                    Dim cd As EiffelKernel.STRING_8 = Eiffel.String(sCode)
+                    Dim qry As EiffelKernel.STRING_8 = Eiffel.String(sQuery)
 
-                qry = EiffelKernel.Create.STRING_8.make_from_cil(sQuery)
-                cd = EiffelKernel.Create.STRING_8.make_from_cil(sCode)
+                    If sRelease <> "" Then
+                        sTerminology = String.Format("{0}({1})", sTerminology, sRelease)
+                    End If
 
-                If Ontology.has_constraint_binding(EiffelKernel.Create.STRING_8.make_from_cil(sTerminology), cd) Then
-                    Ontology.replace_constraint_binding( _
+                    If EIF_adlInterface.ontology.has_constraint_binding( _
+                        Eiffel.String(sTerminology), _
+                        cd) Then
+
+                        EIF_adlInterface.ontology.replace_constraint_binding( _
                         openehr.common_libs.basic.Create.URI.make_from_string(qry), _
-                        EiffelKernel.Create.STRING_8.make_from_cil(sTerminology), _
+                        Eiffel.String(sTerminology), _
                         cd)
                 Else
                     Ontology.add_constraint_binding( _
                         openehr.common_libs.basic.Create.URI.make_from_string(qry), _
-                        EiffelKernel.Create.STRING_8.make_from_cil(sTerminology), _
+                        Eiffel.String(sTerminology), _
                         cd)
                 End If
-
+                End If
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "ADL DLL", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 
         Public Overrides Sub RemoveConstraintBinding(ByVal sTerminology As String, ByVal sCode As String)
-            ' Added - Sam Heard 2005.05.15
             Debug.Assert(sCode <> "", "Code is not set")
             Debug.Assert(sTerminology <> "", "TerminologyID is not set")
+
             ' release is not utilised at this point
             Try
-                Dim str, terminology As EiffelKernel.STRING_8
+                If EIF_adlInterface.archetype_available Then
+                    Dim str As EiffelKernel.STRING_8 = Eiffel.String(sCode)
+                    Dim terminology As EiffelKernel.STRING_8 = Eiffel.String(sTerminology)
 
-                str = EiffelKernel.Create.STRING_8.make_from_cil(sCode)
-                terminology = EiffelKernel.Create.STRING_8.make_from_cil(sTerminology)
                 If Ontology.has_constraint_binding(terminology, str) Then
                     Ontology.remove_constraint_binding(str, terminology)
                 End If
-
+                End If
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "ADL DLL error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
@@ -242,14 +264,12 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Overrides Sub SetLanguage(ByVal code As String)
             sLanguageCode = code
-            EiffelCompiler.set_current_language(EiffelKernel.Create.STRING_8.make_from_cil(code))
+            EIF_adlInterface.set_current_language(Eiffel.String(code))
         End Sub
 
         Public Overrides Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
             ' increase the number of specialisations
-            Dim an_Term As ADL_Term
-
-            an_Term = New ADL_Term(NextSpecialisedId(Id))
+            Dim an_Term As New ADL_Term(NextSpecialisedId(Id))
             an_Term.Text = Text
             an_Term.Description = Description
             Me.AddTerm(an_Term)
@@ -260,36 +280,53 @@ Namespace ArchetypeEditor.ADL_Classes
             ' sets the primary language of this archetype
             ' if this language is added to the available languages it adds it
 
-            If LanguageCode = "" Then
-                Return
-            Else
-                Ontology.set_primary_language(EiffelKernel.Create.STRING_8.make_from_cil(LanguageCode))
+            If LanguageCode <> "" And EIF_adlInterface.archetype_available Then
+                EIF_adlInterface.ontology.set_primary_language(Eiffel.String(LanguageCode))
             End If
         End Sub
 
         Public Overrides Function NextTermId() As String
+            Dim result As String = ""
+
             Try
-                Return Ontology.new_non_specialised_term_code.to_cil
+                If EIF_adlInterface.archetype_available Then
+                    result = EIF_adlInterface.ontology.new_non_specialised_term_code.to_cil
+                End If
             Catch e As Exception
                 Debug.Assert(False, e.Message)
-                Return ""
+                result = ""
             End Try
+
+            Return result
         End Function
 
         Public Overrides Function NextConstraintId() As String
-            Return Ontology.new_constraint_code.to_cil
+            Dim result As String = ""
+
+            If EIF_adlInterface.archetype_available Then
+                result = EIF_adlInterface.ontology.new_constraint_code.to_cil
+            End If
+
+            Return result
         End Function
 
         Private Function NextSpecialisedId(ByVal ParentCode As String) As EiffelKernel.STRING_8
-            Return Ontology.new_specialised_term_code(EiffelKernel.Create.STRING_8.make_from_cil(ParentCode))
+            Dim result As EiffelKernel.STRING_8
+
+            If EIF_adlInterface.archetype_available Then
+                result = EIF_adlInterface.ontology.new_specialised_term_code(Eiffel.String(ParentCode))
+            Else
+                result = EiffelKernel.Create.STRING_8.make_empty
+            End If
+
+            Return result
         End Function
 
         Public Overrides Sub AddTerm(ByVal a_Term As RmTerm)
-            Dim an_adl_Term As ADL_Term
+            If EIF_adlInterface.archetype_available Then
+                Dim an_adl_Term As New ADL_Term(a_Term)
 
-            an_adl_Term = New ADL_Term(a_Term)
-
-            If Not a_Term.isConstraint Then
+                If Not a_Term.IsConstraint Then
                 Try
                     If Not Ontology.has_term_code(an_adl_Term.EIF_Term.code) Then
                         Ontology.add_term_definition(EiffelCompiler.current_language, an_adl_Term.EIF_Term)
@@ -311,16 +348,19 @@ Namespace ArchetypeEditor.ADL_Classes
                     Debug.Assert(False, e.ToString)
                 End Try
             End If
+            End If
         End Sub
 
         Public Overrides Sub ReplaceTerm(ByVal a_Term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
+            If EIF_adlInterface.archetype_available Then
             Dim an_adl_Term As ADL_Term
             Dim language_code As EiffelKernel.STRING_8
 
-            If Not a_Term.isConstraint Then
+                If Not a_Term.IsConstraint Then
                 an_adl_Term = New ADL_Term(a_Term)
+
                 If a_Term.Language <> "" Then
-                    language_code = EiffelKernel.Create.STRING_8.make_from_cil(a_Term.Language)
+                        language_code = Eiffel.String(a_Term.Language)
                 Else
                     language_code = EiffelCompiler.current_language
                 End If
@@ -336,6 +376,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 End Try
             Else
                 Debug.Assert(False, "Term is a constraint and should not be passed")
+            End If
             End If
         End Sub
 
@@ -361,22 +402,20 @@ Namespace ArchetypeEditor.ADL_Classes
         'End Sub
 
         Public Overrides Function HasTermCode(ByVal a_term_code As String) As Boolean
-            If RmTerm.isValidTermCode(a_term_code) Then
-                If Ontology.has_term_code(EiffelKernel.Create.STRING_8.make_from_cil(a_term_code)) Then
-                    Return True
-                ElseIf Ontology.has_constraint_code(EiffelKernel.Create.STRING_8.make_from_cil(a_term_code)) Then
-                    Return True
-                End If
-            End If
+            Dim result As Boolean = False
 
-            Return False
+            If RmTerm.IsValidTermCode(a_term_code) And EIF_adlInterface.archetype_available Then
+                result = EIF_adlInterface.ontology.has_term_code(Eiffel.String(a_term_code)) Or EIF_adlInterface.ontology.has_constraint_code(Eiffel.String(a_term_code))
+                End If
+
+            Return result
         End Function
 
         Public Overrides Sub AddConstraint(ByVal a_term As RmTerm)
-            Dim an_adl_Term As ADL_Term
+            If EIF_adlInterface.archetype_available Then
+                If a_term.IsConstraint Then
+                    Dim an_adl_Term As New ADL_Term(a_term)
 
-            If a_term.isConstraint Then
-                an_adl_Term = New ADL_Term(a_term)
 
                 Try
                     If Not Ontology.has_constraint_code(an_adl_Term.EIF_Term.code) Then
@@ -390,13 +429,13 @@ Namespace ArchetypeEditor.ADL_Classes
             Else
                 Debug.Assert(False, "Code is not a constraint code: " & a_term.Code)
             End If
+            End If
         End Sub
 
         Public Overrides Sub ReplaceConstraint(ByVal a_term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
-            Dim an_adl_Term As ADL_Term
-
-            If a_term.isConstraint Then
-                an_adl_Term = New ADL_Term(a_term)
+            If EIF_adlInterface.archetype_available Then
+                If a_term.IsConstraint Then
+                    Dim an_adl_Term As New ADL_Term(a_term)
 
                 Try
                     If Ontology.has_constraint_code(an_adl_Term.EIF_Term.code) Then
@@ -410,35 +449,32 @@ Namespace ArchetypeEditor.ADL_Classes
             Else
                 Debug.Assert(False, "Code is not a constraint code: " & a_term.Code)
             End If
+            End If
         End Sub
 
         Public Sub populate_languages(ByRef TheOntologyManager As OntologyManager)
-
-            If Not Ontology.languages_available.empty() Then
+            If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.languages_available.empty() Then
                 Dim i As Integer
                 Dim s As String
 
-                'A new ontology always adds the current language - but this may not be available in the archetype
-                ' so clear ..
+                'A new ontology always adds the current language - but this may not be available in the archetype, so clear ..
                 TheOntologyManager.LanguagesTable.Clear()
 
                 For i = Ontology.languages_available.lower() To Ontology.languages_available.upper()
                     s = CType(Ontology.languages_available.i_th(i), EiffelKernel.STRING_8).to_cil()
                     TheOntologyManager.AddLanguage(s)
                 Next
-
             End If
-
         End Sub
 
         Private Sub populate_terminologies(ByRef TheOntologyManager As OntologyManager)
             ' populate the terminology table in TermLookUp
-            If Not Ontology.terminologies_available.empty() Then
+            If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.terminologies_available.empty() Then
                 Dim i As Integer
                 Dim s, t As String
 
-                For i = Ontology.terminologies_available.lower() To Ontology.terminologies_available.upper()
-                    s = CType(Ontology.terminologies_available.i_th(i), EiffelKernel.STRING_8).to_cil()
+                For i = EIF_adlInterface.ontology.terminologies_available.lower() To EIF_adlInterface.ontology.terminologies_available.upper()
+                    s = CType(EIF_adlInterface.ontology.terminologies_available.i_th(i), EiffelKernel.STRING_8).to_cil()
                     t = TheOntologyManager.GetTerminologyDescription(s)
                     TheOntologyManager.AddTerminology(s, t)
                 Next
@@ -448,24 +484,25 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Sub populate_term_definitions(ByRef TheOntologyManager As OntologyManager, Optional ByVal LanguageCode As String = "")
             ' populate the TermDefinitions table in TermLookUp
 
-            If Not Ontology.term_definitions.empty() Then
+            If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.term_definitions.empty() Then
                 Dim d_row, selected_row As DataRow
                 Dim s As EiffelKernel.STRING_8
                 Dim a_term As ADL_Term
-                Dim linklist As EiffelList.LINKED_LIST_REFERENCE
-
-                linklist = Ontology.term_codes
+                Dim linklist As EiffelList.LINKED_LIST_REFERENCE = EIF_adlInterface.ontology.term_codes
                 linklist.start()
+
 
                 Do While Not linklist.off
                     s = CType(linklist.active.item, EiffelKernel.STRING_8)
+
                     If LanguageCode = "" Then
                         ' set the term for all languages
                         For Each selected_row In TheOntologyManager.LanguagesTable.Rows
                             ' take each term from the ADL ontology
                             'SRH: 20.9.2007 - Added check as found problem with handcrafted archetype
                             Dim archetypeTerm As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM
-                            archetypeTerm = Ontology.term_definition(EiffelKernel.Create.STRING_8.make_from_cil(selected_row(0)), s)
+                            archetypeTerm = EIF_adlInterface.ontology.term_definition(Eiffel.String(selected_row(0)), s)
+
                             If archetypeTerm Is Nothing Then
                                 Debug.Assert(False, "Term not in this language")
                                 a_term = New ADL_Term(s.to_cil)
@@ -483,12 +520,14 @@ Namespace ArchetypeEditor.ADL_Classes
                             d_row(2) = a_term.Text
                             d_row(3) = a_term.Description
                             d_row(4) = a_term.Comment
+                            'SRH: 22 Jun 2009 EDT-549 - allow other annotations
+                            d_row(5) = a_term
                             ' add it to the GUI ontology
                             TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
                         Next
                     Else
                         ' just do it for the new language
-                        a_term = New ADL_Term(Ontology.term_definition(EiffelKernel.Create.STRING_8.make_from_cil(LanguageCode), s))
+                        a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(Eiffel.String(LanguageCode), s))
                         ' and if it is not an internal ID for machine processing
                         d_row = TheOntologyManager.TermDefinitionTable.NewRow
                         d_row(0) = LanguageCode
@@ -499,6 +538,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         ' add it to the GUI ontology
                         TheOntologyManager.TermDefinitionTable.Rows.Add(d_row)
                     End If
+
                     linklist.forth()
                 Loop
             End If
@@ -507,17 +547,19 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Sub populate_term_bindings(ByRef TheOntologyManager As OntologyManager)
             ' populate the TermBindings table in TermLookUp
 
-            If Not Ontology.term_bindings.empty() Then
+            If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.term_bindings.empty() Then
                 Dim d_row, selected_row As DataRow
                 Dim terminology, code As EiffelKernel.STRING_8
                 Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE
                 Dim Bindings As EiffelTable.HASH_TABLE_REFERENCE_REFERENCE
 
                 For Each selected_row In TheOntologyManager.TerminologiesTable.Rows
-                    terminology = EiffelKernel.Create.STRING_8.make_from_cil(selected_row(0))
+                    terminology = Eiffel.String(selected_row(0))
+
                     If Ontology.has_term_bindings(terminology) Then
                         Bindings = Ontology.term_bindings_for_terminology(terminology)
                         Bindings.start()
+
                         Do While Not Bindings.off
                             cp = Bindings.item_for_iteration
                             code = Bindings.key_for_iteration
@@ -526,7 +568,6 @@ Namespace ArchetypeEditor.ADL_Classes
                             d_row(1) = code.to_cil
                             d_row(2) = cp.code_string
 
-                            ' EDT-134
                             If Not cp.terminology_id.version_id Is Nothing Then
                                 d_row(3) = cp.terminology_id.version_id.to_cil    ' release
                             End If
@@ -542,14 +583,13 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Sub populate_constraint_definitions(ByRef TheOntologyManager As OntologyManager, Optional ByVal LanguageCode As String = "")
             ' populate the ConstraintDefinitions table in TermLookUp
 
-            If Not Ontology.constraint_definitions.empty() Then
+            If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.constraint_definitions.empty() Then
                 Dim d_row, selected_row As DataRow
                 Dim s As EiffelKernel.STRING_8
                 Dim a_term As ADL_Term
-                Dim linklist As EiffelList.LINKED_LIST_REFERENCE
-
-                linklist = Ontology.constraint_codes
+                Dim linklist As EiffelList.LINKED_LIST_REFERENCE = EIF_adlInterface.ontology.constraint_codes
                 linklist.start()
+
 
                 Do While Not linklist.off
                     s = CType(linklist.active.item, EiffelKernel.STRING_8)
@@ -558,7 +598,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         ' set the constraints for all languages
                         For Each selected_row In TheOntologyManager.LanguagesTable.Rows
                             ' take each constraint from the ADL ontology
-                            a_term = New ADL_Term(Ontology.constraint_definition(EiffelKernel.Create.STRING_8.make_from_cil(selected_row(0)), s))
+                            a_term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(Eiffel.String(selected_row(0)), s))
                             d_row = TheOntologyManager.ConstraintDefinitionTable.NewRow
                             d_row(0) = selected_row(0)
                             d_row(1) = a_term.Code
@@ -569,7 +609,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         Next
                     Else
                         'Do it for the new language
-                        a_term = New ADL_Term(Ontology.constraint_definition(EiffelKernel.Create.STRING_8.make_from_cil(LanguageCode), s))
+                        a_term = New ADL_Term(EIF_adlInterface.ontology.constraint_definition(Eiffel.String(LanguageCode), s))
                         d_row = TheOntologyManager.ConstraintDefinitionTable.NewRow
                         d_row(0) = LanguageCode
                         d_row(1) = a_term.Code
@@ -587,23 +627,22 @@ Namespace ArchetypeEditor.ADL_Classes
         Private Sub populate_constraint_bindings(ByRef TheOntologyManager As OntologyManager)
             ' populate the ConstraintBindings table in TermLookUp
 
-            If Not Ontology.constraint_bindings.empty() Then
+            If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.constraint_bindings.empty() Then
                 Dim d_row, selected_row As DataRow
                 Dim s As EiffelKernel.STRING_8
                 Dim a_query As EiffelKernel.STRING_8
-                Dim linklist As EiffelList.LINKED_LIST_REFERENCE
-
-                linklist = Ontology.constraint_codes
+                Dim linklist As EiffelList.LINKED_LIST_REFERENCE = EIF_adlInterface.ontology.constraint_codes
                 linklist.start()
+
 
                 Do While Not linklist.off
                     s = CType(linklist.active.item, EiffelKernel.STRING_8)
 
                     For Each selected_row In TheOntologyManager.TerminologiesTable.Rows
                         Try
-                            If Ontology.has_constraint_bindings(EiffelKernel.Create.STRING_8.make_from_cil(selected_row(0))) Then
-                                If Ontology.has_constraint_binding(EiffelKernel.Create.STRING_8.make_from_cil(selected_row(0)), s) Then
-                                    a_query = Ontology.constraint_binding(EiffelKernel.Create.STRING_8.make_from_cil(selected_row(0)), s).as_string
+                            If EIF_adlInterface.ontology.has_constraint_bindings(Eiffel.String(selected_row(0))) Then
+                                If EIF_adlInterface.ontology.has_constraint_binding(Eiffel.String(selected_row(0)), s) Then
+                                    a_query = EIF_adlInterface.ontology.constraint_binding(Eiffel.String(selected_row(0)), s).as_string
                                     d_row = TheOntologyManager.ConstraintBindingsTable.NewRow
                                     d_row(0) = selected_row(0)
                                     d_row(1) = s.to_cil
@@ -625,7 +664,6 @@ Namespace ArchetypeEditor.ADL_Classes
         Public Overrides Sub PopulateTermsInLanguage(ByRef TheOntologyManager As OntologyManager, ByVal LanguageCode As String)
             populate_term_definitions(TheOntologyManager, LanguageCode)
             populate_constraint_definitions(TheOntologyManager, LanguageCode)
-
         End Sub
 
         Public Overrides Sub PopulateAllTerms(ByRef TheOntologyManager As OntologyManager)
@@ -637,7 +675,6 @@ Namespace ArchetypeEditor.ADL_Classes
                 populate_constraint_definitions(TheOntologyManager)
                 populate_constraint_bindings(TheOntologyManager)
             End If
-
         End Sub
 
         Sub New(ByRef compiler As openehr.adl_parser.interface.ARCHETYPE_PARSER, Optional ByVal Replace As Boolean = False)
@@ -645,6 +682,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
     End Class
+
 End Namespace
 '
 '***** BEGIN LICENSE BLOCK *****

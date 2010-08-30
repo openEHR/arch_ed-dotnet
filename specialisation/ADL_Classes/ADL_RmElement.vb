@@ -17,6 +17,7 @@
 Option Strict On
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
 Imports EiffelList = EiffelSoftware.Library.Base.structures.list
+Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
 
@@ -30,53 +31,58 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Private Sub ProcessElement(ByVal ComplexObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
             Try
-                Dim v As EiffelKernel.STRING_8 = EiffelKernel.Create.STRING_8.make_from_cil("value")
+                Dim v As EiffelKernel.STRING_8 = Eiffel.String("value")
                 cConstraint = New Constraint
 
                 If Not ComplexObj.any_allowed Then
-                    Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                     Dim i As Integer
 
                     If ComplexObj.has_attribute(v) Then
+                        attribute = ComplexObj.c_attribute_at_path(v)
 
-                        an_attribute = ComplexObj.c_attribute_at_path(v)
-
-                        If an_attribute.children.count > 1 Then
+                        If attribute.children.count > 1 Then
                             ' multiple constraints - not dealt with yet in the GUI
                             Dim m_c As New Constraint_Choice
 
-                            For i = 1 To an_attribute.children.count
-                                m_c.Constraints.Add(ProcessValue(CType(an_attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager))
+                            For i = 1 To attribute.children.count
+                                m_c.Constraints.Add(ProcessValue(CType(attribute.children.i_th(i), openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager))
                             Next
 
                             cConstraint = m_c
-                        ElseIf Not an_attribute.children.is_empty Then
-                            cConstraint = ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager)
+                        ElseIf attribute.has_children Then
+                            cConstraint = ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager)
                         End If
                     End If
 
-                    'SRH 14th Nov 2007 - Added null flavor
-                    v = EiffelKernel.Create.STRING_8.make_from_cil("null_flavor")
-                    If ComplexObj.has_attribute(v) Then
-                        an_attribute = ComplexObj.c_attribute_at_path(v)
+                    Dim hasNullFlavour As Boolean = False
+                    v = Eiffel.String("null_flavor") ' Obsolete
+                    hasNullFlavour = ComplexObj.has_attribute(v)
 
-                        If an_attribute.children.count = 1 Then
-                            Dim c As Constraint_Text = ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    If Not hasNullFlavour Then
+                        v = Eiffel.String("null_flavour") ' redundant
+                        hasNullFlavour = ComplexObj.has_attribute(v)
+                    End If
+
+                    If hasNullFlavour Then
+                        attribute = ComplexObj.c_attribute_at_path(v)
+
+                        If attribute.children.count = 1 Then
+                            Dim c As Constraint_Text = ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+
                             If Not c Is Nothing AndAlso c.AllowableValues.Codes.Count > 0 Then
-                                Me.ConstrainedNullFlavours = c.AllowableValues
+                                ConstrainedNullFlavours = c.AllowableValues
                             End If
                         End If
                     End If
                 End If
-
             Catch ex As Exception
                 MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ComplexObj.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 
         Private Function ProcessInterval(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint_Interval
-
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             Debug.Assert(Not ObjNode.any_allowed)
 
@@ -85,115 +91,148 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim cic As New Constraint_Interval_Count
                     Dim countLimits As Constraint_Count
 
-                    an_attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+                    attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                    countLimits = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
+                    If attribute.has_children Then
+                        countLimits = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
+
                     If countLimits.HasMaximum Then
                         CType(cic.UpperLimit, Constraint_Count).HasMaximum = True
                         CType(cic.UpperLimit, Constraint_Count).MaximumValue = countLimits.MaximumValue
                     End If
+
                     If countLimits.HasMinimum Then
                         CType(cic.LowerLimit, Constraint_Count).HasMinimum = True
                         CType(cic.LowerLimit, Constraint_Count).MinimumValue = countLimits.MinimumValue
                     End If
+                    End If
+
                     Return cic
                 Case "dv_interval<dv_count>", "dv_interval<count>", "interval<count>"
                     Dim cic As New Constraint_Interval_Count
+
                     Try
                         ' Get the upper value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("upper")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("upper"))
-                            cic.UpperLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
+                        If ObjNode.has_attribute(Eiffel.String("upper")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
+
+                            If attribute.has_children Then
+                                cic.UpperLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
                         End If
+                        End If
+
                         ' Get the lower value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("lower")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("lower"))
-                            cic.LowerLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
+                        If ObjNode.has_attribute(Eiffel.String("lower")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
+
+                            If attribute.has_children Then
+                                cic.LowerLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Count)
+                        End If
                         End If
                     Catch ex As Exception
                         MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
+
                     Return cic
                 Case "interval_quantity"
                     Dim ciq As New Constraint_Interval_Quantity
                     Dim quantLimits As New Constraint_Quantity
 
-                    an_attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+                    attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                    quantLimits = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
+                    If attribute.has_children Then
+                        quantLimits = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
+                    End If
 
                     If quantLimits.has_units Then
                         ciq.AddUnit(CType(quantLimits.Units(0), Constraint_QuantityUnit))
                         CType(CType(ciq.UpperLimit, Constraint_Quantity).Units(0), Constraint_QuantityUnit).HasMinimum = False
                         CType(CType(ciq.LowerLimit, Constraint_Quantity).Units(0), Constraint_QuantityUnit).HasMaximum = False
                     End If
+
                     ciq.QuantityPropertyCode = quantLimits.OpenEhrCode
                     Return ciq
                 Case "dv_interval<dv_quantity>", "dv_interval<quantity>", "interval<quantity>"
                     Dim ciq As New Constraint_Interval_Quantity
+
                     Try
                         ' Get the upper value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("upper")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("upper"))
-                            ciq.UpperLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
+                        If ObjNode.has_attribute(Eiffel.String("upper")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
+
+                            If attribute.has_children Then
+                                ciq.UpperLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
                         End If
+                        End If
+
                         ' Get the lower value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("lower")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("lower"))
-                            ciq.LowerLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
+                        If ObjNode.has_attribute(Eiffel.String("lower")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
+
+                            If attribute.has_children Then
+                                ciq.LowerLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
+                        End If
                         End If
                     Catch ex As Exception
                         MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
+
                     Return ciq
-                Case "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>"
+                Case "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", "dv_interval<dv_date>", "dv_interval<dv_time>"
                     Dim cidt As New Constraint_Interval_DateTime
+
                     Try
                         ' Get the upper value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("upper")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("upper"))
-                            cidt.UpperLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)
+                        If ObjNode.has_attribute(Eiffel.String("upper")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("upper"))
+
+                            If attribute.has_children Then
+                                cidt.UpperLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)
                         End If
+                        End If
+
                         ' Get the lower value
-                        If ObjNode.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("lower")) Then
-                            an_attribute = ObjNode.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("lower"))
-                            cidt.LowerLimit = CType(ProcessValue(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)
+                        If ObjNode.has_attribute(Eiffel.String("lower")) Then
+                            attribute = ObjNode.c_attribute_at_path(Eiffel.String("lower"))
+
+                            If attribute.has_children Then
+                                cidt.LowerLimit = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_DateTime)
+                        End If
                         End If
                     Catch ex As Exception
                         MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id.to_cil & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
+
                     Return cidt
                 Case Else
                     Debug.Assert(False, String.Format("Attribute not handled: {0}", ObjNode.rm_type_name.to_cil))
                     Return Nothing
             End Select
-
         End Function
 
         Private Function ProcessDuration(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Duration
-
             If ObjNode.any_allowed Then
                 Return New Constraint_Duration
             Else
-                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 Dim durationConstraint As New Constraint_Duration
+
                 If ObjNode.attributes.count > 0 Then
-                    an_attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+                    attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
                     Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                    If an_attribute.children.count > 0 Then
-                        constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+
+                    If attribute.has_children Then
+                        constraint = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
                         durationConstraint = ProcessDuration(constraint, durationConstraint)
                     End If
+
                     Return durationConstraint
                 End If
             End If
 
-            'Shouldn't get to here
             Debug.Assert(False, "Error processing Duration")
             Return New Constraint_Duration
-
         End Function
-
 
         Private Function ProcessDuration(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT, ByVal duration As Constraint_Duration) As Constraint_Duration
             If ObjNode.any_allowed Then
@@ -284,33 +323,29 @@ Namespace ArchetypeEditor.ADL_Classes
                     duration.IncludeMinimum = cadlC.interval.lower_included
                 End If
             End If
+
             Return duration
         End Function
 
         Private Function ProcessMultiMedia(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_MultiMedia
-            Dim mm As New Constraint_MultiMedia
-            Dim media_type As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim result As New Constraint_MultiMedia
 
-            If ObjNode.any_allowed Then
-                Return mm
-            End If
-
+            If Not ObjNode.any_allowed Then
             Try
-                media_type = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                Dim Obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT
+                    Dim mediaType As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                Obj = CType(media_type.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
-
-                mm.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE))
-
+                    If mediaType.has_children Then
+                        Dim Obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = CType(mediaType.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+                        result.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE))
+                    End If
             Catch ex As Exception
                 Debug.Assert(False)
                 MessageBox.Show(AE_Constants.Instance.Error_loading & " Multimedia constraint:" & ObjNode.node_id.to_cil & _
                     " - " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
+            End If
 
-            Return mm
-
+            Return result
         End Function
 
         Private Function ProcessValue(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint
@@ -349,12 +384,16 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return ProcessCount(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "interval_count", "interval_quantity" 'OBSOLETE
                     Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
-                Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>"
+                Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>", "dv_interval<dv_date>", "dv_interval<dv_time>"
                     Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
                 Case "dv_multimedia", "multimedia", "multi_media"
                     Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "dv_uri", "uri", "dv_ehr_uri"
                     Return ProcessUri(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                Case "dv_identifier"
+                    Return ProcessIdentifier(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    'Case "dv_currency"
+                    'Return ProcessCurrency(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "dv_duration", "duration"
                     If TypeOf ObjNode Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
                         Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -364,83 +403,149 @@ Namespace ArchetypeEditor.ADL_Classes
                         constraintDuration = ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT), constraintDuration)
                         Return constraintDuration
                     End If
+                Case "dv_parsable"
+                    Return ProcessParsable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case Else
                     Debug.Assert(False, String.Format("Attribute not handled: {0}", ObjNode.rm_type_name.to_cil))
                     Return New Constraint
             End Select
         End Function
-        Shared Function ProcessUri(ByVal dvUri As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
-            Dim cUri As New Constraint_URI
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-            If dvUri.rm_type_name.to_cil.ToLowerInvariant = "dv_ehr_uri" Then
-                cUri.EhrUriOnly = True
-            End If
-
-            If dvUri.any_allowed Then
-                Return cUri
-            End If
+        Shared Function ProcessParsable(ByVal dvParse As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
+            Dim result As New Constraint_Parsable
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             Try
-                an_attribute = CType(dvUri.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                Debug.Assert(an_attribute.rm_attribute_name.to_cil.ToLowerInvariant = "value")
-                Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = _
-                    CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = _
-                    CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+                For i As Integer = 1 To dvParse.attributes.count
+                    attribute = CType(dvParse.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                cUri.RegularExpression = cadlC.regexp.to_cil
+                    If attribute.has_children Then
+                        Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                        Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+
+                        Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant()
+                            Case "value"
+                                'OBSOLETE
+
+                            Case "formalism"
+                                Try
+                                    For ii As Integer = 1 To cadlC.strings.count
+                                        result.AllowableFormalisms.Add(CType(cadlC.strings.i_th(ii), EiffelKernel.STRING_8).to_cil)
+                                    Next
+                                Catch ex As Exception
+                                    Debug.Assert(False)
+                                    MessageBox.Show(AE_Constants.Instance.Error_loading & " Multimedia constraint:" & dvParse.node_id.to_cil & _
+                                        " - " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                End Try
+                        End Select
+                    End If
+                Next
             Catch e As Exception
                 MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
 
-            Return cUri
+            Return result
+        End Function
 
+        Shared Function ProcessUri(ByVal dvUri As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
+            Dim result As New Constraint_URI
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+
+            If dvUri.rm_type_name.to_cil.ToLowerInvariant = "dv_ehr_uri" Then
+                result.EhrUriOnly = True
+            End If
+
+            If Not dvUri.any_allowed Then
+                Try
+                    attribute = CType(dvUri.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+                    Debug.Assert(attribute.rm_attribute_name.to_cil.ToLowerInvariant = "value")
+
+                    If attribute.has_children Then
+                        Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                        Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+                        result.RegularExpression = cadlC.regexp.to_cil
+            End If
+                Catch e As Exception
+                    MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+
+            Return result
+        End Function
+
+        Shared Function ProcessIdentifier(ByVal dvIdentifier As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint
+            Dim result As New Constraint_Identifier
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = Nothing
+
+            If Not dvIdentifier.any_allowed Then
+            Try
+                    For i As Integer = 1 To dvIdentifier.attributes.count
+                        attribute = CType(dvIdentifier.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+
+                        If Not attribute Is Nothing AndAlso attribute.has_children Then
+                            Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                            Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+
+                            Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant()
+                                Case "issuer"
+                                    result.IssuerRegex = cadlC.regexp.to_cil
+                                Case "type"
+                                    result.TypeRegex = cadlC.regexp.to_cil
+                                Case "id"
+                                    result.IDRegex = cadlC.regexp.to_cil
+                            End Select
+                        End If
+                    Next
+            Catch e As Exception
+                MessageBox.Show(e.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+            End If
+
+            Return result
         End Function
 
         Private Function ProcessCount(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Count
-            Dim ct As New Constraint_Count
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim result As New Constraint_Count
             Dim i As Integer
 
-            If ObjNode.any_allowed Then
-                Return ct
-            End If
+            If Not ObjNode.any_allowed Then
+                For i = 1 To ObjNode.attributes.count
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-            For i = 1 To ObjNode.attributes.count
-                an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                Select Case an_attribute.rm_attribute_name.to_cil.ToLowerInvariant
+                    If attribute.has_children Then
+                        Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant
                     Case "value", "magnitude"
-                        Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                        Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
-
-                        cadlOS = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                        cadlC = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
+                                Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                                Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
 
                         If Not cadlC.interval.lower_unbounded Then
-                            ct.HasMinimum = True
-                            ct.MinimumValue = cadlC.interval.lower
-                            ct.IncludeMinimum = cadlC.interval.lower_included
+                                    result.HasMinimum = True
+                                    result.MinimumValue = cadlC.interval.lower
+                                    result.IncludeMinimum = cadlC.interval.lower_included
                         Else
-                            ct.HasMinimum = False
+                                    result.HasMinimum = False
                         End If
+
                         If Not cadlC.interval.upper_unbounded Then
-                            ct.HasMaximum = True
-                            ct.MaximumValue = cadlC.interval.upper
-                            ct.IncludeMaximum = cadlC.interval.upper_included
+                                    result.HasMaximum = True
+                                    result.MaximumValue = cadlC.interval.upper
+                                    result.IncludeMaximum = cadlC.interval.upper_included
                         Else
-                            ct.HasMaximum = False
+                                    result.HasMaximum = False
                         End If
 
                         If cadlC.has_assumed_value Then
-                            ct.HasAssumedValue = True
-                            ct.AssumedValue = CType(cadlC.assumed_value, EiffelKernel.INTEGER_32_REF).item
+                                    result.HasAssumedValue = True
+                                    result.AssumedValue = CType(cadlC.assumed_value, EiffelKernel.INTEGER_32).item
                         End If
                     Case Else
                         Debug.Assert(False)
                 End Select
+                    End If
             Next
-            Return ct
+            End If
+
+            Return result
         End Function
 
         Private Function ProcessReal(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_Real
@@ -452,14 +557,14 @@ Namespace ArchetypeEditor.ADL_Classes
 
             If Not cadlC.interval.lower_unbounded Then
                 ct.HasMinimum = True
-                ct.MinimumValue = cadlC.interval.lower
+                ct.MinimumRealValue = cadlC.interval.lower
                 ct.IncludeMinimum = cadlC.interval.lower_included
             Else
                 ct.HasMinimum = False
             End If
             If Not cadlC.interval.upper_unbounded Then
                 ct.HasMaximum = True
-                ct.MaximumValue = cadlC.interval.upper
+                ct.MaximumRealValue = cadlC.interval.upper
                 ct.IncludeMaximum = cadlC.interval.upper_included
             Else
                 ct.HasMaximum = False
@@ -470,180 +575,170 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             Return ct
-
         End Function
 
         'OBSOLETE
         Private Function ProcessRatio(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Proportion
-            Dim rat As New Constraint_Proportion
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim result As New Constraint_Proportion
 
-            If ObjNode.any_allowed Then
-                Return rat
-            Else
+            If Not ObjNode.any_allowed Then
                 For i As Integer = 1 To ObjNode.attributes.count
-                    an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                    Select Case an_attribute.rm_attribute_name.to_cil
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
+
+                    If attribute.has_children Then
+                        Select Case attribute.rm_attribute_name.to_cil
                         Case "numerator"
-                            rat.Numerator = New Constraint_Real(ProcessCount(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                                result.Numerator = New Constraint_Real(ProcessCount(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case "denominator"
-                            rat.Denominator = New Constraint_Real(ProcessCount(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
+                                result.Denominator = New Constraint_Real(ProcessCount(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)))
                         Case Else
                             Debug.Assert(False)
                     End Select
+                    End If
                 Next
             End If
 
-            Return rat
-
+            Return result
         End Function
 
         Private Function ProcessProportion(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Proportion
-            Dim proportion As New Constraint_Proportion
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim result As New Constraint_Proportion
 
-            If ObjNode.any_allowed Then
-                Return proportion
-            Else
+            If Not ObjNode.any_allowed Then
                 For i As Integer = 1 To ObjNode.attributes.count
-                    an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                    Select Case an_attribute.rm_attribute_name.to_cil
-                        Case "numerator"
-                            proportion.Numerator = ProcessReal(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
-                        Case "denominator"
-                            proportion.Denominator = ProcessReal(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
-                        Case "is_integral"
-                            Dim bool As Constraint_Boolean = ProcessBoolean(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
-                            If bool.TrueAllowed Then
-                                proportion.IsIntegral = True
-                            Else
-                                proportion.IsIntegral = False
-                            End If
-                            proportion.IsIntegralSet = True
-                        Case "type"
-                            Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                            Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                            cadlOS = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                            cadlC = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
-                            proportion.SetAllTypesDisallowed()
+                    If attribute.has_children Then
+                        Select Case attribute.rm_attribute_name.to_cil
+                        Case "numerator"
+                                result.Numerator = ProcessReal(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                        Case "denominator"
+                                result.Denominator = ProcessReal(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                        Case "is_integral"
+                                Dim bool As Constraint_Boolean = ProcessBoolean(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                                result.IsIntegral = bool.TrueAllowed
+                                result.IsIntegralSet = True
+                        Case "type"
+                                Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                                Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
+                                result.SetAllTypesDisallowed()
+
                             If Not cadlC.list Is Nothing Then
                                 For ii As Integer = 1 To cadlC.list.count
-                                    proportion.AllowType(cadlC.list.i_th(ii))
+                                        result.AllowType(cadlC.list.i_th(ii))
                                 Next
                             ElseIf Not cadlC.interval Is Nothing Then
                                 'is an interval as only one allowed
-                                proportion.AllowType(cadlC.interval.upper)
+                                    result.AllowType(cadlC.interval.upper)
                             Else
-                                proportion.SetAllTypesAllowed()
+                                    result.SetAllTypesAllowed()
                             End If
-
-
                         Case Else
                             Debug.Assert(False)
                     End Select
+                    End If
                 Next
             End If
 
-            Return proportion
-
+            Return result
         End Function
 
-
         Private Function ProcessDateTime(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_DateTime
+            Dim result As New Constraint_DateTime()
 
             If ObjNode.any_allowed Then
-                Return New Constraint_DateTime
+                Select Case ObjNode.rm_type_name.to_cil.ToUpperInvariant
+                    Case "DV_DATE_TIME"
+                        result.TypeofDateTimeConstraint = 11
+                    Case "DV_DATE"
+                        result.TypeofDateTimeConstraint = 14
+                    Case "DV_TIME"
+                        result.TypeofDateTimeConstraint = 18
+                End Select
             Else
-                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
                 For i As Integer = 1 To ObjNode.attributes.count
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                    an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                    Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    If attribute.has_children Then
+                        Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "value"
-                            Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                            If an_attribute.children.count > 0 Then
-                                constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                                Return ProcessDateTime(constraint)
+                                result = ProcessDateTime(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                                Exit For
+                        End Select
                             End If
-                    End Select
                 Next
             End If
 
-            'Shouldn't get to here
-            Debug.Assert(False, "Error processing boolean")
-            Return New Constraint_DateTime
-
+            Return result
         End Function
 
         Private Function ProcessDateTime(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_DateTime
-            Dim dt As New Constraint_DateTime
+            Dim result As New Constraint_DateTime
             Dim s As String
 
-            If ObjNode.any_allowed Then
-                Return dt
-            End If
-
-            Select Case ObjNode.rm_type_name.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            'If Not ObjNode.any_allowed Then
+            Select Case ObjNode.rm_type_name.to_cil.ToUpperInvariant
                 Case "DATE_TIME"
-                    Dim cadlDT As openehr.openehr.am.archetype.constraint_model.primitive.C_DATE_TIME
-                    cadlDT = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE_TIME)
-                    s = cadlDT.pattern.to_cil
-
+            If ObjNode.any_allowed Then
+                        s = "yyyy-??-??t??:??:??"
+                    Else
+                        s = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE_TIME).pattern.to_cil
+            End If
                 Case "DATE"
-                    Dim cadlD As openehr.openehr.am.archetype.constraint_model.primitive.C_DATE
-                    cadlD = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE)
-                    s = cadlD.pattern.to_cil
-
+                    If ObjNode.any_allowed Then
+                        s = "yyyy-??-??"
+                    Else
+                        s = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DATE).pattern.to_cil
+                    End If
                 Case "TIME"
-                    Dim cadlT As openehr.openehr.am.archetype.constraint_model.primitive.C_TIME
-                    cadlT = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_TIME)
-                    s = cadlT.pattern.to_cil
-
+                    If ObjNode.any_allowed Then
+                        s = "thh:??:??"
+                    Else
+                        s = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_TIME).pattern.to_cil
+                    End If
                 Case Else
                     Debug.Assert(False)
-                    Return Nothing
+                    s = ""
             End Select
-
 
             Select Case s.ToLowerInvariant()
                 Case "yyyy-??-?? ??:??:??", "yyyy-??-??t??:??:??"
                     ' Allow all
-                    dt.TypeofDateTimeConstraint = 11
+                    result.TypeofDateTimeConstraint = 11
                 Case "yyyy-mm-dd hh:mm:ss", "yyyy-mm-ddthh:mm:ss"
-                    dt.TypeofDateTimeConstraint = 12
+                    result.TypeofDateTimeConstraint = 12
                 Case "yyyy-mm-dd hh:??:??", "yyyy-mm-ddthh:??:??"
                     'Partial Date time
-                    dt.TypeofDateTimeConstraint = 13
+                    result.TypeofDateTimeConstraint = 13
                 Case "yyyy-??-??"
                     'Date only
-                    dt.TypeofDateTimeConstraint = 14
+                    result.TypeofDateTimeConstraint = 14
                 Case "yyyy-mm-dd"
                     'Full date
-                    dt.TypeofDateTimeConstraint = 15
+                    result.TypeofDateTimeConstraint = 15
                 Case "yyyy-??-xx"
                     'Partial date
-                    dt.TypeofDateTimeConstraint = 16
+                    result.TypeofDateTimeConstraint = 16
                 Case "yyyy-mm-??"
                     'Partial date with month
-                    dt.TypeofDateTimeConstraint = 17
+                    result.TypeofDateTimeConstraint = 17
                 Case "hh:??:??", "thh:??:??"
                     'TimeOnly
-                    dt.TypeofDateTimeConstraint = 18
+                    result.TypeofDateTimeConstraint = 18
                 Case "hh:mm:ss", "thh:mm:ss"
                     'Full time
-                    dt.TypeofDateTimeConstraint = 19
+                    result.TypeofDateTimeConstraint = 19
                 Case "hh:??:xx", "thh:??:xx"
                     'Partial time
-                    dt.TypeofDateTimeConstraint = 20
+                    result.TypeofDateTimeConstraint = 20
                 Case "hh:mm:??", "thh:mm:??"
                     'Partial time with minutes
-                    dt.TypeofDateTimeConstraint = 21
+                    result.TypeofDateTimeConstraint = 21
             End Select
+            'End If
 
-            Return dt
-
+            Return result
         End Function
 
         Private Function ProcessOrdinal(ByVal an_ordinal_constraint As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
@@ -661,14 +756,15 @@ Namespace ArchetypeEditor.ADL_Classes
                 Do While Not Ordinals.off
                     openehr_ordinal = CType(Ordinals.active.item, openehr.openehr.am.openehr_profile.data_types.quantity.ORDINAL)
 
-                    Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
-
-                    newOrdinal.Ordinal = openehr_ordinal.value
                     c_phrase.Phrase = openehr_ordinal.symbol.as_string.to_cil
-
-                    If c_phrase.TerminologyID = "local" Then
-                        newOrdinal.InternalCode = c_phrase.FirstCode
+                    'SRH: 31 May 2008 - check for redundancy in AT codes when adding ordinals (had a problem after manual cutting and pasting by some users
+                    If c_phrase.TerminologyID.ToLowerInvariant = "local" Then
+                        If Array.IndexOf(ord.InternalCodes, c_phrase.FirstCode) = -1 Then
+                    Dim newOrdinal As OrdinalValue = ord.OrdinalValues.NewOrdinal
+                            newOrdinal.InternalCode = c_phrase.FirstCode
+                    newOrdinal.Ordinal = openehr_ordinal.value
                         ord.OrdinalValues.Add(newOrdinal)
+                        End If
                     Else
                         Beep()
                         Debug.Assert(False)
@@ -698,54 +794,44 @@ Namespace ArchetypeEditor.ADL_Classes
         'OBSOLETE
         Private Function ProcessOrdinal(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint_Ordinal
             Dim i As Integer
-            Dim c_value As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
             If Not ObjNode.any_allowed Then
                 For i = 1 To ObjNode.attributes.count
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                    an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-
-                    Select Case an_attribute.rm_attribute_name.to_cil.ToLowerInvariant()
+                    If attribute.has_children Then
+                        Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant()
                         Case "value"
-                            c_value = CType(an_attribute.children.first, openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL)
-
-                            Return ProcessOrdinal(c_value, a_filemanager)
+                                Return ProcessOrdinal(CType(attribute.children.first, openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL), a_filemanager)
                         Case Else
                             Debug.Assert(False, "attribute not handled")
                     End Select
-
+                    End If
                 Next
             End If
-            Return New Constraint_Ordinal(True, a_filemanager)
 
+            Return New Constraint_Ordinal(True, a_filemanager)
         End Function
 
         Private Function ProcessBoolean(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Boolean
-
             If ObjNode.any_allowed Then
                 Return New Constraint_Boolean
             Else
-                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
                 For i As Integer = 1 To ObjNode.attributes.count
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                    an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                    Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    If attribute.has_children Then
+                        Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "value"
-                            Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
-                            If an_attribute.children.count > 0 Then
-                                constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                                Return ProcessBoolean(constraint)
+                                Return ProcessBoolean(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
+                        End Select
                             End If
-                    End Select
                 Next
             End If
 
             'Shouldn't get to here
             Debug.Assert(False, "Error processing boolean")
             Return New Constraint_Boolean
-
         End Function
 
         Private Function ProcessBoolean(ByVal ObjSimple As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_Boolean
@@ -781,67 +867,60 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Shared Function ProcessText(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Text
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim t As New Constraint_Text
+            Dim result As New Constraint_Text
             Dim i As Integer
 
             If ObjNode.any_allowed Then
-                t.TypeOfTextConstraint = TextConstrainType.Text
-                Return t
-            End If
-
+                result.TypeOfTextConstraint = TextConstrainType.Text
+            Else
             For i = 1 To ObjNode.attributes.count
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
-                an_attribute = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                Select Case an_attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                     Case "defining_code", "code" 'code is redundant
                         'coded - could be a constraint or the actual codes so..
-                        Dim Obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT
-
-                        Obj = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
+                            If attribute.has_children Then
+                                Dim Obj As openehr.openehr.am.archetype.constraint_model.C_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT)
 
                         Select Case Obj.generating_type.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
                             Case "CONSTRAINT_REF"
-                                t.TypeOfTextConstraint = TextConstrainType.Terminology
-                                t.ConstraintCode = CType(Obj, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).target.to_cil
+                                        result.TypeOfTextConstraint = TextConstrainType.Terminology
+                                        result.ConstraintCode = CType(Obj, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).target.to_cil
                             Case "C_CODE_PHRASE"
-                                t.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE))
+                                        result.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE))
 
                                 'get the code for the assumed value if it exists
                                 If CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).has_assumed_value Then
-                                    t.HasAssumedValue = True
-                                    t.AssumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE).code_string.to_cil
+                                            result.HasAssumedValue = True
+                                            result.AssumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE).code_string.to_cil
 
-                                    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                                    Dim assumedValue As openehr.openehr.rm.data_types.text.CODE_PHRASE
-                                    assumedValue = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE)
-                                    t.AssumedValue = assumedValue.code_string().to_cil()
+                                            Dim assumedValue As openehr.openehr.rm.data_types.text.CODE_PHRASE = CType(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).assumed_value, openehr.openehr.rm.data_types.text.CODE_PHRASE)
+                                            result.AssumedValue = assumedValue.code_string().to_cil()
+
                                     If Not assumedValue.terminology_id Is Nothing Then
-                                        t.AssumedValue_TerminologyId = assumedValue.terminology_id.value.to_cil()
+                                                result.AssumedValue_TerminologyId = assumedValue.terminology_id.value.to_cil()
                                     End If
-
                                 End If
 
-                                If t.AllowableValues.TerminologyID = "local" Or t.AllowableValues.TerminologyID = "openehr" Then
-                                    t.TypeOfTextConstraint = TextConstrainType.Internal
+                                        If result.AllowableValues.TerminologyID = "local" Or result.AllowableValues.TerminologyID = "openehr" Then
+                                            result.TypeOfTextConstraint = TextConstrainType.Internal
                                 End If
                         End Select
-
+                            End If
 
                     Case "value"
                         Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
                         Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
-                        Dim EIF_String As EiffelKernel.STRING_8
                         Dim ii As Integer
 
-                        t.TypeOfTextConstraint = TextConstrainType.Text
+                            result.TypeOfTextConstraint = TextConstrainType.Text
 
-                        If an_attribute.children.count > 0 Then
-                            constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                            If attribute.has_children Then
+                                constraint = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
                             cString = CType(constraint.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
+
                             For ii = 1 To cString.strings.count
-                                EIF_String = CType(cString.strings.i_th(ii), EiffelKernel.STRING_8)
-                                t.AllowableValues.Codes.Add(EIF_String.to_cil)
+                                    result.AllowableValues.Codes.Add(CType(cString.strings.i_th(ii), EiffelKernel.STRING_8).to_cil)
                             Next
                         End If
 
@@ -849,25 +928,24 @@ Namespace ArchetypeEditor.ADL_Classes
                     Case "assumed_value"
                         Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
                         Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
-                        Dim EIF_String As EiffelKernel.STRING_8
 
-                        If an_attribute.children.count > 0 Then
-                            constraint = CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
+                            If attribute.has_children Then
+                                constraint = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
                             cString = CType(constraint.item, openehr.openehr.am.archetype.constraint_model.primitive.C_STRING)
-                            EIF_String = CType(cString.strings.first, EiffelKernel.STRING_8)
-                            t.AssumedValue = EIF_String.to_cil
+                                result.AssumedValue = CType(cString.strings.first, EiffelKernel.STRING_8).to_cil
                         End If
 
                     Case "mapping"
                         Debug.Assert(False, "Mapping constraint is not available")
                         ''fix me - need to deal with mappings
                     Case Else
-                        Debug.Assert(False, String.Format("Attribute not handled: {0}", an_attribute.rm_attribute_name.to_cil))
+                            Debug.Assert(False, String.Format("Attribute not handled: {0}", attribute.rm_attribute_name.to_cil))
                         ''fix me - need to deal with mappings
                 End Select
             Next
-            Return t
+            End If
 
+            Return result
         End Function
 
         Private Function ProcessQuantity(ByVal ObjNode As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY) As Constraint_Quantity
@@ -904,12 +982,12 @@ Namespace ArchetypeEditor.ADL_Classes
                         If Not cqi.any_magnitude_allowed Then
                             u.HasMaximum = Not cqi.magnitude.upper_unbounded
                             If u.HasMaximum Then
-                                u.MaximumValue = CSng(cqi.magnitude.upper)
+                                u.MaximumRealValue = CSng(cqi.magnitude.upper)
                                 u.IncludeMaximum = cqi.magnitude.upper_included
                             End If
                             u.HasMinimum = Not cqi.magnitude.lower_unbounded
                             If u.HasMinimum Then
-                                u.MinimumValue = CSng(cqi.magnitude.lower)
+                                u.MinimumRealValue = CSng(cqi.magnitude.lower)
                                 u.IncludeMinimum = cqi.magnitude.lower_included
                             End If
                         End If
@@ -926,10 +1004,17 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
 
                 If ObjNode.has_assumed_value Then
-                    Dim assumed_units As String = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil
-                    Dim assumed_value As Single = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
-                    CType(q.Units.Item(assumed_units), Constraint_QuantityUnit).AssumedValue = assumed_value
-                    CType(q.Units.Item(assumed_units), Constraint_QuantityUnit).HasAssumedValue = True
+                    Dim units As String = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).units.to_cil
+                    'SRH: June 22 2009 - error with blood pressure archetype with assumed unit of degrees - apply only to time
+
+                    Dim assumedUnits As Constraint_QuantityUnit
+                    If q.IsCoded AndAlso q.OpenEhrCode = 128 Then  'time
+                        assumedUnits = CType(q.Units.Item(OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(units)), Constraint_QuantityUnit)
+                    Else
+                        assumedUnits = CType(q.Units.Item(units), Constraint_QuantityUnit)
+                End If
+                    assumedUnits.AssumedValue = CType(ObjNode.assumed_value, openehr.openehr.am.openehr_profile.data_types.quantity.QUANTITY).magnitude
+                    assumedUnits.HasAssumedValue = True
                 End If
 
             End If

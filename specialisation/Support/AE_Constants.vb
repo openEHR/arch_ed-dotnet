@@ -17,6 +17,7 @@
 Public Class AE_Constants
 
     Private mSpecialise As String = "Specialise"
+    Private mSpecialisationsToo As String = "Use specialisations too?"
     Private mMustAddCriteria As String = "Must add criteria"
     Private mReduceTableToSimpleValue As String = "Reduce table to single value"
     Private mChooseMenuFileNew As String = "Choose Menu > File > New"
@@ -24,7 +25,7 @@ Public Class AE_Constants
     Private mExpandAll As String = "Expand all"
     Private mCollapseAll As String = "Collapse all"
     Private mAddReference As String = "Add reference"
-    Private mOceanArchetypeEditor As String = "Ocean archetype editor"
+    Private mOceanArchetypeEditor As String = "Ocean Archetype Editor"
     Private mYouHaveChosenALanguage As String = "You have chosen a language "
     Private mAddTerminology As String = "Add terminology"
     Private mLanguageAdditionCancelled As String = "Adding language cancelled"
@@ -75,7 +76,6 @@ Public Class AE_Constants
     Private mProportion As String = "Proportion"
     Private mUnit As String = "Unit"
     Private mMultiple As String = "Multiple"
-    Private mRequiresSpecialisationToEdit As String = "Requires specialisation to edit"
     Private mInterval As String = "Interval"
     Private mIntervalCount As String = "Interval of Count"
     Private mIntervalQuantity As String = "Interval of Quantity"
@@ -102,7 +102,37 @@ Public Class AE_Constants
     Private mFalse As String = "False"
     Private mChangeDataType As String = "Change data type"
     Private mCardinality As String = "Cardinality"
+    Private mParticipation As String = "Participation"
+    Private mCurrency As String = "Currency"
+    Private mIdentifier As String = "Identifier"
+    Private mNoEmbeddedArchetypeMatches As String = "No embedded archetype matches {0}"
+    Private mNameThisSlot As String = "Name this slot"
+    Private mNameThisSlotQuestion As String = "Name this slot?"
+    Private mReplaceExistingFileQuestion As String = "File {0} already exists. Do you want to replace it?"
+    Private mParsable As String = "Parsable"
 
+
+    Friend ReadOnly Property ReplaceExistingFileQuestion() As String
+        Get
+            Return mReplaceExistingFileQuestion
+        End Get
+    End Property
+
+    Friend ReadOnly Property NameThisSlot() As String
+        Get
+            Return mNameThisSlot
+        End Get
+    End Property
+    Friend ReadOnly Property NameThisSlotQuestion() As String
+        Get
+            Return mNameThisSlotQuestion
+        End Get
+    End Property
+    Friend ReadOnly Property NoEmbeddedArchetypeMatches() As String
+        Get
+            Return mNoEmbeddedArchetypeMatches
+        End Get
+    End Property
     Friend ReadOnly Property Lower() As String
         Get
             Return mLower
@@ -113,9 +143,24 @@ Public Class AE_Constants
             Return mUpper
         End Get
     End Property
+    Friend ReadOnly Property Parsable() As String
+        Get
+            Return mParsable
+        End Get
+    End Property
     Friend ReadOnly Property ReplaceTranslations() As String
         Get
             Return mReplaceTranslations
+        End Get
+    End Property
+    Friend ReadOnly Property Identifier() As String
+        Get
+            Return mIdentifier
+        End Get
+    End Property
+    Friend ReadOnly Property Currency() As String
+        Get
+            Return mCurrency
         End Get
     End Property
 
@@ -214,6 +259,12 @@ Public Class AE_Constants
     Friend ReadOnly Property Specialise() As String
         Get
             Return mSpecialise
+        End Get
+    End Property
+
+    Friend ReadOnly Property SpecialisationsToo() As String
+        Get
+            Return mSpecialisationsToo
         End Get
     End Property
 
@@ -419,6 +470,12 @@ Public Class AE_Constants
         End Get
     End Property
 
+    Friend ReadOnly Property Participation() As String
+        Get
+            Return mParticipation
+        End Get
+    End Property
+
     Friend ReadOnly Property Duplicate_name() As String
         Get
             Return mNameAlreadyInUse
@@ -560,11 +617,7 @@ Public Class AE_Constants
             Return mOrdinal
         End Get
     End Property
-    Friend ReadOnly Property RequiresSpecialisationToEdit() As String
-        Get
-            Return mRequiresSpecialisationToEdit
-        End Get
-    End Property
+
     Friend ReadOnly Property Integral() As String
         Get
             Return mIntegral
@@ -614,6 +667,7 @@ Public Class AE_Constants
 
     Protected Sub New(ByVal Language As String)
         mSpecialise = TerminologyServer.Instance.RubricForCode(185, Language)
+        mSpecialisationsToo = TerminologyServer.Instance.RubricForCode(669, Language)
         mReduceTableToSimpleValue = TerminologyServer.Instance.RubricForCode(277, Language)
         mChooseMenuFileNew = TerminologyServer.Instance.RubricForCode(279, Language)
         mAndAllReferences = TerminologyServer.Instance.RubricForCode(280, Language)
@@ -665,7 +719,6 @@ Public Class AE_Constants
         mDateTime = TerminologyServer.Instance.RubricForCode(161, Language)
         mDuration = TerminologyServer.Instance.RubricForCode(142, Language)
         mOrdinal = TerminologyServer.Instance.RubricForCode(156, Language)
-        mRequiresSpecialisationToEdit = TerminologyServer.Instance.RubricForCode(319, Language)
         mProportion = TerminologyServer.Instance.RubricForCode(507, Language)
         mUnit = TerminologyServer.Instance.RubricForCode(117, Language)
         mMultiple = TerminologyServer.Instance.RubricForCode(320, Language)
@@ -698,8 +751,16 @@ Public Class AE_Constants
         mFalse = TerminologyServer.Instance.RubricForCode(160, Language)
         mChangeDataType = TerminologyServer.Instance.RubricForCode(60, Language)
         mCardinality = TerminologyServer.Instance.RubricForCode(437, Language)
-        'mLocateFile = TerminologyServer.Instance.RubricForCode(?, Language)
+        mParticipation = TerminologyServer.Instance.RubricForCode(654, Language)
+        mCurrency = TerminologyServer.Instance.RubricForCode(672, Language)
+        mIdentifier = TerminologyServer.Instance.RubricForCode(633, Language)
+        mNoEmbeddedArchetypeMatches = TerminologyServer.Instance.RubricForCode(671, Language)
+        mNameThisSlotQuestion = TerminologyServer.Instance.RubricForCode(672, Language)
+        mNameThisSlot = TerminologyServer.Instance.RubricForCode(675, Language)
+        mReplaceExistingFileQuestion = TerminologyServer.Instance.RubricForCode(680, Language)
+        mParsable = TerminologyServer.Instance.RubricForCode(635, Language)
     End Sub
+
 End Class
 
 '

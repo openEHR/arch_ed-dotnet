@@ -27,7 +27,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Tool for editing openEHR archetypes.")> 
 <Assembly: AssemblyCompany("Ocean Informatics")> 
 <Assembly: AssemblyProduct("Ocean Archetype Editor")> 
-<Assembly: AssemblyCopyright("Copyright © 2004-2008")> 
+<Assembly: AssemblyCopyright("Copyright © 2004-2010")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: CLSCompliant(True)> 
 

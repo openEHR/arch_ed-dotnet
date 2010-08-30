@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema id="PropertyUnits" targetNamespace="http://tempuri.org/PropertyUnits.xsd" elementFormDefault="qualified" xmlns="http://tempuri.org/PropertyUnits.xsd" xmlns:mstns="http://tempuri.org/PropertyUnits.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+<xs:schema id="PropertyUnits" targetNamespace="http://tempuri.org/PropertyUnits.xsd" elementFormDefault="qualified"
+	xmlns="http://tempuri.org/PropertyUnits.xsd" xmlns:mstns="http://tempuri.org/PropertyUnits.xsd"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
   <xs:element name="Property">
     <xs:complexType>
-      <xs:sequence>
-      </xs:sequence>
+			<xs:sequence></xs:sequence>
       <xs:attribute name="id" type="xs:integer" msdata:AutoIncrement="true" />
       <xs:attribute name="Text" type="xs:string" />
       <xs:attribute name="openEHR" type="xs:integer" />
-      <xs:attribute name="Translated" type="xs:string" />
-      <xs:attribute name="Language" type="xs:string" />
     </xs:complexType>
     <xs:key name="PropertyKey1" msdata:PrimaryKey="true">
       <xs:selector xpath="." />
@@ -17,17 +16,34 @@
   </xs:element>
   <xs:element name="Unit">
     <xs:complexType>
-      <xs:sequence>
-      </xs:sequence>
+			<xs:sequence></xs:sequence>
       <xs:attribute name="property_id" type="xs:integer" />
       <xs:attribute name="Text" type="xs:string" />
       <xs:attribute name="name" type="xs:string" />
       <xs:attribute name="conversion" type="xs:double" />
       <xs:attribute name="coefficient" type="xs:integer" />
       <xs:attribute name="primary" type="xs:boolean" default="0" />
-      <xs:attribute name="case_ins" type="xs:string" />
+			<xs:attribute name="UCUM" type="xs:string" />
       <xs:attribute name="print" type="xs:string" />
       <xs:attribute name="XML" type="xs:string" />
     </xs:complexType>
   </xs:element>
+	<xs:element name="LanguageSpecific">
+		<xs:complexType>
+			<xs:sequence></xs:sequence>
+			<xs:attribute name="property_id" type="xs:integer" />
+			<xs:attribute name="unit_text" type="xs:string" />
+			<xs:attribute name="language" type="xs:string" />
+			<xs:attribute name="name" type="xs:string" />
+			<xs:attribute name="print" type="xs:string" />
+			<xs:attribute name="XML" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Language">
+		<xs:complexType>
+			<xs:sequence></xs:sequence>
+			<xs:attribute name="code" type="xs:string" />
+			<xs:attribute name="label" type="xs:string" />
+		</xs:complexType>
+	</xs:element>
 </xs:schema>

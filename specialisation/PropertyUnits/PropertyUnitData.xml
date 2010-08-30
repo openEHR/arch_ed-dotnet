@@ -76,6 +76,8 @@
   <Property id="77" Text="Proportion" openEHR="507" />
   <Property id="78" Text="Glomerular filtration rate" openEHR="586" />
   <Property id="79" Text="Electrical Potential Time" openEHR="655" />
+  <Property id="80" Text="Time Fraction" openEHR="670" />
+  <Property id="81" Text="Refractive power" openEHR="685" />
   <Unit property_id="0" Text="m" name="meter" conversion="1" primary="true" />
   <Unit property_id="0" Text="cm" name="centimeter" conversion="0.01" primary="false" />
   <Unit property_id="0" Text="µm" name="micrometer" conversion="1" coefficient="-6" primary="false" />
@@ -86,16 +88,16 @@
   <Unit property_id="0" Text="mile" name="mile" conversion="1609.3" primary="false" />
   <Unit property_id="1" Text="kg" name="kilogram" conversion="1" primary="true" />
   <Unit property_id="1" Text="gm" name="gram" conversion="1" coefficient="-3" primary="false" />
-  <Unit property_id="1" Text="lb" name="pound" conversion="0.4536" primary="false" />
-  <Unit property_id="1" Text="grain" name="grain" conversion="6.48" coefficient="-5" primary="false" />
-  <Unit property_id="1" Text="oz(avdp)" name="ounce" conversion="0.02835" primary="false" />
-  <Unit property_id="1" Text="ton (U.S.)" name="ton (US)" conversion="907.2" primary="false" />
-  <Unit property_id="2" Text="s" name="second" conversion="1" primary="true" case_ins="S" />
-  <Unit property_id="2" Text="min" name="minute" conversion="60" primary="false" case_ins="MIN" />
-  <Unit property_id="2" Text="h" name="hour" conversion="3600" primary="false" case_ins="HR" />
-  <Unit property_id="2" Text="d" name="day" conversion="86400" primary="false" case_ins="D" />
-  <Unit property_id="2" Text="yr" name="year" conversion="3.156" coefficient="7" primary="false" case_ins="YR" />
-  <Unit property_id="3" Text="K" conversion="1" primary="true" case_ins="K" />
+  <Unit property_id="1" Text="lb" name="pound" conversion="0.4536" primary="false" UCUM="[lb-av]" />
+  <Unit property_id="1" Text="grain" name="grain" conversion="6.48" coefficient="-5" primary="false" UCUM="[gr]" />
+  <Unit property_id="1" Text="oz(avdp)" name="ounce" conversion="0.02835" primary="false" UCUM="[oz_av]" />
+  <Unit property_id="1" Text="ton (U.S.)" name="ton (US)" conversion="907.2" primary="false" UCUM="[ston_av]" />
+  <Unit property_id="2" Text="s" name="second" conversion="1" primary="true" UCUM="S" />
+  <Unit property_id="2" Text="min" name="minute" conversion="60" primary="false" UCUM="MIN" />
+  <Unit property_id="2" Text="h" name="hour" conversion="3600" primary="false" UCUM="HR" />
+  <Unit property_id="2" Text="d" name="day" conversion="86400" primary="false" UCUM="D" />
+  <Unit property_id="2" Text="yr" name="year" conversion="3.156" coefficient="7" primary="false" UCUM="YR" />
+  <Unit property_id="3" Text="K" conversion="1" primary="true" UCUM="K" />
   <Unit property_id="3" Text="°R" conversion="0.5555" primary="false" />
   <Unit property_id="3" Text="°F" conversion="0.5555" primary="false" />
   <Unit property_id="3" Text="°C" conversion="1" primary="false" />
@@ -111,9 +113,9 @@
   <Unit property_id="5" Text="acre" conversion="4047" primary="false" />
   <Unit property_id="5" Text="mile2" conversion="2.59" coefficient="6" primary="false" />
   <Unit property_id="6" Text="m3" name="cubic meter" conversion="1" primary="true" />
-  <Unit property_id="6" Text="ml" conversion="1" coefficient="-6" primary="false" />
-  <Unit property_id="6" Text="l" name="litre" conversion="1" coefficient="-3" primary="false" case_ins="L" />
-  <Unit property_id="6" Text="µm3" conversion="1" coefficient="-18" primary="false" />
+  <Unit property_id="6" Text="ml" name="millilitre" conversion="1" coefficient="-6" primary="false" />
+  <Unit property_id="6" Text="l" name="litre" conversion="1" coefficient="-3" primary="false" UCUM="L" />
+  <Unit property_id="6" Text="µm3" name="micro cubic meter" conversion="1" coefficient="-18" primary="false" />
   <Unit property_id="6" Text="ft3" name="cubic foot" conversion="0.02832" primary="false" />
   <Unit property_id="6" Text="in3" name="cubic inch" conversion="1.639" coefficient="-5" primary="false" />
   <Unit property_id="6" Text="gal (U.S.)" name="Imperial gallon" conversion="3.785" coefficient="-3" primary="false" />
@@ -179,7 +181,7 @@
   <Unit property_id="19" Text="kg/h" conversion="2.78" coefficient="-4" primary="false" />
   <Unit property_id="19" Text="lb/s" conversion="0.4536" primary="false" />
   <Unit property_id="19" Text="lb/min" conversion="7.56" coefficient="-3" primary="false" />
-  <Unit property_id="19" Text="lb/hr" conversion="1.26" coefficient="-4" primary="false" />
+  <Unit property_id="19" Text="lb/h" conversion="1.26" coefficient="-4" primary="false" />
   <Unit property_id="20" Text="kg/m2-s" conversion="1" primary="true" />
   <Unit property_id="20" Text="g/cm2-s" conversion="10" primary="false" />
   <Unit property_id="20" Text="g/m2-min" conversion="1.667" coefficient="-5" primary="false" />
@@ -228,7 +230,7 @@
   <Unit property_id="29" Text="dyn/cm2" conversion="0.1" primary="false" />
   <Unit property_id="29" Text="kg/m2" conversion="9.8067" primary="false" />
   <Unit property_id="29" Text="bar" name="bar" conversion="1" coefficient="5" primary="false" />
-  <Unit property_id="29" Text="atm" conversion="1.0125" coefficient="5" primary="false" case_ins="ATM" />
+  <Unit property_id="29" Text="atm" conversion="1.0125" coefficient="5" primary="false" UCUM="ATM" />
   <Unit property_id="29" Text="pdl/ft2" conversion="1.489" primary="false" />
   <Unit property_id="29" Text="lb/ft2" conversion="47.88" primary="false" />
   <Unit property_id="29" Text="lb/in2" conversion="6" primary="false" />
@@ -282,7 +284,7 @@
   <Unit property_id="37" Text="hp-min" conversion="4.48" coefficient="4" primary="false" />
   <Unit property_id="37" Text="hp-s" conversion="745.8" primary="false" />
   <Unit property_id="37" Text="eV" conversion="1.60207" coefficient="-19" primary="false" />
-  <Unit property_id="38" Text="W" name="Watt" conversion="1" primary="true" case_ins="W" />
+  <Unit property_id="38" Text="W" name="Watt" conversion="1" primary="true" UCUM="W" />
   <Unit property_id="38" Text="cal/s" conversion="4.187" primary="false" />
   <Unit property_id="38" Text="kcal/s" conversion="4187" primary="false" />
   <Unit property_id="38" Text="erg/s" conversion="1" coefficient="-7" primary="false" />
@@ -324,7 +326,6 @@
   <Unit property_id="42" Text="erg/s-cm" conversion="1" coefficient="-5" primary="false" />
   <Unit property_id="42" Text="ft-lbf/s-ft" conversion="4.449" primary="false" />
   <Unit property_id="42" Text="Btu/s-ft" conversion="3461" primary="false" />
-  <Unit property_id="42" Text="2447" conversion="0.961" primary="false" />
   <Unit property_id="43" Text="W/m2" conversion="1" primary="true" />
   <Unit property_id="43" Text="cal/s-cm2" conversion="41" primary="false" />
   <Unit property_id="43" Text="kcal/s-cm2" conversion="4.187" coefficient="7" primary="false" />
@@ -372,12 +373,12 @@
   <Unit property_id="48" Text="kcal/h-ft2-C" conversion="12.52" primary="false" />
   <Unit property_id="66" Text="abcoulomb" conversion="10" primary="false" />
   <Unit property_id="66" Text="statcoulomb" conversion="3.336" coefficient="-10" primary="false" />
-  <Unit property_id="49" Text="V" name="Volt" conversion="1" primary="true" case_ins="V" />
+  <Unit property_id="49" Text="V" name="Volt" conversion="1" primary="true" UCUM="V" />
   <Unit property_id="49" Text="kg-m2/A-s3" conversion="1" primary="false" />
   <Unit property_id="49" Text="W/A" conversion="1" primary="false" />
   <Unit property_id="49" Text="abvolt" conversion="1" coefficient="-8" primary="false" />
   <Unit property_id="49" Text="statvolt" conversion="299.8" primary="false" />
-  <Unit property_id="50" Text="Ohm" name="Ohm" conversion="1" primary="true" case_ins="OHM" />
+  <Unit property_id="50" Text="Ohm" name="Ohm" conversion="1" primary="true" UCUM="OHM" />
   <Unit property_id="50" Text="kg-m2/A2-s3" conversion="1" primary="false" />
   <Unit property_id="50" Text="V/A" conversion="1" primary="false" />
   <Unit property_id="50" Text="abohm" conversion="1" coefficient="-9" primary="false" />
@@ -393,7 +394,7 @@
   <Unit property_id="53" Text="Wb" conversion="1" primary="true" />
   <Unit property_id="53" Text="kg-m2/A-s2" conversion="1" primary="false" />
   <Unit property_id="53" Text="V-s" conversion="1" primary="false" />
-  <Unit property_id="54" Text="H" name="Henry" conversion="1" primary="true" case_ins="H" />
+  <Unit property_id="54" Text="H" name="Henry" conversion="1" primary="true" UCUM="H" />
   <Unit property_id="54" Text="kg-m2/A2-s2" conversion="1" primary="false" />
   <Unit property_id="54" Text="V-s/A" conversion="1" primary="false" />
   <Unit property_id="54" Text="abhenry" conversion="1" coefficient="-9" primary="false" />
@@ -402,25 +403,25 @@
   <Unit property_id="0" Text="mm" name="millimeter" conversion="1" coefficient="-3" primary="false" />
   <Unit property_id="0" Text="km" name="kilometer" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="0" Text="1000th in" name="thousandth of inch" conversion="2.54" coefficient="-5" primary="false" />
-  <Unit property_id="6" Text="cl" conversion="1" coefficient="-5" primary="false" />
-  <Unit property_id="6" Text="dl" conversion="1" coefficient="-4" primary="false" />
+  <Unit property_id="6" Text="cl" name="centilitre" conversion="1" coefficient="-5" primary="false" />
+  <Unit property_id="6" Text="dl" name="decilitre" conversion="1" coefficient="-4" primary="false" />
   <Unit property_id="6" Text="pt(US)" name="Imperial pint" conversion="473.2" coefficient="-6" primary="false" />
   <Unit property_id="6" Text="fl oz" name="fluid ounce" primary="false" />
   <Unit property_id="10" Text="mm/s" conversion="1" coefficient="-3" primary="false" />
   <Unit property_id="2" Text="millisec" name="millisecond" conversion="1" coefficient="-3" primary="false" />
   <Unit property_id="2" Text="microsec" name="microsecond" conversion="1" coefficient="-6" primary="false" />
-  <Unit property_id="2" Text="wk" name="week" conversion="604800" primary="false" case_ins="WK" />
+  <Unit property_id="2" Text="wk" name="week" conversion="604800" primary="false" UCUM="WK" />
   <Unit property_id="5" Text="mm2" conversion="1" coefficient="-6" primary="false" />
   <Unit property_id="56" Text="" conversion="1" primary="true" />
   <Unit property_id="56" Text="10*3" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="56" Text="10*6" conversion="1" coefficient="6" primary="false" />
   <Unit property_id="56" Text="10*9" conversion="1" coefficient="9" primary="false" />
   <Unit property_id="56" Text="10*12" conversion="1" coefficient="12" primary="false" />
-  <Unit property_id="6" Text="cc" conversion="1" coefficient="-6" primary="false" />
-  <Unit property_id="7" Text="ml/m" conversion="6" coefficient="-5" primary="false" />
+  <Unit property_id="6" Text="cc" name="cubic centimeter" conversion="1" coefficient="-6" primary="false" />
+  <Unit property_id="7" Text="ml/min" conversion="6" coefficient="-5" primary="false" />
   <Unit property_id="7" Text="ml/h" conversion="3.6" coefficient="-4" primary="false" />
   <Unit property_id="7" Text="l/s" conversion="1" coefficient="-3" primary="false" />
-  <Unit property_id="7" Text="l/m" conversion="6" coefficient="-2" primary="false" />
+  <Unit property_id="7" Text="l/min" conversion="6" coefficient="-2" primary="false" />
   <Unit property_id="7" Text="l/h" conversion="0.36" primary="false" />
   <Unit property_id="5" Text="% body" conversion="1" primary="false" />
   <Unit property_id="5" Text="% trunk" conversion="0.22" primary="false" />
@@ -428,20 +429,20 @@
   <Unit property_id="5" Text="% upper limb" conversion="0.11" primary="false" />
   <Unit property_id="5" Text="% lower limb" conversion="0.22" primary="false" />
   <Unit property_id="0" Text="micron" name="mircon" conversion="1" coefficient="-6" primary="false" />
-  <Unit property_id="57" Text="IU" conversion="1" primary="true" />
+  <Unit property_id="57" Text="IU" name="	InternationalUnits" conversion="1" primary="true" UCUM="[iU]" />
   <Unit property_id="57" Text="mIU" conversion="1" coefficient="-3" primary="false" />
-  <Unit property_id="58" Text="mol" name="mole" conversion="1" primary="true" case_ins="MOL" />
+  <Unit property_id="58" Text="mol" name="mole" conversion="1" primary="true" UCUM="MOL" />
   <Unit property_id="58" Text="mmol" name="millimole" conversion="1" coefficient="-3" primary="false" />
   <Unit property_id="58" Text="nanomol" name="nanomole" conversion="1" coefficient="-9" primary="false" />
   <Unit property_id="58" Text="pmol" name="picomole" conversion="1" coefficient="-12" primary="false" />
-  <Unit property_id="1" Text="t" name="tonne" conversion="1" coefficient="3" primary="false" case_ins="TNE" />
-  <Unit property_id="31" Text="{FORCE/MASS}" conversion="0" primary="false" />
-  <Unit property_id="59" Text="{AMOUNT (mole)/VOLUME}" conversion="0" primary="false" />
-  <Unit property_id="59" Text="{MASS/VOLUME}" conversion="0" primary="false" />
-  <Unit property_id="59" Text="{MASS (IU)/VOLUME}" conversion="0" primary="false" />
-  <Unit property_id="59" Text="{QUALIFIED REAL/VOLUME}" conversion="0" primary="false" />
-  <Unit property_id="59" Text="{VOLUME/VOLUME}" conversion="0" primary="false" />
-  <Unit property_id="60" Text="{QUALIFIED REAL/TIME}" conversion="0" primary="false" />
+  <Unit property_id="1" Text="t" name="tonne" conversion="1" coefficient="3" primary="false" UCUM="t" />
+  <Unit property_id="31" Text="{358/124}" name="{FORCE/MASS}" conversion="0" primary="false" />
+  <Unit property_id="59" Text="{384/129}" name="{AMOUNT (mole)/VOLUME}" conversion="0" primary="false" />
+  <Unit property_id="59" Text="{124/129}" name="{MASS/VOLUME}" conversion="0" primary="false" />
+  <Unit property_id="59" Text="{385/129}" name="{MASS (IU)/VOLUME}" conversion="0" primary="false" />
+  <Unit property_id="59" Text="{380/129}" name="{QUALIFIED REAL/VOLUME}" conversion="0" primary="false" />
+  <Unit property_id="59" Text="{129/129}" name="{VOLUME/VOLUME}" conversion="0" primary="false" />
+  <Unit property_id="60" Text="{380/128}" conversion="0" primary="false" />
   <Unit property_id="60" Text="Hz" name="herz" conversion="1" primary="true" />
   <Unit property_id="60" Text="MHz" name="megaherz" conversion="1" coefficient="6" primary="false" />
   <Unit property_id="60" Text="kHz" name="kiloherz" conversion="1" coefficient="3" primary="false" />
@@ -452,80 +453,100 @@
   <Unit property_id="38" Text="milliW" conversion="1" coefficient="-3" primary="false" />
   <Unit property_id="38" Text="kW" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="1" Text="AU" conversion="0.9105953" coefficient="-30" primary="false" />
-  <Unit property_id="19" Text="g/24hr" conversion="6.672" coefficient="-6" primary="false" />
+  <Unit property_id="19" Text="g/24h" conversion="6.672" coefficient="-6" primary="false" />
   <Unit property_id="19" Text="g/d" conversion="6.672" coefficient="-6" primary="false" />
-  <Unit property_id="59" Text="{MASS/MASS}" conversion="0" primary="false" />
+  <Unit property_id="59" Text="{124/124}" name="{MASS/MASS}" conversion="0" primary="false" />
   <Unit property_id="57" Text="kIU" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="29" Text="cm[H20]" name="centimeters of water" conversion="97.64" primary="false" />
   <Unit property_id="29" Text="Pa" name="Pascal" conversion="1" primary="false" />
   <Unit property_id="29" Text="kPa" name="kiloPascal" conversion="1" coefficient="3" primary="false" />
   <Unit property_id="29" Text="mbar" name="millibar" conversion="1" coefficient="2" primary="false" />
-  <Unit property_id="6" Text="fl" conversion="1" coefficient="-15" primary="false" />
+  <Unit property_id="6" Text="fl" name="flemptoLitre" conversion="1" coefficient="-15" primary="false" />
   <Unit property_id="33" Text="KU" conversion="0" primary="false" />
   <Unit property_id="62" Text="Eq" conversion="1" primary="true" />
   <Unit property_id="62" Text="mEq" conversion="1" coefficient="-3" primary="false" />
   <Unit property_id="10" Text="mm/h" conversion="2.78" coefficient="-7" primary="false" />
   <Unit property_id="19" Text="mmol/24h" conversion="0" primary="false" />
-  <Unit property_id="19" Text="{MASS (mole)/TIME}" conversion="0" primary="false" />
+  <Unit property_id="19" Text="{384/128}" name="{Amount (mole)/TIME}" conversion="0" primary="false" />
   <Unit property_id="58" Text="osmol" conversion="0" primary="false" />
   <Unit property_id="58" Text="mosmol" name="milliosmol" conversion="0" primary="false" />
   <Unit property_id="6" Text="HPF" name="High power field" conversion="0" primary="false" />
   <Unit property_id="6" Text="LPF" name="Low power field" conversion="0" primary="false" />
-  <Unit property_id="6" Text="mm3" coefficient="-6" primary="false" />
+  <Unit property_id="6" Text="mm3" name="cubic milimeter" conversion="1" coefficient="-6" primary="false" UCUM="mm3" />
   <Unit property_id="1" Text="mg" name="milligram" conversion="1" coefficient="-6" primary="false" />
   <Unit property_id="1" Text="µg" name="microgram" conversion="1" coefficient="-9" primary="false" />
   <Unit property_id="1" Text="nanogm" name="nanogram" conversion="1" coefficient="-12" primary="false" />
   <Unit property_id="1" Text="pg" name="picogram" conversion="1" coefficient="-15" primary="false" />
-  <Unit property_id="63" Text="{ENERGY/TIME}" primary="false" />
-  <Unit property_id="63" Text="{POWER}" primary="false" />
-  <Unit property_id="2" Text="mo" name="month" conversion="0" primary="false" case_ins="MO" />
+  <Unit property_id="63" Text="{121/128}" name="{ENERGY/TIME}" primary="false" />
+  <Unit property_id="63" Text="{363}" name="{POWER}" primary="false" />
+  <Unit property_id="2" Text="mo" name="month" conversion="0" primary="false" UCUM="MO" />
   <Unit property_id="56" Text="%" conversion="1" coefficient="-2" primary="false" />
-  <Unit property_id="59" Text="{AMOUNT (Eq)/VOLUME}" conversion="0" primary="false" />
-  <Unit property_id="65" Text="U" conversion="1" coefficient="0" primary="true" case_ins="U" />
-  <Unit property_id="65" Text="mU" conversion="1" coefficient="-3" primary="false" case_ins="MU" />
-  <Unit property_id="59" Text="{Mass (Units)/VOLUME}" conversion="0" primary="false" />
+  <Unit property_id="59" Text="{381/129}" name="{AMOUNT (Eq)/VOLUME}" conversion="0" primary="false" />
+  <Unit property_id="65" Text="U" conversion="1" coefficient="0" primary="true" UCUM="U" />
+  <Unit property_id="65" Text="mU" conversion="1" coefficient="-3" primary="false" UCUM="MU" />
+  <Unit property_id="59" Text="{445/129}" name="{Mass (Units)/VOLUME}" conversion="0" primary="false" />
   <Unit property_id="58" Text="µmol" name="micromol" conversion="1" coefficient="-6" primary="false" />
-  <Unit property_id="66" Text="C" name="Coulomb" conversion="1" primary="true" case_ins="C" />
+  <Unit property_id="66" Text="C" name="Coulomb" conversion="1" primary="true" UCUM="C" />
   <Unit property_id="66" Text="A-s" conversion="1" primary="false" />
-  <Unit property_id="67" Text="cd" name="candela" conversion="1" primary="true" case_ins="CD" />
-  <Unit property_id="68" Text="rad" name="radian" conversion="1" primary="true" case_ins="RAD" />
+  <Unit property_id="67" Text="cd" name="candela" conversion="1" primary="true" UCUM="CD" />
+  <Unit property_id="68" Text="rad" name="radian" conversion="1" primary="true" UCUM="RAD" />
   <Unit property_id="68" Text="°" name="degree" conversion="0.0174533" primary="false" />
   <Unit property_id="69" Text="sr" name="streadian" conversion="1" primary="true" />
-  <Unit property_id="70" Text="F" name="Farad" conversion="1" primary="true" case_ins="F" />
-  <Unit property_id="72" Text="T" name="Telsa" conversion="1" primary="true" case_ins="T" />
-  <Unit property_id="73" Text="lm" name="lumen" conversion="1" primary="true" case_ins="LM" />
-  <Unit property_id="75" Text="Bq" name="Becquerel" conversion="1" primary="true" case_ins="BQ" />
-  <Unit property_id="76" Text="Gy" name="Gray" conversion="1" primary="true" case_ins="GY" />
-  <Unit property_id="76" Text="Sv" name="Sievert" conversion="1" primary="false" case_ins="SV" />
-  <Unit property_id="76" Text="J/kg" name="Joules per kilogram" conversion="1" primary="false" case_ins="J/KG" />
+  <Unit property_id="70" Text="F" name="Farad" conversion="1" primary="true" UCUM="F" />
+  <Unit property_id="72" Text="T" name="Telsa" conversion="1" primary="true" UCUM="T" />
+  <Unit property_id="73" Text="lm" name="lumen" conversion="1" primary="true" UCUM="LM" />
+  <Unit property_id="75" Text="Bq" name="Becquerel" conversion="1" primary="true" UCUM="BQ" />
+  <Unit property_id="76" Text="Gy" name="Gray" conversion="1" primary="true" UCUM="GY" />
+  <Unit property_id="76" Text="Sv" name="Sievert" conversion="1" primary="false" UCUM="SV" />
+  <Unit property_id="76" Text="J/kg" name="Joules per kilogram" conversion="1" primary="false" UCUM="J/KG" />
   <Unit property_id="54" Text="Wb/A" conversion="1" primary="false" />
-  <Unit property_id="2" Text="a" name="year" conversion="3.156" coefficient="7" primary="false" case_ins="ANN" />
+  <Unit property_id="2" Text="a" name="year" conversion="3.156" coefficient="7" primary="false" UCUM="ANN" />
   <Unit property_id="68" Text="'" name="minute" conversion="0.00029088821" primary="false" />
   <Unit property_id="68" Text="&quot;" name="second" conversion="4.8481368E-06" primary="false" />
-  <Unit property_id="5" Text="ar" name="are" conversion="1" primary="false" case_ins="AR" />
-  <Unit property_id="1" Text="u" name="unified atomic mass unit" conversion="1.6605402" coefficient="-27" primary="false" case_ins="AMU" />
+  <Unit property_id="5" Text="ar" name="are" conversion="1" primary="false" UCUM="AR" />
+  <Unit property_id="1" Text="u" name="unified atomic mass unit" conversion="1.6605402" coefficient="-27" primary="false" UCUM="AMU" />
   <Unit property_id="0" Text="pc" name="parsee" conversion="3.085678" coefficient="16" primary="false" />
-  <Unit property_id="5" Text="har" name="hectare" conversion="1" coefficient="5" primary="false" case_ins="HAR" />
-  <Unit property_id="11" Text="[g]" name="free fall" conversion="9.80665" primary="false" case_ins="[G]" />
+  <Unit property_id="5" Text="har" name="hectare" conversion="1" coefficient="5" primary="false" UCUM="HAR" />
+  <Unit property_id="11" Text="[g]" name="free fall" conversion="9.80665" primary="false" UCUM="[G]" />
   <Unit property_id="1" Text="[m_p]" name="proton mass" conversion="1.6726231" coefficient="-27" primary="false" />
   <Unit property_id="1" Text="[m_e]" name="electron mass" conversion="9.1093897" coefficient="-31" primary="false" />
-  <Unit property_id="66" Text="[e]" name="Elementary charge" conversion="1.60217733" coefficient="-19" primary="false" case_ins="[E]" />
-  <Unit property_id="59" Text="[pH]" name="Acidity" conversion="0" primary="false" case_ins="[PH]" />
-  <Unit property_id="77" Text="%" name="Percent" conversion="1" coefficient="-2" primary="false" case_ins="%" />
-  <Unit property_id="77" Text="[ppm]" name="parts per million" conversion="1" coefficient="-6" primary="false" case_ins="[PPM]" />
-  <Unit property_id="77" Text="" name="" conversion="1" primary="true" case_ins=" " />
-  <Unit property_id="77" Text="[ppb]" name="parts per billion" conversion="1" coefficient="-9" primary="false" case_ins="[PPB]" />
-  <Unit property_id="77" Text="[ppt]" name="parts per thousand" conversion="1" coefficient="-3" primary="false" case_ins="[PPT]" />
+  <Unit property_id="66" Text="[e]" name="Elementary charge" conversion="1.60217733" coefficient="-19" primary="false" UCUM="[E]" />
+  <Unit property_id="59" Text="[pH]" name="Acidity" conversion="0" primary="false" UCUM="[PH]" />
+  <Unit property_id="77" Text="%" name="Percent" conversion="1" coefficient="-2" primary="false" UCUM="%" />
+  <Unit property_id="77" Text="[ppm]" name="parts per million" conversion="1" coefficient="-6" primary="false" UCUM="[PPM]" />
+  <Unit property_id="77" Text="" name="" conversion="1" primary="true" UCUM=" " />
+  <Unit property_id="77" Text="[ppb]" name="parts per billion" conversion="1" coefficient="-9" primary="false" UCUM="[PPB]" />
+  <Unit property_id="77" Text="[ppt]" name="parts per thousand" conversion="1" coefficient="-3" primary="false" UCUM="[PPT]" />
   <Unit property_id="78" Text="ml/min/1.73m2" conversion="1" primary="true" />
   <Unit property_id="59" Text="gm/100ml" conversion="0" primary="false" />
-  <Unit property_id="49" Text="mV" name="milliVolt" conversion="1" coefficient="-3" primary="false" case_ins="mV" print="" />
+  <Unit property_id="49" Text="mV" name="milliVolt" conversion="1" coefficient="-3" primary="false" UCUM="mV" print="" />
   <Unit property_id="79" Text="V s" name="Volt seconds" conversion="1" primary="true" />
   <Unit property_id="79" Text="Ashman Units" name="Ashman Units" conversion="4" coefficient="-6" primary="false" />
   <Unit property_id="79" Text="V h" name="Volt hours" conversion="3600" primary="false" />
   <Unit property_id="29" Text="daPa" name="decaPascal" conversion="10" primary="false" />
   <Unit property_id="29" Text="mm[H20]" name="millimeters of water" conversion="970.64" primary="false" />
   <Unit property_id="71" Text="mho" name="mho" conversion="1" primary="false" />
-  <Unit property_id="71" Text="S" name="seimens" conversion="1" primary="true" case_ins="S" />
+  <Unit property_id="71" Text="S" name="seimens" conversion="1" primary="true" UCUM="S" />
   <Unit property_id="71" Text="mmho" name="millimho" conversion="1" coefficient="3" primary="false" />
-  <Unit property_id="71" Text="mS" name="milliseimens" conversion="1" coefficient="3" primary="false" case_ins="mS" />
+  <Unit property_id="71" Text="mS" name="milliseimens" conversion="1" coefficient="3" primary="false" UCUM="mS" />
+  <Unit property_id="80" Text="{128/128}" name="{Time/Time}" conversion="0" primary="false" />
+  <Unit property_id="7" Text="drops/min" conversion="0" primary="false" />
+  <Unit property_id="19" Text="mg/h" conversion="2.78" coefficient="-10" primary="false" />
+  <Unit property_id="19" Text="mg/min" conversion="1.6" coefficient="-8" primary="false" />
+  <Unit property_id="19" Text="mg/24h" conversion="1.158" coefficient="-11" primary="false" />
+  <Unit property_id="10" Text="mm/24h" conversion="1.158" coefficient="-8" primary="false" />
+  <Unit property_id="19" Text="microgm/h" conversion="2.78" coefficient="-13" primary="false" />
+  <Unit property_id="19" Text="microgm/min" conversion="1.6" coefficient="-11" primary="false" />
+  <Unit property_id="19" Text="microgm/24h" conversion="1.158" coefficient="-14" primary="false" />
+  <Unit property_id="6" Text="µL" name="micro litre" conversion="1" coefficient="-6" primary="false" UCUM="uL" />
+  <Unit property_id="1" Text="dram" name="Dram" primary="false" UCUM="[dr_av]" />
+  <Unit property_id="1" Text="oz(troy)" name="Troy ounce" primary="false" UCUM="[oz_tr]" />
+  <Unit property_id="1" Text="fg" name="femtogram" conversion="1" coefficient="-18" primary="false" UCUM="fg" />
+  <Unit property_id="1" Text="cg" name="centogram" conversion="1" coefficient="-2" primary="false" UCUM="cg" />
+  <Unit property_id="1" Text="dg" name="decigram" conversion="1" coefficient="-1" primary="false" UCUM="dg" />
+  <Unit property_id="19" Text="{124/128}" conversion="0" primary="false" />
+  <Unit property_id="81" Text="dioptre" name="Dioptre" conversion="1" primary="true" />
+  <Unit property_id="81" Text="dpt" name="Dioptre" conversion="1" primary="false" />
+  <Unit property_id="7" Text="{129/128}" name="Volume per time" conversion="0" primary="false" />
+  <Unit property_id="0" Text="Fr" name="French" conversion="0.33333333" coefficient="-3" primary="false" />
 </PropertyUnits>

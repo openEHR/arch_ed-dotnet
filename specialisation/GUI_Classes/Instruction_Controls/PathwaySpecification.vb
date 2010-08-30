@@ -99,8 +99,8 @@ Public Class PathwaySpecification
     Friend WithEvents PanelCompletedSpacer As System.Windows.Forms.Panel
     Friend WithEvents PanelLeft As System.Windows.Forms.Panel
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
-    Friend WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents lblAllowTransition As System.Windows.Forms.Label
+    Friend WithEvents lblAllowAltState As System.Windows.Forms.Label
     Friend WithEvents tpTransition As System.Windows.Forms.TabPage
     Friend WithEvents tpState As System.Windows.Forms.TabPage
     Friend WithEvents gbScheduled As System.Windows.Forms.GroupBox
@@ -118,9 +118,9 @@ Public Class PathwaySpecification
         Me.tpTransition = New System.Windows.Forms.TabPage
         Me.cbAborted = New System.Windows.Forms.CheckBox
         Me.cbSuspended = New System.Windows.Forms.CheckBox
-        Me.Label2 = New System.Windows.Forms.Label
+        Me.lblAllowTransition = New System.Windows.Forms.Label
         Me.tpState = New System.Windows.Forms.TabPage
-        Me.Label1 = New System.Windows.Forms.Label
+        Me.lblAllowAltState = New System.Windows.Forms.Label
         Me.cbAlternativeState = New System.Windows.Forms.CheckBox
         Me.PanelRightTop = New System.Windows.Forms.Panel
         Me.SplitterRight = New System.Windows.Forms.Splitter
@@ -260,7 +260,7 @@ Public Class PathwaySpecification
         '
         Me.tpTransition.Controls.Add(Me.cbAborted)
         Me.tpTransition.Controls.Add(Me.cbSuspended)
-        Me.tpTransition.Controls.Add(Me.Label2)
+        Me.tpTransition.Controls.Add(Me.lblAllowTransition)
         Me.tpTransition.Location = New System.Drawing.Point(4, 22)
         Me.tpTransition.Name = "tpTransition"
         Me.tpTransition.Size = New System.Drawing.Size(152, 122)
@@ -285,17 +285,17 @@ Public Class PathwaySpecification
         Me.cbSuspended.Text = "Suspended"
         Me.cbSuspended.Visible = False
         '
-        'Label2
+        'lblAllowTransition
         '
-        Me.Label2.Location = New System.Drawing.Point(8, 8)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(136, 32)
-        Me.Label2.TabIndex = 0
-        Me.Label2.Text = "Allow transition to:"
+        Me.lblAllowTransition.Location = New System.Drawing.Point(8, 8)
+        Me.lblAllowTransition.Name = "lblAllowTransition"
+        Me.lblAllowTransition.Size = New System.Drawing.Size(136, 21)
+        Me.lblAllowTransition.TabIndex = 0
+        Me.lblAllowTransition.Text = "Allow transition to:"
         '
         'tpState
         '
-        Me.tpState.Controls.Add(Me.Label1)
+        Me.tpState.Controls.Add(Me.lblAllowAltState)
         Me.tpState.Controls.Add(Me.cbAlternativeState)
         Me.tpState.Location = New System.Drawing.Point(4, 22)
         Me.tpState.Name = "tpState"
@@ -304,14 +304,14 @@ Public Class PathwaySpecification
         Me.tpState.Text = "State"
         Me.tpState.Visible = False
         '
-        'Label1
+        'lblAllowAltState
         '
-        Me.Label1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Label1.Location = New System.Drawing.Point(0, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(152, 32)
-        Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Allow alternative state for this action."
+        Me.lblAllowAltState.Dock = System.Windows.Forms.DockStyle.Top
+        Me.lblAllowAltState.Location = New System.Drawing.Point(0, 0)
+        Me.lblAllowAltState.Name = "lblAllowAltState"
+        Me.lblAllowAltState.Size = New System.Drawing.Size(152, 32)
+        Me.lblAllowAltState.TabIndex = 2
+        Me.lblAllowAltState.Text = "Allow alternative state for this action."
         '
         'cbAlternativeState
         '
@@ -1032,6 +1032,15 @@ Public Class PathwaySpecification
         gbSuspendedActive.Text = Filemanager.GetOpenEhrTerm(530, "Suspended")
         gbAbortedActive.Text = Filemanager.GetOpenEhrTerm(547, "Abort")
         gbCompleted.Text = Filemanager.GetOpenEhrTerm(532, "Completed")
+        'SRH: 31 Oct 2008 - Further translation EDT-390
+        lblAllowTransition.Text = Filemanager.GetOpenEhrTerm(677, "Allow transition to")
+        cbSuspended.Text = Filemanager.GetOpenEhrTerm(530, "Suspended")
+        cbAborted.Text = Filemanager.GetOpenEhrTerm(547, "Abort")
+        lblAllowAltState.Text = Filemanager.GetOpenEhrTerm(678, "Allow alternative state")
+        cbAlternativeState.Text = Filemanager.GetOpenEhrTerm(679, "Alternative state")
+        Me.tpTransition.Text = Filemanager.GetOpenEhrTerm(676, "Transition")
+        Me.tpState.Text = Filemanager.GetOpenEhrTerm(177, "State")
+
     End Sub
 
     Public Sub Translate()

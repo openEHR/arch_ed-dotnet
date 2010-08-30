@@ -24,7 +24,7 @@ Public Class myArchetypeFromWeb
 
     Public Sub setTerms(ByVal id As String)
 
-        Dim ArchetypeService As ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService = New ArchetypeFinderWebServiceURL.ArchetypeFinderBeanService()
+        Dim ArchetypeService As org.openehr.ArchetypeFinderBean = New org.openehr.ArchetypeFinderBean()
         Dim ArchetypeDescTermsReturn As Array = Nothing 'JAR: 18APR07, EDT-35 Clean up compile time warnings
        
         Dim ArchetypeDescAvailable As Boolean = False

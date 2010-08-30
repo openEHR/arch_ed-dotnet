@@ -50,6 +50,8 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Public Shared Sub SetCardinality(ByVal cadlCardinality As openehr.openehr.am.archetype.constraint_model.CARDINALITY, ByVal colChildren As Children)
+            If cadlCardinality Is Nothing Then Throw New ArgumentNullException("cadlCardinality")
+
             colChildren.Cardinality = SetOccurrences(cadlCardinality.interval)
             colChildren.Cardinality.Ordered = cadlCardinality.is_ordered
         End Sub
@@ -73,7 +75,11 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim cp As New CodePhrase
 
             For i As Integer = 1 To Constraint.code_count
-                cp.Codes.Add(CType(Constraint.code_list.i_th(i), EiffelKernel.STRING_8).to_cil)
+                'SRH: 31 May 2008 - Check for repeats
+                Dim s As String = CType(Constraint.code_list.i_th(i), EiffelKernel.STRING_8).to_cil
+                If Not cp.Codes.Contains(s) Then
+                    cp.Codes.Add(s)
+                End If
             Next
 
             cp.TerminologyID = Constraint.terminology_id.value.to_cil
@@ -84,6 +90,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Select Case assert.expression.generating_type.to_cil
                 Case "EXPR_BINARY_OPERATOR"
                     Dim expr As openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR = assert.expression
+
                     If expr.left_operand.as_string.to_cil = "archetype_id/value" Then
                         Return CType(expr.right_operand, openehr.openehr.am.archetype.assertion.EXPR_LEAF).out.to_cil.Trim("/".ToCharArray())
                     ElseIf expr.left_operand.as_string.to_cil = "concept" Then 'Obsolete
@@ -94,12 +101,15 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case Else
                     Debug.Assert(False)
             End Select
+
             Return "????"
         End Function
 
         Friend Shared Function GetDuration(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As Duration
             Dim result As New Duration
-            Dim durationObject As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+            Dim durationObject As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = Nothing
+
+            If an_attribute.has_children Then
             Try
                 If TypeOf (an_attribute.children.first) Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
                     Dim durationAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
@@ -113,20 +123,22 @@ Namespace ArchetypeEditor.ADL_Classes
                 Debug.Assert(False, "Error casting to width")
                 Throw New Exception("Parsing error: Duration")
             End Try
+            End If
 
             If Not durationObject Is Nothing Then
-                Dim durationConstraint As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION = _
-                    CType(durationObject.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
+                Dim durationConstraint As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION = CType(durationObject.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
+
                 If Not durationConstraint.interval Is Nothing Then
                     'ToDo: deal with genuine range as now max = min only
-                    result.ISO_duration = CType(durationConstraint.interval.upper, _
-                        openehr.common_libs.date_time.Impl.ISO8601_DURATION).as_string.to_cil
+                    result.ISO_duration = CType(durationConstraint.interval.upper, openehr.common_libs.date_time.Impl.ISO8601_DURATION).as_string.to_cil
                 ElseIf Not durationConstraint.pattern Is Nothing Then 'obsolete (error in previous archetypes)
                     result.ISO_duration = durationConstraint.pattern.to_cil
                 End If
             End If
+
             Return result
         End Function
+
     End Class
 End Namespace
 '

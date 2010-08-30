@@ -16,6 +16,7 @@
 
 Option Strict On
 Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
 
@@ -30,13 +31,18 @@ Namespace ArchetypeEditor.ADL_Classes
                 If Not (sComment Is Nothing OrElse sComment = "") Then
                     Me.setItem("comment", sComment)
                 End If
+                'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
+                For Each k As String In OtherAnnotations.Keys
+                    Me.setItem(k, CStr(sAnnotations.Item(k)))
+                Next
+
                 Return EIF_a_Term
             End Get
         End Property
         Private Function getItem(ByVal key As String) As String
             Dim s As EiffelKernel.STRING_8
 
-            s = EiffelKernel.Create.STRING_8.make_from_cil(key)
+            s = Eiffel.String(key)
             If EIF_a_Term.has_key(s) Then
                 Return EIF_a_Term.item(s).to_cil
             Else
@@ -45,16 +51,16 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Private Sub setItem(ByVal Item As String, ByVal Value As String)
-            If EIF_a_Term.has_key(EiffelKernel.Create.STRING_8.make_from_cil(Item)) Then
-                EIF_a_Term.replace_item(EiffelKernel.Create.STRING_8.make_from_cil(Item), EiffelKernel.Create.STRING_8.make_from_cil(Value))
+            If EIF_a_Term.has_key(Eiffel.String(Item)) Then
+                EIF_a_Term.replace_item(Eiffel.String(Item), Eiffel.String(Value))
             Else
-                EIF_a_Term.add_item(EiffelKernel.Create.STRING_8.make_from_cil(Item), EiffelKernel.Create.STRING_8.make_from_cil(Value))
+                EIF_a_Term.add_item(Eiffel.String(Item), Eiffel.String(Value))
             End If
         End Sub
 
         Sub New(ByVal ID As String)
             MyBase.new(ID)
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EiffelKernel.Create.STRING_8.make_from_cil(ID))
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(ID))
         End Sub
 
         Sub New(ByVal EIF_ID As EiffelKernel.STRING_8)
@@ -67,23 +73,48 @@ Namespace ArchetypeEditor.ADL_Classes
             sText = a_Term.Text
             sDescription = a_Term.Description
             sComment = a_Term.Comment
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EiffelKernel.Create.STRING_8.make_from_cil(a_Term.Code))
+            'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
+            sAnnotations = a_Term.OtherAnnotations
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(a_Term.Code))
         End Sub
 
         Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal comment As String = "")
             MyBase.New(code)
+            Debug.Assert(False, "This does not support annotations, not sure when it is called")
             sText = text
             sDescription = description
             sComment = comment
-            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(EiffelKernel.Create.STRING_8.make_from_cil(code))
+            EIF_a_Term = openehr.openehr.am.archetype.ontology.Create.ARCHETYPE_TERM.make(Eiffel.String(code))
         End Sub
 
         Sub New(ByVal an_adlTerm As openehr.openehr.am.archetype.ontology.ARCHETYPE_TERM)
             MyBase.New(an_adlTerm.code.to_cil)
+
+
             EIF_a_Term = an_adlTerm
+
+
+            For i As Integer = 1 To an_adlTerm.keys.count
+                Dim s As String = CType(an_adlTerm.keys.i_th(i), EiffelKernel.STRING_8).to_cil
+                Select Case s.ToLowerInvariant()
+                    Case "text"
             sText = Me.getItem("text")
+
+                    Case "description"
             sDescription = Me.getItem("description")
+
+                    Case "comment"
             sComment = Me.getItem("comment")
+
+                    Case Else
+                        Me.OtherAnnotations.Add(s, Me.getItem(s))
+
+                End Select
+
+
+            Next
+
+
         End Sub
 
     End Class

@@ -57,12 +57,14 @@ Public Class ElementOnly
 
         If Not an_element Is Nothing Then
             mElement = New ArchetypeElement(an_element, mFileManager)
+
             If Not mElement.Constraint Is Nothing Then
-                Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
+                PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(mElement.Constraint.Type, False, False))
             Else
-                Me.ButAddElement.Visible = True
+                ButAddElement.Show()
             End If
         End If
+
         mLoading = False
     End Sub
 
@@ -162,7 +164,7 @@ Public Class ElementOnly
             mNodeId = Value.NodeId
             mLoading = True
             mElement = New ArchetypeElement(Value, mFileManager)
-            Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
+            PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(mElement.Constraint.Type, False, False))
             mLoading = False
             mFileManager.FileEdited = True
             SetCurrentItem(mElement)
@@ -220,10 +222,10 @@ Public Class ElementOnly
         mElement = New ArchetypeElement(temp, mFileManager)
         mElement.Constraint = a_constraint
         mElement.Occurrences.MaxCount = 1
-        PictureBoxSimple.Image = ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
+        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(mElement.Constraint.Type, False, False))
         mFileManager.FileEdited = True
         SetCurrentItem(Element)
-        ButAddElement.Visible = False
+        ButAddElement.Hide()
     End Sub
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs)
@@ -266,7 +268,7 @@ Public Class ElementOnly
 
     Protected Overrides Sub RefreshIcons()
         Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
-        Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(element.Constraint.Type))
+        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(element.Constraint.Type, False, False))
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
@@ -290,38 +292,32 @@ Public Class ElementOnly
     Private Sub SimpleStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' set the variable in the base class
         mControl = Me.lblElement
+
         If (Not mElement Is Nothing) AndAlso (Not mElement.Constraint Is Nothing) Then
             SetCurrentItem(mElement)
-
         End If
     End Sub
 
-
 #Region "Drag and Drop"
 
-    Private Sub lblElement_DragDrop(ByVal sender As System.Object, _
-    ByVal e As System.Windows.Forms.DragEventArgs)
-
+    Private Sub lblElement_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs)
         If Not mNewConstraint Is Nothing Then
             mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
             mElement.Constraint = mNewConstraint
+            PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(mElement.Constraint.Type, False, False))
+        SetCurrentItem(mElement)
+        mFileManager.FileEdited = True
+        mNewConstraint = Nothing
         Else
             Debug.Assert(False, "No item dragged")
-            Return
         End If
-        Me.PictureBoxSimple.Image = Me.ilSmall.Images(Me.ImageIndexForConstraintType(mElement.Constraint.Type))
-        SetCurrentItem(mElement)
-
-        mFileManager.FileEdited = True
-
-        mNewConstraint = Nothing
     End Sub
 
     Private Sub txtSimple_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs)
         e.Effect = e.AllowedEffect
     End Sub
-#End Region
 
+#End Region
 
 End Class
 

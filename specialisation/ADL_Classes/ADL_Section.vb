@@ -15,36 +15,41 @@
 '
 
 Option Explicit On 
-Imports EiffelKernel = EiffelSoftware.Library.Base.kernel
+Imports XMLParser
 
 Namespace ArchetypeEditor.ADL_Classes
     Class ADL_SECTION
         Inherits RmSection
 
         Private Function GetRunTimeConstraintID(ByVal an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE) As String
-
+            Dim result As String = ""
             Dim CodedText As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim constraint_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT
-            Dim s As String = ""
 
+            If an_attribute.has_children Then
             CodedText = an_attribute.children.first
             an_attribute = CodedText.attributes.first
+
+                If an_attribute.has_children Then
             constraint_object = an_attribute.children.first
 
             If constraint_object.generating_type.to_cil = "CONSTRAINT_REF" Then
-                s = CType(constraint_object, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).as_string.to_cil
+                        result = CType(constraint_object, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).as_string.to_cil
             ElseIf constraint_object.generating_type.to_cil = "C_CODE_PHRASE" Then
-                s = CType(constraint_object, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).as_string.to_cil()
+                        result = CType(constraint_object, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE).as_string.to_cil()
+            End If
+                End If
             End If
 
             ' strip off the square brackets
-            s = s.Substring(1, s.Length - 2)
-            If s.StartsWith("local::") Then
-                ' when the runtime name is constrained by an 'at' code to be the same as the design name ie NodeId
-                s = s.Substring(7)
-            End If
-            Return s
+            result = result.Substring(1, result.Length - 2)
 
+            If result.StartsWith("local::") Then
+                ' when the runtime name is constrained by an 'at' code to be the same as the design name ie NodeId
+                result = result.Substring(7)
+            End If
+
+            Return result
         End Function
 
         Private Sub ProcessSection(ByVal a_rm_section As Object, ByVal an_object As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
@@ -63,6 +68,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     For i = 1 To a_complex_object.attributes.count
                         an_attribute = a_complex_object.attributes.i_th(i)
+
+                        If an_attribute.has_children Then
                         Select Case an_attribute.rm_attribute_name.to_cil
                             Case "name", "Name", "NAME", "runtime_label"
                                 a_section.NameConstraint = ADL_RmElement.ProcessText(CType(an_attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -71,7 +78,9 @@ Namespace ArchetypeEditor.ADL_Classes
                                     ProcessSection(a_section, an_attribute.children.i_th(j))
                                 Next
                         End Select
+                        End If
                     Next
+
                     a_rm_section.Children.Add(a_section)
 
                 Case "ARCHETYPE_SLOT"
@@ -80,18 +89,16 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case Else
                     Debug.Assert(False, "Type is not catered for")
             End Select
-
         End Sub
-
 
         Sub New(ByRef Definition As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
             MyBase.New(Definition, a_filemanager)
 
-            If Definition.has_attribute(EiffelKernel.Create.STRING_8.make_from_cil("items")) Then
+            If Definition.has_attribute(Eiffel.String("items")) Then
                 Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 Dim i As Integer
 
-                an_attribute = Definition.c_attribute_at_path(EiffelKernel.Create.STRING_8.make_from_cil("items"))
+                an_attribute = Definition.c_attribute_at_path(Eiffel.String("items"))
                 ArchetypeEditor.ADL_Classes.ADL_Tools.SetCardinality(an_attribute.cardinality, Me.Children)
 
                 For i = 1 To an_attribute.children.count
