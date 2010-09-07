@@ -512,11 +512,8 @@ Namespace ArchetypeEditor.XML_Classes
                                     BuildDuration(an_attribute, durationConstraint)
                                 End If
                             Case RmEvent.ObservationEventType.Interval
-
-                                If an_event.AggregateMathFunction.Codes.Count > 0 Then
-                                    'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function")
-                                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                                    'SRH: 1 Nov 2009 - EDT-568
+                                If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
+                                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", rm.Existence.XmlExistence)
                                     BuildCodedText(an_attribute, an_event.AggregateMathFunction)
                                 End If
 
@@ -703,11 +700,8 @@ Namespace ArchetypeEditor.XML_Classes
                                 BuildDuration(attribute, durationConstraint)
                             End If
                         Case StructureType.IntervalEvent
-
-                            'SRH: 1 Nov 2009 - EDT-568
-                            If an_event.AggregateMathFunction.Codes.Count > 0 Then
-                                'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function")
-                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                            If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
+                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "math_function", an_event.Existence.XmlExistence)
                                 BuildCodedText(attribute, an_event.AggregateMathFunction)
                             End If
 

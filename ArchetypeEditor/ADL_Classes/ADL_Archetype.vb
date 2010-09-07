@@ -361,8 +361,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                     BuildDuration(an_attribute, offset)
                                 End If
                             Case RmEvent.ObservationEventType.Interval
-
-                                If an_event.AggregateMathFunction.Codes.Count > 0 Then
+                                If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
                                     an_attribute = mAomFactory.create_c_attribute_single(cadlEvent, Eiffel.String("math_function"))
                                     BuildCodedText(an_attribute, an_event.AggregateMathFunction)
                                 End If
@@ -378,7 +377,6 @@ Namespace ArchetypeEditor.ADL_Classes
                                     fixedDuration.MaximumValue = an_event.Width
                                     fixedDuration.HasMaximum = True
                                     BuildDuration(an_attribute, fixedDuration)
-
                                 End If
                         End Select
 
@@ -511,8 +509,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             BuildDuration(attribute, offset)
                         End If
                     Case StructureType.IntervalEvent
-
-                        If an_event.AggregateMathFunction.Codes.Count > 0 Then
+                        If Not an_event.AggregateMathFunction Is Nothing AndAlso an_event.AggregateMathFunction.Codes.Count > 0 Then
                             attribute = mAomFactory.create_c_attribute_single(cadlEvent, Eiffel.String("math_function"))
                             BuildCodedText(attribute, an_event.AggregateMathFunction)
                         End If

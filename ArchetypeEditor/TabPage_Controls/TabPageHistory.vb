@@ -200,10 +200,10 @@ Public Class TabpageHistory
         Me.listViewMathsFunctions.CheckBoxes = True
         Me.listViewMathsFunctions.Dock = System.Windows.Forms.DockStyle.Fill
         Me.listViewMathsFunctions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
-        Me.listViewMathsFunctions.Location = New System.Drawing.Point(3, 83)
+        Me.listViewMathsFunctions.Location = New System.Drawing.Point(3, 81)
         Me.listViewMathsFunctions.Name = "listViewMathsFunctions"
         Me.listViewMathsFunctions.ShowGroups = False
-        Me.listViewMathsFunctions.Size = New System.Drawing.Size(212, 162)
+        Me.listViewMathsFunctions.Size = New System.Drawing.Size(212, 164)
         Me.listViewMathsFunctions.TabIndex = 4
         Me.listViewMathsFunctions.UseCompatibleStateImageBehavior = False
         Me.listViewMathsFunctions.View = System.Windows.Forms.View.List
@@ -214,7 +214,7 @@ Public Class TabpageHistory
         Me.Panel1.Controls.Add(Me.comboDurationUnits)
         Me.Panel1.Controls.Add(Me.numericDuration)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel1.Location = New System.Drawing.Point(3, 18)
+        Me.Panel1.Location = New System.Drawing.Point(3, 16)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(212, 65)
         Me.Panel1.TabIndex = 5
@@ -235,7 +235,7 @@ Public Class TabpageHistory
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.comboDurationUnits.Location = New System.Drawing.Point(59, 38)
         Me.comboDurationUnits.Name = "comboDurationUnits"
-        Me.comboDurationUnits.Size = New System.Drawing.Size(150, 24)
+        Me.comboDurationUnits.Size = New System.Drawing.Size(150, 21)
         Me.comboDurationUnits.TabIndex = 3
         Me.comboDurationUnits.Visible = False
         '
@@ -245,7 +245,7 @@ Public Class TabpageHistory
         Me.numericDuration.Maximum = New Decimal(New Integer() {-1, -1, -1, 0})
         Me.numericDuration.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.numericDuration.Name = "numericDuration"
-        Me.numericDuration.Size = New System.Drawing.Size(41, 22)
+        Me.numericDuration.Size = New System.Drawing.Size(45, 20)
         Me.numericDuration.TabIndex = 2
         Me.numericDuration.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numericDuration.Value = New Decimal(New Integer() {1, 0, 0, 0})
@@ -277,10 +277,10 @@ Public Class TabpageHistory
         'NumericOffset
         '
         Me.NumericOffset.Location = New System.Drawing.Point(10, 43)
-        Me.NumericOffset.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
-        Me.NumericOffset.Minimum = New Decimal(New Integer() {1000, 0, 0, -2147483648})
+        Me.NumericOffset.Maximum = New Decimal(New Integer() {-1, -1, -1, 0})
+        Me.NumericOffset.Minimum = New Decimal(New Integer() {-1, -1, -1, -2147483648})
         Me.NumericOffset.Name = "NumericOffset"
-        Me.NumericOffset.Size = New System.Drawing.Size(46, 22)
+        Me.NumericOffset.Size = New System.Drawing.Size(46, 20)
         Me.NumericOffset.TabIndex = 9
         Me.NumericOffset.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericOffset.Visible = False
@@ -291,7 +291,7 @@ Public Class TabpageHistory
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.comboOffsetUnits.Location = New System.Drawing.Point(61, 43)
         Me.comboOffsetUnits.Name = "comboOffsetUnits"
-        Me.comboOffsetUnits.Size = New System.Drawing.Size(105, 24)
+        Me.comboOffsetUnits.Size = New System.Drawing.Size(105, 21)
         Me.comboOffsetUnits.TabIndex = 10
         Me.comboOffsetUnits.Visible = False
         '
@@ -320,7 +320,7 @@ Public Class TabpageHistory
         Me.txtRuntimeConstraint.Location = New System.Drawing.Point(16, 210)
         Me.txtRuntimeConstraint.Name = "txtRuntimeConstraint"
         Me.txtRuntimeConstraint.ReadOnly = True
-        Me.txtRuntimeConstraint.Size = New System.Drawing.Size(315, 22)
+        Me.txtRuntimeConstraint.Size = New System.Drawing.Size(315, 20)
         Me.txtRuntimeConstraint.TabIndex = 4
         '
         'txtEventDescription
@@ -406,10 +406,10 @@ Public Class TabpageHistory
         'numPeriod
         '
         Me.numPeriod.Location = New System.Drawing.Point(13, 194)
-        Me.numPeriod.Maximum = New Decimal(New Integer() {1000, 0, 0, 0})
+        Me.numPeriod.Maximum = New Decimal(New Integer() {-1, -1, -1, 0})
         Me.numPeriod.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.numPeriod.Name = "numPeriod"
-        Me.numPeriod.Size = New System.Drawing.Size(48, 22)
+        Me.numPeriod.Size = New System.Drawing.Size(52, 20)
         Me.numPeriod.TabIndex = 19
         Me.numPeriod.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.numPeriod.Value = New Decimal(New Integer() {1, 0, 0, 0})
@@ -419,7 +419,7 @@ Public Class TabpageHistory
         '
         Me.comboTimeUnits.Location = New System.Drawing.Point(69, 194)
         Me.comboTimeUnits.Name = "comboTimeUnits"
-        Me.comboTimeUnits.Size = New System.Drawing.Size(122, 24)
+        Me.comboTimeUnits.Size = New System.Drawing.Size(122, 21)
         Me.comboTimeUnits.TabIndex = 20
         Me.comboTimeUnits.Visible = False
         '
@@ -507,12 +507,12 @@ Public Class TabpageHistory
         '
         Me.ContextMenuEvents.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SpecialiseToolStripMenuItem})
         Me.ContextMenuEvents.Name = "ContextMenuEvents"
-        Me.ContextMenuEvents.Size = New System.Drawing.Size(145, 28)
+        Me.ContextMenuEvents.Size = New System.Drawing.Size(121, 26)
         '
         'SpecialiseToolStripMenuItem
         '
         Me.SpecialiseToolStripMenuItem.Name = "SpecialiseToolStripMenuItem"
-        Me.SpecialiseToolStripMenuItem.Size = New System.Drawing.Size(144, 24)
+        Me.SpecialiseToolStripMenuItem.Size = New System.Drawing.Size(120, 22)
         Me.SpecialiseToolStripMenuItem.Text = "Specialise"
         '
         'ImageListEvents
@@ -671,8 +671,7 @@ Public Class TabpageHistory
                         " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "\par")
                     End If
                     Try
-                        'SRH: 1 Nov 2009 - EDT-568
-                        If elvi.AggregateMathFunction.Codes.Count > 0 Then
+                        If Not elvi.AggregateMathFunction Is Nothing AndAlso elvi.AggregateMathFunction.Codes.Count > 0 Then
                             Text.Write(Space(3 * level) & Filemanager.GetOpenEhrTerm(266, "Event math function"))
                             Text.Write(" = ")
                             Dim separator As String = ""
@@ -731,31 +730,32 @@ Public Class TabpageHistory
 
                 Case StructureType.PointEvent
                     If elvi.hasFixedOffset Then
-                        Text.WriteLine("<br>" + Filemanager.GetOpenEhrTerm(179, "Offset") + _
-                        " = " & elvi.Offset.ToString & " " & elvi.OffsetUnits & "<br>")
+                        Text.WriteLine("<br>" + Filemanager.GetOpenEhrTerm(179, "Offset") + " = " & elvi.Offset.ToString & " " & elvi.OffsetUnits & "<br>")
                     End If
 
                 Case StructureType.IntervalEvent
-                    'SRH: 1 Nov 2009 - EDT-568
                     If elvi.hasFixedWidth Then
-                        Text.WriteLine("<br>" + Filemanager.GetOpenEhrTerm(143, "Fixed interval") + _
-                        " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "<br>")
+                        Text.WriteLine("<br>" + Filemanager.GetOpenEhrTerm(143, "Fixed interval") + " = " & elvi.Width.ToString & " " & elvi.WidthUnits & "<br>")
                     End If
-                    Try
+
+                    If Not elvi.AggregateMathFunction Is Nothing Then
                         Text.Write("<br>" + Filemanager.GetOpenEhrTerm(266, "Event math function"))
                         Dim separator As String = ""
+
                         For Each code As String In elvi.AggregateMathFunction.Codes
                             Dim i As Integer
+
                             If Integer.TryParse(code, i) Then
                                 Text.Write(separator & Filemanager.GetOpenEhrTerm(i, "Fixed interval"))
+
                                 If separator = "" Then
                                     separator = ", "
                                 End If
                             End If
                         Next
-                        Text.WriteLine("")
-                    Catch
-                    End Try
+                    End If
+
+                    Text.WriteLine("")
             End Select
 
             Text.WriteLine("</tr>")
@@ -769,6 +769,18 @@ Public Class TabpageHistory
         Dim ev As RmEvent
         Dim HistEvent As EventListViewItem
         sNodeID = rm.NodeId
+
+        comboTimeUnits.Items.Clear()
+        comboTimeUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboTimeUnits.SelectedIndex = 3        ' minutes
+
+        comboOffsetUnits.Items.Clear()
+        comboOffsetUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboOffsetUnits.SelectedIndex = 3      ' minutes
+
+        comboDurationUnits.Items.Clear()
+        comboDurationUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboDurationUnits.SelectedIndex = 3    ' minutes
 
         If rm.isPeriodic Then
             chkIsPeriodic.Checked = True
@@ -790,10 +802,6 @@ Public Class TabpageHistory
         Next
 
         Translate()
-
-        'CHANGE Sam Heard - 2004-05-15
-        'Changed the order - set current_item after process event
-        'and call process event on the first item in listEvents
 
         If ListEvents.Items.Count > 0 Then
             ListEvents.Items.Item(0).Selected = True
@@ -1017,7 +1025,7 @@ Public Class TabpageHistory
                 element.WidthUnits = Value
             End Set
         End Property
-        'SRH: 1 Nov 2009 - EDT-568
+
         Public Property AggregateMathFunction() As CodePhrase
             Get
                 Return element.AggregateMathFunction
@@ -1026,9 +1034,10 @@ Public Class TabpageHistory
                 element.AggregateMathFunction = Value
             End Set
         End Property
+
         Public ReadOnly Property HasMathsFunction() As Boolean
             Get
-                Return ((element.EventType = RmEvent.ObservationEventType.Interval) AndAlso (Not element.AggregateMathFunction Is Nothing) AndAlso (element.AggregateMathFunction.Codes.Count > 0))
+                Return element.EventType = RmEvent.ObservationEventType.Interval AndAlso Not element.AggregateMathFunction Is Nothing AndAlso element.AggregateMathFunction.Codes.Count > 0
             End Get
         End Property
         Public Property hasFixedOffset() As Boolean
@@ -1178,16 +1187,7 @@ Public Class TabpageHistory
                 current_item.EventType = RmEvent.ObservationEventType.PointInTime
             ElseIf RadioInterval.Checked Then
                 current_item.EventType = RmEvent.ObservationEventType.Interval
-
-                'SRH: 1 Nov 2009 - EDT-568 - commented out
-                'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
-                'If CInt(comboIntervalViewPoint.SelectedValue) <> 118 Then
-                '    current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
-                'End If
-
-                'SRH: 1 Nov 2009 - EDT-568
                 current_item.AggregateMathFunction = GetAggregateFunctions()
-
                 cbFixedInterval_CheckedChanged(sender, e)
             Else
                 current_item.EventType = RmEvent.ObservationEventType.Event
@@ -1199,9 +1199,11 @@ Public Class TabpageHistory
 
     Private Function GetAggregateFunctions() As CodePhrase
         Dim result As New CodePhrase("openehr")
+
         For Each l As ListViewItem In listViewMathsFunctions.CheckedItems
             result.Codes.Add(CStr(l.Tag))
         Next
+
         Return result
     End Function
 
@@ -1225,10 +1227,6 @@ Public Class TabpageHistory
         mOccurrences.Cardinality = elvi.Occurrences
         numericDuration.Value = 1
 
-        'SRH: 1 Nov 2009 - EDT-568 - commented out
-        'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
-        'comboIntervalViewPoint.SelectedValue = 118  ' not set
-
         ListEvents.Items.Add(elvi)
         elvi.Selected = True
         current_item = elvi
@@ -1239,6 +1237,8 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub ProcessEvent(ByVal elvi As EventListViewItem)
+        mIsLoading = True
+
         txtEventDescription.Text = elvi.Description
         NumericOffset.Value = elvi.Offset
 
@@ -1256,50 +1256,19 @@ Public Class TabpageHistory
             comboDurationUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.WidthUnits)
         End If
 
-        If listViewMathsFunctions.CheckedItems.Count > 0 Then
-            mIsLoading = True
-            For Each l As ListViewItem In Me.listViewMathsFunctions.CheckedItems
-                l.Checked = False
-            Next
-            mIsLoading = False
-        End If
+        Dim math_functions As DataRow() = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.DefaultLanguageCode) 'event math function
+        listViewMathsFunctions.Clear()
 
-        'SRH: 1 Nov 2009 - EDT-568
+        For Each rw As DataRow In math_functions
+            Dim l As New ListViewItem
+            Dim code As String = CStr(rw.Item(1))
+            l.Tag = code
+            l.Text = CStr(rw.Item(2))
 
-        If elvi.HasMathsFunction Then
-            ' has to deal with the change of archetypes from a string
-            ' to a code phrase and the openEHR code as an integer
-
-            Dim count As Integer = 0
-            For Each l As ListViewItem In Me.listViewMathsFunctions.Items
-                If elvi.AggregateMathFunction.Codes.Contains(CStr(l.Tag)) Then
-                    l.Checked = True
-                    count += 1
-                End If
-                If count = elvi.AggregateMathFunction.Codes.Count Then
-                    Exit For
-                End If
-            Next
-        End If
-
-
-        'SRH: 1 Nov 2009 - EDT-568 - commented out
-        'Try
-        '    i = UInt64.Parse(elvi.AggregateMathFunction)  ' new form
-        '    comboIntervalViewPoint.SelectedValue = i
-        'Catch
-        '    'text that is not a code
-        '    If elvi.AggregateMathFunction = "Change" Then
-        '        comboIntervalViewPoint.SelectedIndex = _
-        '        comboIntervalViewPoint.FindStringExact("delta")
-        '        elvi.AggregateMathFunction = "147" ' as delta may not lead to a change
-        '    Else
-        '        comboIntervalViewPoint.SelectedIndex = _
-        '        comboIntervalViewPoint.FindStringExact(elvi.AggregateMathFunction)
-        '    End If
-        'End Try
-
-        'End If
+            ' Deal with the change of archetypes from a string to a code phrase and the openEHR code as an integer.
+            l.Checked = elvi.HasMathsFunction AndAlso elvi.AggregateMathFunction.Codes.Contains(code)
+            listViewMathsFunctions.Items.Add(l)
+        Next
 
         Select Case elvi.EventType
             Case RmEvent.ObservationEventType.Event
@@ -1315,6 +1284,8 @@ Public Class TabpageHistory
         If elvi.hasNameConstraint Then
             txtRuntimeConstraint.Text = elvi.NameConstraint.ToString
         End If
+
+        mIsLoading = False
     End Sub
 
     Private Sub listEvents_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListEvents.SelectedIndexChanged
@@ -1386,45 +1357,21 @@ Public Class TabpageHistory
         End If
     End Sub
 
-    'SRH: 1 Nov 2009 - EDT-568 - commented out
-
-    'Private Sub comboIntervalViewPoint_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-    '    If Not current_item Is Nothing And Not mIsLoading Then
-    '        'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
-    '        If CInt(comboIntervalViewPoint.SelectedValue) <> 118 Then
-    '            current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
-    '        Else
-    '            current_item.AggregateMathFunction = ""
-    '        End If
-    '        mFileManager.FileEdited = True
-    '    End If
-    'End Sub
-
-    'SRH: 1 Nov 2009 - EDT-568 - added
-
     Private Sub listViewMathsFunctions_ItemCheck(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemCheckedEventArgs) Handles listViewMathsFunctions.ItemChecked
-        If Not current_item Is Nothing And Not mIsLoading Then
-
-            'SRH: 1 Nov 2009 - EDT-568 - commented out
-            'SRH: 4 Feb 2009 - add not set - do not set maths function if not set
-            'If CInt(comboIntervalViewPoint.SelectedValue) <> 118 Then
-            '    current_item.AggregateMathFunction = Convert.ToString(comboIntervalViewPoint.SelectedValue)
-            'Else
-            '    current_item.AggregateMathFunction = ""
-            'End If
+        If Not current_item Is Nothing And Not mIsLoading And listViewMathsFunctions.Focused Then
             current_item.AggregateMathFunction = GetAggregateFunctions()
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub radioOpen_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioOpen.CheckedChanged
-        If Not current_item Is Nothing Then
+        If Not current_item Is Nothing And Not mIsLoading Then
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub radioFixed_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioFixed.CheckedChanged
-        If Not current_item Is Nothing Then
+        If Not current_item Is Nothing And Not mIsLoading Then
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -1443,20 +1390,15 @@ Public Class TabpageHistory
                 current_item.hasFixedOffset = False
             End If
 
-            mFileManager.FileEdited = True
+            If Not mIsLoading Then
+                mFileManager.FileEdited = True
+            End If
         End If
     End Sub
 
     Private Sub cbFixedInterval_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFixedInterval.CheckedChanged
         numericDuration.Visible = cbFixedInterval.Checked
         comboDurationUnits.Visible = cbFixedInterval.Checked
-
-        'If cbFixedInterval.Checked Then
-        '    'gbDuration.Height = numericDuration.Location.Y + 62
-        '    gbDuration.Height = numericDuration.Location.Y + 120
-        'Else
-        '    gbDuration.Height = gbOffset.Height + 80
-        'End If
 
         If Not current_item Is Nothing Then
             If cbFixedInterval.Checked Then
@@ -1468,7 +1410,9 @@ Public Class TabpageHistory
                 current_item.hasFixedWidth = False
             End If
 
-            mFileManager.FileEdited = True
+            If Not mIsLoading Then
+                mFileManager.FileEdited = True
+            End If
         End If
     End Sub
 
@@ -1582,57 +1526,6 @@ Public Class TabpageHistory
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
-
-        'MathFunctionTable = New DataTable("MathFunction")
-        'Dim newcol As New DataColumn("Code", System.Type.GetType("System.UInt64"))
-        'MathFunctionTable.Columns.Add(newcol)
-        'newcol = New DataColumn("Text", System.Type.GetType("System.String"))
-        'MathFunctionTable.Columns.Add(newcol)
-
-        Dim math_functions As DataRow()
-        'Dim new_row As DataRow
-
-        'Load according to the language of the interface, not the archetype
-        'math_functions = mFileManager.OntologyManager.CodeForGroupID(14, mFileManager.OntologyManager.LanguageCode) 'event math function
-        math_functions = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.DefaultLanguageCode) 'event math function
-
-        'SRH: 4 Feb 2009 - add not set
-        'new_row = MathFunctionTable.NewRow
-        'new_row("Code") = 118
-        'new_row("Text") = String.Format("<{0}>", Filemanager.GetOpenEhrTerm(118, "Not set"))
-        'MathFunctionTable.Rows.Add(new_row)
-
-        For Each rw As DataRow In math_functions
-            'new_row = MathFunctionTable.NewRow
-            'new_row("Code") = rw.Item(1)
-            'new_row("Text") = rw.Item(2)
-            'MathFunctionTable.Rows.Add(new_row)
-            Dim lv As New ListViewItem
-
-            lv.Tag = CStr(rw.Item(1))
-            lv.Text = CStr(rw.Item(2))
-            listViewMathsFunctions.Items.Add(lv)
-        Next
-
-        'MathFunctionTable.DefaultView.Sort = "Text"
-
-        'comboIntervalViewPoint.SelectedValue = 118
-        'comboIntervalViewPoint.DataSource = MathFunctionTable
-        'comboIntervalViewPoint.DisplayMember = "Text"
-        'comboIntervalViewPoint.ValueMember = "Code"
-
-        comboTimeUnits.Items.Clear()
-        comboTimeUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
-        'Set default to minutes
-        comboTimeUnits.SelectedIndex = 3
-        comboOffsetUnits.Items.Clear()
-        comboOffsetUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
-        'Set default to minutes
-        comboOffsetUnits.SelectedIndex = 3
-        comboDurationUnits.Items.Clear()
-        comboDurationUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
-        'Set default to minutes
-        comboDurationUnits.SelectedIndex = 3
 
         mIsLoading = False
     End Sub

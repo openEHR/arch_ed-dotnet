@@ -366,10 +366,10 @@ Class RmEvent
                 Case "math_function"
                     Debug.Assert(mType = StructureType.IntervalEvent)
 
-                    Dim textConstraint As Constraint_Text = _
-                    ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
-                    'SRH: 1 Nov 2009 - EDT-568
-                    Me.AggregateMathFunction = textConstraint.AllowableValues
+                    If an_attribute.children.Length > 0 Then
+                        Dim textConstraint As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                        AggregateMathFunction = textConstraint.AllowableValues
+                    End If
 
                 Case "data", "item" 'item is OBSOLETE
                     ' return the data for processing
@@ -379,9 +379,7 @@ Class RmEvent
                     ' return the state for processing
                     mXML_State = an_attribute
             End Select
-
         Next
-
 
         If Not Me.XML_Data Is Nothing AndAlso Not Me.XML_Data.children Is Nothing AndAlso Me.XML_Data.children.Length > 0 Then
             Dim cadlStruct As XMLParser.C_COMPLEX_OBJECT
