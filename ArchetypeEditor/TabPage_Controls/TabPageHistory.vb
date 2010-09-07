@@ -770,17 +770,7 @@ Public Class TabpageHistory
         Dim HistEvent As EventListViewItem
         sNodeID = rm.NodeId
 
-        comboTimeUnits.Items.Clear()
-        comboTimeUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
-        comboTimeUnits.SelectedIndex = 3        ' minutes
-
-        comboOffsetUnits.Items.Clear()
-        comboOffsetUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
-        comboOffsetUnits.SelectedIndex = 3      ' minutes
-
-        comboDurationUnits.Items.Clear()
-        comboDurationUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
-        comboDurationUnits.SelectedIndex = 3    ' minutes
+        LoadUnitsComboBoxes()
 
         If rm.isPeriodic Then
             chkIsPeriodic.Checked = True
@@ -1149,7 +1139,6 @@ Public Class TabpageHistory
             MyBase.Text = a_Term.Text
             sDescription = a_Term.Description
             SetImageIndex()
-
         End Sub
 
         Sub New(ByVal elvi As EventListViewItem, ByVal a_filemanager As FileManagerLocal)
@@ -1256,19 +1245,7 @@ Public Class TabpageHistory
             comboDurationUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.WidthUnits)
         End If
 
-        Dim math_functions As DataRow() = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.DefaultLanguageCode) 'event math function
-        listViewMathsFunctions.Clear()
-
-        For Each rw As DataRow In math_functions
-            Dim l As New ListViewItem
-            Dim code As String = CStr(rw.Item(1))
-            l.Tag = code
-            l.Text = CStr(rw.Item(2))
-
-            ' Deal with the change of archetypes from a string to a code phrase and the openEHR code as an integer.
-            l.Checked = elvi.HasMathsFunction AndAlso elvi.AggregateMathFunction.Codes.Contains(code)
-            listViewMathsFunctions.Items.Add(l)
-        Next
+        LoadMathsFunctionsListView(elvi)
 
         Select Case elvi.EventType
             Case RmEvent.ObservationEventType.Event
@@ -1286,6 +1263,36 @@ Public Class TabpageHistory
         End If
 
         mIsLoading = False
+    End Sub
+
+    Protected Sub LoadUnitsComboBoxes()
+        comboTimeUnits.Items.Clear()
+        comboTimeUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboTimeUnits.SelectedIndex = 3        ' minutes
+
+        comboOffsetUnits.Items.Clear()
+        comboOffsetUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboOffsetUnits.SelectedIndex = 3      ' minutes
+
+        comboDurationUnits.Items.Clear()
+        comboDurationUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboDurationUnits.SelectedIndex = 3    ' minutes
+    End Sub
+
+    Private Sub LoadMathsFunctionsListView(ByVal elvi As EventListViewItem)
+        Dim mathfunctions As DataRow() = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.DefaultLanguageCode) 'event math function
+        listViewMathsFunctions.Clear()
+
+        For Each rw As DataRow In mathfunctions
+            Dim l As New ListViewItem
+            Dim code As String = CStr(rw.Item(1))
+            l.Tag = code
+            l.Text = CStr(rw.Item(2))
+
+            ' Deal with the change of archetypes from a string to a code phrase and the openEHR code as an integer.
+            l.Checked = Not elvi Is Nothing AndAlso elvi.HasMathsFunction AndAlso elvi.AggregateMathFunction.Codes.Contains(code)
+            listViewMathsFunctions.Items.Add(l)
+        Next
     End Sub
 
     Private Sub listEvents_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ListEvents.SelectedIndexChanged
@@ -1525,6 +1532,11 @@ Public Class TabpageHistory
 
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             TranslateGUI()
+        End If
+
+        If listViewMathsFunctions.Items.Count = 0 Then
+            LoadUnitsComboBoxes()
+            LoadMathsFunctionsListView(Nothing)
         End If
 
         mIsLoading = False
