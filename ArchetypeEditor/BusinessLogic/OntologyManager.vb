@@ -99,13 +99,13 @@ Public Class OntologyManager
         End Get
     End Property
 
-    Public ReadOnly Property hasTermBinding(ByVal a_terminology As String, ByVal a_code As String, ByVal a_path As String) As Boolean
+    Public ReadOnly Property HasTermBinding(ByVal a_terminology As String, ByVal a_code As String, ByVal a_path As String) As Boolean
         Get
             Dim key(2) As Object
             key(0) = a_terminology
             key(1) = a_path
             key(2) = a_code
-            Return Not Me.TermBindingsTable.Rows.Find(key) Is Nothing
+            Return Not TermBindingsTable.Rows.Find(key) Is Nothing
         End Get
     End Property
 
@@ -164,8 +164,8 @@ Public Class OntologyManager
         End Set
     End Property
 
-    Function HasTerminology(ByVal a_terminology_id As String) As Boolean
-        Return Not mTerminologiesTable.Rows.Find(a_terminology_id) Is Nothing
+    Function HasTerminology(ByVal terminologyId As String) As Boolean
+        Return Not mTerminologiesTable.Rows.Find(terminologyId) Is Nothing
     End Function
 
     Sub ReplaceOntology(ByVal anOntology As Ontology)
@@ -366,14 +366,8 @@ Public Class OntologyManager
         Return mLastTerm
     End Function
 
-    Public Overloads Sub SetText(ByVal Value As String, ByVal code As String)
-        mLastTerm = GetTerm(code)
-        mLastTerm.Text = Value
-        SetText(mLastTerm)
-    End Sub
-
     Private Function ReplaceTranslations() As Boolean
-        If (mLanguageCode = Me.PrimaryLanguageCode) Then
+        If mLanguageCode = PrimaryLanguageCode Then
             If mOntology.IsMultiLanguage Then
                 If mReplaceTranslations = 0 Then
                     If MessageBox.Show(AE_Constants.Instance.ReplaceTranslations, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
@@ -392,67 +386,83 @@ Public Class OntologyManager
                 End If
             End If
         End If
+
         Return False
     End Function
 
-    Public Overloads Sub SetText(ByVal aTerm As RmTerm)
-        If aTerm.isConstraint Then
-            Update(aTerm, mConstraintDefinitionsTable, ReplaceTranslations())
+    Public Sub SetRmTermText(ByVal term As RmTerm)
+        If term.IsConstraint Then
+            Update(term, mConstraintDefinitionsTable, ReplaceTranslations())
         Else
-            Update(aTerm, mTermDefinitionsTable, ReplaceTranslations())
+            Update(term, mTermDefinitionsTable, ReplaceTranslations())
         End If
-        mLastTerm = aTerm
+
+        mLastTerm = term
     End Sub
 
-    Public Function GetText(ByVal ConceptCode As String) As String 'JAR: 13APR07, EDT-32 Support unicode
-        Dim mGetTerm As RmTerm
-        mGetTerm = GetTerm(ConceptCode)
-        If Not mGetTerm Is Nothing Then
-            Return mGetTerm.Text
+    Public Sub SetText(ByVal Value As String, ByVal code As String)
+        mLastTerm = GetTerm(code)
+        mLastTerm.Text = Value
+        SetRmTermText(mLastTerm)
+    End Sub
+
+    Public Function GetText(ByVal code As String) As String
+        Dim result As String = ""
+        Dim term As RmTerm = GetTerm(code)
+
+        If Not term Is Nothing Then
+            result = term.Text
         End If
-        Return ""
+
+        Return result
     End Function
 
-    Public Overloads Sub SetDescription(ByVal Value As String, ByVal code As String)
+    Public Sub SetDescription(ByVal Value As String, ByVal code As String)
         mLastTerm = GetTerm(code)
         mLastTerm.Description = Value
-        SetText(mLastTerm)
+        SetRmTermText(mLastTerm)
     End Sub
 
-    Public Function GetDescription(ByVal ConceptCode As String) As String 'JAR: 13APR07, EDT-32 Support unicode
-        Dim mGetTerm As RmTerm
-        mGetTerm = GetTerm(ConceptCode)
-        If Not mGetTerm Is Nothing Then
-            Return mGetTerm.Description
+    Public Function GetDescription(ByVal code As String) As String
+        Dim result As String = ""
+        Dim term As RmTerm = GetTerm(code)
+
+        If Not term Is Nothing Then
+            result = term.Description
         End If
-        Return ""
+
+        Return result
     End Function
 
-    Public Overloads Sub SetComment(ByVal Value As String, ByVal code As String)
+    Public Sub SetComment(ByVal Value As String, ByVal code As String)
         mLastTerm = GetTerm(code)
         mLastTerm.Comment = Value
-        SetText(mLastTerm)
+        SetRmTermText(mLastTerm)
     End Sub
 
-    Public Sub SetOtherAnnotation(ByVal Key As String, ByVal Value As String, ByVal code As String)    'SRH: 22 Jun 2009 EDT-549 - Allow non-standard annotations in archetype
+    Public Sub SetOtherAnnotation(ByVal Key As String, ByVal Value As String, ByVal code As String)
         mLastTerm = GetTerm(code)
+
         If mLastTerm.OtherAnnotations.ContainsKey(Key) Then
             mLastTerm.OtherAnnotations.Item(Key) = Value
         Else
             mLastTerm.OtherAnnotations.Add(Key, Value)
         End If
-        SetText(mLastTerm)
+
+        SetRmTermText(mLastTerm)
     End Sub
 
-    Public Sub DeleteOtherAnnotation(ByVal Key As String, ByVal code As String)    'SRH: 22 Jun 2009 EDT-549 - Allow non-standard annotations in archetype
+    Public Sub DeleteOtherAnnotation(ByVal Key As String, ByVal code As String)
         mLastTerm = GetTerm(code)
+
         If mLastTerm.OtherAnnotations.ContainsKey(Key) Then
             mLastTerm.OtherAnnotations.Remove(Key)
         End If
-        SetText(mLastTerm)
+
+        SetRmTermText(mLastTerm)
     End Sub
 
-    Public Sub RenameAnnotationKey(ByVal oldKey As String, ByVal newKey As String, ByVal code As String)    'SRH: 22 Jun 2009 EDT-549 - Allow non-standard annotations in archetype
+    Public Sub RenameAnnotationKey(ByVal oldKey As String, ByVal newKey As String, ByVal code As String)
         mLastTerm = GetTerm(code)
         Debug.Assert(mLastTerm.OtherAnnotations.ContainsKey(oldKey), "Must have key")
         Dim value As String
@@ -461,12 +471,11 @@ Public Class OntologyManager
             value = CStr(mLastTerm.OtherAnnotations.Item(oldKey))
             mLastTerm.OtherAnnotations.Remove(oldKey)
             mLastTerm.OtherAnnotations.Add(newKey, value)
-            SetText(mLastTerm)
+            SetRmTermText(mLastTerm)
         End If
-
     End Sub
 
-    Private Sub Update(ByVal aTerm As RmTerm, ByVal aTable As DataTable, Optional ByVal ReplaceTranslations As Boolean = False)
+    Private Sub Update(ByVal aTerm As RmTerm, ByVal aTable As DataTable, ByVal ReplaceTranslations As Boolean)
         Dim d_row As DataRow
 
         If ReplaceTranslations Then
@@ -570,8 +579,7 @@ Public Class OntologyManager
 
             If Not mOntology.LanguageAvailable(a_LanguageCode) Then
                 mOntology.AddLanguage(a_LanguageCode)
-                'update the new terms generated by the 
-                'ontology
+                'update the new terms generated by the ontology
                 UpdateLanguage(a_LanguageCode)
             End If
 
@@ -579,32 +587,67 @@ Public Class OntologyManager
         End If
     End Sub
 
-    Public Sub AddTerminology(ByVal TerminologyCode As String, Optional ByVal TerminologyText As String = "")
-        Dim key As Object
-
-        If TerminologyText = "" Then
+    Public Sub AddTerminology(ByVal terminologyId As String, ByVal terminologyText As String)
+        If terminologyText = "" Then
             ' get the full name of the language from openEHR terminology
-            mLastTerminologyText = TerminologyServer.Instance.CodeSetItemDescription("Terminology", TerminologyCode)
+            mLastTerminologyText = TerminologyServer.Instance.CodeSetItemDescription("Terminology", terminologyId)
         Else
-            mLastTerminologyText = TerminologyText
+            mLastTerminologyText = terminologyText
         End If
 
-        key = TerminologyCode
-
-        If TerminologiesTable.Rows.Find(key) Is Nothing Then
-            Dim new_row As DataRow
-            new_row = mTerminologiesTable.NewRow
-            new_row(0) = TerminologyCode
-            new_row(1) = mLastTerminologyText
-            mTerminologiesTable.Rows.Add(new_row)
+        If TerminologiesTable.Rows.Find(terminologyId) Is Nothing Then
+            Dim row As DataRow = TerminologiesTable.NewRow
+            row(0) = terminologyId
+            row(1) = mLastTerminologyText
+            TerminologiesTable.Rows.Add(row)
         End If
 
         ' ensure it is in the ontology as well
         If mDoUpdateOntology Then
-            mOntology.AddTerminology(TerminologyCode)
+            mOntology.AddTerminology(terminologyId)
         End If
 
         mFileManager.FileEdited = True
+    End Sub
+
+    Public Sub AddConstraintBinding(ByVal acCode As String, ByVal terminologyId As String, ByVal terminologyText As String, ByVal release As String, ByVal subset As String)
+        If Not HasTerminology(terminologyId) Then
+            AddTerminology(terminologyId, terminologyText)
+        End If
+
+        If RmTerm.IsValidTermCode(acCode) Then
+            Dim uri As String = "terminology:" + terminologyId
+
+            If release <> "" Then
+                uri = uri + "/" + release
+            End If
+
+            If subset <> "" Then
+                uri = uri + "?subset=" + subset.Replace(" ", "+")
+            End If
+
+            Dim row As DataRow = Filemanager.Master.OntologyManager.ConstraintBindingsTable.NewRow
+            row(0) = terminologyId
+            row(1) = acCode
+            row(2) = uri
+            row(3) = release
+
+            Dim keys(1) As Object
+            keys(0) = row(0)
+            keys(1) = row(1)
+
+            If Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Contains(keys) Then
+                'change the constraint
+                row = Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Find(keys)
+                row.BeginEdit()
+                row(2) = uri
+                row.EndEdit()
+            Else
+                Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Add(row)
+            End If
+
+            Filemanager.Master.FileEdited = True
+        End If
     End Sub
 
     Public Function GetOpenEHRTerm(ByVal code As Integer, ByVal DefaultTerm As String, Optional ByVal Language As String = "?") As String

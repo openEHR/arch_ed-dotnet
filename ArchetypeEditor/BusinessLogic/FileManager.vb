@@ -481,7 +481,6 @@ Public Class FileManagerLocal
         adlParser.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
         adlParser.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
 
-
         'Build the Definition
         Dim adl_archetype As ArchetypeEditor.ADL_Classes.ADL_Archetype = adlParser.Archetype
         adl_archetype.Definition = Me.Archetype.Definition

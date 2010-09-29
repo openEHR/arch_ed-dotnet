@@ -893,28 +893,22 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub ArchetypeNodeConstraintControl_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Enter
-        If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 0 Then
-            Me.dgNodeBindings.Enabled = False
-        Else
-            Me.dgNodeBindings.Enabled = True
-        End If
+        dgNodeBindings.Enabled = mFileManager.OntologyManager.TerminologiesTable.Rows.Count > 0
     End Sub
 
     Private Sub ArchetypeNodeConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        CType(Me.dgNodeBindings.Columns(0), DataGridViewComboBoxColumn).DataSource = mFileManager.OntologyManager.TerminologiesTable
-        CType(Me.dgNodeBindings.Columns(0), DataGridViewComboBoxColumn).ValueMember = "Terminology"
-        Me.dgNodeBindings.Columns(0).DataPropertyName = "Terminology"
-        Me.dgNodeBindings.Columns(1).DataPropertyName = "Code"
-        Me.dgNodeBindings.Columns(2).DataPropertyName = "Path"
-        Me.dgNodeBindings.DataSource = mDataView
+        CType(dgNodeBindings.Columns(0), DataGridViewComboBoxColumn).DataSource = mFileManager.OntologyManager.TerminologiesTable
+        CType(dgNodeBindings.Columns(0), DataGridViewComboBoxColumn).ValueMember = "Terminology"
+        dgNodeBindings.Columns(0).DataPropertyName = "Terminology"
+        dgNodeBindings.Columns(1).DataPropertyName = "Code"
+        dgNodeBindings.Columns(2).DataPropertyName = "Path"
+        dgNodeBindings.DataSource = mDataView
     End Sub
 
     Private Function SetTermLookUpVisibility(ByVal termID As String) As Boolean
         Dim result As Boolean = False
 
-        If OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp AndAlso _
-            Not String.IsNullOrEmpty(termID) AndAlso _
-            OceanArchetypeEditor.Instance.ServiceTerminology(termID) Then
+        If OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp AndAlso OceanArchetypeEditor.Instance.HasServiceTerminology(termID) Then
             termLookUp.TermCaption = termID
 
             'ToDo: work this from the terminology server
@@ -939,7 +933,6 @@ Public Class ArchetypeNodeConstraintControl
         Else
             termLookUp.Hide()
             result = False
-
         End If
 
         Return result
@@ -984,7 +977,6 @@ Public Class ArchetypeNodeConstraintControl
             mFileManager.FileEdited = True
         End If
     End Sub
-
 
     'Private Sub dgNodeBindings_CellClick(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellClick
     '    SetTermLookUpVisibility(CType(dgNodeBindings.CurrentRow.Cells(0), DataGridViewComboBoxCell).EditedFormattedValue.ToString)
@@ -1031,10 +1023,8 @@ Public Class ArchetypeNodeConstraintControl
 
                             asynchronousIdentifier = asynchronousIdentifierGenerator.Next
 
-
-                            OTSControls.Term.OtsWebService.TerminologyGetPreferredTermsAsync(termLookUp.TerminologyName, Me.termLookUp.TermLanguage, New String() {CStr(dgNodeBindings.Rows(e.RowIndex).Cells(2).Value)}, asynchronousIdentifier)
+                            OTSControls.Term.OtsWebService.TerminologyGetPreferredTermsAsync(termLookUp.TerminologyName, termLookUp.TermLanguage, New String() {CStr(dgNodeBindings.Rows(e.RowIndex).Cells(2).Value)}, asynchronousIdentifier)
                             Debug.WriteLine("started " & asynchronousIdentifier)
-
                         Catch ex As Exception
                             Debug.WriteLine(ex.Message)
                         Finally

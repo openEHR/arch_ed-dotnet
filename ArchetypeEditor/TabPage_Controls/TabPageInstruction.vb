@@ -211,7 +211,7 @@ Public Class TabPageInstruction
             AddActivityTab()
 
             Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm("Current Activity", "Current Activity")
-            mFileManager.OntologyManager.SetText(a_term)
+            mFileManager.OntologyManager.SetRmTermText(a_term)
             Dim rmActivityItem As New RmActivity(a_term.Code)
             AddActivityTab(a_term.Text, rmActivityItem)
             Me.TabControlInstruction.SelectedTab = Me.TabControlInstruction.TabPages(0) 'set to first tab
@@ -426,7 +426,7 @@ Public Class TabPageInstruction
     Private Sub NewActivity() 'Prompts for activity description then adds
         Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New activity"))
         Dim s As String() = OceanArchetypeEditor.Instance.GetInput(a_term, Me.ParentForm)
-        mFileManager.OntologyManager.SetText(a_term)
+        mFileManager.OntologyManager.SetRmTermText(a_term)
 
         If s(0) <> "" Then
             Dim rmActivityItem As New RmActivity(a_term.Code)

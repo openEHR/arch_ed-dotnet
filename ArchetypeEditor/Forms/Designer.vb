@@ -2494,7 +2494,6 @@ Public Class Designer
         Me.mDataViewConstraintBindings.RowFilter = "ID ='ZZZZ'" ' do not show any for the moment
         Me.mDataViewConstraintBindings.AllowNew = False
 
-
         ' ensure that the table is bound to the languages list
         Me.ListLanguages.DataSource = mFileManager.OntologyManager.LanguagesTable
         Me.ListLanguages.DisplayMember = "Language"
@@ -2534,9 +2533,7 @@ Public Class Designer
         Me.terminology.DisplayMember = "Text"
         Me.terminology.ValueMember = "Code"
 
-
         Me.DataGridConstraintStatements.DataSource = Me.mDataViewConstraintBindings
-
     End Sub
 
     Public Sub WriteRichText()
@@ -4722,7 +4719,7 @@ Public Class Designer
 
         Dim frm As New ConstraintBindingForm
 
-        If Me.DataGridConstraintDefinitions.VisibleRowCount > 0 AndAlso Me.DataGridConstraintDefinitions.CurrentRowIndex > -1 Then
+        If DataGridConstraintDefinitions.VisibleRowCount > 0 AndAlso DataGridConstraintDefinitions.CurrentRowIndex > -1 Then
             If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
                 frm.Text = s
                 frm.lblQueryName.Text = Filemanager.GetOpenEhrTerm(624, frm.lblQueryName.Text)
@@ -4732,46 +4729,9 @@ Public Class Designer
                 frm.butOK.Text = AE_Constants.Instance.OK
             End If
 
-            While frm.ShowDialog(Me.ParentForm) = Windows.Forms.DialogResult.OK
-                If (frm.comboTerminology.SelectedIndex > -1 And frm.txtQuery.Text <> "") Then
-
-                    'Add the terminology
-                    If Not mFileManager.OntologyManager.HasTerminology(frm.comboTerminology.SelectedValue) Then
-                        mFileManager.OntologyManager.AddTerminology(frm.comboTerminology.SelectedValue, frm.comboTerminology.SelectedText)
-                    End If
-
-                    'Then the binding
-                    Dim new_row As DataRow
-                    Dim acCode As String = Me.DataGridConstraintDefinitions.Item _
-                        (Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)
-
-                    If RmTerm.IsValidTermCode(acCode) AndAlso frm.txtQuery.Text <> "" Then
-                        new_row = Filemanager.Master.OntologyManager.ConstraintBindingsTable.NewRow
-                        new_row(0) = frm.comboTerminology.SelectedValue
-                        new_row(1) = acCode
-                        new_row(2) = "http://openEHR.org/" & frm.txtQuery.Text
-                        'new_row(3) = frm.txtRelease.Text
-                        Dim keys(1) As Object
-                        keys(0) = new_row(0)
-                        keys(1) = new_row(1)
-
-                        If Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Contains(keys) Then
-                            'change the constraint
-                            Dim row_to_change As DataRow = Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Find(keys)
-                            row_to_change.BeginEdit()
-                            row_to_change(2) = new_row(2)
-                            row_to_change.EndEdit()
-                        Else
-                            Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Add(new_row)
-                        End If
-
-                        Filemanager.Master.FileEdited = True
-                    End If
-                    Return
-                Else
-                    MessageBox.Show(AE_Constants.Instance.Add_Reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End If
-            End While
+            If frm.ShowDialog(ParentForm) = Windows.Forms.DialogResult.OK Then
+                frm.AddConstraintBinding(mFileManager.OntologyManager, DataGridConstraintDefinitions.Item(DataGridConstraintDefinitions.CurrentRowIndex, 0))
+            End If
         Else
             MessageBox.Show(AE_Constants.Instance.Add_Reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
@@ -4980,8 +4940,8 @@ Public Class Designer
                         args.AddParam("css-path", "", "Images/default.css")
                         args.AddParam("terminology-xml-document-path", "", "../Terminology/terminology.xml")
 
-
                         Dim reader As Xml.XmlReader = Nothing
+
                         Try
                             reader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
                         Catch ex As Exception

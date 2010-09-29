@@ -212,7 +212,7 @@ Public Class PathwayEvent
         If mLastEditWasOk Then
             mText = a_term.Text
             mDescription = a_term.Description
-            mFileManager.OntologyManager.SetText(a_term)
+            mFileManager.OntologyManager.SetRmTermText(a_term)
             toolTipPathway.SetToolTip(Me, mText)
             TextRectangle(mText, CreateGraphics)
             mFileManager.FileEdited = True

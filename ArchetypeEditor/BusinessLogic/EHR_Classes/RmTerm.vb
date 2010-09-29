@@ -16,7 +16,7 @@
 
 Public Class RmTerm
     Inherits Term
-    Protected sDescription As String 'New String("")
+    Protected sDescription As String
     Protected sComment As String
     Protected sAnnotations As System.Collections.SortedList
     
@@ -38,8 +38,6 @@ Public Class RmTerm
         End Set
     End Property
 
-
-    'SRH: 23 Jun 2009 - EDT-549: Need to be able to write and store other annotations
     ReadOnly Property OtherAnnotations() As System.Collections.SortedList
         Get
             If sAnnotations Is Nothing Then

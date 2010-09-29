@@ -137,12 +137,11 @@ Public Class ConstraintBindingForm
         Me.lblQuery.Name = "lblQuery"
         Me.lblQuery.Size = New System.Drawing.Size(133, 21)
         Me.lblQuery.TabIndex = 8
-        Me.lblQuery.Text = "http://openEHR.org/"
+        Me.lblQuery.Text = "terminology:"
         Me.lblQuery.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'ConstraintBindingForm
         '
-        Me.AcceptButton = Me.butOK
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.butCancel
         Me.ClientSize = New System.Drawing.Size(464, 168)
@@ -183,9 +182,7 @@ Public Class ConstraintBindingForm
         TextColumn.ColumnName = "Text"
         mDataTable.Columns.Add(TextColumn)
 
-        Dim Terminologies As DataRow() _
-                = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
-
+        Dim Terminologies As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
         mDataTable.DefaultView.Sort = "Text"
 
         For i As Integer = 0 To Terminologies.Length - 1
@@ -195,16 +192,21 @@ Public Class ConstraintBindingForm
             mDataTable.Rows.Add(newRow)
         Next
 
-        Me.comboTerminology.DataSource = mDataTable
-        Me.comboTerminology.DisplayMember = "Text"
-        Me.comboTerminology.ValueMember = "Code"
+        comboTerminology.DataSource = mDataTable
+        comboTerminology.DisplayMember = "Text"
+        comboTerminology.ValueMember = "Code"
     End Sub
 
-    Private Sub txtQuery_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtQuery.TextChanged
-        If txtQuery.Text <> "" Then
-            Me.AcceptButton = Me.butOK
+    Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
+        If comboTerminology.SelectedIndex < 0 Or txtQuery.Text = "" Then
+            MessageBox.Show(AE_Constants.Instance.Add_Reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         Else
-            Me.AcceptButton = Nothing
+            Close()
         End If
     End Sub
+
+    Public Sub AddConstraintBinding(ByVal ontologyManager As OntologyManager, ByVal acCode As String)
+        ontologyManager.AddConstraintBinding(acCode, comboTerminology.SelectedValue, comboTerminology.SelectedText, txtRelease.Text, txtQuery.Text)
+    End Sub
+
 End Class

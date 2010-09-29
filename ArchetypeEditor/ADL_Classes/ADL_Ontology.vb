@@ -111,15 +111,11 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overrides Function HasTermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
-            Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.has_term_binding( _
-                Eiffel.String(a_terminology_id), _
-                Eiffel.String(a_path))
+            Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.has_term_binding(Eiffel.String(a_terminology_id), Eiffel.String(a_path))
         End Function
 
         Public Overrides Function HasConstraintBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
-            Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.has_constraint_binding( _
-                Eiffel.String(a_terminology_id), _
-                Eiffel.String(a_path))
+            Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.has_constraint_binding(Eiffel.String(a_terminology_id), Eiffel.String(a_path))
         End Function
 
         Public Overrides Function TermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As String
@@ -127,9 +123,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
 
             If EIF_adlInterface.archetype_available Then
-                codePhrase = EIF_adlInterface.ontology.term_binding( _
-                    Eiffel.String(a_terminology_id), _
-                    Eiffel.String(a_path))
+                codePhrase = EIF_adlInterface.ontology.term_binding(Eiffel.String(a_terminology_id), Eiffel.String(a_path))
 
                 If Not codePhrase Is Nothing Then
                     result = codePhrase.code_string.to_cil
@@ -144,9 +138,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim codePhrase As openehr.openehr.rm.data_types.text.CODE_PHRASE
 
             If EIF_adlInterface.archetype_available Then
-                codePhrase = EIF_adlInterface.ontology.constraint_binding( _
-                    Eiffel.String(a_terminology_id), _
-                    Eiffel.String(a_path))
+                codePhrase = EIF_adlInterface.ontology.constraint_binding(Eiffel.String(a_terminology_id), Eiffel.String(a_path))
 
                 If Not codePhrase Is Nothing Then
                     result = codePhrase.code_string.to_cil
@@ -165,9 +157,11 @@ Namespace ArchetypeEditor.ADL_Classes
             Try
                 If EIF_adlInterface.archetype_available Then
                     Dim str As EiffelKernel.STRING_8 = Eiffel.String(sPath)
+
                     If sRelease <> "" Then
                         sTerminology = String.Format("{0}({1})", sTerminology, sRelease)
                     End If
+
                     Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(Eiffel.String(sTerminology & "::" & sCode))
 
                     If EIF_adlInterface.ontology.has_term_binding(cp.terminology_id.value, str) Then
@@ -215,20 +209,10 @@ Namespace ArchetypeEditor.ADL_Classes
                         sTerminology = String.Format("{0}({1})", sTerminology, sRelease)
                     End If
 
-                    If EIF_adlInterface.ontology.has_constraint_binding( _
-                        Eiffel.String(sTerminology), _
-                        cd) Then
-
-                        EIF_adlInterface.ontology.replace_constraint_binding( _
-                        openehr.common_libs.basic.Create.URI.make_from_string(qry), _
-                        Eiffel.String(sTerminology), _
-                        cd)
-
+                    If EIF_adlInterface.ontology.has_constraint_binding(Eiffel.String(sTerminology), cd) Then
+                        EIF_adlInterface.ontology.replace_constraint_binding(openehr.common_libs.basic.Create.URI.make_from_string(qry), Eiffel.String(sTerminology), cd)
                     Else
-                        EIF_adlInterface.ontology.add_constraint_binding( _
-                        openehr.common_libs.basic.Create.URI.make_from_string(qry), _
-                        Eiffel.String(sTerminology), _
-                        cd)
+                        EIF_adlInterface.ontology.add_constraint_binding(openehr.common_libs.basic.Create.URI.make_from_string(qry), Eiffel.String(sTerminology), cd)
                     End If
                 End If
             Catch e As System.Exception

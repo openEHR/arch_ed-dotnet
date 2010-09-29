@@ -143,7 +143,7 @@ Public Class TabPageActivity
 
         If s(0) <> "" Then
             CType(Parent, Crownwood.Magic.Controls.TabPage).Title = a_term.Text
-            mFileManager.OntologyManager.SetText(a_term)
+            mFileManager.OntologyManager.SetRmTermText(a_term)
             mFileManager.FileEdited = True
         End If
     End Sub

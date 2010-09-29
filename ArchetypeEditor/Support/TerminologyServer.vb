@@ -301,6 +301,25 @@ Public Class TerminologyServer
         Next
     End Sub
 
+    Private Sub AppendOtsTerminologies()
+        Try
+            If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
+                Ots.Ots.Once.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
+            End If
+
+            For Each t As Ots.Terminology In Ots.Ots.Once.Terminologies
+                Dim key(0) As Object
+                key(0) = t.TerminologyId
+
+                If TerminologyIdentifiers.Rows.Find(key) Is Nothing Then
+                    TerminologyIdentifiers.Rows.Add(t.TerminologyId, t.TerminologyId, "OTS", DBNull.Value)
+                End If
+            Next
+        Catch e As Exception
+            MessageBox.Show("Loading OTS terminologies: " + e.Message)
+        End Try
+    End Sub
+
     Public Sub InitialiseTerminology(ByVal Document As String, ByVal Schema As String)
         'FIXME - Add validation later
         'Dim xmlR As Xml.XmlTextReader
@@ -310,7 +329,7 @@ Public Class TerminologyServer
             Terminology.ReadXmlSchema(Schema)
             Terminology.ReadXml(Document)
         Catch e As Exception
-            MessageBox.Show("Loading terminology:" + e.Message)
+            MessageBox.Show("Loading terminologies: " + e.Message)
         End Try
 
         Languages = Terminology.Tables("Language")
@@ -331,14 +350,16 @@ Public Class TerminologyServer
     End Sub
 
     Sub New()
-        ' HKF: 22 Dec 2008
-        'InitialiseTerminology(Application.StartupPath & "\terminology\terminology.xml", Application.StartupPath & "\terminology\terminology.xsd")
         InitialiseTerminology(Options.AssemblyPath & "\terminology\terminology.xml", Options.AssemblyPath & "\terminology\terminology.xsd")
 
         ' set the VSB column as a primary field for searching
         Dim primarykeyfields(0) As DataColumn
         primarykeyfields(0) = TerminologyIdentifiers.Columns(0)
         TerminologyIdentifiers.PrimaryKey = primarykeyfields
+
+        If OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp Then
+            AppendOtsTerminologies()
+        End If
     End Sub
 
 End Class

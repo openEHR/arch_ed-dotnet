@@ -905,7 +905,7 @@ Public Class TableStructure
             Dim newTerm As RmTerm = New RmTerm(mArchetypeTable.Columns(i + 1).ColumnName)
             newTerm.Text = s(0)
             newTerm.Description = s(1)
-            mFileManager.OntologyManager.SetText(newTerm)
+            mFileManager.OntologyManager.SetRmTermText(newTerm)
             'Dim ArchCol As ArchetypeComposite
             'ArchCol = CType(mArchetypeTable.Rows(0).Item(i * 2), ArchetypeComposite)
             'ArchCol.Text = s(0)

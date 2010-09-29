@@ -26,9 +26,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-
     End Sub
-
 
     Public Sub New(ByVal a_file_manager As FileManagerLocal)
         MyBase.New()
@@ -42,16 +40,15 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         mAllowedValuesDataView = New DataView(mFileManager.OntologyManager.TermDefinitionTable)
 
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.radioText.Text = Filemanager.GetOpenEhrTerm(444, Me.radioText.Text)
-            Me.radioInternal.Text = Filemanager.GetOpenEhrTerm(150, Me.radioInternal.Text)
-            Me.radioTerminology.Text = Filemanager.GetOpenEhrTerm(47, Me.radioTerminology.Text)
-            Me.butDefaultItem.Text = Filemanager.GetOpenEhrTerm(153, Me.butDefaultItem.Text)
-            Me.ToolTip1.SetToolTip(Me.butAddItem, Filemanager.GetOpenEhrTerm(602, "Add existing term"))
-            Me.ToolTip1.SetToolTip(Me.ButNewItem, Filemanager.GetOpenEhrTerm(603, "Add new term"))
-            Me.ToolTip1.SetToolTip(Me.butRemoveItem, Filemanager.GetOpenEhrTerm(152, "Remove term"))
-            Me.lblConstraint.Text = Filemanager.GetOpenEhrTerm(87, Me.lblConstraint.Text)
-            Me.lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
-
+            radioText.Text = Filemanager.GetOpenEhrTerm(444, radioText.Text)
+            radioInternal.Text = Filemanager.GetOpenEhrTerm(150, radioInternal.Text)
+            radioTerminology.Text = Filemanager.GetOpenEhrTerm(47, radioTerminology.Text)
+            DefaultItemButton.Text = Filemanager.GetOpenEhrTerm(153, DefaultItemButton.Text)
+            ToolTip1.SetToolTip(AddItemButton, Filemanager.GetOpenEhrTerm(602, "Add existing term"))
+            ToolTip1.SetToolTip(NewItemButton, Filemanager.GetOpenEhrTerm(603, "Add new term"))
+            ToolTip1.SetToolTip(RemoveItemButton, Filemanager.GetOpenEhrTerm(152, "Remove term"))
+            TermConstraintLabel.Text = Filemanager.GetOpenEhrTerm(87, TermConstraintLabel.Text)
+            TermConstraintDescriptionLabel.Text = Filemanager.GetOpenEhrTerm(113, TermConstraintDescriptionLabel.Text)
         End If
     End Sub
 
@@ -59,17 +56,20 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     Friend WithEvents gbAllowableValues As System.Windows.Forms.GroupBox
-    Friend WithEvents ButNewItem As System.Windows.Forms.Button
-    Friend WithEvents butDefaultItem As System.Windows.Forms.Button
-    Friend WithEvents butRemoveItem As System.Windows.Forms.Button
+    Friend WithEvents NewItemButton As System.Windows.Forms.Button
+    Friend WithEvents DefaultItemButton As System.Windows.Forms.Button
+    Friend WithEvents RemoveItemButton As System.Windows.Forms.Button
     Friend WithEvents txtAssumedValue As System.Windows.Forms.TextBox
-    Friend WithEvents butAddItem As System.Windows.Forms.Button
+    Friend WithEvents AddItemButton As System.Windows.Forms.Button
     Friend WithEvents listAllowableValues As System.Windows.Forms.ListBox
     Friend WithEvents radioInternal As System.Windows.Forms.RadioButton
     Friend WithEvents radioText As System.Windows.Forms.RadioButton
     Friend WithEvents radioTerminology As System.Windows.Forms.RadioButton
-    Friend WithEvents txtTermConstraintDescription As System.Windows.Forms.TextBox
-    Friend WithEvents txtTermConstraintText As System.Windows.Forms.TextBox
+    Friend WithEvents TermConstraintDescriptionTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents TermConstraintTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents TermConstraintTerminologyTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents TermConstraintSubsetTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents TermConstraintReleaseTextBox As System.Windows.Forms.TextBox
     Friend WithEvents ContextMenuListAllowableValues As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuItemCopyAll As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItemPasteAll As System.Windows.Forms.MenuItem
@@ -80,31 +80,36 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     'Private components As System.ComponentModel.IContainer
     'Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents MenuItemEdit As System.Windows.Forms.MenuItem
-    Friend WithEvents lblDescription As System.Windows.Forms.Label
-    Friend WithEvents btnPasteList As System.Windows.Forms.Button
-    Friend WithEvents btnCopyList As System.Windows.Forms.Button
-    Friend WithEvents btnMoveDown As System.Windows.Forms.Button
-    Friend WithEvents btnMoveUp As System.Windows.Forms.Button
+    Friend WithEvents TermConstraintDescriptionLabel As System.Windows.Forms.Label
+    Friend WithEvents PasteListButton As System.Windows.Forms.Button
+    Friend WithEvents CopyListButton As System.Windows.Forms.Button
+    Friend WithEvents MoveDownButton As System.Windows.Forms.Button
+    Friend WithEvents MoveUpButton As System.Windows.Forms.Button
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Private components As System.ComponentModel.IContainer
     Friend WithEvents MenuItemRemove As System.Windows.Forms.MenuItem
-    Friend WithEvents lblConstraint As System.Windows.Forms.Label
+    Friend WithEvents TermConstraintSubsetLabel As System.Windows.Forms.Label
+    Friend WithEvents TermConstraintTerminologyLabel As System.Windows.Forms.Label
+    Friend WithEvents TermConstraintReleaseLabel As System.Windows.Forms.Label
+    Friend WithEvents TermConstraintTerminologyButton As System.Windows.Forms.Button
+    Friend WithEvents TermConstraintSubsetButton As System.Windows.Forms.Button
+    Friend WithEvents TermConstraintLabel As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TextConstraintControl))
         Me.gbAllowableValues = New System.Windows.Forms.GroupBox
-        Me.btnPasteList = New System.Windows.Forms.Button
+        Me.PasteListButton = New System.Windows.Forms.Button
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.btnCopyList = New System.Windows.Forms.Button
-        Me.btnMoveDown = New System.Windows.Forms.Button
-        Me.btnMoveUp = New System.Windows.Forms.Button
-        Me.ButNewItem = New System.Windows.Forms.Button
-        Me.butDefaultItem = New System.Windows.Forms.Button
-        Me.butRemoveItem = New System.Windows.Forms.Button
+        Me.CopyListButton = New System.Windows.Forms.Button
+        Me.MoveDownButton = New System.Windows.Forms.Button
+        Me.MoveUpButton = New System.Windows.Forms.Button
+        Me.NewItemButton = New System.Windows.Forms.Button
+        Me.DefaultItemButton = New System.Windows.Forms.Button
+        Me.RemoveItemButton = New System.Windows.Forms.Button
         Me.txtAssumedValue = New System.Windows.Forms.TextBox
         Me.ContextMenuClearText = New System.Windows.Forms.ContextMenu
         Me.MenuClearText = New System.Windows.Forms.MenuItem
-        Me.butAddItem = New System.Windows.Forms.Button
+        Me.AddItemButton = New System.Windows.Forms.Button
         Me.listAllowableValues = New System.Windows.Forms.ListBox
         Me.ContextMenuListAllowableValues = New System.Windows.Forms.ContextMenu
         Me.MenuItemEdit = New System.Windows.Forms.MenuItem
@@ -113,45 +118,53 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.MenuItemPasteAll = New System.Windows.Forms.MenuItem
         Me.MenuItemCancelCopy = New System.Windows.Forms.MenuItem
         Me.MenuItemAddExisting = New System.Windows.Forms.MenuItem
-        Me.lblDescription = New System.Windows.Forms.Label
-        Me.lblConstraint = New System.Windows.Forms.Label
+        Me.TermConstraintDescriptionLabel = New System.Windows.Forms.Label
+        Me.TermConstraintLabel = New System.Windows.Forms.Label
         Me.radioInternal = New System.Windows.Forms.RadioButton
         Me.radioText = New System.Windows.Forms.RadioButton
         Me.radioTerminology = New System.Windows.Forms.RadioButton
-        Me.txtTermConstraintDescription = New System.Windows.Forms.TextBox
-        Me.txtTermConstraintText = New System.Windows.Forms.TextBox
+        Me.TermConstraintDescriptionTextBox = New System.Windows.Forms.TextBox
+        Me.TermConstraintTextBox = New System.Windows.Forms.TextBox
+        Me.TermConstraintTerminologyTextBox = New System.Windows.Forms.TextBox
+        Me.TermConstraintSubsetTextBox = New System.Windows.Forms.TextBox
+        Me.TermConstraintReleaseTextBox = New System.Windows.Forms.TextBox
+        Me.TermConstraintSubsetLabel = New System.Windows.Forms.Label
+        Me.TermConstraintTerminologyLabel = New System.Windows.Forms.Label
+        Me.TermConstraintReleaseLabel = New System.Windows.Forms.Label
+        Me.TermConstraintTerminologyButton = New System.Windows.Forms.Button
+        Me.TermConstraintSubsetButton = New System.Windows.Forms.Button
         Me.gbAllowableValues.SuspendLayout()
         Me.SuspendLayout()
         '
         'gbAllowableValues
         '
         Me.gbAllowableValues.BackColor = System.Drawing.Color.Transparent
-        Me.gbAllowableValues.Controls.Add(Me.btnPasteList)
-        Me.gbAllowableValues.Controls.Add(Me.btnCopyList)
-        Me.gbAllowableValues.Controls.Add(Me.btnMoveDown)
-        Me.gbAllowableValues.Controls.Add(Me.btnMoveUp)
-        Me.gbAllowableValues.Controls.Add(Me.ButNewItem)
-        Me.gbAllowableValues.Controls.Add(Me.butDefaultItem)
-        Me.gbAllowableValues.Controls.Add(Me.butRemoveItem)
+        Me.gbAllowableValues.Controls.Add(Me.PasteListButton)
+        Me.gbAllowableValues.Controls.Add(Me.CopyListButton)
+        Me.gbAllowableValues.Controls.Add(Me.MoveDownButton)
+        Me.gbAllowableValues.Controls.Add(Me.MoveUpButton)
+        Me.gbAllowableValues.Controls.Add(Me.NewItemButton)
+        Me.gbAllowableValues.Controls.Add(Me.DefaultItemButton)
+        Me.gbAllowableValues.Controls.Add(Me.RemoveItemButton)
         Me.gbAllowableValues.Controls.Add(Me.txtAssumedValue)
-        Me.gbAllowableValues.Controls.Add(Me.butAddItem)
+        Me.gbAllowableValues.Controls.Add(Me.AddItemButton)
         Me.gbAllowableValues.Controls.Add(Me.listAllowableValues)
         Me.gbAllowableValues.Location = New System.Drawing.Point(16, 48)
         Me.gbAllowableValues.Name = "gbAllowableValues"
         Me.gbAllowableValues.Size = New System.Drawing.Size(372, 362)
-        Me.gbAllowableValues.TabIndex = 36
+        Me.gbAllowableValues.TabIndex = 50
         Me.gbAllowableValues.TabStop = False
         '
-        'btnPasteList
+        'PasteListButton
         '
-        Me.btnPasteList.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPasteList.ImageKey = "paste16.bmp"
-        Me.btnPasteList.ImageList = Me.ImageList1
-        Me.btnPasteList.Location = New System.Drawing.Point(15, 224)
-        Me.btnPasteList.Name = "btnPasteList"
-        Me.btnPasteList.Size = New System.Drawing.Size(24, 24)
-        Me.btnPasteList.TabIndex = 9
-        Me.ToolTip1.SetToolTip(Me.btnPasteList, "Paste an external list from Clipboard")
+        Me.PasteListButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.PasteListButton.ImageKey = "paste16.bmp"
+        Me.PasteListButton.ImageList = Me.ImageList1
+        Me.PasteListButton.Location = New System.Drawing.Point(15, 224)
+        Me.PasteListButton.Name = "PasteListButton"
+        Me.PasteListButton.Size = New System.Drawing.Size(24, 24)
+        Me.PasteListButton.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.PasteListButton, "Paste an external list from Clipboard")
         '
         'ImageList1
         '
@@ -162,68 +175,68 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.ImageList1.Images.SetKeyName(2, "copy16.bmp")
         Me.ImageList1.Images.SetKeyName(3, "paste16.bmp")
         '
-        'btnCopyList
+        'CopyListButton
         '
-        Me.btnCopyList.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnCopyList.ImageKey = "copy16.bmp"
-        Me.btnCopyList.ImageList = Me.ImageList1
-        Me.btnCopyList.Location = New System.Drawing.Point(15, 194)
-        Me.btnCopyList.Name = "btnCopyList"
-        Me.btnCopyList.Size = New System.Drawing.Size(24, 24)
-        Me.btnCopyList.TabIndex = 8
-        Me.ToolTip1.SetToolTip(Me.btnCopyList, "Copy the list to the clipboard")
+        Me.CopyListButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CopyListButton.ImageKey = "copy16.bmp"
+        Me.CopyListButton.ImageList = Me.ImageList1
+        Me.CopyListButton.Location = New System.Drawing.Point(15, 194)
+        Me.CopyListButton.Name = "CopyListButton"
+        Me.CopyListButton.Size = New System.Drawing.Size(24, 24)
+        Me.CopyListButton.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.CopyListButton, "Copy the list to the clipboard")
         '
-        'btnMoveDown
+        'MoveDownButton
         '
-        Me.btnMoveDown.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnMoveDown.ImageKey = "arrowdown_blue16.bmp"
-        Me.btnMoveDown.ImageList = Me.ImageList1
-        Me.btnMoveDown.Location = New System.Drawing.Point(15, 154)
-        Me.btnMoveDown.Name = "btnMoveDown"
-        Me.btnMoveDown.Size = New System.Drawing.Size(24, 24)
-        Me.btnMoveDown.TabIndex = 7
-        Me.ToolTip1.SetToolTip(Me.btnMoveDown, "Move the highlighted item down the list." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10))
+        Me.MoveDownButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MoveDownButton.ImageKey = "arrowdown_blue16.bmp"
+        Me.MoveDownButton.ImageList = Me.ImageList1
+        Me.MoveDownButton.Location = New System.Drawing.Point(15, 154)
+        Me.MoveDownButton.Name = "MoveDownButton"
+        Me.MoveDownButton.Size = New System.Drawing.Size(24, 24)
+        Me.MoveDownButton.TabIndex = 4
+        Me.ToolTip1.SetToolTip(Me.MoveDownButton, "Move the highlighted item down the list." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10))
         '
-        'btnMoveUp
+        'MoveUpButton
         '
-        Me.btnMoveUp.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnMoveUp.ImageIndex = 1
-        Me.btnMoveUp.ImageList = Me.ImageList1
-        Me.btnMoveUp.Location = New System.Drawing.Point(15, 124)
-        Me.btnMoveUp.Name = "btnMoveUp"
-        Me.btnMoveUp.Size = New System.Drawing.Size(24, 24)
-        Me.btnMoveUp.TabIndex = 6
-        Me.ToolTip1.SetToolTip(Me.btnMoveUp, "Move the highlighted item up the list")
+        Me.MoveUpButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MoveUpButton.ImageIndex = 1
+        Me.MoveUpButton.ImageList = Me.ImageList1
+        Me.MoveUpButton.Location = New System.Drawing.Point(15, 124)
+        Me.MoveUpButton.Name = "MoveUpButton"
+        Me.MoveUpButton.Size = New System.Drawing.Size(24, 24)
+        Me.MoveUpButton.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.MoveUpButton, "Move the highlighted item up the list")
         '
-        'ButNewItem
+        'NewItemButton
         '
-        Me.ButNewItem.Image = CType(resources.GetObject("ButNewItem.Image"), System.Drawing.Image)
-        Me.ButNewItem.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.ButNewItem.Location = New System.Drawing.Point(15, 24)
-        Me.ButNewItem.Name = "ButNewItem"
-        Me.ButNewItem.Size = New System.Drawing.Size(24, 24)
-        Me.ButNewItem.TabIndex = 0
-        Me.ToolTip1.SetToolTip(Me.ButNewItem, "Add a new term")
+        Me.NewItemButton.Image = CType(resources.GetObject("NewItemButton.Image"), System.Drawing.Image)
+        Me.NewItemButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.NewItemButton.Location = New System.Drawing.Point(15, 24)
+        Me.NewItemButton.Name = "NewItemButton"
+        Me.NewItemButton.Size = New System.Drawing.Size(24, 24)
+        Me.NewItemButton.TabIndex = 0
+        Me.ToolTip1.SetToolTip(Me.NewItemButton, "Add a new term")
         '
-        'butDefaultItem
+        'DefaultItemButton
         '
-        Me.butDefaultItem.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.butDefaultItem.Location = New System.Drawing.Point(46, 331)
-        Me.butDefaultItem.Name = "butDefaultItem"
-        Me.butDefaultItem.Size = New System.Drawing.Size(122, 24)
-        Me.butDefaultItem.TabIndex = 4
-        Me.butDefaultItem.Text = "Set assumed value"
-        Me.butDefaultItem.Visible = False
+        Me.DefaultItemButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.DefaultItemButton.Location = New System.Drawing.Point(46, 331)
+        Me.DefaultItemButton.Name = "DefaultItemButton"
+        Me.DefaultItemButton.Size = New System.Drawing.Size(122, 24)
+        Me.DefaultItemButton.TabIndex = 8
+        Me.DefaultItemButton.Text = "Set assumed value"
+        Me.DefaultItemButton.Visible = False
         '
-        'butRemoveItem
+        'RemoveItemButton
         '
-        Me.butRemoveItem.Image = CType(resources.GetObject("butRemoveItem.Image"), System.Drawing.Image)
-        Me.butRemoveItem.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveItem.Location = New System.Drawing.Point(15, 56)
-        Me.butRemoveItem.Name = "butRemoveItem"
-        Me.butRemoveItem.Size = New System.Drawing.Size(24, 24)
-        Me.butRemoveItem.TabIndex = 1
-        Me.ToolTip1.SetToolTip(Me.butRemoveItem, "Remove term")
+        Me.RemoveItemButton.Image = CType(resources.GetObject("RemoveItemButton.Image"), System.Drawing.Image)
+        Me.RemoveItemButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.RemoveItemButton.Location = New System.Drawing.Point(15, 56)
+        Me.RemoveItemButton.Name = "RemoveItemButton"
+        Me.RemoveItemButton.Size = New System.Drawing.Size(24, 24)
+        Me.RemoveItemButton.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.RemoveItemButton, "Remove term")
         '
         'txtAssumedValue
         '
@@ -234,7 +247,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.txtAssumedValue.Name = "txtAssumedValue"
         Me.txtAssumedValue.ReadOnly = True
         Me.txtAssumedValue.Size = New System.Drawing.Size(188, 20)
-        Me.txtAssumedValue.TabIndex = 5
+        Me.txtAssumedValue.TabIndex = 9
         Me.txtAssumedValue.Text = "(none)"
         Me.txtAssumedValue.Visible = False
         '
@@ -247,15 +260,15 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.MenuClearText.Index = 0
         Me.MenuClearText.Text = "Clear"
         '
-        'butAddItem
+        'AddItemButton
         '
-        Me.butAddItem.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.butAddItem.Location = New System.Drawing.Point(15, 88)
-        Me.butAddItem.Name = "butAddItem"
-        Me.butAddItem.Size = New System.Drawing.Size(24, 24)
-        Me.butAddItem.TabIndex = 2
-        Me.butAddItem.Text = "..."
-        Me.ToolTip1.SetToolTip(Me.butAddItem, "Add a term that is already defined")
+        Me.AddItemButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.AddItemButton.Location = New System.Drawing.Point(15, 88)
+        Me.AddItemButton.Name = "AddItemButton"
+        Me.AddItemButton.Size = New System.Drawing.Size(24, 24)
+        Me.AddItemButton.TabIndex = 2
+        Me.AddItemButton.Text = "..."
+        Me.ToolTip1.SetToolTip(Me.AddItemButton, "Add a term that is already defined")
         '
         'listAllowableValues
         '
@@ -264,12 +277,11 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.listAllowableValues.ContextMenu = Me.ContextMenuListAllowableValues
         Me.listAllowableValues.DisplayMember = "Text"
-        Me.listAllowableValues.ItemHeight = 16
         Me.listAllowableValues.Location = New System.Drawing.Point(46, 20)
         Me.listAllowableValues.MultiColumn = True
         Me.listAllowableValues.Name = "listAllowableValues"
         Me.listAllowableValues.Size = New System.Drawing.Size(318, 303)
-        Me.listAllowableValues.TabIndex = 3
+        Me.listAllowableValues.TabIndex = 7
         '
         'ContextMenuListAllowableValues
         '
@@ -309,23 +321,23 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.MenuItemAddExisting.Index = 5
         Me.MenuItemAddExisting.Text = "Add existing code(s)"
         '
-        'lblDescription
+        'TermConstraintDescriptionLabel
         '
-        Me.lblDescription.Location = New System.Drawing.Point(16, 104)
-        Me.lblDescription.Name = "lblDescription"
-        Me.lblDescription.Size = New System.Drawing.Size(88, 24)
-        Me.lblDescription.TabIndex = 38
-        Me.lblDescription.Text = "Description"
-        Me.lblDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.TermConstraintDescriptionLabel.Location = New System.Drawing.Point(16, 104)
+        Me.TermConstraintDescriptionLabel.Name = "TermConstraintDescriptionLabel"
+        Me.TermConstraintDescriptionLabel.Size = New System.Drawing.Size(88, 24)
+        Me.TermConstraintDescriptionLabel.TabIndex = 36
+        Me.TermConstraintDescriptionLabel.Text = "Description"
+        Me.TermConstraintDescriptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'lblConstraint
+        'TermConstraintLabel
         '
-        Me.lblConstraint.Location = New System.Drawing.Point(16, 48)
-        Me.lblConstraint.Name = "lblConstraint"
-        Me.lblConstraint.Size = New System.Drawing.Size(88, 24)
-        Me.lblConstraint.TabIndex = 37
-        Me.lblConstraint.Text = "Constraint"
-        Me.lblConstraint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.TermConstraintLabel.Location = New System.Drawing.Point(16, 48)
+        Me.TermConstraintLabel.Name = "TermConstraintLabel"
+        Me.TermConstraintLabel.Size = New System.Drawing.Size(88, 24)
+        Me.TermConstraintLabel.TabIndex = 34
+        Me.TermConstraintLabel.Text = "Constraint"
+        Me.TermConstraintLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'radioInternal
         '
@@ -351,40 +363,127 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.radioTerminology.TabIndex = 33
         Me.radioTerminology.Text = "Terminology"
         '
-        'txtTermConstraintDescription
+        'TermConstraintDescriptionTextBox
         '
-        Me.txtTermConstraintDescription.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.TermConstraintDescriptionTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTermConstraintDescription.Location = New System.Drawing.Point(19, 128)
-        Me.txtTermConstraintDescription.Multiline = True
-        Me.txtTermConstraintDescription.Name = "txtTermConstraintDescription"
-        Me.txtTermConstraintDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtTermConstraintDescription.Size = New System.Drawing.Size(369, 265)
-        Me.txtTermConstraintDescription.TabIndex = 35
-        Me.txtTermConstraintDescription.Visible = False
+        Me.TermConstraintDescriptionTextBox.Location = New System.Drawing.Point(19, 128)
+        Me.TermConstraintDescriptionTextBox.Multiline = True
+        Me.TermConstraintDescriptionTextBox.Name = "TermConstraintDescriptionTextBox"
+        Me.TermConstraintDescriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.TermConstraintDescriptionTextBox.Size = New System.Drawing.Size(369, 60)
+        Me.TermConstraintDescriptionTextBox.TabIndex = 37
         '
-        'txtTermConstraintText
+        'TermConstraintTextBox
         '
-        Me.txtTermConstraintText.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TermConstraintTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTermConstraintText.Location = New System.Drawing.Point(19, 72)
-        Me.txtTermConstraintText.Name = "txtTermConstraintText"
-        Me.txtTermConstraintText.Size = New System.Drawing.Size(369, 20)
-        Me.txtTermConstraintText.TabIndex = 34
-        Me.txtTermConstraintText.Visible = False
+        Me.TermConstraintTextBox.Location = New System.Drawing.Point(19, 72)
+        Me.TermConstraintTextBox.Name = "TermConstraintTextBox"
+        Me.TermConstraintTextBox.Size = New System.Drawing.Size(369, 20)
+        Me.TermConstraintTextBox.TabIndex = 35
+        '
+        'TermConstraintTerminologyTextBox
+        '
+        Me.TermConstraintTerminologyTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TermConstraintTerminologyTextBox.Location = New System.Drawing.Point(19, 224)
+        Me.TermConstraintTerminologyTextBox.Name = "TermConstraintTerminologyTextBox"
+        Me.TermConstraintTerminologyTextBox.Size = New System.Drawing.Size(320, 20)
+        Me.TermConstraintTerminologyTextBox.TabIndex = 39
+        '
+        'TermConstraintSubsetTextBox
+        '
+        Me.TermConstraintSubsetTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TermConstraintSubsetTextBox.Location = New System.Drawing.Point(19, 280)
+        Me.TermConstraintSubsetTextBox.Name = "TermConstraintSubsetTextBox"
+        Me.TermConstraintSubsetTextBox.Size = New System.Drawing.Size(320, 20)
+        Me.TermConstraintSubsetTextBox.TabIndex = 42
+        '
+        'TermConstraintReleaseTextBox
+        '
+        Me.TermConstraintReleaseTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TermConstraintReleaseTextBox.Location = New System.Drawing.Point(19, 336)
+        Me.TermConstraintReleaseTextBox.Name = "TermConstraintReleaseTextBox"
+        Me.TermConstraintReleaseTextBox.Size = New System.Drawing.Size(369, 20)
+        Me.TermConstraintReleaseTextBox.TabIndex = 45
+        '
+        'TermConstraintSubsetLabel
+        '
+        Me.TermConstraintSubsetLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TermConstraintSubsetLabel.Location = New System.Drawing.Point(16, 256)
+        Me.TermConstraintSubsetLabel.Name = "TermConstraintSubsetLabel"
+        Me.TermConstraintSubsetLabel.Size = New System.Drawing.Size(88, 24)
+        Me.TermConstraintSubsetLabel.TabIndex = 41
+        Me.TermConstraintSubsetLabel.Text = "Subset"
+        Me.TermConstraintSubsetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'TermConstraintTerminologyLabel
+        '
+        Me.TermConstraintTerminologyLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TermConstraintTerminologyLabel.Location = New System.Drawing.Point(16, 200)
+        Me.TermConstraintTerminologyLabel.Name = "TermConstraintTerminologyLabel"
+        Me.TermConstraintTerminologyLabel.Size = New System.Drawing.Size(88, 24)
+        Me.TermConstraintTerminologyLabel.TabIndex = 38
+        Me.TermConstraintTerminologyLabel.Text = "Terminology"
+        Me.TermConstraintTerminologyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'TermConstraintReleaseLabel
+        '
+        Me.TermConstraintReleaseLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.TermConstraintReleaseLabel.Location = New System.Drawing.Point(16, 312)
+        Me.TermConstraintReleaseLabel.Name = "TermConstraintReleaseLabel"
+        Me.TermConstraintReleaseLabel.Size = New System.Drawing.Size(88, 24)
+        Me.TermConstraintReleaseLabel.TabIndex = 44
+        Me.TermConstraintReleaseLabel.Text = "Release"
+        Me.TermConstraintReleaseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'TermConstraintTerminologyButton
+        '
+        Me.TermConstraintTerminologyButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TermConstraintTerminologyButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TermConstraintTerminologyButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.TermConstraintTerminologyButton.Location = New System.Drawing.Point(346, 222)
+        Me.TermConstraintTerminologyButton.Name = "TermConstraintTerminologyButton"
+        Me.TermConstraintTerminologyButton.Size = New System.Drawing.Size(24, 24)
+        Me.TermConstraintTerminologyButton.TabIndex = 40
+        Me.TermConstraintTerminologyButton.Text = "..."
+        Me.ToolTip1.SetToolTip(Me.TermConstraintTerminologyButton, "Select a terminology")
+        '
+        'TermConstraintSubsetButton
+        '
+        Me.TermConstraintSubsetButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TermConstraintSubsetButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TermConstraintSubsetButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.TermConstraintSubsetButton.Location = New System.Drawing.Point(346, 278)
+        Me.TermConstraintSubsetButton.Name = "TermConstraintSubsetButton"
+        Me.TermConstraintSubsetButton.Size = New System.Drawing.Size(24, 24)
+        Me.TermConstraintSubsetButton.TabIndex = 43
+        Me.TermConstraintSubsetButton.Text = "..."
+        Me.ToolTip1.SetToolTip(Me.TermConstraintSubsetButton, "Select a terminology subset")
         '
         'TextConstraintControl
         '
         Me.BackColor = System.Drawing.Color.Transparent
         Me.Controls.Add(Me.gbAllowableValues)
-        Me.Controls.Add(Me.lblDescription)
-        Me.Controls.Add(Me.lblConstraint)
+        Me.Controls.Add(Me.TermConstraintDescriptionLabel)
+        Me.Controls.Add(Me.TermConstraintLabel)
         Me.Controls.Add(Me.radioInternal)
         Me.Controls.Add(Me.radioText)
         Me.Controls.Add(Me.radioTerminology)
-        Me.Controls.Add(Me.txtTermConstraintDescription)
-        Me.Controls.Add(Me.txtTermConstraintText)
+        Me.Controls.Add(Me.TermConstraintDescriptionTextBox)
+        Me.Controls.Add(Me.TermConstraintTextBox)
+        Me.Controls.Add(Me.TermConstraintTerminologyTextBox)
+        Me.Controls.Add(Me.TermConstraintSubsetTextBox)
+        Me.Controls.Add(Me.TermConstraintReleaseTextBox)
+        Me.Controls.Add(Me.TermConstraintReleaseLabel)
+        Me.Controls.Add(Me.TermConstraintSubsetLabel)
+        Me.Controls.Add(Me.TermConstraintTerminologyLabel)
+        Me.Controls.Add(Me.TermConstraintTerminologyButton)
+        Me.Controls.Add(Me.TermConstraintSubsetButton)
         Me.Name = "TextConstraintControl"
         Me.Size = New System.Drawing.Size(407, 414)
         Me.gbAllowableValues.ResumeLayout(False)
@@ -399,10 +498,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Private mAllowedValuesDataView As DataView
     Private mTempConstraint As Constraint_Text
     Private mConstraintTerm As RmTerm
-    'IMCN: 20 October 2009
-    ' Supports correct ordering of internal list + reordering
     Private CodeTermList As New ArrayList()
-    'IMCN: 20 October 2009
+
     ' Supports correct ordering of internal list + reordering
     Private Class CodeTerm
         Private m_atCode As String
@@ -431,6 +528,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 m_Text = value
             End Set
         End Property
+
         Public Overrides Function ToString() As String
             Return Text
         End Function
@@ -439,9 +537,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Private Shadows ReadOnly Property Constraint() As Constraint_Text
         Get
             Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Text)
-
             Return CType(MyBase.Constraint, Constraint_Text)
-
         End Get
     End Property
 
@@ -455,255 +551,241 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             IsLoading = False
         End Set
     End Property
-    '// Set constraint values on control
+
+    ' Set constraint values on control
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-
-        'Changed SRH: 16th Sep - need to make this visible regardless of type to ensure
-        ' it is displayed if type of constraint is changed (moved from SetInternalCodedValues)
-        ' If IsState Then
         If IsState Then
-            Me.butDefaultItem.Visible = True
-            Me.txtAssumedValue.Visible = True
+            DefaultItemButton.Visible = True
+            txtAssumedValue.Visible = True
         End If
-
-        'End If
 
         Select Case Me.Constraint.TypeOfTextConstraint
             Case TextConstrainType.Text
                 radioText.Checked = True
-                'Added for backward compatibility with some archetypes with textural constraints
-                If Me.Constraint.AllowableValues.Codes.Count > 0 Then
-                    Dim s As String
-                    Me.listAllowableValues.DataSource = Nothing
-                    Me.listAllowableValues.Items.Clear()
 
-                    For Each s In Me.Constraint.AllowableValues.Codes
-                        Me.listAllowableValues.Items.Add(s)
+                'Added for backward compatibility with some archetypes with textural constraints
+                If Constraint.AllowableValues.Codes.Count > 0 Then
+                    Dim s As String
+                    listAllowableValues.DataSource = Nothing
+                    listAllowableValues.Items.Clear()
+
+                    For Each s In Constraint.AllowableValues.Codes
+                        listAllowableValues.Items.Add(s)
                     Next
-                    Me.txtAssumedValue.Text = CStr(Me.Constraint.AssumedValue)
+
+                    txtAssumedValue.Text = CStr(Constraint.AssumedValue)
                 End If
 
             Case TextConstrainType.Internal
-                Me.radioInternal.Checked = True
+                radioInternal.Checked = True
                 SetInternalCodedValues()
 
             Case TextConstrainType.Terminology
-                Me.radioTerminology.Checked = True
-                'SRH 2 Nov 2007: Changed to set the internal code
-                'Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm( _
-                '        Me.Constraint.ConstraintCode)
-                mConstraintTerm = mFileManager.OntologyManager.GetTerm(Me.Constraint.ConstraintCode)
+                radioTerminology.Checked = True
+                mConstraintTerm = mFileManager.OntologyManager.GetTerm(Constraint.ConstraintCode)
+                TermConstraintTextBox.Text = mConstraintTerm.Text
+                TermConstraintDescriptionTextBox.Text = mConstraintTerm.Description
 
-                Me.txtTermConstraintText.Text = mConstraintTerm.Text
-                Me.txtTermConstraintDescription.Text = mConstraintTerm.Description
+                Dim terminologyId As String = ""
+                Dim subset As String = ""
+                Dim release As String = ""
 
+                For Each row As DataRow In mFileManager.OntologyManager.ConstraintBindingsTable.Rows
+                    If TypeOf (row(1)) Is String Then
+                        Dim code As String = CType(row(1), String)
+
+                        If code = mConstraintTerm.Code And TypeOf (row(2)) Is String Then
+                            Dim uri As String = CType(row(2), String)
+
+                            If uri.StartsWith("terminology:") Then
+                                terminologyId = uri.Substring(uri.IndexOf(":") + 1)
+                                Dim i As Integer = terminologyId.IndexOf("?")
+
+                                If i > 0 Then
+                                    subset = terminologyId.Substring(i + 1)
+                                    terminologyId = terminologyId.Remove(i)
+
+                                    If subset.StartsWith("subset=") Then
+                                        subset = subset.Substring(subset.IndexOf("=") + 1).Replace("+", " ")
+                                    Else
+                                        subset = ""
+                                    End If
+                                End If
+
+                                i = terminologyId.IndexOf("/")
+
+                                If i > 0 Then
+                                    release = terminologyId.Substring(i + 1)
+                                    terminologyId = terminologyId.Remove(i)
+                                End If
+                            End If
+                        End If
+                    End If
+                Next
+
+                TermConstraintTerminologyTextBox.Text = terminologyId
+                TermConstraintSubsetTextBox.Text = subset
+                TermConstraintReleaseTextBox.Text = release
         End Select
-        'Added IMCN: 20 October 2009
+
         RefreshButtons()
-
-
     End Sub
 
     Private Sub SetInternalCodedValues()
-
-        If Me.Constraint.AllowableValues.Codes.Count > 0 AndAlso mFileManager.OntologyManager.Ontology.HasTermCode(TextConstraint.AllowableValues.Codes.Item(0)) Then
+        If Constraint.AllowableValues.Codes.Count > 0 AndAlso mFileManager.OntologyManager.Ontology.HasTermCode(TextConstraint.AllowableValues.Codes.Item(0)) Then
             RefreshlistAllowableValues(0)
-            ' now look up the default
-            If Me.Constraint.HasAssumedValue Then
-                Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(Me.Constraint.AssumedValue))
-                Me.txtAssumedValue.Text = aTerm.Text
-            Else
-                Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
-            End If
 
+            ' now look up the default
+            If Constraint.HasAssumedValue Then
+                Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(Constraint.AssumedValue))
+                txtAssumedValue.Text = aTerm.Text
+            Else
+                txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
+            End If
         Else
             ' to hide values as they are not overriden if the filter is set
-            Me.listAllowableValues.DataSource = Nothing
-            Me.listAllowableValues.Items.Clear()
-            Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
+            listAllowableValues.DataSource = Nothing
+            listAllowableValues.Items.Clear()
+            txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
             'May not be present so clear them if they are
             TextConstraint.AllowableValues.Codes.Clear()
         End If
-
     End Sub
 
-    'Added IMCN: 19 October 2009
     ' Establish correct cADL internal list order
     Private Sub RefreshlistAllowableValues(ByVal newindex As Integer)
         Dim atCode As String
-        Dim rowindex As Integer
 
         'Initialise Dataview
-        SetAllowableValuesFilter(Me.Constraint)
+        SetAllowableValuesFilter(Constraint)
         mAllowedValuesDataView.Sort = "Code"
 
         'Refresh CodeTermList
         CodeTermList.Clear()
-        For Each atCode In Me.Constraint.AllowableValues.Codes
-            rowindex = mAllowedValuesDataView.Find(atCode)
+
+        For Each atCode In Constraint.AllowableValues.Codes
+            Dim rowindex As Integer = mAllowedValuesDataView.Find(atCode)
             CodeTermList.Add(New CodeTerm(atCode, CStr(mAllowedValuesDataView.Item(rowindex)("Text"))))
         Next
 
         'Initialise Terms Listbox
-        Me.listAllowableValues.DataSource = Nothing
-        Me.listAllowableValues.Items.Clear()
-        Me.listAllowableValues.DisplayMember = "Text"
-        Me.listAllowableValues.ValueMember = "atCode"
-        Me.listAllowableValues.DataSource = CodeTermList
-        Me.listAllowableValues.Refresh()
+        listAllowableValues.DataSource = Nothing
+        listAllowableValues.Items.Clear()
+        listAllowableValues.DisplayMember = "Text"
+        listAllowableValues.ValueMember = "atCode"
+        listAllowableValues.DataSource = CodeTermList
+        listAllowableValues.Refresh()
 
         'Reset Selected index
-        If newindex >= Me.listAllowableValues.Items.Count Then
-            newindex = Me.listAllowableValues.Items.Count - 1
+        If newindex >= listAllowableValues.Items.Count Then
+            newindex = listAllowableValues.Items.Count - 1
         End If
-        Me.listAllowableValues.SelectedIndex = newindex
 
+        listAllowableValues.SelectedIndex = newindex
     End Sub
+
     ' Adds one or more atCodes from existing list of atCodes
-    Private Sub butAddItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddItem.Click
+    Private Sub butAddItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddItemButton.Click
+        If Not MyBase.IsLoading Then
+            Dim currentValues(Constraint.AllowableValues.Codes.Count) As String
+            Constraint.AllowableValues.Codes.CopyTo(currentValues, 0)
 
-        If MyBase.IsLoading Then Return
+            If radioInternal.Checked Then
+                Dim s() As String = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager, currentValues)
 
-        'SRH: 30 Jun 2008 - added check to avoid values already added
-        Dim currentValues(Me.Constraint.AllowableValues.Codes.Count) As String
-        Me.Constraint.AllowableValues.Codes.CopyTo(currentValues, 0)
+                If Not s Is Nothing Then
+                    For i As Integer = 0 To s.Length - 1
+                        Constraint.AllowableValues.Codes.Add(s(i))
+                    Next
 
-        If Me.radioText.Checked Then
+                    RefreshlistAllowableValues(Constraint.AllowableValues.Codes.Count - 1)
+                End If
+            End If
 
-        ElseIf Me.radioInternal.Checked Then
-
-            Dim s() As String = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager, currentValues)
-
-            If s Is Nothing Then Return
-
-            For i As Integer = 0 To s.Length - 1
-                Me.Constraint.AllowableValues.Codes.Add(s(i))
-            Next
-
-            '//Added IMCN 22 Ocotober 2009
-            RefreshlistAllowableValues(Me.Constraint.AllowableValues.Codes.Count - 1)
-
+            RefreshButtons()
+            mFileManager.FileEdited = True
         End If
-
-        '//Added IMCN 22 Ocotober 2009
-        RefreshButtons()
-        mFileManager.FileEdited = True
-
     End Sub
 
     Private Sub SetAllowableValuesFilter(ByVal TextConstraint As Constraint_Text)
         Dim i As Integer
-        Dim cd As String
-        Dim code As String
-        cd = "Code = "
+        Dim filter As String = ""
+        Dim prefix As String = "Code = "
 
         For i = 0 To TextConstraint.AllowableValues.Codes.Count - 1
             ' Codes could be out of date if a save has been carried out
-            code = TextConstraint.AllowableValues.Codes.Item(i)
-            cd = cd & "'" & code & "'"
-            If i < (TextConstraint.AllowableValues.Codes.Count - 1) Then
-                cd = cd & " OR Code = "
-            End If
+            Dim code As String = TextConstraint.AllowableValues.Codes.Item(i)
+            filter = filter + prefix + "'" + code + "'"
+            prefix = " OR Code = "
         Next
 
-        mAllowedValuesDataView.RowFilter = String.Format("({0}) AND (id = '{1}')", _
-                cd, mFileManager.OntologyManager.LanguageCode)
+        If filter <> "" Then
+            filter = "(" + filter + ") AND "
+        End If
+
+        mAllowedValuesDataView.RowFilter = filter + "id = '" + mFileManager.OntologyManager.LanguageCode + "'"
     End Sub
 
-    Private Sub butDefaultItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butDefaultItem.Click
-
-        If Me.listAllowableValues.SelectedIndex > -1 Then
-            Dim s As String = ""
+    Private Sub butDefaultItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DefaultItemButton.Click
+        If listAllowableValues.SelectedIndex > -1 Then
             ' the code is the default value, show the text
-            '// Changed IMCN: 20 October 2009
-            Me.txtAssumedValue.Text = Me.listAllowableValues.Text
-            s = CStr(Me.listAllowableValues.SelectedValue)
-            Me.txtAssumedValue.Tag = s
+            txtAssumedValue.Text = listAllowableValues.Text
+            Dim s As String = CStr(listAllowableValues.SelectedValue)
+            txtAssumedValue.Tag = s
             ' automatically sets hasAssumedValue
-            Me.Constraint.AssumedValue = s
+            Constraint.AssumedValue = s
 
-            '// Added IMCN: 22 October 2009
             RefreshButtons()
             mFileManager.FileEdited = True
         End If
     End Sub
 
     'Adds a completely new item
-    Private Sub butNewItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButNewItem.Click
-
-        If Me.radioInternal.Checked Then
+    Private Sub butNewItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewItemButton.Click
+        If radioInternal.Checked Then
             AddNewInternalCode()
-            'SRH: Dec 16 2008 - reintroduced for backward compatibility with textural constraints in archetypes
-        ElseIf Me.radioText.Checked Then
-            Dim s As String
-            s = OceanArchetypeEditor.Instance.GetInput("Enter the new item:", Me.ParentForm)
+        ElseIf radioText.Checked Then
+            Dim s As String = OceanArchetypeEditor.Instance.GetInput("Enter the new item:", ParentForm)
+
             If s <> "" Then
-                Me.listAllowableValues.DataSource = Nothing
-                Me.listAllowableValues.Items.Add(s)
-                Me.Constraint.AllowableValues.Codes.Add(s)
-                '// Added IMCN: 22 October 2009
+                listAllowableValues.DataSource = Nothing
+                listAllowableValues.Items.Add(s)
+                Constraint.AllowableValues.Codes.Add(s)
                 RefreshButtons()
                 mFileManager.FileEdited = True
             End If
         End If
-
     End Sub
 
-    '// IMCN 22 October 2009
-    '// Refactored
     Private Sub AddNewInternalCode()
-
         Dim s(1) As String
-        s = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(603, "Add new term"), _
-                                                   AE_Constants.Instance.Description, Me.ParentForm)
+        s = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(603, "Add new term"), AE_Constants.Instance.Description, ParentForm)
 
         If s(0) <> "" Then
             Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(s(0), s(1))
             Dim term_id As String = aTerm.Code
 
-            '// Removed IMCN 22 October 2009 
-            '//  No longer required as listbox is not bound directly to Dataview  
-            'If Me.listAllowableValues.DataSource Is Nothing Then
-            '    mAllowedValuesDataView.RowFilter = String.Format("(Code = '{0}') AND (id = '{1}')", _
-            '            aTerm.Code, mFileManager.OntologyManager.LanguageCode)
-            '    Me.listAllowableValues.DataSource = mAllowedValuesDataView
-            '    Me.listAllowableValues.DisplayMember = "Text"
-            '    Me.listAllowableValues.ValueMember = "Code"
-            'Else
-            '    ' add this id to the term filter
-            '    Dim f As String = mAllowedValuesDataView.RowFilter
-            '    Dim i As Integer = InStr(f, ") AND (") - 1
-            '    Dim str As String = " OR Code = '" & term_id & "'"
-            '    mAllowedValuesDataView.RowFilter = f.Insert(i, str)
-            'End If
-
             ' add the code to the constraint
-            Me.Constraint.AllowableValues.Codes.Add(term_id)
-            SetAllowableValuesFilter(Me.Constraint)
-            RefreshlistAllowableValues(Me.Constraint.AllowableValues.Codes.Count - 1)
-
-            '// Added IMCN: 22 October 2009
+            Constraint.AllowableValues.Codes.Add(term_id)
+            SetAllowableValuesFilter(Constraint)
+            RefreshlistAllowableValues(Constraint.AllowableValues.Codes.Count - 1)
             RefreshButtons()
             mFileManager.FileEdited = True
-
         End If
     End Sub
 
-    Private Sub butRemoveItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveItem.Click
-        Dim Index As Integer = Me.listAllowableValues.SelectedIndex
+    Private Sub butRemoveItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveItemButton.Click
+        Dim Index As Integer = listAllowableValues.SelectedIndex
 
-        '//IMCN 22 October 2009
-        '// Refactored 
         If Index > -1 Then
             Try
-                Dim defaultText As String = Me.txtAssumedValue.Text
+                Dim defaultText As String = txtAssumedValue.Text
 
-                If Me.radioText.Checked Then
+                If radioText.Checked Then
                     RemoveTextTerm(Index, defaultText)
-                ElseIf Me.radioInternal.Checked Then
+                ElseIf radioInternal.Checked Then
                     RemoveCodedTerm(defaultText)
                 End If
-
             Catch ex As Exception
                 Debug.Assert(False, ex.ToString)
             End Try
@@ -712,121 +794,92 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    '//IMCN 22 October 2009
-    '// Remove a text Term from the allowable term list 
+    ' Remove a text Term from the allowable term list 
     Private Sub RemoveTextTerm(ByVal Index As Integer, ByVal defaultText As String)
-
-        If Me.listAllowableValues.Items.Count > 0 Then
-            If MessageBox.Show(AE_Constants.Instance.Remove & _
-                               CStr(Me.listAllowableValues.Items(Index)), _
-                               AE_Constants.Instance.MessageBoxCaption, _
-                               MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
-                If CStr(Me.listAllowableValues.Items(Index)) = defaultText Then
-                    Me.txtAssumedValue.Text = "(none)"
-                    Me.Constraint.HasAssumedValue = False
+        If listAllowableValues.Items.Count > 0 Then
+            If MessageBox.Show(AE_Constants.Instance.Remove & CStr(listAllowableValues.Items(Index)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
+                If CStr(listAllowableValues.Items(Index)) = defaultText Then
+                    txtAssumedValue.Text = "(none)"
+                    Constraint.HasAssumedValue = False
                 End If
 
-                Me.Constraint.AllowableValues.Codes.Remove(CStr(Me.listAllowableValues.Items(Index)))
-                Me.listAllowableValues.Items.RemoveAt(Index)
-
+                Constraint.AllowableValues.Codes.Remove(CStr(listAllowableValues.Items(Index)))
+                listAllowableValues.Items.RemoveAt(Index)
                 mFileManager.FileEdited = True
                 RefreshButtons()
-
             End If
         End If
     End Sub
 
-    '//IMCN 22 October 2009
-    '// Remove a coded Term from the allowable term list
+    ' Remove a coded Term from the allowable term list
     Private Sub RemoveCodedTerm(ByVal defaultText As String)
-
         If mAllowedValuesDataView.Count > 0 Then
-
-            If MessageBox.Show(AE_Constants.Instance.Remove & _
-                               CStr(Me.listAllowableValues.Text), _
-                               AE_Constants.Instance.MessageBoxCaption, _
-                               MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
-
+            If MessageBox.Show(AE_Constants.Instance.Remove & CStr(listAllowableValues.Text), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel) = Windows.Forms.DialogResult.OK Then
                 ' have to delete this from all languages
-                If CStr(Me.listAllowableValues.Text) = defaultText Then
-                    Me.Constraint.HasAssumedValue = False
-                    Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
-
+                If CStr(listAllowableValues.Text) = defaultText Then
+                    Constraint.HasAssumedValue = False
+                    txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
                 End If
 
-                Dim code As String = CStr(Me.listAllowableValues.SelectedValue) '("Code")
-                Me.Constraint.AllowableValues.Codes.Remove(code)
+                Dim code As String = CStr(listAllowableValues.SelectedValue) '("Code")
+                Constraint.AllowableValues.Codes.Remove(code)
 
-                'Cannot remove terms as are reused in the archetype - if this term is redundant it will be removed on save
-                'ParentFrm.mFileManager.OntologyManager.RemoveTerm(Code)
-
-                If Me.Constraint.AllowableValues.Codes.Count = 0 Then
-                    Me.listAllowableValues.DataSource = Nothing
-                    Me.listAllowableValues.Items.Clear()
-
+                If Constraint.AllowableValues.Codes.Count = 0 Then
+                    listAllowableValues.DataSource = Nothing
+                    listAllowableValues.Items.Clear()
                 Else
-                    '// IMCN : 20 October 2009
-                    Me.RefreshlistAllowableValues(Me.listAllowableValues.SelectedIndex)
-
-                    '// IMCN : 20 October 2009
-                    '// No longer required as listbox items are no longer bound directly to the Dataview
-
-                    'Dim f As String = mAllowedValuesDataView.RowFilter
-                    'Dim i As Integer = InStr(f, "Code = '" & code & "' OR ")
-                    'Dim Lengthof As Integer = ("Code = '" & code & "' OR ").Length - 1
-                    'If i = 0 Then
-                    '    'might be the last code
-                    '    i = InStr(f, " OR Code = '" & code & "'")
-                    '    Lengthof = (" OR Code = '" & code & "'").Length - 1
-                    'End If
-                    'If i = 0 Then
-                    '    'might be the only code
-                    '    i = InStr(f, "Code = '" & code & "'")
-                    '    Lengthof = ("Code = '" & code & "'").Length - 1
-                    'End If
-                    'If i <> 0 Then
-                    '    f = f.Substring(0, i - 1) & f.Substring(i + Lengthof)
-                    'End If
-                    'mAllowedValuesDataView.RowFilter = f
+                    RefreshlistAllowableValues(listAllowableValues.SelectedIndex)
                 End If
-
             End If
+
             mFileManager.FileEdited = True
             RefreshButtons()
-
         End If
     End Sub
 
     Private Sub radioInternal_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioInternal.CheckedChanged
-        If Me.radioInternal.Checked Then
+        If radioInternal.Checked Then
             gbAllowableValues.Visible = True
-            txtTermConstraintText.Visible = False
-            txtTermConstraintDescription.Visible = False
-            lblConstraint.Visible = False
-            lblDescription.Visible = False
+            TermConstraintLabel.Visible = False
+            TermConstraintTextBox.Visible = False
+            TermConstraintDescriptionLabel.Visible = False
+            TermConstraintDescriptionTextBox.Visible = False
+            TermConstraintTerminologyLabel.Visible = False
+            TermConstraintTerminologyTextBox.Visible = False
+            TermConstraintTerminologyButton.Visible = False
+            TermConstraintSubsetLabel.Visible = False
+            TermConstraintSubsetTextBox.Visible = False
+            TermConstraintSubsetButton.Visible = False
+            TermConstraintReleaseLabel.Visible = False
+            TermConstraintReleaseTextBox.Visible = False
         End If
 
         If Not MyBase.IsLoading Then
             If radioInternal.Checked Then
-                ButNewItem.Focus()
+                NewItemButton.Focus()
                 Constraint.TypeOfTextConstraint = TextConstrainType.Internal
                 SetInternalCodedValues()
                 mFileManager.FileEdited = True
-                'IMCN: Added 20 October 2009
                 RefreshButtons()
             End If
         End If
     End Sub
 
-
     Private Sub radioTerminology_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioTerminology.CheckedChanged
-
         If radioTerminology.Checked Then
             gbAllowableValues.Visible = False
-            txtTermConstraintText.Visible = True
-            txtTermConstraintDescription.Visible = True
-            lblConstraint.Visible = True
-            lblDescription.Visible = True
+            TermConstraintLabel.Visible = True
+            TermConstraintTextBox.Visible = True
+            TermConstraintDescriptionLabel.Visible = True
+            TermConstraintDescriptionTextBox.Visible = True
+            TermConstraintTerminologyLabel.Visible = True
+            TermConstraintTerminologyTextBox.Visible = True
+            TermConstraintTerminologyButton.Visible = OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp
+            TermConstraintSubsetLabel.Visible = True
+            TermConstraintSubsetTextBox.Visible = True
+            TermConstraintSubsetButton.Visible = OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp
+            TermConstraintReleaseLabel.Visible = True
+            TermConstraintReleaseTextBox.Visible = True
         End If
 
         If Not MyBase.IsLoading Then
@@ -837,21 +890,20 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 If Constraint.ConstraintCode = "" OrElse Not mFileManager.OntologyManager.Ontology.HasTermCode(Constraint.ConstraintCode) Then
                     mConstraintTerm = mFileManager.OntologyManager.AddConstraint(Filemanager.GetOpenEhrTerm(139, "New constraint"))
                     Constraint.ConstraintCode = mConstraintTerm.Code
-                    txtTermConstraintText.Text = mConstraintTerm.Text
-                    txtTermConstraintDescription.Text = mConstraintTerm.Description
+                    TermConstraintTextBox.Text = mConstraintTerm.Text
+                    TermConstraintDescriptionTextBox.Text = mConstraintTerm.Description
                 Else
                     mConstraintTerm = mFileManager.OntologyManager.GetTerm(Constraint.ConstraintCode)
-                    txtTermConstraintText.Text = mConstraintTerm.Text
-                    txtTermConstraintDescription.Text = mConstraintTerm.Description
+                    TermConstraintTextBox.Text = mConstraintTerm.Text
+                    TermConstraintDescriptionTextBox.Text = mConstraintTerm.Description
                 End If
 
                 txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
                 Constraint.HasAssumedValue = False
                 MyBase.IsLoading = False
 
-                txtTermConstraintText.Focus()
+                TermConstraintTextBox.Focus()
                 mFileManager.FileEdited = True
-                'IMCN: Added 20 October 2009
                 RefreshButtons()
             End If
         End If
@@ -859,226 +911,233 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub radioText_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioText.CheckedChanged
         If radioText.Checked Then
-            'SRH: Dec 16 2008 - backward compatibility for existing textural constraints
-            If (Constraint.TypeOfTextConstraint = TextConstrainType.Text) And (Constraint.AllowableValues.Codes.Count > 0) Then
-                gbAllowableValues.Visible = True
-            Else
-                gbAllowableValues.Visible = False
-            End If
-
-            txtTermConstraintText.Visible = False
-            txtTermConstraintDescription.Visible = False
-            lblConstraint.Visible = False
-            lblDescription.Visible = False
+            gbAllowableValues.Visible = Constraint.TypeOfTextConstraint = TextConstrainType.Text And Constraint.AllowableValues.Codes.Count > 0
+            TermConstraintLabel.Visible = False
+            TermConstraintTextBox.Visible = False
+            TermConstraintDescriptionLabel.Visible = False
+            TermConstraintDescriptionTextBox.Visible = False
+            TermConstraintTerminologyLabel.Visible = False
+            TermConstraintTerminologyTextBox.Visible = False
+            TermConstraintTerminologyButton.Visible = False
+            TermConstraintSubsetLabel.Visible = False
+            TermConstraintSubsetTextBox.Visible = False
+            TermConstraintSubsetButton.Visible = False
+            TermConstraintReleaseLabel.Visible = False
+            TermConstraintReleaseTextBox.Visible = False
         End If
 
         If Not MyBase.IsLoading Then
             If radioText.Checked Then
                 Constraint.TypeOfTextConstraint = TextConstrainType.Text
                 mFileManager.FileEdited = True
-                'IMCN: Added 20 October 2009
                 RefreshButtons()
             End If
         End If
     End Sub
 
-    Private Sub txtTermConstraintDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTermConstraintDescription.TextChanged
+    Private Sub TermConstraintTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintTextBox.TextChanged
         If Not MyBase.IsLoading Then
-            mFileManager.OntologyManager.SetDescription(txtTermConstraintDescription.Text, _
-                    Me.Constraint.ConstraintCode)
+            mFileManager.OntologyManager.SetText(TermConstraintTextBox.Text, Constraint.ConstraintCode)
             'Remember if changes constraint type
-            Me.mConstraintTerm.Description = txtTermConstraintDescription.Text
+            mConstraintTerm.Text = TermConstraintTextBox.Text
+        End If
+    End Sub
 
+    Private Sub TermConstraintDescriptionTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintDescriptionTextBox.TextChanged
+        If Not MyBase.IsLoading Then
+            mFileManager.OntologyManager.SetDescription(TermConstraintDescriptionTextBox.Text, Constraint.ConstraintCode)
+            'Remember if changes constraint type
+            mConstraintTerm.Description = TermConstraintDescriptionTextBox.Text
+        End If
+    End Sub
+
+    Private Sub TermConstraintTerminologyTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintTerminologyTextBox.TextChanged, TermConstraintSubsetTextBox.TextChanged, TermConstraintReleaseTextBox.TextChanged
+        If Not MyBase.IsLoading Then
+            Dim terminologyId As String = TermConstraintTerminologyTextBox.Text
+            Dim subset As String = TermConstraintSubsetTextBox.Text
+
+            If terminologyId <> "" And subset <> "" Then
+                mFileManager.OntologyManager.AddConstraintBinding(mConstraintTerm.Code, terminologyId, "", TermConstraintReleaseTextBox.Text, subset)
+            End If
+        End If
+    End Sub
+
+    Private Sub ShowTerminologySelectionForm(ByVal terminologyId As String, ByVal subsetId As String)
+        Dim terminologySelectionForm As New Ots.TerminologySelectionForm
+
+        If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
+            terminologySelectionForm.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
+        End If
+
+        terminologySelectionForm.TerminologyId = terminologyId
+        terminologySelectionForm.SubsetId = subsetId
+        terminologySelectionForm.ShowDialog(ParentForm)
+
+        If terminologySelectionForm.DialogResult = DialogResult.OK Then
+            TermConstraintTerminologyTextBox.Text = terminologySelectionForm.TerminologyId
+            TermConstraintSubsetTextBox.Text = terminologySelectionForm.SubsetId
+        End If
+    End Sub
+
+    Private Sub TermConstraintTerminologyButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintTerminologyButton.Click
+        ShowTerminologySelectionForm("", "")
+    End Sub
+
+    Private Sub TermConstraintSubsetButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintSubsetButton.Click
+        ShowTerminologySelectionForm(TermConstraintTerminologyTextBox.Text, "")
+    End Sub
+
+    Private Sub MenuClearText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuClearText.Click
+        If Not MyBase.IsLoading Then
+            Constraint.HasAssumedValue = False
+            txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
             mFileManager.FileEdited = True
         End If
     End Sub
 
-    Private Sub txtTermConstraintText_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTermConstraintText.TextChanged
-        If Not MyBase.IsLoading Then
-            mFileManager.OntologyManager.SetText(txtTermConstraintText.Text, _
-                    Me.Constraint.ConstraintCode)
-            'Remember if changes constraint type
-            Me.mConstraintTerm.Text = txtTermConstraintText.Text
-        End If
-    End Sub
-
-    Private Sub MenuClearText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuClearText.Click
-
-        If MyBase.IsLoading Then Return
-
-        Me.Constraint.HasAssumedValue = False
-        Me.txtAssumedValue.Text = String.Format("({0})", Filemanager.GetOpenEhrTerm(34, "none"))
-
-        mFileManager.FileEdited = True
-
-    End Sub
-
-
     Private Sub MenuItemAddExisting_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemAddExisting.Click
-        Me.butAddItem_Click(sender, e)
+        butAddItem_Click(sender, e)
     End Sub
 
     Private Sub listAllowableValues_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAllowableValues.DoubleClick, MenuItemEdit.Click
-        If Me.listAllowableValues.SelectedIndex > -1 Then
+        If listAllowableValues.SelectedIndex > -1 Then
             Dim s(1) As String
+            Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(listAllowableValues.SelectedValue))
 
-            ' get the term that is selected
-            '       Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(CType(Me.listAllowableValues.SelectedItem, DataRowView).Item(1)))
-            '// Changed IMCN: 20 October 2009
-            Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(Me.listAllowableValues.SelectedValue))
             If Not t Is Nothing Then
-                s = OceanArchetypeEditor.Instance.GetInput(t, Me.ParentForm)
+                s = OceanArchetypeEditor.Instance.GetInput(t, ParentForm)
 
                 If s(0) <> "" Then
-                    mFileManager.OntologyManager.SetText(t)
+                    mFileManager.OntologyManager.SetRmTermText(t)
                     mFileManager.OntologyManager.SetDescription(t.Description, t.Code)
-                    '// Added IMCN: 20 October 2009
-                    RefreshlistAllowableValues(Me.listAllowableValues.SelectedIndex)
+                    RefreshlistAllowableValues(listAllowableValues.SelectedIndex)
                     RefreshButtons()
                     mFileManager.FileEdited = True
-                Else
-                    Return
                 End If
             End If
         End If
-
     End Sub
 
     Private Sub ContextMenuListAllowableValues_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuListAllowableValues.Popup
-        If Me.listAllowableValues.SelectedIndex > -1 Then
-            '// ChangedIMCN: 20 October 2009)
-            MenuItemEdit.Text = String.Format("{0} {1}", Filemanager.GetOpenEhrTerm(592, "Edit "), Me.listAllowableValues.Text)
+        If listAllowableValues.SelectedIndex > -1 Then
+            MenuItemEdit.Text = String.Format("{0} {1}", Filemanager.GetOpenEhrTerm(592, "Edit "), listAllowableValues.Text)
             MenuItemEdit.Visible = True
-            MenuItemRemove.Text = String.Format("{0} {1}", Filemanager.GetOpenEhrTerm(152, "Remove "), Me.listAllowableValues.Text)
+            MenuItemRemove.Text = String.Format("{0} {1}", Filemanager.GetOpenEhrTerm(152, "Remove "), listAllowableValues.Text)
             MenuItemRemove.Visible = True
         Else
             MenuItemEdit.Visible = False
             MenuItemRemove.Visible = False
         End If
     End Sub
-    'IMCN: 19 October 2009
-    Private Sub butMoveUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoveUp.Click
-        If Me.listAllowableValues.SelectedIndex > -1 Then
-            Dim atCode As String
-            Dim currIndex, newindex As Integer
 
-            atCode = CStr(Me.listAllowableValues.SelectedValue)
-            currIndex = Me.listAllowableValues.SelectedIndex
+    Private Sub butMoveUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MoveUpButton.Click
+        If listAllowableValues.SelectedIndex > -1 Then
+            Dim currIndex, newindex As Integer
+            Dim atCode As String = CStr(listAllowableValues.SelectedValue)
+            currIndex = listAllowableValues.SelectedIndex
+
             If currIndex > 0 Then
                 newindex = currIndex - 1
-                Me.Constraint.AllowableValues.Codes.RemoveAt(currIndex)
-                Me.Constraint.AllowableValues.Codes.Insert(newindex, atCode)
+                Constraint.AllowableValues.Codes.RemoveAt(currIndex)
+                Constraint.AllowableValues.Codes.Insert(newindex, atCode)
                 RefreshlistAllowableValues(newindex)
                 mFileManager.FileEdited = True
                 RefreshButtons()
             End If
-
         End If
     End Sub
-    'IMCN: 19 October 2009
-    Private Sub butMoveDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnMoveDown.Click
-        If Me.listAllowableValues.SelectedIndex > -1 Then
-            Dim atCode As String
+
+    Private Sub butMoveDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MoveDownButton.Click
+        If listAllowableValues.SelectedIndex > -1 Then
             Dim currIndex, newindex As Integer
-            atCode = CStr(Me.listAllowableValues.SelectedValue)
-            currIndex = Me.listAllowableValues.SelectedIndex
-            If currIndex < Me.Constraint.AllowableValues.Codes.Count - 1 Then
+            Dim atCode As String = CStr(listAllowableValues.SelectedValue)
+            currIndex = listAllowableValues.SelectedIndex
+
+            If currIndex < Constraint.AllowableValues.Codes.Count - 1 Then
                 newindex = currIndex + 1
-                Me.Constraint.AllowableValues.Codes.RemoveAt(currIndex)
-                Me.Constraint.AllowableValues.Codes.Insert(newindex, atCode)
-                Me.RefreshlistAllowableValues(newindex)
+                Constraint.AllowableValues.Codes.RemoveAt(currIndex)
+                Constraint.AllowableValues.Codes.Insert(newindex, atCode)
+                RefreshlistAllowableValues(newindex)
                 mFileManager.FileEdited = True
                 RefreshButtons()
             End If
         End If
     End Sub
-    'IMCN: 19 October 2009
-    ' If internal code list is not empty allow export to tab-separated list via clipboard
-    Private Sub butnCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCopyList.Click
 
-        If Me.radioInternal.Checked And (Me.Constraint.AllowableValues.Codes.Count > 0) Then
+    ' If internal code list is not empty allow export to tab-separated list via clipboard
+    Private Sub butnCopy_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CopyListButton.Click
+        If radioInternal.Checked And (Constraint.AllowableValues.Codes.Count > 0) Then
             Dim atCode As String
             Dim aTerm As RmTerm
-            Dim ClipText As String = ""
+            Dim clipText As String = ""
 
-            For Each atCode In Me.Constraint.AllowableValues.Codes()
+            For Each atCode In Constraint.AllowableValues.Codes()
                 aTerm = mFileManager.OntologyManager.GetTerm(atCode)
-                ClipText = ClipText + String.Format("{1}{0}{2}{3}", vbTab, aTerm.Text, aTerm.Description, vbLf)
+                clipText = clipText + aTerm.Text + vbTab + aTerm.Description + vbLf
             Next
-            Clipboard.SetText(ClipText)
-            MessageBox.Show("The list of internal codes has been copied to Clipboard,", _
-                            AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+
+            Clipboard.SetText(clipText)
+            MessageBox.Show("The list of internal codes has been copied to Clipboard,", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
             RefreshButtons()
         End If
-
     End Sub
 
-    '// IMCN: 19 October 2009
-    '// If internal code list is empty allow import of tab-separated list via clipboard
-    '// Format expected is 2 columns with a TAB separator and LF line terminator
-    '// e.g. at000001<TAB>New code<LF>
-
-    Private Sub btnPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnPasteList.Click
-
-        If Me.radioInternal.Checked And (Me.Constraint.AllowableValues.Codes.Count = 0) Then
-            If (Me.Constraint.AllowableValues.Codes.Count <> 0) Then
-                MessageBox.Show("A Clipboard paste can only be made to an empty list", AE_Constants.Instance.MessageBoxCaption, _
-                                MessageBoxButtons.OK, MessageBoxIcon.Information)
+    ' If internal code list is empty allow import of tab-separated list via clipboard
+    ' Format expected is 2 columns with a TAB separator and LF line terminator
+    ' e.g. at000001<TAB>New code<LF>
+    Private Sub btnPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PasteListButton.Click
+        If radioInternal.Checked And Constraint.AllowableValues.Codes.Count = 0 Then
+            If Constraint.AllowableValues.Codes.Count <> 0 Then
+                MessageBox.Show("A Clipboard paste can only be made to an empty list", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Else
                 Dim row As String
-                Dim Term As RmTerm
-                Dim rows As String() = Nothing
+                Dim term As RmTerm
+                Dim rows As String() = Clipboard.GetText().Split(CChar(vbLf))
 
-                rows = Clipboard.GetText().Split(CChar(vbLf))
                 ' Parse clipboard text - tab separator
                 For Each row In rows
                     'Skip empty rows
                     If row.Length <> 0 Then
-                        Try
-                            Dim columns As String()
-                            columns = row.Split(CChar(vbTab))
-                            Term = mFileManager.OntologyManager.AddTerm(columns(0), columns(1))
-                            Me.Constraint.AllowableValues.Codes.Add(Term.Code)
-                        Catch ex As Exception
-                            MessageBox.Show("An error occured when importing the Clipboard" & vbCrLf & _
-                            "The import expects a tab-separated format e.g. at0001<TAB>New code<LF>", _
-                            AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        End Try
+                        Dim columns As String() = row.Split(CChar(vbTab))
+
+                        If columns.Length <> 2 Then
+                            MessageBox.Show("Importing from the clipboard requires lines of tab-separated code and text, e.g., at0001<TAB>New code<LF>.", _
+                            AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+                        Else
+                            term = mFileManager.OntologyManager.AddTerm(columns(0), columns(1))
+                            Constraint.AllowableValues.Codes.Add(term.Code)
+                        End If
                     End If
                 Next
 
-                RefreshlistAllowableValues(Me.Constraint.AllowableValues.Codes.Count - 1)
+                RefreshlistAllowableValues(Constraint.AllowableValues.Codes.Count - 1)
                 mFileManager.FileEdited = True
                 RefreshButtons()
             End If
         End If
     End Sub
-    '// IMCN: 20 October 2009
-    '// Refreshes button Enabled states
+
+    ' Refreshes button Enabled states
     Private Sub RefreshButtons()
+        Dim EmptyList As Boolean = Constraint.AllowableValues.Codes.Count = 0
+        Dim EndOfList As Boolean = listAllowableValues.SelectedIndex = Constraint.AllowableValues.Codes.Count - 1
+        Dim StartOfList As Boolean = listAllowableValues.SelectedIndex = 0
 
-        Dim EmptyList As Boolean = (Me.Constraint.AllowableValues.Codes.Count = 0)
-        Dim EndOfList As Boolean = (Me.listAllowableValues.SelectedIndex = Me.Constraint.AllowableValues.Codes.Count - 1)
-        Dim StartOfList As Boolean = (Me.listAllowableValues.SelectedIndex = 0)
-
-        Me.btnMoveUp.Enabled = Not EmptyList And Not StartOfList
-        Me.btnMoveDown.Enabled = Not EmptyList And Not EndOfList
-        Me.butRemoveItem.Enabled = Not EmptyList
-        Me.btnCopyList.Enabled = Not EmptyList
-        Me.btnPasteList.Enabled = EmptyList
+        MoveUpButton.Enabled = Not EmptyList And Not StartOfList
+        MoveDownButton.Enabled = Not EmptyList And Not EndOfList
+        RemoveItemButton.Enabled = Not EmptyList
+        CopyListButton.Enabled = Not EmptyList
+        PasteListButton.Enabled = EmptyList
     End Sub
 
     Private Sub listAllowableValues_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAllowableValues.SelectedIndexChanged
-        '// IMCN: 20 October 2009
         RefreshButtons()
     End Sub
 
-    '// IMCN: 20 October 2009
     Private Sub MenuItemRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemRemove.Click
-        Me.butRemoveItem_Click(sender, e)
+        butRemoveItem_Click(sender, e)
     End Sub
 
-   
 End Class
 
 '

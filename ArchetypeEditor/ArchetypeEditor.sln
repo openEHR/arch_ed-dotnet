@@ -4,6 +4,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ArchetypeEditor", "Archetyp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLParser", "XMLParser\XMLParser.csproj", "{927EB444-A45E-4703-946F-78EB37FAD96E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ots", "Ots\Ots.csproj", "{17E21C39-3735-4C5B-A091-3A7EF42C7CBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,10 @@ Global
 		{927EB444-A45E-4703-946F-78EB37FAD96E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{927EB444-A45E-4703-946F-78EB37FAD96E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{927EB444-A45E-4703-946F-78EB37FAD96E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17E21C39-3735-4C5B-A091-3A7EF42C7CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17E21C39-3735-4C5B-A091-3A7EF42C7CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17E21C39-3735-4C5B-A091-3A7EF42C7CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17E21C39-3735-4C5B-A091-3A7EF42C7CBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

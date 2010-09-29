@@ -54,7 +54,7 @@ Public Class OceanArchetypeEditor
 
     Private mAvailableTerminologyIDs As ArrayList
 
-    ReadOnly Property ServiceTerminology(ByVal terminologyID As String) As Boolean
+    ReadOnly Property HasServiceTerminology(ByVal terminologyID As String) As Boolean
         Get
             If mAvailableTerminologyIDs Is Nothing Then
                 mAvailableTerminologyIDs = New ArrayList()
@@ -62,6 +62,7 @@ Public Class OceanArchetypeEditor
                 mAvailableTerminologyIDs.Add("SNOMED-CT")
                 mAvailableTerminologyIDs.Add("LNC205")
             End If
+
             Return mAvailableTerminologyIDs.Contains(terminologyID)
         End Get
     End Property
@@ -146,9 +147,7 @@ Public Class OceanArchetypeEditor
     End Function
 
     Public Function MakeTerminologyDataTable() As DataTable
-        Dim mDataTable As DataTable
-
-        mDataTable = New DataTable("DataTable")
+        Dim mDataTable As DataTable = New DataTable("DataTable")
         Dim idColumn As DataColumn = New DataColumn
         idColumn.DataType = System.Type.GetType("System.Int32")
         idColumn.ColumnName = "Id"
@@ -162,14 +161,14 @@ Public Class OceanArchetypeEditor
         TextColumn.ColumnName = "Text"
         mDataTable.Columns.Add(TextColumn)
 
-        Dim Terminologies As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
+        Dim rows As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
 
         mDataTable.DefaultView.Sort = "Text"
 
-        For i As Integer = 0 To Terminologies.Length - 1
+        For i As Integer = 0 To rows.Length - 1
             Dim newRow As DataRow = mDataTable.NewRow()
-            newRow("Code") = Terminologies(i).Item(0)
-            newRow("Text") = Terminologies(i).Item(1)
+            newRow("Code") = rows(i).Item(0)
+            newRow("Text") = rows(i).Item(1)
             mDataTable.Rows.Add(newRow)
         Next
 
@@ -214,8 +213,7 @@ Public Class OceanArchetypeEditor
         frm.Set_Single()
         frm.PrepareDataTable_for_List(1)
 
-        Dim Terminologies As DataRow() _
-                = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
+        Dim Terminologies As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
         frm.DTab_1.DefaultView.Sort = "Text"
 
         For i As Integer = 0 To Terminologies.Length - 1
@@ -246,10 +244,8 @@ Public Class OceanArchetypeEditor
                 ' add to the terminologies
                 Filemanager.Master.OntologyManager.AddTerminology(term, description)
             End If
-
         Else
             Return False
-
         End If
 
         Return True
