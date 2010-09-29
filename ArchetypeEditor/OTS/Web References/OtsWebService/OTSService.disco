@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="http://ots.oceaninformatics.com/OTS/OTSService.asmx?wsdl" docRef="http://ots.oceaninformatics.com/OTS/OTSService.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://ots.oceaninformatics.com/OTS/OTSService.asmx" xmlns:q1="http://oceaninformatics.biz/" binding="q1:OTSWebServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://ots.oceaninformatics.com/OTS/OTSService.asmx" xmlns:q2="http://oceaninformatics.biz/" binding="q2:OTSWebServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>
