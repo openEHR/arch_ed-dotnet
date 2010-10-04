@@ -1143,6 +1143,7 @@ Public Class OntologyManager
         mLanguageDS = New DataSet("LanguageDataSet")
         InitialiseTables()
         AE_Constants.Create(OceanArchetypeEditor.DefaultLanguageCode)
+        OceanArchetypeEditor.Instance.Options.ValidateConfiguration()
         mFileManager = a_file_manager
     End Sub
 

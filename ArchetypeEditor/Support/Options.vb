@@ -217,12 +217,9 @@ Public Class Options
         End Set
     End Property
 
-    Sub ShowOptionsForm(Optional ByVal tabIndex As Integer = 0)
+    Sub ShowOptionsForm()
         Dim frm As New ApplicationOptionsForm
-
-        If frm.TabConfiguration.TabPages.Count > tabIndex Then
-            frm.TabConfiguration.SelectedIndex = tabIndex
-        End If
+        frm.TabConfiguration.SelectedIndex = 1
 
         frm.txtUsername.Text = mUserName
         frm.txtEmail.Text = mUserEmail
@@ -520,31 +517,30 @@ Public Class Options
         End Select
     End Function
 
-    Function ValidateConfiguration() As Boolean
-        Dim result As Boolean = True
+    Public Sub ValidateConfiguration()
+        Dim hasErrors As Boolean = False
         Dim message As String = "Errors:"
 
         If Not File.Exists(mHelpPath) Then
-            result = False
+            hasErrors = True
             message &= ": Help file does not exist @ " & mHelpPath
         End If
 
         If Not Directory.Exists(mRepositoryPath) Then
-            result = False
+            hasErrors = True
             message &= ": Repository does not exist @ " & mRepositoryPath
         End If
 
         If Not Directory.Exists(mXmlRepositoryPath) Then
-            result = False
+            hasErrors = True
             message &= ": XML Repository does not exist @ " & mXmlRepositoryPath
         End If
 
-        If Not result Then
+        If hasErrors Then
             MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            ShowOptionsForm()
         End If
-
-        Return result
-    End Function
+    End Sub
 
     Private Sub RestoreDefaultTerminologyServiceUrlButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         CType(CType(sender, Control).FindForm(), ApplicationOptionsForm).txtTerminologyURL.Text = defaultTerminologyUrl
@@ -575,10 +571,6 @@ Public Class Options
         mAllowWebSearch = False
         mAllowTerminologyLookUp = False
         LoadConfiguration()
-
-        If Not ValidateConfiguration() Then
-            ShowOptionsForm(1)
-        End If
     End Sub
 
     Public Shared ReadOnly Property AssemblyPath() As String
