@@ -44,8 +44,9 @@ Partial Class Link
         Me.butSelector.FlatAppearance.CheckedBackColor = System.Drawing.SystemColors.ControlDark
         Me.butSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.butSelector.Location = New System.Drawing.Point(0, 0)
+        Me.butSelector.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.butSelector.Name = "butSelector"
-        Me.butSelector.Size = New System.Drawing.Size(26, 311)
+        Me.butSelector.Size = New System.Drawing.Size(23, 380)
         Me.butSelector.TabIndex = 1
         Me.butSelector.TabStop = True
         Me.butSelector.Text = ">"
@@ -55,8 +56,10 @@ Partial Class Link
         '
         Me.gbType.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbType.Location = New System.Drawing.Point(0, 0)
+        Me.gbType.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.gbType.Name = "gbType"
-        Me.gbType.Size = New System.Drawing.Size(385, 265)
+        Me.gbType.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbType.Size = New System.Drawing.Size(287, 343)
         Me.gbType.TabIndex = 2
         Me.gbType.TabStop = False
         Me.gbType.Text = "Link Type"
@@ -66,9 +69,11 @@ Partial Class Link
         Me.gbTarget.Controls.Add(Me.txtTarget)
         Me.gbTarget.Controls.Add(Me.TextBox1)
         Me.gbTarget.Dock = System.Windows.Forms.DockStyle.Right
-        Me.gbTarget.Location = New System.Drawing.Point(381, 0)
+        Me.gbTarget.Location = New System.Drawing.Point(282, 0)
+        Me.gbTarget.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.gbTarget.Name = "gbTarget"
-        Me.gbTarget.Size = New System.Drawing.Size(385, 46)
+        Me.gbTarget.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbTarget.Size = New System.Drawing.Size(289, 37)
         Me.gbTarget.TabIndex = 3
         Me.gbTarget.TabStop = False
         Me.gbTarget.Text = "Target"
@@ -77,25 +82,29 @@ Partial Class Link
         '
         Me.txtTarget.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTarget.Location = New System.Drawing.Point(22, 18)
+        Me.txtTarget.Location = New System.Drawing.Point(16, 15)
+        Me.txtTarget.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.txtTarget.Name = "txtTarget"
-        Me.txtTarget.Size = New System.Drawing.Size(358, 22)
+        Me.txtTarget.Size = New System.Drawing.Size(270, 20)
         Me.txtTarget.TabIndex = 1
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(6, 151)
+        Me.TextBox1.Location = New System.Drawing.Point(4, 123)
+        Me.TextBox1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.TextBox1.Multiline = True
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(171, 49)
+        Me.TextBox1.Size = New System.Drawing.Size(129, 41)
         Me.TextBox1.TabIndex = 0
         '
         'gbMeaning
         '
         Me.gbMeaning.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbMeaning.Location = New System.Drawing.Point(0, 0)
+        Me.gbMeaning.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.gbMeaning.Name = "gbMeaning"
-        Me.gbMeaning.Size = New System.Drawing.Size(377, 265)
+        Me.gbMeaning.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.gbMeaning.Size = New System.Drawing.Size(281, 343)
         Me.gbMeaning.TabIndex = 4
         Me.gbMeaning.TabStop = False
         Me.gbMeaning.Text = "Meaning"
@@ -104,15 +113,17 @@ Partial Class Link
         '
         Me.PanelTop.Controls.Add(Me.gbTarget)
         Me.PanelTop.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelTop.Location = New System.Drawing.Point(26, 0)
+        Me.PanelTop.Location = New System.Drawing.Point(23, 0)
+        Me.PanelTop.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.PanelTop.Name = "PanelTop"
-        Me.PanelTop.Size = New System.Drawing.Size(766, 46)
+        Me.PanelTop.Size = New System.Drawing.Size(571, 37)
         Me.PanelTop.TabIndex = 5
         '
         'splitLinkMeaning
         '
         Me.splitLinkMeaning.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.splitLinkMeaning.Location = New System.Drawing.Point(26, 46)
+        Me.splitLinkMeaning.Location = New System.Drawing.Point(23, 37)
+        Me.splitLinkMeaning.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.splitLinkMeaning.Name = "splitLinkMeaning"
         '
         'splitLinkMeaning.Panel1
@@ -122,20 +133,22 @@ Partial Class Link
         'splitLinkMeaning.Panel2
         '
         Me.splitLinkMeaning.Panel2.Controls.Add(Me.gbType)
-        Me.splitLinkMeaning.Size = New System.Drawing.Size(766, 265)
-        Me.splitLinkMeaning.SplitterDistance = 377
+        Me.splitLinkMeaning.Size = New System.Drawing.Size(571, 343)
+        Me.splitLinkMeaning.SplitterDistance = 281
+        Me.splitLinkMeaning.SplitterWidth = 3
         Me.splitLinkMeaning.TabIndex = 6
         '
         'Link
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.Controls.Add(Me.splitLinkMeaning)
         Me.Controls.Add(Me.PanelTop)
         Me.Controls.Add(Me.butSelector)
+        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Name = "Link"
-        Me.Size = New System.Drawing.Size(792, 311)
+        Me.Size = New System.Drawing.Size(594, 380)
         Me.gbTarget.ResumeLayout(False)
         Me.gbTarget.PerformLayout()
         Me.PanelTop.ResumeLayout(False)

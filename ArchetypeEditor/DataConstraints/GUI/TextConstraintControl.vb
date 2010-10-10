@@ -49,6 +49,9 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             ToolTip1.SetToolTip(RemoveItemButton, Filemanager.GetOpenEhrTerm(152, "Remove term"))
             TermConstraintLabel.Text = Filemanager.GetOpenEhrTerm(87, TermConstraintLabel.Text)
             TermConstraintDescriptionLabel.Text = Filemanager.GetOpenEhrTerm(113, TermConstraintDescriptionLabel.Text)
+            TermConstraintTerminologyLabel.Text = Filemanager.GetOpenEhrTerm(47, TermConstraintTerminologyLabel.Text)
+            TermConstraintSubsetLabel.Text = Filemanager.GetOpenEhrTerm(690, TermConstraintSubsetLabel.Text)
+            TermConstraintReleaseLabel.Text = Filemanager.GetOpenEhrTerm(97, TermConstraintReleaseLabel.Text)
         End If
     End Sub
 
@@ -323,7 +326,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         'TermConstraintDescriptionLabel
         '
-        Me.TermConstraintDescriptionLabel.Location = New System.Drawing.Point(16, 104)
+        Me.TermConstraintDescriptionLabel.Location = New System.Drawing.Point(16, 110)
         Me.TermConstraintDescriptionLabel.Name = "TermConstraintDescriptionLabel"
         Me.TermConstraintDescriptionLabel.Size = New System.Drawing.Size(88, 24)
         Me.TermConstraintDescriptionLabel.TabIndex = 36
@@ -332,7 +335,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         'TermConstraintLabel
         '
-        Me.TermConstraintLabel.Location = New System.Drawing.Point(16, 48)
+        Me.TermConstraintLabel.Location = New System.Drawing.Point(16, 78)
         Me.TermConstraintLabel.Name = "TermConstraintLabel"
         Me.TermConstraintLabel.Size = New System.Drawing.Size(88, 24)
         Me.TermConstraintLabel.TabIndex = 34
@@ -368,53 +371,53 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.TermConstraintDescriptionTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintDescriptionTextBox.Location = New System.Drawing.Point(19, 128)
+        Me.TermConstraintDescriptionTextBox.Location = New System.Drawing.Point(108, 110)
         Me.TermConstraintDescriptionTextBox.Multiline = True
         Me.TermConstraintDescriptionTextBox.Name = "TermConstraintDescriptionTextBox"
         Me.TermConstraintDescriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TermConstraintDescriptionTextBox.Size = New System.Drawing.Size(369, 60)
+        Me.TermConstraintDescriptionTextBox.Size = New System.Drawing.Size(280, 160)
         Me.TermConstraintDescriptionTextBox.TabIndex = 37
         '
         'TermConstraintTextBox
         '
         Me.TermConstraintTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintTextBox.Location = New System.Drawing.Point(19, 72)
+        Me.TermConstraintTextBox.Location = New System.Drawing.Point(108, 80)
         Me.TermConstraintTextBox.Name = "TermConstraintTextBox"
-        Me.TermConstraintTextBox.Size = New System.Drawing.Size(369, 20)
+        Me.TermConstraintTextBox.Size = New System.Drawing.Size(280, 20)
         Me.TermConstraintTextBox.TabIndex = 35
         '
         'TermConstraintTerminologyTextBox
         '
         Me.TermConstraintTerminologyTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintTerminologyTextBox.Location = New System.Drawing.Point(19, 224)
+        Me.TermConstraintTerminologyTextBox.Location = New System.Drawing.Point(108, 280)
         Me.TermConstraintTerminologyTextBox.Name = "TermConstraintTerminologyTextBox"
-        Me.TermConstraintTerminologyTextBox.Size = New System.Drawing.Size(320, 20)
+        Me.TermConstraintTerminologyTextBox.Size = New System.Drawing.Size(231, 20)
         Me.TermConstraintTerminologyTextBox.TabIndex = 39
         '
         'TermConstraintSubsetTextBox
         '
         Me.TermConstraintSubsetTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintSubsetTextBox.Location = New System.Drawing.Point(19, 280)
+        Me.TermConstraintSubsetTextBox.Location = New System.Drawing.Point(108, 312)
         Me.TermConstraintSubsetTextBox.Name = "TermConstraintSubsetTextBox"
-        Me.TermConstraintSubsetTextBox.Size = New System.Drawing.Size(320, 20)
+        Me.TermConstraintSubsetTextBox.Size = New System.Drawing.Size(231, 20)
         Me.TermConstraintSubsetTextBox.TabIndex = 42
         '
         'TermConstraintReleaseTextBox
         '
         Me.TermConstraintReleaseTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintReleaseTextBox.Location = New System.Drawing.Point(19, 336)
+        Me.TermConstraintReleaseTextBox.Location = New System.Drawing.Point(108, 344)
         Me.TermConstraintReleaseTextBox.Name = "TermConstraintReleaseTextBox"
-        Me.TermConstraintReleaseTextBox.Size = New System.Drawing.Size(369, 20)
+        Me.TermConstraintReleaseTextBox.Size = New System.Drawing.Size(280, 20)
         Me.TermConstraintReleaseTextBox.TabIndex = 45
         '
         'TermConstraintSubsetLabel
         '
         Me.TermConstraintSubsetLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintSubsetLabel.Location = New System.Drawing.Point(16, 256)
+        Me.TermConstraintSubsetLabel.Location = New System.Drawing.Point(16, 310)
         Me.TermConstraintSubsetLabel.Name = "TermConstraintSubsetLabel"
         Me.TermConstraintSubsetLabel.Size = New System.Drawing.Size(88, 24)
         Me.TermConstraintSubsetLabel.TabIndex = 41
@@ -424,7 +427,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         'TermConstraintTerminologyLabel
         '
         Me.TermConstraintTerminologyLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintTerminologyLabel.Location = New System.Drawing.Point(16, 200)
+        Me.TermConstraintTerminologyLabel.Location = New System.Drawing.Point(16, 278)
         Me.TermConstraintTerminologyLabel.Name = "TermConstraintTerminologyLabel"
         Me.TermConstraintTerminologyLabel.Size = New System.Drawing.Size(88, 24)
         Me.TermConstraintTerminologyLabel.TabIndex = 38
@@ -434,7 +437,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         'TermConstraintReleaseLabel
         '
         Me.TermConstraintReleaseLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintReleaseLabel.Location = New System.Drawing.Point(16, 312)
+        Me.TermConstraintReleaseLabel.Location = New System.Drawing.Point(16, 342)
         Me.TermConstraintReleaseLabel.Name = "TermConstraintReleaseLabel"
         Me.TermConstraintReleaseLabel.Size = New System.Drawing.Size(88, 24)
         Me.TermConstraintReleaseLabel.TabIndex = 44
@@ -446,7 +449,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.TermConstraintTerminologyButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TermConstraintTerminologyButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TermConstraintTerminologyButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.TermConstraintTerminologyButton.Location = New System.Drawing.Point(346, 222)
+        Me.TermConstraintTerminologyButton.Location = New System.Drawing.Point(346, 278)
         Me.TermConstraintTerminologyButton.Name = "TermConstraintTerminologyButton"
         Me.TermConstraintTerminologyButton.Size = New System.Drawing.Size(24, 24)
         Me.TermConstraintTerminologyButton.TabIndex = 40
@@ -458,7 +461,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.TermConstraintSubsetButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TermConstraintSubsetButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.TermConstraintSubsetButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.TermConstraintSubsetButton.Location = New System.Drawing.Point(346, 278)
+        Me.TermConstraintSubsetButton.Location = New System.Drawing.Point(346, 310)
         Me.TermConstraintSubsetButton.Name = "TermConstraintSubsetButton"
         Me.TermConstraintSubsetButton.Size = New System.Drawing.Size(24, 24)
         Me.TermConstraintSubsetButton.TabIndex = 43

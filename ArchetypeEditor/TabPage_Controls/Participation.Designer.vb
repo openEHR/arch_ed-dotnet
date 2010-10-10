@@ -34,7 +34,7 @@ Partial Class Participation
         Me.panelLeft.Location = New System.Drawing.Point(25, 0)
         Me.panelLeft.Margin = New System.Windows.Forms.Padding(2)
         Me.panelLeft.Name = "panelLeft"
-        Me.panelLeft.Size = New System.Drawing.Size(350, 211)
+        Me.panelLeft.Size = New System.Drawing.Size(350, 350)
         Me.panelLeft.TabIndex = 0
         '
         'butSelector
@@ -47,7 +47,7 @@ Partial Class Participation
         Me.butSelector.Location = New System.Drawing.Point(0, 0)
         Me.butSelector.Margin = New System.Windows.Forms.Padding(2)
         Me.butSelector.Name = "butSelector"
-        Me.butSelector.Size = New System.Drawing.Size(25, 211)
+        Me.butSelector.Size = New System.Drawing.Size(25, 350)
         Me.butSelector.TabIndex = 1
         Me.butSelector.TabStop = True
         Me.butSelector.Text = ">"
@@ -60,7 +60,7 @@ Partial Class Participation
         Me.gbFunction.Margin = New System.Windows.Forms.Padding(2)
         Me.gbFunction.Name = "gbFunction"
         Me.gbFunction.Padding = New System.Windows.Forms.Padding(2)
-        Me.gbFunction.Size = New System.Drawing.Size(389, 211)
+        Me.gbFunction.Size = New System.Drawing.Size(389, 350)
         Me.gbFunction.TabIndex = 2
         Me.gbFunction.TabStop = False
         Me.gbFunction.Text = "Participant function"
@@ -74,7 +74,7 @@ Partial Class Participation
         Me.gbConstraints.Margin = New System.Windows.Forms.Padding(2)
         Me.gbConstraints.Name = "gbConstraints"
         Me.gbConstraints.Padding = New System.Windows.Forms.Padding(2)
-        Me.gbConstraints.Size = New System.Drawing.Size(103, 211)
+        Me.gbConstraints.Size = New System.Drawing.Size(103, 350)
         Me.gbConstraints.TabIndex = 3
         Me.gbConstraints.TabStop = False
         Me.gbConstraints.Text = "Constraints"
@@ -110,7 +110,7 @@ Partial Class Participation
         Me.Controls.Add(Me.butSelector)
         Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "Participation"
-        Me.Size = New System.Drawing.Size(867, 211)
+        Me.Size = New System.Drawing.Size(867, 350)
         Me.gbConstraints.ResumeLayout(False)
         Me.gbConstraints.PerformLayout()
         Me.ResumeLayout(False)
