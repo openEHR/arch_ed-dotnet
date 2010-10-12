@@ -919,9 +919,9 @@ Public Class TermBindingPanel
         PathLabel.Text = selectedNode.PhysicalPath
     End Sub
 
-    Private Sub AddPathToBindings(ByVal aPath As String, ByVal aCode As String, Optional ByVal aCriteria As String = "")
+    Private Sub AddPathToBindings(ByVal aPath As String, ByVal aCode As String)
         mCriteriaNewRow = mFileManager.OntologyManager.TermBindingsTable.NewRow
-        mCriteriaNewRow(0) = Me.TerminologyComboBox.SelectedValue
+        mCriteriaNewRow(0) = TerminologyComboBox.SelectedValue
         mCriteriaNewRow(1) = aPath
         mCriteriaNewRow("code") = aCode
 
@@ -942,7 +942,7 @@ Public Class TermBindingPanel
         End If
     End Sub
 
-    Private Sub RemovePathFromBindings(ByVal aPath As String, ByVal aCode As String, Optional ByVal aCriteria As String = "")
+    Private Sub RemovePathFromBindings(ByVal aPath As String, ByVal aCode As String)
         Dim SelectedRows As DataRow()
 
         SelectedRows = mFileManager.OntologyManager.TermBindingsTable.Select _
@@ -1169,7 +1169,7 @@ Public Class TermBindingPanel
         If mCriteriaMode Then
             ' have to add the binding and the criteria
             AddBindingCriteria()
-            AddPathToBindings(Me.CodeTextBox.Text & "{" & mCurrentBindingCriteria.ToPhysicalCriteria & "}", BindingList.SelectedItems(0).Text)
+            AddPathToBindings(CodeTextBox.Text & "{" & mCurrentBindingCriteria.ToPhysicalCriteria & "}", BindingList.SelectedItems(0).Text)
             ShowNodesImage(PathsTreeView.Nodes)
         End If
 

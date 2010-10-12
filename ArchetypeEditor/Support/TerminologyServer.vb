@@ -315,8 +315,8 @@ Public Class TerminologyServer
                     TerminologyIdentifiers.Rows.Add(t.TerminologyId, t.TerminologyId, "OTS", DBNull.Value)
                 End If
             Next
-        Catch e As Exception
-            MessageBox.Show("Loading OTS terminologies: " + e.Message)
+        Catch ex As Exception
+            MessageBox.Show("Loading OTS terminologies: " + ex.Message)
         End Try
     End Sub
 
@@ -328,8 +328,8 @@ Public Class TerminologyServer
         Try
             Terminology.ReadXmlSchema(Schema)
             Terminology.ReadXml(Document)
-        Catch e As Exception
-            MessageBox.Show("Loading terminologies: " + e.Message)
+        Catch ex As Exception
+            MessageBox.Show("Loading terminologies: " + ex.Message)
         End Try
 
         Languages = Terminology.Tables("Language")

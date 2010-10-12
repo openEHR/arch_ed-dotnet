@@ -52,21 +52,6 @@ Public Class OceanArchetypeEditor
         End Get
     End Property
 
-    Private mAvailableTerminologyIDs As ArrayList
-
-    ReadOnly Property HasServiceTerminology(ByVal terminologyID As String) As Boolean
-        Get
-            If mAvailableTerminologyIDs Is Nothing Then
-                mAvailableTerminologyIDs = New ArrayList()
-                'ToDo: Lookup from the 
-                mAvailableTerminologyIDs.Add("SNOMED-CT")
-                mAvailableTerminologyIDs.Add("LNC205")
-            End If
-
-            Return mAvailableTerminologyIDs.Contains(terminologyID)
-        End Get
-    End Property
-
     Private Shared mDefaultLanguageCodeSet As String = "ISO_639-1"
 
     Public Shared ReadOnly Property DefaultLanguageCodeSet() As String

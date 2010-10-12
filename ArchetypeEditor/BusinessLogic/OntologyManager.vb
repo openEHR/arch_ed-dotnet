@@ -1050,7 +1050,7 @@ Public Class OntologyManager
                 Dim sTerminology As String
 
                 If Not e.Row(0) Is Nothing Then     'Terminology
-                    sTerminology = CStr(e.Row(0))
+                    sTerminology = TryCast(e.Row(0), String)
                 Else
                     Return
                 End If
@@ -1058,14 +1058,14 @@ Public Class OntologyManager
                 Dim sPath As String
 
                 If Not e.Row(1) Is Nothing Then     'Path
-                    sPath = CStr(e.Row(1))
+                    sPath = TryCast(e.Row(1), String)
                 Else
                     Return
                 End If
 
                 Dim sCode As String
                 If Not e.Row(2) Is Nothing Then     'Code
-                    sCode = CStr(e.Row(2))
+                    sCode = TryCast(e.Row(2), String)
                 Else
                     Return
                 End If
@@ -1073,7 +1073,7 @@ Public Class OntologyManager
                 Dim sRelease As String = ""
 
                 If Not e.Row(3) Is Nothing Then     'Release
-                    sRelease = CStr(e.Row(3))
+                    sRelease = TryCast(e.Row(3), String)
                 End If
 
                 If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
@@ -1099,7 +1099,7 @@ Public Class OntologyManager
                 Dim sTerminology As String
 
                 If Not e.Row(0) Is Nothing Then     'Terminology
-                    sTerminology = CStr(e.Row(0))
+                    sTerminology = TryCast(e.Row(0), String)
                 Else
                     Return
                 End If
@@ -1107,7 +1107,7 @@ Public Class OntologyManager
                 Dim sCode As String = ""
 
                 If Not e.Row(1) Is Nothing Then     'Code
-                    sCode = CStr(e.Row(1))
+                    sCode = TryCast(e.Row(1), String)
                 Else
                     Return
                 End If
@@ -1115,7 +1115,7 @@ Public Class OntologyManager
                 Dim sQuery As String
 
                 If Not e.Row(2) Is Nothing Then     'Query
-                    sQuery = CStr(e.Row(2))
+                    sQuery = TryCast(e.Row(2), String)
                 Else
                     Return
                 End If
@@ -1123,7 +1123,7 @@ Public Class OntologyManager
                 Dim sRelease As String = ""
 
                 If Not e.Row(3) Is Nothing Then     'Release
-                    sRelease = CStr(e.Row(3))
+                    sRelease = TryCast(e.Row(3), String)
                 End If
 
                 If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then

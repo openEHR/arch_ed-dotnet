@@ -40,13 +40,39 @@ namespace Ots
 
         protected string subsetLanguage;
 
+        public virtual string SubsetLanguage
+        {
+            get { return subsetLanguage; }
+            set { subsetLanguage = value; }
+        }
+
         protected readonly Stack<string> referenceIds = new Stack<string>();
+
+        public virtual string ReferenceId
+        {
+            get
+            {
+                return referenceIds.Count > 0 ? referenceIds.Peek() : "";
+            }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                    referenceIds.Push(value);
+            }
+        }
+
+        protected string termText;
+
+        public virtual string TermText
+        {
+            get { return termText; }
+        }
 
         protected virtual string SelectedValue(string columnName, string defaultValue)
         {
             string result = defaultValue;
 
-            if (Grid.Columns.Contains(columnName))
+            if (Grid.CurrentRow != null && Grid.Columns.Contains(columnName))
             {
                 result = Grid.CurrentRow.Cells[columnName].Value as string;
             }
@@ -58,11 +84,9 @@ namespace Ots
         {
             TerminologyId = SelectedValue("TerminologyId", TerminologyId);
             SubsetId = SelectedValue("QueryId", SubsetId);
-            subsetLanguage = SelectedValue("Language", subsetLanguage);
-            string referenceId = SelectedValue("ReferenceId", "");
-
-            if (!string.IsNullOrEmpty(referenceId))
-                referenceIds.Push(referenceId);
+            SubsetLanguage = SelectedValue("Language", SubsetLanguage);
+            termText = SelectedValue("TermText", termText);
+            ReferenceId = SelectedValue("ReferenceId", "");
         }
 
         protected virtual void PopulateGrid()
@@ -81,7 +105,7 @@ namespace Ots
                     Grid.Columns[0].HeaderText = "Terminology";
                 }
             }
-            else if (string.IsNullOrEmpty(SubsetId))
+            else if (string.IsNullOrEmpty(SubsetId) || string.IsNullOrEmpty(SubsetLanguage))
             {
                 Text = "Select a Subset for Terminology " + TerminologyId;
                 Grid.DataSource = null;
@@ -104,22 +128,22 @@ namespace Ots
                 Text = "Concepts for Terminology " + TerminologyId + " (" + SubsetId + ")";
                 ProgressBar.Visible = true;
 
-                if (referenceIds.Count == 0)
-                    Ots.Once.LoadConcepts(handler, OnOtsError, TerminologyId, SubsetId, subsetLanguage);
+                if (string.IsNullOrEmpty(ReferenceId))
+                    Ots.Once.LoadConcepts(handler, OnOtsError, TerminologyId, SubsetId, SubsetLanguage);
                 else
-                    Ots.Once.LoadChildConcepts(handler, OnOtsError, TerminologyId, SubsetId, subsetLanguage, referenceIds.Peek());
+                    Ots.Once.LoadChildConcepts(handler, OnOtsError, TerminologyId, SubsetId, SubsetLanguage, ReferenceId);
             }
         }
 
         protected virtual void OnOtsError(object sender, AsyncCompletedEventArgs e)
         {
             ProgressBar.Visible = false;
-            ShowException(e.Error);
+            ShowException(e.Error, "OTS Error");
         }
 
-        protected virtual void ShowException(Exception ex)
+        protected virtual void ShowException(Exception ex, string caption)
         {
-            MessageBox.Show(ex.InnerException != null ? ex.InnerException.Message : ex.Message);
+            MessageBox.Show(ex.InnerException != null ? ex.InnerException.Message : ex.Message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         protected void Form_Shown(object sender, EventArgs e)
@@ -134,7 +158,7 @@ namespace Ots
             }
             catch (Exception ex)
             {
-                ShowException(ex);
+                ShowException(ex, "Error");
             }
         }
 

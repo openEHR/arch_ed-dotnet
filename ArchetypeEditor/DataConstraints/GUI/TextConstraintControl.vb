@@ -965,7 +965,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
-    Private Sub ShowTerminologySelectionForm(ByVal terminologyId As String, ByVal subsetId As String)
+    Private Sub ShowTerminologySelectionForm(ByVal terminologyId As String)
         Dim terminologySelectionForm As New Ots.TerminologySelectionForm
 
         If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
@@ -973,7 +973,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         End If
 
         terminologySelectionForm.TerminologyId = terminologyId
-        terminologySelectionForm.SubsetId = subsetId
+        terminologySelectionForm.SubsetId = ""
         terminologySelectionForm.ShowDialog(ParentForm)
 
         If terminologySelectionForm.DialogResult = DialogResult.OK Then
@@ -983,11 +983,11 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub TermConstraintTerminologyButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintTerminologyButton.Click
-        ShowTerminologySelectionForm("", "")
+        ShowTerminologySelectionForm("")
     End Sub
 
     Private Sub TermConstraintSubsetButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintSubsetButton.Click
-        ShowTerminologySelectionForm(TermConstraintTerminologyTextBox.Text, "")
+        ShowTerminologySelectionForm(TermConstraintTerminologyTextBox.Text)
     End Sub
 
     Private Sub MenuClearText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuClearText.Click
