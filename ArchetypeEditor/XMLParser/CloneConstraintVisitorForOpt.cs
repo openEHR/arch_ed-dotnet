@@ -152,6 +152,8 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                  || (parentTypeName == "INTERVAL_EVENT" && attrName == "state")
                  || (parentTypeName == "ELEMENT" && attrName == "value")
                  || (parentTypeName == "ELEMENT" && attrName == "null_flavour")
+                 || (parentTypeName == "DV_INTERVAL" && attrName == "lower")
+                 || (parentTypeName == "DV_INTERVAL" && attrName == "upper")
                 )
                 {
                     result.existence = new IntervalOfInteger();
