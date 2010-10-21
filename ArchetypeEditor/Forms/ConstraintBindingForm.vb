@@ -29,133 +29,133 @@ Public Class ConstraintBindingForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents comboTerminology As System.Windows.Forms.ComboBox
-    Friend WithEvents txtQuery As System.Windows.Forms.TextBox
-    Friend WithEvents txtRelease As System.Windows.Forms.TextBox
-    Friend WithEvents lblTerminology As System.Windows.Forms.Label
-    Friend WithEvents lblQueryName As System.Windows.Forms.Label
-    Friend WithEvents lblRelease As System.Windows.Forms.Label
-    Friend WithEvents butOK As System.Windows.Forms.Button
-    Friend WithEvents butCancel As System.Windows.Forms.Button
-    Friend WithEvents lblQuery As System.Windows.Forms.Label
+    Friend WithEvents TerminologyComboBox As System.Windows.Forms.ComboBox
+    Friend WithEvents SubsetTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents ReleaseTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents TerminologyLabel As System.Windows.Forms.Label
+    Friend WithEvents SubsetLabel As System.Windows.Forms.Label
+    Friend WithEvents ReleaseLabel As System.Windows.Forms.Label
+    Friend WithEvents OkButton As System.Windows.Forms.Button
+    Friend WithEvents SubsetButton As System.Windows.Forms.Button
+    Friend WithEvents CancelCloseButton As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConstraintBindingForm))
-        Me.comboTerminology = New System.Windows.Forms.ComboBox
-        Me.txtQuery = New System.Windows.Forms.TextBox
-        Me.txtRelease = New System.Windows.Forms.TextBox
-        Me.lblTerminology = New System.Windows.Forms.Label
-        Me.lblQueryName = New System.Windows.Forms.Label
-        Me.lblRelease = New System.Windows.Forms.Label
-        Me.butOK = New System.Windows.Forms.Button
-        Me.butCancel = New System.Windows.Forms.Button
-        Me.lblQuery = New System.Windows.Forms.Label
+        Me.TerminologyComboBox = New System.Windows.Forms.ComboBox
+        Me.SubsetTextBox = New System.Windows.Forms.TextBox
+        Me.ReleaseTextBox = New System.Windows.Forms.TextBox
+        Me.TerminologyLabel = New System.Windows.Forms.Label
+        Me.SubsetLabel = New System.Windows.Forms.Label
+        Me.ReleaseLabel = New System.Windows.Forms.Label
+        Me.OkButton = New System.Windows.Forms.Button
+        Me.CancelCloseButton = New System.Windows.Forms.Button
+        Me.SubsetButton = New System.Windows.Forms.Button
         Me.SuspendLayout()
         '
-        'comboTerminology
+        'TerminologyComboBox
         '
-        Me.comboTerminology.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TerminologyComboBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.comboTerminology.Location = New System.Drawing.Point(15, 29)
-        Me.comboTerminology.Name = "comboTerminology"
-        Me.comboTerminology.Size = New System.Drawing.Size(437, 21)
-        Me.comboTerminology.TabIndex = 0
-        Me.comboTerminology.Text = "Choose..."
+        Me.TerminologyComboBox.Location = New System.Drawing.Point(127, 5)
+        Me.TerminologyComboBox.Name = "TerminologyComboBox"
+        Me.TerminologyComboBox.Size = New System.Drawing.Size(325, 21)
+        Me.TerminologyComboBox.TabIndex = 1
+        Me.TerminologyComboBox.Text = "Choose..."
         '
-        'txtQuery
+        'SubsetTextBox
         '
-        Me.txtQuery.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.SubsetTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtQuery.Location = New System.Drawing.Point(147, 83)
-        Me.txtQuery.Name = "txtQuery"
-        Me.txtQuery.Size = New System.Drawing.Size(305, 20)
-        Me.txtQuery.TabIndex = 1
+        Me.SubsetTextBox.Location = New System.Drawing.Point(127, 32)
+        Me.SubsetTextBox.Name = "SubsetTextBox"
+        Me.SubsetTextBox.Size = New System.Drawing.Size(286, 20)
+        Me.SubsetTextBox.TabIndex = 3
         '
-        'txtRelease
+        'ReleaseTextBox
         '
-        Me.txtRelease.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ReleaseTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtRelease.Location = New System.Drawing.Point(15, 133)
-        Me.txtRelease.Name = "txtRelease"
-        Me.txtRelease.Size = New System.Drawing.Size(239, 20)
-        Me.txtRelease.TabIndex = 2
-        Me.txtRelease.Visible = False
+        Me.ReleaseTextBox.Location = New System.Drawing.Point(127, 61)
+        Me.ReleaseTextBox.Name = "ReleaseTextBox"
+        Me.ReleaseTextBox.Size = New System.Drawing.Size(325, 20)
+        Me.ReleaseTextBox.TabIndex = 6
         '
-        'lblTerminology
+        'TerminologyLabel
         '
-        Me.lblTerminology.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.TerminologyLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblTerminology.Location = New System.Drawing.Point(12, 5)
-        Me.lblTerminology.Name = "lblTerminology"
-        Me.lblTerminology.Size = New System.Drawing.Size(440, 21)
-        Me.lblTerminology.TabIndex = 3
-        Me.lblTerminology.Text = "Terminology:"
+        Me.TerminologyLabel.Location = New System.Drawing.Point(12, 5)
+        Me.TerminologyLabel.Name = "TerminologyLabel"
+        Me.TerminologyLabel.Size = New System.Drawing.Size(98, 21)
+        Me.TerminologyLabel.TabIndex = 0
+        Me.TerminologyLabel.Text = "Terminology"
         '
-        'lblQueryName
+        'SubsetLabel
         '
-        Me.lblQueryName.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.SubsetLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblQueryName.Location = New System.Drawing.Point(12, 65)
-        Me.lblQueryName.Name = "lblQueryName"
-        Me.lblQueryName.Size = New System.Drawing.Size(440, 21)
-        Me.lblQueryName.TabIndex = 4
-        Me.lblQueryName.Text = "Query name:"
+        Me.SubsetLabel.Location = New System.Drawing.Point(12, 32)
+        Me.SubsetLabel.Name = "SubsetLabel"
+        Me.SubsetLabel.Size = New System.Drawing.Size(98, 21)
+        Me.SubsetLabel.TabIndex = 2
+        Me.SubsetLabel.Text = "Subset"
         '
-        'lblRelease
+        'ReleaseLabel
         '
-        Me.lblRelease.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ReleaseLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lblRelease.Location = New System.Drawing.Point(12, 109)
-        Me.lblRelease.Name = "lblRelease"
-        Me.lblRelease.Size = New System.Drawing.Size(242, 21)
-        Me.lblRelease.TabIndex = 5
-        Me.lblRelease.Text = "Release"
-        Me.lblRelease.Visible = False
+        Me.ReleaseLabel.Location = New System.Drawing.Point(12, 64)
+        Me.ReleaseLabel.Name = "ReleaseLabel"
+        Me.ReleaseLabel.Size = New System.Drawing.Size(98, 21)
+        Me.ReleaseLabel.TabIndex = 5
+        Me.ReleaseLabel.Text = "Release"
         '
-        'butOK
+        'OkButton
         '
-        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(272, 127)
-        Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(86, 28)
-        Me.butOK.TabIndex = 6
-        Me.butOK.Text = "OK"
+        Me.OkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.OkButton.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.OkButton.Location = New System.Drawing.Point(272, 100)
+        Me.OkButton.Name = "OkButton"
+        Me.OkButton.Size = New System.Drawing.Size(86, 28)
+        Me.OkButton.TabIndex = 7
+        Me.OkButton.Text = "OK"
         '
-        'butCancel
+        'CancelCloseButton
         '
-        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(366, 127)
-        Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(86, 28)
-        Me.butCancel.TabIndex = 7
-        Me.butCancel.Text = "Cancel"
+        Me.CancelCloseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CancelCloseButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.CancelCloseButton.Location = New System.Drawing.Point(366, 100)
+        Me.CancelCloseButton.Name = "CancelCloseButton"
+        Me.CancelCloseButton.Size = New System.Drawing.Size(86, 28)
+        Me.CancelCloseButton.TabIndex = 8
+        Me.CancelCloseButton.Text = "Cancel"
         '
-        'lblQuery
+        'SubsetButton
         '
-        Me.lblQuery.Location = New System.Drawing.Point(12, 86)
-        Me.lblQuery.Name = "lblQuery"
-        Me.lblQuery.Size = New System.Drawing.Size(133, 21)
-        Me.lblQuery.TabIndex = 8
-        Me.lblQuery.Text = "terminology:"
-        Me.lblQuery.TextAlign = System.Drawing.ContentAlignment.TopRight
+        Me.SubsetButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.SubsetButton.Location = New System.Drawing.Point(419, 32)
+        Me.SubsetButton.Name = "SubsetButton"
+        Me.SubsetButton.Size = New System.Drawing.Size(33, 23)
+        Me.SubsetButton.TabIndex = 4
+        Me.SubsetButton.Text = "..."
+        Me.SubsetButton.UseVisualStyleBackColor = True
         '
         'ConstraintBindingForm
         '
+        Me.AcceptButton = Me.OkButton
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(464, 168)
-        Me.Controls.Add(Me.lblQuery)
-        Me.Controls.Add(Me.butCancel)
-        Me.Controls.Add(Me.butOK)
-        Me.Controls.Add(Me.txtQuery)
-        Me.Controls.Add(Me.lblQueryName)
-        Me.Controls.Add(Me.lblTerminology)
-        Me.Controls.Add(Me.txtRelease)
-        Me.Controls.Add(Me.comboTerminology)
-        Me.Controls.Add(Me.lblRelease)
+        Me.CancelButton = Me.CancelCloseButton
+        Me.ClientSize = New System.Drawing.Size(464, 141)
+        Me.Controls.Add(Me.SubsetButton)
+        Me.Controls.Add(Me.CancelCloseButton)
+        Me.Controls.Add(Me.OkButton)
+        Me.Controls.Add(Me.SubsetTextBox)
+        Me.Controls.Add(Me.SubsetLabel)
+        Me.Controls.Add(Me.TerminologyLabel)
+        Me.Controls.Add(Me.ReleaseTextBox)
+        Me.Controls.Add(Me.TerminologyComboBox)
+        Me.Controls.Add(Me.ReleaseLabel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MinimumSize = New System.Drawing.Size(472, 194)
+        Me.MinimumSize = New System.Drawing.Size(472, 168)
         Me.Name = "ConstraintBindingForm"
         Me.Text = "Add Binding"
         Me.ResumeLayout(False)
@@ -182,31 +182,48 @@ Public Class ConstraintBindingForm
         TextColumn.ColumnName = "Text"
         mDataTable.Columns.Add(TextColumn)
 
-        Dim Terminologies As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
+        Dim terminologies As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
         mDataTable.DefaultView.Sort = "Text"
 
-        For i As Integer = 0 To Terminologies.Length - 1
+        For i As Integer = 0 To terminologies.Length - 1
             Dim newRow As DataRow = mDataTable.NewRow()
-            newRow("Code") = Terminologies(i).Item(0)
-            newRow("Text") = Terminologies(i).Item(1)
+            newRow("Code") = terminologies(i).Item(0)
+            newRow("Text") = terminologies(i).Item(1)
             mDataTable.Rows.Add(newRow)
         Next
 
-        comboTerminology.DataSource = mDataTable
-        comboTerminology.DisplayMember = "Text"
-        comboTerminology.ValueMember = "Code"
+        TerminologyComboBox.DataSource = mDataTable
+        TerminologyComboBox.DisplayMember = "Text"
+        TerminologyComboBox.ValueMember = "Code"
     End Sub
 
-    Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
-        If comboTerminology.SelectedIndex < 0 Or txtQuery.Text = "" Then
-            MessageBox.Show(AE_Constants.Instance.Add_Reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Else
-            Close()
+    Private Sub SubsetButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SubsetButton.Click
+        Dim form As New Ots.TerminologySelectionForm
+
+        If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
+            form.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
+        End If
+
+        form.TerminologyId = TerminologyComboBox.Text
+        form.SubsetId = ""
+        form.ShowDialog(ParentForm)
+
+        If form.DialogResult = DialogResult.OK Then
+            TerminologyComboBox.Text = form.TerminologyId
+            SubsetTextBox.Text = form.SubsetId
         End If
     End Sub
 
     Public Sub AddConstraintBinding(ByVal ontologyManager As OntologyManager, ByVal acCode As String)
-        ontologyManager.AddConstraintBinding(acCode, comboTerminology.SelectedValue, comboTerminology.SelectedText, txtRelease.Text, txtQuery.Text)
+        Dim terminologyId As String = TryCast(TerminologyComboBox.SelectedValue, String)
+
+        If String.IsNullOrEmpty(terminologyId) Then
+            terminologyId = TerminologyComboBox.Text
+        End If
+
+        ontologyManager.AddTerminology(terminologyId)
+        Dim uri As String = ontologyManager.ConstraintBindingUri(terminologyId, ReleaseTextBox.Text, SubsetTextBox.Text)
+        ontologyManager.AddConstraintBinding(acCode, uri)
     End Sub
 
 End Class

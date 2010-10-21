@@ -60,9 +60,9 @@ Public Class RmTerm
         End Get
     End Property
 
-    Friend Shared Function IsValidTermCode(ByVal a_term_code As String) As Boolean
+    Friend Shared Function IsValidTermCode(ByVal termCode As String) As Boolean
         Dim rx As New System.Text.RegularExpressions.Regex("a[ct](0\.[0-9]{1,4}|[0-9]{4})(\.[0-9]{1,3})*")
-        Return rx.Match(a_term_code).Success()
+        Return Not termCode Is Nothing AndAlso rx.IsMatch(termCode)
     End Function
 
     Sub New(ByVal Code As String)

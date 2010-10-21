@@ -131,80 +131,51 @@ Public Class OceanArchetypeEditor
         MakeUnitsTable = tTable
     End Function
 
-    Public Function MakeTerminologyDataTable() As DataTable
-        Dim mDataTable As DataTable = New DataTable("DataTable")
-        Dim idColumn As DataColumn = New DataColumn
-        idColumn.DataType = System.Type.GetType("System.Int32")
-        idColumn.ColumnName = "Id"
-        mDataTable.Columns.Add(idColumn)
-        Dim CodeColumn As DataColumn = New DataColumn
-        CodeColumn.DataType = System.Type.GetType("System.String")
-        CodeColumn.ColumnName = "Code"
-        mDataTable.Columns.Add(CodeColumn)
-        Dim TextColumn As DataColumn = New DataColumn
-        TextColumn.DataType = System.Type.GetType("System.String")
-        TextColumn.ColumnName = "Text"
-        mDataTable.Columns.Add(TextColumn)
-
-        Dim rows As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
-
-        mDataTable.DefaultView.Sort = "Text"
-
-        For i As Integer = 0 To rows.Length - 1
-            Dim newRow As DataRow = mDataTable.NewRow()
-            newRow("Code") = rows(i).Item(0)
-            newRow("Text") = rows(i).Item(1)
-            mDataTable.Rows.Add(newRow)
-        Next
-
-        Return mDataTable
-    End Function
-
     Private Function MakePhysicalPropertiesTable() As DataTable
-        Dim tTable As DataTable
+        Dim result As DataTable
 
         ' Now only used as a backup if there are no PropertyUnits XML files
 
         ' Create a new DataTable titled 'TermDefinitions' or 'ConstraintDefinitions'
-        tTable = New DataTable("Property")
+        result = New DataTable("Property")
         ' Add three column objects to the table.
         Dim idColumn As DataColumn = New DataColumn
         idColumn.DataType = System.Type.GetType("System.Int32")
         idColumn.ColumnName = "id"
         idColumn.AutoIncrement = True
-        tTable.Columns.Add(idColumn)
+        result.Columns.Add(idColumn)
         Dim TextColumn As DataColumn = New DataColumn
         TextColumn.DataType = System.Type.GetType("System.String")
         TextColumn.ColumnName = "Text"
-        tTable.Columns.Add(TextColumn)
+        result.Columns.Add(TextColumn)
         Dim DescriptionColumn As DataColumn = New DataColumn
         DescriptionColumn.DataType = System.Type.GetType("System.String")
         DescriptionColumn.ColumnName = "Description"
-        tTable.Columns.Add(DescriptionColumn)
+        result.Columns.Add(DescriptionColumn)
         ' Return the new DataTable.
         'Dim keys(1) As DataColumn
         Dim keys(0) As DataColumn
         keys(0) = idColumn
         'keys(1) = TextColumn
-        tTable.PrimaryKey = keys
+        result.PrimaryKey = keys
 
-        Return tTable
-
+        Return result
     End Function
 
     Public Function AddTerminology() As Boolean
         ' add the language codes 
+        Dim result As Boolean = False
         Dim frm As New Choose
         frm.Set_Single()
         frm.PrepareDataTable_for_List(1)
 
-        Dim Terminologies As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
+        Dim terminologies As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
         frm.DTab_1.DefaultView.Sort = "Text"
 
-        For i As Integer = 0 To Terminologies.Length - 1
+        For i As Integer = 0 To terminologies.Length - 1
             Dim newRow As DataRow = frm.DTab_1.NewRow()
-            newRow("Code") = Terminologies(i).Item(0)
-            newRow("Text") = Terminologies(i).Item(1)
+            newRow("Code") = terminologies(i).Item(0)
+            newRow("Text") = terminologies(i).Item(1)
             frm.DTab_1.Rows.Add(newRow)
         Next
 
@@ -217,23 +188,18 @@ Public Class OceanArchetypeEditor
             Dim term As String = CStr(frm.ListChoose.SelectedValue)
             Dim description As String = frm.ListChoose.Text
 
-            If Not Filemanager.Master.OntologyManager.TerminologiesTable.Select("Terminology = '" & term & "'").Length = 0 Then
+            If Filemanager.Master.OntologyManager.TerminologiesTable.Select("Terminology = '" & term & "'").Length > 0 Then
                 Beep()
-                Debug.Assert(False)
+            Else
+                result = True
 
-                Return False
+                If MessageBox.Show(AE_Constants.Instance.NewTerminology & description, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+                    Filemanager.Master.OntologyManager.AddTerminology(term)
+                End If
             End If
-
-            ' there is already a language in the archetype
-            If (MessageBox.Show(AE_Constants.Instance.NewTerminology & description, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK) Then
-                ' add to the terminologies
-                Filemanager.Master.OntologyManager.AddTerminology(term, description)
-            End If
-        Else
-            Return False
         End If
 
-        Return True
+        Return result
     End Function
 
     Public Function GetInput(ByVal label As String, ByVal parentForm As Form, Optional ByVal defaultValue As String = "") As String
@@ -247,7 +213,7 @@ Public Class OceanArchetypeEditor
         End If
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
-        If frm.ShowDialog(parentForm) = Windows.Forms.DialogResult.OK Then
+        If frm.ShowDialog(parentForm) = DialogResult.OK Then
             s = frm.txtInput.Text
         End If
         frm.Close()
@@ -263,7 +229,7 @@ Public Class OceanArchetypeEditor
         frm.LblInput2.Text = label_2
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
-        If frm.ShowDialog(parentForm) = Windows.Forms.DialogResult.OK Then
+        If frm.ShowDialog(parentForm) = DialogResult.OK Then
             s(0) = frm.txtInput.Text
             s(1) = frm.txtInput2.Text
             If s(1) = "" Then

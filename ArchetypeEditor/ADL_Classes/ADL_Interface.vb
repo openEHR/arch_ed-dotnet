@@ -225,15 +225,11 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Sub AddConstraintBindingsFromTable(ByVal a_table As DataTable)
-            Dim terminology As EiffelKernel.STRING_8
-            Dim constraintCode As EiffelKernel.STRING_8
-            Dim path As openehr.common_libs.basic.URI
-
             For Each dRow As DataRow In a_table.Rows
-                terminology = Eiffel.String(CType(dRow(0), String))
-                constraintCode = Eiffel.String(CType(dRow(1), String))
-                path = openehr.common_libs.basic.Create.URI.make_from_string(Eiffel.String(CType(dRow(2), String)))
-                EIF_adlInterface.ontology.add_constraint_binding(path, terminology, constraintCode)
+                Dim terminology As EiffelKernel.STRING_8 = Eiffel.String(CType(dRow(0), String))
+                Dim acCode As EiffelKernel.STRING_8 = Eiffel.String(CType(dRow(1), String))
+                Dim path As openehr.common_libs.basic.URI = openehr.common_libs.basic.Create.URI.make_from_string(Eiffel.String(CType(dRow(4), String)))
+                EIF_adlInterface.ontology.add_constraint_binding(path, terminology, acCode)
             Next
         End Sub
 

@@ -33,7 +33,6 @@ Public Class OntologyManager
     Private mLanguageCode As String
     Private mPrimaryLanguageText As String
     Private mLastLanguageText As String
-    Private mLastTerminologyText As String
     Private mOntology As Ontology
     Private mLastTerm As RmTerm
     Private mDoUpdateOntology As Boolean = False
@@ -587,18 +586,17 @@ Public Class OntologyManager
         End If
     End Sub
 
-    Public Sub AddTerminology(ByVal terminologyId As String, ByVal terminologyText As String)
-        If terminologyText = "" Then
-            ' get the full name of the language from openEHR terminology
-            mLastTerminologyText = TerminologyServer.Instance.CodeSetItemDescription("Terminology", terminologyId)
-        Else
-            mLastTerminologyText = terminologyText
-        End If
-
+    Public Sub AddTerminology(ByVal terminologyId As String)
         If TerminologiesTable.Rows.Find(terminologyId) Is Nothing Then
+            Dim terminologyText As String = TerminologyServer.Instance.CodeSetItemDescription("Terminologies", terminologyId)
+
+            If terminologyText = "" Then
+                terminologyText = terminologyId
+            End If
+
             Dim row As DataRow = TerminologiesTable.NewRow
             row(0) = terminologyId
-            row(1) = mLastTerminologyText
+            row(1) = terminologyText
             TerminologiesTable.Rows.Add(row)
         End If
 
@@ -610,43 +608,91 @@ Public Class OntologyManager
         mFileManager.FileEdited = True
     End Sub
 
-    Public Sub AddConstraintBinding(ByVal acCode As String, ByVal terminologyId As String, ByVal terminologyText As String, ByVal release As String, ByVal subset As String)
-        If Not HasTerminology(terminologyId) Then
-            AddTerminology(terminologyId, terminologyText)
-        End If
+    Public Sub AddConstraintBinding(ByVal acCode As String, ByVal uri As String)
+        If RmTerm.IsValidTermCode(acCode) And Not String.IsNullOrEmpty(uri) Then
+            Dim row As DataRow = ConstraintBindingsTable.NewRow
+            PopulateConstraintBindingRow(row, acCode, uri)
+            Dim terminologyId As String = TryCast(row(0), String)
 
-        If RmTerm.IsValidTermCode(acCode) Then
-            Dim uri As String = "terminology:" + terminologyId
+            If Not String.IsNullOrEmpty(terminologyId) Then
+                If Not HasTerminology(terminologyId) Then
+                    AddTerminology(terminologyId)
+                End If
+
+                Dim keys(2) As Object
+                keys(0) = row(0)
+                keys(1) = row(1)
+                keys(2) = row(2)
+
+                If ConstraintBindingsTable.Rows.Contains(keys) Then
+                    'change the constraint
+                    row = ConstraintBindingsTable.Rows.Find(keys)
+                    row.BeginEdit()
+                    PopulateConstraintBindingRow(row, acCode, uri)
+                    row.EndEdit()
+                Else
+                    ConstraintBindingsTable.Rows.Add(row)
+                End If
+
+                Filemanager.Master.FileEdited = True
+            End If
+        End If
+    End Sub
+
+    Public Function ConstraintBindingUri(ByVal terminologyId As String, ByVal release As String, ByVal subset As String) As String
+        Dim result As String = ""
+
+        If Not String.IsNullOrEmpty(terminologyId) Then
+            result = terminologyId
 
             If release <> "" Then
-                uri = uri + "/" + release
+                result = result + "/" + release
             End If
 
             If subset <> "" Then
-                uri = uri + "?subset=" + subset.Replace(" ", "+")
+                result = result + "?subset=" + subset
             End If
 
-            Dim row As DataRow = Filemanager.Master.OntologyManager.ConstraintBindingsTable.NewRow
-            row(0) = terminologyId
-            row(1) = acCode
-            row(2) = uri
-            row(3) = release
+            result = "terminology:" + System.Uri.EscapeUriString(result)
+        End If
 
-            Dim keys(1) As Object
-            keys(0) = row(0)
-            keys(1) = row(1)
+        Return result
+    End Function
 
-            If Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Contains(keys) Then
-                'change the constraint
-                row = Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Find(keys)
-                row.BeginEdit()
-                row(2) = uri
-                row.EndEdit()
-            Else
-                Filemanager.Master.OntologyManager.ConstraintBindingsTable.Rows.Add(row)
+    Public Sub PopulateConstraintBindingRow(ByVal row As DataRow, ByVal acCode As String, ByVal uri As String)
+        If Not row Is Nothing And RmTerm.IsValidTermCode(acCode) Then
+            If Not uri Is Nothing AndAlso uri.StartsWith("terminology:") Then
+                Dim terminologyId As String = System.Uri.UnescapeDataString(uri.Substring(uri.IndexOf(":") + 1))
+                Dim release As String = ""
+                Dim subset As String = ""
+
+                Dim i As Integer = terminologyId.IndexOf("?")
+
+                If i >= 0 Then
+                    For Each parameter As String In terminologyId.Substring(i + 1).Split("&"c)
+                        If parameter.StartsWith("subset=") Then
+                            subset = parameter.Substring(parameter.IndexOf("=") + 1).Replace("+", " ")
+                        End If
+                    Next
+
+                    terminologyId = terminologyId.Remove(i)
+                End If
+
+                i = terminologyId.IndexOf("/")
+
+                If i >= 0 Then
+                    release = terminologyId.Substring(i + 1)
+                    terminologyId = terminologyId.Remove(i)
+                End If
+
+                If Not String.IsNullOrEmpty(terminologyId) Then
+                    row(0) = terminologyId
+                    row(1) = acCode
+                    row(2) = release
+                    row(3) = subset
+                    row(4) = uri
+                End If
             End If
-
-            Filemanager.Master.FileEdited = True
         End If
     End Sub
 
@@ -764,7 +810,7 @@ Public Class OntologyManager
         Return TermTable
     End Function
 
-    Private Function MakeConstraintBindingTable() As DataTable
+    Private Function MakeConstraintBindingsTable() As DataTable
         ' Note - there are no versions of the Terminology at present
         ' as if the knowledge model shifted fundamentally then I believe
         ' that the archetype would have to be released with a new version
@@ -772,39 +818,49 @@ Public Class OntologyManager
 
         'Also - we may need to know for all terminology - when it was added - ie what revision
 
-        Dim BindingsTable As DataTable
+        Dim result As DataTable = New DataTable("ConstraintBindings")
 
-        BindingsTable = New DataTable("ConstraintBindings")
-        ' Add six column objects to the table.
         'Short name or ID of terminology
-        Dim TermColumn As DataColumn = New DataColumn
-        TermColumn.DataType = System.Type.GetType("System.String")
-        TermColumn.ColumnName = "Terminology"
-        BindingsTable.Columns.Add(TermColumn)
-        'AcCode acNNNN
-        Dim IDColumn As DataColumn = New DataColumn
-        IDColumn.DataType = System.Type.GetType("System.String")
-        IDColumn.ColumnName = "ID"
-        BindingsTable.Columns.Add(IDColumn)
-        'URL to the path
-        Dim CodeColumn As DataColumn = New DataColumn
-        CodeColumn.DataType = System.Type.GetType("System.String")
-        CodeColumn.ColumnName = "CodePhrase"
-        CodeColumn.DefaultValue = ""
-        BindingsTable.Columns.Add(CodeColumn)
-        'Release information if relevant
-        Dim ReleaseColumn As DataColumn = New DataColumn
-        ReleaseColumn.DataType = System.Type.GetType("System.String")
-        ReleaseColumn.ColumnName = "Release"
-        ReleaseColumn.DefaultValue = ""
-        BindingsTable.Columns.Add(ReleaseColumn)
-        ' Return the new DataTable.
-        Dim keys(1) As DataColumn
-        keys(0) = TermColumn
-        keys(1) = IDColumn
-        BindingsTable.PrimaryKey = keys
+        Dim termColumn As DataColumn = New DataColumn
+        termColumn.DataType = System.Type.GetType("System.String")
+        termColumn.ColumnName = "Terminology"
+        result.Columns.Add(termColumn)
 
-        Return BindingsTable
+        'AcCode acNNNN
+        Dim iDColumn As DataColumn = New DataColumn
+        iDColumn.DataType = System.Type.GetType("System.String")
+        iDColumn.ColumnName = "ID"
+        result.Columns.Add(iDColumn)
+
+        'Release
+        Dim releaseColumn As DataColumn = New DataColumn
+        releaseColumn.DataType = System.Type.GetType("System.String")
+        releaseColumn.ColumnName = "Release"
+        releaseColumn.DefaultValue = ""
+        result.Columns.Add(releaseColumn)
+
+        'Subset
+        Dim subsetColumn As DataColumn = New DataColumn
+        subsetColumn.DataType = System.Type.GetType("System.String")
+        subsetColumn.ColumnName = "Subset"
+        subsetColumn.DefaultValue = ""
+        result.Columns.Add(subsetColumn)
+
+        'URI
+        Dim uriColumn As DataColumn = New DataColumn
+        uriColumn.DataType = System.Type.GetType("System.String")
+        uriColumn.ColumnName = "CodePhrase"
+        uriColumn.DefaultValue = ""
+        result.Columns.Add(uriColumn)
+
+        ' Return the new DataTable.
+        Dim keys(2) As DataColumn
+        keys(0) = termColumn
+        keys(1) = iDColumn
+        keys(2) = releaseColumn
+        result.PrimaryKey = keys
+
+        Return result
     End Function
 
     Private Function MakeTermBindingTable() As DataTable
@@ -985,7 +1041,7 @@ Public Class OntologyManager
 
         mLanguageDS.Relations.Add(new_relation)
 
-        mConstraintBindingsTable = MakeConstraintBindingTable()
+        mConstraintBindingsTable = MakeConstraintBindingsTable()
         mLanguageDS.Tables.Add(mConstraintBindingsTable)
 
         new_relation = New DataRelation("TerminologiesConstraintBindings", mConstraintDefinitionsTable.Columns(1), mConstraintBindingsTable.Columns(1), False)
@@ -1046,96 +1102,42 @@ Public Class OntologyManager
 
     Public Sub TermBindingsTable_RowChanged(ByVal sender As Object, ByVal e As DataRowChangeEventArgs) Handles mTermBindingsTable.RowChanged, mTermBindingsTable.RowDeleting
         If mDoUpdateOntology Then
-            Try
-                Dim sTerminology As String
+            Dim terminologyId As String = TryCast(e.Row(0), String)
+            Dim path As String = TryCast(e.Row(1), String)
+            Dim code As String = TryCast(e.Row(2), String)
+            Dim release As String = TryCast(e.Row(3), String)
 
-                If Not e.Row(0) Is Nothing Then     'Terminology
-                    sTerminology = TryCast(e.Row(0), String)
-                Else
-                    Return
+            If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
+                code = System.Text.RegularExpressions.Regex.Replace(code, "[\*\(\)\]\[\~\`\!\@\#\$\%\^\&\+\=\""\{\}\|\;\:\?/\<\>\s]", "")
+
+                If Not String.IsNullOrEmpty(terminologyId) And Not String.IsNullOrEmpty(path) And Not String.IsNullOrEmpty(code) Then
+                    mOntology.AddorReplaceTermBinding(terminologyId, path, code, release)
                 End If
+            ElseIf e.Action = DataRowAction.Delete Then
+                mOntology.RemoveTermBinding(terminologyId, path)
+            End If
 
-                Dim sPath As String
-
-                If Not e.Row(1) Is Nothing Then     'Path
-                    sPath = TryCast(e.Row(1), String)
-                Else
-                    Return
-                End If
-
-                Dim sCode As String
-                If Not e.Row(2) Is Nothing Then     'Code
-                    sCode = TryCast(e.Row(2), String)
-                Else
-                    Return
-                End If
-
-                Dim sRelease As String = ""
-
-                If Not e.Row(3) Is Nothing Then     'Release
-                    sRelease = TryCast(e.Row(3), String)
-                End If
-
-                If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
-                    sCode = System.Text.RegularExpressions.Regex.Replace(sCode, "[\*\(\)\]\[\~\`\!\@\#\$\%\^\&\+\=\""\{\}\|\;\:\?/\<\>\s]", "")
-
-                    If Not String.IsNullOrEmpty(sTerminology) And Not String.IsNullOrEmpty(sPath) And Not String.IsNullOrEmpty(sCode) Then
-                        mOntology.AddorReplaceTermBinding(sTerminology, sPath, sCode, sRelease)
-                    End If
-                ElseIf e.Action = DataRowAction.Delete Then
-                    mOntology.RemoveTermBinding(sTerminology, sPath)
-                End If
-
-                mFileManager.FileEdited = True
-            Catch ex As Exception
-                Debug.Assert(False, ex.ToString)
-            End Try
+            mFileManager.FileEdited = True
         End If
     End Sub
 
     Public Sub ConstraintBindingsTable_RowChanged(ByVal sender As Object, ByVal e As DataRowChangeEventArgs) Handles mConstraintBindingsTable.RowChanged, mConstraintBindingsTable.RowDeleting
         If mDoUpdateOntology Then
-            Try
-                Dim sTerminology As String
+            Dim terminologyId As String = TryCast(e.Row(0), String)
+            Dim acCode As String = TryCast(e.Row(1), String)
+            Dim release As String = TryCast(e.Row(2), String)
+            Dim subset As String = TryCast(e.Row(3), String)
+            Dim uri As String = ConstraintBindingUri(terminologyId, release, subset)
 
-                If Not e.Row(0) Is Nothing Then     'Terminology
-                    sTerminology = TryCast(e.Row(0), String)
-                Else
-                    Return
-                End If
-
-                Dim sCode As String = ""
-
-                If Not e.Row(1) Is Nothing Then     'Code
-                    sCode = TryCast(e.Row(1), String)
-                Else
-                    Return
-                End If
-
-                Dim sQuery As String
-
-                If Not e.Row(2) Is Nothing Then     'Query
-                    sQuery = TryCast(e.Row(2), String)
-                Else
-                    Return
-                End If
-
-                Dim sRelease As String = ""
-
-                If Not e.Row(3) Is Nothing Then     'Release
-                    sRelease = TryCast(e.Row(3), String)
-                End If
-
+            If Not String.IsNullOrEmpty(terminologyId) And Not String.IsNullOrEmpty(acCode) And Not String.IsNullOrEmpty(uri) Then
                 If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
-                    mOntology.AddorReplaceConstraintBinding(sTerminology, sCode, sQuery, sRelease)
+                    mOntology.AddorReplaceConstraintBinding(terminologyId, acCode, uri, release)
                 ElseIf e.Action = DataRowAction.Delete Then
-                    mOntology.RemoveConstraintBinding(sTerminology, sCode)
+                    mOntology.RemoveConstraintBinding(terminologyId, acCode)
                 End If
 
                 mFileManager.FileEdited = True
-            Catch ex As Exception
-                Debug.Assert(False, ex.ToString)
-            End Try
+            End If
         End If
     End Sub
 

@@ -38,6 +38,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
         mAllowedValuesDataView = New DataView(mFileManager.OntologyManager.TermDefinitionTable)
+        ConstraintBindingsGrid.BindTables(mFileManager.OntologyManager)
 
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
             radioText.Text = Filemanager.GetOpenEhrTerm(444, radioText.Text)
@@ -49,9 +50,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             ToolTip1.SetToolTip(RemoveItemButton, Filemanager.GetOpenEhrTerm(152, "Remove term"))
             TermConstraintLabel.Text = Filemanager.GetOpenEhrTerm(87, TermConstraintLabel.Text)
             TermConstraintDescriptionLabel.Text = Filemanager.GetOpenEhrTerm(113, TermConstraintDescriptionLabel.Text)
-            TermConstraintTerminologyLabel.Text = Filemanager.GetOpenEhrTerm(47, TermConstraintTerminologyLabel.Text)
-            TermConstraintSubsetLabel.Text = Filemanager.GetOpenEhrTerm(690, TermConstraintSubsetLabel.Text)
-            TermConstraintReleaseLabel.Text = Filemanager.GetOpenEhrTerm(97, TermConstraintReleaseLabel.Text)
+            ConstraintBindingsGrid.TranslateGui()
         End If
     End Sub
 
@@ -70,9 +69,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Friend WithEvents radioTerminology As System.Windows.Forms.RadioButton
     Friend WithEvents TermConstraintDescriptionTextBox As System.Windows.Forms.TextBox
     Friend WithEvents TermConstraintTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents TermConstraintTerminologyTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents TermConstraintSubsetTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents TermConstraintReleaseTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents ConstraintBindingsGrid As ConstraintBindingsControl
     Friend WithEvents ContextMenuListAllowableValues As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuItemCopyAll As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItemPasteAll As System.Windows.Forms.MenuItem
@@ -80,8 +77,6 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Friend WithEvents MenuItemAddExisting As System.Windows.Forms.MenuItem
     Friend WithEvents ContextMenuClearText As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuClearText As System.Windows.Forms.MenuItem
-    'Private components As System.ComponentModel.IContainer
-    'Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents MenuItemEdit As System.Windows.Forms.MenuItem
     Friend WithEvents TermConstraintDescriptionLabel As System.Windows.Forms.Label
     Friend WithEvents PasteListButton As System.Windows.Forms.Button
@@ -91,11 +86,6 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Private components As System.ComponentModel.IContainer
     Friend WithEvents MenuItemRemove As System.Windows.Forms.MenuItem
-    Friend WithEvents TermConstraintSubsetLabel As System.Windows.Forms.Label
-    Friend WithEvents TermConstraintTerminologyLabel As System.Windows.Forms.Label
-    Friend WithEvents TermConstraintReleaseLabel As System.Windows.Forms.Label
-    Friend WithEvents TermConstraintTerminologyButton As System.Windows.Forms.Button
-    Friend WithEvents TermConstraintSubsetButton As System.Windows.Forms.Button
     Friend WithEvents TermConstraintLabel As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -128,14 +118,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.radioTerminology = New System.Windows.Forms.RadioButton
         Me.TermConstraintDescriptionTextBox = New System.Windows.Forms.TextBox
         Me.TermConstraintTextBox = New System.Windows.Forms.TextBox
-        Me.TermConstraintTerminologyTextBox = New System.Windows.Forms.TextBox
-        Me.TermConstraintSubsetTextBox = New System.Windows.Forms.TextBox
-        Me.TermConstraintReleaseTextBox = New System.Windows.Forms.TextBox
-        Me.TermConstraintSubsetLabel = New System.Windows.Forms.Label
-        Me.TermConstraintTerminologyLabel = New System.Windows.Forms.Label
-        Me.TermConstraintReleaseLabel = New System.Windows.Forms.Label
-        Me.TermConstraintTerminologyButton = New System.Windows.Forms.Button
-        Me.TermConstraintSubsetButton = New System.Windows.Forms.Button
+        Me.ConstraintBindingsGrid = New ConstraintBindingsControl
         Me.gbAllowableValues.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -387,86 +370,14 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.TermConstraintTextBox.Size = New System.Drawing.Size(280, 20)
         Me.TermConstraintTextBox.TabIndex = 35
         '
-        'TermConstraintTerminologyTextBox
+        'ConstraintBindingsGrid
         '
-        Me.TermConstraintTerminologyTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.ConstraintBindingsGrid.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintTerminologyTextBox.Location = New System.Drawing.Point(108, 280)
-        Me.TermConstraintTerminologyTextBox.Name = "TermConstraintTerminologyTextBox"
-        Me.TermConstraintTerminologyTextBox.Size = New System.Drawing.Size(231, 20)
-        Me.TermConstraintTerminologyTextBox.TabIndex = 39
-        '
-        'TermConstraintSubsetTextBox
-        '
-        Me.TermConstraintSubsetTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintSubsetTextBox.Location = New System.Drawing.Point(108, 312)
-        Me.TermConstraintSubsetTextBox.Name = "TermConstraintSubsetTextBox"
-        Me.TermConstraintSubsetTextBox.Size = New System.Drawing.Size(231, 20)
-        Me.TermConstraintSubsetTextBox.TabIndex = 42
-        '
-        'TermConstraintReleaseTextBox
-        '
-        Me.TermConstraintReleaseTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintReleaseTextBox.Location = New System.Drawing.Point(108, 344)
-        Me.TermConstraintReleaseTextBox.Name = "TermConstraintReleaseTextBox"
-        Me.TermConstraintReleaseTextBox.Size = New System.Drawing.Size(280, 20)
-        Me.TermConstraintReleaseTextBox.TabIndex = 45
-        '
-        'TermConstraintSubsetLabel
-        '
-        Me.TermConstraintSubsetLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintSubsetLabel.Location = New System.Drawing.Point(16, 310)
-        Me.TermConstraintSubsetLabel.Name = "TermConstraintSubsetLabel"
-        Me.TermConstraintSubsetLabel.Size = New System.Drawing.Size(88, 24)
-        Me.TermConstraintSubsetLabel.TabIndex = 41
-        Me.TermConstraintSubsetLabel.Text = "Subset"
-        Me.TermConstraintSubsetLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'TermConstraintTerminologyLabel
-        '
-        Me.TermConstraintTerminologyLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintTerminologyLabel.Location = New System.Drawing.Point(16, 278)
-        Me.TermConstraintTerminologyLabel.Name = "TermConstraintTerminologyLabel"
-        Me.TermConstraintTerminologyLabel.Size = New System.Drawing.Size(88, 24)
-        Me.TermConstraintTerminologyLabel.TabIndex = 38
-        Me.TermConstraintTerminologyLabel.Text = "Terminology"
-        Me.TermConstraintTerminologyLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'TermConstraintReleaseLabel
-        '
-        Me.TermConstraintReleaseLabel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintReleaseLabel.Location = New System.Drawing.Point(16, 342)
-        Me.TermConstraintReleaseLabel.Name = "TermConstraintReleaseLabel"
-        Me.TermConstraintReleaseLabel.Size = New System.Drawing.Size(88, 24)
-        Me.TermConstraintReleaseLabel.TabIndex = 44
-        Me.TermConstraintReleaseLabel.Text = "Release"
-        Me.TermConstraintReleaseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'TermConstraintTerminologyButton
-        '
-        Me.TermConstraintTerminologyButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintTerminologyButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TermConstraintTerminologyButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.TermConstraintTerminologyButton.Location = New System.Drawing.Point(346, 278)
-        Me.TermConstraintTerminologyButton.Name = "TermConstraintTerminologyButton"
-        Me.TermConstraintTerminologyButton.Size = New System.Drawing.Size(24, 24)
-        Me.TermConstraintTerminologyButton.TabIndex = 40
-        Me.TermConstraintTerminologyButton.Text = "..."
-        Me.ToolTip1.SetToolTip(Me.TermConstraintTerminologyButton, "Select a terminology")
-        '
-        'TermConstraintSubsetButton
-        '
-        Me.TermConstraintSubsetButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TermConstraintSubsetButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TermConstraintSubsetButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.TermConstraintSubsetButton.Location = New System.Drawing.Point(346, 310)
-        Me.TermConstraintSubsetButton.Name = "TermConstraintSubsetButton"
-        Me.TermConstraintSubsetButton.Size = New System.Drawing.Size(24, 24)
-        Me.TermConstraintSubsetButton.TabIndex = 43
-        Me.TermConstraintSubsetButton.Text = "..."
-        Me.ToolTip1.SetToolTip(Me.TermConstraintSubsetButton, "Select a terminology subset")
+        Me.ConstraintBindingsGrid.Location = New System.Drawing.Point(8, 280)
+        Me.ConstraintBindingsGrid.Name = "ConstraintBindingsGrid"
+        Me.ConstraintBindingsGrid.Size = New System.Drawing.Size(390, 130)
+        Me.ConstraintBindingsGrid.TabIndex = 38
         '
         'TextConstraintControl
         '
@@ -479,14 +390,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.radioTerminology)
         Me.Controls.Add(Me.TermConstraintDescriptionTextBox)
         Me.Controls.Add(Me.TermConstraintTextBox)
-        Me.Controls.Add(Me.TermConstraintTerminologyTextBox)
-        Me.Controls.Add(Me.TermConstraintSubsetTextBox)
-        Me.Controls.Add(Me.TermConstraintReleaseTextBox)
-        Me.Controls.Add(Me.TermConstraintReleaseLabel)
-        Me.Controls.Add(Me.TermConstraintSubsetLabel)
-        Me.Controls.Add(Me.TermConstraintTerminologyLabel)
-        Me.Controls.Add(Me.TermConstraintTerminologyButton)
-        Me.Controls.Add(Me.TermConstraintSubsetButton)
+        Me.Controls.Add(Me.ConstraintBindingsGrid)
         Me.Name = "TextConstraintControl"
         Me.Size = New System.Drawing.Size(407, 414)
         Me.gbAllowableValues.ResumeLayout(False)
@@ -562,7 +466,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             txtAssumedValue.Visible = True
         End If
 
-        Select Case Me.Constraint.TypeOfTextConstraint
+        Select Case Constraint.TypeOfTextConstraint
             Case TextConstrainType.Text
                 radioText.Checked = True
 
@@ -588,47 +492,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 mConstraintTerm = mFileManager.OntologyManager.GetTerm(Constraint.ConstraintCode)
                 TermConstraintTextBox.Text = mConstraintTerm.Text
                 TermConstraintDescriptionTextBox.Text = mConstraintTerm.Description
-
-                Dim terminologyId As String = ""
-                Dim subset As String = ""
-                Dim release As String = ""
-
-                For Each row As DataRow In mFileManager.OntologyManager.ConstraintBindingsTable.Rows
-                    If TypeOf (row(1)) Is String Then
-                        Dim code As String = CType(row(1), String)
-
-                        If code = mConstraintTerm.Code And TypeOf (row(2)) Is String Then
-                            Dim uri As String = CType(row(2), String)
-
-                            If uri.StartsWith("terminology:") Then
-                                terminologyId = uri.Substring(uri.IndexOf(":") + 1)
-                                Dim i As Integer = terminologyId.IndexOf("?")
-
-                                If i > 0 Then
-                                    subset = terminologyId.Substring(i + 1)
-                                    terminologyId = terminologyId.Remove(i)
-
-                                    If subset.StartsWith("subset=") Then
-                                        subset = subset.Substring(subset.IndexOf("=") + 1).Replace("+", " ")
-                                    Else
-                                        subset = ""
-                                    End If
-                                End If
-
-                                i = terminologyId.IndexOf("/")
-
-                                If i > 0 Then
-                                    release = terminologyId.Substring(i + 1)
-                                    terminologyId = terminologyId.Remove(i)
-                                End If
-                            End If
-                        End If
-                    End If
-                Next
-
-                TermConstraintTerminologyTextBox.Text = terminologyId
-                TermConstraintSubsetTextBox.Text = subset
-                TermConstraintReleaseTextBox.Text = release
+                ConstraintBindingsGrid.SelectConstraintCode(mConstraintTerm.Code)
         End Select
 
         RefreshButtons()
@@ -847,14 +711,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             TermConstraintTextBox.Visible = False
             TermConstraintDescriptionLabel.Visible = False
             TermConstraintDescriptionTextBox.Visible = False
-            TermConstraintTerminologyLabel.Visible = False
-            TermConstraintTerminologyTextBox.Visible = False
-            TermConstraintTerminologyButton.Visible = False
-            TermConstraintSubsetLabel.Visible = False
-            TermConstraintSubsetTextBox.Visible = False
-            TermConstraintSubsetButton.Visible = False
-            TermConstraintReleaseLabel.Visible = False
-            TermConstraintReleaseTextBox.Visible = False
+            ConstraintBindingsGrid.Visible = False
         End If
 
         If Not MyBase.IsLoading Then
@@ -875,14 +732,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             TermConstraintTextBox.Visible = True
             TermConstraintDescriptionLabel.Visible = True
             TermConstraintDescriptionTextBox.Visible = True
-            TermConstraintTerminologyLabel.Visible = True
-            TermConstraintTerminologyTextBox.Visible = True
-            TermConstraintTerminologyButton.Visible = OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp
-            TermConstraintSubsetLabel.Visible = True
-            TermConstraintSubsetTextBox.Visible = True
-            TermConstraintSubsetButton.Visible = OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp
-            TermConstraintReleaseLabel.Visible = True
-            TermConstraintReleaseTextBox.Visible = True
+            ConstraintBindingsGrid.Visible = True
         End If
 
         If Not MyBase.IsLoading Then
@@ -919,14 +769,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             TermConstraintTextBox.Visible = False
             TermConstraintDescriptionLabel.Visible = False
             TermConstraintDescriptionTextBox.Visible = False
-            TermConstraintTerminologyLabel.Visible = False
-            TermConstraintTerminologyTextBox.Visible = False
-            TermConstraintTerminologyButton.Visible = False
-            TermConstraintSubsetLabel.Visible = False
-            TermConstraintSubsetTextBox.Visible = False
-            TermConstraintSubsetButton.Visible = False
-            TermConstraintReleaseLabel.Visible = False
-            TermConstraintReleaseTextBox.Visible = False
+            ConstraintBindingsGrid.Visible = False
         End If
 
         If Not MyBase.IsLoading Then
@@ -952,42 +795,6 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             'Remember if changes constraint type
             mConstraintTerm.Description = TermConstraintDescriptionTextBox.Text
         End If
-    End Sub
-
-    Private Sub TermConstraintTerminologyTextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintTerminologyTextBox.TextChanged, TermConstraintSubsetTextBox.TextChanged, TermConstraintReleaseTextBox.TextChanged
-        If Not MyBase.IsLoading Then
-            Dim terminologyId As String = TermConstraintTerminologyTextBox.Text
-            Dim subset As String = TermConstraintSubsetTextBox.Text
-
-            If terminologyId <> "" And subset <> "" Then
-                mFileManager.OntologyManager.AddConstraintBinding(mConstraintTerm.Code, terminologyId, "", TermConstraintReleaseTextBox.Text, subset)
-            End If
-        End If
-    End Sub
-
-    Private Sub ShowTerminologySelectionForm(ByVal terminologyId As String)
-        Dim terminologySelectionForm As New Ots.TerminologySelectionForm
-
-        If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
-            terminologySelectionForm.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
-        End If
-
-        terminologySelectionForm.TerminologyId = terminologyId
-        terminologySelectionForm.SubsetId = ""
-        terminologySelectionForm.ShowDialog(ParentForm)
-
-        If terminologySelectionForm.DialogResult = DialogResult.OK Then
-            TermConstraintTerminologyTextBox.Text = terminologySelectionForm.TerminologyId
-            TermConstraintSubsetTextBox.Text = terminologySelectionForm.SubsetId
-        End If
-    End Sub
-
-    Private Sub TermConstraintTerminologyButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintTerminologyButton.Click
-        ShowTerminologySelectionForm("")
-    End Sub
-
-    Private Sub TermConstraintSubsetButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TermConstraintSubsetButton.Click
-        ShowTerminologySelectionForm(TermConstraintTerminologyTextBox.Text)
     End Sub
 
     Private Sub MenuClearText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuClearText.Click

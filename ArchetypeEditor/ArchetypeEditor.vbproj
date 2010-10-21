@@ -220,6 +220,10 @@
       <DependentUpon>IdentifierViewControl.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="DataConstraints\GUI\ConstraintBindingsControl.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ConstraintBindingsControl.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\ParsableConstraintControl.resx">
       <DependentUpon>ParsableConstraintControl.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -495,6 +499,12 @@
     </Compile>
     <Compile Include="DataConstraints\ConstraintWithValue.vb">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\ConstraintBindingsControl.Designer.vb">
+      <DependentUpon>ConstraintBindingsControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="DataConstraints\GUI\ConstraintBindingsControl.vb">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="DataConstraints\GUI\ParsableConstraintControl.vb">
       <SubType>UserControl</SubType>

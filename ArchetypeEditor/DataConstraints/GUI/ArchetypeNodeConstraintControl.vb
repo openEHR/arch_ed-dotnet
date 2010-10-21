@@ -1000,31 +1000,31 @@ Public Class ArchetypeNodeConstraintControl
 
     Private Sub dgNodeBindings_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellClick
         If e.RowIndex >= 0 And e.ColumnIndex = 0 And OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp Then
-            Dim terminologySelectionForm As New Ots.TerminologySelectionForm
+            Dim form As New Ots.TerminologySelectionForm
 
             If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
-                terminologySelectionForm.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
+                form.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
             End If
 
             Dim row As DataGridViewRow = dgNodeBindings.Rows(e.RowIndex)
-            terminologySelectionForm.TerminologyId = TryCast(row.Cells(0).Value, String)
-            terminologySelectionForm.SubsetId = row.Cells(0).ToolTipText
-            terminologySelectionForm.SubsetLanguage = TryCast(row.Cells(0).Tag, String)
-            terminologySelectionForm.ReferenceId = TryCast(row.Cells(2).Value, String)
-            terminologySelectionForm.ShowDialog(ParentForm)
+            form.TerminologyId = TryCast(row.Cells(0).Value, String)
+            form.SubsetId = row.Cells(0).ToolTipText
+            form.SubsetLanguage = TryCast(row.Cells(0).Tag, String)
+            form.ReferenceId = TryCast(row.Cells(2).Value, String)
+            form.ShowDialog(ParentForm)
 
-            If terminologySelectionForm.DialogResult = DialogResult.OK Then
-                If Not mFileManager.OntologyManager.HasTerminology(terminologySelectionForm.TerminologyId) Then
-                    mFileManager.OntologyManager.AddTerminology(terminologySelectionForm.TerminologyId, terminologySelectionForm.TerminologyId)
+            If form.DialogResult = DialogResult.OK Then
+                If Not mFileManager.OntologyManager.HasTerminology(form.TerminologyId) Then
+                    mFileManager.OntologyManager.AddTerminology(form.TerminologyId)
                 End If
 
-                row.Cells(0).Value = terminologySelectionForm.TerminologyId
-                row.Cells(0).ToolTipText = terminologySelectionForm.SubsetId
-                row.Cells(0).Tag = terminologySelectionForm.SubsetLanguage
+                row.Cells(0).Value = form.TerminologyId
+                row.Cells(0).ToolTipText = form.SubsetId
+                row.Cells(0).Tag = form.SubsetLanguage
 
-                If Not String.IsNullOrEmpty(terminologySelectionForm.ReferenceId) Then
-                    row.Cells(2).Value = terminologySelectionForm.ReferenceId
-                    row.Cells(2).ToolTipText = terminologySelectionForm.TermText
+                If Not String.IsNullOrEmpty(form.ReferenceId) Then
+                    row.Cells(2).Value = form.ReferenceId
+                    row.Cells(2).ToolTipText = form.TermText
                 End If
 
                 mDataView.AddNew().Delete()     ' Kludge to force the creation of a new empty row in the grid.

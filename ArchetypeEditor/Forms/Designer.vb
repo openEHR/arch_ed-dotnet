@@ -39,7 +39,6 @@ Public Class Designer
     Private mRestrictedSubject As RestrictedSet
     Private mTabPageComposition As TabPageComposition
     Private mDataViewTermBindings As DataView
-    Private mDataViewConstraintBindings As DataView
     Private mDataViewTerminologies As DataView
     Private mFindString As String = ""
     Private mFileManager As FileManagerLocal
@@ -53,11 +52,7 @@ Public Class Designer
     Friend WithEvents butOWL As System.Windows.Forms.ToolBarButton
     Friend WithEvents lblConstraintStatements As System.Windows.Forms.Label
     Friend WithEvents panelConstraintStatementTop As System.Windows.Forms.Panel
-    Friend WithEvents DataGridConstraintStatements As System.Windows.Forms.DataGridView
-    Friend WithEvents ID As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents terminology As System.Windows.Forms.DataGridViewComboBoxColumn
-    Friend WithEvents Code As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents release As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ConstraintBindingsGrid As ConstraintBindingsControl
     Friend WithEvents PanelDescription As System.Windows.Forms.Panel
     Friend WithEvents RichTextBoxDescription As System.Windows.Forms.RichTextBox
     Friend WithEvents tabComment As System.Windows.Forms.TabControl
@@ -112,7 +107,7 @@ Public Class Designer
     Friend WithEvents DefinitionTableStyle As System.Windows.Forms.DataGridTableStyle
     Friend WithEvents DesignerColumnLabel As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents DesignerColumnDefinition As System.Windows.Forms.DataGridTextBoxColumn
-    Friend WithEvents DataGridConstraintDefinitions As System.Windows.Forms.DataGrid
+    Friend WithEvents ConstraintDefinitionsDataGrid As System.Windows.Forms.DataGrid
     Friend WithEvents OpenFileDialogArchetype As System.Windows.Forms.OpenFileDialog
     Friend WithEvents DataGridTableStyle1 As System.Windows.Forms.DataGridTableStyle
     Friend WithEvents DataGridTextBoxColumn2 As System.Windows.Forms.DataGridTextBoxColumn
@@ -164,7 +159,6 @@ Public Class Designer
     Friend WithEvents ToolBarPrint As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarNew As System.Windows.Forms.ToolBarButton
     Friend WithEvents MenuFileSpecialise As System.Windows.Forms.MenuItem
-    Friend WithEvents PanelConstraintBinding As System.Windows.Forms.Panel
     Friend WithEvents tpSectionPage As Crownwood.Magic.Controls.TabPage
     Friend WithEvents MenuFileNew As System.Windows.Forms.MenuItem
     Friend WithEvents MainMenu As System.Windows.Forms.MainMenu
@@ -230,7 +224,6 @@ Public Class Designer
     Friend WithEvents ToolBarButton2 As System.Windows.Forms.ToolBarButton
     Friend WithEvents cbMandatory As System.Windows.Forms.CheckBox
     Friend WithEvents menuFileNewWindow As System.Windows.Forms.MenuItem
-    Friend WithEvents butLookUpConstraint As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Designer))
@@ -250,7 +243,7 @@ Public Class Designer
         Me.cbParticipation = New System.Windows.Forms.CheckBox
         Me.cbPersonState = New System.Windows.Forms.CheckBox
         Me.cbProtocol = New System.Windows.Forms.CheckBox
-        Me.DataGridConstraintDefinitions = New System.Windows.Forms.DataGrid
+        Me.ConstraintDefinitionsDataGrid = New System.Windows.Forms.DataGrid
         Me.DataGridTableStyle2 = New System.Windows.Forms.DataGridTableStyle
         Me.DataGridTextBoxColumn6 = New System.Windows.Forms.DataGridTextBoxColumn
         Me.DataGridTextBoxColumn7 = New System.Windows.Forms.DataGridTextBoxColumn
@@ -338,17 +331,11 @@ Public Class Designer
         Me.PanelTermDefinitions = New System.Windows.Forms.Panel
         Me.tpBindings = New Crownwood.Magic.Controls.TabPage
         Me.tpConstraints = New Crownwood.Magic.Controls.TabPage
-        Me.DataGridConstraintStatements = New System.Windows.Forms.DataGridView
-        Me.ID = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.terminology = New System.Windows.Forms.DataGridViewComboBoxColumn
-        Me.Code = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.release = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.ConstraintBindingsGrid = New ConstraintBindingsControl
         Me.panelConstraintStatementTop = New System.Windows.Forms.Panel
         Me.lblConstraintStatements = New System.Windows.Forms.Label
         Me.Splitter1 = New System.Windows.Forms.Splitter
         Me.PanelConstraintDefTop = New System.Windows.Forms.Panel
-        Me.PanelConstraintBinding = New System.Windows.Forms.Panel
-        Me.butLookUpConstraint = New System.Windows.Forms.Button
         Me.tpLanguages = New Crownwood.Magic.Controls.TabPage
         Me.DataGridTerminologies = New System.Windows.Forms.DataGrid
         Me.DataGridTableStyle3 = New System.Windows.Forms.DataGridTableStyle
@@ -396,7 +383,7 @@ Public Class Designer
         Me.tpConceptComment.SuspendLayout()
         Me.PanelConfigStructure.SuspendLayout()
         Me.PanelRoot.SuspendLayout()
-        CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ConstraintDefinitionsDataGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
         Me.tpText.SuspendLayout()
@@ -410,9 +397,7 @@ Public Class Designer
         Me.tpTerminology.SuspendLayout()
         Me.tpTerms.SuspendLayout()
         Me.tpConstraints.SuspendLayout()
-        CType(Me.DataGridConstraintStatements, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.panelConstraintStatementTop.SuspendLayout()
-        Me.PanelConstraintBinding.SuspendLayout()
         Me.tpLanguages.SuspendLayout()
         CType(Me.DataGridTerminologies, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
@@ -598,24 +583,24 @@ Public Class Designer
         Me.cbProtocol.Text = "Protocol"
         Me.ToolTip1.SetToolTip(Me.cbProtocol, "About HOW the information was collected")
         '
-        'DataGridConstraintDefinitions
+        'ConstraintDefinitionsDataGrid
         '
-        Me.DataGridConstraintDefinitions.AllowNavigation = False
-        Me.DataGridConstraintDefinitions.CaptionBackColor = System.Drawing.Color.CornflowerBlue
-        Me.DataGridConstraintDefinitions.CaptionText = "Constraint definitions"
-        Me.DataGridConstraintDefinitions.DataMember = ""
-        Me.DataGridConstraintDefinitions.Dock = System.Windows.Forms.DockStyle.Top
-        Me.DataGridConstraintDefinitions.HeaderForeColor = System.Drawing.SystemColors.ControlText
-        Me.DataGridConstraintDefinitions.Location = New System.Drawing.Point(0, 7)
-        Me.DataGridConstraintDefinitions.Name = "DataGridConstraintDefinitions"
-        Me.DataGridConstraintDefinitions.RowHeaderWidth = 20
-        Me.DataGridConstraintDefinitions.Size = New System.Drawing.Size(969, 256)
-        Me.DataGridConstraintDefinitions.TabIndex = 4
-        Me.DataGridConstraintDefinitions.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.DataGridTableStyle2})
+        Me.ConstraintDefinitionsDataGrid.AllowNavigation = False
+        Me.ConstraintDefinitionsDataGrid.CaptionBackColor = System.Drawing.Color.CornflowerBlue
+        Me.ConstraintDefinitionsDataGrid.CaptionText = "Constraint definitions"
+        Me.ConstraintDefinitionsDataGrid.DataMember = ""
+        Me.ConstraintDefinitionsDataGrid.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ConstraintDefinitionsDataGrid.HeaderForeColor = System.Drawing.SystemColors.ControlText
+        Me.ConstraintDefinitionsDataGrid.Location = New System.Drawing.Point(0, 7)
+        Me.ConstraintDefinitionsDataGrid.Name = "ConstraintDefinitionsDataGrid"
+        Me.ConstraintDefinitionsDataGrid.RowHeaderWidth = 20
+        Me.ConstraintDefinitionsDataGrid.Size = New System.Drawing.Size(969, 256)
+        Me.ConstraintDefinitionsDataGrid.TabIndex = 4
+        Me.ConstraintDefinitionsDataGrid.TableStyles.AddRange(New System.Windows.Forms.DataGridTableStyle() {Me.DataGridTableStyle2})
         '
         'DataGridTableStyle2
         '
-        Me.DataGridTableStyle2.DataGrid = Me.DataGridConstraintDefinitions
+        Me.DataGridTableStyle2.DataGrid = Me.ConstraintDefinitionsDataGrid
         Me.DataGridTableStyle2.GridColumnStyles.AddRange(New System.Windows.Forms.DataGridColumnStyle() {Me.DataGridTextBoxColumn6, Me.DataGridTextBoxColumn7, Me.DataGridTextBoxColumn8})
         Me.DataGridTableStyle2.HeaderForeColor = System.Drawing.SystemColors.ControlText
         '
@@ -1328,12 +1313,11 @@ Public Class Designer
         'tpConstraints
         '
         Me.tpConstraints.BackColor = System.Drawing.Color.FromArgb(CType(CType(245, Byte), Integer), CType(CType(240, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.tpConstraints.Controls.Add(Me.DataGridConstraintStatements)
+        Me.tpConstraints.Controls.Add(Me.ConstraintBindingsGrid)
         Me.tpConstraints.Controls.Add(Me.panelConstraintStatementTop)
         Me.tpConstraints.Controls.Add(Me.Splitter1)
-        Me.tpConstraints.Controls.Add(Me.DataGridConstraintDefinitions)
+        Me.tpConstraints.Controls.Add(Me.ConstraintDefinitionsDataGrid)
         Me.tpConstraints.Controls.Add(Me.PanelConstraintDefTop)
-        Me.tpConstraints.Controls.Add(Me.PanelConstraintBinding)
         Me.HelpProviderDesigner.SetHelpKeyword(Me.tpConstraints, "Screens/constraints_screen.html")
         Me.HelpProviderDesigner.SetHelpNavigator(Me.tpConstraints, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpConstraints.Location = New System.Drawing.Point(0, 0)
@@ -1345,48 +1329,13 @@ Public Class Designer
         Me.tpConstraints.Title = "Constraints"
         Me.ToolTip1.SetToolTip(Me.tpConstraints, "Constraint definitions")
         '
-        'DataGridConstraintStatements
+        'ConstraintBindingsGrid
         '
-        Me.DataGridConstraintStatements.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridConstraintStatements.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ID, Me.terminology, Me.Code, Me.release})
-        Me.DataGridConstraintStatements.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridConstraintStatements.Location = New System.Drawing.Point(0, 293)
-        Me.DataGridConstraintStatements.Name = "DataGridConstraintStatements"
-        Me.DataGridConstraintStatements.RowTemplate.Height = 24
-        Me.DataGridConstraintStatements.Size = New System.Drawing.Size(969, 291)
-        Me.DataGridConstraintStatements.TabIndex = 12
-        '
-        'ID
-        '
-        Me.ID.DataPropertyName = "ID"
-        Me.ID.HeaderText = "acCode"
-        Me.ID.Name = "ID"
-        Me.ID.Visible = False
-        '
-        'terminology
-        '
-        Me.terminology.DataPropertyName = "Terminology"
-        Me.terminology.FillWeight = 60.0!
-        Me.terminology.HeaderText = "Terminology"
-        Me.terminology.MinimumWidth = 100
-        Me.terminology.Name = "terminology"
-        Me.terminology.Width = 400
-        '
-        'Code
-        '
-        Me.Code.DataPropertyName = "CodePhrase"
-        Me.Code.FillWeight = 20.0!
-        Me.Code.HeaderText = "Query ID"
-        Me.Code.Name = "Code"
-        Me.Code.Width = 350
-        '
-        'release
-        '
-        Me.release.DataPropertyName = "Release"
-        Me.release.FillWeight = 10.0!
-        Me.release.HeaderText = "Release"
-        Me.release.Name = "release"
-        Me.release.Width = 150
+        Me.ConstraintBindingsGrid.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ConstraintBindingsGrid.Location = New System.Drawing.Point(0, 293)
+        Me.ConstraintBindingsGrid.Name = "ConstraintBindingsGrid"
+        Me.ConstraintBindingsGrid.Size = New System.Drawing.Size(969, 350)
+        Me.ConstraintBindingsGrid.TabIndex = 12
         '
         'panelConstraintStatementTop
         '
@@ -1426,27 +1375,6 @@ Public Class Designer
         Me.PanelConstraintDefTop.Name = "PanelConstraintDefTop"
         Me.PanelConstraintDefTop.Size = New System.Drawing.Size(969, 7)
         Me.PanelConstraintDefTop.TabIndex = 10
-        '
-        'PanelConstraintBinding
-        '
-        Me.PanelConstraintBinding.BackColor = System.Drawing.Color.LemonChiffon
-        Me.PanelConstraintBinding.Controls.Add(Me.butLookUpConstraint)
-        Me.PanelConstraintBinding.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelConstraintBinding.Location = New System.Drawing.Point(0, 584)
-        Me.PanelConstraintBinding.Name = "PanelConstraintBinding"
-        Me.PanelConstraintBinding.Size = New System.Drawing.Size(969, 55)
-        Me.PanelConstraintBinding.TabIndex = 7
-        '
-        'butLookUpConstraint
-        '
-        Me.butLookUpConstraint.BackColor = System.Drawing.Color.LemonChiffon
-        Me.butLookUpConstraint.Font = New System.Drawing.Font("Tahoma", 14.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World)
-        Me.butLookUpConstraint.Location = New System.Drawing.Point(220, 14)
-        Me.butLookUpConstraint.Name = "butLookUpConstraint"
-        Me.butLookUpConstraint.Size = New System.Drawing.Size(267, 24)
-        Me.butLookUpConstraint.TabIndex = 2
-        Me.butLookUpConstraint.Text = "Add constraint binding"
-        Me.butLookUpConstraint.UseVisualStyleBackColor = False
         '
         'tpLanguages
         '
@@ -1813,7 +1741,7 @@ Public Class Designer
         Me.tpConceptComment.PerformLayout()
         Me.PanelConfigStructure.ResumeLayout(False)
         Me.PanelRoot.ResumeLayout(False)
-        CType(Me.DataGridConstraintDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ConstraintDefinitionsDataGrid, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
         Me.tpText.ResumeLayout(False)
@@ -1828,10 +1756,8 @@ Public Class Designer
         Me.tpTerminology.ResumeLayout(False)
         Me.tpTerms.ResumeLayout(False)
         Me.tpConstraints.ResumeLayout(False)
-        CType(Me.DataGridConstraintStatements, System.ComponentModel.ISupportInitialize).EndInit()
         Me.panelConstraintStatementTop.ResumeLayout(False)
         Me.panelConstraintStatementTop.PerformLayout()
-        Me.PanelConstraintBinding.ResumeLayout(False)
         Me.tpLanguages.ResumeLayout(False)
         CType(Me.DataGridTerminologies, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
@@ -2373,15 +2299,14 @@ Public Class Designer
         Me.cbMandatory.Text = Filemanager.GetOpenEhrTerm(446, Me.cbMandatory.Text, language)
 
         'Terminology tab on Designer
-        Me.lblPrimaryLanguageText.Text = Filemanager.GetOpenEhrTerm(187, Me.lblPrimaryLanguageText.Text, language)
-        Me.lblAvailableLanguages.Text = Filemanager.GetOpenEhrTerm(67, Me.lblAvailableLanguages.Text, language)
-        Me.lblAvailableTerminologies.Text = Filemanager.GetOpenEhrTerm(70, Me.lblAvailableLanguages.Text, language)
-        Me.DataGridTerminologies.CaptionText = Filemanager.GetOpenEhrTerm(70, Me.DataGridTerminologies.CaptionText, language)
+        lblPrimaryLanguageText.Text = Filemanager.GetOpenEhrTerm(187, Me.lblPrimaryLanguageText.Text, language)
+        lblAvailableLanguages.Text = Filemanager.GetOpenEhrTerm(67, Me.lblAvailableLanguages.Text, language)
+        lblAvailableTerminologies.Text = Filemanager.GetOpenEhrTerm(70, Me.lblAvailableLanguages.Text, language)
+        DataGridTerminologies.CaptionText = Filemanager.GetOpenEhrTerm(70, Me.DataGridTerminologies.CaptionText, language)
 
-        Me.DataGridDefinitions.CaptionText = Filemanager.GetOpenEhrTerm(89, Me.DataGridDefinitions.CaptionText, language)
-        Me.DataGridConstraintDefinitions.CaptionText = Filemanager.GetOpenEhrTerm(623, Me.DataGridConstraintDefinitions.CaptionText, language)
-        Me.lblConstraintStatements.Text = Filemanager.GetOpenEhrTerm(93, lblConstraintStatements.Text, language)
-        Me.butLookUpConstraint.Text = Filemanager.GetOpenEhrTerm(99, butLookUpConstraint.Text, language)
+        DataGridDefinitions.CaptionText = Filemanager.GetOpenEhrTerm(89, Me.DataGridDefinitions.CaptionText, language)
+        ConstraintDefinitionsDataGrid.CaptionText = Filemanager.GetOpenEhrTerm(623, Me.ConstraintDefinitionsDataGrid.CaptionText, language)
+        lblConstraintStatements.Text = Filemanager.GetOpenEhrTerm(93, lblConstraintStatements.Text, language)
 
         'ColumnStyleHeadings
         DataGridTextBoxColumn1.HeaderText = AE_Constants.Instance.Terminology
@@ -2398,9 +2323,7 @@ Public Class Designer
         DataGridTextBoxColumn13.HeaderText = Filemanager.GetOpenEhrTerm(622, DataGridTextBoxColumn13.HeaderText, language) 'Criteria
 
         'Constraint data grid
-        Me.DataGridConstraintStatements.Columns(0).HeaderText = AE_Constants.Instance.Terminology
-        Me.DataGridConstraintStatements.Columns(2).HeaderText = Filemanager.GetOpenEhrTerm(624, Me.DataGridConstraintStatements.Columns(1).HeaderText, language) 'Query name
-        Me.DataGridConstraintStatements.Columns(3).HeaderText = Filemanager.GetOpenEhrTerm(97, Me.DataGridConstraintStatements.Columns(2).HeaderText, language) 'Release
+        ConstraintBindingsGrid.TranslateGui()
 
         'TabControl headings
         Me.tpHeader.Title = Filemanager.GetOpenEhrTerm(76, Me.tpHeader.Title, language)
@@ -2473,7 +2396,7 @@ Public Class Designer
         mTabPageDescription.Translate()
         mTermBindingPanel.PopulatePathTree()
         RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
-        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
+        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
 
         Select Case TabMain.SelectedTab.Name
             Case "tpInterface"
@@ -2485,55 +2408,41 @@ Public Class Designer
     End Sub
 
     Private Sub BindTables()
-        Dim CM As CurrencyManager
-
-        'Me.mDataViewTermBindings = New DataView(mFileManager.OntologyManager.TermBindingsTable)
-        'Me.mDataViewTermBindings.AllowNew = False
-
-        Me.mDataViewConstraintBindings = New DataView(mFileManager.OntologyManager.ConstraintBindingsTable)
-        Me.mDataViewConstraintBindings.RowFilter = "ID ='ZZZZ'" ' do not show any for the moment
-        Me.mDataViewConstraintBindings.AllowNew = False
-
         ' ensure that the table is bound to the languages list
-        Me.ListLanguages.DataSource = mFileManager.OntologyManager.LanguagesTable
-        Me.ListLanguages.DisplayMember = "Language"
-        Me.ListLanguages.ValueMember = "id"
+        ListLanguages.DataSource = mFileManager.OntologyManager.LanguagesTable
+        ListLanguages.DisplayMember = "Language"
+        ListLanguages.ValueMember = "id"
 
         ' bind the Term definitions table
 
-        Me.DataGridDefinitions.DataSource = mFileManager.OntologyManager.LanguagesTable
-        Me.DataGridDefinitions.DataMember = "LanguageTerms"
-        Me.DataGridDefinitions.TableStyles(0).MappingName = "TermDefinitions"
-        Me.DataGridDefinitions.TableStyles(0).GridColumnStyles(0).MappingName = "Code"
-        Me.DataGridDefinitions.TableStyles(0).GridColumnStyles(1).MappingName = "Text"
-        Me.DataGridDefinitions.TableStyles(0).GridColumnStyles(2).MappingName = "Description"
+        DataGridDefinitions.DataSource = mFileManager.OntologyManager.LanguagesTable
+        DataGridDefinitions.DataMember = "LanguageTerms"
+        DataGridDefinitions.TableStyles(0).MappingName = "TermDefinitions"
+        DataGridDefinitions.TableStyles(0).GridColumnStyles(0).MappingName = "Code"
+        DataGridDefinitions.TableStyles(0).GridColumnStyles(1).MappingName = "Text"
+        DataGridDefinitions.TableStyles(0).GridColumnStyles(2).MappingName = "Description"
 
         ' only way to control the dataview behind a related grid
-        CM = Me.BindingContext(DataGridDefinitions.DataSource, DataGridDefinitions.DataMember)
-        CType(CM.List, DataView).AllowNew = False
-        CType(CM.List, DataView).AllowDelete = False
+        Dim cm As CurrencyManager = BindingContext(DataGridDefinitions.DataSource, DataGridDefinitions.DataMember)
+        CType(cm.List, DataView).AllowNew = False
+        CType(cm.List, DataView).AllowDelete = False
 
         ' bind the Constraint definitions table
-        Me.DataGridConstraintDefinitions.DataSource = mFileManager.OntologyManager.LanguagesTable
-        Me.DataGridConstraintDefinitions.DataMember = "LanguageConstraints"
-        Me.DataGridConstraintDefinitions.TableStyles(0).MappingName = "ConstraintDefinitions"
-        Me.DataGridConstraintDefinitions.TableStyles(0).GridColumnStyles(0).MappingName = "Code"
-        Me.DataGridConstraintDefinitions.TableStyles(0).GridColumnStyles(1).MappingName = "Text"
-        Me.DataGridConstraintDefinitions.TableStyles(0).GridColumnStyles(2).MappingName = "Description"
+        ConstraintDefinitionsDataGrid.DataSource = mFileManager.OntologyManager.LanguagesTable
+        ConstraintDefinitionsDataGrid.DataMember = "LanguageConstraints"
+        ConstraintDefinitionsDataGrid.TableStyles(0).MappingName = "ConstraintDefinitions"
+        ConstraintDefinitionsDataGrid.TableStyles(0).GridColumnStyles(0).MappingName = "Code"
+        ConstraintDefinitionsDataGrid.TableStyles(0).GridColumnStyles(1).MappingName = "Text"
+        ConstraintDefinitionsDataGrid.TableStyles(0).GridColumnStyles(2).MappingName = "Description"
 
         ' only way to edit the dataview behind a related grid
-        CM = Me.BindingContext(DataGridConstraintDefinitions.DataSource, DataGridConstraintDefinitions.DataMember)
-        CType(CM.List, DataView).AllowNew = False
-        CType(CM.List, DataView).AllowDelete = False
+        cm = BindingContext(ConstraintDefinitionsDataGrid.DataSource, ConstraintDefinitionsDataGrid.DataMember)
+        CType(cm.List, DataView).AllowNew = False
+        CType(cm.List, DataView).AllowDelete = False
 
         'bind the terminology combobox
-        Me.DataGridTerminologies.DataSource = mFileManager.OntologyManager.TerminologiesTable
-
-        Me.terminology.DataSource = OceanArchetypeEditor.Instance.MakeTerminologyDataTable
-        Me.terminology.DisplayMember = "Text"
-        Me.terminology.ValueMember = "Code"
-
-        Me.DataGridConstraintStatements.DataSource = Me.mDataViewConstraintBindings
+        DataGridTerminologies.DataSource = mFileManager.OntologyManager.TerminologiesTable
+        ConstraintBindingsGrid.BindTables(mFileManager.OntologyManager)
     End Sub
 
     Public Sub WriteRichText()
@@ -4494,24 +4403,21 @@ Public Class Designer
     End Sub
 
     Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
-
-        If mFileManager.FileLoading Then Exit Sub
-
-        ProtocolCheckChanged(Me.TabDesign, Me.cbProtocol.Checked)
-
-        mFileManager.FileEdited = True
-
+        If Not mFileManager.FileLoading Then
+            ProtocolCheckChanged(Me.TabDesign, Me.cbProtocol.Checked)
+            mFileManager.FileEdited = True
+        End If
     End Sub
-    Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
 
+    Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
         ParticipationCheckChanged(Me.TabDesign, Me.cbParticipation.Checked)
+
         If Not mFileManager.FileLoading Then
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub cbStructurePersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbStructurePersonState.CheckedChanged
-
         If cbStructurePersonState.Checked Then
             'cannot have rootstate - 'Person State With EventSeries'
             Me.cbPersonState.Enabled = False
@@ -4674,67 +4580,38 @@ Public Class Designer
             cbMandatory.BringToFront()
 
         ElseIf TabMain.SelectedTab Is tpTerminology Then
-            ' rebuild the ParseTree to ensure the
-            ' paths are all available
+            ' rebuild the ParseTree to ensure the paths are all available
             If mFileManager.FileEdited Then
                 PrepareToSave()
                 mTermBindingPanel.PopulatePathTree()
             End If
-            'CHANGE - Sam Heard - 2004-05-21
-            ' accept all changes in the termdefinitions table
-            'so can test if any changes made
+
+            ' accept all changes in the termdefinitions table so can test if any changes made
             mFileManager.OntologyManager.TermDefinitionTable.AcceptChanges()
+            TabTerminology_SelectionChanged(sender, e)
         End If
     End Sub
 
     Private Sub butAddTerminology_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddTerminology.Click, MenuTerminologyAdd.Click
-        'If ChooseTerminology() Then
         If OceanArchetypeEditor.Instance.AddTerminology() Then
             mFileManager.FileEdited = True
         End If
     End Sub
 
-    Private Sub DataGridConstraintDefinitions_CurrentCellChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridConstraintDefinitions.CurrentCellChanged
-        ' set the mDataViewConstraintBindings to the appropriate term
-        Dim ID As String
-
-        If Me.DataGridConstraintDefinitions.CurrentRowIndex > -1 Then
-            If Me.DataGridConstraintDefinitions.VisibleRowCount > 0 AndAlso _
-            (Not TypeOf (Me.DataGridConstraintDefinitions.Item(Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)) Is System.DBNull) Then
-                Try
-                    ID = Me.DataGridConstraintDefinitions.Item(Me.DataGridConstraintDefinitions.CurrentRowIndex, 0)
-                    If Not ID Is Nothing Then
-                        mDataViewConstraintBindings.RowFilter = "ID = '" & ID & "'"
-                    End If
-                Catch
-                    ' if it falls off the grid to an empty row
-                    Debug.Assert(False)
-                End Try
-            End If
+    Private Sub TabTerminology_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabTerminology.SelectionChanged
+        If tpConstraints.Selected Then
+            ConstraintDefinitionsDataGrid_CurrentCellChanged(sender, e)
         End If
     End Sub
 
-    Private Sub butLookUpConstraint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butLookUpConstraint.Click
-        Dim s As String = Filemanager.GetOpenEhrTerm(99, "Add binding")
+    Private Sub ConstraintDefinitionsDataGrid_CurrentCellChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles ConstraintDefinitionsDataGrid.CurrentCellChanged
+        Dim acCode As String = Nothing
 
-        Dim frm As New ConstraintBindingForm
-
-        If DataGridConstraintDefinitions.VisibleRowCount > 0 AndAlso DataGridConstraintDefinitions.CurrentRowIndex > -1 Then
-            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-                frm.Text = s
-                frm.lblQueryName.Text = Filemanager.GetOpenEhrTerm(624, frm.lblQueryName.Text)
-                frm.lblRelease.Text = Filemanager.GetOpenEhrTerm(97, frm.lblRelease.Text)
-                frm.lblTerminology.Text = AE_Constants.Instance.Terminology
-                frm.butCancel.Text = AE_Constants.Instance.Cancel
-                frm.butOK.Text = AE_Constants.Instance.OK
-            End If
-
-            If frm.ShowDialog(ParentForm) = Windows.Forms.DialogResult.OK Then
-                frm.AddConstraintBinding(mFileManager.OntologyManager, DataGridConstraintDefinitions.Item(DataGridConstraintDefinitions.CurrentRowIndex, 0))
-            End If
-        Else
-            MessageBox.Show(AE_Constants.Instance.Add_Reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        If ConstraintDefinitionsDataGrid.CurrentRowIndex > -1 Then
+            acCode = TryCast(ConstraintDefinitionsDataGrid.Item(ConstraintDefinitionsDataGrid.CurrentRowIndex, 0), String)
         End If
+
+        ConstraintBindingsGrid.SelectConstraintCode(acCode)
     End Sub
 
     Private Sub BuildInterfaceTabPage()

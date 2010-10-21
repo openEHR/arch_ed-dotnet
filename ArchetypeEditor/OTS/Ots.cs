@@ -59,7 +59,7 @@ namespace Ots
         {
             Terminology terminology = null;
 
-            foreach (Terminology t in terminologies)
+            foreach (Terminology t in Terminologies)
                 if (t.TerminologyId == terminologyId)
                     terminology = t;
 
