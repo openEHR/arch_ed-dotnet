@@ -72,7 +72,7 @@ Public Class ConstraintBindingsControl
     End Sub
 
     Private Sub RemoveButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveButton.Click
-        If Grid.CurrentRow.Index >= 0 Then
+        If Not Grid.CurrentRow Is Nothing AndAlso Grid.CurrentRow.Index >= 0 Then
             view.Delete(Grid.CurrentRow.Index)
         End If
     End Sub
