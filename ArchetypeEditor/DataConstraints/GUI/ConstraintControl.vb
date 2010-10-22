@@ -89,86 +89,65 @@ Public Class ConstraintControl
     End Property
 
     Private Sub SetHelpTopic(ByVal a_constraint_type As ConstraintType)
-        ' set the help topic
-
-        Me.HelpProviderConstraint.SetHelpNavigator(Me, HelpNavigator.Topic)
+        HelpProviderConstraint.SetHelpNavigator(Me, HelpNavigator.Topic)
 
         Select Case a_constraint_type
             Case ConstraintType.Boolean
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_boolean.htm")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_boolean.htm")
             Case ConstraintType.Count
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_count.htm")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_count.htm")
             Case ConstraintType.DateTime
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_date_time.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_date_tihtml")
             Case ConstraintType.Interval_Count
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_interval.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_interval.html")
             Case ConstraintType.Interval_Quantity
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_interval.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_interval.html")
             Case ConstraintType.Multiple
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_interval.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_interval.html")
             Case ConstraintType.Ordinal
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_multiple.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_multiple.html")
             Case ConstraintType.Quantity
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_quantity.htm")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_quantity.htm")
             Case ConstraintType.Proportion
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "")
+                HelpProviderConstraint.SetHelpKeyword(Me, "")
             Case ConstraintType.Slot
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_slot.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_slot.html")
             Case ConstraintType.Text
-                Me.HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_text.htm")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_text.htm")
         End Select
-
     End Sub
 
-    Public Overloads Sub ShowConstraint(ByVal IsState As Boolean, _
-            ByVal aArchetypeElement As ArchetypeElement)
-
+    Public Sub ShowElement(ByVal isState As Boolean, ByVal aArchetypeElement As ArchetypeElement)
         mIsLoading = True
-
         mConstraint = aArchetypeElement.Constraint
-
         SetHelpTopic(mConstraint.Type)
-
-        SetControlValues(IsState, aArchetypeElement)
-
+        SetControlValuesFromElement(isState, aArchetypeElement)
         mIsLoading = False
     End Sub
 
-    Public Overloads Sub ShowConstraint(ByVal IsState As Boolean, _
-            ByVal aConstraint As Constraint)
-
+    Public Sub ShowConstraint(ByVal isState As Boolean, ByVal aConstraint As Constraint)
         mIsLoading = True
-
         mConstraint = aConstraint
-
         SetHelpTopic(mConstraint.Type)
 
-        Try
-            If aConstraint.Type = ConstraintType.Ordinal Then
-                SetControlValues(IsState, aConstraint)
-            Else
-                SetControlValues(IsState)
-            End If
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
+        If aConstraint.Type = ConstraintType.Ordinal Then
+            SetControlValuesFromConstraint(isState, aConstraint)
+        Else
+            SetControlValues(isState)
+        End If
 
         mIsLoading = False
-
     End Sub
 
-    Protected Overridable Sub SetControlValues(ByVal IsState As Boolean, _
-            ByVal aArchetypeElement As ArchetypeElement)
-        SetControlValues(IsState)
+    Protected Overridable Sub SetControlValuesFromElement(ByVal isState As Boolean, ByVal aArchetypeElement As ArchetypeElement)
+        SetControlValues(isState)
     End Sub
 
-    Protected Overridable Sub SetControlValues(ByVal IsState As Boolean, _
-                ByVal c As Constraint)
-        SetControlValues(IsState)
+    Protected Overridable Sub SetControlValuesFromConstraint(ByVal isState As Boolean, ByVal c As Constraint)
+        SetControlValues(isState)
     End Sub
 
-    Protected Overridable Sub SetControlValues(ByVal IsState As Boolean)
+    Protected Overridable Sub SetControlValues(ByVal isState As Boolean)
         'Noop
     End Sub
 

@@ -22,6 +22,7 @@ Partial Class ConstraintBindingsControl
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConstraintBindingsControl))
         Me.Grid = New System.Windows.Forms.DataGridView
         Me.TerminologyColumn = New System.Windows.Forms.DataGridViewButtonColumn
@@ -31,6 +32,7 @@ Partial Class ConstraintBindingsControl
         Me.CodePhrase = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.NewButton = New System.Windows.Forms.Button
         Me.RemoveButton = New System.Windows.Forms.Button
+        Me.NewButtonToolTip = New System.Windows.Forms.ToolTip(Me.components)
         CType(Me.Grid, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -93,6 +95,7 @@ Partial Class ConstraintBindingsControl
         Me.NewButton.Name = "NewButton"
         Me.NewButton.Size = New System.Drawing.Size(24, 24)
         Me.NewButton.TabIndex = 0
+        Me.NewButtonToolTip.SetToolTip(Me.NewButton, "Add constraint binding")
         '
         'RemoveButton
         '
@@ -124,5 +127,6 @@ Partial Class ConstraintBindingsControl
     Friend WithEvents CodePhrase As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents NewButton As System.Windows.Forms.Button
     Friend WithEvents RemoveButton As System.Windows.Forms.Button
+    Friend WithEvents NewButtonToolTip As System.Windows.Forms.ToolTip
 
 End Class

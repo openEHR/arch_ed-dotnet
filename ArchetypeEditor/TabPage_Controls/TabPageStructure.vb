@@ -615,10 +615,10 @@ Public Class TabPageStructure
 
             PanelDetails.ShowConstraint(s, IsState, IsMandatory, CurrentItem, mFileManager)
 
-                If Not PanelDetails.Visible Then
-                    PanelDetails.Show()
-                End If
+            If Not PanelDetails.Visible Then
+                PanelDetails.Show()
             End If
+        End If
     End Sub
 
     Public Sub Translate()

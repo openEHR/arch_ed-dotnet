@@ -137,7 +137,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.gbAllowableValues.Controls.Add(Me.listAllowableValues)
         Me.gbAllowableValues.Location = New System.Drawing.Point(16, 48)
         Me.gbAllowableValues.Name = "gbAllowableValues"
-        Me.gbAllowableValues.Size = New System.Drawing.Size(372, 362)
+        Me.gbAllowableValues.Size = New System.Drawing.Size(372, 310)
         Me.gbAllowableValues.TabIndex = 50
         Me.gbAllowableValues.TabStop = False
         '
@@ -207,7 +207,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         'DefaultItemButton
         '
         Me.DefaultItemButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.DefaultItemButton.Location = New System.Drawing.Point(46, 331)
+        Me.DefaultItemButton.Location = New System.Drawing.Point(46, 279)
         Me.DefaultItemButton.Name = "DefaultItemButton"
         Me.DefaultItemButton.Size = New System.Drawing.Size(122, 24)
         Me.DefaultItemButton.TabIndex = 8
@@ -229,7 +229,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.txtAssumedValue.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtAssumedValue.ContextMenu = Me.ContextMenuClearText
-        Me.txtAssumedValue.Location = New System.Drawing.Point(176, 335)
+        Me.txtAssumedValue.Location = New System.Drawing.Point(176, 283)
         Me.txtAssumedValue.Name = "txtAssumedValue"
         Me.txtAssumedValue.ReadOnly = True
         Me.txtAssumedValue.Size = New System.Drawing.Size(188, 20)
@@ -266,7 +266,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.listAllowableValues.Location = New System.Drawing.Point(46, 20)
         Me.listAllowableValues.MultiColumn = True
         Me.listAllowableValues.Name = "listAllowableValues"
-        Me.listAllowableValues.Size = New System.Drawing.Size(318, 303)
+        Me.listAllowableValues.Size = New System.Drawing.Size(318, 251)
         Me.listAllowableValues.TabIndex = 7
         '
         'ContextMenuListAllowableValues
@@ -358,7 +358,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.TermConstraintDescriptionTextBox.Multiline = True
         Me.TermConstraintDescriptionTextBox.Name = "TermConstraintDescriptionTextBox"
         Me.TermConstraintDescriptionTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TermConstraintDescriptionTextBox.Size = New System.Drawing.Size(280, 160)
+        Me.TermConstraintDescriptionTextBox.Size = New System.Drawing.Size(280, 110)
         Me.TermConstraintDescriptionTextBox.TabIndex = 37
         '
         'TermConstraintTextBox
@@ -374,7 +374,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.ConstraintBindingsGrid.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ConstraintBindingsGrid.Location = New System.Drawing.Point(8, 280)
+        Me.ConstraintBindingsGrid.Location = New System.Drawing.Point(8, 230)
         Me.ConstraintBindingsGrid.Name = "ConstraintBindingsGrid"
         Me.ConstraintBindingsGrid.Size = New System.Drawing.Size(390, 130)
         Me.ConstraintBindingsGrid.TabIndex = 38
@@ -392,7 +392,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.TermConstraintTextBox)
         Me.Controls.Add(Me.ConstraintBindingsGrid)
         Me.Name = "TextConstraintControl"
-        Me.Size = New System.Drawing.Size(407, 414)
+        Me.Size = New System.Drawing.Size(407, 364)
         Me.gbAllowableValues.ResumeLayout(False)
         Me.gbAllowableValues.PerformLayout()
         Me.ResumeLayout(False)
@@ -460,17 +460,21 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     End Property
 
     ' Set constraint values on control
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-        If IsState Then
+    Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
+        If isState Then
             DefaultItemButton.Visible = True
             txtAssumedValue.Visible = True
         End If
 
+        SetControlValuesForTypeOfTextConstraint()
+    End Sub
+
+    Protected Sub SetControlValuesForTypeOfTextConstraint()
         Select Case Constraint.TypeOfTextConstraint
             Case TextConstrainType.Text
                 radioText.Checked = True
 
-                'Added for backward compatibility with some archetypes with textural constraints
+                'Added for backward compatibility with some archetypes with textual constraints
                 If Constraint.AllowableValues.Codes.Count > 0 Then
                     Dim s As String
                     listAllowableValues.DataSource = Nothing
@@ -704,6 +708,25 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         End If
     End Sub
 
+    Private Sub radioText_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioText.CheckedChanged
+        If radioText.Checked Then
+            gbAllowableValues.Visible = Constraint.TypeOfTextConstraint = TextConstrainType.Text And Constraint.AllowableValues.Codes.Count > 0
+            TermConstraintLabel.Visible = False
+            TermConstraintTextBox.Visible = False
+            TermConstraintDescriptionLabel.Visible = False
+            TermConstraintDescriptionTextBox.Visible = False
+            ConstraintBindingsGrid.Visible = False
+        End If
+
+        If Not MyBase.IsLoading Then
+            If radioText.Checked Then
+                Constraint.TypeOfTextConstraint = TextConstrainType.Text
+                mFileManager.FileEdited = True
+                SetControlValuesForTypeOfTextConstraint()
+            End If
+        End If
+    End Sub
+
     Private Sub radioInternal_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioInternal.CheckedChanged
         If radioInternal.Checked Then
             gbAllowableValues.Visible = True
@@ -720,7 +743,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 Constraint.TypeOfTextConstraint = TextConstrainType.Internal
                 SetInternalCodedValues()
                 mFileManager.FileEdited = True
-                RefreshButtons()
+                SetControlValuesForTypeOfTextConstraint()
             End If
         End If
     End Sub
@@ -757,26 +780,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
                 TermConstraintTextBox.Focus()
                 mFileManager.FileEdited = True
-                RefreshButtons()
-            End If
-        End If
-    End Sub
-
-    Private Sub radioText_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioText.CheckedChanged
-        If radioText.Checked Then
-            gbAllowableValues.Visible = Constraint.TypeOfTextConstraint = TextConstrainType.Text And Constraint.AllowableValues.Codes.Count > 0
-            TermConstraintLabel.Visible = False
-            TermConstraintTextBox.Visible = False
-            TermConstraintDescriptionLabel.Visible = False
-            TermConstraintDescriptionTextBox.Visible = False
-            ConstraintBindingsGrid.Visible = False
-        End If
-
-        If Not MyBase.IsLoading Then
-            If radioText.Checked Then
-                Constraint.TypeOfTextConstraint = TextConstrainType.Text
-                mFileManager.FileEdited = True
-                RefreshButtons()
+                SetControlValuesForTypeOfTextConstraint()
             End If
         End If
     End Sub

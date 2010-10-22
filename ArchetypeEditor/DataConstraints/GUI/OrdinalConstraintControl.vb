@@ -216,7 +216,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
         End Get
     End Property
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean, _
+    Protected Overloads Overrides Sub SetControlValuesFromElement(ByVal IsState As Boolean, _
             ByVal aArchetypeElement As ArchetypeElement)
 
         Debug.Assert(TypeOf aArchetypeElement.Constraint Is Constraint_Ordinal)
@@ -240,7 +240,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
     End Sub
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean, ByVal c As Constraint)
+    Protected Overloads Overrides Sub SetControlValuesFromConstraint(ByVal IsState As Boolean, ByVal c As Constraint)
 
         Debug.Assert(TypeOf c Is Constraint_Ordinal)
 

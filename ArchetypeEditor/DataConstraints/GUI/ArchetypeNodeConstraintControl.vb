@@ -644,41 +644,31 @@ Public Class ArchetypeNodeConstraintControl
                     mOccurrences.SetUnitary = True
 
                 Case StructureType.Element, StructureType.Reference
-
                     Dim archetypeElem As ArchetypeElement = CType(an_archetype_node, ArchetypeElement)
-
                     SetUpNullFlavours(archetypeElem)
 
                     Select Case archetypeElem.Constraint.Type
                         Case ConstraintType.Any
-                            Me.labelAny.Text = AE_Constants.Instance.Any
-                            Me.labelAny.Visible = True
-
+                            labelAny.Text = AE_Constants.Instance.Any
+                            labelAny.Visible = True
                         Case Else
                             If archetypeElem.Constraint.Type = ConstraintType.Text AndAlso CType(archetypeElem.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstrainType.Terminology Then
-                                Me.gbValueSets.Visible = True
+                                gbValueSets.Visible = True
                             Else
-                                Me.gbValueSets.Visible = False
+                                gbValueSets.Visible = False
                             End If
 
-                            mConstraintControl = ConstraintControl.CreateConstraintControl( _
-                                                           archetypeElem.Constraint.Type, mFileManager)
-
-
-                            Me.PanelDataConstraint.Controls.Add(mConstraintControl)
+                            mConstraintControl = ConstraintControl.CreateConstraintControl(archetypeElem.Constraint.Type, mFileManager)
+                            PanelDataConstraint.Controls.Add(mConstraintControl)
 
                             ' Ensures the ZOrder leads to no overlap
                             mConstraintControl.Dock = DockStyle.Fill
-
-                            mConstraintControl.ShowConstraint(IsState, archetypeElem)
+                            mConstraintControl.ShowElement(IsState, archetypeElem)
                     End Select
 
                 Case StructureType.Slot
-
-                    mConstraintControl = ConstraintControl.CreateConstraintControl( _
-                               ConstraintType.Slot, mFileManager)
-
-                    Me.PanelDataConstraint.Controls.Add(mConstraintControl)
+                    mConstraintControl = ConstraintControl.CreateConstraintControl(ConstraintType.Slot, mFileManager)
+                    PanelDataConstraint.Controls.Add(mConstraintControl)
 
                     ' Ensures the ZOrder leads to no overlap
                     mConstraintControl.Dock = DockStyle.Fill
@@ -695,7 +685,6 @@ Public Class ArchetypeNodeConstraintControl
 
                             mOccurrences.SetUnitary = True
                         End If
-
                     Else
                         mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeSlot).RM_Class, RmSlot).SlotConstraint)
 
@@ -711,10 +700,10 @@ Public Class ArchetypeNodeConstraintControl
                     End If
 
                 Case StructureType.Cluster
-                    Me.labelAny.Visible = False
+                    labelAny.Visible = False
                     mConstraintControl = New ClusterControl(a_file_manager)
                     CType(mConstraintControl, ClusterControl).Item = CType(an_archetype_node, ArchetypeComposite)
-                    Me.PanelDataConstraint.Controls.Add(mConstraintControl)
+                    PanelDataConstraint.Controls.Add(mConstraintControl)
 
                     CType(mConstraintControl, ClusterControl).Header = 50
                     mConstraintControl.Dock = DockStyle.Fill
@@ -724,11 +713,11 @@ Public Class ArchetypeNodeConstraintControl
             mArchetypeNode = an_archetype_node
 
             If IsState Then
-                Me.tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue
-                Me.tpConstraintDetails.BackColor = System.Drawing.Color.LightSteelBlue
+                tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue
+                tpConstraintDetails.BackColor = System.Drawing.Color.LightSteelBlue
             Else
-                Me.tpConstraint.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
-                Me.tpConstraintDetails.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
+                tpConstraint.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
+                tpConstraintDetails.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
             End If
 
             SetControlValues(IsState)

@@ -8,6 +8,7 @@ Public Class ConstraintBindingsControl
         TerminologyColumn.HeaderText = AE_Constants.Instance.Terminology
         ReleaseColumn.HeaderText = Filemanager.GetOpenEhrTerm(97, ReleaseColumn.HeaderText)
         SubsetColumn.HeaderText = Filemanager.GetOpenEhrTerm(624, SubsetColumn.HeaderText)
+        NewButtonToolTip.SetToolTip(NewButton, Filemanager.GetOpenEhrTerm(99, "Add constraint binding"))
     End Sub
 
     Public Sub BindTables(ByVal ontologyManager As OntologyManager)
