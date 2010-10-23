@@ -643,17 +643,17 @@ Public Class OntologyManager
         Dim result As String = ""
 
         If Not String.IsNullOrEmpty(terminologyId) Then
-            result = terminologyId
+            result = System.Uri.EscapeDataString(terminologyId)
 
-            If release <> "" Then
-                result = result + "/" + release
+            If Not String.IsNullOrEmpty(release) Then
+                result = result + "/" + System.Uri.EscapeDataString(release)
             End If
 
-            If subset <> "" Then
-                result = result + "?subset=" + subset
+            If Not String.IsNullOrEmpty(subset) Then
+                result = result + "?subset=" + System.Uri.EscapeDataString(subset)
             End If
 
-            result = "terminology:" + System.Uri.EscapeUriString(result)
+            result = "terminology:" + result
         End If
 
         Return result
@@ -662,7 +662,7 @@ Public Class OntologyManager
     Public Sub PopulateConstraintBindingRow(ByVal row As DataRow, ByVal acCode As String, ByVal uri As String)
         If Not row Is Nothing And RmTerm.IsValidTermCode(acCode) Then
             If Not uri Is Nothing AndAlso uri.StartsWith("terminology:") Then
-                Dim terminologyId As String = System.Uri.UnescapeDataString(uri.Substring(uri.IndexOf(":") + 1))
+                Dim terminologyId As String = uri.Substring(uri.IndexOf(":") + 1)
                 Dim release As String = ""
                 Dim subset As String = ""
 
@@ -671,7 +671,7 @@ Public Class OntologyManager
                 If i >= 0 Then
                     For Each parameter As String In terminologyId.Substring(i + 1).Split("&"c)
                         If parameter.StartsWith("subset=") Then
-                            subset = parameter.Substring(parameter.IndexOf("=") + 1).Replace("+", " ")
+                            subset = parameter.Substring(parameter.IndexOf("=") + 1)
                         End If
                     Next
 
@@ -686,10 +686,10 @@ Public Class OntologyManager
                 End If
 
                 If Not String.IsNullOrEmpty(terminologyId) Then
-                    row(0) = terminologyId
+                    row(0) = System.Uri.UnescapeDataString(terminologyId)
                     row(1) = acCode
-                    row(2) = release
-                    row(3) = subset
+                    row(2) = System.Uri.UnescapeDataString(release)
+                    row(3) = System.Uri.UnescapeDataString(subset)
                     row(4) = uri
                 End If
             End If
