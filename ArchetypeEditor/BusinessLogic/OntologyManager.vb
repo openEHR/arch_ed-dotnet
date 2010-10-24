@@ -1119,17 +1119,22 @@ Public Class OntologyManager
             Dim acCode As String = TryCast(e.Row(1), String)
             Dim release As String = TryCast(e.Row(2), String)
             Dim subset As String = TryCast(e.Row(3), String)
-            Dim uri As String = ConstraintBindingUri(terminologyId, release, subset)
 
-            If Not String.IsNullOrEmpty(terminologyId) And Not String.IsNullOrEmpty(acCode) And Not String.IsNullOrEmpty(uri) Then
-                If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
+            If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
+                Dim uri As String = ConstraintBindingUri(terminologyId, release, subset)
+
+                If Not String.IsNullOrEmpty(terminologyId) And Not String.IsNullOrEmpty(acCode) And Not String.IsNullOrEmpty(uri) Then
+                    If Not uri.Equals(e.Row(4)) Then
+                        e.Row(4) = uri
+                    End If
+
                     mOntology.AddorReplaceConstraintBinding(terminologyId, acCode, uri)
-                ElseIf e.Action = DataRowAction.Delete Then
-                    mOntology.RemoveConstraintBinding(terminologyId, acCode)
                 End If
-
-                mFileManager.FileEdited = True
+            ElseIf e.Action = DataRowAction.Delete Then
+                mOntology.RemoveConstraintBinding(terminologyId, acCode)
             End If
+
+            mFileManager.FileEdited = True
         End If
     End Sub
 
