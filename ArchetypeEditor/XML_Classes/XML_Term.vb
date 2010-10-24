@@ -24,65 +24,57 @@ Namespace ArchetypeEditor.XML_Classes
 
         Public ReadOnly Property XML_Term() As XMLParser.ARCHETYPE_TERM
             Get
-                Me.setItem("text", sText)
-                Me.setItem("description", sDescription)
+                SetItem("text", sText)
+                SetItem("description", sDescription)
+
                 If Not (sComment Is Nothing OrElse sComment = "") Then
-                    Me.setItem("comment", sComment)
+                    SetItem("comment", sComment)
                 End If
-                'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
+
                 For Each k As String In OtherAnnotations.Keys
-                    Me.setItem(k, CStr(sAnnotations.Item(k)))
+                    SetItem(k, CStr(sAnnotations.Item(k)))
                 Next
+
                 Return a_Xml_Term
             End Get
         End Property
 
-        Private Function getItem(ByVal key As String) As String
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            'For Each di As XMLParser.dictionaryItem In a_Xml_Term.items
+        Private Function GetItem(ByVal key As String) As String
             For Each di As XMLParser.StringDictionaryItem In a_Xml_Term.items
                 If di.id = key Then
                     Return di.Value
                 End If
             Next
+
             Return ""
         End Function
 
-        Private Sub setItem(ByVal Item As String, ByVal Value As String)
+        Private Sub SetItem(ByVal Item As String, ByVal Value As String)
             Dim i As Integer
-
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            'Dim new_items() As XMLParser.dictionaryItem
             Dim new_items() As XMLParser.StringDictionaryItem
 
             If Not a_Xml_Term.items Is Nothing Then
-
                 ' set the value of the item
                 For Each di As XMLParser.StringDictionaryItem In a_Xml_Term.items
                     If di.id = Item Then
                         di.Value = Value
-                        Return  'and return if it is found
+                        Return  'FIXME: REMOVE SPAGHETTI CODE! ... return if it is found, but without this goto!
                     End If
                 Next
 
                 new_items = a_Xml_Term.items
                 i = new_items.Length
                 Array.Resize(new_items, i + 1)
-
             Else
                 new_items = CType(Array.CreateInstance(GetType(XMLParser.StringDictionaryItem), 1), XMLParser.StringDictionaryItem())
                 i = 0
             End If
 
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            'Dim new_di As New XMLParser.dictionaryItem()
             Dim new_di As New XMLParser.StringDictionaryItem()
             new_di.id = Item
             new_di.value = Value
             new_items(i) = new_di
-
             a_Xml_Term.items = new_items
-
         End Sub
 
         Sub New(ByVal ID As String)
@@ -98,65 +90,44 @@ Namespace ArchetypeEditor.XML_Classes
             sComment = a_Term.Comment
             sAnnotations = a_Term.OtherAnnotations
             a_Xml_Term = New XMLParser.ARCHETYPE_TERM()
-
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            'a_Xml_Term.items = CType(Array.CreateInstance(GetType(XMLParser.dictionaryItem), 1), XMLParser.dictionaryItem())
             a_Xml_Term.items = CType(Array.CreateInstance(GetType(XMLParser.StringDictionaryItem), 1), XMLParser.StringDictionaryItem())
             a_Xml_Term.items(0) = New XMLParser.StringDictionaryItem
             a_Xml_Term.items(0).id = "text"
-            'a_Xml_Term.items(1) = New XMLParser.dictionaryItem
-            'a_Xml_Term.items(1).key = "description"
-            'a_Xml_Term.items(2) = New XMLParser.dictionaryItem
-            'a_Xml_Term.items(2).key = "comment"
             a_Xml_Term.code = a_Term.Code
-            setItem("text", sText)
-            setItem("description", sDescription)
-            setItem("comment", sComment)
-            'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
+            SetItem("text", sText)
+            SetItem("description", sDescription)
+            SetItem("comment", sComment)
+
             For Each k As String In OtherAnnotations.Keys
-                Me.setItem(k, CStr(sAnnotations.Item(k)))
+                SetItem(k, CStr(sAnnotations.Item(k)))
             Next
         End Sub
 
-        Sub New(ByVal code As String, ByVal text As String, ByVal description As String, Optional ByVal comment As String = "")
+        Sub New(ByVal code As String, ByVal text As String, ByVal description As String)
             MyBase.New(code)
             sText = text
             sDescription = description
             a_Xml_Term = New XMLParser.ARCHETYPE_TERM()
-
             a_Xml_Term.code = code
-            setItem("text", sText)
-            setItem("description", sDescription)
-            If (comment <> "") Then
-                sComment = comment
-                setItem("comment", comment)
-            End If
+            SetItem("text", sText)
+            SetItem("description", sDescription)
         End Sub
 
         Sub New(ByVal an_xmlTerm As XMLParser.ARCHETYPE_TERM)
             MyBase.New(an_xmlTerm.code)
             a_Xml_Term = an_xmlTerm
-            'sText = Me.getItem("text")
-            'sDescription = Me.getItem("description")
-            'sComment = Me.getItem("comment")
-            'SRH: 22 Jun 2009 EDT-549 Allow non-standard annotations
+
             For Each di As XMLParser.StringDictionaryItem In an_xmlTerm.items
                 Select Case di.id.ToLowerInvariant()
                     Case "text"
                         sText = di.Value
-
                     Case "description"
                         sDescription = di.Value
-
                     Case "comment"
                         sComment = di.Value
-
                     Case Else
-                        Me.OtherAnnotations.Add(di.id, di.Value)
-
+                        OtherAnnotations.Add(di.id, di.Value)
                 End Select
-
-
             Next
         End Sub
 
