@@ -223,7 +223,7 @@ Public Class ConstraintBindingForm
 
         ontologyManager.AddTerminology(terminologyId)
         Dim uri As String = ontologyManager.ConstraintBindingUri(terminologyId, ReleaseTextBox.Text, SubsetTextBox.Text)
-        ontologyManager.AddConstraintBinding(acCode, uri)
+        ontologyManager.AddConstraintBinding(terminologyId, acCode, uri)
     End Sub
 
 End Class

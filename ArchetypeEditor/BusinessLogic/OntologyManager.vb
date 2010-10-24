@@ -608,34 +608,31 @@ Public Class OntologyManager
         mFileManager.FileEdited = True
     End Sub
 
-    Public Sub AddConstraintBinding(ByVal acCode As String, ByVal uri As String)
-        If RmTerm.IsValidTermCode(acCode) And Not String.IsNullOrEmpty(uri) Then
-            Dim row As DataRow = ConstraintBindingsTable.NewRow
-            PopulateConstraintBindingRow(row, acCode, uri)
-            Dim terminologyId As String = TryCast(row(0), String)
-
-            If Not String.IsNullOrEmpty(terminologyId) Then
-                If Not HasTerminology(terminologyId) Then
-                    AddTerminology(terminologyId)
-                End If
-
-                Dim keys(2) As Object
-                keys(0) = row(0)
-                keys(1) = row(1)
-                keys(2) = row(2)
-
-                If ConstraintBindingsTable.Rows.Contains(keys) Then
-                    'change the constraint
-                    row = ConstraintBindingsTable.Rows.Find(keys)
-                    row.BeginEdit()
-                    PopulateConstraintBindingRow(row, acCode, uri)
-                    row.EndEdit()
-                Else
-                    ConstraintBindingsTable.Rows.Add(row)
-                End If
-
-                Filemanager.Master.FileEdited = True
+    Public Sub AddConstraintBinding(ByVal terminologyId As String, ByVal acCode As String, ByVal uri As String)
+        If RmTerm.IsValidTermCode(acCode) And Not String.IsNullOrEmpty(terminologyId) Then
+            If Not HasTerminology(terminologyId) Then
+                AddTerminology(terminologyId)
             End If
+
+            Dim row As DataRow = ConstraintBindingsTable.NewRow
+            PopulateConstraintBindingRow(row, terminologyId, acCode, uri)
+
+            Dim keys(2) As Object
+            keys(0) = row(0)
+            keys(1) = row(1)
+            keys(2) = row(2)
+
+            If ConstraintBindingsTable.Rows.Contains(keys) Then
+                'change the constraint
+                row = ConstraintBindingsTable.Rows.Find(keys)
+                row.BeginEdit()
+                PopulateConstraintBindingRow(row, terminologyId, acCode, uri)
+                row.EndEdit()
+            Else
+                ConstraintBindingsTable.Rows.Add(row)
+            End If
+
+            Filemanager.Master.FileEdited = True
         End If
     End Sub
 
@@ -659,13 +656,13 @@ Public Class OntologyManager
         Return result
     End Function
 
-    Public Sub PopulateConstraintBindingRow(ByVal row As DataRow, ByVal acCode As String, ByVal uri As String)
+    Public Sub PopulateConstraintBindingRow(ByVal row As DataRow, ByVal terminologyId As String, ByVal acCode As String, ByVal uri As String)
         If Not row Is Nothing And RmTerm.IsValidTermCode(acCode) Then
-            If Not uri Is Nothing AndAlso uri.StartsWith("terminology:") Then
-                Dim terminologyId As String = uri.Substring(uri.IndexOf(":") + 1)
-                Dim release As String = ""
-                Dim subset As String = ""
+            Dim release As String = ""
+            Dim subset As String = ""
 
+            If Not uri Is Nothing AndAlso uri.StartsWith("terminology:") Then
+                terminologyId = uri.Substring(uri.IndexOf(":") + 1)
                 Dim i As Integer = terminologyId.IndexOf("?")
 
                 If i >= 0 Then
@@ -685,13 +682,17 @@ Public Class OntologyManager
                     terminologyId = terminologyId.Remove(i)
                 End If
 
-                If Not String.IsNullOrEmpty(terminologyId) Then
-                    row(0) = System.Uri.UnescapeDataString(terminologyId)
-                    row(1) = acCode
-                    row(2) = System.Uri.UnescapeDataString(release)
-                    row(3) = System.Uri.UnescapeDataString(subset)
-                    row(4) = uri
-                End If
+                terminologyId = System.Uri.UnescapeDataString(terminologyId)
+                release = System.Uri.UnescapeDataString(release)
+                subset = System.Uri.UnescapeDataString(subset)
+            End If
+
+            If Not String.IsNullOrEmpty(terminologyId) Then
+                row(0) = terminologyId
+                row(1) = acCode
+                row(2) = release
+                row(3) = subset
+                row(4) = uri
             End If
         End If
     End Sub

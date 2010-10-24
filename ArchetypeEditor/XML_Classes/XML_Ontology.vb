@@ -488,7 +488,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                         If Not bindingSet Is Nothing AndAlso Not bindingSet.items Is Nothing Then
                             For Each bind As XMLParser.CONSTRAINT_BINDING_ITEM In bindingSet.items
-                                ontologyManager.AddConstraintBinding(bind.code, bind.value)
+                                ontologyManager.AddConstraintBinding(terminologyId, bind.code, bind.value)
                             Next
                         End If
                     End If

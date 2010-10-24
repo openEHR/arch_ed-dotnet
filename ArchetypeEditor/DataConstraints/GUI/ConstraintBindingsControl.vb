@@ -30,6 +30,12 @@ Public Class ConstraintBindingsControl
         End If
     End Sub
 
+    Private Sub Grid_DataBindingComplete(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewBindingCompleteEventArgs) Handles Grid.DataBindingComplete
+        For Each row As DataGridViewRow In Grid.Rows
+            row.Cells(0).ToolTipText = TryCast(row.Cells(4).Value, String)
+        Next
+    End Sub
+
     Private Sub Grid_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles Grid.CellClick
         If e.RowIndex >= 0 And e.ColumnIndex = 0 And OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp Then
             Dim form As New Ots.TerminologySelectionForm

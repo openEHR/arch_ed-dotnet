@@ -602,10 +602,12 @@ Namespace ArchetypeEditor.ADL_Classes
                     Dim acCode As EiffelKernel.STRING_8 = CType(acCodes.item, EiffelKernel.STRING_8)
 
                     For Each terminologyRow As DataRow In ontologyManager.TerminologiesTable.Rows
-                        Dim terminologyId As EiffelKernel.STRING_8 = Eiffel.String(terminologyRow(0))
+                        Dim terminologyId As String = CStr(terminologyRow(0))
+                        Dim t As EiffelKernel.STRING_8 = Eiffel.String(terminologyId)
 
-                        If EIF_adlInterface.ontology.has_constraint_binding(terminologyId, acCode) Then
-                            ontologyManager.AddConstraintBinding(acCode.to_cil, EIF_adlInterface.ontology.constraint_binding(terminologyId, acCode).as_string.to_cil)
+                        If EIF_adlInterface.ontology.has_constraint_binding(t, acCode) Then
+                            Dim uri As String = EIF_adlInterface.ontology.constraint_binding(t, acCode).as_string.to_cil
+                            ontologyManager.AddConstraintBinding(terminologyId, acCode.to_cil, uri)
                         End If
                     Next
 
