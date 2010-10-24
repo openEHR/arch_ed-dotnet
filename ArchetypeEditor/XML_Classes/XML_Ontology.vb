@@ -108,15 +108,14 @@ Namespace ArchetypeEditor.XML_Classes
             Debug.Assert(sPath <> "", "Path or nodeID are not set")
             Debug.Assert(sTerminology <> "", "TerminologyID is not set")
 
-            ' release is not utilised at this point
             Try
                 Dim terminology_idValue As String = sTerminology
+
                 If Not String.IsNullOrEmpty(sRelease) Then
                     terminology_idValue += "(" + sRelease + ")"
                 End If
-                archetypeParser.Ontology.AddOrReplaceTermBinding(sCode, sPath, sTerminology, _
-                    terminology_idValue)
 
+                archetypeParser.Ontology.AddOrReplaceTermBinding(sCode, sPath, sTerminology, terminology_idValue)
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "XML parser", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
@@ -126,23 +125,20 @@ Namespace ArchetypeEditor.XML_Classes
             Debug.Assert(archetype_path <> "", "Code is not set")
             Debug.Assert(a_terminology_id <> "", "TerminologyID is not set")
 
-            ' release is not utilised at this point
             Try
                 If archetypeParser.Ontology.HasTermBinding(a_terminology_id, archetype_path) Then
                     archetypeParser.Ontology.RemoveTermBinding(archetype_path, a_terminology_id)
                 End If
-
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "XML parser", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 
-        Public Overrides Sub AddorReplaceConstraintBinding(ByVal a_terminology_id As String, ByVal ac_code As String, ByVal a_query As String, ByVal sRelease As String)
+        Public Overrides Sub AddorReplaceConstraintBinding(ByVal a_terminology_id As String, ByVal ac_code As String, ByVal a_query As String)
             Debug.Assert(ac_code <> "", "Code is not set")
             Debug.Assert(a_query <> "", "Query is not set")
             Debug.Assert(a_terminology_id <> "", "TerminologyID is not set")
 
-            ' release is not utilised at this point
             Try
                 archetypeParser.Ontology.AddOrReplaceConstraintBinding(a_query, ac_code, a_terminology_id)
             Catch e As System.Exception
@@ -154,7 +150,6 @@ Namespace ArchetypeEditor.XML_Classes
             Debug.Assert(a_query <> "", "Code is not set")
             Debug.Assert(a_terminology_id <> "", "TerminologyID is not set")
 
-            ' release is not utilised at this point
             Try
                 If archetypeParser.Ontology.HasConstraintBinding(a_terminology_id, a_query) Then
                     archetypeParser.Ontology.RemoveConstraintBinding(a_query, a_terminology_id)

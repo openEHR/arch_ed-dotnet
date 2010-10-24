@@ -151,7 +151,6 @@ Namespace ArchetypeEditor.ADL_Classes
             Debug.Assert(sPath <> "", "Path or nodeID are not set")
             Debug.Assert(sTerminology <> "", "TerminologyID is not set")
 
-            ' release is not utilised at this point
             Try
                 If EIF_adlInterface.archetype_available Then
                     Dim str As EiffelKernel.STRING_8 = Eiffel.String(sPath)
@@ -177,7 +176,6 @@ Namespace ArchetypeEditor.ADL_Classes
             Debug.Assert(sCode <> "", "Code is not set")
             Debug.Assert(sTerminology <> "", "TerminologyID is not set")
 
-            ' release is not utilised at this point
             Try
                 If EIF_adlInterface.archetype_available Then
                     Dim str As EiffelKernel.STRING_8 = Eiffel.String(sCode)
@@ -192,25 +190,21 @@ Namespace ArchetypeEditor.ADL_Classes
             End Try
         End Sub
 
-        Public Overrides Sub AddorReplaceConstraintBinding(ByVal sTerminology As String, ByVal sCode As String, ByVal sQuery As String, ByVal sRelease As String)
+        Public Overrides Sub AddorReplaceConstraintBinding(ByVal sTerminology As String, ByVal sCode As String, ByVal sQuery As String)
             Debug.Assert(sCode <> "", "Code is not set")
             Debug.Assert(sQuery <> "", "Query is not set")
             Debug.Assert(sTerminology <> "", "TerminologyID is not set")
 
-            ' release is not utilised at this point
             Try
                 If EIF_adlInterface.archetype_available Then
+                    Dim terminology As EiffelKernel.STRING_8 = Eiffel.String(sTerminology)
                     Dim cd As EiffelKernel.STRING_8 = Eiffel.String(sCode)
-                    Dim qry As EiffelKernel.STRING_8 = Eiffel.String(sQuery)
+                    Dim uri As openehr.common_libs.basic.URI = openehr.common_libs.basic.Create.URI.make_from_string(Eiffel.String(sQuery))
 
-                    If sRelease <> "" Then
-                        sTerminology = String.Format("{0}({1})", sTerminology, sRelease)
-                    End If
-
-                    If EIF_adlInterface.ontology.has_constraint_binding(Eiffel.String(sTerminology), cd) Then
-                        EIF_adlInterface.ontology.replace_constraint_binding(openehr.common_libs.basic.Create.URI.make_from_string(qry), Eiffel.String(sTerminology), cd)
+                    If EIF_adlInterface.ontology.has_constraint_binding(terminology, cd) Then
+                        EIF_adlInterface.ontology.replace_constraint_binding(uri, terminology, cd)
                     Else
-                        EIF_adlInterface.ontology.add_constraint_binding(openehr.common_libs.basic.Create.URI.make_from_string(qry), Eiffel.String(sTerminology), cd)
+                        EIF_adlInterface.ontology.add_constraint_binding(uri, terminology, cd)
                     End If
                 End If
             Catch e As System.Exception
@@ -222,7 +216,6 @@ Namespace ArchetypeEditor.ADL_Classes
             Debug.Assert(sCode <> "", "Code is not set")
             Debug.Assert(sTerminology <> "", "TerminologyID is not set")
 
-            ' release is not utilised at this point
             Try
                 If EIF_adlInterface.archetype_available Then
                     Dim str As EiffelKernel.STRING_8 = Eiffel.String(sCode)

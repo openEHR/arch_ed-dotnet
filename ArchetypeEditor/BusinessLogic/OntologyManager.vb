@@ -617,10 +617,9 @@ Public Class OntologyManager
             Dim row As DataRow = ConstraintBindingsTable.NewRow
             PopulateConstraintBindingRow(row, terminologyId, acCode, uri)
 
-            Dim keys(2) As Object
+            Dim keys(1) As Object
             keys(0) = row(0)
             keys(1) = row(1)
-            keys(2) = row(2)
 
             If ConstraintBindingsTable.Rows.Contains(keys) Then
                 'change the constraint
@@ -657,43 +656,36 @@ Public Class OntologyManager
     End Function
 
     Public Sub PopulateConstraintBindingRow(ByVal row As DataRow, ByVal terminologyId As String, ByVal acCode As String, ByVal uri As String)
-        If Not row Is Nothing And RmTerm.IsValidTermCode(acCode) Then
+        If Not row Is Nothing And Not String.IsNullOrEmpty(terminologyId) And RmTerm.IsValidTermCode(acCode) Then
             Dim release As String = ""
             Dim subset As String = ""
 
             If Not uri Is Nothing AndAlso uri.StartsWith("terminology:") Then
-                terminologyId = uri.Substring(uri.IndexOf(":") + 1)
-                Dim i As Integer = terminologyId.IndexOf("?")
+                Dim s As String = uri.Substring(uri.IndexOf(":") + 1)
+                Dim i As Integer = s.IndexOf("?")
 
                 If i >= 0 Then
-                    For Each parameter As String In terminologyId.Substring(i + 1).Split("&"c)
+                    For Each parameter As String In s.Substring(i + 1).Split("&"c)
                         If parameter.StartsWith("subset=") Then
-                            subset = parameter.Substring(parameter.IndexOf("=") + 1)
+                            subset = System.Uri.UnescapeDataString(parameter.Substring(parameter.IndexOf("=") + 1))
                         End If
                     Next
 
-                    terminologyId = terminologyId.Remove(i)
+                    s = s.Remove(i)
                 End If
 
-                i = terminologyId.IndexOf("/")
+                i = s.IndexOf("/")
 
                 If i >= 0 Then
-                    release = terminologyId.Substring(i + 1)
-                    terminologyId = terminologyId.Remove(i)
+                    release = System.Uri.UnescapeDataString(s.Substring(i + 1))
                 End If
-
-                terminologyId = System.Uri.UnescapeDataString(terminologyId)
-                release = System.Uri.UnescapeDataString(release)
-                subset = System.Uri.UnescapeDataString(subset)
             End If
 
-            If Not String.IsNullOrEmpty(terminologyId) Then
-                row(0) = terminologyId
-                row(1) = acCode
-                row(2) = release
-                row(3) = subset
-                row(4) = uri
-            End If
+            row(0) = terminologyId
+            row(1) = acCode
+            row(2) = release
+            row(3) = subset
+            row(4) = uri
         End If
     End Sub
 
@@ -855,10 +847,9 @@ Public Class OntologyManager
         result.Columns.Add(uriColumn)
 
         ' Return the new DataTable.
-        Dim keys(2) As DataColumn
+        Dim keys(1) As DataColumn
         keys(0) = termColumn
         keys(1) = iDColumn
-        keys(2) = releaseColumn
         result.PrimaryKey = keys
 
         Return result
@@ -1132,7 +1123,7 @@ Public Class OntologyManager
 
             If Not String.IsNullOrEmpty(terminologyId) And Not String.IsNullOrEmpty(acCode) And Not String.IsNullOrEmpty(uri) Then
                 If e.Action = DataRowAction.Add Or e.Action = DataRowAction.Change Then
-                    mOntology.AddorReplaceConstraintBinding(terminologyId, acCode, uri, release)
+                    mOntology.AddorReplaceConstraintBinding(terminologyId, acCode, uri)
                 ElseIf e.Action = DataRowAction.Delete Then
                     mOntology.RemoveConstraintBinding(terminologyId, acCode)
                 End If
