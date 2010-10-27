@@ -12,10 +12,11 @@ Public Class ConstraintBindingsControl
     End Sub
 
     Public Sub BindTables(ByVal ontologyManager As OntologyManager)
-        Me.OntologyManager = ontologyManager
+        Me.ontologyManager = ontologyManager
         view = New DataView(ontologyManager.ConstraintBindingsTable)
         view.AllowNew = False
         Grid.DataSource = view
+        Grid.Columns(4).Visible = Grid.Width > TerminologyColumn.Width + ReleaseColumn.Width + 400
     End Sub
 
     Public Sub SelectConstraintCode(ByVal value As String)
