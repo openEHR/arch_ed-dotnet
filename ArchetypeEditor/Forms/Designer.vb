@@ -2454,7 +2454,7 @@ Public Class Designer
         text.WriteLine("\viewkind4\uc1\pard\tx2840\tx5112\lang3081\f0\fs20")
         text.WriteLine("\cf1 Header\cf0\par")
         'text.WriteLine("   Concept: " & Me.txtConceptInFull.Text & "\par")        
-        text.WriteLine("   Concept: " & RichTextBoxUnicode.CreateRichTextBoxTag(mFileManager.Archetype.ConceptCode, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\par") 'JAR: 13APR07, EDT-32 Support unicode
+        text.WriteLine("   Concept: " & RichTextBoxUnicode.CreateRichTextBoxTag(mFileManager.Archetype.ConceptCode, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\par")
 
         text.WriteLine("\par")
         text.WriteLine("\cf1 Definition\cf0\par")
@@ -2548,7 +2548,7 @@ Public Class Designer
         RichTextBoxUnicode.ProcessRichEditControl(mRichTextArchetype, mFileManager, mTabPageDescription)
     End Sub
 
-    Public Sub WriteToHTML(ByVal filename As String)
+    Protected Sub WriteToHTML(ByVal filename As String)
         Dim text As IO.StreamWriter
         Dim commaspace As Char() = {" ", ","}
 
@@ -2558,14 +2558,14 @@ Public Class Designer
         text.WriteLine("<HEAD>")
         text.WriteLine("<meta http-equiv=""Content-Language"" content=""" & mFileManager.OntologyManager.LanguageCode & """>")
         text.WriteLine("<meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"">")
-        text.WriteLine("<title>" & Me.txtConceptInFull.Text & "</title>")
+        text.WriteLine("<title>" & txtConceptInFull.Text & "</title>")
         text.WriteLine("</HEAD>")
 
         text.WriteLine("<BODY>")
         text.WriteLine("<table border=""0"" cellpadding=""2"" width=""100%"">")
         text.WriteLine("<tr>")
         text.WriteLine("<td width=""100%"" bgcolor=""#000080"">")
-        text.WriteLine("<h1 align=""center""><font color=""#FFFFFF"">" & Me.txtConceptInFull.Text & "</font></h1>")
+        text.WriteLine("<h1 align=""center""><font color=""#FFFFFF"">" & txtConceptInFull.Text & "</font></h1>")
         text.WriteLine("</td>")
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
@@ -2595,26 +2595,27 @@ Public Class Designer
         Dim commentString As String = "&nbsp;"
 
         If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
-            text.WriteLine(String.Format("<td width=""{0}%"">{1}</td>", width, CStr(IIf(Me.txtConceptComment.Text <> String.Empty, Me.txtConceptComment.Text, commentString))))
+            text.WriteLine(String.Format("<td width=""{0}%"">{1}</td>", width, CStr(IIf(txtConceptComment.Text <> "", txtConceptComment.Text, commentString))))
         End If
 
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
-
 
         text.WriteLine("<table border=""1"" cellpadding=""3"" style=""background-color: rgb(229, 229, 229); width:100%;"" >")
         text.WriteLine("<tr>")
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(585, "Purpose")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(582, "Use")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(583, "Misuse")))
-        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", "References")) 'JAR: 24MAY2007, EDT-30 Add field for References
+        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(690, "Copyright")))
+        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", "References"))
         text.WriteLine("</tr>")
         text.WriteLine("<tr>")
 
-        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(Me.mTabPageDescription.txtPurpose.Text <> String.Empty, Me.mTabPageDescription.txtPurpose.Text, commentString))))
-        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(Me.mTabPageDescription.txtUse.Text <> String.Empty, Me.mTabPageDescription.txtUse.Text, commentString))))
-        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(Me.mTabPageDescription.txtMisuse.Text <> String.Empty, Me.mTabPageDescription.txtMisuse.Text, commentString))))
-        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(Me.mTabPageDescription.txtReferences.Text <> String.Empty, Me.mTabPageDescription.txtReferences.Text, commentString)))) 'JAR: 24MAY2007, EDT-30 Add field for References
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(mTabPageDescription.txtPurpose.Text <> "", mTabPageDescription.txtPurpose.Text, commentString))))
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(mTabPageDescription.txtUse.Text <> "", mTabPageDescription.txtUse.Text, commentString))))
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(mTabPageDescription.txtMisuse.Text <> "", mTabPageDescription.txtMisuse.Text, commentString))))
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(mTabPageDescription.CopyrightTextBox.Text <> "", mTabPageDescription.CopyrightTextBox.Text, commentString))))
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(mTabPageDescription.txtReferences.Text <> "", mTabPageDescription.txtReferences.Text, commentString))))
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
 
@@ -2685,7 +2686,6 @@ Public Class Designer
                     mTabPageProtocolStructure.toHTML(text, "#FF717B")
                 End If
 
-
                 'If Not mTabPageStateStructure Is Nothing Then
                 '    text.WriteLine("cf1   STATE\cf0  = \{\par")
                 '    mTabPageStateStructure.toRichText(text, 2)
@@ -2711,9 +2711,7 @@ Public Class Designer
         End Select
 
         text.WriteLine("</BODY>")
-
         text.WriteLine("</HTML>")
-
         text.Flush()
         text.Close()
     End Sub
@@ -2898,27 +2896,33 @@ Public Class Designer
         End Set
     End Property
 
+    Protected Sub ShowException(ByVal message As String, ByVal ex As Exception)
+        Dim errorMessage As String = message & vbCrLf & vbCrLf & ex.Message
+
+        If Not ex.InnerException Is Nothing Then
+            errorMessage &= vbCrLf & ex.InnerException.Message
+        End If
+
+        MessageBox.Show(errorMessage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Sub
+
     Public Sub AutoSave()
         EmergencySave(Me, New EventArgs)
     End Sub
 
     Private Sub EmergencySave(ByVal sender As Object, ByVal e As EventArgs) Handles mAutoSaveTimer.Tick
-
         If OceanArchetypeEditor.Instance.Options.AutosaveInterval = 0 Then
-            Me.mAutoSaveTimer.Enabled = False
+            mAutoSaveTimer.Enabled = False
         Else
-            If Not Me.mAutoSaveTimer.Enabled Or Me.mAutoSaveTimer.Interval <> OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000 Then
-                Me.mAutoSaveTimer.Enabled = True
-                Me.mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
+            If Not mAutoSaveTimer.Enabled Or mAutoSaveTimer.Interval <> OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000 Then
+                mAutoSaveTimer.Enabled = True
+                mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
             End If
+
             Try
                 Filemanager.AutoFileSave()
             Catch ex As Exception
-                Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
-                If Not ex.InnerException Is Nothing Then
-                    errorMessage &= vbCrLf & ex.InnerException.Message
-                End If
-                MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                ShowException("Error serialising archetype", ex)
             End Try
         End If
     End Sub
@@ -2994,11 +2998,10 @@ Public Class Designer
         mTabPageSection = Nothing
         mTabPageDescription.Reset()
         mTermBindingPanel.Reset()
+
         If Not mTabPageParticipation Is Nothing Then
             mTabPageParticipation.Reset()
         End If
-
-
     End Sub
 
     Public Sub ShowTabPages(ByVal archetyped_class As StructureType, ByVal isNew As Boolean)
@@ -3348,7 +3351,7 @@ Public Class Designer
         mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
 
         RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
-        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
+        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
     End Sub
 
     Private Function SetNewArchetypeName(ByVal AllowOpen As Boolean) As Integer
@@ -3529,8 +3532,6 @@ Public Class Designer
             mFileManager.IsNew = True
             mFileManager.FileName = ""    'new filename and needs to save as
 
-            'EDT-553 - if there is no structure chosen then there is an error
-            'If Not mTabPageDataStructure Is Nothing
             If Not mTabPageDataStructure Is Nothing AndAlso Not mTabPageDataStructure.ArchetypeDisplay Is Nothing Then
                 mTabPageDataStructure.ArchetypeDisplay.SetButtonVisibility(Nothing)
             End If
@@ -3940,7 +3941,7 @@ Public Class Designer
                             For Each tp In Me.TabStructure.TabPages
                                 Select Case tp.Name
                                     Case "tpDataStructure"
-                                        If Not mTabPageDataStructure Is Nothing Then 'AndAlso mTabPageDataStructure.HasData Then 'JAR: 31MAY07, EDT-21 Empty structure raises an exception
+                                        If Not mTabPageDataStructure Is Nothing Then
                                             Dim rm As RmStructureCompound
                                             rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
                                             rm.Children.Add(mTabPageDataStructure.SaveAsStructure)
@@ -4306,7 +4307,7 @@ Public Class Designer
         If state Then
             If Me.mTabPagesCollection.Contains("tpProtocol") Then
                 If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
-                    CrownCtrl.TabPages.Insert(0, Me.mTabPagesCollection.Item("tpProtocol")) 'JAR: 30MAY07, EDT-44 Protocol to be the first tab
+                    CrownCtrl.TabPages.Insert(0, Me.mTabPagesCollection.Item("tpProtocol"))
                 Else
                     CrownCtrl.TabPages.Add(Me.mTabPagesCollection.Item("tpProtocol"))
                 End If
@@ -4323,7 +4324,7 @@ Public Class Designer
                     Me.mTabPagesCollection.Add(tp.Name, tp)
                 End If
                 If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
-                    CrownCtrl.TabPages.Insert(0, tp) 'JAR: 30MAY07, EDT-44 Protocol to be the first tab
+                    CrownCtrl.TabPages.Insert(0, tp)
                 Else
                     CrownCtrl.TabPages.Add(tp)
                 End If
@@ -4374,7 +4375,7 @@ Public Class Designer
                     Me.mTabPagesCollection.Add(tp.Name, tp)
                 End If
                 If mFileManager.Archetype.RmEntity = StructureType.INSTRUCTION Then
-                    CrownCtrl.TabPages.Insert(0, tp) 'JAR: 30MAY07, EDT-44 Protocol to be the first tab
+                    CrownCtrl.TabPages.Insert(0, tp)
                 Else
                     CrownCtrl.TabPages.Add(tp)
                 End If
@@ -4558,7 +4559,7 @@ Public Class Designer
         ElseIf TabMain.SelectedTab Is Me.tpDescription Then
             'Ensure the description is up to date
             RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
-            RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription) 'JAR: 13APR07, EDT-32 Support unicode
+            RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
         End If
     End Sub
 
@@ -4779,13 +4780,7 @@ Public Class Designer
                         mRichTextArchetype.Text = mFileManager.ExportSerialised(s)
                     End If
                 Catch ex As Exception
-                    Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
-
-                    If Not ex.InnerException Is Nothing Then
-                        errorMessage &= vbCrLf & ex.InnerException.Message
-                    End If
-
-                    MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                    ShowException("Error serialising archetype", ex)
                 End Try
         End Select
     End Sub
@@ -4817,20 +4812,11 @@ Public Class Designer
                         args.AddParam("css-path", "", "Images/default.css")
                         args.AddParam("terminology-xml-document-path", "", "../Terminology/terminology.xml")
 
-                        Dim reader As Xml.XmlReader = Nothing
+                        If mTabPageDescription.CopyrightTextBox.Text <> "" Then
+                            args.AddParam("copyright-text", "", mTabPageDescription.CopyrightTextBox.Text)
+                        End If
 
-                        Try
-                            reader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
-                        Catch ex As Exception
-                            Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
-                            If Not ex.InnerException Is Nothing Then
-                                errorMessage &= vbCrLf & ex.InnerException.Message
-                            End If
-                            MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-
-                            Return
-                        End Try
-
+                        Dim reader As Xml.XmlReader = Xml.XmlReader.Create(New IO.StringReader(Filemanager.Master.ExportSerialised("xml")))
                         Dim stream As New IO.FileStream(html, FileMode.Create)
                         transform.Transform(reader, args, stream)
                         stream.Close()
@@ -4841,7 +4827,7 @@ Public Class Designer
 
                     Process.Start("file:///" & html)
                 Catch ex As Exception
-                    MessageBox.Show(ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    ShowException("Error writing HTML", ex)
                 End Try
             Case Else
                 ' toggle the buttons
@@ -4938,14 +4924,11 @@ Public Class Designer
 
     Private Sub MenuFileExportType_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileExportType.Click
         Cursor = Cursors.WaitCursor
+
         Try
             Filemanager.Master.Export(MenuFileExportType.Text)
         Catch ex As Exception
-            Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & ex.Message
-            If Not ex.InnerException Is Nothing Then
-                errorMessage &= vbCrLf & ex.InnerException.Message
-            End If
-            MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            ShowException("Error exporting archetype as " & MenuFileExportType.Text, ex)
         End Try
 
         Cursor = Cursors.Default
@@ -4953,26 +4936,23 @@ Public Class Designer
 
     Private Sub MenuFileExportCAM_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileExportCAM.Click
         Cursor = Cursors.WaitCursor
+
         Try
             Filemanager.Master.ExportCanonicalArchetypeModel()
         Catch ex As Exception
-            Dim errorMessage As String = "Error exporting Canonical Archetype Model" & vbCrLf & vbCrLf & ex.Message
-            If Not ex.InnerException Is Nothing Then
-                errorMessage &= vbCrLf & ex.InnerException.Message
-            End If
-            MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            ShowException("Error exporting Canonical Archetype Model", ex)
         End Try
 
         Cursor = Cursors.Default
     End Sub
 
     Private Sub RichTextBoxDescription_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RichTextBoxDescription.DoubleClick
-        Me.TabMain.SelectedTab = Me.tpDescription
+        TabMain.SelectedTab = tpDescription
     End Sub
 
     Private Sub RichTextBoxDescription_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles RichTextBoxDescription.KeyPress
-        If (e.KeyChar > "0"c And e.KeyChar < "z"c) Then
-            Me.TabMain.SelectedTab = Me.tpDescription
+        If e.KeyChar > "0"c And e.KeyChar < "z"c Then
+            TabMain.SelectedTab = tpDescription
         End If
     End Sub
 
@@ -4994,11 +4974,9 @@ Public Class Designer
         Clipboard.SetText(lblArchetypeName.Text)
     End Sub
 
-    'SRH: Jan 11 2009 - EDT-486 - update structure
     Private Sub SubDataStructureChanged(ByVal sender As Object, ByVal newStructure As StructureType) Handles mTabPageDataStructure.UpdateStructure
         tpDataStructure.Title = Filemanager.GetOpenEhrTerm(CInt(newStructure), newStructure.ToString)
     End Sub
-
 
 End Class
 
