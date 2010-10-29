@@ -134,23 +134,29 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 if ((parentTypeName == "COMPOSITION" && attrName == "context")
                  || (parentTypeName == "COMPOSITION" && attrName == "content")
                  || (parentTypeName == "EVENT_CONTEXT" && attrName == "other_context")
+                 || (parentTypeName == "EVENT_CONTEXT" && attrName == "heath_care_facility")
+                 || (parentTypeName == "EVENT_CONTEXT" && attrName == "end_time")
+                 || (parentTypeName == "EVENT_CONTEXT" && attrName == "participations")
+                 || (parentTypeName == "EVENT_CONTEXT" && attrName == "location")
                  || (parentTypeName == "SECTION" && attrName == "items")
-                 || (parentTypeName == "CARE_ENTRY" && attrName == "protocol")
-                 || (parentTypeName == "OBSERVATION" && attrName == "protocol")
-                 || (parentTypeName == "EVALUATION" && attrName == "protocol")
-                 || (parentTypeName == "INSTRUCTION" && attrName == "protocol")
-                 || (parentTypeName == "ACTION" && attrName == "protocol")
+                 || (entries.Contains(parentTypeName) && attrName == "other_participations")
+                 || (entries.Contains(parentTypeName) && attrName == "provider")
+                 || (entries.Contains(parentTypeName) && attrName == "workflow_id")
+                 || (careEntries.Contains(parentTypeName) && attrName == "protocol")
+                 || (careEntries.Contains(parentTypeName) && attrName == "guideline_id")
                  || (parentTypeName == "OBSERVATION" && attrName == "state")
                  || (parentTypeName == "INSTRUCTION" && attrName == "activities")
+                 || (parentTypeName == "INSTRUCTION" && attrName == "expiry_time")
+                 || (parentTypeName == "INSTRUCTION" && attrName == "wf_definition")
+                 || (parentTypeName == "ACTION" && attrName == "instruction_details")
+                 || (parentTypeName == "INSTRUCTION_DETAILS" && attrName == "wf_details")
                  || (parentTypeName == "ISM_TRANSITION" && attrName == "careflow_step")
                  || (parentTypeName == "ITEM_TREE" && attrName == "items")
                  || (parentTypeName == "ITEM_TABLE" && attrName == "rows")
                  || (parentTypeName == "ITEM_LIST" && attrName == "items")
                  || (parentTypeName == "HISTORY" && attrName == "events")
                  || (parentTypeName == "HISTORY" && attrName == "period")
-                 || (parentTypeName == "EVENT" && attrName == "state")
-                 || (parentTypeName == "POINT_EVENT" && attrName == "state")
-                 || (parentTypeName == "INTERVAL_EVENT" && attrName == "state")
+                 || (events.Contains(parentTypeName) && attrName == "state")
                  || (parentTypeName == "ELEMENT" && attrName == "value")
                  || (parentTypeName == "ELEMENT" && attrName == "null_flavour")
                  || (regexDvInterval.IsMatch(parentTypeName) && (attrName == "lower" || attrName == "upper"))
@@ -172,5 +178,11 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
         }
 
         protected Regex regexDvInterval = new Regex(@"DV_INTERVAL<\w+>");
+
+        protected List<string> careEntries = new List<string>(new string[] { "CARE_ENTRY", "OBSERVATION", "EVALUATION", "INSTRUCTION", "ACTION" });
+
+        protected List<string> entries = new List<string>(new string[] { "ENTRY", "ADMIN_ENTRY", "CARE_ENTRY", "OBSERVATION", "EVALUATION", "INSTRUCTION", "ACTION" });
+
+        protected List<string> events = new List<string>(new string[] { "EVENT", "POINT_EVENT", "INTERVAL_EVENT" });
     }
 }
