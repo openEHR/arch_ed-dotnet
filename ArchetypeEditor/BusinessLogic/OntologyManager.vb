@@ -1070,15 +1070,15 @@ Public Class OntologyManager
                     End If
                 End If
 
-                aterm.Language = CStr(e.Row(0))
-                aterm.Text = CStr(e.Row(2))
-                aterm.Description = CStr(e.Row(3))
+                aterm.Language = TryCast(e.Row(0), String)
+                aterm.Text = TryCast(e.Row(2), String)
+                aterm.Description = TryCast(e.Row(3), String)
 
                 If aterm.IsConstraint Then
                     mOntology.ReplaceConstraint(aterm)
                 Else
                     If Not IsDBNull(e.Row(4)) Then
-                        aterm.Comment = CStr(e.Row(4))
+                        aterm.Comment = TryCast(e.Row(4), String)
                     End If
 
                     mOntology.ReplaceTerm(aterm, ReplaceTranslations())
