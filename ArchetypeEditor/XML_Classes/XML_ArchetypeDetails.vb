@@ -13,11 +13,9 @@
 '	last_change: "$LastChangedDate: 2006-05-17 18:54:30 +0930 (Wed, 17 May 2006) $"
 '
 '
-'Option Strict On
 Option Explicit On
 
 Namespace ArchetypeEditor.XML_Classes
-
 
     Public Class XML_ArchetypeDetails
         Inherits ArchetypeDetails
@@ -29,115 +27,118 @@ Namespace ArchetypeEditor.XML_Classes
             Get
                 If mDescriptionItems Is Nothing Then
                     mDescriptionItems = New ArrayList()
+
                     If Not mXML_Description.details Is Nothing Then
                         mDescriptionItems.AddRange(mXML_Description.details)
                     End If
                 End If
+
                 Return mDescriptionItems
             End Get
         End Property
 
-        Public Overrides Sub AddOrReplace(ByVal a_language As String, ByVal a_detail As ArchetypeDescriptionItem)
-            If Me.HasDetailInLanguage(a_language) Then
-                Me.RemoveDescriptionItem(a_language)
+        Public Overrides Sub AddOrReplace(ByVal language As String, ByVal item As ArchetypeDescriptionItem)
+            If HasDetailInLanguage(language) Then
+                RemoveDescriptionItem(language)
             End If
-            Dim XML_detail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
 
-            XML_detail.language = New XMLParser.CODE_PHRASE
-            XML_detail.language.code_string = a_language
+            Dim detail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
+            detail.language = New XMLParser.CODE_PHRASE
+            detail.language.code_string = language
+            detail.language.terminology_id = New XMLParser.TERMINOLOGY_ID
+            detail.language.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
+            detail.copyright = item.Copyright
 
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            'XML_detail.language.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
-            XML_detail.language.terminology_id = New XMLParser.TERMINOLOGY_ID
-            XML_detail.language.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
+            If item.KeyWords.Count > 0 Then
+                detail.keywords = Array.CreateInstance(GetType(String), item.KeyWords.Count)
 
-            XML_detail.copyright = a_detail.Copyright
-            If a_detail.KeyWords.Count > 0 Then
-                XML_detail.keywords = Array.CreateInstance(GetType(String), a_detail.KeyWords.Count)
-                For i As Integer = 0 To a_detail.KeyWords.Count - 1
-                    XML_detail.keywords(i) = a_detail.KeyWords(i)
+                For i As Integer = 0 To item.KeyWords.Count - 1
+                    detail.keywords(i) = item.KeyWords(i)
                 Next
             End If
 
-            XML_detail.misuse = a_detail.MisUse
-            XML_detail.use = a_detail.Use()
-            XML_detail.purpose = a_detail.Purpose
-            Me.AddDetail(XML_detail)
+            detail.misuse = item.MisUse
+            detail.use = item.Use()
+            detail.purpose = item.Purpose
+            AddDetail(detail)
         End Sub
 
-        Public Sub AddDetail(ByVal a_detail As XMLParser.RESOURCE_DESCRIPTION_ITEM)
-            Me.DescriptionItemsAsArrayList.Add(a_detail)
-            mXML_Description.details = Me.DescriptionItemsAsArrayList.ToArray(GetType(XMLParser.RESOURCE_DESCRIPTION_ITEM))
+        Public Sub AddDetail(ByVal item As XMLParser.RESOURCE_DESCRIPTION_ITEM)
+            DescriptionItemsAsArrayList.Add(item)
+            mXML_Description.details = DescriptionItemsAsArrayList.ToArray(GetType(XMLParser.RESOURCE_DESCRIPTION_ITEM))
         End Sub
 
-        Public Sub RemoveDescriptionItem(ByVal a_language_code As String)
-            Debug.Assert(Me.HasDetailInLanguage(a_language_code))
-            Me.DescriptionItemsAsArrayList.RemoveAt(Me.IndexOfDetailInLanguage(a_language_code))
-            mXML_Description.details = Me.DescriptionItemsAsArrayList.ToArray(GetType(XMLParser.RESOURCE_DESCRIPTION_ITEM))
+        Public Sub RemoveDescriptionItem(ByVal language_code As String)
+            Debug.Assert(HasDetailInLanguage(language_code))
+            DescriptionItemsAsArrayList.RemoveAt(IndexOfDetailInLanguage(language_code))
+            mXML_Description.details = DescriptionItemsAsArrayList.ToArray(GetType(XMLParser.RESOURCE_DESCRIPTION_ITEM))
         End Sub
 
-        Public Overrides Function DetailInLanguage(ByVal a_language As String) As ArchetypeDescriptionItem
-            Dim archDescriptDetail As New ArchetypeDescriptionItem(a_language)
+        Public Overrides Function DetailInLanguage(ByVal language As String) As ArchetypeDescriptionItem
+            Dim result As New ArchetypeDescriptionItem(language)
+            Dim i As Integer = IndexOfDetailInLanguage(language)
 
-            If HasDetailInLanguage(a_language) Then
-                For Each XML_detail As XMLParser.RESOURCE_DESCRIPTION_ITEM In mXML_Description.details
-                    If XML_detail.language.code_string = a_language Then
-                        If Not XML_detail.misuse Is Nothing Then
-                            archDescriptDetail.MisUse = XML_detail.misuse
-                        Else
-                            archDescriptDetail.MisUse = ""
-                        End If
+            If i >= 0 Then
+                Dim detail As XMLParser.RESOURCE_DESCRIPTION_ITEM = mXML_Description.details(i)
 
-                        If Not XML_detail.use Is Nothing Then
-                            archDescriptDetail.Use = XML_detail.use
-                        Else
-                            archDescriptDetail.Use = ""
-                        End If
+                If Not detail.misuse Is Nothing Then
+                    result.MisUse = detail.misuse
+                Else
+                    result.MisUse = ""
+                End If
 
-                        If Not XML_detail.purpose Is Nothing Then
-                            archDescriptDetail.Purpose = XML_detail.purpose
-                        Else
-                            archDescriptDetail.Purpose = ""
-                        End If
+                If Not detail.use Is Nothing Then
+                    result.Use = detail.use
+                Else
+                    result.Use = ""
+                End If
 
-                        If Not XML_detail.keywords Is Nothing Then
-                            archDescriptDetail.KeyWords.AddRange(XML_detail.keywords)
-                        End If
+                If Not detail.purpose Is Nothing Then
+                    result.Purpose = detail.purpose
+                Else
+                    result.Purpose = ""
+                End If
 
-                        ' HKF: 8 Dec 2008
-                        If Not XML_detail.copyright Is Nothing Then
-                            archDescriptDetail.Copyright = XML_detail.copyright
-                        End If
+                If Not detail.keywords Is Nothing Then
+                    result.KeyWords.AddRange(detail.keywords)
+                End If
 
-                        Exit For
-                    End If
-                Next
+                If Not detail.copyright Is Nothing Then
+                    result.Copyright = detail.copyright
+                End If
             End If
-            Return archDescriptDetail
+
+            Return result
         End Function
 
-        Public Overrides Function HasDetailInLanguage(ByVal a_language As String) As Boolean
-            For Each rdi As XMLParser.RESOURCE_DESCRIPTION_ITEM In Me.DescriptionItemsAsArrayList
-                If rdi.language.code_string = a_language Then
-                    Return True
+        Public Overrides Function HasDetailInLanguage(ByVal language As String) As Boolean
+            Dim result As Boolean = False
+
+            For Each rdi As XMLParser.RESOURCE_DESCRIPTION_ITEM In DescriptionItemsAsArrayList
+                If rdi.language.code_string = language Then
+                    result = True
                 End If
             Next
-            Return False
+
+            Return result
         End Function
 
-        Private Function IndexOfDetailInLanguage(ByVal a_language As String) As Integer
+        Private Function IndexOfDetailInLanguage(ByVal language As String) As Integer
+            Dim result As Integer = -1
+
             For i As Integer = 0 To mXML_Description.details.Length - 1
                 Dim rdi As XMLParser.RESOURCE_DESCRIPTION_ITEM = mXML_Description.details(i)
-                If rdi.language.code_string = a_language Then
-                    Return i
+
+                If rdi.language.code_string = language Then
+                    result = i
                 End If
             Next
-            Return -1
+
+            Return result
         End Function
 
-        Sub New(ByVal a_description As XMLParser.RESOURCE_DESCRIPTION)
-            'mADL_Details = a_description.details
-            mXML_Description = a_description
+        Sub New(ByVal description As XMLParser.RESOURCE_DESCRIPTION)
+            mXML_Description = description
         End Sub
 
     End Class

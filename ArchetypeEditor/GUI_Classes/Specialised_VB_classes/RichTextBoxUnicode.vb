@@ -12,7 +12,7 @@
 '	revision:    "$LastChangedRevision: 01 $"
 '	last_change: "$LastChangedDate: 2007-04-13 02:32:19 +1030 (Fri, 13 Apr 2007) $"
 '
-'JAR: 13APR07, EDT-32 RichTextBox displays Unicode as question marks.  Fudge forces it to display using the SelectedText property.    
+
 Option Explicit On
 
 Public Class RichTextBoxUnicode
@@ -20,15 +20,15 @@ Public Class RichTextBoxUnicode
     Public Enum RichTextDataType
         ONTOLOGY_TEXT = 1
         ONTOLOGY_DESC = 2
-        ARCHETYPE_PURPOSE = 3
-        ARCHETYPE_USE = 4
-        ARCHETYPE_MISUSE = 5
-        ARCHETYPE_REFERENCES = 6 'JAR: 24MAY2007, EDT-30 Add field for References
+        ArchetypePurpose = 3
+        ArchetypeUse = 4
+        ArchetypeMisuse = 5
+        ArchetypeCopyright = 6
+        ArchetypeReferences = 7
     End Enum
 
     'Returns a Tag to be placed in the RTF file
     Public Shared Function CreateRichTextBoxTag(ByVal Code As String, ByVal TagType As RichTextDataType) As String
-        'JAR: 21MAY07, EDT-62 Changed delimiter characters
         Dim char1 As Char = Chr(14), char2 As Char = Chr(15) 'Use characters that cannot be easily entered by a user
         Return char1 & Code & char2 & TagType & char1
     End Function
@@ -42,7 +42,6 @@ Public Class RichTextBoxUnicode
         Dim dataType As RichTextDataType
         Dim stringArray() As String
         Dim replaceText As String = ""
-        'JAR: 21MAY07, EDT-62 Changed delimiter characters
         Dim char1 As Char = Chr(14), char2 As Char = Chr(15) 'Use characters that cannot be easily entered by a user
 
         Try
@@ -61,13 +60,15 @@ Public Class RichTextBoxUnicode
                         replaceText = FileManager.OntologyManager.GetDescription(conceptCode)
                     Case RichTextDataType.ONTOLOGY_TEXT
                         replaceText = FileManager.OntologyManager.GetText(conceptCode)
-                    Case RichTextDataType.ARCHETYPE_PURPOSE
+                    Case RichTextDataType.ArchetypePurpose
                         replaceText = TabPage.txtPurpose.Text
-                    Case RichTextDataType.ARCHETYPE_USE
+                    Case RichTextDataType.ArchetypeUse
                         replaceText = TabPage.txtUse.Text
-                    Case RichTextDataType.ARCHETYPE_MISUSE
+                    Case RichTextDataType.ArchetypeMisuse
                         replaceText = TabPage.txtMisuse.Text
-                    Case RichTextDataType.ARCHETYPE_REFERENCES 'JAR: 24MAY2007, EDT-30 Add field for References
+                    Case RichTextDataType.ArchetypeCopyright
+                        replaceText = TabPage.CopyrightTextBox.Text
+                    Case RichTextDataType.ArchetypeReferences
                         replaceText = TabPage.txtReferences.Text
                 End Select
 
@@ -81,6 +82,7 @@ Public Class RichTextBoxUnicode
                 'prepare for next call 
                 Pos1 = RichEditControl.Find(char1, Pos1 + 2, RichTextBoxFinds.MatchCase) 'Use Pos1 to start search.  .Text is dynamic and replace may shrink charpos below Pos2
             Loop
+
             RichEditControl.SelectionStart = 0
             RichEditControl.Visible = True
         Catch

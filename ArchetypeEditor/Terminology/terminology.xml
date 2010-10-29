@@ -761,6 +761,7 @@
   <PrimaryRubric Id="687" Language="en" />
   <PrimaryRubric Id="688" Language="en" />
   <PrimaryRubric Id="689" Language="en" />
+  <PrimaryRubric Id="690" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1340,6 +1341,49 @@
   <Concept Language="en" ConceptID="645" Rubric="Integer and fraction" />
   <Concept Language="en" ConceptID="646" Rubric="Fraction" />
   <Concept Language="en" ConceptID="647" Rubric="Definition" />
+  <Concept Language="en" ConceptID="648" Rubric="witnessed" />
+  <Concept Language="en" ConceptID="649" Rubric="Limit decimal places" />
+  <Concept Language="en" ConceptID="650" Rubric="Translation" />
+  <Concept Language="en" ConceptID="651" Rubric="Accreditation" />
+  <Concept Language="en" ConceptID="652" Rubric="Comments" />
+  <Concept Language="en" ConceptID="653" Rubric="New activity" />
+  <Concept Language="en" ConceptID="654" Rubric="Participation" />
+  <Concept Language="en" ConceptID="655" Rubric="Electrical Potential Time" />
+  <Concept Language="en" ConceptID="656" Rubric="Link within EHR only" />
+  <Concept Language="en" ConceptID="657" Rubric="Regular expression on URI" />
+  <Concept Language="en" ConceptID="658" Rubric="Participant function" />
+  <Concept Language="en" ConceptID="659" Rubric="Link" />
+  <Concept Language="en" ConceptID="660" Rubric="Other participations" />
+  <Concept Language="en" ConceptID="661" Rubric="Target" />
+  <Concept Language="en" ConceptID="662" Rubric="Meaning" />
+  <Concept Language="en" ConceptID="663" Rubric="Search" />
+  <Concept Language="en" ConceptID="664" Rubric="Network error" />
+  <Concept Language="en" ConceptID="665" Rubric="Please enter your search parameter" />
+  <Concept Language="en" ConceptID="666" Rubric="Open existing Archetype from Web" />
+  <Concept Language="en" ConceptID="667" Rubric="Tools" />
+  <Concept Language="en" ConceptID="668" Rubric="Select one unit from the left and one from the right:" />
+  <Concept Language="en" ConceptID="669" Rubric="Use specialisations too?" />
+  <Concept Language="en" ConceptID="670" Rubric="Time Fraction" />
+  <Concept Language="en" ConceptID="671" Rubric="No embedded archetype matches at {0}" />
+  <Concept Language="en" ConceptID="672" Rubric="Name this slot?" />
+  <Concept Language="en" ConceptID="673" Rubric="Item" />
+  <Concept Language="en" ConceptID="674" Rubric="Care entry" />
+  <Concept Language="en" ConceptID="675" Rubric="Name this slot" />
+  <Concept Language="en" ConceptID="676" Rubric="Transition" />
+  <Concept Language="en" ConceptID="677" Rubric="Allow transition to" />
+  <Concept Language="en" ConceptID="678" Rubric="Allow an alternative state for this action" />
+  <Concept Language="en" ConceptID="679" Rubric="Alternative state" />
+  <Concept Language="en" ConceptID="680" Rubric="File {0} already exists. Do you want to replace it?" />
+  <Concept Language="en" ConceptID="681" Rubric="Export" />
+  <Concept Language="en" ConceptID="682" Rubric="application/vnd.oasis.opendocument.text" />
+  <Concept Language="en" ConceptID="683" Rubric="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+  <Concept Language="en" ConceptID="684" Rubric="ParsableText" />
+  <Concept Language="en" ConceptID="685" Rubric="Refractive power" />
+  <Concept Language="en" ConceptID="686" Rubric="Invalid archetype file name {0}. Save as {1}?" />
+  <Concept Language="en" ConceptID="687" Rubric="Open action archetype" />
+  <Concept Language="en" ConceptID="688" Rubric="contact" />
+  <Concept Language="en" ConceptID="689" Rubric="exposure source" />
+  <Concept Language="en" ConceptID="690" Rubric="Copyright" />
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
@@ -5646,41 +5690,8 @@
   <Concept Language="sv" ConceptID="558" Rubric="Under-sektion" />
   <Concept Language="sv" ConceptID="559" Rubric="Post" />
   <Concept Language="sv" ConceptID="560" Rubric="Administrativ post" />
-  <Concept Language="en" ConceptID="648" Rubric="witnessed" />
-  <Concept Language="en" ConceptID="649" Rubric="Limit decimal places" />
   <Concept Language="da" ConceptID="648" Rubric="bevidnet" />
   <Concept Language="da" ConceptID="649" Rubric="Begræns antallet decimaler" />
-  <Concept Language="en" ConceptID="650" Rubric="Translation" />
-  <Concept Language="en" ConceptID="651" Rubric="Accreditation" />
-  <Concept Language="en" ConceptID="652" Rubric="Comments" />
-  <Concept Language="en" ConceptID="653" Rubric="New activity" />
-  <Concept Language="en" ConceptID="654" Rubric="Participation" />
-  <Concept Language="en" ConceptID="655" Rubric="Electrical Potential Time" />
-  <Concept Language="en" ConceptID="656" Rubric="Link within EHR only" />
-  <Concept Language="en" ConceptID="657" Rubric="Regular expression on URI" />
-  <Concept Language="en" ConceptID="658" Rubric="Participant function" />
-  <Concept Language="en" ConceptID="659" Rubric="Link" />
-  <Concept Language="en" ConceptID="660" Rubric="Other participations" />
-  <Concept Language="en" ConceptID="661" Rubric="Target" />
-  <Concept Language="en" ConceptID="662" Rubric="Meaning" />
-  <Concept Language="en" ConceptID="663" Rubric="Search" />
-  <Concept Language="en" ConceptID="664" Rubric="Network error" />
-  <Concept Language="en" ConceptID="665" Rubric="Please enter your search parameter" />
-  <Concept Language="en" ConceptID="666" Rubric="Open existing Archetype from Web" />
-  <Concept Language="en" ConceptID="667" Rubric="Tools" />
-  <Concept Language="en" ConceptID="668" Rubric="Select one unit from the left and one from the right:" />
-  <Concept Language="en" ConceptID="669" Rubric="Use specialisations too?" />
-  <Concept Language="en" ConceptID="670" Rubric="Time Fraction" />
-  <Concept Language="en" ConceptID="671" Rubric="No embedded archetype matches at {0}" />
-  <Concept Language="en" ConceptID="672" Rubric="Name this slot?" />
-  <Concept Language="en" ConceptID="673" Rubric="Item" />
-  <Concept Language="en" ConceptID="674" Rubric="Care entry" />
-  <Concept Language="en" ConceptID="675" Rubric="Name this slot" />
-  <Concept Language="en" ConceptID="676" Rubric="Transition" />
-  <Concept Language="en" ConceptID="677" Rubric="Allow transition to" />
-  <Concept Language="en" ConceptID="678" Rubric="Allow an alternative state for this action" />
-  <Concept Language="en" ConceptID="679" Rubric="Alternative state" />
-  <Concept Language="en" ConceptID="680" Rubric="File {0} already exists. Do you want to replace it?" />
   <Concept Language="de" ConceptID="632" Rubric="Archetyp Id" />
   <Concept Language="de" ConceptID="633" Rubric="Identifier" />
   <Concept Language="de" ConceptID="634" Rubric="Paragraph" />
@@ -5728,15 +5739,6 @@
   <Concept Language="de" ConceptID="676" Rubric="Übergang" />
   <Concept Language="de" ConceptID="677" Rubric="Erlaube Übergang nach " />
   <Concept Language="de" ConceptID="678" Rubric="Alternativen Status für diese Aktion erlauben" />
-  <Concept Language="en" ConceptID="681" Rubric="Export" />
-  <Concept Language="en" ConceptID="682" Rubric="application/vnd.oasis.opendocument.text" />
-  <Concept Language="en" ConceptID="683" Rubric="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
-  <Concept Language="en" ConceptID="684" Rubric="ParsableText" />
-  <Concept Language="en" ConceptID="685" Rubric="Refractive power" />
-  <Concept Language="en" ConceptID="686" Rubric="Invalid archetype file name {0}. Save as {1}?" />
-  <Concept Language="en" ConceptID="687" Rubric="Open action archetype" />
-  <Concept Language="en" ConceptID="688" Rubric="contact" />
-  <Concept Language="en" ConceptID="689" Rubric="exposure source" />
   <Concept Language="ja" ConceptID="670" Rubric="*Time Fraction (en)" />
   <Concept Language="ja" ConceptID="671" Rubric="*No embedded archetype matches at {0} (en)" />
   <Concept Language="ja" ConceptID="672" Rubric="このスロットに名前をつけますか?" />

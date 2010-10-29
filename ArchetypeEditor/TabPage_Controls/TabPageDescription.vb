@@ -27,6 +27,8 @@ Public Class TabPageDescription
     Friend WithEvents UseYourEmailButton As System.Windows.Forms.Button
     Friend WithEvents UseYourNameButton As System.Windows.Forms.Button
     Friend WithEvents butEditContributor As System.Windows.Forms.Button
+    Friend WithEvents CopyrightTextBox As System.Windows.Forms.TextBox
+    Friend WithEvents CopyrightLabel As System.Windows.Forms.Label
 
     Private mIsLoading As Boolean = False
 
@@ -110,6 +112,7 @@ Public Class TabPageDescription
         Me.TabDescription = New Crownwood.Magic.Controls.TabControl
         Me.tpAuthor = New Crownwood.Magic.Controls.TabPage
         Me.gbContributors = New System.Windows.Forms.GroupBox
+        Me.butEditContributor = New System.Windows.Forms.Button
         Me.listContributors = New System.Windows.Forms.ListBox
         Me.butAddContributor = New System.Windows.Forms.Button
         Me.butRemoveContributor = New System.Windows.Forms.Button
@@ -144,7 +147,8 @@ Public Class TabPageDescription
         Me.tpReferences = New Crownwood.Magic.Controls.TabPage
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
         Me.txtReferences = New System.Windows.Forms.TextBox
-        Me.butEditContributor = New System.Windows.Forms.Button
+        Me.CopyrightLabel = New System.Windows.Forms.Label
+        Me.CopyrightTextBox = New System.Windows.Forms.TextBox
         Me.gbUse.SuspendLayout()
         Me.gbMisuse.SuspendLayout()
         Me.gbPurpose.SuspendLayout()
@@ -164,7 +168,7 @@ Public Class TabPageDescription
         Me.lblStatus.Location = New System.Drawing.Point(16, 0)
         Me.lblStatus.Name = "lblStatus"
         Me.lblStatus.Size = New System.Drawing.Size(200, 32)
-        Me.lblStatus.TabIndex = 1
+        Me.lblStatus.TabIndex = 0
         Me.lblStatus.Text = "Authorship lifecycle:"
         Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
@@ -172,22 +176,22 @@ Public Class TabPageDescription
         '
         Me.txtUse.AcceptsReturn = True
         Me.txtUse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtUse.Location = New System.Drawing.Point(3, 19)
+        Me.txtUse.Location = New System.Drawing.Point(3, 17)
         Me.txtUse.Multiline = True
         Me.txtUse.Name = "txtUse"
         Me.txtUse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtUse.Size = New System.Drawing.Size(694, 106)
+        Me.txtUse.Size = New System.Drawing.Size(694, 108)
         Me.txtUse.TabIndex = 4
         '
         'txtMisuse
         '
         Me.txtMisuse.AcceptsReturn = True
         Me.txtMisuse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtMisuse.Location = New System.Drawing.Point(3, 19)
+        Me.txtMisuse.Location = New System.Drawing.Point(3, 17)
         Me.txtMisuse.Multiline = True
         Me.txtMisuse.Name = "txtMisuse"
         Me.txtMisuse.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtMisuse.Size = New System.Drawing.Size(694, 90)
+        Me.txtMisuse.Size = New System.Drawing.Size(694, 92)
         Me.txtMisuse.TabIndex = 6
         '
         'gbUse
@@ -219,7 +223,7 @@ Public Class TabPageDescription
         Me.gbPurpose.Location = New System.Drawing.Point(0, 0)
         Me.gbPurpose.Name = "gbPurpose"
         Me.gbPurpose.Size = New System.Drawing.Size(465, 229)
-        Me.gbPurpose.TabIndex = 13
+        Me.gbPurpose.TabIndex = 0
         Me.gbPurpose.TabStop = False
         Me.gbPurpose.Text = "Purpose"
         '
@@ -227,15 +231,17 @@ Public Class TabPageDescription
         '
         Me.txtPurpose.AcceptsReturn = True
         Me.txtPurpose.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtPurpose.Location = New System.Drawing.Point(3, 19)
+        Me.txtPurpose.Location = New System.Drawing.Point(3, 17)
         Me.txtPurpose.Multiline = True
         Me.txtPurpose.Name = "txtPurpose"
         Me.txtPurpose.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtPurpose.Size = New System.Drawing.Size(459, 207)
+        Me.txtPurpose.Size = New System.Drawing.Size(459, 209)
         Me.txtPurpose.TabIndex = 0
         '
         'panelDescription
         '
+        Me.panelDescription.Controls.Add(Me.CopyrightTextBox)
+        Me.panelDescription.Controls.Add(Me.CopyrightLabel)
         Me.panelDescription.Controls.Add(Me.ButAddKeyWord)
         Me.panelDescription.Controls.Add(Me.butRemoveKeyWord)
         Me.panelDescription.Controls.Add(Me.comboLifeCycle)
@@ -246,7 +252,7 @@ Public Class TabPageDescription
         Me.panelDescription.Location = New System.Drawing.Point(468, 0)
         Me.panelDescription.Name = "panelDescription"
         Me.panelDescription.Size = New System.Drawing.Size(232, 229)
-        Me.panelDescription.TabIndex = 14
+        Me.panelDescription.TabIndex = 1
         '
         'ButAddKeyWord
         '
@@ -255,7 +261,7 @@ Public Class TabPageDescription
         Me.ButAddKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
         Me.ButAddKeyWord.Image = CType(resources.GetObject("ButAddKeyWord.Image"), System.Drawing.Image)
         Me.ButAddKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.ButAddKeyWord.Location = New System.Drawing.Point(16, 92)
+        Me.ButAddKeyWord.Location = New System.Drawing.Point(16, 130)
         Me.ButAddKeyWord.Name = "ButAddKeyWord"
         Me.ButAddKeyWord.Size = New System.Drawing.Size(24, 25)
         Me.ButAddKeyWord.TabIndex = 34
@@ -267,7 +273,7 @@ Public Class TabPageDescription
         Me.butRemoveKeyWord.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butRemoveKeyWord.Image = CType(resources.GetObject("butRemoveKeyWord.Image"), System.Drawing.Image)
         Me.butRemoveKeyWord.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveKeyWord.Location = New System.Drawing.Point(16, 124)
+        Me.butRemoveKeyWord.Location = New System.Drawing.Point(16, 162)
         Me.butRemoveKeyWord.Name = "butRemoveKeyWord"
         Me.butRemoveKeyWord.Size = New System.Drawing.Size(24, 25)
         Me.butRemoveKeyWord.TabIndex = 35
@@ -276,29 +282,28 @@ Public Class TabPageDescription
         'comboLifeCycle
         '
         Me.comboLifeCycle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.comboLifeCycle.Location = New System.Drawing.Point(16, 35)
+        Me.comboLifeCycle.Location = New System.Drawing.Point(16, 26)
         Me.comboLifeCycle.Name = "comboLifeCycle"
-        Me.comboLifeCycle.Size = New System.Drawing.Size(200, 23)
-        Me.comboLifeCycle.TabIndex = 4
+        Me.comboLifeCycle.Size = New System.Drawing.Size(200, 21)
+        Me.comboLifeCycle.TabIndex = 1
         '
         'lblKeyword
         '
-        Me.lblKeyword.Location = New System.Drawing.Point(49, 68)
+        Me.lblKeyword.Location = New System.Drawing.Point(49, 106)
         Me.lblKeyword.Name = "lblKeyword"
         Me.lblKeyword.Size = New System.Drawing.Size(112, 24)
-        Me.lblKeyword.TabIndex = 3
+        Me.lblKeyword.TabIndex = 4
         Me.lblKeyword.Text = "Keywords:"
-        Me.lblKeyword.TextAlign = System.Drawing.ContentAlignment.BottomLeft
+        Me.lblKeyword.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'listKeyword
         '
         Me.listKeyword.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.listKeyword.ItemHeight = 15
-        Me.listKeyword.Location = New System.Drawing.Point(48, 92)
+        Me.listKeyword.Location = New System.Drawing.Point(48, 130)
         Me.listKeyword.Name = "listKeyword"
-        Me.listKeyword.Size = New System.Drawing.Size(168, 94)
+        Me.listKeyword.Size = New System.Drawing.Size(168, 82)
         Me.listKeyword.TabIndex = 36
         '
         'TabDescription
@@ -309,8 +314,8 @@ Public Class TabPageDescription
         Me.TabDescription.Location = New System.Drawing.Point(2, 2)
         Me.TabDescription.Name = "TabDescription"
         Me.TabDescription.PositionTop = True
-        Me.TabDescription.SelectedIndex = 1
-        Me.TabDescription.SelectedTab = Me.tpAuthor
+        Me.TabDescription.SelectedIndex = 0
+        Me.TabDescription.SelectedTab = Me.tpDescDetails
         Me.TabDescription.Size = New System.Drawing.Size(700, 500)
         Me.TabDescription.TabIndex = 15
         Me.TabDescription.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDescDetails, Me.tpAuthor, Me.tpTranslation, Me.tpReferences})
@@ -321,6 +326,7 @@ Public Class TabPageDescription
         Me.tpAuthor.Controls.Add(Me.gbAuthor)
         Me.tpAuthor.Location = New System.Drawing.Point(0, 0)
         Me.tpAuthor.Name = "tpAuthor"
+        Me.tpAuthor.Selected = False
         Me.tpAuthor.Size = New System.Drawing.Size(700, 475)
         Me.tpAuthor.TabIndex = 1
         Me.tpAuthor.Title = "Authorship"
@@ -339,15 +345,26 @@ Public Class TabPageDescription
         Me.gbContributors.TabStop = False
         Me.gbContributors.Text = "Contributors"
         '
+        'butEditContributor
+        '
+        Me.butEditContributor.BackColor = System.Drawing.Color.Transparent
+        Me.butEditContributor.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.butEditContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.butEditContributor.Location = New System.Drawing.Point(32, 88)
+        Me.butEditContributor.Name = "butEditContributor"
+        Me.butEditContributor.Size = New System.Drawing.Size(24, 25)
+        Me.butEditContributor.TabIndex = 40
+        Me.butEditContributor.Text = "..."
+        Me.butEditContributor.UseVisualStyleBackColor = False
+        '
         'listContributors
         '
         Me.listContributors.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.listContributors.ItemHeight = 15
         Me.listContributors.Location = New System.Drawing.Point(64, 24)
         Me.listContributors.Name = "listContributors"
-        Me.listContributors.Size = New System.Drawing.Size(616, 139)
+        Me.listContributors.Size = New System.Drawing.Size(616, 134)
         Me.listContributors.TabIndex = 36
         '
         'butAddContributor
@@ -456,7 +473,7 @@ Public Class TabPageDescription
         '
         Me.txtDate.Location = New System.Drawing.Point(117, 116)
         Me.txtDate.Name = "txtDate"
-        Me.txtDate.Size = New System.Drawing.Size(160, 23)
+        Me.txtDate.Size = New System.Drawing.Size(160, 21)
         Me.txtDate.TabIndex = 10
         '
         'lblOrganisation
@@ -472,7 +489,7 @@ Public Class TabPageDescription
         '
         Me.txtOrganisation.Location = New System.Drawing.Point(117, 84)
         Me.txtOrganisation.Name = "txtOrganisation"
-        Me.txtOrganisation.Size = New System.Drawing.Size(424, 23)
+        Me.txtOrganisation.Size = New System.Drawing.Size(424, 21)
         Me.txtOrganisation.TabIndex = 7
         '
         'lblName
@@ -488,7 +505,7 @@ Public Class TabPageDescription
         '
         Me.txtOriginalAuthor.Location = New System.Drawing.Point(117, 20)
         Me.txtOriginalAuthor.Name = "txtOriginalAuthor"
-        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 23)
+        Me.txtOriginalAuthor.Size = New System.Drawing.Size(424, 21)
         Me.txtOriginalAuthor.TabIndex = 1
         '
         'lblEmail
@@ -504,7 +521,7 @@ Public Class TabPageDescription
         '
         Me.txtOriginalEmail.Location = New System.Drawing.Point(117, 52)
         Me.txtOriginalEmail.Name = "txtOriginalEmail"
-        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 23)
+        Me.txtOriginalEmail.Size = New System.Drawing.Size(424, 21)
         Me.txtOriginalEmail.TabIndex = 4
         '
         'tpDescDetails
@@ -518,7 +535,6 @@ Public Class TabPageDescription
         Me.tpDescDetails.Controls.Add(Me.gbMisuse)
         Me.tpDescDetails.Location = New System.Drawing.Point(0, 0)
         Me.tpDescDetails.Name = "tpDescDetails"
-        Me.tpDescDetails.Selected = False
         Me.tpDescDetails.Size = New System.Drawing.Size(700, 475)
         Me.tpDescDetails.TabIndex = 0
         Me.tpDescDetails.Title = "Details"
@@ -592,7 +608,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslationAccreditation.Location = New System.Drawing.Point(152, 120)
         Me.txtTranslationAccreditation.Name = "txtTranslationAccreditation"
-        Me.txtTranslationAccreditation.Size = New System.Drawing.Size(160, 23)
+        Me.txtTranslationAccreditation.Size = New System.Drawing.Size(160, 21)
         Me.txtTranslationAccreditation.TabIndex = 6
         '
         'lblTranslatorOrganisation
@@ -608,7 +624,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslatorOrganisation.Location = New System.Drawing.Point(152, 88)
         Me.txtTranslatorOrganisation.Name = "txtTranslatorOrganisation"
-        Me.txtTranslatorOrganisation.Size = New System.Drawing.Size(424, 23)
+        Me.txtTranslatorOrganisation.Size = New System.Drawing.Size(424, 21)
         Me.txtTranslatorOrganisation.TabIndex = 4
         '
         'lblTranslatorName
@@ -624,7 +640,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslatorName.Location = New System.Drawing.Point(152, 24)
         Me.txtTranslatorName.Name = "txtTranslatorName"
-        Me.txtTranslatorName.Size = New System.Drawing.Size(424, 23)
+        Me.txtTranslatorName.Size = New System.Drawing.Size(424, 21)
         Me.txtTranslatorName.TabIndex = 0
         '
         'lblTranslatorEmail
@@ -640,7 +656,7 @@ Public Class TabPageDescription
         '
         Me.txtTranslatorEmail.Location = New System.Drawing.Point(152, 56)
         Me.txtTranslatorEmail.Name = "txtTranslatorEmail"
-        Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 23)
+        Me.txtTranslatorEmail.Size = New System.Drawing.Size(424, 21)
         Me.txtTranslatorEmail.TabIndex = 1
         '
         'tpReferences
@@ -667,24 +683,28 @@ Public Class TabPageDescription
         '
         Me.txtReferences.AcceptsReturn = True
         Me.txtReferences.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtReferences.Location = New System.Drawing.Point(3, 19)
+        Me.txtReferences.Location = New System.Drawing.Point(3, 17)
         Me.txtReferences.Multiline = True
         Me.txtReferences.Name = "txtReferences"
         Me.txtReferences.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtReferences.Size = New System.Drawing.Size(694, 453)
+        Me.txtReferences.Size = New System.Drawing.Size(694, 455)
         Me.txtReferences.TabIndex = 0
         '
-        'butEditContributor
+        'CopyrightLabel
         '
-        Me.butEditContributor.BackColor = System.Drawing.Color.Transparent
-        Me.butEditContributor.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.butEditContributor.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butEditContributor.Location = New System.Drawing.Point(32, 88)
-        Me.butEditContributor.Name = "butEditContributor"
-        Me.butEditContributor.Size = New System.Drawing.Size(24, 25)
-        Me.butEditContributor.TabIndex = 40
-        Me.butEditContributor.Text = "..."
-        Me.butEditContributor.UseVisualStyleBackColor = False
+        Me.CopyrightLabel.Location = New System.Drawing.Point(16, 50)
+        Me.CopyrightLabel.Name = "CopyrightLabel"
+        Me.CopyrightLabel.Size = New System.Drawing.Size(200, 32)
+        Me.CopyrightLabel.TabIndex = 2
+        Me.CopyrightLabel.Text = "Copyright:"
+        Me.CopyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'CopyrightTextBox
+        '
+        Me.CopyrightTextBox.Location = New System.Drawing.Point(16, 82)
+        Me.CopyrightTextBox.Name = "CopyrightTextBox"
+        Me.CopyrightTextBox.Size = New System.Drawing.Size(200, 21)
+        Me.CopyrightTextBox.TabIndex = 3
         '
         'TabPageDescription
         '
@@ -700,6 +720,7 @@ Public Class TabPageDescription
         Me.gbPurpose.ResumeLayout(False)
         Me.gbPurpose.PerformLayout()
         Me.panelDescription.ResumeLayout(False)
+        Me.panelDescription.PerformLayout()
         Me.tpAuthor.ResumeLayout(False)
         Me.gbContributors.ResumeLayout(False)
         Me.gbAuthor.ResumeLayout(False)
@@ -730,15 +751,13 @@ Public Class TabPageDescription
             txtOriginalEmail.Text = Value.OriginalAuthorEmail
             txtOrganisation.Text = Value.OriginalAuthorOrganisation
             txtDate.Text = Value.OriginalAuthorDate
-
-            ' HKF: 8 Dec 2008
             listContributors.Items.Clear()
+
             For Each s As String In Value.OtherContributors
                 listContributors.Items.Add(s)
             Next
 
             txtReferences.Text = NewlinesNormalised(Value.References)
-
             mArchetypeDescription = Value
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
             SetDescriptionDetailValues(False)
@@ -821,19 +840,17 @@ Public Class TabPageDescription
         End If
 
         Dim archDescriptionItem As New ArchetypeDescriptionItem(mCurrentLanguage)
-
-        ' HKF: 8 Dec 2008
         Dim existingArchetypeDetails As ArchetypeDescriptionItem = mArchetypeDescription.Details.DetailInLanguage(mCurrentLanguage)
         archDescriptionItem.Copyright = existingArchetypeDetails.Copyright
 
-        ' get the key words
-        For Each s As String In Me.listKeyword.Items
+        For Each s As String In listKeyword.Items
             archDescriptionItem.KeyWords.Add(s)
         Next
 
         archDescriptionItem.Purpose = txtPurpose.Text
         archDescriptionItem.Use = txtUse.Text
         archDescriptionItem.MisUse = txtMisuse.Text
+        archDescriptionItem.Copyright = CopyrightTextBox.Text
         mArchetypeDescription.Details.AddOrReplace(archDescriptionItem.Language, archDescriptionItem)
     End Sub
 
@@ -844,49 +861,47 @@ Public Class TabPageDescription
         result.AppendLine("{\colortbl ;\red0\green0\blue255;\red0\green255\blue0;}")
         result.AppendLine("\viewkind4\uc1\pard\tx2840\tx5112\lang3081\f0\fs20")
 
-        'Purpose
         result.AppendLine("\b")
         result.AppendLine(Filemanager.GetOpenEhrTerm(585, "Purpose"))
         result.Append(":\b0")
         result.AppendLine("\par")
-        'result.AppendLine(Me.txtPurpose.Text) 'JAR: 13APR07, EDT-32 Support unicode
-        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ARCHETYPE_PURPOSE)) 'JAR: 13APR07, EDT-32 Support unicode
+        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ArchetypePurpose))
+        result.AppendLine("\par")
+        result.AppendLine("\par")
 
-        result.AppendLine("\par")
-        result.AppendLine("\par")
-        'Use
         result.AppendLine("\b")
         result.AppendLine(Filemanager.GetOpenEhrTerm(582, "Use"))
         result.Append(":\b0")
         result.AppendLine("\par")
-        'result.AppendLine(Me.txtUse.Text) 'JAR: 13APR07, EDT-32 Support unicode        
-        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ARCHETYPE_USE)) 'JAR: 13APR07, EDT-32 Support unicode
+        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ArchetypeUse))
         result.AppendLine("\par")
         result.AppendLine("\par")
 
-        'Misuse
         result.AppendLine("\b")
         result.AppendLine(Filemanager.GetOpenEhrTerm(583, "Misuse"))
         result.Append(":\b0")
         result.AppendLine("\par")
-        'result.AppendLine(Me.txtMisuse.Text) 'JAR: 13APR07, EDT-32 Support unicode
-        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ARCHETYPE_MISUSE)) 'JAR: 13APR07, EDT-32 Support unicode
+        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ArchetypeMisuse))
         result.AppendLine("\par")
         result.AppendLine("\par")
 
-        'JAR: 24MAY2007, EDT-30 Add field for References
-        'References
         result.AppendLine("\b")
-        'result.AppendLine(Filemanager.GetOpenEhrTerm(???, "References")) 'no OpenEhrTerm for References!
+        result.AppendLine(Filemanager.GetOpenEhrTerm(690, "Copyright"))
+        result.Append(":\b0")
+        result.AppendLine("\par")
+        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ArchetypeCopyright))
+        result.AppendLine("\par")
+        result.AppendLine("\par")
+
+        result.AppendLine("\b")
         result.AppendLine("References")
         result.Append(":\b0")
         result.AppendLine("\par")
-        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ARCHETYPE_REFERENCES)) 'JAR: 13APR07, EDT-32 Support unicode
+        result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ArchetypeReferences))
         result.AppendLine("\par")
         result.AppendLine("\par")
 
         Return result.ToString()
-
     End Function
 
     Protected Overridable Function NewlinesNormalised(ByVal s As String) As String
@@ -911,6 +926,7 @@ Public Class TabPageDescription
             txtPurpose.Text = NewlinesNormalised(archDescriptionItem.Purpose)
             txtUse.Text = NewlinesNormalised(archDescriptionItem.Use)
             txtMisuse.Text = NewlinesNormalised(archDescriptionItem.MisUse)
+            CopyrightTextBox.Text = archDescriptionItem.Copyright
         ElseIf translate Then
             If mArchetypeDescription.Details.HasDetailInLanguage(Filemanager.Master.OntologyManager.PrimaryLanguageCode) Then
                 archDescriptionItem = mArchetypeDescription.Details.DetailInLanguage(Filemanager.Master.OntologyManager.PrimaryLanguageCode)
@@ -922,6 +938,7 @@ Public Class TabPageDescription
                 txtPurpose.Text = String.Format("*{0}({1})", NewlinesNormalised(archDescriptionItem.Purpose), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
                 txtUse.Text = String.Format("*{0}({1})", NewlinesNormalised(archDescriptionItem.Use), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
                 txtMisuse.Text = String.Format("*{0}({1})", NewlinesNormalised(archDescriptionItem.MisUse), Filemanager.Master.OntologyManager.PrimaryLanguageCode)
+                CopyrightTextBox.Text = String.Format("*{0}({1})", archDescriptionItem.Copyright, Filemanager.Master.OntologyManager.PrimaryLanguageCode)
             Else
                 If txtPurpose.Text <> "" Then
                     txtPurpose.Text = String.Format("*{0}({1})", txtPurpose.Text, mCurrentLanguage)
@@ -933,6 +950,10 @@ Public Class TabPageDescription
 
                 If txtMisuse.Text <> "" Then
                     txtMisuse.Text = String.Format("*{0}({1})", txtMisuse.Text, mCurrentLanguage)
+                End If
+
+                If CopyrightTextBox.Text <> "" Then
+                    CopyrightTextBox.Text = String.Format("*{0}({1})", CopyrightTextBox.Text, mCurrentLanguage)
                 End If
             End If
         End If
@@ -982,6 +1003,7 @@ Public Class TabPageDescription
         comboLifeCycle.SelectedIndex = -1
         txtUse.Text = ""
         txtMisuse.Text = ""
+        CopyrightTextBox.Text = ""
         txtReferences.Text = ""
         listKeyword.Items.Clear()
         listContributors.Items.Clear()
@@ -1022,6 +1044,7 @@ Public Class TabPageDescription
         gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, gbPurpose.Text)
         gbUse.Text = Filemanager.GetOpenEhrTerm(582, gbUse.Text)
         gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, gbMisuse.Text)
+        CopyrightLabel.Text = Filemanager.GetOpenEhrTerm(690, CopyrightLabel.Text)
         gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, gbAuthor.Text)
         gbContributors.Text = Filemanager.GetOpenEhrTerm(604, gbContributors.Text)
     End Sub
@@ -1093,7 +1116,7 @@ Public Class TabPageDescription
         Filemanager.Master.FileLoading = temp_isloading
     End Sub
 
-    Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtMisuse.TextChanged, txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged, txtReferences.TextChanged
+    Private Sub TextUpdated(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtOriginalAuthor.TextChanged, txtOriginalEmail.TextChanged, txtPurpose.TextChanged, comboLifeCycle.SelectedIndexChanged, txtUse.TextChanged, txtMisuse.TextChanged, CopyrightTextBox.TextChanged, txtReferences.TextChanged
         If Not Filemanager.Master.FileLoading Then
             Filemanager.Master.FileEdited = True
         End If

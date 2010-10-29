@@ -33,38 +33,31 @@ Namespace ArchetypeEditor.XML_Classes
         End Property
 
         Function XML_Description() As XMLParser.RESOURCE_DESCRIPTION
-            ' set the variables
-
-            ' Add the original author details
-
             Dim authorDetails As New ArrayList
-
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            'Dim di As New XMLParser.dictionaryItem
             Dim di As New XMLParser.StringDictionaryItem
-
-            'di.key = "name"
             di.id = "name"
-            If (Not Me.OriginalAuthor Is Nothing) Then
+
+            If Not OriginalAuthor Is Nothing Then
                 di.Value = mOriginalAuthor
             End If
+
             authorDetails.Add(di)
 
-            If Me.mOriginalAuthorEmail <> "" Then
+            If mOriginalAuthorEmail <> "" Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = "email"
                 di.Value = mOriginalAuthorEmail
                 authorDetails.Add(di)
             End If
 
-            If Me.mOriginalAuthorDate <> "" Then
+            If mOriginalAuthorDate <> "" Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = "date"
                 di.Value = mOriginalAuthorDate
                 authorDetails.Add(di)
             End If
 
-            If Me.mOriginalAuthorOrganisation <> "" Then
+            If mOriginalAuthorOrganisation <> "" Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = "organisation"
                 di.Value = mOriginalAuthorOrganisation
@@ -72,17 +65,16 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             mXML_Description.original_author = authorDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
-
             Dim otherDetails As New ArrayList
-            If Me.References <> "" Then
+
+            If References <> "" Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = "references"
                 di.Value = mReferences
                 otherDetails.Add(di)
             End If
 
-            ' HKF: 8 Dec 2008
-            If Not Me.ArchetypeDigest Is Nothing Then
+            If Not ArchetypeDigest Is Nothing Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID
                 di.Value = ArchetypeDigest
@@ -90,7 +82,6 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             mXML_Description.other_details = otherDetails.ToArray(GetType(XMLParser.StringDictionaryItem))
-
             mXML_Description.lifecycle_state = LifeCycleStateAsString
 
             If Not mArchetypePackageURI Is Nothing Then
@@ -98,8 +89,8 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             ' clear the other contributors and add them again
-
             Dim arrayLength As Integer
+
             If mXML_Description.other_contributors Is Nothing Then
                 arrayLength = 0
             Else
@@ -113,6 +104,7 @@ Namespace ArchetypeEditor.XML_Classes
                     mXML_Description.other_contributors = Array.CreateInstance(GetType(String), mOtherContributors.Count)
                 End If
             End If
+
             For i As Integer = 0 To mOtherContributors.Count - 1
                 mXML_Description.other_contributors(i) = mOtherContributors(i)
             Next
@@ -122,14 +114,14 @@ Namespace ArchetypeEditor.XML_Classes
 
         Sub New(ByVal an_xml_archetype_description As XMLParser.RESOURCE_DESCRIPTION, ByVal a_language_code As String)
             mXML_Description = an_xml_archetype_description
-
             mADL_Version = "2.0" ' this is actually the archetype model rather than ADL
+
             If Not mXML_Description.resource_package_uri Is Nothing Then
                 mArchetypePackageURI = mXML_Description.resource_package_uri
             End If
 
             If Not mXML_Description.original_author Is Nothing Then
-                For Each di As XMLParser.StringDictionaryItem In mXML_Description.original_author 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+                For Each di As XMLParser.StringDictionaryItem In mXML_Description.original_author
                     Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "name"
                             mOriginalAuthor = di.Value
@@ -142,7 +134,7 @@ Namespace ArchetypeEditor.XML_Classes
                     End Select
                 Next
             End If
-            'JAR: 24MAY2007, EDT-30 Add field for References
+
             If Not mXML_Description.other_details Is Nothing Then
                 For Each di As XMLParser.StringDictionaryItem In mXML_Description.other_details
                     Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
@@ -159,10 +151,8 @@ Namespace ArchetypeEditor.XML_Classes
 
             MyBase.LifeCycleStateAsString = mXML_Description.lifecycle_state
 
-            If (mXML_Description.details Is Nothing) OrElse mXML_Description.details.Length = 0 Then
-                Me.mArchetypeDetails.AddOrReplace( _
-                a_language_code, _
-                New ArchetypeDescriptionItem(a_language_code))
+            If mXML_Description.details Is Nothing OrElse mXML_Description.details.Length = 0 Then
+                mArchetypeDetails.AddOrReplace(a_language_code, New ArchetypeDescriptionItem(a_language_code))
             End If
         End Sub
 
@@ -173,26 +163,14 @@ Namespace ArchetypeEditor.XML_Classes
 
         Sub New(ByVal adl_description As ADL_Classes.ADL_Description)
             mXML_Description = New XMLParser.RESOURCE_DESCRIPTION()
-            Me.LifeCycleState = adl_description.LifeCycleState
-            Me.CopyRight = adl_description.CopyRight
-            Me.ArchetypePackageURI = adl_description.ArchetypePackageURI
-            Me.OriginalAuthor = adl_description.OriginalAuthor
-            Me.OriginalAuthorDate = adl_description.OriginalAuthorDate
-            Me.OriginalAuthorEmail = adl_description.OriginalAuthorEmail
-            Me.OriginalAuthorOrganisation = adl_description.OriginalAuthorOrganisation
-            Me.OtherContributors = adl_description.OtherContributors
-            'JAR: 24MAY2007, EDT-30 Add field for References
-            'Me.OtherDetails = adl_description.OtherDetails 'JAR: 24MAY2007, AE-30 Additional field References
-            Me.References = adl_description.References 'JAR: 24MAY2007, AE-30 Additional field References
-
-
-            'Dim XmlArchetypeDetails As New XML_ArchetypeDetails(mXML_Description)
-            'If adl_description.Details.Count > 0 Then
-            '    For Each adl_detail In adl_description.Details
-
-            '    Next
-
-            'End If
+            LifeCycleState = adl_description.LifeCycleState
+            ArchetypePackageURI = adl_description.ArchetypePackageURI
+            OriginalAuthor = adl_description.OriginalAuthor
+            OriginalAuthorDate = adl_description.OriginalAuthorDate
+            OriginalAuthorEmail = adl_description.OriginalAuthorEmail
+            OriginalAuthorOrganisation = adl_description.OriginalAuthorOrganisation
+            OtherContributors = adl_description.OtherContributors
+            References = adl_description.References
         End Sub
 
     End Class

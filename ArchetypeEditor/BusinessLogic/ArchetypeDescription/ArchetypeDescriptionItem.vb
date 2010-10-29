@@ -16,6 +16,7 @@ Public Class ArchetypeDescriptionItem
             mLanguage = Value
         End Set
     End Property
+
     Public Overridable Property Purpose() As String
         Get
             Return mPurpose
@@ -24,6 +25,7 @@ Public Class ArchetypeDescriptionItem
             mPurpose = Value
         End Set
     End Property
+
     Public Overridable Property Use() As String
         Get
             Return mUse
@@ -32,6 +34,7 @@ Public Class ArchetypeDescriptionItem
             mUse = Value
         End Set
     End Property
+
     Public Overridable Property MisUse() As String
         Get
             Return mMisUse
@@ -40,6 +43,7 @@ Public Class ArchetypeDescriptionItem
             mMisUse = Value
         End Set
     End Property
+
     Public Overridable Property Copyright() As String
         Get
             Return mCopyright
@@ -48,11 +52,13 @@ Public Class ArchetypeDescriptionItem
             mCopyright = Value
         End Set
     End Property
+
     Public ReadOnly Property KeyWords() As Collections.Specialized.StringCollection
         Get
             Return mKeyWords
         End Get
     End Property
+
     Public Overridable Property OriginalResourceURI() As String
         Get
             Return mOriginalResourceURI
@@ -61,6 +67,7 @@ Public Class ArchetypeDescriptionItem
             mOriginalResourceURI = Value
         End Set
     End Property
+
     Public Overridable ReadOnly Property OtherDetails() As OtherDefinitionDetails
         Get
             Return mOtherDetails
