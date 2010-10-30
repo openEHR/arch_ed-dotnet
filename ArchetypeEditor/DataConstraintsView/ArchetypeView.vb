@@ -116,15 +116,16 @@ Public Class ArchetypeView
                 view.SuspendLayout()
 
                 For Each d_row As DataRow In archetypeTable.Rows
-                    Debug.Assert(TypeOf d_row(2) Is ArchetypeElement)
-                    Dim ae As ArchetypeElement = CType(d_row(2), ArchetypeElement)
+                    Dim ae As ArchetypeElement = TryCast(d_row(2), ArchetypeElement)
 
-                    If mandatory_only Then
-                        If ae.Occurrences.MinCount > 0 Then
+                    If Not ae Is Nothing Then
+                        If mandatory_only Then
+                            If ae.Occurrences.MinCount > 0 Then
+                                view.Controls.Add(ElementView(ae, a_filemanager))
+                            End If
+                        Else
                             view.Controls.Add(ElementView(ae, a_filemanager))
                         End If
-                    Else
-                        view.Controls.Add(ElementView(ae, a_filemanager))
                     End If
                 Next
 
