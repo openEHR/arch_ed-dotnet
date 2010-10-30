@@ -982,7 +982,6 @@ Public Class TabPageDescription
                         t = New XML_TranslationDetails(mCurrentLanguage)
                 End Select
 
-                t.AuthorName = "?"
                 mTranslationAltered = True
                 Filemanager.Master.FileEdited = True
             End If
