@@ -26,28 +26,18 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
         }
 
         /// <summary>
-        /// Uses the Eiffel engine to parse an archetype to create an empty instance using local classes
-        /// Class to clone the archetype
+        /// Clone an Eiffel ADL archetype as an OpenEhr.V1.Its.Xml.AM.ARCHETYPE.
         /// </summary>
         public ARCHETYPE CloneArchetype(openehr.openehr.am.archetype.ARCHETYPE adlArchetype)
         {
-            // clone archetype
-            ARCHETYPE cloneObject = CloneArchetypeDetails(adlArchetype);
+            ARCHETYPE result = CloneArchetypeDetails(adlArchetype);
 
-            // clone definition (root C_COMPLEX_OBJECT)
-            //object rootNode = nodeVisitor.Visit(adlArchetype.definition(), 0);
             object rootNode = Visit(adlArchetype.definition(), 0);
-
             C_COMPLEX_OBJECT rootComplexObject = rootNode as C_COMPLEX_OBJECT;
-
-            // link defintion to archetype
-            cloneObject.definition = rootComplexObject;
-
-            // clone recursive definition tree
+            result.definition = rootComplexObject;
             CloneTree(adlArchetype.definition(), rootComplexObject, 0);
 
-            // return cloned archetype
-            return cloneObject;
+            return result;
         }
 
         protected virtual void CloneTree(openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT adlComplexObject, C_COMPLEX_OBJECT parentComplexObject, int depth)
@@ -59,25 +49,15 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
 
             for (int i = 1; i <= adlComplexObject.attributes().count(); i++)
             {
-                // clone attribute
                 adlAttribute = adlComplexObject.attributes().i_th(i) as openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE;
                 C_ATTRIBUTE attributeNode = nodeVisitor.CloneAttribute(adlAttribute);
                 attributeNode.children = new C_OBJECT[adlAttribute.children().count()];
-
-                //Console.WriteLine("C_ATTRIBUTE\t\t" + string.Join("\t", new string[depth + 1]) + adlAttribute.rm_attribute_name().to_cil());
-
-                // link attribute to complex object
                 parentComplexObject.attributes[i - 1] = attributeNode;
 
                 for (int j = 1; j <= adlAttribute.children().count(); j++)
                 {
-                    openehr.openehr.am.archetype.constraint_model.C_OBJECT child;
-                    child = adlAttribute.children().i_th(j) as openehr.openehr.am.archetype.constraint_model.C_OBJECT;
-
-                    // create instance of child
+                    openehr.openehr.am.archetype.constraint_model.C_OBJECT child = adlAttribute.children().i_th(j) as openehr.openehr.am.archetype.constraint_model.C_OBJECT;
                     object childNode = nodeVisitor.Visit(child, depth);
-
-                    // link child to attribute
                     attributeNode.children[j - 1] = childNode as C_OBJECT;
 
                     if (child is openehr.openehr.am.archetype.constraint_model.Impl.C_COMPLEX_OBJECT)
@@ -86,34 +66,30 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             }
         }
 
-        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.C_OBJECT currentObject, int depth)
+        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.C_OBJECT o, int depth)
         {
-            if (currentObject == null)
-                throw new ArgumentNullException("currentObject parameter must not be null.  depth = " + depth);
+            if (o == null)
+                throw new ArgumentNullException("CObject parameter must not be null.  depth = " + depth);
 
             try
             {
                 System.Reflection.MethodInfo method = this.GetType().GetMethod("Visit",
                                System.Reflection.BindingFlags.ExactBinding | System.Reflection.BindingFlags.NonPublic
                                | System.Reflection.BindingFlags.Instance, Type.DefaultBinder,
-                               new Type[] { currentObject.GetType(), depth.GetType() }, new System.Reflection.ParameterModifier[0]);
+                               new Type[] { o.GetType(), depth.GetType() }, new System.Reflection.ParameterModifier[0]);
 
                 if (method != null)
                     // Avoid StackOverflow exceptions by executing only if the method and visitable  
                     // are different from the last parameters used.
-                    if (method != lastMethod || currentObject != lastObject)
+                    if (method != lastMethod || o != lastObject)
                     {
                         lastMethod = method;
-                        lastObject = currentObject;
-                        object itemObject = method.Invoke(this, new object[] { currentObject, depth });
+                        lastObject = o;
+                        object itemObject = method.Invoke(this, new object[] { o, depth });
 
                         return itemObject;
                     }
-                    else
-                    {
-                    }
             }
-
             catch (System.Reflection.TargetInvocationException ex)
             {
                 if (ex.InnerException != null)
@@ -132,7 +108,6 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 //throw;
                 throw new InvalidOperationException("Visit Exeception", ex);
             }
-
             catch (InvalidOperationException ex)
             {
                 if (ex.InnerException != null)
@@ -145,448 +120,371 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 //throw;
                 throw new InvalidOperationException("Visit Exeception", ex);
             }
-            throw new NotImplementedException("The Visitor method 'Visit' with parameter type '" + currentObject.GetType().ToString() + "' is not implemented.");
+
+            throw new NotImplementedException("The Visitor method 'Visit' with parameter type '" + o.GetType().ToString() + "' is not implemented.");
         }
 
-        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.C_COMPLEX_OBJECT currentObject, int depth)
+        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.C_COMPLEX_OBJECT o, int depth)
         {
-            ////Console.WriteLine("C_COMPLEX_OBJECT\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
-            C_COMPLEX_OBJECT cloneObject = new C_COMPLEX_OBJECT();
-
-            // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as C_COMPLEX_OBJECT;
-
-            // 0..* Attributes C_ATTRIBUTE (added in CloneTree)
-
-            return cloneObject;
+            C_COMPLEX_OBJECT result = new C_COMPLEX_OBJECT();
+            CloneC_Object(result, o);
+            return result;
         }
 
-        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.C_PRIMITIVE_OBJECT currentObject, int depth)
+        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.C_PRIMITIVE_OBJECT o, int depth)
         {
-            //Console.WriteLine("C_PRIMITIVE_OBJECT\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
+            C_PRIMITIVE_OBJECT result = new C_PRIMITIVE_OBJECT();
+            CloneC_Object(result, o);
 
-            C_PRIMITIVE_OBJECT cloneObject = new C_PRIMITIVE_OBJECT();
+            if (o.item() != null)
+                result.item = CloneC_Primitive(o.item());
 
-            // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as C_PRIMITIVE_OBJECT;
-
-            // C_Primitive Item 0..1
-            if (currentObject.item() != null)
-                cloneObject.item = CloneC_Primitive(currentObject.item());
-
-            return cloneObject;
+            return result;
         }
 
-
-        protected virtual C_DATE CloneDate(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE currentObject)
+        protected virtual C_DATE CloneDate(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE o)
         {
-            C_DATE cloneObject = new C_DATE();
+            C_DATE result = new C_DATE();
 
-            // 0..1 assumed_value Iso8601Date
-            if (currentObject.has_assumed_value().Equals(true))
-                cloneObject.assumed_value = currentObject.assumed_value().ToString();
+            if (o.has_assumed_value().Equals(true))
+                result.assumed_value = o.assumed_value().ToString();
 
-            // 0..1 pattern DateConstraintPattern
-            if (currentObject.pattern() != null)
-                cloneObject.pattern = currentObject.pattern().ToString();
+            if (o.pattern() != null)
+                result.pattern = o.pattern().ToString();
 
-            // 0..1 timezone_validity VALIDITY_KIND    
-            //cloneObject.timezone_validity = VALIDITY_KIND.Item1001 
+            result.range = CloneIntervalOfDate(o.interval());
 
-            // 0..1 range IntervalOfDate            
-            cloneObject.range = CloneIntervalOfDate(currentObject.interval());
-
-            return cloneObject;
+            return result;
         }
 
-        protected virtual C_DATE_TIME CloneDateTime(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE_TIME currentObject)
+        protected virtual C_DATE_TIME CloneDateTime(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE_TIME o)
         {
-            C_DATE_TIME cloneObject = new C_DATE_TIME();
+            C_DATE_TIME result = new C_DATE_TIME();
 
-            // 0..1 assumed_value Iso8601DateTime
-            if (currentObject.has_assumed_value().Equals(true))
-                cloneObject.assumed_value = currentObject.assumed_value().ToString();
+            if (o.has_assumed_value().Equals(true))
+                result.assumed_value = o.assumed_value().ToString();
 
-            //0..1 pattern DateTimeConstraintPattern
-            if (currentObject.pattern() != null)
-                cloneObject.pattern = currentObject.pattern().ToString();
+            if (o.pattern() != null)
+                result.pattern = o.pattern().ToString();
 
-            // 0..1 timezone_validity VALIDITY_KIND
+            result.range = CloneIntervalOfDateTime(o.interval());
 
-            // 0..1 range IntervalOfDateTime
-            cloneObject.range = CloneIntervalOfDateTime(currentObject.interval());
-
-            return cloneObject;
+            return result;
         }
 
-        protected virtual C_TIME CloneTime(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_TIME currentObject)
+        protected virtual C_TIME CloneTime(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_TIME o)
         {
-            C_TIME cloneObject = new C_TIME();
+            C_TIME result = new C_TIME();
 
-            // 0..1 assumed_value Iso8601DateTime
-            if (currentObject.has_assumed_value().Equals(true))
-                cloneObject.assumed_value = currentObject.assumed_value().ToString();
+            if (o.has_assumed_value().Equals(true))
+                result.assumed_value = o.assumed_value().ToString();
 
-            //0..1 pattern TimeConstraintPattern
-            if (currentObject.pattern() != null)
-                cloneObject.pattern = currentObject.pattern().ToString();
+            if (o.pattern() != null)
+                result.pattern = o.pattern().ToString();
 
-            // 0..1 timezone_validity VALIDITY_KIND
+            result.range = CloneIntervalOfTime(o.interval());
 
-            // 0..1 range IntervalOfTime
-            cloneObject.range = CloneIntervalOfTime(currentObject.interval());
-
-            return cloneObject;
+            return result;
         }
 
-        protected virtual C_DURATION CloneDuration(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DURATION currentObject)
+        protected virtual C_DURATION CloneDuration(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DURATION o)
         {
-            C_DURATION cloneObject = new C_DURATION();
+            C_DURATION result = new C_DURATION();
 
-            // 0..1 assumed_value Iso8601Duration
-            if (currentObject.has_assumed_value().Equals(true))
-                cloneObject.assumed_value = currentObject.assumed_value().ToString();
+            if (o.has_assumed_value())
+                result.assumed_value = o.assumed_value().ToString();
 
-            // 0..1 pattern DurationConstraintPattern
-            if (currentObject.pattern() != null)
-                cloneObject.pattern = currentObject.pattern().ToString();
+            if (o.pattern() != null)
+                result.pattern = o.pattern().ToString();
 
-            // 0..1 range IntervalOfDuration
-            cloneObject.range = cloneDurationRange(currentObject.interval());
+            result.range = cloneDurationRange(o.interval());
 
-            return cloneObject;
+            return result;
         }
 
-        protected virtual IntervalOfDuration cloneDurationRange(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject) //Type
+        protected virtual IntervalOfDuration cloneDurationRange(openehr.common_libs.basic.INTERVAL_REFERENCE o)
         {
-            if (currentObject != null)
+            IntervalOfDuration result = null;
+
+            if (o != null)
             {
-                IntervalOfDuration cloneObject = new IntervalOfDuration();
+                result = new IntervalOfDuration();
+                result.lower_unbounded = o.lower_unbounded();
 
-                cloneObject.lower_unbounded = currentObject.lower_unbounded();
-                if (!currentObject.lower_unbounded())
+                if (!o.lower_unbounded())
                 {
-                    cloneObject.lower = currentObject.lower().ToString();  //cloneObject.lower = currentObject.lower();  //local lower is an object!!!     
-                    cloneObject.lower_included = currentObject.lower_included();
-                    cloneObject.lower_includedSpecified = true;
+                    result.lower = o.lower().ToString();
+                    result.lower_included = o.lower_included();
+                    result.lower_includedSpecified = true;
                 }
 
-                cloneObject.upper_unbounded = currentObject.upper_unbounded();
-                if (!currentObject.upper_unbounded())
+                result.upper_unbounded = o.upper_unbounded();
+
+                if (!o.upper_unbounded())
                 {
-                    cloneObject.upper = currentObject.upper().ToString();  //local upper is an object!!!
-                    cloneObject.upper_included = currentObject.upper_included();
-                    cloneObject.upper_includedSpecified = true;
+                    result.upper = o.upper().ToString();
+                    result.upper_included = o.upper_included();
+                    result.upper_includedSpecified = true;
                 }
-
-                return cloneObject;
-            }
-            else
-                return null;
-        }
-
-        protected virtual IntervalOfDate CloneIntervalOfDate(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject)
-        {
-            if (currentObject != null)
-            {
-                IntervalOfDate cloneObject = new IntervalOfDate();
-
-                cloneObject.lower_unbounded = currentObject.lower_unbounded();
-                if (!currentObject.lower_unbounded())
-                {
-                    cloneObject.lower = currentObject.lower().ToString();
-                    cloneObject.lower_included = currentObject.lower_included();
-                    cloneObject.lower_includedSpecified = true;
-                }
-
-                cloneObject.upper_unbounded = currentObject.upper_unbounded();
-                if (!currentObject.upper_unbounded())
-                {
-                    cloneObject.upper = currentObject.upper().ToString();
-                    cloneObject.upper_included = currentObject.upper_included();
-                    cloneObject.upper_includedSpecified = true;
-                }
-
-                return cloneObject;
-            }
-            else
-                return null;
-        }
-
-        protected virtual IntervalOfDateTime CloneIntervalOfDateTime(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject)
-        {
-            if (currentObject != null)
-            {
-                IntervalOfDateTime cloneObject = new IntervalOfDateTime();
-
-                cloneObject.lower_unbounded = currentObject.lower_unbounded();
-                if (!currentObject.lower_unbounded())
-                {
-                    cloneObject.lower = currentObject.lower().ToString();
-                    cloneObject.lower_included = currentObject.lower_included();
-                    cloneObject.lower_includedSpecified = true;
-                }
-
-                cloneObject.upper_unbounded = currentObject.upper_unbounded();
-                if (!currentObject.upper_unbounded())
-                {
-                    cloneObject.upper = currentObject.upper().ToString();
-                    cloneObject.upper_included = currentObject.upper_included();
-                    cloneObject.upper_includedSpecified = true;
-                }
-
-                return cloneObject;
-            }
-            else
-                return null;
-        }
-
-        protected virtual IntervalOfTime CloneIntervalOfTime(openehr.common_libs.basic.INTERVAL_REFERENCE currentObject)
-        {
-            if (currentObject != null)
-            {
-                IntervalOfTime cloneObject = new IntervalOfTime();
-
-                cloneObject.lower_unbounded = currentObject.lower_unbounded();
-                if (!currentObject.lower_unbounded())
-                {
-                    cloneObject.lower = currentObject.lower().ToString();
-                    cloneObject.lower_included = currentObject.lower_included();
-                    cloneObject.lower_includedSpecified = true;
-                }
-
-                cloneObject.upper_unbounded = currentObject.upper_unbounded();
-                if (!currentObject.upper_unbounded())
-                {
-                    cloneObject.upper = currentObject.upper().ToString();
-                    cloneObject.upper_included = currentObject.upper_included();
-                    cloneObject.upper_includedSpecified = true;
-                }
-
-                return cloneObject;
-            }
-            else
-                return null;
-        }
-
-        protected virtual C_BOOLEAN CloneBoolean(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_BOOLEAN currentObject)
-        {
-            C_BOOLEAN cloneObject = new C_BOOLEAN();
-
-            // 1 true_valid
-            cloneObject.true_valid = currentObject.true_valid();
-
-            // 1 false_valid
-            cloneObject.false_valid = currentObject.false_valid();
-
-            // 0..1 assumed_value boolean
-            if (currentObject.has_assumed_value().Equals(true))
-            {
-                cloneObject.assumed_valueSpecified = true;
-                cloneObject.assumed_value = (currentObject.assumed_value() as EiffelKernel.BOOLEAN_REF).item();
             }
 
-            return cloneObject;
+            return result;
         }
 
-        protected virtual C_STRING CloneString(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_STRING currentObject)
+        protected virtual IntervalOfDate CloneIntervalOfDate(openehr.common_libs.basic.INTERVAL_REFERENCE o)
         {
-            C_STRING cloneObject = new C_STRING();
+            IntervalOfDate result = null;
 
-            //0..1 pattern string
-            //HKF: EDT-415
-            //cloneObject.pattern = currentObject.ToString();//pattern().to_cil(); //jar check
-            if (currentObject.regexp() != null)
-                cloneObject.pattern = currentObject.regexp().to_cil();
-
-            // 0..1 assumed_value string
-            if (currentObject.has_assumed_value().Equals(true))
-                cloneObject.assumed_value = currentObject.assumed_value().ToString();
-
-            // 0..* string list
-            if (currentObject.strings() != null && currentObject.strings().count() > 0)
+            if (o != null)
             {
-                int numStrings = currentObject.strings().count();
-                cloneObject.list = new string[numStrings];
-                for (int i = 1; i <= numStrings; i++)
-                    cloneObject.list[i - 1] = currentObject.strings().i_th(i).ToString();
-            }
+                result = new IntervalOfDate();
+                result.lower_unbounded = o.lower_unbounded();
 
-            // 0..1 list_open
-            if (currentObject.is_open())
-            {
-                cloneObject.list_open = true;
-                cloneObject.list_openSpecified = true;
-            }
-
-            return cloneObject;
-        }
-
-        //See AE XML_Archetype BuildReal
-        protected virtual C_INTEGER CloneInteger(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER currentObject)
-        {
-            C_INTEGER cloneObject = new C_INTEGER();
-
-            //0..1 range Interval
-            if (currentObject.interval() != null)
-                cloneObject.range = CloneIntervalOfInteger(currentObject.interval());
-
-            // 0..1 assumed_value int
-            if (currentObject.has_assumed_value().Equals(true))
-            {
-                cloneObject.assumed_valueSpecified = true;
-                cloneObject.assumed_value = (currentObject.assumed_value() as EiffelKernel.INTEGER_32_REF).item();
-                //cloneObject.assumed_value = Int32.Parse(currentObject.assumed_value().ToString());
-            }
-
-            // 0..1 list int 
-            if (currentObject.list() != null)
-                if (currentObject.list().count() > 0)
+                if (!o.lower_unbounded())
                 {
-                    int[] localList = new int[currentObject.list().count()];
-                    cloneObject.list = localList;
-                    for (int i = 1; i <= currentObject.list().count(); i++)
-                        localList[i - 1] = currentObject.list().i_th(i);
+                    result.lower = o.lower().ToString();
+                    result.lower_included = o.lower_included();
+                    result.lower_includedSpecified = true;
                 }
 
-            return cloneObject;
-        }
+                result.upper_unbounded = o.upper_unbounded();
 
-        //See AE XML_Archetype BuildReal
-        protected virtual C_REAL CloneReal(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_REAL currentObject)
-        {
-            C_REAL cloneObject = new C_REAL();
-
-            //0..1 range IntervalOfReal
-            if (currentObject.interval() != null)
-                cloneObject.range = CloneIntervalOfReal(currentObject.interval());
-
-            // 0..1 assumed_value float
-            if (currentObject.has_assumed_value().Equals(true))
-            {
-                cloneObject.assumed_valueSpecified = true;
-                cloneObject.assumed_value = (currentObject.assumed_value() as EiffelKernel.dotnet.Impl.REAL_32_REF).item(); //as REAL_REF; //float to object;
-            }
-
-            // 0..1 list float 
-            if (currentObject.list() != null)
-                if (currentObject.list().count() > 0)
+                if (!o.upper_unbounded())
                 {
-                    float[] localList = new float[currentObject.list().count()];
-                    cloneObject.list = localList;
-                    for (int i = 1; i <= currentObject.list().count(); i++)
-                        localList[i - 1] = (float)currentObject.list().i_th(i);
-                }
-
-            return cloneObject;
-        }
-
-        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.CONSTRAINT_REF currentObject, int depth)
-        {
-            //Console.WriteLine("CONSTRAINT_REF\t" + string.Join("\t", new string[depth + 1])+ currentObject.rm_type_name().to_cil());
-
-            CONSTRAINT_REF cloneObject = new CONSTRAINT_REF();
-
-            // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as CONSTRAINT_REF;
-
-            // 1 reference string
-            cloneObject.reference = currentObject.target().ToString();
-
-            return cloneObject;
-        }
-
-        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.ARCHETYPE_INTERNAL_REF currentObject, int depth)
-        {
-            //Console.WriteLine("ARCHETYPE_INTERNAL_REF\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
-
-            ARCHETYPE_INTERNAL_REF cloneObject = new ARCHETYPE_INTERNAL_REF();
-
-            // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as ARCHETYPE_INTERNAL_REF;
-
-            // 1 target_path string
-            cloneObject.target_path = currentObject.target_path().to_cil();
-
-            return cloneObject;
-        }
-
-        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.ARCHETYPE_SLOT currentObject, int depth)
-        {
-            //Console.WriteLine("ARCHETYPE_SLOT\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
-
-            ARCHETYPE_SLOT cloneObject = new ARCHETYPE_SLOT();
-
-            // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as ARCHETYPE_SLOT;
-
-            // 0..* includes ASSERTION
-            if (currentObject.has_includes())
-                cloneObject.includes = CloneAssertion(currentObject.includes());
-
-            // 0..* excludes ASSERTION
-            if (currentObject.has_excludes())
-                cloneObject.excludes = CloneAssertion(currentObject.excludes());
-
-            return cloneObject;
-        }
-
-        protected virtual object Visit(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.C_DV_QUANTITY currentObject, int depth)
-        {
-            //Console.WriteLine("C_DV_QUANTITY\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
-
-            C_DV_QUANTITY cloneObject = new C_DV_QUANTITY();
-
-            // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as C_DV_QUANTITY;
-
-            // 0..1 assumed_value DV_QUANTITY
-            if (currentObject.assumed_value() != null)
-                cloneObject.assumed_value
-                    = CloneDvQuantity((openehr.openehr.am.openehr_profile.data_types.quantity.Impl.QUANTITY)currentObject.assumed_value());
-
-            if (currentObject.property() != null)
-            {
-                // 0..1 property CODE_PHASE    
-                cloneObject.property = CloneCodePhrase(currentObject.property());
-
-                // 0..* List C_QUANTITY_ITEM
-                if (currentObject.list() != null && currentObject.list().count() > 0)
-                {
-                    C_QUANTITY_ITEM[] localQuantityList = new C_QUANTITY_ITEM[currentObject.list().count()];
-                    cloneObject.list = localQuantityList;
-
-                    for (int i = 1; i <= currentObject.list().count(); i++)
-                        localQuantityList[i - 1] = CloneQuantityItem(currentObject.list().i_th(i) as openehr.openehr.am.openehr_profile.data_types.quantity.Impl.C_QUANTITY_ITEM);
+                    result.upper = o.upper().ToString();
+                    result.upper_included = o.upper_included();
+                    result.upper_includedSpecified = true;
                 }
             }
-            return cloneObject;
+
+            return result;
         }
 
-        protected virtual DV_ORDINAL CloneDvOrdinal(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL currentObject)
+        protected virtual IntervalOfDateTime CloneIntervalOfDateTime(openehr.common_libs.basic.INTERVAL_REFERENCE o)
         {
-            // Ordinal constraint
-            DV_ORDINAL cloneObject = new DV_ORDINAL();
+            IntervalOfDateTime result = null;
+
+            if (o != null)
+            {
+                result = new IntervalOfDateTime();
+                result.lower_unbounded = o.lower_unbounded();
+
+                if (!o.lower_unbounded())
+                {
+                    result.lower = o.lower().ToString();
+                    result.lower_included = o.lower_included();
+                    result.lower_includedSpecified = true;
+                }
+
+                result.upper_unbounded = o.upper_unbounded();
+
+                if (!o.upper_unbounded())
+                {
+                    result.upper = o.upper().ToString();
+                    result.upper_included = o.upper_included();
+                    result.upper_includedSpecified = true;
+                }
+            }
+
+            return result;
+        }
+
+        protected virtual IntervalOfTime CloneIntervalOfTime(openehr.common_libs.basic.INTERVAL_REFERENCE o)
+        {
+            IntervalOfTime result = null;
+
+            if (o != null)
+            {
+                result = new IntervalOfTime();
+                result.lower_unbounded = o.lower_unbounded();
+
+                if (!o.lower_unbounded())
+                {
+                    result.lower = o.lower().ToString();
+                    result.lower_included = o.lower_included();
+                    result.lower_includedSpecified = true;
+                }
+
+                result.upper_unbounded = o.upper_unbounded();
+
+                if (!o.upper_unbounded())
+                {
+                    result.upper = o.upper().ToString();
+                    result.upper_included = o.upper_included();
+                    result.upper_includedSpecified = true;
+                }
+            }
+
+            return result;
+        }
+
+        protected virtual C_BOOLEAN CloneBoolean(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_BOOLEAN o)
+        {
+            C_BOOLEAN result = new C_BOOLEAN();
+            result.true_valid = o.true_valid();
+            result.false_valid = o.false_valid();
+
+            if (o.has_assumed_value())
+            {
+                result.assumed_valueSpecified = true;
+                result.assumed_value = (o.assumed_value() as EiffelKernel.BOOLEAN_REF).item();
+            }
+
+            return result;
+        }
+
+        protected virtual C_STRING CloneString(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_STRING o)
+        {
+            C_STRING result = new C_STRING();
+
+            if (o.regexp() != null)
+                result.pattern = o.regexp().to_cil();
+
+            if (o.has_assumed_value())
+                result.assumed_value = o.assumed_value().ToString();
+
+            if (o.strings() != null && o.strings().count() > 0)
+            {
+                result.list = new string[o.strings().count()];
+
+                for (int i = 1; i <= result.list.Length; i++)
+                    result.list[i - 1] = o.strings().i_th(i).ToString();
+            }
+
+            if (o.is_open())
+            {
+                result.list_open = true;
+                result.list_openSpecified = true;
+            }
+
+            return result;
+        }
+
+        protected virtual C_INTEGER CloneInteger(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER o)
+        {
+            C_INTEGER result = new C_INTEGER();
+
+            if (o.interval() != null)
+                result.range = CloneIntervalOfInteger(o.interval());
+
+            if (o.has_assumed_value())
+            {
+                result.assumed_valueSpecified = true;
+                result.assumed_value = (o.assumed_value() as EiffelKernel.INTEGER_32_REF).item();
+            }
+
+            if (o.list() != null && o.list().count() > 0)
+            {
+                result.list = new int[o.list().count()];
+
+                for (int i = 1; i <= o.list().count(); i++)
+                    result.list[i - 1] = o.list().i_th(i);
+            }
+
+            return result;
+        }
+
+        protected virtual C_REAL CloneReal(openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_REAL o)
+        {
+            C_REAL result = new C_REAL();
+
+            if (o.interval() != null)
+                result.range = CloneIntervalOfReal(o.interval());
+
+            if (o.has_assumed_value())
+            {
+                result.assumed_valueSpecified = true;
+                result.assumed_value = (o.assumed_value() as EiffelKernel.dotnet.Impl.REAL_32_REF).item();
+            }
+
+            if (o.list() != null && o.list().count() > 0)
+            {
+                result.list = new float[o.list().count()];
+
+                for (int i = 1; i <= result.list.Length; i++)
+                    result.list[i - 1] = (float)o.list().i_th(i);
+            }
+
+            return result;
+        }
+
+        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.CONSTRAINT_REF o, int depth)
+        {
+            CONSTRAINT_REF result = new CONSTRAINT_REF();
+            CloneC_Object(result, o);
+            result.reference = o.target().ToString();
+
+            return result;
+        }
+
+        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.ARCHETYPE_INTERNAL_REF o, int depth)
+        {
+            ARCHETYPE_INTERNAL_REF result = new ARCHETYPE_INTERNAL_REF();
+            CloneC_Object(result, o);
+            result.target_path = o.target_path().to_cil();
+
+            return result;
+        }
+
+        protected virtual object Visit(openehr.openehr.am.archetype.constraint_model.Impl.ARCHETYPE_SLOT o, int depth)
+        {
+            ARCHETYPE_SLOT result = new ARCHETYPE_SLOT();
+            CloneC_Object(result, o);
+
+            if (o.has_includes())
+                result.includes = CloneAssertion(o.includes());
+
+            if (o.has_excludes())
+                result.excludes = CloneAssertion(o.excludes());
+
+            return result;
+        }
+
+        protected virtual object Visit(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.C_DV_QUANTITY o, int depth)
+        {
+            C_DV_QUANTITY result = new C_DV_QUANTITY();
+            CloneC_Object(result, o);
+
+            if (o.assumed_value() != null)
+                result.assumed_value = CloneDvQuantity((openehr.openehr.am.openehr_profile.data_types.quantity.Impl.QUANTITY)o.assumed_value());
+
+            if (o.property() != null)
+            {
+                result.property = CloneCodePhrase(o.property());
+
+                if (o.list() != null && o.list().count() > 0)
+                {
+                    result.list = new C_QUANTITY_ITEM[o.list().count()];
+
+                    for (int i = 1; i <= result.list.Length; i++)
+                        result.list[i - 1] = CloneQuantityItem(o.list().i_th(i) as openehr.openehr.am.openehr_profile.data_types.quantity.Impl.C_QUANTITY_ITEM);
+                }
+            }
+
+            return result;
+        }
+
+        protected virtual DV_ORDINAL CloneDvOrdinal(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL o)
+        {
+            DV_ORDINAL result = new DV_ORDINAL();
 
             // Inherits DV_ORDERED (only in Reference Model)
             // 0..1 normal_range DV_INTERVAL
             // 0..* other_reference_ranges REFERENCE_RANGE                        
             // 0..1 normal_status CODE_PHRASE            
 
-            // 1 value int
-            cloneObject.value = currentObject.value();
+            result.value = o.value();
 
-            // 1 symbol DV_CODED_TEXT            
-            cloneObject.symbol = new DV_CODED_TEXT();
-            cloneObject.symbol.defining_code = CloneCodePhrase(currentObject.symbol());
-            cloneObject.symbol.value = "";  // what should this be?
+            result.symbol = new DV_CODED_TEXT();
+            result.symbol.defining_code = CloneCodePhrase(o.symbol());
+            result.symbol.value = "";  // what should this be?
 
-            return cloneObject;
+            return result;
         }
 
-        protected virtual DV_QUANTITY CloneDvQuantity(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.QUANTITY currentObject)
+        protected virtual DV_QUANTITY CloneDvQuantity(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.QUANTITY o)
         {
-            DV_QUANTITY cloneObject = new DV_QUANTITY();
+            DV_QUANTITY result = new DV_QUANTITY();
 
             // Inherits DV_AMOUNT (only in Reference Model)
             // 0..1 normal_range DV_INTERVAL
@@ -596,827 +494,660 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             // 0..1 accuracy float
             // 0..1 accuracy_is_percent boolean
 
-            // 1 magnitude double
-            cloneObject.magnitude = currentObject.magnitude();
+            result.magnitude = o.magnitude();
+            result.precision = o.precision();
 
-            // 0..1 precision int
-            cloneObject.precision = currentObject.precision();
+            if (o.units() != null)
+                result.units = o.units().ToString();
 
-            // 1 units string
-            if (currentObject.units() != null)
-                cloneObject.units = currentObject.units().ToString();
-
-            return cloneObject;
+            return result;
         }
 
-        protected virtual object Visit(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.C_DV_ORDINAL currentObject, int depth)
+        protected virtual object Visit(openehr.openehr.am.openehr_profile.data_types.quantity.Impl.C_DV_ORDINAL o, int depth)
         {
-            //Console.WriteLine("C_DV_ORDINAL\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
+            C_DV_ORDINAL result = new C_DV_ORDINAL();
+            CloneC_Object(result, o);
 
-            C_DV_ORDINAL cloneObject = new C_DV_ORDINAL();
+            if (o.assumed_value() != null)
+                result.assumed_value = CloneDvOrdinal((openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL)o.assumed_value());
 
-            // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as C_DV_ORDINAL;
-
-            // 0..1 assumed_value DV_ORDINAL
-            if (currentObject.assumed_value() != null)
-                cloneObject.assumed_value
-                    = CloneDvOrdinal((openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL)currentObject.assumed_value());
-
-            // 0..* List DV_ORDINAL
-            if (currentObject.any_allowed().Equals(false))
+            if (o.any_allowed())
             {
-                EiffelStructures.list.LINKED_LIST_REFERENCE adlOrdinals = currentObject.items();
-                DV_ORDINAL[] localOrdinals = new DV_ORDINAL[adlOrdinals.count()];
-
+                EiffelStructures.list.LINKED_LIST_REFERENCE adlOrdinals = o.items();
+                result.list = new DV_ORDINAL[adlOrdinals.count()];
                 adlOrdinals.start();
-                for (int i = 0; i < adlOrdinals.count(); i++)
-                {
-                    openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL adlOrdinal = (openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL)adlOrdinals.active().item();
-                    DV_ORDINAL localOrdinal = CloneDvOrdinal(adlOrdinal);
-                    localOrdinals[i] = localOrdinal;
 
+                for (int i = 0; i < result.list.Length; i++)
+                {
+                    result.list[i] = CloneDvOrdinal((openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL)adlOrdinals.active().item());
                     adlOrdinals.forth();
                 }
-
-                cloneObject.list = localOrdinals;
             }
-            return cloneObject;
+
+            return result;
         }
 
-        protected virtual object Visit(openehr.openehr.am.openehr_profile.data_types.text.Impl.C_CODE_PHRASE currentObject, int depth)
+        protected virtual object Visit(openehr.openehr.am.openehr_profile.data_types.text.Impl.C_CODE_PHRASE o, int depth)
         {
-            //Console.WriteLine("C_CODE_PHRASE\t" + string.Join("\t", new string[depth + 1]) + currentObject.rm_type_name().to_cil());
+            C_CODE_PHRASE result = new C_CODE_PHRASE();
+            CloneC_Object(result, o);
 
-            C_CODE_PHRASE cloneObject = new C_CODE_PHRASE();
-
-            // Inherts C_OBJECT
-            cloneObject = CloneC_Object(cloneObject, currentObject) as C_CODE_PHRASE;
-
-            // 0..1 terminology_id TERMINOLOGY_ID
-            if (currentObject.terminology_id() != null)
+            if (o.terminology_id() != null)
             {
                 TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
-                terminologyId.value = currentObject.terminology_id().value().ToString();
-                cloneObject.terminology_id = terminologyId;
+                terminologyId.value = o.terminology_id().value().ToString();
+                result.terminology_id = terminologyId;
             }
 
-            // 0..* code_list string
-            if (currentObject.code_list() != null)
+            if (o.code_list() != null)
             {
-                EiffelStructures.list.Impl.ARRAYED_LIST_REFERENCE castList = currentObject.code_list() as EiffelStructures.list.Impl.ARRAYED_LIST_REFERENCE;
-                EiffelKernel.dotnet.Impl.SPECIAL_REFERENCE sList = (EiffelKernel.dotnet.Impl.SPECIAL_REFERENCE)(castList.area());
-                List<string> copyList = new List<string>();
+                result.code_list = new string[o.code_list().count()];
 
-                for (int i = 0; i < sList.count(); i++)
-                    if (sList.item(i) != null)
-                        copyList.Add(sList.item(i).ToString());
-
-                cloneObject.code_list = copyList.ToArray();
+                for (int i = 1; i <= result.code_list.Length; i++)
+                    result.code_list[i - 1] = o.code_list().i_th(i).ToString();
             }
 
-            // 0..1 assumed_value CODE_PHRASE
-            if (currentObject.has_assumed_value().Equals(true))
-                cloneObject.assumed_value
-                    = CloneCodePhrase((openehr.openehr.rm.data_types.text.Impl.CODE_PHRASE)currentObject.assumed_value());
+            if (o.has_assumed_value())
+                result.assumed_value = CloneCodePhrase((openehr.openehr.rm.data_types.text.Impl.CODE_PHRASE)o.assumed_value());
 
-            return cloneObject;
+            return result;
         }
 
-        protected virtual C_OBJECT CloneC_Object(C_OBJECT cloneObject, openehr.openehr.am.archetype.constraint_model.C_OBJECT currentObject)
+        protected virtual void CloneC_Object(C_OBJECT cloneObject, openehr.openehr.am.archetype.constraint_model.C_OBJECT o)
         {
-            // 1 node_id string            
-            if (!currentObject.node_id().to_cil().StartsWith("unknown"))  //hack for xml conversion 
-                cloneObject.node_id = currentObject.node_id().to_cil();
+            if (!o.node_id().to_cil().StartsWith("unknown"))  //hack for xml conversion 
+                cloneObject.node_id = o.node_id().to_cil();
             else
                 cloneObject.node_id = "";
 
-            // 1 rm_type_name string
-            cloneObject.rm_type_name = currentObject.rm_type_name().to_cil();
-
-            // 1 occurences IntervalOfInteger
-            cloneObject.occurrences = CloneIntervalOfInteger(currentObject.occurrences());
-
-            return cloneObject;
+            cloneObject.rm_type_name = o.rm_type_name().to_cil();
+            cloneObject.occurrences = CloneIntervalOfInteger(o.occurrences());
         }
 
-        protected virtual IntervalOfReal CloneIntervalOfReal(openehr.common_libs.basic.INTERVAL_REAL_32 currentObject)
+        protected virtual IntervalOfReal CloneIntervalOfReal(openehr.common_libs.basic.INTERVAL_REAL_32 o)
         {
-            IntervalOfReal cloneObject = new IntervalOfReal();
+            IntervalOfReal result = new IntervalOfReal();
 
-            System.Diagnostics.Debug.Assert(!cloneObject.lower_includedSpecified, "lower included specified must be false!");
+            System.Diagnostics.Debug.Assert(!result.lower_includedSpecified, "lower included specified must be false!");
 
-            cloneObject.lower_unbounded = currentObject.lower_unbounded();
-            if (!currentObject.lower_unbounded())
+            result.lower_unbounded = o.lower_unbounded();
+
+            if (!o.lower_unbounded())
             {
-                cloneObject.lower = currentObject.lower();
-                cloneObject.lowerSpecified = true;
-                cloneObject.lower_included = currentObject.lower_included();
-                cloneObject.lower_includedSpecified = true;
+                result.lower = o.lower();
+                result.lowerSpecified = true;
+                result.lower_included = o.lower_included();
+                result.lower_includedSpecified = true;
             }
 
-            cloneObject.upper_unbounded = currentObject.upper_unbounded();
-            if (!currentObject.upper_unbounded())
+            result.upper_unbounded = o.upper_unbounded();
+
+            if (!o.upper_unbounded())
             {
-                cloneObject.upper = currentObject.upper();
-                cloneObject.upperSpecified = true;
-                cloneObject.upper_included = currentObject.upper_included();
-                cloneObject.upper_includedSpecified = true;
+                result.upper = o.upper();
+                result.upperSpecified = true;
+                result.upper_included = o.upper_included();
+                result.upper_includedSpecified = true;
             }
 
-            return cloneObject;
+            return result;
         }
 
-        protected virtual IntervalOfInteger CloneIntervalOfInteger(openehr.common_libs.basic.INTERVAL_INTEGER_32 currentObject)
+        protected virtual IntervalOfInteger CloneIntervalOfInteger(openehr.common_libs.basic.INTERVAL_INTEGER_32 o)
         {
-            IntervalOfInteger cloneObject = null;
-            cloneObject = new IntervalOfInteger();
+            IntervalOfInteger result = null;
+            result = new IntervalOfInteger();
 
-            System.Diagnostics.Debug.Assert(!cloneObject.lower_includedSpecified, "lower included specified must be false!");
+            System.Diagnostics.Debug.Assert(!result.lower_includedSpecified, "lower included specified must be false!");
 
-            cloneObject.lower_unbounded = currentObject.lower_unbounded();
-            if (!currentObject.lower_unbounded())
+            result.lower_unbounded = o.lower_unbounded();
+
+            if (!o.lower_unbounded())
             {
-                cloneObject.lower = currentObject.lower();
-                cloneObject.lowerSpecified = true;
-                cloneObject.lower_included = currentObject.lower_included();
-                cloneObject.lower_includedSpecified = true;
+                result.lower = o.lower();
+                result.lowerSpecified = true;
+                result.lower_included = o.lower_included();
+                result.lower_includedSpecified = true;
             }
 
-            cloneObject.upper_unbounded = currentObject.upper_unbounded();
-            if (!currentObject.upper_unbounded())
+            result.upper_unbounded = o.upper_unbounded();
+
+            if (!o.upper_unbounded())
             {
-                cloneObject.upper = currentObject.upper();
-                cloneObject.upperSpecified = true;
-                cloneObject.upper_included = currentObject.upper_included();
-                cloneObject.upper_includedSpecified = true;
+                result.upper = o.upper();
+                result.upperSpecified = true;
+                result.upper_included = o.upper_included();
+                result.upper_includedSpecified = true;
             }
 
-            return cloneObject;
+            return result;
         }
 
-        protected virtual C_PRIMITIVE CloneC_Primitive(openehr.openehr.am.archetype.constraint_model.primitive.C_PRIMITIVE currentObject)
+        protected virtual C_PRIMITIVE CloneC_Primitive(openehr.openehr.am.archetype.constraint_model.primitive.C_PRIMITIVE o)
         {
-            string typeName = currentObject.GetType().Name;
+            string typeName = o.GetType().Name;
             typeName = typeName.ToUpper();
 
             switch (typeName)
             {
                 case "C_REAL":
-                    return CloneReal(currentObject as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_REAL);
+                    return CloneReal(o as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_REAL);
 
                 case "C_INTEGER":
-                    return CloneInteger(currentObject as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER);
+                    return CloneInteger(o as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_INTEGER);
 
                 case "C_STRING":
-                    return CloneString(currentObject as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_STRING);
+                    return CloneString(o as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_STRING);
 
                 case "C_BOOLEAN":
-                    return CloneBoolean(currentObject as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_BOOLEAN);
+                    return CloneBoolean(o as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_BOOLEAN);
 
                 case "C_DURATION":
-                    return CloneDuration(currentObject as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DURATION);
+                    return CloneDuration(o as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DURATION);
 
                 case "C_DATE_TIME":
-                    return CloneDateTime(currentObject as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE_TIME);
+                    return CloneDateTime(o as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE_TIME);
 
                 case "C_DATE":
-                    return CloneDate(currentObject as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE);
+                    return CloneDate(o as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_DATE);
 
                 case "C_TIME":
-                    return CloneTime(currentObject as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_TIME);
+                    return CloneTime(o as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_TIME);
 
                 default:
-                    throw new NotImplementedException("The Visitor method 'Visit' with parameter type '" + currentObject.GetType().ToString() + "' is not implemented.");
+                    throw new NotImplementedException("The Visitor method 'Visit' with parameter type '" + o.GetType().ToString() + "' is not implemented.");
             }
         }
 
-        protected virtual C_QUANTITY_ITEM CloneQuantityItem(openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM currentObject)
+        protected virtual C_QUANTITY_ITEM CloneQuantityItem(openehr.openehr.am.openehr_profile.data_types.quantity.C_QUANTITY_ITEM o)
         {
-            C_QUANTITY_ITEM cloneObject = new C_QUANTITY_ITEM();
+            C_QUANTITY_ITEM result = new C_QUANTITY_ITEM();
 
-            // 0..1 units string
-            cloneObject.units = currentObject.units().to_cil();
+            result.units = o.units().to_cil();
 
-            // 0..1 magnitude IntervalOfReal
-            if (currentObject.magnitude() != null)
-                cloneObject.magnitude = CloneIntervalOfReal(currentObject.magnitude());
+            if (o.magnitude() != null)
+                result.magnitude = CloneIntervalOfReal(o.magnitude());
 
-            // 0..1 precision IntervalOfInteger
-            if (!currentObject.any_precision_allowed())
-                cloneObject.precision = CloneIntervalOfInteger(currentObject.precision());
+            if (!o.any_precision_allowed())
+                result.precision = CloneIntervalOfInteger(o.precision());
 
-            return cloneObject;
+            return result;
         }
 
         protected virtual ASSERTION[] CloneAssertion(EiffelStructures.list.ARRAYED_LIST_REFERENCE adlList)
         {
+            ASSERTION[] result = null;
+
             if (adlList != null)
             {
-                ASSERTION[] localList = new ASSERTION[adlList.count()];
+                result = new ASSERTION[adlList.count()];
 
                 for (int i = 1; i <= adlList.count(); i++)
                 {
                     openehr.openehr.am.archetype.assertion.ASSERTION assert = adlList.i_th(i) as openehr.openehr.am.archetype.assertion.ASSERTION;
                     ASSERTION localAssertion = new ASSERTION();
 
-                    // 0..1 tag string
                     if (assert.tag() != null)
                         localAssertion.tag = assert.tag().ToString();
 
                     // 0..1 string_expression string
                     //localAssertion.string_expression  (not implemented in adl object)
 
-                    // 1 expression EXPR_ITEM 
                     if (assert.expression() != null)
                         localAssertion.expression = CloneExprItem(assert.expression());
 
                     // 0..* variables ASSERTION_VARIABLE (not implememented in adl object)                            
 
-                    localList[i - 1] = localAssertion;
+                    result[i - 1] = localAssertion;
                 }
-
-                return localList;
             }
 
-            return null;
+            return result;
         }
 
-        protected virtual EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_ITEM currentObject)
+        protected virtual EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_ITEM o)
         {
-            if (currentObject is openehr.openehr.am.archetype.assertion.EXPR_LEAF)
-                return CloneExprItem(currentObject as openehr.openehr.am.archetype.assertion.EXPR_LEAF);
+            if (o is openehr.openehr.am.archetype.assertion.EXPR_LEAF)
+                return CloneExprItem(o as openehr.openehr.am.archetype.assertion.EXPR_LEAF);
 
-            else if (currentObject is openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR)
-                return CloneExprItem(currentObject as openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR);
+            else if (o is openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR)
+                return CloneExprItem(o as openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR);
 
-            else if (currentObject is openehr.openehr.am.archetype.assertion.EXPR_UNARY_OPERATOR)
-                return CloneExprItem(currentObject as openehr.openehr.am.archetype.assertion.EXPR_UNARY_OPERATOR);
+            else if (o is openehr.openehr.am.archetype.assertion.EXPR_UNARY_OPERATOR)
+                return CloneExprItem(o as openehr.openehr.am.archetype.assertion.EXPR_UNARY_OPERATOR);
 
             else
                 return null;
         }
 
-        protected virtual EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_LEAF currentObject)
+        protected virtual EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_LEAF o)
         {
-            EXPR_LEAF cloneObject = new EXPR_LEAF();
+            EXPR_LEAF result = new EXPR_LEAF();
 
-            // 1 type string
-            if (currentObject.type() == null)
-                throw new ApplicationException();
+            result.type = o.type().ToString();
 
-            cloneObject.type = currentObject.type().ToString();
-            if (cloneObject.type.StartsWith("OE_"))
-                cloneObject.type = cloneObject.type.Substring(3);
+            if (result.type.StartsWith("OE_"))
+                result.type = result.type.Substring(3);
 
-            // 1 reference_type
-            if (currentObject.reference_type() != null)
-                cloneObject.reference_type = currentObject.reference_type().ToString();
+            if (o.reference_type() != null)
+                result.reference_type = o.reference_type().ToString();
 
-            // 1 item anyType
-            switch (cloneObject.type)
+            switch (result.type)
             {
                 case "C_STRING":
-                    // HKF: EDT-415
-                    //cloneObject.item = CloneC_Primitive((openehr.openehr.am.archetype.constraint_model.primitive.C_PRIMITIVE) currentObject.item());
-                    cloneObject.item = CloneString(currentObject.item() as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_STRING);
+                    result.item = CloneString(o.item() as openehr.openehr.am.archetype.constraint_model.primitive.Impl.C_STRING);
                     break;
 
                 case "String":
-                    cloneObject.item = currentObject.item().ToString();
+                    result.item = o.item().ToString();
                     break;
 
                 default:
-                    throw new NotSupportedException(cloneObject.type);
+                    throw new NotSupportedException(result.type);
             }
 
-            return cloneObject as EXPR_ITEM;
+            return result;
         }
 
-        protected virtual EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR currentObject)
+        protected virtual EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_BINARY_OPERATOR o)
         {
-            EXPR_BINARY_OPERATOR cloneObject = new EXPR_BINARY_OPERATOR();
+            EXPR_BINARY_OPERATOR result = new EXPR_BINARY_OPERATOR();
 
-            // 1 type string
-            if (currentObject.type() != null)
-                cloneObject.type = currentObject.type().ToString();
+            if (o.type() != null)
+                result.type = o.type().ToString();
 
-            // 1 precedence_overridden boolean
-            cloneObject.precedence_overridden = currentObject.precedence_overridden();
+            result.precedence_overridden = o.precedence_overridden();
 
-            // 1 operator OPERATOR_KIND
-            if (currentObject.@operator().value() >= 2001 && currentObject.@operator().value() <= 2020)
-                cloneObject.@operator = ((OPERATOR_KIND)currentObject.@operator().value()) - 2001;  //enum cast            
+            if (o.@operator().value() >= 2001 && o.@operator().value() <= 2020)
+                result.@operator = ((OPERATOR_KIND)o.@operator().value()) - 2001;
 
-            // 1 left_operand EXPR_ITEM
-            if (currentObject.left_operand() != null)
-                cloneObject.left_operand = CloneExprItem(currentObject.left_operand()); //recursion
+            if (o.left_operand() != null)
+                result.left_operand = CloneExprItem(o.left_operand());
 
-            // 1 right_operand EXPR_ITEM
-            if (currentObject.right_operand() != null)
-                cloneObject.right_operand = CloneExprItem(currentObject.right_operand()); //recursion
+            if (o.right_operand() != null)
+                result.right_operand = CloneExprItem(o.right_operand());
 
-            return cloneObject as EXPR_ITEM;
+            return result;
         }
 
-        protected virtual EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_UNARY_OPERATOR currentObject)
+        protected virtual EXPR_ITEM CloneExprItem(openehr.openehr.am.archetype.assertion.EXPR_UNARY_OPERATOR o)
         {
-            EXPR_UNARY_OPERATOR cloneObject = new EXPR_UNARY_OPERATOR();
+            EXPR_UNARY_OPERATOR result = new EXPR_UNARY_OPERATOR();
 
-            // 1 type string
-            if (currentObject.type() != null)
-                cloneObject.type = currentObject.type().ToString();
+            if (o.type() != null)
+                result.type = o.type().ToString();
 
-            // 1 operator OPERATOR_KIND
-            if (currentObject.@operator().value() >= 2001 && currentObject.@operator().value() <= 2020)
-                cloneObject.@operator = ((OPERATOR_KIND)currentObject.@operator().value()) - 2001;  //enum cast            
+            if (o.@operator().value() >= 2001 && o.@operator().value() <= 2020)
+                result.@operator = ((OPERATOR_KIND)o.@operator().value()) - 2001;
 
-            // 1 precedence_overridden boolean
-            cloneObject.precedence_overridden = currentObject.precedence_overridden();
+            result.precedence_overridden = o.precedence_overridden();
 
-            // 1 operand EXPR_ITEM
-            if (currentObject.operand() != null)
-                cloneObject.operand = CloneExprItem(currentObject.operand()); //recursive
+            if (o.operand() != null)
+                result.operand = CloneExprItem(o.operand());
 
-            return cloneObject as EXPR_ITEM;
+            return result;
         }
 
-        protected virtual CODE_PHRASE CloneCodePhrase(openehr.openehr.rm.data_types.text.CODE_PHRASE currentObject)
+        protected virtual CODE_PHRASE CloneCodePhrase(openehr.openehr.rm.data_types.text.CODE_PHRASE o)
         {
-            if (currentObject != null)
+            CODE_PHRASE result = null;
+
+            if (o != null)
             {
-                CODE_PHRASE cloneObject = new CODE_PHRASE();
+                result = new CODE_PHRASE();
 
-                // 1 code_string string
-                if (currentObject.code_string() != null)
-                    cloneObject.code_string = currentObject.code_string().ToString();
+                if (o.code_string() != null)
+                    result.code_string = o.code_string().ToString();
                 else
-                    cloneObject.code_string = "";
+                    result.code_string = "";
 
-                // 1 terminology_id TERMINOLOGY_ID
-                if (currentObject.terminology_id() != null)
+                if (o.terminology_id() != null)
                 {
                     TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
-                    terminologyId.value = currentObject.terminology_id().value().ToString();
-                    cloneObject.terminology_id = terminologyId;
+                    terminologyId.value = o.terminology_id().value().ToString();
+                    result.terminology_id = terminologyId;
                 }
-                return cloneObject;
             }
 
-            return null;
+            return result;
         }
 
         protected virtual ARCHETYPE CloneArchetypeDetails(openehr.openehr.am.archetype.ARCHETYPE archetype)
         {
-            ARCHETYPE cloneObject = new ARCHETYPE();
+            ARCHETYPE result = new ARCHETYPE();
 
             // 0..1 uid HIER_OBJECT_ID (not implemented in adl object)            
 
-            // 1 archtype_id ARCHETYPE_ID
             if (archetype.archetype_id() != null)
             {
                 ARCHETYPE_ID archetypeId = new ARCHETYPE_ID();
                 archetypeId.value = archetype.archetype_id().value().ToString();
-                cloneObject.archetype_id = archetypeId;
+                result.archetype_id = archetypeId;
             }
 
-            // 0..1 adl_version string
             if (archetype.version() != null)
-                //JAR: 21MAY2007, EDT-61 generated XML contains wrong field for ADL version
-                //cloneObject.adl_version = archetype.version().ToString();
-                cloneObject.adl_version = archetype.adl_version().ToString();
+                result.adl_version = archetype.adl_version().ToString();
 
-            // 1 concept string
             if (archetype.concept() != null)
-                cloneObject.concept = archetype.concept().ToString();
+                result.concept = archetype.concept().ToString();
 
-            // 1 original_language CODE_PHRASE
-            cloneObject.original_language = CloneCodePhrase(archetype.original_language());
+            result.original_language = CloneCodePhrase(archetype.original_language());
+            result.is_controlled = archetype.is_controlled();
 
-            // 0..1 is_controlled boolean
-            cloneObject.is_controlled = archetype.is_controlled();
-
-            // 0..1 parent_archetype_id ARCHETYPE_ID
             if (archetype.parent_archetype_id() != null)
             {
                 ARCHETYPE_ID parentId = new ARCHETYPE_ID();
                 parentId.value = archetype.parent_archetype_id().value().ToString();
-                cloneObject.parent_archetype_id = parentId;
+                result.parent_archetype_id = parentId;
             }
 
-            // 0..1 description RESOURCE_DESCRIPTION
-            cloneObject.description = CloneDescription(archetype.description());
-
-            // 1 ontology ARCHETYPE_ONTOLOGY
-            cloneObject.ontology = CloneOntology(archetype.ontology());
+            result.description = CloneDescription(archetype.description());
+            result.ontology = CloneOntology(archetype.ontology());
 
             // 0..1 revision_history REVISION_HISTORY (does not occur in NHS archetypes, do later)
             //if (archetype.revision_history() != null)
-            // cloneObject.revision_history = CloneAuthoredResource(archetype.revision_history());
+            // result.revision_history = CloneAuthoredResource(archetype.revision_history());
 
-            // 0..* translations TRANSLATION_DETAILS
-            if (archetype.translations() != null)
+            if (archetype.translations() != null && archetype.translations().count() >= 0)
             {
-                if (archetype.translations().count() >= 0)
+                TRANSLATION_DETAILS[] translations = new TRANSLATION_DETAILS[archetype.translations().count()];
+                archetype.translations().start();
+
+                for (int i = 1; i <= archetype.translations().count(); i++)
                 {
-                    TRANSLATION_DETAILS[] translations = new TRANSLATION_DETAILS[archetype.translations().count()];
-                    archetype.translations().start();
+                    TRANSLATION_DETAILS translation = new TRANSLATION_DETAILS();
+                    openehr.openehr.rm.common.resource.TRANSLATION_DETAILS td = archetype.translations().item_for_iteration() as openehr.openehr.rm.common.resource.TRANSLATION_DETAILS;
 
-                    for (int i = 1; i <= archetype.translations().count(); i++)
-                    {
-                        TRANSLATION_DETAILS translation = new TRANSLATION_DETAILS();
-                        openehr.openehr.rm.common.resource.TRANSLATION_DETAILS td = archetype.translations().item_for_iteration() as openehr.openehr.rm.common.resource.TRANSLATION_DETAILS;
+                    if (td.accreditation() != null)
+                        translation.accreditation = td.accreditation().ToString();
 
-                        if (td.accreditation() != null)
-                            translation.accreditation = td.accreditation().ToString();
-                        //else
-                        //    translation.accreditation = "";
+                    translation.author = CloneHashTableAny(td.author());
+                    translation.language = CloneCodePhrase(td.language());
+                    translation.other_details = CloneHashTableAny(td.other_details());
+                    translations[i - 1] = translation;
 
-                        translation.author = CloneHashTableAny(td.author());
-                        translation.language = CloneCodePhrase(td.language());
-                        translation.other_details = CloneHashTableAny(td.other_details());
-                        translations[i - 1] = translation;
-
-                        archetype.translations().forth();
-                    }
-                    cloneObject.translations = translations;
+                    archetype.translations().forth();
                 }
+
+                result.translations = translations;
             }
 
-            // 0..1 definition C_COMPLEX_OBJECT (set in cloneArchetype)
+            result.invariants = CloneAssertion(archetype.invariants());
 
-            // 0..* invariants ASSERTION            
-            cloneObject.invariants = CloneAssertion(archetype.invariants());
-
-            return cloneObject;
+            return result;
         }
 
-        protected virtual ARCHETYPE_ONTOLOGY CloneOntology(openehr.openehr.am.archetype.ontology.ARCHETYPE_ONTOLOGY currentObject)
+        protected virtual ARCHETYPE_ONTOLOGY CloneOntology(openehr.openehr.am.archetype.ontology.ARCHETYPE_ONTOLOGY o)
         {
-            ARCHETYPE_ONTOLOGY cloneObject = new ARCHETYPE_ONTOLOGY();
+            ARCHETYPE_ONTOLOGY result = new ARCHETYPE_ONTOLOGY();
 
-            // 1..* term_definitions CodeDefinitionSet
-            cloneObject.term_definitions = CloneCodeDefinitions(currentObject.term_definitions());
+            result.term_definitions = CloneCodeDefinitions(o.term_definitions());
+            result.term_bindings = CloneTermBindingSet(o.term_bindings());
+            result.constraint_definitions = CloneCodeDefinitions(o.constraint_definitions());
+            result.constraint_bindings = CloneConstraintBindingSet(o.constraint_bindings());
 
-            // 0..* term_bindings TermBindingSet
-            cloneObject.term_bindings = CloneTermBindingSet(currentObject.term_bindings());
-
-            // 0..* constraint_definitions CodeDefinitionSet
-            cloneObject.constraint_definitions = CloneCodeDefinitions(currentObject.constraint_definitions());
-
-            // 0..* constraint_bindings ConstraintBindingSet
-            cloneObject.constraint_bindings = CloneConstraintBindingSet(currentObject.constraint_bindings());
-
-            return cloneObject;
+            return result;
         }
 
-        protected virtual TermBindingSet[] CloneTermBindingSet(EiffelStructures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
+        protected virtual TermBindingSet[] CloneTermBindingSet(EiffelStructures.table.HASH_TABLE_REFERENCE_REFERENCE o)
         {
-            if (currentObject != null)
+            TermBindingSet[] result = null;
+
+            if (o != null && o.count() > 0)
             {
-                if (currentObject.count() > 0)
+                result = new TermBindingSet[o.count()];
+                o.start();
+
+                for (int i = 1; i <= o.count(); i++)
                 {
-                    TermBindingSet[] termBindingSets = new TermBindingSet[currentObject.count()];
+                    TermBindingSet termBindingSet = new TermBindingSet();
+                    termBindingSet.terminology = o.key_for_iteration().ToString();
 
-                    currentObject.start();
+                    EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE adlTerms = o.item_for_iteration() as EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE;
+                    SortedList<string, TERM_BINDING_ITEM> localTerms = new SortedList<string, TERM_BINDING_ITEM>();
+                    adlTerms.start();
 
-                    // 0..* items TERM_BINDING_ITEM                    
-                    for (int i = 1; i <= currentObject.count(); i++)
+                    for (int j = 1; j <= adlTerms.count(); j++)
                     {
-                        TermBindingSet termBindingSet = new TermBindingSet();
+                        openehr.openehr.rm.data_types.text.CODE_PHRASE term = adlTerms.item_for_iteration() as openehr.openehr.rm.data_types.text.CODE_PHRASE;
 
-                        //1 terminology string
-                        termBindingSet.terminology = currentObject.key_for_iteration().ToString();
-
-                        //terms HASH table
-                        EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE adlTerms;
-                        adlTerms = currentObject.item_for_iteration() as EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE;
-                        SortedList<string, TERM_BINDING_ITEM> localTerms = new SortedList<string, TERM_BINDING_ITEM>();
-
-                        adlTerms.start();
-
-                        for (int j = 1; j <= adlTerms.count(); j++)
+                        if (term != null)
                         {
-                            openehr.openehr.rm.data_types.text.CODE_PHRASE term = adlTerms.item_for_iteration() as openehr.openehr.rm.data_types.text.CODE_PHRASE;
+                            TERM_BINDING_ITEM localTerm = new TERM_BINDING_ITEM();
+                            localTerm.code = adlTerms.key_for_iteration().ToString();
+                            CODE_PHRASE codePhrase = new CODE_PHRASE();
+                            codePhrase.code_string = term.code_string().ToString();
 
-                            if (term != null)
+                            if (term.code_string() != null)
                             {
-                                TERM_BINDING_ITEM localTerm = new TERM_BINDING_ITEM();
-
-                                // 1 code string
-                                localTerm.code = adlTerms.key_for_iteration().ToString();
-
-                                // 1 value CODE_PHRASE (CODE_PHRASE to HASH TABLE)                                
-                                CODE_PHRASE codePhrase = new CODE_PHRASE();
-
-                                // 1 code_string string
-                                codePhrase.code_string = term.code_string().ToString();
-
-                                // 1 terminology_id TERMINOLOGY_ID                                
-                                if (term.code_string() != null)
-                                {
-                                    TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
-                                    terminologyId.value = term.terminology_id().value().ToString();
-                                    codePhrase.terminology_id = terminologyId;
-
-                                }
-                                localTerm.value = codePhrase;
-                                localTerms.Add(localTerm.code, localTerm);
+                                TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
+                                terminologyId.value = term.terminology_id().value().ToString();
+                                codePhrase.terminology_id = terminologyId;
                             }
 
-                            adlTerms.forth();
+                            localTerm.value = codePhrase;
+                            localTerms.Add(localTerm.code, localTerm);
                         }
 
-                        termBindingSet.items = new TERM_BINDING_ITEM[localTerms.Count];
-                        localTerms.Values.CopyTo(termBindingSet.items, 0);
-                        termBindingSets[i - 1] = termBindingSet;
-                        currentObject.forth();
+                        adlTerms.forth();
                     }
 
-                    return termBindingSets;
+                    termBindingSet.items = new TERM_BINDING_ITEM[localTerms.Count];
+                    localTerms.Values.CopyTo(termBindingSet.items, 0);
+                    result[i - 1] = termBindingSet;
+                    o.forth();
                 }
             }
 
-            return null;
+            return result;
         }
 
-        protected virtual CodeDefinitionSet[] CloneCodeDefinitions(EiffelStructures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
+        protected virtual CodeDefinitionSet[] CloneCodeDefinitions(EiffelStructures.table.HASH_TABLE_REFERENCE_REFERENCE o)
         {
-            if (currentObject != null)
+            CodeDefinitionSet[] result = null;
+
+            if (o != null)
             {
-                //if (currentObject.count() > 0)
+                result = new CodeDefinitionSet[o.count()];
+                o.start();
+
+                for (int i = 1; i <= result.Length; i++)
                 {
-                    CodeDefinitionSet[] codeDefinitionSets = new CodeDefinitionSet[currentObject.count()];
+                    CodeDefinitionSet codeDefinitionSet = new CodeDefinitionSet();
+                    codeDefinitionSet.language = o.key_for_iteration().ToString();
+                    EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE adlTerms = o.item_for_iteration() as EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE;
+                    SortedList<string, ARCHETYPE_TERM> localTerms = new SortedList<string, ARCHETYPE_TERM>();
+                    adlTerms.start();
 
-                    currentObject.start();
-
-                    // 0..* items ARCHETYPE_TERM
-                    for (int i = 1; i <= currentObject.count(); i++)
+                    for (int j = 1; j <= adlTerms.count(); j++)
                     {
-                        CodeDefinitionSet codeDefinitionSet = new CodeDefinitionSet();
-
-                        // 1 language string
-                        codeDefinitionSet.language = currentObject.key_for_iteration().ToString();
-
-                        //terms HASH table
-                        EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE adlTerms;
-                        adlTerms = currentObject.item_for_iteration() as EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE;
-
-                        System.Collections.Generic.SortedList<string, ARCHETYPE_TERM> localTerms =
-                            new System.Collections.Generic.SortedList<string, ARCHETYPE_TERM>();
-
-                        adlTerms.start();
-                        for (int j = 1; j <= adlTerms.count(); j++)
-                        {
-                            openehr.openehr.am.archetype.ontology.Impl.ARCHETYPE_TERM term = adlTerms.item_for_iteration() as openehr.openehr.am.archetype.ontology.Impl.ARCHETYPE_TERM;
-
-                            ARCHETYPE_TERM localTerm = new ARCHETYPE_TERM();
-
-                            // 1 code string
-                            localTerm.code = term.code().ToString();
-
-                            // 1..* items StringDictionaryItem                            
-                            localTerm.items = CloneHashTableAny(term.items());     //Order: description/text
-
-                            localTerms.Add(localTerm.code, localTerm);
-
-                            adlTerms.forth();
-                        }
-
-                        codeDefinitionSet.items = new ARCHETYPE_TERM[localTerms.Count];
-                        localTerms.Values.CopyTo(codeDefinitionSet.items, 0);
-                        CleanUpCodeDefinitionSet(codeDefinitionSet);
-                        codeDefinitionSets[i - 1] = codeDefinitionSet;
-                        currentObject.forth();
+                        openehr.openehr.am.archetype.ontology.Impl.ARCHETYPE_TERM term = adlTerms.item_for_iteration() as openehr.openehr.am.archetype.ontology.Impl.ARCHETYPE_TERM;
+                        ARCHETYPE_TERM localTerm = new ARCHETYPE_TERM();
+                        localTerm.code = term.code().ToString();
+                        localTerm.items = CloneHashTableAny(term.items());
+                        localTerms.Add(localTerm.code, localTerm);
+                        adlTerms.forth();
                     }
 
-                    return codeDefinitionSets;
+                    codeDefinitionSet.items = new ARCHETYPE_TERM[localTerms.Count];
+                    localTerms.Values.CopyTo(codeDefinitionSet.items, 0);
+                    CleanUpCodeDefinitionSet(codeDefinitionSet);
+                    result[i - 1] = codeDefinitionSet;
+                    o.forth();
                 }
             }
 
-            return null;
+            return result;
         }
 
         protected virtual void CleanUpCodeDefinitionSet(CodeDefinitionSet codeDefinitionSet)
         {
         }
 
-        protected virtual ConstraintBindingSet[] CloneConstraintBindingSet(EiffelStructures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
+        protected virtual ConstraintBindingSet[] CloneConstraintBindingSet(EiffelStructures.table.HASH_TABLE_REFERENCE_REFERENCE o)
         {
-            if (currentObject != null)
+            ConstraintBindingSet[] result = null;
+
+            if (o != null && o.count() > 0)
             {
-                if (currentObject.count() > 0)
+                result = new ConstraintBindingSet[o.count()];
+                o.start();
+
+                for (int i = 1; i <= result.Length; i++)
                 {
-                    ConstraintBindingSet[] constraintBindingSets = new ConstraintBindingSet[currentObject.count()];
+                    ConstraintBindingSet constraintBindingSet = new ConstraintBindingSet();
+                    constraintBindingSet.terminology = o.key_for_iteration().ToString();
+                    EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE adlTerms = o.item_for_iteration() as EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE;
+                    CONSTRAINT_BINDING_ITEM[] localTerms = new CONSTRAINT_BINDING_ITEM[adlTerms.count()];
+                    adlTerms.start();
 
-                    currentObject.start();
-                    for (int i = 1; i <= currentObject.count(); i++)
+                    for (int j = 1; j <= adlTerms.count(); j++)
                     {
-                        ConstraintBindingSet constraintBindingSet = new ConstraintBindingSet();
-
-                        // 1 terminology string
-                        constraintBindingSet.terminology = currentObject.key_for_iteration().ToString();
-
-                        // 0..* items CONSTRAINT_BINDING_ITEM
-                        EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE adlTerms;
-                        adlTerms = currentObject.item_for_iteration() as EiffelStructures.table.Impl.HASH_TABLE_REFERENCE_REFERENCE;
-
-                        CONSTRAINT_BINDING_ITEM[] localTerms = new CONSTRAINT_BINDING_ITEM[adlTerms.count()];
-
-                        adlTerms.start();
-                        for (int j = 1; j <= adlTerms.count(); j++)
-                        {
-                            openehr.common_libs.basic.Impl.URI term = adlTerms.item_for_iteration() as openehr.common_libs.basic.Impl.URI;
-
-                            CONSTRAINT_BINDING_ITEM localTerm = new CONSTRAINT_BINDING_ITEM();
-
-                            // 1 code string
-                            localTerm.code = adlTerms.key_for_iteration().ToString();
-
-                            // 1 value anyURI (note localTerm.value is string!)
-                            localTerm.value = adlTerms.item_for_iteration().ToString();
-                            localTerms[j - 1] = localTerm;
-
-                            adlTerms.forth();
-                        }
-
-                        constraintBindingSet.items = localTerms;
-                        constraintBindingSets[i - 1] = constraintBindingSet;
-                        currentObject.forth();
+                        openehr.common_libs.basic.Impl.URI term = adlTerms.item_for_iteration() as openehr.common_libs.basic.Impl.URI;
+                        CONSTRAINT_BINDING_ITEM localTerm = new CONSTRAINT_BINDING_ITEM();
+                        localTerm.code = adlTerms.key_for_iteration().ToString();
+                        localTerm.value = adlTerms.item_for_iteration().ToString();
+                        localTerms[j - 1] = localTerm;
+                        adlTerms.forth();
                     }
-                    return constraintBindingSets;
+
+                    constraintBindingSet.items = localTerms;
+                    result[i - 1] = constraintBindingSet;
+                    o.forth();
                 }
             }
 
-            return null;
+            return result;
         }
 
-        protected virtual RESOURCE_DESCRIPTION CloneDescription(openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION currentObject)
+        protected virtual RESOURCE_DESCRIPTION CloneDescription(openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION o)
         {
-            RESOURCE_DESCRIPTION cloneObject = new RESOURCE_DESCRIPTION();
+            RESOURCE_DESCRIPTION result = new RESOURCE_DESCRIPTION();
 
-            // 1..* original_author StringDictionaryItem
-            cloneObject.original_author = CloneHashTableAny(currentObject.original_author());
+            result.original_author = CloneHashTableAny(o.original_author());
 
-            // 0..* other_contributors string
-            if (currentObject.other_contributors() != null)
-                if (currentObject.other_contributors().count() > 0)
-                {
-                    string[] contributorList = new string[currentObject.other_contributors().count()];
-                    cloneObject.other_contributors = contributorList;
+            if (o.other_contributors() != null && o.other_contributors().count() > 0)
+            {
+                result.other_contributors = new string[o.other_contributors().count()];
 
-                    currentObject.other_contributors().start();
-                    for (int i = 0; i < currentObject.other_contributors().count(); i++)
-                    {
-                        EiffelStructures.list.Impl.ARRAYED_LIST_REFERENCE castList = currentObject.other_contributors() as EiffelStructures.list.Impl.ARRAYED_LIST_REFERENCE;
-                        EiffelKernel.dotnet.Impl.SPECIAL_REFERENCE sList = (EiffelKernel.dotnet.Impl.SPECIAL_REFERENCE)(castList.area());
-                        contributorList[i] = sList.item(i).ToString();
-                        currentObject.other_contributors().forth();
-                    }
-                }
+                for (int i = 1; i < result.other_contributors.Length; i++)
+                    result.other_contributors[i - 1] = ((EiffelKernel.STRING_8)o.other_contributors().i_th(i)).to_cil();
+            }
 
-            // 1 lifecycle_state string
-            cloneObject.lifecycle_state = currentObject.lifecycle_state().to_cil();
+            result.lifecycle_state = o.lifecycle_state().to_cil();
 
-            // 0..1 resource_package_uri string
-            if (currentObject.resource_package_uri() != null)
-                cloneObject.resource_package_uri = currentObject.resource_package_uri().ToString();
+            if (o.resource_package_uri() != null)
+                result.resource_package_uri = o.resource_package_uri().ToString();
 
-            // 0..* other_details StringDictionaryItem
-            cloneObject.other_details = CloneHashTableAny(currentObject.other_details());
+            result.other_details = CloneHashTableAny(o.other_details());
 
             // 0..1 parent_resource AUTHORED_RESOURCE (does not occur in NHS archetypes, do later)
-            //if (currentObject.parent_resource() != null)
-            //cloneObject.parent_resource = CloneAuthoredResource(currentObject.parent_resource());            
+            //if (o.parent_resource() != null)
+            //result.parent_resource = CloneAuthoredResource(o.parent_resource());            
 
-            //0..* details RESOURCE_DESCRIPTION_ITEM
-            if (currentObject.details().count() > 0)
+            if (o.details().count() > 0)
             {
-                RESOURCE_DESCRIPTION_ITEM[] details = new RESOURCE_DESCRIPTION_ITEM[currentObject.details().count()];
+                RESOURCE_DESCRIPTION_ITEM[] details = new RESOURCE_DESCRIPTION_ITEM[o.details().count()];
+                o.details().start();
 
-                currentObject.details().start();
-                for (int i = 1; i <= currentObject.details().count(); i++)
+                for (int i = 1; i <= o.details().count(); i++)
                 {
-                    openehr.openehr.rm.common.resource.Impl.RESOURCE_DESCRIPTION_ITEM item = currentObject.details().item_for_iteration() as openehr.openehr.rm.common.resource.Impl.RESOURCE_DESCRIPTION_ITEM;
-
+                    openehr.openehr.rm.common.resource.Impl.RESOURCE_DESCRIPTION_ITEM item = o.details().item_for_iteration() as openehr.openehr.rm.common.resource.Impl.RESOURCE_DESCRIPTION_ITEM;
                     details[i - 1] = new RESOURCE_DESCRIPTION_ITEM();
-
-                    // 1 language CODE_PHRASE
                     details[i - 1].language = CloneCodePhrase(item.language());
 
-                    // 1 purpose string
                     if (item.purpose() != null)
                         details[i - 1].purpose = item.purpose().ToString();
 
-                    // 0..1 use string
                     if (item.use() != null)
                         details[i - 1].use = item.use().ToString();
 
-                    // 0..1 misuse string
                     if (item.misuse() != null)
                         details[i - 1].misuse = item.misuse().ToString();
 
-                    // 0..1 copyright string
                     if (item.copyright() != null)
                         details[i - 1].copyright = item.copyright().ToString();
 
-                    // 0..* original_resource_uri StringDictionaryItem
-                    if (item.original_resource_uri() != null)
-                        if (item.original_resource_uri().count() > 0)
-                            cloneObject.resource_package_uri = item.original_resource_uri().ToString();
+                    if (item.original_resource_uri() != null && item.original_resource_uri().count() > 0)
+                        result.resource_package_uri = item.original_resource_uri().ToString();
 
                     // 0..* other_details StringDictionaryItem
                     //cloneObject.other_details = CloneHashTableAny(item.other_details());
 
-                    // 0..* keywords string
-                    if (item.keywords() != null)
-                        if (item.keywords().count() > 0)
-                        {
-                            string[] keyWords = new string[item.keywords().count()];
-                            details[i - 1].keywords = keyWords;
-
-                            item.keywords().start();
-                            for (int j = 0; j < item.keywords().count(); j++)
-                            {
-                                if (item.keywords().i_th(j + 1) != null)
-                                    keyWords[j] = item.keywords().i_th(j + 1).ToString();
-
-                                item.keywords().forth();
-                            }
-                            details[i - 1].keywords = keyWords;
-                        }
-
-                    currentObject.details().forth();
-                }
-                cloneObject.details = details;
-            }
-
-            return cloneObject;
-        }
-
-        protected virtual StringDictionaryItem[] CloneHashTableAny(EiffelStructures.table.HASH_TABLE_REFERENCE_REFERENCE currentObject)
-        {
-            if (currentObject != null)
-            {
-                if (currentObject.count() > 0)
-                {
-                    //StringDictionaryItem[] dictionaryItem = new StringDictionaryItem[currentObject.count()];
-                    SortedList<string, StringDictionaryItem> dictionaryItem = new SortedList<string, StringDictionaryItem>();
-                    currentObject.start();
-                    while (currentObject.key_for_iteration() != null)
+                    if (item.keywords() != null && item.keywords().count() > 0)
                     {
+                        string[] keywords = new string[item.keywords().count()];
+                        details[i - 1].keywords = keywords;
 
-                        StringDictionaryItem item = new StringDictionaryItem();
-                        item.id = currentObject.key_for_iteration().ToString();
-                        item.Value = currentObject.item_for_iteration().ToString();
-                        dictionaryItem.Add(item.id, item);
-                        currentObject.forth();
+                        for (int j = 1; j <= keywords.Length; j++)
+                        {
+                            if (item.keywords().i_th(j) != null)
+                                keywords[j - 1] = item.keywords().i_th(j).ToString();
+                        }
                     }
 
-                    StringDictionaryItem[] items = new StringDictionaryItem[dictionaryItem.Count];
-
-                    dictionaryItem.Values.CopyTo(items, 0);
-
-                    return items;
+                    o.details().forth();
                 }
+
+                result.details = details;
             }
 
-            return null;
+            return result;
         }
 
-        protected virtual CARDINALITY CloneCardinality(openehr.openehr.am.archetype.constraint_model.CARDINALITY currentObject)
+        protected virtual StringDictionaryItem[] CloneHashTableAny(EiffelStructures.table.HASH_TABLE_REFERENCE_REFERENCE o)
         {
-            CARDINALITY cloneObject = new CARDINALITY();
+            StringDictionaryItem[] result = null;
 
-            // 1 is_ordered string
-            cloneObject.is_ordered = currentObject.is_ordered();
+            if (o != null && o.count() > 0)
+            {
+                SortedList<string, StringDictionaryItem> dictionaryItem = new SortedList<string, StringDictionaryItem>();
+                o.start();
 
-            // is_unique boolean
-            cloneObject.is_unique = currentObject.is_unique();
+                while (o.key_for_iteration() != null)
+                {
+                    StringDictionaryItem item = new StringDictionaryItem();
+                    item.id = o.key_for_iteration().ToString();
+                    item.Value = o.item_for_iteration().ToString();
+                    dictionaryItem.Add(item.id, item);
+                    o.forth();
+                }
 
-            // 1 interval IntervalOfInteger
-            cloneObject.interval = CloneIntervalOfInteger(currentObject.interval());
+                result = new StringDictionaryItem[dictionaryItem.Count];
+                dictionaryItem.Values.CopyTo(result, 0);
+            }
 
-            return cloneObject;
+            return result;
         }
 
-        protected virtual C_ATTRIBUTE CloneAttribute(openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE currentObject)
+        protected virtual CARDINALITY CloneCardinality(openehr.openehr.am.archetype.constraint_model.CARDINALITY o)
+        {
+            CARDINALITY result = new CARDINALITY();
+
+            result.is_ordered = o.is_ordered();
+            result.is_unique = o.is_unique();
+            result.interval = CloneIntervalOfInteger(o.interval());
+
+            return result;
+        }
+
+        protected virtual C_ATTRIBUTE CloneAttribute(openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE o)
         {
             C_ATTRIBUTE result;
 
-            if (currentObject.cardinality() == null)
+            if (o.cardinality() == null)
                 result = new C_SINGLE_ATTRIBUTE();
             else
             {
                 C_MULTIPLE_ATTRIBUTE cloneMultiple = new C_MULTIPLE_ATTRIBUTE();
-                cloneMultiple.cardinality = CloneCardinality(currentObject.cardinality());
+                cloneMultiple.cardinality = CloneCardinality(o.cardinality());
                 result = cloneMultiple;
             }
 
-            result.rm_attribute_name = currentObject.rm_attribute_name().to_cil();
+            result.rm_attribute_name = o.rm_attribute_name().to_cil();
 
-            if (currentObject.existence() != null)
-                result.existence = CloneIntervalOfInteger(currentObject.existence());
+            if (o.existence() != null)
+                result.existence = CloneIntervalOfInteger(o.existence());
 
             // 0..* children C_OBJECT (set in CloneTree)
 
