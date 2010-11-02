@@ -875,39 +875,38 @@ Public Class PathwaySpecification
 
         mPathwayEvent = selected_pv
         tabProperties.Show()
+        Dim state As StateMachineType = StateMachineType.Not_Set
 
         Select Case mPathwayEvent.DefaultStateMachineType
             Case StateMachineType.ActiveAborted, StateMachineType.InitialAborted, StateMachineType.Completed, StateMachineType.Scheduled
                 tabProperties.Hide()
 
             Case StateMachineType.InitialSuspended
-                cbAlternativeState.Text = StateMachineType.ActiveSuspended.ToString
-                cbAlternativeState.Tag = StateMachineType.ActiveSuspended
-                cbAlternativeState.Show()
+                state = StateMachineType.ActiveSuspended
                 cbSuspended.Hide()
                 cbAborted.Visible = PanelAbortInitial.Controls.Count > 0
 
             Case StateMachineType.ActiveSuspended
-                cbAlternativeState.Text = StateMachineType.InitialSuspended.ToString
-                cbAlternativeState.Tag = StateMachineType.InitialSuspended
-                cbAlternativeState.Show()
+                state = StateMachineType.InitialSuspended
                 cbSuspended.Hide()
                 cbAborted.Visible = PanelAbortActive.Controls.Count > 0
 
             Case StateMachineType.Active
-                cbAlternativeState.Text = StateMachineType.Planned.ToString
-                cbAlternativeState.Tag = StateMachineType.Planned
-                cbAlternativeState.Show()
+                state = StateMachineType.Planned
                 cbAborted.Visible = PanelAbortActive.Controls.Count > 0
                 cbSuspended.Visible = PanelSuspendActive.Controls.Count > 0
 
             Case StateMachineType.Planned
-                cbAlternativeState.Text = StateMachineType.Active.ToString
-                cbAlternativeState.Tag = StateMachineType.Active
+                state = StateMachineType.Active
                 cbAborted.Visible = PanelAbortInitial.Controls.Count > 0
                 cbSuspended.Visible = PanelSuspendInitial.Controls.Count > 0
-                cbAlternativeState.Show()
         End Select
+
+        If state <> StateMachineType.Not_Set Then
+            cbAlternativeState.Text = Filemanager.GetOpenEhrTerm(state, state.ToString)
+            cbAlternativeState.Tag = state
+            cbAlternativeState.Show()
+        End If
 
         mIsloading = True
         cbAlternativeState.Checked = mPathwayEvent.Item.HasAlternativeState
