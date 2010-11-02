@@ -40,13 +40,12 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         lblParser.Text = String.Format("({0})", mFileManager.ParserType)
 
         If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.lblSlot.Text = Filemanager.GetOpenEhrTerm(312, Me.lblSlot.Text)
-            Me.gbInclude.Text = Filemanager.GetOpenEhrTerm(625, Me.gbInclude.Text)
-            Me.gbExclude.Text = Filemanager.GetOpenEhrTerm(626, Me.gbExclude.Text)
-            Me.chkIncludeAll.Text = Filemanager.GetOpenEhrTerm(628, Me.chkIncludeAll.Text)
-            Me.chkExcludeAll.Text = Filemanager.GetOpenEhrTerm(628, Me.chkExcludeAll.Text)
+            lblSlot.Text = Filemanager.GetOpenEhrTerm(312, lblSlot.Text)
+            gbInclude.Text = Filemanager.GetOpenEhrTerm(625, gbInclude.Text)
+            gbExclude.Text = Filemanager.GetOpenEhrTerm(626, gbExclude.Text)
+            chkIncludeAll.Text = Filemanager.GetOpenEhrTerm(628, chkIncludeAll.Text)
+            chkExcludeAll.Text = Filemanager.GetOpenEhrTerm(629, chkExcludeAll.Text)
         End If
-
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer
@@ -134,9 +133,11 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         'chkIncludeAll
         '
-        Me.chkIncludeAll.Location = New System.Drawing.Point(48, 1)
+        Me.chkIncludeAll.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkIncludeAll.Location = New System.Drawing.Point(40, 10)
         Me.chkIncludeAll.Name = "chkIncludeAll"
-        Me.chkIncludeAll.Size = New System.Drawing.Size(104, 24)
+        Me.chkIncludeAll.Size = New System.Drawing.Size(368, 24)
         Me.chkIncludeAll.TabIndex = 32
         Me.chkIncludeAll.Text = "Include All"
         '
@@ -180,9 +181,11 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         '
         'chkExcludeAll
         '
-        Me.chkExcludeAll.Location = New System.Drawing.Point(48, 0)
+        Me.chkExcludeAll.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkExcludeAll.Location = New System.Drawing.Point(40, 4)
         Me.chkExcludeAll.Name = "chkExcludeAll"
-        Me.chkExcludeAll.Size = New System.Drawing.Size(104, 24)
+        Me.chkExcludeAll.Size = New System.Drawing.Size(368, 24)
         Me.chkExcludeAll.TabIndex = 38
         Me.chkExcludeAll.Text = "Exclude All"
         '
