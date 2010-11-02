@@ -126,13 +126,15 @@ Namespace ArchetypeEditor.XML_Classes
         Private Function IndexOfDetailInLanguage(ByVal language As String) As Integer
             Dim result As Integer = -1
 
-            For i As Integer = 0 To mXML_Description.details.Length - 1
-                Dim rdi As XMLParser.RESOURCE_DESCRIPTION_ITEM = mXML_Description.details(i)
+            If Not mXML_Description.details Is Nothing Then
+                For i As Integer = 0 To mXML_Description.details.Length - 1
+                    Dim rdi As XMLParser.RESOURCE_DESCRIPTION_ITEM = mXML_Description.details(i)
 
-                If rdi.language.code_string = language Then
-                    result = i
-                End If
-            Next
+                    If rdi.language.code_string = language Then
+                        result = i
+                    End If
+                Next
+            End If
 
             Return result
         End Function

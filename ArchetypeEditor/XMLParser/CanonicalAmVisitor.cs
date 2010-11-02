@@ -14,39 +14,34 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
     {
         public ARCHETYPE VisitArchetype(ARCHETYPE archetype)
         {
-            ARCHETYPE canonicalArchetype = new ARCHETYPE();
+            ARCHETYPE result = new ARCHETYPE();
 
-            canonicalArchetype.adl_version = archetype.adl_version;
-            canonicalArchetype.archetype_id = archetype.archetype_id;
-            canonicalArchetype.concept = archetype.concept;
-
-            //canonicalArchetype.definition = archetype.definition;
-            canonicalArchetype.definition = VisitComplexObjectConstraint(archetype.definition);
-
-            canonicalArchetype.invariants = archetype.invariants;
+            result.adl_version = archetype.adl_version;
+            result.archetype_id = archetype.archetype_id;
+            result.concept = archetype.concept;
+            result.definition = VisitComplexObjectConstraint(archetype.definition);
+            result.invariants = archetype.invariants;
 
             if (archetype.is_controlledSpecified)
             {
-                canonicalArchetype.is_controlled = archetype.is_controlled;
-                canonicalArchetype.is_controlledSpecified = true;
+                result.is_controlled = archetype.is_controlled;
+                result.is_controlledSpecified = true;
             }
 
-            canonicalArchetype.ontology = VisitOntology(archetype.ontology);
+            result.ontology = VisitOntology(archetype.ontology);
+            result.original_language = archetype.original_language;
+            result.parent_archetype_id = archetype.parent_archetype_id;
+            result.revision_history = archetype.revision_history;
+            result.translations = VisitTranslations(archetype.translations);
+            result.uid = archetype.uid;
 
-            canonicalArchetype.original_language = archetype.original_language;
-            canonicalArchetype.parent_archetype_id = archetype.parent_archetype_id;
-            canonicalArchetype.revision_history = archetype.revision_history;
-
-            canonicalArchetype.translations = VisitTranslations(archetype.translations);
-
-            canonicalArchetype.uid = archetype.uid;
-
-            return canonicalArchetype;
+            return result;
         }
 
         C_OBJECT[] VisitChildren(C_OBJECT[] children)
         {
-            C_OBJECT[] objectConstraints = null;
+            C_OBJECT[] result = null;
+
             if (children != null)
             {
                 List<C_OBJECT> objectConstraintList = new List<C_OBJECT>();
@@ -54,146 +49,147 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 foreach (C_OBJECT objectConstraint in children)
                 {
                     C_OBJECT newObjectConstraint;
-
                     C_COMPLEX_OBJECT complexObjectConstraint = objectConstraint as C_COMPLEX_OBJECT;
+
                     if (complexObjectConstraint != null)
                         newObjectConstraint = VisitComplexObjectConstraint(complexObjectConstraint);
-
                     else
                     {
                         C_PRIMITIVE_OBJECT primitiveObjectConstraint = objectConstraint as C_PRIMITIVE_OBJECT;
+
                         if (primitiveObjectConstraint != null)
                             newObjectConstraint = VisitPrimitiveObjectConstraint(primitiveObjectConstraint);
                         else
-                        newObjectConstraint = objectConstraint;
+                            newObjectConstraint = objectConstraint;
                     }
 
                     System.Diagnostics.Debug.Assert(newObjectConstraint != null, "newObject must not be null");
                     objectConstraintList.Add(newObjectConstraint);
                 }
-                objectConstraints = objectConstraintList.ToArray();
+
+                result = objectConstraintList.ToArray();
             }
 
-            return objectConstraints;
+            return result;
         }
 
         C_COMPLEX_OBJECT VisitComplexObjectConstraint(C_COMPLEX_OBJECT objectConstraint)
         {
-            System.Diagnostics.Trace.Assert(objectConstraint != null,
-                "objectConstraint must not be null");
+            System.Diagnostics.Trace.Assert(objectConstraint != null, "objectConstraint must not be null");
 
-            C_COMPLEX_OBJECT newObjectConstraint = new C_COMPLEX_OBJECT();
-            CloneObjectConstraint(objectConstraint, newObjectConstraint);
+            C_COMPLEX_OBJECT result = new C_COMPLEX_OBJECT();
+            CloneObjectConstraint(objectConstraint, result);
+            result.attributes = VisitAttributes(objectConstraint.attributes);
 
-            newObjectConstraint.attributes = VisitAttributes(objectConstraint.attributes);
-
-            return newObjectConstraint;
+            return result;
         }
 
         C_PRIMITIVE_OBJECT VisitPrimitiveObjectConstraint(C_PRIMITIVE_OBJECT objectConstraint)
         {
-            System.Diagnostics.Trace.Assert(objectConstraint != null,
-                "objectConstraint must not be null");
+            System.Diagnostics.Trace.Assert(objectConstraint != null, "objectConstraint must not be null");
 
-            C_PRIMITIVE primitiveConstraint = VisitPrimitiveConstraint(objectConstraint.item);
-
+            C_PRIMITIVE result = VisitPrimitiveConstraint(objectConstraint.item);
             C_PRIMITIVE_OBJECT primitiveObjectConstraint = null;
-            if (primitiveConstraint != objectConstraint.item)
+
+            if (result != objectConstraint.item)
             {
                 primitiveObjectConstraint = new C_PRIMITIVE_OBJECT();
                 CloneObjectConstraint(objectConstraint, primitiveObjectConstraint);
-                primitiveObjectConstraint.item = primitiveConstraint;
+                primitiveObjectConstraint.item = result;
             }
             else
                 primitiveObjectConstraint = objectConstraint;
 
-            System.Diagnostics.Debug.Assert(primitiveObjectConstraint != null,
-                "primitiveObjectConstraint must not be null");
+            System.Diagnostics.Debug.Assert(primitiveObjectConstraint != null, "primitiveObjectConstraint must not be null");
             return primitiveObjectConstraint;
         }
 
         C_PRIMITIVE VisitPrimitiveConstraint(C_PRIMITIVE primitiveConstraint)
         {
-            System.Diagnostics.Trace.Assert(primitiveConstraint != null,
-                "objectConstraint must not be null");
+            System.Diagnostics.Trace.Assert(primitiveConstraint != null, "objectConstraint must not be null");
 
-            C_PRIMITIVE resultPrimitiveConstraint = null;
-
+            C_PRIMITIVE result = null;
             C_DATE dateConstraint = primitiveConstraint as C_DATE;
+
             if (dateConstraint != null)
-                resultPrimitiveConstraint = VisitPrimitiveConstraint(dateConstraint);
+                result = VisitPrimitiveConstraint(dateConstraint);
             else
             {
                 C_DATE_TIME dateTimeConstraint = primitiveConstraint as C_DATE_TIME;
+
                 if (dateTimeConstraint != null)
-                    resultPrimitiveConstraint = VisitPrimitiveConstraint(dateTimeConstraint);
+                    result = VisitPrimitiveConstraint(dateTimeConstraint);
                 else
                 {
                     C_TIME timeConstraint = primitiveConstraint as C_TIME;
+
                     if (timeConstraint != null)
-                        resultPrimitiveConstraint = VisitPrimitiveConstraint(timeConstraint);
+                        result = VisitPrimitiveConstraint(timeConstraint);
                     else
                     {
                         C_DURATION durationConstraint = primitiveConstraint as C_DURATION;
+
                         if (durationConstraint != null)
-                            resultPrimitiveConstraint = VisitPrimitiveConstraint(durationConstraint);
+                            result = VisitPrimitiveConstraint(durationConstraint);
                         else
-                            resultPrimitiveConstraint = primitiveConstraint;
+                            result = primitiveConstraint;
                     }
                 }
             }
 
-            System.Diagnostics.Debug.Assert(resultPrimitiveConstraint != null,
-                "objectConstraint must not be null");
-            return resultPrimitiveConstraint;
+            System.Diagnostics.Debug.Assert(result != null, "objectConstraint must not be null");
+            return result;
         }
 
         C_DATE VisitPrimitiveConstraint(C_DATE primitiveConstraint)
         {
-            System.Diagnostics.Trace.Assert(primitiveConstraint != null,
-                "objectConstraint must not be null");
+            System.Diagnostics.Trace.Assert(primitiveConstraint != null, "objectConstraint must not be null");
 
-            C_DATE dateConstraint =  new C_DATE();
-            dateConstraint.assumed_value = primitiveConstraint.assumed_value;
+            C_DATE result = new C_DATE();
+            result.assumed_value = primitiveConstraint.assumed_value;
+
             if (primitiveConstraint.pattern != null)
-                dateConstraint.pattern = primitiveConstraint.pattern.ToUpperInvariant();
-            dateConstraint.range = primitiveConstraint.range;
-            dateConstraint.timezone_validity = primitiveConstraint.timezone_validity;
-            dateConstraint.timezone_validitySpecified = primitiveConstraint.timezone_validitySpecified;
+                result.pattern = primitiveConstraint.pattern.ToUpperInvariant();
 
-            return dateConstraint;
+            result.range = primitiveConstraint.range;
+            result.timezone_validity = primitiveConstraint.timezone_validity;
+            result.timezone_validitySpecified = primitiveConstraint.timezone_validitySpecified;
+
+            return result;
         }
 
         C_DATE_TIME VisitPrimitiveConstraint(C_DATE_TIME primitiveConstraint)
         {
-            System.Diagnostics.Trace.Assert(primitiveConstraint != null,
-                "objectConstraint must not be null");
+            System.Diagnostics.Trace.Assert(primitiveConstraint != null, "objectConstraint must not be null");
 
-            C_DATE_TIME resultPrimitiveConstraint = new C_DATE_TIME();
-            resultPrimitiveConstraint.assumed_value = primitiveConstraint.assumed_value;
+            C_DATE_TIME result = new C_DATE_TIME();
+            result.assumed_value = primitiveConstraint.assumed_value;
+
             if (primitiveConstraint.pattern != null)
-                resultPrimitiveConstraint.pattern = primitiveConstraint.pattern.ToUpperInvariant();
-            resultPrimitiveConstraint.range = primitiveConstraint.range;
-            resultPrimitiveConstraint.timezone_validity = primitiveConstraint.timezone_validity;
-            resultPrimitiveConstraint.timezone_validitySpecified = primitiveConstraint.timezone_validitySpecified;
+                result.pattern = primitiveConstraint.pattern.ToUpperInvariant();
 
-            return resultPrimitiveConstraint;
+            result.range = primitiveConstraint.range;
+            result.timezone_validity = primitiveConstraint.timezone_validity;
+            result.timezone_validitySpecified = primitiveConstraint.timezone_validitySpecified;
+
+            return result;
         }
 
         C_TIME VisitPrimitiveConstraint(C_TIME primitiveConstraint)
         {
-            System.Diagnostics.Trace.Assert(primitiveConstraint != null,
-                "objectConstraint must not be null");
+            System.Diagnostics.Trace.Assert(primitiveConstraint != null, "objectConstraint must not be null");
 
-            C_TIME resultPrimitiveConstraint = new C_TIME();
-            resultPrimitiveConstraint.assumed_value = primitiveConstraint.assumed_value;
+            C_TIME result = new C_TIME();
+            result.assumed_value = primitiveConstraint.assumed_value;
+
             if (primitiveConstraint.pattern != null)
-                resultPrimitiveConstraint.pattern = primitiveConstraint.pattern.ToUpperInvariant();
-            resultPrimitiveConstraint.range = primitiveConstraint.range;
-            resultPrimitiveConstraint.timezone_validity = primitiveConstraint.timezone_validity;
-            resultPrimitiveConstraint.timezone_validitySpecified = primitiveConstraint.timezone_validitySpecified;
+                result.pattern = primitiveConstraint.pattern.ToUpperInvariant();
 
-            return resultPrimitiveConstraint;
+            result.range = primitiveConstraint.range;
+            result.timezone_validity = primitiveConstraint.timezone_validity;
+            result.timezone_validitySpecified = primitiveConstraint.timezone_validitySpecified;
+
+            return result;
         }
 
         C_DURATION VisitPrimitiveConstraint(C_DURATION primitiveConstraint)
@@ -201,20 +197,20 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             System.Diagnostics.Trace.Assert(primitiveConstraint != null,
                 "objectConstraint must not be null");
 
-            C_DURATION resultPrimitiveConstraint = new C_DURATION();
-            resultPrimitiveConstraint.assumed_value = primitiveConstraint.assumed_value;
-            if (primitiveConstraint.pattern != null)
-                resultPrimitiveConstraint.pattern = primitiveConstraint.pattern.ToUpperInvariant();
-            resultPrimitiveConstraint.range = primitiveConstraint.range;
+            C_DURATION result = new C_DURATION();
+            result.assumed_value = primitiveConstraint.assumed_value;
 
-            return resultPrimitiveConstraint;
+            if (primitiveConstraint.pattern != null)
+                result.pattern = primitiveConstraint.pattern.ToUpperInvariant();
+
+            result.range = primitiveConstraint.range;
+
+            return result;
         }
 
         /// <summary>
         /// Clone C_OBJECT
         /// </summary>
-        /// <param name="existingNode"></param>
-        /// <param name="newNode"></param>
         void CloneObjectConstraint(C_OBJECT objectConstraint, C_OBJECT newObjectConstraint)
         {
             newObjectConstraint.node_id = objectConstraint.node_id;
@@ -222,18 +218,10 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             newObjectConstraint.rm_type_name = objectConstraint.rm_type_name;
         }
 
-        //void CloneC_Defined_Object(C_DEFINED_OBJECT existingNode, C_DEFINED_OBJECT newNode)
-        //{
-        //    CloneC_Object(existingNode, newNode);
-
-        //}
-
         C_ATTRIBUTE[] VisitAttributes(C_ATTRIBUTE[] attributes)
         {
-            //System.Diagnostics.Trace.Assert(attributes == null || attributes.Length > 0, 
-            //    "attributeConstraints must be null or not empty");
+            C_ATTRIBUTE[] result = null;
 
-            C_ATTRIBUTE[] attributeConstraintArray = null;
             if (attributes != null)
             {
                 SortedList<string, C_ATTRIBUTE> attributeConstraintList = new SortedList<string, C_ATTRIBUTE>();
@@ -241,8 +229,8 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                 foreach (C_ATTRIBUTE attributeConstraint in attributes)
                 {
                     C_ATTRIBUTE newAttribute;
-
                     C_MULTIPLE_ATTRIBUTE multipleAttributeConstraint = attributeConstraint as C_MULTIPLE_ATTRIBUTE;
+
                     if (multipleAttributeConstraint != null)
                         newAttribute = VisitMultipleAttributeConstraint(multipleAttributeConstraint);
                     else
@@ -254,24 +242,22 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
                     attributeConstraintList.Add(newAttribute.rm_attribute_name, newAttribute);
                 }
 
-                attributeConstraintArray = new C_ATTRIBUTE[attributeConstraintList.Count];
-                attributeConstraintList.Values.CopyTo(attributeConstraintArray, 0);
+                result = new C_ATTRIBUTE[attributeConstraintList.Count];
+                attributeConstraintList.Values.CopyTo(result, 0);
             }
 
-            return attributeConstraintArray;
+            return result;
         }
 
         C_MULTIPLE_ATTRIBUTE VisitMultipleAttributeConstraint(C_MULTIPLE_ATTRIBUTE attributeConstraint)
         {
-            System.Diagnostics.Trace.Assert(attributeConstraint != null, 
-                "existingAttribute must not be null");
+            System.Diagnostics.Trace.Assert(attributeConstraint != null, "existingAttribute must not be null");
 
-            C_MULTIPLE_ATTRIBUTE newAttribute = new C_MULTIPLE_ATTRIBUTE();
-            CloneAttributeConstraint(attributeConstraint, newAttribute);
+            C_MULTIPLE_ATTRIBUTE result = new C_MULTIPLE_ATTRIBUTE();
+            CloneAttributeConstraint(attributeConstraint, result);
+            result.cardinality = attributeConstraint.cardinality;
 
-            newAttribute.cardinality = attributeConstraint.cardinality;
-
-            return newAttribute;
+            return result;
         }
 
         C_SINGLE_ATTRIBUTE VisitSingleAttributeConstraint(C_SINGLE_ATTRIBUTE attributeConstraint)
@@ -279,10 +265,10 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             System.Diagnostics.Trace.Assert(attributeConstraint != null, 
                 "existingAttribute must not be null");
 
-            C_SINGLE_ATTRIBUTE newAttribute = new C_SINGLE_ATTRIBUTE();
-            CloneAttributeConstraint(attributeConstraint, newAttribute);
+            C_SINGLE_ATTRIBUTE result = new C_SINGLE_ATTRIBUTE();
+            CloneAttributeConstraint(attributeConstraint, result);
 
-            return newAttribute;
+            return result;
         }
 
         void CloneAttributeConstraint(C_ATTRIBUTE attributeConstraint, C_ATTRIBUTE newAttributeConstraint)
@@ -294,187 +280,212 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
         /// <summary>
         /// canonicalise translations hash list
         /// </summary>
-        /// <param name="translations"></param>
-        /// <returns></returns>
         TRANSLATION_DETAILS[] VisitTranslations(TRANSLATION_DETAILS[] translations)
         {
-            if (translations == null)
-                return null;
+            TRANSLATION_DETAILS[] result = null;
 
-            SortedDictionary<string, TRANSLATION_DETAILS> sortedTranslations = new SortedDictionary<string, TRANSLATION_DETAILS>();
-            foreach (TRANSLATION_DETAILS translation in translations)
+            if (translations != null)
             {
-                if (translation == null)
-                    throw new ApplicationException("translations list must not contain null");
+                SortedDictionary<string, TRANSLATION_DETAILS> sortedTranslations = new SortedDictionary<string, TRANSLATION_DETAILS>();
 
-                TRANSLATION_DETAILS canonicalTranslation = new TRANSLATION_DETAILS();
-                canonicalTranslation.accreditation = translation.accreditation;
-                canonicalTranslation.language = translation.language;
-                // sort translations author hash list
-                canonicalTranslation.author = VisitStringDictionary(translation.author);
-                // sort translations other_details hash list
-                canonicalTranslation.other_details = VisitStringDictionary(translation.other_details);
+                foreach (TRANSLATION_DETAILS translation in translations)
+                {
+                    if (translation == null)
+                        throw new ApplicationException("translations list must not contain null");
 
-                sortedTranslations.Add(translation.language.code_string, canonicalTranslation);
+                    TRANSLATION_DETAILS canonicalTranslation = new TRANSLATION_DETAILS();
+                    canonicalTranslation.accreditation = translation.accreditation;
+                    canonicalTranslation.language = translation.language;
+
+                    // sort translations author hash list
+                    canonicalTranslation.author = VisitStringDictionary(translation.author);
+
+                    // sort translations other_details hash list
+                    canonicalTranslation.other_details = VisitStringDictionary(translation.other_details);
+                    sortedTranslations.Add(translation.language.code_string, canonicalTranslation);
+                }
+
+                result = new TRANSLATION_DETAILS[sortedTranslations.Count];
+                sortedTranslations.Values.CopyTo(result, 0);
             }
 
-            TRANSLATION_DETAILS[] sortedResult = new TRANSLATION_DETAILS[sortedTranslations.Count];
-            sortedTranslations.Values.CopyTo(sortedResult, 0);
-
-            return sortedResult;
+            return result;
         }
 
         ARCHETYPE_ONTOLOGY VisitOntology(ARCHETYPE_ONTOLOGY ontology)
         {
-            ARCHETYPE_ONTOLOGY canonicalOntology = new ARCHETYPE_ONTOLOGY();
+            ARCHETYPE_ONTOLOGY result = new ARCHETYPE_ONTOLOGY();
 
             // canonicalise ontology term_definitions
-            canonicalOntology.term_definitions = VisitCodeDefinitions(ontology.term_definitions);
+            result.term_definitions = VisitCodeDefinitions(ontology.term_definitions);
+
             // canonicalise ontology constraint_definitions
-            canonicalOntology.constraint_definitions = VisitCodeDefinitions(ontology.constraint_definitions);
+            result.constraint_definitions = VisitCodeDefinitions(ontology.constraint_definitions);
 
             // canonicalise ontology term_bindings
-            canonicalOntology.term_bindings = VisitTermBindings(ontology.term_bindings);
+            result.term_bindings = VisitTermBindings(ontology.term_bindings);
 
             // canonicalise ontology constraint_bindings
-            canonicalOntology.constraint_bindings = VisitConstraintBindings(ontology.constraint_bindings);
+            result.constraint_bindings = VisitConstraintBindings(ontology.constraint_bindings);
 
-            return canonicalOntology;
+            return result;
         }
 
         CodeDefinitionSet[] VisitCodeDefinitions(CodeDefinitionSet[] codeDefinitions)
         {
-            if (codeDefinitions == null)
-                return null;
+            CodeDefinitionSet[] result = null;
 
-            SortedDictionary<string, CodeDefinitionSet> sortedCodeDefinitions = new SortedDictionary<string, CodeDefinitionSet>();
-            foreach (CodeDefinitionSet codeDefinitionItem in codeDefinitions)
+            if (codeDefinitions != null)
             {
-                CodeDefinitionSet canonicalItem = new CodeDefinitionSet();
+                SortedDictionary<string, CodeDefinitionSet> sortedCodeDefinitions = new SortedDictionary<string, CodeDefinitionSet>();
 
-                canonicalItem.language = codeDefinitionItem.language;
-                // Canonicalise code definitions items
-                canonicalItem.items = VisitArchetypeTerms(codeDefinitionItem.items);
+                foreach (CodeDefinitionSet codeDefinitionItem in codeDefinitions)
+                {
+                    string language = codeDefinitionItem.language;
 
-                sortedCodeDefinitions.Add(codeDefinitionItem.language, canonicalItem);
+                    if (!string.IsNullOrEmpty(language))
+                    {
+                        CodeDefinitionSet canonicalItem = new CodeDefinitionSet();
+                        canonicalItem.language = language;
+
+                        // Canonicalise code definitions items
+                        canonicalItem.items = VisitArchetypeTerms(codeDefinitionItem.items);
+                        sortedCodeDefinitions.Add(language, canonicalItem);
+                    }
+                }
+
+                result = new CodeDefinitionSet[sortedCodeDefinitions.Count];
+                sortedCodeDefinitions.Values.CopyTo(result, 0);
             }
 
-            CodeDefinitionSet[] sortedResult = new CodeDefinitionSet[sortedCodeDefinitions.Count];
-            sortedCodeDefinitions.Values.CopyTo(sortedResult, 0);
-
-            return sortedResult;
-
+            return result;
         }
 
         ARCHETYPE_TERM[] VisitArchetypeTerms(ARCHETYPE_TERM[] archetypeTerms)
         {
-            if (archetypeTerms == null)
-                return null;
+            ARCHETYPE_TERM[] result = null;
 
-            SortedDictionary<string, ARCHETYPE_TERM> sortedItems = new SortedDictionary<string, ARCHETYPE_TERM>();
-            foreach (ARCHETYPE_TERM termItem in archetypeTerms)
+            if (archetypeTerms != null)
             {
-                ARCHETYPE_TERM canonicalTerm = new ARCHETYPE_TERM();
-                canonicalTerm.code = termItem.code;
-                canonicalTerm.items = VisitStringDictionary(termItem.items);
-                sortedItems.Add(termItem.code, canonicalTerm);
+                SortedDictionary<string, ARCHETYPE_TERM> sortedItems = new SortedDictionary<string, ARCHETYPE_TERM>();
+
+                foreach (ARCHETYPE_TERM termItem in archetypeTerms)
+                {
+                    ARCHETYPE_TERM canonicalTerm = new ARCHETYPE_TERM();
+                    canonicalTerm.code = termItem.code;
+                    canonicalTerm.items = VisitStringDictionary(termItem.items);
+                    sortedItems.Add(termItem.code, canonicalTerm);
+                }
+
+                result = new ARCHETYPE_TERM[sortedItems.Count];
+                sortedItems.Values.CopyTo(result, 0);
             }
 
-            ARCHETYPE_TERM[] sortedResult = new ARCHETYPE_TERM[sortedItems.Count];
-            sortedItems.Values.CopyTo(sortedResult, 0);
-
-            return sortedResult;
+            return result;
         }
 
         TermBindingSet[] VisitTermBindings(TermBindingSet[] termBindings)
         {
-            if (termBindings == null)
-                return null;
+            TermBindingSet[] result = null;
 
-            SortedDictionary<string, TermBindingSet> sortedItems = new SortedDictionary<string, TermBindingSet>();
-            foreach (TermBindingSet bindingItem in termBindings)
+            if (termBindings != null)
             {
-                TermBindingSet canonicalItem = new TermBindingSet();
+                SortedDictionary<string, TermBindingSet> sortedItems = new SortedDictionary<string, TermBindingSet>();
 
-                canonicalItem.terminology = bindingItem.terminology;
-                // sort term bindings items hash list
-                canonicalItem.items = VisitTermBindingItems(bindingItem.items);
+                foreach (TermBindingSet bindingItem in termBindings)
+                {
+                    TermBindingSet canonicalItem = new TermBindingSet();
+                    canonicalItem.terminology = bindingItem.terminology;
 
-                sortedItems.Add(bindingItem.terminology, canonicalItem);
+                    // sort term bindings items hash list
+                    canonicalItem.items = VisitTermBindingItems(bindingItem.items);
+                    sortedItems.Add(bindingItem.terminology, canonicalItem);
+                }
+
+                result = new TermBindingSet[sortedItems.Count];
+                sortedItems.Values.CopyTo(result, 0);
             }
 
-            TermBindingSet[] sortedResult = new TermBindingSet[sortedItems.Count];
-            sortedItems.Values.CopyTo(sortedResult, 0);
-
-            return sortedResult;
+            return result;
         }
 
         TERM_BINDING_ITEM[] VisitTermBindingItems(TERM_BINDING_ITEM[] bindingItems)
         {
-            if (bindingItems == null)
-                return null;
+            TERM_BINDING_ITEM[] result = null;
 
-            SortedDictionary<string, TERM_BINDING_ITEM> sortedItems = new SortedDictionary<string, TERM_BINDING_ITEM>();
-            foreach (TERM_BINDING_ITEM item in bindingItems)
-                sortedItems.Add(item.code, item);
+            if (bindingItems != null)
+            {
+                SortedDictionary<string, TERM_BINDING_ITEM> sortedItems = new SortedDictionary<string, TERM_BINDING_ITEM>();
 
-            TERM_BINDING_ITEM[] sortedResult = new TERM_BINDING_ITEM[sortedItems.Count];
-            sortedItems.Values.CopyTo(sortedResult, 0);
+                foreach (TERM_BINDING_ITEM item in bindingItems)
+                    sortedItems.Add(item.code, item);
 
-            return sortedResult;
+                result = new TERM_BINDING_ITEM[sortedItems.Count];
+                sortedItems.Values.CopyTo(result, 0);
+            }
+
+            return result;
         }
 
         ConstraintBindingSet[] VisitConstraintBindings(ConstraintBindingSet[] constraintBindings)
         {
-            if (constraintBindings == null)
-                return null;
+            ConstraintBindingSet[] result = null;
 
-            SortedDictionary<string, ConstraintBindingSet> sortedItems = new SortedDictionary<string, ConstraintBindingSet>();
-            foreach (ConstraintBindingSet constraintBindingsItem in constraintBindings)
+            if (constraintBindings != null)
             {
-                ConstraintBindingSet canonicalItem = new ConstraintBindingSet();
+                SortedDictionary<string, ConstraintBindingSet> sortedItems = new SortedDictionary<string, ConstraintBindingSet>();
 
-                canonicalItem.terminology = constraintBindingsItem.terminology;
-                // sort constraint bindings items hash list
-                canonicalItem.items = VisitConstraintBindingItems(constraintBindingsItem.items);
+                foreach (ConstraintBindingSet constraintBindingsItem in constraintBindings)
+                {
+                    ConstraintBindingSet canonicalItem = new ConstraintBindingSet();
+                    canonicalItem.terminology = constraintBindingsItem.terminology;
 
-                sortedItems.Add(constraintBindingsItem.terminology, canonicalItem);
+                    // sort constraint bindings items hash list
+                    canonicalItem.items = VisitConstraintBindingItems(constraintBindingsItem.items);
+                    sortedItems.Add(constraintBindingsItem.terminology, canonicalItem);
+                }
+
+                result = new ConstraintBindingSet[sortedItems.Count];
+                sortedItems.Values.CopyTo(result, 0);
             }
 
-            ConstraintBindingSet[] sortedResult = new ConstraintBindingSet[sortedItems.Count];
-            sortedItems.Values.CopyTo(sortedResult, 0);
-
-            return sortedResult;
+            return result;
         }
 
         CONSTRAINT_BINDING_ITEM[] VisitConstraintBindingItems(CONSTRAINT_BINDING_ITEM[] bindingItems)
         {
-            if (bindingItems == null)
-                return null;
+            CONSTRAINT_BINDING_ITEM[] result = null;
 
-            SortedDictionary<string, CONSTRAINT_BINDING_ITEM> sortedItems = new SortedDictionary<string, CONSTRAINT_BINDING_ITEM>();
-            foreach (CONSTRAINT_BINDING_ITEM item in bindingItems)
-                sortedItems.Add(item.code, item);
+            if (bindingItems != null)
+            {
+                SortedDictionary<string, CONSTRAINT_BINDING_ITEM> sortedItems = new SortedDictionary<string, CONSTRAINT_BINDING_ITEM>();
 
-            CONSTRAINT_BINDING_ITEM[] sortedResult = new CONSTRAINT_BINDING_ITEM[sortedItems.Count];
-            sortedItems.Values.CopyTo(sortedResult, 0);
+                foreach (CONSTRAINT_BINDING_ITEM item in bindingItems)
+                    sortedItems.Add(item.code, item);
 
-            return sortedResult;
+                result = new CONSTRAINT_BINDING_ITEM[sortedItems.Count];
+                sortedItems.Values.CopyTo(result, 0);
+            }
+
+            return result;
         }
 
         StringDictionaryItem[] VisitStringDictionary(StringDictionaryItem[] stringDictionary)
         {
-            if (stringDictionary == null)
-                return null;
+            StringDictionaryItem[] result = null;
 
-            SortedDictionary<string, StringDictionaryItem> sortedItems = new SortedDictionary<string, StringDictionaryItem>();
-            foreach (StringDictionaryItem dictionaryItem in stringDictionary)
-                sortedItems.Add(dictionaryItem.id, dictionaryItem);
+            if (stringDictionary != null)
+            {
+                SortedDictionary<string, StringDictionaryItem> sortedItems = new SortedDictionary<string, StringDictionaryItem>();
 
-            StringDictionaryItem[] sortedResult = new StringDictionaryItem[sortedItems.Count];
-            sortedItems.Values.CopyTo(sortedResult, 0);
+                foreach (StringDictionaryItem dictionaryItem in stringDictionary)
+                    sortedItems.Add(dictionaryItem.id, dictionaryItem);
 
-            return sortedResult;
+                result = new StringDictionaryItem[sortedItems.Count];
+                sortedItems.Values.CopyTo(result, 0);
+            }
+
+            return result;
         }
     }
 }

@@ -19,8 +19,8 @@ namespace XMLParser
         {
             _archetype = an_archetype;
 
-            if (_language == null || !AvailableLanguages().Contains(_language))
-                _language = an_archetype.original_language.code_string;
+            if (languageCode == null || !AvailableLanguages().Contains(languageCode))
+                languageCode = an_archetype.original_language.code_string;
         }
 
         public string PrimaryLanguageCode
@@ -39,30 +39,23 @@ namespace XMLParser
                 _languages_available.Add(a_language_code);
         }
 
-
         protected virtual void OnLanguageAdded(string language, string languageCodeSet)
         {
             if (LanguageAdded != null)
                 LanguageAdded(this, language, languageCodeSet);
         }
 
-        string _language;
+        private string languageCode;
 
         public string LanguageCode
         {
-            get
-            {
-                if (_language == null || _language == "")
-                    return _archetype.original_language.code_string;
-                else
-                    return _language;
-            }
+            get { return string.IsNullOrEmpty(languageCode) ? _archetype.original_language.code_string : languageCode; }
         }
 
-        public void SetLanguage(string a_language_code)
+        public void SetLanguage(string language)
         {
-            if (LanguageAvailable(a_language_code))
-                _language = a_language_code;
+            if (LanguageAvailable(language))
+                languageCode = language;
         }
 
         public int NumberOfSpecialisations
@@ -205,22 +198,20 @@ namespace XMLParser
             return null;
         }
 
-        public void AddLanguage(string a_language_code)
+        public void AddLanguage(string language)
         {
-            if (!_languages_available.Contains(a_language_code))
+            if (!string.IsNullOrEmpty(language) && !_languages_available.Contains(language))
             {
-                // add the new language
-                _languages_available.Add(a_language_code);
+                _languages_available.Add(language);
 
                 if (_languages_available.Count > 1)
                 {
-
                     //populate a translation set from the original language
                     CodeDefinitionSet ls = TermDefinitions(_archetype.original_language.code_string);
-                    CodeDefinitionSet new_ls = GetTermLanguageSet(a_language_code);
+                    CodeDefinitionSet new_ls = GetTermLanguageSet(language);
                     ARCHETYPE_TERM[] new_terms = Array.CreateInstance(typeof(ARCHETYPE_TERM), ls.items.Length) as ARCHETYPE_TERM[];
 
-                    for(int i=0; i < ls.items.Length; i++)
+                    for(int i = 0; i < ls.items.Length; i++)
                     {
                         ARCHETYPE_TERM at = ls.items[i];
                         ARCHETYPE_TERM new_at = new ARCHETYPE_TERM();
@@ -247,7 +238,7 @@ namespace XMLParser
 
                     if (ls != null)  //May not be any Constraint definitions
                     {
-                        new_ls = GetConstraintLanguageSet(a_language_code);
+                        new_ls = GetConstraintLanguageSet(language);
                         new_terms = Array.CreateInstance(typeof(ARCHETYPE_TERM), ls.items.Length) as ARCHETYPE_TERM[];
 
                         for (int i = 0; i < ls.items.Length; i++)
@@ -275,7 +266,7 @@ namespace XMLParser
                 }
 
                 //populate a new description by raising an event
-                LanguageAdded(this, a_language_code, _archetype.original_language.terminology_id.value);                
+                LanguageAdded(this, language, _archetype.original_language.terminology_id.value);                
             }
         }
 
@@ -358,16 +349,16 @@ namespace XMLParser
         public void AddOrReplaceConstraintBinding(string terminology_query, string archetype_path, string terminology)
         {
             ConstraintBindingSet ts = GetConstraintBindingSet(terminology);
-            AddOrReplaceBinding(ts, terminology_query, archetype_path);
+            AddOrReplaceConstraintBinding(ts, terminology_query, archetype_path);
         }
 
         public void AddOrReplaceTermBinding(string code_string, string archetype_path, string terminology_key, string code_terminology_id)
         {
             TermBindingSet ts = GetTermBindingSet(terminology_key);
-            AddOrReplaceBinding(ts, code_string, archetype_path, code_terminology_id);
+            AddOrReplaceTermBinding(ts, code_string, archetype_path, code_terminology_id);
         }
 
-        private void AddOrReplaceBinding(TermBindingSet a_terminology_set, string code_string, string archetype_path, string code_terminology_id)
+        private void AddOrReplaceTermBinding(TermBindingSet a_terminology_set, string code_string, string archetype_path, string code_terminology_id)
         {
             int i = 0;
             TERM_BINDING_ITEM[] resize_bindings;
@@ -432,7 +423,7 @@ namespace XMLParser
             a_terminology_set.items = resize_bindings;
         }
         
-        private void AddOrReplaceBinding(ConstraintBindingSet a_terminology_set, string terminology_code, string archetype_path)
+        private void AddOrReplaceConstraintBinding(ConstraintBindingSet a_terminology_set, string terminology_code, string archetype_path)
         {
             int i = 0;
             CONSTRAINT_BINDING_ITEM[] resize_bindings;
@@ -675,55 +666,71 @@ namespace XMLParser
 
         public void AddTermOrConstraintDefinition(ARCHETYPE_TERM a_term, bool isLoading)
         {
-            AddTermOrConstraintDefinition(_language, a_term, isLoading);
+            AddTermOrConstraintDefinition(languageCode, a_term, isLoading);
         }
 
-        public CodeDefinitionSet GetTermLanguageSet(string a_language)
+        public CodeDefinitionSet GetTermLanguageSet(string language)
         {
-            int i = 1;
-            CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
+            CodeDefinitionSet result = null;
 
-            if (definitions != null)
+            if (!string.IsNullOrEmpty(language))
             {
-                foreach (CodeDefinitionSet ls in definitions)
+                int i = 0;
+                CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
+
+                if (definitions != null)
                 {
-                    if (ls.language == a_language)
-                        return ls;
+                    foreach (CodeDefinitionSet ls in definitions)
+                    {
+                        if (ls.language == language)
+                            result = ls;
+                    }
+
+                    i = definitions.Length;
                 }
 
-                i = definitions.Length + 1;
+                if (result == null)
+                {
+                    Array.Resize(ref definitions, i + 1);
+                    definitions[i] = result = new CodeDefinitionSet();
+                    result.language = language;
+                    _archetype.ontology.term_definitions = definitions;
+                }
             }
 
-            Array.Resize(ref definitions, i);
-            CodeDefinitionSet new_ls = new CodeDefinitionSet();
-            new_ls.language = a_language;
-            definitions[i - 1] = new_ls;
-            _archetype.ontology.term_definitions = definitions;
-            return new_ls;
+            return result;
         }
 
-        public CodeDefinitionSet GetConstraintLanguageSet(string a_language)
+        public CodeDefinitionSet GetConstraintLanguageSet(string language)
         {
-            int i = 1;
-            CodeDefinitionSet[] definitions = _archetype.ontology.constraint_definitions;
+            CodeDefinitionSet result = null;
 
-            if (definitions != null)
+            if (!string.IsNullOrEmpty(language))
             {
-                foreach (CodeDefinitionSet ls in definitions)
+                int i = 0;
+                CodeDefinitionSet[] definitions = _archetype.ontology.constraint_definitions;
+
+                if (definitions != null)
                 {
-                    if (ls.language == a_language)
-                        return ls;
+                    foreach (CodeDefinitionSet ls in definitions)
+                    {
+                        if (ls.language == language)
+                            result = ls;
+                    }
+
+                    i = definitions.Length;
                 }
 
-                i = definitions.Length + 1;
+                if (result == null)
+                {
+                    Array.Resize(ref definitions, i + 1);
+                    definitions[i] = result = new CodeDefinitionSet();
+                    result.language = language;
+                    _archetype.ontology.constraint_definitions = definitions;
+                }
             }
 
-            Array.Resize(ref definitions, i);
-            CodeDefinitionSet new_ls = new CodeDefinitionSet();
-            new_ls.language = a_language;
-            definitions[i - 1] = new_ls;
-            _archetype.ontology.constraint_definitions = definitions;
-            return new_ls;
+            return result;
         }
 
         private TermBindingSet GetTermBindingSet(string a_terminology)
@@ -775,43 +782,45 @@ namespace XMLParser
             return new_ts;
         }
 
-        public void AddTermOrConstraintDefinition(string a_language, ARCHETYPE_TERM a_term, bool isLoading)
+        public void AddTermOrConstraintDefinition(string language, ARCHETYPE_TERM term, bool isLoading)
         {
-            CodeDefinitionSet definition;
-            CodeDefinitionSet[] definitions;
-            string code = a_term.code.ToLowerInvariant();
+            CodeDefinitionSet definition = null;
+            CodeDefinitionSet[] definitions = null;
+            string code = term.code.ToLowerInvariant();
 
             if (code.StartsWith("at"))
             {
-                definition = GetTermLanguageSet(a_language);
+                definition = GetTermLanguageSet(language);
                 definitions = _archetype.ontology.term_definitions;
             }
             else if (code.StartsWith("ac"))
             {
-                definition = GetConstraintLanguageSet(a_language);
+                definition = GetConstraintLanguageSet(language);
                 definitions = _archetype.ontology.constraint_definitions;
             }
             else
             {
                 System.Diagnostics.Debug.Assert(false, "Error in code " + code);
-                return;
             }
 
-            //Add the term to that language - ensures there is a language set for the language
-            AddTermOrConstraintDefinitionForLanguage(definition, a_term);
-
-            if (!isLoading && definitions != null && definitions.Length > 1) // if there is more than one language then add the term to those
+            if (definition != null && definitions != null)
             {
-                foreach (CodeDefinitionSet ls in definitions)
-                {
-                    if (ls.language != a_language)
-                    {
-                        foreach (StringDictionaryItem di in a_term.items)
-                        {
-                            di.Value = string.Format("{0}{1}({2})", "*", di.Value, a_language);
-                        }
+                //Add the term to that language - ensures there is a language set for the language
+                AddTermOrConstraintDefinitionForLanguage(definition, term);
 
-                        AddTermOrConstraintDefinitionForLanguage(ls, a_term);
+                if (!isLoading && definitions != null && definitions.Length > 1) // if there is more than one language then add the term to those
+                {
+                    foreach (CodeDefinitionSet ls in definitions)
+                    {
+                        if (ls.language != language)
+                        {
+                            foreach (StringDictionaryItem di in term.items)
+                            {
+                                di.Value = string.Format("{0}{1}({2})", "*", di.Value, language);
+                            }
+
+                            AddTermOrConstraintDefinitionForLanguage(ls, term);
+                        }
                     }
                 }
             }

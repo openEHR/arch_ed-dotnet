@@ -159,9 +159,9 @@ Namespace ArchetypeEditor.XML_Classes
             End Try
         End Sub
 
-        Public Overrides Sub SetLanguage(ByVal code As String)
-            sLanguageCode = code
-            archetypeParser.Ontology.SetLanguage(code)
+        Public Overrides Sub SetLanguage(ByVal language As String)
+            sLanguageCode = language
+            archetypeParser.Ontology.SetLanguage(language)
         End Sub
 
         Public Overrides Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
@@ -173,12 +173,12 @@ Namespace ArchetypeEditor.XML_Classes
             Return result
         End Function
 
-        Public Overrides Sub SetPrimaryLanguage(ByVal LanguageCode As String)
+        Public Overrides Sub SetPrimaryLanguage(ByVal language As String)
             ' sets the primary language of this archetype
             ' if this language is not in the available languages it adds it
 
-            If LanguageCode <> "" Then
-                archetypeParser.Ontology.SetPrimaryLanguage(LanguageCode)
+            If language <> "" Then
+                archetypeParser.Ontology.SetPrimaryLanguage(language)
             End If
         End Sub
 
@@ -208,7 +208,6 @@ Namespace ArchetypeEditor.XML_Classes
                 Else
                     Debug.Assert(False)
                 End If
-
             Catch e As Exception
                 Debug.Assert(False, e.ToString)
             End Try
@@ -507,7 +506,7 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Sub New(ByRef an_xml_parser As XMLParser.XmlArchetypeParser, Optional ByVal Replace As Boolean = False)
+        Sub New(ByRef an_xml_parser As XMLParser.XmlArchetypeParser)
             archetypeParser = an_xml_parser
         End Sub
 

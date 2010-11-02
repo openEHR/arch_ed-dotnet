@@ -320,7 +320,7 @@ Public Class FileManagerLocal
 
         xml_parser.NewArchetype(Archetype.Archetype_ID.ToString, mOntologyManager.PrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
         xml_parser.Archetype.concept = Archetype.ConceptCode
-        xml_parser.Archetype.definition.node_id = xml_parser.Archetype.concept 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+        xml_parser.Archetype.definition.node_id = xml_parser.Archetype.concept
 
         Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(xml_parser)
 
@@ -332,8 +332,6 @@ Public Class FileManagerLocal
         End If
 
         If mOntologyManager.NumberOfSpecialisations > 0 Then
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'xml_parser.Archetype.parent_archetype_id = Archetype.ParentArchetype 
             If xml_parser.Archetype.parent_archetype_id Is Nothing Then
                 xml_parser.Archetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
             End If
@@ -344,10 +342,7 @@ Public Class FileManagerLocal
         xml_parser.Archetype.adl_version = "1.4"
 
         'remove the concept code from ontology as will be set again
-        xml_parser.Archetype.ontology.term_definitions = Nothing 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-        'populate the ontology
-        'xml_parser.Archetype.ontology.specialisation_depth = mOntologyManager.NumberOfSpecialisations.ToString 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1        
+        xml_parser.Archetype.ontology.term_definitions = Nothing
 
         'term definitions
         xmlOntology.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable)
@@ -394,8 +389,6 @@ Public Class FileManagerLocal
 
             xml_detail.misuse = archDetail.MisUse
 
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'xml_detail.original_resource_uri = archDetail.OriginalResourceURI
             If archDetail.OriginalResourceURI <> "" Then
                 Dim new_items(0) As XMLParser.StringDictionaryItem
                 new_items(0).Value = archDetail.OriginalResourceURI
@@ -678,7 +671,9 @@ Public Class FileManagerLocal
                     ElseIf ext = ".xml" Then
                         Dim parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
                         mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface(parser)
-                        mOntologyManager.ReplaceOntology(New ArchetypeEditor.XML_Classes.XML_Ontology(parser, True))
+                        Dim ontology As New ArchetypeEditor.XML_Classes.XML_Ontology(parser)
+                        ontology.SetLanguage(OntologyManager.LanguageCode)
+                        mOntologyManager.ReplaceOntology(ontology)
                     End If
                 End If
 
@@ -785,46 +780,37 @@ Public Class FileManagerLocal
 
         Select Case FileType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "adl"
-                Dim a_ontology As ArchetypeEditor.ADL_Classes.ADL_Ontology
-                Dim a_term As RmTerm
                 mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.DefaultLanguageCode)
 
                 If ArchetypeAvailable Then
-                    a_ontology = New ArchetypeEditor.ADL_Classes.ADL_Ontology(CType(mArchetypeEngine, ArchetypeEditor.ADL_Classes.ADL_Interface).ADL_Parser)
+                    Dim ontology As New ArchetypeEditor.ADL_Classes.ADL_Ontology(CType(mArchetypeEngine, ArchetypeEditor.ADL_Classes.ADL_Interface).ADL_Parser)
 
                     'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
-                    OntologyManager.Ontology = a_ontology
+                    OntologyManager.Ontology = ontology
                     ' a new archetype always has a concept code set to "at0000"
-                    a_term = New RmTerm(Archetype.ConceptCode)
-                    'SRH: 13 Jan 2009 - EDT-491  consistent naming in ADL and AE before saving.
-                    'a_term.Text = "?"
-                    a_term.Text = "unknown"
-                    a_term.Description = "unknown"
-                    OntologyManager.UpdateTerm(a_term)
+                    Dim term As New RmTerm(Archetype.ConceptCode)
+                    term.Text = "unknown"
+                    term.Description = "unknown"
+                    OntologyManager.UpdateTerm(term)
                 End If
             Case "xml"
-                Dim a_ontology As ArchetypeEditor.XML_Classes.XML_Ontology
-                Dim a_term As RmTerm
                 mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.DefaultLanguageCode)
 
                 If ArchetypeAvailable Then
-                    a_ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(CType(mArchetypeEngine, ArchetypeEditor.XML_Classes.XML_Interface).Xml_Parser)
-                    a_ontology.SetLanguage(OceanArchetypeEditor.DefaultLanguageCode)
+                    Dim ontology As New ArchetypeEditor.XML_Classes.XML_Ontology(CType(mArchetypeEngine, ArchetypeEditor.XML_Classes.XML_Interface).Xml_Parser)
+                    ontology.SetLanguage(OceanArchetypeEditor.DefaultLanguageCode)
 
                     'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
-                    OntologyManager.Ontology = a_ontology
+                    OntologyManager.Ontology = ontology
                     ' a new archetype always has a concept code set to "at0000"
-                    a_term = New RmTerm(Archetype.ConceptCode)
-                    'SRH: 13 Jan 2009 - EDT-491  consistent naming in ADL and AE before saving.
-                    'a_term.Text = "?"
-                    a_term.Text = "unknown"
-                    a_term.Description = "unknown"
-                    OntologyManager.UpdateTerm(a_term)
+                    Dim term As New RmTerm(Archetype.ConceptCode)
+                    term.Text = "unknown"
+                    term.Description = "unknown"
+                    OntologyManager.UpdateTerm(term)
                 End If
             Case Else
                 Debug.Assert(False, "Type is not handled: " & FileType)
         End Select
-
     End Sub
 
     Sub New()
@@ -834,7 +820,6 @@ Public Class FileManagerLocal
             Case "xml"
                 mArchetypeEngine = New ArchetypeEditor.XML_Classes.XML_Interface
         End Select
-
     End Sub
 End Class
 
