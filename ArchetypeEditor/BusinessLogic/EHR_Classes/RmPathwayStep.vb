@@ -47,7 +47,7 @@ Public Class RmPathwayStep
             Return mAbortAllowed
         End Get
         Set(ByVal Value As Boolean)
-            Debug.Assert(mStateType = StateMachineType.Active Or mStateType = StateMachineType.Initial)
+            Debug.Assert(mStateType = StateMachineType.Active Or mStateType = StateMachineType.Planned)
             mAbortAllowed = Value
         End Set
     End Property
@@ -56,7 +56,7 @@ Public Class RmPathwayStep
             Return mSuspendAllowed
         End Get
         Set(ByVal Value As Boolean)
-            Debug.Assert(mStateType = StateMachineType.Active Or mStateType = StateMachineType.Initial)
+            Debug.Assert(mStateType = StateMachineType.Active Or mStateType = StateMachineType.Planned)
             mSuspendAllowed = Value
         End Set
     End Property

@@ -1,7 +1,6 @@
 
 Public Enum LifeCycleStates
     NotSet = 118
-    Initial = 524
     AuthorDraft = 569
     OrganisationDraft = 571
     CommitteeDraft = 570
@@ -138,14 +137,5 @@ Public MustInherit Class ArchetypeDescription
             mArchetypePackageURI = Value
         End Set
     End Property
-
-    'Public Property OtherDetails() As OtherDefinitionDetails 'JAR: 24MAY2007, EDT-30 Add field for References
-    '    Get
-    '        Return mOtherDetails
-    '    End Get
-    '    Set(ByVal value As OtherDefinitionDetails)
-    '        mOtherDetails = value
-    '    End Set        
-    'End Property
 
 End Class

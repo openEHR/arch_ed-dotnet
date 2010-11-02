@@ -28,6 +28,7 @@ End Enum
 Public Enum StateMachineType
     Not_Set = 0
     Initial = 524
+    Planned = 526
     Active = 245
     Completed = 532
     ActiveSuspended = 530
@@ -44,7 +45,6 @@ Public Class ReferenceModel
     Private Shared mReferenceModelNames As Collections.Hashtable
     Private Shared mReferenceModelDataTypes As Collections.Hashtable
     Private Shared mValidReferenceModelNames As String() = {"openEHR-EHR"} ', "CEN-EHR"} ', "HL7-CDA"} ',"openEHR-Demographic"}
-
 
     Public Shared Function ModelType() As ReferenceModelType
         Return mRefModelType
@@ -129,6 +129,7 @@ Public Class ReferenceModel
         ' is a valid type for this reference model
         Debug.Assert(IsValidArchetypeDefinition(Value))
         mArchetypedClass = Value
+
         Select Case Value
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 mStructureClass = Value
@@ -168,7 +169,6 @@ Public Class ReferenceModel
                 mReferenceModelNames.Add(659, "other_participations")
                 mReferenceModelNames.Add(1005, "pathway_specification") 'Obsolete
         End Select
-
     End Sub
 
     Public Shared Function RM_StructureName(ByVal s_type As StructureType) As String
@@ -189,11 +189,11 @@ Public Class ReferenceModel
                 mReferenceModelDataTypes.Add(13, "INTERVAL<DV_QUANTITY>")
                 mReferenceModelDataTypes.Add(14, "INTERVAL<DV_DATE_TIME>")
         End Select
-
     End Sub
 
     Public Shared Function RM_DataTypeName(ByVal d_type As ConstraintType) As String
         Dim result, s As String
+
         If mReferenceModelDataTypes.ContainsKey(CType(d_type, Integer)) Then
             result = CStr(mReferenceModelDataTypes.Item(CType(d_type, Integer)))
         Else
@@ -213,7 +213,6 @@ Public Class ReferenceModel
         End Select
 
         Return String.Format("DV_{0}", result)
-
     End Function
 
     Public Shared Function IsValidReferenceModelName(ByVal RefModelName As String) As Boolean
@@ -390,6 +389,7 @@ Public Class ReferenceModel
                 Return True
             End If
         Next
+
         Return False
     End Function
 
@@ -414,7 +414,6 @@ Public Class ReferenceModel
                 Return Nothing
         End Select
     End Function
-
 
     Public Shared Function IsValidStrucutureType(ByVal a_structure_type As StructureType) As Boolean
         For Each st As StructureType In ValidStructureTypes()
@@ -467,6 +466,7 @@ Public Class ReferenceModel
                 Return True
             End If
         Next
+
         Return False
     End Function
 
@@ -532,8 +532,10 @@ Public Class ReferenceModel
                         Debug.Assert(False)
                 End Select
         End Select
+
         Return Nothing
     End Function
+
     Public Shared Function ValidArchetypeDefinitions() As StructureType()
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
@@ -566,6 +568,7 @@ Public Class ReferenceModel
                 Dim s(0) As StructureType
                 Return s
         End Select
+
         Return Nothing
     End Function
 
@@ -573,7 +576,7 @@ Public Class ReferenceModel
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
                 Dim s(7) As StateMachineType
-                s(0) = StateMachineType.Initial
+                s(0) = StateMachineType.Planned
                 s(1) = StateMachineType.Active
                 s(2) = StateMachineType.Completed
                 s(3) = StateMachineType.ActiveSuspended
@@ -582,12 +585,10 @@ Public Class ReferenceModel
                 s(6) = StateMachineType.InitialAborted
                 s(7) = StateMachineType.Scheduled
                 Return s
-
             Case Else
                 Debug.Assert(False, "No other reference model handled")
                 Return Nothing
         End Select
-
     End Function
 
     Public Shared Function StructureTypeFromString(ByVal a_structure_name As String) As StructureType
@@ -603,7 +604,6 @@ Public Class ReferenceModel
             Else
                 Return CType([Enum].Parse(GetType(StructureType), a_structure_name, True), StructureType)
             End If
-
         Catch
             ' not a valid structure type - obsolete structure types are:
             Select Case a_structure_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
@@ -622,23 +622,6 @@ Public Class ReferenceModel
         mStructureClass = StructureType.Not_Set
     End Sub
 End Class
-
-'Class ReferenceModel
-'    Inherits ReferenceModelLocal
-
-'    ' ReferenceModel Singleton
-'    Private Shared mInstance As ReferenceModel
-
-'    Public Shared ReadOnly Property Instance() As ReferenceModel
-'        Get
-'            If mInstance Is Nothing Then
-'                mInstance = New ReferenceModel
-'            End If
-'            Return mInstance
-'        End Get
-'    End Property
-
-'End Class
 
 '
 '***** BEGIN LICENSE BLOCK *****

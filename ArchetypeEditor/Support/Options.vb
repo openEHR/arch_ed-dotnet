@@ -498,7 +498,7 @@ Public Class Options
         Debug.Assert(a_StateMachineType <> StateMachineType.Not_Set)
 
         Select Case a_StateMachineType
-            Case StateMachineType.Initial
+            Case StateMachineType.Planned
                 Return mColors(0)
             Case StateMachineType.Active
                 Return mColors(1)
@@ -514,6 +514,8 @@ Public Class Options
                 Return mColors(6)
             Case StateMachineType.Scheduled
                 Return mColors(7)
+            Case Else
+                Return Color.PaleGoldenrod
         End Select
     End Function
 
