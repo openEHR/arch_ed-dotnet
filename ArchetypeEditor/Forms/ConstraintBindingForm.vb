@@ -37,8 +37,10 @@ Public Class ConstraintBindingForm
     Friend WithEvents ReleaseLabel As System.Windows.Forms.Label
     Friend WithEvents OkButton As System.Windows.Forms.Button
     Friend WithEvents SubsetButton As System.Windows.Forms.Button
+    Friend WithEvents TerminologyToolTip As System.Windows.Forms.ToolTip
     Friend WithEvents CancelCloseButton As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConstraintBindingForm))
         Me.TerminologyComboBox = New System.Windows.Forms.ComboBox
         Me.SubsetTextBox = New System.Windows.Forms.TextBox
@@ -49,6 +51,7 @@ Public Class ConstraintBindingForm
         Me.OkButton = New System.Windows.Forms.Button
         Me.CancelCloseButton = New System.Windows.Forms.Button
         Me.SubsetButton = New System.Windows.Forms.Button
+        Me.TerminologyToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.SuspendLayout()
         '
         'TerminologyComboBox
@@ -60,6 +63,8 @@ Public Class ConstraintBindingForm
         Me.TerminologyComboBox.Size = New System.Drawing.Size(325, 21)
         Me.TerminologyComboBox.TabIndex = 1
         Me.TerminologyComboBox.Text = "Choose..."
+        Me.TerminologyToolTip.SetToolTip(Me.TerminologyComboBox, "Terminology name must start with a letter, followed by one or more letters, digit" & _
+                "s, underscores, minuses, slashes or pluses")
         '
         'SubsetTextBox
         '
@@ -214,16 +219,30 @@ Public Class ConstraintBindingForm
         End If
     End Sub
 
-    Public Sub AddConstraintBinding(ByVal ontologyManager As OntologyManager, ByVal acCode As String)
-        Dim terminologyId As String = TryCast(TerminologyComboBox.SelectedValue, String)
+    Private Sub TerminologyComboBox_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles TerminologyComboBox.Validating
+        If Not CancelCloseButton.Focused Then
+            If Not String.IsNullOrEmpty(TerminologyId) And Not System.Text.RegularExpressions.Regex.IsMatch(TerminologyId, "^[a-zA-Z][a-zA-Z0-9_\-/+]+$") Then
+                e.Cancel = True
+                TerminologyToolTip.Active = True
+            End If
+        End If
+    End Sub
 
-        If String.IsNullOrEmpty(terminologyId) Then
-            terminologyId = TerminologyComboBox.Text
+    Public Sub AddConstraintBinding(ByVal ontologyManager As OntologyManager, ByVal acCode As String)
+        Dim id As String = TerminologyId()
+        Dim uri As String = ontologyManager.ConstraintBindingUri(id, ReleaseTextBox.Text, SubsetTextBox.Text)
+        ontologyManager.AddTerminology(id)
+        ontologyManager.AddConstraintBinding(id, acCode, uri)
+    End Sub
+
+    Public Function TerminologyId() As String
+        Dim result As String = TryCast(TerminologyComboBox.SelectedValue, String)
+
+        If String.IsNullOrEmpty(result) Then
+            result = TerminologyComboBox.Text
         End If
 
-        ontologyManager.AddTerminology(terminologyId)
-        Dim uri As String = ontologyManager.ConstraintBindingUri(terminologyId, ReleaseTextBox.Text, SubsetTextBox.Text)
-        ontologyManager.AddConstraintBinding(terminologyId, acCode, uri)
-    End Sub
+        Return result
+    End Function
 
 End Class
