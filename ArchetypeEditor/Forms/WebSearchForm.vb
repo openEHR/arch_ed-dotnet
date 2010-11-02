@@ -192,6 +192,7 @@ Public Class WebSearchForm
         ' every found archetype will be shown with a short description. 
         ' every archetype is represented by a little user control (vb-class myArchetypeFromWeb)
         Dim x As Int32
+
         For x = 0 To ids.Length - 1
             ' ID of every archetype
             Dim oneArch As New myArchetypeFromWeb
@@ -202,29 +203,27 @@ Public Class WebSearchForm
 
             'add the Archetype to the next cell of the table
             archetypeTable.Controls.Add(oneArch, 0, x)
-
         Next x
-        Me.Controls.Add(archetypeTable)
+
+        Controls.Add(archetypeTable)
 
         ' arrange the finished archetypeTable on the WindowsForm
-        Me.Height = archetypeTable.Height + 280
+        Height = archetypeTable.Height + 280
 
         ' of the Table is big and long (many archetypes found) we enale scrolling
         If (archetypeTable.Height > 650) Then
             archetypeTable.Height = 650
             archetypeTable.AutoSize = False
             archetypeTable.AutoScroll = True
-            Me.Height = archetypeTable.Height + 280
-            'Me.SetBounds(200, 10, Me.Width, Me.Height)
-            Me.CenterToScreen()
+            Height = archetypeTable.Height + 280
+            CenterToScreen()
         End If
 
         archetypeTable.Padding = New Padding(0)
         archetypeTable.Refresh()
         archetypeTable.Visible = True
-        Me.CenterToScreen()
-
-        Me.Refresh()
+        CenterToScreen()
+        Refresh()
     End Sub
 
     Public ReadOnly Property getArchetypeIdTobeOpened() As String
@@ -256,8 +255,6 @@ Public Class WebSearchForm
     Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
         If listViewArchetypes.SelectedItems.Count > 0 Then
             archetypeIdToBeOpened = listViewArchetypes.SelectedItems(0).SubItems(2).Text
-            'Dim request As System.Net.WebRequest
-            'Dim response As Net.HttpWebResponse
             Dim tempPath, downloadPath As String
             tempPath = System.IO.Path.GetTempPath
 

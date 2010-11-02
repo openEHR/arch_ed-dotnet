@@ -1799,7 +1799,6 @@ Public Class Designer
         End If
     End Sub
 
-    ' added funtion (by Jana Graenz)
     ' loads the Windows form "WebSearchForm" for enabling a search for archetypes from the web 
     ' (accessing the web-based Archetype Finder via its provided Web Services)
     Private Sub OpenArchetypeFromWeb(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileOpenFromWeb.Click
@@ -1807,8 +1806,9 @@ Public Class Designer
             Dim frm As New WebSearchForm
 
             If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-                frm.Text = Filemanager.GetOpenEhrTerm(658, frm.Text)
+                frm.Text = Filemanager.GetOpenEhrTerm(666, frm.Text)
                 frm.gbSearch.Text = Filemanager.GetOpenEhrTerm(663, frm.gbSearch.Text)
+                frm.btnSearch.Text = frm.gbSearch.Text
                 frm.comboSearch.Items.Clear()
                 frm.comboSearch.Items.Add(Filemanager.GetOpenEhrTerm(101, "All"))
                 frm.comboSearch.Items.Add(Filemanager.GetOpenEhrTerm(632, "Archetype ID"))
@@ -2250,7 +2250,7 @@ Public Class Designer
         Me.MenuFile.Text = Filemanager.GetOpenEhrTerm(43, Me.MenuFile.Text, language)
         Me.MenuFileNew.Text = Filemanager.GetOpenEhrTerm(151, Me.MenuFileNew.Text, language)
         Me.MenuFileOpen.Text = Filemanager.GetOpenEhrTerm(61, Me.MenuFileOpen.Text, language)
-        Me.MenuFileOpenFromWeb.Text = Filemanager.GetOpenEhrTerm(651, Me.MenuFileOpenFromWeb.Text, language)
+        Me.MenuFileOpenFromWeb.Text = Filemanager.GetOpenEhrTerm(666, Me.MenuFileOpenFromWeb.Text, language)
         Me.MenuFileSave.Text = Filemanager.GetOpenEhrTerm(183, Me.MenuFileSave.Text, language)
         Me.menuFileNewWindow.Text = Filemanager.GetOpenEhrTerm(595, Me.menuFileNewWindow.Text, language)
         Me.MenuFileSaveAs.Text = Filemanager.GetOpenEhrTerm(596, Me.MenuFileSaveAs.Text, language)
@@ -2270,6 +2270,7 @@ Public Class Designer
         Me.MenuLanguage.Text = Filemanager.GetOpenEhrTerm(46, Me.MenuLanguage.Text, language)
         Me.MenuLanguageAdd.Text = Filemanager.GetOpenEhrTerm(68, Me.MenuLanguageAdd.Text, language)
         Me.MenuLanguageChange.Text = Filemanager.GetOpenEhrTerm(69, Me.MenuLanguageChange.Text, language)
+        Me.MenuLanguageToggle.Text = Filemanager.GetOpenEhrTerm(692, Me.MenuLanguageToggle.Text, language)
         Me.MenuLanguageAvailable.Text = Filemanager.GetOpenEhrTerm(67, Me.MenuLanguageAvailable.Text, language)
         Me.MenuTerminologyAdd.Text = Filemanager.GetOpenEhrTerm(71, Me.MenuTerminologyAdd.Text, language)
         Me.MenuTerminologyAvailable.Text = Filemanager.GetOpenEhrTerm(70, Me.MenuTerminologyAvailable.Text, language)
@@ -2607,7 +2608,7 @@ Public Class Designer
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(582, "Use")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(583, "Misuse")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(690, "Copyright")))
-        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", "References"))
+        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(691, "References")))
         text.WriteLine("</tr>")
         text.WriteLine("<tr>")
 
@@ -3384,7 +3385,7 @@ Public Class Designer
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(166, "Cancel")
             Else
                 frm.gbExistingArchetype.Text = Filemanager.GetOpenEhrTerm(609, "Open existing archetypes")
-                frm.gbArchetypeFromWeb.Text = Filemanager.GetOpenEhrTerm(650, "Open Archetype from Web")
+                frm.gbArchetypeFromWeb.Text = Filemanager.GetOpenEhrTerm(666, "Open Archetype from Web")
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(63, "Exit")
             End If
 

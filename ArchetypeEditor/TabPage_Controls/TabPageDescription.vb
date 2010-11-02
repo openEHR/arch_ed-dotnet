@@ -894,7 +894,7 @@ Public Class TabPageDescription
         result.AppendLine("\par")
 
         result.AppendLine("\b")
-        result.AppendLine("References")
+        result.AppendLine(Filemanager.GetOpenEhrTerm(691, "References"))
         result.Append(":\b0")
         result.AppendLine("\par")
         result.AppendLine(RichTextBoxUnicode.CreateRichTextBoxTag("", RichTextBoxUnicode.RichTextDataType.ArchetypeReferences))
@@ -1040,6 +1040,7 @@ Public Class TabPageDescription
         tpAuthor.Title = Filemanager.GetOpenEhrTerm(580, tpAuthor.Title)
         tpDescDetails.Title = Filemanager.GetOpenEhrTerm(581, tpDescDetails.Title)
         tpTranslation.Title = Filemanager.GetOpenEhrTerm(650, tpTranslation.Title)
+        tpReferences.Title = Filemanager.GetOpenEhrTerm(691, tpReferences.Title)
         gbPurpose.Text = Filemanager.GetOpenEhrTerm(585, gbPurpose.Text)
         gbUse.Text = Filemanager.GetOpenEhrTerm(582, gbUse.Text)
         gbMisuse.Text = Filemanager.GetOpenEhrTerm(583, gbMisuse.Text)
