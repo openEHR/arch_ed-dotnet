@@ -96,18 +96,6 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Public Overrides Sub AddTerminology(ByVal code As String)
-            Dim s As EiffelKernel.STRING_8 = Eiffel.String(code)
-
-            Try
-                If EIF_adlInterface.archetype_available AndAlso Not EIF_adlInterface.ontology.has_terminology(s) Then
-                    EIF_adlInterface.ontology.add_binding_terminology(s)
-                End If
-            Catch e As Exception
-                MessageBox.Show(AE_Constants.Instance.Error_saving & " " & AE_Constants.Instance.Terminology, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        End Sub
-
         Public Overrides Function HasTermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
             Return EIF_adlInterface.archetype_available AndAlso EIF_adlInterface.ontology.has_term_binding(Eiffel.String(a_terminology_id), Eiffel.String(a_path))
         End Function

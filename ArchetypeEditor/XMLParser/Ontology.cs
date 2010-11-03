@@ -270,10 +270,10 @@ namespace XMLParser
             }
         }
 
-        public void AddTerminology(string a_terminology_id)
+        public void AddTerminology(string terminology)
         {
-            if (!_terminologies_available.Contains(a_terminology_id))
-                _terminologies_available.Add(a_terminology_id);
+            if (!AvailableTerminologies().Contains(terminology))
+                AvailableTerminologies().Add(terminology);
         }
 
         public bool HasTermCode(string a_term_code)
@@ -346,118 +346,87 @@ namespace XMLParser
             return false;
         }
 
-        public void AddOrReplaceConstraintBinding(string terminology_query, string archetype_path, string terminology)
+        public void AddOrReplaceTermBinding(string code, string archetypePath, string terminology, string terminologyIdValue)
         {
-            ConstraintBindingSet ts = GetConstraintBindingSet(terminology);
-            AddOrReplaceConstraintBinding(ts, terminology_query, archetype_path);
-        }
+            TermBindingSet ts = TermBindingSetForTerminology(terminology);
 
-        public void AddOrReplaceTermBinding(string code_string, string archetype_path, string terminology_key, string code_terminology_id)
-        {
-            TermBindingSet ts = GetTermBindingSet(terminology_key);
-            AddOrReplaceTermBinding(ts, code_string, archetype_path, code_terminology_id);
-        }
-
-        private void AddOrReplaceTermBinding(TermBindingSet a_terminology_set, string code_string, string archetype_path, string code_terminology_id)
-        {
-            int i = 0;
-            TERM_BINDING_ITEM[] resize_bindings;
-
-            if (a_terminology_set.items != null)
+            if (ts != null)
             {
-                foreach (TERM_BINDING_ITEM b in a_terminology_set.items)
+                AddTerminology(terminology);
+                TERM_BINDING_ITEM binding = null;
+                TERM_BINDING_ITEM[] bindings = ts.items;
+
+                if (bindings != null)
                 {
-                    if (b.code == archetype_path)
-                    {
-                        //already there so just change the path                                               
-                        if (b.value == null)
-                        {
-                            CODE_PHRASE codePhrase = new CODE_PHRASE();
-                            b.value = codePhrase;
-                        }
-
-                        if (b.value.terminology_id == null)
-                        {
-                            TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
-                            b.value.terminology_id = terminologyId;
-                        }
-
-                        b.value.terminology_id.value = code_terminology_id;
-                        b.value.code_string = code_string;
-                        
-                        return;
-                    }
+                    foreach (TERM_BINDING_ITEM b in bindings)
+                        if (b.code == archetypePath)
+                            binding = b;
                 }
 
-                resize_bindings = a_terminology_set.items;
-                i = resize_bindings.Length;
-                Array.Resize(ref resize_bindings, i + 1);
-            }
-            else
-            {
-                resize_bindings = Array.CreateInstance(typeof(TERM_BINDING_ITEM), 1) as TERM_BINDING_ITEM[];
-            }
-
-            //didn't find it so create a new binding
-            TERM_BINDING_ITEM new_binding = new TERM_BINDING_ITEM();
-            new_binding.code = archetype_path.ToLower(System.Globalization.CultureInfo.InvariantCulture);
-
-            if (new_binding.value == null)
-            {
-                CODE_PHRASE codePhrase = new CODE_PHRASE();
-                new_binding.value = codePhrase;
-            }
-
-            if (new_binding.value.terminology_id == null)
-            {
-                TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
-                new_binding.value.terminology_id = terminologyId;
-            }
-
-            new_binding.value.terminology_id.value = code_terminology_id;
-            new_binding.value.code_string = code_string;
-
-            //resize the bindings array
-            //add in the new binding
-            resize_bindings[i] = new_binding;
-            a_terminology_set.items = resize_bindings;
-        }
-        
-        private void AddOrReplaceConstraintBinding(ConstraintBindingSet a_terminology_set, string terminology_code, string archetype_path)
-        {
-            int i = 0;
-            CONSTRAINT_BINDING_ITEM[] resize_bindings;
-
-            if (a_terminology_set.items != null)
-            {
-                foreach (CONSTRAINT_BINDING_ITEM b in a_terminology_set.items)
+                if (binding == null)
                 {
-                    if (b.code == archetype_path)
+                    int i = 0;
+
+                    if (bindings == null)
+                        bindings = new TERM_BINDING_ITEM[1];
+                    else
                     {
-                        //already there so just change the path
-                        b.value = terminology_code;
-                        return;
+                        i = bindings.Length;
+                        Array.Resize(ref bindings, i + 1);
                     }
+
+                    ts.items = bindings;
+                    bindings[i] = binding = new TERM_BINDING_ITEM();
+                    binding.code = archetypePath.ToLower(System.Globalization.CultureInfo.InvariantCulture);
                 }
 
-                resize_bindings = a_terminology_set.items;
-                i = resize_bindings.Length;
-                Array.Resize(ref resize_bindings, i + 1);
+                if (binding.value == null)
+                    binding.value = new CODE_PHRASE();
+
+                if (binding.value.terminology_id == null)
+                    binding.value.terminology_id = new TERMINOLOGY_ID();
+
+                binding.value.terminology_id.value = terminologyIdValue;
+                binding.value.code_string = code;
             }
-            else
+        }
+
+        public void AddOrReplaceConstraintBinding(string query, string acCode, string terminology)
+        {
+            ConstraintBindingSet ts = ConstraintBindingSetForTerminology(terminology);
+
+            if (ts != null)
             {
-                resize_bindings = Array.CreateInstance(typeof(CONSTRAINT_BINDING_ITEM), 1) as CONSTRAINT_BINDING_ITEM[];
+                AddTerminology(terminology);
+                CONSTRAINT_BINDING_ITEM binding = null;
+                CONSTRAINT_BINDING_ITEM[] bindings = ts.items;
+
+                if (bindings != null)
+                {
+                    foreach (CONSTRAINT_BINDING_ITEM b in bindings)
+                        if (b.code == acCode)
+                            binding = b;
+                }
+
+                if (binding == null)
+                {
+                    int i = 0;
+
+                    if (bindings == null)
+                        bindings = new CONSTRAINT_BINDING_ITEM[1];
+                    else
+                    {
+                        i = bindings.Length;
+                        Array.Resize(ref bindings, i + 1);
+                    }
+
+                    ts.items = bindings;
+                    bindings[i] = binding = new CONSTRAINT_BINDING_ITEM();
+                    binding.code = acCode.ToLower(System.Globalization.CultureInfo.InvariantCulture);
+                }
+
+                binding.value = query;
             }
-
-            //didn't find it so create a new binding
-            CONSTRAINT_BINDING_ITEM new_binding = new CONSTRAINT_BINDING_ITEM();
-            new_binding.code = archetype_path.ToLower(System.Globalization.CultureInfo.InvariantCulture);
-            new_binding.value = terminology_code;
-
-            //resize the bindings array
-            //add in the new binding
-            resize_bindings[i] = new_binding;
-            a_terminology_set.items = resize_bindings;
         }
 
         public bool LanguageAvailable(string a_language_code)
@@ -510,13 +479,13 @@ namespace XMLParser
         {
             if (_terminologies_available == null)
             {
-                populate_terminology_list();
+                PopulateTerminologyList();
             }
 
             return _terminologies_available;
         }
 
-        private void populate_terminology_list()
+        private void PopulateTerminologyList()
         {
             _terminologies_available = new ArrayList();
 
@@ -524,7 +493,7 @@ namespace XMLParser
             {
                 foreach (TermBindingSet t in _archetype.ontology.term_bindings)
                 {
-                    _terminologies_available.Add(t.terminology);
+                    AddTerminology(t.terminology);
                 }
             }
 
@@ -532,8 +501,7 @@ namespace XMLParser
             {
                 foreach (ConstraintBindingSet t in _archetype.ontology.constraint_bindings)
                 {
-                    if (!_terminologies_available.Contains(t.terminology))
-                        _terminologies_available.Add(t.terminology);
+                    AddTerminology(t.terminology);
                 }
             }
         }
@@ -733,53 +701,68 @@ namespace XMLParser
             return result;
         }
 
-        private TermBindingSet GetTermBindingSet(string a_terminology)
+        private TermBindingSet TermBindingSetForTerminology(string terminology)
         {
-            int i = 1;
-            TermBindingSet[] bindings = _archetype.ontology.term_bindings;
+            TermBindingSet result = null;
 
-            if (bindings != null)
+            if (!string.IsNullOrEmpty(terminology))
             {
-                foreach (TermBindingSet ts in bindings)
+                int i = 0;
+                TermBindingSet[] bindings = _archetype.ontology.term_bindings;
+
+                if (bindings != null)
                 {
-                    if (ts.terminology == a_terminology)
-                        return ts;
+                    foreach (TermBindingSet ts in bindings)
+                    {
+                        if (ts.terminology == terminology)
+                            result = ts;
+                    }
+
+                    i = bindings.Length;
                 }
 
-                i = bindings.Length + 1;
+                if (result == null)
+                {
+                    Array.Resize(ref bindings, i + 1);
+                    bindings[i] = result = new TermBindingSet();
+                    result.terminology = terminology;
+                    _archetype.ontology.term_bindings = bindings;
+                }
             }
 
-            Array.Resize(ref bindings, i);
-            TermBindingSet new_ts = new TermBindingSet();
-            new_ts.terminology = a_terminology;
-            bindings[i - 1] = new_ts;
-            _archetype.ontology.term_bindings = bindings;
-            return new_ts;
+            return result;
         }
 
-        private ConstraintBindingSet GetConstraintBindingSet(string a_terminology)
+        private ConstraintBindingSet ConstraintBindingSetForTerminology(string terminology)
         {
-            int i = 1;
-            ConstraintBindingSet[] terminologySets;
-            terminologySets = _archetype.ontology.constraint_bindings;
+            ConstraintBindingSet result = null;
 
-            if (terminologySets != null)
+            if (!string.IsNullOrEmpty(terminology))
             {
-                foreach (ConstraintBindingSet ts in terminologySets)
+                int i = 0;
+                ConstraintBindingSet[] bindings = _archetype.ontology.constraint_bindings;
+
+                if (bindings != null)
                 {
-                    if (ts.terminology == a_terminology)
-                        return ts;
+                    foreach (ConstraintBindingSet ts in bindings)
+                    {
+                        if (ts.terminology == terminology)
+                            result = ts;
+                    }
+
+                    i = bindings.Length;
                 }
 
-                i = terminologySets.Length + 1;
+                if (result == null)
+                {
+                    Array.Resize(ref bindings, i + 1);
+                    bindings[i] = result = new ConstraintBindingSet();
+                    result.terminology = terminology;
+                    _archetype.ontology.constraint_bindings = bindings;
+                }
             }
 
-            Array.Resize(ref terminologySets, i);
-            ConstraintBindingSet new_ts = new ConstraintBindingSet();
-            new_ts.terminology = a_terminology;
-            terminologySets[i - 1] = new_ts;
-            _archetype.ontology.constraint_bindings = terminologySets;
-            return new_ts;
+            return result;
         }
 
         public void AddTermOrConstraintDefinition(string language, ARCHETYPE_TERM term, bool isLoading)
@@ -1068,7 +1051,7 @@ namespace XMLParser
                 _archetype.ontology.constraint_bindings = PackTerminologySets(_archetype.ontology.constraint_bindings);
             }
 
-            populate_terminology_list();
+            PopulateTerminologyList();
         }
 
         private TermBindingSet[] PackTerminologySets(TermBindingSet[] terminologySets)

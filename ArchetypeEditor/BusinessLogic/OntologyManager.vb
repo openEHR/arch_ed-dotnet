@@ -163,10 +163,6 @@ Public Class OntologyManager
         End Set
     End Property
 
-    Function HasTerminology(ByVal terminologyId As String) As Boolean
-        Return Not mTerminologiesTable.Rows.Find(terminologyId) Is Nothing
-    End Function
-
     Sub ReplaceOntology(ByVal anOntology As Ontology)
         mOntology = anOntology
     End Sub
@@ -600,19 +596,12 @@ Public Class OntologyManager
             TerminologiesTable.Rows.Add(row)
         End If
 
-        ' ensure it is in the ontology as well
-        If mDoUpdateOntology Then
-            mOntology.AddTerminology(terminologyId)
-        End If
-
         mFileManager.FileEdited = True
     End Sub
 
     Public Sub AddConstraintBinding(ByVal terminologyId As String, ByVal acCode As String, ByVal uri As String)
         If RmTerm.IsValidTermCode(acCode) And Not String.IsNullOrEmpty(terminologyId) Then
-            If Not HasTerminology(terminologyId) Then
-                AddTerminology(terminologyId)
-            End If
+            AddTerminology(terminologyId)
 
             Dim row As DataRow = ConstraintBindingsTable.NewRow
             PopulateConstraintBindingRow(row, terminologyId, acCode, uri)

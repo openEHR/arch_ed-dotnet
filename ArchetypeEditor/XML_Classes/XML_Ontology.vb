@@ -77,16 +77,6 @@ Namespace ArchetypeEditor.XML_Classes
             archetypeParser.Ontology.AddLanguage(code)
         End Sub
 
-        Public Overrides Sub AddTerminology(ByVal code As String)
-            Try
-                If Not archetypeParser.Ontology.TerminologyAvailable(code) Then
-                    archetypeParser.Ontology.AddTerminology(code)
-                End If
-            Catch e As Exception
-                MessageBox.Show(AE_Constants.Instance.Error_saving & " " & AE_Constants.Instance.Terminology, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        End Sub
-
         Public Overrides Function HasTermBinding(ByVal a_terminology_id As String, ByVal a_path As String) As Boolean
             Return archetypeParser.Ontology.HasTermBinding(a_terminology_id, a_path)
         End Function
@@ -103,56 +93,56 @@ Namespace ArchetypeEditor.XML_Classes
             Return archetypeParser.Ontology.ConstraintBinding(a_terminology_id, a_path)
         End Function
 
-        Public Overrides Sub AddorReplaceTermBinding(ByVal sTerminology As String, ByVal sPath As String, ByVal sCode As String, ByVal sRelease As String)
+        Public Overrides Sub AddorReplaceTermBinding(ByVal terminologyId As String, ByVal archetypePath As String, ByVal sCode As String, ByVal sRelease As String)
             Debug.Assert(sCode <> "", "Code is not set")
-            Debug.Assert(sPath <> "", "Path or nodeID are not set")
-            Debug.Assert(sTerminology <> "", "TerminologyID is not set")
+            Debug.Assert(archetypePath <> "", "Path or nodeID are not set")
+            Debug.Assert(terminologyId <> "", "TerminologyID is not set")
 
             Try
-                Dim terminology_idValue As String = sTerminology
+                Dim terminology_idValue As String = terminologyId
 
                 If Not String.IsNullOrEmpty(sRelease) Then
                     terminology_idValue += "(" + sRelease + ")"
                 End If
 
-                archetypeParser.Ontology.AddOrReplaceTermBinding(sCode, sPath, sTerminology, terminology_idValue)
+                archetypeParser.Ontology.AddOrReplaceTermBinding(sCode, archetypePath, terminologyId, terminology_idValue)
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "XML parser", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 
-        Public Overrides Sub RemoveTermBinding(ByVal a_terminology_id As String, ByVal archetype_path As String)
-            Debug.Assert(archetype_path <> "", "Code is not set")
-            Debug.Assert(a_terminology_id <> "", "TerminologyID is not set")
+        Public Overrides Sub RemoveTermBinding(ByVal terminologyId As String, ByVal archetypepath As String)
+            Debug.Assert(archetypepath <> "", "Code is not set")
+            Debug.Assert(terminologyId <> "", "TerminologyID is not set")
 
             Try
-                If archetypeParser.Ontology.HasTermBinding(a_terminology_id, archetype_path) Then
-                    archetypeParser.Ontology.RemoveTermBinding(archetype_path, a_terminology_id)
+                If archetypeParser.Ontology.HasTermBinding(terminologyId, archetypepath) Then
+                    archetypeParser.Ontology.RemoveTermBinding(archetypepath, terminologyId)
                 End If
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "XML parser", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 
-        Public Overrides Sub AddorReplaceConstraintBinding(ByVal a_terminology_id As String, ByVal ac_code As String, ByVal a_query As String)
-            Debug.Assert(ac_code <> "", "Code is not set")
-            Debug.Assert(a_query <> "", "Query is not set")
-            Debug.Assert(a_terminology_id <> "", "TerminologyID is not set")
+        Public Overrides Sub AddorReplaceConstraintBinding(ByVal terminologyId As String, ByVal acCode As String, ByVal query As String)
+            Debug.Assert(acCode <> "", "Code is not set")
+            Debug.Assert(query <> "", "Query is not set")
+            Debug.Assert(terminologyId <> "", "TerminologyID is not set")
 
             Try
-                archetypeParser.Ontology.AddOrReplaceConstraintBinding(a_query, ac_code, a_terminology_id)
+                archetypeParser.Ontology.AddOrReplaceConstraintBinding(query, acCode, terminologyId)
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "XML parser", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 
-        Public Overrides Sub RemoveConstraintBinding(ByVal a_terminology_id As String, ByVal a_query As String)
-            Debug.Assert(a_query <> "", "Code is not set")
-            Debug.Assert(a_terminology_id <> "", "TerminologyID is not set")
+        Public Overrides Sub RemoveConstraintBinding(ByVal terminologyid As String, ByVal query As String)
+            Debug.Assert(query <> "", "Code is not set")
+            Debug.Assert(terminologyid <> "", "TerminologyID is not set")
 
             Try
-                If archetypeParser.Ontology.HasConstraintBinding(a_terminology_id, a_query) Then
-                    archetypeParser.Ontology.RemoveConstraintBinding(a_query, a_terminology_id)
+                If archetypeParser.Ontology.HasConstraintBinding(terminologyid, query) Then
+                    archetypeParser.Ontology.RemoveConstraintBinding(query, terminologyid)
                 End If
             Catch e As System.Exception
                 MessageBox.Show(e.Message, "XML Parser error", MessageBoxButtons.OK, MessageBoxIcon.Error)

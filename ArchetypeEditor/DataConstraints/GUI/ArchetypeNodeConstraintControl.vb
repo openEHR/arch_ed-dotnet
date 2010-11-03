@@ -1003,9 +1003,7 @@ Public Class ArchetypeNodeConstraintControl
             form.ShowDialog(ParentForm)
 
             If form.DialogResult = DialogResult.OK Then
-                If Not mFileManager.OntologyManager.HasTerminology(form.TerminologyId) Then
-                    mFileManager.OntologyManager.AddTerminology(form.TerminologyId)
-                End If
+                mFileManager.OntologyManager.AddTerminology(form.TerminologyId)
 
                 row.Cells(0).Value = form.TerminologyId
                 row.Cells(0).ToolTipText = form.SubsetId
