@@ -1,6 +1,7 @@
 
 Public Enum LifeCycleStates
     NotSet = 118
+    Initial = 524
     AuthorDraft = 569
     OrganisationDraft = 571
     CommitteeDraft = 570
