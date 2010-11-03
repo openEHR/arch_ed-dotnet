@@ -146,7 +146,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
         {
             C_DATE result = new C_DATE();
 
-            if (o.has_assumed_value().Equals(true))
+            if (o.has_assumed_value())
                 result.assumed_value = o.assumed_value().ToString();
 
             if (o.pattern() != null)
@@ -161,7 +161,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
         {
             C_DATE_TIME result = new C_DATE_TIME();
 
-            if (o.has_assumed_value().Equals(true))
+            if (o.has_assumed_value())
                 result.assumed_value = o.assumed_value().ToString();
 
             if (o.pattern() != null)
@@ -176,7 +176,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
         {
             C_TIME result = new C_TIME();
 
-            if (o.has_assumed_value().Equals(true))
+            if (o.has_assumed_value())
                 result.assumed_value = o.assumed_value().ToString();
 
             if (o.pattern() != null)
@@ -511,7 +511,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             if (o.assumed_value() != null)
                 result.assumed_value = CloneDvOrdinal((openehr.openehr.am.openehr_profile.data_types.quantity.Impl.ORDINAL)o.assumed_value());
 
-            if (o.any_allowed())
+            if (!o.any_allowed())
             {
                 EiffelStructures.list.LINKED_LIST_REFERENCE adlOrdinals = o.items();
                 result.list = new DV_ORDINAL[adlOrdinals.count()];
