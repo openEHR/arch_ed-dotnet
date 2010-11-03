@@ -118,7 +118,6 @@ Public Class PathwaySpecification
         Me.tpTransition = New System.Windows.Forms.TabPage
         Me.cbAborted = New System.Windows.Forms.CheckBox
         Me.cbSuspended = New System.Windows.Forms.CheckBox
-        Me.lblAllowTransition = New System.Windows.Forms.Label
         Me.tpState = New System.Windows.Forms.TabPage
         Me.lblAllowAltState = New System.Windows.Forms.Label
         Me.cbAlternativeState = New System.Windows.Forms.CheckBox
@@ -160,6 +159,7 @@ Public Class PathwaySpecification
         Me.pbActiveTopUp = New System.Windows.Forms.PictureBox
         Me.SplitterTop = New System.Windows.Forms.Splitter
         Me.SplitterBottom = New System.Windows.Forms.Splitter
+        Me.lblAllowTransition = New System.Windows.Forms.Label
         Me.PanelRight.SuspendLayout()
         Me.gbCompleted.SuspendLayout()
         Me.PanelRightBottom.SuspendLayout()
@@ -258,9 +258,9 @@ Public Class PathwaySpecification
         '
         'tpTransition
         '
+        Me.tpTransition.Controls.Add(Me.lblAllowTransition)
         Me.tpTransition.Controls.Add(Me.cbAborted)
         Me.tpTransition.Controls.Add(Me.cbSuspended)
-        Me.tpTransition.Controls.Add(Me.lblAllowTransition)
         Me.tpTransition.Location = New System.Drawing.Point(4, 22)
         Me.tpTransition.Name = "tpTransition"
         Me.tpTransition.Size = New System.Drawing.Size(152, 122)
@@ -269,29 +269,21 @@ Public Class PathwaySpecification
         '
         'cbAborted
         '
-        Me.cbAborted.Location = New System.Drawing.Point(24, 56)
+        Me.cbAborted.Location = New System.Drawing.Point(24, 62)
         Me.cbAborted.Name = "cbAborted"
-        Me.cbAborted.Size = New System.Drawing.Size(192, 24)
+        Me.cbAborted.Size = New System.Drawing.Size(125, 24)
         Me.cbAborted.TabIndex = 2
         Me.cbAborted.Text = "Aborted"
         Me.cbAborted.Visible = False
         '
         'cbSuspended
         '
-        Me.cbSuspended.Location = New System.Drawing.Point(24, 24)
+        Me.cbSuspended.Location = New System.Drawing.Point(24, 30)
         Me.cbSuspended.Name = "cbSuspended"
-        Me.cbSuspended.Size = New System.Drawing.Size(192, 32)
+        Me.cbSuspended.Size = New System.Drawing.Size(125, 32)
         Me.cbSuspended.TabIndex = 1
         Me.cbSuspended.Text = "Suspended"
         Me.cbSuspended.Visible = False
-        '
-        'lblAllowTransition
-        '
-        Me.lblAllowTransition.Location = New System.Drawing.Point(8, 8)
-        Me.lblAllowTransition.Name = "lblAllowTransition"
-        Me.lblAllowTransition.Size = New System.Drawing.Size(136, 21)
-        Me.lblAllowTransition.TabIndex = 0
-        Me.lblAllowTransition.Text = "Allow transition to:"
         '
         'tpState
         '
@@ -708,6 +700,15 @@ Public Class PathwaySpecification
         Me.SplitterBottom.Size = New System.Drawing.Size(805, 3)
         Me.SplitterBottom.TabIndex = 3
         Me.SplitterBottom.TabStop = False
+        '
+        'lblAllowTransition
+        '
+        Me.lblAllowTransition.Dock = System.Windows.Forms.DockStyle.Top
+        Me.lblAllowTransition.Location = New System.Drawing.Point(0, 0)
+        Me.lblAllowTransition.Name = "lblAllowTransition"
+        Me.lblAllowTransition.Size = New System.Drawing.Size(152, 32)
+        Me.lblAllowTransition.TabIndex = 3
+        Me.lblAllowTransition.Text = "Allow transition to:"
         '
         'PathwaySpecification
         '
