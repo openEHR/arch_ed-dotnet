@@ -17,12 +17,6 @@
 Public Class ConstraintForm
     Inherits System.Windows.Forms.Form
 
-
-    '    Private AnyConstraints As AnyConstraintControl
-    Private mConstraintControl As ConstraintControl
-    Private mFileManager As FileManagerLocal
-
-
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -33,14 +27,13 @@ Public Class ConstraintForm
 
         'Add any initialization after the InitializeComponent() call
 
-        If Not Me.DesignMode Then
+        If Not DesignMode Then
             If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-                Me.butDelete.Text = Filemanager.GetOpenEhrTerm(631, "Delete all")
-                Me.butCancel.Text = AE_Constants.Instance.Cancel
-                Me.butOK.Text = AE_Constants.Instance.OK
+                DeleteButton.Text = Filemanager.GetOpenEhrTerm(631, "Delete this Constraint")
+                CancelCloseButton.Text = AE_Constants.Instance.Cancel
+                OkButton.Text = AE_Constants.Instance.OK
             End If
         End If
-
     End Sub
 
     'Form overrides dispose to clean up the component list.
@@ -59,68 +52,71 @@ Public Class ConstraintForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents PanelBottom As System.Windows.Forms.Panel
-    Friend WithEvents butOK As System.Windows.Forms.Button
-    Friend WithEvents butCancel As System.Windows.Forms.Button
-    Friend WithEvents butDelete As System.Windows.Forms.Button
+    Friend WithEvents OkButton As System.Windows.Forms.Button
+    Friend WithEvents CancelCloseButton As System.Windows.Forms.Button
+    Friend WithEvents DeleteButton As System.Windows.Forms.Button
+    Friend WithEvents TopPanel As System.Windows.Forms.Panel
     Friend WithEvents HelpProviderConstraintForm As System.Windows.Forms.HelpProvider
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ConstraintForm))
-        Me.PanelBottom = New System.Windows.Forms.Panel
-        Me.butDelete = New System.Windows.Forms.Button
-        Me.butCancel = New System.Windows.Forms.Button
-        Me.butOK = New System.Windows.Forms.Button
+        Me.DeleteButton = New System.Windows.Forms.Button
+        Me.CancelCloseButton = New System.Windows.Forms.Button
+        Me.OkButton = New System.Windows.Forms.Button
         Me.HelpProviderConstraintForm = New System.Windows.Forms.HelpProvider
-        Me.PanelBottom.SuspendLayout()
+        Me.TopPanel = New System.Windows.Forms.Panel
         Me.SuspendLayout()
         '
-        'PanelBottom
+        'DeleteButton
         '
-        Me.PanelBottom.Controls.Add(Me.butDelete)
-        Me.PanelBottom.Controls.Add(Me.butCancel)
-        Me.PanelBottom.Controls.Add(Me.butOK)
-        Me.PanelBottom.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.PanelBottom.Location = New System.Drawing.Point(0, 391)
-        Me.PanelBottom.Name = "PanelBottom"
-        Me.PanelBottom.Size = New System.Drawing.Size(492, 32)
-        Me.PanelBottom.TabIndex = 0
+        Me.DeleteButton.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.DeleteButton.Location = New System.Drawing.Point(12, 416)
+        Me.DeleteButton.Name = "DeleteButton"
+        Me.DeleteButton.Size = New System.Drawing.Size(265, 24)
+        Me.DeleteButton.TabIndex = 1
+        Me.DeleteButton.Text = "Delete this Constraint"
         '
-        'butDelete
+        'CancelCloseButton
         '
-        Me.butDelete.Location = New System.Drawing.Point(96, 4)
-        Me.butDelete.Name = "butDelete"
-        Me.butDelete.Size = New System.Drawing.Size(104, 24)
-        Me.butDelete.TabIndex = 0
-        Me.butDelete.Text = "Delete All"
+        Me.CancelCloseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.CancelCloseButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.CancelCloseButton.Location = New System.Drawing.Point(392, 416)
+        Me.CancelCloseButton.Name = "CancelCloseButton"
+        Me.CancelCloseButton.Size = New System.Drawing.Size(88, 24)
+        Me.CancelCloseButton.TabIndex = 3
+        Me.CancelCloseButton.Text = "Cancel"
         '
-        'butCancel
+        'OkButton
         '
-        Me.butCancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.butCancel.Location = New System.Drawing.Point(395, 4)
-        Me.butCancel.Name = "butCancel"
-        Me.butCancel.Size = New System.Drawing.Size(88, 24)
-        Me.butCancel.TabIndex = 2
-        Me.butCancel.Text = "Cancel"
+        Me.OkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.OkButton.DialogResult = System.Windows.Forms.DialogResult.OK
+        Me.OkButton.Location = New System.Drawing.Point(292, 416)
+        Me.OkButton.Name = "OkButton"
+        Me.OkButton.Size = New System.Drawing.Size(88, 24)
+        Me.OkButton.TabIndex = 2
+        Me.OkButton.Text = "OK"
         '
-        'butOK
+        'TopPanel
         '
-        Me.butOK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butOK.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.butOK.Location = New System.Drawing.Point(295, 4)
-        Me.butOK.Name = "butOK"
-        Me.butOK.Size = New System.Drawing.Size(88, 24)
-        Me.butOK.TabIndex = 1
-        Me.butOK.Text = "OK"
+        Me.TopPanel.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TopPanel.Location = New System.Drawing.Point(0, 0)
+        Me.TopPanel.Name = "TopPanel"
+        Me.TopPanel.Size = New System.Drawing.Size(492, 410)
+        Me.TopPanel.TabIndex = 0
         '
         'ConstraintForm
         '
-        Me.AcceptButton = Me.butOK
+        Me.AcceptButton = Me.OkButton
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.CancelButton = Me.butCancel
-        Me.ClientSize = New System.Drawing.Size(492, 423)
+        Me.CancelButton = Me.CancelCloseButton
+        Me.ClientSize = New System.Drawing.Size(492, 442)
         Me.ControlBox = False
-        Me.Controls.Add(Me.PanelBottom)
+        Me.Controls.Add(Me.TopPanel)
+        Me.Controls.Add(Me.DeleteButton)
+        Me.Controls.Add(Me.OkButton)
+        Me.Controls.Add(Me.CancelCloseButton)
         Me.HelpProviderConstraintForm.SetHelpKeyword(Me, "HowTo/Edit data/Set_runtime_name.html")
         Me.HelpProviderConstraintForm.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -128,7 +124,6 @@ Public Class ConstraintForm
         Me.Name = "ConstraintForm"
         Me.HelpProviderConstraintForm.SetShowHelp(Me, True)
         Me.Text = "ConstraintForm"
-        Me.PanelBottom.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -136,73 +131,47 @@ Public Class ConstraintForm
 #End Region
 
     Private mIsLoading As Boolean = True
+    Private mConstraintControl As ConstraintControl
+
     Protected ReadOnly Property IsLoading() As Boolean
         Get
             Return mIsLoading
         End Get
     End Property
 
-    Public Sub ShowConstraint(ByVal IsState As Boolean, ByVal aConstraint As Constraint, ByVal a_file_manager As FileManagerLocal)
-
-        mFileManager = a_file_manager
-
+    Public Sub ShowConstraint(ByVal isState As Boolean, ByVal constraint As Constraint, ByVal filemanager As FileManagerLocal)
         mIsLoading = True
+        Text = AE_Constants.Instance.MessageBoxCaption
+        OkButton.Text = AE_Constants.Instance.OK
+        SuspendLayout()
 
-        Me.Text = AE_Constants.Instance.MessageBoxCaption
-        Me.butOK.Text = AE_Constants.Instance.OK
-        Me.SuspendLayout()
+        If Not mConstraintControl Is Nothing Then
+            TopPanel.Controls.Remove(mConstraintControl)
+            mConstraintControl = Nothing
+        End If
 
-        ' ensure that it is not hidden by slot control
-        '        Me.txtRuntimeName.Visible = True
-        '       Me.txtTermDescription.Visible = True
+        If constraint.Type <> ConstraintType.Any Then
+            mConstraintControl = ConstraintControl.CreateConstraintControl(constraint.Type, filemanager)
+            TopPanel.Controls.Add(mConstraintControl)
+            mConstraintControl.Dock = DockStyle.Fill
+            mConstraintControl.ShowConstraint(isState, constraint)
+        End If
 
-        Try
-
-            If Not mConstraintControl Is Nothing Then
-                Me.Controls.Remove(mConstraintControl)
-                mConstraintControl = Nothing
-            End If
-
-            If aConstraint.Type <> ConstraintType.Any Then
-                mConstraintControl = ConstraintControl.CreateConstraintControl( _
-                        aConstraint.Type, mFileManager)
-
-                Me.Controls.Add(mConstraintControl)
-
-                ' Ensures the ZOrder leads to no overlap
-                mConstraintControl.Dock = DockStyle.Fill
-
-                ' HKF: 1620
-                mConstraintControl.ShowConstraint(IsState, aConstraint)
-            End If
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
-
-        Me.ResumeLayout(False)
+        ResumeLayout(False)
         mIsLoading = False
     End Sub
 
-    Private Sub butOK_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOK.Click
-        Me.Close()
-    End Sub
-
-    Private Sub butCancel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butCancel.Click
-        Me.Close()
-    End Sub
-
-    Private Sub butDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butDelete.Click
-        If MessageBox.Show("Delete all", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = _
-            System.Windows.Forms.DialogResult.Yes Then
-            Me.DialogResult = System.Windows.Forms.DialogResult.Ignore
-            Me.Close()
+    Private Sub butDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DeleteButton.Click
+        If MessageBox.Show(DeleteButton.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            DialogResult = DialogResult.Ignore
+            Close()
         End If
     End Sub
 
     Private Sub ConstraintForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.HelpProviderConstraintForm.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderConstraintForm.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
     End Sub
+
 End Class
 
 '

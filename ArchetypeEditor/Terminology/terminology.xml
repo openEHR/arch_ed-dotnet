@@ -1326,7 +1326,7 @@
   <Concept Language="en" ConceptID="628" Rubric="Include all" />
   <Concept Language="en" ConceptID="629" Rubric="Exclude all" />
   <Concept Language="en" ConceptID="630" Rubric="As percent" />
-  <Concept Language="en" ConceptID="631" Rubric="Delete all" />
+  <Concept Language="en" ConceptID="631" Rubric="Delete this Constraint" />
   <Concept Language="en" ConceptID="632" Rubric="Archetype Id" />
   <Concept Language="en" ConceptID="633" Rubric="Identifier" />
   <Concept Language="en" ConceptID="634" Rubric="Paragraph" />
