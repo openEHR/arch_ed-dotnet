@@ -62,7 +62,6 @@ Public Class ConstraintBindingForm
         Me.TerminologyComboBox.Name = "TerminologyComboBox"
         Me.TerminologyComboBox.Size = New System.Drawing.Size(325, 21)
         Me.TerminologyComboBox.TabIndex = 1
-        Me.TerminologyComboBox.Text = "Choose..."
         Me.TerminologyToolTip.SetToolTip(Me.TerminologyComboBox, "Terminology name must start with a letter, followed by one or more letters, digit" & _
                 "s, underscores, minuses, slashes or pluses")
         '
@@ -170,36 +169,33 @@ Public Class ConstraintBindingForm
 
 #End Region
 
-    Dim mDataTable As DataTable
-
     Private Sub ConstraintBinding_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        mDataTable = New DataTable("DataTable")
-        Dim idColumn As DataColumn = New DataColumn
-        idColumn.DataType = System.Type.GetType("System.Int32")
-        idColumn.ColumnName = "Id"
-        mDataTable.Columns.Add(idColumn)
-        Dim CodeColumn As DataColumn = New DataColumn
-        CodeColumn.DataType = System.Type.GetType("System.String")
-        CodeColumn.ColumnName = "Code"
-        mDataTable.Columns.Add(CodeColumn)
-        Dim TextColumn As DataColumn = New DataColumn
-        TextColumn.DataType = System.Type.GetType("System.String")
-        TextColumn.ColumnName = "Text"
-        mDataTable.Columns.Add(TextColumn)
+        Dim table As New DataTable("DataTable")
+
+        Dim codeColumn As DataColumn = New DataColumn
+        codeColumn.DataType = System.Type.GetType("System.String")
+        codeColumn.ColumnName = "Code"
+        table.Columns.Add(codeColumn)
+
+        Dim textColumn As DataColumn = New DataColumn
+        textColumn.DataType = System.Type.GetType("System.String")
+        textColumn.ColumnName = "Text"
+        table.Columns.Add(textColumn)
 
         Dim terminologies As DataRow() = Filemanager.Master.OntologyManager.GetTerminologyIdentifiers
-        mDataTable.DefaultView.Sort = "Text"
+        table.DefaultView.Sort = "Text"
 
         For i As Integer = 0 To terminologies.Length - 1
-            Dim newRow As DataRow = mDataTable.NewRow()
-            newRow("Code") = terminologies(i).Item(0)
-            newRow("Text") = terminologies(i).Item(1)
-            mDataTable.Rows.Add(newRow)
+            Dim row As DataRow = table.NewRow()
+            row("Code") = terminologies(i).Item(0)
+            row("Text") = terminologies(i).Item(1)
+            table.Rows.Add(row)
         Next
 
-        TerminologyComboBox.DataSource = mDataTable
+        TerminologyComboBox.DataSource = table
         TerminologyComboBox.DisplayMember = "Text"
         TerminologyComboBox.ValueMember = "Code"
+        TerminologyComboBox.SelectedValue = DBNull.Value
     End Sub
 
     Private Sub SubsetButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SubsetButton.Click
