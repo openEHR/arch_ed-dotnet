@@ -6,7 +6,7 @@
     <ProjectGuid>{179B4A54-F044-430D-9DB6-E950F80EC87F}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>ocean-transparent.ico</ApplicationIcon>
+    <ApplicationIcon>ArchetypeEditor.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>ArchetypeEditor</AssemblyName>
@@ -1031,13 +1031,13 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <Content Include="ArchetypeEditor.ico" />
     <Content Include="HTML\adlxml-to-html.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="HTML\Images\default.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ocean-transparent.ico" />
     <None Include="AssemblyVersion.cmd">
     </None>
     <None Include="PropertyUnits\PropertyUnits.xsx">
