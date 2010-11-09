@@ -1,4 +1,4 @@
-::@echo off
+@echo off
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::
@@ -17,6 +17,7 @@
 
 setlocal EnableDelayedExpansion
 set Version=2.2
+set Suffix= Beta
 set Revision=0
 
 if /i "%1" == "Release" (
@@ -28,9 +29,21 @@ if /i "%1" == "Release" (
 	exit /b 1
 )
 
+if /i "%2" == "VB" (
+	set Comment='
+	set Attribute=^<
+	set AttributeEnd=^>
+) else (
+	set Comment=//
+	set Attribute=[
+	set AttributeEnd=]
+)
+
 :WriteAssemblyVersion
-	echo ' This file was generated automatically by %~nx0.
-	echo ^<Assembly: System.Reflection.AssemblyVersion^("!Version!.!Revision!.*"^)^>
+	echo !Comment! This file was generated automatically by %~nx0.
+	echo !Attribute!assembly: System.Reflection.AssemblyVersion^("!Version!.!Revision!.0"^)!AttributeEnd!
+	echo !Attribute!assembly: System.Reflection.AssemblyFileVersion^("!Version!.!Revision!.*"^)!AttributeEnd!
+	echo !Attribute!assembly: System.Reflection.AssemblyInformationalVersion^("!Version!.!Revision!!Suffix!"^)!AttributeEnd!
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::

@@ -52,7 +52,7 @@ Namespace org.openehr
         '''<remarks/>
         Public Sub New()
             MyBase.New
-            Me.Url = OceanArchetypeEditor.Instance.Options.RepositoryUrl.ToString
+            Me.Url = Main.Instance.Options.RepositoryUrl.ToString
             If (Me.IsLocalFileSystemWebService(Me.Url) = true) Then
                 Me.UseDefaultCredentials = true
                 Me.useDefaultCredentialsSetExplicitly = false

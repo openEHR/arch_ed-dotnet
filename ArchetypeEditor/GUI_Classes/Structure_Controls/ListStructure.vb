@@ -184,7 +184,7 @@ Public Class ListStructure
 
         If Not DesignMode Then
             'Set the menu texts
-            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            If Main.Instance.DefaultLanguageCode <> "en" Then
                 MenuRemove.Text = AE_Constants.Instance.Remove
                 SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
                 MenuAddReference.Text = AE_Constants.Instance.Add_Reference
@@ -328,7 +328,7 @@ Public Class ListStructure
                 SetCurrentItem(lvitem.Item)
                 mFileManager.FileEdited = True
             End If
-            End If
+        End If
     End Sub
 
     Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles MenuAddReference.Click
@@ -498,7 +498,7 @@ Public Class ListStructure
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
         Dim lvItem As ArchetypeListViewItem
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
-        Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
+        Dim showComments As Boolean = Main.Instance.Options.ShowCommentsInHtml
         Dim s As String = ""
 
         If mCardinalityControl.Cardinality.Ordered Then
@@ -510,7 +510,7 @@ Public Class ListStructure
         result.Append(Environment.NewLine)
         result.Append("<table border=""1"" cellpadding=""2"" width=""100%"">")
         result.AppendFormat(Me.HtmlHeader(BackGroundColour, showComments))
-       
+
         For Each lvItem In Me.lvList.Items
             result.AppendFormat("{0}{1}", Environment.NewLine, lvItem.Item.ToHTML(0, showComments))
             result.AppendFormat("{0}</tr>", Environment.NewLine)
@@ -603,7 +603,7 @@ Public Class ListStructure
 
                 ' show specialisation if appropriate
                 Dim nodeId As String = CType(lvItem.Item, ArchetypeNodeAbstract).NodeId
-                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(nodeId, ".")
+                Dim i As Integer = Main.Instance.CountInString(nodeId, ".")
                 Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
 
                 If i < numberSpecialisations Then
@@ -687,7 +687,7 @@ Public Class ListStructure
 
                     If lvItem.Item.RM_Class.Type = StructureType.Element Then
                         Dim id As String = CType(lvItem.Item, ArchetypeElement).NodeId
-                        Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(id, ".")
+                        Dim i As Integer = Main.Instance.CountInString(id, ".")
                         Dim numSpecs As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
 
                         If numSpecs = 0 Or (i = numSpecs And ((id.StartsWith("at0.") Or (id.IndexOf(".0.") > -1)))) Then
@@ -732,7 +732,7 @@ Public Class ListStructure
     Private Sub lvList_BeforeLabelEdit(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LabelEditEventArgs) Handles lvList.BeforeLabelEdit
         If Not mCurrentItem Is Nothing Then
             If Not mCurrentItem.IsAnonymous And lvList.SelectedItems.Count = 1 Then
-                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+                Dim i As Integer = Main.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
 
                 If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                     e.CancelEdit = True

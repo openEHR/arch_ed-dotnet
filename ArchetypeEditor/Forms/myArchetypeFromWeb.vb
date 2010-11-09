@@ -29,13 +29,12 @@ Public Class myArchetypeFromWeb
        
         Dim ArchetypeDescAvailable As Boolean = False
         Dim ArchetypeURL As String
-        Dim language As String
-
-        language = OceanArchetypeEditor.DefaultLanguageCode
+        Dim language As String = Main.Instance.DefaultLanguageCode
 
         Try
             'The ADL-URL is required for locating and opening the archetype
             ArchetypeURL = ArchetypeService.getArchetypeADLURL(id)
+
             If Not ArchetypeURL.StartsWith("http:") Then
                 btn_open.Hide()
             Else
@@ -45,7 +44,6 @@ Public Class myArchetypeFromWeb
         Catch ex As System.Web.Services.Protocols.SoapException
             btn_open.Hide()
         End Try
-
 
         ' DescriptionTerms-Array : this is a collection of all elements 
         ' we want to have in our resultset as description for an archetype
@@ -57,7 +55,6 @@ Public Class myArchetypeFromWeb
         DescriptionTerms(0) = "hasEHRClass"
         DescriptionTerms(1) = "archetypeDescription"
         DescriptionTerms(2) = "archetypePurpose"
-
 
         Try
             'The description helps the user to "identify" the archetype by seeing more information than just the ID.

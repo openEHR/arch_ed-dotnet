@@ -40,8 +40,8 @@ Public Class MultiMediaConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.lblMultiMedia.Text = Filemanager.GetOpenEhrTerm(386, Me.lblMultiMedia.Text)
+        If Main.Instance.DefaultLanguageCode <> "en" Then
+            lblMultiMedia.Text = Filemanager.GetOpenEhrTerm(386, Me.lblMultiMedia.Text)
         End If
 
         Dim d_row As DataRow() = mFileManager.OntologyManager.CodeForGroupID(19, "en") ' must be in English

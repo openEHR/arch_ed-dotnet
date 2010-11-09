@@ -22,7 +22,9 @@ Public Class Splash
     Public Sub New()
         MyBase.New()
         InitializeComponent()
-        VersionLabel.Text = "Version " + ProductVersion + " Beta"
+        VersionLabel.Text = "Version " + Application.ProductVersion
+        CopyrightLabel.Text = Options.Copyright
+        LogoPictureBox.Image = Main.Instance.Splash
     End Sub
 
     'Form overrides dispose to clean up the component list.
@@ -38,6 +40,7 @@ Public Class Splash
     Public WithEvents timerSplash As System.Windows.Forms.Timer
     Friend WithEvents VersionLabel As System.Windows.Forms.Label
     Friend WithEvents CopyrightLabel As System.Windows.Forms.Label
+    Friend WithEvents LogoPictureBox As System.Windows.Forms.PictureBox
 
     'Required by the Windows Form Designer
     Private components As System.ComponentModel.IContainer
@@ -52,6 +55,8 @@ Public Class Splash
         Me.timerSplash = New System.Windows.Forms.Timer(Me.components)
         Me.VersionLabel = New System.Windows.Forms.Label
         Me.CopyrightLabel = New System.Windows.Forms.Label
+        Me.LogoPictureBox = New System.Windows.Forms.PictureBox
+        CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'buttonClose
@@ -60,7 +65,7 @@ Public Class Splash
         Me.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.buttonClose.FlatAppearance.BorderColor = System.Drawing.Color.PaleGoldenrod
         Me.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.buttonClose.Location = New System.Drawing.Point(30, 187)
+        Me.buttonClose.Location = New System.Drawing.Point(25, 187)
         Me.buttonClose.Name = "buttonClose"
         Me.buttonClose.Size = New System.Drawing.Size(108, 26)
         Me.buttonClose.TabIndex = 0
@@ -75,36 +80,46 @@ Public Class Splash
         '
         Me.VersionLabel.BackColor = System.Drawing.Color.Transparent
         Me.VersionLabel.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.VersionLabel.Location = New System.Drawing.Point(157, 152)
+        Me.VersionLabel.Location = New System.Drawing.Point(149, 152)
         Me.VersionLabel.Name = "VersionLabel"
-        Me.VersionLabel.Size = New System.Drawing.Size(218, 14)
+        Me.VersionLabel.Size = New System.Drawing.Size(242, 14)
         Me.VersionLabel.TabIndex = 1
-        Me.VersionLabel.Text = "Version 1.0"
+        Me.VersionLabel.Text = "Version"
         Me.VersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'CopyrightLabel
         '
         Me.CopyrightLabel.BackColor = System.Drawing.Color.Transparent
         Me.CopyrightLabel.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CopyrightLabel.Location = New System.Drawing.Point(157, 169)
+        Me.CopyrightLabel.Location = New System.Drawing.Point(148, 169)
         Me.CopyrightLabel.Name = "CopyrightLabel"
-        Me.CopyrightLabel.Size = New System.Drawing.Size(218, 14)
+        Me.CopyrightLabel.Size = New System.Drawing.Size(242, 14)
         Me.CopyrightLabel.TabIndex = 2
-        Me.CopyrightLabel.Text = "Copyright © Ocean Informatics 2010"
+        Me.CopyrightLabel.Text = "Copyright © "
         Me.CopyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'LogoPictureBox
+        '
+        Me.LogoPictureBox.Location = New System.Drawing.Point(6, 6)
+        Me.LogoPictureBox.Name = "LogoPictureBox"
+        Me.LogoPictureBox.Size = New System.Drawing.Size(144, 181)
+        Me.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
+        Me.LogoPictureBox.TabIndex = 3
+        Me.LogoPictureBox.TabStop = False
         '
         'Splash
         '
         Me.AcceptButton = Me.buttonClose
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
-        Me.BackColor = System.Drawing.Color.FloralWhite
+        Me.BackColor = System.Drawing.Color.White
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
         Me.CancelButton = Me.buttonClose
         Me.ClientSize = New System.Drawing.Size(578, 262)
+        Me.Controls.Add(Me.buttonClose)
+        Me.Controls.Add(Me.LogoPictureBox)
         Me.Controls.Add(Me.CopyrightLabel)
         Me.Controls.Add(Me.VersionLabel)
-        Me.Controls.Add(Me.buttonClose)
         Me.DoubleBuffered = True
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -113,8 +128,9 @@ Public Class Splash
         Me.Name = "Splash"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "About Ocean Archetype Editor"
+        Me.Text = "About Archetype Editor"
         Me.TopMost = True
+        CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

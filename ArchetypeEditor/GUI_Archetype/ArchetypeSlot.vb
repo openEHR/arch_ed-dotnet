@@ -124,7 +124,7 @@ Public Class ArchetypeSlot : Inherits ArchetypeNodeAbstract
             End If
         End If
         s.Append("</td>")
-        If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml Then
+        If Main.Instance.Options.ShowCommentsInHtml Then
             s.Append("<td>&nbsp;</td>")
         End If
         s.Append("</tr>")

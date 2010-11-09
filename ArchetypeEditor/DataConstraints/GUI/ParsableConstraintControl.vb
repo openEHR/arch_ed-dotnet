@@ -40,8 +40,8 @@ Public Class ParsableConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.lblParsable.Text = Filemanager.GetOpenEhrTerm(684, Me.lblParsable.Text)
+        If Main.Instance.DefaultLanguageCode <> "en" Then
+            lblParsable.Text = Filemanager.GetOpenEhrTerm(684, lblParsable.Text)
         End If
 
         Dim d_row As DataRow() = mFileManager.OntologyManager.CodeForGroupID(25, "en") ' must be in English

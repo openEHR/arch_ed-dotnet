@@ -28,7 +28,7 @@ Public Class ConstraintForm
         'Add any initialization after the InitializeComponent() call
 
         If Not DesignMode Then
-            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            If Main.Instance.DefaultLanguageCode <> "en" Then
                 DeleteButton.Text = Filemanager.GetOpenEhrTerm(631, "Delete this Constraint")
                 CancelCloseButton.Text = AE_Constants.Instance.Cancel
                 OkButton.Text = AE_Constants.Instance.OK
@@ -169,7 +169,7 @@ Public Class ConstraintForm
     End Sub
 
     Private Sub ConstraintForm_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        HelpProviderConstraintForm.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderConstraintForm.HelpNamespace = Main.Instance.Options.HelpLocationPath
     End Sub
 
 End Class

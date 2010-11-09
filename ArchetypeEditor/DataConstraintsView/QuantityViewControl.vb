@@ -96,15 +96,15 @@ Public Class QuantityViewControl : Inherits ElementViewControl
                     Dim d_rows As DataRow()
 
                     If quantityConstraint.IsCoded Then
-                        d_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
+                        d_rows = Main.Instance.PhysicalPropertiesTable.Select _
                             ("openEHR = " & quantityConstraint.OpenEhrCode.ToString())
                     Else
                         'OBSOLETE
-                        If OceanArchetypeEditor.DefaultLanguageCode = "en" Then
-                            d_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
+                        If Main.Instance.DefaultLanguageCode = "en" Then
+                            d_rows = Main.Instance.PhysicalPropertiesTable.Select _
                                 ("Text = '" & quantityConstraint.PhysicalPropertyAsString & "'")
                         Else
-                            d_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select _
+                            d_rows = Main.Instance.PhysicalPropertiesTable.Select _
                                ("Translated = '" & quantityConstraint.PhysicalPropertyAsString & "'")
                         End If
                     End If
@@ -113,7 +113,7 @@ Public Class QuantityViewControl : Inherits ElementViewControl
 
                         Dim id As String = d_rows(0)(0)
 
-                        For Each d_row In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & id)
+                        For Each d_row In Main.Instance.UnitsTable.Select("property_id = " & id)
                             combo.Items.Add(CStr(d_row(1)))
                         Next
                     End If

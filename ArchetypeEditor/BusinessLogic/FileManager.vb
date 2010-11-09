@@ -318,7 +318,7 @@ Public Class FileManagerLocal
         'Create a new parser
         Dim xml_parser As New XMLParser.XmlArchetypeParser()
 
-        xml_parser.NewArchetype(Archetype.Archetype_ID.ToString, mOntologyManager.PrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
+        xml_parser.NewArchetype(Archetype.Archetype_ID.ToString, mOntologyManager.PrimaryLanguageCode, Main.Instance.DefaultLanguageCodeSet)
         xml_parser.Archetype.concept = Archetype.ConceptCode
         xml_parser.Archetype.definition.node_id = xml_parser.Archetype.concept
 
@@ -366,8 +366,7 @@ Public Class FileManagerLocal
             Dim language As String = CStr(row(0))
             Dim cp As New XMLParser.CODE_PHRASE
             cp.terminology_id = New XMLParser.TERMINOLOGY_ID
-            cp.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
-            'cp.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+            cp.terminology_id.value = Main.Instance.DefaultLanguageCodeSet
             cp.code_string = language
 
             'Add the translations
@@ -572,7 +571,7 @@ Public Class FileManagerLocal
             mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
         Else
             If Not an_archetype_ID Is Nothing Then
-                NewArchetype(an_archetype_ID, OceanArchetypeEditor.Instance.Options.DefaultParser)
+                NewArchetype(an_archetype_ID, Main.Instance.Options.DefaultParser)
             Else
                 mArchetypeEngine.ResetAll()
                 ' need to reload the current archetype if there is one
@@ -586,7 +585,7 @@ Public Class FileManagerLocal
 
     Public Sub AutoSave(ByVal n As Integer)
         mObjectToSave.PrepareToSave()
-        AutoWrite("OceanRecovery-" & Archetype.Archetype_ID.ToString)
+        AutoWrite("Recovery-" & Archetype.Archetype_ID.ToString)
     End Sub
 
     Public Function SaveArchetype() As Boolean
@@ -622,24 +621,24 @@ Public Class FileManagerLocal
                     Dim ext As String = IO.Path.GetExtension(FileName.ToLowerInvariant())
 
                     If ext = ".adl" Then
-                        If OceanArchetypeEditor.Instance.Options.XmlRepositoryAutoSave Then
+                        If Main.Instance.Options.XmlRepositoryAutoSave Then
                             FileEdited = True
                             name = IO.Path.GetFullPath(IO.Path.ChangeExtension(FileName, ".xml"))
 
-                            If name.StartsWith(OceanArchetypeEditor.Instance.Options.RepositoryPath + IO.Path.DirectorySeparatorChar) Then
-                                name = name.Replace(OceanArchetypeEditor.Instance.Options.RepositoryPath, OceanArchetypeEditor.Instance.Options.XmlRepositoryPath)
+                            If name.StartsWith(Main.Instance.Options.RepositoryPath + IO.Path.DirectorySeparatorChar) Then
+                                name = name.Replace(Main.Instance.Options.RepositoryPath, Main.Instance.Options.XmlRepositoryPath)
                                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(name))
                             End If
 
                             SaveArchetypeAs(name)
                         End If
                     ElseIf ext = ".xml" Then
-                        If OceanArchetypeEditor.Instance.Options.RepositoryAutoSave Then
+                        If Main.Instance.Options.RepositoryAutoSave Then
                             FileEdited = True
                             name = IO.Path.GetFullPath(IO.Path.ChangeExtension(FileName, ".adl"))
 
-                            If name.StartsWith(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath + IO.Path.DirectorySeparatorChar) Then
-                                name = name.Replace(OceanArchetypeEditor.Instance.Options.XmlRepositoryPath, OceanArchetypeEditor.Instance.Options.RepositoryPath)
+                            If name.StartsWith(Main.Instance.Options.XmlRepositoryPath + IO.Path.DirectorySeparatorChar) Then
+                                name = name.Replace(Main.Instance.Options.XmlRepositoryPath, Main.Instance.Options.RepositoryPath)
                                 IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(name))
                             End If
 
@@ -727,7 +726,7 @@ Public Class FileManagerLocal
     End Sub
 
     Private Sub AutoWrite(ByVal fileName As String)
-        Dim appata As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
+        Dim appata As String = Main.Instance.Options.ApplicationDataDirectory
         mArchetypeEngine.WriteFile(IO.Path.Combine(appata, fileName & "." & ParserType), ParserType, ParserSynchronised)
     End Sub
 
@@ -769,8 +768,8 @@ Public Class FileManagerLocal
     'End Sub
 
     Public Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal FileType As String)
-        If ParserType <> OceanArchetypeEditor.Instance.Options.DefaultParser Then
-            Select Case OceanArchetypeEditor.Instance.Options.DefaultParser
+        If ParserType <> Main.Instance.Options.DefaultParser Then
+            Select Case Main.Instance.Options.DefaultParser
                 Case "adl"
                     mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
                 Case "xml"
@@ -780,7 +779,7 @@ Public Class FileManagerLocal
 
         Select Case FileType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "adl"
-                mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.DefaultLanguageCode)
+                mArchetypeEngine.NewArchetype(an_ArchetypeID, Main.Instance.DefaultLanguageCode)
 
                 If ArchetypeAvailable Then
                     Dim ontology As New ArchetypeEditor.ADL_Classes.ADL_Ontology(CType(mArchetypeEngine, ArchetypeEditor.ADL_Classes.ADL_Interface).ADL_Parser)
@@ -794,11 +793,11 @@ Public Class FileManagerLocal
                     OntologyManager.UpdateTerm(term)
                 End If
             Case "xml"
-                mArchetypeEngine.NewArchetype(an_ArchetypeID, OceanArchetypeEditor.DefaultLanguageCode)
+                mArchetypeEngine.NewArchetype(an_ArchetypeID, Main.Instance.DefaultLanguageCode)
 
                 If ArchetypeAvailable Then
                     Dim ontology As New ArchetypeEditor.XML_Classes.XML_Ontology(CType(mArchetypeEngine, ArchetypeEditor.XML_Classes.XML_Interface).Xml_Parser)
-                    ontology.SetLanguage(OceanArchetypeEditor.DefaultLanguageCode)
+                    ontology.SetLanguage(Main.Instance.DefaultLanguageCode)
 
                     'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
                     OntologyManager.Ontology = ontology
@@ -814,7 +813,7 @@ Public Class FileManagerLocal
     End Sub
 
     Sub New()
-        Select Case OceanArchetypeEditor.Instance.Options.DefaultParser
+        Select Case Main.Instance.Options.DefaultParser
             Case "adl"
                 mArchetypeEngine = New ArchetypeEditor.ADL_Classes.ADL_Interface
             Case "xml"

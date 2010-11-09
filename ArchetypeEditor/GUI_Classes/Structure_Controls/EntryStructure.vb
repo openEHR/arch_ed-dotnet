@@ -772,7 +772,7 @@ Public Class EntryStructure
                 ' ensure that datatypes cannot be changed in specialisations not at this level
                 'except for any
 
-                Dim equalSpecialisation As Boolean = (mFileManager.OntologyManager.NumberOfSpecialisations = OceanArchetypeEditor.Instance.CountInString(a_node.RM_Class.NodeId, "."))
+                Dim equalSpecialisation As Boolean = (mFileManager.OntologyManager.NumberOfSpecialisations = Main.Instance.CountInString(a_node.RM_Class.NodeId, "."))
 
                 If Not equalSpecialisation Then
                     butRemoveElement.Enabled = False
@@ -799,7 +799,7 @@ Public Class EntryStructure
             Dim i As Integer
 
             If Not Item.IsAnonymous Then
-                ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(CType(Item, ArchetypeNodeAbstract).NodeId, mFileManager)
+                ct = Main.Instance.GetSpecialisationChain(CType(Item, ArchetypeNodeAbstract).NodeId, mFileManager)
 
                 If ct.Length = 1 Then
                     Me.ToolTipSpecialisation.RemoveAll()
@@ -1002,7 +1002,7 @@ Public Class EntryStructure
             Me.ttElement.SetToolTip(Me.butChangeDataType, AE_Constants.Instance.ChangeDataType)
             Me.ttElement.SetToolTip(Me.pbSlot, AE_Constants.Instance.Slot)
 
-            Me.helpEntryStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+            Me.helpEntryStructure.HelpNamespace = Main.Instance.Options.HelpLocationPath
         End If
     End Sub
 
@@ -1066,7 +1066,7 @@ Public Class EntryStructure
 #End Region
 
     Private Sub EntryStructure_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
-        OceanArchetypeEditor.Reflect(Me)
+        Main.Reflect(Me)
     End Sub
 End Class
 

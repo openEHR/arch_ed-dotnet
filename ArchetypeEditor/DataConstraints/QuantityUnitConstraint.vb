@@ -33,7 +33,7 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
         End Get
         Set(ByVal Value As String)
             If mIsTime Then
-                mUnit = OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(Value)
+                mUnit = Main.ISO_TimeUnits.GetOptimalIsoUnit(Value)
             Else
                 mUnit = Value
             End If
@@ -73,8 +73,8 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
 
     Overrides Function ToString() As String
         If mIsTime Then
-            If OceanArchetypeEditor.ISO_TimeUnits.IsValidIsoUnit(mUnit) Then
-                Return OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(mUnit)
+            If Main.ISO_TimeUnits.IsValidIsoUnit(mUnit) Then
+                Return Main.ISO_TimeUnits.GetLanguageForISO(mUnit)
             Else
                 Return mUnit
             End If

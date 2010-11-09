@@ -43,19 +43,17 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         mFileManager = a_file_manager
         Me.QuantityUnitConstraint.LocalFileManager = mFileManager
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.LabelQuantity.Text = Filemanager.GetOpenEhrTerm(115, Me.LabelQuantity.Text)
-            Me.lblListProperty.Text = Filemanager.GetOpenEhrTerm(116, Me.lblListProperty.Text)
-            Me.lblListUnits.Text = Filemanager.GetOpenEhrTerm(117, Me.lblListUnits.Text)
-            Me.QuantityUnitConstraint.LabelQuantity.Text = Filemanager.GetOpenEhrTerm(601, "Unit values")
-            Me.QuantityUnitConstraint.cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, Me.QuantityUnitConstraint.cbMinValue.Text)
-            Me.QuantityUnitConstraint.cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, Me.QuantityUnitConstraint.cbMaxValue.Text)
-            Me.QuantityUnitConstraint.lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, Me.QuantityUnitConstraint.lblAssumedValue.Text)
+        If Main.Instance.DefaultLanguageCode <> "en" Then
+            LabelQuantity.Text = Filemanager.GetOpenEhrTerm(115, LabelQuantity.Text)
+            lblListProperty.Text = Filemanager.GetOpenEhrTerm(116, lblListProperty.Text)
+            lblListUnits.Text = Filemanager.GetOpenEhrTerm(117, lblListUnits.Text)
+            QuantityUnitConstraint.LabelQuantity.Text = Filemanager.GetOpenEhrTerm(601, "Unit values")
+            QuantityUnitConstraint.cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, QuantityUnitConstraint.cbMinValue.Text)
+            QuantityUnitConstraint.cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, QuantityUnitConstraint.cbMaxValue.Text)
+            QuantityUnitConstraint.lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, QuantityUnitConstraint.lblAssumedValue.Text)
         Else
-            Me.QuantityUnitConstraint.LabelQuantity.Text = "Unit values"
+            QuantityUnitConstraint.LabelQuantity.Text = "Unit values"
         End If
-
-
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer
@@ -195,7 +193,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         RemoveHandler Me.comboPhysicalProperty.SelectedIndexChanged, AddressOf Me.comboPhysicalProperty_SelectedIndexChanged
 
         If Me.comboPhysicalProperty.DataSource Is Nothing Then
-            Me.comboPhysicalProperty.DataSource = New DataView(OceanArchetypeEditor.Instance.PhysicalPropertiesTable)
+            Me.comboPhysicalProperty.DataSource = New DataView(Main.Instance.PhysicalPropertiesTable)
             CType(Me.comboPhysicalProperty.DataSource, DataView).Sort = Me.comboPhysicalProperty.DisplayMember
         End If
 
@@ -203,15 +201,17 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         ' an english string (old format), or
         ' a code_phrase 'terminology::code'
 
-        If Not Me.Constraint.IsNull Then
-            If Me.Constraint.IsCoded Then
-                Debug.Assert(Me.Constraint.PhysicalPropertyAsString.StartsWith("openehr"))
+        If Not Constraint.IsNull Then
+            If Constraint.IsCoded Then
+                Debug.Assert(Constraint.PhysicalPropertyAsString.StartsWith("openehr"))
+
                 Try
-                    Dim i As Integer = OceanArchetypeEditor.Instance.GetIdForPropertyOpenEhrCode(Me.Constraint.OpenEhrCode)
+                    Dim i As Integer = Main.Instance.GetIdForPropertyOpenEhrCode(Constraint.OpenEhrCode)
+
                     If i > -1 Then
-                        Me.comboPhysicalProperty.SelectedValue = OceanArchetypeEditor.Instance.GetIdForPropertyOpenEhrCode(Me.Constraint.OpenEhrCode)
+                        comboPhysicalProperty.SelectedValue = Main.Instance.GetIdForPropertyOpenEhrCode(Constraint.OpenEhrCode)
                     Else
-                        Me.comboPhysicalProperty.SelectedValue = 64
+                        comboPhysicalProperty.SelectedValue = 64
                     End If
                 Catch
                     'ToDo: Raise error
@@ -220,24 +220,27 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             Else   ' Obsolete text string as needs to be language independent
                 'And need to update the constraint to the coded version
                 Dim d_row() As DataRow
-                If OceanArchetypeEditor.DefaultLanguageCode = "en" Then
-                    d_row = CType(Me.comboPhysicalProperty.DataSource, DataTable).Select("Text = '" & Me.Constraint.PhysicalPropertyAsString & "'")
+
+                If Main.Instance.DefaultLanguageCode = "en" Then
+                    d_row = CType(comboPhysicalProperty.DataSource, DataTable).Select("Text = '" & Constraint.PhysicalPropertyAsString & "'")
                 Else
-                    d_row = CType(Me.comboPhysicalProperty.DataSource, DataTable).Select("Translated = '" & Me.Constraint.PhysicalPropertyAsString & "'")
+                    d_row = CType(comboPhysicalProperty.DataSource, DataTable).Select("Translated = '" & Constraint.PhysicalPropertyAsString & "'")
                 End If
+
                 If d_row.Length > 0 Then
-                    Me.Constraint.OpenEhrCode = CInt(d_row(0).Item(2))
+                    Constraint.OpenEhrCode = CInt(d_row(0).Item(2))
                     mFileManager.FileEdited = True
+
                     If d_row.Length > 0 Then
-                        Me.comboPhysicalProperty.SelectedValue = d_row(0).Item(0)
+                        comboPhysicalProperty.SelectedValue = d_row(0).Item(0)
                     End If
                 Else
-                    Me.comboPhysicalProperty.SelectedValue = 64 ' Not set
+                    comboPhysicalProperty.SelectedValue = 64 ' Not set
                 End If
             End If
         Else
             'Set the property value to Not Set
-            Me.comboPhysicalProperty.SelectedValue = 64 ' Not set
+            comboPhysicalProperty.SelectedValue = 64 ' Not set
         End If
 
         'Check if the Property is Time - requires special language handling
@@ -287,7 +290,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             If Convert.ToInt16(Me.comboPhysicalProperty.SelectedValue) = 64 Then
                 'Property is not set so show all the units
                 Dim Frm As New Choose
-                Dim data_view As New DataView(OceanArchetypeEditor.Instance.UnitsTable)
+                Dim data_view As New DataView(Main.Instance.UnitsTable)
                 data_view.Sort = "Text"
                 Frm.ListChoose.DataSource = data_view
                 Frm.ListChoose.DisplayMember = "Text"
@@ -330,7 +333,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                     where_clause &= ")"
                 End If
 
-                For Each d_row As DataRow In OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & _
+                For Each d_row As DataRow In Main.Instance.UnitsTable.Select("property_id = " & _
                         CStr(Me.comboPhysicalProperty.SelectedValue) & where_clause)
 
                     Dim s As String
@@ -341,7 +344,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                     If Not (mIsTime And s = "yr") Then
                         'Show language abbreviations for time
                         If mIsTime Then
-                            s = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(s)
+                            s = Main.ISO_TimeUnits.GetLanguageForISO(s)
                         End If
 
                         Dim MI As MenuItem = New MenuItem()
@@ -392,7 +395,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                         = Windows.Forms.DialogResult.OK Then
 
                     If Constraint.IsTime Then
-                        Constraint.Units.Remove(OceanArchetypeEditor.ISO_TimeUnits.GetISOForLanguage(s))
+                        Constraint.Units.Remove(Main.ISO_TimeUnits.GetISOForLanguage(s))
                     Else
                         Constraint.Units.Remove(s)
                     End If
@@ -502,7 +505,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             'Get the power if there is one
             U_1 = y(0).Split("^"c)
             Phys_Prop = U_1(0)
-            selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select(String.Format("openEHR = {0}", Phys_Prop))
+            selected_rows = Main.Instance.PhysicalPropertiesTable.Select(String.Format("openEHR = {0}", Phys_Prop))
 
         Else
             'Obsolete
@@ -511,7 +514,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             'Get the power if there is one
             U_1 = y(0).Split("^"c)
             Phys_Prop = U_1(0)
-            selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select(String.Format("Text = '{0}'", Phys_Prop))
+            selected_rows = Main.Instance.PhysicalPropertiesTable.Select(String.Format("Text = '{0}'", Phys_Prop))
 
         End If
 
@@ -522,9 +525,9 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         End If
 
         'Now get the units
-        selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select(String.Format("property_id = {0}", Phys_Prop))
+        selected_rows = Main.Instance.UnitsTable.Select(String.Format("property_id = {0}", Phys_Prop))
 
-        
+
         For Each d_row In selected_rows
             ' cannot have not set at this level
             Frm.ListChoose.Items.Add(d_row("Text"))
@@ -562,9 +565,9 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
                 If isTextCompoundUnits Then
                     'Obsolete
-                    selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select(String.Format("Text = '{0}'", Phys_Prop))
+                    selected_rows = Main.Instance.PhysicalPropertiesTable.Select(String.Format("Text = '{0}'", Phys_Prop))
                 Else
-                    selected_rows = OceanArchetypeEditor.Instance.PhysicalPropertiesTable.Select(String.Format("openEHR = '{0}'", Phys_Prop))
+                    selected_rows = Main.Instance.PhysicalPropertiesTable.Select(String.Format("openEHR = '{0}'", Phys_Prop))
                 End If
 
                 If selected_rows.Length <> 1 Then
@@ -573,7 +576,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                     Phys_Prop = CStr(selected_rows(0).Item(0))
                 End If
 
-                selected_rows = OceanArchetypeEditor.Instance.UnitsTable.Select("property_id = " & Phys_Prop)
+                selected_rows = Main.Instance.UnitsTable.Select("property_id = " & Phys_Prop)
 
                 If selected_rows.Length = 0 Then
                     Throw New Exception(String.Format("Error loading property values for {0}", Phys_Prop))

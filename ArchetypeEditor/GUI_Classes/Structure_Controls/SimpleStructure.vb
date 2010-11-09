@@ -304,7 +304,7 @@ Public Class SimpleStructure
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
-        Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
+        Dim showComments As Boolean = Main.Instance.Options.ShowCommentsInHtml
 
         result.AppendFormat("<p><i>Structure</i>: {0}", Filemanager.GetOpenEhrTerm(105, "SINGLE"))
         result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
@@ -337,7 +337,7 @@ Public Class SimpleStructure
         Debug.Assert(ContextMenuSimple.MenuItems.Count = 2)
         ' show specialisation if appropriate
 
-        If mCurrentItem Is Nothing OrElse OceanArchetypeEditor.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".") >= mFileManager.OntologyManager.NumberOfSpecialisations Then
+        If mCurrentItem Is Nothing OrElse Main.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".") >= mFileManager.OntologyManager.NumberOfSpecialisations Then
             MenuSpecialise.Visible = False
         Else
             MenuSpecialise.Text = AE_Constants.Instance.Specialise
@@ -360,14 +360,14 @@ Public Class SimpleStructure
             Dim newText As String = txtSimple.Text
 
             If newText <> mElement.Text Then
-                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+                Dim i As Integer = Main.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
 
                 If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                     txtSimple.Text = mElement.Text
                     SpecialiseCurrentItem(sender, e)
                 End If
 
-                i = OceanArchetypeEditor.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
+                i = Main.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
 
                 If i >= mFileManager.OntologyManager.NumberOfSpecialisations Then
                     txtSimple.Text = newText

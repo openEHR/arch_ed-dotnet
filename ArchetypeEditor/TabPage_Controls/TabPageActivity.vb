@@ -32,7 +32,7 @@ Public Class TabPageActivity
             If mOccurrences Is Nothing Then
                 mOccurrences = New OccurrencesPanel(mFileManager)
 
-                Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
+                Select Case Main.Instance.Options.OccurrencesView
                     Case "lexical"
                         mOccurrences.Mode = OccurrencesMode.Lexical
                     Case "numeric"
@@ -77,17 +77,17 @@ Public Class TabPageActivity
         PanelAction.Controls.Add(mOccurrences)
 
         If RightToLeft = Windows.Forms.RightToLeft.Yes Then
-            OceanArchetypeEditor.Reflect(mOccurrences)
+            Main.Reflect(mOccurrences)
             mOccurrences.Dock = DockStyle.Left
         Else
             mOccurrences.Dock = DockStyle.Right
         End If
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
 
-        HelpProviderActivity.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderActivity.HelpNamespace = Main.Instance.Options.HelpLocationPath
         'JAR: 30MAY07, EDT-44 Term already created in TabPageInstruction.  Below causes ontology to be thrown out!
         'If mFileManager.IsNew Then
         '    'need to add an RmActivity to the mActivities set
@@ -124,7 +124,7 @@ Public Class TabPageActivity
 
         s = ReferenceModel.ReferenceModelName & "-ACTION"
         fd.Filter = s & "|" & s & ".*.adl"
-        fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath & "\entry\action"
+        fd.InitialDirectory = Main.Instance.Options.RepositoryPath & "\entry\action"
 
         If fd.ShowDialog = Windows.Forms.DialogResult.OK Then
             Dim ss As String
@@ -139,7 +139,7 @@ Public Class TabPageActivity
     Private Sub menuItemRename_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RenameToolStripMenuItem.Click
         Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm(mActivity.NodeId)
 
-        Dim s() As String = OceanArchetypeEditor.Instance.GetInput(a_term, ParentForm)
+        Dim s() As String = Main.Instance.GetInput(a_term, ParentForm)
 
         If s(0) <> "" Then
             CType(Parent, Crownwood.Magic.Controls.TabPage).Title = a_term.Text
@@ -149,7 +149,7 @@ Public Class TabPageActivity
     End Sub
 
     'JAR: 30MAY07, EDT-44 Multiple activities per instruction
-    Private Sub menuItemRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveToolStripMenuItem.Click        
+    Private Sub menuItemRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveToolStripMenuItem.Click
         If Not mTabPageInstruction Is Nothing Then
             mTabPageInstruction.RemoveActivity()
         End If
@@ -168,7 +168,7 @@ Public Class TabPageActivity
             start_info.WorkingDirectory = Application.StartupPath
 
             Dim regex As New System.Text.RegularExpressions.Regex(txtAction.Text & "\.adl$")
-            Dim dir As New System.IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath & "\entry\action\")
+            Dim dir As New System.IO.DirectoryInfo(Main.Instance.Options.RepositoryPath & "\entry\action\")
             Dim matchingFileNames As New ArrayList
 
             For Each f As System.IO.FileInfo In dir.GetFiles("*.adl")

@@ -35,7 +35,7 @@ Public Class ClusterControl : Inherits ConstraintControl
         mOccurrences.SetMandatory = True
         mOccurrences.IsContainer = True
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             LabelTop.Text = Filemanager.GetOpenEhrTerm(313, Me.LabelTop.Text)
         End If
     End Sub

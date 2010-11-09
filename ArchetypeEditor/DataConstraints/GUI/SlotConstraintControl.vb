@@ -39,7 +39,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         mFileManager = a_file_manager
         lblParser.Text = String.Format("({0})", mFileManager.ParserType)
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             lblSlot.Text = Filemanager.GetOpenEhrTerm(312, lblSlot.Text)
             gbInclude.Text = Filemanager.GetOpenEhrTerm(625, gbInclude.Text)
             gbExclude.Text = Filemanager.GetOpenEhrTerm(626, gbExclude.Text)
@@ -569,7 +569,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
 
         Dim fd As New OpenFileDialog
         fd.Filter = description & "|" & patterns
-        fd.InitialDirectory = OceanArchetypeEditor.Instance.Options.RepositoryPath
+        fd.InitialDirectory = Main.Instance.Options.RepositoryPath
 
         If fd.ShowDialog(Me) = DialogResult.OK Then
             Dim name As String = IO.Path.GetFileNameWithoutExtension(fd.FileName)
@@ -626,7 +626,7 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
         Dim errorMessage As String = Nothing
 
         Cursor = Cursors.WaitCursor
-        Dim d As New System.IO.DirectoryInfo(OceanArchetypeEditor.Instance.Options.RepositoryPath)
+        Dim d As New System.IO.DirectoryInfo(Main.Instance.Options.RepositoryPath)
 
         If d.Exists Then
             Try
@@ -635,10 +635,10 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
                 'RetrieveFiles(d, Filemanager.Master.ParserType)
                 RetrieveFiles(d, Filemanager.Master.AvailableFormats)
             Catch ex As Exception
-                errorMessage = AE_Constants.Instance.Error_loading & " '" & OceanArchetypeEditor.Instance.Options.RepositoryPath & "':" & Environment.NewLine & ex.Message
+                errorMessage = AE_Constants.Instance.Error_loading & " '" & Main.Instance.Options.RepositoryPath & "':" & Environment.NewLine & ex.Message
             End Try
         Else
-            errorMessage = AE_Constants.Instance.Error_loading & " '" & OceanArchetypeEditor.Instance.Options.RepositoryPath & "'."
+            errorMessage = AE_Constants.Instance.Error_loading & " '" & Main.Instance.Options.RepositoryPath & "'."
         End If
 
         Cursor = Cursors.Default

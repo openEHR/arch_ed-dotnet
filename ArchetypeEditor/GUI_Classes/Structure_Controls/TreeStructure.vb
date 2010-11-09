@@ -823,7 +823,7 @@ Public Class TreeStructure
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
-        Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
+        Dim showComments As Boolean = Main.Instance.Options.ShowCommentsInHtml
 
         If IsCluster Then
             result.Append("<p>")
@@ -907,7 +907,7 @@ Public Class TreeStructure
 
             ' show specialisation if appropriate
             If Not tvNode.Item.IsAnonymous Then
-                i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
+                i = Main.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
                 Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
 
                 If i < numberSpecialisations Then
@@ -985,7 +985,7 @@ Public Class TreeStructure
         If tvNode.Item.IsAnonymous Then
             e.CancelEdit = True
         Else
-            Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
+            Dim i As Integer = Main.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
 
             If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                 e.CancelEdit = True
@@ -1008,7 +1008,7 @@ Public Class TreeStructure
                 If Not tvNode.Item.IsAnonymous Then
                     Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
 
-                    i = OceanArchetypeEditor.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
+                    i = Main.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
 
                     If (numberSpecialisations = 0) Or (i = numberSpecialisations And _
                         (((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))))) Then

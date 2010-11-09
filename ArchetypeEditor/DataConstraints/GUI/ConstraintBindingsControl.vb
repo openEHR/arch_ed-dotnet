@@ -38,11 +38,11 @@ Public Class ConstraintBindingsControl
     End Sub
 
     Private Sub Grid_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles Grid.CellClick
-        If e.RowIndex >= 0 And e.ColumnIndex = 0 And OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp Then
+        If e.RowIndex >= 0 And e.ColumnIndex = 0 And Main.Instance.Options.AllowTerminologyLookUp Then
             Dim form As New Ots.TerminologySelectionForm
 
-            If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
-                form.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
+            If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
+                form.Url = Main.Instance.Options.TerminologyUrl.ToString
             End If
 
             Dim row As DataGridViewRow = Grid.Rows(e.RowIndex)
@@ -64,7 +64,7 @@ Public Class ConstraintBindingsControl
             Dim frm As New ConstraintBindingForm
             frm.Text = Filemanager.GetOpenEhrTerm(99, frm.Text)
 
-            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            If Main.Instance.DefaultLanguageCode <> "en" Then
                 frm.SubsetLabel.Text = Filemanager.GetOpenEhrTerm(624, frm.SubsetLabel.Text)
                 frm.ReleaseLabel.Text = Filemanager.GetOpenEhrTerm(97, frm.ReleaseLabel.Text)
                 frm.TerminologyLabel.Text = AE_Constants.Instance.Terminology

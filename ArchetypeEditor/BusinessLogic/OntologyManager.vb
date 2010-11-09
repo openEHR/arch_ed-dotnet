@@ -159,7 +159,7 @@ Public Class OntologyManager
         End Get
         Set(ByVal Value As Ontology)
             mOntology = Value
-            Me.InitialiseOntologyManager(OceanArchetypeEditor.DefaultLanguageCode)
+            InitialiseOntologyManager(Main.Instance.DefaultLanguageCode)
         End Set
     End Property
 
@@ -202,7 +202,7 @@ Public Class OntologyManager
         mOntology.Reset()
 
         If LanguageCode = "" Then
-            LanguageCode = OceanArchetypeEditor.DefaultLanguageCode
+            LanguageCode = Main.Instance.DefaultLanguageCode
         End If
 
         mOntology.SetPrimaryLanguage(LanguageCode)
@@ -679,24 +679,24 @@ Public Class OntologyManager
     End Sub
 
     Public Function GetOpenEHRTerm(ByVal code As Integer, ByVal DefaultTerm As String, Optional ByVal Language As String = "?") As String
-        Dim s As String = Nothing
+        Dim result As String = Nothing
 
         ' returns the string in the language
         If Language = "?" Then
-            Language = OceanArchetypeEditor.SpecificLanguageCode
+            Language = Main.Instance.SpecificLanguageCode
         End If
 
         Try
-            s = TerminologyServer.Instance.RubricForCode(code, Language)
+            result = TerminologyServer.Instance.RubricForCode(code, Language)
         Catch except As Exception
             MessageBox.Show("Error in terminology server: " & except.Message, "Ocean Archetype Parser", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
-        If s Is Nothing Then
-            Return DefaultTerm
-        Else
-            Return s
+        If result Is Nothing Then
+            result = DefaultTerm
         End If
+
+        Return result
     End Function
 
     Public Function CodeForGroupID(ByVal GroupID As Integer, Optional ByVal language As String = "") As DataRow()
@@ -734,10 +734,10 @@ Public Class OntologyManager
         ' set the specific language if it is present e.g. en-US, en-AU
         Dim bestLanguage As String
 
-        If HasLanguage(OceanArchetypeEditor.SpecificLanguageCode) Then
-            bestLanguage = OceanArchetypeEditor.SpecificLanguageCode
-        ElseIf HasLanguage(OceanArchetypeEditor.DefaultLanguageCode) Then
-            bestLanguage = OceanArchetypeEditor.DefaultLanguageCode
+        If HasLanguage(Main.Instance.SpecificLanguageCode) Then
+            bestLanguage = Main.Instance.SpecificLanguageCode
+        ElseIf HasLanguage(Main.Instance.DefaultLanguageCode) Then
+            bestLanguage = Main.Instance.DefaultLanguageCode
         ElseIf HasLanguage(Filemanager.Master.OntologyManager.LanguageCode) Then
             bestLanguage = Filemanager.Master.OntologyManager.LanguageCode
         Else
@@ -1130,8 +1130,8 @@ Public Class OntologyManager
     Sub New(ByVal a_file_manager As FileManagerLocal)
         mLanguageDS = New DataSet("LanguageDataSet")
         InitialiseTables()
-        AE_Constants.Create(OceanArchetypeEditor.DefaultLanguageCode)
-        OceanArchetypeEditor.Instance.Options.ValidateConfiguration()
+        AE_Constants.Create(Main.Instance.DefaultLanguageCode)
+        Main.Instance.Options.ValidateConfiguration()
         mFileManager = a_file_manager
     End Sub
 

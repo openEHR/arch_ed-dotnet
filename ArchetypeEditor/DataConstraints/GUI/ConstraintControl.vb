@@ -216,7 +216,7 @@ Public Class ConstraintControl
     End Function
 
     Private Sub SetHelpDetails()
-        Me.HelpProviderConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderConstraint.HelpNamespace = Main.Instance.Options.HelpLocationPath
     End Sub
 End Class
 

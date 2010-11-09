@@ -996,8 +996,8 @@ Public Class TabPageDescription
     End Sub
 
     Public Sub Reset()
-        txtOriginalAuthor.Text = OceanArchetypeEditor.Instance.Options.UserName
-        txtOriginalEmail.Text = OceanArchetypeEditor.Instance.Options.UserEmail
+        txtOriginalAuthor.Text = Main.Instance.Options.UserName
+        txtOriginalEmail.Text = Main.Instance.Options.UserEmail
         txtPurpose.Text = ""
         comboLifeCycle.SelectedIndex = -1
         txtUse.Text = ""
@@ -1110,9 +1110,11 @@ Public Class TabPageDescription
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         Dim temp_isloading As Boolean = Filemanager.Master.FileLoading
         Filemanager.Master.FileLoading = True
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
+
         Filemanager.Master.FileLoading = temp_isloading
     End Sub
 
@@ -1143,15 +1145,15 @@ Public Class TabPageDescription
 
     Private Sub UseAllAuthorDefaultsButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles UseAllAuthorDefaultsButton.Click, UseYourNameButton.Click, UseYourEmailButton.Click, UseYourOrganisationButton.Click, TodayButton.Click
         If sender Is UseAllAuthorDefaultsButton Or sender Is UseYourNameButton Then
-            txtOriginalAuthor.Text = OceanArchetypeEditor.Instance.Options.UserName
+            txtOriginalAuthor.Text = Main.Instance.Options.UserName
         End If
 
         If sender Is UseAllAuthorDefaultsButton Or sender Is UseYourEmailButton Then
-            txtOriginalEmail.Text = OceanArchetypeEditor.Instance.Options.UserEmail
+            txtOriginalEmail.Text = Main.Instance.Options.UserEmail
         End If
 
         If sender Is UseAllAuthorDefaultsButton Or sender Is UseYourOrganisationButton Then
-            txtOrganisation.Text = OceanArchetypeEditor.Instance.Options.UserOrganisation
+            txtOrganisation.Text = Main.Instance.Options.UserOrganisation
         End If
 
         If sender Is UseAllAuthorDefaultsButton Or sender Is TodayButton Then
@@ -1191,7 +1193,7 @@ Public Class TabPageDescription
     End Sub
 
     Private Sub TabPageDescription_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
-        OceanArchetypeEditor.Reflect(Me)
+        Main.Reflect(Me)
     End Sub
 
     Private Sub txtTranslatorName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTranslatorName.TextChanged, txtTranslationAccreditation.TextChanged, txtTranslatorEmail.TextChanged, txtTranslatorOrganisation.TextChanged

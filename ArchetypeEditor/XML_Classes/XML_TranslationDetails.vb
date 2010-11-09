@@ -80,51 +80,41 @@ Public Class XML_TranslationDetails
 
     Sub New(ByVal a_language As String)
         Dim xmlCodePhrase As New XMLParser.CODE_PHRASE
-
         xmlCodePhrase.code_string = a_language
-        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-        'xmlCodePhrase.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+
         If xmlCodePhrase.terminology_id Is Nothing Then
             xmlCodePhrase.terminology_id = New XMLParser.TERMINOLOGY_ID
         End If
-        xmlCodePhrase.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
 
-
+        xmlCodePhrase.terminology_id.value = Main.Instance.DefaultLanguageCodeSet
         mXmlTranslation = New XMLParser.TRANSLATION_DETAILS
         mXmlTranslation.language = xmlCodePhrase
-
-        Me.Language = a_language
-
-        Me.AuthorName = OceanArchetypeEditor.Instance.Options.UserName
-        Me.AuthorOrganisation = OceanArchetypeEditor.Instance.Options.UserOrganisation
-        Me.AuthorEmail = OceanArchetypeEditor.Instance.Options.UserEmail
-
+        Language = a_language
+        AuthorName = Main.Instance.Options.UserName
+        AuthorOrganisation = Main.Instance.Options.UserOrganisation
+        AuthorEmail = Main.Instance.Options.UserEmail
     End Sub
 
     Sub New(ByVal a_translation As TranslationDetails)
         Dim xmlCodePhrase As New XMLParser.CODE_PHRASE
-
         xmlCodePhrase.code_string = a_translation.Language
-        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-        'xmlCodePhrase.terminology_id = OceanArchetypeEditor.DefaultLanguageCodeSet
+
         If xmlCodePhrase.terminology_id Is Nothing Then
             xmlCodePhrase.terminology_id = New XMLParser.TERMINOLOGY_ID
         End If
-        xmlCodePhrase.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
 
+        xmlCodePhrase.terminology_id.value = Main.Instance.DefaultLanguageCodeSet
         mXmlTranslation = New XMLParser.TRANSLATION_DETAILS
         mXmlTranslation.language = xmlCodePhrase
-
-        Me.Language = a_translation.Language
-        Me.AuthorName = a_translation.AuthorName
-        Me.AuthorOrganisation = a_translation.AuthorOrganisation
-        Me.AuthorEmail = a_translation.AuthorEmail
-        Me.Accreditation = a_translation.Accreditation
-
+        Language = a_translation.Language
+        AuthorName = a_translation.AuthorName
+        AuthorOrganisation = a_translation.AuthorOrganisation
+        AuthorEmail = a_translation.AuthorEmail
+        Accreditation = a_translation.Accreditation
     End Sub
 
     Sub New(ByVal a_translation As XMLParser.TRANSLATION_DETAILS)
-        Me.XmlTranslation = a_translation
+        XmlTranslation = a_translation
     End Sub
 
 End Class

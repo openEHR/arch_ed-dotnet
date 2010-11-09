@@ -38,14 +38,10 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             Translate()
         End If
-
-
     End Sub
-
-
 
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
@@ -240,14 +236,14 @@ Public Class DurationConstraintControl : Inherits ConstraintControl
 
     Public Sub Translate()
         Me.LabelDuration.Text = Filemanager.GetOpenEhrTerm(142, Me.LabelDuration.Text)
-        Me.chkYears.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("a")
-        Me.chkMonths.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("mo")
-        Me.chkWeeks.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("wk")
-        Me.chkDays.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("d")
-        Me.chkHours.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("h")
-        Me.chkMinutes.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("m")
-        Me.chkSeconds.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("s")
-        Me.chkMilliseconds.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO("millisec")
+        Me.chkYears.Text = Main.ISO_TimeUnits.GetLanguageForISO("a")
+        Me.chkMonths.Text = Main.ISO_TimeUnits.GetLanguageForISO("mo")
+        Me.chkWeeks.Text = Main.ISO_TimeUnits.GetLanguageForISO("wk")
+        Me.chkDays.Text = Main.ISO_TimeUnits.GetLanguageForISO("d")
+        Me.chkHours.Text = Main.ISO_TimeUnits.GetLanguageForISO("h")
+        Me.chkMinutes.Text = Main.ISO_TimeUnits.GetLanguageForISO("m")
+        Me.chkSeconds.Text = Main.ISO_TimeUnits.GetLanguageForISO("s")
+        Me.chkMilliseconds.Text = Main.ISO_TimeUnits.GetLanguageForISO("millisec")
     End Sub
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)

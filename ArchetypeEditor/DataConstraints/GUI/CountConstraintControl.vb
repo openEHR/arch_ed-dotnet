@@ -42,13 +42,12 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, Me.cbMinValue.Text)
-            Me.cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, Me.cbMaxValue.Text)
-            Me.lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, Me.lblAssumedValue.Text)
-            Me.chkDecimalPlaces.Text = Filemanager.GetOpenEhrTerm(649, Me.chkDecimalPlaces.Text)
+        If Main.Instance.DefaultLanguageCode <> "en" Then
+            cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, cbMinValue.Text)
+            cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, cbMaxValue.Text)
+            lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, lblAssumedValue.Text)
+            chkDecimalPlaces.Text = Filemanager.GetOpenEhrTerm(649, chkDecimalPlaces.Text)
         End If
-
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer

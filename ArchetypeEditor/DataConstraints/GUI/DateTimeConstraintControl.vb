@@ -52,7 +52,7 @@ Public Class DateTimeConstraintControl : Inherits ConstraintControl
         TvDateTime.Nodes.Item(3).Nodes.Item(1).Tag = 20 ' partial time
         TvDateTime.Nodes.Item(3).Nodes.Item(1).Nodes.Item(0).Tag = 21 ' partial time with minutes
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             TvDateTime.Nodes.Item(0).Text = Filemanager.GetOpenEhrTerm(11, "Allow all")
             TvDateTime.Nodes.Item(1).Text = Filemanager.GetOpenEhrTerm(12, "Date and time")
             TvDateTime.Nodes.Item(1).Nodes.Item(0).Text = Filemanager.GetOpenEhrTerm(13, "Date and partial time")
@@ -64,12 +64,9 @@ Public Class DateTimeConstraintControl : Inherits ConstraintControl
             TvDateTime.Nodes.Item(3).Nodes.Item(0).Text = Filemanager.GetOpenEhrTerm(19, "Full time")
             TvDateTime.Nodes.Item(3).Nodes.Item(1).Text = Filemanager.GetOpenEhrTerm(20, "Partial time")
             TvDateTime.Nodes.Item(3).Nodes.Item(1).Nodes.Item(0).Text = Filemanager.GetOpenEhrTerm(21, "Partial time with minutes")
-            Me.LabelDateTime.Text = Filemanager.GetOpenEhrTerm(161, Me.LabelDateTime.Text)
+            LabelDateTime.Text = Filemanager.GetOpenEhrTerm(161, Me.LabelDateTime.Text)
         End If
-
     End Sub
-
-
 
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  

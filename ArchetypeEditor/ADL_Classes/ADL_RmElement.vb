@@ -1009,7 +1009,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     Dim assumedUnits As Constraint_QuantityUnit
                     If q.IsCoded AndAlso q.OpenEhrCode = 128 Then  'time
-                        assumedUnits = CType(q.Units.Item(OceanArchetypeEditor.ISO_TimeUnits.GetOptimalIsoUnit(units)), Constraint_QuantityUnit)
+                        assumedUnits = CType(q.Units.Item(Main.ISO_TimeUnits.GetOptimalIsoUnit(units)), Constraint_QuantityUnit)
                     Else
                         assumedUnits = CType(q.Units.Item(units), Constraint_QuantityUnit)
                     End If

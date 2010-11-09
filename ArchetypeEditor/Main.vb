@@ -16,22 +16,130 @@
 
 Option Strict On
 
-Public Class OceanArchetypeEditor
+Public Class Main
 
     ' ArchetypeEditor Singleton
-    Private Shared mInstance As OceanArchetypeEditor
-    Private Shared mMenu As Menu
+    Private Shared mInstance As Main
 
-    Public Shared ISO_TimeUnits As New TimeUnits
-
-    Public Shared ReadOnly Property Instance() As OceanArchetypeEditor
+    Public Shared ReadOnly Property Instance() As Main
         Get
             If mInstance Is Nothing Then
-                mInstance = New OceanArchetypeEditor
+                mInstance = New Main
             End If
 
             Return mInstance
         End Get
+    End Property
+
+    Public Shared ISO_TimeUnits As New TimeUnits
+
+    Shared Sub Main(ByVal args() As String)
+        Instance.Logo = My.Resources.OpenEHR
+        Instance.Splash = My.Resources.OpenEHRSplash
+        Instance.Run(args)
+    End Sub
+
+    Public Sub Run(ByVal args() As String)
+        ' Enable XP visual style in order to show groups in the web lookup form.
+        ' IMPORTANT! This must be the first call in the application; otherwise the icons do not display on the main toolbar!
+        Application.EnableVisualStyles()
+
+        ShowSplash()
+
+        'default language as two letter code e.g. "en"
+        mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+
+        ' specific as four letter e.g. "en-au"
+        mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag.ToLowerInvariant()
+
+        Dim frm As New Designer
+
+        If args.Length > 0 AndAlso args(0) <> "" Then
+            frm.ArchetypeToOpen = args(0)
+        End If
+
+        If args.Length > 1 Then
+            If args(1).Length >= 2 Then
+                mDefaultLanguageCode = args(1).Substring(0, 2)
+                mSpecificLanguageCode = args(1)
+            Else
+                MessageBox.Show(String.Format("Invalid Language:{0}", args(1)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+        End If
+
+        'Pickup any Autosave files that are lying around.
+        Dim files As System.IO.FileInfo() = New System.IO.DirectoryInfo(Instance.Options.ApplicationDataDirectory).GetFiles("Recovery-*.*")
+
+        If Not files Is Nothing AndAlso files.Length > 0 Then
+            Dim recoverFrm As New Recovery
+            recoverFrm.chkListRecovery.Items.AddRange(files)
+            recoverFrm.ShowDialog()
+
+            For Each f As System.IO.FileInfo In recoverFrm.chkListRecovery.Items
+                If recoverFrm.chkListRecovery.CheckedItems.Contains(f) Then
+                    If String.IsNullOrEmpty(frm.ArchetypeToOpen) Then
+                        frm.ArchetypeToOpen = f.FullName
+                    Else
+                        Dim info As New ProcessStartInfo
+                        info.FileName = f.FullName
+                        info.WorkingDirectory = Application.StartupPath
+                        Process.Start(info)
+                    End If
+                Else
+                    f.Delete()
+                End If
+            Next
+        End If
+
+        If IsLanguageRightToLeft(mDefaultLanguageCode) Then
+            frm.RightToLeft = RightToLeft.Yes
+        End If
+
+        Try
+            frm.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show("This program has encountered an error and will shut down - a recovery file will be available on restart" & vbCrLf & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            frm.Close()
+        End Try
+    End Sub
+
+    Protected Sub ShowSplash()
+        Dim f As New Splash
+        f.ShowAsSplash()
+        Application.DoEvents()
+    End Sub
+
+    Private mLogo As Bitmap
+
+    Public Property Logo() As Bitmap
+        Get
+            Return mLogo
+        End Get
+        Set(ByVal value As Bitmap)
+            mLogo = value
+        End Set
+    End Property
+
+    Private mSplash As Bitmap
+
+    Public Property Splash() As Bitmap
+        Get
+            Return mSplash
+        End Get
+        Set(ByVal value As Bitmap)
+            mSplash = value
+        End Set
+    End Property
+
+    Private mWebSite As String
+
+    Public Property WebSite() As String
+        Get
+            Return mWebSite
+        End Get
+        Set(ByVal value As String)
+            mWebSite = value
+        End Set
     End Property
 
     Private mOptions As Options
@@ -46,32 +154,26 @@ Public Class OceanArchetypeEditor
         End Get
     End Property
 
-    ReadOnly Property MainMenu() As Menu
-        Get
-            Return mMenu
-        End Get
-    End Property
+    Private mDefaultLanguageCodeSet As String = "ISO_639-1"
 
-    Private Shared mDefaultLanguageCodeSet As String = "ISO_639-1"
-
-    Public Shared ReadOnly Property DefaultLanguageCodeSet() As String
+    Public ReadOnly Property DefaultLanguageCodeSet() As String
         Get
             Return mDefaultLanguageCodeSet
         End Get
     End Property
 
-    Private Shared mDefaultLanguageCode As String
+    Private mDefaultLanguageCode As String
 
-    Public Shared ReadOnly Property DefaultLanguageCode() As String
+    Public ReadOnly Property DefaultLanguageCode() As String
         Get
             Debug.Assert(mDefaultLanguageCode <> "", "DefaultLanguageCode not set")
             Return mDefaultLanguageCode
         End Get
     End Property
 
-    Private Shared mSpecificLanguageCode As String
+    Private mSpecificLanguageCode As String
 
-    Public Shared ReadOnly Property SpecificLanguageCode() As String
+    Public ReadOnly Property SpecificLanguageCode() As String
         Get
             Debug.Assert(mSpecificLanguageCode <> "", "SpecificLanguageCode not set")
             Return mSpecificLanguageCode
@@ -615,136 +717,16 @@ Public Class OceanArchetypeEditor
         Units.Rows.Add(rw)
     End Sub
 
-    Shared Function IsDefaultLanguageRightToLeft() As Boolean
+    Public Function IsDefaultLanguageRightToLeft() As Boolean
         Return IsLanguageRightToLeft(mDefaultLanguageCode)
     End Function
 
-    Shared Function IsLanguageRightToLeft(ByVal a_language_code As String) As Boolean
+    Public Function IsLanguageRightToLeft(ByVal a_language_code As String) As Boolean
         Select Case a_language_code
             Case "fa"
                 Return True
         End Select
     End Function
-
-    Shared Sub ShowSplash()
-        Dim f As New Splash
-        f.ShowAsSplash()
-        Application.DoEvents()
-    End Sub
-
-    Shared Sub main(ByVal CmdArgs() As String)
-        ' Enable XP visual style in order to show groups in the web lookup form.
-        ' IMPORTANT! This must be the first call in the application; otherwise the icons do not display on the main toolbar!
-        Application.EnableVisualStyles()
-
-        ShowSplash()
-
-#Const TEST_LANGUAGE_TRANSLATION = False
-
-#If Not TEST_LANGUAGE_TRANSLATION Then
-
-        'default language as two letter code e.g. "en"
-        mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-
-        ' specific as four letter e.g. "en-au"
-        mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag.ToLowerInvariant()
-
-#Else
-        'FOR TESTING LANGUAGE TRANSLATION
-        'mDefaultLanguageCode = "es"
-        ' mSpecificLanguageCode = "es-cl"
-
-        'mDefaultLanguageCode = "fa"
-        'mSpecificLanguageCode = "fa"
-
-        'mDefaultLanguageCode = "pt-br"
-        'mSpecificLanguageCode = "pt-br"
-
-        'mDefaultLanguageCode = "da"
-        'mSpecificLanguageCode = "da"
-
-        'mDefaultLanguageCode = "nl"
-        'mSpecificLanguageCode = "nl"
-
-        mDefaultLanguageCode = "de"
-        mSpecificLanguageCode = "de"
-
-        'mDefaultLanguageCode = "ja"
-        'mSpecificLanguageCode = "ja"
-
-#End If
-
-        Dim di As New System.IO.DirectoryInfo(Application.StartupPath)
-        Dim files As System.IO.FileInfo()
-        Dim frm As New Designer
-
-        'Loading from the command line argument
-        If CmdArgs.Length > 0 AndAlso CStr(CmdArgs(0)) <> String.Empty Then
-            frm.ArchetypeToOpen = CmdArgs(0)
-        Else
-            'Pickup any Autosave files that are lying around in the same directory as the
-            'Exe file as this is where they are saved and with OceanRecover- as a suffix
-            files = di.GetFiles("OceanRecovery-*.*")
-
-            If Not files Is Nothing AndAlso files.Length > 0 Then
-                Dim recoverFrm As New Recovery
-                recoverFrm.chkListRecovery.Items.AddRange(files)
-                recoverFrm.ShowDialog()
-                Dim isFirst As Boolean = True
-
-                For Each f As System.IO.FileInfo In recoverFrm.chkListRecovery.Items
-                    If recoverFrm.chkListRecovery.CheckedItems.Contains(f) Then
-                        If isFirst Then
-                            frm.ArchetypeToOpen = f.FullName
-                            isFirst = False
-                        Else
-                            Dim start_info As New ProcessStartInfo
-                            start_info.FileName = f.FullName ' Application.ExecutablePath
-                            start_info.WorkingDirectory = Application.StartupPath
-                            Process.Start(start_info)
-                            'Dim p As New System.Diagnostics.Process
-                            'p.StartInfo.FileName = f.FullName
-                            'p.Start()
-                        End If
-                    Else
-                        f.Delete()
-                    End If
-                Next
-            End If
-        End If
-
-        If CmdArgs.Length > 1 Then
-            Try
-                mDefaultLanguageCode = CmdArgs(1).Substring(0, 2)
-                mSpecificLanguageCode = CmdArgs(1)
-            Catch e As Exception
-                MessageBox.Show(String.Format("Invalid Language:{0}", CmdArgs(1)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-                ' specific as four letter e.g. "en-AU"
-                mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.Name
-            End Try
-        End If
-
-        mMenu = frm.MainMenu
-
-        If IsLanguageRightToLeft(mDefaultLanguageCode) Then
-            frm.RightToLeft = RightToLeft.Yes
-        End If
-
-        Try
-            frm.ShowDialog()
-        Catch ex As Exception
-            MessageBox.Show("This program has encountered an error and will shut down - a recovery file will be available on restart" & vbCrLf & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            frm.Close()
-            Return
-        End Try
-
-        files = di.GetFiles("OceanRecovery-*.*")
-
-        For Each f As System.IO.FileInfo In files
-            f.Delete()
-        Next
-    End Sub
 
     Shared Sub Reflect(ByVal a_control As Control)
         For Each Ctrl As Control In a_control.Controls

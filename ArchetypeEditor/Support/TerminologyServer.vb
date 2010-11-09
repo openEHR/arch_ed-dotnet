@@ -173,7 +173,7 @@ Public Class TerminologyServer
         If selected_rows1.Length = 0 Then Return Nothing
 
         If language = "" Then
-            language = OceanArchetypeEditor.DefaultLanguageCode
+            language = Main.Instance.DefaultLanguageCode
         End If
 
         selected_rows = GroupedConcepts.Select("GrouperID = " & selected_rows1(0).Item(1))
@@ -193,7 +193,7 @@ Public Class TerminologyServer
 
         If language = "" Then
             'language = Default_language
-            language = OceanArchetypeEditor.DefaultLanguageCode
+            language = Main.Instance.DefaultLanguageCode
         End If
 
         Return GetConcepts(selected_concepts, language)
@@ -229,7 +229,7 @@ Public Class TerminologyServer
             If ii > -1 Then
                 Dim code, last_code As String
                 Dim subsequent_standard, subsequent_language As Boolean
-                
+
                 ' use standard language as master
                 standard_language = language.Substring(0, ii)
 
@@ -303,8 +303,8 @@ Public Class TerminologyServer
 
     Private Sub AppendOtsTerminologies()
         Try
-            If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
-                Ots.Ots.Once.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
+            If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
+                Ots.Ots.Once.Url = Main.Instance.Options.TerminologyUrl.ToString
             End If
 
             For Each t As Ots.Terminology In Ots.Ots.Once.Terminologies
@@ -357,7 +357,7 @@ Public Class TerminologyServer
         primarykeyfields(0) = TerminologyIdentifiers.Columns(0)
         TerminologyIdentifiers.PrimaryKey = primarykeyfields
 
-        If OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp Then
+        If Main.Instance.Options.AllowTerminologyLookUp Then
             AppendOtsTerminologies()
         End If
     End Sub

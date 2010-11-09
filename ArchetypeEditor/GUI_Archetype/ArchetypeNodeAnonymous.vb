@@ -192,7 +192,7 @@ Public Class ArchetypeNodeAnonymous
                 End If
             End If
             s &= "</td>"
-            If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml Then
+            If Main.Instance.Options.ShowCommentsInHtml Then
                 s &= "<td>&nbsp;</td>"
             End If
             s &= "</tr>"

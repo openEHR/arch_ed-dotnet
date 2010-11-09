@@ -126,7 +126,7 @@ Public Class Designer
     Friend WithEvents DataGridTextBoxColumn8 As System.Windows.Forms.DataGridTextBoxColumn
     Friend WithEvents PanelMain As System.Windows.Forms.Panel
     Friend WithEvents PanelHeader As System.Windows.Forms.Panel
-    Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
+    Friend WithEvents LogoPictureBox As System.Windows.Forms.PictureBox
     Friend WithEvents cbPersonState As System.Windows.Forms.CheckBox
     Friend WithEvents PanelRoot As System.Windows.Forms.Panel
     Friend WithEvents cbProtocol As System.Windows.Forms.CheckBox
@@ -191,11 +191,11 @@ Public Class Designer
     Friend WithEvents lblConcept As System.Windows.Forms.Label
     Friend WithEvents lblPrimaryLanguageText As System.Windows.Forms.Label
     Friend WithEvents MenuHelpLicence As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuHelpOcean As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuHelpOpenehr As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpStart As System.Windows.Forms.MenuItem
     Friend WithEvents MenuTerminology As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelp As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuHelpOceanEditor As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuHelpAbout As System.Windows.Forms.MenuItem
     Friend WithEvents PanelConcept As System.Windows.Forms.Panel
     Friend WithEvents lblAvailableTerminologies As System.Windows.Forms.Label
     Friend WithEvents tpBindings As Crownwood.Magic.Controls.TabPage
@@ -289,8 +289,8 @@ Public Class Designer
         Me.MenuHelpStart = New System.Windows.Forms.MenuItem
         Me.MenuHelpReport = New System.Windows.Forms.MenuItem
         Me.MenuHelpLicence = New System.Windows.Forms.MenuItem
-        Me.MenuHelpOcean = New System.Windows.Forms.MenuItem
-        Me.MenuHelpOceanEditor = New System.Windows.Forms.MenuItem
+        Me.MenuHelpOpenehr = New System.Windows.Forms.MenuItem
+        Me.MenuHelpAbout = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
         Me.tpText = New Crownwood.Magic.Controls.TabPage
@@ -374,7 +374,7 @@ Public Class Designer
         Me.ToolBarSave = New System.Windows.Forms.ToolBarButton
         Me.ToolBarSeparator1 = New System.Windows.Forms.ToolBarButton
         Me.ToolBarPrint = New System.Windows.Forms.ToolBarButton
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox
+        Me.LogoPictureBox = New System.Windows.Forms.PictureBox
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderDesigner = New System.Windows.Forms.HelpProvider
         Me.PanelConcept.SuspendLayout()
@@ -406,7 +406,7 @@ Public Class Designer
         Me.tpInterface.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.ArchetypeNameContextMenu.SuspendLayout()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TxtConceptDescription
@@ -862,7 +862,7 @@ Public Class Designer
         'MenuHelp
         '
         Me.MenuHelp.Index = 5
-        Me.MenuHelp.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuHelpStart, Me.MenuHelpReport, Me.MenuHelpLicence, Me.MenuHelpOcean, Me.MenuHelpOceanEditor})
+        Me.MenuHelp.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuHelpStart, Me.MenuHelpReport, Me.MenuHelpLicence, Me.MenuHelpOpenehr, Me.MenuHelpAbout})
         Me.MenuHelp.Text = "&Help"
         '
         'MenuHelpStart
@@ -880,15 +880,15 @@ Public Class Designer
         Me.MenuHelpLicence.Index = 2
         Me.MenuHelpLicence.Text = "&Licence"
         '
-        'MenuHelpOcean
+        'MenuHelpOpenehr
         '
-        Me.MenuHelpOcean.Index = 3
-        Me.MenuHelpOcean.Text = "About &Ocean Informatics"
+        Me.MenuHelpOpenehr.Index = 3
+        Me.MenuHelpOpenehr.Text = "About &openEHR"
         '
-        'MenuHelpOceanEditor
+        'MenuHelpAbout
         '
-        Me.MenuHelpOceanEditor.Index = 4
-        Me.MenuHelpOceanEditor.Text = "&About the Ocean Editor"
+        Me.MenuHelpAbout.Index = 4
+        Me.MenuHelpAbout.Text = "&About Archetype Editor"
         '
         'PanelMain
         '
@@ -1611,7 +1611,7 @@ Public Class Designer
         Me.PanelHeader.Controls.Add(Me.lblArchetypeName)
         Me.PanelHeader.Controls.Add(Me.lblLifecycle)
         Me.PanelHeader.Controls.Add(Me.ToolBarMain)
-        Me.PanelHeader.Controls.Add(Me.PictureBox1)
+        Me.PanelHeader.Controls.Add(Me.LogoPictureBox)
         Me.PanelHeader.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelHeader.Location = New System.Drawing.Point(0, 0)
         Me.PanelHeader.Name = "PanelHeader"
@@ -1631,7 +1631,7 @@ Public Class Designer
         Me.lblArchetypeName.Name = "lblArchetypeName"
         Me.lblArchetypeName.Size = New System.Drawing.Size(898, 27)
         Me.lblArchetypeName.TabIndex = 2
-        Me.lblArchetypeName.Text = "Archetype Editor by Ocean Informatics"
+        Me.lblArchetypeName.Text = "Archetype Editor"
         Me.lblArchetypeName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'ArchetypeNameContextMenu
@@ -1704,17 +1704,17 @@ Public Class Designer
         Me.ToolBarPrint.ToolTipText = "Print archetype"
         Me.ToolBarPrint.Visible = False
         '
-        'PictureBox1
+        'LogoPictureBox
         '
-        Me.PictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Right
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(911, 0)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(58, 63)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.PictureBox1.TabIndex = 9
-        Me.PictureBox1.TabStop = False
+        Me.LogoPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.LogoPictureBox.Dock = System.Windows.Forms.DockStyle.Right
+        Me.LogoPictureBox.Image = CType(resources.GetObject("LogoPictureBox.Image"), System.Drawing.Image)
+        Me.LogoPictureBox.Location = New System.Drawing.Point(911, 0)
+        Me.LogoPictureBox.Name = "LogoPictureBox"
+        Me.LogoPictureBox.Size = New System.Drawing.Size(58, 63)
+        Me.LogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.LogoPictureBox.TabIndex = 9
+        Me.LogoPictureBox.TabStop = False
         '
         'Designer
         '
@@ -1724,7 +1724,7 @@ Public Class Designer
         Me.ClientSize = New System.Drawing.Size(969, 752)
         Me.Controls.Add(Me.PanelMain)
         Me.Controls.Add(Me.PanelHeader)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me, "HowTo/ocean_archetype_editor.htm")
+        Me.HelpProviderDesigner.SetHelpKeyword(Me, "HowTo/archetype_editor.htm")
         Me.HelpProviderDesigner.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Menu = Me.MainMenu
@@ -1767,7 +1767,7 @@ Public Class Designer
         Me.PanelHeader.ResumeLayout(False)
         Me.PanelHeader.PerformLayout()
         Me.ArchetypeNameContextMenu.ResumeLayout(False)
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.LogoPictureBox, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1805,7 +1805,7 @@ Public Class Designer
         If CheckOKtoClose() Then
             Dim frm As New WebSearchForm
 
-            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            If Main.Instance.DefaultLanguageCode <> "en" Then
                 frm.Text = Filemanager.GetOpenEhrTerm(666, frm.Text)
                 frm.gbSearch.Text = Filemanager.GetOpenEhrTerm(663, frm.gbSearch.Text)
                 frm.btnSearch.Text = frm.gbSearch.Text
@@ -1874,7 +1874,7 @@ Public Class Designer
             Dim ct As CodeAndTerm()
 
             tnc = tvSpecialisation.Nodes
-            ct = OceanArchetypeEditor.Instance.GetSpecialisationChain(mFileManager.Archetype.ConceptCode, mFileManager)
+            ct = Main.Instance.GetSpecialisationChain(mFileManager.Archetype.ConceptCode, mFileManager)
 
             For i = 0 To ct.Length - 1
                 tn = New TreeNode
@@ -2240,10 +2240,10 @@ Public Class Designer
 
     Private Sub TranslateGUI(ByVal language As String)
 
-        If OceanArchetypeEditor.IsLanguageRightToLeft(language) Then
-            Me.RightToLeft = Windows.Forms.RightToLeft.Yes
+        If Main.Instance.IsLanguageRightToLeft(language) Then
+            RightToLeft = Windows.Forms.RightToLeft.Yes
         Else
-            Me.RightToLeft = Windows.Forms.RightToLeft.Inherit
+            RightToLeft = Windows.Forms.RightToLeft.Inherit
         End If
 
         'MenuItem labels
@@ -2265,8 +2265,8 @@ Public Class Designer
         Me.MenuHelpStart.Text = Filemanager.GetOpenEhrTerm(72, Me.MenuHelpStart.Text, language)
         Me.MenuHelpLicence.Text = Filemanager.GetOpenEhrTerm(73, Me.MenuHelpLicence.Text, language)
         Me.MenuTerminology.Text = Filemanager.GetOpenEhrTerm(47, Me.MenuTerminology.Text, language)
-        Me.MenuHelpOcean.Text = Filemanager.GetOpenEhrTerm(74, Me.MenuHelpOcean.Text, language)
-        Me.MenuHelpOceanEditor.Text = Filemanager.GetOpenEhrTerm(75, Me.MenuHelpOceanEditor.Text, language)
+        Me.MenuHelpOpenehr.Text = Filemanager.GetOpenEhrTerm(74, Me.MenuHelpOpenehr.Text, language)
+        Me.MenuHelpAbout.Text = Filemanager.GetOpenEhrTerm(75, Me.MenuHelpAbout.Text, language)
         Me.MenuLanguage.Text = Filemanager.GetOpenEhrTerm(46, Me.MenuLanguage.Text, language)
         Me.MenuLanguageAdd.Text = Filemanager.GetOpenEhrTerm(68, Me.MenuLanguageAdd.Text, language)
         Me.MenuLanguageChange.Text = Filemanager.GetOpenEhrTerm(69, Me.MenuLanguageChange.Text, language)
@@ -2575,7 +2575,7 @@ Public Class Designer
 
         Dim width As String = "50"
 
-        If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
+        If Main.Instance.Options.ShowCommentsInHtml() Then
             width = "33"
         End If
 
@@ -2583,7 +2583,7 @@ Public Class Designer
         text.WriteLine(String.Format("<td width=""{0}%""><h4>Concept description:</h4></td>", width))
         text.WriteLine(String.Format("<td width=""{0}%""><h4>Identification:</h4></td>", width))
 
-        If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
+        If Main.Instance.Options.ShowCommentsInHtml() Then
             text.WriteLine(String.Format("<td width=""{0}%""><h4>Comments:</h4></td>", width))
         End If
 
@@ -2595,7 +2595,7 @@ Public Class Designer
 
         Dim commentString As String = "&nbsp;"
 
-        If OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml() Then
+        If Main.Instance.Options.ShowCommentsInHtml() Then
             text.WriteLine(String.Format("<td width=""{0}%"">{1}</td>", width, CStr(IIf(txtConceptComment.Text <> "", txtConceptComment.Text, commentString))))
         End If
 
@@ -2912,12 +2912,12 @@ Public Class Designer
     End Sub
 
     Private Sub EmergencySave(ByVal sender As Object, ByVal e As EventArgs) Handles mAutoSaveTimer.Tick
-        If OceanArchetypeEditor.Instance.Options.AutosaveInterval = 0 Then
+        If Main.Instance.Options.AutosaveInterval = 0 Then
             mAutoSaveTimer.Enabled = False
         Else
-            If Not mAutoSaveTimer.Enabled Or mAutoSaveTimer.Interval <> OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000 Then
+            If Not mAutoSaveTimer.Enabled Or mAutoSaveTimer.Interval <> Main.Instance.Options.AutosaveInterval * 60000 Then
                 mAutoSaveTimer.Enabled = True
-                mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
+                mAutoSaveTimer.Interval = Main.Instance.Options.AutosaveInterval * 60000
             End If
 
             Try
@@ -3372,14 +3372,14 @@ Public Class Designer
             mFileManager.FileLoading = False
         End If
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            frm.comboModel.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", OceanArchetypeEditor.DefaultLanguageCode)
-            frm.comboComponent.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", OceanArchetypeEditor.DefaultLanguageCode)
-            frm.gbNew.Text = Filemanager.GetOpenEhrTerm(50, frm.gbNew.Text, OceanArchetypeEditor.DefaultLanguageCode)
-            frm.lblComponent.Text = Filemanager.GetOpenEhrTerm(513, frm.lblComponent.Text, OceanArchetypeEditor.DefaultLanguageCode)
-            frm.lblModel.Text = Filemanager.GetOpenEhrTerm(51, frm.lblModel.Text, OceanArchetypeEditor.DefaultLanguageCode)
-            frm.lblShortConcept.Text = Filemanager.GetOpenEhrTerm(52, frm.lblShortConcept.Text, OceanArchetypeEditor.DefaultLanguageCode)
-            frm.butOK.Text = Filemanager.GetOpenEhrTerm(165, frm.butOK.Text, OceanArchetypeEditor.DefaultLanguageCode)
+        If Main.Instance.DefaultLanguageCode <> "en" Then
+            frm.comboModel.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", Main.Instance.DefaultLanguageCode)
+            frm.comboComponent.Text = Filemanager.GetOpenEhrTerm(104, "Choose...", Main.Instance.DefaultLanguageCode)
+            frm.gbNew.Text = Filemanager.GetOpenEhrTerm(50, frm.gbNew.Text, Main.Instance.DefaultLanguageCode)
+            frm.lblComponent.Text = Filemanager.GetOpenEhrTerm(513, frm.lblComponent.Text, Main.Instance.DefaultLanguageCode)
+            frm.lblModel.Text = Filemanager.GetOpenEhrTerm(51, frm.lblModel.Text, Main.Instance.DefaultLanguageCode)
+            frm.lblShortConcept.Text = Filemanager.GetOpenEhrTerm(52, frm.lblShortConcept.Text, Main.Instance.DefaultLanguageCode)
+            frm.butOK.Text = Filemanager.GetOpenEhrTerm(165, frm.butOK.Text, Main.Instance.DefaultLanguageCode)
 
             If Not AllowOpen Then
                 frm.butCancel.Text = Filemanager.GetOpenEhrTerm(166, "Cancel")
@@ -3397,7 +3397,7 @@ Public Class Designer
             frm.Height -= frm.gbExistingArchetype.Height + 18
         End If
 
-        If Not AllowOpen Or Not OceanArchetypeEditor.Instance.Options.AllowWebSearch Then
+        If Not AllowOpen Or Not Main.Instance.Options.AllowWebSearch Then
             frm.gbArchetypeFromWeb.Hide()
             frm.Height -= frm.gbArchetypeFromWeb.Height + 18
         End If
@@ -3407,7 +3407,7 @@ Public Class Designer
         Select Case i
             Case 1
                 'this creates an archetype and sets the ontology
-                mFileManager.NewArchetype(frm.Archetype_ID, OceanArchetypeEditor.Instance.Options.DefaultParser)
+                mFileManager.NewArchetype(frm.Archetype_ID, Main.Instance.Options.DefaultParser)
 
                 If mFileManager.Archetype.ArchetypeAvailable Then
                     mFileManager.Archetype.Version = 1
@@ -3466,7 +3466,7 @@ Public Class Designer
         frm.ShowDialog(Me)
     End Sub
 
-    Private Sub MenuHelpOceanEditor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpOceanEditor.Click
+    Private Sub MenuHelpAbout_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpAbout.Click
         Dim frm As New Splash
         frm.ShowDialog(Me)
     End Sub
@@ -3506,7 +3506,7 @@ Public Class Designer
 
         While InStr(s, "-") > 0
             Dim prompt As String = AE_Constants.Instance.Specialise & " " & mFileManager.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & Environment.NewLine & "Enter the new concept ('-' is not allowed)."
-            s = OceanArchetypeEditor.Instance.GetInput(prompt, Me)
+            s = Main.Instance.GetInput(prompt, Me)
         End While
 
         If s <> "" Then
@@ -3558,13 +3558,12 @@ Public Class Designer
         End Select
     End Sub
 
-    Private Sub MenuHelpOcean_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpOcean.Click
-        'FIXME
-        Process.Start("http://www.oceaninformatics.com")
+    Private Sub MenuHelpOpenehr_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpOpenehr.Click
+        Process.Start("http://www.openehr.org")
     End Sub
 
     Private Sub MenuHelpReport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpReport.Click
-        Process.Start("https://projects.oceaninformatics.com/jira?&os_username=aecustomer&os_password=customer")
+        Process.Start("http://www.openehr.org/issues/browse/AEPR")
     End Sub
 
     Private Sub MenuHelpStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpStart.Click
@@ -3578,18 +3577,18 @@ Public Class Designer
     Private Sub MenuHelpLicence_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpLicence.Click
         Dim s As String
         Try
-            s = "file:///" & Application.StartupPath & "\Ocean Archetype Editor Licence Agreement.html"
+            s = "file:///" & Application.StartupPath & "\Archetype Editor Licence Agreement.html"
             Process.Start(s)
         Catch
-            MessageBox.Show(AE_Constants.Instance.Error_loading & " Ocean Archetype Editor Licence Agreement.html", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(AE_Constants.Instance.Error_loading & " Archetype Editor Licence Agreement.html", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
     Private Sub MenuViewConfig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolsOptionsMenuItem.Click
-        OceanArchetypeEditor.Instance.Options.ShowOptionsForm()
-        ToolBarOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
-        MenuFileOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
-        butLinks.Visible = OceanArchetypeEditor.Instance.Options.ShowLinksButton
+        Main.Instance.Options.ShowOptionsForm()
+        ToolBarOpenFromWeb.Visible = Main.Instance.Options.AllowWebSearch
+        MenuFileOpenFromWeb.Visible = Main.Instance.Options.AllowWebSearch
+        butLinks.Visible = Main.Instance.Options.ShowLinksButton
     End Sub
 
     Private Sub menuFileNewWindow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuFileNewWindow.Click
@@ -4111,8 +4110,7 @@ Public Class Designer
 #Region "Form functions"
 
     Private Sub Designer_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
-        ' general initialisation
+        LogoPictureBox.Image = Main.Instance.Logo
 
         AddHandler Filemanager.IsFileDirtyChanged, AddressOf FileManager_IsFileDirtyChanged
         mFileManager = New FileManagerLocal
@@ -4132,11 +4130,11 @@ Public Class Designer
         Me.tpConstraints.BindingContext = Me.BindingContext
 
         ' Set the help context
-        Me.HelpProviderDesigner.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderDesigner.HelpNamespace = Main.Instance.Options.HelpLocationPath
 
-        ToolBarOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
-        MenuFileOpenFromWeb.Visible = OceanArchetypeEditor.Instance.Options.AllowWebSearch
-        butLinks.Visible = OceanArchetypeEditor.Instance.Options.ShowLinksButton
+        ToolBarOpenFromWeb.Visible = Main.Instance.Options.AllowWebSearch
+        MenuFileOpenFromWeb.Visible = Main.Instance.Options.AllowWebSearch
+        butLinks.Visible = Main.Instance.Options.ShowLinksButton
 
         'Initialise the bindings of tables for all the lookups
         BindTables()
@@ -4151,15 +4149,16 @@ Public Class Designer
         Me.ToolBarPrint.ToolTipText = Filemanager.GetOpenEhrTerm(520, "Print")
         Me.ToolBarSave.ToolTipText = Filemanager.GetOpenEhrTerm(183, "Save")
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            TranslateGUI(OceanArchetypeEditor.DefaultLanguageCode)
+        If Main.Instance.DefaultLanguageCode <> "en" Then
+            TranslateGUI(Main.Instance.DefaultLanguageCode)
         End If
 
         If ArchetypeToOpen <> "" Then
             'command line variable has been set
             Dim archID As String = ArchetypeToOpen.Substring(ArchetypeToOpen.LastIndexOf("\") + 1)
-            If archID.StartsWith("OceanRecovery-") Then
-                archID = archID.Substring(14)
+
+            If archID.StartsWith("Recovery-") Then
+                archID = archID.Substring(9)
             End If
 
             If ArchetypeID.IsValidId(archID) Then
@@ -4191,11 +4190,11 @@ Public Class Designer
             End If
         End If
 
-        If OceanArchetypeEditor.Instance.Options.AutosaveInterval = 0 Then
+        If Main.Instance.Options.AutosaveInterval = 0 Then
             Me.mAutoSaveTimer.Enabled = False
         Else
             Me.mAutoSaveTimer.Enabled = True
-            Me.mAutoSaveTimer.Interval = OceanArchetypeEditor.Instance.Options.AutosaveInterval * 60000
+            Me.mAutoSaveTimer.Interval = Main.Instance.Options.AutosaveInterval * 60000
         End If
 
         ''Add the display format buttons based on the parser types
@@ -4595,7 +4594,7 @@ Public Class Designer
     End Sub
 
     Private Sub butAddTerminology_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddTerminology.Click, MenuTerminologyAdd.Click
-        If OceanArchetypeEditor.Instance.AddTerminology() Then
+        If Main.Instance.AddTerminology() Then
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -4753,7 +4752,7 @@ Public Class Designer
         End Select
 
         If RightToLeft = Windows.Forms.RightToLeft.Yes Then
-            OceanArchetypeEditor.Reflect(tpInterface)
+            Main.Reflect(tpInterface)
         End If
     End Sub
 
@@ -4798,18 +4797,18 @@ Public Class Designer
 
             Case "html"
                 Try
-                    Dim appData As String = OceanArchetypeEditor.Instance.Options.ApplicationDataDirectory
+                    Dim appData As String = Main.Instance.Options.ApplicationDataDirectory
                     Dim appDataImages As String = Path.Combine(appData, "Images")
                     Dim html As String = Path.Combine(appData, "temp.html")
                     My.Computer.FileSystem.CopyDirectory(Path.Combine(Application.StartupPath, "HTML\Images"), appDataImages, True)
 
-                    If OceanArchetypeEditor.Instance.Options.UseXsltForHtml And OceanArchetypeEditor.Instance.Options.XsltScriptPath <> "" Then
+                    If Main.Instance.Options.UseXsltForHtml And Main.Instance.Options.XsltScriptPath <> "" Then
                         Dim transform As New Xml.Xsl.XslCompiledTransform()
-                        transform.Load(OceanArchetypeEditor.Instance.Options.XsltScriptPath, New Xml.Xsl.XsltSettings(True, False), New Xml.XmlUrlResolver())
+                        transform.Load(Main.Instance.Options.XsltScriptPath, New Xml.Xsl.XsltSettings(True, False), New Xml.XmlUrlResolver())
                         Dim args As New Xml.Xsl.XsltArgumentList()
                         args.AddParam("language", "", Filemanager.Master.OntologyManager.LanguageCode)
-                        args.AddParam("show-terminology-flag", "", OceanArchetypeEditor.Instance.Options.ShowTermsInHtml.ToString().ToLower())
-                        args.AddParam("show-comments-flag", "", OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml.ToString().ToLower())
+                        args.AddParam("show-terminology-flag", "", Main.Instance.Options.ShowTermsInHtml.ToString().ToLower())
+                        args.AddParam("show-comments-flag", "", Main.Instance.Options.ShowCommentsInHtml.ToString().ToLower())
                         args.AddParam("css-path", "", "Images/default.css")
                         args.AddParam("terminology-xml-document-path", "", "../Terminology/terminology.xml")
 
@@ -4862,7 +4861,7 @@ Public Class Designer
             defaultValue = arch_id
         End If
         '
-        Dim new_concept As String = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me, defaultValue)
+        Dim new_concept As String = Main.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me, defaultValue)
         new_concept = mFileManager.Archetype.Archetype_ID.ValidConcept(new_concept, arch_id.ToString, True)
 
         If new_concept <> "" Then
@@ -4876,7 +4875,7 @@ Public Class Designer
     End Sub
 
     Private Sub MenuDisplayFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDisplayFind.Click
-        Dim s As String = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.Text, Me, mFindString)
+        Dim s As String = Main.Instance.GetInput(AE_Constants.Instance.Text, Me, mFindString)
 
         If s <> "" Then
             mFindString = s
@@ -4912,7 +4911,7 @@ Public Class Designer
     End Sub
 
     Private Sub Designer_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
-        OceanArchetypeEditor.Reflect(Me)
+        Main.Reflect(Me)
     End Sub
 
     Private Sub menuFileExport_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuFileExport.Select

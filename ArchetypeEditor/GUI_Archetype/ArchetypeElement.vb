@@ -257,7 +257,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                         End Select
 
                         If iso <> "" Then
-                            s &= OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(iso) & ", "
+                            s &= Main.ISO_TimeUnits.GetLanguageForISO(iso) & ", "
                         End If
                     End If
                 End If
@@ -649,7 +649,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         Dim html_dt As HTML_Details = HtmlDetails(Element.Constraint)
         Dim terminologyCode As String
 
-        If OceanArchetypeEditor.Instance.Options.ShowTermsInHtml Then
+        If Main.Instance.Options.ShowTermsInHtml Then
             For Each terminologyRow As DataRow In mFileManager.OntologyManager.TerminologiesTable.Rows
                 terminologyCode = CStr(terminologyRow.Item(0))
 

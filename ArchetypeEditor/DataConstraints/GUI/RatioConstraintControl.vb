@@ -45,11 +45,11 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.lblRatio.Text = Filemanager.GetOpenEhrTerm(507, Me.lblRatio.Text)
-            Me.cbIsIntegral.Text = Filemanager.GetOpenEhrTerm(630, Me.cbIsIntegral.Text)
-        End If
 
+        If Main.Instance.DefaultLanguageCode <> "en" Then
+            lblRatio.Text = Filemanager.GetOpenEhrTerm(507, lblRatio.Text)
+            cbIsIntegral.Text = Filemanager.GetOpenEhrTerm(630, cbIsIntegral.Text)
+        End If
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer

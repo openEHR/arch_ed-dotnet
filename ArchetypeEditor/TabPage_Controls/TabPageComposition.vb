@@ -191,7 +191,7 @@ Public Class TabPageComposition
         End If
 
         mSectionConstraint.IsRootOfComposition = True
-        Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderInstruction.HelpNamespace = Main.Instance.Options.HelpLocationPath
 
         mIsloading = False
 

@@ -38,9 +38,9 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.LabelOrdinal.Text = Filemanager.GetOpenEhrTerm(156, Me.LabelOrdinal.Text)
-            Me.butSetAssumedOrdinal.Text = Filemanager.GetOpenEhrTerm(153, Me.butSetAssumedOrdinal.Text)
+        If Main.Instance.DefaultLanguageCode <> "en" Then
+            LabelOrdinal.Text = Filemanager.GetOpenEhrTerm(156, LabelOrdinal.Text)
+            butSetAssumedOrdinal.Text = Filemanager.GetOpenEhrTerm(153, butSetAssumedOrdinal.Text)
         End If
     End Sub
 
@@ -232,7 +232,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
             Me.txtAssumedOrdinal.Text = GetOrdinalText(CInt(mOrdinalConstraint.AssumedValue))
         End If
 
-        If (Not OceanArchetypeEditor.Instance.TempConstraint Is Nothing) AndAlso (OceanArchetypeEditor.Instance.TempConstraint.Type = ConstraintType.Ordinal) Then
+        If (Not Main.Instance.TempConstraint Is Nothing) AndAlso (Main.Instance.TempConstraint.Type = ConstraintType.Ordinal) Then
             Me.MenuItemPasteAll.Enabled = True
             Me.MenuItemCancelCopy.Visible = True
             Me.MenuItemCopyAll.Enabled = False
@@ -297,7 +297,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
     Private Sub MenuItemCopyAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemCopyAll.Click
 
-        OceanArchetypeEditor.Instance.TempConstraint = Me.Constraint
+        Main.Instance.TempConstraint = Me.Constraint
 
     End Sub
 
@@ -308,7 +308,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
     Private Sub AddCodeToOrdinal()
         If MyBase.IsLoading Then Return
 
-        Dim s As String() = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager, Me.Constraint.InternalCodes)
+        Dim s As String() = Main.Instance.ChooseInternal(mFileManager, Me.Constraint.InternalCodes)
         If s Is Nothing Then Return
 
         For i As Integer = 0 To s.Length - 1
@@ -331,10 +331,10 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
         Me.Constraint.ClearOrdinalValues()
 
-        Debug.Assert(OceanArchetypeEditor.Instance.TempConstraint.Type = ConstraintType.Ordinal)
+        Debug.Assert(Main.Instance.TempConstraint.Type = ConstraintType.Ordinal)
 
         '' default key(0) is set to ae.NodeId
-        For Each ov As OrdinalValue In CType(OceanArchetypeEditor.Instance.TempConstraint, Constraint_Ordinal).OrdinalValues
+        For Each ov As OrdinalValue In CType(Main.Instance.TempConstraint, Constraint_Ordinal).OrdinalValues
             Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
             Dim newOrdinal As OrdinalValue = Me.Constraint.OrdinalValues.NewOrdinal
 
@@ -351,7 +351,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
         Me.MenuItemPasteAll.Enabled = False
         Me.MenuItemCancelCopy.Visible = False
         Me.MenuItemCopyAll.Enabled = True
-        OceanArchetypeEditor.Instance.TempConstraint = Nothing
+        Main.Instance.TempConstraint = Nothing
 
         mFileManager.FileEdited = True
 

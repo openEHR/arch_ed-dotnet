@@ -244,7 +244,7 @@ Public Class ElementOnly
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("<br>")
-        Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
+        Dim showComments As Boolean = Main.Instance.Options.ShowCommentsInHtml
 
         result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
         result.AppendFormat(HtmlHeader(BackGroundColour, showComments))
@@ -275,7 +275,7 @@ Public Class ElementOnly
         Debug.Assert(ContextMenuSimple.MenuItems.Count = 2)
         ' show specialisation if appropriate
 
-        Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
+        Dim i As Integer = Main.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
 
         If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
             MenuSpecialise.Text = AE_Constants.Instance.Specialise

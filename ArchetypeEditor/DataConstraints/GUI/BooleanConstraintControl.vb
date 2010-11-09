@@ -45,15 +45,11 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
 
         mFileManager = a_file_manager
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-            Me.LabelTrueFalse.Text = Filemanager.GetOpenEhrTerm(157, Me.LabelTrueFalse.Text)
-            Me.LabelTrueFalseDefault.Text = Filemanager.GetOpenEhrTerm(600, Me.LabelTrueFalseDefault.Text)
-            Me.gbAssummedValue.Text = Filemanager.GetOpenEhrTerm(158, Me.gbAssummedValue.Text)
-
-
-
+        If Main.Instance.DefaultLanguageCode <> "en" Then
+            LabelTrueFalse.Text = Filemanager.GetOpenEhrTerm(157, Me.LabelTrueFalse.Text)
+            LabelTrueFalseDefault.Text = Filemanager.GetOpenEhrTerm(600, Me.LabelTrueFalseDefault.Text)
+            gbAssummedValue.Text = Filemanager.GetOpenEhrTerm(158, Me.gbAssummedValue.Text)
         End If
-
     End Sub
 
 

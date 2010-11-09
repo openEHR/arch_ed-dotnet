@@ -201,8 +201,8 @@ Public Class ConstraintBindingForm
     Private Sub SubsetButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SubsetButton.Click
         Dim form As New Ots.TerminologySelectionForm
 
-        If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
-            form.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
+        If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
+            form.Url = Main.Instance.Options.TerminologyUrl.ToString
         End If
 
         form.TerminologyId = TerminologyComboBox.Text

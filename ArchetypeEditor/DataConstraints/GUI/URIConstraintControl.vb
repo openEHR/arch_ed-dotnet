@@ -29,10 +29,10 @@ Public Class UriConstraintControl : Inherits ConstraintControl
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = aFileManager
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             Translate()
         End If
-
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -42,6 +42,7 @@ Public Class UriConstraintControl : Inherits ConstraintControl
                 components.Dispose()
             End If
         End If
+
         MyBase.Dispose(disposing)
     End Sub
 

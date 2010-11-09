@@ -530,7 +530,7 @@ Public Class TabPageSection
             tvSection.SelectedNode = tvSection.Nodes(0)
         End If
 
-        HelpProviderSection.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderSection.HelpNamespace = Main.Instance.Options.HelpLocationPath
     End Sub
 
 #Region "Buttons and menus - adding and removing slots and sections"

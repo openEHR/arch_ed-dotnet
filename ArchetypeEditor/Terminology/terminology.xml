@@ -830,8 +830,8 @@
   <Concept Language="en" ConceptID="71" Rubric="Add terminology" />
   <Concept Language="en" ConceptID="72" Rubric="Getting started" />
   <Concept Language="en" ConceptID="73" Rubric="Licence" />
-  <Concept Language="en" ConceptID="74" Rubric="About Ocean Informatics" />
-  <Concept Language="en" ConceptID="75" Rubric="About the Ocean Editor" />
+  <Concept Language="en" ConceptID="74" Rubric="About openEHR" />
+  <Concept Language="en" ConceptID="75" Rubric="About Archetype Editor" />
   <Concept Language="en" ConceptID="76" Rubric="Header" />
   <Concept Language="en" ConceptID="77" Rubric="Entry model" />
   <Concept Language="en" ConceptID="78" Rubric="Protocol" />
@@ -937,7 +937,7 @@
   <Concept Language="en" ConceptID="184" Rubric="Close" />
   <Concept Language="en" ConceptID="185" Rubric="Specialise" />
   <Concept Language="en" ConceptID="47" Rubric="Terminology" />
-  <Concept Language="en" ConceptID="58" Rubric="Archetype Editor by Ocean Informatics" />
+  <Concept Language="en" ConceptID="58" Rubric="Archetype Editor" />
   <Concept Language="en" ConceptID="186" Rubric="Specialisation" />
   <Concept Language="en" ConceptID="187" Rubric="Primary language" />
   <Concept Language="en" ConceptID="188" Rubric="to" />
@@ -1033,7 +1033,7 @@
   <Concept Language="en" ConceptID="281" Rubric="Expand all" />
   <Concept Language="en" ConceptID="282" Rubric="Collapse all" />
   <Concept Language="en" ConceptID="283" Rubric="Add reference" />
-  <Concept Language="en" ConceptID="284" Rubric="Ocean Archetype Editor" />
+  <Concept Language="en" ConceptID="284" Rubric="Archetype Editor" />
   <Concept Language="en" ConceptID="285" Rubric="You have chosen a language that is not fully translated - Do you want to populate the Terminology section?" />
   <Concept Language="en" ConceptID="286" Rubric="Language addition cancelled" />
   <Concept Language="en" ConceptID="287" Rubric="Current archetype" />
@@ -1441,7 +1441,7 @@
   <Concept Language="da" ConceptID="54" Rubric="Begreb" />
   <Concept Language="da" ConceptID="56" Rubric="Uden restriktion" />
   <Concept Language="da" ConceptID="57" Rubric="Arketype-filnavn" />
-  <Concept Language="da" ConceptID="58" Rubric="Arketype Editor fra Ocean Informatics" />
+  <Concept Language="da" ConceptID="58" Rubric="Arketype Editor" />
   <Concept Language="da" ConceptID="59" Rubric="Tooltips" />
   <Concept Language="da" ConceptID="60" Rubric="Skift datatype" />
   <Concept Language="da" ConceptID="61" Rubric="Åbn.." />
@@ -1457,8 +1457,8 @@
   <Concept Language="da" ConceptID="71" Rubric="Tilføj terminologi" />
   <Concept Language="da" ConceptID="72" Rubric="Kom i gang" />
   <Concept Language="da" ConceptID="73" Rubric="Licens" />
-  <Concept Language="da" ConceptID="74" Rubric="Om Ocean Informatics" />
-  <Concept Language="da" ConceptID="75" Rubric="Om Ocean Editor" />
+  <Concept Language="da" ConceptID="74" Rubric="Om openEHR" />
+  <Concept Language="da" ConceptID="75" Rubric="Om Archetype Editor" />
   <Concept Language="da" ConceptID="76" Rubric="Overskrift" />
   <Concept Language="da" ConceptID="77" Rubric="Registreringsmodel" />
   <Concept Language="da" ConceptID="78" Rubric="Protokol" />
@@ -1658,7 +1658,7 @@
   <Concept Language="da" ConceptID="281" Rubric="Udfold alle&#xD;&#xA;Udfold alle&#xD;&#xA;Udfold alle" />
   <Concept Language="da" ConceptID="282" Rubric="Sammenfold alle" />
   <Concept Language="da" ConceptID="283" Rubric="Tilføj reference" />
-  <Concept Language="da" ConceptID="284" Rubric="Ocean Archetype Editor" />
+  <Concept Language="da" ConceptID="284" Rubric="Archetype Editor" />
   <Concept Language="da" ConceptID="285" Rubric="Du har valgt et sprog der ikke er fuldt oversat - Vil du udfyldeTerminologi sektionen?" />
   <Concept Language="da" ConceptID="286" Rubric="Sprogtilføjelse annulleret" />
   <Concept Language="da" ConceptID="287" Rubric="Aktuel arketype" />
@@ -2020,7 +2020,7 @@
   <Concept Language="de" ConceptID="54" Rubric="Konzept" />
   <Concept Language="de" ConceptID="56" Rubric="Uneingeschränkt" />
   <Concept Language="de" ConceptID="57" Rubric="Archetyp-Dateiname" />
-  <Concept Language="de" ConceptID="58" Rubric="Archetyp Editor von Ocean Informatics" />
+  <Concept Language="de" ConceptID="58" Rubric="Archetyp Editor" />
   <Concept Language="de" ConceptID="59" Rubric="Tooltips" />
   <Concept Language="de" ConceptID="60" Rubric="Ändern des Datentyps" />
   <Concept Language="de" ConceptID="61" Rubric="Öffnen" />
@@ -2036,8 +2036,8 @@
   <Concept Language="de" ConceptID="71" Rubric="Terminologie hinzufügen" />
   <Concept Language="de" ConceptID="72" Rubric="Erste Schritte" />
   <Concept Language="de" ConceptID="73" Rubric="Lizenz" />
-  <Concept Language="de" ConceptID="74" Rubric="Über Ocean Informatics" />
-  <Concept Language="de" ConceptID="75" Rubric="Über den Ocean Editor" />
+  <Concept Language="de" ConceptID="74" Rubric="Über openEHR" />
+  <Concept Language="de" ConceptID="75" Rubric="Über den Archetype Editor" />
   <Concept Language="de" ConceptID="76" Rubric="Kopfdaten" />
   <Concept Language="de" ConceptID="77" Rubric="Entry-Modell" />
   <Concept Language="de" ConceptID="78" Rubric="Protokoll" />
@@ -2237,7 +2237,7 @@
   <Concept Language="de" ConceptID="281" Rubric="Ganz aufklappen" />
   <Concept Language="de" ConceptID="282" Rubric="Ganz einklappen" />
   <Concept Language="de" ConceptID="283" Rubric="Verweis hinzufügen" />
-  <Concept Language="de" ConceptID="284" Rubric="Ocean Archetype Editor" />
+  <Concept Language="de" ConceptID="284" Rubric="Archetype Editor" />
   <Concept Language="de" ConceptID="285" Rubric="Sie haben eine unvollständig uebersetzte Sprache gewaehlt - Wollen Sie den Terminologie-Bereich erweitern?" />
   <Concept Language="de" ConceptID="286" Rubric="Hinzufügen der Sprache abgebrochen" />
   <Concept Language="de" ConceptID="287" Rubric="Derzeitiger Archetyp" />
@@ -2630,7 +2630,7 @@
   <Concept Language="es" ConceptID="54" Rubric="Concepto" />
   <Concept Language="es" ConceptID="56" Rubric="Irrestricto" />
   <Concept Language="es" ConceptID="57" Rubric="Nombre de archivo de arquetipo" />
-  <Concept Language="es" ConceptID="58" Rubric="Editor de Arquetipos por Ocean Informatics" />
+  <Concept Language="es" ConceptID="58" Rubric="Editor de Arquetipos" />
   <Concept Language="es" ConceptID="59" Rubric="Indicaciones" />
   <Concept Language="es" ConceptID="60" Rubric="Cambiar el tipo de dato" />
   <Concept Language="es" ConceptID="61" Rubric="Abrir    Ctrl+O" />
@@ -2646,8 +2646,8 @@
   <Concept Language="es" ConceptID="71" Rubric="Agregar terminología" />
   <Concept Language="es" ConceptID="72" Rubric="Comenzando" />
   <Concept Language="es" ConceptID="73" Rubric="Licencia" />
-  <Concept Language="es" ConceptID="74" Rubric="Acerca de Ocean Informatics" />
-  <Concept Language="es" ConceptID="75" Rubric="Acerca del editor de Ocean" />
+  <Concept Language="es" ConceptID="74" Rubric="Acerca de openEHR" />
+  <Concept Language="es" ConceptID="75" Rubric="Acerca del Editor de Arquetipos" />
   <Concept Language="es" ConceptID="76" Rubric="Encabezado" />
   <Concept Language="es" ConceptID="77" Rubric="Modelo de la entrada" />
   <Concept Language="es" ConceptID="78" Rubric="Protocolo" />
@@ -2835,7 +2835,7 @@
   <Concept Language="es" ConceptID="281" Rubric="Expandir todo" />
   <Concept Language="es" ConceptID="282" Rubric="Contraer todo" />
   <Concept Language="es" ConceptID="283" Rubric="Agregar referencia" />
-  <Concept Language="es" ConceptID="284" Rubric="Editor de arquetipos de Ocean" />
+  <Concept Language="es" ConceptID="284" Rubric="Editor de Arquetipos" />
   <Concept Language="es" ConceptID="285" Rubric="Usted ha elejido un idioma que no está completamente traducido - ¿Le gustaría ayuda a poblar la sección de Terminología?" />
   <Concept Language="es" ConceptID="286" Rubric="Agregar idioma cancelado" />
   <Concept Language="es" ConceptID="287" Rubric="Arquetipo actual" />
@@ -3122,7 +3122,7 @@
   <Concept Language="fa" ConceptID="54" Rubric="مفهوم" />
   <Concept Language="fa" ConceptID="56" Rubric="نامحدود" />
   <Concept Language="fa" ConceptID="57" Rubric="نام فایل الگو" />
-  <Concept Language="fa" ConceptID="58" Rubric="ocean informatics ویرایشگر الگو" />
+  <Concept Language="fa" ConceptID="58" Rubric="ویرایشگر" />
   <Concept Language="fa" ConceptID="59" Rubric="عناوین ابزاری" />
   <Concept Language="fa" ConceptID="60" Rubric="تغییر نوع داد ه ها" />
   <Concept Language="fa" ConceptID="61" Rubric="باز کردن" />
@@ -3138,8 +3138,8 @@
   <Concept Language="fa" ConceptID="71" Rubric="اضافه کردن اصطلاح" />
   <Concept Language="fa" ConceptID="72" Rubric="شروع کردن " />
   <Concept Language="fa" ConceptID="73" Rubric="جواز" />
-  <Concept Language="fa" ConceptID="74" Rubric=" Ocean Informatics درباره " />
-  <Concept Language="fa" ConceptID="75" Rubric="the Ocean Editor درباره " />
+  <Concept Language="fa" ConceptID="74" Rubric=" openEHR درباره " />
+  <Concept Language="fa" ConceptID="75" Rubric="Archetype Editor درباره " />
   <Concept Language="fa" ConceptID="76" Rubric="سر عنوان" />
   <Concept Language="fa" ConceptID="77" Rubric="مدل ورودی" />
   <Concept Language="fa" ConceptID="78" Rubric="پروتکل" />
@@ -3339,7 +3339,7 @@
   <Concept Language="fa" ConceptID="281" Rubric="بسط دادن کیله موارد" />
   <Concept Language="fa" ConceptID="282" Rubric="بستن کلیه موارد" />
   <Concept Language="fa" ConceptID="283" Rubric="کلیه ارجاعات" />
-  <Concept Language="fa" ConceptID="284" Rubric="Ocean Archetypeویرایشگر" />
+  <Concept Language="fa" ConceptID="284" Rubric="Archetypeویرایشگر" />
   <Concept Language="fa" ConceptID="285" Rubric="شما زبانی را انتخاب نموده اید که کامل نشده است" />
   <Concept Language="fa" ConceptID="286" Rubric="اضافه کردن زبان لغو شد" />
   <Concept Language="fa" ConceptID="287" Rubric="الگوی کنونی" />
@@ -3635,7 +3635,7 @@
   <Concept Language="fa" ConceptID="631" Rubric="حذف کلیه موارد" />
   <Concept Language="ja" ConceptID="547" Rubric="中断" />
   <Concept Language="ja" ConceptID="531" Rubric="中断した" />
-  <Concept Language="ja" ConceptID="74" Rubric="Ocean Informaticsについて" />
+  <Concept Language="ja" ConceptID="74" Rubric="openEHRについて" />
   <Concept Language="ja" ConceptID="339" Rubric="加速度" />
   <Concept Language="ja" ConceptID="342" Rubric="角加速度" />
   <Concept Language="ja" ConceptID="317" Rubric="テキスト値を序数に変換する" />
@@ -3700,7 +3700,7 @@
   <Concept Language="ja" ConceptID="54" Rubric="概念" />
   <Concept Language="ja" ConceptID="56" Rubric="無制限" />
   <Concept Language="ja" ConceptID="57" Rubric="アーキタイプファイル名" />
-  <Concept Language="ja" ConceptID="58" Rubric="Archetypeエディタ by Ocean Informatics" />
+  <Concept Language="ja" ConceptID="58" Rubric="Archetypeエディタ" />
   <Concept Language="ja" ConceptID="59" Rubric="ツールチップ" />
   <Concept Language="ja" ConceptID="60" Rubric="データ型の変更" />
   <Concept Language="ja" ConceptID="61" Rubric="開く" />
@@ -3716,7 +3716,7 @@
   <Concept Language="ja" ConceptID="71" Rubric="用語体系に加える" />
   <Concept Language="ja" ConceptID="72" Rubric="はじめに" />
   <Concept Language="ja" ConceptID="73" Rubric="ライセンス" />
-  <Concept Language="ja" ConceptID="75" Rubric="Ocean Editorについて" />
+  <Concept Language="ja" ConceptID="75" Rubric="Archetype Editorについて" />
   <Concept Language="ja" ConceptID="76" Rubric="ヘッダ" />
   <Concept Language="ja" ConceptID="77" Rubric="Entryモデル" />
   <Concept Language="ja" ConceptID="78" Rubric="プロトコル" />
@@ -3916,7 +3916,7 @@
   <Concept Language="ja" ConceptID="281" Rubric="すべて展開" />
   <Concept Language="ja" ConceptID="282" Rubric="すべて折りたたむ" />
   <Concept Language="ja" ConceptID="283" Rubric="参照(reference)を追加" />
-  <Concept Language="ja" ConceptID="284" Rubric="Ocean Archetypeエディタ" />
+  <Concept Language="ja" ConceptID="284" Rubric="Archetypeエディタ" />
   <Concept Language="ja" ConceptID="285" Rubric="選択された言語は完全に翻訳されていません。Terminology sectionに追加しますか？" />
   <Concept Language="ja" ConceptID="286" Rubric="言語の追加はキャンセルされました" />
   <Concept Language="ja" ConceptID="287" Rubric="現在のArchetype" />
@@ -4814,11 +4814,11 @@
   <Concept Language="tr" ConceptID="61" Rubric="Aç Ctrl+O" />
   <Concept Language="tr" ConceptID="62" Rubric="Yeni Ctrl+N" />
   <Concept Language="tr" ConceptID="63" Rubric="Kapat" />
-  <Concept Language="tr" ConceptID="74" Rubric="Ocean Informatics hakkında" />
-  <Concept Language="tr" ConceptID="75" Rubric="Ocean Editor hakkında" />
+  <Concept Language="tr" ConceptID="74" Rubric="openEHR hakkında" />
+  <Concept Language="tr" ConceptID="75" Rubric="Arketip Editörü hakkında" />
   <Concept Language="tr" ConceptID="68" Rubric="Dil ekle" />
   <Concept Language="tr" ConceptID="71" Rubric="Terminoloji ekle" />
-  <Concept Language="tr" ConceptID="58" Rubric="Ocean Informatics tarafından geliştirilen Arketip Editörü" />
+  <Concept Language="tr" ConceptID="58" Rubric="Arketip Editörü" />
   <Concept Language="tr" ConceptID="64" Rubric="Arketip VT" />
   <Concept Language="tr" ConceptID="67" Rubric="Mevcut diller" />
   <Concept Language="tr" ConceptID="70" Rubric="Mevcut terminolojiler" />
@@ -5076,7 +5076,7 @@
   <Concept Language="tr" ConceptID="281" Rubric="Hepsini genişlet" />
   <Concept Language="tr" ConceptID="282" Rubric="Hepsini daralt" />
   <Concept Language="tr" ConceptID="283" Rubric="Referans ekle" />
-  <Concept Language="tr" ConceptID="284" Rubric="Ocean Arketip Editörü" />
+  <Concept Language="tr" ConceptID="284" Rubric="Arketip Editörü" />
   <Concept Language="tr" ConceptID="285" Rubric="Tercümesi tamamlanmamış bir dil seçtiniz - terminoloji bölümünü doldurmak istiyor musunuz?" />
   <Concept Language="tr" ConceptID="286" Rubric="Dil ekleme iptal edildi" />
   <Concept Language="tr" ConceptID="287" Rubric="Mevcut arketip" />
@@ -5262,8 +5262,8 @@
   <Concept Language="sv" ConceptID="280" Rubric="och alla referenser" />
   <Concept Language="sv" ConceptID="547" Rubric="Avbryt" />
   <Concept Language="sv" ConceptID="531" Rubric="Avbruten" />
-  <Concept Language="sv" ConceptID="74" Rubric="Om Ocean Informatics" />
-  <Concept Language="sv" ConceptID="75" Rubric="Om Ocean Editor" />
+  <Concept Language="sv" ConceptID="74" Rubric="Om openEHR" />
+  <Concept Language="sv" ConceptID="75" Rubric="Om Arketypeditor" />
   <Concept Language="sv" ConceptID="339" Rubric="Acceleration" />
   <Concept Language="sv" ConceptID="342" Rubric="Acceleration, Vinkel" />
   <Concept Language="sv" ConceptID="556" Rubric="Handling" />
@@ -5318,7 +5318,7 @@
   <Concept Language="sv" ConceptID="54" Rubric="Begrepp" />
   <Concept Language="sv" ConceptID="56" Rubric="Obegränsad" />
   <Concept Language="sv" ConceptID="57" Rubric="Arketyp filnamn" />
-  <Concept Language="sv" ConceptID="58" Rubric="Arketypeditor från Ocean Informatics" />
+  <Concept Language="sv" ConceptID="58" Rubric="Arketypeditor" />
   <Concept Language="sv" ConceptID="59" Rubric="Verktygslåda" />
   <Concept Language="sv" ConceptID="60" Rubric="Ändra data typ" />
   <Concept Language="sv" ConceptID="61" Rubric="Öppna  Ctrl+O " />
@@ -5531,7 +5531,7 @@
   <Concept Language="sv" ConceptID="281" Rubric="Expandera alla" />
   <Concept Language="sv" ConceptID="282" Rubric="Dra ihop alla" />
   <Concept Language="sv" ConceptID="283" Rubric="Lägg till referens" />
-  <Concept Language="sv" ConceptID="284" Rubric="*Ocean Archetype Editor " />
+  <Concept Language="sv" ConceptID="284" Rubric="Arketypeditor" />
   <Concept Language="sv" ConceptID="285" Rubric="Du har valt ett språk som inte är fullständigt översatt - Vill du lägga till termer i terminologidelen?" />
   <Concept Language="sv" ConceptID="286" Rubric="Språktillägg avbruten" />
   <Concept Language="sv" ConceptID="287" Rubric="Aktuell arketyp" />

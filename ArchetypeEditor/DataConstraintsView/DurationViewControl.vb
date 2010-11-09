@@ -75,7 +75,7 @@ Public Class DurationViewControl : Inherits ElementViewControl
                 ElseIf s = "w" Then
                     s = "wk"
                 End If
-                combo.Items.Add(OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(s))
+                combo.Items.Add(Main.ISO_TimeUnits.GetLanguageForISO(s))
             End If
         Next
 

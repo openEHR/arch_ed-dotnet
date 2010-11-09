@@ -81,7 +81,7 @@ Public Class ArchetypeNodeConstraintControl
 
         mOccurrences = New OccurrencesPanel(mFileManager)
 
-        Select Case OceanArchetypeEditor.Instance.Options.OccurrencesView
+        Select Case Main.Instance.Options.OccurrencesView
             Case "lexical"
                 mOccurrences.Mode = OccurrencesMode.Lexical
             Case "numeric"
@@ -91,13 +91,13 @@ Public Class ArchetypeNodeConstraintControl
         PanelGenericConstraint.Controls.Add(mOccurrences)
         mOccurrences.Dock = DockStyle.Fill
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
 
         mIsLoading = False
 
-        HelpProviderCommonConstraint.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderCommonConstraint.HelpNamespace = Main.Instance.Options.HelpLocationPath
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -736,8 +736,8 @@ Public Class ArchetypeNodeConstraintControl
                 End If
             End If
 
-            If OceanArchetypeEditor.IsDefaultLanguageRightToLeft Then
-                OceanArchetypeEditor.Reflect(mConstraintControl)
+            If Main.Instance.IsDefaultLanguageRightToLeft Then
+                Main.Reflect(mConstraintControl)
             End If
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
@@ -832,7 +832,6 @@ Public Class ArchetypeNodeConstraintControl
     Private Sub txtTermDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTermDescription.TextChanged
         If Not mIsLoading Then
             CType(mArchetypeNode, ArchetypeNodeAbstract).Description = Me.txtTermDescription.Text
-
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -988,11 +987,11 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub dgNodeBindings_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles dgNodeBindings.CellClick
-        If e.RowIndex >= 0 And e.ColumnIndex = 0 And OceanArchetypeEditor.Instance.Options.AllowTerminologyLookUp Then
+        If e.RowIndex >= 0 And e.ColumnIndex = 0 And Main.Instance.Options.AllowTerminologyLookUp Then
             Dim form As New Ots.TerminologySelectionForm
 
-            If Not OceanArchetypeEditor.Instance.Options.TerminologyUrl Is Nothing Then
-                form.Url = OceanArchetypeEditor.Instance.Options.TerminologyUrl.ToString
+            If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
+                form.Url = Main.Instance.Options.TerminologyUrl.ToString
             End If
 
             Dim row As DataGridViewRow = dgNodeBindings.Rows(e.RowIndex)

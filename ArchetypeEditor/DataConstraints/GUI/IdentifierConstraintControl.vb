@@ -29,10 +29,9 @@ Public Class IdentifierConstraintControl : Inherits ConstraintControl
 
         'Add any initialization after the InitializeComponent() call
         mFileManager = aFileManager
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             Translate()
         End If
-
     End Sub
 
     'UserControl overrides dispose to clean up the component list.

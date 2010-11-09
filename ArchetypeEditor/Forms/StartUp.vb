@@ -315,13 +315,13 @@ Public Class frmStartUp
             comboModel.Items.Add(name)
         Next
 
-        comboModel.SelectedIndex = OceanArchetypeEditor.Instance.Options.DefaultReferenceModel
+        comboModel.SelectedIndex = Main.Instance.Options.DefaultReferenceModel
         AcceptButton = butOpen
-        HelpProviderStartUp.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderStartUp.HelpNamespace = Main.Instance.Options.HelpLocationPath
     End Sub
 
     Private Sub frmStartUp_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
-        OceanArchetypeEditor.Reflect(Me)
+        Main.Reflect(Me)
     End Sub
 
     Private Sub butOpenFromWeb_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butOpenFromWeb.Click

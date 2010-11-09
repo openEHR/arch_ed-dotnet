@@ -57,7 +57,7 @@ Friend Class Duration
             Return sUnits
         End Get
         Set(ByVal Value As String)
-            If OceanArchetypeEditor.ISO_TimeUnits.IsValidIsoUnit(Value) Then
+            If Main.ISO_TimeUnits.IsValidIsoUnit(Value) Then
                 If sUnits <> Value Then
                     sUnits = Value
                     SetIsoDuration()

@@ -46,7 +46,7 @@ Namespace ArchetypeEditor.XML_Classes
             detail.language = New XMLParser.CODE_PHRASE
             detail.language.code_string = language
             detail.language.terminology_id = New XMLParser.TERMINOLOGY_ID
-            detail.language.terminology_id.value = OceanArchetypeEditor.DefaultLanguageCodeSet
+            detail.language.terminology_id.value = Main.Instance.DefaultLanguageCodeSet
             detail.copyright = item.Copyright
 
             If item.KeyWords.Count > 0 Then

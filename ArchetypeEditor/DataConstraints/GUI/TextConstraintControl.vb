@@ -40,7 +40,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         mAllowedValuesDataView = New DataView(mFileManager.OntologyManager.TermDefinitionTable)
         ConstraintBindingsGrid.BindTables(mFileManager.OntologyManager)
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             radioText.Text = Filemanager.GetOpenEhrTerm(444, radioText.Text)
             radioInternal.Text = Filemanager.GetOpenEhrTerm(150, radioInternal.Text)
             radioTerminology.Text = Filemanager.GetOpenEhrTerm(47, radioTerminology.Text)
@@ -562,7 +562,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Constraint.AllowableValues.Codes.CopyTo(currentValues, 0)
 
             If radioInternal.Checked Then
-                Dim s() As String = OceanArchetypeEditor.Instance.ChooseInternal(mFileManager, currentValues)
+                Dim s() As String = Main.Instance.ChooseInternal(mFileManager, currentValues)
 
                 If Not s Is Nothing Then
                     For i As Integer = 0 To s.Length - 1
@@ -616,7 +616,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         If radioInternal.Checked Then
             AddNewInternalCode()
         ElseIf radioText.Checked Then
-            Dim s As String = OceanArchetypeEditor.Instance.GetInput("Enter the new item:", ParentForm)
+            Dim s As String = Main.Instance.GetInput("Enter the new item:", ParentForm)
 
             If s <> "" Then
                 listAllowableValues.DataSource = Nothing
@@ -630,7 +630,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub AddNewInternalCode()
         Dim s(1) As String
-        s = OceanArchetypeEditor.Instance.GetInput(Filemanager.GetOpenEhrTerm(603, "Add new term"), AE_Constants.Instance.Description, ParentForm)
+        s = Main.Instance.GetInput(Filemanager.GetOpenEhrTerm(603, "Add new term"), AE_Constants.Instance.Description, ParentForm)
 
         If s(0) <> "" Then
             Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(s(0), s(1))
@@ -819,7 +819,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(listAllowableValues.SelectedValue))
 
             If Not t Is Nothing Then
-                s = OceanArchetypeEditor.Instance.GetInput(t, ParentForm)
+                s = Main.Instance.GetInput(t, ParentForm)
 
                 If s(0) <> "" Then
                     mFileManager.OntologyManager.SetRmTermText(t)

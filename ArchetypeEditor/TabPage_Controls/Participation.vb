@@ -41,7 +41,7 @@ Public Class Participation
         gbFunction.Controls.Add(mParticipationFunction)
         mParticipationFunction.Dock = DockStyle.Fill
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
 

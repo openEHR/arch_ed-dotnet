@@ -40,7 +40,7 @@ Public Class PathwayEvent
         Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(defaultMachineStateType.ToString)
         mText = a_term.Text
         mItem = New RmPathwayStep(a_term.Code, defaultMachineStateType)
-        BackColor = OceanArchetypeEditor.Instance.Options.StateMachineColour(defaultMachineStateType)
+        BackColor = Main.Instance.Options.StateMachineColour(defaultMachineStateType)
     End Sub
 
     Sub New(ByVal rm As RmPathwayStep, ByVal a_filemanager As FileManagerLocal)
@@ -52,9 +52,9 @@ Public Class PathwayEvent
         mItem = rm
         Me.Translate()
         If mItem.HasAlternativeState Then
-            Me.BackColor = OceanArchetypeEditor.Instance.Options.StateMachineColour(rm.AlternativeState)
+            Me.BackColor = Main.Instance.Options.StateMachineColour(rm.AlternativeState)
         Else
-            Me.BackColor = OceanArchetypeEditor.Instance.Options.StateMachineColour(rm.StateType)
+            Me.BackColor = Main.Instance.Options.StateMachineColour(rm.StateType)
         End If
         Me.TextRectangle(mText, Me.CreateGraphics)
     End Sub
@@ -154,9 +154,9 @@ Public Class PathwayEvent
         Set(ByVal Value As StateMachineType)
             mItem.AlternativeState = Value
             If Value = StateMachineType.Not_Set Then
-                Me.BackColor = OceanArchetypeEditor.Instance.Options.StateMachineColour(mItem.StateType)
+                Me.BackColor = Main.Instance.Options.StateMachineColour(mItem.StateType)
             Else
-                Me.BackColor = OceanArchetypeEditor.Instance.Options.StateMachineColour(Value)
+                Me.BackColor = Main.Instance.Options.StateMachineColour(Value)
             End If
             TextRectangle(mText, Me.CreateGraphics)
         End Set
@@ -168,7 +168,7 @@ Public Class PathwayEvent
         End Get
         Set(ByVal Value As StateMachineType)
             mItem.StateType = Value
-            Me.BackColor = OceanArchetypeEditor.Instance.Options.StateMachineColour(Value)
+            Me.BackColor = Main.Instance.Options.StateMachineColour(Value)
         End Set
     End Property
 
@@ -206,7 +206,7 @@ Public Class PathwayEvent
 
         Debug.Assert(mItem.StateType <> StateMachineType.Not_Set)
 
-        Dim s() As String = OceanArchetypeEditor.Instance.GetInput(a_term, ParentForm)
+        Dim s() As String = Main.Instance.GetInput(a_term, ParentForm)
         mLastEditWasOk = s(0) <> ""
 
         If mLastEditWasOk Then
@@ -237,7 +237,7 @@ Public Class PathwayEvent
             'If Not mItem.AlternativeState = StateMachineType.Not_Set Then
             'a_colour = OceanArchetypeEditor.Instance.Options.StateMachineColour(mItem.AlternativeState)
             'Else
-            a_colour = OceanArchetypeEditor.Instance.Options.StateMachineColour(mItem.StateType)
+            a_colour = Main.Instance.Options.StateMachineColour(mItem.StateType)
             'End If
         End If
 

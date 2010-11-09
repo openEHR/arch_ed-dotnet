@@ -191,11 +191,11 @@ Public Class TabPageInstruction
     Private Sub TabPageInstruction_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsloading = True
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
 
-        Me.HelpProviderInstruction.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        Me.HelpProviderInstruction.HelpNamespace = Main.Instance.Options.HelpLocationPath
         If mFileManager.IsNew Then
 
             'JAR: 30MAY07, EDT-44 Multiple activities per instruction
@@ -389,7 +389,7 @@ Public Class TabPageInstruction
     End Sub
 
     Private Sub TabPageInstruction_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
-        OceanArchetypeEditor.Reflect(Me)
+        Main.Reflect(Me)
     End Sub
 
     'JAR: 30MAY07, EDT-44 Multiple activities per instruction
@@ -425,7 +425,7 @@ Public Class TabPageInstruction
 
     Private Sub NewActivity() 'Prompts for activity description then adds
         Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(Filemanager.GetOpenEhrTerm(653, "New activity"))
-        Dim s As String() = OceanArchetypeEditor.Instance.GetInput(a_term, Me.ParentForm)
+        Dim s As String() = Main.Instance.GetInput(a_term, Me.ParentForm)
         mFileManager.OntologyManager.SetRmTermText(a_term)
 
         If s(0) <> "" Then

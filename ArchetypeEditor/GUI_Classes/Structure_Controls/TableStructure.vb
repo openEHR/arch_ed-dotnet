@@ -249,6 +249,7 @@ Public Class TableStructure
     Private Sub TableStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' set the variable in the base class
         mControl = dgGrid
+
         If mArchetypeTable Is Nothing Then
             ' no archetype driving constructor
             SetArchetypeTable()
@@ -257,11 +258,13 @@ Public Class TableStructure
                 dgGrid_CurrentCellChanged(sender, e)
             End If
         End If
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
         End If
+
         ' add the change structure menu from EntryStructure
-        Me.ContextMenuGrid.MenuItems.Add(menuChangeStructure)
+        ContextMenuGrid.MenuItems.Add(menuChangeStructure)
     End Sub
 
     Public Overrides ReadOnly Property InterfaceBuilder() As Object
@@ -573,7 +576,7 @@ Public Class TableStructure
 
         ' adds columns if rotated
         If mIsRotated Then
-            s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.Text, AE_Constants.Instance.Description, Me.ParentForm)
+            s = Main.Instance.GetInput(AE_Constants.Instance.Text, AE_Constants.Instance.Description, Me.ParentForm)
             If s(0) <> "" Then
                 a_term = mFileManager.OntologyManager.AddTerm(s(0), s(1))
                 'If mArchetypeTable.Rows.Count > 0 Then
@@ -675,7 +678,7 @@ Public Class TableStructure
 
     Public Overrides Function ToHTML(ByVal BackGroundColour As String) As String
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("")
-        Dim showComments As Boolean = OceanArchetypeEditor.Instance.Options.ShowCommentsInHtml
+        Dim showComments As Boolean = Main.Instance.Options.ShowCommentsInHtml
 
         result.AppendFormat("<p><i>Structure</i>: {0}", Filemanager.GetOpenEhrTerm(108, "TABLE"))
         result.Append(CStr(IIf(mCardinalityControl.Cardinality.Ordered, ", " & mFileManager.OntologyManager.GetOpenEHRTerm(162, "Ordered"), "")))
@@ -897,7 +900,7 @@ Public Class TableStructure
 
         Dim s() As String
 
-        s = OceanArchetypeEditor.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'", AE_Constants.Instance.Description, Me.ParentForm)
+        s = Main.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'", AE_Constants.Instance.Description, Me.ParentForm)
 
         If s(0) <> "" Then
             ' HKF: 1613
@@ -1005,11 +1008,11 @@ Public Class TableStructure
 
             If archetype_node.RM_Class.Type = StructureType.Element Then
                 Dim element As ArchetypeElement = CType(archetype_node, ArchetypeElement)
-                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
+                Dim i As Integer = Main.Instance.CountInString(element.NodeId, ".")
 
                 If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                     SpecialiseCurrentItem(sender, e)
-                    i = OceanArchetypeEditor.Instance.CountInString(element.NodeId, ".")
+                    i = Main.Instance.CountInString(element.NodeId, ".")
 
                     If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
                         e.ProposedValue = element.Text

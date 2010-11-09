@@ -775,7 +775,7 @@ Public Class TabpageHistory
         If rm.isPeriodic Then
             chkIsPeriodic.Checked = True
             numPeriod.Value = rm.Period
-            comboTimeUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(rm.PeriodUnits)
+            comboTimeUnits.Text = Main.ISO_TimeUnits.GetLanguageForISO(rm.PeriodUnits)
         Else
             chkIsPeriodic.Checked = False
         End If
@@ -1232,7 +1232,7 @@ Public Class TabpageHistory
         NumericOffset.Value = elvi.Offset
 
         If elvi.OffsetUnits <> "" Then
-            comboOffsetUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.OffsetUnits)
+            comboOffsetUnits.Text = Main.ISO_TimeUnits.GetLanguageForISO(elvi.OffsetUnits)
         End If
 
         mOccurrences.Cardinality = elvi.Occurrences
@@ -1242,7 +1242,7 @@ Public Class TabpageHistory
         End If
 
         If elvi.WidthUnits <> "" Then
-            comboDurationUnits.Text = OceanArchetypeEditor.ISO_TimeUnits.GetLanguageForISO(elvi.WidthUnits)
+            comboDurationUnits.Text = Main.ISO_TimeUnits.GetLanguageForISO(elvi.WidthUnits)
         End If
 
         LoadMathsFunctionsListView(elvi)
@@ -1267,20 +1267,20 @@ Public Class TabpageHistory
 
     Protected Sub LoadUnitsComboBoxes()
         comboTimeUnits.Items.Clear()
-        comboTimeUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboTimeUnits.Items.AddRange(Main.ISO_TimeUnits.IsoTimeUnits())
         comboTimeUnits.SelectedIndex = 3        ' minutes
 
         comboOffsetUnits.Items.Clear()
-        comboOffsetUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboOffsetUnits.Items.AddRange(Main.ISO_TimeUnits.IsoTimeUnits())
         comboOffsetUnits.SelectedIndex = 3      ' minutes
 
         comboDurationUnits.Items.Clear()
-        comboDurationUnits.Items.AddRange(OceanArchetypeEditor.ISO_TimeUnits.IsoTimeUnits())
+        comboDurationUnits.Items.AddRange(Main.ISO_TimeUnits.IsoTimeUnits())
         comboDurationUnits.SelectedIndex = 3    ' minutes
     End Sub
 
     Private Sub LoadMathsFunctionsListView(ByVal elvi As EventListViewItem)
-        Dim mathfunctions As DataRow() = mFileManager.OntologyManager.CodeForGroupID(14, OceanArchetypeEditor.DefaultLanguageCode) 'event math function
+        Dim mathfunctions As DataRow() = mFileManager.OntologyManager.CodeForGroupID(14, Main.Instance.DefaultLanguageCode) 'event math function
         listViewMathsFunctions.Clear()
 
         For Each rw As DataRow In mathfunctions
@@ -1318,7 +1318,7 @@ Public Class TabpageHistory
             SpecialiseToolStripMenuItem.Visible = False
 
             If Not current_item Is Nothing Then
-                Dim i As Integer = OceanArchetypeEditor.Instance.CountInString(current_item.RM_Class.NodeId, ".")
+                Dim i As Integer = Main.Instance.CountInString(current_item.RM_Class.NodeId, ".")
                 Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
 
                 If i < numberSpecialisations Then
@@ -1526,11 +1526,11 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub TabPageEventSeries_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        HelpProviderEventSeries.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderEventSeries.HelpNamespace = Main.Instance.Options.HelpLocationPath
 
         mIsLoading = True
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
 
@@ -1550,7 +1550,7 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub TabpageHistory_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
-        OceanArchetypeEditor.Reflect(Me)
+        Main.Reflect(Me)
     End Sub
 
     Private Sub ListEvents_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles ListEvents.KeyDown

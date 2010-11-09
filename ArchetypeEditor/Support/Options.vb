@@ -330,8 +330,6 @@ Public Class Options
         Dim filename As String = Path.Combine(ApplicationDataDirectory, "ArchetypeEditor.cfg")
 
         If Not File.Exists(filename) Then
-            ' HKF: 22 Dec 2008
-            'filename = Path.Combine(Application.StartupPath, "ArchetypeEditor.cfg")
             filename = Path.Combine(Options.AssemblyPath, "ArchetypeEditor.cfg")
         End If
 
@@ -483,8 +481,6 @@ Public Class Options
     End Sub
 
     Function ApplicationDataDirectory() As String
-        ' HKF: 22 Dec 2008
-        'Dim result As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Application.ProductName)
         Dim result As String = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Options.ProductName)
 
         If Not Directory.Exists(result) Then
@@ -553,15 +549,10 @@ Public Class Options
     End Sub
 
     Sub New()
-        ' HKF: 22 Dec 2008
-        'mRepositoryPath = Path.Combine(Application.StartupPath, "..\Archetypes")
         mRepositoryPath = Path.Combine(Options.AssemblyPath, "..\Archetypes")
         mXmlRepositoryPath = mRepositoryPath
         mUserName = ""
         mUserEmail = ""
-        ' HKF: 22 Dec 2008
-        'mHelpPath = Path.Combine(Application.StartupPath, "Help\ArchetypeEditor.chm")
-        'mXsltScriptPath = Path.Combine(Application.StartupPath, "HTML\adlxml-to-html.xsl")
         mHelpPath = Path.Combine(Options.AssemblyPath, "Help\ArchetypeEditor.chm")
         mXsltScriptPath = Path.Combine(Options.AssemblyPath, "HTML\adlxml-to-html.xsl")
         mUseXsltForHtml = False
@@ -577,7 +568,7 @@ Public Class Options
 
     Public Shared ReadOnly Property AssemblyPath() As String
         Get
-            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
             Dim basePath As String = System.IO.Path.GetDirectoryName(assembly.CodeBase)
 
             If basePath.StartsWith("file:\") Then
@@ -590,15 +581,29 @@ Public Class Options
 
     Shared ReadOnly Property ProductName() As String
         Get
-            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
-            Dim productAttributes() As System.Reflection.AssemblyProductAttribute
-            productAttributes = assembly.GetCustomAttributes(GetType(System.Reflection.AssemblyProductAttribute), False)
+            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
+            Dim attributes() As System.Reflection.AssemblyProductAttribute
+            attributes = assembly.GetCustomAttributes(GetType(System.Reflection.AssemblyProductAttribute), False)
 
-            If productAttributes Is Nothing Or productAttributes.Length < 1 Then
+            If attributes Is Nothing Or attributes.Length < 1 Then
                 Throw New ApplicationException("Assembly must contain AssemblyProductAttribute")
             End If
 
-            Return productAttributes(0).Product
+            Return attributes(0).Product
+        End Get
+    End Property
+
+    Shared ReadOnly Property Copyright() As String
+        Get
+            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
+            Dim attributes() As System.Reflection.AssemblyCopyrightAttribute
+            attributes = assembly.GetCustomAttributes(GetType(System.Reflection.AssemblyCopyrightAttribute), False)
+
+            If attributes Is Nothing Or attributes.Length < 1 Then
+                Throw New ApplicationException("Assembly must contain AssemblyCopyrightAttribute")
+            End If
+
+            Return attributes(0).Copyright
         End Get
     End Property
 

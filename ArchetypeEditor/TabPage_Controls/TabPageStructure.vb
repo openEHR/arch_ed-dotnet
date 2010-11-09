@@ -56,19 +56,21 @@ Public Class TabPageStructure
 
             mFileManager = Filemanager.Master
             mValidStructureClasses = ReferenceModel.ValidStructureTypes
+
             For Each ValidStructure As StructureType In mValidStructureClasses
                 Me.comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(CInt(ValidStructure), ValidStructure.ToString))
             Next
 
             PanelDetails = New ArchetypeNodeConstraintControl(mFileManager)
-            Me.panelStructure.Controls.Add(PanelDetails)
+            panelStructure.Controls.Add(PanelDetails)
 
-            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
-                Me.comboStructure.Text = Filemanager.GetOpenEhrTerm(104, "Choose...")
+            If Main.Instance.DefaultLanguageCode <> "en" Then
+                comboStructure.Text = Filemanager.GetOpenEhrTerm(104, "Choose...")
                 TranslateGUI()
-                If OceanArchetypeEditor.IsDefaultLanguageRightToLeft Then
+
+                If Main.Instance.IsDefaultLanguageRightToLeft Then
                     ds = DockStyle.Left
-                    OceanArchetypeEditor.Reflect(PanelDetails)
+                    Main.Reflect(PanelDetails)
                 End If
             End If
 
@@ -76,12 +78,9 @@ Public Class TabPageStructure
 
             mSplitter = New Splitter
             mSplitter.Dock = ds
-            Me.panelStructure.Controls.Add(mSplitter)
-
-            Me.panelDisplay.Dock = DockStyle.Fill
-
+            panelStructure.Controls.Add(mSplitter)
+            panelDisplay.Dock = DockStyle.Fill
         End If
-
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -589,7 +588,7 @@ Public Class TabPageStructure
 
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         chkEmbedded.Visible = mEmbeddedAllowed
-        HelpProviderTabPageStructure.HelpNamespace = OceanArchetypeEditor.Instance.Options.HelpLocationPath
+        HelpProviderTabPageStructure.HelpNamespace = Main.Instance.Options.HelpLocationPath
     End Sub
 
     Sub ShowStructurePanel(ByVal Sender As Object, ByVal e As EventArgs) Handles mArchetypeControl.ChangeStructure
@@ -845,7 +844,7 @@ Public Class TabPageStructure
             Else
                 ' have to have a new slot if change the structure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(chosen_structure)
-                
+
             End If
             panelStructure.Show()
             panelDisplay.Hide()
@@ -929,7 +928,7 @@ Public Class TabPageStructure
 
         mFileManager.FileLoading = True
 
-        If OpenArchetypeForSlot(slot, OceanArchetypeEditor.Instance.Options.RepositoryPath & "\structure") Then
+        If OpenArchetypeForSlot(slot, Main.Instance.Options.RepositoryPath & "\structure") Then
             mFileManager.FileLoading = False
             Filemanager.AddEmbedded(mFileManager)
 

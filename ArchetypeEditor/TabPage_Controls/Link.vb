@@ -24,27 +24,34 @@ Public Class Link
             mIsLoading = False
         End Set
     End Property
+
     Private Sub Link_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        Me.PanelTop.Controls.Add(mOccurrences)
+        PanelTop.Controls.Add(mOccurrences)
         mOccurrences.Dock = DockStyle.Left
-        Me.gbTarget.Dock = DockStyle.Fill
+        gbTarget.Dock = DockStyle.Fill
+
         If Not mLinkType.HasConstraint Then
             'if it has not been set from the archetype
             mLinkType.TextConstraint = New Constraint_Text
         End If
+
         mLinkType.BringToFront()
-        Me.gbType.Controls.Add(mLinkType)
+        gbType.Controls.Add(mLinkType)
         mLinkType.Dock = DockStyle.Fill
+
         If Not mLinkMeaning.HasConstraint Then
             'if it has not been set from the archetype
             mLinkMeaning.TextConstraint = New Constraint_Text
         End If
+
         mLinkMeaning.BringToFront()
-        Me.gbMeaning.Controls.Add(mLinkMeaning)
+        gbMeaning.Controls.Add(mLinkMeaning)
         mLinkMeaning.Dock = DockStyle.Fill
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
+
         mIsLoading = False
     End Sub
 

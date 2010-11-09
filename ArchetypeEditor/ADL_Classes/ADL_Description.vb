@@ -122,7 +122,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Sub New(ByVal an_archetype_description As ArchetypeDescription, ByVal a_language As String)
-            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(OceanArchetypeEditor.Instance.Options.UserName), Eiffel.String(a_language))
+            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(Main.Instance.Options.UserName), Eiffel.String(a_language))
 
             If Not an_archetype_description.ArchetypePackageURI Is Nothing Then
                 mArchetypePackageURI = an_archetype_description.ArchetypePackageURI
@@ -139,7 +139,7 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Sub New(ByVal original_language As String)
-            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(OceanArchetypeEditor.Instance.Options.UserName), Eiffel.String(original_language))
+            mADL_Description = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION.make(Eiffel.String(Main.Instance.Options.UserName), Eiffel.String(original_language))
         End Sub
     End Class
 End Namespace

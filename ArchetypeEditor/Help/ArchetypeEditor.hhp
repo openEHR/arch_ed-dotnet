@@ -1,0 +1,83 @@
+[OPTIONS]
+Compatibility=1.1 or later
+Compiled file=ArchetypeEditor.chm
+Contents file=ArchetypeEditor.hhc
+Default topic=Menu\HowTo\archetype_editor.htm
+Display compile progress=No
+Index file=ArchetypeEditor.hhk
+Language=0xc09 English (Australia)
+
+
+[FILES]
+Menu\menus.htm
+Menu\language_menu.html
+Menu\HowTo\translate.htm
+Menu\HowTo\add_constraint_binding.htm
+Menu\HowTo\add_criteria_binding.html
+Menu\HowTo\add_language.htm
+Menu\HowTo\add_term_binding.htm
+Menu\HowTo\add_terminology.htm
+Menu\HowTo\archetype_editor.htm
+Menu\HowTo\change_display_language.html
+Menu\HowTo\design_archetype.htm
+Menu\HowTo\download_archetype.htm
+Menu\HowTo\edit_archetype.htm
+Menu\HowTo\edit_data.htm
+Menu\HowTo\edit_header.htm
+Menu\HowTo\edit_history.htm
+Menu\HowTo\edit_protocol.htm
+Menu\HowTo\edit_state.htm
+Menu\HowTo\name_element_cluster.htm
+Menu\HowTo\new_archetype.htm
+Menu\HowTo\save_archetype.htm
+Menu\HowTo\specialise.htm
+Menu\HowTo\Edit data\specialise_element.htm
+Menu\HowTo\Edit data\add_cluster.htm
+Menu\HowTo\Edit data\add_element.htm
+Menu\HowTo\Edit data\change_datatype.htm
+Menu\HowTo\Edit data\set_common_constraints.htm
+Menu\HowTo\Edit data\set_structure.htm
+Menu\HowTo\Edit data\Data constraints\set_constraints_text.htm
+Menu\HowTo\Edit data\Data constraints\set_constraints_boolean.htm
+Menu\HowTo\Edit data\Data constraints\set_constraints_count.htm
+Menu\HowTo\Edit data\Data constraints\set_constraints_date_time.html
+Menu\HowTo\Edit data\Data constraints\set_constraints_ordinal.htm
+Menu\HowTo\Edit data\Data constraints\set_constraints_quantity.htm
+openEHR\terminology_and_archetypes.htm
+openEHR\archetype_paths.html
+openEHR\composition.htm
+openEHR\composition_when.htm
+openEHR\constraint_binding.htm
+openEHR\entry_classes.htm
+openEHR\entry_when.htm
+openEHR\evaluation_when.htm
+openEHR\extract_when.htm
+openEHR\instruction_when.htm
+openEHR\observation_when.htm
+openEHR\primary_language.html
+openEHR\run_time_constraint.htm
+openEHR\section.htm
+openEHR\section_when.htm
+openEHR\structures.htm
+Screens\terminology_screens.htm
+Screens\constraints_screen.html
+Screens\data_screen.htm
+Screens\display_screen.html
+Screens\Entry Model screen.htm
+Screens\event_interval.htm
+Screens\event_name.htm
+Screens\event_offset.htm
+Screens\event_point_in_time1.htm
+Screens\header.htm
+Screens\interface_screen.html
+Screens\languages_terminologies_screen.html
+Screens\start_up_screen.htm
+Screens\structure_list.htm
+Screens\structure_simple.htm
+Screens\structure_table.htm
+Screens\structure_tree.htm
+Screens\term_binding_screen.html
+Screens\term_screen.html
+
+[INFOTYPES]
+

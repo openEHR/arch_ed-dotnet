@@ -25,13 +25,13 @@ Public Class OccurrencesPanel
         'Add any initialization after the InitializeComponent() call
         mFileManager = a_filemanager
 
-        If OceanArchetypeEditor.Instance.Options.OccurrencesView = "numeric" Then
+        If Main.Instance.Options.OccurrencesView = "numeric" Then
             Mode = OccurrencesMode.Numeric
         Else
             Mode = OccurrencesMode.Lexical
         End If
 
-        If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+        If Main.Instance.DefaultLanguageCode <> "en" Then
             TranslateGUI()
         End If
     End Sub

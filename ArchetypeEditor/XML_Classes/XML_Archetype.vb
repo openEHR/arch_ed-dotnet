@@ -171,7 +171,7 @@ Namespace ArchetypeEditor.XML_Classes
         Protected Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)
             Try
                 If Not mArchetypeParser.ArchetypeAvailable Then
-                    mArchetypeParser.NewArchetype(an_archetype_id.ToString(), sPrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
+                    mArchetypeParser.NewArchetype(an_archetype_id.ToString(), sPrimaryLanguageCode, Main.Instance.DefaultLanguageCodeSet)
                     mXmlArchetype = mArchetypeParser.Archetype
                     mArchetypeParser.SetDefinitionId(mXmlArchetype.concept)
                     setDefinition()
@@ -1252,7 +1252,7 @@ Namespace ArchetypeEditor.XML_Classes
 
             If c.HasMaximum Or c.HasMinimum Then
                 d.range = New XMLParser.IntervalOfDuration()
-                durationISO.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
+                durationISO.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
 
                 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 If c.HasMinimum Then
@@ -2727,7 +2727,7 @@ Namespace ArchetypeEditor.XML_Classes
             ' make the new archetype
 
             Try
-                mArchetypeParser.NewArchetype(an_ArchetypeID.ToString, sPrimaryLanguageCode, OceanArchetypeEditor.DefaultLanguageCodeSet)
+                mArchetypeParser.NewArchetype(an_ArchetypeID.ToString, sPrimaryLanguageCode, Main.Instance.DefaultLanguageCodeSet)
                 mXmlArchetype = mArchetypeParser.Archetype
                 mDescription = New XML_Description(mXmlArchetype.description, primary_language)
             Catch

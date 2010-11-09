@@ -820,7 +820,7 @@ Public Class TermBindingPanel
 
     Private Sub TermBindingPanel_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Not DesignMode Then
-            If OceanArchetypeEditor.DefaultLanguageCode <> "en" Then
+            If Main.Instance.DefaultLanguageCode <> "en" Then
                 TranslateGUI()
             End If
 
@@ -964,7 +964,7 @@ Public Class TermBindingPanel
 
     Private Sub AddTerminologyButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddTerminologyButton.Click
         Try
-            If OceanArchetypeEditor.Instance.AddTerminology() Then
+            If Main.Instance.AddTerminology() Then
                 If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 1 Then
                     SetTermBindingFilter()  ' for the tree view
                     SetDvTermBindingsFilter() ' for the node only view
@@ -1561,7 +1561,7 @@ Public Class TermBindingPanel
     End Sub
 
     Private Sub TermBindingPanel_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
-        OceanArchetypeEditor.Reflect(Me)
+        Main.Reflect(Me)
     End Sub
 
     Dim mCurrentLogicalPath As String

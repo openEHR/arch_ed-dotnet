@@ -158,7 +158,7 @@ Namespace ArchetypeEditor.XML_Classes
 
         Sub New()
             mXML_Description = New XMLParser.RESOURCE_DESCRIPTION()
-            mOriginalAuthor = OceanArchetypeEditor.Instance.Options.UserName
+            mOriginalAuthor = Main.Instance.Options.UserName
         End Sub
 
         Sub New(ByVal adl_description As ADL_Classes.ADL_Description)

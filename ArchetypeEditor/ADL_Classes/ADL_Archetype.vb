@@ -830,13 +830,13 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
             If c.HasMinimum Then
-                durationIso.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
+                durationIso.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
                 durationIso.GUI_duration = CInt(c.MinimumValue)
                 lower = Eiffel.String(durationIso.ISO_duration)
             End If
 
             If c.HasMaximum Then
-                durationIso.ISO_Units = OceanArchetypeEditor.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
+                durationIso.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
                 durationIso.GUI_duration = CInt(c.MaximumValue)
                 upper = Eiffel.String(durationIso.ISO_duration)
             End If

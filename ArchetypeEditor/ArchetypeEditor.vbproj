@@ -55,10 +55,11 @@
     <Optimize>false</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>1</WarningLevel>
     <NoWarn>42016,42017,42018,42019,42032</NoWarn>
     <DebugType>full</DebugType>
+    <WarningsAsErrors>41998,42004,42020,42021,42022,42024,42025,42026,42029,42030,42031,42104,42105,42106,42107,42108,42109</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -74,10 +75,11 @@
     <Optimize>true</Optimize>
     <RegisterForComInterop>false</RegisterForComInterop>
     <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>1</WarningLevel>
     <NoWarn>42016,42017,42018,42019,42032</NoWarn>
     <DebugType>none</DebugType>
+    <WarningsAsErrors>41998,42004,42020,42021,42022,42024,42025,42026,42029,42030,42031,42104,42105,42106,42107,42108,42109</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EiffelSoftware.Runtime, Version=6.2.7.1629, Culture=neutral, PublicKeyToken=def26f296efef469">
@@ -205,17 +207,10 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </Content>
-    <Content Include="Ocean Archetype Editor Licence Agreement.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ocean.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="PropertyUnits\PropertyUnitData.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Support\ChangeLog.htm" />
-    <Content Include="Support\ocean.ico" />
     <EmbeddedResource Include="DataConstraintsView\IdentifierViewControl.resx">
       <DependentUpon>IdentifierViewControl.vb</DependentUpon>
       <SubType>Designer</SubType>
@@ -743,6 +738,7 @@
     <Compile Include="GUI_Classes\Structure_Controls\TreeStructure.vb">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Main.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
@@ -756,9 +752,6 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="OceanArchetypeEditor.vb">
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Support\AE_Constants.vb">
       <SubType>Code</SubType>
@@ -1031,6 +1024,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <Content Include="Archetype Editor Licence Agreement.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ArchetypeEditor.ico" />
     <Content Include="HTML\adlxml-to-html.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1038,6 +1034,8 @@
     <Content Include="HTML\Images\default.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="OpenEHRSplash.png" />
+    <None Include="openEHR.PNG" />
     <None Include="AssemblyVersion.cmd">
     </None>
     <None Include="PropertyUnits\PropertyUnits.xsx">
@@ -1069,7 +1067,7 @@
     <PostBuildEvent>"$(FrameworkSDKDir)bin\corflags.exe" "$(TargetPath)" /nologo /32bit+</PostBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild" Outputs="AssemblyVersion.vb">
-    <Exec Command="AssemblyVersion.cmd $(Configuration) &gt; AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
+    <Exec Command="AssemblyVersion.cmd $(Configuration) VB &gt; AssemblyVersion.vb" Outputs="AssemblyVersion.vb">
       <Output ItemName="Compile" TaskParameter="Outputs" />
     </Exec>
   </Target>
