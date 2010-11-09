@@ -20,15 +20,6 @@ set Version=2.2
 set Suffix= Beta
 set Revision=0
 
-if /i "%1" == "Release" (
-	for /f "delims=:MS" %%R in ('svnversion') do (
-		set Revision=%%R
-		goto WriteAssemblyVersion
-	)
-
-	exit /b 1
-)
-
 if /i "%2" == "VB" (
 	set Comment='
 	set Attribute=^<
@@ -37,6 +28,15 @@ if /i "%2" == "VB" (
 	set Comment=//
 	set Attribute=[
 	set AttributeEnd=]
+)
+
+if /i "%1" == "Release" (
+	for /f "delims=:MS" %%R in ('svnversion') do (
+		set Revision=%%R
+		goto WriteAssemblyVersion
+	)
+
+	exit /b 1
 )
 
 :WriteAssemblyVersion
