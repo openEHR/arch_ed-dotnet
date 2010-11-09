@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+	<param name="ImageType" value="Folder">
+</OBJECT>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="How To">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Archetype Editor">
+			<param name="Local" value="Menu\HowTo\archetype_editor.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Design an archetype">
+			<param name="Local" value="Menu\HowTo\design_archetype.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Create an archetype">
+			<param name="Local" value="Menu\HowTo\new_archetype.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Download archetypes">
+			<param name="Local" value="Menu\HowTo\download_archetype.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Add a language">
+			<param name="Local" value="Menu\HowTo\add_language.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Change the display language">
+			<param name="Local" value="Menu\HowTo\change_display_language.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Add a terminology">
+			<param name="Local" value="Menu\HowTo\add_terminology.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Bind a term to a terminology">
+			<param name="Local" value="Menu\HowTo\add_term_binding.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Add criteria to a term binding">
+			<param name="Local" value="Menu\HowTo\add_criteria_binding.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Bind a constraint to a terminology">
+			<param name="Local" value="Menu\HowTo\add_constraint_binding.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Edit an archetype">
+			<param name="Local" value="Menu\HowTo\edit_archetype.htm">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Edit data of an archetype">
+				<param name="Local" value="Menu\HowTo\edit_data.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Edit archetype header">
+				<param name="Local" value="Menu\HowTo\edit_header.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Edit history">
+				<param name="Local" value="Menu\HowTo\edit_history.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Edit protocol data of an archetype">
+				<param name="Local" value="Menu\HowTo\edit_protocol.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Edit state data of an archetype">
+				<param name="Local" value="Menu\HowTo\edit_state.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Edit data">
+				</OBJECT>
+			<UL>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="Name an element or cluster">
+					<param name="Local" value="Menu\HowTo\name_element_cluster.htm">
+					</OBJECT>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="Add or remove a cluster">
+					<param name="Local" value="Menu\HowTo\Edit data\add_cluster.htm">
+					</OBJECT>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="Add or remove an element">
+					<param name="Local" value="Menu\HowTo\Edit data\add_element.htm">
+					</OBJECT>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="Change the data type of an element">
+					<param name="Local" value="Menu\HowTo\Edit data\change_datatype.htm">
+					</OBJECT>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="Set constraints on an element or cluster">
+					<param name="Local" value="Menu\HowTo\Edit data\set_common_constraints.htm">
+					</OBJECT>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="Set the structure of the data">
+					<param name="Local" value="Menu\HowTo\Edit data\set_structure.htm">
+					</OBJECT>
+			</UL>
+		</UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Save an archetype">
+			<param name="Local" value="Menu\HowTo\save_archetype.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Data constraints">
+			<param name="Local" value="Menu\HowTo\Edit data\set_common_constraints.htm">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Constrain boolean values">
+				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_boolean.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Constrain count values">
+				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_count.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Constrain date &amp; time values">
+				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_date_time.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Constrain ordinal values">
+				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_ordinal.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Constrain quantity values">
+				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_quantity.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Constrain text values">
+				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_text.htm">
+				</OBJECT>
+		</UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Specialise an archetype">
+			<param name="Local" value="Menu\HowTo\specialise.htm">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Specialise an element">
+				<param name="Local" value="Menu\HowTo\Edit data\specialise_element.htm">
+				</OBJECT>
+		</UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Translate an archetype">
+			<param name="Local" value="Menu\HowTo\translate.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Screens">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Start up window">
+			<param name="Local" value="Screens\start_up_screen.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Header tab">
+			<param name="Local" value="Screens\header.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Entries">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Structured as single">
+				<param name="Local" value="Screens\structure_simple.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Structured as list">
+				<param name="Local" value="Screens\structure_list.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Structured as tree">
+				<param name="Local" value="Screens\structure_tree.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Structured as table">
+				<param name="Local" value="Screens\structure_table.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Data tab">
+				<param name="Local" value="Screens\data_screen.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Set the name of an event">
+				<param name="Local" value="Screens\event_name.htm">
+				</OBJECT>
+			<UL>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="Point in time event">
+					<param name="Local" value="Screens\event_point_in_time1.htm">
+					</OBJECT>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="Interval event">
+					<param name="Local" value="Screens\event_interval.htm">
+					</OBJECT>
+				<LI> <OBJECT type="text/sitemap">
+					<param name="Name" value="Set the offset of an event">
+					<param name="Local" value="Screens\event_offset.htm">
+					</OBJECT>
+			</UL>
+		</UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Terminology tab">
+			<param name="Local" value="Screens\terminology_screens.htm">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Term tab">
+				<param name="Local" value="Screens\term_screen.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Term bindings tab">
+				<param name="Local" value="Screens\term_binding_screen.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Constraints tab">
+				<param name="Local" value="Screens\constraints_screen.html">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="Languages and terminologies tab">
+				<param name="Local" value="Screens\languages_terminologies_screen.html">
+				</OBJECT>
+		</UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Display tab">
+			<param name="Local" value="Screens\display_screen.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Interface tab">
+			<param name="Local" value="Screens\interface_screen.html">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="openEHR">
+		<param name="Local" value="openEHR\terminology_and_archetypes.htm">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Terminology and archetypes">
+			<param name="Local" value="openEHR\terminology_and_archetypes.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Archetype paths">
+			<param name="Local" value="openEHR\archetype_paths.html">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Constraint definitions and bindings">
+			<param name="Local" value="openEHR\constraint_binding.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Composition class">
+			<param name="Local" value="openEHR\composition.htm">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="When to use a COMPOSITION">
+				<param name="Local" value="openEHR\composition_when.htm">
+				</OBJECT>
+		</UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Entry classes">
+			<param name="Local" value="openEHR\entry_classes.htm">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="When to use an ENTRY">
+				<param name="Local" value="openEHR\entry_when.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="When to use an EVALUATION">
+				<param name="Local" value="openEHR\evaluation_when.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="When to use an EXTRACT">
+				<param name="Local" value="openEHR\extract_when.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="When to use an INSTRUCTION">
+				<param name="Local" value="openEHR\instruction_when.htm">
+				</OBJECT>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="When to use an OBSERVATION">
+				<param name="Local" value="openEHR\observation_when.htm">
+				</OBJECT>
+		</UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Section class">
+			<param name="Local" value="openEHR\section.htm">
+			</OBJECT>
+		<UL>
+			<LI> <OBJECT type="text/sitemap">
+				<param name="Name" value="When to use a SECTION">
+				<param name="Local" value="openEHR\section_when.htm">
+				</OBJECT>
+		</UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Run time name constraint">
+			<param name="Local" value="openEHR\run_time_constraint.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="openEHR structures">
+			<param name="Local" value="openEHR\structures.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Primary language">
+			<param name="Local" value="openEHR\primary_language.html">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Menus">
+		<param name="Local" value="Menu\menus.htm">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Language menu">
+			<param name="Local" value="Menu\language_menu.html">
+			</OBJECT>
+	</UL>
+</UL>
+</BODY></HTML>
