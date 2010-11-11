@@ -19,6 +19,11 @@ namespace TerminologyLookup
             set;
         }
 
+        protected virtual void ClearTerminologies()
+        {
+            terminologies = null;
+        }
+
         protected abstract void LoadTerminologies();
 
         private List<Terminology> terminologies;
