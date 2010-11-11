@@ -4,7 +4,7 @@
 '	description: "Builds all XML Archetypes"
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
-'	support:     "Ocean Informatics <support@OceanInformatics.biz>"
+'	support:     http://www.openehr.org/issues/browse/AEPR
 '	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '

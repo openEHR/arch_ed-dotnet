@@ -4,7 +4,7 @@
 '	description: "$DESCRIPTION"
 '	keywords:    "Archetype, Clinical, Editor"
 '	author:      "Sam Heard"
-'	support:     "Ocean Informatics <support@OceanInformatics.com>"
+'	support:     http://www.openehr.org/issues/browse/AEPR
 '	copyright:   "Copyright (c) 2008 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '

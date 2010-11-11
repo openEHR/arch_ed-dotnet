@@ -5,7 +5,7 @@
 ::	component:   "openEHR Archetype Project"
 ::	description: "Batch file to set the Subversion revision number in the assembly version."
 ::	author:      "Peter Gummer"
-::	support:     "Ocean Informatics <support@OceanInformatics.com>"
+::	support:     http://www.openehr.org/issues/browse/AEPR
 ::	copyright:   "Copyright 2007 Ocean Informatics Pty Ltd"
 ::	license:     "See notice at bottom of class"
 ::
