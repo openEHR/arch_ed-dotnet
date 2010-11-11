@@ -302,22 +302,24 @@ Public Class TerminologyServer
     End Sub
 
     Private Sub AppendTerminologiesFromLookup()
-        Try
-            If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
-                Main.Instance.TerminologyLookup.Url = Main.Instance.Options.TerminologyUrl.ToString
-            End If
-
-            For Each t As TerminologyLookup.Terminology In Main.Instance.TerminologyLookup.Terminologies
-                Dim key(0) As Object
-                key(0) = t.TerminologyId
-
-                If TerminologyIdentifiers.Rows.Find(key) Is Nothing Then
-                    TerminologyIdentifiers.Rows.Add(t.TerminologyId, t.TerminologyId, Main.Instance.TerminologyLookup.Name, DBNull.Value)
+        If Main.Instance.Options.AllowTerminologyLookUp And Not Main.Instance.TerminologyLookup Is Nothing Then
+            Try
+                If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
+                    Main.Instance.TerminologyLookup.Url = Main.Instance.Options.TerminologyUrl.ToString
                 End If
-            Next
-        Catch ex As Exception
-            MessageBox.Show("Loading " + Main.Instance.TerminologyLookup.Name + " terminologies: " + ex.Message)
-        End Try
+
+                For Each t As TerminologyLookup.Terminology In Main.Instance.TerminologyLookup.Terminologies
+                    Dim key(0) As Object
+                    key(0) = t.TerminologyId
+
+                    If TerminologyIdentifiers.Rows.Find(key) Is Nothing Then
+                        TerminologyIdentifiers.Rows.Add(t.TerminologyId, t.TerminologyId, Main.Instance.TerminologyLookup.Name, DBNull.Value)
+                    End If
+                Next
+            Catch ex As Exception
+                MessageBox.Show("Loading " + Main.Instance.TerminologyLookup.Name + " terminologies: " + ex.Message)
+            End Try
+        End If
     End Sub
 
     Public Sub InitialiseTerminology(ByVal Document As String, ByVal Schema As String)
@@ -356,10 +358,7 @@ Public Class TerminologyServer
         Dim primarykeyfields(0) As DataColumn
         primarykeyfields(0) = TerminologyIdentifiers.Columns(0)
         TerminologyIdentifiers.PrimaryKey = primarykeyfields
-
-        If Main.Instance.Options.AllowTerminologyLookUp Then
-            AppendTerminologiesFromLookup()
-        End If
+        AppendTerminologiesFromLookup()
     End Sub
 
 End Class
