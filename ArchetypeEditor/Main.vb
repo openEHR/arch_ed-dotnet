@@ -131,14 +131,14 @@ Public Class Main
         End Set
     End Property
 
-    Private mWebSite As String
+    Private mTerminologyLookup As TerminologyLookup.TerminologySelection
 
-    Public Property WebSite() As String
+    Public Property TerminologyLookup() As TerminologyLookup.TerminologySelection
         Get
-            Return mWebSite
+            Return mTerminologyLookup
         End Get
-        Set(ByVal value As String)
-            mWebSite = value
+        Set(ByVal value As TerminologyLookup.TerminologySelection)
+            mTerminologyLookup = value
         End Set
     End Property
 

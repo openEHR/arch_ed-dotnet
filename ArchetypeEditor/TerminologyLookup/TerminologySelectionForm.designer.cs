@@ -1,4 +1,4 @@
-namespace Ots
+namespace TerminologyLookup
 {
     partial class TerminologySelectionForm
     {

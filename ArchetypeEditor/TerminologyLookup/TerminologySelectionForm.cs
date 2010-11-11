@@ -7,22 +7,19 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 
-namespace Ots
+namespace TerminologyLookup
 {
     public partial class TerminologySelectionForm : Form
     {
-        public TerminologySelectionForm()
+        public TerminologySelectionForm(TerminologySelection service)
         {
+            Service = service;
             InitializeComponent();
         }
 
-        public virtual string Url
-        {
-            get { return Ots.Once.Url; }
-            set { Ots.Once.Url = value; }
-        }
+        protected readonly TerminologySelection Service;
 
-        protected string terminologyId;
+        private string terminologyId;
 
         public virtual string TerminologyId
         {
@@ -30,7 +27,7 @@ namespace Ots
             set { terminologyId = value; }
         }
 
-        protected string subsetId;
+        private string subsetId;
 
         public virtual string SubsetId
         {
@@ -38,7 +35,7 @@ namespace Ots
             set { subsetId = value; }
         }
 
-        protected string subsetLanguage;
+        private string subsetLanguage;
 
         public virtual string SubsetLanguage
         {
@@ -61,7 +58,7 @@ namespace Ots
             }
         }
 
-        protected string termText;
+        private string termText;
 
         public virtual string TermText
         {
@@ -98,7 +95,7 @@ namespace Ots
             {
                 Text = "Select a Terminology";
                 Grid.DataSource = null;
-                Grid.DataSource = Ots.Once.Terminologies;
+                Grid.DataSource = Service.Terminologies;
 
                 if (Grid.Columns.Count > 0)
                 {
@@ -109,7 +106,7 @@ namespace Ots
             {
                 Text = "Select a Subset for Terminology " + TerminologyId;
                 Grid.DataSource = null;
-                Grid.DataSource = Ots.Once.Queries(TerminologyId);
+                Grid.DataSource = Service.Queries(TerminologyId);
 
                 if (Grid.Columns.Count > 0)
                 {
@@ -118,27 +115,27 @@ namespace Ots
             }
             else
             {
-                Ots.OnConceptsLoaded handler = delegate(DataSet concepts)
+                TerminologySelection.OnConceptsLoaded onConceptsLoaded = delegate(DataSet concepts)
                 {
                     ProgressBar.Visible = false;
                     Grid.DataSource = null;
                     Grid.DataSource = concepts != null && concepts.Tables != null && concepts.Tables.Count > 0 ? concepts.Tables[0] : null;
                 };
 
+                TerminologySelection.OnError onError = delegate(object sender, AsyncCompletedEventArgs e)
+                {
+                    ProgressBar.Visible = false;
+                    ShowException(e.Error, Service.Name + " Error");
+                };
+
                 Text = "Concepts for Terminology " + TerminologyId + " (" + SubsetId + ")";
                 ProgressBar.Visible = true;
 
                 if (string.IsNullOrEmpty(ReferenceId))
-                    Ots.Once.LoadConcepts(handler, OnOtsError, TerminologyId, SubsetId, SubsetLanguage);
+                    Service.LoadConcepts(onConceptsLoaded, onError, TerminologyId, SubsetId, SubsetLanguage);
                 else
-                    Ots.Once.LoadChildConcepts(handler, OnOtsError, TerminologyId, SubsetId, SubsetLanguage, ReferenceId);
+                    Service.LoadChildConcepts(onConceptsLoaded, onError, TerminologyId, SubsetId, SubsetLanguage, ReferenceId);
             }
-        }
-
-        protected virtual void OnOtsError(object sender, AsyncCompletedEventArgs e)
-        {
-            ProgressBar.Visible = false;
-            ShowException(e.Error, "OTS Error");
         }
 
         protected virtual void ShowException(Exception ex, string caption)

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ots
+namespace TerminologyLookup
 {
     public class TerminologyQuery
     {
@@ -11,14 +11,14 @@ namespace Ots
             queryId = id;
         }
 
-        protected readonly string queryId;
+        private readonly string queryId;
 
         public virtual string QueryId
         {
             get { return queryId; }
         }
 
-        protected string description;
+        private string description;
 
         public virtual string Description
         {
@@ -26,7 +26,7 @@ namespace Ots
             set { description = value; }
         }
 
-        protected string language;
+        private string language;
 
         public virtual string Language
         {

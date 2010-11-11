@@ -38,11 +38,11 @@ Public Class ConstraintBindingsControl
     End Sub
 
     Private Sub Grid_CellClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles Grid.CellClick
-        If e.RowIndex >= 0 And e.ColumnIndex = 0 And Main.Instance.Options.AllowTerminologyLookUp Then
-            Dim form As New Ots.TerminologySelectionForm
+        If e.RowIndex >= 0 And e.ColumnIndex = 0 And Main.Instance.Options.AllowTerminologyLookUp And Not Main.Instance.TerminologyLookup Is Nothing Then
+            Dim form As New TerminologyLookup.TerminologySelectionForm(Main.Instance.TerminologyLookup)
 
             If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
-                form.Url = Main.Instance.Options.TerminologyUrl.ToString
+                Main.Instance.TerminologyLookup.Url = Main.Instance.Options.TerminologyUrl.ToString
             End If
 
             Dim row As DataGridViewRow = Grid.Rows(e.RowIndex)

@@ -1024,9 +1024,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <Content Include="Archetype Editor Licence Agreement.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="ArchetypeEditor.ico" />
     <Content Include="HTML\adlxml-to-html.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1051,9 +1048,9 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="OTS\Ots.csproj">
+    <ProjectReference Include="TerminologyLookup\TerminologyLookup.csproj">
       <Project>{17E21C39-3735-4C5B-A091-3A7EF42C7CBB}</Project>
-      <Name>Ots</Name>
+      <Name>TerminologyLookup</Name>
     </ProjectReference>
     <ProjectReference Include="XMLParser\XMLParser.csproj">
       <Project>{927EB444-A45E-4703-946F-78EB37FAD96E}</Project>

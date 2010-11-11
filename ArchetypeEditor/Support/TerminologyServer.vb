@@ -301,22 +301,22 @@ Public Class TerminologyServer
         Next
     End Sub
 
-    Private Sub AppendOtsTerminologies()
+    Private Sub AppendTerminologiesFromLookup()
         Try
             If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
-                Ots.Ots.Once.Url = Main.Instance.Options.TerminologyUrl.ToString
+                Main.Instance.TerminologyLookup.Url = Main.Instance.Options.TerminologyUrl.ToString
             End If
 
-            For Each t As Ots.Terminology In Ots.Ots.Once.Terminologies
+            For Each t As TerminologyLookup.Terminology In Main.Instance.TerminologyLookup.Terminologies
                 Dim key(0) As Object
                 key(0) = t.TerminologyId
 
                 If TerminologyIdentifiers.Rows.Find(key) Is Nothing Then
-                    TerminologyIdentifiers.Rows.Add(t.TerminologyId, t.TerminologyId, "OTS", DBNull.Value)
+                    TerminologyIdentifiers.Rows.Add(t.TerminologyId, t.TerminologyId, Main.Instance.TerminologyLookup.Name, DBNull.Value)
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Loading OTS terminologies: " + ex.Message)
+            MessageBox.Show("Loading " + Main.Instance.TerminologyLookup.Name + " terminologies: " + ex.Message)
         End Try
     End Sub
 
@@ -358,7 +358,7 @@ Public Class TerminologyServer
         TerminologyIdentifiers.PrimaryKey = primarykeyfields
 
         If Main.Instance.Options.AllowTerminologyLookUp Then
-            AppendOtsTerminologies()
+            AppendTerminologiesFromLookup()
         End If
     End Sub
 

@@ -7,8 +7,8 @@
     <ProjectGuid>{17E21C39-3735-4C5B-A091-3A7EF42C7CBB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ots</RootNamespace>
-    <AssemblyName>Ots</AssemblyName>
+    <RootNamespace>TerminologyLookup</RootNamespace>
+    <AssemblyName>TerminologyLookup</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,7 +37,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ots.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -46,16 +45,12 @@
     </Compile>
     <Compile Include="Terminology.cs" />
     <Compile Include="TerminologyQuery.cs" />
+    <Compile Include="TerminologySelection.cs" />
     <Compile Include="TerminologySelectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TerminologySelectionForm.designer.cs">
       <DependentUpon>TerminologySelectionForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\OtsWebService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -66,48 +61,6 @@
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="http://ots.oceaninformatics.com/OTS/OTSService.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\OtsWebService\</RelPath>
-      <UpdateFromURL>http://ots.oceaninformatics.com/OTS/OTSService.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>Ots_OtsWebService_OTSWebService</CachedSettingsPropName>
-    </WebReferenceUrl>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web References\OtsWebService\OTSService.disco" />
-    <None Include="Web References\OtsWebService\OTSService.wsdl" />
-    <None Include="Web References\OtsWebService\QueryRegistrationView.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\OtsWebService\QueryTreeNode.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\OtsWebService\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\OtsWebService\SourceSetResultSubsetBinding.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\OtsWebService\SourceSetTerminologyBinding.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\OtsWebService\TerminologyMapping.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\OtsWebService\TerminologyProviderDescription.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\OtsWebService\TraversalDirection.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

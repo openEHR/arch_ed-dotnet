@@ -196,13 +196,14 @@ Public Class ConstraintBindingForm
         TerminologyComboBox.DisplayMember = "Text"
         TerminologyComboBox.ValueMember = "Code"
         TerminologyComboBox.SelectedValue = DBNull.Value
+        SubsetButton.Visible = Main.Instance.Options.AllowTerminologyLookUp And Not Main.Instance.TerminologyLookup Is Nothing
     End Sub
 
     Private Sub SubsetButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SubsetButton.Click
-        Dim form As New Ots.TerminologySelectionForm
+        Dim form As New TerminologyLookup.TerminologySelectionForm(Main.Instance.TerminologyLookup)
 
         If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
-            form.Url = Main.Instance.Options.TerminologyUrl.ToString
+            Main.Instance.TerminologyLookup.Url = Main.Instance.Options.TerminologyUrl.ToString
         End If
 
         form.TerminologyId = TerminologyComboBox.Text

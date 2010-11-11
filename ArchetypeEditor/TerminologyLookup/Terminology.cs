@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Ots
+namespace TerminologyLookup
 {
     public class Terminology
     {
@@ -11,7 +11,7 @@ namespace Ots
             terminologyId = id;
         }
 
-        protected readonly string terminologyId;
+        private readonly string terminologyId;
 
         public virtual string TerminologyId
         {
