@@ -72,25 +72,25 @@ BrandingText "Archetype Editor Installer"
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File ..\openehr\bin\*.exe.config
-    File ..\openehr\bin\*.exe
-    File ..\openehr\bin\*.dll
-    File ..\openehr\bin\*.xml
+    File ..\bin\*.exe.config
+    File ..\bin\*.exe
+    File ..\bin\*.dll
+    File ..\bin\*.xml
 
     SetOutPath $INSTDIR\Help
-    File ..\openehr\bin\Help\ArchetypeEditor.chm
+    File ..\bin\Help\ArchetypeEditor.chm
 
     SetOutPath $INSTDIR\HTML
-    File ..\openehr\bin\HTML\adlxml-to-html.xsl
+    File ..\bin\HTML\adlxml-to-html.xsl
 
     SetOutPath $INSTDIR\HTML\Images
-    File ..\openehr\bin\HTML\Images\*
+    File ..\bin\HTML\Images\*
 
     SetOutPath $INSTDIR\PropertyUnits
-    File ..\openehr\bin\PropertyUnits\*
+    File ..\bin\PropertyUnits\*
 
     SetOutPath $INSTDIR\Terminology
-    File ..\openehr\bin\Terminology\*
+    File ..\bin\Terminology\*
 
     SetOverwrite ifnewer
     SetOutPath $INSTDIR\..\Archetypes\cluster
