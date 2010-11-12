@@ -3,21 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace TerminologyLookup
 {
     public abstract class TerminologySelection
     {
-        public abstract string Name
-        {
-            get;
-        }
+        public abstract string Name { get; }
 
-        public abstract string Url
-        {
-            get;
-            set;
-        }
+        public abstract string Url { get; set; }
 
         protected virtual void ClearTerminologies()
         {
@@ -59,12 +53,16 @@ namespace TerminologyLookup
             return terminology.Queries;
         }
 
-        public delegate void OnConceptsLoaded(DataSet concepts);
+        public delegate void OnLoaded(DataSet concepts);
 
-        public delegate void OnError(object sender, AsyncCompletedEventArgs e);
+        public delegate void OnError(Exception ex);
 
-        public abstract void LoadConcepts(OnConceptsLoaded onLoaded, OnError onError, string terminologyId, string queryId, string language);
+        public abstract void LoadConcepts(OnLoaded onLoaded, OnError onError, string terminologyId, string queryId, string language);
 
-        public abstract void LoadChildConcepts(OnConceptsLoaded onLoaded, OnError onError, string terminologyId, string queryId, string language, string parentConcept);
+        public abstract void LoadChildConcepts(OnLoaded onLoaded, OnError onError, string terminologyId, string queryId, string language, string parentConcept);
+
+        public abstract void LoadPreferredTerms(OnLoaded onLoaded, OnError onError, string terminologyId, string language, string[] conceptIds);
+
+        public abstract TermLookupController NewTermLookupController { get; }
     }
 }

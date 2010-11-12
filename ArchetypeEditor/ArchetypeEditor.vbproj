@@ -94,10 +94,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>AdlParser\OceanInformatics.AdlParser.dll</HintPath>
     </Reference>
-    <Reference Include="OTSControls, Version=0.9.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>OTS\OTSControls.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>

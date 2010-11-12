@@ -19,11 +19,11 @@ Option Strict On
 Public Class ArchetypeNodeConstraintControl
     Inherits System.Windows.Forms.UserControl
 
-    '    Private AnyConstraints As AnyConstraintControl
     Private mConstraintControl As ConstraintControl
     Private WithEvents mAnnotationsTable As DataTable
     Private mFileManager As FileManagerLocal
     Private mDataView As DataView
+    Private WithEvents termLookUp As TerminologyLookup.TermLookupController
     Friend WithEvents tabConstraint As System.Windows.Forms.TabControl
     Friend WithEvents tpConstraint As System.Windows.Forms.TabPage
     Friend WithEvents tpConstraintDetails As System.Windows.Forms.TabPage
@@ -31,7 +31,6 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents gbComments As System.Windows.Forms.GroupBox
     Friend WithEvents dgValueSets As System.Windows.Forms.DataGridView
     Friend WithEvents gbValueSets As System.Windows.Forms.GroupBox
-    Friend WithEvents termLookUp As OTSControls.Term
     Friend WithEvents gbNullFlavours As System.Windows.Forms.GroupBox
     Friend WithEvents chkListNull As System.Windows.Forms.CheckedListBox
     Friend WithEvents PanelName As System.Windows.Forms.Panel
@@ -98,6 +97,14 @@ Public Class ArchetypeNodeConstraintControl
         mIsLoading = False
 
         HelpProviderCommonConstraint.HelpNamespace = Main.Instance.Options.HelpLocationPath
+
+        If Not Main.Instance.TerminologyLookup Is Nothing Then
+            termLookUp = Main.Instance.TerminologyLookup.NewTermLookupController
+            gbTerminology.Controls.Add(termLookUp.Control)
+            termLookUp.Control.Dock = System.Windows.Forms.DockStyle.Bottom
+            termLookUp.Control.Size = New System.Drawing.Size(420, 55)
+            termLookUp.Control.Visible = False
+        End If
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -153,7 +160,6 @@ Public Class ArchetypeNodeConstraintControl
         Me.Splitter2 = New System.Windows.Forms.Splitter
         Me.gbComments = New System.Windows.Forms.GroupBox
         Me.txtComments = New System.Windows.Forms.TextBox
-        Me.termLookUp = New OTSControls.Term
         Me.gbNullFlavours = New System.Windows.Forms.GroupBox
         Me.chkListNull = New System.Windows.Forms.CheckedListBox
         Me.gbValueSets = New System.Windows.Forms.GroupBox
@@ -320,7 +326,6 @@ Public Class ArchetypeNodeConstraintControl
         Me.tpConstraintDetails.Controls.Add(Me.SplitContainer1)
         Me.tpConstraintDetails.Controls.Add(Me.Splitter2)
         Me.tpConstraintDetails.Controls.Add(Me.gbComments)
-        Me.tpConstraintDetails.Controls.Add(Me.termLookUp)
         Me.tpConstraintDetails.Controls.Add(Me.gbNullFlavours)
         Me.tpConstraintDetails.Controls.Add(Me.gbValueSets)
         Me.tpConstraintDetails.Location = New System.Drawing.Point(4, 22)
@@ -439,25 +444,6 @@ Public Class ArchetypeNodeConstraintControl
         Me.txtComments.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.txtComments.Size = New System.Drawing.Size(414, 46)
         Me.txtComments.TabIndex = 0
-        '
-        'termLookUp
-        '
-        Me.termLookUp.AccessibleDescription = ""
-        Me.termLookUp.Dock = System.Windows.Forms.DockStyle.Bottom
-        Me.termLookUp.Location = New System.Drawing.Point(3, 243)
-        Me.termLookUp.Margin = New System.Windows.Forms.Padding(0)
-        Me.termLookUp.MinimumSize = New System.Drawing.Size(60, 55)
-        Me.termLookUp.Name = "termLookUp"
-        Me.termLookUp.Size = New System.Drawing.Size(420, 55)
-        Me.termLookUp.TabIndex = 3
-        Me.termLookUp.Tag = ""
-        Me.termLookUp.TermCaption = "SNOMED"
-        Me.termLookUp.TermId = Nothing
-        Me.termLookUp.TerminologyName = "Snomed"
-        Me.termLookUp.TermLanguage = "en-GB"
-        Me.termLookUp.TermName = Nothing
-        Me.termLookUp.TermQueryName = "AllSnomed"
-        Me.termLookUp.Visible = False
         '
         'gbNullFlavours
         '
@@ -601,20 +587,23 @@ Public Class ArchetypeNodeConstraintControl
         Try
             ' hide the label if there is no constraint (for ANY or Cluster) - see below
             labelAny.Visible = False
-            termLookUp.TermName = ""
+
+            If Not termLookUp Is Nothing Then
+                termLookUp.TermName = ""
+            End If
 
             If Not mConstraintControl Is Nothing Then
-                Me.PanelDataConstraint.Controls.Remove(mConstraintControl)
+                PanelDataConstraint.Controls.Remove(mConstraintControl)
                 mConstraintControl = Nothing
             End If
 
             'Hide Occurrences and show null flavours if an Element archetype
             If mFileManager.Archetype.RmEntity = StructureType.Element Then
-                Me.PanelGenericConstraint.Visible = False
-                Me.gbNullFlavours.Visible = True
+                PanelGenericConstraint.Visible = False
+                gbNullFlavours.Visible = True
             Else
-                Me.PanelGenericConstraint.Visible = True
-                Me.gbNullFlavours.Visible = False
+                PanelGenericConstraint.Visible = True
+                gbNullFlavours.Visible = False
             End If
 
             'JAR: 07MAY2007, EDT-34 Slot does not support details fields                        
@@ -731,8 +720,8 @@ Public Class ArchetypeNodeConstraintControl
                 mDataView.Table.Columns(1).DefaultValue = nodeID
                 mDataView.RowFilter = "Path = '" & nodeID & "'"
 
-                If mDataView.Count = 0 Then
-                    termLookUp.Hide()
+                If mDataView.Count = 0 And Not termLookUp Is Nothing Then
+                    termLookUp.Control.Hide()
                 End If
             End If
 
@@ -923,59 +912,43 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub termLookUp_TermChanged(ByVal sender As System.Object, ByVal e As EventArgs) Handles termLookUp.TermChanged
-        If Not dgNodeBindings.CurrentRow Is Nothing AndAlso Not termLookUp.TermId Is Nothing Then
-            Dim s As String = termLookUp.TermName
+        If Not dgNodeBindings.CurrentRow Is Nothing And Not termLookUp Is Nothing Then
             dgNodeBindings.CurrentRow.Cells(2).Value = termLookUp.ConceptId
-            dgNodeBindings.CurrentRow.Cells(2).ToolTipText = s
-            termLookUp.Reset()
-            termLookUp.termTextBox.Text = s
-            termLookUp.termTextBox.SelectAll()
+            dgNodeBindings.CurrentRow.Cells(2).ToolTipText = termLookUp.TermName
         End If
     End Sub
 
-    Private Sub GetPreferredTermsCompleted(ByVal sender As Object, ByVal e As OTSControls.OTSServer.TerminologyGetPreferredTermsCompletedEventArgs)
-        If Not e.Error Is Nothing Then
-            MessageBox.Show(e.Error.Message, "OTS Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        ElseIf Not e.Cancelled And CInt(e.UserState) = asynchronousIdentifier Then
-            Dim ds As Data.DataSet = e.Result
+    Private Sub PreferredTermsLoaded(ByVal dataset As Data.DataSet)
+        Cursor = Cursors.Default
 
-            If ds.Tables(0).Rows.Count > 0 Then
-                termLookUp.TermName = CStr(ds.Tables(0).Rows(0).Item(2))
-            End If
+        If dataset.Tables(0).Rows.Count > 0 And Not termLookUp Is Nothing Then
+            termLookUp.TermName = CStr(dataset.Tables(0).Rows(0).Item(2))
         End If
-
-        asynchronousIdentifier = -1
     End Sub
 
-    Private asynchronousIdentifierGenerator As System.Random = New System.Random()
-    Private asynchronousIdentifier As Integer = -1
-    Private handlerAdded As Boolean = False
+    Private Sub ShowTerminologyLookupException(ByVal ex As Exception)
+        Cursor = Cursors.Default
+
+        If Not Main.Instance.TerminologyLookup Is Nothing Then
+            MessageBox.Show(ex.Message, Main.Instance.TerminologyLookup.Name + " Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+    End Sub
 
     Private Sub UpdateTermLookup(ByVal row As DataGridViewRow)
-        If Not row Is Nothing Then
+        If Not row Is Nothing And Not termLookUp Is Nothing Then
             termLookUp.TerminologyName = TryCast(row.Cells(0).Value, String)
-            termLookUp.TermQueryName = row.Cells(0).ToolTipText
-            termLookUp.TermLanguage = TryCast(row.Cells(0).Tag, String)
+            termLookUp.QueryName = row.Cells(0).ToolTipText
+            termLookUp.Language = TryCast(row.Cells(0).Tag, String)
             termLookUp.TermName = row.Cells(2).ToolTipText
-            termLookUp.TermCaption = termLookUp.TerminologyName + " (" + termLookUp.TermQueryName + ")"
-            termLookUp.Visible = Not String.IsNullOrEmpty(termLookUp.TerminologyName) And Not String.IsNullOrEmpty(termLookUp.TermQueryName) And Not String.IsNullOrEmpty(termLookUp.TermLanguage)
+            termLookUp.Control.Visible = Not String.IsNullOrEmpty(termLookUp.TerminologyName) And Not String.IsNullOrEmpty(termLookUp.QueryName) And Not String.IsNullOrEmpty(termLookUp.Language)
 
-            If termLookUp.Visible And String.IsNullOrEmpty(termLookUp.TermName) And asynchronousIdentifier = -1 Then
-                Cursor = Cursors.WaitCursor
+            If termLookUp.Control.Visible And String.IsNullOrEmpty(termLookUp.TermName) Then
+                Dim conceptId As String = TryCast(row.Cells(2).Value, String)
 
-                Try
-                    If Not handlerAdded Then
-                        AddHandler OTSControls.Term.OtsWebService.TerminologyGetPreferredTermsCompleted, AddressOf GetPreferredTermsCompleted
-                        handlerAdded = True
-                    End If
-
-                    asynchronousIdentifier = asynchronousIdentifierGenerator.Next
-                    OTSControls.Term.OtsWebService.TerminologyGetPreferredTermsAsync(termLookUp.TerminologyName, termLookUp.TermLanguage, New String() {TryCast(row.Cells(2).Value, String)}, asynchronousIdentifier)
-                Catch ex As Exception
-                    MessageBox.Show(ex.Message, "OTS Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Finally
-                    Cursor = Cursors.Default
-                End Try
+                If Not String.IsNullOrEmpty(conceptId) Then
+                    Cursor = Cursors.WaitCursor
+                    Main.Instance.TerminologyLookup.LoadPreferredTerms(AddressOf PreferredTermsLoaded, AddressOf ShowTerminologyLookupException, termLookUp.TerminologyName, termLookUp.Language, New String() {conceptId})
+                End If
             End If
         End If
     End Sub

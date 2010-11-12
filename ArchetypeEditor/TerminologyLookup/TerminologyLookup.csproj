@@ -52,6 +52,7 @@
     <Compile Include="TerminologySelectionForm.designer.cs">
       <DependentUpon>TerminologySelectionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TermLookupController.cs" />
   </ItemGroup>
   <ItemGroup>
     <WebReferences Include="Web References\" />

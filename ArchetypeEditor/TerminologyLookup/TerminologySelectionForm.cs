@@ -115,17 +115,17 @@ namespace TerminologyLookup
             }
             else
             {
-                TerminologySelection.OnConceptsLoaded onConceptsLoaded = delegate(DataSet concepts)
+                TerminologySelection.OnLoaded onConceptsLoaded = delegate(DataSet concepts)
                 {
                     ProgressBar.Visible = false;
                     Grid.DataSource = null;
                     Grid.DataSource = concepts != null && concepts.Tables != null && concepts.Tables.Count > 0 ? concepts.Tables[0] : null;
                 };
 
-                TerminologySelection.OnError onError = delegate(object sender, AsyncCompletedEventArgs e)
+                TerminologySelection.OnError onError = delegate(Exception ex)
                 {
                     ProgressBar.Visible = false;
-                    ShowException(e.Error, Service.Name + " Error");
+                    ShowException(ex);
                 };
 
                 Text = "Concepts for Terminology " + TerminologyId + " (" + SubsetId + ")";
@@ -138,9 +138,9 @@ namespace TerminologyLookup
             }
         }
 
-        protected virtual void ShowException(Exception ex, string caption)
+        protected virtual void ShowException(Exception ex)
         {
-            MessageBox.Show(ex.InnerException != null ? ex.InnerException.Message : ex.Message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(ex.InnerException != null ? ex.InnerException.Message : ex.Message, Service.Name + " Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         protected void Form_Shown(object sender, EventArgs e)
@@ -155,7 +155,7 @@ namespace TerminologyLookup
             }
             catch (Exception ex)
             {
-                ShowException(ex, "Error");
+                ShowException(ex);
             }
         }
 
