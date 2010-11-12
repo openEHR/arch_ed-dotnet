@@ -22,7 +22,14 @@ Public Class Splash
     Public Sub New()
         MyBase.New()
         InitializeComponent()
-        VersionLabel.Text = "Version " + Application.ProductVersion
+
+        Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+        Dim attributes() As System.Reflection.AssemblyInformationalVersionAttribute = assembly.GetCustomAttributes(GetType(System.Reflection.AssemblyInformationalVersionAttribute), False)
+
+        If Not attributes Is Nothing AndAlso attributes.Length > 0 Then
+            VersionLabel.Text = "Version " + attributes(0).InformationalVersion()
+        End If
+
         CopyrightLabel.Text = Options.Copyright
         LogoPictureBox.Image = Main.Instance.Splash
     End Sub
