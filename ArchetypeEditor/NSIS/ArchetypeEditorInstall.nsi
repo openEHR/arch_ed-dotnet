@@ -92,28 +92,6 @@ Section -Main SEC0000
     SetOutPath $INSTDIR\Terminology
     File ..\bin\Terminology\*
 
-    SetOverwrite ifnewer
-    SetOutPath $INSTDIR\..\Archetypes\cluster
-    File /nonfatal archetypes\cluster\*.adl
-    SetOutPath $INSTDIR\..\Archetypes\composition
-    File /nonfatal archetypes\composition\*.adl
-    SetOutPath $INSTDIR\..\Archetypes\element
-    File /nonfatal archetypes\element\*.adl
-    SetOutPath $INSTDIR\..\Archetypes\entry\action
-    File /nonfatal archetypes\entry\action\*.adl
-    SetOutPath $INSTDIR\..\Archetypes\entry\admin_entry
-    File /nonfatal archetypes\entry\admin_entry\*.adl
-    SetOutPath $INSTDIR\..\Archetypes\entry\evaluation
-    File /nonfatal archetypes\entry\evaluation\*.adl
-    SetOutPath $INSTDIR\..\Archetypes\entry\instruction
-    File /nonfatal archetypes\entry\instruction\*.adl
-    SetOutPath $INSTDIR\..\Archetypes\entry\observation
-    File /nonfatal archetypes\entry\observation\*.adl
-    SetOutPath $INSTDIR\..\Archetypes\section
-    File /nonfatal archetypes\section\*.adl
-    SetOutPath $INSTDIR\..\Archetypes\structure
-    File /nonfatal archetypes\structure\*.adl
-
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd
 
