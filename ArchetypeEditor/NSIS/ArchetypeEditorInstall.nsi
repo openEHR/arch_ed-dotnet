@@ -12,7 +12,7 @@
 
 # MUI defines
 !define MUI_ICON "openEHR.ico"
-!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of the openEHR Foundation's $(^Name).\r\n\r\nClick Next to continue."
+!define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation of the $(^Name).\r\n\r\nClick Next to continue."
 !define MUI_LICENSEPAGE_RADIOBUTTONS
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
 !define MUI_STARTMENUPAGE_NODISABLE
