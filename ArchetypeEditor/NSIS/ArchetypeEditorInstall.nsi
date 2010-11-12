@@ -72,8 +72,8 @@ BrandingText "Archetype Editor Installer"
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File ..\openehr\bin\ArchetypeEditor.exe.config
-    File ..\openehr\bin\ArchetypeEditor.exe
+    File ..\openehr\bin\*.exe.config
+    File ..\openehr\bin\*.exe
     File ..\openehr\bin\*.dll
     File ..\openehr\bin\*.xml
 
