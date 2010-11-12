@@ -190,7 +190,6 @@ Public Class Designer
     Friend WithEvents MenuTerminologyAvailable As System.Windows.Forms.MenuItem
     Friend WithEvents lblConcept As System.Windows.Forms.Label
     Friend WithEvents lblPrimaryLanguageText As System.Windows.Forms.Label
-    Friend WithEvents MenuHelpLicence As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpOpenehr As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpStart As System.Windows.Forms.MenuItem
     Friend WithEvents MenuTerminology As System.Windows.Forms.MenuItem
@@ -288,7 +287,6 @@ Public Class Designer
         Me.MenuHelp = New System.Windows.Forms.MenuItem
         Me.MenuHelpStart = New System.Windows.Forms.MenuItem
         Me.MenuHelpReport = New System.Windows.Forms.MenuItem
-        Me.MenuHelpLicence = New System.Windows.Forms.MenuItem
         Me.MenuHelpOpenehr = New System.Windows.Forms.MenuItem
         Me.MenuHelpAbout = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
@@ -862,7 +860,7 @@ Public Class Designer
         'MenuHelp
         '
         Me.MenuHelp.Index = 5
-        Me.MenuHelp.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuHelpStart, Me.MenuHelpReport, Me.MenuHelpLicence, Me.MenuHelpOpenehr, Me.MenuHelpAbout})
+        Me.MenuHelp.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuHelpStart, Me.MenuHelpReport, Me.MenuHelpOpenehr, Me.MenuHelpAbout})
         Me.MenuHelp.Text = "&Help"
         '
         'MenuHelpStart
@@ -875,19 +873,14 @@ Public Class Designer
         Me.MenuHelpReport.Index = 1
         Me.MenuHelpReport.Text = "&Report issue"
         '
-        'MenuHelpLicence
-        '
-        Me.MenuHelpLicence.Index = 2
-        Me.MenuHelpLicence.Text = "&Licence"
-        '
         'MenuHelpOpenehr
         '
-        Me.MenuHelpOpenehr.Index = 3
+        Me.MenuHelpOpenehr.Index = 2
         Me.MenuHelpOpenehr.Text = "About &openEHR"
         '
         'MenuHelpAbout
         '
-        Me.MenuHelpAbout.Index = 4
+        Me.MenuHelpAbout.Index = 3
         Me.MenuHelpAbout.Text = "&About Archetype Editor"
         '
         'PanelMain
@@ -2263,7 +2256,6 @@ Public Class Designer
         Me.MenuHelpReport.Text = Filemanager.GetOpenEhrTerm(597, Me.MenuHelpReport.Text, language)
         Me.MenuHelp.Text = Filemanager.GetOpenEhrTerm(48, Me.MenuHelp.Text, language)
         Me.MenuHelpStart.Text = Filemanager.GetOpenEhrTerm(72, Me.MenuHelpStart.Text, language)
-        Me.MenuHelpLicence.Text = Filemanager.GetOpenEhrTerm(73, Me.MenuHelpLicence.Text, language)
         Me.MenuTerminology.Text = Filemanager.GetOpenEhrTerm(47, Me.MenuTerminology.Text, language)
         Me.MenuHelpOpenehr.Text = Filemanager.GetOpenEhrTerm(74, Me.MenuHelpOpenehr.Text, language)
         Me.MenuHelpAbout.Text = Filemanager.GetOpenEhrTerm(75, Me.MenuHelpAbout.Text, language)
@@ -3571,16 +3563,6 @@ Public Class Designer
             Process.Start(Application.StartupPath & "\Help\ArchetypeEditor.chm")
         Catch
             MessageBox.Show(AE_Constants.Instance.Error_loading & " Help\ArchetypeEditor.chm", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub MenuHelpLicence_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpLicence.Click
-        Dim s As String
-        Try
-            s = "file:///" & Application.StartupPath & "\Archetype Editor Licence Agreement.html"
-            Process.Start(s)
-        Catch
-            MessageBox.Show(AE_Constants.Instance.Error_loading & " Archetype Editor Licence Agreement.html", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
