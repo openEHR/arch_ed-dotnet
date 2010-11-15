@@ -118,13 +118,10 @@ Public Class Options
         End Set
     End Property
 
-    Property HelpLocationPath() As String
+    ReadOnly Property HelpLocationPath() As String
         Get
             Return mHelpPath
         End Get
-        Set(ByVal Value As String)
-            mHelpPath = Value
-        End Set
     End Property
 
     Property XsltScriptPath() As String
@@ -229,7 +226,6 @@ Public Class Options
         frm.XmlRepositoryPathTextBox.Text = mXmlRepositoryPath
         frm.XmlRepositoryAutoSaveCheckBox.Checked = mXmlRepositoryAutoSave
         frm.txtTerminologyURL.Text = mTerminologyUrl.ToString
-        frm.txtHelpFile.Text = mHelpPath
         frm.comboOccurrences.Text = mOccurrencesView
         frm.chkWebSearch.Checked = mAllowWebSearch
         frm.chkTerminology.Checked = mAllowTerminologyLookUp
@@ -274,7 +270,6 @@ Public Class Options
             mRepositoryAutoSave = frm.RepositoryAutoSaveCheckBox.Checked
             mXmlRepositoryPath = frm.XmlRepositoryPathTextBox.Text
             mXmlRepositoryAutoSave = frm.XmlRepositoryAutoSaveCheckBox.Checked
-            mHelpPath = frm.txtHelpFile.Text
 
             mXsltScriptPath = frm.XsltScriptPathTextBox.Text
             mUseXsltForHtml = frm.XsltScriptPathCheckBox.Checked
@@ -359,8 +354,6 @@ Public Class Options
                                     mXmlRepositoryPath = y(1).Trim
                                 Case "XmlRepositoryAutoSave"
                                     mXmlRepositoryAutoSave = Boolean.Parse(y(1).Trim)
-                                Case "HelpPath"
-                                    mHelpPath = y(1).Trim
                                 Case "XsltScriptPath"
                                     mXsltScriptPath = y(1).Trim
                                 Case "UseXsltForHtml"
@@ -446,7 +439,6 @@ Public Class Options
                 StrmWrite.WriteLine("XmlRepositoryAutoSave=" & mXmlRepositoryAutoSave)
                 StrmWrite.WriteLine("SharedRepositoryUrl=" & mArchetypeRepositoryUrl.ToString)
                 StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyUrl.ToString)
-                StrmWrite.WriteLine("HelpPath=" & mHelpPath)
                 StrmWrite.WriteLine("XsltScriptPath=" & mXsltScriptPath)
                 StrmWrite.WriteLine("UseXsltForHtml=" & mUseXsltForHtml.ToString)
                 StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
@@ -518,11 +510,6 @@ Public Class Options
     Public Sub ValidateConfiguration()
         Dim hasErrors As Boolean = False
         Dim message As String = "Errors:"
-
-        If Not File.Exists(mHelpPath) Then
-            hasErrors = True
-            message &= ": Help file does not exist @ " & mHelpPath
-        End If
 
         If Not Directory.Exists(mRepositoryPath) Then
             hasErrors = True

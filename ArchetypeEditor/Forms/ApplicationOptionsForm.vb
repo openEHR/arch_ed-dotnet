@@ -65,10 +65,7 @@ Public Class ApplicationOptionsForm
     Friend WithEvents FileLocationsTabPage As System.Windows.Forms.TabPage
     Friend WithEvents AppearanceTabPage As System.Windows.Forms.TabPage
     Friend WithEvents DefaultsTabPage As System.Windows.Forms.TabPage
-    Friend WithEvents Label4 As System.Windows.Forms.Label
-    Friend WithEvents butHelpBrowse As System.Windows.Forms.Button
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
-    Friend WithEvents txtHelpFile As System.Windows.Forms.TextBox
     Friend WithEvents lblOccurrences As System.Windows.Forms.Label
     Friend WithEvents comboOccurrences As System.Windows.Forms.ComboBox
     Friend WithEvents txtOrganisation As System.Windows.Forms.TextBox
@@ -114,7 +111,6 @@ Public Class ApplicationOptionsForm
         Me.butCancel = New System.Windows.Forms.Button
         Me.butOK = New System.Windows.Forms.Button
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.txtHelpFile = New System.Windows.Forms.TextBox
         Me.txtURL = New System.Windows.Forms.TextBox
         Me.txtTerminologyURL = New System.Windows.Forms.TextBox
         Me.XmlRepositoryPathTextBox = New System.Windows.Forms.TextBox
@@ -156,8 +152,6 @@ Public Class ApplicationOptionsForm
         Me.chkTerminology = New System.Windows.Forms.CheckBox
         Me.lblURL = New System.Windows.Forms.Label
         Me.chkWebSearch = New System.Windows.Forms.CheckBox
-        Me.Label4 = New System.Windows.Forms.Label
-        Me.butHelpBrowse = New System.Windows.Forms.Button
         Me.RepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
         Me.XmlRepositoryAutoSaveCheckBox = New System.Windows.Forms.CheckBox
         Me.HtmlTabPage = New System.Windows.Forms.TabPage
@@ -266,16 +260,6 @@ Public Class ApplicationOptionsForm
         Me.butOK.Size = New System.Drawing.Size(80, 24)
         Me.butOK.TabIndex = 2
         Me.butOK.Text = "OK"
-        '
-        'txtHelpFile
-        '
-        Me.txtHelpFile.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtHelpFile.Location = New System.Drawing.Point(17, 128)
-        Me.txtHelpFile.Name = "txtHelpFile"
-        Me.txtHelpFile.Size = New System.Drawing.Size(490, 20)
-        Me.txtHelpFile.TabIndex = 9
-        Me.ToolTip1.SetToolTip(Me.txtHelpFile, "Leave blank for last directory used")
         '
         'txtURL
         '
@@ -601,15 +585,12 @@ Public Class ApplicationOptionsForm
         Me.FileLocationsTabPage.Controls.Add(Me.XmlRepositoryPathTextBox)
         Me.FileLocationsTabPage.Controls.Add(Me.Label6)
         Me.FileLocationsTabPage.Controls.Add(Me.XmlRepositoryBrowseButton)
-        Me.FileLocationsTabPage.Controls.Add(Me.txtHelpFile)
         Me.FileLocationsTabPage.Controls.Add(Me.lblTerminology)
         Me.FileLocationsTabPage.Controls.Add(Me.txtTerminologyURL)
         Me.FileLocationsTabPage.Controls.Add(Me.chkTerminology)
         Me.FileLocationsTabPage.Controls.Add(Me.lblURL)
         Me.FileLocationsTabPage.Controls.Add(Me.txtURL)
         Me.FileLocationsTabPage.Controls.Add(Me.chkWebSearch)
-        Me.FileLocationsTabPage.Controls.Add(Me.Label4)
-        Me.FileLocationsTabPage.Controls.Add(Me.butHelpBrowse)
         Me.FileLocationsTabPage.Controls.Add(Me.lblArchetypePath)
         Me.FileLocationsTabPage.Controls.Add(Me.RepositoryBrowseButton)
         Me.FileLocationsTabPage.Controls.Add(Me.RepositoryAutoSaveCheckBox)
@@ -700,28 +681,6 @@ Public Class ApplicationOptionsForm
         Me.chkWebSearch.TabIndex = 16
         Me.chkWebSearch.Text = "Enable Internet Search"
         Me.chkWebSearch.UseVisualStyleBackColor = True
-        '
-        'Label4
-        '
-        Me.Label4.AutoSize = True
-        Me.Label4.Location = New System.Drawing.Point(17, 111)
-        Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(48, 13)
-        Me.Label4.TabIndex = 8
-        Me.Label4.Text = "Help file:"
-        Me.Label4.TextAlign = System.Drawing.ContentAlignment.BottomLeft
-        '
-        'butHelpBrowse
-        '
-        Me.butHelpBrowse.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.butHelpBrowse.Image = CType(resources.GetObject("butHelpBrowse.Image"), System.Drawing.Image)
-        Me.butHelpBrowse.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.butHelpBrowse.Location = New System.Drawing.Point(519, 122)
-        Me.butHelpBrowse.Name = "butHelpBrowse"
-        Me.butHelpBrowse.Size = New System.Drawing.Size(96, 32)
-        Me.butHelpBrowse.TabIndex = 10
-        Me.butHelpBrowse.Text = "Browse..."
-        Me.butHelpBrowse.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'RepositoryAutoSaveCheckBox
         '
@@ -989,15 +948,6 @@ Public Class ApplicationOptionsForm
 
         If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             XmlRepositoryPathTextBox.Text = FolderBrowserDialog1.SelectedPath
-        End If
-    End Sub
-
-    Private Sub butHelpBrowse_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butHelpBrowse.Click
-        OpenFileDialog1.InitialDirectory = Application.StartupPath & "\Help"
-        OpenFileDialog1.Filter = "Windows help (chm)|*.chm|HTML|*.htm;*.html"
-
-        If OpenFileDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-            txtHelpFile.Text = OpenFileDialog1.FileName
         End If
     End Sub
 

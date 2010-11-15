@@ -3560,9 +3560,9 @@ Public Class Designer
 
     Private Sub MenuHelpStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpStart.Click
         Try
-            Process.Start(Application.StartupPath & "\Help\ArchetypeEditor.chm")
+            Process.Start(Main.Instance.Options.HelpLocationPath)
         Catch
-            MessageBox.Show(AE_Constants.Instance.Error_loading & " Help\ArchetypeEditor.chm", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(AE_Constants.Instance.Error_loading & " " & Main.Instance.Options.HelpLocationPath, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
