@@ -526,20 +526,27 @@ Public Class Options
 
     Public Sub ValidateConfiguration()
         Dim hasErrors As Boolean = False
-        Dim message As String = "Errors:"
+        Dim message As String = ""
 
-        If Not Directory.Exists(mRepositoryPath) Then
+        If mRepositoryPath = "" And mXmlRepositoryPath = "" Then
             hasErrors = True
-            message &= ": Repository does not exist @ " & mRepositoryPath
-        End If
+            message = "To begin working with " & ProductName & ", please configure your Archetype Repository paths."
+        Else
+            message = "Configuration error:"
 
-        If Not Directory.Exists(mXmlRepositoryPath) Then
-            hasErrors = True
-            message &= ": XML Repository does not exist @ " & mXmlRepositoryPath
+            If Not Directory.Exists(mRepositoryPath) Then
+                hasErrors = True
+                message &= vbCrLf & "Archetype Repository does not exist at '" & mRepositoryPath & "'."
+            End If
+
+            If Not Directory.Exists(mXmlRepositoryPath) Then
+                hasErrors = True
+                message &= vbCrLf & "XML Archetype Repository does not exist at '" & mXmlRepositoryPath & "'."
+            End If
         End If
 
         If hasErrors Then
-            MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             ShowOptionsForm()
         End If
     End Sub
@@ -553,8 +560,8 @@ Public Class Options
     End Sub
 
     Sub New()
-        mRepositoryPath = Path.Combine(AssemblyPath, "..\Archetypes")
-        mXmlRepositoryPath = mRepositoryPath
+        mRepositoryPath = ""
+        mXmlRepositoryPath = ""
         mUserName = ""
         mUserEmail = ""
         mHelpPath = Path.Combine(AssemblyPath, "Help\ArchetypeEditor.chm")
