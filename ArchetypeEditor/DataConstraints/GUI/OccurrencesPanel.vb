@@ -236,6 +236,9 @@ Public Class OccurrencesPanel
                 panelNumeric.Dock = DockStyle.Fill
                 gbOccurrences.Controls.Add(panelNumeric)
             End If
+
+            panelLexical.Visible = Mode = OccurrencesMode.Lexical
+            panelNumeric.Visible = Mode = OccurrencesMode.Numeric
         End Set
     End Property
 
