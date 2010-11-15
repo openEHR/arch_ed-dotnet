@@ -273,18 +273,16 @@ Public Class OccurrencesPanel
             mIsLoading = True
             mIsSingle = Value
             mIncludeOrdered = False
+            Enabled = Not Value
 
             If Value Then
                 numMin.Value = 1
                 numMax.Value = 1
                 cbUnbounded.Checked = False
-                Enabled = False
 
-                If mMode = OccurrencesMode.Lexical Then
+                If Mode = OccurrencesMode.Lexical Then
                     comboOptional.SelectedIndex = 1
                 End If
-            Else
-                Enabled = True
             End If
 
             mIsLoading = False
@@ -301,8 +299,8 @@ Public Class OccurrencesPanel
                 numMin.Value = 1
                 numMin.Minimum = 1
                 numMax.Minimum = 1
-                
-                If mMode = OccurrencesMode.Lexical Then
+
+                If Mode = OccurrencesMode.Lexical Then
                     comboOptional.SelectedIndex = 1
                 End If
             Else
@@ -316,8 +314,9 @@ Public Class OccurrencesPanel
 
     Public WriteOnly Property SetUnitary() As Boolean
         Set(ByVal Value As Boolean)
+            SetMandatory = Value
             mIsLoading = True
-            mIncludeOrdered = False
+            comboRepeat.Enabled = Not Value
 
             If Value Then
                 numMax.Value = 1
@@ -326,8 +325,8 @@ Public Class OccurrencesPanel
                 cbUnbounded.Checked = False
                 cbUnbounded.Visible = False
 
-                If mMode = OccurrencesMode.Lexical Then
-                    comboOptional.SelectedIndex = 1
+                If Mode = OccurrencesMode.Lexical Then
+                    comboRepeat.SelectedIndex = 0
                 End If
             Else
                 numMax.Maximum = 1000
@@ -454,6 +453,9 @@ Public Class OccurrencesPanel
     End Sub
 
     Sub SetGUI()
+        numMin.Show()
+        numMax.Show()
+
         Select Case comboRepeat.SelectedIndex
             Case 0 ' no repeat
                 If comboOptional.SelectedIndex = 0 Then
@@ -472,24 +474,23 @@ Public Class OccurrencesPanel
                     numMax.Hide()
                 ElseIf comboOptional.SelectedIndex = 1 Then
                     lblDash.Text = "..*"
-                    numMin.Show()
                     numMax.Hide()
                 End If
             Case 2 ' repeating, limited
                 If comboOptional.SelectedIndex = 0 Then
                     lblDash.Text = "0.."
                     numMin.Hide()
-                    numMax.Show()
                 ElseIf comboOptional.SelectedIndex = 1 Then
                     lblDash.Text = ".."
-                    numMin.Show()
-                    numMax.Show()
                 End If
 
-                If numMax.Value < 2 Then
+                If numMax.Value < 2 And numMax.Maximum >= 2 Then
                     numMax.Value = 2
                 End If
         End Select
+
+        lblNumMin.Visible = numMin.Visible
+        lblNumMax.Visible = numMax.Visible
     End Sub
 
     Private Sub comboOptional_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboOptional.SelectedIndexChanged

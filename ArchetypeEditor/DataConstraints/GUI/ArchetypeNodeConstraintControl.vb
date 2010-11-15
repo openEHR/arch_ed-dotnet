@@ -606,21 +606,23 @@ Public Class ArchetypeNodeConstraintControl
                 gbNullFlavours.Visible = False
             End If
 
-            'JAR: 07MAY2007, EDT-34 Slot does not support details fields                        
             If an_archetype_node.RM_Class.Type = StructureType.Slot Then
                 If tabConstraint.TabPages.Contains(tpConstraintDetails) Then
                     tabConstraint.TabPages.Remove(tpConstraintDetails)      'Hide details tab if a Slot
                 End If
+
                 'Hide runtime name constraint as not applicable
                 PanelName.Visible = False
             Else
                 If Not tabConstraint.TabPages.Contains(tpConstraintDetails) Then
                     tabConstraint.TabPages.Add(tpConstraintDetails)         'Show details tab if not a slot
                 End If
+
                 'Show Runtime name constraint
                 PanelName.Visible = True
             End If
 
+            mOccurrences.SetUnitary = False
             mOccurrences.SetSingle = (aStructureType = StructureType.Single)
 
             Select Case an_archetype_node.RM_Class.Type
@@ -662,31 +664,23 @@ Public Class ArchetypeNodeConstraintControl
                     ' Ensures the ZOrder leads to no overlap
                     mConstraintControl.Dock = DockStyle.Fill
 
-                    If TypeOf an_archetype_node Is ArchetypeNodeAnonymous Then
-                        mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint)
+                    Dim node As ArchetypeNode = TryCast(an_archetype_node, ArchetypeNodeAnonymous)
 
-                        Dim rm_ct As StructureType = CType(CType(an_archetype_node, ArchetypeNodeAnonymous).RM_Class, RmSlot).SlotConstraint.RM_ClassType
-
-                        If rm_ct = StructureType.Tree Or rm_ct = StructureType.Table Or rm_ct = StructureType.List Or rm_ct = StructureType.Single Or rm_ct = StructureType.Structure Then
-                            If IsMandatory Then
-                                mOccurrences.SetMandatory = True
-                            End If
-
-                            mOccurrences.SetUnitary = True
-                        End If
-                    Else
-                        mConstraintControl.ShowConstraint(IsState, CType(CType(an_archetype_node, ArchetypeSlot).RM_Class, RmSlot).SlotConstraint)
-
-                        Dim rm_ct As StructureType = CType(CType(an_archetype_node, ArchetypeSlot).RM_Class, RmSlot).SlotConstraint.RM_ClassType
-
-                        If rm_ct = StructureType.Tree Or rm_ct = StructureType.Table Or rm_ct = StructureType.List Or rm_ct = StructureType.Single Or rm_ct = StructureType.Structure Then
-                            If IsMandatory Then
-                                mOccurrences.SetMandatory = True
-                            End If
-
-                            mOccurrences.SetUnitary = True
-                        End If
+                    If node Is Nothing Then
+                        node = CType(an_archetype_node, ArchetypeSlot)
                     End If
+
+                    Dim constraint As Constraint_Slot = TryCast(node.RM_Class, RmSlot).SlotConstraint
+                    mConstraintControl.ShowConstraint(IsState, constraint)
+
+                    Select Case constraint.RM_ClassType
+                        Case StructureType.Tree, StructureType.Table, StructureType.List, StructureType.Single, StructureType.Structure
+                            If IsMandatory Then
+                                mOccurrences.SetMandatory = True
+                            End If
+
+                            mOccurrences.SetUnitary = True
+                    End Select
 
                 Case StructureType.Cluster
                     labelAny.Visible = False
