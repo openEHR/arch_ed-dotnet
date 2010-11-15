@@ -651,8 +651,6 @@ Public Class ArchetypeNodeConstraintControl
 
                             mConstraintControl = ConstraintControl.CreateConstraintControl(archetypeElem.Constraint.Type, mFileManager)
                             PanelDataConstraint.Controls.Add(mConstraintControl)
-
-                            ' Ensures the ZOrder leads to no overlap
                             mConstraintControl.Dock = DockStyle.Fill
                             mConstraintControl.ShowElement(IsState, archetypeElem)
                     End Select
@@ -660,8 +658,6 @@ Public Class ArchetypeNodeConstraintControl
                 Case StructureType.Slot
                     mConstraintControl = ConstraintControl.CreateConstraintControl(ConstraintType.Slot, mFileManager)
                     PanelDataConstraint.Controls.Add(mConstraintControl)
-
-                    ' Ensures the ZOrder leads to no overlap
                     mConstraintControl.Dock = DockStyle.Fill
 
                     Dim node As ArchetypeNode = TryCast(an_archetype_node, ArchetypeNodeAnonymous)
@@ -687,7 +683,6 @@ Public Class ArchetypeNodeConstraintControl
                     mConstraintControl = New ClusterControl(a_file_manager)
                     CType(mConstraintControl, ClusterControl).Item = CType(an_archetype_node, ArchetypeComposite)
                     PanelDataConstraint.Controls.Add(mConstraintControl)
-
                     CType(mConstraintControl, ClusterControl).Header = 50
                     mConstraintControl.Dock = DockStyle.Fill
 
@@ -784,11 +779,12 @@ Public Class ArchetypeNodeConstraintControl
             Me.gbTerminology.Visible = True
 
             ' set the description of the term
-            Me.txtTermDescription.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Description
-            Me.txtComments.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Comment
+            txtTermDescription.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Description
+            txtComments.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Comment
 
             mAnnotationsTable.Clear()
-            Me.gbAnnotations.Visible = True
+            gbAnnotations.Visible = True
+
             If CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Count > 0 Then
                 For Each k As String In CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Keys
                     Dim dr As DataRow = mAnnotationsTable.NewRow
@@ -798,16 +794,15 @@ Public Class ArchetypeNodeConstraintControl
                 Next
             End If
 
-            ' set the runtime name text
-            Me.txtRuntimeName.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).RuntimeNameText
+            txtRuntimeName.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).RuntimeNameText
 
             'Disable all but occurrences for References
             If mArchetypeNode.RM_Class.Type = StructureType.Reference Then
-                Me.PanelDataConstraint.Enabled = False
-                Me.PanelAddressable.Enabled = False
+                PanelDataConstraint.Enabled = False
+                PanelAddressable.Enabled = False
             Else
-                Me.PanelDataConstraint.Enabled = True
-                Me.PanelAddressable.Enabled = True
+                PanelDataConstraint.Enabled = True
+                PanelAddressable.Enabled = True
             End If
         End If
     End Sub
