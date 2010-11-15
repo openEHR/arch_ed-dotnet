@@ -224,7 +224,7 @@ Public Class ApplicationOptionsForm
         'lblArchetypePath
         '
         Me.lblArchetypePath.AutoSize = True
-        Me.lblArchetypePath.Location = New System.Drawing.Point(17, 9)
+        Me.lblArchetypePath.Location = New System.Drawing.Point(19, 19)
         Me.lblArchetypePath.Name = "lblArchetypePath"
         Me.lblArchetypePath.Size = New System.Drawing.Size(130, 13)
         Me.lblArchetypePath.TabIndex = 0
@@ -235,7 +235,7 @@ Public Class ApplicationOptionsForm
         '
         Me.RepositoryPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.RepositoryPathTextBox.Location = New System.Drawing.Point(17, 28)
+        Me.RepositoryPathTextBox.Location = New System.Drawing.Point(19, 38)
         Me.RepositoryPathTextBox.Name = "RepositoryPathTextBox"
         Me.RepositoryPathTextBox.Size = New System.Drawing.Size(490, 20)
         Me.RepositoryPathTextBox.TabIndex = 2
@@ -265,27 +265,27 @@ Public Class ApplicationOptionsForm
         '
         Me.txtURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtURL.Location = New System.Drawing.Point(17, 228)
+        Me.txtURL.Location = New System.Drawing.Point(19, 168)
         Me.txtURL.Name = "txtURL"
         Me.txtURL.Size = New System.Drawing.Size(490, 20)
-        Me.txtURL.TabIndex = 17
+        Me.txtURL.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.txtURL, "Http address of repository")
         '
         'txtTerminologyURL
         '
         Me.txtTerminologyURL.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtTerminologyURL.Location = New System.Drawing.Point(17, 178)
+        Me.txtTerminologyURL.Location = New System.Drawing.Point(19, 222)
         Me.txtTerminologyURL.Name = "txtTerminologyURL"
         Me.txtTerminologyURL.Size = New System.Drawing.Size(490, 20)
-        Me.txtTerminologyURL.TabIndex = 13
+        Me.txtTerminologyURL.TabIndex = 14
         Me.ToolTip1.SetToolTip(Me.txtTerminologyURL, "Http address of repository")
         '
         'XmlRepositoryPathTextBox
         '
         Me.XmlRepositoryPathTextBox.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.XmlRepositoryPathTextBox.Location = New System.Drawing.Point(17, 78)
+        Me.XmlRepositoryPathTextBox.Location = New System.Drawing.Point(19, 88)
         Me.XmlRepositoryPathTextBox.Name = "XmlRepositoryPathTextBox"
         Me.XmlRepositoryPathTextBox.Size = New System.Drawing.Size(490, 20)
         Me.XmlRepositoryPathTextBox.TabIndex = 6
@@ -306,7 +306,7 @@ Public Class ApplicationOptionsForm
         Me.RepositoryBrowseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.RepositoryBrowseButton.Image = CType(resources.GetObject("RepositoryBrowseButton.Image"), System.Drawing.Image)
         Me.RepositoryBrowseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.RepositoryBrowseButton.Location = New System.Drawing.Point(517, 21)
+        Me.RepositoryBrowseButton.Location = New System.Drawing.Point(519, 31)
         Me.RepositoryBrowseButton.Name = "RepositoryBrowseButton"
         Me.RepositoryBrowseButton.Size = New System.Drawing.Size(96, 32)
         Me.RepositoryBrowseButton.TabIndex = 3
@@ -606,26 +606,26 @@ Public Class ApplicationOptionsForm
         '
         Me.RestoreDefaultTerminologyServiceUrlButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.RestoreDefaultTerminologyServiceUrlButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.RestoreDefaultTerminologyServiceUrlButton.Location = New System.Drawing.Point(517, 171)
+        Me.RestoreDefaultTerminologyServiceUrlButton.Location = New System.Drawing.Point(519, 215)
         Me.RestoreDefaultTerminologyServiceUrlButton.Name = "RestoreDefaultTerminologyServiceUrlButton"
         Me.RestoreDefaultTerminologyServiceUrlButton.Size = New System.Drawing.Size(96, 32)
-        Me.RestoreDefaultTerminologyServiceUrlButton.TabIndex = 14
+        Me.RestoreDefaultTerminologyServiceUrlButton.TabIndex = 15
         Me.RestoreDefaultTerminologyServiceUrlButton.Text = "Restore Default"
         '
         'RestoreDefaultSharedRepositoryUrlButton
         '
         Me.RestoreDefaultSharedRepositoryUrlButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.RestoreDefaultSharedRepositoryUrlButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.RestoreDefaultSharedRepositoryUrlButton.Location = New System.Drawing.Point(517, 221)
+        Me.RestoreDefaultSharedRepositoryUrlButton.Location = New System.Drawing.Point(519, 161)
         Me.RestoreDefaultSharedRepositoryUrlButton.Name = "RestoreDefaultSharedRepositoryUrlButton"
         Me.RestoreDefaultSharedRepositoryUrlButton.Size = New System.Drawing.Size(96, 32)
-        Me.RestoreDefaultSharedRepositoryUrlButton.TabIndex = 18
+        Me.RestoreDefaultSharedRepositoryUrlButton.TabIndex = 11
         Me.RestoreDefaultSharedRepositoryUrlButton.Text = "Restore Default"
         '
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(17, 59)
+        Me.Label6.Location = New System.Drawing.Point(19, 69)
         Me.Label6.Name = "Label6"
         Me.Label6.Size = New System.Drawing.Size(155, 13)
         Me.Label6.TabIndex = 4
@@ -637,7 +637,7 @@ Public Class ApplicationOptionsForm
         Me.XmlRepositoryBrowseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.XmlRepositoryBrowseButton.Image = CType(resources.GetObject("XmlRepositoryBrowseButton.Image"), System.Drawing.Image)
         Me.XmlRepositoryBrowseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.XmlRepositoryBrowseButton.Location = New System.Drawing.Point(517, 71)
+        Me.XmlRepositoryBrowseButton.Location = New System.Drawing.Point(519, 81)
         Me.XmlRepositoryBrowseButton.Name = "XmlRepositoryBrowseButton"
         Me.XmlRepositoryBrowseButton.Size = New System.Drawing.Size(96, 32)
         Me.XmlRepositoryBrowseButton.TabIndex = 7
@@ -646,46 +646,46 @@ Public Class ApplicationOptionsForm
         '
         'lblTerminology
         '
-        Me.lblTerminology.Location = New System.Drawing.Point(17, 150)
+        Me.lblTerminology.Location = New System.Drawing.Point(19, 194)
         Me.lblTerminology.Name = "lblTerminology"
         Me.lblTerminology.Size = New System.Drawing.Size(218, 24)
-        Me.lblTerminology.TabIndex = 11
+        Me.lblTerminology.TabIndex = 12
         Me.lblTerminology.Text = "URL for Terminology Service:"
         Me.lblTerminology.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'chkTerminology
         '
         Me.chkTerminology.AutoSize = True
-        Me.chkTerminology.Location = New System.Drawing.Point(240, 159)
+        Me.chkTerminology.Location = New System.Drawing.Point(242, 203)
         Me.chkTerminology.Name = "chkTerminology"
         Me.chkTerminology.Size = New System.Drawing.Size(160, 17)
-        Me.chkTerminology.TabIndex = 12
+        Me.chkTerminology.TabIndex = 13
         Me.chkTerminology.Text = "Enable Terminology LookUp"
         Me.chkTerminology.UseVisualStyleBackColor = True
         '
         'lblURL
         '
-        Me.lblURL.Location = New System.Drawing.Point(17, 201)
+        Me.lblURL.Location = New System.Drawing.Point(19, 141)
         Me.lblURL.Name = "lblURL"
         Me.lblURL.Size = New System.Drawing.Size(217, 24)
-        Me.lblURL.TabIndex = 15
+        Me.lblURL.TabIndex = 8
         Me.lblURL.Text = "URL for shared repository:"
         Me.lblURL.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'chkWebSearch
         '
         Me.chkWebSearch.AutoSize = True
-        Me.chkWebSearch.Location = New System.Drawing.Point(239, 209)
+        Me.chkWebSearch.Location = New System.Drawing.Point(241, 149)
         Me.chkWebSearch.Name = "chkWebSearch"
         Me.chkWebSearch.Size = New System.Drawing.Size(135, 17)
-        Me.chkWebSearch.TabIndex = 16
+        Me.chkWebSearch.TabIndex = 9
         Me.chkWebSearch.Text = "Enable Internet Search"
         Me.chkWebSearch.UseVisualStyleBackColor = True
         '
         'RepositoryAutoSaveCheckBox
         '
         Me.RepositoryAutoSaveCheckBox.AutoSize = True
-        Me.RepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 9)
+        Me.RepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(241, 19)
         Me.RepositoryAutoSaveCheckBox.Name = "RepositoryAutoSaveCheckBox"
         Me.RepositoryAutoSaveCheckBox.Size = New System.Drawing.Size(197, 17)
         Me.RepositoryAutoSaveCheckBox.TabIndex = 1
@@ -695,7 +695,7 @@ Public Class ApplicationOptionsForm
         'XmlRepositoryAutoSaveCheckBox
         '
         Me.XmlRepositoryAutoSaveCheckBox.AutoSize = True
-        Me.XmlRepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(239, 59)
+        Me.XmlRepositoryAutoSaveCheckBox.Location = New System.Drawing.Point(241, 69)
         Me.XmlRepositoryAutoSaveCheckBox.Name = "XmlRepositoryAutoSaveCheckBox"
         Me.XmlRepositoryAutoSaveCheckBox.Size = New System.Drawing.Size(196, 17)
         Me.XmlRepositoryAutoSaveCheckBox.TabIndex = 5

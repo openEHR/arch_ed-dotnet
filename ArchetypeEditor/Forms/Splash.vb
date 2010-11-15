@@ -30,7 +30,7 @@ Public Class Splash
             VersionLabel.Text = "Version " + attributes(0).InformationalVersion()
         End If
 
-        CopyrightLabel.Text = Options.Copyright
+        CopyrightLabel.Text = Main.Instance.Options.Copyright
         LogoPictureBox.Image = Main.Instance.Splash
     End Sub
 

@@ -19,14 +19,10 @@ Option Strict On
 Public Class Main
 
     ' ArchetypeEditor Singleton
-    Private Shared mInstance As Main
+    Protected Shared mInstance As Main
 
     Public Shared ReadOnly Property Instance() As Main
         Get
-            If mInstance Is Nothing Then
-                mInstance = New Main
-            End If
-
             Return mInstance
         End Get
     End Property
@@ -34,6 +30,7 @@ Public Class Main
     Public Shared ISO_TimeUnits As New TimeUnits
 
     Shared Sub Main(ByVal args() As String)
+        mInstance = New Main
         Instance.Logo = My.Resources.OpenEHR
         Instance.Splash = My.Resources.OpenEHRSplash
         Instance.Run(args)

@@ -352,7 +352,7 @@ Public Class TerminologyServer
     End Sub
 
     Sub New()
-        InitialiseTerminology(Options.AssemblyPath & "\terminology\terminology.xml", Options.AssemblyPath & "\terminology\terminology.xsd")
+        InitialiseTerminology(Main.Instance.Options.AssemblyPath & "\terminology\terminology.xml", Main.Instance.Options.AssemblyPath & "\terminology\terminology.xsd")
 
         ' set the VSB column as a primary field for searching
         Dim primarykeyfields(0) As DataColumn

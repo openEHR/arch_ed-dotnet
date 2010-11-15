@@ -24,8 +24,8 @@ Public Class Options
     Private defaultArchetypeRepositoryUrl As String = "http://openehr.org/knowledge/services/ArchetypeFinderBean?wsdl"
     Private mArchetypeRepositoryUrl As New Uri(defaultArchetypeRepositoryUrl)
     Private mAllowTerminologyLookUp As Boolean
-    Private defaultTerminologyUrl As String = "http://ots.oceaninformatics.com/OTS/OTSService.asmx"
-    Private mTerminologyUrl As New Uri(defaultTerminologyUrl)
+    Private mDefaultTerminologyUrl As String
+    Private mTerminologyUrl As Uri
     Private mColors() As Color = {Color.Yellow, Color.LightGreen, Color.LightSkyBlue, Color.Tomato, Color.Red, Color.Silver, Color.LightGray, Color.Orange}
 
     Property UserName() As String
@@ -97,6 +97,15 @@ Public Class Options
         End Get
         Set(ByVal value As Uri)
             mArchetypeRepositoryUrl = value
+        End Set
+    End Property
+
+    Property DefaultTerminologyUrl() As String
+        Get
+            Return mDefaultTerminologyUrl
+        End Get
+        Set(ByVal value As String)
+            mDefaultTerminologyUrl = value
         End Set
     End Property
 
@@ -225,7 +234,16 @@ Public Class Options
         frm.RepositoryAutoSaveCheckBox.Checked = mRepositoryAutoSave
         frm.XmlRepositoryPathTextBox.Text = mXmlRepositoryPath
         frm.XmlRepositoryAutoSaveCheckBox.Checked = mXmlRepositoryAutoSave
-        frm.txtTerminologyURL.Text = mTerminologyUrl.ToString
+
+        frm.txtTerminologyURL.Visible = Not TerminologyUrl Is Nothing
+        frm.lblTerminology.Visible = Not TerminologyUrl Is Nothing
+        frm.chkTerminology.Visible = Not TerminologyUrl Is Nothing
+        frm.RestoreDefaultTerminologyServiceUrlButton.Visible = Not TerminologyUrl Is Nothing
+
+        If Not TerminologyUrl Is Nothing Then
+            frm.txtTerminologyURL.Text = mTerminologyUrl.ToString
+        End If
+
         frm.comboOccurrences.Text = mOccurrencesView
         frm.chkWebSearch.Checked = mAllowWebSearch
         frm.chkTerminology.Checked = mAllowTerminologyLookUp
@@ -282,7 +300,7 @@ Public Class Options
 
             If Uri.IsWellFormedUriString(frm.txtTerminologyURL.Text, UriKind.Absolute) Then
                 mTerminologyUrl = New Uri(frm.txtTerminologyURL.Text)
-            Else
+            ElseIf frm.txtTerminologyURL.Visible Then
                 MessageBox.Show("Invalid URL for Terminology Service: " & frm.txtTerminologyURL.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End If
 
@@ -438,7 +456,11 @@ Public Class Options
                 StrmWrite.WriteLine("XmlRepositoryPath=" & mXmlRepositoryPath)
                 StrmWrite.WriteLine("XmlRepositoryAutoSave=" & mXmlRepositoryAutoSave)
                 StrmWrite.WriteLine("SharedRepositoryUrl=" & mArchetypeRepositoryUrl.ToString)
-                StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyUrl.ToString)
+
+                If Not mTerminologyUrl Is Nothing Then
+                    StrmWrite.WriteLine("TerminologyUrl=" & mTerminologyUrl.ToString)
+                End If
+
                 StrmWrite.WriteLine("XsltScriptPath=" & mXsltScriptPath)
                 StrmWrite.WriteLine("UseXsltForHtml=" & mUseXsltForHtml.ToString)
                 StrmWrite.WriteLine("ShowTermsInHtml=" & mShowTermsInHtml.ToString)
@@ -552,7 +574,7 @@ Public Class Options
     End Sub
 
     Private Sub RestoreDefaultTerminologyServiceUrlButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        CType(CType(sender, Control).FindForm(), ApplicationOptionsForm).txtTerminologyURL.Text = defaultTerminologyUrl
+        CType(CType(sender, Control).FindForm(), ApplicationOptionsForm).txtTerminologyURL.Text = DefaultTerminologyUrl
     End Sub
 
     Private Sub RestoreDefaultSharedRepositoryUrlButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -577,7 +599,7 @@ Public Class Options
         LoadConfiguration()
     End Sub
 
-    Public Shared ReadOnly Property AssemblyPath() As String
+    Public ReadOnly Property AssemblyPath() As String
         Get
             Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
             Dim basePath As String = System.IO.Path.GetDirectoryName(assembly.CodeBase)
@@ -590,7 +612,7 @@ Public Class Options
         End Get
     End Property
 
-    Public Shared ReadOnly Property ProductName() As String
+    Public ReadOnly Property ProductName() As String
         Get
             Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
             Dim attributes() As System.Reflection.AssemblyProductAttribute
@@ -604,7 +626,7 @@ Public Class Options
         End Get
     End Property
 
-    Public Shared ReadOnly Property Copyright() As String
+    Public ReadOnly Property Copyright() As String
         Get
             Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
             Dim attributes() As System.Reflection.AssemblyCopyrightAttribute
@@ -618,7 +640,7 @@ Public Class Options
         End Get
     End Property
 
-    Public Shared ReadOnly Property AssemblyTitle() As String
+    Public ReadOnly Property AssemblyTitle() As String
         Get
             Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
             Dim attributes() As System.Reflection.AssemblyTitleAttribute
