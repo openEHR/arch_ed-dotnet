@@ -146,7 +146,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
             TabConstraints.TabPages.Add(tp)
             TabConstraints.SelectedTab = tp
 
-            If c.Type <> ConstraintType.Any And c.Type <> ConstraintType.URI Then
+            If c.Type <> ConstraintType.Any Then
                 Dim cc As ConstraintControl = ConstraintControl.CreateConstraintControl(c.Type, mFileManager)
                 tp.Controls.Add(cc)
                 cc.ShowConstraint(mIsState, c)
