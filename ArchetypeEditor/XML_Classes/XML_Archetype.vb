@@ -2592,7 +2592,7 @@ Namespace ArchetypeEditor.XML_Classes
                                             Case Else
                                                 Debug.Assert(False) '?OBSOLETE
                                                 Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                                                objNode = mAomFactory.MakeComplexObject(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_rm.Type)), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                                objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                                                 BuildStructure(a_rm, objNode)
                                         End Select
                                     Next
