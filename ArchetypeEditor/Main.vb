@@ -40,7 +40,7 @@ Public Class Main
         ' Enable XP visual style in order to show groups in the web lookup form.
         ' IMPORTANT! This must be the first call in the application; otherwise the icons do not display on the main toolbar!
         Application.EnableVisualStyles()
-
+        Options.LoadConfiguration()
         ShowSplash()
 
         'default language as two letter code e.g. "en"
@@ -65,7 +65,7 @@ Public Class Main
         End If
 
         'Pickup any Autosave files that are lying around.
-        Dim files As System.IO.FileInfo() = New System.IO.DirectoryInfo(Instance.Options.ApplicationDataDirectory).GetFiles("Recovery-*.*")
+        Dim files As System.IO.FileInfo() = New System.IO.DirectoryInfo(Options.ApplicationDataDirectory).GetFiles("Recovery-*.*")
 
         If Not files Is Nothing AndAlso files.Length > 0 Then
             Dim recoverFrm As New Recovery

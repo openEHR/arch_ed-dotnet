@@ -596,7 +596,6 @@ Public Class Options
         mDefaultParser = "adl"
         mAllowWebSearch = False
         mAllowTerminologyLookUp = False
-        LoadConfiguration()
     End Sub
 
     Public ReadOnly Property AssemblyPath() As String
