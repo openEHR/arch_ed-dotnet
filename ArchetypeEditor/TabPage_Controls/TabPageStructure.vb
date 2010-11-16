@@ -823,87 +823,70 @@ Public Class TabPageStructure
     End Sub
 
     Private Sub comboStructure_selectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboStructure.SelectedIndexChanged
-        Dim entry_structure As EntryStructure ' User control to provide the list or whatever
-        Dim chosen_structure As StructureType
-        Dim switchOffPanelDetails As Boolean = False
-
-        Debug.Assert(mIsCluster = False)
-
+        Debug.Assert(Not mIsCluster)
         Debug.Assert(Not mValidStructureClasses Is Nothing)  ' This should be set to populate the list
 
-        If comboStructure.SelectedIndex = -1 Then Return ' nothing selected
+        If comboStructure.SelectedIndex >= 0 Then
+            Dim chosenStructure As StructureType = mValidStructureClasses(comboStructure.SelectedIndex)
+            ReferenceModel.SetStructureClass(chosenStructure)
 
-        chosen_structure = mValidStructureClasses(comboStructure.SelectedIndex)
-        ReferenceModel.SetStructureClass(chosen_structure)
-
-        If mIsEmbedded Then
-            If mIsLoading Then
-                If mEmbeddedSlot Is Nothing Then
-                    mEmbeddedSlot = New ArchetypeNodeAnonymous(chosen_structure)
+            If mIsEmbedded Then
+                If mIsLoading Then
+                    If mEmbeddedSlot Is Nothing Then
+                        mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
+                    End If
+                Else
+                    ' have to have a new slot if change the structure
+                    mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
                 End If
+
+                panelStructure.Show()
+                panelDisplay.Hide()
+                ShowDetailPanel(mEmbeddedSlot, New EventArgs)
             Else
-                ' have to have a new slot if change the structure
-                mEmbeddedSlot = New ArchetypeNodeAnonymous(chosen_structure)
+                panelStructure.SuspendLayout()
+                panelEntry.SuspendLayout()
+                panelDisplay.SuspendLayout()
 
-            End If
-            panelStructure.Show()
-            panelDisplay.Hide()
-            ShowDetailPanel(mEmbeddedSlot, New EventArgs)
-        Else
+                Dim entryStructure As EntryStructure = Nothing ' User control to provide the list or whatever
 
-            panelStructure.SuspendLayout()
-            panelEntry.SuspendLayout()
-            panelDisplay.SuspendLayout()
+                Select Case chosenStructure
+                    Case StructureType.Single
+                        entryStructure = New SimpleStructure(mFileManager)
+                    Case StructureType.List
+                        entryStructure = New ListStructure(mFileManager)
+                    Case StructureType.Tree
+                        entryStructure = New TreeStructure(mFileManager)
+                    Case StructureType.Table
+                        entryStructure = New TableStructure(mFileManager)
+                    Case Else
+                        Debug.Assert(False)
+                End Select
 
-            ' ensure the structure component is visible
-            panelDisplay.Show()
+                If Not entryStructure Is Nothing Then
+                    If mArchetypeControl Is Nothing Then
+                        ArchetypeDisplay = entryStructure
+                    ElseIf entryStructure.StructureType <> mArchetypeControl.StructureType Then
+                        entryStructure.Archetype = mArchetypeControl.Archetype
+                        ArchetypeDisplay = entryStructure
+                    End If
 
-            Select Case chosen_structure
-                Case StructureType.Single
-                    entry_structure = New SimpleStructure(mFileManager) ' inherits from EntryStructure
-                Case StructureType.List
-                    entry_structure = New ListStructure(mFileManager) ' inherits from EntryStructure
-                Case StructureType.Tree
-                    entry_structure = New TreeStructure(mFileManager) ' inherits from EntryStructure
-                Case StructureType.Table
-                    entry_structure = New TableStructure(mFileManager) ' inherits from EntryStructure
-                Case Else
-                    Debug.Assert(False)
-                    Return
-            End Select
-
-            If mArchetypeControl Is Nothing Then
-                ArchetypeDisplay = entry_structure
-
-                'new structure so hide details
-                'JAR: 17APR07, EDT-22 Adding constraint details when no object exists raises exception
-                'Me.PanelDetails.Visible = False 'This is switched back on when PanelStructure.Visible = True
-                switchOffPanelDetails = True
-
-            Else
-                'Changing structures
-                If entry_structure.StructureType <> mArchetypeControl.StructureType Then
-                    entry_structure.Archetype = mArchetypeControl.Archetype
-                    ArchetypeDisplay = entry_structure
+                    panelDisplay.Show()
+                    panelStructure.Show()
+                    panelEntry.Hide()
+                    PanelDetails.Visible = Not entryStructure.Archetype Is Nothing AndAlso entryStructure.Archetype.Children.Count > 0
                 End If
+
+                panelStructure.ResumeLayout(True)
+                panelEntry.ResumeLayout(True)
+                panelDisplay.ResumeLayout(True)
             End If
 
-            'pane visibility
-            panelStructure.Show()
-            panelEntry.Hide()
-            PanelDetails.Visible = Not switchOffPanelDetails 'JAR: 17APR07, EDT-22 Adding constraint details when no object exists raises exception
-
-            panelStructure.ResumeLayout(True)
-            panelEntry.ResumeLayout(True)
-            panelDisplay.ResumeLayout(True)
+            If Not mIsLoading Then
+                mFileManager.FileEdited = True
+                RaiseEvent UpdateStructure(Me, chosenStructure)
+            End If
         End If
-
-        If Not mIsLoading Then
-            mFileManager.FileEdited = True
-            'SRH: Jan 11 2009 - EDT-486 - update structure
-            RaiseEvent UpdateStructure(Me, chosen_structure)
-        End If
-
     End Sub
 
 #End Region
