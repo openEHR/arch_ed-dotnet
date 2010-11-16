@@ -1554,11 +1554,18 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub ListEvents_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles ListEvents.KeyDown
-        If Not current_item Is Nothing AndAlso e.KeyCode = Keys.Delete Then
-            If MessageBox.Show(AE_Constants.Instance.Remove + " " + current_item.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
-                current_item.Remove()
-            End If
-        End If
+        Select Case e.KeyCode
+            Case Keys.F2
+                If ListEvents.SelectedItems.Count > 0 Then
+                    ListEvents.SelectedItems(0).BeginEdit()
+                End If
+            Case Keys.Delete
+                If Not current_item Is Nothing Then
+                    If MessageBox.Show(AE_Constants.Instance.Remove + " " + current_item.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+                        current_item.Remove()
+                    End If
+                End If
+        End Select
     End Sub
 
     Private Sub SpecialiseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpecialiseToolStripMenuItem.Click
