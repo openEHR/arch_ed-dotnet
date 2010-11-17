@@ -1882,17 +1882,14 @@ Namespace ArchetypeEditor.ADL_Classes
                         Case StructureType.ADMIN_ENTRY
                             BuildEntryAttributes(CType(cDefinition, RmEntry), adlArchetype.definition)
                             an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String("data"))
+                            Dim items() As RmStructure = CType(cDefinition, ArchetypeDefinition).Data.items
 
-                            Try
-                                Dim rm_struct As RmStructureCompound = CType(CType(cDefinition, ArchetypeDefinition).Data.items(0), RmStructureCompound).Children.items(0)
-
+                            If items.Length > 0 Then
+                                Dim rm_struct As RmStructureCompound = CType(items(0), RmStructureCompound).Children.items(0)
                                 Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
                                 objNode = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(rm_struct.Type)), Eiffel.String(rm_struct.NodeId))
                                 BuildStructure(rm_struct, objNode)
-                            Catch
-                                'ToDo - process error
-                                Debug.Assert(False, "Error building structure")
-                            End Try
+                            End If
 
                         Case StructureType.OBSERVATION
                             BuildEntryAttributes(CType(cDefinition, RmEntry), adlArchetype.definition)
