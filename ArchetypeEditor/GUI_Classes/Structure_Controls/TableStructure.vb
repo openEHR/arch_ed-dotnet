@@ -230,22 +230,6 @@ Public Class TableStructure
         Next
     End Sub
 
-    'Public Overrides ReadOnly Property Elements() As ArchetypeElement()
-    '    Get
-    '        Dim i As Integer
-    '        i = mKeyColumns.Count
-    '        If i > 0 Then
-    '            Dim a_e(i) As ArchetypeElement
-    '            For i = 1 To mKeyColumns.Count
-    '                a_e(i) = CType(mKeyColumns.Item(i), ArchetypeElement)
-    '            Next
-    '            Return a_e
-    '        Else
-    '            Return Nothing
-    '        End If
-    '    End Get
-    'End Property
-
     Private Sub TableStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' set the variable in the base class
         mControl = dgGrid
@@ -355,13 +339,8 @@ Public Class TableStructure
         End Set
     End Property
 
-    'JAR: 29MAY07, EDT-21 To detect whether items have been added to table
     Public Overrides Function HasData() As Boolean
-        If Not mArchetypeTable Is Nothing Then
-            Return (mArchetypeTable.Rows.Count > 0)
-        Else
-            Return False
-        End If
+        Return Not mArchetypeTable Is Nothing AndAlso mArchetypeTable.Rows.Count > 0
     End Function
 
     Sub AddNodesToTable(ByVal ch As Children)

@@ -577,11 +577,7 @@ Public Class EntryStructure
             menuChangeStructure.Visible = Value
         End Set
     End Property
-    Public Overridable ReadOnly Property Elements() As ArchetypeElement()
-        Get
-            Throw New NotImplementedException("Subclass must override this property")
-        End Get
-    End Property
+
     Private Sub menuChangeStructure_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuChangeStructure.Click
         NotifyChangeStructure(Me, e)
     End Sub

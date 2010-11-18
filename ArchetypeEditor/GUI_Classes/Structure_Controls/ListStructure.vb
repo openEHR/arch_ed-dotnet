@@ -204,23 +204,6 @@ Public Class ListStructure
         End Get
     End Property
 
-    'Public Overrides ReadOnly Property Elements() As ArchetypeElement()
-    '    Get
-    '        Dim i As Integer
-    '        i = lvList.Items.Count
-    '        If i > 0 Then
-    '            Dim a_e(i) As ArchetypeElement
-    '            For i = 0 To lvList.Items.Count - 1
-
-    '                a_e(i) = CType(lvList.Items(i), ArchetypeListViewItem).Item
-    '            Next
-    '            Return a_e
-    '        Else
-    '            Return Nothing
-    '        End If
-    '    End Get
-    'End Property
-
     Public Overrides Property Archetype() As RmStructureCompound
         Get
             Dim lvItem As ArchetypeListViewItem

@@ -187,18 +187,6 @@ Public Class SimpleStructure
         End Set
     End Property
 
-    Public Overrides ReadOnly Property Elements() As ArchetypeElement()
-        Get
-            If mElement Is Nothing Then
-                Return Nothing
-            Else
-                Dim a_e(0) As ArchetypeElement
-                a_e(0) = mElement
-                Return a_e
-            End If
-        End Get
-    End Property
-
     Public Overrides Function HasData() As Boolean
         Return Not mElement Is Nothing
     End Function

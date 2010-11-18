@@ -807,48 +807,6 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Sub
 
-    Private Sub txtTermDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTermDescription.TextChanged
-        If Not mIsLoading Then
-            CType(mArchetypeNode, ArchetypeNodeAbstract).Description = Me.txtTermDescription.Text
-            mFileManager.FileEdited = True
-        End If
-    End Sub
-
-    Private Sub butSetRuntimeName_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butSetRuntimeName.Click
-        Dim frm As New ConstraintForm
-        Dim has_constraint As Boolean
-        Dim t As Constraint_Text = Nothing
-        has_constraint = mArchetypeNode.RM_Class.HasNameConstraint
-
-        If has_constraint Then
-            t = CType(mArchetypeNode.RM_Class.NameConstraint.Copy, Constraint_Text)
-        End If
-
-        frm.ShowConstraint(False, mArchetypeNode.RM_Class.NameConstraint, mFileManager)
-
-        Select Case frm.ShowDialog(Me)
-            Case Windows.Forms.DialogResult.OK
-                'no action
-                mFileManager.FileEdited = True
-            Case Windows.Forms.DialogResult.Cancel
-                ' put it back to null if it was before
-                If Not has_constraint Then
-                    mArchetypeNode.RM_Class.HasNameConstraint = False
-                Else
-                    mArchetypeNode.RM_Class.NameConstraint = t
-                End If
-            Case Windows.Forms.DialogResult.Ignore
-                mArchetypeNode.RM_Class.HasNameConstraint = False
-                mFileManager.FileEdited = True
-        End Select
-
-        If mArchetypeNode.RM_Class.HasNameConstraint Then
-            Me.txtRuntimeName.Text = mArchetypeNode.RM_Class.NameConstraint.ToString
-        Else
-            Me.txtRuntimeName.Text = ""
-        End If
-    End Sub
-
     Private Sub txtTermDescription_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtTermDescription.KeyPress
         ' work around as acceptsreturn = false does not deal with stop Enter unless there is a AcceptButton
         If e.KeyChar = Chr(13) Then
@@ -856,10 +814,53 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Sub
 
-    Private Sub txtComments_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtComments.TextChanged
-        If Not mIsLoading Then
-            CType(mArchetypeNode, ArchetypeNodeAbstract).Comment = Me.txtComments.Text
+    Private Sub txtTermDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtTermDescription.TextChanged
+        If Not mIsLoading And Not mArchetypeNode Is Nothing Then
+            CType(mArchetypeNode, ArchetypeNodeAbstract).Description = txtTermDescription.Text
             mFileManager.FileEdited = True
+        End If
+    End Sub
+
+    Private Sub txtComments_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtComments.TextChanged
+        If Not mIsLoading And Not mArchetypeNode Is Nothing Then
+            CType(mArchetypeNode, ArchetypeNodeAbstract).Comment = txtComments.Text
+            mFileManager.FileEdited = True
+        End If
+    End Sub
+
+    Private Sub butSetRuntimeName_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butSetRuntimeName.Click
+        If Not mArchetypeNode Is Nothing Then
+            Dim t As Constraint_Text = Nothing
+            Dim hasConstraint As Boolean = mArchetypeNode.RM_Class.HasNameConstraint
+
+            If hasConstraint Then
+                t = CType(mArchetypeNode.RM_Class.NameConstraint.Copy, Constraint_Text)
+            End If
+
+            Dim frm As New ConstraintForm
+            frm.ShowConstraint(False, mArchetypeNode.RM_Class.NameConstraint, mFileManager)
+
+            Select Case frm.ShowDialog(Me)
+                Case Windows.Forms.DialogResult.OK
+                    'no action
+                    mFileManager.FileEdited = True
+                Case Windows.Forms.DialogResult.Cancel
+                    ' put it back to null if it was before
+                    If Not hasConstraint Then
+                        mArchetypeNode.RM_Class.HasNameConstraint = False
+                    Else
+                        mArchetypeNode.RM_Class.NameConstraint = t
+                    End If
+                Case Windows.Forms.DialogResult.Ignore
+                    mArchetypeNode.RM_Class.HasNameConstraint = False
+                    mFileManager.FileEdited = True
+            End Select
+
+            If mArchetypeNode.RM_Class.HasNameConstraint Then
+                txtRuntimeName.Text = mArchetypeNode.RM_Class.NameConstraint.ToString
+            Else
+                txtRuntimeName.Text = ""
+            End If
         End If
     End Sub
 

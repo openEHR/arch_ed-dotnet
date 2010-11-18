@@ -209,27 +209,6 @@ Public Class TreeStructure
 
 #End Region
 
-    Public Overrides ReadOnly Property Elements() As ArchetypeElement()
-        Get
-            Dim i As Integer
-            i = tvTree.GetNodeCount(False)
-            If i > 0 Then
-                Dim an_arraylist As New ArrayList
-
-                AddToElementList(tvTree.Nodes, an_arraylist)
-
-                Dim a_e(an_arraylist.Count - 1) As ArchetypeElement
-
-                For i = 0 To an_arraylist.Count - 1
-                    a_e(i) = CType(an_arraylist.Item(i), ArchetypeElement)
-                Next
-                Return a_e
-            Else
-                Return Nothing
-            End If
-        End Get
-    End Property
-
     Public Property IsCluster() As Boolean
         Get
             Return mIsCluster
@@ -849,7 +828,7 @@ Public Class TreeStructure
     End Function
 
     Public Overrides Function HasData() As Boolean
-        Return Me.tvTree.Nodes.Count > 0
+        Return tvTree.Nodes.Count > 0
     End Function
 
     Private Function TreeToRichText(ByVal TreeNodes As TreeNodeCollection, ByVal level As Integer, ByVal new_line As String) As String
