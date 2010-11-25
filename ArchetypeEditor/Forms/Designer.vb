@@ -1798,6 +1798,7 @@ Public Class Designer
         Me.HelpProviderDesigner.SetHelpKeyword(Me, "HowTo/archetype_editor.htm")
         Me.HelpProviderDesigner.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.Menu = Me.MainMenu
         Me.Name = "Designer"
         Me.HelpProviderDesigner.SetShowHelp(Me, True)
@@ -5076,6 +5077,21 @@ Public Class Designer
 
     Private Sub SubDataStructureChanged(ByVal sender As Object, ByVal newStructure As StructureType) Handles mTabPageDataStructure.UpdateStructure
         tpDataStructure.Title = Filemanager.GetOpenEhrTerm(CInt(newStructure), newStructure.ToString)
+    End Sub
+
+    Private Sub Designer_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+        If e.KeyCode = Keys.F6 And e.Control Then
+            Dim i As Integer = TabMain.SelectedIndex
+
+            If e.Shift Then
+                i = i - 1 + TabMain.TabPages.Count
+            Else
+                i = i + 1
+            End If
+
+            TabMain.SelectedIndex = i Mod TabMain.TabPages.Count
+            e.SuppressKeyPress = True
+        End If
     End Sub
 
 End Class
