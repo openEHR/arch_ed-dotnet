@@ -66,11 +66,22 @@ Public Class Designer
     Friend WithEvents gbSpecialisation As System.Windows.Forms.GroupBox
     Friend WithEvents tvSpecialisation As System.Windows.Forms.TreeView
     Friend WithEvents butLinks As System.Windows.Forms.Button
-    Friend WithEvents ToolsMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents ToolsMenu As System.Windows.Forms.MenuItem
     Friend WithEvents ToolsOptionsMenuItem As System.Windows.Forms.MenuItem
     Friend WithEvents ArchetypeNameContextMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents CopyToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MenuLanguageToggle As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayMenu As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayRtfMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayAdlMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayXmlMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayHtmlMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplaySeparatorMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayFindMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayFindNextMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayPrintMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayFindPreviousMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayFindPreviousContextMenuItem As System.Windows.Forms.MenuItem
     Friend WithEvents mTabPageDescription As TabPageDescription
 
 #Region " Windows Form Designer generated code "
@@ -118,7 +129,7 @@ Public Class Designer
     Friend WithEvents lblPrimaryLanguage As System.Windows.Forms.Label
     Friend WithEvents MenuFileOpen As System.Windows.Forms.MenuItem
     Friend WithEvents MenuFileSave As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuFile As System.Windows.Forms.MenuItem
+    Friend WithEvents FileMenu As System.Windows.Forms.MenuItem
     Friend WithEvents MenuFileExit As System.Windows.Forms.MenuItem
     Friend WithEvents DataGridTableStyle2 As System.Windows.Forms.DataGridTableStyle
     Friend WithEvents DataGridTextBoxColumn6 As System.Windows.Forms.DataGridTextBoxColumn
@@ -150,7 +161,7 @@ Public Class Designer
     Friend WithEvents tpRootStateStructure As Crownwood.Magic.Controls.TabPage
     Friend WithEvents tpRootStateEventSeries As Crownwood.Magic.Controls.TabPage
     Friend WithEvents tpDataStructure As Crownwood.Magic.Controls.TabPage
-    Friend WithEvents tpText As Crownwood.Magic.Controls.TabPage
+    Friend WithEvents tpDisplay As Crownwood.Magic.Controls.TabPage
     Friend WithEvents ToolBarOpen As System.Windows.Forms.ToolBarButton
     Friend WithEvents ToolBarMain As System.Windows.Forms.ToolBar
     Friend WithEvents ImageListToolbar As System.Windows.Forms.ImageList
@@ -182,7 +193,7 @@ Public Class Designer
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents MenuLanguageAvailable As System.Windows.Forms.MenuItem
     Friend WithEvents MenuLanguageAdd As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuLanguage As System.Windows.Forms.MenuItem
+    Friend WithEvents LanguageMenu As System.Windows.Forms.MenuItem
     Friend WithEvents MenuLanguageChange As System.Windows.Forms.MenuItem
     Friend WithEvents tpInterface As Crownwood.Magic.Controls.TabPage
     Friend WithEvents lblLifecycle As System.Windows.Forms.Label
@@ -192,8 +203,8 @@ Public Class Designer
     Friend WithEvents lblPrimaryLanguageText As System.Windows.Forms.Label
     Friend WithEvents MenuHelpOpenehr As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpStart As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuTerminology As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuHelp As System.Windows.Forms.MenuItem
+    Friend WithEvents TerminologyMenu As System.Windows.Forms.MenuItem
+    Friend WithEvents HelpMenu As System.Windows.Forms.MenuItem
     Friend WithEvents MenuHelpAbout As System.Windows.Forms.MenuItem
     Friend WithEvents PanelConcept As System.Windows.Forms.Panel
     Friend WithEvents lblAvailableTerminologies As System.Windows.Forms.Label
@@ -203,12 +214,12 @@ Public Class Designer
     Friend WithEvents MenuHelpReport As System.Windows.Forms.MenuItem
     Friend WithEvents HelpProviderDesigner As System.Windows.Forms.HelpProvider
     Friend WithEvents Panel3 As System.Windows.Forms.Panel
-    Friend WithEvents ContextMenuDisplay As System.Windows.Forms.ContextMenu
-    Friend WithEvents menuDisplayPrint As System.Windows.Forms.MenuItem
-    Friend WithEvents menuEdit As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayContextMenu As System.Windows.Forms.ContextMenu
+    Friend WithEvents DisplayPrintContextMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents EditMenu As System.Windows.Forms.MenuItem
     Friend WithEvents menuEditArchID As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuDisplayFind As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuDisplayFindAgain As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayFindContextMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents DisplayFindNextContextMenuItem As System.Windows.Forms.MenuItem
     Friend WithEvents tpDescription As Crownwood.Magic.Controls.TabPage
     Friend WithEvents DataGridTableStyle5 As System.Windows.Forms.DataGridTableStyle
     Friend WithEvents DataGridTextBoxColumn13 As System.Windows.Forms.DataGridTextBoxColumn
@@ -260,7 +271,7 @@ Public Class Designer
         Me.lblPrimaryLanguage = New System.Windows.Forms.Label
         Me.lblPrimaryLanguageText = New System.Windows.Forms.Label
         Me.MainMenu = New System.Windows.Forms.MainMenu(Me.components)
-        Me.MenuFile = New System.Windows.Forms.MenuItem
+        Me.FileMenu = New System.Windows.Forms.MenuItem
         Me.MenuFileNew = New System.Windows.Forms.MenuItem
         Me.MenuFileOpen = New System.Windows.Forms.MenuItem
         Me.MenuFileOpenFromWeb = New System.Windows.Forms.MenuItem
@@ -272,40 +283,35 @@ Public Class Designer
         Me.menuFileNewWindow = New System.Windows.Forms.MenuItem
         Me.MenuFileSpecialise = New System.Windows.Forms.MenuItem
         Me.MenuFileExit = New System.Windows.Forms.MenuItem
-        Me.menuEdit = New System.Windows.Forms.MenuItem
+        Me.EditMenu = New System.Windows.Forms.MenuItem
         Me.menuEditArchID = New System.Windows.Forms.MenuItem
-        Me.MenuLanguage = New System.Windows.Forms.MenuItem
+        Me.LanguageMenu = New System.Windows.Forms.MenuItem
         Me.MenuLanguageAvailable = New System.Windows.Forms.MenuItem
         Me.MenuLanguageAdd = New System.Windows.Forms.MenuItem
         Me.MenuLanguageChange = New System.Windows.Forms.MenuItem
         Me.MenuLanguageToggle = New System.Windows.Forms.MenuItem
-        Me.MenuTerminology = New System.Windows.Forms.MenuItem
+        Me.TerminologyMenu = New System.Windows.Forms.MenuItem
         Me.MenuTerminologyAvailable = New System.Windows.Forms.MenuItem
         Me.MenuTerminologyAdd = New System.Windows.Forms.MenuItem
-        Me.ToolsMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayMenu = New System.Windows.Forms.MenuItem
+        Me.DisplayRtfMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayAdlMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayXmlMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayHtmlMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplaySeparatorMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayFindMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayFindNextMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayFindPreviousMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayPrintMenuItem = New System.Windows.Forms.MenuItem
+        Me.ToolsMenu = New System.Windows.Forms.MenuItem
         Me.ToolsOptionsMenuItem = New System.Windows.Forms.MenuItem
-        Me.MenuHelp = New System.Windows.Forms.MenuItem
+        Me.HelpMenu = New System.Windows.Forms.MenuItem
         Me.MenuHelpStart = New System.Windows.Forms.MenuItem
         Me.MenuHelpReport = New System.Windows.Forms.MenuItem
         Me.MenuHelpOpenehr = New System.Windows.Forms.MenuItem
         Me.MenuHelpAbout = New System.Windows.Forms.MenuItem
         Me.PanelMain = New System.Windows.Forms.Panel
         Me.TabMain = New Crownwood.Magic.Controls.TabControl
-        Me.tpText = New Crownwood.Magic.Controls.TabPage
-        Me.Panel3 = New System.Windows.Forms.Panel
-        Me.DisplayToolBar = New System.Windows.Forms.ToolBar
-        Me.tbSep1 = New System.Windows.Forms.ToolBarButton
-        Me.butRTF = New System.Windows.Forms.ToolBarButton
-        Me.butADL = New System.Windows.Forms.ToolBarButton
-        Me.butXML = New System.Windows.Forms.ToolBarButton
-        Me.butOWL = New System.Windows.Forms.ToolBarButton
-        Me.tbSep2 = New System.Windows.Forms.ToolBarButton
-        Me.butHTML1 = New System.Windows.Forms.ToolBarButton
-        Me.ToolBarButton1 = New System.Windows.Forms.ToolBarButton
-        Me.butDisplayFind = New System.Windows.Forms.ToolBarButton
-        Me.ToolBarButton2 = New System.Windows.Forms.ToolBarButton
-        Me.butPrint = New System.Windows.Forms.ToolBarButton
-        Me.ImageListToolbar = New System.Windows.Forms.ImageList(Me.components)
         Me.tpHeader = New Crownwood.Magic.Controls.TabPage
         Me.PanelDescription = New System.Windows.Forms.Panel
         Me.RichTextBoxDescription = New System.Windows.Forms.RichTextBox
@@ -314,14 +320,14 @@ Public Class Designer
         Me.tvSpecialisation = New System.Windows.Forms.TreeView
         Me.tpDesign = New Crownwood.Magic.Controls.TabPage
         Me.TabDesign = New Crownwood.Magic.Controls.TabControl
+        Me.tpData = New Crownwood.Magic.Controls.TabPage
+        Me.TabStructure = New Crownwood.Magic.Controls.TabControl
+        Me.tpDataStructure = New Crownwood.Magic.Controls.TabPage
         Me.tpRootState = New Crownwood.Magic.Controls.TabPage
         Me.TabState = New Crownwood.Magic.Controls.TabControl
         Me.tpRootStateStructure = New Crownwood.Magic.Controls.TabPage
         Me.tpRootStateEventSeries = New Crownwood.Magic.Controls.TabPage
         Me.PanelState = New System.Windows.Forms.Panel
-        Me.tpData = New Crownwood.Magic.Controls.TabPage
-        Me.TabStructure = New Crownwood.Magic.Controls.TabControl
-        Me.tpDataStructure = New Crownwood.Magic.Controls.TabPage
         Me.tpSectionPage = New Crownwood.Magic.Controls.TabPage
         Me.tpTerminology = New Crownwood.Magic.Controls.TabPage
         Me.TabTerminology = New Crownwood.Magic.Controls.TabControl
@@ -353,13 +359,29 @@ Public Class Designer
         Me.ListLanguages = New System.Windows.Forms.ListBox
         Me.Panel1 = New System.Windows.Forms.Panel
         Me.lblAvailableLanguages = New System.Windows.Forms.Label
+        Me.tpDisplay = New Crownwood.Magic.Controls.TabPage
+        Me.Panel3 = New System.Windows.Forms.Panel
+        Me.DisplayToolBar = New System.Windows.Forms.ToolBar
+        Me.tbSep1 = New System.Windows.Forms.ToolBarButton
+        Me.butRTF = New System.Windows.Forms.ToolBarButton
+        Me.butADL = New System.Windows.Forms.ToolBarButton
+        Me.butXML = New System.Windows.Forms.ToolBarButton
+        Me.butOWL = New System.Windows.Forms.ToolBarButton
+        Me.tbSep2 = New System.Windows.Forms.ToolBarButton
+        Me.butHTML1 = New System.Windows.Forms.ToolBarButton
+        Me.ToolBarButton1 = New System.Windows.Forms.ToolBarButton
+        Me.butDisplayFind = New System.Windows.Forms.ToolBarButton
+        Me.ToolBarButton2 = New System.Windows.Forms.ToolBarButton
+        Me.butPrint = New System.Windows.Forms.ToolBarButton
+        Me.ImageListToolbar = New System.Windows.Forms.ImageList(Me.components)
         Me.tpInterface = New Crownwood.Magic.Controls.TabPage
         Me.cbMandatory = New System.Windows.Forms.CheckBox
         Me.tpDescription = New Crownwood.Magic.Controls.TabPage
-        Me.ContextMenuDisplay = New System.Windows.Forms.ContextMenu
-        Me.menuDisplayPrint = New System.Windows.Forms.MenuItem
-        Me.MenuDisplayFind = New System.Windows.Forms.MenuItem
-        Me.MenuDisplayFindAgain = New System.Windows.Forms.MenuItem
+        Me.DisplayContextMenu = New System.Windows.Forms.ContextMenu
+        Me.DisplayFindContextMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayFindNextContextMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayFindPreviousContextMenuItem = New System.Windows.Forms.MenuItem
+        Me.DisplayPrintContextMenuItem = New System.Windows.Forms.MenuItem
         Me.PanelHeader = New System.Windows.Forms.Panel
         Me.lblArchetypeName = New System.Windows.Forms.Label
         Me.ArchetypeNameContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
@@ -384,14 +406,13 @@ Public Class Designer
         CType(Me.ConstraintDefinitionsDataGrid, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.PanelMain.SuspendLayout()
-        Me.tpText.SuspendLayout()
         Me.tpHeader.SuspendLayout()
         Me.PanelDescription.SuspendLayout()
         Me.PanelConcept_1.SuspendLayout()
         Me.gbSpecialisation.SuspendLayout()
         Me.tpDesign.SuspendLayout()
-        Me.tpRootState.SuspendLayout()
         Me.tpData.SuspendLayout()
+        Me.tpRootState.SuspendLayout()
         Me.tpTerminology.SuspendLayout()
         Me.tpTerms.SuspendLayout()
         Me.tpConstraints.SuspendLayout()
@@ -401,6 +422,7 @@ Public Class Designer
         Me.Panel2.SuspendLayout()
         Me.panelLanguages.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.tpDisplay.SuspendLayout()
         Me.tpInterface.SuspendLayout()
         Me.PanelHeader.SuspendLayout()
         Me.ArchetypeNameContextMenu.SuspendLayout()
@@ -414,7 +436,7 @@ Public Class Designer
         Me.TxtConceptDescription.Multiline = True
         Me.TxtConceptDescription.Name = "TxtConceptDescription"
         Me.TxtConceptDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TxtConceptDescription.Size = New System.Drawing.Size(588, 59)
+        Me.TxtConceptDescription.Size = New System.Drawing.Size(588, 61)
         Me.TxtConceptDescription.TabIndex = 1
         Me.TxtConceptDescription.Tag = ""
         '
@@ -431,7 +453,7 @@ Public Class Designer
         '
         Me.txtConceptInFull.Location = New System.Drawing.Point(75, 10)
         Me.txtConceptInFull.Name = "txtConceptInFull"
-        Me.txtConceptInFull.Size = New System.Drawing.Size(271, 23)
+        Me.txtConceptInFull.Size = New System.Drawing.Size(271, 21)
         Me.txtConceptInFull.TabIndex = 0
         Me.txtConceptInFull.Tag = ""
         '
@@ -480,10 +502,10 @@ Public Class Designer
         '
         Me.tpConceptDescription.BackColor = System.Drawing.Color.LightYellow
         Me.tpConceptDescription.Controls.Add(Me.TxtConceptDescription)
-        Me.tpConceptDescription.Location = New System.Drawing.Point(4, 24)
+        Me.tpConceptDescription.Location = New System.Drawing.Point(4, 22)
         Me.tpConceptDescription.Name = "tpConceptDescription"
         Me.tpConceptDescription.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptDescription.Size = New System.Drawing.Size(594, 65)
+        Me.tpConceptDescription.Size = New System.Drawing.Size(594, 67)
         Me.tpConceptDescription.TabIndex = 0
         Me.tpConceptDescription.Text = "Description"
         Me.tpConceptDescription.UseVisualStyleBackColor = True
@@ -492,10 +514,10 @@ Public Class Designer
         '
         Me.tpConceptComment.BackColor = System.Drawing.Color.LightYellow
         Me.tpConceptComment.Controls.Add(Me.txtConceptComment)
-        Me.tpConceptComment.Location = New System.Drawing.Point(4, 24)
+        Me.tpConceptComment.Location = New System.Drawing.Point(4, 22)
         Me.tpConceptComment.Name = "tpConceptComment"
         Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptComment.Size = New System.Drawing.Size(594, 65)
+        Me.tpConceptComment.Size = New System.Drawing.Size(594, 67)
         Me.tpConceptComment.TabIndex = 1
         Me.tpConceptComment.Text = "Comment"
         Me.tpConceptComment.UseVisualStyleBackColor = True
@@ -507,7 +529,7 @@ Public Class Designer
         Me.txtConceptComment.Multiline = True
         Me.txtConceptComment.Name = "txtConceptComment"
         Me.txtConceptComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtConceptComment.Size = New System.Drawing.Size(588, 59)
+        Me.txtConceptComment.Size = New System.Drawing.Size(588, 61)
         Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
@@ -720,15 +742,14 @@ Public Class Designer
         '
         'MainMenu
         '
-        Me.MainMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFile, Me.menuEdit, Me.MenuLanguage, Me.MenuTerminology, Me.ToolsMenuItem, Me.MenuHelp})
+        Me.MainMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.FileMenu, Me.EditMenu, Me.LanguageMenu, Me.TerminologyMenu, Me.DisplayMenu, Me.ToolsMenu, Me.HelpMenu})
         '
-        'MenuFile
+        'FileMenu
         '
-        Me.MenuFile.Index = 0
-        Me.MenuFile.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileNew, Me.MenuFileOpen, Me.MenuFileOpenFromWeb, Me.MenuFileSave, Me.MenuFileSaveAs, Me.menuFileExport, Me.menuFileNewWindow, Me.MenuFileSpecialise, Me.MenuFileExit})
-        Me.MenuFile.Shortcut = System.Windows.Forms.Shortcut.CtrlF
-        Me.MenuFile.ShowShortcut = False
-        Me.MenuFile.Text = "&File"
+        Me.FileMenu.Index = 0
+        Me.FileMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuFileNew, Me.MenuFileOpen, Me.MenuFileOpenFromWeb, Me.MenuFileSave, Me.MenuFileSaveAs, Me.menuFileExport, Me.menuFileNewWindow, Me.MenuFileSpecialise, Me.MenuFileExit})
+        Me.FileMenu.ShowShortcut = False
+        Me.FileMenu.Text = "&File"
         '
         'MenuFileNew
         '
@@ -792,22 +813,22 @@ Public Class Designer
         Me.MenuFileExit.Index = 8
         Me.MenuFileExit.Text = "E&xit"
         '
-        'menuEdit
+        'EditMenu
         '
-        Me.menuEdit.Index = 1
-        Me.menuEdit.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuEditArchID})
-        Me.menuEdit.Text = "&Edit"
+        Me.EditMenu.Index = 1
+        Me.EditMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuEditArchID})
+        Me.EditMenu.Text = "&Edit"
         '
         'menuEditArchID
         '
         Me.menuEditArchID.Index = 0
         Me.menuEditArchID.Text = "&Archetype ID..."
         '
-        'MenuLanguage
+        'LanguageMenu
         '
-        Me.MenuLanguage.Index = 2
-        Me.MenuLanguage.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuLanguageAvailable, Me.MenuLanguageAdd, Me.MenuLanguageChange, Me.MenuLanguageToggle})
-        Me.MenuLanguage.Text = "&Language"
+        Me.LanguageMenu.Index = 2
+        Me.LanguageMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuLanguageAvailable, Me.MenuLanguageAdd, Me.MenuLanguageChange, Me.MenuLanguageToggle})
+        Me.LanguageMenu.Text = "&Language"
         '
         'MenuLanguageAvailable
         '
@@ -830,11 +851,11 @@ Public Class Designer
         Me.MenuLanguageToggle.Shortcut = System.Windows.Forms.Shortcut.CtrlL
         Me.MenuLanguageToggle.Text = "&Toggle Language"
         '
-        'MenuTerminology
+        'TerminologyMenu
         '
-        Me.MenuTerminology.Index = 3
-        Me.MenuTerminology.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuTerminologyAvailable, Me.MenuTerminologyAdd})
-        Me.MenuTerminology.Text = "Terminolog&y"
+        Me.TerminologyMenu.Index = 3
+        Me.TerminologyMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuTerminologyAvailable, Me.MenuTerminologyAdd})
+        Me.TerminologyMenu.Text = "Terminolog&y"
         '
         'MenuTerminologyAvailable
         '
@@ -846,22 +867,76 @@ Public Class Designer
         Me.MenuTerminologyAdd.Index = 1
         Me.MenuTerminologyAdd.Text = "&Add Terminology"
         '
-        'ToolsMenuItem
+        'DisplayMenu
         '
-        Me.ToolsMenuItem.Index = 4
-        Me.ToolsMenuItem.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.ToolsOptionsMenuItem})
-        Me.ToolsMenuItem.Text = "&Tools"
+        Me.DisplayMenu.Index = 4
+        Me.DisplayMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.DisplayRtfMenuItem, Me.DisplayAdlMenuItem, Me.DisplayXmlMenuItem, Me.DisplayHtmlMenuItem, Me.DisplaySeparatorMenuItem, Me.DisplayFindMenuItem, Me.DisplayFindNextMenuItem, Me.DisplayFindPreviousMenuItem, Me.DisplayPrintMenuItem})
+        Me.DisplayMenu.Text = "&Display"
+        '
+        'DisplayRtfMenuItem
+        '
+        Me.DisplayRtfMenuItem.Index = 0
+        Me.DisplayRtfMenuItem.Text = "&RTF"
+        '
+        'DisplayAdlMenuItem
+        '
+        Me.DisplayAdlMenuItem.Index = 1
+        Me.DisplayAdlMenuItem.Text = "&ADL"
+        '
+        'DisplayXmlMenuItem
+        '
+        Me.DisplayXmlMenuItem.Index = 2
+        Me.DisplayXmlMenuItem.Text = "&XML"
+        '
+        'DisplayHtmlMenuItem
+        '
+        Me.DisplayHtmlMenuItem.Index = 3
+        Me.DisplayHtmlMenuItem.Text = "&HTML"
+        '
+        'DisplaySeparatorMenuItem
+        '
+        Me.DisplaySeparatorMenuItem.Index = 4
+        Me.DisplaySeparatorMenuItem.Text = "-"
+        '
+        'DisplayFindMenuItem
+        '
+        Me.DisplayFindMenuItem.Index = 5
+        Me.DisplayFindMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlF
+        Me.DisplayFindMenuItem.Text = "&Find..."
+        '
+        'DisplayFindNextMenuItem
+        '
+        Me.DisplayFindNextMenuItem.Index = 6
+        Me.DisplayFindNextMenuItem.Shortcut = System.Windows.Forms.Shortcut.F3
+        Me.DisplayFindNextMenuItem.Text = "Find &Next"
+        '
+        'DisplayFindPreviousMenuItem
+        '
+        Me.DisplayFindPreviousMenuItem.Index = 7
+        Me.DisplayFindPreviousMenuItem.Shortcut = System.Windows.Forms.Shortcut.ShiftF3
+        Me.DisplayFindPreviousMenuItem.Text = "Find Pre&vious"
+        '
+        'DisplayPrintMenuItem
+        '
+        Me.DisplayPrintMenuItem.Index = 8
+        Me.DisplayPrintMenuItem.Text = "&Print"
+        '
+        'ToolsMenu
+        '
+        Me.ToolsMenu.Index = 5
+        Me.ToolsMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.ToolsOptionsMenuItem})
+        Me.ToolsMenu.Text = "&Tools"
         '
         'ToolsOptionsMenuItem
         '
         Me.ToolsOptionsMenuItem.Index = 0
         Me.ToolsOptionsMenuItem.Text = "&Options..."
         '
-        'MenuHelp
+        'HelpMenu
         '
-        Me.MenuHelp.Index = 5
-        Me.MenuHelp.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuHelpStart, Me.MenuHelpReport, Me.MenuHelpOpenehr, Me.MenuHelpAbout})
-        Me.MenuHelp.Text = "&Help"
+        Me.HelpMenu.Index = 6
+        Me.HelpMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuHelpStart, Me.MenuHelpReport, Me.MenuHelpOpenehr, Me.MenuHelpAbout})
+        Me.HelpMenu.Text = "&Help"
         '
         'MenuHelpStart
         '
@@ -905,128 +980,8 @@ Public Class Designer
         Me.HelpProviderDesigner.SetShowHelp(Me.TabMain, True)
         Me.TabMain.Size = New System.Drawing.Size(969, 689)
         Me.TabMain.TabIndex = 1
-        Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpText, Me.tpInterface, Me.tpDescription})
+        Me.TabMain.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpHeader, Me.tpDesign, Me.tpSectionPage, Me.tpTerminology, Me.tpDisplay, Me.tpInterface, Me.tpDescription})
         Me.TabMain.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpText
-        '
-        Me.tpText.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.tpText.Controls.Add(Me.Panel3)
-        Me.tpText.Controls.Add(Me.DisplayToolBar)
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpText, "Screens/display_screen.html")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpText, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpText.Location = New System.Drawing.Point(0, 0)
-        Me.tpText.Name = "tpText"
-        Me.tpText.Selected = False
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpText, True)
-        Me.tpText.Size = New System.Drawing.Size(969, 660)
-        Me.tpText.TabIndex = 3
-        Me.tpText.Title = "Display"
-        '
-        'Panel3
-        '
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel3.Location = New System.Drawing.Point(0, 44)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Padding = New System.Windows.Forms.Padding(5)
-        Me.Panel3.Size = New System.Drawing.Size(969, 616)
-        Me.Panel3.TabIndex = 4
-        '
-        'DisplayToolBar
-        '
-        Me.DisplayToolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
-        Me.DisplayToolBar.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.butADL, Me.butXML, Me.butOWL, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butDisplayFind, Me.ToolBarButton2, Me.butPrint})
-        Me.DisplayToolBar.ButtonSize = New System.Drawing.Size(20, 30)
-        Me.DisplayToolBar.DropDownArrows = True
-        Me.DisplayToolBar.ImageList = Me.ImageListToolbar
-        Me.DisplayToolBar.Location = New System.Drawing.Point(0, 0)
-        Me.DisplayToolBar.Name = "DisplayToolBar"
-        Me.DisplayToolBar.ShowToolTips = True
-        Me.DisplayToolBar.Size = New System.Drawing.Size(969, 44)
-        Me.DisplayToolBar.TabIndex = 1
-        Me.DisplayToolBar.Wrappable = False
-        '
-        'tbSep1
-        '
-        Me.tbSep1.Name = "tbSep1"
-        Me.tbSep1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butRTF
-        '
-        Me.butRTF.ImageIndex = 4
-        Me.butRTF.Name = "butRTF"
-        Me.butRTF.Pushed = True
-        Me.butRTF.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
-        Me.butRTF.Tag = "rtf"
-        Me.butRTF.Text = "RTF"
-        '
-        'butADL
-        '
-        Me.butADL.Name = "butADL"
-        Me.butADL.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
-        Me.butADL.Tag = "adl"
-        Me.butADL.Text = "ADL"
-        '
-        'butXML
-        '
-        Me.butXML.Name = "butXML"
-        Me.butXML.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
-        Me.butXML.Tag = "xml"
-        Me.butXML.Text = "XML"
-        '
-        'butOWL
-        '
-        Me.butOWL.Name = "butOWL"
-        Me.butOWL.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
-        Me.butOWL.Tag = "owl"
-        Me.butOWL.Text = "OWL"
-        '
-        'tbSep2
-        '
-        Me.tbSep2.Name = "tbSep2"
-        Me.tbSep2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butHTML1
-        '
-        Me.butHTML1.ImageIndex = 5
-        Me.butHTML1.Name = "butHTML1"
-        Me.butHTML1.Tag = "html"
-        Me.butHTML1.Text = "HTML"
-        '
-        'ToolBarButton1
-        '
-        Me.ToolBarButton1.Name = "ToolBarButton1"
-        Me.ToolBarButton1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butDisplayFind
-        '
-        Me.butDisplayFind.Name = "butDisplayFind"
-        Me.butDisplayFind.Tag = "find"
-        Me.butDisplayFind.Text = "Find"
-        '
-        'ToolBarButton2
-        '
-        Me.ToolBarButton2.Name = "ToolBarButton2"
-        Me.ToolBarButton2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
-        '
-        'butPrint
-        '
-        Me.butPrint.ImageIndex = 2
-        Me.butPrint.Name = "butPrint"
-        Me.butPrint.Tag = "print"
-        Me.butPrint.Text = "Print"
-        '
-        'ImageListToolbar
-        '
-        Me.ImageListToolbar.ImageStream = CType(resources.GetObject("ImageListToolbar.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImageListToolbar.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImageListToolbar.Images.SetKeyName(0, "")
-        Me.ImageListToolbar.Images.SetKeyName(1, "")
-        Me.ImageListToolbar.Images.SetKeyName(2, "")
-        Me.ImageListToolbar.Images.SetKeyName(3, "")
-        Me.ImageListToolbar.Images.SetKeyName(4, "")
-        Me.ImageListToolbar.Images.SetKeyName(5, "")
-        Me.ImageListToolbar.Images.SetKeyName(6, "searchweb.ico")
         '
         'tpHeader
         '
@@ -1128,6 +1083,47 @@ Public Class Designer
         Me.TabDesign.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpData, Me.tpRootState})
         Me.TabDesign.TextInactiveColor = System.Drawing.Color.Black
         '
+        'tpData
+        '
+        Me.tpData.Controls.Add(Me.TabStructure)
+        Me.tpData.Controls.Add(Me.PanelConfigStructure)
+        Me.tpData.Location = New System.Drawing.Point(0, 0)
+        Me.tpData.Name = "tpData"
+        Me.tpData.Size = New System.Drawing.Size(969, 607)
+        Me.tpData.TabIndex = 0
+        Me.tpData.Title = "Data"
+        '
+        'TabStructure
+        '
+        Me.TabStructure.BackColor = System.Drawing.Color.RoyalBlue
+        Me.TabStructure.BoldSelectedPage = True
+        Me.TabStructure.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabStructure, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabStructure, System.Windows.Forms.HelpNavigator.Topic)
+        Me.TabStructure.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
+        Me.TabStructure.Location = New System.Drawing.Point(0, 24)
+        Me.TabStructure.Name = "TabStructure"
+        Me.TabStructure.PositionTop = True
+        Me.TabStructure.SelectedIndex = 0
+        Me.TabStructure.SelectedTab = Me.tpDataStructure
+        Me.HelpProviderDesigner.SetShowHelp(Me.TabStructure, True)
+        Me.TabStructure.Size = New System.Drawing.Size(969, 583)
+        Me.TabStructure.TabIndex = 10
+        Me.TabStructure.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDataStructure})
+        Me.TabStructure.TextInactiveColor = System.Drawing.Color.Black
+        '
+        'tpDataStructure
+        '
+        Me.tpDataStructure.BackColor = System.Drawing.Color.CornflowerBlue
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDataStructure, "HowTo/edit_data.htm")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDataStructure, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpDataStructure.Location = New System.Drawing.Point(0, 0)
+        Me.tpDataStructure.Name = "tpDataStructure"
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpDataStructure, True)
+        Me.tpDataStructure.Size = New System.Drawing.Size(969, 558)
+        Me.tpDataStructure.TabIndex = 0
+        Me.tpDataStructure.Title = "Structure"
+        '
         'tpRootState
         '
         Me.tpRootState.Controls.Add(Me.TabState)
@@ -1184,47 +1180,6 @@ Public Class Designer
         Me.PanelState.Name = "PanelState"
         Me.PanelState.Size = New System.Drawing.Size(969, 24)
         Me.PanelState.TabIndex = 0
-        '
-        'tpData
-        '
-        Me.tpData.Controls.Add(Me.TabStructure)
-        Me.tpData.Controls.Add(Me.PanelConfigStructure)
-        Me.tpData.Location = New System.Drawing.Point(0, 0)
-        Me.tpData.Name = "tpData"
-        Me.tpData.Size = New System.Drawing.Size(969, 607)
-        Me.tpData.TabIndex = 0
-        Me.tpData.Title = "Data"
-        '
-        'TabStructure
-        '
-        Me.TabStructure.BackColor = System.Drawing.Color.RoyalBlue
-        Me.TabStructure.BoldSelectedPage = True
-        Me.TabStructure.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.TabStructure, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.TabStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.TabStructure.HideTabsMode = Crownwood.Magic.Controls.TabControl.HideTabsModes.ShowAlways
-        Me.TabStructure.Location = New System.Drawing.Point(0, 24)
-        Me.TabStructure.Name = "TabStructure"
-        Me.TabStructure.PositionTop = True
-        Me.TabStructure.SelectedIndex = 0
-        Me.TabStructure.SelectedTab = Me.tpDataStructure
-        Me.HelpProviderDesigner.SetShowHelp(Me.TabStructure, True)
-        Me.TabStructure.Size = New System.Drawing.Size(969, 583)
-        Me.TabStructure.TabIndex = 10
-        Me.TabStructure.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpDataStructure})
-        Me.TabStructure.TextInactiveColor = System.Drawing.Color.Black
-        '
-        'tpDataStructure
-        '
-        Me.tpDataStructure.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDataStructure, "HowTo/edit_data.htm")
-        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDataStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.tpDataStructure.Location = New System.Drawing.Point(0, 0)
-        Me.tpDataStructure.Name = "tpDataStructure"
-        Me.HelpProviderDesigner.SetShowHelp(Me.tpDataStructure, True)
-        Me.tpDataStructure.Size = New System.Drawing.Size(969, 558)
-        Me.tpDataStructure.TabIndex = 0
-        Me.tpDataStructure.Title = "Structure"
         '
         'tpSectionPage
         '
@@ -1327,7 +1282,7 @@ Public Class Designer
         Me.ConstraintBindingsGrid.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ConstraintBindingsGrid.Location = New System.Drawing.Point(0, 293)
         Me.ConstraintBindingsGrid.Name = "ConstraintBindingsGrid"
-        Me.ConstraintBindingsGrid.Size = New System.Drawing.Size(969, 350)
+        Me.ConstraintBindingsGrid.Size = New System.Drawing.Size(969, 346)
         Me.ConstraintBindingsGrid.TabIndex = 12
         '
         'panelConstraintStatementTop
@@ -1521,10 +1476,9 @@ Public Class Designer
         'ListLanguages
         '
         Me.ListLanguages.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ListLanguages.ItemHeight = 15
         Me.ListLanguages.Location = New System.Drawing.Point(0, 96)
         Me.ListLanguages.Name = "ListLanguages"
-        Me.ListLanguages.Size = New System.Drawing.Size(312, 529)
+        Me.ListLanguages.Size = New System.Drawing.Size(312, 537)
         Me.ListLanguages.TabIndex = 9
         '
         'Panel1
@@ -1546,6 +1500,126 @@ Public Class Designer
         Me.lblAvailableLanguages.Size = New System.Drawing.Size(208, 24)
         Me.lblAvailableLanguages.TabIndex = 10
         Me.lblAvailableLanguages.Text = "Available languages:"
+        '
+        'tpDisplay
+        '
+        Me.tpDisplay.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.tpDisplay.Controls.Add(Me.Panel3)
+        Me.tpDisplay.Controls.Add(Me.DisplayToolBar)
+        Me.HelpProviderDesigner.SetHelpKeyword(Me.tpDisplay, "Screens/display_screen.html")
+        Me.HelpProviderDesigner.SetHelpNavigator(Me.tpDisplay, System.Windows.Forms.HelpNavigator.Topic)
+        Me.tpDisplay.Location = New System.Drawing.Point(0, 0)
+        Me.tpDisplay.Name = "tpDisplay"
+        Me.tpDisplay.Selected = False
+        Me.HelpProviderDesigner.SetShowHelp(Me.tpDisplay, True)
+        Me.tpDisplay.Size = New System.Drawing.Size(969, 664)
+        Me.tpDisplay.TabIndex = 3
+        Me.tpDisplay.Title = "Display"
+        '
+        'Panel3
+        '
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel3.Location = New System.Drawing.Point(0, 42)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Padding = New System.Windows.Forms.Padding(5)
+        Me.Panel3.Size = New System.Drawing.Size(969, 622)
+        Me.Panel3.TabIndex = 4
+        '
+        'DisplayToolBar
+        '
+        Me.DisplayToolBar.Appearance = System.Windows.Forms.ToolBarAppearance.Flat
+        Me.DisplayToolBar.Buttons.AddRange(New System.Windows.Forms.ToolBarButton() {Me.tbSep1, Me.butRTF, Me.butADL, Me.butXML, Me.butOWL, Me.tbSep2, Me.butHTML1, Me.ToolBarButton1, Me.butDisplayFind, Me.ToolBarButton2, Me.butPrint})
+        Me.DisplayToolBar.ButtonSize = New System.Drawing.Size(20, 30)
+        Me.DisplayToolBar.DropDownArrows = True
+        Me.DisplayToolBar.ImageList = Me.ImageListToolbar
+        Me.DisplayToolBar.Location = New System.Drawing.Point(0, 0)
+        Me.DisplayToolBar.Name = "DisplayToolBar"
+        Me.DisplayToolBar.ShowToolTips = True
+        Me.DisplayToolBar.Size = New System.Drawing.Size(969, 42)
+        Me.DisplayToolBar.TabIndex = 1
+        Me.DisplayToolBar.Wrappable = False
+        '
+        'tbSep1
+        '
+        Me.tbSep1.Name = "tbSep1"
+        Me.tbSep1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butRTF
+        '
+        Me.butRTF.ImageIndex = 4
+        Me.butRTF.Name = "butRTF"
+        Me.butRTF.Pushed = True
+        Me.butRTF.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
+        Me.butRTF.Tag = "rtf"
+        Me.butRTF.Text = "RTF"
+        '
+        'butADL
+        '
+        Me.butADL.Name = "butADL"
+        Me.butADL.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
+        Me.butADL.Tag = "adl"
+        Me.butADL.Text = "ADL"
+        '
+        'butXML
+        '
+        Me.butXML.Name = "butXML"
+        Me.butXML.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
+        Me.butXML.Tag = "xml"
+        Me.butXML.Text = "XML"
+        '
+        'butOWL
+        '
+        Me.butOWL.Name = "butOWL"
+        Me.butOWL.Style = System.Windows.Forms.ToolBarButtonStyle.ToggleButton
+        Me.butOWL.Tag = "owl"
+        Me.butOWL.Text = "OWL"
+        '
+        'tbSep2
+        '
+        Me.tbSep2.Name = "tbSep2"
+        Me.tbSep2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butHTML1
+        '
+        Me.butHTML1.ImageIndex = 5
+        Me.butHTML1.Name = "butHTML1"
+        Me.butHTML1.Tag = "html"
+        Me.butHTML1.Text = "HTML"
+        '
+        'ToolBarButton1
+        '
+        Me.ToolBarButton1.Name = "ToolBarButton1"
+        Me.ToolBarButton1.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butDisplayFind
+        '
+        Me.butDisplayFind.Name = "butDisplayFind"
+        Me.butDisplayFind.Tag = "find"
+        Me.butDisplayFind.Text = "Find"
+        '
+        'ToolBarButton2
+        '
+        Me.ToolBarButton2.Name = "ToolBarButton2"
+        Me.ToolBarButton2.Style = System.Windows.Forms.ToolBarButtonStyle.Separator
+        '
+        'butPrint
+        '
+        Me.butPrint.ImageIndex = 2
+        Me.butPrint.Name = "butPrint"
+        Me.butPrint.Tag = "print"
+        Me.butPrint.Text = "Print"
+        '
+        'ImageListToolbar
+        '
+        Me.ImageListToolbar.ImageStream = CType(resources.GetObject("ImageListToolbar.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImageListToolbar.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImageListToolbar.Images.SetKeyName(0, "")
+        Me.ImageListToolbar.Images.SetKeyName(1, "")
+        Me.ImageListToolbar.Images.SetKeyName(2, "")
+        Me.ImageListToolbar.Images.SetKeyName(3, "")
+        Me.ImageListToolbar.Images.SetKeyName(4, "")
+        Me.ImageListToolbar.Images.SetKeyName(5, "")
+        Me.ImageListToolbar.Images.SetKeyName(6, "searchweb.ico")
         '
         'tpInterface
         '
@@ -1579,24 +1653,29 @@ Public Class Designer
         Me.tpDescription.TabIndex = 6
         Me.tpDescription.Title = "Description"
         '
-        'ContextMenuDisplay
+        'DisplayContextMenu
         '
-        Me.ContextMenuDisplay.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.menuDisplayPrint, Me.MenuDisplayFind, Me.MenuDisplayFindAgain})
+        Me.DisplayContextMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.DisplayFindContextMenuItem, Me.DisplayFindNextContextMenuItem, Me.DisplayFindPreviousContextMenuItem, Me.DisplayPrintContextMenuItem})
         '
-        'menuDisplayPrint
+        'DisplayFindContextMenuItem
         '
-        Me.menuDisplayPrint.Index = 0
-        Me.menuDisplayPrint.Text = "Print"
+        Me.DisplayFindContextMenuItem.Index = 0
+        Me.DisplayFindContextMenuItem.Text = "&Find..."
         '
-        'MenuDisplayFind
+        'DisplayFindNextContextMenuItem
         '
-        Me.MenuDisplayFind.Index = 1
-        Me.MenuDisplayFind.Text = "Find"
+        Me.DisplayFindNextContextMenuItem.Index = 1
+        Me.DisplayFindNextContextMenuItem.Text = "Find &Next"
         '
-        'MenuDisplayFindAgain
+        'DisplayFindPreviousContextMenuItem
         '
-        Me.MenuDisplayFindAgain.Index = 2
-        Me.MenuDisplayFindAgain.Text = "Find again"
+        Me.DisplayFindPreviousContextMenuItem.Index = 2
+        Me.DisplayFindPreviousContextMenuItem.Text = "Find Pre&vious"
+        '
+        'DisplayPrintContextMenuItem
+        '
+        Me.DisplayPrintContextMenuItem.Index = 3
+        Me.DisplayPrintContextMenuItem.Text = "&Print"
         '
         'PanelHeader
         '
@@ -1631,12 +1710,12 @@ Public Class Designer
         '
         Me.ArchetypeNameContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem})
         Me.ArchetypeNameContextMenu.Name = "ArchetypeNameContextMenu"
-        Me.ArchetypeNameContextMenu.Size = New System.Drawing.Size(103, 26)
+        Me.ArchetypeNameContextMenu.Size = New System.Drawing.Size(100, 26)
         '
         'CopyToolStripMenuItem
         '
         Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
-        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(102, 22)
+        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(99, 22)
         Me.CopyToolStripMenuItem.Text = "Copy"
         '
         'lblLifecycle
@@ -1701,7 +1780,6 @@ Public Class Designer
         '
         Me.LogoPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
         Me.LogoPictureBox.Dock = System.Windows.Forms.DockStyle.Right
-        Me.LogoPictureBox.Image = CType(resources.GetObject("LogoPictureBox.Image"), System.Drawing.Image)
         Me.LogoPictureBox.Location = New System.Drawing.Point(911, 0)
         Me.LogoPictureBox.Name = "LogoPictureBox"
         Me.LogoPictureBox.Size = New System.Drawing.Size(58, 63)
@@ -1737,15 +1815,13 @@ Public Class Designer
         CType(Me.ConstraintDefinitionsDataGrid, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.DataGridDefinitions, System.ComponentModel.ISupportInitialize).EndInit()
         Me.PanelMain.ResumeLayout(False)
-        Me.tpText.ResumeLayout(False)
-        Me.tpText.PerformLayout()
         Me.tpHeader.ResumeLayout(False)
         Me.PanelDescription.ResumeLayout(False)
         Me.PanelConcept_1.ResumeLayout(False)
         Me.gbSpecialisation.ResumeLayout(False)
         Me.tpDesign.ResumeLayout(False)
-        Me.tpRootState.ResumeLayout(False)
         Me.tpData.ResumeLayout(False)
+        Me.tpRootState.ResumeLayout(False)
         Me.tpTerminology.ResumeLayout(False)
         Me.tpTerms.ResumeLayout(False)
         Me.tpConstraints.ResumeLayout(False)
@@ -1756,6 +1832,8 @@ Public Class Designer
         Me.Panel2.ResumeLayout(False)
         Me.panelLanguages.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
+        Me.tpDisplay.ResumeLayout(False)
+        Me.tpDisplay.PerformLayout()
         Me.tpInterface.ResumeLayout(False)
         Me.PanelHeader.ResumeLayout(False)
         Me.PanelHeader.PerformLayout()
@@ -2186,9 +2264,9 @@ Public Class Designer
 
         ' add the display printable rich text box
         mRichTextArchetype = New ArchetypeEditor.Specialised_VB_Classes.RichTextBoxPrintable
-        Me.Panel3.Controls.Add(mRichTextArchetype)
+        Panel3.Controls.Add(mRichTextArchetype)
         mRichTextArchetype.Dock = DockStyle.Fill
-        mRichTextArchetype.ContextMenu = ContextMenuDisplay
+        mRichTextArchetype.ContextMenu = DisplayContextMenu
 
         ' add the term binding panel
         mTermBindingPanel = New TermBindingPanel
@@ -2200,7 +2278,6 @@ Public Class Designer
         Me.tpDescription.Controls.Add(mTabPageDescription)
         mTabPageDescription.Dock = DockStyle.Fill
         Me.mComponentsCollection.Add(mTabPageDescription)
-
     End Sub
 
     Private Sub AddLanguageToMenu(ByVal LanguageText As String)
@@ -2232,7 +2309,6 @@ Public Class Designer
 #Region "Internal functions to populate the Designer with different terms and languages"
 
     Private Sub TranslateGUI(ByVal language As String)
-
         If Main.Instance.IsLanguageRightToLeft(language) Then
             RightToLeft = Windows.Forms.RightToLeft.Yes
         Else
@@ -2240,65 +2316,73 @@ Public Class Designer
         End If
 
         'MenuItem labels
-        Me.MenuFile.Text = Filemanager.GetOpenEhrTerm(43, Me.MenuFile.Text, language)
-        Me.MenuFileNew.Text = Filemanager.GetOpenEhrTerm(151, Me.MenuFileNew.Text, language)
-        Me.MenuFileOpen.Text = Filemanager.GetOpenEhrTerm(61, Me.MenuFileOpen.Text, language)
-        Me.MenuFileOpenFromWeb.Text = Filemanager.GetOpenEhrTerm(666, Me.MenuFileOpenFromWeb.Text, language)
-        Me.MenuFileSave.Text = Filemanager.GetOpenEhrTerm(183, Me.MenuFileSave.Text, language)
-        Me.menuFileNewWindow.Text = Filemanager.GetOpenEhrTerm(595, Me.menuFileNewWindow.Text, language)
-        Me.MenuFileSaveAs.Text = Filemanager.GetOpenEhrTerm(596, Me.MenuFileSaveAs.Text, language)
-        Me.MenuFileSpecialise.Text = Filemanager.GetOpenEhrTerm(185, Me.MenuFileSpecialise.Text, language)
-        Me.MenuFileExit.Text = Filemanager.GetOpenEhrTerm(63, Me.MenuFileExit.Text, language)
-        Me.menuEdit.Text = Filemanager.GetOpenEhrTerm(592, Me.menuEdit.Text, language)
-        Me.menuEditArchID.Text = Filemanager.GetOpenEhrTerm(632, Me.menuEditArchID.Text, language)
-        Me.ToolsMenuItem.Text = Filemanager.GetOpenEhrTerm(667, ToolsMenuItem.Text, language)
-        Me.ToolsOptionsMenuItem.Text = Filemanager.GetOpenEhrTerm(598, ToolsOptionsMenuItem.Text, language)
-        Me.MenuHelpReport.Text = Filemanager.GetOpenEhrTerm(597, Me.MenuHelpReport.Text, language)
-        Me.MenuHelp.Text = Filemanager.GetOpenEhrTerm(48, Me.MenuHelp.Text, language)
-        Me.MenuHelpStart.Text = Filemanager.GetOpenEhrTerm(72, Me.MenuHelpStart.Text, language)
-        Me.MenuTerminology.Text = Filemanager.GetOpenEhrTerm(47, Me.MenuTerminology.Text, language)
-        Me.MenuHelpOpenehr.Text = Filemanager.GetOpenEhrTerm(74, Me.MenuHelpOpenehr.Text, language)
-        Me.MenuHelpAbout.Text = Filemanager.GetOpenEhrTerm(75, Me.MenuHelpAbout.Text, language)
-        Me.MenuLanguage.Text = Filemanager.GetOpenEhrTerm(46, Me.MenuLanguage.Text, language)
-        Me.MenuLanguageAdd.Text = Filemanager.GetOpenEhrTerm(68, Me.MenuLanguageAdd.Text, language)
-        Me.MenuLanguageChange.Text = Filemanager.GetOpenEhrTerm(69, Me.MenuLanguageChange.Text, language)
-        Me.MenuLanguageToggle.Text = Filemanager.GetOpenEhrTerm(692, Me.MenuLanguageToggle.Text, language)
-        Me.MenuLanguageAvailable.Text = Filemanager.GetOpenEhrTerm(67, Me.MenuLanguageAvailable.Text, language)
-        Me.MenuTerminologyAdd.Text = Filemanager.GetOpenEhrTerm(71, Me.MenuTerminologyAdd.Text, language)
-        Me.MenuTerminologyAvailable.Text = Filemanager.GetOpenEhrTerm(70, Me.MenuTerminologyAvailable.Text, language)
-        Me.menuFileExport.Text = Filemanager.GetOpenEhrTerm(681, Me.MenuTerminologyAvailable.Text, language)
+        FileMenu.Text = Filemanager.GetOpenEhrTerm(43, FileMenu.Text, language)
+        MenuFileNew.Text = Filemanager.GetOpenEhrTerm(151, MenuFileNew.Text, language)
+        MenuFileOpen.Text = Filemanager.GetOpenEhrTerm(61, MenuFileOpen.Text, language)
+        MenuFileOpenFromWeb.Text = Filemanager.GetOpenEhrTerm(666, MenuFileOpenFromWeb.Text, language)
+        MenuFileSave.Text = Filemanager.GetOpenEhrTerm(183, MenuFileSave.Text, language)
+        menuFileNewWindow.Text = Filemanager.GetOpenEhrTerm(595, menuFileNewWindow.Text, language)
+        MenuFileSaveAs.Text = Filemanager.GetOpenEhrTerm(596, MenuFileSaveAs.Text, language)
+        MenuFileSpecialise.Text = Filemanager.GetOpenEhrTerm(185, MenuFileSpecialise.Text, language)
+        MenuFileExit.Text = Filemanager.GetOpenEhrTerm(63, MenuFileExit.Text, language)
+        EditMenu.Text = Filemanager.GetOpenEhrTerm(592, EditMenu.Text, language)
+        menuEditArchID.Text = Filemanager.GetOpenEhrTerm(632, menuEditArchID.Text, language)
+        DisplayMenu.Text = Filemanager.GetOpenEhrTerm(83, DisplayMenu.Text, language)
+        DisplayFindMenuItem.Text = Filemanager.GetOpenEhrTerm(693, DisplayFindMenuItem.Text, language)
+        DisplayFindContextMenuItem.Text = Filemanager.GetOpenEhrTerm(693, DisplayFindContextMenuItem.Text, language)
+        DisplayFindNextMenuItem.Text = Filemanager.GetOpenEhrTerm(694, DisplayFindNextMenuItem.Text, language)
+        DisplayFindNextContextMenuItem.Text = Filemanager.GetOpenEhrTerm(694, DisplayFindNextContextMenuItem.Text, language)
+        DisplayFindPreviousMenuItem.Text = Filemanager.GetOpenEhrTerm(695, DisplayFindPreviousMenuItem.Text, language)
+        DisplayFindPreviousContextMenuItem.Text = Filemanager.GetOpenEhrTerm(695, DisplayFindPreviousContextMenuItem.Text, language)
+        DisplayPrintMenuItem.Text = Filemanager.GetOpenEhrTerm(520, DisplayPrintMenuItem.Text, language)
+        DisplayPrintContextMenuItem.Text = Filemanager.GetOpenEhrTerm(520, DisplayPrintContextMenuItem.Text, language)
+        ToolsMenu.Text = Filemanager.GetOpenEhrTerm(667, ToolsMenu.Text, language)
+        ToolsOptionsMenuItem.Text = Filemanager.GetOpenEhrTerm(598, ToolsOptionsMenuItem.Text, language)
+        MenuHelpReport.Text = Filemanager.GetOpenEhrTerm(597, MenuHelpReport.Text, language)
+        HelpMenu.Text = Filemanager.GetOpenEhrTerm(48, HelpMenu.Text, language)
+        MenuHelpStart.Text = Filemanager.GetOpenEhrTerm(72, MenuHelpStart.Text, language)
+        TerminologyMenu.Text = Filemanager.GetOpenEhrTerm(47, TerminologyMenu.Text, language)
+        MenuHelpOpenehr.Text = Filemanager.GetOpenEhrTerm(74, MenuHelpOpenehr.Text, language)
+        MenuHelpAbout.Text = Filemanager.GetOpenEhrTerm(75, MenuHelpAbout.Text, language)
+        LanguageMenu.Text = Filemanager.GetOpenEhrTerm(46, LanguageMenu.Text, language)
+        MenuLanguageAdd.Text = Filemanager.GetOpenEhrTerm(68, MenuLanguageAdd.Text, language)
+        MenuLanguageChange.Text = Filemanager.GetOpenEhrTerm(69, MenuLanguageChange.Text, language)
+        MenuLanguageToggle.Text = Filemanager.GetOpenEhrTerm(692, MenuLanguageToggle.Text, language)
+        MenuLanguageAvailable.Text = Filemanager.GetOpenEhrTerm(67, MenuLanguageAvailable.Text, language)
+        MenuTerminologyAdd.Text = Filemanager.GetOpenEhrTerm(71, MenuTerminologyAdd.Text, language)
+        MenuTerminologyAvailable.Text = Filemanager.GetOpenEhrTerm(70, MenuTerminologyAvailable.Text, language)
+        menuFileExport.Text = Filemanager.GetOpenEhrTerm(681, MenuTerminologyAvailable.Text, language)
 
         'Front panel of designer
-        Me.lblArchetypeName.Text = Filemanager.GetOpenEhrTerm(58, Me.lblArchetypeName.Text, language)
-        Me.lblConcept.Text = Filemanager.GetOpenEhrTerm(54, Me.lblConcept.Text, language)
-        Me.tpConceptDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.tpConceptDescription.Text, language)
-        Me.tpConceptComment.Text = Filemanager.GetOpenEhrTerm(652, Me.tpConceptComment.Text, language)
-        Me.gbSpecialisation.Text = Filemanager.GetOpenEhrTerm(186, Me.gbSpecialisation.Text, language)
-        Me.butLinks.Text = Filemanager.GetOpenEhrTerm(659, Me.butLinks.Text, language)
-
+        lblArchetypeName.Text = Filemanager.GetOpenEhrTerm(58, lblArchetypeName.Text, language)
+        lblConcept.Text = Filemanager.GetOpenEhrTerm(54, lblConcept.Text, language)
+        tpConceptDescription.Text = Filemanager.GetOpenEhrTerm(113, tpConceptDescription.Text, language)
+        tpConceptComment.Text = Filemanager.GetOpenEhrTerm(652, tpConceptComment.Text, language)
+        gbSpecialisation.Text = Filemanager.GetOpenEhrTerm(186, gbSpecialisation.Text, language)
+        butLinks.Text = Filemanager.GetOpenEhrTerm(659, butLinks.Text, language)
 
         'Entry tab on designer
-        Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
-        Me.cbParticipation.Text = Filemanager.GetOpenEhrTerm(654, Me.cbParticipation.Text, language)
-        Me.cbPersonState.Text = Filemanager.GetOpenEhrTerm(79, Me.cbPersonState.Text, language)
-        Me.chkEventSeries.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(80, Me.chkEventSeries.Text, language), Filemanager.GetOpenEhrTerm(81, Me.chkEventSeries.Text, language))
-        Me.cbStructurePersonState.Text = Filemanager.GetOpenEhrTerm(82, Me.cbStructurePersonState.Text, language)
-        Me.cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, Me.cbProtocol.Text, language)
+        cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, cbProtocol.Text, language)
+        cbParticipation.Text = Filemanager.GetOpenEhrTerm(654, cbParticipation.Text, language)
+        cbPersonState.Text = Filemanager.GetOpenEhrTerm(79, cbPersonState.Text, language)
+        chkEventSeries.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(80, chkEventSeries.Text, language), Filemanager.GetOpenEhrTerm(81, chkEventSeries.Text, language))
+        cbStructurePersonState.Text = Filemanager.GetOpenEhrTerm(82, cbStructurePersonState.Text, language)
+        cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, cbProtocol.Text, language)
 
         'Display tab on Designer
-        Me.butPrint.Text = Filemanager.GetOpenEhrTerm(520, Me.butPrint.Text, language)
+        butPrint.Text = Filemanager.GetOpenEhrTerm(520, butPrint.Text, language)
 
         'Interface tab
-        Me.cbMandatory.Text = Filemanager.GetOpenEhrTerm(446, Me.cbMandatory.Text, language)
+        cbMandatory.Text = Filemanager.GetOpenEhrTerm(446, cbMandatory.Text, language)
 
         'Terminology tab on Designer
-        lblPrimaryLanguageText.Text = Filemanager.GetOpenEhrTerm(187, Me.lblPrimaryLanguageText.Text, language)
-        lblAvailableLanguages.Text = Filemanager.GetOpenEhrTerm(67, Me.lblAvailableLanguages.Text, language)
-        lblAvailableTerminologies.Text = Filemanager.GetOpenEhrTerm(70, Me.lblAvailableLanguages.Text, language)
-        DataGridTerminologies.CaptionText = Filemanager.GetOpenEhrTerm(70, Me.DataGridTerminologies.CaptionText, language)
+        lblPrimaryLanguageText.Text = Filemanager.GetOpenEhrTerm(187, lblPrimaryLanguageText.Text, language)
+        lblAvailableLanguages.Text = Filemanager.GetOpenEhrTerm(67, lblAvailableLanguages.Text, language)
+        lblAvailableTerminologies.Text = Filemanager.GetOpenEhrTerm(70, lblAvailableLanguages.Text, language)
+        DataGridTerminologies.CaptionText = Filemanager.GetOpenEhrTerm(70, DataGridTerminologies.CaptionText, language)
 
-        DataGridDefinitions.CaptionText = Filemanager.GetOpenEhrTerm(89, Me.DataGridDefinitions.CaptionText, language)
-        ConstraintDefinitionsDataGrid.CaptionText = Filemanager.GetOpenEhrTerm(623, Me.ConstraintDefinitionsDataGrid.CaptionText, language)
+        DataGridDefinitions.CaptionText = Filemanager.GetOpenEhrTerm(89, DataGridDefinitions.CaptionText, language)
+        ConstraintDefinitionsDataGrid.CaptionText = Filemanager.GetOpenEhrTerm(623, ConstraintDefinitionsDataGrid.CaptionText, language)
         lblConstraintStatements.Text = Filemanager.GetOpenEhrTerm(93, lblConstraintStatements.Text, language)
 
         'ColumnStyleHeadings
@@ -2319,23 +2403,23 @@ Public Class Designer
         ConstraintBindingsGrid.TranslateGui()
 
         'TabControl headings
-        Me.tpHeader.Title = Filemanager.GetOpenEhrTerm(76, Me.tpHeader.Title, language)
-        Me.tpDesign.Title = Filemanager.GetOpenEhrTerm(647, Me.tpDesign.Title, language)
-        'Me.tpParticipation.Title = Filemanager.GetOpenEhrTerm(654, Me.tpParticipation.Title, language)
-        Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(647, Me.tpSectionPage.Title, language)
-        Me.tpTerminology.Title = Filemanager.GetOpenEhrTerm(47, Me.tpTerminology.Title, language)
-        Me.tpText.Title = Filemanager.GetOpenEhrTerm(83, Me.tpText.Title, language)
-        Me.tpInterface.Title = Filemanager.GetOpenEhrTerm(84, Me.tpInterface.Title, language)
-        Me.tpDescription.Title = Filemanager.GetOpenEhrTerm(113, Me.tpDescription.Title, language)
-        Me.tpTerms.Title = Filemanager.GetOpenEhrTerm(86, Me.tpTerms.Title, language)
-        Me.tpBindings.Title = Filemanager.GetOpenEhrTerm(93, Me.tpTerms.Title, language)
-        Me.tpConstraints.Title = Filemanager.GetOpenEhrTerm(87, Me.tpConstraints.Title, language)
-        Me.tpLanguages.Title = Filemanager.GetOpenEhrTerm(88, Me.tpLanguages.Title, language)
-        Me.tpData.Title = Filemanager.GetOpenEhrTerm(80, Me.tpData.Title, language)
-        Me.tpRootState.Title = Filemanager.GetOpenEhrTerm(177, Me.tpRootState.Title, language)
-        Me.tpRootStateEventSeries.Title = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(177, Me.chkEventSeries.Text, language), Filemanager.GetOpenEhrTerm(81, Me.chkEventSeries.Text, language))
-        Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(177, Me.tpRootStateStructure.Title, language)
-        Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(446, Me.cbMandatory.Text, language)
+        tpHeader.Title = Filemanager.GetOpenEhrTerm(76, tpHeader.Title, language)
+        tpDesign.Title = Filemanager.GetOpenEhrTerm(647, tpDesign.Title, language)
+        'tpParticipation.Title = Filemanager.GetOpenEhrTerm(654, tpParticipation.Title, language)
+        tpSectionPage.Title = Filemanager.GetOpenEhrTerm(647, tpSectionPage.Title, language)
+        tpTerminology.Title = Filemanager.GetOpenEhrTerm(47, tpTerminology.Title, language)
+        tpDisplay.Title = Filemanager.GetOpenEhrTerm(83, tpDisplay.Title, language)
+        tpInterface.Title = Filemanager.GetOpenEhrTerm(84, tpInterface.Title, language)
+        tpDescription.Title = Filemanager.GetOpenEhrTerm(113, tpDescription.Title, language)
+        tpTerms.Title = Filemanager.GetOpenEhrTerm(86, tpTerms.Title, language)
+        tpBindings.Title = Filemanager.GetOpenEhrTerm(93, tpTerms.Title, language)
+        tpConstraints.Title = Filemanager.GetOpenEhrTerm(87, tpConstraints.Title, language)
+        tpLanguages.Title = Filemanager.GetOpenEhrTerm(88, tpLanguages.Title, language)
+        tpData.Title = Filemanager.GetOpenEhrTerm(80, tpData.Title, language)
+        tpRootState.Title = Filemanager.GetOpenEhrTerm(177, tpRootState.Title, language)
+        tpRootStateEventSeries.Title = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(177, chkEventSeries.Text, language), Filemanager.GetOpenEhrTerm(81, chkEventSeries.Text, language))
+        tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(177, tpRootStateStructure.Title, language)
+        tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(446, cbMandatory.Text, language)
     End Sub
 
     Private Sub TranslateSpecialisationNodes(ByVal tnc As TreeNodeCollection)
@@ -4546,7 +4630,7 @@ Public Class Designer
     End Sub
 
     Private Sub TabMain_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanged
-        If TabMain.SelectedTab Is tpText Then
+        If TabMain.SelectedTab Is tpDisplay Then
             If mRichTextArchetype.Text = "" Then
                 For Each tbb As System.Windows.Forms.ToolBarButton In DisplayToolBar.Buttons
                     tbb.Pushed = False
@@ -4769,13 +4853,14 @@ Public Class Designer
 
     Private Sub DisplayToolBar_ButtonClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolBarButtonClickEventArgs) Handles DisplayToolBar.ButtonClick
         ' Buttons are tagged with the file extension and the fixed buttons are tagged with standard english text.
+        TabMain.SelectedTab = tpDisplay
 
         Select Case CStr(e.Button.Tag).ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "find"
-                MenuDisplayFind_Click(sender, e)
+                DisplayFind_Click(sender, e)
 
             Case "print"
-                mRichTextArchetype.Print()
+                DisplayPrint_Click(sender, e)
 
             Case "html"
                 Try
@@ -4814,9 +4899,7 @@ Public Class Designer
             Case Else
                 ' toggle the buttons
                 For Each bt As ToolBarButton In DisplayToolBar.Buttons
-                    If Not bt Is e.Button Then
-                        bt.Pushed = False
-                    End If
+                    bt.Pushed = bt Is e.Button
                 Next
 
                 RefreshRichText()
@@ -4825,14 +4908,8 @@ Public Class Designer
 
 #End Region
 
-    Private Sub menuDisplayPrint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuDisplayPrint.Click
-        Me.mRichTextArchetype.Print()
-    End Sub
-
     Private Sub menuEditArchID_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuEditArchID.Click
         Dim arch_id As String = mFileManager.Archetype.Archetype_ID.Concept
-
-        'SRH 15 Nov 2007 - Added old value to make changes easier
         Dim defaultValue As String
         Dim i As Integer
 
@@ -4856,32 +4933,73 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub MenuDisplayFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDisplayFind.Click
+    Private Sub DisplayRtf_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayRtfMenuItem.Click
+        DisplayToolBar_ButtonClick(sender, New ToolBarButtonClickEventArgs(butRTF))
+    End Sub
+
+    Private Sub DisplayAdl_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayAdlMenuItem.Click
+        DisplayToolBar_ButtonClick(sender, New ToolBarButtonClickEventArgs(butADL))
+    End Sub
+
+    Private Sub DisplayXml_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayXmlMenuItem.Click
+        DisplayToolBar_ButtonClick(sender, New ToolBarButtonClickEventArgs(butXML))
+    End Sub
+
+    Private Sub DisplayHtml_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayHtmlMenuItem.Click
+        DisplayToolBar_ButtonClick(sender, New ToolBarButtonClickEventArgs(butHTML1))
+    End Sub
+
+    Private Sub DisplayFind_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayFindContextMenuItem.Click, DisplayFindMenuItem.Click
+        TabMain.SelectedTab = tpDisplay
+
         Dim s As String = Main.Instance.GetInput(AE_Constants.Instance.Text, Me, mFindString)
 
         If s <> "" Then
             mFindString = s
-            MenuDisplayFindAgain_Click(sender, e)
+            DisplayFindNext_Click(sender, e)
         End If
     End Sub
 
-    Private Sub MenuDisplayFindAgain_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDisplayFindAgain.Click
-        Dim from As Integer = -1
+    Private Sub DisplayFindNext_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayFindNextContextMenuItem.Click, DisplayFindNextMenuItem.Click
+        TabMain.SelectedTab = tpDisplay
+        mRichTextArchetype.Focus()
 
         If mFindString <> "" Then
-            from = mRichTextArchetype.Find(mFindString, mRichTextArchetype.SelectionStart + mRichTextArchetype.SelectionLength, RichTextBoxFinds.None)
-        End If
-
-        If from > -1 Then
-            mRichTextArchetype.Focus()
-            mRichTextArchetype.Select(from, mFindString.Length)
-        Else
-            Beep()
+            FindRichText(mRichTextArchetype.Find(mFindString, mRichTextArchetype.SelectionStart + mRichTextArchetype.SelectionLength, RichTextBoxFinds.None))
         End If
     End Sub
 
-    Private Sub ContextMenuDisplay_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuDisplay.Popup
-        MenuDisplayFindAgain.Visible = mFindString <> ""
+    Private Sub DisplayFindPrevious_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayFindPreviousContextMenuItem.Click, DisplayFindPreviousMenuItem.Click
+        TabMain.SelectedTab = tpDisplay
+        mRichTextArchetype.Focus()
+
+        If mFindString <> "" Then
+            FindRichText(mRichTextArchetype.Find(mFindString, 0, mRichTextArchetype.SelectionStart, RichTextBoxFinds.Reverse))
+        End If
+    End Sub
+
+    Private Sub FindRichText(ByVal start As Integer)
+        If start > -1 Then
+            mRichTextArchetype.Select(start, mFindString.Length)
+        Else
+            Beep()
+            Dim t As New ToolTip()
+            t.ShowAlways = True
+            t.IsBalloon = True
+            t.Show(Filemanager.GetOpenEhrTerm(289, "Could not find") + ": " + mFindString, DisplayToolBar, 300, 5, 2000)
+        End If
+    End Sub
+
+    Private Sub DisplayPrint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayPrintContextMenuItem.Click, DisplayPrintMenuItem.Click
+        TabMain.SelectedTab = tpDisplay
+        mRichTextArchetype.Print()
+    End Sub
+
+    Private Sub DisplayMenu_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DisplayContextMenu.Popup, DisplayMenu.Popup
+        DisplayFindNextMenuItem.Visible = mFindString <> ""
+        DisplayFindNextContextMenuItem.Visible = mFindString <> ""
+        DisplayFindPreviousMenuItem.Visible = mFindString <> ""
+        DisplayFindPreviousContextMenuItem.Visible = mFindString <> ""
     End Sub
 
     Private Sub cbMandatory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMandatory.CheckedChanged

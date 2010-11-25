@@ -765,6 +765,9 @@
   <PrimaryRubric Id="690" Language="en" />
   <PrimaryRubric Id="691" Language="en" />
   <PrimaryRubric Id="692" Language="en" />
+  <PrimaryRubric Id="693" Language="en" />
+  <PrimaryRubric Id="694" Language="en" />
+  <PrimaryRubric Id="695" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1389,6 +1392,9 @@
   <Concept Language="en" ConceptID="690" Rubric="Copyright" />
   <Concept Language="en" ConceptID="691" Rubric="References" />
   <Concept Language="en" ConceptID="692" Rubric="Toggle Language" />
+  <Concept Language="en" ConceptID="693" Rubric="Find" />
+  <Concept Language="en" ConceptID="694" Rubric="Find Next" />
+  <Concept Language="en" ConceptID="695" Rubric="Find Previous" />
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
