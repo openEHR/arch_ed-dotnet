@@ -4993,7 +4993,7 @@ Public Class Designer
             t.IsBalloon = True
             t.ToolTipTitle = Filemanager.GetOpenEhrTerm(289, "Could not find")
             t.ToolTipIcon = ToolTipIcon.Info
-            t.Show(mFindString, DisplayToolBar, 300, 5, 5000)
+            t.Show(mFindString, mRichTextArchetype, 300, -20, 5000)
         End If
     End Sub
 
