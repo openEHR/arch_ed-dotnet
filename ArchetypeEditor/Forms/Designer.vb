@@ -4841,6 +4841,8 @@ Public Class Designer
                 PrepareToSave()
 
                 Try
+                    Cursor = Cursors.WaitCursor
+
                     If s = mFileManager.ParserType.ToLowerInvariant() Then
                         mRichTextArchetype.Text = mFileManager.Archetype.SerialisedArchetype(s)
                     Else
@@ -4848,6 +4850,8 @@ Public Class Designer
                     End If
                 Catch ex As Exception
                     ShowException("Error serialising archetype", ex)
+                Finally
+                    Cursor = Cursors.Default
                 End Try
         End Select
     End Sub
@@ -4987,7 +4991,9 @@ Public Class Designer
             Dim t As New ToolTip()
             t.ShowAlways = True
             t.IsBalloon = True
-            t.Show(Filemanager.GetOpenEhrTerm(289, "Could not find") + ": " + mFindString, DisplayToolBar, 300, 5, 2000)
+            t.ToolTipTitle = Filemanager.GetOpenEhrTerm(289, "Could not find")
+            t.ToolTipIcon = ToolTipIcon.Info
+            t.Show(mFindString, DisplayToolBar, 300, 5, 5000)
         End If
     End Sub
 
