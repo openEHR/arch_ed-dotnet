@@ -197,18 +197,6 @@ Public Class OntologyManager
         mReplaceTranslations = 0
     End Sub
 
-    Public Sub Reset(Optional ByVal LanguageCode As String = "") ' resets for beginning a new archetype
-        mReplaceTranslations = 0
-        mOntology.Reset()
-
-        If LanguageCode = "" Then
-            LanguageCode = Main.Instance.DefaultLanguageCode
-        End If
-
-        mOntology.SetPrimaryLanguage(LanguageCode)
-        InitialiseOntologyManager(LanguageCode)
-    End Sub
-
     Public Sub PopulateAllTerms()
         mOntology.PopulateAllTerms(Me)
     End Sub
