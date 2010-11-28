@@ -1927,7 +1927,6 @@ Public Class Designer
 
         mFileManager.IsNew = False
 
-
         ' stop the handler while we get all the languages
         RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
         ResetDefaults()
@@ -2185,9 +2184,6 @@ Public Class Designer
                 mFileManager.FileName = ""
 
                 SetUpGUI(ReferenceModel.ArchetypedClass, True)
-
-                mFileManager.FileLoading = False
-                mFileManager.FileEdited = True
 
                 AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
@@ -3336,100 +3332,105 @@ Public Class Designer
     End Sub
 
     Private Sub SetUpGUI(ByVal archetyped_class As StructureType, ByVal isNew As Boolean)
-
         'NOTE: Showing tabpages in the editor requires generating
         'IDs for the structural components (e.g. EventSeries and List)
         'This feature cannot be run unless the Ontology is initialised
         If mFileManager.OntologyManager.Ontology Is Nothing Then
             Beep()
             Debug.Assert(False)
-            Return
+        Else
+            Select Case archetyped_class
+                Case StructureType.OBSERVATION
+                    'must have a EventSeries
+                    cbPersonState.Visible = True
+
+                    If isNew Then
+                        SetUpDataStructure()
+                        SetUpEventSeries()
+                    End If
+
+                Case StructureType.EVALUATION, StructureType.ADMIN_ENTRY
+                    If isNew Then
+                        SetUpDataStructure()
+                    End If
+
+                Case StructureType.INSTRUCTION
+                    If isNew Then
+                        SetUpInstruction()
+                    End If
+
+                Case StructureType.ACTION
+                    If isNew Then
+                        SetUpAction()
+                    End If
+
+                Case StructureType.SECTION
+                    If isNew Then
+                        SetUpSection()
+                    End If
+
+                Case StructureType.COMPOSITION
+                    If isNew Then
+                        SetUpComposition()
+                    End If
+
+                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                    If isNew Then
+                        SetUpStructure()
+                    End If
+
+                Case StructureType.Cluster
+                    If isNew Then
+                        SetUpStructure()
+                        mTabPageDataStructure.SetAsCluster(mFileManager.Archetype.ConceptCode)
+                    End If
+
+                Case StructureType.Element
+                    If isNew Then
+                        SetUpStructure()
+                        mTabPageDataStructure.SetAsElement(mFileManager.Archetype.ConceptCode)
+                    End If
+
+                Case StructureType.ENTRY
+                    If isNew Then
+                        SetUpDataStructure()
+                    End If
+
+                Case Else
+                    Beep()
+                    Debug.Assert(False)
+                    Throw New Exception(String.Format("{0}: {1}", AE_Constants.Instance.Error_loading, mFileManager.Archetype.Archetype_ID.ToString))
+
+            End Select
+
+            ShowTabPages(archetyped_class, isNew)
+
+            lblLifecycle.Text = mFileManager.Archetype.LifeCycle
+            lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
+            Text = AE_Constants.Instance.MessageBoxCaption & " [" & txtConceptInFull.Text & "]"
+
+            ' Set the GUI language elements
+            lblPrimaryLanguage.Text = mFileManager.OntologyManager.PrimaryLanguageText
+
+            For Each row As DataRow In mFileManager.OntologyManager.LanguagesTable.Rows
+                AddLanguageToMenu(row(1))
+            Next
+
+            'Set the description and translation
+            mTabPageDescription.Description = mFileManager.Archetype.Description
+            mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
+
+            RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
+            RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
+
+            If isNew Then
+                mFileManager.FileLoading = False
+                mFileManager.FileEdited = True
+
+                Dim concept As String = mFileManager.Archetype.Archetype_ID.Concept
+                txtConceptInFull.Text = Char.ToUpper(concept(0), New Globalization.CultureInfo(Main.Instance.DefaultLanguageCode)) + concept.Substring(1).Replace("_", " ")
+            End If
         End If
-
-        Select Case archetyped_class
-            Case StructureType.OBSERVATION
-                'must have a EventSeries
-                Me.cbPersonState.Visible = True
-                If isNew Then
-                    SetUpDataStructure()
-                    SetUpEventSeries()
-                End If
-
-            Case StructureType.EVALUATION, StructureType.ADMIN_ENTRY
-                If isNew Then
-                    SetUpDataStructure()
-                End If
-
-            Case StructureType.INSTRUCTION
-                If isNew Then
-                    SetUpInstruction()
-                End If
-
-            Case StructureType.ACTION
-                If isNew Then
-                    SetUpAction()
-                End If
-
-            Case StructureType.SECTION
-                If isNew Then
-                    SetUpSection()
-                End If
-
-            Case StructureType.COMPOSITION
-                If isNew Then
-                    SetUpComposition()
-                End If
-
-            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                If isNew Then
-                    SetUpStructure()
-                End If
-
-            Case StructureType.Cluster
-                If isNew Then
-                    SetUpStructure()
-                    Me.mTabPageDataStructure.SetAsCluster(mFileManager.Archetype.ConceptCode)
-                End If
-
-            Case StructureType.Element
-                If isNew Then
-                    SetUpStructure()
-                    Me.mTabPageDataStructure.SetAsElement(mFileManager.Archetype.ConceptCode)
-                End If
-
-            Case StructureType.ENTRY
-                If isNew Then
-                    SetUpDataStructure()
-                End If
-
-            Case Else
-                Beep()
-                Debug.Assert(False)
-                Throw New Exception(String.Format("{0}: {1}", AE_Constants.Instance.Error_loading, mFileManager.Archetype.Archetype_ID.ToString))
-
-        End Select
-
-        ShowTabPages(archetyped_class, isNew)
-
-        Me.lblLifecycle.Text = mFileManager.Archetype.LifeCycle
-        Me.lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
-        ' Set the form text
-        Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & Me.txtConceptInFull.Text & "]"
-
-        ' Set the GUI language elements
-        Me.lblPrimaryLanguage.Text = mFileManager.OntologyManager.PrimaryLanguageText
-        ' set the language menu
-        Dim d_row As DataRow
-        For Each d_row In mFileManager.OntologyManager.LanguagesTable.Rows
-            AddLanguageToMenu(d_row(1))
-        Next
-
-        'Set the description and translation
-        mTabPageDescription.Description = mFileManager.Archetype.Description
-        mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
-
-        RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
-        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
     End Sub
 
     Private Function SetNewArchetypeName(ByVal AllowOpen As Boolean) As Integer
@@ -4246,22 +4247,16 @@ Public Class Designer
 
             'load the start screen
             If SetNewArchetypeName(True) = 2 Then
-
                 ' new archetype
                 SetUpGUI(ReferenceModel.ArchetypedClass, True)
-                mFileManager.FileLoading = False
-                mFileManager.FileEdited = True
-
-                'Case 1  -  archetype openned - no action
-                'Case 0  - exit application called from in set new archetype name
             End If
         End If
 
         If Main.Instance.Options.AutosaveInterval = 0 Then
-            Me.mAutoSaveTimer.Enabled = False
+            mAutoSaveTimer.Enabled = False
         Else
-            Me.mAutoSaveTimer.Enabled = True
-            Me.mAutoSaveTimer.Interval = Main.Instance.Options.AutosaveInterval * 60000
+            mAutoSaveTimer.Enabled = True
+            mAutoSaveTimer.Interval = Main.Instance.Options.AutosaveInterval * 60000
         End If
 
         ''Add the display format buttons based on the parser types
@@ -4281,7 +4276,6 @@ Public Class Designer
             e.Cancel = True
         End If
     End Sub
-
 
     Protected Overrides Sub Finalize()
         MyBase.Finalize()

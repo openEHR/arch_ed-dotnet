@@ -767,7 +767,7 @@ Public Class FileManagerLocal
     '    'anOntologyManager.ConvertToADL(New ADL_Ontology(CType(mArchetypeEngine, ADL_Interface).EIF_adlInterface, False))
     'End Sub
 
-    Public Sub NewArchetype(ByVal an_ArchetypeID As ArchetypeID, ByVal FileType As String)
+    Public Sub NewArchetype(ByVal archetypeID As ArchetypeID, ByVal FileType As String)
         If ParserType <> Main.Instance.Options.DefaultParser Then
             Select Case Main.Instance.Options.DefaultParser
                 Case "adl"
@@ -777,39 +777,26 @@ Public Class FileManagerLocal
             End Select
         End If
 
-        Select Case FileType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-            Case "adl"
-                mArchetypeEngine.NewArchetype(an_ArchetypeID, Main.Instance.DefaultLanguageCode)
+        mArchetypeEngine.NewArchetype(archetypeID, Main.Instance.DefaultLanguageCode)
 
-                If ArchetypeAvailable Then
-                    Dim ontology As New ArchetypeEditor.ADL_Classes.ADL_Ontology(CType(mArchetypeEngine, ArchetypeEditor.ADL_Classes.ADL_Interface).ADL_Parser)
+        If ArchetypeAvailable Then
+            'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
+            Select Case FileType.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                Case "adl"
+                    OntologyManager.Ontology = New ArchetypeEditor.ADL_Classes.ADL_Ontology(CType(mArchetypeEngine, ArchetypeEditor.ADL_Classes.ADL_Interface).ADL_Parser)
+                Case "xml"
+                    OntologyManager.Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(CType(mArchetypeEngine, ArchetypeEditor.XML_Classes.XML_Interface).Xml_Parser)
+                    OntologyManager.Ontology.SetLanguage(Main.Instance.DefaultLanguageCode)
+                Case Else
+                    Debug.Assert(False, "Type is not handled: " & FileType)
+            End Select
 
-                    'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
-                    OntologyManager.Ontology = ontology
-                    ' a new archetype always has a concept code set to "at0000"
-                    Dim term As New RmTerm(Archetype.ConceptCode)
-                    term.Text = "unknown"
-                    term.Description = "unknown"
-                    OntologyManager.UpdateTerm(term)
-                End If
-            Case "xml"
-                mArchetypeEngine.NewArchetype(an_ArchetypeID, Main.Instance.DefaultLanguageCode)
-
-                If ArchetypeAvailable Then
-                    Dim ontology As New ArchetypeEditor.XML_Classes.XML_Ontology(CType(mArchetypeEngine, ArchetypeEditor.XML_Classes.XML_Interface).Xml_Parser)
-                    ontology.SetLanguage(Main.Instance.DefaultLanguageCode)
-
-                    'Apply a new ontology - this empties the GUI - use ReplaceOntology to preserve
-                    OntologyManager.Ontology = ontology
-                    ' a new archetype always has a concept code set to "at0000"
-                    Dim term As New RmTerm(Archetype.ConceptCode)
-                    term.Text = "unknown"
-                    term.Description = "unknown"
-                    OntologyManager.UpdateTerm(term)
-                End If
-            Case Else
-                Debug.Assert(False, "Type is not handled: " & FileType)
-        End Select
+            ' a new archetype always has a concept code set to "at0000"
+            Dim term As New RmTerm(Archetype.ConceptCode)
+            term.Text = "unknown"
+            term.Description = "unknown"
+            OntologyManager.UpdateTerm(term)
+        End If
     End Sub
 
     Sub New()
