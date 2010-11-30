@@ -421,43 +421,33 @@ Public Class ReferenceModel
                 Return True
             End If
         Next
+
         Return False
     End Function
 
     Public Shared Function ValidStructureTypes() As StructureType()
+        Dim result As StructureType()
+
         Select Case mArchetypedClass
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                Dim s(0) As StructureType
-                s(0) = mArchetypedClass
-                Return s
+                result = New StructureType() {mArchetypedClass}
             Case StructureType.Cluster, StructureType.Columns, StructureType.Element, StructureType.Reference, StructureType.SECTION, StructureType.Slot
                 'classes which cannot contain structure types        
-                Dim s(0) As StructureType
-                Return s ' empty
+                result = New StructureType() {}
             Case Else
                 Select Case mRefModelType
                     Case ReferenceModelType.openEHR_EHR
-                        Dim s(3) As StructureType
-                        s(0) = StructureType.Single
-                        s(1) = StructureType.List
-                        s(2) = StructureType.Tree
-                        s(3) = StructureType.Table
-                        Return s
+                        result = New StructureType() {StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table}
                     Case ReferenceModelType.CEN_EHR, ReferenceModelType.HL7_CDA
-                        Dim s(2) As StructureType
-                        s(0) = StructureType.Single
-                        s(1) = StructureType.List
-                        s(2) = StructureType.Tree
-                        Return s
+                        result = New StructureType() {StructureType.Single, StructureType.List, StructureType.Tree}
                     Case ReferenceModelType.openEHR_Demographic
-                        Debug.Assert(False, "Not available")
-                        Dim s(0) As StructureType
-                        Return s ' empty
+                        result = New StructureType() {}
                     Case Else
-                        Dim s(0) As StructureType
-                        Return s ' empty
+                        result = New StructureType() {}
                 End Select
         End Select
+
+        Return result
     End Function
 
     Public Shared Function IsValidArchetypeDefinition(ByVal a_structure_type As StructureType) As Boolean

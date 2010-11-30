@@ -3209,38 +3209,35 @@ Public Class Designer
 #Region "Menus, toolbar and related functions - apart from language (see region below)"
 
     Private Sub SetUpStructure()
-        Me.mTabPageDataStructure = New TabPageStructure
-        Me.tpSectionPage.Controls.Clear()
-        Me.tpSectionPage.Controls.Add(mTabPageDataStructure)
+        mTabPageDataStructure = New TabPageStructure
+        tpSectionPage.Controls.Clear()
+        tpSectionPage.Controls.Add(mTabPageDataStructure)
         mTabPageDataStructure.Dock = DockStyle.Fill
-        Me.mComponentsCollection.Add(mTabPageDataStructure)
+        mComponentsCollection.Add(mTabPageDataStructure)
     End Sub
 
     Private Sub SetUpSection()
         mTabPageSection = New TabPageSection
-        Me.tpSectionPage.Controls.Clear()
-        Me.tpSectionPage.Controls.Add(mTabPageSection)
+        tpSectionPage.Controls.Clear()
+        tpSectionPage.Controls.Add(mTabPageSection)
         mTabPageSection.Dock = DockStyle.Fill
-        Me.mComponentsCollection.Add(mTabPageSection)
-        'Me.tpSectionPage.Title = AE_Constants.Instance.Section
+        mComponentsCollection.Add(mTabPageSection)
 
-        Me.HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
-        Me.HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_section.htm")
+        HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
+        HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_section.htm")
     End Sub
 
     Private Sub SetUpComposition()
         mTabPageComposition = New TabPageComposition
-        Me.tpSectionPage.Controls.Clear()
-        Me.tpSectionPage.Controls.Add(mTabPageComposition)
+        tpSectionPage.Controls.Clear()
+        tpSectionPage.Controls.Add(mTabPageComposition)
         mTabPageComposition.Dock = DockStyle.Fill
-        Me.mComponentsCollection.Add(mTabPageComposition)
-        'Me.tpSectionPage.Title = mFileManager.Archetype.RmType.ToString
+        mComponentsCollection.Add(mTabPageComposition)
 
-        Me.HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
+        HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
         'FIXME - need to add help about how to edit a composition
-        Me.HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_section.htm")
+        HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_section.htm")
     End Sub
-
 
     Private Sub SetUpEventSeries(Optional ByVal NodeId As String = "")
         Dim tp As New Crownwood.Magic.Controls.TabPage
@@ -3253,13 +3250,13 @@ Public Class Designer
         mComponentsCollection.Add(mTabPageDataEventSeries)
         tp.Controls.Add(mTabPageDataEventSeries)
         mTabPageDataEventSeries.Dock = DockStyle.Fill
-        Me.TabStructure.TabPages.Add(tp)
+        TabStructure.TabPages.Add(tp)
 
         file_loading = mFileManager.FileLoading
         mFileManager.FileLoading = True
         ' this creates a new EventSeries unless fileloading set to true
         ' which happens when creating a new archetype
-        Me.chkEventSeries.Checked = True
+        chkEventSeries.Checked = True
         ' now put it back to how it was
         mFileManager.FileLoading = file_loading
 
@@ -3271,64 +3268,55 @@ Public Class Designer
             mTabPageDataEventSeries.NodeId = NodeId
         End If
 
-        Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
-        Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_EventSeries.htm")
+        HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
+        HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_EventSeries.htm")
     End Sub
 
     Private Sub SetUpInstruction()
         ' reset the data structure tab page
         mTabPageInstruction = New TabPageInstruction
 
-        'Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(557, StructureType.INSTRUCTION.ToString)
-        Me.tpSectionPage.Controls.Clear()
-        Me.tpSectionPage.Controls.Add(mTabPageInstruction)
+        tpSectionPage.Controls.Clear()
+        tpSectionPage.Controls.Add(mTabPageInstruction)
         mTabPageInstruction.Dock = DockStyle.Fill
 
         ' add it to the collection of components that require translation
-        Me.mComponentsCollection.Add(mTabPageInstruction)
+        mComponentsCollection.Add(mTabPageInstruction)
 
-        Me.HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
-        Me.HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_instruction.htm")
-
+        HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
+        HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_instruction.htm")
     End Sub
 
     Private Sub SetUpAction()
         ' reset the data structure tab page
         mTabPageAction = New TabPageAction
 
-        'Me.tpSectionPage.Title = Filemanager.GetOpenEhrTerm(556, "Action")
-        Me.tpSectionPage.Controls.Clear()
-        Me.tpSectionPage.Controls.Add(mTabPageAction)
+        tpSectionPage.Controls.Clear()
+        tpSectionPage.Controls.Add(mTabPageAction)
         mTabPageAction.Dock = DockStyle.Fill
 
         ' add it to the collection of components that require translation
-        Me.mComponentsCollection.Add(mTabPageAction)
+        mComponentsCollection.Add(mTabPageAction)
 
-        Me.HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
-        Me.HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_instruction.htm")
-
+        HelpProviderDesigner.SetHelpNavigator(tpSectionPage, HelpNavigator.Topic)
+        HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_instruction.htm")
     End Sub
 
     Private Sub SetUpDataStructure()
         ' reset the data structure tab page
         mTabPageDataStructure = New TabPageStructure
-
-        'Changed SRH: Sep 1st 2007
         mTabPageDataStructure.EmbeddedAllowed = False
-
-        'SRH: Jan 6th 2010 - EDT 585
-        'Data is a mandatory structure in data
         mTabPageDataStructure.IsMandatory = True
 
-        Me.tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
-        Me.tpDataStructure.Controls.Add(mTabPageDataStructure)
+        tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
+        tpDataStructure.Controls.Add(mTabPageDataStructure)
         mTabPageDataStructure.Dock = DockStyle.Fill
 
         ' add it to the collection of components that require translation
         mComponentsCollection.Add(mTabPageDataStructure)
 
-        Me.TabStructure.SelectedIndex = 0
-        Me.tpDataStructure.Selected = True
+        TabStructure.SelectedIndex = 0
+        tpDataStructure.Selected = True
     End Sub
 
     Private Sub SetUpGUI(ByVal archetyped_class As StructureType, ByVal isNew As Boolean)
@@ -3726,16 +3714,15 @@ Public Class Designer
 #Region "Methods to build the GUI when an archetype is loaded"
 
     Private Sub ProcessStateEventSeries(ByVal a_history As RmHistory)
-
-        Me.cbPersonState.Checked = True
+        cbPersonState.Checked = True
         'cannot have state associated with structure
-        Me.cbStructurePersonState.Enabled = False
-        Me.TabDesign.TabPages.Add(Me.mBaseTabPagesCollection.Item("tpRootState"))
-        Me.tpRootState.Visible = True
+        cbStructurePersonState.Enabled = False
+        TabDesign.TabPages.Add(mBaseTabPagesCollection.Item("tpRootState"))
+        tpRootState.Visible = True
 
         mTabPageStateEventSeries = New TabpageHistory
         mTabPageStateEventSeries.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.tpRootStateEventSeries.Controls.Add(mTabPageStateEventSeries)
+        tpRootStateEventSeries.Controls.Add(mTabPageStateEventSeries)
         mTabPageStateEventSeries.Dock = DockStyle.Fill
         mTabPageStateEventSeries.ProcessEventSeries(a_history)
         mComponentsCollection.Add(mTabPageStateEventSeries)
@@ -3743,14 +3730,15 @@ Public Class Designer
         mTabPageStateStructure = New TabPageStructure  'Me
         mTabPageStateStructure.IsState = True  ' sets some display characteristics of buttons
         mTabPageStateStructure.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.tpRootStateStructure.Controls.Add(mTabPageStateStructure)
+        tpRootStateStructure.Controls.Add(mTabPageStateStructure)
         mTabPageStateStructure.Dock = DockStyle.Fill
-        If Not a_history.Data Is Nothing Then
-            Me.mTabPageStateStructure.ProcessStructure(a_history.Data)
-        End If
-        Me.tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(mTabPageStateStructure.StructureType, mTabPageStateStructure.StructureType.ToString())
-        mComponentsCollection.Add(mTabPageStateStructure)
 
+        If Not a_history.Data Is Nothing Then
+            mTabPageStateStructure.ProcessStructure(a_history.Data)
+        End If
+
+        tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(mTabPageStateStructure.StructureType, mTabPageStateStructure.StructureType.ToString())
+        mComponentsCollection.Add(mTabPageStateStructure)
     End Sub
 
     Private Sub ProcessEventSeries(ByVal a_EventSeries As RmHistory)
@@ -3758,21 +3746,20 @@ Public Class Designer
 
         SetUpEventSeries(a_EventSeries.NodeId)
         mTabPageDataEventSeries.ProcessEventSeries(a_EventSeries)
+
         If Not a_EventSeries.Data Is Nothing Then
             ProcessDataStructure(a_EventSeries.Data)
         End If
-
     End Sub
 
     Private Sub ProcessState(ByVal a_Structure As RmStructure)
-
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageDataStateStructure = New TabPageStructure  'Me)
         mTabPageDataStateStructure.IsState = True ' allows assumed values to be set (buttons visible)
-        Me.cbStructurePersonState.Checked = True
+        cbStructurePersonState.Checked = True
 
         If a_Structure.Type = StructureType.Slot Then
-            mTabPageDataStateStructure.ProcessStructure(CType(a_Structure, RmSlot))
+            mTabPageDataStateStructure.ProcessSlot(CType(a_Structure, RmSlot))
         Else
             mTabPageDataStateStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
         End If
@@ -3785,12 +3772,9 @@ Public Class Designer
         tp.BackColor = System.Drawing.Color.RoyalBlue
         tp.Name = "tpStateStructure"
         tp.Title = AE_Constants.Instance.Person_state
-        Me.TabStructure.TabPages.Add(tp)
-
-
-        Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
-        Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_state.html")
-
+        TabStructure.TabPages.Add(tp)
+        HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
+        HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_state.html")
     End Sub
 
     Private Sub ProcessStructure(ByVal a_Structure As RmStructureCompound)
@@ -3805,37 +3789,26 @@ Public Class Designer
 
     Private Sub ProcessElement(ByVal an_element As RmElement)
         SetUpStructure()
-        mTabPageDataStructure.ProcessStructure(an_element)
+        mTabPageDataStructure.ProcessElement(an_element)
     End Sub
 
-
     Private Sub ProcessPathwaySpecification(ByVal a_structure As RmStructureCompound)
-
-
     End Sub
 
     Private Sub ProcessDataStructure(ByVal a_Structure As RmStructure)
-        'Changed - no slots for data in archetypes (allowed in state and protocol)
-        'Added chkEmbedded = false
-        'If a_Structure.Type = StructureType.Slot Then
-        'mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmSlot))
-        'Else
         mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
-        'End If
         mTabPageDataStructure.EmbeddedAllowed = False
-
-        'SRH: Jan 6th 2010 - EDT 585 - has to be 1..1
         mTabPageDataStructure.IsMandatory = True
-
-        Me.tpDataStructure.Title = mTabPageDataStructure.StructureTypeAsString
+        tpDataStructure.Title = mTabPageDataStructure.StructureTypeAsString
     End Sub
 
     Private Sub ProcessProtocol(ByVal rm As RmStructure, ByVal tbCtrl As Crownwood.Magic.Controls.TabControl)
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageProtocolStructure = New TabPageStructure '(Me)
         mTabPageProtocolStructure.BackColor = System.Drawing.Color.PaleGoldenrod
+
         If rm.Type = StructureType.Slot Then
-            mTabPageProtocolStructure.ProcessStructure(CType(rm, RmSlot))
+            mTabPageProtocolStructure.ProcessSlot(CType(rm, RmSlot))
         Else
             mTabPageProtocolStructure.ProcessStructure(CType(rm, RmStructureCompound))
         End If
@@ -3848,11 +3821,12 @@ Public Class Designer
         tp.Name = "tpProtocol"
         tp.Title = Filemanager.GetOpenEhrTerm(78, "Protocol")
         tbCtrl.TabPages.Add(tp)
-        Me.cbProtocol.Checked = True
+        cbProtocol.Checked = True
 
-        Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
-        Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_protocol.htm")
+        HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
+        HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_protocol.htm")
     End Sub
+
 #End Region
 
 #Region "Methods to save archetype as represented in the GUI"

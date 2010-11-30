@@ -55,7 +55,7 @@ Public Class TabPageActivity
                     Case StructureType.List, StructureType.Table, StructureType.Tree, StructureType.Single
                         mActionSpecification.ProcessStructure(CType(rm, RmStructureCompound))
                     Case StructureType.Slot
-                        mActionSpecification.ProcessStructure(CType(rm, RmSlot))
+                        mActionSpecification.ProcessSlot(CType(rm, RmSlot))
                     Case Else
                         Debug.Assert(False, "Not handled yet")
                 End Select

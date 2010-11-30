@@ -53,12 +53,10 @@ Public Class EntryStructure
 
         ' need to set nodeID prior to setting structure type
         mNodeId = rm.NodeId
-
         mFileManager = a_file_manager
         mStructureType = rm.Type
         SetHelpTopic(StructureType.Single)
         ShowIcons()
-
     End Sub
 
     Public Sub New(ByVal rm As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)
@@ -69,16 +67,14 @@ Public Class EntryStructure
 
         ' need to set nodeID prior to setting structure type
         mNodeId = rm.NodeId
-
         mFileManager = a_file_manager
         mStructureType = rm.Type
+
         ' layout the buttons on the icons panel
         Select Case rm.Type
-            Case StructureType.Single, StructureType.List, _
-                StructureType.Tree, StructureType.Table
+            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 SetHelpTopic(mStructureType)
-                Me.menuChangeStructure = New System.Windows.Forms.MenuItem
-                menuChangeStructure.Text = AE_Constants.Instance.ChangeStructure
+                menuChangeStructure = New System.Windows.Forms.MenuItem(AE_Constants.Instance.ChangeStructure)
             Case StructureType.Cluster
                 SetHelpTopic(StructureType.Tree)
             Case Else
@@ -86,9 +82,7 @@ Public Class EntryStructure
         End Select
 
         ShowIcons()
-
         SetCardinality(rm)
-
     End Sub
 
     Public Sub New(ByVal a_structure_as_string As String, ByVal a_file_manager As FileManagerLocal)
@@ -96,27 +90,23 @@ Public Class EntryStructure
         'This call is required by the Windows Form Designer.
         InitializeComponent()
         'Add any initialization after the InitializeComponent() call
+
         mFileManager = a_file_manager
 
         ' also sets the node Id if it is not already set
-        Me.StructureType = System.Enum.Parse(StructureType.GetType, a_structure_as_string)
+        StructureType = System.Enum.Parse(StructureType.GetType, a_structure_as_string)
 
         ' layout the buttons on the icons panel
         Select Case mStructureType
-            Case StructureType.Single, StructureType.List, _
-                StructureType.Tree, StructureType.Table
+            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 SetHelpTopic(mStructureType)
             Case Else
                 Debug.Assert(False)
         End Select
 
-        Me.menuChangeStructure = New System.Windows.Forms.MenuItem
-        menuChangeStructure.Text = AE_Constants.Instance.ChangeStructure
-
+        menuChangeStructure = New System.Windows.Forms.MenuItem(AE_Constants.Instance.ChangeStructure)
         ShowIcons()
-
         SetCardinality(mStructureType)
-
     End Sub
 
     Public Sub New()
@@ -569,7 +559,7 @@ Public Class EntryStructure
         End Get
     End Property
 
-    Public Property ShowChangeStructureMenu() As Boolean
+    Public Property IsChangeStructureMenuVisible() As Boolean
         Get
             Return menuChangeStructure.Visible
         End Get

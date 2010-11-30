@@ -247,7 +247,7 @@ Public Class TabPageComposition
                 Case StructureType.Participation
                     mParticipationConstraint.OtherParticipations = CType(rm, RmStructureCompound)
                 Case StructureType.Slot
-                    mContextConstraint.ProcessStructure(CType(rm, RmSlot))
+                    mContextConstraint.ProcessSlot(CType(rm, RmSlot))
                 Case Else
                     Debug.Assert(False, "Not handled yet")
             End Select

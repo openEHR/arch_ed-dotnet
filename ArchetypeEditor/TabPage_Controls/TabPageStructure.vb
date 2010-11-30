@@ -17,7 +17,6 @@
 Option Explicit On
 
 Public Class TabPageStructure
-
     Inherits System.Windows.Forms.UserControl
 
     Private mIsEmbedded As Boolean
@@ -27,7 +26,6 @@ Public Class TabPageStructure
     Private mIsMandatory As Boolean = False
     Private mEmbeddedAllowed As Boolean = True
     Private mEmbeddedLoaded As Boolean = False
-    Private mIsCluster As Boolean = False
     Private mIsElement As Boolean = False
     Private mValidStructureClasses As StructureType()
     Private WithEvents mArchetypeDisplay As EntryStructure
@@ -37,8 +35,6 @@ Public Class TabPageStructure
     Public Event UpdateStructure(ByVal sender As Object, ByVal newStructure As StructureType)
     Public Delegate Sub TabPageStructureUpdateStructure(ByVal sender As Object, ByVal newStructure As StructureType)
 
-
-
 #Region " Windows Form Designer generated code "
 
     Public Sub New() 'ByVal aEditor As Designer)
@@ -47,23 +43,16 @@ Public Class TabPageStructure
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
-        If Not Me.DesignMode Then
+        If Not DesignMode Then
             Dim ds As DockStyle = DockStyle.Right
 
             mFileManager = Filemanager.Master
             mValidStructureClasses = ReferenceModel.ValidStructureTypes
-
-            For Each ValidStructure As StructureType In mValidStructureClasses
-                comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(CInt(ValidStructure), ValidStructure.ToString))
-            Next
-
             PanelDetails = New ArchetypeNodeConstraintControl(mFileManager)
             panelStructure.Controls.Add(PanelDetails)
+            TranslateGUI()
 
             If Main.Instance.DefaultLanguageCode <> "en" Then
-                comboStructure.Text = Filemanager.GetOpenEhrTerm(104, "Choose...")
-                TranslateGUI()
-
                 If Main.Instance.IsDefaultLanguageRightToLeft Then
                     ds = DockStyle.Left
                     Main.Reflect(PanelDetails)
@@ -71,7 +60,6 @@ Public Class TabPageStructure
             End If
 
             PanelDetails.Dock = ds
-
             mSplitter = New Splitter
             mSplitter.Dock = ds
             panelStructure.Controls.Add(mSplitter)
@@ -423,7 +411,7 @@ Public Class TabPageStructure
         Me.panelEntry.Location = New System.Drawing.Point(0, 0)
         Me.panelEntry.Name = "panelEntry"
         Me.panelEntry.Size = New System.Drawing.Size(650, 40)
-        Me.panelEntry.TabIndex = 9
+        Me.panelEntry.TabIndex = 0
         '
         'chkEmbedded
         '
@@ -452,7 +440,6 @@ Public Class TabPageStructure
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.comboStructure, True)
         Me.comboStructure.Size = New System.Drawing.Size(136, 21)
         Me.comboStructure.TabIndex = 7
-        Me.comboStructure.Text = "Choose..."
         '
         'HelpProviderTabPageStructure
         '
@@ -485,13 +472,12 @@ Public Class TabPageStructure
         End Get
         Set(ByVal Value As EntryStructure)
             mArchetypeDisplay = Value
+            panelDisplay.Controls.Clear()
 
-            If panelDisplay.Controls.Count > 0 Then
-                panelDisplay.Controls.Clear()
+            If Not Value Is Nothing Then
+                panelDisplay.Controls.Add(Value)
+                Value.Dock = DockStyle.Fill
             End If
-
-            panelDisplay.Controls.Add(Value)
-            Value.Dock = DockStyle.Fill
         End Set
     End Property
 
@@ -562,7 +548,7 @@ Public Class TabPageStructure
     End Property
 
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        chkEmbedded.Visible = mEmbeddedAllowed
+        chkEmbedded.Visible = EmbeddedAllowed
         HelpProviderTabPageStructure.HelpNamespace = Main.Instance.Options.HelpLocationPath
     End Sub
 
@@ -572,26 +558,15 @@ Public Class TabPageStructure
         comboStructure.DroppedDown = True
     End Sub
 
-    Private Sub ShowDetailPanel(ByVal CurrentItem As ArchetypeNode, ByVal e As EventArgs) Handles mArchetypeDisplay.CurrentItemChanged
-        If CurrentItem Is Nothing Then
+    Private Sub ShowDetailPanel(ByVal node As ArchetypeNode, ByVal e As EventArgs) Handles mArchetypeDisplay.CurrentItemChanged
+        If node Is Nothing Then
             PanelDetails.Hide()
         Else
-            Dim s As StructureType
+            PanelDetails.ShowConstraint(IsState, IsMandatory, node, mFileManager)
+            PanelDetails.Show()
 
-            If ArchetypeDisplay Is Nothing Then  'with a slot only
-                If TypeOf (CurrentItem) Is ArchetypeNodeAnonymous Then
-                    s = CType(CurrentItem, ArchetypeNodeAnonymous).RM_Class.Type
-                ElseIf TypeOf (CurrentItem) Is ArchetypeSlot Then
-                    s = CType(CurrentItem, ArchetypeSlot).RM_Class.Type
-                End If
-            Else
-                s = ArchetypeDisplay.StructureType
-            End If
-
-            PanelDetails.ShowConstraint(s, IsState, IsMandatory, CurrentItem, mFileManager)
-
-            If Not PanelDetails.Visible Then
-                PanelDetails.Show()
+            If Not mIsEmbedded Then
+                panelEntry.Hide()
             End If
         End If
     End Sub
@@ -618,23 +593,26 @@ Public Class TabPageStructure
         comboStructure.Items.Clear()
 
         If Not mValidStructureClasses Is Nothing Then
-            For Each ValidStructure As StructureType In mValidStructureClasses
-                comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(ValidStructure, ValidStructure.ToString))
+            For Each s As StructureType In mValidStructureClasses
+                comboStructure.Items.Add(Filemanager.GetOpenEhrTerm(CInt(s), s.ToString))
             Next
         End If
 
-        lblStructure.Text = Filemanager.GetOpenEhrTerm(85, lblStructure.Text)
+        If comboStructure.SelectedIndex < 0 And comboStructure.Items.Count > 0 Then
+            comboStructure.SelectedItem = StructureType.Tree.ToString
 
-        If chkEmbedded.Visible Then
-            chkEmbedded.Text = Filemanager.GetOpenEhrTerm(605, chkEmbedded.Text)
+            If comboStructure.SelectedIndex < 0 Then
+                comboStructure.SelectedIndex = 0
+            End If
         End If
 
+        lblStructure.Text = Filemanager.GetOpenEhrTerm(85, lblStructure.Text)
+        chkEmbedded.Text = Filemanager.GetOpenEhrTerm(605, chkEmbedded.Text)
         mIsLoading = False
     End Sub
 
     Public Function SaveAsStructure() As RmStructure
         ' save as RmStructureCompound or RmSlot
-
         If mIsEmbedded Then
             If mEmbeddedSlot Is Nothing Then
                 Return Nothing
@@ -644,12 +622,10 @@ Public Class TabPageStructure
         Else
             If ArchetypeDisplay Is Nothing Then
                 Return Nothing
+            ElseIf mIsElement Then
+                Return CType(ArchetypeDisplay, ElementOnly).Archetype
             Else
-                If mIsElement Then
-                    Return CType(ArchetypeDisplay, ElementOnly).Archetype
-                Else
-                    Return ArchetypeDisplay.Archetype
-                End If
+                Return ArchetypeDisplay.Archetype
             End If
         End If
     End Function
@@ -672,51 +648,45 @@ Public Class TabPageStructure
         ArchetypeDisplay.Reset()
     End Sub
 
-    Public Sub ProcessStructure(ByVal an_element As RmElement)
+    Public Sub ProcessElement(ByVal an_element As RmElement)
         mIsLoading = True
         mIsElement = True
         panelEntry.Hide()
         panelStructure.Show()
         ArchetypeDisplay = New ElementOnly(an_element, mFileManager)
-
-        'Set the initial value
         ArchetypeDisplay.SetInitial()
-
         mIsLoading = False
     End Sub
 
-    Public Sub ProcessStructure(ByVal a_compound_structure As RmStructureCompound)
+    Public Sub ProcessStructure(ByVal compoundstructure As RmStructureCompound)
         mIsLoading = True
 
-        If Not a_compound_structure.Children Is Nothing Then ' Not sure that it should be there
+        If compoundstructure.Children Is Nothing Then
+            panelEntry.Show()
+            panelStructure.Hide()
+        Else
             panelEntry.Hide()
             panelStructure.Show()
 
-            Select Case a_compound_structure.Type
+            Select Case compoundstructure.Type
                 Case StructureType.Single
-                    ArchetypeDisplay = New SimpleStructure(a_compound_structure, mFileManager)
+                    ArchetypeDisplay = New SimpleStructure(compoundstructure, mFileManager)
 
                 Case StructureType.List
                     ' this also shows the panels and sets lvList to visible
-                    ArchetypeDisplay = New ListStructure(a_compound_structure, mFileManager)
+                    ArchetypeDisplay = New ListStructure(compoundstructure, mFileManager)
 
-                Case StructureType.Tree
-                    ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
+                Case StructureType.Tree, StructureType.Cluster
+                    ArchetypeDisplay = New TreeStructure(compoundstructure, mFileManager)
 
                 Case StructureType.Table
-                    ArchetypeDisplay = New TableStructure(CType(a_compound_structure, RmTable), mFileManager)
-
-                Case StructureType.Cluster
-                    ArchetypeDisplay = New TreeStructure(a_compound_structure, mFileManager)
+                    ArchetypeDisplay = New TableStructure(CType(compoundstructure, RmTable), mFileManager)
 
                 Case Else
                     Debug.Assert(False)
             End Select
 
             ArchetypeDisplay.SetInitial()
-        Else
-            panelEntry.Show()
-            panelStructure.Hide()
         End If
 
         mIsLoading = False
@@ -748,17 +718,11 @@ Public Class TabPageStructure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Element)
             End If
 
-            panelStructure.Show()
             panelDisplay.Hide()
             ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
-            ' ensure the structure component is visible
-            If Not panelDisplay.Visible Then
-                panelDisplay.Show()
-            End If
-
-            Dim newElementOnly As New ElementOnly(New RmElement(mFileManager.Archetype.ConceptCode), mFileManager)
-            ArchetypeDisplay = newElementOnly
+            panelDisplay.Show()
+            ArchetypeDisplay = New ElementOnly(New RmElement(mFileManager.Archetype.ConceptCode), mFileManager)
             PanelDetails.Hide()
         End If
 
@@ -766,7 +730,6 @@ Public Class TabPageStructure
     End Sub
 
     Public Sub SetAsCluster(ByVal a_node_id As String)
-        mIsCluster = True
         panelEntry.Hide()
 
         If mIsEmbedded Then
@@ -779,17 +742,11 @@ Public Class TabPageStructure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Cluster)
             End If
 
-            panelStructure.Show()
             panelDisplay.Hide()
             ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
-            ' ensure the structure component is visible
-            If Not panelDisplay.Visible Then
-                panelDisplay.Show()
-            End If
-
-            Dim newTreeStructure As New TreeStructure(New RmCluster(mFileManager.Archetype.ConceptCode), mFileManager)
-            ArchetypeDisplay = newTreeStructure
+            panelDisplay.Show()
+            ArchetypeDisplay = New TreeStructure(New RmCluster(mFileManager.Archetype.ConceptCode), mFileManager)
             PanelDetails.Hide()
         End If
 
@@ -797,20 +754,14 @@ Public Class TabPageStructure
     End Sub
 
     Private Sub comboStructure_selectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboStructure.SelectedIndexChanged
-        Debug.Assert(Not mIsCluster)
-        Debug.Assert(Not mValidStructureClasses Is Nothing)  ' This should be set to populate the list
+        Debug.Assert(Not mValidStructureClasses Is Nothing)
 
-        If comboStructure.SelectedIndex >= 0 Then
+        If Enabled And comboStructure.SelectedIndex >= 0 Then
             Dim chosenStructure As StructureType = mValidStructureClasses(comboStructure.SelectedIndex)
             ReferenceModel.SetStructureClass(chosenStructure)
 
             If mIsEmbedded Then
-                If mIsLoading Then
-                    If mEmbeddedSlot Is Nothing Then
-                        mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
-                    End If
-                Else
-                    ' have to have a new slot if change the structure
+                If Not mIsLoading Or mEmbeddedSlot Is Nothing Then
                     mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
                 End If
 
@@ -847,7 +798,6 @@ Public Class TabPageStructure
 
                     panelDisplay.Show()
                     panelStructure.Show()
-                    panelEntry.Hide()
                     PanelDetails.Visible = Not ArchetypeDisplay Is Nothing AndAlso ArchetypeDisplay.HasData
                 End If
 
@@ -871,16 +821,16 @@ Public Class TabPageStructure
         End Get
     End Property
 
-    Public Sub ProcessStructure(ByVal slot As RmSlot)
+    Public Sub ProcessSlot(ByVal slot As RmSlot)
         mIsLoading = True
         mIsEmbedded = True
         mEmbeddedSlot = New ArchetypeNodeAnonymous(slot)
+        comboStructure.SelectedIndex = -1
 
         Dim sl As Constraint_Slot = slot.SlotConstraint
         mFileManager = New FileManagerLocal
         PanelDetails.LocalFileManager = mFileManager
         mFileManager.ObjectToSave = Me
-
         mFileManager.FileLoading = True
 
         If OpenArchetypeForSlot(slot, Main.Instance.Options.RepositoryPath & "\structure") Then
@@ -889,12 +839,13 @@ Public Class TabPageStructure
 
             'Hide context menu to change structure
             If Not ArchetypeDisplay Is Nothing Then
-                ArchetypeDisplay.ShowChangeStructureMenu = False
+                ArchetypeDisplay.IsChangeStructureMenuVisible = False
                 Translate()
             End If
         Else
             mFileManager = Filemanager.Master
             chkEmbedded.Checked = True
+            ArchetypeDisplay = Nothing
 
             Select Case slot.SlotConstraint.RM_ClassType
                 Case StructureType.Single
@@ -1022,7 +973,7 @@ Public Class TabPageStructure
                 comboStructure.Focus()
                 comboStructure.DroppedDown = True
             Else
-                If Filemanager.HasEmbedded AndAlso (Not Filemanager.Master Is mFileManager) Then
+                If Filemanager.HasEmbedded And Not Filemanager.Master Is mFileManager Then
                     Filemanager.RemoveEmbedded(mFileManager)
                     mFileManager = Filemanager.Master
                 End If

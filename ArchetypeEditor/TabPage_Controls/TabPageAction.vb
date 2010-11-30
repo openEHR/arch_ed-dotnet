@@ -256,7 +256,7 @@ Public Class TabPageAction
                     mActionDescription.IsMandatory = True
 
                     If an_action.Type = StructureType.Slot Then
-                        mActionDescription.ProcessStructure(CType(an_action, RmSlot))
+                        mActionDescription.ProcessSlot(CType(an_action, RmSlot))
                     Else
                         Debug.Assert(an_action.Type = StructureType.Single Or an_action.Type = StructureType.List Or an_action.Type = StructureType.Tree Or an_action.Type = StructureType.Table)
                         mActionDescription.ProcessStructure(CType(an_action, RmStructureCompound))

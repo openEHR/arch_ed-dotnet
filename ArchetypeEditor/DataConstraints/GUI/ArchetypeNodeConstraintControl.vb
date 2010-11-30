@@ -579,7 +579,7 @@ Public Class ArchetypeNodeConstraintControl
         gbAnnotations.Text = Filemanager.GetOpenEhrTerm(690, "Annotations")
     End Sub
 
-    Public Sub ShowConstraint(ByVal aStructureType As StructureType, ByVal IsState As Boolean, ByVal IsMandatory As Boolean, ByVal an_archetype_node As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
+    Public Sub ShowConstraint(ByVal IsState As Boolean, ByVal IsMandatory As Boolean, ByVal node As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
         mFileManager = a_file_manager
         mIsLoading = True
         SuspendLayout()
@@ -606,7 +606,7 @@ Public Class ArchetypeNodeConstraintControl
                 gbNullFlavours.Visible = False
             End If
 
-            If an_archetype_node.RM_Class.Type = StructureType.Slot Then
+            If node.RM_Class.Type = StructureType.Slot Then
                 If tabConstraint.TabPages.Contains(tpConstraintDetails) Then
                     tabConstraint.TabPages.Remove(tpConstraintDetails)      'Hide details tab if a Slot
                 End If
@@ -623,9 +623,9 @@ Public Class ArchetypeNodeConstraintControl
             End If
 
             mOccurrences.SetUnitary = False
-            mOccurrences.SetSingle = (aStructureType = StructureType.Single)
+            mOccurrences.SetSingle = node.RM_Class.Type = StructureType.Single
 
-            Select Case an_archetype_node.RM_Class.Type
+            Select Case node.RM_Class.Type
 
                 Case StructureType.Tree, StructureType.List, StructureType.Table, StructureType.Single
                     If IsMandatory Then
@@ -635,7 +635,7 @@ Public Class ArchetypeNodeConstraintControl
                     mOccurrences.SetUnitary = True
 
                 Case StructureType.Element, StructureType.Reference
-                    Dim archetypeElem As ArchetypeElement = CType(an_archetype_node, ArchetypeElement)
+                    Dim archetypeElem As ArchetypeElement = CType(node, ArchetypeElement)
                     SetUpNullFlavours(archetypeElem)
 
                     Select Case archetypeElem.Constraint.Type
@@ -659,13 +659,6 @@ Public Class ArchetypeNodeConstraintControl
                     mConstraintControl = ConstraintControl.CreateConstraintControl(ConstraintType.Slot, mFileManager)
                     PanelDataConstraint.Controls.Add(mConstraintControl)
                     mConstraintControl.Dock = DockStyle.Fill
-
-                    Dim node As ArchetypeNode = TryCast(an_archetype_node, ArchetypeNodeAnonymous)
-
-                    If node Is Nothing Then
-                        node = CType(an_archetype_node, ArchetypeSlot)
-                    End If
-
                     Dim constraint As Constraint_Slot = TryCast(node.RM_Class, RmSlot).SlotConstraint
                     mConstraintControl.ShowConstraint(IsState, constraint)
 
@@ -681,14 +674,14 @@ Public Class ArchetypeNodeConstraintControl
                 Case StructureType.Cluster
                     labelAny.Visible = False
                     mConstraintControl = New ClusterControl(a_file_manager)
-                    CType(mConstraintControl, ClusterControl).Item = CType(an_archetype_node, ArchetypeComposite)
+                    CType(mConstraintControl, ClusterControl).Item = CType(node, ArchetypeComposite)
                     PanelDataConstraint.Controls.Add(mConstraintControl)
                     CType(mConstraintControl, ClusterControl).Header = 50
                     mConstraintControl.Dock = DockStyle.Fill
 
             End Select
 
-            mArchetypeNode = an_archetype_node
+            mArchetypeNode = node
 
             If IsState Then
                 tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue
@@ -701,11 +694,11 @@ Public Class ArchetypeNodeConstraintControl
             SetControlValues(IsState)
 
             'Enable the node code if not anonymous
-            If an_archetype_node.IsAnonymous Then
+            If node.IsAnonymous Then
                 dgNodeBindings.Hide()
             Else
                 dgNodeBindings.Show()
-                Dim nodeID As String = an_archetype_node.RM_Class.NodeId
+                Dim nodeID As String = node.RM_Class.NodeId
                 mDataView.Table.Columns(1).DefaultValue = nodeID
                 mDataView.RowFilter = "Path = '" & nodeID & "'"
 
