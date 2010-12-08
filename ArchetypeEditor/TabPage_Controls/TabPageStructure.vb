@@ -522,11 +522,13 @@ Public Class TabPageStructure
 
     Public ReadOnly Property StructureType() As StructureType
         Get
-            If ArchetypeDisplay Is Nothing Then
-                Return Nothing
-            Else
-                Return ArchetypeDisplay.StructureType
+            Dim result As StructureType = Nothing
+
+            If Not ArchetypeDisplay Is Nothing Then
+                result = ArchetypeDisplay.StructureType
             End If
+
+            Return result
         End Get
     End Property
 
@@ -562,7 +564,7 @@ Public Class TabPageStructure
         If node Is Nothing Then
             PanelDetails.Hide()
         Else
-            PanelDetails.ShowConstraint(IsState, IsMandatory, node, mFileManager)
+            PanelDetails.ShowConstraint(StructureType = StructureType.Single, IsState, IsMandatory, node, mFileManager)
             PanelDetails.Show()
 
             If Not mIsEmbedded Then

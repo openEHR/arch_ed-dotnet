@@ -486,18 +486,13 @@ Public Class TabPageSection
             mConstraintDisplay.Visible = False
         Else
             MenuSectionRemove.Visible = True
-            Dim a_node As ArchetypeTreeNode = tvSection.SelectedNode
+            Dim node As ArchetypeTreeNode = tvSection.SelectedNode
 
-            Try
-                SuspendLayout()
-                mConstraintDisplay.ShowConstraint(False, False, a_node.Item, mFileManager)
-                ResumeLayout()
-            Catch
-                Debug.Assert(False, "Type is not catered for")
-                Return
-            End Try
+            SuspendLayout()
+            mConstraintDisplay.ShowConstraint(False, False, False, node.Item, mFileManager)
+            ResumeLayout()
 
-            If a_node.Item.RM_Class.Type = StructureType.Slot AndAlso TypeOf a_node.Item Is ArchetypeNodeAnonymous Then
+            If node.Item.RM_Class.Type = StructureType.Slot AndAlso TypeOf node.Item Is ArchetypeNodeAnonymous Then
                 MenuNameSlot.Visible = True
             End If
 

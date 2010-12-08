@@ -579,8 +579,8 @@ Public Class ArchetypeNodeConstraintControl
         gbAnnotations.Text = Filemanager.GetOpenEhrTerm(690, "Annotations")
     End Sub
 
-    Public Sub ShowConstraint(ByVal IsState As Boolean, ByVal IsMandatory As Boolean, ByVal node As ArchetypeNode, ByVal a_file_manager As FileManagerLocal)
-        mFileManager = a_file_manager
+    Public Sub ShowConstraint(ByVal isSingle As Boolean, ByVal isState As Boolean, ByVal isMandatory As Boolean, ByVal node As ArchetypeNode, ByVal fileManager As FileManagerLocal)
+        mFileManager = fileManager
         mIsLoading = True
         SuspendLayout()
 
@@ -623,12 +623,12 @@ Public Class ArchetypeNodeConstraintControl
             End If
 
             mOccurrences.SetUnitary = False
-            mOccurrences.SetSingle = node.RM_Class.Type = StructureType.Single
+            mOccurrences.SetSingle = isSingle
 
             Select Case node.RM_Class.Type
 
                 Case StructureType.Tree, StructureType.List, StructureType.Table, StructureType.Single
-                    If IsMandatory Then
+                    If isMandatory Then
                         mOccurrences.SetMandatory = True
                     End If
 
@@ -652,7 +652,7 @@ Public Class ArchetypeNodeConstraintControl
                             mConstraintControl = ConstraintControl.CreateConstraintControl(archetypeElem.Constraint.Type, mFileManager)
                             PanelDataConstraint.Controls.Add(mConstraintControl)
                             mConstraintControl.Dock = DockStyle.Fill
-                            mConstraintControl.ShowElement(IsState, archetypeElem)
+                            mConstraintControl.ShowElement(isState, archetypeElem)
                     End Select
 
                 Case StructureType.Slot
@@ -660,11 +660,11 @@ Public Class ArchetypeNodeConstraintControl
                     PanelDataConstraint.Controls.Add(mConstraintControl)
                     mConstraintControl.Dock = DockStyle.Fill
                     Dim constraint As Constraint_Slot = TryCast(node.RM_Class, RmSlot).SlotConstraint
-                    mConstraintControl.ShowConstraint(IsState, constraint)
+                    mConstraintControl.ShowConstraint(isState, constraint)
 
                     Select Case constraint.RM_ClassType
                         Case StructureType.Tree, StructureType.Table, StructureType.List, StructureType.Single, StructureType.Structure
-                            If IsMandatory Then
+                            If isMandatory Then
                                 mOccurrences.SetMandatory = True
                             End If
 
@@ -673,7 +673,7 @@ Public Class ArchetypeNodeConstraintControl
 
                 Case StructureType.Cluster
                     labelAny.Visible = False
-                    mConstraintControl = New ClusterControl(a_file_manager)
+                    mConstraintControl = New ClusterControl(fileManager)
                     CType(mConstraintControl, ClusterControl).Item = CType(node, ArchetypeComposite)
                     PanelDataConstraint.Controls.Add(mConstraintControl)
                     CType(mConstraintControl, ClusterControl).Header = 50
@@ -683,7 +683,7 @@ Public Class ArchetypeNodeConstraintControl
 
             mArchetypeNode = node
 
-            If IsState Then
+            If isState Then
                 tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue
                 tpConstraintDetails.BackColor = System.Drawing.Color.LightSteelBlue
             Else
@@ -691,7 +691,7 @@ Public Class ArchetypeNodeConstraintControl
                 tpConstraintDetails.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
             End If
 
-            SetControlValues(IsState)
+            SetControlValues(isState)
 
             'Enable the node code if not anonymous
             If node.IsAnonymous Then
