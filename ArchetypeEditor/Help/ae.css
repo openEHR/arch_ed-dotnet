@@ -21,7 +21,7 @@ p				{ margin: 0 0 18px; }
 /* Content Positioning and Size */
 #navigation		{ float: left; width: 175px; }
 #content		{ float: right; }
-#extra			{ float: right; }		/* Footer */
+#extra			{ float: right; width: 540px; }		/* Footer */
 #footer			{ background: #9cd2f8; border-bottom: 2px solid #999; clear: both; }
 #footer a		{ color: #004b6f; }
 #footer	p		{ color: #666; margin: 0; padding: 0 18px 10px; }
