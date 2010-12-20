@@ -118,6 +118,18 @@ Public Class Options
         End Set
     End Property
 
+    ReadOnly Property TerminologyUrlString() As String
+        Get
+            Dim result As String = ""
+
+            If AllowTerminologyLookUp And Not TerminologyUrl Is Nothing Then
+                result = TerminologyUrl.ToString
+            End If
+
+            Return result
+        End Get
+    End Property
+
     Property AllowTerminologyLookUp() As Boolean
         Get
             Return mAllowTerminologyLookUp
@@ -223,7 +235,7 @@ Public Class Options
         End Set
     End Property
 
-    Sub ShowOptionsForm()
+    Public Sub ShowOptionsForm()
         Dim frm As New ApplicationOptionsForm
         frm.TabConfiguration.SelectedIndex = 1
 

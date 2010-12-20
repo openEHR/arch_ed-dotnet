@@ -16,7 +16,7 @@
 
 Public Class TerminologyServer
     Private DVPhrases As DataView
-    Private Terminology As New DataSet("openEHRTerminology")
+    Private Terminology As DataSet
     Private Languages, Territories, TerminologyIdentifiers, Concepts, Groupers, GroupedConcepts As DataTable
 
     Shared mInstance As TerminologyServer
@@ -301,12 +301,11 @@ Public Class TerminologyServer
         Next
     End Sub
 
-    Private Sub AppendTerminologiesFromLookup()
+    Protected Sub UseTerminologiesFromLookup()
         If Main.Instance.Options.AllowTerminologyLookUp And Not Main.Instance.TerminologyLookup Is Nothing Then
             Try
-                If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
-                    Main.Instance.TerminologyLookup.Url = Main.Instance.Options.TerminologyUrl.ToString
-                End If
+                Main.Instance.TerminologyLookup.Url = Main.Instance.Options.TerminologyUrlString
+                TerminologyIdentifiers.Rows.Clear()
 
                 For Each t As TerminologyLookup.Terminology In Main.Instance.TerminologyLookup.Terminologies
                     Dim key(0) As Object
@@ -322,14 +321,16 @@ Public Class TerminologyServer
         End If
     End Sub
 
-    Public Sub InitialiseTerminology(ByVal Document As String, ByVal Schema As String)
+    Public Sub Initialise()
+        Terminology = New DataSet("openEHRTerminology")
+
         'FIXME - Add validation later
         'Dim xmlR As Xml.XmlTextReader
         'Dim xmlValid As Xml.XmlValidatingReader
 
         Try
-            Terminology.ReadXmlSchema(Schema)
-            Terminology.ReadXml(Document)
+            Terminology.ReadXmlSchema(Main.Instance.Options.AssemblyPath & "\terminology\terminology.xsd")
+            Terminology.ReadXml(Main.Instance.Options.AssemblyPath & "\terminology\terminology.xml")
         Catch ex As Exception
             MessageBox.Show("Loading terminologies: " + ex.Message)
         End Try
@@ -341,24 +342,25 @@ Public Class TerminologyServer
         Groupers = Terminology.Tables("Grouper")
         GroupedConcepts = Terminology.Tables("GroupedConcept")
 
-        Dim KeyFields(1) As DataColumn
-        KeyFields(0) = Concepts.Columns(0)
-        KeyFields(1) = Concepts.Columns(1)
-        Concepts.PrimaryKey = KeyFields
+        Dim keyFields(1) As DataColumn
+        keyFields(0) = Concepts.Columns(0)
+        keyFields(1) = Concepts.Columns(1)
+        Concepts.PrimaryKey = keyFields
 
-        ReDim KeyFields(0)
-        KeyFields(0) = Territories.Columns(0)
-        Territories.PrimaryKey = KeyFields
-    End Sub
-
-    Sub New()
-        InitialiseTerminology(Main.Instance.Options.AssemblyPath & "\terminology\terminology.xml", Main.Instance.Options.AssemblyPath & "\terminology\terminology.xsd")
+        ReDim keyFields(0)
+        keyFields(0) = Territories.Columns(0)
+        Territories.PrimaryKey = keyFields
 
         ' set the VSB column as a primary field for searching
         Dim primarykeyfields(0) As DataColumn
         primarykeyfields(0) = TerminologyIdentifiers.Columns(0)
         TerminologyIdentifiers.PrimaryKey = primarykeyfields
-        AppendTerminologiesFromLookup()
+
+        UseTerminologiesFromLookup()
+    End Sub
+
+    Sub New()
+        Initialise()
     End Sub
 
 End Class

@@ -201,10 +201,7 @@ Public Class ConstraintBindingForm
 
     Private Sub SubsetButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SubsetButton.Click
         Dim form As New TerminologyLookup.TerminologySelectionForm(Main.Instance.TerminologyLookup)
-
-        If Not Main.Instance.Options.TerminologyUrl Is Nothing Then
-            Main.Instance.TerminologyLookup.Url = Main.Instance.Options.TerminologyUrl.ToString
-        End If
+        Main.Instance.TerminologyLookup.Url = Main.Instance.Options.TerminologyUrlString
 
         form.TerminologyId = TerminologyComboBox.Text
         form.SubsetId = ""

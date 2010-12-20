@@ -965,7 +965,7 @@ Public Class ApplicationOptionsForm
         End If
     End Sub
 
-    Private Sub ColourPanel_doubleClick(ByVal sender As System.Object, ByVal e As EventArgs) Handles Panel_0.DoubleClick, Panel_1.DoubleClick, Panel_2.DoubleClick, Panel_3.DoubleClick, Panel_4.DoubleClick, Panel_5.DoubleClick, Panel_6.DoubleClick, Panel_7.DoubleClick
+    Private Sub ColourPanel_DoubleClick(ByVal sender As System.Object, ByVal e As EventArgs) Handles Panel_0.DoubleClick, Panel_1.DoubleClick, Panel_2.DoubleClick, Panel_3.DoubleClick, Panel_4.DoubleClick, Panel_5.DoubleClick, Panel_6.DoubleClick, Panel_7.DoubleClick
         Dim p As Panel = CType(sender, Panel)
         p.BorderStyle = BorderStyle.FixedSingle
         ColorDialog1.FullOpen = True

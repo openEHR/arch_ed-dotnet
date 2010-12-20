@@ -3641,7 +3641,13 @@ Public Class Designer
     End Sub
 
     Private Sub MenuViewConfig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolsOptionsMenuItem.Click
+        Dim previousTerminologyUrl As String = Main.Instance.Options.TerminologyUrlString
         Main.Instance.Options.ShowOptionsForm()
+
+        If previousTerminologyUrl <> Main.Instance.Options.TerminologyUrlString Then
+            TerminologyServer.Instance.Initialise()
+        End If
+
         ToolBarOpenFromWeb.Visible = Main.Instance.Options.AllowWebSearch
         MenuFileOpenFromWeb.Visible = Main.Instance.Options.AllowWebSearch
         butLinks.Visible = Main.Instance.Options.ShowLinksButton
