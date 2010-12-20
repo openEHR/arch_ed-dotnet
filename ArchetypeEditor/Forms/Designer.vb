@@ -3633,11 +3633,7 @@ Public Class Designer
     End Sub
 
     Private Sub MenuHelpStart_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuHelpStart.Click
-        Try
-            Process.Start(Main.Instance.Options.HelpLocationPath)
-        Catch
-            MessageBox.Show(AE_Constants.Instance.Error_loading & " " & Main.Instance.Options.HelpLocationPath, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+        Process.Start("http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/Help/index.html")
     End Sub
 
     Private Sub MenuViewConfig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolsOptionsMenuItem.Click

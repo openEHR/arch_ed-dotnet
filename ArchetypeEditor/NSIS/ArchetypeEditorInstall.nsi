@@ -24,7 +24,7 @@
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP "openEHR.bmp"
 !define MUI_FINISHPAGE_RUN "$INSTDIR\ArchetypeEditor.exe"
-!define MUI_FINISHPAGE_SHOWREADME "https://wiki.oceaninformatics.com/confluence/display/TTL/Archetype+Editor+Releases"
+!define MUI_FINISHPAGE_SHOWREADME "http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/Help/release_notes.html"
 !define MUI_FINISHPAGE_SHOWREADME_TEXT "Show Release Notes"
 !define MUI_FINISHPAGE_NOAUTOCLOSE
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE

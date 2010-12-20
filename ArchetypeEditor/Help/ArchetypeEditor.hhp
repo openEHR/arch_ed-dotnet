@@ -2,13 +2,15 @@
 Compatibility=1.1 or later
 Compiled file=ArchetypeEditor.chm
 Contents file=ArchetypeEditor.hhc
-Default topic=Menu\HowTo\archetype_editor.htm
+Default topic=index.html
 Display compile progress=No
 Index file=ArchetypeEditor.hhk
 Language=0xc09 English (Australia)
 
 
 [FILES]
+index.html
+release_notes.html
 Menu\menus.htm
 Menu\language_menu.html
 Menu\HowTo\translate.htm
@@ -31,18 +33,18 @@ Menu\HowTo\name_element_cluster.htm
 Menu\HowTo\new_archetype.htm
 Menu\HowTo\save_archetype.htm
 Menu\HowTo\specialise.htm
-Menu\HowTo\Edit data\specialise_element.htm
-Menu\HowTo\Edit data\add_cluster.htm
-Menu\HowTo\Edit data\add_element.htm
-Menu\HowTo\Edit data\change_datatype.htm
-Menu\HowTo\Edit data\set_common_constraints.htm
-Menu\HowTo\Edit data\set_structure.htm
-Menu\HowTo\Edit data\Data constraints\set_constraints_text.htm
-Menu\HowTo\Edit data\Data constraints\set_constraints_boolean.htm
-Menu\HowTo\Edit data\Data constraints\set_constraints_count.htm
-Menu\HowTo\Edit data\Data constraints\set_constraints_date_time.html
-Menu\HowTo\Edit data\Data constraints\set_constraints_ordinal.htm
-Menu\HowTo\Edit data\Data constraints\set_constraints_quantity.htm
+Menu\HowTo\Editing\specialise_element.htm
+Menu\HowTo\Editing\add_cluster.htm
+Menu\HowTo\Editing\add_element.htm
+Menu\HowTo\Editing\change_datatype.htm
+Menu\HowTo\Editing\set_common_constraints.htm
+Menu\HowTo\Editing\set_structure.htm
+Menu\HowTo\Editing\Data constraints\set_constraints_text.htm
+Menu\HowTo\Editing\Data constraints\set_constraints_boolean.htm
+Menu\HowTo\Editing\Data constraints\set_constraints_count.htm
+Menu\HowTo\Editing\Data constraints\set_constraints_date_time.html
+Menu\HowTo\Editing\Data constraints\set_constraints_ordinal.htm
+Menu\HowTo\Editing\Data constraints\set_constraints_quantity.htm
 openEHR\terminology_and_archetypes.htm
 openEHR\archetype_paths.html
 openEHR\composition.htm
@@ -63,7 +65,7 @@ Screens\terminology_screens.htm
 Screens\constraints_screen.html
 Screens\data_screen.htm
 Screens\display_screen.html
-Screens\Entry Model screen.htm
+Screens\entry_model_screen.htm
 Screens\event_interval.htm
 Screens\event_name.htm
 Screens\event_offset.htm

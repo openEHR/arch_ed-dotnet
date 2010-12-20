@@ -93,27 +93,27 @@ Public Class ConstraintControl
 
         Select Case a_constraint_type
             Case ConstraintType.Boolean
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_boolean.htm")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_boolean.htm")
             Case ConstraintType.Count
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_count.htm")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_count.htm")
             Case ConstraintType.DateTime
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_date_tihtml")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_date_tihtml")
             Case ConstraintType.Interval_Count
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_interval.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
             Case ConstraintType.Interval_Quantity
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_interval.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
             Case ConstraintType.Multiple
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_interval.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
             Case ConstraintType.Ordinal
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_multiple.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_multiple.html")
             Case ConstraintType.Quantity
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_quantity.htm")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_quantity.htm")
             Case ConstraintType.Proportion
                 HelpProviderConstraint.SetHelpKeyword(Me, "")
             Case ConstraintType.Slot
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_slot.html")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_slot.html")
             Case ConstraintType.Text
-                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Edit data/Data constraints/set_constraints_text.htm")
+                HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_text.htm")
         End Select
     End Sub
 

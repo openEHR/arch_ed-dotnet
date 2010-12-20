@@ -117,7 +117,7 @@ Public Class ConstraintForm
         Me.Controls.Add(Me.DeleteButton)
         Me.Controls.Add(Me.OkButton)
         Me.Controls.Add(Me.CancelCloseButton)
-        Me.HelpProviderConstraintForm.SetHelpKeyword(Me, "HowTo/Edit data/Set_runtime_name.html")
+        Me.HelpProviderConstraintForm.SetHelpKeyword(Me, "HowTo/Editing/Set_runtime_name.html")
         Me.HelpProviderConstraintForm.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(500, 450)

@@ -433,7 +433,7 @@ Public Class TabPageStructure
         '
         'comboStructure
         '
-        Me.HelpProviderTabPageStructure.SetHelpKeyword(Me.comboStructure, "HowTo/Edit data/set_structure.htm")
+        Me.HelpProviderTabPageStructure.SetHelpKeyword(Me.comboStructure, "HowTo/Editing/set_structure.htm")
         Me.HelpProviderTabPageStructure.SetHelpNavigator(Me.comboStructure, System.Windows.Forms.HelpNavigator.Topic)
         Me.comboStructure.Location = New System.Drawing.Point(97, 8)
         Me.comboStructure.Name = "comboStructure"

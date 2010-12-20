@@ -352,7 +352,7 @@ Public Class EntryStructure
         '
         'butChangeDataType
         '
-        Me.helpEntryStructure.SetHelpKeyword(Me.butChangeDataType, "HowTo/Edit data/change_datatype.htm")
+        Me.helpEntryStructure.SetHelpKeyword(Me.butChangeDataType, "HowTo/Editing/change_datatype.htm")
         Me.helpEntryStructure.SetHelpNavigator(Me.butChangeDataType, System.Windows.Forms.HelpNavigator.Topic)
         Me.butChangeDataType.Image = CType(resources.GetObject("butChangeDataType.Image"), System.Drawing.Image)
         Me.butChangeDataType.Location = New System.Drawing.Point(8, 354)

@@ -9,6 +9,14 @@
 </OBJECT>
 <UL>
 	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Archetype Editor">
+		<param name="Local" value="index.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Release Notes">
+		<param name="Local" value="release_notes.html">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
 		<param name="Name" value="How To">
 		</OBJECT>
 	<UL>
@@ -78,7 +86,7 @@
 				<param name="Local" value="Menu\HowTo\edit_state.htm">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
-				<param name="Name" value="Edit data">
+				<param name="Name" value="Editing">
 				</OBJECT>
 			<UL>
 				<LI> <OBJECT type="text/sitemap">
@@ -87,23 +95,23 @@
 					</OBJECT>
 				<LI> <OBJECT type="text/sitemap">
 					<param name="Name" value="Add or remove a cluster">
-					<param name="Local" value="Menu\HowTo\Edit data\add_cluster.htm">
+					<param name="Local" value="Menu\HowTo\Editing\add_cluster.htm">
 					</OBJECT>
 				<LI> <OBJECT type="text/sitemap">
 					<param name="Name" value="Add or remove an element">
-					<param name="Local" value="Menu\HowTo\Edit data\add_element.htm">
+					<param name="Local" value="Menu\HowTo\Editing\add_element.htm">
 					</OBJECT>
 				<LI> <OBJECT type="text/sitemap">
 					<param name="Name" value="Change the data type of an element">
-					<param name="Local" value="Menu\HowTo\Edit data\change_datatype.htm">
+					<param name="Local" value="Menu\HowTo\Editing\change_datatype.htm">
 					</OBJECT>
 				<LI> <OBJECT type="text/sitemap">
 					<param name="Name" value="Set constraints on an element or cluster">
-					<param name="Local" value="Menu\HowTo\Edit data\set_common_constraints.htm">
+					<param name="Local" value="Menu\HowTo\Editing\set_common_constraints.htm">
 					</OBJECT>
 				<LI> <OBJECT type="text/sitemap">
 					<param name="Name" value="Set the structure of the data">
-					<param name="Local" value="Menu\HowTo\Edit data\set_structure.htm">
+					<param name="Local" value="Menu\HowTo\Editing\set_structure.htm">
 					</OBJECT>
 			</UL>
 		</UL>
@@ -113,32 +121,32 @@
 			</OBJECT>
 		<LI> <OBJECT type="text/sitemap">
 			<param name="Name" value="Data constraints">
-			<param name="Local" value="Menu\HowTo\Edit data\set_common_constraints.htm">
+			<param name="Local" value="Menu\HowTo\Editing\set_common_constraints.htm">
 			</OBJECT>
 		<UL>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Constrain boolean values">
-				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_boolean.htm">
+				<param name="Local" value="Menu\HowTo\Editing\Data constraints\set_constraints_boolean.htm">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Constrain count values">
-				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_count.htm">
+				<param name="Local" value="Menu\HowTo\Editing\Data constraints\set_constraints_count.htm">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Constrain date &amp; time values">
-				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_date_time.html">
+				<param name="Local" value="Menu\HowTo\Editing\Data constraints\set_constraints_date_time.html">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Constrain ordinal values">
-				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_ordinal.htm">
+				<param name="Local" value="Menu\HowTo\Editing\Data constraints\set_constraints_ordinal.htm">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Constrain quantity values">
-				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_quantity.htm">
+				<param name="Local" value="Menu\HowTo\Editing\Data constraints\set_constraints_quantity.htm">
 				</OBJECT>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Constrain text values">
-				<param name="Local" value="Menu\HowTo\Edit data\Data constraints\set_constraints_text.htm">
+				<param name="Local" value="Menu\HowTo\Editing\Data constraints\set_constraints_text.htm">
 				</OBJECT>
 		</UL>
 		<LI> <OBJECT type="text/sitemap">
@@ -148,7 +156,7 @@
 		<UL>
 			<LI> <OBJECT type="text/sitemap">
 				<param name="Name" value="Specialise an element">
-				<param name="Local" value="Menu\HowTo\Edit data\specialise_element.htm">
+				<param name="Local" value="Menu\HowTo\Editing\specialise_element.htm">
 				</OBJECT>
 		</UL>
 		<LI> <OBJECT type="text/sitemap">

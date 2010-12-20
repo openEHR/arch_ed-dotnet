@@ -1,0 +1,644 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Archetype Editor Release Notes</title>
+    <meta content="text/html; charset=us-ascii" http-equiv="Content-Type" />
+    <link rel="stylesheet" type="text/css" href="ae.css" media="screen" />
+  </head>
+
+  <body>
+    <div id="container">
+      <table style="BACKGROUND-COLOR: #9cd2f8" border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tbody>
+          <tr valign="top">
+            <td valign="middle" width="152">
+              <img border="0" alt="openEHR logo" src="images/openehr_logo_trans_bg.png" width="150" height="50"/>
+            </td>
+            <td>
+              <div id="header">
+                <h1>Archetype Editor Release Notes</h1>
+                <p><i>open</i>EHR Foundation</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div id="wrapper">
+        <div id="content">
+          <p><br clear="all" /></p>
+
+          <h1><a name="ArchetypeEditorReleases-CurrentBetaRelease"></a>Current Beta Release</h1>
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.2"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor" rel="nofollow">Archetype Editor 2.2.719</a></span> 20 December 2010</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>When saving to XML, if the option to save ADL automatically is on, then the ADL definition section is deleted.</li>
+            <li>The Help documentation is out of date.</li>
+          </ul>
+
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>An <b><i>open</i>EHR installer</b> is now available. (Previous releases were only available from Ocean Informatics.)</li>
+            <li>The option to report an issue goes to the problem tracker on <i>open</i>EHR rather than Ocean Informatics.</li>
+            <li>The <b>Help</b> is now online instead of being installed.</li>
+            <li>On creating a new archetype, the 'short concept label' is inserted as the default 'Concept' label.</li>
+            <li>On creating a new archetype, an appropriate structure is preselected (usually 'Tree').</li>
+            <li><b>&lt;Ctrl+F6&gt;</b> and <b>&lt;Ctrl+Shift+F6&gt;</b> keyboard shortcuts move between the main tabs.</li>
+            <li>Exporting to <b>XML</b> now formats nicely with newlines and indenting.</li>
+            <li>The <b>Display</b> tab no longer has its own "Save" button.</li>
+            <li>The <b>Display</b> tab can now search for text.</li>
+            <li>A new <b>Display</b> menu improves the usability of the Display tab.</li>
+            <li>The proportion constraint control hides the denominator for unitary and percentage types.</li>
+            <li>Data value choices are restricted to those that are unique.</li>
+            <li>The default <b>cardinality of clusters</b> is 1..*.</li>
+            <li><b>ACTION</b> archetypes now show the <b>Planned</b> state, not <b>Initial</b> which was not truly a state.</li>
+            <li>Allow non-standard ontology items in addition to "text", "description" and "comment".</li>
+            <li>Allow <b>specialising of events</b> in OBSERVATION archetypes.</li>
+            <li>Allow multiple constraints on <b>maths_functions</b>.</li>
+            <li>Allow the order of <b>internal codes</b> to be changed.</li>
+            <li>Allow <b>internal codes</b> to be copied and pasted.</li>
+            <li>Allow <b>constraint bindings</b> to be edited directly at the node definition.</li>
+            <li>Allow <b>constraint bindings</b> and <b>term bindings</b> to use and browse any terminology defined in OTS.</li>
+            <li>Allow each <b>contributor</b> to be edited.</li>
+            <li>Allow the <b>copyright</b> to be edited.</li>
+            <li>HTML displays the <b>copyright</b> from the archetype.</li>
+            <li>Prevent renaming of non-specialised nodes in specialised archetypes.</li>
+            <li>Fixed the file recovery dialog to appear when appropriate during start-up.</li>
+            <li>Fixed specialising of <b>XML</b> archetypes.</li>
+            <li>Fixed several exceptions with <b>XML</b> archetypes.</li>
+            <li>Fixed specialising of of a node more than 10 times in ADL archetypes.</li>
+            <li>Fixed drag and drop in <b>SECTION</b> archetypes.</li>
+            <li>Fixed action patterns in <b>XML INSTRUCTION</b> archetypes.</li>
+            <li>Fixed loading math_function, width, fixed interval and offset in <b>OBSERVATION</b> archetypes.</li>
+            <li>Fixed errors when loading <b>term bindings</b> and <b>constraint bindings</b>.</li>
+            <li>Fixed displaying <b>URI</b> constraints within a <b>choice</b> element.</li>
+            <li>Fixed errors when saving an archetype containing a <b>choice</b> with an interval of date or time.</li>
+            <li>Fixed invalid occurrences of embedded archetypes.</li>
+            <li>Fixed mistranslations in the <b>Japanese</b> terminology.</li>
+          </ul>
+
+
+          <p><br clear="all" /></p>
+          <hr />
+
+          <h1><a name="ArchetypeEditorReleases-CurrentStableRelease"></a>Current Stable Release</h1>
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.1.583"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/RELEASES/BlueChina" rel="nofollow">Archetype Editor 2.1.583</a></span> 2 July 2009</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+
+          <ul>
+            <li>Saving an archetype containing a <b>DV_CHOICE</b> with an interval of date or time (except in the first position) either crashes or corrupts the ADL.</li>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>When saving to XML, if the option to save ADL automatically is on, then the ADL definition section is deleted.</li>
+            <li>Cardinality "optional not repeating 0..1" cannot be saved.</li>
+            <li>The Help documentation is out of date.</li>
+          </ul>
+
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+
+          <ul>
+            <li>Old spellings of the following are still accepted, but it now saves the ADL with the correct spelling:
+            <ul>
+              <li><b>null_flavor</b> is now called <b>null_flavour</b>.</li>
+              <li><b>term_binding</b> is now called <b>term_bindings</b>.</li>
+              <li><b>constraint_binding</b> is now called <b>constraint_bindings</b>.</li>
+            </ul>
+            </li>
+            <li>An <b>MD5 hash</b> digest of the Archetype Model is saved in <b>other_details</b>, for canonical Archetype Model integrity check hashes.</li>
+            <li>Updated existence statements for optional attributes such as protocol, state and value.</li>
+            <li>Fixed several ADL/XML archetype file consistency issues.</li>
+            <li><b>Interval events</b> may have no maths aggregate function.</li>
+            <li><b>DV_PARSABLE</b> is now supported.</li>
+            <li><b>Slots</b> show archetypes of all types (XML and ADL).</li>
+            <li>Added the correct calculated existence values for <b>Protocol</b> and <b>State</b>.</li>
+            <li>The label on the Data tab now reflects the structure when it is changed.</li>
+            <li>Updated Flow (Mass) property units.</li>
+            <li>Rationalised terminology to remove references to translations and include HL7 OIDs.</li>
+            <li>Fixed XML in <b>DV_DURATION</b>, which was not saving the format.</li>
+            <li>Ensured <b>ARCHETYPE_INTERNAL_REF.target_path</b> is provided in the archetype XML.</li>
+            <li>Ensured the parent concept of the specialised archetype root concept is included in the list of referenced terms in XML.</li>
+            <li>Ensured <b>original_author</b> name is mandatory in description.</li>
+            <li>Ensured that existing archetypes containing <b>DV_TEXT.value</b> constraints do not silently lose those constraints.</li>
+            <li>Included <b>T</b> delimiter in <b>C_DATE_TIME</b> patterns.</li>
+            <li>Serialised <b>DV_QUANTITY</b> with default precision, for the "Explicitly specify default value" canonical AM rule.</li>
+            <li>Showed compound units in Quantity in the current language.</li>
+            <li><b>DV_ORDINAL</b> assumed values are better supported.</li>
+          </ul>
+
+
+          <p><br clear="all" /></p>
+          <hr />
+
+          <h1><a name="ArchetypeEditorReleases-PreviousReleases"></a>Previous Releases</h1>
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor2.0.582"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/RELEASES/Nitrogen" rel="nofollow">Archetype Editor 2.0.582</a></span> 2 July 2009</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>When saving to XML, if the option to save ADL automatically is on, then the ADL definition section is deleted.</li>
+            <li>Cardinality "optional not repeating 0..1" cannot be saved.</li>
+            <li>The documentation is out of date.</li>
+            <li>The ADL term_binding and constraint_binding are still in the singular (changed in ADL 1.5).</li>
+          </ul>
+
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li><b>Slots</b> can now be named.</li>
+            <li><b>Slots</b> can now be constrained to an abstract type (<b>Item</b>, <b>Entry</b>, etc.).</li>
+            <li><b>Slot patterns</b> now specify the full archetype id, not just the concept and version.</li>
+            <li><b>Slot patterns</b> in XML archetypes are no longer surrounding by slashes.</li>
+            <li>The web source of archetypes is now <b><span><a href="http://openehr.org/knowledge" rel="nofollow">CKM</a></span></b>.</li>
+            <li>Installs a reduced set of <b>sample archetypes</b>, clearly named as samples.</li>
+            <li><b>XML</b> archetypes are now valid against the schema.</li>
+            <li><b>HTML</b> generation has an updated user-configurable XSLT script.</li>
+            <li><b>Ctrl+L</b> keyboard shortcut toggles between two languages.</li>
+            <li>Added <b>Japanese</b> terminology.</li>
+            <li>Added <b>ICD Oncology (3)</b> terminology.</li>
+            <li>Added new unit <b>time fraction</b>.</li>
+            <li><b>Internal references</b> are now commented in the ADL, like other nodes already were.</li>
+            <li>Prevented duplicate term codes in <b>coded text</b> and <b>ordinals</b>.</li>
+            <li><b>Term Bindings</b> save the Release field.</li>
+            <li>The terminology look-up has several usability improvements.</li>
+            <li><b>Translation</b> saves the Accreditation field.</li>
+            <li><b>Copyright</b> details are not discarded.</li>
+            <li>The <b>Links</b> button is hidden, unless an option is set.</li>
+            <li>Removed the <b>File &#124; Close</b> menu item.</li>
+            <li><b>Save As</b> now always regenerates the ADL.</li>
+            <li>Changing the archetype id and then saving to the new name sometimes instead overwrote the old .adl file.</li>
+            <li>If an <b>embedded</b> archetype is not found, the user can locate its directory.</li>
+            <li>Fixed several problems with <b>embedded</b> archetypes, including taking into account the parent archetype's language.</li>
+            <li>Fixed loading <b>Quantity</b> minimum and maximum, which were rounding to a whole number.</li>
+            <li>Fixed mishandling of "openehr" term codes as "local".</li>
+            <li>Fixed an "Incorrect format" error when saving an INSTRUCTION with a <b>Protocol</b>.</li>
+            <li>Fixed several exceptions when changing the Structure Type.</li>
+            <li>Fixed several exceptions on the Interface tab.</li>
+            <li>Fixed exceptions opening an XML archetype containing a <b>DV_EHR_URI</b>.</li>
+            <li>Fixed problems saving to ADL:
+            <ul>
+              <li>Double-quotes were wrongly converted to single quotes. (Saving to XML had the same problem.)</li>
+              <li>Backslashes were saved in a way that could cause parsing of the archetype to fail.</li>
+              <li>The Purpose, Use, Misuse and Reference fields were saved with extra carriage returns.</li>
+            </ul>
+            </li>
+            <li>Fixed problems introduced in version 1.0.1246:
+            <ul>
+              <li>An exception occurred when <b>specialising</b> a node.</li>
+              <li><b>Save As</b> left the <b>Save</b> button visible.</li>
+              <li>Saving as an invalid file name corrected the name silently. It now advises that this is happening.</li>
+            </ul>
+            </li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor1.0.1248"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/!svn/bc/332/TRUNK/ArchetypeEditor/" rel="nofollow">Archetype Editor 1.0.1248.332</a></span> 12 May 2008</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>When saving to XML, if the option to save ADL automatically is on, then the ADL definition section is deleted.</li>
+            <li>An exception occurs when trying to specialise a node.</li>
+            <li>The user can add duplicate internal codes although it displays only once. The work around is to remove the code until it disappears from the list and then add it back once.</li>
+            <li>Cardinality "optional not repeating 0..1" cannot be saved.</li>
+            <li>Embedded archetype doesn't take into account the parent archetype's language.</li>
+            <li>The Protocol tab causes an "Incorrect format" error.</li>
+            <li>Some key details are missing from the HTML for SECTION, INSTRUCTION and ACTION.</li>
+            <li>The documentation is out of date.</li>
+          </ul>
+
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Fixed loading of attributes such as <b>QUANTITY.precision</b> from the ADL file. (This error was introduced in version 1.0.1243.)</li>
+            <li>Fixed wrong image being displayed for Clusters.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor1.0.1247"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/!svn/bc/327/TRUNK/ArchetypeEditor/" rel="nofollow">Archetype Editor 1.0.1247.327</a></span> 6 May 2008</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>When saving to XML, if the option to save ADL automatically is on, then the ADL definition section is deleted.</li>
+            <li>Some attributes (e.g. QUANTITY.precision) are always loaded as zero from the ADL file.</li>
+            <li>Wrong image is being displayed for Clusters.</li>
+            <li>An exception occurs when trying to specialise a node.</li>
+            <li>The user can add duplicate internal codes although it displays only once.</li>
+            <li>Cardinality "optional not repeating 0..1" cannot be saved.</li>
+            <li>Embedded archetype doesn't take into account the parent archetype's language.</li>
+            <li>The Protocol tab causes an "Incorrect format" error.</li>
+            <li>The documentation is out of date.</li>
+          </ul>
+
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li><b>DV_IDENTIFIER</b> is now supported.</li>
+            <li><b>Participations</b> can now be saved within a COMPOSITION archetype.</li>
+            <li>Fixed saving of <b>Slots</b> to ADL, which often had an invalid include or exclude pattern.</li>
+            <li>Fixed several "Unhandled Exception" error messages.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor1.0.1246"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/!svn/bc/315/TRUNK/ArchetypeEditor/" rel="nofollow">Archetype Editor 1.0.1246.315</a></span> 29 April 2008</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>When saving to XML, if the option to save ADL automatically is on, then the ADL definition section is deleted.</li>
+            <li>Slots are saved to ADL with an invalid include or exclude pattern.</li>
+            <li>Some attributes (e.g. QUANTITY.precision) are always loaded as zero from the ADL file.</li>
+            <li>Participations do not save for COMPOSITION or if only Occurrences is set.</li>
+            <li>An exception when occurs trying to specialise a node.</li>
+            <li>The user can add duplicate internal codes although it displays only once.</li>
+            <li>Cardinality "optional not repeating 0..1" cannot be saved.</li>
+            <li>Embedded archetype doesn't take into account the parent archetype's language.</li>
+            <li>The Protocol tab causes an "Incorrect format" error.</li>
+            <li>The documentation is out of date.</li>
+          </ul>
+
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>The installer now associates Archetype Editor with the <b>.adl</b> file extension.</li>
+            <li>The installer now sets up the same sample archetypes directory as Template Designer.</li>
+            <li>When saving an archetype, a dialog warns if the file name does not match the id.</li>
+            <li>The <b>HTML</b> display is now optionally generated via a user-configurable XSLT script.</li>
+            <li>On the <b>Header</b> tab:
+            <ul>
+              <li>There is a new <b>Links</b> button.</li>
+              <li>Right-clicking the archetype id pops up a <b>Copy</b> menu.</li>
+            </ul>
+            </li>
+            <li>The <b>New</b> button on the toolbar is now always visible.</li>
+            <li>Changing the <b>Structure</b> type now scrolls so you can see its combo box.</li>
+            <li>Adding <b>Quantity Units</b> no longer adds the Property as a Unit when you cancel.</li>
+            <li>Adding a <b>Slot</b> pattern now gives the option to match specialisations.</li>
+            <li>Fixed the <b>Save As</b> dialog's <b>HTML</b> option, which did nothing when you selected it.</li>
+            <li>Fixed various problems with <b>reference</b> elements.</li>
+            <li>Fixed errors reloading two of the <b>date-time</b> constraint formats.</li>
+            <li>Fixed some mistakes in the display of <b>date-time</b> constraint fields on the <b>Interface</b> tab.</li>
+            <li>Fixed saving of the <b>Duration min</b> constraint.</li>
+            <li>Fixed an "Error creating window handle" after frequently switching to the <b>Interface</b> tab of a large archetype.</li>
+            <li>Fixed several "Unhandled Exception" error messages.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor1.0.1245.279"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/!svn/bc/279/TRUNK/ArchetypeEditor/" rel="nofollow">Archetype Editor 1.0.1245.279</a></span> 26 March 2008</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>When saving to XML, if the option to save ADL automatically is on, then the ADL definition section is deleted.</li>
+            <li>The user can add duplicate internal codes although it displays only once.</li>
+            <li>Some attributes (e.g. QUANTITY.precision) are always loaded as zero from the ADL file.</li>
+            <li>Cardinality "optional not repeating 0..1" cannot be saved.</li>
+            <li>Embedded archetype doesn't take into account the parent archetype's language.</li>
+            <li>The Protocol tab causes an "Incorrect format" error.</li>
+            <li>Some key details are missing from the HTML for SECTION, INSTRUCTION and ACTION.</li>
+            <li>The documentation is out of date.</li>
+          </ul>
+
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>The old 'A' icon has been removed everywhere, in favour of the 'Oi' icon, similar to the Ocean Template Designer.</li>
+            <li>The overall appearance makes better use of Windows XP and Vista visual themes, most noticeably in the <b>Open from Web</b> dialog.</li>
+            <li>A new option allows <b>automatic saving to XML</b> whenever an archetype is saved as ADL; and also <b>automatic saving to ADL</b> whenever an archetype is saved as XML.</li>
+            <li>An unhandled exception has been fixed, when opening an embedded archetype if the repository path does not have a "structures" subdirectory.</li>
+            <li><b>XML</b> was exported with the wrong <b>adl_version</b> (e.g., "v1"). It is now correct (i.e., "1.4").</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor1.0.1244.250"></a><span><a href="http://www.openehr.org/svn/knowledge_tools_dotnet/!svn/bc/250/TRUNK/ArchetypeEditor/" rel="nofollow">Archetype Editor 1.0.1244.250</a></span> 30 November 2007</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>The user can add duplicate internal codes although it displays only once.</li>
+            <li>Some attributes (e.g. QUANTITY.precision) are always loaded as zero from the ADL file.</li>
+            <li>Cardinality "optional not repeating 0..1" cannot be saved.</li>
+            <li>Unhandled exception when the repository is one directory above where it should be.</li>
+            <li>Embedded archetype doesn't take into account the parent archetype's language.</li>
+            <li>The Protocol tab causes an "Incorrect format" error.</li>
+            <li>Some key details are missing from the HTML for SECTION, INSTRUCTION and ACTION.</li>
+            <li>The documentation is out of date.</li>
+          </ul>
+
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>New option to <b>open an archetype from the web</b>.</li>
+            <li>The Options window is now under a Windows-standard <b>Tools</b> menu.</li>
+            <li>The version number now has a fourth part, identifying the revision from which it was built.</li>
+            <li>Removed the XML and ADL radio buttons on the start-up dialog.</li>
+            <li>Fixed the DURATION constraint, which could not be set if no pattern or range were specified.</li>
+            <li>Fixed several "Unhandled Exception" error messages.</li>
+            <li>Fixed a problem that it sometimes silently failed to save to XML.</li>
+            <li>Fixed term_bindings in the XML, which did not have a code_string element value, and instead placed it wrongly in the terminology_id.</li>
+            <li>Fixed a rare case where the specialisation part of an archetype ID could be lost when renaming it.</li>
+            <li>Fixed the size of the Participations controls so that they are fully visible.</li>
+            <li>Added scroll bars in several places, to improve usability on very small screens.</li>
+            <li>The Pathway tab is more user-friendly.</li>
+            <li>Added new units for pressure and impedance/immitance.</li>
+            <li>Changing the Structure now works with Single, even if no object has been selected.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor1.0.1243"></a>Archetype Editor 1.0.1243 26 October 2007</h2>
+
+          <h4><a name="ArchetypeEditorReleases-KnownIssues"></a>Known Issues</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>The user can add duplicate internal codes although it displays only once.</li>
+            <li>Some attributes (e.g. QUANTITY.precision) are always loaded as zero from the ADL file.</li>
+            <li>If an archetype contains references on the Description tab, exporting to XML silently fails to write to the XML file.</li>
+          </ul>
+
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Now runs on both 64- and 32-bit versions of Windows.</li>
+            <li>Updated the problem reporting to use Jira rather than Mantis.</li>
+            <li>No longer writes to the "Program Files" directory, so it will work for non-administrative users, in a student lab setting, etc.</li>
+            <li>An auto-backup is created at a configurable time interval.</li>
+            <li>Improved validation of the Short Concept part of the Archetype ID.</li>
+            <li>Fixed various bugs on saving XML.</li>
+            <li>Fixed a lot of "Unhandled Exception" error messages.</li>
+            <li>Fixed HTML-generation of archetypes with Table structure.</li>
+            <li>Fixed the order of OK and Cancel buttons to conform to Windows standards.</li>
+            <li>Fixed the tab order in many places.</li>
+            <li>Minimum duration range of zero retains the correct units: it is no longer forced to "0S".</li>
+            <li>Changes to "Limit decimal places" are now saved, even if "Set min. value" and/or "Set max. value" is not set.</li>
+            <li>The default setting for a Text attribute is now "Free text/coded".</li>
+            <li>Changing the Structure now works with Table and Single, not just List and Tree.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor1.0.1241"></a>Archetype Editor 1.0.1241 1 June 2007</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>ADL Parser is slow loading first Archetype file.</li>
+            <li>Fixed bug on saving XML.</li>
+            <li>Catches error on loading chained archetypes.</li>
+            <li>Corrected error in HTML display.</li>
+            <li>Fixed bug in display of Duration data type.</li>
+            <li>Fixed bug on addressing list of internal codes when double-click on list.</li>
+            <li>Fixed bug with load from command line.</li>
+            <li>Fixed bug with typing property into quantity.</li>
+            <li>Fixed bug with duration in weeks.</li>
+            <li>Full Release 1.0.1 compliance with XML archetypes.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor1.0.1240"></a>Archetype Editor 1.0.1240 11 May 2007</h2>
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor1.0.123819March2007"></a>Archetype Editor 1.0.1238 19 March 2007</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Fixed bug with load from command line.</li>
+            <li>Fixed bug with typing property into quantity.</li>
+            <li>Fixed bug with duration in weeks.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.8Beta25October2006"></a>Archetype Editor 0.99.8 Beta 25 October 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Major changes to align with release 1.0 of the reference model.</li>
+            <li>New Action class archetypes, altered instruction model.</li>
+            <li>Allows embedded editing of structures within entries (allows instruction and action to share activity description specifications).</li>
+            <li>Date representation fully ISO compliant.</li>
+            <li>Many bugs and GUI issues fixed for working in other languages (GUI support for German, Turkish and Farsi added).</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.825September2006"></a>Archetype Editor 0.99.8 25 September 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Further alignment with the 1.0 reference model. Main change is that State data is now represented on one event and referenced from other events. Many minor bug fixes.</li>
+            <li>Quantity properties are now sorted and it is possible to add a unit first (setting the property based on the unit).</li>
+            <li>A lot of work on the Terminology bindings and constraint bindings.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.7f28August2006"></a>Archetype Editor 0.99.7f 28 August 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Bug fixes - working in languages which do not have translations of the <i>open</i>EHR termset.</li>
+            <li>This release fixes many issues with term and constraint bindings - enabling binding of terms that are not archetype nodes.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.7e11July2006"></a>Archetype Editor 0.99.7e 11 July 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Full alignment with <i>open</i>EHR Foundation archetypes.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.7d15June2006"></a>Archetype Editor 0.99.7d 15 June 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Fixed bug - not recording Quantity.Property.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.7c6June2006"></a>Archetype Editor 0.99.7c 6 June 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Fixed bug with Section archetypes.</li>
+            <li>Handling of single data structure error corrected.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.7b25May2006"></a>Archetype Editor 0.99.7b 25 May 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Parser updated to handle carriage returns in text and description.</li>
+            <li>Constraint bindings to terminologies are now saved, though no standardisation of this has yet been agreed.</li>
+            <li>Contributors and keywords are now handled properly.</li>
+            <li>Right to left script handling now almost universal.</li>
+            <li>Date time representation is now fully ISO compliant - backward compatibility has been maintained.</li>
+            <li>'b' corrects parser error removing excessive codes during cleanup.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.6a11May2006"></a>Archetype Editor 0.99.6a 11 May 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Build 0.99.6 saved when working in Farsi which gave default menus in Farsi. More additions for handling right-to-left scripts.</li>
+            <li>Bug fixed in loading descriptions.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.68May2006"></a>Archetype Editor 0.99.6 8 May 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Further GUI support for other languages, comprehensive testing.</li>
+            <li>Minor bug fixes.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.5d23April2006"></a>Archetype Editor 0.99.5d 23 April 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Minor bug fixes from alpha testing - ordinals display in embedded archetypes, correct file save on changing occurrences with embedded archetypes.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.5c22April2006"></a>Archetype Editor 0.99.5c 22 April 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Minor changes to ADL processing, instruction.activity.action_archetype_id as regular expression.</li>
+            <li>Bug fix with archetype naming.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.5b17April2006"></a>Archetype Editor 0.99.5b 17 April 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Fixed bugs with drag and drop, more interface translation, embedding archetypes.</li>
+            <li>Fixed bug in structure archetypes archetype ID name.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.5a9April2006"></a>Archetype Editor 0.99.5a 9 April 2006</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Major rework to allow embedded archetypes, added Action archetypes, fixed bugs with language translation and GUI, added archetype Description.</li>
+            <li>Comes with sample archetypes which are release 1.0 compatible, installed in archetype subdirectory.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.2a8June2005"></a>Archetype Editor 0.99.2a 8 June 2005</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Add display of further data types, find in ADL view, fixed various minor bugs and over-write bug if new archetype created twice.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.99.1a17May2005"></a>Archetype Editor 0.99.1a 17 May 2005</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Fix translate to local language on load, allow edit of archetype ID, multiple datatype now called choice.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.995May2005"></a>Archetype Editor 0.99 5 May 2005</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Added quantity ratio (count only at this stage) and assumed values.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.98.925April2005"></a>Archetype Editor 0.98.9 25 April 2005</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Added control of cluster cardinality, debugged specialisations, cluster drag/drop.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.98.813April2005"></a>Archetype Editor 0.98.8 13 April 2005</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Refined HTML display, fixed bug with display of URI in interface.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.98.730March2005"></a>Archetype Editor 0.98.7 30 March 2005</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Early version of HTML display, fixed bug with dates.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.98.619March2005"></a>Archetype Editor 0.98.6 19 March 2005</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Updated to work with ADL 1.2 ready for <i>open</i>EHR 1.0 release later in the year.</li>
+          </ul>
+
+
+
+          <h2><a name="ArchetypeEditorReleases-ArchetypeEditor0.98.58February2005"></a>Archetype Editor 0.98.5 8 February 2005</h2>
+
+          <h4><a name="ArchetypeEditorReleases-ReleaseChanges"></a>Release Changes</h4>
+          <ul>
+            <li>Minor bug fixes with translation of ordinals.</li>
+            <li>Added ability to edit description of ordinal terms.</li>
+          </ul>
+
+        </div>
+      </div>
+
+      <div id="footer">
+        <ul>
+          <li value="0"><a href="index.html">Home</a></li>
+          <li value="0"><a href="release_notes.html">Release notes</a></li>
+          <li value="0"><a href="Menu/HowTo/archetype_editor.htm">Getting started</a></li>
+        </ul>
+        <p>Copyright 2010 openEHR Foundation - $LastChangedDate$ $LastChangedRevision$</p>
+      </div>
+    </div>
+  </body>
+</html>

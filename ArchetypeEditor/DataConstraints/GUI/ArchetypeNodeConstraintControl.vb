@@ -241,7 +241,7 @@ Public Class ArchetypeNodeConstraintControl
         'butSetRuntimeName
         '
         Me.butSetRuntimeName.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.HelpProviderCommonConstraint.SetHelpKeyword(Me.butSetRuntimeName, "HowTo/Edit data/Set_runtime_name.html")
+        Me.HelpProviderCommonConstraint.SetHelpKeyword(Me.butSetRuntimeName, "HowTo/Editing/Set_runtime_name.html")
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me.butSetRuntimeName, System.Windows.Forms.HelpNavigator.Topic)
         Me.butSetRuntimeName.Location = New System.Drawing.Point(381, 7)
         Me.butSetRuntimeName.Name = "butSetRuntimeName"
@@ -519,7 +519,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange
         Me.BackColor = System.Drawing.Color.Transparent
         Me.Controls.Add(Me.tabConstraint)
-        Me.HelpProviderCommonConstraint.SetHelpKeyword(Me, "HowTo/Edit data/set_common_constraints.htm")
+        Me.HelpProviderCommonConstraint.SetHelpKeyword(Me, "HowTo/Editing/set_common_constraints.htm")
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "ArchetypeNodeConstraintControl"
         Me.HelpProviderCommonConstraint.SetShowHelp(Me, True)
