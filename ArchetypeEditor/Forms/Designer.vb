@@ -2445,14 +2445,11 @@ Public Class Designer
 
         ' Concept and description fields on header and the form text
         Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
-
         txtConceptInFull.Text = term.Text
-
-        'Text = AE_Constants.Instance.MessageBoxCaption & " [" & term.Text & "] " & languageCode
-        UpdateTitle()
-
         TxtConceptDescription.Text = term.Description
         txtConceptComment.Text = term.Comment
+
+        UpdateTitle()
 
         'and in the specialisation chain
         If tvSpecialisation.GetNodeCount(False) > 0 Then
@@ -3428,10 +3425,7 @@ Public Class Designer
     End Sub
 
     Private Sub UpdateTitle()
-
-        '//        Text = AE_Constants.Instance.MessageBoxCaption & " '" & mFileManager.OntologyManager.LanguageCode & "' " & " [" & txtConceptInFull.Text & "]"
-        Text = AE_Constants.Instance.MessageBoxCaption & " [" & mFileManager.OntologyManager.LanguageCode & "] " & " " & txtConceptInFull.Text & ""
-
+        Text = AE_Constants.Instance.MessageBoxCaption & " [" & mFileManager.OntologyManager.LanguageCode & "] " & txtConceptInFull.Text & ""
     End Sub
 
     Private Function SetNewArchetypeName(ByVal AllowOpen As Boolean) As Integer
@@ -3699,7 +3693,6 @@ Public Class Designer
             previousLanguageCode = mFileManager.OntologyManager.LanguageCode
             previousLanguageText = mFileManager.OntologyManager.LanguageText
             Translate(langCode)
-
         End If
     End Sub
 
@@ -4317,7 +4310,6 @@ Public Class Designer
         If Not mFileManager.FileLoading Then
             mFileManager.OntologyManager.SetText(txtConceptInFull.Text, mFileManager.Archetype.ConceptCode)
             mFileManager.FileEdited = True
-            'Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & Me.txtConceptInFull.Text & "]" & Main.Instance.SpecificLanguageCode
             UpdateTitle()
 
             If Me.gbSpecialisation.Visible Then
