@@ -934,7 +934,7 @@ Public Class ApplicationOptionsForm
     End Sub
 
     Private Sub RepositoryBrowseButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RepositoryBrowseButton.Click
-        FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
+        FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.Desktop
         FolderBrowserDialog1.ShowNewFolderButton = True
 
         If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
@@ -943,7 +943,7 @@ Public Class ApplicationOptionsForm
     End Sub
 
     Private Sub XmlRepositoryBrowseButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles XmlRepositoryBrowseButton.Click
-        FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.MyComputer
+        FolderBrowserDialog1.RootFolder = Environment.SpecialFolder.Desktop
         FolderBrowserDialog1.ShowNewFolderButton = True
 
         If FolderBrowserDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then

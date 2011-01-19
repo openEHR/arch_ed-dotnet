@@ -57,19 +57,11 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents gbAllowableValues As System.Windows.Forms.GroupBox
-    Friend WithEvents NewItemButton As System.Windows.Forms.Button
-    Friend WithEvents DefaultItemButton As System.Windows.Forms.Button
-    Friend WithEvents RemoveItemButton As System.Windows.Forms.Button
-    Friend WithEvents txtAssumedValue As System.Windows.Forms.TextBox
-    Friend WithEvents AddItemButton As System.Windows.Forms.Button
-    Friend WithEvents listAllowableValues As System.Windows.Forms.ListBox
     Friend WithEvents radioInternal As System.Windows.Forms.RadioButton
     Friend WithEvents radioText As System.Windows.Forms.RadioButton
     Friend WithEvents radioTerminology As System.Windows.Forms.RadioButton
     Friend WithEvents TermConstraintDescriptionTextBox As System.Windows.Forms.TextBox
     Friend WithEvents TermConstraintTextBox As System.Windows.Forms.TextBox
-    Friend WithEvents ConstraintBindingsGrid As ConstraintBindingsControl
     Friend WithEvents ContextMenuListAllowableValues As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuItemCopyAll As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItemPasteAll As System.Windows.Forms.MenuItem
@@ -79,31 +71,32 @@ Public Class TextConstraintControl : Inherits ConstraintControl
     Friend WithEvents MenuClearText As System.Windows.Forms.MenuItem
     Friend WithEvents MenuItemEdit As System.Windows.Forms.MenuItem
     Friend WithEvents TermConstraintDescriptionLabel As System.Windows.Forms.Label
-    Friend WithEvents PasteListButton As System.Windows.Forms.Button
-    Friend WithEvents CopyListButton As System.Windows.Forms.Button
-    Friend WithEvents MoveDownButton As System.Windows.Forms.Button
-    Friend WithEvents MoveUpButton As System.Windows.Forms.Button
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Private components As System.ComponentModel.IContainer
     Friend WithEvents MenuItemRemove As System.Windows.Forms.MenuItem
+    Friend WithEvents menuCopyTerm As System.Windows.Forms.MenuItem
+    Friend WithEvents listAllowableValues As System.Windows.Forms.ListBox
+    Friend WithEvents AddItemButton As System.Windows.Forms.Button
+    Friend WithEvents txtAssumedValue As System.Windows.Forms.TextBox
+    Friend WithEvents RemoveItemButton As System.Windows.Forms.Button
+    Friend WithEvents DefaultItemButton As System.Windows.Forms.Button
+    Friend WithEvents NewItemButton As System.Windows.Forms.Button
+    Friend WithEvents MoveUpButton As System.Windows.Forms.Button
+    Friend WithEvents MoveDownButton As System.Windows.Forms.Button
+    Friend WithEvents CopyListButton As System.Windows.Forms.Button
+    Friend WithEvents PasteListButton As System.Windows.Forms.Button
+    Friend WithEvents gbAllowableValues As System.Windows.Forms.GroupBox
+    Friend WithEvents ListViewSelected As System.Windows.Forms.ListView
+    Friend WithEvents Code As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Description As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ConstraintBindingsGrid As ConstraintBindingsControl
     Friend WithEvents TermConstraintLabel As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TextConstraintControl))
-        Me.gbAllowableValues = New System.Windows.Forms.GroupBox
-        Me.PasteListButton = New System.Windows.Forms.Button
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.CopyListButton = New System.Windows.Forms.Button
-        Me.MoveDownButton = New System.Windows.Forms.Button
-        Me.MoveUpButton = New System.Windows.Forms.Button
-        Me.NewItemButton = New System.Windows.Forms.Button
-        Me.DefaultItemButton = New System.Windows.Forms.Button
-        Me.RemoveItemButton = New System.Windows.Forms.Button
-        Me.txtAssumedValue = New System.Windows.Forms.TextBox
         Me.ContextMenuClearText = New System.Windows.Forms.ContextMenu
         Me.MenuClearText = New System.Windows.Forms.MenuItem
-        Me.AddItemButton = New System.Windows.Forms.Button
-        Me.listAllowableValues = New System.Windows.Forms.ListBox
         Me.ContextMenuListAllowableValues = New System.Windows.Forms.ContextMenu
         Me.MenuItemEdit = New System.Windows.Forms.MenuItem
         Me.MenuItemRemove = New System.Windows.Forms.MenuItem
@@ -111,6 +104,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.MenuItemPasteAll = New System.Windows.Forms.MenuItem
         Me.MenuItemCancelCopy = New System.Windows.Forms.MenuItem
         Me.MenuItemAddExisting = New System.Windows.Forms.MenuItem
+        Me.menuCopyTerm = New System.Windows.Forms.MenuItem
         Me.TermConstraintDescriptionLabel = New System.Windows.Forms.Label
         Me.TermConstraintLabel = New System.Windows.Forms.Label
         Me.radioInternal = New System.Windows.Forms.RadioButton
@@ -118,39 +112,23 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.radioTerminology = New System.Windows.Forms.RadioButton
         Me.TermConstraintDescriptionTextBox = New System.Windows.Forms.TextBox
         Me.TermConstraintTextBox = New System.Windows.Forms.TextBox
+        Me.listAllowableValues = New System.Windows.Forms.ListBox
+        Me.AddItemButton = New System.Windows.Forms.Button
+        Me.txtAssumedValue = New System.Windows.Forms.TextBox
+        Me.RemoveItemButton = New System.Windows.Forms.Button
+        Me.DefaultItemButton = New System.Windows.Forms.Button
+        Me.NewItemButton = New System.Windows.Forms.Button
+        Me.MoveUpButton = New System.Windows.Forms.Button
+        Me.MoveDownButton = New System.Windows.Forms.Button
+        Me.CopyListButton = New System.Windows.Forms.Button
+        Me.PasteListButton = New System.Windows.Forms.Button
+        Me.gbAllowableValues = New System.Windows.Forms.GroupBox
+        Me.ListViewSelected = New System.Windows.Forms.ListView
+        Me.Code = New System.Windows.Forms.ColumnHeader
+        Me.Description = New System.Windows.Forms.ColumnHeader
         Me.ConstraintBindingsGrid = New ConstraintBindingsControl
         Me.gbAllowableValues.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'gbAllowableValues
-        '
-        Me.gbAllowableValues.BackColor = System.Drawing.Color.Transparent
-        Me.gbAllowableValues.Controls.Add(Me.PasteListButton)
-        Me.gbAllowableValues.Controls.Add(Me.CopyListButton)
-        Me.gbAllowableValues.Controls.Add(Me.MoveDownButton)
-        Me.gbAllowableValues.Controls.Add(Me.MoveUpButton)
-        Me.gbAllowableValues.Controls.Add(Me.NewItemButton)
-        Me.gbAllowableValues.Controls.Add(Me.DefaultItemButton)
-        Me.gbAllowableValues.Controls.Add(Me.RemoveItemButton)
-        Me.gbAllowableValues.Controls.Add(Me.txtAssumedValue)
-        Me.gbAllowableValues.Controls.Add(Me.AddItemButton)
-        Me.gbAllowableValues.Controls.Add(Me.listAllowableValues)
-        Me.gbAllowableValues.Location = New System.Drawing.Point(16, 48)
-        Me.gbAllowableValues.Name = "gbAllowableValues"
-        Me.gbAllowableValues.Size = New System.Drawing.Size(372, 310)
-        Me.gbAllowableValues.TabIndex = 50
-        Me.gbAllowableValues.TabStop = False
-        '
-        'PasteListButton
-        '
-        Me.PasteListButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.PasteListButton.ImageKey = "paste16.bmp"
-        Me.PasteListButton.ImageList = Me.ImageList1
-        Me.PasteListButton.Location = New System.Drawing.Point(15, 224)
-        Me.PasteListButton.Name = "PasteListButton"
-        Me.PasteListButton.Size = New System.Drawing.Size(24, 24)
-        Me.PasteListButton.TabIndex = 6
-        Me.ToolTip1.SetToolTip(Me.PasteListButton, "Paste an external list from Clipboard")
         '
         'ImageList1
         '
@@ -161,82 +139,6 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.ImageList1.Images.SetKeyName(2, "copy16.bmp")
         Me.ImageList1.Images.SetKeyName(3, "paste16.bmp")
         '
-        'CopyListButton
-        '
-        Me.CopyListButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.CopyListButton.ImageKey = "copy16.bmp"
-        Me.CopyListButton.ImageList = Me.ImageList1
-        Me.CopyListButton.Location = New System.Drawing.Point(15, 194)
-        Me.CopyListButton.Name = "CopyListButton"
-        Me.CopyListButton.Size = New System.Drawing.Size(24, 24)
-        Me.CopyListButton.TabIndex = 5
-        Me.ToolTip1.SetToolTip(Me.CopyListButton, "Copy the list to the clipboard")
-        '
-        'MoveDownButton
-        '
-        Me.MoveDownButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MoveDownButton.ImageKey = "arrowdown_blue16.bmp"
-        Me.MoveDownButton.ImageList = Me.ImageList1
-        Me.MoveDownButton.Location = New System.Drawing.Point(15, 154)
-        Me.MoveDownButton.Name = "MoveDownButton"
-        Me.MoveDownButton.Size = New System.Drawing.Size(24, 24)
-        Me.MoveDownButton.TabIndex = 4
-        Me.ToolTip1.SetToolTip(Me.MoveDownButton, "Move the highlighted item down the list." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10))
-        '
-        'MoveUpButton
-        '
-        Me.MoveUpButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.MoveUpButton.ImageIndex = 1
-        Me.MoveUpButton.ImageList = Me.ImageList1
-        Me.MoveUpButton.Location = New System.Drawing.Point(15, 124)
-        Me.MoveUpButton.Name = "MoveUpButton"
-        Me.MoveUpButton.Size = New System.Drawing.Size(24, 24)
-        Me.MoveUpButton.TabIndex = 3
-        Me.ToolTip1.SetToolTip(Me.MoveUpButton, "Move the highlighted item up the list")
-        '
-        'NewItemButton
-        '
-        Me.NewItemButton.Image = CType(resources.GetObject("NewItemButton.Image"), System.Drawing.Image)
-        Me.NewItemButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.NewItemButton.Location = New System.Drawing.Point(15, 24)
-        Me.NewItemButton.Name = "NewItemButton"
-        Me.NewItemButton.Size = New System.Drawing.Size(24, 24)
-        Me.NewItemButton.TabIndex = 0
-        Me.ToolTip1.SetToolTip(Me.NewItemButton, "Add a new term")
-        '
-        'DefaultItemButton
-        '
-        Me.DefaultItemButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.DefaultItemButton.Location = New System.Drawing.Point(46, 279)
-        Me.DefaultItemButton.Name = "DefaultItemButton"
-        Me.DefaultItemButton.Size = New System.Drawing.Size(122, 24)
-        Me.DefaultItemButton.TabIndex = 8
-        Me.DefaultItemButton.Text = "Set assumed value"
-        Me.DefaultItemButton.Visible = False
-        '
-        'RemoveItemButton
-        '
-        Me.RemoveItemButton.Image = CType(resources.GetObject("RemoveItemButton.Image"), System.Drawing.Image)
-        Me.RemoveItemButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.RemoveItemButton.Location = New System.Drawing.Point(15, 56)
-        Me.RemoveItemButton.Name = "RemoveItemButton"
-        Me.RemoveItemButton.Size = New System.Drawing.Size(24, 24)
-        Me.RemoveItemButton.TabIndex = 1
-        Me.ToolTip1.SetToolTip(Me.RemoveItemButton, "Remove term")
-        '
-        'txtAssumedValue
-        '
-        Me.txtAssumedValue.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txtAssumedValue.ContextMenu = Me.ContextMenuClearText
-        Me.txtAssumedValue.Location = New System.Drawing.Point(176, 283)
-        Me.txtAssumedValue.Name = "txtAssumedValue"
-        Me.txtAssumedValue.ReadOnly = True
-        Me.txtAssumedValue.Size = New System.Drawing.Size(188, 20)
-        Me.txtAssumedValue.TabIndex = 9
-        Me.txtAssumedValue.Text = "(none)"
-        Me.txtAssumedValue.Visible = False
-        '
         'ContextMenuClearText
         '
         Me.ContextMenuClearText.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuClearText})
@@ -246,32 +148,9 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.MenuClearText.Index = 0
         Me.MenuClearText.Text = "Clear"
         '
-        'AddItemButton
-        '
-        Me.AddItemButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.AddItemButton.Location = New System.Drawing.Point(15, 88)
-        Me.AddItemButton.Name = "AddItemButton"
-        Me.AddItemButton.Size = New System.Drawing.Size(24, 24)
-        Me.AddItemButton.TabIndex = 2
-        Me.AddItemButton.Text = "..."
-        Me.ToolTip1.SetToolTip(Me.AddItemButton, "Add a term that is already defined")
-        '
-        'listAllowableValues
-        '
-        Me.listAllowableValues.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-                    Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.listAllowableValues.ContextMenu = Me.ContextMenuListAllowableValues
-        Me.listAllowableValues.DisplayMember = "Text"
-        Me.listAllowableValues.Location = New System.Drawing.Point(46, 20)
-        Me.listAllowableValues.MultiColumn = True
-        Me.listAllowableValues.Name = "listAllowableValues"
-        Me.listAllowableValues.Size = New System.Drawing.Size(318, 251)
-        Me.listAllowableValues.TabIndex = 7
-        '
         'ContextMenuListAllowableValues
         '
-        Me.ContextMenuListAllowableValues.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItemEdit, Me.MenuItemRemove, Me.MenuItemCopyAll, Me.MenuItemPasteAll, Me.MenuItemCancelCopy, Me.MenuItemAddExisting})
+        Me.ContextMenuListAllowableValues.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuItemEdit, Me.MenuItemRemove, Me.MenuItemCopyAll, Me.MenuItemPasteAll, Me.MenuItemCancelCopy, Me.MenuItemAddExisting, Me.menuCopyTerm})
         '
         'MenuItemEdit
         '
@@ -306,6 +185,11 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.MenuItemAddExisting.Index = 5
         Me.MenuItemAddExisting.Text = "Add existing code(s)"
+        '
+        'menuCopyTerm
+        '
+        Me.menuCopyTerm.Index = 6
+        Me.menuCopyTerm.Text = "Copy Term to clipboard"
         '
         'TermConstraintDescriptionLabel
         '
@@ -370,11 +254,166 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         Me.TermConstraintTextBox.Size = New System.Drawing.Size(280, 20)
         Me.TermConstraintTextBox.TabIndex = 35
         '
+        'listAllowableValues
+        '
+        Me.listAllowableValues.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.listAllowableValues.ContextMenu = Me.ContextMenuListAllowableValues
+        Me.listAllowableValues.DisplayMember = "Text"
+        Me.listAllowableValues.Location = New System.Drawing.Point(45, 19)
+        Me.listAllowableValues.Name = "listAllowableValues"
+        Me.listAllowableValues.Size = New System.Drawing.Size(318, 199)
+        Me.listAllowableValues.TabIndex = 7
+        '
+        'AddItemButton
+        '
+        Me.AddItemButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.AddItemButton.Location = New System.Drawing.Point(15, 88)
+        Me.AddItemButton.Name = "AddItemButton"
+        Me.AddItemButton.Size = New System.Drawing.Size(24, 24)
+        Me.AddItemButton.TabIndex = 2
+        Me.AddItemButton.Text = "..."
+        Me.ToolTip1.SetToolTip(Me.AddItemButton, "Add a term that is already defined")
+        '
+        'txtAssumedValue
+        '
+        Me.txtAssumedValue.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtAssumedValue.ContextMenu = Me.ContextMenuClearText
+        Me.txtAssumedValue.Location = New System.Drawing.Point(174, 282)
+        Me.txtAssumedValue.Name = "txtAssumedValue"
+        Me.txtAssumedValue.ReadOnly = True
+        Me.txtAssumedValue.Size = New System.Drawing.Size(184, 20)
+        Me.txtAssumedValue.TabIndex = 9
+        Me.txtAssumedValue.Text = "(none)"
+        Me.txtAssumedValue.Visible = False
+        '
+        'RemoveItemButton
+        '
+        Me.RemoveItemButton.Image = CType(resources.GetObject("RemoveItemButton.Image"), System.Drawing.Image)
+        Me.RemoveItemButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.RemoveItemButton.Location = New System.Drawing.Point(15, 56)
+        Me.RemoveItemButton.Name = "RemoveItemButton"
+        Me.RemoveItemButton.Size = New System.Drawing.Size(24, 24)
+        Me.RemoveItemButton.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.RemoveItemButton, "Remove term")
+        '
+        'DefaultItemButton
+        '
+        Me.DefaultItemButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.DefaultItemButton.Location = New System.Drawing.Point(46, 279)
+        Me.DefaultItemButton.Name = "DefaultItemButton"
+        Me.DefaultItemButton.Size = New System.Drawing.Size(122, 24)
+        Me.DefaultItemButton.TabIndex = 8
+        Me.DefaultItemButton.Text = "Set assumed value"
+        Me.DefaultItemButton.Visible = False
+        '
+        'NewItemButton
+        '
+        Me.NewItemButton.Image = CType(resources.GetObject("NewItemButton.Image"), System.Drawing.Image)
+        Me.NewItemButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.NewItemButton.Location = New System.Drawing.Point(15, 24)
+        Me.NewItemButton.Name = "NewItemButton"
+        Me.NewItemButton.Size = New System.Drawing.Size(24, 24)
+        Me.NewItemButton.TabIndex = 0
+        Me.ToolTip1.SetToolTip(Me.NewItemButton, "Add a new term")
+        '
+        'MoveUpButton
+        '
+        Me.MoveUpButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MoveUpButton.ImageIndex = 1
+        Me.MoveUpButton.ImageList = Me.ImageList1
+        Me.MoveUpButton.Location = New System.Drawing.Point(15, 124)
+        Me.MoveUpButton.Name = "MoveUpButton"
+        Me.MoveUpButton.Size = New System.Drawing.Size(24, 24)
+        Me.MoveUpButton.TabIndex = 3
+        Me.ToolTip1.SetToolTip(Me.MoveUpButton, "Move the highlighted item up the list")
+        '
+        'MoveDownButton
+        '
+        Me.MoveDownButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.MoveDownButton.ImageKey = "arrowdown_blue16.bmp"
+        Me.MoveDownButton.ImageList = Me.ImageList1
+        Me.MoveDownButton.Location = New System.Drawing.Point(15, 154)
+        Me.MoveDownButton.Name = "MoveDownButton"
+        Me.MoveDownButton.Size = New System.Drawing.Size(24, 24)
+        Me.MoveDownButton.TabIndex = 4
+        Me.ToolTip1.SetToolTip(Me.MoveDownButton, "Move the highlighted item down the list." & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10))
+        '
+        'CopyListButton
+        '
+        Me.CopyListButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.CopyListButton.ImageKey = "copy16.bmp"
+        Me.CopyListButton.ImageList = Me.ImageList1
+        Me.CopyListButton.Location = New System.Drawing.Point(15, 194)
+        Me.CopyListButton.Name = "CopyListButton"
+        Me.CopyListButton.Size = New System.Drawing.Size(24, 24)
+        Me.CopyListButton.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.CopyListButton, "Copy the list to the clipboard")
+        '
+        'PasteListButton
+        '
+        Me.PasteListButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.PasteListButton.ImageKey = "paste16.bmp"
+        Me.PasteListButton.ImageList = Me.ImageList1
+        Me.PasteListButton.Location = New System.Drawing.Point(15, 224)
+        Me.PasteListButton.Name = "PasteListButton"
+        Me.PasteListButton.Size = New System.Drawing.Size(24, 24)
+        Me.PasteListButton.TabIndex = 6
+        Me.ToolTip1.SetToolTip(Me.PasteListButton, "Paste an external list from Clipboard")
+        '
+        'gbAllowableValues
+        '
+        Me.gbAllowableValues.BackColor = System.Drawing.Color.Transparent
+        Me.gbAllowableValues.Controls.Add(Me.ListViewSelected)
+        Me.gbAllowableValues.Controls.Add(Me.PasteListButton)
+        Me.gbAllowableValues.Controls.Add(Me.CopyListButton)
+        Me.gbAllowableValues.Controls.Add(Me.MoveDownButton)
+        Me.gbAllowableValues.Controls.Add(Me.MoveUpButton)
+        Me.gbAllowableValues.Controls.Add(Me.NewItemButton)
+        Me.gbAllowableValues.Controls.Add(Me.DefaultItemButton)
+        Me.gbAllowableValues.Controls.Add(Me.RemoveItemButton)
+        Me.gbAllowableValues.Controls.Add(Me.txtAssumedValue)
+        Me.gbAllowableValues.Controls.Add(Me.AddItemButton)
+        Me.gbAllowableValues.Controls.Add(Me.listAllowableValues)
+        Me.gbAllowableValues.Location = New System.Drawing.Point(16, 48)
+        Me.gbAllowableValues.Name = "gbAllowableValues"
+        Me.gbAllowableValues.Size = New System.Drawing.Size(372, 310)
+        Me.gbAllowableValues.TabIndex = 50
+        Me.gbAllowableValues.TabStop = False
+        Me.gbAllowableValues.Visible = False
+        '
+        'ListViewSelected
+        '
+        Me.ListViewSelected.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.ListViewSelected.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.Code, Me.Description})
+        Me.ListViewSelected.GridLines = True
+        Me.ListViewSelected.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable
+        Me.ListViewSelected.LabelWrap = False
+        Me.ListViewSelected.Location = New System.Drawing.Point(46, 224)
+        Me.ListViewSelected.Name = "ListViewSelected"
+        Me.ListViewSelected.ShowItemToolTips = True
+        Me.ListViewSelected.Size = New System.Drawing.Size(317, 50)
+        Me.ListViewSelected.TabIndex = 10
+        Me.ListViewSelected.UseCompatibleStateImageBehavior = False
+        Me.ListViewSelected.View = System.Windows.Forms.View.Details
+        '
+        'Code
+        '
+        Me.Code.Text = "Code"
+        Me.Code.Width = 47
+        '
+        'Description
+        '
+        Me.Description.Text = "Description"
+        Me.Description.Width = 263
+        '
         'ConstraintBindingsGrid
         '
         Me.ConstraintBindingsGrid.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ConstraintBindingsGrid.Location = New System.Drawing.Point(8, 230)
+        Me.ConstraintBindingsGrid.AutoSize = True
+        Me.ConstraintBindingsGrid.Location = New System.Drawing.Point(0, 221)
         Me.ConstraintBindingsGrid.Name = "ConstraintBindingsGrid"
         Me.ConstraintBindingsGrid.Size = New System.Drawing.Size(390, 130)
         Me.ConstraintBindingsGrid.TabIndex = 38
@@ -813,7 +852,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         butAddItem_Click(sender, e)
     End Sub
 
-    Private Sub listAllowableValues_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAllowableValues.DoubleClick, MenuItemEdit.Click
+    Private Sub listAllowableValues_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemEdit.Click, listAllowableValues.DoubleClick, ListViewSelected.DoubleClick
         If listAllowableValues.SelectedIndex > -1 Then
             Dim s(1) As String
             Dim t As RmTerm = mFileManager.OntologyManager.GetTerm(CStr(listAllowableValues.SelectedValue))
@@ -891,7 +930,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Next
 
             Clipboard.SetText(clipText)
-            MessageBox.Show("The list of internal codes has been copied to Clipboard,", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ' MessageBox.Show("The list of internal codes has been copied to Clipboard,", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Beep()
             RefreshButtons()
         End If
     End Sub
@@ -912,14 +952,20 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                 For Each row In rows
                     'Skip empty rows
                     If row.Length <> 0 Then
-                        Dim columns As String() = row.Split(CChar(vbTab))
+                        Dim cleanRow As String
+                        ' Trim any trailing linefeed
+                        cleanRow = row.Trim()
+                        Dim columns As String() = cleanRow.Split(CChar(vbTab))
 
-                        If columns.Length <> 2 Then
-                            MessageBox.Show("Importing from the clipboard requires lines of tab-separated code and text, e.g., at0001<TAB>New code<LF>.", _
-                            AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-                        Else
+                        If columns.Length = 1 Then
+                            term = mFileManager.OntologyManager.AddTerm(columns(0), "")
+                            Constraint.AllowableValues.Codes.Add(term.Code)
+                        ElseIf columns.Length = 2 Then
                             term = mFileManager.OntologyManager.AddTerm(columns(0), columns(1))
                             Constraint.AllowableValues.Codes.Add(term.Code)
+                        Else
+                            MessageBox.Show("Importing from the clipboard requires lines of tab-separated code and text, e.g., at0001<TAB>New code<LF>.", _
+                            AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
                         End If
                     End If
                 Next
@@ -944,14 +990,70 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         PasteListButton.Enabled = EmptyList
     End Sub
 
+    Private Sub RefreshListItemDetail()
+
+        Dim EmptyList As Boolean = Constraint.AllowableValues.Codes.Count = 0
+
+        ListViewSelected.Items.Clear()
+        If Not EmptyList And listAllowableValues.SelectedIndex > -1 Then
+
+            Dim atTerm As RmTerm
+            Dim listviewContent(2) As String
+            Dim lvItem As ListViewItem
+
+            atTerm = ReturnSelectedTerm()
+            listviewContent(0) = atTerm.Code
+            listviewContent(1) = atTerm.Description
+
+            lvItem = New ListViewItem(listviewContent)
+            ListViewSelected.Items.Add(lvItem)
+
+        End If
+    End Sub
+
     Private Sub listAllowableValues_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAllowableValues.SelectedIndexChanged
         RefreshButtons()
+        RefreshListItemDetail()
     End Sub
 
     Private Sub MenuItemRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemRemove.Click
         butRemoveItem_Click(sender, e)
     End Sub
 
+
+
+    Private Sub menuCopyTerm_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCopyTerm.Click
+        Dim ClipText As String
+        Dim atTerm As RmTerm
+        atTerm = ReturnSelectedTerm()
+
+        ClipText = "local::" + atTerm.Code + "::" + atTerm.Text + vbLf
+        Clipboard.SetText(ClipText)
+        Beep()
+
+    End Sub
+
+    Private Function ReturnSelectedTerm() As RmTerm
+        Dim atCode As String
+        Dim atTerm As RmTerm
+
+        atCode = Constraint.AllowableValues.Codes(listAllowableValues.SelectedIndex)
+        atTerm = mFileManager.OntologyManager.GetTerm(atCode)
+        Return atTerm
+    End Function
+
+    Private Sub TextConstraintControl_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        ListViewSelected.ContextMenu = Me.ContextMenuListAllowableValues
+    End Sub
+
+
+    Private Sub ListViewSelected_MouseDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListViewSelected.MouseDoubleClick
+
+    End Sub
+
+    Private Sub ConstraintBindingsGrid_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ConstraintBindingsGrid.Load
+
+    End Sub
 End Class
 
 '
