@@ -436,7 +436,7 @@ Public Class Designer
         Me.TxtConceptDescription.Multiline = True
         Me.TxtConceptDescription.Name = "TxtConceptDescription"
         Me.TxtConceptDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TxtConceptDescription.Size = New System.Drawing.Size(588, 61)
+        Me.TxtConceptDescription.Size = New System.Drawing.Size(588, 59)
         Me.TxtConceptDescription.TabIndex = 1
         Me.TxtConceptDescription.Tag = ""
         '
@@ -453,7 +453,7 @@ Public Class Designer
         '
         Me.txtConceptInFull.Location = New System.Drawing.Point(75, 10)
         Me.txtConceptInFull.Name = "txtConceptInFull"
-        Me.txtConceptInFull.Size = New System.Drawing.Size(271, 21)
+        Me.txtConceptInFull.Size = New System.Drawing.Size(271, 23)
         Me.txtConceptInFull.TabIndex = 0
         Me.txtConceptInFull.Tag = ""
         '
@@ -502,10 +502,10 @@ Public Class Designer
         '
         Me.tpConceptDescription.BackColor = System.Drawing.Color.LightYellow
         Me.tpConceptDescription.Controls.Add(Me.TxtConceptDescription)
-        Me.tpConceptDescription.Location = New System.Drawing.Point(4, 22)
+        Me.tpConceptDescription.Location = New System.Drawing.Point(4, 24)
         Me.tpConceptDescription.Name = "tpConceptDescription"
         Me.tpConceptDescription.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptDescription.Size = New System.Drawing.Size(594, 67)
+        Me.tpConceptDescription.Size = New System.Drawing.Size(594, 65)
         Me.tpConceptDescription.TabIndex = 0
         Me.tpConceptDescription.Text = "Description"
         Me.tpConceptDescription.UseVisualStyleBackColor = True
@@ -514,10 +514,10 @@ Public Class Designer
         '
         Me.tpConceptComment.BackColor = System.Drawing.Color.LightYellow
         Me.tpConceptComment.Controls.Add(Me.txtConceptComment)
-        Me.tpConceptComment.Location = New System.Drawing.Point(4, 22)
+        Me.tpConceptComment.Location = New System.Drawing.Point(4, 24)
         Me.tpConceptComment.Name = "tpConceptComment"
         Me.tpConceptComment.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpConceptComment.Size = New System.Drawing.Size(594, 67)
+        Me.tpConceptComment.Size = New System.Drawing.Size(594, 65)
         Me.tpConceptComment.TabIndex = 1
         Me.tpConceptComment.Text = "Comment"
         Me.tpConceptComment.UseVisualStyleBackColor = True
@@ -529,7 +529,7 @@ Public Class Designer
         Me.txtConceptComment.Multiline = True
         Me.txtConceptComment.Name = "txtConceptComment"
         Me.txtConceptComment.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtConceptComment.Size = New System.Drawing.Size(588, 61)
+        Me.txtConceptComment.Size = New System.Drawing.Size(588, 59)
         Me.txtConceptComment.TabIndex = 0
         '
         'PanelConfigStructure
@@ -1476,9 +1476,10 @@ Public Class Designer
         'ListLanguages
         '
         Me.ListLanguages.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ListLanguages.ItemHeight = 15
         Me.ListLanguages.Location = New System.Drawing.Point(0, 96)
         Me.ListLanguages.Name = "ListLanguages"
-        Me.ListLanguages.Size = New System.Drawing.Size(312, 537)
+        Me.ListLanguages.Size = New System.Drawing.Size(312, 529)
         Me.ListLanguages.TabIndex = 9
         '
         'Panel1
@@ -1519,10 +1520,10 @@ Public Class Designer
         'Panel3
         '
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel3.Location = New System.Drawing.Point(0, 42)
+        Me.Panel3.Location = New System.Drawing.Point(0, 44)
         Me.Panel3.Name = "Panel3"
         Me.Panel3.Padding = New System.Windows.Forms.Padding(5)
-        Me.Panel3.Size = New System.Drawing.Size(969, 622)
+        Me.Panel3.Size = New System.Drawing.Size(969, 620)
         Me.Panel3.TabIndex = 4
         '
         'DisplayToolBar
@@ -1535,7 +1536,7 @@ Public Class Designer
         Me.DisplayToolBar.Location = New System.Drawing.Point(0, 0)
         Me.DisplayToolBar.Name = "DisplayToolBar"
         Me.DisplayToolBar.ShowToolTips = True
-        Me.DisplayToolBar.Size = New System.Drawing.Size(969, 42)
+        Me.DisplayToolBar.Size = New System.Drawing.Size(969, 44)
         Me.DisplayToolBar.TabIndex = 1
         Me.DisplayToolBar.Wrappable = False
         '
@@ -1710,12 +1711,12 @@ Public Class Designer
         '
         Me.ArchetypeNameContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CopyToolStripMenuItem})
         Me.ArchetypeNameContextMenu.Name = "ArchetypeNameContextMenu"
-        Me.ArchetypeNameContextMenu.Size = New System.Drawing.Size(100, 26)
+        Me.ArchetypeNameContextMenu.Size = New System.Drawing.Size(103, 26)
         '
         'CopyToolStripMenuItem
         '
         Me.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem"
-        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(99, 22)
+        Me.CopyToolStripMenuItem.Size = New System.Drawing.Size(102, 22)
         Me.CopyToolStripMenuItem.Text = "Copy"
         '
         'lblLifecycle
@@ -2444,8 +2445,12 @@ Public Class Designer
 
         ' Concept and description fields on header and the form text
         Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
+
         txtConceptInFull.Text = term.Text
-        Text = AE_Constants.Instance.MessageBoxCaption & " [" & term.Text & "]"
+
+        'Text = AE_Constants.Instance.MessageBoxCaption & " [" & term.Text & "] " & languageCode
+        UpdateTitle()
+
         TxtConceptDescription.Text = term.Description
         txtConceptComment.Text = term.Comment
 
@@ -3395,7 +3400,8 @@ Public Class Designer
 
             lblLifecycle.Text = mFileManager.Archetype.LifeCycle
             lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
-            Text = AE_Constants.Instance.MessageBoxCaption & " [" & txtConceptInFull.Text & "]"
+
+            UpdateTitle()
 
             ' Set the GUI language elements
             lblPrimaryLanguage.Text = mFileManager.OntologyManager.PrimaryLanguageText
@@ -3419,6 +3425,13 @@ Public Class Designer
                 txtConceptInFull.Text = Char.ToUpper(concept(0), New Globalization.CultureInfo(Main.Instance.DefaultLanguageCode)) + concept.Substring(1).Replace("_", " ")
             End If
         End If
+    End Sub
+
+    Private Sub UpdateTitle()
+
+        '//        Text = AE_Constants.Instance.MessageBoxCaption & " '" & mFileManager.OntologyManager.LanguageCode & "' " & " [" & txtConceptInFull.Text & "]"
+        Text = AE_Constants.Instance.MessageBoxCaption & " [" & mFileManager.OntologyManager.LanguageCode & "] " & " " & txtConceptInFull.Text & ""
+
     End Sub
 
     Private Function SetNewArchetypeName(ByVal AllowOpen As Boolean) As Integer
@@ -3686,6 +3699,7 @@ Public Class Designer
             previousLanguageCode = mFileManager.OntologyManager.LanguageCode
             previousLanguageText = mFileManager.OntologyManager.LanguageText
             Translate(langCode)
+
         End If
     End Sub
 
@@ -4303,7 +4317,8 @@ Public Class Designer
         If Not mFileManager.FileLoading Then
             mFileManager.OntologyManager.SetText(txtConceptInFull.Text, mFileManager.Archetype.ConceptCode)
             mFileManager.FileEdited = True
-            Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & Me.txtConceptInFull.Text & "]"
+            'Me.Text = AE_Constants.Instance.MessageBoxCaption & " [" & Me.txtConceptInFull.Text & "]" & Main.Instance.SpecificLanguageCode
+            UpdateTitle()
 
             If Me.gbSpecialisation.Visible Then
                 UpdateSpecialisationTree(Me.txtConceptInFull.Text, mFileManager.Archetype.ConceptCode)
