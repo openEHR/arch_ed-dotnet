@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("The openEHR Foundation")]
 [assembly: AssemblyProduct("TerminologyLookup")]
-[assembly: AssemblyCopyright("Copyright © 2010 openEHR Foundation")]
+[assembly: AssemblyCopyright("Copyright © 2011 openEHR Foundation")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
