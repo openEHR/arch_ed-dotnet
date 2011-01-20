@@ -412,8 +412,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         '
         Me.ConstraintBindingsGrid.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ConstraintBindingsGrid.AutoSize = True
-        Me.ConstraintBindingsGrid.Location = New System.Drawing.Point(0, 221)
+        Me.ConstraintBindingsGrid.Location = New System.Drawing.Point(8, 230)
         Me.ConstraintBindingsGrid.Name = "ConstraintBindingsGrid"
         Me.ConstraintBindingsGrid.Size = New System.Drawing.Size(390, 130)
         Me.ConstraintBindingsGrid.TabIndex = 38
@@ -930,32 +929,27 @@ Public Class TextConstraintControl : Inherits ConstraintControl
             Next
 
             Clipboard.SetText(clipText)
-            ' MessageBox.Show("The list of internal codes has been copied to Clipboard,", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Beep()
+            ToolTip1.Show("Copied to clipboard" + vbCrLf + clipText, listAllowableValues, 5000)
             RefreshButtons()
         End If
     End Sub
 
-    ' If internal code list is empty allow import of tab-separated list via clipboard
-    ' Format expected is 2 columns with a TAB separator and LF line terminator
-    ' e.g. at000001<TAB>New code<LF>
+    ' If internal code list is empty allow import of tab-separated list via clipboard.
+    ' Format expected is either 1 or 2 columns, with a TAB separator and LF line terminator.
+    ' E.g. at000001<TAB>New code<LF>
     Private Sub btnPaste_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles PasteListButton.Click
         If radioInternal.Checked And Constraint.AllowableValues.Codes.Count = 0 Then
             If Constraint.AllowableValues.Codes.Count <> 0 Then
                 MessageBox.Show("A Clipboard paste can only be made to an empty list", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
             Else
                 Dim row As String
-                Dim term As RmTerm
-                Dim rows As String() = Clipboard.GetText().Split(CChar(vbLf))
 
                 ' Parse clipboard text - tab separator
-                For Each row In rows
+                For Each row In Clipboard.GetText().Split(CChar(vbLf))
                     'Skip empty rows
                     If row.Length <> 0 Then
-                        Dim cleanRow As String
-                        ' Trim any trailing linefeed
-                        cleanRow = row.Trim()
-                        Dim columns As String() = cleanRow.Split(CChar(vbTab))
+                        Dim columns As String() = row.Trim().Split(CChar(vbTab))
+                        Dim term As RmTerm
 
                         If columns.Length = 1 Then
                             term = mFileManager.OntologyManager.AddTerm(columns(0), "")
@@ -979,35 +973,26 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     ' Refreshes button Enabled states
     Private Sub RefreshButtons()
-        Dim EmptyList As Boolean = Constraint.AllowableValues.Codes.Count = 0
-        Dim EndOfList As Boolean = listAllowableValues.SelectedIndex = Constraint.AllowableValues.Codes.Count - 1
-        Dim StartOfList As Boolean = listAllowableValues.SelectedIndex = 0
+        Dim isEmpty As Boolean = Constraint.AllowableValues.Codes.Count = 0
+        Dim isAtEnd As Boolean = listAllowableValues.SelectedIndex = Constraint.AllowableValues.Codes.Count - 1
+        Dim isAtStart As Boolean = listAllowableValues.SelectedIndex = 0
 
-        MoveUpButton.Enabled = Not EmptyList And Not StartOfList
-        MoveDownButton.Enabled = Not EmptyList And Not EndOfList
-        RemoveItemButton.Enabled = Not EmptyList
-        CopyListButton.Enabled = Not EmptyList
-        PasteListButton.Enabled = EmptyList
+        MoveUpButton.Enabled = Not isEmpty And Not isAtStart
+        MoveDownButton.Enabled = Not isEmpty And Not isAtEnd
+        RemoveItemButton.Enabled = Not isEmpty
+        CopyListButton.Enabled = Not isEmpty
+        PasteListButton.Enabled = isEmpty
     End Sub
 
     Private Sub RefreshListItemDetail()
-
-        Dim EmptyList As Boolean = Constraint.AllowableValues.Codes.Count = 0
-
+        Dim atTerm As RmTerm = SelectedTerm()
         ListViewSelected.Items.Clear()
-        If Not EmptyList And listAllowableValues.SelectedIndex > -1 Then
 
-            Dim atTerm As RmTerm
+        If Not atTerm Is Nothing Then
             Dim listviewContent(2) As String
-            Dim lvItem As ListViewItem
-
-            atTerm = ReturnSelectedTerm()
             listviewContent(0) = atTerm.Code
             listviewContent(1) = atTerm.Description
-
-            lvItem = New ListViewItem(listviewContent)
-            ListViewSelected.Items.Add(lvItem)
-
+            ListViewSelected.Items.Add(New ListViewItem(listviewContent))
         End If
     End Sub
 
@@ -1016,44 +1001,40 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         RefreshListItemDetail()
     End Sub
 
+    Private Sub listAllowableValues_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listAllowableValues.MouseEnter
+        ToolTip1.SetToolTip(listAllowableValues, listAllowableValues.Items.Count.ToString + " internal codes")
+    End Sub
+
     Private Sub MenuItemRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuItemRemove.Click
         butRemoveItem_Click(sender, e)
     End Sub
 
-
-
     Private Sub menuCopyTerm_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuCopyTerm.Click
-        Dim ClipText As String
-        Dim atTerm As RmTerm
-        atTerm = ReturnSelectedTerm()
+        Dim atTerm As RmTerm = SelectedTerm()
 
-        ClipText = "local::" + atTerm.Code + "::" + atTerm.Text + vbLf
-        Clipboard.SetText(ClipText)
-        Beep()
-
+        If Not atTerm Is Nothing Then
+            Dim clipText As String = "local::" + atTerm.Code + "::" + atTerm.Text + vbLf
+            Clipboard.SetText(clipText)
+            ToolTip1.Show("Copied to clipboard" + vbCrLf + clipText, listAllowableValues, 5000)
+        End If
     End Sub
 
-    Private Function ReturnSelectedTerm() As RmTerm
-        Dim atCode As String
-        Dim atTerm As RmTerm
+    Private Function SelectedTerm() As RmTerm
+        Dim result As RmTerm = Nothing
+        Dim i As Integer = listAllowableValues.SelectedIndex
 
-        atCode = Constraint.AllowableValues.Codes(listAllowableValues.SelectedIndex)
-        atTerm = mFileManager.OntologyManager.GetTerm(atCode)
-        Return atTerm
+        If i >= 0 And i < Constraint.AllowableValues.Codes.Count Then
+            Dim atCode As String = Constraint.AllowableValues.Codes(i)
+            result = mFileManager.OntologyManager.GetTerm(atCode)
+        End If
+
+        Return result
     End Function
 
     Private Sub TextConstraintControl_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        ListViewSelected.ContextMenu = Me.ContextMenuListAllowableValues
+        ListViewSelected.ContextMenu = ContextMenuListAllowableValues
     End Sub
 
-
-    Private Sub ListViewSelected_MouseDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles ListViewSelected.MouseDoubleClick
-
-    End Sub
-
-    Private Sub ConstraintBindingsGrid_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ConstraintBindingsGrid.Load
-
-    End Sub
 End Class
 
 '
