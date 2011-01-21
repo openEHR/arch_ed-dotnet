@@ -213,26 +213,26 @@ Public Class OntologyManager
         ElseIf Not mLastTerm Is Nothing AndAlso mLastTerm.Code = code AndAlso mLastTerm.Language = mLanguageCode Then
             result = mLastTerm
         Else
-            Dim d_row As DataRow
+            Dim row As DataRow
 
-            Dim Keys(1) As Object
-            Keys(0) = mLanguageCode
-            Keys(1) = code
+            Dim keys(1) As Object
+            keys(0) = mLanguageCode
+            keys(1) = code
             result = New RmTerm(code)
 
             If result.IsConstraint Then
-                d_row = mConstraintDefinitionsTable.Rows.Find(Keys)
-
-                If Not d_row Is Nothing Then
-                    result.Language = mLanguageCode
-                    result.Text = CStr(d_row(2))
-                    result.Description = CStr(d_row(3))
-                End If
+                row = mConstraintDefinitionsTable.Rows.Find(keys)
             Else
-                d_row = mTermDefinitionsTable.Rows.Find(Keys)
+                row = mTermDefinitionsTable.Rows.Find(keys)
+            End If
 
-                If Not d_row Is Nothing AndAlso TypeOf d_row(5) Is RmTerm Then
-                    result = CType(d_row(5), RmTerm)
+            If Not row Is Nothing Then
+                If TypeOf row(5) Is RmTerm Then
+                    result = CType(row(5), RmTerm)
+                Else
+                    result.Language = mLanguageCode
+                    result.Text = CStr(row(2))
+                    result.Description = CStr(row(3))
                 End If
             End If
 
