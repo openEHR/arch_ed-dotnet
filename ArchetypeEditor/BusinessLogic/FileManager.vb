@@ -104,6 +104,17 @@ Public Class FileManagerLocal
             End If
         End Set
     End Property
+    'EDT-584 - to allow out of date archetypes to be updated
+    Public Sub FileUpdateRequired()
+        'allows override of file edited when loading
+        Dim temp As Boolean
+        temp = mIsFileLoading
+        mIsFileLoading = False
+        FileEdited = True
+        mIsFileLoading = temp
+    End Sub
+
+
     Public Property ParserSynchronised() As Boolean
         Get
             Return mParserSynchronised

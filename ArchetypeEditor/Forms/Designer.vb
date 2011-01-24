@@ -2959,16 +2959,18 @@ Public Class Designer
         End Get
         Set(ByVal Value As Boolean)
             If Value Then
-                If mFileManager.Archetype.LifeCycle Is Nothing Then
-                    mFileManager.Archetype.LifeCycle = "draft"
-                    Me.lblLifecycle.Text = "draft"
-                    Me.lblLifecycle.Visible = True
-                Else
-                    'ToDo - need to do revision number
-                    'Debug.Assert(False)
+                'EDT-584 - added as updating  need for file save during load
+                If Not mFileManager.Archetype Is Nothing Then
+                    If mFileManager.Archetype.LifeCycle Is Nothing Then
+                        mFileManager.Archetype.LifeCycle = "draft"
+                        Me.lblLifecycle.Text = "draft"
+                        Me.lblLifecycle.Visible = True
+                    Else
+                        'ToDo - need to do revision number
+                        'Debug.Assert(False)
+                    End If
                 End If
             End If
-
         End Set
     End Property
 

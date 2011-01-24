@@ -234,6 +234,13 @@ Public Class RmStructureCompound
                             Dim eif_string As EiffelKernel.STRING_8
                             eif_string = Eiffel.String("careflow_step")
 
+                            'EDT-584
+                            If ObjNode.node_id.to_cil = "unknown" Then
+                                'This is an old format archetype with node IDs on transitions
+                                'The atCodes will be generated on save
+                                a_filemanager.FileUpdateRequired()
+                            End If
+
                             If CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).has_attribute(eif_string) Then
                                 Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(eif_string)
 
@@ -411,6 +418,13 @@ Public Class RmStructureCompound
                                 colChildren.Add(New RmTable(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager))
                             Case StructureType.ISM_TRANSITION, StructureType.CarePathwayStep
                                 'need to get the node_id from the workflow step to get the text displayed
+                                'EDT-584
+                                If String.IsNullOrEmpty(ObjNode.node_id) Then
+                                    'This is an old format archetype with node IDs on transitions
+                                    'The atCodes will be generated on save
+                                    a_filemanager.FileUpdateRequired()
+                                End If
+
                                 For Each attribute As XMLParser.C_ATTRIBUTE In CType(ObjNode, XMLParser.C_COMPLEX_OBJECT).attributes
                                     If attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "careflow_step" Then
                                         Dim node_id As String

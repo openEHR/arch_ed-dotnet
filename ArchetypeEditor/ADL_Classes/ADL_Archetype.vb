@@ -1696,7 +1696,9 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim code_phrase As New CodePhrase
 
-            objNode = mAomFactory.create_c_complex_object_anonymous(an_attribute, Eiffel.String("ISM_TRANSITION"))
+            'objNode = mAomFactory.create_c_complex_object_anonymous(an_attribute, Eiffel.String("ISM_TRANSITION"))
+            'EDT-584
+            objNode = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String("ISM_TRANSITION"), Eiffel.String(rm.NodeId))
             a_state = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("current_state"))
             code_phrase.TerminologyID = "openehr"
             code_phrase.Codes.Add((CInt(rm.StateType)).ToString)

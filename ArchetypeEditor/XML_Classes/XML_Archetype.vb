@@ -2300,7 +2300,8 @@ Namespace ArchetypeEditor.XML_Classes
             Dim code_phrase As New CodePhrase
 
             'objNode = mAomFactory.MakeComplexObject(an_attribute, "ISM_TRANSITION")
-            objNode = mAomFactory.MakeComplexObject(an_attribute, "ISM_TRANSITION", "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            'EDT-584
+            objNode = mAomFactory.MakeComplexObject(an_attribute, "ISM_TRANSITION", rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
             'a_state = mAomFactory.MakeSingleAttribute(objNode, "current_state")
             a_state = mAomFactory.MakeSingleAttribute(objNode, "current_state", an_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
