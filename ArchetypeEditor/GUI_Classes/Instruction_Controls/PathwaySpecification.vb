@@ -116,6 +116,7 @@ Public Class PathwaySpecification
         Me.PanelRightBottom = New System.Windows.Forms.Panel
         Me.tabProperties = New System.Windows.Forms.TabControl
         Me.tpTransition = New System.Windows.Forms.TabPage
+        Me.lblAllowTransition = New System.Windows.Forms.Label
         Me.cbAborted = New System.Windows.Forms.CheckBox
         Me.cbSuspended = New System.Windows.Forms.CheckBox
         Me.tpState = New System.Windows.Forms.TabPage
@@ -159,7 +160,6 @@ Public Class PathwaySpecification
         Me.pbActiveTopUp = New System.Windows.Forms.PictureBox
         Me.SplitterTop = New System.Windows.Forms.Splitter
         Me.SplitterBottom = New System.Windows.Forms.Splitter
-        Me.lblAllowTransition = New System.Windows.Forms.Label
         Me.PanelRight.SuspendLayout()
         Me.gbCompleted.SuspendLayout()
         Me.PanelRightBottom.SuspendLayout()
@@ -216,7 +216,8 @@ Public Class PathwaySpecification
         '
         'PanelCompleted
         '
-        Me.PanelCompleted.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelCompleted.BackColor = System.Drawing.Color.Ivory
+        Me.PanelCompleted.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelCompleted.ContextMenu = Me.ContextMenuState
         Me.PanelCompleted.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelCompleted.Location = New System.Drawing.Point(3, 16)
@@ -266,6 +267,15 @@ Public Class PathwaySpecification
         Me.tpTransition.Size = New System.Drawing.Size(152, 122)
         Me.tpTransition.TabIndex = 0
         Me.tpTransition.Text = "Transition"
+        '
+        'lblAllowTransition
+        '
+        Me.lblAllowTransition.Dock = System.Windows.Forms.DockStyle.Top
+        Me.lblAllowTransition.Location = New System.Drawing.Point(0, 0)
+        Me.lblAllowTransition.Name = "lblAllowTransition"
+        Me.lblAllowTransition.Size = New System.Drawing.Size(152, 32)
+        Me.lblAllowTransition.TabIndex = 3
+        Me.lblAllowTransition.Text = "Allow transition to:"
         '
         'cbAborted
         '
@@ -355,7 +365,7 @@ Public Class PathwaySpecification
         '
         'PanelSuspendActive
         '
-        Me.PanelSuspendActive.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelSuspendActive.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelSuspendActive.ContextMenu = Me.ContextMenuState
         Me.PanelSuspendActive.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelSuspendActive.Location = New System.Drawing.Point(3, 16)
@@ -386,7 +396,7 @@ Public Class PathwaySpecification
         '
         'PanelSuspendInitial
         '
-        Me.PanelSuspendInitial.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelSuspendInitial.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelSuspendInitial.ContextMenu = Me.ContextMenuState
         Me.PanelSuspendInitial.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelSuspendInitial.Location = New System.Drawing.Point(3, 16)
@@ -420,7 +430,7 @@ Public Class PathwaySpecification
         '
         'PanelAbortActive
         '
-        Me.PanelAbortActive.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelAbortActive.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelAbortActive.ContextMenu = Me.ContextMenuState
         Me.PanelAbortActive.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelAbortActive.Location = New System.Drawing.Point(3, 16)
@@ -451,7 +461,7 @@ Public Class PathwaySpecification
         '
         'PanelAbortInitial
         '
-        Me.PanelAbortInitial.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelAbortInitial.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelAbortInitial.ContextMenu = Me.ContextMenuState
         Me.PanelAbortInitial.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelAbortInitial.Location = New System.Drawing.Point(3, 16)
@@ -488,7 +498,8 @@ Public Class PathwaySpecification
         '
         'PanelActive
         '
-        Me.PanelActive.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelActive.BackColor = System.Drawing.Color.Ivory
+        Me.PanelActive.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelActive.ContextMenu = Me.ContextMenuState
         Me.PanelActive.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelActive.Location = New System.Drawing.Point(3, 16)
@@ -518,8 +529,8 @@ Public Class PathwaySpecification
         '
         'PanelScheduled
         '
-        Me.PanelScheduled.BackColor = System.Drawing.Color.LightYellow
-        Me.PanelScheduled.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelScheduled.BackColor = System.Drawing.Color.Ivory
+        Me.PanelScheduled.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelScheduled.ContextMenu = Me.ContextMenuState
         Me.PanelScheduled.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelScheduled.Location = New System.Drawing.Point(3, 16)
@@ -560,7 +571,8 @@ Public Class PathwaySpecification
         '
         'PanelPlanned
         '
-        Me.PanelPlanned.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.PanelPlanned.BackColor = System.Drawing.Color.Ivory
+        Me.PanelPlanned.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.PanelPlanned.ContextMenu = Me.ContextMenuState
         Me.PanelPlanned.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PanelPlanned.Location = New System.Drawing.Point(3, 16)
@@ -701,18 +713,9 @@ Public Class PathwaySpecification
         Me.SplitterBottom.TabIndex = 3
         Me.SplitterBottom.TabStop = False
         '
-        'lblAllowTransition
-        '
-        Me.lblAllowTransition.Dock = System.Windows.Forms.DockStyle.Top
-        Me.lblAllowTransition.Location = New System.Drawing.Point(0, 0)
-        Me.lblAllowTransition.Name = "lblAllowTransition"
-        Me.lblAllowTransition.Size = New System.Drawing.Size(152, 32)
-        Me.lblAllowTransition.TabIndex = 3
-        Me.lblAllowTransition.Text = "Allow transition to:"
-        '
         'PathwaySpecification
         '
-        Me.BackColor = System.Drawing.Color.LemonChiffon
+        Me.BackColor = System.Drawing.Color.LightYellow
         Me.Controls.Add(Me.PanelMiddle)
         Me.Controls.Add(Me.SplitterBottom)
         Me.Controls.Add(Me.SplitterTop)
@@ -829,7 +832,7 @@ Public Class PathwaySpecification
         End If
     End Sub
 
-    Private Sub Panel_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles PanelActive.Resize, PanelAbortActive.Resize, PanelAbortInitial.Resize, PanelPlanned.Resize, PanelSuspendInitial.Resize, PanelCompleted.Resize, PanelSuspendActive.Resize
+    Private Sub Panel_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles PanelActive.Resize, PanelAbortActive.Resize, PanelAbortInitial.Resize, PanelPlanned.Resize, PanelSuspendInitial.Resize, PanelCompleted.Resize, PanelSuspendActive.Resize, PanelScheduled.Resize
         LayOutControls(CType(sender, Control))
     End Sub
 

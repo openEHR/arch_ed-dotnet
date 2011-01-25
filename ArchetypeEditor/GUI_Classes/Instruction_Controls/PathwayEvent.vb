@@ -195,7 +195,7 @@ Public Class PathwayEvent
         a_term = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
         mText = a_term.Text
         mDescription = a_term.Description
-        Me.toolTipPathway.SetToolTip(Me, mText)
+        Me.toolTipPathway.SetToolTip(Me, mText & "[" & a_term.Code & "]")
         TextRectangle(mText, Me.CreateGraphics)
     End Sub
 
@@ -213,7 +213,7 @@ Public Class PathwayEvent
             mText = a_term.Text
             mDescription = a_term.Description
             mFileManager.OntologyManager.SetRmTermText(a_term)
-            toolTipPathway.SetToolTip(Me, mText)
+            Me.toolTipPathway.SetToolTip(Me, mText & "[" & a_term.Code & "]")
             TextRectangle(mText, CreateGraphics)
             mFileManager.FileEdited = True
         End If
