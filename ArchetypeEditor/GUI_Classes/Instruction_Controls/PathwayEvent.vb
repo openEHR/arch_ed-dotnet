@@ -10,10 +10,13 @@ Public Class PathwayEvent
     Private mItem As RmPathwayStep
     Private mLastEditWasOk As Boolean
     Friend WithEvents toolTipPathway As System.Windows.Forms.ToolTip
+    Friend WithEvents menuMoveLeft As System.Windows.Forms.MenuItem
+    Friend WithEvents MenuMoveRight As System.Windows.Forms.MenuItem
     Private mFileManager As FileManagerLocal
 
     Public Event SelectionChanged(ByVal sender As Object, ByVal e As EventArgs)
     Public Event Deleted(ByVal sender As Object, ByVal e As EventArgs)
+    Public Event Moved(ByVal sender As Object, ByVal e As EventArgs)
 
 
 #Region " Windows Form Designer generated code "
@@ -83,12 +86,14 @@ Public Class PathwayEvent
         Me.ContextMenuPathwayEvent = New System.Windows.Forms.ContextMenu
         Me.MenuEdit = New System.Windows.Forms.MenuItem
         Me.MenuDelete = New System.Windows.Forms.MenuItem
+        Me.menuMoveLeft = New System.Windows.Forms.MenuItem
+        Me.MenuMoveRight = New System.Windows.Forms.MenuItem
         Me.toolTipPathway = New System.Windows.Forms.ToolTip(Me.components)
         Me.SuspendLayout()
         '
         'ContextMenuPathwayEvent
         '
-        Me.ContextMenuPathwayEvent.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuEdit, Me.MenuDelete})
+        Me.ContextMenuPathwayEvent.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuEdit, Me.MenuDelete, Me.menuMoveLeft, Me.MenuMoveRight})
         '
         'MenuEdit
         '
@@ -100,6 +105,16 @@ Public Class PathwayEvent
         Me.MenuDelete.Index = 1
         Me.MenuDelete.Text = "Delete"
         '
+        'menuMoveLeft
+        '
+        Me.menuMoveLeft.Index = 2
+        Me.menuMoveLeft.Text = "Move left"
+        '
+        'MenuMoveRight
+        '
+        Me.MenuMoveRight.Index = 3
+        Me.MenuMoveRight.Text = "Move right"
+        '
         'toolTipPathway
         '
         Me.toolTipPathway.AutomaticDelay = 100
@@ -109,7 +124,7 @@ Public Class PathwayEvent
         Me.BackColor = System.Drawing.Color.LightGreen
         Me.ContextMenu = Me.ContextMenuPathwayEvent
         Me.Name = "PathwayEvent"
-        Me.Size = New System.Drawing.Size(80, 204)
+        Me.Size = New System.Drawing.Size(80, 244)
         Me.ResumeLayout(False)
 
     End Sub
@@ -295,4 +310,39 @@ Public Class PathwayEvent
         Remove()
     End Sub
 
+    Private Sub PathwayEvent_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+
+
+    End Sub
+
+    Public Sub Moveby(ByVal delta As Integer)
+
+        Dim p As Panel
+        Dim currindex As Integer
+        Dim newindex As Integer
+
+        '//Re-order the pathway event
+        p = Parent
+        currindex = p.Controls.GetChildIndex(Me)
+
+        newindex = currindex + delta
+
+        If newindex <> currindex AndAlso newindex >= 0 AndAlso newindex <= p.Controls.Count Then
+            p.Controls.SetChildIndex(Me, newindex)
+            mFileManager.FileEdited = True
+            RaiseEvent Deleted(p, New EventArgs)
+        End If
+
+    End Sub
+
+   
+    Private Sub menuMoveLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuMoveLeft.Click
+        Moveby(-1)
+    End Sub
+
+    Private Sub MenuMoveRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuMoveRight.Click
+        Moveby(1)
+    End Sub
+
+    
 End Class

@@ -865,6 +865,10 @@ Public Class PathwaySpecification
         LayOutControls(Sender)
     End Sub
 
+    Private Sub OnMoved(ByVal Sender As Object, ByVal e As EventArgs)
+        LayOutControls(Sender)
+    End Sub
+
     Private Sub OnSelectionChanged(ByVal Sender As Object, ByVal e As EventArgs)
 
         Dim selected_pv As PathwayEvent = CType(Sender, PathwayEvent)
@@ -974,6 +978,7 @@ Public Class PathwaySpecification
         pv.ContextMenuPathwayEvent.MergeMenu(ContextMenuState)
         AddHandler pv.SelectionChanged, AddressOf OnSelectionChanged
         AddHandler pv.Deleted, AddressOf OnDeleted
+        AddHandler pv.Moved, AddressOf OnMoved
         LayOutControls(ctrl)
     End Sub
 
@@ -1062,7 +1067,20 @@ Public Class PathwaySpecification
                     mPathwayEvent.Remove()
                 End If
             End If
+        ElseIf e.KeyCode = Keys.Left AndAlso e.Modifiers = Keys.Control Then
+            If mPathwayEvent.Selected Then
+                mPathwayEvent.Moveby(-1)
+            End If
+        ElseIf e.KeyCode = Keys.Right AndAlso e.Modifiers = Keys.Control Then
+            If mPathwayEvent.Selected Then
+                mPathwayEvent.Moveby(1)
+            End If
         End If
+
+    End Sub
+
+    Private Sub PanelActive_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles PanelActive.DragDrop
+
     End Sub
 End Class
 
