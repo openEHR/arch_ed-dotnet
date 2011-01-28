@@ -98,7 +98,7 @@ Public Class PathwayEvent
         'MenuEdit
         '
         Me.MenuEdit.Index = 0
-        Me.MenuEdit.Text = "Edit text"
+        Me.MenuEdit.Text = "Edit Text"
         '
         'MenuDelete
         '
@@ -108,12 +108,12 @@ Public Class PathwayEvent
         'menuMoveLeft
         '
         Me.menuMoveLeft.Index = 2
-        Me.menuMoveLeft.Text = "Move left"
+        Me.menuMoveLeft.Text = "Move Left"
         '
         'MenuMoveRight
         '
         Me.MenuMoveRight.Index = 3
-        Me.MenuMoveRight.Text = "Move right"
+        Me.MenuMoveRight.Text = "Move Right"
         '
         'toolTipPathway
         '
@@ -193,8 +193,8 @@ Public Class PathwayEvent
         End Get
         Set(ByVal Value As String)
             mText = Value
-            Me.toolTipPathway.SetToolTip(Me, mText)
-            TextRectangle(mText, Me.CreateGraphics)
+            toolTipPathway.SetToolTip(Me, mText)
+            TextRectangle(mText, CreateGraphics)
         End Set
     End Property
 
@@ -205,13 +205,11 @@ Public Class PathwayEvent
     End Property
 
     Public Sub Translate()
-        Dim a_term As RmTerm
-
-        a_term = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
-        mText = a_term.Text
-        mDescription = a_term.Description
-        Me.toolTipPathway.SetToolTip(Me, mText & "[" & a_term.Code & "]")
-        TextRectangle(mText, Me.CreateGraphics)
+        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
+        mText = term.Text
+        mDescription = term.Description
+        toolTipPathway.SetToolTip(Me, mText & "[" & term.Code & "]")
+        TextRectangle(mText, CreateGraphics)
     End Sub
 
     Public Sub Edit()
@@ -228,7 +226,7 @@ Public Class PathwayEvent
             mText = a_term.Text
             mDescription = a_term.Description
             mFileManager.OntologyManager.SetRmTermText(a_term)
-            Me.toolTipPathway.SetToolTip(Me, mText & "[" & a_term.Code & "]")
+            toolTipPathway.SetToolTip(Me, mText & "[" & a_term.Code & "]")
             TextRectangle(mText, CreateGraphics)
             mFileManager.FileEdited = True
         End If
@@ -296,10 +294,8 @@ Public Class PathwayEvent
     End Sub
 
     Public Sub Remove()
-        Dim p As Panel
         ' get the parent - needed to layout controls as basis for the event
-
-        p = Parent
+        Dim p As Panel = Parent
         p.Controls.Remove(Me)
         mItem = Nothing
         mFileManager.FileEdited = True
@@ -310,32 +306,24 @@ Public Class PathwayEvent
         Remove()
     End Sub
 
-    Private Sub PathwayEvent_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
-
-
-    End Sub
-
     Public Sub Moveby(ByVal delta As Integer)
+        ' Re-order the pathway event
+        Dim controls As ControlCollection = Parent.Controls
+        Dim currindex As Integer = controls.GetChildIndex(Me)
+        Dim newindex As Integer = currindex + delta
 
-        Dim p As Panel
-        Dim currindex As Integer
-        Dim newindex As Integer
+        If newindex <> currindex And newindex >= 0 And newindex < controls.Count Then
+            controls.SetChildIndex(Me, newindex)
 
-        '//Re-order the pathway event
-        p = Parent
-        currindex = p.Controls.GetChildIndex(Me)
+            For i As Integer = 0 To controls.Count - 1
+                controls(i).TabIndex = i
+            Next
 
-        newindex = currindex + delta
-
-        If newindex <> currindex AndAlso newindex >= 0 AndAlso newindex <= p.Controls.Count Then
-            p.Controls.SetChildIndex(Me, newindex)
             mFileManager.FileEdited = True
-            RaiseEvent Deleted(p, New EventArgs)
+            RaiseEvent Deleted(Parent, New EventArgs)
         End If
-
     End Sub
 
-   
     Private Sub menuMoveLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuMoveLeft.Click
         Moveby(-1)
     End Sub
@@ -344,5 +332,4 @@ Public Class PathwayEvent
         Moveby(1)
     End Sub
 
-    
 End Class
