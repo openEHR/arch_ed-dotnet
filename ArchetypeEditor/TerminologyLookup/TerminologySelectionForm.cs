@@ -105,9 +105,14 @@ namespace TerminologyLookup
             else if (string.IsNullOrEmpty(SubsetId) || string.IsNullOrEmpty(SubsetLanguage))
             {
                 Text = "Select a Subset for Terminology " + TerminologyId;
-                Service.AddTerminology(TerminologyId);
                 Grid.DataSource = null;
-                Grid.DataSource = Service.TerminologyById(TerminologyId);
+
+                Terminology terminology = Service.TerminologyById(TerminologyId);
+
+                if (terminology != null)
+                {
+                    Grid.DataSource = terminology.Queries;
+                }
 
                 if (Grid.Columns.Count > 0)
                 {
