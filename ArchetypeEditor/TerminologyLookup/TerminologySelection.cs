@@ -36,21 +36,26 @@ namespace TerminologyLookup
             }
         }
 
-        public virtual IList<TerminologyQuery> Queries(string terminologyId)
+        public virtual Terminology TerminologyById(string terminologyId)
         {
-            Terminology terminology = null;
+            Terminology result = null;
 
             foreach (Terminology t in Terminologies)
                 if (t.TerminologyId == terminologyId)
-                    terminology = t;
+                    result = t;
+
+            return result;
+        }
+
+        public virtual void AddTerminology(string terminologyId)
+        {
+            Terminology terminology = TerminologyById(terminologyId);
 
             if (terminology == null)
             {
                 terminology = new Terminology(terminologyId);
                 terminologies.Add(terminology);
             }
-
-            return terminology.Queries;
         }
 
         public delegate void OnLoaded(DataSet concepts);
