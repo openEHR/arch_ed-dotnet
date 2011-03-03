@@ -24,7 +24,6 @@ Public MustInherit Class ArchetypeNodeAbstract
     Protected mText As String
     Protected mDescription As String
     Protected mComment As String
-    'SRH: 22 Jun 2009 EDT-549 to allow non-standard annotations
     Protected mAnnotations As New System.Collections.SortedList
     Protected mItem As RmStructure
 

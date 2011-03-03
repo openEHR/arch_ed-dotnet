@@ -38,8 +38,8 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents gbAnnotations As System.Windows.Forms.GroupBox
     Friend WithEvents dgAnnotations As System.Windows.Forms.DataGridView
-    Friend WithEvents key As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents valueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents AnnotationKeyColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents AnnotationvalueColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents gbTerminology As System.Windows.Forms.GroupBox
     Friend WithEvents dgNodeBindings As System.Windows.Forms.DataGridView
     Friend WithEvents TerminologyColumn As System.Windows.Forms.DataGridViewButtonColumn
@@ -89,11 +89,7 @@ Public Class ArchetypeNodeConstraintControl
 
         PanelGenericConstraint.Controls.Add(mOccurrences)
         mOccurrences.Dock = DockStyle.Fill
-
-        If Main.Instance.DefaultLanguageCode <> "en" Then
-            TranslateGUI()
-        End If
-
+        TranslateGUI()
         mIsLoading = False
 
         HelpProviderCommonConstraint.HelpNamespace = Main.Instance.Options.HelpLocationPath
@@ -153,8 +149,8 @@ Public Class ArchetypeNodeConstraintControl
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer
         Me.gbAnnotations = New System.Windows.Forms.GroupBox
         Me.dgAnnotations = New System.Windows.Forms.DataGridView
-        Me.key = New System.Windows.Forms.DataGridViewTextBoxColumn
-        Me.valueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.AnnotationKeyColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.AnnotationvalueColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.gbTerminology = New System.Windows.Forms.GroupBox
         Me.dgNodeBindings = New System.Windows.Forms.DataGridView
         Me.Splitter2 = New System.Windows.Forms.Splitter
@@ -370,7 +366,7 @@ Public Class ArchetypeNodeConstraintControl
         'dgAnnotations
         '
         Me.dgAnnotations.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgAnnotations.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.key, Me.valueColumn})
+        Me.dgAnnotations.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.AnnotationKeyColumn, Me.AnnotationvalueColumn})
         Me.dgAnnotations.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgAnnotations.Location = New System.Drawing.Point(3, 16)
         Me.dgAnnotations.Name = "dgAnnotations"
@@ -379,19 +375,19 @@ Public Class ArchetypeNodeConstraintControl
         '
         'key
         '
-        Me.key.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.key.DataPropertyName = "Key"
-        Me.key.FillWeight = 25.0!
-        Me.key.HeaderText = "Key"
-        Me.key.Name = "key"
+        Me.AnnotationKeyColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.AnnotationKeyColumn.DataPropertyName = "Key"
+        Me.AnnotationKeyColumn.FillWeight = 25.0!
+        Me.AnnotationKeyColumn.HeaderText = "Key"
+        Me.AnnotationKeyColumn.Name = "key"
         '
         'valueColumn
         '
-        Me.valueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
-        Me.valueColumn.DataPropertyName = "Value"
-        Me.valueColumn.FillWeight = 75.0!
-        Me.valueColumn.HeaderText = "Value"
-        Me.valueColumn.Name = "valueColumn"
+        Me.AnnotationvalueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill
+        Me.AnnotationvalueColumn.DataPropertyName = "Value"
+        Me.AnnotationvalueColumn.FillWeight = 75.0!
+        Me.AnnotationvalueColumn.HeaderText = "Value"
+        Me.AnnotationvalueColumn.Name = "valueColumn"
         '
         'gbTerminology
         '
@@ -570,13 +566,15 @@ Public Class ArchetypeNodeConstraintControl
     End Property
 
     Public Sub TranslateGUI()
-        lblDescription.Text = Filemanager.GetOpenEhrTerm(113, Me.lblDescription.Text)
-        lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, Me.lblRunTimeName.Text)
-        tpConstraint.Text = Filemanager.GetOpenEhrTerm(87, Me.tpConstraint.Text)
-        tpConstraintDetails.Text = Filemanager.GetOpenEhrTerm(113, Me.tpConstraintDetails.Text)
-        TerminologyColumn.HeaderText = Filemanager.GetOpenEhrTerm(688, "Key")
-        CodeColumn.HeaderText = Filemanager.GetOpenEhrTerm(689, "Value")
-        gbAnnotations.Text = Filemanager.GetOpenEhrTerm(690, "Annotations")
+        lblDescription.Text = Filemanager.GetOpenEhrTerm(113, lblDescription.Text)
+        lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, lblRunTimeName.Text)
+        tpConstraint.Text = Filemanager.GetOpenEhrTerm(87, tpConstraint.Text)
+        tpConstraintDetails.Text = Filemanager.GetOpenEhrTerm(113, tpConstraintDetails.Text)
+        TerminologyColumn.HeaderText = Filemanager.GetOpenEhrTerm(47, TerminologyColumn.HeaderText)
+        CodeColumn.HeaderText = Filemanager.GetOpenEhrTerm(90, CodeColumn.HeaderText)
+        AnnotationKeyColumn.HeaderText = Filemanager.GetOpenEhrTerm(696, AnnotationKeyColumn.HeaderText)
+        AnnotationvalueColumn.HeaderText = Filemanager.GetOpenEhrTerm(697, AnnotationvalueColumn.HeaderText)
+        gbAnnotations.Text = Filemanager.GetOpenEhrTerm(698, gbAnnotations.Text)
     End Sub
 
     Public Sub ShowConstraint(ByVal isSingle As Boolean, ByVal isState As Boolean, ByVal isMandatory As Boolean, ByVal node As ArchetypeNode, ByVal fileManager As FileManagerLocal)
@@ -719,7 +717,6 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub SetUpNullFlavours(ByVal archetypeElmnt As ArchetypeElement)
-
         Dim cp As CodePhrase = archetypeElmnt.RM_Class.ConstrainedNullFlavours
         Dim t As Term
 
@@ -738,7 +735,6 @@ Public Class ArchetypeNodeConstraintControl
         End If
 
         gbNullFlavours.Visible = True
-
     End Sub
 
     Private Function SetNullFlavorChecked(ByVal nullFlavors As CodePhrase, ByVal cde As String) As Boolean
@@ -753,7 +749,6 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Function
 
-
     Protected Overridable Sub SetControlValues(ByVal IsState As Boolean) '(ByVal aArchetypeNode As ArchetypeNode)
 
         ' ToDo: set constraint values on control
@@ -763,13 +758,12 @@ Public Class ArchetypeNodeConstraintControl
         mOccurrences.Cardinality = mArchetypeNode.Occurrences
 
         If mArchetypeNode.IsAnonymous Then
-            Me.PanelAddressable.Visible = False
-            Me.gbTerminology.Visible = False
-            Me.gbAnnotations.Visible = False
-
+            PanelAddressable.Visible = False
+            gbTerminology.Visible = False
+            gbAnnotations.Visible = False
         Else
-            Me.PanelAddressable.Visible = True
-            Me.gbTerminology.Visible = True
+            PanelAddressable.Visible = True
+            gbTerminology.Visible = True
 
             ' set the description of the term
             txtTermDescription.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Description
@@ -858,32 +852,46 @@ Public Class ArchetypeNodeConstraintControl
     End Sub
 
     Private Sub mAnnotations_ColumnChanged(ByVal sender As Object, ByVal e As System.Data.DataColumnChangeEventArgs) Handles mAnnotationsTable.ColumnChanging
-        If Not mIsLoading And Not e.Row.RowState = DataRowState.Detached Then
-            If String.IsNullOrEmpty(CStr(e.ProposedValue)) Then
-                e.ProposedValue = CStr(e.Row(e.Column.Ordinal))
-            Else
-                If e.Column.Ordinal = 0 Then
-                    'Key name changed
-                    Dim oldKey As String = CStr(e.Row(0))
-                    Dim newKey As String = CStr(e.ProposedValue)
-                    mFileManager.OntologyManager.RenameAnnotationKey(oldKey, newKey, mArchetypeNode.RM_Class.NodeId)
-                End If
+        If e.Column.Ordinal = 0 Then
+            Dim newKey As String = TryCast(e.ProposedValue, String)
 
-                mFileManager.FileEdited = True
+            If newKey Is Nothing OrElse System.Text.RegularExpressions.Regex.IsMatch(newKey, "^[a-zA-Z][a-zA-Z0-9_]*$") Then
+                e.Row.ClearErrors()
+            Else
+                e.Row.SetColumnError(0, AnnotationKeyColumn.HeaderText + " must start with a letter, optionally followed by letters or numbers.")
             End If
+        End If
+
+        If Not mIsLoading And Not e.Row.RowState = DataRowState.Detached Then
+            If e.Column.Ordinal = 0 Then
+                Dim oldKey As String = TryCast(e.Row(0), String)
+
+                If Not String.IsNullOrEmpty(oldKey) Then
+                    mFileManager.OntologyManager.DeleteOtherAnnotation(oldKey, mArchetypeNode.RM_Class.NodeId)
+                End If
+            End If
+
+            mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub mAnnotations_RowChanged(ByVal sender As Object, ByVal e As System.Data.DataRowChangeEventArgs) Handles mAnnotationsTable.RowChanging, mAnnotationsTable.RowDeleting
         If Not (mIsLoading Or mFileManager.FileLoading) Then
-            Select Case e.Action
-                Case DataRowAction.Add, DataRowAction.Commit, DataRowAction.Change
-                    mFileManager.OntologyManager.SetOtherAnnotation(CStr(e.Row(0)), CStr(e.Row(1)), mArchetypeNode.RM_Class.NodeId)
-                Case DataRowAction.Delete
-                    mFileManager.OntologyManager.DeleteOtherAnnotation(CStr(e.Row(0)), mArchetypeNode.RM_Class.NodeId)
-            End Select
+            If Not e.Row.HasErrors Then
+                Dim key As String = TryCast(e.Row(0), String)
+                Dim value As String = TryCast(e.Row(1), String)
 
-            mFileManager.FileEdited = True
+                If Not String.IsNullOrEmpty(key) And Not String.IsNullOrEmpty(value) Then
+                    Select Case e.Action
+                        Case DataRowAction.Add, DataRowAction.Commit, DataRowAction.Change
+                            mFileManager.OntologyManager.SetOtherAnnotation(key, value, mArchetypeNode.RM_Class.NodeId)
+                        Case DataRowAction.Delete
+                            mFileManager.OntologyManager.DeleteOtherAnnotation(key, mArchetypeNode.RM_Class.NodeId)
+                    End Select
+
+                    mFileManager.FileEdited = True
+                End If
+            End If
         End If
     End Sub
 

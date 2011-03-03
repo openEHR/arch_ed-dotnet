@@ -423,39 +423,16 @@ Public Class OntologyManager
         SetRmTermText(mLastTerm)
     End Sub
 
-    Public Sub SetOtherAnnotation(ByVal Key As String, ByVal Value As String, ByVal code As String)
+    Public Sub SetOtherAnnotation(ByVal key As String, ByVal value As String, ByVal code As String)
         mLastTerm = GetTerm(code)
-
-        If mLastTerm.OtherAnnotations.ContainsKey(Key) Then
-            mLastTerm.OtherAnnotations.Item(Key) = Value
-        Else
-            mLastTerm.OtherAnnotations.Add(Key, Value)
-        End If
-
+        mLastTerm.OtherAnnotations.Item(key) = value
         SetRmTermText(mLastTerm)
     End Sub
 
     Public Sub DeleteOtherAnnotation(ByVal Key As String, ByVal code As String)
         mLastTerm = GetTerm(code)
-
-        If mLastTerm.OtherAnnotations.ContainsKey(Key) Then
-            mLastTerm.OtherAnnotations.Remove(Key)
-        End If
-
+        mLastTerm.OtherAnnotations.Remove(Key)
         SetRmTermText(mLastTerm)
-    End Sub
-
-    Public Sub RenameAnnotationKey(ByVal oldKey As String, ByVal newKey As String, ByVal code As String)
-        mLastTerm = GetTerm(code)
-        Debug.Assert(mLastTerm.OtherAnnotations.ContainsKey(oldKey), "Must have key")
-        Dim value As String
-
-        If mLastTerm.OtherAnnotations.ContainsKey(oldKey) Then
-            value = CStr(mLastTerm.OtherAnnotations.Item(oldKey))
-            mLastTerm.OtherAnnotations.Remove(oldKey)
-            mLastTerm.OtherAnnotations.Add(newKey, value)
-            SetRmTermText(mLastTerm)
-        End If
     End Sub
 
     Private Sub Update(ByVal aTerm As RmTerm, ByVal aTable As DataTable, ByVal ReplaceTranslations As Boolean)
