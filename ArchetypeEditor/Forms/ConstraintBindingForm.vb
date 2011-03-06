@@ -37,7 +37,7 @@ Public Class ConstraintBindingForm
     Friend WithEvents ReleaseLabel As System.Windows.Forms.Label
     Friend WithEvents OkButton As System.Windows.Forms.Button
     Friend WithEvents SubsetButton As System.Windows.Forms.Button
-    Friend WithEvents TerminologyToolTip As System.Windows.Forms.ToolTip
+    Friend WithEvents TerminologyErrorProvider As System.Windows.Forms.ErrorProvider
     Friend WithEvents CancelCloseButton As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -51,7 +51,8 @@ Public Class ConstraintBindingForm
         Me.OkButton = New System.Windows.Forms.Button
         Me.CancelCloseButton = New System.Windows.Forms.Button
         Me.SubsetButton = New System.Windows.Forms.Button
-        Me.TerminologyToolTip = New System.Windows.Forms.ToolTip(Me.components)
+        Me.TerminologyErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        CType(Me.TerminologyErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TerminologyComboBox
@@ -60,10 +61,8 @@ Public Class ConstraintBindingForm
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TerminologyComboBox.Location = New System.Drawing.Point(127, 5)
         Me.TerminologyComboBox.Name = "TerminologyComboBox"
-        Me.TerminologyComboBox.Size = New System.Drawing.Size(325, 21)
+        Me.TerminologyComboBox.Size = New System.Drawing.Size(353, 21)
         Me.TerminologyComboBox.TabIndex = 1
-        Me.TerminologyToolTip.SetToolTip(Me.TerminologyComboBox, "Terminology name must start with a letter, followed by one or more letters, digit" & _
-                "s, underscores, minuses, slashes or pluses")
         '
         'SubsetTextBox
         '
@@ -71,7 +70,7 @@ Public Class ConstraintBindingForm
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SubsetTextBox.Location = New System.Drawing.Point(127, 32)
         Me.SubsetTextBox.Name = "SubsetTextBox"
-        Me.SubsetTextBox.Size = New System.Drawing.Size(286, 20)
+        Me.SubsetTextBox.Size = New System.Drawing.Size(314, 20)
         Me.SubsetTextBox.TabIndex = 3
         '
         'ReleaseTextBox
@@ -80,13 +79,11 @@ Public Class ConstraintBindingForm
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ReleaseTextBox.Location = New System.Drawing.Point(127, 61)
         Me.ReleaseTextBox.Name = "ReleaseTextBox"
-        Me.ReleaseTextBox.Size = New System.Drawing.Size(325, 20)
+        Me.ReleaseTextBox.Size = New System.Drawing.Size(353, 20)
         Me.ReleaseTextBox.TabIndex = 6
         '
         'TerminologyLabel
         '
-        Me.TerminologyLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TerminologyLabel.Location = New System.Drawing.Point(12, 5)
         Me.TerminologyLabel.Name = "TerminologyLabel"
         Me.TerminologyLabel.Size = New System.Drawing.Size(98, 21)
@@ -95,8 +92,6 @@ Public Class ConstraintBindingForm
         '
         'SubsetLabel
         '
-        Me.SubsetLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SubsetLabel.Location = New System.Drawing.Point(12, 32)
         Me.SubsetLabel.Name = "SubsetLabel"
         Me.SubsetLabel.Size = New System.Drawing.Size(98, 21)
@@ -105,8 +100,6 @@ Public Class ConstraintBindingForm
         '
         'ReleaseLabel
         '
-        Me.ReleaseLabel.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ReleaseLabel.Location = New System.Drawing.Point(12, 64)
         Me.ReleaseLabel.Name = "ReleaseLabel"
         Me.ReleaseLabel.Size = New System.Drawing.Size(98, 21)
@@ -117,7 +110,7 @@ Public Class ConstraintBindingForm
         '
         Me.OkButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.OkButton.DialogResult = System.Windows.Forms.DialogResult.OK
-        Me.OkButton.Location = New System.Drawing.Point(272, 100)
+        Me.OkButton.Location = New System.Drawing.Point(300, 100)
         Me.OkButton.Name = "OkButton"
         Me.OkButton.Size = New System.Drawing.Size(86, 28)
         Me.OkButton.TabIndex = 7
@@ -127,7 +120,7 @@ Public Class ConstraintBindingForm
         '
         Me.CancelCloseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.CancelCloseButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.CancelCloseButton.Location = New System.Drawing.Point(366, 100)
+        Me.CancelCloseButton.Location = New System.Drawing.Point(394, 100)
         Me.CancelCloseButton.Name = "CancelCloseButton"
         Me.CancelCloseButton.Size = New System.Drawing.Size(86, 28)
         Me.CancelCloseButton.TabIndex = 8
@@ -135,20 +128,25 @@ Public Class ConstraintBindingForm
         '
         'SubsetButton
         '
+        Me.SubsetButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.SubsetButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SubsetButton.Location = New System.Drawing.Point(419, 32)
+        Me.SubsetButton.Location = New System.Drawing.Point(447, 32)
         Me.SubsetButton.Name = "SubsetButton"
         Me.SubsetButton.Size = New System.Drawing.Size(33, 23)
         Me.SubsetButton.TabIndex = 4
         Me.SubsetButton.Text = "..."
         Me.SubsetButton.UseVisualStyleBackColor = True
         '
+        'TerminologyErrorProvider
+        '
+        Me.TerminologyErrorProvider.ContainerControl = Me
+        '
         'ConstraintBindingForm
         '
         Me.AcceptButton = Me.OkButton
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.CancelButton = Me.CancelCloseButton
-        Me.ClientSize = New System.Drawing.Size(464, 141)
+        Me.ClientSize = New System.Drawing.Size(492, 141)
         Me.Controls.Add(Me.SubsetButton)
         Me.Controls.Add(Me.CancelCloseButton)
         Me.Controls.Add(Me.OkButton)
@@ -159,9 +157,11 @@ Public Class ConstraintBindingForm
         Me.Controls.Add(Me.TerminologyComboBox)
         Me.Controls.Add(Me.ReleaseLabel)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
-        Me.MinimumSize = New System.Drawing.Size(472, 168)
+        Me.MaximumSize = New System.Drawing.Size(800, 168)
+        Me.MinimumSize = New System.Drawing.Size(500, 168)
         Me.Name = "ConstraintBindingForm"
         Me.Text = "Add Binding"
+        CType(Me.TerminologyErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -214,12 +214,17 @@ Public Class ConstraintBindingForm
     End Sub
 
     Private Sub TerminologyComboBox_Validating(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles TerminologyComboBox.Validating
+        Dim message As String = ""
+
         If Not CancelCloseButton.Focused Then
             If Not String.IsNullOrEmpty(TerminologyId) And Not System.Text.RegularExpressions.Regex.IsMatch(TerminologyId, "^[a-zA-Z][a-zA-Z0-9_\-/+]+$") Then
                 e.Cancel = True
-                TerminologyToolTip.Active = True
+                message = "Terminology name must start with a letter, followed by one or more letters, digits, underscores, minuses, slashes or pluses"
             End If
         End If
+
+        TerminologyErrorProvider.SetError(TerminologyComboBox, message)
+        TerminologyErrorProvider.SetIconAlignment(TerminologyComboBox, ErrorIconAlignment.MiddleLeft)
     End Sub
 
     Public Sub AddConstraintBinding(ByVal ontologyManager As OntologyManager, ByVal acCode As String)
