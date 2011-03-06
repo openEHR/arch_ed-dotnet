@@ -19,5 +19,7 @@ namespace TerminologyLookup
         }
 
         public readonly List<TerminologyQuery> Queries = new List<TerminologyQuery>();
+
+        public virtual List<string> Languages { get; set; }
     }
 }

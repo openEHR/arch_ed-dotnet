@@ -111,41 +111,55 @@ namespace TerminologyLookup
 
                 if (terminology != null)
                 {
-                    Grid.DataSource = terminology.Queries;
-                }
+                    List<TerminologyQuery> subsets = terminology.Queries;
 
-                if (Grid.Columns.Count > 0)
-                {
-                    Grid.Columns[0].HeaderText = "Subset";
+                    if (subsets.Count > 0)
+                    {
+                        Grid.DataSource = terminology.Queries;
+
+                        if (Grid.Columns.Count > 0)
+                            Grid.Columns[0].HeaderText = "Subset";
+                    }
+                    else
+                    {
+                        if (terminology.Languages == null)
+                            Service.LoadTerminologyLanguages(terminology, ShowException);
+
+                        if (terminology.Languages.Count > 0)
+                        {
+                            Text = "Concepts for Terminology " + TerminologyId + " (no subsets have been defined for this terminology)";
+                            ProgressBar.Visible = true;
+
+                            if (string.IsNullOrEmpty(ReferenceId))
+                                Service.LoadConcepts(OnConceptsLoaded, ShowException, TerminologyId, terminology.Languages[0]);
+                            else
+                                Service.LoadChildConcepts(OnConceptsLoaded, ShowException, TerminologyId, terminology.Languages[0], ReferenceId);
+                        }
+                    }
                 }
             }
             else
             {
-                TerminologySelection.OnLoaded onConceptsLoaded = delegate(DataSet concepts)
-                {
-                    ProgressBar.Visible = false;
-                    Grid.DataSource = null;
-                    Grid.DataSource = concepts != null && concepts.Tables != null && concepts.Tables.Count > 0 ? concepts.Tables[0] : null;
-                };
-
-                TerminologySelection.OnError onError = delegate(Exception ex)
-                {
-                    ProgressBar.Visible = false;
-                    ShowException(ex);
-                };
-
                 Text = "Concepts for Terminology " + TerminologyId + " (" + SubsetId + ")";
                 ProgressBar.Visible = true;
 
                 if (string.IsNullOrEmpty(ReferenceId))
-                    Service.LoadConcepts(onConceptsLoaded, onError, TerminologyId, SubsetId, SubsetLanguage);
+                    Service.LoadConceptsFromSubset(OnConceptsLoaded, ShowException, TerminologyId, SubsetId, SubsetLanguage);
                 else
-                    Service.LoadChildConcepts(onConceptsLoaded, onError, TerminologyId, SubsetId, SubsetLanguage, ReferenceId);
+                    Service.LoadChildConceptsFromSubset(OnConceptsLoaded, ShowException, TerminologyId, SubsetId, SubsetLanguage, ReferenceId);
             }
+        }
+
+        protected virtual void OnConceptsLoaded(DataSet concepts)
+        {
+            ProgressBar.Visible = false;
+            Grid.DataSource = null;
+            Grid.DataSource = concepts != null && concepts.Tables != null && concepts.Tables.Count > 0 ? concepts.Tables[0] : null;
         }
 
         protected virtual void ShowException(Exception ex)
         {
+            ProgressBar.Visible = false;
             MessageBox.Show(ex.InnerException != null ? ex.InnerException.Message : ex.Message, Service.Name + " Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 

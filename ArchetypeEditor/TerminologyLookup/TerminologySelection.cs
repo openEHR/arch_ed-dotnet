@@ -62,9 +62,15 @@ namespace TerminologyLookup
 
         public delegate void OnError(Exception ex);
 
-        public abstract void LoadConcepts(OnLoaded onLoaded, OnError onError, string terminologyId, string queryId, string language);
+        public abstract void LoadTerminologyLanguages(Terminology terminology, OnError onError);
+        
+        public abstract void LoadConcepts(OnLoaded onLoaded, OnError onError, string terminologyId, string language);
 
-        public abstract void LoadChildConcepts(OnLoaded onLoaded, OnError onError, string terminologyId, string queryId, string language, string parentConcept);
+        public abstract void LoadChildConcepts(OnLoaded onLoaded, OnError onError, string terminologyId, string language, string parentConcept);
+
+        public abstract void LoadConceptsFromSubset(OnLoaded onLoaded, OnError onError, string terminologyId, string queryId, string language);
+
+        public abstract void LoadChildConceptsFromSubset(OnLoaded onLoaded, OnError onError, string terminologyId, string queryId, string language, string parentConcept);
 
         public abstract void LoadPreferredTerms(OnLoaded onLoaded, OnError onError, string terminologyId, string language, string[] conceptIds);
 
