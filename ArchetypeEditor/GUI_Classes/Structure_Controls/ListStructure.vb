@@ -32,8 +32,7 @@ Public Class ListStructure
         'Add any initialization after the InitializeComponent() call
 
         'Not able to set imagelists that are inherited
-        Me.lvList.SmallImageList = Me.ilSmall
-
+        lvList.SmallImageList = ilSmall
 
         Dim lvitem As ArchetypeListViewItem
 
@@ -45,16 +44,16 @@ Public Class ListStructure
                     lvitem = New ArchetypeListViewItem(element, mFileManager)
                     'Sets selected if first in list
                     lvitem.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.isReference, lvList.Items.Count = 0)
-                    Me.lvList.Items.Add(lvitem)
+                    lvList.Items.Add(lvitem)
                 Case StructureType.Slot
                     Dim slot As RmSlot = CType(item, RmSlot)
+
                     If slot.SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
                         lvitem = New ArchetypeListViewItem(slot, mFileManager)
                         'Sets selected if first in list
                         lvitem.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, lvList.Items.Count = 0)
-                        Me.lvList.Items.Add(lvitem)
+                        lvList.Items.Add(lvitem)
                     End If
-
                 Case Else
                     Debug.Assert(False, "Type not handled")
             End Select
@@ -68,9 +67,8 @@ Public Class ListStructure
         'Add any initialization after the InitializeComponent() call
 
         'Not able to set imagelists that are inherited
-        Me.lvList.SmallImageList = Me.ilSmall
+        lvList.SmallImageList = Me.ilSmall
         mFileManager.FileEdited = True
-
     End Sub
 
     Public Sub New()
@@ -80,11 +78,11 @@ Public Class ListStructure
         'Add any initialization after the InitializeComponent() call
 
         'Not able to set imagelists that are inherited
-        Me.lvList.SmallImageList = Me.ilSmall
+        lvList.SmallImageList = ilSmall
+
         If Not Me.DesignMode Then
             Debug.Assert(False)
         End If
-
     End Sub
 
     ''Required by the Windows Form Designer
@@ -206,69 +204,72 @@ Public Class ListStructure
 
     Public Overrides Property Archetype() As RmStructureCompound
         Get
-            Dim lvItem As ArchetypeListViewItem
+            Dim result As New RmStructureCompound(mNodeId, StructureType.List)
+            result.Children.Cardinality = mCardinalityControl.Cardinality
 
-            Dim RM_S As New RmStructureCompound(mNodeId, StructureType.List)
-
-            RM_S.Children.Cardinality = mCardinalityControl.Cardinality
-
-            For Each lvItem In Me.lvList.Items
-                RM_S.Children.Add(lvItem.Item.RM_Class)
+            For Each lvItem As ArchetypeListViewItem In lvList.Items
+                result.Children.Add(lvItem.Item.RM_Class)
             Next
-            Return RM_S
+
+            Return result
         End Get
         Set(ByVal Value As RmStructureCompound)
-            Dim aStructure As RmStructure
-            ' handles conversion from other structures
-            Me.lvList.Items.Clear()
+            Dim struct As RmStructure
+            lvList.Items.Clear()
             mNodeId = Value.NodeId
-            Select Case Value.Type '.TypeName
-                Case StructureType.Tree ' "TREE"
+
+            Select Case Value.Type
+                Case StructureType.Tree
                     ProcessTreeToList(Value)
-                Case StructureType.Single ' "SINGLE"
-                    aStructure = Value.Children.FirstElementOrElementSlot
-                    AddRmStructureToList(aStructure)
-                Case StructureType.Table ' "TABLE"
+                Case StructureType.Single
+                    struct = Value.Children.FirstElementOrElementSlot
+                    AddRmStructureToList(struct)
+                Case StructureType.Table
                     If Value.Children.items(0).Type = StructureType.Cluster Then
-                        Dim clust As RmCluster
+                        Dim clust As RmCluster = CType(Value.Children.items(0), RmCluster)
 
-                        clust = CType(Value.Children.items(0), RmCluster)
-
-                        For Each aStructure In clust.Children
-                            AddRmStructureToList(aStructure)
+                        For Each struct In clust.Children
+                            AddRmStructureToList(struct)
                         Next
                     Else
                         Debug.Assert(False, "Not expected type")
                     End If
             End Select
+
             If lvList.Items.Count > 0 Then
                 lvList.Items(0).Selected = True
             End If
         End Set
     End Property
 
-    Private Sub AddRmStructureToList(ByVal a_structure As RmStructure)
-        If Not a_structure Is Nothing Then
-            Select Case a_structure.Type
+    Private Sub AddRmStructureToList(ByVal struct As RmStructure)
+        If Not struct Is Nothing Then
+            Dim lvItem As ArchetypeListViewItem = Nothing
+
+            Select Case struct.Type
                 Case StructureType.Element, StructureType.Reference
-                    lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmElement), mFileManager))
+                    lvItem = New ArchetypeListViewItem(CType(struct, RmElement), mFileManager)
                 Case StructureType.Slot
-                    If CType(a_structure, RmSlot).SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
-                        lvList.Items.Add(New ArchetypeListViewItem(CType(a_structure, RmSlot), mFileManager))
+                    If CType(struct, RmSlot).SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
+                        lvItem = New ArchetypeListViewItem(CType(struct, RmSlot), mFileManager)
                     End If
                 Case Else
                     Debug.Assert(False, "Type not handled")
             End Select
+
+            If Not lvItem Is Nothing Then
+                lvList.Items.Add(lvItem)
+                lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, lvItem.Selected)
+            End If
         End If
     End Sub
 
     Private Sub ProcessTreeToList(ByVal rm As RmStructureCompound)
-        For Each aStructure As RmStructure In rm.Children
-            'If a_rm_structure.TypeName = "Cluster" Then
-            If aStructure.Type = StructureType.Cluster Then
-                ProcessTreeToList(CType(aStructure, RmStructureCompound))
+        For Each struct As RmStructure In rm.Children
+            If struct.Type = StructureType.Cluster Then
+                ProcessTreeToList(CType(struct, RmStructureCompound))
             Else
-                AddRmStructureToList(aStructure)
+                AddRmStructureToList(struct)
             End If
         Next
     End Sub
@@ -631,9 +632,7 @@ Public Class ListStructure
                 lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, lvItem.Selected)
             Next
 
-            lvItem = CType(Me.lvList.SelectedItems(0), ArchetypeListViewItem)
-            'Force the change to selected image
-            'lvItem.ImageIndex = Me.ImageIndexForItem(lvItem.Item, True)
+            lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
             SetCurrentItem(lvItem.Item)
 
             If lvItem.Item.HasReferences Then
