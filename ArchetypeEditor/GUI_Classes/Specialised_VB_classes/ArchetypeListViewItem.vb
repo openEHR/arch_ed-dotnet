@@ -36,24 +36,21 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
         End Set
     End Property
 
-    
-
     Public Sub Translate()
         mArchetypeNode.Translate()
         MyBase.Text = mArchetypeNode.Text
     End Sub
 
     Public Function Copy() As ArchetypeListViewItem
-        Return New ArchetypeListViewItem(Me.Item)
+        Return New ArchetypeListViewItem(Item.Copy())
     End Function
 
     Public Sub Specialise()
-        If TypeOf mArchetypeNode Is ArchetypeElement Then
-            CType(mArchetypeNode, ArchetypeElement).Specialise()
+        If Not mArchetypeNode.IsAnonymous Then
+            CType(mArchetypeNode, ArchetypeNodeAbstract).Specialise()
             MyBase.Text = mArchetypeNode.Text
         End If
     End Sub
-
 
     Sub New(ByVal aText As String, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(aText)
@@ -62,16 +59,17 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
 
     Sub New(ByVal el As RmElement, ByVal a_file_manager As FileManagerLocal)
         MyBase.New()
+
         'Must call translate to get the text
         Dim aTerm As RmTerm = a_file_manager.OntologyManager.GetTerm(el.NodeId)
         MyBase.Text = aTerm.Text
 
         mArchetypeNode = New ArchetypeElement(el, a_file_manager)
-
     End Sub
 
     Sub New(ByVal slot As RmSlot, ByVal a_file_manager As FileManagerLocal)
         MyBase.New()
+
         If slot.NodeId <> "" Then
             mArchetypeNode = New ArchetypeSlot(slot, a_file_manager)
             MyBase.Text = mArchetypeNode.Text
@@ -85,7 +83,6 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
         MyBase.New(an_archetype_node.Text)
         mArchetypeNode = an_archetype_node
     End Sub
-
 
 End Class
 
