@@ -121,7 +121,7 @@ Public Class ElementOnly
         Me.lblElement.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblElement.Location = New System.Drawing.Point(110, 40)
         Me.lblElement.Name = "lblElement"
-        Me.lblElement.Size = New System.Drawing.Size(70, 20)
+        Me.lblElement.Size = New System.Drawing.Size(59, 17)
         Me.lblElement.TabIndex = 40
         Me.lblElement.Text = "Element"
         '
@@ -134,11 +134,12 @@ Public Class ElementOnly
         Me.lblElementOnly.TabIndex = 40
         Me.lblElementOnly.Text = "Element"
         '
-        'SimpleStructure
+        'ElementOnly
         '
+        Me.ContextMenu = Me.ContextMenuSimple
         Me.Controls.Add(Me.lblElement)
         Me.Controls.Add(Me.PictureBoxSimple)
-        Me.Name = "SimpleStructure"
+        Me.Name = "ElementOnly"
         Me.Controls.SetChildIndex(Me.PictureBoxSimple, 0)
         Me.Controls.SetChildIndex(Me.lblElement, 0)
         CType(Me.PictureBoxSimple, System.ComponentModel.ISupportInitialize).EndInit()
@@ -148,7 +149,6 @@ Public Class ElementOnly
     End Sub
 
 #End Region
-
 
     Public Overrides ReadOnly Property InterfaceBuilder() As Object
         Get
@@ -181,11 +181,12 @@ Public Class ElementOnly
         MyBase.Translate()
     End Sub
 
-    Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
-        If MessageBox.Show(String.Format("{0} {1}?", AE_Constants.Instance.Specialise, mCurrentItem.Text), AE_Constants.Instance.MessageBoxCaption, _
-            MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
-            mElement.Specialise()
-            Debug.Assert(False, "Needs to be tested")
+    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles MenuSpecialise.Click
+        Dim dlg As New SpecialisationQuestionDialog()
+        dlg.ShowForArchetypeNode(Element.Text, Element.Occurrences, Element.isAnonymous)
+
+        If dlg.IsSpecialisationRequested Then
+            Element.Specialise()
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -203,7 +204,6 @@ Public Class ElementOnly
             SetCurrentItem(mElement) ' does not raise an event during construction
         End If
     End Sub
-
 
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
         Dim temp As New RmElement(mFileManager.Archetype.ConceptCode)
@@ -260,7 +260,6 @@ Public Class ElementOnly
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
-        Debug.Assert(ContextMenuSimple.MenuItems.Count = 2)
         ' show specialisation if appropriate
 
         Dim i As Integer = Main.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
@@ -273,15 +272,11 @@ Public Class ElementOnly
         End If
     End Sub
 
-    Private Sub txtSimple_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        'nothing for this class
-    End Sub
-
     Private Sub SimpleStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' set the variable in the base class
         mControl = Me.lblElement
 
-        If (Not mElement Is Nothing) AndAlso (Not mElement.Constraint Is Nothing) Then
+        If Not mElement Is Nothing AndAlso Not mElement.Constraint Is Nothing Then
             SetCurrentItem(mElement)
         End If
     End Sub

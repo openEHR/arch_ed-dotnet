@@ -288,27 +288,27 @@ Public Class ListStructure
         MyBase.Translate()
     End Sub
 
-    Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
+    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
         If lvList.SelectedItems.Count > 0 Then
-            Dim lvitem As ArchetypeListViewItem = CType(lvList.SelectedItems.Item(0), ArchetypeListViewItem)
-            'Fixme - need to add code to check if can be specialised
+            Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems.Item(0), ArchetypeListViewItem)
+            Dim dlg As New SpecialisationQuestionDialog()
+            dlg.ShowForArchetypeNode(lvItem.Item.Text, lvItem.Item.Occurrences, lvItem.Item.IsAnonymous)
 
-            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & lvitem.Text & "'?", _
-                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-
-                If lvitem.Item.Occurrences.IsUnbounded Or lvitem.Item.Occurrences.MaxCount > 1 Then
-                    Dim i As Integer
-
-                    i = lvitem.Index
-                    lvitem = lvitem.Copy
-                    lvitem.Specialise()
-                    Me.lvList.Items.Insert(i + 1, lvitem)
+            If dlg.IsSpecialisationRequested Then
+                If dlg.IsCloningRequested Then
+                    Dim i As Integer = lvItem.Index
+                    lvItem = lvItem.Copy
+                    lvItem.Specialise()
+                    lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, False)
+                    lvList.Items.Insert(i + 1, lvItem)
                 Else
-                    lvitem.Specialise()
+                    lvItem.Specialise()
                 End If
 
-                'force refresh
-                SetCurrentItem(lvitem.Item)
+                lvList.SelectedItems.Clear()
+                lvItem.Selected = True
+                SetCurrentItem(lvItem.Item)
+                lvItem.BeginEdit()
                 mFileManager.FileEdited = True
             End If
         End If
@@ -559,7 +559,7 @@ Public Class ListStructure
                 lvList.Items(0).Selected = True
             End If
 
-            CType(lvList.SelectedItems(0), ArchetypeListViewItem).ImageIndex = Me.ImageIndexForItem(mCurrentItem, True)
+            CType(lvList.SelectedItems(0), ArchetypeListViewItem).ImageIndex = ImageIndexForItem(mCurrentItem, True)
         End If
     End Sub
 

@@ -412,39 +412,42 @@ Public Class TableStructure
         MyBase.Translate()
     End Sub
 
-    Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
-        If dgGrid.CurrentRowIndex > -1 AndAlso TypeOf mArchetypeTable.Rows(dgGrid.CurrentCell.RowNumber).Item(2) Is ArchetypeElement Then
-            Dim mElement As ArchetypeElement = CType(mArchetypeTable.Rows(dgGrid.CurrentCell.RowNumber).Item(2), ArchetypeElement)
+    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
+        If dgGrid.CurrentRowIndex > -1 Then
+            Dim element As ArchetypeElement = TryCast(mArchetypeTable.Rows(dgGrid.CurrentCell.RowNumber).Item(2), ArchetypeElement)
 
-            If mElement.IsReference Then
-                MessageBox.Show(AE_Constants.Instance.Cannot_specialise_reference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            ElseIf MessageBox.Show(AE_Constants.Instance.Specialise & "?", _
-                    AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-
-                If mElement.Occurrences.IsUnbounded Or mElement.Occurrences.MaxCount > 1 Then
-                    Dim new_element As ArchetypeElement
-                    Dim new_row As DataRow
-                    Dim a_cell As DataGridCell
-
-                    new_element = CType(CType(mElement, ArchetypeElement).Copy, ArchetypeElement)
-                    new_element.Specialise()
-
-                    new_row = mArchetypeTable.NewRow
-                    new_row(1) = new_element.Text
-                    mArchetypeTable.Rows.InsertAt(new_row, Me.dgGrid.CurrentRowIndex + 1)
-                    new_row(2) = new_element
-                    new_row(0) = ImageIndexForConstraintType(new_element.Constraint.Type, CType(new_element.RM_Class, RmElement).isReference, False)
-                    ' go to the new entry
-                    a_cell.RowNumber = dgGrid.CurrentRowIndex + 1
-                    a_cell.ColumnNumber = 1
-                    dgGrid.Focus()
-                    dgGrid.CurrentCell = a_cell
+            If Not element Is Nothing Then
+                If element.IsReference Then
+                    MessageBox.Show(AE_Constants.Instance.CannotSpecialisereference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Else
-                    mElement.Specialise()
-                    mArchetypeTable.Rows(dgGrid.CurrentRowIndex).Item(1) = mCurrentItem.Text
-                End If
+                    Dim dlg As New SpecialisationQuestionDialog()
+                    dlg.ShowForArchetypeNode(element.Text, element.Occurrences, element.isAnonymous)
 
-                mFileManager.FileEdited = True
+                    If dlg.IsSpecialisationRequested Then
+                        If dlg.IsCloningRequested Then
+                            Dim new_element As ArchetypeElement = CType(CType(element, ArchetypeElement).Copy, ArchetypeElement)
+                            new_element.Specialise()
+
+                            Dim row As DataRow = mArchetypeTable.NewRow
+                            row(1) = new_element.Text
+                            mArchetypeTable.Rows.InsertAt(row, dgGrid.CurrentRowIndex + 1)
+                            row(2) = new_element
+                            row(0) = ImageIndexForItem(element, False)
+
+                            ' go to the new entry
+                            Dim cell As DataGridCell
+                            cell.RowNumber = dgGrid.CurrentRowIndex + 1
+                            cell.ColumnNumber = 1
+                            dgGrid.Focus()
+                            dgGrid.CurrentCell = cell
+                        Else
+                            element.Specialise()
+                            mArchetypeTable.Rows(dgGrid.CurrentRowIndex).Item(1) = mCurrentItem.Text
+                        End If
+
+                        mFileManager.FileEdited = True
+                    End If
+                End If
             End If
         End If
     End Sub

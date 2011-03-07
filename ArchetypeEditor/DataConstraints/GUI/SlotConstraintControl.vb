@@ -635,10 +635,10 @@ Public Class SlotConstraintControl : Inherits ConstraintControl
                 'RetrieveFiles(d, Filemanager.Master.ParserType)
                 RetrieveFiles(d, Filemanager.Master.AvailableFormats)
             Catch ex As Exception
-                errorMessage = AE_Constants.Instance.Error_loading & " '" & Main.Instance.Options.RepositoryPath & "':" & Environment.NewLine & ex.Message
+                errorMessage = AE_Constants.Instance.ErrorLoading & " '" & Main.Instance.Options.RepositoryPath & "':" & Environment.NewLine & ex.Message
             End Try
         Else
-            errorMessage = AE_Constants.Instance.Error_loading & " '" & Main.Instance.Options.RepositoryPath & "'."
+            errorMessage = AE_Constants.Instance.ErrorLoading & " '" & Main.Instance.Options.RepositoryPath & "'."
         End If
 
         Cursor = Cursors.Default

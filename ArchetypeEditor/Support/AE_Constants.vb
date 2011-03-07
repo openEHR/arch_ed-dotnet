@@ -17,6 +17,10 @@
 Public Class AE_Constants
 
     Private mSpecialise As String = "Specialise"
+    Private mSpecialisationQuestion As String = "Specialise '{0}'?"
+    Private mSpecialiseYes As String = "Yes, specialise it"
+    Private mSpecialiseAndClone As String = "Yes, but add a new node"
+    Private mSpecialiseNo As String = "No"
     Private mSpecialisationsToo As String = "Use specialisations too?"
     Private mMustAddCriteria As String = "Must add criteria"
     Private mReduceTableToSimpleValue As String = "Reduce table to single value"
@@ -25,7 +29,7 @@ Public Class AE_Constants
     Private mExpandAll As String = "Expand all"
     Private mCollapseAll As String = "Collapse all"
     Private mAddReference As String = "Add reference"
-    Private mOceanArchetypeEditor As String = "Ocean Archetype Editor"
+    Private mMessageBoxCaption As String = "Archetype Editor"
     Private mYouHaveChosenALanguage As String = "You have chosen a language "
     Private mAddTerminology As String = "Add terminology"
     Private mLanguageAdditionCancelled As String = "Adding language cancelled"
@@ -244,7 +248,8 @@ Public Class AE_Constants
             Return mProportion
         End Get
     End Property
-    Friend ReadOnly Property Cannot_specialise_reference() As String
+
+    Friend ReadOnly Property CannotSpecialisereference() As String
         Get
             Return mCannotSpecialiseReference
         End Get
@@ -259,6 +264,30 @@ Public Class AE_Constants
     Friend ReadOnly Property Specialise() As String
         Get
             Return mSpecialise
+        End Get
+    End Property
+
+    Friend ReadOnly Property SpecialisationQuestion() As String
+        Get
+            Return mSpecialisationQuestion
+        End Get
+    End Property
+
+    Friend ReadOnly Property SpecialiseYes() As String
+        Get
+            Return mSpecialiseYes
+        End Get
+    End Property
+
+    Friend ReadOnly Property SpecialiseAndClone() As String
+        Get
+            Return mSpecialiseAndClone
+        End Get
+    End Property
+
+    Friend ReadOnly Property SpecialiseNo() As String
+        Get
+            Return mSpecialiseNo
         End Get
     End Property
 
@@ -332,7 +361,7 @@ Public Class AE_Constants
     End Property
     Friend ReadOnly Property MessageBoxCaption() As String
         Get
-            Return mOceanArchetypeEditor
+            Return mMessageBoxCaption
         End Get
     End Property
 
@@ -389,12 +418,12 @@ Public Class AE_Constants
             Return mRemoveState
         End Get
     End Property
-    Friend ReadOnly Property Error_loading() As String
+    Friend ReadOnly Property ErrorLoading() As String
         Get
             Return mErrorLoading
         End Get
     End Property
-    Friend ReadOnly Property Error_saving() As String
+    Friend ReadOnly Property ErrorSaving() As String
         Get
             Return mErrorSaving
         End Get
@@ -639,16 +668,14 @@ Public Class AE_Constants
         End Get
     End Property
 
-
-
-
-    ' AE_Constants Singleton
     Private Shared mInstance As AE_Constants
+
     Public Shared ReadOnly Property HasInstance() As Boolean
         Get
             Return Not mInstance Is Nothing
         End Get
     End Property
+
     Public Shared ReadOnly Property Instance() As AE_Constants
         Get
             If mInstance Is Nothing Then
@@ -661,20 +688,22 @@ Public Class AE_Constants
 
     Public Shared Function Create(ByVal aLanguage As String) As AE_Constants
         mInstance = New AE_Constants(aLanguage)
-
         Return mInstance
     End Function
 
     Protected Sub New(ByVal Language As String)
         mSpecialise = TerminologyServer.Instance.RubricForCode(185, Language)
-        mSpecialisationsToo = TerminologyServer.Instance.RubricForCode(669, Language)
+        mSpecialisationQuestion = TerminologyServer.Instance.RubricForCode(699, Language)
+        mSpecialiseYes = TerminologyServer.Instance.RubricForCode(700, Language)
+        mSpecialiseAndClone = TerminologyServer.Instance.RubricForCode(701, Language)
+        mSpecialiseNo = TerminologyServer.Instance.RubricForCode(702, Language)
         mReduceTableToSimpleValue = TerminologyServer.Instance.RubricForCode(277, Language)
         mChooseMenuFileNew = TerminologyServer.Instance.RubricForCode(279, Language)
         mAndAllReferences = TerminologyServer.Instance.RubricForCode(280, Language)
         mExpandAll = TerminologyServer.Instance.RubricForCode(281, Language)
         mCollapseAll = TerminologyServer.Instance.RubricForCode(282, Language)
         mAddReference = TerminologyServer.Instance.RubricForCode(283, Language)
-        mOceanArchetypeEditor = TerminologyServer.Instance.RubricForCode(284, Language)
+        mMessageBoxCaption = TerminologyServer.Instance.RubricForCode(284, Language)
         mYouHaveChosenALanguage = TerminologyServer.Instance.RubricForCode(285, Language)
         mAddTerminology = TerminologyServer.Instance.RubricForCode(71, Language)
         mLanguageAdditionCancelled = TerminologyServer.Instance.RubricForCode(286, Language)

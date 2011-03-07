@@ -600,7 +600,7 @@ Public Class ReferenceModel
                 Case "simple"
                     Return StructureType.Single
                 Case Else
-                    MessageBox.Show(AE_Constants.Instance.Error_loading & ": ITEM_STRUCTURE = " & a_structure_name & " -> ITEM_TREE", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show(AE_Constants.Instance.ErrorLoading & ": ITEM_STRUCTURE = " & a_structure_name & " -> ITEM_TREE", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Return StructureType.Tree
             End Select
         End Try

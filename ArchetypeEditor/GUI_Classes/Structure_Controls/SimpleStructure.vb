@@ -213,12 +213,16 @@ Public Class SimpleStructure
         mIsLoading = False
     End Sub
 
-    Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
-        If TypeOf mElement Is ArchetypeElement Then
-            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & txtSimple.Text & "'?", _
-                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                CType(mElement, ArchetypeElement).Specialise()
-                txtSimple.Text = mElement.Text
+    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
+        Dim element As ArchetypeElement = TryCast(mElement, ArchetypeElement)
+
+        If Not element Is Nothing Then
+            Dim dlg As New SpecialisationQuestionDialog()
+            dlg.ShowForArchetypeNode(element.Text, element.Occurrences, element.isAnonymous)
+
+            If dlg.IsSpecialisationRequested Then
+                element.Specialise()
+                txtSimple.Text = element.Text
                 mFileManager.FileEdited = True
             End If
         End If
@@ -322,7 +326,6 @@ Public Class SimpleStructure
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
-        Debug.Assert(ContextMenuSimple.MenuItems.Count = 2)
         ' show specialisation if appropriate
 
         If mCurrentItem Is Nothing OrElse Main.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".") >= mFileManager.OntologyManager.NumberOfSpecialisations Then

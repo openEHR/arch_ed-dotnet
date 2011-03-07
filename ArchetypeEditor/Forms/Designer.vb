@@ -3391,7 +3391,7 @@ Public Class Designer
                 Case Else
                     Beep()
                     Debug.Assert(False)
-                    Throw New Exception(String.Format("{0}: {1}", AE_Constants.Instance.Error_loading, mFileManager.Archetype.Archetype_ID.ToString))
+                    Throw New Exception(String.Format("{0}: {1}", AE_Constants.Instance.ErrorLoading, mFileManager.Archetype.Archetype_ID.ToString))
 
             End Select
 
@@ -3665,7 +3665,7 @@ Public Class Designer
             start_info.WorkingDirectory = Application.StartupPath
             Process.Start(start_info)
         Catch
-            MessageBox.Show(AE_Constants.Instance.Error_loading & " Archetype Editor", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(AE_Constants.Instance.ErrorLoading & " Archetype Editor", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 

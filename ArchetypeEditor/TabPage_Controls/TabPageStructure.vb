@@ -956,7 +956,7 @@ Public Class TabPageStructure
             ArchetypeDisplay.PanelStructureHeader.Controls.Add(lbl)
             lbl.BringToFront()
         Else
-            MessageBox.Show(AE_Constants.Instance.Error_loading & ": " & an_archetype_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show(AE_Constants.Instance.ErrorLoading & ": " & an_archetype_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
         End If
     End Sub
 

@@ -152,7 +152,6 @@ Public Class ArchetypeSlot : Inherits ArchetypeNodeAbstract
             Next
         End If
 
-
         If slot_constraint.ExcludeAll Then
             s &= Environment.NewLine & Space(3 * (level + 1)) & "  Exclude ALL\par"
         ElseIf slot_constraint.Exclude.Count > 0 Then
@@ -161,24 +160,25 @@ Public Class ArchetypeSlot : Inherits ArchetypeNodeAbstract
                 s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
             Next
         End If
+
         Return s
     End Function
 
-    Sub New(ByVal a_slot As RmSlot, ByVal aFileManager As FileManagerLocal)
-        MyBase.New(a_slot, aFileManager)
+    Sub New(ByVal slot As RmSlot, ByVal fileManager As FileManagerLocal)
+        MyBase.New(slot, fileManager)
     End Sub
 
-    Sub New(ByVal UnnamedSlot As ArchetypeNodeAnonymous, ByVal aFileManager As FileManagerLocal)
-        MyBase.New(UnnamedSlot.RM_Class, aFileManager)
+    Sub New(ByVal UnnamedSlot As ArchetypeNodeAnonymous, ByVal fileManager As FileManagerLocal)
+        MyBase.New(UnnamedSlot.RM_Class, fileManager)
         Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(ReferenceModel.RM_StructureName(Slot.SlotConstraint.RM_ClassType))
         mText = aTerm.Text
         Slot.NodeId = aTerm.Code
         mDescription = ""
     End Sub
 
-    Sub New(ByVal a_text As String, ByVal slotClass As StructureType, ByVal aFileManager As FileManagerLocal)
+    Sub New(ByVal a_text As String, ByVal slotClass As StructureType, ByVal fileManager As FileManagerLocal)
         MyBase.New(a_text)
-        mFileManager = aFileManager
+        mFileManager = fileManager
         Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(a_text)
         mDescription = aTerm.Description
         mComment = aTerm.Comment

@@ -19,7 +19,7 @@ Option Strict On
 Public Class TabpageHistory
     Inherits System.Windows.Forms.UserControl
 
-    Private current_item As EventListViewItem
+    Private currentItem As EventListViewItem
     Private sNodeID As String
     Private MathFunctionTable As DataTable
     Private mIsLoading As Boolean = False
@@ -797,8 +797,8 @@ Public Class TabpageHistory
             ListEvents.Items.Item(0).Selected = True
             butRemoveElement.Visible = True
             ProcessEvent(CType(ListEvents.Items.Item(0), EventListViewItem))
-            current_item = CType(ListEvents.Items.Item(0), EventListViewItem)
-            current_item.Selected = True
+            currentItem = CType(ListEvents.Items.Item(0), EventListViewItem)
+            currentItem.Selected = True
         End If
     End Sub
 
@@ -811,7 +811,7 @@ Public Class TabpageHistory
     Public Sub Translate()
         Dim HistEvent As EventListViewItem
         Dim elvi As EventListViewItem
-        current_item = Nothing
+        currentItem = Nothing
 
         For Each HistEvent In ListEvents.Items
             HistEvent.Translate()
@@ -825,7 +825,7 @@ Public Class TabpageHistory
                 txtRuntimeConstraint.Text = elvi.NameConstraint.ToString
             End If
 
-            current_item = elvi
+            currentItem = elvi
         End If
     End Sub
 
@@ -914,7 +914,7 @@ Public Class TabpageHistory
         mOccurrences.Cardinality = elvi.Occurrences
         ListEvents.Items.Add(elvi)
         elvi.Selected = True
-        current_item = elvi
+        currentItem = elvi
     End Sub
 
 #End Region
@@ -1162,7 +1162,7 @@ Public Class TabpageHistory
         comboTimeUnits.Visible = chkIsPeriodic.Checked
         gbOffset.Visible = radioPointInTime.Checked And Not chkIsPeriodic.Checked
 
-        If Not current_item Is Nothing Then
+        If Not currentItem Is Nothing Then
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -1171,15 +1171,15 @@ Public Class TabpageHistory
         gbDuration.Visible = RadioInterval.Checked
         gbOffset.Visible = radioPointInTime.Checked And Not chkIsPeriodic.Checked
 
-        If Not current_item Is Nothing And Not mIsLoading Then
+        If Not currentItem Is Nothing And Not mIsLoading Then
             If radioPointInTime.Checked Then
-                current_item.EventType = RmEvent.ObservationEventType.PointInTime
+                currentItem.EventType = RmEvent.ObservationEventType.PointInTime
             ElseIf RadioInterval.Checked Then
-                current_item.EventType = RmEvent.ObservationEventType.Interval
-                current_item.AggregateMathFunction = GetAggregateFunctions()
+                currentItem.EventType = RmEvent.ObservationEventType.Interval
+                currentItem.AggregateMathFunction = GetAggregateFunctions()
                 cbFixedInterval_CheckedChanged(sender, e)
             Else
-                current_item.EventType = RmEvent.ObservationEventType.Event
+                currentItem.EventType = RmEvent.ObservationEventType.Event
             End If
 
             mFileManager.FileEdited = True
@@ -1199,11 +1199,11 @@ Public Class TabpageHistory
     Private Sub butAddEvent_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddEvent.Click
         Dim elvi As EventListViewItem
         ' ensure there is no selected event
-        If Not current_item Is Nothing Then
-            current_item.Selected = False
+        If Not currentItem Is Nothing Then
+            currentItem.Selected = False
         End If
 
-        current_item = Nothing
+        currentItem = Nothing
 
         ' create a new generic event and set the screen accordingly
         elvi = New EventListViewItem(Filemanager.GetOpenEhrTerm(276, "Any event"), mFileManager)
@@ -1218,7 +1218,7 @@ Public Class TabpageHistory
 
         ListEvents.Items.Add(elvi)
         elvi.Selected = True
-        current_item = elvi
+        currentItem = elvi
         elvi.Selected = True
         butRemoveElement.Show()
         mFileManager.FileEdited = True
@@ -1301,24 +1301,24 @@ Public Class TabpageHistory
         If ListEvents.SelectedItems.Count = 1 Then
             ' must be at least one selected - this is called twice when change selection
             ' first set to 0 then selects one
-            If Not current_item Is ListEvents.SelectedItems(0) Then
-                If Not current_item Is Nothing Then
-                    elvi = current_item
+            If Not currentItem Is ListEvents.SelectedItems(0) Then
+                If Not currentItem Is Nothing Then
+                    elvi = currentItem
                     elvi.Selected = False   ' sets the imageindex to unselected (and the listitem to selected if it is not)
-                    current_item = Nothing  ' stops processes when writing information
+                    currentItem = Nothing  ' stops processes when writing information
                 End If
 
                 elvi = CType(ListEvents.SelectedItems(0), EventListViewItem)
                 ProcessEvent(elvi)
-                current_item = elvi
+                currentItem = elvi
                 ' set the image to selected, don't use selected to change as it will call this again!
-                current_item.Selected = True
+                currentItem.Selected = True
             End If
 
             SpecialiseToolStripMenuItem.Visible = False
 
-            If Not current_item Is Nothing Then
-                Dim i As Integer = Main.Instance.CountInString(current_item.RM_Class.NodeId, ".")
+            If Not currentItem Is Nothing Then
+                Dim i As Integer = Main.Instance.CountInString(currentItem.RM_Class.NodeId, ".")
                 Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
 
                 If i < numberSpecialisations Then
@@ -1330,55 +1330,55 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub txtEventDescription_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtEventDescription.TextChanged
-        If Not current_item Is Nothing And Not mIsLoading Then
-            current_item.Description = txtEventDescription.Text
+        If Not currentItem Is Nothing And Not mIsLoading Then
+            currentItem.Description = txtEventDescription.Text
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub NumericOffset_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericOffset.ValueChanged, NumericOffset.TextChanged
-        If Not current_item Is Nothing And Not mIsLoading Then
-            current_item.Offset = CInt(NumericOffset.Value)
+        If Not currentItem Is Nothing And Not mIsLoading Then
+            currentItem.Offset = CInt(NumericOffset.Value)
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub comboOffsetUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboOffsetUnits.SelectedIndexChanged
-        If Not current_item Is Nothing And Not mIsLoading Then
-            current_item.OffsetUnits = CType(comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+        If Not currentItem Is Nothing And Not mIsLoading Then
+            currentItem.OffsetUnits = CType(comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub numericDuration_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numericDuration.ValueChanged, numericDuration.TextChanged
-        If Not current_item Is Nothing And Not mIsLoading Then
-            current_item.Width = CInt(numericDuration.Value)
+        If Not currentItem Is Nothing And Not mIsLoading Then
+            currentItem.Width = CInt(numericDuration.Value)
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub comboDurationUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboDurationUnits.SelectedIndexChanged
-        If Not current_item Is Nothing And Not mIsLoading Then
-            current_item.WidthUnits = CType(comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+        If Not currentItem Is Nothing And Not mIsLoading Then
+            currentItem.WidthUnits = CType(comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub listViewMathsFunctions_ItemCheck(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemCheckedEventArgs) Handles listViewMathsFunctions.ItemChecked
-        If Not current_item Is Nothing And Not mIsLoading And listViewMathsFunctions.Focused Then
-            current_item.AggregateMathFunction = GetAggregateFunctions()
+        If Not currentItem Is Nothing And Not mIsLoading And listViewMathsFunctions.Focused Then
+            currentItem.AggregateMathFunction = GetAggregateFunctions()
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub radioOpen_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioOpen.CheckedChanged
-        If Not current_item Is Nothing And Not mIsLoading Then
+        If Not currentItem Is Nothing And Not mIsLoading Then
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub radioFixed_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioFixed.CheckedChanged
-        If Not current_item Is Nothing And Not mIsLoading Then
+        If Not currentItem Is Nothing And Not mIsLoading Then
             mFileManager.FileEdited = True
         End If
     End Sub
@@ -1387,14 +1387,14 @@ Public Class TabpageHistory
         NumericOffset.Visible = cbFixedOffset.Checked
         comboOffsetUnits.Visible = cbFixedOffset.Checked
 
-        If Not current_item Is Nothing Then
+        If Not currentItem Is Nothing Then
             If cbFixedOffset.Checked Then
-                current_item.hasFixedOffset = True
+                currentItem.hasFixedOffset = True
                 ' may accept default so set them
-                current_item.Offset = CInt(NumericOffset.Value)
-                current_item.OffsetUnits = CType(comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+                currentItem.Offset = CInt(NumericOffset.Value)
+                currentItem.OffsetUnits = CType(comboOffsetUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
             Else
-                current_item.hasFixedOffset = False
+                currentItem.hasFixedOffset = False
             End If
 
             If Not mIsLoading Then
@@ -1407,14 +1407,14 @@ Public Class TabpageHistory
         numericDuration.Visible = cbFixedInterval.Checked
         comboDurationUnits.Visible = cbFixedInterval.Checked
 
-        If Not current_item Is Nothing Then
+        If Not currentItem Is Nothing Then
             If cbFixedInterval.Checked Then
-                current_item.hasFixedWidth = True
+                currentItem.hasFixedWidth = True
                 ' may accept default so load these
-                current_item.Width = CInt(numericDuration.Value)
-                current_item.WidthUnits = CType(comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
+                currentItem.Width = CInt(numericDuration.Value)
+                currentItem.WidthUnits = CType(comboDurationUnits.SelectedItem, TimeUnits.TimeUnit).ISOunit
             Else
-                current_item.hasFixedWidth = False
+                currentItem.hasFixedWidth = False
             End If
 
             If Not mIsLoading Then
@@ -1494,13 +1494,13 @@ Public Class TabpageHistory
         Dim frm As New ConstraintForm
         Dim has_constraint As Boolean
         Dim t As Constraint_Text = Nothing
-        has_constraint = current_item.hasNameConstraint
+        has_constraint = currentItem.hasNameConstraint
 
         If has_constraint Then
-            t = CType(current_item.NameConstraint.Copy, Constraint_Text)
+            t = CType(currentItem.NameConstraint.Copy, Constraint_Text)
         End If
 
-        frm.ShowConstraint(False, current_item.NameConstraint, mFileManager)
+        frm.ShowConstraint(False, currentItem.NameConstraint, mFileManager)
 
         Select Case frm.ShowDialog
             Case Windows.Forms.DialogResult.OK
@@ -1509,17 +1509,17 @@ Public Class TabpageHistory
             Case Windows.Forms.DialogResult.Cancel
                 ' put it back to null if it was before
                 If Not has_constraint Then
-                    current_item.hasNameConstraint = False
+                    currentItem.hasNameConstraint = False
                 Else
-                    current_item.NameConstraint = t
+                    currentItem.NameConstraint = t
                 End If
             Case Windows.Forms.DialogResult.Ignore
-                current_item.hasNameConstraint = False
+                currentItem.hasNameConstraint = False
                 mFileManager.FileEdited = True
         End Select
 
-        If current_item.hasNameConstraint Then
-            txtRuntimeConstraint.Text = current_item.NameConstraint.ToString
+        If currentItem.hasNameConstraint Then
+            txtRuntimeConstraint.Text = currentItem.NameConstraint.ToString
         Else
             txtRuntimeConstraint.Text = ""
         End If
@@ -1560,34 +1560,33 @@ Public Class TabpageHistory
                     ListEvents.SelectedItems(0).BeginEdit()
                 End If
             Case Keys.Delete
-                If Not current_item Is Nothing Then
-                    If MessageBox.Show(AE_Constants.Instance.Remove + " " + current_item.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
-                        current_item.Remove()
+                If Not currentItem Is Nothing Then
+                    If MessageBox.Show(AE_Constants.Instance.Remove + " " + currentItem.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+                        currentItem.Remove()
                     End If
                 End If
         End Select
     End Sub
 
     Private Sub SpecialiseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpecialiseToolStripMenuItem.Click
-        If Not current_item Is Nothing Then
-            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & current_item.Text & "'?", _
-                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
-                MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+        If Not currentItem Is Nothing Then
+            Dim dlg As New SpecialisationQuestionDialog()
+            dlg.ShowForArchetypeNode(currentItem.Text, currentItem.Occurrences, False)
 
-                If Not (current_item.Occurrences.IsUnbounded Or current_item.Occurrences.MaxCount > 1) Then
+            If dlg.IsSpecialisationRequested Then
+                If dlg.IsCloningRequested Then
+                    Dim i As Integer = currentItem.Index
 
-                    current_item.Specialise()
-                Else
-                    Dim i As Integer = current_item.Index
+                    currentItem = currentItem.Copy()
+                    currentItem.Specialise()
 
-                    current_item = current_item.Copy()
-                    current_item.Specialise()
+                    ListEvents.Items.Insert(i + 1, currentItem)
 
-                    Me.ListEvents.Items.Insert(i + 1, current_item)
-
-                    current_item.Selected = True
-                    current_item.BeginEdit()
+                    currentItem.Selected = True
+                    currentItem.BeginEdit()
                     mFileManager.FileEdited = True
+                Else
+                    currentItem.Specialise()
                 End If
             End If
         End If

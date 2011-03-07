@@ -95,7 +95,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     EIF_adlInterface.serialise_archetype(Eiffel.String(a_format))
                 Catch e As Exception
                     Debug.Assert(False, e.Message)
-                    MessageBox.Show(AE_Constants.Instance.Error_saving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show(AE_Constants.Instance.ErrorSaving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             End If
         End Sub
@@ -272,7 +272,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     MessageBox.Show("Archetype not available - error on making parse tree")
                 End If
             Catch ex As Exception
-                MessageBox.Show(AE_Constants.Instance.Error_saving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(AE_Constants.Instance.ErrorSaving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 
@@ -302,7 +302,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     MessageBox.Show("Archetype not available - error on making parse tree")
                 End If
             Catch ex As Exception
-                MessageBox.Show(AE_Constants.Instance.Error_saving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show(AE_Constants.Instance.ErrorSaving & " " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
         End Sub
 

@@ -119,7 +119,6 @@ Public Class TreeStructure
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     Friend WithEvents tvTree As System.Windows.Forms.TreeView
-    'Friend WithEvents ContextMenuTree As System.Windows.Forms.ContextMenu
     Friend WithEvents TreeContextMenu As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuRemove As System.Windows.Forms.MenuItem
     Friend WithEvents MenuNameSlot As MenuItem
@@ -415,32 +414,27 @@ Public Class TreeStructure
         Next
     End Sub
 
-    Protected Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles MenuSpecialise.Click
+    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles MenuSpecialise.Click
         If Not tvTree.SelectedNode Is Nothing Then
-            If MessageBox.Show(AE_Constants.Instance.Specialise & " '" & tvTree.SelectedNode.Text & "'?", _
-                AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+            Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+            Dim dlg As New SpecialisationQuestionDialog()
+            dlg.ShowForArchetypeNode(tvNode.Item.Text, tvNode.Item.Occurrences, tvNode.Item.IsAnonymous)
 
-                Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
-
-                If TypeOf tvNode.Item Is ArchetypeSlot Or Not (tvNode.Item.Occurrences.IsUnbounded Or tvNode.Item.Occurrences.MaxCount > 1) Then
-                    tvNode.Specialise()
-                Else
+            If dlg.IsSpecialisationRequested Then
+                If dlg.IsCloningRequested Then
                     Dim i As Integer = CType(tvNode, ArchetypeTreeNode).Index
                     tvNode = tvNode.Copy(mFileManager)
                     tvNode.Specialise()
-
-                    If tvNode.Item.RM_Class.Type = StructureType.Element Then
-                        Dim archetype_element As ArchetypeElement = CType(tvNode.Item, ArchetypeElement)
-                        'Cannot specialise a reference
-                        tvNode.ImageIndex = ImageIndexForConstraintType(archetype_element.Constraint.Type, False, False)
-                        tvNode.SelectedImageIndex = ImageIndexForConstraintType(CType(tvNode.Item, ArchetypeElement).Constraint.Type, False, True)
-                    End If
+                    tvNode.ImageIndex = ImageIndexForItem(tvNode.Item, False)
+                    tvNode.SelectedImageIndex = ImageIndexForItem(tvNode.Item, True)
 
                     If tvTree.SelectedNode.Parent Is Nothing Then
                         tvTree.Nodes.Insert(i + 1, tvNode)
                     Else
                         tvTree.SelectedNode.Parent.Nodes.Insert(i + 1, tvNode)
                     End If
+                Else
+                    tvNode.Specialise()
                 End If
 
                 tvTree.SelectedNode = tvNode
@@ -928,7 +922,7 @@ Public Class TreeStructure
         If Not tvNode Is Nothing Then
             If Not mHoverNode Is tvNode Then
                 mHoverNode = tvNode
-                SetToolTipSpecialisation(Me.tvTree, tvNode.Item)
+                SetToolTipSpecialisation(tvTree, tvNode.Item)
             End If
         End If
     End Sub

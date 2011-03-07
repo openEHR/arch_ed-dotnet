@@ -525,6 +525,7 @@ Public Class EntryStructure
             Return 38
         End Get
     End Property
+
     'implement as overrided property
     Public Property StructureType() As StructureType
         Get
@@ -561,7 +562,7 @@ Public Class EntryStructure
 
     Public Property IsChangeStructureMenuVisible() As Boolean
         Get
-            Return menuChangeStructure.Visible
+            Return Not menuChangeStructure Is Nothing AndAlso menuChangeStructure.Visible
         End Get
         Set(ByVal Value As Boolean)
             menuChangeStructure.Visible = Value
@@ -663,10 +664,6 @@ Public Class EntryStructure
         RaiseEvent CurrentItemChanged(mCurrentItem, New EventArgs)
     End Sub
 
-    Protected Overridable Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
-        Throw New NotImplementedException("Subclass must override this method")
-    End Sub
-
     Public Overridable Sub Reset()
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
@@ -719,18 +716,18 @@ Public Class EntryStructure
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
 
-    Protected Overloads Sub SetCurrentItem(ByVal a_node As ArchetypeNode)
+    Protected Overloads Sub SetCurrentItem(ByVal node As ArchetypeNode)
         ' if nothing this hides panelDetails
-        mCurrentItem = a_node
+        mCurrentItem = node
 
-        If Not a_node Is Nothing Then
-            lblAtcode.Text = a_node.RM_Class.NodeId
+        If Not node Is Nothing Then
+            lblAtcode.Text = node.RM_Class.NodeId
         Else
             lblAtcode.Text = ""
         End If
 
-        SetButtonVisibility(a_node)
-        RaiseEvent CurrentItemChanged(a_node, New EventArgs)
+        SetButtonVisibility(node)
+        RaiseEvent CurrentItemChanged(node, New EventArgs)
     End Sub
 
     Public Sub SetButtonVisibility(ByVal a_node As ArchetypeNode)
@@ -772,60 +769,58 @@ Public Class EntryStructure
         End If
     End Sub
 
-    Protected Sub SetToolTipSpecialisation(ByVal Ctrl As Control, ByVal Item As ArchetypeNode)
-
-        If Item Is Nothing Then
-            Me.ToolTipSpecialisation.RemoveAll()
-            Return
-        End If
-
-        If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
-            Dim s As String
-            Dim ct() As CodeAndTerm
-            Dim i As Integer
-
-            If Not Item.IsAnonymous Then
-                ct = Main.Instance.GetSpecialisationChain(CType(Item, ArchetypeNodeAbstract).NodeId, mFileManager)
+    Protected Sub SetToolTipSpecialisation(ByVal ctrl As Control, ByVal item As ArchetypeNode)
+        If item Is Nothing Then
+            ToolTipSpecialisation.RemoveAll()
+        ElseIf mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
+            If Not item.IsAnonymous Then
+                Dim ct() As CodeAndTerm = Main.Instance.GetSpecialisationChain(CType(item, ArchetypeNodeAbstract).NodeId, mFileManager)
 
                 If ct.Length = 1 Then
-                    Me.ToolTipSpecialisation.RemoveAll()
-                    Return
+                    ToolTipSpecialisation.RemoveAll()
+                Else
+                    Dim s As String = "Specialised:" & Environment.NewLine
+                    Dim i As Integer
+
+                    For i = 0 To ct.Length - 1
+                        s = s & Space((i * 2) + 2) & "- " & ct(i).Text
+
+                        If i < ct.Length - 1 Then
+                            s = s & Environment.NewLine
+                        End If
+                    Next
+
+                    ToolTipSpecialisation.SetToolTip(ctrl, s)
                 End If
-                s = "Specialised:" & Environment.NewLine
-                For i = 0 To ct.Length - 1
-                    s = s & Space((i * 2) + 2) & "- " & ct(i).Text
-                    If i < ct.Length - 1 Then
-                        s = s & Environment.NewLine
-                    End If
-                Next
-                Me.ToolTipSpecialisation.SetToolTip(Ctrl, s)
             End If
         End If
-
     End Sub
 
     Protected Function ImageIndexForItem(ByVal item As ArchetypeNode, ByVal isSelected As Boolean) As Integer
+        Dim result As Integer = 0
+
         Select Case item.RM_Class.Type
             Case StructureType.Element, StructureType.Reference
                 Dim element As ArchetypeElement = CType(item, ArchetypeElement)
-                Return ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, isSelected)
+                result = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, isSelected)
             Case StructureType.Slot
-                Return ImageIndexForConstraintType(ConstraintType.Slot, False, isSelected)
+                result = ImageIndexForConstraintType(ConstraintType.Slot, False, isSelected)
             Case StructureType.Cluster
-                ' FIXME: This doesn't appear to be called from anywhere. Should we clean it up or delete it?
                 If isSelected Then
-                    Return 77
+                    result = 77
                 Else
-                    Return 76
+                    result = 76
                 End If
         End Select
+
+        Return result
     End Function
 
     Protected Function ImageIndexForConstraintType(ByVal ct As ConstraintType, ByVal isReference As Boolean, ByVal isSelected As Boolean) As Integer
         Dim offset As Integer
 
         If isReference Then offset = 19
-        If isSelected Then offset += Me.SelectedImageOffset
+        If isSelected Then offset += SelectedImageOffset
 
         Select Case ct
             Case ConstraintType.Quantity

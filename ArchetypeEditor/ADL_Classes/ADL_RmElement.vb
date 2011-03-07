@@ -340,7 +340,7 @@ Namespace ArchetypeEditor.ADL_Classes
                     End If
                 Catch ex As Exception
                     Debug.Assert(False)
-                    MessageBox.Show(AE_Constants.Instance.Error_loading & " Multimedia constraint:" & ObjNode.node_id.to_cil & _
+                    MessageBox.Show(AE_Constants.Instance.ErrorLoading & " Multimedia constraint:" & ObjNode.node_id.to_cil & _
                         " - " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             End If
@@ -434,7 +434,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                     Next
                                 Catch ex As Exception
                                     Debug.Assert(False)
-                                    MessageBox.Show(AE_Constants.Instance.Error_loading & " Multimedia constraint:" & dvParse.node_id.to_cil & _
+                                    MessageBox.Show(AE_Constants.Instance.ErrorLoading & " Multimedia constraint:" & dvParse.node_id.to_cil & _
                                         " - " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                                 End Try
                         End Select

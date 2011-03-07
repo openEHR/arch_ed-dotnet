@@ -694,7 +694,7 @@ Public Class FileManagerLocal
                         FileEdited = False
                     End If
                 Catch ex As Exception
-                    MessageBox.Show(AE_Constants.Instance.Error_saving & FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    MessageBox.Show(AE_Constants.Instance.ErrorSaving & FileName & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             End If
         End If

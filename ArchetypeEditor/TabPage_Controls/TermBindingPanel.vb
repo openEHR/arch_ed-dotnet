@@ -1113,7 +1113,7 @@ Public Class TermBindingPanel
                         RemovePathFromBindings(a_path, a_code)
                     Catch ex As Exception
                         Debug.Assert(False, ex.ToString)
-                        MessageBox.Show(AE_Constants.Instance.Error_saving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        MessageBox.Show(AE_Constants.Instance.ErrorSaving, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     End Try
                 End If
             End If

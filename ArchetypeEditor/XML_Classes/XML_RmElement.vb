@@ -187,7 +187,7 @@ Namespace ArchetypeEditor.XML_Classes
 
             Catch ex As Exception
                 Debug.Assert(False)
-                MessageBox.Show(AE_Constants.Instance.Error_loading & " Multimedia constraint:" & ObjNode.node_id & _
+                MessageBox.Show(AE_Constants.Instance.ErrorLoading & " Multimedia constraint:" & ObjNode.node_id & _
                     " - " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try
 
@@ -332,7 +332,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                                 Catch ex As Exception
                                     Debug.Assert(False)
-                                    MessageBox.Show(AE_Constants.Instance.Error_loading & " Parsable constraint:" & dvParse.node_id & _
+                                    MessageBox.Show(AE_Constants.Instance.ErrorLoading & " Parsable constraint:" & dvParse.node_id & _
                                         " - " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                                 End Try
                         End Select

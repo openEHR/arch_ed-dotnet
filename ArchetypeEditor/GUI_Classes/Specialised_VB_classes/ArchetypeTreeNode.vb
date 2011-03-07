@@ -88,10 +88,10 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         End Get
     End Property
 
-    Public Function Copy(ByVal a_file_manager As FileManagerLocal) As ArchetypeTreeNode
+    Public Function Copy(ByVal fileManager As FileManagerLocal) As ArchetypeTreeNode
         Select Case mArchetypeNode.RM_Class.Type
             Case StructureType.SECTION
-                Return New ArchetypeTreeNode(CType(mArchetypeNode, RmSection), a_file_manager)
+                Return New ArchetypeTreeNode(CType(mArchetypeNode, RmSection), fileManager)
             Case StructureType.Cluster
                 Return New ArchetypeTreeNode(CType(mArchetypeNode, ArchetypeComposite))
             Case StructureType.Element
@@ -100,8 +100,8 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
             Case StructureType.Reference
                 Return New ArchetypeTreeNode(mArchetypeNode)
             Case StructureType.Slot
-                If (TypeOf mArchetypeNode Is ArchetypeSlot) Then
-                    Return (New ArchetypeTreeNode(mArchetypeNode))
+                If TypeOf mArchetypeNode Is ArchetypeSlot Then
+                    Return New ArchetypeTreeNode(mArchetypeNode)
                 Else
                     Return Nothing
                 End If
@@ -120,8 +120,6 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         If Not mArchetypeNode.IsAnonymous Then
             CType(mArchetypeNode, ArchetypeNodeAbstract).Specialise()
             MyBase.Text = mArchetypeNode.Text
-        Else
-            Debug.Assert(False)
         End If
     End Sub
 
@@ -143,22 +141,24 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         If mArchetypeNode.RM_Class.Type = StructureType.Cluster AndAlso CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
             CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
         End If
+
         SetImageIndex()
     End Sub
 
-    Sub New(ByVal aText As String, ByVal a_type As StructureType, ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal aText As String, ByVal a_type As StructureType, ByVal fileManager As FileManagerLocal)
         MyBase.New(aText)
+
         Select Case a_type
             Case StructureType.Element
-                mArchetypeNode = New ArchetypeElement(aText, a_file_manager)
+                mArchetypeNode = New ArchetypeElement(aText, fileManager)
             Case StructureType.Cluster
-                mArchetypeNode = New ArchetypeComposite(aText, a_type, a_file_manager)
+                mArchetypeNode = New ArchetypeComposite(aText, a_type, fileManager)
                 If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
                     CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
                 End If
                 SetImageIndex()
             Case StructureType.SECTION
-                mArchetypeNode = New ArchetypeComposite(aText, a_type, a_file_manager)
+                mArchetypeNode = New ArchetypeComposite(aText, a_type, fileManager)
                 SetImageIndex()
             Case Else
                 Debug.Assert(False, String.Format("Type {0} is not handled", a_type.ToString.ToUpper))
@@ -167,13 +167,12 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
                 '    'mArchetypeNode = New ArchetypeNodeAnonymous(a_type)
         End Select
 
-        Me.Item.Occurrences.MaxCount = 1
-
+        Item.Occurrences.MaxCount = 1
     End Sub
 
-    Sub New(ByVal aCluster As RmCluster, ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal aCluster As RmCluster, ByVal fileManager As FileManagerLocal)
         MyBase.New()
-        mArchetypeNode = New ArchetypeComposite(aCluster, a_file_manager)
+        mArchetypeNode = New ArchetypeComposite(aCluster, fileManager)
         If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
             CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
         End If
@@ -191,42 +190,39 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         SetImageIndex()
     End Sub
 
-    Sub New(ByVal aSection As RmSection, ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal aSection As RmSection, ByVal fileManager As FileManagerLocal)
         MyBase.New()
-        mArchetypeNode = New ArchetypeComposite(aSection, a_file_manager)
+        mArchetypeNode = New ArchetypeComposite(aSection, fileManager)
         MyBase.Text = mArchetypeNode.Text
         'Me.Item.Occurrences = New Count(1, 1)
         SetImageIndex()
     End Sub
 
-    Sub New(ByVal aSection As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal aSection As RmStructureCompound, ByVal fileManager As FileManagerLocal)
         MyBase.New()
-        mArchetypeNode = New ArchetypeComposite(aSection, a_file_manager)
+        mArchetypeNode = New ArchetypeComposite(aSection, fileManager)
         MyBase.Text = mArchetypeNode.Text
         'Me.Item.Occurrences = aSection.Occurrences
         SetImageIndex()
     End Sub
 
-    Sub New(ByVal el As RmElement, ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal el As RmElement, ByVal fileManager As FileManagerLocal)
         MyBase.New()
-        mArchetypeNode = New ArchetypeElement(el, a_file_manager)
+        mArchetypeNode = New ArchetypeElement(el, fileManager)
         MyBase.Text = mArchetypeNode.Text
         'Me.Item.Occurrences = el.Occurrences
     End Sub
 
-    Sub New(ByVal a_slot As RmSlot, ByVal a_file_manager As FileManagerLocal)
-        'SRH: Changed 18 Aug 2008
+    Sub New(ByVal slot As RmSlot, ByVal fileManager As FileManagerLocal)
         MyBase.New()
-        If a_slot.NodeId <> String.Empty Then
-            mArchetypeNode = New ArchetypeSlot(a_slot, a_file_manager)
+
+        If slot.NodeId <> "" Then
+            mArchetypeNode = New ArchetypeSlot(slot, fileManager)
             MyBase.Text = mArchetypeNode.Text
         Else
-            MyBase.Text = a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(a_slot.SlotConstraint.RM_ClassType), a_slot.SlotConstraint.RM_ClassType.ToString)
-            mArchetypeNode = New ArchetypeNodeAnonymous(a_slot)
+            mArchetypeNode = New ArchetypeNodeAnonymous(slot)
+            MyBase.Text = fileManager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
         End If
-
-        'MyBase.New(a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(a_slot.SlotConstraint.RM_ClassType), a_slot.SlotConstraint.RM_ClassType.ToString))
-        'mArchetypeNode = New ArchetypeNodeAnonymous(a_slot)
     End Sub
 
 End Class

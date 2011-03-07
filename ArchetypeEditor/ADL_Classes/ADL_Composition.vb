@@ -82,7 +82,7 @@ Class ADL_COMPOSITION
                                     MessageBox.Show("Editor does not support compositions with fixed sections. Create slots and separate suitable section archetype", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
                                 End If
                             Catch ex As Exception
-                                MessageBox.Show(String.Format("{0}- ({1}): {2}", AE_Constants.Instance.Error_loading, a_filemanager.Archetype.Archetype_ID.ToString(), ex.Message), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                                MessageBox.Show(String.Format("{0}- ({1}): {2}", AE_Constants.Instance.ErrorLoading, a_filemanager.Archetype.Archetype_ID.ToString(), ex.Message), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                             End Try
                         Next
 
