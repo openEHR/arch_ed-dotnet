@@ -1090,14 +1090,15 @@ Public Class TabpageHistory
         End Function
 
         Public Sub Specialise()
-            Dim a_Term As RmTerm
-
             MyBase.Text = "! - " & MyBase.Text
-            a_Term = mFileManager.OntologyManager.SpecialiseTerm(MyBase.Text, sDescription, element.NodeId)
-            element.NodeId = a_Term.Code
+            Dim term As RmTerm = mFileManager.OntologyManager.SpecialiseTerm(MyBase.Text, sDescription, element.NodeId)
+            element.NodeId = term.Code
+
             If element.HasNameConstraint Then
                 element.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseTerm(element.NameConstraint.ConstraintCode).Code
             End If
+
+            mFileManager.FileEdited = True
         End Sub
 
         Private Sub SetImageIndex()
