@@ -147,7 +147,7 @@ Public Class ChooseFix
         Me.Name = "ChooseFix"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
-        Me.Text = "Ocean Archetype Editor - Mismatched Id and File Name"
+        Me.Text = "Mismatched Id and File Name"
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
