@@ -730,7 +730,7 @@ Public Class EntryStructure
         RaiseEvent CurrentItemChanged(node, New EventArgs)
     End Sub
 
-    Public Sub SetButtonVisibility(ByVal a_node As ArchetypeNode)
+    Public Sub SetButtonVisibility(ByVal node As ArchetypeNode)
         'Hide the icons if simple to stop drag and drop
         If mStructureType = StructureType.Single AndAlso pbText.Visible Then
             pbAny.Hide()
@@ -743,26 +743,24 @@ Public Class EntryStructure
             LayoutIcons()
         End If
 
-        If a_node Is Nothing OrElse a_node.RM_Class.Type <> StructureType.Element Then
+        If node Is Nothing OrElse node.RM_Class.Type <> StructureType.Element Then
             butRemoveElement.Enabled = False
             butChangeDataType.Hide()
         Else
-            butChangeDataType.Enabled = Not CType(a_node, ArchetypeElement).IsReference
+            butChangeDataType.Enabled = Not CType(node, ArchetypeElement).IsReference
             butChangeDataType.Show()
             butRemoveElement.Enabled = True
 
-            If mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
+            If SpecialisationDepth > 0 Then
                 ' ensure that datatypes cannot be changed in specialisations not at this level
                 'except for any
 
-                Dim equalSpecialisation As Boolean = (mFileManager.OntologyManager.NumberOfSpecialisations = Main.Instance.CountInString(a_node.RM_Class.NodeId, "."))
-
-                If Not equalSpecialisation Then
+                If node.RM_Class.SpecialisationDepth < SpecialisationDepth Then
                     butRemoveElement.Enabled = False
                     butChangeDataType.Hide()
                 End If
 
-                If CType(a_node, ArchetypeElement).Constraint.Type = ConstraintType.Any Then
+                If CType(node, ArchetypeElement).Constraint.Type = ConstraintType.Any Then
                     butChangeDataType.Show()
                 End If
             End If
@@ -772,7 +770,7 @@ Public Class EntryStructure
     Protected Sub SetToolTipSpecialisation(ByVal ctrl As Control, ByVal item As ArchetypeNode)
         If item Is Nothing Then
             ToolTipSpecialisation.RemoveAll()
-        ElseIf mFileManager.OntologyManager.NumberOfSpecialisations > 0 Then
+        ElseIf SpecialisationDepth > 0 Then
             If Not item.IsAnonymous Then
                 Dim ct() As CodeAndTerm = Main.Instance.GetSpecialisationChain(CType(item, ArchetypeNodeAbstract).NodeId, mFileManager)
 
@@ -795,6 +793,12 @@ Public Class EntryStructure
             End If
         End If
     End Sub
+
+    Protected ReadOnly Property SpecialisationDepth() As Integer
+        Get
+            Return mFileManager.OntologyManager.NumberOfSpecialisations
+        End Get
+    End Property
 
     Protected Function ImageIndexForItem(ByVal item As ArchetypeNode, ByVal isSelected As Boolean) As Integer
         Dim result As Integer = 0

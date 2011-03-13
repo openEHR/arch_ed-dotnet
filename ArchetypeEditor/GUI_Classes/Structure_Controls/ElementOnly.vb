@@ -87,11 +87,11 @@ Public Class ElementOnly
     'Do not modify it using the code editor.
     Friend WithEvents PictureBoxSimple As System.Windows.Forms.PictureBox
     Friend WithEvents ContextMenuSimple As System.Windows.Forms.ContextMenu
-    Friend WithEvents MenuSpecialise As System.Windows.Forms.MenuItem
+    Friend WithEvents SpecialiseMenuItem As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.PictureBoxSimple = New System.Windows.Forms.PictureBox
         Me.ContextMenuSimple = New System.Windows.Forms.ContextMenu
-        Me.MenuSpecialise = New System.Windows.Forms.MenuItem
+        Me.SpecialiseMenuItem = New System.Windows.Forms.MenuItem
         Me.lblElement = New System.Windows.Forms.Label
         Me.lblElementOnly = New System.Windows.Forms.Label
         CType(Me.PictureBoxSimple, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -108,12 +108,12 @@ Public Class ElementOnly
         '
         'ContextMenuSimple
         '
-        Me.ContextMenuSimple.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuSpecialise})
+        Me.ContextMenuSimple.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.SpecialiseMenuItem})
         '
         'MenuSpecialise
         '
-        Me.MenuSpecialise.Index = 0
-        Me.MenuSpecialise.Text = "Specialise"
+        Me.SpecialiseMenuItem.Index = 0
+        Me.SpecialiseMenuItem.Text = "Specialise"
         '
         'lblElement
         '
@@ -181,9 +181,9 @@ Public Class ElementOnly
         MyBase.Translate()
     End Sub
 
-    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles MenuSpecialise.Click
+    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
         Dim dlg As New SpecialisationQuestionDialog()
-        dlg.ShowForArchetypeNode(Element.Text, Element.Occurrences, Element.isAnonymous)
+        dlg.ShowForArchetypeNode(Element.Text, Element.RM_Class, SpecialisationDepth)
 
         If dlg.IsSpecialisationRequested Then
             Element.Specialise()
@@ -262,13 +262,13 @@ Public Class ElementOnly
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
         ' show specialisation if appropriate
 
-        Dim i As Integer = Main.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".")
+        SpecialiseMenuItem.Visible = False
 
-        If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-            MenuSpecialise.Text = AE_Constants.Instance.Specialise
-            MenuSpecialise.Visible = True
-        Else
-            MenuSpecialise.Visible = False
+        If Not mCurrentItem Is Nothing Then
+            If mCurrentItem.RM_Class.SpecialisationDepth < SpecialisationDepth Then
+                SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
+                SpecialiseMenuItem.Visible = True
+            End If
         End If
     End Sub
 

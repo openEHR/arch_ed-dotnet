@@ -225,19 +225,19 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Public Overrides Function SpecialiseTerm(ByVal Text As String, ByVal Description As String, ByVal Id As String) As RmTerm
             ' increase the number of specialisations
-            Dim an_Term As New ADL_Term(NextSpecialisedId(Id))
-            an_Term.Text = Text
-            an_Term.Description = Description
-            Me.AddTerm(an_Term)
-            Return an_Term
+            Dim result As New ADL_Term(NextSpecialisedId(Id))
+            result.Text = Text
+            result.Description = Description
+            AddTerm(result)
+            Return result
         End Function
 
-        Public Overrides Sub SetPrimaryLanguage(ByVal LanguageCode As String)
+        Public Overrides Sub SetPrimaryLanguage(ByVal language As String)
             ' sets the primary language of this archetype
             ' if this language is added to the available languages it adds it
 
-            If LanguageCode <> "" And EIF_adlInterface.archetype_available Then
-                EIF_adlInterface.ontology.set_primary_language(Eiffel.String(LanguageCode))
+            If language <> "" And EIF_adlInterface.archetype_available Then
+                EIF_adlInterface.ontology.set_primary_language(Eiffel.String(language))
             End If
         End Sub
 
@@ -250,7 +250,6 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
             Catch e As Exception
                 Debug.Assert(False, e.Message)
-                result = ""
             End Try
 
             Return result

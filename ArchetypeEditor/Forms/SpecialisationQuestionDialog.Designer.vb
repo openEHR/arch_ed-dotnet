@@ -38,7 +38,7 @@ Partial Class SpecialisationQuestionDialog
         Me.YesButton.DialogResult = System.Windows.Forms.DialogResult.Yes
         Me.YesButton.Location = New System.Drawing.Point(15, 64)
         Me.YesButton.Name = "YesButton"
-        Me.YesButton.Size = New System.Drawing.Size(304, 23)
+        Me.YesButton.Size = New System.Drawing.Size(465, 23)
         Me.YesButton.TabIndex = 1
         Me.YesButton.Text = "Yes"
         '
@@ -46,7 +46,7 @@ Partial Class SpecialisationQuestionDialog
         '
         Me.NoButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.NoButton.DialogResult = System.Windows.Forms.DialogResult.No
-        Me.NoButton.Location = New System.Drawing.Point(330, 64)
+        Me.NoButton.Location = New System.Drawing.Point(330, 93)
         Me.NoButton.Name = "NoButton"
         Me.NoButton.Size = New System.Drawing.Size(150, 23)
         Me.NoButton.TabIndex = 3
@@ -59,7 +59,7 @@ Partial Class SpecialisationQuestionDialog
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.QuestionLabel.Location = New System.Drawing.Point(53, 9)
         Me.QuestionLabel.Name = "QuestionLabel"
-        Me.QuestionLabel.Size = New System.Drawing.Size(384, 52)
+        Me.QuestionLabel.Size = New System.Drawing.Size(427, 52)
         Me.QuestionLabel.TabIndex = 0
         Me.QuestionLabel.Text = "Specialise?"
         '

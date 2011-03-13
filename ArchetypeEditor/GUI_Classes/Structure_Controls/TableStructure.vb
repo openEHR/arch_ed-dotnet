@@ -183,7 +183,7 @@ Public Class TableStructure
         'MenuNameSlot
         '
         Me.MenuNameSlot.Index = 2
-        Me.MenuNameSlot.Text = "Name this slot"
+        Me.MenuNameSlot.Text = "Name this Slot"
         '
         'MenuRenameColumn
         '
@@ -225,6 +225,7 @@ Public Class TableStructure
 
     Private Sub AddColumnElement(ByVal an_element As ArchetypeElement)
         mKeyColumns.Add(an_element)
+
         For Each t As String In CType(an_element.Constraint, Constraint_Text).AllowableValues.Codes
             AddColumn(mFileManager.OntologyManager.GetTerm(t))
         Next
@@ -421,17 +422,17 @@ Public Class TableStructure
                     MessageBox.Show(AE_Constants.Instance.CannotSpecialisereference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Else
                     Dim dlg As New SpecialisationQuestionDialog()
-                    dlg.ShowForArchetypeNode(element.Text, element.Occurrences, element.isAnonymous)
+                    dlg.ShowForArchetypeNode(element.Text, element.RM_Class, SpecialisationDepth)
 
                     If dlg.IsSpecialisationRequested Then
                         If dlg.IsCloningRequested Then
-                            Dim new_element As ArchetypeElement = CType(CType(element, ArchetypeElement).Copy, ArchetypeElement)
-                            new_element.Specialise()
+                            Dim newelement As ArchetypeElement = CType(CType(element, ArchetypeElement).Copy, ArchetypeElement)
+                            newelement.Specialise()
 
                             Dim row As DataRow = mArchetypeTable.NewRow
-                            row(1) = new_element.Text
+                            row(1) = newelement.Text
                             mArchetypeTable.Rows.InsertAt(row, dgGrid.CurrentRowIndex + 1)
-                            row(2) = new_element
+                            row(2) = newelement
                             row(0) = ImageIndexForItem(element, False)
 
                             ' go to the new entry
@@ -600,7 +601,6 @@ Public Class TableStructure
         End If
     End Sub
 
-
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles MenuRemoveRow.Click
         Dim rowIndex As Integer = dgGrid.CurrentRowIndex
 
@@ -689,22 +689,19 @@ Public Class TableStructure
         result.AppendLine("</table>")
 
         Return result.ToString
-
     End Function
 
     Private Function TableToHTML(ByVal table As DataTable, ByVal showComments As Boolean) As String
         Dim text As System.Text.StringBuilder = New System.Text.StringBuilder
 
-
-        ' then the rows
         For Each dRow As DataRow In table.Rows
             For i As Integer = 1 To mKeyColumns.Count
                 text.AppendFormat("<tr>{0}</tr>", CType(dRow.Item(2), ArchetypeNode).ToHTML(0, showComments))
             Next
         Next
+
         Return text.ToString()
     End Function
-
 
     Public Overrides Function ToRichText(ByVal indentlevel As Integer, ByVal new_line As String) As String
         Dim i, col_width As Integer
@@ -792,17 +789,19 @@ Public Class TableStructure
             d_row(0) = ImageIndexForItem(CType(d_row.Item(2), ArchetypeNode), False)
             d_row.EndEdit()
         End If
+
         dgGrid.Refresh()
     End Sub
 
     Private Function GetImageIndexForRow(ByVal row As Integer) As Integer
         Dim i As Integer
         i = CInt(mArchetypeTable.Rows(row).Item(0))
+
         If dgGrid.CurrentRowIndex = row Then
             i += Me.SelectedImageOffset
         End If
-        Return i
 
+        Return i
     End Function
 
     Private Function MakeArchetypeTable() As DataTable
@@ -826,9 +825,7 @@ Public Class TableStructure
         Return ArchTab
     End Function
 
-
     Private Sub SetArchetypeTable()
-
         mArchetypeTable = MakeArchetypeTable()
 
         'TableArchetypeStyle
@@ -869,94 +866,73 @@ Public Class TableStructure
     End Sub
 
     Private Sub MenuRenameColumn_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuRenameColumn.Click
-        Dim label As String
-        Dim i As Integer
-
-        i = Me.dgGrid.CurrentCell.ColumnNumber
-        label = Me.TableArchetypeStyle.GridColumnStyles(i).HeaderText
+        Dim i As Integer = dgGrid.CurrentCell.ColumnNumber
+        Dim label As String = TableArchetypeStyle.GridColumnStyles(i).HeaderText
 
         If i < 1 Then
             MessageBox.Show(AE_Constants.Instance.Cannot_rename & "'" & label & "'", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Return
+        Else
+            Dim s() As String = Main.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'", AE_Constants.Instance.Description, ParentForm)
+
+            If s(0) <> "" Then
+                Dim newTerm As RmTerm = New RmTerm(mArchetypeTable.Columns(i + 1).ColumnName)
+                newTerm.Text = s(0)
+                newTerm.Description = s(1)
+                mFileManager.OntologyManager.SetRmTermText(newTerm)
+                TableArchetypeStyle.GridColumnStyles(i).HeaderText = s(0)
+                TableArchetypeStyle.GridColumnStyles(i).NullText = "(" & s(0) & ")"
+                dgGrid.Refresh()
+            End If
         End If
-
-        Dim s() As String
-
-        s = Main.Instance.GetInput(AE_Constants.Instance.New_name & "'" & label & "'", AE_Constants.Instance.Description, Me.ParentForm)
-
-        If s(0) <> "" Then
-            ' HKF: 1613
-            'Dim ArchCol As ArchetypeColumn
-            Dim newTerm As RmTerm = New RmTerm(mArchetypeTable.Columns(i + 1).ColumnName)
-            newTerm.Text = s(0)
-            newTerm.Description = s(1)
-            mFileManager.OntologyManager.SetRmTermText(newTerm)
-            'Dim ArchCol As ArchetypeComposite
-            'ArchCol = CType(mArchetypeTable.Rows(0).Item(i * 2), ArchetypeComposite)
-            'ArchCol.Text = s(0)
-            'ArchCol.Description = s(1)
-            Me.TableArchetypeStyle.GridColumnStyles(i).HeaderText = s(0)
-            Me.TableArchetypeStyle.GridColumnStyles(i).NullText = "(" & s(0) & ")"
-            Me.dgGrid.Refresh()
-        End If
-
     End Sub
 
     Private Sub ContextMenuGrid_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuGrid.Popup
         ContextMenuGrid.MenuItems.Clear()
 
         Dim hasRemoveMenu As Boolean = False
+        MenuRemoveColumn.Visible = False
+        MenuRemoveRow.Visible = False
 
-        Me.MenuRemoveColumn.Visible = False
-        Me.MenuRemoveRow.Visible = False
-
-        If (Me.dgGrid.CurrentCell.ColumnNumber > 1) Then
-            Me.MenuRename.Text = Filemanager.GetOpenEhrTerm(325, "Rename")
-            Me.MenuRenameColumn.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(164, "Column"), Me.TableArchetypeStyle.GridColumnStyles(Me.dgGrid.CurrentCell.ColumnNumber).HeaderText)
-            ContextMenuGrid.MenuItems.Add(Me.MenuRename)
-            ContextMenuGrid.MenuItems.Add(Me.MenuRemoveColumnOrRow)
+        If dgGrid.CurrentCell.ColumnNumber > 1 Then
+            MenuRename.Text = Filemanager.GetOpenEhrTerm(325, "Rename")
+            MenuRenameColumn.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(164, "Column"), TableArchetypeStyle.GridColumnStyles(dgGrid.CurrentCell.ColumnNumber).HeaderText)
+            ContextMenuGrid.MenuItems.Add(MenuRename)
+            ContextMenuGrid.MenuItems.Add(MenuRemoveColumnOrRow)
             hasRemoveMenu = True
             MenuRemoveColumn.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(164, "Column"), MenuRenameColumn.Text)
-            Me.MenuRemoveColumn.Visible = True
-            ContextMenuGrid.MenuItems.Add(Me.MenuRemoveColumnOrRow)
+            MenuRemoveColumn.Visible = True
+            ContextMenuGrid.MenuItems.Add(MenuRemoveColumnOrRow)
         End If
-        If Me.dgGrid.CurrentRowIndex > -1 Then
+
+        If dgGrid.CurrentRowIndex > -1 Then
             If Not hasRemoveMenu Then
-                ContextMenuGrid.MenuItems.Add(Me.MenuRemoveColumnOrRow)
+                ContextMenuGrid.MenuItems.Add(MenuRemoveColumnOrRow)
             End If
-            Me.MenuRemoveRow.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(163, "Row"), CStr(Me.dgGrid.Item(Me.dgGrid.CurrentRowIndex, 1)))
-            Me.MenuRemoveRow.Visible = True
+
+            MenuRemoveRow.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(163, "Row"), CStr(dgGrid.Item(dgGrid.CurrentRowIndex, 1)))
+            MenuRemoveRow.Visible = True
         End If
 
         If mFileManager.OntologyManager.Ontology.NumberOfSpecialisations = 0 Then
-            ContextMenuGrid.MenuItems.Add(Me.menuChangeStructure)
+            ContextMenuGrid.MenuItems.Add(menuChangeStructure)
         End If
-
     End Sub
 
     Private Sub dgGrid_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles dgGrid.MouseMove
         Dim myHitInfo As DataGrid.HitTestInfo = dgGrid.HitTest(e.X, e.Y)
-        Dim i As Integer
+        Dim i As Integer = myHitInfo.Row - 1
 
-        i = myHitInfo.Row - 1
         If i > -1 Then
-            SetToolTipSpecialisation(Me.dgGrid, CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode))
+            SetToolTipSpecialisation(dgGrid, CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode))
         End If
     End Sub
 
     Private Sub dgGrid_CurrentCellChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles dgGrid.CurrentCellChanged
         ' arises when moves to new cell
-        Dim i As Integer
         If mIsRotated Then
-            Dim element As ArchetypeNode
-
-            i = Me.dgGrid.CurrentCell.RowNumber
-            element = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode)
-            If TypeOf element Is ArchetypeNodeAnonymous AndAlso element.RM_Class.Type = Global.ArchetypeEditor.StructureType.Slot Then
-                MenuNameSlot.Visible = True
-            Else
-                MenuNameSlot.Visible = False
-            End If
+            Dim i As Integer = dgGrid.CurrentCell.RowNumber
+            Dim element As ArchetypeNode = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNode)
+            MenuNameSlot.Visible = TypeOf element Is ArchetypeNodeAnonymous AndAlso element.RM_Class.Type = Global.ArchetypeEditor.StructureType.Slot
             SetCurrentItem(element)
         Else
             Debug.Assert(False, "TODO")
@@ -990,13 +966,11 @@ Public Class TableStructure
 
             If archetype_node.RM_Class.Type = StructureType.Element Then
                 Dim element As ArchetypeElement = CType(archetype_node, ArchetypeElement)
-                Dim i As Integer = Main.Instance.CountInString(element.NodeId, ".")
 
-                If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                If element.RM_Class.SpecialisationDepth < SpecialisationDepth Then
                     SpecialiseCurrentItem(sender, e)
-                    i = Main.Instance.CountInString(element.NodeId, ".")
 
-                    If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                    If element.RM_Class.SpecialisationDepth < SpecialisationDepth Then
                         e.ProposedValue = element.Text
                     End If
                 End If

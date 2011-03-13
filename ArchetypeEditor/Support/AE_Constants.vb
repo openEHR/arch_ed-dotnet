@@ -26,9 +26,9 @@ Public Class AE_Constants
     Private mReduceTableToSimpleValue As String = "Reduce table to single value"
     Private mChooseMenuFileNew As String = "Choose Menu > File > New"
     Private mAndAllReferences As String = "and all references"
-    Private mExpandAll As String = "Expand all"
-    Private mCollapseAll As String = "Collapse all"
-    Private mAddReference As String = "Add reference"
+    Private mExpandAll As String = "Expand All"
+    Private mCollapseAll As String = "Collapse All"
+    Private mAddReference As String = "Add Reference"
     Private mMessageBoxCaption As String = "Archetype Editor"
     Private mYouHaveChosenALanguage As String = "You have chosen a language "
     Private mAddTerminology As String = "Add terminology"
@@ -110,7 +110,7 @@ Public Class AE_Constants
     Private mCurrency As String = "Currency"
     Private mIdentifier As String = "Identifier"
     Private mNoEmbeddedArchetypeMatches As String = "No embedded archetype matches {0}"
-    Private mNameThisSlot As String = "Name this slot"
+    Private mNameThisSlot As String = "Name this Slot"
     Private mNameThisSlotQuestion As String = "Name this slot?"
     Private mReplaceExistingFileQuestion As String = "File {0} already exists. Do you want to replace it?"
     Private mParsable As String = "Parsable"
@@ -339,22 +339,22 @@ Public Class AE_Constants
             Return mChooseMenuFileNew
         End Get
     End Property
-    Friend ReadOnly Property All_References() As String
+    Friend ReadOnly Property AllReferences() As String
         Get
             Return mAndAllReferences
         End Get
     End Property
-    Friend ReadOnly Property Expand_All() As String
+    Friend ReadOnly Property ExpandAll() As String
         Get
             Return mExpandAll
         End Get
     End Property
-    Friend ReadOnly Property Collapse_All() As String
+    Friend ReadOnly Property CollapseAll() As String
         Get
             Return mCollapseAll
         End Get
     End Property
-    Friend ReadOnly Property Add_Reference() As String
+    Friend ReadOnly Property AddReference() As String
         Get
             Return mAddReference
         End Get

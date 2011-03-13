@@ -243,26 +243,28 @@ Public Class OntologyManager
     End Function
 
     Public Function SpecialiseTerm(ByVal text As String, ByVal description As String, ByVal id As String) As RmTerm
+        Dim split As String() = id.Split("."c)
+        Dim specialisationDepth As Integer = split.Length - 1
+
+        If specialisationDepth = NumberOfSpecialisations Then
+            id = split(0)
+
+            For i As Integer = 1 To specialisationDepth - 1
+                id = id + "." + split(i)
+            Next
+        End If
+
         Dim result As RmTerm = mOntology.SpecialiseTerm(text, description, id)
         UpdateTerm(result)
         Return result
     End Function
 
-    Public Function SpecialiseTerm(ByVal term As RmTerm) As RmTerm
-        Dim result As RmTerm = mOntology.SpecialiseTerm(term.Text & "**", term.Description, term.Code)
-        UpdateTerm(result)
-        Return result
-    End Function
-
-    Public Function SpecialiseTerm(ByVal a_term_code As String) As RmTerm
+    Public Function SpecialiseNameConstraint(ByVal a_term_code As String) As RmTerm
         Dim result As RmTerm = Nothing
-        Dim a_term As RmTerm
+        Dim term As RmTerm = mOntology.TermForCode(a_term_code, mLanguageCode)
 
-        a_term = mOntology.TermForCode(a_term_code, mLanguageCode)
-
-        If Not a_term Is Nothing Then
-            result = mOntology.SpecialiseTerm(a_term.Text & "**", a_term.Description, a_term.Code)
-            UpdateTerm(result)
+        If Not term Is Nothing Then
+            result = SpecialiseTerm(term.Text & "**", term.Description, term.Code)
         End If
 
         Return result
@@ -299,7 +301,7 @@ Public Class OntologyManager
             term.Description = "*"
         End If
 
-        If term.isConstraint Then
+        If term.IsConstraint Then
             For Each l_row In mLanguagesTable.Rows
                 d_row = mConstraintDefinitionsTable.NewRow
                 d_row(0) = l_row(0)

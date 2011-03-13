@@ -938,6 +938,7 @@ Public Class TabpageHistory
                 MyBase.Text = Value
             End Set
         End Property
+
         Public Property hasNameConstraint() As Boolean
             Get
                 Return element.HasNameConstraint
@@ -946,6 +947,7 @@ Public Class TabpageHistory
                 element.HasNameConstraint = Value
             End Set
         End Property
+
         Public Property NameConstraint() As Constraint_Text
             Get
                 Return element.NameConstraint
@@ -954,6 +956,7 @@ Public Class TabpageHistory
                 element.NameConstraint = Value
             End Set
         End Property
+
         Public Shadows Property Selected() As Boolean
             Get
                 Return MyBase.Selected()
@@ -965,6 +968,7 @@ Public Class TabpageHistory
                 SetImageIndex()
             End Set
         End Property
+
         Public Property Description() As String
             Get
                 Return sDescription
@@ -974,6 +978,7 @@ Public Class TabpageHistory
                 mFileManager.OntologyManager.SetDescription(Value, element.NodeId)
             End Set
         End Property
+
         Public Property EventType() As RmEvent.ObservationEventType
             Get
                 Return element.EventType
@@ -983,6 +988,7 @@ Public Class TabpageHistory
                 SetImageIndex()
             End Set
         End Property
+
         Public Property Offset() As Integer
             Get
                 Return element.Offset
@@ -991,6 +997,7 @@ Public Class TabpageHistory
                 element.Offset = Value
             End Set
         End Property
+
         Public Property OffsetUnits() As String
             Get
                 Return element.OffsetUnits
@@ -999,6 +1006,7 @@ Public Class TabpageHistory
                 element.OffsetUnits = Value
             End Set
         End Property
+
         Public Property Width() As Integer
             Get
                 Return CInt(element.Width)
@@ -1007,6 +1015,7 @@ Public Class TabpageHistory
                 element.Width = Value
             End Set
         End Property
+
         Public Property WidthUnits() As String
             Get
                 Return element.WidthUnits
@@ -1030,6 +1039,7 @@ Public Class TabpageHistory
                 Return element.EventType = RmEvent.ObservationEventType.Interval AndAlso Not element.AggregateMathFunction Is Nothing AndAlso element.AggregateMathFunction.Codes.Count > 0
             End Get
         End Property
+
         Public Property hasFixedOffset() As Boolean
             Get
                 Return element.hasFixedOffset
@@ -1038,6 +1048,7 @@ Public Class TabpageHistory
                 element.hasFixedOffset = Value
             End Set
         End Property
+
         Public Property hasFixedWidth() As Boolean
             Get
                 Return element.hasFixedDuration
@@ -1046,11 +1057,13 @@ Public Class TabpageHistory
                 element.hasFixedDuration = Value
             End Set
         End Property
+
         Public ReadOnly Property RM_Class() As RmStructure
             Get
                 Return element
             End Get
         End Property
+
         Public Property Occurrences() As RmCardinality
             Get
                 Return element.Occurrences
@@ -1059,28 +1072,30 @@ Public Class TabpageHistory
                 element.Occurrences = Value
             End Set
         End Property
+
         Public ReadOnly Property Id() As String
             Get
                 Id = element.NodeId
             End Get
         End Property
+
         Public ReadOnly Property TypeName() As String
             Get
                 ' has to be an element as it is in a list
                 Return element.TypeName
             End Get
         End Property
+
         Public ReadOnly Property IsMandatory() As Boolean
             Get
-                Return (element.Occurrences.MinCount > 0)
+                Return element.Occurrences.MinCount > 0
             End Get
         End Property
 
         Public Sub Translate()
-            Dim a_Term As RmTerm
-            a_Term = mFileManager.OntologyManager.GetTerm(element.NodeId)
-            MyBase.Text = a_Term.Text
-            sDescription = a_Term.Description
+            Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(element.NodeId)
+            MyBase.Text = term.Text
+            sDescription = term.Description
         End Sub
 
         Public Function Copy() As EventListViewItem
@@ -1095,7 +1110,7 @@ Public Class TabpageHistory
             element.NodeId = term.Code
 
             If element.HasNameConstraint Then
-                element.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseTerm(element.NameConstraint.ConstraintCode).Code
+                element.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseNameConstraint(element.NameConstraint.ConstraintCode).Code
             End If
 
             mFileManager.FileEdited = True
@@ -1122,31 +1137,24 @@ Public Class TabpageHistory
             MyBase.New()
             mFileManager = a_filemanager
             MyBase.Text = Text
-
-            Dim a_Term As RmTerm
-            a_Term = mFileManager.OntologyManager.AddTerm(Text)
-            element = New RmEvent(a_Term.Code)
+            Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(Text)
+            element = New RmEvent(term.Code)
             sDescription = "*"
         End Sub
 
         Sub New(ByVal an_event As RmEvent, ByVal a_filemanager As FileManagerLocal)
             MyBase.New()
             mFileManager = a_filemanager
-
-            Dim a_Term As RmTerm
-
             element = an_event
-            a_Term = mFileManager.OntologyManager.GetTerm(an_event.NodeId)
-            MyBase.Text = a_Term.Text
-            sDescription = a_Term.Description
+            Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(an_event.NodeId)
+            MyBase.Text = term.Text
+            sDescription = term.Description
             SetImageIndex()
         End Sub
 
         Sub New(ByVal elvi As EventListViewItem, ByVal a_filemanager As FileManagerLocal)
             MyBase.New()
-
             mFileManager = a_filemanager
-
             MyBase.Text = elvi.Text
             sDescription = elvi.Description
             ' need to copy here as may be a copy process
@@ -1319,10 +1327,7 @@ Public Class TabpageHistory
             SpecialiseToolStripMenuItem.Visible = False
 
             If Not currentItem Is Nothing Then
-                Dim i As Integer = Main.Instance.CountInString(currentItem.RM_Class.NodeId, ".")
-                Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
-
-                If i < numberSpecialisations Then
+                If currentItem.RM_Class.SpecialisationDepth < mFileManager.OntologyManager.NumberOfSpecialisations Then
                     SpecialiseToolStripMenuItem.Visible = True
                 End If
             End If
@@ -1572,7 +1577,7 @@ Public Class TabpageHistory
     Private Sub SpecialiseToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles SpecialiseToolStripMenuItem.Click
         If Not currentItem Is Nothing Then
             Dim dlg As New SpecialisationQuestionDialog()
-            dlg.ShowForArchetypeNode(currentItem.Text, currentItem.Occurrences, False)
+            dlg.ShowForArchetypeNode(currentItem.Text, currentItem.RM_Class, mFileManager.OntologyManager.NumberOfSpecialisations)
 
             If dlg.IsSpecialisationRequested Then
                 If dlg.IsCloningRequested Then

@@ -450,54 +450,35 @@ Public Class Main
         End Try
 
         Return Nothing
-
     End Function
 
+    Public Function GetSpecialisationChain(ByVal nodeId As String, ByVal fileManager As FileManagerLocal) As CodeAndTerm()
+        Dim result(nodeId.Length) As CodeAndTerm
+        Dim length As Integer = 0
+        Dim start As Integer = 1
 
-    Public Function CountInString(ByVal String1 As String, ByVal string2 As String) As Integer ' returns the number of occurences
-        Dim counter As Integer
-        Dim i As Integer = InStr(String1, string2)
-        While i > 0
-            counter += 1
-            String1 = Mid(String1, i + 1)
-            i = InStr(String1, string2)
-        End While
+        While start > 0
+            Dim ct As New CodeAndTerm
+            start = InStr(start, nodeId, ".")
 
-        Return counter
-
-    End Function
-
-    Public Function GetSpecialisationChain(ByVal Id As String, ByVal a_filemanager As FileManagerLocal) As CodeAndTerm()
-        Dim i, start, n As Integer
-        n = CountInString(Id, ".")
-        Dim ct(n) As CodeAndTerm
-        Dim counter As Integer
-        start = 1
-        For i = 0 To n
-            Dim a_ct As New CodeAndTerm
-            start = InStr(start, Id, ".")
             If start > 0 Then
-                a_ct.Code = Mid(Id, 1, start - 1)
+                ct.Code = Mid(nodeId, 1, start - 1)
+                start += 1
             Else
-                a_ct.Code = Id
+                ct.Code = nodeId
             End If
 
             'catch the fragments that represent no term at that level of specialisation
-            ' these will be AT0.# etc
-            ' or AT0003.0.#
-            If a_ct.Code = "AT0" Or a_ct.Code = "at0" Or a_ct.Code.EndsWith(".0") Then
-                ReDim ct(ct.Length - 2)
-            Else
-                Dim a_Term As RmTerm
-
-                a_Term = a_filemanager.OntologyManager.GetTerm(a_ct.Code)
-                a_ct.Text = a_Term.Text
-                ct(counter) = a_ct
-                counter += 1
+            ' these will be AT0.# or AT0003.0.#, etc.
+            If ct.Code <> "AT0" And ct.Code <> "at0" And Not ct.Code.EndsWith(".0") Then
+                ct.Text = fileManager.OntologyManager.GetTerm(ct.Code).Text
+                result(length) = ct
+                length += 1
             End If
-            start += 1
-        Next
-        Return ct
+        End While
+
+        ReDim Preserve result(length - 1)
+        Return result
     End Function
 
     Public ReadOnly Property UnitsTable() As DataTable

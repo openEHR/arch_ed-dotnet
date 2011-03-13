@@ -20,7 +20,6 @@ Public MustInherit Class ArchetypeNodeAbstract
     Implements ArchetypeNode
 
     Protected mFileManager As FileManagerLocal
-
     Protected mText As String
     Protected mDescription As String
     Protected mComment As String
@@ -33,35 +32,39 @@ Public MustInherit Class ArchetypeNodeAbstract
         End Get
         Set(ByVal Value As String)
             mText = Value
-            mFileManager.OntologyManager.SetText(Value, mItem.NodeId)
+            mFileManager.OntologyManager.SetText(Value, NodeId)
             mFileManager.FileEdited = True
         End Set
     End Property
+
     Public Shadows ReadOnly Property RM_Class() As RmStructure Implements ArchetypeNode.RM_Class
         Get
             Return mItem
         End Get
     End Property
+
     Public Property Description() As String
         Get
             Return mDescription
         End Get
         Set(ByVal Value As String)
             mDescription = Value
-            mFileManager.OntologyManager.SetDescription(Value, mItem.NodeId)
+            mFileManager.OntologyManager.SetDescription(Value, NodeId)
             mFileManager.FileEdited = True
         End Set
     End Property
+
     Public Property Comment() As String
         Get
             Return mComment
         End Get
         Set(ByVal Value As String)
             mComment = Value
-            mFileManager.OntologyManager.SetComment(Value, mItem.NodeId)
+            mFileManager.OntologyManager.SetComment(Value, NodeId)
             mFileManager.FileEdited = True
         End Set
     End Property
+
     Public ReadOnly Property Annotations() As System.Collections.SortedList
         Get
             Return mAnnotations
@@ -77,6 +80,7 @@ Public MustInherit Class ArchetypeNodeAbstract
             End If
         End Get
     End Property
+
     Public ReadOnly Property NameConstraint() As Constraint_Text
         Get
             Return mItem.NameConstraint
@@ -94,24 +98,27 @@ Public MustInherit Class ArchetypeNodeAbstract
             mItem.Occurrences = Value
         End Set
     End Property
+
     Public ReadOnly Property IsMandatory() As Boolean Implements ArchetypeNode.IsMandatory
         Get
-            Return (mItem.Occurrences.MinCount > 0)
+            Return Occurrences.MinCount > 0
         End Get
     End Property
-    Public ReadOnly Property NodeId() As String
-        Get
-            Return mItem.NodeId
-        End Get
-    End Property
-    Public ReadOnly Property isAnonymous() As Boolean Implements ArchetypeNode.IsAnonymous
+
+    Public ReadOnly Property IsAnonymous() As Boolean Implements ArchetypeNode.IsAnonymous
         Get
             Return False
         End Get
     End Property
 
+    Public ReadOnly Property NodeId() As String
+        Get
+            Return mItem.NodeId
+        End Get
+    End Property
+
     Private Overloads Function CopyArchetypeNode() As ArchetypeNode
-        Return Me.Copy
+        Return Copy()
     End Function
 
     Public MustOverride Function Copy() As ArchetypeNode Implements ArchetypeNode.Copy
@@ -121,28 +128,22 @@ Public MustInherit Class ArchetypeNodeAbstract
     Public MustOverride Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String Implements ArchetypeNode.ToHTML
 
     Public Sub Translate() Implements ArchetypeNode.Translate
-        Dim aTerm As RmTerm
-
-        aTerm = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
-        mText = aTerm.Text
-        mDescription = aTerm.Description
-        mComment = aTerm.Comment
+        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(NodeId)
+        mText = term.Text
+        mDescription = term.Description
+        mComment = term.Comment
     End Sub
 
     Public Sub Specialise()
-        Dim aTerm As RmTerm
-
         mText = "! - " & mText
-        aTerm = mFileManager.OntologyManager.SpecialiseTerm(mText, mDescription, mItem.NodeId)
-        mItem.NodeId = aTerm.Code
-        ' if there is a constraint on the runtime name this will
-        ' have to be specialised as well
-        If mItem.HasNameConstraint Then
-            If mItem.NameConstraint.TypeOfTextConstraint = TextConstrainType.Terminology Then
-                aTerm = mFileManager.OntologyManager.SpecialiseTerm(mItem.NameConstraint.ConstraintCode)
-                mItem.NameConstraint.ConstraintCode = aTerm.Code
-            End If
+        Dim term As RmTerm = mFileManager.OntologyManager.SpecialiseTerm(mText, mDescription, NodeId)
+        mItem.NodeId = term.Code
+
+        If mItem.HasNameConstraint And mItem.NameConstraint.TypeOfTextConstraint = TextConstrainType.Terminology Then
+            mItem.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseNameConstraint(mItem.NameConstraint.ConstraintCode).Code
         End If
+
+        mFileManager.FileEdited = True
     End Sub
 
     Public Overrides Function ToString() As String

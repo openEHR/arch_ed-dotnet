@@ -31,21 +31,25 @@ Public Class ArchetypeNodeAnonymous
             Debug.Assert(False)
         End Set
     End Property
-    Public ReadOnly Property isAnonymous() As Boolean Implements ArchetypeNode.IsAnonymous
+
+    Public ReadOnly Property IsAnonymous() As Boolean Implements ArchetypeNode.IsAnonymous
         Get
             Return True
         End Get
     End Property
+
     Public ReadOnly Property IsReference() As Boolean Implements ArchetypeNode.IsReference
         Get
             Return False
         End Get
     End Property
+
     Public ReadOnly Property HasReferences() As Boolean Implements ArchetypeNode.HasReferences
         Get
             Return False
         End Get
     End Property
+
     Public Property Occurrences() As RmCardinality Implements ArchetypeNode.Occurrences
         Get
             Return mRMStructure.Occurrences
@@ -54,11 +58,13 @@ Public Class ArchetypeNodeAnonymous
             mRMStructure.Occurrences = Value
         End Set
     End Property
+
     Public ReadOnly Property IsMandatory() As Boolean Implements ArchetypeNode.IsMandatory
         Get
             Return (mRMStructure.Occurrences.MinCount > 0)
         End Get
     End Property
+
     Public ReadOnly Property RM_Class() As RmStructure Implements ArchetypeNode.RM_Class
         Get
             Return mRMStructure
@@ -124,14 +130,15 @@ Public Class ArchetypeNodeAnonymous
                     s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
                 Next
             End If
+
             Return s
         End If
+
         Return ""
     End Function
 
     Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String Implements ArchetypeNode.ToHTML
         Dim s As String
-
 
         If mRMStructure.Type = StructureType.Slot Then
             Dim slot_constraint As Constraint_Slot
@@ -198,17 +205,15 @@ Public Class ArchetypeNodeAnonymous
             s &= "</tr>"
             Return s
         End If
+
         Return ""
     End Function
 
-
     Public Function Copy() As ArchetypeNode Implements ArchetypeNode.Copy
-        Dim an_anon As New ArchetypeNodeAnonymous
-
-        an_anon.mRMStructure = Me.mRMStructure.Copy
-        an_anon.mText = Me.mText
-        Return an_anon
-
+        Dim result As New ArchetypeNodeAnonymous
+        result.mRMStructure = Me.mRMStructure.Copy
+        result.mText = Me.mText
+        Return result
     End Function
 
     Sub New()
@@ -234,6 +239,7 @@ Public Class ArchetypeNodeAnonymous
         mRMStructure = a_slot
         Translate()
     End Sub
+
 End Class
 
 '

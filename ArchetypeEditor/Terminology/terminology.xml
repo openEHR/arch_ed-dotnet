@@ -1041,9 +1041,9 @@
   <Concept Language="en" ConceptID="278" Rubric="Constants" />
   <Concept Language="en" ConceptID="279" Rubric="Choose Menu &gt; File &gt; New  or press the [New] toolbar button to start again" />
   <Concept Language="en" ConceptID="280" Rubric=" and all references" />
-  <Concept Language="en" ConceptID="281" Rubric="Expand all" />
-  <Concept Language="en" ConceptID="282" Rubric="Collapse all" />
-  <Concept Language="en" ConceptID="283" Rubric="Add reference" />
+  <Concept Language="en" ConceptID="281" Rubric="Expand All" />
+  <Concept Language="en" ConceptID="282" Rubric="Collapse All" />
+  <Concept Language="en" ConceptID="283" Rubric="Add Reference" />
   <Concept Language="en" ConceptID="284" Rubric="Archetype Editor" />
   <Concept Language="en" ConceptID="285" Rubric="You have chosen a language that is not fully translated - Do you want to populate the Terminology section?" />
   <Concept Language="en" ConceptID="286" Rubric="Language addition cancelled" />
@@ -1381,7 +1381,7 @@
   <Concept Language="en" ConceptID="672" Rubric="Name this slot?" />
   <Concept Language="en" ConceptID="673" Rubric="Item" />
   <Concept Language="en" ConceptID="674" Rubric="Care entry" />
-  <Concept Language="en" ConceptID="675" Rubric="Name this slot" />
+  <Concept Language="en" ConceptID="675" Rubric="Name this Slot" />
   <Concept Language="en" ConceptID="676" Rubric="Transition" />
   <Concept Language="en" ConceptID="677" Rubric="Allow transition to" />
   <Concept Language="en" ConceptID="678" Rubric="Allow an alternative state for this action" />
@@ -2595,7 +2595,7 @@
   <Concept Language="de" ConceptID="672" Rubric="Diesen Slot bennenen?" />
   <Concept Language="de" ConceptID="673" Rubric="Item" />
   <Concept Language="de" ConceptID="674" Rubric="Versorgungseintrag (Care entry)" />
-  <Concept Language="de" ConceptID="675" Rubric="*Name this slot (en)" />
+  <Concept Language="de" ConceptID="675" Rubric="Diesen Slot bennenen" />
   <Concept Language="de" ConceptID="676" Rubric="Übergang" />
   <Concept Language="de" ConceptID="677" Rubric="Erlaube Übergang nach " />
   <Concept Language="de" ConceptID="678" Rubric="Alternativen Status für diese Aktion erlauben" />

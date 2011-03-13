@@ -173,12 +173,15 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Public Overrides Function NextTermId() As String
+            Dim result As String = ""
+
             Try
-                Return archetypeParser.Ontology.NextTermId()
+                result = archetypeParser.Ontology.NextTermId()
             Catch e As Exception
                 Debug.Assert(False, e.Message)
-                Return ""
             End Try
+
+            Return result
         End Function
 
         Public Overrides Function NextConstraintId() As String

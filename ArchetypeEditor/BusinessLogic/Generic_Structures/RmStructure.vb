@@ -80,6 +80,7 @@ Public Class RmStructure
             Return mType
         End Get
     End Property
+
     Public Property NameConstraint() As Constraint_Text Implements ArcheTypeDefinitionBasic.NameConstraint
         Get
             If mRunTimeConstraint Is Nothing Then
@@ -91,6 +92,7 @@ Public Class RmStructure
             mRunTimeConstraint = Value
         End Set
     End Property
+
     Public Property Links() As System.Collections.Generic.List(Of RmLink) Implements ArcheTypeDefinitionBasic.RootLinks
         Get
             Return mLinks
@@ -99,6 +101,7 @@ Public Class RmStructure
             mLinks = value
         End Set
     End Property
+
     Public Property HasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.hasNameConstraint
         Get
             Return Not mRunTimeConstraint Is Nothing
@@ -113,6 +116,7 @@ Public Class RmStructure
             End If
         End Set
     End Property
+
     Public Property NodeId() As String Implements ArcheTypeDefinitionBasic.RootNodeId
         Get
             Return sNodeId
@@ -121,6 +125,7 @@ Public Class RmStructure
             sNodeId = Value
         End Set
     End Property
+
     Public Property Occurrences() As RmCardinality
         Get
             Return cOccurrences
@@ -130,7 +135,7 @@ Public Class RmStructure
         End Set
     End Property
 
-    Public Property Existence() As RmExistence 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+    Public Property Existence() As RmExistence
         Get
             Return cExistence
         End Get
@@ -139,22 +144,31 @@ Public Class RmStructure
         End Set
     End Property
 
+    Public ReadOnly Property SpecialisationDepth() As Integer
+        Get
+            Return NodeId.Split("."c).Length - 1
+        End Get
+    End Property
+
     Public Overridable Function HasLinks() As Boolean
         For Each l As RmLink In mLinks
             If l.HasConstraint Then
                 Return True
             End If
         Next
+
         Return False
     End Function
 
     Public Overridable Function Copy() As RmStructure
-        Dim rm As New RmStructure(sNodeId, mType)
-        rm.cOccurrences = Me.cOccurrences.Copy
-        If Not Me.mRunTimeConstraint Is Nothing Then
-            rm.mRunTimeConstraint = Me.mRunTimeConstraint.Copy
+        Dim result As New RmStructure(sNodeId, mType)
+        result.cOccurrences = cOccurrences.Copy
+
+        If Not mRunTimeConstraint Is Nothing Then
+            result.mRunTimeConstraint = mRunTimeConstraint.Copy
         End If
-        Return rm
+
+        Return result
     End Function
 
     Sub New(ByRef Archetype As Archetype)

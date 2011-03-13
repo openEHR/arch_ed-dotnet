@@ -32,7 +32,6 @@ Public Class SimpleStructure
         If Not Me.DesignMode Then
             Debug.Assert(False)
         End If
-
     End Sub
 
     Public Sub New(ByVal a_file_manager As FileManagerLocal)
@@ -42,7 +41,6 @@ Public Class SimpleStructure
         InitializeComponent()
         'Add any initialization after the InitializeComponent() call
         mFileManager.FileEdited = True
-
     End Sub
 
     Sub New(ByVal rm As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)
@@ -89,12 +87,12 @@ Public Class SimpleStructure
     Friend WithEvents PictureBoxSimple As System.Windows.Forms.PictureBox
     Friend WithEvents txtSimple As System.Windows.Forms.TextBox
     Friend WithEvents ContextMenuSimple As System.Windows.Forms.ContextMenu
-    Friend WithEvents MenuSpecialise As System.Windows.Forms.MenuItem
+    Friend WithEvents SpecialiseMenuItem As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.PictureBoxSimple = New System.Windows.Forms.PictureBox
         Me.txtSimple = New System.Windows.Forms.TextBox
         Me.ContextMenuSimple = New System.Windows.Forms.ContextMenu
-        Me.MenuSpecialise = New System.Windows.Forms.MenuItem
+        Me.SpecialiseMenuItem = New System.Windows.Forms.MenuItem
         CType(Me.PictureBoxSimple, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -118,12 +116,12 @@ Public Class SimpleStructure
         '
         'ContextMenuSimple
         '
-        Me.ContextMenuSimple.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuSpecialise})
+        Me.ContextMenuSimple.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.SpecialiseMenuItem})
         '
         'MenuSpecialise
         '
-        Me.MenuSpecialise.Index = 0
-        Me.MenuSpecialise.Text = "Specialise"
+        Me.SpecialiseMenuItem.Index = 0
+        Me.SpecialiseMenuItem.Text = "Specialise"
         '
         'SimpleStructure
         '
@@ -218,7 +216,7 @@ Public Class SimpleStructure
 
         If Not element Is Nothing Then
             Dim dlg As New SpecialisationQuestionDialog()
-            dlg.ShowForArchetypeNode(element.Text, element.Occurrences, element.isAnonymous)
+            dlg.ShowForArchetypeNode(element.Text, element.RM_Class, SpecialisationDepth)
 
             If dlg.IsSpecialisationRequested Then
                 element.Specialise()
@@ -328,11 +326,13 @@ Public Class SimpleStructure
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
         ' show specialisation if appropriate
 
-        If mCurrentItem Is Nothing OrElse Main.Instance.CountInString(mCurrentItem.RM_Class.NodeId, ".") >= mFileManager.OntologyManager.NumberOfSpecialisations Then
-            MenuSpecialise.Visible = False
-        Else
-            MenuSpecialise.Text = AE_Constants.Instance.Specialise
-            MenuSpecialise.Visible = True
+        SpecialiseMenuItem.Visible = False
+
+        If Not mCurrentItem Is Nothing Then
+            If mCurrentItem.RM_Class.SpecialisationDepth < SpecialisationDepth Then
+                SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
+                SpecialiseMenuItem.Visible = True
+            End If
         End If
 
         If mFileManager.OntologyManager.Ontology.NumberOfSpecialisations = 0 Then
@@ -351,16 +351,12 @@ Public Class SimpleStructure
             Dim newText As String = txtSimple.Text
 
             If newText <> mElement.Text Then
-                Dim i As Integer = Main.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
-
-                If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                If mCurrentItem.RM_Class.SpecialisationDepth < SpecialisationDepth Then
                     txtSimple.Text = mElement.Text
                     SpecialiseCurrentItem(sender, e)
                 End If
 
-                i = Main.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
-
-                If i >= mFileManager.OntologyManager.NumberOfSpecialisations Then
+                If mCurrentItem.RM_Class.SpecialisationDepth = SpecialisationDepth Then
                     txtSimple.Text = newText
                     mElement.Text = newText
                 End If

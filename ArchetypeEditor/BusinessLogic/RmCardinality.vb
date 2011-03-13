@@ -18,9 +18,9 @@ Option Explicit On
 
 Public Class RmCardinality
     ' class for counts and cardinality
-    Private mMaxCount As Integer '= 1
-    Private mMinCount As Integer '= 0
-    Private mUnbounded As Boolean '= False
+    Private mMaxCount As Integer
+    Private mMinCount As Integer
+    Private mUnbounded As Boolean
     Private mIncludeUpper As Boolean = True
     Private mIncludeLower As Boolean = True
     Private mOrdered As Boolean = False
@@ -30,35 +30,36 @@ Public Class RmCardinality
     Public Event Updated As CardinalityUpdatedEventHandler
     Public Delegate Sub CardinalityUpdatedEventHandler(ByVal sender As Object, ByVal e As EventArgs)
 
-    'Private sCount As String
-
     Public Property MaxCount() As Integer
         Get
             Return mMaxCount
         End Get
         Set(ByVal Value As Integer)
             mUnbounded = False
+
             If Value <> mMaxCount Then
                 If Value >= 1 Then
                     mMaxCount = Value
+
                     If Value < mMinCount Then
                         mMinCount = Value
                     End If
-                    'setCount()
                 End If
 
                 'SRH: 11 Jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
                 RaiseEvent Updated(Me, New EventArgs)
-
             End If
+
             mIsDefault = False
         End Set
     End Property
+
     Public ReadOnly Property IsDefault() As Boolean
         Get
             Return mIsDefault
         End Get
     End Property
+
     Public Property MinCount() As Integer
         Get
             Return mMinCount
@@ -67,16 +68,16 @@ Public Class RmCardinality
             If Value <> mMinCount Then
                 If Value >= 0 Then
                     mMinCount = Value
+
                     If Value > mMaxCount Then
                         mMaxCount = Value
                     End If
-                    'setCount()
                 End If
 
                 'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
                 RaiseEvent Updated(Me, New EventArgs)
-
             End If
+
             mIsDefault = False
         End Set
     End Property
@@ -88,18 +89,18 @@ Public Class RmCardinality
         Set(ByVal Value As Boolean)
             If mUnbounded <> Value Then
                 mUnbounded = Value
+
                 If Not mUnbounded Then
                     If mMinCount > mMaxCount Then
                         mMaxCount = mMinCount
                     End If
                 End If
+
                 mIsDefault = False
 
                 'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
                 RaiseEvent Updated(Me, New EventArgs)
-
             End If
-            'setCount()
         End Set
     End Property
 
@@ -118,7 +119,6 @@ Public Class RmCardinality
 
                 'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
                 RaiseEvent Updated(Me, New EventArgs)
-
             End If
         End Set
     End Property
@@ -134,10 +134,10 @@ Public Class RmCardinality
 
                 'SRH: 11 jan 2009 - EDT-502 - prevent recursive loops with auto set of minimum value based on events
                 RaiseEvent Updated(Me, New EventArgs)
-
             End If
         End Set
     End Property
+
     Public Property Ordered() As Boolean
         Get
             Return mOrdered
@@ -147,66 +147,55 @@ Public Class RmCardinality
             mIsDefault = False
         End Set
     End Property
+
+    Public ReadOnly Property IsMultiple() As Boolean
+        Get
+            Return IsUnbounded Or MaxCount > 1
+        End Get
+    End Property
+
     Public Function Copy() As RmCardinality
         Return New RmCardinality(Me)
     End Function
 
     Public Overrides Function ToString() As String
-
         Dim max As String = "*"
+
         If Not mUnbounded Then
-            '    max = "*"
-            'Else
             max = mMaxCount.ToString
         End If
 
         Return mMinCount.ToString & ".." & max
-
     End Function
 
     Public Sub SetFromOpenEHRCardinality(ByVal a_cardinality As openehr.openehr.am.archetype.constraint_model.CARDINALITY)
-
         If a_cardinality.interval.upper_unbounded Then
             mUnbounded = True
         Else
             mUnbounded = False
             mMaxCount = a_cardinality.interval.upper
         End If
+
         mMinCount = a_cardinality.interval.lower
-
         mOrdered = a_cardinality.is_ordered
-
         mIsDefault = False
-
     End Sub
 
     Public Sub SetFromXmlCardinality(ByVal a_cardinality As XMLParser.CARDINALITY)
-
-        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
         If a_cardinality.interval.upperSpecified = True Then
             mUnbounded = False
             mMaxCount = a_cardinality.interval.upper
         Else
             mUnbounded = True
         End If
+
         mMinCount = a_cardinality.interval.lower
-
-        'If a_cardinality.interval.maximum <> "" Then
-        '    mUnbounded = False
-        '    mMaxCount = CInt(a_cardinality.interval.maximum)
-        'Else
-        '    mUnbounded = True
-        'End If
-        'mMinCount = CInt(a_cardinality.interval.minimum)
-
         mOrdered = a_cardinality.is_ordered
-
         mIsDefault = False
     End Sub
 
     Public Sub SetFromString(ByVal a_string As String)
-        'Format is n..* or n..n
-        ' or n (= n..n)
+        'Format is n..* or n..n or n (= n..n)
 
         Dim i As Integer = a_string.IndexOf("..")
 
@@ -217,11 +206,13 @@ Public Class RmCardinality
                 mUnbounded = False
                 mMaxCount = Integer.Parse(a_string.Substring(a_string.LastIndexOf(".") + 1))
             End If
+
             mMinCount = Integer.Parse(a_string.Substring(0, a_string.IndexOf(".")))
         Else
             mMinCount = Integer.Parse(a_string)
             mMaxCount = Integer.Parse(a_string)
         End If
+
         mIsDefault = False
     End Sub
 

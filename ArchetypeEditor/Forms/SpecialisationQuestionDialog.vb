@@ -10,13 +10,14 @@ Public Class SpecialisationQuestionDialog
 
     Protected selection As SpecialisationOption
 
-    Public Sub ShowForArchetypeNode(ByVal itemText As String, ByVal occurrences As RmCardinality, ByVal isAnonymous As Boolean)
+    Public Sub ShowForArchetypeNode(ByVal itemText As String, ByVal struct As RmStructure, ByVal archetypeSpecialisationDepth As Integer)
         Text = AE_Constants.Instance.MessageBoxCaption
         YesButton.Text = AE_Constants.Instance.SpecialiseYes
+        YesButton.Enabled = struct.SpecialisationDepth < archetypeSpecialisationDepth
         YesAndCloneButton.Text = AE_Constants.Instance.SpecialiseAndClone
+        YesAndCloneButton.Enabled = struct.Occurrences.IsMultiple
         NoButton.Text = AE_Constants.Instance.SpecialiseNo
         QuestionLabel.Text = String.Format(AE_Constants.Instance.SpecialisationQuestion, itemText)
-        YesAndCloneButton.Enabled = Not isAnonymous And (occurrences.IsUnbounded Or occurrences.MaxCount > 1)
         ShowDialog()
     End Sub
 

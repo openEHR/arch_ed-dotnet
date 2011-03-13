@@ -120,23 +120,23 @@ Public Class TreeStructure
     'Do not modify it using the code editor.
     Friend WithEvents tvTree As System.Windows.Forms.TreeView
     Friend WithEvents TreeContextMenu As System.Windows.Forms.ContextMenu
-    Friend WithEvents MenuRemove As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuNameSlot As MenuItem
+    Friend WithEvents RemoveMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents NameSlotMenuItem As MenuItem
     Friend WithEvents MenuExpandAll As System.Windows.Forms.MenuItem
     Friend WithEvents MenuCollapseAll As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuSpecialise As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuAddReference As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuRemoveItemAndReferences As System.Windows.Forms.MenuItem
+    Friend WithEvents SpecialiseMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents AddReferenceMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents RemoveItemAndReferencesMenuItem As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.tvTree = New System.Windows.Forms.TreeView
         Me.TreeContextMenu = New System.Windows.Forms.ContextMenu
-        Me.MenuRemove = New System.Windows.Forms.MenuItem
-        Me.MenuNameSlot = New System.Windows.Forms.MenuItem
-        Me.MenuRemoveItemAndReferences = New System.Windows.Forms.MenuItem
+        Me.RemoveMenuItem = New System.Windows.Forms.MenuItem
+        Me.NameSlotMenuItem = New System.Windows.Forms.MenuItem
+        Me.RemoveItemAndReferencesMenuItem = New System.Windows.Forms.MenuItem
         Me.MenuExpandAll = New System.Windows.Forms.MenuItem
         Me.MenuCollapseAll = New System.Windows.Forms.MenuItem
-        Me.MenuSpecialise = New System.Windows.Forms.MenuItem
-        Me.MenuAddReference = New System.Windows.Forms.MenuItem
+        Me.SpecialiseMenuItem = New System.Windows.Forms.MenuItem
+        Me.AddReferenceMenuItem = New System.Windows.Forms.MenuItem
         Me.SuspendLayout()
         '
         'tvTree
@@ -158,43 +158,43 @@ Public Class TreeStructure
         '
         'TreeContextMenu
         '
-        Me.TreeContextMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRemove, Me.MenuExpandAll, Me.MenuCollapseAll, Me.MenuSpecialise, Me.MenuAddReference, Me.MenuNameSlot})
+        Me.TreeContextMenu.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.RemoveMenuItem, Me.MenuExpandAll, Me.MenuCollapseAll, Me.SpecialiseMenuItem, Me.AddReferenceMenuItem, Me.NameSlotMenuItem})
         '
         'MenuRemove
         '
-        Me.MenuRemove.Index = 0
-        Me.MenuRemove.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRemoveItemAndReferences})
-        Me.MenuRemove.Text = "Remove"
+        Me.RemoveMenuItem.Index = 0
+        Me.RemoveMenuItem.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.RemoveItemAndReferencesMenuItem})
+        Me.RemoveMenuItem.Text = "Remove"
         '
         'MenuRemoveItemAndReferences
         '
-        Me.MenuRemoveItemAndReferences.Index = 0
-        Me.MenuRemoveItemAndReferences.Text = "?"
+        Me.RemoveItemAndReferencesMenuItem.Index = 0
+        Me.RemoveItemAndReferencesMenuItem.Text = "?"
         '
         'MenuExpandAll
         '
         Me.MenuExpandAll.Index = 1
-        Me.MenuExpandAll.Text = "Expand all"
+        Me.MenuExpandAll.Text = "Expand All"
         '
         'MenuCollapseAll
         '
         Me.MenuCollapseAll.Index = 2
-        Me.MenuCollapseAll.Text = "Collapse all"
+        Me.MenuCollapseAll.Text = "Collapse All"
         '
-        'MenuSpecialise
+        'SpecialiseMenuItem
         '
-        Me.MenuSpecialise.Index = 3
-        Me.MenuSpecialise.Text = "Specialise"
+        Me.SpecialiseMenuItem.Index = 3
+        Me.SpecialiseMenuItem.Text = "Specialise"
         '
-        'MenuAddReference
+        'AddReferenceMenuItem
         '
-        Me.MenuAddReference.Index = 4
-        Me.MenuAddReference.Text = "Add reference"
+        Me.AddReferenceMenuItem.Index = 4
+        Me.AddReferenceMenuItem.Text = "Add Reference"
         '
         'MenuNameSlot
         '
-        Me.MenuNameSlot.Index = 5
-        Me.MenuNameSlot.Text = "Name this slot"
+        Me.NameSlotMenuItem.Index = 5
+        Me.NameSlotMenuItem.Text = "Name this Slot"
         '
         'TreeStructure
         '
@@ -236,16 +236,17 @@ Public Class TreeStructure
 
         If Not DesignMode Then
             'set the text for the menus
-            MenuRemove.Text = AE_Constants.Instance.Remove
-            MenuExpandAll.Text = AE_Constants.Instance.Expand_All
-            MenuCollapseAll.Text = AE_Constants.Instance.Collapse_All
-            MenuSpecialise.Text = AE_Constants.Instance.Specialise
-            MenuAddReference.Text = AE_Constants.Instance.Add_Reference
-            MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
+            RemoveMenuItem.Text = AE_Constants.Instance.Remove
+            MenuExpandAll.Text = AE_Constants.Instance.ExpandAll
+            MenuCollapseAll.Text = AE_Constants.Instance.CollapseAll
+            SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
+            AddReferenceMenuItem.Text = AE_Constants.Instance.AddReference
+            NameSlotMenuItem.Text = AE_Constants.Instance.NameThisSlot
 
             If tvTree.GetNodeCount(False) > 0 Then
                 tvTree.SelectedNode = tvTree.Nodes(0)
             End If
+
             ' add the change structure menu from EntryStructure
             If Not IsCluster AndAlso Not TreeContextMenu.MenuItems.Contains(menuChangeStructure) Then
                 TreeContextMenu.MenuItems.Add(menuChangeStructure)
@@ -414,11 +415,11 @@ Public Class TreeStructure
         Next
     End Sub
 
-    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles MenuSpecialise.Click
+    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
         If Not tvTree.SelectedNode Is Nothing Then
             Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
             Dim dlg As New SpecialisationQuestionDialog()
-            dlg.ShowForArchetypeNode(tvNode.Item.Text, tvNode.Item.Occurrences, tvNode.Item.IsAnonymous)
+            dlg.ShowForArchetypeNode(tvNode.Item.Text, tvNode.RM_Class, SpecialisationDepth)
 
             If dlg.IsSpecialisationRequested Then
                 If dlg.IsCloningRequested Then
@@ -445,7 +446,7 @@ Public Class TreeStructure
         End If
     End Sub
 
-    Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles MenuAddReference.Click
+    Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles AddReferenceMenuItem.Click
         Dim tvNode As ArchetypeTreeNode
         Dim ref As RmReference
 
@@ -469,7 +470,7 @@ Public Class TreeStructure
         End If
     End Sub
 
-    Protected Overrides Sub NameSlot(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuNameSlot.Click
+    Protected Overrides Sub NameSlot(ByVal sender As Object, ByVal e As System.EventArgs) Handles NameSlotMenuItem.Click
         If Not tvTree.SelectedNode Is Nothing Then
             ReplaceAnonymousSlot()
             tvTree.SelectedNode.BeginEdit()
@@ -632,7 +633,7 @@ Public Class TreeStructure
         End If
     End Sub
 
-    Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles MenuRemoveItemAndReferences.Click
+    Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles RemoveItemAndReferencesMenuItem.Click
         Dim tvNode As ArchetypeTreeNode
         Dim has_references As Boolean
         Dim message As String
@@ -644,7 +645,7 @@ Public Class TreeStructure
             If tvNode.Item.RM_Class.Type = StructureType.Element Then
                 If CType(tvNode.Item.RM_Class, RmElement).hasReferences Then
                     has_references = True
-                    message = AE_Constants.Instance.Remove & Me.tvTree.SelectedNode.Text & " " & AE_Constants.Instance.All_References
+                    message = AE_Constants.Instance.Remove & Me.tvTree.SelectedNode.Text & " " & AE_Constants.Instance.AllReferences
                 End If
             End If
 
@@ -854,45 +855,36 @@ Public Class TreeStructure
     End Function
 
     Private Sub TreeExpandAll(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuExpandAll.Click
-        Me.tvTree.ExpandAll()
+        tvTree.ExpandAll()
     End Sub
 
     Private Sub TreeCollapseAll(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuCollapseAll.Click
-        Me.tvTree.CollapseAll()
+        tvTree.CollapseAll()
     End Sub
 
     Private Sub ContextMenuTree_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TreeContextMenu.Popup
-        MenuRemove.Visible = False
-        MenuSpecialise.Visible = False
-        MenuAddReference.Visible = False
-        MenuNameSlot.Visible = False
+        RemoveMenuItem.Visible = False
+        SpecialiseMenuItem.Visible = False
+        AddReferenceMenuItem.Visible = False
+        NameSlotMenuItem.Visible = False
 
         If Not tvTree.SelectedNode Is Nothing Then
-            Dim i As Integer
             Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
-            MenuRemoveItemAndReferences.Text = tvNode.Text
+            RemoveItemAndReferencesMenuItem.Text = tvNode.Text
 
-            If tvNode.Item.RM_Class.Type = StructureType.Element Then
-                If Not CType(tvNode.Item.RM_Class, RmElement).isReference Then
-                    MenuAddReference.Visible = True
-                End If
-            End If
+            Dim item As ArchetypeNode = tvNode.Item
+            Dim element As ArchetypeElement = TryCast(item, ArchetypeElement)
+            AddReferenceMenuItem.Visible = Not (element Is Nothing OrElse element.IsReference)
 
-            ' show specialisation if appropriate
-            If Not tvNode.Item.IsAnonymous Then
-                i = Main.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
-                Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
-
-                If i < numberSpecialisations Then
-                    MenuSpecialise.Visible = True
-                Else
-                    If numberSpecialisations = 0 Or ((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))) Then
-                        MenuRemove.Visible = True
-                    End If
-                End If
+            If item.IsAnonymous Then
+                NameSlotMenuItem.Visible = True
+                RemoveMenuItem.Visible = True
             Else
-                MenuNameSlot.Visible = True
-                MenuRemove.Visible = True
+                Dim nodeId As String = CType(item, ArchetypeNodeAbstract).NodeId
+                Dim i As Integer = item.RM_Class.SpecialisationDepth
+
+                RemoveMenuItem.Visible = i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1)
+                SpecialiseMenuItem.Visible = SpecialisationDepth > 0 And (i < SpecialisationDepth Or item.Occurrences.IsMultiple)
             End If
         End If
     End Sub
@@ -905,7 +897,7 @@ Public Class TreeStructure
             Dim element As ArchetypeElement = CType(aArcheTypeNode, ArchetypeElement)
 
             If element.HasReferences Then
-                MenuRemoveItemAndReferences.Text = String.Format("{0} [+]", MenuRemoveItemAndReferences.Text)
+                RemoveItemAndReferencesMenuItem.Text = String.Format("{0} [+]", RemoveItemAndReferencesMenuItem.Text)
             End If
 
             tvTree.LabelEdit = Not element.IsReference
@@ -936,11 +928,11 @@ Public Class TreeStructure
             Else
                 Dim tvNode As ArchetypeTreeNode = CType(e.Node, ArchetypeTreeNode)
                 tvNode.Text = e.Label
-                MenuRemoveItemAndReferences.Text = e.Label
+                RemoveItemAndReferencesMenuItem.Text = e.Label
 
                 If tvNode.Item.RM_Class.Type = StructureType.Element Then
                     If CType(tvNode.Item, ArchetypeElement).HasReferences Then
-                        MenuRemoveItemAndReferences.Text = String.Format("{0} [+]", MenuRemoveItemAndReferences.Text)
+                        RemoveItemAndReferencesMenuItem.Text = String.Format("{0} [+]", RemoveItemAndReferencesMenuItem.Text)
                         Translate()
                     End If
                 End If
@@ -957,13 +949,9 @@ Public Class TreeStructure
 
         If tvNode.Item.IsAnonymous Then
             e.CancelEdit = True
-        Else
-            Dim i As Integer = Main.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
-
-            If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
-                e.CancelEdit = True
-                SpecialiseCurrentItem(sender, e)
-            End If
+        ElseIf tvNode.Item.RM_Class.SpecialisationDepth < SpecialisationDepth Then
+            e.CancelEdit = True
+            SpecialiseCurrentItem(sender, e)
         End If
     End Sub
 
@@ -975,20 +963,18 @@ Public Class TreeStructure
                     tvTree.SelectedNode.BeginEdit()
                 End If
             Case Keys.Delete
-                Dim i As Integer
                 Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+                Dim item As ArchetypeNode = tvNode.Item
 
-                If Not tvNode.Item.IsAnonymous Then
-                    Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+                If item.IsAnonymous Then
+                    RemoveItemAndReferences(sender, e)
+                Else
+                    Dim nodeId As String = CType(item, ArchetypeNodeAbstract).NodeId
+                    Dim i As Integer = item.RM_Class.SpecialisationDepth
 
-                    i = Main.Instance.CountInString(CType(tvNode.Item, ArchetypeNodeAbstract).NodeId, ".")
-
-                    If (numberSpecialisations = 0) Or (i = numberSpecialisations And _
-                        (((CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.StartsWith("at0.") Or (CType(tvNode.Item, ArchetypeNodeAbstract).NodeId.IndexOf(".0.") > -1))))) Then
+                    If i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1) Then
                         RemoveItemAndReferences(sender, e)
                     End If
-                Else
-                    RemoveItemAndReferences(sender, e)
                 End If
         End Select
     End Sub

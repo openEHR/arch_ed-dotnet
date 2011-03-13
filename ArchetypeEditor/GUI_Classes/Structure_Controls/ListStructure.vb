@@ -94,20 +94,20 @@ Public Class ListStructure
     Friend WithEvents lvList As System.Windows.Forms.ListView
     Friend WithEvents ElementName As System.Windows.Forms.ColumnHeader
     Friend WithEvents ContextMenuList As System.Windows.Forms.ContextMenu
-    Friend WithEvents MenuRemove As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuNameSlot As MenuItem
+    Friend WithEvents RemoveMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents NameSlotMenuItem As MenuItem
     Friend WithEvents SpecialiseMenuItem As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuAddReference As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuRemoveItemAndReference As System.Windows.Forms.MenuItem
+    Friend WithEvents AddReferenceMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents RemoveItemAndReferencesMenuItem As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.lvList = New System.Windows.Forms.ListView
         Me.ElementName = New System.Windows.Forms.ColumnHeader
         Me.ContextMenuList = New System.Windows.Forms.ContextMenu
-        Me.MenuRemove = New System.Windows.Forms.MenuItem
-        Me.MenuNameSlot = New System.Windows.Forms.MenuItem
-        Me.MenuRemoveItemAndReference = New System.Windows.Forms.MenuItem
+        Me.RemoveMenuItem = New System.Windows.Forms.MenuItem
+        Me.NameSlotMenuItem = New System.Windows.Forms.MenuItem
+        Me.RemoveItemAndReferencesMenuItem = New System.Windows.Forms.MenuItem
         Me.SpecialiseMenuItem = New System.Windows.Forms.MenuItem
-        Me.MenuAddReference = New System.Windows.Forms.MenuItem
+        Me.AddReferenceMenuItem = New System.Windows.Forms.MenuItem
         Me.SuspendLayout()
         '
         'lvList
@@ -135,33 +135,33 @@ Public Class ListStructure
         '
         'ContextMenuList
         '
-        Me.ContextMenuList.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRemove, Me.SpecialiseMenuItem, Me.MenuAddReference, Me.MenuNameSlot})
+        Me.ContextMenuList.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.RemoveMenuItem, Me.SpecialiseMenuItem, Me.AddReferenceMenuItem, Me.NameSlotMenuItem})
         '
         'MenuRemove
         '
-        Me.MenuRemove.Index = 0
-        Me.MenuRemove.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuRemoveItemAndReference})
-        Me.MenuRemove.Text = "Remove"
+        Me.RemoveMenuItem.Index = 0
+        Me.RemoveMenuItem.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.RemoveItemAndReferencesMenuItem})
+        Me.RemoveMenuItem.Text = "Remove"
         '
         'MenuRemoveItemAndReference
         '
-        Me.MenuRemoveItemAndReference.Index = 0
-        Me.MenuRemoveItemAndReference.Text = "?"
+        Me.RemoveItemAndReferencesMenuItem.Index = 0
+        Me.RemoveItemAndReferencesMenuItem.Text = "?"
         '
         'SpecialiseMenuItem
         '
         Me.SpecialiseMenuItem.Index = 1
         Me.SpecialiseMenuItem.Text = "Specialise"
         '
-        'MenuAddReference
+        'AddReferenceMenuItem
         '
-        Me.MenuAddReference.Index = 2
-        Me.MenuAddReference.Text = "Add Reference"
+        Me.AddReferenceMenuItem.Index = 2
+        Me.AddReferenceMenuItem.Text = "Add Reference"
         '
         'MenuNameSlot
         '
-        Me.MenuNameSlot.Index = 3
-        Me.MenuNameSlot.Text = "Name this slot"
+        Me.NameSlotMenuItem.Index = 3
+        Me.NameSlotMenuItem.Text = "Name this Slot"
         '
 
         '
@@ -183,10 +183,10 @@ Public Class ListStructure
         If Not DesignMode Then
             'Set the menu texts
             If Main.Instance.DefaultLanguageCode <> "en" Then
-                MenuRemove.Text = AE_Constants.Instance.Remove
+                RemoveMenuItem.Text = AE_Constants.Instance.Remove
                 SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
-                MenuAddReference.Text = AE_Constants.Instance.Add_Reference
-                MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
+                AddReferenceMenuItem.Text = AE_Constants.Instance.AddReference
+                NameSlotMenuItem.Text = AE_Constants.Instance.NameThisSlot
             End If
 
             ' add the change structure menu from EntryStructure
@@ -292,8 +292,10 @@ Public Class ListStructure
     Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
         If lvList.SelectedItems.Count > 0 Then
             Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems.Item(0), ArchetypeListViewItem)
+            Dim node As ArchetypeNodeAbstract = CType(lvItem.Item, ArchetypeNodeAbstract)
+
             Dim dlg As New SpecialisationQuestionDialog()
-            dlg.ShowForArchetypeNode(lvItem.Item.Text, lvItem.Item.Occurrences, lvItem.Item.IsAnonymous)
+            dlg.ShowForArchetypeNode(lvItem.Item.Text, node.RM_Class, SpecialisationDepth)
 
             If dlg.IsSpecialisationRequested Then
                 If dlg.IsCloningRequested Then
@@ -309,13 +311,13 @@ Public Class ListStructure
                 lvList.SelectedItems.Clear()
                 lvItem.Selected = True
                 SetCurrentItem(lvItem.Item)
-                lvItem.BeginEdit()
+                RenameSelectedItem()
                 mFileManager.FileEdited = True
             End If
         End If
     End Sub
 
-    Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles MenuAddReference.Click
+    Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles AddReferenceMenuItem.Click
         Dim ref As RmReference
 
         ' create a new reference element pointing to this element
@@ -337,14 +339,11 @@ Public Class ListStructure
         End If
     End Sub
 
-    Protected Overrides Sub NameSlot(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuNameSlot.Click
-        If lvList.SelectedItems.Count > 0 Then
-            ReplaceAnonymousSlot()
-            lvList.SelectedItems(0).BeginEdit()
-        End If
+    Protected Overrides Sub NameSlot(ByVal sender As Object, ByVal e As System.EventArgs) Handles NameSlotMenuItem.Click
+        RenameSelectedItem()
     End Sub
 
-    Protected Sub ReplaceAnonymousSlot()
+    Protected Sub RenameSelectedItem()
         If lvList.SelectedItems.Count > 0 Then
             Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
 
@@ -354,7 +353,6 @@ Public Class ListStructure
                 lvList.Items.RemoveAt(i)
                 lvItem = New ArchetypeListViewItem(newSlot)
                 lvItem.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, True)
-
                 lvList.Items.Insert(i, lvItem)
 
                 If Not lvItem.Selected Then
@@ -363,6 +361,10 @@ Public Class ListStructure
                 End If
 
                 mFileManager.FileEdited = True
+            End If
+
+            If lvList.LabelEdit Then
+                lvItem.BeginEdit()
             End If
         End If
     End Sub
@@ -411,7 +413,7 @@ Public Class ListStructure
         End If
     End Sub
 
-    Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles MenuRemoveItemAndReference.Click
+    Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles RemoveItemAndReferencesMenuItem.Click
         If Me.lvList.SelectedIndices.Count > 0 Then
             Dim lvItem As ArchetypeListViewItem
             Dim message As String
@@ -419,7 +421,7 @@ Public Class ListStructure
             lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
 
             If lvItem.Item.HasReferences Then
-                message = AE_Constants.Instance.Remove & Me.lvList.SelectedItems(0).Text & " " & AE_Constants.Instance.All_References
+                message = AE_Constants.Instance.Remove & Me.lvList.SelectedItems(0).Text & " " & AE_Constants.Instance.AllReferences
             Else
                 message = AE_Constants.Instance.Remove & Me.lvList.SelectedItems(0).Text
             End If
@@ -552,11 +554,8 @@ Public Class ListStructure
                     lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, False)
                 End If
             Next
-        Else
+        ElseIf lvList.Items.Count > 0 Then
             If lvList.SelectedItems.Count = 0 Then
-                If lvList.Items.Count = 0 Then
-                    Return
-                End If
                 lvList.Items(0).Selected = True
             End If
 
@@ -565,41 +564,28 @@ Public Class ListStructure
     End Sub
 
     Private Sub ContextMenuList_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuList.Popup
-        MenuRemove.Visible = False
+        RemoveMenuItem.Visible = False
         SpecialiseMenuItem.Visible = False
-        MenuAddReference.Visible = False
-        MenuNameSlot.Visible = False
+        AddReferenceMenuItem.Visible = False
+        NameSlotMenuItem.Visible = False
 
         If lvList.SelectedItems.Count > 0 Then
             Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
-            MenuRemoveItemAndReference.Text = lvItem.Text
+            RemoveItemAndReferencesMenuItem.Text = lvItem.Text
 
-            'If it is an element and not a slot
-            If Not lvItem.Item.IsAnonymous Then
-                'may be a reference and can't add a reference
-                If TypeOf lvItem.Item Is ArchetypeElement Then
-                    Dim element As ArchetypeElement = CType(lvItem.Item, ArchetypeElement)
+            Dim item As ArchetypeNode = lvItem.Item
+            Dim element As ArchetypeElement = TryCast(item, ArchetypeElement)
+            AddReferenceMenuItem.Visible = Not (element Is Nothing OrElse element.IsReference)
 
-                    If Not element.IsReference Then
-                        MenuAddReference.Visible = True
-                    End If
-                End If
-
-                ' show specialisation if appropriate
-                Dim nodeId As String = CType(lvItem.Item, ArchetypeNodeAbstract).NodeId
-                Dim i As Integer = Main.Instance.CountInString(nodeId, ".")
-                Dim numberSpecialisations As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
-
-                If i < numberSpecialisations Then
-                    SpecialiseMenuItem.Visible = True
-                Else
-                    If numberSpecialisations = 0 Or ((nodeId.StartsWith("at0.") Or (nodeId.IndexOf(".0.") > -1))) Then
-                        MenuRemove.Visible = True
-                    End If
-                End If
+            If item.IsAnonymous Then
+                NameSlotMenuItem.Visible = True
+                RemoveMenuItem.Visible = True
             Else
-                MenuNameSlot.Visible = True
-                MenuRemove.Visible = True
+                Dim nodeId As String = CType(item, ArchetypeNodeAbstract).NodeId
+                Dim i As Integer = item.RM_Class.SpecialisationDepth
+
+                RemoveMenuItem.Visible = i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1)
+                SpecialiseMenuItem.Visible = SpecialisationDepth > 0 And (i < SpecialisationDepth Or item.Occurrences.IsMultiple)
             End If
         End If
     End Sub
@@ -611,8 +597,7 @@ Public Class ListStructure
 
                 If Not lvItem Is Nothing AndAlso lvItem.Item.IsAnonymous Then
                     If MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                        ReplaceAnonymousSlot()
-                        lvList.SelectedItems(0).BeginEdit()
+                        RenameSelectedItem()
                     End If
                 End If
             End If
@@ -625,7 +610,7 @@ Public Class ListStructure
         If lvList.Items.Count = 0 Then
             butChangeDataType.Hide()
         ElseIf lvList.SelectedItems.Count = 1 Then
-            MenuRemoveItemAndReference.Text = lvList.SelectedItems(0).Text
+            RemoveItemAndReferencesMenuItem.Text = lvList.SelectedItems(0).Text
 
             'Unselect the previous item
             For Each lvItem In lvList.Items
@@ -636,12 +621,12 @@ Public Class ListStructure
             SetCurrentItem(lvItem.Item)
 
             If lvItem.Item.HasReferences Then
-                MenuRemoveItemAndReference.Text = String.Format("{0} [+]", MenuRemoveItemAndReference.Text)
+                RemoveItemAndReferencesMenuItem.Text = String.Format("{0} [+]", RemoveItemAndReferencesMenuItem.Text)
             End If
 
             lvList.LabelEdit = Not lvItem.Item.IsReference
         Else
-            MenuRemove.Visible = False
+            RemoveMenuItem.Visible = False
         End If
     End Sub
 
@@ -657,26 +642,21 @@ Public Class ListStructure
     Private Sub lvList_KeyDown(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles lvList.KeyDown
         Select Case e.KeyCode
             Case Keys.F2
-                If lvList.SelectedItems.Count > 0 Then
-                    ReplaceAnonymousSlot()
-                    lvList.SelectedItems(0).BeginEdit()
-                End If
+                RenameSelectedItem()
             Case Keys.Delete
-                Dim lvItem As ArchetypeListViewItem
-
                 If lvList.SelectedItems.Count > 0 Then
-                    lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
+                    Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
+                    Dim item As ArchetypeNode = lvItem.Item
 
-                    If lvItem.Item.RM_Class.Type = StructureType.Element Then
-                        Dim id As String = CType(lvItem.Item, ArchetypeElement).NodeId
-                        Dim i As Integer = Main.Instance.CountInString(id, ".")
-                        Dim numSpecs As Integer = mFileManager.OntologyManager.NumberOfSpecialisations
+                    If item.IsAnonymous Then
+                        RemoveItemAndReferences(sender, e)
+                    Else
+                        Dim nodeId As String = CType(item, ArchetypeElement).NodeId
+                        Dim i As Integer = item.RM_Class.SpecialisationDepth
 
-                        If numSpecs = 0 Or (i = numSpecs And ((id.StartsWith("at0.") Or (id.IndexOf(".0.") > -1)))) Then
+                        If i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1) Then
                             RemoveItemAndReferences(sender, e)
                         End If
-                    Else
-                        RemoveItemAndReferences(sender, e)
                     End If
                 End If
         End Select
@@ -694,11 +674,11 @@ Public Class ListStructure
                 lvItem = CType(Me.lvList.Items(e.Item), ArchetypeListViewItem)
                 lvItem.Text = e.Label
 
-                MenuRemoveItemAndReference.Text = e.Label
+                RemoveItemAndReferencesMenuItem.Text = e.Label
 
                 If lvItem.Item.HasReferences Then
                     Translate()
-                    MenuRemoveItemAndReference.Text = String.Format("{0} [+]", MenuRemoveItemAndReference.Text)
+                    RemoveItemAndReferencesMenuItem.Text = String.Format("{0} [+]", RemoveItemAndReferencesMenuItem.Text)
                 End If
 
                 'Slots set the text to include the class
@@ -714,9 +694,7 @@ Public Class ListStructure
     Private Sub lvList_BeforeLabelEdit(ByVal sender As System.Object, ByVal e As System.Windows.Forms.LabelEditEventArgs) Handles lvList.BeforeLabelEdit
         If Not mCurrentItem Is Nothing Then
             If Not mCurrentItem.IsAnonymous And lvList.SelectedItems.Count = 1 Then
-                Dim i As Integer = Main.Instance.CountInString(CType(mCurrentItem, ArchetypeNodeAbstract).NodeId, ".")
-
-                If i < mFileManager.OntologyManager.NumberOfSpecialisations Then
+                If mCurrentItem.RM_Class.SpecialisationDepth < SpecialisationDepth Then
                     e.CancelEdit = True
                     SpecialiseCurrentItem(sender, e)
                 End If
