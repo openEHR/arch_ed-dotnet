@@ -569,7 +569,7 @@ Public Class ArchetypeNodeConstraintControl
         lblDescription.Text = Filemanager.GetOpenEhrTerm(113, lblDescription.Text)
         lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, lblRunTimeName.Text)
         tpConstraint.Text = Filemanager.GetOpenEhrTerm(87, tpConstraint.Text)
-        tpConstraintDetails.Text = Filemanager.GetOpenEhrTerm(113, tpConstraintDetails.Text)
+        tpConstraintDetails.Text = Filemanager.GetOpenEhrTerm(581, tpConstraintDetails.Text)
         TerminologyColumn.HeaderText = Filemanager.GetOpenEhrTerm(47, TerminologyColumn.HeaderText)
         CodeColumn.HeaderText = Filemanager.GetOpenEhrTerm(90, CodeColumn.HeaderText)
         AnnotationKeyColumn.HeaderText = Filemanager.GetOpenEhrTerm(696, AnnotationKeyColumn.HeaderText)
