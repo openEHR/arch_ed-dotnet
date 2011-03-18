@@ -93,9 +93,9 @@
   <Language code="sk" Description="Slovak" />
   <Language code="sl" Description="Slovenian" />
   <Language code="sb" Description="Sorbian" />
-  <Language code="es" Description="Spanish (Spain ? Traditional)" />
+  <Language code="es" Description="Spanish" />
+  <Language code="es-es" Description="Spanish (Spain)" />
   <Language code="es-mx" Description="Spanish (Mexico)" />
-  <Language code="es" Description="Spanish (Spain ? Modern)" />
   <Language code="es-gt" Description="Spanish (Guatemala)" />
   <Language code="es-cr" Description="Spanish (Costa Rica)" />
   <Language code="es-pa" Description="Spanish (Panama)" />
