@@ -2017,7 +2017,7 @@ Public Class Designer
                                         Debug.Assert(rm.Children.Count > 0)
 
                                         Dim rm_1 As RmStructure
-                                        rm_1 = rm.Children.items(0)
+                                        rm_1 = rm.Children.Items(0)
 
                                         If rm_1.Type = StructureType.History Then
                                             ProcessStateEventSeries(rm_1)
@@ -2027,7 +2027,7 @@ Public Class Designer
 
                                     Case StructureType.Protocol
                                         Debug.Assert(rm.Children.Count > 0)
-                                        ProcessProtocol(rm.Children.items(0), Me.TabDesign)
+                                        ProcessProtocol(rm.Children.Items(0), Me.TabDesign)
                                 End Select
                             Next
 
@@ -2042,14 +2042,14 @@ Public Class Designer
                                 Select Case rm.Type
                                     Case StructureType.Data
                                         If rm.Children.Count > 0 Then
-                                            ProcessDataStructure(rm.Children.items(0))
+                                            ProcessDataStructure(rm.Children.Items(0))
                                         End If
 
                                         '  Case StructureType.State
                                         '     ProcessState(rm.Children.items(0))
 
                                     Case StructureType.Protocol
-                                        ProcessProtocol(rm.Children.items(0), Me.TabDesign)
+                                        ProcessProtocol(rm.Children.Items(0), Me.TabDesign)
                                 End Select
                             Next
 
@@ -2066,7 +2066,7 @@ Public Class Designer
                             For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 If rmStruct.Type = StructureType.Protocol Then
                                     mTabPageInstruction.cbProtocol.Checked = True
-                                    ProcessProtocol(rmStruct.Children.items(0), mTabPageInstruction.TabControlInstruction)
+                                    ProcessProtocol(rmStruct.Children.Items(0), mTabPageInstruction.TabControlInstruction)
                                 End If
                             Next
 
@@ -2082,7 +2082,7 @@ Public Class Designer
                             For Each rmStruct As RmStructureCompound In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 If rmStruct.Type = StructureType.Protocol Then
                                     mTabPageAction.cbProtocol.Checked = True
-                                    ProcessProtocol(rmStruct.Children.items(0), mTabPageAction.TabControlAction)
+                                    ProcessProtocol(rmStruct.Children.Items(0), mTabPageAction.TabControlAction)
                                 End If
                             Next
 
@@ -2091,10 +2091,10 @@ Public Class Designer
                                 cbParticipation.Checked = True
                                 SetUpParticipations()
                             End If
-                            rm = CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.items(0)
+                            rm = CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Items(0)
                             SetUpDataStructure()
                             If rm.Children.Count > 0 Then
-                                ProcessDataStructure(rm.Children.items(0))
+                                ProcessDataStructure(rm.Children.Items(0))
                             End If
 
                     End Select
@@ -2149,18 +2149,19 @@ Public Class Designer
         If mRestrictedSubject Is Nothing Then
             mRestrictedSubject = New RestrictedSet()
             mRestrictedSubject.LocalFileManager = mFileManager
-            Me.PanelConcept_1.Controls.Add(mRestrictedSubject)
+            PanelConcept_1.Controls.Add(mRestrictedSubject)
             mRestrictedSubject.Dock = DockStyle.Left
         Else
             mRestrictedSubject.Reset()
         End If
+
         mRestrictedSubject.TermSetToRestrict = aRestriction
         mRestrictedSubject.TranslateGUI()
-
     End Sub
 
     Sub SetUpParticipations()
         mTabPageParticipation.chkProvider.Checked = CType(mFileManager.Archetype.Definition, RmEntry).ProviderIsMandatory
+
         If CType(mFileManager.Archetype.Definition, RmEntry).HasOtherParticipations Then
             mTabPageParticipation.OtherParticipations = CType(mFileManager.Archetype.Definition, RmEntry).OtherParticipations
         End If
@@ -2195,7 +2196,6 @@ Public Class Designer
     End Sub
 
     Private Sub SaveArchetype(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSave.Click, MenuFileSaveAs.Click
-
         Dim s As String
 
         If sender Is MenuFileSaveAs Then  ' save as a different name or format
@@ -2204,9 +2204,6 @@ Public Class Designer
 
             s = Filemanager.Master.FileName
             Filemanager.Master.FileName = ""
-
-            ' HKF: 17 Feb EDT-276: force save as
-            'Filemanager.Master.FileEdited = True
             Filemanager.Master.ParserSynchronised = False
 
             If Not Filemanager.Master.SaveArchetype() Then
@@ -2278,17 +2275,11 @@ Public Class Designer
         Me.mComponentsCollection.Add(mTabPageDescription)
     End Sub
 
-    Private Sub AddLanguageToMenu(ByVal LanguageText As String)
-        If LanguageText = "" Then
-            'Fixme - raise error
-            Return
-        Else
-            Dim MI As New MenuItem
-            MI.Text = LanguageText
-            If LanguageText = mFileManager.OntologyManager.LanguageText Then
-                MI.Checked = True
-            End If
-            Me.MenuLanguageChange.MenuItems.Add(MI)
+    Private Sub AddLanguageToMenu(ByVal languageText As String)
+        If Not languageText Is Nothing Then
+            Dim mi As New MenuItem(languageText)
+            mi.Checked = languageText = mFileManager.OntologyManager.LanguageText
+            MenuLanguageChange.MenuItems.Add(mi)
         End If
     End Sub
 
@@ -2794,114 +2785,52 @@ Public Class Designer
 
 #End Region
 
-#Region "Choose form functions"
-
-    Friend Function ChooseLanguage() As Boolean
-        Dim frm As New Choose
-        Dim lang As String
+    Protected Function ChooseLanguage() As Boolean
+        Dim result As Boolean = False
         Dim i As Integer
-        Dim Languages As DataRow()
-        Dim New_row As DataRow
 
-        ' add the language codes - FIXME - from a file in future
+        Dim frm As New Choose
         frm.Set_Single()
         frm.PrepareDataTable_for_List(1)
-        Languages = mFileManager.OntologyManager.GetLanguageList
+        Dim languages As DataRow() = mFileManager.OntologyManager.GetLanguageList
 
-        ' the first language is "aaaa" and is set to show all in the openEHR maintenance
-        For i = 0 To Languages.Length - 1
-            New_row = frm.DTab_1.NewRow()
-            New_row("Code") = Languages(i).Item(0)
-            New_row("Text") = Languages(i).Item(1)
-            frm.DTab_1.Rows.Add(New_row)
+        For i = 0 To languages.Length - 1
+            Dim row As DataRow = frm.DTab_1.NewRow()
+            row("Code") = languages(i).Item(0)
+            row("Text") = languages(i).Item(1)
+            frm.DTab_1.Rows.Add(row)
         Next
 
         frm.ListChoose.DataSource = frm.DTab_1
         frm.DTab_1.DefaultView.Sort = "Text"
         frm.ListChoose.DisplayMember = "Text"
         frm.ListChoose.ValueMember = "Code"
-
         frm.ShowDialog(Me)
 
         If frm.DialogResult = Windows.Forms.DialogResult.OK Then
             ' check it is not a language added previously
+            Dim lang As String = frm.ListChoose.SelectedValue
 
-            lang = frm.ListChoose.SelectedValue
+            If Not mFileManager.OntologyManager.HasLanguage(lang) Then
+                ' stop the handler while we get all the languages
+                RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
-            If Not mFileManager.OntologyManager.LanguagesTable.Rows.Find(lang) Is Nothing Then
-                Return False ' no need to add anything
-            End If
+                ' check with user they want to add a language
+                result = MessageBox.Show(AE_Constants.Instance.NewLanguage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK
 
+                If result Then
+                    mFileManager.OntologyManager.AddLanguage(lang, frm.ListChoose.Text)
+                    AddLanguageToMenu(frm.ListChoose.Text)
+                Else
+                    MessageBox.Show(AE_Constants.Instance.Language_addition_cancelled, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
 
-            ' stop the handler while we get all the languages
-            RemoveHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
-
-            ' check with user they want to add a language
-            If (MessageBox.Show(AE_Constants.Instance.NewLanguage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
-                Windows.Forms.DialogResult.OK) Then
-                mFileManager.OntologyManager.AddLanguage(lang, frm.ListChoose.Text)
-                Me.AddLanguageToMenu(frm.ListChoose.Text)
-            Else
-                MessageBox.Show(AE_Constants.Instance.Language_addition_cancelled, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
-                Return False
             End If
-
-            AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
-            Return True
-        Else
-            Return False
         End If
 
+        Return result
     End Function
-
-    'Friend Function ChooseTerminology() As Boolean
-    '    Dim frm As New Choose
-    '    Dim term, Description As String
-    '    Dim i As Integer
-    '    Dim Terminologies As DataRow()
-    '    Dim new_row As DataRow
-
-    '    ' add the language codes - FIXME - from a file in future
-    '    frm.Set_Single()
-    '    frm.PrepareDataTable_for_List(1)
-    '    Terminologies = mFileManager.OntologyManager.GetTerminologyIdentifiers
-    '    frm.DTab_1.DefaultView.Sort = "Text"
-    '    For i = 0 To Terminologies.Length - 1
-    '        new_row = frm.DTab_1.NewRow()
-    '        new_row("Code") = Terminologies(i).Item(0)
-    '        new_row("Text") = Terminologies(i).Item(1)
-    '        frm.DTab_1.Rows.Add(new_row)
-    '    Next
-
-    '    frm.ListChoose.DataSource = frm.DTab_1
-    '    frm.ListChoose.DisplayMember = "Text"
-    '    frm.ListChoose.ValueMember = "Code"
-
-    '    If frm.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
-    '        ' check it is not a language added previously
-    '        term = frm.ListChoose.SelectedValue
-    '        Description = frm.ListChoose.Text
-    '        If Not mFileManager.OntologyManager.TerminologiesTable.Select("Terminology = '" & term & "'").Length = 0 Then
-    '            Beep()
-    '            Return False
-    '        End If
-
-    '        ' there is already a language in the archetype
-    '        If (MessageBox.Show(AE_Constants.Instance.NewTerminology & Description, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK) Then
-    '            ' add to the terminologies
-    '            mFileManager.OntologyManager.AddTerminology(term, Description)
-    '        End If
-    '    Else
-    '        Return False
-    '    End If
-    '    Return True
-    'End Function
-
-
-
-
-#End Region
 
 #Region "Public Properties, Methods and Types"
 
@@ -3007,60 +2936,62 @@ Public Class Designer
 
     Public Sub ResetDefaults()
         ' show the front page
-        Me.TabMain.SelectedIndex = 0
-        Me.TabMain.SelectedTab = Me.tpHeader
+        TabMain.SelectedIndex = 0
+        TabMain.SelectedTab = tpHeader
 
         ' set the front page to default state
-        Me.lblArchetypeName.Text = ""
+        lblArchetypeName.Text = ""
+
         If Not mRestrictedSubject Is Nothing Then
             mRestrictedSubject.Reset() 'clears list and makes invisible
         End If
-        Me.gbSpecialisation.Visible = False
-        Me.tvSpecialisation.Nodes.Clear()
-        Me.txtConceptInFull.Text = ""
-        Me.RichTextBoxDescription.Text = ""
-        Me.TxtConceptDescription.Text = ""
-        Me.txtConceptComment.Text = ""
-        Me.tabComment.SelectedIndex = 0
+
+        gbSpecialisation.Visible = False
+        tvSpecialisation.Nodes.Clear()
+        txtConceptInFull.Text = ""
+        RichTextBoxDescription.Text = ""
+        TxtConceptDescription.Text = ""
+        txtConceptComment.Text = ""
+        tabComment.SelectedIndex = 0
 
         'set the other pages
-        Me.cbStructurePersonState.Checked = False
-        Me.cbStructurePersonState.Visible = False
-        Me.cbPersonState.Checked = False
-        Me.cbPersonState.Visible = False
-        Me.chkEventSeries.Checked = False
-        Me.chkEventSeries.Visible = False
-        Me.cbProtocol.Checked = False
-        Me.cbProtocol.Visible = False
-        Me.cbStructurePersonState.Checked = False
-        Me.cbStructurePersonState.Visible = False
+        cbStructurePersonState.Checked = False
+        cbStructurePersonState.Visible = False
+        cbPersonState.Checked = False
+        cbPersonState.Visible = False
+        chkEventSeries.Checked = False
+        chkEventSeries.Visible = False
+        cbProtocol.Checked = False
+        cbProtocol.Visible = False
+        cbStructurePersonState.Checked = False
+        cbStructurePersonState.Visible = False
 
         'set the display panel to nothing
-        Me.mRichTextArchetype.Clear()
+        mRichTextArchetype.Clear()
 
         'Set the participation to false
-        Me.cbParticipation.Checked = False
+        cbParticipation.Checked = False
 
         'Get rid of the languages from menu
-        Me.MenuLanguageChange.MenuItems.Clear()
+        MenuLanguageChange.MenuItems.Clear()
 
         ' Now set the interface elements
 
-        While Me.TabDesign.TabPages.Count > 1
+        While TabDesign.TabPages.Count > 1
             ' get rid of the tab pages except Data
-            Me.TabDesign.TabPages.RemoveAt(1)
+            TabDesign.TabPages.RemoveAt(1)
         End While
 
-        While Me.TabStructure.TabPages.Count > 1
+        While TabStructure.TabPages.Count > 1
             ' get rid of the tab pages except Structure
-            Me.TabStructure.TabPages.RemoveAt(1)
+            TabStructure.TabPages.RemoveAt(1)
         End While
 
         ' clear any controls on the tab pages to ensure restart
 
-        Me.tpDataStructure.Controls.Clear()
-        Me.tpRootStateStructure.Controls.Clear()
-        Me.tpRootStateEventSeries.Controls.Clear()
+        tpDataStructure.Controls.Clear()
+        tpRootStateStructure.Controls.Clear()
+        tpRootStateEventSeries.Controls.Clear()
 
         'clear any added pages and controls
         mTabPagesCollection = New Collections.Hashtable  'clear all tab pages
@@ -3421,7 +3352,15 @@ Public Class Designer
                 mFileManager.FileEdited = True
 
                 Dim concept As String = mFileManager.Archetype.Archetype_ID.Concept
-                txtConceptInFull.Text = Char.ToUpper(concept(0), New Globalization.CultureInfo(Main.Instance.DefaultLanguageCode)) + concept.Substring(1).Replace("_", " ")
+                Dim firstChar As Char = Char.ToUpper(concept(0))
+
+                For Each culture As Globalization.CultureInfo In Globalization.CultureInfo.GetCultures(Globalization.CultureTypes.AllCultures)
+                    If culture.TwoLetterISOLanguageName = Main.Instance.DefaultLanguageCode Or culture.Name = Main.Instance.SpecificLanguageCode Then
+                        firstChar = Char.ToUpper(concept(0), culture)
+                    End If
+                Next
+
+                txtConceptInFull.Text = firstChar + concept.Substring(1).Replace("_", " ")
             End If
         End If
     End Sub
@@ -3528,16 +3467,15 @@ Public Class Designer
     End Sub
 
     Private Sub MenuViewLanguageTerminology_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuLanguageAvailable.Click, MenuTerminologyAvailable.Click
-        Me.TabMain.SelectedIndex = 2
-        Me.TabMain.SelectedTab = Me.tpTerminology
-        Me.TabTerminology.SelectedIndex = 2
-        Me.TabTerminology.SelectedTab = Me.tpLanguages
-        Me.ListLanguages.Focus()
+        TabMain.SelectedIndex = 2
+        TabMain.SelectedTab = tpTerminology
+        TabTerminology.SelectedIndex = 2
+        TabTerminology.SelectedTab = tpLanguages
+        ListLanguages.Focus()
     End Sub
 
     Private Sub MenuViewArchetypes_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        Dim frm As Form
-        frm = New formCreateClinicalModel
+        Dim frm As New formCreateClinicalModel
         frm.ShowDialog(Me)
     End Sub
 
@@ -3548,30 +3486,31 @@ Public Class Designer
 
     Private Sub UpdateSpecialisationTree(ByVal Label As String, ByVal NodeId As String)
         Dim tnc As TreeNodeCollection
-        Dim tn, new_node As TreeNode
 
-        If Me.tvSpecialisation.GetNodeCount(False) > 0 Then
+        If tvSpecialisation.GetNodeCount(False) > 0 Then
             Dim i As Integer
+            Dim tn As TreeNode = tvSpecialisation.Nodes(0)
 
-            tn = Me.tvSpecialisation.Nodes(0)
             For i = 2 To Me.tvSpecialisation.GetNodeCount(True)
                 tn = tn.LastNode
             Next
+
             If tn.Tag = NodeId Then
                 ' update the node as specialisation is already there
                 tn.Text = Label
                 Return
             End If
+
             tnc = tn.Nodes
         Else
             tnc = Me.tvSpecialisation.Nodes
         End If
-        new_node = New TreeNode
-        new_node.Text = Label
-        new_node.Tag = NodeId
-        tnc.Add(new_node)
-        new_node.EnsureVisible()
 
+        Dim newNode As New TreeNode
+        newNode.Text = Label
+        newNode.Tag = NodeId
+        tnc.Add(newNode)
+        newNode.EnsureVisible()
     End Sub
 
     Private Sub MenuFileSpecialise_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSpecialise.Click

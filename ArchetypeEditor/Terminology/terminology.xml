@@ -76,8 +76,8 @@
   <Language code="lt" Description="Lithuanian" />
   <Language code="mk" Description="FYRO Macedonian ms Malaysian" />
   <Language code="mt" Description="Maltese" />
-  <Language code="no" Description="Norwegian (Bokmal)" />
-  <Language code="no" Description="Norwegian (Nynorsk)" />
+  <Language code="nb" Description="Norwegian (Bokmal)" />
+  <Language code="nn" Description="Norwegian (Nynorsk)" />
   <Language code="pl" Description="Polish" />
   <Language code="pt-br" Description="Portuguese (Brazil)" />
   <Language code="pt" Description="Portuguese (Portugal)" />

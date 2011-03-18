@@ -42,9 +42,13 @@ Public Class OntologyManager
         Get
             Return mOntology.PrimaryLanguageCode
         End Get
-        Set(ByVal Value As String)
-            mOntology.SetPrimaryLanguage(Value)
-            mPrimaryLanguageText = TerminologyServer.Instance.CodeSetItemDescription("Language", Value)
+        Set(ByVal value As String)
+            mOntology.SetPrimaryLanguage(value)
+            mPrimaryLanguageText = TerminologyServer.Instance.CodeSetItemDescription("Language", value)
+
+            If mPrimaryLanguageText Is Nothing Then
+                mPrimaryLanguageText = value
+            End If
         End Set
     End Property
 
@@ -52,7 +56,12 @@ Public Class OntologyManager
         Get
             If mPrimaryLanguageText Is Nothing Then
                 mPrimaryLanguageText = TerminologyServer.Instance.CodeSetItemDescription("Language", mOntology.PrimaryLanguageCode)
+
+                If mPrimaryLanguageText Is Nothing Then
+                    mPrimaryLanguageText = PrimaryLanguageCode
+                End If
             End If
+
             Return mPrimaryLanguageText
         End Get
     End Property
@@ -61,10 +70,14 @@ Public Class OntologyManager
         Get
             Return mLanguageCode
         End Get
-        Set(ByVal Value As String)
-            mLanguageCode = Value
-            mOntology.SetLanguage(Value)
-            mLanguageText = TerminologyServer.Instance.CodeSetItemDescription("Language", Value)
+        Set(ByVal value As String)
+            mLanguageCode = value
+            mOntology.SetLanguage(value)
+            mLanguageText = TerminologyServer.Instance.CodeSetItemDescription("Language", value)
+
+            If mLanguageText Is Nothing Then
+                mLanguageText = value
+            End If
         End Set
     End Property
 
@@ -167,10 +180,7 @@ Public Class OntologyManager
         mOntology = anOntology
     End Sub
 
-    Private Sub InitialiseOntologyManager(ByVal LanguageCode As String)
-        Dim new_row As DataRow
-        Dim LanguageText As String
-
+    Private Sub InitialiseOntologyManager(ByVal languageCode As String)
         Try
             mLanguageDS.Clear()
         Catch
@@ -184,17 +194,23 @@ Public Class OntologyManager
 
         Debug.Assert(TermDefinitionTable.Rows.Count = 0)
 
-        LanguageText = TerminologyServer.Instance.CodeSetItemDescription("Language", LanguageCode)
+        Dim languageText As String = TerminologyServer.Instance.CodeSetItemDescription("Language", languageCode)
+
+        If languageText Is Nothing Then
+            languageText = languageCode
+        End If
+
         mPrimaryLanguageText = Nothing
-        mLanguageCode = LanguageCode
-        mLanguageText = LanguageText
-        mLastLanguageText = LanguageText
-        new_row = mLanguagesTable.NewRow
-        new_row(0) = mLanguageCode
-        new_row(1) = mLanguageText
-        mLanguagesTable.Rows.Add(new_row)
+        mLanguageCode = languageCode
+        mLanguageText = languageText
+        mLastLanguageText = languageText
         mLastTerm = Nothing
         mReplaceTranslations = 0
+
+        Dim row As DataRow = mLanguagesTable.NewRow
+        row(0) = languageCode
+        row(1) = languageText
+        mLanguagesTable.Rows.Add(row)
     End Sub
 
     Public Sub PopulateAllTerms()
@@ -288,8 +304,6 @@ Public Class OntologyManager
         Debug.Assert(term.Code <> "")
         Debug.Assert(term.Text <> "")
 
-        Dim d_row, l_row As DataRow
-
         If term.Code = "" Then
             Debug.Assert(False)
             Return
@@ -302,30 +316,30 @@ Public Class OntologyManager
         End If
 
         If term.IsConstraint Then
-            For Each l_row In mLanguagesTable.Rows
-                d_row = mConstraintDefinitionsTable.NewRow
-                d_row(0) = l_row(0)
-                d_row(1) = term.Code
-                d_row(2) = term.Text
-                d_row(3) = term.Description
+            For Each row As DataRow In mLanguagesTable.Rows
+                Dim newRow As DataRow = mConstraintDefinitionsTable.NewRow
+                newRow(0) = row(0)
+                newRow(1) = term.Code
+                newRow(2) = term.Text
+                newRow(3) = term.Description
 
                 Try
-                    mConstraintDefinitionsTable.Rows.Add(d_row)
+                    mConstraintDefinitionsTable.Rows.Add(newRow)
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             Next
         Else
-            For Each l_row In mLanguagesTable.Rows
-                d_row = mTermDefinitionsTable.NewRow
-                d_row(0) = l_row(0)
-                d_row(1) = term.Code
-                d_row(2) = term.Text
-                d_row(3) = term.Description
-                d_row(5) = term
+            For Each row As DataRow In mLanguagesTable.Rows
+                Dim newRow As DataRow = mTermDefinitionsTable.NewRow
+                newRow(0) = row(0)
+                newRow(1) = term.Code
+                newRow(2) = term.Text
+                newRow(3) = term.Description
+                newRow(5) = term
 
                 Try
-                    mTermDefinitionsTable.Rows.Add(d_row)
+                    mTermDefinitionsTable.Rows.Add(newRow)
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
@@ -516,33 +530,28 @@ Public Class OntologyManager
         mFileManager.FileEdited = True
     End Sub
 
-    Public Sub AddLanguage(ByVal a_LanguageCode As String, Optional ByVal LanguageText As String = "")
-        Dim key As Object
-
-        If LanguageText = "" Then
+    Public Sub AddLanguage(ByVal languageCode As String, Optional ByVal languageText As String = "")
+        If languageText = "" Then
             ' get the full name of the language from openEHR terminology
-            mLastLanguageText = TerminologyServer.Instance.CodeSetItemDescription("Language", a_LanguageCode)
-        Else
-            mLastLanguageText = LanguageText
+            languageText = TerminologyServer.Instance.CodeSetItemDescription("Language", languageCode)
         End If
 
-        If mLastLanguageText = "" Then
-            Debug.Assert(False, "Language code is empty")
-            Return
+        If languageText Is Nothing Then
+            languageText = languageCode
         End If
 
-        key = a_LanguageCode
-        If LanguagesTable.Rows.Find(key) Is Nothing Then
-            Dim new_row As DataRow
-            new_row = LanguagesTable.NewRow
-            new_row(0) = a_LanguageCode
-            new_row("Language") = mLastLanguageText
-            LanguagesTable.Rows.Add(new_row)
+        mLastLanguageText = languageText
 
-            If Not mOntology.LanguageAvailable(a_LanguageCode) Then
-                mOntology.AddLanguage(a_LanguageCode)
+        If Not HasLanguage(languageCode) Then
+            Dim row As DataRow = LanguagesTable.NewRow
+            row(0) = languageCode
+            row("Language") = languageText
+            LanguagesTable.Rows.Add(row)
+
+            If Not mOntology.LanguageAvailable(languageCode) Then
+                mOntology.AddLanguage(languageCode)
                 'update the new terms generated by the ontology
-                UpdateLanguage(a_LanguageCode)
+                UpdateLanguage(languageCode)
             End If
 
             mFileManager.FileEdited = True
