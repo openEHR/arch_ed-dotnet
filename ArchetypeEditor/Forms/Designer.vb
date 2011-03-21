@@ -3687,7 +3687,7 @@ Public Class Designer
             mTabPageStateStructure.ProcessStructure(a_history.Data)
         End If
 
-        tpRootStateStructure.Title = Filemanager.GetOpenEhrTerm(mTabPageStateStructure.StructureType, mTabPageStateStructure.StructureType.ToString())
+        tpRootStateStructure.Title = mTabPageStateStructure.StructureTypeAsString
         mComponentsCollection.Add(mTabPageStateStructure)
     End Sub
 
@@ -3704,7 +3704,7 @@ Public Class Designer
 
     Private Sub ProcessState(ByVal a_Structure As RmStructure)
         Dim tp As New Crownwood.Magic.Controls.TabPage
-        mTabPageDataStateStructure = New TabPageStructure  'Me)
+        mTabPageDataStateStructure = New TabPageStructure
         mTabPageDataStateStructure.IsState = True ' allows assumed values to be set (buttons visible)
         cbStructurePersonState.Checked = True
 

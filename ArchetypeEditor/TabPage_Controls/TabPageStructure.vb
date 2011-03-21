@@ -52,11 +52,9 @@ Public Class TabPageStructure
             panelStructure.Controls.Add(PanelDetails)
             TranslateGUI()
 
-            If Main.Instance.DefaultLanguageCode <> "en" Then
-                If Main.Instance.IsDefaultLanguageRightToLeft Then
-                    ds = DockStyle.Left
-                    Main.Reflect(PanelDetails)
-                End If
+            If Main.Instance.IsDefaultLanguageRightToLeft Then
+                ds = DockStyle.Left
+                Main.Reflect(PanelDetails)
             End If
 
             PanelDetails.Dock = ds
@@ -470,13 +468,13 @@ Public Class TabPageStructure
         Get
             Return mArchetypeDisplay
         End Get
-        Set(ByVal Value As EntryStructure)
-            mArchetypeDisplay = Value
+        Set(ByVal value As EntryStructure)
+            mArchetypeDisplay = value
             panelDisplay.Controls.Clear()
 
-            If Not Value Is Nothing Then
-                panelDisplay.Controls.Add(Value)
-                Value.Dock = DockStyle.Fill
+            If Not value Is Nothing Then
+                panelDisplay.Controls.Add(value)
+                value.Dock = DockStyle.Fill
             End If
         End Set
     End Property
@@ -522,9 +520,13 @@ Public Class TabPageStructure
 
     Public ReadOnly Property StructureType() As StructureType
         Get
-            Dim result As StructureType = Nothing
+            Dim result As StructureType = StructureType.Not_Set
 
-            If Not ArchetypeDisplay Is Nothing Then
+            If mIsEmbedded Then
+                If Not mEmbeddedSlot Is Nothing Then
+                    result = mEmbeddedSlot.RM_Class.Type
+                End If
+            ElseIf Not ArchetypeDisplay Is Nothing Then
                 result = ArchetypeDisplay.StructureType
             End If
 
@@ -534,18 +536,7 @@ Public Class TabPageStructure
 
     Public ReadOnly Property StructureTypeAsString() As String
         Get
-            Select Case StructureType
-                Case StructureType.Single
-                    Return Filemanager.GetOpenEhrTerm(105, "Single")
-                Case StructureType.List
-                    Return Filemanager.GetOpenEhrTerm(106, "List")
-                Case StructureType.Tree
-                    Return Filemanager.GetOpenEhrTerm(107, "Tree")
-                Case StructureType.Table
-                    Return Filemanager.GetOpenEhrTerm(108, "Structure")
-                Case Else
-                    Return ""
-            End Select
+            Return Filemanager.GetOpenEhrTerm(CInt(StructureType), StructureType.ToString)
         End Get
     End Property
 
@@ -555,6 +546,11 @@ Public Class TabPageStructure
     End Sub
 
     Private Sub ShowStructurePanel(ByVal Sender As Object, ByVal e As EventArgs) Handles mArchetypeDisplay.ChangeStructure
+        Dim wasEnabledPriorToTemporarilyDisablingInOrderToSuppressComboStrucutreChangeEvent As Boolean = Enabled
+        Enabled = False
+        comboStructure.SelectedItem = StructureTypeAsString
+        Enabled = wasEnabledPriorToTemporarilyDisablingInOrderToSuppressComboStrucutreChangeEvent
+
         panelEntry.Show()
         comboStructure.Focus()
         comboStructure.DroppedDown = True
@@ -601,7 +597,7 @@ Public Class TabPageStructure
         End If
 
         If comboStructure.SelectedIndex < 0 And comboStructure.Items.Count > 0 Then
-            comboStructure.SelectedItem = StructureType.Tree.ToString
+            comboStructure.SelectedItem = Filemanager.GetOpenEhrTerm(CInt(StructureType.Tree), StructureType.Tree.ToString)
 
             If comboStructure.SelectedIndex < 0 Then
                 comboStructure.SelectedIndex = 0
@@ -615,21 +611,23 @@ Public Class TabPageStructure
 
     Public Function SaveAsStructure() As RmStructure
         ' save as RmStructureCompound or RmSlot
+        Dim result As RmStructure = Nothing
+
         If mIsEmbedded Then
-            If mEmbeddedSlot Is Nothing Then
-                Return Nothing
-            Else
-                Return mEmbeddedSlot.RM_Class
+            If Not mEmbeddedSlot Is Nothing Then
+                result = mEmbeddedSlot.RM_Class
             End If
         Else
-            If ArchetypeDisplay Is Nothing Then
-                Return Nothing
-            ElseIf mIsElement Then
-                Return CType(ArchetypeDisplay, ElementOnly).Archetype
-            Else
-                Return ArchetypeDisplay.Archetype
+            If Not ArchetypeDisplay Is Nothing Then
+                If mIsElement Then
+                    result = CType(ArchetypeDisplay, ElementOnly).Archetype
+                Else
+                    result = ArchetypeDisplay.Archetype
+                End If
             End If
         End If
+
+        Return result
     End Function
 
     Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
@@ -711,12 +709,7 @@ Public Class TabPageStructure
         panelEntry.Hide()
 
         If mIsEmbedded Then
-            If mIsLoading Then
-                If mEmbeddedSlot Is Nothing Then
-                    mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Element)
-                End If
-            Else
-                ' have to have a new slot if change the structure
+            If Not mIsLoading Or mEmbeddedSlot Is Nothing Then
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Element)
             End If
 
@@ -762,55 +755,55 @@ Public Class TabPageStructure
             Dim chosenStructure As StructureType = mValidStructureClasses(comboStructure.SelectedIndex)
             ReferenceModel.SetStructureClass(chosenStructure)
 
-            If mIsEmbedded Then
-                If Not mIsLoading Or mEmbeddedSlot Is Nothing Then
-                    mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
-                End If
-
-                panelStructure.Show()
-                panelDisplay.Hide()
-                ShowDetailPanel(mEmbeddedSlot, New EventArgs)
-            Else
-                panelStructure.SuspendLayout()
-                panelEntry.SuspendLayout()
-                panelDisplay.SuspendLayout()
-
-                Dim entryStructure As EntryStructure = Nothing ' User control to provide the list or whatever
-
-                Select Case chosenStructure
-                    Case StructureType.Single
-                        entryStructure = New SimpleStructure(mFileManager)
-                    Case StructureType.List
-                        entryStructure = New ListStructure(mFileManager)
-                    Case StructureType.Tree
-                        entryStructure = New TreeStructure(mFileManager)
-                    Case StructureType.Table
-                        entryStructure = New TableStructure(mFileManager)
-                    Case Else
-                        Debug.Assert(False)
-                End Select
-
-                If Not entryStructure Is Nothing Then
-                    If ArchetypeDisplay Is Nothing Then
-                        ArchetypeDisplay = entryStructure
-                    ElseIf entryStructure.StructureType <> ArchetypeDisplay.StructureType Then
-                        entryStructure.Archetype = ArchetypeDisplay.Archetype
-                        ArchetypeDisplay = entryStructure
+            If mIsEmbedded Or chosenStructure <> StructureType Then
+                If mIsEmbedded Then
+                    If Not mIsLoading Or mEmbeddedSlot Is Nothing Then
+                        mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
                     End If
 
-                    panelDisplay.Show()
                     panelStructure.Show()
-                    PanelDetails.Visible = Not ArchetypeDisplay Is Nothing AndAlso ArchetypeDisplay.HasData
+                    panelDisplay.Hide()
+                    ShowDetailPanel(mEmbeddedSlot, New EventArgs)
+                Else
+                    panelStructure.SuspendLayout()
+                    panelEntry.SuspendLayout()
+                    panelDisplay.SuspendLayout()
+
+                    Dim entryStructure As EntryStructure = Nothing ' User control to provide the list or whatever
+
+                    Select Case chosenStructure
+                        Case StructureType.Single
+                            entryStructure = New SimpleStructure(mFileManager)
+                        Case StructureType.List
+                            entryStructure = New ListStructure(mFileManager)
+                        Case StructureType.Tree
+                            entryStructure = New TreeStructure(mFileManager)
+                        Case StructureType.Table
+                            entryStructure = New TableStructure(mFileManager)
+                        Case Else
+                            Debug.Assert(False)
+                    End Select
+
+                    If Not entryStructure Is Nothing Then
+                        If Not ArchetypeDisplay Is Nothing Then
+                            entryStructure.Archetype = ArchetypeDisplay.Archetype
+                        End If
+
+                        ArchetypeDisplay = entryStructure
+                        panelDisplay.Show()
+                        panelStructure.Show()
+                        PanelDetails.Visible = ArchetypeDisplay.HasData
+                    End If
+
+                    panelStructure.ResumeLayout(True)
+                    panelEntry.ResumeLayout(True)
+                    panelDisplay.ResumeLayout(True)
                 End If
 
-                panelStructure.ResumeLayout(True)
-                panelEntry.ResumeLayout(True)
-                panelDisplay.ResumeLayout(True)
-            End If
-
-            If Not mIsLoading Then
-                mFileManager.FileEdited = True
-                RaiseEvent UpdateStructure(Me, chosenStructure)
+                If Not mIsLoading Then
+                    mFileManager.FileEdited = True
+                    RaiseEvent UpdateStructure(Me, chosenStructure)
+                End If
             End If
         End If
     End Sub
