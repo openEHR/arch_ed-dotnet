@@ -755,7 +755,9 @@ Public Class TabPageStructure
             Dim chosenStructure As StructureType = mValidStructureClasses(comboStructure.SelectedIndex)
             ReferenceModel.SetStructureClass(chosenStructure)
 
-            If mIsEmbedded Or chosenStructure <> StructureType Then
+            If mIsEmbedded <> chkEmbedded.Checked Or chosenStructure <> StructureType Then
+                mIsEmbedded = chkEmbedded.Checked
+
                 If mIsEmbedded Then
                     If Not mIsLoading Or mEmbeddedSlot Is Nothing Then
                         mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
@@ -958,24 +960,18 @@ Public Class TabPageStructure
     End Sub
 
     Private Sub chkEmbedded_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEmbedded.CheckedChanged
-        mIsEmbedded = chkEmbedded.Checked
-
         If Not mIsLoading Then
-            'changed the embedded status
             ' if it is not loading and is changed to false then need to remove the filemanager.
             'ToDo: needs to be more comprehensive if more than one embedded
-            If mIsEmbedded AndAlso comboStructure.SelectedIndex = -1 Then
-                comboStructure.Focus()
-                comboStructure.DroppedDown = True
-            Else
-                If Filemanager.HasEmbedded And Not Filemanager.Master Is mFileManager Then
-                    Filemanager.RemoveEmbedded(mFileManager)
-                    mFileManager = Filemanager.Master
-                End If
-
-                comboStructure_selectedIndexChanged(sender, e)
+            If Filemanager.HasEmbedded And Not Filemanager.Master Is mFileManager Then
+                Filemanager.RemoveEmbedded(mFileManager)
+                mFileManager = Filemanager.Master
             End If
+
+            comboStructure_selectedIndexChanged(sender, e)
         End If
+
+        mIsEmbedded = chkEmbedded.Checked
     End Sub
 
 #End Region
