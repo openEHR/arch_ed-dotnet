@@ -524,7 +524,11 @@ Public Class TabPageStructure
 
             If mIsEmbedded Then
                 If Not mEmbeddedSlot Is Nothing Then
-                    result = mEmbeddedSlot.RM_Class.Type
+                    Dim slot As RmSlot = TryCast(mEmbeddedSlot.RM_Class, RmSlot)
+
+                    If Not slot Is Nothing Then
+                        result = slot.SlotConstraint.RM_ClassType
+                    End If
                 End If
             ElseIf Not ArchetypeDisplay Is Nothing Then
                 result = ArchetypeDisplay.StructureType
@@ -771,31 +775,34 @@ Public Class TabPageStructure
                     panelEntry.SuspendLayout()
                     panelDisplay.SuspendLayout()
 
-                    Dim entryStructure As EntryStructure = Nothing ' User control to provide the list or whatever
+                    If chosenStructure <> StructureType Then
+                        Dim entryStructure As EntryStructure = Nothing ' User control to provide the list or whatever
 
-                    Select Case chosenStructure
-                        Case StructureType.Single
-                            entryStructure = New SimpleStructure(mFileManager)
-                        Case StructureType.List
-                            entryStructure = New ListStructure(mFileManager)
-                        Case StructureType.Tree
-                            entryStructure = New TreeStructure(mFileManager)
-                        Case StructureType.Table
-                            entryStructure = New TableStructure(mFileManager)
-                        Case Else
-                            Debug.Assert(False)
-                    End Select
+                        Select Case chosenStructure
+                            Case StructureType.Single
+                                entryStructure = New SimpleStructure(mFileManager)
+                            Case StructureType.List
+                                entryStructure = New ListStructure(mFileManager)
+                            Case StructureType.Tree
+                                entryStructure = New TreeStructure(mFileManager)
+                            Case StructureType.Table
+                                entryStructure = New TableStructure(mFileManager)
+                            Case Else
+                                Debug.Assert(False)
+                        End Select
 
-                    If Not entryStructure Is Nothing Then
-                        If Not ArchetypeDisplay Is Nothing Then
-                            entryStructure.Archetype = ArchetypeDisplay.Archetype
+                        If Not entryStructure Is Nothing Then
+                            If Not ArchetypeDisplay Is Nothing Then
+                                entryStructure.Archetype = ArchetypeDisplay.Archetype
+                            End If
+
+                            ArchetypeDisplay = entryStructure
                         End If
-
-                        ArchetypeDisplay = entryStructure
-                        panelDisplay.Show()
-                        panelStructure.Show()
-                        PanelDetails.Visible = ArchetypeDisplay.HasData
                     End If
+
+                    panelDisplay.Show()
+                    panelStructure.Show()
+                    PanelDetails.Visible = ArchetypeDisplay.HasData
 
                     panelStructure.ResumeLayout(True)
                     panelEntry.ResumeLayout(True)
@@ -843,18 +850,7 @@ Public Class TabPageStructure
             mFileManager = Filemanager.Master
             chkEmbedded.Checked = True
             ArchetypeDisplay = Nothing
-
-            Select Case slot.SlotConstraint.RM_ClassType
-                Case StructureType.Single
-                    comboStructure.SelectedIndex = 0
-                Case StructureType.List
-                    comboStructure.SelectedIndex = 1
-                Case StructureType.Tree
-                    comboStructure.SelectedIndex = 2
-                Case StructureType.Table
-                    comboStructure.SelectedIndex = 3
-            End Select
-
+            comboStructure.SelectedItem = StructureTypeAsString
             Translate()
         End If
 
