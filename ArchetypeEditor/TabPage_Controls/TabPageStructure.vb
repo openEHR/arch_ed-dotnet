@@ -759,7 +759,7 @@ Public Class TabPageStructure
             Dim chosenStructure As StructureType = mValidStructureClasses(comboStructure.SelectedIndex)
             ReferenceModel.SetStructureClass(chosenStructure)
 
-            If mIsEmbedded <> chkEmbedded.Checked Or chosenStructure <> StructureType Then
+            If mIsLoading Or mIsEmbedded <> chkEmbedded.Checked Or chosenStructure <> StructureType Then
                 mIsEmbedded = chkEmbedded.Checked
 
                 If mIsEmbedded Then
@@ -831,7 +831,6 @@ Public Class TabPageStructure
         mEmbeddedSlot = New ArchetypeNodeAnonymous(slot)
         comboStructure.SelectedIndex = -1
 
-        Dim sl As Constraint_Slot = slot.SlotConstraint
         mFileManager = New FileManagerLocal
         PanelDetails.LocalFileManager = mFileManager
         mFileManager.ObjectToSave = Me
