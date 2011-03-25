@@ -98,8 +98,6 @@ Public Class TreeStructure
 
         'Not able to set inherited imagelists through GUI
         Me.tvTree.ImageList = Me.ilSmall
-        mFileManager.FileEdited = True
-
     End Sub
 
     'Form overrides dispose to clean up the component list.

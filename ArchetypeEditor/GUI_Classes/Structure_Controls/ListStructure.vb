@@ -68,7 +68,6 @@ Public Class ListStructure
 
         'Not able to set imagelists that are inherited
         lvList.SmallImageList = Me.ilSmall
-        mFileManager.FileEdited = True
     End Sub
 
     Public Sub New()

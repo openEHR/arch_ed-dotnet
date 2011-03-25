@@ -39,8 +39,6 @@ Public Class SimpleStructure
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
-        'Add any initialization after the InitializeComponent() call
-        mFileManager.FileEdited = True
     End Sub
 
     Sub New(ByVal rm As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)

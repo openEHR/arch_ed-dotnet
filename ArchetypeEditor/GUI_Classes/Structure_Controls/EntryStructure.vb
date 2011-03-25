@@ -94,7 +94,7 @@ Public Class EntryStructure
         mFileManager = a_file_manager
 
         ' also sets the node Id if it is not already set
-        StructureType = System.Enum.Parse(StructureType.GetType, a_structure_as_string)
+        mStructureType = System.Enum.Parse(StructureType.GetType, a_structure_as_string)
 
         ' layout the buttons on the icons panel
         Select Case mStructureType
@@ -527,32 +527,19 @@ Public Class EntryStructure
     End Property
 
     'implement as overrided property
-    Public Property StructureType() As StructureType
+    Public ReadOnly Property StructureType() As StructureType
         Get
             Return mStructureType
         End Get
-        Set(ByVal Value As StructureType)
-            mStructureType = Value
-            Dim s As String = ""
-
-            Select Case Value
-                Case StructureType.Single
-                    s = Filemanager.GetOpenEhrTerm(105, "Single")
-                Case StructureType.List
-                    s = Filemanager.GetOpenEhrTerm(106, "List")
-                Case StructureType.Tree
-                    s = Filemanager.GetOpenEhrTerm(107, "Tree")
-                Case StructureType.Table
-                    s = Filemanager.GetOpenEhrTerm(108, "Table")
-            End Select
-            If mNodeId = "" Then
-                mNodeId = mFileManager.OntologyManager.AddTerm(s, "@ internal @").Code
-            Else
-                mFileManager.OntologyManager.SetText(s, mNodeId)
-            End If
-            ShowIcons()
-        End Set
     End Property
+
+    Public Sub SetTextForNodeId(ByVal text As String)
+        If mNodeId = "" Then
+            mNodeId = mFileManager.OntologyManager.AddTerm(text, "@ internal @").Code
+        Else
+            mFileManager.OntologyManager.SetText(text, mNodeId)
+        End If
+    End Sub
 
     Public Overridable ReadOnly Property InterfaceBuilder() As Object
         Get
@@ -716,7 +703,7 @@ Public Class EntryStructure
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
 
-    Protected Overloads Sub SetCurrentItem(ByVal node As ArchetypeNode)
+    Protected Sub SetCurrentItem(ByVal node As ArchetypeNode)
         ' if nothing this hides panelDetails
         mCurrentItem = node
 

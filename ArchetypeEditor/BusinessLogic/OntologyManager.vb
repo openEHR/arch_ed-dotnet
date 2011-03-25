@@ -365,44 +365,42 @@ Public Class OntologyManager
         Return mLastTerm
     End Function
 
-    Private Function ReplaceTranslations() As Boolean
-        If mLanguageCode = PrimaryLanguageCode Then
-            If mOntology.IsMultiLanguage Then
-                If mReplaceTranslations = 0 Then
-                    If MessageBox.Show(AE_Constants.Instance.ReplaceTranslations, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.Yes Then
-                        mReplaceTranslations = -1 'true
-                        Return True
-                    Else
-                        mReplaceTranslations = 1 ' false
-                    End If
-                Else
-                    If mReplaceTranslations = 1 Then
-                        Return False
-                    Else
-                        ' -1
-                        Return True
-                    End If
+    Private Function ReplaceTranslations(ByVal term As RmTerm) As Boolean
+        Dim result As Boolean = False
+
+        If mLanguageCode = PrimaryLanguageCode And mOntology.IsMultiLanguage Then
+            If mReplaceTranslations = 0 Then
+                mReplaceTranslations = 1
+                Dim message As String = AE_Constants.Instance.ReplaceTranslations + Environment.NewLine + term.Code + " = """ + term.Text + """"
+
+                If MessageBox.Show(Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = DialogResult.Yes Then
+                    mReplaceTranslations = -1
                 End If
             End If
+
+            result = mReplaceTranslations = -1
         End If
 
-        Return False
+        Return result
     End Function
 
     Public Sub SetRmTermText(ByVal term As RmTerm)
         If term.IsConstraint Then
-            Update(term, mConstraintDefinitionsTable, ReplaceTranslations())
+            Update(term, mConstraintDefinitionsTable)
         Else
-            Update(term, mTermDefinitionsTable, ReplaceTranslations())
+            Update(term, mTermDefinitionsTable)
         End If
 
         mLastTerm = term
     End Sub
 
-    Public Sub SetText(ByVal Value As String, ByVal code As String)
+    Public Sub SetText(ByVal value As String, ByVal code As String)
         mLastTerm = GetTerm(code)
-        mLastTerm.Text = Value
-        SetRmTermText(mLastTerm)
+
+        If mLastTerm.Text <> value Then
+            mLastTerm.Text = value
+            SetRmTermText(mLastTerm)
+        End If
     End Sub
 
     Public Function GetText(ByVal code As String) As String
@@ -451,10 +449,10 @@ Public Class OntologyManager
         SetRmTermText(mLastTerm)
     End Sub
 
-    Private Sub Update(ByVal aTerm As RmTerm, ByVal aTable As DataTable, ByVal ReplaceTranslations As Boolean)
+    Private Sub Update(ByVal aTerm As RmTerm, ByVal aTable As DataTable)
         Dim d_row As DataRow
 
-        If ReplaceTranslations Then
+        If ReplaceTranslations(aTerm) Then
             Dim priorSetting As Boolean = mDoUpdateOntology
             Dim selected_rows As DataRow()
             selected_rows = aTable.Select("Code ='" & aTerm.Code & "'")
@@ -1046,7 +1044,7 @@ Public Class OntologyManager
                         aterm.Comment = TryCast(e.Row(4), String)
                     End If
 
-                    mOntology.ReplaceTerm(aterm, ReplaceTranslations())
+                    mOntology.ReplaceTerm(aterm, ReplaceTranslations(aterm))
                 End If
 
                 mFileManager.FileEdited = True

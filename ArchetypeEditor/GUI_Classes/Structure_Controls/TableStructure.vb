@@ -119,8 +119,6 @@ Public Class TableStructure
         MyBase.New("Table", a_file_manager)
         'This call is required by the Windows Form Designer.
         InitializeComponent()
-        'Add any initialization after the InitializeComponent() call
-        mFileManager.FileEdited = True
     End Sub
     'UserControl overrides dispose to clean up the component list.
     'Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)

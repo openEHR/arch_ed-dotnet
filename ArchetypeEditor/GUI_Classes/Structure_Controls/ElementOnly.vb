@@ -39,15 +39,6 @@ Public Class ElementOnly
 
     End Sub
 
-    Public Sub New(ByVal a_file_manager As FileManagerLocal)
-        MyBase.New("Single", a_file_manager) ' structure type simple
-
-        'This call is required by the Windows Form Designer.
-        InitializeComponent()
-        'Add any initialization after the InitializeComponent() call
-        mFileManager.FileEdited = True
-    End Sub
-
     Sub New(ByVal an_element As RmElement, ByVal a_file_manager As FileManagerLocal)
         MyBase.New(an_element, a_file_manager)
         'This call is required by the Windows Form Designer.
