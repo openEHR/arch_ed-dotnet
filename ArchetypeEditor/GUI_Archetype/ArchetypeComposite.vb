@@ -18,6 +18,7 @@ Option Strict On
 
 Public Class ArchetypeComposite
     Inherits ArchetypeNodeAbstract
+
     Private mIsFixed As Boolean
     Private mCardinality As New RmCardinality(0)
 
@@ -36,6 +37,32 @@ Public Class ArchetypeComposite
         End Get
         Set(ByVal Value As Boolean)
             mCardinality.Ordered = Value
+        End Set
+    End Property
+
+    Public Overrides ReadOnly Property IsReference() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property HasReferences() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Overrides Property Constraint() As Constraint
+        Get
+            Dim result As Constraint = Nothing
+
+            If Item.Type = StructureType.Cluster Then
+                result = New Constraint_Cluster
+            End If
+
+            Return result
+        End Get
+        Set(ByVal value As Constraint)
         End Set
     End Property
 
@@ -66,23 +93,11 @@ Public Class ArchetypeComposite
         Return s
     End Function
 
-    Public Overrides ReadOnly Property IsReference() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
-
-    Public Overrides ReadOnly Property HasReferences() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
-
     Public Overrides Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
         Dim s As String
         Dim result As System.Text.StringBuilder = New System.Text.StringBuilder("<tr>")
 
-        Select Case Me.mItem.Type
+        Select Case mItem.Type
             Case StructureType.Cluster
                 result.AppendFormat("{0}<td><table><tr><td width=""{1}""></td><td><img border=""0"" src=""Images/compound.gif"" width=""32"" height=""32"" align=""middle""><b><i>{2}</i></b></td></table></td>", Environment.NewLine, (level * 20).ToString, mText)
                 s = Filemanager.GetOpenEhrTerm(313, "Cluster")
@@ -118,39 +133,39 @@ Public Class ArchetypeComposite
 
     End Function
 
-    Public Sub New(ByVal aText As String, ByVal a_type As StructureType, ByVal a_file_manager As FileManagerLocal)
+    Public Sub New(ByVal aText As String, ByVal a_type As StructureType, ByVal fileManager As FileManagerLocal)
         MyBase.New(aText)
-        mFileManager = a_file_manager
-        Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(aText)
-        Me.Item = New RmStructure(aTerm.Code, a_type)
-        Me.Item.Occurrences.MaxCount = 1
+        mFileManager = fileManager
+        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(aText)
+        Item = New RmStructure(term.Code, a_type)
+        Item.Occurrences.MaxCount = 1
     End Sub
 
-    Public Sub New(ByVal a_type As StructureType, ByVal a_file_manager As FileManagerLocal)
+    Public Sub New(ByVal a_type As StructureType, ByVal fileManager As FileManagerLocal)
         ' for anonymous use of an archetype with no term
         ' called by structures when creating the cluster control which has no id
         MyBase.New("")
 
-        mFileManager = a_file_manager
-        Dim aTerm As RmTerm = New RmTerm("")
-        Me.Item = New RmStructure(aTerm.Code, a_type)
-        Me.Item.Occurrences.MaxCount = 1
+        mFileManager = fileManager
+        Dim term As RmTerm = New RmTerm("")
+        Item = New RmStructure(term.Code, a_type)
+        Item.Occurrences.MaxCount = 1
     End Sub
 
-    Sub New(ByVal aCluster As RmCluster, ByVal a_file_manager As FileManagerLocal)
-        MyBase.New(New RmStructure(aCluster), a_file_manager)
-        mCardinality = aCluster.Children.Cardinality
-        mIsFixed = aCluster.Children.Fixed
+    Sub New(ByVal cluster As RmCluster, ByVal fileManager As FileManagerLocal)
+        MyBase.New(New RmStructure(cluster), fileManager)
+        mCardinality = cluster.Children.Cardinality
+        mIsFixed = cluster.Children.Fixed
     End Sub
 
-    Sub New(ByVal a_structure As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)
-        MyBase.New(New RmStructure(a_structure), a_file_manager)
-        mCardinality = a_structure.Children.Cardinality
-        mIsFixed = a_structure.Children.Fixed
+    Sub New(ByVal struct As RmStructureCompound, ByVal fileManager As FileManagerLocal)
+        MyBase.New(New RmStructure(struct), fileManager)
+        mCardinality = struct.Children.Cardinality
+        mIsFixed = struct.Children.Fixed
     End Sub
 
-    Sub New(ByVal aSection As RmSection, ByVal a_file_manager As FileManagerLocal)
-        MyBase.New(New RmStructure(aSection), a_file_manager)
+    Sub New(ByVal aSection As RmSection, ByVal fileManager As FileManagerLocal)
+        MyBase.New(New RmStructure(aSection), fileManager)
         mCardinality = aSection.Children.Cardinality
         mIsFixed = aSection.Children.Fixed
     End Sub
@@ -158,6 +173,7 @@ Public Class ArchetypeComposite
     Sub New(ByVal aNode As ArchetypeNodeAbstract)
         MyBase.New(aNode)
     End Sub
+
 End Class
 
 '

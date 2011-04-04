@@ -50,7 +50,7 @@ Public Class ElementOnly
             mElement = New ArchetypeElement(an_element, mFileManager)
 
             If Not mElement.Constraint Is Nothing Then
-                PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(mElement.Constraint.Type, False, False))
+                PictureBoxSimple.Image = ilSmall.Images(mElement.Constraint.ImageIndexForConstraintKind(False, False))
             Else
                 ButAddElement.Show()
             End If
@@ -147,15 +147,15 @@ Public Class ElementOnly
         End Get
     End Property
 
-    Public Shadows Property Archetype() As RmElement
+    Public Overrides Property Archetype() As RmStructure
         Get
             Return mElement.RM_Class
         End Get
-        Set(ByVal Value As RmElement)
-            mNodeId = Value.NodeId
+        Set(ByVal value As RmStructure)
+            mNodeId = value.NodeId
             mLoading = True
-            mElement = New ArchetypeElement(Value, mFileManager)
-            PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(mElement.Constraint.Type, False, False))
+            mElement = New ArchetypeElement(value, mFileManager)
+            PictureBoxSimple.Image = ilSmall.Images(mElement.Constraint.ImageIndexForConstraintKind(False, False))
             mLoading = False
             mFileManager.FileEdited = True
             SetCurrentItem(mElement)
@@ -163,7 +163,7 @@ Public Class ElementOnly
     End Property
 
     Public Overrides Sub Reset()
-        Me.PictureBoxSimple.Image = Nothing
+        PictureBoxSimple.Image = Nothing
     End Sub
 
     Public Overrides Sub Translate()
@@ -201,7 +201,7 @@ Public Class ElementOnly
         mElement = New ArchetypeElement(temp, mFileManager)
         mElement.Constraint = a_constraint
         mElement.Occurrences.MaxCount = 1
-        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(mElement.Constraint.Type, False, False))
+        PictureBoxSimple.Image = ilSmall.Images(mElement.Constraint.ImageIndexForConstraintKind(False, False))
         mFileManager.FileEdited = True
         SetCurrentItem(Element)
         ButAddElement.Hide()
@@ -247,7 +247,7 @@ Public Class ElementOnly
 
     Protected Overrides Sub RefreshIcons()
         Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
-        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(element.Constraint.Type, False, False))
+        PictureBoxSimple.Image = ilSmall.Images(element.Constraint.ImageIndexForConstraintKind(False, False))
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
@@ -278,7 +278,7 @@ Public Class ElementOnly
         If Not mNewConstraint Is Nothing Then
             mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
             mElement.Constraint = mNewConstraint
-            PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(mElement.Constraint.Type, False, False))
+            PictureBoxSimple.Image = ilSmall.Images(mElement.Constraint.ImageIndexForConstraintKind(False, False))
             SetCurrentItem(mElement)
             mFileManager.FileEdited = True
             mNewConstraint = Nothing

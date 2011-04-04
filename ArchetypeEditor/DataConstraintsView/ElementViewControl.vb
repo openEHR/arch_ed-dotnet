@@ -50,10 +50,10 @@ Public MustInherit Class ElementViewControl : Inherits Control
         End If
 
         If anElement.Constraint IsNot Nothing Then
-            Select Case anElement.Constraint.Type
-                Case ConstraintType.Text
+            Select Case anElement.Constraint.Kind
+                Case ConstraintKind.Text
                     lbl.TextAlign = ContentAlignment.TopLeft
-                Case ConstraintType.DateTime
+                Case ConstraintKind.DateTime
                     lbl.TextAlign = ContentAlignment.MiddleLeft
             End Select
         End If

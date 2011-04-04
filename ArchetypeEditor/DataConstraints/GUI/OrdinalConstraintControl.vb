@@ -232,7 +232,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
             Me.txtAssumedOrdinal.Text = GetOrdinalText(CInt(mOrdinalConstraint.AssumedValue))
         End If
 
-        If (Not Main.Instance.TempConstraint Is Nothing) AndAlso (Main.Instance.TempConstraint.Type = ConstraintType.Ordinal) Then
+        If (Not Main.Instance.TempConstraint Is Nothing) AndAlso (Main.Instance.TempConstraint.Kind = ConstraintKind.Ordinal) Then
             Me.MenuItemPasteAll.Enabled = True
             Me.MenuItemCancelCopy.Visible = True
             Me.MenuItemCopyAll.Enabled = False
@@ -331,7 +331,7 @@ Public Class OrdinalConstraintControl : Inherits ConstraintControl
 
         Me.Constraint.ClearOrdinalValues()
 
-        Debug.Assert(Main.Instance.TempConstraint.Type = ConstraintType.Ordinal)
+        Debug.Assert(Main.Instance.TempConstraint.Kind = ConstraintKind.Ordinal)
 
         '' default key(0) is set to ae.NodeId
         For Each ov As OrdinalValue In CType(Main.Instance.TempConstraint, Constraint_Ordinal).OrdinalValues

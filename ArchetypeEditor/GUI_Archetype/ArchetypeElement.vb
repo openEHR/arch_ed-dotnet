@@ -28,13 +28,13 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
     Public Overrides ReadOnly Property IsReference() As Boolean
         Get
-            Return Element.isReference
+            Return Element.IsReference
         End Get
     End Property
 
     Public Overrides ReadOnly Property HasReferences() As Boolean
         Get
-            Return Element.hasReferences
+            Return Element.HasReferences
         End Get
     End Property
 
@@ -45,12 +45,12 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End Get
     End Property
 
-    Public Property Constraint() As Constraint
+    Public Overrides Property Constraint() As Constraint
         Get
             Return Element.Constraint
         End Get
-        Set(ByVal Value As Constraint)
-            Element.Constraint = Value
+        Set(ByVal value As Constraint)
+            Element.Constraint = value
         End Set
     End Property
 
@@ -153,7 +153,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         result &= Environment.NewLine & AE_Constants.Instance.Upper & ": " & s & "<br>"
         Return result
     End Function
-
 
     Private Function QuantityIntervalConstraintToHTML(ByVal q As Constraint_Interval_Quantity) As String
         Dim result As String
@@ -266,7 +265,6 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End If
     End Function
 
-
     Private Function OrdinalConstraintToRichText(ByVal OrdinalConstraint As Constraint_Ordinal) As String
         Dim s As String
         Dim ov As OrdinalValue
@@ -374,7 +372,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         result = result & Environment.NewLine & (Space(3 * level) & s & "\par")
 
         If Not Element.Constraint Is Nothing Then
-            result &= Environment.NewLine & (Space(3 * level) & "  DataType = " & Element.Constraint.ConstraintTypeString & "\par")
+            result &= Environment.NewLine & (Space(3 * level) & "  DataType = " & Element.Constraint.ConstraintKindString & "\par")
             result &= ConstraintToRichText(Element.Constraint, level)
             result &= Environment.NewLine & ("\par")
         End If
@@ -391,23 +389,22 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Private Function ConstraintToRichText(ByVal a_constraint As Constraint, ByVal level As Integer) As String
         Dim result As String = ""
 
-        Select Case a_constraint.Type
+        Select Case a_constraint.Kind
 
-            Case ConstraintType.Quantity
+            Case ConstraintKind.Quantity
                 result &= Environment.NewLine _
                         & QuantityConstraintToRichText(CType(a_constraint, Constraint_Quantity), level)
 
-            Case ConstraintType.Count
+            Case ConstraintKind.Count
                 result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & CountConstraintToRichText(CType(a_constraint, Constraint_Count)) & "\par")
 
-            Case ConstraintType.Text
+            Case ConstraintKind.Text
                 result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & TextConstraintToRichText(CType(a_constraint, Constraint_Text)) & "\par")
 
-            Case ConstraintType.Boolean
-                Dim b As Constraint_Boolean
+            Case ConstraintKind.Boolean
+                Dim b As Constraint_Boolean = CType(a_constraint, Constraint_Boolean)
                 Dim s As String = ""
 
-                b = CType(a_constraint, Constraint_Boolean)
                 If b.TrueFalseAllowed Then
                     s = "*"
                 ElseIf b.TrueAllowed Then
@@ -422,41 +419,39 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
                 result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & s & "\par")
 
-            Case ConstraintType.DateTime
-                Dim dt As Constraint_DateTime
-                dt = CType(a_constraint, Constraint_DateTime)
-                result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & DateTimeConstraintToRichText(dt) & "\par")
+            Case ConstraintKind.DateTime
+                result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & DateTimeConstraintToRichText(CType(a_constraint, Constraint_DateTime)) & "\par")
 
-            Case ConstraintType.Ordinal
+            Case ConstraintKind.Ordinal
                 result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & OrdinalConstraintToRichText(CType(a_constraint, Constraint_Ordinal)) & "\par")
 
-            Case ConstraintType.Duration
+            Case ConstraintKind.Duration
                 result &= Environment.NewLine & (Space(3 * level) & "  Constraint: " & DurationConstraintToRichText(CType(a_constraint, Constraint_Duration)) & "\par")
 
-            Case ConstraintType.Any
+            Case ConstraintKind.Any
                 ' add nothing
 
-            Case ConstraintType.Multiple
+            Case ConstraintKind.Multiple
                 For Each c As Constraint In CType(a_constraint, Constraint_Choice).Constraints
                     result &= ConstraintToRichText(c, level + 1)
                 Next
 
-            Case ConstraintType.MultiMedia
+            Case ConstraintKind.MultiMedia
                 'add nothing
 
-            Case ConstraintType.URI
+            Case ConstraintKind.URI
                 'add nothing
 
-            Case ConstraintType.Parsable
+            Case ConstraintKind.Parsable
                 'add nothing
 
-            Case ConstraintType.Identifier
+            Case ConstraintKind.Identifier
                 'add nothing
 
-            Case ConstraintType.Currency
+            Case ConstraintKind.Currency
                 'add nothing
 
-            Case ConstraintType.Interval_Count
+            Case ConstraintKind.Interval_Count
                 Dim cic As Constraint_Interval_Count = CType(a_constraint, Constraint_Interval_Count)
                 result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": "
                 result &= CountConstraintToRichText(CType(cic.UpperLimit, Constraint_Count))
@@ -464,7 +459,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 result &= CountConstraintToRichText(CType(cic.LowerLimit, Constraint_Count))
                 result &= "\par"
 
-            Case ConstraintType.Interval_DateTime
+            Case ConstraintKind.Interval_DateTime
                 Dim cidt As Constraint_Interval_DateTime = CType(a_constraint, Constraint_Interval_DateTime)
                 result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": "
                 result &= DateTimeConstraintToRichText(CType(cidt.UpperLimit, Constraint_DateTime))
@@ -472,15 +467,14 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 result &= DateTimeConstraintToRichText(CType(cidt.LowerLimit, Constraint_DateTime))
                 result &= "\par"
 
-            Case ConstraintType.Interval_Quantity
+            Case ConstraintKind.Interval_Quantity
                 Dim ciq As Constraint_Interval_Count = CType(a_constraint, Constraint_Interval_Quantity)
                 result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Upper & ": \par"
                 result &= Environment.NewLine & QuantityConstraintToRichText(CType(ciq.UpperLimit, Constraint_Quantity), level + 1) & "\par"
                 result &= Environment.NewLine & Space(3 * level) & AE_Constants.Instance.Lower & ": \par"
                 result &= Environment.NewLine & QuantityConstraintToRichText(CType(ciq.LowerLimit, Constraint_Quantity), level + 1) & "\par"
 
-
-            Case ConstraintType.Proportion
+            Case ConstraintKind.Proportion
                 Dim cp As Constraint_Proportion = CType(a_constraint, Constraint_Proportion)
                 result &= Environment.NewLine & Space(3 * level)
                 result &= CountConstraintToRichText(CType(cp.Numerator, Constraint_Count))
@@ -499,7 +493,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
                 result &= "\par"
 
-            Case ConstraintType.Slot
+            Case ConstraintKind.Slot
                 Dim cSlot As Constraint_Slot = CType(a_constraint, Constraint_Slot)
 
                 If cSlot.hasSlots Then
@@ -526,7 +520,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                 result &= "\par"
 
             Case Else
-                Debug.Assert(False, a_constraint.Type.ToString & " not handled")
+                Debug.Assert(False, a_constraint.Kind.ToString & " not handled")
 
         End Select
         Return result
@@ -545,8 +539,8 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         result.TerminologyCode = ""
 
         If Not c Is Nothing Then
-            Select Case c.Type
-                Case ConstraintType.Multiple
+            Select Case c.Kind
+                Case ConstraintKind.Multiple
                     Dim prefix As String = ""
 
                     For Each cc As Constraint In CType(c, Constraint_Choice).Constraints
@@ -556,23 +550,23 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
                     result.ImageSource = "Images/choice.gif"
 
-                Case ConstraintType.Any
+                Case ConstraintKind.Any
                     result.HTML = Environment.NewLine & "&nbsp;"
                     result.ImageSource = "Images/any.gif"
 
-                Case ConstraintType.Quantity
+                Case ConstraintKind.Quantity
                     result.HTML = Environment.NewLine & QuantityConstraintToHTML(CType(c, Constraint_Quantity))
                     result.ImageSource = "Images/quantity.gif"
 
-                Case ConstraintType.Count
+                Case ConstraintKind.Count
                     result.HTML = Environment.NewLine & CountConstraintToRichText(CType(c, Constraint_Count))
                     result.ImageSource = "Images/count.gif"
 
-                Case ConstraintType.Text
+                Case ConstraintKind.Text
                     result.HTML = Environment.NewLine & TextConstraintToRichText(CType(c, Constraint_Text))
                     result.ImageSource = "Images/text.gif"
 
-                Case ConstraintType.Boolean
+                Case ConstraintKind.Boolean
                     Dim b As Constraint_Boolean = CType(c, Constraint_Boolean)
                     result.HTML = Environment.NewLine
 
@@ -590,50 +584,49 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
                     result.ImageSource = "Images/truefalse.gif"
 
-                Case ConstraintType.DateTime
-                    Dim dt As Constraint_DateTime
-                    dt = CType(c, Constraint_DateTime)
+                Case ConstraintKind.DateTime
+                    Dim dt As Constraint_DateTime = CType(c, Constraint_DateTime)
                     result.HTML = Environment.NewLine & Filemanager.GetOpenEhrTerm(dt.TypeofDateTimeConstraint, "not known")
                     result.ImageSource = "Images/datetime.gif"
 
-                Case ConstraintType.Ordinal
+                Case ConstraintKind.Ordinal
                     result.HTML = Environment.NewLine & OrdinalConstraintToHTML(CType(c, Constraint_Ordinal))
                     result.ImageSource = "Images/ordinal.gif"
 
-                Case ConstraintType.URI
+                Case ConstraintKind.URI
                     result.HTML = Environment.NewLine & "&nbsp;"
                     result.ImageSource = "Images/uri.gif"
 
-                Case ConstraintType.Proportion
+                Case ConstraintKind.Proportion
                     result.HTML = Environment.NewLine & ProportionConstraintToHTML(CType(c, Constraint_Proportion))
                     result.ImageSource = "Images/ratio.gif"
 
-                Case ConstraintType.Duration
+                Case ConstraintKind.Duration
                     result.HTML = Environment.NewLine & DurationConstraintToRichText(CType(c, Constraint_Duration))
                     result.ImageSource = "Images/duration.gif"
 
-                Case ConstraintType.Interval_Count
+                Case ConstraintKind.Interval_Count
                     result.HTML = Environment.NewLine & IntervalCountToHTML(CType(c, Constraint_Interval_Count))
                     result.ImageSource = "Images/interval.gif"
 
-                Case ConstraintType.Interval_Quantity
+                Case ConstraintKind.Interval_Quantity
                     result.HTML = Environment.NewLine & IntervalQuantityToHTML(CType(c, Constraint_Interval_Quantity))
                     result.ImageSource = "Images/interval.gif"
 
-                Case ConstraintType.Interval_DateTime
+                Case ConstraintKind.Interval_DateTime
                     result.HTML = Environment.NewLine & IntervalDateTimeToHTML(CType(c, Constraint_Interval_DateTime))
                     result.ImageSource = "Images/interval.gif"
 
-                Case ConstraintType.MultiMedia
+                Case ConstraintKind.MultiMedia
                     result.HTML = ""
                     result.ImageSource = "Images/multimedia.gif"
 
-                Case ConstraintType.Slot
+                Case ConstraintKind.Slot
                     result.HTML = Environment.NewLine & SlotToHTML(CType(c, Constraint_Slot))
                     result.ImageSource = "Images/slot.gif"
 
                 Case Else
-                    Debug.WriteLine(c.Type.ToString)
+                    Debug.WriteLine(c.Kind.ToString)
                     Debug.Assert(False, "Not handled")
             End Select
         End If
@@ -660,15 +653,15 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End If
 
         If Not Element.Constraint Is Nothing Then
-            If Element.Constraint.Type = ConstraintType.Multiple Then
+            If Element.Constraint.Kind = ConstraintKind.Multiple Then
                 Dim prefix As String = ""
 
                 For Each c As Constraint In CType(Element.Constraint, Constraint_Choice).Constraints
-                    class_names &= prefix & c.Type.ToString
+                    class_names &= prefix & c.Kind.ToString
                     prefix = "<hr>"
                 Next
             Else
-                class_names = Element.Constraint.ConstraintTypeString
+                class_names = Element.Constraint.ConstraintKindString
             End If
         End If
 

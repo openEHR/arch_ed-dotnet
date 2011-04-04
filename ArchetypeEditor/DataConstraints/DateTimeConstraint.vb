@@ -19,16 +19,16 @@ Class Constraint_DateTime
     Private iDTconstraint As Integer
     'FIXME - should be an enumeration
 
-    Public Overrides Function copy() As Constraint
+    Public Overrides Function Copy() As Constraint
         Dim dt As New Constraint_DateTime
         dt.iDTconstraint = Me.iDTconstraint
         Return dt
     End Function
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             'Return "DateTime"
-            Return ConstraintType.DateTime
+            Return ConstraintKind.DateTime
         End Get
     End Property
 

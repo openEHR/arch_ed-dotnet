@@ -24,10 +24,9 @@ Public Class RmStructureCompound
 
     Private colChildren As Children
 
-
     Public Overrides ReadOnly Property Type() As StructureType
         Get
-            Return mType
+            Return mStructureType
         End Get
     End Property
 
@@ -41,11 +40,10 @@ Public Class RmStructureCompound
     End Property
 
     Public Overrides Function Copy() As RmStructure
-        Dim rm As New RmStructureCompound(Me.NodeId, mType)
-
-        rm.cOccurrences = Me.cOccurrences.Copy
-        rm.colChildren = Me.colChildren.copy
-        Return rm
+        Dim result As New RmStructureCompound(Me.NodeId, mStructureType)
+        result.cOccurrences = cOccurrences.Copy
+        result.colChildren = colChildren.Copy
+        Return result
     End Function
 
     Public Overridable Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure Implements ArchetypeDefinition.GetChildByNodeId
@@ -54,32 +52,29 @@ Public Class RmStructureCompound
 
     Sub New(ByVal rm As RmStructure)
         MyBase.New(rm)
-        colChildren = New Children(mType)
+        colChildren = New Children(mStructureType)
     End Sub
 
     Sub New(ByVal archetype_composite As ArchetypeComposite)
         MyBase.New(archetype_composite.RM_Class)
-        colChildren = New Children(mType)
+        colChildren = New Children(mStructureType)
         colChildren.Cardinality = archetype_composite.Cardinality
-        'colChildren.Existence = archetype_composite.existence 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
     End Sub
-
 
     Sub New(ByVal NodeId As String, ByVal a_structure As StructureType)
         MyBase.New(NodeId, a_structure)
-        colChildren = New Children(mType)
+        colChildren = New Children(mStructureType)
     End Sub
-
 
 #Region "ADL oriented features"
 
     Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(EIF_Structure)
-        colChildren = New Children(mType)
+        colChildren = New Children(mStructureType)
 
         'mType is set by the RmStructure class
 
-        Select Case mType
+        Select Case mStructureType
             Case StructureType.Single
                 ProcessSimple(EIF_Structure, a_filemanager)
             Case StructureType.List
@@ -107,7 +102,7 @@ Public Class RmStructureCompound
             a_structure_type = StructureType.Activities Or _
             a_structure_type = StructureType.OtherParticipations)
 
-        colChildren = New Children(mType)
+        colChildren = New Children(mStructureType)
         ProcessData(EIF_Attribute, a_filemanager)
     End Sub
 
@@ -120,7 +115,7 @@ Public Class RmStructureCompound
             Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label" 'runtime_label is obsolete
                     If attribute.has_children Then
-                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        mNameConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     End If
                 Case "items"
                     Dim ii As Integer
@@ -156,7 +151,7 @@ Public Class RmStructureCompound
             Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label" ' runtime_label is obsolete
                     If attribute.has_children Then
-                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        mNameConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     End If
                 Case "item"
                     colChildren.Existence.SetFromOpenEHRExistence(attribute.existence)
@@ -274,11 +269,11 @@ Public Class RmStructureCompound
 
     Sub New(ByVal XML_Structure As XMLParser.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(XML_Structure)
-        colChildren = New Children(mType)
+        colChildren = New Children(mStructureType)
 
         'mType is set by the RmStructure class
 
-        Select Case mType
+        Select Case mStructureType
             Case StructureType.Single
                 ProcessSimple(XML_Structure, a_filemanager)
             Case StructureType.List
@@ -305,7 +300,7 @@ Public Class RmStructureCompound
             a_structure_type = StructureType.ActivityDescription Or _
             a_structure_type = StructureType.Activities Or _
             a_structure_type = StructureType.OtherParticipations)
-        colChildren = New Children(mType)
+        colChildren = New Children(mStructureType)
         ProcessData(XML_Attribute, a_filemanager)
     End Sub
 
@@ -315,7 +310,7 @@ Public Class RmStructureCompound
         For Each an_attribute In ObjNode.attributes
             Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label" 'runtime_label is obsolete
-                    mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                    mNameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                 Case "items"
                     'Set whether the list is ordered or not
                     colChildren.Cardinality.SetFromXmlCardinality(CType(an_attribute, XMLParser.C_MULTIPLE_ATTRIBUTE).cardinality)
@@ -345,7 +340,7 @@ Public Class RmStructureCompound
         For Each an_attribute In ObjNode.attributes
             Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label" ' runtime_label is obsolete
-                    mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                    mNameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                 Case "item"
                     Dim co As XMLParser.C_OBJECT = an_attribute.children(0)
                     colChildren.Existence.SetFromXmlExistence(CType(an_attribute, XMLParser.C_SINGLE_ATTRIBUTE).existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1

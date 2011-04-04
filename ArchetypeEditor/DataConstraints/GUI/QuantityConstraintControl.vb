@@ -180,7 +180,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
     Private Shadows ReadOnly Property Constraint() As Constraint_Quantity
         Get
             Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Quantity)
-            Debug.Assert(MyBase.Constraint.Type = ConstraintType.Quantity)
+            Debug.Assert(MyBase.Constraint.Kind = ConstraintKind.Quantity)
             Return CType(MyBase.Constraint, Constraint_Quantity)
         End Get
     End Property
@@ -424,7 +424,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
 
         If Me.comboPhysicalProperty.Focused Then
             If (Me.comboPhysicalProperty.SelectedIndex > -1) _
-                    AndAlso (MyBase.Constraint.Type = ConstraintType.Quantity) Then
+                    AndAlso (MyBase.Constraint.Kind = ConstraintKind.Quantity) Then
 
                 'Check to see if it is TIME as Time units are handled with
                 'language specific abbreviations

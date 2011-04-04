@@ -19,7 +19,7 @@ Class Constraint_Boolean
     Private boolHasAssumed As Boolean
     Private iBoolVal As Integer ' 0 = TrueOrFalse (default), 1 = True, 2 = False
 
-    Public Overrides Function copy() As Constraint
+    Public Overrides Function Copy() As Constraint
         Dim b As New Constraint_Boolean
         b.boolAssumed = boolAssumed
         b.boolHasAssumed = boolHasAssumed
@@ -27,9 +27,9 @@ Class Constraint_Boolean
         Return b
     End Function
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Boolean
+            Return ConstraintKind.Boolean
         End Get
     End Property
     Public Property AssumedValue() As Boolean

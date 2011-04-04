@@ -20,8 +20,6 @@ Public Class EntryStructure
     Inherits System.Windows.Forms.UserControl
 
     Private mStructureType As StructureType   'implement as overrided property
-    'Protected MenuItemSpecialise As MenuItem
-    'Protected MenuItemAddReference As MenuItem
     Protected OKtoEditSpecialisation As Boolean
     Protected mNodeId As String
     Protected mIsState As Boolean
@@ -45,32 +43,27 @@ Public Class EntryStructure
 
 #Region " Windows Form Designer generated code "
 
-    Public Sub New(ByVal rm As RmElement, ByVal a_file_manager As FileManagerLocal)
+    Public Sub New(ByVal rm As RmElement, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         'This call is required by the Windows Form Designer.
         InitializeComponent()
-        'Add any initialization after the InitializeComponent() call
 
-        ' need to set nodeID prior to setting structure type
         mNodeId = rm.NodeId
-        mFileManager = a_file_manager
+        mFileManager = fileManager
         mStructureType = rm.Type
         SetHelpTopic(StructureType.Single)
         ShowIcons()
     End Sub
 
-    Public Sub New(ByVal rm As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)
+    Public Sub New(ByVal rm As RmStructureCompound, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         'This call is required by the Windows Form Designer.
         InitializeComponent()
-        'Add any initialization after the InitializeComponent() call
 
-        ' need to set nodeID prior to setting structure type
         mNodeId = rm.NodeId
-        mFileManager = a_file_manager
+        mFileManager = fileManager
         mStructureType = rm.Type
 
-        ' layout the buttons on the icons panel
         Select Case rm.Type
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 SetHelpTopic(mStructureType)
@@ -85,18 +78,16 @@ Public Class EntryStructure
         SetCardinality(rm)
     End Sub
 
-    Public Sub New(ByVal a_structure_as_string As String, ByVal a_file_manager As FileManagerLocal)
+    Public Sub New(ByVal structureAsString As String, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         'This call is required by the Windows Form Designer.
         InitializeComponent()
-        'Add any initialization after the InitializeComponent() call
 
-        mFileManager = a_file_manager
+        mFileManager = fileManager
 
         ' also sets the node Id if it is not already set
-        mStructureType = System.Enum.Parse(StructureType.GetType, a_structure_as_string)
+        mStructureType = System.Enum.Parse(StructureType.GetType, structureAsString)
 
-        ' layout the buttons on the icons panel
         Select Case mStructureType
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 SetHelpTopic(mStructureType)
@@ -411,9 +402,9 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(13, "")
         Me.ilSmall.Images.SetKeyName(14, "")
         Me.ilSmall.Images.SetKeyName(15, "")
-        Me.ilSmall.Images.SetKeyName(16, "id.bmp")
-        Me.ilSmall.Images.SetKeyName(17, "currency.bmp")
-        Me.ilSmall.Images.SetKeyName(18, "parsable.gif")
+        Me.ilSmall.Images.SetKeyName(16, "")
+        Me.ilSmall.Images.SetKeyName(17, "")
+        Me.ilSmall.Images.SetKeyName(18, "")
         Me.ilSmall.Images.SetKeyName(19, "")
         Me.ilSmall.Images.SetKeyName(20, "")
         Me.ilSmall.Images.SetKeyName(21, "")
@@ -430,9 +421,9 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(32, "")
         Me.ilSmall.Images.SetKeyName(33, "")
         Me.ilSmall.Images.SetKeyName(34, "")
-        Me.ilSmall.Images.SetKeyName(35, "id_ref.bmp")
-        Me.ilSmall.Images.SetKeyName(36, "currency_ref.bmp")
-        Me.ilSmall.Images.SetKeyName(37, "parsable_ref.png")
+        Me.ilSmall.Images.SetKeyName(35, "")
+        Me.ilSmall.Images.SetKeyName(36, "")
+        Me.ilSmall.Images.SetKeyName(37, "")
         Me.ilSmall.Images.SetKeyName(38, "")
         Me.ilSmall.Images.SetKeyName(39, "")
         Me.ilSmall.Images.SetKeyName(40, "")
@@ -449,9 +440,9 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(51, "")
         Me.ilSmall.Images.SetKeyName(52, "")
         Me.ilSmall.Images.SetKeyName(53, "")
-        Me.ilSmall.Images.SetKeyName(54, "id_selected.bmp")
-        Me.ilSmall.Images.SetKeyName(55, "currency_selected.bmp")
-        Me.ilSmall.Images.SetKeyName(56, "parsable_selected.png")
+        Me.ilSmall.Images.SetKeyName(54, "")
+        Me.ilSmall.Images.SetKeyName(55, "")
+        Me.ilSmall.Images.SetKeyName(56, "")
         Me.ilSmall.Images.SetKeyName(57, "")
         Me.ilSmall.Images.SetKeyName(58, "")
         Me.ilSmall.Images.SetKeyName(59, "")
@@ -468,11 +459,13 @@ Public Class EntryStructure
         Me.ilSmall.Images.SetKeyName(70, "")
         Me.ilSmall.Images.SetKeyName(71, "")
         Me.ilSmall.Images.SetKeyName(72, "")
-        Me.ilSmall.Images.SetKeyName(73, "id_ref_selected.bmp")
-        Me.ilSmall.Images.SetKeyName(74, "currency_ref_selected.bmp")
-        Me.ilSmall.Images.SetKeyName(75, "parsable_ref_selected.png")
+        Me.ilSmall.Images.SetKeyName(73, "")
+        Me.ilSmall.Images.SetKeyName(74, "")
+        Me.ilSmall.Images.SetKeyName(75, "")
         Me.ilSmall.Images.SetKeyName(76, "")
         Me.ilSmall.Images.SetKeyName(77, "")
+        Me.ilSmall.Images.SetKeyName(78, "")
+        Me.ilSmall.Images.SetKeyName(79, "")
         '
         'ToolTipSpecialisation
         '
@@ -520,12 +513,6 @@ Public Class EntryStructure
 
 #End Region
 
-    Public ReadOnly Property SelectedImageOffset() As Integer
-        Get
-            Return 38
-        End Get
-    End Property
-
     'implement as overrided property
     Public ReadOnly Property StructureType() As StructureType
         Get
@@ -560,11 +547,11 @@ Public Class EntryStructure
         NotifyChangeStructure(Me, e)
     End Sub
 
-    Public Overridable Property Archetype() As RmStructureCompound
+    Public Overridable Property Archetype() As RmStructure
         Get
             Throw New NotImplementedException("Subclass must override this property")
         End Get
-        Set(ByVal Value As RmStructureCompound)
+        Set(ByVal Value As RmStructure)
             Throw New NotImplementedException("Subclass must override this property")
         End Set
     End Property
@@ -598,9 +585,9 @@ Public Class EntryStructure
 
     Private Sub CardinalityUpdated(ByVal sender As Object, ByVal e As EventArgs)
         If mCardinalityControl.Cardinality.ToString() = "0..*" Then
-            Me.PanelStructureHeader.Height = 25
+            PanelStructureHeader.Height = 25
         Else
-            Me.PanelStructureHeader.Height = 75
+            PanelStructureHeader.Height = 75
         End If
     End Sub
 
@@ -622,6 +609,7 @@ Public Class EntryStructure
         result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(113, "Description"))
         result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(87, "Constraints"))
         result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(438, "Values"))
+
         If showComments Then
             result.AppendFormat("{0}<td width=""{1}%""><h4>{2}</h4></td>", Environment.NewLine, displayWidth, Filemanager.GetOpenEhrTerm(652, "Comments"))
         End If
@@ -632,18 +620,17 @@ Public Class EntryStructure
     End Function
 
     Protected Sub SetHelpTopic(ByVal a_structure_type As StructureType)
-
-        Me.helpEntryStructure.SetHelpNavigator(Me, HelpNavigator.Topic)
+        helpEntryStructure.SetHelpNavigator(Me, HelpNavigator.Topic)
 
         Select Case a_structure_type
             Case StructureType.Single
-                Me.helpEntryStructure.SetHelpKeyword(Me, "Screens/structure_simple.htm")
+                helpEntryStructure.SetHelpKeyword(Me, "Screens/structure_simple.htm")
             Case StructureType.List
-                Me.helpEntryStructure.SetHelpKeyword(Me, "Screens/structure_list.htm")
+                helpEntryStructure.SetHelpKeyword(Me, "Screens/structure_list.htm")
             Case StructureType.Tree
-                Me.helpEntryStructure.SetHelpKeyword(Me, "Screens/structure_tree.htm")
+                helpEntryStructure.SetHelpKeyword(Me, "Screens/structure_tree.htm")
             Case StructureType.Table
-                Me.helpEntryStructure.SetHelpKeyword(Me, "Screens/structure_table.htm")
+                helpEntryStructure.SetHelpKeyword(Me, "Screens/structure_table.htm")
         End Select
     End Sub
 
@@ -747,7 +734,7 @@ Public Class EntryStructure
                     butChangeDataType.Hide()
                 End If
 
-                If CType(node, ArchetypeElement).Constraint.Type = ConstraintType.Any Then
+                If CType(node, ArchetypeElement).Constraint.Kind = ConstraintKind.Any Then
                     butChangeDataType.Show()
                 End If
             End If
@@ -786,76 +773,6 @@ Public Class EntryStructure
             Return mFileManager.OntologyManager.NumberOfSpecialisations
         End Get
     End Property
-
-    Protected Function ImageIndexForItem(ByVal item As ArchetypeNode, ByVal isSelected As Boolean) As Integer
-        Dim result As Integer = 0
-
-        Select Case item.RM_Class.Type
-            Case StructureType.Element, StructureType.Reference
-                Dim element As ArchetypeElement = CType(item, ArchetypeElement)
-                result = ImageIndexForConstraintType(element.Constraint.Type, element.IsReference, isSelected)
-            Case StructureType.Slot
-                result = ImageIndexForConstraintType(ConstraintType.Slot, False, isSelected)
-            Case StructureType.Cluster
-                If isSelected Then
-                    result = 77
-                Else
-                    result = 76
-                End If
-        End Select
-
-        Return result
-    End Function
-
-    Protected Function ImageIndexForConstraintType(ByVal ct As ConstraintType, ByVal isReference As Boolean, ByVal isSelected As Boolean) As Integer
-        Dim offset As Integer
-
-        If isReference Then offset = 19
-        If isSelected Then offset += SelectedImageOffset
-
-        Select Case ct
-            Case ConstraintType.Quantity
-                Return 0 + offset
-            Case ConstraintType.Text
-                Return 1 + offset
-            Case ConstraintType.Boolean
-                Return 2 + offset
-            Case ConstraintType.Ordinal
-                Return 3 + offset
-            Case ConstraintType.Count
-                Return 4 + offset
-            Case ConstraintType.DateTime
-                Return 5 + offset
-            Case ConstraintType.Any
-                Return 6 + offset
-            Case ConstraintType.Multiple
-                Return 7 + offset
-            Case ConstraintType.MultiMedia
-                Return 8 + offset
-            Case ConstraintType.URI
-                Return 9 + offset
-            Case ConstraintType.Proportion
-                Return 10 + offset
-            Case ConstraintType.Duration
-                Return 11 + offset
-            Case ConstraintType.Interval_Quantity
-                Return 12 + offset
-            Case ConstraintType.Interval_Count
-                Return 13 + offset
-            Case ConstraintType.Interval_DateTime
-                Return 14 + offset
-            Case ConstraintType.Slot
-                Return 15 + offset
-            Case ConstraintType.Identifier
-                Return 16 + offset
-            Case ConstraintType.Currency
-                Return 17 + offset
-            Case ConstraintType.Parsable
-                Return 18 + offset
-            Case Else
-                Debug.Assert(False, "Constraint not handled")
-        End Select
-    End Function
 
     Private Sub LayoutIcons()
         ' now space the buttons consistently
@@ -913,16 +830,16 @@ Public Class EntryStructure
 
     Private Sub ChangeConstraint(ByVal a_constraint As Constraint)
         Debug.Assert(mCurrentItem.RM_Class.Type = StructureType.Element)
-        If a_constraint.Type = ConstraintType.Multiple Then
+        If a_constraint.Kind = ConstraintKind.Multiple Then
             'Add the current constraint to the multiple constraint before setting the current item to the multiple
             CType(a_constraint, Constraint_Choice).Constraints.Add(CType(mCurrentItem, ArchetypeElement).Constraint)
-        ElseIf CType(mCurrentItem, ArchetypeElement).Constraint.Type = ConstraintType.Multiple Then
+        ElseIf CType(mCurrentItem, ArchetypeElement).Constraint.Kind = ConstraintKind.Multiple Then
             'Or if the current item is multiple
             Dim m As Constraint_Choice
             m = CType(mCurrentItem, ArchetypeElement).Constraint
             For Each c As Constraint In m.Constraints
                 'find the constraint that is of the same type as a_constraint if there is one
-                If c.Type = a_constraint.Type Then
+                If c.Kind = a_constraint.Kind Then
                     a_constraint = c
                 End If
             Next
@@ -939,7 +856,7 @@ Public Class EntryStructure
         Debug.Assert(mCurrentItem.RM_Class.Type = StructureType.Element, "Button should not be available")
         mConstraintMenu = New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf ChangeConstraint), mFileManager)
         ' hide the current constraint type
-        mConstraintMenu.HideMenuItem(CType(mCurrentItem, ArchetypeElement).Constraint.Type)
+        mConstraintMenu.HideMenuItem(CType(mCurrentItem, ArchetypeElement).Constraint.Kind)
         mConstraintMenu.ShowHeader(Filemanager.GetOpenEhrTerm(60, "Change data type"))
         mConstraintMenu.Show(butChangeDataType, New System.Drawing.Point(5, 5))
     End Sub
@@ -982,8 +899,6 @@ Public Class EntryStructure
         RaiseEvent ChangeStructure(sender, e)
     End Sub
 
-#Region "Drag and Drop operations for toolbar on left"
-
     Private Sub pbGroup_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) _
                 Handles pbAny.MouseUp, pbBoolean.MouseUp, pbCluster.MouseUp, pbCount.MouseUp, pbDateTime.MouseUp, _
                     pbOrdinal.MouseUp, pbText.MouseUp, pbQuantity.MouseUp, pbSlot.MouseUp
@@ -991,7 +906,6 @@ Public Class EntryStructure
         'cancel drag and drop operation
         mNewConstraint = Nothing
         mNewCluster = False
-
     End Sub
 
     Private Sub pbGroup_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) _
@@ -1031,15 +945,12 @@ Public Class EntryStructure
         If mControl.Enabled = False Then
             mControl.Enabled = True
         End If
-
     End Sub
-
-
-#End Region
 
     Private Sub EntryStructure_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
         Main.Reflect(Me)
     End Sub
+
 End Class
 
 '

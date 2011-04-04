@@ -70,26 +70,27 @@ Public Class RmStructure
     '  maps to C_OBJECT in ADL
     Protected sNodeId As String
     Protected cOccurrences As New RmCardinality
-    Protected cExistence As New RmExistence 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-    Protected mRunTimeConstraint As Constraint_Text
-    Protected mType As StructureType
+    Protected cExistence As New RmExistence
+    Protected mNameConstraint As Constraint_Text
+    Protected mStructureType As StructureType
     Protected mLinks As New System.Collections.Generic.List(Of RmLink)
 
     Public Overridable ReadOnly Property Type() As StructureType Implements ArcheTypeDefinitionBasic.Type
         Get
-            Return mType
+            Return mStructureType
         End Get
     End Property
 
     Public Property NameConstraint() As Constraint_Text Implements ArcheTypeDefinitionBasic.NameConstraint
         Get
-            If mRunTimeConstraint Is Nothing Then
-                mRunTimeConstraint = New Constraint_Text
+            If mNameConstraint Is Nothing Then
+                mNameConstraint = New Constraint_Text
             End If
-            Return mRunTimeConstraint
+
+            Return mNameConstraint
         End Get
         Set(ByVal Value As Constraint_Text)
-            mRunTimeConstraint = Value
+            mNameConstraint = Value
         End Set
     End Property
 
@@ -102,17 +103,17 @@ Public Class RmStructure
         End Set
     End Property
 
-    Public Property HasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.hasNameConstraint
+    Public Property HasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.HasNameConstraint
         Get
-            Return Not mRunTimeConstraint Is Nothing
+            Return Not mNameConstraint Is Nothing
         End Get
         Set(ByVal Value As Boolean)
             If Value Then
-                If mRunTimeConstraint Is Nothing Then
-                    mRunTimeConstraint = New Constraint_Text
+                If mNameConstraint Is Nothing Then
+                    mNameConstraint = New Constraint_Text
                 End If
             Else
-                mRunTimeConstraint = Nothing
+                mNameConstraint = Nothing
             End If
         End Set
     End Property
@@ -161,11 +162,11 @@ Public Class RmStructure
     End Function
 
     Public Overridable Function Copy() As RmStructure
-        Dim result As New RmStructure(sNodeId, mType)
+        Dim result As New RmStructure(sNodeId, mStructureType)
         result.cOccurrences = cOccurrences.Copy
 
-        If Not mRunTimeConstraint Is Nothing Then
-            result.mRunTimeConstraint = mRunTimeConstraint.Copy
+        If Not mNameConstraint Is Nothing Then
+            result.mNameConstraint = mNameConstraint.Copy
         End If
 
         Return result
@@ -180,19 +181,19 @@ Public Class RmStructure
         End If
     End Sub
 
-    Sub New(ByVal a_RmStructure As RmStructure)
-        mType = a_RmStructure.mType
-        sNodeId = a_RmStructure.sNodeId
-        cOccurrences = a_RmStructure.cOccurrences.Copy()
+    Sub New(ByVal struct As RmStructure)
+        mStructureType = struct.mStructureType
+        sNodeId = struct.sNodeId
+        cOccurrences = struct.cOccurrences.Copy()
 
-        If a_RmStructure.HasNameConstraint Then
-            mRunTimeConstraint = a_RmStructure.NameConstraint
+        If struct.HasNameConstraint Then
+            mNameConstraint = struct.NameConstraint
         End If
     End Sub
 
     Sub New(ByVal NodeId As String, ByVal a_structure_type As StructureType)
         sNodeId = NodeId
-        mType = a_structure_type
+        mStructureType = a_structure_type
     End Sub
 
     Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_OBJECT)
@@ -201,7 +202,7 @@ Public Class RmStructure
         End If
 
         cOccurrences = ArchetypeEditor.ADL_Classes.ADL_Tools.SetOccurrences(EIF_Structure.occurrences)
-        mType = ReferenceModel.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
+        mStructureType = ReferenceModel.StructureTypeFromString(EIF_Structure.rm_type_name.to_cil)
 
         If EIF_Structure.generating_type.to_cil = "C_COMPLEX_OBJECT" Then
             Dim s As String
@@ -219,7 +220,7 @@ Public Class RmStructure
             Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(EIF_Structure, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT).c_attribute_at_path(Eiffel.String(s))
 
             If attribute.has_children Then
-                mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                mNameConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
             End If
         End If
     End Sub
@@ -230,13 +231,13 @@ Public Class RmStructure
         End If
 
         cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(XML_Structure.occurrences)
-        mType = ReferenceModel.StructureTypeFromString(XML_Structure.rm_type_name)
+        mStructureType = ReferenceModel.StructureTypeFromString(XML_Structure.rm_type_name)
 
         If XML_Structure.GetType.ToString = "XMLParser.C_COMPLEX_OBJECT" Then
             If Not CType(XML_Structure, XMLParser.C_COMPLEX_OBJECT).attributes Is Nothing Then
                 For Each an_attribute As XMLParser.C_ATTRIBUTE In CType(XML_Structure, XMLParser.C_COMPLEX_OBJECT).attributes
                     If an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture) = "name" Then
-                        mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                        mNameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                     End If
                 Next
             End If

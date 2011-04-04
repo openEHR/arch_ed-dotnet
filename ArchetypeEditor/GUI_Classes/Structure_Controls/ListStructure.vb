@@ -43,7 +43,7 @@ Public Class ListStructure
                     Dim element As RmElement = CType(item, RmElement)
                     lvitem = New ArchetypeListViewItem(element, mFileManager)
                     'Sets selected if first in list
-                    lvitem.ImageIndex = ImageIndexForConstraintType(element.Constraint.Type, element.isReference, lvList.Items.Count = 0)
+                    lvitem.ImageIndex = element.Constraint.ImageIndexForConstraintKind(element.IsReference, lvList.Items.Count = 0)
                     lvList.Items.Add(lvitem)
                 Case StructureType.Slot
                     Dim slot As RmSlot = CType(item, RmSlot)
@@ -51,7 +51,7 @@ Public Class ListStructure
                     If slot.SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
                         lvitem = New ArchetypeListViewItem(slot, mFileManager)
                         'Sets selected if first in list
-                        lvitem.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, lvList.Items.Count = 0)
+                        lvitem.ImageIndex = CType(item, RmSlot).SlotConstraint.ImageIndexForConstraintKind(False, lvList.Items.Count = 0)
                         lvList.Items.Add(lvitem)
                     End If
                 Case Else
@@ -201,7 +201,7 @@ Public Class ListStructure
         End Get
     End Property
 
-    Public Overrides Property Archetype() As RmStructureCompound
+    Public Overrides Property Archetype() As RmStructure
         Get
             Dim result As New RmStructureCompound(mNodeId, StructureType.List)
             result.Children.Cardinality = mCardinalityControl.Cardinality
@@ -212,20 +212,21 @@ Public Class ListStructure
 
             Return result
         End Get
-        Set(ByVal Value As RmStructureCompound)
+        Set(ByVal value As RmStructure)
+            Dim compound As RmStructureCompound = CType(value, RmStructureCompound)
             Dim struct As RmStructure
             lvList.Items.Clear()
-            mNodeId = Value.NodeId
+            mNodeId = value.NodeId
 
-            Select Case Value.Type
+            Select Case value.Type
                 Case StructureType.Tree
-                    ProcessTreeToList(Value)
+                    ProcessTreeToList(compound)
                 Case StructureType.Single
-                    struct = Value.Children.FirstElementOrElementSlot
+                    struct = compound.Children.FirstElementOrElementSlot
                     AddRmStructureToList(struct)
                 Case StructureType.Table
-                    If Value.Children.items(0).Type = StructureType.Cluster Then
-                        Dim clust As RmCluster = CType(Value.Children.items(0), RmCluster)
+                    If compound.Children.Items(0).Type = StructureType.Cluster Then
+                        Dim clust As RmCluster = CType(compound.Children.Items(0), RmCluster)
 
                         For Each struct In clust.Children
                             AddRmStructureToList(struct)
@@ -258,7 +259,7 @@ Public Class ListStructure
 
             If Not lvItem Is Nothing Then
                 lvList.Items.Add(lvItem)
-                lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, lvItem.Selected)
+                lvItem.ImageIndex = lvItem.Item.ImageIndex(lvItem.Selected)
             End If
         End If
     End Sub
@@ -299,9 +300,7 @@ Public Class ListStructure
             If dlg.IsSpecialisationRequested Then
                 If dlg.IsCloningRequested Then
                     Dim i As Integer = lvItem.Index
-                    lvItem = lvItem.Copy
-                    lvItem.Specialise()
-                    lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, False)
+                    lvItem = lvItem.SpecialiseCloned
                     lvList.Items.Insert(i + 1, lvItem)
                 Else
                     lvItem.Specialise()
@@ -325,11 +324,9 @@ Public Class ListStructure
 
             If Not lvItem.Item.IsAnonymous Then
                 ref = New RmReference(CType(lvItem.Item, ArchetypeElement).RM_Class)
-                ' record the presence of the reference so a delete can be safe
-                CType(lvItem.Item.RM_Class, RmElement).hasReferences = True
                 lvItem = New ArchetypeListViewItem(ref, mFileManager)
                 ' insert in the list
-                lvItem.ImageIndex = ImageIndexForConstraintType(CType(lvItem.Item, ArchetypeElement).Constraint.Type, True, False)
+                lvItem.ImageIndex = CType(lvItem.Item, ArchetypeElement).Constraint.ImageIndexForConstraintKind(True, False)
                 lvList.Items.Insert(lvList.SelectedIndices(0) + 1, lvItem)
                 mFileManager.FileEdited = True
             Else
@@ -351,7 +348,7 @@ Public Class ListStructure
                 Dim i As Integer = lvItem.Index
                 lvList.Items.RemoveAt(i)
                 lvItem = New ArchetypeListViewItem(newSlot)
-                lvItem.ImageIndex = ImageIndexForConstraintType(ConstraintType.Slot, False, True)
+                lvItem.ImageIndex = newSlot.Constraint.ImageIndexForConstraintKind(False, True)
                 lvList.Items.Insert(i, lvItem)
 
                 If Not lvItem.Selected Then
@@ -378,11 +375,11 @@ Public Class ListStructure
         End If
     End Sub
 
-    Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
+    Protected Overrides Sub AddNewElement(ByVal aConstraint As Constraint)
         Dim lvItem As ArchetypeListViewItem = Nothing
         Dim editLabel As Boolean = False
 
-        If a_constraint.Type = ConstraintType.Slot Then
+        If aConstraint.Kind = ConstraintKind.Slot Then
             Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
                 Case DialogResult.Yes
                     Dim archetype_slot As New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
@@ -394,11 +391,11 @@ Public Class ListStructure
             End Select
         Else
             lvItem = New ArchetypeListViewItem(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
-            CType(lvItem.Item, ArchetypeElement).Constraint = a_constraint
+            CType(lvItem.Item, ArchetypeElement).Constraint = aConstraint
             editLabel = True
         End If
 
-        lvItem.ImageIndex = Me.ImageIndexForConstraintType(a_constraint.Type, False, True)
+        lvItem.ImageIndex = aConstraint.ImageIndexForConstraintKind(False, True)
         lvList.Items.Add(lvItem)
         mFileManager.FileEdited = True
 
@@ -550,7 +547,7 @@ Public Class ListStructure
 
             For Each lvItem As ArchetypeListViewItem In lvList.Items
                 If Not lvItem.Item.IsAnonymous AndAlso CType(lvItem.Item, ArchetypeElement).NodeId = element.NodeId Then
-                    lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, False)
+                    lvItem.ImageIndex = lvItem.Item.ImageIndex(False)
                 End If
             Next
         ElseIf lvList.Items.Count > 0 Then
@@ -558,7 +555,7 @@ Public Class ListStructure
                 lvList.Items(0).Selected = True
             End If
 
-            CType(lvList.SelectedItems(0), ArchetypeListViewItem).ImageIndex = ImageIndexForItem(mCurrentItem, True)
+            CType(lvList.SelectedItems(0), ArchetypeListViewItem).ImageIndex = mCurrentItem.ImageIndex(True)
         End If
     End Sub
 
@@ -613,7 +610,7 @@ Public Class ListStructure
 
             'Unselect the previous item
             For Each lvItem In lvList.Items
-                lvItem.ImageIndex = ImageIndexForItem(lvItem.Item, lvItem.Selected)
+                lvItem.ImageIndex = lvItem.Item.ImageIndex(lvItem.Selected)
             Next
 
             lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)

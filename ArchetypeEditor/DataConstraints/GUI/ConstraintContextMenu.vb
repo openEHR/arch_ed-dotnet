@@ -20,6 +20,7 @@ Public Class ConstraintContextMenu
     Public Delegate Sub ProcessMenuClick(ByVal a_constraint As Constraint)
     Private _ProcessMenuClick As ProcessMenuClick
     Private mFileManager As FileManagerLocal
+
     Private mMI_Header, mMI_Spacer, mMI_Text, _
         mMI_Quantity, mMI_Count, mMI_DateTime, _
         mMI_Ordinal, mMI_Boolean, mMI_any, mMI_Multiple, _
@@ -34,95 +35,95 @@ Public Class ConstraintContextMenu
         mMI_Spacer.Visible = True
     End Sub
 
-    Sub ShowMenuItem(ByVal a_constraint_type As ConstraintType)
+    Sub ShowMenuItem(ByVal a_constraint_type As ConstraintKind)
         Select Case a_constraint_type
-            Case ConstraintType.Any
+            Case ConstraintKind.Any
                 mMI_any.Visible = True
-            Case ConstraintType.Boolean
+            Case ConstraintKind.Boolean
                 mMI_Boolean.Visible = True
-            Case ConstraintType.Count
+            Case ConstraintKind.Count
                 mMI_Count.Visible = True
-            Case ConstraintType.DateTime
+            Case ConstraintKind.DateTime
                 mMI_DateTime.Visible = True
-            Case ConstraintType.Multiple
+            Case ConstraintKind.Multiple
                 mMI_Multiple.Visible = True
-            Case ConstraintType.Ordinal
+            Case ConstraintKind.Ordinal
                 mMI_Ordinal.Visible = True
-            Case ConstraintType.Quantity
+            Case ConstraintKind.Quantity
                 mMI_Quantity.Visible = True
-            Case ConstraintType.QuantityUnit
+            Case ConstraintKind.QuantityUnit
                 mMI_QuantityUnit.Visible = True
-            Case ConstraintType.Duration
+            Case ConstraintKind.Duration
                 mMI_Duration.Visible = True
-            Case ConstraintType.Proportion
+            Case ConstraintKind.Proportion
                 mMI_Ratio.Visible = True
-            Case ConstraintType.Slot
+            Case ConstraintKind.Slot
                 mMI_Slot.Visible = True
-            Case ConstraintType.Text
+            Case ConstraintKind.Text
                 mMI_Text.Visible = True
-            Case ConstraintType.Interval_Count
+            Case ConstraintKind.Interval_Count
                 mMI_Interval_Count.Visible = True
                 mMI_Interval.Visible = True
-            Case ConstraintType.Interval_Quantity
+            Case ConstraintKind.Interval_Quantity
                 mMI_Interval_Quantity.Visible = True
                 mMI_Interval.Visible = True
-            Case ConstraintType.Interval_DateTime
+            Case ConstraintKind.Interval_DateTime
                 mMI_Interval_DateTime.Visible = True
                 mMI_Interval.Visible = True
-            Case ConstraintType.MultiMedia
+            Case ConstraintKind.MultiMedia
                 mMI_MultiMedia.Visible = True
-            Case ConstraintType.URI
+            Case ConstraintKind.URI
                 mMI_URI.Visible = True
-            Case ConstraintType.Currency
+            Case ConstraintKind.Currency
                 mMI_Currency.Visible = True
-            Case ConstraintType.Identifier
+            Case ConstraintKind.Identifier
                 mMI_Identifier.Visible = True
-            Case ConstraintType.Parsable
+            Case ConstraintKind.Parsable
                 mMI_Parsable.Visible = True
         End Select
     End Sub
 
-    Sub HideMenuItem(ByVal a_constraint_type As ConstraintType)
+    Sub HideMenuItem(ByVal a_constraint_type As ConstraintKind)
         Select Case a_constraint_type
-            Case ConstraintType.Any
+            Case ConstraintKind.Any
                 mMI_any.Visible = False
-            Case ConstraintType.Boolean
+            Case ConstraintKind.Boolean
                 mMI_Boolean.Visible = False
-            Case ConstraintType.Count
+            Case ConstraintKind.Count
                 mMI_Count.Visible = False
-            Case ConstraintType.DateTime
+            Case ConstraintKind.DateTime
                 mMI_DateTime.Visible = False
-            Case ConstraintType.Multiple
+            Case ConstraintKind.Multiple
                 mMI_Multiple.Visible = False
-            Case ConstraintType.Ordinal
+            Case ConstraintKind.Ordinal
                 mMI_Ordinal.Visible = False
-            Case ConstraintType.Quantity
+            Case ConstraintKind.Quantity
                 mMI_Quantity.Visible = False
-            Case ConstraintType.QuantityUnit
+            Case ConstraintKind.QuantityUnit
                 mMI_QuantityUnit.Visible = False
-            Case ConstraintType.Duration
+            Case ConstraintKind.Duration
                 mMI_Duration.Visible = False
-            Case ConstraintType.Proportion
+            Case ConstraintKind.Proportion
                 mMI_Ratio.Visible = False
-            Case ConstraintType.Slot
+            Case ConstraintKind.Slot
                 mMI_Slot.Visible = False
-            Case ConstraintType.Text
+            Case ConstraintKind.Text
                 mMI_Text.Visible = False
-            Case ConstraintType.Interval_Count
+            Case ConstraintKind.Interval_Count
                 mMI_Interval_Count.Visible = False
-            Case ConstraintType.Interval_Quantity
+            Case ConstraintKind.Interval_Quantity
                 mMI_Interval_Quantity.Visible = False
-            Case ConstraintType.Interval_DateTime
+            Case ConstraintKind.Interval_DateTime
                 mMI_Interval_DateTime.Visible = False
-            Case ConstraintType.MultiMedia
+            Case ConstraintKind.MultiMedia
                 mMI_MultiMedia.Visible = False
-            Case ConstraintType.URI
+            Case ConstraintKind.URI
                 mMI_URI.Visible = False
-            Case ConstraintType.Currency
+            Case ConstraintKind.Currency
                 mMI_Currency.Visible = False
-            Case ConstraintType.Identifier
+            Case ConstraintKind.Identifier
                 mMI_Identifier.Visible = False
-            Case ConstraintType.Parsable
+            Case ConstraintKind.Parsable
                 mMI_Parsable.Visible = False
         End Select
 
@@ -132,6 +133,7 @@ Public Class ConstraintContextMenu
             mMI_Interval.Visible = True
         End If
     End Sub
+
     Sub Reset()
         mMI_Header.Text = ""
         mMI_Header.Visible = False
@@ -184,60 +186,58 @@ Public Class ConstraintContextMenu
         mMI_Currency.Visible = False
         mMI_Identifier.Visible = False
         mMI_Parsable.Visible = False
-
     End Sub
 
-    Private Sub InternalProcessMenuItemClick(ByVal Sender As Object, ByVal e As EventArgs)
-        If Sender Is mMI_Text Then
+    Private Sub InternalProcessMenuItemClick(ByVal sender As Object, ByVal e As EventArgs)
+        If sender Is mMI_Text Then
             _ProcessMenuClick(New Constraint_Text)
-        ElseIf Sender Is mMI_Quantity Then
+        ElseIf sender Is mMI_Quantity Then
             _ProcessMenuClick(New Constraint_Quantity)
-        ElseIf Sender Is mMI_Count Then
+        ElseIf sender Is mMI_Count Then
             _ProcessMenuClick(New Constraint_Count)
-        ElseIf Sender Is mMI_DateTime Then
+        ElseIf sender Is mMI_DateTime Then
             _ProcessMenuClick(New Constraint_DateTime)
-        ElseIf Sender Is mMI_Ordinal Then
+        ElseIf sender Is mMI_Ordinal Then
             _ProcessMenuClick(New Constraint_Ordinal(True, mFileManager))
-        ElseIf Sender Is mMI_Boolean Then
+        ElseIf sender Is mMI_Boolean Then
             _ProcessMenuClick(New Constraint_Boolean)
-        ElseIf Sender Is mMI_any Then
+        ElseIf sender Is mMI_any Then
             _ProcessMenuClick(New Constraint)
-        ElseIf Sender Is mMI_Duration Then
+        ElseIf sender Is mMI_Duration Then
             _ProcessMenuClick(New Constraint_Duration)
-        ElseIf Sender Is mMI_Multiple Then
+        ElseIf sender Is mMI_Multiple Then
             _ProcessMenuClick(New Constraint_Choice)
-        ElseIf Sender Is mMI_Slot Then
+        ElseIf sender Is mMI_Slot Then
             _ProcessMenuClick(New Constraint_Slot)
-        ElseIf Sender Is mMI_Ratio Then
+        ElseIf sender Is mMI_Ratio Then
             _ProcessMenuClick(New Constraint_Proportion)
             'Cannot be Quantity Unit alone
             'ElseIf Sender Is mMI_QuantityUnit Then
             '    _ProcessMenuClick(New Constraint_QuantityUnit)
-        ElseIf Sender Is mMI_Interval_Count Then
+        ElseIf sender Is mMI_Interval_Count Then
             _ProcessMenuClick(New Constraint_Interval_Count)
-        ElseIf Sender Is mMI_Interval_Quantity Then
+        ElseIf sender Is mMI_Interval_Quantity Then
             _ProcessMenuClick(New Constraint_Interval_Quantity)
-        ElseIf Sender Is mMI_Interval_DateTime Then
+        ElseIf sender Is mMI_Interval_DateTime Then
             _ProcessMenuClick(New Constraint_Interval_DateTime)
-        ElseIf Sender Is mMI_MultiMedia Then
+        ElseIf sender Is mMI_MultiMedia Then
             _ProcessMenuClick(New Constraint_MultiMedia)
-        ElseIf Sender Is mMI_URI Then
+        ElseIf sender Is mMI_URI Then
             _ProcessMenuClick(New Constraint_URI)
-        ElseIf Sender Is mMI_Identifier Then
+        ElseIf sender Is mMI_Identifier Then
             _ProcessMenuClick(New Constraint_Identifier)
-        ElseIf Sender Is mMI_Currency Then
+        ElseIf sender Is mMI_Currency Then
             _ProcessMenuClick(New Constraint_Currency)
-        ElseIf Sender Is mMI_Parsable Then
+        ElseIf sender Is mMI_Parsable Then
             _ProcessMenuClick(New Constraint_Parsable)
         Else
             Debug.Assert(False, "Menu item is not loaded")
         End If
     End Sub
 
-    Sub New(ByVal a_sub As ProcessMenuClick, ByVal a_filemanager As FileManagerLocal)
-        mFileManager = a_filemanager
-
-        _ProcessMenuClick = a_sub
+    Sub New(ByVal eventHandler As ProcessMenuClick, ByVal fileManager As FileManagerLocal)
+        mFileManager = fileManager
+        _ProcessMenuClick = eventHandler
 
         ' add invisible head item
         mMI_Header = New MenuItem

@@ -1,49 +1,32 @@
-'
+﻿'
 '	component:   "openEHR Archetype Project"
-'	description: "Constraint on multimedia values"
+'	description: "Constraint on a cluster"
 '	keywords:    "Archetype, Clinical, Editor"
-'	author:      "Sam Heard"
+'	author:      "Peter Gummer"
 '	support:     http://www.openehr.org/issues/browse/AEPR
-'	copyright:   "Copyright (c) 2005 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2011 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL$"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	file:        "$URL: http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/DataConstraints/ChoiceConstraint.vb $"
+'	revision:    "$LastChangedRevision: 676 $"
+'	last_change: "$LastChangedDate: 2010-11-11 11:55:24 +1100 (Thu, 11 Nov 2010) $"
 '
 
 Option Strict On
 
-Public Class Constraint_MultiMedia
+Public Class Constraint_Cluster
     Inherits Constraint
-
-    Private cpTerms As New CodePhrase
-    Private boolFixed As Boolean
 
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintKind.MultiMedia
+            Return ConstraintKind.Cluster
         End Get
     End Property
-    Public Property AllowableValues() As CodePhrase
-        Get
-            Return cpTerms
-        End Get
-        Set(ByVal Value As CodePhrase)
-            cpTerms = Value
-        End Set
-    End Property
-    Public Property Fixed() As Boolean
-        Get
-            Return boolFixed
-        End Get
-        Set(ByVal Value As Boolean)
-            boolFixed = Value
-        End Set
-    End Property
-    Sub New()
-        cpTerms.TerminologyID = "openEHR"
-    End Sub
+
+    Public Overrides Function Copy() As Constraint
+        Return New Constraint_Cluster
+    End Function
+
 End Class
 
 '
@@ -60,15 +43,15 @@ End Class
 'for the specific language governing rights and limitations under the
 'License.
 '
-'The Original Code is MultimediaConstraint.vb.
+'The Original Code is ChoiceCluster.vb.
 '
 'The Initial Developer of the Original Code is
-'Sam Heard, Ocean Informatics (www.oceaninformatics.biz).
-'Portions created by the Initial Developer are Copyright (C) 2004
+'Sam Heard, Ocean Informatics (www.oceaninformatics.com).
+'Portions created by the Initial Developer are Copyright (C) 2011
 'the Initial Developer. All Rights Reserved.
 '
 'Contributor(s):
-'
+'	Heath Frankel
 '
 'Alternatively, the contents of this file may be used under the terms of
 'either the GNU General Public License Version 2 or later (the "GPL"), or

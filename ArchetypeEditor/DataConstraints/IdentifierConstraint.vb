@@ -19,9 +19,9 @@ Public Class Constraint_Identifier
 
     ' no constraint data at the moment
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Identifier
+            Return ConstraintKind.Identifier
         End Get
     End Property
 

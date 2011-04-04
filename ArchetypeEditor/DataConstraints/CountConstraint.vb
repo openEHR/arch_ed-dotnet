@@ -27,9 +27,9 @@ Public Class Constraint_Count
     Protected mHasList As Boolean
     Protected mList As String
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Count
+            Return ConstraintKind.Count
         End Get
     End Property
 

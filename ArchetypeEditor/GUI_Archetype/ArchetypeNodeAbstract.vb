@@ -17,16 +17,15 @@
 Option Strict On
 
 Public MustInherit Class ArchetypeNodeAbstract
-    Implements ArchetypeNode
+    Inherits ArchetypeNode
 
     Protected mFileManager As FileManagerLocal
     Protected mText As String
     Protected mDescription As String
     Protected mComment As String
     Protected mAnnotations As New System.Collections.SortedList
-    Protected mItem As RmStructure
 
-    Public Overridable Property Text() As String Implements ArchetypeNode.Text
+    Public Overrides Property Text() As String
         Get
             Return mText
         End Get
@@ -35,12 +34,6 @@ Public MustInherit Class ArchetypeNodeAbstract
             mFileManager.OntologyManager.SetText(Value, NodeId)
             mFileManager.FileEdited = True
         End Set
-    End Property
-
-    Public Shadows ReadOnly Property RM_Class() As RmStructure Implements ArchetypeNode.RM_Class
-        Get
-            Return mItem
-        End Get
     End Property
 
     Public Property Description() As String
@@ -87,25 +80,7 @@ Public MustInherit Class ArchetypeNodeAbstract
         End Get
     End Property
 
-    Public MustOverride ReadOnly Property IsReference() As Boolean Implements ArchetypeNode.IsReference
-    Public MustOverride ReadOnly Property HasReferences() As Boolean Implements ArchetypeNode.HasReferences
-
-    Public Property Occurrences() As RmCardinality Implements ArchetypeNode.Occurrences
-        Get
-            Return mItem.Occurrences
-        End Get
-        Set(ByVal Value As RmCardinality)
-            mItem.Occurrences = Value
-        End Set
-    End Property
-
-    Public ReadOnly Property IsMandatory() As Boolean Implements ArchetypeNode.IsMandatory
-        Get
-            Return Occurrences.MinCount > 0
-        End Get
-    End Property
-
-    Public ReadOnly Property IsAnonymous() As Boolean Implements ArchetypeNode.IsAnonymous
+    Public Overrides ReadOnly Property IsAnonymous() As Boolean
         Get
             Return False
         End Get
@@ -117,17 +92,7 @@ Public MustInherit Class ArchetypeNodeAbstract
         End Get
     End Property
 
-    Private Overloads Function CopyArchetypeNode() As ArchetypeNode
-        Return Copy()
-    End Function
-
-    Public MustOverride Function Copy() As ArchetypeNode Implements ArchetypeNode.Copy
-
-    Public MustOverride Function ToRichText(ByVal level As Integer) As String Implements ArchetypeNode.ToRichText
-
-    Public MustOverride Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String Implements ArchetypeNode.ToHTML
-
-    Public Sub Translate() Implements ArchetypeNode.Translate
+    Public Overrides Sub Translate()
         Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(NodeId)
         mText = term.Text
         mDescription = term.Description
@@ -150,39 +115,30 @@ Public MustInherit Class ArchetypeNodeAbstract
         Return mText
     End Function
 
-    Protected Property Item() As RmStructure
-        Get
-            Return mItem
-        End Get
-        Set(ByVal Value As RmStructure)
-            mItem = Value
-        End Set
-    End Property
-
     Protected Sub New(ByVal aText As String)
         mText = aText
         mDescription = "*"
     End Sub
 
-    Sub New(ByVal aItem As RmStructure, ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal aItem As RmStructure, ByVal fileManager As FileManagerLocal)
         mItem = aItem
-        mFileManager = a_file_manager
+        mFileManager = fileManager
 
-        Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(aItem.NodeId)
-        mText = aTerm.Text
-        mDescription = aTerm.Description
-        mComment = aTerm.Comment
-        mAnnotations = aTerm.OtherAnnotations
+        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(aItem.NodeId)
+        mText = term.Text
+        mDescription = term.Description
+        mComment = term.Comment
+        mAnnotations = term.OtherAnnotations
     End Sub
 
-    Sub New(ByVal a_node As ArchetypeNodeAbstract)
-        mFileManager = a_node.mFileManager
-        mItem = a_node.mItem.Copy
-        Dim aTerm As RmTerm = mFileManager.OntologyManager.GetTerm(a_node.NodeId)
-        mText = aTerm.Text
-        mDescription = aTerm.Description
-        mComment = aTerm.Comment
-        mAnnotations = aTerm.OtherAnnotations
+    Sub New(ByVal node As ArchetypeNodeAbstract)
+        mFileManager = node.mFileManager
+        mItem = node.Item.Copy
+        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(node.NodeId)
+        mText = term.Text
+        mDescription = term.Description
+        mComment = term.Comment
+        mAnnotations = term.OtherAnnotations
     End Sub
 
 End Class

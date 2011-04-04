@@ -20,9 +20,9 @@ Class Constraint_Interval_DateTime
     Private mDateTimeUpper As New Constraint_DateTime
     Private mDateTimeLower As New Constraint_DateTime
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Interval_DateTime
+            Return ConstraintKind.Interval_DateTime
         End Get
     End Property
 

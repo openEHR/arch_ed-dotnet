@@ -91,7 +91,7 @@ Public Class ParsingTools
 
                     element = getElementForReference(a_structure.NodeId, mHighestLevelChildren)
                     If Not element Is Nothing Then
-                        element.hasReferences = True
+                        element.HasReferences = True
                         CType(a_structure, RmReference).SetElement(element)
                     Else
                         a_structure = Nothing

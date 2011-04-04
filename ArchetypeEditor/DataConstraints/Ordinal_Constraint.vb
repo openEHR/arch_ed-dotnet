@@ -55,9 +55,9 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
         mOrdinalTable.Rows.Clear()
     End Sub
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Ordinal
+            Return ConstraintKind.Ordinal
         End Get
     End Property
 

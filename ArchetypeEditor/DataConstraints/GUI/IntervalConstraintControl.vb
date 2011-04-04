@@ -129,7 +129,7 @@ Public Class IntervalConstraintControl : Inherits ConstraintControl
         tp = New TabPage(label)
 
         cc = ConstraintControl.CreateConstraintControl( _
-                    c.Type, mFileManager)
+                    c.Kind, mFileManager)
         tp.Controls.Add(cc)
         cc.ShowConstraint(mIsState, c)
         cc.Dock = DockStyle.Fill

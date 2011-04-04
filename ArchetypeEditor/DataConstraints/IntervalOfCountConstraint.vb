@@ -20,9 +20,9 @@ Class Constraint_Interval_Count
     Private mLower As New Constraint_Count
     Private mUpper As New Constraint_Count
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Interval_Count
+            Return ConstraintKind.Interval_Count
         End Get
     End Property
 

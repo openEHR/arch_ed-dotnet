@@ -17,12 +17,35 @@
 Option Strict On
 
 Public Class ArchetypeNodeAnonymous
-    Implements ArchetypeNode
+    Inherits ArchetypeNode
 
-    Private mRMStructure As RmStructure
+    Private Property Slot() As RmSlot
+        Get
+            Return CType(Item, RmSlot)
+        End Get
+        Set(ByVal Value As RmSlot)
+            Item = Value
+        End Set
+    End Property
+
+    Public Overrides Property Constraint() As Constraint
+        Get
+            Return Slot.SlotConstraint
+        End Get
+        Set(ByVal value As Constraint)
+            Slot.SlotConstraint = CType(value, Constraint_Slot)
+        End Set
+    End Property
+
+    Public ReadOnly Property SlotConstraint() As Constraint_Slot
+        Get
+            Return CType(Item, RmSlot).SlotConstraint
+        End Get
+    End Property
+
     Private mText As String
 
-    Public Property Text() As String Implements ArchetypeNode.Text
+    Public Overrides Property Text() As String
         Get
             Return mText
         End Get
@@ -32,49 +55,28 @@ Public Class ArchetypeNodeAnonymous
         End Set
     End Property
 
-    Public ReadOnly Property IsAnonymous() As Boolean Implements ArchetypeNode.IsAnonymous
+    Public Overrides ReadOnly Property IsAnonymous() As Boolean
         Get
             Return True
         End Get
     End Property
 
-    Public ReadOnly Property IsReference() As Boolean Implements ArchetypeNode.IsReference
+    Public Overrides ReadOnly Property IsReference() As Boolean
         Get
             Return False
         End Get
     End Property
 
-    Public ReadOnly Property HasReferences() As Boolean Implements ArchetypeNode.HasReferences
+    Public Overrides ReadOnly Property HasReferences() As Boolean
         Get
             Return False
         End Get
     End Property
 
-    Public Property Occurrences() As RmCardinality Implements ArchetypeNode.Occurrences
-        Get
-            Return mRMStructure.Occurrences
-        End Get
-        Set(ByVal Value As RmCardinality)
-            mRMStructure.Occurrences = Value
-        End Set
-    End Property
-
-    Public ReadOnly Property IsMandatory() As Boolean Implements ArchetypeNode.IsMandatory
-        Get
-            Return (mRMStructure.Occurrences.MinCount > 0)
-        End Get
-    End Property
-
-    Public ReadOnly Property RM_Class() As RmStructure Implements ArchetypeNode.RM_Class
-        Get
-            Return mRMStructure
-        End Get
-    End Property
-
-    Public Sub Translate() Implements ArchetypeNode.Translate
-        Select Case mRMStructure.Type
+    Public Overrides Sub Translate()
+        Select Case Item.Type
             Case StructureType.Slot
-                Select Case CType(mRMStructure, RmSlot).SlotConstraint.RM_ClassType
+                Select Case SlotConstraint.RM_ClassType
                     Case StructureType.ENTRY
                         mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(559, "ENTRY")
                     Case StructureType.OBSERVATION
@@ -99,33 +101,28 @@ Public Class ArchetypeNodeAnonymous
         End Select
     End Sub
 
-    Function ToRichText(ByVal level As Integer) As String Implements ArchetypeNode.ToRichText
+    Public Overrides Function ToRichText(ByVal level As Integer) As String
         Dim s, statement As String
 
-        If mRMStructure.Type = StructureType.Slot Then
-            Dim slot_constraint As Constraint_Slot
-
-            Try
-                slot_constraint = CType(mRMStructure, RmSlot).SlotConstraint
-            Catch ex As Exception
-                Return ""
-            End Try
-
+        If Item.Type = StructureType.Slot Then
+            Dim slot_constraint As Constraint_Slot = SlotConstraint
             s = Space(3 * level) & slot_constraint.RM_ClassType.ToString & ":\par"
+
             If slot_constraint.IncludeAll Then
                 s &= Environment.NewLine & Space(3 * (level + 1)) & "  Include ALL\par"
             ElseIf slot_constraint.Include.Count > 0 Then
                 s &= Environment.NewLine & Space(3 * (level + 1)) & "  Include:\par"
+
                 For Each statement In slot_constraint.Include
                     s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
                 Next
             End If
 
-
             If slot_constraint.ExcludeAll Then
                 s &= Environment.NewLine & Space(3 * (level + 1)) & "  Exclude ALL\par"
             ElseIf slot_constraint.Exclude.Count > 0 Then
                 s &= Environment.NewLine & Space(3 * (level + 1)) & "  Exclude:\par"
+
                 For Each statement In slot_constraint.Exclude
                     s &= Environment.NewLine & Space(3 * (level + 2)) & statement & "\par"
                 Next
@@ -137,20 +134,12 @@ Public Class ArchetypeNodeAnonymous
         Return ""
     End Function
 
-    Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String Implements ArchetypeNode.ToHTML
+    Public Overrides Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
         Dim s As String
 
-        If mRMStructure.Type = StructureType.Slot Then
-            Dim slot_constraint As Constraint_Slot
-
-            Try
-                slot_constraint = CType(mRMStructure, RmSlot).SlotConstraint
-            Catch ex As Exception
-                Return ""
-            End Try
-
+        If Item.Type = StructureType.Slot Then
+            Dim slot_constraint As Constraint_Slot = SlotConstraint
             s = "<tr><td><table><tr><td width=""" & (level * 20).ToString & """></td><td>"
-
             s &= "<img border=""0"" src=""Images/slot.gif"" width=""32"" height=""32"" align=""middle"">"
             s &= "</td></tr></table></td>"
 
@@ -209,25 +198,25 @@ Public Class ArchetypeNodeAnonymous
         Return ""
     End Function
 
-    Public Function Copy() As ArchetypeNode Implements ArchetypeNode.Copy
+    Public Overrides Function Copy() As ArchetypeNode
         Dim result As New ArchetypeNodeAnonymous
-        result.mRMStructure = Me.mRMStructure.Copy
-        result.mText = Me.mText
+        result.Item = Item.Copy
+        result.mText = mText
         Return result
     End Function
 
     Sub New()
-        mRMStructure = New RmSlot
+        Item = New RmSlot
         Translate()
     End Sub
 
-    Sub New(ByVal a_type As StructureType)
+    Sub New(ByVal type As StructureType)
         ' set the text value to the class type
-        mRMStructure = New RmSlot(a_type)
+        Item = New RmSlot(type)
 
         'SRH: 6th Jan 2010 - EDT 585 - default for structures should be 0..1 (except for Data which should be 1..1)
 
-        If a_type = StructureType.Tree Or a_type = StructureType.Table Or a_type = StructureType.List Or a_type = StructureType.Single Then
+        If type = StructureType.Tree Or type = StructureType.Table Or type = StructureType.List Or type = StructureType.Single Then
             Occurrences.MinCount = 0
             Occurrences.MaxCount = 1
         End If
@@ -235,8 +224,8 @@ Public Class ArchetypeNodeAnonymous
         Translate()
     End Sub
 
-    Sub New(ByVal a_slot As RmSlot)
-        mRMStructure = a_slot
+    Sub New(ByVal slot As RmSlot)
+        Item = slot
         Translate()
     End Sub
 

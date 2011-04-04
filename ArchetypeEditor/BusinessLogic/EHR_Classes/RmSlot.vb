@@ -40,7 +40,7 @@ Public Class RmSlot
     End Function
 
     Overrides Function Copy() As RmStructure
-        Dim rm As New RmSlot(Me.mType)
+        Dim rm As New RmSlot(Me.mStructureType)
         rm.mSlotConstraint = Me.mSlotConstraint
         rm.Occurrences = Me.cOccurrences
         rm.NodeId = Me.sNodeId

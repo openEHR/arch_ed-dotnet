@@ -38,7 +38,7 @@ Class RmEvent
 
     Public Shadows ReadOnly Property TypeName() As String
         Get
-            Return mType.ToString
+            Return mStructureType.ToString
         End Get
     End Property
 
@@ -69,11 +69,11 @@ Class RmEvent
             mEventType = Value
             Select Case Value
                 Case ObservationEventType.Event
-                    mType = StructureType.Event
+                    mStructureType = StructureType.Event
                 Case ObservationEventType.Interval
-                    mType = StructureType.IntervalEvent
+                    mStructureType = StructureType.IntervalEvent
                 Case ObservationEventType.PointInTime
-                    mType = StructureType.PointEvent
+                    mStructureType = StructureType.PointEvent
             End Select
         End Set
     End Property
@@ -130,9 +130,9 @@ Class RmEvent
     Public Overrides Function Copy() As RmStructure
         Dim result As New RmEvent(NodeId)
         result.cOccurrences = cOccurrences
-        result.mType = mType
+        result.mStructureType = mStructureType
         result.sNodeId = sNodeId
-        result.mRunTimeConstraint = mRunTimeConstraint
+        result.mNameConstraint = mNameConstraint
         result.iOffset = iOffset
         result.sOffset = sOffset
         result.iWidth = iWidth
@@ -199,7 +199,7 @@ Class RmEvent
             Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label" ' runtime_label is OBSOLETE
                     If attribute.has_children Then
-                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        mNameConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     End If
                 Case "offset"
                     Try
@@ -220,7 +220,7 @@ Class RmEvent
                     End Try
 
                 Case "aggregate_math_function" ' OBSOLETE
-                    Debug.Assert(mType = StructureType.IntervalEvent)
+                    Debug.Assert(mStructureType = StructureType.IntervalEvent)
 
                     If attribute.has_children Then
                         Dim MathFunc As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = attribute.children.first
@@ -228,7 +228,7 @@ Class RmEvent
                     End If
 
                 Case "math_function"
-                    Debug.Assert(mType = StructureType.IntervalEvent)
+                    Debug.Assert(mStructureType = StructureType.IntervalEvent)
 
                     If attribute.has_children Then
                         Dim textConstraint As Constraint_Text = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -340,7 +340,7 @@ Class RmEvent
 
             Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
                 Case "name"
-                    mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                    mNameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                 Case "offset"
                     Try
                         Dim d As Duration = _
@@ -352,7 +352,7 @@ Class RmEvent
                     End Try
 
                 Case "width"
-                    Debug.Assert(mType = StructureType.IntervalEvent)
+                    Debug.Assert(mStructureType = StructureType.IntervalEvent)
 
                     Try
                         Dim d As Duration = _
@@ -364,7 +364,7 @@ Class RmEvent
                     End Try
 
                 Case "math_function"
-                    Debug.Assert(mType = StructureType.IntervalEvent)
+                    Debug.Assert(mStructureType = StructureType.IntervalEvent)
 
                     If an_attribute.children.Length > 0 Then
                         Dim textConstraint As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))

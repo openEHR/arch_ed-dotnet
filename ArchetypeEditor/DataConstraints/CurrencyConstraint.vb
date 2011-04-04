@@ -17,9 +17,9 @@ Option Strict On
 Public Class Constraint_Currency
     Inherits Constraint_Real
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Currency
+            Return ConstraintKind.Currency
         End Get
     End Property
 

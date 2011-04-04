@@ -39,15 +39,15 @@ Public Class DatatypeViewControl : Inherits ElementViewControl 'Viewcontrol
         Dim result As Label = Nothing
 
         If aConstraint IsNot Nothing Then
-            Select Case aConstraint.Type
-                Case ConstraintType.Any, ConstraintType.Slot
+            Select Case aConstraint.Kind
+                Case ConstraintKind.Any, ConstraintKind.Slot
                     result = New Label
                     result.Height = 25
                     result.Width = 70
-                    result.Text = "[" & aConstraint.ConstraintTypeString & "]"
+                    result.Text = "[" & aConstraint.ConstraintKindString & "]"
                     result.Location = Pos
                 Case Else
-                    Throw New NotSupportedException(String.Format("Constraint type '{0}' not supported as a view.", aConstraint.Type.ToString))
+                    Throw New NotSupportedException(String.Format("Constraint type '{0}' not supported as a view.", aConstraint.Kind.ToString))
             End Select
         Else
             Throw New NotSupportedException("Cannot view without a Constraint.")

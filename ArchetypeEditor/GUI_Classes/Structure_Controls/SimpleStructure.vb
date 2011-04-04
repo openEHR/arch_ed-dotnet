@@ -57,7 +57,7 @@ Public Class SimpleStructure
 
             txtSimple.Text = mElement.Text
             txtSimple.Enabled = True
-            PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement, False))
+            PictureBoxSimple.Image = ilSmall.Images(mElement.ImageIndex(False))
         Else
             ButAddElement.Show()
         End If
@@ -143,21 +143,21 @@ Public Class SimpleStructure
         End Get
     End Property
 
-    Public Overrides Property Archetype() As RmStructureCompound
+    Public Overrides Property Archetype() As RmStructure
         Get
-            Dim rm As New RmStructureCompound(mNodeId, StructureType.Single)
-            rm.Occurrences = New RmCardinality(1, 1)
+            Dim result As New RmStructureCompound(mNodeId, StructureType.Single)
+            result.Occurrences = New RmCardinality(1, 1)
 
             If Not mElement Is Nothing Then
-                rm.Children.Add(mElement.RM_Class)
+                result.Children.Add(mElement.RM_Class)
             End If
 
-            Return rm
+            Return result
         End Get
-        Set(ByVal Value As RmStructureCompound)
+        Set(ByVal value As RmStructure)
             mIsLoading = True
-            mNodeId = Value.NodeId
-            Dim element As RmStructure = Value.Children.FirstElementOrElementSlot
+            mNodeId = value.NodeId
+            Dim element As RmStructure = CType(value, RmStructureCompound).Children.FirstElementOrElementSlot()
 
             If Not element Is Nothing Then
                 If element.Type = StructureType.Element Then
@@ -168,7 +168,7 @@ Public Class SimpleStructure
 
                 txtSimple.Text = mElement.Text
                 txtSimple.Enabled = True
-                PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement, False))
+                PictureBoxSimple.Image = ilSmall.Images(mElement.ImageIndex(False))
             Else
                 mElement = Nothing
                 ButAddElement.Show()
@@ -241,7 +241,7 @@ Public Class SimpleStructure
     Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
         mIsLoading = True
 
-        If a_constraint.Type = ConstraintType.Slot Then
+        If a_constraint.Kind = ConstraintKind.Slot Then
             Dim newSlot As New RmSlot(CType(a_constraint, Constraint_Slot).RM_ClassType)
             mElement = New ArchetypeSlot(newSlot, mFileManager)
         Else
@@ -252,7 +252,7 @@ Public Class SimpleStructure
         mElement.Occurrences.MaxCount = 1
         txtSimple.Text = mElement.Text
         txtSimple.Enabled = True
-        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForItem(mElement, False))
+        PictureBoxSimple.Image = ilSmall.Images(mElement.ImageIndex(False))
         txtSimple.Focus()
         txtSimple.SelectAll()
         mFileManager.FileEdited = True
@@ -318,7 +318,7 @@ Public Class SimpleStructure
 
     Protected Overrides Sub RefreshIcons()
         Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
-        PictureBoxSimple.Image = ilSmall.Images(ImageIndexForConstraintType(element.Constraint.Type, False, False))
+        PictureBoxSimple.Image = ilSmall.Images(element.Constraint.ImageIndexForConstraintKind(False, False))
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup

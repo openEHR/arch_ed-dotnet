@@ -50,7 +50,7 @@ Public Class RmLink
         Dim rm As New RmLink()
         rm.LinkType = mLinkType.Copy()
         rm.Meaning = mMeaning.Copy()
-        rm.Target = mTarget.copy()
+        rm.Target = mTarget.Copy()
         rm.Occurrences = Occurrences.Copy()
         Return rm
     End Function

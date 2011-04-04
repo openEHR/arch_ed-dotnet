@@ -627,11 +627,7 @@ Public Class TabPageStructure
             End If
         Else
             If Not mStructureControl Is Nothing Then
-                If mIsElement Then
-                    result = CType(mStructureControl, ElementOnly).Archetype
-                Else
-                    result = mStructureControl.Archetype
-                End If
+                result = mStructureControl.Archetype
             End If
         End If
 

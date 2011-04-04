@@ -17,7 +17,7 @@ Option Strict On
 Public Class Constraint_Duration
     Inherits Constraint_Count
 
-    Public Overrides Function copy() As Constraint
+    Public Overrides Function Copy() As Constraint
         Dim d As New Constraint_Duration
 
         d.mHasMaxVal = Me.mHasMaxVal
@@ -31,9 +31,9 @@ Public Class Constraint_Duration
 
         Return d
     End Function
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Duration
+            Return ConstraintKind.Duration
         End Get
     End Property
 

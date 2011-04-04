@@ -124,7 +124,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
     End Property
 
     Private Sub AddConstraintControl(ByVal c As Constraint)
-        Dim isText As Boolean = (c.Type = ConstraintType.Text)
+        Dim isText As Boolean = (c.Kind = ConstraintKind.Text)
         Dim tcType As TextConstrainType
         Dim isOkToAdd As Boolean = True
 
@@ -142,12 +142,12 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
         End If
 
         If isOkToAdd Then
-            Dim tp As TabPage = New TabPage(c.ConstraintTypeString)
+            Dim tp As TabPage = New TabPage(c.ConstraintKindString)
             TabConstraints.TabPages.Add(tp)
             TabConstraints.SelectedTab = tp
 
-            If c.Type <> ConstraintType.Any Then
-                Dim cc As ConstraintControl = ConstraintControl.CreateConstraintControl(c.Type, mFileManager)
+            If c.Kind <> ConstraintKind.Any Then
+                Dim cc As ConstraintControl = ConstraintControl.CreateConstraintControl(c.Kind, mFileManager)
                 tp.Controls.Add(cc)
                 cc.ShowConstraint(mIsState, c)
                 cc.Dock = DockStyle.Fill
@@ -188,7 +188,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
 
         'check each of the constraints
         For Each c As Constraint In Constraint.Constraints
-            If c.Type = ConstraintType.Text Then
+            If c.Kind = ConstraintKind.Text Then
                 'if it is text then remember the type
                 result = CType(c, Constraint_Text).TypeOfTextConstraint()
 
@@ -219,15 +219,15 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
             AddConstraintMenu.Reset()
         End If
 
-        AddConstraintMenu.HideMenuItem(ConstraintType.Multiple)
+        AddConstraintMenu.HideMenuItem(ConstraintKind.Multiple)
 
         If nTextConstraints = 2 Then
-            AddConstraintMenu.HideMenuItem(ConstraintType.Text)
+            AddConstraintMenu.HideMenuItem(ConstraintKind.Text)
         End If
 
         For Each c As Constraint In Constraint.Constraints
-            If c.Type <> ConstraintType.Text Then
-                AddConstraintMenu.HideMenuItem(c.Type)
+            If c.Kind <> ConstraintKind.Text Then
+                AddConstraintMenu.HideMenuItem(c.Kind)
             End If
         Next
 
@@ -239,13 +239,13 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
             Dim i As Integer = TabConstraints.SelectedIndex
             TabConstraints.TabPages.Remove(Me.TabConstraints.SelectedTab)
 
-            If Constraint.Constraints.Item(i).Type = ConstraintType.Text Then
+            If Constraint.Constraints.Item(i).Kind = ConstraintKind.Text Then
                 nTextConstraints = nTextConstraints - 1
                 RestrictExistingTextControl(True)
             End If
 
             If Not AddConstraintMenu Is Nothing Then
-                AddConstraintMenu.ShowMenuItem(Constraint.Constraints.Item(i).Type)
+                AddConstraintMenu.ShowMenuItem(Constraint.Constraints.Item(i).Kind)
             End If
 
             Constraint.Constraints.RemoveAt(i)

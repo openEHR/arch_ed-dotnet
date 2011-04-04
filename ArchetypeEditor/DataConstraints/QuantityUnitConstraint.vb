@@ -21,9 +21,9 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
     Private mUnit As String
     Private mIsTime As Boolean
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.QuantityUnit
+            Return ConstraintKind.QuantityUnit
         End Get
     End Property
 

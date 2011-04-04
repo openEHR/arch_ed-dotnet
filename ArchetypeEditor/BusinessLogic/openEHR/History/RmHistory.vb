@@ -107,7 +107,7 @@ Class RmHistory
             Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                 Case "name", "runtime_label"  'run_time_label is obsolete
                     If attribute.has_children Then
-                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        mNameConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     End If
 
                 Case "period"
@@ -162,7 +162,7 @@ Class RmHistory
             For Each an_attribute In ObjNode.attributes
                 Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                     Case "name", "runtime_label"  'run_time_label is obsolete
-                        mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        mNameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
 
                     Case "period"
                         Try

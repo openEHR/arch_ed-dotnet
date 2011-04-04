@@ -636,25 +636,25 @@ Public Class ArchetypeNodeConstraintControl
                     Dim archetypeElem As ArchetypeElement = CType(node, ArchetypeElement)
                     SetUpNullFlavours(archetypeElem)
 
-                    Select Case archetypeElem.Constraint.Type
-                        Case ConstraintType.Any
+                    Select Case archetypeElem.Constraint.Kind
+                        Case ConstraintKind.Any
                             labelAny.Text = AE_Constants.Instance.Any
                             labelAny.Visible = True
                         Case Else
-                            If archetypeElem.Constraint.Type = ConstraintType.Text AndAlso CType(archetypeElem.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstrainType.Terminology Then
+                            If archetypeElem.Constraint.Kind = ConstraintKind.Text AndAlso CType(archetypeElem.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstrainType.Terminology Then
                                 gbValueSets.Visible = True
                             Else
                                 gbValueSets.Visible = False
                             End If
 
-                            mConstraintControl = ConstraintControl.CreateConstraintControl(archetypeElem.Constraint.Type, mFileManager)
+                            mConstraintControl = ConstraintControl.CreateConstraintControl(archetypeElem.Constraint.Kind, mFileManager)
                             PanelDataConstraint.Controls.Add(mConstraintControl)
                             mConstraintControl.Dock = DockStyle.Fill
                             mConstraintControl.ShowElement(isState, archetypeElem)
                     End Select
 
                 Case StructureType.Slot
-                    mConstraintControl = ConstraintControl.CreateConstraintControl(ConstraintType.Slot, mFileManager)
+                    mConstraintControl = ConstraintControl.CreateConstraintControl(ConstraintKind.Slot, mFileManager)
                     PanelDataConstraint.Controls.Add(mConstraintControl)
                     mConstraintControl.Dock = DockStyle.Fill
                     Dim constraint As Constraint_Slot = TryCast(node.RM_Class, RmSlot).SlotConstraint

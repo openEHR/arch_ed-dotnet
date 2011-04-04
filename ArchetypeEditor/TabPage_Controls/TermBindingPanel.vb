@@ -1525,8 +1525,8 @@ Public Class TermBindingPanel
                 Debug.Assert(TypeOf rmClass Is RmElement)
                 Dim valueConstraint As Constraint = CType(rmClass, RmElement).Constraint
 
-                Select Case valueConstraint.Type
-                    Case ConstraintType.Ordinal
+                Select Case valueConstraint.Kind
+                    Case ConstraintKind.Ordinal
                         Dim ordinalConstraint As Constraint_Ordinal = CType(valueConstraint, Constraint_Ordinal)
                         Dim rows() As DataRow = ordinalConstraint.OrdinalValues.Select("Ordinal = " & ValueOperand)
                         Debug.Assert(rows.Length = 1)

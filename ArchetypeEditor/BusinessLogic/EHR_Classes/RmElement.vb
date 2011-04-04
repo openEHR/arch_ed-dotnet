@@ -24,12 +24,13 @@ Public Class RmElement
     Protected boolIsReference As Boolean
     Protected boolHasReferences As Boolean
 
-    Public ReadOnly Property isReference() As Boolean
+    Public ReadOnly Property IsReference() As Boolean
         Get
             Return boolIsReference
         End Get
     End Property
-    Public Overridable Property hasReferences() As Boolean
+
+    Public Overridable Property HasReferences() As Boolean
         Get
             Return boolHasReferences
         End Get
@@ -37,6 +38,7 @@ Public Class RmElement
             boolHasReferences = Value
         End Set
     End Property
+
     Public Overrides ReadOnly Property Type() As StructureType
         Get
             Return StructureType.Element
@@ -45,9 +47,10 @@ Public Class RmElement
 
     Public Overridable ReadOnly Property DataType() As String
         Get
-            Return cConstraint.Type.ToString
+            Return cConstraint.Kind.ToString
         End Get
     End Property
+
     Public Overridable Property Constraint() As Constraint
         Get
             Return cConstraint
@@ -58,16 +61,19 @@ Public Class RmElement
     End Property
 
     Public Overrides Function Copy() As RmStructure
-        Dim ae As New RmElement(Me.NodeId)
+        Dim result As New RmElement(NodeId)
+
         ' Also copies if it is a reference but no longer leaves it as a reference
         ' Used in specialisation of archetypes
-        ae.cOccurrences = Me.Occurrences.Copy
-        ae.cConstraint = Me.Constraint.copy
-        ae.sNodeId = Me.NodeId
-        If Not mRunTimeConstraint Is Nothing Then
-            ae.mRunTimeConstraint = CType(Me.mRunTimeConstraint.copy, Constraint_Text)
+        result.Occurrences = Occurrences.Copy
+        result.Constraint = Constraint.Copy
+        result.NodeId = NodeId
+
+        If Not mNameConstraint Is Nothing Then
+            result.NameConstraint = CType(mNameConstraint.Copy, Constraint_Text)
         End If
-        Return ae
+
+        Return result
     End Function
 
     Private constraintNullFlavours As CodePhrase = New CodePhrase("openehr")
@@ -89,16 +95,17 @@ Public Class RmElement
         MyBase.New(e)
         ' for reference
     End Sub
-    Sub New(ByVal NodeId As String)
-        MyBase.New(NodeId, StructureType.Element)
+
+    Sub New(ByVal nodeId As String)
+        MyBase.New(nodeId, StructureType.Element)
     End Sub
 
-    Sub New(ByVal XML_Element As XMLParser.C_COMPLEX_OBJECT)
-        MyBase.New(XML_Element)
+    Sub New(ByVal xmlElement As XMLParser.C_COMPLEX_OBJECT)
+        MyBase.New(xmlElement)
     End Sub
 
-    Sub New(ByVal EIF_Element As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.New(EIF_Element)
+    Sub New(ByVal eifElement As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        MyBase.New(eifElement)
     End Sub
 
 End Class

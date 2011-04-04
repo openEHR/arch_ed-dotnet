@@ -150,8 +150,8 @@ Public Class ConstraintForm
             mConstraintControl = Nothing
         End If
 
-        If constraint.Type <> ConstraintType.Any Then
-            mConstraintControl = ConstraintControl.CreateConstraintControl(constraint.Type, filemanager)
+        If constraint.Kind <> ConstraintKind.Any Then
+            mConstraintControl = ConstraintControl.CreateConstraintControl(constraint.Kind, filemanager)
             TopPanel.Controls.Add(mConstraintControl)
             mConstraintControl.Dock = DockStyle.Fill
             mConstraintControl.ShowConstraint(isState, constraint)

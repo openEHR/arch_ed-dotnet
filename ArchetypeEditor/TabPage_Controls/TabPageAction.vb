@@ -248,7 +248,7 @@ Public Class TabPageAction
                     mPathwaySpecification.Dock = DockStyle.Fill
                     mPathwaySpecification.PathwaySteps = rm
                 Case StructureType.ActivityDescription
-                    Dim an_action As RmStructure = rm.Children.items(0)
+                    Dim an_action As RmStructure = rm.Children.Items(0)
                     tpAction.Controls.Clear()
                     mActionDescription = New TabPageStructure
 

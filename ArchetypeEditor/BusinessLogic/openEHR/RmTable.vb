@@ -49,14 +49,6 @@ Public Class RmTable : Inherits RmStructureCompound
         ProcessTable(XML_Table, a_filemanager)
     End Sub
 
-    Sub New(ByVal rm As RmStructure)
-        MyBase.New(rm)
-    End Sub
-
-    Sub New(ByVal archetype_composite As ArchetypeComposite)
-        MyBase.New(archetype_composite)
-    End Sub
-
     Sub New(ByVal NodeId As String)
         MyBase.New(NodeId, StructureType.Table)
     End Sub
@@ -82,7 +74,7 @@ Public Class RmTable : Inherits RmStructureCompound
             If attribute.has_children Then
                 Select Case attribute.rm_attribute_name.to_cil.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                     Case "name", "runtime_label"
-                        mRunTimeConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                        mNameConstraint = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     Case "rotated"
                         Dim b As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN = CType(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT).item, openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN)
                         mRotated = b.true_valid
@@ -102,7 +94,7 @@ Public Class RmTable : Inherits RmStructureCompound
         For Each attribute In ObjNode.attributes
             Select Case attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InstalledUICulture)
                 Case "name", "runtime_label"
-                    mRunTimeConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                    mNameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
                 Case "rotated"
                     Dim b As XMLParser.C_BOOLEAN = CType(CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT).item, XMLParser.C_BOOLEAN)
                     mRotated = b.true_valid

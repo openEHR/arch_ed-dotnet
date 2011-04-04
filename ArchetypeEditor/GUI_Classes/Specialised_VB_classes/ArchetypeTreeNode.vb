@@ -88,29 +88,6 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         End Get
     End Property
 
-    Public Function Copy(ByVal fileManager As FileManagerLocal) As ArchetypeTreeNode
-        Select Case mArchetypeNode.RM_Class.Type
-            Case StructureType.SECTION
-                Return New ArchetypeTreeNode(CType(mArchetypeNode, RmSection), fileManager)
-            Case StructureType.Cluster
-                Return New ArchetypeTreeNode(CType(mArchetypeNode, ArchetypeComposite))
-            Case StructureType.Element
-                'Return New ArchetypeTreeNode(CType(mArchetypeNode, ArchetypeElement), a_file_manager)
-                Return New ArchetypeTreeNode(mArchetypeNode)
-            Case StructureType.Reference
-                Return New ArchetypeTreeNode(mArchetypeNode)
-            Case StructureType.Slot
-                If TypeOf mArchetypeNode Is ArchetypeSlot Then
-                    Return New ArchetypeTreeNode(mArchetypeNode)
-                Else
-                    Return Nothing
-                End If
-            Case Else
-                Debug.Assert(False, "Type not handled")
-                Return Nothing
-        End Select
-    End Function
-
     Public Sub Translate()
         mArchetypeNode.Translate()
         MyBase.Text = mArchetypeNode.Text
@@ -123,16 +100,39 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         End If
     End Sub
 
-    Private Sub SetImageIndex()
-        Select Case mArchetypeNode.RM_Class.Type
-            Case StructureType.Cluster
-                MyBase.ImageIndex = 76
-                MyBase.SelectedImageIndex = 77
-            Case StructureType.SECTION
-                MyBase.ImageIndex = 1
-                MyBase.SelectedImageIndex = 3
-        End Select
-    End Sub
+    Public Function SpecialiseCloned(ByVal fileManager As FileManagerLocal) As ArchetypeTreeNode
+        Dim result As ArchetypeTreeNode
+        Dim composite As ArchetypeComposite = TryCast(mArchetypeNode, ArchetypeComposite)
+
+        If composite Is Nothing Then
+            result = New ArchetypeTreeNode(mArchetypeNode)
+        Else
+            result = New ArchetypeTreeNode(composite)
+
+            For Each child As ArchetypeTreeNode In Nodes
+                Dim clone As ArchetypeTreeNode
+                Dim el As RmElement = TryCast(child.Item.RM_Class, RmElement)
+
+                If el Is Nothing Then
+                    clone = child.SpecialiseCloned(fileManager)
+                Else
+                    Dim ref As RmReference = New RmReference(el)
+                    clone = New ArchetypeTreeNode(ref, fileManager)
+                    clone.ImageIndex = clone.Item.ImageIndex(False)
+                    clone.SelectedImageIndex = clone.Item.ImageIndex(True)
+                End If
+
+                result.Nodes.Add(clone)
+            Next
+
+            result.Expand()
+        End If
+
+        result.ImageIndex = result.Item.ImageIndex(False)
+        result.SelectedImageIndex = result.Item.ImageIndex(True)
+        result.Specialise()
+        Return result
+    End Function
 
     Public Sub New(ByVal aArchetypeNode As ArchetypeNode)
         MyBase.New(aArchetypeNode.Text)
@@ -141,8 +141,6 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         If mArchetypeNode.RM_Class.Type = StructureType.Cluster AndAlso CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
             CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
         End If
-
-        SetImageIndex()
     End Sub
 
     Sub New(ByVal aText As String, ByVal a_type As StructureType, ByVal fileManager As FileManagerLocal)
@@ -153,13 +151,14 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
                 mArchetypeNode = New ArchetypeElement(aText, fileManager)
             Case StructureType.Cluster
                 mArchetypeNode = New ArchetypeComposite(aText, a_type, fileManager)
+
                 If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
                     CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
                 End If
-                SetImageIndex()
             Case StructureType.SECTION
                 mArchetypeNode = New ArchetypeComposite(aText, a_type, fileManager)
-                SetImageIndex()
+                ImageIndex = 1
+                SelectedImageIndex = 3
             Case Else
                 Debug.Assert(False, String.Format("Type {0} is not handled", a_type.ToString.ToUpper))
                 'Case StructureType.Slot
@@ -173,44 +172,43 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Sub New(ByVal aCluster As RmCluster, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         mArchetypeNode = New ArchetypeComposite(aCluster, fileManager)
+        MyBase.Text = mArchetypeNode.Text
+
         If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
             CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
         End If
-        MyBase.Text = mArchetypeNode.Text
-        SetImageIndex()
     End Sub
 
     Sub New(ByVal aCluster As ArchetypeComposite)
         MyBase.New()
         mArchetypeNode = aCluster.Copy
         MyBase.Text = mArchetypeNode.Text
+
         If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
             CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
         End If
-        SetImageIndex()
     End Sub
 
     Sub New(ByVal aSection As RmSection, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         mArchetypeNode = New ArchetypeComposite(aSection, fileManager)
         MyBase.Text = mArchetypeNode.Text
-        'Me.Item.Occurrences = New Count(1, 1)
-        SetImageIndex()
+        ImageIndex = 1
+        SelectedImageIndex = 3
     End Sub
 
     Sub New(ByVal aSection As RmStructureCompound, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         mArchetypeNode = New ArchetypeComposite(aSection, fileManager)
         MyBase.Text = mArchetypeNode.Text
-        'Me.Item.Occurrences = aSection.Occurrences
-        SetImageIndex()
+        ImageIndex = 1
+        SelectedImageIndex = 3
     End Sub
 
     Sub New(ByVal el As RmElement, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         mArchetypeNode = New ArchetypeElement(el, fileManager)
         MyBase.Text = mArchetypeNode.Text
-        'Me.Item.Occurrences = el.Occurrences
     End Sub
 
     Sub New(ByVal slot As RmSlot, ByVal fileManager As FileManagerLocal)

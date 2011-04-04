@@ -31,10 +31,10 @@ Class Constraint_Proportion
     Private mAllowedTypes As Boolean() = {True, True, True, True, True}
     Private mIsIntegralSet As Boolean = False
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             'Return "Proportion"
-            Return ConstraintType.Proportion
+            Return ConstraintKind.Proportion
         End Get
     End Property
     Public Overrides Property AssumedValue() As Object

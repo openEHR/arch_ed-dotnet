@@ -31,33 +31,32 @@ Public Class Constraint_Text
     Private mTerminologyId As String
 
     Public Overrides Function Copy() As Constraint
-        Dim t As New Constraint_Text
-
-        t.boolFixed = Me.boolFixed
-        t.cpTerms.Phrase = Me.cpTerms.Phrase
-        t.mConstraintCode = Me.mConstraintCode
-        t.mTextConstraintType = Me.mTextConstraintType
-        t.boolFixed = Me.boolFixed
-        t.HasAssumedValue = Me.HasAssumedValue
-        t.mAssumed_value = Me.mAssumed_value
-        t.mTerminologyId = mTerminologyId
-        Return t
+        Dim result As New Constraint_Text
+        result.boolFixed = boolFixed
+        result.cpTerms.Phrase = cpTerms.Phrase
+        result.mConstraintCode = mConstraintCode
+        result.mTextConstraintType = mTextConstraintType
+        result.boolFixed = boolFixed
+        result.HasAssumedValue = HasAssumedValue
+        result.mAssumed_value = mAssumed_value
+        result.mTerminologyId = mTerminologyId
+        Return result
     End Function
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Text
+            Return ConstraintKind.Text
         End Get
     End Property
 
     Public Overrides Property AssumedValue() As Object
         Get
             If HasAssumedValue Then
-
                 If Not cpTerms.Codes.Contains(mAssumed_value) Then
                     mAssumed_value = Nothing
                     HasAssumedValue = False
                 End If
+
                 Return mAssumed_value
             Else
                 Return Nothing
@@ -94,6 +93,7 @@ Public Class Constraint_Text
             cpTerms = Value
         End Set
     End Property
+
     Public Property Fixed() As Boolean
         Get
             Fixed = boolFixed
@@ -102,6 +102,7 @@ Public Class Constraint_Text
             boolFixed = Value
         End Set
     End Property
+
     Public Property TypeOfTextConstraint() As TextConstrainType
         Get
             Return mTextConstraintType
@@ -110,20 +111,23 @@ Public Class Constraint_Text
             ' HKF: 29 Sep 2008 - EDT-335, resolve AdlParser ERROR - Serialisation failed Found leaf term code 271 not defined in ontology 
             ' Ensure that Null Flavor code phrase terminology ID  of 'openehr' is not overwritten with local when TextConstraint set                
             'If Value = TextConstrainType.Internal Then
-            If Value = TextConstrainType.Internal AndAlso Me.AllowableValues.TerminologyID <> "openehr" Then
-                Me.AllowableValues.TerminologyID = "local"
+            If Value = TextConstrainType.Internal AndAlso AllowableValues.TerminologyID <> "openehr" Then
+                AllowableValues.TerminologyID = "local"
             End If
+
             mTextConstraintType = Value
         End Set
     End Property
+
     Public Property ConstraintCode() As String
         Get
-                Return mConstraintCode
+            Return mConstraintCode
         End Get
         Set(ByVal Value As String)
             mConstraintCode = Value
         End Set
     End Property
+
     Overrides Function ToString() As String
         Select Case mTextConstraintType
             Case TextConstrainType.Internal
@@ -136,11 +140,7 @@ Public Class Constraint_Text
                 Return MyBase.ToString()
         End Select
     End Function
-    'Changed SRH - Free text is now the default
-    'Sub New()
-    '    'default
-    '    mTextConstraintType = TextConstrainType.Internal
-    'End Sub
+
 End Class
 
 

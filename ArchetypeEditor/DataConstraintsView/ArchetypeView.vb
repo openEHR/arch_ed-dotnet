@@ -231,50 +231,50 @@ Public Class ArchetypeView
 
     Public Shared Function ElementView(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
         'any additions need to be processed in the function below
-        Dim t As ConstraintType
+        Dim t As ConstraintKind
 
         If Not anElement Is Nothing AndAlso Not anElement.Constraint Is Nothing Then
-            t = anElement.Constraint.Type
+            t = anElement.Constraint.Kind
         End If
 
         Select Case t
-            Case ConstraintType.Text
+            Case ConstraintKind.Text
                 Return New TextViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Quantity
+            Case ConstraintKind.Quantity
                 Return New QuantityViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Duration
+            Case ConstraintKind.Duration
                 Return New DurationViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Boolean
+            Case ConstraintKind.Boolean
                 Return New BooleanViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Ordinal
+            Case ConstraintKind.Ordinal
                 Return New OrdinalViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.DateTime
+            Case ConstraintKind.DateTime
                 Return New DateTimeViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Count
+            Case ConstraintKind.Count
                 Return New CountViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Multiple
+            Case ConstraintKind.Multiple
                 Return New MultipleViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.URI
+            Case ConstraintKind.URI
                 Return New URIViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Identifier
+            Case ConstraintKind.Identifier
                 Return New IdentifierViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
+            Case ConstraintKind.Interval_Count, ConstraintKind.Interval_Quantity, ConstraintKind.Interval_DateTime
                 Return New IntervalViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.Proportion
+            Case ConstraintKind.Proportion
                 Return New RatioViewControl(anElement, a_filemanager)
 
-            Case ConstraintType.MultiMedia
+            Case ConstraintKind.MultiMedia
                 Return New MultiMediaViewControl(anElement, a_filemanager)
 
             Case Else
@@ -284,50 +284,50 @@ Public Class ArchetypeView
 
     Public Shared Function ConstraintView(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
         'any additions need to be processed in the function above
-        Dim t As ConstraintType
+        Dim t As ConstraintKind
 
         If Not aConstraint Is Nothing Then
-            t = aConstraint.Type
+            t = aConstraint.Kind
         End If
 
         Select Case t
-            Case ConstraintType.Text
+            Case ConstraintKind.Text
                 Return New TextViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Quantity
+            Case ConstraintKind.Quantity
                 Return New QuantityViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Duration
+            Case ConstraintKind.Duration
                 Return New DurationViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Boolean
+            Case ConstraintKind.Boolean
                 Return New BooleanViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Ordinal
+            Case ConstraintKind.Ordinal
                 Return New OrdinalViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.DateTime
+            Case ConstraintKind.DateTime
                 Return New DateTimeViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Count
+            Case ConstraintKind.Count
                 Return New CountViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Multiple
+            Case ConstraintKind.Multiple
                 Return New MultipleViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.URI
+            Case ConstraintKind.URI
                 Return New URIViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Identifier
+            Case ConstraintKind.Identifier
                 Return New IdentifierViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
+            Case ConstraintKind.Interval_Count, ConstraintKind.Interval_Quantity, ConstraintKind.Interval_DateTime
                 Return New IntervalViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.Proportion
+            Case ConstraintKind.Proportion
                 Return New RatioViewControl(aConstraint, a_filemanager)
 
-            Case ConstraintType.MultiMedia
+            Case ConstraintKind.MultiMedia
                 Return New MultiMediaViewControl(aConstraint, a_filemanager)
 
             Case Else

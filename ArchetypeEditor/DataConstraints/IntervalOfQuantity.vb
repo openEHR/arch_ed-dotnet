@@ -20,9 +20,9 @@ Class Constraint_Interval_Quantity
     Private mQuantityLower As New Constraint_Quantity
     Private mQuantityUpper As New Constraint_Quantity
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Interval_Quantity
+            Return ConstraintKind.Interval_Quantity
         End Get
     End Property
 

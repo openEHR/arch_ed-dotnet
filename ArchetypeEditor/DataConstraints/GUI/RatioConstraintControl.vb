@@ -159,7 +159,7 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
         tp = New TabPage(name)
 
         cc = CType(ConstraintControl.CreateConstraintControl( _
-            c.Type, mFileManager), CountConstraintControl)
+            c.Kind, mFileManager), CountConstraintControl)
         tp.Controls.Add(cc)
         cc.ShowConstraint(mIsState, c)
         cc.Dock = DockStyle.Fill
@@ -206,8 +206,8 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
                     mDenominator = Me.TabConstraints.TabPages.Item(1)
                     Me.TabConstraints.TabPages.RemoveAt(1)
                 End If
-                Select Case Me.Constraint.Denominator.Type
-                    Case ConstraintType.Real
+                Select Case Me.Constraint.Denominator.Kind
+                    Case ConstraintKind.Real
                         CType(Me.Constraint.Denominator, Constraint_Real).MinimumRealValue = 100
                         CType(Me.Constraint.Denominator, Constraint_Real).MaximumRealValue = 100
                 End Select

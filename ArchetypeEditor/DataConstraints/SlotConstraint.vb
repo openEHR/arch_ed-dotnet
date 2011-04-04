@@ -22,16 +22,19 @@ Public Class Constraint_Slot
     Dim mType As StructureType
     Dim mExcludeAll As Boolean
     Dim mIncludeAll As Boolean
-    Public Overrides ReadOnly Property Type() As ConstraintType
+
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Slot
+            Return ConstraintKind.Slot
         End Get
     End Property
+
     Public ReadOnly Property hasSlots() As Boolean
         Get
-            Return (colInclude.Count > 0 Or colExclude.Count > 0 Or mIncludeAll Or mExcludeAll)
+            Return colInclude.Count > 0 Or colExclude.Count > 0 Or mIncludeAll Or mExcludeAll
         End Get
     End Property
+
     Property RM_ClassType() As StructureType
         Get
             Return mType
@@ -40,6 +43,7 @@ Public Class Constraint_Slot
             mType = Value
         End Set
     End Property
+
     Public Property IncludeAll() As Boolean
         Get
             Return mIncludeAll
@@ -48,6 +52,7 @@ Public Class Constraint_Slot
             mIncludeAll = Value
         End Set
     End Property
+
     Public Property ExcludeAll() As Boolean
         Get
             Return mExcludeAll
@@ -56,6 +61,7 @@ Public Class Constraint_Slot
             mExcludeAll = Value
         End Set
     End Property
+
     Public Property Include() As CollectionOfSlots
         Get
             Return colInclude
@@ -64,6 +70,7 @@ Public Class Constraint_Slot
             colInclude = Value
         End Set
     End Property
+
     Public Property Exclude() As CollectionOfSlots
         Get
             Return colExclude
@@ -74,10 +81,10 @@ Public Class Constraint_Slot
     End Property
 
     Public Overrides Function Copy() As Constraint
-        Dim slot As Constraint_Slot = New Constraint_Slot()
-        slot.colInclude = Me.colInclude.Copy
-        slot.colExclude = Me.colExclude.Copy
-        Return slot
+        Dim result As Constraint_Slot = New Constraint_Slot()
+        result.colInclude = colInclude.Copy
+        result.colExclude = colExclude.Copy
+        Return result
     End Function
 
 End Class

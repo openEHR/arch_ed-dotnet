@@ -191,7 +191,7 @@ Public Class ReferenceModel
         End Select
     End Sub
 
-    Public Shared Function RM_DataTypeName(ByVal d_type As ConstraintType) As String
+    Public Shared Function RM_DataTypeName(ByVal d_type As ConstraintKind) As String
         Dim result, s As String
 
         If mReferenceModelDataTypes.ContainsKey(CType(d_type, Integer)) Then
@@ -201,14 +201,14 @@ Public Class ReferenceModel
         End If
 
         Select Case d_type
-            Case ConstraintType.Interval_Count
-                s = RM_DataTypeName(ConstraintType.Count)
+            Case ConstraintKind.Interval_Count
+                s = RM_DataTypeName(ConstraintKind.Count)
                 result = String.Format("INTERVAL<{0}>", s)
-            Case ConstraintType.Interval_Quantity
-                s = RM_DataTypeName(ConstraintType.Quantity)
+            Case ConstraintKind.Interval_Quantity
+                s = RM_DataTypeName(ConstraintKind.Quantity)
                 result = String.Format("INTERVAL<{0}>", s)
-            Case ConstraintType.Interval_DateTime
-                s = RM_DataTypeName(ConstraintType.DateTime)
+            Case ConstraintKind.Interval_DateTime
+                s = RM_DataTypeName(ConstraintKind.DateTime)
                 result = String.Format("INTERVAL<{0}>", s)
         End Select
 

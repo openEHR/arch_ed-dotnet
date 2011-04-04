@@ -32,13 +32,12 @@ Public Class RmReference
             Return mPath
         End Get
         Set(ByVal Value As String)
-            Dim i As Integer
-            Dim s As String
             If Value.EndsWith("/") Then
                 Value = Value.TrimEnd(CType("/", Char))
             End If
-            i = Value.LastIndexOf("/")
-            s = Value.Substring(i + 1)
+
+            Dim i As Integer = Value.LastIndexOf("/")
+            Dim s As String = Value.Substring(i + 1)
             i = s.IndexOf("[")
             s = s.Substring(i + 1)
             i = s.IndexOf("]")
@@ -47,7 +46,7 @@ Public Class RmReference
             mPath = Value
         End Set
     End Property
-    Public Overrides Property hasReferences() As Boolean
+    Public Overrides Property HasReferences() As Boolean
         ' cannot be true
         Get
             Return False
@@ -76,14 +75,16 @@ Public Class RmReference
     Sub SetElement(ByVal rm As RmElement)
         Debug.Assert(Not rm Is Nothing, "rm Argument is nothing")
 
-        If (sNodeId <> rm.NodeId) Then
+        If sNodeId <> rm.NodeId Then
             If rm.HasNameConstraint Then
-                mRunTimeConstraint = rm.NameConstraint
+                mNameConstraint = rm.NameConstraint
             End If
-            mType = StructureType.Element
+
+            mStructureType = StructureType.Element
             sNodeId = rm.NodeId
             cOccurrences = rm.Occurrences.Copy()
         End If
+
         mElement = rm
     End Sub
 
@@ -95,9 +96,11 @@ Public Class RmReference
 
     Sub New(ByRef el As RmElement)
         MyBase.New(el)
+        el.HasReferences = True
         boolIsReference = True
         mElement = el
     End Sub
+
 End Class
 
 '

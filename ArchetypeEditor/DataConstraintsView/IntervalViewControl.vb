@@ -33,19 +33,19 @@ Public Class IntervalViewControl : Inherits ElementViewControl
     Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, _
             ByVal aLocation As System.Drawing.Point)
 
-        If aConstraint.Type = ConstraintType.Interval_Quantity Then
+        If aConstraint.Kind = ConstraintKind.Interval_Quantity Then
             Dim c As Constraint_Interval_Quantity = CType(aConstraint, Constraint_Interval_Quantity)
 
             mLower = New QuantityViewControl(c.LowerLimit, mFileManager)
             mUpper = New QuantityViewControl(c.UpperLimit, mFileManager)
 
-        ElseIf aConstraint.Type = ConstraintType.Interval_Count Then
+        ElseIf aConstraint.Kind = ConstraintKind.Interval_Count Then
             Dim c As Constraint_Interval_Count = CType(aConstraint, Constraint_Interval_Count)
 
             mLower = New CountViewControl(c.LowerLimit, mFileManager)
             mUpper = New CountViewControl(c.UpperLimit, mFileManager)
-            
-        ElseIf aConstraint.Type = ConstraintType.Interval_DateTime Then
+
+        ElseIf aConstraint.Kind = ConstraintKind.Interval_DateTime Then
             Dim c As Constraint_Interval_DateTime = CType(aConstraint, Constraint_Interval_DateTime)
 
             mLower = New DateTimeViewControl(c.LowerLimit, mFileManager)
@@ -79,12 +79,12 @@ Public Class IntervalViewControl : Inherits ElementViewControl
             'CHANGE Sam Heard 2004-05-24
             'Added set increment
             If c.MaximumValue <= 10 Then
-                If c.Type = ConstraintType.QuantityUnit Then
+                If c.Kind = ConstraintKind.QuantityUnit Then
                     aControl.Increment = CDec(0.1)
                 End If
             End If
             If c.MaximumValue <= 1 Then
-                If c.Type = ConstraintType.QuantityUnit Then
+                If c.Kind = ConstraintKind.QuantityUnit Then
                     aControl.Increment = CDec(0.01)
                 End If
             End If

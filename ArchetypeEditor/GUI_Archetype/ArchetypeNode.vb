@@ -16,19 +16,60 @@
 
 Option Strict On
 
-Public Interface ArchetypeNode
-    Property Text() As String
-    ReadOnly Property RM_Class() As RmStructure
-    ReadOnly Property IsMandatory() As Boolean
-    Property Occurrences() As RmCardinality
-    ReadOnly Property IsAnonymous() As Boolean
-    ReadOnly Property IsReference() As Boolean
-    ReadOnly Property HasReferences() As Boolean
-    Sub Translate()
-    Function ToRichText(ByVal level As Integer) As String
-    Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
-    Function Copy() As ArchetypeNode
-End Interface
+Public MustInherit Class ArchetypeNode
+    Public MustOverride Property Text() As String
+    Public MustOverride Property Constraint() As Constraint
+    Public MustOverride ReadOnly Property IsAnonymous() As Boolean
+    Public MustOverride ReadOnly Property IsReference() As Boolean
+    Public MustOverride ReadOnly Property HasReferences() As Boolean
+    Public MustOverride Sub Translate()
+    Public MustOverride Function ToRichText(ByVal level As Integer) As String
+    Public MustOverride Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
+    Public MustOverride Function Copy() As ArchetypeNode
+
+    Protected mItem As RmStructure
+
+    Public Overridable ReadOnly Property RM_Class() As RmStructure
+        Get
+            Return mItem
+        End Get
+    End Property
+
+    Protected Overridable Property Item() As RmStructure
+        Get
+            Return mItem
+        End Get
+        Set(ByVal value As RmStructure)
+            mItem = value
+        End Set
+    End Property
+
+    Public Overridable Property Occurrences() As RmCardinality
+        Get
+            Return mItem.Occurrences
+        End Get
+        Set(ByVal value As RmCardinality)
+            mItem.Occurrences = value
+        End Set
+    End Property
+
+    Public Overridable ReadOnly Property IsMandatory() As Boolean
+        Get
+            Return Occurrences.MinCount > 0
+        End Get
+    End Property
+
+    Public Overridable Function ImageIndex(ByVal isSelected As Boolean) As Integer
+        Dim result As Integer = ConstraintKind.Any
+
+        If Not Constraint Is Nothing Then
+            result = Constraint.ImageIndexForConstraintKind(IsReference, isSelected)
+        End If
+
+        Return result
+    End Function
+
+End Class
 
 '
 '***** BEGIN LICENSE BLOCK *****

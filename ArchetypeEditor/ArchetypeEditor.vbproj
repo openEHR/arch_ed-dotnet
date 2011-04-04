@@ -483,6 +483,7 @@
     <Compile Include="DataConstraints\ChoiceConstraint.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DataConstraints\ClusterConstraint.vb" />
     <Compile Include="DataConstraints\CollectionOfSlots.vb">
       <SubType>Code</SubType>
     </Compile>

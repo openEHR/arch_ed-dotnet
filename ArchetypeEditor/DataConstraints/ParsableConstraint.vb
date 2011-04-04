@@ -17,9 +17,9 @@ Option Strict On
 Public Class Constraint_Parsable
     Inherits Constraint
     
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Parsable
+            Return ConstraintKind.Parsable
         End Get
     End Property
 

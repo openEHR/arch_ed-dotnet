@@ -65,7 +65,7 @@ Public Class MultipleViewControl : Inherits ElementViewControl
 
             tp.Controls.Add(viewControl)
 
-            tp.Text = c.ConstraintTypeString
+            tp.Text = c.ConstraintKindString
             tabctrl.TabPages.Add(tp)
         Next
         tabctrl.Width = maxWidth

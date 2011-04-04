@@ -1,4 +1,7 @@
-Public Class ArchetypeSlot : Inherits ArchetypeNodeAbstract
+Option Strict On
+
+Public Class ArchetypeSlot
+    Inherits ArchetypeNodeAbstract
 
     Private Property Slot() As RmSlot
         Get
@@ -9,25 +12,14 @@ Public Class ArchetypeSlot : Inherits ArchetypeNodeAbstract
         End Set
     End Property
 
-    Public Shadows ReadOnly Property RM_Class() As RmSlot
-        Get
-            Debug.Assert(TypeOf MyBase.RM_Class Is RmSlot)
-            Return CType(MyBase.RM_Class, RmSlot)
-        End Get
-    End Property
-
-    Public Property Constraint() As Constraint
+    Public Overrides Property Constraint() As Constraint
         Get
             Return Slot.SlotConstraint
         End Get
         Set(ByVal Value As Constraint)
-            Slot.SlotConstraint = Value
+            Slot.SlotConstraint = CType(Value, Constraint_Slot)
         End Set
     End Property
-
-    Public Overrides Function Copy() As ArchetypeNode
-        Return New ArchetypeSlot(CType(Slot.Copy, RmSlot), mFileManager)
-    End Function
 
     Public Overrides Property Text() As String
         Get
@@ -162,6 +154,10 @@ Public Class ArchetypeSlot : Inherits ArchetypeNodeAbstract
         End If
 
         Return s
+    End Function
+
+    Public Overrides Function Copy() As ArchetypeNode
+        Return New ArchetypeSlot(CType(Slot.Copy, RmSlot), mFileManager)
     End Function
 
     Sub New(ByVal slot As RmSlot, ByVal fileManager As FileManagerLocal)

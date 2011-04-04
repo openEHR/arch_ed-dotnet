@@ -51,12 +51,12 @@ Public Class CountViewControl : Inherits ElementViewControl
             'CHANGE Sam Heard 2004-05-24
             'Added set increment
             If u.MaximumValue <= 10 Then
-                If u.Type = ConstraintType.QuantityUnit Then
+                If u.Kind = ConstraintKind.QuantityUnit Then
                     aControl.Increment = CDec(0.1)
                 End If
             End If
             If u.MaximumValue <= 1 Then
-                If u.Type = ConstraintType.QuantityUnit Then
+                If u.Kind = ConstraintKind.QuantityUnit Then
                     aControl.Increment = CDec(0.01)
                 End If
             End If

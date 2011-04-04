@@ -18,22 +18,18 @@ Public Class RmCluster
     Inherits RmStructureCompound
 
     Public Overrides Function Copy() As RmStructure
-        Dim ac As New RmCluster(Me.NodeId)
-        ac.cOccurrences = Me.cOccurrences
-        ac.mRunTimeConstraint = Me.mRunTimeConstraint
-        Return ac
+        Dim result As New RmCluster(NodeId)
+        result.cOccurrences = cOccurrences
+        result.mNameConstraint = mNameConstraint
+        Return result
     End Function
 
-    Sub New(ByVal archetype_node As ArchetypeComposite)
-        MyBase.New(archetype_node)
+    Sub New(ByVal node As ArchetypeComposite)
+        MyBase.New(node)
     End Sub
 
-    Sub New(ByVal rm As RmStructure)
-        MyBase.New(rm)
-    End Sub
-
-    Sub New(ByVal NodeId As String)
-        MyBase.New(NodeId, StructureType.Cluster)
+    Sub New(ByVal nodeId As String)
+        MyBase.New(nodeId, StructureType.Cluster)
     End Sub
 
 #Region "ADL and XML Processing"

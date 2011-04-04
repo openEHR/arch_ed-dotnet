@@ -26,20 +26,23 @@ Public MustInherit Class RmChildren
     End Property
 
     Protected mCardinality As New RmCardinality(0)
-    Protected mExistence As New RmExistence 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+    Protected mExistence As New RmExistence
 
     Public Property Cardinality() As RmCardinality
         Get
             'SRH: 11 Jan 2009 - EDT-502 - added check for cardinality to be set to minimum
             Dim minCardinalityCount As Integer = 0
+
             For Each child As RmStructure In Me.List
                 If Not TypeOf child Is RmReference AndAlso child.Occurrences.MinCount > 0 Then
                     minCardinalityCount += child.Occurrences.MinCount
                 End If
             Next
+
             If mCardinality.MinCount < minCardinalityCount Then
                 mCardinality.MinCount = minCardinalityCount
             End If
+
             Return mCardinality
         End Get
         Set(ByVal Value As RmCardinality)
@@ -47,7 +50,7 @@ Public MustInherit Class RmChildren
         End Set
     End Property
 
-    Public Property Existence() As RmExistence 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+    Public Property Existence() As RmExistence
         Get
             ' HKF: Revert EDT-502 - allowing this to remain as 1..1 results in a null statement about existence in the ADL but results in incorrect XML, which must be ignored 
             'SRH: 11 Jan 2009 - EDT-502 - added check for existence to be mandatory if contains any mandatory children (only relevant for structures as protocol or state)
@@ -83,7 +86,6 @@ Public MustInherit Class RmChildren
     End Sub
 
     Public Function GetChildByNodeId(ByVal aNodeId As String) As RmStructure
-
         For Each child As RmStructure In Me.List
             If child.NodeId = aNodeId Then
                 Return child
@@ -98,26 +100,28 @@ Public MustInherit Class RmChildren
                 End If
             End If
         Next
+
         Return Nothing
     End Function
 
 End Class
 
 Public Class Children
-
     Inherits RmChildren
 
     Private boolOrdered As Boolean = True
     Private mParentStructureType As StructureType
 
-    Public ReadOnly Property items() As RmStructure()
+    Public ReadOnly Property Items() As RmStructure()
         Get
-            Dim rm(MyBase.List.Count - 1) As RmStructure
+            Dim result(MyBase.List.Count - 1) As RmStructure
             Dim i As Integer
+
             For i = 0 To MyBase.List.Count - 1
-                rm(i) = CType(MyBase.List.Item(i), RmStructure)
+                result(i) = CType(MyBase.List.Item(i), RmStructure)
             Next
-            Return rm
+
+            Return result
         End Get
     End Property
 
@@ -126,43 +130,39 @@ Public Class Children
             Dim i As Integer
 
             For i = 0 To MyBase.List.Count - 1
-                Select Case Me.items(i).Type
+                Select Case Items(i).Type
                     Case StructureType.Element
-
-                        Return CType(Me.items(i), RmElement)
+                        Return CType(Items(i), RmElement)
 
                     Case StructureType.Cluster
+                        Dim rm As RmStructure = CType(Items(i), RmCluster).Children.FirstElementOrElementSlot
 
-                        Dim rm As RmStructure
-                        rm = CType(Me.items(i), RmCluster).Children.FirstElementOrElementSlot
                         If Not rm Is Nothing Then
                             Return rm
                         End If
 
                     Case StructureType.Slot
-                        Dim aSlot As RmSlot = CType(Me.items(i), RmSlot)
-                        If aSlot.Type = StructureType.Element Then
-                            Return aSlot
+                        Dim slot As RmSlot = CType(Items(i), RmSlot)
+
+                        If slot.Type = StructureType.Element Then
+                            Return slot
                         End If
                 End Select
-
             Next
 
             Return Nothing
         End Get
     End Property
 
-    Public Function copy() As Children
-        Dim child As New Children(mParentStructureType)
-        Dim rm As RmStructure
+    Public Function Copy() As Children
+        Dim result As New Children(mParentStructureType)
 
-        For Each rm In Me.items
-            Dim rm1 As RmStructure
-            rm1 = rm.Copy
-            child.Add(rm)
+        For Each rm As RmStructure In Items
+            Dim struct As RmStructure = rm.Copy
+            result.Add(rm)
         Next
 
-        Return child
+        Return result
     End Function
 
     Public Shadows Sub Add(ByVal an_RM_Structure As RmStructure)

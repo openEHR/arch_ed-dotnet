@@ -22,7 +22,7 @@ Public Class RmSection
     End Sub
 
     Sub New(ByVal NodeId As String)
-        MyBase.new(NodeId, StructureType.SECTION)
+        MyBase.New(NodeId, StructureType.SECTION)
     End Sub
 
     Sub New(ByVal EIF_Structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal a_filemanager As FileManagerLocal)

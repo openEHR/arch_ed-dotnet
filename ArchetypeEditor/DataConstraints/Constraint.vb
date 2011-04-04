@@ -14,49 +14,61 @@
 
 Option Strict On
 
-Public Enum ConstraintType
-    Nil = 0
+Public Enum ConstraintKind
+    Cluster = 0
     Any = 1
-    [Boolean] = 2
-    Quantity = 3
-    QuantityUnit = 4
-    Count = 5
-    Text = 6
+    Quantity = 2
+    Text = 3
+    [Boolean] = 4
+    Ordinal = 5
+    Count = 6
     DateTime = 7
-    Ordinal = 8
-    Multiple = 9
-    Proportion = 10
-    Slot = 11
-    Interval_Count = 12
+    Multiple = 8
+    MultiMedia = 9
+    URI = 10
+    Proportion = 11
+    Duration = 12
     Interval_Quantity = 13
-    Interval_DateTime = 14
-    MultiMedia = 15
-    URI = 16
-    Duration = 17
-    Real = 18
-    Identifier = 19
-    Currency = 20
-    Parsable = 21
+    Interval_Count = 14
+    Interval_DateTime = 15
+    Slot = 16
+    Identifier = 17
+    Currency = 18
+    Parsable = 19
+    QuantityUnit = 20
+    Real = 21
 End Enum
-
 
 Public Class Constraint
 
-    Public ReadOnly Property ConstraintTypeString() As String
+    Public ReadOnly Property ConstraintKindString() As String
         Get
-            Return Me.Type.ToString
-        End Get
-    End Property
-    Public Overridable ReadOnly Property Type() As ConstraintType
-        Get
-            Return ConstraintType.Any
+            Return Kind.ToString
         End Get
     End Property
 
-    'Returns a constraint which is ANY
-    Public Overridable Function copy() As Constraint
+    Public Overridable ReadOnly Property Kind() As ConstraintKind
+        Get
+            Return ConstraintKind.Any
+        End Get
+    End Property
+
+    Public Overridable Function Copy() As Constraint
         Return New Constraint
     End Function
+
+    Public Const SelectedImageOffset As Integer = 40
+
+    Public Function ImageIndexForConstraintKind(ByVal isReference As Boolean, ByVal isSelected As Boolean) As Integer
+        Dim result As Integer = CType(Kind, Integer)
+
+        If isReference Then result += 20
+
+        If isSelected Then result += SelectedImageOffset
+
+        Return result
+    End Function
+
 End Class
 
 '

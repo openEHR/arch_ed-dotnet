@@ -19,9 +19,9 @@ Public Class Constraint_Real
 
     Protected mPrecision As Integer = -1
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Real
+            Return ConstraintKind.Real
         End Get
     End Property
 

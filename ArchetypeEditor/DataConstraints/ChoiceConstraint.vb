@@ -14,13 +14,14 @@
 
 Option Strict On
 
-Class Constraint_Choice : Inherits Constraint
+Class Constraint_Choice
+    Inherits Constraint
 
     Dim col_Constraints As New ConstraintCollection
 
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Multiple
+            Return ConstraintKind.Multiple
         End Get
     End Property
     Public ReadOnly Property Constraints() As ConstraintCollection

@@ -40,7 +40,6 @@ Public Class RmParticipation
         End Set
     End Property
 
-
     Overrides Function Copy() As RmStructure
         Dim rm As New RmParticipation()
         rm.FunctionConstraint = mTextConstraint.Copy()

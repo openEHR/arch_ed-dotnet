@@ -88,31 +88,31 @@ Public Class ConstraintControl
         End Set
     End Property
 
-    Private Sub SetHelpTopic(ByVal a_constraint_type As ConstraintType)
+    Private Sub SetHelpTopic(ByVal a_constraint_type As ConstraintKind)
         HelpProviderConstraint.SetHelpNavigator(Me, HelpNavigator.Topic)
 
         Select Case a_constraint_type
-            Case ConstraintType.Boolean
+            Case ConstraintKind.Boolean
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_boolean.htm")
-            Case ConstraintType.Count
+            Case ConstraintKind.Count
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_count.htm")
-            Case ConstraintType.DateTime
+            Case ConstraintKind.DateTime
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_date_tihtml")
-            Case ConstraintType.Interval_Count
+            Case ConstraintKind.Interval_Count
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
-            Case ConstraintType.Interval_Quantity
+            Case ConstraintKind.Interval_Quantity
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
-            Case ConstraintType.Multiple
+            Case ConstraintKind.Multiple
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_interval.html")
-            Case ConstraintType.Ordinal
+            Case ConstraintKind.Ordinal
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_multiple.html")
-            Case ConstraintType.Quantity
+            Case ConstraintKind.Quantity
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_quantity.htm")
-            Case ConstraintType.Proportion
+            Case ConstraintKind.Proportion
                 HelpProviderConstraint.SetHelpKeyword(Me, "")
-            Case ConstraintType.Slot
+            Case ConstraintKind.Slot
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_slot.html")
-            Case ConstraintType.Text
+            Case ConstraintKind.Text
                 HelpProviderConstraint.SetHelpKeyword(Me, "HowTo/Editing/Data constraints/set_constraints_text.htm")
         End Select
     End Sub
@@ -120,7 +120,7 @@ Public Class ConstraintControl
     Public Sub ShowElement(ByVal isState As Boolean, ByVal aArchetypeElement As ArchetypeElement)
         mIsLoading = True
         mConstraint = aArchetypeElement.Constraint
-        SetHelpTopic(mConstraint.Type)
+        SetHelpTopic(mConstraint.Kind)
         SetControlValuesFromElement(isState, aArchetypeElement)
         mIsLoading = False
     End Sub
@@ -128,9 +128,9 @@ Public Class ConstraintControl
     Public Sub ShowConstraint(ByVal isState As Boolean, ByVal aConstraint As Constraint)
         mIsLoading = True
         mConstraint = aConstraint
-        SetHelpTopic(mConstraint.Type)
+        SetHelpTopic(mConstraint.Kind)
 
-        If aConstraint.Type = ConstraintType.Ordinal Then
+        If aConstraint.Kind = ConstraintKind.Ordinal Then
             SetControlValuesFromConstraint(isState, aConstraint)
         Else
             SetControlValues(isState)
@@ -155,57 +155,57 @@ Public Class ConstraintControl
         Return Not mConstraint Is Nothing
     End Function
 
-    Public Shared Function CreateConstraintControl(ByVal aConstraintType As ConstraintType, ByVal a_file_manager As FileManagerLocal) As ConstraintControl
+    Public Shared Function CreateConstraintControl(ByVal aConstraintType As ConstraintKind, ByVal a_file_manager As FileManagerLocal) As ConstraintControl
 
         Select Case aConstraintType
             'Case ConstraintType.Any
 
-            Case ConstraintType.Boolean
+            Case ConstraintKind.Boolean
                 Return New BooleanConstraintControl(a_file_manager)
 
-            Case ConstraintType.Quantity
+            Case ConstraintKind.Quantity
                 Return New QuantityConstraintControl(a_file_manager)
 
-            Case ConstraintType.Count, ConstraintType.Real
+            Case ConstraintKind.Count, ConstraintKind.Real
                 Return New CountConstraintControl(a_file_manager)
 
-            Case ConstraintType.Text
+            Case ConstraintKind.Text
                 Return New TextConstraintControl(a_file_manager)
 
-            Case ConstraintType.DateTime
+            Case ConstraintKind.DateTime
                 Return New DateTimeConstraintControl(a_file_manager)
 
-            Case ConstraintType.Duration
+            Case ConstraintKind.Duration
                 Return New DurationConstraintControl(a_file_manager)
 
-            Case ConstraintType.Ordinal
+            Case ConstraintKind.Ordinal
                 Return New OrdinalConstraintControl(a_file_manager)
 
-            Case ConstraintType.Multiple
+            Case ConstraintKind.Multiple
                 Return New MultipleConstraintControl(a_file_manager)
 
-            Case ConstraintType.Proportion
+            Case ConstraintKind.Proportion
                 Return New RatioConstraintControl(a_file_manager)
 
-            Case ConstraintType.Slot
+            Case ConstraintKind.Slot
                 Return New SlotConstraintControl(a_file_manager)
 
-            Case ConstraintType.Interval_Count, ConstraintType.Interval_Quantity, ConstraintType.Interval_DateTime
+            Case ConstraintKind.Interval_Count, ConstraintKind.Interval_Quantity, ConstraintKind.Interval_DateTime
                 Return New IntervalConstraintControl(a_file_manager)
 
-            Case ConstraintType.MultiMedia
+            Case ConstraintKind.MultiMedia
                 Return New MultiMediaConstraintControl(a_file_manager)
 
-            Case ConstraintType.URI
+            Case ConstraintKind.URI
                 Return New UriConstraintControl(a_file_manager)
 
-            Case ConstraintType.Identifier
+            Case ConstraintKind.Identifier
                 Return New IdentifierConstraintControl(a_file_manager)
 
-            Case ConstraintType.Currency
+            Case ConstraintKind.Currency
                 Return New CountConstraintControl(a_file_manager)
 
-            Case ConstraintType.Parsable
+            Case ConstraintKind.Parsable
                 Return New ParsableConstraintControl(a_file_manager)
 
             Case Else

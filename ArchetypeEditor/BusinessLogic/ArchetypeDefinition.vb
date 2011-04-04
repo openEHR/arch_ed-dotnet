@@ -24,7 +24,7 @@ Public Interface ArcheTypeDefinitionBasic
     Property RootNodeId() As String
     Property RootLinks() As System.Collections.Generic.List(Of RmLink)
     Property NameConstraint() As Constraint_Text
-    Property hasNameConstraint() As Boolean
+    Property HasNameConstraint() As Boolean
 End Interface
 
 Public Interface ArchetypeDefinition
@@ -67,7 +67,7 @@ Public MustInherit Class ArchetypeDefinitionAbstract
         End Set
     End Property
 
-    Public Property hasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.hasNameConstraint
+    Public Property hasNameConstraint() As Boolean Implements ArcheTypeDefinitionBasic.HasNameConstraint
         Get
             Return Not mRuntimeConstraint Is Nothing
         End Get

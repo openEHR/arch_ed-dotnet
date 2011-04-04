@@ -23,9 +23,9 @@ Public Class Constraint_Quantity
     Private mSeparator As String = "::"
     Private mIsCoded As Boolean
     
-    Public Overrides ReadOnly Property Type() As ConstraintType
+    Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            Return ConstraintType.Quantity
+            Return ConstraintKind.Quantity
         End Get
     End Property
     Public ReadOnly Property has_units() As Boolean
