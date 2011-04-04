@@ -536,7 +536,7 @@ Public Class EntryStructure
     Public Sub SetTextForNodeId(ByVal text As String)
         If mNodeId = "" Then
             mNodeId = mFileManager.OntologyManager.AddTerm(text, "@ internal @").Code
-        Else
+        ElseIf mNodeId <> mFileManager.Archetype.ConceptCode Then
             mFileManager.OntologyManager.SetText(text, mNodeId)
         End If
     End Sub

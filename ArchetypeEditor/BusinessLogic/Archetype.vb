@@ -16,12 +16,10 @@
 
 
 Public MustInherit Class Archetype
-    'Protected adlEngine As openehr.openehr.am.archetype.constraint_model.AdlEngine
 
     Protected cDefinition As ArcheTypeDefinitionBasic
     Protected mDescription As ArchetypeDescription
     Protected sParentArchetypeID As String
-    Protected sConceptCode As New String("at0000")
     Protected sPrimaryLanguageCode As String
     Protected sReferenceModelOriginator As New String("?")
     Protected sLifeCycle As New String("draft")
@@ -38,7 +36,7 @@ Public MustInherit Class Archetype
     MustOverride ReadOnly Property SourceCode() As String
     MustOverride ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
     MustOverride Sub Specialise(ByVal NewConceptShortName As String, ByRef The_Ontology As OntologyManager)
-    MustOverride Sub UpdateArchetypeId() 'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
+    MustOverride Sub UpdateArchetypeId()
 
     Public ReadOnly Property RmEntity() As StructureType
         Get
