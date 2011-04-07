@@ -39,7 +39,7 @@ Public Class ArchetypeNodeAnonymous
 
     Public ReadOnly Property SlotConstraint() As Constraint_Slot
         Get
-            Return CType(Item, RmSlot).SlotConstraint
+            Return Slot.SlotConstraint
         End Get
     End Property
 
@@ -58,18 +58,6 @@ Public Class ArchetypeNodeAnonymous
     Public Overrides ReadOnly Property IsAnonymous() As Boolean
         Get
             Return True
-        End Get
-    End Property
-
-    Public Overrides ReadOnly Property IsReference() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
-
-    Public Overrides ReadOnly Property HasReferences() As Boolean
-        Get
-            Return False
         End Get
     End Property
 

@@ -21,12 +21,11 @@ Public Class RmElement
 
     Private colReferences As New System.Collections.Specialized.StringCollection
     Protected cConstraint As Constraint
-    Protected boolIsReference As Boolean
     Protected boolHasReferences As Boolean
 
-    Public ReadOnly Property IsReference() As Boolean
+    Public Overridable ReadOnly Property IsReference() As Boolean
         Get
-            Return boolIsReference
+            Return False
         End Get
     End Property
 

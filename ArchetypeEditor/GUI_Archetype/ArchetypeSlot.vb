@@ -40,18 +40,6 @@ Public Class ArchetypeSlot
         End Set
     End Property
 
-    Public Overrides ReadOnly Property HasReferences() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
-
-    Public Overrides ReadOnly Property IsReference() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
-
     Public Overrides Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
         Dim s As New System.Text.StringBuilder()
         Dim slot_constraint As Constraint_Slot

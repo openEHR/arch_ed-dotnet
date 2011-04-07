@@ -46,6 +46,13 @@ Public Class RmReference
             mPath = Value
         End Set
     End Property
+
+    Public Overrides ReadOnly Property IsReference() As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
     Public Overrides Property HasReferences() As Boolean
         ' cannot be true
         Get
@@ -91,13 +98,11 @@ Public Class RmReference
     Sub New()
         'allows reference to be created before element is known
         MyBase.New("?")
-        boolIsReference = True
     End Sub
 
     Sub New(ByRef el As RmElement)
         MyBase.New(el)
         el.HasReferences = True
-        boolIsReference = True
         mElement = el
     End Sub
 

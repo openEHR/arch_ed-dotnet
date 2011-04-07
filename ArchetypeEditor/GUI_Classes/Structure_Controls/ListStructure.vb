@@ -42,17 +42,15 @@ Public Class ListStructure
                 Case StructureType.Element, StructureType.Reference
                     Dim element As RmElement = CType(item, RmElement)
                     lvitem = New ArchetypeListViewItem(element, mFileManager)
-                    'Sets selected if first in list
-                    lvitem.ImageIndex = element.Constraint.ImageIndexForConstraintKind(element.IsReference, lvList.Items.Count = 0)
                     lvList.Items.Add(lvitem)
+                    lvitem.RefreshIcons()
                 Case StructureType.Slot
                     Dim slot As RmSlot = CType(item, RmSlot)
 
                     If slot.SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
                         lvitem = New ArchetypeListViewItem(slot, mFileManager)
-                        'Sets selected if first in list
-                        lvitem.ImageIndex = CType(item, RmSlot).SlotConstraint.ImageIndexForConstraintKind(False, lvList.Items.Count = 0)
                         lvList.Items.Add(lvitem)
+                        lvitem.RefreshIcons()
                     End If
                 Case Else
                     Debug.Assert(False, "Type not handled")
@@ -103,10 +101,10 @@ Public Class ListStructure
         Me.ElementName = New System.Windows.Forms.ColumnHeader
         Me.ContextMenuList = New System.Windows.Forms.ContextMenu
         Me.RemoveMenuItem = New System.Windows.Forms.MenuItem
-        Me.NameSlotMenuItem = New System.Windows.Forms.MenuItem
         Me.RemoveItemAndReferencesMenuItem = New System.Windows.Forms.MenuItem
         Me.SpecialiseMenuItem = New System.Windows.Forms.MenuItem
         Me.AddReferenceMenuItem = New System.Windows.Forms.MenuItem
+        Me.NameSlotMenuItem = New System.Windows.Forms.MenuItem
         Me.SuspendLayout()
         '
         'lvList
@@ -123,8 +121,9 @@ Public Class ListStructure
         Me.lvList.Location = New System.Drawing.Point(40, 27)
         Me.lvList.MultiSelect = False
         Me.lvList.Name = "lvList"
-        Me.lvList.Size = New System.Drawing.Size(344, 333)
+        Me.lvList.Size = New System.Drawing.Size(344, 379)
         Me.lvList.TabIndex = 38
+        Me.lvList.UseCompatibleStateImageBehavior = False
         Me.lvList.View = System.Windows.Forms.View.Details
         '
         'ElementName
@@ -136,13 +135,13 @@ Public Class ListStructure
         '
         Me.ContextMenuList.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.RemoveMenuItem, Me.SpecialiseMenuItem, Me.AddReferenceMenuItem, Me.NameSlotMenuItem})
         '
-        'MenuRemove
+        'RemoveMenuItem
         '
         Me.RemoveMenuItem.Index = 0
         Me.RemoveMenuItem.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.RemoveItemAndReferencesMenuItem})
         Me.RemoveMenuItem.Text = "Remove"
         '
-        'MenuRemoveItemAndReference
+        'RemoveItemAndReferencesMenuItem
         '
         Me.RemoveItemAndReferencesMenuItem.Index = 0
         Me.RemoveItemAndReferencesMenuItem.Text = "?"
@@ -157,12 +156,10 @@ Public Class ListStructure
         Me.AddReferenceMenuItem.Index = 2
         Me.AddReferenceMenuItem.Text = "Add Reference"
         '
-        'MenuNameSlot
+        'NameSlotMenuItem
         '
         Me.NameSlotMenuItem.Index = 3
         Me.NameSlotMenuItem.Text = "Name this Slot"
-        '
-
         '
         'ListStructure
         '
@@ -259,7 +256,7 @@ Public Class ListStructure
 
             If Not lvItem Is Nothing Then
                 lvList.Items.Add(lvItem)
-                lvItem.ImageIndex = lvItem.Item.ImageIndex(lvItem.Selected)
+                lvItem.RefreshIcons()
             End If
         End If
     End Sub
@@ -300,7 +297,7 @@ Public Class ListStructure
             If dlg.IsSpecialisationRequested Then
                 If dlg.IsCloningRequested Then
                     Dim i As Integer = lvItem.Index
-                    lvItem = lvItem.SpecialiseCloned
+                    lvItem = lvItem.SpecialisedClone
                     lvList.Items.Insert(i + 1, lvItem)
                 Else
                     lvItem.Specialise()
@@ -326,8 +323,8 @@ Public Class ListStructure
                 ref = New RmReference(CType(lvItem.Item, ArchetypeElement).RM_Class)
                 lvItem = New ArchetypeListViewItem(ref, mFileManager)
                 ' insert in the list
-                lvItem.ImageIndex = CType(lvItem.Item, ArchetypeElement).Constraint.ImageIndexForConstraintKind(True, False)
                 lvList.Items.Insert(lvList.SelectedIndices(0) + 1, lvItem)
+                lvItem.RefreshIcons()
                 mFileManager.FileEdited = True
             Else
                 Debug.Assert(False)
@@ -348,8 +345,8 @@ Public Class ListStructure
                 Dim i As Integer = lvItem.Index
                 lvList.Items.RemoveAt(i)
                 lvItem = New ArchetypeListViewItem(newSlot)
-                lvItem.ImageIndex = newSlot.Constraint.ImageIndexForConstraintKind(False, True)
                 lvList.Items.Insert(i, lvItem)
+                lvItem.RefreshIcons()
 
                 If Not lvItem.Selected Then
                     ' needed for first element in the list
@@ -395,14 +392,10 @@ Public Class ListStructure
             editLabel = True
         End If
 
-        lvItem.ImageIndex = aConstraint.ImageIndexForConstraintKind(False, True)
         lvList.Items.Add(lvItem)
+        lvItem.Selected = True
+        lvItem.RefreshIcons()
         mFileManager.FileEdited = True
-
-        If Not lvItem.Selected Then
-            ' needed for first element in the list
-            lvItem.Selected = True
-        End If
 
         If editLabel Then
             lvItem.BeginEdit()
@@ -509,54 +502,36 @@ Public Class ListStructure
 
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click
         If Not lvList.SelectedIndices.Count = 0 Then
-            Dim lvI As ListViewItem
-            Dim i As Integer
-            i = lvList.SelectedIndices(0)
-            lvI = lvList.SelectedItems(0)
+            Dim i As Integer = lvList.SelectedIndices(0)
+            Dim lvItem As ListViewItem = lvList.SelectedItems(0)
 
             If i > 0 Then
-                lvList.Items.Remove(lvI)
-                lvList.Items.Insert((i - 1), lvI)
+                lvList.Items.Remove(lvItem)
+                lvList.Items.Insert(i - 1, lvItem)
                 mFileManager.FileEdited = True
-                lvList.Items.Item(i - 1).Selected = True
+                lvItem.Selected = True
             End If
         End If
     End Sub
 
     Protected Overrides Sub butListDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListDown.Click
         If Not lvList.SelectedIndices.Count = 0 Then
-            Dim lvI As ListViewItem
-            Dim i, c As Integer
+            Dim i As Integer = lvList.SelectedIndices(0)
+            Dim lvItem As ListViewItem = lvList.SelectedItems(0)
 
-            c = lvList.Items.Count
-            i = lvList.SelectedIndices(0)
-            lvI = lvList.SelectedItems(0)
-
-            If i < (c - 1) Then
-                lvList.Items.Remove(lvI)
-                lvList.Items.Insert((i + 1), lvI)
-                lvI.Selected = True
+            If i < lvList.Items.Count - 1 Then
+                lvList.Items.Remove(lvItem)
+                lvList.Items.Insert(i + 1, lvItem)
+                lvItem.Selected = True
                 mFileManager.FileEdited = True
             End If
         End If
     End Sub
 
     Protected Overrides Sub RefreshIcons()
-        If mCurrentItem.HasReferences Then
-            Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
-
-            For Each lvItem As ArchetypeListViewItem In lvList.Items
-                If Not lvItem.Item.IsAnonymous AndAlso CType(lvItem.Item, ArchetypeElement).NodeId = element.NodeId Then
-                    lvItem.ImageIndex = lvItem.Item.ImageIndex(False)
-                End If
-            Next
-        ElseIf lvList.Items.Count > 0 Then
-            If lvList.SelectedItems.Count = 0 Then
-                lvList.Items(0).Selected = True
-            End If
-
-            CType(lvList.SelectedItems(0), ArchetypeListViewItem).ImageIndex = mCurrentItem.ImageIndex(True)
-        End If
+        For Each lvItem As ArchetypeListViewItem In lvList.Items
+            lvItem.RefreshIcons()
+        Next
     End Sub
 
     Private Sub ContextMenuList_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuList.Popup
@@ -601,19 +576,13 @@ Public Class ListStructure
     End Sub
 
     Private Sub lvList_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvList.SelectedIndexChanged
-        Dim lvItem As ArchetypeListViewItem
-
         If lvList.Items.Count = 0 Then
             butChangeDataType.Hide()
         ElseIf lvList.SelectedItems.Count = 1 Then
             RemoveItemAndReferencesMenuItem.Text = lvList.SelectedItems(0).Text
+            RefreshIcons()
 
-            'Unselect the previous item
-            For Each lvItem In lvList.Items
-                lvItem.ImageIndex = lvItem.Item.ImageIndex(lvItem.Selected)
-            Next
-
-            lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
+            Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
             SetCurrentItem(lvItem.Item)
 
             If lvItem.Item.HasReferences Then
@@ -627,8 +596,7 @@ Public Class ListStructure
     End Sub
 
     Private Sub lvList_MouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lvList.MouseMove
-        Dim lvItem As ArchetypeListViewItem
-        lvItem = CType(lvList.GetItemAt(e.X, e.Y), ArchetypeListViewItem)
+        Dim lvItem As ArchetypeListViewItem = CType(lvList.GetItemAt(e.X, e.Y), ArchetypeListViewItem)
 
         If Not lvItem Is Nothing Then
             SetToolTipSpecialisation(lvList, CType(lvList.GetItemAt(e.X, e.Y), ArchetypeListViewItem).Item)
@@ -702,6 +670,16 @@ Public Class ListStructure
 
 #Region "Drag and Drop"
 
+    Private Sub lvList_ItemDrag(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemDragEventArgs) Handles lvList.ItemDrag
+        mDragItem = CType(e.Item, ArchetypeListViewItem)
+        lvList.AllowDrop = True
+        lvList.DoDragDrop(e, DragDropEffects.Move)
+    End Sub
+
+    Private Sub lvList_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles lvList.DragEnter
+        e.Effect = e.AllowedEffect
+    End Sub
+
     Private Sub lvList_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles lvList.DragDrop
         Dim position As Point
         Dim DropListItem As ArchetypeListViewItem
@@ -766,16 +744,6 @@ Public Class ListStructure
         mNewConstraint = Nothing
         mNewCluster = False
         mDragItem = Nothing
-    End Sub
-
-    Private Sub lvList_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles lvList.DragEnter
-        e.Effect = e.AllowedEffect
-    End Sub
-
-    Private Sub lvList_ItemDrag(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ItemDragEventArgs) Handles lvList.ItemDrag
-        mDragItem = CType(e.Item, ArchetypeListViewItem)
-        Me.lvList.AllowDrop = True
-        Me.lvList.DoDragDrop(e, DragDropEffects.Move)
     End Sub
 
 #End Region

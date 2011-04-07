@@ -93,14 +93,20 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         MyBase.Text = mArchetypeNode.Text
     End Sub
 
+    Public Sub RefreshIcons()
+        ImageIndex = Item.ImageIndex(False)
+        SelectedImageIndex = Item.ImageIndex(True)
+    End Sub
+
     Public Sub Specialise()
         If Not mArchetypeNode.IsAnonymous Then
             CType(mArchetypeNode, ArchetypeNodeAbstract).Specialise()
             MyBase.Text = mArchetypeNode.Text
+            RefreshIcons()
         End If
     End Sub
 
-    Public Function SpecialiseCloned(ByVal fileManager As FileManagerLocal) As ArchetypeTreeNode
+    Public Function SpecialisedClone(ByVal fileManager As FileManagerLocal) As ArchetypeTreeNode
         Dim result As ArchetypeTreeNode
         Dim composite As ArchetypeComposite = TryCast(mArchetypeNode, ArchetypeComposite)
 
@@ -114,12 +120,11 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
                 Dim el As RmElement = TryCast(child.Item.RM_Class, RmElement)
 
                 If el Is Nothing Then
-                    clone = child.SpecialiseCloned(fileManager)
+                    clone = child.SpecialisedClone(fileManager)
                 Else
                     Dim ref As RmReference = New RmReference(el)
                     clone = New ArchetypeTreeNode(ref, fileManager)
-                    clone.ImageIndex = clone.Item.ImageIndex(False)
-                    clone.SelectedImageIndex = clone.Item.ImageIndex(True)
+                    clone.RefreshIcons()
                 End If
 
                 result.Nodes.Add(clone)
@@ -128,8 +133,6 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
             result.Expand()
         End If
 
-        result.ImageIndex = result.Item.ImageIndex(False)
-        result.SelectedImageIndex = result.Item.ImageIndex(True)
         result.Specialise()
         Return result
     End Function

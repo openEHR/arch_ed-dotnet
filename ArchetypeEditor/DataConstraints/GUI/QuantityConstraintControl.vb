@@ -188,13 +188,14 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
 
         ' set constraint values on control
-        Me.LabelQuantity.Text = AE_Constants.Instance.Quantity
+        LabelQuantity.Text = AE_Constants.Instance.Quantity
         mIsState = IsState
-        RemoveHandler Me.comboPhysicalProperty.SelectedIndexChanged, AddressOf Me.comboPhysicalProperty_SelectedIndexChanged
+        RemoveHandler comboPhysicalProperty.SelectedIndexChanged, AddressOf comboPhysicalProperty_SelectedIndexChanged
 
-        If Me.comboPhysicalProperty.DataSource Is Nothing Then
-            Me.comboPhysicalProperty.DataSource = New DataView(Main.Instance.PhysicalPropertiesTable)
-            CType(Me.comboPhysicalProperty.DataSource, DataView).Sort = Me.comboPhysicalProperty.DisplayMember
+        If comboPhysicalProperty.DataSource Is Nothing Then
+            Dim view As New DataView(Main.Instance.PhysicalPropertiesTable)
+            comboPhysicalProperty.DataSource = view
+            view.Sort = comboPhysicalProperty.DisplayMember
         End If
 
         ' Locate the property - it can be expressed as:
@@ -219,20 +220,22 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 End Try
             Else   ' Obsolete text string as needs to be language independent
                 'And need to update the constraint to the coded version
-                Dim d_row() As DataRow
+                Dim filter As String
 
                 If Main.Instance.DefaultLanguageCode = "en" Then
-                    d_row = CType(comboPhysicalProperty.DataSource, DataTable).Select("Text = '" & Constraint.PhysicalPropertyAsString & "'")
+                    filter = "Text = '" & Constraint.PhysicalPropertyAsString & "'"
                 Else
-                    d_row = CType(comboPhysicalProperty.DataSource, DataTable).Select("Translated = '" & Constraint.PhysicalPropertyAsString & "'")
+                    filter = "Translated = '" & Constraint.PhysicalPropertyAsString & "'"
                 End If
 
-                If d_row.Length > 0 Then
-                    Constraint.OpenEhrCode = CInt(d_row(0).Item(2))
+                Dim row() As DataRow = CType(comboPhysicalProperty.DataSource, DataView).Table.Select(filter)
+
+                If row.Length > 0 Then
+                    Constraint.OpenEhrCode = CInt(row(0).Item(2))
                     mFileManager.FileEdited = True
 
-                    If d_row.Length > 0 Then
-                        comboPhysicalProperty.SelectedValue = d_row(0).Item(0)
+                    If row.Length > 0 Then
+                        comboPhysicalProperty.SelectedValue = row(0).Item(0)
                     End If
                 Else
                     comboPhysicalProperty.SelectedValue = 64 ' Not set
@@ -290,9 +293,9 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             If Convert.ToInt16(Me.comboPhysicalProperty.SelectedValue) = 64 Then
                 'Property is not set so show all the units
                 Dim Frm As New Choose
-                Dim data_view As New DataView(Main.Instance.UnitsTable)
-                data_view.Sort = "Text"
-                Frm.ListChoose.DataSource = data_view
+                Dim view As New DataView(Main.Instance.UnitsTable)
+                view.Sort = "Text"
+                Frm.ListChoose.DataSource = view
                 Frm.ListChoose.DisplayMember = "Text"
                 Frm.ListChoose.ValueMember = "property_id"
 

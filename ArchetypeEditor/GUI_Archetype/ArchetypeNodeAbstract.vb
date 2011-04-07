@@ -66,23 +66,19 @@ Public MustInherit Class ArchetypeNodeAbstract
 
     Public ReadOnly Property RuntimeNameText() As String
         Get
+            Dim result As String = ""
+
             If Item.HasNameConstraint Then
-                Return Item.NameConstraint.ToString
-            Else
-                Return ""
+                result = Item.NameConstraint.ToString
             End If
+
+            Return result
         End Get
     End Property
 
     Public ReadOnly Property NameConstraint() As Constraint_Text
         Get
             Return mItem.NameConstraint
-        End Get
-    End Property
-
-    Public Overrides ReadOnly Property IsAnonymous() As Boolean
-        Get
-            Return False
         End Get
     End Property
 
@@ -99,7 +95,8 @@ Public MustInherit Class ArchetypeNodeAbstract
         mComment = term.Comment
     End Sub
 
-    Public Sub Specialise()
+    Public Overridable Sub Specialise()
+        Item = Item.Copy
         mText = "! - " & mText
         Dim term As RmTerm = mFileManager.OntologyManager.SpecialiseTerm(mText, mDescription, NodeId)
         mItem.NodeId = term.Code

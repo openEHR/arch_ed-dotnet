@@ -40,18 +40,6 @@ Public Class ArchetypeComposite
         End Set
     End Property
 
-    Public Overrides ReadOnly Property IsReference() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
-
-    Public Overrides ReadOnly Property HasReferences() As Boolean
-        Get
-            Return False
-        End Get
-    End Property
-
     Public Overrides Property Constraint() As Constraint
         Get
             Dim result As Constraint = Nothing

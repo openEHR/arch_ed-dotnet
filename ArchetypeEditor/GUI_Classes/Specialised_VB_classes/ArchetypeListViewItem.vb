@@ -41,16 +41,20 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
         MyBase.Text = mArchetypeNode.Text
     End Sub
 
+    Public Sub RefreshIcons()
+        ImageIndex = Item.ImageIndex(Selected)
+    End Sub
+
     Public Sub Specialise()
         If Not mArchetypeNode.IsAnonymous Then
             CType(mArchetypeNode, ArchetypeNodeAbstract).Specialise()
             MyBase.Text = mArchetypeNode.Text
+            RefreshIcons()
         End If
     End Sub
 
-    Public Function SpecialiseCloned() As ArchetypeListViewItem
+    Public Function SpecialisedClone() As ArchetypeListViewItem
         Dim result As New ArchetypeListViewItem(Item.Copy())
-        result.ImageIndex = result.Item.ImageIndex(False)
         result.Specialise()
         Return result
     End Function

@@ -19,9 +19,6 @@ Option Strict On
 Public MustInherit Class ArchetypeNode
     Public MustOverride Property Text() As String
     Public MustOverride Property Constraint() As Constraint
-    Public MustOverride ReadOnly Property IsAnonymous() As Boolean
-    Public MustOverride ReadOnly Property IsReference() As Boolean
-    Public MustOverride ReadOnly Property HasReferences() As Boolean
     Public MustOverride Sub Translate()
     Public MustOverride Function ToRichText(ByVal level As Integer) As String
     Public MustOverride Function ToHTML(ByVal level As Integer, ByVal showComments As Boolean) As String
@@ -56,6 +53,24 @@ Public MustInherit Class ArchetypeNode
     Public Overridable ReadOnly Property IsMandatory() As Boolean
         Get
             Return Occurrences.MinCount > 0
+        End Get
+    End Property
+
+    Public Overridable ReadOnly Property IsAnonymous() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Overridable ReadOnly Property IsReference() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Overridable ReadOnly Property HasReferences() As Boolean
+        Get
+            Return False
         End Get
     End Property
 
