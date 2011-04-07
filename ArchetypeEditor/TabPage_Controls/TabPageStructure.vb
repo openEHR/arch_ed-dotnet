@@ -29,9 +29,8 @@ Public Class TabPageStructure
     Private mIsElement As Boolean = False
     Private mValidStructureClasses As StructureType()
     Private WithEvents mStructureControl As EntryStructure
-    Private WithEvents mSplitter As Splitter
     Private mFileManager As FileManagerLocal
-    Friend WithEvents PanelDetails As ArchetypeNodeConstraintControl
+    Friend WithEvents DetailsPanel As ArchetypeNodeConstraintControl
     Public Event UpdateStructure(ByVal sender As Object, ByVal newStructure As StructureType)
     Public Delegate Sub TabPageStructureUpdateStructure(ByVal sender As Object, ByVal newStructure As StructureType)
 
@@ -44,24 +43,20 @@ Public Class TabPageStructure
         InitializeComponent()
 
         If Not DesignMode Then
-            Dim ds As DockStyle = DockStyle.Right
-
             mFileManager = Filemanager.Master
             mValidStructureClasses = ReferenceModel.ValidStructureTypes
-            PanelDetails = New ArchetypeNodeConstraintControl(mFileManager)
-            panelStructure.Controls.Add(PanelDetails)
+            DetailsPanel = New ArchetypeNodeConstraintControl(mFileManager)
+            Controls.Add(DetailsPanel)
             TranslateGUI()
+
+            Dim ds As DockStyle = DockStyle.Right
 
             If Main.Instance.IsDefaultLanguageRightToLeft Then
                 ds = DockStyle.Left
-                Main.Reflect(PanelDetails)
+                Main.Reflect(DetailsPanel)
             End If
 
-            PanelDetails.Dock = ds
-            mSplitter = New Splitter
-            mSplitter.Dock = ds
-            panelStructure.Controls.Add(mSplitter)
-            panelDisplay.Dock = DockStyle.Fill
+            DetailsPanel.Dock = ds
         End If
     End Sub
 
@@ -81,9 +76,9 @@ Public Class TabPageStructure
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    Friend WithEvents panelStructure As System.Windows.Forms.Panel
-    Friend WithEvents panelDisplay As System.Windows.Forms.Panel
-    Friend WithEvents panelEntry As System.Windows.Forms.Panel
+    Friend WithEvents leftPanel As System.Windows.Forms.Panel
+    Friend WithEvents displayPanel As System.Windows.Forms.Panel
+    Friend WithEvents structurePanel As System.Windows.Forms.Panel
     Friend WithEvents comboStructure As System.Windows.Forms.ComboBox
     Friend WithEvents ContextMenuListView As System.Windows.Forms.ContextMenu
     Friend WithEvents menuAdd_node As System.Windows.Forms.MenuItem
@@ -126,8 +121,12 @@ Public Class TabPageStructure
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(TabPageStructure))
-        Me.panelStructure = New System.Windows.Forms.Panel
-        Me.panelDisplay = New System.Windows.Forms.Panel
+        Me.leftPanel = New System.Windows.Forms.Panel
+        Me.displayPanel = New System.Windows.Forms.Panel
+        Me.structurePanel = New System.Windows.Forms.Panel
+        Me.chkEmbedded = New System.Windows.Forms.CheckBox
+        Me.lblStructure = New System.Windows.Forms.Label
+        Me.comboStructure = New System.Windows.Forms.ComboBox
         Me.ContextMenuGrid = New System.Windows.Forms.ContextMenu
         Me.MenuItemGridAdd = New System.Windows.Forms.MenuItem
         Me.MenuItemGridAddColumn = New System.Windows.Forms.MenuItem
@@ -161,39 +160,77 @@ Public Class TabPageStructure
         Me.menuRemove = New System.Windows.Forms.MenuItem
         Me.MenuRemoveElement = New System.Windows.Forms.MenuItem
         Me.ilSmall = New System.Windows.Forms.ImageList(Me.components)
-        Me.panelEntry = New System.Windows.Forms.Panel
-        Me.chkEmbedded = New System.Windows.Forms.CheckBox
-        Me.lblStructure = New System.Windows.Forms.Label
-        Me.comboStructure = New System.Windows.Forms.ComboBox
         Me.ttElement = New System.Windows.Forms.ToolTip(Me.components)
         Me.ToolTipSpecialisation = New System.Windows.Forms.ToolTip(Me.components)
         Me.HelpProviderTabPageStructure = New System.Windows.Forms.HelpProvider
-        Me.panelStructure.SuspendLayout()
-        Me.panelEntry.SuspendLayout()
+        Me.leftPanel.SuspendLayout()
+        Me.structurePanel.SuspendLayout()
         Me.SuspendLayout()
         '
-        'panelStructure
+        'leftPanel
         '
-        Me.panelStructure.BackColor = System.Drawing.Color.Transparent
-        Me.panelStructure.Controls.Add(Me.panelDisplay)
-        Me.panelStructure.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.panelStructure.Location = New System.Drawing.Point(0, 40)
-        Me.panelStructure.Name = "panelStructure"
-        Me.panelStructure.Size = New System.Drawing.Size(650, 502)
-        Me.panelStructure.TabIndex = 8
-        Me.panelStructure.Visible = False
+        Me.leftPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.leftPanel.BackColor = System.Drawing.Color.Transparent
+        Me.leftPanel.Controls.Add(Me.displayPanel)
+        Me.leftPanel.Controls.Add(Me.structurePanel)
+        Me.leftPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.leftPanel.Location = New System.Drawing.Point(0, 0)
+        Me.leftPanel.Name = "leftPanel"
+        Me.leftPanel.Size = New System.Drawing.Size(650, 542)
+        Me.leftPanel.TabIndex = 0
         '
-        'panelDisplay
+        'displayPanel
         '
-        Me.panelDisplay.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.HelpProviderTabPageStructure.SetHelpNavigator(Me.panelDisplay, System.Windows.Forms.HelpNavigator.Index)
-        Me.panelDisplay.Location = New System.Drawing.Point(192, 84)
-        Me.panelDisplay.Name = "panelDisplay"
-        Me.panelDisplay.Padding = New System.Windows.Forms.Padding(2)
-        Me.HelpProviderTabPageStructure.SetShowHelp(Me.panelDisplay, True)
-        Me.panelDisplay.Size = New System.Drawing.Size(342, 350)
-        Me.panelDisplay.TabIndex = 0
+        Me.displayPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.displayPanel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.HelpProviderTabPageStructure.SetHelpNavigator(Me.displayPanel, System.Windows.Forms.HelpNavigator.Index)
+        Me.displayPanel.Location = New System.Drawing.Point(0, 40)
+        Me.displayPanel.Name = "displayPanel"
+        Me.displayPanel.Padding = New System.Windows.Forms.Padding(2)
+        Me.HelpProviderTabPageStructure.SetShowHelp(Me.displayPanel, True)
+        Me.displayPanel.Size = New System.Drawing.Size(650, 502)
+        Me.displayPanel.TabIndex = 1
+        '
+        'structurePanel
+        '
+        Me.structurePanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.structurePanel.BackColor = System.Drawing.Color.Transparent
+        Me.structurePanel.Controls.Add(Me.chkEmbedded)
+        Me.structurePanel.Controls.Add(Me.lblStructure)
+        Me.structurePanel.Controls.Add(Me.comboStructure)
+        Me.structurePanel.Dock = System.Windows.Forms.DockStyle.Top
+        Me.structurePanel.Location = New System.Drawing.Point(0, 0)
+        Me.structurePanel.Name = "structurePanel"
+        Me.structurePanel.Size = New System.Drawing.Size(650, 40)
+        Me.structurePanel.TabIndex = 0
+        '
+        'chkEmbedded
+        '
+        Me.chkEmbedded.Location = New System.Drawing.Point(264, 5)
+        Me.chkEmbedded.Name = "chkEmbedded"
+        Me.chkEmbedded.Size = New System.Drawing.Size(200, 32)
+        Me.chkEmbedded.TabIndex = 10
+        Me.chkEmbedded.Text = "Embedded archetype"
+        '
+        'lblStructure
+        '
+        Me.lblStructure.BackColor = System.Drawing.Color.Transparent
+        Me.lblStructure.Location = New System.Drawing.Point(9, 12)
+        Me.lblStructure.Name = "lblStructure"
+        Me.lblStructure.Size = New System.Drawing.Size(79, 16)
+        Me.lblStructure.TabIndex = 1
+        Me.lblStructure.Text = "Structure"
+        Me.lblStructure.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
+        'comboStructure
+        '
+        Me.HelpProviderTabPageStructure.SetHelpKeyword(Me.comboStructure, "HowTo/Editing/set_structure.htm")
+        Me.HelpProviderTabPageStructure.SetHelpNavigator(Me.comboStructure, System.Windows.Forms.HelpNavigator.Topic)
+        Me.comboStructure.Location = New System.Drawing.Point(97, 8)
+        Me.comboStructure.Name = "comboStructure"
+        Me.HelpProviderTabPageStructure.SetShowHelp(Me.comboStructure, True)
+        Me.comboStructure.Size = New System.Drawing.Size(136, 21)
+        Me.comboStructure.TabIndex = 7
         '
         'ContextMenuGrid
         '
@@ -399,46 +436,6 @@ Public Class TabPageStructure
         Me.ilSmall.Images.SetKeyName(32, "")
         Me.ilSmall.Images.SetKeyName(33, "")
         '
-        'panelEntry
-        '
-        Me.panelEntry.BackColor = System.Drawing.Color.Transparent
-        Me.panelEntry.Controls.Add(Me.chkEmbedded)
-        Me.panelEntry.Controls.Add(Me.lblStructure)
-        Me.panelEntry.Controls.Add(Me.comboStructure)
-        Me.panelEntry.Dock = System.Windows.Forms.DockStyle.Top
-        Me.panelEntry.Location = New System.Drawing.Point(0, 0)
-        Me.panelEntry.Name = "panelEntry"
-        Me.panelEntry.Size = New System.Drawing.Size(650, 40)
-        Me.panelEntry.TabIndex = 0
-        '
-        'chkEmbedded
-        '
-        Me.chkEmbedded.Location = New System.Drawing.Point(264, 5)
-        Me.chkEmbedded.Name = "chkEmbedded"
-        Me.chkEmbedded.Size = New System.Drawing.Size(200, 32)
-        Me.chkEmbedded.TabIndex = 10
-        Me.chkEmbedded.Text = "Embedded archetype"
-        '
-        'lblStructure
-        '
-        Me.lblStructure.BackColor = System.Drawing.Color.Transparent
-        Me.lblStructure.Location = New System.Drawing.Point(9, 12)
-        Me.lblStructure.Name = "lblStructure"
-        Me.lblStructure.Size = New System.Drawing.Size(79, 16)
-        Me.lblStructure.TabIndex = 9
-        Me.lblStructure.Text = "Structure"
-        Me.lblStructure.TextAlign = System.Drawing.ContentAlignment.TopRight
-        '
-        'comboStructure
-        '
-        Me.HelpProviderTabPageStructure.SetHelpKeyword(Me.comboStructure, "HowTo/Editing/set_structure.htm")
-        Me.HelpProviderTabPageStructure.SetHelpNavigator(Me.comboStructure, System.Windows.Forms.HelpNavigator.Topic)
-        Me.comboStructure.Location = New System.Drawing.Point(97, 8)
-        Me.comboStructure.Name = "comboStructure"
-        Me.HelpProviderTabPageStructure.SetShowHelp(Me.comboStructure, True)
-        Me.comboStructure.Size = New System.Drawing.Size(136, 21)
-        Me.comboStructure.TabIndex = 7
-        '
         'HelpProviderTabPageStructure
         '
         Me.HelpProviderTabPageStructure.HelpNamespace = ""
@@ -446,18 +443,16 @@ Public Class TabPageStructure
         'TabPageStructure
         '
         Me.AutoScroll = True
-        Me.AutoScrollMinSize = New System.Drawing.Size(650, 542)
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
-        Me.Controls.Add(Me.panelStructure)
-        Me.Controls.Add(Me.panelEntry)
+        Me.Controls.Add(Me.leftPanel)
         Me.HelpProviderTabPageStructure.SetHelpKeyword(Me, "Screens/data_screen.htm")
         Me.HelpProviderTabPageStructure.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.HelpProviderTabPageStructure.SetHelpString(Me, "")
         Me.Name = "TabPageStructure"
         Me.HelpProviderTabPageStructure.SetShowHelp(Me, True)
         Me.Size = New System.Drawing.Size(650, 542)
-        Me.panelStructure.ResumeLayout(False)
-        Me.panelEntry.ResumeLayout(False)
+        Me.leftPanel.ResumeLayout(False)
+        Me.structurePanel.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -531,10 +526,10 @@ Public Class TabPageStructure
 
     Protected Sub SetEntryStructure(ByVal value As EntryStructure)
         mStructureControl = value
-        panelDisplay.Controls.Clear()
+        displayPanel.Controls.Clear()
 
         If Not value Is Nothing Then
-            panelDisplay.Controls.Add(value)
+            displayPanel.Controls.Add(value)
             value.Dock = DockStyle.Fill
             value.SetTextForNodeId(StructureTypeAsString)
         End If
@@ -545,11 +540,11 @@ Public Class TabPageStructure
         HelpProviderTabPageStructure.HelpNamespace = Main.Instance.Options.HelpLocationPath
 
         If Not mIsEmbedded Then
-            ShowStructurePanel(sender, e)
+            ShowStructureType(sender, e)
         End If
     End Sub
 
-    Private Sub ShowStructurePanel(ByVal sender As Object, ByVal e As EventArgs) Handles mStructureControl.ChangeStructure
+    Private Sub ShowStructureType(ByVal sender As Object, ByVal e As EventArgs) Handles mStructureControl.ChangeStructure
         If comboStructure.Items.Count > 0 Then
             Dim wasLoading As Boolean = mIsLoading
             mIsLoading = True
@@ -564,7 +559,7 @@ Public Class TabPageStructure
                 End If
             End If
 
-            panelEntry.Show()
+            structurePanel.Show()
             comboStructure.Focus()
             comboStructure.DroppedDown = sender Is mStructureControl
 
@@ -574,14 +569,10 @@ Public Class TabPageStructure
 
     Private Sub ShowDetailPanel(ByVal node As ArchetypeNode, ByVal e As EventArgs) Handles mStructureControl.CurrentItemChanged
         If node Is Nothing Then
-            PanelDetails.Hide()
+            DetailsPanel.Hide()
         Else
-            PanelDetails.ShowConstraint(StructureType = StructureType.Single, IsState, IsMandatory, node, mFileManager)
-            PanelDetails.Show()
-
-            If Not mIsEmbedded Then
-                panelEntry.Hide()
-            End If
+            DetailsPanel.ShowConstraint(StructureType = StructureType.Single, IsState, IsMandatory, node, mFileManager)
+            DetailsPanel.Show()
         End If
     End Sub
 
@@ -651,8 +642,8 @@ Public Class TabPageStructure
     Public Sub ProcessElement(ByVal an_element As RmElement)
         mIsLoading = True
         mIsElement = True
-        panelEntry.Hide()
-        panelStructure.Show()
+        structurePanel.Hide()
+        displayPanel.Show()
         SetEntryStructure(New ElementOnly(an_element, mFileManager))
         mStructureControl.SetInitial()
         mIsLoading = False
@@ -662,11 +653,11 @@ Public Class TabPageStructure
         mIsLoading = True
 
         If compoundstructure.Children Is Nothing Then
-            panelEntry.Show()
-            panelStructure.Hide()
+            structurePanel.Show()
+            displayPanel.Hide()
         Else
-            panelEntry.Hide()
-            panelStructure.Show()
+            structurePanel.Hide()
+            displayPanel.Show()
 
             Select Case compoundstructure.Type
                 Case StructureType.Single
@@ -706,26 +697,24 @@ Public Class TabPageStructure
 
     Public Sub SetAsElement(ByVal a_node_id As String)
         mIsElement = True
-        panelEntry.Hide()
+        structurePanel.Hide()
 
         If mIsEmbedded Then
             If Not mIsLoading Or mEmbeddedSlot Is Nothing Then
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Element)
             End If
 
-            panelDisplay.Hide()
+            displayPanel.Hide()
             ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
-            panelDisplay.Show()
+            displayPanel.Show()
             SetEntryStructure(New ElementOnly(New RmElement(mFileManager.Archetype.ConceptCode), mFileManager))
-            PanelDetails.Hide()
+            DetailsPanel.Hide()
         End If
-
-        panelStructure.Show()
     End Sub
 
     Public Sub SetAsCluster(ByVal a_node_id As String)
-        panelEntry.Hide()
+        structurePanel.Hide()
 
         If mIsEmbedded Then
             If mIsLoading Then
@@ -737,15 +726,13 @@ Public Class TabPageStructure
                 mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Cluster)
             End If
 
-            panelDisplay.Hide()
+            displayPanel.Hide()
             ShowDetailPanel(mEmbeddedSlot, New EventArgs)
         Else
-            panelDisplay.Show()
+            displayPanel.Show()
             SetEntryStructure(New TreeStructure(New RmCluster(mFileManager.Archetype.ConceptCode), mFileManager))
-            PanelDetails.Hide()
+            DetailsPanel.Hide()
         End If
-
-        panelStructure.Show()
     End Sub
 
     Private Sub comboStructure_selectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboStructure.SelectedIndexChanged
@@ -763,8 +750,7 @@ Public Class TabPageStructure
                         mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
                     End If
 
-                    panelStructure.Show()
-                    panelDisplay.Hide()
+                    displayPanel.Hide()
                     ShowDetailPanel(mEmbeddedSlot, New EventArgs)
                 Else
                     If chosenStructure <> StructureType Then
@@ -792,9 +778,8 @@ Public Class TabPageStructure
                         End If
                     End If
 
-                    panelDisplay.Show()
-                    panelStructure.Show()
-                    PanelDetails.Visible = mStructureControl.HasData
+                    displayPanel.Show()
+                    DetailsPanel.Visible = mStructureControl.HasData
                 End If
 
                 If Not mIsLoading Then
@@ -807,12 +792,6 @@ Public Class TabPageStructure
 
 #Region "Features related to embedded archetype handling"
 
-    Private ReadOnly Property ArchetypeAvailable() As Boolean
-        Get
-            Return mFileManager.ArchetypeAvailable
-        End Get
-    End Property
-
     Public Sub ProcessSlot(ByVal slot As RmSlot)
         mIsLoading = True
         mIsEmbedded = True
@@ -820,7 +799,7 @@ Public Class TabPageStructure
         comboStructure.SelectedIndex = -1
 
         mFileManager = New FileManagerLocal
-        PanelDetails.LocalFileManager = mFileManager
+        DetailsPanel.LocalFileManager = mFileManager
         mFileManager.ObjectToSave = Me
         mFileManager.FileLoading = True
 
