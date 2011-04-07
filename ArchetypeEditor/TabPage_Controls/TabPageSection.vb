@@ -187,6 +187,7 @@ Public Class TabPageSection
         '
         Me.MenuNameSlot.Index = 2
         Me.MenuNameSlot.Text = "Name this slot"
+        Me.MenuNameSlot.Visible = False
         Me.MenuSectionRemove.Visible = False
         '
         'ilSection
