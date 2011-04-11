@@ -233,8 +233,8 @@ Public Class ElementOnly
         Return result.ToString
     End Function
 
-    Public Overrides Function HasData() As Boolean
-        Return Not mElement Is Nothing
+    Public Overrides Function ItemCount() As Integer
+        Return IIf(mElement Is Nothing, 0, 1)
     End Function
 
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)

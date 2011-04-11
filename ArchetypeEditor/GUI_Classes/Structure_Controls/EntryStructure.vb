@@ -674,7 +674,7 @@ Public Class EntryStructure
         Throw New NotImplementedException("Subclass must override this method")
     End Function
 
-    Public Overridable Function HasData() As Boolean
+    Public Overridable Function ItemCount() As Integer
         Throw New NotImplementedException("Subclass must override this method")
     End Function
 

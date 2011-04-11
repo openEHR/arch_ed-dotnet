@@ -326,8 +326,14 @@ Public Class TableStructure
         End Set
     End Property
 
-    Public Overrides Function HasData() As Boolean
-        Return Not mArchetypeTable Is Nothing AndAlso mArchetypeTable.Rows.Count > 0
+    Public Overrides Function ItemCount() As Integer
+        Dim result As Integer = 0
+
+        If Not mArchetypeTable Is Nothing Then
+            result = mArchetypeTable.Rows.Count
+        End If
+
+        Return result
     End Function
 
     Sub AddNodesToTable(ByVal ch As Children)

@@ -114,7 +114,7 @@ Public Class AE_Constants
     Private mNameThisSlotQuestion As String = "Name this slot?"
     Private mReplaceExistingFileQuestion As String = "File {0} already exists. Do you want to replace it?"
     Private mParsable As String = "Parsable"
-
+    Private mChangeStructureTypeWarning As String = "Changing to structure type {0} may lose some elements. Do you want to continue?"
 
     Friend ReadOnly Property ReplaceExistingFileQuestion() As String
         Get
@@ -132,11 +132,19 @@ Public Class AE_Constants
             Return mNameThisSlotQuestion
         End Get
     End Property
+
     Friend ReadOnly Property NoEmbeddedArchetypeMatches() As String
         Get
             Return mNoEmbeddedArchetypeMatches
         End Get
     End Property
+
+    Friend ReadOnly Property ChangeStructureTypeWarning() As String
+        Get
+            Return mChangeStructureTypeWarning
+        End Get
+    End Property
+
     Friend ReadOnly Property Lower() As String
         Get
             Return mLower
@@ -788,6 +796,7 @@ Public Class AE_Constants
         mNameThisSlot = TerminologyServer.Instance.RubricForCode(675, Language)
         mReplaceExistingFileQuestion = TerminologyServer.Instance.RubricForCode(680, Language)
         mParsable = TerminologyServer.Instance.RubricForCode(635, Language)
+        mChangeStructureTypeWarning = TerminologyServer.Instance.RubricForCode(703, Language)
     End Sub
 
 End Class

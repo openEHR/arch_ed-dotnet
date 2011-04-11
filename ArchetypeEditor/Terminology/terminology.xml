@@ -776,6 +776,7 @@
   <PrimaryRubric Id="700" Language="en" />
   <PrimaryRubric Id="701" Language="en" />
   <PrimaryRubric Id="702" Language="en" />
+  <PrimaryRubric Id="703" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1410,6 +1411,7 @@
   <Concept Language="en" ConceptID="700" Rubric="Yes, specialise it" />
   <Concept Language="en" ConceptID="701" Rubric="Yes, but add a new node" />
   <Concept Language="en" ConceptID="702" Rubric="No" />
+  <Concept Language="en" ConceptID="703" Rubric="Changing to structure type {0} may lose some elements. Do you want to continue?" />
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />

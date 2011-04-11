@@ -496,8 +496,8 @@ Public Class ListStructure
         Return result.ToString()
     End Function
 
-    Public Overrides Function HasData() As Boolean
-        Return lvList.Items.Count > 0
+    Public Overrides Function ItemCount() As Integer
+        Return lvList.Items.Count
     End Function
 
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click

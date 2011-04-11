@@ -697,8 +697,8 @@ Public Class TreeStructure
         Return result.ToString
     End Function
 
-    Public Overrides Function HasData() As Boolean
-        Return tvTree.Nodes.Count > 0
+    Public Overrides Function ItemCount() As Integer
+        Return tvTree.Nodes.Count
     End Function
 
     Private Function TreeToRichText(ByVal TreeNodes As TreeNodeCollection, ByVal level As Integer, ByVal new_line As String) As String

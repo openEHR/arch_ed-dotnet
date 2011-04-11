@@ -231,6 +231,7 @@ Public Class TabPageStructure
         Me.HelpProviderTabPageStructure.SetShowHelp(Me.comboStructure, True)
         Me.comboStructure.Size = New System.Drawing.Size(136, 21)
         Me.comboStructure.TabIndex = 7
+        Me.comboStructure.DropDownStyle = ComboBoxStyle.DropDownList
         '
         'ContextMenuGrid
         '
@@ -690,7 +691,7 @@ Public Class TabPageStructure
             aContainer.Size = New Size
         End If
 
-        If Not mStructureControl Is Nothing AndAlso mStructureControl.HasData Then
+        If Not mStructureControl Is Nothing AndAlso mStructureControl.ItemCount > 0 Then
             ArchetypeView.Instance.BuildInterface(mStructureControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only, mFileManager)
         End If
     End Sub
@@ -735,56 +736,81 @@ Public Class TabPageStructure
         End If
     End Sub
 
-    Private Sub comboStructure_selectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboStructure.SelectedIndexChanged
+    Private Sub comboStructure_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles comboStructure.KeyDown
+        If e.KeyCode = Keys.Escape And comboStructure.DroppedDown Then
+            Enabled = False
+            comboStructure.SelectedItem = StructureTypeAsString
+            comboStructure.DroppedDown = False
+            Enabled = True
+            comboStructure.Focus()
+        End If
+    End Sub
+
+    Private Sub comboStructure_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboStructure.SelectedIndexChanged, comboStructure.DropDownClosed
         Debug.Assert(Not mValidStructureClasses Is Nothing)
 
-        If Enabled And comboStructure.SelectedIndex >= 0 Then
+        If Enabled And comboStructure.SelectedIndex >= 0 And Not comboStructure.DroppedDown Then
             Dim chosenStructure As StructureType = mValidStructureClasses(comboStructure.SelectedIndex)
-            ReferenceModel.SetStructureClass(chosenStructure)
 
-            If mIsLoading Or mIsEmbedded <> chkEmbedded.Checked Or chosenStructure <> StructureType Then
-                mIsEmbedded = chkEmbedded.Checked
+            If Not mIsLoading And Not mIsEmbedded And chosenStructure <> StructureType Then
+                If Not mStructureControl Is Nothing AndAlso mStructureControl.ItemCount > 1 Then
+                    If StructureType = StructureType.Tree Or chosenStructure = StructureType.Single Then
+                        Dim question As String = String.Format(AE_Constants.Instance.ChangeStructureTypeWarning, Filemanager.GetOpenEhrTerm(CInt(chosenStructure), chosenStructure.ToString))
 
-                If mIsEmbedded Then
-                    If Not mIsLoading Or mEmbeddedSlot Is Nothing Then
-                        mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
-                    End If
-
-                    displayPanel.Hide()
-                    ShowDetailPanel(mEmbeddedSlot, New EventArgs)
-                Else
-                    If chosenStructure <> StructureType Then
-                        Dim entryStructure As EntryStructure = Nothing ' User control to provide the list or whatever
-
-                        Select Case chosenStructure
-                            Case StructureType.Single
-                                entryStructure = New SimpleStructure(mFileManager)
-                            Case StructureType.List
-                                entryStructure = New ListStructure(mFileManager)
-                            Case StructureType.Tree
-                                entryStructure = New TreeStructure(mFileManager)
-                            Case StructureType.Table
-                                entryStructure = New TableStructure(mFileManager)
-                            Case Else
-                                Debug.Assert(False)
-                        End Select
-
-                        If Not entryStructure Is Nothing Then
-                            If Not mStructureControl Is Nothing Then
-                                entryStructure.Archetype = mStructureControl.Archetype
-                            End If
-
-                            SetEntryStructure(entryStructure)
+                        If MessageBox.Show(question, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) <> DialogResult.Yes Then
+                            comboStructure.SelectedItem = StructureTypeAsString
                         End If
                     End If
-
-                    displayPanel.Show()
-                    DetailsPanel.Visible = mStructureControl.HasData
                 End If
+            End If
 
-                If Not mIsLoading Then
-                    mFileManager.FileEdited = True
-                    RaiseEvent UpdateStructure(Me, chosenStructure)
+            If chosenStructure = mValidStructureClasses(comboStructure.SelectedIndex) Then
+                ReferenceModel.SetStructureClass(chosenStructure)
+
+                If mIsLoading Or mIsEmbedded <> chkEmbedded.Checked Or chosenStructure <> StructureType Then
+                    mIsEmbedded = chkEmbedded.Checked
+
+                    If mIsEmbedded Then
+                        If Not mIsLoading Or mEmbeddedSlot Is Nothing Then
+                            mEmbeddedSlot = New ArchetypeNodeAnonymous(chosenStructure)
+                        End If
+
+                        displayPanel.Hide()
+                        ShowDetailPanel(mEmbeddedSlot, New EventArgs)
+                    Else
+                        If chosenStructure <> StructureType Then
+                            Dim entryStructure As EntryStructure = Nothing ' User control to provide the list or whatever
+
+                            Select Case chosenStructure
+                                Case StructureType.Single
+                                    entryStructure = New SimpleStructure(mFileManager)
+                                Case StructureType.List
+                                    entryStructure = New ListStructure(mFileManager)
+                                Case StructureType.Tree
+                                    entryStructure = New TreeStructure(mFileManager)
+                                Case StructureType.Table
+                                    entryStructure = New TableStructure(mFileManager)
+                                Case Else
+                                    Debug.Assert(False)
+                            End Select
+
+                            If Not entryStructure Is Nothing Then
+                                If Not mStructureControl Is Nothing Then
+                                    entryStructure.Archetype = mStructureControl.Archetype
+                                End If
+
+                                SetEntryStructure(entryStructure)
+                            End If
+                        End If
+
+                        displayPanel.Show()
+                        DetailsPanel.Visible = mStructureControl.ItemCount > 0
+                    End If
+
+                    If Not mIsLoading Then
+                        mFileManager.FileEdited = True
+                        RaiseEvent UpdateStructure(Me, chosenStructure)
+                    End If
                 End If
             End If
         End If
@@ -930,7 +956,7 @@ Public Class TabPageStructure
                 mFileManager = Filemanager.Master
             End If
 
-            comboStructure_selectedIndexChanged(sender, e)
+            comboStructure_SelectedIndexChanged(sender, e)
         End If
 
         mIsEmbedded = chkEmbedded.Checked

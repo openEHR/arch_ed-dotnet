@@ -183,8 +183,8 @@ Public Class SimpleStructure
         End Set
     End Property
 
-    Public Overrides Function HasData() As Boolean
-        Return Not mElement Is Nothing
+    Public Overrides Function ItemCount() As Integer
+        Return IIf(mElement Is Nothing, 0, 1)
     End Function
 
     Public Overrides Sub Reset()
