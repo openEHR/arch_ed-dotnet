@@ -49,8 +49,9 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
         If Not mArchetypeNode.IsAnonymous Then
             CType(mArchetypeNode, ArchetypeNodeAbstract).Specialise()
             MyBase.Text = mArchetypeNode.Text
-            RefreshIcons()
         End If
+
+        RefreshIcons()
     End Sub
 
     Public Function SpecialisedClone() As ArchetypeListViewItem
