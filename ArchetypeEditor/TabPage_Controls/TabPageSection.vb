@@ -419,6 +419,7 @@ Public Class TabPageSection
                 e.CancelEdit = True
             Else
                 tvNode.Text = e.Label
+                tvNode.Item.Text = e.Label
 
                 'Slots may set text to include class
                 If tvNode.Text <> e.Label Then

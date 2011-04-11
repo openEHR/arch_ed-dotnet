@@ -637,6 +637,7 @@ Public Class ListStructure
 
                 lvItem = CType(Me.lvList.Items(e.Item), ArchetypeListViewItem)
                 lvItem.Text = e.Label
+                lvItem.Item.Text = e.Label
 
                 RemoveItemAndReferencesMenuItem.Text = e.Label
 

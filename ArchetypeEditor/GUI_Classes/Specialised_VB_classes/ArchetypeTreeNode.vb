@@ -28,20 +28,6 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
         End Get
     End Property
 
-    Public Shadows Property Text() As String
-        Get
-            Return mArchetypeNode.Text
-        End Get
-        Set(ByVal Value As String)
-            mArchetypeNode.Text = Value
-            If TypeOf (mArchetypeNode) Is ArchetypeSlot Then
-                MyBase.Text = mArchetypeNode.Text
-            Else
-                MyBase.Text = Value
-            End If
-        End Set
-    End Property
-
     Public ReadOnly Property TypeName() As String
         Get
             Return mArchetypeNode.RM_Class.Type.ToString
@@ -90,7 +76,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
 
     Public Sub Translate()
         mArchetypeNode.Translate()
-        MyBase.Text = mArchetypeNode.Text
+        Text = mArchetypeNode.Text
     End Sub
 
     Public Sub RefreshIcons()
@@ -101,7 +87,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Public Sub Specialise()
         If Not mArchetypeNode.IsAnonymous Then
             CType(mArchetypeNode, ArchetypeNodeAbstract).Specialise()
-            MyBase.Text = mArchetypeNode.Text
+            Text = mArchetypeNode.Text
         End If
 
         RefreshIcons()
@@ -176,7 +162,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Sub New(ByVal aCluster As RmCluster, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         mArchetypeNode = New ArchetypeComposite(aCluster, fileManager)
-        MyBase.Text = mArchetypeNode.Text
+        Text = mArchetypeNode.Text
 
         If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
             CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
@@ -186,7 +172,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Sub New(ByVal aCluster As ArchetypeComposite)
         MyBase.New()
         mArchetypeNode = aCluster.Copy
-        MyBase.Text = mArchetypeNode.Text
+        Text = mArchetypeNode.Text
 
         If CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount < 1 Then
             CType(mArchetypeNode, ArchetypeComposite).Cardinality.MinCount = 1
@@ -196,7 +182,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Sub New(ByVal aSection As RmSection, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         mArchetypeNode = New ArchetypeComposite(aSection, fileManager)
-        MyBase.Text = mArchetypeNode.Text
+        Text = mArchetypeNode.Text
         ImageIndex = 1
         SelectedImageIndex = 3
     End Sub
@@ -204,7 +190,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Sub New(ByVal aSection As RmStructureCompound, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         mArchetypeNode = New ArchetypeComposite(aSection, fileManager)
-        MyBase.Text = mArchetypeNode.Text
+        Text = mArchetypeNode.Text
         ImageIndex = 1
         SelectedImageIndex = 3
     End Sub
@@ -212,7 +198,7 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
     Sub New(ByVal el As RmElement, ByVal fileManager As FileManagerLocal)
         MyBase.New()
         mArchetypeNode = New ArchetypeElement(el, fileManager)
-        MyBase.Text = mArchetypeNode.Text
+        Text = mArchetypeNode.Text
     End Sub
 
     Sub New(ByVal slot As RmSlot, ByVal fileManager As FileManagerLocal)
@@ -220,10 +206,10 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
 
         If slot.NodeId <> "" Then
             mArchetypeNode = New ArchetypeSlot(slot, fileManager)
-            MyBase.Text = mArchetypeNode.Text
+            Text = mArchetypeNode.Text
         Else
             mArchetypeNode = New ArchetypeNodeAnonymous(slot)
-            MyBase.Text = fileManager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
+            Text = fileManager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
         End If
     End Sub
 

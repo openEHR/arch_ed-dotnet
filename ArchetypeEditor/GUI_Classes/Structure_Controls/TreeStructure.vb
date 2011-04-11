@@ -803,6 +803,7 @@ Public Class TreeStructure
             Else
                 Dim tvNode As ArchetypeTreeNode = CType(e.Node, ArchetypeTreeNode)
                 tvNode.Text = e.Label
+                tvNode.Item.Text = e.Label
                 RemoveItemAndReferencesMenuItem.Text = e.Label
 
                 If tvNode.Item.RM_Class.Type = StructureType.Element Then

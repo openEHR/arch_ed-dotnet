@@ -26,19 +26,10 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
             Return mArchetypeNode
         End Get
     End Property
-    Public Shadows Property Text() As String
-        Get
-            Return mArchetypeNode.Text
-        End Get
-        Set(ByVal Value As String)
-            mArchetypeNode.Text = Value
-            MyBase.Text = mArchetypeNode.Text
-        End Set
-    End Property
 
     Public Sub Translate()
         mArchetypeNode.Translate()
-        MyBase.Text = mArchetypeNode.Text
+        Text = mArchetypeNode.Text
     End Sub
 
     Public Sub RefreshIcons()
@@ -48,7 +39,7 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
     Public Sub Specialise()
         If Not mArchetypeNode.IsAnonymous Then
             CType(mArchetypeNode, ArchetypeNodeAbstract).Specialise()
-            MyBase.Text = mArchetypeNode.Text
+            Text = mArchetypeNode.Text
         End If
 
         RefreshIcons()
@@ -60,36 +51,36 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
         Return result
     End Function
 
-    Sub New(ByVal aText As String, ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal aText As String, ByVal fileManager As FileManagerLocal)
         MyBase.New(aText)
-        mArchetypeNode = New ArchetypeElement(aText, a_file_manager)
+        mArchetypeNode = New ArchetypeElement(aText, fileManager)
     End Sub
 
-    Sub New(ByVal el As RmElement, ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal el As RmElement, ByVal fileManager As FileManagerLocal)
         MyBase.New()
 
         'Must call translate to get the text
-        Dim aTerm As RmTerm = a_file_manager.OntologyManager.GetTerm(el.NodeId)
-        MyBase.Text = aTerm.Text
+        Dim aTerm As RmTerm = fileManager.OntologyManager.GetTerm(el.NodeId)
+        Text = aTerm.Text
 
-        mArchetypeNode = New ArchetypeElement(el, a_file_manager)
+        mArchetypeNode = New ArchetypeElement(el, fileManager)
     End Sub
 
-    Sub New(ByVal slot As RmSlot, ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal slot As RmSlot, ByVal fileManager As FileManagerLocal)
         MyBase.New()
 
         If slot.NodeId <> "" Then
-            mArchetypeNode = New ArchetypeSlot(slot, a_file_manager)
-            MyBase.Text = mArchetypeNode.Text
+            mArchetypeNode = New ArchetypeSlot(slot, fileManager)
+            Text = mArchetypeNode.Text
         Else
-            MyBase.Text = a_file_manager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
+            Text = fileManager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
             mArchetypeNode = New ArchetypeNodeAnonymous(slot)
         End If
     End Sub
 
-    Sub New(ByVal an_archetype_node As ArchetypeNode)
-        MyBase.New(an_archetype_node.Text)
-        mArchetypeNode = an_archetype_node
+    Sub New(ByVal node As ArchetypeNode)
+        MyBase.New(node.Text)
+        mArchetypeNode = node
     End Sub
 
 End Class
