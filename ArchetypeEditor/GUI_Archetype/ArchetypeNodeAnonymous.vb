@@ -79,6 +79,8 @@ Public Class ArchetypeNodeAnonymous
                         mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(560, "Administration ENTRY")
                     Case StructureType.SECTION
                         mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(314, "SECTION")
+                    Case StructureType.Item
+                        mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(673, "Item")
                     Case StructureType.Cluster
                         mText = Filemanager.Master.OntologyManager.GetOpenEHRTerm(313, "Cluster")
                     Case StructureType.Element
