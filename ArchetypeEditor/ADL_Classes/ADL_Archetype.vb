@@ -1887,10 +1887,14 @@ Namespace ArchetypeEditor.ADL_Classes
                             Dim items() As RmStructure = CType(cDefinition, ArchetypeDefinition).Data.Items
 
                             If items.Length > 0 Then
-                                Dim rm_struct As RmStructureCompound = CType(items(0), RmStructureCompound).Children.Items(0)
-                                Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                                objNode = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(rm_struct.Type)), Eiffel.String(rm_struct.NodeId))
-                                BuildStructure(rm_struct, objNode)
+                                Dim struct As RmStructureCompound = CType(items(0), RmStructureCompound)
+
+                                If struct.Children.Items.Length > 0 Then
+                                    struct = struct.Children.Items(0)
+                                    Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                                    objNode = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(struct.Type)), Eiffel.String(struct.NodeId))
+                                    BuildStructure(struct, objNode)
+                                End If
                             End If
 
                         Case StructureType.OBSERVATION
