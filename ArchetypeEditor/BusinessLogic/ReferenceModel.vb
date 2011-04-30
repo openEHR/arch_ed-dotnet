@@ -43,16 +43,15 @@ Public Class ReferenceModel
     Private Shared mArchetypedClass As StructureType
     Private Shared mStructureClass As StructureType
     Private Shared mReferenceModelNames As Collections.Hashtable
-    Private Shared mReferenceModelDataTypes As Collections.Hashtable
     Private Shared mValidReferenceModelNames As String() = {"openEHR-EHR"} ', "CEN-EHR"} ', "HL7-CDA"} ',"openEHR-Demographic"}
 
     Public Shared Function ModelType() As ReferenceModelType
         Return mRefModelType
     End Function
+
     Public Shared Sub SetModelType(ByVal Value As ReferenceModelType)
         mRefModelType = Value
         LoadReferenceModelNames()
-        LoadReferenceModelDataTypes()
     End Sub
 
     Public Shared Function ReferenceModelName() As String
@@ -179,40 +178,28 @@ Public Class ReferenceModel
         End If
     End Function
 
-    Private Shared Sub LoadReferenceModelDataTypes()
-        mReferenceModelDataTypes = New Hashtable
+    Public Shared Function RM_DataTypeName(ByVal kind As ConstraintKind) As String
+        Dim result As String
+        Dim kindOfInterval As ConstraintKind = ConstraintKind.Any
 
-        Select Case mRefModelType
-            Case ReferenceModelType.openEHR_EHR
-                mReferenceModelDataTypes.Add(7, "DATE_TIME")
-                mReferenceModelDataTypes.Add(12, "INTERVAL<DV_COUNT>")
-                mReferenceModelDataTypes.Add(13, "INTERVAL<DV_QUANTITY>")
-                mReferenceModelDataTypes.Add(14, "INTERVAL<DV_DATE_TIME>")
+        Select Case kind
+            Case ConstraintKind.Interval_Count
+                kindOfInterval = ConstraintKind.Count
+            Case ConstraintKind.Interval_Quantity
+                kindOfInterval = ConstraintKind.Quantity
+            Case ConstraintKind.Interval_DateTime
+                kindOfInterval = ConstraintKind.DateTime
         End Select
-    End Sub
 
-    Public Shared Function RM_DataTypeName(ByVal d_type As ConstraintKind) As String
-        Dim result, s As String
-
-        If mReferenceModelDataTypes.ContainsKey(CType(d_type, Integer)) Then
-            result = CStr(mReferenceModelDataTypes.Item(CType(d_type, Integer)))
+        If kindOfInterval <> ConstraintKind.Any Then
+            result = "DV_INTERVAL<" + RM_DataTypeName(kindOfInterval) + ">"
+        ElseIf kind = ConstraintKind.DateTime Then
+            result = "DV_DATE_TIME"
         Else
-            result = d_type.ToString.ToUpperInvariant()
+            result = "DV_" + kind.ToString.ToUpperInvariant
         End If
 
-        Select Case d_type
-            Case ConstraintKind.Interval_Count
-                s = RM_DataTypeName(ConstraintKind.Count)
-                result = String.Format("INTERVAL<{0}>", s)
-            Case ConstraintKind.Interval_Quantity
-                s = RM_DataTypeName(ConstraintKind.Quantity)
-                result = String.Format("INTERVAL<{0}>", s)
-            Case ConstraintKind.Interval_DateTime
-                s = RM_DataTypeName(ConstraintKind.DateTime)
-                result = String.Format("INTERVAL<{0}>", s)
-        End Select
-
-        Return String.Format("DV_{0}", result)
+        Return result
     End Function
 
     Public Shared Function IsValidReferenceModelName(ByVal RefModelName As String) As Boolean
