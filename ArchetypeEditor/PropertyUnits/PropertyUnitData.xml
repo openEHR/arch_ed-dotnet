@@ -549,4 +549,10 @@
   <Unit property_id="81" Text="dpt" name="Dioptre" conversion="1" primary="false" />
   <Unit property_id="7" Text="{129/128}" name="Volume per time" conversion="0" primary="false" />
   <Unit property_id="0" Text="Fr" name="French" conversion="0.33333333" coefficient="-3" primary="false" />
+  <Unit property_id="21" Text="g/m2.7" name="mass per height^2.7 (BSA)" conversion="0" primary="false" />
+  <Unit property_id="21" Text="g/m2" conversion="1000" primary="false" />
+  <Unit property_id="56" Text="10^3" conversion="1" coefficient="3" primary="false" />
+  <Unit property_id="56" Text="10^6" conversion="1" coefficient="6" primary="false" />
+  <Unit property_id="56" Text="10^9" conversion="1" coefficient="9" primary="false" />
+  <Unit property_id="56" Text="10^12" conversion="1" coefficient="12" primary="false" />
 </PropertyUnits>
