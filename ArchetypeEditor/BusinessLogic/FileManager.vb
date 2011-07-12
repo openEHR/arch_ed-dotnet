@@ -261,8 +261,6 @@ Public Class FileManagerLocal
 
             mOntologyManager.PopulateAllTerms() 'Note: call switches on FileEdited!
             mOntologyManager.SetBestLanguage()
-            mOntologyManager.TermDefinitionTable.AcceptChanges()
-
 
             mPriorFileName = Nothing
             FileEdited = False

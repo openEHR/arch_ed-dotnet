@@ -1412,9 +1412,6 @@
   <Concept Language="en" ConceptID="701" Rubric="Yes, but add a new node" />
   <Concept Language="en" ConceptID="702" Rubric="No" />
   <Concept Language="en" ConceptID="703" Rubric="Changing to structure type {0} may lose some elements. Do you want to continue?" />
-  <Concept Language="en" ConceptID="704" Rubric="Contact" />
-  <Concept Language="en" ConceptID="705" Rubric="Publisher" />
-  <Concept Language="en" ConceptID="706" Rubric="Currently responsible" />
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
