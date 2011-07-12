@@ -25,6 +25,7 @@ Public Class RichTextBoxUnicode
         ArchetypeMisuse = 5
         ArchetypeCopyright = 6
         ArchetypeReferences = 7
+        ArchetypeCurrentContact = 8
     End Enum
 
     'Returns a Tag to be placed in the RTF file
@@ -70,6 +71,8 @@ Public Class RichTextBoxUnicode
                         replaceText = TabPage.CopyrightTextBox.Text
                     Case RichTextDataType.ArchetypeReferences
                         replaceText = TabPage.txtReferences.Text
+                    Case RichTextDataType.ArchetypeCurrentContact
+                        replaceText = TabPage.txtCurrentContact.Text
                 End Select
 
                 'RichEditControl.SelectedText does not replace text when string is empty (Replace needs to occur to remove char1/AM)

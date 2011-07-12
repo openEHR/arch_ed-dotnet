@@ -74,6 +74,22 @@ Namespace ArchetypeEditor.XML_Classes
                 otherDetails.Add(di)
             End If
 
+            
+            '//IMCN EDT-684 11 Jul 2011 
+            'If CurrentContact <> "" Then
+            '    di = New XMLParser.StringDictionaryItem
+            '    di.id = CURRENT_CONTACT
+            '    di.Value = mCurrentContact
+            '    otherDetails.Add(di)
+            'End If
+
+            'If CurrentPublisher <> "" Then
+            '    di = New XMLParser.StringDictionaryItem
+            '    di.id = CURRENT_PUBLISHER
+            '    di.Value = mCurrentPublisher
+            '    otherDetails.Add(di)
+            'End If
+
             If Not ArchetypeDigest Is Nothing Then
                 di = New XMLParser.StringDictionaryItem
                 di.id = AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID
@@ -140,6 +156,11 @@ Namespace ArchetypeEditor.XML_Classes
                     Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "references"
                             mReferences = di.Value
+                            '//IMCN EDT-684 11 Jul 2011 
+                            'Case CURRENT_CONTACT
+                            '    mCurrentContact = di.Value
+                            'Case CURRENT_PUBLISHER
+                            '    mCurrentPublisher = di.Value
                     End Select
                 Next
             End If
@@ -171,6 +192,9 @@ Namespace ArchetypeEditor.XML_Classes
             OriginalAuthorOrganisation = adl_description.OriginalAuthorOrganisation
             OtherContributors = adl_description.OtherContributors
             References = adl_description.References
+            '//IMCN 11 EDT-684 Jul 2011
+            'CurrentContact = adl_description.CurrentContact
+            'CurrentPublisher = adl_description.CurrentPublisher
         End Sub
 
     End Class

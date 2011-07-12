@@ -491,6 +491,11 @@ Namespace ArchetypeEditor.ADL_Classes
                     linklist.forth()
                 Loop
             End If
+
+            If Not ontologyManager.TermDefinitionTable.GetChanges Is Nothing Then
+                ontologyManager.TermDefinitionTable.AcceptChanges()
+            End If
+
         End Sub
 
         Private Sub populate_term_bindings(ByRef ontologyManager As OntologyManager)
@@ -569,6 +574,10 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     linklist.forth()
                 Loop
+            End If
+
+            If Not ontologyManager.ConstraintDefinitionTable.GetChanges Is Nothing Then
+                ontologyManager.ConstraintDefinitionTable.AcceptChanges()
             End If
         End Sub
 

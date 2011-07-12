@@ -22,6 +22,8 @@ Namespace ArchetypeEditor.ADL_Classes
     Public Class ADL_Description
         Inherits ArchetypeDescription
 
+
+
         Private mADL_Description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
 
         Public Overrides Property Details() As ArchetypeDetails
@@ -66,9 +68,20 @@ Namespace ArchetypeEditor.ADL_Classes
                 mADL_Description.add_other_detail(Eiffel.String("references"), Eiffel.String(mReferences))
             End If
 
+
+            ''//IMCN 11 Jul 2011 EDT-119
+            'If mCurrentContact <> "" Then
+            '    mADL_Description.add_other_detail(Eiffel.String(CURRENT_CONTACT), Eiffel.String(mCurrentContact))
+            'End If
+
+            'If mCurrentPublisher <> "" Then
+            '    mADL_Description.add_other_detail(Eiffel.String(CURRENT_PUBLISHER), Eiffel.String(mCurrentPublisher))
+            'End If
+
             If ArchetypeDigest <> "" Then
                 mADL_Description.add_other_detail(Eiffel.String(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), Eiffel.String(ArchetypeDigest))
             End If
+
 
             mADL_Description.clear_other_contributors()
 
@@ -112,6 +125,13 @@ Namespace ArchetypeEditor.ADL_Classes
                 If mADL_Description.other_details.has(Eiffel.String("references")) Then
                     mReferences = mADL_Description.other_details.item(Eiffel.String("references")).to_cil()
                 End If
+                '//IMCN 11 Jul 2011 EDT-119
+                'If mADL_Description.other_details.has(Eiffel.String(CURRENT_CONTACT)) Then
+                '    mCurrentContact = mADL_Description.other_details.item(Eiffel.String(CURRENT_CONTACT)).to_cil()
+                'End If
+                'If mADL_Description.other_details.has(Eiffel.String(CURRENT_PUBLISHER)) Then
+                '    mCurrentPublisher = mADL_Description.other_details.item(Eiffel.String(CURRENT_PUBLISHER)).to_cil()
+                'End If
             End If
 
             MyBase.LifeCycleStateAsString = mADL_Description.lifecycle_state.to_cil
@@ -134,6 +154,9 @@ Namespace ArchetypeEditor.ADL_Classes
             mOriginalAuthorDate = an_archetype_description.OriginalAuthorDate
             mOtherContributors = an_archetype_description.OtherContributors
             mReferences = an_archetype_description.References
+            '// IMCN EDT- 12 Jul 2011
+            'mCurrentContact = an_archetype_description.CurrentContact
+            'mCurrentPublisher = an_archetype_description.CurrentPublisher
 
             MyBase.LifeCycleState = an_archetype_description.LifeCycleState
         End Sub
