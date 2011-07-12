@@ -2371,6 +2371,7 @@ Public Class Designer
         DataGridTerminologies.CaptionText = Filemanager.GetOpenEhrTerm(70, DataGridTerminologies.CaptionText, language)
 
         DataGridDefinitions.CaptionText = Filemanager.GetOpenEhrTerm(89, DataGridDefinitions.CaptionText, language)
+
         ConstraintDefinitionsDataGrid.CaptionText = Filemanager.GetOpenEhrTerm(623, ConstraintDefinitionsDataGrid.CaptionText, language)
         lblConstraintStatements.Text = Filemanager.GetOpenEhrTerm(93, lblConstraintStatements.Text, language)
 
@@ -4528,10 +4529,12 @@ Public Class Designer
     Private Sub TabMain_SelectionChanging(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanging
         ' catch any refreshes that are required
         If TabMain.SelectedTab Is Me.tpTerminology Then
+
             ' edits of terms in the table may have taken place and will need to be 
             ' reflected in the GUI (via Translate)
 
             If Not mFileManager.FileLoading Then
+                ForceTerminologyGridUpdate()
                 ' if this is not due to a file load (e.g. opening a file)
                 If Not mFileManager.OntologyManager.TermDefinitionTable.GetChanges Is Nothing Then
                     ' and there have been some changes to the table
@@ -4546,6 +4549,16 @@ Public Class Designer
             RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
             RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
         End If
+    End Sub
+
+    Private Sub ForceTerminologyGridUpdate()
+
+        'IMCN EDT-669 11 July 2011
+        ' Forces table row update so that Definitons page is correctly synced with direct terminology table changes
+        ' where row does not lose focus prior to tab change
+        DataGridDefinitions.EndEdit(Nothing, DataGridDefinitions.CurrentRowIndex, False)
+        DataGridDefinitions.BindingContext(DataGridDefinitions.DataSource, DataGridDefinitions.DataMember).EndCurrentEdit()
+        Application.DoEvents()
     End Sub
 
     Private Sub TabMain_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanged
@@ -5018,6 +5031,10 @@ Public Class Designer
         End If
     End Sub
 
+    Private Sub DataGridDefinitions_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridDefinitions.MouseLeave
+        'IMCN EDT-669 11 July 2011
+        ForceTerminologyGridUpdate()
+    End Sub
 End Class
 
 
