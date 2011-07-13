@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{179B4A54-F044-430D-9DB6-E950F80EC87F}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -242,6 +242,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SpecialisationQuestionDialog.resx">
       <DependentUpon>SpecialisationQuestionDialog.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Specialised_VB_classes\RestrictedSet.resx">
       <SubType>Designer</SubType>
@@ -270,11 +271,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyUnits\PropertyUnits.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Terminology\Terminology.xsd">
-      <SubType>Designer</SubType>
+      <SubType>
+      </SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Include="ADL_Classes\ADL_Archetype.vb">
@@ -838,93 +841,123 @@
     <Compile Include="XML_Classes\XML_TranslationDetails.vb" />
     <EmbeddedResource Include="DataConstraintsView\BooleanViewControl.resx">
       <DependentUpon>BooleanViewControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraintsView\CountViewControl.resx">
       <DependentUpon>CountViewControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraintsView\ElementViewControl.resx">
       <DependentUpon>ElementViewControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraintsView\RatioViewControl.resx">
       <DependentUpon>RatioViewControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraintsView\TextViewControl.resx">
       <DependentUpon>TextViewControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraintsView\URIViewControl.resx">
       <DependentUpon>URIViewControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraintsView\ViewPanel.resx">
       <DependentUpon>ViewPanel.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\ArchetypeNodeConstraintControl.resx">
       <DependentUpon>ArchetypeNodeConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\BooleanConstraintControl.resx">
       <DependentUpon>BooleanConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\ClusterControl.resx">
       <DependentUpon>ClusterControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\ConstraintContextMenu.resx">
       <DependentUpon>ConstraintContextMenu.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\ConstraintControl.resx">
       <DependentUpon>ConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\CountConstraintControl.resx">
       <DependentUpon>CountConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\DateTimeConstraintControl.resx">
       <DependentUpon>DateTimeConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\DurationConstraintControl.resx">
       <DependentUpon>DurationConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\IntervalConstraintControl.resx">
       <DependentUpon>IntervalConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\MultimediaConstraintControl.resx">
       <DependentUpon>MultimediaConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\MultipleConstraintControl.resx">
       <DependentUpon>MultipleConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\OccurrencesPanel.resx">
       <DependentUpon>OccurrencesPanel.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\OrdinalConstraintControl.resx">
       <DependentUpon>OrdinalConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\QuantityConstraintControl.resx">
       <DependentUpon>QuantityConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\QuantityUnitConstraintControl.resx">
       <DependentUpon>QuantityUnitConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\RatioConstraintControl.resx">
       <DependentUpon>RatioConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\SlotConstraintControl.resx">
       <DependentUpon>SlotConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\GUI\TextConstraintControl.resx">
       <DependentUpon>TextConstraintControl.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DataConstraints\OrdinalTable.resx">
       <DependentUpon>OrdinalTable.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ApplicationOptionsForm.resx">
       <DependentUpon>ApplicationOptionsForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ArchetypeLibrary.resx">
       <DependentUpon>ArchetypeLibrary.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Choose.resx">
       <DependentUpon>Choose.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChoosePath.resx">
       <DependentUpon>ChoosePath.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChooseType.resx">
       <SubType>Designer</SubType>
@@ -932,15 +965,19 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConstraintBindingForm.resx">
       <DependentUpon>ConstraintBindingForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ConstraintForm.resx">
       <DependentUpon>ConstraintForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Designer.resx">
       <DependentUpon>Designer.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\InputForm.resx">
       <DependentUpon>InputForm.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\myArchetypeFromWeb.resx">
       <DependentUpon>myArchetypeFromWeb.vb</DependentUpon>
@@ -948,9 +985,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Splash.resx">
       <DependentUpon>Splash.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartUp.resx">
       <DependentUpon>StartUp.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WebSearchForm.resx">
       <DependentUpon>WebSearchForm.vb</DependentUpon>
@@ -958,12 +997,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Instruction_Controls\PathwayEvent.resx">
       <DependentUpon>PathwayEvent.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Instruction_Controls\PathwaySpecification.resx">
       <DependentUpon>PathwaySpecification.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Specialised_VB_classes\RichTextBoxPrintable.resx">
       <DependentUpon>RichTextBoxPrintable.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Structure_Controls\ElementOnly.resx">
       <DependentUpon>ElementOnly.vb</DependentUpon>
@@ -971,18 +1013,23 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Structure_Controls\EntryStructure.resx">
       <DependentUpon>EntryStructure.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Structure_Controls\ListStructure.resx">
       <DependentUpon>ListStructure.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Structure_Controls\SimpleStructure.resx">
       <DependentUpon>SimpleStructure.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Structure_Controls\TableStructure.resx">
       <DependentUpon>TableStructure.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI_Classes\Structure_Controls\TreeStructure.resx">
       <DependentUpon>TreeStructure.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <SubType>Designer</SubType>
@@ -992,27 +1039,35 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TabPageAction.resx">
       <DependentUpon>TabPageAction.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TabPageComposition.resx">
       <DependentUpon>TabPageComposition.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TabPageDescription.resx">
       <DependentUpon>TabPageDescription.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TabPageHistory.resx">
       <DependentUpon>TabPageHistory.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TabPageInstruction.resx">
       <DependentUpon>TabPageInstruction.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TabPageSection.resx">
       <DependentUpon>TabPageSection.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TabPageStructure.resx">
       <DependentUpon>TabPageStructure.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="TabPage_Controls\TermBindingPanel.resx">
       <DependentUpon>TermBindingPanel.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

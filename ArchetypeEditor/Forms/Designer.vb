@@ -2676,6 +2676,9 @@ Public Class Designer
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(583, "Misuse")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(690, "Copyright")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(691, "References")))
+        '//IMCN EDT-684 12 Jul 2011
+        text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(704, "Contact")))
+        
         text.WriteLine("</tr>")
         text.WriteLine("<tr>")
 
@@ -2684,6 +2687,9 @@ Public Class Designer
         text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(mTabPageDescription.txtMisuse.Text <> "", mTabPageDescription.txtMisuse.Text, commentString))))
         text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(mTabPageDescription.CopyrightTextBox.Text <> "", mTabPageDescription.CopyrightTextBox.Text, commentString))))
         text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(mTabPageDescription.txtReferences.Text <> "", mTabPageDescription.txtReferences.Text, commentString))))
+        ' IMCN EDT-684 12 Jul 2011
+        text.WriteLine(String.Format("<td width=""33%"">{0}</td>", CStr(IIf(mTabPageDescription.txtCurrentContact.Text <> "", mTabPageDescription.txtCurrentContact.Text, commentString))))
+
         text.WriteLine("</tr>")
         text.WriteLine("</table>")
 

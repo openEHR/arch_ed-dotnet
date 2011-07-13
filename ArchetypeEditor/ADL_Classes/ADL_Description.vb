@@ -66,6 +66,11 @@ Namespace ArchetypeEditor.ADL_Classes
                 mADL_Description.add_other_detail(Eiffel.String("references"), Eiffel.String(mReferences))
             End If
 
+            '//IMCN 11 Jul 2011 EDT-684
+            If mCurrentContact <> "" Then
+                mADL_Description.add_other_detail(Eiffel.String(CURRENT_CONTACT), Eiffel.String(mCurrentContact))
+            End If
+
             If ArchetypeDigest <> "" Then
                 mADL_Description.add_other_detail(Eiffel.String(AM.ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID), Eiffel.String(ArchetypeDigest))
             End If
@@ -108,9 +113,14 @@ Namespace ArchetypeEditor.ADL_Classes
                 Next
             End If
 
+
             If Not mADL_Description.other_details Is Nothing Then
                 If mADL_Description.other_details.has(Eiffel.String("references")) Then
                     mReferences = mADL_Description.other_details.item(Eiffel.String("references")).to_cil()
+                End If
+                '//IMCN  EDT-684 11 Jul 2011
+                If mADL_Description.other_details.has(Eiffel.String(CURRENT_CONTACT)) Then
+                    mCurrentContact = mADL_Description.other_details.item(Eiffel.String(CURRENT_CONTACT)).to_cil()
                 End If
             End If
 
@@ -134,6 +144,8 @@ Namespace ArchetypeEditor.ADL_Classes
             mOriginalAuthorDate = an_archetype_description.OriginalAuthorDate
             mOtherContributors = an_archetype_description.OtherContributors
             mReferences = an_archetype_description.References
+            '// IMCN EDT-684 12 Jul 2011
+            mCurrentContact = an_archetype_description.CurrentContact
 
             MyBase.LifeCycleState = an_archetype_description.LifeCycleState
         End Sub

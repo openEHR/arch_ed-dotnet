@@ -25,8 +25,11 @@ Public MustInherit Class ArchetypeDescription
     Protected mArchetypeDetails As New ArchetypeDetails
     Protected mOtherContributors As New Collections.Specialized.StringCollection
     Protected mReferences As String
+    Protected mCurrentContact As String
 
     Private mArchetypeDigest As String
+
+    Public Shared CURRENT_CONTACT As String = "current_contact"
 
     Property OriginalAuthor() As String
         Get
@@ -90,6 +93,15 @@ Public MustInherit Class ArchetypeDescription
             mArchetypeDigest = Value
         End Set
     End Property
+    Property CurrentContact() As String
+        Get
+            Return mCurrentContact
+        End Get
+        Set(ByVal Value As String)
+            mCurrentContact = Value
+        End Set
+    End Property
+
 
     Public Overridable Property Details() As ArchetypeDetails
         Get
