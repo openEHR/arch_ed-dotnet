@@ -29,7 +29,7 @@ Public MustInherit Class ArchetypeDescription
 
     Private mArchetypeDigest As String
 
-    Public Shared CURRENT_CONTACT As String = "current_contact"
+    Public Const CurrentContactKey As String = "current_contact"
 
     Property OriginalAuthor() As String
         Get
@@ -93,6 +93,7 @@ Public MustInherit Class ArchetypeDescription
             mArchetypeDigest = Value
         End Set
     End Property
+
     Property CurrentContact() As String
         Get
             Return mCurrentContact
@@ -101,7 +102,6 @@ Public MustInherit Class ArchetypeDescription
             mCurrentContact = Value
         End Set
     End Property
-
 
     Public Overridable Property Details() As ArchetypeDetails
         Get

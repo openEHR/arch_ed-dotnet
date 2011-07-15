@@ -74,10 +74,9 @@ Namespace ArchetypeEditor.XML_Classes
                 otherDetails.Add(di)
             End If
 
-            '//IMCN EDT-684 11 Jul 2011 
             If CurrentContact <> "" Then
                 di = New XMLParser.StringDictionaryItem
-                di.id = CURRENT_CONTACT
+                di.id = CurrentContactKey
                 di.Value = mCurrentContact
                 otherDetails.Add(di)
             End If
@@ -148,8 +147,7 @@ Namespace ArchetypeEditor.XML_Classes
                     Select Case di.id.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "references"
                             mReferences = di.Value
-                        Case CURRENT_CONTACT
-                            '//IMCN EDT-684 11 Jul 2011 
+                        Case CurrentContactKey
                             mCurrentContact = di.Value
                     End Select
                 Next
@@ -182,7 +180,6 @@ Namespace ArchetypeEditor.XML_Classes
             OriginalAuthorOrganisation = adl_description.OriginalAuthorOrganisation
             OtherContributors = adl_description.OtherContributors
             References = adl_description.References
-            '//IMCN 11 EDT-684 Jul 2011
             CurrentContact = adl_description.CurrentContact
         End Sub
 

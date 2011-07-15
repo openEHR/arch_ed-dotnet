@@ -809,9 +809,7 @@ Public Class TabPageDescription
                 listContributors.Items.Add(s)
             Next
 
-            'IMCN EDT-684 12 Jul 2011
             txtCurrentContact.Text = Value.CurrentContact
-
             txtReferences.Text = NewlinesNormalised(Value.References)
             mArchetypeDescription = Value
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
@@ -884,19 +882,16 @@ Public Class TabPageDescription
         mArchetypeDescription.OriginalAuthorOrganisation = txtOrganisation.Text
         mArchetypeDescription.OriginalAuthorDate = txtDate.Text
         mArchetypeDescription.References = txtReferences.Text
+        mArchetypeDescription.CurrentContact = txtCurrentContact.Text
         mArchetypeDescription.OtherContributors.Clear()
 
         For Each s As String In Me.listContributors.Items
             mArchetypeDescription.OtherContributors.Add(s)
         Next
 
-        'IMCN EDT-684 12 Jul 2011
-        mArchetypeDescription.CurrentContact = txtCurrentContact.Text
-
         If mCurrentLanguage Is Nothing Then
             mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         End If
-
 
         Dim archDescriptionItem As New ArchetypeDescriptionItem(mCurrentLanguage)
         Dim existingArchetypeDetails As ArchetypeDescriptionItem = mArchetypeDescription.Details.DetailInLanguage(mCurrentLanguage)
@@ -1106,10 +1101,8 @@ Public Class TabPageDescription
         CopyrightLabel.Text = Filemanager.GetOpenEhrTerm(690, CopyrightLabel.Text)
         gbAuthor.Text = Filemanager.GetOpenEhrTerm(584, gbAuthor.Text)
         gbContributors.Text = Filemanager.GetOpenEhrTerm(604, gbContributors.Text)
-        'IMCN EDT-684 12 Jul 2011
         gbCurrentResponsibility.Text = Filemanager.GetOpenEhrTerm(705, gbCurrentResponsibility.Text)
         lblCurrentContact.Text = Filemanager.GetOpenEhrTerm(704, lblCurrentContact.Text)
-
     End Sub
 
     Private Function MakeLifeCycleTable() As DataTable
@@ -1255,6 +1248,12 @@ Public Class TabPageDescription
         End If
     End Sub
 
+    Private Sub txtCurrentContact_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtCurrentContact.TextChanged
+        If Not Filemanager.Master.FileLoading Then
+            Filemanager.Master.FileEdited = True
+        End If
+    End Sub
+
     Private Sub TabPageDescription_RightToLeftChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.RightToLeftChanged
         Main.Reflect(Me)
     End Sub
@@ -1280,15 +1279,11 @@ Public Class TabPageDescription
     End Sub
 
     Private Sub listContributors_DoubleClick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listContributors.DoubleClick
-        Me.butEditContributor_Click(sender, e)
-    End Sub
-    Private Sub txtCurrentContact_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtCurrentContact.TextChanged
-        If Not Filemanager.Master.FileLoading Then
-            Filemanager.Master.FileEdited = True
-        End If
+        butEditContributor_Click(sender, e)
     End Sub
 
     Private Sub CurrentContactButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CurrentContactButton.Click
         txtCurrentContact.Text = Main.Instance.Options.UserName & ", " & Main.Instance.Options.UserOrganisation & ", " & Main.Instance.Options.UserEmail
     End Sub
+
 End Class
