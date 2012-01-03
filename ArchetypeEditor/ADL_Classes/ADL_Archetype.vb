@@ -1433,6 +1433,11 @@ Namespace ArchetypeEditor.ADL_Classes
             ' Build a section, runtimename is already done
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
+            'SRH - 3 Jan 2012 - fix cardinality constraint on section
+            If rmChildren.Cardinality.MinCount = 0 Then
+                rmChildren.Cardinality.MinCount = 1
+            End If
+
             an_attribute = mAomFactory.create_c_attribute_multiple(cadlObj, Eiffel.String("items"), MakeCardinality(rmChildren.Cardinality, rmChildren.Cardinality.Ordered))
             'SRH - 11 Feb 2009 - EDT 514 - set the minimum cardinality of cluster and structures to 1
             'As cardinality is expressed in the RM as 1..* this forces existence at the moment to be 1..1 - however this is not the intent.
