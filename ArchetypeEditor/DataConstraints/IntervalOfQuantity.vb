@@ -20,6 +20,13 @@ Class Constraint_Interval_Quantity
     Private mQuantityLower As New Constraint_Quantity
     Private mQuantityUpper As New Constraint_Quantity
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Interval_Quantity
+        result.mQuantityLower = CType(mQuantityLower.Copy, Constraint_Quantity)
+        result.mQuantityUpper = CType(mQuantityUpper.Copy, Constraint_Quantity)
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Interval_Quantity
@@ -60,6 +67,7 @@ Class Constraint_Interval_Quantity
         mQuantityUpper.Units.Add(unitConstraint)
         mQuantityLower.Units.Add(unitConstraint)
     End Sub
+
 End Class
 
 

@@ -21,6 +21,20 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
     Private mUnit As String
     Private mIsTime As Boolean
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_QuantityUnit(mIsTime)
+        result.mHasMaxVal = mHasMaxVal
+        result.mHasMinVal = mHasMinVal
+        result.mMaxVal = mMaxVal
+        result.mMinVal = mMinVal
+        result.mAssumedValue = mAssumedValue
+        result.HasAssumedValue = HasAssumedValue
+        result.mUnit = mUnit
+        result.mIsTime = mIsTime
+        result.mPrecision = mPrecision
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.QuantityUnit
@@ -49,27 +63,11 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
         End Set
     End Property
 
-
     ReadOnly Property isCompoundUnit() As Boolean
         Get
             Return mUnit.StartsWith("{")
         End Get
     End Property
-
-    Public Overrides Function Copy() As Constraint
-        Dim q As New Constraint_QuantityUnit(mIsTime)
-
-        q.mHasMaxVal = Me.mHasMaxVal
-        q.mHasMinVal = Me.mHasMinVal
-        q.mMaxVal = Me.mMaxVal
-        q.mMinVal = Me.mMinVal
-        q.mAssumedValue = Me.mAssumedValue
-        q.HasAssumedValue = Me.HasAssumedValue
-        q.mUnit = Me.mUnit
-        q.mPrecision = Me.mPrecision
-
-        Return q
-    End Function
 
     Overrides Function ToString() As String
         If mIsTime Then
@@ -84,8 +82,7 @@ Public Class Constraint_QuantityUnit : Inherits Constraint_Real
     End Function
 
     Sub New(ByVal is_time_unit As Boolean)
-        'Special handling for time units as need to be language dependent
-        'display
+        'Special handling for time units as need to be language dependent display
         mIsTime = is_time_unit
     End Sub
 

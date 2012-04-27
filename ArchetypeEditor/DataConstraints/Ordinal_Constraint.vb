@@ -30,25 +30,20 @@ Public Class Constraint_Ordinal : Inherits Constraint_with_value
     Private mFileManager As FileManagerLocal
 
     Public Overrides Function Copy() As Constraint
-        Dim ord As New Constraint_Ordinal(mFileManager)
-
-        ord.mFixed = mFixed
-        ord.OrdinalValues.Copy(mOrdinalTable)
+        Dim result As New Constraint_Ordinal(mFileManager)
+        result.mFixed = mFixed
+        result.OrdinalValues.Copy(mOrdinalTable)
 
         'SRH - 4th March 2009 - EDT-523 - error with assumed value being set to zero
         'ord.HasAssumedValue = Me.HasAssumedValue
-        If Me.HasAssumedValue Then
-            ord.AssumedValue = mAssumedValue
+        If HasAssumedValue Then
+            result.AssumedValue = mAssumedValue
         End If
 
-        'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-        ord.AssumedValue_TerminologyId = mTerminologyId
-        ord.AssumedValue_CodeString = mCodeString
-
-        ord.EndLoading()
-
-        Return ord
-
+        result.AssumedValue_TerminologyId = mTerminologyId
+        result.AssumedValue_CodeString = mCodeString
+        result.EndLoading()
+        Return result
     End Function
 
     Public Sub ClearOrdinalValues()

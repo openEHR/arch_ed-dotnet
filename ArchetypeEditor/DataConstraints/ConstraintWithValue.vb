@@ -25,7 +25,6 @@ Public MustInherit Class Constraint_with_value
         End Get
         Set(ByVal Value As Boolean)
             mHasAssumedValue = Value
-
         End Set
     End Property
 

@@ -17,15 +17,21 @@ Option Strict On
 Public Class Constraint_URI
     Inherits Constraint
 
-    ' no constraint data at the moment
+    Dim mEhrUriOnly As Boolean
+    Dim mRegex As String
+
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_URI
+        result.mEhrUriOnly = mEhrUriOnly
+        result.mRegex = mRegex
+        Return result
+    End Function
 
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.URI
         End Get
     End Property
-
-    Dim mEhrUriOnly As Boolean
 
     Public Property EhrUriOnly() As Boolean
         Get
@@ -35,8 +41,6 @@ Public Class Constraint_URI
             mEhrUriOnly = value
         End Set
     End Property
-
-    Dim mRegex As String
 
     Public Property RegularExpression() As String
         Get

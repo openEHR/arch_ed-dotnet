@@ -27,6 +27,21 @@ Public Class Constraint_Count
     Protected mHasList As Boolean
     Protected mList As String
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Count
+        result.mMinVal = mMinVal
+        result.mMaxVal = mMaxVal
+        result.mAssumedValue = mAssumedValue
+        result.mHasMinVal = mHasMinVal
+        result.mHasMaxVal = mHasMaxVal
+        result.mIncludeMin = mIncludeMin
+        result.mIncludeMax = mIncludeMax
+        result.mHasList = mHasList
+        result.mList = mList
+        result.HasAssumedValue = HasAssumedValue
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Count
@@ -124,17 +139,6 @@ Public Class Constraint_Count
             mList = Value
         End Set
     End Property
-
-    Public Overrides Function Copy() As Constraint
-        Dim c As New Constraint_Count
-        c.mHasMaxVal = mHasMaxVal
-        c.mHasMinVal = mHasMinVal
-        c.mMaxVal = mMaxVal
-        c.mMinVal = mMinVal
-        c.mAssumedValue = mAssumedValue
-        c.HasAssumedValue = HasAssumedValue
-        Return c
-    End Function
 
     Public Sub SetFromReal(ByVal r As Constraint_Real)
         HasAssumedValue = r.HasAssumedValue

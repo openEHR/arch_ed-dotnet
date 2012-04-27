@@ -16,14 +16,20 @@ Option Strict On
 
 Public Class Constraint_Parsable
     Inherits Constraint
-    
+
+    Dim mFormalism As New Generic.List(Of String)
+
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Parsable
+        result.mFormalism = mFormalism
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Parsable
         End Get
     End Property
-
-    Dim mFormalism As New Generic.List(Of String)
 
     Public Property AllowableFormalisms() As Generic.List(Of String)
         Get

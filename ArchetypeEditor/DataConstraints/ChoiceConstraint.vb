@@ -19,22 +19,23 @@ Class Constraint_Choice
 
     Dim col_Constraints As New ConstraintCollection
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Choice
+        result.col_Constraints = col_Constraints.Copy
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Multiple
         End Get
     End Property
+
     Public ReadOnly Property Constraints() As ConstraintCollection
         Get
             Return col_Constraints
         End Get
     End Property
-
-    Public Overrides Function Copy() As Constraint
-        Dim cm As New Constraint_Choice
-        cm.col_Constraints = Me.col_Constraints.Copy
-        Return cm
-    End Function
 
 End Class
 

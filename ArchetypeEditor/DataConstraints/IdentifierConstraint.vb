@@ -17,15 +17,23 @@ Option Strict On
 Public Class Constraint_Identifier
     Inherits Constraint
 
-    ' no constraint data at the moment
+    Dim mID As String
+    Dim mType As String
+    Dim mIssuer As String
+
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Identifier
+        result.mID = mID
+        result.mType = mType
+        result.mIssuer = mIssuer
+        Return result
+    End Function
 
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Identifier
         End Get
     End Property
-
-    Dim mID As String
 
     Public Property IDRegex() As String
         Get
@@ -36,8 +44,6 @@ Public Class Constraint_Identifier
         End Set
     End Property
 
-    Dim mType As String
-
     Public Property TypeRegex() As String
         Get
             Return mType
@@ -47,7 +53,6 @@ Public Class Constraint_Identifier
         End Set
     End Property
 
-    Dim mIssuer As String
     Public Property IssuerRegex() As String
         Get
             Return mIssuer

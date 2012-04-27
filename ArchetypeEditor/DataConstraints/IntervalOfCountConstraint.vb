@@ -20,6 +20,13 @@ Class Constraint_Interval_Count
     Private mLower As New Constraint_Count
     Private mUpper As New Constraint_Count
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Interval_Count
+        result.mLower = CType(mLower.Copy, Constraint_Count)
+        result.mUpper = CType(mUpper.Copy, Constraint_Count)
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Interval_Count

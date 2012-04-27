@@ -22,17 +22,29 @@ Public Class Constraint_Quantity
     Private mOpenEhrCode As String  'carries uncoded value
     Private mSeparator As String = "::"
     Private mIsCoded As Boolean
-    
+
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Quantity
+        result.mUnits = mUnits
+        result.mTerminologyId = mTerminologyId
+        result.mOpenEhrCode = mOpenEhrCode
+        result.mSeparator = mSeparator
+        result.mIsCoded = mIsCoded
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Quantity
         End Get
     End Property
+
     Public ReadOnly Property has_units() As Boolean
         Get
             Return mUnits.Count > 0
         End Get
     End Property
+
     Public Property PhysicalPropertyAsString() As String
         Get
             If mIsCoded Then
@@ -43,6 +55,7 @@ Public Class Constraint_Quantity
         End Get
         Set(ByVal Value As String)
             Dim i As Integer = Value.IndexOf(mSeparator)
+
             If i > -1 Then
                 mIsCoded = True
                 mTerminologyId = Value.Substring(0, i)
@@ -53,11 +66,13 @@ Public Class Constraint_Quantity
             End If
         End Set
     End Property
+
     Public ReadOnly Property IsNull() As Boolean
         Get
             Return mOpenEhrCode = ""
         End Get
     End Property
+
     Public Property OpenEhrCode() As Integer
         Get
             If mIsCoded Then
@@ -70,21 +85,25 @@ Public Class Constraint_Quantity
         End Get
         Set(ByVal Value As Integer)
             mOpenEhrCode = Value.ToString()
+
             If mOpenEhrCode <> "" Then
                 mIsCoded = True
             End If
         End Set
     End Property
+
     Public ReadOnly Property IsTime() As Boolean
         Get
             Return mOpenEhrCode = "128"
         End Get
     End Property
+
     Public ReadOnly Property IsCoded() As Boolean
         Get
             Return mIsCoded
         End Get
     End Property
+
     Public Property Units() As Collection
         Get
             Return mUnits
@@ -93,14 +112,6 @@ Public Class Constraint_Quantity
             mUnits = Value
         End Set
     End Property
-
-    Public Overrides Function Copy() As Constraint
-        Dim q As New Constraint_Quantity
-
-        q.mUnits = Me.mUnits
-        q.mOpenEhrCode = mOpenEhrCode
-        Return q
-    End Function
 
 End Class
 

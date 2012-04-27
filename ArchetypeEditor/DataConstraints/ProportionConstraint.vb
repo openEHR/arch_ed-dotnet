@@ -31,16 +31,25 @@ Class Constraint_Proportion
     Private mAllowedTypes As Boolean() = {True, True, True, True, True}
     Private mIsIntegralSet As Boolean = False
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Proportion
+        result.mNumerator = CType(mNumerator.Copy, Constraint_Real)
+        result.mDenominator = CType(mDenominator.Copy, Constraint_Real)
+        result.mIsIntegral = mIsIntegral
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             'Return "Proportion"
             Return ConstraintKind.Proportion
         End Get
     End Property
+
     Public Overrides Property AssumedValue() As Object
         Get
             'fixme
-            If Me.HasAssumedValue Then
+            If HasAssumedValue Then
                 'ToDo: fix this
                 Debug.Assert(False)
                 Return Nothing
@@ -53,6 +62,7 @@ Class Constraint_Proportion
             HasAssumedValue = True
         End Set
     End Property
+
     Public Property IsIntegralSet() As Boolean
         Get
             Return mIsIntegralSet
@@ -61,6 +71,7 @@ Class Constraint_Proportion
             mIsIntegralSet = value
         End Set
     End Property
+
     Public Property IsIntegral() As Boolean
         Get
             Return mIsIntegral
@@ -69,6 +80,7 @@ Class Constraint_Proportion
             mIsIntegral = Value
         End Set
     End Property
+
     Public Property Numerator() As Constraint_Real
         Get
             Return mNumerator
@@ -79,6 +91,7 @@ Class Constraint_Proportion
             End If
         End Set
     End Property
+
     Public Property Denominator() As Constraint_Real
         Get
             Return mDenominator
@@ -89,18 +102,21 @@ Class Constraint_Proportion
             End If
         End Set
     End Property
+
     Friend Sub SetAllTypesDisallowed()
         For i As Integer = 0 To 4
             mAllowedTypes(i) = False
         Next
     End Sub
+
     Friend Sub SetAllTypesAllowed()
         For i As Integer = 0 To 4
             mAllowedTypes(i) = True
         Next
     End Sub
+
     Private Function ValidValue(ByVal value As Constraint_Count) As Boolean
-       If IsIntegral Then
+        If IsIntegral Then
             If (Convert.ToInt32(value.MaximumValue) - value.MaximumValue <> 0) Or (Convert.ToInt32(value.MinimumValue) - value.MinimumValue <> 0) Then
                 Debug.Assert(False)
                 'ToDo: throw error
@@ -108,13 +124,6 @@ Class Constraint_Proportion
             End If
         End If
         Return True
-    End Function
-    Public Overrides Function Copy() As Constraint
-        Dim c As New Constraint_Proportion
-        c.Numerator = CType(Me.Numerator.Copy, Constraint_Real)
-        c.Denominator = CType(Me.Denominator.Copy, Constraint_Real)
-        c.mIsIntegral = mIsIntegral
-        Return c
     End Function
 
     Public Property IsPercent() As Boolean

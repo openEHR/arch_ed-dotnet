@@ -23,6 +23,16 @@ Public Class Constraint_Slot
     Dim mExcludeAll As Boolean
     Dim mIncludeAll As Boolean
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Slot()
+        result.colInclude = colInclude.Copy
+        result.colExclude = colExclude.Copy
+        result.mType = mType
+        result.mExcludeAll = mExcludeAll
+        result.mIncludeAll = mIncludeAll
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Slot
@@ -79,13 +89,6 @@ Public Class Constraint_Slot
             colExclude = Value
         End Set
     End Property
-
-    Public Overrides Function Copy() As Constraint
-        Dim result As Constraint_Slot = New Constraint_Slot()
-        result.colInclude = colInclude.Copy
-        result.colExclude = colExclude.Copy
-        Return result
-    End Function
 
 End Class
 

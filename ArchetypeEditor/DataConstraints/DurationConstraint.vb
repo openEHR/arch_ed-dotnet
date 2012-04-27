@@ -17,27 +17,35 @@ Option Strict On
 Public Class Constraint_Duration
     Inherits Constraint_Count
 
+    Private mMinMaxValueUnits As String
+
+    Private mAllowableUnits As String = "PYMWDTHMS"
+    ' Y = year, M = month, W = week, D = day, T as separator then H = hour
+    ' M = minute S = second
+
     Public Overrides Function Copy() As Constraint
-        Dim d As New Constraint_Duration
-
-        d.mHasMaxVal = Me.mHasMaxVal
-        d.mHasMinVal = Me.mHasMinVal
-        d.mMaxVal = Me.mMaxVal
-        d.mMinVal = Me.mMinVal
-        d.mAllowableUnits = Me.mAllowableUnits
-        d.mMinMaxValueUnits = Me.MinMaxValueUnits
-        d.mAssumedValue = Me.mAssumedValue
-        d.HasAssumedValue = Me.HasAssumedValue
-
-        Return d
+        Dim result As New Constraint_Duration
+        result.mMinVal = mMinVal
+        result.mMaxVal = mMaxVal
+        result.mAssumedValue = mAssumedValue
+        result.mHasMinVal = mHasMinVal
+        result.mHasMaxVal = mHasMaxVal
+        result.mIncludeMin = mIncludeMin
+        result.mIncludeMax = mIncludeMax
+        result.mHasList = mHasList
+        result.mList = mList
+        result.HasAssumedValue = HasAssumedValue
+        result.mAllowableUnits = mAllowableUnits
+        result.mMinMaxValueUnits = MinMaxValueUnits
+        Return result
     End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Duration
         End Get
     End Property
 
-    Private mMinMaxValueUnits As String
     Public Property MinMaxValueUnits() As String
         Get
             Return mMinMaxValueUnits
@@ -47,9 +55,6 @@ Public Class Constraint_Duration
         End Set
     End Property
 
-    Private mAllowableUnits As String = "PYMWDTHMS"
-    ' Y = year, M = month, W = week, D = day, T as separator then H = hour
-    ' M = minute S = second
     Public Property AllowableUnits() As String
         Get
             Return mAllowableUnits
@@ -62,21 +67,26 @@ Public Class Constraint_Duration
     Public Function LimitsAsPattern() As String
         Dim result As String = ""
 
-        If Me.HasMinimum Then
-            If Not Me.IncludeMinimum Then
+        If HasMinimum Then
+            If Not IncludeMinimum Then
                 result &= ">"
             End If
-            result &= "P" & Me.mMinMaxValueUnits & mMinVal.ToString()
+
+            result &= "P" & mMinMaxValueUnits & mMinVal.ToString()
         End If
-        If Me.HasMaximum Then
-            If Me.HasMinimum Then
+
+        If HasMaximum Then
+            If HasMinimum Then
                 result &= ".."
             End If
-            If Not Me.IncludeMaximum Then
+
+            If Not IncludeMaximum Then
                 result &= "<"
             End If
-            result &= "P" & Me.mMinMaxValueUnits
+
+            result &= "P" & mMinMaxValueUnits
         End If
+
         Return result
     End Function
 

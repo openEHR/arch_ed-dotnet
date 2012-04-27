@@ -32,14 +32,13 @@ Public Class Constraint_Text
 
     Public Overrides Function Copy() As Constraint
         Dim result As New Constraint_Text
-        result.boolFixed = boolFixed
-        result.cpTerms.Phrase = cpTerms.Phrase
         result.mConstraintCode = mConstraintCode
-        result.mTextConstraintType = mTextConstraintType
         result.boolFixed = boolFixed
-        result.HasAssumedValue = HasAssumedValue
+        result.mTextConstraintType = mTextConstraintType
+        result.cpTerms.Phrase = cpTerms.Phrase
         result.mAssumed_value = mAssumed_value
         result.mTerminologyId = mTerminologyId
+        result.HasAssumedValue = HasAssumedValue
         Return result
     End Function
 

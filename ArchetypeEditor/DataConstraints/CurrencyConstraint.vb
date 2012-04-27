@@ -17,6 +17,18 @@ Option Strict On
 Public Class Constraint_Currency
     Inherits Constraint_Real
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Currency
+        result.mHasMaxVal = mHasMaxVal
+        result.mHasMinVal = mHasMinVal
+        result.mMaxVal = mMaxVal
+        result.mMinVal = mMinVal
+        result.mAssumedValue = mAssumedValue
+        result.HasAssumedValue = HasAssumedValue
+        result.mPrecision = mPrecision
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Currency
@@ -57,18 +69,6 @@ Public Class Constraint_Currency
             End Try
         End Set
     End Property
-
-    Public Overrides Function Copy() As Constraint
-        Dim c As New Constraint_Currency
-        c.mHasMaxVal = mHasMaxVal
-        c.mHasMinVal = mHasMinVal
-        c.mMaxVal = mMaxVal
-        c.mMinVal = mMinVal
-        c.mAssumedValue = mAssumedValue
-        c.HasAssumedValue = HasAssumedValue
-        c.mPrecision = Precision
-        Return c
-    End Function
 
     Sub New()
         'default to 2 decimal places

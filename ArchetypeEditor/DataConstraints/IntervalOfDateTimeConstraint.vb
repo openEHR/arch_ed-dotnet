@@ -20,6 +20,13 @@ Class Constraint_Interval_DateTime
     Private mDateTimeUpper As New Constraint_DateTime
     Private mDateTimeLower As New Constraint_DateTime
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_Interval_DateTime
+        result.mDateTimeLower = CType(mDateTimeLower.Copy, Constraint_DateTime)
+        result.mDateTimeUpper = CType(mDateTimeUpper.Copy, Constraint_DateTime)
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.Interval_DateTime

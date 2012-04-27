@@ -20,11 +20,19 @@ Public Class Constraint_MultiMedia
     Private cpTerms As New CodePhrase
     Private boolFixed As Boolean
 
+    Public Overrides Function Copy() As Constraint
+        Dim result As New Constraint_MultiMedia
+        result.cpTerms = cpTerms
+        result.boolFixed = boolFixed
+        Return result
+    End Function
+
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
             Return ConstraintKind.MultiMedia
         End Get
     End Property
+
     Public Property AllowableValues() As CodePhrase
         Get
             Return cpTerms
@@ -33,6 +41,7 @@ Public Class Constraint_MultiMedia
             cpTerms = Value
         End Set
     End Property
+
     Public Property Fixed() As Boolean
         Get
             Return boolFixed
@@ -41,9 +50,11 @@ Public Class Constraint_MultiMedia
             boolFixed = Value
         End Set
     End Property
+
     Sub New()
         cpTerms.TerminologyID = "openEHR"
     End Sub
+
 End Class
 
 '

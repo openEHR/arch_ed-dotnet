@@ -15,16 +15,17 @@ Option Strict On
 
 Class Constraint_Boolean
     Inherits Constraint
+
     Private boolAssumed As Boolean
     Private boolHasAssumed As Boolean
     Private iBoolVal As Integer ' 0 = TrueOrFalse (default), 1 = True, 2 = False
 
     Public Overrides Function Copy() As Constraint
-        Dim b As New Constraint_Boolean
-        b.boolAssumed = boolAssumed
-        b.boolHasAssumed = boolHasAssumed
-        b.iBoolVal = iBoolVal
-        Return b
+        Dim result As New Constraint_Boolean
+        result.boolAssumed = boolAssumed
+        result.boolHasAssumed = boolHasAssumed
+        result.iBoolVal = iBoolVal
+        Return result
     End Function
 
     Public Overrides ReadOnly Property Kind() As ConstraintKind
@@ -32,6 +33,7 @@ Class Constraint_Boolean
             Return ConstraintKind.Boolean
         End Get
     End Property
+
     Public Property AssumedValue() As Boolean
         Get
             If boolHasAssumed Then
@@ -49,19 +51,20 @@ Class Constraint_Boolean
                 If iBoolVal = 0 Or iBoolVal = 2 Then
                     boolAssumed = Value
                     boolHasAssumed = True
-
                     Return
                 End If
             End If
             Debug.Assert(False)
         End Set
     End Property
+
     Public Property TrueAllowed() As Boolean
         Get
             Return iBoolVal = 1
         End Get
         Set(ByVal Value As Boolean)
             iBoolVal = 1
+
             ' cannot have an assumed value of false
             If boolHasAssumed Then
                 If Not boolAssumed Then
@@ -70,12 +73,14 @@ Class Constraint_Boolean
             End If
         End Set
     End Property
+
     Public Property FalseAllowed() As Boolean
         Get
             Return iBoolVal = 2
         End Get
         Set(ByVal Value As Boolean)
             iBoolVal = 2
+
             ' cannot have an assumed value of true
             If boolHasAssumed Then
                 If boolAssumed Then
@@ -84,15 +89,16 @@ Class Constraint_Boolean
             End If
         End Set
     End Property
+
     Public Property TrueFalseAllowed() As Boolean
         Get
             Return iBoolVal = 0
         End Get
         Set(ByVal Value As Boolean)
             iBoolVal = 0
-
         End Set
     End Property
+
     Public Property hasAssumedValue() As Boolean
         Get
             Return boolHasAssumed
