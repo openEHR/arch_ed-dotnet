@@ -98,10 +98,9 @@ Public MustInherit Class ArchetypeNodeAbstract
     Public Overridable Sub Specialise()
         Item = Item.Copy
         mText = "! - " & mText
-        Dim term As RmTerm = mFileManager.OntologyManager.SpecialiseTerm(mText, mDescription, NodeId)
-        mItem.NodeId = term.Code
+        mItem.NodeId = mFileManager.OntologyManager.SpecialiseTerm(mText, mDescription, NodeId).Code
 
-        If mItem.HasNameConstraint And mItem.NameConstraint.TypeOfTextConstraint = TextConstrainType.Terminology Then
+        If mItem.HasNameConstraint AndAlso mItem.NameConstraint.TypeOfTextConstraint = TextConstrainType.Terminology Then
             mItem.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseNameConstraint(mItem.NameConstraint.ConstraintCode).Code
         End If
 
