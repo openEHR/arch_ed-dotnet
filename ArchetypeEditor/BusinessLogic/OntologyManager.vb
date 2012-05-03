@@ -449,52 +449,48 @@ Public Class OntologyManager
         SetRmTermText(mLastTerm)
     End Sub
 
-    Private Sub Update(ByVal aTerm As RmTerm, ByVal aTable As DataTable)
-        Dim d_row As DataRow
+    Private Sub Update(ByVal term As RmTerm, ByVal table As DataTable)
+        Dim row As DataRow
 
-        If ReplaceTranslations(aTerm) Then
+        If ReplaceTranslations(term) Then
             Dim priorSetting As Boolean = mDoUpdateOntology
-            Dim selected_rows As DataRow()
-            selected_rows = aTable.Select("Code ='" & aTerm.Code & "'")
 
-            For Each d_row In selected_rows
-                If CStr(d_row(0)) = mLanguageCode Then
-                    d_row.BeginEdit()
+            For Each row In table.Select("Code ='" & term.Code & "'")
+                If TryCast(row(0), String) = mLanguageCode Then
+                    row.BeginEdit()
 
-                    If CStr(d_row(2)) <> aTerm.Text Then
-                        d_row(2) = aTerm.Text
+                    If TryCast(row(2), String) <> term.Text Then
+                        row(2) = term.Text
                     End If
 
-                    If CStr(d_row(3)) <> aTerm.Description Then
-                        d_row(3) = aTerm.Description
+                    If TryCast(row(3), String) <> term.Description Then
+                        row(3) = term.Description
                     End If
 
-                    If Not aTerm.IsConstraint Then
-                        If Not (IsDBNull(d_row(4)) And String.IsNullOrEmpty(aTerm.Comment)) Then
-                            If CStr(d_row(4)) <> aTerm.Comment Then
-                                d_row(4) = aTerm.Comment
-                            End If
+                    If Not term.IsConstraint Then
+                        If TryCast(row(4), String) <> term.Comment Then
+                            row(4) = term.Comment
                         End If
 
-                        d_row(5) = aTerm
+                        row(5) = term
                     End If
 
-                    d_row.EndEdit()
+                    row.EndEdit()
                 Else
                     mDoUpdateOntology = False 'as ontology changes are handled there
-                    d_row.BeginEdit()
-                    d_row(2) = "*" & aTerm.Text & "(" & mLanguageCode & ")"
-                    d_row(3) = "*" & aTerm.Description & "(" & mLanguageCode & ")"
+                    row.BeginEdit()
+                    row(2) = "*" & term.Text & "(" & mLanguageCode & ")"
+                    row(3) = "*" & term.Description & "(" & mLanguageCode & ")"
 
-                    If Not aTerm.IsConstraint Then
-                        If Not (IsDBNull(d_row(4)) And String.IsNullOrEmpty(aTerm.Comment)) Then
-                            d_row(4) = "*" & aTerm.Comment & "(" & mLanguageCode & ")"
+                    If Not term.IsConstraint Then
+                        If Not IsDBNull(row(4)) Or term.Comment <> "" Then
+                            row(4) = "*" & term.Comment & "(" & mLanguageCode & ")"
                         End If
 
-                        d_row(5) = aTerm
+                        row(5) = term
                     End If
 
-                    d_row.EndEdit()
+                    row.EndEdit()
                     mDoUpdateOntology = priorSetting
                 End If
             Next
@@ -502,26 +498,26 @@ Public Class OntologyManager
             'Need to update ontology here
             Dim keys(1) As Object
             keys(0) = mLanguageCode
-            keys(1) = aTerm.Code
-            d_row = aTable.Rows.Find(keys)
+            keys(1) = term.Code
+            row = table.Rows.Find(keys)
 
-            If Not d_row Is Nothing Then
-                d_row.BeginEdit()
+            If Not row Is Nothing Then
+                row.BeginEdit()
 
-                If IsDBNull(d_row(2)) OrElse CStr(d_row(2)) <> aTerm.Text Then
-                    d_row(2) = aTerm.Text
+                If TryCast(row(2), String) <> term.Text Then
+                    row(2) = term.Text
                 End If
 
-                If IsDBNull(d_row(3)) OrElse CStr(d_row(3)) <> aTerm.Description Then
-                    d_row(3) = aTerm.Description
+                If TryCast(row(3), String) <> term.Description Then
+                    row(3) = term.Description
                 End If
 
-                If IsDBNull(d_row(4)) OrElse CStr(d_row(4)) <> aTerm.Comment Then
-                    d_row(4) = aTerm.Comment
+                If TryCast(row(4), String) <> term.Comment Then
+                    row(4) = term.Comment
                 End If
 
-                d_row(5) = aTerm
-                d_row.EndEdit()
+                row(5) = term
+                row.EndEdit()
             End If
         End If
 
