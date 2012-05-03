@@ -3,20 +3,20 @@
 '	component:   "openEHR Archetype Project"
 '	description: "$DESCRIPTION"
 '	keywords:    "Archetype, Clinical, Editor"
-'	author:      "Sam Heard"
+'	author:      "Peter Gummer"
 '	support:     http://www.openehr.org/issues/browse/AEPR
-'	copyright:   "Copyright (c) 2004,2005,2006 Ocean Informatics Pty Ltd"
+'	copyright:   "Copyright (c) 2012 Ocean Informatics Pty Ltd"
 '	license:     "See notice at bottom of class"
 '
-'	file:        "$URL$"
-'	revision:    "$LastChangedRevision$"
-'	last_change: "$LastChangedDate$"
+'	file:        "$URL: http://www.openehr.org/svn/knowledge_tools_dotnet/TRUNK/ArchetypeEditor/DataConstraintsView/ParsableViewControl.vb $"
+'	revision:    "$LastChangedRevision: 676 $"
+'	last_change: "$LastChangedDate: 2010-11-11 11:55:24 +1100 (Thu, 11 Nov 2010) $"
 '
 '
 
 Option Strict On
 
-Public Class MultiMediaViewControl : Inherits ElementViewControl
+Public Class ParsableViewControl : Inherits ElementViewControl
 
     Private WithEvents mComboBox As ComboBox
 
@@ -29,7 +29,7 @@ Public Class MultiMediaViewControl : Inherits ElementViewControl
     End Sub
 
     Protected Overrides Sub InitialiseComponent(ByVal constraint As Constraint, ByVal location As System.Drawing.Point)
-        Dim multimediaConstraint As Constraint_MultiMedia = CType(constraint, Constraint_MultiMedia)
+        Dim parsableConstraint As Constraint_Parsable = CType(constraint, Constraint_Parsable)
         Dim length As Integer = 150
 
         mComboBox = New ComboBox
@@ -37,14 +37,12 @@ Public Class MultiMediaViewControl : Inherits ElementViewControl
         mComboBox.Height = 25
         mComboBox.Width = 150
 
-        For Each s As String In multimediaConstraint.AllowableValues.Codes
+        For Each s As String In parsableConstraint.AllowableFormalisms
             If length < s.Length And s.Length <= 250 Then
                 length = s.Length
             End If
 
-            Dim term As New RmTerm(s)
-            term.Text = Filemanager.GetOpenEhrTerm(Integer.Parse(s), "?")
-            mComboBox.Items.Add(term)
+            mComboBox.Items.Add(s)
         Next
 
         mComboBox.Width = length
@@ -52,13 +50,8 @@ Public Class MultiMediaViewControl : Inherits ElementViewControl
     End Sub
 
     Private Sub ComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mComboBox.SelectedIndexChanged
-        If mComboBox.SelectedValue Is Nothing Then
-            Tag = New CodePhrase(CType(mComboBox.Items(0), RmTerm)).Phrase
-            Value = mComboBox.Text
-        Else
-            Tag = New CodePhrase(CType(mComboBox.SelectedValue, RmTerm)).Phrase
-            Value = CType(mComboBox.SelectedValue, RmTerm).Text
-        End If
+        Tag = mComboBox.Text
+        Value = mComboBox.Text
     End Sub
 
     Private mValue As String

@@ -277,6 +277,9 @@ Public Class ArchetypeView
             Case ConstraintKind.MultiMedia
                 Return New MultiMediaViewControl(anElement, a_filemanager)
 
+            Case ConstraintKind.Parsable
+                Return New ParsableViewControl(anElement, a_filemanager)
+
             Case Else
                 Return New DatatypeViewControl(anElement, a_filemanager)
         End Select
@@ -329,6 +332,9 @@ Public Class ArchetypeView
 
             Case ConstraintKind.MultiMedia
                 Return New MultiMediaViewControl(aConstraint, a_filemanager)
+
+            Case ConstraintKind.Parsable
+                Return New ParsableViewControl(aConstraint, a_filemanager)
 
             Case Else
                 Return New DatatypeViewControl(aConstraint, a_filemanager)
