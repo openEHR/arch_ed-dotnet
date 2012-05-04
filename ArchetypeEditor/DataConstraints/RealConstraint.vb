@@ -69,7 +69,7 @@ Public Class Constraint_Real
     Public Overrides Property AssumedValue() As Object
         Get
             If HasAssumedValue Then
-                Return CSng(mAssumedValue)
+                Return mAssumedValue
             Else
                 Return Nothing
             End If

@@ -41,25 +41,15 @@ Class Constraint_Proportion
 
     Public Overrides ReadOnly Property Kind() As ConstraintKind
         Get
-            'Return "Proportion"
             Return ConstraintKind.Proportion
         End Get
     End Property
 
     Public Overrides Property AssumedValue() As Object
         Get
-            'fixme
-            If HasAssumedValue Then
-                'ToDo: fix this
-                Debug.Assert(False)
-                Return Nothing
-            Else
-                Return Nothing
-            End If
+            Return Nothing
         End Get
         Set(ByVal Value As Object)
-            'fixme
-            HasAssumedValue = True
         End Set
     End Property
 
@@ -103,97 +93,67 @@ Class Constraint_Proportion
         End Set
     End Property
 
-    Friend Sub SetAllTypesDisallowed()
-        For i As Integer = 0 To 4
-            mAllowedTypes(i) = False
-        Next
-    End Sub
+    Private Function ValidValue(ByVal value As Constraint_Count) As Boolean
+        If IsIntegral Then
+            If (Convert.ToInt32(value.MaximumValue) - value.MaximumValue <> 0) Or (Convert.ToInt32(value.MinimumValue) - value.MinimumValue <> 0) Then
+                Return False
+            End If
+        End If
 
-    Friend Sub SetAllTypesAllowed()
+        Return True
+    End Function
+
+    Public ReadOnly Property HasDenominator() As Boolean
+        Get
+            Return mAllowedTypes(0) Or mAllowedTypes(3) Or mAllowedTypes(4)
+        End Get
+    End Property
+
+    Public ReadOnly Property IsPercent() As Boolean
+        Get
+            Return Not mAllowedTypes(0) And Not mAllowedTypes(1) And mAllowedTypes(2) And Not mAllowedTypes(3) And Not mAllowedTypes(4)
+        End Get
+    End Property
+
+    Public ReadOnly Property IsUnitary() As Boolean
+        Get
+            Return Not mAllowedTypes(0) And mAllowedTypes(1) And Not mAllowedTypes(2) And Not mAllowedTypes(3) And Not mAllowedTypes(4)
+        End Get
+    End Property
+
+    Public Function IsTypeAllowed(ByVal proportionType As Integer) As Boolean
+        Return proportionType >= mAllowedTypes.GetLowerBound(0) AndAlso proportionType <= mAllowedTypes.GetUpperBound(0) AndAlso mAllowedTypes(proportionType)
+    End Function
+
+    Public ReadOnly Property AllowsAllTypes() As Boolean
+        Get
+            Return mAllowedTypes(0) And mAllowedTypes(1) And mAllowedTypes(2) And mAllowedTypes(3) And mAllowedTypes(4)
+        End Get
+    End Property
+
+    Public Sub AllowAllTypes()
         For i As Integer = 0 To 4
             mAllowedTypes(i) = True
         Next
     End Sub
 
-    Private Function ValidValue(ByVal value As Constraint_Count) As Boolean
-        If IsIntegral Then
-            If (Convert.ToInt32(value.MaximumValue) - value.MaximumValue <> 0) Or (Convert.ToInt32(value.MinimumValue) - value.MinimumValue <> 0) Then
-                Debug.Assert(False)
-                'ToDo: throw error
-                Return False
-            End If
-        End If
-        Return True
-    End Function
+    Public Sub DisallowAllTypes()
+        For i As Integer = 0 To 4
+            mAllowedTypes(i) = False
+        Next
+    End Sub
 
-    Public Property IsPercent() As Boolean
-        Get
-            Return (mAllowedTypes(0) = False And mAllowedTypes(1) = False And mAllowedTypes(2) = True And mAllowedTypes(3) = False And mAllowedTypes(4) = False)
-        End Get
-        Set(ByVal value As Boolean)
-            If value Then
-                mDenominator.MinimumRealValue = 100
-                mDenominator.MaximumRealValue = 100
-            Else
-                mDenominator.HasMinimum = True
-                mDenominator.MinimumRealValue = 0
-                mDenominator.IncludeMinimum = False
-                mDenominator.HasMaximum = False
-            End If
-        End Set
-    End Property
-
-    Public Property IsUnitary() As Boolean
-        Get
-            Return (mAllowedTypes(0) = False And mAllowedTypes(1) = True And mAllowedTypes(2) = False And mAllowedTypes(3) = False And mAllowedTypes(4) = False)
-        End Get
-        Set(ByVal value As Boolean)
-            If value Then
-                mDenominator.MinimumRealValue = 1
-                mDenominator.MaximumRealValue = 1
-            Else
-                mDenominator.HasMinimum = True
-                mDenominator.MinimumRealValue = 0
-                mDenominator.IncludeMinimum = False
-                mDenominator.HasMaximum = False
-            End If
-        End Set
-    End Property
-
-    'Returns true if any type is allowed
-    Public Property AllowAllTypes() As Boolean
-        Get
-            Return (mAllowedTypes(0) And mAllowedTypes(1) And mAllowedTypes(2) And mAllowedTypes(3) And mAllowedTypes(4))
-        End Get
-        Set(ByVal value As Boolean)
-            If value Then
-                For i As Integer = 0 To 4
-                    mAllowedTypes(i) = True
-                Next
-            End If
-        End Set
-    End Property
-
-    Public Sub AllowType(ByVal ProportionType As Integer)
-        If ProportionType >= mAllowedTypes.GetLowerBound(0) And ProportionType <= mAllowedTypes.GetUpperBound(0) Then
-            mAllowedTypes(ProportionType) = True
+    Public Sub AllowType(ByVal proportionType As Integer)
+        If proportionType >= mAllowedTypes.GetLowerBound(0) And proportionType <= mAllowedTypes.GetUpperBound(0) Then
+            mAllowedTypes(proportionType) = True
         Else
             Debug.Assert(False)
         End If
     End Sub
 
-    Public Function IsTypeAllowed(ByVal proportionType As Integer) As Boolean
+    Public Sub DisallowType(ByVal proportionType As Integer)
         If proportionType >= mAllowedTypes.GetLowerBound(0) And proportionType <= mAllowedTypes.GetUpperBound(0) Then
-            Return mAllowedTypes(proportionType)
-        Else
-            Debug.Assert(False)
-            Return False
-        End If
-    End Function
-
-    Public Sub DisAllowType(ByVal ProportionType As Integer)
-        If ProportionType >= mAllowedTypes.GetLowerBound(0) And ProportionType <= mAllowedTypes.GetUpperBound(0) Then
-            mAllowedTypes(ProportionType) = False
+            mAllowedTypes(proportionType) = False
         Else
             Debug.Assert(False)
         End If

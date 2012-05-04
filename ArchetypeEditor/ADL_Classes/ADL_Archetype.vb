@@ -583,71 +583,72 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Private Sub BuildProportion(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal cp As Constraint_Proportion)
-            Dim RatioObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim fraction_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim proportion As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim fraction As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
-            RatioObject = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String(ReferenceModel.RM_DataTypeName(cp.Kind)))
+            proportion = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String(ReferenceModel.RM_DataTypeName(cp.Kind)))
 
             If cp.Numerator.HasMaximum Or cp.Numerator.HasMinimum Or cp.Numerator.Precision <> -1 Then
-                fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, Eiffel.String("numerator"))
-                BuildReal(fraction_attribute, cp.Numerator)
+                fraction = mAomFactory.create_c_attribute_single(proportion, Eiffel.String("numerator"))
+                BuildReal(fraction, cp.Numerator)
             End If
 
-            If cp.Denominator.HasMaximum Or cp.Denominator.HasMinimum Then
-                fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, Eiffel.String("denominator"))
-                BuildReal(fraction_attribute, cp.Denominator)
+            If cp.HasDenominator And (cp.Denominator.HasMaximum Or cp.Denominator.HasMinimum) Then
+                fraction = mAomFactory.create_c_attribute_single(proportion, Eiffel.String("denominator"))
+                BuildReal(fraction, cp.Denominator)
             End If
 
             If cp.IsIntegralSet Then
                 'There is a restriction on whether the instance will be integral or not
-                fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, Eiffel.String("is_integral"))
+                fraction = mAomFactory.create_c_attribute_single(proportion, Eiffel.String("is_integral"))
+
                 If cp.IsIntegral Then
-                    mAomFactory.create_c_primitive_object(fraction_attribute, mAomFactory.create_c_boolean_make_true())
+                    mAomFactory.create_c_primitive_object(fraction, mAomFactory.create_c_boolean_make_true())
                 Else
-                    mAomFactory.create_c_primitive_object(fraction_attribute, mAomFactory.create_c_boolean_make_false())
+                    mAomFactory.create_c_primitive_object(fraction, mAomFactory.create_c_boolean_make_false())
                 End If
             End If
 
-            If Not cp.AllowAllTypes Then
+            If Not cp.AllowsAllTypes Then
                 Dim integerConstraint As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
-                Dim integerList As EiffelList.LIST_INTEGER_32
-
-                fraction_attribute = mAomFactory.create_c_attribute_single(RatioObject, Eiffel.String("type"))
-
-                integerList = mAomFactory.create_integer_list()
+                fraction = mAomFactory.create_c_attribute_single(proportion, Eiffel.String("type"))
+                Dim allowedTypes As EiffelList.LIST_INTEGER_32 = mAomFactory.create_integer_list()
 
                 For i As Integer = 0 To 4
                     If cp.IsTypeAllowed(i) Then
-                        integerList.extend(i)
+                        allowedTypes.extend(i)
                     End If
                 Next
 
-                integerConstraint = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_INTEGER.make_list(integerList)
-                mAomFactory.create_c_primitive_object(fraction_attribute, integerConstraint)
+                integerConstraint = openehr.openehr.am.archetype.constraint_model.primitive.Create.C_INTEGER.make_list(allowedTypes)
+                mAomFactory.create_c_primitive_object(fraction, integerConstraint)
             End If
         End Sub
 
         Protected Sub BuildReal(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal ct As Constraint_Real)
-            Dim magnitude As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+            Dim magnitude As openehr.openehr.am.archetype.constraint_model.primitive.C_REAL = Nothing
 
             If ct.HasMaximum And ct.HasMinimum Then
-                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_bounded(ct.MinimumRealValue, ct.MaximumRealValue, ct.IncludeMinimum, ct.IncludeMaximum))
+                magnitude = mAomFactory.create_c_real_make_bounded(ct.MinimumRealValue, ct.MaximumRealValue, ct.IncludeMinimum, ct.IncludeMaximum)
             ElseIf ct.HasMaximum Then
-                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_lower_unbounded(ct.MaximumRealValue, ct.IncludeMaximum))
+                magnitude = mAomFactory.create_c_real_make_lower_unbounded(ct.MaximumRealValue, ct.IncludeMaximum)
             ElseIf ct.HasMinimum Then
-                magnitude = mAomFactory.create_c_primitive_object(value_attribute, mAomFactory.create_c_real_make_upper_unbounded(ct.MinimumRealValue, ct.IncludeMinimum))
-            Else
-                Debug.Assert(False)
-                Return
+                magnitude = mAomFactory.create_c_real_make_upper_unbounded(ct.MinimumRealValue, ct.IncludeMinimum)
             End If
 
-            If ct.Precision > -1 Then
-                'Need set precision on C_REAL
-                'magnitude.set_precision(ct.Precision)
-            End If
+            If Not magnitude Is Nothing Then
+                mAomFactory.create_c_primitive_object(value_attribute, magnitude)
 
-            If ct.HasAssumedValue Then
-                magnitude.set_assumed_value(CType(ct.AssumedValue, Single))
+                If ct.Precision > -1 Then
+                    'Need set precision on C_REAL
+                    'magnitude.set_precision(ct.Precision)
+                End If
+
+                If ct.HasAssumedValue Then
+                    Dim ref As EiffelKernel.dotnet.REAL_32_REF = EiffelKernel.dotnet.Create.REAL_32_REF.default_create
+                    ref.set_item(CType(ct.AssumedValue, Single))
+                    magnitude.set_assumed_value(ref)
+                End If
             End If
         End Sub
 
@@ -667,9 +668,9 @@ Namespace ArchetypeEditor.ADL_Classes
                 mAomFactory.create_c_primitive_object(mAomFactory.create_c_attribute_single(cadlCount, Eiffel.String("magnitude")), magnitude)
 
                 If ct.HasAssumedValue Then
-                    Dim int_ref As EiffelKernel.INTEGER_32_REF = EiffelKernel.Create.INTEGER_32_REF.default_create
-                    int_ref.set_item(CType(ct.AssumedValue, Integer))
-                    magnitude.set_assumed_value(int_ref)
+                    Dim ref As EiffelKernel.INTEGER_32_REF = EiffelKernel.Create.INTEGER_32_REF.default_create
+                    ref.set_item(CType(ct.AssumedValue, Integer))
+                    magnitude.set_assumed_value(ref)
                 End If
             End If
         End Sub

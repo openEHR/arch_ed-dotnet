@@ -516,27 +516,27 @@ Namespace ArchetypeEditor.ADL_Classes
                         Select Case attribute.rm_attribute_name.to_cil.ToLowerInvariant
                             Case "value", "magnitude"
                                 Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                                Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
+                                Dim magnitude As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
 
-                                If Not cadlC.interval.lower_unbounded Then
+                                If Not magnitude.interval.lower_unbounded Then
                                     result.HasMinimum = True
-                                    result.MinimumValue = cadlC.interval.lower
-                                    result.IncludeMinimum = cadlC.interval.lower_included
+                                    result.MinimumValue = magnitude.interval.lower
+                                    result.IncludeMinimum = magnitude.interval.lower_included
                                 Else
                                     result.HasMinimum = False
                                 End If
 
-                                If Not cadlC.interval.upper_unbounded Then
+                                If Not magnitude.interval.upper_unbounded Then
                                     result.HasMaximum = True
-                                    result.MaximumValue = cadlC.interval.upper
-                                    result.IncludeMaximum = cadlC.interval.upper_included
+                                    result.MaximumValue = magnitude.interval.upper
+                                    result.IncludeMaximum = magnitude.interval.upper_included
                                 Else
                                     result.HasMaximum = False
                                 End If
 
-                                If cadlC.has_assumed_value Then
+                                If magnitude.has_assumed_value Then
                                     result.HasAssumedValue = True
-                                    result.AssumedValue = CType(cadlC.assumed_value, EiffelKernel.INTEGER_32).item
+                                    result.AssumedValue = CType(magnitude.assumed_value, EiffelKernel.INTEGER_32).item
                                 End If
                             Case Else
                                 Debug.Assert(False)
@@ -549,32 +549,31 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Private Function ProcessReal(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_Real
-            Dim ct As New Constraint_Real
+            Dim result As New Constraint_Real
+            Dim magnitude As openehr.openehr.am.archetype.constraint_model.primitive.C_REAL = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_REAL)
 
-            Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_REAL
-
-            cadlC = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_REAL)
-
-            If Not cadlC.interval.lower_unbounded Then
-                ct.HasMinimum = True
-                ct.MinimumRealValue = cadlC.interval.lower
-                ct.IncludeMinimum = cadlC.interval.lower_included
+            If Not magnitude.interval.lower_unbounded Then
+                result.HasMinimum = True
+                result.MinimumRealValue = magnitude.interval.lower
+                result.IncludeMinimum = magnitude.interval.lower_included
             Else
-                ct.HasMinimum = False
-            End If
-            If Not cadlC.interval.upper_unbounded Then
-                ct.HasMaximum = True
-                ct.MaximumRealValue = cadlC.interval.upper
-                ct.IncludeMaximum = cadlC.interval.upper_included
-            Else
-                ct.HasMaximum = False
-            End If
-            If cadlC.has_assumed_value Then
-                ct.HasAssumedValue = True
-                ct.AssumedValue = cadlC.assumed_value
+                result.HasMinimum = False
             End If
 
-            Return ct
+            If Not magnitude.interval.upper_unbounded Then
+                result.HasMaximum = True
+                result.MaximumRealValue = magnitude.interval.upper
+                result.IncludeMaximum = magnitude.interval.upper_included
+            Else
+                result.HasMaximum = False
+            End If
+
+            If magnitude.has_assumed_value Then
+                result.HasAssumedValue = True
+                result.AssumedValue = CType(magnitude.assumed_value, EiffelKernel.dotnet.REAL_32_REF).item
+            End If
+
+            Return result
         End Function
 
         'OBSOLETE
@@ -621,7 +620,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             Case "type"
                                 Dim cadlOS As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
                                 Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER = CType(cadlOS.item, openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER)
-                                result.SetAllTypesDisallowed()
+                                result.DisallowAllTypes()
 
                                 If Not cadlC.list Is Nothing Then
                                     For ii As Integer = 1 To cadlC.list.count
@@ -631,7 +630,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                     'is an interval as only one allowed
                                     result.AllowType(cadlC.interval.upper)
                                 Else
-                                    result.SetAllTypesAllowed()
+                                    result.AllowAllTypes()
                                 End If
                             Case Else
                                 Debug.Assert(False)

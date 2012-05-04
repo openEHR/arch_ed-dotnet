@@ -86,21 +86,8 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
         End Try
     End Sub
 
-    Protected Overrides Sub MaxValueChanged()
-        Dim maximum As Decimal
-        Decimal.TryParse(numMaxValue.Text, maximum)
-        Constraint.MaximumRealValue = Convert.ToSingle(maximum, System.Globalization.NumberFormatInfo.InvariantInfo)
-    End Sub
-
-    Protected Overrides Sub MinValueChanged()
-        Dim minimum As Decimal
-        Decimal.TryParse(numMinValue.Text, minimum)
-        Constraint.MinimumRealValue = Convert.ToSingle(minimum, System.Globalization.NumberFormatInfo.InvariantInfo)
-    End Sub
-
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         Reset()
-
         MyBase.SetControlValues(IsState)
 
         'SetMaxAndMin()
@@ -108,9 +95,7 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
         'If IsState Then
         '    SetStateValues()
         'End If
-
     End Sub
-
 
     'Private Sub SetMaxAndMin()
     '    If Constraint.HasMaximum Then

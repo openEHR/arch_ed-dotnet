@@ -855,115 +855,85 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildProportion(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal cp As Constraint_Proportion)
-            Dim RatioObject As XMLParser.C_COMPLEX_OBJECT
-            Dim fraction_attribute As XMLParser.C_ATTRIBUTE
+            Dim proportion As XMLParser.C_COMPLEX_OBJECT
+            Dim fraction As XMLParser.C_ATTRIBUTE
 
-            'RatioObject = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(cp.Type))
-            RatioObject = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(cp.Kind), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            proportion = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(cp.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If cp.Numerator.HasMaximum Or cp.Numerator.HasMinimum Then
-                'fraction_attribute = mAomFactory.MakeSingleAttribute(RatioObject, "numerator")
-                fraction_attribute = mAomFactory.MakeSingleAttribute(RatioObject, "numerator", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                BuildReal(fraction_attribute, cp.Numerator)
+                fraction = mAomFactory.MakeSingleAttribute(proportion, "numerator", value_attribute.existence)
+                BuildReal(fraction, cp.Numerator)
             End If
-            If cp.Denominator.HasMaximum Or cp.Denominator.HasMinimum Then
-                'fraction_attribute = mAomFactory.MakeSingleAttribute(RatioObject, "denominator")
-                fraction_attribute = mAomFactory.MakeSingleAttribute(RatioObject, "denominator", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                BuildReal(fraction_attribute, cp.Denominator)
+
+            If cp.HasDenominator And (cp.Denominator.HasMaximum Or cp.Denominator.HasMinimum) Then
+                fraction = mAomFactory.MakeSingleAttribute(proportion, "denominator", value_attribute.existence)
+                BuildReal(fraction, cp.Denominator)
             End If
 
             If cp.IsIntegralSet Then
                 'There is a restriction on whether the instance will be integral or not
-                'fraction_attribute = mAomFactory.MakeSingleAttribute(RatioObject, "is_integral")
-                fraction_attribute = mAomFactory.MakeSingleAttribute(RatioObject, "is_integral", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                fraction = mAomFactory.MakeSingleAttribute(proportion, "is_integral", value_attribute.existence)
                 Dim boolConstraint As New Constraint_Boolean
+
                 If cp.IsIntegral Then
                     boolConstraint.TrueAllowed = True
                 Else
                     boolConstraint.FalseAllowed = True
                 End If
-                BuildBoolean(fraction_attribute, boolConstraint)
+
+                BuildBoolean(fraction, boolConstraint)
             End If
 
-            If Not cp.AllowAllTypes Then
+            If Not cp.AllowsAllTypes Then
                 Dim integerConstraint As New XMLParser.C_INTEGER
-
-                'fraction_attribute = mAomFactory.MakeSingleAttribute(RatioObject, "type")
-                fraction_attribute = mAomFactory.MakeSingleAttribute(RatioObject, "type", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
+                fraction = mAomFactory.MakeSingleAttribute(proportion, "type", value_attribute.existence)
                 Dim allowedTypes As New ArrayList
 
                 For i As Integer = 0 To 4
                     If cp.IsTypeAllowed(i) Then
-                        'allowedTypes.Add(i.ToString) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                         allowedTypes.Add(i)
                     End If
                 Next
 
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1 exception raised string to integer
-                'integerConstraint.list = allowedTypes.ToArray(GetType(String))
                 integerConstraint.list = allowedTypes.ToArray(GetType(Int32))
-
-                mAomFactory.MakePrimitiveObject(fraction_attribute, integerConstraint)
+                mAomFactory.MakePrimitiveObject(fraction, integerConstraint)
             End If
-
         End Sub
 
         Private Sub BuildReal(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal ct As Constraint_Count)
-            Dim magnitude As XMLParser.C_PRIMITIVE_OBJECT
-            Dim cReal As New XMLParser.C_REAL
+            Dim magnitude As New XMLParser.C_REAL
 
             If ct.HasMaximum Or ct.HasMinimum Then
-                cReal.range = New XMLParser.IntervalOfReal
+                magnitude.range = New XMLParser.IntervalOfReal
             End If
 
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             If ct.HasMinimum Then
-                cReal.range.lower = ct.MinimumValue
-                cReal.range.lowerSpecified = True
-                cReal.range.lower_included = ct.IncludeMinimum
-                cReal.range.lower_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1 
+                magnitude.range.lower = ct.MinimumValue
+                magnitude.range.lowerSpecified = True
+                magnitude.range.lower_included = ct.IncludeMinimum
+                magnitude.range.lower_includedSpecified = True
             Else
-                cReal.range.lower_unbounded = True
+                magnitude.range.lower_unbounded = True
             End If
 
             If ct.HasMaximum Then
-                cReal.range.upper = ct.MaximumValue
-                cReal.range.upperSpecified = True
-                cReal.range.upper_included = ct.IncludeMaximum
-                cReal.range.upper_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                magnitude.range.upper = ct.MaximumValue
+                magnitude.range.upperSpecified = True
+                magnitude.range.upper_included = ct.IncludeMaximum
+                magnitude.range.upper_includedSpecified = True
             Else
-                cReal.range.upper_unbounded = True
+                magnitude.range.upper_unbounded = True
             End If
-
-            'If ct.HasMaximum And ct.HasMinimum Then
-            '    cReal.range.minimum = ct.MinimumValue
-            '    cReal.range.minimumSpecified = True
-            '    cReal.range.maximum = ct.MaximumValue
-            '    cReal.range.maximumSpecified = True
-            '    cReal.range.includes_minimum = ct.IncludeMinimum
-            '    cReal.range.includes_maximum = ct.IncludeMaximum
-            'ElseIf ct.HasMaximum Then
-            '    cReal.range.maximum = ct.MaximumValue
-            '    cReal.range.maximumSpecified = True
-            '    cReal.range.includes_maximum = ct.IncludeMaximum
-            'ElseIf ct.HasMinimum Then
-            '    cReal.range.minimum = ct.MinimumValue
-            '    cReal.range.minimumSpecified = True
-            '    cReal.range.includes_minimum = ct.IncludeMinimum
-            'End If
 
             If ct.HasAssumedValue Then
-                cReal.assumed_valueSpecified = True
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                cReal.assumed_value = CSng(ct.AssumedValue)
-                'cReal.assumed_value = ct.AssumedValue.ToString()
+                magnitude.assumed_valueSpecified = True
+                magnitude.assumed_value = CSng(ct.AssumedValue)
             End If
 
-            magnitude = mAomFactory.MakePrimitiveObject(value_attribute, cReal)
+            mAomFactory.MakePrimitiveObject(value_attribute, magnitude)
 
             ' Validate Interval PostConditions
-            With cReal.range
+            With magnitude.range
                 Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
                 Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
                 Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
@@ -972,15 +942,6 @@ Namespace ArchetypeEditor.XML_Classes
                 Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
             End With
         End Sub
-
-        Private Function StringToIntegerConverter(ByVal input As String) As Integer
-            Dim result As Integer
-            If Integer.TryParse(input, result) Then
-                Return result
-            Else
-                Throw New Exception(String.Format("{0} is not a valid integer", input))
-            End If
-        End Function
 
         Private Sub BuildCount(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal ct As Constraint_Count)
             Dim an_attribute As XMLParser.C_ATTRIBUTE
@@ -2695,8 +2656,8 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
         End Sub
-        Protected Sub BuildParticipation(ByVal attribute As XmlParser.C_ATTRIBUTE, ByVal participation As RmParticipation)
-            Dim cObject As XmlParser.C_COMPLEX_OBJECT
+        Protected Sub BuildParticipation(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal participation As RmParticipation)
+            Dim cObject As XMLParser.C_COMPLEX_OBJECT
             cObject = mAomFactory.MakeComplexObject(attribute, "PARTICIPATION", "", MakeOccurrences(participation.Occurrences))
             If participation.MandatoryDateTime Then
                 Dim timeAttrib As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(cObject, "time", New RmExistence(1).XmlExistence)

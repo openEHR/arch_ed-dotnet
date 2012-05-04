@@ -16,7 +16,7 @@
 
 Option Strict On
 
-Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintControl
+Public Class RatioConstraintControl : Inherits ConstraintControl
     Friend WithEvents PanelMultipleControl As System.Windows.Forms.Panel
     Friend WithEvents TabConstraints As System.Windows.Forms.TabControl
     Private mIsState As Boolean
@@ -37,14 +37,14 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
 
     End Sub
 
-    Public Sub New(ByVal a_file_manager As FileManagerLocal)
+    Public Sub New(ByVal aFileManager As FileManagerLocal)
         MyBase.New()
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-        mFileManager = a_file_manager
+        mFileManager = aFileManager
 
         If Main.Instance.DefaultLanguageCode <> "en" Then
             lblRatio.Text = Filemanager.GetOpenEhrTerm(507, lblRatio.Text)
@@ -142,8 +142,6 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
     End Sub
 #End Region
 
-
-
     Private Shadows ReadOnly Property Constraint() As Constraint_Proportion
         Get
             Debug.Assert(TypeOf MyBase.Constraint Is Constraint_Proportion)
@@ -152,159 +150,128 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
         End Get
     End Property
 
-    Private Function SetFactor(ByVal c As Constraint, ByVal name As String) As CountConstraintControl
-        Dim tp As TabPage
-        Dim cc As CountConstraintControl
-
-        tp = New TabPage(name)
-
-        cc = CType(ConstraintControl.CreateConstraintControl( _
-            c.Kind, mFileManager), CountConstraintControl)
-        tp.Controls.Add(cc)
-        cc.ShowConstraint(mIsState, c)
-        cc.Dock = DockStyle.Fill
-        Me.TabConstraints.TabPages.Add(tp)
-        Return cc
+    Private Function NewCountContraintControl(ByVal c As Constraint, ByVal name As String) As CountConstraintControl
+        Dim result As CountConstraintControl = CType(ConstraintControl.CreateConstraintControl(c.Kind, mFileManager), CountConstraintControl)
+        Dim tp As New TabPage(name)
+        tp.Controls.Add(result)
+        result.ShowConstraint(mIsState, c)
+        result.Dock = DockStyle.Fill
+        TabConstraints.TabPages.Add(tp)
+        Return result
     End Function
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-        mIsState = IsState
-        ' set constraint values on control
+    Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
+        mIsState = isState
+        mNumeratorControl = NewCountContraintControl(Constraint.Numerator, Filemanager.GetOpenEhrTerm(450, "Numerator"))
+        mDenominatorControl = NewCountContraintControl(Constraint.Denominator, Filemanager.GetOpenEhrTerm(449, "Denominator"))
+        mNumeratorControl.IsIntegral = Constraint.IsIntegral
+        mDenominatorControl.IsIntegral = Constraint.IsIntegral
 
-        mNumeratorControl = SetFactor(Me.Constraint.Numerator, Filemanager.GetOpenEhrTerm(450, "Numerator"))
-        mDenominatorControl = SetFactor(Me.Constraint.Denominator, Filemanager.GetOpenEhrTerm(449, "Denominator"))
-        mNumeratorControl.IsIntegral = Me.Constraint.IsIntegral
-        mDenominatorControl.IsIntegral = Me.Constraint.IsIntegral
-        If Me.Constraint.IsIntegralSet Then
-            cbIsIntegral.Checked = Me.Constraint.IsIntegral
+        If Constraint.IsIntegralSet Then
+            cbIsIntegral.Checked = Constraint.IsIntegral
         Else
             cbIsIntegral.CheckState = CheckState.Indeterminate
         End If
-        'SRH 18th Sep - hide check decimal places in proportion as precision is not available
-        mNumeratorControl.chkDecimalPlaces.Visible = False
-        mDenominatorControl.chkDecimalPlaces.Visible = False
 
-        If Me.Constraint.AllowAllTypes Then
-            Me.cbAllowAll.Checked = True
+        ' Hide check decimal places in proportion as precision is not available
+        mNumeratorControl.chkDecimalPlaces.Hide()
+        mDenominatorControl.chkDecimalPlaces.Hide()
+
+        If Constraint.AllowsAllTypes Then
+            cbAllowAll.Checked = True
         Else
-            Me.cbAllowAll.Checked = False
+            cbAllowAll.Checked = False
+
             For i As Integer = 0 To 4
-                Me.chkListType.SetItemChecked(i, Me.Constraint.IsTypeAllowed(i))
+                chkListType.SetItemChecked(i, Constraint.IsTypeAllowed(i))
             Next
         End If
-        'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
+
         SetControlTabs(-1, CheckState.Indeterminate)
-
-
     End Sub
 
-    Private WriteOnly Property SetAsPercent() As Boolean
-        Set(ByVal value As Boolean)
-            If value Then
-                'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
-                If Me.TabConstraints.TabPages.Count > 1 Then
-                    mDenominator = Me.TabConstraints.TabPages.Item(1)
-                    Me.TabConstraints.TabPages.RemoveAt(1)
-                End If
-                Select Case Me.Constraint.Denominator.Kind
-                    Case ConstraintKind.Real
-                        CType(Me.Constraint.Denominator, Constraint_Real).MinimumRealValue = 100
-                        CType(Me.Constraint.Denominator, Constraint_Real).MaximumRealValue = 100
-                End Select
+    Private Sub cbIsIntegral_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbIsIntegral.CheckStateChanged
+        If Not IsLoading Then
+            Constraint.IsIntegral = cbIsIntegral.Checked
+
+            If cbIsIntegral.CheckState = CheckState.Indeterminate Then
+                Constraint.IsIntegralSet = False
             Else
-                Me.TabConstraints.TabPages.Add(mDenominator)
+                Constraint.IsIntegralSet = True
             End If
 
-            If MyBase.IsLoading Then Return
-
+            ' set the decimals to zero or two on the numvals
+            mNumeratorControl.IsIntegral = Constraint.IsIntegral
+            mDenominatorControl.IsIntegral = Constraint.IsIntegral
             mFileManager.FileEdited = True
-        End Set
-    End Property
-
-    Private Sub cbIsIntegral_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbIsIntegral.CheckStateChanged
-
-        If MyBase.IsLoading Then Return
-
-        Me.Constraint.IsIntegral = cbIsIntegral.Checked
-
-        If cbIsIntegral.CheckState = CheckState.Indeterminate Then
-            Me.Constraint.IsIntegralSet = False
-        Else
-            Me.Constraint.IsIntegralSet = True
         End If
-
-        ' set the decimals to zero or two on the numvals
-        mNumeratorControl.IsIntegral = Me.Constraint.IsIntegral
-        mDenominatorControl.IsIntegral = Me.Constraint.IsIntegral
-
-        mFileManager.FileEdited = True
     End Sub
 
     Private Sub cbAllowAll_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbAllowAll.CheckedChanged
-        Me.chkListType.Visible = Not cbAllowAll.Checked
+        chkListType.Visible = Not cbAllowAll.Checked
 
-        If MyBase.IsLoading Then Return
+        If Not IsLoading Then
+            If cbAllowAll.Checked Then
+                Constraint.AllowAllTypes()
+            End If
 
-        Me.Constraint.AllowAllTypes = cbAllowAll.Checked
+            'Set all the choices to true
+            IsLoading = True
 
-        'Set all the choices to true
-        MyBase.IsLoading = True
-        For i As Integer = 0 To 4
-            Me.chkListType.SetItemChecked(i, True)
-        Next
-        MyBase.IsLoading = False
+            For i As Integer = 0 To 4
+                chkListType.SetItemChecked(i, True)
+            Next
 
-        If Me.TabConstraints.TabPages.Count = 1 Then
-            Me.TabConstraints.TabPages.Insert(1, mDenominator)
+            IsLoading = False
+
+            If TabConstraints.TabPages.Count = 1 Then
+                TabConstraints.TabPages.Insert(1, mDenominator)
+            End If
+
+            mFileManager.FileEdited = True
         End If
-
-        mFileManager.FileEdited = True
-
     End Sub
 
-    'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
-
-    ''' <summary>
-    ''' Returns -1 if there is more than one item and the index of the item if there is only one
-    ''' </summary>
-    ''' <returns>-1 if more than one item and the index if there is only one</returns>
+    ' Return -1 if there is more than one item and the index of the item if there is only one
     Private Function IsSingleOption(ByVal itemIndex As Integer) As Integer
+        Dim result As Integer = -1
+
         If itemIndex > -1 Then
             If chkListType.CheckedIndices.Count = 2 Then
                 For Each i As Integer In chkListType.CheckedIndices
                     If i <> itemIndex Then
-                        Return i
+                        result = i
                     End If
                 Next
             End If
-        Else
-            If chkListType.CheckedIndices.Count = 1 Then
-                Return chkListType.CheckedIndices.Item(0)
-            End If
+        ElseIf chkListType.CheckedIndices.Count = 1 Then
+            result = chkListType.CheckedIndices.Item(0)
         End If
-        Return -1
+
+        Return result
     End Function
 
-    'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
     Private Function UnitaryOrPercent(ByVal itemIndex As Integer) As Boolean
+        Dim result As Boolean = False
+
         If (itemIndex = -1 And chkListType.CheckedIndices.Count = 2) Or chkListType.CheckedIndices.Count = 3 Then
+            result = True
+
             For Each index As Integer In chkListType.CheckedIndices
                 If index <> itemIndex Then
                     If index < 1 Or index > 2 Then
-                        Return False
+                        result = False
                     End If
                 End If
             Next
-            Return True
         End If
 
-        Return False
+        Return result
     End Function
 
-    'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
     Private Sub SetControlTabs(ByVal itemIndex As Integer, ByVal checkedStatus As CheckState)
-
         Dim i As Integer
+
         If checkedStatus = CheckState.Unchecked Then
             i = IsSingleOption(itemIndex)
         Else
@@ -312,48 +279,54 @@ Public Class RatioConstraintControl : Inherits ConstraintControl 'AnyConstraintC
         End If
 
         If i = 2 And checkedStatus <> CheckState.Checked Then
-            SetAsPercent = True
-        ElseIf (i = 1 And checkedStatus <> CheckState.Checked) Or _
+            SetAsPercent()
+        ElseIf UnitaryOrPercent(itemIndex) Or _
+            (i = 1 And checkedStatus <> CheckState.Checked) Or _
             (i = 1 And itemIndex = 2 And checkedStatus = CheckState.Checked) Or _
             (i = 2 And itemIndex = 1 And checkedStatus = CheckState.Checked) Then
-            If Me.TabConstraints.TabPages.Count = 2 Then
-                mDenominator = Me.TabConstraints.TabPages(1)
-                Me.TabConstraints.TabPages.RemoveAt(1)
-            End If
-        ElseIf UnitaryOrPercent(itemIndex) Then
-            If Me.TabConstraints.TabPages.Count = 2 Then
-                mDenominator = Me.TabConstraints.TabPages(1)
-                Me.TabConstraints.TabPages.RemoveAt(1)
+            If TabConstraints.TabPages.Count = 2 Then
+                mDenominator = TabConstraints.TabPages(1)
+                TabConstraints.TabPages.RemoveAt(1)
             End If
         Else
-            If Me.TabConstraints.TabPages.Count = 1 Then
-                Me.TabConstraints.TabPages.Insert(1, mDenominator)
+            If TabConstraints.TabPages.Count = 1 Then
+                TabConstraints.TabPages.Insert(1, mDenominator)
             End If
         End If
     End Sub
 
+    Private Sub SetAsPercent()
+        If TabConstraints.TabPages.Count > 1 Then
+            mDenominator = TabConstraints.TabPages.Item(1)
+            TabConstraints.TabPages.RemoveAt(1)
+        End If
+
+        Select Case Constraint.Denominator.Kind
+            Case ConstraintKind.Real
+                Constraint.Denominator.MinimumRealValue = 100
+                Constraint.Denominator.MaximumRealValue = 100
+        End Select
+
+        If Not IsLoading Then
+            mFileManager.FileEdited = True
+        End If
+    End Sub
+
     Private Sub chkListType_ItemCheck(ByVal sender As Object, ByVal e As System.Windows.Forms.ItemCheckEventArgs) Handles chkListType.ItemCheck
+        If Not IsLoading Then
+            If chkListType.CheckedIndices.Count = 1 AndAlso e.NewValue = CheckState.Unchecked Then
+                e.NewValue = CheckState.Checked
+            Else
+                If e.NewValue = CheckState.Checked Then
+                    Constraint.AllowType(e.Index)
+                Else
+                    Constraint.DisallowType(e.Index)
+                End If
 
-        
-
-        If MyBase.IsLoading Then Return
-
-        If chkListType.CheckedIndices.Count = 1 AndAlso e.NewValue = CheckState.Unchecked Then
-            e.NewValue = CheckState.Checked
-            Return
+                SetControlTabs(e.Index, e.NewValue)
+                mFileManager.FileEdited = True
+            End If
         End If
-
-        If e.NewValue = CheckState.Checked Then
-            Me.Constraint.AllowType(e.Index)
-        Else
-            Me.Constraint.DisAllowType(e.Index)
-        End If
-
-        'SRH: 19 Mar 2009 - EDT 525 - clear denominator if percent or unitary
-        'check for a unique state
-        SetControlTabs(e.Index, e.NewValue)
-
-        mFileManager.FileEdited = True
     End Sub
 
 End Class

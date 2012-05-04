@@ -327,7 +327,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             if (o.has_assumed_value())
             {
                 result.assumed_valueSpecified = true;
-                result.assumed_value = (o.assumed_value() as EiffelKernel.BOOLEAN_REF).item();
+                result.assumed_value = ((EiffelKernel.BOOLEAN_REF)o.assumed_value()).item();
             }
 
             return result;
@@ -370,7 +370,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             if (o.has_assumed_value())
             {
                 result.assumed_valueSpecified = true;
-                result.assumed_value = (o.assumed_value() as EiffelKernel.INTEGER_32_REF).item();
+                result.assumed_value = ((EiffelKernel.INTEGER_32_REF)o.assumed_value()).item();
             }
 
             if (o.list() != null && o.list().count() > 0)
@@ -394,7 +394,7 @@ namespace XMLParser.OpenEhr.V1.Its.Xml.AM
             if (o.has_assumed_value())
             {
                 result.assumed_valueSpecified = true;
-                result.assumed_value = (o.assumed_value() as EiffelKernel.dotnet.Impl.REAL_32_REF).item();
+                result.assumed_value = ((EiffelKernel.dotnet.REAL_32_REF)o.assumed_value()).item();
             }
 
             if (o.list() != null && o.list().count() > 0)

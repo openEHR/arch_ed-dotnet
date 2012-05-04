@@ -633,7 +633,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                             cadlOS = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
                             cadlC = CType(cadlOS.item, XMLParser.C_INTEGER)
-                            proportion.SetAllTypesDisallowed()
+                            proportion.DisallowAllTypes()
                             For ii As Integer = 0 To cadlC.list.Length - 1
                                 proportion.AllowType(CInt(cadlC.list(ii)))
                             Next
