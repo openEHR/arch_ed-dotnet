@@ -344,11 +344,13 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Return result
     End Function
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
+    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
         ' set constraint values on control
+        lblAssumedValue.Show()
+        NumericAssumed.Show()
 
-        If IsState Then
-            SetStateValues()
+        If Constraint.HasAssumedValue Then
+            NumericAssumed.Value = CType(Constraint.AssumedValue, Decimal)
         End If
 
         IsIntegral = Not (TypeOf Constraint Is Constraint_Real Or TypeOf Constraint Is Constraint_Currency)
@@ -361,15 +363,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         End If
 
         LabelQuantity.Text = AE_Constants.Instance.Count
-    End Sub
-
-    Protected Sub SetStateValues()
-        lblAssumedValue.Show()
-        NumericAssumed.Show()
-
-        If Constraint.HasAssumedValue Then
-            NumericAssumed.Value = CType(Constraint.AssumedValue, Decimal)
-        End If
     End Sub
 
     Private Sub SetMaxAndMin()
