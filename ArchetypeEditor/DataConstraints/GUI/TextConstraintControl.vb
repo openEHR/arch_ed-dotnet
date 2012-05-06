@@ -499,11 +499,8 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     ' Set constraint values on control
     Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
-        If isState Then
-            DefaultItemButton.Visible = True
-            txtAssumedValue.Visible = True
-        End If
-
+        DefaultItemButton.Visible = True
+        txtAssumedValue.Visible = True
         SetControlValuesForTypeOfTextConstraint()
     End Sub
 

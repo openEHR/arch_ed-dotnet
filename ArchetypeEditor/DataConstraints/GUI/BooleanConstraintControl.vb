@@ -18,9 +18,6 @@ Option Strict On
 
 Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstraintControl
 
-    Private mIsState As Boolean
-
-
 #Region " Windows Form Designer generated code "
     Public Sub New()
         MyBase.New()
@@ -153,127 +150,112 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
     End Property
 
     Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
+        cbFalse.Text = AE_Constants.Instance.False_
+        cbTrue.Text = AE_Constants.Instance.True_
 
-        mIsState = IsState
-
-        ' set constraint values on control
-
-        Me.cbFalse.Text = AE_Constants.Instance.False_
-        Me.cbTrue.Text = AE_Constants.Instance.True_
-
-        If Me.Constraint.TrueFalseAllowed Then
-            Me.cbTrue.Checked = True
-            Me.cbFalse.Checked = True
-        ElseIf Me.Constraint.TrueAllowed Then
-            Me.cbTrue.Checked = True
-            Me.cbFalse.Checked = False
-        ElseIf Me.Constraint.FalseAllowed Then
-            Me.cbFalse.Checked = True
-            Me.cbTrue.Checked = False
+        If Constraint.TrueFalseAllowed Then
+            cbTrue.Checked = True
+            cbFalse.Checked = True
+        ElseIf Constraint.TrueAllowed Then
+            cbTrue.Checked = True
+            cbFalse.Checked = False
+        ElseIf Constraint.FalseAllowed Then
+            cbFalse.Checked = True
+            cbTrue.Checked = False
         End If
 
-        If IsState Then
-            Me.gbAssummedValue.Visible = True
-            If Me.Constraint.hasAssumedValue Then
-                If Me.Constraint.AssumedValue Then
-                    Me.listBoolean.SelectedIndex = Me.listBoolean.Items.IndexOf(AE_Constants.Instance.True_)
-                Else
-                    Me.listBoolean.SelectedIndex = Me.listBoolean.Items.IndexOf(AE_Constants.Instance.False_)
-                End If
+        gbAssummedValue.Visible = True
+
+        If Constraint.hasAssumedValue Then
+            If Constraint.AssumedValue Then
+                listBoolean.SelectedIndex = listBoolean.Items.IndexOf(AE_Constants.Instance.True_)
+            Else
+                listBoolean.SelectedIndex = listBoolean.Items.IndexOf(AE_Constants.Instance.False_)
             End If
-        Else
-            Me.gbAssummedValue.Visible = False
         End If
-
     End Sub
 
     Private Sub listBoolean_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listBoolean.SelectedIndexChanged
-        If Not MyBase.IsLoading AndAlso mIsState = True AndAlso Me.listBoolean.SelectedIndex <> -1 Then
+        If Not MyBase.IsLoading AndAlso listBoolean.SelectedIndex <> -1 Then
+            Constraint.hasAssumedValue = True
 
-            Me.Constraint.hasAssumedValue = True
-
-            Select Case Me.listBoolean.SelectedItem.ToString
+            Select Case listBoolean.SelectedItem.ToString
                 Case AE_Constants.Instance.True_
-                    ' true
-                    Me.Constraint.AssumedValue = True
-
+                    Constraint.AssumedValue = True
                 Case AE_Constants.Instance.False_ ' false
-                    Me.Constraint.AssumedValue = False
-
+                    Constraint.AssumedValue = False
                 Case Else
                     Debug.Assert(False)
             End Select
 
             mFileManager.FileEdited = True
-
         End If
     End Sub
 
     Private Sub cbTrue_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbTrue.CheckedChanged
         If Not MyBase.IsLoading Then
-            If Me.cbTrue.Checked Then
-                If Me.Constraint.FalseAllowed Then
-                    Me.Constraint.TrueFalseAllowed = True
+            If cbTrue.Checked Then
+                If Constraint.FalseAllowed Then
+                    Constraint.TrueFalseAllowed = True
                 Else
-                    Me.Constraint.TrueAllowed = True
+                    Constraint.TrueAllowed = True
                 End If
             Else
-                If Not Me.cbFalse.Checked Then
+                If Not cbFalse.Checked Then
                     ' something has to be allowed
-                    Me.cbFalse.Checked = True
+                    cbFalse.Checked = True
                 Else
-                    Me.Constraint.FalseAllowed = True
+                    Constraint.FalseAllowed = True
                 End If
             End If
 
             mFileManager.FileEdited = True
         End If
 
-        If Me.listBoolean.Items.Contains(AE_Constants.Instance.True_) Then
-            If Not Me.cbTrue.Checked Then
-                Me.listBoolean.Items.Remove(AE_Constants.Instance.True_)
+        If listBoolean.Items.Contains(AE_Constants.Instance.True_) Then
+            If Not cbTrue.Checked Then
+                listBoolean.Items.Remove(AE_Constants.Instance.True_)
             End If
         Else
-            If Me.cbTrue.Checked Then
-                Me.listBoolean.Items.Add(AE_Constants.Instance.True_)
+            If cbTrue.Checked Then
+                listBoolean.Items.Add(AE_Constants.Instance.True_)
             End If
         End If
-
     End Sub
 
     Private Sub cbFalse_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbFalse.CheckedChanged
         If Not MyBase.IsLoading Then
-            If Me.cbFalse.Checked Then
-                If Me.Constraint.TrueAllowed Then
-                    Me.Constraint.TrueFalseAllowed = True
+            If cbFalse.Checked Then
+                If Constraint.TrueAllowed Then
+                    Constraint.TrueFalseAllowed = True
                 Else
-                    Me.Constraint.FalseAllowed = True
+                    Constraint.FalseAllowed = True
                 End If
             Else
-                If Not Me.cbTrue.Checked Then
+                If Not cbTrue.Checked Then
                     ' something has to be allowed
-                    Me.cbTrue.Checked = True
+                    cbTrue.Checked = True
                 Else
-                    Me.Constraint.TrueAllowed = True
+                    Constraint.TrueAllowed = True
                 End If
             End If
 
             mFileManager.FileEdited = True
         End If
 
-        If Me.listBoolean.Items.Contains(AE_Constants.Instance.False_) Then
-            If Not Me.cbFalse.Checked Then
-                Me.listBoolean.Items.Remove(AE_Constants.Instance.False_)
+        If listBoolean.Items.Contains(AE_Constants.Instance.False_) Then
+            If Not cbFalse.Checked Then
+                listBoolean.Items.Remove(AE_Constants.Instance.False_)
             End If
         Else
-            If Me.cbFalse.Checked Then
-                Me.listBoolean.Items.Add(AE_Constants.Instance.False_)
+            If cbFalse.Checked Then
+                listBoolean.Items.Add(AE_Constants.Instance.False_)
             End If
         End If
     End Sub
 
     Private Sub BooleanConstraintControl_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        Me.LabelTrueFalse.Text = AE_Constants.Instance.Boolean_
+        LabelTrueFalse.Text = AE_Constants.Instance.Boolean_
     End Sub
 End Class
 
