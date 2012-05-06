@@ -49,16 +49,13 @@ Public Class QuantityViewControl : Inherits ElementViewControl
 
         mNumeric.Height = 25
         mNumeric.Width = 75
-        If quantityConstraint.IsNull _
-                OrElse quantityConstraint.PhysicalPropertyAsString = "?" Then
 
+        If quantityConstraint.IsNull OrElse quantityConstraint.PhysicalPropertyAsString = "?" Then
             mNumeric.Location = New Point(aLocation.X, aLocation.Y)
-
-            Me.Controls.Add(mNumeric)
-
+            Controls.Add(mNumeric)
         Else
             mNumeric.Location = New Point(aLocation.X + 5, aLocation.Y + 5)
-            Me.Controls.Add(mNumeric)
+            Controls.Add(mNumeric)
 
             If quantityConstraint.has_units Then
                 If quantityConstraint.Units.Count = 1 Then
@@ -110,26 +107,25 @@ Public Class QuantityViewControl : Inherits ElementViewControl
                     End If
 
                     If Not d_rows Is Nothing AndAlso d_rows.Length > 0 Then
-
                         Dim id As String = d_rows(0)(0)
 
                         For Each d_row In Main.Instance.UnitsTable.Select("property_id = " & id)
                             combo.Items.Add(CStr(d_row(1)))
                         Next
                     End If
-                    Me.Controls.Add(combo)
+                    Controls.Add(combo)
                 Catch
                     Debug.Assert(False, "Error selecting quantity property")
                     combo.Items.Add("#Error#")
-                    Me.Controls.Add(combo)
+                    Controls.Add(combo)
                 End Try
             End If
         End If
     End Sub
 
     Private Sub SetMaxMin(ByVal aControl As NumericUpDown, ByVal u As Constraint_QuantityUnit)
-        If u.HasMaximum Then
-            aControl.Maximum = u.MaximumRealValue
+        If u.HasMaximum AndAlso u.MaximumRealValue < 1000000 Then
+            aControl.Maximum = CDec(u.MaximumRealValue)
 
             If u.MaximumRealValue <= 10 Then
                 If u.Kind = ConstraintKind.QuantityUnit Then
@@ -145,12 +141,16 @@ Public Class QuantityViewControl : Inherits ElementViewControl
         Else
             aControl.Maximum = 1000000
         End If
-        If u.HasMinimum Then
-            aControl.Minimum = u.MinimumRealValue
+
+        If u.HasMinimum AndAlso u.MinimumRealValue > -1000000 Then
+            aControl.Minimum = CDec(u.MinimumRealValue)
+        Else
+            aControl.Minimum = -1000000
         End If
     End Sub
 
     Private mValue As Decimal
+
     Public Overrides Property Value() As Object
         Get
             Return mValue
@@ -161,9 +161,7 @@ Public Class QuantityViewControl : Inherits ElementViewControl
         End Set
     End Property
 
-    Private Sub Numeric_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) _
-            Handles mNumeric.ValueChanged
-
+    Private Sub Numeric_ValueChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles mNumeric.ValueChanged
         Tag = mNumeric.Value
         Value = mNumeric.Value
     End Sub

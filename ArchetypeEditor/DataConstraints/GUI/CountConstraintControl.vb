@@ -370,11 +370,21 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             chkList.Checked = True
             txtList.Text = Constraint.ValueList
         Else
+            Dim realConstraint As Constraint_Real = TryCast(Constraint, Constraint_Real)
+
             If Constraint.HasMaximum Then
                 cbMaxValue.Checked = True
 
-                If TypeOf Constraint Is Constraint_Real Then
-                    numMaxValue.Value = CDec(CType(Constraint, Constraint_Real).MaximumRealValue)
+                If Not realConstraint Is Nothing Then
+                    Dim max As Single = realConstraint.MaximumRealValue
+
+                    If max > numMaxValue.Maximum Then
+                        numMaxValue.Value = numMaxValue.Maximum
+                    ElseIf max < numMaxValue.Minimum Then
+                        numMaxValue.Value = numMaxValue.Minimum
+                    Else
+                        numMaxValue.Value = CDec(max)
+                    End If
                 Else
                     numMaxValue.Value = Constraint.MaximumValue
                 End If
@@ -391,8 +401,16 @@ Public Class CountConstraintControl : Inherits ConstraintControl
             If Constraint.HasMinimum Then
                 cbMinValue.Checked = True
 
-                If TypeOf Constraint Is Constraint_Real Then
-                    numMinValue.Value = CDec(CType(Constraint, Constraint_Real).MinimumRealValue)
+                If Not realConstraint Is Nothing Then
+                    Dim min As Single = realConstraint.MinimumRealValue
+
+                    If min > numMinValue.Maximum Then
+                        numMinValue.Value = numMinValue.Maximum
+                    ElseIf min < numMinValue.Minimum Then
+                        numMinValue.Value = numMinValue.Minimum
+                    Else
+                        numMinValue.Value = CDec(min)
+                    End If
                 Else
                     numMinValue.Value = Constraint.MinimumValue
                 End If
@@ -411,8 +429,8 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Overridable Sub CoordinateMinAndMaxValues()
-        Dim minimum As Decimal = Decimal.MinValue
-        Dim maximum As Decimal = Decimal.MaxValue
+        Dim minimum As Decimal = numMinValue.Minimum
+        Dim maximum As Decimal = numMinValue.Maximum
         Dim realConstraint As Constraint_Real = TryCast(Constraint, Constraint_Real)
 
         If realConstraint IsNot Nothing Then
