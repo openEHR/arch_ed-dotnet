@@ -21,8 +21,8 @@ Public Class OntologyManager
     Private mLanguagesTable As DataTable
     Private mFileManager As FileManagerLocal
 
-    Private WithEvents mTermDefinitionsTable As DataTable
-    Private WithEvents mConstraintDefinitionsTable As DataTable
+    Private WithEvents mTermDefinitionTable As DataTable
+    Private WithEvents mConstraintDefinitionTable As DataTable
     Private WithEvents mConstraintBindingsTable As DataTable
     Private WithEvents mTermBindingsTable As DataTable
     Private WithEvents mTermBindingCriteriaTable As DataTable
@@ -107,7 +107,7 @@ Public Class OntologyManager
 
     Public ReadOnly Property TermDefinitionTable() As DataTable
         Get
-            Return mTermDefinitionsTable
+            Return mTermDefinitionTable
         End Get
     End Property
 
@@ -123,7 +123,7 @@ Public Class OntologyManager
 
     Public ReadOnly Property ConstraintDefinitionTable() As DataTable
         Get
-            Return mConstraintDefinitionsTable
+            Return mConstraintDefinitionTable
         End Get
     End Property
 
@@ -237,9 +237,9 @@ Public Class OntologyManager
             result = New RmTerm(code)
 
             If result.IsConstraint Then
-                row = mConstraintDefinitionsTable.Rows.Find(keys)
+                row = mConstraintDefinitionTable.Rows.Find(keys)
             Else
-                row = mTermDefinitionsTable.Rows.Find(keys)
+                row = mTermDefinitionTable.Rows.Find(keys)
             End If
 
             If Not row Is Nothing Then
@@ -317,21 +317,21 @@ Public Class OntologyManager
 
         If term.IsConstraint Then
             For Each row As DataRow In mLanguagesTable.Rows
-                Dim newRow As DataRow = mConstraintDefinitionsTable.NewRow
+                Dim newRow As DataRow = mConstraintDefinitionTable.NewRow
                 newRow(0) = row(0)
                 newRow(1) = term.Code
                 newRow(2) = term.Text
                 newRow(3) = term.Description
 
                 Try
-                    mConstraintDefinitionsTable.Rows.Add(newRow)
+                    mConstraintDefinitionTable.Rows.Add(newRow)
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             Next
         Else
             For Each row As DataRow In mLanguagesTable.Rows
-                Dim newRow As DataRow = mTermDefinitionsTable.NewRow
+                Dim newRow As DataRow = mTermDefinitionTable.NewRow
                 newRow(0) = row(0)
                 newRow(1) = term.Code
                 newRow(2) = term.Text
@@ -339,7 +339,7 @@ Public Class OntologyManager
                 newRow(5) = term
 
                 Try
-                    mTermDefinitionsTable.Rows.Add(newRow)
+                    mTermDefinitionTable.Rows.Add(newRow)
                 Catch ex As Exception
                     MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
@@ -356,12 +356,12 @@ Public Class OntologyManager
         mLastTerm.Text = Text
         mLastTerm.Description = Description
         mOntology.AddConstraint(mLastTerm)
-        Dim d_row As DataRow = mConstraintDefinitionsTable.NewRow
-        d_row(0) = mLanguageCode
-        d_row(1) = mLastTerm.Code
-        d_row(2) = Text
-        d_row(3) = Description
-        mConstraintDefinitionsTable.Rows.Add(d_row)
+        Dim row As DataRow = mConstraintDefinitionTable.NewRow
+        row(0) = mLanguageCode
+        row(1) = mLastTerm.Code
+        row(2) = Text
+        row(3) = Description
+        mConstraintDefinitionTable.Rows.Add(row)
         Return mLastTerm
     End Function
 
@@ -386,9 +386,9 @@ Public Class OntologyManager
 
     Public Sub SetRmTermText(ByVal term As RmTerm)
         If term.IsConstraint Then
-            Update(term, mConstraintDefinitionsTable)
+            Update(term, mConstraintDefinitionTable)
         Else
-            Update(term, mTermDefinitionsTable)
+            Update(term, mTermDefinitionTable)
         End If
 
         mLastTerm = term
@@ -960,17 +960,17 @@ Public Class OntologyManager
         mLanguagesTable = MakeLanguagesTable()
         mLanguageDS.Tables.Add(mLanguagesTable)
 
-        mTermDefinitionsTable = MakeDefinitionsTable("TermDefinitions")
-        mLanguageDS.Tables.Add(mTermDefinitionsTable)
+        mTermDefinitionTable = MakeDefinitionsTable("TermDefinitions")
+        mLanguageDS.Tables.Add(mTermDefinitionTable)
 
-        mConstraintDefinitionsTable = MakeDefinitionsTable("ConstraintDefinitions")
-        mLanguageDS.Tables.Add(mConstraintDefinitionsTable)
+        mConstraintDefinitionTable = MakeDefinitionsTable("ConstraintDefinitions")
+        mLanguageDS.Tables.Add(mConstraintDefinitionTable)
 
         ' add relations
-        new_relation = New DataRelation("LanguageTerms", mLanguagesTable.Columns(0), mTermDefinitionsTable.Columns(0))
+        new_relation = New DataRelation("LanguageTerms", mLanguagesTable.Columns(0), mTermDefinitionTable.Columns(0))
         mLanguageDS.Relations.Add(new_relation)
 
-        new_relation = New DataRelation("LanguageConstraints", mLanguagesTable.Columns(0), mConstraintDefinitionsTable.Columns(0))
+        new_relation = New DataRelation("LanguageConstraints", mLanguagesTable.Columns(0), mConstraintDefinitionTable.Columns(0))
         mLanguageDS.Relations.Add(new_relation)
 
         mTerminologiesTable = MakeTerminologiesTable()
@@ -995,7 +995,7 @@ Public Class OntologyManager
         mConstraintBindingsTable = MakeConstraintBindingsTable()
         mLanguageDS.Tables.Add(mConstraintBindingsTable)
 
-        new_relation = New DataRelation("TerminologiesConstraintBindings", mConstraintDefinitionsTable.Columns(1), mConstraintBindingsTable.Columns(1), False)
+        new_relation = New DataRelation("TerminologiesConstraintBindings", mConstraintDefinitionTable.Columns(1), mConstraintBindingsTable.Columns(1), False)
         mLanguageDS.Relations.Add(new_relation)
 
         mSubjectOfDataTable = MakeSubjectOfDataTable()
@@ -1018,29 +1018,27 @@ Public Class OntologyManager
         Return TerminologyServer.Instance.CodeSetAsDataRow("Languages")
     End Function
 
-    Public Sub DefinitionsTable_RowChanged(ByVal sender As Object, ByVal e As DataRowChangeEventArgs) Handles mTermDefinitionsTable.RowChanged, mConstraintDefinitionsTable.RowChanged
+    Public Sub DefinitionsTable_RowChanged(ByVal sender As Object, ByVal e As DataRowChangeEventArgs) Handles mTermDefinitionTable.RowChanged, mConstraintDefinitionTable.RowChanged
         If mDoUpdateOntology Then
             If e.Action = DataRowAction.Change Then
-                Dim aterm As New RmTerm(CStr(e.Row(1)))
+                Dim term As RmTerm = TryCast(e.Row(5), RmTerm)
 
-                If Not aterm.IsConstraint Then
-                    If Not IsDBNull(e.Row(5)) Then
-                        aterm = CType(e.Row(5), RmTerm)
-                    End If
+                If term Is Nothing Then
+                    term = New RmTerm(CStr(e.Row(1)))
                 End If
 
-                aterm.Language = TryCast(e.Row(0), String)
-                aterm.Text = TryCast(e.Row(2), String)
-                aterm.Description = TryCast(e.Row(3), String)
+                term.Language = TryCast(e.Row(0), String)
+                term.Text = TryCast(e.Row(2), String)
+                term.Description = TryCast(e.Row(3), String)
 
-                If aterm.IsConstraint Then
-                    mOntology.ReplaceConstraint(aterm)
+                If term.IsConstraint Then
+                    mOntology.ReplaceConstraint(term)
                 Else
                     If Not IsDBNull(e.Row(4)) Then
-                        aterm.Comment = TryCast(e.Row(4), String)
+                        term.Comment = TryCast(e.Row(4), String)
                     End If
 
-                    mOntology.ReplaceTerm(aterm, ReplaceTranslations(aterm))
+                    mOntology.ReplaceTerm(term, ReplaceTranslations(term))
                 End If
 
                 mFileManager.FileEdited = True

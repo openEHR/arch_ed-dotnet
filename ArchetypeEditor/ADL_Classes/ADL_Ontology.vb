@@ -437,7 +437,7 @@ Namespace ArchetypeEditor.ADL_Classes
             ' populate the TermDefinitions table in TermLookUp
 
             If EIF_adlInterface.archetype_available And Not EIF_adlInterface.ontology.term_definitions.empty() Then
-                Dim d_row, selected_row As DataRow
+                Dim row, selected_row As DataRow
                 Dim s As EiffelKernel.STRING_8
                 Dim a_term As ADL_Term
                 Dim linklist As EiffelStructures.traversing.LINEAR_REFERENCE = EIF_adlInterface.ontology.term_codes
@@ -464,28 +464,29 @@ Namespace ArchetypeEditor.ADL_Classes
                             End If
 
                             ' and if it is not an internal ID for machine processing
-                            d_row = ontologyManager.TermDefinitionTable.NewRow
-                            d_row(0) = selected_row(0)
-                            d_row(1) = a_term.Code
-                            d_row(2) = a_term.Text
-                            d_row(3) = a_term.Description
-                            d_row(4) = a_term.Comment
-                            d_row(5) = a_term
+                            row = ontologyManager.TermDefinitionTable.NewRow
+                            row(0) = selected_row(0)
+                            row(1) = a_term.Code
+                            row(2) = a_term.Text
+                            row(3) = a_term.Description
+                            row(4) = a_term.Comment
+                            row(5) = a_term
                             ' add it to the GUI ontology
-                            ontologyManager.TermDefinitionTable.Rows.Add(d_row)
+                            ontologyManager.TermDefinitionTable.Rows.Add(row)
                         Next
                     Else
                         ' just do it for the new language
                         a_term = New ADL_Term(EIF_adlInterface.ontology.term_definition(Eiffel.String(LanguageCode), s))
                         ' and if it is not an internal ID for machine processing
-                        d_row = ontologyManager.TermDefinitionTable.NewRow
-                        d_row(0) = LanguageCode
-                        d_row(1) = a_term.Code
-                        d_row(2) = a_term.Text
-                        d_row(3) = a_term.Description
-                        d_row(4) = a_term.Comment
+                        row = ontologyManager.TermDefinitionTable.NewRow
+                        row(0) = LanguageCode
+                        row(1) = a_term.Code
+                        row(2) = a_term.Text
+                        row(3) = a_term.Description
+                        row(4) = a_term.Comment
+                        row(5) = a_term
                         ' add it to the GUI ontology
-                        ontologyManager.TermDefinitionTable.Rows.Add(d_row)
+                        ontologyManager.TermDefinitionTable.Rows.Add(row)
                     End If
 
                     linklist.forth()
