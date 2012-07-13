@@ -2205,6 +2205,8 @@ Public Class Designer
 
     Private Sub SaveArchetypeAs(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSaveAs.Click
         ' Save as a different name or format
+        TabMain_SelectionChanging(sender, e)
+
         Dim parserType As String = mFileManager.ParserType
 
         Dim s As String = Filemanager.Master.FileName
@@ -4960,6 +4962,7 @@ Public Class Designer
     End Sub
 
     Private Sub MenuFileExportType_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileExportType.Click
+        TabMain_SelectionChanging(sender, e)
         Cursor = Cursors.WaitCursor
 
         Try
