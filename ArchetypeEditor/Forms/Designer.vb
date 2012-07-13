@@ -2195,39 +2195,41 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub SaveArchetype(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSave.Click, MenuFileSaveAs.Click
-        Dim s As String
+    Private Sub SaveArchetype(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSave.Click
+        TabMain_SelectionChanging(sender, e)
 
-        If sender Is MenuFileSaveAs Then  ' save as a different name or format
-            'Remember the parser type
-            Dim parserType As String = mFileManager.ParserType
-
-            s = Filemanager.Master.FileName
-            Filemanager.Master.FileName = ""
-            Filemanager.Master.ParserSynchronised = False
-
-            If Not Filemanager.Master.SaveArchetype() Then
-                Filemanager.Master.FileName = s
-                MenuFileSpecialise.Visible = True
-            Else
-                If mFileManager.ParserType <> parserType Then
-                    'Saved in a different format so set the description to right format
-                    Filemanager.Master.FileLoading = True
-                    mTabPageDescription.Description = mFileManager.Archetype.Description
-
-                    Debug.Assert(mTabPageDescription.TranslationDetails.Count = mFileManager.Archetype.TranslationDetails.Count, "translation count must be equal")
-                    mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
-
-                    Filemanager.Master.FileLoading = False
-                End If
-
-                If Not Filemanager.HasFileToSave Then
-                    'Hide save button on Toolbar
-                    Filemanager.SetFileChangedToolBar(False)
-                End If
-            End If
-        ElseIf Filemanager.SaveFiles(False) Then
+        If Filemanager.SaveFiles(False) Then
             MenuFileSpecialise.Visible = True
+        End If
+    End Sub
+
+    Private Sub SaveArchetypeAs(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuFileSaveAs.Click
+        ' Save as a different name or format
+        Dim parserType As String = mFileManager.ParserType
+
+        Dim s As String = Filemanager.Master.FileName
+        Filemanager.Master.FileName = ""
+        Filemanager.Master.ParserSynchronised = False
+
+        If Not Filemanager.Master.SaveArchetype() Then
+            Filemanager.Master.FileName = s
+            MenuFileSpecialise.Visible = True
+        Else
+            If mFileManager.ParserType <> parserType Then
+                'Saved in a different format so set the description to right format
+                Filemanager.Master.FileLoading = True
+                mTabPageDescription.Description = mFileManager.Archetype.Description
+
+                Debug.Assert(mTabPageDescription.TranslationDetails.Count = mFileManager.Archetype.TranslationDetails.Count, "translation count must be equal")
+                mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
+
+                Filemanager.Master.FileLoading = False
+            End If
+
+            If Not Filemanager.HasFileToSave Then
+                'Hide save button on Toolbar
+                Filemanager.SetFileChangedToolBar(False)
+            End If
         End If
 
         lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
@@ -3567,9 +3569,7 @@ Public Class Designer
             Case 2 ' Open from Web
                 OpenArchetypeFromWeb(sender, e)
             Case 3 ' Save                                
-                If Filemanager.SaveFiles(False) Then
-                    MenuFileSpecialise.Visible = True
-                End If
+                SaveArchetype(sender, e)
             Case 4 ' separator
 
             Case 5 ' Print
@@ -4532,13 +4532,11 @@ Public Class Designer
 
     Private Sub TabMain_SelectionChanging(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanging
         ' catch any refreshes that are required
-        If TabMain.SelectedTab Is Me.tpTerminology Then
-
-            ' edits of terms in the table may have taken place and will need to be 
-            ' reflected in the GUI (via Translate)
-
+        If TabMain.SelectedTab Is tpTerminology Then
+            ' edits of terms in the table may have taken place and will need to be reflected in the GUI (via Translate)
             If Not mFileManager.FileLoading Then
                 ForceTerminologyGridUpdate()
+
                 ' if this is not due to a file load (e.g. opening a file)
                 If Not mFileManager.OntologyManager.TermDefinitionTable.GetChanges Is Nothing Then
                     ' and there have been some changes to the table
@@ -4547,8 +4545,7 @@ Public Class Designer
                     Translate("")
                 End If
             End If
-
-        ElseIf TabMain.SelectedTab Is Me.tpDescription Then
+        ElseIf TabMain.SelectedTab Is tpDescription Then
             'Ensure the description is up to date
             RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
             RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
@@ -4556,10 +4553,8 @@ Public Class Designer
     End Sub
 
     Private Sub ForceTerminologyGridUpdate()
-
-        'IMCN EDT-669 11 July 2011
-        ' Forces table row update so that Definitons page is correctly synced with direct terminology table changes
-        ' where row does not lose focus prior to tab change
+        ' Force table row update so that Definitons page is correctly synced with direct terminology table changes
+        ' where row does not lose focus prior to tab change.
         DataGridDefinitions.EndEdit(Nothing, DataGridDefinitions.CurrentRowIndex, False)
         DataGridDefinitions.BindingContext(DataGridDefinitions.DataSource, DataGridDefinitions.DataMember).EndCurrentEdit()
         Application.DoEvents()
@@ -5035,10 +5030,6 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub DataGridDefinitions_MouseLeave(ByVal sender As Object, ByVal e As System.EventArgs) Handles DataGridDefinitions.MouseLeave
-        'IMCN EDT-669 11 July 2011
-        ForceTerminologyGridUpdate()
-    End Sub
 End Class
 
 
