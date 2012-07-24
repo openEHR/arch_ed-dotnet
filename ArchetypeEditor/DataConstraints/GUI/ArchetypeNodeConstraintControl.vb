@@ -602,22 +602,6 @@ Public Class ArchetypeNodeConstraintControl
             txtTermDescription.Enabled = Not isElement
             txtComments.Enabled = Not isElement
 
-            If node.RM_Class.Type = StructureType.Slot Then
-                If tabConstraint.TabPages.Contains(tpConstraintDetails) Then
-                    tabConstraint.TabPages.Remove(tpConstraintDetails)      'Hide details tab if a Slot
-                End If
-
-                'Hide runtime name constraint as not applicable
-                PanelName.Visible = False
-            Else
-                If Not tabConstraint.TabPages.Contains(tpConstraintDetails) Then
-                    tabConstraint.TabPages.Add(tpConstraintDetails)         'Show details tab if not a slot
-                End If
-
-                'Show Runtime name constraint
-                PanelName.Visible = True
-            End If
-
             mOccurrences.SetUnitary = False
             mOccurrences.SetSingle = isSingle
 
@@ -689,10 +673,19 @@ Public Class ArchetypeNodeConstraintControl
 
             SetControlValues(isState)
 
-            'Enable the node code if not anonymous
             If node.IsAnonymous Then
+                If tabConstraint.TabPages.Contains(tpConstraintDetails) Then
+                    tabConstraint.TabPages.Remove(tpConstraintDetails)      'Hide details tab
+                End If
+
+                PanelName.Hide()
                 dgNodeBindings.Hide()
             Else
+                If Not tabConstraint.TabPages.Contains(tpConstraintDetails) Then
+                    tabConstraint.TabPages.Add(tpConstraintDetails)         'Show details tab
+                End If
+
+                PanelName.Show()
                 dgNodeBindings.Show()
                 Dim nodeID As String = node.RM_Class.NodeId
                 mDataView.Table.Columns(1).DefaultValue = nodeID
@@ -710,7 +703,7 @@ Public Class ArchetypeNodeConstraintControl
             Debug.Assert(False, ex.ToString)
         End Try
 
-        Me.ResumeLayout(False)
+        ResumeLayout(False)
         mIsLoading = False
     End Sub
 
