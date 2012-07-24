@@ -1551,42 +1551,30 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Protected Sub BuildRootElement(ByVal an_element As RmElement, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+        Protected Sub BuildRootElement(ByVal element As RmElement, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+            ' N.B.: Writing the name constraint has already been done in the caller.
 
-            'SRH: 7 Feb 2009 - EDT-509 - writing name constraint has already been done in calling class
-            'If an_element.HasNameConstraint Then
-            '    attribute = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("name"))
-            '    BuildText(attribute, an_element.NameConstraint)
-            'End If
-
-            If Not an_element.Constraint Is Nothing Then
-                If an_element.Constraint.Kind <> ConstraintKind.Any Then
-                    attribute = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("value"))
-                    BuildElementConstraint(attribute, an_element.Constraint)
-                End If
+            If Not element.Constraint Is Nothing AndAlso element.Constraint.Kind <> ConstraintKind.Any Then
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("value"))
+                BuildElementConstraint(attribute, element.Constraint)
             End If
         End Sub
 
         Protected Sub BuildRootCluster(ByVal Cluster As RmCluster, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
-            ' CadlObj.SetObjectId(Eiffel.String(Rm.NodeId))
-
             If Cluster.Children.Count > 0 Then
-                an_attribute = mAomFactory.create_c_attribute_multiple(CadlObj, Eiffel.String("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
-
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_multiple(CadlObj, Eiffel.String("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
                 Dim index As Integer = 0
+
                 For Each Rm As RmStructure In Cluster.Children.Items
                     If Rm.Type = StructureType.Cluster Then
-                        BuildCluster(Rm, an_attribute)
+                        BuildCluster(Rm, Attribute)
                         index += 1
                     ElseIf Rm.Type = StructureType.Element Or Rm.Type = StructureType.Reference Then
-                        BuildElementOrReference(Rm, an_attribute, index)
+                        BuildElementOrReference(Rm, Attribute, index)
                         index += 1
                     ElseIf Rm.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(an_attribute, Rm)
+                        BuildSlotFromAttribute(Attribute, Rm)
                         index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
@@ -1599,53 +1587,44 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
 
                 For Each ref As ReferenceToResolve In ReferencesToResolve
-
                     path = GetPathOfNode(ref.Element.NodeId)
+
                     If Not path Is Nothing Then
                         ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, Eiffel.String("ELEMENT"), path.as_string)
                         ref_cadlRefNode.set_occurrences(MakeOccurrences(ref.Element.Occurrences))
                     Else
                         'reference element no longer exists so build it as an element
                         Dim new_element As RmElement = ref.Element.Copy()
-
                         BuildElementOrReference(new_element, ref.Attribute, ref.Index)
                     End If
-
                 Next
+
                 ReferencesToResolve.Clear()
             End If
         End Sub
 
-        Protected Sub BuildRootSection(ByVal Rm As RmSection, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        Protected Sub BuildRootSection(ByVal section As RmSection, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            If section.Children.Count > 0 Then
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_multiple(CadlObj, Eiffel.String("items"), MakeCardinality(section.Children.Cardinality, section.Children.Cardinality.Ordered))
 
-            ' CadlObj.SetObjectId(Eiffel.String(Rm.NodeId))
+                For Each rm As RmStructure In section.Children
+                    If rm.Type = StructureType.SECTION Then
+                        Dim newSection As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = openehr.openehr.am.archetype.constraint_model.Create.C_COMPLEX_OBJECT.make_identified(Eiffel.String("SECTION"), Eiffel.String(rm.NodeId))
+                        newSection.set_occurrences(MakeOccurrences(rm.Occurrences))
 
-            If Rm.Children.Count > 0 Then
-                an_attribute = mAomFactory.create_c_attribute_multiple(CadlObj, Eiffel.String("items"), MakeCardinality(Rm.Children.Cardinality, Rm.Children.Cardinality.Ordered))
-
-                For Each a_structure As RmStructure In Rm.Children
-                    If a_structure.Type = StructureType.SECTION Then
-                        Dim new_section As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
-                        new_section = openehr.openehr.am.archetype.constraint_model.Create.C_COMPLEX_OBJECT.make_identified(Eiffel.String("SECTION"), Eiffel.String(a_structure.NodeId))
-                        new_section.set_occurrences(MakeOccurrences(a_structure.Occurrences))
-
-                        If a_structure.HasNameConstraint Then
-                            Dim another_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                            another_attribute = mAomFactory.create_c_attribute_single(new_section, Eiffel.String("name"))
-                            BuildText(another_attribute, a_structure.NameConstraint)
+                        If rm.HasNameConstraint Then
+                            Dim anotherAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(newSection, Eiffel.String("name"))
+                            BuildText(anotherAttribute, rm.NameConstraint)
                         End If
 
-                        If CType(a_structure, RmSection).Children.Count > 0 Then
-                            BuildSection(CType(a_structure, RmSection).Children, new_section)
+                        If CType(rm, RmSection).Children.Count > 0 Then
+                            BuildSection(CType(rm, RmSection).Children, newSection)
                         End If
-                        an_attribute.put_child(new_section)
-                    ElseIf a_structure.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(an_attribute, a_structure)
-                    Else
-                        Debug.Assert(False)
+
+                        attribute.put_child(newSection)
+                    ElseIf rm.Type = StructureType.Slot Then
+                        BuildSlotFromAttribute(Attribute, rm)
                     End If
                 Next
             End If
