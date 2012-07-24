@@ -4533,24 +4533,23 @@ Public Class Designer
     End Sub
 
     Private Sub TabMain_SelectionChanging(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanging
-        ' catch any refreshes that are required
-        If TabMain.SelectedTab Is tpTerminology Then
-            ' edits of terms in the table may have taken place and will need to be reflected in the GUI (via Translate)
+        If Not mFileManager Is Nothing Then
             If Not mFileManager.FileLoading Then
-                ForceTerminologyGridUpdate()
+                If TabMain.SelectedTab Is tpTerminology Then
+                    ForceTerminologyGridUpdate()
+                End If
 
-                ' if this is not due to a file load (e.g. opening a file)
+                ' Edits of terms in the table may have taken place and will need to be reflected in the GUI (via Translate).
                 If Not mFileManager.OntologyManager.TermDefinitionTable.GetChanges Is Nothing Then
-                    ' and there have been some changes to the table
                     mFileManager.OntologyManager.TermDefinitionTable.AcceptChanges()
-                    mFileManager.FileEdited = True
                     Translate("")
                 End If
             End If
-        ElseIf TabMain.SelectedTab Is tpDescription Then
-            'Ensure the description is up to date
-            RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
-            RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
+
+            If TabMain.SelectedTab Is tpDescription Then
+                RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
+                RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
+            End If
         End If
     End Sub
 
