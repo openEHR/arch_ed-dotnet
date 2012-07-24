@@ -595,14 +595,12 @@ Public Class ArchetypeNodeConstraintControl
                 mConstraintControl = Nothing
             End If
 
-            'Hide Occurrences and show null flavours if an Element archetype
-            If mFileManager.Archetype.RmEntity = StructureType.Element Then
-                PanelGenericConstraint.Visible = False
-                gbNullFlavours.Visible = True
-            Else
-                PanelGenericConstraint.Visible = True
-                gbNullFlavours.Visible = False
-            End If
+            'Hide Occurrences and show null flavours if an Element archetype; and the text and description are not editable here.
+            Dim isElement As Boolean = mFileManager.Archetype.RmEntity = StructureType.Element
+            PanelGenericConstraint.Visible = Not isElement
+            gbNullFlavours.Visible = isElement
+            txtTermDescription.Enabled = Not isElement
+            txtComments.Enabled = Not isElement
 
             If node.RM_Class.Type = StructureType.Slot Then
                 If tabConstraint.TabPages.Contains(tpConstraintDetails) Then
@@ -749,12 +747,7 @@ Public Class ArchetypeNodeConstraintControl
         End If
     End Function
 
-    Protected Overridable Sub SetControlValues(ByVal IsState As Boolean) '(ByVal aArchetypeNode As ArchetypeNode)
-
-        ' ToDo: set constraint values on control
-
-        ' set the cardinality
-
+    Protected Overridable Sub SetControlValues(ByVal IsState As Boolean)
         mOccurrences.Cardinality = mArchetypeNode.Occurrences
 
         If mArchetypeNode.IsAnonymous Then
@@ -764,13 +757,11 @@ Public Class ArchetypeNodeConstraintControl
         Else
             PanelAddressable.Visible = True
             gbTerminology.Visible = True
+            gbAnnotations.Visible = True
 
-            ' set the description of the term
             txtTermDescription.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Description
             txtComments.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).Comment
-
             mAnnotationsTable.Clear()
-            gbAnnotations.Visible = True
 
             If CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Count > 0 Then
                 For Each k As String In CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Keys
@@ -784,13 +775,9 @@ Public Class ArchetypeNodeConstraintControl
             txtRuntimeName.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).RuntimeNameText
 
             'Disable all but occurrences for References
-            If mArchetypeNode.RM_Class.Type = StructureType.Reference Then
-                PanelDataConstraint.Enabled = False
-                PanelAddressable.Enabled = False
-            Else
-                PanelDataConstraint.Enabled = True
-                PanelAddressable.Enabled = True
-            End If
+            Dim isntReference As Boolean = mArchetypeNode.RM_Class.Type <> StructureType.Reference
+            PanelDataConstraint.Enabled = isntReference
+            PanelAddressable.Enabled = isntReference
         End If
     End Sub
 
