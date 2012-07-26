@@ -41,7 +41,11 @@ Public Class RmReference
             i = s.IndexOf("[")
             s = s.Substring(i + 1)
             i = s.IndexOf("]")
-            s = s.Substring(0, i)
+
+            If i >= 0 Then
+                s = s.Substring(0, i)
+            End If
+
             sNodeId = s
             mPath = Value
         End Set

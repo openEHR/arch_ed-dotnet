@@ -47,7 +47,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 adlArchetype.set_concept(Eiffel.String(Value))
                 adlArchetype.definition.set_object_id(adlArchetype.concept) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
 
-                System.Diagnostics.Debug.Assert(Me.ConceptCode = Value)
+                System.Diagnostics.Debug.Assert(ConceptCode = Value)
                 System.Diagnostics.Debug.Assert(adlEngine.archetype.concept.to_cil = Value)
                 System.Diagnostics.Debug.Assert(adlArchetype.definition.node_id.to_cil = Value)
             End Set
@@ -73,7 +73,6 @@ Namespace ArchetypeEditor.ADL_Classes
             End Set
         End Property
 
-        'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
         Public Overrides Sub UpdateArchetypeId() 'Forces changes made to ArchetypeID to be updated in parser
             SetArchetypeId(Archetype_ID)
         End Sub
@@ -86,6 +85,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 sLifeCycle = Value
             End Set
         End Property
+
         Public Overrides Property ParentArchetype() As String
             Get
                 Return adlArchetype.parent_archetype_id.as_string.to_cil
@@ -96,6 +96,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 adlArchetype.set_parent_archetype_id(archId)
             End Set
         End Property
+
         Public Overrides ReadOnly Property SourceCode() As String
             Get
                 If Not adlEngine.source Is Nothing Then
@@ -105,14 +106,13 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
             End Get
         End Property
+
         Public Overrides ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
             Get
-                Me.MakeParseTree()
+                MakeParseTree()
 
                 Try
-                    ' HKF: 8 Dec 2008
                     SetArchetypeDigest()
-
                     adlEngine.serialise(Eiffel.String(a_format))
                     Return adlEngine.serialised_archetype.to_cil
                 Catch e As System.Reflection.TargetInvocationException
@@ -125,14 +125,17 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return AE_Constants.Instance.ErrorSaving
                 Catch e As Exception
                     Dim errorMessage As String = "Error serialising archetype." & vbCrLf & vbCrLf & e.Message
+
                     If Not e.InnerException Is Nothing Then
                         errorMessage &= vbCrLf & e.InnerException.Message
                     End If
+
                     MessageBox.Show(errorMessage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                     Return AE_Constants.Instance.ErrorSaving
                 End Try
             End Get
         End Property
+
         Public Overrides ReadOnly Property Paths(ByVal LanguageCode As String, ByVal parserIsSynchronised As Boolean, Optional ByVal Logical As Boolean = False) As String()
             Get
                 Dim list As EiffelList.ARRAYED_LIST_REFERENCE
@@ -166,7 +169,7 @@ Namespace ArchetypeEditor.ADL_Classes
             ' Update the GUI tables with the new term
             a_term = New ADL_Term(adlEngine.ontology.term_definition(Eiffel.String(The_Ontology.LanguageCode), adlArchetype.concept))
             The_Ontology.UpdateTerm(a_term)
-            Me.mArchetypeID.Concept &= "-" & ConceptShortName
+            mArchetypeID.Concept &= "-" & ConceptShortName
         End Sub
 
         Public Sub RemoveUnusedCodes()
@@ -175,8 +178,8 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Protected Sub SetArchetypeId(ByVal an_archetype_id As ArchetypeID)
             Dim id As openehr.openehr.rm.support.identification.ARCHETYPE_ID
-
             id = openehr.openehr.rm.support.identification.Create.ARCHETYPE_ID.make_from_string(Eiffel.String(an_archetype_id.ToString))
+
             Try
                 If Not adlEngine.archetype_available Then
                     adlEngine.create_new_archetype(id.rm_originator, id.rm_name, id.rm_entity, Eiffel.String(sPrimaryLanguageCode))
@@ -191,6 +194,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         setDefinition()
                     End If
                 End If
+
                 adlArchetype.set_archetype_id(id)
                 ' set the internal variable last in case errors
                 mArchetypeID = an_archetype_id
@@ -212,26 +216,25 @@ Namespace ArchetypeEditor.ADL_Classes
             id_expression_leaf = mAomFactory.create_expr_leaf_archetype_ref(Eiffel.String(id))
             id_pattern_expression_leaf = mAomFactory.create_expr_leaf_constraint(mAomFactory.create_c_string_make_from_regexp(Eiffel.String(expression)))
 
-            match_operator = mAomFactory.create_expr_binary_operator_node( _
-                openehr.openehr.am.archetype.assertion.Create.OPERATOR_KIND.make_from_string(Eiffel.String("matches")), id_expression_leaf, id_pattern_expression_leaf)
+            match_operator = mAomFactory.create_expr_binary_operator_node(openehr.openehr.am.archetype.assertion.Create.OPERATOR_KIND.make_from_string(Eiffel.String("matches")), id_expression_leaf, id_pattern_expression_leaf)
 
             Return mAomFactory.create_assertion(match_operator, Nothing)
         End Function
 
         Protected Function MakeCardinality(ByVal c As RmCardinality, Optional ByVal IsOrdered As Boolean = True) As openehr.openehr.am.archetype.constraint_model.CARDINALITY
-            Dim cardObj As openehr.openehr.am.archetype.constraint_model.CARDINALITY
+            Dim result As openehr.openehr.am.archetype.constraint_model.CARDINALITY
 
             If c.IsUnbounded Then
-                cardObj = mAomFactory.create_cardinality_make_upper_unbounded(c.MinCount)
+                result = mAomFactory.create_cardinality_make_upper_unbounded(c.MinCount)
             Else
-                cardObj = mAomFactory.create_cardinality_make_bounded(c.MinCount, c.MaxCount)
+                result = mAomFactory.create_cardinality_make_bounded(c.MinCount, c.MaxCount)
             End If
 
             If Not c.Ordered Then
-                cardObj.set_unordered()
+                result.set_unordered()
             End If
 
-            Return cardObj
+            Return result
         End Function
 
         Protected Function MakeOccurrences(ByVal c As RmCardinality) As openehr.common_libs.basic.INTERVAL_INTEGER_32
@@ -302,16 +305,16 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim i As Integer
                 value_rel_node = mAomFactory.create_c_attribute_single(plain_text, Eiffel.String("value"))
                 cString = mAomFactory.create_c_string_make_from_string(Eiffel.String(TermList.Item(0)))
+
                 For i = 1 To TermList.Count - 1
                     cString.add_string(Eiffel.String(TermList.Item(i)))
                 Next
+
                 cadlSimple = mAomFactory.create_c_primitive_object(value_rel_node, cString)
             End If
-
         End Sub
 
         Private Sub DuplicateHistory(ByVal rm As RmStructureCompound, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-
             Dim cadlHistory, cadlEvent As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim an_event As RmEvent
@@ -393,12 +396,10 @@ Namespace ArchetypeEditor.ADL_Classes
                         objNode = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(rm.Type)), Eiffel.String(rm.NodeId))
                         BuildStructure(rm, objNode)
 
-                        Exit Sub
-
+                        Exit Sub 'FIXME: Remove spaghetti code!
                     End If ' at least one child
                 End If
             Next
-
         End Sub
 
         Private Sub BuildHistory(ByVal a_history As RmHistory, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal rmState As RmStructureCompound)
@@ -429,25 +430,23 @@ Namespace ArchetypeEditor.ADL_Classes
                             BuildSlotFromAttribute(an_attribute, a_rm)
                         Else
                             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
                             objNode = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_rm.Type)), Eiffel.String(a_rm.NodeId))
                             BuildStructure(a_rm, objNode)
-                            path = Me.GetPathOfNode(a_rm.NodeId)
+                            path = GetPathOfNode(a_rm.NodeId)
                         End If
-
                     Else
                         If embeddedState Then
                             BuildSlotFromAttribute(an_attribute, a_rm)
                         Else
                             'create a reference
                             Dim ref_cadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
+
                             If Not path Is Nothing Then
                                 ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_rm.Type)), path.as_string)
                             End If
-
                         End If
                     End If
-                    'SRH: 11 Jan 2009 - EDT-502 - set existence of protocol and state attributes
+
                     an_attribute.set_existence(MakeExistence(rmState.Children.Existence))
                 Next
             End If
@@ -550,30 +549,31 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Protected Sub BuildCluster(ByVal Cluster As RmCluster, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-            Dim cluster_cadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim clusterCadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim rm As RmStructure
 
-            cluster_cadlObj = mAomFactory.create_c_complex_object_identified(RelNode, Eiffel.String(ReferenceModel.RM_StructureName(StructureType.Cluster)), Eiffel.String(Cluster.NodeId))
-            cluster_cadlObj.set_occurrences(MakeOccurrences(Cluster.Occurrences))
+            clusterCadlObj = mAomFactory.create_c_complex_object_identified(RelNode, Eiffel.String(ReferenceModel.RM_StructureName(StructureType.Cluster)), Eiffel.String(Cluster.NodeId))
+            clusterCadlObj.set_occurrences(MakeOccurrences(Cluster.Occurrences))
 
             If Cluster.HasNameConstraint Then
-                an_attribute = mAomFactory.create_c_attribute_single(cluster_cadlObj, Eiffel.String("name"))
-                BuildText(an_attribute, Cluster.NameConstraint)
+                attribute = mAomFactory.create_c_attribute_single(clusterCadlObj, Eiffel.String("name"))
+                BuildText(attribute, Cluster.NameConstraint)
             End If
 
             If Cluster.Children.Count > 0 Then
-                an_attribute = mAomFactory.create_c_attribute_multiple(cluster_cadlObj, Eiffel.String("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
-                Dim index As Integer
+                attribute = mAomFactory.create_c_attribute_multiple(clusterCadlObj, Eiffel.String("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
+                Dim index As Integer = 0
+
                 For Each rm In Cluster.Children.Items
                     If rm.Type = StructureType.Cluster Then
-                        BuildCluster(rm, an_attribute)
+                        BuildCluster(rm, attribute)
                         index += 1
                     ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                        BuildElementOrReference(rm, an_attribute, index)
+                        BuildElementOrReference(rm, attribute, index)
                         index += 1
                     ElseIf rm.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(an_attribute, rm)
+                        BuildSlotFromAttribute(attribute, rm)
                         index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
@@ -640,7 +640,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 mAomFactory.create_c_primitive_object(value_attribute, magnitude)
 
                 If ct.Precision > -1 Then
-                    'Need set precision on C_REAL
+                    'TODO: set precision on C_REAL?
                     'magnitude.set_precision(ct.Precision)
                 End If
 
@@ -727,27 +727,26 @@ Namespace ArchetypeEditor.ADL_Classes
             Select Case dtType
                 Case "dt"
                     an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String("DV_DATE_TIME"))
-                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+
                     If Not allowAll Then
                         an_attribute = mAomFactory.create_c_attribute_single(an_object, Eiffel.String("value"))
                         cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_date_time_make_pattern(Eiffel.String(s)))
                     End If
                 Case "d"
                     an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String("DV_DATE"))
-                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+
                     If Not allowAll Then
                         an_attribute = mAomFactory.create_c_attribute_single(an_object, Eiffel.String("value"))
                         cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_date_make_pattern(Eiffel.String(s)))
                     End If
                 Case "t"
                     an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String("DV_TIME"))
-                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+
                     If Not allowAll Then
                         an_attribute = mAomFactory.create_c_attribute_single(an_object, Eiffel.String("value"))
                         cadlDateTime = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_time_make_pattern(Eiffel.String(s)))
                     End If
             End Select
-
         End Sub
 
         Protected Sub BuildSlotFromAttribute(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
@@ -857,19 +856,15 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Protected Sub BuildQuantity(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
             Dim cadlQuantity As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY
-
             cadlQuantity = mAomFactory.create_c_dv_quantity(value_attribute)
             ' set the property constraint - it should be present
 
             If Not q.IsNull Then
-
                 Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE
 
                 Debug.Assert(q.IsCoded)
 
-                cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string( _
-                 Eiffel.String(q.PhysicalPropertyAsString))
-
+                cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(Eiffel.String(q.PhysicalPropertyAsString))
                 cadlQuantity.set_property(cp)
 
                 If q.has_units Then
@@ -902,7 +897,6 @@ Namespace ArchetypeEditor.ADL_Classes
                     Next
                 End If
             End If
-
         End Sub
 
         Private Sub BuildBoolean(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal b As Constraint_Boolean)
@@ -939,8 +933,8 @@ Namespace ArchetypeEditor.ADL_Classes
             ' Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim c_value As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_ORDINAL
             Dim o_v As OrdinalValue
-
             c_value = mAomFactory.create_c_dv_ordinal(value_attribute)
+
             If o.OrdinalValues.Count > 0 Then
                 For Each o_v In o.OrdinalValues
                     If o_v.InternalCode <> Nothing Then
@@ -969,23 +963,19 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Function GetPathOfNode(ByVal NodeId As String) As openehr.common_libs.structures.object_graph.path.OG_PATH
-            Dim tablePaths As EiffelList.LIST_REFERENCE
-            Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH = Nothing
-            Dim s As String
-            Dim i As Integer
+            Dim result As openehr.common_libs.structures.object_graph.path.OG_PATH = Nothing
+            Dim paths As EiffelList.LIST_REFERENCE = adlArchetype.physical_paths
 
-            tablePaths = Me.adlArchetype.physical_paths
-
-            For i = 1 To tablePaths.count
-                s = tablePaths.i_th(i).out.to_cil
+            For i As Integer = 1 To paths.count
+                Dim s As String = paths.i_th(i).out.to_cil
 
                 If s.EndsWith(NodeId & "]") Then
-                    path = openehr.common_libs.structures.object_graph.path.Create.OG_PATH.make_from_string(Eiffel.String(s))
+                    result = openehr.common_libs.structures.object_graph.path.Create.OG_PATH.make_from_string(Eiffel.String(s))
                     Exit For
                 End If
             Next
 
-            Return path
+            Return result
         End Function
 
         Private Sub BuildInterval(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Interval)
@@ -1030,15 +1020,14 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE
 
             objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String(ReferenceModel.RM_DataTypeName(c.Kind)))
-
             code_rel_node = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("media_type"))
+
             If c.AllowableValues.Codes.Count > 0 Then
                 ca_Term = mAomFactory.create_c_code_phrase_from_pattern(code_rel_node, Eiffel.String(c.AllowableValues.Phrase))
             Else
                 ca_Term = openehr.openehr.am.openehr_profile.data_types.text.Create.C_CODE_PHRASE.make_from_terminology_id(Eiffel.String(c.AllowableValues.TerminologyID))
                 code_rel_node.put_child(ca_Term)
             End If
-
         End Sub
 
         Private Sub BuildURI(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_URI)
@@ -1058,51 +1047,29 @@ Namespace ArchetypeEditor.ADL_Classes
                 cSt = mAomFactory.create_c_string_make_from_regexp(Eiffel.String(c.RegularExpression))
                 mAomFactory.create_c_primitive_object(attribute, cSt)
             End If
-
         End Sub
-
 
         Private Sub BuildParsable(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Parsable)
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
             objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String("DV_PARSABLE"))
-
-            'If Not String.IsNullOrEmpty(c.RegularExpression) Then
-            '    'Add a constraint to C_STRING
-            '    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            '    attribute = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("value"))
-            '    Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
-            '    cSt = mAomFactory.create_c_string_make_from_regexp(Eiffel.String(c.RegularExpression))
-            '    mAomFactory.create_c_primitive_object(attribute, cSt)
-            'End If
 
             If c.AllowableFormalisms.Count > 0 Then
                 'Add a constraint to C_STRING
                 Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 attribute = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("formalism"))
                 Dim cSt As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
-                'cSt = mAomFactory.create_c_string_make_from_regexp(Eiffel.String(c.Formalism))
                 cSt = mAomFactory.create_c_string_make_from_string(Eiffel.String(c.AllowableFormalisms.Item(0)))
+
                 For i As Integer = 1 To c.AllowableFormalisms.Count - 1
                     cSt.add_string(Eiffel.String(c.AllowableFormalisms.Item(i)))
                 Next
+
                 mAomFactory.create_c_primitive_object(attribute, cSt)
             End If
-
-            'If c.AllowableValues.Codes.Count > 0 Then
-            '    'Add a constraint to C_STRING
-            '    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            '    attribute = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("formalism"))
-            '    Dim ca_Term As openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE
-            '    ca_Term = mAomFactory.create_c_code_phrase_from_pattern(attribute, Eiffel.String(c.AllowableValues.Phrase))
-            'End If
-
         End Sub
 
         Private Sub BuildIdentifier(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
-
             objNode = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String(ReferenceModel.RM_DataTypeName(c.Kind)))
 
             If c.IssuerRegex <> Nothing Then
@@ -1134,7 +1101,6 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildElementConstraint(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal c As Constraint)
-
             ' cannot have a value with no constraint on datatype
             Debug.Assert(c.Kind <> ConstraintKind.Any)
 
@@ -1153,7 +1119,6 @@ Namespace ArchetypeEditor.ADL_Classes
 
                 Case ConstraintKind.Any
                     Debug.Assert(False, "Need to check this is set to the true")
-                    'value_attribute.parent.set_any_allowed()
 
                 Case ConstraintKind.Proportion
                     BuildProportion(value_attribute, c)
@@ -1199,189 +1164,162 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildElementOrReference(ByVal Element As RmElement, ByRef RelNode As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal index As Integer)
-            Dim value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
             If Element.Type = StructureType.Reference Then
-                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
-
-                path = GetPathOfNode(Element.NodeId)
+                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH = GetPathOfNode(Element.NodeId)
 
                 If Not path Is Nothing Then
-                    Dim ref_cadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
-                    ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(RelNode, Eiffel.String("ELEMENT"), path.as_string)
-                    ref_cadlRefNode.set_occurrences(MakeOccurrences(Element.Occurrences))
+                    Dim refCadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
+                    refCadlRefNode = mAomFactory.create_archetype_internal_ref(RelNode, Eiffel.String("ELEMENT"), path.as_string)
+                    refCadlRefNode.set_occurrences(MakeOccurrences(Element.Occurrences))
                 Else
                     'the origin of the reference has not been added yet
                     Dim ref As ReferenceToResolve
-
                     ref.Element = Element
                     ref.Attribute = RelNode
                     ref.Index = index
-
                     ReferencesToResolve.Add(ref)
                 End If
             Else
-                Dim element_cadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                Dim elementCadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
+                elementCadlObj = mAomFactory.create_c_complex_object_identified(RelNode, Eiffel.String(ReferenceModel.RM_StructureName(StructureType.Element)), Eiffel.String(Element.NodeId))
+                elementCadlObj.set_occurrences(MakeOccurrences(Element.Occurrences))
 
-                element_cadlObj = mAomFactory.create_c_complex_object_identified(RelNode, Eiffel.String(ReferenceModel.RM_StructureName(StructureType.Element)), Eiffel.String(Element.NodeId))
-                element_cadlObj.set_occurrences(MakeOccurrences(Element.Occurrences))
                 If Element.HasNameConstraint Then
-                    Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
-                    an_attribute = mAomFactory.create_c_attribute_single(element_cadlObj, Eiffel.String("name"))
-                    BuildText(an_attribute, Element.NameConstraint)
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(elementCadlObj, Eiffel.String("name"))
+                    BuildText(attribute, Element.NameConstraint)
                 End If
+
                 If Element.Constraint.Kind <> ConstraintKind.Any Then
-                    value_attribute = mAomFactory.create_c_attribute_single(element_cadlObj, Eiffel.String("value"))
-                    BuildElementConstraint(value_attribute, Element.Constraint)
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(elementCadlObj, Eiffel.String("value"))
+                    BuildElementConstraint(attribute, Element.Constraint)
                 End If
 
                 'Check for constraint on Flavours of Null
                 If Element.HasNullFlavourConstraint() Then
-                    Dim null_flavour_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                    null_flavour_attribute = mAomFactory.create_c_attribute_single(element_cadlObj, Eiffel.String("null_flavour"))
-                    null_flavour_attribute.set_existence(mAomFactory.create_c_integer_make_bounded(0, 1, True, True).interval)
-                    BuildCodedText(null_flavour_attribute, Element.ConstrainedNullFlavours)
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(elementCadlObj, Eiffel.String("null_flavour"))
+                    attribute.set_existence(mAomFactory.create_c_integer_make_bounded(0, 1, True, True).interval)
+                    BuildCodedText(attribute, Element.ConstrainedNullFlavours)
                 End If
-
             End If
+        End Sub
 
-            'SRH 13th Nov 2007 - Added flavours of null constraint
+        Protected Sub ResolveReferences()
+            For Each ref As ReferenceToResolve In ReferencesToResolve
+                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH = GetPathOfNode(ref.Element.NodeId)
 
+                If Not path Is Nothing Then
+                    'The following is based on refCadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, Eiffel.String("ELEMENT"), path.as_string)
+                    Dim refCadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
+                    refCadlRefNode = openehr.openehr.am.archetype.constraint_model.Create.ARCHETYPE_INTERNAL_REF.make(Eiffel.String("ELEMENT"), path.as_string)
+                    ref.Attribute.children.insert(refCadlRefNode, ref.Index + 1)
+                    refCadlRefNode.set_parent(ref.Attribute)
 
+                    'The following would be equivalent to og.put_child_left(refCadlRefNode.representation, some child at ref.Index + 1) ...
+                    Dim og As openehr.common_libs.structures.object_graph.OG_ATTRIBUTE_NODE
+                    og = CType(ref.Attribute.representation, openehr.common_libs.structures.object_graph.OG_ATTRIBUTE_NODE)
+                    og.children.put(refCadlRefNode.representation, refCadlRefNode.representation.node_id)
+                    refCadlRefNode.representation.set_parent(og)
+                    og.children_ordered.go_i_th(ref.Index + 1)
+                    og.children_ordered.put_left(refCadlRefNode.representation)
+                    og.children_sorted.extend(refCadlRefNode.representation)
 
+                    refCadlRefNode.set_occurrences(MakeOccurrences(ref.Element.Occurrences))
+                Else
+                    'reference element no longer exists so build it as an element
+                    BuildElementOrReference(ref.Element.Copy(), ref.Attribute, ref.Index)
+                End If
+            Next
 
-
+            ReferencesToResolve.Clear()
         End Sub
 
         Private Sub BuildStructure(ByVal rmStruct As RmStructureCompound, ByRef objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim rm As RmStructure
+            Dim index As Integer = 0
 
             ' preconditions
             Debug.Assert(rmStruct.NodeId <> "") ' anonymous
 
-            ' now make sure there are some contents to the structure
-            ' and if not set it to anyallowed
+            ' now make sure there are some contents to the structure and if not set it to anyallowed
             If rmStruct.Children.Count > 0 Then
-                Select Case rmStruct.Type '.TypeName
-                    Case StructureType.Single ' "SINGLE"
+                Select Case rmStruct.Type
+                    Case StructureType.Single
+                        attribute = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("item"))
+                        rm = rmStruct.Children.Items(0)
 
-                        an_attribute = mAomFactory.create_c_attribute_single(objNode, _
-                            Eiffel.String("item"))
-
-                        Dim rmStr As RmStructure = rmStruct.Children.Items(0)
-                        If rmStr.Type = StructureType.Element Or rmStr.Type = StructureType.Reference Then
-                            BuildElementOrReference(rmStr, an_attribute, 0)
-                        ElseIf rmStr.Type = StructureType.Slot Then
-                            BuildSlotFromAttribute(an_attribute, rmStr)
+                        If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
+                            BuildElementOrReference(rm, attribute, 0)
+                        ElseIf rm.Type = StructureType.Slot Then
+                            BuildSlotFromAttribute(attribute, rm)
                         Else
                             Debug.Assert(False, "Type not handled")
                         End If
-
-                    Case StructureType.List ' "LIST"
-                        an_attribute = mAomFactory.create_c_attribute_multiple(objNode, _
-                            Eiffel.String("items"), _
+                    Case StructureType.List
+                        attribute = mAomFactory.create_c_attribute_multiple(objNode, Eiffel.String("items"), _
                             MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
 
-                        Dim index As Integer = 0
                         For Each rm In rmStruct.Children.Items
                             If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                                BuildElementOrReference(rm, an_attribute, index)
+                                BuildElementOrReference(rm, attribute, index)
                                 index += 1
                             ElseIf rm.Type = StructureType.Slot Then
-                                BuildSlotFromAttribute(an_attribute, rm)
+                                BuildSlotFromAttribute(attribute, rm)
                                 index += 1
                             Else
                                 Debug.Assert(False, "Type not handled")
                             End If
                         Next
-                    Case StructureType.Tree ' "TREE"
-                        an_attribute = mAomFactory.create_c_attribute_multiple(objNode, _
-                            Eiffel.String("items"), _
+                    Case StructureType.Tree
+                        attribute = mAomFactory.create_c_attribute_multiple(objNode, Eiffel.String("items"), _
                             MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
-
-                        Dim index As Integer = 0
 
                         For Each rm In rmStruct.Children.Items
                             If rm.Type = StructureType.Cluster Then
-                                BuildCluster(rm, an_attribute)
+                                BuildCluster(rm, attribute)
                                 index += 1
                             ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                                BuildElementOrReference(rm, an_attribute, index)
+                                BuildElementOrReference(rm, attribute, index)
                                 index += 1
                             ElseIf rm.Type = StructureType.Slot Then
-                                BuildSlotFromAttribute(an_attribute, rm)
+                                BuildSlotFromAttribute(attribute, rm)
                                 index += 1
                             Else
                                 Debug.Assert(False, "Type not handled")
                             End If
                         Next
-                    Case StructureType.Table ' "TABLE"
-                        Dim table As RmTable
+                    Case StructureType.Table
+                        Dim table As RmTable = CType(rmStruct, RmTable)
                         Dim b As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN
                         Dim rh As openehr.openehr.am.archetype.constraint_model.primitive.C_INTEGER
 
-                        table = CType(rmStruct, RmTable)
                         ' set is rotated
-                        an_attribute = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("rotated"))
+                        attribute = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("rotated"))
+
                         If table.isRotated Then
                             b = mAomFactory.create_c_boolean_make_true()
                         Else
                             b = mAomFactory.create_c_boolean_make_false()
                         End If
-                        mAomFactory.create_c_primitive_object(an_attribute, b)
+
+                        mAomFactory.create_c_primitive_object(attribute, b)
 
                         ' set number of row if not one
                         If table.NumberKeyColumns > 0 Then
-                            an_attribute = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("number_key_columns"))
+                            attribute = mAomFactory.create_c_attribute_single(objNode, Eiffel.String("number_key_columns"))
                             rh = mAomFactory.create_c_integer_make_bounded(table.NumberKeyColumns, table.NumberKeyColumns, True, True)
-                            mAomFactory.create_c_primitive_object(an_attribute, rh)
+                            mAomFactory.create_c_primitive_object(attribute, rh)
                         End If
 
-
-                        an_attribute = mAomFactory.create_c_attribute_multiple(objNode, Eiffel.String("rows"), MakeCardinality(New RmCardinality(rmStruct.Occurrences), True))
-
-                        BuildCluster(rmStruct.Children.Items(0), an_attribute)
-
+                        attribute = mAomFactory.create_c_attribute_multiple(objNode, Eiffel.String("rows"), MakeCardinality(New RmCardinality(rmStruct.Occurrences), True))
+                        BuildCluster(rmStruct.Children.Items(0), attribute)
                 End Select
             End If
 
-            If ReferencesToResolve.Count > 0 Then
-                Dim ref_cadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
-                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
-
-                For Each ref As ReferenceToResolve In ReferencesToResolve
-
-                    path = GetPathOfNode(ref.Element.NodeId)
-                    If Not path Is Nothing Then
-
-                        'The following code needs to be updated to allow the insertion of a reference
-                        'if it appears before its defining node
-
-                        'ref_cadlRefNode = openehr.openehr.am.archetype.constraint_model.Create.ARCHETYPE_INTERNAL_REF.make(Eiffel.String("ELEMENT"), path.as_string)
-                        'ref.Attribute.children.insert(ref_cadlRefNode, ref.Index + 1) 'Eiffel has 1 based collections
-
-                        'The following line (1 only) will need to be turned off)
-
-                        ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, Eiffel.String("ELEMENT"), path.as_string)
-                        ref_cadlRefNode.set_occurrences(MakeOccurrences(ref.Element.Occurrences))
-
-                    Else
-                        'reference element no longer exists so build it as an element
-                        Dim new_element As RmElement = ref.Element.Copy()
-
-                        BuildElementOrReference(new_element, ref.Attribute, ref.Index)
-                    End If
-
-                Next
-                ReferencesToResolve.Clear()
-            End If
-
+            ResolveReferences()
         End Sub
 
         Protected Sub BuildSubjectOfData(ByVal subject As RelatedParty, ByVal root_node As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-
             Dim objnode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
             Dim a_relationship As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
@@ -1397,6 +1335,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim cObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
             cObject = mAomFactory.create_c_complex_object_anonymous(attribute, Eiffel.String("PARTICIPATION"))
             cObject.set_occurrences(MakeOccurrences(participation.Occurrences))
+
             If participation.MandatoryDateTime Then
                 Dim timeAttrib As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(cObject, Eiffel.String("time"))
             End If
@@ -1428,7 +1367,6 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
 
         End Sub
-
 
         Protected Sub BuildSection(ByVal rmChildren As Children, ByVal cadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
@@ -1566,15 +1504,15 @@ Namespace ArchetypeEditor.ADL_Classes
                 Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_multiple(CadlObj, Eiffel.String("items"), MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered))
                 Dim index As Integer = 0
 
-                For Each Rm As RmStructure In Cluster.Children.Items
-                    If Rm.Type = StructureType.Cluster Then
-                        BuildCluster(Rm, Attribute)
+                For Each rm As RmStructure In Cluster.Children.Items
+                    If rm.Type = StructureType.Cluster Then
+                        BuildCluster(rm, Attribute)
                         index += 1
-                    ElseIf Rm.Type = StructureType.Element Or Rm.Type = StructureType.Reference Then
-                        BuildElementOrReference(Rm, Attribute, index)
+                    ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
+                        BuildElementOrReference(rm, attribute, index)
                         index += 1
-                    ElseIf Rm.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(Attribute, Rm)
+                    ElseIf rm.Type = StructureType.Slot Then
+                        BuildSlotFromAttribute(attribute, rm)
                         index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
@@ -1582,25 +1520,7 @@ Namespace ArchetypeEditor.ADL_Classes
                 Next
             End If
 
-            If ReferencesToResolve.Count > 0 Then
-                Dim ref_cadlRefNode As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_INTERNAL_REF
-                Dim path As openehr.common_libs.structures.object_graph.path.OG_PATH
-
-                For Each ref As ReferenceToResolve In ReferencesToResolve
-                    path = GetPathOfNode(ref.Element.NodeId)
-
-                    If Not path Is Nothing Then
-                        ref_cadlRefNode = mAomFactory.create_archetype_internal_ref(ref.Attribute, Eiffel.String("ELEMENT"), path.as_string)
-                        ref_cadlRefNode.set_occurrences(MakeOccurrences(ref.Element.Occurrences))
-                    Else
-                        'reference element no longer exists so build it as an element
-                        Dim new_element As RmElement = ref.Element.Copy()
-                        BuildElementOrReference(new_element, ref.Attribute, ref.Index)
-                    End If
-                Next
-
-                ReferencesToResolve.Clear()
-            End If
+            ResolveReferences()
         End Sub
 
         Protected Sub BuildRootSection(ByVal section As RmSection, ByVal CadlObj As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -2046,11 +1966,11 @@ Namespace ArchetypeEditor.ADL_Classes
                 adlArchetype = adlEngine.archetype
                 adlArchetype.set_archetype_id(id)
                 adlArchetype.definition.set_object_id(adlArchetype.concept)
-
             Catch
                 Debug.Assert(False)
                 ''FIXME raise error
             End Try
+
             mDescription = New ADL_Description(adlEngine.archetype.original_language.code_string.to_cil) ' nothing to pass
         End Sub
 
@@ -2154,7 +2074,6 @@ Namespace ArchetypeEditor.ADL_Classes
                 Case Else
                     Debug.Assert(False)
             End Select
-
         End Sub
 
     End Class

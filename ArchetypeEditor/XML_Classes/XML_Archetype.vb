@@ -31,13 +31,14 @@ Namespace ArchetypeEditor.XML_Classes
         Private Structure ReferenceToResolve
             Dim Element As RmElement
             Dim Attribute As XMLParser.C_ATTRIBUTE
+            Dim Index As Integer
         End Structure
 
         Protected ReferencesToResolve As ArrayList = New ArrayList
 
         Public Overrides Property ConceptCode() As String
             Get
-                Return mXmlArchetype.concept 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                Return mXmlArchetype.concept
             End Get
             Set(ByVal Value As String)
                 mXmlArchetype.concept = Value
@@ -64,7 +65,6 @@ Namespace ArchetypeEditor.XML_Classes
             End Set
         End Property
 
-        'JAR: 23MAY2007, EDT-16 Validate Archetype Id against file name
         Public Overrides Sub UpdateArchetypeId() 'Forces changes made to ArchetypeID to be updated in parser
             SetArchetypeId(Archetype_ID)
         End Sub
@@ -80,8 +80,6 @@ Namespace ArchetypeEditor.XML_Classes
 
         Public Overrides Property ParentArchetype() As String
             Get
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                'Return mXmlArchetype.parent_archetype_id
                 If Not mXmlArchetype.parent_archetype_id Is Nothing Then
                     Return mXmlArchetype.parent_archetype_id.value
                 Else
@@ -89,22 +87,23 @@ Namespace ArchetypeEditor.XML_Classes
                 End If
             End Get
             Set(ByVal Value As String)
-                'mXmlArchetype.parent_archetype_id = value
-                If (mXmlArchetype.parent_archetype_id Is Nothing) Then
+                If mXmlArchetype.parent_archetype_id Is Nothing Then
                     mXmlArchetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
                 End If
                 mXmlArchetype.parent_archetype_id.value = Value
             End Set
         End Property
+
         Public Overrides ReadOnly Property SourceCode() As String
             Get
                 Return mArchetypeParser.Serialise
             End Get
         End Property
+
         Public Overrides ReadOnly Property SerialisedArchetype(ByVal a_format As String) As String
             Get
                 If a_format.ToLowerInvariant() = "xml" Then
-                    Me.MakeParseTree()
+                    MakeParseTree()
                     Return mArchetypeParser.Serialise
                 Else
                     Debug.Assert(False, "Cannot return format '" + a_format + " from XML parser!")
@@ -112,14 +111,16 @@ Namespace ArchetypeEditor.XML_Classes
                 End If
             End Get
         End Property
+
         Public Overrides ReadOnly Property Paths(ByVal LanguageCode As String, ByVal parserIsSynchronised As Boolean, Optional ByVal Logical As Boolean = False) As String()
             Get
                 Dim list As System.Collections.ArrayList
 
                 ' must call the prepareToSave to ensure it is accurate
-                If (Not Filemanager.Master.FileLoading) AndAlso (Not parserIsSynchronised) Then
+                If Not Filemanager.Master.FileLoading AndAlso Not parserIsSynchronised Then
                     MakeParseTree()
                 End If
+
                 ' showing the task with logical paths takes a lot of space
                 If Logical Then
                     list = mArchetypeParser.LogicalPaths(LanguageCode)
@@ -128,7 +129,6 @@ Namespace ArchetypeEditor.XML_Classes
                 End If
 
                 Return list.ToArray(GetType(String))
-
             End Get
         End Property
 
@@ -136,7 +136,7 @@ Namespace ArchetypeEditor.XML_Classes
             mArchetypeParser.SpecialiseArchetype(ConceptShortName)
             ' Update the GUI tables with the new term
             The_Ontology.AddTerm(mXmlArchetype.concept)
-            Me.mArchetypeID.Concept &= "-" & ConceptShortName
+            mArchetypeID.Concept &= "-" & ConceptShortName
         End Sub
 
         Public Sub RemoveUnusedCodes()
@@ -182,8 +182,10 @@ Namespace ArchetypeEditor.XML_Classes
                         ' will need to reset the GUI to the new entity
                         setDefinition()
                     End If
-                    mXmlArchetype.archetype_id.value = an_archetype_id.ToString() 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+
+                    mXmlArchetype.archetype_id.value = an_archetype_id.ToString()
                 End If
+
                 ' set the internal variable last in case errors
                 mArchetypeID = an_archetype_id
             Catch e As Exception
@@ -213,8 +215,6 @@ Namespace ArchetypeEditor.XML_Classes
             id_pattern_expression_leaf.reference_type = "constraint"
 
             Dim c_s As New XMLParser.C_STRING()
-            ' HKF: EDT-415
-            'c_s.pattern = "/" + expression + "/"
             c_s.pattern = expression
 
             id_pattern_expression_leaf.item = c_s
@@ -236,22 +236,18 @@ Namespace ArchetypeEditor.XML_Classes
             cardObj = New XMLParser.CARDINALITY()
             cardObj.interval = New XMLParser.IntervalOfInteger()
 
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1 
             With cardObj.interval
-
-                'If (Not c.IsUnbounded) Then
                 .lower = c.MinCount
                 .lowerSpecified = True
                 .lower_included = c.IncludeLower
-                .lower_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1                    
-                'End If
-
+                .lower_includedSpecified = True
                 .upper_unbounded = c.IsUnbounded
-                If (Not c.IsUnbounded) Then
+
+                If Not c.IsUnbounded Then
                     .upper = c.MaxCount
                     .upperSpecified = True
                     .upper_included = c.IncludeUpper
-                    .upper_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    .upper_includedSpecified = True
                 End If
 
                 ' Validate Interval PostConditions 
@@ -263,46 +259,25 @@ Namespace ArchetypeEditor.XML_Classes
                 Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
             End With
 
-            'original code
-            'cardObj.interval.includes_maximum = True
-            'cardObj.interval.includes_minimum = True
-            'cardObj.interval.minimum = c.MinCount
-
-            'If Not c.IsUnbounded Then
-            '    cardObj.interval.maximum = CStr(c.MaxCount)
-            'End If
-
             cardObj.is_ordered = c.Ordered
-            'If c.Ordered Then
-            '    cardObj.is_ordered = True
-            'Else
-            '    cardObj.is_ordered = False
-            'End If
-
             Return cardObj
-
         End Function
 
         Private Function MakeOccurrences(ByVal c As RmCardinality) As XMLParser.IntervalOfInteger
             Dim an_interval As New XMLParser.IntervalOfInteger()
 
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
             With an_interval
-                '.lower = 0                
-                'If (Not c.IsUnbounded) Then
                 .lower = c.MinCount
                 .lowerSpecified = True
                 .lower_included = c.IncludeLower
-                .lower_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1                    
-                'End If
-
+                .lower_includedSpecified = True
                 .upper_unbounded = c.IsUnbounded
-                If (Not c.IsUnbounded) Then
+
+                If Not c.IsUnbounded Then
                     .upper = c.MaxCount
                     .upperSpecified = True
                     .upper_included = c.IncludeUpper
-                    .upper_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    .upper_includedSpecified = True
                 Else
                     .upper_unbounded = True
                 End If
@@ -336,14 +311,10 @@ Namespace ArchetypeEditor.XML_Classes
             Dim code_rel_node As XMLParser.C_ATTRIBUTE
             Dim ca_Term As XMLParser.CONSTRAINT_REF
 
-            'coded_text = mAomFactory.MakeComplexObject(value_attribute, "DV_CODED_TEXT")
             coded_text = mAomFactory.MakeComplexObject(value_attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
 
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code")
-            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", value_attribute.existence)
             ca_Term = New XMLParser.CONSTRAINT_REF()
-            'ca_Term.rm_type_name = "External constraint" 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             ca_Term.rm_type_name = "CODE_PHRASE"
             ca_Term.node_id = ""
             ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
@@ -356,15 +327,10 @@ Namespace ArchetypeEditor.XML_Classes
             Dim code_rel_node, name_rel_node As XMLParser.C_ATTRIBUTE
             Dim ca_Term As XMLParser.CONSTRAINT_REF
 
-            'name_rel_node = mAomFactory.MakeSingleAttribute(ObjNode, "name")
-            name_rel_node = mAomFactory.MakeSingleAttribute(ObjNode, "name", New RmExistence(1).XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'coded_text = mAomFactory.MakeComplexObject(name_rel_node, "DV_CODED_TEXT")
+            name_rel_node = mAomFactory.MakeSingleAttribute(ObjNode, "name", New RmExistence(1).XmlExistence)
             coded_text = mAomFactory.MakeComplexObject(name_rel_node, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
-
-            'code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code")
-            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", New RmExistence(1).XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", New RmExistence(1).XmlExistence)
             ca_Term = New XMLParser.CONSTRAINT_REF()
-            'ca_Term.rm_type_name = "External constraint" 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             ca_Term.rm_type_name = "CODE_PHRASE"
             ca_Term.node_id = ""
             ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
@@ -377,71 +343,58 @@ Namespace ArchetypeEditor.XML_Classes
             Dim code_rel_node As XMLParser.C_ATTRIBUTE
             Dim ca_Term As New XMLParser.C_CODE_PHRASE
 
-            ca_Term.terminology_id = New XMLParser.TERMINOLOGY_ID 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'coded_text = mAomFactory.MakeComplexObject(value_attribute, "DV_CODED_TEXT")
+            ca_Term.terminology_id = New XMLParser.TERMINOLOGY_ID
             coded_text = mAomFactory.MakeComplexObject(value_attribute, "DV_CODED_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
             ca_Term.rm_type_name = "CODE_PHRASE"
             ca_Term.node_id = ""
             ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
-
-
-            'code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code") 
-            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            code_rel_node = mAomFactory.MakeSingleAttribute(coded_text, "defining_code", value_attribute.existence)
 
             If a_CodePhrase.Codes.Count > 0 Then
-
-                'ca_Term.terminology_id = a_CodePhrase.TerminologyID 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 ca_Term.terminology_id.value = a_CodePhrase.TerminologyID.ToString()
-
                 ca_Term.code_list = Array.CreateInstance(GetType(String), a_CodePhrase.Codes.Count)
+
                 For i As Integer = 0 To a_CodePhrase.Codes.Count - 1
                     ca_Term.code_list(i) = a_CodePhrase.Codes(i)
                 Next
+
                 If an_assumed_value <> "" Then
-                    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                    'ca_Term.assumed_value = an_assumed_value              
                     ca_Term.assumed_value = New XMLParser.CODE_PHRASE
                     ca_Term.assumed_value.code_string = an_assumed_value
+
                     If assumed_value_terminology <> "" Then
                         ca_Term.assumed_value.terminology_id = New XMLParser.TERMINOLOGY_ID
                         ca_Term.assumed_value.terminology_id.value = assumed_value_terminology
                     End If
                 End If
             Else
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 ca_Term.terminology_id = New XMLParser.TERMINOLOGY_ID
                 ca_Term.terminology_id.value = a_CodePhrase.TerminologyID
             End If
+
             mAomFactory.add_object(code_rel_node, ca_Term)
         End Sub
 
-        ''SRH: 5Aug2007 - remove ability to set free text lists in archetypes - only in templates
-        'HKF: reinstated to be able to read old archetypes
         Private Sub BuildPlainText(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal TermList As Collections.Specialized.StringCollection)
             Dim plain_text As XMLParser.C_COMPLEX_OBJECT
             Dim value_rel_node As XMLParser.C_ATTRIBUTE
             Dim cString As XMLParser.C_STRING
             Dim xmlSimple As XMLParser.C_PRIMITIVE_OBJECT
 
-            'plain_text = mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT")
-            plain_text = mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT", "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            plain_text = mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If TermList.Count > 0 Then
                 Dim i As Integer
-                'value_rel_node = mAomFactory.MakeSingleAttribute(plain_text, "value")
-                value_rel_node = mAomFactory.MakeSingleAttribute(plain_text, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                value_rel_node = mAomFactory.MakeSingleAttribute(plain_text, "value", value_attribute.existence)
                 cString = New XMLParser.C_STRING()
                 cString.list = Array.CreateInstance(GetType(String), TermList.Count)
+
                 For i = 0 To TermList.Count - 1
                     cString.list(i) = TermList.Item(i)
                 Next
-                xmlSimple = mAomFactory.MakePrimitiveObject(value_rel_node, cString)
-                'Else 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                '    plain_text.any_allowed = True
-            End If
 
+                xmlSimple = mAomFactory.MakePrimitiveObject(value_rel_node, cString)
+            End If
         End Sub
 
         Private Sub DuplicateHistory(ByVal rm As RmStructureCompound, ByRef RelNode As XMLParser.C_ATTRIBUTE)
@@ -462,16 +415,15 @@ Namespace ArchetypeEditor.XML_Classes
                         MakeOccurrences(a_history.Occurrences))
 
                     If Not a_history.HasNameConstraint Then
-                        'an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "name")
-                        an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "name", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                        an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "name", rm.Existence.XmlExistence)
                         BuildText(an_attribute, a_history.NameConstraint)
                     End If
+
                     If a_history.isPeriodic Then
                         Dim durationConstraint As New Constraint_Duration
-
-                        'an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period")
-                        an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                        an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period", rm.Existence.XmlExistence)
                         durationConstraint.MinMaxValueUnits = a_history.PeriodUnits
+
                         'Set max and min to offset value
                         durationConstraint.MinimumValue = a_history.Period
                         durationConstraint.HasMinimum = True
@@ -485,9 +437,7 @@ Namespace ArchetypeEditor.XML_Classes
                         an_attribute = mAomFactory.MakeMultipleAttribute( _
                             xmlHistory, _
                             "events", _
-                            MakeCardinality(a_history.Children.Cardinality), a_history.Children.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-                        'a_history.Children.Count)
+                            MakeCardinality(a_history.Children.Cardinality), a_history.Children.Existence.XmlExistence)
 
                         an_event = a_history.Children.Item(0)
                         xmlEvent = mAomFactory.MakeComplexObject( _
@@ -500,10 +450,9 @@ Namespace ArchetypeEditor.XML_Classes
                             Case RmEvent.ObservationEventType.PointInTime
                                 If an_event.hasFixedOffset Then
                                     Dim durationConstraint As New Constraint_Duration
-
-                                    'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset")
-                                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", rm.Existence.XmlExistence)
                                     durationConstraint.MinMaxValueUnits = an_event.OffsetUnits
+
                                     'Set max and min to offset value
                                     durationConstraint.MinimumValue = an_event.Offset
                                     durationConstraint.HasMinimum = True
@@ -519,10 +468,9 @@ Namespace ArchetypeEditor.XML_Classes
 
                                 If an_event.hasFixedDuration Then
                                     Dim durationConstraint As New Constraint_Duration
-
-                                    'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width")
-                                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                    an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width", rm.Existence.XmlExistence)
                                     durationConstraint.MinMaxValueUnits = an_event.WidthUnits
+
                                     'Set max and min to offset value
                                     durationConstraint.MinimumValue = an_event.Width
                                     durationConstraint.HasMinimum = True
@@ -534,34 +482,23 @@ Namespace ArchetypeEditor.XML_Classes
 
                         ' runtime name
                         If an_event.HasNameConstraint Then
-                            'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "name")
-                            an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "name", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                            an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "name", rm.Existence.XmlExistence)
                             BuildText(an_attribute, an_event.NameConstraint)
                         End If
 
                         ' data
-                        'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "data")
-                        an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "data", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                        Dim objNode As XMLParser.C_COMPLEX_OBJECT
+                        an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "data", rm.Existence.XmlExistence)
 
-                        'objNode = mAomFactory.MakeComplexObject( _
-                        '    an_attribute, _
-                        '    ReferenceModel.RM_StructureName(rm.Type), _
-                        '    rm.NodeId)
-
-                        objNode = mAomFactory.MakeComplexObject( _
+                        Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject( _
                             an_attribute, _
                             ReferenceModel.RM_StructureName(rm.Type), _
-                            rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                            rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
 
                         BuildStructure(rm, objNode)
-
-                        Exit Sub
-
+                        Exit Sub 'FIME: Spaghetti code!
                     End If ' at least one child
                 End If
             Next
-
         End Sub
 
         Private Sub BuildHistory(ByVal a_history As RmHistory, ByRef RelNode As XMLParser.C_ATTRIBUTE, ByVal rmState As RmStructureCompound)
@@ -570,58 +507,48 @@ Namespace ArchetypeEditor.XML_Classes
             Dim an_attribute As XMLParser.C_ATTRIBUTE
             Dim embeddedState As Boolean = False
 
-            Try
-                events = BuildHistory(a_history, RelNode)
+            events = BuildHistory(a_history, RelNode)
 
-                Dim a_rm As RmStructure = Nothing
+            Dim a_rm As RmStructure = Nothing
 
-                If rmState.Children.Count > 0 Then
-                    a_rm = rmState.Children.Items(0)
-                End If
+            If rmState.Children.Count > 0 Then
+                a_rm = rmState.Children.Items(0)
+            End If
 
-                If events.Length > 0 AndAlso Not a_rm Is Nothing Then
-                    Dim path As String = "?"
-                    For i As Integer = 0 To events.Length - 1
-                        history_event = CType(events(i), XMLParser.C_COMPLEX_OBJECT)
-                        'an_attribute = mAomFactory.MakeSingleAttribute(history_event, "state")
+            If events.Length > 0 AndAlso Not a_rm Is Nothing Then
+                Dim path As String = "?"
 
-                        'SRH: 11 Jan 2009 - EDT-502 - set the correct existence on state and protocol
-                        'an_attribute = mAomFactory.MakeSingleAttribute(history_event, "state", a_history.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                For i As Integer = 0 To events.Length - 1
+                    history_event = CType(events(i), XMLParser.C_COMPLEX_OBJECT)
+                    an_attribute = mAomFactory.MakeSingleAttribute(history_event, "state", rmState.Children.Existence.XmlExistence)
 
-                        an_attribute = mAomFactory.MakeSingleAttribute(history_event, "state", rmState.Children.Existence.XmlExistence)
-
-                        'First event has the structure
-                        If i = 0 Then
-                            If a_rm.Type = StructureType.Slot Then
-                                embeddedState = True
-                                BuildSlotFromAttribute(an_attribute, a_rm)
-                            Else
-
-                                Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                                'objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId)
-                                objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-                                BuildStructure(a_rm, objNode)
-                                path = Me.GetPathOfNode(a_rm.NodeId)
-                            End If
+                    'First event has the structure
+                    If i = 0 Then
+                        If a_rm.Type = StructureType.Slot Then
+                            embeddedState = True
+                            BuildSlotFromAttribute(an_attribute, a_rm)
                         Else
-                            If embeddedState Then
-                                BuildSlotFromAttribute(an_attribute, a_rm)
+                            Dim objNode As XMLParser.C_COMPLEX_OBJECT
+                            objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
+                            BuildStructure(a_rm, objNode)
+                            path = GetPathOfNode(a_rm.NodeId)
+                        End If
+                    Else
+                        If embeddedState Then
+                            BuildSlotFromAttribute(an_attribute, a_rm)
+                        Else
+                            'create a reference
+                            Dim ref_xmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF
+
+                            If Not path = "?" Then
+                                ref_xmlRefNode = mAomFactory.MakeArchetypeRef(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), path)
                             Else
-                                'create a reference
-                                Dim ref_xmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF
-                                If Not path = "?" Then
-                                    ref_xmlRefNode = mAomFactory.MakeArchetypeRef(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), path)
-                                Else
-                                    Debug.Assert(False, "Error with path")
-                                End If
+                                Debug.Assert(False, "Error with path")
                             End If
                         End If
-                    Next
-                End If
-            Catch ex As Exception
-                Debug.Assert(False)
-            End Try
+                    End If
+                Next
+            End If
         End Sub
 
         Private Function BuildHistory(ByVal a_history As RmHistory, ByRef RelNode As XMLParser.C_ATTRIBUTE) As Object()
@@ -647,11 +574,9 @@ Namespace ArchetypeEditor.XML_Classes
 
                 If a_history.isPeriodic Then
                     Dim durationConstraint As New Constraint_Duration
-
-                    'an_attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period")
-                    attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period", a_history.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
+                    attribute = mAomFactory.MakeSingleAttribute(xmlHistory, "period", a_history.Existence.XmlExistence)
                     durationConstraint.MinMaxValueUnits = a_history.PeriodUnits
+
                     'Set max and min to offset value
                     durationConstraint.MinimumValue = a_history.Period
                     durationConstraint.HasMinimum = True
@@ -661,12 +586,10 @@ Namespace ArchetypeEditor.XML_Classes
                 End If
 
                 ' now build the events
-
                 events_rel_node = mAomFactory.MakeMultipleAttribute( _
                     xmlHistory, _
                     "events", _
                     MakeCardinality(a_history.Children.Cardinality), a_history.Children.Existence.XmlExistence)
-                'a_history.Children.Count)
 
                 For i As Integer = 0 To a_history.Children.Count - 1
                     an_event = a_history.Children.Item(i)
@@ -687,11 +610,9 @@ Namespace ArchetypeEditor.XML_Classes
                         Case StructureType.PointEvent
                             If an_event.hasFixedOffset Then
                                 Dim durationConstraint As New Constraint_Duration
-
-                                'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset")
-                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
+                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "offset", an_event.Existence.XmlExistence)
                                 durationConstraint.MinMaxValueUnits = an_event.OffsetUnits
+
                                 'Set max and min to offset value
                                 durationConstraint.MinimumValue = an_event.Offset
                                 durationConstraint.HasMinimum = True
@@ -707,10 +628,9 @@ Namespace ArchetypeEditor.XML_Classes
 
                             If an_event.hasFixedDuration Then
                                 Dim durationConstraint As New Constraint_Duration
-
-                                'an_attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width")
-                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width", an_event.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                attribute = mAomFactory.MakeSingleAttribute(xmlEvent, "width", an_event.Existence.XmlExistence)
                                 durationConstraint.MinMaxValueUnits = an_event.WidthUnits
+
                                 'Set max and min to offset value
                                 durationConstraint.MinimumValue = an_event.Width
                                 durationConstraint.HasMinimum = True
@@ -746,34 +666,31 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         Private Sub BuildCluster(ByVal Cluster As RmCluster, ByRef RelNode As XMLParser.C_ATTRIBUTE)
-            Dim cluster_xmlObj As XMLParser.C_COMPLEX_OBJECT
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+            Dim clusterXmlObj As XMLParser.C_COMPLEX_OBJECT
+            Dim attribute As XMLParser.C_ATTRIBUTE
             Dim rm As RmStructure
 
-            cluster_xmlObj = mAomFactory.MakeComplexObject( _
-                RelNode, _
-                ReferenceModel.RM_StructureName(StructureType.Cluster), _
-                Cluster.NodeId, _
-                MakeOccurrences(Cluster.Occurrences))
+            clusterXmlObj = mAomFactory.MakeComplexObject(RelNode, ReferenceModel.RM_StructureName(StructureType.Cluster), Cluster.NodeId, MakeOccurrences(Cluster.Occurrences))
 
             If Cluster.HasNameConstraint Then
-                an_attribute = mAomFactory.MakeSingleAttribute(cluster_xmlObj, "name", Cluster.Existence.XmlExistence)
-                BuildText(an_attribute, Cluster.NameConstraint)
+                attribute = mAomFactory.MakeSingleAttribute(clusterXmlObj, "name", Cluster.Existence.XmlExistence)
+                BuildText(attribute, Cluster.NameConstraint)
             End If
 
             If Cluster.Children.Count > 0 Then
-                an_attribute = mAomFactory.MakeMultipleAttribute( _
-                    cluster_xmlObj, _
-                    "items", _
-                MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered), Cluster.Children.Existence.XmlExistence)
+                attribute = mAomFactory.MakeMultipleAttribute(clusterXmlObj, "items", MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered), Cluster.Children.Existence.XmlExistence)
+                Dim index As Integer = 0
 
                 For Each rm In Cluster.Children.Items
                     If rm.Type = StructureType.Cluster Then
-                        BuildCluster(rm, an_attribute)
+                        BuildCluster(rm, attribute)
+                        index += 1
                     ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                        BuildElementOrReference(rm, an_attribute)
+                        BuildElementOrReference(rm, attribute, index)
+                        index += 1
                     ElseIf rm.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(an_attribute, rm)
+                        BuildSlotFromAttribute(attribute, rm)
+                        index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
                     End If
@@ -793,40 +710,26 @@ Namespace ArchetypeEditor.XML_Classes
         Protected Sub BuildRootCluster(ByVal Cluster As RmCluster, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
             If Cluster.Children.Count > 0 Then
-                Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(xmlObj, "items", MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered), Cluster.Children.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(xmlObj, "items", MakeCardinality(Cluster.Children.Cardinality, Cluster.Children.Cardinality.Ordered), Cluster.Children.Existence.XmlExistence)
+                Dim index As Integer = 0
 
                 For Each rm As RmStructure In Cluster.Children.Items
                     If rm.Type = StructureType.Cluster Then
                         BuildCluster(rm, Attribute)
+                        index += 1
                     ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                        BuildElementOrReference(rm, Attribute)
+                        BuildElementOrReference(rm, attribute, index)
+                        index += 1
                     ElseIf rm.Type = StructureType.Slot Then
-                        BuildSlotFromAttribute(Attribute, rm)
+                        BuildSlotFromAttribute(attribute, rm)
+                        index += 1
                     Else
                         Debug.Assert(False, "Type not handled")
                     End If
                 Next
             End If
 
-            If ReferencesToResolve.Count > 0 Then
-                Dim ref_xmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF
-                Dim path As String
-
-                For Each ref As ReferenceToResolve In ReferencesToResolve
-                    path = GetPathOfNode(ref.Element.NodeId)
-
-                    If Not path Is Nothing Then
-                        ref_xmlRefNode = mAomFactory.MakeArchetypeRef(ref.Attribute, "ELEMENT", path)
-                        ref_xmlRefNode.occurrences = MakeOccurrences(ref.Element.Occurrences)
-                    Else
-                        'reference element no longer exists so build it as an element
-                        Dim new_element As RmElement = ref.Element.Copy()
-                        BuildElementOrReference(new_element, ref.Attribute)
-                    End If
-                Next
-
-                ReferencesToResolve.Clear()
-            End If
+            ResolveReferences()
         End Sub
 
         Private Sub BuildRootSection(ByVal section As RmSection, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
@@ -952,34 +855,21 @@ Namespace ArchetypeEditor.XML_Classes
             Dim xmlCount As XMLParser.C_COMPLEX_OBJECT
             Dim magnitude As XMLParser.C_PRIMITIVE_OBJECT
 
-            'xmlCount = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(ct.Type))
-            xmlCount = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(ct.Kind), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            xmlCount = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(ct.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
 
-            'Uncomment to allow lists of integers
-            'If ct.HasList Then
-            '    an_attribute = mAomFactory.MakeSingleAttribute(xmlCount, "magnitude", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            '    Dim c_int As New XMLParser.C_INTEGER
-
-            '    Dim y As String()
-            '    y = ct.ValueList.Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-            '    Dim intToString As New Converter(Of String, Integer)(AddressOf StringToIntegerConverter)
-            '    c_int.list = Array.ConvertAll(Of String, Integer)(y, intToString)
-
-            'Else
             If ct.HasMaximum Or ct.HasMinimum Then
                 ' set the magnitude constraint
-                'an_attribute = mAomFactory.MakeSingleAttribute(xmlCount, "magnitude")
-                an_attribute = mAomFactory.MakeSingleAttribute(xmlCount, "magnitude", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                an_attribute = mAomFactory.MakeSingleAttribute(xmlCount, "magnitude", value_attribute.existence)
                 Dim c_int As New XMLParser.C_INTEGER
 
                 If ct.HasMaximum Or ct.HasMinimum Then
-                    c_int.range = New XMLParser.IntervalOfInteger 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    c_int.range = New XMLParser.IntervalOfInteger
 
                     If ct.HasMaximum Then
                         c_int.range.upper = CInt(ct.MaximumValue)
                         c_int.range.upperSpecified = True
                         c_int.range.upper_included = ct.IncludeMaximum
-                        c_int.range.upper_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                        c_int.range.upper_includedSpecified = True
                     Else
                         c_int.range.upper_unbounded = True
                     End If
@@ -988,48 +878,19 @@ Namespace ArchetypeEditor.XML_Classes
                         c_int.range.lower = CInt(ct.MinimumValue)
                         c_int.range.lowerSpecified = True
                         c_int.range.lower_included = ct.IncludeMinimum
-                        c_int.range.lower_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1                    
+                        c_int.range.lower_includedSpecified = True
                     Else
                         c_int.range.lower_unbounded = True
                     End If
                 End If
 
-                'The following statement will never occur due to outer IF statement
-                'If Not ct.HasMaximum And Not ct.HasMinimum Then
-                '    Debug.Assert(False)
-                '    'xmlCount.any_allowed = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1                    
-                '    Return
-                'End If
-
-                'If ct.HasMaximum And ct.HasMinimum Then
-                '    c_int.range.minimum = ct.MinimumValue
-                '    c_int.range.maximum = ct.MaximumValue
-                '    c_int.range.includes_minimum = ct.IncludeMinimum
-                '    c_int.range.includes_maximum = ct.IncludeMaximum
-                'ElseIf ct.HasMaximum Then
-                '    c_int.range.maximum = ct.MaximumValue
-                '    c_int.range.includes_maximum = ct.IncludeMaximum
-                'ElseIf ct.HasMinimum Then
-                '    c_int.range.minimum = ct.MinimumValue
-                '    c_int.range.includes_minimum = ct.IncludeMinimum
-                'Else
-                '    Debug.Assert(False)
-                '    'xmlCount.any_allowed = True 
-                '    Return
-                'End If
-
                 If ct.HasAssumedValue Then
-                    'c_int.assumed_value = ct.AssumedValue.ToString()
                     c_int.assumed_valueSpecified = True
                     c_int.assumed_value = CInt(ct.AssumedValue)
                 End If
 
                 magnitude = mAomFactory.MakePrimitiveObject(an_attribute, c_int)
 
-                'Else 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                '    xmlCount.any_allowed = True
-
-                ' Validate Interval PostConditions
                 With c_int.range
                     Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
                     Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
@@ -1039,7 +900,6 @@ Namespace ArchetypeEditor.XML_Classes
                     Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
                 End With
             End If
-            'End If
         End Sub
 
         Private Sub BuildDateTime(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal dt As Constraint_DateTime)
@@ -1048,20 +908,13 @@ Namespace ArchetypeEditor.XML_Classes
             Dim an_object As XMLParser.C_COMPLEX_OBJECT
             Dim cd As XMLParser.C_PRIMITIVE
             Dim xmlDateTime As New XMLParser.C_PRIMITIVE_OBJECT
-
-            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
             Dim allowAll As Boolean = False
 
             Select Case dt.TypeofDateTimeConstraint
                 Case 11                 ' Allow all
-                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
-
                     Dim dtc As New XMLParser.C_DATE_TIME
-                    'dtc.pattern = "YYYY-??-??T??:??:??"
                     cd = dtc
-
                     allowAll = True
-
                 Case 12                 ' Full date time
                     Dim dtc As New XMLParser.C_DATE_TIME
                     dtc.pattern = "YYYY-MM-DDTHH:MM:SS"
@@ -1071,9 +924,7 @@ Namespace ArchetypeEditor.XML_Classes
                     dtc.pattern = "YYYY-MM-DDTHH:??:??"
                     cd = dtc
                 Case 14                 'Date only
-                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
                     Dim dtc As New XMLParser.C_DATE
-                    'dtc.pattern = "YYYY-??-??"
                     cd = dtc
                     allowAll = True
                 Case 15                'Full date
@@ -1089,9 +940,7 @@ Namespace ArchetypeEditor.XML_Classes
                     dtc.pattern = "YYYY-MM-??"
                     cd = dtc
                 Case 18                'TimeOnly
-                    'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
                     Dim dtc As New XMLParser.C_TIME
-                    'dtc.pattern = "HH:??:??"
                     cd = dtc
                     allowAll = True
                 Case 19                 'Full time
@@ -1120,16 +969,13 @@ Namespace ArchetypeEditor.XML_Classes
                 Case "xmlparser.c_time"
                     a_type = "DV_TIME"
             End Select
-            'an_object = mAomFactory.MakeComplexObject(value_attribute, a_type)
-            an_object = mAomFactory.MakeComplexObject(value_attribute, a_type, "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'an_attribute = mAomFactory.MakeSingleAttribute(an_object, "value")
 
-            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
+            an_object = mAomFactory.MakeComplexObject(value_attribute, a_type, "", MakeOccurrences(New RmCardinality(1, 1)))
+
             If Not allowAll Then
-                an_attribute = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                an_attribute = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence)
                 mAomFactory.MakePrimitiveObject(an_attribute, cd)
             End If
-
         End Sub
 
         Private Sub BuildSlotFromAttribute(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal a_slot As RmSlot)
@@ -1202,14 +1048,7 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildDuration(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Duration)
-
-            'Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type))
-            Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value")
-
-            'SRH: 19 Jan 2008 - Fix bug in DV_DURATION if no constraint
-            'Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
+            Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
             Dim objNode As XMLParser.C_PRIMITIVE_OBJECT
             Dim d As New XMLParser.C_DURATION
 
@@ -1219,12 +1058,11 @@ Namespace ArchetypeEditor.XML_Classes
                 d.range = New XMLParser.IntervalOfDuration()
                 durationISO.ISO_Units = Main.ISO_TimeUnits.GetIsoUnitForDuration(c.MinMaxValueUnits)
 
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 If c.HasMinimum Then
                     durationISO.GUI_duration = CInt(c.MinimumValue)
                     d.range.lower = durationISO.ISO_duration
                     d.range.lower_included = c.IncludeMinimum
-                    d.range.lower_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    d.range.lower_includedSpecified = True
                 Else
                     d.range.lower_unbounded = True
                 End If
@@ -1233,59 +1071,31 @@ Namespace ArchetypeEditor.XML_Classes
                     durationISO.GUI_duration = CInt(c.MaximumValue)
                     d.range.upper = durationISO.ISO_duration
                     d.range.upper_included = c.IncludeMaximum
-                    d.range.upper_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    d.range.upper_includedSpecified = True
                 Else
                     d.range.upper_unbounded = True
                 End If
 
-                'If c.HasMaximum And c.HasMinimum Then
-                '    durationISO.GUI_duration = CInt(c.MaximumValue)
-                '    d.range.maximum = durationISO.ISO_duration
-                '    durationISO.GUI_duration = CInt(c.MinimumValue)
-                '    d.range.minimum = durationISO.ISO_duration
-                '    d.range.includes_maximum = c.IncludeMaximum
-                '    d.range.includes_minimum = c.IncludeMinimum
-                'ElseIf c.HasMinimum Then
-                '    durationISO.GUI_duration = CInt(c.MinimumValue)
-                '    d.range.minimum = durationISO.ISO_duration
-                '    d.range.includes_minimum = c.IncludeMinimum
-                'Else 'Has maximum
-                '    durationISO.GUI_duration = CInt(c.MaximumValue)
-                '    d.range.maximum = durationISO.ISO_duration
-                '    d.range.includes_maximum = c.IncludeMaximum
-                'End If
                 With d.range
-                    'Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
                     Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
-                    'Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
                     Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
                     Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
                     Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
                 End With
             End If
 
-            'HKF: 8 Dec 2008
-            'If Not c.AllowableUnits Is Nothing Then
             If Not String.IsNullOrEmpty(c.AllowableUnits) AndAlso c.AllowableUnits <> "PYMWDTHMS" Then
                 d.pattern = c.AllowableUnits
             End If
 
-            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
-            'If Not d.range Is Nothing And Not String.IsNullOrEmpty(d.pattern) And Not String.IsNullOrEmpty(d.assumed_value) Then
-            'SRH: 13 jan 2009 - EDT-497 - Further bug fixed
             If Not d.range Is Nothing Or Not String.IsNullOrEmpty(d.pattern) Or Not String.IsNullOrEmpty(d.assumed_value) Then
-                'SRH: 19 Jan 2008 - Fix bug in DV_DURATION if no constraint
-                Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence)
                 objNode = mAomFactory.MakePrimitiveObject(an_attribute, d)
             End If
-            ' Validate Interval PostConditions
         End Sub
 
         Private Sub BuildQuantity(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
             Dim cQuantity As New XMLParser.C_DV_QUANTITY
-
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'cQuantity.rm_type_name = "QUANTITY" 
             cQuantity.rm_type_name = "DV_QUANTITY"
             cQuantity.node_id = ""
             cQuantity.occurrences = MakeOccurrences(New RmCardinality(1, 1))
@@ -1293,16 +1103,13 @@ Namespace ArchetypeEditor.XML_Classes
             mAomFactory.add_object(value_attribute, cQuantity)
 
             ' set the property constraint - it should be present
-
             If Not q.IsNull Then
-
                 Dim cp As New XMLParser.CODE_PHRASE
 
                 Debug.Assert(q.IsCoded)
 
-                'cp.code_string = q.OpenEhrCode 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                 cp.code_string = q.OpenEhrCode.ToString()
-                cp.terminology_id = New XMLParser.TERMINOLOGY_ID 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                cp.terminology_id = New XMLParser.TERMINOLOGY_ID
                 cp.terminology_id.value = "openehr"
 
                 cQuantity.property = cp
@@ -1323,14 +1130,12 @@ Namespace ArchetypeEditor.XML_Classes
                         'Magnitude
                         If unit_constraint.HasMaximum Or unit_constraint.HasMinimum Then
                             a_real = New XMLParser.IntervalOfReal
-                            'a_real.has_maximum = unit_constraint.HasMaximum
-                            'a_real.has_minimum = unit_constraint.HasMinimum
 
                             If unit_constraint.HasMaximum Then
                                 a_real.upper = unit_constraint.MaximumRealValue
                                 a_real.upperSpecified = True
                                 a_real.upper_included = unit_constraint.IncludeMaximum
-                                a_real.upper_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                a_real.upper_includedSpecified = True
                             Else
                                 a_real.upper_unbounded = True
                             End If
@@ -1339,31 +1144,10 @@ Namespace ArchetypeEditor.XML_Classes
                                 a_real.lower = unit_constraint.MinimumRealValue
                                 a_real.lowerSpecified = True
                                 a_real.lower_included = unit_constraint.IncludeMinimum
-                                a_real.lower_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                a_real.lower_includedSpecified = True
                             Else
                                 a_real.lower_unbounded = True
                             End If
-
-                            'If unit_constraint.HasMaximum And unit_constraint.HasMinimum Then
-                            '    a_real.minimum = unit_constraint.MinimumValue
-                            '    a_real.minimumSpecified = True
-                            '    a_real.maximum = unit_constraint.MaximumValue
-                            '    a_real.maximumSpecified = True
-                            '    If unit_constraint.IncludeMinimum = False Then
-                            '        a_real.includes_minimum = unit_constraint.IncludeMinimum
-                            '    End If
-                            '    If unit_constraint.IncludeMaximum = False Then
-                            '        a_real.includes_maximum = unit_constraint.IncludeMaximum
-                            '    End If
-                            'ElseIf unit_constraint.HasMaximum Then
-                            '    a_real.maximum = unit_constraint.MaximumValue
-                            '    a_real.maximumSpecified = True
-                            '    a_real.includes_maximum = unit_constraint.IncludeMaximum
-                            'ElseIf unit_constraint.HasMinimum Then
-                            '    a_real.minimum = unit_constraint.MinimumValue
-                            '    a_real.minimumSpecified = True
-                            '    a_real.includes_minimum = unit_constraint.IncludeMinimum
-                            'End If
 
                             ' Validate Interval PostConditions
                             With a_real
@@ -1382,8 +1166,6 @@ Namespace ArchetypeEditor.XML_Classes
 
                         'Precision
                         If unit_constraint.Precision > -1 Then
-                            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                            'cUnit.precision = unit_constraint.Precision
                             cUnit.precision = New XMLParser.IntervalOfInteger
                             cUnit.precision.lower = unit_constraint.Precision
                             cUnit.precision.upper = unit_constraint.Precision
@@ -1395,11 +1177,7 @@ Namespace ArchetypeEditor.XML_Classes
                             cUnit.precision.upper_includedSpecified = True
                         End If
 
-                        'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                         If unit_constraint.HasAssumedValue Then
-                            'cUnit.assumed_value = unit_constraint.AssumedValue (as CSng)
-                            'cUnit.assumed_valueSpecified = True
-
                             If cQuantity.assumed_value Is Nothing Then
                                 cQuantity.assumed_value = New XMLParser.DV_QUANTITY
                                 cQuantity.assumed_value.units = unit_constraint.Unit '1 units string
@@ -1416,21 +1194,12 @@ Namespace ArchetypeEditor.XML_Classes
                         cQuantity.list(i - 1) = cUnit
                     Next
                 End If
-
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                'Else
-                '    cQuantity.any_allowed = True
             End If
-
         End Sub
 
         Private Sub BuildBoolean(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal b As Constraint_Boolean)
-
-            'Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(b.Type))
-            Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(b.Kind), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-            'Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value")
-            Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(b.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+            Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence)
 
             Dim c_value As XMLParser.C_PRIMITIVE_OBJECT
             Dim c_bool As New XMLParser.C_BOOLEAN
@@ -1461,9 +1230,6 @@ Namespace ArchetypeEditor.XML_Classes
             Dim o_v As OrdinalValue
 
             c_value = New XMLParser.C_DV_ORDINAL()
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'c_value.rm_type_name = "ORDINAL"
-            'c_value.list = Array.CreateInstance(GetType(XMLParser.ORDINAL), o.OrdinalValues.Count) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             c_value.rm_type_name = "DV_ORDINAL"
             c_value.list = Array.CreateInstance(GetType(XMLParser.DV_ORDINAL), o.OrdinalValues.Count)
             c_value.node_id = ""
@@ -1472,15 +1238,7 @@ Namespace ArchetypeEditor.XML_Classes
             If o.OrdinalValues.Count > 0 Then
                 Dim i As Integer = 0
                 For Each o_v In o.OrdinalValues
-                    'SRH: Added as empty rows still give a count of 1
                     If o_v.InternalCode <> Nothing Then
-                        'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                        'Dim xmlO As New XMLParser.ORDINAL
-                        'xmlO.value = o_v.Ordinal.ToString()
-                        'xmlO.symbol = New XMLParser.CODE_PHRASE
-                        'xmlO.symbol.code_string = o_v.InternalCode
-                        'xmlO.symbol.terminology_id = "local"
-
                         Dim xmlO As New XMLParser.DV_ORDINAL
 
                         '1 value int
@@ -1501,8 +1259,6 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             If o.HasAssumedValue Then
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                'c_value.assumed_value = CStr(o.AssumedValue)
                 c_value.assumed_value = New XMLParser.DV_ORDINAL
                 c_value.assumed_value.symbol = New XMLParser.DV_CODED_TEXT
                 c_value.assumed_value.symbol.defining_code = New XMLParser.CODE_PHRASE
@@ -1511,14 +1267,12 @@ Namespace ArchetypeEditor.XML_Classes
                 c_value.assumed_value.symbol.defining_code.terminology_id.value = o.AssumedValue_TerminologyId
                 c_value.assumed_value.symbol.value = ""
                 c_value.assumed_value.value = CStr(o.AssumedValue)
-
             End If
 
             mAomFactory.add_object(value_attribute, c_value)
         End Sub
 
         Private Sub BuildText(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal t As Constraint_Text)
-
             Select Case t.TypeOfTextConstraint
                 Case TextConstrainType.Terminology
                     If t.ConstraintCode <> "" Then
@@ -1527,29 +1281,21 @@ Namespace ArchetypeEditor.XML_Classes
                 Case TextConstrainType.Internal
                     BuildCodedText(value_attribute, t.AllowableValues, CStr(t.AssumedValue), t.AssumedValue_TerminologyId)
                 Case TextConstrainType.Text
-                    'HKF: reinstated BuildPlainText to be able to read old archetypes
-                    'mAomFactory.MakeComplexObject(value_attribute, "DV_TEXT", "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                     BuildPlainText(value_attribute, t.AllowableValues.Codes)
             End Select
         End Sub
 
         Protected Function GetPathOfNode(ByVal NodeId As String) As String
-            Dim an_arraylist As System.Collections.ArrayList
-            Dim path As String = ""
+            Dim result As String = ""
 
-            an_arraylist = mArchetypeParser.PhysicalPaths()
-
-            'System.Diagnostics.Debug.WriteLine(an_arraylist.Count)
-            For Each s As String In an_arraylist
-                'System.Diagnostics.Debug.WriteLine(s)
+            For Each s As String In mArchetypeParser.PhysicalPaths()
                 If s.EndsWith(NodeId & "]") Then
-                    path = s
+                    result = s
                     Exit For
                 End If
             Next
 
-            Debug.Assert(Not String.IsNullOrEmpty(path), "Should be a path for every node")
-            Return path
+            Return result
         End Function
 
         Private Sub BuildInterval(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Interval)
@@ -1588,22 +1334,18 @@ Namespace ArchetypeEditor.XML_Classes
             Dim code_rel_node As XMLParser.C_ATTRIBUTE
             Dim ca_Term As XMLParser.C_CODE_PHRASE
 
-            'objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Type))
-            objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'code_rel_node = mAomFactory.MakeSingleAttribute(objNode, "media_type")
-            code_rel_node = mAomFactory.MakeSingleAttribute(objNode, "media_type", value_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+            code_rel_node = mAomFactory.MakeSingleAttribute(objNode, "media_type", value_attribute.existence)
             ca_Term = New XMLParser.C_CODE_PHRASE
             ca_Term.rm_type_name = "CODE_PHRASE"
             ca_Term.node_id = ""
             ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
-
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             ca_Term.terminology_id = New XMLParser.TERMINOLOGY_ID
             ca_Term.terminology_id.value = c.AllowableValues.TerminologyID
+
             If c.AllowableValues.TerminologyID = "" Then
                 ca_Term.terminology_id.value = "local"
             End If
-            'ca_Term.terminology = c.AllowableValues.TerminologyID
 
             If c.AllowableValues.Codes.Count > 0 Then
                 ca_Term.code_list = Array.CreateInstance(GetType(String), c.AllowableValues.Codes.Count)
@@ -1611,16 +1353,15 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             mAomFactory.add_object(code_rel_node, ca_Term)
-
         End Sub
 
         Private Sub BuildURI(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_URI)
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
 
             If c.EhrUriOnly Then
-                objNode = mAomFactory.MakeComplexObject(value_attribute, "DV_EHR_URI", "", MakeOccurrences(New RmCardinality(1, 1))) 'SRH: 1AUG2007 - support DV_EHR_URI
+                objNode = mAomFactory.MakeComplexObject(value_attribute, "DV_EHR_URI", "", MakeOccurrences(New RmCardinality(1, 1)))
             Else
-                objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
             End If
 
             If Not String.IsNullOrEmpty(c.RegularExpression) Then
@@ -1635,18 +1376,7 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildParsable(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Parsable)
-            Dim objNode As XMLParser.C_COMPLEX_OBJECT
-
-            objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
-
-            'If Not String.IsNullOrEmpty(c.RegularExpression) Then
-            '    'Add a constraint to C_STRING
-            '    Dim attribute As XMLParser.C_ATTRIBUTE
-            '    attribute = mAomFactory.MakeSingleAttribute(objNode, "value", MakeOccurrences(New RmCardinality(1, 1)))
-            '    Dim cSt As New XMLParser.C_STRING
-            '    cSt.pattern = c.RegularExpression
-            '    mAomFactory.MakePrimitiveObject(attribute, cSt)
-            'End If
+            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If c.AllowableFormalisms.Count > 0 Then
                 'Add a constraint to C_STRING
@@ -1656,33 +1386,10 @@ Namespace ArchetypeEditor.XML_Classes
                 cSt.list = c.AllowableFormalisms.ToArray()
                 mAomFactory.MakePrimitiveObject(attribute, cSt)
             End If
-
-            'If c.AllowableValues.Codes.Count > 0 Then
-            '    'Add a constraint to C_STRING
-            '    Dim attribute As XMLParser.C_ATTRIBUTE
-            '    attribute = mAomFactory.MakeSingleAttribute(objNode, "formalism", MakeOccurrences(New RmCardinality(1, 1)))
-            '    ca_Term = New XMLParser.C_CODE_PHRASE
-            '    ca_Term.rm_type_name = "CODE_PHRASE"
-            '    ca_Term.node_id = ""
-            '    ca_Term.occurrences = MakeOccurrences(New RmCardinality(1, 1))
-
-            '    'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            '    ca_Term.terminology_id = New XMLParser.TERMINOLOGY_ID
-            '    ca_Term.terminology_id.value = c.AllowableValues.TerminologyID
-            '    If c.AllowableValues.TerminologyID = "" Then
-            '        ca_Term.terminology_id.value = "local"
-            '    End If
-            '    ca_Term.code_list = Array.CreateInstance(GetType(String), c.AllowableValues.Codes.Count)
-            '    c.AllowableValues.Codes.CopyTo(ca_Term.code_list, 0)
-            '    mAomFactory.add_object(attribute, ca_Term)
-            'End If
-
         End Sub
 
         Private Sub BuildIdentifier(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint_Identifier)
-            Dim objNode As XMLParser.C_COMPLEX_OBJECT
-
-            objNode = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(c.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
 
             If c.IssuerRegex <> Nothing Then
                 'Add a constraint to C_STRING
@@ -1708,7 +1415,6 @@ Namespace ArchetypeEditor.XML_Classes
                 cSt.pattern = c.IDRegex
                 mAomFactory.MakePrimitiveObject(attribute, cSt)
             End If
-
         End Sub
 
         Private Sub BuildElementConstraint(ByVal parent As XMLParser.C_COMPLEX_OBJECT, ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal c As Constraint)
@@ -1730,7 +1436,6 @@ Namespace ArchetypeEditor.XML_Classes
                         BuildOrdinal(value_attribute, c)
 
                     Case ConstraintKind.Any
-                        'parent.any_allowed = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1                    
 
                     Case ConstraintKind.Proportion
                         BuildProportion(value_attribute, c)
@@ -1743,10 +1448,8 @@ Namespace ArchetypeEditor.XML_Classes
 
                     Case ConstraintKind.Slot
                         Dim slot As New RmSlot()
-
                         slot.SlotConstraint = c
                         slot.Occurrences.IsUnbounded = True
-
                         BuildSlotFromAttribute(value_attribute, slot)
 
                     Case ConstraintKind.Multiple
@@ -1766,9 +1469,6 @@ Namespace ArchetypeEditor.XML_Classes
                     Case ConstraintKind.Duration
                         BuildDuration(value_attribute, c)
 
-                        'Case ConstraintType.Currency
-                        '    BuildCurrency(value_attribute, c)
-
                     Case ConstraintKind.Identifier
                         BuildIdentifier(value_attribute, c)
 
@@ -1777,250 +1477,190 @@ Namespace ArchetypeEditor.XML_Classes
 
                     Case Else
                         Debug.Assert(False, String.Format("{0} constraint type is not handled", c.ToString()))
-
                 End Select
-
             Catch ex As Exception
                 Debug.Assert(False)
             End Try
         End Sub
 
-        Private Sub BuildElementOrReference(ByVal Element As RmElement, ByRef RelNode As XMLParser.C_ATTRIBUTE)
-            Dim value_attribute As XMLParser.C_ATTRIBUTE
+        Protected Sub BuildElementOrReference(ByVal Element As RmElement, ByRef RelNode As XMLParser.C_ATTRIBUTE, ByVal index As Integer)
+            If Element.Type = StructureType.Reference Then
+                Dim path As String = GetPathOfNode(Element.NodeId)
 
-            Try
-                If Element.Type = StructureType.Reference Then
+                If path <> "" Then
+                    Dim refXmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF = mAomFactory.MakeArchetypeRef(RelNode, "ELEMENT", path)
+                    refXmlRefNode.occurrences = MakeOccurrences(Element.Occurrences)
+                Else
+                    'the origin of the reference has not been added yet
                     Dim ref As ReferenceToResolve
-
                     ref.Element = Element
                     ref.Attribute = RelNode
-
+                    ref.Index = index
                     ReferencesToResolve.Add(ref)
+                End If
+            Else
+                Dim elementXmlObj As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(RelNode, _
+                    ReferenceModel.RM_StructureName(StructureType.Element), Element.NodeId, MakeOccurrences(Element.Occurrences))
 
-                Else
-                    Dim element_xmlObj As XMLParser.C_COMPLEX_OBJECT
-
-                    element_xmlObj = mAomFactory.MakeComplexObject(RelNode, _
-                        ReferenceModel.RM_StructureName(StructureType.Element), _
-                        Element.NodeId, _
-                        MakeOccurrences(Element.Occurrences))
-                    'JAR
-
-                    If Element.HasNameConstraint Then
-                        Dim an_attribute As XMLParser.C_ATTRIBUTE
-
-                        'an_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "name")
-                        an_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "name", Element.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                        BuildText(an_attribute, Element.NameConstraint)
-                    End If
-
-                    If Element.Constraint.Kind = ConstraintKind.Any Then
-                        If element_xmlObj.attributes Is Nothing OrElse element_xmlObj.attributes.Length = 0 Then
-                            'element_xmlObj.any_allowed = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                        End If
-                    Else
-                        'value_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "value")
-                        value_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "value", Element.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                        BuildElementConstraint(element_xmlObj, value_attribute, Element.Constraint)
-                    End If
-
-                    'Check for constraint on Flavours of Null
-                    If Element.HasNullFlavourConstraint() Then
-                        Dim null_flavour_attribute As XMLParser.C_ATTRIBUTE
-                        null_flavour_attribute = mAomFactory.MakeSingleAttribute(element_xmlObj, "null_flavour", New RmExistence(0, 1).XmlExistence)
-                        BuildCodedText(null_flavour_attribute, Element.ConstrainedNullFlavours)
-                    End If
+                If Element.HasNameConstraint Then
+                    Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "name", Element.Existence.XmlExistence)
+                    BuildText(attribute, Element.NameConstraint)
                 End If
 
-            Catch ex As Exception
-                Debug.Assert(False, ex.Message)
-            End Try
+                If Element.Constraint.Kind <> ConstraintKind.Any Then
+                    Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "value", Element.Existence.XmlExistence)
+                    BuildElementConstraint(elementXmlObj, attribute, Element.Constraint)
+                End If
+
+                'Check for constraint on Flavours of Null
+                If Element.HasNullFlavourConstraint() Then
+                    Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(elementXmlObj, "null_flavour", New RmExistence(0, 1).XmlExistence)
+                    BuildCodedText(attribute, Element.ConstrainedNullFlavours)
+                End If
+            End If
+        End Sub
+
+        Protected Sub ResolveReferences()
+            For Each ref As ReferenceToResolve In ReferencesToResolve
+                Dim path As String = GetPathOfNode(ref.Element.NodeId)
+
+                If path <> "" Then
+                    Dim refXmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF = mAomFactory.MakeArchetypeRef(ref.Attribute, "ELEMENT", path)
+
+                    For i As Integer = ref.Attribute.children.Length - 2 To ref.Index Step -1
+                        ref.Attribute.children(i + 1) = ref.Attribute.children(i)
+                    Next
+
+                    ref.Attribute.children(ref.Index) = refXmlRefNode
+                    refXmlRefNode.occurrences = MakeOccurrences(ref.Element.Occurrences)
+                Else
+                    'reference element no longer exists so build it as an element
+                    BuildElementOrReference(ref.Element.Copy(), ref.Attribute, ref.Index)
+                End If
+            Next
+
+            ReferencesToResolve.Clear()
         End Sub
 
         Private Sub BuildStructure(ByVal rmStruct As RmStructureCompound, ByRef objNode As XMLParser.C_COMPLEX_OBJECT)
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+            Dim attribute As XMLParser.C_ATTRIBUTE
             Dim rm As RmStructure
+            Dim index As Integer = 0
 
-            Try
-                ' preconditions
-                Debug.Assert(rmStruct.NodeId <> "") ' anonymous
+            ' preconditions
+            Debug.Assert(rmStruct.NodeId <> "") ' anonymous
 
-                ' now make sure there are some contents to the structure
-                ' and if not set it to anyallowed
-                If rmStruct.Children.Count > 0 Then
-                    Select Case rmStruct.Type '.TypeName
-                        Case StructureType.Single ' "SINGLE"
-                            rm = rmStruct.Children.Items(0)
-                            'an_attribute = mAomFactory.MakeSingleAttribute(objNode, "item")
-                            an_attribute = mAomFactory.MakeSingleAttribute(objNode, "item", rmStruct.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            ' now make sure there are some contents to the structure and if not set it to anyallowed
+            If rmStruct.Children.Count > 0 Then
+                Select Case rmStruct.Type
+                    Case StructureType.Single
+                        attribute = mAomFactory.MakeSingleAttribute(objNode, "item", rmStruct.Existence.XmlExistence)
+                        rm = rmStruct.Children.Items(0)
+
+                        If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
+                            BuildElementOrReference(rm, attribute, 0)
+                        ElseIf rm.Type = StructureType.Slot Then
+                            BuildSlotFromAttribute(attribute, rm)
+                        Else
+                            Debug.Assert(False, "Type not handled")
+                        End If
+                    Case StructureType.List
+                        attribute = mAomFactory.MakeMultipleAttribute(objNode, "items", _
+                            MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered), CType(rmStruct, RmStructureCompound).Children.Existence.XmlExistence)
+
+                        For Each rm In rmStruct.Children.Items
                             If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                                BuildElementOrReference(rm, an_attribute)
+                                BuildElementOrReference(rm, attribute, index)
+                                index += 1
                             ElseIf rm.Type = StructureType.Slot Then
-                                BuildSlotFromAttribute(an_attribute, rm)
+                                BuildSlotFromAttribute(attribute, rm)
+                                index += 1
                             Else
                                 Debug.Assert(False, "Type not handled")
                             End If
-                        Case StructureType.List ' "LIST"
-                            an_attribute = mAomFactory.MakeMultipleAttribute( _
-                                objNode, _
-                                "items", _
-                                MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered), CType(rmStruct, RmStructureCompound).Children.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                            'MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered)) ', _                        
-                            'CType(rmStruct, RmStructureCompound).Children.Count)
+                        Next
+                    Case StructureType.Tree
+                        attribute = mAomFactory.MakeMultipleAttribute(objNode, "items", _
+                            MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered), CType(rmStruct, RmStructureCompound).Children.Existence.XmlExistence)
 
-                            For Each rm In rmStruct.Children.Items
-                                If rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                                    BuildElementOrReference(rm, an_attribute)
-                                ElseIf rm.Type = StructureType.Slot Then
-                                    BuildSlotFromAttribute(an_attribute, rm)
-                                Else
-                                    Debug.Assert(False, "Type not handled")
-                                End If
-                            Next
-                        Case StructureType.Tree ' "TREE"
-                            an_attribute = mAomFactory.MakeMultipleAttribute( _
-                                objNode, _
-                                "items", _
-                                MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered), CType(rmStruct, RmStructureCompound).Children.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                            'MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered)) ', _
-                            'CType(rmStruct, RmStructureCompound).Children.Count)
-
-                            For Each rm In rmStruct.Children.Items
-                                If rm.Type = StructureType.Cluster Then
-                                    BuildCluster(rm, an_attribute)
-                                ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
-                                    BuildElementOrReference(rm, an_attribute)
-                                ElseIf rm.Type = StructureType.Slot Then
-                                    BuildSlotFromAttribute(an_attribute, rm)
-                                Else
-                                    Debug.Assert(False, "Type not handled")
-                                End If
-                            Next
-                        Case StructureType.Table ' "TABLE"
-                            Dim table As RmTable
-                            Dim b As New XMLParser.C_BOOLEAN
-
-                            b.assumed_valueSpecified = False
-
-                            table = CType(rmStruct, RmTable)
-                            ' set is rotated
-                            'an_attribute = mAomFactory.MakeSingleAttribute(objNode, "rotated")
-                            an_attribute = mAomFactory.MakeSingleAttribute(objNode, "rotated", rmStruct.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                            If table.isRotated Then
-                                b.true_valid = True
-                                b.false_valid = False
+                        For Each rm In rmStruct.Children.Items
+                            If rm.Type = StructureType.Cluster Then
+                                BuildCluster(rm, attribute)
+                                index += 1
+                            ElseIf rm.Type = StructureType.Element Or rm.Type = StructureType.Reference Then
+                                BuildElementOrReference(rm, attribute, index)
+                                index += 1
+                            ElseIf rm.Type = StructureType.Slot Then
+                                BuildSlotFromAttribute(attribute, rm)
+                                index += 1
                             Else
-                                b.false_valid = True
-                                b.true_valid = False
+                                Debug.Assert(False, "Type not handled")
                             End If
+                        Next
+                    Case StructureType.Table
+                        Dim table As RmTable = CType(rmStruct, RmTable)
+                        Dim b As New XMLParser.C_BOOLEAN
+                        b.assumed_valueSpecified = False
+                        attribute = mAomFactory.MakeSingleAttribute(objNode, "rotated", rmStruct.Existence.XmlExistence)
 
-                            mAomFactory.MakePrimitiveObject(an_attribute, b)
+                        b.true_valid = table.isRotated
+                        b.false_valid = Not table.isRotated
+                        mAomFactory.MakePrimitiveObject(attribute, b)
 
-                            ' set number of row if not one
-                            If table.NumberKeyColumns > 0 Then
-                                Dim rh As New XMLParser.C_INTEGER
-                                rh.range = New XMLParser.IntervalOfInteger
+                        ' set number of row if not one
+                        If table.NumberKeyColumns > 0 Then
+                            Dim rh As New XMLParser.C_INTEGER
+                            rh.range = New XMLParser.IntervalOfInteger
+                            attribute = mAomFactory.MakeSingleAttribute(objNode, "number_key_columns", rmStruct.Existence.XmlExistence)
 
-                                'an_attribute = mAomFactory.MakeSingleAttribute(objNode, "number_key_columns")
-                                an_attribute = mAomFactory.MakeSingleAttribute(objNode, "number_key_columns", rmStruct.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                            rh.range.lower = table.NumberKeyColumns
+                            rh.range.lower_included = True
+                            rh.range.lower_includedSpecified = True
+                            rh.range.lowerSpecified = True
 
-                                rh.range.lower = table.NumberKeyColumns
-                                rh.range.lower_included = True
-                                rh.range.lower_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                                rh.range.lowerSpecified = True
+                            rh.range.upper_included = True
+                            rh.range.upper_includedSpecified = True
+                            rh.range.upper = table.NumberKeyColumns
+                            rh.range.upperSpecified = True
 
-                                rh.range.upper_included = True
-                                rh.range.upper_includedSpecified = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                                rh.range.upper = table.NumberKeyColumns
-                                rh.range.upperSpecified = True
-                                'rh.list_openSpecified = False
+                            ' Validate Interval PostConditions
+                            With rh.range
+                                Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
+                                Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
+                                Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
+                                Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
+                                Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
+                                Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
+                            End With
 
-                                'rh.range.includes_maximum = True
-                                'rh.range.includes_minimum = True
-                                'rh.range.maximum = table.NumberKeyColumns
-                                'rh.range.minimum = table.NumberKeyColumns
-                                'rh.list_openSpecified = False
-
-                                ' Validate Interval PostConditions
-                                With rh.range
-                                    Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
-                                    Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
-                                    Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
-                                    Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
-                                    Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
-                                    Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
-                                End With
-
-                                mAomFactory.MakePrimitiveObject(an_attribute, rh)
-                            End If
-
-
-                            an_attribute = mAomFactory.MakeMultipleAttribute( _
-                                objNode, _
-                                "rows", _
-                                MakeCardinality(New RmCardinality(rmStruct.Occurrences), True), rmStruct.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-                            'MakeCardinality(New RmCardinality(rmStruct.Occurrences), True)) ', _
-                            'CType(rmStruct.Children.items(0), RmCluster).Children.Count)
-
-                            BuildCluster(rmStruct.Children.Items(0), an_attribute)
-
-                    End Select
-                Else
-                    'objNode.any_allowed = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                End If
-
-                If ReferencesToResolve.Count > 0 Then
-                    Dim ref_xmlRefNode As XMLParser.ARCHETYPE_INTERNAL_REF
-                    Dim path As String
-
-                    For Each ref As ReferenceToResolve In ReferencesToResolve
-
-                        path = GetPathOfNode(ref.Element.NodeId)
-                        If Not path Is Nothing Then
-                            ref_xmlRefNode = mAomFactory.MakeArchetypeRef(ref.Attribute, "ELEMENT", path)
-                            ref_xmlRefNode.occurrences = MakeOccurrences(ref.Element.Occurrences)
-                        Else
-                            'reference element no longer exists so build it as an element
-                            Dim new_element As RmElement = ref.Element.Copy()
-
-                            BuildElementOrReference(new_element, ref.Attribute)
+                            mAomFactory.MakePrimitiveObject(attribute, rh)
                         End If
-                    Next
-                    ReferencesToResolve.Clear()
-                End If
 
-            Catch ex As Exception
-                Debug.Assert(False)
-            End Try
+                        attribute = mAomFactory.MakeMultipleAttribute(objNode, "rows", MakeCardinality(New RmCardinality(rmStruct.Occurrences), True), rmStruct.Existence.XmlExistence)
+                        BuildCluster(rmStruct.Children.Items(0), attribute)
+                End Select
+            End If
+
+            ResolveReferences()
         End Sub
 
-        Private Sub BuildSubjectOfData(ByVal subject As RelatedParty, ByVal root_node As XMLParser.C_COMPLEX_OBJECT)
+        Protected Sub BuildSubjectOfData(ByVal subject As RelatedParty, ByVal root_node As XMLParser.C_COMPLEX_OBJECT)
             Dim objnode As XMLParser.C_COMPLEX_OBJECT
             Dim an_attribute As XMLParser.C_ATTRIBUTE
             Dim a_relationship As XMLParser.C_ATTRIBUTE
 
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'an_attribute = mAomFactory.MakeSingleAttribute(root_node, "subject")
-            'objnode = mAomFactory.MakeComplexObject(an_attribute, "PARTY_RELATED")
             an_attribute = mAomFactory.MakeSingleAttribute(root_node, "subject", New RmExistence(1).XmlExistence)
             objnode = mAomFactory.MakeComplexObject(an_attribute, "PARTY_RELATED", "", MakeOccurrences(New RmCardinality(1, 1)))
-
-            'a_relationship = mAomFactory.MakeSingleAttribute(objnode, "relationship")
-            a_relationship = mAomFactory.MakeSingleAttribute(objnode, "relationship", New RmExistence(1).XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            a_relationship = mAomFactory.MakeSingleAttribute(objnode, "relationship", New RmExistence(1).XmlExistence)
             BuildCodedText(a_relationship, subject.Relationship)
         End Sub
 
         Private Sub BuildSection(ByVal rmChildren As Children, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
             ' Build a section, runtimename is already done
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
-
-            an_attribute = mAomFactory.MakeMultipleAttribute( _
+            Dim an_attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute( _
                 xmlObj, _
                 "items", _
-                MakeCardinality(rmChildren.Cardinality, rmChildren.Cardinality.Ordered), rmChildren.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'MakeCardinality(rmChildren.Cardinality, rmChildren.Cardinality.Ordered)) ', _
-            'rmChildren.Count)
+                MakeCardinality(rmChildren.Cardinality, rmChildren.Cardinality.Ordered), rmChildren.Existence.XmlExistence)
 
             For Each a_structure As RmStructure In rmChildren
 
@@ -2034,15 +1674,12 @@ Namespace ArchetypeEditor.XML_Classes
                     MakeOccurrences(a_structure.Occurrences))
 
                     If a_structure.HasNameConstraint Then
-                        'an_attribute = mAomFactory.MakeSingleAttribute(new_section, "name")
-                        an_attribute = mAomFactory.MakeSingleAttribute(new_section, "name", rmChildren.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                        an_attribute = mAomFactory.MakeSingleAttribute(new_section, "name", rmChildren.Existence.XmlExistence)
                         BuildText(an_attribute, a_structure.NameConstraint)
                     End If
 
                     If CType(a_structure, RmSection).Children.Count > 0 Then
                         BuildSection(CType(a_structure, RmSection).Children, new_section)
-                    Else
-                        'new_section.any_allowed = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                     End If
                 ElseIf a_structure.Type = StructureType.Slot Then
                     BuildSlotFromAttribute(an_attribute, a_structure)
@@ -2053,11 +1690,7 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildComposition(ByVal Rm As RmComposition, ByVal xmlObj As XMLParser.C_COMPLEX_OBJECT)
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
-
-            ' set the category
-            'an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "category")
-            an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "category", New RmExistence(1).XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            Dim an_attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(xmlObj, "category", New RmExistence(1).XmlExistence)
 
             Dim t As New Constraint_Text
             t.TypeOfTextConstraint = TextConstrainType.Terminology ' coded_text
@@ -2071,8 +1704,6 @@ Namespace ArchetypeEditor.XML_Classes
 
             BuildCodedText(an_attribute, t.AllowableValues)
 
-            'Changed SRH 29 Apr 2008 - added handling of participations
-
             Dim eventContext As XMLParser.C_COMPLEX_OBJECT = Nothing
 
             If Rm.HasParticipations Then
@@ -2081,84 +1712,54 @@ Namespace ArchetypeEditor.XML_Classes
                 BuildParticipations(eventContext, Rm.Participations)
             End If
 
-
             ' Deal with the content and context
             If Rm.Data.Count > 0 Then
 
                 For Each a_structure As RmStructure In Rm.Data
                     Select Case a_structure.Type
                         Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
-
-                            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
                             Dim new_structure As XMLParser.C_COMPLEX_OBJECT
-                            'an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context")
-                            'new_structure = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", ""))
-                            'an_attribute = mAomFactory.MakeSingleAttribute(new_structure, "other_context")
-                            'new_structure = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_structure.Type), a_structure.NodeId)
 
-                            'Changed SRH 29 Apr 2008 - added handling of participations
                             If eventContext Is Nothing Then
                                 an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
                                 eventContext = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
                             End If
+
                             an_attribute = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
                             new_structure = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_structure.Type), a_structure.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
                             BuildStructure(a_structure, new_structure)
-
-                            'SRH: 26 Feb 2009 - EDT-419
                         Case StructureType.Slot
-
                             If eventContext Is Nothing Then
                                 an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "context", New RmExistence(1).XmlExistence)
                                 eventContext = mAomFactory.MakeComplexObject(an_attribute, "EVENT_CONTEXT", "", MakeOccurrences(New RmCardinality(1, 1)))
                             End If
+
                             an_attribute = mAomFactory.MakeSingleAttribute(eventContext, "other_context", New RmExistence(1).XmlExistence)
                             BuildSlotFromAttribute(an_attribute, a_structure)
-
-
                         Case StructureType.SECTION
-
                             If CType(a_structure, RmSection).Children.Count > 0 Then
-                                'an_attribute = mAomFactory.MakeSingleAttribute(xmlObj, "content")                                
-                                an_attribute = mAomFactory.MakeMultipleAttribute(xmlObj, "content", MakeCardinality(Rm.Data.Cardinality), a_structure.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                an_attribute = mAomFactory.MakeMultipleAttribute(xmlObj, "content", MakeCardinality(Rm.Data.Cardinality), a_structure.Existence.XmlExistence)
 
                                 For Each slot As RmSlot In CType(a_structure, RmSection).Children
                                     BuildSlotFromAttribute(an_attribute, slot)
                                 Next
-
                             End If
-
                         Case Else
                             Debug.Assert(False)
                     End Select
                 Next
-            Else
-                'xmlObj.any_allowed = True 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
             End If
         End Sub
 
-        Private Sub BuildStructure(ByVal rm As RmStructureCompound, _
-                ByVal an_adlArchetype As XMLParser.C_COMPLEX_OBJECT, _
-                ByVal attribute_name As String)
+        Private Sub BuildStructure(ByVal rm As RmStructureCompound, ByVal an_adlArchetype As XMLParser.C_COMPLEX_OBJECT, ByVal attribute_name As String)
             Dim an_attribute As XMLParser.C_ATTRIBUTE
 
-            'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name)
-            'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
             If CType(rm.Children.Items(0), RmStructure).Type = StructureType.Slot Then
-                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Existence.XmlExistence)
                 BuildSlotFromAttribute(an_attribute, rm.Children.Items(0))
             Else
                 an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, attribute_name, rm.Children.Existence.XmlExistence)
-                Dim objNode As XMLParser.C_COMPLEX_OBJECT
-
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                'objNode = mAomFactory.MakeComplexObject( _
-                '    an_attribute, _
-                '    ReferenceModel.RM_StructureName(rm.Children.items(0).Type), _
-                '    rm.Children.items(0).NodeId)
-
-                objNode = mAomFactory.MakeComplexObject( _
+                Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject( _
                     an_attribute, _
                     ReferenceModel.RM_StructureName(rm.Children.Items(0).Type), _
                     rm.Children.Items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1)))
@@ -2172,43 +1773,27 @@ Namespace ArchetypeEditor.XML_Classes
             Dim rmStructComp As RmStructureCompound
 
             If rm.Type = StructureType.Slot Then
-                'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol")
-                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rm.Existence.XmlExistence)
                 BuildSlotFromAttribute(an_attribute, rm)
             Else
                 rmStructComp = CType(rm, RmStructureCompound)
                 If rmStructComp.Children.Count > 0 Then
-                    'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol")
-                    'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                    'SRH: 11 Jan 2009 - EDT-502 - setting the existance of the attribute
-                    an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rmStructComp.Children.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                    an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "protocol", rmStructComp.Children.Existence.XmlExistence)
                     ' only 1 protocol allowed
-                    Dim objNode As XMLParser.C_COMPLEX_OBJECT
+                    Dim protocolRm As RmStructure = rmStructComp.Children.Items(0)
 
-                    'objNode = mAomFactory.MakeComplexObject( _
-                    '    an_attribute, _
-                    '    ReferenceModel.RM_StructureName(rmStructComp.Children.items(0).Type), _
-                    '    rmStructComp.Children.items(0).NodeId)
-
-
-                    'Changed SRH - allow a slot for protocol
-                    Dim protocolRm As RmStructure
-
-                    protocolRm = rmStructComp.Children.Items(0)
                     If protocolRm.Type = StructureType.Slot Then
                         BuildSlotFromAttribute(an_attribute, CType(protocolRm, RmSlot))
-
                     Else
-                        objNode = mAomFactory.MakeComplexObject( _
+                        Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject( _
                             an_attribute, _
                             ReferenceModel.RM_StructureName(rmStructComp.Children.Items(0).Type), _
-                            rmStructComp.Children.Items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                            rmStructComp.Children.Items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1)))
 
                         BuildStructure(CType(protocolRm, RmStructureCompound), objNode)
                     End If
                 End If
             End If
-
         End Sub
 
         Private Sub BuildWorkFlowStep(ByVal rm As RmPathwayStep, ByVal an_attribute As XMLParser.C_ATTRIBUTE)
@@ -2216,44 +1801,34 @@ Namespace ArchetypeEditor.XML_Classes
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
             Dim code_phrase As New CodePhrase
 
-            'objNode = mAomFactory.MakeComplexObject(an_attribute, "ISM_TRANSITION")
-            'EDT-584
-            objNode = mAomFactory.MakeComplexObject(an_attribute, "ISM_TRANSITION", rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-
-            'a_state = mAomFactory.MakeSingleAttribute(objNode, "current_state")
-            a_state = mAomFactory.MakeSingleAttribute(objNode, "current_state", an_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            objNode = mAomFactory.MakeComplexObject(an_attribute, "ISM_TRANSITION", rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
+            a_state = mAomFactory.MakeSingleAttribute(objNode, "current_state", an_attribute.existence)
             code_phrase.TerminologyID = "openehr"
             code_phrase.Codes.Add((CInt(rm.StateType)).ToString)
+
             If rm.HasAlternativeState Then
                 code_phrase.Codes.Add(CInt(rm.AlternativeState).ToString)
             End If
-            BuildCodedText(a_state, code_phrase)
 
-            'a_step = mAomFactory.MakeSingleAttribute(objNode, "careflow_step")
-            a_step = mAomFactory.MakeSingleAttribute(objNode, "careflow_step", an_attribute.existence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            BuildCodedText(a_state, code_phrase)
+            a_step = mAomFactory.MakeSingleAttribute(objNode, "careflow_step", an_attribute.existence)
             code_phrase = New CodePhrase
             code_phrase.Codes.Add(rm.NodeId)  ' local is default terminology, node_id of rm is same as term code of name
-            'code_phrase.TerminologyID = rm.NodeId
             BuildCodedText(a_step, code_phrase)
-
         End Sub
 
         Private Sub BuildPathway(ByVal rm As RmStructureCompound, ByVal arch_def As XMLParser.C_COMPLEX_OBJECT)
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
-
             If rm.Children.Count > 0 Then
-                'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "ism_transition")
-                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "ism_transition", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                Dim attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "ism_transition", rm.Existence.XmlExistence)
 
                 For Each pathway_step As RmPathwayStep In rm.Children
-                    BuildWorkFlowStep(pathway_step, an_attribute)
+                    BuildWorkFlowStep(pathway_step, attribute)
                 Next
             End If
         End Sub
 
         Private Sub BuildActivity(ByVal rm As RmActivity, ByVal an_attribute As XMLParser.C_ATTRIBUTE)
             Dim objNode As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(an_attribute, "ACTIVITY", rm.NodeId, MakeOccurrences(rm.Occurrences))
-
             Dim escapedString As String = rm.ArchetypeId
 
             If escapedString <> "" Then
@@ -2272,19 +1847,13 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             For Each rm_struct As RmStructure In rm.Children
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                'an_attribute = mAomFactory.MakeMultipleAttribute(objNode, "description", MakeCardinality(rm.Children.Cardinality)) 
                 an_attribute = mAomFactory.MakeSingleAttribute(objNode, "description", rm.Children.Existence.XmlExistence)
 
                 Select Case rm_struct.Type
                     Case StructureType.List, StructureType.Single, StructureType.Tree, StructureType.Table
-                        Dim EIF_struct As XMLParser.C_COMPLEX_OBJECT
-                        'EIF_struct = mAomFactory.MakeComplexObject(an_attribute, _
-                        '    ReferenceModel.RM_StructureName(rm_struct.Type), _
-                        '    rm_struct.NodeId)
-                        EIF_struct = mAomFactory.MakeComplexObject(an_attribute, _
+                        Dim EIF_struct As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(an_attribute, _
                             ReferenceModel.RM_StructureName(rm_struct.Type), _
-                            rm_struct.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                            rm_struct.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
 
                         BuildStructure(CType(rm_struct, RmStructureCompound), EIF_struct)
 
@@ -2302,16 +1871,9 @@ Namespace ArchetypeEditor.XML_Classes
                     Case StructureType.Activities
 
                         'ToDo: Set cardinality on this attribute
-                        Dim an_attribute As XMLParser.C_ATTRIBUTE
-
-                        an_attribute = mAomFactory.MakeMultipleAttribute(mXmlArchetype.definition, _
-                        "activities", MakeCardinality(New RmCardinality(0)), _
-                        New RmExistence(1).XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1                        
-                        'rm.Children.Count)
-
-                        'JAR: 30MAY07, EDT-44 Multiple activities per instruction
-                        'only one activity allowed at present - EDT-44 not any more! 
-                        'Debug.Assert(rm.Children.Count < 2)
+                        Dim an_attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(mXmlArchetype.definition, _
+                            "activities", MakeCardinality(New RmCardinality(0)), _
+                            New RmExistence(1).XmlExistence)
 
                         For Each activity As RmActivity In rm.Children
                             BuildActivity(activity, an_attribute)
@@ -2330,26 +1892,20 @@ Namespace ArchetypeEditor.XML_Classes
             Dim objNode As XMLParser.C_COMPLEX_OBJECT
 
             If rm.Children.Items.Length > 0 Then
-                'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "description")
-                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "description", rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "description", rm.Existence.XmlExistence)
                 action_spec = rm.Children.Items(0)
 
                 Select Case action_spec.Type
                     Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                        'objNode = mAomFactory.MakeComplexObject(an_attribute, _
-                        '    ReferenceModel.RM_StructureName(action_spec.Type), _
-                        '    rm.Children.items(0).NodeId)
-
                         objNode = mAomFactory.MakeComplexObject(an_attribute, _
-                                                    ReferenceModel.RM_StructureName(action_spec.Type), _
-                                                    rm.Children.Items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                            ReferenceModel.RM_StructureName(action_spec.Type), _
+                            rm.Children.Items(0).NodeId, MakeOccurrences(New RmCardinality(1, 1)))
 
                         BuildStructure(action_spec, objNode)
 
                     Case StructureType.Slot
                         ' allows action to be specified in another archetype
                         Dim slot As RmSlot = CType(action_spec, RmSlot)
-
                         BuildSlotFromAttribute(an_attribute, slot)
                 End Select
             End If
@@ -2441,14 +1997,12 @@ Namespace ArchetypeEditor.XML_Classes
 
                         Case StructureType.ADMIN_ENTRY
                             BuildEntryAttributes(CType(cDefinition, RmEntry), mXmlArchetype.definition)
-                            'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data")
                             an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", New RmExistence(1).XmlExistence)
 
                             Try
                                 Dim rm_struct As RmStructureCompound = CType(CType(cDefinition, ArchetypeDefinition).Data.Items(0), RmStructureCompound).Children.Items(0)
                                 Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                                'objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(rm_struct.Type), rm_struct.NodeId)
-                                objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(rm_struct.Type), rm_struct.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(rm_struct.Type), rm_struct.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
                                 BuildStructure(rm_struct, objNode)
                             Catch
                                 'ToDo - process error
@@ -2479,8 +2033,7 @@ Namespace ArchetypeEditor.XML_Classes
                                         a_rm = rm.Children.Items(0)
 
                                         If a_rm.Type = StructureType.History Then
-                                            'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "state")
-                                            an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "state", a_rm.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                            an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "state", a_rm.Existence.XmlExistence)
 
                                             ' can have EventSeries for each state
                                             BuildHistory(a_rm, an_attribute)
@@ -2492,11 +2045,10 @@ Namespace ArchetypeEditor.XML_Classes
 
                             'Add the data
                             If Not rm_data Is Nothing Then
-                                'an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data")
-                                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", rm_data.Existence.XmlExistence) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", rm_data.Existence.XmlExistence)
 
                                 For Each a_rm As RmStructureCompound In rm_data.Children.Items
-                                    Select Case a_rm.Type '.TypeName
+                                    Select Case a_rm.Type
                                         Case StructureType.History
                                             If Not rm_state Is Nothing Then
                                                 BuildHistory(a_rm, an_attribute, rm_state)
@@ -2506,7 +2058,7 @@ Namespace ArchetypeEditor.XML_Classes
                                         Case Else
                                             Debug.Assert(False) '?OBSOLETE
                                             Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                                            objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1))) 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                                            objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
                                             BuildStructure(a_rm, objNode)
                                     End Select
                                 Next
@@ -2540,8 +2092,8 @@ Namespace ArchetypeEditor.XML_Classes
                     End Select
                 End If
 
-                If Me.HasLinkConstraints Then
-                    BuildLinks(Me.Definition.RootLinks, mXmlArchetype.definition)
+                If HasLinkConstraints() Then
+                    BuildLinks(Definition.RootLinks, mXmlArchetype.definition)
                 End If
 
                 mSynchronised = True
@@ -2549,23 +2101,24 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Sub BuildLinks(ByVal cLinks As System.Collections.Generic.List(Of RmLink), ByVal cObject As XMLParser.C_COMPLEX_OBJECT)
-            Dim linksAttribute As XMLParser.C_ATTRIBUTE = _
-                mAomFactory.MakeMultipleAttribute(cObject, "links", MakeCardinality(New RmCardinality(0)), New RmExistence(0).XmlExistence)
-
+            Dim linksAttribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeMultipleAttribute(cObject, "links", MakeCardinality(New RmCardinality(0)), New RmExistence(0).XmlExistence)
             Dim anAttribute As XMLParser.C_ATTRIBUTE
 
             For Each l As RmLink In cLinks
                 If l.HasConstraint Then
                     Dim linkObject As XMLParser.C_COMPLEX_OBJECT = _
                         mAomFactory.MakeComplexObject(linksAttribute, "LINK")
+
                     If l.Meaning.TypeOfTextConstraint <> TextConstrainType.Text Then
                         anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "meaning", New RmExistence().XmlExistence)
                         BuildText(anAttribute, l.Meaning)
                     End If
+
                     If l.LinkType.TypeOfTextConstraint <> TextConstrainType.Text Then
                         anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "type", New RmExistence().XmlExistence)
                         BuildText(anAttribute, l.LinkType)
                     End If
+
                     If l.Target.RegularExpression <> String.Empty Then
                         anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "target".ToLowerInvariant, New RmExistence().XmlExistence)
                         BuildURI(anAttribute, l.Target)
@@ -2575,37 +2128,35 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Sub BuildEntryAttributes(ByVal anEntry As RmEntry, ByVal archetypeDefinition As XMLParser.C_COMPLEX_OBJECT)
-
             If anEntry.SubjectOfData.Relationship.Codes.Count > 0 Then
                 BuildSubjectOfData(anEntry.SubjectOfData, archetypeDefinition)
             End If
+
             If CType(cDefinition, RmEntry).ProviderIsMandatory Then
                 Dim objnode As XMLParser.C_COMPLEX_OBJECT
                 Dim an_attribute As XMLParser.C_ATTRIBUTE
-                'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-                'an_attribute = mAomFactory.MakeSingleAttribute(root_node, "subject")
-                'objnode = mAomFactory.MakeComplexObject(an_attribute, "PARTY_RELATED")
                 an_attribute = mAomFactory.MakeSingleAttribute(archetypeDefinition, "provider", New RmExistence(1).XmlExistence)
                 objnode = mAomFactory.MakeComplexObject(an_attribute, "PARTY_PROXY", "", MakeOccurrences(New RmCardinality(1, 1)))
             End If
 
-            BuildParticipations(Me.mXmlArchetype.definition, CType(cDefinition, RmEntry).OtherParticipations)
-
+            BuildParticipations(mXmlArchetype.definition, CType(cDefinition, RmEntry).OtherParticipations)
         End Sub
 
         Protected Sub BuildParticipations(ByVal aRmClass As XMLParser.C_COMPLEX_OBJECT, ByVal participations As RmStructureCompound)
             If participations.Children.Count > 0 Then
                 Dim participationAttribute As XMLParser.C_ATTRIBUTE
                 participationAttribute = mAomFactory.MakeMultipleAttribute(aRmClass, participations.NodeId, MakeCardinality(participations.Children.Cardinality), New RmExistence(1).XmlExistence)
+
                 For Each p As RmParticipation In participations.Children
                     BuildParticipation(participationAttribute, p)
                 Next
             End If
-
         End Sub
+
         Protected Sub BuildParticipation(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal participation As RmParticipation)
             Dim cObject As XMLParser.C_COMPLEX_OBJECT
             cObject = mAomFactory.MakeComplexObject(attribute, "PARTICIPATION", "", MakeOccurrences(participation.Occurrences))
+
             If participation.MandatoryDateTime Then
                 Dim timeAttrib As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(cObject, "time", New RmExistence(1).XmlExistence)
             End If
@@ -2619,14 +2170,12 @@ Namespace ArchetypeEditor.XML_Classes
                 constraintAttribute = mAomFactory.MakeSingleAttribute(cObject, "function", New RmExistence(1).XmlExistence)
 
                 If participation.FunctionConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
-
                     BuildCodedText(constraintAttribute, participation.FunctionConstraint.AllowableValues)
                 Else
                     BuildCodedText(constraintAttribute, participation.FunctionConstraint.ConstraintCode)
                 End If
             End If
         End Sub
-
 
         Sub New(ByVal an_XML_Parser As XMLParser.XmlArchetypeParser, ByVal an_ArchetypeID As ArchetypeID, ByVal primary_language As String)
             ' call to create a brand new archetype
@@ -2652,20 +2201,18 @@ Namespace ArchetypeEditor.XML_Classes
             mXmlArchetype = a_parser.Archetype
             mArchetypeParser = a_parser
 
-            'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
-            'mArchetypeID = New ArchetypeID(mXmlArchetype.archetype_id)
-            If Not mXmlArchetype.archetype_id Is Nothing Then 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            If Not mXmlArchetype.archetype_id Is Nothing Then
                 mArchetypeID = New ArchetypeID(mXmlArchetype.archetype_id.value)
             End If
 
             ' get the parent ID
-            If Not mXmlArchetype.parent_archetype_id Is Nothing Then 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+            If Not mXmlArchetype.parent_archetype_id Is Nothing Then
                 sParentArchetypeID = mXmlArchetype.parent_archetype_id.value
             End If
+
             'this is the one
             mDescription = New XML_Description(mXmlArchetype.description, a_parser.Archetype.original_language.code_string)
 
-            'HKF: 8 Dec 2008
             If Not mXmlArchetype.translations Is Nothing Then
                 For Each t As XMLParser.TRANSLATION_DETAILS In mXmlArchetype.translations
                     mTranslationDetails.Add(t.language.code_string, New XML_TranslationDetails(t))
@@ -2692,8 +2239,8 @@ Namespace ArchetypeEditor.XML_Classes
                 Case Else
                     Debug.Assert(False)
             End Select
-            sLifeCycle = mXmlArchetype.description.lifecycle_state
 
+            sLifeCycle = mXmlArchetype.description.lifecycle_state
         End Sub
 
         Sub New(ByVal a_parser As XMLParser.XmlArchetypeParser, ByVal a_filemanager As FileManagerLocal)
@@ -2705,19 +2252,16 @@ Namespace ArchetypeEditor.XML_Classes
                 mXmlArchetype = a_parser.Archetype
                 mArchetypeParser = a_parser
 
-                'mArchetypeID = New ArchetypeID(mXmlArchetype.archetype_id)
-                If Not mXmlArchetype.archetype_id Is Nothing Then 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                If Not mXmlArchetype.archetype_id Is Nothing Then
                     mArchetypeID = New ArchetypeID(mXmlArchetype.archetype_id.value)
                 End If
 
-                ' get the parent ID
-                If Not mXmlArchetype.parent_archetype_id Is Nothing Then 'JAR: 30APR2007, EDT-42 Support XML Schema 1.0.1
+                If Not mXmlArchetype.parent_archetype_id Is Nothing Then
                     sParentArchetypeID = mXmlArchetype.parent_archetype_id.value
                 End If
 
                 ReferenceModel.SetArchetypedClass(mArchetypeID.ReferenceModelEntity)
 
-                'description and translation details
                 mDescription = New XML_Description(mXmlArchetype.description, a_parser.Archetype.original_language.code_string)
 
                 If Not mXmlArchetype.translations Is Nothing Then
@@ -2745,7 +2289,6 @@ Namespace ArchetypeEditor.XML_Classes
                         Debug.Assert(False)
                 End Select
 
-                'SRH: 24.9.2007 - Check for root links
                 If Not mXmlArchetype.definition.attributes Is Nothing Then
                     For Each attrib As XMLParser.C_ATTRIBUTE In mXmlArchetype.definition.attributes
                         If attrib.rm_attribute_name.ToLowerInvariant = "links" Then
@@ -2771,15 +2314,14 @@ Namespace ArchetypeEditor.XML_Classes
                                             End If
                                     End Select
                                 Next
+
                                 cDefinition.RootLinks.Add(link)
                             Next
-
                         End If
                     Next
                 End If
 
                 sLifeCycle = mXmlArchetype.description.lifecycle_state
-
             Catch ex As Exception
                 Debug.Assert(True)
             End Try
