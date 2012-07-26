@@ -2922,27 +2922,6 @@ Public Class Designer
         MessageBox.Show(errorMessage, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
     End Sub
 
-    Public Sub AutoSave()
-        EmergencySave(Me, New EventArgs)
-    End Sub
-
-    Private Sub EmergencySave(ByVal sender As Object, ByVal e As EventArgs) Handles mAutoSaveTimer.Tick
-        If Main.Instance.Options.AutosaveInterval = 0 Then
-            mAutoSaveTimer.Enabled = False
-        Else
-            If Not mAutoSaveTimer.Enabled Or mAutoSaveTimer.Interval <> Main.Instance.Options.AutosaveInterval * 60000 Then
-                mAutoSaveTimer.Enabled = True
-                mAutoSaveTimer.Interval = Main.Instance.Options.AutosaveInterval * 60000
-            End If
-
-            Try
-                Filemanager.AutoFileSave()
-            Catch ex As Exception
-                ShowException("Error serialising archetype", ex)
-            End Try
-        End If
-    End Sub
-
     Public Sub ResetDefaults()
         ' show the front page
         TabMain.SelectedIndex = 0
@@ -3602,6 +3581,7 @@ Public Class Designer
         ToolBarOpenFromWeb.Visible = Main.Instance.Options.AllowWebSearch
         MenuFileOpenFromWeb.Visible = Main.Instance.Options.AllowWebSearch
         butLinks.Visible = Main.Instance.Options.ShowLinksButton
+        InitialiseAutoSave()
     End Sub
 
     Private Sub menuFileNewWindow_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuFileNewWindow.Click
@@ -4183,23 +4163,23 @@ Public Class Designer
             End If
         End If
 
-        If Main.Instance.Options.AutosaveInterval = 0 Then
-            mAutoSaveTimer.Enabled = False
-        Else
-            mAutoSaveTimer.Enabled = True
+        InitialiseAutoSave()
+    End Sub
+
+    Protected Sub InitialiseAutoSave()
+        mAutoSaveTimer.Enabled = Main.Instance.Options.AutosaveInterval > 0
+
+        If mAutoSaveTimer.Enabled Then
             mAutoSaveTimer.Interval = Main.Instance.Options.AutosaveInterval * 60000
         End If
+    End Sub
 
-        ''Add the display format buttons based on the parser types
-        'For Each format_type As String In mFileManager.AvailableFormats
-        '    format_type = format_type.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
-        '    If format_type <> "HTML" Then
-        '        Dim tbb As New ToolBarButton(format_type)
-        '        tbb.Tag = format_type
-        '        tbb.Style = ToolBarButtonStyle.ToggleButton
-        '        DisplayToolBar.Buttons.Insert(2, tbb)
-        '    End If
-        'Next
+    Private Sub AutoSave(ByVal sender As Object, ByVal e As EventArgs) Handles mAutoSaveTimer.Tick
+        Try
+            Filemanager.AutoFileSave()
+        Catch ex As Exception
+            ShowException("Error serialising archetype", ex)
+        End Try
     End Sub
 
     Private Sub Designer_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
