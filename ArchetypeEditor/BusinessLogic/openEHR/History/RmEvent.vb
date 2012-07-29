@@ -336,65 +336,57 @@ Class RmEvent
 
         cOccurrences = ArchetypeEditor.XML_Classes.XML_Tools.SetOccurrences(ObjNode.occurrences)
 
-        For Each an_attribute In ObjNode.attributes
+        If Not ObjNode.attributes Is Nothing Then
+            For Each an_attribute In ObjNode.attributes
+                Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
+                    Case "name"
+                        mNameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                    Case "offset"
+                        Try
+                            Dim d As Duration = ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
+                            Offset = d.GUI_duration
+                            OffsetUnits = d.ISO_Units
+                        Catch e As Exception
+                            MessageBox.Show(String.Format("Error: Event[{0}]/offset attribute - {1}", NodeId, e.Message))
+                        End Try
+                    Case "width"
+                        Debug.Assert(mStructureType = StructureType.IntervalEvent)
 
-            Select Case an_attribute.rm_attribute_name.ToLowerInvariant()
-                Case "name"
-                    mNameConstraint = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
-                Case "offset"
-                    Try
-                        Dim d As Duration = _
-                            ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
-                        Me.Offset = d.GUI_duration
-                        Me.OffsetUnits = d.ISO_Units
-                    Catch e As Exception
-                        MessageBox.Show(String.Format("Error: Event[{0}]/offset attribute - {1}", Me.NodeId, e.Message))
-                    End Try
+                        Try
+                            Dim d As Duration = ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
+                            Width = d.GUI_duration
+                            WidthUnits = d.ISO_Units
+                        Catch e As Exception
+                            MessageBox.Show(String.Format("Error: Event[{1}]/width attribute - {0}", NodeId, e.Message))
+                        End Try
+                    Case "math_function"
+                        Debug.Assert(mStructureType = StructureType.IntervalEvent)
 
-                Case "width"
-                    Debug.Assert(mStructureType = StructureType.IntervalEvent)
+                        If an_attribute.children.Length > 0 Then
+                            Dim textConstraint As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
+                            AggregateMathFunction = textConstraint.AllowableValues
+                        End If
+                    Case "data", "item" 'item is OBSOLETE
+                        ' return the data for processing
+                        mXML_Data = an_attribute
+                    Case "state"
+                        ' return the state for processing
+                        mXML_State = an_attribute
+                End Select
+            Next
+        End If
 
-                    Try
-                        Dim d As Duration = _
-                            ArchetypeEditor.XML_Classes.XML_Tools.GetDuration(an_attribute)
-                        Me.Width = d.GUI_duration
-                        Me.WidthUnits = d.ISO_Units
-                    Catch e As Exception
-                        MessageBox.Show(String.Format("Error: Event[{1}]/width attribute - {0}", Me.NodeId, e.Message))
-                    End Try
-
-                Case "math_function"
-                    Debug.Assert(mStructureType = StructureType.IntervalEvent)
-
-                    If an_attribute.children.Length > 0 Then
-                        Dim textConstraint As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(CType(an_attribute.children(0), XMLParser.C_COMPLEX_OBJECT))
-                        AggregateMathFunction = textConstraint.AllowableValues
-                    End If
-
-                Case "data", "item" 'item is OBSOLETE
-                    ' return the data for processing
-                    mXML_Data = an_attribute
-
-                Case "state"
-                    ' return the state for processing
-                    mXML_State = an_attribute
-            End Select
-        Next
-
-        If Not Me.XML_Data Is Nothing AndAlso Not Me.XML_Data.children Is Nothing AndAlso Me.XML_Data.children.Length > 0 Then
+        If Not XML_Data Is Nothing AndAlso Not XML_Data.children Is Nothing AndAlso XML_Data.children.Length > 0 Then
             Dim cadlStruct As XMLParser.C_COMPLEX_OBJECT
+            Dim generating_type As String = XML_Data.children(0).GetType.ToString
 
-            Dim generating_type As String = Me.XML_Data.children(0).GetType.ToString
             Select Case generating_type
                 Case "XMLParser.ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
                 Case "XMLParser.C_COMPLEX_OBJECT"
-                    cadlStruct = CType(Me.XML_Data.children(0), XMLParser.C_COMPLEX_OBJECT)
-                    Dim structure_type As StructureType
-
-                    structure_type = ReferenceModel.StructureTypeFromString(cadlStruct.rm_type_name)
-
+                    cadlStruct = CType(XML_Data.children(0), XMLParser.C_COMPLEX_OBJECT)
+                    Dim structure_type As StructureType = ReferenceModel.StructureTypeFromString(cadlStruct.rm_type_name)
                     Debug.Assert(structure_type <> StructureType.Not_Set)
 
                     If structure_type = StructureType.Table Then
@@ -405,17 +397,17 @@ Class RmEvent
             End Select
         End If
 
-        If Not Me.XML_State Is Nothing AndAlso Not Me.XML_State.children Is Nothing AndAlso Me.XML_State.children.Length > 0 Then
-            Dim generating_type As String = Me.XML_State.children(0).GetType.ToString
+        If Not XML_State Is Nothing AndAlso Not XML_State.children Is Nothing AndAlso XML_State.children.Length > 0 Then
+            Dim generating_type As String = XML_State.children(0).GetType.ToString
 
             Select Case generating_type
                 Case "XMLParser.ARCHETYPE_INTERNAL_REF"
                     ' Place holder for different structures at different events 
                     ' not available as yet
                 Case "XMLParser.C_COMPLEX_OBJECT"
-                    ArchetypeEditor.XML_Classes.XML_Tools.StateStructure = New RmStructureCompound(Me.XML_State, StructureType.State, a_filemanager)
+                    ArchetypeEditor.XML_Classes.XML_Tools.StateStructure = New RmStructureCompound(XML_State, StructureType.State, a_filemanager)
                 Case "XMLParser.ARCHETYPE_SLOT"
-                    ArchetypeEditor.XML_Classes.XML_Tools.StateStructure = New RmStructureCompound(Me.XML_State, StructureType.State, a_filemanager)
+                    ArchetypeEditor.XML_Classes.XML_Tools.StateStructure = New RmStructureCompound(XML_State, StructureType.State, a_filemanager)
             End Select
         End If
 

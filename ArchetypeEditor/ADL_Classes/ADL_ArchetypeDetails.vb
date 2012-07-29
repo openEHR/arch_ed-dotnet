@@ -4,67 +4,66 @@ Imports XMLParser
 Public Class ADL_ArchetypeDetails
     Inherits ArchetypeDetails
 
-    Private mADL_Description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
+    Private mAdlDescription As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION
 
-    Public Overrides Sub AddOrReplace(ByVal a_language As String, ByVal a_detail As ArchetypeDescriptionItem)
-        Dim eiffelLanguageString As EiffelKernel.STRING_8 = Eiffel.String(a_language)
+    Public Overrides Sub AddOrReplace(ByVal language As String, ByVal detail As ArchetypeDescriptionItem)
+        Dim eiffelLanguageString As EiffelKernel.STRING_8 = Eiffel.String(language)
 
-        If HasDetailInLanguage(a_language) Then
-            mADL_Description.details.remove(eiffelLanguageString)
+        If HasDetailInLanguage(language) Then
+            mAdlDescription.remove_detail(eiffelLanguageString)
         End If
 
-        Dim detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
+        Dim d As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM
+        d = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION_ITEM.make_from_language(eiffelLanguageString, Eiffel.String(detail.Purpose))
 
-        detail = openehr.openehr.rm.common.resource.Create.RESOURCE_DESCRIPTION_ITEM.make_from_language(eiffelLanguageString, Eiffel.String(a_detail.Purpose))
-
-        For Each s As String In a_detail.KeyWords
-            detail.add_keyword(Eiffel.String(s))
+        For Each s As String In detail.KeyWords
+            d.add_keyword(Eiffel.String(s))
         Next
 
-        detail.set_misuse(Eiffel.String(a_detail.MisUse))
-        detail.set_use(Eiffel.String(a_detail.Use))
-        detail.set_purpose(Eiffel.String(a_detail.Purpose))
+        d.set_misuse(Eiffel.String(detail.MisUse))
+        d.set_use(Eiffel.String(detail.Use))
+        d.set_purpose(Eiffel.String(detail.Purpose))
 
-        If Not a_detail.Copyright Is Nothing Then
-            detail.set_copyright(Eiffel.String(a_detail.Copyright))
+        If Not detail.Copyright Is Nothing Then
+            d.set_copyright(Eiffel.String(detail.Copyright))
         End If
 
-        mADL_Description.add_detail(detail)
+        mAdlDescription.add_detail(d)
     End Sub
 
-    Public Overrides Function DetailInLanguage(ByVal a_language As String) As ArchetypeDescriptionItem
-        Dim result As New ArchetypeDescriptionItem(a_language)
+    Public Overrides Function DetailInLanguage(ByVal language As String) As ArchetypeDescriptionItem
+        Dim result As New ArchetypeDescriptionItem(language)
 
-        If HasDetailInLanguage(a_language) Then
-            Dim detail As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM = mADL_Description.detail_for_language(Eiffel.String(a_language))
+        If HasDetailInLanguage(language) Then
+            Dim d As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION_ITEM = mAdlDescription.detail_for_language(Eiffel.String(language))
 
-            If Not detail Is Nothing Then
-                If Not detail.misuse Is Nothing Then
-                    result.MisUse = detail.misuse.to_cil
+            If Not d Is Nothing Then
+                If Not d.misuse Is Nothing Then
+                    result.MisUse = d.misuse.to_cil
                 Else
                     result.MisUse = ""
                 End If
 
-                If Not detail.use Is Nothing Then
-                    result.Use = detail.use.to_cil
+                If Not d.use Is Nothing Then
+                    result.Use = d.use.to_cil
                 Else
                     result.Use = ""
                 End If
 
-                If Not detail.purpose Is Nothing Then
-                    result.Purpose = detail.purpose.to_cil
+                If Not d.purpose Is Nothing Then
+                    result.Purpose = d.purpose.to_cil
                 Else
                     result.Purpose = ""
                 End If
 
-                If Not detail.keywords Is Nothing Then
-                    For i As Integer = 1 To detail.keywords.count
-                        result.KeyWords.Add(detail.keywords.i_th(i).to_cil)
+                If Not d.keywords Is Nothing Then
+                    For i As Integer = 1 To d.keywords.count
+                        result.KeyWords.Add(d.keywords.i_th(i).to_cil)
                     Next
                 End If
 
-                If Not detail.copyright Is Nothing Then
-                    result.Copyright = detail.copyright.to_cil
+                If Not d.copyright Is Nothing Then
+                    result.Copyright = d.copyright.to_cil
                 End If
             End If
         End If
@@ -72,12 +71,18 @@ Public Class ADL_ArchetypeDetails
         Return result
     End Function
 
-    Public Overrides Function HasDetailInLanguage(ByVal a_language As String) As Boolean
-        Return mADL_Description.details.has(Eiffel.String(a_language))
+    Public Overrides Function HasDetailInLanguage(ByVal language As String) As Boolean
+        Return mAdlDescription.details.has(Eiffel.String(language))
     End Function
 
-    Sub New(ByVal a_description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION)
-        mADL_Description = a_description
+    Public Overrides ReadOnly Property Count() As Integer
+        Get
+            Return mAdlDescription.details.count
+        End Get
+    End Property
+
+    Sub New(ByVal description As openehr.openehr.rm.common.resource.RESOURCE_DESCRIPTION)
+        mAdlDescription = description
     End Sub
 
 End Class

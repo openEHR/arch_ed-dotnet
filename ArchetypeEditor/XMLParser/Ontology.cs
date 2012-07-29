@@ -441,26 +441,21 @@ namespace XMLParser
             if (_languages_available == null)
             {
                 _languages_available = new ArrayList();
-                populate_language_list();
+                CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
+
+                if (definitions == null)
+                    _languages_available.Add(_archetype.original_language.code_string);
+                else
+                {
+                    foreach (CodeDefinitionSet ls in definitions)
+                    {
+                        if (!_languages_available.Contains(ls.language))
+                            _languages_available.Add(ls.language);
+                    }
+                }
             }
 
             return _languages_available;
-        }
-
-        private void populate_language_list()
-        {
-            //current language is added by default so need to ensure we do not get it twice
-            if (!_languages_available.Contains(_archetype.original_language.code_string))
-                _languages_available.Add(_archetype.original_language.code_string);
- 
-            if (_archetype.translations != null)
-            {
-                foreach (TRANSLATION_DETAILS t in _archetype.translations)
-                {
-                    if (!_languages_available.Contains(t.language.code_string))
-                        _languages_available.Add(t.language.code_string);
-                }
-            }
         }
 
         public bool IsMultiLanguage()

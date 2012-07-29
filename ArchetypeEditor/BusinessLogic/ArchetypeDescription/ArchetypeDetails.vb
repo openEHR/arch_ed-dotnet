@@ -1,27 +1,32 @@
 Public Class ArchetypeDetails
-    Inherits Collections.DictionaryBase
+    Protected mDetails As New Hashtable
 
-    Public Overridable Sub AddOrReplace(ByVal a_language As String, ByVal a_detail As ArchetypeDescriptionItem)
-        If Me.HasDetailInLanguage(a_language) Then
-            Me.InnerHashtable.Remove(a_language)
+    Public Overridable Sub AddOrReplace(ByVal language As String, ByVal detail As ArchetypeDescriptionItem)
+        If HasDetailInLanguage(language) Then
+            mDetails.Remove(language)
         End If
-        Me.InnerHashtable.Add(a_language, a_detail)
+
+        mDetails.Add(language, detail)
     End Sub
 
-    Public Overridable Function DetailInLanguage(ByVal a_language As String) As ArchetypeDescriptionItem
-        If Me.InnerHashtable.ContainsKey(a_language) Then
-            Return Me.InnerHashtable.Item(a_language)
-        Else
-            Return Nothing
+    Public Overridable Function DetailInLanguage(ByVal language As String) As ArchetypeDescriptionItem
+        Dim result As New ArchetypeDescriptionItem(language)
+
+        If mDetails.ContainsKey(language) Then
+            result = mDetails.Item(language)
         End If
+
+        Return result
     End Function
 
-    Public Overridable Function HasDetailInLanguage(ByVal a_language As String) As Boolean
-        If Me.InnerHashtable.ContainsKey(a_language) Then
-            Return True
-        Else
-            Return False
-        End If
+    Public Overridable Function HasDetailInLanguage(ByVal language As String) As Boolean
+        Return mDetails.ContainsKey(language)
     End Function
+
+    Public Overridable ReadOnly Property Count() As Integer
+        Get
+            Return mDetails.Count
+        End Get
+    End Property
 
 End Class

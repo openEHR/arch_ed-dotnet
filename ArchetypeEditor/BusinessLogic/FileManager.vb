@@ -327,51 +327,43 @@ Public Class FileManagerLocal
 
     Public Function CreateXMLParser() As XMLParser.XmlArchetypeParser
         'Create a new parser
-        Dim xml_parser As New XMLParser.XmlArchetypeParser()
+        Dim result As New XMLParser.XmlArchetypeParser()
+        result.NewArchetype(Archetype.Archetype_ID.ToString, mOntologyManager.PrimaryLanguageCode, Main.Instance.DefaultLanguageCodeSet)
+        result.Archetype.concept = Archetype.ConceptCode
+        result.Archetype.definition.node_id = result.Archetype.concept
 
-        xml_parser.NewArchetype(Archetype.Archetype_ID.ToString, mOntologyManager.PrimaryLanguageCode, Main.Instance.DefaultLanguageCodeSet)
-        xml_parser.Archetype.concept = Archetype.ConceptCode
-        xml_parser.Archetype.definition.node_id = xml_parser.Archetype.concept
-
-        Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(xml_parser)
+        Dim xmlOntology As ArchetypeEditor.XML_Classes.XML_Ontology = New ArchetypeEditor.XML_Classes.XML_Ontology(result)
 
         'Set the root id which can be different than the concept ID
         Dim definition As ArcheTypeDefinitionBasic = Archetype.Definition
 
-        If Not definition Is Nothing AndAlso Not definition.RootNodeId Is Nothing AndAlso xml_parser.Archetype.definition.node_id <> definition.RootNodeId Then
-            xml_parser.Archetype.definition.node_id = definition.RootNodeId
+        If Not definition Is Nothing AndAlso Not definition.RootNodeId Is Nothing AndAlso result.Archetype.definition.node_id <> definition.RootNodeId Then
+            result.Archetype.definition.node_id = definition.RootNodeId
         End If
 
         If mOntologyManager.NumberOfSpecialisations > 0 Then
-            If xml_parser.Archetype.parent_archetype_id Is Nothing Then
-                xml_parser.Archetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
+            If result.Archetype.parent_archetype_id Is Nothing Then
+                result.Archetype.parent_archetype_id = New XMLParser.ARCHETYPE_ID
             End If
 
-            xml_parser.Archetype.parent_archetype_id.value = Archetype.ParentArchetype
+            result.Archetype.parent_archetype_id.value = Archetype.ParentArchetype
         End If
 
-        xml_parser.Archetype.adl_version = "1.4"
+        result.Archetype.adl_version = "1.4"
 
         'remove the concept code from ontology as will be set again
-        xml_parser.Archetype.ontology.term_definitions = Nothing
+        result.Archetype.ontology.term_definitions = Nothing
 
-        'term definitions
         xmlOntology.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable)
-
-        'constraint definitions
         xmlOntology.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable)
-
-        'bindings
         xmlOntology.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
         xmlOntology.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
 
-        'languages - need translations and details for each language
-        Dim ii As Integer = mOntologyManager.LanguagesTable.Rows.Count
-        Dim translationsArray As XMLParser.TRANSLATION_DETAILS() = Array.CreateInstance(GetType(XMLParser.TRANSLATION_DETAILS), ii - 1)
-        Dim details_array As XMLParser.RESOURCE_DESCRIPTION_ITEM() = Array.CreateInstance(GetType(XMLParser.RESOURCE_DESCRIPTION_ITEM), ii)
-
+        'Translations and details for each language
+        Dim translationsArray As XMLParser.TRANSLATION_DETAILS() = Array.CreateInstance(GetType(XMLParser.TRANSLATION_DETAILS), Archetype.TranslationDetails.Count)
+        Dim detailsArray As XMLParser.RESOURCE_DESCRIPTION_ITEM() = Array.CreateInstance(GetType(XMLParser.RESOURCE_DESCRIPTION_ITEM), Archetype.Description.Details.Count)
         Dim i As Integer = 0
-        ii = 0
+        Dim ii As Integer = 0
 
         For Each row As DataRow In mOntologyManager.LanguagesTable.Rows
             Dim language As String = CStr(row(0))
@@ -380,117 +372,99 @@ Public Class FileManagerLocal
             cp.terminology_id.value = Main.Instance.DefaultLanguageCodeSet
             cp.code_string = language
 
-            'Add the translations
-            If language <> mOntologyManager.PrimaryLanguageCode And Archetype.TranslationDetails.ContainsKey(language) Then
-                Dim translationDetail As TranslationDetails = Archetype.TranslationDetails.Item(language)
-                Dim xmlTranslationDetail As New XML_TranslationDetails(translationDetail)
-                translationsArray(i) = xmlTranslationDetail.XmlTranslation
+            If Archetype.TranslationDetails.ContainsKey(language) Then
+                translationsArray(i) = New XML_TranslationDetails(Archetype.TranslationDetails.Item(language)).XmlTranslation
                 i += 1
             End If
 
-            'Add the archetype details in each language
-            Dim archDetail As ArchetypeDescriptionItem = Archetype.Description.Details.DetailInLanguage(language)
-            Dim xml_detail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
-            xml_detail.language = cp
+            If Archetype.Description.Details.HasDetailInLanguage(language) Then
+                Dim archDetail As ArchetypeDescriptionItem = Archetype.Description.Details.DetailInLanguage(language)
+                Dim xmlDetail As New XMLParser.RESOURCE_DESCRIPTION_ITEM
+                xmlDetail.language = cp
+                xmlDetail.copyright = archDetail.Copyright
+                xmlDetail.misuse = archDetail.MisUse
 
-            If Not String.IsNullOrEmpty(archDetail.Copyright) Then
-                xml_detail.copyright = archDetail.Copyright
+                If archDetail.OriginalResourceURI <> "" Then
+                    Dim newItems(0) As XMLParser.StringDictionaryItem
+                    newItems(0).Value = archDetail.OriginalResourceURI
+                    xmlDetail.original_resource_uri = newItems
+                End If
+
+                xmlDetail.purpose = archDetail.Purpose
+                xmlDetail.use = archDetail.Use
+
+                If Not archDetail.KeyWords Is Nothing AndAlso archDetail.KeyWords.Count > 0 Then
+                    xmlDetail.keywords = Array.CreateInstance(GetType(String), archDetail.KeyWords.Count)
+
+                    For j As Integer = 0 To archDetail.KeyWords.Count - 1
+                        xmlDetail.keywords(j) = archDetail.KeyWords.Item(j)
+                    Next
+                End If
+
+                detailsArray(ii) = xmlDetail
+                ii += 1
             End If
-
-            xml_detail.misuse = archDetail.MisUse
-
-            If archDetail.OriginalResourceURI <> "" Then
-                Dim new_items(0) As XMLParser.StringDictionaryItem
-                new_items(0).Value = archDetail.OriginalResourceURI
-                xml_detail.original_resource_uri = new_items
-            End If
-
-            xml_detail.purpose = archDetail.Purpose
-            xml_detail.use = archDetail.Use
-
-            If Not archDetail.KeyWords Is Nothing AndAlso archDetail.KeyWords.Count > 0 Then
-                xml_detail.keywords = Array.CreateInstance(GetType(String), archDetail.KeyWords.Count)
-
-                For j As Integer = 0 To archDetail.KeyWords.Count - 1
-                    xml_detail.keywords(j) = archDetail.KeyWords.Item(j)
-                Next
-            End If
-
-            details_array(ii) = xml_detail
-            ii += 1
         Next
 
         'Definition
-        Dim xmlArchetype As New ArchetypeEditor.XML_Classes.XML_Archetype(xml_parser)
+        Dim xmlArchetype As New ArchetypeEditor.XML_Classes.XML_Archetype(result)
         xmlArchetype.Definition = Archetype.Definition
         xmlArchetype.Description = Archetype.Description
         xmlArchetype.MakeParseTree()
         ParserSynchronised = True
 
-        'description
+        'Description
         If TypeOf Archetype.Description Is ArchetypeEditor.XML_Classes.XML_Description Then
-            xml_parser.Archetype.description = CType(Archetype.Description, ArchetypeEditor.XML_Classes.XML_Description).XML_Description
+            result.Archetype.description = CType(Archetype.Description, ArchetypeEditor.XML_Classes.XML_Description).XML_Description
         Else
-            xml_parser.Archetype.description = New ArchetypeEditor.XML_Classes.XML_Description(Archetype.Description).XML_Description
+            result.Archetype.description = New ArchetypeEditor.XML_Classes.XML_Description(Archetype.Description).XML_Description
         End If
 
-        xml_parser.Archetype.description.details = details_array
-
-        'translations
-        xml_parser.Archetype.translations = translationsArray
-        Return xml_parser
+        result.Archetype.description.details = detailsArray
+        result.Archetype.translations = translationsArray
+        Return result
     End Function
 
     Private Function CreateAdlParser() As ArchetypeEditor.ADL_Classes.ADL_Interface
         'Create a new parser
-        Dim adlParser As New ArchetypeEditor.ADL_Classes.ADL_Interface()
-        adlParser.NewArchetype(Archetype.Archetype_ID, mOntologyManager.PrimaryLanguageCode)
-        adlParser.Archetype.ConceptCode = Archetype.ConceptCode
+        Dim result As New ArchetypeEditor.ADL_Classes.ADL_Interface()
+        result.NewArchetype(Archetype.Archetype_ID, mOntologyManager.PrimaryLanguageCode)
+        result.Archetype.ConceptCode = Archetype.ConceptCode
 
         If mOntologyManager.NumberOfSpecialisations > 0 Then
-            adlParser.Archetype.ParentArchetype = Archetype.ParentArchetype
+            result.Archetype.ParentArchetype = Archetype.ParentArchetype
         End If
 
-        adlParser.ADL_Parser.archetype.set_adl_version(Eiffel.String("1.4"))
+        result.ADL_Parser.archetype.set_adl_version(Eiffel.String("1.4"))
+        result.Archetype.Description = New ArchetypeEditor.ADL_Classes.ADL_Description(Archetype.Description, mOntologyManager.PrimaryLanguageCode)
 
-        'HKF: 8 Dec 2008
-        'description
-        adlParser.Archetype.Description = New ArchetypeEditor.ADL_Classes.ADL_Description(Me.Archetype.Description, mOntologyManager.PrimaryLanguageCode)
-
-        'populate the ontology
-
-        'languages - need translations and details for each language
-        'First deal with the original language
         For Each dRow As DataRow In mOntologyManager.LanguagesTable.Rows
             Dim language As String = CStr(dRow(0))
+
             If language <> mOntologyManager.PrimaryLanguageCode Then
-                Dim adlTranslationDetails As ADL_TranslationDetails = New ADL_TranslationDetails(Me.Archetype.TranslationDetails.Item(language))
-                adlParser.ADL_Parser.ontology.add_language(Eiffel.String(language))
-                'HKF: 8 Dec 2008
-                adlParser.Archetype.TranslationDetails.Add(language, adlTranslationDetails)
+                result.ADL_Parser.ontology.add_language(Eiffel.String(language))
+
+                If Archetype.TranslationDetails.ContainsKey(language) Then
+                    result.Archetype.TranslationDetails.Add(language, New ADL_TranslationDetails(Archetype.TranslationDetails.Item(language)))
+                End If
             End If
 
-            ' HKF: 8 Dec 2008
-            Dim archDetail As ArchetypeDescriptionItem = Me.Archetype.Description.Details.DetailInLanguage(language)
-            adlParser.Archetype.Description.Details.AddOrReplace(language, archDetail)
+            If Archetype.Description.Details.HasDetailInLanguage(language) Then
+                result.Archetype.Description.Details.AddOrReplace(language, Archetype.Description.Details.DetailInLanguage(language))
+            End If
         Next
-        'term definitions
-        adlParser.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable, mOntologyManager.PrimaryLanguageCode)
 
-        'constraint definitions
-        adlParser.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable, mOntologyManager.PrimaryLanguageCode)
+        result.AddTermDefinitionsFromTable(mOntologyManager.TermDefinitionTable, mOntologyManager.PrimaryLanguageCode)
+        result.AddConstraintDefinitionsFromTable(mOntologyManager.ConstraintDefinitionTable, mOntologyManager.PrimaryLanguageCode)
+        result.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
+        result.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
 
-        'bindings
-        adlParser.AddTermBindingsFromTable(mOntologyManager.TermBindingsTable)
-        adlParser.AddConstraintBindingsFromTable(mOntologyManager.ConstraintBindingsTable)
+        Dim adlArchetype As ArchetypeEditor.ADL_Classes.ADL_Archetype = result.Archetype
+        adlArchetype.Definition = Archetype.Definition
+        adlArchetype.MakeParseTree()
+        ParserSynchronised = True
 
-        'Build the Definition
-        Dim adl_archetype As ArchetypeEditor.ADL_Classes.ADL_Archetype = adlParser.Archetype
-        adl_archetype.Definition = Me.Archetype.Definition
-        adl_archetype.MakeParseTree()
-        Me.ParserSynchronised = True
-
-        Return adlParser
+        Return result
     End Function
 
     Public Function ExportSerialised(ByVal a_format As String) As String
