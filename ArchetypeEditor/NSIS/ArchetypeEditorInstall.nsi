@@ -63,7 +63,7 @@ VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
 VIAddVersionKey FileVersion "${VERSION}.${BUILD}"
 VIAddVersionKey FileDescription "Archetype Editor Installer"
-VIAddVersionKey LegalCopyright "Copyright © 2011 openEHR Foundation"
+VIAddVersionKey LegalCopyright "Copyright © 2012 openEHR Foundation"
 InstallDirRegKey HKLM "${REGKEY}" Path
 ShowUninstDetails show
 BrandingText "Archetype Editor Installer"
