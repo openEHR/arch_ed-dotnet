@@ -870,18 +870,17 @@ Public Class PathwaySpecification
     End Sub
 
     Private Sub OnSelectionChanged(ByVal Sender As Object, ByVal e As EventArgs)
+        Dim pv As PathwayEvent = CType(Sender, PathwayEvent)
 
-        Dim selected_pv As PathwayEvent = CType(Sender, PathwayEvent)
+        Debug.Assert(pv.Selected)
 
-        Debug.Assert(selected_pv.Selected)
-
-        If Not selected_pv Is mPathwayEvent Then
+        If Not pv Is mPathwayEvent Then
             If Not mPathwayEvent Is Nothing Then
                 mPathwayEvent.Selected = False
             End If
         End If
 
-        mPathwayEvent = selected_pv
+        mPathwayEvent = pv
         tabProperties.Show()
         Dim state As StateMachineType = StateMachineType.Not_Set
 
@@ -924,11 +923,9 @@ Public Class PathwaySpecification
     End Sub
 
     Private Sub MenuAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuAdd.Click, PanelAbortActive.DoubleClick, PanelAbortInitial.DoubleClick, PanelActive.DoubleClick, PanelPlanned.DoubleClick, PanelCompleted.DoubleClick, PanelSuspendInitial.DoubleClick, PanelSuspendActive.DoubleClick, PanelScheduled.DoubleClick
-        Dim ctrl As Control = Nothing
+        Dim ctrl As Control = TryCast(sender, Control)
 
-        If TypeOf sender Is Control Then
-            ctrl = sender
-        ElseIf TypeOf sender Is MenuItem Then
+        If ctrl Is Nothing And TypeOf sender Is MenuItem Then
             ctrl = CType(sender, MenuItem).GetContextMenu.SourceControl
         End If
 
@@ -975,7 +972,7 @@ Public Class PathwaySpecification
     Private Sub AddPathwayEvent(ByVal ctrl As Control, ByVal pv As PathwayEvent)
         ctrl.Controls.Add(pv)
         pv.TabStop = True
-        pv.ContextMenuPathwayEvent.MergeMenu(ContextMenuState)
+        AddHandler pv.ContextMenuPathwayEvent.MenuItems.Add(MenuAdd.Text).Click, AddressOf MenuAdd_Click
         AddHandler pv.SelectionChanged, AddressOf OnSelectionChanged
         AddHandler pv.Deleted, AddressOf OnDeleted
         AddHandler pv.Moved, AddressOf OnMoved
