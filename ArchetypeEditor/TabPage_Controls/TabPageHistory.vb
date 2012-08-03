@@ -51,9 +51,6 @@ Public Class TabpageHistory
             gbEventDetails.Controls.Add(mOccurrences)
             mOccurrences.Dock = DockStyle.Top
             mOccurrences.TabIndex = 0
-            'gbDuration.Location = gbOffset.Location
-            'gbDuration.Height = gbOffset.Height
-
         End If
     End Sub
 
@@ -766,10 +763,7 @@ Public Class TabpageHistory
     End Sub
 
     Friend Sub ProcessEventSeries(ByVal rm As RmHistory)
-        Dim ev As RmEvent
-        Dim HistEvent As EventListViewItem
         sNodeID = rm.NodeId
-
         LoadUnitsComboBoxes()
 
         If rm.isPeriodic Then
@@ -786,9 +780,8 @@ Public Class TabpageHistory
             radioOpen.Checked = True
         End If
 
-        For Each ev In rm.Children
-            HistEvent = New EventListViewItem(ev, mFileManager)
-            ListEvents.Items.Add(HistEvent)
+        For Each ev As RmEvent In rm.Children
+            ListEvents.Items.Add(New EventListViewItem(ev, mFileManager))
         Next
 
         Translate()
@@ -809,16 +802,14 @@ Public Class TabpageHistory
     End Property
 
     Public Sub Translate()
-        Dim HistEvent As EventListViewItem
-        Dim elvi As EventListViewItem
         currentItem = Nothing
 
-        For Each HistEvent In ListEvents.Items
-            HistEvent.Translate()
+        For Each ev As EventListViewItem In ListEvents.Items
+            ev.Translate()
         Next
 
         If ListEvents.SelectedItems.Count > 0 Then
-            elvi = CType(ListEvents.SelectedItems(0), EventListViewItem)
+            Dim elvi As EventListViewItem = CType(ListEvents.SelectedItems(0), EventListViewItem)
             txtEventDescription.Text = elvi.Description
 
             If elvi.hasNameConstraint Then
@@ -1289,14 +1280,14 @@ Public Class TabpageHistory
     End Sub
 
     Private Sub LoadMathsFunctionsListView(ByVal elvi As EventListViewItem)
-        Dim mathfunctions As DataRow() = mFileManager.OntologyManager.CodeForGroupID(14, Main.Instance.DefaultLanguageCode) 'event math function
+        Dim mathsFunctions As DataRow() = mFileManager.OntologyManager.CodeForGroupID(14, Main.Instance.DefaultLanguageCode) 'event math function
         listViewMathsFunctions.Clear()
 
-        For Each rw As DataRow In mathfunctions
+        For Each row As DataRow In mathsFunctions
             Dim l As New ListViewItem
-            Dim code As String = CStr(rw.Item(1))
+            Dim code As String = CStr(row.Item(1))
             l.Tag = code
-            l.Text = CStr(rw.Item(2))
+            l.Text = CStr(row.Item(2))
 
             ' Deal with the change of archetypes from a string to a code phrase and the openEHR code as an integer.
             l.Checked = Not elvi Is Nothing AndAlso elvi.HasMathsFunction AndAlso elvi.AggregateMathFunction.Codes.Contains(code)
@@ -1540,8 +1531,11 @@ Public Class TabpageHistory
             TranslateGUI()
         End If
 
-        If listViewMathsFunctions.Items.Count = 0 Then
+        If comboTimeUnits.Items.Count = 0 Then
             LoadUnitsComboBoxes()
+        End If
+
+        If listViewMathsFunctions.Items.Count = 0 Then
             LoadMathsFunctionsListView(Nothing)
         End If
 
