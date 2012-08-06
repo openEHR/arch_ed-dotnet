@@ -263,85 +263,69 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
             listUnits.SelectedIndex = 0
         End If
 
-        AddHandler Me.comboPhysicalProperty.SelectedIndexChanged, AddressOf Me.comboPhysicalProperty_SelectedIndexChanged
-
+        AddHandler comboPhysicalProperty.SelectedIndexChanged, AddressOf Me.comboPhysicalProperty_SelectedIndexChanged
     End Sub
 
-    Private Sub listUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles listUnits.SelectedIndexChanged
-
+    Private Sub listUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listUnits.SelectedIndexChanged
         ' no change to archetype so currentitem needs to be null
-        If listUnits.SelectedIndex > -1 Then
-
+        If listUnits.SelectedIndex >= 0 Then
             MyBase.IsLoading = True
-
-            Dim quantityUnit As Constraint_QuantityUnit
-            quantityUnit = CType(listUnits.SelectedItem, Constraint_QuantityUnit)
-
-            ' HKF: 1620
             QuantityUnitConstraint.Visible = True
-            QuantityUnitConstraint.ShowConstraint(mIsState, quantityUnit)
-
+            QuantityUnitConstraint.ShowConstraint(mIsState, CType(listUnits.SelectedItem, Constraint_QuantityUnit))
             MyBase.IsLoading = False
         Else
+            QuantityUnitConstraint.Reset()
             QuantityUnitConstraint.Visible = False
         End If
     End Sub
 
     Private Sub butAddUnit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddUnit.Click
-        If (Not Me.comboPhysicalProperty.SelectedValue Is Nothing) Then
-            If Convert.ToInt16(Me.comboPhysicalProperty.SelectedValue) = 64 Then
+        If Not comboPhysicalProperty.SelectedValue Is Nothing Then
+            If Convert.ToInt16(comboPhysicalProperty.SelectedValue) = 64 Then
                 'Property is not set so show all the units
-                Dim Frm As New Choose
+                Dim form As New Choose
                 Dim view As New DataView(Main.Instance.UnitsTable)
                 view.Sort = "Text"
-                Frm.ListChoose.DataSource = view
-                Frm.ListChoose.DisplayMember = "Text"
-                Frm.ListChoose.ValueMember = "property_id"
+                form.ListChoose.DataSource = view
+                form.ListChoose.DisplayMember = "Text"
+                form.ListChoose.ValueMember = "property_id"
+                form.Set_Single()
+                form.ListChoose.SelectionMode = SelectionMode.One
+                form.ShowDialog(Me)
 
-                Frm.Set_Single()
-                Frm.ListChoose.SelectionMode = SelectionMode.One
-                Frm.ShowDialog(Me)
-                If Frm.ListChoose.SelectedIndex < 0 Then
-                    Return
+                If form.ListChoose.SelectedIndex >= 0 Then
+                    'Set the property to the property Id and then set the constraint property
+                    comboPhysicalProperty.SelectedValue = form.ListChoose.SelectedValue
+                    Constraint.OpenEhrCode = CInt(CType(comboPhysicalProperty.SelectedItem, DataRowView).Item("openEHR"))
+
+                    'Add the unit
+                    Dim quantityUnit As New Constraint_QuantityUnit(mIsTime)
+                    quantityUnit.Unit = CStr(CType(form.ListChoose.SelectedItem, DataRowView).Item(1))
+                    Constraint.Units.Add(quantityUnit, quantityUnit.Unit)
+                    listUnits.Items.Add(quantityUnit)
+                    listUnits.SelectedItem = quantityUnit
+
+                    mFileManager.FileEdited = True
                 End If
-
-                'Set the property to the property Id and then set the constraint property
-                Me.comboPhysicalProperty.SelectedValue = Frm.ListChoose.SelectedValue
-                Me.Constraint.OpenEhrCode = CInt(CType(Me.comboPhysicalProperty.SelectedItem, DataRowView).Item("openEHR"))
-
-                'Add the unit
-                Dim quantityUnit As New Constraint_QuantityUnit(mIsTime)
-                quantityUnit.Unit = CStr(CType(Frm.ListChoose.SelectedItem, DataRowView).Item(1))
-                Constraint.Units.Add(quantityUnit, quantityUnit.Unit)
-                listUnits.Items.Add(quantityUnit)
-                listUnits.SelectedItem = quantityUnit
-
-                mFileManager.FileEdited = True
-
             Else
-                Dim c_menu As New ContextMenu
-                Dim where_clause As String = ""
+                Dim menu As New ContextMenu
+                Dim whereClause As String = ""
 
                 'Exclude units already added
-                For Each c_unit As Constraint_QuantityUnit In Me.listUnits.Items
-                    If where_clause = "" Then
-                        where_clause = " AND NOT (Text = '" & c_unit.Unit & "'"
+                For Each c_unit As Constraint_QuantityUnit In listUnits.Items
+                    If whereClause = "" Then
+                        whereClause = " AND NOT (Text = '" & c_unit.Unit & "'"
                     Else
-                        where_clause &= " OR Text = '" & c_unit.Unit & "'"
+                        whereClause &= " OR Text = '" & c_unit.Unit & "'"
                     End If
                 Next
 
-                If where_clause <> "" Then
-                    where_clause &= ")"
+                If whereClause <> "" Then
+                    whereClause &= ")"
                 End If
 
-                For Each d_row As DataRow In Main.Instance.UnitsTable.Select("property_id = " & _
-                        CStr(Me.comboPhysicalProperty.SelectedValue) & where_clause)
-
-                    Dim s As String
-
-                    s = CStr(d_row(1))
+                For Each row As DataRow In Main.Instance.UnitsTable.Select("property_id = " & CStr(comboPhysicalProperty.SelectedValue) & whereClause)
+                    Dim s As String = CStr(row(1))
 
                     'Omit the "yr" unit as is a duplicate of "a"
                     If Not (mIsTime And s = "yr") Then
@@ -356,17 +340,21 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                             'If these are numeric then substitute the terms in the appropriate language
                             Dim y() As String = (s.Trim("{}".ToCharArray())).Split("/"c)
                             Dim label As New System.Text.StringBuilder("{")
+
                             For Each code As String In y
                                 Dim ii As Integer
+
                                 If label.ToString() <> "{" Then
                                     label.Append("/")
                                 End If
+
                                 If Integer.TryParse(code, ii) Then
                                     label.Append(Filemanager.GetOpenEhrTerm(ii, "#Error#"))
                                 Else
                                     label.Append(y)
                                 End If
                             Next
+
                             label.Append("}")
                             MI.Text = label.ToString()
                             MI.Tag = s
@@ -375,87 +363,60 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                         End If
 
                         AddHandler MI.Click, AddressOf AddUnit
-
-                        c_menu.MenuItems.Add(MI)
+                        menu.MenuItems.Add(MI)
                     End If
-
                 Next
-                c_menu.Show(butAddUnit, New System.Drawing.Point(5, 5))
+
+                menu.Show(butAddUnit, New System.Drawing.Point(5, 5))
             End If
         End If
-
     End Sub
 
     Private Sub butRemoveUnit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveUnit.Click
+        If listUnits.SelectedIndex >= 0 Then
+            Dim s As String = listUnits.SelectedItem.ToString
+            Dim text As String = AE_Constants.Instance.Remove & "'" & s & "'"
 
-        If listUnits.Items.Count > 0 Then
-            If listUnits.SelectedIndex > -1 Then
-
-                Dim s As String = listUnits.SelectedItem.ToString
-                If MessageBox.Show(AE_Constants.Instance.Remove & "'" & s & "'", _
-                        AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, _
-                        MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) _
-                        = Windows.Forms.DialogResult.OK Then
-
-                    If Constraint.IsTime Then
-                        Constraint.Units.Remove(Main.ISO_TimeUnits.GetISOForLanguage(s))
-                    Else
-                        Constraint.Units.Remove(s)
-                    End If
-
-
-                    Dim i As Integer = listUnits.SelectedIndex
-                    listUnits.Items.Remove(listUnits.SelectedItem)
-
-                    If i - 1 > -1 Then
-                        listUnits.SelectedIndex = i - 1
-                    Else
-                        QuantityUnitConstraint.Reset()
-                    End If
-
-                    mFileManager.FileEdited = True
+            If MessageBox.Show(text, AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
+                If Constraint.IsTime Then
+                    Constraint.Units.Remove(Main.ISO_TimeUnits.GetISOForLanguage(s))
+                Else
+                    Constraint.Units.Remove(s)
                 End If
 
-            End If
+                Dim i As Integer = Math.Max(0, listUnits.SelectedIndex - 1)
+                listUnits.Items.Remove(listUnits.SelectedItem)
 
+                If i < listUnits.Items.Count Then
+                    listUnits.SelectedIndex = i
+                End If
+
+                mFileManager.FileEdited = True
+            End If
         End If
     End Sub
 
-    Private Sub comboPhysicalProperty_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-        'Handles comboPhysicalProperty.SelectedIndexChanged
-        'Handling added specifically in code to allow loading
+    Private Sub comboPhysicalProperty_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        'Handles comboPhysicalProperty.SelectedIndexChanged -- Handling added specifically in code to allow loading
 
-        If Me.comboPhysicalProperty.Focused Then
-            If (Me.comboPhysicalProperty.SelectedIndex > -1) _
-                    AndAlso (MyBase.Constraint.Kind = ConstraintKind.Quantity) Then
-
-                'Check to see if it is TIME as Time units are handled with
-                'language specific abbreviations
-
-                If CInt(Me.comboPhysicalProperty.SelectedValue) = 2 Then
-                    mIsTime = True
-                Else
-                    mIsTime = False
-                End If
-
+        If comboPhysicalProperty.Focused Then
+            If comboPhysicalProperty.SelectedIndex >= 0 AndAlso MyBase.Constraint.Kind = ConstraintKind.Quantity Then
+                'Check to see if it is TIME as Time units are handled with language specific abbreviations
+                mIsTime = CInt(comboPhysicalProperty.SelectedValue) = 2
                 MyBase.IsLoading = True
-                'OBSOLETE
-                'Me.Constraint.Physical_property = CStr(Me.comboPhysicalProperty.Text)
+
                 ' get the openEHR term, which allows translation
-                Me.Constraint.OpenEhrCode = CInt(CType(Me.comboPhysicalProperty.SelectedItem, DataRowView).Item("openEHR"))
+                Constraint.OpenEhrCode = CInt(CType(Me.comboPhysicalProperty.SelectedItem, DataRowView).Item("openEHR"))
 
                 'clear the units
                 For Each u As Constraint_QuantityUnit In Me.Constraint.Units
-                    Me.Constraint.Units.Remove(u.Unit)
+                    Constraint.Units.Remove(u.Unit)
                 Next
 
-                'Reset 
+                'Reset
+                listUnits.SelectedIndex = -1
                 listUnits.Items.Clear()
-
-                QuantityUnitConstraint.Reset()
-
                 mFileManager.FileEdited = True
-
                 MyBase.IsLoading = False
             End If
         End If
@@ -478,13 +439,10 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                     End Try
                 End If
 
-                'SRH: 16 Mar 2009 - EDT-256 - allow no unit
-                'If quantityUnit.Unit <> "" Then
                 Constraint.Units.Add(quantityUnit, quantityUnit.Unit)
                 listUnits.Items.Add(quantityUnit)
                 listUnits.SelectedItem = quantityUnit
                 mFileManager.FileEdited = True
-                'End If
             Catch ex As Exception
                 Debug.Assert(False, ex.ToString)
                 MessageBox.Show(AE_Constants.Instance.Duplicate_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)

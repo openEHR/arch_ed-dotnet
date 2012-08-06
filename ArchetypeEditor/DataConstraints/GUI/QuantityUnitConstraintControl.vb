@@ -26,18 +26,16 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-
     End Sub
 
-    Public Sub New(ByVal a_file_manager As FileManagerLocal)
-        MyBase.New(a_file_manager)
+    Public Sub New(ByVal fileManager As FileManagerLocal)
+        MyBase.New(fileManager)
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-        mFileManager = a_file_manager
-
+        mFileManager = fileManager
     End Sub
 
     'NOTE: The following procedure is required by the Windows Form Designer
@@ -54,7 +52,6 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
     End Sub
 
 #End Region
-
 
     Public WriteOnly Property LocalFileManager() As FileManagerLocal
         Set(ByVal Value As FileManagerLocal)
@@ -78,6 +75,8 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
             numMaxValue.Value = 0
             cbMinValue.Checked = False
             numMinValue.Value = 0
+            NumericAssumed.Minimum = Decimal.MinValue
+            NumericAssumed.Maximum = Decimal.MaxValue
             NumericAssumed.Value = 0
             comboIncludeMax.SelectedIndex = 0
             comboIncludeMin.SelectedIndex = 0
@@ -85,43 +84,6 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
             MyBase.IsLoading = loading
         End Try
     End Sub
-
-    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
-        Reset()
-        MyBase.SetControlValues(IsState)
-
-        'SetMaxAndMin()
-
-        'If IsState Then
-        '    SetStateValues()
-        'End If
-    End Sub
-
-    'Private Sub SetMaxAndMin()
-    '    If Constraint.HasMaximum Then
-    '        Me.cbMaxValue.Checked = True
-    '        Me.numMaxValue.Value = CDec(Constraint.MaximumValue)
-    '        If Constraint.IncludeMaximum Then
-    '            Me.comboIncludeMax.SelectedIndex = 0
-    '        Else
-    '            Me.comboIncludeMax.SelectedIndex = 1
-    '        End If
-    '    Else
-    '        Me.cbMaxValue.Checked = False
-    '    End If
-
-    '    If Constraint.HasMinimum Then
-    '        Me.cbMinValue.Checked = True
-    '        Me.numMinValue.Value = CDec(Constraint.MinimumValue)
-    '        If Constraint.IncludeMinimum Then
-    '            Me.comboIncludeMin.SelectedIndex = 0
-    '        Else
-    '            Me.comboIncludeMin.SelectedIndex = 1
-    '        End If
-    '    Else
-    '        Me.cbMinValue.Checked = False
-    '    End If
-    'End Sub
 
 End Class
 

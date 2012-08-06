@@ -145,7 +145,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.NumericAssumed.TabIndex = 10
         Me.NumericAssumed.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         Me.NumericAssumed.ThousandsSeparator = True
-        Me.NumericAssumed.Visible = False
         '
         'numMaxValue
         '
@@ -257,7 +256,6 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.lblAssumedValue.TabIndex = 9
         Me.lblAssumedValue.Text = "Assumed value:"
         Me.lblAssumedValue.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.lblAssumedValue.Visible = False
         '
         'numPrecision
         '
@@ -332,29 +330,18 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         End Get
     End Property
 
-    Protected Function ToDecimal(ByVal o As String) As Decimal
-        Dim result As Decimal = 0
-
-        Try
-            result = CDec(o)
-        Catch ex As Exception
-            ' Discard the exception and simply return zero
-        End Try
-
-        Return result
-    End Function
-
-    Protected Overrides Sub SetControlValues(ByVal IsState As Boolean)
+    Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
         ' set constraint values on control
-        lblAssumedValue.Show()
-        NumericAssumed.Show()
+        NumericAssumed.Minimum = Decimal.MinValue
+        NumericAssumed.Maximum = Decimal.MaxValue
+        NumericAssumed.Value = 0
+
+        IsIntegral = Not (TypeOf Constraint Is Constraint_Real Or TypeOf Constraint Is Constraint_Currency)
+        SetMaxAndMin()
 
         If Constraint.HasAssumedValue Then
             NumericAssumed.Value = CType(Constraint.AssumedValue, Decimal)
         End If
-
-        IsIntegral = Not (TypeOf Constraint Is Constraint_Real Or TypeOf Constraint Is Constraint_Currency)
-        SetMaxAndMin()
 
         If TypeOf Constraint Is Constraint_Currency Then
             LabelQuantity.Text = AE_Constants.Instance.Currency
@@ -431,48 +418,49 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     Protected Overridable Sub CoordinateMinAndMaxValues()
         Dim minimum As Decimal = numMinValue.Minimum
         Dim maximum As Decimal = numMinValue.Maximum
-        Dim realConstraint As Constraint_Real = TryCast(Constraint, Constraint_Real)
 
-        If realConstraint IsNot Nothing Then
-            If numMinValue.Visible Then
-                Decimal.TryParse(numMinValue.Text, minimum)
+        If HasConstraint() Then
+            Dim realConstraint As Constraint_Real = TryCast(Constraint, Constraint_Real)
+
+            If realConstraint IsNot Nothing Then
+                If cbMinValue.Checked Then
+                    Decimal.TryParse(numMinValue.Text, minimum)
+                End If
+
+                If cbMaxValue.Checked Then
+                    Decimal.TryParse(numMaxValue.Text, maximum)
+                End If
+
+                realConstraint.MinimumRealValue = minimum
+                realConstraint.MaximumRealValue = maximum
+            Else
+                Dim iMinimum As Integer = Integer.MinValue
+                Dim iMaximum As Integer = Integer.MaxValue
+
+                If cbMinValue.Checked Then
+                    Integer.TryParse(numMinValue.Text, iMinimum)
+                End If
+
+                If cbMaxValue.Checked Then
+                    Integer.TryParse(numMaxValue.Text, iMaximum)
+                End If
+
+                minimum = iMinimum
+                maximum = iMaximum
+                Constraint.MinimumValue = iMinimum
+                Constraint.MaximumValue = iMaximum
             End If
-
-            If numMaxValue.Visible Then
-                Decimal.TryParse(numMaxValue.Text, maximum)
-            End If
-
-            realConstraint.MinimumRealValue = minimum
-            realConstraint.MaximumRealValue = maximum
-        Else
-            Dim iMinimum As Integer = Integer.MinValue
-            Dim iMaximum As Integer = Integer.MaxValue
-
-            If numMinValue.Visible Then
-                Integer.TryParse(numMinValue.Text, iMinimum)
-            End If
-
-            If numMaxValue.Visible Then
-                Integer.TryParse(numMaxValue.Text, iMaximum)
-            End If
-
-            minimum = iMinimum
-            maximum = iMaximum
-            Constraint.MinimumValue = iMinimum
-            Constraint.MaximumValue = iMaximum
         End If
 
-        If NumericAssumed.Visible Then
-            NumericAssumed.Minimum = minimum
-            NumericAssumed.Maximum = maximum
+        NumericAssumed.Minimum = minimum
+        NumericAssumed.Maximum = maximum
 
-            If comboIncludeMin.SelectedIndex = 1 Then
-                NumericAssumed.Minimum += NumericAssumed.Increment  ' don't include minimum
-            End If
+        If comboIncludeMin.SelectedIndex = 1 Then
+            NumericAssumed.Minimum += NumericAssumed.Increment  ' don't include minimum
+        End If
 
-            If comboIncludeMax.SelectedIndex = 1 Then
-                NumericAssumed.Maximum -= NumericAssumed.Increment  ' don't include maximum
-            End If
+        If comboIncludeMax.SelectedIndex = 1 Then
+            NumericAssumed.Maximum -= NumericAssumed.Increment  ' don't include maximum
         End If
 
         If minimum > maximum Then
@@ -609,10 +597,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         If Not MyBase.IsLoading Then
             If comboIncludeMin.SelectedIndex = 1 Then
                 Constraint.IncludeMinimum = False
-
-                If NumericAssumed.Visible Then
-                    NumericAssumed.Minimum = Constraint.MinimumValue + NumericAssumed.Increment
-                End If
+                NumericAssumed.Minimum = Constraint.MinimumValue + NumericAssumed.Increment
             Else
                 Constraint.IncludeMinimum = True
             End If
@@ -626,10 +611,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         If Not MyBase.IsLoading Then
             If comboIncludeMax.SelectedIndex = 1 Then
                 Constraint.IncludeMaximum = False
-
-                If NumericAssumed.Visible Then
-                    NumericAssumed.Maximum = Constraint.MaximumValue - NumericAssumed.Increment
-                End If
+                NumericAssumed.Maximum = Constraint.MaximumValue - NumericAssumed.Increment
             Else
                 Constraint.IncludeMaximum = True
             End If
@@ -650,10 +632,13 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
     Private Sub NumericAssumed_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericAssumed.ValueChanged, NumericAssumed.TextChanged
         If Not MyBase.IsLoading Then
+            Dim assumedValue As Decimal = 0
+            Decimal.TryParse(NumericAssumed.Text, assumedValue)
+
             If NumericAssumed.DecimalPlaces = 0 Then
-                Constraint.AssumedValue = ToDecimal(NumericAssumed.Text)
+                Constraint.AssumedValue = assumedValue
             Else
-                Constraint.AssumedValue = Convert.ToSingle(ToDecimal(NumericAssumed.Text), System.Globalization.NumberFormatInfo.InvariantInfo)
+                Constraint.AssumedValue = Convert.ToSingle(assumedValue, System.Globalization.NumberFormatInfo.InvariantInfo)
             End If
 
             Constraint.HasAssumedValue = True
@@ -671,8 +656,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Else
             numMaxValue.DecimalPlaces = i
             numMinValue.DecimalPlaces = i
-            Dim d As Decimal
-            d = CDec(Math.Pow(10, -i)) ' set the increment to the power of the precision
+            Dim d As Decimal = CDec(Math.Pow(10, -i)) ' set the increment to the power of the precision
             numMinValue.Increment = d
             numMaxValue.Increment = d
         End If
@@ -713,12 +697,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
 
     Private Sub txtList_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtList.KeyPress
         If e.KeyChar = ","c Then
-            If txtList.TextLength = 0 Or txtList.Text.EndsWith(",") Then
-                e.Handled = True
-            Else
-                e.Handled = False
-            End If
-
+            e.Handled = (txtList.TextLength = 0 Or txtList.Text.EndsWith(","))
         ElseIf "1234567890".Contains(e.KeyChar.ToString()) Then
             e.Handled = False
         Else
