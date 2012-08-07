@@ -950,42 +950,37 @@ Public Class TermBindingPanel
     End Sub
 
     Private Sub AddTerminologyButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddTerminologyButton.Click
-        Try
-            If Main.Instance.AddTerminology() Then
-                If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 1 Then
-                    SetTermBindingFilter()  ' for the tree view
-                    SetDvTermBindingsFilter() ' for the node only view
-                    dgTermBindings.Enabled = True
+        If Main.Instance.AddTerminology() Then
+            If mFileManager.OntologyManager.TerminologiesTable.Rows.Count = 1 Then
+                SetTermBindingFilter()  ' for the tree view
+                SetDvTermBindingsFilter() ' for the node only view
+                dgTermBindings.Enabled = True
 
-                    If dgTermBindings.AllowUserToAddRows = False Then
-                        dgTermBindings.AllowUserToAddRows = True
-                    End If
-                Else
-                    TerminologyComboBox.SelectedIndex = TerminologyComboBox.Items.Count - 1
+                If dgTermBindings.AllowUserToAddRows = False Then
+                    dgTermBindings.AllowUserToAddRows = True
                 End If
-
-                mFileManager.FileEdited = True
+            Else
+                TerminologyComboBox.SelectedIndex = TerminologyComboBox.Items.Count - 1
             End If
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
+
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
-    Private Sub BindingList_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles BindingList.SelectedIndexChanged
-
+    Private Sub BindingList_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BindingList.SelectedIndexChanged
         Debug.Assert(BindingList.SelectedIndices.Count <= 1)
+
         If BindingList.SelectedIndices.Count = 1 Then
             Dim index As Integer = BindingList.SelectedIndices.Item(0)
-            Me.gbCriteria.Visible = True
+            gbCriteria.Visible = True
+
             If index >= 0 Then
                 Dim bindingRowView As DataRowView = mTermBindingView.Item(index)
 
                 ' populate binding criteria
                 Dim path As String = CStr(bindingRowView.Item("Path"))
                 Dim code As String = CStr(bindingRowView.Item("Code"))
-
-                Me.SetBindingCriteriaFilter(path, code)
+                SetBindingCriteriaFilter(path, code)
 
                 ' set binding list tooltip
                 BindingToolTip.SetToolTip(BindingList, path)
@@ -996,6 +991,7 @@ Public Class TermBindingPanel
             If BindingList.SelectedIndices.Count = 0 Then
                 Me.gbCriteria.Visible = False
             End If
+
             BindingToolTip.SetToolTip(BindingList, "")
         End If
     End Sub
@@ -1023,7 +1019,7 @@ Public Class TermBindingPanel
                     AddCriteriaButton_Click(sender, e)
                     mCriteriaMode = True
                 Else
-                    Me.PanelBindings.Enabled = True
+                    PanelBindings.Enabled = True
                     AddBindingGroupBox.Hide()
                 End If
             Else
@@ -1033,7 +1029,6 @@ Public Class TermBindingPanel
                     PanelBindings.Enabled = True
                     AddBindingGroupBox.Hide()
                 Catch ex As Exception
-                    Debug.Assert(False, ex.ToString)
                     MessageBox.Show(AE_Constants.Instance.Duplicate_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             End If
@@ -1074,9 +1069,7 @@ Public Class TermBindingPanel
     Private Sub SetBindingCriteriaFilter(ByVal Path As String, ByVal Code As String)
         ' Called during load before terminologyComboBox has a selected value so...
         If Not TerminologyComboBox.SelectedValue Is Nothing Then
-            mTermBindingCriteriaView.RowFilter = String.Format( _
-                "Terminology = '{0}' AND Path = '{1}' AND Code = '{2}'", _
-                CStr(TerminologyComboBox.SelectedValue), Path, Code)
+            mTermBindingCriteriaView.RowFilter = String.Format("Terminology = '{0}' AND Path = '{1}' AND Code = '{2}'", CStr(TerminologyComboBox.SelectedValue), Path, Code)
         End If
     End Sub
 
@@ -1140,7 +1133,7 @@ Public Class TermBindingPanel
 
     Private Sub BindingCriteriaCancelButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles BindingCriteriaCancelButton.Click
         AddBindingCriteriaGroupBox.Visible = False
-        Me.PanelBindings.Enabled = True
+        PanelBindings.Enabled = True
         mCriteriaMode = False
         PathsTreeView.SelectedNode = mCurrentTermNode
     End Sub
@@ -1150,32 +1143,44 @@ Public Class TermBindingPanel
         mCurrentBindingCriteria.ValueOperand = CStr(CriteriaValueTextBox.Tag)
 
         If mCriteriaMode Then
-            ' have to add the binding and the criteria
-            AddBindingCriteria()
-            AddPathToBindings(CodeTextBox.Text & "{" & mCurrentBindingCriteria.ToPhysicalCriteria & "}", BindingList.SelectedItems(0).Text)
-            ShowNodesImage(PathsTreeView.Nodes)
+            If BindingList.SelectedItems.Count = 0 Or BindingList.SelectedIndices.Count = 0 Then
+                MessageBox.Show("Binding code required", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Else
+                Dim bindingRowView As DataRowView = mTermBindingView.Item(BindingList.SelectedIndices.Item(0))
+
+                ' populate binding criteria
+                Dim path As String = CStr(bindingRowView.Item("Path"))
+                Dim terminology As String = CStr(bindingRowView.Item("Terminology"))
+                Dim code As String = CStr(bindingRowView.Item("Code"))
+
+                Dim newRow As DataRow = mFileManager.OntologyManager.TermBindingCriteriaTable.NewRow
+                newRow(0) = terminology
+                newRow(1) = path
+                newRow("code") = code
+                newRow("Criteria") = mCurrentBindingCriteria.ToPhysicalCriteria
+
+                mFileManager.OntologyManager.TermBindingCriteriaTable.Rows.Add(newRow)
+                mFileManager.FileEdited = True
+                AddPathToBindings(CodeTextBox.Text & "{" & mCurrentBindingCriteria.ToPhysicalCriteria & "}", BindingList.SelectedItems(0).Text)
+                ShowNodesImage(PathsTreeView.Nodes)
+            End If
         End If
 
         BindingCriteriaCancelButton_Click(sender, e)
     End Sub
 
     Private Sub PopulateCriteriaPath()
-        Try
-            Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
+        Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
 
-            If CriteriaPathRadioButton.Checked Then
-                mCurrentBindingCriteria.NodeOperand = selectedNode.PhysicalPath
-            Else
-                Debug.Assert(CriteriaNodeRadioButton.Checked, "No criteria scope option selected")
+        If CriteriaPathRadioButton.Checked Then
+            mCurrentBindingCriteria.NodeOperand = selectedNode.PhysicalPath
+        Else
+            Debug.Assert(CriteriaNodeRadioButton.Checked, "No criteria scope option selected")
 
-                mCurrentBindingCriteria.NodeOperand = selectedNode.NodeId
-            End If
+            mCurrentBindingCriteria.NodeOperand = selectedNode.NodeId
+        End If
 
-            CriteriaTermLabel.Text = mCurrentBindingCriteria.NodeText
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
+        CriteriaTermLabel.Text = mCurrentBindingCriteria.NodeText
     End Sub
 
     Private Sub ShowCriteriaElementView()
@@ -1188,7 +1193,7 @@ Public Class TermBindingPanel
 
         If Not termConstraint Is Nothing Then
             mCriteriaElementView = ArchetypeView.ConstraintView(termConstraint, mFileManager)
-            mCriteriaElementView.Location = Me.CriteriaValueTextBox.Location 'New Point(520, 64)
+            mCriteriaElementView.Location = CriteriaValueTextBox.Location
             AddBindingCriteriaGroupBox.Controls.Add(mCriteriaElementView)
         End If
     End Sub
@@ -1197,24 +1202,6 @@ Public Class TermBindingPanel
         If Not PathsTreeView.SelectedNode Is Nothing Then
             PopulateCriteriaPath()
         End If
-    End Sub
-
-    Private Sub AddBindingCriteria()
-        Dim bindingRowView As DataRowView = mTermBindingView.Item(BindingList.SelectedIndices.Item(0))
-
-        ' populate binding criteria
-        Dim path As String = CStr(bindingRowView.Item("Path"))
-        Dim terminology As String = CStr(bindingRowView.Item("Terminology"))
-        Dim code As String = CStr(bindingRowView.Item("Code"))
-
-        Dim newRow As DataRow = mFileManager.OntologyManager.TermBindingCriteriaTable.NewRow
-        newRow(0) = terminology
-        newRow(1) = path
-        newRow("code") = code
-        newRow("Criteria") = mCurrentBindingCriteria.ToPhysicalCriteria
-
-        mFileManager.OntologyManager.TermBindingCriteriaTable.Rows.Add(newRow)
-        mFileManager.FileEdited = True
     End Sub
 
     Public Sub Translate()
@@ -1250,48 +1237,34 @@ Public Class TermBindingPanel
         BindingCodeListColumnHeader.Text = Filemanager.GetOpenEhrTerm(90, BindingCodeListColumnHeader.Text)
         cmBindingPastePath.Text = Filemanager.GetOpenEhrTerm(639, cmBindingPastePath.Text)
         tpSimple.Title = Filemanager.GetOpenEhrTerm(621, tpSimple.Title)
-        Me.tpComplex.Title = Filemanager.GetOpenEhrTerm(102, tpComplex.Title)
-        Me.dgTermBindings.Columns(0).HeaderText = Filemanager.GetOpenEhrTerm(621, Me.dgTermBindings.Columns(0).HeaderText)
-        Me.dgTermBindings.Columns(1).HeaderText = Filemanager.GetOpenEhrTerm(90, Me.dgTermBindings.Columns(1).HeaderText)
-        Me.dgTermBindings.Columns(2).HeaderText = Filemanager.GetOpenEhrTerm(97, Me.dgTermBindings.Columns(2).HeaderText)
+        tpComplex.Title = Filemanager.GetOpenEhrTerm(102, tpComplex.Title)
+        dgTermBindings.Columns(0).HeaderText = Filemanager.GetOpenEhrTerm(621, dgTermBindings.Columns(0).HeaderText)
+        dgTermBindings.Columns(1).HeaderText = Filemanager.GetOpenEhrTerm(90, dgTermBindings.Columns(1).HeaderText)
+        dgTermBindings.Columns(2).HeaderText = Filemanager.GetOpenEhrTerm(97, dgTermBindings.Columns(2).HeaderText)
     End Sub
 
     Private Sub DeleteCriteriaButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DeleteCriteriaButton.Click
-        'Debug.Assert(BindingCriteriaListBox.SelectedIndex >= 0)
         If BindingCriteriaListBox.SelectedIndex >= 0 Then
-
             mTermBindingCriteriaView.Item(BindingCriteriaListBox.SelectedIndex).Delete()
-
         Else
             MsgBox("Select a binding criteria to remove")
         End If
-
     End Sub
 
     Private Sub mTermBindingCriteriaView_ListChanged(ByVal sender As Object, ByVal e As System.ComponentModel.ListChangedEventArgs) Handles mTermBindingCriteriaView.ListChanged
-
         PopulateBindingCriteriaList()
-
     End Sub
 
     Private Sub PopulateBindingCriteriaList()
-        Try
-            BindingCriteriaListBox.Items.Clear()
+        BindingCriteriaListBox.Items.Clear()
 
-            For Each criteriaRow As DataRowView In mTermBindingCriteriaView
+        For Each criteriaRow As DataRowView In mTermBindingCriteriaView
+            Dim criteriaExpression As String = CStr(criteriaRow.Item("criteria"))
+            Dim criteria As New BindingCriteria(criteriaExpression, mFileManager)
+            BindingCriteriaListBox.Items.Add(criteria)
+        Next
 
-                Dim criteriaExpression As String = CStr(criteriaRow.Item("criteria"))
-                Dim criteria As New BindingCriteria(criteriaExpression, mFileManager)
-
-                BindingCriteriaListBox.Items.Add(criteria)
-
-            Next
-
-            BindingToolTip.SetToolTip(BindingCriteriaListBox, "")
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
+        BindingToolTip.SetToolTip(BindingCriteriaListBox, "")
     End Sub
 
     Private Sub CriteriaValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
@@ -1311,15 +1284,18 @@ Public Class TermBindingPanel
             mFileManager = a_filemanager
             Debug.Assert(physicalPathPart.IndexOf("/") = -1, "Path is wrong:" & physicalPathPart)
             Dim i As Integer = physicalPathPart.IndexOf("[")
-            If (i > -1) Then
+
+            If i > -1 Then
                 mNodeId = physicalPathPart.Substring(i + 1, physicalPathPart.Length - i - 2)
             Else
                 Debug.Assert(physicalPathPart = "context", String.Format("Possible error in path: {0}", physicalPathPart))
             End If
+
             Translate()
         End Sub
 
         Private mNodeId As String
+
         ReadOnly Property NodeId() As String
             Get
                 Return mNodeId
