@@ -4072,13 +4072,8 @@ Public Class Designer
 
     Private Sub GetParticipations(ByVal entry As RmEntry, ByVal participations As TabPageParticipation)
         'Participations may have been added
-        If participations.chkProvider.Checked Then
-            entry.ProviderIsMandatory = True
-        Else
-            entry.ProviderIsMandatory = False
-        End If
+        entry.ProviderIsMandatory = participations.chkProvider.Checked
 
-        'Check for other participations
         If participations.HasOtherParticipations Then
             entry.OtherParticipations = mTabPageParticipation.OtherParticipations
         End If

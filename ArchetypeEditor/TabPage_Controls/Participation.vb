@@ -72,7 +72,6 @@ Public Class Participation
 
     Public Sub Translate()
         mRestrictedModeSet.Translate()
-        mParticipationFunction.TextConstraint = mParticipation.FunctionConstraint
     End Sub
 
     Private Sub cbDateTime_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbDateTime.CheckedChanged
