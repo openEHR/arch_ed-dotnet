@@ -698,80 +698,83 @@ Public Class TermBindingPanel
         End If
     End Function
 
-    Private Sub PopulateNodeTree()
-        Try
-            PathsTreeView.SuspendLayout()
+    Public Sub PopulatePathTree()
+        PathsTreeView.SuspendLayout()
+        PathsTreeView.Nodes.Clear()
 
-            Dim languageCode As String = mFileManager.OntologyManager.LanguageCode
+        Dim languageCode As String = mFileManager.OntologyManager.LanguageCode
 
-            ' get the paths with the NodeId labels
-            Dim physicalPaths As String() = mFileManager.Archetype.Paths(languageCode, mFileManager.ParserSynchronised, False)
+        ' get the paths with the NodeId labels
+        Dim physicalPaths As String() = mFileManager.Archetype.Paths(languageCode, mFileManager.ParserSynchronised, False)
 
-            'Temporary fix for paths notation which included value[unknown_1] and such
-            'Match number, bracket at end of string - but no underscore
-            'Dim regularExp As New System.Text.RegularExpressions.Regex("(?<!_)\d\]\Z")
-            Dim regularExp As New System.Text.RegularExpressions.Regex(".+\d\]\Z")
+        'Temporary fix for paths notation which included value[unknown_1] and such
+        'Match number, bracket at end of string - but no underscore
+        'Dim regularExp As New System.Text.RegularExpressions.Regex("(?<!_)\d\]\Z")
+        Dim regularExp As New System.Text.RegularExpressions.Regex(".+\d\]\Z")
 
-            For i As Integer = 0 To physicalPaths.Length - 1
-                'ignore value paths and empty attributes
-                If regularExp.Match(physicalPaths(i)).Success Then
-                    Dim z As String() = physicalPaths(i).Split("/"c)
-                    Dim nodes As TreeNodeCollection = PathsTreeView.Nodes
+        For i As Integer = 0 To physicalPaths.Length - 1
+            'ignore value paths and empty attributes
+            If regularExp.Match(physicalPaths(i)).Success Then
+                Dim z As String() = physicalPaths(i).Split("/"c)
+                Dim nodes As TreeNodeCollection = PathsTreeView.Nodes
 
-                    'Ignore the first string as always ""
-                    Debug.Assert(z(0) = "", "String is not empty as expected")
+                'Ignore the first string as always ""
+                Debug.Assert(z(0) = "", "String is not empty as expected")
 
-                    For j As Integer = 1 To z.Length - 1
-                        Dim nodeFound As Boolean = False
-                        Dim node As TermNode = Nothing
-                        Dim splitPathSegment As String() = z(j).Split("[]".ToCharArray())
+                For j As Integer = 1 To z.Length - 1
+                    Dim nodeFound As Boolean = False
+                    Dim node As TermNode = Nothing
+                    Dim splitPathSegment As String() = z(j).Split("[]".ToCharArray())
 
-                        If splitPathSegment.Length > 1 Then
-                            Dim nId As String = splitPathSegment(1)
+                    If splitPathSegment.Length > 1 Then
+                        Dim nId As String = splitPathSegment(1)
 
-                            ' does this node exist elsewhere?
-                            For Each n As TermNode In nodes
-                                If n.NodeId = nId Then
-                                    node = n
-                                    nodeFound = True
-                                    Exit For
-                                End If
-                            Next
-                        End If
+                        ' does this node exist elsewhere?
+                        For Each n As TermNode In nodes
+                            If n.NodeId = nId Then
+                                node = n
+                                nodeFound = True
+                                Exit For
+                            End If
+                        Next
+                    End If
 
-                        If Not nodeFound Then
-                            node = New TermNode(z(j), mFileManager)
+                    If Not nodeFound Then
+                        node = New TermNode(z(j), mFileManager)
 
-                            If z(j).StartsWith("data") Then
+                        If z(j).StartsWith("data") Then
+                            nodes.Insert(0, node)
+                        ElseIf z(j).StartsWith("events") Then
+                            If z.Length > 3 Then
+                                ' the data node
                                 nodes.Insert(0, node)
-                            ElseIf z(j).StartsWith("events") Then
-                                If z.Length > 3 Then
-                                    ' the data node
-                                    nodes.Insert(0, node)
-                                Else
-                                    nodes.Add(node)
-                                End If
                             Else
                                 nodes.Add(node)
                             End If
+                        Else
+                            nodes.Add(node)
                         End If
+                    End If
 
-                        nodes = node.Nodes
-                    Next    ' z index
-                End If
-            Next    ' LogPath index
-
-            ShowNodesImage(PathsTreeView.Nodes)
-
-            If PathsTreeView.GetNodeCount(False) > 0 Then
-                PathsTreeView.ExpandAll()
-                PathsTreeView.SelectedNode = PathsTreeView.Nodes(0)
+                    nodes = node.Nodes
+                Next
             End If
+        Next
 
-            PathsTreeView.ResumeLayout()
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
+        ShowNodesImage(PathsTreeView.Nodes)
+
+        If PathsTreeView.GetNodeCount(False) > 0 Then
+            PathsTreeView.ExpandAll()
+            PathsTreeView.SelectedNode = PathsTreeView.Nodes(0)
+            AddBindingButton.Enabled = True
+            DeleteBindingButton.Enabled = True
+        Else
+            AddBindingButton.Enabled = False
+            DeleteBindingButton.Enabled = False
+        End If
+
+        SetDvTermBindingsFilter()
+        PathsTreeView.ResumeLayout()
     End Sub
 
     Private Sub ShowNodesImage(ByVal aNodes As TreeNodeCollection)
@@ -824,36 +827,24 @@ Public Class TermBindingPanel
                 TranslateGUI()
             End If
 
-            Try
-                'Set up the view of the node (only) term bindings for that terminology
-                dvTermBindings = New Data.DataView(mFileManager.OntologyManager.TermBindingsTable)
-                'Now set the terminology source which calls SetDvTermBindingsFilter if there are any terminologies
-                TerminologyComboBox.DataSource = mFileManager.OntologyManager.TerminologiesTable
+            'Set up the view of the node (only) term bindings for that terminology
+            dvTermBindings = New Data.DataView(mFileManager.OntologyManager.TermBindingsTable)
+            'Now set the terminology source which calls SetDvTermBindingsFilter if there are any terminologies
+            TerminologyComboBox.DataSource = mFileManager.OntologyManager.TerminologiesTable
 
-                dgTermBindings.DataSource = dvTermBindings
+            dgTermBindings.DataSource = dvTermBindings
 
-                'set up the text display for the terms in the current language
-                dvTermDefinitions = New Data.DataView(mFileManager.OntologyManager.TermDefinitionTable)
-                SetDvTermDefinitionsFilter()
-                'Node column
-                CType(dgTermBindings.Columns(1), DataGridViewComboBoxColumn).DataSource = dvTermDefinitions
-                CType(dgTermBindings.Columns(1), DataGridViewComboBoxColumn).DisplayMember = "Text"
-                CType(dgTermBindings.Columns(1), DataGridViewComboBoxColumn).ValueMember = "Code"
+            'set up the text display for the terms in the current language
+            dvTermDefinitions = New Data.DataView(mFileManager.OntologyManager.TermDefinitionTable)
+            SetDvTermDefinitionsFilter()
+            'Node column
+            CType(dgTermBindings.Columns(1), DataGridViewComboBoxColumn).DataSource = dvTermDefinitions
+            CType(dgTermBindings.Columns(1), DataGridViewComboBoxColumn).DisplayMember = "Text"
+            CType(dgTermBindings.Columns(1), DataGridViewComboBoxColumn).ValueMember = "Code"
 
-                BindingToolTip.SetToolTip(AddBindingButton, Filemanager.GetOpenEhrTerm(99, "Add binding"))
-                BindingToolTip.SetToolTip(DeleteBindingButton, Filemanager.GetOpenEhrTerm(152, "Remove"))
-            Catch ex As Exception
-                Debug.Assert(False, ex.ToString)
-            End Try
+            BindingToolTip.SetToolTip(AddBindingButton, Filemanager.GetOpenEhrTerm(99, "Add binding"))
+            BindingToolTip.SetToolTip(DeleteBindingButton, Filemanager.GetOpenEhrTerm(152, "Remove"))
         End If
-    End Sub
-
-    Public Sub PopulatePathTree()
-        PathsTreeView.SuspendLayout()
-        PathsTreeView.Nodes.Clear()
-        PopulateNodeTree()
-        SetDvTermBindingsFilter()
-        PathsTreeView.ResumeLayout()
     End Sub
 
     Public Sub Reset()
@@ -865,26 +856,21 @@ Public Class TermBindingPanel
     End Sub
 
     Private Sub PathsTreeView_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles PathsTreeView.AfterSelect
-        Debug.Assert(Not PathsTreeView.SelectedNode Is Nothing)
-        'Debug.Assert(TypeOf PathsTreeView.SelectedNode Is TermNode)
+        Debug.Assert(TypeOf PathsTreeView.SelectedNode Is TermNode)
 
-        Try
-            If Not CriteriaMode Then
-                SetTermBindingFilter()
+        If Not CriteriaMode Then
+            SetTermBindingFilter()
 
-                If AddBindingGroupBox.Visible Then
-                    PopulateNewBindingPath()
-                End If
-            Else
-                PopulateCriteriaPath()
-                ShowCriteriaElementView()
+            If AddBindingGroupBox.Visible Then
+                PopulateNewBindingPath()
             End If
+        Else
+            PopulateCriteriaPath()
+            ShowCriteriaElementView()
+        End If
 
-            Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
-            BindingToolTip.SetToolTip(PathsTreeView, selectedNode.PhysicalPath)
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
+        Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
+        BindingToolTip.SetToolTip(PathsTreeView, selectedNode.PhysicalPath)
     End Sub
 
     Private Sub SetTermBindingFilter()
@@ -900,23 +886,24 @@ Public Class TermBindingPanel
     End Sub
 
     Private Sub AddBindingButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddBindingButton.Click
-        If Not TerminologyComboBox.SelectedValue Is Nothing Then
+        If TerminologyComboBox.SelectedValue Is Nothing Then
+            MsgBox("Select a terminology")
+        Else
             AddBindingGroupBox.Show()
             PanelBindings.Enabled = False
             CodeTextBox.Text = ""
             ReleaseTextBox.Text = ""
             PopulateNewBindingPath()
-        Else
-            MsgBox("Select a terminology")
         End If
     End Sub
 
     Private Sub PopulateNewBindingPath()
-        Debug.Assert(Not PathsTreeView.SelectedNode Is Nothing)
-        Debug.Assert(TypeOf PathsTreeView.SelectedNode Is TermNode)
-        Dim selectedNode As TermNode = CType(PathsTreeView.SelectedNode, TermNode)
-        NodeLabel.Text = selectedNode.NodeId
-        PathLabel.Text = selectedNode.PhysicalPath
+        Dim node As TermNode = TryCast(PathsTreeView.SelectedNode, TermNode)
+
+        If Not node Is Nothing Then
+            NodeLabel.Text = node.NodeId
+            PathLabel.Text = node.PhysicalPath
+        End If
     End Sub
 
     Private Sub AddPathToBindings(ByVal aPath As String, ByVal aCode As String)
@@ -1133,16 +1120,12 @@ Public Class TermBindingPanel
 
             'Make the right panel visible
             AddBindingCriteriaGroupBox.Visible = True
-            Me.PanelBindings.Enabled = False
+            PanelBindings.Enabled = False
 
             mCurrentTermNode = CType(PathsTreeView.SelectedNode, TermNode)
-
             mCurrentBindingCriteria = New BindingCriteria(mFileManager)
-
             PopulateCriteriaPath()
-
             mCriteriaMode = True
-
             ShowCriteriaElementView()
         Else
             MsgBox("Select a term binding")
@@ -1210,47 +1193,39 @@ Public Class TermBindingPanel
         End If
     End Sub
 
-    Private Sub CriteriaNodeRadioButton_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles CriteriaNodeRadioButton.CheckedChanged, CriteriaPathRadioButton.CheckedChanged
-
+    Private Sub CriteriaNodeRadioButton_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CriteriaNodeRadioButton.CheckedChanged, CriteriaPathRadioButton.CheckedChanged
         If Not PathsTreeView.SelectedNode Is Nothing Then
-            'Debug.Assert(Not PathsTreeView.SelectedNode Is Nothing)
             PopulateCriteriaPath()
         End If
     End Sub
 
     Private Sub AddBindingCriteria()
-        Try
-            Dim bindingRowView As DataRowView = mTermBindingView.Item(BindingList.SelectedIndices.Item(0))
+        Dim bindingRowView As DataRowView = mTermBindingView.Item(BindingList.SelectedIndices.Item(0))
 
-            ' populate binding criteria
-            Dim path As String = CStr(bindingRowView.Item("Path"))
-            Dim terminology As String = CStr(bindingRowView.Item("Terminology"))
-            Dim code As String = CStr(bindingRowView.Item("Code"))
+        ' populate binding criteria
+        Dim path As String = CStr(bindingRowView.Item("Path"))
+        Dim terminology As String = CStr(bindingRowView.Item("Terminology"))
+        Dim code As String = CStr(bindingRowView.Item("Code"))
 
-            Dim newRow As DataRow = mFileManager.OntologyManager.TermBindingCriteriaTable.NewRow
-            newRow(0) = terminology
-            newRow(1) = path
-            newRow("code") = code
-            newRow("Criteria") = mCurrentBindingCriteria.ToPhysicalCriteria
+        Dim newRow As DataRow = mFileManager.OntologyManager.TermBindingCriteriaTable.NewRow
+        newRow(0) = terminology
+        newRow(1) = path
+        newRow("code") = code
+        newRow("Criteria") = mCurrentBindingCriteria.ToPhysicalCriteria
 
-            mFileManager.OntologyManager.TermBindingCriteriaTable.Rows.Add(newRow)
-
-            mFileManager.FileEdited = True
-
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
+        mFileManager.OntologyManager.TermBindingCriteriaTable.Rows.Add(newRow)
+        mFileManager.FileEdited = True
     End Sub
 
     Public Sub Translate()
-        TranslateNodes(Me.PathsTreeView.Nodes)
+        TranslateNodes(PathsTreeView.Nodes)
         SetDvTermDefinitionsFilter()
     End Sub
 
     Private Sub TranslateNodes(ByVal nodes As TreeNodeCollection)
         For Each t As TermNode In nodes
             t.Translate()
+
             If t.GetNodeCount(False) > 0 Then
                 TranslateNodes(t.Nodes)
             End If
