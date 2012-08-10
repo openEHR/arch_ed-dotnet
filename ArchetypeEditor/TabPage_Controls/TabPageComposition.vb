@@ -64,12 +64,12 @@ Public Class TabPageComposition
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.TabControlInstruction = New Crownwood.Magic.Controls.TabControl
         Me.tpContext = New Crownwood.Magic.Controls.TabPage
+        Me.tpParticipations = New Crownwood.Magic.Controls.TabPage
         Me.tpSectionConstraint = New Crownwood.Magic.Controls.TabPage
         Me.PanelBaseTop = New System.Windows.Forms.Panel
         Me.radioPersist = New System.Windows.Forms.RadioButton
         Me.radioEvent = New System.Windows.Forms.RadioButton
         Me.HelpProviderInstruction = New System.Windows.Forms.HelpProvider
-        Me.tpParticipations = New Crownwood.Magic.Controls.TabPage
         Me.PanelBaseTop.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -85,11 +85,11 @@ Public Class TabPageComposition
         Me.TabControlInstruction.Name = "TabControlInstruction"
         Me.TabControlInstruction.PositionTop = True
         Me.TabControlInstruction.SelectedIndex = 0
-        Me.TabControlInstruction.SelectedTab = Me.tpContext
+        Me.TabControlInstruction.SelectedTab = Me.tpSectionConstraint
         Me.HelpProviderInstruction.SetShowHelp(Me.TabControlInstruction, True)
         Me.TabControlInstruction.Size = New System.Drawing.Size(848, 400)
         Me.TabControlInstruction.TabIndex = 0
-        Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpContext, Me.tpParticipations, Me.tpSectionConstraint})
+        Me.TabControlInstruction.TabPages.AddRange(New Crownwood.Magic.Controls.TabPage() {Me.tpSectionConstraint, Me.tpContext, Me.tpParticipations})
         Me.TabControlInstruction.TextInactiveColor = System.Drawing.Color.Black
         '
         'tpContext
@@ -98,17 +98,26 @@ Public Class TabPageComposition
         Me.HelpProviderInstruction.SetHelpNavigator(Me.tpContext, System.Windows.Forms.HelpNavigator.Topic)
         Me.tpContext.Location = New System.Drawing.Point(0, 0)
         Me.tpContext.Name = "tpContext"
+        Me.tpContext.Selected = False
         Me.HelpProviderInstruction.SetShowHelp(Me.tpContext, True)
-        Me.tpContext.Size = New System.Drawing.Size(848, 374)
+        Me.tpContext.Size = New System.Drawing.Size(848, 375)
         Me.tpContext.TabIndex = 2
         Me.tpContext.Title = "Context"
+        '
+        'tpParticipations
+        '
+        Me.tpParticipations.Location = New System.Drawing.Point(0, 0)
+        Me.tpParticipations.Name = "tpParticipations"
+        Me.tpParticipations.Selected = False
+        Me.tpParticipations.Size = New System.Drawing.Size(848, 375)
+        Me.tpParticipations.TabIndex = 3
+        Me.tpParticipations.Title = "Participations"
         '
         'tpSectionConstraint
         '
         Me.tpSectionConstraint.Location = New System.Drawing.Point(0, 0)
         Me.tpSectionConstraint.Name = "tpSectionConstraint"
-        Me.tpSectionConstraint.Selected = False
-        Me.tpSectionConstraint.Size = New System.Drawing.Size(848, 374)
+        Me.tpSectionConstraint.Size = New System.Drawing.Size(848, 375)
         Me.tpSectionConstraint.TabIndex = 0
         Me.tpSectionConstraint.Title = "Sections"
         '
@@ -139,15 +148,6 @@ Public Class TabPageComposition
         Me.radioEvent.TabIndex = 0
         Me.radioEvent.TabStop = True
         Me.radioEvent.Text = "Event"
-        '
-        'tpParticipations
-        '
-        Me.tpParticipations.Location = New System.Drawing.Point(0, 0)
-        Me.tpParticipations.Name = "tpParticipations"
-        Me.tpParticipations.Selected = False
-        Me.tpParticipations.Size = New System.Drawing.Size(848, 374)
-        Me.tpParticipations.TabIndex = 3
-        Me.tpParticipations.Title = "Participations"
         '
         'TabPageComposition
         '
@@ -307,7 +307,7 @@ Public Class TabPageComposition
         'ToDo: more to do here
         Me.radioPersist.Text = Filemanager.GetOpenEhrTerm(431, "Persistent")
         Me.radioEvent.Text = Filemanager.GetOpenEhrTerm(433, "Event")
-        tpSectionConstraint.Title = Filemanager.GetOpenEhrTerm(515, "Content")
+        Me.tpSectionConstraint.Title = Filemanager.GetOpenEhrTerm(515, "Content")
         Me.tpContext.Title = Filemanager.GetOpenEhrTerm(515, "Context")
         Me.mContextConstraint.TranslateGUI()
         Me.mSectionConstraint.TranslateGUI()
@@ -330,6 +330,9 @@ Public Class TabPageComposition
         End If
     End Sub
 
+    Private Sub TabControlInstruction_SelectionChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabControlInstruction.SelectionChanged
+
+    End Sub
 End Class
 
 '
