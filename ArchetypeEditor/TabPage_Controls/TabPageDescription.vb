@@ -1213,7 +1213,8 @@ Public Class TabPageDescription
         End If
 
         If sender Is UseAllAuthorDefaultsButton Or sender Is TodayButton Then
-            txtDate.Text = System.DateTime.Now().ToShortDateString
+            txtDate.Text = System.DateTime.Now().ToString("yyyy-MM-dd")
+
         End If
     End Sub
 

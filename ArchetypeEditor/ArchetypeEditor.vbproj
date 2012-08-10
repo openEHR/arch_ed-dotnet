@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{179B4A54-F044-430D-9DB6-E950F80EC87F}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -1082,8 +1082,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <Content Include="AdlParser\EiffelSoftware.Runtime.dll" />
-    <Content Include="AdlParser\OceanInformatics.AdlParser.dll" />
+    <Content Include="ADL_Classes\AdlParser\EiffelSoftware.Runtime.dll" />
+    <Content Include="ADL_Classes\AdlParser\OceanInformatics.AdlParser.dll" />
     <None Include="My Project\Settings.settings">
       <CustomToolNamespace>My</CustomToolNamespace>
       <Generator>SettingsSingleFileGenerator</Generator>
