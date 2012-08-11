@@ -906,26 +906,42 @@ Public Class TermBindingPanel
         End If
     End Sub
 
-    Private Sub AddPathToBindings(ByVal aPath As String, ByVal aCode As String)
-        mCriteriaNewRow = mFileManager.OntologyManager.TermBindingsTable.NewRow
-        mCriteriaNewRow(0) = TerminologyComboBox.SelectedValue
-        mCriteriaNewRow(1) = aPath
-        mCriteriaNewRow("code") = aCode
+    Private Sub AddPathToBindings(ByVal path As String, ByVal code As String)
+        Dim yes As Boolean = True
 
-        If mFileManager.OntologyManager.Ontology.HasTermBinding(CStr(mCriteriaNewRow(0)), aPath) Then
+        If mFileManager.OntologyManager.Ontology.HasTermBinding(CStr(TerminologyComboBox.SelectedValue), path) Then
             ' already has this path so add criteria
-            If MessageBox.Show("Term has binding, add anyway?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
-                Return
-            End If
+            yes = MessageBox.Show("Term has binding, add anyway?", AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes
         End If
 
-        mFileManager.OntologyManager.TermBindingsTable.Rows.Add(mCriteriaNewRow)
-        mFileManager.FileEdited = True
+        If yes Then
+            Dim key(2) As Object
+            key(0) = TerminologyComboBox.SelectedValue
+            key(1) = path
+            key(2) = code
+            Dim row As DataRow = mFileManager.OntologyManager.TermBindingsTable.Rows.Find(key)
 
-        Debug.Assert(BindingList.Items.Count > 0, "BindingList not updated")
+            If row Is Nothing Then
+                mCriteriaNewRow = mFileManager.OntologyManager.TermBindingsTable.NewRow
+                mCriteriaNewRow(0) = TerminologyComboBox.SelectedValue
+                mCriteriaNewRow(1) = path
+                mCriteriaNewRow("code") = code
+                mFileManager.OntologyManager.TermBindingsTable.Rows.Add(mCriteriaNewRow)
+            Else
+                row.BeginEdit()
+                row(0) = TerminologyComboBox.SelectedValue
+                row(1) = path
+                row("code") = code
+                row.EndEdit()
+            End If
 
-        If BindingList.Items.Count > 0 Then
-            BindingList.Items(BindingList.Items.Count - 1).Selected = True
+            mFileManager.FileEdited = True
+
+            Debug.Assert(BindingList.Items.Count > 0, "BindingList not updated")
+
+            If BindingList.Items.Count > 0 Then
+                BindingList.Items(BindingList.Items.Count - 1).Selected = True
+            End If
         End If
     End Sub
 
@@ -1140,7 +1156,7 @@ Public Class TermBindingPanel
 
     Private Sub CriteriaOkButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CriteriaOkButton.Click
         mCurrentBindingCriteria.[Operator] = CStr(OperatorComboBox.Text)
-        mCurrentBindingCriteria.ValueOperand = CStr(CriteriaValueTextBox.Tag)
+        mCurrentBindingCriteria.ValueOperand = CStr(CriteriaValueTextBox.Text)
 
         If mCriteriaMode Then
             If BindingList.SelectedItems.Count = 0 Or BindingList.SelectedIndices.Count = 0 Then
@@ -1153,13 +1169,29 @@ Public Class TermBindingPanel
                 Dim terminology As String = CStr(bindingRowView.Item("Terminology"))
                 Dim code As String = CStr(bindingRowView.Item("Code"))
 
-                Dim newRow As DataRow = mFileManager.OntologyManager.TermBindingCriteriaTable.NewRow
-                newRow(0) = terminology
-                newRow(1) = path
-                newRow("code") = code
-                newRow("Criteria") = mCurrentBindingCriteria.ToPhysicalCriteria
+                Dim key(3) As Object
+                key(0) = terminology
+                key(1) = path
+                key(2) = code
+                key(3) = mCurrentBindingCriteria.ToPhysicalCriteria
+                Dim row As DataRow = mFileManager.OntologyManager.TermBindingCriteriaTable.Rows.Find(key)
 
-                mFileManager.OntologyManager.TermBindingCriteriaTable.Rows.Add(newRow)
+                If row Is Nothing Then
+                    row = mFileManager.OntologyManager.TermBindingCriteriaTable.NewRow
+                    row(0) = terminology
+                    row(1) = path
+                    row("code") = code
+                    row("Criteria") = mCurrentBindingCriteria.ToPhysicalCriteria
+                    mFileManager.OntologyManager.TermBindingCriteriaTable.Rows.Add(row)
+                Else
+                    row.BeginEdit()
+                    row(0) = terminology
+                    row(1) = path
+                    row("code") = code
+                    row("Criteria") = mCurrentBindingCriteria.ToPhysicalCriteria
+                    row.EndEdit()
+                End If
+
                 mFileManager.FileEdited = True
                 AddPathToBindings(CodeTextBox.Text & "{" & mCurrentBindingCriteria.ToPhysicalCriteria & "}", BindingList.SelectedItems(0).Text)
                 ShowNodesImage(PathsTreeView.Nodes)
@@ -1267,11 +1299,8 @@ Public Class TermBindingPanel
         BindingToolTip.SetToolTip(BindingCriteriaListBox, "")
     End Sub
 
-    Private Sub CriteriaValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles mCriteriaElementView.ValueChanged
-
+    Private Sub CriteriaValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mCriteriaElementView.ValueChanged
         CriteriaValueTextBox.Text = CStr(mCriteriaElementView.Value)
-        CriteriaValueTextBox.Tag = mCriteriaElementView.Tag
     End Sub
 
     Class TermNode : Inherits TreeNode
@@ -1356,7 +1385,8 @@ Public Class TermBindingPanel
                 Case Else
                     txt = mFileManager.OntologyManager.GetTerm(NodeId).Text
             End Select
-            Me.Text = txt
+
+            Text = txt
         End Sub
 
         ReadOnly Property Constraint() As Constraint
@@ -1375,8 +1405,7 @@ Public Class TermBindingPanel
         End Property
 
         Public Function Copy() As TermNode
-            Dim tn As New TermNode(Me.mPhysicalPathPart, Me.mFileManager)
-            Return tn
+            Return New TermNode(mPhysicalPathPart, mFileManager)
         End Function
     End Class
 
@@ -1388,26 +1417,26 @@ Public Class TermBindingPanel
 
         Public ReadOnly Property NodeText() As String
             Get
-                If NodeOperand.IndexOf("/") > -1 Then
+                If NodeOperand.IndexOf("/") >= 0 Then
                     Dim path As String = NodeOperand.TrimEnd("/"c)
                     Dim pathParts() As String = path.Split("/"c)
-
                     path = ""
+
                     For Each part As String In pathParts
                         Dim i As Integer = part.IndexOf("[") + 1
+
                         If i > 0 Then
                             Dim j As Integer = part.IndexOf("]")
                             Debug.Assert(j > 0)
                             Dim partTerm As String = part.Substring(i, j - i)
-
                             Dim term As RmTerm = mFilemanager.OntologyManager.GetTerm(partTerm)
+
                             If term.Text <> "" Then
                                 part = term.Text
                             Else
                                 ' TODO: what are valid values/mappings here?
                                 part = part.Substring(0, i - 1)
                             End If
-
                         Else
                             ' TODO: what are valid values/mappings here?
                             part = "structure"
@@ -1417,11 +1446,9 @@ Public Class TermBindingPanel
                     Next
 
                     Return path
-
                 Else
                     If mFilemanager.OntologyManager.Ontology.HasTermCode(NodeOperand) Then
                         Dim nodeTerm As RmTerm = mFilemanager.OntologyManager.GetTerm(NodeOperand)
-
                         Return nodeTerm.Text
                     Else
                         Return NodeOperand
@@ -1437,55 +1464,49 @@ Public Class TermBindingPanel
         End Function
 
         Public Function ToPhysicalCriteria() As String
-            ' Computerable criteria expression
-            Dim criteria As String = String.Format("{0} {1} {2}", NodeOperand, _
-                    [Operator], ValueOperand)
-
-            Return criteria
+            ' Computable criteria expression
+            Return NodeOperand + " " + [Operator] + " " + ValueOperand
         End Function
 
         Public Function ToLogicalCriteria() As String
             ' Readable criteria expression
-            Dim criteria As String = String.Format("{0} {1} {2}", NodeText, _
-            [Operator], ValueText)
-
-            Return criteria
-
+            Return NodeText + " " + [Operator] + " " + ValueText
         End Function
 
         Public ReadOnly Property ValueText() As String
             Get
-                Dim nodeId As String = NodeOperand
+                Dim result As String = ValueOperand
 
-                If nodeId.IndexOf("/") > 0 Then
-                    Dim path As String = nodeId.TrimEnd("/"c)
-                    Dim pathParts() As String = path.Split("/"c)
-                    nodeId = pathParts(pathParts.Length - 1)
+                If ValueOperand <> "" Then
+                    Dim nodeId As String = NodeOperand
 
-                    Dim i As Integer = nodeId.IndexOf("[") + 1
-                    Debug.Assert(i > 0)
+                    If nodeId.IndexOf("/") >= 0 Then
+                        Dim path As String = nodeId.TrimEnd("/"c)
+                        Dim pathParts() As String = path.Split("/"c)
+                        nodeId = pathParts(pathParts.Length - 1)
 
-                    Dim j As Integer = nodeId.IndexOf("]")
-                    Debug.Assert(j > 0)
+                        Dim i As Integer = nodeId.IndexOf("[") + 1
+                        Debug.Assert(i > 0)
 
-                    nodeId = nodeId.Substring(i, j - i)
-                End If
+                        Dim j As Integer = nodeId.IndexOf("]")
+                        Debug.Assert(j > 0)
 
-                Dim rmClass As RmStructure = CType(mFilemanager.Archetype.Definition, ArchetypeDefinition).Data.GetChildByNodeId(nodeId)
+                        nodeId = nodeId.Substring(i, j - i)
+                    End If
 
-                Debug.Assert(TypeOf rmClass Is RmElement)
-                Dim valueConstraint As Constraint = CType(rmClass, RmElement).Constraint
+                    Dim rmClass As RmStructure = CType(mFilemanager.Archetype.Definition, ArchetypeDefinition).Data.GetChildByNodeId(nodeId)
+                    Dim valueConstraint As Constraint = CType(rmClass, RmElement).Constraint
+                    Dim ordinalConstraint As Constraint_Ordinal = TryCast(valueConstraint, Constraint_Ordinal)
 
-                Select Case valueConstraint.Kind
-                    Case ConstraintKind.Ordinal
-                        Dim ordinalConstraint As Constraint_Ordinal = CType(valueConstraint, Constraint_Ordinal)
+                    If Not ordinalConstraint Is Nothing Then
                         Dim rows() As DataRow = ordinalConstraint.OrdinalValues.Select("Ordinal = " & ValueOperand)
                         Debug.Assert(rows.Length = 1)
                         Dim ordinal As New OrdinalValue(rows(0))
-                        Return ordinal.Text
-                    Case Else
-                        Return ValueOperand
-                End Select
+                        result = ordinal.Text
+                    End If
+                End If
+
+                Return result
             End Get
         End Property
 
@@ -1500,7 +1521,6 @@ Public Class TermBindingPanel
 
             NodeOperand = criteriaParts(0)
             [Operator] = criteriaParts(1)
-            'ValueOperand = criteriaParts(2)
             ValueOperand = String.Join(" ", criteriaParts, 2, criteriaParts.Length - 2)
         End Sub
     End Class
@@ -1535,11 +1555,11 @@ Public Class TermBindingPanel
 
     Private Sub ContextMenuTermBinding_Popup(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuTermBinding.Opening
         If mCurrentLogicalPath <> "" Then
-            Me.cmBindingPastePath.Enabled = True
-            Me.cmBindingPastePathLogical.Text = mCurrentLogicalPath
-            Me.cmBindingPastePathPhysical.Text = mCurrentPhysicalPath
+            cmBindingPastePath.Enabled = True
+            cmBindingPastePathLogical.Text = mCurrentLogicalPath
+            cmBindingPastePathPhysical.Text = mCurrentPhysicalPath
         Else
-            Me.cmBindingPastePath.Enabled = False
+            cmBindingPastePath.Enabled = False
         End If
     End Sub
 
