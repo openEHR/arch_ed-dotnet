@@ -871,7 +871,7 @@ Public Class TabPageDescription
         End If
 
         If comboLifeCycle.SelectedIndex > -1 Then
-            mArchetypeDescription.LifeCycleState = CType([Enum].ToObject(GetType(LifeCycleStates), Convert.ToInt32(Me.comboLifeCycle.SelectedValue)), LifeCycleStates)
+            mArchetypeDescription.LifeCycleState = CType([Enum].ToObject(GetType(LifeCycleStates), Convert.ToInt32(comboLifeCycle.SelectedValue)), LifeCycleStates)
         Else
             'set lifecycle to not set
             mArchetypeDescription.LifeCycleState = CType([Enum].ToObject(GetType(LifeCycleStates), 0), LifeCycleStates)
@@ -885,7 +885,7 @@ Public Class TabPageDescription
         mArchetypeDescription.CurrentContact = txtCurrentContact.Text
         mArchetypeDescription.OtherContributors.Clear()
 
-        For Each s As String In Me.listContributors.Items
+        For Each s As String In listContributors.Items
             mArchetypeDescription.OtherContributors.Add(s)
         Next
 
@@ -1129,7 +1129,7 @@ Public Class TabPageDescription
 
     Private Sub LoadAuthorStatesTableCombo()
         ' add the lifecycle states to the combo box
-        Dim i As Integer = Me.comboLifeCycle.SelectedIndex
+        Dim i As Integer = comboLifeCycle.SelectedIndex
 
         'If the table is only cleared then the second time the
         ' table is cleared and reloaded an index error occurs
@@ -1146,22 +1146,22 @@ Public Class TabPageDescription
 
         'Debug.Assert(mLifeCycleStatesTable.Rows.Count = 0, "Did not clear lifecycletable")
 
-        Dim d_r As DataRow()
-        d_r = Filemanager.Master.OntologyManager.CodeForGroupID(23) ' LifeCycle states
-        For Each data_row As DataRow In d_r
+        Dim row As DataRow() = Filemanager.Master.OntologyManager.CodeForGroupID(23) ' LifeCycle states
+
+        For Each data_row As DataRow In row
             Dim new_row As DataRow = mLifeCycleStatesTable.NewRow
             new_row(0) = data_row(1)
             new_row(1) = data_row(2)
             mLifeCycleStatesTable.Rows.Add(new_row)
         Next
+
         mLifeCycleStatesTable.AcceptChanges()
-        Me.comboLifeCycle.DataSource = mLifeCycleStatesTable
-        Me.comboLifeCycle.DisplayMember = "LifeCycle"
-        Me.comboLifeCycle.ValueMember = "code"
-
-        Me.comboLifeCycle.SelectedIndex = i
-
+        comboLifeCycle.DataSource = mLifeCycleStatesTable
+        comboLifeCycle.DisplayMember = "LifeCycle"
+        comboLifeCycle.ValueMember = "code"
+        comboLifeCycle.SelectedIndex = i
     End Sub
+
     Private Sub TabPageDescription_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mCurrentLanguage = Filemanager.Master.OntologyManager.LanguageCode
         Dim temp_isloading As Boolean = Filemanager.Master.FileLoading
@@ -1184,16 +1184,16 @@ Public Class TabPageDescription
         Dim ipb As New InputForm
         ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(578, "Keyword")
 
-        If ipb.ShowDialog(Me.ParentForm) = Windows.Forms.DialogResult.OK Then
-            Me.listKeyword.Items.Add(ipb.txtInput.Text)
+        If ipb.ShowDialog(ParentForm) = Windows.Forms.DialogResult.OK Then
+            listKeyword.Items.Add(ipb.txtInput.Text)
             Filemanager.Master.FileEdited = True
         End If
     End Sub
 
     Private Sub butRemoveKeyWord_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveKeyWord.Click
-        If Me.listKeyword.SelectedIndex > -1 Then
-            If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(Me.listKeyword.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                Me.listKeyword.Items.RemoveAt(Me.listKeyword.SelectedIndex)
+        If listKeyword.SelectedIndex > -1 Then
+            If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(listKeyword.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                listKeyword.Items.RemoveAt(listKeyword.SelectedIndex)
                 Filemanager.Master.FileEdited = True
             End If
         End If
@@ -1214,7 +1214,6 @@ Public Class TabPageDescription
 
         If sender Is UseAllAuthorDefaultsButton Or sender Is TodayButton Then
             txtDate.Text = System.DateTime.Now().ToString("yyyy-MM-dd")
-
         End If
     End Sub
 
@@ -1223,15 +1222,15 @@ Public Class TabPageDescription
         ipb.lblInput.Text = Filemanager.GetOpenEhrTerm(604, "Contributors")
 
         If ipb.ShowDialog = Windows.Forms.DialogResult.OK Then
-            Me.listContributors.Items.Add(ipb.txtInput.Text)
+            listContributors.Items.Add(ipb.txtInput.Text)
             Filemanager.Master.FileEdited = True
         End If
     End Sub
 
     Private Sub butRemoveContributor_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveContributor.Click
-        If Me.listContributors.SelectedIndex > -1 Then
-            If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(Me.listContributors.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
-                Me.listContributors.Items.RemoveAt(Me.listContributors.SelectedIndex)
+        If listContributors.SelectedIndex > -1 Then
+            If MessageBox.Show(AE_Constants.Instance.Remove & " - " & CStr(listContributors.SelectedItem), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.Yes Then
+                listContributors.Items.RemoveAt(listContributors.SelectedIndex)
                 Filemanager.Master.FileEdited = True
             End If
         End If

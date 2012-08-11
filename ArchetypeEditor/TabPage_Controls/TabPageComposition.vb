@@ -165,25 +165,25 @@ Public Class TabPageComposition
 
     Private Sub TabPageComposition_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         mIsloading = True
-        'remember tabpage context
-        mTabPageContext = Me.tpContext
-        mTabPageParticipation = Me.tpParticipations
+        mTabPageContext = tpContext
+        mTabPageParticipation = tpParticipations
 
-        If Me.tpSectionConstraint.Controls.Count = 0 Then
+        If tpSectionConstraint.Controls.Count = 0 Then
             ' nothing loaded from archetype
             mSectionConstraint = New TabPageSection
             tpSectionConstraint.Controls.Add(mSectionConstraint)
             tpSectionConstraint.Title = Filemanager.GetOpenEhrTerm(515, "Content")
             mSectionConstraint.Dock = DockStyle.Fill
         End If
-        If Me.tpContext.Controls.Count = 0 Then
+
+        If tpContext.Controls.Count = 0 Then
             ' nothing loaded from archetype
             mContextConstraint = New TabPageStructure
             tpContext.Controls.Add(mContextConstraint)
             mContextConstraint.Dock = DockStyle.Fill
         End If
-        'SRH: 35.9.2007 - Added participations to Composition
-        If Me.tpParticipations.Controls.Count = 0 Then
+
+        If tpParticipations.Controls.Count = 0 Then
             mParticipationConstraint = New TabPageParticipation
             mParticipationConstraint.panelProvider.Visible = False ' only used for Entries
             tpParticipations.Controls.Add(mParticipationConstraint)
@@ -191,12 +191,9 @@ Public Class TabPageComposition
         End If
 
         mSectionConstraint.IsRootOfComposition = True
-        Me.HelpProviderInstruction.HelpNamespace = Main.Instance.Options.HelpLocationPath
-
+        HelpProviderInstruction.HelpNamespace = Main.Instance.Options.HelpLocationPath
         mIsloading = False
-
     End Sub
-
 
     Public ReadOnly Property ComponentType() As StructureType
         Get
@@ -209,20 +206,20 @@ Public Class TabPageComposition
     End Sub
 
     Public Sub Reset()
-        Me.radioEvent.Checked = True
+        radioEvent.Checked = True
 
-        Me.tpContext.Controls.Clear()
+        tpContext.Controls.Clear()
         mContextConstraint = New TabPageStructure
         tpContext.Controls.Add(mContextConstraint)
         mContextConstraint.Dock = DockStyle.Fill
 
-        Me.tpSectionConstraint.Controls.Clear()
+        tpSectionConstraint.Controls.Clear()
         mSectionConstraint = New TabPageSection
         mSectionConstraint.IsRootOfComposition = True
         tpSectionConstraint.Controls.Add(mSectionConstraint)
         mSectionConstraint.Dock = DockStyle.Fill
 
-        Me.tpParticipations.Controls.Clear()
+        tpParticipations.Controls.Clear()
         mParticipationConstraint = New TabPageParticipation
         mParticipationConstraint.panelProvider.Visible = False
         tpParticipations.Controls.Add(mParticipationConstraint)
@@ -230,13 +227,9 @@ Public Class TabPageComposition
     End Sub
 
     Public Sub ProcessComposition(ByVal a_composition As RmComposition)
+        Reset()
+        radioPersist.Checked = a_composition.IsPersistent
 
-        Me.Reset()
-
-        Me.radioPersist.Checked = a_composition.IsPersistent
-
-        'Srh: 26 fEB 2009 - edt-419
-        'For Each rm As RmStructureCompound In a_composition.Data
         For Each rm As RmStructure In a_composition.Data
             Select Case rm.Type
                 Case StructureType.SECTION
@@ -261,7 +254,6 @@ Public Class TabPageComposition
     Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point, ByVal mandatory_only As Boolean)
         Dim spacer As Integer = 1
 
-        'leftmargin = pos.X
         If aContainer.Name <> "tpInterface" Then
             aContainer.Size = New Size
         End If
@@ -273,51 +265,56 @@ Public Class TabPageComposition
 
     Public Function SaveAsComposition() As RmComposition
         Dim rm As New RmComposition
-        If Me.radioEvent.Checked AndAlso Not mContextConstraint Is Nothing Then
+
+        If radioEvent.Checked AndAlso Not mContextConstraint Is Nothing Then
             Dim context As RmStructure = mContextConstraint.SaveAsStructure
+
             If Not context Is Nothing Then
                 rm.Data.Add(context)
             End If
         End If
+
         If Not mParticipationConstraint Is Nothing AndAlso mParticipationConstraint.HasOtherParticipations Then
             rm.Participations = mParticipationConstraint.OtherParticipations
         End If
+
         If Not mSectionConstraint Is Nothing Then
             Dim section As RmSection = mSectionConstraint.SaveAsSection
+
             If Not section Is Nothing Then
                 rm.Data.Add(section)
             End If
         End If
 
-        rm.IsPersistent = Me.radioPersist.Checked
+        rm.IsPersistent = radioPersist.Checked
         Return rm
     End Function
 
     Public Sub Translate()
         If Not mContextConstraint Is Nothing Then
-            Me.mContextConstraint.Translate()
+            mContextConstraint.Translate()
         End If
 
         If Not mSectionConstraint Is Nothing Then
-            Me.mSectionConstraint.Translate()
+            mSectionConstraint.Translate()
         End If
     End Sub
 
     Public Sub TranslateGUI()
         'ToDo: more to do here
-        Me.radioPersist.Text = Filemanager.GetOpenEhrTerm(431, "Persistent")
-        Me.radioEvent.Text = Filemanager.GetOpenEhrTerm(433, "Event")
-        Me.tpSectionConstraint.Title = Filemanager.GetOpenEhrTerm(515, "Content")
-        Me.tpContext.Title = Filemanager.GetOpenEhrTerm(515, "Context")
-        Me.mContextConstraint.TranslateGUI()
-        Me.mSectionConstraint.TranslateGUI()
+        radioPersist.Text = Filemanager.GetOpenEhrTerm(431, "Persistent")
+        radioEvent.Text = Filemanager.GetOpenEhrTerm(433, "Event")
+        tpSectionConstraint.Title = Filemanager.GetOpenEhrTerm(515, "Content")
+        tpContext.Title = Filemanager.GetOpenEhrTerm(515, "Context")
+        mContextConstraint.TranslateGUI()
+        mSectionConstraint.TranslateGUI()
     End Sub
-
 
     Private Sub radioPersist_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioPersist.CheckedChanged
         If mTabPageContext Is Nothing Then
-            mTabPageContext = Me.tpContext
+            mTabPageContext = tpContext
         End If
+
         If radioPersist.Checked Then
             TabControlInstruction.TabPages.Remove(mTabPageContext)
             TabControlInstruction.TabPages.Remove(tpParticipations)
@@ -325,14 +322,12 @@ Public Class TabPageComposition
             TabControlInstruction.TabPages.Insert(0, mTabPageContext)
             TabControlInstruction.TabPages.Insert(1, tpParticipations)
         End If
+
         If Not Filemanager.Master.FileLoading Then
             Filemanager.Master.FileEdited = True
         End If
     End Sub
 
-    Private Sub TabControlInstruction_SelectionChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabControlInstruction.SelectionChanged
-
-    End Sub
 End Class
 
 '
