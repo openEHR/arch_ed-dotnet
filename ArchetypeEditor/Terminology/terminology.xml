@@ -779,6 +779,7 @@
   <PrimaryRubric Id="703" Language="en" />
   <PrimaryRubric Id="704" Language="en" />
   <PrimaryRubric Id="705" Language="en" />
+  <PrimaryRubric Id="706" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -1416,6 +1417,7 @@
   <Concept Language="en" ConceptID="703" Rubric="Changing to structure type {0} may lose some elements. Do you want to continue?" />
   <Concept Language="en" ConceptID="704" Rubric="Contact" />
   <Concept Language="en" ConceptID="705" Rubric="Currently responsible" />
+  <Concept Language="en" ConceptID="706" Rubric="Please enter the Concept part of the Archetype ID." />
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />

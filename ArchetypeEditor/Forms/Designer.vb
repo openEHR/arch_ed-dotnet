@@ -4820,22 +4820,22 @@ Public Class Designer
 #End Region
 
     Private Sub menuEditArchID_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuEditArchID.Click
-        Dim arch_id As String = mFileManager.Archetype.Archetype_ID.Concept
+        Dim archetypeId As String = mFileManager.Archetype.Archetype_ID.Concept
         Dim defaultValue As String
         Dim i As Integer
 
-        i = arch_id.LastIndexOf("-")
+        i = archetypeId.LastIndexOf("-")
         If i > -1 Then
-            defaultValue = arch_id.Substring(i + 1)
+            defaultValue = archetypeId.Substring(i + 1)
         Else
-            defaultValue = arch_id
+            defaultValue = archetypeId
         End If
         '
-        Dim new_concept As String = Main.Instance.GetInput(Filemanager.GetOpenEhrTerm(54, "Concept"), Me, defaultValue)
-        new_concept = mFileManager.Archetype.Archetype_ID.ValidConcept(new_concept, arch_id.ToString, True)
+        Dim newConcept As String = Main.Instance.GetInput(Filemanager.GetOpenEhrTerm(706, "Please enter the Concept part of the Archetype ID."), Me, defaultValue)
+        newConcept = mFileManager.Archetype.Archetype_ID.ValidConcept(newConcept, archetypeId.ToString, True)
 
-        If new_concept <> "" Then
-            mFileManager.Archetype.Archetype_ID.Concept = new_concept
+        If newConcept <> "" Then
+            mFileManager.Archetype.Archetype_ID.Concept = newConcept
 
             ' force save as to new file
             mFileManager.IsNew = True
