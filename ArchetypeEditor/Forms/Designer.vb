@@ -2180,9 +2180,10 @@ Public Class Designer
 
                 ' stop auto updating of controls
                 mFileManager.FileLoading = True
+                MenuFileSpecialise.Visible = False
                 ResetDefaults()
 
-                'reset the filename to null to force SaveAs
+                'reset the filename to force SaveAs
                 mFileManager.FileName = ""
 
                 SetUpGUI(ReferenceModel.ArchetypedClass, True)
@@ -3367,8 +3368,8 @@ Public Class Designer
 
         If AllowOpen Then
             mFileManager.FileLoading = True
-            ' clear the archetype editor
-            Me.ResetDefaults()
+            ResetDefaults()
+
             ' prevent being asked again to save if open new archetype
             mFileManager.FileEdited = False
             mFileManager.FileLoading = False
