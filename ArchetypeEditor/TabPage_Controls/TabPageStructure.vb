@@ -569,6 +569,10 @@ Public Class TabPageStructure
     End Sub
 
     Private Sub ShowDetailPanel(ByVal node As ArchetypeNode, ByVal e As EventArgs) Handles mStructureControl.CurrentItemChanged
+        If node Is Nothing And mIsEmbedded Then
+            node = mEmbeddedSlot
+        End If
+
         If node Is Nothing Then
             DetailsPanel.Hide()
         Else
