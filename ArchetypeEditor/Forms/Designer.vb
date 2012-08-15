@@ -1966,14 +1966,13 @@ Public Class Designer
                 Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, _
                     StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
 
-                    'If mFileManager.Archetype.Definition.TypeName.StartsWith("ENTRY") Then
                     Dim rm As RmStructureCompound
                     ' allow restriction of subject of data
                     InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
 
                     ' deal with the various groups of information appropriate to the type
                     Select Case mFileManager.Archetype.RmEntity
-                        Case StructureType.ENTRY ' "ENTRY"
+                        Case StructureType.ENTRY
                             If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
                                 cbParticipation.Checked = True
                                 SetUpParticipations()
@@ -1988,7 +1987,7 @@ Public Class Designer
                                 End Select
                             Next
 
-                        Case StructureType.OBSERVATION ' "ENTRY.OBSERVATION"
+                        Case StructureType.OBSERVATION
 
                             If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
                                 cbParticipation.Checked = True
@@ -2001,23 +2000,20 @@ Public Class Designer
                             For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
                                     Case StructureType.Data
-                                        Dim rm_s As RmStructureCompound
-                                        For Each rm_s In rm.Children
-                                            'Select Case rm_s.TypeName
+                                        For Each rm_s As RmStructureCompound In rm.Children
                                             Select Case rm_s.Type
                                                 Case StructureType.History
                                                     ProcessEventSeries(rm_s)
                                                 Case Else
                                                     'Redundant
-                                                    Me.ProcessDataStructure(rm_s)
+                                                    ProcessDataStructure(rm_s)
                                             End Select
                                         Next
 
                                     Case StructureType.State
                                         Debug.Assert(rm.Children.Count > 0)
 
-                                        Dim rm_1 As RmStructure
-                                        rm_1 = rm.Children.Items(0)
+                                        Dim rm_1 As RmStructure = rm.Children.Items(0)
 
                                         If rm_1.Type = StructureType.History Then
                                             ProcessStateEventSeries(rm_1)
@@ -2031,31 +2027,27 @@ Public Class Designer
                                 End Select
                             Next
 
-                        Case StructureType.EVALUATION ' "ENTRY.EVALUATION"
+                        Case StructureType.EVALUATION
                             If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
                                 cbParticipation.Checked = True
                                 SetUpParticipations()
                             End If
 
                             SetUpDataStructure()
+
                             For Each rm In CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data
                                 Select Case rm.Type
                                     Case StructureType.Data
                                         If rm.Children.Count > 0 Then
                                             ProcessDataStructure(rm.Children.Items(0))
                                         End If
-
-                                        '  Case StructureType.State
-                                        '     ProcessState(rm.Children.items(0))
-
                                     Case StructureType.Protocol
                                         ProcessProtocol(rm.Children.Items(0), Me.TabDesign)
                                 End Select
                             Next
 
-                        Case StructureType.INSTRUCTION ' "ENTRY.INSTRUCTION"
+                        Case StructureType.INSTRUCTION
                             SetUpInstruction()
-
                             mTabPageInstruction.ProcessInstruction(CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data)
 
                             If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
@@ -2091,8 +2083,10 @@ Public Class Designer
                                 cbParticipation.Checked = True
                                 SetUpParticipations()
                             End If
+
                             rm = CType(mFileManager.Archetype.Definition, ArchetypeDefinition).Data.Items(0)
                             SetUpDataStructure()
+
                             If rm.Children.Count > 0 Then
                                 ProcessDataStructure(rm.Children.Items(0))
                             End If
@@ -2100,23 +2094,21 @@ Public Class Designer
                     End Select
 
                     ' fill the subject of data if required
-                    Dim cp As CodePhrase
-                    cp = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
+                    Dim cp As CodePhrase = CType(mFileManager.Archetype.Definition, RmEntry).SubjectOfData.Relationship
 
                     If Not cp Is Nothing Then
                         If cp.Codes.Count > 0 Then
-                            Me.mRestrictedSubject.AsCodePhrase = cp
+                            mRestrictedSubject.AsCodePhrase = cp
                         End If
                     End If
 
-                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                    ProcessStructure(mFileManager.Archetype.Definition)
-
-                Case StructureType.Cluster
-                    ProcessCluster(mFileManager.Archetype.Definition)
+                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table, StructureType.Cluster
+                    SetUpStructure()
+                    mTabPageDataStructure.ProcessStructure(mFileManager.Archetype.Definition)
 
                 Case StructureType.Element
-                    ProcessElement(mFileManager.Archetype.Definition)
+                    SetUpStructure()
+                    mTabPageDataStructure.ProcessElement(mFileManager.Archetype.Definition)
 
                 Case StructureType.SECTION
                     SetUpSection()
@@ -3134,10 +3126,25 @@ Public Class Designer
 
     Private Sub SetUpStructure()
         mTabPageDataStructure = New TabPageStructure
+        mTabPageDataStructure.DisallowEmbedded()
         tpSectionPage.Controls.Clear()
         tpSectionPage.Controls.Add(mTabPageDataStructure)
         mTabPageDataStructure.Dock = DockStyle.Fill
         mComponentsCollection.Add(mTabPageDataStructure)
+    End Sub
+
+    Private Sub SetUpDataStructure()
+        mTabPageDataStructure = New TabPageStructure
+        mTabPageDataStructure.DisallowEmbedded()
+        mTabPageDataStructure.IsMandatory = True
+
+        tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
+        tpDataStructure.Controls.Add(mTabPageDataStructure)
+        mTabPageDataStructure.Dock = DockStyle.Fill
+        mComponentsCollection.Add(mTabPageDataStructure)
+
+        TabStructure.SelectedIndex = 0
+        tpDataStructure.Selected = True
     End Sub
 
     Private Sub SetUpSection()
@@ -3226,23 +3233,6 @@ Public Class Designer
         HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_instruction.htm")
     End Sub
 
-    Private Sub SetUpDataStructure()
-        ' reset the data structure tab page
-        mTabPageDataStructure = New TabPageStructure
-        mTabPageDataStructure.EmbeddedAllowed = False
-        mTabPageDataStructure.IsMandatory = True
-
-        tpDataStructure.Title = Filemanager.GetOpenEhrTerm(85, "Structure")
-        tpDataStructure.Controls.Add(mTabPageDataStructure)
-        mTabPageDataStructure.Dock = DockStyle.Fill
-
-        ' add it to the collection of components that require translation
-        mComponentsCollection.Add(mTabPageDataStructure)
-
-        TabStructure.SelectedIndex = 0
-        tpDataStructure.Selected = True
-    End Sub
-
     Private Sub SetUpGUI(ByVal archetyped_class As StructureType, ByVal isNew As Boolean)
         'NOTE: Showing tabpages in the editor requires generating
         'IDs for the structural components (e.g. EventSeries and List)
@@ -3294,13 +3284,13 @@ Public Class Designer
                 Case StructureType.Cluster
                     If isNew Then
                         SetUpStructure()
-                        mTabPageDataStructure.SetAsCluster(mFileManager.Archetype.ConceptCode)
+                        mTabPageDataStructure.SetAsCluster()
                     End If
 
                 Case StructureType.Element
                     If isNew Then
                         SetUpStructure()
-                        mTabPageDataStructure.SetAsElement(mFileManager.Archetype.ConceptCode)
+                        mTabPageDataStructure.SetAsElement()
                     End If
 
                 Case StructureType.ENTRY
@@ -3651,7 +3641,7 @@ Public Class Designer
 
 #Region "Methods to build the GUI when an archetype is loaded"
 
-    Private Sub ProcessStateEventSeries(ByVal a_history As RmHistory)
+    Private Sub ProcessStateEventSeries(ByVal history As RmHistory)
         cbPersonState.Checked = True
         'cannot have state associated with structure
         cbStructurePersonState.Enabled = False
@@ -3662,17 +3652,17 @@ Public Class Designer
         mTabPageStateEventSeries.BackColor = System.Drawing.Color.LightSteelBlue
         tpRootStateEventSeries.Controls.Add(mTabPageStateEventSeries)
         mTabPageStateEventSeries.Dock = DockStyle.Fill
-        mTabPageStateEventSeries.ProcessEventSeries(a_history)
+        mTabPageStateEventSeries.ProcessEventSeries(history)
         mComponentsCollection.Add(mTabPageStateEventSeries)
 
-        mTabPageStateStructure = New TabPageStructure  'Me
-        mTabPageStateStructure.IsState = True  ' sets some display characteristics of buttons
+        mTabPageStateStructure = New TabPageStructure
+        mTabPageStateStructure.IsState = True
         mTabPageStateStructure.BackColor = System.Drawing.Color.LightSteelBlue
         tpRootStateStructure.Controls.Add(mTabPageStateStructure)
         mTabPageStateStructure.Dock = DockStyle.Fill
 
-        If Not a_history.Data Is Nothing Then
-            mTabPageStateStructure.ProcessStructure(a_history.Data)
+        If Not history.Data Is Nothing Then
+            mTabPageStateStructure.ProcessStructure(history.Data)
         End If
 
         tpRootStateStructure.Title = mTabPageStateStructure.StructureTypeAsString
@@ -3690,16 +3680,16 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub ProcessState(ByVal a_Structure As RmStructure)
+    Private Sub ProcessState(ByVal struct As RmStructure)
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageDataStateStructure = New TabPageStructure
-        mTabPageDataStateStructure.IsState = True ' allows assumed values to be set (buttons visible)
+        mTabPageDataStateStructure.IsState = True
         cbStructurePersonState.Checked = True
 
-        If a_Structure.Type = StructureType.Slot Then
-            mTabPageDataStateStructure.ProcessSlot(CType(a_Structure, RmSlot))
+        If struct.Type = StructureType.Slot Then
+            mTabPageDataStateStructure.ProcessSlot(CType(struct, RmSlot))
         Else
-            mTabPageDataStateStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
+            mTabPageDataStateStructure.ProcessStructure(CType(struct, RmStructureCompound))
         End If
 
         ' add it to the collection of components that require translation
@@ -3715,34 +3705,16 @@ Public Class Designer
         HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_state.html")
     End Sub
 
-    Private Sub ProcessStructure(ByVal a_Structure As RmStructureCompound)
-        SetUpStructure()
-        mTabPageDataStructure.ProcessStructure(a_Structure)
-    End Sub
-
-    Private Sub ProcessCluster(ByVal a_Structure As RmCluster)
-        SetUpStructure()
-        mTabPageDataStructure.ProcessStructure(a_Structure)
-    End Sub
-
-    Private Sub ProcessElement(ByVal an_element As RmElement)
-        SetUpStructure()
-        mTabPageDataStructure.ProcessElement(an_element)
-    End Sub
-
-    Private Sub ProcessPathwaySpecification(ByVal a_structure As RmStructureCompound)
-    End Sub
-
     Private Sub ProcessDataStructure(ByVal a_Structure As RmStructure)
         mTabPageDataStructure.ProcessStructure(CType(a_Structure, RmStructureCompound))
-        mTabPageDataStructure.EmbeddedAllowed = False
+        mTabPageDataStructure.DisallowEmbedded()
         mTabPageDataStructure.IsMandatory = True
         tpDataStructure.Title = mTabPageDataStructure.StructureTypeAsString
     End Sub
 
     Private Sub ProcessProtocol(ByVal rm As RmStructure, ByVal tbCtrl As Crownwood.Magic.Controls.TabControl)
         Dim tp As New Crownwood.Magic.Controls.TabPage
-        mTabPageProtocolStructure = New TabPageStructure '(Me)
+        mTabPageProtocolStructure = New TabPageStructure
         mTabPageProtocolStructure.BackColor = System.Drawing.Color.PaleGoldenrod
 
         If rm.Type = StructureType.Slot Then
@@ -4280,7 +4252,7 @@ Public Class Designer
                     CrownCtrl.TabPages.Add(Me.mTabPagesCollection.Item("tpProtocol"))
                 End If
             Else
-                mTabPageProtocolStructure = New TabPageStructure '(Me)
+                mTabPageProtocolStructure = New TabPageStructure
                 mTabPageProtocolStructure.BackColor = System.Drawing.Color.LightGoldenrodYellow
                 tp = New Crownwood.Magic.Controls.TabPage
                 tp.Name = "tpProtocol"
@@ -4400,7 +4372,7 @@ Public Class Designer
                 ' no State page added
                 Dim tp As New Crownwood.Magic.Controls.TabPage
 
-                mTabPageDataStateStructure = New TabPageStructure '(Me)
+                mTabPageDataStateStructure = New TabPageStructure
                 mTabPageDataStateStructure.IsState = True ' makes assumed value button/text box visible
                 'Adding it to this collection allows it to be removed
                 ' and then readded without losing the data
@@ -4416,16 +4388,16 @@ Public Class Designer
                 Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
                 Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_state.htm")
             End If
+
             ' now set the selected tab page to this one
             Dim i As Integer
+
             For i = 0 To Me.TabStructure.TabPages.Count - 1
                 If Me.TabStructure.TabPages(i).Name = "tpStateStructure" Then
                     Me.TabStructure.SelectedIndex = i
                 End If
             Next
-
         Else
-
             If mFileManager.FileLoading Then
                 Me.cbPersonState.Enabled = True
             Else
@@ -4467,9 +4439,10 @@ Public Class Designer
             End If
 
             Me.tpRootState.Visible = True
+
             If Me.tpRootStateStructure.Controls.Count = 0 Then
                 ' add a TabPageStructure component
-                mTabPageStateStructure = New TabPageStructure '(Me)
+                mTabPageStateStructure = New TabPageStructure
                 mTabPageStateStructure.IsState = True ' makes assumed value button/text box visible
                 Me.tpRootStateStructure.Controls.Add(mTabPageStateStructure)
                 mTabPageStateStructure.Dock = DockStyle.Fill

@@ -978,10 +978,11 @@ Namespace ArchetypeEditor.XML_Classes
             End If
         End Sub
 
-        Private Sub BuildSlotFromAttribute(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal a_slot As RmSlot)
+        Private Sub BuildSlotFromAttribute(ByVal attribute As XMLParser.C_ATTRIBUTE, ByVal a_slot As RmSlot)
             Dim slot As New XMLParser.ARCHETYPE_SLOT
             slot.rm_type_name = ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)
             slot.occurrences = MakeOccurrences(a_slot.Occurrences)
+
             If a_slot.NodeId Is Nothing Then
                 slot.node_id = ""
             Else
@@ -989,7 +990,7 @@ Namespace ArchetypeEditor.XML_Classes
             End If
 
             BuildSlot(slot, a_slot.SlotConstraint)
-            mAomFactory.add_object(value_attribute, slot)
+            mAomFactory.add_object(attribute, slot)
         End Sub
 
         Private Sub BuildSlot(ByRef slot As XMLParser.ARCHETYPE_SLOT, ByVal sl As Constraint_Slot)
@@ -1905,8 +1906,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                     Case StructureType.Slot
                         ' allows action to be specified in another archetype
-                        Dim slot As RmSlot = CType(action_spec, RmSlot)
-                        BuildSlotFromAttribute(an_attribute, slot)
+                        BuildSlotFromAttribute(an_attribute, CType(action_spec, RmSlot))
                 End Select
             End If
         End Sub
@@ -1914,7 +1914,7 @@ Namespace ArchetypeEditor.XML_Classes
         Public Overridable Sub MakeParseTree()
             If Not mSynchronised Then
                 Dim rm As RmStructureCompound
-                Dim an_attribute As XMLParser.C_ATTRIBUTE
+                Dim attribute As XMLParser.C_ATTRIBUTE
 
                 'reset the XML definition to make it again
                 mXmlArchetype.definition.attributes = Nothing
@@ -1948,18 +1948,14 @@ Namespace ArchetypeEditor.XML_Classes
                     mAomFactory = New XMLParser.AomFactory()
 
                     If cDefinition.HasNameConstraint Then
-                        an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "name", New RmExistence(1).XmlExistence)
-                        BuildText(an_attribute, cDefinition.NameConstraint)
+                        attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "name", New RmExistence(1).XmlExistence)
+                        BuildText(attribute, cDefinition.NameConstraint)
                     End If
-
-                    Debug.Assert(ReferenceModel.IsValidArchetypeDefinition(cDefinition.Type))
 
                     Select Case cDefinition.Type
 
                         Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                            Dim Definition As New C_COMPLEX_OBJECT_PROXY(mXmlArchetype.definition)
-
-                            If Definition.Any_Allowed AndAlso CType(cDefinition, ArchetypeDefinition).Data.Count > 0 Then
+                            If New C_COMPLEX_OBJECT_PROXY(mXmlArchetype.definition).Any_Allowed AndAlso CType(cDefinition, ArchetypeDefinition).Data.Count > 0 Then
                                 'This can arise if the archetype has been saved with no children then
                                 'items have been added later - this is percular to Tree, List and Table.
                                 mXmlArchetype.definition.occurrences = MakeOccurrences(New RmCardinality(0))
@@ -1997,17 +1993,17 @@ Namespace ArchetypeEditor.XML_Classes
 
                         Case StructureType.ADMIN_ENTRY
                             BuildEntryAttributes(CType(cDefinition, RmEntry), mXmlArchetype.definition)
-                            an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", New RmExistence(1).XmlExistence)
+                            attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", New RmExistence(1).XmlExistence)
+                            Dim items() As RmStructure = CType(cDefinition, ArchetypeDefinition).Data.Items
 
-                            Try
-                                Dim rm_struct As RmStructureCompound = CType(CType(cDefinition, ArchetypeDefinition).Data.Items(0), RmStructureCompound).Children.Items(0)
-                                Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                                objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(rm_struct.Type), rm_struct.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
-                                BuildStructure(rm_struct, objNode)
-                            Catch
-                                'ToDo - process error
-                                Debug.Assert(False, "Error building structure")
-                            End Try
+                            If items.Length > 0 Then
+                                Dim struct As RmStructureCompound = CType(items(0), RmStructureCompound)
+
+                                If struct.Children.Items.Length > 0 Then
+                                    struct = struct.Children.Items(0)
+                                    BuildStructure(struct, mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_StructureName(struct.Type), struct.NodeId, MakeOccurrences(New RmCardinality(1, 1))))
+                                End If
+                            End If
 
                         Case StructureType.OBSERVATION
                             BuildEntryAttributes(CType(cDefinition, RmEntry), mXmlArchetype.definition)
@@ -2022,43 +2018,44 @@ Namespace ArchetypeEditor.XML_Classes
                                 Select Case rm.Type
                                     Case StructureType.Protocol
                                         rm_protocol = rm
-
                                     Case StructureType.Data
                                         'remember the data structure
                                         rm_data = rm
-
                                     Case StructureType.State
                                         'for the moment saving the state data on the first event EventSeries if there is one
-                                        Dim a_rm As RmStructure
-                                        a_rm = rm.Children.Items(0)
+                                        Dim a_rm As RmStructure = Nothing
 
-                                        If a_rm.Type = StructureType.History Then
-                                            an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "state", a_rm.Existence.XmlExistence)
+                                        If rm.Children.Items.Length > 0 Then
+                                            a_rm = rm.Children.Items(0)
+                                        End If
+
+                                        If a_rm Is Nothing OrElse a_rm.Type <> StructureType.History Then
+                                            rm_state = rm
+                                        Else
+                                            attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "state", a_rm.Existence.XmlExistence)
 
                                             ' can have EventSeries for each state
-                                            BuildHistory(a_rm, an_attribute)
-                                        Else
-                                            rm_state = rm
+                                            BuildHistory(a_rm, attribute)
                                         End If
                                 End Select
                             Next
 
                             'Add the data
                             If Not rm_data Is Nothing Then
-                                an_attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", rm_data.Existence.XmlExistence)
+                                attribute = mAomFactory.MakeSingleAttribute(mXmlArchetype.definition, "data", rm_data.Existence.XmlExistence)
 
                                 For Each a_rm As RmStructureCompound In rm_data.Children.Items
                                     Select Case a_rm.Type
                                         Case StructureType.History
                                             If Not rm_state Is Nothing Then
-                                                BuildHistory(a_rm, an_attribute, rm_state)
+                                                BuildHistory(a_rm, attribute, rm_state)
                                             Else
-                                                BuildHistory(a_rm, an_attribute)
+                                                BuildHistory(a_rm, attribute)
                                             End If
                                         Case Else
                                             Debug.Assert(False) '?OBSOLETE
                                             Dim objNode As XMLParser.C_COMPLEX_OBJECT
-                                            objNode = mAomFactory.MakeComplexObject(an_attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
+                                            objNode = mAomFactory.MakeComplexObject(attribute, ReferenceModel.RM_StructureName(a_rm.Type), a_rm.NodeId, MakeOccurrences(New RmCardinality(1, 1)))
                                             BuildStructure(a_rm, objNode)
                                     End Select
                                 Next
@@ -2090,13 +2087,13 @@ Namespace ArchetypeEditor.XML_Classes
                                 End Select
                             Next
                     End Select
-                End If
 
-                If HasLinkConstraints() Then
-                    BuildLinks(Definition.RootLinks, mXmlArchetype.definition)
-                End If
+                    If HasLinkConstraints() Then
+                        BuildLinks(Definition.RootLinks, mXmlArchetype.definition)
+                    End If
 
-                mSynchronised = True
+                    mSynchronised = True
+                End If
             End If
         End Sub
 

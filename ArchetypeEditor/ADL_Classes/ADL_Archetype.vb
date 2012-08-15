@@ -749,13 +749,13 @@ Namespace ArchetypeEditor.ADL_Classes
             End Select
         End Sub
 
-        Protected Sub BuildSlotFromAttribute(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
+        Protected Sub BuildSlotFromAttribute(ByVal attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal a_slot As RmSlot)
             Dim slot As openehr.openehr.am.archetype.constraint_model.ARCHETYPE_SLOT
 
             If a_slot.NodeId = String.Empty Then
-                slot = mAomFactory.create_archetype_slot_anonymous(value_attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)))
+                slot = mAomFactory.create_archetype_slot_anonymous(attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)))
             Else
-                slot = mAomFactory.create_archetype_slot_identified(value_attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)), Eiffel.String(a_slot.NodeId))
+                slot = mAomFactory.create_archetype_slot_identified(attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_slot.SlotConstraint.RM_ClassType)), Eiffel.String(a_slot.NodeId))
             End If
 
             slot.set_occurrences(MakeOccurrences(a_slot.Occurrences))
@@ -1271,8 +1271,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             End If
                         Next
                     Case StructureType.Tree
-                        attribute = mAomFactory.create_c_attribute_multiple(objNode, Eiffel.String("items"), _
-                            MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
+                        attribute = mAomFactory.create_c_attribute_multiple(objNode, Eiffel.String("items"), MakeCardinality(CType(rmStruct, RmStructureCompound).Children.Cardinality, CType(rmStruct, RmStructureCompound).Children.Cardinality.Ordered))
 
                         For Each rm In rmStruct.Children.Items
                             If rm.Type = StructureType.Cluster Then
@@ -1436,14 +1435,10 @@ Namespace ArchetypeEditor.ADL_Classes
 
             ' Deal with the content and context
             If Rm.Data.Count > 0 Then
-
                 For Each a_structure As RmStructure In Rm.Data
                     Select Case a_structure.Type
                         Case StructureType.List, StructureType.Single, StructureType.Table, StructureType.Tree
-
                             Dim new_structure As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
-                            'Changed SRH 29 Apr 2008 - added handling of participations
 
                             If eventContext Is Nothing Then
                                 an_attribute = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("context"))
@@ -1454,10 +1449,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             new_structure = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_structure.Type)), Eiffel.String(a_structure.NodeId))
                             BuildStructure(a_structure, new_structure)
 
-                            'SRH: 26 Feb 2009 - EDT-419 - allow slot for context
-
                         Case StructureType.Slot
-
                             If eventContext Is Nothing Then
                                 an_attribute = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("context"))
                                 eventContext = mAomFactory.create_c_complex_object_anonymous(an_attribute, Eiffel.String("EVENT_CONTEXT"))
@@ -1466,9 +1458,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             an_attribute = mAomFactory.create_c_attribute_single(eventContext, Eiffel.String("other_context"))
                             BuildSlotFromAttribute(an_attribute, a_structure)
 
-
                         Case StructureType.SECTION
-
                             If CType(a_structure, RmSection).Children.Count > 0 Then
 
                                 an_attribute = mAomFactory.create_c_attribute_multiple(CadlObj, _
@@ -1476,10 +1466,8 @@ Namespace ArchetypeEditor.ADL_Classes
                                     MakeCardinality(CType(a_structure, RmSection).Children.Cardinality, CType(a_structure, RmSection).Children.Cardinality.Ordered))
 
                                 For Each slot As RmSlot In CType(a_structure, RmSection).Children
-
                                     BuildSlotFromAttribute(an_attribute, slot)
                                 Next
-
                             End If
 
                         Case Else
@@ -1550,11 +1538,8 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Private Sub BuildStructure(ByVal rm As RmStructureCompound, _
-                ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, _
-                ByVal attribute_name As String)
+        Private Sub BuildStructure(ByVal rm As RmStructureCompound, ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT, ByVal attribute_name As String)
             Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-
             an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String(attribute_name))
 
             If rm.Children.Count > 0 Then
@@ -1568,11 +1553,9 @@ Namespace ArchetypeEditor.ADL_Classes
                 End If
             End If
 
-            'SRH: 11 Jan 2009 - EDT-502 - set existence of protocol and state attributes
             If attribute_name = "state" Or attribute_name = "protocol" Then
                 an_attribute.set_existence(MakeExistence(rm.Children.Existence))
             End If
-
         End Sub
 
         Private Sub BuildProtocol(ByVal rm As RmStructureCompound, ByVal an_adlArchetype As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
@@ -1709,9 +1692,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                     Case StructureType.Slot
                         ' allows action to be specified in another archetype
-                        Dim slot As RmSlot = CType(action_spec, RmSlot)
-
-                        BuildSlotFromAttribute(an_attribute, slot)
+                        BuildSlotFromAttribute(an_attribute, CType(action_spec, RmSlot))
                 End Select
             End If
         End Sub
@@ -1719,7 +1700,7 @@ Namespace ArchetypeEditor.ADL_Classes
         Public Overridable Sub MakeParseTree()
             If Not mSynchronised Then
                 Dim rm As RmStructureCompound
-                Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
+                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
 
                 'reset the ADL definition to make it again
                 adlArchetype.reset_definition()
@@ -1740,11 +1721,9 @@ Namespace ArchetypeEditor.ADL_Classes
                     mAomFactory = adlEngine.constraint_model_factory
 
                     If cDefinition.HasNameConstraint Then
-                        an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String("name"))
-                        BuildText(an_attribute, cDefinition.NameConstraint)
+                        attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String("name"))
+                        BuildText(attribute, cDefinition.NameConstraint)
                     End If
-
-                    Debug.Assert(ReferenceModel.IsValidArchetypeDefinition(cDefinition.Type))
 
                     Select Case cDefinition.Type
 
@@ -1782,13 +1761,12 @@ Namespace ArchetypeEditor.ADL_Classes
 
                                     Case StructureType.Data
                                         BuildStructure(rm, adlArchetype.definition, "data")
-
                                 End Select
                             Next
 
                         Case StructureType.ADMIN_ENTRY
                             BuildEntryAttributes(CType(cDefinition, RmEntry), adlArchetype.definition)
-                            an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String("data"))
+                            attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String("data"))
                             Dim items() As RmStructure = CType(cDefinition, ArchetypeDefinition).Data.Items
 
                             If items.Length > 0 Then
@@ -1796,14 +1774,13 @@ Namespace ArchetypeEditor.ADL_Classes
 
                                 If struct.Children.Items.Length > 0 Then
                                     struct = struct.Children.Items(0)
-                                    Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                                    objNode = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(struct.Type)), Eiffel.String(struct.NodeId))
-                                    BuildStructure(struct, objNode)
+                                    BuildStructure(struct, mAomFactory.create_c_complex_object_identified(attribute, Eiffel.String(ReferenceModel.RM_StructureName(struct.Type)), Eiffel.String(struct.NodeId)))
                                 End If
                             End If
 
                         Case StructureType.OBSERVATION
                             BuildEntryAttributes(CType(cDefinition, RmEntry), adlArchetype.definition)
+
                             'Add state to each event so need to be sure of requirements
                             Dim state_to_be_added As Boolean = True
                             Dim rm_state As RmStructureCompound = Nothing
@@ -1837,28 +1814,28 @@ Namespace ArchetypeEditor.ADL_Classes
 
                             'Add the data
                             If Not rm_data Is Nothing Then
-                                an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String("data"))
+                                attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String("data"))
 
                                 For Each a_rm As RmStructureCompound In rm_data.Children.Items
-                                    Select Case a_rm.Type '.TypeName
+                                    Select Case a_rm.Type
                                         Case StructureType.History
                                             If Not rm_state Is Nothing Then
-                                                BuildHistory(a_rm, an_attribute, rm_state)
+                                                BuildHistory(a_rm, attribute, rm_state)
                                             Else
-                                                BuildHistory(a_rm, an_attribute)
+                                                BuildHistory(a_rm, attribute)
                                             End If
                                         Case Else
                                             Debug.Assert(False) '?OBSOLETE
                                             Dim objNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-                                            objNode = mAomFactory.create_c_complex_object_identified(an_attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_rm.Type)), Eiffel.String(a_rm.NodeId))
+                                            objNode = mAomFactory.create_c_complex_object_identified(attribute, Eiffel.String(ReferenceModel.RM_StructureName(a_rm.Type)), Eiffel.String(a_rm.NodeId))
                                             BuildStructure(a_rm, objNode)
                                     End Select
                                 Next
                             End If
 
                             If Not rm_state_history Is Nothing Then
-                                an_attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String("state"))
-                                BuildHistory(rm_state_history, an_attribute)
+                                attribute = mAomFactory.create_c_attribute_single(adlArchetype.definition, Eiffel.String("state"))
+                                BuildHistory(rm_state_history, attribute)
                             End If
 
                             If Not rm_protocol Is Nothing Then

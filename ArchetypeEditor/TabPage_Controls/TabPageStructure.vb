@@ -24,9 +24,7 @@ Public Class TabPageStructure
     Private mIsLoading As Boolean = False
     Private mIsState As Boolean
     Private mIsMandatory As Boolean = False
-    Private mEmbeddedAllowed As Boolean = True
     Private mEmbeddedLoaded As Boolean = False
-    Private mIsElement As Boolean = False
     Private mValidStructureClasses As StructureType()
     Private WithEvents mStructureControl As EntryStructure
     Private mFileManager As FileManagerLocal
@@ -484,15 +482,6 @@ Public Class TabPageStructure
         End Set
     End Property
 
-    Public Property EmbeddedAllowed() As Boolean
-        Get
-            Return mEmbeddedAllowed
-        End Get
-        Set(ByVal Value As Boolean)
-            mEmbeddedAllowed = Value
-        End Set
-    End Property
-
     Public ReadOnly Property StructureType() As StructureType
         Get
             Dim result As StructureType = StructureType.Not_Set
@@ -519,6 +508,25 @@ Public Class TabPageStructure
         End Get
     End Property
 
+    Public Function SaveAsStructure() As RmStructure
+        ' Whether to save as RmStructureCompound or RmSlot
+        Dim result As RmStructure = Nothing
+
+        If mIsEmbedded Then
+            If Not mEmbeddedSlot Is Nothing Then
+                result = mEmbeddedSlot.RM_Class
+            End If
+        ElseIf Not mStructureControl Is Nothing Then
+            result = mStructureControl.Archetype
+        End If
+
+        Return result
+    End Function
+
+    Public Sub DisallowEmbedded()
+        chkEmbedded.Visible = False
+    End Sub
+
     Public Sub SetButtonVisibility(ByVal node As ArchetypeNode)
         If Not mStructureControl Is Nothing Then
             mStructureControl.SetButtonVisibility(node)
@@ -537,7 +545,6 @@ Public Class TabPageStructure
     End Sub
 
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        chkEmbedded.Visible = EmbeddedAllowed
         HelpProviderTabPageStructure.HelpNamespace = Main.Instance.Options.HelpLocationPath
 
         If Not mIsEmbedded Then
@@ -560,9 +567,12 @@ Public Class TabPageStructure
                 End If
             End If
 
-            structurePanel.Show()
-            comboStructure.Focus()
-            comboStructure.DroppedDown = sender Is mStructureControl
+            structurePanel.Visible = comboStructure.Items.Count > 1
+
+            If structurePanel.Visible Then
+                comboStructure.Focus()
+                comboStructure.DroppedDown = sender Is mStructureControl
+            End If
 
             mIsLoading = wasLoading
         End If
@@ -613,23 +623,6 @@ Public Class TabPageStructure
         mIsLoading = False
     End Sub
 
-    Public Function SaveAsStructure() As RmStructure
-        ' save as RmStructureCompound or RmSlot
-        Dim result As RmStructure = Nothing
-
-        If mIsEmbedded Then
-            If Not mEmbeddedSlot Is Nothing Then
-                result = mEmbeddedSlot.RM_Class
-            End If
-        Else
-            If Not mStructureControl Is Nothing Then
-                result = mStructureControl.Archetype
-            End If
-        End If
-
-        Return result
-    End Function
-
     Public Sub toRichText(ByRef text As IO.StringWriter, ByVal level As Integer)
         If Not mStructureControl Is Nothing Then
             text.WriteLine(mStructureControl.ToRichText(level, Chr(13) & Chr(10)))
@@ -646,7 +639,6 @@ Public Class TabPageStructure
 
     Public Sub ProcessElement(ByVal an_element As RmElement)
         mIsLoading = True
-        mIsElement = True
         structurePanel.Hide()
         displayPanel.Show()
         SetEntryStructure(New ElementOnly(an_element, mFileManager))
@@ -654,29 +646,29 @@ Public Class TabPageStructure
         mIsLoading = False
     End Sub
 
-    Public Sub ProcessStructure(ByVal compoundstructure As RmStructureCompound)
+    Public Sub ProcessStructure(ByVal struct As RmStructureCompound)
         mIsLoading = True
 
-        If compoundstructure.Children Is Nothing Then
+        If struct.Children Is Nothing Then
             structurePanel.Show()
             displayPanel.Hide()
         Else
             structurePanel.Hide()
             displayPanel.Show()
 
-            Select Case compoundstructure.Type
+            Select Case struct.Type
                 Case StructureType.Single
-                    SetEntryStructure(New SimpleStructure(compoundstructure, mFileManager))
+                    SetEntryStructure(New SimpleStructure(struct, mFileManager))
 
                 Case StructureType.List
                     ' this also shows the panels and sets lvList to visible
-                    SetEntryStructure(New ListStructure(compoundstructure, mFileManager))
+                    SetEntryStructure(New ListStructure(struct, mFileManager))
 
                 Case StructureType.Tree, StructureType.Cluster
-                    SetEntryStructure(New TreeStructure(compoundstructure, mFileManager))
+                    SetEntryStructure(New TreeStructure(struct, mFileManager))
 
                 Case StructureType.Table
-                    SetEntryStructure(New TableStructure(CType(compoundstructure, RmTable), mFileManager))
+                    SetEntryStructure(New TableStructure(CType(struct, RmTable), mFileManager))
 
                 Case Else
                     Debug.Assert(False)
@@ -700,44 +692,18 @@ Public Class TabPageStructure
         End If
     End Sub
 
-    Public Sub SetAsElement(ByVal a_node_id As String)
-        mIsElement = True
+    Public Sub SetAsElement()
         structurePanel.Hide()
-
-        If mIsEmbedded Then
-            If Not mIsLoading Or mEmbeddedSlot Is Nothing Then
-                mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Element)
-            End If
-
-            displayPanel.Hide()
-            ShowDetailPanel(mEmbeddedSlot, New EventArgs)
-        Else
-            displayPanel.Show()
-            SetEntryStructure(New ElementOnly(New RmElement(mFileManager.Archetype.ConceptCode), mFileManager))
-            DetailsPanel.Hide()
-        End If
+        displayPanel.Show()
+        SetEntryStructure(New ElementOnly(New RmElement(mFileManager.Archetype.ConceptCode), mFileManager))
+        DetailsPanel.Hide()
     End Sub
 
-    Public Sub SetAsCluster(ByVal a_node_id As String)
+    Public Sub SetAsCluster()
         structurePanel.Hide()
-
-        If mIsEmbedded Then
-            If mIsLoading Then
-                If mEmbeddedSlot Is Nothing Then
-                    mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Cluster)
-                End If
-            Else
-                ' have to have a new slot if change the structure
-                mEmbeddedSlot = New ArchetypeNodeAnonymous(StructureType.Cluster)
-            End If
-
-            displayPanel.Hide()
-            ShowDetailPanel(mEmbeddedSlot, New EventArgs)
-        Else
-            displayPanel.Show()
-            SetEntryStructure(New TreeStructure(New RmCluster(mFileManager.Archetype.ConceptCode), mFileManager))
-            DetailsPanel.Hide()
-        End If
+        displayPanel.Show()
+        SetEntryStructure(New TreeStructure(New RmCluster(mFileManager.Archetype.ConceptCode), mFileManager))
+        DetailsPanel.Hide()
     End Sub
 
     Private Sub comboStructure_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles comboStructure.KeyDown

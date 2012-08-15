@@ -580,6 +580,7 @@ Public Class EntryStructure
             End If
 
             AddHandler mCardinalityControl.Cardinality.Updated, AddressOf CardinalityUpdated
+            CardinalityUpdated(mCardinalityControl, New EventArgs)
         End If
     End Sub
 
