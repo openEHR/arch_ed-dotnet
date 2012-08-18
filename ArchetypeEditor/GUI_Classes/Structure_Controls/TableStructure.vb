@@ -38,8 +38,15 @@ Public Class TableStructure
 
 #Region " Windows Form Designer generated code "
 
-    Public Sub New(ByVal rm As RmTable, ByVal a_file_manager As FileManagerLocal)
-        MyBase.New(rm, a_file_manager)
+    Public Sub New()
+        MyBase.New()
+        'This call is required by the Windows Form Designer.
+        InitializeComponent()
+        Debug.Assert(DesignMode)
+    End Sub
+
+    Public Sub New(ByVal rm As RmTable, ByVal filemanager As FileManagerLocal)
+        MyBase.New(rm, filemanager)
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -48,78 +55,62 @@ Public Class TableStructure
         mIsLoading = True
         SetArchetypeTable()
 
-        mRow = CType(rm.Children.Items(0), RmCluster)
+        If rm.Children.Count > 0 Then
+            mRow = CType(rm.Children.Items(0), RmCluster)
 
-        Dim d_row As DataRow
+            If mRow.Children.Count > 0 Then
+                Dim rmStr As RmStructure
+                Dim archNode As ArchetypeNode = Nothing
 
-        If mRow.Children.Count > 0 Then
-            Dim rmStr As RmStructure
-            Dim archNode As ArchetypeNode = Nothing
+                butChangeDataType.Show()
 
-            butChangeDataType.Show()
+                If rm.isRotated Then
+                    For i As Integer = 0 To mRow.Children.Count - 1
+                        'set column heading as always rotated - at the moment
+                        rmStr = mRow.Children.Items(i)
 
-            If rm.isRotated Then
-                For i As Integer = 0 To mRow.Children.Count - 1
-                    'set column heading as always rotated - at the moment
-                    rmStr = mRow.Children.Items(i)
-
-                    If rmStr.Type = StructureType.Element Then
-                        archNode = New ArchetypeElement(CType(rmStr, RmElement), mFileManager)
-                    ElseIf rmStr.Type = StructureType.Slot Then
-                        If String.IsNullOrEmpty(rmStr.NodeId) Then
-                            archNode = New ArchetypeNodeAnonymous(CType(rmStr, RmSlot))
+                        If rmStr.Type = StructureType.Element Then
+                            archNode = New ArchetypeElement(CType(rmStr, RmElement), mFileManager)
+                        ElseIf rmStr.Type = StructureType.Slot Then
+                            If String.IsNullOrEmpty(rmStr.NodeId) Then
+                                archNode = New ArchetypeNodeAnonymous(CType(rmStr, RmSlot))
+                            Else
+                                archNode = New ArchetypeSlot(CType(rmStr, RmSlot), mFileManager)
+                            End If
                         Else
-                            archNode = New ArchetypeSlot(CType(rmStr, RmSlot), mFileManager)
+                            Debug.Assert(False, "Type not handled")
+                            Throw New Exception("Table row of invalid type")
                         End If
 
-                    Else
-                        Debug.Assert(False, "Type not handled")
-                        Throw New Exception("Table row of invalid type")
-                    End If
+                        If i < rm.NumberKeyColumns AndAlso TypeOf archNode Is ArchetypeElement Then
+                            AddColumnElement(CType(archNode, ArchetypeElement))
+                        Else
+                            Dim row As DataRow = mArchetypeTable.NewRow
+                            row.Item(0) = archNode.ImageIndex(False)
+                            row.Item(1) = archNode.Text
+                            row.Item(2) = archNode
+                            mArchetypeTable.Rows.Add(row)
+                        End If
+                    Next
 
-                    If i < rm.NumberKeyColumns AndAlso TypeOf archNode Is ArchetypeElement Then
-                        AddColumnElement(CType(archNode, ArchetypeElement))
-                    Else
-                        d_row = mArchetypeTable.NewRow
-                        d_row.Item(0) = archNode.ImageIndex(False)
-                        d_row.Item(1) = archNode.Text
-                        d_row.Item(2) = archNode
-                        mArchetypeTable.Rows.Add(d_row)
+                    If mArchetypeTable.Rows.Count > 0 Then
+                        SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeNode))
                     End If
-                Next
-
-                If mArchetypeTable.Rows.Count > 0 Then
-                    SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeNode))
+                Else
+                    Debug.Assert(False, "Unrotated tables are not handled at present")
                 End If
-            Else
-                Debug.Assert(False, "Unrotated tables are not handled at present")
             End If
-        End If
-
-        If mArchetypeTable.Rows.Count = 0 Then
-            'FIXME raise error
-            'FIXME: This is exiting early without resetting mIsLoading!!! Apart from being bad software engineering (it's a GOTO), is it a bug?
-            Return
         End If
 
         mIsLoading = False
     End Sub
 
-    Public Sub New()
-        MyBase.New()
+    Public Sub New(ByVal filemanager As FileManagerLocal)
+        MyBase.New("Table", filemanager)
         'This call is required by the Windows Form Designer.
         InitializeComponent()
-        'Add any initialization after the InitializeComponent() call
-        If Not Me.DesignMode Then
-            Debug.Assert(False)
-        End If
     End Sub
 
-    Public Sub New(ByVal a_file_manager As FileManagerLocal)
-        MyBase.New("Table", a_file_manager)
-        'This call is required by the Windows Form Designer.
-        InitializeComponent()
-    End Sub
     'UserControl overrides dispose to clean up the component list.
     'Protected Overloads Overrides Sub Dispose(ByVal disposing As Boolean)
     '    If disposing Then
