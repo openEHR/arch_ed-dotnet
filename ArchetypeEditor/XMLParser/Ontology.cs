@@ -530,101 +530,58 @@ namespace XMLParser
                 
         public string NextTermId()
         {
-            ArrayList counters = new ArrayList();
-            CodeDefinitionSet[] definitions = _archetype.ontology.term_definitions;
-
-            if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
-            {
-                foreach (ARCHETYPE_TERM t in definitions[0].items)
-                {
-                    if (NumberOfSpecialisations == 0)
-                    {
-                        counters.Add(int.Parse(t.code.Substring(2))); //leave the at off the front
-                    }
-                    else if (number_of(Char.Parse("."), t.code) == NumberOfSpecialisations)
-                    {
-                        counters.Add(int.Parse(t.code.Substring(t.code.LastIndexOf(".") + 1)));
-                    }
-                }
-            }
-
-            int i = 1;
-
-            while (counters.Contains(i))
-            {
-                i++;
-            }
-
-            if (NumberOfSpecialisations == 0)
-                return "at" + i.ToString().PadLeft(4, Char.Parse("0"));
-            else
-            {
-                string result = "at";
-
-                for (i = 0; i < NumberOfSpecialisations; i++)
-                {
-                    result += "0.";
-                }
-
-                result += i.ToString();
-                return result;
-            }
+            return NextTermOrConstraintId(_archetype.ontology.term_definitions, "at");
         }
 
         public string NextConstraintId()
         {
-            ArrayList counters = new ArrayList();
-            CodeDefinitionSet[] definitions = _archetype.ontology.constraint_definitions;
+            return NextTermOrConstraintId(_archetype.ontology.constraint_definitions, "ac");
+        }
+
+        protected string NextTermOrConstraintId(CodeDefinitionSet[] definitions, string prefix)
+        {
+            string result = prefix;
+            int next = 1;
 
             if (definitions != null && definitions.Length > 0 && definitions[0].items != null)
             {
                 foreach (ARCHETYPE_TERM t in definitions[0].items)
                 {
+                    string code = "";
+
                     if (NumberOfSpecialisations == 0)
                     {
-                        counters.Add(int.Parse(t.code.Substring(2))); //leave the ac off the front
+                        code = t.code.Replace(prefix, "");
                     }
-                    else if (number_of(Char.Parse("."), t.code) == NumberOfSpecialisations)
+                    else
                     {
-                        counters.Add(int.Parse(t.code.Substring(t.code.LastIndexOf(".") + 1)));
+                        string[] split = t.code.Split('.');
+                        int n = split.Length - 1;
+
+                        if (NumberOfSpecialisations == n)
+                            code = split[n];
                     }
+
+                    int i = 0;
+
+                    if (int.TryParse(code, out i) && next <= i)
+                        next = i + 1;
                 }
             }
 
-            int i = 1;
-
-            while (counters.Contains(i))
-            {
-                i++;
-            }
-
             if (NumberOfSpecialisations == 0)
-                return "ac" + i.ToString().PadRight(4, Char.Parse("0"));
+                result += next.ToString().PadLeft(4, Char.Parse("0"));
             else
             {
-                string result = "ac";
-
-                for (i = 0; i < NumberOfSpecialisations; i++)
+                for (int i = 0; i < NumberOfSpecialisations; i++)
                 {
                     result += "0.";
                 }
 
-                result += i.ToString();
-                return result;
-            }
-        }
-
-        private int number_of(char c, string a_string)
-        {
-            int i = 0;
-
-            foreach (char cc in a_string.ToCharArray())
-            {
-                if (cc == c)
-                    i++;
+                result += next.ToString();
             }
 
-            return i;
+            return result;
         }
 
         public void AddTermOrConstraintDefinition(ARCHETYPE_TERM a_term, bool isLoading)

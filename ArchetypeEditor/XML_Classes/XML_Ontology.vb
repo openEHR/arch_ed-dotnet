@@ -20,7 +20,6 @@ Namespace ArchetypeEditor.XML_Classes
     Friend Class XML_Ontology
         Inherits Ontology
         Private archetypeParser As XMLParser.XmlArchetypeParser
-        Private sLanguageCode As String
 
         Public Overrides ReadOnly Property PrimaryLanguageCode() As String
             Get
@@ -29,7 +28,7 @@ Namespace ArchetypeEditor.XML_Classes
         End Property
         Public Overrides ReadOnly Property LanguageCode() As String
             Get
-                Return sLanguageCode
+                Return archetypeParser.Ontology.LanguageCode
             End Get
         End Property
 
@@ -148,7 +147,6 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Public Overrides Sub SetLanguage(ByVal language As String)
-            sLanguageCode = language
             archetypeParser.Ontology.SetLanguage(language)
         End Sub
 
@@ -193,7 +191,7 @@ Namespace ArchetypeEditor.XML_Classes
         Public Overrides Sub AddTerm(ByVal term As RmTerm)
             Try
                 If Not archetypeParser.Ontology.HasTermCode(term.Code) Then
-                    archetypeParser.Ontology.AddTermOrConstraintDefinition(sLanguageCode, New XML_Term(term).XML_Term, False)
+                    archetypeParser.Ontology.AddTermOrConstraintDefinition(LanguageCode, New XML_Term(term).XML_Term, False)
                 Else
                     Debug.Assert(False)
                 End If
@@ -209,7 +207,7 @@ Namespace ArchetypeEditor.XML_Classes
                 If term.Language <> "" Then
                     language = term.Language
                 Else
-                    language = archetypeParser.Ontology.LanguageCode
+                    language = LanguageCode
                 End If
 
                 Try
@@ -223,7 +221,7 @@ Namespace ArchetypeEditor.XML_Classes
                 End Try
             Else
                 Debug.Assert(False, "Term is a constraint and should not be passed")
-            End If
+                End If
         End Sub
 
         Public Overrides Function HasTermCode(ByVal termCode As String) As Boolean
@@ -236,7 +234,23 @@ Namespace ArchetypeEditor.XML_Classes
             If term.IsConstraint Then
                 Try
                     If Not archetypeParser.Ontology.HasTermCode(term.Code) Then
-                        archetypeParser.Ontology.AddTermOrConstraintDefinition(archetypeParser.Ontology.LanguageCode, New XML_Term(term).XML_Term, False)
+                        archetypeParser.Ontology.AddTermOrConstraintDefinition(LanguageCode, New XML_Term(term).XML_Term, False)
+                    Else
+                        Debug.Assert(False, "Constraint code not available: " & term.Code)
+                    End If
+                Catch e As Exception
+                    Debug.Assert(False, e.Message)
+                End Try
+            Else
+                Debug.Assert(False, "Code is not a constraint code: " & term.Code)
+            End If
+        End Sub
+
+        Public Overrides Sub ReplaceConstraint(ByVal term As RmTerm, Optional ByVal replaceTranslations As Boolean = False)
+            If term.IsConstraint Then
+                Try
+                    If archetypeParser.Ontology.HasTermCode(term.Code) Then
+                        archetypeParser.Ontology.ReplaceTermDefinition(LanguageCode, New XML_Term(term).XML_Term, replaceTranslations)
                     Else
                         Debug.Assert(False, "Constraint code not available: " & term.Code)
                     End If
@@ -282,22 +296,6 @@ Namespace ArchetypeEditor.XML_Classes
                 Dim term As XML_Term = New XML_Term(CStr(row(1)), CStr(row(2)), CStr(row(3)))
                 archetypeParser.Ontology.AddTermOrConstraintDefinition(CStr(row(0)), term.XML_Term, True)
             Next
-        End Sub
-
-        Public Overrides Sub ReplaceConstraint(ByVal term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
-            If term.IsConstraint Then
-                Try
-                    If archetypeParser.Ontology.HasTermCode(term.Code) Then
-                        archetypeParser.Ontology.ReplaceTermDefinition(archetypeParser.Ontology.LanguageCode, New XML_Term(term).XML_Term, ReplaceTranslations)
-                    Else
-                        Debug.Assert(False, "Constraint code not available: " & term.Code)
-                    End If
-                Catch e As Exception
-                    Debug.Assert(False, e.Message)
-                End Try
-            Else
-                Debug.Assert(False, "Code is not a constraint code: " & term.Code)
-            End If
         End Sub
 
         Private Sub PopulateLanguages(ByRef ontologyManager As OntologyManager)

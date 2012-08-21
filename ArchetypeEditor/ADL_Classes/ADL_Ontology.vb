@@ -23,7 +23,6 @@ Namespace ArchetypeEditor.ADL_Classes
     Friend Class ADL_Ontology
         Inherits Ontology
         Private EIF_adlInterface As openehr.adl_parser.interface.ADL_INTERFACE
-        Private sLanguageCode As String
 
         Public Overrides ReadOnly Property PrimaryLanguageCode() As String
             Get
@@ -219,7 +218,6 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Public Overrides Sub SetLanguage(ByVal code As String)
-            sLanguageCode = code
             EIF_adlInterface.set_current_language(Eiffel.String(code))
         End Sub
 
@@ -277,29 +275,27 @@ Namespace ArchetypeEditor.ADL_Classes
             Return result
         End Function
 
-        Public Overrides Sub AddTerm(ByVal a_Term As RmTerm)
+        Public Overrides Sub AddTerm(ByVal term As RmTerm)
             If EIF_adlInterface.archetype_available Then
-                Dim an_adl_Term As New ADL_Term(a_Term)
+                Dim adlTerm As New ADL_Term(term)
 
-                If Not a_Term.IsConstraint Then
+                If Not term.IsConstraint Then
                     Try
-                        If Not EIF_adlInterface.ontology.has_term_code(an_adl_Term.EIF_Term.code) Then
-                            EIF_adlInterface.ontology.add_term_definition(EIF_adlInterface.current_language, an_adl_Term.EIF_Term)
+                        If Not EIF_adlInterface.ontology.has_term_code(adlTerm.EIF_Term.code) Then
+                            EIF_adlInterface.ontology.add_term_definition(EIF_adlInterface.current_language, adlTerm.EIF_Term)
                         Else
                             Debug.Assert(False)
                         End If
-
                     Catch e As Exception
                         Debug.Assert(False, e.ToString)
                     End Try
                 Else
                     Try
-                        If Not EIF_adlInterface.ontology.has_constraint_code(an_adl_Term.EIF_Term.code) Then
-                            EIF_adlInterface.ontology.add_constraint_definition(EIF_adlInterface.current_language, an_adl_Term.EIF_Term)
+                        If Not EIF_adlInterface.ontology.has_constraint_code(adlTerm.EIF_Term.code) Then
+                            EIF_adlInterface.ontology.add_constraint_definition(EIF_adlInterface.current_language, adlTerm.EIF_Term)
                         Else
                             Debug.Assert(False)
                         End If
-
                     Catch e As Exception
                         Debug.Assert(False, e.ToString)
                     End Try
@@ -307,25 +303,23 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        Public Overrides Sub ReplaceTerm(ByVal a_Term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
+        Public Overrides Sub ReplaceTerm(ByVal term As RmTerm, Optional ByVal replaceTranslations As Boolean = False)
             If EIF_adlInterface.archetype_available Then
-                Dim an_adl_Term As ADL_Term
-                Dim language_code As EiffelKernel.STRING_8
+                If Not term.IsConstraint Then
+                    Dim adlTerm As ADL_Term = New ADL_Term(term)
+                    Dim language As EiffelKernel.STRING_8
 
-                If Not a_Term.IsConstraint Then
-                    an_adl_Term = New ADL_Term(a_Term)
-
-                    If a_Term.Language <> "" Then
-                        language_code = Eiffel.String(a_Term.Language)
+                    If term.Language <> "" Then
+                        language = Eiffel.String(term.Language)
                     Else
-                        language_code = EIF_adlInterface.current_language
+                        language = EIF_adlInterface.current_language
                     End If
 
                     Try
-                        If EIF_adlInterface.ontology.has_term_code(an_adl_Term.EIF_Term.code) Then
-                            EIF_adlInterface.ontology.replace_term_definition(language_code, an_adl_Term.EIF_Term, ReplaceTranslations)
+                        If EIF_adlInterface.ontology.has_term_code(adlTerm.EIF_Term.code) Then
+                            EIF_adlInterface.ontology.replace_term_definition(language, adlTerm.EIF_Term, replaceTranslations)
                         Else
-                            Debug.Assert(False, "Term code is not available: " & an_adl_Term.Code)
+                            Debug.Assert(False, "Term code is not available: " & adlTerm.Code)
                         End If
                     Catch e As Exception
                         Debug.Assert(False, e.Message)
@@ -336,73 +330,52 @@ Namespace ArchetypeEditor.ADL_Classes
             End If
         End Sub
 
-        'Not used as not safe - better to remove unused terms when saving the archetype
-
-        'Public Overrides Sub DeleteTerm(ByVal a_Term As RmTerm)
-        '    Dim an_adl_Term As ADL_Term
-
-        '    an_adl_Term = New ADL_Term(a_Term)
-        '    Try
-        '        If EIF_adlInterface.ontology.has_term_code(an_adl_Term.EIF_Term.code) Then
-        '            If an_adl_Term.isConstraint Then
-        '                EIF_adlInterface.ontology.remove_constraint_definition(an_adl_Term.EIF_Term)
-        '            Else
-        '                EIF_adlInterface.ontology.remove_term_definition(an_adl_Term.EIF_Term)
-        '            End If
-        '        Else
-        '            Debug.Assert(False, "Term code is not available: " & an_adl_Term.Code)
-        '        End If
-        '    Catch e As Exception
-        '        Debug.Assert(False, e.Message)
-        '    End Try
-        'End Sub
-
-        Public Overrides Function HasTermCode(ByVal a_term_code As String) As Boolean
+        Public Overrides Function HasTermCode(ByVal termCode As String) As Boolean
             Dim result As Boolean = False
 
-            If RmTerm.IsValidTermCode(a_term_code) And EIF_adlInterface.archetype_available Then
-                result = EIF_adlInterface.ontology.has_term_code(Eiffel.String(a_term_code)) Or EIF_adlInterface.ontology.has_constraint_code(Eiffel.String(a_term_code))
+            If RmTerm.IsValidTermCode(termCode) And EIF_adlInterface.archetype_available Then
+                result = EIF_adlInterface.ontology.has_term_code(Eiffel.String(termCode)) Or EIF_adlInterface.ontology.has_constraint_code(Eiffel.String(termCode))
             End If
 
             Return result
         End Function
 
-        Public Overrides Sub AddConstraint(ByVal a_term As RmTerm)
+        Public Overrides Sub AddConstraint(ByVal term As RmTerm)
             If EIF_adlInterface.archetype_available Then
-                If a_term.IsConstraint Then
-                    Dim an_adl_Term As New ADL_Term(a_term)
+                If term.IsConstraint Then
+                    Dim adlTerm As New ADL_Term(term)
 
                     Try
-                        If Not EIF_adlInterface.ontology.has_constraint_code(an_adl_Term.EIF_Term.code) Then
-                            EIF_adlInterface.ontology.add_constraint_definition(EIF_adlInterface.current_language, an_adl_Term.EIF_Term)
+                        If Not EIF_adlInterface.ontology.has_constraint_code(adlTerm.EIF_Term.code) Then
+                            EIF_adlInterface.ontology.add_constraint_definition(EIF_adlInterface.current_language, adlTerm.EIF_Term)
                         Else
-                            Debug.Assert(False, "Constraint code not available: " & an_adl_Term.Code)
+                            Debug.Assert(False, "Constraint code not available: " & adlTerm.Code)
                         End If
                     Catch e As Exception
                         Debug.Assert(False, e.Message)
                     End Try
                 Else
-                    Debug.Assert(False, "Code is not a constraint code: " & a_term.Code)
+                    Debug.Assert(False, "Code is not a constraint code: " & term.Code)
                 End If
             End If
         End Sub
 
-        Public Overrides Sub ReplaceConstraint(ByVal a_term As RmTerm, Optional ByVal ReplaceTranslations As Boolean = False)
+        Public Overrides Sub ReplaceConstraint(ByVal term As RmTerm, Optional ByVal replaceTranslations As Boolean = False)
             If EIF_adlInterface.archetype_available Then
-                If a_term.IsConstraint Then
-                    Dim an_adl_Term As New ADL_Term(a_term)
+                If term.IsConstraint Then
+                    Dim adlTerm As New ADL_Term(term)
 
                     Try
-                        If EIF_adlInterface.ontology.has_constraint_code(an_adl_Term.EIF_Term.code) Then
-                            EIF_adlInterface.ontology.replace_constraint_definition(EIF_adlInterface.current_language, an_adl_Term.EIF_Term, ReplaceTranslations)
+                        If EIF_adlInterface.ontology.has_constraint_code(adlTerm.EIF_Term.code) Then
+                            EIF_adlInterface.ontology.replace_constraint_definition(EIF_adlInterface.current_language, adlTerm.EIF_Term, replaceTranslations)
                         Else
-                            Debug.Assert(False, "Constraint code not available: " & an_adl_Term.Code)
+                            Debug.Assert(False, "Constraint code not available: " & adlTerm.Code)
                         End If
                     Catch e As Exception
                         Debug.Assert(False, e.Message)
                     End Try
                 Else
-                    Debug.Assert(False, "Code is not a constraint code: " & a_term.Code)
+                    Debug.Assert(False, "Code is not a constraint code: " & term.Code)
                 End If
             End If
         End Sub
