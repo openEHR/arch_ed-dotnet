@@ -138,11 +138,11 @@ Public Class Designer
     Friend WithEvents PanelMain As System.Windows.Forms.Panel
     Friend WithEvents PanelHeader As System.Windows.Forms.Panel
     Friend WithEvents LogoPictureBox As System.Windows.Forms.PictureBox
-    Friend WithEvents cbPersonState As System.Windows.Forms.CheckBox
+    Friend WithEvents cbPersonStateWithEventSeries As System.Windows.Forms.CheckBox
     Friend WithEvents PanelRoot As System.Windows.Forms.Panel
     Friend WithEvents cbProtocol As System.Windows.Forms.CheckBox
     Friend WithEvents PanelConfigStructure As System.Windows.Forms.Panel
-    Friend WithEvents cbStructurePersonState As System.Windows.Forms.CheckBox
+    Friend WithEvents cbPersonState As System.Windows.Forms.CheckBox
     Friend WithEvents TabMain As Crownwood.Magic.Controls.TabControl
     Friend WithEvents TabTerminology As Crownwood.Magic.Controls.TabControl
     Friend WithEvents TabDesign As Crownwood.Magic.Controls.TabControl
@@ -247,11 +247,11 @@ Public Class Designer
         Me.tpConceptComment = New System.Windows.Forms.TabPage
         Me.txtConceptComment = New System.Windows.Forms.TextBox
         Me.PanelConfigStructure = New System.Windows.Forms.Panel
-        Me.cbStructurePersonState = New System.Windows.Forms.CheckBox
+        Me.cbPersonState = New System.Windows.Forms.CheckBox
         Me.chkEventSeries = New System.Windows.Forms.CheckBox
         Me.PanelRoot = New System.Windows.Forms.Panel
         Me.cbParticipation = New System.Windows.Forms.CheckBox
-        Me.cbPersonState = New System.Windows.Forms.CheckBox
+        Me.cbPersonStateWithEventSeries = New System.Windows.Forms.CheckBox
         Me.cbProtocol = New System.Windows.Forms.CheckBox
         Me.ConstraintDefinitionsDataGrid = New System.Windows.Forms.DataGrid
         Me.DataGridTableStyle2 = New System.Windows.Forms.DataGridTableStyle
@@ -535,7 +535,7 @@ Public Class Designer
         'PanelConfigStructure
         '
         Me.PanelConfigStructure.BackColor = System.Drawing.Color.LightGoldenrodYellow
-        Me.PanelConfigStructure.Controls.Add(Me.cbStructurePersonState)
+        Me.PanelConfigStructure.Controls.Add(Me.cbPersonState)
         Me.PanelConfigStructure.Controls.Add(Me.chkEventSeries)
         Me.PanelConfigStructure.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelConfigStructure.Location = New System.Drawing.Point(0, 0)
@@ -544,18 +544,17 @@ Public Class Designer
         Me.PanelConfigStructure.Size = New System.Drawing.Size(969, 24)
         Me.PanelConfigStructure.TabIndex = 9
         '
-        'cbStructurePersonState
+        'cbPersonState
         '
-        Me.cbStructurePersonState.Location = New System.Drawing.Point(240, 4)
-        Me.cbStructurePersonState.Name = "cbStructurePersonState"
-        Me.cbStructurePersonState.Size = New System.Drawing.Size(192, 20)
-        Me.cbStructurePersonState.TabIndex = 31
-        Me.cbStructurePersonState.Text = "Person State"
-        Me.ToolTip1.SetToolTip(Me.cbStructurePersonState, "Information about the person that influences the interpretation")
+        Me.cbPersonState.Location = New System.Drawing.Point(240, 4)
+        Me.cbPersonState.Name = "cbPersonState"
+        Me.cbPersonState.Size = New System.Drawing.Size(192, 20)
+        Me.cbPersonState.TabIndex = 31
+        Me.cbPersonState.Text = "Person State"
+        Me.ToolTip1.SetToolTip(Me.cbPersonState, "Information about the person that influences the interpretation")
         '
         'chkEventSeries
         '
-        Me.chkEventSeries.Enabled = False
         Me.chkEventSeries.Location = New System.Drawing.Point(38, 0)
         Me.chkEventSeries.Name = "chkEventSeries"
         Me.chkEventSeries.Size = New System.Drawing.Size(197, 24)
@@ -567,7 +566,7 @@ Public Class Designer
         '
         Me.PanelRoot.BackColor = System.Drawing.Color.LightYellow
         Me.PanelRoot.Controls.Add(Me.cbParticipation)
-        Me.PanelRoot.Controls.Add(Me.cbPersonState)
+        Me.PanelRoot.Controls.Add(Me.cbPersonStateWithEventSeries)
         Me.PanelRoot.Controls.Add(Me.cbProtocol)
         Me.PanelRoot.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelRoot.Location = New System.Drawing.Point(0, 0)
@@ -584,15 +583,14 @@ Public Class Designer
         Me.cbParticipation.Text = "Participation"
         Me.ToolTip1.SetToolTip(Me.cbParticipation, "About who participated in what has been recorded")
         '
-        'cbPersonState
+        'cbPersonStateWithEventSeries
         '
-        Me.cbPersonState.Enabled = False
-        Me.cbPersonState.Location = New System.Drawing.Point(439, 9)
-        Me.cbPersonState.Name = "cbPersonState"
-        Me.cbPersonState.Size = New System.Drawing.Size(190, 16)
-        Me.cbPersonState.TabIndex = 31
-        Me.cbPersonState.Text = "Person State with EventSeries"
-        Me.ToolTip1.SetToolTip(Me.cbPersonState, "Only for situations where 'state' information requires a EventSeries event")
+        Me.cbPersonStateWithEventSeries.Location = New System.Drawing.Point(439, 9)
+        Me.cbPersonStateWithEventSeries.Name = "cbPersonStateWithEventSeries"
+        Me.cbPersonStateWithEventSeries.Size = New System.Drawing.Size(190, 16)
+        Me.cbPersonStateWithEventSeries.TabIndex = 31
+        Me.cbPersonStateWithEventSeries.Text = "Person State with EventSeries"
+        Me.ToolTip1.SetToolTip(Me.cbPersonStateWithEventSeries, "Only for situations where 'state' information requires a EventSeries event")
         '
         'cbProtocol
         '
@@ -1963,9 +1961,7 @@ Public Class Designer
         If mFileManager.Archetype.hasData Then
             Select Case mFileManager.Archetype.RmEntity
 
-                Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, _
-                    StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
-
+                Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.OBSERVATION, StructureType.INSTRUCTION, StructureType.ADMIN_ENTRY, StructureType.ACTION
                     Dim rm As RmStructureCompound
                     ' allow restriction of subject of data
                     InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
@@ -1983,12 +1979,11 @@ Public Class Designer
                                     Case StructureType.Data
                                         ProcessEventSeries(rm)
                                     Case StructureType.Protocol
-                                        ProcessProtocol(rm, Me.TabDesign)
+                                        ProcessProtocol(rm, TabDesign)
                                 End Select
                             Next
 
                         Case StructureType.OBSERVATION
-
                             If CType(mFileManager.Archetype.Definition, RmEntry).HasParticipationConstraint Then
                                 cbParticipation.Checked = True
                                 SetUpParticipations()
@@ -2023,7 +2018,7 @@ Public Class Designer
 
                                     Case StructureType.Protocol
                                         Debug.Assert(rm.Children.Count > 0)
-                                        ProcessProtocol(rm.Children.Items(0), Me.TabDesign)
+                                        ProcessProtocol(rm.Children.Items(0), TabDesign)
                                 End Select
                             Next
 
@@ -2042,7 +2037,7 @@ Public Class Designer
                                             ProcessDataStructure(rm.Children.Items(0))
                                         End If
                                     Case StructureType.Protocol
-                                        ProcessProtocol(rm.Children.Items(0), Me.TabDesign)
+                                        ProcessProtocol(rm.Children.Items(0), TabDesign)
                                 End Select
                             Next
 
@@ -2090,7 +2085,6 @@ Public Class Designer
                             If rm.Children.Count > 0 Then
                                 ProcessDataStructure(rm.Children.Items(0))
                             End If
-
                     End Select
 
                     ' fill the subject of data if required
@@ -2350,10 +2344,9 @@ Public Class Designer
         'Entry tab on designer
         cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, cbProtocol.Text, language)
         cbParticipation.Text = Filemanager.GetOpenEhrTerm(654, cbParticipation.Text, language)
-        cbPersonState.Text = Filemanager.GetOpenEhrTerm(79, cbPersonState.Text, language)
+        cbPersonStateWithEventSeries.Text = Filemanager.GetOpenEhrTerm(79, cbPersonStateWithEventSeries.Text, language)
         chkEventSeries.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(80, chkEventSeries.Text, language), Filemanager.GetOpenEhrTerm(81, chkEventSeries.Text, language))
-        cbStructurePersonState.Text = Filemanager.GetOpenEhrTerm(82, cbStructurePersonState.Text, language)
-        cbProtocol.Text = Filemanager.GetOpenEhrTerm(78, cbProtocol.Text, language)
+        cbPersonState.Text = Filemanager.GetOpenEhrTerm(82, cbPersonState.Text, language)
 
         'Display tab on Designer
         butPrint.Text = Filemanager.GetOpenEhrTerm(520, butPrint.Text, language)
@@ -2674,7 +2667,7 @@ Public Class Designer
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(690, "Copyright")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(691, "References")))
         text.WriteLine(String.Format("<td width=""33%""><h4>{0}</h4></td>", Filemanager.GetOpenEhrTerm(704, "Contact")))
-        
+
         text.WriteLine("</tr>")
         text.WriteLine("<tr>")
 
@@ -2936,16 +2929,14 @@ Public Class Designer
         tabComment.SelectedIndex = 0
 
         'set the other pages
-        cbStructurePersonState.Checked = False
-        cbStructurePersonState.Visible = False
         cbPersonState.Checked = False
-        cbPersonState.Visible = False
+        cbPersonState.Hide()
+        cbPersonStateWithEventSeries.Checked = False
+        cbPersonStateWithEventSeries.Hide()
         chkEventSeries.Checked = False
-        chkEventSeries.Visible = False
+        chkEventSeries.Hide()
         cbProtocol.Checked = False
-        cbProtocol.Visible = False
-        cbStructurePersonState.Checked = False
-        cbStructurePersonState.Visible = False
+        cbProtocol.Hide()
 
         'set the display panel to nothing
         mRichTextArchetype.Clear()
@@ -2994,38 +2985,30 @@ Public Class Designer
         End If
     End Sub
 
-    Public Sub ShowTabPages(ByVal archetyped_class As StructureType, ByVal isNew As Boolean)
-
+    Protected Sub ShowTabPages(ByVal archetypedClass As StructureType, ByVal isNew As Boolean)
         'layout of the pages to match the archetyped class
         'Compositions, Sections and Instructions use the tpSectionPage which is generic - probably a bad name!
 
-        Select Case archetyped_class
-
+        Select Case archetypedClass
             Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
                 ' enable restriction of subject of care
                 If isNew Then
                     InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
                 End If
+
                 'need to check not changing from section
-                If Me.TabMain.TabPages.Contains(Me.tpSectionPage) Then
-                    Me.TabMain.TabPages.Remove(Me.tpSectionPage)
-                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpDesign"))
+                If TabMain.TabPages.Contains(tpSectionPage) Then
+                    TabMain.TabPages.Remove(tpSectionPage)
+                    TabMain.TabPages.Insert(1, mBaseTabPagesCollection("tpDesign"))
                 End If
 
-                Select Case archetyped_class
-                    Case StructureType.ADMIN_ENTRY, StructureType.ENTRY
-                        'no protocol, state or EventSeries
-                        Me.cbPersonState.Visible = False
-                        Me.cbStructurePersonState.Visible = False
-                        Me.cbProtocol.Visible = False
+                Select Case archetypedClass
                     Case StructureType.EVALUATION
-                        Me.cbPersonState.Visible = False
-                        Me.cbStructurePersonState.Visible = False
-                        Me.cbProtocol.Visible = True
+                        cbProtocol.Show()
                     Case StructureType.OBSERVATION
-                        Me.cbPersonState.Visible = True
-                        Me.cbStructurePersonState.Visible = True
-                        Me.cbProtocol.Visible = True
+                        cbPersonStateWithEventSeries.Show()
+                        cbPersonState.Show()
+                        cbProtocol.Show()
                 End Select
 
             Case StructureType.INSTRUCTION
@@ -3070,14 +3053,11 @@ Public Class Designer
                     InitialiseRestrictedSet(RestrictedSet.TermSet.Setting)
                 End If
 
-
                 'need to check not changing from Evaluation, Observation
                 If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
                     Me.TabMain.TabPages.Remove(Me.tpDesign)
                     Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
                 End If
-
-                'Me.tpSectionPage.Title = ReferenceModel.ArchetypedClass.ToString
 
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 ' disable restriction of subject of care
@@ -3090,8 +3070,6 @@ Public Class Designer
                     Me.TabMain.TabPages.Remove(Me.tpDesign)
                     Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
                 End If
-
-                'Me.tpSectionPage.Title = ReferenceModel.StructureClass.ToString
 
             Case StructureType.Cluster
                 If isNew Then
@@ -3111,7 +3089,6 @@ Public Class Designer
                     Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
                 End If
         End Select
-
     End Sub
 
     Private Function CheckOKtoClose() As Boolean
@@ -3172,8 +3149,6 @@ Public Class Designer
 
     Private Sub SetUpEventSeries(Optional ByVal NodeId As String = "")
         Dim tp As New Crownwood.Magic.Controls.TabPage
-        Dim file_loading As Boolean
-
         mTabPageDataEventSeries = New TabpageHistory
         tp.Name = "tpDataEventSeries"
         tp.Title = Filemanager.GetOpenEhrTerm(133, "Events")
@@ -3183,13 +3158,11 @@ Public Class Designer
         mTabPageDataEventSeries.Dock = DockStyle.Fill
         TabStructure.TabPages.Add(tp)
 
-        file_loading = mFileManager.FileLoading
+        Dim wasLoading As Boolean = mFileManager.FileLoading
         mFileManager.FileLoading = True
-        ' this creates a new EventSeries unless fileloading set to true
-        ' which happens when creating a new archetype
+        ' this creates a new EventSeries unless fileloading set to true which happens when creating a new archetype
         chkEventSeries.Checked = True
-        ' now put it back to how it was
-        mFileManager.FileLoading = file_loading
+        mFileManager.FileLoading = wasLoading
 
         If NodeId = "" Then
             ' a new EventSeries so set Id and add a baseline event as default
@@ -3233,7 +3206,7 @@ Public Class Designer
         HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_instruction.htm")
     End Sub
 
-    Private Sub SetUpGUI(ByVal archetyped_class As StructureType, ByVal isNew As Boolean)
+    Private Sub SetUpGUI(ByVal archetypedClass As StructureType, ByVal isNew As Boolean)
         'NOTE: Showing tabpages in the editor requires generating
         'IDs for the structural components (e.g. EventSeries and List)
         'This feature cannot be run unless the Ontology is initialised
@@ -3241,11 +3214,8 @@ Public Class Designer
             Beep()
             Debug.Assert(False)
         Else
-            Select Case archetyped_class
+            Select Case archetypedClass
                 Case StructureType.OBSERVATION
-                    'must have a EventSeries
-                    cbPersonState.Visible = True
-
                     If isNew Then
                         SetUpDataStructure()
                         SetUpEventSeries()
@@ -3302,10 +3272,9 @@ Public Class Designer
                     Beep()
                     Debug.Assert(False)
                     Throw New Exception(String.Format("{0}: {1}", AE_Constants.Instance.ErrorLoading, mFileManager.Archetype.Archetype_ID.ToString))
-
             End Select
 
-            ShowTabPages(archetyped_class, isNew)
+            ShowTabPages(archetypedClass, isNew)
 
             lblLifecycle.Text = mFileManager.Archetype.LifeCycle
             lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
@@ -3642,9 +3611,9 @@ Public Class Designer
 #Region "Methods to build the GUI when an archetype is loaded"
 
     Private Sub ProcessStateEventSeries(ByVal history As RmHistory)
-        cbPersonState.Checked = True
+        cbPersonStateWithEventSeries.Checked = True
         'cannot have state associated with structure
-        cbStructurePersonState.Enabled = False
+        cbPersonState.Enabled = False
         TabDesign.TabPages.Add(mBaseTabPagesCollection.Item("tpRootState"))
         tpRootState.Visible = True
 
@@ -3684,7 +3653,7 @@ Public Class Designer
         Dim tp As New Crownwood.Magic.Controls.TabPage
         mTabPageDataStateStructure = New TabPageStructure
         mTabPageDataStateStructure.IsState = True
-        cbStructurePersonState.Checked = True
+        cbPersonState.Checked = True
 
         If struct.Type = StructureType.Slot Then
             mTabPageDataStateStructure.ProcessSlot(CType(struct, RmSlot))
@@ -3935,7 +3904,7 @@ Public Class Designer
                             For Each tp In Me.TabStructure.TabPages
                                 Select Case tp.Name
                                     Case "tpDataEventSeries"
-                                        If Me.chkEventSeries.Checked Then
+                                        If chkEventSeries.Checked Then
                                             If Not mTabPageDataEventSeries Is Nothing Then
                                                 Dim RmHistory As RmHistory
                                                 RmHistory = mTabPageDataEventSeries.SaveAsEventSeries()
@@ -3949,7 +3918,7 @@ Public Class Designer
                                         End If
 
                                     Case "tpDataStructure"
-                                        If Not Me.chkEventSeries.Checked Then
+                                        If Not chkEventSeries.Checked Then
                                             If Not mTabPageDataStructure Is Nothing Then
                                                 Dim rm As RmStructureCompound
                                                 rm = New RmStructureCompound(StructureType.Data.ToString, StructureType.Data)
@@ -4165,41 +4134,37 @@ Public Class Designer
 #Region "Functions associated with GUI widgets"
 
     Private Sub chkEventSeries_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkEventSeries.CheckedChanged
-
         ' only proceed if in interactive state
-        If mFileManager.FileLoading Then Return
-
-        If chkEventSeries.Checked Then
-            If mTabPagesCollection.Contains("tpDataEventSeries") Then
-                ' if one is already built
-                Me.TabStructure.TabPages.Add(mTabPagesCollection.Item("tpDataEventSeries"))
-            Else
-                SetUpEventSeries()
-            End If
-            ' now set the selected tab page to this one
-            Dim i As Integer
-            For i = 0 To Me.TabStructure.TabPages.Count - 1
-                If Me.TabStructure.TabPages(i).Name = "tpDataEventSeries" Then
-                    Me.TabStructure.SelectedIndex = i
+        If Not mFileManager.FileLoading Then
+            If chkEventSeries.Checked Then
+                If mTabPagesCollection.Contains("tpDataEventSeries") Then
+                    ' if one is already built
+                    TabStructure.TabPages.Add(mTabPagesCollection.Item("tpDataEventSeries"))
+                Else
+                    SetUpEventSeries()
                 End If
-            Next
-        Else
-            Dim tp As Crownwood.Magic.Controls.TabPage
-            For Each tp In Me.TabStructure.TabPages
-                If tp.Name = "tpDataEventSeries" Then
-                    If Not mTabPagesCollection.Contains("tpDataEventSeries") Then
-                        mTabPagesCollection.Add(tp.Name, tp)
+
+                ' now set the selected tab page to this one
+                For i As Integer = 0 To Me.TabStructure.TabPages.Count - 1
+                    If TabStructure.TabPages(i).Name = "tpDataEventSeries" Then
+                        TabStructure.SelectedIndex = i
                     End If
-                    Me.TabStructure.TabPages.Remove(tp)
-                    Exit For
-                End If
-            Next
+                Next
+            Else
+                For Each tp As Crownwood.Magic.Controls.TabPage In TabStructure.TabPages
+                    If tp.Name = "tpDataEventSeries" Then
+                        If Not mTabPagesCollection.Contains("tpDataEventSeries") Then
+                            mTabPagesCollection.Add(tp.Name, tp)
+                        End If
+
+                        TabStructure.TabPages.Remove(tp)
+                        Exit For
+                    End If
+                Next
+            End If
+
+            mFileManager.FileEdited = True
         End If
-
-        If mFileManager.FileLoading Then Exit Sub
-
-        mFileManager.FileEdited = True
-
     End Sub
 
     Private Sub txtConceptInFull_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtConceptInFull.TextChanged
@@ -4208,7 +4173,7 @@ Public Class Designer
             mFileManager.FileEdited = True
             UpdateTitle()
 
-            If Me.gbSpecialisation.Visible Then
+            If gbSpecialisation.Visible Then
                 UpdateSpecialisationTree(Me.txtConceptInFull.Text, mFileManager.Archetype.ConceptCode)
             End If
         End If
@@ -4345,140 +4310,133 @@ Public Class Designer
 
     Private Sub cbProtocol_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbProtocol.CheckedChanged
         If Not mFileManager.FileLoading Then
-            ProtocolCheckChanged(Me.TabDesign, Me.cbProtocol.Checked)
+            ProtocolCheckChanged(TabDesign, cbProtocol.Checked)
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub cbParticipation_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbParticipation.CheckedChanged
-        ParticipationCheckChanged(Me.TabDesign, Me.cbParticipation.Checked)
+        ParticipationCheckChanged(TabDesign, cbParticipation.Checked)
 
         If Not mFileManager.FileLoading Then
             mFileManager.FileEdited = True
         End If
     End Sub
 
-    Private Sub cbStructurePersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbStructurePersonState.CheckedChanged
-        If cbStructurePersonState.Checked Then
+    Private Sub cbPersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbPersonState.CheckedChanged
+        If cbPersonState.Checked Then
             'cannot have rootstate - 'Person State With EventSeries'
-            Me.cbPersonState.Enabled = False
+            cbPersonStateWithEventSeries.Enabled = False
 
-            If mFileManager.FileLoading Then Exit Sub
-
-            If mTabPagesCollection.Contains("tpStateStructure") Then
-                ' no State page added
-                Me.TabStructure.TabPages.Add(Me.mTabPagesCollection.Item("tpStateStructure"))
-            Else
-                ' no State page added
-                Dim tp As New Crownwood.Magic.Controls.TabPage
-
-                mTabPageDataStateStructure = New TabPageStructure
-                mTabPageDataStateStructure.IsState = True ' makes assumed value button/text box visible
-                'Adding it to this collection allows it to be removed
-                ' and then readded without losing the data
-                mComponentsCollection.Add(mTabPageDataStateStructure)
-                tp.Controls.Add(mTabPageDataStateStructure)
-                mTabPageDataStateStructure.Dock = DockStyle.Fill
-                tp.BackColor = System.Drawing.Color.RoyalBlue
-                tp.Name = "tpStateStructure"
-                ' add it to the collection incase it is needed again
-                mTabPagesCollection.Add(tp.Name, tp)
-                tp.Title = AE_Constants.Instance.Person_state
-                Me.TabStructure.TabPages.Add(tp)
-                Me.HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
-                Me.HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_state.htm")
-            End If
-
-            ' now set the selected tab page to this one
-            Dim i As Integer
-
-            For i = 0 To Me.TabStructure.TabPages.Count - 1
-                If Me.TabStructure.TabPages(i).Name = "tpStateStructure" Then
-                    Me.TabStructure.SelectedIndex = i
+            If Not mFileManager.FileLoading Then
+                If mTabPagesCollection.Contains("tpStateStructure") Then
+                    ' no State page added
+                    TabStructure.TabPages.Add(mTabPagesCollection.Item("tpStateStructure"))
+                Else
+                    ' no State page added
+                    Dim tp As New Crownwood.Magic.Controls.TabPage
+                    mTabPageDataStateStructure = New TabPageStructure
+                    mTabPageDataStateStructure.IsState = True ' makes assumed value button/text box visible
+                    'Adding it to this collection allows it to be removed and then readded without losing the data
+                    mComponentsCollection.Add(mTabPageDataStateStructure)
+                    tp.Controls.Add(mTabPageDataStateStructure)
+                    mTabPageDataStateStructure.Dock = DockStyle.Fill
+                    tp.BackColor = System.Drawing.Color.RoyalBlue
+                    tp.Name = "tpStateStructure"
+                    ' add it to the collection incase it is needed again
+                    mTabPagesCollection.Add(tp.Name, tp)
+                    tp.Title = AE_Constants.Instance.Person_state
+                    TabStructure.TabPages.Add(tp)
+                    HelpProviderDesigner.SetHelpNavigator(tp, HelpNavigator.Topic)
+                    HelpProviderDesigner.SetHelpKeyword(tp, "HowTo/edit_state.htm")
                 End If
-            Next
+
+                ' now set the selected tab page to this one
+                For i As Integer = 0 To TabStructure.TabPages.Count - 1
+                    If TabStructure.TabPages(i).Name = "tpStateStructure" Then
+                        TabStructure.SelectedIndex = i
+                    End If
+                Next
+            End If
         Else
             If mFileManager.FileLoading Then
-                Me.cbPersonState.Enabled = True
+                cbPersonStateWithEventSeries.Enabled = True
             Else
-                Dim tp As Crownwood.Magic.Controls.TabPage
+                If MessageBox.Show(AE_Constants.Instance.Remove_state, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                    cbPersonStateWithEventSeries.Enabled = True
 
-                If MessageBox.Show(AE_Constants.Instance.Remove_state, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
-                    Windows.Forms.DialogResult.OK Then
-                    Me.cbPersonState.Enabled = True
-                    For Each tp In Me.TabStructure.TabPages
+                    For Each tp As Crownwood.Magic.Controls.TabPage In TabStructure.TabPages
                         If tp.Name = "tpStateStructure" Then
-                            Me.TabStructure.TabPages.Remove(tp)
+                            TabStructure.TabPages.Remove(tp)
                             Exit For
                         End If
                     Next
+
                     mFileManager.FileEdited = True
                 Else
                     'cancel the checkChanged
                     mFileManager.FileLoading = True
-                    Me.cbStructurePersonState.Checked = True
+                    cbPersonState.Checked = True
                     mFileManager.FileLoading = False
                 End If
             End If
         End If
     End Sub
 
-    Private Sub cbPersonState_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbPersonState.CheckedChanged
-
+    Private Sub cbPersonStateWithEventSeries_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbPersonStateWithEventSeries.CheckedChanged
         ' ensure in interactive state
-        If mFileManager.FileLoading Then Return
+        If Not mFileManager.FileLoading Then
+            If cbPersonStateWithEventSeries.Checked Then
+                'cannot have state associated with structure
+                cbPersonState.Enabled = False
 
-        If cbPersonState.Checked Then
-            'cannot have state associated with structure
-            Me.cbStructurePersonState.Enabled = False
+                If mTabPagesCollection.Contains("tpRootState") Then
+                    TabDesign.TabPages.Add(mTabPagesCollection.Item("tpRootState"))
+                Else
+                    TabDesign.TabPages.Add(mBaseTabPagesCollection.Item("tpRootState"))
+                End If
 
-            If Me.mTabPagesCollection.Contains("tpRootState") Then
-                Me.TabDesign.TabPages.Add(Me.mTabPagesCollection.Item("tpRootState"))
+                tpRootState.Visible = True
+
+                If tpRootStateStructure.Controls.Count = 0 Then
+                    ' add a TabPageStructure component
+                    mTabPageStateStructure = New TabPageStructure
+                    mTabPageStateStructure.IsState = True ' makes assumed value button/text box visible
+                    tpRootStateStructure.Controls.Add(mTabPageStateStructure)
+                    mTabPageStateStructure.Dock = DockStyle.Fill
+
+                    mTabPageStateEventSeries = New TabpageHistory
+                    mTabPageStateEventSeries.BackColor = System.Drawing.Color.LightSteelBlue
+                    mTabPageStateEventSeries.NodeId = mFileManager.OntologyManager.AddTerm("State Event Series", "@ internal @").Code
+                    mTabPageStateEventSeries.AddBaseLineEvent()
+
+                    tpRootStateEventSeries.Controls.Add(mTabPageStateEventSeries)
+                    mTabPageStateEventSeries.Dock = DockStyle.Fill
+                End If
             Else
-                Me.TabDesign.TabPages.Add(Me.mBaseTabPagesCollection.Item("tpRootState"))
-            End If
+                If MessageBox.Show(AE_Constants.Instance.Remove_state, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+                    cbPersonState.Enabled = True
 
-            Me.tpRootState.Visible = True
+                    For Each tp As Crownwood.Magic.Controls.TabPage In TabDesign.TabPages
+                        If tp.Name = "tpRootState" Then
+                            If Not mTabPagesCollection.Contains("tpRootState") Then
+                                mTabPagesCollection.Add(tp.Name, tp)
+                            End If
 
-            If Me.tpRootStateStructure.Controls.Count = 0 Then
-                ' add a TabPageStructure component
-                mTabPageStateStructure = New TabPageStructure
-                mTabPageStateStructure.IsState = True ' makes assumed value button/text box visible
-                Me.tpRootStateStructure.Controls.Add(mTabPageStateStructure)
-                mTabPageStateStructure.Dock = DockStyle.Fill
-
-                mTabPageStateEventSeries = New TabpageHistory
-                mTabPageStateEventSeries.BackColor = System.Drawing.Color.LightSteelBlue
-                mTabPageStateEventSeries.NodeId = mFileManager.OntologyManager.AddTerm("State Event Series", "@ internal @").Code
-                mTabPageStateEventSeries.AddBaseLineEvent()
-
-                Me.tpRootStateEventSeries.Controls.Add(mTabPageStateEventSeries)
-                mTabPageStateEventSeries.Dock = DockStyle.Fill
-            End If
-        Else
-            Dim tp As Crownwood.Magic.Controls.TabPage
-            If MessageBox.Show(AE_Constants.Instance.Remove_state, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = _
-                Windows.Forms.DialogResult.OK Then
-
-                Me.cbStructurePersonState.Enabled = True
-                For Each tp In Me.TabDesign.TabPages
-                    If tp.Name = "tpRootState" Then
-                        If Not mTabPagesCollection.Contains("tpRootState") Then
-                            mTabPagesCollection.Add(tp.Name, tp)
+                            TabDesign.TabPages.Remove(tp)
+                            Exit For
                         End If
-                        Me.TabDesign.TabPages.Remove(tp)
-                        Exit For
-                    End If
-                Next
-            Else
-                'cancel the checkChanged
-                mFileManager.FileLoading = True
-                Me.cbPersonState.Checked = True
-                mFileManager.FileLoading = False
+                    Next
+                Else
+                    'cancel the checkChanged
+                    mFileManager.FileLoading = True
+                    cbPersonStateWithEventSeries.Checked = True
+                    mFileManager.FileLoading = False
+                End If
             End If
-        End If
 
-        mFileManager.FileEdited = True
+            mFileManager.FileEdited = True
+        End If
     End Sub
 
     Private Sub TabMain_SelectionChanging(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanging
@@ -4594,7 +4552,7 @@ Public Class Designer
                     mTabPageDataStructure.BuildInterface(tpInterface, pos, cbMandatory.Checked)
                 End If
 
-                If cbStructurePersonState.Checked Then
+                If cbPersonState.Checked Then
                     Dim gb As New GroupBox
                     gb.Text = Filemanager.GetOpenEhrTerm(177, "State")
                     gb.FlatStyle = FlatStyle.Popup
@@ -4610,7 +4568,7 @@ Public Class Designer
                     pos.Y += gb.Height + 10
                 End If
 
-                If cbPersonState.Checked Then
+                If cbPersonStateWithEventSeries.Checked Then
                     Dim gb, hist As GroupBox
                     gb = New GroupBox
                     gb.Text = Filemanager.GetOpenEhrTerm(79, "Person State with History")
