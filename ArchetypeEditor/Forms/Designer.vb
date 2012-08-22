@@ -2116,7 +2116,7 @@ Public Class Designer
         End If
 
         ReferenceModel.SetArchetypedClass(mFileManager.Archetype.Archetype_ID.ReferenceModelEntity)
-        SetUpGUI(mFileManager.Archetype.RmEntity, False)
+        SetUpArchetype(mFileManager.Archetype.RmEntity)
 
         AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
         ListLanguages.SelectedValue = mFileManager.OntologyManager.LanguageCode
@@ -2171,8 +2171,7 @@ Public Class Designer
 
                 'reset the filename to force SaveAs
                 mFileManager.FileName = ""
-
-                SetUpGUI(ReferenceModel.ArchetypedClass, True)
+                SetUpNewArchetype(ReferenceModel.ArchetypedClass)
 
                 AddHandler ListLanguages.SelectedIndexChanged, AddressOf ListLanguages_SelectedIndexChanged
 
@@ -2985,17 +2984,12 @@ Public Class Designer
         End If
     End Sub
 
-    Protected Sub ShowTabPages(ByVal archetypedClass As StructureType, ByVal isNew As Boolean)
-        'layout of the pages to match the archetyped class
+    Protected Sub SetUpArchetype(ByVal archetypedClass As StructureType)
+        'Lay out the pages to match the archetyped class.
         'Compositions, Sections and Instructions use the tpSectionPage which is generic - probably a bad name!
 
         Select Case archetypedClass
             Case StructureType.ENTRY, StructureType.OBSERVATION, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
-                ' enable restriction of subject of care
-                If isNew Then
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
-                End If
-
                 'need to check not changing from section
                 If TabMain.TabPages.Contains(tpSectionPage) Then
                     TabMain.TabPages.Remove(tpSectionPage)
@@ -3011,84 +3005,32 @@ Public Class Designer
                         cbProtocol.Show()
                 End Select
 
-            Case StructureType.INSTRUCTION
-                ' enable restriction of subject of care
-                If isNew Then
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
-                End If
-
-                'need to check not changing from section
-                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
-                    Me.TabMain.TabPages.Remove(Me.tpDesign)
-                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
-                End If
-
-            Case StructureType.ACTION
-                ' enable restriction of subject of care
-                If isNew Then
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
-                End If
-
-                'need to check not changing from section
-                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
-                    Me.TabMain.TabPages.Remove(Me.tpDesign)
-                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
-                End If
-
-            Case StructureType.SECTION
-                ' disable restriction of subject of care
-                If isNew Then
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.None)
-                End If
-
-                'need to check not changing from Evaluation, Observation
-                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
-                    Me.TabMain.TabPages.Remove(Me.tpDesign)
-                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
-                End If
-
-            Case StructureType.COMPOSITION
-                ' Set to restriction of setting
-                If isNew Then
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.Setting)
-                End If
-
-                'need to check not changing from Evaluation, Observation
-                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
-                    Me.TabMain.TabPages.Remove(Me.tpDesign)
-                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
-                End If
-
-            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                ' disable restriction of subject of care
-                If isNew Then
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.None)
-                End If
-
-                'need to check not changing from section
-                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
-                    Me.TabMain.TabPages.Remove(Me.tpDesign)
-                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
-                End If
-
-            Case StructureType.Cluster
-                If isNew Then
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.None)
-                End If
-                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
-                    Me.TabMain.TabPages.Remove(Me.tpDesign)
-                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
-                End If
-
-            Case StructureType.Element
-                If isNew Then
-                    InitialiseRestrictedSet(RestrictedSet.TermSet.None)
-                End If
-                If Me.TabMain.TabPages.Contains(Me.tpDesign) Then
-                    Me.TabMain.TabPages.Remove(Me.tpDesign)
-                    Me.TabMain.TabPages.Insert(1, Me.mBaseTabPagesCollection("tpSectionPage"))
+            Case StructureType.INSTRUCTION, StructureType.ACTION, StructureType.SECTION, StructureType.COMPOSITION, _
+                    StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table, StructureType.Cluster, StructureType.Element
+                If TabMain.TabPages.Contains(tpDesign) Then
+                    TabMain.TabPages.Remove(tpDesign)
+                    TabMain.TabPages.Insert(1, mBaseTabPagesCollection("tpSectionPage"))
                 End If
         End Select
+
+        lblLifecycle.Text = mFileManager.Archetype.LifeCycle
+        lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
+
+        UpdateTitle()
+
+        ' Set the GUI language elements
+        lblPrimaryLanguage.Text = mFileManager.OntologyManager.PrimaryLanguageText
+
+        For Each row As DataRow In mFileManager.OntologyManager.LanguagesTable.Rows
+            AddLanguageToMenu(row(1))
+        Next
+
+        'Set the description and translation
+        mTabPageDescription.Description = mFileManager.Archetype.Description
+        mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
+
+        RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
+        RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
     End Sub
 
     Private Function CheckOKtoClose() As Boolean
@@ -3206,111 +3148,60 @@ Public Class Designer
         HelpProviderDesigner.SetHelpKeyword(tpSectionPage, "HowTo/edit_instruction.htm")
     End Sub
 
-    Private Sub SetUpGUI(ByVal archetypedClass As StructureType, ByVal isNew As Boolean)
-        'NOTE: Showing tabpages in the editor requires generating
-        'IDs for the structural components (e.g. EventSeries and List)
+    Protected Sub SetUpNewArchetype(ByVal archetypedClass As StructureType)
+        'NOTE: Showing tabpages in the editor requires generating IDs for the structural components (e.g. EventSeries and List)
         'This feature cannot be run unless the Ontology is initialised
-        If mFileManager.OntologyManager.Ontology Is Nothing Then
-            Beep()
-            Debug.Assert(False)
-        Else
-            Select Case archetypedClass
-                Case StructureType.OBSERVATION
-                    If isNew Then
-                        SetUpDataStructure()
-                        SetUpEventSeries()
-                    End If
+        Debug.Assert(Not mFileManager.OntologyManager.Ontology Is Nothing)
 
-                Case StructureType.EVALUATION, StructureType.ADMIN_ENTRY
-                    If isNew Then
-                        SetUpDataStructure()
-                    End If
+        Select Case archetypedClass
+            Case StructureType.OBSERVATION
+                SetUpDataStructure()
+                SetUpEventSeries()
+                InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
+            Case StructureType.ENTRY, StructureType.EVALUATION, StructureType.ADMIN_ENTRY
+                SetUpDataStructure()
+                InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
+            Case StructureType.INSTRUCTION
+                SetUpInstruction()
+                InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
+            Case StructureType.ACTION
+                SetUpAction()
+                InitialiseRestrictedSet(RestrictedSet.TermSet.SubjectOfData)
+            Case StructureType.SECTION
+                SetUpSection()
+                InitialiseRestrictedSet(RestrictedSet.TermSet.None)
+            Case StructureType.COMPOSITION
+                SetUpComposition()
+                InitialiseRestrictedSet(RestrictedSet.TermSet.Setting)
+            Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
+                SetUpStructure()
+                InitialiseRestrictedSet(RestrictedSet.TermSet.None)
+            Case StructureType.Cluster
+                SetUpStructure()
+                mTabPageDataStructure.SetAsCluster()
+                InitialiseRestrictedSet(RestrictedSet.TermSet.None)
+            Case StructureType.Element
+                SetUpStructure()
+                mTabPageDataStructure.SetAsElement()
+                InitialiseRestrictedSet(RestrictedSet.TermSet.None)
+            Case Else
+                Throw New Exception(AE_Constants.Instance.ErrorLoading + ": " + mFileManager.Archetype.Archetype_ID.ToString)
+        End Select
 
-                Case StructureType.INSTRUCTION
-                    If isNew Then
-                        SetUpInstruction()
-                    End If
+        SetUpArchetype(archetypedClass)
+        mFileManager.FileLoading = False
+        mFileManager.FileEdited = True
 
-                Case StructureType.ACTION
-                    If isNew Then
-                        SetUpAction()
-                    End If
+        Dim concept As String = mFileManager.Archetype.Archetype_ID.Concept
+        Dim firstChar As Char = Char.ToUpper(concept(0))
 
-                Case StructureType.SECTION
-                    If isNew Then
-                        SetUpSection()
-                    End If
-
-                Case StructureType.COMPOSITION
-                    If isNew Then
-                        SetUpComposition()
-                    End If
-
-                Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
-                    If isNew Then
-                        SetUpStructure()
-                    End If
-
-                Case StructureType.Cluster
-                    If isNew Then
-                        SetUpStructure()
-                        mTabPageDataStructure.SetAsCluster()
-                    End If
-
-                Case StructureType.Element
-                    If isNew Then
-                        SetUpStructure()
-                        mTabPageDataStructure.SetAsElement()
-                    End If
-
-                Case StructureType.ENTRY
-                    If isNew Then
-                        SetUpDataStructure()
-                    End If
-
-                Case Else
-                    Beep()
-                    Debug.Assert(False)
-                    Throw New Exception(String.Format("{0}: {1}", AE_Constants.Instance.ErrorLoading, mFileManager.Archetype.Archetype_ID.ToString))
-            End Select
-
-            ShowTabPages(archetypedClass, isNew)
-
-            lblLifecycle.Text = mFileManager.Archetype.LifeCycle
-            lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
-
-            UpdateTitle()
-
-            ' Set the GUI language elements
-            lblPrimaryLanguage.Text = mFileManager.OntologyManager.PrimaryLanguageText
-
-            For Each row As DataRow In mFileManager.OntologyManager.LanguagesTable.Rows
-                AddLanguageToMenu(row(1))
-            Next
-
-            'Set the description and translation
-            mTabPageDescription.Description = mFileManager.Archetype.Description
-            mTabPageDescription.TranslationDetails = mFileManager.Archetype.TranslationDetails
-
-            RichTextBoxDescription.Rtf = mTabPageDescription.AsRtfString()
-            RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
-
-            If isNew Then
-                mFileManager.FileLoading = False
-                mFileManager.FileEdited = True
-
-                Dim concept As String = mFileManager.Archetype.Archetype_ID.Concept
-                Dim firstChar As Char = Char.ToUpper(concept(0))
-
-                For Each culture As Globalization.CultureInfo In Globalization.CultureInfo.GetCultures(Globalization.CultureTypes.AllCultures)
-                    If culture.TwoLetterISOLanguageName = Main.Instance.DefaultLanguageCode Or culture.Name = Main.Instance.SpecificLanguageCode Then
-                        firstChar = Char.ToUpper(concept(0), culture)
-                    End If
-                Next
-
-                txtConceptInFull.Text = firstChar + concept.Substring(1).Replace("_", " ")
+        For Each culture As Globalization.CultureInfo In Globalization.CultureInfo.GetCultures(Globalization.CultureTypes.AllCultures)
+            If culture.TwoLetterISOLanguageName = Main.Instance.DefaultLanguageCode Or culture.Name = Main.Instance.SpecificLanguageCode Then
+                firstChar = Char.ToUpper(concept(0), culture)
             End If
-        End If
+        Next
+
+        txtConceptInFull.Text = firstChar + concept.Substring(1).Replace("_", " ")
     End Sub
 
     Private Sub UpdateTitle()
@@ -4095,8 +3986,7 @@ Public Class Designer
 
             'load the start screen
             If SetNewArchetypeName(True) = 2 Then
-                ' new archetype
-                SetUpGUI(ReferenceModel.ArchetypedClass, True)
+                SetUpNewArchetype(ReferenceModel.ArchetypedClass)
             End If
         End If
 

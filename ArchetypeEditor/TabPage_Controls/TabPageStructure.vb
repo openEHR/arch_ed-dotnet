@@ -34,7 +34,7 @@ Public Class TabPageStructure
 
 #Region " Windows Form Designer generated code "
 
-    Public Sub New() 'ByVal aEditor As Designer)
+    Public Sub New()
         MyBase.New()
 
         'This call is required by the Windows Form Designer.

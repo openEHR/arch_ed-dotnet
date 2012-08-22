@@ -4,7 +4,23 @@ Public Class TabPageActivity
     Friend WithEvents mOccurrences As OccurrencesPanel
     Private mActivity As RmActivity
     Private mFileManager As FileManagerLocal
-    Private mTabPageInstruction As TabPageInstruction 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+    Private mTabPageInstruction As TabPageInstruction
+
+    Public Sub New(ByVal parentTabPage As TabPageInstruction)
+        mTabPageInstruction = parentTabPage
+
+        ' This call is required by the Windows Form Designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+        mFileManager = Filemanager.Master
+
+        mActionSpecification = New TabPageStructure()
+        mActionSpecification.IsMandatory = True
+        Controls.Add(mActionSpecification)
+        mActionSpecification.BringToFront()
+        mActionSpecification.Dock = DockStyle.Fill
+    End Sub
 
     Public Property Activity() As RmActivity
         Get
@@ -13,13 +29,10 @@ Public Class TabPageActivity
                 mActivity.Occurrences = mOccurrences.Cardinality
                 mActivity.ArchetypeId = Me.txtAction.Text
 
-                If Not mActionSpecification Is Nothing Then
-                    Dim action_specification As RmStructure
-                    action_specification = mActionSpecification.SaveAsStructure()
+                Dim actionSpecification As RmStructure = mActionSpecification.SaveAsStructure()
 
-                    If Not action_specification Is Nothing Then
-                        mActivity.Children.Add(mActionSpecification.SaveAsStructure)
-                    End If
+                If Not actionSpecification Is Nothing Then
+                    mActivity.Children.Add(mActionSpecification.SaveAsStructure)
                 End If
             End If
 
@@ -44,13 +57,6 @@ Public Class TabPageActivity
             txtAction.Text = mActivity.ArchetypeId
 
             For Each rm As RmStructure In mActivity.Children
-                If Controls.Contains(mActionSpecification) Then
-                    txtAction.Controls.Remove(mActionSpecification)
-                End If
-
-                mActionSpecification = New TabPageStructure
-                mActionSpecification.IsMandatory = True
-
                 Select Case rm.Type
                     Case StructureType.List, StructureType.Table, StructureType.Tree, StructureType.Single
                         mActionSpecification.ProcessStructure(CType(rm, RmStructureCompound))
@@ -59,10 +65,6 @@ Public Class TabPageActivity
                     Case Else
                         Debug.Assert(False, "Not handled yet")
                 End Select
-
-                Controls.Add(mActionSpecification)
-                mActionSpecification.BringToFront()
-                mActionSpecification.Dock = DockStyle.Fill
             Next
         End Set
     End Property
@@ -88,18 +90,12 @@ Public Class TabPageActivity
         End If
 
         HelpProviderActivity.HelpNamespace = Main.Instance.Options.HelpLocationPath
-        'JAR: 30MAY07, EDT-44 Term already created in TabPageInstruction.  Below causes ontology to be thrown out!
-        'If mFileManager.IsNew Then
-        '    'need to add an RmActivity to the mActivities set
-        '    Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm("New activity")
-        '    mActivity = New RmActivity(a_term.Code)
-        'End If
         mIsloading = False
     End Sub
 
     Sub TranslateGUI()
         lblAction.Text = Filemanager.GetOpenEhrTerm(556, "Action")
-        Me.butOpenArchetype.Text = Filemanager.GetOpenEhrTerm(687, "Open action archetype")
+        butOpenArchetype.Text = Filemanager.GetOpenEhrTerm(687, "Open action archetype")
     End Sub
 
     Public Sub Translate()
@@ -120,35 +116,28 @@ Public Class TabPageActivity
 
     Private Sub butGetAction_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butGetAction.Click
         Dim fd As New OpenFileDialog
-        Dim s As String
-
-        s = ReferenceModel.ReferenceModelName & "-ACTION"
+        Dim s As String = ReferenceModel.ReferenceModelName & "-ACTION"
         fd.Filter = s & "|" & s & ".*.adl"
         fd.InitialDirectory = Main.Instance.Options.RepositoryPath & "\entry\action"
 
         If fd.ShowDialog = Windows.Forms.DialogResult.OK Then
-            Dim ss As String
-
-            ss = fd.FileName.Substring(fd.FileName.LastIndexOf("\") + s.Length + 2)
-            'JAR: 07MAY2007, EDT-28 Display filename should match that when loaded (i.e. ArchetypeId)
-            'txtAction.Text = ss.Substring(0, ss.LastIndexOf(".")).Replace(".", "\.")
+            Dim ss As String = fd.FileName.Substring(fd.FileName.LastIndexOf("\") + s.Length + 2)
             txtAction.Text = ss.Substring(0, ss.LastIndexOf("."))
         End If
     End Sub
 
     Private Sub menuItemRename_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RenameToolStripMenuItem.Click
-        Dim a_term As RmTerm = mFileManager.OntologyManager.GetTerm(mActivity.NodeId)
+        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mActivity.NodeId)
 
-        Dim s() As String = Main.Instance.GetInput(a_term, ParentForm)
+        Dim s() As String = Main.Instance.GetInput(term, ParentForm)
 
         If s(0) <> "" Then
-            CType(Parent, Crownwood.Magic.Controls.TabPage).Title = a_term.Text
-            mFileManager.OntologyManager.SetRmTermText(a_term)
+            CType(Parent, Crownwood.Magic.Controls.TabPage).Title = term.Text
+            mFileManager.OntologyManager.SetRmTermText(term)
             mFileManager.FileEdited = True
         End If
     End Sub
 
-    'JAR: 30MAY07, EDT-44 Multiple activities per instruction
     Private Sub menuItemRemove_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveToolStripMenuItem.Click
         If Not mTabPageInstruction Is Nothing Then
             mTabPageInstruction.RemoveActivity()
@@ -209,13 +198,6 @@ Public Class TabPageActivity
         End If
     End Sub
 
-    Public Sub Reset()
-        txtAction.Text = ""
-        mActionSpecification = New TabPageStructure
-        lblNodeId.Text = ""
-    End Sub
-
-    'JAR: 30MAY07, EDT-44 Multiple activities per instruction
     Public Sub ShowPopUp()
         ContextMenuStrip1.Show()
     End Sub
@@ -224,31 +206,9 @@ Public Class TabPageActivity
         ContextMenuStrip1.Show(location)
     End Sub
 
-    'JAR: 30MAY07, EDT-44 Multiple activities per instruction
-    'Public Sub New()
-    Public Sub New(ByVal ParentTabPageInstruction As TabPageInstruction)
-        mTabPageInstruction = ParentTabPageInstruction
-
-        ' This call is required by the Windows Form Designer.
-        InitializeComponent()
-
-        ' Add any initialization after the InitializeComponent() call.
-        mFileManager = Filemanager.Master
-        If mActionSpecification Is Nothing Then
-            mActionSpecification = New TabPageStructure()
-        End If
-
-        'SRH: 6 Jan 2010 EDT-585
-        mActionSpecification.IsMandatory = True
-
-        Controls.Add(mActionSpecification)
-        mActionSpecification.BringToFront()
-        mActionSpecification.Dock = DockStyle.Fill
-    End Sub
-
     Private Sub ContextMenuStrip1_Opening(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles ContextMenuStrip1.Opening
         RenameToolStripMenuItem.Text = AE_Constants.Instance.Rename & " - " & CType(Parent, Crownwood.Magic.Controls.TabPage).Title
-        RemoveToolStripMenuItem.Text = AE_Constants.Instance.Remove & " - " & CType(Parent, Crownwood.Magic.Controls.TabPage).Title 'JAR: 30MAY07, EDT-44 Multiple activities per instruction
+        RemoveToolStripMenuItem.Text = AE_Constants.Instance.Remove & " - " & CType(Parent, Crownwood.Magic.Controls.TabPage).Title
     End Sub
 
 End Class
