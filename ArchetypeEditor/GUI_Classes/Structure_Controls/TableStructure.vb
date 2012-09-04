@@ -393,7 +393,7 @@ Public Class TableStructure
         MyBase.Translate()
     End Sub
 
-    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
+    Public Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
         If dgGrid.CurrentRowIndex > -1 Then
             Dim element As ArchetypeElement = TryCast(mArchetypeTable.Rows(dgGrid.CurrentCell.RowNumber).Item(2), ArchetypeElement)
 

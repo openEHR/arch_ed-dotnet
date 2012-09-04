@@ -780,6 +780,7 @@
   <PrimaryRubric Id="704" Language="en" />
   <PrimaryRubric Id="705" Language="en" />
   <PrimaryRubric Id="706" Language="en" />
+  <PrimaryRubric Id="707" Language="en" />
   <Concept Language="en" ConceptID="0" Rubric="self" />
   <Concept Language="en" ConceptID="3" Rubric="fetus" />
   <Concept Language="en" ConceptID="6" Rubric="donor" />
@@ -951,7 +952,7 @@
   <Concept Language="en" ConceptID="182" Rubric="Signed negative" />
   <Concept Language="en" ConceptID="183" Rubric="Save" />
   <Concept Language="en" ConceptID="184" Rubric="Close" />
-  <Concept Language="en" ConceptID="185" Rubric="Specialise" />
+  <Concept Language="en" ConceptID="185" Rubric="Specialise..." />
   <Concept Language="en" ConceptID="47" Rubric="Terminology" />
   <Concept Language="en" ConceptID="58" Rubric="Archetype Editor" />
   <Concept Language="en" ConceptID="186" Rubric="Specialisation" />
@@ -1418,6 +1419,7 @@
   <Concept Language="en" ConceptID="704" Rubric="Contact" />
   <Concept Language="en" ConceptID="705" Rubric="Currently responsible" />
   <Concept Language="en" ConceptID="706" Rubric="Please enter the Concept part of the Archetype ID." />
+  <Concept Language="en" ConceptID="707" Rubric="Specialised" />
   <Concept Language="en-au" ConceptID="3" Rubric="fetus" />
   <Concept Language="da" ConceptID="0" Rubric="selv" />
   <Concept Language="da" ConceptID="3" Rubric="føtus" />
@@ -1592,7 +1594,7 @@
   <Concept Language="da" ConceptID="182" Rubric="negativ med fortegn&#xD;&#xA;negativ med fortegn&#xD;&#xA;Negativ med fortegn" />
   <Concept Language="da" ConceptID="183" Rubric="Gem" />
   <Concept Language="da" ConceptID="184" Rubric="Luk" />
-  <Concept Language="da" ConceptID="185" Rubric="Specialicer" />
+  <Concept Language="da" ConceptID="185" Rubric="Specialicer..." />
   <Concept Language="da" ConceptID="186" Rubric="Specialisering" />
   <Concept Language="da" ConceptID="187" Rubric="Primært sprog" />
   <Concept Language="da" ConceptID="188" Rubric="til" />
@@ -2171,7 +2173,7 @@
   <Concept Language="de" ConceptID="182" Rubric="Negativzahl mit Vorzeichen" />
   <Concept Language="de" ConceptID="183" Rubric="Speichern" />
   <Concept Language="de" ConceptID="184" Rubric="Schliessen" />
-  <Concept Language="de" ConceptID="185" Rubric="Spezialisieren" />
+  <Concept Language="de" ConceptID="185" Rubric="Spezialisieren..." />
   <Concept Language="de" ConceptID="186" Rubric="Spezialisierung" />
   <Concept Language="de" ConceptID="187" Rubric="Primärsprache" />
   <Concept Language="de" ConceptID="188" Rubric="zu" />
@@ -2780,7 +2782,7 @@
   <Concept Language="es" ConceptID="182" Rubric="Con signo negativo" />
   <Concept Language="es" ConceptID="183" Rubric="Guardar" />
   <Concept Language="es" ConceptID="184" Rubric="Cerrar" />
-  <Concept Language="es" ConceptID="185" Rubric="Especialícese" />
+  <Concept Language="es" ConceptID="185" Rubric="Especialícese..." />
   <Concept Language="es" ConceptID="186" Rubric="Especialización" />
   <Concept Language="es" ConceptID="187" Rubric="Idioma primario" />
   <Concept Language="es" ConceptID="188" Rubric="para" />
@@ -5010,7 +5012,7 @@
   <Concept Language="tr" ConceptID="0" Rubric="kendisi" />
   <Concept Language="tr" ConceptID="183" Rubric="Kaydet" />
   <Concept Language="tr" ConceptID="184" Rubric="Kapat" />
-  <Concept Language="tr" ConceptID="185" Rubric="Özelleştir" />
+  <Concept Language="tr" ConceptID="185" Rubric="Özelleştir..." />
   <Concept Language="tr" ConceptID="186" Rubric="Özelleştirme" />
   <Concept Language="tr" ConceptID="187" Rubric="Birincil dil" />
   <Concept Language="tr" ConceptID="188" Rubric="-" />
@@ -5467,7 +5469,7 @@
   <Concept Language="sv" ConceptID="182" Rubric="*Signed negative (en)" />
   <Concept Language="sv" ConceptID="183" Rubric="Spara" />
   <Concept Language="sv" ConceptID="184" Rubric="Stäng(a)" />
-  <Concept Language="sv" ConceptID="185" Rubric="Specialisera" />
+  <Concept Language="sv" ConceptID="185" Rubric="Specialisera..." />
   <Concept Language="sv" ConceptID="186" Rubric="Specialitet" />
   <Concept Language="sv" ConceptID="187" Rubric="Förstaspråk" />
   <Concept Language="sv" ConceptID="188" Rubric="till" />

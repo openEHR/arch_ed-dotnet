@@ -120,12 +120,6 @@
   <metadata name="HelpProviderCommonConstraint.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="key.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="valueColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="TerminologyColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -135,4 +129,23 @@
   <metadata name="PathColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="specialiseButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        Qk02AwAAAAAAADYAAAAoAAAAEAAAABAAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAAgIAAgIAA
+        gIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAA
+        gIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAA7YEp6Yg55I9K3Jxo26F14q6GgIAA
+        gIAAgIAAgIAAgIAAgIAAgIAAgIAA3n0u4X0t6YAr8YAl6Yg535VZ3Jxo3ql+5bON6LiUgIAAgIAAgIAA
+        gIAAgIAA0Xs12nww3n0u5X4r7YEp8YAl5I9K35VZ26F14q6G5bON7L6cgIAAgIAAgIAAgIAAzXs51nsy
+        2nww4X0t6YAr7YEp6Yg55I9K3Jxo3ql+4q6G6LiUgIAAgIAAgIAAgIAAyHs80Xs11nsy3n0u5X4r6YAr
+        8YAl6Yg535VZ26F13ql+5bONgIAAgIAAgIAAgIAAgIAAzXs50Xs12nww4X0t5X4r7YEp8YAl5I9K3Jxo
+        26F1gIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAA1nsy3n0u4X0t6YAr7YEp6Yg59dtn79uD7tuQ8uOkgIAA
+        gIAAgIAAgIAAgIAAgIAAgIAAgIAA89NH89RJ9NVO9NZQ9Nhc8dp179uD8OCa9Oas9um0gIAAgIAAgIAA
+        gIAAgIAA6MtM79FJ89NH89RL9NZQ9NZQ9dtn8dp17tuQ8uOk9Oas+e29gIAAgIAAgIAAgIAA5clP7M5K
+        79FJ89RJ9NVO9NZQ9Nhc9dtn79uD8OCa8uOk9um0gIAAgIAAgIAAgIAA4cZR6MtM7M5K89NH89RL9NVO
+        9NZQ9Nhc8dp17tuQ8OCa9OasgIAAgIAAgIAAgIAAgIAA5clP6MtM79FJ89RJ89RL9NZQ9NZQ9dtn79uD
+        7tuQgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAA7M5K89NH89RJ9NVO9NZQ9NhcgIAAgIAAgIAAgIAAgIAA
+        gIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAAgIAA
+</value>
+  </data>
 </root>

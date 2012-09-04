@@ -17,7 +17,7 @@ Public Class SpecialisationQuestionDialog
         YesAndCloneButton.Text = AE_Constants.Instance.SpecialiseAndClone
         YesAndCloneButton.Enabled = struct.Occurrences.IsMultiple
         NoButton.Text = AE_Constants.Instance.SpecialiseNo
-        QuestionLabel.Text = String.Format(AE_Constants.Instance.SpecialisationQuestion, itemText)
+        QuestionLabel.Text = AE_Constants.Instance.SpecialisationQuestion(itemText)
         ShowDialog()
     End Sub
 

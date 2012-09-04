@@ -22,8 +22,6 @@ Public Class ElementOnly
     Private mLoading As Boolean
     Friend WithEvents lblElement As System.Windows.Forms.Label
     Friend WithEvents lblElementOnly As System.Windows.Forms.Label
-    Private mOKtoEditSpecialisation As Boolean
-
 
 #Region " Windows Form Designer generated code "
 
@@ -172,7 +170,7 @@ Public Class ElementOnly
         MyBase.Translate()
     End Sub
 
-    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
+    Public Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
         Dim dlg As New SpecialisationQuestionDialog()
         dlg.ShowForArchetypeNode(Element.Text, Element.RM_Class, SpecialisationDepth)
 

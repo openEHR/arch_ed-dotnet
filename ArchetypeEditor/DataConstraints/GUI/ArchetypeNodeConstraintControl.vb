@@ -45,7 +45,10 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents TerminologyColumn As System.Windows.Forms.DataGridViewButtonColumn
     Friend WithEvents CodeColumn As System.Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents PathColumn As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents specialiseButton As System.Windows.Forms.Button
     Friend WithEvents mOccurrences As OccurrencesPanel
+
+    Public Event Specialise(ByVal sender As Object, ByVal e As EventArgs)
 
 #Region " Windows Form Designer generated code "
     Public Sub New()
@@ -131,6 +134,7 @@ Public Class ArchetypeNodeConstraintControl
     Friend WithEvents lblDescription As System.Windows.Forms.Label
     Friend WithEvents labelAny As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ArchetypeNodeConstraintControl))
         Me.PanelGenericConstraint = New System.Windows.Forms.Panel
         Me.PanelDataConstraint = New System.Windows.Forms.Panel
         Me.labelAny = New System.Windows.Forms.Label
@@ -163,6 +167,7 @@ Public Class ArchetypeNodeConstraintControl
         Me.TerminologyColumn = New System.Windows.Forms.DataGridViewButtonColumn
         Me.CodeColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
         Me.PathColumn = New System.Windows.Forms.DataGridViewTextBoxColumn
+        Me.specialiseButton = New System.Windows.Forms.Button
         Me.PanelDataConstraint.SuspendLayout()
         Me.PanelAddressable.SuspendLayout()
         Me.PanelName.SuspendLayout()
@@ -510,11 +515,24 @@ Public Class ArchetypeNodeConstraintControl
         Me.PathColumn.Name = "PathColumn"
         Me.PathColumn.Visible = False
         '
+        'specialiseButton
+        '
+        Me.specialiseButton.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.specialiseButton.Image = CType(resources.GetObject("specialiseButton.Image"), System.Drawing.Image)
+        Me.specialiseButton.ImageAlign = ContentAlignment.MiddleLeft
+        Me.specialiseButton.Location = New System.Drawing.Point(284, 0)
+        Me.specialiseButton.Name = "specialiseButton"
+        Me.specialiseButton.Size = New System.Drawing.Size(140, 20)
+        Me.specialiseButton.TabIndex = 0
+        Me.specialiseButton.Text = "Specialise..."
+        Me.specialiseButton.UseVisualStyleBackColor = True
+        '
         'ArchetypeNodeConstraintControl
         '
         Me.AutoValidate = System.Windows.Forms.AutoValidate.EnableAllowFocusChange
         Me.BackColor = System.Drawing.Color.Transparent
         Me.Controls.Add(Me.tabConstraint)
+        Me.Controls.Add(Me.specialiseButton)
         Me.HelpProviderCommonConstraint.SetHelpKeyword(Me, "HowTo/Editing/set_common_constraints.htm")
         Me.HelpProviderCommonConstraint.SetHelpNavigator(Me, System.Windows.Forms.HelpNavigator.Topic)
         Me.Name = "ArchetypeNodeConstraintControl"
@@ -566,6 +584,7 @@ Public Class ArchetypeNodeConstraintControl
     End Property
 
     Public Sub TranslateGUI()
+        specialiseButton.Text = AE_Constants.Instance.Specialise
         lblDescription.Text = Filemanager.GetOpenEhrTerm(113, lblDescription.Text)
         lblRunTimeName.Text = Filemanager.GetOpenEhrTerm(114, lblRunTimeName.Text)
         tpConstraint.Text = Filemanager.GetOpenEhrTerm(87, tpConstraint.Text)
@@ -582,126 +601,134 @@ Public Class ArchetypeNodeConstraintControl
         mIsLoading = True
         SuspendLayout()
 
-        Try
-            ' hide the label if there is no constraint (for ANY or Cluster) - see below
-            labelAny.Visible = False
+        Dim isSameSpecialisationDepth As Boolean = mFileManager.OntologyManager.NumberOfSpecialisations = node.RM_Class.SpecialisationDepth
+        specialiseButton.Visible = Not isSameSpecialisationDepth And Not node.IsAnonymous
+        specialiseButton.BringToFront()
 
-            If Not termLookUp Is Nothing Then
-                termLookUp.TermName = ""
-            End If
+        For Each c As Control In tpConstraint.Controls
+            c.Enabled = isSameSpecialisationDepth
+        Next
 
-            If Not mConstraintControl Is Nothing Then
-                PanelDataConstraint.Controls.Remove(mConstraintControl)
-                mConstraintControl = Nothing
-            End If
+        For Each c As Control In tpConstraintDetails.Controls
+            c.Enabled = isSameSpecialisationDepth
+        Next
 
-            'Hide Occurrences and show null flavours if an Element archetype; and the text and description are not editable here.
-            Dim isElement As Boolean = mFileManager.Archetype.RmEntity = StructureType.Element
-            PanelGenericConstraint.Visible = Not isElement
-            gbNullFlavours.Visible = isElement
-            txtTermDescription.Enabled = Not isElement
-            txtComments.Enabled = Not isElement
+        ' hide the label if there is no constraint (for ANY or Cluster) - see below
+        labelAny.Visible = False
 
-            mOccurrences.SetUnitary = False
-            mOccurrences.SetSingle = isSingle
+        If Not termLookUp Is Nothing Then
+            termLookUp.TermName = ""
+        End If
 
-            Select Case node.RM_Class.Type
+        If Not mConstraintControl Is Nothing Then
+            PanelDataConstraint.Controls.Remove(mConstraintControl)
+            mConstraintControl = Nothing
+        End If
 
-                Case StructureType.Tree, StructureType.List, StructureType.Table, StructureType.Single
-                    If isMandatory Then
-                        mOccurrences.SetMandatory = True
-                    End If
+        'Hide Occurrences and show null flavours if an Element archetype; and the text and description are not editable here.
+        Dim isElement As Boolean = mFileManager.Archetype.RmEntity = StructureType.Element
+        PanelGenericConstraint.Visible = Not isElement
+        gbNullFlavours.Visible = isElement
+        txtTermDescription.Enabled = isSameSpecialisationDepth And Not isElement
+        txtComments.Enabled = isSameSpecialisationDepth And Not isElement
 
-                    mOccurrences.SetUnitary = True
+        mOccurrences.SetUnitary = False
+        mOccurrences.SetSingle = isSingle
 
-                Case StructureType.Element, StructureType.Reference
-                    Dim archetypeElem As ArchetypeElement = CType(node, ArchetypeElement)
-                    SetUpNullFlavours(archetypeElem)
+        Select Case node.RM_Class.Type
 
-                    Select Case archetypeElem.Constraint.Kind
-                        Case ConstraintKind.Any
-                            labelAny.Text = AE_Constants.Instance.Any
-                            labelAny.Visible = True
-                        Case Else
-                            If archetypeElem.Constraint.Kind = ConstraintKind.Text AndAlso CType(archetypeElem.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstrainType.Terminology Then
-                                gbValueSets.Visible = True
-                            Else
-                                gbValueSets.Visible = False
-                            End If
-
-                            mConstraintControl = ConstraintControl.CreateConstraintControl(archetypeElem.Constraint.Kind, mFileManager)
-                            PanelDataConstraint.Controls.Add(mConstraintControl)
-                            mConstraintControl.Dock = DockStyle.Fill
-                            mConstraintControl.ShowElement(isState, archetypeElem)
-                    End Select
-
-                Case StructureType.Slot
-                    mConstraintControl = ConstraintControl.CreateConstraintControl(ConstraintKind.Slot, mFileManager)
-                    PanelDataConstraint.Controls.Add(mConstraintControl)
-                    mConstraintControl.Dock = DockStyle.Fill
-                    Dim constraint As Constraint_Slot = TryCast(node.RM_Class, RmSlot).SlotConstraint
-                    mConstraintControl.ShowConstraint(isState, constraint)
-
-                    Select Case constraint.RM_ClassType
-                        Case StructureType.Tree, StructureType.Table, StructureType.List, StructureType.Single, StructureType.Structure
-                            If isMandatory Then
-                                mOccurrences.SetMandatory = True
-                            End If
-
-                            mOccurrences.SetUnitary = True
-                    End Select
-
-                Case StructureType.Cluster
-                    labelAny.Visible = False
-                    mConstraintControl = New ClusterControl(fileManager)
-                    CType(mConstraintControl, ClusterControl).Item = CType(node, ArchetypeComposite)
-                    PanelDataConstraint.Controls.Add(mConstraintControl)
-                    CType(mConstraintControl, ClusterControl).Header = 50
-                    mConstraintControl.Dock = DockStyle.Fill
-
-            End Select
-
-            mArchetypeNode = node
-
-            If isState Then
-                tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue
-                tpConstraintDetails.BackColor = System.Drawing.Color.LightSteelBlue
-            Else
-                tpConstraint.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
-                tpConstraintDetails.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
-            End If
-
-            SetControlValues(isState)
-
-            If node.IsAnonymous Then
-                If tabConstraint.TabPages.Contains(tpConstraintDetails) Then
-                    tabConstraint.TabPages.Remove(tpConstraintDetails)      'Hide details tab
+            Case StructureType.Tree, StructureType.List, StructureType.Table, StructureType.Single
+                If isMandatory Then
+                    mOccurrences.SetMandatory = True
                 End If
 
-                PanelName.Hide()
-                dgNodeBindings.Hide()
-            Else
-                If Not tabConstraint.TabPages.Contains(tpConstraintDetails) Then
-                    tabConstraint.TabPages.Add(tpConstraintDetails)         'Show details tab
-                End If
+                mOccurrences.SetUnitary = True
 
-                PanelName.Show()
-                dgNodeBindings.Show()
-                Dim nodeID As String = node.RM_Class.NodeId
-                mDataView.Table.Columns(1).DefaultValue = nodeID
-                mDataView.RowFilter = "Path = '" & nodeID & "'"
+            Case StructureType.Element, StructureType.Reference
+                Dim archetypeElem As ArchetypeElement = CType(node, ArchetypeElement)
+                SetUpNullFlavours(archetypeElem)
 
-                If mDataView.Count = 0 And Not termLookUp Is Nothing Then
-                    termLookUp.Control.Hide()
-                End If
+                Select Case archetypeElem.Constraint.Kind
+                    Case ConstraintKind.Any
+                        labelAny.Text = AE_Constants.Instance.Any
+                        labelAny.Visible = True
+                    Case Else
+                        If archetypeElem.Constraint.Kind = ConstraintKind.Text AndAlso CType(archetypeElem.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstrainType.Terminology Then
+                            gbValueSets.Visible = True
+                        Else
+                            gbValueSets.Visible = False
+                        End If
+
+                        mConstraintControl = ConstraintControl.CreateConstraintControl(archetypeElem.Constraint.Kind, mFileManager)
+                        PanelDataConstraint.Controls.Add(mConstraintControl)
+                        mConstraintControl.Dock = DockStyle.Fill
+                        mConstraintControl.ShowElement(isState, archetypeElem)
+                End Select
+
+            Case StructureType.Slot
+                mConstraintControl = ConstraintControl.CreateConstraintControl(ConstraintKind.Slot, mFileManager)
+                PanelDataConstraint.Controls.Add(mConstraintControl)
+                mConstraintControl.Dock = DockStyle.Fill
+                Dim constraint As Constraint_Slot = TryCast(node.RM_Class, RmSlot).SlotConstraint
+                mConstraintControl.ShowConstraint(isState, constraint)
+
+                Select Case constraint.RM_ClassType
+                    Case StructureType.Tree, StructureType.Table, StructureType.List, StructureType.Single, StructureType.Structure
+                        If isMandatory Then
+                            mOccurrences.SetMandatory = True
+                        End If
+
+                        mOccurrences.SetUnitary = True
+                End Select
+
+            Case StructureType.Cluster
+                labelAny.Visible = False
+                mConstraintControl = New ClusterControl(fileManager)
+                CType(mConstraintControl, ClusterControl).Item = CType(node, ArchetypeComposite)
+                PanelDataConstraint.Controls.Add(mConstraintControl)
+                CType(mConstraintControl, ClusterControl).Header = 50
+                mConstraintControl.Dock = DockStyle.Fill
+
+        End Select
+
+        mArchetypeNode = node
+
+        If isState Then
+            tpConstraint.BackColor = System.Drawing.Color.LightSteelBlue
+            tpConstraintDetails.BackColor = System.Drawing.Color.LightSteelBlue
+        Else
+            tpConstraint.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
+            tpConstraintDetails.BackColor = System.Drawing.Color.FromArgb(CType(CType(247, Byte), Integer), CType(CType(245, Byte), Integer), CType(CType(234, Byte), Integer))
+        End If
+
+        SetControlValues(isState)
+
+        If node.IsAnonymous Then
+            If tabConstraint.TabPages.Contains(tpConstraintDetails) Then
+                tabConstraint.TabPages.Remove(tpConstraintDetails)      'Hide details tab
             End If
 
-            If Main.Instance.IsDefaultLanguageRightToLeft Then
-                Main.Reflect(mConstraintControl)
+            PanelName.Hide()
+            dgNodeBindings.Hide()
+        Else
+            If Not tabConstraint.TabPages.Contains(tpConstraintDetails) Then
+                tabConstraint.TabPages.Add(tpConstraintDetails)         'Show details tab
             End If
-        Catch ex As Exception
-            Debug.Assert(False, ex.ToString)
-        End Try
+
+            PanelName.Show()
+            dgNodeBindings.Show()
+            Dim nodeID As String = node.RM_Class.NodeId
+            mDataView.Table.Columns(1).DefaultValue = nodeID
+            mDataView.RowFilter = "Path = '" & nodeID & "'"
+
+            If mDataView.Count = 0 And Not termLookUp Is Nothing Then
+                termLookUp.Control.Hide()
+            End If
+        End If
+
+        If Main.Instance.IsDefaultLanguageRightToLeft Then
+            Main.Reflect(mConstraintControl)
+        End If
 
         ResumeLayout(False)
         mIsLoading = False
@@ -709,35 +736,26 @@ Public Class ArchetypeNodeConstraintControl
 
     Private Sub SetUpNullFlavours(ByVal archetypeElmnt As ArchetypeElement)
         Dim cp As CodePhrase = archetypeElmnt.RM_Class.ConstrainedNullFlavours
-        Dim t As Term
+        Dim term As Term
 
         If chkListNull.Items.Count = 0 Then
-            Dim dr As DataRow() = TerminologyServer.Instance.CodesForGrouperID(15)
-            For Each r As DataRow In dr
-                t = New Term(CStr(r(1)))
-                t.Text = CStr(r(2))
-                chkListNull.Items.Add(t, SetNullFlavorChecked(cp, t.Code))
+            For Each row As DataRow In TerminologyServer.Instance.CodesForGrouperID(15)
+                term = New Term(CStr(row(1)))
+                term.Text = CStr(row(2))
+                chkListNull.Items.Add(term, SetNullFlavorChecked(cp, term.Code))
             Next
         Else
             For i As Integer = 0 To chkListNull.Items.Count - 1
-                t = CType(chkListNull.Items(i), Term)
-                chkListNull.SetItemChecked(i, SetNullFlavorChecked(cp, t.Code))
+                term = CType(chkListNull.Items(i), Term)
+                chkListNull.SetItemChecked(i, SetNullFlavorChecked(cp, term.Code))
             Next
         End If
 
         gbNullFlavours.Visible = True
     End Sub
 
-    Private Function SetNullFlavorChecked(ByVal nullFlavors As CodePhrase, ByVal cde As String) As Boolean
-        If nullFlavors.Codes.Count > 0 Then
-            If nullFlavors.Codes.Contains(cde) Then
-                Return True
-            Else
-                Return False
-            End If
-        Else
-            Return True
-        End If
+    Private Function SetNullFlavorChecked(ByVal nullFlavors As CodePhrase, ByVal code As String) As Boolean
+        Return nullFlavors.Codes.Count = 0 Or nullFlavors.Codes.Contains(code)
     End Function
 
     Protected Overridable Sub SetControlValues(ByVal IsState As Boolean)
@@ -757,20 +775,21 @@ Public Class ArchetypeNodeConstraintControl
             mAnnotationsTable.Clear()
 
             If CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Count > 0 Then
-                For Each k As String In CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Keys
-                    Dim dr As DataRow = mAnnotationsTable.NewRow
-                    dr(0) = k
-                    dr(1) = CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Item(k)
-                    mAnnotationsTable.Rows.Add(dr)
+                For Each key As String In CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Keys
+                    Dim row As DataRow = mAnnotationsTable.NewRow
+                    row(0) = key
+                    row(1) = CType(mArchetypeNode, ArchetypeNodeAbstract).Annotations.Item(key)
+                    mAnnotationsTable.Rows.Add(row)
                 Next
             End If
 
             txtRuntimeName.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).RuntimeNameText
 
             'Disable all but occurrences for References
+            Dim isSameSpecialisationDepth As Boolean = mArchetypeNode.RM_Class.SpecialisationDepth = mFileManager.OntologyManager.NumberOfSpecialisations
             Dim isntReference As Boolean = mArchetypeNode.RM_Class.Type <> StructureType.Reference
-            PanelDataConstraint.Enabled = isntReference
-            PanelAddressable.Enabled = isntReference
+            PanelDataConstraint.Enabled = isSameSpecialisationDepth And isntReference
+            PanelAddressable.Enabled = isSameSpecialisationDepth And isntReference
         End If
     End Sub
 
@@ -1007,6 +1026,10 @@ Public Class ArchetypeNodeConstraintControl
                 End If
             End If
         End If
+    End Sub
+
+    Private Sub specialiseButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles specialiseButton.Click
+        RaiseEvent Specialise(sender, e)
     End Sub
 
 End Class

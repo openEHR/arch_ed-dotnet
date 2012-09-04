@@ -17,6 +17,7 @@
 Public Class AE_Constants
 
     Private mSpecialise As String = "Specialise"
+    Private mSpecialised As String = "Specialised"
     Private mSpecialisationQuestion As String = "Specialise '{0}'?"
     Private mSpecialiseYes As String = "Yes, specialise it"
     Private mSpecialiseAndClone As String = "Yes, but add a new node"
@@ -275,9 +276,15 @@ Public Class AE_Constants
         End Get
     End Property
 
-    Friend ReadOnly Property SpecialisationQuestion() As String
+    Friend ReadOnly Property Specialised() As String
         Get
-            Return mSpecialisationQuestion
+            Return mSpecialised
+        End Get
+    End Property
+
+    Friend ReadOnly Property SpecialisationQuestion(ByVal what As Object) As String
+        Get
+            Return String.Format(mSpecialisationQuestion, what)
         End Get
     End Property
 
@@ -701,6 +708,7 @@ Public Class AE_Constants
 
     Protected Sub New(ByVal Language As String)
         mSpecialise = TerminologyServer.Instance.RubricForCode(185, Language)
+        mSpecialised = TerminologyServer.Instance.RubricForCode(707, Language)
         mSpecialisationQuestion = TerminologyServer.Instance.RubricForCode(699, Language)
         mSpecialiseYes = TerminologyServer.Instance.RubricForCode(700, Language)
         mSpecialiseAndClone = TerminologyServer.Instance.RubricForCode(701, Language)

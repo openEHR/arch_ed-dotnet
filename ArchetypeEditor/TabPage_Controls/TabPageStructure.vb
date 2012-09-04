@@ -546,6 +546,7 @@ Public Class TabPageStructure
 
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         HelpProviderTabPageStructure.HelpNamespace = Main.Instance.Options.HelpLocationPath
+        structurePanel.Enabled = mFileManager.OntologyManager.NumberOfSpecialisations = 0
 
         If Not mIsEmbedded And comboStructure.Items.Count > 0 Then
             Dim wasLoading As Boolean = mIsLoading
@@ -563,7 +564,7 @@ Public Class TabPageStructure
 
             structurePanel.Visible = comboStructure.Items.Count > 1
 
-            If structurePanel.Visible Then
+            If structurePanel.Visible And structurePanel.Enabled Then
                 comboStructure.Focus()
             End If
 
@@ -584,8 +585,18 @@ Public Class TabPageStructure
         End If
     End Sub
 
-    Public Sub Translate()
+    Private Sub Specialise(ByVal sender As Object, ByVal e As EventArgs) Handles DetailsPanel.Specialise
         If Not mStructureControl Is Nothing Then
+            mStructureControl.SpecialiseCurrentItem(sender, e)
+        End If
+    End Sub
+
+    Public Sub Translate()
+        structurePanel.Enabled = mFileManager.OntologyManager.NumberOfSpecialisations = 0
+
+        If mIsEmbedded Then
+            ShowDetailPanel(mEmbeddedSlot, Nothing)
+        ElseIf Not mStructureControl Is Nothing Then
             If mFileManager Is Filemanager.Master Then
                 mStructureControl.Translate()
             Else
@@ -739,7 +750,7 @@ Public Class TabPageStructure
                         End If
 
                         displayPanel.Hide()
-                        ShowDetailPanel(mEmbeddedSlot, New EventArgs)
+                        ShowDetailPanel(mEmbeddedSlot, Nothing)
                     Else
                         If chosenStructure <> StructureType Then
                             Dim entryStructure As EntryStructure = Nothing ' User control to provide the list or whatever

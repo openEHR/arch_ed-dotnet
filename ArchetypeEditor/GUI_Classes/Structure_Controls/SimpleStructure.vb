@@ -209,7 +209,7 @@ Public Class SimpleStructure
         mIsLoading = False
     End Sub
 
-    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
+    Public Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
         Dim element As ArchetypeElement = TryCast(mElement, ArchetypeElement)
 
         If Not element Is Nothing Then
@@ -356,11 +356,6 @@ Public Class SimpleStructure
                 End If
             End If
         End If
-    End Sub
-
-    Private Sub txtSimple_Leave(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        ' ask again if overriding specialisation rules
-        OKtoEditSpecialisation = False
     End Sub
 
     Private Sub SimpleStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load

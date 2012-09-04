@@ -281,7 +281,7 @@ Public Class ListStructure
         MyBase.Translate()
     End Sub
 
-    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
+    Public Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
         If lvList.SelectedItems.Count > 0 Then
             Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems.Item(0), ArchetypeListViewItem)
             Dim node As ArchetypeNodeAbstract = CType(lvItem.Item, ArchetypeNodeAbstract)

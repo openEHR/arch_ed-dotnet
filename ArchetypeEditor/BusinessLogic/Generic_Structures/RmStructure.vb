@@ -147,7 +147,13 @@ Public Class RmStructure
 
     Public ReadOnly Property SpecialisationDepth() As Integer
         Get
-            Return NodeId.Split("."c).Length - 1
+            Dim result As Integer = 0
+
+            If Not NodeId Is Nothing Then
+                result = NodeId.Split("."c).Length - 1
+            End If
+
+            Return result
         End Get
     End Property
 

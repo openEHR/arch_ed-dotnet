@@ -3358,13 +3358,11 @@ Public Class Designer
         s = "-"
 
         While InStr(s, "-") > 0
-            Dim prompt As String = AE_Constants.Instance.Specialise & " " & mFileManager.Archetype.Archetype_ID.ToString & "." & Environment.NewLine & Environment.NewLine & "Enter the new concept ('-' is not allowed)."
+            Dim prompt As String = AE_Constants.Instance.SpecialisationQuestion(mFileManager.Archetype.Archetype_ID) & Environment.NewLine & Environment.NewLine & "Enter the new concept ('-' is not allowed)."
             s = Main.Instance.GetInput(prompt, Me)
         End While
 
         If s <> "" Then
-            Dim a_Term As RmTerm
-
             ' replace spaces with underscore
             s = s.Replace(" "c, "_"c)
 
@@ -3374,13 +3372,14 @@ Public Class Designer
 
             ' show the new archetype ID in the GUI
             lblArchetypeName.Text = mFileManager.Archetype.Archetype_ID.ToString
-            a_Term = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
-            txtConceptInFull.Text = a_Term.Text
-            TxtConceptDescription.Text = a_Term.Description
+            Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mFileManager.Archetype.ConceptCode)
+            txtConceptInFull.Text = term.Text
+            TxtConceptDescription.Text = term.Description
             txtConceptComment.Text = ""
             gbSpecialisation.Show()
-            UpdateSpecialisationTree(a_Term.Text, mFileManager.Archetype.ConceptCode)
+            UpdateSpecialisationTree(term.Text, mFileManager.Archetype.ConceptCode)
             MenuFileSpecialise.Visible = False
+            Translate("")
             mFileManager.FileLoading = False
             mFileManager.FileEdited = True
             mFileManager.IsNew = True

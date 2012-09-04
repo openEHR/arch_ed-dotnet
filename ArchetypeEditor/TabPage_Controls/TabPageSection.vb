@@ -19,8 +19,7 @@ Public Class TabPageSection
     Inherits System.Windows.Forms.UserControl
 
     Private mNodeDragged As ArchetypeTreeNode
-    Private MenuItemSpecialise As MenuItem
-    Private mConstraintDisplay As ArchetypeNodeConstraintControl
+    Private WithEvents DetailsPanel As ArchetypeNodeConstraintControl
     Private mRootOfComposition As Boolean = False
     Private mFileManager As FileManagerLocal
     Private mNoHitNode As Boolean = False
@@ -37,11 +36,11 @@ Public Class TabPageSection
 
         'Add any initialization after the InitializeComponent() call
 
-        If Not Me.DesignMode Then
+        If Not DesignMode Then
             mFileManager = Filemanager.Master
             SetCardinality(StructureType.SECTION)
+            DetailsPanel = New ArchetypeNodeConstraintControl(mFileManager)
         End If
-
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -62,12 +61,13 @@ Public Class TabPageSection
     'Do not modify it using the code editor.
     Friend WithEvents PanelTop As System.Windows.Forms.Panel
     Friend WithEvents Splitter1 As System.Windows.Forms.Splitter
-    Friend WithEvents tvSection As System.Windows.Forms.TreeView
+    Friend WithEvents tvTree As System.Windows.Forms.TreeView
     Friend WithEvents ilSection As System.Windows.Forms.ImageList
     Friend WithEvents ContextMenuTree As System.Windows.Forms.ContextMenu
     Friend WithEvents MenuSectionAdd As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuNameSlot As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuSectionRemove As System.Windows.Forms.MenuItem
+    Friend WithEvents NameSlotMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents RemoveMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents SpecialiseMenuItem As System.Windows.Forms.MenuItem
     Friend WithEvents ToolTip1 As System.Windows.Forms.ToolTip
     Friend WithEvents butListUp As System.Windows.Forms.Button
     Friend WithEvents butListDown As System.Windows.Forms.Button
@@ -85,11 +85,12 @@ Public Class TabPageSection
         Me.butListUp = New System.Windows.Forms.Button
         Me.butListDown = New System.Windows.Forms.Button
         Me.Splitter1 = New System.Windows.Forms.Splitter
-        Me.tvSection = New System.Windows.Forms.TreeView
+        Me.tvTree = New System.Windows.Forms.TreeView
         Me.ContextMenuTree = New System.Windows.Forms.ContextMenu
         Me.MenuSectionAdd = New System.Windows.Forms.MenuItem
-        Me.MenuNameSlot = New System.Windows.Forms.MenuItem
-        Me.MenuSectionRemove = New System.Windows.Forms.MenuItem
+        Me.NameSlotMenuItem = New System.Windows.Forms.MenuItem
+        Me.RemoveMenuItem = New System.Windows.Forms.MenuItem
+        Me.SpecialiseMenuItem = New System.Windows.Forms.MenuItem
         Me.ilSection = New System.Windows.Forms.ImageList(Me.components)
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.PanelLeft = New System.Windows.Forms.Panel
@@ -154,41 +155,45 @@ Public Class TabPageSection
         Me.Splitter1.TabIndex = 2
         Me.Splitter1.TabStop = False
         '
-        'tvSection
+        'tvTree
         '
-        Me.tvSection.AllowDrop = True
-        Me.tvSection.ContextMenu = Me.ContextMenuTree
-        Me.tvSection.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.tvSection.ImageIndex = 0
-        Me.tvSection.ImageList = Me.ilSection
-        Me.tvSection.LabelEdit = True
-        Me.tvSection.Location = New System.Drawing.Point(32, 69)
-        Me.tvSection.Name = "tvSection"
-        Me.tvSection.SelectedImageIndex = 0
-        Me.tvSection.Size = New System.Drawing.Size(328, 347)
-        Me.tvSection.TabIndex = 4
+        Me.tvTree.AllowDrop = True
+        Me.tvTree.ContextMenu = Me.ContextMenuTree
+        Me.tvTree.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.tvTree.ImageIndex = 0
+        Me.tvTree.ImageList = Me.ilSection
+        Me.tvTree.LabelEdit = True
+        Me.tvTree.Location = New System.Drawing.Point(32, 69)
+        Me.tvTree.Name = "tvTree"
+        Me.tvTree.SelectedImageIndex = 0
+        Me.tvTree.Size = New System.Drawing.Size(328, 347)
+        Me.tvTree.TabIndex = 4
         '
         'ContextMenuTree
         '
-        Me.ContextMenuTree.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuSectionAdd, Me.MenuSectionRemove, Me.MenuNameSlot})
+        Me.ContextMenuTree.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuSectionAdd, Me.RemoveMenuItem, Me.SpecialiseMenuItem, Me.NameSlotMenuItem})
         '
         'MenuSectionAdd
         '
         Me.MenuSectionAdd.Index = 0
         Me.MenuSectionAdd.Text = "New"
         '
-        'MenuSectionRemove
+        'RemoveMenuItem
         '
-        Me.MenuSectionRemove.Index = 1
-        Me.MenuSectionRemove.Text = "Remove"
-        Me.MenuSectionRemove.Visible = False
+        Me.RemoveMenuItem.Index = 1
+        Me.RemoveMenuItem.Text = "Remove"
+        Me.RemoveMenuItem.Visible = False
         '
-        'MenuNameSlot
+        'SpecialiseMenuItem
         '
-        Me.MenuNameSlot.Index = 2
-        Me.MenuNameSlot.Text = "Name this slot"
-        Me.MenuNameSlot.Visible = False
-        Me.MenuSectionRemove.Visible = False
+        Me.SpecialiseMenuItem.Index = 2
+        Me.SpecialiseMenuItem.Text = "Specialise"
+        '
+        'NameSlotMenuItem
+        '
+        Me.NameSlotMenuItem.Index = 3
+        Me.NameSlotMenuItem.Text = "Name this slot"
+        Me.NameSlotMenuItem.Visible = False
         '
         'ilSection
         '
@@ -222,7 +227,7 @@ Public Class TabPageSection
         'TabPageSection
         '
         Me.BackColor = System.Drawing.Color.LightYellow
-        Me.Controls.Add(Me.tvSection)
+        Me.Controls.Add(Me.tvTree)
         Me.Controls.Add(Me.Splitter1)
         Me.Controls.Add(Me.PanelSectionConstraint)
         Me.Controls.Add(Me.PanelLeft)
@@ -272,7 +277,7 @@ Public Class TabPageSection
             text.WriteLine(Space(3 * level) & s & "\par")
         End If
 
-        TreeToRichText(tvSection.Nodes, text, level + 1)
+        TreeToRichText(tvTree.Nodes, text, level + 1)
         text.WriteLine("\pard\f0\fs20\par")
     End Sub
 
@@ -317,12 +322,12 @@ Public Class TabPageSection
 
         If mRootOfComposition Then
             SectNode = New RmSection("root")
-            ProcessChildrenRM_Structures(tvSection.Nodes, SectNode)
+            ProcessChildrenRM_Structures(tvTree.Nodes, SectNode)
         Else
             SectNode = New RmSection(mFileManager.Archetype.ConceptCode)
 
-            If tvSection.GetNodeCount(False) > 0 Then
-                ProcessChildrenRM_Structures(tvSection.Nodes, SectNode)
+            If tvTree.GetNodeCount(False) > 0 Then
+                ProcessChildrenRM_Structures(tvTree.Nodes, SectNode)
             End If
         End If
 
@@ -347,22 +352,22 @@ Public Class TabPageSection
     Public Sub ProcessSection(ByVal a_section As RmSection)
         Dim rm_node As Object
         SetCardinality(a_section)
-        tvSection.Nodes.Clear()
+        tvTree.Nodes.Clear()
 
         If mRootOfComposition Then
             For Each slot As RmSlot In a_section.Children
                 Dim n As New ArchetypeTreeNode(CType(slot, RmSlot), mFileManager)
-                tvSection.Nodes.Add(n)
+                tvTree.Nodes.Add(n)
             Next
         Else
             For Each rm_node In a_section.Children
                 If TypeOf rm_node Is RmSection Then
                     Dim n As New ArchetypeTreeNode(CType(rm_node, RmStructureCompound), mFileManager)
-                    tvSection.Nodes.Add(n)
+                    tvTree.Nodes.Add(n)
                     ProcessSection(rm_node, n.Nodes)
                 ElseIf TypeOf rm_node Is RmSlot Then
                     Dim n As New ArchetypeTreeNode(CType(rm_node, RmSlot), mFileManager)
-                    tvSection.Nodes.Add(n)
+                    tvTree.Nodes.Add(n)
                 Else
                     Debug.Assert(False, "Type not catered for")
                 End If
@@ -381,7 +386,8 @@ Public Class TabPageSection
     End Sub
 
     Public Sub Translate()
-        TranslateSectionNodes(tvSection.Nodes)
+        TranslateSectionNodes(tvTree.Nodes)
+        tvTree_AfterSelect(Me, Nothing)
     End Sub
 
     Public Sub TranslateGUI()
@@ -409,7 +415,13 @@ Public Class TabPageSection
         End If
     End Sub
 
-    Private Sub tvSection_AfterLabelEdit(ByVal sender As System.Object, ByVal e As System.Windows.Forms.NodeLabelEditEventArgs) Handles tvSection.AfterLabelEdit
+    Protected ReadOnly Property SpecialisationDepth() As Integer
+        Get
+            Return mFileManager.OntologyManager.NumberOfSpecialisations
+        End Get
+    End Property
+
+    Private Sub tvTree_AfterLabelEdit(ByVal sender As System.Object, ByVal e As System.Windows.Forms.NodeLabelEditEventArgs) Handles tvTree.AfterLabelEdit
         ' add the update of the Term and description
 
         If Not e.Label Is Nothing Then
@@ -429,77 +441,116 @@ Public Class TabPageSection
         End If
     End Sub
 
-    Private Sub tvSection_BeforeLabelEdit(ByVal sender As System.Object, ByVal e As System.Windows.Forms.NodeLabelEditEventArgs) Handles tvSection.BeforeLabelEdit
+    Private Sub tvTree_BeforeLabelEdit(ByVal sender As System.Object, ByVal e As System.Windows.Forms.NodeLabelEditEventArgs) Handles tvTree.BeforeLabelEdit
         ' add the update of the Term and description
 
-        Dim tvNode As ArchetypeTreeNode
+        Dim tvNode As ArchetypeTreeNode = e.Node
 
-        tvNode = e.Node
-        If tvNode.RM_Class.Type = StructureType.Slot AndAlso TypeOf (tvNode.Item) Is ArchetypeNodeAnonymous Then
+        If tvNode.Item.IsAnonymous Then
             e.CancelEdit = True
         End If
     End Sub
 
-    Private Sub butRemoveSection_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveSection.Click, MenuSectionRemove.Click
-        Dim n As TreeNode = tvSection.SelectedNode
+    Private Sub butRemoveSection_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveSection.Click, RemoveMenuItem.Click
+        Dim n As TreeNode = tvTree.SelectedNode
 
         If Not n Is Nothing Then
             If MessageBox.Show(AE_Constants.Instance.Remove & " " & n.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
-                tvSection.Nodes.Remove(n)
+                tvTree.Nodes.Remove(n)
                 mFileManager.FileEdited = True
             End If
         End If
     End Sub
 
-    Private Sub NameSlot_Click(ByVal sender As Object, ByVal e As EventArgs) Handles MenuNameSlot.Click
-        Dim a_node As ArchetypeTreeNode = tvSection.SelectedNode
-        Dim slot As ArchetypeNodeAnonymous = CType(a_node.Item, ArchetypeNodeAnonymous)
-        Dim newSlot As New ArchetypeSlot(slot, mFileManager)
-        Dim i As Integer = a_node.Index
-        Dim nc As TreeNodeCollection
+    Public Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click, DetailsPanel.Specialise
+        If Not tvTree.SelectedNode Is Nothing Then
+            Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+            Dim dlg As New SpecialisationQuestionDialog()
+            dlg.ShowForArchetypeNode(tvNode.Item.Text, tvNode.RM_Class, SpecialisationDepth)
 
-        If a_node.Parent Is Nothing Then
-            nc = tvSection.Nodes
-        Else
-            nc = a_node.Parent.Nodes
+            If dlg.IsSpecialisationRequested Then
+                If dlg.IsCloningRequested Then
+                    Dim i As Integer = tvNode.Index
+                    tvNode = tvNode.SpecialisedClone(mFileManager)
+
+                    If tvTree.SelectedNode.Parent Is Nothing Then
+                        tvTree.Nodes.Insert(i + 1, tvNode)
+                    Else
+                        tvTree.SelectedNode.Parent.Nodes.Insert(i + 1, tvNode)
+                    End If
+                Else
+                    tvNode.Specialise()
+                End If
+
+                tvNode.ImageIndex = 0
+                tvNode.SelectedImageIndex = 2
+                tvTree.SelectedNode = tvNode
+                DetailsPanel.ShowConstraint(False, False, False, tvNode.Item, mFileManager)
+                tvNode.BeginEdit()
+                mFileManager.FileEdited = True
+            End If
         End If
-
-        a_node.Remove()
-
-        a_node = New ArchetypeTreeNode(newSlot)
-        nc.Insert(i, a_node)
-
-        a_node.ImageIndex = 0
-        a_node.SelectedImageIndex = 2
-
-        a_node.EnsureVisible()
-        tvSection.SelectedNode = a_node
-
-        mFileManager.FileEdited = True
-        a_node.BeginEdit()
     End Sub
 
-    Private Sub tvSection_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles tvSection.AfterSelect
-        ' pass the active selection as an iArchetypeItemNode
-        MenuNameSlot.Visible = False
+    Private Sub NameSlot_Click(ByVal sender As Object, ByVal e As EventArgs) Handles NameSlotMenuItem.Click
+        If Not tvTree.SelectedNode Is Nothing Then
+            ReplaceAnonymousSlot()
+            tvTree.SelectedNode.BeginEdit()
+        End If
+    End Sub
 
-        If tvSection.SelectedNode Is Nothing Then
-            MenuSectionRemove.Visible = False
-            mConstraintDisplay.Visible = False
-        Else
-            MenuSectionRemove.Visible = True
-            Dim node As ArchetypeTreeNode = tvSection.SelectedNode
+    Protected Sub ReplaceAnonymousSlot()
+        If Not tvTree.SelectedNode Is Nothing Then
+            Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+
+            If tvNode.Item.IsAnonymous Then
+                Dim newSlot As New ArchetypeSlot(CType(tvNode.Item, ArchetypeNodeAnonymous), mFileManager)
+                Dim i As Integer = tvNode.Index
+                Dim nc As TreeNodeCollection
+
+                If tvNode.Parent Is Nothing Then
+                    nc = tvTree.Nodes
+                Else
+                    nc = tvNode.Parent.Nodes
+                End If
+
+                tvNode.Remove()
+                tvNode = New ArchetypeTreeNode(newSlot)
+                tvNode.ImageIndex = 0
+                tvNode.SelectedImageIndex = 2
+                nc.Insert(i, tvNode)
+
+                mFileManager.FileEdited = True
+                tvNode.EnsureVisible()
+                tvTree.SelectedNode = tvNode
+            End If
+        End If
+    End Sub
+
+    Private Sub tvTree_AfterSelect(ByVal sender As System.Object, ByVal e As System.Windows.Forms.TreeViewEventArgs) Handles tvTree.AfterSelect
+        RemoveMenuItem.Visible = False
+        SpecialiseMenuItem.Visible = False
+        NameSlotMenuItem.Visible = False
+        DetailsPanel.Visible = Not tvTree.SelectedNode Is Nothing
+
+        If Not tvTree.SelectedNode Is Nothing Then
+            Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
+            Dim item As ArchetypeNode = tvNode.Item
 
             SuspendLayout()
-            mConstraintDisplay.ShowConstraint(False, False, False, node.Item, mFileManager)
+            DetailsPanel.ShowConstraint(False, False, False, item, mFileManager)
             ResumeLayout()
 
-            If node.Item.RM_Class.Type = StructureType.Slot AndAlso TypeOf node.Item Is ArchetypeNodeAnonymous Then
-                MenuNameSlot.Visible = True
-            End If
+            If item.IsAnonymous Then
+                NameSlotMenuItem.Visible = True
+                RemoveMenuItem.Visible = True
+            Else
+                Dim nodeId As String = CType(item, ArchetypeNodeAbstract).NodeId
+                Dim i As Integer = item.RM_Class.SpecialisationDepth
 
-            If Not mConstraintDisplay.Visible Then
-                mConstraintDisplay.Visible = True
+                RemoveMenuItem.Visible = i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1)
+                SpecialiseMenuItem.Visible = SpecialisationDepth > 0 And (i < SpecialisationDepth Or item.Occurrences.IsMultiple)
+                NameSlotMenuItem.Visible = item.IsAnonymous
             End If
         End If
     End Sub
@@ -513,17 +564,23 @@ Public Class TabPageSection
     End Sub
 
     Private Sub TabPageSection_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        tvSection.ExpandAll()
-        mConstraintDisplay = New ArchetypeNodeConstraintControl(mFileManager)
-        mConstraintDisplay.Visible = False
-        PanelSectionConstraint.Controls.Add(mConstraintDisplay)
-        mConstraintDisplay.Dock = DockStyle.Fill
+        tvTree.ExpandAll()
+        DetailsPanel.Visible = False
+        PanelSectionConstraint.Controls.Add(DetailsPanel)
+        DetailsPanel.Dock = DockStyle.Fill
 
-        If tvSection.GetNodeCount(False) > 0 Then
-            tvSection.SelectedNode = tvSection.Nodes(0)
+        If tvTree.GetNodeCount(False) > 0 Then
+            tvTree.SelectedNode = tvTree.Nodes(0)
         End If
 
         HelpProviderSection.HelpNamespace = Main.Instance.Options.HelpLocationPath
+
+        If Not DesignMode Then
+            'set the text for the menus
+            RemoveMenuItem.Text = AE_Constants.Instance.Remove
+            SpecialiseMenuItem.Text = AE_Constants.Instance.Specialise
+            NameSlotMenuItem.Text = AE_Constants.Instance.NameThisSlot
+        End If
     End Sub
 
 #Region "Buttons and menus - adding and removing slots and sections"
@@ -547,21 +604,21 @@ Public Class TabPageSection
         tvNode.SelectedImageIndex = 2
 
         If mRootOfComposition Then
-            tvSection.Nodes.Add(tvNode)
-        ElseIf tvSection.SelectedNode Is Nothing Or mNoHitNode Then
-            tvSection.Nodes.Add(tvNode)
-        ElseIf CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = StructureType.SECTION Then
-            tvSection.SelectedNode.Nodes.Add(tvNode)
-        ElseIf tvSection.SelectedNode.Parent Is Nothing Then
-            tvSection.Nodes.Add(tvNode)
+            tvTree.Nodes.Add(tvNode)
+        ElseIf tvTree.SelectedNode Is Nothing Or mNoHitNode Then
+            tvTree.Nodes.Add(tvNode)
+        ElseIf CType(tvTree.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = StructureType.SECTION Then
+            tvTree.SelectedNode.Nodes.Add(tvNode)
+        ElseIf tvTree.SelectedNode.Parent Is Nothing Then
+            tvTree.Nodes.Add(tvNode)
         Else
-            tvSection.SelectedNode.Parent.Nodes.Add(tvNode)
+            tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
         End If
 
         mFileManager.FileEdited = True
         tvNode.EnsureVisible()
         tvNode.BeginEdit()
-        tvSection.SelectedNode = tvNode
+        tvTree.SelectedNode = tvNode
     End Sub
 
     Sub AddSection(ByVal sender As Object, ByVal e As EventArgs)
@@ -573,19 +630,19 @@ Public Class TabPageSection
         s = Filemanager.GetOpenEhrTerm(314, "Section")
         Dim tvNode As New ArchetypeTreeNode(s, StructureType.SECTION, mFileManager)
 
-        If tvSection.SelectedNode Is Nothing Or mNoHitNode Then
-            tvSection.Nodes.Add(tvNode)
+        If tvTree.SelectedNode Is Nothing Or mNoHitNode Then
+            tvTree.Nodes.Add(tvNode)
         ElseIf CType(sender, MenuItem).Index = 1 Then  ' add as subsection
-            tvSection.SelectedNode.Nodes.Add(tvNode)
-        ElseIf tvSection.SelectedNode.Parent Is Nothing Then
-            tvSection.Nodes.Add(tvNode)
+            tvTree.SelectedNode.Nodes.Add(tvNode)
+        ElseIf tvTree.SelectedNode.Parent Is Nothing Then
+            tvTree.Nodes.Add(tvNode)
         Else
-            tvSection.SelectedNode.Parent.Nodes.Add(tvNode)
+            tvTree.SelectedNode.Parent.Nodes.Add(tvNode)
         End If
 
         mFileManager.FileEdited = True
         tvNode.EnsureVisible()
-        tvSection.SelectedNode = tvNode
+        tvTree.SelectedNode = tvNode
         tvNode.BeginEdit()
     End Sub
 
@@ -612,8 +669,8 @@ Public Class TabPageSection
             'mi = New MenuItem(Filemanager.GetOpenEhrTerm(314, "Section"))
             'AddHandler mi.Click, AddressOf AddSection
             'cm.MenuItems.Add(mi)
-            'If (Not tvSection.SelectedNode Is Nothing) AndAlso _
-            '    CType(tvSection.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = _
+            'If (Not tvTree.SelectedNode Is Nothing) AndAlso _
+            '    CType(tvTree.SelectedNode, ArchetypeTreeNode).Item.RM_Class.Type = _
             '    StructureType.SECTION Then
 
             mi = New MenuItem(Filemanager.GetOpenEhrTerm(558, "Sub-Section"))
@@ -639,11 +696,11 @@ Public Class TabPageSection
         ContextMenuTree.MenuItems(0).MergeMenu(CreateContextMenu)
     End Sub
 
-    Private Sub tvSection_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tvSection.KeyDown
+    Private Sub tvTree_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles tvTree.KeyDown
         Select Case e.KeyCode
             Case Keys.F2
-                If Not tvSection.SelectedNode Is Nothing Then
-                    tvSection.SelectedNode.BeginEdit()
+                If Not tvTree.SelectedNode Is Nothing Then
+                    tvTree.SelectedNode.BeginEdit()
                 End If
             Case Keys.Delete
                 butRemoveSection_Click(sender, New EventArgs)
@@ -655,19 +712,19 @@ Public Class TabPageSection
 #Region "Moving and dragging slots and sections"
 
     Private Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListUp.Click
-        If Not tvSection.SelectedNode Is Nothing Then
+        If Not tvTree.SelectedNode Is Nothing Then
             Dim tvNodeCollection As TreeNodeCollection
             Dim tvParentNodeCollection As TreeNodeCollection = Nothing
             Dim i As Integer
-            Dim tvN As TreeNode = tvSection.SelectedNode
+            Dim tvN As TreeNode = tvTree.SelectedNode
 
             If tvN.Parent Is Nothing Then
-                tvNodeCollection = tvSection.Nodes
+                tvNodeCollection = tvTree.Nodes
             Else
                 tvNodeCollection = tvN.Parent.Nodes
 
                 If tvN.Parent.Parent Is Nothing Then
-                    tvParentNodeCollection = tvSection.Nodes
+                    tvParentNodeCollection = tvTree.Nodes
                 Else
                     tvParentNodeCollection = tvN.Parent.Parent.Nodes
                 End If
@@ -679,31 +736,31 @@ Public Class TabPageSection
                 tvN.Remove()
                 tvNodeCollection.Insert(i - 1, tvN)
                 mFileManager.FileEdited = True
-                tvSection.SelectedNode = tvN
+                tvTree.SelectedNode = tvN
             ElseIf i = 0 AndAlso Not tvParentNodeCollection Is Nothing Then
                 Dim ii As Integer = tvN.Parent.Index
                 tvN.Remove()
                 tvParentNodeCollection.Insert(ii, tvN)
                 mFileManager.FileEdited = True
-                tvSection.SelectedNode = tvN
+                tvTree.SelectedNode = tvN
             End If
         End If
     End Sub
 
     Private Sub butListDown_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butListDown.Click
-        If Not tvSection.SelectedNode Is Nothing Then
+        If Not tvTree.SelectedNode Is Nothing Then
             Dim tvNodeCollection As TreeNodeCollection
             Dim tvParentNodeCollection As TreeNodeCollection = Nothing
             Dim i As Integer
-            Dim tvN As TreeNode = tvSection.SelectedNode
+            Dim tvN As TreeNode = tvTree.SelectedNode
 
             If tvN.Parent Is Nothing Then
-                tvNodeCollection = tvSection.Nodes
+                tvNodeCollection = tvTree.Nodes
             Else
                 tvNodeCollection = tvN.Parent.Nodes
 
                 If tvN.Parent.Parent Is Nothing Then
-                    tvParentNodeCollection = tvSection.Nodes
+                    tvParentNodeCollection = tvTree.Nodes
                 Else
                     tvParentNodeCollection = tvN.Parent.Parent.Nodes
                 End If
@@ -715,47 +772,47 @@ Public Class TabPageSection
                 tvN.Remove()
                 tvNodeCollection.Insert(i + 1, tvN)
                 mFileManager.FileEdited = True
-                tvSection.SelectedNode = tvN
+                tvTree.SelectedNode = tvN
             ElseIf i = tvNodeCollection.Count - 1 AndAlso Not tvParentNodeCollection Is Nothing Then
                 Dim ii As Integer = tvN.Parent.Index
                 tvN.Remove()
                 tvParentNodeCollection.Insert(ii + 1, tvN)
                 mFileManager.FileEdited = True
-                tvSection.SelectedNode = tvN
+                tvTree.SelectedNode = tvN
             End If
         End If
     End Sub
 
-    Private Sub tvSection_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvSection.MouseDown
+    Private Sub tvTree_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvTree.MouseDown
         mNoHitNode = False
 
         If e.Button = System.Windows.Forms.MouseButtons.Left Then
-            tvSection.Cursor = System.Windows.Forms.Cursors.Hand
+            tvTree.Cursor = System.Windows.Forms.Cursors.Hand
         ElseIf e.Button = System.Windows.Forms.MouseButtons.Right Then
-            Dim tn As TreeNode = tvSection.GetNodeAt(e.X, e.Y)
+            Dim tn As TreeNode = tvTree.GetNodeAt(e.X, e.Y)
 
             If Not tn Is Nothing Then
-                tvSection.SelectedNode = tn
+                tvTree.SelectedNode = tn
             Else
                 mNoHitNode = True
             End If
         End If
     End Sub
 
-    Private Sub tvSection_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvSection.MouseUp
-        tvSection.Cursor = System.Windows.Forms.Cursors.Default
+    Private Sub tvTree_MouseUp(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles tvTree.MouseUp
+        tvTree.Cursor = System.Windows.Forms.Cursors.Default
     End Sub
 
-    Private Sub tvSection_ItemDrag(ByVal sender As Object, ByVal e As System.Windows.Forms.ItemDragEventArgs) Handles tvSection.ItemDrag
+    Private Sub tvTree_ItemDrag(ByVal sender As Object, ByVal e As System.Windows.Forms.ItemDragEventArgs) Handles tvTree.ItemDrag
         mNodeDragged = e.Item
-        tvSection.DoDragDrop(e, DragDropEffects.Move)
+        tvTree.DoDragDrop(e, DragDropEffects.Move)
     End Sub
 
-    Private Sub tvSection_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvSection.DragEnter
+    Private Sub tvTree_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragEnter
         e.Effect = DragDropEffects.Move
     End Sub
 
-    Private Sub tvSection_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvSection.DragOver
+    Private Sub tvTree_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragOver
         'Prevent dropping a parent on a child
 
         e.Effect = e.AllowedEffect
@@ -764,8 +821,8 @@ Public Class TabPageSection
             Dim position As Drawing.Point
             position.X = e.X
             position.Y = e.Y
-            position = tvSection.PointToClient(position)
-            Dim node As TreeNode = tvSection.GetNodeAt(position)
+            position = tvTree.PointToClient(position)
+            Dim node As TreeNode = tvTree.GetNodeAt(position)
 
             While Not node Is Nothing
                 node = node.Parent
@@ -778,13 +835,13 @@ Public Class TabPageSection
         End If
     End Sub
 
-    Private Sub tvSection_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvSection.DragDrop
+    Private Sub tvTree_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles tvTree.DragDrop
         If Not mNodeDragged Is Nothing Then
             Dim position As Point
             position.X = e.X
             position.Y = e.Y
-            position = tvSection.PointToClient(position)
-            Dim dropNode As ArchetypeTreeNode = tvSection.GetNodeAt(position)
+            position = tvTree.PointToClient(position)
+            Dim dropNode As ArchetypeTreeNode = tvTree.GetNodeAt(position)
 
             If dropNode Is mNodeDragged Then
                 Beep()
@@ -793,8 +850,8 @@ Public Class TabPageSection
                 Dim dropIndex As Integer
 
                 If dropNode Is Nothing Then
-                    dropParent = tvSection.Nodes
-                    dropIndex = tvSection.GetNodeCount(False)
+                    dropParent = tvTree.Nodes
+                    dropIndex = tvTree.GetNodeCount(False)
                 ElseIf dropNode.Item.RM_Class.Type = StructureType.SECTION Then
                     dropParent = dropNode.Nodes
 
@@ -805,7 +862,7 @@ Public Class TabPageSection
                     End If
                 Else
                     If dropNode.Parent Is Nothing Then
-                        dropParent = tvSection.Nodes
+                        dropParent = tvTree.Nodes
                     Else
                         dropParent = dropNode.Parent.Nodes
                     End If
@@ -814,7 +871,7 @@ Public Class TabPageSection
                 End If
 
                 If mNodeDragged.Parent Is Nothing Then
-                    dragParent = tvSection.Nodes
+                    dragParent = tvTree.Nodes
                 Else
                     dragParent = mNodeDragged.Parent.Nodes
                 End If
@@ -822,12 +879,12 @@ Public Class TabPageSection
                 dragParent.Remove(mNodeDragged)
                 dropParent.Insert(dropIndex, mNodeDragged)
                 mNodeDragged.EnsureVisible()
-                tvSection.SelectedNode = mNodeDragged
+                tvTree.SelectedNode = mNodeDragged
                 mFileManager.FileEdited = True
             End If
         End If
 
-        tvSection.Cursor = System.Windows.Forms.Cursors.Default
+        tvTree.Cursor = System.Windows.Forms.Cursors.Default
     End Sub
 
 #End Region

@@ -330,7 +330,7 @@ Public Class TreeStructure
         MyBase.Translate()
     End Sub
 
-    Protected Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
+    Public Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
         If Not tvTree.SelectedNode Is Nothing Then
             Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
             Dim dlg As New SpecialisationQuestionDialog()
@@ -338,7 +338,7 @@ Public Class TreeStructure
 
             If dlg.IsSpecialisationRequested Then
                 If dlg.IsCloningRequested Then
-                    Dim i As Integer = CType(tvNode, ArchetypeTreeNode).Index
+                    Dim i As Integer = tvNode.Index
                     tvNode = tvNode.SpecialisedClone(mFileManager)
 
                     If tvTree.SelectedNode.Parent Is Nothing Then

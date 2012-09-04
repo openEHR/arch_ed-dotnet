@@ -20,7 +20,6 @@ Public Class EntryStructure
     Inherits System.Windows.Forms.UserControl
 
     Private mStructureType As StructureType   'implement as overrided property
-    Protected OKtoEditSpecialisation As Boolean
     Protected mNodeId As String
     Protected mIsState As Boolean
     Protected mConstraintMenu As ConstraintContextMenu
@@ -662,6 +661,10 @@ Public Class EntryStructure
         Throw New NotImplementedException("Subclass must override this method")
     End Function
 
+    Public Overridable Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
+        Throw New NotImplementedException("Subclass must override this method")
+    End Sub
+
     Protected Overridable Sub ButListUp_Click(ByVal sender As Object, ByVal e As EventArgs)
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
@@ -735,7 +738,7 @@ Public Class EntryStructure
                 If ct.Length = 1 Then
                     ToolTipSpecialisation.RemoveAll()
                 Else
-                    Dim s As String = "Specialised:" & Environment.NewLine
+                    Dim s As String = AE_Constants.Instance.Specialised & ":" & Environment.NewLine
                     Dim i As Integer
 
                     For i = 0 To ct.Length - 1
