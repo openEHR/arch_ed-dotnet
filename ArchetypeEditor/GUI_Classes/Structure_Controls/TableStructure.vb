@@ -236,18 +236,15 @@ Public Class TableStructure
         If Main.Instance.DefaultLanguageCode <> "en" Then
             MenuNameSlot.Text = AE_Constants.Instance.NameThisSlot
         End If
-
-        ' add the change structure menu from EntryStructure
-        ContextMenuGrid.MenuItems.Add(menuChangeStructure)
     End Sub
 
     Public Overrides ReadOnly Property InterfaceBuilder() As Object
         Get
-            Dim Obj As New ArrayList
-            Obj.Add(mArchetypeTable)
-            Obj.Add(mKeyColumns)
-            Obj.Add(mIsRotated)
-            Return Obj
+            Dim result As New ArrayList
+            result.Add(mArchetypeTable)
+            result.Add(mKeyColumns)
+            result.Add(mIsRotated)
+            Return result
         End Get
     End Property
 
@@ -463,7 +460,7 @@ Public Class TableStructure
     End Sub
 
     Public Overrides Sub SetInitial()
-        If Me.dgGrid.VisibleRowCount > 0 Then
+        If dgGrid.VisibleRowCount > 0 Then
             SetCurrentItem(CType(mArchetypeTable.Rows(0).Item(2), ArchetypeNode))
         End If
     End Sub
@@ -893,10 +890,6 @@ Public Class TableStructure
 
             MenuRemoveRow.Text = String.Format("{0}: {1}", Filemanager.GetOpenEhrTerm(163, "Row"), CStr(dgGrid.Item(dgGrid.CurrentRowIndex, 1)))
             MenuRemoveRow.Visible = True
-        End If
-
-        If mFileManager.OntologyManager.Ontology.NumberOfSpecialisations = 0 Then
-            ContextMenuGrid.MenuItems.Add(menuChangeStructure)
         End If
     End Sub
 

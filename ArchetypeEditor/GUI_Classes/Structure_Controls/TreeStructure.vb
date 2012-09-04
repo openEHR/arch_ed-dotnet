@@ -197,11 +197,6 @@ Public Class TreeStructure
             If tvTree.GetNodeCount(False) > 0 Then
                 tvTree.SelectedNode = tvTree.Nodes(0)
             End If
-
-            ' add the change structure menu from EntryStructure
-            If Not mIsCluster AndAlso Not TreeContextMenu.MenuItems.Contains(menuChangeStructure) Then
-                TreeContextMenu.MenuItems.Add(menuChangeStructure)
-            End If
         End If
     End Sub
 

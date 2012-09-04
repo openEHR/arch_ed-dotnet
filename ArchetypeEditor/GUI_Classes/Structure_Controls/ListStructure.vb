@@ -184,11 +184,6 @@ Public Class ListStructure
                 AddReferenceMenuItem.Text = AE_Constants.Instance.AddReference
                 NameSlotMenuItem.Text = AE_Constants.Instance.NameThisSlot
             End If
-
-            ' add the change structure menu from EntryStructure
-            If Not ContextMenuList.MenuItems.Contains(menuChangeStructure) Then
-                ContextMenuList.MenuItems.Add(menuChangeStructure)
-            End If
         End If
     End Sub
 

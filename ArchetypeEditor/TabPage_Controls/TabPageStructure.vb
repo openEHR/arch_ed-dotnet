@@ -547,13 +547,7 @@ Public Class TabPageStructure
     Private Sub TabPageStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         HelpProviderTabPageStructure.HelpNamespace = Main.Instance.Options.HelpLocationPath
 
-        If Not mIsEmbedded Then
-            ShowStructureType(sender, e)
-        End If
-    End Sub
-
-    Private Sub ShowStructureType(ByVal sender As Object, ByVal e As EventArgs) Handles mStructureControl.ChangeStructure
-        If comboStructure.Items.Count > 0 Then
+        If Not mIsEmbedded And comboStructure.Items.Count > 0 Then
             Dim wasLoading As Boolean = mIsLoading
             mIsLoading = True
 
@@ -571,7 +565,6 @@ Public Class TabPageStructure
 
             If structurePanel.Visible Then
                 comboStructure.Focus()
-                comboStructure.DroppedDown = sender Is mStructureControl
             End If
 
             mIsLoading = wasLoading
@@ -637,11 +630,11 @@ Public Class TabPageStructure
         End If
     End Sub
 
-    Public Sub ProcessElement(ByVal an_element As RmElement)
+    Public Sub ProcessElement(ByVal element As RmElement)
         mIsLoading = True
         structurePanel.Hide()
         displayPanel.Show()
-        SetEntryStructure(New ElementOnly(an_element, mFileManager))
+        SetEntryStructure(New ElementOnly(element, mFileManager))
         mStructureControl.SetInitial()
         mIsLoading = False
     End Sub
@@ -680,15 +673,15 @@ Public Class TabPageStructure
         mIsLoading = False
     End Sub
 
-    Public Sub BuildInterface(ByVal aContainer As Control, ByRef pos As Point, ByVal mandatory_only As Boolean)
+    Public Sub BuildInterface(ByVal container As Control, ByRef pos As Point, ByVal mandatoryOnly As Boolean)
         Dim spacer As Integer = 1
 
-        If aContainer.Name <> "tpInterface" Then
-            aContainer.Size = New Size
+        If container.Name <> "tpInterface" Then
+            container.Size = New Size
         End If
 
         If Not mStructureControl Is Nothing AndAlso mStructureControl.ItemCount > 0 Then
-            ArchetypeView.Instance.BuildInterface(mStructureControl.InterfaceBuilder, aContainer, pos, spacer, mandatory_only, mFileManager)
+            ArchetypeView.Instance.BuildInterface(mStructureControl.InterfaceBuilder, container, pos, spacer, mandatoryOnly, mFileManager)
         End If
     End Sub
 
@@ -802,20 +795,14 @@ Public Class TabPageStructure
         If OpenArchetypeForSlot(slot, Main.Instance.Options.RepositoryPath & "\structure") Then
             mFileManager.FileLoading = False
             Filemanager.AddEmbedded(mFileManager)
-
-            'Hide context menu to change structure
-            If Not mStructureControl Is Nothing Then
-                mStructureControl.IsChangeStructureMenuVisible = False
-                Translate()
-            End If
         Else
             mFileManager = Filemanager.Master
             chkEmbedded.Checked = True
             SetEntryStructure(Nothing)
             comboStructure.SelectedItem = StructureTypeAsString
-            Translate()
         End If
 
+        Translate()
         mIsLoading = False
     End Sub
 

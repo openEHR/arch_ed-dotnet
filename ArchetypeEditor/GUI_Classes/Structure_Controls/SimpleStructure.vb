@@ -332,10 +332,6 @@ Public Class SimpleStructure
                 SpecialiseMenuItem.Visible = True
             End If
         End If
-
-        If mFileManager.OntologyManager.Ontology.NumberOfSpecialisations = 0 Then
-            ContextMenuSimple.MenuItems.Add(menuChangeStructure)
-        End If
     End Sub
 
     Private Sub txtSimple_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSimple.MouseEnter
@@ -380,9 +376,6 @@ Public Class SimpleStructure
             txtSimple.Enabled = False
             mIsLoading = False
         End If
-
-        ' add the change structure menu from EntryStructure
-        ContextMenuSimple.MenuItems.Add(menuChangeStructure)
     End Sub
 
 

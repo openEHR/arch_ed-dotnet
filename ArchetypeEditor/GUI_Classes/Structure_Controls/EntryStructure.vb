@@ -28,7 +28,6 @@ Public Class EntryStructure
     Protected mCurrentItem As ArchetypeNode
     Protected mFileManager As FileManagerLocal
     Protected mCardinalityControl As OccurrencesPanel
-    Protected WithEvents menuChangeStructure As System.Windows.Forms.MenuItem
 
     'implement as overrided property
     Protected mControl As Control  ' the GUI control in the inherited class e.g. tree, text etc
@@ -38,7 +37,6 @@ Public Class EntryStructure
     Friend WithEvents pbSlot As System.Windows.Forms.PictureBox
     Protected mNewCluster As Boolean = False
     Public Event CurrentItemChanged(ByVal sender As ArchetypeNode, ByVal e As EventArgs)
-    Public Event ChangeStructure(ByVal sender As Object, ByVal e As EventArgs)
 
 
 #Region " Windows Form Designer generated code "
@@ -67,7 +65,6 @@ Public Class EntryStructure
         Select Case rm.Type
             Case StructureType.Single, StructureType.List, StructureType.Tree, StructureType.Table
                 SetHelpTopic(mStructureType)
-                menuChangeStructure = New System.Windows.Forms.MenuItem(AE_Constants.Instance.ChangeStructure)
             Case StructureType.Cluster
                 SetHelpTopic(StructureType.Tree)
             Case Else
@@ -95,7 +92,6 @@ Public Class EntryStructure
                 Debug.Assert(False)
         End Select
 
-        menuChangeStructure = New System.Windows.Forms.MenuItem(AE_Constants.Instance.ChangeStructure)
         ShowIcons()
         SetCardinality(mStructureType)
     End Sub
@@ -534,19 +530,6 @@ Public Class EntryStructure
         End Get
     End Property
 
-    Public Property IsChangeStructureMenuVisible() As Boolean
-        Get
-            Return Not menuChangeStructure Is Nothing AndAlso menuChangeStructure.Visible
-        End Get
-        Set(ByVal Value As Boolean)
-            menuChangeStructure.Visible = Value
-        End Set
-    End Property
-
-    Private Sub menuChangeStructure_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuChangeStructure.Click
-        NotifyChangeStructure(Me, e)
-    End Sub
-
     Public Overridable Property Archetype() As RmStructure
         Get
             Throw New NotImplementedException("Subclass must override this property")
@@ -896,14 +879,8 @@ Public Class EntryStructure
         End If
     End Sub
 
-    Protected Sub NotifyChangeStructure(ByVal sender As Object, ByVal e As EventArgs)
-        RaiseEvent ChangeStructure(sender, e)
-    End Sub
-
     Private Sub pbGroup_MouseUp(ByVal sender As System.Object, ByVal e As System.Windows.Forms.MouseEventArgs) _
-                Handles pbAny.MouseUp, pbBoolean.MouseUp, pbCluster.MouseUp, pbCount.MouseUp, pbDateTime.MouseUp, _
-                    pbOrdinal.MouseUp, pbText.MouseUp, pbQuantity.MouseUp, pbSlot.MouseUp
-
+                Handles pbAny.MouseUp, pbBoolean.MouseUp, pbCluster.MouseUp, pbCount.MouseUp, pbDateTime.MouseUp, pbOrdinal.MouseUp, pbText.MouseUp, pbQuantity.MouseUp, pbSlot.MouseUp
         'cancel drag and drop operation
         mNewConstraint = Nothing
         mNewCluster = False
