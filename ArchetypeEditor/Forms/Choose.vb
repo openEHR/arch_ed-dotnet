@@ -73,6 +73,7 @@ Public Class Choose
         '
         Me.ListChoose.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ListChoose.HorizontalScrollbar = True
         Me.ListChoose.Location = New System.Drawing.Point(13, 32)
         Me.ListChoose.Name = "ListChoose"
         Me.ListChoose.Size = New System.Drawing.Size(274, 199)
@@ -111,6 +112,7 @@ Public Class Choose
         '
         Me.ListBox2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
                     Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.ListBox2.HorizontalScrollbar = True
         Me.ListBox2.Location = New System.Drawing.Point(296, 32)
         Me.ListBox2.Name = "ListBox2"
         Me.ListBox2.Size = New System.Drawing.Size(240, 199)
