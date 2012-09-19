@@ -61,25 +61,9 @@ namespace XMLParser
         public int NumberOfSpecialisations
         {
             get
-            {                
-                //Number of specialisations is the number of hyphens that appear in the second section of the archetype id
-                int specialisationDepth = 0;
-
-                if (_archetype.archetype_id != null)
-                {
-                    string archetypeId = _archetype.archetype_id.value;                    
-                    char[] splitter = {'.'};
-                    string[] idComponents = archetypeId.Split(splitter);
-
-                    if (idComponents.GetUpperBound(0) >= 1)
-                    {
-                        splitter[0] = '-';
-                        string[] specialisations = idComponents[1].Split(splitter);
-                        specialisationDepth = specialisations.GetUpperBound(0);
-                    }
-                }
-
-                return specialisationDepth;
+            {
+                // Number of specialisations is the number of dots that appear in the archetype's concept code (e.g., at0000.1)
+                return _archetype.concept != null ? _archetype.concept.Split('.').Length - 1 : 0;
             }
         }
 
