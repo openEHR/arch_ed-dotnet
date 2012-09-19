@@ -9,14 +9,8 @@ namespace XMLParser
 {
     public class XmlArchetypeParser
     {
-        ARCHETYPE _archetype;
-        
-        public XmlArchetypeParser()
-        {
-
-        }
-
-        Ontology _ontology;
+        private ARCHETYPE _archetype;
+        private Ontology _ontology;
 
         public Ontology Ontology
         {
@@ -27,6 +21,7 @@ namespace XMLParser
                     _ontology = new Ontology(_archetype);
                     _ontology.LanguageAdded += new LanguageAddedEventHandler(ontology_LanguageAdded);
                 }
+
                 return _ontology;
             }
         }
@@ -36,7 +31,6 @@ namespace XMLParser
             CODE_PHRASE cp = new CODE_PHRASE();
             cp.code_string = language;
             
-            //JAR: 30APR2007, AE-42 Support XML Schema 1.0.12
             if (defaultLanguageCodeSet != "")
             {                
                 TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
@@ -156,13 +150,7 @@ namespace XMLParser
         {
             get
             {
-                if (this.ArchetypeAvailable)
-                {
-                    //string[] y = _archetype.archetype_id.Split("-.".ToCharArray()); //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                    string[] y = _archetype.archetype_id.value.ToString().Split("-.".ToCharArray());//JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                    return y[2];
-                }
-                return "";
+                return ArchetypeAvailable ? _archetype.archetype_id.value.ToString().Split("-.".ToCharArray())[2] : "";
             }
         }
 
@@ -177,13 +165,9 @@ namespace XMLParser
 
             if(this.ArchetypeAvailable)
             {
-                // HKF: 8 Dec 2008
                 SetArchetypeDigest();
 
-                // HKF: 8 Dec 2008
-                //System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
                 System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                //xmlSerialiser.Serialize(ms, _archetype);
                 System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
                 settings.Indent = true;
                 settings.Encoding = Encoding.UTF8;
@@ -198,7 +182,6 @@ namespace XMLParser
             return result;
         }
         
-        // HKF 8 Dec 2008
         void SetArchetypeDigest()
         {
             System.Diagnostics.Debug.Assert(_archetype != null, "archetype must not be null");
@@ -225,7 +208,6 @@ namespace XMLParser
             else
             {
                 StringDictionaryItem item = otherDetails[ArchetypeModelBuilder.ARCHETYPE_DIGEST_ID];
-
                 item.Value = archetypDigest;
             }
 
@@ -248,18 +230,17 @@ namespace XMLParser
         {
             get
             {
-                System.Collections.ArrayList a_list = new System.Collections.ArrayList();
-                a_list.Add("xml");
-                return a_list;
+                System.Collections.ArrayList result = new System.Collections.ArrayList();
+                result.Add("xml");
+                return result;
             }
         }
 
         public void NewArchetype(string an_archetypeID, string a_languageCode, string defaultLanguageCodeSet)
         {
             _archetype = new ARCHETYPE();
+            _ontology = null;
             
-            //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            //_archetype.archetype_id = an_archetypeID;            
             ARCHETYPE_ID archetypeId = new ARCHETYPE_ID();
             archetypeId.value = an_archetypeID;
             _archetype.archetype_id = archetypeId;            
@@ -267,8 +248,6 @@ namespace XMLParser
             _archetype.original_language = new CODE_PHRASE();
             _archetype.original_language.code_string = a_languageCode;
             
-            //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            //_archetype.original_language.terminology_id = defaultLanguageCodeSet;
             if (defaultLanguageCodeSet != "")
             {
                 TERMINOLOGY_ID terminologyId = new TERMINOLOGY_ID();
@@ -305,6 +284,7 @@ namespace XMLParser
             RESOURCE_DESCRIPTION_ITEM rdi = new RESOURCE_DESCRIPTION_ITEM();
             RESOURCE_DESCRIPTION_ITEM[] descriptionItems;
             rdi.language = a_language;
+
             if (_archetype.description.details == null)
             {
                 //create an array
@@ -323,18 +303,21 @@ namespace XMLParser
                 {
                     //copy from the primary language
                     string originalLanguage = _archetype.original_language.code_string;
+
                     if (descItem.language.code_string == originalLanguage)
                     {
                         rdi.purpose = string.Format("{0}{1}({2})", "*", descItem.purpose, originalLanguage);
+
                         if (rdi.use != null && rdi.use != "")
                         {
                             rdi.use = string.Format("{0}{1}({2})", "*", descItem.use, originalLanguage);
                         }
+
                         if (rdi.misuse != null && rdi.misuse != "")
                         {
                             rdi.misuse = string.Format("{0}{1}({2})", "*", descItem.misuse, originalLanguage);
                         }
-                        //if (rdi.original_resource_uri != null && rdi.original_resource_uri != "") //JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
+
                         if (rdi.original_resource_uri != null && rdi.original_resource_uri.ToString() != "")
                         {                            
                             rdi.original_resource_uri = descItem.original_resource_uri;
@@ -342,9 +325,8 @@ namespace XMLParser
                     }
                 }
             }
+
             _archetype.description.details = descriptionItems;
-            // HKF: 8 Dec 2008
-            //AddTranslation(a_language);
         }
 
         public void AddTranslation(CODE_PHRASE a_language)
@@ -352,6 +334,7 @@ namespace XMLParser
             TRANSLATION_DETAILS td = new TRANSLATION_DETAILS();
             TRANSLATION_DETAILS[] translationDetails;
             td.language = a_language;
+
             if (_archetype.translations == null)
             {
                 //create an array
@@ -366,6 +349,7 @@ namespace XMLParser
                 Array.Resize(ref translationDetails, i + 1);
                 translationDetails[i] = td;
             }
+
             _archetype.translations = translationDetails;    
         }
 
@@ -374,7 +358,7 @@ namespace XMLParser
             _open_file_error = false;
             _status = "";
             _archetype = null;
-            _ontology = null; //reset the ontology
+            _ontology = null;
 
             try
             {
@@ -384,10 +368,9 @@ namespace XMLParser
 				ARCHETYPE new_archetype = xmlSerialiser.Deserialize(xml_reader) as ARCHETYPE;
                 xml_reader.Close();
 
-				// Reset the ontology and load the new archetype if there is no error.
-				_ontology = null;
 				_archetype = new_archetype;
-			}
+                _ontology = null;
+            }
             catch (Exception e)
             {
                 _open_file_error = true;
@@ -401,7 +384,7 @@ namespace XMLParser
             _open_file_error = false;
             _status = "";
             _archetype = null;
-            _ontology = null; //reset the ontology
+            _ontology = null;
 
             try
             {
@@ -411,10 +394,9 @@ namespace XMLParser
 				ARCHETYPE new_archetype = xmlSerialiser.Deserialize(xml_reader) as ARCHETYPE;
                 xml_reader.Close();
 
-				// Reset the ontology and load the new archetype if there is no error.
-				_ontology = null;
 				_archetype = new_archetype;
-			}
+                _ontology = null;
+            }
             catch (Exception e)
             {
                 _open_file_error = true;
@@ -432,7 +414,6 @@ namespace XMLParser
             {
                 _ontology.RemoveUnusedCodes();
 
-                // HKF: 8 Dec 2008
                 SetArchetypeDigest();
 
                 System.Xml.XmlWriterSettings settings = new System.Xml.XmlWriterSettings();
@@ -440,9 +421,6 @@ namespace XMLParser
                 settings.Encoding = Encoding.UTF8;
 
                 System.Xml.XmlWriter xml_writer = System.Xml.XmlWriter.Create(a_file_name, settings);
-                // HKF: 8 Dec 2008
-                //System.Xml.Serialization.XmlSerializer xmlSerialiser = new System.Xml.Serialization.XmlSerializer(typeof(ARCHETYPE));
-                //xmlSerialiser.Serialize(xml_writer, _archetype);
                 AmSerializer.Serialize(xml_writer, _archetype);
 
                 xml_writer.Close();
@@ -458,7 +436,6 @@ namespace XMLParser
         public System.Collections.ArrayList PhysicalPaths()
         {
             System.Collections.ArrayList all_paths = new System.Collections.ArrayList();
-
             get_paths(all_paths, _archetype.definition, "");
             return all_paths;
         }
@@ -466,7 +443,6 @@ namespace XMLParser
         public System.Collections.ArrayList LogicalPaths(string a_language_code)
         {
            System.Collections.ArrayList logical_paths = new System.Collections.ArrayList();
-
             get_logical_paths(logical_paths, _archetype.definition, "", a_language_code);
             return logical_paths;        
         }
@@ -500,7 +476,6 @@ namespace XMLParser
                         {
                             C_COMPLEX_OBJECT co = attrib.children[0] as C_COMPLEX_OBJECT;
 
-                            //if (co != null && !string.IsNullOrEmpty(co.node_id))
                             if (co != null)
                                 get_paths(list, co, path + "/" + attrib.rm_attribute_name);
                         }
@@ -549,18 +524,18 @@ namespace XMLParser
         private string getText(string a_language_code, string a_node_id)
         {
             ARCHETYPE_TERM term = _ontology.TermDefinition(a_language_code, a_node_id);
+
             if (term != null)
             {
-                //JAR: 30APR2007, AE-42 Support XML Schema 1.0.12
                 foreach (StringDictionaryItem di in term.items)
                 {
                     if (di.id == "text")
                         return di.Value;
                 }
             }
+
             System.Diagnostics.Debug.Assert(false, "text field is not present");
             return "";
         }
     }
-
 }
