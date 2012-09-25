@@ -219,6 +219,7 @@ Public Class SimpleStructure
             If dlg.IsSpecialisationRequested Then
                 element.Specialise()
                 txtSimple.Text = element.Text
+                SetCurrentItem(element)
                 mFileManager.FileEdited = True
             End If
         End If

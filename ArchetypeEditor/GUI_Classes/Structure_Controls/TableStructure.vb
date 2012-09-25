@@ -406,13 +406,13 @@ Public Class TableStructure
 
                     If dlg.IsSpecialisationRequested Then
                         If dlg.IsCloningRequested Then
-                            Dim newelement As ArchetypeElement = CType(CType(element, ArchetypeElement).Copy, ArchetypeElement)
-                            newelement.Specialise()
+                            element = CType(CType(element, ArchetypeElement).Copy, ArchetypeElement)
+                            element.Specialise()
 
                             Dim row As DataRow = mArchetypeTable.NewRow
-                            row(1) = newelement.Text
+                            row(1) = element.Text
                             mArchetypeTable.Rows.InsertAt(row, dgGrid.CurrentRowIndex + 1)
-                            row(2) = newelement
+                            row(2) = element
                             row(0) = element.ImageIndex(False)
 
                             ' go to the new entry
@@ -426,6 +426,7 @@ Public Class TableStructure
                             mArchetypeTable.Rows(dgGrid.CurrentRowIndex).Item(1) = mCurrentItem.Text
                         End If
 
+                        SetCurrentItem(element)
                         mFileManager.FileEdited = True
                     End If
                 End If

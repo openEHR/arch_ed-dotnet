@@ -176,6 +176,7 @@ Public Class ElementOnly
 
         If dlg.IsSpecialisationRequested Then
             Element.Specialise()
+            SetCurrentItem(Element)
             mFileManager.FileEdited = True
         End If
     End Sub
