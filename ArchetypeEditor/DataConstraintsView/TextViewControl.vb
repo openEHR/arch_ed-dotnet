@@ -22,83 +22,73 @@ Public Class TextViewControl : Inherits ElementViewControl ' ViewControl
     Private WithEvents mComboBox As ComboBox
     Private WithEvents mTextBox As TextBox
 
-    Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) 'ByVal aConstraint As Constraint_Text)
+    Public Sub New(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(anElement, a_filemanager)
     End Sub
 
     Public Sub New(ByVal aConstraint As Constraint, ByVal a_filemanager As FileManagerLocal)
         MyBase.New(aConstraint, a_filemanager)
-
     End Sub
 
-    'Protected Overrides Sub InitialiseComponent(ByVal anElement As ArchetypeElement, _
-    '        ByVal aLocation As System.Drawing.Point)
-    Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, _
-            ByVal aLocation As System.Drawing.Point)
-
-        'Dim aConstraint As Constraint_Text = CType(anElement.Constraint, Constraint_Text)
+    Protected Overrides Sub InitialiseComponent(ByVal aConstraint As Constraint, ByVal aLocation As System.Drawing.Point)
         Dim textConstraint As Constraint_Text = CType(aConstraint, Constraint_Text)
 
         Select Case textConstraint.TypeOfTextConstraint
             Case TextConstrainType.Text
                 If textConstraint.AllowableValues.Codes.Count > 0 Then
-                    'Dim ctrl As New ComboBox
                     mComboBox = New ComboBox
-                    'Dim s As String
                     Dim lth As Integer = 150
-
-                    mComboBox.Location = aLocation 'pos
+                    mComboBox.Location = aLocation
                     mComboBox.Height = 25
                     mComboBox.Width = 150
+
                     For Each s As String In textConstraint.AllowableValues.Codes
                         If s.Length > lth Then
                             lth = s.Length
                         End If
+
                         mComboBox.Items.Add(s)
                     Next
+
                     If lth > 250 Then
                         lth = 250
                     End If
+
                     mComboBox.Width = lth
+
                     If textConstraint.HasAssumedValue Then
                         mComboBox.Text = CStr(textConstraint.AssumedValue)
                     End If
 
-                    Me.Controls.Add(mComboBox)
-                    'Return ctrl
-
+                    Controls.Add(mComboBox)
                 Else
-                    Dim ctrl As New TextBox
-                    mTextBox = ctrl
-
-                    ctrl.Location = aLocation 'pos
-                    ctrl.Height = 25
-                    ctrl.Width = 200
-                    ctrl.Text = "Free text"
-
-                    'Return ctrl
-                    Me.Controls.Add(ctrl)
+                    mTextBox = New TextBox
+                    mTextBox.Location = aLocation
+                    mTextBox.Height = 25
+                    mTextBox.Width = 200
+                    mTextBox.Text = Filemanager.GetOpenEhrTerm(441, "Free text")
+                    Controls.Add(mTextBox)
                 End If
 
             Case TextConstrainType.Internal
                 If textConstraint.AllowableValues.Codes.Count > 0 Then
                     mComboBox = New ComboBox
                     Dim lth As Integer = 150
-                    Dim a_Term As RmTerm
+                    Dim term As RmTerm
 
-                    mComboBox.Location = aLocation 'pos
+                    mComboBox.Location = aLocation
                     mComboBox.Height = 25
                     mComboBox.Width = 150
 
                     For Each s As String In textConstraint.AllowableValues.Codes
-                        a_Term = Filemanager.Master.OntologyManager.GetTerm(s)
+                        term = Filemanager.Master.OntologyManager.GetTerm(s)
 
-                        If Not a_Term.Text Is Nothing Then
-                            If a_Term.Text.Length > lth Then
-                                lth = a_Term.Text.Length
+                        If Not term.Text Is Nothing Then
+                            If term.Text.Length > lth Then
+                                lth = term.Text.Length
                             End If
 
-                            mComboBox.Items.Add(a_Term)
+                            mComboBox.Items.Add(term)
                         End If
                     Next
 
@@ -109,78 +99,63 @@ Public Class TextViewControl : Inherits ElementViewControl ' ViewControl
                     mComboBox.Width = lth
 
                     If textConstraint.HasAssumedValue Then
-                        a_Term = Filemanager.Master.OntologyManager.GetTerm(CStr(textConstraint.AssumedValue))
-                        mComboBox.Text = a_Term.Text
+                        term = Filemanager.Master.OntologyManager.GetTerm(CStr(textConstraint.AssumedValue))
+                        mComboBox.Text = term.Text
                     End If
 
                     Controls.Add(mComboBox)
 
                 Else
-                    'Dim ctrl As New TextBox
                     mTextBox = New TextBox
-                    mTextBox.Location = aLocation 'pos
+                    mTextBox.Location = aLocation
                     mTextBox.Height = 30
                     mTextBox.Width = 300
                     mTextBox.Text = "No values set"
-
-                    Me.Controls.Add(mTextBox)
-
+                    Controls.Add(mTextBox)
                 End If
 
             Case TextConstrainType.Terminology
-                'Dim p As New Panel
-                'Dim rel_pos As New Point
-
-                'rel_pos.X = 0
-                'rel_pos.Y = 0
                 Dim lbl As New Label
-                lbl.Location = aLocation 'pos 'rel_pos
+                lbl.Location = aLocation
                 lbl.Height = 40
                 lbl.Width = 250
                 lbl.BorderStyle = BorderStyle.Fixed3D
 
-                Dim a_Term As RmTerm
-                a_Term = mFileManager.OntologyManager.GetTerm(textConstraint.ConstraintCode)
-                lbl.Text = a_Term.Text
-                Me.Controls.Add(lbl)
+                Dim term As RmTerm
+                term = mFileManager.OntologyManager.GetTerm(textConstraint.ConstraintCode)
+                lbl.Text = term.Text
+                Controls.Add(lbl)
 
                 Dim but As New Button
                 but.Text = "..."
-                ''rel_pos.X = 260
-                'pos.X = 260
                 aLocation.X += 260
                 but.BackColor = System.Drawing.Color.LightGray
 
                 mToolTip = New ToolTip
-                mToolTip.SetToolTip(but, a_Term.Description)
+                mToolTip.SetToolTip(but, term.Description)
 
                 but.Width = 30
                 but.Height = 20
-                but.Location = aLocation 'pos 'rel_pos
-                Me.Controls.Add(but)
-
-                'Return p
+                but.Location = aLocation
+                Controls.Add(but)
 
             Case Else
                 Debug.Assert(False)
         End Select
-
     End Sub
 
-    Private Sub ComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles mComboBox.SelectedIndexChanged
-
+    Private Sub ComboBox_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mComboBox.SelectedIndexChanged
         Try
             If TypeOf mComboBox.Items(0) Is RmTerm Then
                 If mComboBox.SelectedValue Is Nothing Then
-                    Me.Tag = New CodePhrase(CType(mComboBox.Items(0), RmTerm)).Phrase
+                    Tag = New CodePhrase(CType(mComboBox.Items(0), RmTerm)).Phrase
                     Value = mComboBox.Text
                 Else
-                    Me.Tag = New CodePhrase(CType(mComboBox.SelectedValue, RmTerm)).Phrase
+                    Tag = New CodePhrase(CType(mComboBox.SelectedValue, RmTerm)).Phrase
                     Value = CType(mComboBox.SelectedValue, RmTerm).Text
                 End If
             Else  ' text string
-                Me.Tag = mComboBox.Text
+                Tag = mComboBox.Text
                 Value = mComboBox.Text
             End If
         Catch ex As Exception
@@ -188,14 +163,13 @@ Public Class TextViewControl : Inherits ElementViewControl ' ViewControl
         End Try
     End Sub
 
-    Private Sub TextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-            Handles mTextBox.TextChanged
-
-        Me.Tag = mTextBox.Text
+    Private Sub TextBox_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles mTextBox.TextChanged
+        Tag = mTextBox.Text
         Value = mTextBox.Text
     End Sub
 
     Private mValue As String
+
     Public Overrides Property Value() As Object
         Get
             Return mValue
