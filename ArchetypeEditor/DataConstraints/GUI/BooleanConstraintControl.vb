@@ -196,16 +196,16 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         If Not MyBase.IsLoading Then
             If cbTrue.Checked Then
                 If Constraint.FalseAllowed Then
-                    Constraint.TrueFalseAllowed = True
+                    Constraint.AllowTrueOrFalse()
                 Else
-                    Constraint.TrueAllowed = True
+                    Constraint.AllowTrueOnly()
                 End If
             Else
                 If Not cbFalse.Checked Then
                     ' something has to be allowed
                     cbFalse.Checked = True
                 Else
-                    Constraint.FalseAllowed = True
+                    Constraint.AllowFalseOnly()
                 End If
             End If
 
@@ -227,16 +227,16 @@ Public Class BooleanConstraintControl : Inherits ConstraintControl 'AnyConstrain
         If Not MyBase.IsLoading Then
             If cbFalse.Checked Then
                 If Constraint.TrueAllowed Then
-                    Constraint.TrueFalseAllowed = True
+                    Constraint.AllowTrueOrFalse()
                 Else
-                    Constraint.FalseAllowed = True
+                    Constraint.AllowFalseOnly()
                 End If
             Else
                 If Not cbTrue.Checked Then
                     ' something has to be allowed
                     cbTrue.Checked = True
                 Else
-                    Constraint.TrueAllowed = True
+                    Constraint.AllowTrueOnly()
                 End If
             End If
 

@@ -58,48 +58,43 @@ Class Constraint_Boolean
         End Set
     End Property
 
-    Public Property TrueAllowed() As Boolean
+    Public ReadOnly Property TrueAllowed() As Boolean
         Get
             Return iBoolVal = 1
         End Get
-        Set(ByVal Value As Boolean)
-            iBoolVal = 1
-
-            ' cannot have an assumed value of false
-            If boolHasAssumed Then
-                If Not boolAssumed Then
-                    boolHasAssumed = False
-                End If
-            End If
-        End Set
     End Property
 
-    Public Property FalseAllowed() As Boolean
+    Public ReadOnly Property FalseAllowed() As Boolean
         Get
             Return iBoolVal = 2
         End Get
-        Set(ByVal Value As Boolean)
-            iBoolVal = 2
-
-            ' cannot have an assumed value of true
-            If boolHasAssumed Then
-                If boolAssumed Then
-                    boolHasAssumed = False
-                End If
-            End If
-        End Set
     End Property
 
-    Public Property TrueFalseAllowed() As Boolean
+    Public ReadOnly Property TrueFalseAllowed() As Boolean
         Get
             Return iBoolVal = 0
         End Get
-        Set(ByVal Value As Boolean)
-            iBoolVal = 0
-        End Set
     End Property
 
-    Public Property hasAssumedValue() As Boolean
+    Public Sub AllowTrueOnly()
+        iBoolVal = 1
+
+        ' cannot have an assumed value of false
+        boolHasAssumed = boolHasAssumed And boolAssumed
+    End Sub
+
+    Public Sub AllowFalseOnly()
+        iBoolVal = 2
+
+        ' cannot have an assumed value of true
+        boolHasAssumed = boolHasAssumed And Not boolAssumed
+    End Sub
+
+    Public Sub AllowTrueOrFalse()
+        iBoolVal = 0
+    End Sub
+
+    Public Property HasAssumedValue() As Boolean
         Get
             Return boolHasAssumed
         End Get

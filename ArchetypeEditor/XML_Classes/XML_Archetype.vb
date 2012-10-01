@@ -780,15 +780,17 @@ Namespace ArchetypeEditor.XML_Classes
             If cp.IsIntegralSet Then
                 'There is a restriction on whether the instance will be integral or not
                 fraction = mAomFactory.MakeSingleAttribute(proportion, "is_integral", value_attribute.existence)
-                Dim boolConstraint As New Constraint_Boolean
+                Dim b As New XMLParser.C_BOOLEAN
 
                 If cp.IsIntegral Then
-                    boolConstraint.TrueAllowed = True
+                    b.false_valid = False
+                    b.true_valid = True
                 Else
-                    boolConstraint.FalseAllowed = True
+                    b.false_valid = True
+                    b.true_valid = False
                 End If
 
-                BuildBoolean(fraction, boolConstraint)
+                mAomFactory.MakePrimitiveObject(fraction, b)
             End If
 
             If Not cp.AllowsAllTypes Then
@@ -1199,31 +1201,29 @@ Namespace ArchetypeEditor.XML_Classes
         End Sub
 
         Private Sub BuildBoolean(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal b As Constraint_Boolean)
-            Dim an_object As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(b.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
-            Dim an_attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(an_object, "value", value_attribute.existence)
+            Dim o As XMLParser.C_COMPLEX_OBJECT = mAomFactory.MakeComplexObject(value_attribute, ReferenceModel.RM_DataTypeName(b.Kind), "", MakeOccurrences(New RmCardinality(1, 1)))
+            Dim attribute As XMLParser.C_SINGLE_ATTRIBUTE = mAomFactory.MakeSingleAttribute(o, "value", value_attribute.existence)
 
-            Dim c_value As XMLParser.C_PRIMITIVE_OBJECT
             Dim c_bool As New XMLParser.C_BOOLEAN
 
             If b.TrueFalseAllowed Then
                 c_bool.false_valid = True
                 c_bool.true_valid = True
-                c_value = mAomFactory.MakePrimitiveObject(an_attribute, c_bool)
+                mAomFactory.MakePrimitiveObject(attribute, c_bool)
             ElseIf b.TrueAllowed Then
                 c_bool.false_valid = False
                 c_bool.true_valid = True
-                c_value = mAomFactory.MakePrimitiveObject(an_attribute, c_bool)
+                mAomFactory.MakePrimitiveObject(attribute, c_bool)
             ElseIf b.FalseAllowed Then
                 c_bool.false_valid = True
                 c_bool.true_valid = False
-                c_value = mAomFactory.MakePrimitiveObject(an_attribute, c_bool)
+                mAomFactory.MakePrimitiveObject(attribute, c_bool)
             End If
 
             If b.hasAssumedValue Then
                 c_bool.assumed_value = b.AssumedValue
                 c_bool.assumed_valueSpecified = True
             End If
-
         End Sub
 
         Private Sub BuildOrdinal(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal o As Constraint_Ordinal)

@@ -211,120 +211,114 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Private Function ProcessDuration(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Duration
-            If ObjNode.any_allowed Then
-                Return New Constraint_Duration
-            Else
-                Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-                Dim durationConstraint As New Constraint_Duration
+            Dim result As New Constraint_Duration
 
+            If Not ObjNode.any_allowed Then
                 If ObjNode.attributes.count > 0 Then
-                    attribute = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
-                    Dim constraint As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
+                    Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.first, openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
 
                     If attribute.has_children Then
-                        constraint = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)
-                        durationConstraint = ProcessDuration(constraint, durationConstraint)
+                        result = ProcessDuration(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
                     End If
-
-                    Return durationConstraint
                 End If
             End If
 
-            Debug.Assert(False, "Error processing Duration")
-            Return New Constraint_Duration
+            Return result
         End Function
 
-        Private Function ProcessDuration(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT, ByVal duration As Constraint_Duration) As Constraint_Duration
-            If ObjNode.any_allowed Then
-                Return duration
-            End If
+        Private Function ProcessDuration(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_Duration
+            Dim result As New Constraint_Duration
 
-            Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION
-            cadlC = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
-            If Not cadlC.pattern Is Nothing Then
-                duration.AllowableUnits = cadlC.pattern.to_cil
-            End If
+            If Not ObjNode.any_allowed Then
+                Dim cadlC As openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION = CType(ObjNode.item, openehr.openehr.am.archetype.constraint_model.primitive.C_DURATION)
 
-            If Not cadlC.interval Is Nothing Then
-
-                If cadlC.interval.upper_unbounded Then
-                    duration.HasMaximum = False
-                Else
-                    Dim upperDuration As openehr.common_libs.date_time.ISO8601_DURATION
-                    upperDuration = CType(cadlC.interval.upper, openehr.common_libs.date_time.ISO8601_DURATION)
-
-                    Dim units As String = upperDuration.value.to_cil
-                    units = units.ToUpperInvariant.Substring(units.Length - 1)
-
-                    Select Case units
-                        Case "S"
-                            duration.MaximumValue = upperDuration.seconds
-                            units = "TS"
-                        Case "M"
-                            If upperDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
-                                'Minutes
-                                duration.MaximumValue = upperDuration.minutes
-                                units = "TM"
-                            Else
-                                'Months
-                                duration.MaximumValue = upperDuration.months
-                            End If
-                        Case "H"
-                            duration.MaximumValue = upperDuration.hours
-                            units = "TH"
-                        Case "D"
-                            duration.MaximumValue = upperDuration.days
-                        Case "Y"
-                            duration.MaximumValue = upperDuration.years
-                        Case "W"
-                            duration.MaximumValue = upperDuration.weeks
-                    End Select
-                    duration.MinMaxValueUnits = units
-                    duration.HasMaximum = True
-                    duration.IncludeMaximum = cadlC.interval.upper_included
+                If Not cadlC.pattern Is Nothing Then
+                    result.AllowableUnits = cadlC.pattern.to_cil
                 End If
 
-                If cadlC.interval.lower_unbounded Then
-                    duration.HasMinimum = False
-                Else
-                    Dim lowerDuration As openehr.common_libs.date_time.ISO8601_DURATION
-                    lowerDuration = CType(cadlC.interval.lower, openehr.common_libs.date_time.ISO8601_DURATION)
+                If Not cadlC.interval Is Nothing Then
+                    If cadlC.interval.upper_unbounded Then
+                        result.HasMaximum = False
+                    Else
+                        Dim upperDuration As openehr.common_libs.date_time.ISO8601_DURATION
+                        upperDuration = CType(cadlC.interval.upper, openehr.common_libs.date_time.ISO8601_DURATION)
 
-                    Dim units As String = lowerDuration.value.to_cil
-                    units = units.ToUpperInvariant.Substring(units.Length - 1)
+                        Dim units As String = upperDuration.value.to_cil
+                        units = units.ToUpperInvariant.Substring(units.Length - 1)
 
-                    Select Case units.ToUpperInvariant
-                        Case "S"
-                            duration.MinimumValue = lowerDuration.seconds
-                            units = "TS"
-                        Case "M"
-                            If lowerDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
-                                'Minutes
-                                duration.MinimumValue = lowerDuration.minutes
-                                units = "TM"
-                            Else
-                                'Months
-                                duration.MinimumValue = lowerDuration.months
-                            End If
-                        Case "H"
-                            duration.MinimumValue = lowerDuration.hours
-                            units = "TH"
-                        Case "D"
-                            duration.MinimumValue = lowerDuration.days
-                        Case "Y"
-                            duration.MinimumValue = lowerDuration.years
-                        Case "W"
-                            duration.MinimumValue = lowerDuration.weeks
-                    End Select
-                    If duration.MinMaxValueUnits = String.Empty Then
-                        duration.MinMaxValueUnits = units
+                        Select Case units
+                            Case "S"
+                                result.MaximumValue = upperDuration.seconds
+                                units = "TS"
+                            Case "M"
+                                If upperDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
+                                    'Minutes
+                                    result.MaximumValue = upperDuration.minutes
+                                    units = "TM"
+                                Else
+                                    'Months
+                                    result.MaximumValue = upperDuration.months
+                                End If
+                            Case "H"
+                                result.MaximumValue = upperDuration.hours
+                                units = "TH"
+                            Case "D"
+                                result.MaximumValue = upperDuration.days
+                            Case "Y"
+                                result.MaximumValue = upperDuration.years
+                            Case "W"
+                                result.MaximumValue = upperDuration.weeks
+                        End Select
+
+                        result.MinMaxValueUnits = units
+                        result.HasMaximum = True
+                        result.IncludeMaximum = cadlC.interval.upper_included
                     End If
-                    duration.HasMinimum = True
-                    duration.IncludeMinimum = cadlC.interval.lower_included
+
+                    If cadlC.interval.lower_unbounded Then
+                        result.HasMinimum = False
+                    Else
+                        Dim lowerDuration As openehr.common_libs.date_time.ISO8601_DURATION
+                        lowerDuration = CType(cadlC.interval.lower, openehr.common_libs.date_time.ISO8601_DURATION)
+
+                        Dim units As String = lowerDuration.value.to_cil
+                        units = units.ToUpperInvariant.Substring(units.Length - 1)
+
+                        Select Case units.ToUpperInvariant
+                            Case "S"
+                                result.MinimumValue = lowerDuration.seconds
+                                units = "TS"
+                            Case "M"
+                                If lowerDuration.value.to_cil.ToLowerInvariant.Contains("t") Then
+                                    'Minutes
+                                    result.MinimumValue = lowerDuration.minutes
+                                    units = "TM"
+                                Else
+                                    'Months
+                                    result.MinimumValue = lowerDuration.months
+                                End If
+                            Case "H"
+                                result.MinimumValue = lowerDuration.hours
+                                units = "TH"
+                            Case "D"
+                                result.MinimumValue = lowerDuration.days
+                            Case "Y"
+                                result.MinimumValue = lowerDuration.years
+                            Case "W"
+                                result.MinimumValue = lowerDuration.weeks
+                        End Select
+
+                        If result.MinMaxValueUnits = String.Empty Then
+                            result.MinMaxValueUnits = units
+                        End If
+
+                        result.HasMinimum = True
+                        result.IncludeMinimum = cadlC.interval.lower_included
+                    End If
                 End If
             End If
 
-            Return duration
+            Return result
         End Function
 
         Private Function ProcessMultiMedia(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_MultiMedia
@@ -349,7 +343,6 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Private Function ProcessValue(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint
-
             Select Case ObjNode.rm_type_name.to_cil.ToLowerInvariant()
                 Case "dv_quantity", "quantity"
                     Return ProcessQuantity(CType(ObjNode, openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY))
@@ -384,7 +377,10 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return ProcessCount(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "interval_count", "interval_quantity" 'OBSOLETE
                     Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
-                Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>", "dv_interval<dv_date>", "dv_interval<dv_time>"
+                Case "dv_interval<dv_count>", "dv_interval<count>", "interval<count>", _
+                     "dv_interval<dv_quantity>", "dv_interval<quantity>", "interval<quantity>", _
+                     "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", _
+                     "dv_interval<dv_date>", "dv_interval<dv_time>"
                     Return ProcessInterval(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT), a_filemanager)
                 Case "dv_multimedia", "multimedia", "multi_media"
                     Return ProcessMultiMedia(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -392,16 +388,14 @@ Namespace ArchetypeEditor.ADL_Classes
                     Return ProcessUri(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "dv_identifier"
                     Return ProcessIdentifier(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
-                    'Case "dv_currency"
-                    'Return ProcessCurrency(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
+                    'TODO Case "dv_currency"
+                    '    Return ProcessCurrency(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                 Case "dv_duration", "duration"
                     If TypeOf ObjNode Is openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT Then
                         Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
                     Else
                         'obsolete
-                        Dim constraintDuration As New Constraint_Duration
-                        constraintDuration = ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT), constraintDuration)
-                        Return constraintDuration
+                        Return ProcessDuration(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT))
                     End If
                 Case "dv_parsable"
                     Return ProcessParsable(CType(ObjNode, openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT))
@@ -834,35 +828,33 @@ Namespace ArchetypeEditor.ADL_Classes
         End Function
 
         Private Function ProcessBoolean(ByVal ObjSimple As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT) As Constraint_Boolean
-            Dim b As New Constraint_Boolean
-            Dim i As Integer
-
-
-            Dim bool As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN = _
-                CType(ObjSimple.item, openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN)
+            Dim result As New Constraint_Boolean
+            Dim i As Integer = 0
+            Dim bool As openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN = CType(ObjSimple.item, openehr.openehr.am.archetype.constraint_model.primitive.C_BOOLEAN)
 
             If bool.true_valid Then
                 i = 1
             End If
+
             If bool.false_valid Then
                 i += 2
             End If
+
             Select Case i
                 Case 1
-                    b.TrueAllowed = True
+                    result.AllowTrueOnly()
                 Case 2
-                    b.FalseAllowed = False
+                    result.AllowFalseOnly()
                 Case 3
-                    b.TrueFalseAllowed = False
+                    result.AllowTrueOrFalse()
             End Select
 
             If bool.has_assumed_value() Then
-                b.hasAssumedValue = True
-                b.AssumedValue = CType(bool.assumed_value, EiffelKernel.BOOLEAN_REF).item
+                result.HasAssumedValue = True
+                result.AssumedValue = CType(bool.assumed_value, EiffelKernel.BOOLEAN_REF).item
             End If
 
-            Return b
-
+            Return result
         End Function
 
         Shared Function ProcessText(ByVal ObjNode As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT) As Constraint_Text

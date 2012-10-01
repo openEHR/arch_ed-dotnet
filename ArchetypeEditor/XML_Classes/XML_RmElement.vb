@@ -196,82 +196,59 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         Private Function ProcessValue(ByVal ObjNode As XMLParser.C_OBJECT, ByVal a_filemanager As FileManagerLocal) As Constraint
-            Try
-
-                Select Case ObjNode.rm_type_name.ToLowerInvariant()
-                    Case "dv_quantity", "quantity"
-                        'For backward compatibility
-                        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                        'If TypeOf (ObjNode) Is XMLParser.C_DV_QUANTITY Then
-                        Return ProcessQuantity(CType(ObjNode, XMLParser.C_DV_QUANTITY))
-                        'Else
-                        '    Return ProcessQuantity(CType(ObjNode, XMLParser.C_QUANTITY))
-                        'End If
-                    Case "dv_coded_text", "dv_text", "coded_text", "text"
-                        Return ProcessText(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Case "dv_boolean", "boolean"
-                        If TypeOf (ObjNode) Is XMLParser.C_COMPLEX_OBJECT Then
-                            Return ProcessBoolean(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                        Else
-                            'obsolete
-                            Return ProcessBoolean(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
-                        End If
-                    Case "c_dv_ordinal", "ordinal", "c_ordinal", "dv_ordinal"
-                        'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                        'If TypeOf (ObjNode) Is XMLParser.C_DV_ORDINAL Then
-                        Return ProcessOrdinal(CType(ObjNode, XMLParser.C_DV_ORDINAL), a_filemanager)
-                        'ElseIf TypeOf (ObjNode) Is XMLParser.C_ORDINAL Then
-                        '    'Obsolete
-                        '    Return ProcessOrdinal(CType(ObjNode, XMLParser.C_ORDINAL), a_filemanager)
-                        'Else
-                        'Obsolete
-                        'Return ProcessOrdinal(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
-                        'End If
-
-                    Case "dv_date_time", "dv_date", "dv_time", "date_time", "date", "time", "datetime"
-                        If TypeOf (ObjNode) Is XMLParser.C_COMPLEX_OBJECT Then
-                            Return ProcessDateTime(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                        Else
-                            'obsolete
-                            Return ProcessDateTime(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
-                        End If
-                    Case "dv_proportion", "proportion"
-                        Return ProcessProportion(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Case "dv_count", "count"
-                        Return ProcessCount(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Case "interval_count", "interval_quantity" ' OBSOLETE
-                        Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
-                    Case "dv_interval<dv_count>", "dv_interval<dv_quantity>", "dv_interval<dv_date_time>", "dv_interval<count>", _
-                         "dv_interval<quantity>", "dv_interval<date_time>", "interval<count>", "interval<quantity>", "interval<date_time>", _
-                         "dv_interval<dv_date>", "dv_interval<dv_time>"
-                        Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
-                    Case "dv_multimedia", "multi_media", "multimedia"
-                        Return ProcessMultiMedia(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Case "dv_uri", "uri", "dv_ehr_uri"
-                        Return ProcessUri(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Case "dv_identifier"
-                        Return ProcessIdentifier(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                        'Case "dv_currency"
-                        '    Return ProcessCurrency(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                    Case "dv_duration", "duration"
-                        If TypeOf ObjNode Is XMLParser.C_COMPLEX_OBJECT Then
-                            Return ProcessDuration(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-                        Else
-                            'obsolete
-                            Return ProcessDuration(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
-                        End If
-                    Case "dv_parsable"
-                        Return ProcessParsable(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
-
-                    Case Else
-                        Debug.Assert(False)
-                        Return New Constraint
-                End Select
-
-            Catch ex As Exception
-                MessageBox.Show(AE_Constants.Instance.Incorrect_format & " " & ObjNode.node_id & ": " & ex.Message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Return New Constraint
-            End Try
+            Select Case ObjNode.rm_type_name.ToLowerInvariant()
+                Case "dv_quantity", "quantity"
+                    Return ProcessQuantity(CType(ObjNode, XMLParser.C_DV_QUANTITY))
+                Case "dv_coded_text", "dv_text", "coded_text", "text"
+                    Return ProcessText(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                Case "dv_boolean", "boolean"
+                    If TypeOf (ObjNode) Is XMLParser.C_COMPLEX_OBJECT Then
+                        Return ProcessBoolean(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                    Else
+                        'obsolete
+                        Return ProcessBoolean(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
+                    End If
+                Case "c_dv_ordinal", "ordinal", "c_ordinal", "dv_ordinal"
+                    Return ProcessOrdinal(CType(ObjNode, XMLParser.C_DV_ORDINAL), a_filemanager)
+                Case "dv_date_time", "dv_date", "dv_time", "date_time", "date", "time", "datetime"
+                    If TypeOf (ObjNode) Is XMLParser.C_COMPLEX_OBJECT Then
+                        Return ProcessDateTime(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                    Else
+                        'obsolete
+                        Return ProcessDateTime(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
+                    End If
+                Case "dv_proportion", "proportion"
+                    Return ProcessProportion(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                Case "dv_count", "count"
+                    Return ProcessCount(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                Case "interval_count", "interval_quantity" 'OBSOLETE
+                    Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
+                Case "dv_interval<dv_count>", "dv_interval<count>", "interval<count>", _
+                     "dv_interval<dv_quantity>", "dv_interval<quantity>", "interval<quantity>", _
+                     "dv_interval<dv_date_time>", "dv_interval<date_time>", "interval<date_time>", _
+                     "dv_interval<dv_date>", "dv_interval<dv_time>"
+                    Return ProcessInterval(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT), a_filemanager)
+                Case "dv_multimedia", "multi_media", "multimedia"
+                    Return ProcessMultiMedia(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                Case "dv_uri", "uri", "dv_ehr_uri"
+                    Return ProcessUri(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                Case "dv_identifier"
+                    Return ProcessIdentifier(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                    'TODO Case "dv_currency"
+                    '    Return ProcessCurrency(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                Case "dv_duration", "duration"
+                    If TypeOf ObjNode Is XMLParser.C_COMPLEX_OBJECT Then
+                        Return ProcessDuration(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                    Else
+                        'obsolete
+                        Return ProcessDuration(CType(ObjNode, XMLParser.C_PRIMITIVE_OBJECT))
+                    End If
+                Case "dv_parsable"
+                    Return ProcessParsable(CType(ObjNode, XMLParser.C_COMPLEX_OBJECT))
+                Case Else
+                    Debug.Assert(False, String.Format("Attribute not handled: {0}", ObjNode.rm_type_name))
+                    Return New Constraint
+            End Select
         End Function
 
         Shared Function ProcessUri(ByVal dvUri As XMLParser.C_COMPLEX_OBJECT) As Constraint
@@ -381,97 +358,77 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         Private Function ProcessDuration(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Duration
+            Dim result As New Constraint_Duration
 
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            'If ObjNode.any_allowed Then
-            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
-            If complexObject.Any_Allowed Then
-                Return New Constraint_Duration
-            Else
-                Dim an_attribute As XMLParser.C_ATTRIBUTE
+            If Not New C_COMPLEX_OBJECT_PROXY(ObjNode).Any_Allowed Then
+                If ObjNode.attributes.Length > 0 Then
+                    Dim attribute As XMLParser.C_ATTRIBUTE = ObjNode.attributes(0)
 
-                'For i As Integer = 0 To ObjNode.attributes.Length
-                For i As Integer = 0 To ObjNode.attributes.Length - 1
-
-                    an_attribute = ObjNode.attributes(i)
-                    Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                    Select Case attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
                         Case "value"
-                            Dim constraint As XMLParser.C_PRIMITIVE_OBJECT
-                            If Not an_attribute.children Is Nothing AndAlso an_attribute.children.Length > 0 Then
-                                constraint = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
-                                Return ProcessDuration(constraint)
+                            If Not attribute.children Is Nothing AndAlso attribute.children.Length > 0 Then
+                                result = ProcessDuration(CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT))
                             End If
                     End Select
-                Next
+                End If
             End If
 
-            'Shouldn't get to here
-            Debug.Assert(False, "Error processing boolean")
-            Return New Constraint_Duration
-
+            Return result
         End Function
 
         Private Function ProcessDuration(ByVal ObjNode As XMLParser.C_PRIMITIVE_OBJECT) As Constraint_Duration
-            Dim duration As New Constraint_Duration
+            Dim result As New Constraint_Duration
 
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1            
-            'If ObjNode.any_allowed Then
-            Dim primitiveObject As New C_PRIMITIVE_OBJECT_PROXY(ObjNode)
-            If primitiveObject.Any_Allowed Then
-                Return duration
-            End If
+            If Not New C_PRIMITIVE_OBJECT_PROXY(ObjNode).Any_Allowed Then
+                Dim cadlC As XMLParser.C_DURATION = CType(ObjNode.item, XMLParser.C_DURATION)
 
-            Dim cadlC As XMLParser.C_DURATION
-            cadlC = CType(ObjNode.item, XMLParser.C_DURATION)
-
-            'SRH: 13 jan 2009 - EDT-497 - Allow all added to each type
-            If Not String.IsNullOrEmpty(cadlC.pattern) Then
-                duration.AllowableUnits = cadlC.pattern
-            End If
-            If Not cadlC.range Is Nothing Then
-
-                ' Validate Interval PreConditions
-                With cadlC.range
-                    'Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
-                    Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
-                    'Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
-                    Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
-                    Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
-                    Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
-                End With
-
-                'If Not cadlC.range.minimum Is Nothing Then 'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-                If cadlC.range.lower_included Then
-                    duration.HasMinimum = True
-                    duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.lower)
-                    If cadlC.range.lower.StartsWith("P") Then
-                        duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower.Substring(1))) ' leave the P of the front
-                    Else
-                        duration.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower))
-                    End If
-                Else
-                    duration.HasMinimum = False
+                If Not String.IsNullOrEmpty(cadlC.pattern) Then
+                    result.AllowableUnits = cadlC.pattern
                 End If
 
-                'If Not cadlC.range.maximum Is Nothing Then
-                If cadlC.range.upper_included Then
-                    If duration.MinMaxValueUnits = "" Then
-                        duration.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
-                    End If
-                    duration.HasMaximum = True
-                    If cadlC.range.upper.StartsWith("P") Then
-                        duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper.Substring(1))) ' leave the P of the front
+                If Not cadlC.range Is Nothing Then
+                    With cadlC.range
+                        Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
+                        Debug.Assert(Not (.upper_included And .upper_unbounded), "upper included must not be true when unbounded")
+                        Debug.Assert(.lower_includedSpecified Or .lower_unbounded, "lower included specified must not equal lower unbounded")
+                        Debug.Assert(.upper_includedSpecified Or .upper_unbounded, "upper included specified must not equal upper unbounded")
+                    End With
+
+                    If cadlC.range.lower_included Then
+                        result.HasMinimum = True
+                        result.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.lower)
+
+                        If cadlC.range.lower.StartsWith("P") Then
+                            result.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower.Substring(1))) ' leave the P of the front
+                        Else
+                            result.MinimumValue = Convert.ToInt64(Val(cadlC.range.lower))
+                        End If
                     Else
-                        duration.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper))
+                        result.HasMinimum = False
                     End If
 
+                    If cadlC.range.upper_included Then
+                        If result.MinMaxValueUnits = "" Then
+                            result.MinMaxValueUnits = ArchetypeEditor.XML_Classes.XML_Tools.GetDurationUnits(cadlC.range.upper)
+                        End If
+
+                        result.HasMaximum = True
+
+                        If cadlC.range.upper.StartsWith("P") Then
+                            result.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper.Substring(1))) ' leave the P of the front
+                        Else
+                            result.MaximumValue = Convert.ToInt64(Val(cadlC.range.upper))
+                        End If
+                    End If
+                End If
+
+                If Not cadlC.assumed_value Is Nothing Then
+                    result.HasAssumedValue = True
+                    result.AssumedValue = cadlC.assumed_value
                 End If
             End If
-            If Not cadlC.assumed_value Is Nothing Then
-                duration.HasAssumedValue = True
-                duration.AssumedValue = cadlC.assumed_value
-            End If
-            Return duration
+
+            Return result
         End Function
 
         Private Function ProcessCount(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Count
@@ -602,49 +559,44 @@ Namespace ArchetypeEditor.XML_Classes
 
         End Function
 
+        Private Function ProcessProportion(ByVal objNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Proportion
+            Dim result As New Constraint_Proportion
 
-        Private Function ProcessProportion(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Proportion
-            Dim proportion As New Constraint_Proportion
-            Dim an_attribute As XMLParser.C_ATTRIBUTE
+            If Not New C_COMPLEX_OBJECT_PROXY(objNode).Any_Allowed Then
+                For Each attribute As XMLParser.C_ATTRIBUTE In objNode.attributes
+                    If Not attribute.children Is Nothing AndAlso attribute.children.Length > 0 Then
+                        Select Case attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+                            Case "numerator"
+                                result.Numerator = ProcessReal(CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT))
+                            Case "denominator"
+                                result.Denominator = ProcessReal(CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT))
+                            Case "is_integral"
+                                Dim bool As Constraint_Boolean = ProcessBoolean(CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT))
+                                result.IsIntegral = bool.TrueAllowed
+                                result.IsIntegralSet = True
+                            Case "type"
+                                Dim cadlOS As XMLParser.C_PRIMITIVE_OBJECT = CType(attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
+                                Dim cadlC As XMLParser.C_INTEGER = CType(cadlOS.item, XMLParser.C_INTEGER)
+                                result.DisallowAllTypes()
 
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            'If ObjNode.any_allowed Then
-            Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
-            If complexObject.Any_Allowed Then
-                Return proportion
-            Else
-                For Each an_attribute In ObjNode.attributes
-                    Select Case an_attribute.rm_attribute_name.ToLower(System.Globalization.CultureInfo.InvariantCulture)
-                        Case "numerator"
-                            proportion.Numerator = ProcessReal(CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT))
-                        Case "denominator"
-                            proportion.Denominator = ProcessReal(CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT))
-                        Case "is_integral"
-                            Dim bool As Constraint_Boolean = ProcessBoolean(CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT))
-                            If bool.TrueAllowed Then
-                                proportion.IsIntegral = True
-                            Else
-                                proportion.IsIntegral = False
-                            End If
-                            proportion.IsIntegralSet = True
-                        Case "type"
-                            Dim cadlOS As XMLParser.C_PRIMITIVE_OBJECT
-                            Dim cadlC As XMLParser.C_INTEGER
-
-                            cadlOS = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)
-                            cadlC = CType(cadlOS.item, XMLParser.C_INTEGER)
-                            proportion.DisallowAllTypes()
-                            For ii As Integer = 0 To cadlC.list.Length - 1
-                                proportion.AllowType(CInt(cadlC.list(ii)))
-                            Next
-                        Case Else
-                            Debug.Assert(False)
-                    End Select
+                                If Not cadlC.list Is Nothing Then
+                                    For ii As Integer = 0 To cadlC.list.Length - 1
+                                        result.AllowType(CInt(cadlC.list(ii)))
+                                    Next
+                                ElseIf Not cadlC.range Is Nothing Then
+                                    'is an interval as only one allowed
+                                    result.AllowType(cadlC.range.upper)
+                                Else
+                                    result.AllowAllTypes()
+                                End If
+                            Case Else
+                                Debug.Assert(False)
+                        End Select
+                    End If
                 Next
             End If
 
-            Return proportion
-
+            Return result
         End Function
 
         Private Function ProcessDateTime(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_DateTime
@@ -890,9 +842,6 @@ Namespace ArchetypeEditor.XML_Classes
         End Function
 
         Private Function ProcessBoolean(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Boolean
-
-            'JAR: 30APR2007, AE-42 Support XML Schema 1.0.1
-            'If ObjNode.any_allowed Then
             Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
             If complexObject.Any_Allowed Then
                 Return New Constraint_Boolean
@@ -916,38 +865,36 @@ Namespace ArchetypeEditor.XML_Classes
             'Shouldn't get to here
             Debug.Assert(False, "Error processing boolean")
             Return New Constraint_Boolean
-
         End Function
 
-
         Private Function ProcessBoolean(ByVal ObjSimple As XMLParser.C_PRIMITIVE_OBJECT) As Constraint_Boolean
-            Dim b As New Constraint_Boolean
+            Dim result As New Constraint_Boolean
             Dim i As Integer = 0
+            Dim bool As XMLParser.C_BOOLEAN = CType(ObjSimple.item, XMLParser.C_BOOLEAN)
 
-            Dim c_bool As XMLParser.C_BOOLEAN = CType(ObjSimple.item, XMLParser.C_BOOLEAN)
-
-            If c_bool.true_valid Then
+            If bool.true_valid Then
                 i = 1
             End If
-            If c_bool.false_valid Then
+
+            If bool.false_valid Then
                 i += 2
             End If
+
             Select Case i
                 Case 1
-                    b.TrueAllowed = True
+                    result.AllowTrueOnly()
                 Case 2
-                    b.FalseAllowed = False
+                    result.AllowFalseOnly()
                 Case 3, 0
-                    b.TrueFalseAllowed = False
+                    result.AllowTrueOrFalse()
             End Select
 
-            If c_bool.assumed_valueSpecified Then
-                b.hasAssumedValue = True
-                b.AssumedValue = c_bool.assumed_value
+            If bool.assumed_valueSpecified Then
+                result.HasAssumedValue = True
+                result.AssumedValue = bool.assumed_value
             End If
 
-            Return b
-
+            Return result
         End Function
 
         Shared Function ProcessText(ByVal ObjNode As XMLParser.C_COMPLEX_OBJECT) As Constraint_Text

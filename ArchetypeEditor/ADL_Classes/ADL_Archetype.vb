@@ -900,31 +900,24 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Private Sub BuildBoolean(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal b As Constraint_Boolean)
-            Dim an_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
-            Dim an_object As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT
-
-            an_object = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String(ReferenceModel.RM_DataTypeName(b.Kind)))
-            an_attribute = mAomFactory.create_c_attribute_single(an_object, Eiffel.String("value"))
+            Dim o As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = mAomFactory.create_c_complex_object_anonymous(value_attribute, Eiffel.String(ReferenceModel.RM_DataTypeName(b.Kind)))
+            Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = mAomFactory.create_c_attribute_single(o, Eiffel.String("value"))
 
             Dim c_value As openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT
 
             If b.TrueFalseAllowed Then
-                c_value = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_boolean_make_true_false())
+                c_value = mAomFactory.create_c_primitive_object(attribute, mAomFactory.create_c_boolean_make_true_false())
             ElseIf b.TrueAllowed Then
-                c_value = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_boolean_make_true())
+                c_value = mAomFactory.create_c_primitive_object(attribute, mAomFactory.create_c_boolean_make_true())
             Else
                 Debug.Assert(b.FalseAllowed, "Must have FalseAllowed as true if gets to here")
-                c_value = mAomFactory.create_c_primitive_object(an_attribute, mAomFactory.create_c_boolean_make_false())
+                c_value = mAomFactory.create_c_primitive_object(attribute, mAomFactory.create_c_boolean_make_false())
             End If
 
             If b.hasAssumedValue Then
-                Dim EIF_bool As EiffelKernel.BOOLEAN_REF = EiffelKernel.Create.BOOLEAN_REF.default_create
-                If b.AssumedValue Then
-                    EIF_bool.set_item(True)
-                Else
-                    EIF_bool.set_item(False)
-                End If
-                c_value.item.set_assumed_value(EIF_bool)
+                Dim bool As EiffelKernel.BOOLEAN_REF = EiffelKernel.Create.BOOLEAN_REF.default_create
+                bool.set_item(b.AssumedValue)
+                c_value.item.set_assumed_value(bool)
             End If
         End Sub
 
