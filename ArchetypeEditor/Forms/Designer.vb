@@ -2229,22 +2229,19 @@ Public Class Designer
 
     ' Initialisation and Data table initialisers
     Private Sub DesignerInitialiser()
-
-        Me.TabMain.SelectedIndex = 0
-        Me.TabMain.SelectedTab = Me.tpHeader
-        Me.tpHeader.Selected = True
-        Me.TabTerminology.SelectedIndex = 0
-        Me.TabTerminology.SelectedTab = Me.tpTerms
-        Me.tpTerms.Selected = True
+        TabMain.SelectedIndex = 0
+        TabMain.SelectedTab = tpHeader
+        tpHeader.Selected = True
+        TabTerminology.SelectedIndex = 0
+        TabTerminology.SelectedTab = tpTerms
+        tpTerms.Selected = True
 
         ' add the data page to the base collection to use as the root state incase
-        mBaseTabPagesCollection.Add(Me.tpRootState, Me.tpRootState.Name)
-        Me.TabDesign.TabPages.Remove(Me.tpRootState)
-        'mBaseTabPagesCollection.Add(Me.tpParticipation, Me.tpParticipation.Name)
-        'Me.TabDesign.TabPages.Remove(Me.tpParticipation)
-        mBaseTabPagesCollection.Add(Me.tpSectionPage, Me.tpSectionPage.Name)
-        Me.TabMain.TabPages.Remove(Me.tpSectionPage)
-        mBaseTabPagesCollection.Add(Me.tpDesign, Me.tpDesign.Name)
+        mBaseTabPagesCollection.Add(tpRootState, tpRootState.Name)
+        TabDesign.TabPages.Remove(tpRootState)
+        mBaseTabPagesCollection.Add(tpSectionPage, tpSectionPage.Name)
+        TabMain.TabPages.Remove(tpSectionPage)
+        mBaseTabPagesCollection.Add(tpDesign, tpDesign.Name)
         ' leave in place as default
 
         ' add the display printable rich text box
@@ -2255,14 +2252,14 @@ Public Class Designer
 
         ' add the term binding panel
         mTermBindingPanel = New TermBindingPanel
-        Me.tpBindings.Controls.Add(mTermBindingPanel)
+        tpBindings.Controls.Add(mTermBindingPanel)
         mTermBindingPanel.Dock = DockStyle.Fill
 
         'Add description
         mTabPageDescription = New TabPageDescription
-        Me.tpDescription.Controls.Add(mTabPageDescription)
+        tpDescription.Controls.Add(mTabPageDescription)
         mTabPageDescription.Dock = DockStyle.Fill
-        Me.mComponentsCollection.Add(mTabPageDescription)
+        mComponentsCollection.Add(mTabPageDescription)
     End Sub
 
     Private Sub AddLanguageToMenu(ByVal languageText As String)
@@ -4331,9 +4328,8 @@ Public Class Designer
     Private Sub TabMain_SelectionChanging(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanging
         If Not mFileManager Is Nothing Then
             If Not mFileManager.FileLoading Then
-                If TabMain.SelectedTab Is tpTerminology Then
-                    ForceTerminologyGridUpdate()
-                End If
+                ' Force update of the current table row from the currently focussed grid, just in case the grid row has not lost focus yet.
+                LogoPictureBox.Focus()
 
                 ' Edits of terms in the table may have taken place and will need to be reflected in the GUI (via Translate).
                 If Not mFileManager.OntologyManager.TermDefinitionTable.GetChanges Is Nothing Then
@@ -4347,14 +4343,6 @@ Public Class Designer
                 RichTextBoxUnicode.ProcessRichEditControl(RichTextBoxDescription, mFileManager, mTabPageDescription)
             End If
         End If
-    End Sub
-
-    Private Sub ForceTerminologyGridUpdate()
-        ' Force table row update so that Definitons page is correctly synced with direct terminology table changes
-        ' where row does not lose focus prior to tab change.
-        DataGridDefinitions.EndEdit(Nothing, DataGridDefinitions.CurrentRowIndex, False)
-        DataGridDefinitions.BindingContext(DataGridDefinitions.DataSource, DataGridDefinitions.DataMember).EndCurrentEdit()
-        Application.DoEvents()
     End Sub
 
     Private Sub TabMain_SelectionChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles TabMain.SelectionChanged
