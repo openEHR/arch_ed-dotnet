@@ -100,7 +100,7 @@ Public MustInherit Class ArchetypeNodeAbstract
         mText = "! - " & mText
         mItem.NodeId = mFileManager.OntologyManager.SpecialiseTerm(mText, mDescription, NodeId).Code
 
-        If mItem.HasNameConstraint AndAlso mItem.NameConstraint.TypeOfTextConstraint = TextConstrainType.Terminology Then
+        If mItem.HasNameConstraint AndAlso mItem.NameConstraint.TypeOfTextConstraint = TextConstraintType.Terminology Then
             mItem.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseNameConstraint(mItem.NameConstraint.ConstraintCode).Code
         End If
 

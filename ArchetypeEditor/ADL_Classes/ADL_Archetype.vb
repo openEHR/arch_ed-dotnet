@@ -944,13 +944,13 @@ Namespace ArchetypeEditor.ADL_Classes
 
         Protected Sub BuildText(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal t As Constraint_Text)
             Select Case t.TypeOfTextConstraint
-                Case TextConstrainType.Terminology
+                Case TextConstraintType.Terminology
                     If t.ConstraintCode <> "" Then
                         BuildCodedText(value_attribute, t.ConstraintCode)
                     End If
-                Case TextConstrainType.Internal
+                Case TextConstraintType.Internal
                     BuildCodedText(value_attribute, t.AllowableValues, t.AssumedValue)
-                Case TextConstrainType.Text
+                Case TextConstraintType.Text
                     BuildPlainText(value_attribute, t.AllowableValues.Codes)
             End Select
         End Sub
@@ -1336,11 +1336,11 @@ Namespace ArchetypeEditor.ADL_Classes
                 BuildCodedText(mAomFactory.create_c_attribute_single(cObject, Eiffel.String("mode")), participation.ModeSet)
             End If
 
-            If participation.FunctionConstraint.TypeOfTextConstraint <> TextConstrainType.Text Then
+            If participation.FunctionConstraint.TypeOfTextConstraint <> TextConstraintType.Text Then
                 Dim constraintAttribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE
                 constraintAttribute = mAomFactory.create_c_attribute_single(cObject, Eiffel.String("function"))
 
-                If participation.FunctionConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
+                If participation.FunctionConstraint.TypeOfTextConstraint = TextConstraintType.Internal Then
 
                     BuildCodedText(constraintAttribute, participation.FunctionConstraint.AllowableValues)
                 Else
@@ -1406,7 +1406,7 @@ Namespace ArchetypeEditor.ADL_Classes
             ' set the category
             an_attribute = mAomFactory.create_c_attribute_single(CadlObj, Eiffel.String("category"))
             Dim t As New Constraint_Text
-            t.TypeOfTextConstraint = TextConstrainType.Terminology ' coded_text
+            t.TypeOfTextConstraint = TextConstraintType.Terminology ' coded_text
             t.AllowableValues.TerminologyID = "openehr"
 
             If Rm.IsPersistent Then
@@ -1886,12 +1886,12 @@ Namespace ArchetypeEditor.ADL_Classes
                 If l.HasConstraint Then
                     Dim linkObject As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT = mAomFactory.create_c_complex_object_anonymous(linksAttribute, Eiffel.String("LINK"))
 
-                    If l.Meaning.TypeOfTextConstraint <> TextConstrainType.Text Then
+                    If l.Meaning.TypeOfTextConstraint <> TextConstraintType.Text Then
                         anAttribute = mAomFactory.create_c_attribute_single(linkObject, Eiffel.String("meaning"))
                         BuildText(anAttribute, l.Meaning)
                     End If
 
-                    If l.LinkType.TypeOfTextConstraint <> TextConstrainType.Text Then
+                    If l.LinkType.TypeOfTextConstraint <> TextConstraintType.Text Then
                         anAttribute = mAomFactory.create_c_attribute_single(linkObject, Eiffel.String("type"))
                     End If
 

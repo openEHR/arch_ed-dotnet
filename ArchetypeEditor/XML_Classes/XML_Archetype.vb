@@ -1275,13 +1275,13 @@ Namespace ArchetypeEditor.XML_Classes
 
         Private Sub BuildText(ByVal value_attribute As XMLParser.C_ATTRIBUTE, ByVal t As Constraint_Text)
             Select Case t.TypeOfTextConstraint
-                Case TextConstrainType.Terminology
+                Case TextConstraintType.Terminology
                     If t.ConstraintCode <> "" Then
                         BuildCodedText(value_attribute, t.ConstraintCode)
                     End If
-                Case TextConstrainType.Internal
+                Case TextConstraintType.Internal
                     BuildCodedText(value_attribute, t.AllowableValues, CStr(t.AssumedValue), t.AssumedValue_TerminologyId)
-                Case TextConstrainType.Text
+                Case TextConstraintType.Text
                     BuildPlainText(value_attribute, t.AllowableValues.Codes)
             End Select
         End Sub
@@ -1694,7 +1694,7 @@ Namespace ArchetypeEditor.XML_Classes
             Dim an_attribute As XMLParser.C_ATTRIBUTE = mAomFactory.MakeSingleAttribute(xmlObj, "category", New RmExistence(1).XmlExistence)
 
             Dim t As New Constraint_Text
-            t.TypeOfTextConstraint = TextConstrainType.Terminology ' coded_text
+            t.TypeOfTextConstraint = TextConstraintType.Terminology ' coded_text
             t.AllowableValues.TerminologyID = "openehr"
 
             If Rm.IsPersistent Then
@@ -2106,12 +2106,12 @@ Namespace ArchetypeEditor.XML_Classes
                     Dim linkObject As XMLParser.C_COMPLEX_OBJECT = _
                         mAomFactory.MakeComplexObject(linksAttribute, "LINK")
 
-                    If l.Meaning.TypeOfTextConstraint <> TextConstrainType.Text Then
+                    If l.Meaning.TypeOfTextConstraint <> TextConstraintType.Text Then
                         anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "meaning", New RmExistence().XmlExistence)
                         BuildText(anAttribute, l.Meaning)
                     End If
 
-                    If l.LinkType.TypeOfTextConstraint <> TextConstrainType.Text Then
+                    If l.LinkType.TypeOfTextConstraint <> TextConstraintType.Text Then
                         anAttribute = mAomFactory.MakeSingleAttribute(linkObject, "type", New RmExistence().XmlExistence)
                         BuildText(anAttribute, l.LinkType)
                     End If
@@ -2162,11 +2162,11 @@ Namespace ArchetypeEditor.XML_Classes
                 BuildCodedText(mAomFactory.MakeSingleAttribute(cObject, "mode", New RmExistence(1).XmlExistence), participation.ModeSet)
             End If
 
-            If participation.FunctionConstraint.TypeOfTextConstraint <> TextConstrainType.Text Then
+            If participation.FunctionConstraint.TypeOfTextConstraint <> TextConstraintType.Text Then
                 Dim constraintAttribute As XMLParser.C_ATTRIBUTE
                 constraintAttribute = mAomFactory.MakeSingleAttribute(cObject, "function", New RmExistence(1).XmlExistence)
 
-                If participation.FunctionConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
+                If participation.FunctionConstraint.TypeOfTextConstraint = TextConstraintType.Internal Then
                     BuildCodedText(constraintAttribute, participation.FunctionConstraint.AllowableValues)
                 Else
                     BuildCodedText(constraintAttribute, participation.FunctionConstraint.ConstraintCode)

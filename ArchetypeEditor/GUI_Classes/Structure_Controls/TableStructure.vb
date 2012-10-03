@@ -550,7 +550,7 @@ Public Class TableStructure
                     element = New ArchetypeElement("row_head", mFileManager)
                     'Added SRH: Need to set the constraint to internal (as no longer default)
                     Dim c As Constraint_Text = New Constraint_Text
-                    c.TypeOfTextConstraint = TextConstrainType.Internal
+                    c.TypeOfTextConstraint = TextConstraintType.Internal
                     element.Constraint = c
                     mKeyColumns.Add(element)
                 End If

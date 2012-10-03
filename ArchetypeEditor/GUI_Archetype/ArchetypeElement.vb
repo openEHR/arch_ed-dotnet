@@ -71,7 +71,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
 
         s = TextConstraint.TypeOfTextConstraint.ToString & ";"
         Select Case TextConstraint.TypeOfTextConstraint
-            Case TextConstrainType.Text
+            Case TextConstraintType.Text
                 Dim a_string As String
                 If TextConstraint.AllowableValues.Codes.Count > 0 Then
                     For Each a_string In TextConstraint.AllowableValues.Codes 'JAR: 13APR07, EDT-32 Support unicode
@@ -82,7 +82,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                     Next
                     s.TrimEnd(punctuation)
                 End If
-            Case TextConstrainType.Internal
+            Case TextConstraintType.Internal
                 If TextConstraint.AllowableValues.Codes.Count > 1 Then
                     Dim a_string As String
                     For Each a_string In TextConstraint.AllowableValues.Codes
@@ -93,7 +93,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                     Next
                     s = s.TrimEnd(punctuation)
                 End If
-            Case TextConstrainType.Terminology
+            Case TextConstraintType.Terminology
                 a_Term = mFileManager.OntologyManager.GetTerm(TextConstraint.ConstraintCode)
                 s = s & " " & a_Term.Text
         End Select

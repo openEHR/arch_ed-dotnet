@@ -81,8 +81,8 @@ Public Class Link
     End Sub
 
     Public Function HasConstraint() As Boolean
-        Return mLinkType.TextConstraint.TypeOfTextConstraint <> TextConstrainType.Text OrElse _
-            mLinkMeaning.TextConstraint.TypeOfTextConstraint <> TextConstrainType.Text OrElse _
+        Return mLinkType.TextConstraint.TypeOfTextConstraint <> TextConstraintType.Text OrElse _
+            mLinkMeaning.TextConstraint.TypeOfTextConstraint <> TextConstraintType.Text OrElse _
             txtTarget.Text <> String.Empty
     End Function
 

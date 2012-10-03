@@ -14,7 +14,7 @@
 
 Option Strict On
 
-Public Enum TextConstrainType
+Public Enum TextConstraintType
     Text
     Internal
     Terminology
@@ -25,7 +25,7 @@ Public Class Constraint_Text
 
     Private mConstraintCode As String
     Private boolFixed As Boolean
-    Private mTextConstraintType As TextConstrainType
+    Private mTextConstraintType As TextConstraintType
     Private cpTerms As New CodePhrase
     Private mAssumed_value As String
     Private mTerminologyId As String
@@ -102,15 +102,15 @@ Public Class Constraint_Text
         End Set
     End Property
 
-    Public Property TypeOfTextConstraint() As TextConstrainType
+    Public Property TypeOfTextConstraint() As TextConstraintType
         Get
             Return mTextConstraintType
         End Get
-        Set(ByVal Value As TextConstrainType)
+        Set(ByVal Value As TextConstraintType)
             ' HKF: 29 Sep 2008 - EDT-335, resolve AdlParser ERROR - Serialisation failed Found leaf term code 271 not defined in ontology 
             ' Ensure that Null Flavor code phrase terminology ID  of 'openehr' is not overwritten with local when TextConstraint set                
             'If Value = TextConstrainType.Internal Then
-            If Value = TextConstrainType.Internal AndAlso AllowableValues.TerminologyID <> "openehr" Then
+            If Value = TextConstraintType.Internal AndAlso AllowableValues.TerminologyID <> "openehr" Then
                 AllowableValues.TerminologyID = "local"
             End If
 
@@ -129,11 +129,11 @@ Public Class Constraint_Text
 
     Overrides Function ToString() As String
         Select Case mTextConstraintType
-            Case TextConstrainType.Internal
+            Case TextConstraintType.Internal
                 Return AE_Constants.Instance.InternalCodes
-            Case TextConstrainType.Text
+            Case TextConstraintType.Text
                 Return AE_Constants.Instance.Text
-            Case TextConstrainType.Terminology
+            Case TextConstraintType.Terminology
                 Return AE_Constants.Instance.Terminology
             Case Else
                 Return MyBase.ToString()

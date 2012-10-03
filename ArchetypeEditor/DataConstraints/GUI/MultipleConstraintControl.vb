@@ -16,7 +16,7 @@
 
 Option Strict On
 
-Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstraintControl
+Public Class MultipleConstraintControl : Inherits ConstraintControl
     Friend WithEvents PanelMultipleControl As System.Windows.Forms.Panel
     Friend WithEvents TabConstraints As System.Windows.Forms.TabControl
     Friend WithEvents AddConstraintMenu As ConstraintContextMenu
@@ -124,24 +124,11 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
     End Property
 
     Private Sub AddConstraintControl(ByVal c As Constraint)
-        Dim isText As Boolean = (c.Kind = ConstraintKind.Text)
-        Dim tcType As TextConstrainType
-        Dim isOkToAdd As Boolean = True
-
-        ' Limit the choices to one of each type except for dv_text (but need to ensure one is coded, one is free)
-        If isText Then
-            nTextConstraints = nTextConstraints + 1
-
-            If nTextConstraints = 2 Then
-                tcType = RestrictExistingTextControl(False)
-            ElseIf nTextConstraints > 2 Then
-                'ToDo - accurate error text
-                MessageBox.Show(String.Format("{0}: {1}", AE_Constants.Instance.Duplicate_name, CType(c, Constraint_Text).TypeOfTextConstraint.ToString()), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                isOkToAdd = False
-            End If
-        End If
-
-        If isOkToAdd Then
+        ' Limit the choices to one of each type except for DV_TEXT (but ensure one is coded, one is free).
+        If c.Kind = ConstraintKind.Text And nTextConstraints > 1 Then
+            'ToDo - accurate error text
+            MessageBox.Show(String.Format("{0}: {1}", AE_Constants.Instance.Duplicate_name, CType(c, Constraint_Text).TypeOfTextConstraint.ToString()), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Else
             Dim tp As TabPage = New TabPage(c.ConstraintKindString)
             TabConstraints.TabPages.Add(tp)
             TabConstraints.SelectedTab = tp
@@ -149,28 +136,22 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
             If c.Kind <> ConstraintKind.Any Then
                 Dim cc As ConstraintControl = ConstraintControl.CreateConstraintControl(c.Kind, mFileManager)
                 tp.Controls.Add(cc)
+
+                If c.Kind = ConstraintKind.Text Then
+                    nTextConstraints = nTextConstraints + 1
+                End If
+
                 cc.ShowConstraint(mIsState, c)
                 cc.Dock = DockStyle.Fill
-
-                If isText AndAlso nTextConstraints = 2 Then
-                    If tcType = TextConstrainType.Text Then
-                        CType(cc, TextConstraintControl).radioText.Enabled = False
-                        CType(cc, TextConstraintControl).radioTerminology.Checked = True
-                    Else
-                        CType(cc, TextConstraintControl).radioTerminology.Enabled = False
-                        CType(cc, TextConstraintControl).radioInternal.Enabled = False
-                    End If
-                End If
+                RestrictTextControls()
             End If
         End If
     End Sub
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-        Dim i As Integer
-        mIsState = IsState
+    Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
+        mIsState = isState
 
-        ' set constraint values on control
-        For i = 0 To Constraint.Constraints.Count - 1
+        For i As Integer = 0 To Constraint.Constraints.Count - 1
             AddConstraintControl(Constraint.Constraints.Item(i))
         Next
     End Sub
@@ -183,34 +164,26 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
         mFileManager.FileEdited = True
     End Sub
 
-    Private Function RestrictExistingTextControl(ByVal choiceEnabled As Boolean) As TextConstrainType
-        Dim result As TextConstrainType
+    Protected Sub RestrictTextControls()
+        Dim isFreeText As Boolean = False
 
-        'check each of the constraints
-        For Each c As Constraint In Constraint.Constraints
-            If c.Kind = ConstraintKind.Text Then
-                'if it is text then remember the type
-                result = CType(c, Constraint_Text).TypeOfTextConstraint()
+        For Each tp As TabPage In TabConstraints.TabPages
+            If tp.Controls.Count > 0 Then
+                Dim cc As TextConstraintControl = TryCast(tp.Controls(0), TextConstraintControl)
 
-                For Each tp As TabPage In TabConstraints.TabPages
-                    If tp.Controls.Count > 0 AndAlso TypeOf tp.Controls(0) Is TextConstraintControl Then
-                        Dim cc As TextConstraintControl = CType(tp.Controls(0), TextConstraintControl)
-
-                        If result = TextConstrainType.Text Then
-                            cc.radioInternal.Enabled = choiceEnabled
-                            cc.radioTerminology.Enabled = choiceEnabled
-                        Else
-                            cc.radioText.Enabled = choiceEnabled
-                        End If
+                If Not cc Is Nothing Then
+                    If isFreeText And cc.radioText.Checked Then
+                        cc.radioTerminology.Checked = True
                     End If
-                Next
 
-                Exit For
+                    isFreeText = cc.radioText.Checked
+                    cc.radioText.Enabled = isFreeText Or nTextConstraints = 1
+                    cc.radioInternal.Enabled = Not isFreeText Or nTextConstraints = 1
+                    cc.radioTerminology.Enabled = Not isFreeText Or nTextConstraints = 1
+                End If
             End If
         Next
-
-        Return result
-    End Function
+    End Sub
 
     Private Sub butAddConstraint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddConstraint.Click
         If AddConstraintMenu Is Nothing Then
@@ -241,7 +214,7 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl 'AnyConstrai
 
             If Constraint.Constraints.Item(i).Kind = ConstraintKind.Text Then
                 nTextConstraints = nTextConstraints - 1
-                RestrictExistingTextControl(True)
+                RestrictTextControls()
             End If
 
             If Not AddConstraintMenu Is Nothing Then

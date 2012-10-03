@@ -905,7 +905,7 @@ Namespace ArchetypeEditor.XML_Classes
             'If Not ObjNode.any_allowed = Nothing AndAlso ObjNode.any_allowed Then
             Dim complexObject As New C_COMPLEX_OBJECT_PROXY(ObjNode)
             If Not complexObject.Any_Allowed = Nothing AndAlso complexObject.Any_Allowed Then
-                t.TypeOfTextConstraint = TextConstrainType.Text
+                t.TypeOfTextConstraint = TextConstraintType.Text
                 Return t
             End If
 
@@ -919,7 +919,7 @@ Namespace ArchetypeEditor.XML_Classes
 
                         Select Case Obj.GetType.ToString.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
                             Case "XMLPARSER.CONSTRAINT_REF"
-                                t.TypeOfTextConstraint = TextConstrainType.Terminology
+                                t.TypeOfTextConstraint = TextConstraintType.Terminology
                                 t.ConstraintCode = CType(Obj, XMLParser.CONSTRAINT_REF).reference
                             Case "XMLPARSER.C_CODE_PHRASE"
                                 t.AllowableValues = ArchetypeEditor.XML_Classes.XML_Tools.ProcessCodes(CType(Obj, XMLParser.C_CODE_PHRASE))
@@ -933,7 +933,7 @@ Namespace ArchetypeEditor.XML_Classes
                                 End If
 
                                 If t.AllowableValues.TerminologyID = "local" Or t.AllowableValues.TerminologyID = "openehr" Then
-                                    t.TypeOfTextConstraint = TextConstrainType.Internal
+                                    t.TypeOfTextConstraint = TextConstraintType.Internal
                                 End If
                         End Select
 
@@ -942,7 +942,7 @@ Namespace ArchetypeEditor.XML_Classes
                         Dim constraint As XMLParser.C_PRIMITIVE_OBJECT
                         Dim cString As XMLParser.C_STRING
 
-                        t.TypeOfTextConstraint = TextConstrainType.Text
+                        t.TypeOfTextConstraint = TextConstraintType.Text
 
                         If an_attribute.children.Length > 0 Then
                             constraint = CType(an_attribute.children(0), XMLParser.C_PRIMITIVE_OBJECT)

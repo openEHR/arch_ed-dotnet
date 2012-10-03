@@ -653,7 +653,7 @@ Public Class ArchetypeNodeConstraintControl
                         labelAny.Text = AE_Constants.Instance.Any
                         labelAny.Visible = True
                     Case Else
-                        If archetypeElem.Constraint.Kind = ConstraintKind.Text AndAlso CType(archetypeElem.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstrainType.Terminology Then
+                        If archetypeElem.Constraint.Kind = ConstraintKind.Text AndAlso CType(archetypeElem.Constraint, Constraint_Text).TypeOfTextConstraint = TextConstraintType.Terminology Then
                             gbValueSets.Visible = True
                         Else
                             gbValueSets.Visible = False

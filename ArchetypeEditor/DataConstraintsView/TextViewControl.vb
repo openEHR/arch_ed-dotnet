@@ -34,7 +34,7 @@ Public Class TextViewControl : Inherits ElementViewControl ' ViewControl
         Dim textConstraint As Constraint_Text = CType(aConstraint, Constraint_Text)
 
         Select Case textConstraint.TypeOfTextConstraint
-            Case TextConstrainType.Text
+            Case TextConstraintType.Text
                 If textConstraint.AllowableValues.Codes.Count > 0 Then
                     mComboBox = New ComboBox
                     Dim lth As Integer = 150
@@ -70,7 +70,7 @@ Public Class TextViewControl : Inherits ElementViewControl ' ViewControl
                     Controls.Add(mTextBox)
                 End If
 
-            Case TextConstrainType.Internal
+            Case TextConstraintType.Internal
                 If textConstraint.AllowableValues.Codes.Count > 0 Then
                     mComboBox = New ComboBox
                     Dim lth As Integer = 150
@@ -114,7 +114,7 @@ Public Class TextViewControl : Inherits ElementViewControl ' ViewControl
                     Controls.Add(mTextBox)
                 End If
 
-            Case TextConstrainType.Terminology
+            Case TextConstraintType.Terminology
                 Dim lbl As New Label
                 lbl.Location = aLocation
                 lbl.Height = 40

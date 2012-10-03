@@ -506,7 +506,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Protected Sub SetControlValuesForTypeOfTextConstraint()
         Select Case Constraint.TypeOfTextConstraint
-            Case TextConstrainType.Text
+            Case TextConstraintType.Text
                 radioText.Checked = True
 
                 'Added for backward compatibility with some archetypes with textual constraints
@@ -522,11 +522,11 @@ Public Class TextConstraintControl : Inherits ConstraintControl
                     txtAssumedValue.Text = CStr(Constraint.AssumedValue)
                 End If
 
-            Case TextConstrainType.Internal
+            Case TextConstraintType.Internal
                 radioInternal.Checked = True
                 SetInternalCodedValues()
 
-            Case TextConstrainType.Terminology
+            Case TextConstraintType.Terminology
                 radioTerminology.Checked = True
                 mConstraintTerm = mFileManager.OntologyManager.GetTerm(Constraint.ConstraintCode)
                 TermConstraintTextBox.Text = mConstraintTerm.Text
@@ -745,7 +745,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
     Private Sub radioText_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles radioText.CheckedChanged
         If radioText.Checked Then
-            gbAllowableValues.Visible = Constraint.TypeOfTextConstraint = TextConstrainType.Text And Constraint.AllowableValues.Codes.Count > 0
+            gbAllowableValues.Visible = Constraint.TypeOfTextConstraint = TextConstraintType.Text And Constraint.AllowableValues.Codes.Count > 0
             TermConstraintLabel.Visible = False
             TermConstraintTextBox.Visible = False
             TermConstraintDescriptionLabel.Visible = False
@@ -755,7 +755,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         If Not MyBase.IsLoading Then
             If radioText.Checked Then
-                Constraint.TypeOfTextConstraint = TextConstrainType.Text
+                Constraint.TypeOfTextConstraint = TextConstraintType.Text
                 mFileManager.FileEdited = True
                 SetControlValuesForTypeOfTextConstraint()
             End If
@@ -775,7 +775,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
         If Not MyBase.IsLoading Then
             If radioInternal.Checked Then
                 NewItemButton.Focus()
-                Constraint.TypeOfTextConstraint = TextConstrainType.Internal
+                Constraint.TypeOfTextConstraint = TextConstraintType.Internal
                 SetInternalCodedValues()
                 mFileManager.FileEdited = True
                 SetControlValuesForTypeOfTextConstraint()
@@ -795,7 +795,7 @@ Public Class TextConstraintControl : Inherits ConstraintControl
 
         If Not MyBase.IsLoading Then
             If radioTerminology.Checked Then
-                Constraint.TypeOfTextConstraint = TextConstrainType.Terminology
+                Constraint.TypeOfTextConstraint = TextConstraintType.Terminology
                 MyBase.IsLoading = True  ' avoids replacing the text
 
                 If Constraint.ConstraintCode = "" OrElse Not mFileManager.OntologyManager.Ontology.HasTermCode(Constraint.ConstraintCode) Then

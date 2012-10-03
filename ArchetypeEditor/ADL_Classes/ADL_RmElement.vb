@@ -862,7 +862,7 @@ Namespace ArchetypeEditor.ADL_Classes
             Dim i As Integer
 
             If ObjNode.any_allowed Then
-                result.TypeOfTextConstraint = TextConstrainType.Text
+                result.TypeOfTextConstraint = TextConstraintType.Text
             Else
                 For i = 1 To ObjNode.attributes.count
                     Dim attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE = CType(ObjNode.attributes.i_th(i), openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE)
@@ -875,7 +875,7 @@ Namespace ArchetypeEditor.ADL_Classes
 
                                 Select Case Obj.generating_type.to_cil.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
                                     Case "CONSTRAINT_REF"
-                                        result.TypeOfTextConstraint = TextConstrainType.Terminology
+                                        result.TypeOfTextConstraint = TextConstraintType.Terminology
                                         result.ConstraintCode = CType(Obj, openehr.openehr.am.archetype.constraint_model.CONSTRAINT_REF).target.to_cil
                                     Case "C_CODE_PHRASE"
                                         result.AllowableValues = ArchetypeEditor.ADL_Classes.ADL_Tools.ProcessCodes(CType(Obj, openehr.openehr.am.openehr_profile.data_types.text.C_CODE_PHRASE))
@@ -894,7 +894,7 @@ Namespace ArchetypeEditor.ADL_Classes
                                         End If
 
                                         If result.AllowableValues.TerminologyID = "local" Or result.AllowableValues.TerminologyID = "openehr" Then
-                                            result.TypeOfTextConstraint = TextConstrainType.Internal
+                                            result.TypeOfTextConstraint = TextConstraintType.Internal
                                         End If
                                 End Select
                             End If
@@ -904,7 +904,7 @@ Namespace ArchetypeEditor.ADL_Classes
                             Dim cString As openehr.openehr.am.archetype.constraint_model.primitive.C_STRING
                             Dim ii As Integer
 
-                            result.TypeOfTextConstraint = TextConstrainType.Text
+                            result.TypeOfTextConstraint = TextConstraintType.Text
 
                             If attribute.has_children Then
                                 constraint = CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_PRIMITIVE_OBJECT)

@@ -56,8 +56,8 @@ Public Class RmLink
     End Function
 
     Public Function HasConstraint() As Boolean
-        Return mLinkType.TypeOfTextConstraint <> TextConstrainType.Text OrElse _
-        mMeaning.TypeOfTextConstraint <> TextConstrainType.Text OrElse _
+        Return mLinkType.TypeOfTextConstraint <> TextConstraintType.Text OrElse _
+        mMeaning.TypeOfTextConstraint <> TextConstraintType.Text OrElse _
         mTarget.RegularExpression <> String.Empty
     End Function
 

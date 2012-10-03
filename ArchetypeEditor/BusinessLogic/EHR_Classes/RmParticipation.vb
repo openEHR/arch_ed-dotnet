@@ -64,7 +64,7 @@ Public Class RmParticipation
                     Case "mode"
                         Dim modeConstraint As Constraint_Text = ArchetypeEditor.ADL_Classes.ADL_RmElement.ProcessText(attribute.children.first)
 
-                        If Not modeConstraint Is Nothing AndAlso modeConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
+                        If Not modeConstraint Is Nothing AndAlso modeConstraint.TypeOfTextConstraint = TextConstraintType.Internal Then
                             mModeSet = modeConstraint.AllowableValues
                         End If
                     Case "function"
@@ -83,7 +83,7 @@ Public Class RmParticipation
             Select Case attribute.rm_attribute_name.ToLowerInvariant
                 Case "mode"
                     Dim modeConstraint As Constraint_Text = ArchetypeEditor.XML_Classes.XML_RmElement.ProcessText(attribute.children(0))
-                    If Not modeConstraint Is Nothing AndAlso modeConstraint.TypeOfTextConstraint = TextConstrainType.Internal Then
+                    If Not modeConstraint Is Nothing AndAlso modeConstraint.TypeOfTextConstraint = TextConstraintType.Internal Then
                         mModeSet = modeConstraint.AllowableValues
                     End If
                 Case "function"

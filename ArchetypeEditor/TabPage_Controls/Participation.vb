@@ -82,7 +82,7 @@ Public Class Participation
     End Sub
 
     Public Function HasConstraint() As Boolean
-        Return mRestrictedModeSet.HasRestriction() OrElse cbDateTime.Checked OrElse mParticipationFunction.TextConstraint.TypeOfTextConstraint <> TextConstrainType.Text
+        Return mRestrictedModeSet.HasRestriction() OrElse cbDateTime.Checked OrElse mParticipationFunction.TextConstraint.TypeOfTextConstraint <> TextConstraintType.Text
     End Function
 
 End Class
