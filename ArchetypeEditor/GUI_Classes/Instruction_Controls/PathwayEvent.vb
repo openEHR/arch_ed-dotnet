@@ -29,37 +29,37 @@ Public Class PathwayEvent
 
         'Add any initialization after the InitializeComponent() call
 
-        If Not Me.DesignMode Then
+        If Not DesignMode Then
             Debug.Assert(False) ' should only be used in design view
         End If
     End Sub
 
     Sub New(ByVal defaultMachineStateType As StateMachineType, ByVal a_filemanager As FileManagerLocal)
-
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
         mFileManager = a_filemanager
-        Dim a_term As RmTerm = mFileManager.OntologyManager.AddTerm(defaultMachineStateType.ToString)
-        mText = a_term.Text
-        mItem = New RmPathwayStep(a_term.Code, defaultMachineStateType)
+        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(defaultMachineStateType.ToString)
+        mText = term.Text
+        mItem = New RmPathwayStep(term.Code, defaultMachineStateType)
         BackColor = Main.Instance.Options.StateMachineColour(defaultMachineStateType)
     End Sub
 
     Sub New(ByVal rm As RmPathwayStep, ByVal a_filemanager As FileManagerLocal)
-
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
         mFileManager = a_filemanager
         mItem = rm
-        Me.Translate()
+        Translate()
+
         If mItem.HasAlternativeState Then
-            Me.BackColor = Main.Instance.Options.StateMachineColour(rm.AlternativeState)
+            BackColor = Main.Instance.Options.StateMachineColour(rm.AlternativeState)
         Else
-            Me.BackColor = Main.Instance.Options.StateMachineColour(rm.StateType)
+            BackColor = Main.Instance.Options.StateMachineColour(rm.StateType)
         End If
-        Me.TextRectangle(mText, Me.CreateGraphics)
+
+        TextRectangle(mText, CreateGraphics)
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -168,12 +168,14 @@ Public Class PathwayEvent
         End Get
         Set(ByVal Value As StateMachineType)
             mItem.AlternativeState = Value
+
             If Value = StateMachineType.Not_Set Then
-                Me.BackColor = Main.Instance.Options.StateMachineColour(mItem.StateType)
+                BackColor = Main.Instance.Options.StateMachineColour(mItem.StateType)
             Else
-                Me.BackColor = Main.Instance.Options.StateMachineColour(Value)
+                BackColor = Main.Instance.Options.StateMachineColour(Value)
             End If
-            TextRectangle(mText, Me.CreateGraphics)
+
+            TextRectangle(mText, CreateGraphics)
         End Set
     End Property
 
@@ -183,7 +185,7 @@ Public Class PathwayEvent
         End Get
         Set(ByVal Value As StateMachineType)
             mItem.StateType = Value
-            Me.BackColor = Main.Instance.Options.StateMachineColour(Value)
+            BackColor = Main.Instance.Options.StateMachineColour(Value)
         End Set
     End Property
 
@@ -204,6 +206,12 @@ Public Class PathwayEvent
         End Get
     End Property
 
+    Protected ReadOnly Property SpecialisationDepth() As Integer
+        Get
+            Return mFileManager.OntologyManager.NumberOfSpecialisations
+        End Get
+    End Property
+
     Public Sub Translate()
         Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
         mText = term.Text
@@ -213,20 +221,20 @@ Public Class PathwayEvent
     End Sub
 
     Public Sub Edit()
-        Dim a_term As RmTerm = New RmTerm(mItem.NodeId)
-        a_term.Text = mText
-        a_term.Description = mDescription
+        Dim term As RmTerm = New RmTerm(mItem.NodeId)
+        term.Text = mText
+        term.Description = mDescription
 
         Debug.Assert(mItem.StateType <> StateMachineType.Not_Set)
 
-        Dim s() As String = Main.Instance.GetInput(a_term, ParentForm)
+        Dim s() As String = Main.Instance.GetInput(term, ParentForm)
         mLastEditWasOk = s(0) <> ""
 
         If mLastEditWasOk Then
-            mText = a_term.Text
-            mDescription = a_term.Description
-            mFileManager.OntologyManager.SetRmTermText(a_term)
-            toolTipPathway.SetToolTip(Me, mText & "[" & a_term.Code & "]")
+            mText = term.Text
+            mDescription = term.Description
+            mFileManager.OntologyManager.SetRmTermText(term)
+            toolTipPathway.SetToolTip(Me, mText & "[" & term.Code & "]")
             TextRectangle(mText, CreateGraphics)
             mFileManager.FileEdited = True
         End If
@@ -234,36 +242,28 @@ Public Class PathwayEvent
 
     Private Function TextRectangle(ByVal TextToRender As String, ByVal g As Graphics) As Drawing.Rectangle
         Dim fontFamily As New FontFamily("Arial")
-        Dim a_colour As Drawing.Color
-        Dim font As New Font( _
-           fontFamily, _
-           8, _
-           FontStyle.Regular, _
-           GraphicsUnit.Point)
-        Dim rect As New Rectangle(4, 4, Me.Width - 8, Me.Height - 8)
+        Dim colour As Drawing.Color
+        Dim font As New Font(fontFamily, 8, FontStyle.Regular, GraphicsUnit.Point)
+        Dim rect As New Rectangle(4, 4, Width - 8, Height - 8)
         Dim stringFormat As New StringFormat
         Dim solidBrush As New SolidBrush(Color.FromArgb(255, 0, 0, 0))  'black
 
         If mItem Is Nothing Then
-            a_colour = Me.BackColor
+            colour = BackColor
         Else
-            'If Not mItem.AlternativeState = StateMachineType.Not_Set Then
-            'a_colour = OceanArchetypeEditor.Instance.Options.StateMachineColour(mItem.AlternativeState)
-            'Else
-            a_colour = Main.Instance.Options.StateMachineColour(mItem.StateType)
-            'End If
+            colour = Main.Instance.Options.StateMachineColour(mItem.StateType)
         End If
 
-        ' exclude the area outside the triangle from graphics commands
+        ' Exclude the area outside the triangle from graphics commands
         g.IntersectClip(rect)
 
-        rect = New Rectangle(5, 5, Me.Width - 10, Me.Height - 10)
-        g.Clear(a_colour)
+        rect = New Rectangle(5, 5, Width - 10, Height - 10)
+        g.Clear(colour)
 
-        ' Center each line of text.
+        ' Centre each line of text.
         stringFormat.Alignment = StringAlignment.Center
 
-        ' Center the block of text (top to bottom) in the rectangle.
+        ' Centre the block of text (top to bottom) in the rectangle.
         stringFormat.LineAlignment = StringAlignment.Center
 
         g.DrawString(TextToRender, font, solidBrush, RectangleF.op_Implicit(rect), stringFormat)
@@ -330,6 +330,13 @@ Public Class PathwayEvent
 
     Private Sub MenuMoveRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuMoveRight.Click
         Moveby(1)
+    End Sub
+
+    Private Sub ContextMenuPathwayEvent_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuPathwayEvent.Popup
+        Dim nodeId As String = Item.NodeId
+        Dim i As Integer = Item.SpecialisationDepth()
+
+        MenuDelete.Visible = i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1)
     End Sub
 
 End Class

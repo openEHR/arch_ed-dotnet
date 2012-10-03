@@ -804,30 +804,30 @@ Public Class PathwaySpecification
 #Region "Resizing and form layout"
 
     Private Sub LayOutControls(ByVal Ctrl As Control)
-        Dim i, total_width As Integer
+        Dim i, totalWidth As Integer
         Dim spacer As Integer = 5
-        Dim left_margin As Integer = 5
+        Dim leftMargin As Integer = 5
         Dim scalefactor As Double = 1
-        Dim path_event As PathwayEvent
+        Dim pathEvent As PathwayEvent
 
         i = Ctrl.Controls.Count
 
         If i <> 0 Then
-            total_width = PathwayEvent.DefaultWidth * i
+            totalWidth = PathwayEvent.DefaultWidth * i
 
-            If total_width > Ctrl.Width Then
-                scalefactor = (Ctrl.Width - (spacer * i) - left_margin) / total_width
+            If totalWidth > Ctrl.Width Then
+                scalefactor = (Ctrl.Width - (spacer * i) - leftMargin) / totalWidth
             Else
                 scalefactor = 1
             End If
 
             For i = 0 To Ctrl.Controls.Count - 1
-                path_event = CType(Ctrl.Controls(i), PathwayEvent)
-                path_event.Width = (PathwayEvent.DefaultWidth * scalefactor)
-                path_event.Height = Ctrl.Height - 6
-                path_event.Top = 3
-                path_event.Left = left_margin
-                left_margin = path_event.Left + path_event.Width + spacer
+                pathEvent = CType(Ctrl.Controls(i), PathwayEvent)
+                pathEvent.Width = (PathwayEvent.DefaultWidth * scalefactor)
+                pathEvent.Height = Ctrl.Height - 6
+                pathEvent.Top = 3
+                pathEvent.Left = leftMargin
+                leftMargin = pathEvent.Left + pathEvent.Width + spacer
             Next
         End If
     End Sub
