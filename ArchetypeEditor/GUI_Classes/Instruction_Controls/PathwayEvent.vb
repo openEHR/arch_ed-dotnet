@@ -206,11 +206,33 @@ Public Class PathwayEvent
         End Get
     End Property
 
-    Protected ReadOnly Property SpecialisationDepth() As Integer
+    Public ReadOnly Property SpecialisationDepth() As Integer
         Get
             Return mFileManager.OntologyManager.NumberOfSpecialisations
         End Get
     End Property
+
+    Public ReadOnly Property IsSameSpecialisationDepth() As Boolean
+        Get
+            Return SpecialisationDepth = Item.SpecialisationDepth()
+        End Get
+    End Property
+
+    Public Sub Specialise()
+        Dim dlg As New SpecialisationQuestionDialog()
+        dlg.ShowForArchetypeNode(PathwayEventText, Item, SpecialisationDepth)
+
+        If dlg.IsSpecialisationRequested Then
+            Item = Item.Copy
+            Item.NodeId = mFileManager.OntologyManager.SpecialiseTerm(PathwayEventText, mDescription, Item.NodeId).Code
+
+            If Item.HasNameConstraint AndAlso Item.NameConstraint.TypeOfTextConstraint = TextConstraintType.Terminology Then
+                Item.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseNameConstraint(Item.NameConstraint.ConstraintCode).Code
+            End If
+
+            mFileManager.FileEdited = True
+        End If
+    End Sub
 
     Public Sub Translate()
         Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
@@ -221,22 +243,28 @@ Public Class PathwayEvent
     End Sub
 
     Public Sub Edit()
-        Dim term As RmTerm = New RmTerm(mItem.NodeId)
-        term.Text = mText
-        term.Description = mDescription
+        If Not IsSameSpecialisationDepth Then
+            Specialise()
+        End If
 
-        Debug.Assert(mItem.StateType <> StateMachineType.Not_Set)
+        If IsSameSpecialisationDepth Then
+            Dim term As RmTerm = New RmTerm(mItem.NodeId)
+            term.Text = mText
+            term.Description = mDescription
 
-        Dim s() As String = Main.Instance.GetInput(term, ParentForm)
-        mLastEditWasOk = s(0) <> ""
+            Debug.Assert(mItem.StateType <> StateMachineType.Not_Set)
 
-        If mLastEditWasOk Then
-            mText = term.Text
-            mDescription = term.Description
-            mFileManager.OntologyManager.SetRmTermText(term)
-            toolTipPathway.SetToolTip(Me, mText & "[" & term.Code & "]")
-            TextRectangle(mText, CreateGraphics)
-            mFileManager.FileEdited = True
+            Dim s() As String = Main.Instance.GetInput(term, ParentForm)
+            mLastEditWasOk = s(0) <> ""
+
+            If mLastEditWasOk Then
+                mText = term.Text
+                mDescription = term.Description
+                mFileManager.OntologyManager.SetRmTermText(term)
+                toolTipPathway.SetToolTip(Me, mText & "[" & term.Code & "]")
+                TextRectangle(mText, CreateGraphics)
+                mFileManager.FileEdited = True
+            End If
         End If
     End Sub
 

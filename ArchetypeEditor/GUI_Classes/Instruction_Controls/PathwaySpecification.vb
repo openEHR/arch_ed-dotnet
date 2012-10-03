@@ -19,6 +19,7 @@ Public Class PathwaySpecification
     Private mValidStateMachineClasses As StateMachineType()
     Private WithEvents mPathwayEvent As PathwayEvent
     Private mIsloading As Boolean
+    Friend WithEvents specialiseButton As System.Windows.Forms.Button
     Private mFileManager As FileManagerLocal
     Public Event StructureChanged(ByVal sender As Object, ByVal a_structure As StructureType)
 
@@ -32,10 +33,9 @@ Public Class PathwaySpecification
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-        If Not Me.DesignMode Then
+        If Not DesignMode Then
             mFileManager = Filemanager.Master
         End If
-
     End Sub
 
     'UserControl overrides dispose to clean up the component list.
@@ -123,6 +123,7 @@ Public Class PathwaySpecification
         Me.lblAllowAltState = New System.Windows.Forms.Label
         Me.cbAlternativeState = New System.Windows.Forms.CheckBox
         Me.PanelRightTop = New System.Windows.Forms.Panel
+        Me.specialiseButton = New System.Windows.Forms.Button
         Me.SplitterRight = New System.Windows.Forms.Splitter
         Me.gbSuspended = New System.Windows.Forms.GroupBox
         Me.gbSuspendedActive = New System.Windows.Forms.GroupBox
@@ -166,6 +167,7 @@ Public Class PathwaySpecification
         Me.tabProperties.SuspendLayout()
         Me.tpTransition.SuspendLayout()
         Me.tpState.SuspendLayout()
+        Me.PanelRightTop.SuspendLayout()
         Me.gbSuspended.SuspendLayout()
         Me.gbSuspendedActive.SuspendLayout()
         Me.gbSuspendedInitial.SuspendLayout()
@@ -325,11 +327,26 @@ Public Class PathwaySpecification
         '
         'PanelRightTop
         '
+        Me.PanelRightTop.Controls.Add(Me.specialiseButton)
         Me.PanelRightTop.Dock = System.Windows.Forms.DockStyle.Top
         Me.PanelRightTop.Location = New System.Drawing.Point(0, 0)
         Me.PanelRightTop.Name = "PanelRightTop"
         Me.PanelRightTop.Size = New System.Drawing.Size(160, 152)
         Me.PanelRightTop.TabIndex = 0
+        '
+        'specialiseButton
+        '
+        Me.specialiseButton.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.specialiseButton.Image = CType(resources.GetObject("specialiseButton.Image"), System.Drawing.Image)
+        Me.specialiseButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.specialiseButton.Location = New System.Drawing.Point(5, 5)
+        Me.specialiseButton.Name = "specialiseButton"
+        Me.specialiseButton.Size = New System.Drawing.Size(150, 23)
+        Me.specialiseButton.TabIndex = 2
+        Me.specialiseButton.Text = "Specialise..."
+        Me.specialiseButton.UseVisualStyleBackColor = True
+        Me.specialiseButton.Visible = False
         '
         'SplitterRight
         '
@@ -733,6 +750,7 @@ Public Class PathwaySpecification
         Me.tabProperties.ResumeLayout(False)
         Me.tpTransition.ResumeLayout(False)
         Me.tpState.ResumeLayout(False)
+        Me.PanelRightTop.ResumeLayout(False)
         Me.gbSuspended.ResumeLayout(False)
         Me.gbSuspendedActive.ResumeLayout(False)
         Me.gbSuspendedInitial.ResumeLayout(False)
@@ -919,7 +937,18 @@ Public Class PathwaySpecification
         cbAlternativeState.Checked = mPathwayEvent.Item.HasAlternativeState
         cbSuspended.Checked = mPathwayEvent.Item.SuspendAllowed
         cbAborted.Checked = mPathwayEvent.Item.AbortAllowed
+
+        tpState.Enabled = mPathwayEvent.IsSameSpecialisationDepth
+        tpTransition.Enabled = mPathwayEvent.IsSameSpecialisationDepth
+        specialiseButton.Visible = Not mPathwayEvent.IsSameSpecialisationDepth
+
         mIsloading = False
+    End Sub
+
+    Private Sub SpecialiseButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles specialiseButton.Click
+        If Not mPathwayEvent Is Nothing Then
+            mPathwayEvent.Specialise()
+        End If
     End Sub
 
     Private Sub MenuAdd_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuAdd.Click, PanelAbortActive.DoubleClick, PanelAbortInitial.DoubleClick, PanelActive.DoubleClick, PanelPlanned.DoubleClick, PanelCompleted.DoubleClick, PanelSuspendInitial.DoubleClick, PanelSuspendActive.DoubleClick, PanelScheduled.DoubleClick
@@ -1044,6 +1073,7 @@ Public Class PathwaySpecification
         cbAlternativeState.Text = Filemanager.GetOpenEhrTerm(679, "Alternative state")
         tpTransition.Text = Filemanager.GetOpenEhrTerm(676, "Transition")
         tpState.Text = Filemanager.GetOpenEhrTerm(177, "State")
+        specialiseButton.Text = AE_Constants.Instance.Specialise
     End Sub
 
     Public Sub Translate()

@@ -20,62 +20,73 @@ Public Class RmPathwayStep
     Private mAbortAllowed As Boolean
     Private mSuspendAllowed As Boolean
 
-
     Property StateType() As StateMachineType
         Get
             Return mStateType
         End Get
-        Set(ByVal Value As StateMachineType)
-            mStateType = Value
+        Set(ByVal value As StateMachineType)
+            mStateType = value
         End Set
     End Property
+
     ReadOnly Property HasAlternativeState() As Boolean
         Get
             Return mAlternativeState <> StateMachineType.Not_Set
         End Get
     End Property
+
     Property AlternativeState() As StateMachineType
         Get
             Return mAlternativeState
         End Get
-        Set(ByVal Value As StateMachineType)
-            mAlternativeState = Value
+        Set(ByVal value As StateMachineType)
+            mAlternativeState = value
         End Set
     End Property
+
     Property AbortAllowed() As Boolean
         Get
             Return mAbortAllowed
         End Get
-        Set(ByVal Value As Boolean)
-            Debug.Assert(mStateType = StateMachineType.Active Or mStateType = StateMachineType.Planned)
-            mAbortAllowed = Value
+        Set(ByVal value As Boolean)
+            Debug.Assert(Not value Or mStateType = StateMachineType.Active Or mStateType = StateMachineType.Planned)
+            mAbortAllowed = value
         End Set
     End Property
+
     Property SuspendAllowed() As Boolean
         Get
             Return mSuspendAllowed
         End Get
-        Set(ByVal Value As Boolean)
-            Debug.Assert(mStateType = StateMachineType.Active Or mStateType = StateMachineType.Planned)
-            mSuspendAllowed = Value
+        Set(ByVal value As Boolean)
+            Debug.Assert(Not value Or mStateType = StateMachineType.Active Or mStateType = StateMachineType.Planned)
+            mSuspendAllowed = value
         End Set
     End Property
 
-
-    Sub New(ByVal nodeID As String, ByVal a_machine_state_type As StateMachineType)
+    Sub New(ByVal nodeID As String, ByVal stateType As StateMachineType)
         MyBase.New(nodeID, StructureType.CarePathwayStep)
-        mStateType = a_machine_state_type
+        mStateType = stateType
     End Sub
 
-    Sub New(ByVal a_node_id As String, ByVal EIF_PathwayStep As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
-        MyBase.New(a_node_id, StructureType.CarePathwayStep)
+    Sub New(ByVal nodeID As String, ByVal EIF_PathwayStep As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
+        MyBase.New(nodeID, StructureType.CarePathwayStep)
         ProcessPathwayStep(EIF_PathwayStep)
     End Sub
 
-    Sub New(ByVal a_node_id As String, ByVal XML_PathwayStep As XMLParser.C_COMPLEX_OBJECT)
-        MyBase.New(a_node_id, StructureType.CarePathwayStep)
+    Sub New(ByVal nodeID As String, ByVal XML_PathwayStep As XMLParser.C_COMPLEX_OBJECT)
+        MyBase.New(nodeID, StructureType.CarePathwayStep)
         ProcessPathwayStep(XML_PathwayStep)
     End Sub
+
+    Overrides Function Copy() As RmStructure
+        Dim result As New RmPathwayStep(NodeId, StateType)
+        result.AlternativeState = AlternativeState
+        result.AbortAllowed = AbortAllowed
+        result.SuspendAllowed = SuspendAllowed
+        result.Occurrences = Occurrences.Copy()
+        Return result
+    End Function
 
     Sub ProcessPathwayStep(ByVal EIF_Step As openehr.openehr.am.archetype.constraint_model.C_COMPLEX_OBJECT)
         For i As Integer = 1 To EIF_Step.attributes.count
