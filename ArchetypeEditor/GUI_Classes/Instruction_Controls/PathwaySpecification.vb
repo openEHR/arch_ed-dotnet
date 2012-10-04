@@ -787,7 +787,16 @@ Public Class PathwaySpecification
 
     Property PathwaySteps() As RmStructureCompound
         Get
-            Return BuildPathwaySteps()
+            Dim result As New RmStructureCompound("ism_transition", StructureType.ISM_TRANSITION)
+            GetPathwaySteps(result, PanelPlanned)
+            GetPathwaySteps(result, PanelSuspendInitial)
+            GetPathwaySteps(result, PanelAbortInitial)
+            GetPathwaySteps(result, PanelScheduled)
+            GetPathwaySteps(result, PanelActive)
+            GetPathwaySteps(result, PanelSuspendActive)
+            GetPathwaySteps(result, PanelAbortActive)
+            GetPathwaySteps(result, PanelCompleted)
+            Return result
         End Get
         Set(ByVal Value As RmStructureCompound)
             Debug.Assert(Value.Type = StructureType.ISM_TRANSITION)
@@ -856,28 +865,13 @@ Public Class PathwaySpecification
 
 #End Region
 
-    Private Sub GetPathwaySteps(ByVal Parent As Children, ByVal Ctrl As Control)
-        For Each c As Control In Ctrl.Controls
+    Private Sub GetPathwaySteps(ByVal parent As RmStructureCompound, ByVal control As Control)
+        For Each c As Control In control.Controls
             If TypeOf c Is PathwayEvent Then
-                Parent.Add(CType(c, PathwayEvent).Item)
+                parent.Children.Add(CType(c, PathwayEvent).Item)
             End If
         Next
     End Sub
-
-    Private Function BuildPathwaySteps() As RmStructureCompound
-        Dim rm As New RmStructureCompound("ism_transition", StructureType.ISM_TRANSITION)
-
-        GetPathwaySteps(rm.Children, PanelPlanned)
-        GetPathwaySteps(rm.Children, PanelSuspendInitial)
-        GetPathwaySteps(rm.Children, PanelAbortInitial)
-        GetPathwaySteps(rm.Children, PanelScheduled)
-        GetPathwaySteps(rm.Children, PanelActive)
-        GetPathwaySteps(rm.Children, PanelSuspendActive)
-        GetPathwaySteps(rm.Children, PanelAbortActive)
-        GetPathwaySteps(rm.Children, PanelCompleted)
-
-        Return rm
-    End Function
 
     Private Sub OnDeleted(ByVal Sender As Object, ByVal e As EventArgs)
         LayOutControls(Sender)
@@ -887,8 +881,8 @@ Public Class PathwaySpecification
         LayOutControls(Sender)
     End Sub
 
-    Private Sub OnSelectionChanged(ByVal Sender As Object, ByVal e As EventArgs)
-        Dim pv As PathwayEvent = CType(Sender, PathwayEvent)
+    Private Sub OnSelectionChanged(ByVal sender As Object, ByVal e As EventArgs)
+        Dim pv As PathwayEvent = CType(sender, PathwayEvent)
 
         Debug.Assert(pv.Selected)
 
@@ -934,6 +928,7 @@ Public Class PathwaySpecification
         End If
 
         mIsloading = True
+
         cbAlternativeState.Checked = mPathwayEvent.Item.HasAlternativeState
         cbSuspended.Checked = mPathwayEvent.Item.SuspendAllowed
         cbAborted.Checked = mPathwayEvent.Item.AbortAllowed
@@ -1085,6 +1080,10 @@ Public Class PathwaySpecification
         TranslatePathwayEvents(PanelSuspendActive)
         TranslatePathwayEvents(PanelAbortActive)
         TranslatePathwayEvents(PanelCompleted)
+
+        If Not mPathwayEvent Is Nothing Then
+            OnSelectionChanged(mPathwayEvent, Nothing)
+        End If
     End Sub
 
     Private Sub PathwaySpecification_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles mPathwayEvent.KeyDown

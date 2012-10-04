@@ -189,17 +189,6 @@ Public Class PathwayEvent
         End Set
     End Property
 
-    Property PathwayEventText() As String
-        Get
-            Return mText
-        End Get
-        Set(ByVal Value As String)
-            mText = Value
-            toolTipPathway.SetToolTip(Me, mText)
-            TextRectangle(mText, CreateGraphics)
-        End Set
-    End Property
-
     ReadOnly Property LastEditWasOk() As Boolean
         Get
             Return mLastEditWasOk
@@ -226,29 +215,30 @@ Public Class PathwayEvent
         End Get
     End Property
 
-    Public Sub Specialise()
-        Dim dlg As New SpecialisationQuestionDialog()
-        dlg.ShowForArchetypeNode(PathwayEventText, Item, SpecialisationDepth)
-
-        If dlg.IsSpecialisationRequested Then
-            Item = Item.Copy
-            Item.NodeId = mFileManager.OntologyManager.SpecialiseTerm(PathwayEventText, mDescription, Item.NodeId).Code
-
-            If Item.HasNameConstraint AndAlso Item.NameConstraint.TypeOfTextConstraint = TextConstraintType.Terminology Then
-                Item.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseNameConstraint(Item.NameConstraint.ConstraintCode).Code
-            End If
-
-            mFileManager.FileEdited = True
-            RaiseEvent SelectionChanged(Me, New EventArgs)
-        End If
-    End Sub
-
     Public Sub Translate()
         Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
         mText = term.Text
         mDescription = term.Description
         toolTipPathway.SetToolTip(Me, mText & "[" & term.Code & "]")
         TextRectangle(mText, CreateGraphics)
+    End Sub
+
+    Public Sub Specialise()
+        Dim dlg As New SpecialisationQuestionDialog()
+        dlg.ShowForArchetypeNode(mText, Item, SpecialisationDepth)
+
+        If dlg.IsSpecialisationRequested Then
+            Item = Item.Copy
+            Item.NodeId = mFileManager.OntologyManager.SpecialiseTerm(mText, mDescription, Item.NodeId).Code
+
+            If Item.HasNameConstraint AndAlso Item.NameConstraint.TypeOfTextConstraint = TextConstraintType.Terminology Then
+                Item.NameConstraint.ConstraintCode = mFileManager.OntologyManager.SpecialiseNameConstraint(Item.NameConstraint.ConstraintCode).Code
+            End If
+
+            Translate()
+            mFileManager.FileEdited = True
+            RaiseEvent SelectionChanged(Me, New EventArgs)
+        End If
     End Sub
 
     Public Sub Edit()
@@ -269,13 +259,40 @@ Public Class PathwayEvent
             mLastEditWasOk = s(0) <> ""
 
             If mLastEditWasOk Then
-                mText = term.Text
-                mDescription = term.Description
                 mFileManager.OntologyManager.SetRmTermText(term)
-                toolTipPathway.SetToolTip(Me, mText & "[" & term.Code & "]")
-                TextRectangle(mText, CreateGraphics)
+                Translate()
                 mFileManager.FileEdited = True
             End If
+        End If
+    End Sub
+
+    Public Sub Delete()
+        If CanDelete Then
+            If MessageBox.Show(AE_Constants.Instance.Remove & mText, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                Dim p As Control = Parent
+                p.Controls.Remove(Me)
+                mItem = Nothing
+                mFileManager.FileEdited = True
+                RaiseEvent Deleted(p, New EventArgs)
+            End If
+        End If
+    End Sub
+
+    Public Sub Moveby(ByVal delta As Integer)
+        ' Re-order the pathway event
+        Dim controls As ControlCollection = Parent.Controls
+        Dim currindex As Integer = controls.GetChildIndex(Me)
+        Dim newindex As Integer = currindex + delta
+
+        If newindex <> currindex And newindex >= 0 And newindex < controls.Count Then
+            controls.SetChildIndex(Me, newindex)
+
+            For i As Integer = 0 To controls.Count - 1
+                controls(i).TabIndex = i
+            Next
+
+            mFileManager.FileEdited = True
+            RaiseEvent Deleted(Parent, New EventArgs)
         End If
     End Sub
 
@@ -330,36 +347,6 @@ Public Class PathwayEvent
 
     Private Sub PathwayEvent_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Resize
         TextRectangle(mText, CreateGraphics)
-    End Sub
-
-    Public Sub Delete()
-        If CanDelete Then
-            If MessageBox.Show(AE_Constants.Instance.Remove & PathwayEventText, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                Dim p As Control = Parent
-                p.Controls.Remove(Me)
-                mItem = Nothing
-                mFileManager.FileEdited = True
-                RaiseEvent Deleted(p, New EventArgs)
-            End If
-        End If
-    End Sub
-
-    Public Sub Moveby(ByVal delta As Integer)
-        ' Re-order the pathway event
-        Dim controls As ControlCollection = Parent.Controls
-        Dim currindex As Integer = controls.GetChildIndex(Me)
-        Dim newindex As Integer = currindex + delta
-
-        If newindex <> currindex And newindex >= 0 And newindex < controls.Count Then
-            controls.SetChildIndex(Me, newindex)
-
-            For i As Integer = 0 To controls.Count - 1
-                controls(i).TabIndex = i
-            Next
-
-            mFileManager.FileEdited = True
-            RaiseEvent Deleted(Parent, New EventArgs)
-        End If
     End Sub
 
     Private Sub MenuDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDelete.Click
