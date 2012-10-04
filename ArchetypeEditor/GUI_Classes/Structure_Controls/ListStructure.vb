@@ -544,14 +544,9 @@ Public Class ListStructure
             Dim item As ArchetypeNode = lvItem.Item
             Dim element As ArchetypeElement = TryCast(item, ArchetypeElement)
             AddReferenceMenuItem.Visible = Not (element Is Nothing OrElse element.IsReference)
-
-            If item.IsAnonymous Then
-                NameSlotMenuItem.Visible = True
-                RemoveMenuItem.Visible = True
-            Else
-                RemoveMenuItem.Visible = CType(item, ArchetypeNodeAbstract).CanRemove
-                SpecialiseMenuItem.Visible = CType(item, ArchetypeNodeAbstract).CanSpecialise
-            End If
+            NameSlotMenuItem.Visible = item.IsAnonymous
+            RemoveMenuItem.Visible = item.CanRemove
+            SpecialiseMenuItem.Visible = item.CanSpecialise
         End If
     End Sub
 
