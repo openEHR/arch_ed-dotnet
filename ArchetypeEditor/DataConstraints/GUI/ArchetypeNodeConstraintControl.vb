@@ -601,8 +601,8 @@ Public Class ArchetypeNodeConstraintControl
         mIsLoading = True
         SuspendLayout()
 
-        Dim isSameSpecialisationDepth As Boolean = mFileManager.OntologyManager.NumberOfSpecialisations = node.RM_Class.SpecialisationDepth
-        specialiseButton.Visible = Not isSameSpecialisationDepth And Not node.IsAnonymous
+        Dim isSameSpecialisationDepth As Boolean = mFileManager.OntologyManager.NumberOfSpecialisations = node.RM_Class.SpecialisationDepth Or node.IsAnonymous
+        specialiseButton.Visible = Not isSameSpecialisationDepth
         specialiseButton.BringToFront()
 
         For Each c As Control In tpConstraint.Controls
@@ -761,6 +761,12 @@ Public Class ArchetypeNodeConstraintControl
     Protected Overridable Sub SetControlValues(ByVal IsState As Boolean)
         mOccurrences.Cardinality = mArchetypeNode.Occurrences
 
+        'Disable all but occurrences for References
+        Dim isSameSpecialisationDepth As Boolean = mFileManager.OntologyManager.NumberOfSpecialisations = mArchetypeNode.RM_Class.SpecialisationDepth Or mArchetypeNode.IsAnonymous
+        Dim isntReference As Boolean = mArchetypeNode.RM_Class.Type <> StructureType.Reference
+        PanelDataConstraint.Enabled = isSameSpecialisationDepth And isntReference
+        PanelAddressable.Enabled = isSameSpecialisationDepth And isntReference
+
         If mArchetypeNode.IsAnonymous Then
             PanelAddressable.Visible = False
             gbTerminology.Visible = False
@@ -784,12 +790,6 @@ Public Class ArchetypeNodeConstraintControl
             End If
 
             txtRuntimeName.Text = CType(mArchetypeNode, ArchetypeNodeAbstract).RuntimeNameText
-
-            'Disable all but occurrences for References
-            Dim isSameSpecialisationDepth As Boolean = mArchetypeNode.RM_Class.SpecialisationDepth = mFileManager.OntologyManager.NumberOfSpecialisations
-            Dim isntReference As Boolean = mArchetypeNode.RM_Class.Type <> StructureType.Reference
-            PanelDataConstraint.Enabled = isSameSpecialisationDepth And isntReference
-            PanelAddressable.Enabled = isSameSpecialisationDepth And isntReference
         End If
     End Sub
 
