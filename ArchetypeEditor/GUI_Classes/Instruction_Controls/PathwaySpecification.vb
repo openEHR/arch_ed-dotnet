@@ -1090,9 +1090,7 @@ Public Class PathwaySpecification
     Private Sub PathwaySpecification_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles mPathwayEvent.KeyDown
         If mPathwayEvent.Selected Then
             If e.KeyCode = Keys.Delete Then
-                If MessageBox.Show(AE_Constants.Instance.Remove & mPathwayEvent.PathwayEventText, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
-                    mPathwayEvent.Remove()
-                End If
+                mPathwayEvent.Delete()
             ElseIf e.KeyCode = Keys.Left And e.Modifiers = Keys.Control Then
                 mPathwayEvent.Moveby(-1)
             ElseIf e.KeyCode = Keys.Right And e.Modifiers = Keys.Control Then

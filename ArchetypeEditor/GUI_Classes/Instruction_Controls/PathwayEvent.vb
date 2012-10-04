@@ -218,6 +218,14 @@ Public Class PathwayEvent
         End Get
     End Property
 
+    Public ReadOnly Property CanDelete() As Boolean
+        Get
+            Dim nodeId As String = Item.NodeId
+            Dim depth As Integer = Item.SpecialisationDepth()
+            Return SpecialisationDepth = depth And (depth = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1)
+        End Get
+    End Property
+
     Public Sub Specialise()
         Dim dlg As New SpecialisationQuestionDialog()
         dlg.ShowForArchetypeNode(PathwayEventText, Item, SpecialisationDepth)
@@ -321,17 +329,16 @@ Public Class PathwayEvent
         TextRectangle(mText, CreateGraphics)
     End Sub
 
-    Public Sub Remove()
-        ' get the parent - needed to layout controls as basis for the event
-        Dim p As Panel = Parent
-        p.Controls.Remove(Me)
-        mItem = Nothing
-        mFileManager.FileEdited = True
-        RaiseEvent Deleted(p, New EventArgs)
-    End Sub
-
-    Private Sub MenuDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDelete.Click
-        Remove()
+    Public Sub Delete()
+        If CanDelete Then
+            If MessageBox.Show(AE_Constants.Instance.Remove & PathwayEventText, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                Dim p As Control = Parent
+                p.Controls.Remove(Me)
+                mItem = Nothing
+                mFileManager.FileEdited = True
+                RaiseEvent Deleted(p, New EventArgs)
+            End If
+        End If
     End Sub
 
     Public Sub Moveby(ByVal delta As Integer)
@@ -352,6 +359,10 @@ Public Class PathwayEvent
         End If
     End Sub
 
+    Private Sub MenuDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDelete.Click
+        Delete()
+    End Sub
+
     Private Sub menuMoveLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuMoveLeft.Click
         Moveby(-1)
     End Sub
@@ -361,10 +372,7 @@ Public Class PathwayEvent
     End Sub
 
     Private Sub ContextMenuPathwayEvent_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuPathwayEvent.Popup
-        Dim nodeId As String = Item.NodeId
-        Dim i As Integer = Item.SpecialisationDepth()
-
-        MenuDelete.Visible = i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1)
+        MenuDelete.Visible = CanDelete
     End Sub
 
 End Class
