@@ -239,6 +239,7 @@ Public Class PathwayEvent
             End If
 
             mFileManager.FileEdited = True
+            RaiseEvent SelectionChanged(Me, New EventArgs)
         End If
     End Sub
 
@@ -251,6 +252,8 @@ Public Class PathwayEvent
     End Sub
 
     Public Sub Edit()
+        mLastEditWasOk = False
+
         If Not IsSameSpecialisationDepth Then
             Specialise()
         End If
