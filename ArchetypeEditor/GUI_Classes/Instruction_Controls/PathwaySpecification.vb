@@ -873,7 +873,7 @@ Public Class PathwaySpecification
         Next
     End Sub
 
-    Private Sub OnDeleted(ByVal Sender As Object, ByVal e As EventArgs)
+    Private Sub OnRemoved(ByVal Sender As Object, ByVal e As EventArgs)
         LayOutControls(Sender)
     End Sub
 
@@ -998,7 +998,7 @@ Public Class PathwaySpecification
         pv.TabStop = True
         AddHandler pv.ContextMenuPathwayEvent.MenuItems.Add(MenuAdd.Text).Click, AddressOf MenuAdd_Click
         AddHandler pv.SelectionChanged, AddressOf OnSelectionChanged
-        AddHandler pv.Deleted, AddressOf OnDeleted
+        AddHandler pv.Removed, AddressOf OnRemoved
         AddHandler pv.Moved, AddressOf OnMoved
         LayOutControls(ctrl)
     End Sub
@@ -1089,7 +1089,7 @@ Public Class PathwaySpecification
     Private Sub PathwaySpecification_KeyDown(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles mPathwayEvent.KeyDown
         If mPathwayEvent.Selected Then
             If e.KeyCode = Keys.Delete Then
-                mPathwayEvent.Delete()
+                mPathwayEvent.Remove()
             ElseIf e.KeyCode = Keys.Left And e.Modifiers = Keys.Control Then
                 mPathwayEvent.Moveby(-1)
             ElseIf e.KeyCode = Keys.Right And e.Modifiers = Keys.Control Then

@@ -10,12 +10,13 @@ Public Class PathwayEvent
     Private mItem As RmPathwayStep
     Private mLastEditWasOk As Boolean
     Friend WithEvents toolTipPathway As System.Windows.Forms.ToolTip
-    Friend WithEvents menuMoveLeft As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuMoveRight As System.Windows.Forms.MenuItem
+    Friend WithEvents MoveLeftMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents MoveRightMenuItem As System.Windows.Forms.MenuItem
+    Friend WithEvents RemoveMenuItem As System.Windows.Forms.MenuItem
     Private mFileManager As FileManagerLocal
 
     Public Event SelectionChanged(ByVal sender As Object, ByVal e As EventArgs)
-    Public Event Deleted(ByVal sender As Object, ByVal e As EventArgs)
+    Public Event Removed(ByVal sender As Object, ByVal e As EventArgs)
     Public Event Moved(ByVal sender As Object, ByVal e As EventArgs)
 
 
@@ -34,22 +35,22 @@ Public Class PathwayEvent
         End If
     End Sub
 
-    Sub New(ByVal defaultMachineStateType As StateMachineType, ByVal a_filemanager As FileManagerLocal)
+    Sub New(ByVal defaultMachineStateType As StateMachineType, ByVal fileManager As FileManagerLocal)
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
-        mFileManager = a_filemanager
+        mFileManager = fileManager
         Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(defaultMachineStateType.ToString)
         mText = term.Text
         mItem = New RmPathwayStep(term.Code, defaultMachineStateType)
         BackColor = Main.Instance.Options.StateMachineColour(defaultMachineStateType)
     End Sub
 
-    Sub New(ByVal rm As RmPathwayStep, ByVal a_filemanager As FileManagerLocal)
+    Sub New(ByVal rm As RmPathwayStep, ByVal fileManager As FileManagerLocal)
         'This call is required by the Windows Form Designer.
         InitializeComponent()
 
-        mFileManager = a_filemanager
+        mFileManager = fileManager
         mItem = rm
         Translate()
 
@@ -79,45 +80,44 @@ Public Class PathwayEvent
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     Friend WithEvents ContextMenuPathwayEvent As System.Windows.Forms.ContextMenu
-    Friend WithEvents MenuEdit As System.Windows.Forms.MenuItem
-    Friend WithEvents MenuDelete As System.Windows.Forms.MenuItem
+    Friend WithEvents EditMenuItem As System.Windows.Forms.MenuItem
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Me.ContextMenuPathwayEvent = New System.Windows.Forms.ContextMenu
-        Me.MenuEdit = New System.Windows.Forms.MenuItem
-        Me.MenuDelete = New System.Windows.Forms.MenuItem
-        Me.menuMoveLeft = New System.Windows.Forms.MenuItem
-        Me.MenuMoveRight = New System.Windows.Forms.MenuItem
+        Me.EditMenuItem = New System.Windows.Forms.MenuItem
+        Me.MoveLeftMenuItem = New System.Windows.Forms.MenuItem
+        Me.MoveRightMenuItem = New System.Windows.Forms.MenuItem
         Me.toolTipPathway = New System.Windows.Forms.ToolTip(Me.components)
+        Me.RemoveMenuItem = New System.Windows.Forms.MenuItem
         Me.SuspendLayout()
         '
         'ContextMenuPathwayEvent
         '
-        Me.ContextMenuPathwayEvent.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.MenuEdit, Me.MenuDelete, Me.menuMoveLeft, Me.MenuMoveRight})
+        Me.ContextMenuPathwayEvent.MenuItems.AddRange(New System.Windows.Forms.MenuItem() {Me.EditMenuItem, Me.RemoveMenuItem, Me.MoveLeftMenuItem, Me.MoveRightMenuItem})
         '
-        'MenuEdit
+        'EditMenuItem
         '
-        Me.MenuEdit.Index = 0
-        Me.MenuEdit.Text = "Edit Text"
+        Me.EditMenuItem.Index = 0
+        Me.EditMenuItem.Text = "Edit"
         '
-        'MenuDelete
+        'MoveLeftMenuItem
         '
-        Me.MenuDelete.Index = 1
-        Me.MenuDelete.Text = "Delete"
+        Me.MoveLeftMenuItem.Index = 2
+        Me.MoveLeftMenuItem.Text = "Move Left"
         '
-        'menuMoveLeft
+        'MoveRightMenuItem
         '
-        Me.menuMoveLeft.Index = 2
-        Me.menuMoveLeft.Text = "Move Left"
-        '
-        'MenuMoveRight
-        '
-        Me.MenuMoveRight.Index = 3
-        Me.MenuMoveRight.Text = "Move Right"
+        Me.MoveRightMenuItem.Index = 3
+        Me.MoveRightMenuItem.Text = "Move Right"
         '
         'toolTipPathway
         '
         Me.toolTipPathway.AutomaticDelay = 100
+        '
+        'RemoveMenuItem
+        '
+        Me.RemoveMenuItem.Index = 1
+        Me.RemoveMenuItem.Text = "Remove"
         '
         'PathwayEvent
         '
@@ -207,7 +207,7 @@ Public Class PathwayEvent
         End Get
     End Property
 
-    Public ReadOnly Property CanDelete() As Boolean
+    Public ReadOnly Property CanRemove() As Boolean
         Get
             Dim nodeId As String = Item.NodeId
             Dim depth As Integer = Item.SpecialisationDepth()
@@ -266,14 +266,14 @@ Public Class PathwayEvent
         End If
     End Sub
 
-    Public Sub Delete()
-        If CanDelete Then
+    Public Sub Remove()
+        If CanRemove Then
             If MessageBox.Show(AE_Constants.Instance.Remove & mText, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
                 Dim p As Control = Parent
                 p.Controls.Remove(Me)
                 mItem = Nothing
                 mFileManager.FileEdited = True
-                RaiseEvent Deleted(p, New EventArgs)
+                RaiseEvent Removed(p, New EventArgs)
             End If
         End If
     End Sub
@@ -292,7 +292,7 @@ Public Class PathwayEvent
             Next
 
             mFileManager.FileEdited = True
-            RaiseEvent Deleted(Parent, New EventArgs)
+            RaiseEvent Removed(Parent, New EventArgs)
         End If
     End Sub
 
@@ -341,28 +341,30 @@ Public Class PathwayEvent
         Selected = True
     End Sub
 
-    Private Sub MenuEdit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuEdit.Click, Me.DoubleClick
-        Edit()
-    End Sub
-
     Private Sub PathwayEvent_Resize(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Resize
         TextRectangle(mText, CreateGraphics)
     End Sub
 
-    Private Sub MenuDelete_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuDelete.Click
-        Delete()
+    Private Sub EditMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles EditMenuItem.Click, Me.DoubleClick
+        Edit()
     End Sub
 
-    Private Sub menuMoveLeft_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles menuMoveLeft.Click
+    Private Sub RemoveMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveMenuItem.Click
+        Remove()
+    End Sub
+
+    Private Sub MoveLeftMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MoveLeftMenuItem.Click
         Moveby(-1)
     End Sub
 
-    Private Sub MenuMoveRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MenuMoveRight.Click
+    Private Sub MenuMoveRight_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MoveRightMenuItem.Click
         Moveby(1)
     End Sub
 
     Private Sub ContextMenuPathwayEvent_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuPathwayEvent.Popup
-        MenuDelete.Visible = CanDelete
+        RemoveMenuItem.Visible = CanRemove
+        RemoveMenuItem.Text = AE_Constants.Instance.Remove
+        EditMenuItem.Text = mFileManager.OntologyManager.GetOpenEHRTerm(592, EditMenuItem.Text)
     End Sub
 
 End Class
