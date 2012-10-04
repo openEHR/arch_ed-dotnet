@@ -131,13 +131,10 @@ Public Class PathwayEvent
 
 #End Region
 
-    Property Item() As RmPathwayStep
+    Public ReadOnly Property Item() As RmPathwayStep
         Get
             Return mItem
         End Get
-        Set(ByVal Value As RmPathwayStep)
-            mItem = Value
-        End Set
     End Property
 
     Property Selected() As Boolean
@@ -207,14 +204,6 @@ Public Class PathwayEvent
         End Get
     End Property
 
-    Public ReadOnly Property CanRemove() As Boolean
-        Get
-            Dim nodeId As String = Item.NodeId
-            Dim depth As Integer = Item.SpecialisationDepth()
-            Return SpecialisationDepth = depth And (depth = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1)
-        End Get
-    End Property
-
     Public Sub Translate()
         Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(mItem.NodeId)
         mText = term.Text
@@ -228,7 +217,7 @@ Public Class PathwayEvent
         dlg.ShowForArchetypeNode(mText, Item, SpecialisationDepth)
 
         If dlg.IsSpecialisationRequested Then
-            Item = Item.Copy
+            mItem = Item.Copy
             Item.NodeId = mFileManager.OntologyManager.SpecialiseTerm(mText, mDescription, Item.NodeId).Code
 
             If Item.HasNameConstraint AndAlso Item.NameConstraint.TypeOfTextConstraint = TextConstraintType.Terminology Then
@@ -267,7 +256,7 @@ Public Class PathwayEvent
     End Sub
 
     Public Sub Remove()
-        If CanRemove Then
+        If Item.CanRemove(SpecialisationDepth) Then
             If MessageBox.Show(AE_Constants.Instance.Remove & mText, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
                 Dim p As Control = Parent
                 p.Controls.Remove(Me)
@@ -362,7 +351,7 @@ Public Class PathwayEvent
     End Sub
 
     Private Sub ContextMenuPathwayEvent_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuPathwayEvent.Popup
-        RemoveMenuItem.Visible = CanRemove
+        RemoveMenuItem.Visible = Item.CanRemove(SpecialisationDepth)
         RemoveMenuItem.Text = AE_Constants.Instance.Remove
         EditMenuItem.Text = mFileManager.OntologyManager.GetOpenEHRTerm(592, EditMenuItem.Text)
     End Sub
