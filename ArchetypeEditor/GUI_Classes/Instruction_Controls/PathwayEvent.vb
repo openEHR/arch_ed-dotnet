@@ -268,7 +268,7 @@ Public Class PathwayEvent
 
     Public Sub Delete()
         If CanDelete Then
-            If MessageBox.Show(AE_Constants.Instance.Remove & mText, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            If MessageBox.Show(AE_Constants.Instance.Remove & mText, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
                 Dim p As Control = Parent
                 p.Controls.Remove(Me)
                 mItem = Nothing
