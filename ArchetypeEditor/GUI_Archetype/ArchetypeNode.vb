@@ -74,6 +74,24 @@ Public MustInherit Class ArchetypeNode
         End Get
     End Property
 
+    Public Overridable ReadOnly Property CanRemove() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Overridable ReadOnly Property CanSpecialise() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
+    Public Overridable ReadOnly Property CanChangeDataType() As Boolean
+        Get
+            Return False
+        End Get
+    End Property
+
     Public Overridable Function ImageIndex(ByVal isSelected As Boolean) As Integer
         Dim result As Integer = ConstraintKind.Any
 

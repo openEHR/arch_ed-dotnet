@@ -263,9 +263,7 @@ Public Class SimpleStructure
     End Sub
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs)
-        If MessageBox.Show(AE_Constants.Instance.Remove & mElement.Text, _
-            AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, _
-            MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+        If MessageBox.Show(AE_Constants.Instance.Remove & mElement.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
             mIsLoading = True
             mElement = Nothing
             txtSimple.Text = ""

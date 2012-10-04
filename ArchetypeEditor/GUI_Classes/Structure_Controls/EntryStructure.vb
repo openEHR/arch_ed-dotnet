@@ -704,28 +704,8 @@ Public Class EntryStructure
             LayoutIcons()
         End If
 
-        If node Is Nothing OrElse node.RM_Class.Type <> StructureType.Element Then
-            butRemoveElement.Enabled = False
-            butChangeDataType.Hide()
-        Else
-            butChangeDataType.Enabled = Not CType(node, ArchetypeElement).IsReference
-            butChangeDataType.Show()
-            butRemoveElement.Enabled = True
-
-            If SpecialisationDepth > 0 Then
-                ' ensure that datatypes cannot be changed in specialisations not at this level
-                'except for any
-
-                If node.RM_Class.SpecialisationDepth < SpecialisationDepth Then
-                    butRemoveElement.Enabled = False
-                    butChangeDataType.Hide()
-                End If
-
-                If CType(node, ArchetypeElement).Constraint.Kind = ConstraintKind.Any Then
-                    butChangeDataType.Show()
-                End If
-            End If
-        End If
+        butRemoveElement.Enabled = Not node Is Nothing AndAlso node.CanRemove
+        butChangeDataType.Visible = Not node Is Nothing AndAlso node.CanChangeDataType
     End Sub
 
     Protected Sub SetToolTipSpecialisation(ByVal ctrl As Control, ByVal item As ArchetypeNode)
@@ -817,6 +797,7 @@ Public Class EntryStructure
 
     Private Sub ChangeConstraint(ByVal a_constraint As Constraint)
         Debug.Assert(mCurrentItem.RM_Class.Type = StructureType.Element)
+
         If a_constraint.Kind = ConstraintKind.Multiple Then
             'Add the current constraint to the multiple constraint before setting the current item to the multiple
             CType(a_constraint, Constraint_Choice).Constraints.Add(CType(mCurrentItem, ArchetypeElement).Constraint)
@@ -824,6 +805,7 @@ Public Class EntryStructure
             'Or if the current item is multiple
             Dim m As Constraint_Choice
             m = CType(mCurrentItem, ArchetypeElement).Constraint
+
             For Each c As Constraint In m.Constraints
                 'find the constraint that is of the same type as a_constraint if there is one
                 If c.Kind = a_constraint.Kind Then
@@ -831,6 +813,7 @@ Public Class EntryStructure
                 End If
             Next
         End If
+
         'now set the current item to the new constraint
         CType(mCurrentItem, ArchetypeElement).Constraint = a_constraint
         mFileManager.FileEdited = True
@@ -856,7 +839,7 @@ Public Class EntryStructure
 
     Protected Overrides Sub OnBackColorChanged(ByVal e As System.EventArgs)
         ' changes the colour of some buttons when the background colour changes
-        If Me.BackColor.Equals(System.Drawing.Color.LightSteelBlue) Then
+        If BackColor.Equals(System.Drawing.Color.LightSteelBlue) Then
             ButAddElement.BackColor = System.Drawing.Color.CornflowerBlue
             butRemoveElement.BackColor = System.Drawing.Color.CornflowerBlue
             butListUp.BackColor = System.Drawing.Color.CornflowerBlue
@@ -867,18 +850,17 @@ Public Class EntryStructure
     Private Sub EntryStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
         If Not Me.DesignMode Then
             ' add the tooltips to the buttons on the left
-            Me.ttElement.SetToolTip(Me.pbText, AE_Constants.Instance.Text)
-            Me.ttElement.SetToolTip(Me.pbQuantity, AE_Constants.Instance.Quantity)
-            Me.ttElement.SetToolTip(Me.pbAny, AE_Constants.Instance.Any)
-            Me.ttElement.SetToolTip(Me.pbBoolean, AE_Constants.Instance.Boolean_)
-            Me.ttElement.SetToolTip(Me.pbOrdinal, AE_Constants.Instance.Ordinal)
-            Me.ttElement.SetToolTip(Me.pbCount, AE_Constants.Instance.Count)
-            Me.ttElement.SetToolTip(Me.pbDateTime, AE_Constants.Instance.DateTime)
-            Me.ttElement.SetToolTip(Me.pbCluster, AE_Constants.Instance.Cluster)
-            Me.ttElement.SetToolTip(Me.butChangeDataType, AE_Constants.Instance.ChangeDataType)
-            Me.ttElement.SetToolTip(Me.pbSlot, AE_Constants.Instance.Slot)
-
-            Me.helpEntryStructure.HelpNamespace = Main.Instance.Options.HelpLocationPath
+            ttElement.SetToolTip(pbText, AE_Constants.Instance.Text)
+            ttElement.SetToolTip(pbQuantity, AE_Constants.Instance.Quantity)
+            ttElement.SetToolTip(pbAny, AE_Constants.Instance.Any)
+            ttElement.SetToolTip(pbBoolean, AE_Constants.Instance.Boolean_)
+            ttElement.SetToolTip(pbOrdinal, AE_Constants.Instance.Ordinal)
+            ttElement.SetToolTip(pbCount, AE_Constants.Instance.Count)
+            ttElement.SetToolTip(pbDateTime, AE_Constants.Instance.DateTime)
+            ttElement.SetToolTip(pbCluster, AE_Constants.Instance.Cluster)
+            ttElement.SetToolTip(butChangeDataType, AE_Constants.Instance.ChangeDataType)
+            ttElement.SetToolTip(pbSlot, AE_Constants.Instance.Slot)
+            helpEntryStructure.HelpNamespace = Main.Instance.Options.HelpLocationPath
         End If
     End Sub
 

@@ -520,18 +520,16 @@ Public Class TreeStructure
     End Sub
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles RemoveItemAndReferencesMenuItem.Click
-        Dim tvNode As ArchetypeTreeNode
-        Dim has_references As Boolean
-        Dim message As String
+        Dim tvNode As ArchetypeTreeNode = TryCast(tvTree.SelectedNode, ArchetypeTreeNode)
 
-        If Not tvTree.SelectedNode Is Nothing Then
-            tvNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
-            message = AE_Constants.Instance.Remove & Me.tvTree.SelectedNode.Text
+        If Not tvNode Is Nothing AndAlso tvNode.Item.CanRemove Then
+            Dim hasReferences As Boolean = False
+            Dim message As String = AE_Constants.Instance.Remove & tvTree.SelectedNode.Text
 
             If tvNode.Item.RM_Class.Type = StructureType.Element Then
                 If CType(tvNode.Item.RM_Class, RmElement).HasReferences Then
-                    has_references = True
-                    message = AE_Constants.Instance.Remove & Me.tvTree.SelectedNode.Text & " " & AE_Constants.Instance.AllReferences
+                    hasReferences = True
+                    message = AE_Constants.Instance.Remove & tvTree.SelectedNode.Text & " " & AE_Constants.Instance.AllReferences
                 End If
             End If
 
@@ -551,14 +549,16 @@ Public Class TreeStructure
                 End If
 
                 'if the current node has references then remove all nodes with the same id
-                If has_references Then
-                    RemoveTreeNodeAndReferences(Me.tvTree.Nodes, CType(tvNode.Item, ArchetypeElement).NodeId)
+                If hasReferences Then
+                    RemoveTreeNodeAndReferences(tvTree.Nodes, CType(tvNode.Item, ArchetypeElement).NodeId)
                 Else
                     tvNode.Remove()
                 End If
 
                 mFileManager.FileEdited = True
             End If
+        Else
+            Beep()
         End If
     End Sub
 
@@ -706,6 +706,7 @@ Public Class TreeStructure
                 text = text & new_line & TreeToRichText(an.Nodes, level + 3, new_line)
             End If
         Next
+
         Return text
     End Function
 
@@ -750,11 +751,8 @@ Public Class TreeStructure
                 NameSlotMenuItem.Visible = True
                 RemoveMenuItem.Visible = True
             Else
-                Dim nodeId As String = CType(item, ArchetypeNodeAbstract).NodeId
-                Dim i As Integer = item.RM_Class.SpecialisationDepth
-
-                RemoveMenuItem.Visible = i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1)
-                SpecialiseMenuItem.Visible = SpecialisationDepth > 0 And (i < SpecialisationDepth Or item.Occurrences.IsMultiple)
+                RemoveMenuItem.Visible = CType(item, ArchetypeNodeAbstract).CanRemove
+                SpecialiseMenuItem.Visible = CType(item, ArchetypeNodeAbstract).CanSpecialise
             End If
         End If
     End Sub
@@ -834,19 +832,7 @@ Public Class TreeStructure
                     tvTree.SelectedNode.BeginEdit()
                 End If
             Case Keys.Delete
-                Dim tvNode As ArchetypeTreeNode = CType(tvTree.SelectedNode, ArchetypeTreeNode)
-                Dim item As ArchetypeNode = tvNode.Item
-
-                If item.IsAnonymous Then
-                    RemoveItemAndReferences(sender, e)
-                Else
-                    Dim nodeId As String = CType(item, ArchetypeNodeAbstract).NodeId
-                    Dim i As Integer = item.RM_Class.SpecialisationDepth
-
-                    If i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1) Then
-                        RemoveItemAndReferences(sender, e)
-                    End If
-                End If
+                RemoveItemAndReferences(sender, e)
         End Select
     End Sub
 

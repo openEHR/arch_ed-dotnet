@@ -60,80 +60,83 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         End Get
     End Property
 
+    Public Overrides ReadOnly Property CanChangeDataType() As Boolean
+        Get
+            Return Not IsReference And (CanRemove Or (Not CanSpecialise And Constraint.Kind = ConstraintKind.Any))
+        End Get
+    End Property
+
     Public Overrides Function Copy() As ArchetypeNode
         Return New ArchetypeElement(CType(Element.Copy, RmElement), mFileManager)
     End Function
 
     Private Function TextConstraintToRichText(ByVal TextConstraint As Constraint_Text) As String
-        Dim s As String
         Dim punctuation As Char() = {CType(".", Char), CType(",", Char)}
-        Dim a_Term As RmTerm
+        Dim term As RmTerm
+        Dim s As String = TextConstraint.TypeOfTextConstraint.ToString & ";"
 
-        s = TextConstraint.TypeOfTextConstraint.ToString & ";"
         Select Case TextConstraint.TypeOfTextConstraint
             Case TextConstraintType.Text
                 Dim a_string As String
-                If TextConstraint.AllowableValues.Codes.Count > 0 Then
-                    For Each a_string In TextConstraint.AllowableValues.Codes 'JAR: 13APR07, EDT-32 Support unicode
-                        s = s & " '" & a_string & "',"
-                        'SRH: 22nd July EDT-76 - Changed it back as done in error - there is no coded value
-                        's = s & " '" & RichTextBoxUnicode.CreateRichTextBoxTag(a_string, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "'," 'JAR: 13APR07, EDT-32 Support unicode
 
+                If TextConstraint.AllowableValues.Codes.Count > 0 Then
+                    For Each a_string In TextConstraint.AllowableValues.Codes
+                        s = s & " '" & a_string & "',"
                     Next
+
                     s.TrimEnd(punctuation)
                 End If
             Case TextConstraintType.Internal
                 If TextConstraint.AllowableValues.Codes.Count > 1 Then
                     Dim a_string As String
+
                     For Each a_string In TextConstraint.AllowableValues.Codes
                         'a_Term = mFileManager.OntologyManager.GetTerm(a_string)
                         's = s & " '" & a_Term.Text & "',"                        
-                        s = s & " '" & RichTextBoxUnicode.CreateRichTextBoxTag(a_string, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "'," 'JAR: 13APR07, EDT-32 Support unicode
+                        s = s & " '" & RichTextBoxUnicode.CreateRichTextBoxTag(a_string, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "',"
 
                     Next
+
                     s = s.TrimEnd(punctuation)
                 End If
             Case TextConstraintType.Terminology
-                a_Term = mFileManager.OntologyManager.GetTerm(TextConstraint.ConstraintCode)
-                s = s & " " & a_Term.Text
+                term = mFileManager.OntologyManager.GetTerm(TextConstraint.ConstraintCode)
+                s = s & " " & term.Text
         End Select
 
         Return s.Trim
-
     End Function
 
     Private Function QuantityConstraintToRichText(ByVal q As Constraint_Quantity, ByVal level As Integer) As String
-        Dim Text As String
+        Dim result As String
         Dim u As Constraint_QuantityUnit
 
         If q.IsCoded Then
-            Text = (Space(3 * level) & "  Constraint: Physical property = " & _
-            Filemanager.GetOpenEhrTerm(q.OpenEhrCode, q.PhysicalPropertyAsString) & ";" & "\par")
+            result = (Space(3 * level) & "  Constraint: Physical property = " & Filemanager.GetOpenEhrTerm(q.OpenEhrCode, q.PhysicalPropertyAsString) & ";" & "\par")
         Else
-            Text = (Space(3 * level) & "  Constraint: Physical property = " & _
-                q.PhysicalPropertyAsString & ";" & "\par")
+            result = (Space(3 * level) & "  Constraint: Physical property = " & q.PhysicalPropertyAsString & ";" & "\par")
         End If
 
         For Each u In q.Units
-            Text &= Environment.NewLine & (Space(4 * level) & QuantityUnitConstraintToRichText(u) & "\par")
+            result &= Environment.NewLine & (Space(4 * level) & QuantityUnitConstraintToRichText(u) & "\par")
         Next
-        Return Text
+
+        Return result
     End Function
 
     Private Function QuantityConstraintToHTML(ByVal q As Constraint_Quantity) As String
         Dim result As String
 
         If q.IsCoded Then
-            result = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
-                Filemanager.GetOpenEhrTerm(q.OpenEhrCode, q.PhysicalPropertyAsString) & "<br>"
+            result = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & Filemanager.GetOpenEhrTerm(q.OpenEhrCode, q.PhysicalPropertyAsString) & "<br>"
         Else
-            result = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
-                q.PhysicalPropertyAsString & "<br>"
+            result = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & q.PhysicalPropertyAsString & "<br>"
         End If
 
         For Each u As Constraint_QuantityUnit In q.Units
             result &= Environment.NewLine & QuantityUnitConstraintToRichText(u) & "<br>"
         Next
+
         Return result
     End Function
 
@@ -155,17 +158,17 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     End Function
 
     Private Function QuantityIntervalConstraintToHTML(ByVal q As Constraint_Interval_Quantity) As String
-        Dim result As String
-
-        result = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & _
-                Filemanager.GetOpenEhrTerm(q.QuantityPropertyCode, CType(q.LowerLimit, Constraint_Quantity).PhysicalPropertyAsString) & "<br>"
+        Dim result As String = Filemanager.GetOpenEhrTerm(116, "Property") & " = " & Filemanager.GetOpenEhrTerm(q.QuantityPropertyCode, CType(q.LowerLimit, Constraint_Quantity).PhysicalPropertyAsString) & "<br>"
 
         Dim u As Constraint_QuantityUnit
         result &= Environment.NewLine & AE_Constants.Instance.Lower & ": <br>"
+
         For Each u In CType(q.LowerLimit, Constraint_Quantity).Units
             result &= QuantityUnitConstraintToRichText(u) & "<br>"
         Next
+
         result &= Environment.NewLine & AE_Constants.Instance.Upper & ": <br>"
+
         For Each u In CType(q.UpperLimit, Constraint_Quantity).Units
             result &= QuantityUnitConstraintToRichText(u) & "<br>"
         Next
@@ -179,20 +182,24 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
         If u.Unit <> "" Then
             s = "  Units = " & u.ToString & ";"
         End If
+
         If u.HasMinimum Then
             If u.IncludeMinimum Then
                 s &= " >="
             Else
                 s &= " >"
             End If
+
             s &= u.MinimumRealValue.ToString & ";"
         End If
+
         If u.HasMaximum Then
             If u.IncludeMaximum Then
                 s &= " <="
             Else
                 s &= " <"
             End If
+
             s &= u.MaximumRealValue.ToString & ";"
         End If
 
@@ -201,15 +208,16 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     End Function
 
     Private Function CountConstraintToRichText(ByVal CountConstraint As Constraint_Count) As String
-        Dim s As String
-        s = ""
+        Dim s As String = ""
 
         If CountConstraint.HasMinimum Then
             If Not CountConstraint.IncludeMinimum Then
                 s &= " >"
             End If
+
             s &= CountConstraint.MinimumValue.ToString & ".."
         End If
+
         If CountConstraint.HasMaximum Then
             If Not CountConstraint.IncludeMaximum Then
                 s &= "<"
@@ -218,12 +226,13 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                     s &= "<="
                 End If
             End If
+
             s &= CountConstraint.MaximumValue.ToString
         Else
             s &= "*"
         End If
-        Return s.Trim
 
+        Return s.Trim
     End Function
 
     Private Function DurationConstraintToRichText(ByVal durationConstraint As Constraint_Duration) As String
@@ -261,6 +270,7 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
                     End If
                 End If
             Next
+
             Return s.Trim(", ".ToCharArray)
         End If
     End Function
@@ -268,17 +278,14 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     Private Function OrdinalConstraintToRichText(ByVal OrdinalConstraint As Constraint_Ordinal) As String
         Dim s As String
         Dim ov As OrdinalValue
-        'Dim a_Term As RmTerm
 
         s = "{"
         For Each ov In OrdinalConstraint.OrdinalValues
-            'a_Term = mFileManager.OntologyManager.GetTerm(ov.InternalCode)
-            's = s & ov.Ordinal.ToString & ": \i " & a_Term.Text & "\i0 ; "
-            s = s & ov.Ordinal.ToString & ": \i " & RichTextBoxUnicode.CreateRichTextBoxTag(ov.InternalCode, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\i0 ; " 'JAR: 13APR07, EDT-32 Support unicode
+            s = s & ov.Ordinal.ToString & ": \i " & RichTextBoxUnicode.CreateRichTextBoxTag(ov.InternalCode, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & "\i0 ; "
         Next
+
         s = s.Trim & "}"
         Return s
-
     End Function
 
     Private Function OrdinalConstraintToHTML(ByVal OrdinalConstraint As Constraint_Ordinal) As String
@@ -357,17 +364,14 @@ Public Class ArchetypeElement : Inherits ArchetypeNodeAbstract
     End Function
 
     Public Overrides Function ToRichText(ByVal level As Integer) As String
-
         ' write the cardinality of the element
-        'Dim s1 As String = mText & " (" & mItem.Occurrences.ToString & ")"        
-        Dim s1 As String = RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & " (" & mItem.Occurrences.ToString & ")"  ''JAR: 13APR07, EDT-32 Support unicode
+        Dim s1 As String = RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_TEXT) & " (" & mItem.Occurrences.ToString & ")"
 
         ' add bars if table and wrapping text
         Dim result As String = (Space(3 * level) & "\b " & s1 & "\b0\par")
 
         'write the description of the element
-        'Dim s As String = " " & mDescription        
-        Dim s As String = RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC) 'JAR: 13APR07, EDT-32 Support unicode
+        Dim s As String = RichTextBoxUnicode.CreateRichTextBoxTag(NodeId, RichTextBoxUnicode.RichTextDataType.ONTOLOGY_DESC)
 
         result = result & Environment.NewLine & (Space(3 * level) & s & "\par")
 

@@ -398,16 +398,16 @@ Public Class ListStructure
     End Sub
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles RemoveItemAndReferencesMenuItem.Click
-        If Me.lvList.SelectedIndices.Count > 0 Then
+        If lvList.SelectedItems.Count > 0 AndAlso CType(lvList.SelectedItems(0), ArchetypeListViewItem).Item.CanRemove Then
             Dim lvItem As ArchetypeListViewItem
             Dim message As String
 
             lvItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
 
             If lvItem.Item.HasReferences Then
-                message = AE_Constants.Instance.Remove & Me.lvList.SelectedItems(0).Text & " " & AE_Constants.Instance.AllReferences
+                message = AE_Constants.Instance.Remove & lvList.SelectedItems(0).Text & " " & AE_Constants.Instance.AllReferences
             Else
-                message = AE_Constants.Instance.Remove & Me.lvList.SelectedItems(0).Text
+                message = AE_Constants.Instance.Remove & lvList.SelectedItems(0).Text
             End If
 
             If MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
@@ -434,10 +434,12 @@ Public Class ListStructure
                 Else
                     lvItem.Remove()
                 End If
+
                 If lvList.SelectedItems.Count = 0 Then
                     lvItem = Nothing
                     SetCurrentItem(Nothing)
                 End If
+
                 mFileManager.FileEdited = True
             End If
         Else
@@ -547,11 +549,8 @@ Public Class ListStructure
                 NameSlotMenuItem.Visible = True
                 RemoveMenuItem.Visible = True
             Else
-                Dim nodeId As String = CType(item, ArchetypeNodeAbstract).NodeId
-                Dim i As Integer = item.RM_Class.SpecialisationDepth
-
-                RemoveMenuItem.Visible = i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1)
-                SpecialiseMenuItem.Visible = SpecialisationDepth > 0 And (i < SpecialisationDepth Or item.Occurrences.IsMultiple)
+                RemoveMenuItem.Visible = CType(item, ArchetypeNodeAbstract).CanRemove
+                SpecialiseMenuItem.Visible = CType(item, ArchetypeNodeAbstract).CanSpecialise
             End If
         End If
     End Sub
@@ -603,21 +602,7 @@ Public Class ListStructure
             Case Keys.F2
                 RenameSelectedItem()
             Case Keys.Delete
-                If lvList.SelectedItems.Count > 0 Then
-                    Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
-                    Dim item As ArchetypeNode = lvItem.Item
-
-                    If item.IsAnonymous Then
-                        RemoveItemAndReferences(sender, e)
-                    Else
-                        Dim nodeId As String = CType(item, ArchetypeElement).NodeId
-                        Dim i As Integer = item.RM_Class.SpecialisationDepth
-
-                        If i = SpecialisationDepth And (i = 0 Or nodeId.StartsWith("at0.") Or nodeId.IndexOf(".0.") > -1) Then
-                            RemoveItemAndReferences(sender, e)
-                        End If
-                    End If
-                End If
+                RemoveItemAndReferences(sender, e)
         End Select
     End Sub
 

@@ -554,6 +554,7 @@ Public Class TableStructure
                     element.Constraint = c
                     mKeyColumns.Add(element)
                 End If
+
                 CType(element.Constraint, Constraint_Text).AllowableValues.Codes.Add(a_term.Code)
                 AddColumn(a_term)
                 mFileManager.FileEdited = True
@@ -564,19 +565,15 @@ Public Class TableStructure
     End Sub
 
     Private Sub RemoveColumn(ByVal sender As Object, ByVal e As EventArgs) Handles MenuRemoveColumn.Click
-        Dim columnIndex As Integer
-        Dim columnLabel As String
-
-        columnIndex = Me.dgGrid.CurrentCell.ColumnNumber
-        columnLabel = Me.TableArchetypeStyle.GridColumnStyles(columnIndex).HeaderText
+        Dim columnIndex As Integer = dgGrid.CurrentCell.ColumnNumber
+        Dim columnLabel As String = TableArchetypeStyle.GridColumnStyles(columnIndex).HeaderText
 
         If columnIndex < 2 Then
             'Nothing to delete
             MessageBox.Show(AE_Constants.Instance.Cannot_delete & ": " & AE_Constants.Instance.SelectItem, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Return
         Else
             If MessageBox.Show(AE_Constants.Instance.Remove & "'" & columnLabel & "'", AE_Constants.Instance.Remove, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = Windows.Forms.DialogResult.OK Then
-                Me.TableArchetypeStyle.GridColumnStyles.RemoveAt(columnIndex)
+                TableArchetypeStyle.GridColumnStyles.RemoveAt(columnIndex)
                 mArchetypeTable.Columns.RemoveAt(columnIndex * 2)
             End If
         End If

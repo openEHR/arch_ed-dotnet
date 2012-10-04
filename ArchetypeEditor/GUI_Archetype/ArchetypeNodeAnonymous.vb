@@ -61,6 +61,12 @@ Public Class ArchetypeNodeAnonymous
         End Get
     End Property
 
+    Public Overrides ReadOnly Property CanRemove() As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
     Public Overrides Sub Translate()
         Select Case Item.Type
             Case StructureType.Slot

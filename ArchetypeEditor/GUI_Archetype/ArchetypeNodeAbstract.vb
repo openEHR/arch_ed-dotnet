@@ -111,6 +111,18 @@ Public MustInherit Class ArchetypeNodeAbstract
         Return mText
     End Function
 
+    Public Overrides ReadOnly Property CanRemove() As Boolean
+        Get
+            Return Item.CanRemove(mFileManager.OntologyManager.NumberOfSpecialisations)
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property CanSpecialise() As Boolean
+        Get
+            Return Item.CanSpecialise(mFileManager.OntologyManager.NumberOfSpecialisations)
+        End Get
+    End Property
+
     Protected Sub New(ByVal aText As String)
         mText = aText
         mDescription = "*"

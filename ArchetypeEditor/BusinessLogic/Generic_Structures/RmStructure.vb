@@ -162,6 +162,11 @@ Public Class RmStructure
         Return archetypeSpecialisationDepth = depth And (depth = 0 Or NodeId.StartsWith("at0.") Or NodeId.IndexOf(".0.") > -1)
     End Function
 
+    Public Function CanSpecialise(ByVal archetypeSpecialisationDepth As Integer) As Boolean
+        Dim depth As Integer = SpecialisationDepth()
+        Return archetypeSpecialisationDepth > 0 And (depth < archetypeSpecialisationDepth Or Occurrences.IsMultiple)
+    End Function
+
     Public Overridable Function HasLinks() As Boolean
         For Each l As RmLink In mLinks
             If l.HasConstraint Then
