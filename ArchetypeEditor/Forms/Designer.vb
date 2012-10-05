@@ -3385,6 +3385,18 @@ Public Class Designer
             If Not mTabPageDataStructure Is Nothing Then
                 mTabPageDataStructure.SetButtonVisibility(Nothing)
             End If
+
+            If Not mTabPageDataStateStructure Is Nothing Then
+                mTabPageDataStateStructure.SetButtonVisibility(Nothing)
+            End If
+
+            If Not mTabPageProtocolStructure Is Nothing Then
+                mTabPageProtocolStructure.SetButtonVisibility(Nothing)
+            End If
+
+            If Not mTabPageStateStructure Is Nothing Then
+                mTabPageStateStructure.SetButtonVisibility(Nothing)
+            End If
         End If
     End Sub
 
