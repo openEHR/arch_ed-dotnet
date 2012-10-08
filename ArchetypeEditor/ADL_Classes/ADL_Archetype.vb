@@ -162,14 +162,11 @@ Namespace ArchetypeEditor.ADL_Classes
             End Get
         End Property
 
-        Public Overrides Sub Specialise(ByVal ConceptShortName As String, ByRef The_Ontology As OntologyManager)
-            Dim a_term As ADL_Term
-
-            adlEngine.specialise_archetype(Eiffel.String(ConceptShortName))
+        Public Overrides Sub Specialise(ByVal shortConceptName As String, ByRef ontology As OntologyManager)
+            adlEngine.specialise_archetype(Eiffel.String(shortConceptName))
             ' Update the GUI tables with the new term
-            a_term = New ADL_Term(adlEngine.ontology.term_definition(Eiffel.String(The_Ontology.LanguageCode), adlArchetype.concept))
-            The_Ontology.UpdateTerm(a_term)
-            mArchetypeID.Concept &= "-" & ConceptShortName
+            ontology.UpdateTerm(New ADL_Term(adlEngine.ontology.term_definition(Eiffel.String(ontology.LanguageCode), adlArchetype.concept)))
+            mArchetypeID.Concept &= "-" & shortConceptName
         End Sub
 
         Public Sub RemoveUnusedCodes()

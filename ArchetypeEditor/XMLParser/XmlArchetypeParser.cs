@@ -114,7 +114,7 @@ namespace XMLParser
             _archetype.parent_archetype_id = _archetype.archetype_id;
 
             //now add the addition to the concept name in the archetype ID
-            string[] y = _archetype.archetype_id.value.ToString().Split(".".ToCharArray());
+            string[] y = _archetype.archetype_id.value.Split(".".ToCharArray());
             _archetype.archetype_id = new ARCHETYPE_ID();
             _archetype.archetype_id.value = y[0] + "." + y[1] + "-" + addition_to_concept_name;
 
@@ -130,9 +130,8 @@ namespace XMLParser
         public void SetDefinitionId(string a_concept_id)
         {
             if (_archetype.definition == null)
-            {
                 _archetype.definition = new C_COMPLEX_OBJECT();
-            }
+
             _archetype.definition.node_id = a_concept_id;
         }
 

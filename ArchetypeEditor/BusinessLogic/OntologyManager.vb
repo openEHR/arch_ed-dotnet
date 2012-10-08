@@ -290,10 +290,10 @@ Public Class OntologyManager
         Return mOntology.NextTermId
     End Function
 
-    Public Function AddTerm(ByVal Text As String, Optional ByVal Description As String = "*") As RmTerm
+    Public Function AddTerm(ByVal text As String, Optional ByVal description As String = "*") As RmTerm
         mLastTerm = New RmTerm(mOntology.NextTermId)
-        mLastTerm.Text = Text
-        mLastTerm.Description = Description
+        mLastTerm.Text = text
+        mLastTerm.Description = description
         mOntology.AddTerm(mLastTerm)
         UpdateTerm(mLastTerm)
         Return mLastTerm
@@ -306,44 +306,45 @@ Public Class OntologyManager
 
         If term.Code = "" Then
             Debug.Assert(False)
-            Return
-        ElseIf term.Text = "" Then
-            Debug.Assert(False)
-            term.Text = "unknown"
-            term.Description = "unknown"
-        ElseIf term.Description = "" Then
-            term.Description = "*"
-        End If
-
-        If term.IsConstraint Then
-            For Each row As DataRow In mLanguagesTable.Rows
-                Dim newRow As DataRow = mConstraintDefinitionTable.NewRow
-                newRow(0) = row(0)
-                newRow(1) = term.Code
-                newRow(2) = term.Text
-                newRow(3) = term.Description
-
-                Try
-                    mConstraintDefinitionTable.Rows.Add(newRow)
-                Catch ex As Exception
-                    MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            Next
         Else
-            For Each row As DataRow In mLanguagesTable.Rows
-                Dim newRow As DataRow = mTermDefinitionTable.NewRow
-                newRow(0) = row(0)
-                newRow(1) = term.Code
-                newRow(2) = term.Text
-                newRow(3) = term.Description
-                newRow(5) = term
+            If term.Text = "" Then
+                Debug.Assert(False)
+                term.Text = "unknown"
+                term.Description = "unknown"
+            ElseIf term.Description = "" Then
+                term.Description = "*"
+            End If
 
-                Try
-                    mTermDefinitionTable.Rows.Add(newRow)
-                Catch ex As Exception
-                    MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                End Try
-            Next
+            If term.IsConstraint Then
+                For Each row As DataRow In mLanguagesTable.Rows
+                    Dim newRow As DataRow = mConstraintDefinitionTable.NewRow
+                    newRow(0) = row(0)
+                    newRow(1) = term.Code
+                    newRow(2) = term.Text
+                    newRow(3) = term.Description
+
+                    Try
+                        mConstraintDefinitionTable.Rows.Add(newRow)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
+                Next
+            Else
+                For Each row As DataRow In mLanguagesTable.Rows
+                    Dim newRow As DataRow = mTermDefinitionTable.NewRow
+                    newRow(0) = row(0)
+                    newRow(1) = term.Code
+                    newRow(2) = term.Text
+                    newRow(3) = term.Description
+                    newRow(5) = term
+
+                    Try
+                        mTermDefinitionTable.Rows.Add(newRow)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
+                Next
+            End If
         End If
     End Sub
 

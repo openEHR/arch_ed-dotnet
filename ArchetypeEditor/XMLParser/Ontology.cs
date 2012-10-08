@@ -745,24 +745,18 @@ namespace XMLParser
             }
         }
 
-        private void AddTermOrConstraintDefinitionForLanguage(CodeDefinitionSet ls, ARCHETYPE_TERM a_term)
+        protected void AddTermOrConstraintDefinitionForLanguage(CodeDefinitionSet ls, ARCHETYPE_TERM term)
         {
-            int i;
-
             if (ls.items == null)
-            {
-                ls.items = Array.CreateInstance(typeof(ARCHETYPE_TERM), 1) as ARCHETYPE_TERM[];
-                i = 0;
-            }
+                ls.items = new ARCHETYPE_TERM[1];
             else
             {
                 ARCHETYPE_TERM[] t = ls.items;
                 Array.Resize(ref t, t.Length + 1);
-                i = t.Length - 1;
                 ls.items = t;
             }
 
-            ls.items[i] = a_term;
+            ls.items[ls.items.Length - 1] = term;
         }
 
         private CodeDefinitionSet TermDefinitions(string a_language_code)
