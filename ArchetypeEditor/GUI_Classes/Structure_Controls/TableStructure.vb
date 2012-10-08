@@ -23,7 +23,6 @@ Public Class TableStructure
     Private TableArchetypeStyle As DataGridTableStyle
     Private RowHeadings As DataGridTextBoxColumn
     Private IconColumn As DataGridIconOnlyColumn
-    Private mMenuItemAddRow As MenuItem
     Private mIsRotated As Boolean = True
     Private mRow As RmCluster
     Private mIsLoading As Boolean
@@ -438,26 +437,24 @@ Public Class TableStructure
         Debug.Assert(False, "Cannot add a reference to a table at present ? required")
     End Sub
 
-    Protected Overrides Sub SetUpAddElementMenu()
-        Dim cm As New ContextMenu
-        Dim a_mi As MenuItem
-        If mIsRotated Then
-            a_mi = New MenuItem(Filemanager.GetOpenEhrTerm(324, "New Row"))
-        Else
-            a_mi = New MenuItem(Filemanager.GetOpenEhrTerm(323, "New Column"))
-        End If
-        mConstraintMenu = New ConstraintContextMenu(AddressOf AddNewElement, mFileManager)
-        cm.MenuItems.Add(a_mi)
-        a_mi.MergeMenu(mConstraintMenu)
+    Protected Overrides Sub ShowAddElementMenu(ByVal menu As ConstraintContextMenu)
+        Dim m As New ContextMenu
+        Dim rowItem As MenuItem = New MenuItem(Filemanager.GetOpenEhrTerm(324, "New Row"))
+        Dim columnItem As MenuItem = New MenuItem(Filemanager.GetOpenEhrTerm(323, "New Column"))
 
         If mIsRotated Then
-            mMenuItemAddRow = New MenuItem(Filemanager.GetOpenEhrTerm(323, "New Column"))
+            m.MenuItems.Add(rowItem)
+            rowItem.MergeMenu(menu)
+            AddHandler columnItem.Click, AddressOf AddKeyColumn
+            m.MenuItems.Add(columnItem)
         Else
-            mMenuItemAddRow = New MenuItem(Filemanager.GetOpenEhrTerm(323, "New Row"))
+            m.MenuItems.Add(columnItem)
+            columnItem.MergeMenu(menu)
+            AddHandler rowItem.Click, AddressOf AddKeyColumn
+            m.MenuItems.Add(rowItem)
         End If
-        AddHandler mMenuItemAddRow.Click, AddressOf AddKeyColumn
-        cm.MenuItems.Add(mMenuItemAddRow)
-        cm.Show(Me.ButAddElement, New System.Drawing.Point(5, 5))
+
+        m.Show(ButAddElement, New System.Drawing.Point(5, 5))
     End Sub
 
     Public Overrides Sub SetInitial()
@@ -474,12 +471,7 @@ Public Class TableStructure
         mIsLoading = True
         new_row = mArchetypeTable.NewRow
         new_row(1) = Filemanager.GetOpenEhrTerm(109, "New Element")
-        '      Try
         mArchetypeTable.Rows.Add(new_row)
-        '     Catch
-        '        MessageBox.Show(AE_Constants.Instance.Duplicate_name, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-        '       Return
-        '      End Try
 
         el = New ArchetypeElement(CType(new_row(1), String), mFileManager)
         el.Occurrences.MaxCount = 1
@@ -489,10 +481,10 @@ Public Class TableStructure
         ' go to the new entry
         a_cell.RowNumber = mArchetypeTable.Rows.Count - 1
         a_cell.ColumnNumber = 1
-        Me.dgGrid.Focus()
+        dgGrid.Focus()
         SetCurrentItem(el)
         mFileManager.FileEdited = True
-        Me.dgGrid.CurrentCell = a_cell
+        dgGrid.CurrentCell = a_cell
         mIsLoading = False
     End Sub
 

@@ -409,22 +409,20 @@ Public Class TreeStructure
         End If
     End Sub
 
-    Protected Overrides Sub SetUpAddElementMenu()
-        Dim cm As New ContextMenu
-        Dim a_mi As MenuItem
-        a_mi = New MenuItem(Filemanager.GetOpenEhrTerm(109, "New element"))
-        cm.MenuItems.Add(a_mi)
-        a_mi.MergeMenu(mConstraintMenu)
+    Protected Overrides Sub ShowAddElementMenu(ByVal menu As ConstraintContextMenu)
+        Dim m As New ContextMenu
+        Dim item As MenuItem = New MenuItem(Filemanager.GetOpenEhrTerm(109, "New element"))
+        m.MenuItems.Add(item)
+        item.MergeMenu(menu)
 
         mAddClusterMenuItem = New MenuItem(Filemanager.GetOpenEhrTerm(322, "New cluster"))
         AddHandler mAddClusterMenuItem.Click, AddressOf AddNewCluster
-        cm.MenuItems.Add(mAddClusterMenuItem)
+        m.MenuItems.Add(mAddClusterMenuItem)
 
         Dim addSlotMenuItem As New MenuItem(Filemanager.GetOpenEhrTerm(312, "New slot"))
         AddHandler addSlotMenuItem.Click, AddressOf AddNewSlot
-        cm.MenuItems.Add(addSlotMenuItem)
-
-        cm.Show(Me.ButAddElement, New System.Drawing.Point(5, 5))
+        m.MenuItems.Add(addSlotMenuItem)
+        m.Show(ButAddElement, New System.Drawing.Point(5, 5))
     End Sub
 
     Public Overrides Sub SetInitial()

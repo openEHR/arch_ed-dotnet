@@ -357,10 +357,6 @@ Public Class ListStructure
         End If
     End Sub
 
-    Protected Overrides Sub SetUpAddElementMenu()
-        mConstraintMenu.Show(ButAddElement, New System.Drawing.Point(5, 5))
-    End Sub
-
     Public Overrides Sub SetInitial()
         If lvList.Items.Count > 0 Then
             lvList.Items(0).Selected = True

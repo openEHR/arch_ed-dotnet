@@ -185,10 +185,6 @@ Public Class ElementOnly
         Debug.Assert(False, "Cannot add a reference to a simple")
     End Sub
 
-    Protected Overrides Sub SetUpAddElementMenu()
-        mConstraintMenu.Show(ButAddElement, New System.Drawing.Point(5, 5))
-    End Sub
-
     Public Overrides Sub SetInitial()
         If Not mElement Is Nothing Then
             SetCurrentItem(mElement) ' does not raise an event during construction

@@ -22,7 +22,6 @@ Public Class EntryStructure
     Private mStructureType As StructureType   'implement as overrided property
     Protected mNodeId As String
     Protected mIsState As Boolean
-    Protected mConstraintMenu As ConstraintContextMenu
     Protected mOrdinalTable As DataTable
     Protected mCurrentItem As ArchetypeNode
     Protected mFileManager As FileManagerLocal
@@ -629,10 +628,6 @@ Public Class EntryStructure
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
 
-    Protected Overridable Sub SetUpAddElementMenu()
-        Throw New NotImplementedException("Subclass must override this method")
-    End Sub
-
     Protected Overridable Sub AddNewElement(ByVal a_constraint As Constraint)
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
@@ -786,21 +781,24 @@ Public Class EntryStructure
     End Sub
 
     Private Sub ButAddElement_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ButAddElement.Click
-        mConstraintMenu = New ConstraintContextMenu(AddressOf AddNewElement, mFileManager)
-        mConstraintMenu.ShowHeader(Filemanager.GetOpenEhrTerm(155, "Add"))
-        SetUpAddElementMenu()
+        ShowAddElementMenu(New ConstraintContextMenu(AddressOf AddNewElement, mFileManager))
     End Sub
 
     Private Sub butRemoveElement_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveElement.Click
         RemoveItemAndReferences(sender, e)
     End Sub
 
-    Private Sub ChangeConstraint(ByVal a_constraint As Constraint)
+    Protected Overridable Sub ShowAddElementMenu(ByVal menu As ConstraintContextMenu)
+        menu.ShowHeader(Filemanager.GetOpenEhrTerm(155, "Add"))
+        menu.Show(ButAddElement, New System.Drawing.Point(5, 5))
+    End Sub
+
+    Private Sub ChangeConstraint(ByVal newConstraint As Constraint)
         Debug.Assert(mCurrentItem.RM_Class.Type = StructureType.Element)
 
-        If a_constraint.Kind = ConstraintKind.Multiple Then
+        If newConstraint.Kind = ConstraintKind.Multiple Then
             'Add the current constraint to the multiple constraint before setting the current item to the multiple
-            CType(a_constraint, Constraint_Choice).Constraints.Add(CType(mCurrentItem, ArchetypeElement).Constraint)
+            CType(newConstraint, Constraint_Choice).Constraints.Add(CType(mCurrentItem, ArchetypeElement).Constraint)
         ElseIf CType(mCurrentItem, ArchetypeElement).Constraint.Kind = ConstraintKind.Multiple Then
             'Or if the current item is multiple
             Dim m As Constraint_Choice
@@ -808,14 +806,14 @@ Public Class EntryStructure
 
             For Each c As Constraint In m.Constraints
                 'find the constraint that is of the same type as a_constraint if there is one
-                If c.Kind = a_constraint.Kind Then
-                    a_constraint = c
+                If c.Kind = newConstraint.Kind Then
+                    newConstraint = c
                 End If
             Next
         End If
 
         'now set the current item to the new constraint
-        CType(mCurrentItem, ArchetypeElement).Constraint = a_constraint
+        CType(mCurrentItem, ArchetypeElement).Constraint = newConstraint
         mFileManager.FileEdited = True
         RefreshIcons()
         RaiseEvent CurrentItemChanged(mCurrentItem, New EventArgs)
@@ -824,11 +822,11 @@ Public Class EntryStructure
     Private Sub butChangeDataType_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butChangeDataType.Click
         Debug.Assert(Not mCurrentItem Is Nothing, "Button should not be available")
         Debug.Assert(mCurrentItem.RM_Class.Type = StructureType.Element, "Button should not be available")
-        mConstraintMenu = New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf ChangeConstraint), mFileManager)
-        ' hide the current constraint type
-        mConstraintMenu.HideMenuItem(CType(mCurrentItem, ArchetypeElement).Constraint.Kind)
-        mConstraintMenu.ShowHeader(Filemanager.GetOpenEhrTerm(60, "Change data type"))
-        mConstraintMenu.Show(butChangeDataType, New System.Drawing.Point(5, 5))
+
+        Dim menu As New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf ChangeConstraint), mFileManager)
+        menu.HideMenuItem(CType(mCurrentItem, ArchetypeElement).Constraint.Kind)
+        menu.ShowHeader(Filemanager.GetOpenEhrTerm(60, "Change data type"))
+        menu.Show(butChangeDataType, New System.Drawing.Point(5, 5))
     End Sub
 
     Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
