@@ -268,9 +268,9 @@ Public Class Options
         frm.txtURL.Text = mArchetypeRepositoryUrl.ToString
 
         If mDefaultParser = "xml" Then
-            frm.chkParserXML.Checked = True
+            frm.ParserXmlRadioButton.Checked = True
         Else
-            frm.chkParserADL.Checked = True
+            frm.ParserAdlRadioButton.Checked = True
         End If
 
         frm.XsltScriptPathTextBox.Text = mXsltScriptPath
@@ -326,7 +326,7 @@ Public Class Options
             mAllowWebSearch = frm.chkWebSearch.Checked
             mAllowTerminologyLookUp = frm.chkTerminology.Checked
 
-            If frm.chkParserADL.Checked Then
+            If frm.ParserAdlRadioButton.Checked Then
                 mDefaultParser = "adl"
             Else
                 mDefaultParser = "xml"

@@ -71,9 +71,9 @@ Public Class ApplicationOptionsForm
     Friend WithEvents txtOrganisation As System.Windows.Forms.TextBox
     Friend WithEvents lblOrganisation As System.Windows.Forms.Label
     Friend WithEvents Panel_7 As System.Windows.Forms.Panel
-    Friend WithEvents grpParser As System.Windows.Forms.GroupBox
-    Friend WithEvents chkParserXML As System.Windows.Forms.CheckBox
-    Friend WithEvents chkParserADL As System.Windows.Forms.CheckBox
+    Friend WithEvents ParserGroupBox As System.Windows.Forms.GroupBox
+    Friend WithEvents ParserXmlRadioButton As System.Windows.Forms.RadioButton
+    Friend WithEvents ParserAdlRadioButton As System.Windows.Forms.RadioButton
     Friend WithEvents chkWebSearch As System.Windows.Forms.CheckBox
     Friend WithEvents lblURL As System.Windows.Forms.Label
     Friend WithEvents txtURL As System.Windows.Forms.TextBox
@@ -168,9 +168,9 @@ Public Class ApplicationOptionsForm
         Me.DefaultsTabPage = New System.Windows.Forms.TabPage
         Me.Label5 = New System.Windows.Forms.Label
         Me.numAutoSave = New System.Windows.Forms.NumericUpDown
-        Me.grpParser = New System.Windows.Forms.GroupBox
-        Me.chkParserXML = New System.Windows.Forms.CheckBox
-        Me.chkParserADL = New System.Windows.Forms.CheckBox
+        Me.ParserGroupBox = New System.Windows.Forms.GroupBox
+        Me.ParserXmlRadioButton = New System.Windows.Forms.RadioButton
+        Me.ParserAdlRadioButton = New System.Windows.Forms.RadioButton
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.gbUserDetails.SuspendLayout()
         Me.GroupBox1.SuspendLayout()
@@ -182,7 +182,7 @@ Public Class ApplicationOptionsForm
         Me.AppearanceTabPage.SuspendLayout()
         Me.DefaultsTabPage.SuspendLayout()
         CType(Me.numAutoSave, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.grpParser.SuspendLayout()
+        Me.ParserGroupBox.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label3
@@ -825,7 +825,7 @@ Public Class ApplicationOptionsForm
         '
         Me.DefaultsTabPage.Controls.Add(Me.Label5)
         Me.DefaultsTabPage.Controls.Add(Me.numAutoSave)
-        Me.DefaultsTabPage.Controls.Add(Me.grpParser)
+        Me.DefaultsTabPage.Controls.Add(Me.ParserGroupBox)
         Me.DefaultsTabPage.Controls.Add(Me.comboReferenceModel)
         Me.DefaultsTabPage.Controls.Add(Me.Label1)
         Me.DefaultsTabPage.Location = New System.Drawing.Point(4, 22)
@@ -852,36 +852,36 @@ Public Class ApplicationOptionsForm
         Me.numAutoSave.TabIndex = 5
         Me.numAutoSave.Value = New Decimal(New Integer() {15, 0, 0, 0})
         '
-        'grpParser
+        'ParserGroupBox
         '
-        Me.grpParser.Controls.Add(Me.chkParserXML)
-        Me.grpParser.Controls.Add(Me.chkParserADL)
-        Me.grpParser.Location = New System.Drawing.Point(293, 36)
-        Me.grpParser.Name = "grpParser"
-        Me.grpParser.Size = New System.Drawing.Size(155, 67)
-        Me.grpParser.TabIndex = 3
-        Me.grpParser.TabStop = False
-        Me.grpParser.Text = "Parser"
+        Me.ParserGroupBox.Controls.Add(Me.ParserXmlRadioButton)
+        Me.ParserGroupBox.Controls.Add(Me.ParserAdlRadioButton)
+        Me.ParserGroupBox.Location = New System.Drawing.Point(293, 36)
+        Me.ParserGroupBox.Name = "ParserGroupBox"
+        Me.ParserGroupBox.Size = New System.Drawing.Size(155, 67)
+        Me.ParserGroupBox.TabIndex = 3
+        Me.ParserGroupBox.TabStop = False
+        Me.ParserGroupBox.Text = "Parser"
         '
-        'chkParserXML
+        'ParserXmlRadioButton
         '
-        Me.chkParserXML.AutoSize = True
-        Me.chkParserXML.Location = New System.Drawing.Point(27, 42)
-        Me.chkParserXML.Name = "chkParserXML"
-        Me.chkParserXML.Size = New System.Drawing.Size(48, 17)
-        Me.chkParserXML.TabIndex = 1
-        Me.chkParserXML.Text = "XML"
-        Me.chkParserXML.UseVisualStyleBackColor = True
+        Me.ParserXmlRadioButton.AutoSize = True
+        Me.ParserXmlRadioButton.Location = New System.Drawing.Point(27, 42)
+        Me.ParserXmlRadioButton.Name = "ParserXmlRadioButton"
+        Me.ParserXmlRadioButton.Size = New System.Drawing.Size(47, 17)
+        Me.ParserXmlRadioButton.TabIndex = 1
+        Me.ParserXmlRadioButton.Text = "XML"
+        Me.ParserXmlRadioButton.UseVisualStyleBackColor = True
         '
-        'chkParserADL
+        'ParserAdlRadioButton
         '
-        Me.chkParserADL.AutoSize = True
-        Me.chkParserADL.Location = New System.Drawing.Point(27, 19)
-        Me.chkParserADL.Name = "chkParserADL"
-        Me.chkParserADL.Size = New System.Drawing.Size(47, 17)
-        Me.chkParserADL.TabIndex = 0
-        Me.chkParserADL.Text = "ADL"
-        Me.chkParserADL.UseVisualStyleBackColor = True
+        Me.ParserAdlRadioButton.AutoSize = True
+        Me.ParserAdlRadioButton.Location = New System.Drawing.Point(27, 19)
+        Me.ParserAdlRadioButton.Name = "ParserAdlRadioButton"
+        Me.ParserAdlRadioButton.Size = New System.Drawing.Size(46, 17)
+        Me.ParserAdlRadioButton.TabIndex = 0
+        Me.ParserAdlRadioButton.Text = "ADL"
+        Me.ParserAdlRadioButton.UseVisualStyleBackColor = True
         '
         'ApplicationOptionsForm
         '
@@ -912,8 +912,8 @@ Public Class ApplicationOptionsForm
         Me.DefaultsTabPage.ResumeLayout(False)
         Me.DefaultsTabPage.PerformLayout()
         CType(Me.numAutoSave, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.grpParser.ResumeLayout(False)
-        Me.grpParser.PerformLayout()
+        Me.ParserGroupBox.ResumeLayout(False)
+        Me.ParserGroupBox.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -977,14 +977,6 @@ Public Class ApplicationOptionsForm
         End If
 
         p.BorderStyle = BorderStyle.Fixed3D
-    End Sub
-
-    Private Sub chkParserADL_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkParserADL.CheckedChanged
-        chkParserXML.Checked = Not chkParserADL.Checked
-    End Sub
-
-    Private Sub chkParserXML_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkParserXML.CheckedChanged
-        chkParserADL.Checked = Not chkParserXML.Checked
     End Sub
 
 End Class
