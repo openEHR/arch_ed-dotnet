@@ -1096,12 +1096,12 @@ Public Class OntologyManager
         End If
     End Sub
 
-    Sub New(ByVal a_file_manager As FileManagerLocal)
+    Sub New(ByVal fileManager As FileManagerLocal)
         mLanguageDS = New DataSet("LanguageDataSet")
         InitialiseTables()
         AE_Constants.Create(Main.Instance.DefaultLanguageCode)
         Main.Instance.Options.ValidateConfiguration()
-        mFileManager = a_file_manager
+        mFileManager = fileManager
     End Sub
 
 End Class

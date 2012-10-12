@@ -612,20 +612,21 @@ Public Class Options
 
     Public ReadOnly Property AssemblyPath() As String
         Get
-            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
-            Dim basePath As String = System.IO.Path.GetDirectoryName(assembly.CodeBase)
+            Dim result As String
+            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly
+            result = System.IO.Path.GetDirectoryName(assembly.CodeBase)
 
-            If basePath.StartsWith("file:\") Then
-                basePath = basePath.Substring(6)
+            If result.StartsWith("file:\") Then
+                result = result.Substring(6)
             End If
 
-            Return basePath
+            Return result
         End Get
     End Property
 
     Public ReadOnly Property ProductName() As String
         Get
-            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
+            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly
             Dim attributes() As System.Reflection.AssemblyProductAttribute
             attributes = assembly.GetCustomAttributes(GetType(System.Reflection.AssemblyProductAttribute), False)
 
@@ -639,7 +640,7 @@ Public Class Options
 
     Public ReadOnly Property Copyright() As String
         Get
-            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
+            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly
             Dim attributes() As System.Reflection.AssemblyCopyrightAttribute
             attributes = assembly.GetCustomAttributes(GetType(System.Reflection.AssemblyCopyrightAttribute), False)
 
@@ -653,7 +654,7 @@ Public Class Options
 
     Public ReadOnly Property AssemblyTitle() As String
         Get
-            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetEntryAssembly()
+            Dim assembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly
             Dim attributes() As System.Reflection.AssemblyTitleAttribute
             attributes = assembly.GetCustomAttributes(GetType(System.Reflection.AssemblyTitleAttribute), False)
 

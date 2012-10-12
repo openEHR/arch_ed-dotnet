@@ -43,12 +43,6 @@ Public Class Main
         Options.LoadConfiguration()
         ShowSplash()
 
-        'default language as two letter code e.g. "en"
-        mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
-
-        ' specific as four letter e.g. "en-au"
-        mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag.ToLowerInvariant()
-
         Dim frm As New Designer
 
         If args.Length > 0 AndAlso args(0) <> "" Then
@@ -188,8 +182,14 @@ Public Class Main
         End Set
     End Property
 
-    Protected Sub New()
+    Public Sub New()
         mDataSet = New DataSet("DesignerDataSet")
+
+        'default language as two letter code e.g. "en"
+        mDefaultLanguageCode = System.Globalization.CultureInfo.CurrentCulture.TwoLetterISOLanguageName
+
+        ' specific as four letter e.g. "en-au"
+        mSpecificLanguageCode = System.Globalization.CultureInfo.CurrentCulture.IetfLanguageTag.ToLowerInvariant()
     End Sub
 
     Private mDataSet As DataSet
@@ -302,48 +302,52 @@ Public Class Main
     End Function
 
     Public Function GetInput(ByVal label As String, ByVal parentForm As Form, Optional ByVal defaultValue As String = "") As String
-        Dim frm As New InputForm
-        Dim s As String = ""
+        Dim result As String = ""
 
+        Dim frm As New InputForm
         frm.lblInput.Text = label
+
         If defaultValue <> "" Then
             frm.txtInput.Text = defaultValue
             frm.txtInput.SelectAll()
         End If
+
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
         If frm.ShowDialog(parentForm) = DialogResult.OK Then
-            s = frm.txtInput.Text
+            result = frm.txtInput.Text
         End If
-        frm.Close()
 
-        Return s
+        frm.Close()
+        Return result
     End Function
 
     Public Function GetInput(ByVal label_1 As String, ByVal label_2 As String, ByVal parentForm As Form) As String()
+        Dim result(1) As String
         Dim frm As New InputForm
-        Dim s(1) As String
 
         frm.lblInput.Text = label_1
         frm.LblInput2.Text = label_2
         frm.Text = AE_Constants.Instance.MessageBoxCaption
 
         If frm.ShowDialog(parentForm) = DialogResult.OK Then
-            s(0) = frm.txtInput.Text
-            s(1) = frm.txtInput2.Text
-            If s(1) = "" Then
+            result(0) = frm.txtInput.Text
+            result(1) = frm.txtInput2.Text
+
+            If result(1) = "" Then
                 'avoids null in xml read
-                s(1) = "*"
+                result(1) = "*"
             End If
         End If
+
         frm.Close()
-        Return s
+        Return result
     End Function
 
     Public Function GetInput(ByVal a_term As RmTerm, ByVal parentForm As Form) As String()
-        Dim frm As New InputForm
-        Dim s(1) As String
+        Dim result(1) As String
 
+        Dim frm As New InputForm
         frm.lblInput.Text = AE_Constants.Instance.Text
         frm.LblInput2.Text = AE_Constants.Instance.Description
         frm.Text = AE_Constants.Instance.MessageBoxCaption
@@ -352,96 +356,88 @@ Public Class Main
         frm.txtInput2.Text = a_term.Description
 
         If frm.ShowDialog(parentForm) = Windows.Forms.DialogResult.OK Then
-            s(0) = frm.txtInput.Text
-            If s(0) <> "" Then
-                a_term.Text = s(0)
+            result(0) = frm.txtInput.Text
+
+            If result(0) <> "" Then
+                a_term.Text = result(0)
             End If
-            s(1) = frm.txtInput2.Text
-            If s(1) = "" Then
+
+            result(1) = frm.txtInput2.Text
+
+            If result(1) = "" Then
                 'avoids null in xml read
-                s(1) = "*"
+                result(1) = "*"
             End If
-            a_term.Description = s(1)
+
+            a_term.Description = result(1)
         End If
+
         frm.Close()
-        Return s
+        Return result
     End Function
 
-    'SRH: 1 Jun 2008: added check for invalid terms
-    Public Function ChooseInternal(ByVal a_file_manager As FileManagerLocal, ByVal excludedTerms As String()) As String()
+    Public Function ChooseInternal(ByVal fileManager As FileManagerLocal, ByVal excludedTerms As String()) As String()
         Try
-            Dim Frm As New Choose
-            Dim selected_rows As DataRow()
-            Dim i As Integer
+            Dim dialog As New Choose
+            dialog.Set_Single()
+            dialog.PrepareDataTable_for_List(1)
 
-            Frm.Set_Single()
+            Dim selectedRows As DataRow() = fileManager.OntologyManager.TermDefinitionTable.Select(String.Format("Id = '{0}'", fileManager.OntologyManager.LanguageCode))
 
-            Frm.PrepareDataTable_for_List(1)
-
-            selected_rows = a_file_manager.OntologyManager.TermDefinitionTable.Select(String.Format("Id = '{0}'", _
-                        a_file_manager.OntologyManager.LanguageCode))
-
-            For i = 0 To selected_rows.Length - 1
+            For i As Integer = 0 To selectedRows.Length - 1
                 'Ensure it is not an orphan term in the ontology
-                Dim s As String = CStr(selected_rows(i).Item(1))
-                If a_file_manager.OntologyManager.Ontology.HasTermCode(s) AndAlso Not Array.IndexOf(excludedTerms, s) > -1 Then
-                    Dim New_row As DataRow
-                    New_row = Frm.DTab_1.NewRow
-                    New_row(1) = s
-                    New_row(2) = selected_rows(i).Item(2)
-                    Frm.DTab_1.Rows.Add(New_row)
+                Dim s As String = CStr(selectedRows(i).Item(1))
+
+                If fileManager.OntologyManager.Ontology.HasTermCode(s) AndAlso Not Array.IndexOf(excludedTerms, s) > -1 Then
+                    Dim row As DataRow
+                    row = dialog.DTab_1.NewRow
+                    row(1) = s
+                    row(2) = selectedRows(i).Item(2)
+                    dialog.DTab_1.Rows.Add(row)
                 End If
             Next
-            Frm.ListChoose.SelectionMode = SelectionMode.MultiExtended
-            Frm.ListChoose.DataSource = Frm.DTab_1
-            Frm.ListChoose.DisplayMember = "Text"
-            Frm.ListChoose.ValueMember = "Code"
 
-            If Frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            dialog.ListChoose.SelectionMode = SelectionMode.MultiExtended
+            dialog.ListChoose.DataSource = dialog.DTab_1
+            dialog.ListChoose.DisplayMember = "Text"
+            dialog.ListChoose.ValueMember = "Code"
 
-                If Frm.ListChoose.SelectedIndices.Count > 0 Then
-                    Dim s(Frm.ListChoose.SelectedItems.Count - 1) As String
-                    For i = 0 To Frm.ListChoose.SelectedItems.Count - 1
-                        'Change Sam Heard 2004-06-11
-                        'Change from datarow to datarowview
-                        Debug.Assert(TypeOf Frm.ListChoose.SelectedItems(i) Is DataRowView)
-                        Dim selectedRow As DataRowView = CType(Frm.ListChoose.SelectedItems(i), DataRowView)
-                        s(i) = CStr(selectedRow.Item("Code"))
+            If dialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                If dialog.ListChoose.SelectedIndices.Count > 0 Then
+                    Dim result(dialog.ListChoose.SelectedItems.Count - 1) As String
+
+                    For i As Integer = 0 To dialog.ListChoose.SelectedItems.Count - 1
+                        Dim selectedRow As DataRowView = CType(dialog.ListChoose.SelectedItems(i), DataRowView)
+                        result(i) = CStr(selectedRow.Item("Code"))
                     Next
 
-                    Return s
+                    Return result
                 End If
-
             End If
-
         Catch ex As Exception
             Debug.Assert(False, ex.ToString)
         End Try
 
         Return Nothing
-
     End Function
 
     Public Function ChooseInternal(ByVal an_array_of_elements As ArchetypeElement(), Optional ByVal AlreadyAdded As CodePhrase = Nothing) As ArchetypeElement()
         Try
-            Dim Frm As New Choose
-            Dim i As Integer
+            Dim dialog As New Choose
+            dialog.Set_Single()
 
-            Frm.Set_Single()
-
-
-            For i = 0 To an_array_of_elements.Length - 1
+            For i As Integer = 0 To an_array_of_elements.Length - 1
                 If Not AlreadyAdded.Codes.Contains(an_array_of_elements(i).NodeId) Then
-                    Frm.ListChoose.Items.Add(an_array_of_elements(i))
+                    dialog.ListChoose.Items.Add(an_array_of_elements(i))
                 End If
             Next
 
-            If Frm.ShowDialog() = Windows.Forms.DialogResult.OK Then
+            If dialog.ShowDialog() = Windows.Forms.DialogResult.OK Then
 
-                If Frm.ListChoose.SelectedIndices.Count > 0 Then
-                    Dim a_e(Frm.ListChoose.SelectedIndices.Count - 1) As ArchetypeElement
-                    Frm.ListChoose.SelectedItems.CopyTo(a_e, 0)
-                    Return a_e
+                If dialog.ListChoose.SelectedIndices.Count > 0 Then
+                    Dim result(dialog.ListChoose.SelectedIndices.Count - 1) As ArchetypeElement
+                    dialog.ListChoose.SelectedItems.CopyTo(result, 0)
+                    Return result
                 End If
             End If
 
@@ -502,10 +498,6 @@ Public Class Main
     End Property
 
     Private Sub MakeQuantityTables()
-
-        'CHANGED Sam Heard 2004-09-05
-        ' Added XML file for units and properties
-
         Try
             mDataSet.ReadXmlSchema(Application.StartupPath & "\PropertyUnits\PropertyUnits.xsd")
             mDataSet.ReadXml(Application.StartupPath & "\PropertyUnits\PropertyUnitData.xml")
@@ -539,23 +531,18 @@ Public Class Main
             mDataSet.Tables("Unit").PrimaryKey = keys
             mDataSet.Tables("Unit").DefaultView.Sort = "Text"
 
-            Dim new_relation As New DataRelation("PhysPropUnits", mDataSet.Tables("Property").Columns(0), _
-                    mDataSet.Tables("Unit").Columns(0))
+            Dim new_relation As New DataRelation("PhysPropUnits", mDataSet.Tables("Property").Columns(0), mDataSet.Tables("Unit").Columns(0))
             mDataSet.Relations.Add(new_relation)
-
         Catch e As Exception
             ' emergency if data is not available as file
             Dim physicalProperties As DataTable = MakePhysicalPropertiesTable()
             Dim units As DataTable = MakeUnitsTable()
             mDataSet.Tables.Add(physicalProperties)
             mDataSet.Tables.Add(units)
-            Dim new_relation As New DataRelation("PhysPropUnits", physicalProperties.Columns(0), _
-                units.Columns(0))
+            Dim new_relation As New DataRelation("PhysPropUnits", physicalProperties.Columns(0), units.Columns(0))
             mDataSet.Relations.Add(new_relation)
             PopulatePhysPropUnitTables(units, physicalProperties)
         End Try
-
-        '
     End Sub
 
     Public Function GetIdForPropertyOpenEhrCode(ByVal openEhrCode As Integer) As Integer
@@ -570,9 +557,8 @@ Public Class Main
             Return -1
         End Try
     End Function
-    Private Sub PopulatePhysPropUnitTables(ByVal Units As DataTable, _
-            ByVal PhysicalProperties As DataTable)
 
+    Private Sub PopulatePhysPropUnitTables(ByVal Units As DataTable, ByVal PhysicalProperties As DataTable)
         Dim id As Integer
 
         ' Now only used as a backup if there are no PropertyUnits XML files
@@ -669,28 +655,20 @@ Public Class Main
         id = AddPhysicalProperty(PhysicalProperties, "work")
         AddUnit(Units, id, "Watt")
         AddUnit(Units, id, "{ENERGY/TIME}")
-
     End Sub
 
-    Private Function AddPhysicalProperty(ByVal PhysicalProperties As DataTable, _
-            ByVal Txt As String) As Integer
-
+    Private Function AddPhysicalProperty(ByVal PhysicalProperties As DataTable, ByVal Txt As String) As Integer
         Dim rw As DataRow = PhysicalProperties.NewRow()
         rw("Text") = Txt
         Dim i As Integer = CInt(rw(0))         ' get the id to return
         PhysicalProperties.Rows.Add(rw)
-
         Return i
     End Function
 
-    Private Sub AddUnit(ByVal Units As DataTable, ByVal Id As Integer, _
-            ByVal Txt As String, Optional ByVal Desc As String = "")
-
+    Private Sub AddUnit(ByVal Units As DataTable, ByVal Id As Integer, ByVal Txt As String, Optional ByVal Desc As String = "")
         Dim rw As DataRow = Units.NewRow()
-
         rw("Text") = Txt
         rw("Description") = Desc
-
         rw(0) = Id ' get the id to return
         Units.Rows.Add(rw)
     End Sub
@@ -708,7 +686,6 @@ Public Class Main
 
     Shared Sub Reflect(ByVal a_control As Control)
         For Each Ctrl As Control In a_control.Controls
-
             If Ctrl.Dock = DockStyle.Left Then
                 Ctrl.Dock = DockStyle.Right
             ElseIf Ctrl.Dock = DockStyle.Right Then
