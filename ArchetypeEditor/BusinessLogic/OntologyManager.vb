@@ -89,7 +89,13 @@ Public Class OntologyManager
 
     Public ReadOnly Property NumberOfSpecialisations() As Integer
         Get
-            Return mOntology.NumberOfSpecialisations
+            Dim result As Integer = 0
+
+            If Not mOntology Is Nothing Then
+                result = mOntology.NumberOfSpecialisations
+            End If
+
+            Return result
         End Get
     End Property
 
