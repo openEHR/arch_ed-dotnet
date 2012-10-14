@@ -467,16 +467,14 @@ Public Class FileManagerLocal
         Return result
     End Function
 
-    Public Function ExportSerialised(ByVal a_format As String) As String
+    Public Function ExportSerialised(ByVal format As String) As String
         mObjectToSave.PrepareToSave()
 
-        Select Case a_format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
+        Select Case format.ToLower(System.Globalization.CultureInfo.InvariantCulture)
             Case "xml"
-                Dim xml_parser As XMLParser.XmlArchetypeParser = CreateXMLParser()
-                Return xml_parser.Serialise()
+                Return CreateXMLParser().Serialise()
             Case "adl"
-                Dim adl_parser As ArchetypeEditor.ADL_Classes.ADL_Interface = CreateAdlParser()
-                Return adl_parser.Archetype.SerialisedArchetype(a_format)
+                Return CreateAdlParser().Archetype.SerialisedArchetype(format)
             Case Else
                 Debug.Assert(False, "Format not handled")
                 Return "Format not available"

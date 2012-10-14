@@ -41,57 +41,122 @@ Public Class Main
         ' IMPORTANT! This must be the first call in the application; otherwise the icons do not display on the main toolbar!
         Application.EnableVisualStyles()
         Options.LoadConfiguration()
-        ShowSplash()
 
-        Dim frm As New Designer
+        Dim archetypePath As String = ""
+        Dim exportDirectory As String = ""
+        Dim exportFormats As New Collections.Generic.List(Of String)
+        Dim invalidArgs As String = ""
 
-        If args.Length > 0 AndAlso args(0) <> "" Then
-            frm.ArchetypeToOpen = args(0)
-        End If
-
-        If args.Length > 1 Then
-            If args(1).Length >= 2 Then
-                mDefaultLanguageCode = args(1).Substring(0, 2)
-                mSpecificLanguageCode = args(1)
-            Else
-                MessageBox.Show(String.Format("Invalid Language:{0}", args(1)), AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End If
-        End If
-
-        'Pickup any Autosave files that are lying around.
-        Dim files As System.IO.FileInfo() = New System.IO.DirectoryInfo(Options.ApplicationDataDirectory).GetFiles("Recovery-*.*")
-
-        If Not files Is Nothing AndAlso files.Length > 0 Then
-            Dim recoverFrm As New Recovery
-            recoverFrm.chkListRecovery.Items.AddRange(files)
-            recoverFrm.ShowDialog()
-
-            For Each f As System.IO.FileInfo In recoverFrm.chkListRecovery.Items
-                If recoverFrm.chkListRecovery.CheckedItems.Contains(f) Then
-                    If String.IsNullOrEmpty(frm.ArchetypeToOpen) Then
-                        frm.ArchetypeToOpen = f.FullName
-                    Else
-                        Dim info As New ProcessStartInfo
-                        info.FileName = f.FullName
-                        info.WorkingDirectory = Application.StartupPath
-                        Process.Start(info)
-                    End If
+        For Each arg As String In args
+            If IO.Path.GetExtension(arg.ToLowerInvariant) = ".adl" Or IO.Path.GetExtension(arg.ToLowerInvariant) = ".xml" Then
+                archetypePath = arg
+            ElseIf arg.ToLowerInvariant = "-exportadl" Or arg.ToLowerInvariant = "-exportxml" Then
+                If archetypePath = "" Then
+                    invalidArgs = invalidArgs + " " + arg + " must come after [archetypefiles]"
                 Else
-                    f.Delete()
+                    exportFormats.Add(arg.ToLowerInvariant.Substring(7))
                 End If
+            ElseIf exportFormats.Count > 0 And exportDirectory = "" Then
+                exportDirectory = IO.Path.GetFullPath(arg)
+            ElseIf arg.Length >= 2 Then
+                mDefaultLanguageCode = arg.Substring(0, 2)
+                mSpecificLanguageCode = arg
+            Else
+                invalidArgs = invalidArgs + " " + arg
+            End If
+        Next
+
+        AE_Constants.Create(DefaultLanguageCode)
+
+        If invalidArgs <> "" Then
+            DisplayUsage(invalidArgs)
+        ElseIf exportFormats.Count > 0 Then
+            Export(archetypePath, exportDirectory, exportFormats)
+        Else
+            ShowSplash()
+            Dim frm As New Designer
+            frm.ArchetypeToOpen = archetypePath
+
+            'Pick up any Autosave files that are lying around.
+            Dim files As IO.FileInfo() = New IO.DirectoryInfo(Options.ApplicationDataDirectory).GetFiles("Recovery-*.*")
+
+            If Not files Is Nothing AndAlso files.Length > 0 Then
+                Dim recoverFrm As New Recovery
+                recoverFrm.chkListRecovery.Items.AddRange(files)
+                recoverFrm.ShowDialog()
+
+                For Each f As IO.FileInfo In recoverFrm.chkListRecovery.Items
+                    If recoverFrm.chkListRecovery.CheckedItems.Contains(f) Then
+                        If String.IsNullOrEmpty(frm.ArchetypeToOpen) Then
+                            frm.ArchetypeToOpen = f.FullName
+                        Else
+                            Dim info As New ProcessStartInfo
+                            info.FileName = f.FullName
+                            info.WorkingDirectory = Application.StartupPath
+                            Process.Start(info)
+                        End If
+                    Else
+                        f.Delete()
+                    End If
+                Next
+            End If
+
+            If IsLanguageRightToLeft(mDefaultLanguageCode) Then
+                frm.RightToLeft = RightToLeft.Yes
+            End If
+
+            Try
+                frm.ShowDialog()
+            Catch ex As Exception
+                MessageBox.Show("This program has encountered an error and will shut down - a recovery file will be available on restart" & vbCrLf & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                frm.Close()
+            End Try
+        End If
+    End Sub
+
+    Protected Sub DisplayUsage(ByVal invalidArgs As String)
+        Dim message As String = "Invalid arguments:" + invalidArgs + Environment.NewLine + _
+            "Usage: " + IO.Path.GetFileName(Application.ExecutablePath) + " [languagecode] [archetypefiles] [-exportadl] [-exportxml] [exportdirectory]" + Environment.NewLine + _
+            "Examples:" + Environment.NewLine + _
+            "* Opening an ADL file with German as current language: de cluster\openEHR-EHR-CLUSTER.xx.v1.adl" + Environment.NewLine + _
+            "* Opening an XML file with US English as current language: en-us cluster\openEHR-EHR-CLUSTER.xx.v1.xml" + Environment.NewLine + _
+            "* Export all ADL files in-place: C:\knowledge\*.adl -exportadl" + Environment.NewLine + _
+            "* Export all ADL files as ADL and XML to a directory: C:\knowledge\*.adl -exportadl -exportxml C:\export" + Environment.NewLine
+
+        MessageBox.Show(message, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
+    End Sub
+
+    Protected Sub Export(ByVal archetypePath As String, ByVal exportDirectory As String, ByVal formats As Collections.Generic.List(Of String))
+        Dim frm As New Designer
+        Dim searchPattern As String = IO.Path.GetFileName(archetypePath)
+        Dim sourceDirectory As String = IO.Path.GetDirectoryName(archetypePath)
+
+        If sourceDirectory = "" Then
+            sourceDirectory = "."
+        End If
+
+        sourceDirectory = IO.Path.GetFullPath(sourceDirectory)
+
+        If exportDirectory = "" Then
+            exportDirectory = sourceDirectory
+        End If
+
+        For Each filename As String In IO.Directory.GetFiles(sourceDirectory, searchPattern, IO.SearchOption.AllDirectories)
+            Dim exportFilename As String = IO.Path.Combine(exportDirectory, filename.Remove(0, sourceDirectory.Length + 1))
+            IO.Directory.CreateDirectory(IO.Path.GetDirectoryName(exportFilename))
+            frm.OpenArchetype(filename)
+
+            For Each format As String In formats
+                Dim bytes As Byte() = System.Text.Encoding.UTF8.GetBytes(Filemanager.Master.ExportSerialised(format))
+                Dim stream As New IO.FileStream(IO.Path.ChangeExtension(exportFilename, format), IO.FileMode.Create)
+
+                Try
+                    stream.Write(bytes, 0, bytes.Length)
+                Finally
+                    stream.Close()
+                End Try
             Next
-        End If
-
-        If IsLanguageRightToLeft(mDefaultLanguageCode) Then
-            frm.RightToLeft = RightToLeft.Yes
-        End If
-
-        Try
-            frm.ShowDialog()
-        Catch ex As Exception
-            MessageBox.Show("This program has encountered an error and will shut down - a recovery file will be available on restart" & vbCrLf & vbCrLf & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            frm.Close()
-        End Try
+        Next
     End Sub
 
     Protected Sub ShowSplash()
@@ -209,16 +274,16 @@ Public Class Main
         tTable = New DataTable("Unit")
         ' Add three column objects to the table.
         Dim idColumn As DataColumn = New DataColumn
-        idColumn.DataType = System.Type.GetType("System.Int32")
+        idColumn.DataType = Type.GetType("System.Int32")
         idColumn.ColumnName = "property_id"
         idColumn.AutoIncrement = False
         tTable.Columns.Add(idColumn)
         Dim TextColumn As DataColumn = New DataColumn
-        TextColumn.DataType = System.Type.GetType("System.String")
+        TextColumn.DataType = Type.GetType("System.String")
         TextColumn.ColumnName = "Text"
         tTable.Columns.Add(TextColumn)
         Dim DescriptionColumn As DataColumn = New DataColumn
-        DescriptionColumn.DataType = System.Type.GetType("System.String")
+        DescriptionColumn.DataType = Type.GetType("System.String")
         DescriptionColumn.ColumnName = "Description"
         tTable.Columns.Add(DescriptionColumn)
         ' Return the new DataTable.
@@ -239,16 +304,16 @@ Public Class Main
         result = New DataTable("Property")
         ' Add three column objects to the table.
         Dim idColumn As DataColumn = New DataColumn
-        idColumn.DataType = System.Type.GetType("System.Int32")
+        idColumn.DataType = Type.GetType("System.Int32")
         idColumn.ColumnName = "id"
         idColumn.AutoIncrement = True
         result.Columns.Add(idColumn)
         Dim TextColumn As DataColumn = New DataColumn
-        TextColumn.DataType = System.Type.GetType("System.String")
+        TextColumn.DataType = Type.GetType("System.String")
         TextColumn.ColumnName = "Text"
         result.Columns.Add(TextColumn)
         Dim DescriptionColumn As DataColumn = New DataColumn
-        DescriptionColumn.DataType = System.Type.GetType("System.String")
+        DescriptionColumn.DataType = Type.GetType("System.String")
         DescriptionColumn.ColumnName = "Description"
         result.Columns.Add(DescriptionColumn)
         ' Return the new DataTable.

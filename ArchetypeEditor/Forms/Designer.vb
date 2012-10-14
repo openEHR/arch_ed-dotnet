@@ -94,6 +94,12 @@ Public Class Designer
 
         'Add any initialization after the InitializeComponent() call
 
+        AddHandler Filemanager.IsFileDirtyChanged, AddressOf FileManager_IsFileDirtyChanged
+        mFileManager = New FileManagerLocal
+        Filemanager.Master = mFileManager
+        mFileManager.ObjectToSave = Me
+
+        DesignerInitialiser() ' see Internal functions region
     End Sub
 
     'Form overrides dispose to clean up the component list.
@@ -1893,7 +1899,7 @@ Public Class Designer
         End If
     End Sub
 
-    Private Sub OpenArchetype(ByVal a_file_name As String)
+    Public Sub OpenArchetype(ByVal filename As String)
         Application.DoEvents()
         Cursor = System.Windows.Forms.Cursors.WaitCursor
 
@@ -1904,7 +1910,7 @@ Public Class Designer
         mFileManager.FileLoading = True
         Dim watch As Stopwatch = Stopwatch.StartNew()
 
-        If Not mFileManager.OpenArchetype(a_file_name) Then
+        If Not mFileManager.OpenArchetype(filename) Then
             MessageBox.Show(mFileManager.Status, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Error)
             Cursor = System.Windows.Forms.Cursors.Default
             mFileManager.ParserReset()
@@ -1913,7 +1919,7 @@ Public Class Designer
             Exit Sub            ' FIXME: Spaghetti code!
         End If
 
-        Debug.WriteLine(a_file_name + ": " + CStr(watch.Elapsed.TotalSeconds))
+        Debug.WriteLine(filename + ": " + CStr(watch.Elapsed.TotalSeconds))
 
         Dim i As Integer
 
@@ -2834,14 +2840,15 @@ Public Class Designer
         End Set
     End Property
 
-    Dim m_ArchetypeToOpen As String
+    Dim mArchetypeToOpen As String
+
     'Allows setting archetype to open on load if required
     Public Property ArchetypeToOpen() As String
         Get
-            Return m_ArchetypeToOpen
+            Return mArchetypeToOpen
         End Get
         Set(ByVal Value As String)
-            m_ArchetypeToOpen = Value
+            mArchetypeToOpen = Value
         End Set
     End Property
 
@@ -3926,13 +3933,6 @@ Public Class Designer
 
     Private Sub Designer_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         LogoPictureBox.Image = Main.Instance.Logo
-
-        AddHandler Filemanager.IsFileDirtyChanged, AddressOf FileManager_IsFileDirtyChanged
-        mFileManager = New FileManagerLocal
-        Filemanager.Master = mFileManager
-        mFileManager.ObjectToSave = Me
-
-        DesignerInitialiser() ' see Internal functions region
 
         ' the following lines are necessary to maintain links in the bindings
         ' for the databindings to stay current
