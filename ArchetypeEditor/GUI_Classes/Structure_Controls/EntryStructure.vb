@@ -552,7 +552,7 @@ Public Class EntryStructure
             mCardinalityControl.SetSingle = True
         Else
             mCardinalityControl.IsContainer = True
-            mCardinalityControl.Location = New Drawing.Point(0, 0)
+            mCardinalityControl.Location = New Point(0, 0)
             PanelStructureHeader.Controls.Add(mCardinalityControl)
 
             If a_structure_type = Global.ArchetypeEditor.StructureType.Cluster Then
@@ -672,7 +672,7 @@ Public Class EntryStructure
         Throw New NotImplementedException("Subclass must override this method")
     End Sub
 
-    Protected Sub SetCurrentItem(ByVal node As ArchetypeNode)
+    Protected Overridable Sub SetCurrentItem(ByVal node As ArchetypeNode)
         ' if nothing this hides panelDetails
         mCurrentItem = node
 
@@ -684,6 +684,11 @@ Public Class EntryStructure
 
         SetButtonVisibility(node)
         RaiseEvent CurrentItemChanged(node, New EventArgs)
+    End Sub
+
+    Protected Overridable Sub ReplaceCurrentItem(ByVal node As ArchetypeNode)
+        mCurrentItem = node
+        mFileManager.FileEdited = True
     End Sub
 
     Public Sub SetButtonVisibility(ByVal node As ArchetypeNode)
@@ -714,9 +719,8 @@ Public Class EntryStructure
                     ToolTipSpecialisation.RemoveAll()
                 Else
                     Dim s As String = AE_Constants.Instance.Specialised & ":" & Environment.NewLine
-                    Dim i As Integer
 
-                    For i = 0 To ct.Length - 1
+                    For i As Integer = 0 To ct.Length - 1
                         s = s & Space((i * 2) + 2) & "- " & ct(i).Text
 
                         If i < ct.Length - 1 Then
@@ -738,10 +742,9 @@ Public Class EntryStructure
 
     Private Sub LayoutIcons()
         ' now space the buttons consistently
-        Dim ctrl As Control
-        Dim loc As New System.Drawing.Point(8, 4)
+        Dim loc As New Point(8, 4)
 
-        For Each ctrl In PanelIcons.Controls
+        For Each ctrl As Control In PanelIcons.Controls
             If ctrl.Visible Then
                 ctrl.Location = loc
                 loc.Y += 27
@@ -790,22 +793,23 @@ Public Class EntryStructure
 
     Protected Overridable Sub ShowAddElementMenu(ByVal menu As ConstraintContextMenu)
         menu.ShowHeader(Filemanager.GetOpenEhrTerm(155, "Add"))
-        menu.Show(ButAddElement, New System.Drawing.Point(5, 5))
+        menu.Show(ButAddElement, New Point(5, 5))
     End Sub
 
-    Private Sub ChangeConstraint(ByVal newConstraint As Constraint)
+    Protected Overridable Sub ChangeConstraint(ByVal newConstraint As Constraint)
         Debug.Assert(mCurrentItem.RM_Class.Type = StructureType.Element)
 
-        If newConstraint.Kind = ConstraintKind.Multiple Then
-            'Add the current constraint to the multiple constraint before setting the current item to the multiple
-            CType(newConstraint, Constraint_Choice).Constraints.Add(CType(mCurrentItem, ArchetypeElement).Constraint)
-        ElseIf CType(mCurrentItem, ArchetypeElement).Constraint.Kind = ConstraintKind.Multiple Then
-            'Or if the current item is multiple
-            Dim m As Constraint_Choice
-            m = CType(mCurrentItem, ArchetypeElement).Constraint
+        Dim slot As Constraint_Slot = TryCast(newConstraint, Constraint_Slot)
 
-            For Each c As Constraint In m.Constraints
-                'find the constraint that is of the same type as a_constraint if there is one
+        If Not slot Is Nothing Then
+            slot.RM_ClassType = SlotClassSelection()
+            ReplaceCurrentItem(New ArchetypeSlot(mCurrentItem.Text, slot.RM_ClassType, mFileManager))
+        ElseIf newConstraint.Kind = ConstraintKind.Multiple Then
+            'Add the current constraint to the multiple constraint before setting the current item to the multiple
+            CType(newConstraint, Constraint_Choice).Constraints.Add(mCurrentItem.Constraint)
+        ElseIf mCurrentItem.Constraint.Kind = ConstraintKind.Multiple Then
+            'Or if the current item is multiple, find the constraint that is of the same type as the new constraint if there is one
+            For Each c As Constraint In CType(mCurrentItem.Constraint, Constraint_Choice).Constraints
                 If c.Kind = newConstraint.Kind Then
                     newConstraint = c
                 End If
@@ -813,20 +817,24 @@ Public Class EntryStructure
         End If
 
         'now set the current item to the new constraint
-        CType(mCurrentItem, ArchetypeElement).Constraint = newConstraint
+        mCurrentItem.Constraint = newConstraint
         mFileManager.FileEdited = True
         RefreshIcons()
         RaiseEvent CurrentItemChanged(mCurrentItem, New EventArgs)
     End Sub
 
+    Protected Overridable Function SlotClassSelection() As StructureType
+        Return StructureType.Element
+    End Function
+
     Private Sub butChangeDataType_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butChangeDataType.Click
         Debug.Assert(Not mCurrentItem Is Nothing, "Button should not be available")
         Debug.Assert(mCurrentItem.RM_Class.Type = StructureType.Element, "Button should not be available")
 
-        Dim menu As New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf ChangeConstraint), mFileManager)
-        menu.HideMenuItem(CType(mCurrentItem, ArchetypeElement).Constraint.Kind)
+        Dim menu As New ConstraintContextMenu(AddressOf ChangeConstraint, mFileManager)
+        menu.ShowMenuItem(mCurrentItem.Constraint.Kind, False)
         menu.ShowHeader(Filemanager.GetOpenEhrTerm(60, "Change data type"))
-        menu.Show(butChangeDataType, New System.Drawing.Point(5, 5))
+        menu.Show(butChangeDataType, New Point(5, 5))
     End Sub
 
     Private Sub cbOrdered_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
@@ -846,7 +854,7 @@ Public Class EntryStructure
     End Sub
 
     Private Sub EntryStructure_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles MyBase.Load
-        If Not Me.DesignMode Then
+        If Not DesignMode Then
             ' add the tooltips to the buttons on the left
             ttElement.SetToolTip(pbText, AE_Constants.Instance.Text)
             ttElement.SetToolTip(pbQuantity, AE_Constants.Instance.Quantity)
@@ -900,6 +908,7 @@ Public Class EntryStructure
                 Case "pbSlot"
                     mNewConstraint = New Constraint_Slot
             End Select
+
             sender.DoDragDrop(mNewConstraint, DragDropEffects.Copy)
         End If
 

@@ -17,305 +17,175 @@
 Public Class ConstraintContextMenu
     Inherits ContextMenu
 
-    Public Delegate Sub ProcessMenuClick(ByVal a_constraint As Constraint)
-    Private _ProcessMenuClick As ProcessMenuClick
+    Public Delegate Sub Click(ByVal newConstraint As Constraint)
+    Private onClick As Click
     Private mFileManager As FileManagerLocal
 
-    Private mMI_Header, mMI_Spacer, mMI_Text, _
-        mMI_Quantity, mMI_Count, mMI_DateTime, _
-        mMI_Ordinal, mMI_Boolean, mMI_any, mMI_Multiple, _
-        mMI_Slot, mMI_Ratio, mMI_QuantityUnit, mMI_Interval, _
-        mMI_Interval_Quantity, mMI_Interval_Count, mMI_Interval_DateTime, _
-        mMI_Duration, mMI_MultiMedia, mMI_URI, mMI_Identifier, mMI_Currency, _
-        mMI_Parsable As MenuItem
+    Private _
+        HeaderMenuItem, _
+        SpacerMenuItem, _
+        TextMenuItem, _
+        QuantityMenuItem, _
+        CountMenuItem, _
+        DateTimeMenuItem, _
+        OrdinalMenuItem, _
+        BooleanMenuItem, _
+        AnyMenuItem, _
+        MultipleMenuItem, _
+        SlotMenuItem, _
+        ProportionMenuItem, _
+        IntervalMenuItem, _
+        IntervalOfQuantityMenuItem, _
+        IntervalOfCountMenuItem, _
+        IntervalOfDateTimeMenuItem, _
+        DurationMenuItem, _
+        MultiMediaMenuItem, _
+        UriMenuItem, _
+        IdentifierMenuItem, _
+        ParsableMenuItem, _
+        CurrencyMenuItem As MenuItem
 
-    Sub ShowHeader(ByVal header_text As String)
-        mMI_Header.Text = header_text
-        mMI_Header.Visible = True
-        mMI_Spacer.Visible = True
+    Public Sub ShowHeader(ByVal headerText As String)
+        HeaderMenuItem.Text = headerText
+        HeaderMenuItem.Visible = True
+        SpacerMenuItem.Visible = True
     End Sub
 
-    Sub ShowMenuItem(ByVal a_constraint_type As ConstraintKind)
-        Select Case a_constraint_type
+    Public Sub ShowMenuItem(ByVal kind As ConstraintKind, ByVal isVisible As Boolean)
+        Select Case kind
             Case ConstraintKind.Any
-                mMI_any.Visible = True
+                AnyMenuItem.Visible = isVisible
             Case ConstraintKind.Boolean
-                mMI_Boolean.Visible = True
+                BooleanMenuItem.Visible = isVisible
             Case ConstraintKind.Count
-                mMI_Count.Visible = True
+                CountMenuItem.Visible = isVisible
             Case ConstraintKind.DateTime
-                mMI_DateTime.Visible = True
+                DateTimeMenuItem.Visible = isVisible
             Case ConstraintKind.Multiple
-                mMI_Multiple.Visible = True
+                MultipleMenuItem.Visible = isVisible
             Case ConstraintKind.Ordinal
-                mMI_Ordinal.Visible = True
+                OrdinalMenuItem.Visible = isVisible
             Case ConstraintKind.Quantity
-                mMI_Quantity.Visible = True
-            Case ConstraintKind.QuantityUnit
-                mMI_QuantityUnit.Visible = True
+                QuantityMenuItem.Visible = isVisible
             Case ConstraintKind.Duration
-                mMI_Duration.Visible = True
+                DurationMenuItem.Visible = isVisible
             Case ConstraintKind.Proportion
-                mMI_Ratio.Visible = True
+                ProportionMenuItem.Visible = isVisible
             Case ConstraintKind.Slot
-                mMI_Slot.Visible = True
+                SlotMenuItem.Visible = isVisible
             Case ConstraintKind.Text
-                mMI_Text.Visible = True
+                TextMenuItem.Visible = isVisible
             Case ConstraintKind.Interval_Count
-                mMI_Interval_Count.Visible = True
-                mMI_Interval.Visible = True
+                IntervalOfCountMenuItem.Visible = isVisible
             Case ConstraintKind.Interval_Quantity
-                mMI_Interval_Quantity.Visible = True
-                mMI_Interval.Visible = True
+                IntervalOfQuantityMenuItem.Visible = isVisible
             Case ConstraintKind.Interval_DateTime
-                mMI_Interval_DateTime.Visible = True
-                mMI_Interval.Visible = True
+                IntervalOfDateTimeMenuItem.Visible = isVisible
             Case ConstraintKind.MultiMedia
-                mMI_MultiMedia.Visible = True
+                MultiMediaMenuItem.Visible = isVisible
             Case ConstraintKind.URI
-                mMI_URI.Visible = True
+                UriMenuItem.Visible = isVisible
             Case ConstraintKind.Currency
-                mMI_Currency.Visible = True
+                CurrencyMenuItem.Visible = isVisible
             Case ConstraintKind.Identifier
-                mMI_Identifier.Visible = True
+                IdentifierMenuItem.Visible = isVisible
             Case ConstraintKind.Parsable
-                mMI_Parsable.Visible = True
-        End Select
-    End Sub
-
-    Sub HideMenuItem(ByVal a_constraint_type As ConstraintKind)
-        Select Case a_constraint_type
-            Case ConstraintKind.Any
-                mMI_any.Visible = False
-            Case ConstraintKind.Boolean
-                mMI_Boolean.Visible = False
-            Case ConstraintKind.Count
-                mMI_Count.Visible = False
-            Case ConstraintKind.DateTime
-                mMI_DateTime.Visible = False
-            Case ConstraintKind.Multiple
-                mMI_Multiple.Visible = False
-            Case ConstraintKind.Ordinal
-                mMI_Ordinal.Visible = False
-            Case ConstraintKind.Quantity
-                mMI_Quantity.Visible = False
-            Case ConstraintKind.QuantityUnit
-                mMI_QuantityUnit.Visible = False
-            Case ConstraintKind.Duration
-                mMI_Duration.Visible = False
-            Case ConstraintKind.Proportion
-                mMI_Ratio.Visible = False
-            Case ConstraintKind.Slot
-                mMI_Slot.Visible = False
-            Case ConstraintKind.Text
-                mMI_Text.Visible = False
-            Case ConstraintKind.Interval_Count
-                mMI_Interval_Count.Visible = False
-            Case ConstraintKind.Interval_Quantity
-                mMI_Interval_Quantity.Visible = False
-            Case ConstraintKind.Interval_DateTime
-                mMI_Interval_DateTime.Visible = False
-            Case ConstraintKind.MultiMedia
-                mMI_MultiMedia.Visible = False
-            Case ConstraintKind.URI
-                mMI_URI.Visible = False
-            Case ConstraintKind.Currency
-                mMI_Currency.Visible = False
-            Case ConstraintKind.Identifier
-                mMI_Identifier.Visible = False
-            Case ConstraintKind.Parsable
-                mMI_Parsable.Visible = False
+                ParsableMenuItem.Visible = isVisible
         End Select
 
-        If mMI_Interval_Count.Visible = False And mMI_Interval_Quantity.Visible = False And mMI_Interval_DateTime.Visible = False Then
-            mMI_Interval.Visible = False
-        Else
-            mMI_Interval.Visible = True
-        End If
+        IntervalMenuItem.Visible = IntervalOfCountMenuItem.Visible Or IntervalOfQuantityMenuItem.Visible Or IntervalOfDateTimeMenuItem.Visible
     End Sub
 
-    Sub Reset()
-        mMI_Header.Text = ""
-        mMI_Header.Visible = False
-        mMI_Spacer.Visible = False
-        mMI_Text.Visible = True
-        mMI_Quantity.Visible = True
-        mMI_Duration.Visible = True
-        mMI_Count.Visible = True
-        mMI_DateTime.Visible = True
-        mMI_Ordinal.Visible = True
-        mMI_Boolean.Visible = True
-        mMI_any.Visible = True
-        mMI_Multiple.Visible = True
-        mMI_Interval.Visible = True
-        mMI_Interval_Quantity.Visible = True
-        mMI_Interval_Count.Visible = True
-        mMI_Interval_DateTime.Visible = True
-        mMI_MultiMedia.Visible = True
-        mMI_URI.Visible = True
-        mMI_Ratio.Visible = True
-        mMI_Slot.Visible = True
-        mMI_Currency.Visible = True
-        mMI_Identifier.Visible = True
-        mMI_Parsable.Visible = True
-
-        '==========================
-        'Rest are not usual datatypes
-        mMI_QuantityUnit.Visible = False
-    End Sub
-
-    Sub HideAll()
-        mMI_Text.Visible = False
-        mMI_Quantity.Visible = False
-        mMI_Duration.Visible = False
-        mMI_Count.Visible = False
-        mMI_DateTime.Visible = False
-        mMI_Ordinal.Visible = False
-        mMI_Boolean.Visible = False
-        mMI_any.Visible = False
-        mMI_Multiple.Visible = False
-        mMI_Slot.Visible = False
-        mMI_Ratio.Visible = False
-        mMI_QuantityUnit.Visible = False
-        mMI_Interval.Visible = False
-        mMI_Interval_Quantity.Visible = False
-        mMI_Interval_Count.Visible = False
-        mMI_Interval_DateTime.Visible = False
-        mMI_MultiMedia.Visible = False
-        mMI_URI.Visible = False
-        mMI_Currency.Visible = False
-        mMI_Identifier.Visible = False
-        mMI_Parsable.Visible = False
-    End Sub
-
-    Private Sub InternalProcessMenuItemClick(ByVal sender As Object, ByVal e As EventArgs)
-        If sender Is mMI_Text Then
-            _ProcessMenuClick(New Constraint_Text)
-        ElseIf sender Is mMI_Quantity Then
-            _ProcessMenuClick(New Constraint_Quantity)
-        ElseIf sender Is mMI_Count Then
-            _ProcessMenuClick(New Constraint_Count)
-        ElseIf sender Is mMI_DateTime Then
-            _ProcessMenuClick(New Constraint_DateTime)
-        ElseIf sender Is mMI_Ordinal Then
-            _ProcessMenuClick(New Constraint_Ordinal(True, mFileManager))
-        ElseIf sender Is mMI_Boolean Then
-            _ProcessMenuClick(New Constraint_Boolean)
-        ElseIf sender Is mMI_any Then
-            _ProcessMenuClick(New Constraint)
-        ElseIf sender Is mMI_Duration Then
-            _ProcessMenuClick(New Constraint_Duration)
-        ElseIf sender Is mMI_Multiple Then
-            _ProcessMenuClick(New Constraint_Choice)
-        ElseIf sender Is mMI_Slot Then
-            _ProcessMenuClick(New Constraint_Slot)
-        ElseIf sender Is mMI_Ratio Then
-            _ProcessMenuClick(New Constraint_Proportion)
+    Protected Sub DoClick(ByVal sender As Object, ByVal e As EventArgs)
+        If sender Is TextMenuItem Then
+            onClick(New Constraint_Text)
+        ElseIf sender Is QuantityMenuItem Then
+            onClick(New Constraint_Quantity)
+        ElseIf sender Is CountMenuItem Then
+            onClick(New Constraint_Count)
+        ElseIf sender Is DateTimeMenuItem Then
+            onClick(New Constraint_DateTime)
+        ElseIf sender Is OrdinalMenuItem Then
+            onClick(New Constraint_Ordinal(True, mFileManager))
+        ElseIf sender Is BooleanMenuItem Then
+            onClick(New Constraint_Boolean)
+        ElseIf sender Is AnyMenuItem Then
+            onClick(New Constraint)
+        ElseIf sender Is DurationMenuItem Then
+            onClick(New Constraint_Duration)
+        ElseIf sender Is MultipleMenuItem Then
+            onClick(New Constraint_Choice)
+        ElseIf sender Is SlotMenuItem Then
+            onClick(New Constraint_Slot)
+        ElseIf sender Is ProportionMenuItem Then
+            onClick(New Constraint_Proportion)
             'Cannot be Quantity Unit alone
             'ElseIf Sender Is mMI_QuantityUnit Then
-            '    _ProcessMenuClick(New Constraint_QuantityUnit)
-        ElseIf sender Is mMI_Interval_Count Then
-            _ProcessMenuClick(New Constraint_Interval_Count)
-        ElseIf sender Is mMI_Interval_Quantity Then
-            _ProcessMenuClick(New Constraint_Interval_Quantity)
-        ElseIf sender Is mMI_Interval_DateTime Then
-            _ProcessMenuClick(New Constraint_Interval_DateTime)
-        ElseIf sender Is mMI_MultiMedia Then
-            _ProcessMenuClick(New Constraint_MultiMedia)
-        ElseIf sender Is mMI_URI Then
-            _ProcessMenuClick(New Constraint_URI)
-        ElseIf sender Is mMI_Identifier Then
-            _ProcessMenuClick(New Constraint_Identifier)
-        ElseIf sender Is mMI_Currency Then
-            _ProcessMenuClick(New Constraint_Currency)
-        ElseIf sender Is mMI_Parsable Then
-            _ProcessMenuClick(New Constraint_Parsable)
+            '    click(New Constraint_QuantityUnit)
+        ElseIf sender Is IntervalOfCountMenuItem Then
+            onClick(New Constraint_Interval_Count)
+        ElseIf sender Is IntervalOfQuantityMenuItem Then
+            onClick(New Constraint_Interval_Quantity)
+        ElseIf sender Is IntervalOfDateTimeMenuItem Then
+            onClick(New Constraint_Interval_DateTime)
+        ElseIf sender Is MultiMediaMenuItem Then
+            onClick(New Constraint_MultiMedia)
+        ElseIf sender Is UriMenuItem Then
+            onClick(New Constraint_URI)
+        ElseIf sender Is IdentifierMenuItem Then
+            onClick(New Constraint_Identifier)
+        ElseIf sender Is CurrencyMenuItem Then
+            onClick(New Constraint_Currency)
+        ElseIf sender Is ParsableMenuItem Then
+            onClick(New Constraint_Parsable)
         Else
             Debug.Assert(False, "Menu item is not loaded")
         End If
     End Sub
 
-    Sub New(ByVal eventHandler As ProcessMenuClick, ByVal fileManager As FileManagerLocal)
+    Protected Function NewMenuItem(ByVal parent As Menu, ByVal text As String) As MenuItem
+        Dim result As New MenuItem(text)
+        parent.MenuItems.Add(result)
+        AddHandler result.Click, AddressOf DoClick
+        Return result
+    End Function
+
+    Sub New(ByVal eventHandler As Click, ByVal fileManager As FileManagerLocal)
+        onClick = eventHandler
         mFileManager = fileManager
-        _ProcessMenuClick = eventHandler
 
         ' add invisible head item
-        mMI_Header = New MenuItem
-        Me.MenuItems.Add(mMI_Header)
-        mMI_Header.Visible = False
+        HeaderMenuItem = New MenuItem
+        MenuItems.Add(HeaderMenuItem)
+        HeaderMenuItem.Visible = False
         ' and invisible spacer
-        mMI_Spacer = New MenuItem
-        mMI_Spacer.Text = "----------"
-        mMI_Spacer.Enabled = False
-        Me.MenuItems.Add(mMI_Spacer)
-        mMI_Spacer.Visible = False
+        SpacerMenuItem = New MenuItem
+        SpacerMenuItem.Text = "----------"
+        SpacerMenuItem.Enabled = False
+        MenuItems.Add(SpacerMenuItem)
+        SpacerMenuItem.Visible = False
 
-        mMI_Text = New MenuItem(AE_Constants.Instance.Text)
-        Me.MenuItems.Add(mMI_Text)
-        AddHandler mMI_Text.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Quantity = New MenuItem(AE_Constants.Instance.Quantity)
-        Me.MenuItems.Add(mMI_Quantity)
-        AddHandler mMI_Quantity.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Count = New MenuItem(AE_Constants.Instance.Count)
-        Me.MenuItems.Add(mMI_Count)
-        AddHandler mMI_Count.Click, AddressOf InternalProcessMenuItemClick
-        mMI_DateTime = New MenuItem(AE_Constants.Instance.DateTime)
-        Me.MenuItems.Add(mMI_DateTime)
-        AddHandler mMI_DateTime.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Duration = New MenuItem(AE_Constants.Instance.Duration)
-        Me.MenuItems.Add(mMI_Duration)
-        AddHandler mMI_Duration.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Ordinal = New MenuItem(AE_Constants.Instance.Ordinal)
-        Me.MenuItems.Add(mMI_Ordinal)
-        AddHandler mMI_Ordinal.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Boolean = New MenuItem(AE_Constants.Instance.Boolean_)
-        Me.MenuItems.Add(mMI_Boolean)
-        AddHandler mMI_Boolean.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Interval = New MenuItem(AE_Constants.Instance.Interval)
-        Me.MenuItems.Add(mMI_Interval)
-        mMI_Interval_Count = New MenuItem(AE_Constants.Instance.IntervalCount)
-        mMI_Interval.MenuItems.Add(mMI_Interval_Count)
-        AddHandler mMI_Interval_Count.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Interval_Quantity = New MenuItem(AE_Constants.Instance.IntervalQuantity)
-        mMI_Interval.MenuItems.Add(mMI_Interval_Quantity)
-        AddHandler mMI_Interval_Quantity.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Interval_DateTime = New MenuItem(AE_Constants.Instance.IntervalDateTime)
-        mMI_Interval.MenuItems.Add(mMI_Interval_DateTime)
-        AddHandler mMI_Interval_DateTime.Click, AddressOf InternalProcessMenuItemClick
-        mMI_any = New MenuItem(AE_Constants.Instance.Any)
-        Me.MenuItems.Add(mMI_any)
-        AddHandler mMI_any.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Multiple = New MenuItem(AE_Constants.Instance.Multiple)
-        Me.MenuItems.Add(mMI_Multiple)
-        AddHandler mMI_Multiple.Click, AddressOf InternalProcessMenuItemClick
-        mMI_MultiMedia = New MenuItem(AE_Constants.Instance.MultiMedia)
-        Me.MenuItems.Add(mMI_MultiMedia)
-        AddHandler mMI_MultiMedia.Click, AddressOf InternalProcessMenuItemClick
-        mMI_URI = New MenuItem(AE_Constants.Instance.URI)
-        Me.MenuItems.Add(mMI_URI)
-        AddHandler mMI_URI.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Ratio = New MenuItem(AE_Constants.Instance.Proportion)
-        Me.MenuItems.Add(mMI_Ratio)
-        AddHandler mMI_Ratio.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Identifier = New MenuItem(AE_Constants.Instance.Identifier)
-        Me.MenuItems.Add(mMI_Identifier)
-        AddHandler mMI_Identifier.Click, AddressOf InternalProcessMenuItemClick
-        mMI_Currency = New MenuItem(AE_Constants.Instance.Currency)
-        'UNCOMMENT TO ADD CURRENCY
-        'Me.MenuItems.Add(mMI_Currency)
-        'AddHandler mMI_Currency.Click, AddressOf InternalProcessMenuItemClick
-
-        mMI_Slot = New MenuItem(AE_Constants.Instance.Slot)
-        Me.MenuItems.Add(mMI_Slot)
-        AddHandler mMI_Slot.Click, AddressOf InternalProcessMenuItemClick
-        'mMI_Slot.Visible = False
-        mMI_QuantityUnit = New MenuItem(AE_Constants.Instance.Unit)
-        Me.MenuItems.Add(mMI_QuantityUnit)
-        AddHandler mMI_QuantityUnit.Click, AddressOf InternalProcessMenuItemClick
-        mMI_QuantityUnit.Visible = False
-        mMI_Parsable = New MenuItem(AE_Constants.Instance.Parsable)
-        Me.MenuItems.Add(mMI_Parsable)
-        AddHandler mMI_Parsable.Click, AddressOf InternalProcessMenuItemClick
+        TextMenuItem = NewMenuItem(Me, AE_Constants.Instance.Text)
+        QuantityMenuItem = NewMenuItem(Me, AE_Constants.Instance.Quantity)
+        CountMenuItem = NewMenuItem(Me, AE_Constants.Instance.Count)
+        DateTimeMenuItem = NewMenuItem(Me, AE_Constants.Instance.DateTime)
+        DurationMenuItem = NewMenuItem(Me, AE_Constants.Instance.Duration)
+        OrdinalMenuItem = NewMenuItem(Me, AE_Constants.Instance.Ordinal)
+        BooleanMenuItem = NewMenuItem(Me, AE_Constants.Instance.Boolean_)
+        IntervalMenuItem = New MenuItem(AE_Constants.Instance.Interval)
+        MenuItems.Add(IntervalMenuItem)
+        IntervalOfCountMenuItem = NewMenuItem(IntervalMenuItem, AE_Constants.Instance.IntervalCount)
+        IntervalOfQuantityMenuItem = NewMenuItem(IntervalMenuItem, AE_Constants.Instance.IntervalQuantity)
+        IntervalOfDateTimeMenuItem = NewMenuItem(IntervalMenuItem, AE_Constants.Instance.IntervalDateTime)
+        AnyMenuItem = NewMenuItem(Me, AE_Constants.Instance.Any)
+        MultipleMenuItem = NewMenuItem(Me, AE_Constants.Instance.Multiple)
+        MultiMediaMenuItem = NewMenuItem(Me, AE_Constants.Instance.MultiMedia)
+        UriMenuItem = NewMenuItem(Me, AE_Constants.Instance.URI)
+        ProportionMenuItem = NewMenuItem(Me, AE_Constants.Instance.Proportion)
+        IdentifierMenuItem = NewMenuItem(Me, AE_Constants.Instance.Identifier)
+        'TODO CurrencyMenuItem = NewMenuItem(Me, AE_Constants.Instance.Currency)
+        SlotMenuItem = NewMenuItem(Me, AE_Constants.Instance.Slot)
+        ParsableMenuItem = NewMenuItem(Me, AE_Constants.Instance.Parsable)
     End Sub
 
 End Class

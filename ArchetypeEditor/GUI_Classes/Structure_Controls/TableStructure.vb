@@ -432,7 +432,7 @@ Public Class TableStructure
         End If
     End Sub
 
-    Protected Sub ReplaceCurrentItem(ByVal node As ArchetypeNode)
+    Protected Overrides Sub ReplaceCurrentItem(ByVal node As ArchetypeNode)
         Dim i As Integer = dgGrid.CurrentCell.RowNumber
 
         If i > -1 Then

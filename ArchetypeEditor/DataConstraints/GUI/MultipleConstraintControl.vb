@@ -19,7 +19,6 @@ Option Strict On
 Public Class MultipleConstraintControl : Inherits ConstraintControl
     Friend WithEvents PanelMultipleControl As System.Windows.Forms.Panel
     Friend WithEvents TabConstraints As System.Windows.Forms.TabControl
-    Friend WithEvents AddConstraintMenu As ConstraintContextMenu
     Private mIsState As Boolean
 
 #Region " Windows Form Designer generated code "
@@ -48,15 +47,15 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
     'Friend WithEvents PanelBoolean As System.Windows.Forms.Panel
-    Friend WithEvents butRemoveUnit As System.Windows.Forms.Button
-    Friend WithEvents butAddConstraint As System.Windows.Forms.Button
+    Friend WithEvents RemoveButton As System.Windows.Forms.Button
+    Friend WithEvents AddButton As System.Windows.Forms.Button
     Friend WithEvents ContextMenuDataType As System.Windows.Forms.ContextMenu
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(MultipleConstraintControl))
         Me.TabConstraints = New System.Windows.Forms.TabControl
         Me.PanelMultipleControl = New System.Windows.Forms.Panel
-        Me.butRemoveUnit = New System.Windows.Forms.Button
-        Me.butAddConstraint = New System.Windows.Forms.Button
+        Me.RemoveButton = New System.Windows.Forms.Button
+        Me.AddButton = New System.Windows.Forms.Button
         Me.ContextMenuDataType = New System.Windows.Forms.ContextMenu
         Me.PanelMultipleControl.SuspendLayout()
         Me.SuspendLayout()
@@ -72,36 +71,36 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl
         '
         'PanelMultipleControl
         '
-        Me.PanelMultipleControl.Controls.Add(Me.butRemoveUnit)
-        Me.PanelMultipleControl.Controls.Add(Me.butAddConstraint)
+        Me.PanelMultipleControl.Controls.Add(Me.RemoveButton)
+        Me.PanelMultipleControl.Controls.Add(Me.AddButton)
         Me.PanelMultipleControl.Dock = System.Windows.Forms.DockStyle.Left
         Me.PanelMultipleControl.Location = New System.Drawing.Point(0, 0)
         Me.PanelMultipleControl.Name = "PanelMultipleControl"
         Me.PanelMultipleControl.Size = New System.Drawing.Size(32, 232)
         Me.PanelMultipleControl.TabIndex = 0
         '
-        'butRemoveUnit
+        'RemoveButton
         '
-        Me.butRemoveUnit.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.butRemoveUnit.Image = CType(resources.GetObject("butRemoveUnit.Image"), System.Drawing.Image)
-        Me.butRemoveUnit.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveUnit.Location = New System.Drawing.Point(4, 40)
-        Me.butRemoveUnit.Name = "butRemoveUnit"
-        Me.butRemoveUnit.Size = New System.Drawing.Size(24, 25)
-        Me.butRemoveUnit.TabIndex = 1
-        Me.ToolTip1.SetToolTip(Me.butRemoveUnit, "Remove selected constraint")
+        Me.RemoveButton.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.RemoveButton.Image = CType(resources.GetObject("RemoveButton.Image"), System.Drawing.Image)
+        Me.RemoveButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.RemoveButton.Location = New System.Drawing.Point(4, 40)
+        Me.RemoveButton.Name = "RemoveButton"
+        Me.RemoveButton.Size = New System.Drawing.Size(24, 25)
+        Me.RemoveButton.TabIndex = 1
+        Me.ToolTip1.SetToolTip(Me.RemoveButton, "Remove selected constraint")
         '
-        'butAddConstraint
+        'AddButton
         '
-        Me.butAddConstraint.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.butAddConstraint.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.butAddConstraint.Image = CType(resources.GetObject("butAddConstraint.Image"), System.Drawing.Image)
-        Me.butAddConstraint.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddConstraint.Location = New System.Drawing.Point(4, 8)
-        Me.butAddConstraint.Name = "butAddConstraint"
-        Me.butAddConstraint.Size = New System.Drawing.Size(24, 25)
-        Me.butAddConstraint.TabIndex = 0
-        Me.ToolTip1.SetToolTip(Me.butAddConstraint, "Add new constraint")
+        Me.AddButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.AddButton.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.AddButton.Image = CType(resources.GetObject("AddButton.Image"), System.Drawing.Image)
+        Me.AddButton.ImageAlign = System.Drawing.ContentAlignment.TopRight
+        Me.AddButton.Location = New System.Drawing.Point(4, 8)
+        Me.AddButton.Name = "AddButton"
+        Me.AddButton.Size = New System.Drawing.Size(24, 25)
+        Me.AddButton.TabIndex = 0
+        Me.ToolTip1.SetToolTip(Me.AddButton, "Add new constraint")
         '
         'MultipleConstraintControl
         '
@@ -158,9 +157,15 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl
 
     Private nTextConstraints As Integer
 
-    Private Sub AddConstraint(ByVal a_constraint As Constraint)
-        Constraint.Constraints.Add(a_constraint)
-        AddConstraintControl(a_constraint)
+    Private Sub AddConstraint(ByVal newConstraint As Constraint)
+        Dim slot As Constraint_Slot = TryCast(newConstraint, Constraint_Slot)
+
+        If Not slot Is Nothing Then
+            slot.RM_ClassType = StructureType.Element
+        End If
+
+        Constraint.Constraints.Add(newConstraint)
+        AddConstraintControl(newConstraint)
         mFileManager.FileEdited = True
     End Sub
 
@@ -185,40 +190,28 @@ Public Class MultipleConstraintControl : Inherits ConstraintControl
         Next
     End Sub
 
-    Private Sub butAddConstraint_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butAddConstraint.Click
-        If AddConstraintMenu Is Nothing Then
-            AddConstraintMenu = New ConstraintContextMenu(New ConstraintContextMenu.ProcessMenuClick(AddressOf AddConstraint), mFileManager)
-        Else
-            AddConstraintMenu.Reset()
-        End If
-
-        AddConstraintMenu.HideMenuItem(ConstraintKind.Multiple)
-
-        If nTextConstraints = 2 Then
-            AddConstraintMenu.HideMenuItem(ConstraintKind.Text)
-        End If
+    Private Sub AddButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AddButton.Click
+        Dim menu As New ConstraintContextMenu(AddressOf AddConstraint, mFileManager)
+        menu.ShowMenuItem(ConstraintKind.Multiple, False)
+        menu.ShowMenuItem(ConstraintKind.Text, nTextConstraints < 2)
 
         For Each c As Constraint In Constraint.Constraints
             If c.Kind <> ConstraintKind.Text Then
-                AddConstraintMenu.HideMenuItem(c.Kind)
+                menu.ShowMenuItem(c.Kind, False)
             End If
         Next
 
-        AddConstraintMenu.Show(butAddConstraint, New System.Drawing.Point(5, 5))
+        menu.Show(AddButton, New Point(5, 5))
     End Sub
 
-    Private Sub butRemoveUnit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles butRemoveUnit.Click
+    Private Sub RemoveButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RemoveButton.Click
         If MessageBox.Show(AE_Constants.Instance.Remove & TabConstraints.SelectedTab.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
             Dim i As Integer = TabConstraints.SelectedIndex
-            TabConstraints.TabPages.Remove(Me.TabConstraints.SelectedTab)
+            TabConstraints.TabPages.Remove(TabConstraints.SelectedTab)
 
             If Constraint.Constraints.Item(i).Kind = ConstraintKind.Text Then
                 nTextConstraints = nTextConstraints - 1
                 RestrictTextControls()
-            End If
-
-            If Not AddConstraintMenu Is Nothing Then
-                AddConstraintMenu.ShowMenuItem(Constraint.Constraints.Item(i).Kind)
             End If
 
             Constraint.Constraints.RemoveAt(i)

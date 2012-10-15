@@ -47,7 +47,7 @@ Public Class ListStructure
                 Case StructureType.Slot
                     Dim slot As RmSlot = CType(item, RmSlot)
 
-                    If slot.SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
+                    If slot.SlotConstraint.RM_ClassType = StructureType.Element Then
                         lvitem = New ArchetypeListViewItem(slot, mFileManager)
                         lvList.Items.Add(lvitem)
                         lvitem.RefreshIcons()
@@ -242,7 +242,7 @@ Public Class ListStructure
                 Case StructureType.Element, StructureType.Reference
                     lvItem = New ArchetypeListViewItem(CType(struct, RmElement), mFileManager)
                 Case StructureType.Slot
-                    If CType(struct, RmSlot).SlotConstraint.RM_ClassType = Global.ArchetypeEditor.StructureType.Element Then
+                    If CType(struct, RmSlot).SlotConstraint.RM_ClassType = StructureType.Element Then
                         lvItem = New ArchetypeListViewItem(CType(struct, RmSlot), mFileManager)
                     End If
                 Case Else
@@ -307,6 +307,25 @@ Public Class ListStructure
         End If
     End Sub
 
+    Protected Overrides Sub ReplaceCurrentItem(ByVal node As ArchetypeNode)
+        If lvList.SelectedItems.Count > 0 Then
+            Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems.Item(0), ArchetypeListViewItem)
+            Dim i As Integer = lvItem.Index
+            lvList.Items.RemoveAt(i)
+            lvItem = New ArchetypeListViewItem(node)
+            lvItem.RefreshIcons()
+            lvList.Items.Insert(i, lvItem)
+
+            If Not lvItem.Selected Then
+                ' needed for first element in the list
+                lvItem.Selected = True
+            End If
+
+            mCurrentItem = node
+            mFileManager.FileEdited = True
+        End If
+    End Sub
+
     Protected Overrides Sub AddReference(ByVal sender As Object, ByVal e As EventArgs) Handles AddReferenceMenuItem.Click
         Dim ref As RmReference
 
@@ -336,19 +355,7 @@ Public Class ListStructure
             Dim lvItem As ArchetypeListViewItem = CType(lvList.SelectedItems(0), ArchetypeListViewItem)
 
             If lvItem.Item.IsAnonymous Then
-                Dim newSlot As New ArchetypeSlot(CType(lvItem.Item, ArchetypeNodeAnonymous), mFileManager)
-                Dim i As Integer = lvItem.Index
-                lvList.Items.RemoveAt(i)
-                lvItem = New ArchetypeListViewItem(newSlot)
-                lvList.Items.Insert(i, lvItem)
-                lvItem.RefreshIcons()
-
-                If Not lvItem.Selected Then
-                    ' needed for first element in the list
-                    lvItem.Selected = True
-                End If
-
-                mFileManager.FileEdited = True
+                ReplaceCurrentItem(New ArchetypeSlot(CType(lvItem.Item, ArchetypeNodeAnonymous), mFileManager))
             End If
 
             If lvList.LabelEdit Then
@@ -363,24 +370,16 @@ Public Class ListStructure
         End If
     End Sub
 
-    Protected Overrides Sub AddNewElement(ByVal aConstraint As Constraint)
+    Protected Overrides Sub AddNewElement(ByVal constraint As Constraint)
         Dim lvItem As ArchetypeListViewItem = Nothing
-        Dim editLabel As Boolean = False
+        Dim allowEdit As Boolean = False
 
-        If aConstraint.Kind = ConstraintKind.Slot Then
-            Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                Case DialogResult.Yes
-                    Dim archetype_slot As New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
-                    lvItem = New ArchetypeListViewItem(archetype_slot)
-                    editLabel = True
-                Case DialogResult.No
-                    Dim newSlot As New RmSlot(StructureType.Element)
-                    lvItem = New ArchetypeListViewItem(newSlot, mFileManager)
-            End Select
+        If constraint.Kind = ConstraintKind.Slot Then
+            lvItem = NewSlotNode(allowEdit)
         Else
             lvItem = New ArchetypeListViewItem(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
-            CType(lvItem.Item, ArchetypeElement).Constraint = aConstraint
-            editLabel = True
+            lvItem.Item.Constraint = constraint
+            allowEdit = True
         End If
 
         lvList.Items.Add(lvItem)
@@ -388,10 +387,23 @@ Public Class ListStructure
         lvItem.RefreshIcons()
         mFileManager.FileEdited = True
 
-        If editLabel Then
+        If allowEdit Then
             lvItem.BeginEdit()
         End If
     End Sub
+
+    Protected Function NewSlotNode(ByRef allowEdit As Boolean) As ArchetypeListViewItem
+        Dim result As ArchetypeListViewItem = Nothing
+
+        If MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            result = New ArchetypeListViewItem(New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager))
+        Else
+            result = New ArchetypeListViewItem(New ArchetypeNodeAnonymous(StructureType.Element))
+            allowEdit = False
+        End If
+
+        Return result
+    End Function
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs) Handles RemoveItemAndReferencesMenuItem.Click
         If lvList.SelectedItems.Count > 0 AndAlso CType(lvList.SelectedItems(0), ArchetypeListViewItem).Item.CanRemove Then
@@ -456,7 +468,8 @@ Public Class ListStructure
         s = s.Trim
 
         text = text & new_line & (Space(3 * indentlevel) & "\cf2 Items\cf0  " & s & "\par")
-        For Each lvItem In Me.lvList.Items
+
+        For Each lvItem In lvList.Items
             text &= new_line & lvItem.Item.ToRichText(indentlevel + 1)
         Next
 
@@ -653,69 +666,61 @@ Public Class ListStructure
     End Sub
 
     Private Sub lvList_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles lvList.DragDrop
-        Dim position As Point
-        Dim DropListItem As ArchetypeListViewItem
-        Dim list_item_dragged As ArchetypeListViewItem = Nothing
-        Dim editLabel As Boolean = False
-        Dim i As Integer
+        Dim draggedItem As ArchetypeListViewItem = Nothing
+        Dim allowEdit As Boolean = False
 
         If Not mDragItem Is Nothing Then
-            list_item_dragged = mDragItem
+            draggedItem = mDragItem
         ElseIf Not mNewConstraint Is Nothing Then
             If TypeOf mNewConstraint Is Constraint_Slot Then
-                Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    Case DialogResult.Yes
-                        Dim archetype_slot As New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
-                        list_item_dragged = New ArchetypeListViewItem(archetype_slot)
-                        editLabel = True
-                    Case DialogResult.No
-                        Dim newSlot As New RmSlot(StructureType.Element)
-                        list_item_dragged = New ArchetypeListViewItem(newSlot, mFileManager)
-                End Select
+                draggedItem = NewSlotNode(allowEdit)
             Else
-                Dim archetype_element As ArchetypeElement
-                archetype_element = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
-                archetype_element.Constraint = mNewConstraint
-                list_item_dragged = New ArchetypeListViewItem(archetype_element)
-                editLabel = True
+                Dim element As New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
+                element.Constraint = mNewConstraint
+                draggedItem = New ArchetypeListViewItem(element)
+                allowEdit = True
             End If
         Else
             Debug.Assert(False, "No item dragged")
             mNewConstraint = Nothing
             mNewCluster = False
             mDragItem = Nothing
-            Return
         End If
 
-        position.X = e.X
-        position.Y = e.Y
-        position = Me.lvList.PointToClient(position)
-        DropListItem = CType(Me.lvList.GetItemAt(position.X, position.Y), ArchetypeListViewItem)
+        If Not draggedItem Is Nothing Then
+            Dim position As Point
+            position.X = e.X
+            position.Y = e.Y
+            position = lvList.PointToClient(position)
+            Dim droppedItem As ArchetypeListViewItem = CType(lvList.GetItemAt(position.X, position.Y), ArchetypeListViewItem)
 
-        If e.Effect = DragDropEffects.Move Then
-            lvList.Items.Remove(list_item_dragged)
+            If e.Effect = DragDropEffects.Move Then
+                lvList.Items.Remove(draggedItem)
+            End If
+
+            Dim i As Integer
+
+            If droppedItem Is Nothing Then
+                i = lvList.Items.Count - 1
+            Else
+                i = droppedItem.Index
+            End If
+
+            lvList.Items.Insert(i + 1, draggedItem)
+
+            draggedItem.Selected = True
+
+            If allowEdit And e.Effect = DragDropEffects.Copy Then
+                ' have to do this last or not visible
+                draggedItem.BeginEdit()
+            End If
+
+            mFileManager.FileEdited = True
+
+            mNewConstraint = Nothing
+            mNewCluster = False
+            mDragItem = Nothing
         End If
-
-        If DropListItem Is Nothing Then
-            i = lvList.Items.Count - 1
-        Else
-            i = DropListItem.Index
-        End If
-
-        lvList.Items.Insert(i + 1, list_item_dragged)
-
-        list_item_dragged.Selected = True
-
-        If editLabel And e.Effect = DragDropEffects.Copy Then
-            ' have to do this last or not visible
-            list_item_dragged.BeginEdit()
-        End If
-
-        mFileManager.FileEdited = True
-
-        mNewConstraint = Nothing
-        mNewCluster = False
-        mDragItem = Nothing
     End Sub
 
 #End Region

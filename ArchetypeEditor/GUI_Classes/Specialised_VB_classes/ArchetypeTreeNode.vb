@@ -206,11 +206,11 @@ Public Class ArchetypeTreeNode : Inherits TreeNode
 
         If slot.NodeId <> "" Then
             mArchetypeNode = New ArchetypeSlot(slot, fileManager)
-            Text = mArchetypeNode.Text
         Else
             mArchetypeNode = New ArchetypeNodeAnonymous(slot)
-            Text = fileManager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
         End If
+
+        Text = mArchetypeNode.Text
     End Sub
 
 End Class

@@ -71,11 +71,11 @@ Public Class ArchetypeListViewItem : Inherits ListViewItem
 
         If slot.NodeId <> "" Then
             mArchetypeNode = New ArchetypeSlot(slot, fileManager)
-            Text = mArchetypeNode.Text
         Else
-            Text = fileManager.OntologyManager.GetOpenEHRTerm(CInt(slot.SlotConstraint.RM_ClassType), slot.SlotConstraint.RM_ClassType.ToString)
             mArchetypeNode = New ArchetypeNodeAnonymous(slot)
         End If
+
+        Text = mArchetypeNode.Text
     End Sub
 
     Sub New(ByVal node As ArchetypeNode)
