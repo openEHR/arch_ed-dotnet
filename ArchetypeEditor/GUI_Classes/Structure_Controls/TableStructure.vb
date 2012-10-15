@@ -33,8 +33,6 @@ Public Class TableStructure
     Public Shadows Event CurrentItemChanged(ByVal an_archetype_node As ArchetypeNode)
     Private mKeyColumns As New Collection
 
-    'ToDo: Add specialisation to tables
-
 #Region " Windows Form Designer generated code "
 
     Public Sub New()
@@ -366,8 +364,8 @@ Public Class TableStructure
 
     Public Overrides Sub Translate()
         Dim i As Integer
-
         mIsLoading = True
+
         If mIsRotated Then
             For i = 0 To mArchetypeTable.Rows.Count - 1
                 Dim an_element As ArchetypeNode
@@ -377,6 +375,7 @@ Public Class TableStructure
             Next
 
             i = 2 ' columns start at 2 if rotated
+
             For Each row_heading As ArchetypeElement In mKeyColumns
                 row_heading.Translate()
                 TableArchetypeStyle.GridColumnStyles(i).HeaderText = row_heading.Text
@@ -394,25 +393,25 @@ Public Class TableStructure
 
     Public Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs)
         If dgGrid.CurrentRowIndex > -1 Then
-            Dim element As ArchetypeElement = TryCast(mArchetypeTable.Rows(dgGrid.CurrentCell.RowNumber).Item(2), ArchetypeElement)
+            Dim node As ArchetypeNodeAbstract = TryCast(mArchetypeTable.Rows(dgGrid.CurrentCell.RowNumber).Item(2), ArchetypeNodeAbstract)
 
-            If Not element Is Nothing Then
-                If element.IsReference Then
+            If Not node Is Nothing Then
+                If node.IsReference Then
                     MessageBox.Show(AE_Constants.Instance.CannotSpecialisereference, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Else
                     Dim dlg As New SpecialisationQuestionDialog()
-                    dlg.ShowForArchetypeNode(element.Text, element.RM_Class, SpecialisationDepth)
+                    dlg.ShowForArchetypeNode(node.Text, node.RM_Class, SpecialisationDepth)
 
                     If dlg.IsSpecialisationRequested Then
                         If dlg.IsCloningRequested Then
-                            element = CType(CType(element, ArchetypeElement).Copy, ArchetypeElement)
-                            element.Specialise()
+                            node = CType(node.Copy, ArchetypeNodeAbstract)
+                            node.Specialise()
 
                             Dim row As DataRow = mArchetypeTable.NewRow
-                            row(1) = element.Text
+                            row(1) = node.Text
                             mArchetypeTable.Rows.InsertAt(row, dgGrid.CurrentRowIndex + 1)
-                            row(2) = element
-                            row(0) = element.ImageIndex(False)
+                            row(2) = node
+                            row(0) = node.ImageIndex(False)
 
                             ' go to the new entry
                             Dim cell As DataGridCell
@@ -421,15 +420,28 @@ Public Class TableStructure
                             dgGrid.Focus()
                             dgGrid.CurrentCell = cell
                         Else
-                            element.Specialise()
+                            node.Specialise()
                             mArchetypeTable.Rows(dgGrid.CurrentRowIndex).Item(1) = mCurrentItem.Text
                         End If
 
-                        SetCurrentItem(element)
+                        SetCurrentItem(node)
                         mFileManager.FileEdited = True
                     End If
                 End If
             End If
+        End If
+    End Sub
+
+    Protected Sub ReplaceCurrentItem(ByVal node As ArchetypeNode)
+        Dim i As Integer = dgGrid.CurrentCell.RowNumber
+
+        If i > -1 Then
+            mArchetypeTable.Rows(i).Item(2) = node
+            mIsLoading = True
+            mArchetypeTable.Rows(i).Item(1) = node.Text
+            mIsLoading = False
+            mCurrentItem = node
+            mFileManager.FileEdited = True
         End If
     End Sub
 
@@ -463,30 +475,46 @@ Public Class TableStructure
         End If
     End Sub
 
-    Protected Overrides Sub AddNewElement(ByVal aConstraint As Constraint)
-        Dim el As ArchetypeElement
-        Dim new_row As DataRow
-        Dim a_cell As DataGridCell
-
+    Protected Overrides Sub AddNewElement(ByVal constraint As Constraint)
         mIsLoading = True
-        new_row = mArchetypeTable.NewRow
-        new_row(1) = Filemanager.GetOpenEhrTerm(109, "New Element")
-        mArchetypeTable.Rows.Add(new_row)
+        Dim node As ArchetypeNode
 
-        el = New ArchetypeElement(CType(new_row(1), String), mFileManager)
-        el.Occurrences.MaxCount = 1
-        el.Constraint = aConstraint
-        new_row(2) = el
-        new_row(0) = aConstraint.ImageIndexForConstraintKind(False, False)
+        If constraint.Kind = ConstraintKind.Slot Then
+            node = NewSlotNode()
+        Else
+            node = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
+            node.Occurrences.MaxCount = 1
+            node.Constraint = constraint
+        End If
+
+        Dim row As DataRow = mArchetypeTable.NewRow
+        row(0) = node.ImageIndex(False)
+        row(1) = node.Text
+        row(2) = node
+        mArchetypeTable.Rows.Add(row)
+
         ' go to the new entry
-        a_cell.RowNumber = mArchetypeTable.Rows.Count - 1
-        a_cell.ColumnNumber = 1
+        Dim cell As DataGridCell
+        cell.RowNumber = mArchetypeTable.Rows.Count - 1
+        cell.ColumnNumber = 1
         dgGrid.Focus()
-        SetCurrentItem(el)
+        dgGrid.CurrentCell = cell
+        SetCurrentItem(node)
         mFileManager.FileEdited = True
-        dgGrid.CurrentCell = a_cell
         mIsLoading = False
     End Sub
+
+    Protected Function NewSlotNode() As ArchetypeNode
+        Dim result As ArchetypeNode = Nothing
+
+        If MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+            result = New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
+        Else
+            result = New ArchetypeNodeAnonymous(StructureType.Element)
+        End If
+
+        Return result
+    End Function
 
     Protected Overrides Sub butListUp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         'nothing for this class
@@ -740,24 +768,25 @@ Public Class TableStructure
     End Function
 
     Protected Overrides Sub RefreshIcons()
-        Dim d_row As DataRow
+        Dim row As DataRow
 
         If mCurrentItem.HasReferences Then
             Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
 
-            For Each d_row In mArchetypeTable.Rows
-                Dim node As ArchetypeNode = CType(d_row.Item(2), ArchetypeNode)
+            For Each row In mArchetypeTable.Rows
+                Dim node As ArchetypeNode = CType(row.Item(2), ArchetypeNode)
+
                 If Not node.IsAnonymous AndAlso CType(node, ArchetypeElement).NodeId = element.NodeId Then
-                    d_row.BeginEdit()
-                    d_row(0) = element.Constraint.ImageIndexForConstraintKind(element.IsReference, False)
-                    d_row.EndEdit()
+                    row.BeginEdit()
+                    row(0) = element.ImageIndex(False)
+                    row.EndEdit()
                 End If
             Next
         Else
-            d_row = mArchetypeTable.Rows(dgGrid.CurrentRowIndex)
-            d_row.BeginEdit()
-            d_row(0) = CType(d_row.Item(2), ArchetypeNode).ImageIndex(False)
-            d_row.EndEdit()
+            row = mArchetypeTable.Rows(dgGrid.CurrentRowIndex)
+            row.BeginEdit()
+            row(0) = CType(row.Item(2), ArchetypeNode).ImageIndex(False)
+            row.EndEdit()
         End If
 
         dgGrid.Refresh()
@@ -905,50 +934,42 @@ Public Class TableStructure
     End Sub
 
     Protected Overrides Sub NameSlot(ByVal sender As Object, ByVal e As System.EventArgs) Handles MenuNameSlot.Click
-        Dim slot As ArchetypeNodeAnonymous
+        Dim i As Integer = dgGrid.CurrentCell.RowNumber
 
-        Dim i As Integer = Me.dgGrid.CurrentCell.RowNumber
-        slot = CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNodeAnonymous)
-
-        Try
-            ' move to an ArchetypeSlot (allows naming)
-            'Dim newSlot As New ArchetypeSlot(Filemanager.GetOpenEhrTerm(567, "Element"), Global.ArchetypeEditor.StructureType.Element, mFileManager)
-            Dim newSlot As New ArchetypeSlot(slot, mFileManager)
-            mArchetypeTable.Rows(i).Item(2) = newSlot
-            mIsLoading = True
-            mArchetypeTable.Rows(i).Item(1) = newSlot.Text
-            mIsLoading = False
-            mFileManager.FileEdited = True
-        Catch ex As Exception
-            Debug.Assert(False, "Incorrect type?")
-        End Try
-
+        If i > -1 Then
+            ReplaceCurrentItem(New ArchetypeSlot(CType(mArchetypeTable.Rows(i).Item(2), ArchetypeNodeAnonymous), mFileManager))
+        End If
     End Sub
 
     Private Sub ArchetypeTable_ColumnChanging(ByVal sender As Object, ByVal e As System.Data.DataColumnChangeEventArgs)
         If Not mIsLoading Then
-            Dim archetype_node As ArchetypeNode = CType(e.Row.Item(2), ArchetypeNode)
+            Dim node As ArchetypeNode = CType(e.Row.Item(2), ArchetypeNode)
 
-            If archetype_node.RM_Class.Type = StructureType.Element Then
-                Dim element As ArchetypeElement = CType(archetype_node, ArchetypeElement)
-
-                If element.RM_Class.SpecialisationDepth < SpecialisationDepth Then
-                    SpecialiseCurrentItem(sender, e)
+            If node.RM_Class.Type = StructureType.Slot AndAlso TypeOf (node) Is ArchetypeNodeAnonymous Then
+                e.ProposedValue = node.Text
+            Else
+                If node.RM_Class.Type = StructureType.Element Then
+                    Dim element As ArchetypeElement = CType(node, ArchetypeElement)
 
                     If element.RM_Class.SpecialisationDepth < SpecialisationDepth Then
-                        e.ProposedValue = element.Text
+                        SpecialiseCurrentItem(sender, e)
+
+                        If element.RM_Class.SpecialisationDepth < SpecialisationDepth Then
+                            e.ProposedValue = element.Text
+                        End If
                     End If
                 End If
-            ElseIf archetype_node.RM_Class.Type = Global.ArchetypeEditor.StructureType.Slot AndAlso TypeOf (archetype_node) Is ArchetypeNodeAnonymous Then
-                e.ProposedValue = archetype_node.Text
-                Return  ' FIXME: Eliminate spaghetti code
-            End If
 
-            archetype_node.Text = CStr(e.ProposedValue)
+                Dim proposedText As String = TryCast(e.ProposedValue, String)
 
-            'Slot may reset text to include class
-            If archetype_node.Text <> CStr(e.ProposedValue) Then
-                e.ProposedValue = archetype_node.Text
+                If Not proposedText Is Nothing Then
+                    node.Text = proposedText
+
+                    'Slot may reset text to include class
+                    If node.Text <> proposedText Then
+                        e.ProposedValue = node.Text
+                    End If
+                End If
             End If
         End If
     End Sub
@@ -985,42 +1006,11 @@ Public Class TableStructure
     End Sub
 
     Private Sub dgGrid_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles dgGrid.DragDrop
-        Dim table_archetype As ArchetypeNode = Nothing
+        Dim node As ArchetypeNode = Nothing
 
         If Not mNewConstraint Is Nothing Then
-            Dim new_row As DataRow
-            Dim a_cell As DataGridCell
-
-            If TypeOf mNewConstraint Is Constraint_Slot Then
-                Select Case MessageBox.Show(AE_Constants.Instance.NameThisSlotQuestion, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-                    Case DialogResult.Yes
-                        table_archetype = New ArchetypeSlot(mFileManager.OntologyManager.GetOpenEHRTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
-                    Case DialogResult.No
-                        Dim newSlot As New RmSlot(StructureType.Element)
-                        table_archetype = New ArchetypeNodeAnonymous(newSlot)
-                End Select
-            Else
-                table_archetype = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New element"), mFileManager)
-                CType(table_archetype, ArchetypeElement).Constraint = mNewConstraint
-            End If
-
             mCurrentItem = Nothing
-            mIsLoading = True
-            new_row = mArchetypeTable.NewRow
-            'Change Sam Heard 2004-06-11
-            'Change to use constraint.type
-            new_row(0) = table_archetype.ImageIndex(False)
-            new_row(1) = table_archetype.Text
-            new_row(2) = table_archetype
-            mArchetypeTable.Rows.Add(new_row)
-
-            ' go to the new entry
-            a_cell.RowNumber = mArchetypeTable.Rows.Count - 1
-            a_cell.ColumnNumber = 1
-            dgGrid.Focus()
-            dgGrid.CurrentCell = a_cell
-            mFileManager.FileEdited = True
-            mIsLoading = False
+            AddNewElement(mNewConstraint)
             mNewConstraint = Nothing
         End If
     End Sub
