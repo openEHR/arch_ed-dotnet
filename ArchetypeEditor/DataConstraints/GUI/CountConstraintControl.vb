@@ -265,7 +265,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numPrecision.Size = New System.Drawing.Size(51, 22)
         Me.numPrecision.TabIndex = 2
         Me.numPrecision.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.numPrecision.Value = New Decimal(New Integer() {3, 0, 0, 0})
+        Me.numPrecision.Value = New Decimal(New Integer() {0, 0, 0, 0})
         '
         'chkDecimalPlaces
         '
@@ -625,7 +625,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         If Not MyBase.IsLoading Then
             If NumericAssumed.Text = "" Then
                 e.Cancel = True
-                NumericAssumed.Text = CStr(NumericAssumed.Value) 'display prevous value (previous value remains in .value but display is blank)
+                NumericAssumed.Text = CStr(NumericAssumed.Value) 'display previous value (previous value remains in .value but display is blank)
             End If
         End If
     End Sub
@@ -652,10 +652,12 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         If i > 2 Then
             numMaxValue.DecimalPlaces = 3
             numMinValue.DecimalPlaces = 3
+            NumericAssumed.DecimalPlaces = 3
             numMinValue.Increment = CDec(0.001)
         Else
             numMaxValue.DecimalPlaces = i
             numMinValue.DecimalPlaces = i
+            NumericAssumed.DecimalPlaces = i
             Dim d As Decimal = CDec(Math.Pow(10, -i)) ' set the increment to the power of the precision
             numMinValue.Increment = d
             numMaxValue.Increment = d
@@ -687,6 +689,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
                 CType(Constraint, Constraint_Real).Precision = -1
                 numMaxValue.DecimalPlaces = 3
                 numMinValue.DecimalPlaces = 3
+                NumericAssumed.DecimalPlaces = 3
                 numMinValue.Increment = CDec(0.001)
             End If
 
