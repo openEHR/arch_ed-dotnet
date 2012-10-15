@@ -123,16 +123,16 @@ Public MustInherit Class ArchetypeNodeAbstract
         End Get
     End Property
 
-    Protected Sub New(ByVal aText As String)
-        mText = aText
+    Protected Sub New(ByVal text As String)
+        mText = text
         mDescription = "*"
     End Sub
 
-    Sub New(ByVal aItem As RmStructure, ByVal fileManager As FileManagerLocal)
-        mItem = aItem
+    Sub New(ByVal item As RmStructure, ByVal fileManager As FileManagerLocal)
+        mItem = item
         mFileManager = fileManager
 
-        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(aItem.NodeId)
+        Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(item.NodeId)
         mText = term.Text
         mDescription = term.Description
         mComment = term.Comment
@@ -140,8 +140,9 @@ Public MustInherit Class ArchetypeNodeAbstract
     End Sub
 
     Sub New(ByVal node As ArchetypeNodeAbstract)
-        mFileManager = node.mFileManager
         mItem = node.Item.Copy
+        mFileManager = node.mFileManager
+
         Dim term As RmTerm = mFileManager.OntologyManager.GetTerm(node.NodeId)
         mText = term.Text
         mDescription = term.Description

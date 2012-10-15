@@ -40,26 +40,24 @@ Public Class RmSlot
     End Function
 
     Overrides Function Copy() As RmStructure
-        Dim rm As New RmSlot(Me.mStructureType)
-        rm.mSlotConstraint = Me.mSlotConstraint
-        rm.Occurrences = Me.cOccurrences
-        rm.NodeId = Me.sNodeId
+        Dim rm As New RmSlot(mStructureType)
+        rm.mSlotConstraint = mSlotConstraint
+        rm.Occurrences = cOccurrences
+        rm.NodeId = sNodeId
         Return rm
     End Function
 
     Sub New()
         MyBase.New("", StructureType.Slot)
-        'Changed SRH 22/10/2007: set default occurrences to unbounded
         cOccurrences.IsUnbounded = True
         mSlotConstraint = New Constraint_Slot
     End Sub
 
-    Sub New(ByVal a_type As StructureType)
-        MyBase.new("", StructureType.Slot)
-        'Changed SRH 22/10/2007: set default occurrences to unbounded
+    Sub New(ByVal type As StructureType)
+        MyBase.New("", StructureType.Slot)
         cOccurrences.IsUnbounded = True
         mSlotConstraint = New Constraint_Slot
-        mSlotConstraint.RM_ClassType = a_type
+        mSlotConstraint.RM_ClassType = type
     End Sub
 
 #Region "ADL and XML oriented features"
@@ -143,12 +141,12 @@ Public Class RmSlot
         End If
     End Sub
 
-    Sub New(ByVal an_archetype_slot As XMLParser.ARCHETYPE_SLOT)
-        MyBase.New(an_archetype_slot)
+    Sub New(ByVal archetypeSlot As XMLParser.ARCHETYPE_SLOT)
+        MyBase.New(archetypeSlot)
 
         mSlotConstraint = New Constraint_Slot
 
-        Select Case an_archetype_slot.rm_type_name.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
+        Select Case archetypeSlot.rm_type_name.ToUpper(System.Globalization.CultureInfo.InvariantCulture)
             Case "SECTION"
                 mSlotConstraint.RM_ClassType = StructureType.SECTION
             Case "ENTRY"
@@ -179,9 +177,9 @@ Public Class RmSlot
                 mSlotConstraint.RM_ClassType = StructureType.Element
         End Select
 
-        If an_archetype_slot.includes IsNot Nothing AndAlso an_archetype_slot.includes.Length > 0 Then
-            For i As Integer = 0 To an_archetype_slot.includes.Length - 1
-                Dim assert As XMLParser.ASSERTION = CType(an_archetype_slot.includes(i), XMLParser.ASSERTION)
+        If archetypeSlot.includes IsNot Nothing AndAlso archetypeSlot.includes.Length > 0 Then
+            For i As Integer = 0 To archetypeSlot.includes.Length - 1
+                Dim assert As XMLParser.ASSERTION = CType(archetypeSlot.includes(i), XMLParser.ASSERTION)
                 Dim pattern As String = ArchetypeEditor.XML_Classes.XML_Tools.GetConstraintFromAssertion(assert)
 
                 If pattern = ".*" Then
@@ -200,9 +198,9 @@ Public Class RmSlot
             Next
         End If
 
-        If an_archetype_slot.excludes IsNot Nothing AndAlso an_archetype_slot.excludes.Length > 0 Then
-            For i As Integer = 0 To an_archetype_slot.excludes.Length - 1
-                Dim assert As XMLParser.ASSERTION = CType(an_archetype_slot.excludes(i), XMLParser.ASSERTION)
+        If archetypeSlot.excludes IsNot Nothing AndAlso archetypeSlot.excludes.Length > 0 Then
+            For i As Integer = 0 To archetypeSlot.excludes.Length - 1
+                Dim assert As XMLParser.ASSERTION = CType(archetypeSlot.excludes(i), XMLParser.ASSERTION)
                 Dim pattern As String = ArchetypeEditor.XML_Classes.XML_Tools.GetConstraintFromAssertion(assert)
 
                 If pattern = ".*" Then

@@ -127,30 +127,27 @@ Public Class Children
 
     ReadOnly Property FirstElementOrElementSlot() As RmStructure
         Get
-            Dim i As Integer
+            Dim result As RmStructure = Nothing
+            Dim i As Integer = 0
 
-            For i = 0 To MyBase.List.Count - 1
+            While i < Count And result Is Nothing
                 Select Case Items(i).Type
                     Case StructureType.Element
-                        Return CType(Items(i), RmElement)
-
+                        result = CType(Items(i), RmElement)
                     Case StructureType.Cluster
-                        Dim rm As RmStructure = CType(Items(i), RmCluster).Children.FirstElementOrElementSlot
-
-                        If Not rm Is Nothing Then
-                            Return rm
-                        End If
-
+                        result = CType(Items(i), RmCluster).Children.FirstElementOrElementSlot
                     Case StructureType.Slot
                         Dim slot As RmSlot = CType(Items(i), RmSlot)
 
-                        If slot.Type = StructureType.Element Then
-                            Return slot
+                        If slot.SlotConstraint.RM_ClassType = StructureType.Element Then
+                            result = slot
                         End If
                 End Select
-            Next
 
-            Return Nothing
+                i = i + 1
+            End While
+
+            Return result
         End Get
     End Property
 

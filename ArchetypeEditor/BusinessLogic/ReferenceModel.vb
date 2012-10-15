@@ -210,17 +210,17 @@ Public Class ReferenceModel
         Select Case mRefModelType
             Case ReferenceModelType.openEHR_EHR
                 Select Case Parent
-                    Case StructureType.COMPOSITION 'openEHR
+                    Case StructureType.COMPOSITION
                         Select Case Child
                             Case StructureType.SECTION, StructureType.List, StructureType.Table, StructureType.Single, StructureType.Tree, StructureType.Slot
                                 Return True
                         End Select
-                    Case StructureType.SECTION 'openEHR
+                    Case StructureType.SECTION
                         Select Case Child
                             Case StructureType.SECTION, StructureType.Slot
                                 Return True
                         End Select
-                    Case StructureType.OBSERVATION, StructureType.EVALUATION 'openEHR
+                    Case StructureType.OBSERVATION, StructureType.EVALUATION
                         ' set the current entry type
                         Select Case Child
                             Case StructureType.Data, StructureType.State, StructureType.Protocol
@@ -247,7 +247,7 @@ Public Class ReferenceModel
                             Case StructureType.List, StructureType.Table, StructureType.Tree, StructureType.Single, StructureType.Slot
                                 Return True
                         End Select
-                    Case StructureType.Data 'openEHR
+                    Case StructureType.Data
                         Debug.Assert(mArchetypedClass <> 0)
 
                         Select Case mArchetypedClass
@@ -281,20 +281,19 @@ Public Class ReferenceModel
                             Case StructureType.History ' Allows for history based state information
                                 Return True
                         End Select
-                    Case StructureType.Single 'openEHR
+                    Case StructureType.Single
                         mStructureClass = Parent
                         Select Case Child
-
-                            Case StructureType.Element
+                            Case StructureType.Element, StructureType.Slot
                                 Return True
                         End Select
-                    Case StructureType.List 'openEHR
+                    Case StructureType.List
                         mStructureClass = Parent
                         Select Case Child
                             Case StructureType.Element, StructureType.Reference, StructureType.Slot
                                 Return True
                         End Select
-                    Case StructureType.Tree, StructureType.Cluster 'openEHR
+                    Case StructureType.Tree, StructureType.Cluster
                         If Parent = StructureType.Tree Then
                             mStructureClass = Parent
                         End If
@@ -302,7 +301,7 @@ Public Class ReferenceModel
                             Case StructureType.Element, StructureType.Reference, StructureType.Cluster, StructureType.Slot
                                 Return True
                         End Select
-                    Case StructureType.Table 'openEHR
+                    Case StructureType.Table
                         mStructureClass = Parent
                         Select Case Child
                             Case StructureType.Cluster

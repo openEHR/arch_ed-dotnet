@@ -18,7 +18,6 @@ Option Explicit On
 
 Public Class SimpleStructure
     Inherits EntryStructure
-    Private mElement As ArchetypeNode
     Private mIsLoading As Boolean
 
 #Region " Windows Form Designer generated code "
@@ -34,15 +33,15 @@ Public Class SimpleStructure
         End If
     End Sub
 
-    Public Sub New(ByVal a_file_manager As FileManagerLocal)
-        MyBase.New("Single", a_file_manager) ' structure type simple
+    Public Sub New(ByVal fileManager As FileManagerLocal)
+        MyBase.New("Single", fileManager) ' structure type simple
 
         'This call is required by the Windows Form Designer.
         InitializeComponent()
     End Sub
 
-    Sub New(ByVal rm As RmStructureCompound, ByVal a_file_manager As FileManagerLocal)
-        MyBase.New(rm, a_file_manager)
+    Sub New(ByVal rm As RmStructureCompound, ByVal fileManager As FileManagerLocal)
+        MyBase.New(rm, fileManager)
         'This call is required by the Windows Form Designer.
         InitializeComponent()
         mIsLoading = True
@@ -50,14 +49,14 @@ Public Class SimpleStructure
 
         If Not element Is Nothing Then
             If element.Type = StructureType.Element Then
-                mElement = New ArchetypeElement(element, mFileManager)
-            Else 'Slot
-                mElement = New ArchetypeSlot(element, mFileManager)
+                mCurrentItem = New ArchetypeElement(element, mFileManager)
+            Else
+                mCurrentItem = New ArchetypeSlot(element, mFileManager)
             End If
 
-            txtSimple.Text = mElement.Text
+            txtSimple.Text = mCurrentItem.Text
             txtSimple.Enabled = True
-            PictureBoxSimple.Image = ilSmall.Images(mElement.ImageIndex(False))
+            PictureBoxSimple.Image = ilSmall.Images(mCurrentItem.ImageIndex(False))
         Else
             ButAddElement.Show()
         End If
@@ -139,7 +138,7 @@ Public Class SimpleStructure
 
     Public Overrides ReadOnly Property InterfaceBuilder() As Object
         Get
-            Return mElement
+            Return mCurrentItem
         End Get
     End Property
 
@@ -148,8 +147,8 @@ Public Class SimpleStructure
             Dim result As New RmStructureCompound(mNodeId, StructureType.Single)
             result.Occurrences = New RmCardinality(1, 1)
 
-            If Not mElement Is Nothing Then
-                result.Children.Add(mElement.RM_Class)
+            If Not mCurrentItem Is Nothing Then
+                result.Children.Add(mCurrentItem.RM_Class)
             End If
 
             Return result
@@ -161,16 +160,16 @@ Public Class SimpleStructure
 
             If Not element Is Nothing Then
                 If element.Type = StructureType.Element Then
-                    mElement = New ArchetypeElement(element, mFileManager)
+                    mCurrentItem = New ArchetypeElement(element, mFileManager)
                 Else
-                    mElement = New ArchetypeSlot(element, mFileManager)
+                    mCurrentItem = New ArchetypeSlot(element, mFileManager)
                 End If
 
-                txtSimple.Text = mElement.Text
+                txtSimple.Text = mCurrentItem.Text
                 txtSimple.Enabled = True
-                PictureBoxSimple.Image = ilSmall.Images(mElement.ImageIndex(False))
+                PictureBoxSimple.Image = ilSmall.Images(mCurrentItem.ImageIndex(False))
             Else
-                mElement = Nothing
+                mCurrentItem = Nothing
                 ButAddElement.Show()
                 txtSimple.Text = AE_Constants.Instance.DragDropHere
                 txtSimple.Enabled = False
@@ -179,12 +178,12 @@ Public Class SimpleStructure
 
             mIsLoading = False
             mFileManager.FileEdited = True
-            SetCurrentItem(mElement)
+            SetCurrentItem(mCurrentItem)
         End Set
     End Property
 
     Public Overrides Function ItemCount() As Integer
-        Return IIf(mElement Is Nothing, 0, 1)
+        Return IIf(mCurrentItem Is Nothing, 0, 1)
     End Function
 
     Public Overrides Sub Reset()
@@ -197,11 +196,11 @@ Public Class SimpleStructure
     Public Overrides Sub Translate()
         mIsLoading = True
 
-        If mElement Is Nothing Then
+        If mCurrentItem Is Nothing Then
             txtSimple.Text = ""
         Else
-            mElement.Translate()
-            txtSimple.Text = mElement.Text
+            mCurrentItem.Translate()
+            txtSimple.Text = mCurrentItem.Text
         End If
 
         'call base translate to raise event to refresh constraint display
@@ -210,16 +209,16 @@ Public Class SimpleStructure
     End Sub
 
     Public Overrides Sub SpecialiseCurrentItem(ByVal sender As Object, ByVal e As EventArgs) Handles SpecialiseMenuItem.Click
-        Dim element As ArchetypeElement = TryCast(mElement, ArchetypeElement)
+        Dim node As ArchetypeNodeAbstract = TryCast(mCurrentItem, ArchetypeNodeAbstract)
 
-        If Not element Is Nothing Then
+        If Not node Is Nothing Then
             Dim dlg As New SpecialisationQuestionDialog()
-            dlg.ShowForArchetypeNode(element.Text, element.RM_Class, SpecialisationDepth)
+            dlg.ShowForArchetypeNode(node.Text, node.RM_Class, SpecialisationDepth)
 
             If dlg.IsSpecialisationRequested Then
-                element.Specialise()
-                txtSimple.Text = element.Text
-                SetCurrentItem(element)
+                node.Specialise()
+                txtSimple.Text = node.Text
+                SetCurrentItem(node)
                 mFileManager.FileEdited = True
             End If
         End If
@@ -230,38 +229,37 @@ Public Class SimpleStructure
     End Sub
 
     Public Overrides Sub SetInitial()
-        If Not mElement Is Nothing Then
-            SetCurrentItem(mElement)
+        If Not mCurrentItem Is Nothing Then
+            SetCurrentItem(mCurrentItem)
         End If
     End Sub
 
-    Protected Overrides Sub AddNewElement(ByVal a_constraint As Constraint)
+    Protected Overrides Sub AddNewElement(ByVal constraint As Constraint)
         mIsLoading = True
 
-        If a_constraint.Kind = ConstraintKind.Slot Then
-            Dim newSlot As New RmSlot(CType(a_constraint, Constraint_Slot).RM_ClassType)
-            mElement = New ArchetypeSlot(newSlot, mFileManager)
+        If constraint.Kind = ConstraintKind.Slot Then
+            mCurrentItem = New ArchetypeSlot(Filemanager.GetOpenEhrTerm(CInt(StructureType.Element), StructureType.Element.ToString), StructureType.Element, mFileManager)
         Else
-            mElement = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
-            CType(mElement, ArchetypeElement).Constraint = a_constraint
+            mCurrentItem = New ArchetypeElement(Filemanager.GetOpenEhrTerm(109, "New Element"), mFileManager)
+            mCurrentItem.Constraint = constraint
         End If
 
-        mElement.Occurrences.MaxCount = 1
-        txtSimple.Text = mElement.Text
+        mCurrentItem.Occurrences.MaxCount = 1
+        txtSimple.Text = mCurrentItem.Text
         txtSimple.Enabled = True
-        PictureBoxSimple.Image = ilSmall.Images(mElement.ImageIndex(False))
+        PictureBoxSimple.Image = ilSmall.Images(mCurrentItem.ImageIndex(False))
         txtSimple.Focus()
         txtSimple.SelectAll()
         mFileManager.FileEdited = True
-        SetCurrentItem(mElement)
+        SetCurrentItem(mCurrentItem)
         ButAddElement.Hide()
         mIsLoading = False
     End Sub
 
     Protected Overrides Sub RemoveItemAndReferences(ByVal sender As Object, ByVal e As EventArgs)
-        If MessageBox.Show(AE_Constants.Instance.Remove & mElement.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
+        If MessageBox.Show(AE_Constants.Instance.Remove & mCurrentItem.Text, AE_Constants.Instance.MessageBoxCaption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = Windows.Forms.DialogResult.OK Then
             mIsLoading = True
-            mElement = Nothing
+            mCurrentItem = Nothing
             txtSimple.Text = ""
             ButAddElement.Show()
             txtSimple.Enabled = False
@@ -271,17 +269,11 @@ Public Class SimpleStructure
         End If
     End Sub
 
-    ReadOnly Property Element() As ArchetypeElement
-        Get
-            Return mElement
-        End Get
-    End Property
-
     Public Overrides Function ToRichText(ByVal indentlevel As Integer, ByVal new_line As String) As String
-        If mElement Is Nothing Then
+        If mCurrentItem Is Nothing Then
             Return ""
         Else
-            Return mElement.ToRichText(indentlevel)
+            Return mCurrentItem.ToRichText(indentlevel)
         End If
     End Function
 
@@ -293,8 +285,8 @@ Public Class SimpleStructure
         result.AppendFormat("{0}<table border=""1"" cellpadding=""2"" width=""100%"">", Environment.NewLine)
         result.AppendFormat(HtmlHeader(BackGroundColour, showComments))
 
-        If Not mElement Is Nothing Then
-            result.AppendFormat("{0}{1}", Environment.NewLine, mElement.ToHTML(0, showComments))
+        If Not mCurrentItem Is Nothing Then
+            result.AppendFormat("{0}{1}", Environment.NewLine, mCurrentItem.ToHTML(0, showComments))
         End If
 
         result.AppendFormat("{0}</tr>", Environment.NewLine)
@@ -312,13 +304,10 @@ Public Class SimpleStructure
     End Sub
 
     Protected Overrides Sub RefreshIcons()
-        Dim element As ArchetypeElement = CType(mCurrentItem, ArchetypeElement)
-        PictureBoxSimple.Image = ilSmall.Images(element.Constraint.ImageIndexForConstraintKind(False, False))
+        PictureBoxSimple.Image = ilSmall.Images(mCurrentItem.ImageIndex(False))
     End Sub
 
     Private Sub ContextMenuSimple_Popup(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ContextMenuSimple.Popup
-        ' show specialisation if appropriate
-
         SpecialiseMenuItem.Visible = False
 
         If Not mCurrentItem Is Nothing Then
@@ -330,7 +319,7 @@ Public Class SimpleStructure
     End Sub
 
     Private Sub txtSimple_MouseEnter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSimple.MouseEnter
-        SetToolTipSpecialisation(txtSimple, mElement)
+        SetToolTipSpecialisation(txtSimple, mCurrentItem)
     End Sub
 
     Private Sub txtSimple_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtSimple.TextChanged
@@ -339,15 +328,15 @@ Public Class SimpleStructure
 
             Dim newText As String = txtSimple.Text
 
-            If newText <> mElement.Text Then
+            If newText <> mCurrentItem.Text Then
                 If mCurrentItem.RM_Class.SpecialisationDepth < SpecialisationDepth Then
-                    txtSimple.Text = mElement.Text
+                    txtSimple.Text = mCurrentItem.Text
                     SpecialiseCurrentItem(sender, e)
                 End If
 
                 If mCurrentItem.RM_Class.SpecialisationDepth = SpecialisationDepth Then
                     txtSimple.Text = newText
-                    mElement.Text = newText
+                    mCurrentItem.Text = newText
                 End If
             End If
         End If
@@ -357,8 +346,8 @@ Public Class SimpleStructure
         ' set the variable in the base class
         mControl = txtSimple
 
-        If Not mElement Is Nothing Then
-            SetCurrentItem(mElement)
+        If Not mCurrentItem Is Nothing Then
+            SetCurrentItem(mCurrentItem)
         Else
             mIsLoading = True
             txtSimple.Text = ""
@@ -371,22 +360,20 @@ Public Class SimpleStructure
 
 #Region "Drag and Drop"
 
-    Private Sub txtSimple_DragDrop(ByVal sender As System.Object, _
-    ByVal e As System.Windows.Forms.DragEventArgs) Handles txtSimple.DragDrop
-
+    Private Sub txtSimple_DragDrop(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles txtSimple.DragDrop
         If Not mNewConstraint Is Nothing Then
             AddNewElement(mNewConstraint)
             mNewConstraint = Nothing
         Else
-            Me.txtSimple.Enabled = False
+            txtSimple.Enabled = False
             Debug.Assert(False, "No item dragged")
-            Return
         End If
     End Sub
 
     Private Sub txtSimple_DragEnter(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles txtSimple.DragEnter
         e.Effect = e.AllowedEffect
     End Sub
+
 #End Region
 
 End Class

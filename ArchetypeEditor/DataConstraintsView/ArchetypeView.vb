@@ -32,40 +32,27 @@ Public Class ArchetypeView
         End Get
     End Property
 
-    Public Sub BuildInterface(ByVal an_element As ArchetypeElement, _
-            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
+    Public Sub BuildInterface(ByVal node As ArchetypeNode, _
+            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatoryOnly As Boolean, ByVal a_filemanager As FileManagerLocal)
 
-        If Not mandatory_only Or an_element.IsMandatory Then
+        If Not mandatoryOnly Or node.IsMandatory Then
             Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT))
-            view.Location = New Point(pos.X, pos.Y)
-            view.Controls.Add(ElementView(an_element, a_filemanager))
+            view.Location = pos
+            AddArchetypeNode(node, view, mandatoryOnly, a_filemanager)
             pos.Y = view.Top + view.Height + spacer
             aContainer.Controls.Add(view)
         End If
     End Sub
 
     Public Sub BuildInterface(ByVal Items As Windows.Forms.ListView.ListViewItemCollection, _
-            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
+            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatoryOnly As Boolean, ByVal a_filemanager As FileManagerLocal)
 
         Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
-        view.Location = New Point(pos.X, pos.Y)
+        view.Location = pos
         view.SuspendLayout()
 
         For Each lvitem As ArchetypeListViewItem In Items
-            If ((lvitem.Item.IsMandatory) Or (Not mandatory_only)) Then
-                Select Case lvitem.Item.RM_Class.Type
-                    Case StructureType.Element, StructureType.Reference
-                        view.Controls.Add(ElementView(CType(lvitem.Item, ArchetypeElement), a_filemanager))
-                    Case StructureType.Slot
-                        Dim panel As New Windows.Forms.Panel
-                        Dim lbl As New Windows.Forms.Label
-                        lbl.Text = lvitem.Text
-                        panel.Controls.Add(lbl)
-                        view.Controls.Add(panel)
-                    Case Else
-                        Debug.Assert(False, "Type not handled")
-                End Select
-            End If
+            AddArchetypeNode(lvitem.Item, view, mandatoryOnly, a_filemanager)
         Next
 
         view.ResumeLayout()
@@ -82,14 +69,14 @@ Public Class ArchetypeView
         End If
     End Sub
 
-    Public Sub BuildInterface(ByVal Nodes As TreeNodeCollection, _
-        ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
+    Public Sub BuildInterface(ByVal nodes As TreeNodeCollection, _
+        ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatoryOnly As Boolean, ByVal a_filemanager As FileManagerLocal)
 
-        NodesToControls(Nodes, aContainer, pos, spacer, mandatory_only, a_filemanager)
+        NodesToControls(nodes, aContainer, pos, spacer, mandatoryOnly, a_filemanager)
     End Sub
 
     Public Sub BuildInterface(ByVal TableDetails As ArrayList, _
-            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
+            ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatoryOnly As Boolean, ByVal a_filemanager As FileManagerLocal)
 
         Dim archetypeTable As DataTable
         Dim rowHeadings As Collection
@@ -105,34 +92,28 @@ Public Class ArchetypeView
 
         If isRotated And rowHeadings.Count > 0 Then
             For Each t As String In CType(CType(rowHeadings(1), ArchetypeElement).Constraint, Constraint_Text).AllowableValues.Codes
-                Dim Rel_Pos As New Point(20, 20)
+                Dim relPos As New Point(20, 20)
 
                 Dim gb As New GroupBox
                 gb.Text = a_filemanager.OntologyManager.GetTerm(t).Text
                 gb.Location = pos
 
                 Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
-                view.Location = New Point(Rel_Pos.X, Rel_Pos.Y)
+                view.Location = relPos
                 view.SuspendLayout()
 
-                For Each d_row As DataRow In archetypeTable.Rows
-                    Dim ae As ArchetypeElement = TryCast(d_row(2), ArchetypeElement)
+                For Each row As DataRow In archetypeTable.Rows
+                    Dim node As ArchetypeNode = TryCast(row(2), ArchetypeNode)
 
-                    If Not ae Is Nothing Then
-                        If mandatory_only Then
-                            If ae.Occurrences.MinCount > 0 Then
-                                view.Controls.Add(ElementView(ae, a_filemanager))
-                            End If
-                        Else
-                            view.Controls.Add(ElementView(ae, a_filemanager))
-                        End If
+                    If Not node Is Nothing Then
+                        AddArchetypeNode(node, view, mandatoryOnly, a_filemanager)
                     End If
                 Next
 
                 view.ResumeLayout()
                 gb.Controls.Add(view)
 
-                gb.Width = Rel_Pos.X + view.Width + 5
+                gb.Width = relPos.X + view.Width + 5
                 gb.Height = view.Top + view.Height + 1
 
                 pos.X += gb.Width + 5
@@ -142,76 +123,61 @@ Public Class ArchetypeView
     End Sub
 
     Private Sub NodesToControls(ByVal NodeCol As TreeNodeCollection, _
-        ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatory_only As Boolean, ByVal a_filemanager As FileManagerLocal)
+        ByVal aContainer As Control, ByRef pos As Point, ByVal spacer As Integer, ByVal mandatoryOnly As Boolean, ByVal a_filemanager As FileManagerLocal)
 
         'Displays the archetype nodes as GUI controls on the Interface TAB
 
         Dim view As New ViewPanel(New ColumnLayout(Orientation.CENTER, Orientation.LEFT, spacer))
-        view.Location = New Point(pos.X, pos.Y)
+        view.Location = pos
         view.SuspendLayout()
 
         For Each tvNode As ArchetypeTreeNode In NodeCol
-            If tvNode.Item.IsMandatory Or Not mandatory_only Then
-                Select Case tvNode.Item.RM_Class.Type
-                    Case StructureType.Cluster
-                        Dim ctrl As New Panel
-                        ctrl.Location = pos
+            If tvNode.Item.IsMandatory Or Not mandatoryOnly Then
+                If tvNode.Item.RM_Class.Type = StructureType.Cluster Then
+                    Dim ctrl As New Panel
+                    ctrl.Location = pos
 
-                        Dim rel_pos As New Point(0, 20)
-                        Dim lbl As New Label
-                        lbl.Width = 150
-                        lbl.Height = 20
-                        lbl.Text = tvNode.Text
-                        lbl.AutoSize = lbl.Text.Length > 20
-                        lbl.Location = rel_pos
-                        lbl.BorderStyle = BorderStyle.FixedSingle
-                        ToolTip1.SetToolTip(lbl, tvNode.Item.Occurrences.ToString)
+                    Dim relPos As New Point(0, 20)
+                    Dim lbl As New Label
+                    lbl.Width = 150
+                    lbl.Height = 20
+                    lbl.Text = tvNode.Text
+                    lbl.AutoSize = lbl.Text.Length > 20
+                    lbl.Location = relPos
+                    lbl.BorderStyle = BorderStyle.FixedSingle
+                    ToolTip1.SetToolTip(lbl, tvNode.Item.Occurrences.ToString)
 
-                        'bold if must exist
-                        If tvNode.Item.Occurrences.MinCount > 0 Then
-                            lbl.Font = New System.Drawing.Font(lbl.Font, FontStyle.Bold)
-                        End If
+                    'bold if must exist
+                    If tvNode.Item.Occurrences.MinCount > 0 Then
+                        lbl.Font = New System.Drawing.Font(lbl.Font, FontStyle.Bold)
+                    End If
 
-                        ctrl.Controls.Add(lbl)
-                        lbl.BackColor = System.Drawing.Color.CornflowerBlue
+                    ctrl.Controls.Add(lbl)
+                    lbl.BackColor = System.Drawing.Color.CornflowerBlue
 
-                        If Not tvNode.Item.IsAnonymous AndAlso CType(tvNode.Item, ArchetypeNodeAbstract).RuntimeNameText <> "" Then
-                            Dim but As New Button
-                            but.Text = "..."
-                            rel_pos.X = lbl.Location.X + lbl.Size.Width + 10
-                            but.BackColor = System.Drawing.Color.LightGray
+                    If Not tvNode.Item.IsAnonymous AndAlso CType(tvNode.Item, ArchetypeNodeAbstract).RuntimeNameText <> "" Then
+                        Dim but As New Button
+                        but.Text = "..."
+                        relPos.X = lbl.Location.X + lbl.Size.Width + 10
+                        but.BackColor = System.Drawing.Color.LightGray
 
-                            ToolTip1.SetToolTip(but, CType(tvNode.Item, ArchetypeNodeAbstract).RuntimeNameText)
+                        ToolTip1.SetToolTip(but, CType(tvNode.Item, ArchetypeNodeAbstract).RuntimeNameText)
 
-                            but.Width = 30
-                            but.Height = 20
-                            but.Location = rel_pos
+                        but.Width = 30
+                        but.Height = 20
+                        but.Location = relPos
 
-                            ctrl.Controls.Add(but)
-                            ctrl.Width = 300
-                        End If
+                        ctrl.Controls.Add(but)
+                        ctrl.Width = 300
+                    End If
 
-                        rel_pos.X = 20
-                        rel_pos.Y = 40
-                        NodesToControls(tvNode.Nodes, ctrl, rel_pos, spacer, mandatory_only, a_filemanager)
-                        view.Controls.Add(ctrl)
-
-                    Case StructureType.Element, StructureType.Reference
-                        view.Controls.Add(ElementView(CType(tvNode.Item, ArchetypeElement), a_filemanager))
-
-                    Case StructureType.Slot
-                        Dim newPanel As New Panel
-                        newPanel.BorderStyle = BorderStyle.Fixed3D
-                        newPanel.Size = New Size(150, 25)
-                        Dim lbl As New Label
-                        lbl.Text = Filemanager.GetOpenEhrTerm(312, "Slot") & ": " & tvNode.Text
-                        newPanel.Controls.Add(lbl)
-                        view.Controls.Add(newPanel)
-
-                    Case Else
-                        Beep()
-                        Debug.Assert(False)
-                End Select
+                    relPos.X = 20
+                    relPos.Y = 40
+                    NodesToControls(tvNode.Nodes, ctrl, relPos, spacer, mandatoryOnly, a_filemanager)
+                    view.Controls.Add(ctrl)
+                Else
+                    AddArchetypeNode(tvNode.Item, view, mandatoryOnly, a_filemanager)
+                End If
             End If
         Next
 
@@ -229,7 +195,26 @@ Public Class ArchetypeView
         End If
     End Sub
 
-    Public Shared Function ElementView(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
+    Public Sub AddArchetypeNode(ByVal node As ArchetypeNode, ByVal view As ViewPanel, ByVal mandatoryOnly As Boolean, ByVal a_filemanager As FileManagerLocal)
+        If Not mandatoryOnly Or node.IsMandatory Then
+            Dim element As ArchetypeElement = TryCast(node, ArchetypeElement)
+
+            If Not element Is Nothing Then
+                view.Controls.Add(ElementView(element, a_filemanager))
+            Else
+                Dim panel As New Panel
+                panel.BorderStyle = BorderStyle.Fixed3D
+                panel.Size = New Size(500, 25)
+                Dim lbl As New Label
+                lbl.Text = node.RM_Class.Type.ToString + ": " + node.Text
+                lbl.AutoSize = True
+                panel.Controls.Add(lbl)
+                view.Controls.Add(panel)
+            End If
+        End If
+    End Sub
+
+    Public Function ElementView(ByVal anElement As ArchetypeElement, ByVal a_filemanager As FileManagerLocal) As ElementViewControl
         'any additions need to be processed in the function below
         Dim t As ConstraintKind
 

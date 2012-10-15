@@ -28,11 +28,12 @@ Public Class ArchetypeSlot
         End Get
         Set(ByVal value As String)
             Dim i As Integer = value.IndexOf("["c)
+
             If i > 0 Then
-                '// IMCN 02 July 2010 EDT-609: strip spurious space character
                 If (i > 1) And value.Substring(i - 1, 1) = " " Then
                     i = i - 1
                 End If
+
                 MyBase.Text = value.Substring(0, i)
             Else
                 MyBase.Text = value
@@ -53,7 +54,6 @@ Public Class ArchetypeSlot
         s.Append("<tr><td><table><tr><td width=""")
         s.Append((level * 20).ToString)
         s.Append("""></td><td>")
-
 
         s.Append("<img border=""0"" src=""Images/slot.gif"" width=""32"" height=""32"" align=""middle"">")
         s.AppendLine("</td></tr></table></td>")
@@ -152,22 +152,22 @@ Public Class ArchetypeSlot
         MyBase.New(slot, fileManager)
     End Sub
 
-    Sub New(ByVal UnnamedSlot As ArchetypeNodeAnonymous, ByVal fileManager As FileManagerLocal)
-        MyBase.New(UnnamedSlot.RM_Class, fileManager)
-        Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(ReferenceModel.RM_StructureName(Slot.SlotConstraint.RM_ClassType))
-        mText = aTerm.Text
-        Slot.NodeId = aTerm.Code
+    Sub New(ByVal anonymousSlot As ArchetypeNodeAnonymous, ByVal fileManager As FileManagerLocal)
+        MyBase.New(anonymousSlot.RM_Class, fileManager)
+        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(ReferenceModel.RM_StructureName(Slot.SlotConstraint.RM_ClassType))
+        mText = term.Text
+        Slot.NodeId = term.Code
         mDescription = ""
     End Sub
 
-    Sub New(ByVal a_text As String, ByVal slotClass As StructureType, ByVal fileManager As FileManagerLocal)
-        MyBase.New(a_text)
+    Sub New(ByVal text As String, ByVal slotClass As StructureType, ByVal fileManager As FileManagerLocal)
+        MyBase.New(text)
         mFileManager = fileManager
-        Dim aTerm As RmTerm = mFileManager.OntologyManager.AddTerm(a_text)
-        mDescription = aTerm.Description
-        mComment = aTerm.Comment
+        Dim term As RmTerm = mFileManager.OntologyManager.AddTerm(text)
+        mDescription = term.Description
+        mComment = term.Comment
         Slot = New RmSlot(slotClass)
-        Slot.NodeId = aTerm.Code
+        Slot.NodeId = term.Code
     End Sub
 
 End Class
