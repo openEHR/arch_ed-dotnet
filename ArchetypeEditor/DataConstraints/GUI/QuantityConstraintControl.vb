@@ -496,6 +496,11 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         If Not IsLoading Then
             Dim assumedUnit As Constraint_QuantityUnit = TryCast(AssumedValueComboBox.SelectedItem, Constraint_QuantityUnit)
 
+            If assumedUnit Is Nothing And sender Is AssumedValueNumericUpDown Then
+                assumedUnit = TryCast(listUnits.SelectedItem, Constraint_QuantityUnit)
+                AssumedValueComboBox.SelectedItem = assumedUnit
+            End If
+
             For Each unit As Constraint_QuantityUnit In Constraint.Units
                 unit.HasAssumedValue = unit Is assumedUnit
 
