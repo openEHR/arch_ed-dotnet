@@ -144,7 +144,7 @@ Namespace ArchetypeEditor.ADL_Classes
                         quantLimits = CType(ProcessValue(CType(attribute.children.first, openehr.openehr.am.archetype.constraint_model.C_OBJECT), a_filemanager), Constraint_Quantity)
                     End If
 
-                    If quantLimits.has_units Then
+                    If quantLimits.HasUnits Then
                         ciq.AddUnit(CType(quantLimits.Units(0), Constraint_QuantityUnit))
                         CType(CType(ciq.UpperLimit, Constraint_Quantity).Units(0), Constraint_QuantityUnit).HasMinimum = False
                         CType(CType(ciq.LowerLimit, Constraint_Quantity).Units(0), Constraint_QuantityUnit).HasMaximum = False

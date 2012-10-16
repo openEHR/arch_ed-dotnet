@@ -39,7 +39,7 @@ Public Class Constraint_Quantity
         End Get
     End Property
 
-    Public ReadOnly Property has_units() As Boolean
+    Public ReadOnly Property HasUnits() As Boolean
         Get
             Return mUnits.Count > 0
         End Get

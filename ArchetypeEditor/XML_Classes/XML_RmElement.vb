@@ -121,7 +121,7 @@ Namespace ArchetypeEditor.XML_Classes
                     an_attribute = CType(ObjNode.attributes(0), XMLParser.C_ATTRIBUTE)
 
                     quantLimits = CType(ProcessValue(CType(an_attribute.children(0), XMLParser.C_OBJECT), a_filemanager), Constraint_Quantity)
-                    If quantLimits.has_units Then
+                    If quantLimits.HasUnits Then
                         ciq.AddUnit(CType(quantLimits.Units(0), Constraint_QuantityUnit))
                         CType(CType(ciq.UpperLimit, Constraint_Quantity).Units(0), Constraint_QuantityUnit).HasMinimum = False
                         CType(CType(ciq.LowerLimit, Constraint_Quantity).Units(0), Constraint_QuantityUnit).HasMaximum = False

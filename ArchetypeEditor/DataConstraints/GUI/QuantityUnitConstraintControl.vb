@@ -75,14 +75,18 @@ Public Class QuantityUnitConstraintControl : Inherits CountConstraintControl
             numMaxValue.Value = 0
             cbMinValue.Checked = False
             numMinValue.Value = 0
-            NumericAssumed.Minimum = Decimal.MinValue
-            NumericAssumed.Maximum = Decimal.MaxValue
-            NumericAssumed.Value = 0
             comboIncludeMax.SelectedIndex = 0
             comboIncludeMin.SelectedIndex = 0
         Finally
             MyBase.IsLoading = loading
         End Try
+    End Sub
+
+    Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
+        MyBase.SetControlValues(isState)
+        LabelQuantity.Hide()
+        lblAssumedValue.Hide()
+        NumericAssumed.Hide()
     End Sub
 
 End Class

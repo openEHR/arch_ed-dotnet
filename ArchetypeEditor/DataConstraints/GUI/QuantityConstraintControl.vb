@@ -26,7 +26,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         InitializeComponent()
 
         'Add any initialization after the InitializeComponent() call
-        If Not Me.DesignMode Then
+        If Not DesignMode Then
             Debug.Assert(False)
         End If
 
@@ -41,18 +41,16 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         'Add any initialization after the InitializeComponent() call
 
         mFileManager = a_file_manager
-        Me.QuantityUnitConstraint.LocalFileManager = mFileManager
+        QuantityUnitConstraint.LocalFileManager = mFileManager
 
         If Main.Instance.DefaultLanguageCode <> "en" Then
             LabelQuantity.Text = Filemanager.GetOpenEhrTerm(115, LabelQuantity.Text)
             lblListProperty.Text = Filemanager.GetOpenEhrTerm(116, lblListProperty.Text)
             lblListUnits.Text = Filemanager.GetOpenEhrTerm(117, lblListUnits.Text)
-            QuantityUnitConstraint.LabelQuantity.Text = Filemanager.GetOpenEhrTerm(601, "Unit values")
             QuantityUnitConstraint.cbMinValue.Text = Filemanager.GetOpenEhrTerm(131, QuantityUnitConstraint.cbMinValue.Text)
             QuantityUnitConstraint.cbMaxValue.Text = Filemanager.GetOpenEhrTerm(132, QuantityUnitConstraint.cbMaxValue.Text)
             QuantityUnitConstraint.lblAssumedValue.Text = Filemanager.GetOpenEhrTerm(158, QuantityUnitConstraint.lblAssumedValue.Text)
-        Else
-            QuantityUnitConstraint.LabelQuantity.Text = "Unit values"
+            AssumedValueLabel.Text = Filemanager.GetOpenEhrTerm(158, AssumedValueLabel.Text)
         End If
     End Sub
 
@@ -66,6 +64,10 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
     Friend WithEvents butAddUnit As System.Windows.Forms.Button
     Friend WithEvents butRemoveUnit As System.Windows.Forms.Button
     Friend WithEvents LabelQuantity As System.Windows.Forms.Label
+    Friend WithEvents AssumedValuePanel As System.Windows.Forms.Panel
+    Friend WithEvents AssumedValueComboBox As System.Windows.Forms.ComboBox
+    Friend WithEvents AssumedValueLabel As System.Windows.Forms.Label
+    Friend WithEvents AssumedValueNumericUpDown As System.Windows.Forms.NumericUpDown
     Friend WithEvents QuantityUnitConstraint As QuantityUnitConstraintControl
 
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
@@ -78,41 +80,50 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.butRemoveUnit = New System.Windows.Forms.Button
         Me.LabelQuantity = New System.Windows.Forms.Label
         Me.QuantityUnitConstraint = New QuantityUnitConstraintControl
+        Me.AssumedValuePanel = New System.Windows.Forms.Panel
+        Me.AssumedValueComboBox = New System.Windows.Forms.ComboBox
+        Me.AssumedValueLabel = New System.Windows.Forms.Label
+        Me.AssumedValueNumericUpDown = New System.Windows.Forms.NumericUpDown
+        Me.AssumedValuePanel.SuspendLayout()
+        CType(Me.AssumedValueNumericUpDown, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'listUnits
         '
-        Me.listUnits.Location = New System.Drawing.Point(77, 100)
+        Me.listUnits.Location = New System.Drawing.Point(134, 56)
         Me.listUnits.Name = "listUnits"
-        Me.listUnits.Size = New System.Drawing.Size(192, 56)
+        Me.listUnits.Size = New System.Drawing.Size(231, 82)
         Me.listUnits.TabIndex = 6
         '
         'lblListProperty
         '
         Me.lblListProperty.BackColor = System.Drawing.Color.Transparent
-        Me.lblListProperty.Location = New System.Drawing.Point(24, 29)
+        Me.lblListProperty.Location = New System.Drawing.Point(8, 32)
         Me.lblListProperty.Name = "lblListProperty"
-        Me.lblListProperty.Size = New System.Drawing.Size(224, 16)
+        Me.lblListProperty.Size = New System.Drawing.Size(87, 16)
         Me.lblListProperty.TabIndex = 1
         Me.lblListProperty.Text = "Property:"
+        Me.lblListProperty.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'lblListUnits
         '
         Me.lblListUnits.BackColor = System.Drawing.Color.Transparent
-        Me.lblListUnits.Location = New System.Drawing.Point(28, 78)
+        Me.lblListUnits.Location = New System.Drawing.Point(8, 56)
         Me.lblListUnits.Name = "lblListUnits"
-        Me.lblListUnits.Size = New System.Drawing.Size(136, 16)
+        Me.lblListUnits.Size = New System.Drawing.Size(87, 16)
         Me.lblListUnits.TabIndex = 3
         Me.lblListUnits.Text = "Units:"
+        Me.lblListUnits.TextAlign = System.Drawing.ContentAlignment.TopRight
         '
         'comboPhysicalProperty
         '
         Me.comboPhysicalProperty.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append
         Me.comboPhysicalProperty.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems
         Me.comboPhysicalProperty.DisplayMember = "Text"
-        Me.comboPhysicalProperty.Location = New System.Drawing.Point(41, 51)
+        Me.comboPhysicalProperty.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.comboPhysicalProperty.Location = New System.Drawing.Point(101, 29)
         Me.comboPhysicalProperty.Name = "comboPhysicalProperty"
-        Me.comboPhysicalProperty.Size = New System.Drawing.Size(289, 21)
+        Me.comboPhysicalProperty.Size = New System.Drawing.Size(264, 21)
         Me.comboPhysicalProperty.TabIndex = 2
         Me.comboPhysicalProperty.ValueMember = "id"
         '
@@ -122,7 +133,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.butAddUnit.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butAddUnit.Image = CType(resources.GetObject("butAddUnit.Image"), System.Drawing.Image)
         Me.butAddUnit.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butAddUnit.Location = New System.Drawing.Point(45, 100)
+        Me.butAddUnit.Location = New System.Drawing.Point(102, 56)
         Me.butAddUnit.Name = "butAddUnit"
         Me.butAddUnit.Size = New System.Drawing.Size(24, 25)
         Me.butAddUnit.TabIndex = 4
@@ -133,7 +144,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.butRemoveUnit.ForeColor = System.Drawing.SystemColors.ControlText
         Me.butRemoveUnit.Image = CType(resources.GetObject("butRemoveUnit.Image"), System.Drawing.Image)
         Me.butRemoveUnit.ImageAlign = System.Drawing.ContentAlignment.TopRight
-        Me.butRemoveUnit.Location = New System.Drawing.Point(45, 128)
+        Me.butRemoveUnit.Location = New System.Drawing.Point(102, 84)
         Me.butRemoveUnit.Name = "butRemoveUnit"
         Me.butRemoveUnit.Size = New System.Drawing.Size(24, 25)
         Me.butRemoveUnit.TabIndex = 5
@@ -150,11 +161,52 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         '
         'QuantityUnitConstraint
         '
-        Me.QuantityUnitConstraint.Location = New System.Drawing.Point(0, 171)
+        Me.QuantityUnitConstraint.Location = New System.Drawing.Point(-2, 141)
         Me.QuantityUnitConstraint.Name = "QuantityUnitConstraint"
-        Me.QuantityUnitConstraint.Size = New System.Drawing.Size(384, 120)
+        Me.QuantityUnitConstraint.Size = New System.Drawing.Size(365, 81)
         Me.QuantityUnitConstraint.TabIndex = 7
         Me.QuantityUnitConstraint.Visible = False
+        '
+        'AssumedValuePanel
+        '
+        Me.AssumedValuePanel.Controls.Add(Me.AssumedValueComboBox)
+        Me.AssumedValuePanel.Controls.Add(Me.AssumedValueLabel)
+        Me.AssumedValuePanel.Controls.Add(Me.AssumedValueNumericUpDown)
+        Me.AssumedValuePanel.Location = New System.Drawing.Point(4, 224)
+        Me.AssumedValuePanel.Name = "AssumedValuePanel"
+        Me.AssumedValuePanel.Size = New System.Drawing.Size(366, 27)
+        Me.AssumedValuePanel.TabIndex = 14
+        Me.AssumedValuePanel.Visible = False
+        '
+        'AssumedValueComboBox
+        '
+        Me.AssumedValueComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.AssumedValueComboBox.FormattingEnabled = True
+        Me.AssumedValueComboBox.Location = New System.Drawing.Point(245, 4)
+        Me.AssumedValueComboBox.Name = "AssumedValueComboBox"
+        Me.AssumedValueComboBox.Size = New System.Drawing.Size(116, 21)
+        Me.AssumedValueComboBox.TabIndex = 16
+        '
+        'AssumedValueLabel
+        '
+        Me.AssumedValueLabel.Location = New System.Drawing.Point(8, 1)
+        Me.AssumedValueLabel.Name = "AssumedValueLabel"
+        Me.AssumedValueLabel.Size = New System.Drawing.Size(122, 24)
+        Me.AssumedValueLabel.TabIndex = 14
+        Me.AssumedValueLabel.Text = "Assumed value:"
+        Me.AssumedValueLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'AssumedValueNumericUpDown
+        '
+        Me.AssumedValueNumericUpDown.Location = New System.Drawing.Point(138, 5)
+        Me.AssumedValueNumericUpDown.Maximum = New Decimal(New Integer() {1000000000, 0, 0, 0})
+        Me.AssumedValueNumericUpDown.Minimum = New Decimal(New Integer() {1000000, 0, 0, -2147483648})
+        Me.AssumedValueNumericUpDown.Name = "AssumedValueNumericUpDown"
+        Me.AssumedValueNumericUpDown.Size = New System.Drawing.Size(100, 20)
+        Me.AssumedValueNumericUpDown.TabIndex = 15
+        Me.AssumedValueNumericUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.AssumedValueNumericUpDown.ThousandsSeparator = True
+        Me.AssumedValueNumericUpDown.Value = New Decimal(New Integer() {3, 0, 0, 0})
         '
         'QuantityConstraintControl
         '
@@ -167,8 +219,11 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Me.Controls.Add(Me.comboPhysicalProperty)
         Me.Controls.Add(Me.lblListProperty)
         Me.Controls.Add(Me.lblListUnits)
+        Me.Controls.Add(Me.AssumedValuePanel)
         Me.Name = "QuantityConstraintControl"
-        Me.Size = New System.Drawing.Size(419, 297)
+        Me.Size = New System.Drawing.Size(373, 255)
+        Me.AssumedValuePanel.ResumeLayout(False)
+        CType(Me.AssumedValueNumericUpDown, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -185,11 +240,9 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         End Get
     End Property
 
-    Protected Overloads Overrides Sub SetControlValues(ByVal IsState As Boolean)
-
-        ' set constraint values on control
+    Protected Overrides Sub SetControlValues(ByVal isState As Boolean)
         LabelQuantity.Text = AE_Constants.Instance.Quantity
-        mIsState = IsState
+        mIsState = isState
         RemoveHandler comboPhysicalProperty.SelectedIndexChanged, AddressOf comboPhysicalProperty_SelectedIndexChanged
 
         If comboPhysicalProperty.DataSource Is Nothing Then
@@ -247,35 +300,45 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         End If
 
         'Check if the Property is Time - requires special language handling
-        If CInt(comboPhysicalProperty.SelectedValue) = 2 Then
-            mIsTime = True
-        Else
-            mIsTime = False
-        End If
+        mIsTime = CInt(comboPhysicalProperty.SelectedValue) = 2
 
         listUnits.Items.Clear()
+        AssumedValueComboBox.Items.Clear()
+        AssumedValueNumericUpDown.Minimum = Decimal.MinValue
+        AssumedValueNumericUpDown.Maximum = Decimal.MaxValue
+        AssumedValueNumericUpDown.Increment = 1
+        AssumedValueNumericUpDown.DecimalPlaces = 3
+        AssumedValueNumericUpDown.Increment = CDec(0.001)
+        AssumedValueNumericUpDown.Value = 0
 
-        For Each unit As Constraint_QuantityUnit In Me.Constraint.Units
+        For Each unit As Constraint_QuantityUnit In Constraint.Units
             listUnits.Items.Add(unit)
+            listUnits.SelectedIndex = 0
+            AssumedValueComboBox.Items.Add(unit)
+
+            If unit.HasAssumedValue Then
+                AssumedValueComboBox.SelectedItem = unit
+                AssumedValueNumericUpDown.Value = CType(unit.AssumedValue, Decimal)
+                SetLimitsOnAssumedValueNumericUpDown(unit)
+            End If
         Next
 
-        If listUnits.Items.Count > 0 Then
-            listUnits.SelectedIndex = 0
-        End If
-
-        AddHandler comboPhysicalProperty.SelectedIndexChanged, AddressOf Me.comboPhysicalProperty_SelectedIndexChanged
+        AddHandler comboPhysicalProperty.SelectedIndexChanged, AddressOf comboPhysicalProperty_SelectedIndexChanged
     End Sub
 
     Private Sub listUnits_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles listUnits.SelectedIndexChanged
         ' no change to archetype so currentitem needs to be null
         If listUnits.SelectedIndex >= 0 Then
-            MyBase.IsLoading = True
-            QuantityUnitConstraint.Visible = True
+            Dim wasLoading As Boolean = IsLoading
+            IsLoading = True
+            QuantityUnitConstraint.Show()
             QuantityUnitConstraint.ShowConstraint(mIsState, CType(listUnits.SelectedItem, Constraint_QuantityUnit))
-            MyBase.IsLoading = False
+            AssumedValuePanel.Show()
+            IsLoading = wasLoading
         Else
             QuantityUnitConstraint.Reset()
-            QuantityUnitConstraint.Visible = False
+            QuantityUnitConstraint.Hide()
+            AssumedValuePanel.Hide()
         End If
     End Sub
 
@@ -304,6 +367,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                     Constraint.Units.Add(quantityUnit, quantityUnit.Unit)
                     listUnits.Items.Add(quantityUnit)
                     listUnits.SelectedItem = quantityUnit
+                    AssumedValueComboBox.Items.Add(quantityUnit)
 
                     mFileManager.FileEdited = True
                 End If
@@ -385,6 +449,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 End If
 
                 Dim i As Integer = Math.Max(0, listUnits.SelectedIndex - 1)
+                AssumedValueComboBox.Items.Remove(listUnits.SelectedItem)
                 listUnits.Items.Remove(listUnits.SelectedItem)
 
                 If i < listUnits.Items.Count Then
@@ -397,33 +462,88 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub comboPhysicalProperty_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        'Handles comboPhysicalProperty.SelectedIndexChanged -- Handling added specifically in code to allow loading
-
         If comboPhysicalProperty.Focused Then
             If comboPhysicalProperty.SelectedIndex >= 0 AndAlso MyBase.Constraint.Kind = ConstraintKind.Quantity Then
+                Dim wasLoading As Boolean = IsLoading
+                IsLoading = True
+
                 'Check to see if it is TIME as Time units are handled with language specific abbreviations
                 mIsTime = CInt(comboPhysicalProperty.SelectedValue) = 2
-                MyBase.IsLoading = True
 
                 ' get the openEHR term, which allows translation
-                Constraint.OpenEhrCode = CInt(CType(Me.comboPhysicalProperty.SelectedItem, DataRowView).Item("openEHR"))
+                Constraint.OpenEhrCode = CInt(CType(comboPhysicalProperty.SelectedItem, DataRowView).Item("openEHR"))
 
                 'clear the units
-                For Each u As Constraint_QuantityUnit In Me.Constraint.Units
+                For Each u As Constraint_QuantityUnit In Constraint.Units
                     Constraint.Units.Remove(u.Unit)
                 Next
 
                 'Reset
                 listUnits.SelectedIndex = -1
                 listUnits.Items.Clear()
+                AssumedValueComboBox.Items.Clear()
                 mFileManager.FileEdited = True
-                MyBase.IsLoading = False
+                IsLoading = wasLoading
             End If
         End If
     End Sub
 
+    Private Sub AssumedValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles _
+        AssumedValueNumericUpDown.ValueChanged, _
+        AssumedValueComboBox.SelectedIndexChanged, _
+        QuantityUnitConstraint.Leave
+
+        If Not IsLoading Then
+            Dim assumedUnit As Constraint_QuantityUnit = TryCast(AssumedValueComboBox.SelectedItem, Constraint_QuantityUnit)
+
+            For Each unit As Constraint_QuantityUnit In Constraint.Units
+                unit.HasAssumedValue = unit Is assumedUnit
+
+                If unit.HasAssumedValue Then
+                    SetLimitsOnAssumedValueNumericUpDown(unit)
+
+                    Dim assumedValue As Decimal = 0
+                    Decimal.TryParse(AssumedValueNumericUpDown.Text, assumedValue)
+
+                    If AssumedValueNumericUpDown.DecimalPlaces = 0 Then
+                        unit.AssumedValue = assumedValue
+                    Else
+                        unit.AssumedValue = Convert.ToSingle(assumedValue, System.Globalization.NumberFormatInfo.InvariantInfo)
+                    End If
+                End If
+            Next
+
+            mFileManager.FileEdited = True
+        End If
+    End Sub
+
+    Private Sub SetLimitsOnAssumedValueNumericUpDown(ByVal unit As Constraint_QuantityUnit)
+        Dim precision As Integer = unit.Precision
+
+        If precision < 0 Then
+            precision = 3
+        End If
+
+        Dim increment As Decimal = CDec(Math.Pow(10, -precision)) ' set the increment to the power of the precision
+        Dim minimum As Decimal = unit.MinimumValue
+        Dim maximum As Decimal = unit.MaximumValue
+
+        If Not unit.IncludeMinimum Then
+            minimum += increment  ' don't include minimum
+        End If
+
+        If Not unit.IncludeMaximum Then
+            maximum -= increment  ' don't include maximum
+        End If
+
+        AssumedValueNumericUpDown.DecimalPlaces = precision
+        AssumedValueNumericUpDown.Increment = increment
+        AssumedValueNumericUpDown.Minimum = minimum
+        AssumedValueNumericUpDown.Maximum = maximum
+    End Sub
+
     Private Sub AddUnit(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             Try
                 Dim quantityUnit As New Constraint_QuantityUnit(mIsTime)
 
@@ -442,6 +562,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
                 Constraint.Units.Add(quantityUnit, quantityUnit.Unit)
                 listUnits.Items.Add(quantityUnit)
                 listUnits.SelectedItem = quantityUnit
+                AssumedValueComboBox.Items.Add(quantityUnit)
                 mFileManager.FileEdited = True
             Catch ex As Exception
                 Debug.Assert(False, ex.ToString)

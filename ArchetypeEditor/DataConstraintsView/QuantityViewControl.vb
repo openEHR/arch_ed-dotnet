@@ -42,7 +42,7 @@ Public Class QuantityViewControl : Inherits ElementViewControl
         'Change Sam Heard 2004-06-20
         'Crash if no units so added check
 
-        If quantityConstraint.has_units Then
+        If quantityConstraint.HasUnits Then
             Debug.Assert(TypeOf quantityConstraint.Units.Item(1) Is Constraint_Count)
             SetMaxMin(mNumeric, CType(quantityConstraint.Units.Item(1), Constraint_Count))
         End If
@@ -57,7 +57,7 @@ Public Class QuantityViewControl : Inherits ElementViewControl
             mNumeric.Location = New Point(aLocation.X + 5, aLocation.Y + 5)
             Controls.Add(mNumeric)
 
-            If quantityConstraint.has_units Then
+            If quantityConstraint.HasUnits Then
                 If quantityConstraint.Units.Count = 1 Then
                     ' shows one unit as a label
                     Dim lbl As New Label

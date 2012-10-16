@@ -852,45 +852,37 @@ Namespace ArchetypeEditor.ADL_Classes
         End Sub
 
         Protected Sub BuildQuantity(ByVal value_attribute As openehr.openehr.am.archetype.constraint_model.C_ATTRIBUTE, ByVal q As Constraint_Quantity)
-            Dim cadlQuantity As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY
-            cadlQuantity = mAomFactory.create_c_dv_quantity(value_attribute)
-            ' set the property constraint - it should be present
+            Dim cadlQuantity As openehr.openehr.am.openehr_profile.data_types.quantity.C_DV_QUANTITY = mAomFactory.create_c_dv_quantity(value_attribute)
 
             If Not q.IsNull Then
-                Dim cp As openehr.openehr.rm.data_types.text.CODE_PHRASE
-
                 Debug.Assert(q.IsCoded)
 
-                cp = openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(Eiffel.String(q.PhysicalPropertyAsString))
-                cadlQuantity.set_property(cp)
+                cadlQuantity.set_property(openehr.openehr.rm.data_types.text.Create.CODE_PHRASE.make_from_string(Eiffel.String(q.PhysicalPropertyAsString)))
 
-                If q.has_units Then
-                    Dim unit_constraint As Constraint_QuantityUnit
+                If q.HasUnits Then
+                    For Each unit As Constraint_QuantityUnit In q.Units
+                        Dim magnitude As openehr.common_libs.basic.INTERVAL_REAL_32 = Nothing
+                        Dim precision As openehr.common_libs.basic.INTERVAL_INTEGER_32 = Nothing
 
-                    For Each unit_constraint In q.Units
-                        Dim a_real As openehr.common_libs.basic.INTERVAL_REAL_32 = Nothing
-                        Dim a_precision As openehr.common_libs.basic.INTERVAL_INTEGER_32 = Nothing
-
-                        If unit_constraint.HasMaximum Or unit_constraint.HasMinimum Then
-                            If unit_constraint.HasMaximum And unit_constraint.HasMinimum Then
-                                a_real = mAomFactory.create_real_interval_make_bounded(unit_constraint.MinimumRealValue, unit_constraint.MaximumRealValue, unit_constraint.IncludeMinimum, unit_constraint.IncludeMaximum)
-                            ElseIf unit_constraint.HasMaximum Then
-                                a_real = mAomFactory.create_real_interval_make_lower_unbounded(unit_constraint.MaximumRealValue, unit_constraint.IncludeMaximum)
-                            ElseIf unit_constraint.HasMinimum Then
-                                a_real = mAomFactory.create_real_interval_make_upper_unbounded(unit_constraint.MinimumRealValue, unit_constraint.IncludeMinimum)
+                        If unit.HasMaximum Or unit.HasMinimum Then
+                            If unit.HasMaximum And unit.HasMinimum Then
+                                magnitude = mAomFactory.create_real_interval_make_bounded(unit.MinimumRealValue, unit.MaximumRealValue, unit.IncludeMinimum, unit.IncludeMaximum)
+                            ElseIf unit.HasMaximum Then
+                                magnitude = mAomFactory.create_real_interval_make_lower_unbounded(unit.MaximumRealValue, unit.IncludeMaximum)
+                            ElseIf unit.HasMinimum Then
+                                magnitude = mAomFactory.create_real_interval_make_upper_unbounded(unit.MinimumRealValue, unit.IncludeMinimum)
                             End If
                         End If
 
-                        If unit_constraint.HasAssumedValue Then
-                            cadlQuantity.set_assumed_value_from_units_magnitude(Eiffel.String(unit_constraint.Unit), unit_constraint.AssumedValue, unit_constraint.Precision)
+                        If unit.HasAssumedValue Then
+                            cadlQuantity.set_assumed_value_from_units_magnitude(Eiffel.String(unit.Unit), unit.AssumedValue, unit.Precision)
                         End If
 
-                        ' Now set the precision (has to be an interval)
-                        If unit_constraint.Precision > -1 Then
-                            a_precision = mAomFactory.create_integer_interval_make_bounded(unit_constraint.Precision, unit_constraint.Precision, True, True)
+                        If unit.Precision > -1 Then
+                            precision = mAomFactory.create_integer_interval_make_bounded(unit.Precision, unit.Precision, True, True)
                         End If
 
-                        cadlQuantity.add_unit_constraint(Eiffel.String(unit_constraint.Unit), a_real, a_precision)
+                        cadlQuantity.add_unit_constraint(Eiffel.String(unit.Unit), magnitude, precision)
                     Next
                 End If
             End If

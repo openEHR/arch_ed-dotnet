@@ -1102,58 +1102,49 @@ Namespace ArchetypeEditor.XML_Classes
             cQuantity.rm_type_name = "DV_QUANTITY"
             cQuantity.node_id = ""
             cQuantity.occurrences = MakeOccurrences(New RmCardinality(1, 1))
-
             mAomFactory.add_object(value_attribute, cQuantity)
 
-            ' set the property constraint - it should be present
             If Not q.IsNull Then
-                Dim cp As New XMLParser.CODE_PHRASE
-
                 Debug.Assert(q.IsCoded)
 
+                Dim cp As New XMLParser.CODE_PHRASE
                 cp.code_string = q.OpenEhrCode.ToString()
                 cp.terminology_id = New XMLParser.TERMINOLOGY_ID
                 cp.terminology_id.value = "openehr"
-
                 cQuantity.property = cp
 
-                If q.has_units Then
-                    Dim unit_constraint As Constraint_QuantityUnit
-                    Dim cUnit As XMLParser.C_QUANTITY_ITEM
-
+                If q.HasUnits Then
                     cQuantity.list = Array.CreateInstance(GetType(XMLParser.C_QUANTITY_ITEM), q.Units.Count)
 
                     For i As Integer = 1 To q.Units.Count
-                        unit_constraint = q.Units(i)
-                        Dim a_real As XMLParser.IntervalOfReal = Nothing
-                        cUnit = New XMLParser.C_QUANTITY_ITEM
+                        Dim unit As Constraint_QuantityUnit = q.Units(i)
+                        Dim magnitude As XMLParser.IntervalOfReal = Nothing
+                        Dim cUnit As XMLParser.C_QUANTITY_ITEM = New XMLParser.C_QUANTITY_ITEM
+                        cUnit.units = unit.Unit
 
-                        cUnit.units = unit_constraint.Unit
+                        If unit.HasMaximum Or unit.HasMinimum Then
+                            magnitude = New XMLParser.IntervalOfReal
 
-                        'Magnitude
-                        If unit_constraint.HasMaximum Or unit_constraint.HasMinimum Then
-                            a_real = New XMLParser.IntervalOfReal
-
-                            If unit_constraint.HasMaximum Then
-                                a_real.upper = unit_constraint.MaximumRealValue
-                                a_real.upperSpecified = True
-                                a_real.upper_included = unit_constraint.IncludeMaximum
-                                a_real.upper_includedSpecified = True
+                            If unit.HasMaximum Then
+                                magnitude.upper = unit.MaximumRealValue
+                                magnitude.upperSpecified = True
+                                magnitude.upper_included = unit.IncludeMaximum
+                                magnitude.upper_includedSpecified = True
                             Else
-                                a_real.upper_unbounded = True
+                                magnitude.upper_unbounded = True
                             End If
 
-                            If unit_constraint.HasMinimum Then
-                                a_real.lower = unit_constraint.MinimumRealValue
-                                a_real.lowerSpecified = True
-                                a_real.lower_included = unit_constraint.IncludeMinimum
-                                a_real.lower_includedSpecified = True
+                            If unit.HasMinimum Then
+                                magnitude.lower = unit.MinimumRealValue
+                                magnitude.lowerSpecified = True
+                                magnitude.lower_included = unit.IncludeMinimum
+                                magnitude.lower_includedSpecified = True
                             Else
-                                a_real.lower_unbounded = True
+                                magnitude.lower_unbounded = True
                             End If
 
                             ' Validate Interval PostConditions
-                            With a_real
+                            With magnitude
                                 Debug.Assert(.lowerSpecified = Not .lower_unbounded, "lower specified must not equal lower unbounded")
                                 Debug.Assert(Not (.lower_included And .lower_unbounded), "lower included must not be true when unbounded")
                                 Debug.Assert(.upperSpecified = Not .upper_unbounded, "upper specified must not equal upper unbounded")
@@ -1163,34 +1154,27 @@ Namespace ArchetypeEditor.XML_Classes
                             End With
                         End If
 
-                        If Not a_real Is Nothing Then
-                            cUnit.magnitude = a_real
+                        If Not magnitude Is Nothing Then
+                            cUnit.magnitude = magnitude
                         End If
 
-                        'Precision
-                        If unit_constraint.Precision > -1 Then
+                        If unit.HasAssumedValue Then
+                            cQuantity.assumed_value = New XMLParser.DV_QUANTITY
+                            cQuantity.assumed_value.units = unit.Unit
+                            cQuantity.assumed_value.magnitude = unit.AssumedValue
+                            cQuantity.assumed_value.precision = unit.Precision
+                        End If
+
+                        If unit.Precision > -1 Then
                             cUnit.precision = New XMLParser.IntervalOfInteger
-                            cUnit.precision.lower = unit_constraint.Precision
-                            cUnit.precision.upper = unit_constraint.Precision
+                            cUnit.precision.lower = unit.Precision
+                            cUnit.precision.upper = unit.Precision
                             cUnit.precision.lower_included = True
                             cUnit.precision.upper_included = True
                             cUnit.precision.lowerSpecified = True
                             cUnit.precision.upperSpecified = True
                             cUnit.precision.lower_includedSpecified = True
                             cUnit.precision.upper_includedSpecified = True
-                        End If
-
-                        If unit_constraint.HasAssumedValue Then
-                            If cQuantity.assumed_value Is Nothing Then
-                                cQuantity.assumed_value = New XMLParser.DV_QUANTITY
-                                cQuantity.assumed_value.units = unit_constraint.Unit '1 units string
-                                cQuantity.assumed_value.magnitude = unit_constraint.AssumedValue '1 magnitude double
-                                cQuantity.assumed_value.precision = unit_constraint.Precision
-                                '0..1 precision int 'Optional, don't set it
-
-                            Else 'C_DV_QUANTITY has only ONE assumed value.  More than one unit exists with an assumed value
-                                Throw New ArgumentException("Quanitity constraint has more than one assumed value! (XML_Archetype BuildQuantity)")
-                            End If
                         End If
 
                         'vb collection is base 1, cQuantity.list is base 0
