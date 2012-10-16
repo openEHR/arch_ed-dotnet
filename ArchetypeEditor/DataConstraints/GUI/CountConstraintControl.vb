@@ -265,7 +265,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
         Me.numPrecision.Size = New System.Drawing.Size(51, 22)
         Me.numPrecision.TabIndex = 2
         Me.numPrecision.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        Me.numPrecision.Value = New Decimal(New Integer() {0, 0, 0, 0})
+        Me.numPrecision.Value = New Decimal(New Integer() {3, 0, 0, 0})
         '
         'chkDecimalPlaces
         '
@@ -502,13 +502,17 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Property
 
     Protected Sub cbMinValue_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMinValue.CheckedChanged
+        If cbMinValue.Checked And numMaxValue.Visible And numMinValue.Value > numMaxValue.Value Then
+            numMinValue.Value = numMaxValue.Value
+        End If
+
         numMinValue.Visible = cbMinValue.Checked
         comboIncludeMin.Visible = cbMinValue.Checked
 
         'Allows duration control to display the units combobox
         RaiseEvent ChangeDisplay(sender, cbMinValue.Checked Or cbMaxValue.Checked)
 
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             Constraint.IncludeMinimum = cbMinValue.Checked And comboIncludeMin.SelectedIndex <> 1
             Constraint.HasMinimum = cbMinValue.Checked
             CoordinateMinAndMaxValues()
@@ -517,13 +521,17 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Sub cbMaxValue_CheckChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cbMaxValue.CheckedChanged
+        If cbMaxValue.Checked And numMinValue.Visible And numMaxValue.Value < numMinValue.Value Then
+            numMaxValue.Value = numMinValue.Value
+        End If
+
         numMaxValue.Visible = cbMaxValue.Checked
         comboIncludeMax.Visible = cbMaxValue.Checked
 
         'Allows duration control to display the units combobox
         RaiseEvent ChangeDisplay(sender, cbMinValue.Checked Or cbMaxValue.Checked)
 
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             Constraint.IncludeMaximum = cbMaxValue.Checked And comboIncludeMax.SelectedIndex <> 1
             Constraint.HasMaximum = cbMaxValue.Checked
             CoordinateMinAndMaxValues()
@@ -532,7 +540,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub numMaxValue_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles numMaxValue.Validating
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             If numMaxValue.Text = "" Then 'empty string, revert to previous value
                 e.Cancel = True
                 numMaxValue.Text = CStr(numMaxValue.Value) 'display previous value (previous value remains in .value but display is blank)
@@ -541,14 +549,14 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Sub numMaxValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMaxValue.TextChanged
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             CoordinateMinAndMaxValues()
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub numMinValue_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles numMinValue.Validating
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             If numMinValue.Text = "" Then 'empty string, revert to previous value
                 e.Cancel = True
                 numMinValue.Text = CStr(numMinValue.Value) 'display previous value (previous value remains in .value but display is blank)
@@ -557,14 +565,14 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Protected Sub numMinValue_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles numMinValue.TextChanged
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             CoordinateMinAndMaxValues()
             mFileManager.FileEdited = True
         End If
     End Sub
 
     Private Sub MenuClearText_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             Debug.Assert(False)
             mFileManager.FileEdited = True
         End If
@@ -594,7 +602,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub comboIncludeMin_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboIncludeMin.SelectedIndexChanged
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             If comboIncludeMin.SelectedIndex = 1 Then
                 Constraint.IncludeMinimum = False
                 NumericAssumed.Minimum = Constraint.MinimumValue + NumericAssumed.Increment
@@ -608,7 +616,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub comboIncludeMax_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles comboIncludeMax.SelectedIndexChanged
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             If comboIncludeMax.SelectedIndex = 1 Then
                 Constraint.IncludeMaximum = False
                 NumericAssumed.Maximum = Constraint.MaximumValue - NumericAssumed.Increment
@@ -622,7 +630,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub NumericAssumed_Validating(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles NumericAssumed.Validating
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             If NumericAssumed.Text = "" Then
                 e.Cancel = True
                 NumericAssumed.Text = CStr(NumericAssumed.Value) 'display previous value (previous value remains in .value but display is blank)
@@ -631,7 +639,7 @@ Public Class CountConstraintControl : Inherits ConstraintControl
     End Sub
 
     Private Sub NumericAssumed_ValueChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NumericAssumed.ValueChanged, NumericAssumed.TextChanged
-        If Not MyBase.IsLoading Then
+        If Not IsLoading Then
             Dim assumedValue As Decimal = 0
             Decimal.TryParse(NumericAssumed.Text, assumedValue)
 
