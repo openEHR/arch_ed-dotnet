@@ -534,7 +534,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         Dim maximum As Decimal = Decimal.MaxValue
 
         If unit.HasMinimum Then
-            minimum = unit.MinimumValue
+            minimum = CDec(unit.MinimumRealValue)
 
             If Not unit.IncludeMinimum Then
                 minimum += increment  ' don't include minimum
@@ -542,7 +542,7 @@ Public Class QuantityConstraintControl : Inherits ConstraintControl
         End If
 
         If unit.HasMaximum Then
-            maximum = unit.MaximumValue
+            maximum = CDec(unit.MaximumRealValue)
 
             If Not unit.IncludeMaximum Then
                 maximum -= increment  ' don't include maximum
